@@ -1,0 +1,12 @@
+<map id="projects/ad5460/src/examples/basic/basic_example.c" name="projects/ad5460/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example header for eval&#45;ad5460 project." alt="" coords="215,5,381,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$ad5460_8h.html" title="Header file of AD5460 Driver." alt="" coords="157,109,239,136"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="261,184,367,211"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="336,109,449,136"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="474,109,610,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="215,259,285,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="31,184,114,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="138,184,237,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="509,184,575,211"/>
+</map>

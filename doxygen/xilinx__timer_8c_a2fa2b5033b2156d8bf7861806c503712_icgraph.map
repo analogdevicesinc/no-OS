@@ -1,0 +1,4 @@
+<map id="xilinx_timer_count_clk_set" name="xilinx_timer_count_clk_set">
+<area shape="rect" id="node1" title="Set the timer clock frequency." alt="" coords="181,5,324,47"/>
+<area shape="rect" id="node2" href="$xilinx__timer_8c.html#addc4af514f6e8d49e6a4b0f8d6441b3b" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="5,13,133,39"/>
+</map>

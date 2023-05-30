@@ -1,0 +1,11 @@
+<map id="ade7913_read" name="ade7913_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="596,165,711,192"/>
+<area shape="rect" id="node2" href="$ade7913_8h.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="360,5,539,32"/>
+<area shape="rect" id="node3" href="$ade7913_8h.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="374,56,525,83"/>
+<area shape="rect" id="node4" href="$ade7913_8h.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="351,107,548,133"/>
+<area shape="rect" id="node5" href="$ade7913_8h.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="369,158,530,199"/>
+<area shape="rect" id="node6" href="$ade7913_8h.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="152,224,259,251"/>
+<area shape="rect" id="node8" href="$ade7913_8h.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="361,275,537,301"/>
+<area shape="rect" id="node9" href="$ade7913_8h.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="108,300,303,327"/>
+<area shape="rect" id="node7" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,275,60,301"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="drivers/power/ades1754/ades1754.h" name="drivers/power/ades1754/ades1754.h">
+<area shape="rect" id="node1" title="Header file for the ADES1754 Driver." alt="" coords="109,5,288,47"/>
+<area shape="rect" id="node2" href="$ades1754_8c.html" title="Source file for the ADES1754 Driver." alt="" coords="5,95,184,136"/>
+<area shape="rect" id="node3" href="$ades1754_2src_2common_2common__data_8h.html" title="Defines common data to be used by ades1754 examples." alt="" coords="208,95,400,136"/>
+<area shape="rect" id="node4" href="$ades1754_2src_2common_2common__data_8c.html" title="Defines common data to be used by ades1754 examples." alt="" coords="209,184,399,225"/>
+</map>

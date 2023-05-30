@@ -1,0 +1,21 @@
+<map id="adis_write_fifo_en" name="adis_write_fifo_en">
+<area shape="rect" id="node1" title="Write FIFO enable bit value." alt="" coords="423,401,563,428"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a59559d0650b39a30f0c2e98189eaca69" title="API to be called after trigger is disabled." alt="" coords="213,5,375,32"/>
+<area shape="rect" id="node3" href="$iio__adis__internals_8h.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="219,56,369,83"/>
+<area shape="rect" id="node4" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="215,107,373,149"/>
+<area shape="rect" id="node5" href="$adis_8h.html#a36db8ae51d7390f42ef0ba60e8eac164" title="Read raw temperature data." alt="" coords="217,731,371,757"/>
+<area shape="rect" id="node8" href="$adis_8h.html#ac8742db0ae6b5b09e9f24f87a5887572" title="Read raw acceleration data on x axis." alt="" coords="227,781,361,808"/>
+<area shape="rect" id="node9" href="$adis_8h.html#a47a132c41144a48ffec3f55ad1f3a3bb" title="Read raw delta angle data on x axis." alt="" coords="216,173,372,200"/>
+<area shape="rect" id="node10" href="$adis_8h.html#a76d64491528918ff49ef8c1e28ea7601" title="Read raw delta velocity data on x axis." alt="" coords="218,224,370,251"/>
+<area shape="rect" id="node11" href="$adis_8h.html#a9156a464b496ef333282f3bb06829eff" title="Read raw gyroscope data on x axis." alt="" coords="226,477,362,504"/>
+<area shape="rect" id="node12" href="$adis_8h.html#aa81242e3a496e9c06178d64731a2324a" title="Read raw acceleration data on y axis." alt="" coords="227,528,361,555"/>
+<area shape="rect" id="node13" href="$adis_8h.html#abee671f832770a7f4f88b7536068ea9f" title="Read raw delta angle data on y axis." alt="" coords="216,275,372,301"/>
+<area shape="rect" id="node14" href="$adis_8h.html#a9564607ae5ddb9a6aef87d2a2969baa6" title="Read raw delta velocity data on y axis." alt="" coords="218,325,370,352"/>
+<area shape="rect" id="node15" href="$adis_8h.html#a34005ac0792987ea8460c88cf1a2f27e" title="Read raw gyroscope data on y axis." alt="" coords="226,579,362,605"/>
+<area shape="rect" id="node16" href="$adis_8h.html#aaa776d92d2944988cb57385a547c1028" title="Read raw acceleration data on z axis." alt="" coords="228,629,360,656"/>
+<area shape="rect" id="node17" href="$adis_8h.html#a0779f9820a9dda34ea31e3b6956385a1" title="Read raw delta angle data on z axis." alt="" coords="217,376,371,403"/>
+<area shape="rect" id="node18" href="$adis_8h.html#a9993363049ee765afffeeafc221c67d8" title="Read raw delta velocity data on z axis." alt="" coords="219,427,369,453"/>
+<area shape="rect" id="node19" href="$adis_8h.html#a923431c5b825bb48123638dacda62e93" title="Read raw gyroscope data on z axis." alt="" coords="227,680,361,707"/>
+<area shape="rect" id="node6" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="16,477,155,504"/>
+<area shape="rect" id="node7" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,629,165,656"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="projects/adf4382/src/platform/mbed/parameters.h" name="projects/adf4382/src/platform/mbed/parameters.h">
+<area shape="rect" id="node1" title="Definitions specific to Mbed platform used by ADF4382 project." alt="" coords="137,5,352,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,105,121"/>
+<area shape="rect" id="node3" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="130,95,234,121"/>
+<area shape="rect" id="node6" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="259,95,356,121"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="395,95,500,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="203,169,270,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="291,244,374,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="525,244,596,271"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="395,169,529,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="427,244,497,271"/>
+</map>

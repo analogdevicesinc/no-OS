@@ -1,0 +1,5 @@
+<map id="ade7754_wave_update_rate" name="ade7754_wave_update_rate">
+<area shape="rect" id="node1" title="Select waveform register update rate." alt="" coords="277,5,483,32"/>
+<area shape="rect" id="node2" href="$ade7754_8h.html#ae62a8e2b0fe643a68a9f2efed8dce572" title="Setup the ADE7754 device." alt="" coords="108,5,229,32"/>
+<area shape="rect" id="node3" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,32"/>
+</map>

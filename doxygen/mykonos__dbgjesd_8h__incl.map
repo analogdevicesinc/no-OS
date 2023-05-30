@@ -1,0 +1,10 @@
+<map id="projects/ad9371/src/devices/mykonos/mykonos_debug/mykonos_dbgjesd.h" name="projects/ad9371/src/devices/mykonos/mykonos_debug/mykonos_dbgjesd.h">
+<area shape="rect" id="node1" title="Contains macro definitions and global structure declarations for mykonos_dbgjesd.c." alt="" coords="323,5,526,61"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html" title="Contains macro definitions and function prototypes for mykonos.c." alt="" coords="162,109,255,136"/>
+<area shape="rect" id="node6" href="$t__mykonos__gpio_8h.html" title="Mykonos GPIO error handling and type defines." alt="" coords="307,184,447,211"/>
+<area shape="rect" id="node7" href="$t__mykonos__dbgjesd_8h.html" title="Contains definitions and structure declarations for mykonos_dbgjesd.c." alt="" coords="403,109,566,136"/>
+<area shape="rect" id="node8" href="$mykonos__user_8h.html" title="Contains macro definitions and global structure declarations for mykonos_user.c." alt="" coords="591,109,717,136"/>
+<area shape="rect" id="node3" href="$t__mykonos_8h.html" title="Contains type definitions for Mykonos API." alt="" coords="5,184,111,211"/>
+<area shape="rect" id="node5" href="$mykonos__version_8h.html" title="Contains the version number for the Mykonos API." alt="" coords="135,184,283,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="331,259,422,285"/>
+</map>

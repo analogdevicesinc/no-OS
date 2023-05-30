@@ -1,0 +1,14 @@
+<map id="ad5460_reg_update" name="ad5460_reg_update">
+<area shape="rect" id="node1" title="Update a register&#39;s field." alt="" coords="591,217,741,244"/>
+<area shape="rect" id="node2" href="$ad5460_8h.html#af6dce2561d89992c6132034a42cb6477" title="Disable the slew rate control." alt="" coords="352,5,543,32"/>
+<area shape="rect" id="node3" href="$ad5460_8h.html#ace4100908d1c6f6c7220eb77641d0aea" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="353,188,541,215"/>
+<area shape="rect" id="node5" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="172,331,304,357"/>
+<area shape="rect" id="node7" href="$ad5460_8h.html#a3ac149b8ac0e51abe4a0a543f5cff2d6" title="Set the operation mode for a specific channel." alt="" coords="370,57,525,98"/>
+<area shape="rect" id="node8" href="$ad5460_8h.html#a83ab0c31b4c6787df032e94e1ce55f49" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="370,239,525,281"/>
+<area shape="rect" id="node9" href="$ad5460_8h.html#a15df7e48eca2a50e452eff927a9fc29b" title="Set the current range for a specific channel." alt="" coords="370,407,525,449"/>
+<area shape="rect" id="node11" href="$ad5460_8h.html#a7c17c388ab71313269c2a441ae2a6dbc" title="Set the voltage range for a specific channel." alt="" coords="370,122,525,163"/>
+<area shape="rect" id="node12" href="$ad5460_8h.html#a09df865017b68029dfe0d01b3151cb98" title="Set the GPIO operation mode." alt="" coords="358,305,537,332"/>
+<area shape="rect" id="node4" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="179,159,297,185"/>
+<area shape="rect" id="node6" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,331,124,357"/>
+<area shape="rect" id="node10" href="$current__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current output example main execution." alt="" coords="179,415,297,441"/>
+</map>

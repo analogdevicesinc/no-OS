@@ -1,0 +1,682 @@
+<map id="include/no_os_i2c.h" name="include/no_os_i2c.h">
+<area shape="rect" id="node1" title="Header file of I2C Interface." alt="" coords="25075,5,25224,32"/>
+<area shape="rect" id="node2" href="$adxl313_8h.html" title="Header file of ADXL313 Driver." alt="" coords="1461,281,1622,322"/>
+<area shape="rect" id="node8" href="$adxl345_8h.html" title="Header file of ADXL345 Driver." alt="" coords="4210,80,4371,121"/>
+<area shape="rect" id="node10" href="$adxl355_8h.html" title="Header file of ADXL355 Driver." alt="" coords="805,281,966,322"/>
+<area shape="rect" id="node16" href="$adxl367_8h.html" title="Header file of ADXL367 Driver." alt="" coords="4549,281,4710,322"/>
+<area shape="rect" id="node22" href="$adxl372_8h.html" title="Header file for adxl372 Driver." alt="" coords="6806,80,6967,121"/>
+<area shape="rect" id="node26" href="$adxl38x_8h.html" title="Header file of ADXL38X Driver." alt="" coords="24243,385,24405,426"/>
+<area shape="rect" id="node33" href="$ad7091r5_8h.html" title="Header file for ad7091r5 Driver." alt="" coords="7241,80,7399,121"/>
+<area shape="rect" id="node35" href="$ad799x_8h.html" title="Header file of AD799x Driver." alt="" coords="7515,80,7661,121"/>
+<area shape="rect" id="node37" href="$adm1177_8h.html" title=" " alt="" coords="7731,80,7890,121"/>
+<area shape="rect" id="node41" href="$max9611_8c.html" title="Implementation of max9611 Family Driver." alt="" coords="7907,177,8095,218"/>
+<area shape="rect" id="node42" href="$max9611_8h.html" title="Header file of max9611 Family Driver." alt="" coords="8151,80,8339,121"/>
+<area shape="rect" id="node43" href="$ad5592r-base_8h.html" title="Header file of AD5592R Base Driver." alt="" coords="8409,80,8588,121"/>
+<area shape="rect" id="node49" href="$no__os__i2c_8c.html" title="Implementation of the I2C Interface." alt="" coords="8635,87,8805,114"/>
+<area shape="rect" id="node50" href="$ad7156_8h.html" title="Header file of AD7156 Driver." alt="" coords="9053,80,9198,121"/>
+<area shape="rect" id="node52" href="$ad7746_8h.html" title="Header file of AD7746 Driver." alt="" coords="9394,80,9539,121"/>
+<area shape="rect" id="node55" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="9389,177,9544,218"/>
+<area shape="rect" id="node56" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="9569,177,9717,218"/>
+<area shape="rect" id="node57" href="$ad5629r_8h.html" title="Header file of AD5629R Driver for Microblaze processor." alt="" coords="9814,80,9965,121"/>
+<area shape="rect" id="node59" href="$ad5686_8h.html" title="Header file of AD5686 Driver. This driver supporting the following devices: AD5684R,..." alt="" coords="10017,80,10164,121"/>
+<area shape="rect" id="node61" href="$max538x_8h.html" title="Header file of max538x Family Driver." alt="" coords="15221,80,15379,121"/>
+<area shape="rect" id="node62" href="$max538x_8c.html" title="Implementation of max538x Family Driver." alt="" coords="15103,177,15262,218"/>
+<area shape="rect" id="node65" href="$24xx32a_8h.html" title="Header file of 24AA32A/24LC32A Interface." alt="" coords="10087,177,10268,218"/>
+<area shape="rect" id="node66" href="$24xx32a_8c.html" title="24AA32A/24LC32A EEPROM Interfaces" alt="" coords="8312,281,8493,322"/>
+<area shape="rect" id="node67" href="$adf5611_2src_2common_2common__data_8h.html" title="Defines common data to be used by adf5611 examples." alt="" coords="1579,385,1771,426"/>
+<area shape="rect" id="node69" href="$wethlink_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="8618,281,8841,322"/>
+<area shape="rect" id="node81" href="$ad-acevsecrdset-sl_2src_2main_8c.html" title="Main file for the stout project. This includes general initialization routines for the uC." alt="" coords="5181,496,5366,537"/>
+<area shape="rect" id="node106" href="$adp1050_2src_2common_2common__data_8h.html" title="Defines common data to be used by adp1050 examples." alt="" coords="11787,385,11979,426"/>
+<area shape="rect" id="node108" href="$adp1055_2src_2common_2common__data_8h.html" title="Defines common data to be used by adp1055 examples." alt="" coords="12503,385,12695,426"/>
+<area shape="rect" id="node110" href="$adp5055_2src_2common_2common__data_8h.html" title="Defines common data to be used by adp5055 examples." alt="" coords="12972,385,13164,426"/>
+<area shape="rect" id="node131" href="$eval-pqmon_2src_2common_2common__data_8h.html" title=" " alt="" coords="2349,385,2563,426"/>
+<area shape="rect" id="node143" href="$lt3074_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt3074 examples." alt="" coords="13315,385,13507,426"/>
+<area shape="rect" id="node152" href="$ad9545_8h.html" title="Header file for ad9545 Driver." alt="" coords="15389,281,15577,322"/>
+<area shape="rect" id="node154" href="$ad9545__i2c_8c.html" title="Implementation of ad9545 I2C Driver." alt="" coords="14803,385,14991,426"/>
+<area shape="rect" id="node159" href="$ad5933_8h.html" title="Header file of AD5933 Driver." alt="" coords="14714,80,14918,121"/>
+<area shape="rect" id="node161" href="$adp5589_8h.html" title="Header file of ADP5589 Driver." alt="" coords="14975,80,15129,121"/>
+<area shape="rect" id="node163" href="$ltc4306_8c.html" title="Implementation of ltc4306 driver." alt="" coords="15337,177,15487,218"/>
+<area shape="rect" id="node164" href="$ltc4306_8h.html" title="Header file of ltc4306 driver." alt="" coords="18576,80,18725,121"/>
+<area shape="rect" id="node166" href="$ade7816_8h.html" title="Header file of ADE7816 Driver." alt="" coords="20009,80,20180,121"/>
+<area shape="rect" id="node168" href="$ade7816__i2c_8c.html" title="Source file of ADE7816 I2C Driver." alt="" coords="19764,177,19935,218"/>
+<area shape="rect" id="node172" href="$adpd188_8h.html" title="ADPD188 driver header file." alt="" coords="24559,80,24737,121"/>
+<area shape="rect" id="node177" href="$adpd410x_8h.html" title=" " alt="" coords="20609,80,20786,121"/>
+<area shape="rect" id="node180" href="$aducm3029__i2c_8c.html" title="Implementation of I2C driver for ADuCM302x." alt="" coords="22505,80,22711,121"/>
+<area shape="rect" id="node181" href="$altera__i2c_8c.html" title="Implementation of Altera I2C Generic Driver." alt="" coords="22735,80,22905,121"/>
+<area shape="rect" id="node182" href="$chibios__i2c_8c.html" title="Implementation of chibios i2c driver." alt="" coords="20818,177,20995,218"/>
+<area shape="rect" id="node183" href="$chibios__i2c_8h.html" title="Header file for the chibios i2c driver." alt="" coords="21933,80,22110,121"/>
+<area shape="rect" id="node184" href="$generic__i2c_8c.html" title=" " alt="" coords="23343,80,23521,121"/>
+<area shape="rect" id="node185" href="$linux__i2c_8c.html" title="Implementation of Linux platform I2C Driver." alt="" coords="23545,80,23708,121"/>
+<area shape="rect" id="node186" href="$max32650_2maxim__i2c_8h.html" title=" " alt="" coords="22929,80,23111,121"/>
+<area shape="rect" id="node188" href="$max32655_2maxim__i2c_8h.html" title=" " alt="" coords="23135,80,23318,121"/>
+<area shape="rect" id="node190" href="$max32660_2maxim__i2c_8h.html" title=" " alt="" coords="23733,80,23915,121"/>
+<area shape="rect" id="node192" href="$max32665_2maxim__i2c_8h.html" title=" " alt="" coords="23939,80,24122,121"/>
+<area shape="rect" id="node194" href="$max32670_2maxim__i2c_8h.html" title=" " alt="" coords="24146,80,24329,121"/>
+<area shape="rect" id="node196" href="$max32690_2maxim__i2c_8h.html" title=" " alt="" coords="24353,80,24535,121"/>
+<area shape="rect" id="node198" href="$max78000_2maxim__i2c_8h.html" title=" " alt="" coords="25058,80,25241,121"/>
+<area shape="rect" id="node218" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="28361,177,28527,218"/>
+<area shape="rect" id="node339" href="$lt7170_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt7170 examples." alt="" coords="45077,385,45269,426"/>
+<area shape="rect" id="node342" href="$lt7182s_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt7182s examples." alt="" coords="45293,385,45485,426"/>
+<area shape="rect" id="node360" href="$ltm4686_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltm4686 examples." alt="" coords="45509,385,45701,426"/>
+<area shape="rect" id="node363" href="$ltp8800_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltp8800 examples." alt="" coords="45725,385,45917,426"/>
+<area shape="rect" id="node454" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for adp1050 project." alt="" coords="69189,489,69355,545"/>
+<area shape="rect" id="node456" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for adp1055 project." alt="" coords="70126,489,70293,545"/>
+<area shape="rect" id="node458" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for adp5055 project." alt="" coords="71141,489,71307,545"/>
+<area shape="rect" id="node463" href="$adt75_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for ad74413r project." alt="" coords="70751,489,70918,545"/>
+<area shape="rect" id="node597" href="$pico__i2c_8h.html" title="Header file for the pico i2c driver." alt="" coords="28553,80,28711,121"/>
+<area shape="rect" id="node599" href="$stm32__i2c_8c.html" title="Implementation of stm32 i2c driver." alt="" coords="28911,177,29083,218"/>
+<area shape="rect" id="node600" href="$stm32__i2c_8h.html" title="Header file for the stm32 i2c driver." alt="" coords="28765,80,28937,121"/>
+<area shape="rect" id="node601" href="$xilinx__i2c_8c.html" title="Implementation of Xilinx I2C Generic Driver." alt="" coords="45497,80,45663,121"/>
+<area shape="rect" id="node602" href="$ad5110_8h.html" title="Header file of ad5110 Driver for Microblaze processor." alt="" coords="29071,80,29235,121"/>
+<area shape="rect" id="node604" href="$ad525x_8h.html" title="Header file of AD525X Driver for Microblaze processor. This driver supporting the following devices :..." alt="" coords="29278,80,29442,121"/>
+<area shape="rect" id="node606" href="$adp1050_8h.html" title="Header file for the ADP1050 Driver." alt="" coords="46496,281,46667,322"/>
+<area shape="rect" id="node610" href="$adp1055_8h.html" title="Header file for the ADP1055 Driver." alt="" coords="47353,281,47524,322"/>
+<area shape="rect" id="node614" href="$adp5055_8h.html" title="Header file for the ADP5055 Driver." alt="" coords="47783,281,47953,322"/>
+<area shape="rect" id="node618" href="$lt3074_8h.html" title=" " alt="" coords="48295,281,48451,322"/>
+<area shape="rect" id="node621" href="$lt3074_8c.html" title=" " alt="" coords="48643,385,48799,426"/>
+<area shape="rect" id="node622" href="$lt7170_8h.html" title=" " alt="" coords="49022,281,49178,322"/>
+<area shape="rect" id="node625" href="$lt7170_8c.html" title=" " alt="" coords="49395,385,49551,426"/>
+<area shape="rect" id="node626" href="$lt7182s_8h.html" title=" " alt="" coords="49304,281,49467,322"/>
+<area shape="rect" id="node629" href="$lt7182s_8c.html" title=" " alt="" coords="49864,385,50027,426"/>
+<area shape="rect" id="node630" href="$lt8491_8h.html" title="Implementation of LT8491 Driver." alt="" coords="46911,80,47067,121"/>
+<area shape="rect" id="node632" href="$lt8491_8c.html" title="Implementation of LT8491 Driver." alt="" coords="47143,177,47299,218"/>
+<area shape="rect" id="node633" href="$ltc2992_8c.html" title=" " alt="" coords="47375,177,47537,218"/>
+<area shape="rect" id="node634" href="$ltc2992_8h.html" title=" " alt="" coords="47273,80,47436,121"/>
+<area shape="rect" id="node635" href="$ltc3337_8h.html" title="Header file for the LTC3337 Driver." alt="" coords="48820,281,48983,322"/>
+<area shape="rect" id="node637" href="$ltc3350_8c.html" title="Implementation of LTC3350 Driver." alt="" coords="47561,177,47724,218"/>
+<area shape="rect" id="node638" href="$ltc3350_8h.html" title=" " alt="" coords="47561,80,47724,121"/>
+<area shape="rect" id="node639" href="$ltc4162l_8h.html" title=" " alt="" coords="48527,80,48694,121"/>
+<area shape="rect" id="node641" href="$ltc4162l_8c.html" title=" " alt="" coords="48770,177,48937,218"/>
+<area shape="rect" id="node642" href="$ltc7841_8h.html" title="Header file of LTC7841 Driver." alt="" coords="50033,281,50196,322"/>
+<area shape="rect" id="node646" href="$ltm4686_8h.html" title="Header file of the LTM4686 driver." alt="" coords="50411,281,50581,322"/>
+<area shape="rect" id="node649" href="$ltm4686_8c.html" title="Source code of the LTM4686 driver." alt="" coords="50822,385,50991,426"/>
+<area shape="rect" id="node650" href="$ltp8800_8h.html" title=" " alt="" coords="50947,281,51111,322"/>
+<area shape="rect" id="node653" href="$ltp8800_8c.html" title=" " alt="" coords="51307,385,51471,426"/>
+<area shape="rect" id="node654" href="$max42500_8h.html" title="Header file of MAX42500 Driver." alt="" coords="25265,80,25449,121"/>
+<area shape="rect" id="node656" href="$max31343_8h.html" title=" " alt="" coords="49305,80,49466,121"/>
+<area shape="rect" id="node658" href="$pcf85263_8h.html" title="Header file of pcf85263 Driver." alt="" coords="28368,80,28520,121"/>
+<area shape="rect" id="node660" href="$iio__adg2128_8c.html" title=" " alt="" coords="50064,80,50237,121"/>
+<area shape="rect" id="node661" href="$adt7420_8h.html" title="Header file of ADT7420 Driver." alt="" coords="49541,80,49693,121"/>
+<area shape="rect" id="node663" href="$iio__adt7420_8c.html" title="Implementation of IIO ADT7420 Driver." alt="" coords="49768,177,49939,218"/>
+<area shape="rect" id="node664" href="$adt75_8h.html" title="Header file of ADT75 Driver." alt="" coords="46017,281,46169,322"/>
+<area shape="rect" id="node668" href="$max31827_8h.html" title="Implementation of MAX31827 Driver." alt="" coords="50707,80,50887,121"/>
+<area shape="rect" id="node670" href="$max31827_8c.html" title="Implementation of MAX31827 Driver." alt="" coords="50984,177,51163,218"/>
+<area shape="rect" id="node671" href="$max31875_8h.html" title="Header file of MAX31875 Driver." alt="" coords="51162,80,51342,121"/>
+<area shape="rect" id="node673" href="$adf5611_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ADF5611 project." alt="" coords="51366,80,51581,121"/>
+<area shape="rect" id="node675" href="$adv7511_2src_2main_8c.html" title="The implementation of the main function of the app." alt="" coords="51605,80,51763,121"/>
+<area shape="rect" id="node676" href="$wrapper_8c.html" title=" " alt="" coords="51787,80,51944,121"/>
+<area shape="rect" id="node677" href="$cn0565_2src_2app_2main_8c.html" title="EIT main." alt="" coords="51969,80,52117,121"/>
+<area shape="rect" id="node678" href="$mux__board_8h.html" title="Cross&#45;point switch handling code." alt="" coords="52141,80,52329,121"/>
+<area shape="rect" id="node3" href="$adxl313_8c.html" title=" " alt="" coords="923,385,1085,426"/>
+<area shape="rect" id="node4" href="$iio__adxl313_8c.html" title=" " alt="" coords="1342,385,1503,426"/>
+<area shape="rect" id="node5" href="$eval-adxl313z_2src_2common_2common__data_8h.html" title=" " alt="" coords="6745,385,6959,426"/>
+<area shape="rect" id="node7" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="1447,489,1636,545"/>
+<area shape="rect" id="node6" href="$eval-adxl313z_2src_2common_2common__data_8c.html" title=" " alt="" coords="5390,496,5605,537"/>
+<area shape="rect" id="node9" href="$adxl345_8c.html" title="Implementation of ADXL345 Driver." alt="" coords="4210,177,4371,218"/>
+<area shape="rect" id="node11" href="$adxl355_8c.html" title="Implementation of ADXL355 Driver." alt="" coords="686,385,847,426"/>
+<area shape="rect" id="node12" href="$iio__adxl355_8c.html" title="Implementation of IIO ADXL355 Driver." alt="" coords="501,385,662,426"/>
+<area shape="rect" id="node13" href="$eval-adxl355-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl355&#45;pmdz examples." alt="" coords="1109,377,1317,433"/>
+<area shape="rect" id="node15" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example header for eval&#45;adxl355&#45;pmdz project." alt="" coords="975,489,1183,545"/>
+<area shape="rect" id="node14" href="$eval-adxl355-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl355&#45;pmdz examples." alt="" coords="5,489,213,545"/>
+<area shape="rect" id="node17" href="$adxl367_8c.html" title="Implementation of ADXL367 Driver." alt="" coords="1981,385,2142,426"/>
+<area shape="rect" id="node18" href="$iio__adxl367_8c.html" title="IIO part of the ADXL367 driver." alt="" coords="1795,385,1957,426"/>
+<area shape="rect" id="node19" href="$eval-adxl367z_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="9029,385,9243,426"/>
+<area shape="rect" id="node21" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example for eval&#45;adxl367z project." alt="" coords="1900,489,2121,545"/>
+<area shape="rect" id="node20" href="$eval-adxl367z_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="5629,496,5843,537"/>
+<area shape="rect" id="node23" href="$adxl372_8c.html" title="Implementation of adxl372 Core Driver." alt="" coords="6713,177,6874,218"/>
+<area shape="rect" id="node24" href="$adxl372__i2c_8c.html" title="Implementation of adxl372 I2C Driver." alt="" coords="6898,177,7059,218"/>
+<area shape="rect" id="node25" href="$adxl372__spi_8c.html" title="Implementation of adxl372 SPI Driver." alt="" coords="6527,177,6689,218"/>
+<area shape="rect" id="node27" href="$adxl38x_8c.html" title="Implementation of ADXL38X Driver." alt="" coords="18879,496,19041,537"/>
+<area shape="rect" id="node28" href="$eval-adxl38x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl38x examples." alt="" coords="18641,496,18855,537"/>
+<area shape="rect" id="node30" href="$basic__example__main_8c.html" title="Main program for basic example eval&#45;adxl38x project." alt="" coords="19569,489,19759,545"/>
+<area shape="rect" id="node31" href="$fifo__example__main_8c.html" title="Main program for FIFO example eval&#45;adxl38x project." alt="" coords="19065,489,19268,545"/>
+<area shape="rect" id="node32" href="$selftest__example__main_8c.html" title="Main program for self test example eval&#45;adxl38x project." alt="" coords="19292,489,19545,545"/>
+<area shape="rect" id="node29" href="$eval-adxl38x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl38x examples." alt="" coords="18641,607,18855,649"/>
+<area shape="rect" id="node34" href="$ad7091r5_8c.html" title="Implementation of ad7091r5 Driver." alt="" coords="7135,177,7294,218"/>
+<area shape="rect" id="node36" href="$ad799x_8c.html" title="Implementation of AD799x Driver." alt="" coords="7319,177,7465,218"/>
+<area shape="rect" id="node38" href="$adm1177_8c.html" title="Source file of ADM1177 Driver." alt="" coords="7490,177,7649,218"/>
+<area shape="rect" id="node39" href="$iio__adm1177_8c.html" title="Source file of iio_adm1177." alt="" coords="7673,177,7831,218"/>
+<area shape="rect" id="node40" href="$wethlink_2src_2app_2main_8c.html" title=" " alt="" coords="2167,385,2324,426"/>
+<area shape="rect" id="node44" href="$ad5592r-base_8c.html" title="Implementation of AD5592R Base Driver." alt="" coords="8373,177,8552,218"/>
+<area shape="rect" id="node45" href="$ad5592r_8c.html" title="Implementation of AD5592R driver." alt="" coords="7907,281,8085,322"/>
+<area shape="rect" id="node46" href="$ad5592r_8h.html" title="Header file of AD5592R driver." alt="" coords="8171,177,8349,218"/>
+<area shape="rect" id="node47" href="$ad5593r_8c.html" title="Implementation of AD5593R driver." alt="" coords="8109,281,8288,322"/>
+<area shape="rect" id="node48" href="$ad5593r_8h.html" title="Header file of AD5593R driver." alt="" coords="8627,177,8805,218"/>
+<area shape="rect" id="node51" href="$ad7156_8c.html" title="Implementation of AD7156 Driver." alt="" coords="8881,177,9026,218"/>
+<area shape="rect" id="node53" href="$ad7746_8c.html" title="Implementation of AD7746 Driver." alt="" coords="9050,177,9195,218"/>
+<area shape="rect" id="node54" href="$iio__ad7746_8c.html" title=" " alt="" coords="9219,177,9365,218"/>
+<area shape="rect" id="node58" href="$ad5629r_8c.html" title="Implementation of ad5629r Driver for Microblaze processor." alt="" coords="9741,177,9891,218"/>
+<area shape="rect" id="node60" href="$ad5686_8c.html" title="Implementation of AD5686 Driver." alt="" coords="9916,177,10063,218"/>
+<area shape="rect" id="node63" href="$eval-ltc4306_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ltc4306&#45;pmdz examples." alt="" coords="14037,385,14251,426"/>
+<area shape="rect" id="node64" href="$eval-ltc4306_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ltc4306&#45;pmdz examples." alt="" coords="7373,496,7587,537"/>
+<area shape="rect" id="node68" href="$adf5611_2src_2common_2common__data_8c.html" title="Defines common data to be used by adf5611 examples." alt="" coords="238,496,429,537"/>
+<area shape="rect" id="node70" href="$altera__gpio_8c.html" title="Implementation of Altera GPIO Generic Driver." alt="" coords="8835,385,9005,426"/>
+<area shape="rect" id="node71" href="$altera__spi_8c.html" title="Implementation of Altera SPI Generic Driver." alt="" coords="9267,385,9437,426"/>
+<area shape="rect" id="node72" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8h.html" title="Defines common data to be used by the STOUT project." alt="" coords="23721,385,23951,426"/>
+<area shape="rect" id="node74" href="$inter_8h.html" title="GPIO interrupt phase interface file." alt="" coords="9513,385,9698,426"/>
+<area shape="rect" id="node76" href="$interface_8h.html" title="User interface interface file." alt="" coords="3140,385,3337,426"/>
+<area shape="rect" id="node79" href="$self__test_8c.html" title="Relay implementation file." alt="" coords="2356,496,2548,537"/>
+<area shape="rect" id="node82" href="$pilot_8h.html" title="Pilot phase interface file." alt="" coords="2930,385,3115,426"/>
+<area shape="rect" id="node83" href="$supply_8h.html" title="Power supply phase interface file." alt="" coords="3362,385,3547,426"/>
+<area shape="rect" id="node85" href="$ad3552r__fmcz_2src_2common_2common__data_8h.html" title="Defines common data to be used by iio examples." alt="" coords="3850,385,4065,426"/>
+<area shape="rect" id="node87" href="$ad5460_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="4117,385,4309,426"/>
+<area shape="rect" id="node89" href="$ad74413r_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad74413r examples." alt="" coords="4348,385,4540,426"/>
+<area shape="rect" id="node91" href="$ad74413r_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for AD74413R project." alt="" coords="8979,489,9210,545"/>
+<area shape="rect" id="node92" href="$ad74416h_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="4571,385,4763,426"/>
+<area shape="rect" id="node94" href="$ad9371_2src_2app_2headless_8c.html" title="Implementation of Main Function." alt="" coords="6984,385,7133,426"/>
+<area shape="rect" id="node95" href="$ad9467__fmc_8c.html" title="Implementation of the program&#39;s main function." alt="" coords="7157,385,7307,426"/>
+<area shape="rect" id="node96" href="$ad9656__fmc_8c.html" title="Implementation of Main Function." alt="" coords="7331,385,7499,426"/>
+<area shape="rect" id="node97" href="$ades1754_2src_2common_2common__data_8h.html" title="Defines common data to be used by ades1754 examples." alt="" coords="4841,385,5033,426"/>
+<area shape="rect" id="node99" href="$adf4368_2src_2common_2common__data_8h.html" title="Defines common data to be used by adf4368 examples." alt="" coords="5436,385,5628,426"/>
+<area shape="rect" id="node101" href="$adf4368_2src_2examples_2basic_2basic__example_8c.html" title="Basic example eval&#45;adf4368 project." alt="" coords="9234,489,9401,545"/>
+<area shape="rect" id="node102" href="$adf4382_2src_2common_2common__data_8h.html" title="Defines common data to be used by adf4382 examples." alt="" coords="5652,385,5844,426"/>
+<area shape="rect" id="node104" href="$adin1110_2src_2common_2common__data_8h.html" title="Defines common data to be used by the ADIN1110 examples." alt="" coords="5868,385,6060,426"/>
+<area shape="rect" id="node112" href="$adrv9001_2src_2app_2headless_8c.html" title="adrv9002 main project file." alt="" coords="7523,385,7685,426"/>
+<area shape="rect" id="node113" href="$adrv9009_2src_2app_2app__clocking_8c.html" title="Clock setup and initialization routines." alt="" coords="7709,385,7872,426"/>
+<area shape="rect" id="node114" href="$adrv9009_2src_2app_2app__jesd_8c.html" title="JESD setup and initialization routines." alt="" coords="7896,385,8059,426"/>
+<area shape="rect" id="node115" href="$app__talise_8c.html" title="Talise initialization and control routines." alt="" coords="8083,385,8245,426"/>
+<area shape="rect" id="node116" href="$app__transceiver_8c.html" title="FPGA XCVR setup and initialization routines." alt="" coords="8269,385,8437,426"/>
+<area shape="rect" id="node117" href="$headless__arm_8c.html" title="Contains example code for user integration with their application. This file contains code for ARM." alt="" coords="8461,385,8624,426"/>
+<area shape="rect" id="node118" href="$headless__mb_8c.html" title="Contains example code for user integration with their application. This file contains code for MicroB..." alt="" coords="8648,385,8811,426"/>
+<area shape="rect" id="node119" href="$adrv902x_2src_2common_2common__data_8c.html" title="Defines common data to be used by adrv902x examples." alt="" coords="6297,496,6487,537"/>
+<area shape="rect" id="node120" href="$adrv902x_2src_2common_2hal_2no__os__platform_8c.html" title=" " alt="" coords="9878,496,10101,537"/>
+<area shape="rect" id="node121" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html" title="Basic example for the adrv902x project." alt="" coords="10125,489,10317,545"/>
+<area shape="rect" id="node122" href="$dma__example_8c.html" title="DMA example for the adrv902x project." alt="" coords="10341,489,10528,545"/>
+<area shape="rect" id="node123" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example for the adrv902x project." alt="" coords="11030,489,11205,545"/>
+<area shape="rect" id="node124" href="$adt7420-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="15015,385,15230,426"/>
+<area shape="rect" id="node126" href="$adxrs290-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxrs290&#45;pmdz examples." alt="" coords="2639,385,2854,426"/>
+<area shape="rect" id="node128" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html" title="Implementation of IIO trigger example for iio_demo project." alt="" coords="6935,481,7134,552"/>
+<area shape="rect" id="node129" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adxrs290&#45;pmdz project." alt="" coords="7826,489,8057,545"/>
+<area shape="rect" id="node130" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adxl355&#45;pmdz project." alt="" coords="8534,481,8741,552"/>
+<area shape="rect" id="node141" href="$fmcdaq3_8c.html" title="Implementation of Main Function." alt="" coords="5058,385,5217,426"/>
+<area shape="rect" id="node142" href="$fmcjesdadc1_8c.html" title="Implementation of Main Function." alt="" coords="5241,385,5412,426"/>
+<area shape="rect" id="node145" href="$ltc7841_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltc7841 examples." alt="" coords="23976,385,24168,426"/>
+<area shape="rect" id="node147" href="$ltc7871_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltc7871 examples." alt="" coords="3576,385,3768,426"/>
+<area shape="rect" id="node149" href="$led_8c.html" title=" " alt="" coords="6084,385,6241,426"/>
+<area shape="rect" id="node150" href="$net_8c.html" title=" " alt="" coords="6265,385,6423,426"/>
+<area shape="rect" id="node151" href="$wethlink_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="6447,385,6670,426"/>
+<area shape="rect" id="node73" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8c.html" title="Defines common data to be used by the STOUT project." alt="" coords="18171,496,18402,537"/>
+<area shape="rect" id="node75" href="$inter_8c.html" title="Interrupt on port 2 implementation file." alt="" coords="6511,496,6697,537"/>
+<area shape="rect" id="node77" href="$interface_8c.html" title="User interface implementation file." alt="" coords="3010,496,3206,537"/>
+<area shape="rect" id="node78" href="$pilot_8c.html" title="Pilot phase implementation file." alt="" coords="2146,496,2331,537"/>
+<area shape="rect" id="node80" href="$state__machine_8c.html" title="STOUT state machine implementation file." alt="" coords="2573,489,2771,545"/>
+<area shape="rect" id="node84" href="$supply_8c.html" title="Power supply phase implementation file." alt="" coords="3230,496,3415,537"/>
+<area shape="rect" id="node86" href="$ad3552r__fmcz_2src_2common_2common__data_8c.html" title="Defines common data to be used by iio examples." alt="" coords="3439,496,3654,537"/>
+<area shape="rect" id="node88" href="$ad5460_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="3678,496,3869,537"/>
+<area shape="rect" id="node90" href="$ad74413r_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad74413r examples." alt="" coords="3893,496,4083,537"/>
+<area shape="rect" id="node93" href="$ad74416h_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="4107,496,4298,537"/>
+<area shape="rect" id="node98" href="$ades1754_2src_2common_2common__data_8c.html" title="Defines common data to be used by ades1754 examples." alt="" coords="4322,496,4513,537"/>
+<area shape="rect" id="node100" href="$adf4368_2src_2common_2common__data_8c.html" title="Defines common data to be used by adf4368 examples." alt="" coords="4537,496,4727,537"/>
+<area shape="rect" id="node103" href="$adf4382_2src_2common_2common__data_8c.html" title="Defines common data to be used by adf4382 examples." alt="" coords="4751,496,4942,537"/>
+<area shape="rect" id="node105" href="$adin1110_2src_2common_2common__data_8c.html" title="Defines common data to be used by the ADIN1110 examples." alt="" coords="4966,496,5157,537"/>
+<area shape="rect" id="node107" href="$adp1050_2src_2common_2common__data_8c.html" title="Defines common data to be used by adp1050 examples." alt="" coords="5867,496,6058,537"/>
+<area shape="rect" id="node109" href="$adp1055_2src_2common_2common__data_8c.html" title="Defines common data to be used by adp1055 examples." alt="" coords="6082,496,6273,537"/>
+<area shape="rect" id="node111" href="$adp5055_2src_2common_2common__data_8c.html" title="Defines common data to be used by adp5055 examples." alt="" coords="6721,496,6911,537"/>
+<area shape="rect" id="node125" href="$adt7420-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="8081,496,8295,537"/>
+<area shape="rect" id="node127" href="$adxrs290-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxrs290&#45;pmdz examples." alt="" coords="1661,496,1875,537"/>
+<area shape="rect" id="node132" href="$afe__config_8h.html" title=" " alt="" coords="687,496,876,537"/>
+<area shape="rect" id="node135" href="$iio__pqm_8h.html" title=" " alt="" coords="829,704,1003,745"/>
+<area shape="rect" id="node139" href="$eval-pqmon_2src_2common_2common__data_8c.html" title=" " alt="" coords="1207,496,1422,537"/>
+<area shape="rect" id="node140" href="$pqlib__convert_8c.html" title=" " alt="" coords="453,496,662,537"/>
+<area shape="rect" id="node133" href="$afe__config_8c.html" title=" " alt="" coords="687,607,875,649"/>
+<area shape="rect" id="node134" href="$pqlib__afe_8h.html" title=" " alt="" coords="481,607,663,649"/>
+<area shape="rect" id="node137" href="$pqlib__afe_8c.html" title=" " alt="" coords="577,793,759,835"/>
+<area shape="rect" id="node136" href="$iio__pqm_8c.html" title=" " alt="" coords="1041,793,1215,835"/>
+<area shape="rect" id="node138" href="$pqlib__example_8c.html" title=" " alt="" coords="799,793,1017,835"/>
+<area shape="rect" id="node144" href="$lt3074_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt3074 examples." alt="" coords="7158,496,7349,537"/>
+<area shape="rect" id="node146" href="$ltc7841_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltc7841 examples." alt="" coords="18426,496,18617,537"/>
+<area shape="rect" id="node148" href="$ltc7871_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltc7871 examples." alt="" coords="2795,496,2986,537"/>
+<area shape="rect" id="node153" href="$ad9545_8c.html" title="Implementation of ad9545 Clock Driver." alt="" coords="14539,385,14727,426"/>
+<area shape="rect" id="node155" href="$ad9545__spi_8c.html" title="Implementation of ad9545 SPI Driver." alt="" coords="14327,385,14515,426"/>
+<area shape="rect" id="node156" href="$ad9545_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad9545 example." alt="" coords="15255,385,15447,426"/>
+<area shape="rect" id="node157" href="$ad9545_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad9545 example." alt="" coords="7611,496,7802,537"/>
+<area shape="rect" id="node158" href="$ad9545_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for ad9545 project." alt="" coords="14641,489,14807,545"/>
+<area shape="rect" id="node160" href="$ad5933_8c.html" title="Implementation of AD5933 Driver." alt="" coords="14698,177,14902,218"/>
+<area shape="rect" id="node162" href="$adp5589_8c.html" title="Implementation of ADP5589 Driver." alt="" coords="14926,177,15079,218"/>
+<area shape="rect" id="node165" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html" title="Basic example code for eval&#45;ltc4306&#45;pmdz project." alt="" coords="16788,489,16977,545"/>
+<area shape="rect" id="node167" href="$ade7816_8c.html" title="Source file of ADE7816 Driver." alt="" coords="20009,177,20180,218"/>
+<area shape="rect" id="node169" href="$ade7816__spi_8c.html" title="Source file of ADE7816 SPI Driver." alt="" coords="20204,177,20375,218"/>
+<area shape="rect" id="node170" href="$ade7816_2src_2common_2common__data_8h.html" title="Defines common data to be used by ade7816 example." alt="" coords="15471,385,15663,426"/>
+<area shape="rect" id="node171" href="$ade7816_2src_2common_2common__data_8c.html" title="Defines common data to be used by ade7816 example." alt="" coords="8319,496,8510,537"/>
+<area shape="rect" id="node173" href="$adpd188_8c.html" title="ADPD188 driver implementation." alt="" coords="22259,177,22437,218"/>
+<area shape="rect" id="node174" href="$iio__adpd188_8h.html" title="Header of the ADPD188 IIO driver." alt="" coords="22614,177,22791,218"/>
+<area shape="rect" id="node175" href="$iio__adpd188_8c.html" title="Implementation of the ADPD188 IIO driver." alt="" coords="22425,281,22602,322"/>
+<area shape="rect" id="node176" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="22627,281,22792,322"/>
+<area shape="rect" id="node178" href="$adpd410x_8c.html" title=" " alt="" coords="20399,177,20577,218"/>
+<area shape="rect" id="node179" href="$iio__adpd410x_8c.html" title="Implementation of adpd410x iio." alt="" coords="20601,177,20793,218"/>
+<area shape="rect" id="node187" href="$max32650_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="21019,177,21202,218"/>
+<area shape="rect" id="node189" href="$max32655_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="21226,177,21409,218"/>
+<area shape="rect" id="node191" href="$max32660_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="21433,177,21615,218"/>
+<area shape="rect" id="node193" href="$max32665_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="21639,177,21822,218"/>
+<area shape="rect" id="node195" href="$max32670_2maxim__i2c_8c.html" title="Implementation of max32670 I2C driver." alt="" coords="21846,177,22029,218"/>
+<area shape="rect" id="node197" href="$max32690_2maxim__i2c_8c.html" title="Implementation of max32690 I2C driver." alt="" coords="22053,177,22235,218"/>
+<area shape="rect" id="node199" href="$max78000_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="24470,177,24653,218"/>
+<area shape="rect" id="node200" href="$ad-acevsecrdset-sl_2src_2platform_2parameters_8h.html" title="Definitions specific to the Maxim platform used by the STOUT project." alt="" coords="24923,177,25135,218"/>
+<area shape="rect" id="node202" href="$adp1050_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by adp1050 project." alt="" coords="26401,177,26623,218"/>
+<area shape="rect" id="node205" href="$adp1055_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by adp1055 project." alt="" coords="26647,177,26870,218"/>
+<area shape="rect" id="node208" href="$adp5055_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by adp5055 project." alt="" coords="27387,177,27610,218"/>
+<area shape="rect" id="node211" href="$adt7420-pmdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to MAXIM platform used by adt7420&#45;pmdz project." alt="" coords="27634,177,27881,218"/>
+<area shape="rect" id="node214" href="$adt75_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by adt75." alt="" coords="25159,177,25382,218"/>
+<area shape="rect" id="node216" href="$dc2703a_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="25406,177,25629,218"/>
+<area shape="rect" id="node219" href="$eval-ltc4306_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to MAXIM platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="25899,177,26146,218"/>
+<area shape="rect" id="node221" href="$eval-pqmon_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="26221,169,26377,225"/>
+<area shape="rect" id="node223" href="$lt3074_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by lt3074 project." alt="" coords="27905,177,28127,218"/>
+<area shape="rect" id="node226" href="$lt7170_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by lt7170 project." alt="" coords="26894,177,27117,218"/>
+<area shape="rect" id="node228" href="$lt7182s_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by lt7182s project." alt="" coords="27141,177,27363,218"/>
+<area shape="rect" id="node230" href="$ltc3337_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="22917,177,23139,218"/>
+<area shape="rect" id="node232" href="$ltc4162l_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="23163,177,23386,218"/>
+<area shape="rect" id="node234" href="$ltc7841_2src_2platform_2maxim_2parameters_8h.html" title="Definitions used by the LTC7841 project." alt="" coords="24677,177,24899,218"/>
+<area shape="rect" id="node236" href="$ltc7841_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by ltc7841 project." alt="" coords="24177,281,24399,322"/>
+<area shape="rect" id="node237" href="$ltm4686_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by ltm4686 project." alt="" coords="23410,177,23633,218"/>
+<area shape="rect" id="node239" href="$ltp8800_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by ltp8800 project." alt="" coords="23657,177,23879,218"/>
+<area shape="rect" id="node241" href="$max31827-evkit_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="23903,177,24150,218"/>
+<area shape="rect" id="node243" href="$max42500_2src_2common_2common__data_8c.html" title="Defines common data to be used by max42500 examples." alt="" coords="8765,496,8955,537"/>
+<area shape="rect" id="node244" href="$max42500_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by max42500 project." alt="" coords="24223,177,24446,218"/>
+<area shape="rect" id="node245" href="$swiot1l_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by the swiot1l project." alt="" coords="25653,177,25875,218"/>
+<area shape="rect" id="node201" href="$ad-acevsecrdset-sl_2src_2platform_2parameters_8c.html" title="Definition of Maxim platform data used by the STOUT project." alt="" coords="24631,281,24841,322"/>
+<area shape="rect" id="node203" href="$adp1050_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of adp1050 project." alt="" coords="35675,496,35855,537"/>
+<area shape="rect" id="node204" href="$adp1050_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by adp1050 project." alt="" coords="26401,281,26623,322"/>
+<area shape="rect" id="node206" href="$adp1055_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of adp1055 project." alt="" coords="35879,496,36059,537"/>
+<area shape="rect" id="node207" href="$adp1055_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by adp1055 project." alt="" coords="27715,281,27938,322"/>
+<area shape="rect" id="node209" href="$adp5055_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of adp5055 project." alt="" coords="36083,496,36263,537"/>
+<area shape="rect" id="node210" href="$adp5055_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by adp5055 project." alt="" coords="28505,281,28727,322"/>
+<area shape="rect" id="node212" href="$adt7420-pmdz_2src_2platform_2maxim_2main_8c.html" title="Main file for MAX32650 platform of adt7420&#45;pmdz project." alt="" coords="36288,496,36491,537"/>
+<area shape="rect" id="node213" href="$adt7420-pmdz_2src_2platform_2maxim_2parameters_8c.html" title="Definition of MAXIM platform data used by adt7420&#45;pmdz project." alt="" coords="28801,281,29047,322"/>
+<area shape="rect" id="node215" href="$adt75_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by adt75 project." alt="" coords="24865,281,25087,322"/>
+<area shape="rect" id="node217" href="$dc2703a_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="25111,281,25334,322"/>
+<area shape="rect" id="node220" href="$eval-ltc4306_2src_2platform_2maxim_2parameters_8c.html" title="Definition of MAXIM platform data used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="25900,281,26145,322"/>
+<area shape="rect" id="node222" href="$eval-pqmon_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="26221,273,26377,329"/>
+<area shape="rect" id="node224" href="$lt3074_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of lt3074 project." alt="" coords="67267,496,67447,537"/>
+<area shape="rect" id="node225" href="$lt3074_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by lt3074 project." alt="" coords="29121,281,29343,322"/>
+<area shape="rect" id="node227" href="$lt7170_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by lt7170 project." alt="" coords="28011,281,28234,322"/>
+<area shape="rect" id="node229" href="$lt7182s_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by lt7182s project." alt="" coords="28258,281,28481,322"/>
+<area shape="rect" id="node231" href="$ltc3337_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="22917,281,23139,322"/>
+<area shape="rect" id="node233" href="$ltc4162l_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="23163,281,23386,322"/>
+<area shape="rect" id="node235" href="$ltc7841_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ltc7841 project." alt="" coords="19783,496,19963,537"/>
+<area shape="rect" id="node238" href="$ltm4686_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by ltm4686 project." alt="" coords="23410,281,23633,322"/>
+<area shape="rect" id="node240" href="$ltp8800_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by ltp8800 project." alt="" coords="23657,281,23879,322"/>
+<area shape="rect" id="node242" href="$max31827-evkit_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="23904,281,24149,322"/>
+<area shape="rect" id="node246" href="$swiot1l_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by the swiot1l project." alt="" coords="25358,281,25581,322"/>
+<area shape="rect" id="node247" href="$swiot1l_2src_2platform_2platform__includes_8h.html" title="Includes used by the swiot1l project." alt="" coords="25655,281,25870,322"/>
+<area shape="rect" id="node248" href="$ad463x__fmcz_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad463x&#45;fmcz examples." alt="" coords="18998,385,19213,426"/>
+<area shape="rect" id="node250" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of ad463x&#45;fmcz project." alt="" coords="28619,496,28818,537"/>
+<area shape="rect" id="node251" href="$ad463x__fmcz_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of ad463x_fmcz project." alt="" coords="28841,489,29007,545"/>
+<area shape="rect" id="node252" href="$ad469x__evb_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad469x_evb examples." alt="" coords="19237,385,19451,426"/>
+<area shape="rect" id="node254" href="$ad469x__evb_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of ad469x_evb project." alt="" coords="32315,489,32472,545"/>
+<area shape="rect" id="node255" href="$ad7091r8-sdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad7091r8&#45;sdz examples." alt="" coords="21877,385,22091,426"/>
+<area shape="rect" id="node257" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ad7091r8&#45;sdz project." alt="" coords="32496,496,32699,537"/>
+<area shape="rect" id="node258" href="$ad719x_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad719x examples." alt="" coords="22332,385,22524,426"/>
+<area shape="rect" id="node260" href="$ad719x_2src_2platform_2xilinx_2main_8c.html" title="Main file for XILINX platform of ad719x project." alt="" coords="33500,496,33671,537"/>
+<area shape="rect" id="node261" href="$ad738x__fmcz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad738x examples." alt="" coords="22787,385,23002,426"/>
+<area shape="rect" id="node263" href="$ad738x__fmcz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;ad738x project." alt="" coords="33899,496,34098,537"/>
+<area shape="rect" id="node264" href="$ad738x__fmcz_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of ad463x_fmcz project." alt="" coords="34121,489,34287,545"/>
+<area shape="rect" id="node265" href="$ad7616-st_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad7616 examples." alt="" coords="23026,385,23241,426"/>
+<area shape="rect" id="node267" href="$ad7616-st_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;ad7616 project." alt="" coords="34311,489,34462,545"/>
+<area shape="rect" id="node268" href="$ad796x__fmcz_2src_2common_2common__data_8h.html" title="Defines common data to be used by iio examples." alt="" coords="23265,385,23479,426"/>
+<area shape="rect" id="node270" href="$ad796x__fmcz_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of iio project." alt="" coords="34487,489,34652,545"/>
+<area shape="rect" id="node271" href="$ad9545_2src_2platform_2linux_2main_8c.html" title="Main file for Maxim platform of ad9545 project." alt="" coords="34677,496,34843,537"/>
+<area shape="rect" id="node272" href="$ade7816_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ade7816 project." alt="" coords="34867,496,35047,537"/>
+<area shape="rect" id="node273" href="$adrv902x_2src_2common_2common__data_8h.html" title="Defines common data to be used by adrv902x examples." alt="" coords="15953,385,16145,426"/>
+<area shape="rect" id="node274" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html" title="Main file for XILINX platform of adrv902x project." alt="" coords="35072,496,35243,537"/>
+<area shape="rect" id="node275" href="$adt75_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad74413r examples." alt="" coords="44645,385,44837,426"/>
+<area shape="rect" id="node277" href="$adt75_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of adt75 project." alt="" coords="35267,496,35447,537"/>
+<area shape="rect" id="node278" href="$dc2703a_2src_2common_2common__data_8h.html" title=" " alt="" coords="44213,385,44405,426"/>
+<area shape="rect" id="node280" href="$dc2703a_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="35471,496,35651,537"/>
+<area shape="rect" id="node281" href="$dc2903a_2src_2common_2common__data_8h.html" title="Defines common data to be used by DC2903A examples." alt="" coords="23504,385,23696,426"/>
+<area shape="rect" id="node283" href="$dc2903a_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of DC2903A project." alt="" coords="19987,496,20167,537"/>
+<area shape="rect" id="node284" href="$demo__esp_2src_2common_2common__data_8h.html" title="Defines common data to be used by demo_esp examples." alt="" coords="16169,385,16361,426"/>
+<area shape="rect" id="node286" href="$demo__esp_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of demo_esp project." alt="" coords="20192,496,20403,537"/>
+<area shape="rect" id="node287" href="$demo__esp_2src_2platform_2maxim_2main_8c.html" title="Main file for maxim platform of demo_esp project." alt="" coords="20427,496,20607,537"/>
+<area shape="rect" id="node288" href="$eval-ad8460_2src_2common_2common__data_8h.html" title=" " alt="" coords="16386,385,16601,426"/>
+<area shape="rect" id="node290" href="$eval-ad8460_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="20632,496,20835,537"/>
+<area shape="rect" id="node291" href="$eval-adis1646x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1646x examples." alt="" coords="16625,385,16839,426"/>
+<area shape="rect" id="node293" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adis1646x project." alt="" coords="20859,496,21061,537"/>
+<area shape="rect" id="node294" href="$eval-adis1646x_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adis1646x project." alt="" coords="21085,496,21269,537"/>
+<area shape="rect" id="node295" href="$eval-adis1646x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1646x project." alt="" coords="21294,496,21493,537"/>
+<area shape="rect" id="node296" href="$eval-adis1647x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1647x examples." alt="" coords="16915,385,17130,426"/>
+<area shape="rect" id="node298" href="$eval-adis1647x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adis1647x project." alt="" coords="21517,496,21720,537"/>
+<area shape="rect" id="node299" href="$eval-adis1647x_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adis1647x project." alt="" coords="21744,496,21928,537"/>
+<area shape="rect" id="node300" href="$eval-adis1647x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1647x project." alt="" coords="21953,496,22151,537"/>
+<area shape="rect" id="node301" href="$eval-adis1650x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1650x examples." alt="" coords="17154,385,17369,426"/>
+<area shape="rect" id="node303" href="$eval-adis1650x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adis1650x project." alt="" coords="22176,496,22379,537"/>
+<area shape="rect" id="node304" href="$eval-adis1650x_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adis1650x project." alt="" coords="22403,496,22587,537"/>
+<area shape="rect" id="node305" href="$eval-adis1650x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1650x project." alt="" coords="22611,496,22810,537"/>
+<area shape="rect" id="node306" href="$eval-adis1654x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1654x examples." alt="" coords="17393,385,17607,426"/>
+<area shape="rect" id="node308" href="$eval-adis1654x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adis1654x project." alt="" coords="22835,496,23037,537"/>
+<area shape="rect" id="node309" href="$eval-adis1654x_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adis1654x project." alt="" coords="23061,496,23245,537"/>
+<area shape="rect" id="node310" href="$eval-adis1654x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1654x project." alt="" coords="23270,496,23469,537"/>
+<area shape="rect" id="node311" href="$eval-adis1655x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1655x examples." alt="" coords="17631,385,17846,426"/>
+<area shape="rect" id="node313" href="$eval-adis1655x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adis1655x project." alt="" coords="23493,496,23696,537"/>
+<area shape="rect" id="node314" href="$eval-adis1655x_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adis1655x project." alt="" coords="23720,496,23904,537"/>
+<area shape="rect" id="node315" href="$eval-adis1655x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1655x project." alt="" coords="23929,496,24127,537"/>
+<area shape="rect" id="node316" href="$eval-adis1657x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1657x examples." alt="" coords="17870,385,18085,426"/>
+<area shape="rect" id="node318" href="$eval-adis1657x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adis1657x project." alt="" coords="24152,496,24355,537"/>
+<area shape="rect" id="node319" href="$eval-adis1657x_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adis1657x project." alt="" coords="24379,496,24563,537"/>
+<area shape="rect" id="node320" href="$eval-adis1657x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1657x project." alt="" coords="24587,496,24786,537"/>
+<area shape="rect" id="node321" href="$eval-adxl313z_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="24811,496,25013,537"/>
+<area shape="rect" id="node322" href="$eval-adxl313z_2src_2platform_2stm32_2main_8c.html" title=" " alt="" coords="25038,496,25237,537"/>
+<area shape="rect" id="node323" href="$eval-adxl367z_2src_2platform_2xilinx_2main_8c.html" title="Main file for XILINX platform of eval&#45;adxl367z project." alt="" coords="25261,496,25454,537"/>
+<area shape="rect" id="node324" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adxl38x project." alt="" coords="25479,496,25681,537"/>
+<area shape="rect" id="node325" href="$eval-adxl38x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxl38x project." alt="" coords="25706,496,25905,537"/>
+<area shape="rect" id="node326" href="$eval-ltc4306_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;ltc4306&#45;pmdz project." alt="" coords="25929,489,26114,545"/>
+<area shape="rect" id="node327" href="$eval-ltc4306_2src_2platform_2maxim_2main_8c.html" title="Main file for MAX32xxx platform of eval&#45;ltc4306&#45;pmdz project." alt="" coords="26139,496,26341,537"/>
+<area shape="rect" id="node328" href="$iio__demo_2src_2common_2common__data_8h.html" title="Defines common data to be used by iio_demo examples." alt="" coords="18109,385,18301,426"/>
+<area shape="rect" id="node330" href="$iio__demo_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of iio_demo project." alt="" coords="26365,496,26576,537"/>
+<area shape="rect" id="node331" href="$iio__demo_2src_2platform_2linux_2main_8c.html" title="Main file for linux platform of iio_demo project." alt="" coords="26599,496,26766,537"/>
+<area shape="rect" id="node332" href="$iio__demo_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of iio_demo project." alt="" coords="26790,496,26970,537"/>
+<area shape="rect" id="node333" href="$iio__demo_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of iio_demo project." alt="" coords="26994,496,27155,537"/>
+<area shape="rect" id="node334" href="$iio__demo_2src_2platform_2stm32_2main_8c.html" title="Main file for stm32 platform of iio_demo project." alt="" coords="27179,496,27354,537"/>
+<area shape="rect" id="node335" href="$iio__demo_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of iio_demo project." alt="" coords="27379,496,27549,537"/>
+<area shape="rect" id="node336" href="$iio__demo__free_r_t_o_s_2src_2common_2common__data_8h.html" title=" " alt="" coords="18326,385,18541,426"/>
+<area shape="rect" id="node338" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html" title="Main function on maxim platform used by iio_demo_freeRTOS project." alt="" coords="27573,496,27779,537"/>
+<area shape="rect" id="node341" href="$lt7170_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of lt7170 project." alt="" coords="27803,496,27983,537"/>
+<area shape="rect" id="node344" href="$lt7182s_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of lt7182s project." alt="" coords="28007,496,28187,537"/>
+<area shape="rect" id="node345" href="$lt8722_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt8722 examples." alt="" coords="18565,385,18757,426"/>
+<area shape="rect" id="node347" href="$lt8722_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of lt8722 project." alt="" coords="28211,496,28391,537"/>
+<area shape="rect" id="node348" href="$ltc2983_2src_2common_2common__data_8h.html" title=" " alt="" coords="18781,385,18973,426"/>
+<area shape="rect" id="node350" href="$ltc2983_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="28415,496,28595,537"/>
+<area shape="rect" id="node351" href="$ltc3337_2src_2common_2common__data_8h.html" title=" " alt="" coords="44861,385,45053,426"/>
+<area shape="rect" id="node353" href="$ltc3337_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="29031,496,29211,537"/>
+<area shape="rect" id="node354" href="$ltc4162l_2src_2common_2common__data_8h.html" title=" " alt="" coords="44429,385,44621,426"/>
+<area shape="rect" id="node356" href="$ltc4162l_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="29235,496,29415,537"/>
+<area shape="rect" id="node357" href="$ltc4296_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltc4296 examples." alt="" coords="19476,385,19668,426"/>
+<area shape="rect" id="node359" href="$ltc4296_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ltc4296 project." alt="" coords="29439,496,29619,537"/>
+<area shape="rect" id="node362" href="$ltm4686_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ltm4686 project." alt="" coords="29643,496,29823,537"/>
+<area shape="rect" id="node365" href="$ltp8800_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ltp8800 project." alt="" coords="29847,496,30027,537"/>
+<area shape="rect" id="node366" href="$max11205pmb1_2src_2common_2common__data_8h.html" title="Defines common data to be used by max11205pmb1 examples." alt="" coords="19693,385,19907,426"/>
+<area shape="rect" id="node368" href="$max11205pmb1_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max11205pmb1 project." alt="" coords="30052,496,30255,537"/>
+<area shape="rect" id="node369" href="$max14906_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14906 examples." alt="" coords="19932,385,20124,426"/>
+<area shape="rect" id="node371" href="$max14906_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max14906 project." alt="" coords="30279,496,30459,537"/>
+<area shape="rect" id="node372" href="$max14906_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of max14906 project." alt="" coords="30483,496,30658,537"/>
+<area shape="rect" id="node373" href="$max14914_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14914 example." alt="" coords="20148,385,20340,426"/>
+<area shape="rect" id="node375" href="$max14914_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max14914 project." alt="" coords="30682,496,30862,537"/>
+<area shape="rect" id="node376" href="$max14916_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14916 examples." alt="" coords="20364,385,20556,426"/>
+<area shape="rect" id="node378" href="$max14916_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max14916 project." alt="" coords="30886,496,31066,537"/>
+<area shape="rect" id="node379" href="$max14919_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14919 example." alt="" coords="20580,385,20772,426"/>
+<area shape="rect" id="node381" href="$max14919_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max14919 project." alt="" coords="31090,496,31270,537"/>
+<area shape="rect" id="node382" href="$max22017_2src_2common_2common__data_8h.html" title="Defines common data to be used by max22017 examples." alt="" coords="20796,385,20988,426"/>
+<area shape="rect" id="node384" href="$max22017_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max22017 project." alt="" coords="31294,496,31474,537"/>
+<area shape="rect" id="node385" href="$max22190_2src_2common_2common__data_8h.html" title="Defines common data to be used by max22190 examples." alt="" coords="21012,385,21204,426"/>
+<area shape="rect" id="node387" href="$max22190_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max22190 project." alt="" coords="31498,496,31678,537"/>
+<area shape="rect" id="node388" href="$max22196_2src_2common_2common__data_8h.html" title="Defines common data to be used by max22196 examples." alt="" coords="21228,385,21420,426"/>
+<area shape="rect" id="node390" href="$max22196_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max22196 project." alt="" coords="31702,496,31882,537"/>
+<area shape="rect" id="node391" href="$max22200_2src_2common_2common__data_8h.html" title="Common data used by the MAX22200 project." alt="" coords="21444,385,21636,426"/>
+<area shape="rect" id="node393" href="$max22200_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of MAX22200 project." alt="" coords="31906,496,32086,537"/>
+<area shape="rect" id="node394" href="$max25603_2src_2common_2common__data_8h.html" title="Common data used by the MAX25603 project." alt="" coords="21660,385,21852,426"/>
+<area shape="rect" id="node396" href="$max25603_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of MAX25603 project." alt="" coords="32110,496,32290,537"/>
+<area shape="rect" id="node397" href="$max31827-evkit_2src_2common_2common__data_8h.html" title=" " alt="" coords="46937,385,47151,426"/>
+<area shape="rect" id="node399" href="$max31827-evkit_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="32723,496,32925,537"/>
+<area shape="rect" id="node400" href="$max31855_2src_2common_2common__data_8h.html" title=" " alt="" coords="22116,385,22308,426"/>
+<area shape="rect" id="node402" href="$max31855_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="32950,496,33130,537"/>
+<area shape="rect" id="node403" href="$max42500_2src_2common_2common__data_8h.html" title="Defines common data to be used by max42500 examples." alt="" coords="15737,385,15929,426"/>
+<area shape="rect" id="node404" href="$pulsar-adc_2src_2common_2common__data_8h.html" title="Defines common data to be used by pulsar&#45;adc examples." alt="" coords="22549,385,22763,426"/>
+<area shape="rect" id="node406" href="$pulsar-adc_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of pulsar&#45;adc project." alt="" coords="33154,489,33305,545"/>
+<area shape="rect" id="node407" href="$pulsar-adc_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of pulsar&#45;adc project." alt="" coords="33329,489,33476,545"/>
+<area shape="rect" id="node408" href="$swiot1l_2src_2common_2common__data_8h.html" title="Defines common data to be used by the swiot1l project." alt="" coords="43947,385,44139,426"/>
+<area shape="rect" id="node595" href="$swiot1l_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of the swiot1l project." alt="" coords="33695,496,33875,537"/>
+<area shape="rect" id="node249" href="$ad463x__fmcz_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad463x_fmcz examples." alt="" coords="13066,496,13281,537"/>
+<area shape="rect" id="node253" href="$ad469x__evb_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad469x_evb examples." alt="" coords="13305,496,13519,537"/>
+<area shape="rect" id="node256" href="$ad7091r8-sdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad7091r8&#45;sdz example." alt="" coords="16119,496,16334,537"/>
+<area shape="rect" id="node259" href="$ad719x_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad719x examples." alt="" coords="16573,496,16763,537"/>
+<area shape="rect" id="node262" href="$ad738x__fmcz_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad738x examples." alt="" coords="17241,496,17455,537"/>
+<area shape="rect" id="node266" href="$ad7616-st_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad7616 examples." alt="" coords="17479,496,17694,537"/>
+<area shape="rect" id="node269" href="$ad796x__fmcz_2src_2common_2common__data_8c.html" title="Defines common data to be used by iio examples." alt="" coords="17718,496,17933,537"/>
+<area shape="rect" id="node276" href="$adt75_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad74413r examples." alt="" coords="67901,496,68091,537"/>
+<area shape="rect" id="node279" href="$dc2703a_2src_2common_2common__data_8c.html" title=" " alt="" coords="67471,496,67662,537"/>
+<area shape="rect" id="node282" href="$dc2903a_2src_2common_2common__data_8c.html" title="Defines common data to be used by DC2903A examples." alt="" coords="17957,496,18147,537"/>
+<area shape="rect" id="node285" href="$demo__esp_2src_2common_2common__data_8c.html" title="Defines common data to be used by demo_esp examples." alt="" coords="9425,496,9615,537"/>
+<area shape="rect" id="node289" href="$eval-ad8460_2src_2common_2common__data_8c.html" title=" " alt="" coords="9639,496,9854,537"/>
+<area shape="rect" id="node292" href="$eval-adis1646x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1646x examples." alt="" coords="10553,496,10767,537"/>
+<area shape="rect" id="node297" href="$eval-adis1647x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1647x examples." alt="" coords="10791,496,11006,537"/>
+<area shape="rect" id="node302" href="$eval-adis1650x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1650x examples." alt="" coords="11229,496,11443,537"/>
+<area shape="rect" id="node307" href="$eval-adis1654x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1654x examples." alt="" coords="11467,496,11682,537"/>
+<area shape="rect" id="node312" href="$eval-adis1655x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1655x examples." alt="" coords="11706,496,11921,537"/>
+<area shape="rect" id="node317" href="$eval-adis1657x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1657x examples." alt="" coords="11945,496,12159,537"/>
+<area shape="rect" id="node329" href="$iio__demo_2src_2common_2common__data_8c.html" title="Defines common data to be used by iio_demo examples." alt="" coords="12183,496,12374,537"/>
+<area shape="rect" id="node337" href="$iio__demo__free_r_t_o_s_2src_2common_2common__data_8c.html" title="Defines common data to be used by iio_demo_freeRTOS examples." alt="" coords="12398,496,12613,537"/>
+<area shape="rect" id="node340" href="$lt7170_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt7170 examples." alt="" coords="68330,496,68521,537"/>
+<area shape="rect" id="node343" href="$lt7182s_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt7182s examples." alt="" coords="68545,496,68735,537"/>
+<area shape="rect" id="node346" href="$lt8722_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt8722 examples." alt="" coords="12637,496,12827,537"/>
+<area shape="rect" id="node349" href="$ltc2983_2src_2common_2common__data_8c.html" title=" " alt="" coords="12851,496,13042,537"/>
+<area shape="rect" id="node352" href="$ltc3337_2src_2common_2common__data_8c.html" title=" " alt="" coords="68115,496,68306,537"/>
+<area shape="rect" id="node355" href="$ltc4162l_2src_2common_2common__data_8c.html" title=" " alt="" coords="67686,496,67877,537"/>
+<area shape="rect" id="node358" href="$ltc4296_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltc4296 examples." alt="" coords="13543,496,13734,537"/>
+<area shape="rect" id="node361" href="$ltm4686_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltm4686 examples." alt="" coords="68759,496,68950,537"/>
+<area shape="rect" id="node364" href="$ltp8800_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltp8800 examples." alt="" coords="68974,496,69165,537"/>
+<area shape="rect" id="node367" href="$max11205pmb1_2src_2common_2common__data_8c.html" title="Defines common data to be used by max11205pmb1 examples." alt="" coords="13758,496,13973,537"/>
+<area shape="rect" id="node370" href="$max14906_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14906 examples." alt="" coords="13997,496,14187,537"/>
+<area shape="rect" id="node374" href="$max14914_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14914 example." alt="" coords="14211,496,14402,537"/>
+<area shape="rect" id="node377" href="$max14916_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14916 examples." alt="" coords="14426,496,14617,537"/>
+<area shape="rect" id="node380" href="$max14919_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14919 example." alt="" coords="14831,496,15022,537"/>
+<area shape="rect" id="node383" href="$max22017_2src_2common_2common__data_8c.html" title="Defines common data to be used by max22017 examples." alt="" coords="15046,496,15237,537"/>
+<area shape="rect" id="node386" href="$max22190_2src_2common_2common__data_8c.html" title="Defines common data to be used by max22190 examples." alt="" coords="15261,496,15451,537"/>
+<area shape="rect" id="node389" href="$max22196_2src_2common_2common__data_8c.html" title="Defines common data to be used by max22196 examples." alt="" coords="15475,496,15666,537"/>
+<area shape="rect" id="node392" href="$max22200_2src_2common_2common__data_8c.html" title="Common data used by the MAX22200 project." alt="" coords="15690,496,15881,537"/>
+<area shape="rect" id="node395" href="$max25603_2src_2common_2common__data_8c.html" title="Common data used by the MAX25603 project." alt="" coords="15905,496,16095,537"/>
+<area shape="rect" id="node398" href="$max31827-evkit_2src_2common_2common__data_8c.html" title=" " alt="" coords="70513,496,70727,537"/>
+<area shape="rect" id="node401" href="$max31855_2src_2common_2common__data_8c.html" title=" " alt="" coords="16358,496,16549,537"/>
+<area shape="rect" id="node405" href="$pulsar-adc_2src_2common_2common__data_8c.html" title="Defines common data to be used by pulsar&#45;adc examples." alt="" coords="17002,496,17217,537"/>
+<area shape="rect" id="node409" href="$rcd_8c.html" title="RCD implementation file." alt="" coords="53974,496,54159,537"/>
+<area shape="rect" id="node410" href="$relay_8c.html" title="Relay implementation file." alt="" coords="54183,496,54369,537"/>
+<area shape="rect" id="node411" href="$axi__qspi__example_8c.html" title="Implementation of Main Function." alt="" coords="54393,489,54564,545"/>
+<area shape="rect" id="node412" href="$generic__spi__example_8c.html" title="Implementation of Main Function." alt="" coords="54589,489,54790,545"/>
+<area shape="rect" id="node413" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform." alt="" coords="54815,489,54985,545"/>
+<area shape="rect" id="node414" href="$ad463x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of IIO example for ad463x_fmcz project." alt="" coords="55010,489,55225,545"/>
+<area shape="rect" id="node415" href="$ad463x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example header for ad463x_fmcz project." alt="" coords="55249,489,55447,545"/>
+<area shape="rect" id="node416" href="$ad469x__evb_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of Basic example." alt="" coords="55471,489,55670,545"/>
+<area shape="rect" id="node417" href="$ad469x__evb_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for ad469x_evb project." alt="" coords="55695,489,55892,545"/>
+<area shape="rect" id="node418" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for eval&#45;ad5460 project." alt="" coords="55917,489,56083,545"/>
+<area shape="rect" id="node419" href="$channel__output__example_8c.html" title="implementation of channel output configuration for eval&#45;ad5460 project" alt="" coords="56108,481,56303,552"/>
+<area shape="rect" id="node420" href="$current__output__example_8c.html" title="implementation of current output configuration for eval&#45;ad5460 project" alt="" coords="56327,481,56516,552"/>
+<area shape="rect" id="node421" href="$voltage__output__example_8c.html" title="Implementation of channel output configuration for eval&#45;ad5460 project." alt="" coords="56540,481,56732,552"/>
+<area shape="rect" id="node422" href="$ad5460_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ad5460 project." alt="" coords="56756,496,56927,537"/>
+<area shape="rect" id="node423" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for ad7091r8&#45;sdz project." alt="" coords="56951,489,57140,545"/>
+<area shape="rect" id="node424" href="$ad7091r8-sdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;ad7091r8&#45;sdz project." alt="" coords="57164,489,57361,545"/>
+<area shape="rect" id="node425" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html" title="Implementation of IIO timer trigger example for eval&#45;ad7091r8&#45;sdz project." alt="" coords="57386,481,57585,552"/>
+<area shape="rect" id="node426" href="$ad719x_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example for ad719x project." alt="" coords="57609,489,57807,545"/>
+<area shape="rect" id="node427" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of basic example for eval&#45;ad738x project." alt="" coords="57831,489,58046,545"/>
+<area shape="rect" id="node428" href="$ad738x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example header for eval&#45;ad738x project." alt="" coords="58071,489,58268,545"/>
+<area shape="rect" id="node429" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example header for ad74413r project." alt="" coords="58293,489,58491,545"/>
+<area shape="rect" id="node430" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="58515,489,58690,545"/>
+<area shape="rect" id="node431" href="$ad74413r_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ad74413r project." alt="" coords="58714,496,58894,537"/>
+<area shape="rect" id="node432" href="$ad74413r_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of ad74413r project." alt="" coords="58918,496,59093,537"/>
+<area shape="rect" id="node433" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for eval&#45;ad74416h project." alt="" coords="59117,489,59283,545"/>
+<area shape="rect" id="node434" href="$ad74416h_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ad74416h project." alt="" coords="59308,496,59479,537"/>
+<area shape="rect" id="node435" href="$ad74416h_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;ad74416h project." alt="" coords="59503,496,59678,537"/>
+<area shape="rect" id="node436" href="$ad7616-st_2src_2examples_2iio_2iio__example_8c.html" title="IIO example header for eval&#45;ad7616 project." alt="" coords="59702,489,59855,545"/>
+<area shape="rect" id="node437" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of BASIC example." alt="" coords="59879,489,60094,545"/>
+<area shape="rect" id="node438" href="$ad796x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for iio project." alt="" coords="60119,489,60316,545"/>
+<area shape="rect" id="node439" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="60341,489,60507,545"/>
+<area shape="rect" id="node440" href="$ades1754_2src_2examples_2basic_2basic__example_8c.html" title="Basic example sources file for ades1754." alt="" coords="60531,489,60698,545"/>
+<area shape="rect" id="node441" href="$spi__uart__bridge__example_8c.html" title="SPI&#45;to&#45;UART example source file for ades1754." alt="" coords="60722,489,60923,545"/>
+<area shape="rect" id="node442" href="$ades1754_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ades1754 project." alt="" coords="60947,496,61127,537"/>
+<area shape="rect" id="node443" href="$adf4368_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for adf4368 project." alt="" coords="61151,489,61326,545"/>
+<area shape="rect" id="node444" href="$adf4368_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ADF4368 project." alt="" coords="61351,496,61521,537"/>
+<area shape="rect" id="node445" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html" title="Basic example eval&#45;adf4382 project." alt="" coords="61546,489,61713,545"/>
+<area shape="rect" id="node446" href="$adf4382_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for adf4382 project." alt="" coords="61737,489,61911,545"/>
+<area shape="rect" id="node447" href="$adf4382_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ADF4382 project." alt="" coords="61936,496,62107,537"/>
+<area shape="rect" id="node448" href="$adf4382_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of ADF4382 project." alt="" coords="62131,496,62306,537"/>
+<area shape="rect" id="node449" href="$adf5611_2src_2examples_2basic_2basic__example_8c.html" title="Basic example eval&#45;adf5611 project." alt="" coords="62330,489,62497,545"/>
+<area shape="rect" id="node450" href="$adf5611_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for adf5611 project." alt="" coords="62521,489,62695,545"/>
+<area shape="rect" id="node451" href="$adf5611_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ADF5611 project." alt="" coords="76219,496,76389,537"/>
+<area shape="rect" id="node452" href="$frame__rx__tx__example_8c.html" title="Frame receive and transmit example header for the ADIN1110 project." alt="" coords="62719,489,62899,545"/>
+<area shape="rect" id="node453" href="$adin1110_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of the ADIN1110 project." alt="" coords="62923,496,63103,537"/>
+<area shape="rect" id="node455" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for adp1050 project." alt="" coords="69750,489,69925,545"/>
+<area shape="rect" id="node457" href="$adp1055_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for adp1055 project." alt="" coords="70942,489,71117,545"/>
+<area shape="rect" id="node459" href="$adp5055_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for adp5055 project." alt="" coords="71331,489,71506,545"/>
+<area shape="rect" id="node460" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example code for adt7420&#45;pmdz project." alt="" coords="73465,489,73687,545"/>
+<area shape="rect" id="node461" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example code for adt7420&#45;pmdz project." alt="" coords="63128,489,63325,545"/>
+<area shape="rect" id="node462" href="$adt7420-pmdz_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of adt7420&#45;pmdz project." alt="" coords="63349,496,63544,537"/>
+<area shape="rect" id="node464" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="69551,489,69726,545"/>
+<area shape="rect" id="node465" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxrs290&#45;pmdz project." alt="" coords="63568,489,63765,545"/>
+<area shape="rect" id="node466" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="63790,489,63975,545"/>
+<area shape="rect" id="node467" href="$adxrs290-pmdz_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="64000,496,64203,537"/>
+<area shape="rect" id="node468" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by adxrs290 project." alt="" coords="64227,496,64453,537"/>
+<area shape="rect" id="node469" href="$adxrs290-pmdz_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of adxrs290 project." alt="" coords="64399,607,64583,649"/>
+<area shape="rect" id="node471" href="$adxrs290-pmdz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="64527,496,64726,537"/>
+<area shape="rect" id="node472" href="$adin1110__standalone__example_8c.html" title="Implementation of the ADIN1110 standalone example." alt="" coords="64751,481,64980,552"/>
+<area shape="rect" id="node473" href="$apard32690_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of the basic example." alt="" coords="65005,489,65203,545"/>
+<area shape="rect" id="node474" href="$apard32690_2src_2examples_2main_8c.html" title="Main file for the apard32690 project." alt="" coords="65227,496,65389,537"/>
+<area shape="rect" id="node475" href="$tcp__echo__server__example_8c.html" title="Implementation of the TCP echo server example." alt="" coords="65413,481,65609,552"/>
+<area shape="rect" id="node476" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="71530,489,71697,545"/>
+<area shape="rect" id="node477" href="$dc2703a_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="65633,489,65807,545"/>
+<area shape="rect" id="node478" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of basic example for DC2903A project." alt="" coords="65832,489,66024,545"/>
+<area shape="rect" id="node479" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for demo_esp project." alt="" coords="66048,489,66216,545"/>
+<area shape="rect" id="node480" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="66240,489,66429,545"/>
+<area shape="rect" id="node481" href="$eval-ad8460_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="66453,489,66651,545"/>
+<area shape="rect" id="node482" href="$eval-ade7753_2src_2interrupt_2interrupt_8c.html" title="External interrupt implementation file." alt="" coords="66675,496,66851,537"/>
+<area shape="rect" id="node483" href="$eval-ade7753_2src_2main_8c.html" title="Main function of ADE7753 example." alt="" coords="66875,496,67042,537"/>
+<area shape="rect" id="node484" href="$eval-ade7754_2src_2interrupt_2interrupt_8c.html" title="External interrupt implementation file." alt="" coords="67067,496,67243,537"/>
+<area shape="rect" id="node485" href="$eval-ade7754_2src_2main_8c.html" title="Main function of ADE7754 example." alt="" coords="36515,496,36682,537"/>
+<area shape="rect" id="node486" href="$eval-ade7758_2src_2interrupt_2interrupt_8c.html" title="External interrupt implementation file." alt="" coords="36707,496,36883,537"/>
+<area shape="rect" id="node487" href="$eval-ade7758_2src_2main_8c.html" title="Main function of ADE7758 example." alt="" coords="36907,496,37074,537"/>
+<area shape="rect" id="node488" href="$eval-ade7913_2src_2interrupt_2interrupt_8c.html" title=" " alt="" coords="37099,496,37275,537"/>
+<area shape="rect" id="node489" href="$eval-ade7913_2src_2main_8c.html" title="Main function of ADE7913 example." alt="" coords="37299,496,37466,537"/>
+<area shape="rect" id="node490" href="$eval-ade7953_2src_2interrupt_2interrupt_8c.html" title="External interrupt implementation file." alt="" coords="37491,496,37667,537"/>
+<area shape="rect" id="node491" href="$eval-ade7953_2src_2main_8c.html" title="Main function of ADE7953 example." alt="" coords="37691,496,37858,537"/>
+<area shape="rect" id="node492" href="$eval-ade7978_2src_2interrupt_2interrupt_8c.html" title=" " alt="" coords="37883,496,38059,537"/>
+<area shape="rect" id="node493" href="$eval-ade7978_2src_2main_8c.html" title="Main function of ADE7978 example." alt="" coords="38083,496,38250,537"/>
+<area shape="rect" id="node494" href="$eval-ade9153a_2src_2main_8c.html" title="Main function of ADE9153A example." alt="" coords="38274,496,38449,537"/>
+<area shape="rect" id="node495" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1646x project." alt="" coords="38473,489,38663,545"/>
+<area shape="rect" id="node496" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adis1646x project." alt="" coords="38687,489,38918,545"/>
+<area shape="rect" id="node497" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1646x project." alt="" coords="38943,496,39169,537"/>
+<area shape="rect" id="node499" href="$eval-adis1647x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1647x project." alt="" coords="39193,489,39383,545"/>
+<area shape="rect" id="node500" href="$eval-adis1647x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adis1647x project." alt="" coords="39407,489,39638,545"/>
+<area shape="rect" id="node501" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1647x project." alt="" coords="39663,496,39889,537"/>
+<area shape="rect" id="node503" href="$eval-adis1650x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1650x project." alt="" coords="39913,489,40103,545"/>
+<area shape="rect" id="node504" href="$eval-adis1650x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adis1650x project." alt="" coords="40127,489,40358,545"/>
+<area shape="rect" id="node505" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1650x project." alt="" coords="40383,496,40609,537"/>
+<area shape="rect" id="node507" href="$eval-adis1654x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1654x project." alt="" coords="40633,489,40823,545"/>
+<area shape="rect" id="node508" href="$eval-adis1654x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adis1654x project." alt="" coords="40847,489,41078,545"/>
+<area shape="rect" id="node509" href="$eval-adis1654x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1654x project." alt="" coords="41103,496,41329,537"/>
+<area shape="rect" id="node511" href="$eval-adis1655x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1655x project." alt="" coords="41353,489,41543,545"/>
+<area shape="rect" id="node512" href="$eval-adis1655x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adis1655x project." alt="" coords="41567,489,41798,545"/>
+<area shape="rect" id="node513" href="$eval-adis1655x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1655x project." alt="" coords="41823,496,42049,537"/>
+<area shape="rect" id="node515" href="$eval-adis1657x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1657x project." alt="" coords="42073,489,42263,545"/>
+<area shape="rect" id="node516" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adis1657x project." alt="" coords="42287,489,42518,545"/>
+<area shape="rect" id="node517" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1657x project." alt="" coords="42543,496,42769,537"/>
+<area shape="rect" id="node519" href="$eval-adxl313z_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxl313z project." alt="" coords="42793,489,42991,545"/>
+<area shape="rect" id="node520" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxl355&#45;pmdz project." alt="" coords="43015,489,43196,545"/>
+<area shape="rect" id="node521" href="$iio__lwip__example_8c.html" title="Implementation of IIO LWIP example for eval&#45;adxl355&#45;pmdz project." alt="" coords="43221,481,43395,552"/>
+<area shape="rect" id="node522" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="43420,489,43647,545"/>
+<area shape="rect" id="node523" href="$eval-adxl355-pmdz_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="43671,489,43867,545"/>
+<area shape="rect" id="node524" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="43891,489,44069,545"/>
+<area shape="rect" id="node525" href="$eval-adxl355-pmdz_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="44018,600,44195,656"/>
+<area shape="rect" id="node527" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="44145,489,44335,545"/>
+<area shape="rect" id="node528" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxl367z project." alt="" coords="44360,489,44557,545"/>
+<area shape="rect" id="node529" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html" title=" " alt="" coords="44582,489,44738,545"/>
+<area shape="rect" id="node530" href="$iio__demo_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for iio_demo project." alt="" coords="44762,489,44937,545"/>
+<area shape="rect" id="node531" href="$iio__sw__trigger__example_8c.html" title="Implementation of IIO sw trigger example for iio_demo project." alt="" coords="44961,481,45146,552"/>
+<area shape="rect" id="node532" href="$iio__demo_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html" title=" " alt="" coords="45171,481,45373,552"/>
+<area shape="rect" id="node533" href="$iio__demo_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by iio_demo project." alt="" coords="45397,496,45651,537"/>
+<area shape="rect" id="node535" href="$iio__demo_2src_2platform_2linux_2parameters_8h.html" title="Definitions specific to linux platform used by iio_demo project." alt="" coords="45675,496,45885,537"/>
+<area shape="rect" id="node537" href="$iio__demo_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="45909,496,46131,537"/>
+<area shape="rect" id="node539" href="$iio__demo_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by iio_demo project." alt="" coords="46155,496,46359,537"/>
+<area shape="rect" id="node541" href="$iio__demo_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to stm32 platform used by iio_demo project." alt="" coords="46384,496,46603,537"/>
+<area shape="rect" id="node543" href="$iio__demo__free_r_t_o_s_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for iio_demo_freeRTOS project." alt="" coords="46627,489,46832,545"/>
+<area shape="rect" id="node544" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="46857,496,47103,537"/>
+<area shape="rect" id="node546" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt3074 project." alt="" coords="71721,489,71887,545"/>
+<area shape="rect" id="node547" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt3074 project." alt="" coords="71911,489,72086,545"/>
+<area shape="rect" id="node548" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt7170 project." alt="" coords="72491,489,72658,545"/>
+<area shape="rect" id="node549" href="$lt7170_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt7170 project." alt="" coords="72682,489,72857,545"/>
+<area shape="rect" id="node550" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt7182s project." alt="" coords="72881,489,73047,545"/>
+<area shape="rect" id="node551" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt7182s project." alt="" coords="73071,489,73246,545"/>
+<area shape="rect" id="node552" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt8722 project." alt="" coords="47127,489,47294,545"/>
+<area shape="rect" id="node553" href="$lt8722_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt8722 project." alt="" coords="47318,489,47493,545"/>
+<area shape="rect" id="node554" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="47517,489,47683,545"/>
+<area shape="rect" id="node555" href="$ltc2983_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="47707,489,47882,545"/>
+<area shape="rect" id="node556" href="$ltc3337_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="72301,489,72467,545"/>
+<area shape="rect" id="node557" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="72110,489,72277,545"/>
+<area shape="rect" id="node558" href="$ltc4162l_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="47906,489,48081,545"/>
+<area shape="rect" id="node559" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltc4296 project." alt="" coords="48105,489,48271,545"/>
+<area shape="rect" id="node560" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltc7841 project." alt="" coords="73711,489,73878,545"/>
+<area shape="rect" id="node561" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltc7841 project." alt="" coords="73902,489,74077,545"/>
+<area shape="rect" id="node562" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltc7871 project." alt="" coords="48295,489,48462,545"/>
+<area shape="rect" id="node563" href="$ltc7871_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltc7871 project." alt="" coords="48486,489,48661,545"/>
+<area shape="rect" id="node564" href="$ltc7871_2src_2platform_2maxim_2main_8c.html" title=" " alt="" coords="48685,496,48865,537"/>
+<area shape="rect" id="node565" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltm4686 project." alt="" coords="74101,489,74267,545"/>
+<area shape="rect" id="node566" href="$ltm4686_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltm4686 project." alt="" coords="74291,489,74466,545"/>
+<area shape="rect" id="node567" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltp8800 project." alt="" coords="74866,489,75033,545"/>
+<area shape="rect" id="node568" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltp8800 project." alt="" coords="75057,489,75231,545"/>
+<area shape="rect" id="node569" href="$max11205pmb1_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of basic example for max11205pmb1 project." alt="" coords="48889,489,49103,545"/>
+<area shape="rect" id="node570" href="$max11205pmb1_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for max11205pmb1 project." alt="" coords="49128,489,49325,545"/>
+<area shape="rect" id="node571" href="$max14906_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="49349,489,49520,545"/>
+<area shape="rect" id="node572" href="$max14906_2src_2examples_2iio__example_2iio__example_8c.html" title="Source file for iio example." alt="" coords="49545,489,49719,545"/>
+<area shape="rect" id="node573" href="$max14914_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="49744,489,49915,545"/>
+<area shape="rect" id="node574" href="$max14916_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="49939,489,50109,545"/>
+<area shape="rect" id="node575" href="$max14916_2src_2examples_2iio__example_2iio__example_8c.html" title="Source file for iio example." alt="" coords="50134,489,50309,545"/>
+<area shape="rect" id="node576" href="$max14919_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="50333,489,50504,545"/>
+<area shape="rect" id="node577" href="$max22017_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="50528,489,50699,545"/>
+<area shape="rect" id="node578" href="$max22017_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for max22017." alt="" coords="50723,489,50898,545"/>
+<area shape="rect" id="node579" href="$max22190_2src_2examples_2basic_2basic__example_8c.html" title="Basic example sources file for max22190." alt="" coords="50923,489,51093,545"/>
+<area shape="rect" id="node580" href="$max22190_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for max22190." alt="" coords="51118,489,51293,545"/>
+<area shape="rect" id="node581" href="$max22196_2src_2examples_2basic_2basic__example_8c.html" title="Basic example sources file for max22196." alt="" coords="51317,489,51488,545"/>
+<area shape="rect" id="node582" href="$max22196_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for max22196." alt="" coords="51513,489,51687,545"/>
+<area shape="rect" id="node583" href="$max22200_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="51712,489,51883,545"/>
+<area shape="rect" id="node584" href="$max22200_2src_2examples_2iio__example_2iio__example_8c.html" title="Source file for iio example." alt="" coords="51907,489,52082,545"/>
+<area shape="rect" id="node585" href="$max25603_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="52107,489,52277,545"/>
+<area shape="rect" id="node586" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="75256,489,75445,545"/>
+<area shape="rect" id="node587" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="52301,489,52499,545"/>
+<area shape="rect" id="node588" href="$max31855_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="52523,489,52693,545"/>
+<area shape="rect" id="node589" href="$max31855_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="52718,489,52893,545"/>
+<area shape="rect" id="node590" href="$max42500_2src_2examples_2basic_2basic__example_8c.html" title="Implementation of basic MAX42500 example." alt="" coords="52917,489,53088,545"/>
+<area shape="rect" id="node591" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of IIO example for basic_demo project." alt="" coords="53113,489,53311,545"/>
+<area shape="rect" id="node592" href="$pulsar-adc_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example header for eval&#45;pulsar_adc project." alt="" coords="53336,489,53533,545"/>
+<area shape="rect" id="node593" href="$swiot1l_2src_2common_2common__data_8c.html" title="Defines common data to be used by the SWIOT1L firmware." alt="" coords="53558,496,53749,537"/>
+<area shape="rect" id="node594" href="$swiot1l__mqtt_8c.html" title="Source file for the swiot1l mqtt example." alt="" coords="53773,489,53950,545"/>
+<area shape="rect" id="node596" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="69379,496,69527,537"/>
+<area shape="rect" id="node470" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by adxrs290 project." alt="" coords="64148,607,64375,649"/>
+<area shape="rect" id="node498" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1646x project." alt="" coords="38943,607,39169,649"/>
+<area shape="rect" id="node502" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1647x project." alt="" coords="39663,607,39889,649"/>
+<area shape="rect" id="node506" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1650x project." alt="" coords="40383,607,40609,649"/>
+<area shape="rect" id="node510" href="$eval-adis1654x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1654x project." alt="" coords="41103,607,41329,649"/>
+<area shape="rect" id="node514" href="$eval-adis1655x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1655x project." alt="" coords="41823,607,42049,649"/>
+<area shape="rect" id="node518" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1657x project." alt="" coords="42543,607,42769,649"/>
+<area shape="rect" id="node526" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="43817,600,43994,656"/>
+<area shape="rect" id="node534" href="$iio__demo_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by iio_demo project." alt="" coords="45398,607,45650,649"/>
+<area shape="rect" id="node536" href="$iio__demo_2src_2platform_2linux_2parameters_8c.html" title="Definition of linux platform data used by iio_demo project." alt="" coords="45676,607,45884,649"/>
+<area shape="rect" id="node538" href="$iio__demo_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo project." alt="" coords="45909,607,46131,649"/>
+<area shape="rect" id="node540" href="$iio__demo_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by iio_demo project." alt="" coords="46156,607,46359,649"/>
+<area shape="rect" id="node542" href="$iio__demo_2src_2platform_2stm32_2parameters_8c.html" title="Definition of stm32 platform data used by iio_demo project." alt="" coords="46385,607,46602,649"/>
+<area shape="rect" id="node545" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo_freeRTOS project." alt="" coords="46857,607,47103,649"/>
+<area shape="rect" id="node598" href="$pico__i2c_8c.html" title="Implementation of pico i2c driver." alt="" coords="28729,177,28887,218"/>
+<area shape="rect" id="node603" href="$ad5110_8c.html" title="Implementation of AD5110 Driver for Microblaze processor." alt="" coords="29107,177,29271,218"/>
+<area shape="rect" id="node605" href="$ad525x_8c.html" title=" " alt="" coords="29295,177,29459,218"/>
+<area shape="rect" id="node607" href="$adp1050_8c.html" title="Source file for the ADP1050 Driver." alt="" coords="46691,385,46861,426"/>
+<area shape="rect" id="node608" href="$iio__adp1050_8c.html" title="Source file for the ADP1050 IIO Driver." alt="" coords="70317,496,70488,537"/>
+<area shape="rect" id="node609" href="$iio__adp1050_8h.html" title="Header file for the ADP1050 IIO Driver." alt="" coords="46496,385,46667,426"/>
+<area shape="rect" id="node611" href="$adp1055_8c.html" title="Source file for the ADP1055 Driver." alt="" coords="47379,385,47549,426"/>
+<area shape="rect" id="node612" href="$iio__adp1055_8c.html" title="Source file for the ADP1055 IIO Driver." alt="" coords="73271,496,73441,537"/>
+<area shape="rect" id="node613" href="$iio__adp1055_8h.html" title="Header file for the ADP1055 IIO Driver." alt="" coords="47573,385,47744,426"/>
+<area shape="rect" id="node615" href="$adp5055_8c.html" title="Source file for the ADP5055 Driver." alt="" coords="47869,385,48040,426"/>
+<area shape="rect" id="node616" href="$iio__adp5055_8c.html" title="Source file for the ADP5055 IIO Driver." alt="" coords="74491,496,74661,537"/>
+<area shape="rect" id="node617" href="$iio__adp5055_8h.html" title="Header file for the ADP5055 IIO Driver." alt="" coords="48064,385,48235,426"/>
+<area shape="rect" id="node619" href="$iio__lt3074_8c.html" title="Source file for the LT3074 IIO Driver." alt="" coords="74686,496,74842,537"/>
+<area shape="rect" id="node620" href="$iio__lt3074_8h.html" title="Header file for the LT3074 IIO Driver." alt="" coords="48411,385,48567,426"/>
+<area shape="rect" id="node623" href="$iio__lt7170_8c.html" title="Source file for the LT7170 IIO Driver." alt="" coords="75470,496,75626,537"/>
+<area shape="rect" id="node624" href="$iio__lt7170_8h.html" title="Header file for the LT7170 IIO Driver." alt="" coords="49163,385,49319,426"/>
+<area shape="rect" id="node627" href="$iio__lt7182s_8c.html" title="Source file for the LT7182S IIO Driver." alt="" coords="75651,496,75813,537"/>
+<area shape="rect" id="node628" href="$iio__lt7182s_8h.html" title="Header file for the LT7182S IIO Driver." alt="" coords="49627,385,49789,426"/>
+<area shape="rect" id="node631" href="$iio__lt8491_8c.html" title="Implementation of IIO LT8491 Driver." alt="" coords="46911,177,47067,218"/>
+<area shape="rect" id="node636" href="$ltc3337_8c.html" title="Implementation file for the LTC3337 Driver." alt="" coords="48925,385,49088,426"/>
+<area shape="rect" id="node640" href="$iio__ltc4162l_8c.html" title="Implementation of IIO LTC4162L Driver." alt="" coords="48527,177,48694,218"/>
+<area shape="rect" id="node643" href="$iio__ltc7841_8h.html" title="Header file for the LTC7841 IIO Driver." alt="" coords="50339,385,50501,426"/>
+<area shape="rect" id="node645" href="$ltc7841_8c.html" title="Source file for the LTC7841 Driver." alt="" coords="50152,385,50315,426"/>
+<area shape="rect" id="node644" href="$iio__ltc7841_8c.html" title="Source file for the LTC7841 IIO Driver." alt="" coords="75837,496,76000,537"/>
+<area shape="rect" id="node647" href="$iio__ltm4686_8c.html" title="Source file for the LTM4686 IIO Driver." alt="" coords="76025,496,76194,537"/>
+<area shape="rect" id="node648" href="$iio__ltm4686_8h.html" title="Header file for the LTM4686 IIO Driver." alt="" coords="50577,385,50746,426"/>
+<area shape="rect" id="node651" href="$iio__ltp8800_8c.html" title="Source file for the LTP8800 IIO Driver." alt="" coords="76414,496,76578,537"/>
+<area shape="rect" id="node652" href="$iio__ltp8800_8h.html" title="Header file for the LTP8800 IIO Driver." alt="" coords="51067,385,51231,426"/>
+<area shape="rect" id="node655" href="$max42500_8c.html" title="Source file of MAX42500 Driver." alt="" coords="28152,177,28336,218"/>
+<area shape="rect" id="node657" href="$max31343_8c.html" title=" " alt="" coords="49305,177,49466,218"/>
+<area shape="rect" id="node659" href="$pcf85263_8c.html" title="Implementation of PCF85263 Driver." alt="" coords="28552,177,28704,218"/>
+<area shape="rect" id="node662" href="$adt7420_8c.html" title="Implementation of ADT7420 Driver." alt="" coords="49592,177,49744,218"/>
+<area shape="rect" id="node665" href="$adt75_8c.html" title="Source file of ADT75 Driver." alt="" coords="46219,385,46371,426"/>
+<area shape="rect" id="node666" href="$iio__adt75_8h.html" title="Header file of the IIO ADT75 Driver." alt="" coords="46043,385,46195,426"/>
+<area shape="rect" id="node667" href="$iio__adt75_8c.html" title="Source file of IIO ADT75 Driver." alt="" coords="69949,496,70101,537"/>
+<area shape="rect" id="node669" href="$iio__max31827_8c.html" title="Implementation of IIO MAX31827 Driver." alt="" coords="50757,177,50960,218"/>
+<area shape="rect" id="node672" href="$max31875_8c.html" title="Implementation of MAX31875 Driver." alt="" coords="51237,177,51416,218"/>
+<area shape="rect" id="node674" href="$adf5611_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ADF5611 project." alt="" coords="51597,177,51811,218"/>
+<area shape="rect" id="node679" href="$cn0565_2src_2app_2app_8c.html" title="EIT application source." alt="" coords="52065,177,52213,218"/>
+<area shape="rect" id="node680" href="$mux__board_8c.html" title="Cross&#45;point switch handling code." alt="" coords="52237,177,52424,218"/>
+</map>

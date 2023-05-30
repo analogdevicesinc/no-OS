@@ -1,0 +1,9 @@
+<map id="lt8491_reg_write" name="lt8491_reg_write">
+<area shape="rect" id="node1" title="Write a register value." alt="" coords="668,132,799,159"/>
+<area shape="rect" id="node2" href="$lt8491_8h.html#a70ce007d48579077da50ac25d9ca5021" title="Device and comm init function." alt="" coords="213,5,415,32"/>
+<area shape="rect" id="node5" href="$lt8491_8h.html#a391e5527ddc51bc0f4ef1838b5ed6fc5" title="Restart the chip." alt="" coords="241,157,387,184"/>
+<area shape="rect" id="node6" href="$lt8491_8h.html#a8bb06d2a8425d4d7ccb07ee7c7e32158" title="Write the telemetry battery charging enable." alt="" coords="464,107,619,133"/>
+<area shape="rect" id="node7" href="$lt8491_8h.html#aba5cf44f3ab2696902345559541c4e3c" title="Write the scratch register." alt="" coords="463,208,620,235"/>
+<area shape="rect" id="node3" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,132,165,159"/>
+<area shape="rect" id="node4" href="$iio__lt8491_8h.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="28,56,143,83"/>
+</map>

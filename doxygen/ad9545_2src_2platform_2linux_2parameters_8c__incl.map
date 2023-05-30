@@ -1,0 +1,8 @@
+<map id="projects/ad9545/src/platform/linux/parameters.c" name="projects/ad9545/src/platform/linux/parameters.c">
+<area shape="rect" id="node1" title="Definitions specific to Linux platform used by ad9545 project." alt="" coords="96,5,304,47"/>
+<area shape="rect" id="node2" href="$ad9545_2src_2platform_2linux_2parameters_8h.html" title="Definitions specific to Maxim platform used by ad9545 project." alt="" coords="145,95,255,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,88,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="113,169,183,196"/>
+<area shape="rect" id="node5" href="$linux__spi_8h.html" title=" " alt="" coords="207,169,299,196"/>
+<area shape="rect" id="node6" href="$linux__i2c_8h.html" title=" " alt="" coords="323,169,415,196"/>
+</map>

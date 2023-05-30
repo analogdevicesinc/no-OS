@@ -1,0 +1,4 @@
+<map id="adis_write_za_bias" name="adis_write_za_bias">
+<area shape="rect" id="node1" title="Write raw acceleration offset correction on z axis." alt="" coords="231,5,376,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a668f0e032ce85e71e07e298e044488d3" title="Handles the write request for calibbias attribute." alt="" coords="5,5,183,32"/>
+</map>

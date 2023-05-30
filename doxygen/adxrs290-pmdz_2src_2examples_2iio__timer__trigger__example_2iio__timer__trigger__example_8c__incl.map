@@ -1,0 +1,22 @@
+<map id="projects/adxrs290&#45;pmdz/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c" name="projects/adxrs290&#45;pmdz/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO trigger example for iio_demo project." alt="" coords="331,5,529,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="91,124,201,151"/>
+<area shape="rect" id="node3" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="5,199,119,225"/>
+<area shape="rect" id="node5" href="$iio__adxrs290_8h.html" title="Implementation of ADXRS290 iio." alt="" coords="275,124,393,151"/>
+<area shape="rect" id="node9" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="285,199,383,225"/>
+<area shape="rect" id="node15" title=" " alt="" coords="765,124,892,151"/>
+<area shape="rect" id="node16" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="715,423,815,449"/>
+<area shape="rect" id="node17" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="445,199,527,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="307,497,377,524"/>
+<area shape="rect" id="node6" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="186,348,279,375"/>
+<area shape="rect" id="node7" title=" " alt="" coords="554,497,637,524"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="58,423,229,449"/>
+<area shape="rect" id="node10" href="$iio_8h.html" title="Header file of iio." alt="" coords="405,273,455,300"/>
+<area shape="rect" id="node14" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="285,273,381,300"/>
+<area shape="rect" id="node11" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="492,348,597,375"/>
+<area shape="rect" id="node12" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="506,423,639,449"/>
+<area shape="rect" id="node13" title=" " alt="" coords="707,497,777,524"/>
+<area shape="rect" id="node18" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="581,273,690,300"/>
+<area shape="rect" id="node20" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="355,348,468,375"/>
+<area shape="rect" id="node19" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="621,348,689,375"/>
+</map>

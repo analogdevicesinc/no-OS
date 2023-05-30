@@ -1,0 +1,12 @@
+<map id="ade9113_init_param" name="ade9113_init_param">
+<area shape="rect" id="node1" title="ADE9113 Device initialization parameters." alt="" coords="1251,145,1405,172"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,51,1129,77"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,5,819,32"/>
+<area shape="rect" id="node4" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,145,1125,172"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,145,786,172"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,108,184,135"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,169,471,196"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,222,472,263"/>
+<area shape="rect" id="node9" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="969,244,1118,271"/>
+<area shape="rect" id="node10" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="636,293,813,320"/>
+</map>

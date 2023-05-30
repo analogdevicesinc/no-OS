@@ -1,0 +1,9 @@
+<map id="lt3074_reg_write" name="lt3074_reg_write">
+<area shape="rect" id="node1" title="Generic register write wrapper." alt="" coords="745,31,876,57"/>
+<area shape="rect" id="node2" href="$lt3074_8h.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="539,5,697,32"/>
+<area shape="rect" id="node7" href="$lt3074_8h.html#ae65f3c229ab9f13258e2f1239c5cac18" title="Set output voltage margin." alt="" coords="339,56,491,83"/>
+<area shape="rect" id="node3" href="$lt3074_8h.html#adbb25a5e0bfec64795789a60e0b67507" title="Initialize the device structure." alt="" coords="369,5,460,32"/>
+<area shape="rect" id="node4" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="172,56,291,83"/>
+<area shape="rect" id="node5" href="$iio__lt3074_8h.html#a0d877a2fe54762f2932c52e49b7f4b5a" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,5,289,32"/>
+<area shape="rect" id="node6" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

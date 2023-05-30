@@ -1,0 +1,5 @@
+<map id="adxl367_set_power_mode" name="adxl367_set_power_mode">
+<area shape="rect" id="node1" title="Places the device into standby/measure mode." alt="" coords="415,31,607,57"/>
+<area shape="rect" id="node2" href="$adxl367_8h.html#a683f866c35c8a9164d469649ab69a638" title="Performs self test." alt="" coords="229,5,367,32"/>
+<area shape="rect" id="node3" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,31,181,57"/>
+</map>

@@ -1,0 +1,32 @@
+<map id="no_os_mutex_init" name="no_os_mutex_init">
+<area shape="rect" id="node1" title="Initialize mutex. mutex &#45; Pointer toward the mutex." alt="" coords="767,309,904,336"/>
+<area shape="rect" id="node2" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="588,208,712,235"/>
+<area shape="rect" id="node3" href="$no__os__i2c_8c.html#a01ee72a3cf98054b436f4332c80bd4aa" title="Initialize the i2c bus communication peripheral." alt="" coords="581,259,719,285"/>
+<area shape="rect" id="node4" href="$no__os__pwm_8c.html#aa308736af8784447c2d2646bd980f52f" title="Initialize the PWM peripheral." alt="" coords="587,309,713,336"/>
+<area shape="rect" id="node28" href="$no__os__spi_8c.html#a28b2d2f56d7c423bfc021dda383ae594" title="Initialize the SPI bus communication peripheral." alt="" coords="581,360,719,387"/>
+<area shape="rect" id="node29" href="$no__os__timer_8c.html#a183eaf62bb64040a02755a602977b833" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="585,461,715,488"/>
+<area shape="rect" id="node5" href="$ad738x_8h.html#a5a643687de5deac9b07cf82ee05503d7" title=" " alt="" coords="419,12,518,39"/>
+<area shape="rect" id="node7" href="$ad7616_8h.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="412,69,525,96"/>
+<area shape="rect" id="node9" href="$adaq7980_8h.html#a0db55892937414f2d5dc84a14fd89677" title=" " alt="" coords="404,132,533,159"/>
+<area shape="rect" id="node11" href="$adp1050_8h.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="415,208,522,235"/>
+<area shape="rect" id="node15" href="$adp1055_8h.html#a00e64892f343d5d3a045a2272d11e54a" title="Initialize the ADP1055 device." alt="" coords="415,284,522,311"/>
+<area shape="rect" id="node19" href="$ltp8800_8h.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="419,335,518,361"/>
+<area shape="rect" id="node23" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="441,385,496,412"/>
+<area shape="rect" id="node24" href="$max25603_8h.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="409,436,528,463"/>
+<area shape="rect" id="node26" href="$pulsar__adc_8h.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="409,487,529,513"/>
+<area shape="rect" id="node6" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,32"/>
+<area shape="rect" id="node8" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="249,56,303,83"/>
+<area shape="rect" id="node10" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="249,107,303,133"/>
+<area shape="rect" id="node12" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="211,157,341,184"/>
+<area shape="rect" id="node14" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="217,208,335,235"/>
+<area shape="rect" id="node13" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="17,157,136,184"/>
+<area shape="rect" id="node16" href="$iio__adp1055_8h.html#ac5bb67e09856d0c177bf845381d36618" title="Initializes the ADP1050 IIO descriptor." alt="" coords="211,259,341,285"/>
+<area shape="rect" id="node18" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="217,309,335,336"/>
+<area shape="rect" id="node17" href="$adp1055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="17,259,136,285"/>
+<area shape="rect" id="node20" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,360,356,387"/>
+<area shape="rect" id="node21" href="$iio__ltp8800_8h.html#ae91bc4bceb8a86bc476ffae79c750cda" title="Initializes the LTP8800 IIO descriptor." alt="" coords="215,411,337,437"/>
+<area shape="rect" id="node22" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,411,148,437"/>
+<area shape="rect" id="node25" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,461,356,488"/>
+<area shape="rect" id="node27" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,512,356,539"/>
+<area shape="rect" id="node30" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO trigger example main execution." alt="" coords="409,537,528,564"/>
+</map>

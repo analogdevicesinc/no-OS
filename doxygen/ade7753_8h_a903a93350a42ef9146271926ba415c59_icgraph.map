@@ -1,0 +1,19 @@
+<map id="ade7753_read" name="ade7753_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="823,228,937,255"/>
+<area shape="rect" id="node2" href="$ade7753_8h.html#a86ba10b7b04a34be7d9e4ce87bfc9d75" title="Clear irq status flags." alt="" coords="108,52,296,79"/>
+<area shape="rect" id="node4" href="$ade7753_8h.html#ad4099d28320c2a857e2ae7f513459e76" title="Read energy values." alt="" coords="604,101,768,128"/>
+<area shape="rect" id="node5" href="$eval-ade7753_2src_2common_2common__data_8h.html#a15949fe4023e52c618a1a27713a2f456" title="Read measurements." alt="" coords="369,152,525,179"/>
+<area shape="rect" id="node6" href="$ade7753_8h.html#a0b1742166bff53d5f8973073bb09e57e" title="Get interrupt indicator from STATUS register." alt="" coords="597,253,775,280"/>
+<area shape="rect" id="node8" href="$ade7753_8h.html#a0c08e6b9bb5947203a35ffcfb64df728" title="Read period value." alt="" coords="609,152,763,179"/>
+<area shape="rect" id="node9" href="$ade7753_8h.html#ae4681fbeffd487a6324e525d0d3d1385" title="read with reset Ipeak val" alt="" coords="609,406,763,447"/>
+<area shape="rect" id="node10" href="$ade7753_8h.html#a94f98f42aee166767e663aa814a9f8b2" title="read with reset Vpeak val" alt="" coords="598,472,774,499"/>
+<area shape="rect" id="node11" href="$ade7753_8h.html#a782aa6df37cab3bcce13e1cfc7108834" title="Read rms values." alt="" coords="614,203,758,229"/>
+<area shape="rect" id="node12" href="$ade7753_8h.html#ad117412dc7e71d7cbb04b99a90ceae37" title="Update specific register bits." alt="" coords="605,355,767,381"/>
+<area shape="rect" id="node17" href="$ade7753_8h.html#abb151efdc4b605a3c2a6b3124d8957bb" title="Version product." alt="" coords="352,253,541,280"/>
+<area shape="rect" id="node3" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,204,60,231"/>
+<area shape="rect" id="node7" href="$ade7753_8h.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="149,241,255,268"/>
+<area shape="rect" id="node13" href="$ade7753_8h.html#a894c298fbec8447aea4fa54cb4b0353a" title="Enable/Disable interrupt." alt="" coords="370,405,523,432"/>
+<area shape="rect" id="node14" href="$ade7753_8h.html#a05069d40bac54d22911d9720fe4305d7" title="Reset the device using SW reset." alt="" coords="375,304,518,331"/>
+<area shape="rect" id="node15" href="$ade7753_8h.html#a45e57845fc7fee8de59a69facb6d7c0c" title="Select source of sampled data for wave register." alt="" coords="359,457,534,498"/>
+<area shape="rect" id="node16" href="$ade7753_8h.html#ae9ca805900d6098339024cc66497ac07" title="Select waveform register update rate." alt="" coords="344,523,549,549"/>
+</map>

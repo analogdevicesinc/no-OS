@@ -1,0 +1,13 @@
+<map id="adxl313_dev" name="adxl313_dev">
+<area shape="rect" id="node1" title="ADXL313 Device structure." alt="" coords="1184,81,1289,107"/>
+<area shape="rect" id="node2" href="$unionadxl313__act__inact__ctl__flags.html" title="Union holding the flags corresponding to ACT AC/DC and INACT AC/DC Bits." alt="" coords="887,25,1049,67"/>
+<area shape="rect" id="node3" href="$struct__adxl313__act__inact__ctl__flags.html" title="Structure holding the flags corresponding to ACT AC/DC and INACT AC/DC Bits." alt="" coords="631,5,777,47"/>
+<area shape="rect" id="node4" href="$unionadxl313__comm__desc.html" title="Union holding the communication parameters." alt="" coords="889,110,1047,137"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="643,110,765,137"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,33,184,59"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,77,471,103"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,128,472,169"/>
+<area shape="rect" id="node9" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="643,195,765,222"/>
+<area shape="rect" id="node10" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,213,184,239"/>
+<area shape="rect" id="node11" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="324,257,471,283"/>
+</map>

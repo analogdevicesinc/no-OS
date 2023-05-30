@@ -1,0 +1,6 @@
+<map id="ltp8800_init" name="ltp8800_init">
+<area shape="rect" id="node1" title="Initialize the device structure." alt="" coords="404,31,503,57"/>
+<area shape="rect" id="node2" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,32"/>
+<area shape="rect" id="node3" href="$iio__ltp8800_8h.html#ae91bc4bceb8a86bc476ffae79c750cda" title="Initializes the LTP8800 IIO descriptor." alt="" coords="215,56,337,83"/>
+<area shape="rect" id="node4" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+</map>

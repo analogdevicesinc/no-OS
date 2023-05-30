@@ -1,0 +1,4 @@
+<map id="no_os_clk_init_param" name="no_os_clk_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="13,95,176,121"/>
+<area shape="rect" id="node2" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+</map>

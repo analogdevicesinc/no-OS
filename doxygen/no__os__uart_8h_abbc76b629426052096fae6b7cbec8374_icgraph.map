@@ -1,0 +1,23 @@
+<map id="no_os_uart_read" name="no_os_uart_read">
+<area shape="rect" id="node1" title="Read data from UART." alt="" coords="717,132,847,159"/>
+<area shape="rect" id="node2" href="$stm32__uart__stdio_8h.html#ab60e5acd5530805f1421802fc0dc1d35" title=" " alt="" coords="559,5,617,32"/>
+<area shape="rect" id="node3" href="$ades1754_8h.html#a8d5454b5a79290f87d6e85bf54768cd5" title="ADES1754 HELLO ALL specific command message to wake&#45;up devices alongside daisy&#45;chain." alt="" coords="515,56,661,83"/>
+<area shape="rect" id="node6" href="$ades1754_8h.html#a1e2642c939bb958615c13fd33919e079" title="ADES1754 read all command message." alt="" coords="516,107,660,133"/>
+<area shape="rect" id="node7" href="$ades1754_8h.html#a69b25b97b9db645b88777f94641bd5ef" title="ADES1754 read block command message." alt="" coords="507,157,669,184"/>
+<area shape="rect" id="node8" href="$ades1754_8h.html#a3043ee917cdcdbf9cb3ef43134f920ac" title="ADES1754 read device command message." alt="" coords="512,208,664,235"/>
+<area shape="rect" id="node21" href="$cn0565_2src_2app_2app_8c.html#a388217d376f9fb3aeccae6a3e7b4c4c1" title=" " alt="" coords="545,259,631,285"/>
+<area shape="rect" id="node4" href="$ades1754_8h.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="313,63,426,89"/>
+<area shape="rect" id="node5" href="$ades1754_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="59,93,178,120"/>
+<area shape="rect" id="node9" href="$ades1754_8h.html#ab10ca7d0a1c2731a054bb4fdc0ef4877" title="Read specific alert state." alt="" coords="294,125,445,152"/>
+<area shape="rect" id="node10" href="$ades1754_8h.html#a01fb57c7549f06f25260bd31a6e0bb5b" title="ADES1754 read cell data." alt="" coords="280,201,459,228"/>
+<area shape="rect" id="node11" href="$ades1754_8h.html#adab9ebabc29ae19de65b72649e194884" title="ADES1754 update device command message." alt="" coords="285,337,453,364"/>
+<area shape="rect" id="node12" href="$ades1754_8h.html#abf0336a8c2479fe281f6890b1e22072e" title="Set ADC scan method." alt="" coords="19,144,218,171"/>
+<area shape="rect" id="node13" href="$ades1754_8h.html#a6b3a12d5e93621a0113c20b392f28a17" title="Cell&#45;Balancing Calibration Period Selection." alt="" coords="27,195,210,237"/>
+<area shape="rect" id="node14" href="$ades1754_8h.html#a568a6c93f7660701c4a318aa9b830d49" title="Cell&#45;Ballancing Measurement Enable/Disable." alt="" coords="6,261,231,288"/>
+<area shape="rect" id="node15" href="$ades1754_8h.html#a9f3596b0241f3b820fb2fdf73114c513" title="Set Cell Balancing mode." alt="" coords="5,312,232,339"/>
+<area shape="rect" id="node16" href="$ades1754_8h.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9" title="Set Buffer mode for data acquisition." alt="" coords="18,363,219,389"/>
+<area shape="rect" id="node17" href="$ades1754_8h.html#a9badaadef8c37481a4ccceae8b42170c" title="Set IIR filter coefficient." alt="" coords="53,413,185,440"/>
+<area shape="rect" id="node18" href="$ades1754_8h.html#aed1fbc41b15d76f6174710a8077ec948" title="Set speciic IIR filter settings." alt="" coords="39,464,199,491"/>
+<area shape="rect" id="node19" href="$ades1754_8h.html#a415d67f8019842750759f13156278777" title="ADES1754 Start/Stop Scanning function." alt="" coords="39,515,198,541"/>
+<area shape="rect" id="node20" href="$ades1754_8h.html#a9f0bfa3719e1e1684c7f16b2aad35599" title="Select Scan Mode of the cells." alt="" coords="11,565,226,592"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="adxl38x_data_raw_to_gees" name="adxl38x_data_raw_to_gees">
+<area shape="rect" id="node1" title="Function to convert accel data to gees." alt="" coords="303,5,501,32"/>
+<area shape="rect" id="node2" href="$fifo__example__main_8h.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="108,5,255,32"/>
+<area shape="rect" id="node3" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,32"/>
+</map>

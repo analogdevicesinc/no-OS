@@ -1,0 +1,5 @@
+<map id="ade9153a_hw_reset" name="ade9153a_hw_reset">
+<area shape="rect" id="node1" title="Reset the device using HW reset." alt="" coords="257,42,409,69"/>
+<area shape="rect" id="node2" href="$ade9153a_8h.html#a3c4b2644d56d572e7d8ba29dc761229c" title="Select comms interface Serial." alt="" coords="18,5,197,47"/>
+<area shape="rect" id="node3" href="$ade9153a_8h.html#a4b6ef6f7d176de7c3bca0316227b9fdb" title="Select comms interface SPI." alt="" coords="5,71,209,98"/>
+</map>

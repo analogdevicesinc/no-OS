@@ -1,0 +1,8 @@
+<map id="ad5791_get_register_value" name="ad5791_get_register_value">
+<area shape="rect" id="node1" title="Reads the value of a register." alt="" coords="448,74,603,115"/>
+<area shape="rect" id="node2" href="$ad5791_8h.html#a479517b9876d7d00161ff6b977faca9d" title="Sets the DAC output in one of the three states." alt="" coords="216,5,400,32"/>
+<area shape="rect" id="node3" href="$ad5791_8h.html#a89753bea092705e1b56fc9ab9f0bd3a0" title="Configures the output amplifier, DAC coding, SDO state and the linearity error compensation." alt="" coords="251,56,365,83"/>
+<area shape="rect" id="node4" href="$ad5791_8h.html#a6811049d716e2c50e1f5a5f6e206cc85" title="SPI write to device using a mask." alt="" coords="219,107,397,133"/>
+<area shape="rect" id="node6" href="$cn0531_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="281,157,335,184"/>
+<area shape="rect" id="node5" href="$ad5791_8h.html#ac74ee2a2599c5317535cb9feceebd225" title="Set Linearity error compensation based on the reference voltage span." alt="" coords="5,107,168,133"/>
+</map>

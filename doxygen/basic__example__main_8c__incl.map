@@ -1,0 +1,14 @@
+<map id="projects/eval&#45;adxl38x/src/examples/basic/basic_example_main.c" name="projects/eval&#45;adxl38x/src/examples/basic/basic_example_main.c">
+<area shape="rect" id="node1" title="Main program for basic example eval&#45;adxl38x project." alt="" coords="341,5,530,61"/>
+<area shape="rect" id="node2" href="$basic__example__main_8h.html" title="Main header for example eval&#45;adxl38x project." alt="" coords="5,109,177,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="201,109,328,136"/>
+<area shape="rect" id="node4" href="$adxl38x_8h.html" title="Header file of ADXL38X Driver." alt="" coords="352,109,439,136"/>
+<area shape="rect" id="node9" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="531,184,644,211"/>
+<area shape="rect" id="node10" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="514,109,650,136"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="675,109,743,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="360,259,431,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="178,184,261,211"/>
+<area shape="rect" id="node7" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="285,184,383,211"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="407,184,506,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="669,184,735,211"/>
+</map>

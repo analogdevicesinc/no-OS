@@ -1,0 +1,18 @@
+<map id="drivers/power/ltm4686/ltm4686.c" name="drivers/power/ltm4686/ltm4686.c">
+<area shape="rect" id="node1" title="Source code of the LTM4686 driver." alt="" coords="568,5,737,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="391,244,461,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="617,244,699,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="817,244,888,271"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1032,95,1100,121"/>
+<area shape="rect" id="node6" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="1124,95,1235,121"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="515,169,615,196"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,169,119,196"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="840,95,951,121"/>
+<area shape="rect" id="node11" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="143,169,242,196"/>
+<area shape="rect" id="node12" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="463,95,570,121"/>
+<area shape="rect" id="node13" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="645,95,751,121"/>
+<area shape="rect" id="node15" href="$ltm4686_8h.html" title="Header file of the LTM4686 driver." alt="" coords="301,95,389,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="890,169,957,196"/>
+<area shape="rect" id="node14" title=" " alt="" coords="690,169,765,196"/>
+<area shape="rect" id="node16" title=" " alt="" coords="317,169,388,196"/>
+</map>

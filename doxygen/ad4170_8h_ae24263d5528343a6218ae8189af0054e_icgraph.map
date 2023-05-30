@@ -1,0 +1,8 @@
+<map id="ad4170_spi_reg_write_mask" name="ad4170_spi_reg_write_mask">
+<area shape="rect" id="node1" title="SPI write device register using a mask." alt="" coords="236,107,443,133"/>
+<area shape="rect" id="node2" href="$ad4170_8h.html#a576b13688c52d149cf2a43b39084a333" title="Perform a software reset." alt="" coords="41,5,152,32"/>
+<area shape="rect" id="node3" href="$ad4170_8h.html#a3ca58a262948f7d1cc5c3fd562042607" title="Set the AD4170 clock selection configuration." alt="" coords="18,56,175,83"/>
+<area shape="rect" id="node4" href="$ad4170_8h.html#a235862ccc6dddd05420432900c3fedbb" title="Set the AD4170 DCLK configuration." alt="" coords="17,107,176,133"/>
+<area shape="rect" id="node5" href="$ad4170_8h.html#a8ee0c2d9530b516c27c3be372a061a4e" title="Set the AD4170 MCLK configuration." alt="" coords="15,157,178,184"/>
+<area shape="rect" id="node6" href="$ad4170_8c.html#a83d10b0457a777f079f6ccbee72d091b" title="Set the AD4170 SPI settings." alt="" coords="5,208,188,235"/>
+</map>

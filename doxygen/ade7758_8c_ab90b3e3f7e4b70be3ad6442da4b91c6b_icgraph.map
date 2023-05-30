@@ -1,0 +1,14 @@
+<map id="ade7758_update_bits" name="ade7758_update_bits">
+<area shape="rect" id="node1" title="Update specific register bits." alt="" coords="531,183,692,209"/>
+<area shape="rect" id="node2" href="$ade7758_8h.html#a85ea4d235a62d1d2c1f4198746ef00b8" title="Operation mode of the ADCs." alt="" coords="301,5,459,32"/>
+<area shape="rect" id="node5" href="$ade7758_8h.html#ae42bfdaa8620b923435a3ac51b0ae0ea" title="Select the input to the energy accumulation registers." alt="" coords="317,56,443,83"/>
+<area shape="rect" id="node6" href="$ade7758_8h.html#af563e84e29d4f693ed1c74396787db67" title="Enable/Disable interrupt." alt="" coords="303,107,457,133"/>
+<area shape="rect" id="node7" href="$ade7758_8h.html#a25768e9b2e97a4bdd6b858a1c1645dfc" title="Select the source of the measurement of the voltage line frequency." alt="" coords="299,157,461,184"/>
+<area shape="rect" id="node8" href="$ade7758_8h.html#a7abd5adabc220a2509032906244a57ef" title="Reset the device using SW reset." alt="" coords="309,376,451,403"/>
+<area shape="rect" id="node10" href="$ade7758_8h.html#a6256795cf572104190077c90bd04e58e" title="Select the phase of sampled data for wave register." alt="" coords="284,208,476,235"/>
+<area shape="rect" id="node11" href="$ade7758_8h.html#ac77450d3d9e7dd6ed665944487e24ecc" title="Select source of sampled data for wave register." alt="" coords="293,259,467,301"/>
+<area shape="rect" id="node12" href="$ade7758_8h.html#aae0adecdd5d9ca76c6f6aa88aa82a9a8" title="Select waveform register update rate." alt="" coords="277,325,483,352"/>
+<area shape="rect" id="node3" href="$ade7758_8h.html#ad643b16ba67d694a04b326f1df0a3820" title="Setup the ADE7758 device." alt="" coords="108,183,229,209"/>
+<area shape="rect" id="node4" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,267,60,293"/>
+<area shape="rect" id="node9" href="$ade7758_8h.html#a422e1a9832e2a6c7451aa9857d446c90" title="Initialize the device." alt="" coords="115,292,222,319"/>
+</map>

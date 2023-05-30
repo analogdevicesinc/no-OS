@@ -1,0 +1,9 @@
+<map id="drivers/adc/ad4170/ad4170.h" name="drivers/adc/ad4170/ad4170.h">
+<area shape="rect" id="node1" title="Header file for the ad4170 driver." alt="" coords="159,5,305,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="151,169,222,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="407,169,489,196"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="310,95,410,121"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="179,95,285,121"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,95,104,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="311,169,382,196"/>
+</map>

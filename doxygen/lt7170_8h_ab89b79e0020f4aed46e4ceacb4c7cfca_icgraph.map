@@ -1,0 +1,4 @@
+<map id="lt7170_write_word" name="lt7170_write_word">
+<area shape="rect" id="node1" title="Perform a raw PMBus write word operation." alt="" coords="200,5,343,32"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#a30b2bb5c6fcd4f0cf0afdb61361c7a0e" title="Set output PWM mode." alt="" coords="5,5,152,32"/>
+</map>

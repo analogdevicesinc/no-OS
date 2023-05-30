@@ -1,0 +1,10 @@
+<map id="drivers/frequency/adf4382/adf4382.h" name="drivers/frequency/adf4382/adf4382.h">
+<area shape="rect" id="node1" title="Implementation of adf4382 Driver." alt="" coords="80,5,273,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="271,169,341,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="27,95,97,121"/>
+<area shape="rect" id="node4" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="121,95,232,121"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="380,95,480,121"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="257,95,355,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="380,169,451,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="475,169,558,196"/>
+</map>

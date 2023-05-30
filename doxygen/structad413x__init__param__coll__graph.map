@@ -1,0 +1,14 @@
+<map id="ad413x_init_param" name="ad413x_init_param">
+<area shape="rect" id="node1" title="Initial parameter structure." alt="" coords="1263,107,1409,133"/>
+<area shape="rect" id="node2" href="$structad413x__standby__ctrl.html" title="Standby control flags." alt="" coords="965,5,1122,32"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,56,1129,83"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,17,819,44"/>
+<area shape="rect" id="node5" href="$structad413x__channel.html" title="Channel setting." alt="" coords="979,107,1107,133"/>
+<area shape="rect" id="node6" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,157,1125,184"/>
+<area shape="rect" id="node7" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,157,786,184"/>
+<area shape="rect" id="node8" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,120,184,147"/>
+<area shape="rect" id="node10" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,181,471,208"/>
+<area shape="rect" id="node9" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,234,472,275"/>
+<area shape="rect" id="node11" href="$structad413x__preset.html" title="Preset setting." alt="" coords="984,256,1103,283"/>
+<area shape="rect" id="node12" href="$structad413x__ref__buf.html" title="ADC reference buffer selection." alt="" coords="663,305,786,332"/>
+</map>

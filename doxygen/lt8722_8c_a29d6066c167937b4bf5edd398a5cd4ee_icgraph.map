@@ -1,0 +1,26 @@
+<map id="lt8722_reg_write" name="lt8722_reg_write">
+<area shape="rect" id="node1" title="Write data to LT8722 device." alt="" coords="896,399,1027,425"/>
+<area shape="rect" id="node2" href="$lt8722_8h.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="265,297,356,324"/>
+<area shape="rect" id="node5" href="$lt8722_8h.html#a4ff031d2fd57959d9682248339313636" title="Write to LT8722 device register with mask." alt="" coords="673,399,848,425"/>
+<area shape="rect" id="node24" href="$lt8722_8h.html#a3b1037e324c4b61c98cebb06d23684b0" title="Set analot output signal source of LT8722 device." alt="" coords="693,449,828,476"/>
+<area shape="rect" id="node3" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,348,165,375"/>
+<area shape="rect" id="node4" href="$iio__lt8722_8h.html#a23141fac16f901e00b4a6068918ee0d6" title="Initializes the LT8722 IIO descriptor." alt="" coords="28,297,143,324"/>
+<area shape="rect" id="node6" href="$lt8722_8h.html#ab3afb3880e6dc12fe0fb7839542995cb" title="Clear LT8722 device faults." alt="" coords="467,44,614,71"/>
+<area shape="rect" id="node7" href="$lt8722_8h.html#a680d1d094a41e3626f80ef7cdfa4d8d8" title="Shutdown the LT8722 device." alt="" coords="489,247,592,273"/>
+<area shape="rect" id="node8" href="$lt8722_8h.html#acbcf0e62a653fa0f1e87504c05160ed9" title="Set analog output buffer status of LT8722 device." alt="" coords="466,449,615,476"/>
+<area shape="rect" id="node9" href="$lt8722_8h.html#a5420a9ec6300ed15c178d2f18ee1862f" title="Set DAC code of LT8722 device." alt="" coords="481,348,601,375"/>
+<area shape="rect" id="node11" href="$lt8722_8h.html#ad655b0fe8a65d90ea90962c2db8c9280" title="Set ENABLE_REQ field in LT8722 device." alt="" coords="456,399,625,425"/>
+<area shape="rect" id="node13" href="$lt8722_8h.html#a570879b4e54e38d79beb8d61e904f17c" title="Set LDR power dissipation limit of LT8722 device." alt="" coords="466,500,615,527"/>
+<area shape="rect" id="node14" href="$lt8722_8h.html#a8160879da7967fd0c5575bbc2c8ffff7" title="Set negative output current limit of LT8722 device." alt="" coords="464,551,617,593"/>
+<area shape="rect" id="node15" href="$lt8722_8h.html#ad00984b3fcdc6de568898e9ff6e83003" title="Set positive output current limit of LT8722 device." alt="" coords="464,617,617,658"/>
+<area shape="rect" id="node16" href="$lt8722_8h.html#adb3fb1d2c2a2e353e1b0971c850f3c0b" title="Set positive output voltage limit of LT8722 device." alt="" coords="467,682,614,723"/>
+<area shape="rect" id="node17" href="$lt8722_8h.html#a4b0dc0c0140dafddc6f0cb480ad7ba8d" title="Set negative output voltage limit of LT8722 device." alt="" coords="467,747,614,789"/>
+<area shape="rect" id="node18" href="$lt8722_8h.html#aee404651e57d76867a6c7990dc3fbe9d" title="Set switching frequency adjustment of LT8722 device." alt="" coords="457,813,624,840"/>
+<area shape="rect" id="node19" href="$lt8722_8h.html#a50aba850e6825e90ddf215713f9c2229" title="Set switching frequency of LT8722 device." alt="" coords="457,864,624,891"/>
+<area shape="rect" id="node20" href="$lt8722_8h.html#adffad847781986c9ca61a785539f1829" title="Set initial peak inductor current of LT8722 device." alt="" coords="460,95,621,121"/>
+<area shape="rect" id="node21" href="$lt8722_8h.html#ae4a4ce84ce7792b55619cecff8b15869" title="Set switching enable of LT8722 device." alt="" coords="461,297,620,324"/>
+<area shape="rect" id="node22" href="$lt8722_8h.html#ad141ec95f3f4787718faa7dfc0521456" title="Set PWM duty cycle of LT8722 device." alt="" coords="470,145,611,172"/>
+<area shape="rect" id="node23" href="$lt8722_8h.html#ae295ce7f869bc18d7babf347bbd83172" title="Set internal circuitry voltage source of LT8722 device." alt="" coords="463,196,618,223"/>
+<area shape="rect" id="node10" href="$lt8722_8h.html#ad9a474691b3c502b9663a8cb5c7fe091" title="Set output volatge of LT8722 device." alt="" coords="213,348,408,375"/>
+<area shape="rect" id="node12" href="$lt8722_8h.html#ac73cab22e0f650778dbe7ba66fc82f1b" title="Reset the LT8722 device." alt="" coords="244,399,377,425"/>
+</map>

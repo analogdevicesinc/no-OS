@@ -1,0 +1,12 @@
+<map id="adxl362_get_register_value" name="adxl362_get_register_value">
+<area shape="rect" id="node1" title="Performs a burst read of a specified number of registers." alt="" coords="252,201,411,242"/>
+<area shape="rect" id="node2" href="$adxl362_8h.html#a85de7c1eb85484f9f9180f432197d180" title="Reads the 3&#45;axis raw data from the accelerometer and converts it to g." alt="" coords="31,5,178,32"/>
+<area shape="rect" id="node3" href="$adxl362_8h.html#a1f7f054b6553e172c359b816250f04bc" title="Reads the 3&#45;axis raw data from the accelerometer." alt="" coords="39,56,171,83"/>
+<area shape="rect" id="node4" href="$adxl362_8h.html#af8f03dacefae0a3b39b88314cd0ffdca" title="Initializes communication with the device and checks if the part is present by reading the device id." alt="" coords="53,107,156,133"/>
+<area shape="rect" id="node5" href="$adxl362_8h.html#a3e7264584a3833fa1fbbf537ecd169cf" title="Reads the temperature of the device." alt="" coords="5,157,204,184"/>
+<area shape="rect" id="node6" href="$adxl362_8h.html#a7d4d7e82f2a2f6d3ed88aa013b982e34" title="Selects the Output Data Rate of the device." alt="" coords="13,208,196,235"/>
+<area shape="rect" id="node7" href="$adxl362_8h.html#aa8b08894551865247233a1d9ac3d08ec" title="Places the device into standby/measure mode." alt="" coords="9,259,201,285"/>
+<area shape="rect" id="node8" href="$adxl362_8h.html#a248bb86ec9c4ff20e27bca063dce1e75" title="Selects the measurement range." alt="" coords="32,309,177,336"/>
+<area shape="rect" id="node9" href="$adxl362_8h.html#a0cc6fa4ec0b9bb68e1d59dfe139a22d7" title="Configures activity detection." alt="" coords="18,361,191,402"/>
+<area shape="rect" id="node10" href="$adxl362_8h.html#aa516c3ee05c5f49b0497aa63d1b28cab" title="Configures inactivity detection." alt="" coords="12,426,197,467"/>
+</map>

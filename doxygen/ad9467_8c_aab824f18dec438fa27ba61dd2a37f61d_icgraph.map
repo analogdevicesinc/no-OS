@@ -1,0 +1,21 @@
+<map id="ad9467_set_bits_to_reg" name="ad9467_set_bits_to_reg">
+<area shape="rect" id="node1" title="Sets a bit or a group of bits inside a register without modifying the other bits." alt="" coords="567,415,743,442"/>
+<area shape="rect" id="node2" href="$ad9467_8h.html#a79ec5e0b953aa7648e3d8ca880a3acee" title="Sets the AC coupling(0) or DC coupling(1) mode." alt="" coords="339,5,500,47"/>
+<area shape="rect" id="node3" href="$ad9467_8h.html#a1125171373d3873d6a144855fc2a0d1c" title="Disconnects (1) or connects (0) the analog input from or to the the ADC channel." alt="" coords="339,71,500,112"/>
+<area shape="rect" id="node4" href="$ad9467_8h.html#a597797a641700c750e9a32641c9c11bb" title="Changes the input buffer current(1)." alt="" coords="328,137,511,163"/>
+<area shape="rect" id="node5" href="$ad9467_8h.html#abd5aa1b883075986a7d34cf3494ffa68" title="Changes the input buffer current(2)." alt="" coords="328,187,511,214"/>
+<area shape="rect" id="node6" href="$ad9467_8h.html#a435c341bd1925e56140829983de1008c" title="Determines LVDS output properties." alt="" coords="329,238,510,265"/>
+<area shape="rect" id="node7" href="$ad9467_8h.html#ac538012352eeb265aa262a2cc101926f" title="Activates the normal (0) or inverted (1) DCO clock." alt="" coords="326,289,513,315"/>
+<area shape="rect" id="node8" href="$ad9467_8h.html#a1ee4250c78259778b92cf0473ffb090f" title="Enables (1) or disables (0) the external voltage reference." alt="" coords="341,339,497,366"/>
+<area shape="rect" id="node9" href="$ad9467_8h.html#a2853eb8b8d9e541b869521d24873c6cf" title="Configures the full&#45;scale input voltage selection." alt="" coords="328,390,511,417"/>
+<area shape="rect" id="node10" href="$ad9467_8h.html#a7675d7bae1a339b8905afb6af8075788" title="Sets the output current adjustment." alt="" coords="320,441,519,467"/>
+<area shape="rect" id="node11" href="$ad9467_8h.html#a35c640df5935d520d6e21c72a03b84e1" title="Disables (1) or enables (0) the data output." alt="" coords="333,491,506,518"/>
+<area shape="rect" id="node12" href="$ad9467_8h.html#a8cf1ef07324f55b9c5ea07b014797e72" title="Specifies the output format." alt="" coords="334,593,505,619"/>
+<area shape="rect" id="node15" href="$ad9467_8h.html#a70c8f21b8351059ff7b142d6610c9e8f" title="Activates the inverted (1) or normal (0) output mode." alt="" coords="108,542,272,569"/>
+<area shape="rect" id="node16" href="$ad9467_8h.html#a75824f422e1e72caf5b140d06b9c4cb1" title="Configures the power mode." alt="" coords="347,643,492,670"/>
+<area shape="rect" id="node17" href="$ad9467_8h.html#aa4ca255f28a2fdd3b321f285f10ebb42" title="Sets (1) or clears (0) the reset long PN sequence bit(PN23)." alt="" coords="115,745,265,771"/>
+<area shape="rect" id="node18" href="$ad9467_8h.html#adf0af00c561fb97352c0784c324dd081" title="Sets (1) or clears (0) the reset short PN sequence bit(PN9)." alt="" coords="119,795,261,822"/>
+<area shape="rect" id="node19" href="$ad9467_8h.html#a1a94cd0931136ab64a76f2aa4f9e6cc4" title="Sets the ADC&#39;s test mode." alt="" coords="346,694,493,721"/>
+<area shape="rect" id="node13" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="151,643,229,670"/>
+<area shape="rect" id="node14" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,669,60,695"/>
+</map>

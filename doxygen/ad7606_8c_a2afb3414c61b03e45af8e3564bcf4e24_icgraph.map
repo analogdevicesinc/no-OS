@@ -1,0 +1,5 @@
+<map id="ad7606_init" name="ad7606_init">
+<area shape="rect" id="node1" title="Initialize the ad7606 device structure." alt="" coords="175,31,273,57"/>
+<area shape="rect" id="node2" href="$iio__ad7606_8h.html#a711196dffba30114293e1db85fd666e1" title="Initialize AD7606 for IIO interfacing." alt="" coords="5,5,127,32"/>
+<area shape="rect" id="node3" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="39,56,93,83"/>
+</map>

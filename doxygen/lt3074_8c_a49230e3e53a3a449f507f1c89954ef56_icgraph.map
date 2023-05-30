@@ -1,0 +1,9 @@
+<map id="lt3074_send_byte" name="lt3074_send_byte">
+<area shape="rect" id="node1" title="Send a PMBus command to the device." alt="" coords="692,56,829,83"/>
+<area shape="rect" id="node2" href="$lt3074_8h.html#a15fa1e76dcbf43fe9262f76f83666c89" title="Clear status registers." alt="" coords="487,31,634,57"/>
+<area shape="rect" id="node7" href="$lt3074_8h.html#a77dc4714276b8d05da572d99dfc27479" title="Perform a device software reset." alt="" coords="477,81,644,108"/>
+<area shape="rect" id="node3" href="$lt3074_8h.html#adbb25a5e0bfec64795789a60e0b67507" title="Initialize the device structure." alt="" coords="339,31,429,57"/>
+<area shape="rect" id="node4" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="172,5,291,32"/>
+<area shape="rect" id="node5" href="$iio__lt3074_8h.html#a0d877a2fe54762f2932c52e49b7f4b5a" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,56,289,83"/>
+<area shape="rect" id="node6" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,56,124,83"/>
+</map>

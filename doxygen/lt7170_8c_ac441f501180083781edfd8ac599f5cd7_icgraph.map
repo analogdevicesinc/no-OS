@@ -1,0 +1,6 @@
+<map id="lt7170_send_byte" name="lt7170_send_byte">
+<area shape="rect" id="node1" title="Send a PMBus command to the device." alt="" coords="220,56,357,83"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#ab644f01f8b3f267685bba2c3535de601" title="Clear all asserted faults." alt="" coords="15,5,162,32"/>
+<area shape="rect" id="node3" href="$lt7170_8h.html#a04128a0d564876f87e321f863270f63e" title="Perform commands for non&#45;volatile memory (NVM)" alt="" coords="21,56,156,83"/>
+<area shape="rect" id="node4" href="$lt7170_8h.html#aeb649be8fcf512b48d3b7f006830ea0a" title="Perform a device software reset." alt="" coords="5,107,172,133"/>
+</map>

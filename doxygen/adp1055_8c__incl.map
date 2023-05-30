@@ -1,0 +1,16 @@
+<map id="drivers/power/adp1055/adp1055.c" name="drivers/power/adp1055/adp1055.c">
+<area shape="rect" id="node1" title="Source file for the ADP1055 Driver." alt="" coords="656,5,827,47"/>
+<area shape="rect" id="node2" href="$adp1055_8h.html" title="Header file for the ADP1055 Driver." alt="" coords="413,95,504,121"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="631,169,731,196"/>
+<area shape="rect" id="node12" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="873,95,983,121"/>
+<area shape="rect" id="node14" href="$no__os__alloc_8h.html" title=" " alt="" coords="734,95,845,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="237,244,307,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="417,244,500,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="756,169,823,196"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,169,112,196"/>
+<area shape="rect" id="node7" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="136,169,235,196"/>
+<area shape="rect" id="node8" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="310,169,421,196"/>
+<area shape="rect" id="node11" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="497,169,607,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="735,244,806,271"/>
+<area shape="rect" id="node13" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="898,169,966,196"/>
+</map>

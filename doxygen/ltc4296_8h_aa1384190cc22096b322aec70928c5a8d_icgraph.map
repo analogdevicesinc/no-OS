@@ -1,0 +1,21 @@
+<map id="ltc4296_reg_write" name="ltc4296_reg_write">
+<area shape="rect" id="node1" title="Register Write." alt="" coords="695,391,833,418"/>
+<area shape="rect" id="node2" href="$ltc4296_8h.html#ac85ee4f3f8c86b87deb0c02b18e041a1" title="Clear circuit break faults." alt="" coords="450,71,642,98"/>
+<area shape="rect" id="node4" href="$ltc4296_8h.html#a94d5e1bab7c9859218cd26a0485f5906" title="Clear global faults." alt="" coords="468,123,624,164"/>
+<area shape="rect" id="node5" href="$ltc4296_8h.html#ae589e14e837a59ca341c89708da399a1" title="Clear Port Events." alt="" coords="475,5,617,47"/>
+<area shape="rect" id="node7" href="$ltc4296_8h.html#a425040b9a2bb2b4fb794b362b88f9561" title="Disable the global ADC." alt="" coords="465,189,627,215"/>
+<area shape="rect" id="node8" href="$ltc4296_8h.html#a43e962728bfabf996f827ce0811750e8" title="Force port to power mode." alt="" coords="459,239,633,266"/>
+<area shape="rect" id="node9" href="$ltc4296_8h.html#a2f4cd2b12d9fd083bd0c557cf87d4a51" title="Device initialization." alt="" coords="256,509,355,535"/>
+<area shape="rect" id="node11" href="$ltc4296_8h.html#add5337ca7937c1c999a6cb6cd442e085" title="Check if port is disabled." alt="" coords="467,341,625,367"/>
+<area shape="rect" id="node12" href="$ltc4296_8h.html#a6906acd8493f785d8f983dc4c47033cc" title="Enable specific port." alt="" coords="242,711,369,738"/>
+<area shape="rect" id="node13" href="$ltc4296_8h.html#aa68f91f1a7e08c29a12a525aada778f3" title="Enable specific port and classify." alt="" coords="467,443,625,484"/>
+<area shape="rect" id="node14" href="$ltc4296_8h.html#af4b3d0eaa0f53c41eef4ca623168ea10" title="Stimulate valid wake&#45;up signature for a port." alt="" coords="226,610,385,637"/>
+<area shape="rect" id="node15" href="$ltc4296_8h.html#a50a6a88e46753fa6b57624cfeab9b68b" title="Set port is able to source power." alt="" coords="445,559,647,586"/>
+<area shape="rect" id="node16" href="$ltc4296_8h.html#a19480e8dc27ee4bb6e2f714d240d7b7d" title="Software reset." alt="" coords="491,391,601,418"/>
+<area shape="rect" id="node17" href="$ltc4296_8h.html#a055027c6637764f6a5dacef447d7d4fd" title="Set the global ADC to measure voltage." alt="" coords="465,661,627,687"/>
+<area shape="rect" id="node18" href="$ltc4296_8h.html#aaac62d33fbc481b7c7502dff3ec8cb1e" title="Set port to power mode." alt="" coords="465,711,627,738"/>
+<area shape="rect" id="node19" href="$ltc4296_8h.html#a233877755eabb35a0c8373b8bea6a3f5" title="Device unlock." alt="" coords="486,290,606,317"/>
+<area shape="rect" id="node3" href="$ltc4296_8h.html#aebc83ee39584effbc89eedd89cc11f00" title="Check global events." alt="" coords="232,203,379,244"/>
+<area shape="rect" id="node6" href="$ltc4296_8c.html#a135395f045d8588e52cac9d85c3f80f4" title="Check port events." alt="" coords="213,13,397,39"/>
+<area shape="rect" id="node10" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,610,165,637"/>
+</map>

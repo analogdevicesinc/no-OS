@@ -1,0 +1,6 @@
+<map id="adis_write_sync_mode" name="adis_write_sync_mode">
+<area shape="rect" id="node1" title="Update synchronization mode." alt="" coords="420,42,591,69"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="213,5,372,47"/>
+<area shape="rect" id="node3" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="254,71,331,98"/>
+<area shape="rect" id="node4" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,71,165,98"/>
+</map>

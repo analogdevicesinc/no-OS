@@ -1,0 +1,18 @@
+<map id="ad3530r_reg_write" name="ad3530r_reg_write">
+<area shape="rect" id="node1" title="Write into device register." alt="" coords="727,277,869,304"/>
+<area shape="rect" id="node2" href="$ad3530r_8h.html#a8a3ac7191cbdf77aba3b02e2c0548ada" title=" " alt="" coords="5,5,180,32"/>
+<area shape="rect" id="node3" href="$ad3530r_8h.html#a422fe55dd8f8813163bd0192cc34fdd1" title=" " alt="" coords="505,372,668,399"/>
+<area shape="rect" id="node5" href="$ad3530r_8h.html#a5a341873f52311996625d6488ed9128b" title=" " alt="" coords="9,78,176,119"/>
+<area shape="rect" id="node6" href="$ad3530r_8h.html#a4c45291edfabc854f60823bf02395958" title=" " alt="" coords="506,511,667,537"/>
+<area shape="rect" id="node7" href="$ad3530r_8h.html#affcc4cfb845310a896d06b72eb499570" title="SPI write to device using a mask." alt="" coords="495,277,679,304"/>
+<area shape="rect" id="node4" href="$ad3530r_8c.html#adf657d70dc5ad1db0cc23dad3e739158" title="Configures the device." alt="" coords="7,416,178,443"/>
+<area shape="rect" id="node8" href="$ad3530r_8h.html#accede971255551577c41c49625f1e72a" title="Perform a hard/soft reset." alt="" coords="280,147,395,173"/>
+<area shape="rect" id="node10" href="$ad3530r_8h.html#a45f0c36ead8fdf6a2330277bae4727bd" title=" " alt="" coords="248,416,427,443"/>
+<area shape="rect" id="node11" href="$ad3530r_8h.html#aa36c5429be3704bee573884d15c0d633" title=" " alt="" coords="254,467,421,509"/>
+<area shape="rect" id="node12" href="$ad3530r_8h.html#af0a5badacfee47157cff054d8894f780" title=" " alt="" coords="230,248,445,275"/>
+<area shape="rect" id="node13" href="$ad3530r_8h.html#a4a206b1a7dcb061a1386abe79b8c315f" title=" " alt="" coords="262,299,413,341"/>
+<area shape="rect" id="node14" href="$ad3530r_8h.html#a568e7651537627d1cd0aa5c8f229ec56" title=" " alt="" coords="252,365,423,392"/>
+<area shape="rect" id="node15" href="$ad3530r_8h.html#a5815e99e0ad280385f829c2a20018188" title="Trigger the LDAC using software." alt="" coords="245,96,429,123"/>
+<area shape="rect" id="node16" href="$ad3530r_8h.html#af8b8629966943af864d6b8c3799e94d5" title="Updates the interface configuration." alt="" coords="228,197,447,224"/>
+<area shape="rect" id="node9" href="$ad3530r_8h.html#a9f4f360a67fe344a9ec9d26973046ed8" title="Initialize the device structure." alt="" coords="41,172,144,199"/>
+</map>

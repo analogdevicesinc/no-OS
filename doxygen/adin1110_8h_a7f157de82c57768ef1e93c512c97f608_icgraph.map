@@ -1,0 +1,17 @@
+<map id="adin1110_reg_write" name="adin1110_reg_write">
+<area shape="rect" id="node1" title="Write a register&#39;s value." alt="" coords="759,208,909,235"/>
+<area shape="rect" id="node2" href="$adin1110_8c.html#adff719efae401e69148b2ffdc2fc1657" title="Drop a MAC address filter." alt="" coords="519,5,711,32"/>
+<area shape="rect" id="node4" href="$adin1110_8h.html#a9f5add21eeddbb548eb4c86436a6b00c" title="Reset the MAC device." alt="" coords="536,56,693,83"/>
+<area shape="rect" id="node5" href="$adin1110_8h.html#a976ff9c87dee57812cdc31869fb00afa" title="Read a PHY register using clause 22." alt="" coords="535,107,694,133"/>
+<area shape="rect" id="node6" href="$adin1110_8h.html#a36cc242f605b3251d5a5662fea41f534" title="Read a PHY register using clause 45." alt="" coords="521,157,709,184"/>
+<area shape="rect" id="node7" href="$adin1110_8h.html#af976653778ae7d9acc44b2e745987a73" title="Write a PHY register using clause 22." alt="" coords="533,208,696,235"/>
+<area shape="rect" id="node8" href="$adin1110_8h.html#aa2b694efd5f31849bdeb6228b7070394" title="Write a PHY register using clause 45." alt="" coords="519,259,711,285"/>
+<area shape="rect" id="node9" href="$adin1110_8h.html#a72d9ad4ea11c49d3a4a76ec024d4be81" title="Update a register&#39;s value based on a mask." alt="" coords="533,309,696,336"/>
+<area shape="rect" id="node10" href="$adin1110_8h.html#a05609f0807a1f98ed266f3f75073ddea" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="525,360,705,387"/>
+<area shape="rect" id="node11" href="$adin1110_8h.html#aedf3f21c23621ec1abcdec2374996711" title="Reset both the MAC and PHY." alt="" coords="541,411,688,437"/>
+<area shape="rect" id="node3" href="$adin1110_8h.html#a32b2d0fa3b54c8b0219e6b8ed5992d14" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="317,171,471,213"/>
+<area shape="rect" id="node12" href="$adin1110_8h.html#a635de87c5f9555429501be7482f7d2bb" title="Initialize the device." alt="" coords="339,411,449,437"/>
+<area shape="rect" id="node13" href="$adin1110__standalone__example_8h.html#acbf661085a642e031f672cda6c6da4fe" title="Configure the ADIN1110 and read the device ID." alt="" coords="108,374,269,415"/>
+<area shape="rect" id="node15" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="129,440,248,467"/>
+<area shape="rect" id="node14" href="$apard32690_2src_2examples_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution." alt="" coords="5,381,60,408"/>
+</map>

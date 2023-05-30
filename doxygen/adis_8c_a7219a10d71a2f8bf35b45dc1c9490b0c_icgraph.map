@@ -1,0 +1,4 @@
+<map id="adis_get_deltavelocity_scale" name="adis_get_deltavelocity_scale">
+<area shape="rect" id="node1" title="Read adis device delta velocity scale in fractional form." alt="" coords="203,5,372,47"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="5,13,155,39"/>
+</map>

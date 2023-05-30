@@ -1,0 +1,8 @@
+<map id="drivers/accel/adxl367/adxl367.h" name="drivers/accel/adxl367/adxl367.h">
+<area shape="rect" id="node1" title="Header file of ADXL367 Driver." alt="" coords="296,5,457,47"/>
+<area shape="rect" id="node2" href="$adxl367_8c.html" title="Implementation of ADXL367 Driver." alt="" coords="5,102,167,143"/>
+<area shape="rect" id="node3" href="$iio__adxl367_8c.html" title="IIO part of the ADXL367 driver." alt="" coords="191,102,352,143"/>
+<area shape="rect" id="node4" href="$eval-adxl367z_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="376,102,591,143"/>
+<area shape="rect" id="node6" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example for eval&#45;adxl367z project." alt="" coords="615,95,837,151"/>
+<area shape="rect" id="node5" href="$eval-adxl367z_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="376,199,591,240"/>
+</map>

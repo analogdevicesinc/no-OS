@@ -1,0 +1,10 @@
+<map id="gcd" name="gcd">
+<area shape="rect" id="node1" title="Computes the greatest common divider of two numbers." alt="" coords="741,81,787,108"/>
+<area shape="rect" id="node2" href="$group___a_p_i.html#ga45fcbdbcecb280893d0f33e1346e3adc" title="Set NCO." alt="" coords="537,5,663,32"/>
+<area shape="rect" id="node3" href="$ad9208__api_8h.html#a8085bba558039c73e537e3f0bd479de6" title="Set AD9208 NCO based on the Channel Carrier Frequency." alt="" coords="507,56,693,83"/>
+<area shape="rect" id="node4" href="$adf4156_8h.html#a14d2922ab161e99b4135b71c08fe5d97" title="Sets the ADF4156 output frequency." alt="" coords="533,107,667,133"/>
+<area shape="rect" id="node5" href="$adf4350_8c.html#a36f6fb1f03a7c1b263bdf4787defbeb0" title="Sets the ADF4350 frequency." alt="" coords="533,157,667,184"/>
+<area shape="rect" id="node6" href="$adf4350_8h.html#a8c919c6b19796b92b775d6727856ef46" title="Stores PLL 0 frequency in Hz." alt="" coords="275,150,459,191"/>
+<area shape="rect" id="node7" href="$adf4350_8h.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="108,157,227,184"/>
+<area shape="rect" id="node8" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,157,60,184"/>
+</map>

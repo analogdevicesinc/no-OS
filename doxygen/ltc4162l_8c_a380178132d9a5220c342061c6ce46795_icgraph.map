@@ -1,0 +1,26 @@
+<map id="ltc4162l_reg_read" name="ltc4162l_reg_read">
+<area shape="rect" id="node1" title="Read from a register of the LTC4162L." alt="" coords="695,548,833,575"/>
+<area shape="rect" id="node2" href="$ltc4162l_8h.html#aeac3beab3298444973a44147d684bb82" title="Get the number of cells." alt="" coords="463,103,637,129"/>
+<area shape="rect" id="node4" href="$ltc4162l_8h.html#a307ec70a0ddee2f825824a817b7f247a" title="Get the vcharge setting." alt="" coords="229,209,390,250"/>
+<area shape="rect" id="node5" href="$ltc4162l_8h.html#a0778d4aeb58c3865f5695bd6ba7807a6" title="Get the average battery voltage." alt="" coords="221,40,398,67"/>
+<area shape="rect" id="node6" href="$ltc4162l_8h.html#a2f75a3a7cf89596b31acd59c08719a24" title="Get the battery voltage." alt="" coords="236,275,383,301"/>
+<area shape="rect" id="node8" href="$ltc4162l_8h.html#aa7f47972d5d72da0238dcb78d3dfea5e" title="Get the charge status." alt="" coords="473,366,627,407"/>
+<area shape="rect" id="node9" href="$ltc4162l_8h.html#a2dec6ea224585512b47f682043eae547" title="Get the charger state." alt="" coords="471,431,629,473"/>
+<area shape="rect" id="node10" href="$ltc4162l_8h.html#a7efc5d4495f9397b40c0e1b6676709ce" title="Get the chemistry type." alt="" coords="459,159,641,185"/>
+<area shape="rect" id="node11" href="$ltc4162l_8c.html#a857d94b7e8890a8602109ac4048470e0" title="Get the die temperature." alt="" coords="465,497,635,524"/>
+<area shape="rect" id="node12" href="$ltc4162l_8h.html#ac1af5cfb7d62836a0b8de3d6804d7883" title="Get icharge value." alt="" coords="471,548,629,575"/>
+<area shape="rect" id="node13" href="$ltc4162l_8h.html#a6642e6cb5e0b82170ccc9d60ec5d1bc0" title="Get icharge setting." alt="" coords="471,599,629,641"/>
+<area shape="rect" id="node14" href="$ltc4162l_8h.html#a64ea52dfd707801b9e52da28f3ee5879" title="Get the iin limit." alt="" coords="469,665,631,692"/>
+<area shape="rect" id="node15" href="$ltc4162l_8h.html#a4d4ca4f3cb23926ccb397c65724a72a4" title="Get the online status." alt="" coords="475,717,625,758"/>
+<area shape="rect" id="node16" href="$ltc4162l_8h.html#a20301856964acfdc85edb499b9b11149" title="Get the telemetry." alt="" coords="463,783,637,809"/>
+<area shape="rect" id="node17" href="$ltc4162l_8h.html#a92829bd929abc1a62a7bf6824e29eaf3" title="Get the term current." alt="" coords="453,833,647,860"/>
+<area shape="rect" id="node18" href="$ltc4162l_8h.html#a418dd24e54a740f4e0d0ae0f620d829d" title="Get the battery current." alt="" coords="238,325,381,352"/>
+<area shape="rect" id="node19" href="$ltc4162l_8h.html#a560c5cd3e3d780323e53e83b1e770f55" title="Get the input current." alt="" coords="475,885,625,926"/>
+<area shape="rect" id="node20" href="$ltc4162l_8h.html#a1d0a9a26cf95b84adb94dbd1ece5e04a" title="Get the input voltage." alt="" coords="475,950,625,991"/>
+<area shape="rect" id="node21" href="$ltc4162l_8h.html#ad671bc39aa9851e3cc72418e5ab675ad" title="Update a register of the LTC4162L." alt="" coords="473,1016,627,1043"/>
+<area shape="rect" id="node23" href="$ltc4162l_8h.html#adf810111cd24e29cc2bf4e86b0e24af6" title="Set the telemetry." alt="" coords="223,1067,395,1093"/>
+<area shape="rect" id="node3" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,157,165,184"/>
+<area shape="rect" id="node7" href="$ltc4162l_8h.html#adefe23a8cac6fb9ec62aef14e501cc75" title="Set the vcharge setting." alt="" coords="229,91,389,133"/>
+<area shape="rect" id="node22" href="$ltc4162l_8h.html#a54ce5aba264f512645b9d83e9c1df71a" title="Set the iin limit." alt="" coords="229,965,390,992"/>
+<area shape="rect" id="node24" href="$ltc4162l_8h.html#aff704397120e87b1e5f776622aaf72e1" title="Set the term current." alt="" coords="213,1016,405,1043"/>
+</map>

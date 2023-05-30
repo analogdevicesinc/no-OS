@@ -1,0 +1,22 @@
+<map id="no_os_irq_disable" name="no_os_irq_disable">
+<area shape="rect" id="node1" title="Disable specific interrupt." alt="" coords="805,275,944,301"/>
+<area shape="rect" id="node2" href="$ade9113_8h.html#afa4896e133d9433b6dbabc58785335d8" title="DRDY inerrupt disable." alt="" coords="565,5,757,32"/>
+<area shape="rect" id="node3" href="$net_8c.html#ac3136f214a7023774a03531efb49eb77" title=" " alt="" coords="608,56,715,83"/>
+<area shape="rect" id="node4" href="$aducm3029__irq_8c.html#aed37b0eb8c60fc02d44a01683ab8958f" title="Disable all external interrupts." alt="" coords="577,107,746,149"/>
+<area shape="rect" id="node5" href="$iio__trigger_8h.html#ab1e79bf681f66c1c6d8b9444117ef95d" title="Disable system interrupt which is linked to the given trigger." alt="" coords="601,173,722,200"/>
+<area shape="rect" id="node7" href="$max11205_8h.html#adff8b4d146093da04e57377b4624cf4c" title="Free memory allocated by max11205_init()." alt="" coords="587,224,735,251"/>
+<area shape="rect" id="node9" href="$net_8c.html#a07fadf782270f861e72575c8d9c86c70" title=" " alt="" coords="604,275,719,301"/>
+<area shape="rect" id="node10" href="$no__os__dma_8c.html#a6f9f8b3688bec7db3fc05dc892da8a37" title="Abort the ongoing and any other future transfers scheduled for a channel." alt="" coords="576,325,747,352"/>
+<area shape="rect" id="node15" href="$self__test_8h.html#a190f7b376da6bd8788dec204bd18b0ca" title="Startup test for RCD." alt="" coords="609,377,714,404"/>
+<area shape="rect" id="node17" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="140,432,259,459"/>
+<area shape="rect" id="node19" href="$self__test_8h.html#a467fec0e3bad53875d3b029d41f4446e" title="Running test for RCD." alt="" coords="347,483,509,509"/>
+<area shape="rect" id="node20" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="582,533,741,560"/>
+<area shape="rect" id="node6" href="$iio__adis__internals_8h.html#aa3fb4f6fcd0868abc263f5db5b782538" title="Handles trigger: reads all available samples in FIFO and writes them to the buffer." alt="" coords="339,133,517,174"/>
+<area shape="rect" id="node8" href="$iio__max11205_8h.html#a2310b65fd7b0f421f0e5215fd96b6335" title="Free the resources allocated by max11205_iio_init()." alt="" coords="343,199,513,225"/>
+<area shape="rect" id="node11" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="340,250,516,291"/>
+<area shape="rect" id="node14" href="$stm32__spi_8c.html#ac383af549ce0203aa73ff2c293158684" title="Abort SPI transfers." alt="" coords="355,315,501,357"/>
+<area shape="rect" id="node12" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="108,228,291,255"/>
+<area shape="rect" id="node13" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="126,279,273,321"/>
+<area shape="rect" id="node16" href="$self__test_8h.html#a9440e0a0a3091dcda40b03efbb3acd55" title="Startup test." alt="" coords="363,381,493,408"/>
+<area shape="rect" id="node18" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,432,60,459"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="adxl38x_set_op_mode" name="adxl38x_set_op_mode">
+<area shape="rect" id="node1" title="Places the device into the given operation mode." alt="" coords="653,183,821,209"/>
+<area shape="rect" id="node2" href="$adxl38x_8h.html#ac7d2f189eea39934e801c243fbb6175f" title="Reads the raw output data using burst read." alt="" coords="436,56,605,83"/>
+<area shape="rect" id="node4" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="5,56,165,83"/>
+<area shape="rect" id="node5" href="$adxl38x_8h.html#ada2c338dfa91317699e28a7febad15d3" title="Reads the raw output data using continuous read." alt="" coords="439,157,602,184"/>
+<area shape="rect" id="node6" href="$adxl38x_8h.html#acf9a35b3f4bec99e5e66d9dc5b204e90" title="Reads the raw temperature data using burst read." alt="" coords="449,208,592,235"/>
+<area shape="rect" id="node7" href="$adxl38x_8h.html#a491ab20d0eb87e53ac22b04c8693cff5" title="Executed Selftest on the sensing axes and returns the outcome of the test." alt="" coords="456,259,585,285"/>
+<area shape="rect" id="node10" href="$fifo__example__main_8h.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="227,309,374,336"/>
+<area shape="rect" id="node3" href="$adxl38x_8h.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="215,5,386,32"/>
+<area shape="rect" id="node8" href="$selftest__example__main_8h.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="213,259,388,285"/>
+<area shape="rect" id="node9" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="58,284,113,311"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="adis_read_filt_size_var_b" name="adis_read_filt_size_var_b">
+<area shape="rect" id="node1" title="Read filter size variable B value." alt="" coords="388,35,531,76"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="185,5,340,47"/>
+<area shape="rect" id="node3" href="$adis_8h.html#a9383b11add51276beed4be42beeae199" title="Read configured filter frequency." alt="" coords="208,71,317,98"/>
+<area shape="rect" id="node4" href="$iio__adis__internals_8h.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="5,71,137,98"/>
+</map>

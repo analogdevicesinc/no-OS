@@ -1,0 +1,10 @@
+<map id="drivers/platform/stm32/stm32_i3c.h" name="drivers/platform/stm32/stm32_i3c.h">
+<area shape="rect" id="node1" title="Header file for the stm32 I3C driver." alt="" coords="15,5,187,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node3" href="$no__os__i3c_8h.html" title="Header file of I3C Interface." alt="" coords="51,95,150,121"/>
+<area shape="rect" id="node7" href="$stm32__hal_8h.html" title=" " alt="" coords="183,95,285,121"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="85,169,185,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="100,244,171,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="195,244,278,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="210,169,277,196"/>
+</map>

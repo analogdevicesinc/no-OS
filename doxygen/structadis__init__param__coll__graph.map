@@ -1,0 +1,15 @@
+<map id="adis_init_param" name="adis_init_param">
+<area shape="rect" id="node1" title="ADIS device initialization parameters." alt="" coords="1318,319,1445,345"/>
+<area shape="rect" id="node9" href="$structadis__chip__info.html" title="ADIS specific chip information structure." alt="" coords="1656,264,1771,291"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,223,1129,249"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,212,819,239"/>
+<area shape="rect" id="node4" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,340,1125,367"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,352,786,379"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,315,184,341"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,376,471,403"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,429,472,470"/>
+<area shape="rect" id="node10" href="$structadis__data__field__map__def.html" title="ADIS filed map definition structure." alt="" coords="1289,153,1473,180"/>
+<area shape="rect" id="node11" href="$structadis__field.html" title="ADIS device field structure." alt="" coords="1001,153,1085,180"/>
+<area shape="rect" id="node12" href="$structadis__timeout.html" title="ADIS chip timeouts." alt="" coords="1328,204,1435,231"/>
+<area shape="rect" id="node13" href="$structadis__clk__freq__limit.html" title="ADIS frequency limit for input synchronization clock." alt="" coords="1309,264,1454,291"/>
+</map>

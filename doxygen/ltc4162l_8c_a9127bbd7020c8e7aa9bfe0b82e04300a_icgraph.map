@@ -1,0 +1,9 @@
+<map id="ltc4162l_reg_write" name="ltc4162l_reg_write">
+<area shape="rect" id="node1" title="Write to a register of the LTC4162L." alt="" coords="453,136,596,163"/>
+<area shape="rect" id="node2" href="$ltc4162l_8h.html#ad671bc39aa9851e3cc72418e5ab675ad" title="Update a register of the LTC4162L." alt="" coords="248,56,403,83"/>
+<area shape="rect" id="node5" href="$ltc4162l_8h.html#aff704397120e87b1e5f776622aaf72e1" title="Set the term current." alt="" coords="5,107,197,133"/>
+<area shape="rect" id="node6" href="$ltc4162l_8h.html#a008f1a368917c1d8438517fd46dac5a9" title="Set icharge setting." alt="" coords="247,158,403,199"/>
+<area shape="rect" id="node7" href="$ltc4162l_8h.html#adefe23a8cac6fb9ec62aef14e501cc75" title="Set the vcharge setting." alt="" coords="245,223,405,265"/>
+<area shape="rect" id="node3" href="$ltc4162l_8h.html#a54ce5aba264f512645b9d83e9c1df71a" title="Set the iin limit." alt="" coords="21,5,182,32"/>
+<area shape="rect" id="node4" href="$ltc4162l_8h.html#adf810111cd24e29cc2bf4e86b0e24af6" title="Set the telemetry." alt="" coords="15,56,187,83"/>
+</map>

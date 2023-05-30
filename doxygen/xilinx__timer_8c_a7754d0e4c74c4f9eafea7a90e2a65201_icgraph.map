@@ -1,0 +1,4 @@
+<map id="xilinx_timer_counter_set" name="xilinx_timer_counter_set">
+<area shape="rect" id="node1" title="Set the current counter value of the timer." alt="" coords="181,5,364,32"/>
+<area shape="rect" id="node2" href="$xilinx__timer_8c.html#addc4af514f6e8d49e6a4b0f8d6441b3b" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="5,5,133,32"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="projects/swiot1l/src/common/swiot.h" name="projects/swiot1l/src/common/swiot.h">
+<area shape="rect" id="node1" title="Header file for the swiot IIO device." alt="" coords="513,5,661,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="419,468,501,495"/>
+<area shape="rect" id="node3" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="493,393,600,420"/>
+<area shape="rect" id="node5" href="$ad74413r_8h.html" title="Header file of AD74413r Driver." alt="" coords="723,319,818,345"/>
+<area shape="rect" id="node7" href="$iio__ad74413r_8h.html" title="Header file of the IIO AD74413r Driver." alt="" coords="919,95,1036,121"/>
+<area shape="rect" id="node16" href="$max14906_8h.html" title="Header file of MAX14906 Driver." alt="" coords="441,244,543,271"/>
+<area shape="rect" id="node19" href="$iio__max14906_8h.html" title="Header file of MAX14906 IIO Driver." alt="" coords="625,169,751,196"/>
+<area shape="rect" id="node20" href="$adin1110_8h.html" title=" " alt="" coords="139,319,234,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="987,468,1058,495"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="371,393,469,420"/>
+<area shape="rect" id="node8" href="$iio_8h.html" title="Header file of iio." alt="" coords="967,244,1017,271"/>
+<area shape="rect" id="node14" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="1057,169,1156,196"/>
+<area shape="rect" id="node9" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="1169,319,1263,345"/>
+<area shape="rect" id="node11" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="906,319,1011,345"/>
+<area shape="rect" id="node10" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="1237,393,1408,420"/>
+<area shape="rect" id="node12" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="827,393,960,420"/>
+<area shape="rect" id="node13" title=" " alt="" coords="693,468,763,495"/>
+<area shape="rect" id="node15" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="1316,244,1412,271"/>
+<area shape="rect" id="node17" href="$max149x6-base_8h.html" title="Header file of MAX149X6 Base Driver." alt="" coords="309,319,448,345"/>
+<area shape="rect" id="node18" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="145,393,245,420"/>
+</map>

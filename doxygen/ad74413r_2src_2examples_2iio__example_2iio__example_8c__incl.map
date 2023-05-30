@@ -1,0 +1,23 @@
+<map id="projects/ad74413r/src/examples/iio_example/iio_example.c" name="projects/ad74413r/src/examples/iio_example/iio_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO example for AD74413R project." alt="" coords="831,5,1006,61"/>
+<area shape="rect" id="node2" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="670,184,751,211"/>
+<area shape="rect" id="node15" href="$iio__ad74413r_8h.html" title="Header file of the IIO AD74413r Driver." alt="" coords="460,109,577,136"/>
+<area shape="rect" id="node20" title=" " alt="" coords="993,109,1119,136"/>
+<area shape="rect" id="node21" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="1017,408,1117,435"/>
+<area shape="rect" id="node3" href="$iio_8h.html" title="Header file of iio." alt="" coords="544,259,595,285"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="718,333,823,360"/>
+<area shape="rect" id="node11" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="424,259,520,285"/>
+<area shape="rect" id="node12" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="808,259,917,285"/>
+<area shape="rect" id="node14" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="619,259,733,285"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="488,333,581,360"/>
+<area shape="rect" id="node5" title=" " alt="" coords="780,483,863,509"/>
+<area shape="rect" id="node6" title=" " alt="" coords="471,483,542,509"/>
+<area shape="rect" id="node7" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="360,408,531,435"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="859,408,992,435"/>
+<area shape="rect" id="node10" title=" " alt="" coords="961,483,1031,509"/>
+<area shape="rect" id="node13" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="847,333,915,360"/>
+<area shape="rect" id="node16" href="$ad74413r_8h.html" title="Header file of AD74413r Driver." alt="" coords="190,333,285,360"/>
+<area shape="rect" id="node19" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="425,184,524,211"/>
+<area shape="rect" id="node17" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,408,104,435"/>
+<area shape="rect" id="node18" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="128,408,235,435"/>
+</map>

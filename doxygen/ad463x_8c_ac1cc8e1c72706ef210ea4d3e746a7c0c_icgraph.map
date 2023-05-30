@@ -1,0 +1,4 @@
+<map id="ad463x_read_data_offload" name="ad463x_read_data_offload">
+<area shape="rect" id="node1" title="Read from device. Enter register mode to read/write registers." alt="" coords="196,5,391,32"/>
+<area shape="rect" id="node2" href="$ad463x_8h.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="5,5,148,32"/>
+</map>
