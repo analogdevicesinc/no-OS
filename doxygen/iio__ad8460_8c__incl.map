@@ -1,0 +1,20 @@
+<map id="drivers/dac/ad8460/iio_ad8460.c" name="drivers/dac/ad8460/iio_ad8460.c">
+<area shape="rect" id="node1" title="Implementation of IIO AD8460 Driver." alt="" coords="408,5,555,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="341,169,409,196"/>
+<area shape="rect" id="node3" href="$iio__ad8460_8h.html" title="Implementation of IIO AD8460 Driver." alt="" coords="519,95,625,121"/>
+<area shape="rect" id="node12" href="$ad8460_8h.html" title="Implementation of AD8460 Driver." alt="" coords="264,244,347,271"/>
+<area shape="rect" id="node16" href="$no__os__alloc_8h.html" title=" " alt="" coords="685,95,795,121"/>
+<area shape="rect" id="node18" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="284,95,393,121"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="547,169,597,196"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="455,244,548,271"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="615,244,721,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="677,393,760,420"/>
+<area shape="rect" id="node7" title=" " alt="" coords="431,393,502,420"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="259,319,429,345"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="781,319,915,345"/>
+<area shape="rect" id="node11" title=" " alt="" coords="813,393,883,420"/>
+<area shape="rect" id="node13" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,319,112,345"/>
+<area shape="rect" id="node14" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="136,319,235,345"/>
+<area shape="rect" id="node15" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="555,319,655,345"/>
+<area shape="rect" id="node17" title=" " alt="" coords="707,169,773,196"/>
+</map>

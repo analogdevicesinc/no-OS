@@ -1,0 +1,17 @@
+<map id="drivers/power/max17851/max17851.c" name="drivers/power/max17851/max17851.c">
+<area shape="rect" id="node1" title="Source file of the MAX17851 driver." alt="" coords="276,5,460,47"/>
+<area shape="rect" id="node2" href="$max17851_8h.html" title="Header file of the MAX17851 driver." alt="" coords="316,95,419,121"/>
+<area shape="rect" id="node12" href="$no__os__alloc_8h.html" title=" " alt="" coords="11,95,122,121"/>
+<area shape="rect" id="node14" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="510,95,620,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="364,319,435,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="187,169,258,196"/>
+<area shape="rect" id="node5" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="282,169,387,196"/>
+<area shape="rect" id="node9" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="462,244,569,271"/>
+<area shape="rect" id="node10" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="593,244,692,271"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="28,244,128,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="132,319,214,345"/>
+<area shape="rect" id="node7" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="204,244,337,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="36,319,107,345"/>
+<area shape="rect" id="node13" title=" " alt="" coords="33,169,100,196"/>
+<area shape="rect" id="node15" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="564,169,632,196"/>
+</map>

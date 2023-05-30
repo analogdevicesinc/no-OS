@@ -1,0 +1,21 @@
+<map id="projects/ad738x_fmcz/src" name="projects/ad738x_fmcz/src">
+<area shape="rect" id="node2" href="dir_430e25e7a00639c1bafab3d8bab0762e.html" title="common" alt="" coords="38,63,117,111"/>
+<area shape="rect" id="node5" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="75,159,147,207"/>
+<area shape="rect" id="edge9-headlabel" href="dir_000303_000002.html" title="2" alt="" coords="100,131,109,146"/>
+<area shape="rect" id="node6" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="105,351,177,399"/>
+<area shape="rect" id="edge10-headlabel" href="dir_000303_000279.html" title="3" alt="" coords="120,323,129,338"/>
+<area shape="rect" id="node3" href="dir_748d0d8bb7079ee184b650e69860c5db.html" title="examples" alt="" coords="141,63,227,111"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000827_000002.html" title="2" alt="" coords="142,142,151,157"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000827_000279.html" title="4" alt="" coords="193,346,202,360"/>
+<area shape="rect" id="node7" href="dir_0bb79d6a83cfcf0ad99764c4144043fa.html" title="iio" alt="" coords="148,255,220,303"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000827_000277.html" title="2" alt="" coords="188,229,197,244"/>
+<area shape="rect" id="node4" href="dir_bc7e1cd1ac56024e13139ae8a83fa8e8.html" title="platform" alt="" coords="251,63,330,111"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000540_000002.html" title="13" alt="" coords="158,166,175,181"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000540_000279.html" title="4" alt="" coords="193,353,202,368"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000002_000279.html" title="2215" alt="" coords="119,323,152,338"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000002_000277.html" title="114" alt="" coords="149,228,174,242"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000279_000002.html" title="1" alt="" coords="112,219,121,234"/>
+<area shape="rect" id="edge11-headlabel" href="dir_000277_000279.html" title="17" alt="" coords="158,330,176,345"/>
+<area shape="rect" id="clust2" href="dir_28a1faf045eaf00fc98435341abfb6df.html" alt="" coords="27,52,437,121"/>
+<area shape="rect" id="clust1" href="dir_85a73f16dbd610096c4d808d99769a12.html" title="ad738x_fmcz" alt="" coords="16,16,448,132"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="adp1055_read" name="adp1055_read">
+<area shape="rect" id="node1" title="Read data from ADP1055." alt="" coords="387,81,501,108"/>
+<area shape="rect" id="node2" href="$adp1055_8h.html#ad8cadf8379b80b096981faef77b2230e" title="Send statuses." alt="" coords="175,5,336,32"/>
+<area shape="rect" id="node3" href="$adp1055_8h.html#a94cf556461eda735f0e3d78a8d694bfd" title="Read VIN/IIN/VOUT/TEMP2/TEMP3/DUTY_CYCLE_FREQ/POUT raw value from the ADP1055." alt="" coords="177,56,334,83"/>
+<area shape="rect" id="node4" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,81,124,108"/>
+<area shape="rect" id="node5" href="$adp1055_8h.html#a3363ae3574b63617f25204ed228b9287" title="Read Voltage Sense output raw value from the ADP1055." alt="" coords="172,157,339,184"/>
+</map>

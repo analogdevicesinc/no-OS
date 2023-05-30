@@ -1,0 +1,11 @@
+<map id="max31827_reg_write" name="max31827_reg_write">
+<area shape="rect" id="node1" title="Write a register value." alt="" coords="756,67,915,93"/>
+<area shape="rect" id="node2" href="$max31827_8h.html#acf60373c1d4f07f1fb9850b75c1ae299" title="Initialize MAX31827 device setup." alt="" coords="525,11,688,37"/>
+<area shape="rect" id="node6" href="$max31827_8h.html#af12781416b9b04a63d2fd67109676e6a" title="Read&#45;modify&#45;write operation." alt="" coords="505,67,708,93"/>
+<area shape="rect" id="node8" href="$max31827_8h.html#a0c301ae1d6106477de04566e075bc380" title="Shutdown then write register value." alt="" coords="256,123,457,149"/>
+<area shape="rect" id="node3" href="$max31827_8h.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="297,5,416,32"/>
+<area shape="rect" id="node4" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="27,60,187,87"/>
+<area shape="rect" id="node5" href="$iio__max31827_8h.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="35,5,178,32"/>
+<area shape="rect" id="node7" href="$max31827_8h.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="273,57,441,98"/>
+<area shape="rect" id="node9" href="$max31827_8h.html#af4aa71f953a9fb60e16ba9a080fc78f4" title="Write the alarm value to the specified register." alt="" coords="5,123,208,149"/>
+</map>

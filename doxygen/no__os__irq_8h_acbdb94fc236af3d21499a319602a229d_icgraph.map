@@ -1,0 +1,18 @@
+<map id="no_os_irq_ctrl_remove" name="no_os_irq_ctrl_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_irq_ctrl_init()." alt="" coords="453,284,623,311"/>
+<area shape="rect" id="node2" href="$ade7753_8h.html#aa33b08d1dbebcc490f87cfd5035c5edd" title="Remove the device and release resources." alt="" coords="242,5,377,32"/>
+<area shape="rect" id="node3" href="$ade7754_8h.html#a5a1dfdc173e486138c2fa073658f7b34" title="Remove the device and release resources." alt="" coords="242,56,377,83"/>
+<area shape="rect" id="node4" href="$ade7758_8h.html#a0020fddf14e36f32a1ada5be57fb97ed" title="Remove the device and release resources." alt="" coords="242,107,377,133"/>
+<area shape="rect" id="node5" href="$ade7953_8h.html#ada70efe05b0f03ea5baa1857aa795cf5" title="Remove the device and release resources." alt="" coords="242,157,377,184"/>
+<area shape="rect" id="node6" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="229,208,389,235"/>
+<area shape="rect" id="node7" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="213,259,405,285"/>
+<area shape="rect" id="node9" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="228,309,391,336"/>
+<area shape="rect" id="node11" href="$eval-ade7913_2src_2platform_2platform_8h.html#aac2d512681f800201bd2b7307ddc95fd" title="Init NVIC." alt="" coords="271,360,348,387"/>
+<area shape="rect" id="node13" href="$ade7816_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="282,411,337,437"/>
+<area shape="rect" id="node14" href="$stm32__dma_8c.html#a9a2bedfbb3463411630b83a164f4e782" title="Free the resources allocated for a DMA descriptor." alt="" coords="231,461,387,488"/>
+<area shape="rect" id="node15" href="$stm32__gpdma_8c.html#a874639e0d34fe726adb68d80667e0bdc" title="Free the resources allocated for a General Purpose DMA descriptor." alt="" coords="223,512,395,539"/>
+<area shape="rect" id="node16" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="230,563,389,589"/>
+<area shape="rect" id="node8" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="58,259,113,285"/>
+<area shape="rect" id="node10" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,309,165,336"/>
+<area shape="rect" id="node12" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="58,360,113,387"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="adp1055_remove" name="adp1055_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by the adp1055_init()" alt="" coords="556,56,691,83"/>
+<area shape="rect" id="node2" href="$iio__adp1055_8h.html#a7d78b48b956613b2cf7593a35dad1a90" title="Free resources allocated by the init function." alt="" coords="349,5,508,32"/>
+<area shape="rect" id="node4" href="$adp1055_8h.html#a00e64892f343d5d3a045a2272d11e54a" title="Initialize the ADP1055 device." alt="" coords="375,56,482,83"/>
+<area shape="rect" id="node6" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="177,107,296,133"/>
+<area shape="rect" id="node3" href="$adp1055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,31,124,57"/>
+<area shape="rect" id="node5" href="$iio__adp1055_8h.html#ac5bb67e09856d0c177bf845381d36618" title="Initializes the ADP1050 IIO descriptor." alt="" coords="172,56,301,83"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="iio_hw_trig_init" name="iio_hw_trig_init">
+<area shape="rect" id="node1" title="Initialize hardware trigger." alt="" coords="348,56,469,83"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO trigger example main execution." alt="" coords="145,5,263,32"/>
+<area shape="rect" id="node3" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,56,300,83"/>
+<area shape="rect" id="node5" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="143,107,265,133"/>
+<area shape="rect" id="node4" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node6" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,107,60,133"/>
+</map>

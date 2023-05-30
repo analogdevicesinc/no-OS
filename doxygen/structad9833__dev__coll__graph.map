@@ -1,0 +1,9 @@
+<map id="ad9833_dev" name="ad9833_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="923,103,1024,129"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,52,797,79"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,19,184,45"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,49,490,76"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,101,491,142"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,153,801,180"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,167,511,193"/>
+</map>

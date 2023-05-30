@@ -1,0 +1,5 @@
+<map id="ad74416h_set_gpio_config" name="ad74416h_set_gpio_config">
+<area shape="rect" id="node1" title="Set the GPIO operation mode." alt="" coords="368,5,563,32"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#a1f78b57089351637513641367e1e8cee" title="Set the logic value of a GPO pin." alt="" coords="172,5,320,32"/>
+<area shape="rect" id="node3" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

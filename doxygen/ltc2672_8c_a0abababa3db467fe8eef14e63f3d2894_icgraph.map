@@ -1,0 +1,5 @@
+<map id="ltc2672_set_code_all_channels" name="ltc2672_set_code_all_channels">
+<area shape="rect" id="node1" title="sets the same dac code for all channels" alt="" coords="412,5,571,47"/>
+<area shape="rect" id="node2" href="$ltc2672_8h.html#a91a7b29cb54abd98b1c3a5c66592f28f" title="sets the same current for all channels" alt="" coords="213,5,364,47"/>
+<area shape="rect" id="node3" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,13,165,39"/>
+</map>

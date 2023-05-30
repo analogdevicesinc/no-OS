@@ -1,0 +1,5 @@
+<map id="adpd188_adc_fsample_set" name="adpd188_adc_fsample_set">
+<area shape="rect" id="node1" title="Set sample frequency of the ADC." alt="" coords="229,42,424,69"/>
+<area shape="rect" id="node2" href="$adpd188_8h.html#ab8a0efa4cbeda4444394df7c4c327938" title="Do initial configuration of the device to use as a smoke detector. The configuration is described in ..." alt="" coords="5,5,181,47"/>
+<area shape="rect" id="node3" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="66,71,121,98"/>
+</map>

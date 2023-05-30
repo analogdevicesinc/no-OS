@@ -1,0 +1,15 @@
+<map id="drivers/temperature/ltc2983/ltc2983.c" name="drivers/temperature/ltc2983/ltc2983.c">
+<area shape="rect" id="node1" title="Implementation of LTC2983 Driver." alt="" coords="327,5,479,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="219,95,287,121"/>
+<area shape="rect" id="node3" href="$ltc2983_8h.html" title=" " alt="" coords="362,95,445,121"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="469,95,580,121"/>
+<area shape="rect" id="node12" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,169,119,196"/>
+<area shape="rect" id="node13" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="605,95,741,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="387,244,470,271"/>
+<area shape="rect" id="node5" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="266,169,373,196"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="143,169,242,196"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="448,169,548,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="235,244,305,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="532,244,603,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="634,169,701,196"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="lt3074_write_word_data" name="lt3074_write_word_data">
+<area shape="rect" id="node1" title="Converts value to register data and do PMBus write word operation." alt="" coords="347,5,525,32"/>
+<area shape="rect" id="node2" href="$lt3074_8h.html#a98353c0d94b9bb8883e036162b86d3ad" title="Sets the limit value for a specific fault/warning limits." alt="" coords="172,5,299,32"/>
+<area shape="rect" id="node3" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

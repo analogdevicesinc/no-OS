@@ -1,0 +1,8 @@
+<map id="drivers/temperature/adt7420/adt7420.h" name="drivers/temperature/adt7420/adt7420.h">
+<area shape="rect" id="node1" title="Header file of ADT7420 Driver." alt="" coords="299,5,451,47"/>
+<area shape="rect" id="node2" href="$adt7420_8c.html" title="Implementation of ADT7420 Driver." alt="" coords="5,102,157,143"/>
+<area shape="rect" id="node3" href="$iio__adt7420_8c.html" title="Implementation of IIO ADT7420 Driver." alt="" coords="181,102,352,143"/>
+<area shape="rect" id="node4" href="$adt7420-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="377,102,591,143"/>
+<area shape="rect" id="node6" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example code for adt7420&#45;pmdz project." alt="" coords="616,95,837,151"/>
+<area shape="rect" id="node5" href="$adt7420-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="377,199,591,240"/>
+</map>

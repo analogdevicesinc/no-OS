@@ -1,0 +1,6 @@
+<map id="pilot_compute_average" name="pilot_compute_average">
+<area shape="rect" id="node1" title="Compute PWM value average." alt="" coords="497,5,672,32"/>
+<area shape="rect" id="node2" href="$pilot_8h.html#a60cf721143055e8bd817694754570457" title="Update PWM values in the state machine structure." alt="" coords="275,5,449,32"/>
+<area shape="rect" id="node3" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,5,227,32"/>
+<area shape="rect" id="node4" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,32"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="max31827_reg_read" name="max31827_reg_read">
+<area shape="rect" id="node1" title="Read a register value." alt="" coords="756,56,911,83"/>
+<area shape="rect" id="node2" href="$max31827_8h.html#a768a7b73e9301586a53fb36f67232427" title="Read a temperature from a register." alt="" coords="523,5,691,32"/>
+<area shape="rect" id="node5" href="$max31827_8h.html#af12781416b9b04a63d2fd67109676e6a" title="Read&#45;modify&#45;write operation." alt="" coords="505,56,708,83"/>
+<area shape="rect" id="node6" href="$max31827_8h.html#a0c301ae1d6106477de04566e075bc380" title="Shutdown then write register value." alt="" coords="256,85,457,112"/>
+<area shape="rect" id="node3" href="$max31827_8h.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="273,9,441,50"/>
+<area shape="rect" id="node4" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="27,16,187,43"/>
+<area shape="rect" id="node7" href="$max31827_8h.html#af4aa71f953a9fb60e16ba9a080fc78f4" title="Write the alarm value to the specified register." alt="" coords="5,85,208,112"/>
+</map>

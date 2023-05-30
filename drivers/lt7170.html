@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LT7170 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=3d3703ae" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=dcfbb431"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LT7182S no-OS driver" href="lt7182s.html" />
+    <link rel="prev" title="LT3074 no-OS driver" href="lt3074.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">LT7170 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#lt7170">LT7170</a></li>
+<li><a class="reference internal" href="#lt7170-device-configuration">LT7170 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#vout-configuration">VOUT Configuration</a></li>
+<li><a class="reference internal" href="#vin-configuration">VIN Configuration</a></li>
+<li><a class="reference internal" href="#status-configuration">Status Configuration</a></li>
+<li><a class="reference internal" href="#telemetry">Telemetry</a></li>
+<li><a class="reference internal" href="#timing-configuration">Timing Configuration</a></li>
+<li><a class="reference internal" href="#overvalue-and-undervalue-limits-configuration">Overvalue and Undervalue Limits Configuration</a></li>
+<li><a class="reference internal" href="#pwm-configuration">PWM Configuration</a></li>
+<li><a class="reference internal" href="#clock-configuration">Clock Configuration</a></li>
+<li><a class="reference internal" href="#nvm-commands">NVM commands</a></li>
+<li><a class="reference internal" href="#software-reset-configuration">Software Reset Configuration</a></li>
+<li><a class="reference internal" href="#lt7170-driver-initialization-example">LT7170 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#lt7170-no-os-iio-support">LT7170 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#lt7170-iio-device-configuration">LT7170 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#input-channel-attributes">Input Channel Attributes</a></li>
+<li><a class="reference internal" href="#output-channel-attributes">Output Channel Attributes</a></li>
+<li><a class="reference internal" href="#global-attributes">Global Attributes</a></li>
+<li><a class="reference internal" href="#debug-attributes">Debug Attributes</a></li>
+<li><a class="reference internal" href="#lt7170-iio-driver-initialization-example">LT7170 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#supported-devices">Supported Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#supported-carriers">Supported Carriers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#building-and-running-the-project">Building and Running the Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#project-layout-and-hdl-generation">Project Layout and HDL Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#switching-between-use-cases">Switching Between Use Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#demo-applications">Demo Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="lt7170-no-os-driver">
+<h1>LT7170 no-OS driver<a class="headerlink" href="#lt7170-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/LT7170">LT7170/LT7170-1</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/LT7171">LT7171/LT7171-1</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The LT7170/LT7170-1 are monolithic DC/DC synchronous step-down regulators that
+deliver up to 20 A of continuous output current. The LT7170-1 option has two
+switching phases that are connected to two inductors to drive a
+single-regulated output supply.</p>
+<p>Similarly, the LT7171/LT7171-1 are monolithic PolyPhase DC/DC synchronous
+step-down regulators that also deliver up to 20A of continuous output current.
+The LT7171-1 option has two switching phases that are connected to two
+inductors to drive a single-regulated output supply.</p>
+<p>Both series offer quick, clean, low-overshoot switching edges deliver high
+efficiency while minimizing electromagnetic interference (EMI) emissions.</p>
+<p>An I2C-based PMBus 1.3-compliant serial interface allows control of device
+functions while providing telemetry information for system monitoring. The
+LT7170/LT7170-1 and LT7171/LT7171-1 are supported by the LTpowerPlay graphical
+user interface (GUI) tool.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+</section>
+<section id="lt7170">
+<h2>LT7170<a class="headerlink" href="#lt7170" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Communications, Storage, and Industrial Systems</p></li>
+<li><p>Data Center and Solid-State Drives</p></li>
+</ul>
+</section>
+<section id="lt7170-device-configuration">
+<h2>LT7170 Device Configuration<a class="headerlink" href="#lt7170-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h2>
+<p>In order to be able to use the device, you will have to provide the support
+for the communication protocol (I2C) alongside other GPIO pins if needed in the
+specific application (depends on the way the device is used).</p>
+<p>The first API to be called is <strong>lt7170_init</strong>. Make sure that it return 0,
+which means that the driver was initialized correctly.</p>
+<p>The initialization API uses the device descriptor and an initialization
+parameter. The initialization parameter contains the <strong>chip_id</strong> of the device
+and the optional GPIO
+parameters for controlling POWER GOOD, RUN, FAULT and ALERT pins. Use of packet
+error checking and the external clock can also be configured in the parameter.
+These are defined in the header file of the driver.</p>
+</section>
+<section id="vout-configuration">
+<h2>VOUT Configuration<a class="headerlink" href="#vout-configuration" title="Link to this heading"></a></h2>
+<p>The VOUT_COMMAND sets the output voltage, while the VOUT_MAX sets the upper
+limit on the commanded voltage. The output voltage and limit can be set using
+the <strong>lt7170_vout_value</strong> API.</p>
+<p>The output voltage transition rate can be configured using the
+<strong>lt7170_vout_tr</strong> API.</p>
+<p>Output voltage lower and higher margin can also be configured using the
+<strong>lt7170_vout_margin</strong> API.</p>
+<p>The OPERATION command via the <strong>lt7170_set_operation</strong> can be used to command
+the output voltage to be regulated at the high margin, low margin, or at the
+nominal VOUT_COMMAND. This can also be used to set a channel off.</p>
+</section>
+<section id="vin-configuration">
+<h2>VIN Configuration<a class="headerlink" href="#vin-configuration" title="Link to this heading"></a></h2>
+<p>VIN_ON and VIN_OFF command values sets the input voltage window at which power
+conversion will proceed. Both of which can be configured through the
+<strong>lt7170_set_vin</strong> API.</p>
+</section>
+<section id="status-configuration">
+<h2>Status Configuration<a class="headerlink" href="#status-configuration" title="Link to this heading"></a></h2>
+<p>Statuses bytes/words of the device can be read using <strong>lt7170_read_status</strong>
+API. Faults asserted by these statuses can be cleared using the
+<strong>lt7170_clear_faults</strong> API.</p>
+</section>
+<section id="telemetry">
+<h2>Telemetry<a class="headerlink" href="#telemetry" title="Link to this heading"></a></h2>
+<p>Measurements can be read using the <strong>lt7170_read_value</strong> API. Some telemetry
+values includes input/output voltage,
+input/output current, external VCC, die temperature, and output power.</p>
+<p>The frequency at which telemetry values are converted, as well as enabling debug
+telemetries such as external VCC and ITH values, can be configured using the
+<strong>lt7170_adc_control</strong> API.</p>
+</section>
+<section id="timing-configuration">
+<h2>Timing Configuration<a class="headerlink" href="#timing-configuration" title="Link to this heading"></a></h2>
+<p>The TON_DELAY command sets the time from when a start condition is received
+until the output voltage starts to rise. The TON_RISE sets the time from the
+from the time the output starts to rise to the time the output enters the
+regulation band. The TOFF_DELAY command sets the time from when a stop condition
+is received until the output voltage starts to fall. The TOFF_FALL command sets
+the time from the end of the turn-off delay time until the output voltage is
+commanded to zero. These commands can be set using the <strong>lt7170_set_timing</strong>
+API.</p>
+</section>
+<section id="overvalue-and-undervalue-limits-configuration">
+<h2>Overvalue and Undervalue Limits Configuration<a class="headerlink" href="#overvalue-and-undervalue-limits-configuration" title="Link to this heading"></a></h2>
+<p>Overvalue and undervalue limits sets the threshold at which the device voltage,
+current, temperature, and timing must meet. When these measurements cross the
+limits, a status bit may be asserted. These limits can be configured using the
+<strong>lt7170_set_limit</strong> API.</p>
+</section>
+<section id="pwm-configuration">
+<h2>PWM Configuration<a class="headerlink" href="#pwm-configuration" title="Link to this heading"></a></h2>
+<p>The PWM can be set on forced continuous mode or on
+pulse skip mode. This can be set using the <strong>lt7170_pwm_mode</strong> API.</p>
+<p>The phase offset of the PWM can also be set using the
+<strong>lt7170_pwm_phase</strong> API.</p>
+</section>
+<section id="clock-configuration">
+<h2>Clock Configuration<a class="headerlink" href="#clock-configuration" title="Link to this heading"></a></h2>
+<p>When using the device in parallel with others of the same device, the PWM clock
+of all devices can be synchronized. Using an external clock or enabling the
+clock input can be configured using the <strong>lt7170_sync_config</strong> API.</p>
+</section>
+<section id="nvm-commands">
+<h2>NVM commands<a class="headerlink" href="#nvm-commands" title="Link to this heading"></a></h2>
+<p>The device has an internal EEPROM that saves the settings configured to the
+device even when power is removed. The <strong>lt7170_nvm_cmd</strong> API allows the user
+to lock and unlock EEPROM, and store, compare and restore user settings.</p>
+</section>
+<section id="software-reset-configuration">
+<h2>Software Reset Configuration<a class="headerlink" href="#software-reset-configuration" title="Link to this heading"></a></h2>
+<p>Software Reset operation is available through <strong>lt7170_software_reset</strong> API.</p>
+</section>
+<section id="lt7170-driver-initialization-example">
+<h2>LT7170 Driver Initialization Example<a class="headerlink" href="#lt7170-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>lt7170_dev<span class="w"> </span>*lt7170_dev<span class="p">;</span>
+struct<span class="w"> </span>no_os_i2c_init_param<span class="w"> </span><span class="nv">lt7170_i2c_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_DEVICE_ID,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_OPS,
+<span class="w">        </span>.slave_address<span class="w"> </span><span class="o">=</span><span class="w"> </span>LT7170_PMBUS_ADDRESS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>lt7170_init_param<span class="w"> </span><span class="nv">lt7170_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.i2c_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>lt7170_i2c_ip,
+<span class="w">        </span>.pg_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.run_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.alert_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.fault_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.fault_cfg<span class="w"> </span><span class="o">=</span><span class="w"> </span>LT7170_FAULT_PIN_OUTPUT,
+<span class="w">        </span>.chip_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ID_LT7170,
+<span class="w">        </span>.external_clk_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.crc_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="o">}</span><span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>lt7170_init<span class="o">(</span><span class="p">&amp;</span>lt7170_dev,<span class="w"> </span><span class="p">&amp;</span>lt7170_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="lt7170-no-os-iio-support">
+<h2>LT7170 no-OS IIO support<a class="headerlink" href="#lt7170-no-os-iio-support" title="Link to this heading"></a></h2>
+<p>The LT7170 IIO driver comes on top of the LT7170 driver and offers support
+for interfacing IIO clients through libiio.</p>
+</section>
+<section id="lt7170-iio-device-configuration">
+<h2>LT7170 IIO Device Configuration<a class="headerlink" href="#lt7170-iio-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="input-channel-attributes">
+<h2>Input Channel Attributes<a class="headerlink" href="#input-channel-attributes" title="Link to this heading"></a></h2>
+<p>VIN/IIN/TEMP/VCC channels are the input channels of the LT7170 IIO
+device and each of them has a total of 2 channel attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">raw</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">scale</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">calculated</span> <span class="pre">accordingly</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">priv</span></code></p></li>
+</ul>
+</section>
+<section id="output-channel-attributes">
+<h2>Output Channel Attributes<a class="headerlink" href="#output-channel-attributes" title="Link to this heading"></a></h2>
+<p>IOUT channel is an output channel with the following channel
+attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">raw</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">scale</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">calculated</span> <span class="pre">accordingly</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">priv</span></code></p></li>
+</ul>
+<p>Meanwhile, VOUT channel is an output channel with a separate channel
+attributes. Each channel has 11 attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">raw</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">scale</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">calculated</span> <span class="pre">accordingly</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">priv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">-</span> <span class="pre">state</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_available</span> <span class="pre">-</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">available</span> <span class="pre">states</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_command</span> <span class="pre">-</span> <span class="pre">VOUT_COMMAND</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_max</span> <span class="pre">-</span> <span class="pre">VOUT_COMMAND</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_margin_low</span> <span class="pre">-</span> <span class="pre">VOUT_MARGIN_LOW</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_margin_high</span> <span class="pre">-</span> <span class="pre">VOUT_MARGIN_HIGH</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phase</span> <span class="pre">-</span> <span class="pre">Phase</span> <span class="pre">offset</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pulse_skipping</span> <span class="pre">-</span> <span class="pre">PWM</span> <span class="pre">pulse</span> <span class="pre">skip</span> <span class="pre">mode</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pulse_skipping_available</span> <span class="pre">-</span> <span class="pre">pulse</span> <span class="pre">skipping</span> <span class="pre">available</span> <span class="pre">states</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">each</span> <span class="pre">channel</span></code></p></li>
+</ul>
+</section>
+<section id="global-attributes">
+<h2>Global Attributes<a class="headerlink" href="#global-attributes" title="Link to this heading"></a></h2>
+<p>The device has a total of 12 global attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">freq_sync</span> <span class="pre">-</span> <span class="pre">Clock</span> <span class="pre">frequency</span> <span class="pre">sync</span> <span class="pre">enable</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">freq_sync_available</span> <span class="pre">-</span> <span class="pre">Available</span> <span class="pre">state</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">clock</span> <span class="pre">sync</span> <span class="pre">enable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency</span> <span class="pre">-</span> <span class="pre">Device</span> <span class="pre">switching</span> <span class="pre">frequency</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_ov_fault_limit</span> <span class="pre">-</span> <span class="pre">Output</span> <span class="pre">overvoltage</span> <span class="pre">fault</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_ov_warn_limit</span> <span class="pre">-</span> <span class="pre">Output</span> <span class="pre">overvoltage</span> <span class="pre">warning</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_uv_fault_limit</span> <span class="pre">-</span> <span class="pre">Output</span> <span class="pre">undervoltage</span> <span class="pre">fault</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_uv_warn_limit</span> <span class="pre">-</span> <span class="pre">Output</span> <span class="pre">undervoltage</span> <span class="pre">warning</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iin_oc_warn_limit</span> <span class="pre">-</span> <span class="pre">Input</span> <span class="pre">overcurrent</span> <span class="pre">warning</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iout_oc_warn_limit</span> <span class="pre">-</span> <span class="pre">Output</span> <span class="pre">overcurrent</span> <span class="pre">warning</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ot_fault_limit</span> <span class="pre">-</span> <span class="pre">Overtemperature</span> <span class="pre">fault</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">both</span> <span class="pre">channels</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ot_warn_limit</span> <span class="pre">-</span> <span class="pre">Overtemperature</span> <span class="pre">warning</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">both</span> <span class="pre">channels</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vin_uv_warn_limit</span> <span class="pre">-</span> <span class="pre">Output</span> <span class="pre">undervoltage</span> <span class="pre">warning</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">both</span> <span class="pre">channels</span></code></p></li>
+</ul>
+</section>
+<section id="debug-attributes">
+<h2>Debug Attributes<a class="headerlink" href="#debug-attributes" title="Link to this heading"></a></h2>
+<p>The device has a total of 7 debug attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">status_vout</span> <span class="pre">-</span> <span class="pre">VOUT</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">channel</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_iout</span> <span class="pre">-</span> <span class="pre">IOUT</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">channel</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_input</span> <span class="pre">-</span> <span class="pre">INPUT</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">channel</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_mfr_specific</span> <span class="pre">-</span> <span class="pre">MFR_SPECIFIC</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">channel</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_word</span> <span class="pre">-</span> <span class="pre">Status</span> <span class="pre">word</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_temperature</span> <span class="pre">-</span> <span class="pre">TEMPERATURE</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_cml</span> <span class="pre">-</span> <span class="pre">CML</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+</ul>
+</section>
+<section id="lt7170-iio-driver-initialization-example">
+<h2>LT7170 IIO Driver Initialization Example<a class="headerlink" href="#lt7170-iio-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>lt7170_iio_desc<span class="w"> </span>*lt7170_iio_desc<span class="p">;</span>
+struct<span class="w"> </span>lt7170_iio_desc_init_param<span class="w"> </span><span class="nv">lt7170_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.lt7170_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>lt7170_ip,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>lt7170_iio_init<span class="o">(</span><span class="p">&amp;</span>lt7170_iio_desc,<span class="w"> </span><span class="p">&amp;</span>lt7170_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lt7170&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>lt7170_iio_desc,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>lt7170_iio_desc-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>lt7170_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="lt3074.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">LT3074 no-OS driver</a>
+    <a href="lt7182s.html" title="Next document (Alt+Shift+RightArrow)" class="next">LT7182S no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

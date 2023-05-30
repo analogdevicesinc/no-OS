@@ -1,0 +1,11 @@
+<map id="adin1110_desc" name="adin1110_desc">
+<area shape="rect" id="node1" title="ADIN1110 device descriptor." alt="" coords="1264,97,1383,124"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,97,786,124"/>
+<area shape="rect" id="node6" href="$structoa__tc6__desc.html" title="Holds the frame buffers and the communication descriptor for the OA TC6 driver." alt="" coords="1025,45,1128,72"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,67,184,93"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,97,471,124"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,149,472,190"/>
+<area shape="rect" id="node7" href="$structoa__tc6__frame__buffer.html" title="Stores an Ethernet frame along with metadata needed for parsing. The MAC driver or the user applicati..." alt="" coords="647,8,803,35"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="1011,159,1143,185"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,159,819,185"/>
+</map>

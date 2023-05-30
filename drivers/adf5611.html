@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADF5611 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=3d3703ae" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=dcfbb431"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADMFM2000 no-OS driver" href="admfm2000.html" />
+    <link rel="prev" title="ADF4368 no-OS driver" href="adf4368.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADF5611 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#adf5611-device-configuration">ADF5611 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#reference-clock-configuration">Reference Clock Configuration</a></li>
+<li><a class="reference internal" href="#reference-divider-configuration">Reference Divider Configuration</a></li>
+<li><a class="reference internal" href="#charge-pump-current-configuration">Charge Pump Current Configuration</a></li>
+<li><a class="reference internal" href="#output-frequency-configuration">Output Frequency Configuration</a></li>
+<li><a class="reference internal" href="#output-power-configuration">Output Power Configuration</a></li>
+<li><a class="reference internal" href="#id14">Reference Divider Configuration</a></li>
+<li><a class="reference internal" href="#differential-divider-output-power-configuration">Differential Divider Output Power Configuration</a></li>
+<li><a class="reference internal" href="#differential-output-enable-configuration">Differential Output Enable Configuration</a></li>
+<li><a class="reference internal" href="#adf5611-frequency-generation">ADF5611 Frequency Generation</a></li>
+<li><a class="reference internal" href="#frequency-setting">Frequency Setting</a></li>
+<li><a class="reference internal" href="#adf5611-driver-initialization-example">ADF5611 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#spi-communication-example">SPI Communication Example</a></li>
+<li><a class="reference internal" href="#adf5611-no-os-iio-support">ADF5611 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adf5611-iio-device-configuration">ADF5611 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#adf5611-iio-driver-initialization-example">ADF5611 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#supported-devices">Supported Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#supported-carriers">Supported Carriers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#building-and-running-the-project">Building and Running the Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#project-layout-and-hdl-generation">Project Layout and HDL Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#switching-between-use-cases">Switching Between Use Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html#demo-applications">Demo Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adf5611-no-os-driver">
+<h1>ADF5611 no-OS driver<a class="headerlink" href="#adf5611-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a></p></li>
+<li><p><a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a> and <a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a>
+allows implementation of fractional-N or Integer N phase-locked loop (PLL) frequency
+synthesizers when used with an external loop filter and an external reference source.
+The wideband microwave voltage controlled oscillator (VCO) design permits frequency operation
+from 7300 MHz to 14600 MHz for <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a> and from 7300
+MHz to 8500 MHz for <a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a> at a single radio
+frequency (RF) output. A series of frequency dividers with a differential frequency output
+allows operation from 57 MHz to 14600MHz for <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a>,
+while <a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a> is limited to 57MHz to 8500MHz.
+Analog and digital power supplies for the PLL circuitry range from 3.15 V to 3.45 V, and
+the VCO supplies are between 4.75 V and 5.25 V.
+Both <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a> and <a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a>
+has an integrated VCO with a fundamental frequency of 3650 MHz to 7300 MHz. These frequencies
+are internally doubled and routed to the RFOUT pin. An additional differential output allows
+the doubled VCO frequency to be divided by 1, 2, 4, 8, 16, 32, 64, or 128, allowing the user
+to generate RF output frequencies as low as 57 MHz. A simple 3 or 4 wire serial port interface
+(SPI) provides control of all on-chip registers. To conserve power, this divider block can be disabled
+when not needed through the SPI interface. Likewise, the output power for both the single-
+ended output and the differential output are programmable. Their integrated phase detector
+(PD) and delta-sigma (Δ-Σ) modulator, capable of operating at up to 100 MHz, permit wide
+loop bandwidths and fast frequency tuning with a typical spurious level of −100 dBc.
+With phase noise levels from −115 dBc/Hz at 7.3 GHz to −109 dBc/Hz at 14.6 GHz and −112 dBc/Hz
+at 8.5 GHz RFOUT respectively, both synthesizers are equipped to minimize blocker effects,
+and to improve receiver sensitivity and transmitter spectral purity. The low phase noise floor
+eliminates any contribution to modulator and mixer noise floor in transmitter applications.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Military and Defense</p></li>
+<li><p>Test equipment</p></li>
+<li><p>Clock generation</p></li>
+<li><p>Wireless infrastructure</p></li>
+<li><p>Satellite and very small aperture terminal (VSAT)</p></li>
+<li><p>Microwave radio</p></li>
+</ul>
+</section>
+<section id="adf5611-device-configuration">
+<h2>ADF5611 Device Configuration<a class="headerlink" href="#adf5611-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h2>
+<p>Communicating with the device will require the driver to support Serial Peripheral Interface
+(SPI).</p>
+<p>The first API to be called is the <strong>adf5611_init</strong>. Ensure that the function call returns 0,
+which means that the driver was initialized correctly. This function also performs a soft reset,
+putting the device in a known state.</p>
+</section>
+<section id="reference-clock-configuration">
+<h2>Reference Clock Configuration<a class="headerlink" href="#reference-clock-configuration" title="Link to this heading"></a></h2>
+<p>By default, the device is set to use a 122.88MHz clock. This can be changed to any
+value, which is supported by the device, by using the function
+<strong>adf5611_set_ref_clk</strong>. The current configuration can be read out using
+<strong>adf5612_get_ref_clk</strong>.The input reference clock value for the function will
+have to be expressed in KHz.</p>
+</section>
+<section id="reference-divider-configuration">
+<h2>Reference Divider Configuration<a class="headerlink" href="#reference-divider-configuration" title="Link to this heading"></a></h2>
+<p>On the reference input path there is a divider, allowing the input reference
+frequency to be divided by up to 16383. Default this is set to 2 and can be changed
+using <strong>adf5611_set_ref_div</strong>. The current configuration can be read out using
+<strong>adf5611_get_ref_div</strong>.</p>
+<p>Together with the reference doubler this feature will determine the PFD frequency.</p>
+</section>
+<section id="charge-pump-current-configuration">
+<h2>Charge Pump Current Configuration<a class="headerlink" href="#charge-pump-current-configuration" title="Link to this heading"></a></h2>
+<p>The ADF5611 has the option for 16 preset charge pump currents, ranging from 0.2
+mA to 3.2 mA. By default the charge pump current is set to 3.2 mA. The
+supported currents can be configured using <strong>adf5611_set_cp_i</strong> API, which will
+expect the register value, ranging form 0 to 15, as inputs. The current
+configuration can be read out using <strong>adf5611_get_cp_i</strong>, which will also return
+the value in the same range.</p>
+<p>In order to determine which value corresponds to your design charge pump
+current, please refer to the datasheet <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a>
+in the register details section for register REG0021h.</p>
+</section>
+<section id="output-frequency-configuration">
+<h2>Output Frequency Configuration<a class="headerlink" href="#output-frequency-configuration" title="Link to this heading"></a></h2>
+<p>The <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a> and <a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a>
+each has a main RF output and a differential divider RF output.
+The main RF output range from 7300MHz to 14600MHz, and the differential divided
+output is between 57MHz to 14600MHz for <a class="reference external" href="www.analog.com/en/products/adf5611.html">ADF5611</a>,
+while <a class="reference external" href="www.analog.com/en/products/adf5612.html">ADF5612</a> has a similar minimum main RF output
+frequency but has maximum main RF output as well as divided output of 8500MHz.
+The main RF output can be reconfigured by using the <strong>adf5611_set_rfout</strong> API.
+The output frequency set by the API is expressed in Hz. The previously configured output
+frequency can be read out using <strong>adf5611_get_rfout</strong>.</p>
+<p>This attribute will only set the main RFOUT frequency. While the differential output depends
+on this attribute settings, its output is determined by the Ouput divider settings.</p>
+</section>
+<section id="output-power-configuration">
+<h2>Output Power Configuration<a class="headerlink" href="#output-power-configuration" title="Link to this heading"></a></h2>
+<p>The output power of the RFOUT frequency can be configured using <strong>adf5611_set_output_power</strong>
+API. The current configuration can be read out using <strong>adf5611_get_output_power</strong>.</p>
+<p>The Power of the RFOUT frequency is between 0 to 3 with 3 being the default.</p>
+</section>
+<section id="id14">
+<h2>Reference Divider Configuration<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<p>On the differential ouput path there is a divider, allowing the main RFOUT frequency to be
+divided evenly up to 128. By default, this is set to 1, which is equal to the RFOUT frequency
+and can be changed using <strong>adf5611_set_rfoutdiv_divider</strong>. The current configuration can be
+read out using <strong>adf5611_get_rfoutdiv_divider</strong>.</p>
+</section>
+<section id="differential-divider-output-power-configuration">
+<h2>Differential Divider Output Power Configuration<a class="headerlink" href="#differential-divider-output-power-configuration" title="Link to this heading"></a></h2>
+<p>The differential divider output power can be configured using <strong>adf5611_set_rfoutdiv_power</strong> API.
+The current configuration can also be read out using <strong>adf5611_get_rfoutdiv_power</strong>.</p>
+<p>The Power of differential output is between 0 to 3 with 3 being the default.</p>
+</section>
+<section id="differential-output-enable-configuration">
+<h2>Differential Output Enable Configuration<a class="headerlink" href="#differential-output-enable-configuration" title="Link to this heading"></a></h2>
+<p>The differential ouput path can be activated independently without affecting the main RF output
+using <strong>adf5611_set_en_rfoutdiv</strong> API.
+The API expects a boolean value to enable or disable the path. The current status can be
+determined using the <strong>adf5611_get_en_rfoutdiv</strong> API.</p>
+<p>By default the path is disabled. 0 is disabled and 1 is enabled.</p>
+</section>
+<section id="adf5611-frequency-generation">
+<h2>ADF5611 Frequency Generation<a class="headerlink" href="#adf5611-frequency-generation" title="Link to this heading"></a></h2>
+</section>
+<section id="frequency-setting">
+<h2>Frequency Setting<a class="headerlink" href="#frequency-setting" title="Link to this heading"></a></h2>
+<p>As mentioned above, using the default values the generated frequency will be of
+12 GHz. This frequency depends on all of the previous configurations and is
+recalculated based on them using the <strong>adf5611_set_rfout</strong> API. When the API is
+called, it will calculate the VCO frequency, the integer and fractional parts of
+the feedback loop for the PLL while trying to obtain the configured output frequency.
+The API will also write the corresponding registers with the computed values.</p>
+</section>
+<section id="adf5611-driver-initialization-example">
+<h2>ADF5611 Driver Initialization Example<a class="headerlink" href="#adf5611-driver-initialization-example" title="Link to this heading"></a></h2>
+</section>
+<section id="spi-communication-example">
+<h2>SPI Communication Example<a class="headerlink" href="#spi-communication-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>struct<span class="w"> </span>adf5611_dev<span class="w"> </span>*dev<span class="p">;</span>
+<span class="w">    </span>int<span class="w"> </span>ret<span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf5611_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">    </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">    </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">    </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">    </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">    </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="w">    </span><span class="o">}</span><span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf5611_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1500000</span>,
+<span class="w">    </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">    </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">    </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="w">    </span><span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_i2c_init_param<span class="w"> </span><span class="nv">adf5611_i2c_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_DEVICE_ID,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_OPS,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_EXTRA,
+<span class="w">    </span>.slave_address<span class="w"> </span><span class="o">=</span><span class="w"> </span>0x54
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>eeprom_24xx32a_init_param<span class="w"> </span><span class="nv">adf5611_eeprom_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.i2c_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_i2c_ip,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_eeprom_init_param<span class="w"> </span><span class="nv">adf5611_eeprom_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>eeprom_24xx32a_ops,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_eeprom_init_param,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>adf4368_init_param<span class="w"> </span><span class="nv">adf5611_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_spi_ip,
+<span class="w">    </span>.spi4wire<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.cmos_3v3<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">    </span>.ref_clk_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">122880000</span>,
+<span class="w">    </span>.rfout_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12000000000</span>,
+<span class="w">    </span>.ref_div<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>,
+<span class="w">    </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>,
+<span class="w">    </span>.bleed_word<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">17</span>,
+<span class="w">    </span>.ld_count<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span>,
+<span class="w">    </span>.id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ID_ADF5611,
+<span class="w">    </span><span class="o">}</span><span class="p">;</span>
+
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf5611_init<span class="o">(</span><span class="p">&amp;</span>dev,<span class="w"> </span><span class="p">&amp;</span>adf5611_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf5611_set_freq<span class="o">(</span>dev,<span class="w"> </span><span class="m">12000000000</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="adf5611-no-os-iio-support">
+<h2>ADF5611 no-OS IIO support<a class="headerlink" href="#adf5611-no-os-iio-support" title="Link to this heading"></a></h2>
+<p>The ADF5611 IIO driver comes on top of ADF5611 driver and offers support for
+interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="adf5611-iio-device-configuration">
+<h2>ADF5611 IIO Device Configuration<a class="headerlink" href="#adf5611-iio-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading"></a></h2>
+<p>ADF5611 and ADF5612 has only one channel for the the RF output frequency, which makes most
+of the attributes, device attributes.</p>
+<p>The attributes are:</p>
+<ul class="simple">
+<li><p>reference_frequency - Sets the current Reference Frequency.</p></li>
+<li><p>reference_divider - Sets the current Reference Divider ratio.</p></li>
+<li><p>charge_pump_current - Sets the current Charge Pump Configuration.</p></li>
+<li><p>charge_pump_current_available - Returns the available Charge Pump Currents.</p></li>
+<li><p>rfoutdiv_power - Sets the current Differential Divider Output Power.</p></li>
+<li><p>rfoutdiv_divider - Sets the current Differential Divider ratio.</p></li>
+<li><p>rfoutdiv_divider_available - Returns the available Differential Divider Ratios.</p></li>
+<li><p>en_rfoutdiv - Enables or Disables the Differential Output path.</p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading"></a></h2>
+<p>ADF5611 and ADF5612 IIO device has 1 output channel which corresponds to the RF output
+frequency.</p>
+<p>Which is represented as:</p>
+<ul class="simple">
+<li><p>output altvoltage0 - corresponding to channel 1 on the device</p></li>
+</ul>
+<p>The channel has 2 attributes:</p>
+<ul class="simple">
+<li><p>rfout_frequency - Sets the current RF Output Frequency.</p></li>
+<li><p>rfout_power - Sets the current RF Output Power.</p></li>
+</ul>
+</section>
+<section id="adf5611-iio-driver-initialization-example">
+<h2>ADF5611 IIO Driver Initialization Example<a class="headerlink" href="#adf5611-iio-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>struct<span class="w"> </span>adf5611_iio_dev<span class="w"> </span>*adf5611_iio_dev<span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>adf5611_iio_dev_init_param<span class="w"> </span>adf5611_iio_ip<span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>iio_ctx_attr<span class="w"> </span>*context_attributes<span class="p">;</span>
+<span class="w">    </span>int<span class="w"> </span>ret<span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf5611_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">    </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">    </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">    </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">    </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">    </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf5611_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1500000</span>,
+<span class="w">    </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">    </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">    </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_i2c_init_param<span class="w"> </span><span class="nv">adf5611_i2c_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_DEVICE_ID,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_OPS,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>I2C_EXTRA,
+<span class="w">    </span>.slave_address<span class="w"> </span><span class="o">=</span><span class="w"> </span>0x54
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>eeprom_24xx32a_init_param<span class="w"> </span><span class="nv">adf5611_eeprom_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.i2c_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_i2c_ip,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_eeprom_init_param<span class="w"> </span><span class="nv">adf5611_eeprom_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>eeprom_24xx32a_ops,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_eeprom_init_param,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf5611_init_param<span class="w"> </span><span class="nv">adf5611_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_spi_ip,
+<span class="w">    </span>.spi4wire<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.cmos_3v3<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">    </span>.ref_clk_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">122880000</span>,
+<span class="w">    </span>.rfout_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12000000000</span>,
+<span class="w">    </span>.ref_div<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>,
+<span class="w">    </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>,
+<span class="w">    </span>.bleed_word<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">17</span>,
+<span class="w">    </span>.ld_count<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span>,
+<span class="w">    </span>.id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ID_ADF5611,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="w">    </span>adf5611_iio_ip.adf5611_dev_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf5611_ip<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf5611_iio_init<span class="o">(</span><span class="p">&amp;</span>adf5611_iio_dev,<span class="w"> </span><span class="p">&amp;</span>adf5611_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="o">{</span>
+<span class="w">                    </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;adf5611&quot;</span>,
+<span class="w">                    </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf5611_iio_dev,
+<span class="w">                    </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf5611_iio_dev-&gt;iio_dev,
+<span class="w">            </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_eeprom_desc<span class="w"> </span>*eeprom_dev<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>eeprom_24xx32a_ops.init<span class="o">(</span><span class="p">&amp;</span>eeprom_dev,<span class="w"> </span><span class="p">&amp;</span>adf5611_eeprom_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+<span class="w">    </span>char<span class="w"> </span>board_name<span class="o">[</span><span class="m">17</span><span class="o">]</span><span class="w"> </span><span class="o">={</span><span class="m">0</span><span class="o">}</span><span class="p">;</span>
+<span class="w">    </span>char<span class="w"> </span>hw_mezz<span class="o">[</span><span class="m">25</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span>uint32_t<span class="w"> </span><span class="nv">eeprom_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>0x1B<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>eeprom_24xx32a_ops.read<span class="o">(</span>eeprom_dev,<span class="w"> </span>eeprom_address,
+<span class="w">                    </span><span class="o">(</span>uint8_t<span class="w"> </span>*<span class="o">)</span>board_name,<span class="w"> </span>sizeof<span class="o">(</span>board_name<span class="o">))</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+<span class="w">    </span>int<span class="w"> </span>i,<span class="w"> </span><span class="nv">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="o">(</span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"> </span>board_name<span class="o">[</span>i<span class="o">]</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s1">&#39;\0&#39;</span><span class="p">;</span><span class="w"> </span>i++<span class="o">)</span>
+<span class="w">    </span><span class="o">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>isalnum<span class="o">((</span>unsigned<span class="w"> </span>char<span class="o">)</span>board_name<span class="o">[</span>i<span class="o">])</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>board_name<span class="o">[</span>i<span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                    </span>hw_mezz<span class="o">[</span>index++<span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>board_name<span class="o">[</span>i<span class="o">]</span><span class="p">;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span>hw_mezz<span class="o">[</span>index<span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;\0&#39;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>eeprom_24xx32a_ops.remove<span class="o">(</span>eeprom_dev<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="o">(</span>ret<span class="o">){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="nv">context_attributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>struct<span class="w"> </span>iio_ctx_attr<span class="w"> </span>*<span class="o">)</span>calloc<span class="o">(</span>NUM_CTX_ATTR,
+<span class="w">                            </span>sizeof<span class="o">(</span>*context_attributes<span class="o">))</span><span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">0</span><span class="o">]</span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hw_mezzanine&quot;</span><span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">0</span><span class="o">]</span>.value<span class="w"> </span><span class="o">=</span><span class="w"> </span>hw_mezz<span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">1</span><span class="o">]</span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hw_carrier&quot;</span><span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">1</span><span class="o">]</span>.value<span class="w"> </span><span class="o">=</span><span class="w"> </span>HW_CARRIER<span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">2</span><span class="o">]</span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hw_name&quot;</span><span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">2</span><span class="o">]</span>.value<span class="w"> </span><span class="o">=</span><span class="w"> </span>ACTIVE_DEVICE_NAME<span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">3</span><span class="o">]</span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hw_vendor&quot;</span><span class="p">;</span>
+<span class="w">    </span>context_attributes<span class="o">[</span><span class="m">3</span><span class="o">]</span>.value<span class="w"> </span><span class="o">=</span><span class="w"> </span>ACTIVE_DEVICE_VENDOR<span class="p">;</span>
+
+<span class="w">    </span>app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+<span class="w">    </span>app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span>app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf5611_uart_ip<span class="p">;</span>
+<span class="w">    </span>app_init_param.ctx_attrs<span class="w"> </span><span class="o">=</span><span class="w"> </span>context_attributes<span class="p">;</span>
+<span class="w">    </span>app_init_param.nb_ctx_attr<span class="w"> </span><span class="o">=</span><span class="w"> </span>NUM_CTX_ATTR<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>exit<span class="p">;</span>
+<span class="w">    </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="adf4368.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADF4368 no-OS driver</a>
+    <a href="admfm2000.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADMFM2000 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

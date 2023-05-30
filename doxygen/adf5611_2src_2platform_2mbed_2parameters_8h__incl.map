@@ -1,0 +1,14 @@
+<map id="projects/adf5611/src/platform/mbed/parameters.h" name="projects/adf5611/src/platform/mbed/parameters.h">
+<area shape="rect" id="node1" title="Definitions specific to Mbed platform used by ADF5611 project." alt="" coords="260,5,475,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,105,121"/>
+<area shape="rect" id="node3" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="130,95,234,121"/>
+<area shape="rect" id="node6" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="380,95,477,121"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="501,95,607,121"/>
+<area shape="rect" id="node11" href="$mbed__i2c_8h.html" title="Header containing extra types required for I2C interface." alt="" coords="259,95,356,121"/>
+<area shape="rect" id="node12" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="685,169,783,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="274,169,341,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="373,244,455,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="612,244,683,271"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="477,169,610,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="508,244,579,271"/>
+</map>

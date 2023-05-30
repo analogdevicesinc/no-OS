@@ -1,0 +1,13 @@
+<map id="projects/ad&#45;acevsecrdset&#45;sl/src/supply/supply.c" name="projects/ad&#45;acevsecrdset&#45;sl/src/supply/supply.c">
+<area shape="rect" id="node1" title="Power supply phase implementation file." alt="" coords="278,5,463,47"/>
+<area shape="rect" id="node2" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="5,95,141,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="166,95,293,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="317,95,424,121"/>
+<area shape="rect" id="node6" href="$supply_8h.html" title="Power supply phase interface file." alt="" coords="448,95,523,121"/>
+<area shape="rect" id="node11" title=" " alt="" coords="547,95,600,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="40,169,107,196"/>
+<area shape="rect" id="node7" href="$state__machine_8h.html" title="STOUT state machine header file." alt="" coords="276,169,407,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="431,169,540,196"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="564,169,660,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="441,244,511,271"/>
+</map>

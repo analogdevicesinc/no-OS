@@ -1,0 +1,12 @@
+<map id="projects/eval&#45;adis1655x/src/common/common_data.h" name="projects/eval&#45;adis1655x/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by eval&#45;adis1655x examples." alt="" coords="48,5,263,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,156,121"/>
+<area shape="rect" id="node3" href="$adis1655x_8h.html" title="Implementation of adis1655x.h." alt="" coords="181,95,282,121"/>
+<area shape="rect" id="node4" href="$adis_8h.html" title="Implementation of adis.h." alt="" coords="201,169,262,196"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="7,244,106,271"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="181,244,281,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="165,319,236,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="269,319,351,345"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="357,244,425,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="55,319,125,345"/>
+</map>

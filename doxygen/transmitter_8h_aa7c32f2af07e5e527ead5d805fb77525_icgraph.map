@@ -1,0 +1,6 @@
+<map id="ADIAPI_TransmitterSetMuteState" name="ADIAPI_TransmitterSetMuteState">
+<area shape="rect" id="node1" title="This is the TX audio/video mute handling function." alt="" coords="513,23,715,65"/>
+<area shape="rect" id="node2" href="$transmitter_8h.html#a9b4cd6388e4e3a28623e0eca4c521132" title="Initializes the hardware of the transmitter." alt="" coords="255,5,461,32"/>
+<area shape="rect" id="node4" href="$transmitter_8h.html#aca5990e3df08467a7eb3e67a807f8c19" title="Performs TX housekeeping tasks. This function should be called periodically (at least every 100 ms)" alt="" coords="251,56,465,83"/>
+<area shape="rect" id="node3" href="$transmitter_8h.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="5,5,203,32"/>
+</map>

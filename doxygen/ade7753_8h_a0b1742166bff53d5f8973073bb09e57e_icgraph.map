@@ -1,0 +1,6 @@
+<map id="ade7753_get_int_status" name="ade7753_get_int_status">
+<area shape="rect" id="node1" title="Get interrupt indicator from STATUS register." alt="" coords="312,31,489,57"/>
+<area shape="rect" id="node2" href="$ade7753_8h.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="133,5,239,32"/>
+<area shape="rect" id="node4" href="$eval-ade7753_2src_2common_2common__data_8h.html#a15949fe4023e52c618a1a27713a2f456" title="Read measurements." alt="" coords="108,56,264,83"/>
+<area shape="rect" id="node3" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,57"/>
+</map>

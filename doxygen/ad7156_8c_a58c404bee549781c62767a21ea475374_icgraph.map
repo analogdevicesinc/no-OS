@@ -1,0 +1,4 @@
+<map id="ad7156_wait_read_channel_data" name="ad7156_wait_read_channel_data">
+<area shape="rect" id="node1" title="Waits for a finished CDC conversion and reads a 12&#45;bit sample from the selected channel." alt="" coords="252,13,487,39"/>
+<area shape="rect" id="node2" href="$ad7156_8h.html#aadbc4753dd57c1a2296aaa705ea7829d" title="Waits for a finished CDC conversion the selected channel, reads a sample and converts the data to pic..." alt="" coords="5,5,204,47"/>
+</map>

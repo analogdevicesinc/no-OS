@@ -1,0 +1,12 @@
+<map id="adis_read_sync_mode" name="adis_read_sync_mode">
+<area shape="rect" id="node1" title="Read synchronization mode encoded value." alt="" coords="875,115,1041,141"/>
+<area shape="rect" id="node2" href="$adis_8h.html#a54ef11afd65d0bf5b6d93a6ad776abdf" title="Read adis synchronization clock frequency value in Hertz." alt="" coords="646,5,819,32"/>
+<area shape="rect" id="node3" href="$iio__adis__internals_8h.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="657,56,808,83"/>
+<area shape="rect" id="node4" href="$iio__adis__internals_8h.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="655,107,810,149"/>
+<area shape="rect" id="node5" href="$adis_8h.html#a7f088977b566a1c27c547d070015f3c2" title="Update external clock frequency." alt="" coords="639,173,827,200"/>
+<area shape="rect" id="node6" href="$adis_8h.html#a358ff26569317c1d7376c00a23abfbc7" title="Write external clock scale factor value." alt="" coords="656,224,809,251"/>
+<area shape="rect" id="node7" href="$adis_8h.html#af3f09f782cb5607fb43ebcc7c8f36c7f" title="Update synchronization mode." alt="" coords="420,224,591,251"/>
+<area shape="rect" id="node8" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="213,187,372,229"/>
+<area shape="rect" id="node9" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="254,253,331,280"/>
+<area shape="rect" id="node10" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,253,165,280"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="max_spi_init_param" name="max_spi_init_param">
+<area shape="rect" id="node1" title="Maxim specific SPI initialization parameters." alt="" coords="23,184,177,211"/>
+<area shape="rect" id="node2" href="$structno__os__dma__init__param.html" title="Initialization parameter for the DMA controller." alt="" coords="13,95,187,121"/>
+<area shape="rect" id="node3" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="5,5,195,32"/>
+</map>

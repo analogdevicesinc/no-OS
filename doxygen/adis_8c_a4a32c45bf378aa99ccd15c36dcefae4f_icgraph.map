@@ -1,0 +1,6 @@
+<map id="adis_cmd_sw_res" name="adis_cmd_sw_res">
+<area shape="rect" id="node1" title="Command: software reset." alt="" coords="533,5,669,32"/>
+<area shape="rect" id="node2" href="$adis_8h.html#ac138d46e3aaa5696d6000b8309707c82" title="Device initial setup." alt="" coords="339,5,485,32"/>
+<area shape="rect" id="node3" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="213,5,291,32"/>
+<area shape="rect" id="node4" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,5,165,32"/>
+</map>

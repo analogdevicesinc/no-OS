@@ -1,0 +1,4 @@
+<map id="adis_get_temp_offset" name="adis_get_temp_offset">
+<area shape="rect" id="node1" title="Read adis device temperature offset in integer." alt="" coords="205,5,368,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#aaedb46cc4fe942a8837df6283c46684c" title="Handles the read request for offset attribute." alt="" coords="5,5,157,32"/>
+</map>

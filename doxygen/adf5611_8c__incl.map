@@ -1,0 +1,16 @@
+<map id="drivers/frequency/adf5611/adf5611.c" name="drivers/frequency/adf5611/adf5611.c">
+<area shape="rect" id="node1" title="Implementation of adf5611 Driver." alt="" coords="274,5,468,47"/>
+<area shape="rect" id="node2" href="$adf5611_8h.html" title="Implementation of adf5611 Driver." alt="" coords="205,95,292,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="316,95,426,121"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="611,95,720,121"/>
+<area shape="rect" id="node13" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="451,95,587,121"/>
+<area shape="rect" id="node14" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="8,95,121,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="164,244,234,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="24,169,94,196"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="293,169,393,196"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="119,169,218,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="396,244,466,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="288,244,371,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="480,169,547,196"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="632,169,700,196"/>
+</map>

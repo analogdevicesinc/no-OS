@@ -1,0 +1,14 @@
+<map id="max42500_reg_read" name="max42500_reg_read">
+<area shape="rect" id="node1" title="Read a raw value from a register." alt="" coords="748,178,903,205"/>
+<area shape="rect" id="node2" href="$max42500_8h.html#ab1ee776e9ce01d8bbbdc108c74fabd88" title="Get the status of the voltage monitor input." alt="" coords="219,37,428,64"/>
+<area shape="rect" id="node4" href="$max42500_8h.html#a038c7bfd211a1db049ede34fb35ef918" title="Get the power&#45;down timestamp for a specified voltage monitor input." alt="" coords="507,47,674,88"/>
+<area shape="rect" id="node5" href="$max42500_8h.html#ab4768f16aa58a4804782076410d1c522" title="Get the power&#45;up timestamp for a specified voltage monitor input." alt="" coords="507,112,674,154"/>
+<area shape="rect" id="node6" href="$max42500_8h.html#a45a93542ac6c986d6245ffb65a6f8b9a" title="Initialize the device structure." alt="" coords="264,153,383,180"/>
+<area shape="rect" id="node7" href="$max42500_8h.html#a460e7ea60567482b927982c3a00f3716" title="Update a register&#39;s value based on a mask." alt="" coords="505,229,676,256"/>
+<area shape="rect" id="node11" href="$max42500_8h.html#a154fb403d51164c516bd0e6e0b6b7fb1" title="Enable/Disable watchdog." alt="" coords="497,280,685,322"/>
+<area shape="rect" id="node12" href="$max42500_8h.html#aefce91748fb02ea8752fb4f9bdf5ff88" title="Update the watchdog key based on the mode and current value." alt="" coords="481,346,700,373"/>
+<area shape="rect" id="node3" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,178,165,205"/>
+<area shape="rect" id="node8" href="$max42500_8h.html#a12d9747d4143e266cb34770695e84a69" title="Set the overvoltage threshold of VM1 to VM5." alt="" coords="225,204,422,230"/>
+<area shape="rect" id="node9" href="$max42500_8h.html#a372c0993640464da288a4881836b2dc5" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="225,254,422,281"/>
+<area shape="rect" id="node10" href="$max42500_8h.html#aac3ba7534a3177465fd2eac9fec90c02" title="Set watchdog reset hold time." alt="" coords="213,305,433,332"/>
+</map>

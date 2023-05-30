@@ -1,0 +1,16 @@
+<map id="projects/max14919/src/examples/basic/basic_example.c" name="projects/max14919/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Source file for basic example." alt="" coords="241,5,411,61"/>
+<area shape="rect" id="node2" href="$max14919_2src_2examples_2basic_2basic__example_8h.html" title=" " alt="" coords="5,109,137,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="161,109,288,136"/>
+<area shape="rect" id="node4" href="$max14919_8h.html" title="Header file of MAX14919 Driver." alt="" coords="364,109,467,136"/>
+<area shape="rect" id="node12" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="45,184,159,211"/>
+<area shape="rect" id="node13" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="566,109,702,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="207,259,277,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="458,259,541,285"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="234,184,341,211"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="365,184,465,211"/>
+<area shape="rect" id="node10" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="541,184,650,211"/>
+<area shape="rect" id="node9" title=" " alt="" coords="363,259,433,285"/>
+<area shape="rect" id="node11" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="565,259,633,285"/>
+<area shape="rect" id="node14" title=" " alt="" coords="674,184,741,211"/>
+</map>

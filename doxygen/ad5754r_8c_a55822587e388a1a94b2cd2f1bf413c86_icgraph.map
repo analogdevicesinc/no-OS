@@ -1,0 +1,11 @@
+<map id="ad5754r_update_bits" name="ad5754r_update_bits">
+<area shape="rect" id="node1" title="Update specific register bits." alt="" coords="569,148,728,175"/>
+<area shape="rect" id="node2" href="$ad5754r_8h.html#a679e14945072b4e54cdbfba468fbc192" title="Set power&#45;up state for specific channel." alt="" coords="343,5,513,32"/>
+<area shape="rect" id="node5" href="$ad5754r_8h.html#a86eb2633b3da97e164056f31216264a8" title="Set clear mode setting for device." alt="" coords="335,56,521,83"/>
+<area shape="rect" id="node6" href="$ad5754r_8h.html#a7fde54cb94c1b6632bc7f26f0502b2b1" title="Apply current clamp setting for device." alt="" coords="351,107,505,149"/>
+<area shape="rect" id="node7" href="$ad5754r_8h.html#a3c216ae4b41db1538b59025b9d0e122d" title="Set Internal Reference Enable/Disable state for device." alt="" coords="353,173,503,214"/>
+<area shape="rect" id="node8" href="$ad5754r_8h.html#aebf248be160290a179b4b7992be0e1ae" title="Set SDO Enable/Disable state for device." alt="" coords="335,239,521,265"/>
+<area shape="rect" id="node9" href="$ad5754r_8h.html#ad1e19f86104f644876be104c09a5791c" title="Apply TSD setting for device." alt="" coords="352,289,504,316"/>
+<area shape="rect" id="node3" href="$ad5754r_8h.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="156,148,287,175"/>
+<area shape="rect" id="node4" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,148,108,175"/>
+</map>

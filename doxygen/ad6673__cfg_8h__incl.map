@@ -1,0 +1,8 @@
+<map id="drivers/adc/ad6673/ad6673_cfg.h" name="drivers/adc/ad6673/ad6673_cfg.h">
+<area shape="rect" id="node1" title="Header file of AD6673 Driver Configuration." alt="" coords="11,5,158,47"/>
+<area shape="rect" id="node2" href="$ad6673_8h.html" title="Header file of AD6673 Driver." alt="" coords="43,95,126,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="35,169,134,196"/>
+<area shape="rect" id="node5" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="158,169,267,196"/>
+<area shape="rect" id="node6" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="179,244,247,271"/>
+</map>

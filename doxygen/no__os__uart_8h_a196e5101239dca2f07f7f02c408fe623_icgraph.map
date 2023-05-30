@@ -1,0 +1,15 @@
+<map id="no_os_uart_init" name="no_os_uart_init">
+<area shape="rect" id="node1" title="Initialize the UART communication peripheral." alt="" coords="493,183,615,209"/>
+<area shape="rect" id="node2" href="$ades1754_8h.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="273,5,386,32"/>
+<area shape="rect" id="node4" href="$adin1110__standalone__example_8h.html#acbf661085a642e031f672cda6c6da4fe" title="Configure the ADIN1110 and read the device ID." alt="" coords="249,259,410,301"/>
+<area shape="rect" id="node6" href="$apard32690_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="249,107,409,133"/>
+<area shape="rect" id="node7" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="251,56,408,83"/>
+<area shape="rect" id="node9" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="270,208,389,235"/>
+<area shape="rect" id="node10" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="248,376,411,403"/>
+<area shape="rect" id="node12" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="302,325,357,352"/>
+<area shape="rect" id="node13" href="$tcp__echo__server__example_8h.html#a71a933205bd5c61d181123850b2c6e9b" title="TCP echo example main execution." alt="" coords="213,157,445,184"/>
+<area shape="rect" id="node3" href="$ades1754_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="26,5,145,32"/>
+<area shape="rect" id="node5" href="$apard32690_2src_2examples_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution." alt="" coords="58,212,113,239"/>
+<area shape="rect" id="node8" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="58,56,113,83"/>
+<area shape="rect" id="node11" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,376,165,403"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ltc7871_is_write_protected" name="ltc7871_is_write_protected">
+<area shape="rect" id="node1" title="Read Write Protect bit for IDAC registers, and MFR_SSFM register." alt="" coords="419,143,616,170"/>
+<area shape="rect" id="node2" href="$ltc7871_8h.html#a21c22ab9a7876ab2eac5ef74aa428bb9" title="Set Frequency Spread Range." alt="" coords="181,5,362,47"/>
+<area shape="rect" id="node3" href="$ltc7871_8h.html#a6785a0e9c841036825e9a39a8f3124d5" title="stores the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="191,71,352,112"/>
+<area shape="rect" id="node4" href="$ltc7871_8h.html#a35de5774bc09f4c0991300d2e652d8df" title="stores the current DAC value to program the VHIGH voltage." alt="" coords="191,136,352,177"/>
+<area shape="rect" id="node6" href="$ltc7871_8h.html#aea03d5056be2372d7c846964d8ea7555" title="stores the current DAC value to program the VLOW voltage." alt="" coords="172,202,371,229"/>
+<area shape="rect" id="node7" href="$ltc7871_8h.html#a73042797a3127e7b4eac4b20ba6d2c24" title="Set Modulation Signal Frequency." alt="" coords="188,253,355,279"/>
+<area shape="rect" id="node5" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,173,124,199"/>
+</map>

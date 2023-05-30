@@ -1,0 +1,11 @@
+<map id="drivers/adc&#45;dac/ad74416h/ad74416h.h" name="drivers/adc&#45;dac/ad74416h/ad74416h.h">
+<area shape="rect" id="node1" title="Header file of AD74416h Driver." alt="" coords="623,5,813,47"/>
+<area shape="rect" id="node2" href="$ad74416h_8c.html" title="Source file of AD74416H Driver." alt="" coords="5,102,196,143"/>
+<area shape="rect" id="node3" href="$ad74416h_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="221,102,413,143"/>
+<area shape="rect" id="node5" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for eval&#45;ad74416h project." alt="" coords="437,95,604,151"/>
+<area shape="rect" id="node6" href="$current__input__ext_8c.html" title="Current input in External power mode example for ad74416h&#45;pmdz." alt="" coords="628,95,808,151"/>
+<area shape="rect" id="node7" href="$current__input__loop_8c.html" title="Current input in Loop power mode example code for ad74416h&#45;pmdz." alt="" coords="832,95,1025,151"/>
+<area shape="rect" id="node8" href="$current__output_8c.html" title="Current Output example code for ad74416h&#45;pmdz project." alt="" coords="1050,95,1239,151"/>
+<area shape="rect" id="node9" href="$multiple__devices_8c.html" title="Example code with multiple AD74416H devices for ad74416h&#45;pmdz project." alt="" coords="1263,95,1469,151"/>
+<area shape="rect" id="node4" href="$ad74416h_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="221,199,412,240"/>
+</map>

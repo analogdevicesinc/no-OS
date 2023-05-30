@@ -1,0 +1,13 @@
+<map id="max17851_reg_write" name="max17851_reg_write">
+<area shape="rect" id="node1" title="MAX17851 register write function." alt="" coords="736,351,895,377"/>
+<area shape="rect" id="node2" href="$max17851_8h.html#a66a3ec73171c8be3fcdeb686807a4d6f" title="MAX17851 device initialization function." alt="" coords="29,275,148,301"/>
+<area shape="rect" id="node3" href="$max17851_8h.html#a27afa58e6396e8b57caf989baff47825" title="MAX17851 register update function." alt="" coords="498,173,669,200"/>
+<area shape="rect" id="node10" href="$max17851_8h.html#af80bbb0535fff50d503a14a7e975bf3e" title="Set communication retry count and timeout delay." alt="" coords="500,325,667,352"/>
+<area shape="rect" id="node11" href="$max17851_8h.html#a133eabd58fda33d7e008f86cf1c1bbb2" title="Select Safe Monitoring Mode Scan Delay." alt="" coords="479,427,688,453"/>
+<area shape="rect" id="node4" href="$max17851_8h.html#ab2819fe18407dcc6b6d80efe28b0d708" title="Configure general settings for MAX17851." alt="" coords="237,5,413,32"/>
+<area shape="rect" id="node6" href="$max17851_8h.html#a747d53ad47c9e1a833cd8c06ee034755" title="Set timing for Alert Packets/Keep&#45;Alive Packets." alt="" coords="220,275,431,301"/>
+<area shape="rect" id="node7" href="$max17851_8h.html#a766cf6d2fba7f456b491fda2f4a0de3c" title="Select queue for transmitting/loading TX buffer for UART." alt="" coords="233,123,417,149"/>
+<area shape="rect" id="node8" href="$max17851_8h.html#ab4f00c981af9b07707bfa0c352f538de" title="Enable/Disable specific alert." alt="" coords="248,173,403,200"/>
+<area shape="rect" id="node9" href="$max17851_8h.html#aee729ee5a1f5d21baf9d56b14ab0a5fc" title="Select the number of unmasked consecutive Alert Packet status alerts, which must happen prior to taki..." alt="" coords="248,57,403,98"/>
+<area shape="rect" id="node5" href="$max17851_8h.html#a224e1263a89dc84e1736d4acdc4ddefc" title="Write message over UART using MAX17851." alt="" coords="5,5,172,32"/>
+</map>

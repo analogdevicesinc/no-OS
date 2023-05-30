@@ -1,0 +1,7 @@
+<map id="max25603_init_param" name="max25603_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="163,349,331,376"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="225,95,397,121"/>
+<area shape="rect" id="node4" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="91,185,267,212"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="217,5,405,32"/>
+<area shape="rect" id="node5" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="5,95,197,121"/>
+</map>

@@ -1,0 +1,67 @@
+<map id="no_os_memswap64" name="no_os_memswap64">
+<area shape="rect" id="node1" title=" " alt="" coords="1433,1385,1584,1412"/>
+<area shape="rect" id="node2" href="$ad3530r_8h.html#a152772b28c7dcb6f61c255652e31a2d6" title="Write into device register." alt="" coords="1205,255,1348,281"/>
+<area shape="rect" id="node18" href="$ad4858_8h.html#a9c247ad147170c0dc6c3700cf9a2b7b8" title="Read device register." alt="" coords="1209,828,1344,855"/>
+<area shape="rect" id="node31" href="$ad4858_8h.html#a9baa7d712f364e1b215c1e102c38e97c" title="Write device register." alt="" coords="1207,1005,1346,1032"/>
+<area shape="rect" id="node38" href="$adis1654x_8c.html#a869c26c00f78c2459822ebbf23d20756" title="Read burst data." alt="" coords="1176,1335,1377,1361"/>
+<area shape="rect" id="node39" href="$afe__config_8h.html#af4a22f0faa5b49d6a00db9e586d2cf67" title="reads the 16bit value from the register and saves to a 16bitbuffer." alt="" coords="1201,1461,1352,1488"/>
+<area shape="rect" id="node52" href="$afe__config_8h.html#a1800899845c09ad1e0d3b08c4badcd11" title="reads the 32bit value from the register and saves to a 32bit buffer." alt="" coords="1201,1816,1352,1843"/>
+<area shape="rect" id="node60" href="$afe__config_8h.html#af6720fa267621a9b11bd8a824a0db5b6" title="write the 16bit value to the register" alt="" coords="1201,1385,1352,1412"/>
+<area shape="rect" id="node63" href="$afe__config_8h.html#a408d2651d62c2440f9f8098cb216cd7a" title="write the 32bit value to the register" alt="" coords="1201,1588,1352,1615"/>
+<area shape="rect" id="node65" href="$stm32__i3c_8c.html#acb7fd673626d22c159a56f5d9efdc703" title="I3C target request a dynamic address callback. When called, assigns a dynamic address to the target." alt="" coords="1168,1867,1385,1909"/>
+<area shape="rect" id="node3" href="$ad3530r_8h.html#a8a3ac7191cbdf77aba3b02e2c0548ada" title=" " alt="" coords="352,5,527,32"/>
+<area shape="rect" id="node4" href="$ad3530r_8h.html#a422fe55dd8f8813163bd0192cc34fdd1" title=" " alt="" coords="641,584,804,611"/>
+<area shape="rect" id="node6" href="$ad3530r_8h.html#a5a341873f52311996625d6488ed9128b" title=" " alt="" coords="356,78,523,119"/>
+<area shape="rect" id="node7" href="$ad3530r_8h.html#a4c45291edfabc854f60823bf02395958" title=" " alt="" coords="642,147,803,173"/>
+<area shape="rect" id="node8" href="$ad3530r_8h.html#affcc4cfb845310a896d06b72eb499570" title="SPI write to device using a mask." alt="" coords="908,307,1092,333"/>
+<area shape="rect" id="node5" href="$ad3530r_8c.html#adf657d70dc5ad1db0cc23dad3e739158" title="Configures the device." alt="" coords="354,416,525,443"/>
+<area shape="rect" id="node9" href="$ad3530r_8h.html#accede971255551577c41c49625f1e72a" title="Perform a hard/soft reset." alt="" coords="665,248,780,275"/>
+<area shape="rect" id="node11" href="$ad3530r_8h.html#a45f0c36ead8fdf6a2330277bae4727bd" title=" " alt="" coords="633,416,812,443"/>
+<area shape="rect" id="node12" href="$ad3530r_8h.html#aa36c5429be3704bee573884d15c0d633" title=" " alt="" coords="639,467,806,509"/>
+<area shape="rect" id="node13" href="$ad3530r_8h.html#af0a5badacfee47157cff054d8894f780" title=" " alt="" coords="615,533,830,560"/>
+<area shape="rect" id="node14" href="$ad3530r_8h.html#a4a206b1a7dcb061a1386abe79b8c315f" title=" " alt="" coords="647,299,798,341"/>
+<area shape="rect" id="node15" href="$ad3530r_8h.html#a568e7651537627d1cd0aa5c8f229ec56" title=" " alt="" coords="637,365,808,392"/>
+<area shape="rect" id="node16" href="$ad3530r_8h.html#a5815e99e0ad280385f829c2a20018188" title="Trigger the LDAC using software." alt="" coords="631,96,815,123"/>
+<area shape="rect" id="node17" href="$ad3530r_8h.html#af8b8629966943af864d6b8c3799e94d5" title="Updates the interface configuration." alt="" coords="613,197,832,224"/>
+<area shape="rect" id="node10" href="$ad3530r_8h.html#a9f4f360a67fe344a9ec9d26973046ed8" title="Initialize the device structure." alt="" coords="388,223,491,249"/>
+<area shape="rect" id="node19" href="$ad4858_8h.html#a308fdf9132f0909bcd601d763cf979f9" title="Enable/Disable seamless hdr." alt="" coords="880,752,1120,779"/>
+<area shape="rect" id="node20" href="$ad4858_8h.html#a01cf4315146b2fe3860aa3a171dcd644" title="Enable/Disable channel sleep." alt="" coords="907,803,1093,829"/>
+<area shape="rect" id="node21" href="$ad4858_8h.html#a7131dedc19333c6712e7b4bc32ad9238" title="Update specific register bits of an input register." alt="" coords="929,853,1071,880"/>
+<area shape="rect" id="node22" href="$ad4858_8h.html#ad2bdbbdba4d502b8a8c96f5bbf5e8189" title="Enable OSR." alt="" coords="649,787,797,813"/>
+<area shape="rect" id="node23" href="$ad4858_8h.html#a6500f08e53800e01a79955829a763530" title="Enable/Disable test pattern on ADC data output." alt="" coords="646,838,799,879"/>
+<area shape="rect" id="node24" href="$ad4858_8h.html#aaff675e9d2d77ef52a0839e5bf0867b7" title="Set channel softspan." alt="" coords="628,904,817,931"/>
+<area shape="rect" id="node25" href="$ad4858_8h.html#a49169412cb6a0c76f99dda26d2eb3de3" title="Set device data interface mode." alt="" coords="318,980,561,1007"/>
+<area shape="rect" id="node26" href="$ad4858_8h.html#a9d6ef9a6bda2fdf0e875556b9746cbde" title="Set the device operating mode." alt="" coords="617,635,828,661"/>
+<area shape="rect" id="node27" href="$ad4858_8h.html#ac4534c16451ccffc90d7b041cca684e0" title="Set OSR ratio." alt="" coords="642,685,803,712"/>
+<area shape="rect" id="node28" href="$ad4858_8h.html#a13c8857e1fc1b833747502e75bbbb58c" title="Set packet format." alt="" coords="623,736,822,763"/>
+<area shape="rect" id="node29" href="$ad4858_8h.html#a32913ac6515364e2f71f91e9c17f0e1a" title="Set the SPI data mode." alt="" coords="621,1005,824,1032"/>
+<area shape="rect" id="node30" href="$ad4858_8h.html#a66fa4d0c785ded69d94ef45d087233cb" title="Set device config interface mode." alt="" coords="313,1044,565,1071"/>
+<area shape="rect" id="node32" href="$ad4858_8h.html#ae2d2d56835dc20d3c3a20145cf8952a8" title="Set channel gain." alt="" coords="919,1107,1081,1133"/>
+<area shape="rect" id="node33" href="$ad4858_8h.html#ac252e43468626da37f68d0bd82be969f" title="Set channel offset." alt="" coords="915,1157,1085,1184"/>
+<area shape="rect" id="node34" href="$ad4858_8h.html#abcdc2a96ba14b86c91c381f1b9a82559" title="Set channel overrange (OR) limit." alt="" coords="908,1208,1092,1235"/>
+<area shape="rect" id="node35" href="$ad4858_8h.html#ac2e43865619555673bd1570ab2a9edeb" title="Set channel phase." alt="" coords="913,904,1087,931"/>
+<area shape="rect" id="node36" href="$ad4858_8h.html#ad501cfa7eafaf2cf5b2183003f8e0288" title="Set channel underrange (UR) limit." alt="" coords="908,955,1092,981"/>
+<area shape="rect" id="node37" href="$ad4858_8h.html#aad1e55294ece064c23977eaf983f6a09" title="Perform an AD4858 software reset." alt="" coords="929,1005,1071,1032"/>
+<area shape="rect" id="node40" href="$afe__config_8h.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="687,1461,758,1488"/>
+<area shape="rect" id="node43" href="$afe__config_8h.html#a2bde554353ebc39a8173482742486ce6" title="reads angle registers." alt="" coords="939,1664,1061,1691"/>
+<area shape="rect" id="node47" href="$afe__config_8h.html#a2c439b6d3229e353d9eef6b78da9d489" title="reads waveform buffer." alt="" coords="924,1765,1076,1792"/>
+<area shape="rect" id="node48" href="$afe__config_8h.html#a15a51e39b44ded5b109e75d36622a1cb" title="sets ACCMODE register for nominal frequency, ICONSEL, VCONSEL." alt="" coords="929,1360,1071,1387"/>
+<area shape="rect" id="node51" href="$afe__config_8h.html#ad83626fc28d6f9930cf411960fa5c195" title="configure WFB_CFB register, initialized with start filling" alt="" coords="954,1411,1046,1437"/>
+<area shape="rect" id="node41" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,1580,265,1607"/>
+<area shape="rect" id="node42" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,1580,60,1607"/>
+<area shape="rect" id="node44" href="$pqlib__afe_8h.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="667,1791,778,1817"/>
+<area shape="rect" id="node45" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="359,1737,519,1778"/>
+<area shape="rect" id="node46" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,1635,248,1661"/>
+<area shape="rect" id="node49" href="$pqlib__example_8h.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="643,1360,802,1387"/>
+<area shape="rect" id="node50" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="346,1607,533,1633"/>
+<area shape="rect" id="node53" href="$afe__config_8h.html#a0704d74646e948b4ecb8dc725f8e77af" title="reads period registers." alt="" coords="937,1917,1063,1944"/>
+<area shape="rect" id="node54" href="$afe__config_8h.html#aacae322ee886069937979582906cc247" title="reads rms1012value registers." alt="" coords="925,1968,1075,1995"/>
+<area shape="rect" id="node55" href="$afe__config_8h.html#aaf76db1f70b29ef161967d24082effe0" title="reads rmsonevalue registers." alt="" coords="929,1867,1071,1893"/>
+<area shape="rect" id="node56" href="$afe__config_8h.html#aef1b196eb349217367cbb7fcbee5a90a" title="Read STATUS0 register." alt="" coords="933,1715,1067,1741"/>
+<area shape="rect" id="node58" href="$afe__config_8h.html#a5f38b9cf8c3d64723726e875b21a286d" title="Read STATUS1 register." alt="" coords="929,1816,1071,1843"/>
+<area shape="rect" id="node59" href="$afe__config_8h.html#ad5b1247da8507b6d7f9b58586f91bba9" title="reads AFE version." alt="" coords="655,1929,790,1956"/>
+<area shape="rect" id="node57" href="$afe__config_8h.html#a969a1b69d5fee8ce240851bfc5a8ea89" title="Waits for passed number of cycles." alt="" coords="655,1676,790,1703"/>
+<area shape="rect" id="node61" href="$afe__config_8h.html#aae3486554a0920eeaf96c3f060a2f400" title="sets refChannel." alt="" coords="923,1259,1077,1285"/>
+<area shape="rect" id="node62" href="$afe__config_8h.html#ae2bc9941587fb8de9a5c684bfd504648" title="Starts the AFE." alt="" coords="960,1512,1040,1539"/>
+<area shape="rect" id="node64" href="$afe__config_8h.html#a8be876f4837bad48f90910656aee9ade" title="Configures IRQ flags." alt="" coords="943,1563,1057,1589"/>
+</map>

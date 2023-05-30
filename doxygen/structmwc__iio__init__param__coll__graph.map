@@ -1,0 +1,12 @@
+<map id="mwc_iio_init_param" name="mwc_iio_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="268,285,421,312"/>
+<area shape="rect" id="node2" href="$structadin1300__desc.html" title=" " alt="" coords="72,196,191,223"/>
+<area shape="rect" id="node3" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="5,95,143,121"/>
+<area shape="rect" id="node8" href="$structmax24287__desc.html" title=" " alt="" coords="215,196,343,223"/>
+<area shape="rect" id="node4" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="9,5,139,32"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="213,95,345,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="263,5,451,32"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="360,145,532,172"/>
+<area shape="rect" id="node9" href="$structno__os__eeprom__desc.html" title="Structure holding the EEPROM descriptor." alt="" coords="507,196,662,223"/>
+<area shape="rect" id="node10" href="$structno__os__eeprom__platform__ops.html" title="Structure holding the EEPROM function pointers that point to the platform specific function." alt="" coords="479,95,690,121"/>
+</map>

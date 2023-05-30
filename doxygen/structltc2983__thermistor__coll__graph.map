@@ -1,0 +1,5 @@
+<map id="ltc2983_thermistor" name="ltc2983_thermistor">
+<area shape="rect" id="node1" title="thermistor sensor descriptor for LTC2983" alt="" coords="78,95,223,121"/>
+<area shape="rect" id="node2" href="$structltc2983__sensor.html" title="common LTC2983 sensor struct" alt="" coords="5,5,125,32"/>
+<area shape="rect" id="node3" href="$structltc2983__custom__sensor.html" title="custom LTC2983 sensor struct" alt="" coords="150,5,325,32"/>
+</map>

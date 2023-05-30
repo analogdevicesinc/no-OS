@@ -1,0 +1,17 @@
+<map id="ltc7871_iio_dev" name="ltc7871_iio_dev">
+<area shape="rect" id="node1" title="Structure holding the LTC7871 IIO device descriptor." alt="" coords="1188,212,1312,239"/>
+<area shape="rect" id="node2" href="$structltc7871__dev.html" title="Device descriptor for ltc7871." alt="" coords="955,148,1056,175"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="683,93,805,120"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,20,184,47"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,51,490,77"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,102,491,143"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="678,148,810,175"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,168,511,195"/>
+<area shape="rect" id="node9" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="961,252,1049,279"/>
+<area shape="rect" id="node10" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="696,300,792,327"/>
+<area shape="rect" id="node11" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="366,243,467,269"/>
+<area shape="rect" id="node12" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="361,307,473,333"/>
+<area shape="rect" id="node13" href="$structscan__type.html" title=" " alt="" coords="373,357,461,384"/>
+<area shape="rect" id="node14" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="669,373,819,400"/>
+<area shape="rect" id="node15" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="328,408,505,435"/>
+</map>

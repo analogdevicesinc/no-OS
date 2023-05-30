@@ -1,0 +1,4 @@
+<map id="adxl345_get_xyz" name="adxl345_get_xyz">
+<area shape="rect" id="node1" title="Reads the raw output data of each axis." alt="" coords="200,5,332,32"/>
+<area shape="rect" id="node2" href="$adxl345_8h.html#a88594289b442c1a52ecdb807ca4a4194" title="Reads the raw output data of each axis and converts it to g." alt="" coords="5,5,152,32"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="ad5791_set_register_value" name="ad5791_set_register_value">
+<area shape="rect" id="node1" title="Writes data into a register." alt="" coords="448,99,603,141"/>
+<area shape="rect" id="node2" href="$ad5791_8h.html#a479517b9876d7d00161ff6b977faca9d" title="Sets the DAC output in one of the three states." alt="" coords="216,5,400,32"/>
+<area shape="rect" id="node3" href="$ad5791_8h.html#a89753bea092705e1b56fc9ab9f0bd3a0" title="Configures the output amplifier, DAC coding, SDO state and the linearity error compensation." alt="" coords="251,56,365,83"/>
+<area shape="rect" id="node4" href="$ad5791_8h.html#af9bc13089bf26b479e2c543b1976c237" title="Asserts RESET, CLR or LDAC in a software manner." alt="" coords="219,107,397,133"/>
+<area shape="rect" id="node7" href="$ad5791_8h.html#a6811049d716e2c50e1f5a5f6e206cc85" title="SPI write to device using a mask." alt="" coords="219,157,397,184"/>
+<area shape="rect" id="node9" href="$cn0531_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="281,208,335,235"/>
+<area shape="rect" id="node5" href="$ad5791_8h.html#a7d772e9879595d021680f27e5b938b63" title="Clear DAC channel output with the clearcode." alt="" coords="9,56,164,83"/>
+<area shape="rect" id="node6" href="$ad5791_8h.html#ad284845f79fa8d876527c16ce9fb69a2" title="Trigger LDAC." alt="" coords="9,107,164,133"/>
+<area shape="rect" id="node8" href="$ad5791_8h.html#ac74ee2a2599c5317535cb9feceebd225" title="Set Linearity error compensation based on the reference voltage span." alt="" coords="5,157,168,184"/>
+</map>

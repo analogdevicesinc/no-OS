@@ -1,0 +1,16 @@
+<map id="ades1754_read_dev" name="ades1754_read_dev">
+<area shape="rect" id="node1" title="ADES1754 read device command message." alt="" coords="507,56,659,83"/>
+<area shape="rect" id="node2" href="$ades1754_8h.html#ab10ca7d0a1c2731a054bb4fdc0ef4877" title="Read specific alert state." alt="" coords="294,5,445,32"/>
+<area shape="rect" id="node4" href="$ades1754_8h.html#a01fb57c7549f06f25260bd31a6e0bb5b" title="ADES1754 read cell data." alt="" coords="280,56,459,83"/>
+<area shape="rect" id="node5" href="$ades1754_8h.html#adab9ebabc29ae19de65b72649e194884" title="ADES1754 update device command message." alt="" coords="285,249,453,276"/>
+<area shape="rect" id="node3" href="$ades1754_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="59,5,178,32"/>
+<area shape="rect" id="node6" href="$ades1754_8h.html#abf0336a8c2479fe281f6890b1e22072e" title="Set ADC scan method." alt="" coords="19,56,218,83"/>
+<area shape="rect" id="node7" href="$ades1754_8h.html#a6b3a12d5e93621a0113c20b392f28a17" title="Cell&#45;Balancing Calibration Period Selection." alt="" coords="27,107,210,149"/>
+<area shape="rect" id="node8" href="$ades1754_8h.html#a568a6c93f7660701c4a318aa9b830d49" title="Cell&#45;Ballancing Measurement Enable/Disable." alt="" coords="6,173,231,200"/>
+<area shape="rect" id="node9" href="$ades1754_8h.html#a9f3596b0241f3b820fb2fdf73114c513" title="Set Cell Balancing mode." alt="" coords="5,224,232,251"/>
+<area shape="rect" id="node10" href="$ades1754_8h.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9" title="Set Buffer mode for data acquisition." alt="" coords="18,275,219,301"/>
+<area shape="rect" id="node11" href="$ades1754_8h.html#a9badaadef8c37481a4ccceae8b42170c" title="Set IIR filter coefficient." alt="" coords="53,325,185,352"/>
+<area shape="rect" id="node12" href="$ades1754_8h.html#aed1fbc41b15d76f6174710a8077ec948" title="Set speciic IIR filter settings." alt="" coords="39,376,199,403"/>
+<area shape="rect" id="node13" href="$ades1754_8h.html#a415d67f8019842750759f13156278777" title="ADES1754 Start/Stop Scanning function." alt="" coords="39,427,198,453"/>
+<area shape="rect" id="node14" href="$ades1754_8h.html#a9f0bfa3719e1e1684c7f16b2aad35599" title="Select Scan Mode of the cells." alt="" coords="11,477,226,504"/>
+</map>

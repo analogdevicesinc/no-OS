@@ -1,0 +1,5 @@
+<map id="adxcvr_drp_wait_idle" name="adxcvr_drp_wait_idle">
+<area shape="rect" id="node1" title="Read AXI ADXCVR DRP status." alt="" coords="188,31,348,57"/>
+<area shape="rect" id="node2" href="$axi__adxcvr_8h.html#a8d899f5b5004a4f001e45d725c0469f0" title="AXI ADXCVR DPR Port Read." alt="" coords="7,5,138,32"/>
+<area shape="rect" id="node3" href="$axi__adxcvr_8h.html#aced69997b25476d0e77f8e3f99e40995" title="AXI ADXCVR DPR Port Write." alt="" coords="5,56,140,83"/>
+</map>
