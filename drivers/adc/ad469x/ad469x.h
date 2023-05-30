@@ -396,6 +396,10 @@ int32_t ad469x_std_seq_osr(struct ad469x_dev *dev,
 int32_t ad469x_std_pin_pairing(struct ad469x_dev *dev,
 			       enum ad469x_pin_pairing pin_pair);
 
+/* Configure the busy indicator to the output on specified pin */
+int32_t ad469x_set_busy(struct ad469x_dev *dev,
+			enum ad469x_busy_gp_sel gp_sel);
+
 /* Enter conversion mode */
 int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev);
 
