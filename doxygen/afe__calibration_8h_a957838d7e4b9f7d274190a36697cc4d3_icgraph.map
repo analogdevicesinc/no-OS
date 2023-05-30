@@ -1,0 +1,5 @@
+<map id="calibration_get_status_string" name="calibration_get_status_string">
+<area shape="rect" id="Node000001" title="Get current calibration status string." alt="" coords="171,5,337,45"/>
+<area shape="rect" id="Node000002" href="$iio__pqm_8c.html#a7579bb84d6998edfe7203f244b85ba6b" title="Read a pqm device attribute." alt="" coords="5,13,123,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,28,123,28,123,23,157,23"/>
+</map>

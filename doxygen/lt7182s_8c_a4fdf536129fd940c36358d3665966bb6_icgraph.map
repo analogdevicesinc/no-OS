@@ -1,0 +1,20 @@
+<map id="lt7182s_write_byte" name="lt7182s_write_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write byte operation." alt="" coords="765,80,912,105"/>
+<area shape="rect" id="Node000002" href="$lt7182s_8c.html#a14c5d608469c9ae6f58c62bfd88fb44f" title="Configure ADC control." alt="" coords="558,5,710,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="796,77,716,45,682,33,683,28,718,39,798,72"/>
+<area shape="rect" id="Node000003" href="$lt7182s_8c.html#a9a4f7bb789424d3294a697ec5343b3d9" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="563,55,705,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="751,85,704,79,705,73,752,79"/>
+<area shape="rect" id="Node000004" href="$lt7182s_8c.html#a86fdeef5bde2bf5c700c88716df5dbb4" title="Set channel operation." alt="" coords="551,104,717,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="752,106,718,110,717,104,751,100"/>
+<area shape="rect" id="Node000009" href="$lt7182s_8c.html#af90ec06e9a51eb4d82d2873708430caa" title="Configure SYNC pin for clock synchronization." alt="" coords="557,153,711,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="796,113,718,143,680,156,678,151,716,138,794,108"/>
+<area shape="rect" id="Node000005" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="404,129,503,155"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="537,133,503,138,503,132,537,128"/>
+<area shape="rect" id="Node000006" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,104,356,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="390,136,356,131,357,125,391,130"/>
+<area shape="rect" id="Node000007" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="215,153,337,179"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="391,153,338,160,337,155,390,148"/>
+<area shape="rect" id="Node000008" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,153,148,179"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="201,169,148,169,148,163,201,163"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="543,157,503,151,503,146,544,151"/>
+</map>

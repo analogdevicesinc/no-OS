@@ -1,0 +1,21 @@
+<map id="drivers/platform/aducm3029/aducm3029_timer.h" name="drivers/platform/aducm3029/aducm3029_timer.h">
+<area shape="rect" id="Node000001" title="Header file of TIMER driver for ADuCM302x." alt="" coords="576,5,783,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__delay_8c.html" title="Implementation of DELAY functions for ADuCM302x." alt="" coords="5,101,212,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="563,44,402,66,224,96,188,103,187,98,223,91,401,61,562,39"/>
+<area shape="rect" id="Node000003" href="$aducm3029__irq_8c.html" title="Implementation of External IRQ driver for ADuCM302x." alt="" coords="236,101,443,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="598,52,409,103,407,98,597,46"/>
+<area shape="rect" id="Node000004" href="$aducm3029__timer_8c.html" title="Implementation of TIMER driver for ADuCM302x." alt="" coords="467,101,673,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="649,56,594,103,590,99,645,52"/>
+<area shape="rect" id="Node000005" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="697,93,883,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="714,52,761,91,757,95,710,56"/>
+<area shape="rect" id="Node000008" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by demo_esp project." alt="" coords="907,101,1161,141"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="765,46,963,98,962,103,763,51"/>
+<area shape="rect" id="Node000010" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="1185,101,1350,141"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="797,35,975,57,1173,91,1204,98,1203,103,1172,96,974,63,797,41"/>
+<area shape="rect" id="Node000006" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="489,196,675,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="725,156,637,198,635,194,723,151"/>
+<area shape="rect" id="Node000007" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="699,196,884,251"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="793,162,794,196,788,196,788,162"/>
+<area shape="rect" id="Node000009" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by demo_esp." alt="" coords="908,203,1160,243"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1037,155,1037,203,1031,203,1031,155"/>
+</map>

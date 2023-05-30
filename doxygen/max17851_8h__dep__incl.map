@@ -1,0 +1,7 @@
+<map id="drivers/power/max17851/max17851.h" name="drivers/power/max17851/max17851.h">
+<area shape="rect" id="Node000001" title="Header file of the MAX17851 driver." alt="" coords="113,5,297,45"/>
+<area shape="rect" id="Node000002" href="$max17851_8c.html" title="Source file of the MAX17851 driver." alt="" coords="5,101,189,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,56,121,103,117,99,171,52"/>
+<area shape="rect" id="Node000003" href="$spi__uart__bridge__example_8c.html" title="SPI&#45;to&#45;UART example source file for ades1754." alt="" coords="214,93,415,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="240,52,286,91,282,95,236,56"/>
+</map>

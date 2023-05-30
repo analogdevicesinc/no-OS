@@ -1,0 +1,13 @@
+<map id="ltc3220_set_quick_write" name="ltc3220_set_quick_write">
+<area shape="rect" id="Node000001" title="Sets the configuration to perform a quick write to the device." alt="" coords="403,70,581,95"/>
+<area shape="rect" id="Node000002" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a8a2b897c6011f223031b42d5293741df" title="Parallel and Serial LED control. LED 2 to 9 are set to serial, then LED1 is set to display on all LED..." alt="" coords="178,5,349,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="427,69,343,48,344,43,428,64"/>
+<area shape="rect" id="Node000004" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a9c14a30ab21d05b3893d5a00d660f1ce" title="individual LED control for all 18 LEDs" alt="" coords="172,70,355,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="389,85,355,85,355,80,389,80"/>
+<area shape="rect" id="Node000005" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a27fd88a32eb2f2f1eac3738645a7acbd" title="individual LED control with alternating modes for all 18 LEDs" alt="" coords="172,120,355,160"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="428,101,344,123,343,117,427,96"/>
+<area shape="rect" id="Node000003" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,70,124,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,52,110,72,109,67,180,47"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="158,85,124,85,124,80,158,80"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="180,119,109,98,110,93,181,114"/>
+</map>

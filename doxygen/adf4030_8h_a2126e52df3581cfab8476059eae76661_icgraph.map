@@ -1,0 +1,9 @@
+<map id="adf4030_remove" name="adf4030_remove">
+<area shape="rect" id="Node000001" title="Free resources allocated for adf4030." alt="" coords="404,31,536,56"/>
+<area shape="rect" id="Node000002" href="$iio__adf4030_8c.html#aedc0f061bb07173019266c26ecf79cc8" title="Free the resources allocated by adf4030_iio_init()." alt="" coords="199,5,353,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="390,36,353,31,354,25,391,30"/>
+<area shape="rect" id="Node000004" href="$adf4030_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="196,55,356,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="391,56,357,60,356,55,390,51"/>
+<area shape="rect" id="Node000003" href="$adf4030_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="185,21,148,21,148,15,185,15"/>
+</map>

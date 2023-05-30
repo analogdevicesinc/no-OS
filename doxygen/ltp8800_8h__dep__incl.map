@@ -1,0 +1,18 @@
+<map id="drivers/power/ltp8800/ltp8800.h" name="drivers/power/ltp8800/ltp8800.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="313,5,477,45"/>
+<area shape="rect" id="Node000002" href="$iio__ltp8800_8c.html" title="Source file for the LTP8800 IIO Driver." alt="" coords="5,203,169,243"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="300,41,190,62,144,77,115,95,98,120,90,149,87,178,88,203,83,203,82,178,85,148,94,118,111,91,142,72,188,57,299,35"/>
+<area shape="rect" id="Node000003" href="$iio__ltp8800_8h.html" title="Header file for the LTP8800 IIO Driver." alt="" coords="125,101,289,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="346,54,247,103,244,98,344,49"/>
+<area shape="rect" id="Node000005" href="$ltp8800_8c.html" title=" " alt="" coords="313,101,477,141"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="398,59,398,101,393,101,393,59"/>
+<area shape="rect" id="Node000006" href="$ltp8800_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltp8800 examples." alt="" coords="502,101,694,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="450,49,558,98,556,103,448,54"/>
+<area shape="rect" id="Node000008" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltp8800 project." alt="" coords="719,93,885,148"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="491,43,707,91,719,94,718,99,705,96,490,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="176,152,112,205,108,201,172,148"/>
+<area shape="rect" id="Node000004" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltp8800 project." alt="" coords="193,196,368,251"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="231,150,264,194,259,197,227,153"/>
+<area shape="rect" id="Node000007" href="$ltp8800_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltp8800 examples." alt="" coords="503,203,693,243"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="601,155,601,203,595,203,595,155"/>
+</map>

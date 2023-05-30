@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/net/adin1110/README.rst

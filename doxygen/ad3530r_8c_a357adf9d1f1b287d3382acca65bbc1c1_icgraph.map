@@ -1,0 +1,38 @@
+<map id="get_reg_addr" name="get_reg_addr">
+<area shape="rect" id="Node000001" title="Get adjusted register address based on the chip id selected." alt="" coords="641,272,748,297"/>
+<area shape="rect" id="Node000002" href="$ad3530r_8c.html#accede971255551577c41c49625f1e72a" title="Perform a hard/soft reset." alt="" coords="186,55,301,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="689,259,682,209,666,148,654,117,637,88,617,62,592,40,552,20,509,10,463,9,418,13,335,33,272,57,271,52,333,28,417,8,463,3,509,5,554,15,595,36,621,58,642,85,659,115,671,147,688,208,694,258"/>
+<area shape="rect" id="Node000004" href="$ad3530r_8c.html#a45f0c36ead8fdf6a2330277bae4727bd" title=" " alt="" coords="397,51,575,76"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="685,259,674,221,655,174,628,128,611,107,592,89,573,78,576,74,595,85,615,104,633,125,660,172,679,219,690,258"/>
+<area shape="rect" id="Node000006" href="$ad3530r_8c.html#a8a3ac7191cbdf77aba3b02e2c0548ada" title=" " alt="" coords="156,451,331,476"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="684,311,650,366,625,394,595,418,547,434,480,447,331,461,331,456,479,442,546,429,592,413,621,391,646,363,680,308"/>
+<area shape="rect" id="Node000007" href="$ad3530r_8c.html#a422fe55dd8f8813163bd0192cc34fdd1" title=" " alt="" coords="405,100,567,125"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="681,260,647,199,622,167,592,140,566,127,569,123,595,136,626,163,651,196,685,258"/>
+<area shape="rect" id="Node000008" href="$ad3530r_8c.html#a5a341873f52311996625d6488ed9128b" title=" " alt="" coords="160,511,327,551"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="694,312,685,359,669,416,656,446,639,474,619,499,595,520,564,538,530,550,495,558,459,562,389,562,326,554,327,549,390,557,459,557,494,553,529,545,561,533,592,516,615,495,635,471,651,443,664,414,680,357,688,311"/>
+<area shape="rect" id="Node000009" href="$ad3530r_8c.html#aa36c5429be3704bee573884d15c0d633" title=" " alt="" coords="403,150,569,190"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="670,264,635,233,592,204,566,193,568,188,595,200,638,229,673,260"/>
+<area shape="rect" id="Node000010" href="$ad3530r_8c.html#af0a5badacfee47157cff054d8894f780" title=" " alt="" coords="379,215,593,240"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="642,270,593,255,544,243,545,237,594,250,644,265"/>
+<area shape="rect" id="Node000011" href="$ad3530r_8c.html#a4a206b1a7dcb061a1386abe79b8c315f" title=" " alt="" coords="411,265,561,305"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="627,287,562,287,562,282,627,282"/>
+<area shape="rect" id="Node000012" href="$ad3530r_8c.html#a568e7651537627d1cd0aa5c8f229ec56" title=" " alt="" coords="401,329,571,355"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="644,304,594,319,545,332,544,327,593,314,642,299"/>
+<area shape="rect" id="Node000013" href="$ad3530r_8c.html#a4c45291edfabc854f60823bf02395958" title=" " alt="" coords="405,379,567,404"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="673,309,638,340,595,368,561,381,559,376,592,364,635,336,670,305"/>
+<area shape="rect" id="Node000014" href="$ad3530r_8c.html#a5815e99e0ad280385f829c2a20018188" title="Trigger the LDAC using software." alt="" coords="394,480,578,505"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="688,311,675,345,656,386,629,427,595,463,558,482,556,477,592,458,625,424,651,384,670,343,683,309"/>
+<area shape="rect" id="Node000003" href="$ad3530r_8c.html#a9f4f360a67fe344a9ec9d26973046ed8" title="Initialize the device structure." alt="" coords="5,121,108,147"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,87,94,124,93,119,193,82"/>
+<area shape="rect" id="Node000005" href="$ad3530r_8c.html#adf657d70dc5ad1db0cc23dad3e739158" title="Configures the device." alt="" coords="158,187,329,212"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="396,83,380,90,342,112,308,140,258,188,254,184,304,136,339,108,377,85,394,78"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="192,184,93,149,95,144,194,179"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="410,131,380,140,320,165,270,189,268,184,318,160,378,135,409,126"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="389,184,329,192,329,186,389,179"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="364,216,329,212,329,206,365,211"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="404,263,378,254,275,215,277,210,380,249,406,258"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="397,327,377,319,338,294,303,265,253,214,257,210,307,261,342,290,380,314,399,322"/>
+<area shape="poly" id="edge19_Node000013_Node000005" title=" " alt="" coords="392,376,377,368,332,331,295,287,267,245,249,213,253,211,271,242,299,284,336,327,380,364,394,371"/>
+<area shape="poly" id="edge21_Node000014_Node000006" title=" " alt="" coords="380,483,330,476,331,471,381,477"/>
+<area shape="poly" id="edge22_Node000014_Node000008" title=" " alt="" coords="393,510,327,521,326,515,392,505"/>
+</map>

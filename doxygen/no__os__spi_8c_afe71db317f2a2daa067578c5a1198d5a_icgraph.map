@@ -1,0 +1,9 @@
+<map id="no_os_spi_transfer_abort" name="no_os_spi_transfer_abort">
+<area shape="rect" id="Node000001" title="Abort SPI transfers." alt="" coords="471,27,615,67"/>
+<area shape="rect" id="Node000002" href="$stm32__spi_8c.html#a50f1db6c12a130f00d92ae3acf9c0589" title=" " alt="" coords="236,35,423,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="457,50,423,50,423,45,457,45"/>
+<area shape="rect" id="Node000003" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="222,37,188,32,189,27,223,31"/>
+<area shape="rect" id="Node000004" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,55,170,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="223,63,170,69,170,64,222,58"/>
+</map>

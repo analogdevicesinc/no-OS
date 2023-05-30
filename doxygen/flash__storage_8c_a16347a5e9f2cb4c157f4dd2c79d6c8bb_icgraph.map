@@ -1,0 +1,18 @@
+<map id="flash_storage_is_initialized" name="flash_storage_is_initialized">
+<area shape="rect" id="Node000001" title="Check if flash storage is initialized." alt="" coords="925,55,1124,80"/>
+<area shape="rect" id="Node000002" href="$pqlib__example_8c.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="719,5,877,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="952,54,857,33,858,28,953,49"/>
+<area shape="rect" id="Node000007" href="$iio__pqm_8c.html#a7579bb84d6998edfe7203f244b85ba6b" title="Read a pqm device attribute." alt="" coords="739,55,857,80"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="911,70,857,70,857,65,911,65"/>
+<area shape="rect" id="Node000008" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="737,104,859,129"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="953,86,858,107,857,101,952,80"/>
+<area shape="rect" id="Node000003" href="$pqlib__example_8c.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="484,5,671,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="705,21,671,21,671,15,705,15"/>
+<area shape="rect" id="Node000004" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,5,265,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="470,21,265,21,265,15,470,15"/>
+<area shape="rect" id="Node000006" href="$pqlib__example_8c.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="313,31,436,56"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="471,34,436,38,436,33,470,29"/>
+<area shape="rect" id="Node000005" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="299,36,265,31,266,26,300,31"/>
+</map>

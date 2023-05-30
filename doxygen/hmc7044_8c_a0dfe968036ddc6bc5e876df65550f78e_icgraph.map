@@ -1,0 +1,14 @@
+<map id="hmc7044_calc_out_div" name="hmc7044_calc_out_div">
+<area shape="rect" id="Node000001" title=" " alt="" coords="532,31,703,56"/>
+<area shape="rect" id="Node000002" href="$hmc7044_8c.html#a137130beb6599c4db546a75ea64b60f5" title=" " alt="" coords="299,5,484,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="518,35,484,31,485,26,518,30"/>
+<area shape="rect" id="Node000005" href="$hmc7044_8c.html#ae60764ac7046bfc076d6c8ff28678f18" title=" " alt="" coords="307,55,475,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="518,57,476,61,475,56,518,51"/>
+<area shape="rect" id="Node000003" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="127,5,231,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="285,21,232,21,232,15,285,15"/>
+<area shape="rect" id="Node000004" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="114,21,60,21,60,15,114,15"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="322,54,231,33,232,27,323,49"/>
+<area shape="rect" id="Node000006" href="$hmc7044_8c.html#a33ed57b826e8c687547fbf931b1eb857" title="Set the clock rate." alt="" coords="108,55,251,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="294,70,251,70,251,65,294,65"/>
+</map>

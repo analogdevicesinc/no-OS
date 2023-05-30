@@ -1,0 +1,7 @@
+<map id="admfm2000_set_dsa_raw" name="admfm2000_set_dsa_raw">
+<area shape="rect" id="Node000001" title="Set the DSA GPIOs of the device." alt="" coords="383,5,572,31"/>
+<area shape="rect" id="Node000002" href="$admfm2000_8c.html#a4ba019b42b3ebb0f8ecd819a8362882d" title="Initialize the admfm2000 device." alt="" coords="205,5,335,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="369,21,335,21,335,15,369,15"/>
+<area shape="rect" id="Node000003" href="$iio__admfm2000_8c.html#a93f6f30d3bfa95c550b99c5a181bd52c" title="Initialize the iio device." alt="" coords="5,5,157,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="192,21,157,21,157,15,192,15"/>
+</map>

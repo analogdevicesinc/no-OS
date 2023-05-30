@@ -1,0 +1,10 @@
+<map id="iio/iio_types.h" name="iio/iio_types.h">
+<area shape="rect" id="Node000001" title="Header file for iio_types." alt="" coords="69,5,182,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,88,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,33,71,71,68,68,111,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="151,152,222,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,31,139,64,153,103,173,139,169,142,148,105,134,65,125,32"/>
+<area shape="rect" id="Node000004" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="163,79,333,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="146,28,218,69,215,74,144,33"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="240,106,208,143,204,140,236,103"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="drivers/frequency/admv1014/admv1014.h" name="drivers/frequency/admv1014/admv1014.h">
+<area shape="rect" id="Node000001" title="Header file for admv1014 Driver." alt="" coords="28,5,237,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="36,167,107,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,48,38,67,24,80,12,94,9,111,15,127,27,143,43,156,39,160,23,146,10,130,3,111,8,92,20,76,35,63,68,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="242,167,325,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,43,226,63,259,92,275,122,283,152,278,153,270,123,255,95,223,67,186,48"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="22,93,121,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="120,47,91,84,87,81,116,44"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="145,93,245,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="150,44,179,81,175,84,146,47"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="74,119,74,153,69,153,69,119"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="177,121,105,162,102,157,174,116"/>
+<area shape="poly" id="edge8_Node000005_Node000003" title=" " alt="" coords="211,117,260,156,257,160,208,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="147,167,217,192"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="196,119,189,154,184,153,190,119"/>
+</map>

@@ -1,0 +1,62 @@
+<map id="iio_sw_trig_init_param" name="iio_sw_trig_init_param">
+<area shape="rect" id="Node000001" title="IIO software trigger initialization structure." alt="" coords="1543,259,1712,284"/>
+<area shape="rect" id="Node000002" href="$structiio__desc.html" title=" " alt="" coords="1363,259,1437,284"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1451,269,1542,269,1542,274,1451,274"/>
+<area shape="rect" id="Node000003" href="$structiiod__desc.html" title=" " alt="" coords="1140,95,1223,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1237,104,1290,114,1316,124,1340,139,1365,167,1383,200,1399,258,1394,259,1378,202,1361,170,1337,143,1314,128,1288,119,1236,110"/>
+<area shape="rect" id="Node000004" href="$structiiod__conn__priv.html" title=" " alt="" coords="815,57,931,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="945,76,1140,100,1139,105,944,81"/>
+<area shape="rect" id="Node000005" href="$structcomand__desc.html" title=" " alt="" coords="531,5,641,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="655,28,816,57,815,62,654,33"/>
+<area shape="rect" id="Node000006" href="$structiiod__run__cmd__result.html" title=" " alt="" coords="509,119,663,144"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="676,116,755,101,831,80,833,85,757,106,677,121"/>
+<area shape="rect" id="Node000007" href="$structiiod__buff.html" title=" " alt="" coords="243,81,321,107"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="335,89,395,86,815,69,815,75,395,91,335,94"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="335,98,510,119,509,125,335,103"/>
+<area shape="rect" id="Node000008" href="$structiiod__ops.html" title=" " alt="" coords="835,127,911,152"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="925,135,1008,137,1114,148,1171,158,1229,172,1286,191,1340,216,1368,235,1389,256,1386,260,1365,239,1337,220,1284,196,1228,178,1170,164,1113,153,1007,143,925,141"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="924,131,1139,109,1140,114,925,137"/>
+<area shape="rect" id="Node000009" href="$structiio__ctx__attr.html" title="Structure holding the context attribute members." alt="" coords="1134,208,1229,233"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="1243,229,1339,250,1363,257,1362,262,1338,255,1241,234"/>
+<area shape="rect" id="Node000010" href="$structiio__dev__priv.html" title="Links a physical device instance &quot;void *dev_instance&quot; with a &quot;iio_device *iio&quot; that describes capabil..." alt="" coords="1131,349,1232,375"/>
+<area shape="poly" id="edge11_Node000002_Node000010" title=" " alt="" coords="1234,342,1338,302,1376,282,1379,287,1340,307,1236,347"/>
+<area shape="rect" id="Node000011" href="$structiio__device__data.html" title=" " alt="" coords="811,320,935,345"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="949,337,1131,355,1130,360,949,342"/>
+<area shape="rect" id="Node000012" href="$structiio__buffer.html" title=" " alt="" coords="545,312,627,337"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="641,324,811,328,811,334,641,329"/>
+<area shape="rect" id="Node000023" href="$structiio__buffer__priv.html" title=" " alt="" coords="816,369,931,395"/>
+<area shape="poly" id="edge26_Node000023_Node000012" title=" " alt="" coords="642,337,687,347,816,371,815,376,686,353,640,342"/>
+<area shape="rect" id="Node000013" href="$structno__os__circular__buffer.html" title="Circular buffer descriptor." alt="" coords="202,296,362,321"/>
+<area shape="poly" id="edge33_Node000002_Node000013" title=" " alt="" coords="361,291,467,276,585,269,1183,269,1362,269,1362,274,1183,274,585,274,468,281,362,296"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="376,311,545,320,544,325,375,316"/>
+<area shape="poly" id="edge27_Node000023_Node000013" title=" " alt="" coords="340,323,420,343,510,361,593,370,676,376,816,380,816,385,676,381,592,376,509,366,419,348,339,328"/>
+<area shape="rect" id="Node000014" href="$structno__os__cb__ptr.html" title="Circular buffer pointer." alt="" coords="5,296,112,321"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="126,306,202,306,202,311,126,311"/>
+<area shape="rect" id="Node000015" href="$structiio__cyclic__buffer__info.html" title=" " alt="" coords="203,369,361,395"/>
+<area shape="poly" id="edge16_Node000012_Node000015" title=" " alt="" coords="363,364,544,330,545,335,364,369"/>
+<area shape="rect" id="Node000016" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="829,480,917,505"/>
+<area shape="poly" id="edge17_Node000010_Node000016" title=" " alt="" coords="919,472,1091,401,1152,372,1155,377,1093,406,921,477"/>
+<area shape="rect" id="Node000017" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="511,440,661,465"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="675,462,830,484,829,489,674,468"/>
+<area shape="rect" id="Node000018" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="193,419,371,444"/>
+<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="385,436,511,445,511,450,385,441"/>
+<area shape="rect" id="Node000019" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="538,509,634,535"/>
+<area shape="poly" id="edge20_Node000016_Node000019" title=" " alt="" coords="648,515,756,506,829,497,829,502,756,511,648,521"/>
+<area shape="rect" id="Node000020" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="226,468,338,493"/>
+<area shape="poly" id="edge21_Node000019_Node000020" title=" " alt="" coords="352,487,538,513,537,518,351,493"/>
+<area shape="rect" id="Node000021" href="$structscan__type.html" title=" " alt="" coords="238,517,326,543"/>
+<area shape="poly" id="edge22_Node000019_Node000021" title=" " alt="" coords="340,526,538,521,538,526,340,531"/>
+<area shape="rect" id="Node000022" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="231,601,333,627"/>
+<area shape="poly" id="edge24_Node000016_Node000022" title=" " alt="" coords="346,614,492,612,578,604,662,587,717,569,770,546,850,503,853,508,772,551,719,574,663,593,578,609,492,617,346,620"/>
+<area shape="poly" id="edge23_Node000019_Node000022" title=" " alt="" coords="337,595,542,532,544,537,339,600"/>
+<area shape="rect" id="Node000025" href="$structiio__trigger.html" title=" " alt="" coords="542,656,630,681"/>
+<area shape="poly" id="edge30_Node000025_Node000022" title=" " alt="" coords="333,628,395,645,473,657,542,663,541,669,472,662,394,650,332,633"/>
+<area shape="poly" id="edge25_Node000010_Node000023" title=" " alt="" coords="944,381,1016,380,1092,375,1130,370,1131,375,1092,381,1016,385,945,386"/>
+<area shape="rect" id="Node000024" href="$structiio__trig__priv.html" title="Links a physical trigger instance &quot;void *instance&quot; with a &quot;iio_trigger *descriptor&quot; that describes ca..." alt="" coords="992,580,1091,605"/>
+<area shape="poly" id="edge28_Node000002_Node000024" title=" " alt="" coords="1068,569,1187,471,1337,336,1386,282,1390,286,1341,340,1191,475,1072,573"/>
+<area shape="poly" id="edge29_Node000024_Node000025" title=" " alt="" coords="643,657,756,638,991,598,992,603,756,643,644,662"/>
+<area shape="rect" id="Node000026" href="$structno__os__uart__desc.html" title="Stucture holding the UART descriptor." alt="" coords="1116,592,1247,617"/>
+<area shape="poly" id="edge31_Node000002_Node000026" title=" " alt="" coords="1221,583,1281,545,1311,519,1336,489,1365,433,1382,375,1392,322,1395,284,1401,285,1397,323,1387,376,1370,435,1341,491,1315,522,1284,549,1224,588"/>
+<area shape="rect" id="Node000027" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="780,680,967,705"/>
+<area shape="poly" id="edge32_Node000026_Node000027" title=" " alt="" coords="933,674,1091,629,1138,615,1139,620,1093,634,934,679"/>
+</map>

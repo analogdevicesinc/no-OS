@@ -1,0 +1,17 @@
+<map id="mykonosTxSettings_t" name="mykonosTxSettings_t">
+<area shape="rect" id="Node000001" title="Data structure to hold Tx data path settings." alt="" coords="599,106,761,131"/>
+<area shape="rect" id="Node000002" href="$structmykonos_tx_profile__t.html" title="Data structure to hold settings for the current Tx specific use case profile." alt="" coords="271,7,421,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,30,505,45,576,65,620,84,657,104,655,108,617,89,574,71,503,50,434,35"/>
+<area shape="rect" id="Node000003" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="5,7,115,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,17,270,17,270,23,128,23"/>
+<area shape="rect" id="Node000004" href="$structmykonos_jesd204b_deframer_config__t.html" title="Data structure to hold the settings for the deserializer and deframer configuration." alt="" coords="219,57,473,82"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="471,81,575,96,617,103,616,109,574,101,470,86"/>
+<area shape="rect" id="Node000005" href="$structmykonos_dpd_config__t.html" title="Structure to configure DPD (Only valid for a DPD&#45;enabled transceiver) deprecated robustModeling membe..." alt="" coords="266,106,426,131"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="440,116,599,116,599,121,440,121"/>
+<area shape="rect" id="Node000006" href="$structint8__cpx.html" title="Structure used within the DPD config structure to hold a int8_t complex number." alt="" coords="21,106,99,131"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="113,116,266,116,266,121,113,121"/>
+<area shape="rect" id="Node000007" href="$structmykonos_clgc_config__t.html" title="Structure to configure CLGC (Closed Loop Gain Control) (Only valid for a DPD&#45;enabled transceiver)" alt="" coords="265,155,427,181"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="441,155,574,136,616,129,617,134,575,141,441,160"/>
+<area shape="rect" id="Node000008" href="$structmykonos_vswr_config__t.html" title="Structure to configure VSWR (Only valid for a DPD&#45;enabled transceiver)" alt="" coords="263,205,429,230"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="443,200,508,186,574,167,617,148,655,129,657,134,620,153,576,172,509,191,444,206"/>
+</map>

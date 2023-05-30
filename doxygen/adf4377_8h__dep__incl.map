@@ -1,0 +1,13 @@
+<map id="drivers/frequency/adf4377/adf4377.h" name="drivers/frequency/adf4377/adf4377.h">
+<area shape="rect" id="Node000001" title="Header file for adf4377 Driver." alt="" coords="336,5,529,45"/>
+<area shape="rect" id="Node000002" href="$adf4377_8c.html" title="Implementation of adf4377 Driver." alt="" coords="5,101,199,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="353,52,170,103,168,98,352,47"/>
+<area shape="rect" id="Node000003" href="$iio__adf4377_8c.html" title="Implementation of ADF4377 IIO Driver." alt="" coords="223,101,416,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="401,56,344,103,341,99,397,52"/>
+<area shape="rect" id="Node000004" href="$adf4377__sdz_2src_2common_2common__data_8h.html" title="Defines the common data used for examples eval&#45;adf4377 project." alt="" coords="440,101,655,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="468,52,526,99,522,103,465,56"/>
+<area shape="rect" id="Node000006" href="$adf4377__sdz_2src_2examples_2basic_2basic__example_8c.html" title="Basic example eval&#45;adf4377 project." alt="" coords="679,93,869,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="515,46,680,91,678,96,514,52"/>
+<area shape="rect" id="Node000005" href="$adf4377__sdz_2src_2common_2common__data_8c.html" title="Defines the common data used in the examples eval&#45;adf4377 project." alt="" coords="440,196,655,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="550,154,550,196,545,196,545,154"/>
+</map>

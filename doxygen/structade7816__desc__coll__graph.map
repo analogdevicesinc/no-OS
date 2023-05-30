@@ -1,0 +1,31 @@
+<map id="ade7816_desc" name="ade7816_desc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="977,277,1092,302"/>
+<area shape="poly" id="edge16_Node000001_Node000001" title=" " alt="" coords="1009,262,1017,253,1035,250,1050,252,1059,259,1062,268,1057,278,1052,275,1056,268,1055,262,1048,257,1035,255,1019,258,1013,265"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="687,77,810,102"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="805,104,879,136,918,158,955,183,979,206,1000,231,1028,275,1024,278,995,235,975,210,952,187,916,162,877,141,802,109"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="719,62,728,53,749,50,766,52,777,59,780,68,774,78,770,75,774,68,773,62,764,57,749,55,730,58,722,66"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,50,490,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,67,687,82,687,87,504,72"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,13,184,38"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,17,293,16,406,19,527,30,646,51,718,74,716,79,645,56,526,35,406,25,293,21,198,23"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,35,343,52,343,57,198,40"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,100,491,140"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,111,645,99,687,94,687,99,646,104,505,116"/>
+<area shape="rect" id="Node000006" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="687,187,810,213"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="824,199,889,208,954,227,993,250,1022,274,1019,278,990,254,952,232,888,213,824,204"/>
+<area shape="rect" id="Node000007" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="343,227,490,253"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="503,227,686,205,687,210,504,232"/>
+<area shape="rect" id="Node000008" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,183,184,209"/>
+<area shape="poly" id="edge10_Node000006_Node000008" title=" " alt="" coords="197,193,645,195,687,196,687,201,645,200,197,198"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="198,208,208,209,343,228,343,233,208,215,197,213"/>
+<area shape="rect" id="Node000009" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="683,277,815,302"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="829,287,977,287,977,292,829,292"/>
+<area shape="rect" id="Node000010" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,277,511,302"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="525,287,682,287,682,292,525,292"/>
+<area shape="rect" id="Node000011" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="674,326,823,351"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="837,325,953,307,985,299,986,305,954,312,838,331"/>
+<area shape="rect" id="Node000012" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="328,326,505,351"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="519,336,673,336,673,341,519,341"/>
+<area shape="rect" id="Node000013" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="669,382,828,407"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="842,388,898,378,952,359,992,331,1021,301,1025,304,996,335,955,364,899,383,842,393"/>
+</map>

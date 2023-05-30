@@ -1,0 +1,7 @@
+<map id="ltc2983_diode" name="ltc2983_diode">
+<area shape="rect" id="Node000001" title="diode sensor descriptor for LTC2983" alt="" coords="86,93,199,119"/>
+<area shape="rect" id="Node000002" href="$structltc2983__sensor.html" title="common LTC2983 sensor struct" alt="" coords="5,5,125,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,39,134,91,130,95,83,43"/>
+<area shape="rect" id="Node000003" href="$structideal__factor__value.html" title="LTC2983 diode ideal factor value." alt="" coords="150,5,293,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,43,156,95,152,91,200,39"/>
+</map>

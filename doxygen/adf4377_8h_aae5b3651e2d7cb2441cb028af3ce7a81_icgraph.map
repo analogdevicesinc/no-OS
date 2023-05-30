@@ -1,0 +1,13 @@
+<map id="adf4377_set_freq" name="adf4377_set_freq">
+<area shape="rect" id="Node000001" title=" " alt="" coords="375,95,509,121"/>
+<area shape="rect" id="Node000002" href="$adf4377_8c.html#a08f2c1c84711e139d71372dd9c272c37" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="174,5,325,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="398,92,326,60,298,48,300,43,328,55,401,87"/>
+<area shape="rect" id="Node000003" href="$adf4377_8c.html#a0ea1b3126955879798c5a2e558681ea1" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="173,70,326,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="361,100,326,95,327,90,361,95"/>
+<area shape="rect" id="Node000004" href="$adf4377_8c.html#a7f19e75c1223f2da1d50aceea1cdab36" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="172,119,327,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,121,328,125,327,120,360,115"/>
+<area shape="rect" id="Node000005" href="$adf4377_8c.html#a0ffea34a8701485d8a263906cff45bb0" title="Set the desired output frequency and reset everything over to maximum supported value of 12...." alt="" coords="179,169,319,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="400,129,328,158,292,171,290,166,326,154,398,124"/>
+<area shape="rect" id="Node000006" href="$adf4377__sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,169,124,194"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="166,184,124,184,124,179,166,179"/>
+</map>

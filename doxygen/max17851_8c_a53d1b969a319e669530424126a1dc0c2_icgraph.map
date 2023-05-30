@@ -1,0 +1,31 @@
+<map id="max17851_reg_write" name="max17851_reg_write">
+<area shape="rect" id="Node000001" title="MAX17851 register write function." alt="" coords="743,395,901,420"/>
+<area shape="rect" id="Node000002" href="$max17851_8c.html#a66a3ec73171c8be3fcdeb686807a4d6f" title="MAX17851 device initialization function." alt="" coords="29,319,148,344"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="729,400,148,340,149,335,729,395"/>
+<area shape="rect" id="Node000003" href="$max17851_8c.html#a27afa58e6396e8b57caf989baff47825" title="MAX17851 register update function." alt="" coords="505,183,675,208"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="794,387,603,210,607,206,798,383"/>
+<area shape="rect" id="Node000011" href="$max17851_8c.html#af80bbb0535fff50d503a14a7e975bf3e" title="Set communication retry count and timeout delay." alt="" coords="507,420,673,445"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="729,420,674,426,673,421,728,415"/>
+<area shape="rect" id="Node000012" href="$max17851_8c.html#a133eabd58fda33d7e008f86cf1c1bbb2" title="Select Safe Monitoring Mode Scan Delay." alt="" coords="485,469,695,495"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="781,428,695,461,654,472,652,467,694,455,779,423"/>
+<area shape="poly" id="edge6_Node000003_Node000002" title=" " alt="" coords="568,220,513,266,477,289,438,307,362,328,283,338,210,341,149,339,149,334,210,335,283,333,361,322,436,302,474,284,510,262,565,215"/>
+<area shape="rect" id="Node000004" href="$max17851_8c.html#ab2819fe18407dcc6b6d80efe28b0d708" title="Configure general settings for MAX17851." alt="" coords="241,104,417,129"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="544,180,437,143,393,132,394,127,438,138,546,175"/>
+<area shape="rect" id="Node000006" href="$max17851_8c.html#a747d53ad47c9e1a833cd8c06ee034755" title="Set timing for Alert Packets/Keep&#45;Alive Packets." alt="" coords="223,153,434,179"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="491,187,434,180,434,175,491,182"/>
+<area shape="rect" id="Node000007" href="$max17851_8c.html#a766cf6d2fba7f456b491fda2f4a0de3c" title="Select queue for transmitting/loading TX buffer for UART." alt="" coords="237,5,421,31"/>
+<area shape="poly" id="edge9_Node000003_Node000007" title=" " alt="" coords="570,173,515,108,478,73,436,44,410,33,412,28,439,40,481,69,519,104,574,170"/>
+<area shape="rect" id="Node000008" href="$max17851_8c.html#ab4f00c981af9b07707bfa0c352f538de" title="Enable/Disable specific alert." alt="" coords="251,55,406,80"/>
+<area shape="poly" id="edge10_Node000003_Node000008" title=" " alt="" coords="563,176,507,134,472,112,436,94,404,83,405,78,438,89,475,108,510,130,566,172"/>
+<area shape="rect" id="Node000009" href="$max17851_8c.html#aee729ee5a1f5d21baf9d56b14ab0a5fc" title="Select the number of unmasked consecutive Alert Packet status alerts, which must happen prior to taki..." alt="" coords="251,203,406,243"/>
+<area shape="poly" id="edge11_Node000003_Node000009" title=" " alt="" coords="491,209,407,218,406,212,491,203"/>
+<area shape="rect" id="Node000010" href="$max17851_8c.html#a19992131052ac04b693280f6dcd78666" title="Select which GPIO pins to be configured as SAFEMON output." alt="" coords="220,268,437,293"/>
+<area shape="poly" id="edge13_Node000003_Node000010" title=" " alt="" coords="549,216,438,258,391,271,390,265,437,253,547,211"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="231,137,222,143,197,162,175,185,139,235,113,283,97,319,92,317,108,281,135,232,171,181,194,158,218,138,228,133"/>
+<area shape="rect" id="Node000005" href="$max17851_8c.html#a224e1263a89dc84e1736d4acdc4ddefc" title="Write message over UART using MAX17851." alt="" coords="5,104,172,129"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="227,119,172,119,172,114,227,114"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="238,186,221,194,181,223,146,259,100,320,96,317,142,255,178,219,219,189,235,181"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="239,250,221,258,159,290,110,321,107,316,157,285,219,253,237,246"/>
+<area shape="poly" id="edge15_Node000011_Node000002" title=" " alt="" coords="492,437,361,430,289,420,219,403,156,376,107,347,110,342,158,371,221,398,290,415,362,425,493,432"/>
+<area shape="poly" id="edge17_Node000012_Node000002" title=" " alt="" coords="471,488,412,485,347,477,282,463,219,442,181,421,147,394,99,346,102,342,150,390,184,416,221,437,283,458,348,472,412,479,472,483"/>
+</map>

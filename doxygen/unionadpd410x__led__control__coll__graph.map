@@ -1,0 +1,5 @@
+<map id="adpd410x_led_control" name="adpd410x_led_control">
+<area shape="rect" id="Node000001" title="Union of the LED mapping and value so they can be accessed both ways." alt="" coords="9,93,174,119"/>
+<area shape="rect" id="Node000002" href="$struct__adpd410x__led__control.html" title="Structure mapping LED output option and LED strength to one byte." alt="" coords="5,5,177,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,45,94,93,89,93,89,45"/>
+</map>

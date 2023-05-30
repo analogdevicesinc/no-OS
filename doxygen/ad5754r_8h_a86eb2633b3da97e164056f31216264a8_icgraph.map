@@ -1,0 +1,7 @@
+<map id="ad5754r_set_clear_mode" name="ad5754r_set_clear_mode">
+<area shape="rect" id="Node000001" title="Set clear mode setting for device." alt="" coords="335,5,520,31"/>
+<area shape="rect" id="Node000002" href="$ad5754r_8c.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="156,5,287,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,21,287,21,287,15,321,15"/>
+<area shape="rect" id="Node000003" href="$ad5754r_8c.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,5,108,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,21,108,21,108,15,142,15"/>
+</map>

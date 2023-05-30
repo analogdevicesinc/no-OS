@@ -1,0 +1,35 @@
+<map id="drivers/power/max42500/max42500.c" name="drivers/power/max42500/max42500.c">
+<area shape="rect" id="Node000001" title="Source file of MAX42500 Driver." alt="" coords="467,5,651,45"/>
+<area shape="rect" id="Node000002" href="$max42500_8h.html" title="Header file of MAX42500 Driver." alt="" coords="221,93,323,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="491,48,328,92,326,87,489,43"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="776,93,885,119"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="625,43,779,87,777,92,623,48"/>
+<area shape="rect" id="Node000009" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="379,93,479,119"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="529,48,461,88,459,84,526,43"/>
+<area shape="rect" id="Node000011" href="$no__os__alloc_8h.html" title=" " alt="" coords="503,93,614,119"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="561,46,561,79,556,79,556,46"/>
+<area shape="rect" id="Node000013" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="639,93,745,119"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="592,43,662,84,659,89,589,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="237,240,307,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="275,119,275,226,269,226,269,119"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="309,167,392,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="286,117,330,156,326,159,283,121"/>
+<area shape="rect" id="Node000005" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,167,104,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="238,121,104,165,102,160,236,116"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="128,167,235,192"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="259,121,209,160,205,156,256,117"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="90,189,225,233,223,238,89,195"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="198,190,248,229,245,233,194,194"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="803,167,871,192"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="834,119,838,153,832,153,829,119"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="431,120,425,155,418,175,406,194,388,211,366,224,322,243,320,238,364,220,384,207,402,190,413,173,420,154,426,119"/>
+<area shape="poly" id="edge13_Node000009_Node000004" title=" " alt="" coords="418,121,375,159,372,156,415,117"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="467,167,538,192"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="443,117,483,155,479,159,440,121"/>
+<area shape="poly" id="edge16_Node000011_Node000010" title=" " alt="" coords="552,121,522,157,518,154,547,117"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="563,167,629,192"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="567,118,586,153,581,156,562,120"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="709,117,726,132,741,152,749,173,748,184,742,194,720,206,680,216,563,232,321,251,321,246,563,227,679,210,718,201,738,190,743,182,744,174,736,154,722,136,705,121"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="653,167,728,192"/>
+<area shape="poly" id="edge19_Node000013_Node000014" title=" " alt="" coords="694,119,694,153,688,153,689,119"/>
+</map>

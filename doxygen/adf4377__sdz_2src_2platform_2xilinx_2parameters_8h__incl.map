@@ -1,0 +1,17 @@
+<map id="projects/adf4377_sdz/src/platform/xilinx/parameters.h" name="projects/adf4377_sdz/src/platform/xilinx/parameters.h">
+<area shape="rect" id="Node000001" title="Platform dependent parameters." alt="" coords="99,5,259,60"/>
+<area shape="rect" id="Node000002" href="$xilinx__spi_8h.html" title=" " alt="" coords="5,108,101,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,62,83,102,80,98,139,58"/>
+<area shape="rect" id="Node000005" href="$xilinx__gpio_8h.html" title=" " alt="" coords="126,108,231,133"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="181,60,181,94,176,94,176,60"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="255,108,372,133"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="221,58,285,98,282,103,218,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="38,255,109,280"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="43,135,18,168,12,187,15,206,28,227,46,244,42,248,24,230,9,208,7,186,14,165,38,132"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="24,181,123,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="59,133,69,167,64,169,54,134"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="76,207,76,241,71,241,71,207"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="176,135,161,169,137,208,100,247,96,244,133,205,156,166,172,133"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="197,181,280,207"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="191,132,222,169,218,173,187,135"/>
+</map>
