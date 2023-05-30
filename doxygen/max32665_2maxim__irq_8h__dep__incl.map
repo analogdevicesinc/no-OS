@@ -1,0 +1,8 @@
+<map id="drivers/platform/maxim/max32665/maxim_irq.h" name="drivers/platform/maxim/max32665/maxim_irq.h">
+<area shape="rect" id="node1" title="Header file for maxim irq specifics." alt="" coords="453,5,635,47"/>
+<area shape="rect" id="node2" href="$max32665_2maxim__dma_8c.html" title="Maxim platform specific implementation DMA API." alt="" coords="5,95,197,136"/>
+<area shape="rect" id="node3" href="$max32665_2maxim__gpio_8c.html" title="Implementation of gpio driver." alt="" coords="222,95,413,136"/>
+<area shape="rect" id="node4" href="$max32665_2maxim__gpio__irq_8c.html" title="Source file for GPIO IRQ driver." alt="" coords="437,95,651,136"/>
+<area shape="rect" id="node5" href="$max32665_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="675,95,855,136"/>
+<area shape="rect" id="node6" href="$max32665_2maxim__uart_8c.html" title="Source file of UART driver for STM32." alt="" coords="880,95,1069,136"/>
+</map>

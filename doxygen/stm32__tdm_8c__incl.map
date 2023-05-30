@@ -1,0 +1,19 @@
+<map id="drivers/platform/stm32/stm32_tdm.c" name="drivers/platform/stm32/stm32_tdm.c">
+<area shape="rect" id="node1" title="Implementation of TDM driver using STM32&#39;s SAI peripheral." alt="" coords="382,5,554,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="886,169,957,196"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="29,169,97,196"/>
+<area shape="rect" id="node4" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="123,169,229,196"/>
+<area shape="rect" id="node6" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="546,95,657,121"/>
+<area shape="rect" id="node10" href="$no__os__tdm_8h.html" title="Header file of TDM Interface." alt="" coords="603,169,709,196"/>
+<area shape="rect" id="node11" href="$stm32__tdm_8h.html" title="Header file for the stm32 tdm driver." alt="" coords="414,95,522,121"/>
+<area shape="rect" id="node12" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="253,169,349,196"/>
+<area shape="rect" id="node13" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,95,115,121"/>
+<area shape="rect" id="node14" href="$no__os__alloc_8h.html" title=" " alt="" coords="941,95,1051,121"/>
+<area shape="rect" id="node16" href="$stm32__irq_8h.html" title="Header file for stm32 irq specifics." alt="" coords="291,95,389,121"/>
+<area shape="rect" id="node17" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="732,95,865,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="507,244,578,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="705,244,788,271"/>
+<area shape="rect" id="node8" href="$stm32__hal_8h.html" title=" " alt="" coords="374,169,477,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="392,244,459,271"/>
+<area shape="rect" id="node15" title=" " alt="" coords="981,169,1048,196"/>
+</map>

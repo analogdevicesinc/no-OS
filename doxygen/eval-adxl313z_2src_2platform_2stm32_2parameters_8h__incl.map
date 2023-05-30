@@ -1,0 +1,18 @@
+<map id="projects/eval&#45;adxl313z/src/platform/stm32/parameters.h" name="projects/eval&#45;adxl313z/src/platform/stm32/parameters.h">
+<area shape="rect" id="node1" title=" " alt="" coords="149,5,390,47"/>
+<area shape="rect" id="node2" href="$stm32__hal_8h.html" title=" " alt="" coords="98,244,201,271"/>
+<area shape="rect" id="node4" href="$stm32__irq_8h.html" title="Header file for stm32 irq specifics." alt="" coords="181,169,280,196"/>
+<area shape="rect" id="node7" href="$stm32__spi_8h.html" title="Header file for the stm32 spi driver." alt="" coords="5,169,107,196"/>
+<area shape="rect" id="node9" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="437,169,547,196"/>
+<area shape="rect" id="node11" href="$stm32__uart_8h.html" title="Header file of UART driver for STM32." alt="" coords="305,169,413,196"/>
+<area shape="rect" id="node15" href="$stm32__uart__stdio_8h.html" title="Header file of stm32 UART driver stdout/stdin redirection." alt="" coords="499,95,645,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="169,319,236,345"/>
+<area shape="rect" id="node5" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="225,244,321,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="323,393,394,420"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="47,319,145,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="652,393,735,420"/>
+<area shape="rect" id="node12" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="511,244,617,271"/>
+<area shape="rect" id="node13" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="497,319,631,345"/>
+<area shape="rect" id="node14" title=" " alt="" coords="529,393,599,420"/>
+<area shape="rect" id="node16" title=" " alt="" coords="623,169,708,196"/>
+</map>

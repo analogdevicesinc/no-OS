@@ -1,0 +1,17 @@
+<map id="max22196_reg_write" name="max22196_reg_write">
+<area shape="rect" id="node1" title="MAX22196 register write function." alt="" coords="1299,222,1457,248"/>
+<area shape="rect" id="node2" href="$max22196_8h.html#a9c7be5484b2f302bd8d6166982b571a7" title="MAX22196 register update function" alt="" coords="1080,171,1251,198"/>
+<area shape="rect" id="node9" href="$max22196_8h.html#a0c59262c6148641d878796a0118d6f1b" title="MAX22196 channel counter set function" alt="" coords="841,298,1024,324"/>
+<area shape="rect" id="node3" href="$max22196_8h.html#a55a9099f1cfd78f3cfe9239fcce6ea26" title="MAX22196 channel configuration function" alt="" coords="855,44,1011,71"/>
+<area shape="rect" id="node4" href="$max22196_8h.html#a564b2b714be1da675e95637c4d68f0f4" title="Set fault mask bits in the fault mask registers." alt="" coords="833,95,1032,122"/>
+<area shape="rect" id="node5" href="$max22196_8h.html#ac04759080b2c5d96660446ba566de92a" title="MAX22196 filter set function" alt="" coords="627,146,781,172"/>
+<area shape="rect" id="node7" href="$max22196_8h.html#a5f4edc2f17d0c99e6712fdf94a3387e3" title="MAX22196 channel counter get function." alt="" coords="841,196,1025,223"/>
+<area shape="rect" id="node8" href="$max22196_8h.html#a4f889de5ceaadcb488a3efb501a67ea6" title="Set global configuration." alt="" coords="850,247,1015,274"/>
+<area shape="rect" id="node15" href="$max22196_8h.html#a98a279fc5be189a1a7119d1c46cdda7f" title="MAX22196 function that helps setting the mode of the device." alt="" coords="623,19,785,46"/>
+<area shape="rect" id="node6" href="$max22196_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="196,146,356,172"/>
+<area shape="rect" id="node10" href="$max22196_8h.html#ad57b479304a72f95be4f15b6798935c1" title="Free the resources allocated during init." alt="" coords="630,272,778,299"/>
+<area shape="rect" id="node11" href="$iio__max22196_8h.html#adbe2d80904377772075eaa50878f1d92" title="Free resources allocated by the init function." alt="" coords="404,272,575,299"/>
+<area shape="rect" id="node13" href="$max22196_8h.html#abb69d82911101d8da2dd77ac3f536462" title="Initialize and configure the MAX22196 device." alt="" coords="430,222,549,248"/>
+<area shape="rect" id="node12" href="$max22196_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,247,148,274"/>
+<area shape="rect" id="node14" href="$iio__max22196_8h.html#ac557d98d4738856040072e5e2491768b" title="Initializes the MAX22196 IIO descriptor." alt="" coords="205,222,347,248"/>
+</map>

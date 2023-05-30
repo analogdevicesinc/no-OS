@@ -1,0 +1,11 @@
+<map id="ltc4306_reg_update" name="ltc4306_reg_update">
+<area shape="rect" id="node1" title="Update selected I2C register contents." alt="" coords="460,180,611,207"/>
+<area shape="rect" id="node2" href="$ltc4306_8h.html#a1c2f57e653d010e78aa2c8b04ef9a324" title="Configures GPIO1 and GPIO2 as input or output mode. If selected as output mode, can be configured as ..." alt="" coords="227,5,399,32"/>
+<area shape="rect" id="node3" href="$ltc4306_8h.html#abf6bb141b301cabbccdac5d3dc727688" title="Sets Connection Requirement bit field." alt="" coords="231,56,394,83"/>
+<area shape="rect" id="node4" href="$ltc4306_8h.html#ad6e2df274a55b13b7a2c3429bcb88834" title="En/Disables downstream accelerator." alt="" coords="220,107,405,149"/>
+<area shape="rect" id="node5" href="$ltc4306_8h.html#af36fa1d04f93bee12ff961fbf5cd88e8" title="Dis/connects to a downstream bus. Bus logic state must be 1 for connection to occur EXCEPT when conn_..." alt="" coords="220,173,405,214"/>
+<area shape="rect" id="node7" href="$ltc4306_8h.html#a76c1b8fbfab041606d69c0e46861f729" title="Enables Mass Write." alt="" coords="223,239,402,265"/>
+<area shape="rect" id="node8" href="$ltc4306_8h.html#a45f07dc20dcefcdb8c914e9db97827c4" title="Sets LTC4306&#39;s Timeout Mode." alt="" coords="213,289,412,316"/>
+<area shape="rect" id="node9" href="$ltc4306_8h.html#a1edae0e29cb57043454ade8f78e402e7" title="En/Disables upstream accelerator." alt="" coords="229,341,396,382"/>
+<area shape="rect" id="node6" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,180,165,207"/>
+</map>

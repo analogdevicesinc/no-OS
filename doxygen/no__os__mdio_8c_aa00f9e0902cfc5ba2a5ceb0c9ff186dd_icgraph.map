@@ -1,0 +1,28 @@
+<map id="no_os_mdio_write" name="no_os_mdio_write">
+<area shape="rect" id="node1" title="Write a register using MDIO." alt="" coords="1028,416,1168,443"/>
+<area shape="rect" id="node2" href="$adin1300_8h.html#a7440dca6b332660b45736eb44b15f5fd" title=" " alt="" coords="657,61,780,88"/>
+<area shape="rect" id="node8" href="$adin1300_8h.html#ab0f7eef113c03df14773df229d9cc65b" title=" " alt="" coords="642,239,795,265"/>
+<area shape="rect" id="node15" href="$max24287_8h.html#a68b19899dca61bb58c819d58b24291d0" title=" " alt="" coords="851,711,978,737"/>
+<area shape="rect" id="node25" href="$max24287_8h.html#a5ce815af6bdc2e3f9120306a2acfe352" title=" " alt="" coords="849,441,980,468"/>
+<area shape="rect" id="node3" href="$adin1300_8h.html#aadf12627f16298aca038fa79940d9e3f" title=" " alt="" coords="406,36,575,63"/>
+<area shape="rect" id="node5" href="$net_8h.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="108,391,179,417"/>
+<area shape="rect" id="node7" href="$adin1300_8h.html#aec0201e5599c752c0248c937a67803fb" title=" " alt="" coords="414,87,567,113"/>
+<area shape="rect" id="node4" href="$adin1300_8h.html#a48d11366cb4959ea4e3bd89561080af1" title=" " alt="" coords="231,188,341,215"/>
+<area shape="rect" id="node6" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,391,60,417"/>
+<area shape="rect" id="node9" href="$adin1300_8h.html#ac04ecf89b2a10bcb23e34c7244959517" title=" " alt="" coords="419,239,562,265"/>
+<area shape="rect" id="node11" href="$adin1300_8h.html#a69f5b4b95c68c97511d2bebbf5ab509c" title=" " alt="" coords="393,188,588,215"/>
+<area shape="rect" id="node12" href="$adin1300_8h.html#ab5584f37a7df6d797889dad0e34d7e4c" title=" " alt="" coords="402,137,579,164"/>
+<area shape="rect" id="node13" href="$adin1300_8h.html#a1770df7a6536e09c29be3bf39b94a2fe" title=" " alt="" coords="403,289,578,316"/>
+<area shape="rect" id="node10" href="$net_8c.html#a07fadf782270f861e72575c8d9c86c70" title=" " alt="" coords="229,391,343,417"/>
+<area shape="rect" id="node14" href="$net_8c.html#ac3136f214a7023774a03531efb49eb77" title=" " alt="" coords="233,441,339,468"/>
+<area shape="rect" id="node16" href="$max24287_8h.html#a09359b6f956ecefaf3096fd4b311105a" title=" " alt="" coords="636,914,801,955"/>
+<area shape="rect" id="node17" href="$max24287_8h.html#a1efb86de191a6247d91897edeeb734e9" title=" " alt="" coords="636,645,801,686"/>
+<area shape="rect" id="node18" href="$max24287_8h.html#a95989a0a41e011a59d747079d39cfc35" title=" " alt="" coords="227,543,345,569"/>
+<area shape="rect" id="node19" href="$max24287_8h.html#a836e75d660f53c44ba229675f0181ab1" title=" " alt="" coords="637,711,800,737"/>
+<area shape="rect" id="node20" href="$max24287_8h.html#a1cf946ec3299cfdd3c85eb3eea203a78" title=" " alt="" coords="645,761,793,788"/>
+<area shape="rect" id="node21" href="$max24287_8h.html#ae0645e06f46ca83a256411464638edd8" title=" " alt="" coords="637,593,800,620"/>
+<area shape="rect" id="node22" href="$max24287_8h.html#ad1998cd06f95ef204ce45d66d941de85" title=" " alt="" coords="407,644,575,671"/>
+<area shape="rect" id="node23" href="$max24287_8h.html#afdae76ec9fd43c4ae0586e7c7ba64e08" title=" " alt="" coords="401,492,581,519"/>
+<area shape="rect" id="node24" href="$max24287_8h.html#a7c75a89a17a1c66871abebc3dd573d25" title=" " alt="" coords="409,695,572,721"/>
+<area shape="rect" id="node26" href="$max24287_8h.html#ad325f8dd5a45b541f7825b9cbfad48f1" title=" " alt="" coords="394,441,587,468"/>
+</map>

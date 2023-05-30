@@ -1,0 +1,10 @@
+<map id="ad9523_dev" name="ad9523_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="467,288,568,315"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="224,199,347,225"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="151,102,297,129"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="321,95,471,136"/>
+<area shape="rect" id="node6" href="$structad9523__state.html" title=" " alt="" coords="583,199,694,225"/>
+<area shape="rect" id="node7" href="$structad9523__platform__data.html" title="platform specific information" alt="" coords="529,102,698,129"/>
+<area shape="rect" id="node8" href="$structad9523__channel__spec.html" title="Output channel configuration." alt="" coords="531,5,696,32"/>
+</map>

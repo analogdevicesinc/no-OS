@@ -1,0 +1,13 @@
+<map id="drivers/imu/adis1650x.c" name="drivers/imu/adis1650x.c">
+<area shape="rect" id="node1" title="Implementation of adis1650x.c." alt="" coords="252,5,431,32"/>
+<area shape="rect" id="node2" href="$adis_8h.html" title="Implementation of adis.h." alt="" coords="199,155,260,181"/>
+<area shape="rect" id="node9" href="$adis1650x_8h.html" title="Implementation of adis1650x.h." alt="" coords="223,80,324,107"/>
+<area shape="rect" id="node10" href="$adis__internals_8h.html" title="Internal include file used for specific chip driver definitions, which are not useful for the user." alt="" coords="348,80,473,107"/>
+<area shape="rect" id="node11" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="498,80,609,107"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,229,104,256"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="179,229,279,256"/>
+<area shape="rect" id="node6" title=" " alt="" coords="163,304,234,331"/>
+<area shape="rect" id="node7" title=" " alt="" coords="267,304,349,331"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="355,229,423,256"/>
+<area shape="rect" id="node4" title=" " alt="" coords="53,304,123,331"/>
+</map>

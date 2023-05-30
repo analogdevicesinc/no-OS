@@ -1,0 +1,9 @@
+<map id="ad9528_setup" name="ad9528_setup">
+<area shape="rect" id="node1" title="Initializes the AD9528." alt="" coords="316,81,429,108"/>
+<area shape="rect" id="node2" href="$ad9083_2src_2app__clocking_8h.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="121,5,255,32"/>
+<area shape="rect" id="node4" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="108,56,268,83"/>
+<area shape="rect" id="node5" href="$dma__example_8h.html#a0ecbc6b48b2626c3e722bbe55440bdaa" title="DMA example main execution." alt="" coords="111,107,265,133"/>
+<area shape="rect" id="node7" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="117,157,259,184"/>
+<area shape="rect" id="node3" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node6" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,107,60,133"/>
+</map>

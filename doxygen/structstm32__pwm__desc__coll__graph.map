@@ -1,0 +1,8 @@
+<map id="stm32_pwm_desc" name="stm32_pwm_desc">
+<area shape="rect" id="node1" title="Structure holding the STM32 PWM descriptor." alt="" coords="185,184,323,211"/>
+<area shape="rect" id="node2" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="5,95,164,121"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="188,95,320,121"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="149,5,337,32"/>
+<area shape="rect" id="node5" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="355,95,505,121"/>
+<area shape="rect" id="node6" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="361,5,539,32"/>
+</map>

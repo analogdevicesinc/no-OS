@@ -1,0 +1,19 @@
+<map id="drivers/platform/maxim/max32690/maxim_i2c.c" name="drivers/platform/maxim/max32690/maxim_i2c.c">
+<area shape="rect" id="node1" title="Implementation of max32690 I2C driver." alt="" coords="335,5,518,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="145,244,215,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="153,169,223,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="505,95,575,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="600,95,653,121"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="677,95,787,121"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="43,95,143,121"/>
+<area shape="rect" id="node10" href="$max32690_2maxim__i2c_8h.html" title=" " alt="" coords="373,95,480,121"/>
+<area shape="rect" id="node15" title=" " alt="" coords="811,95,917,121"/>
+<area shape="rect" id="node16" href="$no__os__alloc_8h.html" title=" " alt="" coords="226,95,337,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="838,169,906,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="45,169,128,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="512,169,600,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="625,169,727,196"/>
+<area shape="rect" id="node13" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="389,169,488,196"/>
+<area shape="rect" id="node14" title=" " alt="" coords="751,169,814,196"/>
+<area shape="rect" id="node17" title=" " alt="" coords="248,169,315,196"/>
+</map>

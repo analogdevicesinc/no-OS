@@ -1,0 +1,7 @@
+<map id="no_os_mdio_init" name="no_os_mdio_init">
+<area shape="rect" id="node1" title="Initialize the MDIO interface." alt="" coords="393,31,521,57"/>
+<area shape="rect" id="node2" href="$adin1300_8h.html#a48d11366cb4959ea4e3bd89561080af1" title=" " alt="" coords="231,5,341,32"/>
+<area shape="rect" id="node5" href="$max24287_8h.html#a95989a0a41e011a59d747079d39cfc35" title=" " alt="" coords="227,56,345,83"/>
+<area shape="rect" id="node3" href="$net_8h.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="108,31,179,57"/>
+<area shape="rect" id="node4" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,57"/>
+</map>

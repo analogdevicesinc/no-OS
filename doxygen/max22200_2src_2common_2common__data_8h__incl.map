@@ -1,0 +1,11 @@
+<map id="projects/max22200/src/common/common_data.h" name="projects/max22200/src/common/common_data.h">
+<area shape="rect" id="node1" title="Common data used by the MAX22200 project." alt="" coords="60,5,252,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="6,95,157,121"/>
+<area shape="rect" id="node3" href="$max22200_8h.html" title="Header file of MAX22200 Driver." alt="" coords="181,95,283,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="151,244,222,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="407,244,489,271"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="179,169,285,196"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,169,104,196"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="310,169,410,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="311,244,382,271"/>
+</map>

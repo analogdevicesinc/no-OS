@@ -1,0 +1,8 @@
+<map id="no_os_irq_unregister_callback" name="no_os_irq_unregister_callback">
+<area shape="rect" id="node1" title="Unregisters a generic IRQ handling function." alt="" coords="431,86,588,127"/>
+<area shape="rect" id="node2" href="$ade9113_8h.html#a70245c89427f7c191241fc84243ebab3" title="Remove the device and release resources." alt="" coords="236,5,371,32"/>
+<area shape="rect" id="node3" href="$aducm3029__irq_8c.html#ae16785f8773a98fdb8cbfa65c2e0f4d2" title="Free the resources allocated by no_os_irq_ctrl_init()" alt="" coords="228,57,379,98"/>
+<area shape="rect" id="node4" href="$max11205_8h.html#adff8b4d146093da04e57377b4624cf4c" title="Free memory allocated by max11205_init()." alt="" coords="229,123,377,149"/>
+<area shape="rect" id="node6" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="224,173,383,200"/>
+<area shape="rect" id="node5" href="$iio__max11205_8h.html#a2310b65fd7b0f421f0e5215fd96b6335" title="Free the resources allocated by max11205_iio_init()." alt="" coords="5,123,176,149"/>
+</map>

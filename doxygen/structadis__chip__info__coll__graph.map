@@ -1,0 +1,7 @@
+<map id="adis_chip_info" name="adis_chip_info">
+<area shape="rect" id="node1" title="ADIS specific chip information structure." alt="" coords="209,345,324,372"/>
+<area shape="rect" id="node2" href="$structadis__data__field__map__def.html" title="ADIS filed map definition structure." alt="" coords="5,241,189,268"/>
+<area shape="rect" id="node3" href="$structadis__field.html" title="ADIS device field structure." alt="" coords="55,5,139,32"/>
+<area shape="rect" id="node4" href="$structadis__timeout.html" title="ADIS chip timeouts." alt="" coords="213,241,320,268"/>
+<area shape="rect" id="node5" href="$structadis__clk__freq__limit.html" title="ADIS frequency limit for input synchronization clock." alt="" coords="345,241,490,268"/>
+</map>

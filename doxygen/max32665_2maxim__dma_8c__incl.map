@@ -1,0 +1,21 @@
+<map id="drivers/platform/maxim/max32665/maxim_dma.c" name="drivers/platform/maxim/max32665/maxim_dma.c">
+<area shape="rect" id="node1" title="Maxim platform specific implementation DMA API." alt="" coords="507,5,699,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="68,244,139,271"/>
+<area shape="rect" id="node3" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="833,95,942,121"/>
+<area shape="rect" id="node5" href="$no__os__alloc_8h.html" title=" " alt="" coords="327,169,437,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="17,169,117,196"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="587,244,683,271"/>
+<area shape="rect" id="node11" href="$max32665_2maxim__irq_8h.html" title="Header file for maxim irq specifics." alt="" coords="462,169,566,196"/>
+<area shape="rect" id="node15" href="$max32665_2maxim__dma_8h.html" title="Maxim platform specific header DMA API." alt="" coords="641,95,757,121"/>
+<area shape="rect" id="node18" title=" " alt="" coords="891,169,953,196"/>
+<area shape="rect" id="node19" title=" " alt="" coords="966,95,1057,121"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="977,169,1045,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="374,244,441,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="600,319,671,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="206,319,289,345"/>
+<area shape="rect" id="node12" title=" " alt="" coords="163,244,265,271"/>
+<area shape="rect" id="node13" href="$no__os__list_8h.html" title="List library header." alt="" coords="465,244,563,271"/>
+<area shape="rect" id="node14" title=" " alt="" coords="289,244,349,271"/>
+<area shape="rect" id="node16" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="641,169,749,196"/>
+<area shape="rect" id="node17" href="$no__os__mutex_8h.html" title=" " alt="" coords="759,244,880,271"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="projects/demo_esp/src/common/common_data.h" name="projects/demo_esp/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by demo_esp examples." alt="" coords="252,5,444,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="26,95,177,121"/>
+<area shape="rect" id="node3" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="201,95,306,121"/>
+<area shape="rect" id="node8" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="291,169,405,196"/>
+<area shape="rect" id="node9" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="429,169,536,196"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="523,95,619,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="313,244,383,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,244,88,271"/>
+<area shape="rect" id="node6" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="83,169,216,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="114,244,185,271"/>
+</map>

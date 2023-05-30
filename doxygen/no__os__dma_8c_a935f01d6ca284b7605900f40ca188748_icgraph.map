@@ -1,0 +1,4 @@
+<map id="no_os_dma_remove" name="no_os_dma_remove">
+<area shape="rect" id="node1" title="Remove resources allocated for the DMA controller." alt="" coords="177,5,331,32"/>
+<area shape="rect" id="node2" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="5,5,129,32"/>
+</map>

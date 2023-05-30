@@ -1,0 +1,11 @@
+<map id="adxl345_set_register_value" name="adxl345_set_register_value">
+<area shape="rect" id="node1" title="Writes data into a register." alt="" coords="271,224,429,265"/>
+<area shape="rect" id="node2" href="$adxl345_8h.html#afba00ca105a0d3a67bc8abf2d00b703f" title="Enables/disables the activity detection." alt="" coords="35,5,193,47"/>
+<area shape="rect" id="node3" href="$adxl345_8h.html#af5ac6a0dd16e927e4ea43e2880f87708" title="Enables/disables the free&#45;fall detection." alt="" coords="33,71,195,112"/>
+<area shape="rect" id="node4" href="$adxl345_8h.html#a1cf9afad1c3d6a81e5bc7fd1a745e6f0" title="Enables/disables the inactivity detection." alt="" coords="29,136,199,177"/>
+<area shape="rect" id="node5" href="$adxl345_8h.html#af568732d605456e0d3a7155c19e02e6b" title="Sets an offset value for each axis (Offset Calibration)." alt="" coords="41,202,187,229"/>
+<area shape="rect" id="node6" href="$adxl345_8h.html#a437ea06da249a03a3c98ee4a0f86d289" title="Enables/disables the orientation detection (only for adxl346)." alt="" coords="25,253,203,295"/>
+<area shape="rect" id="node7" href="$adxl345_8h.html#ac08a9bb3aefcf7f2adb12b0ab0abe2ca" title="Places the device into standby/measure mode." alt="" coords="18,319,210,346"/>
+<area shape="rect" id="node8" href="$adxl345_8h.html#a6a7c64d2827df1e1277ea1cfb3e87579" title="Selects the measurement range." alt="" coords="5,370,223,397"/>
+<area shape="rect" id="node9" href="$adxl345_8h.html#ab061b09e44c20b393e2e6eb935a83dd2" title="Enables/disables the tap detection." alt="" coords="15,421,213,447"/>
+</map>

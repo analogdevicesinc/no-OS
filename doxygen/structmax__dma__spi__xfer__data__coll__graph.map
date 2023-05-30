@@ -1,0 +1,15 @@
+<map id="max_dma_spi_xfer_data" name="max_dma_spi_xfer_data">
+<area shape="rect" id="node1" title=" " alt="" coords="987,311,1169,337"/>
+<area shape="rect" id="node2" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="694,203,813,229"/>
+<area shape="rect" id="node3" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="1252,145,1493,172"/>
+<area shape="rect" id="node4" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="1011,75,1145,101"/>
+<area shape="rect" id="node5" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="659,5,848,32"/>
+<area shape="rect" id="node6" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="679,56,828,83"/>
+<area shape="rect" id="node7" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="323,55,500,81"/>
+<area shape="rect" id="node8" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="349,203,473,229"/>
+<area shape="rect" id="node9" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="692,315,815,341"/>
+<area shape="rect" id="node10" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,285,184,312"/>
+<area shape="rect" id="node12" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="338,316,485,343"/>
+<area shape="rect" id="node11" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,367,486,409"/>
+<area shape="rect" id="node13" href="$structno__os__dma__xfer__desc.html" title="It&#39;s used to setup a generic DMA transfer." alt="" coords="670,371,837,397"/>
+</map>

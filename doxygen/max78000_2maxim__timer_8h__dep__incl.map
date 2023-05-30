@@ -1,0 +1,13 @@
+<map id="drivers/platform/maxim/max78000/maxim_timer.h" name="drivers/platform/maxim/max78000/maxim_timer.h">
+<area shape="rect" id="node1" title="Header file for Maxim timer platform driver." alt="" coords="619,5,818,47"/>
+<area shape="rect" id="node2" href="$max78000_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="5,95,203,136"/>
+<area shape="rect" id="node3" href="$ad7091r8-sdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by eval&#45;ad7091r8&#45;sdz project." alt="" coords="227,95,474,136"/>
+<area shape="rect" id="node5" href="$demo__esp_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to maxim platform used by demo_esp project." alt="" coords="498,95,721,136"/>
+<area shape="rect" id="node7" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="745,95,911,136"/>
+<area shape="rect" id="node8" href="$iio__demo_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="935,95,1158,136"/>
+<area shape="rect" id="node10" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="1182,95,1429,136"/>
+<area shape="rect" id="node4" href="$ad7091r8-sdz_2src_2platform_2maxim_2parameters_8c.html" title="Definitions specific to Maxim platform used by eval&#45;ad7091r8&#45;sdz project." alt="" coords="228,184,473,225"/>
+<area shape="rect" id="node6" href="$demo__esp_2src_2platform_2maxim_2parameters_8c.html" title="Definition of maxim platform data used by demo_esp." alt="" coords="498,184,721,225"/>
+<area shape="rect" id="node9" href="$iio__demo_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo project." alt="" coords="935,184,1158,225"/>
+<area shape="rect" id="node11" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo_freeRTOS project." alt="" coords="1183,184,1428,225"/>
+</map>

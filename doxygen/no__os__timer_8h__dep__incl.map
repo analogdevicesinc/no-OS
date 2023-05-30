@@ -1,0 +1,63 @@
+<map id="include/no_os_timer.h" name="include/no_os_timer.h">
+<area shape="rect" id="node1" title="Timer control module header." alt="" coords="2791,5,2955,32"/>
+<area shape="rect" id="node2" href="$no__os__timer_8c.html" title="Implementation of the timer Interface." alt="" coords="428,95,613,121"/>
+<area shape="rect" id="node3" href="$ad3552r_8c.html" title="Implementation of ad3552r Driver." alt="" coords="637,87,788,129"/>
+<area shape="rect" id="node4" href="$aducm3029__delay_8c.html" title="Implementation of DELAY functions for ADuCM302x." alt="" coords="5,191,212,233"/>
+<area shape="rect" id="node5" href="$aducm3029__timer_8h.html" title="Header file of TIMER driver for ADuCM302x." alt="" coords="965,87,1172,129"/>
+<area shape="rect" id="node6" href="$aducm3029__irq_8c.html" title="Implementation of External IRQ driver for ADuCM302x." alt="" coords="236,191,443,233"/>
+<area shape="rect" id="node7" href="$aducm3029__timer_8c.html" title="Implementation of TIMER driver for ADuCM302x." alt="" coords="467,191,673,233"/>
+<area shape="rect" id="node8" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="976,184,1161,240"/>
+<area shape="rect" id="node12" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="1186,191,1351,233"/>
+<area shape="rect" id="node13" href="$generic__timer_8c.html" title="Timer control module source." alt="" coords="1306,87,1485,129"/>
+<area shape="rect" id="node14" href="$linux__timer_8c.html" title="Source file for Linux timer platform driver." alt="" coords="1509,87,1671,129"/>
+<area shape="rect" id="node15" href="$linux__timer_8h.html" title="Header file for Linux timer platform driver." alt="" coords="1695,87,1858,129"/>
+<area shape="rect" id="node16" href="$max32650_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="1883,87,2081,129"/>
+<area shape="rect" id="node18" href="$max32655_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2105,87,2304,129"/>
+<area shape="rect" id="node20" href="$max32660_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2328,87,2527,129"/>
+<area shape="rect" id="node22" href="$max32665_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2551,87,2749,129"/>
+<area shape="rect" id="node24" href="$max32690_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2773,87,2972,129"/>
+<area shape="rect" id="node26" href="$max78000_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="3045,87,3244,129"/>
+<area shape="rect" id="node28" href="$ad7091r8-sdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by eval&#45;ad7091r8&#45;sdz project." alt="" coords="2483,191,2729,233"/>
+<area shape="rect" id="node32" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="3223,191,3389,233"/>
+<area shape="rect" id="node33" href="$iio__demo_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="3413,191,3636,233"/>
+<area shape="rect" id="node35" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="3660,191,3907,233"/>
+<area shape="rect" id="node37" href="$pico__irq_8c.html" title="Implementation of external irq driver." alt="" coords="3931,191,4089,233"/>
+<area shape="rect" id="node38" href="$pico__timer_8h.html" title="Header file for the pico timer driver." alt="" coords="4175,87,4333,129"/>
+<area shape="rect" id="node39" href="$pico__timer_8c.html" title="Implementation of pico timer driver." alt="" coords="4113,191,4272,233"/>
+<area shape="rect" id="node52" href="$stm32__timer_8c.html" title="Implementation of stm32 timer driver." alt="" coords="5752,191,5924,233"/>
+<area shape="rect" id="node53" href="$stm32__timer_8h.html" title="Header file for the stm32 timer driver." alt="" coords="4409,87,4581,129"/>
+<area shape="rect" id="node56" href="$xilinx__timer_8c.html" title="Timer and GIC control module source." alt="" coords="4605,87,4772,129"/>
+<area shape="rect" id="node57" href="$adv7511_2src_2main_8c.html" title="The implementation of the main function of the app." alt="" coords="4797,87,4954,129"/>
+<area shape="rect" id="node58" href="$wrapper_8c.html" title=" " alt="" coords="4978,87,5135,129"/>
+<area shape="rect" id="node59" href="$demo__esp_2src_2common_2common__data_8h.html" title="Defines common data to be used by demo_esp examples." alt="" coords="5159,87,5351,129"/>
+<area shape="rect" id="node61" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for demo_esp project." alt="" coords="5375,80,5543,136"/>
+<area shape="rect" id="node10" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by demo_esp project." alt="" coords="698,191,951,233"/>
+<area shape="rect" id="node9" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="976,288,1161,344"/>
+<area shape="rect" id="node11" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by demo_esp." alt="" coords="699,295,951,337"/>
+<area shape="rect" id="node17" href="$max32650_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="1375,191,1573,233"/>
+<area shape="rect" id="node19" href="$max32655_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="1597,191,1794,233"/>
+<area shape="rect" id="node21" href="$max32660_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="1818,191,2015,233"/>
+<area shape="rect" id="node23" href="$max32665_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2039,191,2237,233"/>
+<area shape="rect" id="node25" href="$max32690_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2261,191,2458,233"/>
+<area shape="rect" id="node27" href="$max78000_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2754,191,2951,233"/>
+<area shape="rect" id="node30" href="$demo__esp_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to maxim platform used by demo_esp project." alt="" coords="2976,191,3199,233"/>
+<area shape="rect" id="node29" href="$ad7091r8-sdz_2src_2platform_2maxim_2parameters_8c.html" title="Definitions specific to Maxim platform used by eval&#45;ad7091r8&#45;sdz project." alt="" coords="2483,295,2729,337"/>
+<area shape="rect" id="node31" href="$demo__esp_2src_2platform_2maxim_2parameters_8c.html" title="Definition of maxim platform data used by demo_esp." alt="" coords="2976,295,3199,337"/>
+<area shape="rect" id="node34" href="$iio__demo_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo project." alt="" coords="3413,295,3636,337"/>
+<area shape="rect" id="node36" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo_freeRTOS project." alt="" coords="3661,295,3906,337"/>
+<area shape="rect" id="node40" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by adxrs290 project." alt="" coords="4297,191,4523,233"/>
+<area shape="rect" id="node42" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1646x project." alt="" coords="4547,191,4774,233"/>
+<area shape="rect" id="node44" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1647x project." alt="" coords="4798,191,5025,233"/>
+<area shape="rect" id="node46" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1650x project." alt="" coords="5049,191,5275,233"/>
+<area shape="rect" id="node48" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1657x project." alt="" coords="5299,191,5526,233"/>
+<area shape="rect" id="node50" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="5551,184,5728,240"/>
+<area shape="rect" id="node41" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by adxrs290 project." alt="" coords="4297,295,4523,337"/>
+<area shape="rect" id="node43" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1646x project." alt="" coords="4547,295,4774,337"/>
+<area shape="rect" id="node45" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1647x project." alt="" coords="4798,295,5025,337"/>
+<area shape="rect" id="node47" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1650x project." alt="" coords="5049,295,5275,337"/>
+<area shape="rect" id="node49" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1657x project." alt="" coords="5299,295,5526,337"/>
+<area shape="rect" id="node51" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="5551,288,5728,344"/>
+<area shape="rect" id="node54" href="$iio__demo_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to stm32 platform used by iio_demo project." alt="" coords="5949,191,6167,233"/>
+<area shape="rect" id="node55" href="$iio__demo_2src_2platform_2stm32_2parameters_8c.html" title="Definition of stm32 platform data used by iio_demo project." alt="" coords="5949,295,6167,337"/>
+<area shape="rect" id="node60" href="$demo__esp_2src_2common_2common__data_8c.html" title="Defines common data to be used by demo_esp examples." alt="" coords="6192,191,6383,233"/>
+</map>

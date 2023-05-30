@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/adc/adm1177/README.rst

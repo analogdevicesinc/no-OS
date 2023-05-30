@@ -1,0 +1,17 @@
+<map id="drivers/afe/ad413x/iio_ad413x.h" name="drivers/afe/ad413x/iio_ad413x.h">
+<area shape="rect" id="node1" title="Header file of iio_ad413x." alt="" coords="445,5,589,47"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="461,95,511,121"/>
+<area shape="rect" id="node10" href="$ad413x_8h.html" title="Header file of AD413X Driver." alt="" coords="775,169,858,196"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="439,169,533,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="196,169,301,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="41,319,123,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="616,319,687,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="401,244,571,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="67,244,201,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="149,319,220,345"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="940,244,1053,271"/>
+<area shape="rect" id="node12" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="1078,244,1185,271"/>
+<area shape="rect" id="node13" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="646,244,745,271"/>
+<area shape="rect" id="node14" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="769,244,865,271"/>
+<area shape="rect" id="node15" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="225,244,325,271"/>
+</map>

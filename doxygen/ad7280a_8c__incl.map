@@ -1,0 +1,11 @@
+<map id="drivers/adc/ad7280a/ad7280a.c" name="drivers/adc/ad7280a/ad7280a.c">
+<area shape="rect" id="node1" title="Driver for the AD7280A Lithium Ion Battery Monitoring System." alt="" coords="328,5,483,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="417,169,488,196"/>
+<area shape="rect" id="node3" href="$ad7280a_8h.html" title=" " alt="" coords="171,95,262,121"/>
+<area shape="rect" id="node8" href="$no__os__alloc_8h.html" title=" " alt="" coords="444,95,554,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="113,244,184,271"/>
+<area shape="rect" id="node5" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="25,169,138,196"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="163,169,270,196"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="294,169,392,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="512,169,579,196"/>
+</map>

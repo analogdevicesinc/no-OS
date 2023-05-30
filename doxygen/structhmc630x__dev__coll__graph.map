@@ -1,0 +1,6 @@
+<map id="hmc630x_dev" name="hmc630x_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="116,228,229,255"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="33,95,165,121"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,32"/>
+<area shape="rect" id="node4" href="$structhmc630x__vco.html" title=" " alt="" coords="190,95,302,121"/>
+</map>

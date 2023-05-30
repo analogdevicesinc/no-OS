@@ -1,0 +1,285 @@
+<map id="no_os_calloc" name="no_os_calloc">
+<area shape="rect" id="node1" title="Allocate memory and return a pointer to it, set memory to 0." alt="" coords="1223,4369,1328,4396"/>
+<area shape="rect" id="node2" href="$adrv902x_2src_2common_2hal_2no__os__platform_8c.html#a8fd9645143f61bb44276c425df9aab39" title=" " alt="" coords="1037,5,1110,32"/>
+<area shape="rect" id="node3" href="$ad2s1210_8h.html#af5f06949a9e57917a8494b1fd80c2870" title=" " alt="" coords="1017,56,1130,83"/>
+<area shape="rect" id="node4" href="$ad3552r_8h.html#a118aa692c26c404334c0f2019043fbeb" title=" " alt="" coords="1022,157,1125,184"/>
+<area shape="rect" id="node5" href="$iio__ad3552r_8h.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="765,115,891,141"/>
+<area shape="rect" id="node6" href="$iio__ad413x_8h.html#a664572ed923615a25c158e97a1593809" title=" " alt="" coords="1013,208,1134,235"/>
+<area shape="rect" id="node7" href="$ad5770r_8h.html#a91549ef06cfe7ec6c7119ed89a44927d" title=" " alt="" coords="515,249,618,276"/>
+<area shape="rect" id="node8" href="$ad5770r_8h.html#ad2d7dae4cde50442dde72aaffd1bddb0" title=" " alt="" coords="991,377,1156,418"/>
+<area shape="rect" id="node9" href="$ad5770r_8h.html#a8caf175b6fe7227d956c1f4ce1fe02ae" title=" " alt="" coords="989,259,1158,301"/>
+<area shape="rect" id="node13" href="$iio__ad5791_8h.html#afad979732e25d7ee76cc7f0d366b52f6" title="Initialize the AD5791 IIO driver." alt="" coords="1013,443,1134,469"/>
+<area shape="rect" id="node15" href="$iio__ad7091r8_8h.html#ab9ebf560e86c6769048fec90dbed9f65" title="Initializes the AD7091R8 IIO driver." alt="" coords="1006,493,1141,520"/>
+<area shape="rect" id="node21" href="$ad7091r8_8h.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="1018,544,1129,571"/>
+<area shape="rect" id="node23" href="$ad713x_8h.html#aeebe94d6a7a09c6dc2a17fb2e2a5858c" title="Initialize the device." alt="" coords="779,1203,877,1229"/>
+<area shape="rect" id="node25" href="$ad7293_8h.html#a3c09628fc50f54db81d143cc303355dd" title="Initializes the ad7293." alt="" coords="1024,2013,1123,2040"/>
+<area shape="rect" id="node26" href="$iio__ad74413r_8h.html#ab0589b8f5954bcc6c101cd7e9fdd21f7" title="Initializes the AD74413R IIO descriptor." alt="" coords="761,1659,895,1685"/>
+<area shape="rect" id="node32" href="$ad74413r_8h.html#a8573c97f5310399cc7fb7a25b7cd5ac4" title="Initialize the device structure." alt="" coords="1018,2064,1129,2091"/>
+<area shape="rect" id="node34" href="$ad74416h_8h.html#ab14b588a86ccfbf3a829c9b485ca5e88" title="Initialize the device structure." alt="" coords="1016,2115,1131,2141"/>
+<area shape="rect" id="node36" href="$ad7606_8h.html#a2afb3414c61b03e45af8e3564bcf4e24" title="Initialize the ad7606 device structure." alt="" coords="1024,2165,1123,2192"/>
+<area shape="rect" id="node37" href="$ad7616_8h.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="510,1076,623,1103"/>
+<area shape="rect" id="node39" href="$ad7689_8h.html#acbaca2b51f89737647ae7d4df17ad33c" title="Initialize the ad7689 driver and create a descriptor." alt="" coords="1024,2216,1123,2243"/>
+<area shape="rect" id="node40" href="$iio__ad7746_8h.html#aab1cf957b500cb5329bf0629c00031e5" title=" " alt="" coords="1013,2267,1134,2293"/>
+<area shape="rect" id="node42" href="$ad7746_8h.html#a2f5d9a49f99bf836d5614406c98897c4" title="Initialize the ad7606 device structure." alt="" coords="1024,2317,1123,2344"/>
+<area shape="rect" id="node43" href="$ad7768_8h.html#ae777ccca8f6689a02e22c1e2a699f9d1" title=" " alt="" coords="995,2368,1151,2395"/>
+<area shape="rect" id="node46" href="$ad7799_8h.html#a29c76300e6bd41f44f6248c3cb5ca2a3" title="Initialize the device." alt="" coords="1024,2419,1123,2445"/>
+<area shape="rect" id="node47" href="$ad9081_8h.html#a9e5da84ba8bb2b3cce0c6a237ec0ee86" title=" " alt="" coords="1024,2469,1123,2496"/>
+<area shape="rect" id="node48" href="$ad9083_8h.html#a40a9edf7bf247382e415c3e849451d89" title=" " alt="" coords="1024,2520,1123,2547"/>
+<area shape="rect" id="node49" href="$ad9172_8h.html#a70fc0c3bf90da142e1a112a49ed17bf4" title=" " alt="" coords="1024,645,1123,672"/>
+<area shape="rect" id="node51" href="$ad9208_8h.html#a3f89bec09654f4ad9f037d47c33deba4" title=" " alt="" coords="1007,2571,1140,2597"/>
+<area shape="rect" id="node53" href="$ad9361__api_8h.html#ab58f5f1831cfcb6bf7a34d14de1edc1f" title=" " alt="" coords="1024,1253,1123,1280"/>
+<area shape="rect" id="node55" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#a300fee1e9b4ba514e195d5312b11eea3" title="Initializes the AD9528." alt="" coords="1017,899,1130,925"/>
+<area shape="rect" id="node56" href="$ad9083_2src_2app__clocking_8h.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="761,823,895,849"/>
+<area shape="rect" id="node62" href="$ad9656_8h.html#ab61e88ca0626ae6931233680606b395c" title="Setup the working parameters of the ad9656 chip." alt="" coords="1017,2621,1130,2648"/>
+<area shape="rect" id="node64" href="$ada4250_8h.html#afcaeb14f57346669b660ba6004853ef8" title="Initialize the ADA4250 device." alt="" coords="1020,2672,1127,2699"/>
+<area shape="rect" id="node66" href="$adaq8092_8h.html#a3fd6d9f29c2321a807a1d8791c2b85cd" title="Initialize the device." alt="" coords="1016,2723,1131,2749"/>
+<area shape="rect" id="node67" href="$adas1000_8h.html#a53655dc2232c9d893f208871217abcbf" title="Initializes the SPI communication with ADAS1000. The ADAS1000 is configured with the specified frame ..." alt="" coords="1017,2773,1130,2800"/>
+<area shape="rect" id="node68" href="$adc__demo_8h.html#acef70bf413745ca92f5772707ff7e068" title="init function for the adc demo driver" alt="" coords="1015,2824,1132,2851"/>
+<area shape="rect" id="node69" href="$ade9113_8h.html#ac8de97a314fe1275ee03d3d5c5379c14" title="Initialize the device." alt="" coords="1020,2875,1127,2901"/>
+<area shape="rect" id="node70" href="$ade9430_8h.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="1020,2925,1127,2952"/>
+<area shape="rect" id="node72" href="$adf4371_8h.html#a193a11338c8401b7d591366c527fc3df" title=" " alt="" coords="1022,3077,1125,3104"/>
+<area shape="rect" id="node73" href="$adf4377_8h.html#a0dd8ab44b3943f2f325d5bd6101b7dc1" title="Initializes the ADF4377." alt="" coords="1022,3128,1125,3155"/>
+<area shape="rect" id="node75" href="$adf5355_8h.html#af7443c252a8b448a6c08f928e767a413" title="Initializes the ADF5355." alt="" coords="1022,3179,1125,3205"/>
+<area shape="rect" id="node76" href="$iio__adg2128_8h.html#a0be44d94247751690423522668e18a07" title=" " alt="" coords="1009,3229,1138,3256"/>
+<area shape="rect" id="node78" href="$iio__adin1300_8h.html#a5927988d0e79bebae0ac11db5ff7019c" title=" " alt="" coords="1007,3280,1140,3307"/>
+<area shape="rect" id="node81" href="$adin1300_8h.html#a48d11366cb4959ea4e3bd89561080af1" title=" " alt="" coords="1018,3331,1129,3357"/>
+<area shape="rect" id="node82" href="$iio__adis1646x_8h.html#aed886da3c824f9d666d090fa37745977" title="Initialize adis1646x iio device." alt="" coords="1003,3584,1143,3611"/>
+<area shape="rect" id="node84" href="$iio__adis1647x_8h.html#a207b572fce1d02774cca7174f9264024" title="Initialize adis1647x iio device." alt="" coords="1003,3635,1143,3661"/>
+<area shape="rect" id="node86" href="$iio__adis1650x_8h.html#aa1decd80e7c6178c550c6a9e7e7ed24d" title="Initialize adis1650x iio device." alt="" coords="1003,3685,1143,3712"/>
+<area shape="rect" id="node88" href="$iio__adis1657x_8h.html#a32fc1f743a4b4051dd39cb633c1c3f27" title="Initialize adis1657x iio device." alt="" coords="1003,3736,1143,3763"/>
+<area shape="rect" id="node90" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="1035,3787,1112,3813"/>
+<area shape="rect" id="node92" href="$iio__adm1177_8h.html#a97115e321188fb0f7ec817fabf8dcbea" title=" " alt="" coords="761,3483,895,3509"/>
+<area shape="rect" id="node93" href="$adm1177_8h.html#a5a0ffed7a7310caacae8870e519d32e6" title="Initializes I2C." alt="" coords="1018,3837,1129,3864"/>
+<area shape="rect" id="node94" href="$admv1013_8h.html#a0466df867756a21adaa080f89fb248c4" title="Initializes the admv1013." alt="" coords="1014,3888,1133,3915"/>
+<area shape="rect" id="node95" href="$admv1014_8h.html#af54aeecd75abebc7ad4b44d2eb947844" title="Initializes the admv1014." alt="" coords="1014,3939,1133,3965"/>
+<area shape="rect" id="node96" href="$admv8818_8h.html#ab2a128203022a3ed084779326ecef8be" title="Initializes the admv8818." alt="" coords="1014,3989,1133,4016"/>
+<area shape="rect" id="node97" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="234,1304,363,1331"/>
+<area shape="rect" id="node99" href="$adp1050_8h.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="513,1355,620,1381"/>
+<area shape="rect" id="node101" href="$iio__adpd188_8h.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="763,4040,893,4067"/>
+<area shape="rect" id="node103" href="$adpd188_8h.html#ad498aa08ccb8f2c328fcc761f391738d" title="Initialize the ADPD188 driver." alt="" coords="1020,4091,1127,4117"/>
+<area shape="rect" id="node104" href="$adpd410x_8h.html#a0af50d86e2cf4508c5faecaa6a533ab8" title="Reads a certain number of bytes from the fifo and stores in data Used to read a large amount of data ..." alt="" coords="753,4116,903,4143"/>
+<area shape="rect" id="node105" href="$adpd410x_8h.html#a0cf48ae700bd9b6ce5c1e278483bfdd9" title="Read a specified number of bytes from device register." alt="" coords="977,4192,1170,4219"/>
+<area shape="rect" id="node114" href="$adpd410x_8h.html#a8c47ad8226f8c0882232750616b4ac6d" title="Setup the device and the driver." alt="" coords="12,4192,141,4219"/>
+<area shape="rect" id="node119" href="$adrf6780_8h.html#ad0ffbdbf399514f68df82b7a317b8fc4" title="Initializes the adrf6780." alt="" coords="1019,4293,1127,4320"/>
+<area shape="rect" id="node120" href="$iio__adt7420_8h.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="1010,4344,1137,4371"/>
+<area shape="rect" id="node122" href="$iio__adt75_8h.html#a68980aab7e3046c5c327fe0fc5277d6a" title="Initializes the ADT75 IIO descriptor." alt="" coords="773,1760,883,1787"/>
+<area shape="rect" id="node124" href="$adt75_8h.html#acb58ba01abf8486d2f8f2670c2e7a574" title="Initialize the device structure." alt="" coords="1030,1811,1117,1837"/>
+<area shape="rect" id="node126" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="769,1963,887,1989"/>
+<area shape="rect" id="node128" href="$aducm3029__adc_8h.html#ad329a84ae892867c36fb1268eb4e6f73" title="Allocate adc_desc and initialize adc." alt="" coords="995,4395,1151,4421"/>
+<area shape="rect" id="node129" href="$aducm3029__gpio_8c.html#ae72f0a1e0b08c470e4285edb30c33f93" title="Obtain the GPIO descriptor from the number specified in param." alt="" coords="993,4445,1154,4472"/>
+<area shape="rect" id="node130" href="$aducm3029__irq_8c.html#a3f3a37afdf4150bfcdd37a41aba46d52" title="Initialized the controller for the ADuCM3029 external interrupts." alt="" coords="984,4496,1163,4523"/>
+<area shape="rect" id="node131" href="$aducm3029__pwm_8c.html#a9de11b9b76ee02af00e48fef88bc82f6" title=" " alt="" coords="991,4547,1156,4573"/>
+<area shape="rect" id="node132" href="$aducm3029__spi_8c.html#a3922e66bc860da0fbf6860865a12a95e" title="Initialize the SPI communication peripheral." alt="" coords="997,4597,1149,4624"/>
+<area shape="rect" id="node133" href="$aducm3029__timer_8c.html#a3e1f2a69e5b1c3ad904c429af6ad0560" title="Initialize a instance of a timer." alt="" coords="989,4648,1157,4675"/>
+<area shape="rect" id="node134" href="$aducm3029__trng_8c.html#a6349f4a54bbc9a6cfd59e2dd21bf7806" title="Initialize descriptor." alt="" coords="994,4699,1153,4725"/>
+<area shape="rect" id="node135" href="$axi__adxcvr_8c.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="AXI ADXCVR Device Initialization." alt="" coords="1026,4749,1121,4776"/>
+<area shape="rect" id="node136" href="$iio__adxl313_8h.html#ae25b9cd3de1b08c9797d8bd11778471f" title=" " alt="" coords="1011,4800,1136,4827"/>
+<area shape="rect" id="node138" href="$adxl313_8h.html#acedc3d2093ee5bef7e57269f1098b88e" title=" " alt="" coords="1022,4851,1125,4877"/>
+<area shape="rect" id="node140" href="$iio__adxl355_8h.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="1011,4901,1136,4928"/>
+<area shape="rect" id="node145" href="$adxl355_8h.html#a856ba86fac725f93403ffe8971a803ce" title="Initializes the communication peripheral and checks if the ADXL355 part is present." alt="" coords="1022,4952,1125,4979"/>
+<area shape="rect" id="node147" href="$iio__adxl367_8h.html#ab0285a11dd056b3295e75c6f3b5c64bd" title="Initializes the ADXL367 IIO driver." alt="" coords="1011,5003,1136,5029"/>
+<area shape="rect" id="node149" href="$adxl367_8h.html#a9441469bf596dc90e47226420481f41f" title="Initializes communication with the device and checks if the part is present by reading the device id." alt="" coords="1022,5053,1125,5080"/>
+<area shape="rect" id="node151" href="$altera__gpio_8c.html#a0ae6987fc738d1dcd41b2cdf538b3b30" title="Obtain the GPIO decriptor." alt="" coords="1012,5104,1135,5131"/>
+<area shape="rect" id="node152" href="$altera__spi_8c.html#a8cf9a24d64493d15aa0ca2003dd87e72" title="Initialize the SPI communication peripheral." alt="" coords="1016,5155,1131,5181"/>
+<area shape="rect" id="node153" href="$ad9083_2src_2app__jesd_8h.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="1019,5205,1127,5232"/>
+<area shape="rect" id="node154" href="$wrapper_8h.html#ab5f82c7bf49e985eec67654e85da3c4b" title=" " alt="" coords="996,5256,1151,5283"/>
+<area shape="rect" id="node155" href="$wrapper_8h.html#a533b3af0030a961b0e3b2ed1e09b83c4" title=" " alt="" coords="988,5307,1159,5333"/>
+<area shape="rect" id="node156" href="$wrapper_8h.html#a44a49d54d98361c52c5f0b757a74cd74" title=" " alt="" coords="749,5369,907,5396"/>
+<area shape="rect" id="node157" href="$wrapper_8h.html#afa4746abacae9e1629b9db7a1a0355bf" title=" " alt="" coords="742,5445,914,5472"/>
+<area shape="rect" id="node158" href="$axi__dmac_8h.html#a7292b57a2b854f8a3e481ee6e0bd2250" title=" " alt="" coords="1017,747,1130,773"/>
+<area shape="rect" id="node171" href="$axi__jesd204__rx_8h.html#ab0e2722b8a1e3a0add052039c15bd919" title="Device initialization, JESD FSM ON." alt="" coords="999,1000,1147,1027"/>
+<area shape="rect" id="node173" href="$axi__jesd204__tx_8h.html#a2e34a0eea89935e4ec65e3fbe0dd6357" title="Device initialization." alt="" coords="999,949,1147,976"/>
+<area shape="rect" id="node174" href="$axi__pwm_8c.html#ae2588a2dad883803d9fc8f036c1c5dcb" title="Initialize the pwm axi generator and the handler associated with it." alt="" coords="512,569,621,596"/>
+<area shape="rect" id="node175" href="$axi__sysid_8h.html#a113306944618362640981679929a8f7e" title=" " alt="" coords="1018,1152,1129,1179"/>
+<area shape="rect" id="node176" href="$chibios__gpio_8c.html#a0e6d8a4f38700d792b402cc1a7b62fbd" title="Obtain the GPIO descriptor." alt="" coords="1008,5509,1139,5536"/>
+<area shape="rect" id="node178" href="$chibios__i2c_8c.html#a6f65ea8d9379a60d75da1f5e39b0936e" title="Initialize the I2C communication peripheral." alt="" coords="1012,5560,1135,5587"/>
+<area shape="rect" id="node179" href="$chibios__spi_8c.html#a517f1994e2f1e7a76ce2ab154695a775" title="Initialize the SPI communication peripheral." alt="" coords="1012,5611,1135,5637"/>
+<area shape="rect" id="node180" href="$dac__demo_8h.html#a2e21209c9b48f2e2dda348cbf7f2d55e" title="init function for the dac demo driver" alt="" coords="1015,5661,1132,5688"/>
+<area shape="rect" id="node181" href="$demux__spi_8h.html#a15a2b69e6fd452e7adae44491f653a47" title="Initialize the SPI demux layer." alt="" coords="1013,5712,1134,5739"/>
+<area shape="rect" id="node182" href="$24xx32a_8c.html#a0fb7b57ae0cbee83a14da6dc7e2dc5e2" title="Initialize the 24XX32A EEPROM." alt="" coords="992,5763,1155,5789"/>
+<area shape="rect" id="node183" href="$wrapper_8h.html#acda402288dee41c473e5d8883e0d8925" title=" " alt="" coords="1000,5408,1147,5435"/>
+<area shape="rect" id="node184" href="$iio__hmc630x_8h.html#ac1eb02123857a7727f2a953f4abded3b" title=" " alt="" coords="761,3533,895,3560"/>
+<area shape="rect" id="node185" href="$hmc630x_8h.html#a7fcea8769d50f179f5bcd2fa79d110f6" title=" " alt="" coords="1018,5813,1129,5840"/>
+<area shape="rect" id="node186" href="$hmc7044_8h.html#aa76b1a2eea781106b50fed22044dd394" title=" " alt="" coords="1018,696,1129,723"/>
+<area shape="rect" id="node187" href="$iio__ad9361_8h.html#a93203e738007a3336ceb5d1a1b928060" title="Init for reading/writing and parameterization of a ad9361 device." alt="" coords="1013,1203,1134,1229"/>
+<area shape="rect" id="node188" href="$iio__axi__adc_8h.html#a1ce7c75ba31b028f98660a12eedc38ea" title="Registers a iio_axi_adc_desc for reading/writing and parameterization of axi_adc device." alt="" coords="1012,1101,1135,1128"/>
+<area shape="rect" id="node189" href="$iio__axi__dac_8h.html#a4a92f682062206373619caa22a9fdea1" title="Registers a iio_axi_dac_desc for reading/writing and parameterization of axi_dac device." alt="" coords="1012,848,1135,875"/>
+<area shape="rect" id="node190" href="$iio__trigger_8h.html#ac463acd613c3864b48d7c5d8671d7bef" title="Initialize hardware trigger." alt="" coords="767,1608,889,1635"/>
+<area shape="rect" id="node192" href="$iio_8h.html#a3cd4e4597f478a8e0d9cd06f4202a28a" title="Set communication ops and read/write ops." alt="" coords="1040,5864,1107,5891"/>
+<area shape="rect" id="node193" href="$iio__trigger_8h.html#a893b5cf4e707c894006c99a553d59e2c" title="Initialize software trigger." alt="" coords="1013,5915,1133,5941"/>
+<area shape="rect" id="node194" href="$linux__gpio_8c.html#a6b5e6ca5f0662c507563ef488378403f" title="Obtain the GPIO decriptor." alt="" coords="1015,5965,1132,5992"/>
+<area shape="rect" id="node196" href="$linux__timer_8c.html#a0013116dab39a529b3281e955df3eff4" title="Timer driver init function." alt="" coords="1011,6016,1135,6043"/>
+<area shape="rect" id="node197" href="$ltc2358_8h.html#a95f177b2ecf8f00f90180101abf03d05" title="Initialize the device." alt="" coords="1024,6067,1123,6093"/>
+<area shape="rect" id="node198" href="$ltc2672_8h.html#a705c48ae35b5bea359c4a054e7f6d70a" title="Device and communication init function." alt="" coords="1024,6117,1123,6144"/>
+<area shape="rect" id="node200" href="$ltc268x_8h.html#a3a84f9a511f93146f1dc1b802a8718e6" title=" " alt="" coords="1024,6168,1123,6195"/>
+<area shape="rect" id="node201" href="$ltc3337_8h.html#a0feb241ce59f74dbcd96a8152d8959b3" title=" " alt="" coords="1024,6219,1123,6245"/>
+<area shape="rect" id="node203" href="$ltc3350_8h.html#afecfb7444568d9f1bd24ac7174f2232b" title="Initializes the communication peripheral and checks if the LTC3350 part is present." alt="" coords="1024,6269,1123,6296"/>
+<area shape="rect" id="node204" href="$ltc4306_8h.html#a9def59b80110ee73a4fce208f8257303" title="Initializes the communication peripheral and checks if the ltc4306 part is present." alt="" coords="1024,6320,1123,6347"/>
+<area shape="rect" id="node206" href="$ltc4332_8h.html#a7e7452fd81ca8801b0748acb80fc28bc" title="Write and read data to/from SPI ltc4332 layer." alt="" coords="972,6421,1175,6448"/>
+<area shape="rect" id="node207" href="$ltc6953_8h.html#af5625c1ca9661596d8f88c1d461e7016" title="Initializes the SPI communication with LTC6953." alt="" coords="1024,6472,1123,6499"/>
+<area shape="rect" id="node208" href="$iio__max11205_8h.html#a3096b33647acf69c1bb9132184c42bd4" title="Initializes the max11205 iio driver." alt="" coords="1002,6523,1145,6549"/>
+<area shape="rect" id="node210" href="$max11205_8h.html#ae231424231ccb7c1ee925ed0fe3054db" title="Initializes the communication peripheral." alt="" coords="1014,6573,1133,6600"/>
+<area shape="rect" id="node212" href="$max14001_8h.html#a497a1057d75520a948f47a8fc8469643" title="Initialize the device." alt="" coords="1014,6624,1133,6651"/>
+<area shape="rect" id="node213" href="$iio__max14906_8h.html#a5536d17cd62bda79c445c5b0b009291a" title="Initializes the MAX14906 IIO descriptor." alt="" coords="757,1912,899,1939"/>
+<area shape="rect" id="node215" href="$iio__max14906_8c.html#a6821b5e1c7f1557c56453ea435f5278c" title="Configure a set if IIO channels based on the operation modes of the enabled physical channels." alt="" coords="995,6675,1152,6717"/>
+<area shape="rect" id="node216" href="$max14906_8h.html#a70b9ff21f795f28138434e77895cbf8c" title="Initialize and configure the MAX14906 device." alt="" coords="1014,1861,1133,1888"/>
+<area shape="rect" id="node218" href="$max14914_8h.html#a093ecfd0dbf9474bc926dd8de9b6890a" title="Initialize the MAX14914 device." alt="" coords="1014,6741,1133,6768"/>
+<area shape="rect" id="node220" href="$iio__max14916_8h.html#ac6ad1ec4dd3e33839e97b18e406c2ee7" title="Initializes the MAX14916 IIO descriptor." alt="" coords="757,6792,899,6819"/>
+<area shape="rect" id="node222" href="$iio__max14916_8c.html#a40ce9e18272547b5df8f10fea8e098ac" title=" " alt="" coords="995,6894,1152,6935"/>
+<area shape="rect" id="node223" href="$max14916_8h.html#a6a56efd1014729fae9dbe2d4dd2fec4d" title="Initialize and configure the MAX14916 device." alt="" coords="1014,6843,1133,6869"/>
+<area shape="rect" id="node225" href="$max14919_8h.html#ad907f3a2e421fc4f1b9421e3890f50b2" title="Initialize the MAX14919 device descriptor." alt="" coords="1014,6960,1133,6987"/>
+<area shape="rect" id="node227" href="$iio__max22190_8h.html#a2e9c7002f8a1514d7724af884dfe8e93" title="Initializes the MAX22190 IIO Descriptor." alt="" coords="757,7011,899,7037"/>
+<area shape="rect" id="node229" href="$max22190_8h.html#a5df03b296a6f8d3b93a711c047b1b556" title="MAX22190 Initialization function." alt="" coords="1014,7061,1133,7088"/>
+<area shape="rect" id="node231" href="$iio__max22196_8h.html#ac557d98d4738856040072e5e2491768b" title="Initializes the MAX22196 IIO descriptor." alt="" coords="757,7112,899,7139"/>
+<area shape="rect" id="node233" href="$iio__max22196_8c.html#a2b4980355bc423ae78b5cdc7997dace2" title="Configure a set if IIO channels based on the chip id physical channels." alt="" coords="995,7214,1152,7255"/>
+<area shape="rect" id="node234" href="$max22196_8h.html#abb69d82911101d8da2dd77ac3f536462" title="Initialize and configure the MAX22196 device." alt="" coords="1014,7163,1133,7189"/>
+<area shape="rect" id="node236" href="$iio__max22200_8h.html#ac94399543264c762f05f9be7ae5bc96c" title="Initializes the MAX22200 IIO descriptor." alt="" coords="757,7280,899,7307"/>
+<area shape="rect" id="node238" href="$iio__max22200_8c.html#a4711de693e4d717392f3d69f2c20890b" title=" " alt="" coords="995,7382,1152,7423"/>
+<area shape="rect" id="node239" href="$max22200_8h.html#a1835ac8951625384aedaa5113e914946" title="MAX22200 descriptor initialization function." alt="" coords="1014,7331,1133,7357"/>
+<area shape="rect" id="node241" href="$max22516_8h.html#a798d21b92c0a7a5e9823703223de914c" title="Initialize the MAX22516 device." alt="" coords="1014,7448,1133,7475"/>
+<area shape="rect" id="node242" href="$iio__max24287_8h.html#addf7d79c2734d21d0ac8769136380217" title=" " alt="" coords="1002,3381,1145,3408"/>
+<area shape="rect" id="node243" href="$max24287_8h.html#a95989a0a41e011a59d747079d39cfc35" title=" " alt="" coords="1014,3432,1133,3459"/>
+<area shape="rect" id="node244" href="$iio__max31855_8h.html#aabdd7a2af43ae6033a57f22a27ba860a" title="Initializes the MAX31855 IIO driver." alt="" coords="757,7499,899,7525"/>
+<area shape="rect" id="node245" href="$max31855_8h.html#a88cb0da8235d2269bc09cccf38269a93" title="Device and comm init function." alt="" coords="1014,7549,1133,7576"/>
+<area shape="rect" id="node247" href="$max31865_8h.html#a0c05dd932736d0e22912c096a1aa83c8" title="Device and comm init function." alt="" coords="1014,7600,1133,7627"/>
+<area shape="rect" id="node248" href="$max31875_8h.html#aab2c03aafe05ba98503addd53c99691e" title="Initialize the device driver befre use." alt="" coords="1014,7651,1133,7677"/>
+<area shape="rect" id="node249" href="$max538x_8h.html#a707a5b07b11a4bf8cd2cf1912435a73d" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="1018,6371,1129,6397"/>
+<area shape="rect" id="node250" href="$max9611_8h.html#a8dd6a844e74cf6ab71b510c82a50d04a" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="1018,7701,1129,7728"/>
+<area shape="rect" id="node251" href="$max32650_2maxim__gpio_8c.html#a19be948d28822b63516d820bb1c57fc3" title="Obtain the GPIO decriptor." alt="" coords="1016,7752,1131,7779"/>
+<area shape="rect" id="node253" href="$max32650_2maxim__irq_8c.html#a6b853838daa4aa57a94d2fe3d1997894" title="Initialize the interrupt controller." alt="" coords="1008,7803,1139,7829"/>
+<area shape="rect" id="node254" href="$max32650_2maxim__spi_8c.html#aa4c18a500f7b61d872b99f2d8ca86351" title="Initialize the SPI communication peripheral." alt="" coords="1021,7853,1126,7880"/>
+<area shape="rect" id="node255" href="$max32650_2maxim__timer_8c.html#a12a480177365abaae5e0951f1704a292" title="Timer driver init function." alt="" coords="1013,7904,1134,7931"/>
+<area shape="rect" id="node256" href="$max32650_2maxim__trng_8c.html#ad46234418805cca5e28e91270f262c4f" title="Initialize the device." alt="" coords="1017,7955,1129,7981"/>
+<area shape="rect" id="node257" href="$mdio__bitbang_8c.html#afb995dde668eafa356ae8392649ba904" title=" " alt="" coords="1004,8005,1143,8032"/>
+<area shape="rect" id="node258" href="$nhd__c12832a1z_8h.html#a2bf6b2b56cebe2f0b4d5a759a92e2610" title="Initializes nhd_c12832a1z for display screening." alt="" coords="998,2976,1149,3003"/>
+<area shape="rect" id="node259" href="$aducm3029__flash_8c.html#a6e2ba771f744d60f5e5e6f661ef58154" title=" " alt="" coords="1010,8056,1137,8083"/>
+<area shape="rect" id="node261" href="$no__os__i2c_8c.html#a01ee72a3cf98054b436f4332c80bd4aa" title="Initialize the i2c bus communication peripheral." alt="" coords="759,1507,897,1533"/>
+<area shape="rect" id="node262" href="$freertos__mutex_8c.html#a7a67cc9bd2171d375a7809836f893ef4" title="Initialize mutex. mutex &#45; Pointer toward the mutex." alt="" coords="1005,1456,1142,1483"/>
+<area shape="rect" id="node266" href="$no__os__spi_8c.html#a28b2d2f56d7c423bfc021dda383ae594" title="Initialize the SPI bus communication peripheral." alt="" coords="759,1557,897,1584"/>
+<area shape="rect" id="node268" href="$aducm3029__rtc_8c.html#a4562b8c6a95f0f2e998380893fc9d92a" title="Initialize the RTC peripheral." alt="" coords="1017,8107,1129,8133"/>
+<area shape="rect" id="node269" href="$freertos__semaphore_8c.html#ae004cbe02137df26906c59202c37ef90" title="Initialize semaphore. semaphore &#45; Pointer toward the semaphore." alt="" coords="989,8157,1157,8184"/>
+<area shape="rect" id="node270" href="$pcf85263_8h.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="1018,3027,1129,3053"/>
+<area shape="rect" id="node271" href="$pico__i2c_8c.html#aaafc4e2b67562c5811b259741c8bcc08" title="Initialize the I2C communication peripheral." alt="" coords="1022,8208,1125,8235"/>
+<area shape="rect" id="node272" href="$pico__spi_8c.html#ab3de917bdd9f68fc4fd638d9a99655cb" title="Initialize the SPI communication peripheral." alt="" coords="1022,8259,1125,8285"/>
+<area shape="rect" id="node273" href="$pico__timer_8c.html#a6d498f7bc9ca0f6ffdf8d38e479b92ad" title="Initialize the timer peripheral." alt="" coords="1014,8309,1133,8336"/>
+<area shape="rect" id="node274" href="$sd_8h.html#a04c26ddfea1e6b02c35dc8b2c8be7aab" title=" " alt="" coords="1041,8360,1106,8387"/>
+<area shape="rect" id="node275" href="$stm32__i2c_8c.html#a130feb849ff24bcd02d0c9f7f11d5edb" title="Initialize the I2C communication peripheral." alt="" coords="1015,8411,1132,8437"/>
+<area shape="rect" id="node276" href="$stm32__spi_8c.html#ab30b6267353de9d9f7d9dab38b808021" title="Initialize the SPI communication peripheral." alt="" coords="1015,8461,1132,8488"/>
+<area shape="rect" id="node277" href="$stm32__tdm_8h.html#a056ca840bde6d6da60fc98ba6a3cdab5" title="Initialize the TDM communication peripheral." alt="" coords="1011,8512,1135,8539"/>
+<area shape="rect" id="node278" href="$stm32__timer_8c.html#ae3def940070085dbb47da01ae86a3efe" title="Initialize the timer peripheral." alt="" coords="1007,8563,1140,8589"/>
+<area shape="rect" id="node279" href="$swiot_8h.html#aa4157740dd311a6ef1f76a75b1dd00d2" title="Initializes the swiot IIO descriptor." alt="" coords="774,1709,882,1736"/>
+<area shape="rect" id="node280" href="$xilinx__gpio__irq_8c.html#a449e62eb84f1d98d40007632abb2b51c" title="Initialize the GPIO IRQ controller." alt="" coords="997,8613,1150,8640"/>
+<area shape="rect" id="node281" href="$xilinx__gpio__irq_8c.html#ae5f7b38938393620556af9ba91f0951a" title="Register pin specific GPIO interrupt." alt="" coords="996,8665,1151,8706"/>
+<area shape="rect" id="node282" href="$xilinx__irq_8c.html#a916d9dccdf90831846d0a89393218fcd" title="Initialize the IRQ interrupts." alt="" coords="1014,8731,1133,8757"/>
+<area shape="rect" id="node283" href="$xilinx__timer_8c.html#a14232d1169f3a5a0d8c859b153799aaf" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="1009,8781,1137,8808"/>
+<area shape="rect" id="node10" href="$ad5770r_8h.html#ae121931aa1a5da6dd95e5332f2f47047" title=" " alt="" coords="742,275,914,301"/>
+<area shape="rect" id="node11" href="$ad5770r_8h.html#ab43f472b8eb575ea8d9e0d7270590995" title=" " alt="" coords="741,173,915,200"/>
+<area shape="rect" id="node12" href="$ad5770r_8h.html#a4725043c09c4f6a5c1ac8ca77ae52a7c" title=" " alt="" coords="736,224,920,251"/>
+<area shape="rect" id="node14" href="$cn0531_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="801,443,855,469"/>
+<area shape="rect" id="node16" href="$max31855_2src_2examples_2iio__example_2iio__example_8h.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="757,493,899,520"/>
+<area shape="rect" id="node17" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a24add404325f00727126e8cf06932df2" title="IIOD example task." alt="" coords="529,468,604,495"/>
+<area shape="rect" id="node20" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="539,519,594,545"/>
+<area shape="rect" id="node18" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="246,468,351,495"/>
+<area shape="rect" id="node19" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="49,468,104,495"/>
+<area shape="rect" id="node22" href="$max31855_2src_2examples_2basic_2basic__example_8h.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,544,908,571"/>
+<area shape="rect" id="node24" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="539,1203,594,1229"/>
+<area shape="rect" id="node27" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,1659,638,1685"/>
+<area shape="rect" id="node28" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="471,1608,663,1635"/>
+<area shape="rect" id="node30" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="505,1709,628,1736"/>
+<area shape="rect" id="node29" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="271,1608,326,1635"/>
+<area shape="rect" id="node31" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="271,1709,326,1736"/>
+<area shape="rect" id="node33" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="740,2064,916,2091"/>
+<area shape="rect" id="node35" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,2115,908,2141"/>
+<area shape="rect" id="node38" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="271,1039,326,1065"/>
+<area shape="rect" id="node41" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="801,2292,855,2319"/>
+<area shape="rect" id="node44" href="$ad7768_8h.html#aedad7966a7f57f13de96bd8a2167721f" title=" " alt="" coords="771,2356,885,2383"/>
+<area shape="rect" id="node45" href="$ad7768__evb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="801,2407,855,2433"/>
+<area shape="rect" id="node50" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="801,671,855,697"/>
+<area shape="rect" id="node52" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="801,2571,855,2597"/>
+<area shape="rect" id="node54" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="801,1152,855,1179"/>
+<area shape="rect" id="node58" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="748,873,908,900"/>
+<area shape="rect" id="node59" href="$dma__example_8h.html#a0ecbc6b48b2626c3e722bbe55440bdaa" title="DMA example main execution." alt="" coords="751,924,905,951"/>
+<area shape="rect" id="node61" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="757,975,899,1001"/>
+<area shape="rect" id="node57" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="539,975,594,1001"/>
+<area shape="rect" id="node60" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="539,1025,594,1052"/>
+<area shape="rect" id="node63" href="$ad9656__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="801,2621,855,2648"/>
+<area shape="rect" id="node65" href="$ada4250__ardz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="801,2672,855,2699"/>
+<area shape="rect" id="node71" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="801,2976,855,3003"/>
+<area shape="rect" id="node74" href="$adf4377__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="801,3128,855,3155"/>
+<area shape="rect" id="node77" href="$cn0565_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="801,3229,855,3256"/>
+<area shape="rect" id="node79" href="$net_8h.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="793,3381,863,3408"/>
+<area shape="rect" id="node80" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="539,3483,594,3509"/>
+<area shape="rect" id="node83" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="732,3584,924,3611"/>
+<area shape="rect" id="node85" href="$eval-adis1647x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="732,3635,924,3661"/>
+<area shape="rect" id="node87" href="$eval-adis1650x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="732,3685,924,3712"/>
+<area shape="rect" id="node89" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="732,3736,924,3763"/>
+<area shape="rect" id="node91" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="748,3787,908,3813"/>
+<area shape="rect" id="node98" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,1304,148,1331"/>
+<area shape="rect" id="node100" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="219,1355,379,1381"/>
+<area shape="rect" id="node102" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="539,3837,594,3864"/>
+<area shape="rect" id="node106" href="$adpd410x_8h.html#acea46e9c43d9e459cc0b50253d76c9f8" title="Read device register." alt="" coords="753,4167,903,4193"/>
+<area shape="rect" id="node107" href="$adpd410x_8h.html#a4a65d1440f2d41e7f808ef813b77b237" title="Get a full data packet from the device containing data from all active time slots." alt="" coords="491,4192,642,4219"/>
+<area shape="rect" id="node108" href="$adpd410x_8h.html#a1af8b15290b36ee55a1844a2f6f851d4" title="Get number of bytes in the device FIFO." alt="" coords="459,4243,674,4269"/>
+<area shape="rect" id="node109" href="$adpd410x_8h.html#a4844c1a7e5060f6586d0242b512ee099" title="Get number of active time slots." alt="" coords="463,3888,670,3915"/>
+<area shape="rect" id="node110" href="$adpd410x_8h.html#a96d878550eebba0a2e4fb43b8d085f4e" title="Get operation mode." alt="" coords="479,3939,654,3965"/>
+<area shape="rect" id="node111" href="$adpd410x_8h.html#a0f9ff978aecb9ee80fd528121bc49b3e" title="Get device sampling frequency." alt="" coords="459,3989,674,4016"/>
+<area shape="rect" id="node112" href="$adpd410x_8h.html#a3398d6eea6ec9b5840cbdbfb21363ac0" title="Do a read and write of a register to update only part of a register." alt="" coords="468,4040,665,4067"/>
+<area shape="rect" id="node117" href="$adpd410x_8h.html#aeebd23ab85c6cd30017c65946538e5e3" title="Setup an active time slot." alt="" coords="203,4167,394,4193"/>
+<area shape="rect" id="node118" href="$adpd410x_8h.html#adfc05439df83ca920f95cda419f45ee3" title="Set device sampling frequency." alt="" coords="460,4141,673,4168"/>
+<area shape="rect" id="node113" href="$adpd410x_8h.html#a7a74b5425d1d67e763df0ab85dc2df12" title="Do a software reset." alt="" coords="235,4116,362,4143"/>
+<area shape="rect" id="node115" href="$adpd410x_8c.html#a276c3d1815c3a76bc0c4a8556d51cc3b" title="Set number of active time slots." alt="" coords="196,4065,401,4092"/>
+<area shape="rect" id="node116" href="$adpd410x_8h.html#a2f5eb641289541459498a473a416724d" title="Set operation mode." alt="" coords="212,3964,385,3991"/>
+<area shape="rect" id="node121" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="757,4344,899,4371"/>
+<area shape="rect" id="node123" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,1760,638,1787"/>
+<area shape="rect" id="node125" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,1811,908,1837"/>
+<area shape="rect" id="node127" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="539,1963,594,1989"/>
+<area shape="rect" id="node137" href="$eval-adxl313z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="757,4724,899,4751"/>
+<area shape="rect" id="node139" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,4775,908,4801"/>
+<area shape="rect" id="node141" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="757,4825,899,4852"/>
+<area shape="rect" id="node142" href="$iio__lwip__example_8h.html#a3eaab21567975f345a978fb8dd807bbc" title="IIO example main execution." alt="" coords="740,4876,916,4903"/>
+<area shape="rect" id="node144" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="732,4927,924,4953"/>
+<area shape="rect" id="node143" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="539,4876,594,4903"/>
+<area shape="rect" id="node146" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="740,4977,916,5004"/>
+<area shape="rect" id="node148" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="757,5028,899,5055"/>
+<area shape="rect" id="node150" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="740,5079,916,5105"/>
+<area shape="rect" id="node159" href="$ad7616_8h.html#a95be394fec3468f9125bf4547892241b" title="Read from device in parallel mode. Enter register mode to read/write registers." alt="" coords="467,924,666,951"/>
+<area shape="rect" id="node160" href="$spi__engine_8h.html#a3851f39c90fdbfbd294eee58a4def795" title="Initialize the SPI engine&#39;s offload module." alt="" coords="742,721,914,748"/>
+<area shape="rect" id="node161" href="$ad463x_8h.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="495,620,638,647"/>
+<area shape="rect" id="node163" href="$ad469x_8h.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="455,721,679,748"/>
+<area shape="rect" id="node164" href="$ad469x_8h.html#a92cd606b28fd68b3a2c52717552818df" title="Read from device. Enter register mode to read/write registers." alt="" coords="495,823,638,849"/>
+<area shape="rect" id="node166" href="$ad738x_8h.html#a7e9ed97589f47833975ca0d0010ab31b" title="Read from device. Enter register mode to read/write registers." alt="" coords="495,671,638,697"/>
+<area shape="rect" id="node168" href="$adaq7980_8h.html#a1d04d6c8c5b30c8f739bb4ed0f7deecd" title="Read from device. Enter register mode to read/write registers." alt="" coords="495,873,638,900"/>
+<area shape="rect" id="node170" href="$ad400x__fmcz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="539,772,594,799"/>
+<area shape="rect" id="node162" href="$ad463x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="271,595,326,621"/>
+<area shape="rect" id="node165" href="$ad469x_8h.html#ad920a4e940cf6f64bfa4613e02a598fe" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="213,823,385,849"/>
+<area shape="rect" id="node167" href="$ad738x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="271,671,326,697"/>
+<area shape="rect" id="node169" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="271,949,326,976"/>
+<area shape="rect" id="node172" href="$ad9081_2src_2app__jesd_8h.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="774,1025,882,1052"/>
+<area shape="rect" id="node177" href="$chibios__gpio_8c.html#a1f221955a82150b9a40bf4ae504407f8" title="Get the value of an optional GPIO." alt="" coords="733,5509,923,5536"/>
+<area shape="rect" id="node191" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="449,1481,684,1508"/>
+<area shape="rect" id="node195" href="$linux__gpio_8c.html#ace92039abbc730d6743eeec20f20f0e0" title="Get the value of an optional GPIO." alt="" coords="739,5965,917,5992"/>
+<area shape="rect" id="node199" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="748,6117,908,6144"/>
+<area shape="rect" id="node202" href="$ltc3337_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,6219,908,6245"/>
+<area shape="rect" id="node205" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,6345,908,6372"/>
+<area shape="rect" id="node209" href="$max11205pmb1_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="757,6523,899,6549"/>
+<area shape="rect" id="node211" href="$max11205pmb1_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="748,6573,908,6600"/>
+<area shape="rect" id="node214" href="$max14906_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,1912,638,1939"/>
+<area shape="rect" id="node217" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,1861,908,1888"/>
+<area shape="rect" id="node219" href="$max14914_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,6741,908,6768"/>
+<area shape="rect" id="node221" href="$max14916_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,6792,638,6819"/>
+<area shape="rect" id="node224" href="$max14916_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,6843,908,6869"/>
+<area shape="rect" id="node226" href="$max14919_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,6960,908,6987"/>
+<area shape="rect" id="node228" href="$max22190_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,7011,638,7037"/>
+<area shape="rect" id="node230" href="$max22190_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,7061,908,7088"/>
+<area shape="rect" id="node232" href="$max22196_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,7112,638,7139"/>
+<area shape="rect" id="node235" href="$max22196_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,7163,908,7189"/>
+<area shape="rect" id="node237" href="$max22200_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="495,7280,638,7307"/>
+<area shape="rect" id="node240" href="$max22200_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,7331,908,7357"/>
+<area shape="rect" id="node246" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="748,7549,908,7576"/>
+<area shape="rect" id="node252" href="$max32650_2maxim__gpio_8c.html#ae40e108e2abda6d969f82b25610ac3b9" title="Get the value of an optional GPIO." alt="" coords="741,7752,915,7779"/>
+<area shape="rect" id="node260" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="801,8056,855,8083"/>
+<area shape="rect" id="node263" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="766,1456,890,1483"/>
+<area shape="rect" id="node264" href="$no__os__pwm_8c.html#aa308736af8784447c2d2646bd980f52f" title="Initialize the PWM peripheral." alt="" coords="765,1253,891,1280"/>
+<area shape="rect" id="node267" href="$no__os__timer_8c.html#a5b7907bf19cee0c54acd61ca161fcca9" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="763,1405,893,1432"/>
+<area shape="rect" id="node265" href="$adaq7980_8h.html#a0db55892937414f2d5dc84a14fd89677" title=" " alt="" coords="502,1253,631,1280"/>
+</map>

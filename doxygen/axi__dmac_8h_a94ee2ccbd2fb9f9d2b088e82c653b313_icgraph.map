@@ -1,0 +1,12 @@
+<map id="axi_dmac_transfer_start" name="axi_dmac_transfer_start">
+<area shape="rect" id="node1" title=" " alt="" coords="355,132,535,159"/>
+<area shape="rect" id="node2" href="$ad7616_8h.html#a95be394fec3468f9125bf4547892241b" title="Read from device in parallel mode. Enter register mode to read/write registers." alt="" coords="108,5,307,32"/>
+<area shape="rect" id="node4" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="169,56,246,83"/>
+<area shape="rect" id="node6" href="$dma__example_8h.html#a0ecbc6b48b2626c3e722bbe55440bdaa" title="DMA example main execution." alt="" coords="130,107,285,133"/>
+<area shape="rect" id="node8" href="$iio__axi__adc_8c.html#aca23a80aa2cbb5c102d031473a0d9189" title="Update active channels." alt="" coords="126,157,289,184"/>
+<area shape="rect" id="node9" href="$iio__axi__dac_8c.html#a5391d278882dec3aab5b3caccbb8fdc7" title="Update active channels." alt="" coords="122,208,293,235"/>
+<area shape="rect" id="node10" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="180,259,235,285"/>
+<area shape="rect" id="node3" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node5" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node7" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,107,60,133"/>
+</map>

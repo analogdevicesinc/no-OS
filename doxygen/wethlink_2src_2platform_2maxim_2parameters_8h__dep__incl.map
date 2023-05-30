@@ -1,0 +1,36 @@
+<map id="projects/wethlink/src/platform/maxim/parameters.h" name="projects/wethlink/src/platform/maxim/parameters.h">
+<area shape="rect" id="node1" title=" " alt="" coords="2525,5,2748,47"/>
+<area shape="rect" id="node2" href="$altera__gpio_8c.html" title="Implementation of Altera GPIO Generic Driver." alt="" coords="5,102,175,143"/>
+<area shape="rect" id="node3" href="$altera__spi_8c.html" title="Implementation of Altera SPI Generic Driver." alt="" coords="199,102,368,143"/>
+<area shape="rect" id="node4" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8h.html" title="Defines common data to be used by the STOUT project." alt="" coords="392,102,623,143"/>
+<area shape="rect" id="node6" href="$interface_8h.html" title="User interface interface file." alt="" coords="647,102,845,143"/>
+<area shape="rect" id="node9" href="$self__test_8c.html" title="Relay implementation file." alt="" coords="1086,206,1278,247"/>
+<area shape="rect" id="node11" href="$ad-acevsecrdset-sl_2src_2main_8c.html" title="Main file for the stout project. This includes general initialization routines for the uC." alt="" coords="1340,102,1525,143"/>
+<area shape="rect" id="node12" href="$pilot_8h.html" title="Pilot phase interface file." alt="" coords="869,102,1055,143"/>
+<area shape="rect" id="node13" href="$supply_8h.html" title="Power supply phase interface file." alt="" coords="1131,102,1316,143"/>
+<area shape="rect" id="node15" href="$ad9371_2src_2app_2headless_8c.html" title="Implementation of Main Function." alt="" coords="1550,102,1699,143"/>
+<area shape="rect" id="node16" href="$ad9467__fmc_8c.html" title="Implementation of the program&#39;s main function." alt="" coords="1723,102,1873,143"/>
+<area shape="rect" id="node17" href="$ad9656__fmc_8c.html" title="Implementation of Main Function." alt="" coords="1897,102,2065,143"/>
+<area shape="rect" id="node18" href="$adrv9001_2src_2app_2headless_8c.html" title="adrv9002 main project file." alt="" coords="2089,102,2251,143"/>
+<area shape="rect" id="node19" href="$adrv9009_2src_2app_2app__clocking_8c.html" title="Clock setup and initialization routines." alt="" coords="2275,102,2438,143"/>
+<area shape="rect" id="node20" href="$adrv9009_2src_2app_2app__jesd_8c.html" title="JESD setup and initialization routines." alt="" coords="2462,102,2625,143"/>
+<area shape="rect" id="node21" href="$app__talise_8c.html" title="Talise initialization and control routines." alt="" coords="2649,102,2811,143"/>
+<area shape="rect" id="node22" href="$app__transceiver_8c.html" title="FPGA XCVR setup and initialization routines." alt="" coords="2835,102,3003,143"/>
+<area shape="rect" id="node23" href="$adrv9009_2src_2app_2headless_8c.html" title="Contains example code for user integration with their application." alt="" coords="3027,102,3190,143"/>
+<area shape="rect" id="node24" href="$adrv902x_2src_2common_2common__data_8c.html" title="Defines common data to be used by adrv902x examples." alt="" coords="3215,102,3405,143"/>
+<area shape="rect" id="node25" href="$adrv902x_2src_2common_2hal_2no__os__platform_8c.html" title=" " alt="" coords="3429,102,3652,143"/>
+<area shape="rect" id="node26" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html" title="Basic example for the adrv902x project." alt="" coords="3677,95,3869,151"/>
+<area shape="rect" id="node27" href="$dma__example_8c.html" title="DMA example for the adrv902x project." alt="" coords="3893,95,4079,151"/>
+<area shape="rect" id="node28" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example for the adrv902x project." alt="" coords="4104,95,4279,151"/>
+<area shape="rect" id="node29" href="$fmcdaq3_8c.html" title="Implementation of Main Function." alt="" coords="4303,102,4461,143"/>
+<area shape="rect" id="node30" href="$fmcjesdadc1_8c.html" title="Implementation of Main Function." alt="" coords="4486,102,4657,143"/>
+<area shape="rect" id="node31" href="$led_8c.html" title=" " alt="" coords="4681,102,4838,143"/>
+<area shape="rect" id="node32" href="$wethlink_2src_2app_2main_8c.html" title=" " alt="" coords="4862,102,5019,143"/>
+<area shape="rect" id="node33" href="$net_8c.html" title=" " alt="" coords="5043,102,5201,143"/>
+<area shape="rect" id="node34" href="$wethlink_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="5225,102,5448,143"/>
+<area shape="rect" id="node5" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8c.html" title="Defines common data to be used by the STOUT project." alt="" coords="179,206,409,247"/>
+<area shape="rect" id="node7" href="$interface_8c.html" title="User interface implementation file." alt="" coords="433,206,629,247"/>
+<area shape="rect" id="node8" href="$pilot_8c.html" title="Pilot phase implementation file." alt="" coords="653,206,839,247"/>
+<area shape="rect" id="node10" href="$state__machine_8c.html" title="STOUT state machine implementation file." alt="" coords="863,199,1061,255"/>
+<area shape="rect" id="node14" href="$supply_8c.html" title="Power supply phase implementation file." alt="" coords="1303,206,1488,247"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="no_os_dma_default_handler_data" name="no_os_dma_default_handler_data">
+<area shape="rect" id="node1" title="IRQ parameter for the default inter transfer handler." alt="" coords="5,29,247,55"/>
+<area shape="rect" id="node2" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="165,141,284,168"/>
+<area shape="rect" id="node4" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="290,231,423,257"/>
+<area shape="rect" id="node3" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="271,29,395,55"/>
+<area shape="rect" id="node5" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="309,141,498,168"/>
+<area shape="rect" id="node6" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="522,141,671,168"/>
+<area shape="rect" id="node7" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="508,29,685,55"/>
+</map>

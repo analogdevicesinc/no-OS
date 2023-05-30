@@ -1,0 +1,11 @@
+<map id="net_context" name="net_context">
+<area shape="rect" id="node1" title=" " alt="" coords="302,273,401,300"/>
+<area shape="rect" id="node2" href="$structadin1300__desc.html" title=" " alt="" coords="292,184,411,211"/>
+<area shape="rect" id="node3" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="237,95,375,121"/>
+<area shape="rect" id="node7" href="$structmax24287__desc.html" title=" " alt="" coords="139,184,267,211"/>
+<area shape="rect" id="node4" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="241,5,371,32"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="33,95,165,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,32"/>
+<area shape="rect" id="node8" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="434,184,583,211"/>
+<area shape="rect" id="node9" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="420,95,597,121"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="drivers/adc/adm1177/adm1177.h" name="drivers/adc/adm1177/adm1177.h">
+<area shape="rect" id="node1" title=" " alt="" coords="85,5,244,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="129,169,200,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="24,95,91,121"/>
+<area shape="rect" id="node4" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="115,95,214,121"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="238,95,338,121"/>
+<area shape="rect" id="node8" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="362,95,473,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="238,169,309,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="334,169,416,196"/>
+</map>

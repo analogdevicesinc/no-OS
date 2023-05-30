@@ -1,0 +1,4 @@
+<map id="ad469x_read_data" name="ad469x_read_data">
+<area shape="rect" id="node1" title="Read from device. Enter register mode to read/write registers." alt="" coords="225,5,368,32"/>
+<area shape="rect" id="node2" href="$ad469x_8h.html#ad920a4e940cf6f64bfa4613e02a598fe" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="5,5,177,32"/>
+</map>

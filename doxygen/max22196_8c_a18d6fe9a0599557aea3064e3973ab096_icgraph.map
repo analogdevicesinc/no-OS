@@ -1,0 +1,9 @@
+<map id="max22196_set_chan_cnt" name="max22196_set_chan_cnt">
+<area shape="rect" id="node1" title="MAX22196 channel counter set function" alt="" coords="819,31,1001,57"/>
+<area shape="rect" id="node2" href="$max22196_8h.html#ad57b479304a72f95be4f15b6798935c1" title="Free the resources allocated during init." alt="" coords="623,31,771,57"/>
+<area shape="rect" id="node3" href="$iio__max22196_8h.html#adbe2d80904377772075eaa50878f1d92" title="Free resources allocated by the init function." alt="" coords="404,5,575,32"/>
+<area shape="rect" id="node5" href="$max22196_8h.html#abb69d82911101d8da2dd77ac3f536462" title="Initialize and configure the MAX22196 device." alt="" coords="430,56,549,83"/>
+<area shape="rect" id="node4" href="$max22196_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+<area shape="rect" id="node6" href="$max22196_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="196,56,356,83"/>
+<area shape="rect" id="node7" href="$iio__max22196_8h.html#ac557d98d4738856040072e5e2491768b" title="Initializes the MAX22196 IIO descriptor." alt="" coords="205,107,347,133"/>
+</map>

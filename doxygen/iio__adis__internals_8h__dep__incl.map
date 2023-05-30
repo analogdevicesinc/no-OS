@@ -1,0 +1,12 @@
+<map id="drivers/imu/iio_adis_internals.h" name="drivers/imu/iio_adis_internals.h">
+<area shape="rect" id="node1" title="Internal include file used for specific chip IIO driver definitions which are not useful for the user..." alt="" coords="444,5,595,47"/>
+<area shape="rect" id="node2" href="$iio__adis_8c.html" title="Implementation of iio_adis.c." alt="" coords="5,95,167,121"/>
+<area shape="rect" id="node3" href="$iio__adis1646x_8h.html" title="Implementation of iio_adis1646x.h." alt="" coords="191,95,394,121"/>
+<area shape="rect" id="node5" href="$iio__adis1647x_8h.html" title="Implementation of iio_adis1647x.h." alt="" coords="418,95,621,121"/>
+<area shape="rect" id="node7" href="$iio__adis1650x_8h.html" title="Implementation of iio_adis1650x.h." alt="" coords="645,95,847,121"/>
+<area shape="rect" id="node9" href="$iio__adis1657x_8h.html" title="Implementation of iio_adis1657x.h." alt="" coords="871,95,1074,121"/>
+<area shape="rect" id="node4" href="$iio__adis1646x_8c.html" title="Implementation of iio_adis1646x.c." alt="" coords="192,169,393,196"/>
+<area shape="rect" id="node6" href="$iio__adis1647x_8c.html" title="Implementation of iio_adis1647x.c." alt="" coords="419,169,620,196"/>
+<area shape="rect" id="node8" href="$iio__adis1650x_8c.html" title="Implementation of iio_adis1650x.c." alt="" coords="645,169,847,196"/>
+<area shape="rect" id="node10" href="$iio__adis1657x_8c.html" title="Implementation of iio_adis1657x.c." alt="" coords="872,169,1073,196"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="drivers/platform/maxim/max32665/maxim_dma.h" name="drivers/platform/maxim/max32665/maxim_dma.h">
+<area shape="rect" id="node1" title="Maxim platform specific header DMA API." alt="" coords="215,5,409,47"/>
+<area shape="rect" id="node2" href="$max32665_2maxim__dma_8c.html" title="Maxim platform specific implementation DMA API." alt="" coords="5,95,197,136"/>
+<area shape="rect" id="node3" href="$max32665_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="222,95,402,136"/>
+<area shape="rect" id="node4" href="$max32665_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="426,95,609,136"/>
+</map>

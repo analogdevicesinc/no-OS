@@ -1,0 +1,13 @@
+<map id="no_os_irq_trigger_level_set" name="no_os_irq_trigger_level_set">
+<area shape="rect" id="node1" title="Set interrupt trigger level." alt="" coords="599,81,799,108"/>
+<area shape="rect" id="node2" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="391,5,551,32"/>
+<area shape="rect" id="node3" href="$iio__trigger_8h.html#ac463acd613c3864b48d7c5d8671d7bef" title="Initialize hardware trigger." alt="" coords="410,56,531,83"/>
+<area shape="rect" id="node9" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="443,107,498,133"/>
+<area shape="rect" id="node10" href="$net_8h.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="435,157,506,184"/>
+<area shape="rect" id="node4" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,5,343,32"/>
+<area shape="rect" id="node5" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="129,56,321,83"/>
+<area shape="rect" id="node7" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="164,107,287,133"/>
+<area shape="rect" id="node6" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node8" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,107,60,133"/>
+<area shape="rect" id="node11" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="198,157,253,184"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="self_test_supply" name="self_test_supply">
+<area shape="rect" id="node1" title="Startup test for power supply." alt="" coords="453,31,581,57"/>
+<area shape="rect" id="node2" href="$self__test_8h.html#a793eb94846dc445e72d969b182ce1f7f" title="Startup test." alt="" coords="275,5,405,32"/>
+<area shape="rect" id="node3" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,31,227,57"/>
+<area shape="rect" id="node4" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,31,60,57"/>
+</map>

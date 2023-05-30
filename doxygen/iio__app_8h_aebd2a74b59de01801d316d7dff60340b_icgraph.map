@@ -1,0 +1,12 @@
+<map id="iio_app_init" name="iio_app_init">
+<area shape="rect" id="node1" title=" " alt="" coords="391,132,488,159"/>
+<area shape="rect" id="node2" href="$ad738x-st_2src_2examples_2iio_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,5,297,32"/>
+<area shape="rect" id="node3" href="$iio__lwip__example_8h.html#a3eaab21567975f345a978fb8dd807bbc" title="IIO example main execution." alt="" coords="137,56,313,83"/>
+<area shape="rect" id="node5" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,107,343,133"/>
+<area shape="rect" id="node6" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="129,157,321,184"/>
+<area shape="rect" id="node8" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="198,208,253,235"/>
+<area shape="rect" id="node9" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="164,259,287,285"/>
+<area shape="rect" id="node4" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node7" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,157,60,184"/>
+<area shape="rect" id="node10" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,259,60,285"/>
+</map>

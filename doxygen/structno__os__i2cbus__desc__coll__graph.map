@@ -1,0 +1,4 @@
+<map id="no_os_i2cbus_desc" name="no_os_i2cbus_desc">
+<area shape="rect" id="node1" title="Structure holding I2C bus descriptor." alt="" coords="21,95,168,121"/>
+<area shape="rect" id="node2" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+</map>

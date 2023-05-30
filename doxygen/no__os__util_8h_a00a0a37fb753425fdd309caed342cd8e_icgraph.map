@@ -1,0 +1,15 @@
+<map id="no_os_div_s64_rem" name="no_os_div_s64_rem">
+<area shape="rect" id="node1" title=" " alt="" coords="461,183,612,209"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="229,5,413,32"/>
+<area shape="rect" id="node4" href="$adxl313_8h.html#abe3973b9472473f33e98502f802b7241" title=" " alt="" coords="238,56,405,83"/>
+<area shape="rect" id="node6" href="$adxl313_8h.html#aba7db8244b208799c405fe572044c926" title=" " alt="" coords="255,107,387,133"/>
+<area shape="rect" id="node7" href="$adxl355_8h.html#a3dfc3d88cc09e28b63a815471ebb25c6" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="238,157,405,184"/>
+<area shape="rect" id="node9" href="$adxl355_8h.html#ab2cca702bfd799f169c4c82cb13ecbb8" title="Reads the raw temperature data and converts it to millidegrees Celsius." alt="" coords="250,208,393,235"/>
+<area shape="rect" id="node10" href="$adxl355_8h.html#a31457c441689b591b9177bc6e4d877d0" title="Reads the raw output data of each axis and converts it to g." alt="" coords="255,259,387,285"/>
+<area shape="rect" id="node11" href="$iio_8h.html#a5de19adb6399a7b8b228beba45f1e739" title=" " alt="" coords="255,309,387,336"/>
+<area shape="rect" id="node12" href="$max31855_8h.html#abdca58ca6d3ed48396082f3ea8ed60ed" title="Read thermocouple and internal temperatures (converted in deg. C)" alt="" coords="237,360,405,387"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,5,181,32"/>
+<area shape="rect" id="node5" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="13,81,173,108"/>
+<area shape="rect" id="node8" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,208,181,235"/>
+<area shape="rect" id="node13" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="13,360,173,387"/>
+</map>

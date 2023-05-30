@@ -1,0 +1,12 @@
+<map id="max_spi_state" name="max_spi_state">
+<area shape="rect" id="node1" title=" " alt="" coords="33,297,151,323"/>
+<area shape="rect" id="node2" href="$structmax__spi__init__param.html" title="Maxim specific SPI initialization parameters." alt="" coords="15,184,169,211"/>
+<area shape="rect" id="node3" href="$structno__os__dma__init__param.html" title="Initialization parameter for the DMA controller." alt="" coords="5,95,179,121"/>
+<area shape="rect" id="node4" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="61,5,251,32"/>
+<area shape="rect" id="node5" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="229,184,363,211"/>
+<area shape="rect" id="node7" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="175,297,417,323"/>
+<area shape="rect" id="node6" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="366,409,485,436"/>
+<area shape="rect" id="node8" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="553,297,677,323"/>
+<area shape="rect" id="node9" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="341,95,491,121"/>
+<area shape="rect" id="node10" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="327,5,505,32"/>
+</map>

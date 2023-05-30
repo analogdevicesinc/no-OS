@@ -1,0 +1,6 @@
+<map id="no_os_list_remove" name="no_os_list_remove">
+<area shape="rect" id="node1" title=" " alt="" coords="408,31,552,57"/>
+<area shape="rect" id="node2" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="5,5,129,32"/>
+<area shape="rect" id="node3" href="$no__os__dma_8c.html#a935f01d6ca284b7605900f40ca188748" title="Remove resources allocated for the DMA controller." alt="" coords="192,31,345,57"/>
+<area shape="rect" id="node4" href="$xilinx__gpio__irq_8c.html#a607992ac5707856c00e5c9ae436269e9" title="Remove the GPIO IRQ controller." alt="" coords="177,81,360,108"/>
+</map>

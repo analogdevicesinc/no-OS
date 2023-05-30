@@ -1,0 +1,16 @@
+<map id="no_os_irq_ctrl_init" name="no_os_irq_ctrl_init">
+<area shape="rect" id="node1" title="Initialize the IRQ interrupts." alt="" coords="496,208,636,235"/>
+<area shape="rect" id="node2" href="$max11205pmb1_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="251,5,411,32"/>
+<area shape="rect" id="node3" href="$max11205pmb1_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="259,56,402,83"/>
+<area shape="rect" id="node4" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="213,107,448,133"/>
+<area shape="rect" id="node5" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="235,157,427,184"/>
+<area shape="rect" id="node7" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="249,208,412,235"/>
+<area shape="rect" id="node9" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="303,259,358,285"/>
+<area shape="rect" id="node10" href="$net_8h.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="295,309,366,336"/>
+<area shape="rect" id="node12" href="$stm32__tdm_8h.html#a056ca840bde6d6da60fc98ba6a3cdab5" title="Initialize the TDM communication peripheral." alt="" coords="269,360,393,387"/>
+<area shape="rect" id="node13" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="269,411,392,437"/>
+<area shape="rect" id="node6" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="58,157,113,184"/>
+<area shape="rect" id="node8" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,208,165,235"/>
+<area shape="rect" id="node11" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="58,309,113,336"/>
+<area shape="rect" id="node14" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="58,411,113,437"/>
+</map>

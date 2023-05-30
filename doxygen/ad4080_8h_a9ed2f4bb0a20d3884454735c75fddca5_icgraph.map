@@ -1,0 +1,38 @@
+<map id="ad4080_read" name="ad4080_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="695,464,801,491"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#af6d901569db1283a0ba31b50ab245f51" title="Get Address Ascension." alt="" coords="463,5,626,32"/>
+<area shape="rect" id="node3" href="$ad4080_8h.html#a934739ac5391536720f161a205903a4a" title="Get AD4080 Analog/Digital LDO." alt="" coords="467,57,623,98"/>
+<area shape="rect" id="node4" href="$ad4080_8h.html#ac84813bbcf35df81f46f009e34eced81" title="Get AD4080 LVDS/SPI Lane Control." alt="" coords="467,122,622,163"/>
+<area shape="rect" id="node5" href="$ad4080_8h.html#ab6cdb3e1a285df21bdf319b0440535a4" title="Get AD4080 Data Interface Configuration." alt="" coords="459,187,631,229"/>
+<area shape="rect" id="node6" href="$ad4080_8h.html#a952bcc5af42af7ca1a123297e8b0e525" title="Get Set AD4080 Conversion Data FIFO Mode." alt="" coords="459,253,630,280"/>
+<area shape="rect" id="node7" href="$ad4080_8h.html#a8c87b27855a6a741421f2406c0e7066f" title="Get AD4080 FIFO Watermark." alt="" coords="443,304,647,331"/>
+<area shape="rect" id="node8" href="$ad4080_8h.html#a11db511da3e7846139046e729aacf470" title="Get AD4080 Output Pattern." alt="" coords="455,355,635,381"/>
+<area shape="rect" id="node9" href="$ad4080_8h.html#acaa7cec8ed2559559481f53fc7bc7315" title="Get AD4080 Interface LDO." alt="" coords="456,405,633,432"/>
+<area shape="rect" id="node10" href="$ad4080_8h.html#a98d979166a8e3afc3a9dedb982b8e258" title="Get AD4080 Interface clock periods from CNV rising edge." alt="" coords="463,457,626,498"/>
+<area shape="rect" id="node11" href="$ad4080_8h.html#a6f5dba80e6d0da8d3322197bc8acefcd" title="Get AD4080 LVDS CNV Clock Mode." alt="" coords="463,522,626,563"/>
+<area shape="rect" id="node12" href="$ad4080_8h.html#ab0d6b52a89b6a704e3c010521ec7d161" title="Get AD4080 LVDS Self Clock Mode." alt="" coords="463,587,626,629"/>
+<area shape="rect" id="node13" href="$ad4080_8h.html#a8a94417a4a242a3d6d0ac3367d547231" title="Get AD4080 LVDS Differential Output Voltage." alt="" coords="463,653,626,680"/>
+<area shape="rect" id="node14" href="$ad4080_8h.html#a134ef7e5761932f014cea1b578c4306a" title="Get Operation Mode." alt="" coords="462,704,627,731"/>
+<area shape="rect" id="node15" href="$ad4080_8h.html#a76298011b838571948c842c94b93fbb3" title="Get Short Instruction." alt="" coords="457,755,632,781"/>
+<area shape="rect" id="node16" href="$ad4080_8h.html#af8c38ebcef521c9a7f0df3b377c790e9" title="Get Single/Streaming Mode." alt="" coords="455,805,635,832"/>
+<area shape="rect" id="node17" href="$ad4080_8h.html#aa1eda9f52474a7e6bbc693319846cc7b" title="Get Strict Register Access." alt="" coords="461,857,628,898"/>
+<area shape="rect" id="node18" href="$ad4080_8h.html#a728f941826fe1b0ffe27221470f0e193" title="Update specific register bits." alt="" coords="468,923,621,949"/>
+<area shape="rect" id="node19" href="$ad4080_8h.html#a6a704e6558f7114804d76e0ddf0085b2" title="Set Address Ascension." alt="" coords="224,481,387,508"/>
+<area shape="rect" id="node20" href="$ad4080_8h.html#a964bdf51c7d6d7763ceee3389d063b65" title="Set AD4080 Analog/Digital LDO." alt="" coords="228,533,383,574"/>
+<area shape="rect" id="node21" href="$ad4080_8h.html#afd5b47c0c4bc60a62a10c73124642cc1" title="Set AD4080 LVDS/SPI Lane Control." alt="" coords="229,598,382,639"/>
+<area shape="rect" id="node23" href="$ad4080_8h.html#ab11b11ff63aa576788f723392cacfe0b" title="Set AD4080 Data Interface Configuration." alt="" coords="220,663,391,705"/>
+<area shape="rect" id="node24" href="$ad4080_8h.html#a646c430d79d7ef53fc6354d93524b2be" title="Set AD4080 Conversion Data FIFO Mode." alt="" coords="221,729,390,756"/>
+<area shape="rect" id="node25" href="$ad4080_8h.html#a9f54799720b940bf32d79f1401d36f74" title="Set AD4080 Output Pattern." alt="" coords="216,780,395,807"/>
+<area shape="rect" id="node26" href="$ad4080_8h.html#a63069a89cf413fcca6318d1f8348f551" title="Set AD4080 Interface LDO." alt="" coords="217,831,393,857"/>
+<area shape="rect" id="node27" href="$ad4080_8h.html#a6f3da0885a402914fbf6782651dd5164" title="Set AD4080 Interface clock periods from CNV rising edge." alt="" coords="225,882,386,923"/>
+<area shape="rect" id="node28" href="$ad4080_8h.html#a98a6de8443361651e56698a384465145" title="Set AD4080 LVDS CNV Clock Mode." alt="" coords="225,947,386,989"/>
+<area shape="rect" id="node29" href="$ad4080_8h.html#a6d7b938c83287bcdd4dca06ca3a6a21b" title="Set AD4080 LVDS Self Clock Mode." alt="" coords="224,1013,387,1054"/>
+<area shape="rect" id="node30" href="$ad4080_8h.html#a085cb9017c2ccd27624d05a35b9de27d" title="Set AD4080 LVDS Differential Output Voltage." alt="" coords="224,1079,387,1105"/>
+<area shape="rect" id="node31" href="$ad4080_8h.html#a1be5d09077b0e9f052586e6c34493617" title="Set Operation Mode." alt="" coords="223,1129,387,1156"/>
+<area shape="rect" id="node32" href="$ad4080_8h.html#a62b9dac8804057cc877d94656738a144" title="Set Short Instruction." alt="" coords="219,1180,392,1207"/>
+<area shape="rect" id="node34" href="$ad4080_8h.html#a3e9051eee1f798e76d98a16c8939cea9" title="Set Single/Streaming Mode." alt="" coords="216,1231,395,1257"/>
+<area shape="rect" id="node35" href="$ad4080_8h.html#a2c0489fb911a4c42eb2cd972758972d1" title="Set Strict Register Access." alt="" coords="223,1282,388,1323"/>
+<area shape="rect" id="node36" href="$ad4080_8h.html#a8b25a0d8ebbc3ff7e6cd6e61ed877cdb" title="Software reset the device." alt="" coords="235,1348,376,1375"/>
+<area shape="rect" id="node22" href="$ad4080_8h.html#a39a7f7a31ecbd353673ef4094dca02e4" title="Configure the data interface during initialization." alt="" coords="5,889,168,916"/>
+<area shape="rect" id="node33" href="$ad4080_8h.html#a668ebef8b83d588a3a0b3a97fd2a4708" title="Configure the config SPI interface during initialization." alt="" coords="5,1223,168,1265"/>
+</map>

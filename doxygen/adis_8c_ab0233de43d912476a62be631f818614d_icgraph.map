@@ -1,0 +1,5 @@
+<map id="adis_write_burst32" name="adis_write_burst32">
+<area shape="rect" id="node1" title="Write burst32 enable bit value." alt="" coords="255,31,400,57"/>
+<area shape="rect" id="node2" href="$adis1657x_8c.html#a66a1ce0fd8d8547943c8007c8f15a7a7" title="Read burst data." alt="" coords="5,5,207,32"/>
+<area shape="rect" id="node3" href="$adis_8h.html#a1af882def39ced5be5538e266efddf9f" title="Read burst data." alt="" coords="25,56,187,83"/>
+</map>

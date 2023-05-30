@@ -1,0 +1,12 @@
+<map id="no_os_irq_set_priority" name="no_os_irq_set_priority">
+<area shape="rect" id="node1" title="Set the priority for an interrupt." alt="" coords="391,132,556,159"/>
+<area shape="rect" id="node2" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="145,5,305,32"/>
+<area shape="rect" id="node3" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,56,343,83"/>
+<area shape="rect" id="node4" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="129,107,321,133"/>
+<area shape="rect" id="node6" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="198,157,253,184"/>
+<area shape="rect" id="node7" href="$net_8h.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="190,208,261,235"/>
+<area shape="rect" id="node9" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="164,259,287,285"/>
+<area shape="rect" id="node5" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,107,60,133"/>
+<area shape="rect" id="node8" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,208,60,235"/>
+<area shape="rect" id="node10" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,259,60,285"/>
+</map>

@@ -1,0 +1,23 @@
+<map id="projects/swiot1l/src/platform/platform_includes.h" name="projects/swiot1l/src/platform/platform_includes.h">
+<area shape="rect" id="node1" title="Includes used by the swiot1l project." alt="" coords="603,5,818,47"/>
+<area shape="rect" id="node2" href="$swiot1l_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by the swiot1l project." alt="" coords="418,95,577,121"/>
+<area shape="rect" id="node9" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="935,95,1017,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="181,169,285,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="309,169,416,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="440,169,555,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="579,169,685,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="710,169,823,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="5,169,157,196"/>
+<area shape="rect" id="node10" href="$iio_8h.html" title="Header file of iio." alt="" coords="899,169,949,196"/>
+<area shape="rect" id="node15" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="746,244,851,271"/>
+<area shape="rect" id="node18" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="1083,319,1179,345"/>
+<area shape="rect" id="node19" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="973,169,1083,196"/>
+<area shape="rect" id="node21" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="1158,244,1271,271"/>
+<area shape="rect" id="node11" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="876,244,969,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="551,393,633,420"/>
+<area shape="rect" id="node13" title=" " alt="" coords="949,393,1019,420"/>
+<area shape="rect" id="node14" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="837,319,1008,345"/>
+<area shape="rect" id="node16" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="629,319,763,345"/>
+<area shape="rect" id="node17" title=" " alt="" coords="661,393,731,420"/>
+<area shape="rect" id="node20" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="994,244,1062,271"/>
+</map>

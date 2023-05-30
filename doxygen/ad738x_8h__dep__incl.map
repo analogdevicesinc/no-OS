@@ -1,0 +1,9 @@
+<map id="drivers/adc/ad738x/ad738x.h" name="drivers/adc/ad738x/ad738x.h">
+<area shape="rect" id="node1" title="Header file for AD738x Driver." alt="" coords="287,5,433,47"/>
+<area shape="rect" id="node2" href="$ad738x_8c.html" title="Implementation of AD738x Driver." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$iio__ad738x_8h.html" title="Header file for AD738X IIO interface." alt="" coords="176,95,323,136"/>
+<area shape="rect" id="node4" href="$ad738x-st_2src_2examples_2iio_2iio__example_8c.html" title="IIO example header for eval&#45;ad738x project." alt="" coords="197,184,350,240"/>
+<area shape="rect" id="node5" href="$ad738x-st_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad738x examples." alt="" coords="398,95,613,136"/>
+<area shape="rect" id="node7" href="$ad738x__fmc_8c.html" title="Implementation of Main Function." alt="" coords="637,95,803,136"/>
+<area shape="rect" id="node6" href="$ad738x-st_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad738x examples." alt="" coords="398,191,613,233"/>
+</map>

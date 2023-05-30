@@ -1,0 +1,7 @@
+<map id="no_os_aducm_uart_desc" name="no_os_aducm_uart_desc">
+<area shape="rect" id="node1" title="Stores specific parameter needed by the UART driver for internal operations." alt="" coords="139,199,320,225"/>
+<area shape="rect" id="node2" href="$structno__os__op__desc.html" title="It stores the state of a operation." alt="" coords="5,95,125,121"/>
+<area shape="rect" id="node3" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="150,95,309,121"/>
+<area shape="rect" id="node4" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="333,95,483,121"/>
+<area shape="rect" id="node5" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="319,5,497,32"/>
+</map>

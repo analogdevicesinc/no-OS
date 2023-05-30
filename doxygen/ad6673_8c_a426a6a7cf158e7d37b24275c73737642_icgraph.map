@@ -1,0 +1,5 @@
+<map id="ad6673_jesd204b_set_frames" name="ad6673_jesd204b_set_frames">
+<area shape="rect" id="node1" title="Sets number of frames per multiframe (K)." alt="" coords="393,5,556,47"/>
+<area shape="rect" id="node2" href="$ad6673_8h.html#a98bd7b00060d18b6e58080966d2e5c64" title="Configures the JESD204B interface." alt="" coords="167,13,345,39"/>
+<area shape="rect" id="node3" href="$ad6673_8h.html#a9228c7d4c22253ce20062937317ccf98" title="Configures the device." alt="" coords="5,13,119,39"/>
+</map>

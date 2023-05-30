@@ -1,0 +1,4 @@
+<map id="no_os_timer_init" name="no_os_timer_init">
+<area shape="rect" id="node1" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="288,5,419,32"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="5,5,240,32"/>
+</map>

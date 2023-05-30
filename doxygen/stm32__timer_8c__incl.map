@@ -1,0 +1,14 @@
+<map id="drivers/platform/stm32/stm32_timer.c" name="drivers/platform/stm32/stm32_timer.c">
+<area shape="rect" id="node1" title="Implementation of stm32 timer driver." alt="" coords="196,5,368,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="180,169,251,196"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="129,95,197,121"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="5,95,105,121"/>
+<area shape="rect" id="node7" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="367,169,480,196"/>
+<area shape="rect" id="node8" href="$no__os__alloc_8h.html" title=" " alt="" coords="273,95,384,121"/>
+<area shape="rect" id="node10" href="$stm32__timer_8h.html" title="Header file for the stm32 timer driver." alt="" coords="460,95,576,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="388,244,459,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="14,169,97,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="275,169,342,196"/>
+<area shape="rect" id="node11" href="$stm32__hal_8h.html" title=" " alt="" coords="556,169,659,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="574,244,641,271"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="drivers/power/ltc3350/ltc3350.c" name="drivers/power/ltc3350/ltc3350.c">
+<area shape="rect" id="node1" title="Implementation of LTC3350 Driver." alt="" coords="253,5,416,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="84,244,155,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="448,244,519,271"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="650,95,718,121"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="339,169,439,196"/>
+<area shape="rect" id="node7" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="28,95,142,121"/>
+<area shape="rect" id="node8" href="$no__os__alloc_8h.html" title=" " alt="" coords="515,95,626,121"/>
+<area shape="rect" id="node10" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="70,169,169,196"/>
+<area shape="rect" id="node11" href="$ltc3350_8h.html" title=" " alt="" coords="238,95,321,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="341,244,424,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="565,169,632,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="244,169,315,196"/>
+</map>

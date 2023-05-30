@@ -1,0 +1,4 @@
+<map id="adis_init" name="adis_init">
+<area shape="rect" id="node1" title="Initialize adis device." alt="" coords="213,5,291,32"/>
+<area shape="rect" id="node2" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,5,165,32"/>
+</map>

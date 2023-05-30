@@ -1,0 +1,5 @@
+<map id="max_gpio_irq_param" name="max_gpio_irq_param">
+<area shape="rect" id="node1" title="Maxim platform specific GPIO irq extra param (optional for now)" alt="" coords="15,184,173,211"/>
+<area shape="rect" id="node2" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="19,95,169,121"/>
+<area shape="rect" id="node3" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,32"/>
+</map>

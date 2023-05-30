@@ -1,0 +1,20 @@
+<map id="projects/ad74413r/src/platform/stm32/parameters.c" name="projects/ad74413r/src/platform/stm32/parameters.c">
+<area shape="rect" id="node1" title="Definition of STM32 platform data used by ad74413r project." alt="" coords="277,5,494,47"/>
+<area shape="rect" id="node2" href="$ad74413r_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by ad74413r project." alt="" coords="331,95,440,121"/>
+<area shape="rect" id="node3" href="$stm32__hal_8h.html" title=" " alt="" coords="318,319,421,345"/>
+<area shape="rect" id="node5" href="$stm32__irq_8h.html" title="Header file for stm32 irq specifics." alt="" coords="477,244,576,271"/>
+<area shape="rect" id="node8" href="$stm32__spi_8h.html" title="Header file for the stm32 spi driver." alt="" coords="5,244,107,271"/>
+<area shape="rect" id="node10" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="131,244,242,271"/>
+<area shape="rect" id="node12" href="$stm32__uart_8h.html" title="Header file of UART driver for STM32." alt="" coords="601,244,709,271"/>
+<area shape="rect" id="node16" href="$stm32__uart__stdio_8h.html" title="Header file of stm32 UART driver stdout/stdin redirection." alt="" coords="619,169,765,196"/>
+<area shape="rect" id="node18" href="$stm32__gpio__irq_8h.html" title="Header file for stm32 gpio irq specifics." alt="" coords="318,244,453,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="336,393,403,420"/>
+<area shape="rect" id="node6" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="445,319,541,345"/>
+<area shape="rect" id="node7" title=" " alt="" coords="458,468,529,495"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="93,393,192,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="615,468,697,495"/>
+<area shape="rect" id="node13" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="731,319,837,345"/>
+<area shape="rect" id="node14" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="717,393,851,420"/>
+<area shape="rect" id="node15" title=" " alt="" coords="749,468,819,495"/>
+<area shape="rect" id="node17" title=" " alt="" coords="733,244,819,271"/>
+</map>

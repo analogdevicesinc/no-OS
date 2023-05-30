@@ -1,0 +1,5 @@
+<map id="adis_read_burst32" name="adis_read_burst32">
+<area shape="rect" id="node1" title="Read burst32 enable bit value." alt="" coords="208,35,349,61"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="7,5,158,32"/>
+<area shape="rect" id="node3" href="$iio__adis__internals_8h.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="5,57,160,98"/>
+</map>

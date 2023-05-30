@@ -1,0 +1,13 @@
+<map id="ad713x_spi_reg_write" name="ad713x_spi_reg_write">
+<area shape="rect" id="node1" title="Write to device." alt="" coords="608,351,772,377"/>
+<area shape="rect" id="node2" href="$ad713x_8h.html#a293d6298174f55ffeffa3649a9e661aa" title="SPI write to device using a mask." alt="" coords="381,245,560,272"/>
+<area shape="rect" id="node5" href="$cn0561_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,256,60,283"/>
+<area shape="rect" id="node3" href="$ad713x_8h.html#afe7b88477a788866018549d0fbd772e7" title="Enable/Disable CLKOUT output." alt="" coords="127,5,315,32"/>
+<area shape="rect" id="node4" href="$ad713x_8h.html#a9bde2318f0a6aae97235df92824770ca" title="Digital filter type selection for each channel." alt="" coords="129,56,312,83"/>
+<area shape="rect" id="node6" href="$ad713x_8h.html#ad4d91646cb5ae2811b0ce4dba1e81e05" title="DOUTx output format configuration." alt="" coords="142,107,299,149"/>
+<area shape="rect" id="node7" href="$ad713x_8h.html#a1104462843a912706f8fbc7dd71047f1" title="Magnitude and phase matching calibration clock delay enable for all channels at 2 clock delay...." alt="" coords="131,173,310,214"/>
+<area shape="rect" id="node8" href="$ad713x_8c.html#a982a923283f9d0494ae6f9d8c7debf2c" title="Change magnitude and phase calibration clock delay mode for a specific channel." alt="" coords="131,238,310,279"/>
+<area shape="rect" id="node9" href="$ad713x_8h.html#af1105e0368c71e013a517fa3959baf94" title="Enable/Disable reference gain correction." alt="" coords="108,304,333,331"/>
+<area shape="rect" id="node10" href="$ad713x_8h.html#a315e4a9808efd589b7637bfaf450a281" title="Device power mode control." alt="" coords="127,355,315,381"/>
+<area shape="rect" id="node11" href="$ad713x_8h.html#a8c081cd3183727ce3142bbf328cbcf95" title="Select the wideband filter bandwidth for a channel. The option is relative to ODR,..." alt="" coords="125,405,317,432"/>
+</map>

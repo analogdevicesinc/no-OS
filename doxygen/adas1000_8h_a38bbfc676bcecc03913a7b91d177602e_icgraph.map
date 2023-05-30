@@ -1,0 +1,7 @@
+<map id="adas1000_read" name="adas1000_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="405,56,527,83"/>
+<area shape="rect" id="node2" href="$adas1000_8h.html#a29248f239c75a2d43314d12b1fda1607" title="Reads the specified number of frames." alt="" coords="183,5,341,32"/>
+<area shape="rect" id="node3" href="$adas1000_8h.html#a8cfc29cb8ec02e4382c85c0586d6275f" title="Sets the frame rate." alt="" coords="167,56,357,83"/>
+<area shape="rect" id="node5" href="$adas1000_8h.html#a1b1ef3661bbdfd8ded985b12c60a7773" title="Selects which words are not included in a data frame." alt="" coords="177,107,347,149"/>
+<area shape="rect" id="node4" href="$adas1000_8h.html#a53655dc2232c9d893f208871217abcbf" title="Initializes the SPI communication with ADAS1000. The ADAS1000 is configured with the specified frame ..." alt="" coords="5,85,119,112"/>
+</map>
