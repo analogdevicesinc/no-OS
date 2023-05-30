@@ -1,0 +1,5 @@
+<map id="ad6676_spi_write" name="ad6676_spi_write">
+<area shape="rect" id="node1" title="SPI write to device." alt="" coords="232,31,368,57"/>
+<area shape="rect" id="node2" href="$ad6676_8h.html#a17ab1a8e6afdd9fa9a079f74feb46172" title="Set attenuation in decibels or disable attenuator." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node3" href="$ad6676_8h.html#aaeb3a0256ee71f85e46323132e739432" title="Perform an interface test." alt="" coords="43,56,146,83"/>
+</map>

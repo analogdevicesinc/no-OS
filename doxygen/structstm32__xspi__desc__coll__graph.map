@@ -1,0 +1,12 @@
+<map id="stm32_xspi_desc" name="stm32_xspi_desc">
+<area shape="rect" id="node1" title="stm32 platform specific XSPI descriptor." alt="" coords="153,320,288,347"/>
+<area shape="rect" id="node2" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="308,141,427,168"/>
+<area shape="rect" id="node3" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="339,320,580,347"/>
+<area shape="rect" id="node4" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="533,231,666,257"/>
+<area shape="rect" id="node5" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="690,141,879,168"/>
+<area shape="rect" id="node6" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="517,141,666,168"/>
+<area shape="rect" id="node7" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="503,29,680,55"/>
+<area shape="rect" id="node8" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="295,29,453,55"/>
+<area shape="rect" id="node9" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="65,29,189,55"/>
+<area shape="rect" id="node10" href="$structno__os__dma__xfer__desc.html" title="It&#39;s used to setup a generic DMA transfer." alt="" coords="5,231,172,257"/>
+</map>

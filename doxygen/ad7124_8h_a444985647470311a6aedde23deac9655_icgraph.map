@@ -1,0 +1,6 @@
+<map id="ad7124_wait_to_power_on" name="ad7124_wait_to_power_on">
+<area shape="rect" id="node1" title="Waits until the device finishes the power&#45;on reset operation." alt="" coords="428,5,623,32"/>
+<area shape="rect" id="node2" href="$ad7124_8h.html#abb99194477f1f288b13842d42dfb60bd" title="Resets the device." alt="" coords="269,5,380,32"/>
+<area shape="rect" id="node3" href="$ad7124_8h.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="108,5,221,32"/>
+<area shape="rect" id="node4" href="$ad7124-8pmdz_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,32"/>
+</map>

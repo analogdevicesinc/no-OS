@@ -1,0 +1,7 @@
+<map id="ad5460_set_gpio_config" name="ad5460_set_gpio_config">
+<area shape="rect" id="node1" title="Set the GPIO operation mode." alt="" coords="488,31,667,57"/>
+<area shape="rect" id="node2" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="261,5,393,32"/>
+<area shape="rect" id="node4" href="$channel__output__example_8h.html#ae839d5b557e7413ee71a7d30f7b5f8fa" title="Channel output example main execution." alt="" coords="213,56,440,83"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node5" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="58,56,113,83"/>
+</map>

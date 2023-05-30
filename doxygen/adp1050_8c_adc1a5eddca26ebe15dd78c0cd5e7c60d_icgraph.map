@@ -1,0 +1,5 @@
+<map id="adp1050_vout_value" name="adp1050_vout_value">
+<area shape="rect" id="node1" title="Set VOUT_COMMAND and VOUT_MAX values." alt="" coords="213,31,371,57"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#afc314ab80bc8f5e20356cf5ac09b12e4" title="Trim IIN(CS1 pin)/VIN(VF pin)/VOUT(VS pin)." alt="" coords="29,5,141,32"/>
+<area shape="rect" id="node3" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,56,165,83"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="projects/ad7091r8&#45;sdz/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c" name="projects/ad7091r8&#45;sdz/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO timer trigger example for eval&#45;ad7091r8&#45;sdz project." alt="" coords="276,5,475,76"/>
+<area shape="rect" id="node2" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8h.html" title="IIO timer trigger example header for ad7091r8&#45;sdz project." alt="" coords="5,124,212,151"/>
+<area shape="rect" id="node3" href="$iio__ad7091r8_8h.html" title="Header file of IIO AD7091R8 driver header file." alt="" coords="603,124,721,151"/>
+<area shape="rect" id="node12" title=" " alt="" coords="312,124,439,151"/>
+<area shape="rect" id="node13" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="475,124,556,151"/>
+<area shape="rect" id="node18" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="196,348,296,375"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="661,199,711,225"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="695,273,789,300"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="388,273,493,300"/>
+<area shape="rect" id="node6" title=" " alt="" coords="161,423,243,449"/>
+<area shape="rect" id="node7" title=" " alt="" coords="507,423,577,449"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="681,348,851,375"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="321,348,454,375"/>
+<area shape="rect" id="node11" title=" " alt="" coords="332,423,403,449"/>
+<area shape="rect" id="node14" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="575,273,671,300"/>
+<area shape="rect" id="node15" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="287,199,397,225"/>
+<area shape="rect" id="node17" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="472,199,585,225"/>
+<area shape="rect" id="node16" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="296,273,364,300"/>
+</map>

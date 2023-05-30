@@ -1,0 +1,15 @@
+<map id="drivers/motor/tmc7300/tmc7300.c" name="drivers/motor/tmc7300/tmc7300.c">
+<area shape="rect" id="node1" title="Source file for the TMC7300 driver." alt="" coords="246,5,417,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="71,319,142,345"/>
+<area shape="rect" id="node3" title=" " alt="" coords="488,319,559,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="204,319,286,345"/>
+<area shape="rect" id="node5" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="375,169,480,196"/>
+<area shape="rect" id="node7" href="$no__os__alloc_8h.html" title=" " alt="" coords="36,95,147,121"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="748,95,857,121"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="82,244,182,271"/>
+<area shape="rect" id="node12" href="$tmc7300_8h.html" title="Header file for the TMC7300 driver." alt="" coords="458,95,549,121"/>
+<area shape="rect" id="node6" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="257,244,390,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="81,169,148,196"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="768,169,836,196"/>
+<area shape="rect" id="node13" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="516,244,622,271"/>
+</map>

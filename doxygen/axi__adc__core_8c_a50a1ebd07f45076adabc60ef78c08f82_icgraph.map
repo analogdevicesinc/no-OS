@@ -1,0 +1,31 @@
+<map id="axi_adc_read" name="axi_adc_read">
+<area shape="rect" id="node1" title="AXI ADC Data read." alt="" coords="815,307,923,334"/>
+<area shape="rect" id="node2" href="$ad9265_8h.html#a1f67322e49a0c38b7834b7095af10578" title="ad9265_calibrate" alt="" coords="359,14,494,40"/>
+<area shape="rect" id="node5" href="$ad9361__conv_8c.html#a8470c5d87c88378877debec96221c63a" title=" " alt="" coords="585,256,748,283"/>
+<area shape="rect" id="node8" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="388,76,465,103"/>
+<area shape="rect" id="node10" href="$axi__adc__core_8h.html#a52f36bc7c6ddeedae6c52a7f53122c5f" title="Set input/output delay primitive for number of lines." alt="" coords="595,206,738,232"/>
+<area shape="rect" id="node13" href="$axi__adc__core_8h.html#ae7289bd14b9c458c2f0c250d14855f80" title="Get the scale calibration values for AXI ADC channel." alt="" coords="581,307,753,334"/>
+<area shape="rect" id="node14" href="$axi__adc__core_8c.html#a6af17b228bbbed4dbfc1a86d3ce2a51a" title="Get the phase calibration values for AXI ADC channel." alt="" coords="575,358,759,400"/>
+<area shape="rect" id="node17" href="$axi__adc__core_8h.html#a43a5410d1924a8549878f6c1c836592c" title="Get the AXI ADC Sampling Frequency." alt="" coords="567,424,767,451"/>
+<area shape="rect" id="node18" href="$axi__adc__core_8h.html#ac63e4a1c1a9490a7f0a8afe8e1ba75a7" title="Begin AXI ADC Initialization." alt="" coords="595,475,738,502"/>
+<area shape="rect" id="node21" href="$axi__adc__core_8h.html#a3f8de28c2195f5524197a9cf2b9e543a" title="Monitor the AXI ADC PN Sequence." alt="" coords="361,151,492,178"/>
+<area shape="rect" id="node23" href="$axi__adc__core_8h.html#a9c9ab05770c548d33106e95518a542e2" title="Calibrate bias for specific AXI ADC channel." alt="" coords="581,526,752,552"/>
+<area shape="rect" id="node24" href="$axi__adc__core_8c.html#ae36b237348e2791fc03dae04d8037a6d" title="Calibrate phase for specific AXI ADC channel." alt="" coords="575,577,758,618"/>
+<area shape="rect" id="node27" href="$axi__adc__core_8h.html#afdaae27794182d7114aa087c1871b908" title="Set AXI ADC PN sequence." alt="" coords="596,104,737,131"/>
+<area shape="rect" id="node28" href="$axi__adc__core_8h.html#a7e7072ec229da6c82b28c7b0190de9e7" title="Update active AXI ADC channels." alt="" coords="581,642,752,684"/>
+<area shape="rect" id="node3" href="$ad9265_8h.html#a93b1899f56931595d1ea398cc472d7ae" title="ad9265_setup" alt="" coords="141,14,254,40"/>
+<area shape="rect" id="node4" href="$ad9265__fmc__125ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,14,60,40"/>
+<area shape="rect" id="node6" href="$ad9361_8h.html#ae41064273d5d2b8e5506c22396ed2ffc" title=" " alt="" coords="343,258,510,284"/>
+<area shape="rect" id="node7" href="$ad9361__conv_8c.html#ad8a136112b1adb63e98063006c3ac178" title=" " alt="" coords="116,252,279,293"/>
+<area shape="rect" id="node9" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="170,76,225,103"/>
+<area shape="rect" id="node11" href="$axi__adc__core_8h.html#a6373e572a9a14904476526e344ee80ad" title="Calibrate Delay using specific PN sequence." alt="" coords="108,200,287,227"/>
+<area shape="rect" id="node12" href="$ad9434__fmc__500ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,200,60,227"/>
+<area shape="rect" id="node15" href="$axi__adc__core_8h.html#ac3be9d8c91a88d4307d68aa2828ef3e3" title="Get the phase calibration values for AXI ADC channel." alt="" coords="335,391,519,418"/>
+<area shape="rect" id="node16" href="$axi__adc__core_8h.html#ab3189e6ffb45925b9bd98a7d7de9beed" title="Get the scale calibration values for AXI ADC channel." alt="" coords="337,340,516,367"/>
+<area shape="rect" id="node19" href="$axi__adc__core_8h.html#a1d52b9aff0d444bd88c1878b98c96d28" title="AXI ADC Main Initialization." alt="" coords="377,475,477,502"/>
+<area shape="rect" id="node20" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="170,475,225,502"/>
+<area shape="rect" id="node22" href="$ad9656__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="170,150,225,176"/>
+<area shape="rect" id="node25" href="$axi__adc__core_8h.html#add160e0d47dc5a3c833ac87863945d50" title="Calibrate phase for specific AXI ADC channel." alt="" coords="335,587,518,614"/>
+<area shape="rect" id="node26" href="$axi__adc__core_8h.html#a7e5138632b8d83ba3329b26ef1dc5547" title="Calibrate scale for specific AXI ADC channel." alt="" coords="337,536,516,563"/>
+<area shape="rect" id="node29" href="$iio__axi__adc_8c.html#af7d00c44f5edd36cdca063ce45d767db" title="Update active channels." alt="" coords="351,642,503,684"/>
+</map>

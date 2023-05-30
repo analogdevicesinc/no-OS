@@ -1,0 +1,25 @@
+<map id="ad74413r_reg_update" name="ad74413r_reg_update">
+<area shape="rect" id="node1" title="Update a register&#39;s field." alt="" coords="984,392,1147,419"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#a616ec2580d5e530cfd5feb5bb0c461dd" title="Clear the DAC (to the code in DAC_CLR_CODE register)" alt="" coords="748,5,900,32"/>
+<area shape="rect" id="node3" href="$ad74413r_8h.html#ab10b09fc8236f9f4b4318fe70e6a17e9" title="Disable the slew rate control." alt="" coords="722,56,926,83"/>
+<area shape="rect" id="node4" href="$ad74413r_8h.html#ab6466b2dd407b5accccbfaeea9042f75" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="723,107,925,133"/>
+<area shape="rect" id="node5" href="$ad74413r_8h.html#a848dec7dd3b0f971e38486d2c02eb10c" title="Set the logic value of a GPO pin." alt="" coords="492,360,633,387"/>
+<area shape="rect" id="node6" href="$ad74413r_8h.html#aad9e00c68f2ff4a3d5da09da02497e32" title="Enable/disable a specific ADC channel." alt="" coords="725,209,923,250"/>
+<area shape="rect" id="node10" href="$ad74413r_8h.html#a52644a6378136dbd4e2676463fff1fec" title="Start or stop ADC conversions." alt="" coords="720,275,928,301"/>
+<area shape="rect" id="node11" href="$ad74413r_8h.html#ad84f8c43da29bf0fd97915eb492be5db" title="Set the ADC sample rate for the diagnostics channels." alt="" coords="720,664,928,691"/>
+<area shape="rect" id="node14" href="$ad74413r_8h.html#a1451fd07297d8643a53907c18800d610" title="Set the rejection setting for a specific channel." alt="" coords="722,613,926,640"/>
+<area shape="rect" id="node16" href="$ad74413r_8h.html#a321774430421c0f76cec172113f26b32" title="Set the operation mode for a specific channel." alt="" coords="740,547,908,589"/>
+<area shape="rect" id="node17" href="$ad74413r_8h.html#a1c9d3f797477cc94885acac1eedcb77b" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="712,715,936,741"/>
+<area shape="rect" id="node18" href="$ad74413r_8h.html#a591c0a8ec0569ff7e68aa0ccbbf15ea8" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="249,512,394,539"/>
+<area shape="rect" id="node19" href="$ad74413r_8h.html#aa3d6f1a8bfcf7b076eadbb2cb306504f" title="Enable conversions on a diagnostic register." alt="" coords="723,326,925,367"/>
+<area shape="rect" id="node20" href="$ad74413r_8h.html#acfe06137db94ea0ed21795cd544c4ccc" title="Set the GPO operation mode." alt="" coords="731,443,917,469"/>
+<area shape="rect" id="node22" href="$ad74413r_8h.html#aa7eb45929e78919c26309e36af5a1f81" title="Select which information the device will respond with (in the readback field) when a read operation i..." alt="" coords="753,765,895,792"/>
+<area shape="rect" id="node23" href="$ad74413r_8h.html#a823eb0f0f44a1d034272122f280ae26e" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="232,157,411,184"/>
+<area shape="rect" id="node7" href="$ad74413r_8h.html#ae5b5d0636b18c601de28dbdc25b909e6" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="469,259,656,285"/>
+<area shape="rect" id="node9" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,309,181,336"/>
+<area shape="rect" id="node8" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="229,259,413,285"/>
+<area shape="rect" id="node12" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="501,664,624,691"/>
+<area shape="rect" id="node13" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="294,639,349,665"/>
+<area shape="rect" id="node15" href="$swiot1l__mqtt_8h.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="509,613,616,640"/>
+<area shape="rect" id="node21" href="$ad74413r_8h.html#a2870a77c140d0932b234263eff8789e5" title="Set multiple GPO values at once." alt="" coords="461,411,664,437"/>
+</map>

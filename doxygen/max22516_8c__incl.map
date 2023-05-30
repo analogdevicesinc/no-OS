@@ -1,0 +1,16 @@
+<map id="drivers/io&#45;link/max22516/max22516.c" name="drivers/io&#45;link/max22516/max22516.c">
+<area shape="rect" id="node1" title="Implementation of MAX22516 Driver." alt="" coords="513,5,698,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="653,244,723,271"/>
+<area shape="rect" id="node3" href="$max22516_8h.html" title="Header file for max22516 Driver." alt="" coords="178,95,281,121"/>
+<area shape="rect" id="node10" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="413,95,526,121"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="551,95,660,121"/>
+<area shape="rect" id="node13" href="$no__os__alloc_8h.html" title=" " alt="" coords="685,95,795,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="194,244,265,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="307,169,375,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,244,88,271"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="53,169,152,196"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="176,169,283,196"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="399,169,499,196"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="575,169,643,196"/>
+<area shape="rect" id="node14" title=" " alt="" coords="725,169,792,196"/>
+</map>

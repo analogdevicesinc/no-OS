@@ -1,0 +1,6 @@
+<map id="ad7746_reg_read" name="ad7746_reg_read">
+<area shape="rect" id="node1" title="Reads data from AD7746 registers, starting from the selected register address pointer." alt="" coords="320,31,455,57"/>
+<area shape="rect" id="node2" href="$ad7746_8h.html#ae3d0541802a583196755c4e068b83673" title="Waits until a conversion on the capacitive channel has been finished and returns the output data." alt="" coords="108,5,272,32"/>
+<area shape="rect" id="node4" href="$ad7746_8h.html#a9e658ccc3e9028043a62c11dc180c531" title="Waits until a conversion on a voltage/temperature channel has been finished and returns the output da..." alt="" coords="113,56,267,83"/>
+<area shape="rect" id="node3" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,57"/>
+</map>

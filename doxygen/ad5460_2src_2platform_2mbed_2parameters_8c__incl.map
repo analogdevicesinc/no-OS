@@ -1,0 +1,14 @@
+<map id="projects/ad5460/src/platform/mbed/parameters.c" name="projects/ad5460/src/platform/mbed/parameters.c">
+<area shape="rect" id="node1" title="Definition of Mbed platform data used by ad5460 project." alt="" coords="201,5,414,47"/>
+<area shape="rect" id="node2" href="$ad5460_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ad5460 project." alt="" coords="253,95,362,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,105,196"/>
+<area shape="rect" id="node4" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="130,169,234,196"/>
+<area shape="rect" id="node7" href="$mbed__i2c_8h.html" title="Header containing extra types required for I2C interface." alt="" coords="259,169,356,196"/>
+<area shape="rect" id="node8" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="380,169,477,196"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="501,169,607,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="274,244,341,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="383,319,466,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="617,319,688,345"/>
+<area shape="rect" id="node11" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="487,244,621,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="519,319,589,345"/>
+</map>

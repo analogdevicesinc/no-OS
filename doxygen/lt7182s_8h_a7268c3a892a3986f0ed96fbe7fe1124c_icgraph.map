@@ -1,0 +1,6 @@
+<map id="lt7182s_read_byte" name="lt7182s_read_byte">
+<area shape="rect" id="node1" title="Perform a raw PMBus read byte operation." alt="" coords="415,31,557,57"/>
+<area shape="rect" id="node2" href="$lt7182s_8h.html#a26227a7512ddbfaac792ef12ca6431c7" title="Read statuses." alt="" coords="213,5,367,32"/>
+<area shape="rect" id="node4" href="$lt7182s_8h.html#af90ec06e9a51eb4d82d2873708430caa" title="Configure SYNC pin for clock synchronization." alt="" coords="213,56,367,83"/>
+<area shape="rect" id="node3" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="adp1050_send_command" name="adp1050_send_command">
+<area shape="rect" id="node1" title="Send command byte/word to ADP1050." alt="" coords="621,31,809,57"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#a81f834b12dccd706de08f2c3d6f1c83f" title="Change the CHIP/EEPROM password. TRIM password is the same with EEPROM password." alt="" coords="404,5,573,32"/>
+<area shape="rect" id="node3" href="$adp1050_8h.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="435,56,542,83"/>
+<area shape="rect" id="node4" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="211,31,341,57"/>
+<area shape="rect" id="node6" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,81,356,108"/>
+<area shape="rect" id="node5" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,31,148,57"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ltc4306_read_bus_logic_state" name="ltc4306_read_bus_logic_state">
+<area shape="rect" id="node1" title="Reads bus logic state." alt="" coords="447,5,621,47"/>
+<area shape="rect" id="node2" href="$ltc4306_8h.html#af36fa1d04f93bee12ff961fbf5cd88e8" title="Dis/connects to a downstream bus. Bus logic state must be 1 for connection to occur EXCEPT when conn_..." alt="" coords="213,5,399,47"/>
+<area shape="rect" id="node3" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,13,165,39"/>
+</map>

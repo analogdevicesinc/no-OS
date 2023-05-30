@@ -1,0 +1,4 @@
+<map id="adp1050_vout_offset" name="adp1050_vout_offset">
+<area shape="rect" id="node1" title="Set output voltage offset." alt="" coords="165,5,324,32"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#afc314ab80bc8f5e20356cf5ac09b12e4" title="Trim IIN(CS1 pin)/VIN(VF pin)/VOUT(VS pin)." alt="" coords="5,5,117,32"/>
+</map>

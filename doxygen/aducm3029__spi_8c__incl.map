@@ -1,0 +1,14 @@
+<map id="drivers/platform/aducm3029/aducm3029_spi.c" name="drivers/platform/aducm3029/aducm3029_spi.c">
+<area shape="rect" id="node1" title="Implementation of SPI driver for ADuCM302x." alt="" coords="305,5,511,47"/>
+<area shape="rect" id="node2" href="$aducm3029__spi_8h.html" title="ADuCM302x specific header for SPI driver." alt="" coords="129,95,265,121"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,169,104,196"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="289,95,399,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="555,169,626,196"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="423,95,523,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="599,95,710,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="128,169,280,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="197,244,267,271"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="305,169,373,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="448,169,531,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="651,169,717,196"/>
+</map>

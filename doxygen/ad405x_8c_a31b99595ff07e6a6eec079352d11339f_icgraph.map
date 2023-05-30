@@ -1,0 +1,16 @@
+<map id="ad405x_read" name="ad405x_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="767,254,873,281"/>
+<area shape="rect" id="node2" href="$ad405x_8h.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the device." alt="" coords="593,229,691,255"/>
+<area shape="rect" id="node3" href="$ad405x_8h.html#a683206b2c6482e8181918922eb34a7f4" title="Update specific register bits." alt="" coords="565,279,719,306"/>
+<area shape="rect" id="node4" href="$ad405x_8h.html#a112d94464fc72ac320766fa1b27e9141" title="Disable INVERT_ON_CHOP." alt="" coords="306,5,475,47"/>
+<area shape="rect" id="node5" href="$ad405x_8h.html#a91647373d66a6f0e1425951e81084a1e" title="Enable INVERT_ON_CHOP." alt="" coords="307,71,474,112"/>
+<area shape="rect" id="node6" href="$ad405x_8h.html#af7b58be286e4da075eccbdf214589655" title="Enter ADC Mode." alt="" coords="305,137,476,163"/>
+<area shape="rect" id="node8" href="$ad405x_8h.html#a4b8c3a93ff433390235d94fd4eed6e80" title="Set averaging filter window length." alt="" coords="306,188,475,229"/>
+<area shape="rect" id="node9" href="$ad405x_8h.html#a2e2ca9b7ad51006af1b2b3fd0951b6b8" title="Enter Burst Averaging Mode." alt="" coords="264,254,517,281"/>
+<area shape="rect" id="node10" href="$ad405x_8h.html#ac488927d2c6e855a0e47421ab2cb80ed" title="Set output data format." alt="" coords="299,305,483,331"/>
+<area shape="rect" id="node11" href="$ad405x_8h.html#a7acf8afe789e34e5496504bcadffe837" title="Set DEV_EN signal polarity." alt="" coords="287,355,495,382"/>
+<area shape="rect" id="node12" href="$ad405x_8h.html#a98a2df6a7855d9aa718f00399aabcbce" title="Set GP mode." alt="" coords="309,406,473,433"/>
+<area shape="rect" id="node13" href="$ad405x_8h.html#a000fb460ab0e58ad9c4ebadf14ce89b4" title="Select sample rate for Burst and Autonomous Modes." alt="" coords="298,457,483,483"/>
+<area shape="rect" id="node14" href="$ad405x_8h.html#a2ad41fe31ec82635d42c6f83c782a79a" title="Software reset the device." alt="" coords="320,507,461,534"/>
+<area shape="rect" id="node7" href="$ad405x_8h.html#a09c204a1bf949ac99e72ab02b3571613" title="Set operation mode." alt="" coords="5,195,216,222"/>
+</map>

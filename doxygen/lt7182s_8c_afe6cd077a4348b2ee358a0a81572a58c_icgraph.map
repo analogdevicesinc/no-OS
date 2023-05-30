@@ -1,0 +1,11 @@
+<map id="lt7182s_read_word" name="lt7182s_read_word">
+<area shape="rect" id="node1" title="Perform a raw PMBus read word operation." alt="" coords="644,81,789,108"/>
+<area shape="rect" id="node2" href="$lt7182s_8h.html#a8939c420a775717b905ff79c6dc6799a" title="Initialize the device structure." alt="" coords="456,5,555,32"/>
+<area shape="rect" id="node6" href="$lt7182s_8h.html#ad40614921c324454a0248a4888a2539e" title="Set output PWM mode." alt="" coords="429,56,582,83"/>
+<area shape="rect" id="node7" href="$lt7182s_8h.html#a26227a7512ddbfaac792ef12ca6431c7" title="Read statuses." alt="" coords="213,107,367,133"/>
+<area shape="rect" id="node8" href="$lt7182s_8h.html#a8e554a7c23f2fc5c8990483eb05acedb" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="415,157,596,184"/>
+<area shape="rect" id="node3" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,107,165,133"/>
+<area shape="rect" id="node4" href="$iio__lt7182s_8h.html#a7c5483fc8031d69287e746f226d1935d" title="Initializes the LT7182S IIO descriptor." alt="" coords="229,5,351,32"/>
+<area shape="rect" id="node5" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,5,157,32"/>
+<area shape="rect" id="node9" href="$lt7182s_8h.html#a970492096192f47fe8c8aac1803e4867" title="Read a value." alt="" coords="215,157,365,184"/>
+</map>

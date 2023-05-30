@@ -1,0 +1,10 @@
+<map id="ad74413r_reset" name="ad74413r_reset">
+<area shape="rect" id="node1" title="Perform either a software or hardware reset and wait for device reset time." alt="" coords="691,43,813,69"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#a8573c97f5310399cc7fb7a25b7cd5ac4" title="Initialize the device structure." alt="" coords="517,17,628,44"/>
+<area shape="rect" id="node6" href="$ad74413r_8h.html#a3adf2187f2b14c7bc4552dc518b61696" title="Free the device descriptor." alt="" coords="503,68,643,95"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="279,43,455,69"/>
+<area shape="rect" id="node4" href="$swiot1l__mqtt_8h.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="116,5,223,32"/>
+<area shape="rect" id="node5" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,44,60,71"/>
+<area shape="rect" id="node7" href="$iio__ad74413r_8h.html#a49925a5d4078dae88b143c4caab743cb" title="Free an iio descriptor." alt="" coords="285,93,448,120"/>
+<area shape="rect" id="node8" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,81,231,108"/>
+</map>

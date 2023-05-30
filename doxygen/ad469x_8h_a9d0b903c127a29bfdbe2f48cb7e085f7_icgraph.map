@@ -1,0 +1,4 @@
+<map id="ad469x_enter_conversion_mode" name="ad469x_enter_conversion_mode">
+<area shape="rect" id="node1" title="Enter conversion mode. To exit conversion mode send a 5 bit conversion mode command AD469x_CMD_REG_CO..." alt="" coords="237,5,471,32"/>
+<area shape="rect" id="node2" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="5,5,189,32"/>
+</map>

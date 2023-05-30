@@ -1,0 +1,4 @@
+<map id="ad74416h_set_adc_conv_seq" name="ad74416h_set_adc_conv_seq">
+<area shape="rect" id="node1" title="Start or stop ADC conversions." alt="" coords="244,5,455,32"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="5,5,196,32"/>
+</map>

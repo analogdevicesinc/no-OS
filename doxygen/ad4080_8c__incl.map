@@ -1,0 +1,13 @@
+<map id="drivers/adc/ad4080/ad4080.c" name="drivers/adc/ad4080/ad4080.c">
+<area shape="rect" id="node1" title="Implementation of AD4080 Driver." alt="" coords="255,5,402,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="245,95,313,121"/>
+<area shape="rect" id="node4" href="$ad4080_8h.html" title="Header file of AD4080 Driver." alt="" coords="338,95,421,121"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="503,95,616,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="344,244,415,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="508,169,579,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="79,169,179,196"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="203,169,302,196"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="326,169,433,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="101,244,183,271"/>
+</map>

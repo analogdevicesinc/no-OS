@@ -1,0 +1,7 @@
+<map id="adin1300_desc" name="adin1300_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="97,184,215,211"/>
+<area shape="rect" id="node2" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="9,95,146,121"/>
+<area shape="rect" id="node3" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="182,95,314,121"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="161,5,349,32"/>
+</map>

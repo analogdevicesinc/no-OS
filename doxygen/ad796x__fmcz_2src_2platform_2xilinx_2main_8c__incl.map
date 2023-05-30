@@ -1,0 +1,7 @@
+<map id="projects/ad796x_fmcz/src/platform/xilinx/main.c" name="projects/ad796x_fmcz/src/platform/xilinx/main.c">
+<area shape="rect" id="node1" title="Main file for xilinx platform of iio project." alt="" coords="161,5,326,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,156,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="180,109,307,136"/>
+<area shape="rect" id="node4" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="331,109,441,136"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="352,184,420,211"/>
+</map>

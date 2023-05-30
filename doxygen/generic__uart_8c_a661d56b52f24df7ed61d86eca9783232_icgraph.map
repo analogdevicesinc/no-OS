@@ -1,0 +1,6 @@
+<map id="no_os_uart_remove" name="no_os_uart_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_uart_init()." alt="" coords="424,31,575,57"/>
+<area shape="rect" id="node2" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="213,5,376,32"/>
+<area shape="rect" id="node4" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="267,56,322,83"/>
+<area shape="rect" id="node3" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

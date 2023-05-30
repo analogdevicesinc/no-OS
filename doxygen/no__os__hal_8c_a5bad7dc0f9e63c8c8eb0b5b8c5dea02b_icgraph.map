@@ -1,0 +1,9 @@
+<map id="ADIHAL_spiReadByte" name="ADIHAL_spiReadByte">
+<area shape="rect" id="node1" title="Performs a Single SPI Read from an ADI Device." alt="" coords="327,107,487,133"/>
+<area shape="rect" id="node2" href="$no__os__hal_8c.html#a670e8e00c6b1129300091002c5516987" title="Performs a Multi SPI Read from an ADI Device." alt="" coords="110,5,277,32"/>
+<area shape="rect" id="node3" href="$no__os__hal_8c.html#acab3e8da311a67494b32dd7e735d0faa" title="Performs a read from a particular bit field in a SPI register." alt="" coords="113,56,274,83"/>
+<area shape="rect" id="node4" href="$no__os__hal_8c.html#afa9b91010b66b76980d6f69353c99c01" title="Performs a write to the specified field in a SPI register." alt="" coords="112,107,275,133"/>
+<area shape="rect" id="node5" href="$app__talise_8h.html#a51c2ee9f37b849d981c6de38835f5eca" title=" " alt="" coords="108,157,279,184"/>
+<area shape="rect" id="node7" href="$app__talise_8h.html#af32696ad573675e8510480d3da595221" title=" " alt="" coords="143,208,244,235"/>
+<area shape="rect" id="node6" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,183,60,209"/>
+</map>

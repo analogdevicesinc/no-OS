@@ -1,0 +1,108 @@
+<map id="no_os_sign_extend32" name="no_os_sign_extend32">
+<area shape="rect" id="node1" title=" " alt="" coords="841,2881,1004,2908"/>
+<area shape="rect" id="node2" href="$ade7913_8h.html#ab77f36317800804dc692df67ba2efdea" title="Read device register." alt="" coords="649,183,763,209"/>
+<area shape="rect" id="node11" href="$ade9113_8h.html#a20c6ba63204d38a43a03e3c4a31de7a5" title="Read device register." alt="" coords="649,851,763,877"/>
+<area shape="rect" id="node52" href="$ade9113_8h.html#a930fd56888d6c7a00fe1998f6c7dd53c" title="Read device register in a daisy&#45;chain setup." alt="" coords="638,2147,774,2173"/>
+<area shape="rect" id="node53" href="$adis__internals_8h.html#a50222f9a887a27f2ce9e27ad662744a0" title="Read field to int32 value." alt="" coords="631,2197,781,2224"/>
+<area shape="rect" id="node83" href="$adt75_8h.html#ac560d739d40415c90549577bf308285d" title="Read the current temperature sample (in milliCelsius)" alt="" coords="619,2704,793,2731"/>
+<area shape="rect" id="node85" href="$adxl38x_8h.html#a491ab20d0eb87e53ac22b04c8693cff5" title="Executed Selftest on the sensing axes and returns the outcome of the test." alt="" coords="641,2755,771,2781"/>
+<area shape="rect" id="node88" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="626,2805,786,2832"/>
+<area shape="rect" id="node89" href="$ltc2983_8h.html#a66c3e302cbbbac4a70496397bbf6e495" title="Read channel data / temperature." alt="" coords="399,2907,543,2933"/>
+<area shape="rect" id="node91" href="$ltc2983_8h.html#a84ea47244c6b2e47b87355c962cf0fe8" title="Read raw channel data / temperature." alt="" coords="619,2907,793,2933"/>
+<area shape="rect" id="node92" href="$ltp8800_8h.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="657,2957,755,2984"/>
+<area shape="rect" id="node96" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="679,3008,733,3035"/>
+<area shape="rect" id="node97" href="$max22017_8h.html#a62dea369504e705032e9b2ce8656d629" title="Get data from requestec channel." alt="" coords="629,3059,783,3085"/>
+<area shape="rect" id="node98" href="$max22017_8h.html#ad308647e3e628b640e5cd2600036e0db" title="Set data of the selected channel." alt="" coords="629,3109,783,3136"/>
+<area shape="rect" id="node100" href="$max31827_8h.html#a768a7b73e9301586a53fb36f67232427" title="Read a temperature from a register." alt="" coords="622,3160,790,3187"/>
+<area shape="rect" id="node103" href="$max31855_8h.html#abdca58ca6d3ed48396082f3ea8ed60ed" title="Read thermocouple and internal temperatures (converted in deg. C)" alt="" coords="622,3215,790,3241"/>
+<area shape="rect" id="node105" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="647,3265,765,3292"/>
+<area shape="rect" id="node3" href="$ade7913_8h.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="381,5,560,32"/>
+<area shape="rect" id="node4" href="$ade7913_8h.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="395,56,546,83"/>
+<area shape="rect" id="node5" href="$ade7913_8h.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="372,107,569,133"/>
+<area shape="rect" id="node6" href="$ade7913_8h.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="390,259,551,301"/>
+<area shape="rect" id="node7" href="$ade7913_8h.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="162,208,269,235"/>
+<area shape="rect" id="node9" href="$ade7913_8h.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="383,325,559,352"/>
+<area shape="rect" id="node10" href="$ade7913_8h.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="118,157,313,184"/>
+<area shape="rect" id="node8" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,183,60,209"/>
+<area shape="rect" id="node12" href="$ade9113_8h.html#a021aef42c8122bdba9212a1936753248" title="Get register map CRC." alt="" coords="405,580,537,607"/>
+<area shape="rect" id="node13" href="$ade9113_8h.html#ae98a14422abb6af74b3661b65010a3de" title="Get CRC enable on SPI write setting." alt="" coords="393,631,548,673"/>
+<area shape="rect" id="node14" href="$ade9113_8h.html#acb24a05b5763017f45057217890d54c0" title="Get EMI HI limit." alt="" coords="392,697,549,738"/>
+<area shape="rect" id="node15" href="$ade9113_8h.html#abf0849e3b80c573302d6f37989c709d5" title="Get EMI HI mask." alt="" coords="371,763,571,789"/>
+<area shape="rect" id="node16" href="$ade9113_8h.html#abe55829c5e2b25846f8f4ae8977e0ded" title="Get EMI LO limit." alt="" coords="392,814,549,855"/>
+<area shape="rect" id="node17" href="$ade9113_8h.html#a5607a916152e062ba2e494d53996a7a0" title="Get EMI LO mask." alt="" coords="371,880,571,907"/>
+<area shape="rect" id="node18" href="$ade9113_8h.html#af3b5568eb8a231ecd93af66de15fb5b8" title="Get EMI MID limit." alt="" coords="385,931,556,973"/>
+<area shape="rect" id="node19" href="$ade9113_8h.html#a431ea1d79a0cfdda9a85ef929e9b98e2" title="Get ECC or PHY Error Count on ISO to NONISO Communications." alt="" coords="383,997,558,1024"/>
+<area shape="rect" id="node20" href="$ade9113_8h.html#a2f97c22926adcbae167087a7df90d2c0" title="Get interrupt indicator from STATUS register." alt="" coords="382,1048,559,1075"/>
+<area shape="rect" id="node44" href="$ade9113_8h.html#a4852eb88325b2942700bc44cdbaecca7" title="Get SILICON_REVISION value." alt="" coords="393,1099,548,1141"/>
+<area shape="rect" id="node45" href="$ade9113_8h.html#ac560c1e9d5bf11c956fd30c7ad6d33d5" title="Get STATUSx register value." alt="" coords="377,1165,565,1192"/>
+<area shape="rect" id="node46" href="$ade9113_8h.html#aedee79125f760aa7685a92f876595b0f" title="Get STREAM_DBG mode." alt="" coords="391,1217,550,1258"/>
+<area shape="rect" id="node47" href="$ade9113_8h.html#abaa622bce58906fe82dc2a2a6869c4f5" title="Get VERSION_PRODUCT value." alt="" coords="390,377,551,418"/>
+<area shape="rect" id="node50" href="$ade9113_8h.html#ab7917ca96deaaf5eabec8ec171be43bb" title="Get wave value." alt="" coords="401,479,541,505"/>
+<area shape="rect" id="node51" href="$ade9113_8h.html#ae11f2c9078bb5b74c0876f0f5e44ebed" title="Get the value stired in the scratchpad register." alt="" coords="375,529,567,556"/>
+<area shape="rect" id="node21" href="$ade9113_8h.html#ac07342aad30106c1373b0cd92d60f64e" title="Get ADC_SYNC_DONE indicator." alt="" coords="109,1048,321,1075"/>
+<area shape="rect" id="node22" href="$ade9113_8h.html#a15aaf923d728390cfd7b40e72f2501b1" title="Get COM_UP indicator." alt="" coords="133,1099,297,1125"/>
+<area shape="rect" id="node23" href="$ade9113_8h.html#a183988e328ed2fda01ee826cb7e8ac17" title="Get COMFLT_ERR indicator." alt="" coords="126,1149,305,1176"/>
+<area shape="rect" id="node24" href="$ade9113_8h.html#ad8b6326e254e9b5442565bb3c5ddfb0b" title="Get CRC_CHG indicator." alt="" coords="134,1200,297,1227"/>
+<area shape="rect" id="node25" href="$ade9113_8h.html#a97407c6d4f8092f4651e69d66e5dc18f" title="Get CRC_DONE indicator." alt="" coords="114,1251,317,1277"/>
+<area shape="rect" id="node26" href="$ade9113_8h.html#a6ecc3569c1c23aec580731e3b5da2e93" title="Get EFUSE_MEM_ERR indicator." alt="" coords="108,1301,323,1328"/>
+<area shape="rect" id="node27" href="$ade9113_8h.html#aa7ee2ec13907c5aa96c349c1ac3e77d5" title="Get I_WAV_OVRNG indicator." alt="" coords="118,1352,313,1379"/>
+<area shape="rect" id="node28" href="$ade9113_8h.html#a6c19e18b8c0709e6d7864b90aeefce98" title="Get ISO_CLK_STBL_ERR indicator." alt="" coords="136,1403,295,1445"/>
+<area shape="rect" id="node29" href="$ade9113_8h.html#a9c4580d035fbb6dfa2350b8051997b2e" title="Get ISO_DIG_MOD_I_OVF indicator." alt="" coords="136,1469,295,1510"/>
+<area shape="rect" id="node30" href="$ade9113_8h.html#aab58481692c8cccf8f064aac5e1f58f3" title="Get ISO_DIG_MOD_V1_OVF indicator." alt="" coords="136,1534,295,1575"/>
+<area shape="rect" id="node31" href="$ade9113_8h.html#a8d47289d0de45bd7c2b46912dbb7c057" title="Get ISO_DIG_MOD_V2_OVF indicator." alt="" coords="136,1599,295,1641"/>
+<area shape="rect" id="node32" href="$ade9113_8h.html#a12efdda72554040d4d6d057b79bcc88b" title="Get ISO_ECC_ERR indicator." alt="" coords="122,1665,309,1692"/>
+<area shape="rect" id="node33" href="$ade9113_8h.html#a8087931b11f8cf7f6612ff1c7f6a4cda" title="Get ISO_EFUSE_MEM_ERR indicator." alt="" coords="128,399,303,441"/>
+<area shape="rect" id="node34" href="$ade9113_8h.html#a9fe64b5b0a312deefbdbc82b989ee343" title="Get ISO_PHY_CRC_ERR indicator." alt="" coords="134,465,297,506"/>
+<area shape="rect" id="node35" href="$ade9113_8h.html#a0a139d4d62daef09e6a847cb6afdebf7" title="Get ISO_PHY_ERR indicator." alt="" coords="121,531,309,557"/>
+<area shape="rect" id="node36" href="$ade9113_8h.html#a5b3801f7398908bfd4fda50cf8baf091" title="Get ISO_STATUS_RD_ECC_ERR indicator." alt="" coords="126,582,305,623"/>
+<area shape="rect" id="node37" href="$ade9113_8h.html#acdf4a4fbd92a34a27bafc7695270f675" title="Get ISO_TEST_MMR_ERR indicator." alt="" coords="133,647,297,689"/>
+<area shape="rect" id="node38" href="$ade9113_8h.html#ae1a622415243b36f75fbccbff0fc7f77" title="Get RESET_DONE indicator." alt="" coords="123,713,308,740"/>
+<area shape="rect" id="node39" href="$ade9113_8h.html#a744fce7e1911cdd5fe3e0356b24fd9b3" title="Get SPI_CRC_ERR indicator." alt="" coords="124,764,307,791"/>
+<area shape="rect" id="node40" href="$ade9113_8h.html#affbfb5ba4f7bf0489af821fb86285ccd" title="Get STATUS1 indicator." alt="" coords="131,815,300,841"/>
+<area shape="rect" id="node41" href="$ade9113_8h.html#a44f5f5a5b613ccd73e0895f15cfe98ec" title="Get STATUS2 indicator." alt="" coords="131,865,300,892"/>
+<area shape="rect" id="node42" href="$ade9113_8h.html#a6dadfb9485fd867898ba61594ec1a16f" title="Get V1_WAV_OVRNG indicator." alt="" coords="134,917,297,958"/>
+<area shape="rect" id="node43" href="$ade9113_8h.html#aa16499c63ab925f8302140b9ad3f7a26" title="Get V2_WAV_OVRNG indicator." alt="" coords="134,982,297,1023"/>
+<area shape="rect" id="node48" href="$ade9113_8h.html#af4c8fffd5d44a93755fa934d137b240b" title="Reset the device using SW reset." alt="" coords="143,348,287,375"/>
+<area shape="rect" id="node49" href="$ade9113_8h.html#ac36c5f753e2d4a5b42a6024a05f8ef9d" title="Reset the device using SW reset." alt="" coords="144,297,287,324"/>
+<area shape="rect" id="node54" href="$adis_8h.html#a36db8ae51d7390f42ef0ba60e8eac164" title="Read raw temperature data." alt="" coords="393,2147,548,2173"/>
+<area shape="rect" id="node57" href="$adis_8h.html#ac8742db0ae6b5b09e9f24f87a5887572" title="Read raw acceleration data on x axis." alt="" coords="404,1843,537,1869"/>
+<area shape="rect" id="node58" href="$adis_8h.html#a47a132c41144a48ffec3f55ad1f3a3bb" title="Read raw delta angle data on x axis." alt="" coords="393,2197,549,2224"/>
+<area shape="rect" id="node59" href="$adis_8h.html#a76d64491528918ff49ef8c1e28ea7601" title="Read raw delta velocity data on x axis." alt="" coords="395,2248,547,2275"/>
+<area shape="rect" id="node60" href="$adis_8h.html#a9156a464b496ef333282f3bb06829eff" title="Read raw gyroscope data on x axis." alt="" coords="403,1893,539,1920"/>
+<area shape="rect" id="node61" href="$adis_8h.html#a9c258cfc2bc18e15cc2feedb3c993bd2" title="Read raw acceleration offset correction on x axis." alt="" coords="399,1539,542,1565"/>
+<area shape="rect" id="node63" href="$adis_8h.html#aa5921035934b7e532b0c2e43c11e2c23" title="Read raw acceleration scale adjustment on x axis." alt="" coords="396,2755,545,2781"/>
+<area shape="rect" id="node65" href="$adis_8h.html#a353a5f22d62f0b7a36aa8f6b15fbfa0c" title="Read raw gyroscope offset correction on x axis." alt="" coords="399,1589,542,1616"/>
+<area shape="rect" id="node66" href="$adis_8h.html#aff83327d6dde25dcac4e475b9017e3b9" title="Read raw gyroscope scale adjustment on x axis." alt="" coords="396,2501,545,2528"/>
+<area shape="rect" id="node67" href="$adis_8h.html#aa81242e3a496e9c06178d64731a2324a" title="Read raw acceleration data on y axis." alt="" coords="404,1944,537,1971"/>
+<area shape="rect" id="node68" href="$adis_8h.html#abee671f832770a7f4f88b7536068ea9f" title="Read raw delta angle data on y axis." alt="" coords="393,2299,549,2325"/>
+<area shape="rect" id="node69" href="$adis_8h.html#a9564607ae5ddb9a6aef87d2a2969baa6" title="Read raw delta velocity data on y axis." alt="" coords="395,2349,547,2376"/>
+<area shape="rect" id="node70" href="$adis_8h.html#a34005ac0792987ea8460c88cf1a2f27e" title="Read raw gyroscope data on y axis." alt="" coords="403,1995,539,2021"/>
+<area shape="rect" id="node71" href="$adis_8h.html#a100648f8e49f4f0f5026f2bdc67db39c" title="Read raw acceleration offset correction on y axis." alt="" coords="399,1640,542,1667"/>
+<area shape="rect" id="node72" href="$adis_8h.html#a2aad002cf671b3123812fa3a1dd7c693" title="Read raw acceleration scale adjustment on y axis." alt="" coords="396,2552,545,2579"/>
+<area shape="rect" id="node73" href="$adis_8h.html#a9d1bfae66fe1c74c9138bafaab17a3dc" title="Read raw gyroscope offset correction on y axis." alt="" coords="399,1691,542,1717"/>
+<area shape="rect" id="node74" href="$adis_8h.html#a733a04a6bc2935de76cda8711bff3284" title="Read raw gyroscope scale adjustment on y axis." alt="" coords="396,2603,545,2629"/>
+<area shape="rect" id="node75" href="$adis_8h.html#aaa776d92d2944988cb57385a547c1028" title="Read raw acceleration data on z axis." alt="" coords="405,2045,537,2072"/>
+<area shape="rect" id="node76" href="$adis_8h.html#a0779f9820a9dda34ea31e3b6956385a1" title="Read raw delta angle data on z axis." alt="" coords="393,2400,548,2427"/>
+<area shape="rect" id="node77" href="$adis_8h.html#a9993363049ee765afffeeafc221c67d8" title="Read raw delta velocity data on z axis." alt="" coords="395,2451,546,2477"/>
+<area shape="rect" id="node78" href="$adis_8h.html#a923431c5b825bb48123638dacda62e93" title="Read raw gyroscope data on z axis." alt="" coords="403,2096,538,2123"/>
+<area shape="rect" id="node79" href="$adis_8h.html#a108b910611edeac000074499e7e8034a" title="Read raw acceleration offset correction on z axis." alt="" coords="400,1741,541,1768"/>
+<area shape="rect" id="node80" href="$adis_8h.html#a4099e5677e853938baf80b8d3fb75e56" title="Read raw acceleration scale adjustment on z axis." alt="" coords="397,2653,545,2680"/>
+<area shape="rect" id="node81" href="$adis_8h.html#a5e7c1a01a2bfea61c370dd33b06ddf84" title="Read raw gyroscope offset correction on z axis." alt="" coords="400,1792,541,1819"/>
+<area shape="rect" id="node82" href="$adis_8h.html#a8eb48d6b07700c7a4e41efc174a22d9c" title="Read raw gyroscope scale adjustment on z axis." alt="" coords="397,2704,545,2731"/>
+<area shape="rect" id="node55" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="146,2147,285,2173"/>
+<area shape="rect" id="node56" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="135,1995,295,2021"/>
+<area shape="rect" id="node62" href="$iio__adis__internals_8h.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="129,1716,302,1743"/>
+<area shape="rect" id="node64" href="$iio__adis__internals_8h.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="125,2628,305,2655"/>
+<area shape="rect" id="node84" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="391,2805,551,2832"/>
+<area shape="rect" id="node86" href="$selftest__example__main_8h.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="383,2856,558,2883"/>
+<area shape="rect" id="node87" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="188,2856,243,2883"/>
+<area shape="rect" id="node90" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="135,2907,295,2933"/>
+<area shape="rect" id="node93" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="391,2957,551,2984"/>
+<area shape="rect" id="node94" href="$iio__ltp8800_8h.html#ae91bc4bceb8a86bc476ffae79c750cda" title="Initializes the LTP8800 IIO descriptor." alt="" coords="409,3008,532,3035"/>
+<area shape="rect" id="node95" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="144,3008,287,3035"/>
+<area shape="rect" id="node99" href="$max22017_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="391,3099,551,3125"/>
+<area shape="rect" id="node101" href="$max31827_8h.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="387,3150,555,3191"/>
+<area shape="rect" id="node102" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="135,3157,295,3184"/>
+<area shape="rect" id="node104" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="391,3216,551,3243"/>
+<area shape="rect" id="node106" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="443,3267,498,3293"/>
+</map>

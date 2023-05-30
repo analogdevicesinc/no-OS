@@ -1,0 +1,6 @@
+<map id="lt7182s_send_byte" name="lt7182s_send_byte">
+<area shape="rect" id="node1" title="Send a PMBus command to the device." alt="" coords="227,56,371,83"/>
+<area shape="rect" id="node2" href="$lt7182s_8h.html#a950d068679ed669a2e48e6816ce3c9aa" title="Clear all asserted faults." alt="" coords="15,5,169,32"/>
+<area shape="rect" id="node3" href="$lt7182s_8h.html#a9a4f7bb789424d3294a697ec5343b3d9" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="21,56,163,83"/>
+<area shape="rect" id="node4" href="$lt7182s_8h.html#a7196549d3a11d4fabff61ddd331bd797" title="Perform a device software reset." alt="" coords="5,107,179,133"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad74416h_reset" name="ad74416h_reset">
+<area shape="rect" id="node1" title="Perform software or hardware reset and wait for device reset time." alt="" coords="376,5,503,32"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#ab14b588a86ccfbf3a829c9b485ca5e88" title="Initialize the device structure." alt="" coords="213,5,328,32"/>
+<area shape="rect" id="node3" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

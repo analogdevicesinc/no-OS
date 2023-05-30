@@ -1,0 +1,11 @@
+<map id="ad3552r_desc" name="ad3552r_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="948,87,1060,113"/>
+<area shape="rect" id="node2" href="$structad3552r__ch__data.html" title=" " alt="" coords="690,5,823,32"/>
+<area shape="rect" id="node3" href="$structad3552__transfer__config.html" title=" " alt="" coords="669,56,844,83"/>
+<area shape="rect" id="node4" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="695,145,818,172"/>
+<area shape="rect" id="node5" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,85,184,112"/>
+<area shape="rect" id="node7" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,116,490,143"/>
+<area shape="rect" id="node6" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,167,491,209"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="691,200,823,227"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,233,511,260"/>
+</map>

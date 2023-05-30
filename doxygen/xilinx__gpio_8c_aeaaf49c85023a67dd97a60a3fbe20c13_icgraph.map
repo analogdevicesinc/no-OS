@@ -1,0 +1,4 @@
+<map id="xil_gpio_get" name="xil_gpio_get">
+<area shape="rect" id="node1" title="Obtain the GPIO decriptor." alt="" coords="215,5,316,32"/>
+<area shape="rect" id="node2" href="$xilinx__gpio_8c.html#a6718d8e1a8d32fef8e6898a4f6788508" title="Get the value of an optional GPIO." alt="" coords="5,5,167,32"/>
+</map>

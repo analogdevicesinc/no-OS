@@ -1,0 +1,23 @@
+<map id="projects/eval&#45;adis1647x/src/platform/pico/parameters.h" name="projects/eval&#45;adis1647x/src/platform/pico/parameters.h">
+<area shape="rect" id="node1" title="Definitions specific to pico platform used by eval&#45;adis1647x project." alt="" coords="418,5,645,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,132,121"/>
+<area shape="rect" id="node3" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="116,244,216,271"/>
+<area shape="rect" id="node7" href="$pico__uart_8h.html" title="Header file of UART driver for pico." alt="" coords="303,95,397,121"/>
+<area shape="rect" id="node12" href="$pico__spi_8h.html" title="Header file for the pico spi driver." alt="" coords="803,95,889,121"/>
+<area shape="rect" id="node15" href="$pico__gpio_8h.html" title="Header file for pico gpio specifics." alt="" coords="939,95,1035,121"/>
+<area shape="rect" id="node17" href="$pico__gpio__irq_8h.html" title="Header file for pico gpio irq specifics." alt="" coords="658,95,778,121"/>
+<area shape="rect" id="node19" href="$pico__irq_8h.html" title="Header file for pico irq specifics." alt="" coords="549,95,634,121"/>
+<area shape="rect" id="node20" href="$pico__timer_8h.html" title="Header file for the pico timer driver." alt="" coords="421,95,524,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="471,319,541,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="252,319,323,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="125,319,207,345"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="208,169,313,196"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="538,169,634,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="338,169,463,196"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="241,244,374,271"/>
+<area shape="rect" id="node13" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="703,244,802,271"/>
+<area shape="rect" id="node14" title=" " alt="" coords="861,169,980,196"/>
+<area shape="rect" id="node16" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="893,244,999,271"/>
+<area shape="rect" id="node18" title=" " alt="" coords="659,169,785,196"/>
+<area shape="rect" id="node21" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="449,244,563,271"/>
+</map>

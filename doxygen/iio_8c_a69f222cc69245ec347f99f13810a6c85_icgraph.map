@@ -1,0 +1,8 @@
+<map id="iio_parse_value" name="iio_parse_value">
+<area shape="rect" id="node1" title=" " alt="" coords="265,115,389,141"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a668f0e032ce85e71e07e298e044488d3" title="Handles the write request for calibbias attribute." alt="" coords="23,5,200,32"/>
+<area shape="rect" id="node3" href="$iio__adis__internals_8h.html#aedca9e1cc912124ab7272928dcf8c349" title="Handles the write request for calibscale attribute." alt="" coords="19,56,203,83"/>
+<area shape="rect" id="node4" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="32,107,191,149"/>
+<area shape="rect" id="node5" href="$iio__adis__internals_8h.html#ac75103dfd80247d5138fd31c30ad7eeb" title="Handles the write request for lpf attribute." alt="" coords="43,173,179,200"/>
+<area shape="rect" id="node6" href="$iio__adis__internals_8h.html#a797f08ea5dd75bd9138701d8fad04e0a" title="Handles the write request for sampling frequency attribute." alt="" coords="5,224,217,251"/>
+</map>

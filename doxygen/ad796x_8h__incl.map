@@ -1,0 +1,12 @@
+<map id="drivers/adc/ad796x/ad796x.h" name="drivers/adc/ad796x/ad796x.h">
+<area shape="rect" id="node1" title="Header file of AD796X Driver." alt="" coords="249,5,395,47"/>
+<area shape="rect" id="node2" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="366,169,473,196"/>
+<area shape="rect" id="node4" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="5,169,116,196"/>
+<area shape="rect" id="node6" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="141,95,239,121"/>
+<area shape="rect" id="node9" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="457,95,587,121"/>
+<area shape="rect" id="node10" href="$axi__adc__core_8h.html" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="263,95,381,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="271,244,341,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="34,244,117,271"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="140,169,240,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="155,244,225,271"/>
+</map>

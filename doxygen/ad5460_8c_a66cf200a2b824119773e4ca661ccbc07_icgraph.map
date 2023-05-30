@@ -1,0 +1,6 @@
+<map id="ad5460_dac_current_to_code" name="ad5460_dac_current_to_code">
+<area shape="rect" id="node1" title="Convers a microamp value in the corresponding DAC 16 bit code." alt="" coords="383,23,536,65"/>
+<area shape="rect" id="node2" href="$channel__output__example_8h.html#ae839d5b557e7413ee71a7d30f7b5f8fa" title="Channel output example main execution." alt="" coords="108,5,335,32"/>
+<area shape="rect" id="node4" href="$current__output__example_8h.html#a8d0ccace5dc4c241ce6ae16991f6847a" title="Current output example main execution." alt="" coords="111,56,332,83"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="5,31,60,57"/>
+</map>

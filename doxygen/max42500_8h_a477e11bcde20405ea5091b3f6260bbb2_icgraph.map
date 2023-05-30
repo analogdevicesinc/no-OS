@@ -1,0 +1,12 @@
+<map id="max42500_reg_read" name="max42500_reg_read">
+<area shape="rect" id="node1" title="Read a raw value from a register." alt="" coords="748,107,903,133"/>
+<area shape="rect" id="node2" href="$max42500_8h.html#ab1ee776e9ce01d8bbbdc108c74fabd88" title="Get the status of the voltage monitor input." alt="" coords="486,5,695,32"/>
+<area shape="rect" id="node4" href="$max42500_8h.html#a45a93542ac6c986d6245ffb65a6f8b9a" title="Initialize the device structure." alt="" coords="264,56,383,83"/>
+<area shape="rect" id="node5" href="$max42500_8h.html#a460e7ea60567482b927982c3a00f3716" title="Update a register&#39;s value based on a mask." alt="" coords="505,107,676,133"/>
+<area shape="rect" id="node9" href="$max42500_8h.html#a154fb403d51164c516bd0e6e0b6b7fb1" title="Enable/Disable watchdog." alt="" coords="497,158,685,199"/>
+<area shape="rect" id="node10" href="$max42500_8h.html#aefce91748fb02ea8752fb4f9bdf5ff88" title="Update the watchdog key based on the mode and current value." alt="" coords="481,224,700,251"/>
+<area shape="rect" id="node3" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,81,165,108"/>
+<area shape="rect" id="node6" href="$max42500_8h.html#a12d9747d4143e266cb34770695e84a69" title="Set the overvoltage threshold of VM1 to VM5." alt="" coords="225,107,422,133"/>
+<area shape="rect" id="node7" href="$max42500_8h.html#a372c0993640464da288a4881836b2dc5" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="225,157,422,184"/>
+<area shape="rect" id="node8" href="$max42500_8h.html#aac3ba7534a3177465fd2eac9fec90c02" title="Set watchdog reset hold time." alt="" coords="213,208,433,235"/>
+</map>

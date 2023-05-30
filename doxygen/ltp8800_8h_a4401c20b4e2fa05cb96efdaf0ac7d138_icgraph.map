@@ -1,0 +1,6 @@
+<map id="ltp8800_remove" name="ltp8800_remove">
+<area shape="rect" id="node1" title="Free or remove device instance." alt="" coords="404,31,532,57"/>
+<area shape="rect" id="node2" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,32"/>
+<area shape="rect" id="node3" href="$iio__ltp8800_8h.html#ae734d94cb2d3f2f4b78e173ad9e36eaa" title="Free resources allocated by the init function." alt="" coords="201,56,351,83"/>
+<area shape="rect" id="node4" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+</map>

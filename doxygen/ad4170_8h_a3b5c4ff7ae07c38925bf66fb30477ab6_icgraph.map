@@ -1,0 +1,18 @@
+<map id="ad4170_spi_reg_read" name="ad4170_spi_reg_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="491,233,651,260"/>
+<area shape="rect" id="node2" href="$ad4170_8h.html#aca12c1916e6be2a08a4354ef4563e5f1" title="Get data from register Data_Per_Channel[n]." alt="" coords="261,5,417,32"/>
+<area shape="rect" id="node3" href="$ad4170_8h.html#ab220040d5cd73d3c2bf10c3fa885857b" title="Get data from register Data_16b." alt="" coords="264,56,415,83"/>
+<area shape="rect" id="node4" href="$ad4170_8h.html#a54051436e9e54496e9cba81ffb3ce2a1" title="Get data and status from register Data_16b_Status." alt="" coords="261,107,418,133"/>
+<area shape="rect" id="node5" href="$ad4170_8h.html#a4cbffc69457221faa81ffc27dce30043" title="Get data from register Data_24b." alt="" coords="264,157,415,184"/>
+<area shape="rect" id="node6" href="$ad4170_8h.html#a112d9b5e05d557eb772cc285d194c82b" title="Get data and status from register Data_24b_Status." alt="" coords="261,208,418,235"/>
+<area shape="rect" id="node7" href="$ad4170_8h.html#a12d700f89d038fbf6674dda7380c6827" title="Get data from register Data_32b." alt="" coords="264,259,415,285"/>
+<area shape="rect" id="node8" href="$ad4170_8h.html#a3d13fbfc6fa1d2e04b8cb9c1b42bb16e" title="Get the Error register." alt="" coords="271,309,407,336"/>
+<area shape="rect" id="node9" href="$ad4170_8h.html#a839d7d7b1e763f337ae1e814efeb39f2" title="Get status from register Data_Status." alt="" coords="267,360,412,387"/>
+<area shape="rect" id="node10" href="$ad4170_8h.html#aa98f370b756f9ad50f127eec5564d9a5" title="Debugging function to print the register map to console." alt="" coords="276,411,403,437"/>
+<area shape="rect" id="node11" href="$ad4170_8h.html#ae24263d5528343a6218ae8189af0054e" title="SPI write device register using a mask." alt="" coords="236,461,443,488"/>
+<area shape="rect" id="node12" href="$ad4170_8h.html#a576b13688c52d149cf2a43b39084a333" title="Perform a software reset." alt="" coords="41,360,152,387"/>
+<area shape="rect" id="node13" href="$ad4170_8h.html#a3ca58a262948f7d1cc5c3fd562042607" title="Set the AD4170 clock selection configuration." alt="" coords="18,411,175,437"/>
+<area shape="rect" id="node14" href="$ad4170_8h.html#a235862ccc6dddd05420432900c3fedbb" title="Set the AD4170 DCLK configuration." alt="" coords="17,461,176,488"/>
+<area shape="rect" id="node15" href="$ad4170_8h.html#a8ee0c2d9530b516c27c3be372a061a4e" title="Set the AD4170 MCLK configuration." alt="" coords="15,512,178,539"/>
+<area shape="rect" id="node16" href="$ad4170_8c.html#a83d10b0457a777f079f6ccbee72d091b" title="Set the AD4170 SPI settings." alt="" coords="5,563,188,589"/>
+</map>

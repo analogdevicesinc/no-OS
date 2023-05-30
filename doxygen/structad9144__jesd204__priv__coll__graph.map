@@ -1,0 +1,10 @@
+<map id="ad9144_jesd204_priv" name="ad9144_jesd204_priv">
+<area shape="rect" id="node1" title=" " alt="" coords="360,377,520,404"/>
+<area shape="rect" id="node2" href="$structad9144__dev.html" title=" " alt="" coords="389,288,491,315"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="276,199,399,225"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="188,102,335,129"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="359,95,508,136"/>
+<area shape="rect" id="node7" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="524,199,628,225"/>
+<area shape="rect" id="node8" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="532,102,652,129"/>
+</map>

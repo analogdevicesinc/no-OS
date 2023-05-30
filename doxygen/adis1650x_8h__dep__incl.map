@@ -1,0 +1,9 @@
+<map id="drivers/imu/adis1650x.h" name="drivers/imu/adis1650x.h">
+<area shape="rect" id="node1" title="Implementation of adis1650x.h." alt="" coords="336,5,515,32"/>
+<area shape="rect" id="node2" href="$adis1650x_8c.html" title="Implementation of adis1650x.c." alt="" coords="5,95,184,121"/>
+<area shape="rect" id="node3" href="$iio__adis1650x_8h.html" title="Implementation of iio_adis1650x.h." alt="" coords="208,95,411,121"/>
+<area shape="rect" id="node5" href="$eval-adis1650x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adis1650x examples." alt="" coords="435,87,650,129"/>
+<area shape="rect" id="node7" href="$eval-adis1650x_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for eval&#45;adis1650x project." alt="" coords="675,80,864,136"/>
+<area shape="rect" id="node4" href="$iio__adis1650x_8c.html" title="Implementation of iio_adis1650x.c." alt="" coords="209,191,410,218"/>
+<area shape="rect" id="node6" href="$eval-adis1650x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adis1650x examples." alt="" coords="435,184,650,225"/>
+</map>

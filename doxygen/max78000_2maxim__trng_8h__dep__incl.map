@@ -1,0 +1,5 @@
+<map id="drivers/platform/maxim/max78000/maxim_trng.h" name="drivers/platform/maxim/max78000/maxim_trng.h">
+<area shape="rect" id="node1" title="MAX78000 specific header for TRNG driver." alt="" coords="106,5,297,47"/>
+<area shape="rect" id="node2" href="$max78000_2maxim__trng_8c.html" title="MAX78000 implementation of true random number generator." alt="" coords="5,95,195,136"/>
+<area shape="rect" id="node3" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="219,95,386,136"/>
+</map>

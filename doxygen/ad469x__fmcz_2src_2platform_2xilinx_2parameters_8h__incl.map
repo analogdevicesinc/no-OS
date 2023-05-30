@@ -1,0 +1,18 @@
+<map id="projects/ad469x_fmcz/src/platform/xilinx/parameters.h" name="projects/ad469x_fmcz/src/platform/xilinx/parameters.h">
+<area shape="rect" id="node1" title="Definitions specific to xilinx platform used by ad469x_fmcz project." alt="" coords="279,5,444,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,123,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="147,109,242,136"/>
+<area shape="rect" id="node4" href="$xilinx__uart_8h.html" title=" " alt="" coords="266,109,369,136"/>
+<area shape="rect" id="node5" href="$axi__pwm__extra_8h.html" title=" " alt="" coords="162,184,297,211"/>
+<area shape="rect" id="node9" href="$spi__engine_8h.html" title=" " alt="" coords="444,109,548,136"/>
+<area shape="rect" id="node16" href="$xilinx__gpio_8h.html" title=" " alt="" coords="771,259,877,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="437,333,507,360"/>
+<area shape="rect" id="node7" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="186,259,297,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="769,333,852,360"/>
+<area shape="rect" id="node10" href="$xilinx__spi_8h.html" title=" " alt="" coords="372,184,468,211"/>
+<area shape="rect" id="node12" href="$spi__engine__private_8h.html" title=" " alt="" coords="492,184,649,211"/>
+<area shape="rect" id="node15" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="674,184,771,211"/>
+<area shape="rect" id="node11" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="423,259,521,285"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="647,259,747,285"/>
+<area shape="rect" id="node14" title=" " alt="" coords="662,333,733,360"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="projects/ad&#45;acevsecrdset&#45;sl/src/supply/supply.h" name="projects/ad&#45;acevsecrdset&#45;sl/src/supply/supply.h">
+<area shape="rect" id="node1" title="Power supply phase interface file." alt="" coords="229,5,414,47"/>
+<area shape="rect" id="node2" href="$self__test_8c.html" title="Relay implementation file." alt="" coords="5,102,197,143"/>
+<area shape="rect" id="node3" href="$state__machine_8c.html" title="STOUT state machine implementation file." alt="" coords="222,95,421,151"/>
+<area shape="rect" id="node4" href="$supply_8c.html" title="Power supply phase implementation file." alt="" coords="445,102,630,143"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="projects/adt75/src/examples/basic/basic_example.c" name="projects/adt75/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="BASIC example header for ad74413r project." alt="" coords="403,5,569,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$adt75_2src_2examples_2basic_2basic__example_8h.html" title="BASIC example header for adt75 project." alt="" coords="156,109,288,136"/>
+<area shape="rect" id="node4" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="405,184,519,211"/>
+<area shape="rect" id="node6" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="594,184,693,211"/>
+<area shape="rect" id="node7" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="313,109,449,136"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="753,109,853,136"/>
+<area shape="rect" id="node12" href="$adt75_8h.html" title="Header file of ADT75 Driver." alt="" coords="524,109,595,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="564,259,635,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="314,184,381,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="717,184,788,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="813,184,895,211"/>
+</map>
