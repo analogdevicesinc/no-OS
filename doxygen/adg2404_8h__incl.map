@@ -1,0 +1,10 @@
+<map id="drivers/mux/adg2404/adg2404.h" name="drivers/mux/adg2404/adg2404.h">
+<area shape="rect" id="Node000001" title="Header file of ADG2404 Driver." alt="" coords="5,5,165,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="70,167,141,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,47,49,63,37,80,31,99,34,118,51,140,72,157,69,161,47,144,30,120,26,99,33,78,45,59,60,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="44,93,127,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="88,46,88,79,83,79,83,46"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="151,93,257,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="116,43,177,84,174,88,113,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="190,121,134,161,131,156,187,117"/>
+</map>

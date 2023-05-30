@@ -1,0 +1,5 @@
+<map id="adis_read_diag_accl_failure" name="adis_read_diag_accl_failure">
+<area shape="rect" id="Node000001" title="Diagnosis: read accelerometer self test error flag value." alt="" coords="208,5,361,45"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="5,5,160,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,28,160,28,160,23,195,23"/>
+</map>

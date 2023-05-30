@@ -1,0 +1,15 @@
+<map id="adf4106_update_latch" name="adf4106_update_latch">
+<area shape="rect" id="Node000001" title="Update one of the latch via the SPI interface." alt="" coords="379,109,545,134"/>
+<area shape="rect" id="Node000002" href="$adf4106_8c.html#a9ad26a92594bfec093ae67437ebe777c" title="CE Pin method." alt="" coords="171,5,316,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="423,105,330,60,300,48,302,43,332,55,426,100"/>
+<area shape="rect" id="Node000004" href="$adf4106_8c.html#a4cebf4257806d881191e6a2f495843d9" title="Counter reset method." alt="" coords="166,69,321,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="365,110,320,103,321,98,365,105"/>
+<area shape="rect" id="Node000005" href="$adf4106_8c.html#a2bdf7b6593a069407ac191aaf17cf937" title="Initialization latch method." alt="" coords="172,133,315,173"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="365,138,315,146,314,140,365,133"/>
+<area shape="rect" id="Node000006" href="$adf4106_8c.html#aa0a81923d785465172dc592b80f0fd2c" title="Sets the output frequency." alt="" coords="156,198,331,223"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="427,143,332,188,294,200,293,195,330,183,425,138"/>
+<area shape="rect" id="Node000003" href="$adf4106_8c.html#a0114bdab2ee87166e4c059f2fad79239" title="Initialize SPI and Initial Values for ADF4106 Board." alt="" coords="5,77,108,102"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,52,96,79,94,74,171,47"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="152,92,108,92,108,87,152,87"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="171,131,94,105,96,100,173,126"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="drivers/accel/adxl313/adxl313.h" name="drivers/accel/adxl313/adxl313.h">
+<area shape="rect" id="Node000001" title="Header file of ADXL313 Driver." alt="" coords="90,5,251,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="209,167,279,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,46,53,59,23,75,14,85,9,95,9,105,15,117,26,127,43,135,90,151,195,170,194,175,89,156,41,140,23,131,11,120,4,106,4,93,9,82,20,71,51,54,89,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="26,93,97,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,48,90,87,87,83,143,43"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="367,93,467,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,43,369,87,368,92,229,48"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="121,93,220,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="173,46,173,79,168,79,168,46"/>
+<area shape="rect" id="Node000008" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="244,93,343,119"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="202,43,265,84,262,88,199,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="390,121,286,164,284,159,388,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="329,167,399,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="411,121,383,157,379,154,406,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="424,167,507,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="427,118,452,154,448,157,423,121"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="185,117,224,155,220,159,181,121"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="287,121,262,157,258,154,283,117"/>
+</map>

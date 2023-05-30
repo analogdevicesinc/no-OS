@@ -1,0 +1,5 @@
+<map id="adis_data_field_map_def" name="adis_data_field_map_def">
+<area shape="rect" id="Node000001" title="ADIS filed map definition structure." alt="" coords="5,240,189,265"/>
+<area shape="rect" id="Node000002" href="$structadis__field.html" title="ADIS device field structure." alt="" coords="55,5,139,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,45,100,240,95,240,95,45"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="adxl355_remove" name="adxl355_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by adxl355_init()." alt="" coords="375,31,505,56"/>
+<area shape="rect" id="Node000002" href="$iio__adxl355_8c.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="187,5,312,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,36,312,29,312,24,361,30"/>
+<area shape="rect" id="Node000004" href="$iio__adxl355_8c.html#a819a3a8938ae7bc56eb56935ccc04028" title="Free the resources allocated by adxl355_iio_init()." alt="" coords="172,55,327,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,56,327,60,327,55,361,51"/>
+<area shape="rect" id="Node000003" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,21,124,21,124,15,173,15"/>
+</map>

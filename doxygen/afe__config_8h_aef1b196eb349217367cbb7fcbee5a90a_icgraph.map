@@ -1,0 +1,19 @@
+<map id="afe_read_status0" name="afe_read_status0">
+<area shape="rect" id="Node000001" title="Read STATUS0 register." alt="" coords="901,35,1036,60"/>
+<area shape="rect" id="Node000002" href="$afe__config_8c.html#a969a1b69d5fee8ce240851bfc5a8ea89" title="Waits for passed number of cycles." alt="" coords="719,8,853,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="888,38,854,33,854,28,888,33"/>
+<area shape="rect" id="Node000007" href="$pqlib__afe_8c.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="731,59,841,84"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="888,61,842,67,841,61,887,55"/>
+<area shape="rect" id="Node000003" href="$pqlib__example_8c.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="484,5,671,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="705,22,671,22,671,17,705,17"/>
+<area shape="rect" id="Node000004" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,31,265,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="470,28,266,41,265,36,470,22"/>
+<area shape="rect" id="Node000006" href="$pqlib__example_8c.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="313,56,436,81"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="513,37,427,59,425,53,512,32"/>
+<area shape="rect" id="Node000005" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,46,60,46,60,41,94,41"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="299,61,265,57,266,51,300,56"/>
+<area shape="rect" id="Node000008" href="$pqlib__example_8c.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="497,55,657,95"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="717,75,658,76,658,71,717,70"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="483,75,436,73,437,68,483,70"/>
+</map>

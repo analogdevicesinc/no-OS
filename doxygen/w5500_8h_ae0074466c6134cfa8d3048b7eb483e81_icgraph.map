@@ -1,0 +1,5 @@
+<map id="w5500_setup" name="w5500_setup">
+<area shape="rect" id="Node000001" title="Setup the W5500 chip with basic configuration." alt="" coords="147,5,255,31"/>
+<area shape="rect" id="Node000002" href="$w5500_8c.html#a65605a8a9cc9d60a325603ef2ee24013" title="Initialize the device." alt="" coords="5,5,99,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,21,99,21,99,15,133,15"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="max96793_csi_diag_part_config_status" name="max96793_csi_diag_part_config_status">
+<area shape="rect" id="Node000001" title="Structure holding the CSI configuration status of the MAX96793 device." alt="" coords="85,108,269,148"/>
+<area shape="rect" id="Node000002" href="$structmax96793__csi__video__stream__config.html" title="Structure holding the video stream configuration of the MAX96793 device." alt="" coords="5,5,164,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,58,102,82,114,95,130,106,127,110,111,99,97,86,86,60"/>
+<area shape="rect" id="Node000003" href="$structmax96793__pipe__diag__stream__id__status.html" title="Structure holding the stream ID status of the MAX96793 device." alt="" coords="188,5,349,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,60,241,86,213,110,209,106,237,82,254,57"/>
+</map>

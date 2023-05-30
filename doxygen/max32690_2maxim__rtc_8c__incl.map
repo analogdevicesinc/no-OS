@@ -1,0 +1,33 @@
+<map id="drivers/platform/maxim/max32690/maxim_rtc.c" name="drivers/platform/maxim/max32690/maxim_rtc.c">
+<area shape="rect" id="Node000001" title="Implementation of RTC driver." alt="" coords="418,5,598,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="449,167,519,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="508,46,491,153,485,153,502,45"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="126,93,194,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,48,208,96,207,91,420,43"/>
+<area shape="rect" id="Node000004" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="219,93,315,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="451,48,316,92,314,86,449,43"/>
+<area shape="rect" id="Node000006" href="$no__os__rtc_8h.html" title="Header of the RTC interface." alt="" coords="5,93,101,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="418,44,115,96,115,90,417,39"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="339,93,439,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="481,48,420,88,417,84,478,43"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="515,93,565,119"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="518,45,533,80,528,82,513,47"/>
+<area shape="rect" id="Node000010" href="$max32690_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="589,93,693,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="541,43,611,84,609,89,539,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="717,93,840,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="574,43,727,87,725,92,572,48"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="864,93,971,119"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="599,41,851,89,850,95,598,47"/>
+<area shape="rect" id="Node000013" href="$no__os__alloc_8h.html" title=" " alt="" coords="995,93,1106,119"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="599,36,982,91,981,96,598,41"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="231,167,302,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="269,119,269,153,264,153,264,119"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="88,116,220,160,218,165,87,121"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="406,117,459,156,456,160,403,121"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="371,121,300,162,297,157,368,116"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="341,167,424,192"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="391,119,388,153,382,153,386,119"/>
+<area shape="poly" id="edge17_Node000013_Node000002" title=" " alt="" coords="995,119,983,121,730,154,533,176,533,170,730,148,982,116,995,114"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1017,167,1084,192"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="1053,119,1053,153,1048,153,1048,119"/>
+</map>

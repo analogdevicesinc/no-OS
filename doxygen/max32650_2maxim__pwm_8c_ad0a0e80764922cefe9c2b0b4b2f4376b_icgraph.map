@@ -1,0 +1,5 @@
+<map id="max_pwm_enable" name="max_pwm_enable">
+<area shape="rect" id="Node000001" title="Enable the PWM." alt="" coords="172,5,313,31"/>
+<area shape="rect" id="Node000002" href="$max32650_2maxim__pwm_8c.html#aae32d88704bd9d5add123de92faa305a" title="Initialize the PWM." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

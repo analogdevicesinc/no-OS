@@ -1,0 +1,15 @@
+<map id="adin1300_config_speed" name="adin1300_config_speed">
+<area shape="rect" id="Node000001" title=" " alt="" coords="389,55,564,80"/>
+<area shape="rect" id="Node000002" href="$adin1300_8c.html#a48d11366cb4959ea4e3bd89561080af1" title=" " alt="" coords="229,5,339,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="413,54,334,33,335,28,414,49"/>
+<area shape="rect" id="Node000005" href="$net_8c.html#ac3136f214a7023774a03531efb49eb77" title=" " alt="" coords="231,55,337,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="376,70,337,70,337,65,376,65"/>
+<area shape="rect" id="Node000006" href="$net_8c.html#a07fadf782270f861e72575c8d9c86c70" title=" " alt="" coords="227,104,341,129"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="414,86,335,106,334,101,413,81"/>
+<area shape="rect" id="Node000003" href="$net_8c.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="108,55,179,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,38,180,58,178,53,233,33"/>
+<area shape="rect" id="Node000004" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="217,70,179,70,179,65,217,65"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="233,102,178,82,180,77,235,97"/>
+</map>

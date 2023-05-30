@@ -1,0 +1,28 @@
+var ad7616_st_2src_2platform_2stm32_2parameters_8h =
+[
+    [ "GPIO_BUSY_NB", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#ad00ed152e8ac5822abe168d24fd078f3", null ],
+    [ "GPIO_BUSY_PORT", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a6803734e62816d6c3b44e99eb147595f", null ],
+    [ "GPIO_CONVST_NB", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#ac3d0bc5d6d1e95f0a67be2d0ca2fc806", null ],
+    [ "GPIO_CONVST_PORT", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a037aff33c0acbd8e3cd0dd2f9bc18885", null ],
+    [ "GPIO_OPS", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#aa00c79541f5bcf66f6cfadcdc90e82e1", null ],
+    [ "GPIO_PORT_A", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a26c950f1ed9bbc330c8a1a778cbb30ac", null ],
+    [ "GPIO_PORT_G", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#ad18a811c876e0e178d5c654f43049fb4", null ],
+    [ "GPIO_RESET_NB", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a080d05ce9d5cd9e44fda98076e8b4df0", null ],
+    [ "GPIO_RESET_PORT", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a423bac34988269894634d5938a778eae", null ],
+    [ "INTC_DEVICE_ID", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a90bc74590962865fc1ab7ee1be0f4b64", null ],
+    [ "SPI_BAUDRATE", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a4dad4b502d445b46f33cdd159e04051a", null ],
+    [ "SPI_CS", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#ade4259fa3cbb71732a4e73c18dcb9b0d", null ],
+    [ "SPI_CS_PORT", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a9912b2a4108ecd9f98ad04eceef5f836", null ],
+    [ "SPI_DEVICE_ID", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a2264889066fc41987d29395b4772bd17", null ],
+    [ "SPI_EXTRA", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a66db4b9b440d992b52d4e6a6e5779e69", null ],
+    [ "SPI_OPS", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a58f6638bccd9f8463f2cb95d378b6505", null ],
+    [ "UART_BAUDRATE", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_EXTRA", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#aef2e6b5fc83c0dc37191e4212e578f7f", null ],
+    [ "UART_IRQ_ID", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#adff4ff00d8f3375e4fb198270ae24597", null ],
+    [ "UART_OPS", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#ae64afa3f3792f9fce17061e4e8733413", null ],
+    [ "ad7616_gpio_convst_extra_ip", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a468658b8acc346f8d43fabbccf2dcf28", null ],
+    [ "ad7616_spi_extra_ip", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a2376d0f6cdb06c6421a672288c0e7718", null ],
+    [ "ad7616_uart_extra_ip", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a58f1eb1198ea2f7c42b34f27cb9c5ecb", null ],
+    [ "huart5", "ad7616-st_2src_2platform_2stm32_2parameters_8h.html#a25a82fcf0cd24eb6d39977cb5864cec8", null ]
+];

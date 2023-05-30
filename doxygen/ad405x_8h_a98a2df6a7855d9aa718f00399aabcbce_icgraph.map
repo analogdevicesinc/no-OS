@@ -1,0 +1,9 @@
+<map id="ad405x_set_gp_mode" name="ad405x_set_gp_mode">
+<area shape="rect" id="Node000001" title="Set GP mode." alt="" coords="341,31,505,56"/>
+<area shape="rect" id="Node000002" href="$iio__ad405x_8c.html#a25e5b9b70c0d01d27fb470e006568145" title="Initializes the AD405X IIO driver." alt="" coords="172,5,293,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="327,33,293,29,294,23,328,28"/>
+<area shape="rect" id="Node000004" href="$ad405x_2src_2examples_2basic__example_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,55,292,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,58,292,63,292,57,328,53"/>
+<area shape="rect" id="Node000003" href="$ad405x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

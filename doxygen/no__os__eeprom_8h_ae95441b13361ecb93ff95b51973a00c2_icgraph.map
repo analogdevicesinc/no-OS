@@ -1,0 +1,7 @@
+<map id="no_os_eeprom_write" name="no_os_eeprom_write">
+<area shape="rect" id="Node000001" title="Write the EEPROM data." alt="" coords="221,31,379,56"/>
+<area shape="rect" id="Node000002" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="62,5,117,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,35,117,24,117,19,208,30"/>
+<area shape="rect" id="Node000003" href="$mwc_8c.html#a9304b4706a2361d3ef1ce91d004305d6" title=" " alt="" coords="5,55,173,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,56,174,60,173,55,208,51"/>
+</map>

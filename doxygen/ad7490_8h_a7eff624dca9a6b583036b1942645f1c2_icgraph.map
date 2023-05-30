@@ -1,0 +1,17 @@
+<map id="ad7490_set_op_mode" name="ad7490_set_op_mode">
+<area shape="rect" id="Node000001" title="Set AD7490 operating mode." alt="" coords="545,31,709,56"/>
+<area shape="rect" id="Node000002" href="$ad7490_8c.html#a570992f78e25185cbe35df6f76d7851a" title="AD7490 Initialization function." alt="" coords="385,5,483,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,33,483,27,484,22,532,28"/>
+<area shape="rect" id="Node000006" href="$ad7490_8c.html#a683ca7dc1ccf609a62037b87184d3566" title="Free the resources allocated by initialization." alt="" coords="371,55,497,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="532,58,498,62,497,57,531,53"/>
+<area shape="rect" id="Node000003" href="$iio__ad7490_8c.html#a6a4af5f1a2888c06864cf197f300f466" title=" " alt="" coords="187,55,308,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="373,37,297,57,296,52,372,32"/>
+<area shape="rect" id="Node000005" href="$eval-ad7490sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="188,5,307,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="370,21,307,21,307,15,370,15"/>
+<area shape="rect" id="Node000004" href="$eval-ad7490sdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="173,70,124,70,124,65,173,65"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="357,70,308,70,308,65,357,65"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="372,54,296,33,297,28,373,49"/>
+<area shape="rect" id="Node000007" href="$iio__ad7490_8c.html#a1e5b19530981e700aa19c5087312ab8d" title=" " alt="" coords="172,104,323,129"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="373,86,297,106,296,101,372,81"/>
+</map>

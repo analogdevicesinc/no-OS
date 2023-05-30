@@ -1,0 +1,21 @@
+<map id="no_os_list_add_last" name="no_os_list_add_last">
+<area shape="rect" id="Node000001" title=" " alt="" coords="701,145,851,170"/>
+<area shape="rect" id="Node000002" href="$aducm3029__irq_8c.html#a0b93fd38ff0df79033b4335e9b4c9ea3" title="Registers a IRQ callback function to irq controller." alt="" coords="467,5,646,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="751,137,707,98,652,60,627,48,629,43,655,55,710,93,754,133"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__irq_8c.html#a91c4a4a93e184bb53266635bb42aac24" title="Register a callback function to be triggered when an interrupt occurs." alt="" coords="460,70,653,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="734,141,652,109,614,98,615,93,654,104,736,136"/>
+<area shape="rect" id="Node000004" href="$no__os__dma_8c.html#a5348cf029fbed8be89cf5296b401b40d" title="Acquire a channel and configure the list of transfers." alt="" coords="469,119,644,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="687,150,644,145,644,139,688,145"/>
+<area shape="rect" id="Node000008" href="$pico__irq_8c.html#abe5830316a4b383a5e66fdd2984c1d94" title="Register a callback." alt="" coords="461,169,652,194"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="688,170,652,174,652,168,687,164"/>
+<area shape="rect" id="Node000009" href="$stm32__irq_8c.html#af566f287316bc200dddc34fd6f7948df" title="Register a callback." alt="" coords="485,219,629,259"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="732,178,654,208,618,221,616,216,652,203,730,173"/>
+<area shape="rect" id="Node000010" href="$xilinx__gpio__irq_8c.html#a493b4352122333a0e4aaf6ae130ccb20" title="Register pin specific GPIO interrupt." alt="" coords="479,283,634,323"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="758,182,713,228,685,252,655,273,630,285,628,280,652,268,682,248,710,224,754,178"/>
+<area shape="rect" id="Node000005" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="236,112,412,152"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="455,135,412,135,412,129,455,129"/>
+<area shape="rect" id="Node000006" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,90,188,115"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="222,122,188,117,189,112,223,116"/>
+<area shape="rect" id="Node000007" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,140,170,180"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="223,147,170,154,170,148,222,142"/>
+</map>

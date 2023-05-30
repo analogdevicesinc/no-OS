@@ -1,0 +1,8 @@
+<map id="drivers/platform/maxim/max32660/maxim_rtc.h" name="drivers/platform/maxim/max32660/maxim_rtc.h">
+<area shape="rect" id="Node000001" title="Header file of RTC driver." alt="" coords="5,5,187,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="61,167,131,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,46,83,80,81,118,90,153,85,154,76,119,77,79,86,45"/>
+<area shape="rect" id="Node000003" href="$no__os__rtc_8h.html" title="Header of the RTC interface." alt="" coords="91,93,187,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="109,44,128,80,124,83,104,47"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="134,120,112,156,108,154,129,118"/>
+</map>

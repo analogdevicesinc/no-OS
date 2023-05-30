@@ -1,0 +1,17 @@
+<map id="projects/adrv902x/src/common/clkgen_routines.c" name="projects/adrv902x/src/common/clkgen_routines.c">
+<area shape="rect" id="Node000001" title="Implements clkgen init and settings to be used by adrv902x examples." alt="" coords="227,5,428,45"/>
+<area shape="rect" id="Node000002" href="$clkgen__routines_8h.html" title="Defines clkgen init and settings to be used by adrv902x examples." alt="" coords="259,93,396,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="330,46,330,79,325,79,325,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,156,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="288,121,134,165,133,160,287,116"/>
+<area shape="rect" id="Node000004" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="181,167,317,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="316,121,273,159,270,156,313,117"/>
+<area shape="rect" id="Node000006" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="341,167,471,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="342,117,385,156,381,159,338,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="496,167,591,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="363,116,496,160,495,165,361,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="215,240,282,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="251,192,251,226,246,226,246,192"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="371,240,441,265"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="409,192,409,226,403,226,403,192"/>
+</map>

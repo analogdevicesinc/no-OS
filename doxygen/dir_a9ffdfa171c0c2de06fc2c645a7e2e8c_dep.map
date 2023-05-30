@@ -1,0 +1,21 @@
+<map id="projects/adrv902x/src/common" name="projects/adrv902x/src/common">
+<area shape="rect" id="node4" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="323,136,389,161"/>
+<area shape="poly" id="edge1" href="dir_000382_000471.html" alt="" coords="179,85,310,129,309,134,177,91"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000382_000471.html" title="2" alt="" coords="303,115,313,130"/>
+<area shape="rect" id="node5" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="413,136,483,161"/>
+<area shape="poly" id="edge2" href="dir_000382_000686.html" alt="" coords="184,83,400,133,399,138,183,88"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000382_000686.html" title="8" alt="" coords="392,119,402,134"/>
+<area shape="rect" id="node2" href="dir_4f91bb810fbd5f7ab003f84be65b759f.html" title="firmware" alt="" coords="37,136,117,161"/>
+<area shape="rect" id="node3" href="dir_ca785b63aa9d85b17a4e7c4ec14bfd28.html" title="hal" alt="" coords="37,63,80,88"/>
+<area shape="poly" id="edge4" href="dir_000608_000594.html" alt="" coords="64,88,73,122,68,124,59,89"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000608_000594.html" title="4" alt="" coords="73,109,83,124"/>
+<area shape="poly" id="edge3" href="dir_000608_000471.html" alt="" coords="81,82,94,85,200,110,309,133,308,138,198,115,93,91,79,87"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000608_000471.html" title="1" alt="" coords="302,119,311,134"/>
+<area shape="poly" id="edge6" href="dir_000608_000686.html" alt="" coords="81,82,94,85,178,102,245,111,313,119,400,133,399,139,312,124,244,116,177,108,93,91,79,87"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000608_000686.html" title="5" alt="" coords="392,119,401,134"/>
+<area shape="rect" id="node6" href="dir_6a5cb97f3d4ff2c3ed3d54b8b729fd93.html" title="adrv9001" alt="" coords="216,136,299,161"/>
+<area shape="poly" id="edge5" href="dir_000608_000215.html" alt="" coords="81,82,213,129,212,134,79,87"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000608_000215.html" title="1" alt="" coords="206,115,216,129"/>
+<area shape="rect" id="clust2" href="dir_a9ffdfa171c0c2de06fc2c645a7e2e8c.html" alt="" coords="27,52,195,172"/>
+<area shape="rect" id="clust1" href="dir_e2aef189a26865c6b859aad2cfce73a6.html" title="src" alt="" coords="16,16,205,183"/>
+</map>

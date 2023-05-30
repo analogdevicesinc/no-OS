@@ -1,0 +1,16 @@
+<map id="adf5902_write" name="adf5902_write">
+<area shape="rect" id="Node000001" title="Writes 4 bytes of data to ADF5902." alt="" coords="372,80,487,105"/>
+<area shape="rect" id="Node000002" href="$adf5902_8c.html#a904a11cbab343f190278eec3878038be" title="Initializes the ADF5902." alt="" coords="165,5,267,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="392,76,323,45,267,29,268,24,325,39,395,71"/>
+<area shape="rect" id="Node000004" href="$adf5902_8c.html#a3778ff2df9023574f987474d5aeb2f77" title="Free resoulces allocated for ADF5902." alt="" coords="140,55,292,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="358,87,292,79,292,74,358,82"/>
+<area shape="rect" id="Node000005" href="$adf5902_8c.html#adefdd83c7357ac6c466f509679f37b15" title="Recalibration procedure." alt="" coords="140,104,292,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="358,103,292,111,292,105,358,98"/>
+<area shape="rect" id="Node000006" href="$adf5902_8c.html#a4bfc5d5aa71daf83bee66b672bacca07" title="Measure output locked frequency." alt="" coords="108,153,324,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="393,114,325,143,281,156,279,151,323,138,391,109"/>
+<area shape="rect" id="Node000003" href="$adf5902__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="152,31,109,44,77,63,50,82,47,78,74,58,107,40,151,26"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="127,82,60,92,60,86,126,77"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="126,108,60,99,60,93,127,102"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="132,152,107,143,75,126,49,108,52,103,78,121,109,138,133,147"/>
+</map>

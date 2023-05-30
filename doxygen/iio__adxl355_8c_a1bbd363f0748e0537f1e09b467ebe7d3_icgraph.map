@@ -1,0 +1,48 @@
+<map id="adxl355_read_device_data" name="adxl355_read_device_data">
+<area shape="rect" id="Node000001" title="Reads from the device." alt="" coords="857,311,1053,337"/>
+<area shape="rect" id="Node000002" href="$adxl355_8c.html#adee32d841ce0cc8e7275d105382da9a3" title="Reads the number of FIFO entries register value." alt="" coords="634,72,807,112"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="939,300,887,219,850,174,808,133,778,114,780,110,811,129,854,170,892,216,943,297"/>
+<area shape="rect" id="Node000003" href="$adxl355_8c.html#a87d487d5c1307498ea083fe451934f2c" title="Reads fifo data and returns the raw values." alt="" coords="387,134,584,159"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="937,302,915,272,885,237,849,204,808,178,753,158,695,147,637,142,584,141,584,136,638,136,696,141,755,153,811,174,853,200,889,234,919,268,941,298"/>
+<area shape="rect" id="Node000006" href="$adxl355_8c.html#af4bed2fbfd28cc3097694c4f77f673ed" title="Gets the current operation mode of the device." alt="" coords="636,438,805,463"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="928,347,875,384,811,421,764,440,762,435,808,416,872,379,925,343"/>
+<area shape="rect" id="Node000007" href="$adxl355_8c.html#a5a713beae7da66b3cf9ab6642a7d0c03" title="Reads the raw temperature." alt="" coords="633,187,808,213"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="927,305,874,266,808,228,775,215,777,210,810,223,877,261,930,301"/>
+<area shape="rect" id="Node000009" href="$adxl355_8c.html#a9dfdf6c018dabf65a714422398fb93c7" title="Reads the raw output data." alt="" coords="639,237,802,262"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="904,309,809,277,767,265,768,260,810,272,906,304"/>
+<area shape="rect" id="Node000011" href="$adxl355_8c.html#ad4ce0375e5c06b483579a570ea976efb" title="Reads the status register value." alt="" coords="643,286,799,311"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="844,315,798,310,799,304,844,309"/>
+<area shape="rect" id="Node000012" href="$adxl355_8c.html#a71f7b8a40d6c14dad5998c5aa0e87753" title="Performs a soft reset of the device." alt="" coords="413,337,558,362"/>
+<area shape="poly" id="edge27_Node000001_Node000012" title=" " alt="" coords="844,333,558,348,558,343,844,327"/>
+<area shape="rect" id="Node000015" href="$adxl355_8c.html#a856ba86fac725f93403ffe8971a803ce" title="Initializes the communication peripheral and checks if the ADXL355 part is present." alt="" coords="434,387,537,413"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="863,342,537,394,537,389,862,336"/>
+<area shape="rect" id="Node000016" href="$adxl355_8c.html#a6f316752484487d5655670558a954a13" title="Writes the high&#45;pass filter settings." alt="" coords="632,487,809,513"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="940,350,887,414,851,449,811,478,786,490,784,485,808,474,848,445,884,410,936,346"/>
+<area shape="rect" id="Node000017" href="$adxl355_8c.html#a5ebd6b97e3c1722a3a7c63ce77b030ed" title="Sets the interrupt polarity." alt="" coords="645,537,797,562"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="945,350,925,389,896,437,857,486,811,528,789,539,786,534,808,523,854,482,891,434,921,387,941,348"/>
+<area shape="rect" id="Node000018" href="$adxl355_8c.html#a04f6359f3e9f79c0254ac61465761bb2" title="Writes the low&#45;pass filter settings." alt="" coords="179,53,332,78"/>
+<area shape="poly" id="edge24_Node000001_Node000018" title=" " alt="" coords="946,299,932,246,905,179,887,145,865,113,839,85,808,62,776,46,742,32,670,15,597,9,524,10,455,18,391,30,295,55,294,50,390,25,454,13,524,5,597,3,671,10,743,27,778,41,811,58,842,81,869,110,892,142,910,177,937,244,951,297"/>
+<area shape="rect" id="Node000019" href="$adxl355_8c.html#a0343f1bcddcf796e5b1e74004f3a0b79" title="Sets the measurement range register value." alt="" coords="648,586,793,611"/>
+<area shape="poly" id="edge26_Node000001_Node000019" title=" " alt="" coords="949,351,931,399,903,460,863,523,839,552,811,577,791,588,789,584,808,573,835,548,859,520,898,458,927,397,944,349"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="621,118,541,137,540,131,620,113"/>
+<area shape="rect" id="Node000004" href="$adxl355_8c.html#a3dfc3d88cc09e28b63a815471ebb25c6" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="172,134,339,159"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="373,149,339,149,339,144,373,144"/>
+<area shape="rect" id="Node000005" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,235,124,261"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="195,166,173,176,122,207,83,237,79,233,119,203,171,171,193,161"/>
+<area shape="rect" id="Node000008" href="$adxl355_8c.html#ab2cca702bfd799f169c4c82cb13ecbb8" title="Reads the raw temperature data and converts it to millidegrees Celsius." alt="" coords="184,185,327,210"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="619,202,327,200,327,195,619,197"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="194,216,114,238,113,233,193,211"/>
+<area shape="rect" id="Node000010" href="$adxl355_8c.html#a31457c441689b591b9177bc6e4d877d0" title="Reads the raw output data of each axis and converts it to g." alt="" coords="419,235,551,261"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="626,252,551,251,551,246,626,246"/>
+<area shape="poly" id="edge12_Node000010_Node000005" title=" " alt="" coords="405,251,124,251,124,245,405,245"/>
+<area shape="poly" id="edge18_Node000011_Node000005" title=" " alt="" coords="629,295,386,276,124,255,125,250,387,271,629,289"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="648,317,546,339,544,334,647,312"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="399,354,289,346,229,336,171,320,119,293,79,263,82,259,121,288,173,315,230,331,289,341,399,349"/>
+<area shape="rect" id="Node000013" href="$iio__adxl355_8c.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="193,387,318,413"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="414,368,314,390,313,385,413,363"/>
+<area shape="rect" id="Node000014" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,387,124,413"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="179,403,125,403,125,397,179,397"/>
+<area shape="poly" id="edge21_Node000015_Node000005" title=" " alt="" coords="443,420,386,438,316,451,278,453,241,451,205,443,171,428,157,416,143,399,113,351,69,262,74,260,118,349,147,396,161,413,173,423,206,437,242,445,279,448,315,446,385,433,441,415"/>
+<area shape="poly" id="edge20_Node000015_Node000013" title=" " alt="" coords="420,403,318,403,318,397,420,397"/>
+<area shape="poly" id="edge25_Node000018_Node000005" title=" " alt="" coords="223,87,174,125,117,186,77,237,73,234,113,182,170,121,220,83"/>
+</map>

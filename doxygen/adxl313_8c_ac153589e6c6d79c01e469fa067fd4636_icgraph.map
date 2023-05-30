@@ -1,0 +1,9 @@
+<map id="adxl313_get_conf_act_inact_ctl" name="adxl313_get_conf_act_inact_ctl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="431,37,595,77"/>
+<area shape="rect" id="Node000002" href="$adxl313_8c.html#ad14d5588767f1b178ff91d1ebb6034d6" title="Enable the activity detection." alt="" coords="219,5,377,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,46,376,40,377,34,418,40"/>
+<area shape="rect" id="Node000003" href="$adxl313_8c.html#aef4533824eea2c42410b877c50d58c75" title="Enables the inactivity detection." alt="" coords="213,69,383,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="418,74,383,79,382,74,417,69"/>
+<area shape="rect" id="Node000004" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,77,165,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,92,166,92,166,87,200,87"/>
+</map>

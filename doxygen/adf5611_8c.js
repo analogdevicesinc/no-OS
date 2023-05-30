@@ -1,0 +1,25 @@
+var adf5611_8c =
+[
+    [ "adf5611_get_cp_i", "adf5611_8c.html#abaa4080b08cd3a858b4c7e9b1f4e56e9", null ],
+    [ "adf5611_get_en_rfoutdiv", "adf5611_8c.html#a1bc0c87533b9c9baf596bfafd42ab4f9", null ],
+    [ "adf5611_get_output_power", "adf5611_8c.html#af87e5881b79c4e6972eb39b0bb08d683", null ],
+    [ "adf5611_get_ref_clk", "adf5611_8c.html#a6dd76a30893d7796b6895495bc6c0b90", null ],
+    [ "adf5611_get_ref_div", "adf5611_8c.html#a8585630c0732aac7471a48e5b7777281", null ],
+    [ "adf5611_get_rfout", "adf5611_8c.html#aff9e07728b70acca1bbb9a029d08d696", null ],
+    [ "adf5611_get_rfoutdiv_divider", "adf5611_8c.html#afa09f98dca519b7d9d62a3417e428334", null ],
+    [ "adf5611_get_rfoutdiv_power", "adf5611_8c.html#a61475c5cbc317dcfc13d50beb1ecb47b", null ],
+    [ "adf5611_init", "adf5611_8c.html#aeb9d7346a1652fb351e163f6672986d8", null ],
+    [ "adf5611_remove", "adf5611_8c.html#a495abbeb6999a0533a6db04ade12fdcb", null ],
+    [ "adf5611_set_cp_i", "adf5611_8c.html#ab46263e7257acbf73c6433be8f0df282", null ],
+    [ "adf5611_set_en_rfoutdiv", "adf5611_8c.html#aa1ec5626952917353b4c51228e8858d1", null ],
+    [ "adf5611_set_freq", "adf5611_8c.html#a78d0176d4d45998c3611927d7f2e4563", null ],
+    [ "adf5611_set_output_power", "adf5611_8c.html#a476d422a65e7cd0dd85bf620360287fb", null ],
+    [ "adf5611_set_ref_clk", "adf5611_8c.html#a7186fdf8366bdf8cafc5bdb33005caa9", null ],
+    [ "adf5611_set_ref_div", "adf5611_8c.html#a539e31cc24688283cfe42189497134fc", null ],
+    [ "adf5611_set_rfout", "adf5611_8c.html#a9a813cea1bfb24602123ce7bc38e0287", null ],
+    [ "adf5611_set_rfoutdiv_divider", "adf5611_8c.html#ac2610ca3558d3b82454b0328e1259317", null ],
+    [ "adf5611_set_rfoutdiv_power", "adf5611_8c.html#af9ad843f0ae443b7919a7aadb5fe7e9c", null ],
+    [ "adf5611_spi_read", "adf5611_8c.html#a7b6b8c9c71c854ed0ce3a98f2f16a88a", null ],
+    [ "adf5611_spi_update_bits", "adf5611_8c.html#afed89c88fb9483e104a60ed6b86a399a", null ],
+    [ "adf5611_spi_write", "adf5611_8c.html#ad0eceabca033ac25672da4777436a5fd", null ]
+];

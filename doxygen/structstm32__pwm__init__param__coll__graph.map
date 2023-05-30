@@ -1,0 +1,5 @@
+<map id="stm32_pwm_init_param" name="stm32_pwm_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the STM32 PWM parameters." alt="" coords="5,93,184,119"/>
+<area shape="rect" id="Node000002" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="15,5,174,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,45,97,93,92,93,92,45"/>
+</map>

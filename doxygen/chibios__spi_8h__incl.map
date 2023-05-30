@@ -1,0 +1,10 @@
+<map id="drivers/platform/chibios/chibios_spi.h" name="drivers/platform/chibios/chibios_spi.h">
+<area shape="rect" id="Node000001" title="Header file for the chibios spi driver." alt="" coords="5,5,183,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="15,167,85,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,47,51,68,35,94,32,109,32,124,40,153,35,155,27,125,27,108,30,92,47,65,68,44"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="45,93,143,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="97,46,97,79,91,79,91,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="168,93,223,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="120,43,171,82,168,87,117,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="89,120,67,156,62,154,84,118"/>
+</map>

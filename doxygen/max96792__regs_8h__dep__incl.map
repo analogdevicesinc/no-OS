@@ -1,0 +1,9 @@
+<map id="drivers/gmsl/deserializer/camera/max96792/max96792_regs.h" name="drivers/gmsl/deserializer/camera/max96792/max96792_regs.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="257,5,525,45"/>
+<area shape="rect" id="Node000002" href="$max96792_8c.html" title=" " alt="" coords="5,93,237,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,52,181,96,179,91,318,47"/>
+<area shape="rect" id="Node000003" href="$max96792__csi_8c.html" title=" " alt="" coords="262,93,519,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="393,59,393,93,388,93,388,59"/>
+<area shape="rect" id="Node000004" href="$max96792__diag_8c.html" title=" " alt="" coords="544,93,811,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="468,47,615,91,614,96,466,52"/>
+</map>

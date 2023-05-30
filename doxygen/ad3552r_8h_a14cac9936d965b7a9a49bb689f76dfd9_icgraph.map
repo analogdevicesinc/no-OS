@@ -1,0 +1,24 @@
+<map id="ad3552r_write_reg" name="ad3552r_write_reg">
+<area shape="rect" id="Node000001" title=" " alt="" coords="791,96,933,121"/>
+<area shape="rect" id="Node000002" href="$ad3552r_8c.html#ae80ba21fae1f11883703b87a0bb676e2" title=" " alt="" coords="384,20,487,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="802,95,742,80,604,57,486,41,487,36,604,51,743,75,803,89"/>
+<area shape="rect" id="Node000005" href="$ad3552r_8c.html#a4b118dc51ba86b1c81b8a5fbfe1c384f" title=" " alt="" coords="578,121,737,146"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="777,122,737,127,737,121,777,116"/>
+<area shape="rect" id="Node000006" href="$ad3552r_8c.html#a19e686b2bc91948778bcbbfec309a3af" title=" " alt="" coords="347,72,524,97"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="777,106,524,92,524,87,777,101"/>
+<area shape="rect" id="Node000010" href="$ad3552r_8c.html#a8e59071eb5dc9e29dcef464b5ee97c37" title=" " alt="" coords="572,171,743,211"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="820,129,744,162,714,173,712,168,742,157,818,124"/>
+<area shape="rect" id="Node000003" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,22,124,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="370,22,298,12,235,8,172,12,109,25,108,20,172,7,235,3,299,7,370,17"/>
+<area shape="rect" id="Node000004" href="$iio__ad3552r_8c.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="172,22,299,48"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="370,36,299,37,299,32,370,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="158,38,124,38,124,32,158,32"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="586,121,493,100,494,95,587,115"/>
+<area shape="rect" id="Node000008" href="$generic__spi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="382,121,489,146"/>
+<area shape="poly" id="edge9_Node000005_Node000008" title=" " alt="" coords="564,136,489,136,489,131,564,131"/>
+<area shape="rect" id="Node000007" href="$axi__qspi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="182,72,289,97"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="333,87,289,87,289,82,333,82"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="177,70,109,51,110,45,178,65"/>
+<area shape="rect" id="Node000009" href="$generic__spi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="176,121,295,146"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="368,136,295,136,295,131,368,131"/>
+</map>

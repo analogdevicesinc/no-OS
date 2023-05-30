@@ -1,0 +1,13 @@
+<map id="ad9656_reg_write" name="ad9656_reg_write">
+<area shape="rect" id="Node000001" title="Write to the ad9656 that is conected to the SPI." alt="" coords="333,55,472,80"/>
+<area shape="rect" id="Node000002" href="$ad9656_8c.html#acbd1d7f4292b47a1777aa1f0c22f72ed" title="Launch the JESD204 test functionality for the receive path for the ad9656 chip." alt="" coords="115,5,278,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="335,54,250,33,251,28,336,49"/>
+<area shape="rect" id="Node000004" href="$ad9656_8c.html#ab61e88ca0626ae6931233680606b395c" title="Setup the working parameters of the ad9656 chip." alt="" coords="140,55,253,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="319,70,254,70,254,65,319,65"/>
+<area shape="rect" id="Node000005" href="$ad9656_8c.html#ae4e108d8747fe5a402b4109d9c1e2c43" title="Launch the user input test functionality for the receive path for the ad9656 chip...." alt="" coords="108,104,285,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="336,86,251,107,250,101,335,81"/>
+<area shape="rect" id="Node000003" href="$ad9656__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="134,37,109,45,61,60,59,55,107,39,133,32"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="126,70,60,70,60,65,126,65"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="137,103,107,94,59,79,61,74,109,89,138,98"/>
+</map>

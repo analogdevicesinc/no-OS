@@ -1,0 +1,15 @@
+<map id="drivers/platform/linux/linux_uart.h" name="drivers/platform/linux/linux_uart.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="58,5,221,45"/>
+<area shape="rect" id="Node000002" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="87,93,192,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,46,142,79,137,79,137,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,121,89,141,63,168,50,197,45,227,39,226,45,196,58,165,85,137,115,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="201,240,283,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="163,117,193,137,220,165,235,196,242,226,237,227,230,198,216,168,189,141,160,121"/>
+<area shape="rect" id="Node000005" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="73,167,206,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="142,119,142,153,137,153,137,119"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="125,194,69,234,66,230,122,190"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="157,190,215,230,212,234,154,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="104,240,175,265"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="142,192,142,226,137,226,137,192"/>
+</map>

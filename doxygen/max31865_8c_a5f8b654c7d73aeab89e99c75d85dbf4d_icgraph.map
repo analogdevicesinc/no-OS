@@ -1,0 +1,5 @@
+<map id="max31865_clear_fault" name="max31865_clear_fault">
+<area shape="rect" id="Node000001" title="Clear all faults in FAULTSTAT." alt="" coords="205,5,372,31"/>
+<area shape="rect" id="Node000002" href="$max31865_8c.html#aae18daf93299f0050372bda29cc0d9c1" title="Read the raw 16&#45;bit value from the RTD_REG in one shot mode." alt="" coords="5,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,21,157,21,157,15,192,15"/>
+</map>

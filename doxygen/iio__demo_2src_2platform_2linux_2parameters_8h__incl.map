@@ -1,0 +1,13 @@
+<map id="projects/iio_demo/src/platform/linux/parameters.h" name="projects/iio_demo/src/platform/linux/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to linux platform used by iio_demo project." alt="" coords="32,5,241,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,132,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,47,90,84,86,81,118,44"/>
+<area shape="rect" id="Node000003" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="156,93,256,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,44,188,81,184,84,151,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="76,167,147,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="192,121,139,160,136,156,189,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="171,167,241,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="209,119,209,153,203,153,203,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="266,167,349,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="224,116,281,156,278,161,221,121"/>
+</map>

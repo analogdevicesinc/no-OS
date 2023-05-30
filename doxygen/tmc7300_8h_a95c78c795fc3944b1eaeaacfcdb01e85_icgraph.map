@@ -1,0 +1,24 @@
+<map id="tmc7300_reg_write" name="tmc7300_reg_write">
+<area shape="rect" id="Node000001" title="Write a register." alt="" coords="505,307,652,332"/>
+<area shape="rect" id="Node000002" href="$tmc7300_8c.html#a58f3b9b30d60ca1dd2c027640c12abfa" title="Update a register." alt="" coords="285,179,443,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="543,302,385,206,388,202,546,297"/>
+<area shape="rect" id="Node000009" href="$tmc7300_8c.html#a016377d64687a2ee849e237849181cfe" title="Set the standstill mode. The motorrun bit will be set to 0." alt="" coords="5,301,223,327"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="492,319,457,318,223,316,223,311,457,313,492,314"/>
+<area shape="rect" id="Node000010" href="$tmc7300_8c.html#af67ae6edb940da6e3c3000fe05aec17c" title="Set the current limit." alt="" coords="285,327,443,367"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="492,333,444,340,443,334,491,328"/>
+<area shape="rect" id="Node000011" href="$tmc7300_8c.html#a3a2b24fd6c2195a5f4b3076fc35ec6c8" title="Set the UART response delay." alt="" coords="271,392,457,417"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="544,341,458,382,419,394,418,389,456,377,542,336"/>
+<area shape="rect" id="Node000003" href="$tmc7300_8c.html#a666dc6dc776d6bfe0b112b71fd1cd8c7" title="Enable the bridge driver." alt="" coords="35,5,193,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="345,169,295,105,260,72,221,44,193,32,195,27,224,40,264,68,299,102,349,165"/>
+<area shape="rect" id="Node000004" href="$tmc7300_8c.html#afa24e691fc8e073c42eccef568793994" title="Initialize the TMC7300 driver." alt="" coords="61,55,167,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="337,172,286,131,255,111,222,94,167,77,168,72,224,89,257,106,289,127,340,167"/>
+<area shape="rect" id="Node000005" href="$tmc7300_8c.html#ae24f277cba551330a667bd6a3037df4d" title="Set the comparator blank time register." alt="" coords="21,104,207,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="317,176,222,143,178,132,179,127,223,138,319,171"/>
+<area shape="rect" id="Node000006" href="$tmc7300_8c.html#ac0effb4a4767211744380e79804e46d4" title="Set the PWM duty cycle." alt="" coords="23,153,205,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="271,185,204,178,205,173,271,179"/>
+<area shape="rect" id="Node000007" href="$tmc7300_8c.html#ac5d47fc049d6d3813161ad971e1d374b" title="Set the PWM duty cycle and direction." alt="" coords="11,203,217,228"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="271,203,217,208,217,203,270,198"/>
+<area shape="rect" id="Node000008" href="$tmc7300_8c.html#af10ce624c541d2e1a2f3b56a5ee2c92a" title="Set the frequency of the PWM signal." alt="" coords="25,252,203,277"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="317,211,223,242,175,254,173,249,222,237,315,206"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="340,215,289,255,224,292,191,304,190,299,222,288,286,250,337,211"/>
+</map>

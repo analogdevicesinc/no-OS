@@ -1,0 +1,10 @@
+<map id="lm75_shutdown" name="lm75_shutdown">
+<area shape="rect" id="Node000001" title="Put the LM75 into normal or shutdown operation." alt="" coords="316,31,441,56"/>
+<area shape="rect" id="Node000002" href="$lm75_8c.html#a2f106daa31e17217692ea2fe3184fd48" title="Initialize LM75 device driver." alt="" coords="171,5,253,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,34,253,27,254,22,303,29"/>
+<area shape="rect" id="Node000004" href="$lm75_8c.html#a6095466fec0251593b5ce760e450a645" title="Uninitialize LM75 device driver." alt="" coords="156,55,268,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="303,57,269,62,268,57,302,52"/>
+<area shape="rect" id="Node000003" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html#a897b461801f0c5c236b9fb1279569532" title=" " alt="" coords="5,31,108,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="157,30,109,38,108,32,157,24"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="142,59,108,54,109,49,143,54"/>
+</map>

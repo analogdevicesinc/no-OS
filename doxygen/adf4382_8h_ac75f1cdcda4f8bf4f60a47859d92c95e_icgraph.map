@@ -1,0 +1,19 @@
+<map id="adf4382_set_vco_cal_timeout" name="adf4382_set_vco_cal_timeout">
+<area shape="rect" id="Node000001" title="Computes and sets the VCO Calibration Timeout values." alt="" coords="580,109,739,149"/>
+<area shape="rect" id="Node000002" href="$adf4382_8c.html#af72d0899bbe73092b615195d788b8bab" title="Initializes the ADF4382." alt="" coords="403,29,506,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="607,105,531,70,496,57,498,52,533,65,609,100"/>
+<area shape="rect" id="Node000006" href="$adf4382_8c.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="379,79,530,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="566,118,530,113,531,108,567,113"/>
+<area shape="rect" id="Node000007" href="$adf4382_8c.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="378,144,531,169"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="567,144,532,149,532,144,566,139"/>
+<area shape="rect" id="Node000008" href="$adf4382_8c.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="377,193,532,219"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="602,157,533,184,500,196,498,191,531,180,600,152"/>
+<area shape="rect" id="Node000003" href="$iio__adf4382_8c.html#a98024760107fb7218ace561900ad4b6a" title="Initializes the ADF4382 IIO driver." alt="" coords="187,5,314,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="389,37,314,28,315,23,390,32"/>
+<area shape="rect" id="Node000005" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="191,55,310,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="390,53,311,63,310,57,389,47"/>
+<area shape="rect" id="Node000004" href="$adf4382_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="174,21,124,21,124,15,174,15"/>
+<area shape="rect" id="Node000009" href="$adf4382_8c.html#a3f4a0e1104b1241c2a4705c469dcd2fe" title="Fast calibration function. Computes Minimum VCO frequency (fmin), uses the minimum NDIV value to gene..." alt="" coords="172,186,329,226"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="364,209,330,209,330,203,364,203"/>
+</map>

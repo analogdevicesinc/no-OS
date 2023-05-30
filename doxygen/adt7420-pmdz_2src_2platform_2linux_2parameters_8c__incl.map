@@ -1,0 +1,9 @@
+<map id="projects/adt7420&#45;pmdz/src/platform/linux/parameters.c" name="projects/adt7420&#45;pmdz/src/platform/linux/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Linux platform data used by adt7420&#45;pmdz project." alt="" coords="5,5,236,45"/>
+<area shape="rect" id="Node000002" href="$adt7420-pmdz_2src_2platform_2linux_2parameters_8h.html" title="Definitions specific to Linux platform used by adt7420&#45;pmdz project." alt="" coords="66,93,175,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,46,123,79,118,79,118,46"/>
+<area shape="rect" id="Node000003" href="$linux__i2c_8h.html" title=" " alt="" coords="75,167,167,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,119,123,153,118,153,118,119"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="85,240,156,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="123,192,123,226,118,226,118,192"/>
+</map>

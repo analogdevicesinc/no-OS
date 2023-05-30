@@ -1,0 +1,5 @@
+<map id="adxl367_read_raw_temp" name="adxl367_read_raw_temp">
+<area shape="rect" id="Node000001" title="Reads the raw temperature of the device. If ADXL367_TEMP_EN is not set, use adxl367_temp_read_en() fi..." alt="" coords="252,5,435,31"/>
+<area shape="rect" id="Node000002" href="$adxl367_8c.html#a8f38540b76abfa7c6ca2d9e912df008b" title="Reads the temperature of the device." alt="" coords="5,5,204,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,21,204,21,204,15,238,15"/>
+</map>

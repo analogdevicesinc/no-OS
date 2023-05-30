@@ -1,0 +1,49 @@
+<map id="ltc2672_transaction" name="ltc2672_transaction">
+<area shape="rect" id="Node000001" title="Write raw register value." alt="" coords="696,426,847,451"/>
+<area shape="rect" id="Node000002" href="$ltc2672_8c.html#a54f9f1b347663b30f4f5df972f617ae8" title="power down ltc2672" alt="" coords="213,455,407,481"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="743,461,700,486,649,505,608,513,566,515,483,511,409,498,350,483,351,478,410,493,484,506,566,510,607,507,647,500,697,481,740,457"/>
+<area shape="rect" id="Node000004" href="$ltc2672_8c.html#ac5d36a739c06f7c4c60a5f6338aa4e01" title="configures the fault detection bits" alt="" coords="457,70,645,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="765,412,756,352,735,272,720,230,700,189,676,151,646,117,615,98,618,93,650,113,680,147,705,187,725,228,740,271,761,351,770,411"/>
+<area shape="rect" id="Node000005" href="$ltc2672_8c.html#a3a1d0b24cd65568eeea113ff402b0bb5" title="enables or disables selected channel/s for toggling" alt="" coords="467,221,636,261"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="754,415,711,350,681,314,646,282,614,264,617,259,650,278,685,310,716,347,759,413"/>
+<area shape="rect" id="Node000006" href="$ltc2672_8c.html#a0e50093dfbdf5c727590dfe7e9545f70" title="writes to the input registers of all channels" alt="" coords="227,164,393,204"/>
+<area shape="poly" id="edge26_Node000001_Node000006" title=" " alt="" coords="762,413,749,367,727,311,693,256,672,232,647,212,617,196,586,184,519,170,453,168,394,172,393,167,453,162,520,165,587,179,620,191,649,207,675,228,698,253,732,309,754,366,767,412"/>
+<area shape="rect" id="Node000007" href="$ltc2672_8c.html#a6147850fb033cb0cee82f3615f85a703" title="writes to the input register of a channel" alt="" coords="235,279,385,319"/>
+<area shape="poly" id="edge27_Node000001_Node000007" title=" " alt="" coords="745,418,702,381,675,364,647,349,580,327,511,313,444,305,385,301,386,296,444,300,511,308,581,322,649,344,678,359,705,377,749,414"/>
+<area shape="rect" id="Node000008" href="$ltc2672_8c.html#abfb6482f1f409d593eed6fe8846e734a" title="enables or disables global toggle bit" alt="" coords="227,617,393,642"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="762,465,745,499,721,538,689,576,649,606,618,621,586,632,518,644,452,647,393,644,393,639,452,642,518,639,584,626,616,616,647,602,685,572,717,535,741,496,757,463"/>
+<area shape="rect" id="Node000009" href="$ltc2672_8c.html#a1d36170a7754cb809ffd2684e6c51be1" title="configures mux output depending on target measurement" alt="" coords="228,691,392,717"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="770,466,760,519,739,587,723,621,703,654,679,684,649,708,612,726,572,738,531,743,489,743,412,734,350,719,351,714,413,729,490,738,531,737,571,732,610,721,647,703,675,680,699,651,719,619,734,585,755,518,764,465"/>
+<area shape="rect" id="Node000010" href="$ltc2672_8c.html#a36631880a13e9f7a623bb1ec896a0b3b" title="power down ALL channels" alt="" coords="472,387,631,427"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="682,428,631,421,631,416,683,423"/>
+<area shape="rect" id="Node000011" href="$ltc2672_8c.html#aa60a564b4108d96e5839d4c000117b8a" title="power down a channel" alt="" coords="472,451,631,491"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="683,454,631,462,631,456,682,449"/>
+<area shape="rect" id="Node000012" href="$ltc2672_8c.html#a0abababa3db467fe8eef14e63f3d2894" title="sets the same dac code for all channels" alt="" coords="472,5,631,45"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="767,413,761,343,743,248,727,197,707,147,680,101,646,59,629,46,632,42,650,55,684,98,711,145,732,196,748,247,766,342,772,412"/>
+<area shape="rect" id="Node000014" href="$ltc2672_8c.html#a2ad5dfbec025fdd04cd81e92d1e86c6c" title="sets the dac code for channel" alt="" coords="455,566,648,591"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="751,463,707,506,649,549,604,568,602,564,647,544,704,502,748,460"/>
+<area shape="rect" id="Node000016" href="$ltc2672_8c.html#a6920eca6de621459b93ccf003eb4aed6" title="sets the same output span for all channels" alt="" coords="231,100,389,140"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="764,413,753,360,732,294,716,260,697,227,674,197,646,171,617,153,586,139,518,121,450,114,390,114,389,109,451,108,519,115,588,134,620,148,650,167,678,193,702,224,721,257,737,292,758,359,769,412"/>
+<area shape="rect" id="Node000017" href="$ltc2672_8c.html#a0b950ef76098e6cc78274e22acbcc49c" title="sets output span for channel" alt="" coords="455,667,648,693"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="764,466,748,506,724,555,692,606,650,650,614,670,611,665,646,646,687,603,720,553,744,504,759,464"/>
+<area shape="rect" id="Node000018" href="$ltc2672_8c.html#a0e6e9a7425d2717f6a620a886255637e" title="setup toggle parameters for a channel" alt="" coords="229,343,391,383"/>
+<area shape="poly" id="edge22_Node000001_Node000018" title=" " alt="" coords="739,421,697,397,647,377,581,364,513,358,391,358,391,353,513,353,582,359,649,372,699,392,742,416"/>
+<area shape="rect" id="Node000019" href="$ltc2672_8c.html#a1def86a6675902daf4116ccb7f2a9ab1" title="updates all the channels" alt="" coords="479,768,624,808"/>
+<area shape="poly" id="edge24_Node000001_Node000019" title=" " alt="" coords="769,466,759,524,737,599,721,640,702,680,678,718,650,751,624,770,620,766,646,747,674,714,697,677,717,638,732,598,753,522,764,465"/>
+<area shape="rect" id="Node000020" href="$ltc2672_8c.html#aeb0b18a163631ca1f102c6362b284840" title="updates the channel" alt="" coords="461,833,641,858"/>
+<area shape="poly" id="edge25_Node000001_Node000020" title=" " alt="" coords="772,465,767,536,750,632,734,683,713,734,685,781,650,822,631,835,628,830,646,818,681,778,708,731,729,681,744,631,762,535,767,465"/>
+<area shape="rect" id="Node000003" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,350,165,375"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="268,452,112,378,115,373,271,447"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="453,237,397,237,337,242,274,252,214,269,179,287,147,309,100,352,97,348,144,305,176,282,212,264,273,247,336,236,397,232,453,232"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="452,221,393,206,394,201,454,215"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="454,267,386,283,385,278,453,262"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="221,613,212,606,184,580,160,549,123,482,99,420,87,376,92,375,104,419,128,480,164,546,188,576,215,602,224,608"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="257,688,233,674,211,657,183,621,158,582,121,500,98,426,86,376,92,375,103,425,126,498,163,579,187,618,215,653,236,670,259,683"/>
+<area shape="rect" id="Node000013" href="$ltc2672_8c.html#a1925a7ba84e10d9845b6663853a1a5d2" title="sets the same current for all channels" alt="" coords="235,21,385,61"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="458,34,386,39,385,34,458,29"/>
+<area shape="poly" id="edge16_Node000013_Node000003" title=" " alt="" coords="241,70,215,90,188,122,165,158,128,234,104,302,92,350,87,349,99,301,123,232,160,155,184,119,211,86,238,66"/>
+<area shape="rect" id="Node000015" href="$ltc2672_8c.html#ac94ad5cab8fa0c407aeda8139638dd8c" title="set the current for a selected DAC channel" alt="" coords="235,552,385,592"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="441,578,386,577,386,571,441,573"/>
+<area shape="poly" id="edge20_Node000016_Node000003" title=" " alt="" coords="222,149,215,154,191,177,169,203,133,259,108,312,93,351,88,349,103,310,128,257,164,200,187,173,212,150,218,145"/>
+<area shape="poly" id="edge23_Node000018_Node000003" title=" " alt="" coords="215,365,166,365,166,360,215,360"/>
+</map>

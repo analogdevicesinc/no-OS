@@ -1,0 +1,17 @@
+<map id="stm32_i3c_dma_ctx" name="stm32_i3c_dma_ctx">
+<area shape="rect" id="Node000001" title="STM32 platform specific I3C DMA context descriptor." alt="" coords="635,211,787,236"/>
+<area shape="rect" id="Node000002" href="$structno__os__i3c__desc.html" title="Structure holding I3C device descriptor." alt="" coords="524,93,647,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="609,126,700,209,696,213,606,130"/>
+<area shape="rect" id="Node000004" href="$structno__os__i3c__bus__desc.html" title="Structure holding I3C bus descriptor." alt="" coords="350,211,503,236"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="541,127,515,145,507,155,502,165,498,177,489,189,454,213,451,208,485,185,493,174,497,163,502,152,512,141,538,123"/>
+<area shape="rect" id="Node000003" href="$structno__os__i3c__platform__ops.html" title="Structure holding I3C function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,30,524,91,523,97,173,36"/>
+<area shape="poly" id="edge7_Node000004_Node000003" title=" " alt="" coords="87,44,79,81,80,100,88,117,104,133,129,147,198,173,279,193,354,208,353,213,277,198,196,178,126,152,100,137,83,120,75,101,73,81,82,43"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="515,206,535,197,553,185,565,169,573,152,582,118,587,119,578,153,570,172,556,189,538,202,518,211"/>
+<area shape="rect" id="Node000005" href="$structno__os__i3c__daa__lut.html" title="Stores the PID + DA information to look&#45;up during the DAA. Should be used only for device initializat..." alt="" coords="188,93,329,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="272,130,291,158,316,185,340,198,367,208,365,213,338,203,313,189,286,162,268,132"/>
+<area shape="rect" id="Node000006" href="$structno__os__i3c__ccc__info.html" title=" " alt="" coords="353,93,500,119"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="429,132,429,211,424,211,424,132"/>
+<area shape="rect" id="Node000007" href="$structno__os__dma__xfer__desc.html" title="It&#39;s used to setup a generic DMA transfer." alt="" coords="671,93,838,119"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="748,132,718,212,713,210,743,130"/>
+</map>

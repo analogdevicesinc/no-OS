@@ -1,0 +1,14 @@
+<map id="ad5770r_spi_reg_read" name="ad5770r_spi_reg_read">
+<area shape="rect" id="Node000001" title=" " alt="" coords="615,95,780,121"/>
+<area shape="rect" id="Node000002" href="$ad5770r_8c.html#a3632abaff6e6a9363f7016e7b742756f" title=" " alt="" coords="391,5,559,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="651,93,566,60,533,48,535,43,568,55,652,88"/>
+<area shape="rect" id="Node000003" href="$ad5770r_8c.html#ac9b459470e83dd110d3a08c1a6615460" title=" " alt="" coords="399,70,550,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="600,100,550,94,550,89,601,94"/>
+<area shape="rect" id="Node000004" href="$ad5770r_8c.html#a91549ef06cfe7ec6c7119ed89a44927d" title=" " alt="" coords="5,146,108,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="601,118,108,157,108,152,601,113"/>
+<area shape="rect" id="Node000005" href="$ad5770r_8c.html#a909c6021a22656060dd5ece70c28ead2" title=" " alt="" coords="383,171,567,197"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="647,128,514,174,512,169,645,123"/>
+<area shape="rect" id="Node000006" href="$ad5770r_8c.html#a114ec63f21e9dc34b056b6e99a0fe8bc" title=" " alt="" coords="156,171,335,197"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="369,187,335,187,335,181,369,181"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="142,173,108,168,109,163,143,168"/>
+</map>

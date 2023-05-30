@@ -1,0 +1,8 @@
+<map id="drivers/platform/maxim/max32670/maxim_spi.h" name="drivers/platform/maxim/max32670/maxim_spi.h">
+<area shape="rect" id="Node000001" title="maxim specific header for SPI driver" alt="" coords="5,5,188,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="61,167,132,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,46,83,80,82,118,90,153,85,154,77,119,78,79,87,45"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="91,93,190,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="110,44,130,80,125,83,105,47"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="136,120,113,156,109,154,131,118"/>
+</map>

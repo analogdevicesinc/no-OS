@@ -1,0 +1,23 @@
+<map id="lt3074_write_word" name="lt3074_write_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write word operation." alt="" coords="972,81,1115,107"/>
+<area shape="rect" id="Node000002" href="$lt3074_8c.html#a0608c21951399f7ee47cbd104bf28fa8" title="Generic register write wrapper." alt="" coords="769,56,900,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="958,86,900,79,900,74,959,81"/>
+<area shape="rect" id="Node000009" href="$lt3074_8c.html#a581c4e7ed8c678c11369ac1aa79cd0a5" title="Converts value to register data and do PMBus write word operation." alt="" coords="745,105,924,131"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="959,106,925,110,924,105,958,101"/>
+<area shape="rect" id="Node000003" href="$lt3074_8c.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="539,5,697,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="766,55,672,33,674,28,767,50"/>
+<area shape="rect" id="Node000008" href="$lt3074_8c.html#ae65f3c229ab9f13258e2f1239c5cac18" title="Set output voltage margin." alt="" coords="339,56,491,81"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="755,71,491,71,491,66,755,66"/>
+<area shape="rect" id="Node000004" href="$lt3074_8c.html#ab6c8397a7fd51120ae521f03fb129c6f" title="Initialize the device structure." alt="" coords="369,7,460,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="525,21,460,22,460,16,525,16"/>
+<area shape="rect" id="Node000005" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,56,291,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="357,37,280,58,279,53,356,32"/>
+<area shape="rect" id="Node000006" href="$iio__lt3074_8c.html#a415078dac56a0cdfeab8963d3e685f23" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,7,289,32"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="356,22,289,22,289,17,356,17"/>
+<area shape="rect" id="Node000007" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,7,124,32"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="160,22,124,22,124,17,160,17"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="325,71,291,71,291,66,325,66"/>
+<area shape="rect" id="Node000010" href="$lt3074_8c.html#a98353c0d94b9bb8883e036162b86d3ad" title="Sets the limit value for a specific fault/warning limits." alt="" coords="555,107,681,132"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="732,121,682,122,682,116,732,116"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="541,118,444,110,338,97,279,84,280,79,339,91,445,105,541,113"/>
+</map>

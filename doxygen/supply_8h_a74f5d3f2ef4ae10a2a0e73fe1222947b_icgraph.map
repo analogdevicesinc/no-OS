@@ -1,0 +1,17 @@
+<map id="supply_scale_v2" name="supply_scale_v2">
+<area shape="rect" id="Node000001" title="Scale V2 value." alt="" coords="840,56,969,81"/>
+<area shape="rect" id="Node000002" href="$supply_8c.html#ae015f45c5c985f983a16c120ff751b7a" title="saves the current and voltage values in rms_adc structure" alt="" coords="629,56,792,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="826,71,792,71,792,66,826,66"/>
+<area shape="rect" id="Node000003" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="490,7,545,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="647,55,544,29,545,23,648,50"/>
+<area shape="rect" id="Node000004" href="$self__test_8c.html#a20e5f2d063314f7d70c97e6d0d1095b0" title="Startup test for power supply." alt="" coords="453,56,581,81"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="616,71,582,71,582,66,616,66"/>
+<area shape="rect" id="Node000006" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,56,227,81"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="644,87,582,97,484,101,387,98,227,81,227,75,387,92,484,96,581,91,644,82"/>
+<area shape="rect" id="Node000005" href="$self__test_8c.html#a9440e0a0a3091dcda40b03efbb3acd55" title="Startup test." alt="" coords="275,5,405,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="458,55,385,33,386,28,460,50"/>
+<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="439,71,227,71,227,66,439,66"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="283,37,212,58,211,53,282,32"/>
+<area shape="rect" id="Node000007" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,71,60,71,60,66,94,66"/>
+</map>

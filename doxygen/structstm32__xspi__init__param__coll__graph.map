@@ -1,0 +1,13 @@
+<map id="stm32_xspi_init_param" name="stm32_xspi_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the initialization parameters for stm32 platform. specific XSPI parameters." alt="" coords="199,181,373,207"/>
+<area shape="rect" id="Node000002" href="$structstm32__xspi__command.html" title="Structure holding the stm32 platform specific XSPI command parameters." alt="" coords="5,93,175,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,122,260,179,258,184,128,127"/>
+<area shape="rect" id="Node000003" href="$structno__os__dma__init__param.html" title="Initialization parameter for the DMA controller." alt="" coords="199,93,373,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,133,289,181,283,181,283,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="190,5,379,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="288,45,288,93,283,93,282,45"/>
+<area shape="rect" id="Node000005" href="$structstm32__dma__channel.html" title="STM32 DMA Channels." alt="" coords="398,93,555,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="440,127,313,184,311,179,437,122"/>
+<area shape="rect" id="Node000006" href="$structstm32__dma__trigger.html" title="Trigger descriptor for triggering a DMA transfer." alt="" coords="403,5,553,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="480,45,480,93,474,93,475,45"/>
+</map>

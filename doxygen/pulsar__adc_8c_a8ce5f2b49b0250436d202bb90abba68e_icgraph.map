@@ -1,0 +1,15 @@
+<map id="pulsar_adc_remove" name="pulsar_adc_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by pulsar_adc_init()." alt="" coords="624,56,773,81"/>
+<area shape="rect" id="Node000002" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,57,356,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="610,72,356,72,356,67,610,66"/>
+<area shape="rect" id="Node000003" href="$iio__pulsar__adc_8c.html#aa6aeb456d8d8f17aa93126567f8e40aa" title="Release resources." alt="" coords="404,5,576,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="631,55,542,33,544,28,633,50"/>
+<area shape="rect" id="Node000005" href="$pulsar__adc_8c.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="430,107,550,132"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="633,87,544,109,542,104,631,82"/>
+<area shape="rect" id="Node000004" href="$pulsar-adc_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,57,148,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="391,27,296,35,196,47,131,60,130,55,196,42,296,30,390,21"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="420,106,331,85,333,80,422,101"/>
+<area shape="rect" id="Node000006" href="$iio__pulsar__adc_8c.html#a8dc355525e9be45109bec316dad2ae8d" title="Initialize PULSAR_ADC for IIO interfacing." alt="" coords="205,107,347,132"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="416,122,348,122,348,117,416,117"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="210,106,128,85,129,80,212,101"/>
+</map>

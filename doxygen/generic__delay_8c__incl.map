@@ -1,0 +1,14 @@
+<map id="drivers/platform/generic/generic_delay.c" name="drivers/platform/generic/generic_delay.c">
+<area shape="rect" id="Node000001" title="Implementation of Generic Platform Drivers." alt="" coords="38,5,217,45"/>
+<area shape="rect" id="Node000002" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,93,119,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,47,82,84,78,81,109,44"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="143,93,243,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="145,44,176,81,172,84,141,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="44,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="67,118,76,153,71,154,62,120"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="176,121,111,162,108,157,173,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="148,167,219,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="194,119,189,154,184,153,188,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="243,167,326,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="209,117,261,156,257,160,206,121"/>
+</map>

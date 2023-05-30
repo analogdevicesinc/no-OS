@@ -1,0 +1,5 @@
+<map id="drivers/temperature/max31875/max31875.h" name="drivers/temperature/max31875/max31875.h">
+<area shape="rect" id="Node000001" title="Header file of MAX31875 Driver." alt="" coords="5,5,185,45"/>
+<area shape="rect" id="Node000002" href="$max31875_8c.html" title="Implementation of MAX31875 Driver." alt="" coords="6,93,185,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,59,98,93,93,93,93,59"/>
+</map>

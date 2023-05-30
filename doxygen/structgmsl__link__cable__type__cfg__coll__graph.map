@@ -1,0 +1,5 @@
+<map id="gmsl_link_cable_type_cfg" name="gmsl_link_cable_type_cfg">
+<area shape="rect" id="Node000001" title="Structure for configuring GMSL tx&#45;link rate settings." alt="" coords="5,93,196,119"/>
+<area shape="rect" id="Node000002" href="$structgmsl__link__cable__type.html" title="Enumerates link cable type indices." alt="" coords="19,5,182,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,45,103,93,98,93,98,45"/>
+</map>

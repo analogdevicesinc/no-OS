@@ -1,0 +1,11 @@
+<map id="ad405x_extra" name="ad405x_extra">
+<area shape="rect" id="Node000001" title=" " alt="" coords="83,269,193,295"/>
+<area shape="rect" id="Node000002" href="$structad405x__i3c__extra.html" title="AD405X Device I3C structure." alt="" coords="5,181,143,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,217,109,244,129,267,125,271,105,247,86,220"/>
+<area shape="rect" id="Node000003" href="$structad405x__spi__extra.html" title="AD405X Device SPI structure." alt="" coords="167,181,304,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,218,153,271,150,267,210,214"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="169,93,301,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="238,133,238,181,233,181,233,133"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="141,5,329,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="238,45,238,93,233,93,233,45"/>
+</map>

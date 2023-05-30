@@ -1,0 +1,9 @@
+<map id="ade7816_spi_reg_write" name="ade7816_spi_reg_write">
+<area shape="rect" id="Node000001" title="ADE7816 SPI Write Register function." alt="" coords="569,5,741,31"/>
+<area shape="rect" id="Node000002" href="$ade7816_8c.html#aee753094ae017b3041d658565456c84c" title="ADE7816 set communication function." alt="" coords="368,5,521,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="555,21,521,21,521,15,555,15"/>
+<area shape="rect" id="Node000003" href="$ade7816_8c.html#ac294be7c53212f7157e0f12ba10a04be" title="Initialize and configure the ADE7816 device." alt="" coords="213,5,320,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="354,21,320,21,320,15,354,15"/>
+<area shape="rect" id="Node000004" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="199,21,165,21,165,15,199,15"/>
+</map>

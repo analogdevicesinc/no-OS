@@ -1,0 +1,39 @@
+<map id="ad5710r_reg_read" name="ad5710r_reg_read">
+<area shape="rect" id="Node000001" title="Read from device register." alt="" coords="917,34,1056,59"/>
+<area shape="rect" id="Node000002" href="$ad5710r_8c.html#ab542378cc528191b2d64a2d71bc30727" title="Initialize the device structure." alt="" coords="5,166,108,191"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="903,34,869,30,744,17,645,9,548,10,423,24,345,35,285,47,228,67,157,101,108,134,72,167,68,164,105,130,155,96,226,62,284,42,344,30,422,18,547,5,646,4,744,12,870,25,904,29"/>
+<area shape="rect" id="Node000003" href="$ad5710r_8c.html#a0f2bffb7361dc0994c3e18648348c990" title="Perform a hard/soft reset." alt="" coords="473,34,587,59"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="903,49,587,49,587,44,903,44"/>
+<area shape="rect" id="Node000004" href="$ad5710r_8c.html#a831e654a1b6e7fb10456072c534d412a" title="SPI write to device using a mask." alt="" coords="685,234,869,259"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="964,71,794,235,790,231,960,67"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="460,65,423,74,242,125,100,168,98,163,241,120,422,69,459,60"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="761,223,741,188,713,148,677,108,636,74,612,62,587,55,588,50,614,57,639,69,681,104,717,145,745,186,766,220"/>
+<area shape="rect" id="Node000005" href="$ad5710r_8c.html#afa74225f43658589afb69b1c0506d88a" title="Selects the output mode for a specific channel of the AD5710R DAC." alt="" coords="439,84,621,124"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="752,226,701,182,670,158,636,138,609,126,611,121,639,133,673,154,705,177,756,222"/>
+<area shape="rect" id="Node000006" href="$ad5710r_8c.html#ae1b6d820db5fb6384783db2e8eac434e" title="Configures the CRC selection bit." alt="" coords="441,148,619,174"/>
+<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="737,230,636,189,592,176,593,171,638,184,739,225"/>
+<area shape="rect" id="Node000008" href="$ad5710r_8c.html#a2b3d93cc9aaec90fd4b295ce569ca995" title="Set the multiplexer output select register." alt="" coords="447,198,613,238"/>
+<area shape="poly" id="edge10_Node000004_Node000008" title=" " alt="" coords="672,237,613,230,614,225,672,232"/>
+<area shape="rect" id="Node000009" href="$ad5710r_8c.html#a01d0e3bcac9768e1e0bfd8a5daf8ba28" title="Set operating mode for each channel." alt="" coords="423,263,637,288"/>
+<area shape="poly" id="edge12_Node000004_Node000009" title=" " alt="" coords="672,261,638,266,637,260,672,256"/>
+<area shape="rect" id="Node000010" href="$ad5710r_8c.html#ad0bc1bd5387db14cef9c9d322c123466" title="Set output range for all channels." alt="" coords="455,313,605,353"/>
+<area shape="poly" id="edge14_Node000004_Node000010" title=" " alt="" coords="733,267,638,302,599,315,597,310,636,297,731,262"/>
+<area shape="rect" id="Node000011" href="$ad5710r_8c.html#a07510ed58e673a805db6a166de79046a" title="Set reference configuration." alt="" coords="445,378,615,403"/>
+<area shape="poly" id="edge16_Node000004_Node000011" title=" " alt="" coords="758,271,707,320,674,346,639,367,606,380,604,375,636,362,671,341,703,316,754,267"/>
+<area shape="rect" id="Node000012" href="$ad5710r_8c.html#a2f3b4228a118a3880e61d3cf1b571ecb" title="Trigger the LDAC using software." alt="" coords="438,427,622,452"/>
+<area shape="poly" id="edge18_Node000004_Node000012" title=" " alt="" coords="765,272,745,305,716,344,680,384,639,416,611,429,609,424,636,412,677,380,712,341,740,302,760,269"/>
+<area shape="rect" id="Node000015" href="$ad5710r_8c.html#a15af7f31677bf9178c373227f5b2316a" title="Updates the interface configuration." alt="" coords="156,482,375,507"/>
+<area shape="poly" id="edge21_Node000004_Node000015" title=" " alt="" coords="771,273,754,317,727,371,689,424,665,448,639,467,603,485,565,498,486,512,409,515,342,510,342,504,409,509,485,507,564,493,601,480,636,463,662,444,685,421,722,368,749,315,766,271"/>
+<area shape="rect" id="Node000007" href="$ad5710r_8c.html#ae6dbc3922700fef2989110ab529189f2" title="Configures the device." alt="" coords="180,235,351,260"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="457,179,423,189,355,213,297,237,295,232,353,208,422,184,455,174"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="213,233,95,193,97,188,214,228"/>
+<area shape="poly" id="edge11_Node000008_Node000007" title=" " alt="" coords="433,232,351,241,351,235,433,226"/>
+<area shape="poly" id="edge13_Node000009_Node000007" title=" " alt="" coords="409,265,351,259,351,254,409,260"/>
+<area shape="poly" id="edge15_Node000010_Node000007" title=" " alt="" coords="450,311,422,302,304,263,305,258,423,297,452,306"/>
+<area shape="poly" id="edge17_Node000011_Node000007" title=" " alt="" coords="444,376,422,367,377,342,337,313,278,262,281,258,340,309,380,338,424,362,446,371"/>
+<area shape="rect" id="Node000013" href="$ad5710r_8c.html#aa5538dfb1ac803f6623565a3566e210a" title="Set dac value based on the user selected DAC update mode." alt="" coords="178,367,353,392"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="459,426,322,395,323,390,460,421"/>
+<area shape="rect" id="Node000014" href="$ad5710r_8c.html#a3e722ffb779458b78899de535ea391ae" title="Sets dac value for multiple channels." alt="" coords="182,417,349,457"/>
+<area shape="poly" id="edge20_Node000012_Node000014" title=" " alt="" coords="424,441,349,440,349,435,424,436"/>
+<area shape="poly" id="edge22_Node000015_Node000002" title=" " alt="" coords="161,477,154,471,125,438,102,400,85,360,73,318,59,243,56,191,61,191,65,242,78,317,90,358,107,398,129,435,158,467,165,472"/>
+</map>

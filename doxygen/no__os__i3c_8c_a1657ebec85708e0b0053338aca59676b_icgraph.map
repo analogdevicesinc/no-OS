@@ -1,0 +1,5 @@
+<map id="no_os_i3c_addr_get_free" name="no_os_i3c_addr_get_free">
+<area shape="rect" id="Node000001" title="Get a free address." alt="" coords="271,13,453,38"/>
+<area shape="rect" id="Node000002" href="$stm32__i3c_8c.html#acb7fd673626d22c159a56f5d9efdc703" title="I3C target request a dynamic address callback. When called, assigns a dynamic address to the target." alt="" coords="5,5,223,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,28,223,28,223,23,257,23"/>
+</map>

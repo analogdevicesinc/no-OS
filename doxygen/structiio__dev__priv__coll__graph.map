@@ -1,0 +1,32 @@
+<map id="iio_dev_priv" name="iio_dev_priv">
+<area shape="rect" id="Node000001" title="Links a physical device instance &quot;void *dev_instance&quot; with a &quot;iio_device *iio&quot; that describes capabil..." alt="" coords="316,391,417,416"/>
+<area shape="rect" id="Node000002" href="$structiio__device__data.html" title=" " alt="" coords="305,303,429,328"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="369,342,369,390,364,390,364,342"/>
+<area shape="rect" id="Node000003" href="$structiio__buffer.html" title=" " alt="" coords="215,205,297,231"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="282,238,355,301,352,305,279,242"/>
+<area shape="rect" id="Node000014" href="$structiio__buffer__priv.html" title=" " alt="" coords="165,303,280,328"/>
+<area shape="poly" id="edge15_Node000014_Node000003" title=" " alt="" coords="250,245,229,303,224,301,245,243"/>
+<area shape="rect" id="Node000004" href="$structno__os__circular__buffer.html" title="Circular buffer descriptor." alt="" coords="5,108,165,133"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="119,138,237,203,234,208,116,142"/>
+<area shape="poly" id="edge16_Node000014_Node000004" title=" " alt="" coords="104,143,217,301,212,304,99,146"/>
+<area shape="rect" id="Node000005" href="$structno__os__cb__ptr.html" title="Circular buffer pointer." alt="" coords="32,5,139,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="88,45,88,108,83,108,83,45"/>
+<area shape="rect" id="Node000006" href="$structiio__cyclic__buffer__info.html" title=" " alt="" coords="190,108,349,133"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="268,147,260,205,255,205,263,147"/>
+<area shape="rect" id="Node000007" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="483,303,571,328"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="496,337,439,369,392,393,389,388,436,364,494,333"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="405,205,555,231"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="494,242,523,301,519,303,489,244"/>
+<area shape="rect" id="Node000009" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="373,108,550,133"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="469,147,480,204,475,205,464,148"/>
+<area shape="rect" id="Node000010" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="627,205,723,231"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="647,241,546,305,543,300,644,236"/>
+<area shape="rect" id="Node000011" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="575,108,687,133"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="630,147,634,171,646,189,661,203,657,207,642,192,630,173,625,148"/>
+<area shape="rect" id="Node000012" href="$structscan__type.html" title=" " alt="" coords="711,108,799,133"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="734,145,721,159,684,207,680,204,717,156,730,141"/>
+<area shape="rect" id="Node000013" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="840,108,941,133"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="897,147,896,160,890,173,868,203,845,224,821,238,795,248,739,262,670,281,620,297,572,308,570,303,618,292,669,276,737,257,794,243,818,233,841,219,864,199,886,171,890,159,892,146"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="857,142,790,174,707,208,705,203,788,170,854,137"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="255,333,348,388,346,393,252,337"/>
+</map>

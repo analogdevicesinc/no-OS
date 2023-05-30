@@ -1,0 +1,11 @@
+<map id="projects/max25603/src/platform/maxim/parameters.h" name="projects/max25603/src/platform/maxim/parameters.h">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by MAX25603 project." alt="" coords="164,5,387,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,124,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,48,109,91,108,86,224,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="149,93,263,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="261,47,228,84,224,81,257,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="288,93,401,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="294,44,327,81,323,84,290,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="426,93,578,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="330,43,457,86,455,91,329,48"/>
+</map>

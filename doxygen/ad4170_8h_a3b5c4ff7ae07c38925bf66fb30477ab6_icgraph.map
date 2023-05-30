@@ -1,0 +1,41 @@
+<map id="ad4170_spi_reg_read" name="ad4170_spi_reg_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="637,252,797,277"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#aca12c1916e6be2a08a4354ef4563e5f1" title="Get data from register Data_Per_Channel[n]." alt="" coords="408,5,564,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="706,239,691,196,667,143,632,89,611,65,588,44,563,31,566,26,591,40,615,61,637,86,671,140,696,194,711,237"/>
+<area shape="rect" id="Node000003" href="$ad4170_8c.html#ab220040d5cd73d3c2bf10c3fa885857b" title="Get data from register Data_16b." alt="" coords="411,55,561,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="702,241,685,207,659,167,627,127,588,94,561,81,563,76,591,89,631,123,664,164,689,204,707,238"/>
+<area shape="rect" id="Node000004" href="$ad4170_8c.html#a54051436e9e54496e9cba81ffb3ce2a1" title="Get data and status from register Data_16b_Status." alt="" coords="407,104,565,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="696,243,651,192,621,165,588,143,562,132,564,127,591,138,624,161,655,188,700,239"/>
+<area shape="rect" id="Node000005" href="$ad4170_8c.html#a4cbffc69457221faa81ffc27dce30043" title="Get data from register Data_24b." alt="" coords="411,153,561,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="686,247,641,219,588,192,554,181,555,176,590,188,644,214,689,242"/>
+<area shape="rect" id="Node000006" href="$ad4170_8c.html#a112d9b5e05d557eb772cc285d194c82b" title="Get data and status from register Data_24b_Status." alt="" coords="407,203,565,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="643,252,546,231,547,225,645,247"/>
+<area shape="rect" id="Node000007" href="$ad4170_8c.html#a12d700f89d038fbf6674dda7380c6827" title="Get data from register Data_32b." alt="" coords="411,252,561,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="624,267,562,267,562,262,624,262"/>
+<area shape="rect" id="Node000008" href="$ad4170_8c.html#a3d13fbfc6fa1d2e04b8cb9c1b42bb16e" title="Get the Error register." alt="" coords="418,301,554,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="645,283,547,304,546,299,643,278"/>
+<area shape="rect" id="Node000009" href="$ad4170_8c.html#a839d7d7b1e763f337ae1e814efeb39f2" title="Get status from register Data_Status." alt="" coords="171,352,316,377"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="690,288,645,316,590,341,519,358,445,367,376,371,316,371,316,366,376,365,445,362,518,352,588,335,642,312,687,283"/>
+<area shape="rect" id="Node000010" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="5,503,104,528"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="699,290,653,335,623,358,590,376,527,400,471,411,420,413,371,412,323,410,272,412,216,421,153,443,128,456,105,473,70,504,66,500,102,468,126,452,151,438,215,416,271,406,323,404,372,406,420,408,471,406,526,395,588,372,620,353,649,331,695,286"/>
+<area shape="rect" id="Node000011" href="$ad4170_8c.html#aa98f370b756f9ad50f127eec5564d9a5" title="Debugging function to print the register map to console." alt="" coords="423,453,549,479"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="706,291,662,363,629,402,591,436,551,456,548,451,588,432,626,398,658,360,702,288"/>
+<area shape="rect" id="Node000012" href="$ad4170_8c.html#ae24263d5528343a6218ae8189af0054e" title="SPI write device register using a mask." alt="" coords="383,527,589,552"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="710,292,693,334,668,387,634,442,591,492,561,514,528,529,526,524,558,509,588,488,629,439,663,384,688,332,705,290"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="180,385,154,399,124,424,99,453,65,504,61,501,95,450,121,420,150,394,177,380"/>
+<area shape="rect" id="Node000013" href="$ad4170_8c.html#a576b13688c52d149cf2a43b39084a333" title="Perform a software reset." alt="" coords="188,453,299,479"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="434,525,334,493,294,481,295,476,335,487,436,520"/>
+<area shape="rect" id="Node000014" href="$ad4170_8c.html#a3ca58a262948f7d1cc5c3fd562042607" title="Set the AD4170 clock selection configuration." alt="" coords="165,503,322,528"/>
+<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="369,530,322,526,323,520,369,525"/>
+<area shape="rect" id="Node000015" href="$ad4170_8c.html#a3216e26d31ef57f5eeab2c46b993fd20" title="Set the AD4170 DCLK configuration." alt="" coords="164,552,323,577"/>
+<area shape="poly" id="edge17_Node000012_Node000015" title=" " alt="" coords="369,554,323,559,322,554,369,549"/>
+<area shape="rect" id="Node000016" href="$ad4170_8c.html#ab4f531eaeb090bbe407873d6792d4f3c" title="Set the AD4170 MCLK configuration." alt="" coords="162,601,325,627"/>
+<area shape="poly" id="edge19_Node000012_Node000016" title=" " alt="" coords="437,559,335,593,296,604,294,599,334,587,436,554"/>
+<area shape="rect" id="Node000017" href="$ad4170_8c.html#a83d10b0457a777f079f6ccbee72d091b" title="Set the AD4170 SPI settings." alt="" coords="152,651,335,676"/>
+<area shape="poly" id="edge21_Node000012_Node000017" title=" " alt="" coords="460,563,405,603,336,642,305,653,303,648,334,637,402,598,457,559"/>
+<area shape="poly" id="edge14_Node000013_Node000010" title=" " alt="" coords="182,485,105,505,104,500,180,480"/>
+<area shape="poly" id="edge16_Node000014_Node000010" title=" " alt="" coords="151,518,104,518,104,513,151,513"/>
+<area shape="poly" id="edge18_Node000015_Node000010" title=" " alt="" coords="180,551,104,531,105,526,182,546"/>
+<area shape="poly" id="edge20_Node000016_Node000010" title=" " alt="" coords="167,599,151,592,103,561,67,530,71,526,106,557,153,588,169,594"/>
+<area shape="poly" id="edge22_Node000017_Node000010" title=" " alt="" coords="161,648,150,642,119,615,93,584,60,529,64,527,98,581,123,611,154,637,163,643"/>
+</map>

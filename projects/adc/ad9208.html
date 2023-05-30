@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="AD9208 no-OS Example Project" name="description" />
+
+    <title>AD9208 no-OS Example Project &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=22cbc7d3" />
+    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="AD9434-FMC-500EBZ no-OS Example Project" href="ad9434-fmc-500ebz.html" />
+    <link rel="prev" title="ad9081 no-OS Example Project" href="ad9081.html" />
+   
+  
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        
+        <a id="logo" href="../../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD9208 no-OS Example Project</a><ul>
+<li><a class="reference internal" href="#supported-evaluation-board">Supported Evaluation Board</a></li>
+<li><a class="reference internal" href="#supported-carrier">Supported Carrier</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#hardware-specifications">Hardware Specifications</a></li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#iio-example">IIO example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#xilinx">Xilinx</a><ul>
+<li><a class="reference internal" href="#used-hardware">Used Hardware</a></li>
+<li><a class="reference internal" href="#connections">Connections</a></li>
+<li><a class="reference internal" href="#build-command">Build Command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/amplifiers/adl8113.html">ADL8113 Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/accel/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/accel/adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad4080.html">AD4080 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad7490.html">AD7490 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/adaq7980.html">ADAQ7980 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/max9611pmb.html">MAX9611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc/pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc-dac/ad5592r.html">AD5592R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc-dac/ad5592r.html#ad5592r-ad5593r-iio-support">AD5592R/AD5593R IIO Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/adc-dac/ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/axi/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/digital-io/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/digital-io/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/digital-io/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/digital-io/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/digital-io/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/digital-io/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/dac/ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/dac/ad5710r.html">AD5710R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/dac/ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/dac/ad9152.html">AD9152 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/dac/max22007.html">MAX22007 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/dac/max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/ad9523.html">AD9523 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/frequency/admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/io-link/max22516.html">MAX22516 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/led/ltc3208.html">LTC3208 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/led/ltc3220.html">LTC3220 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/led/max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/meter/ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/meter/ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/meter/ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/mux/adg2404.html">ADG2404/ADG6404 Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/rf-transceiver/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/rf-transceiver/talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/switch/adg1712.html">ADG1712 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/switch/adg1736.html">ADG736/ADG1736 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/switch/adgm3121.html">ADGM3144/ADGM3121 MEMS Switch Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/switch/adgs6414d.html">ADGS6414D Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/temperature/adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/temperature/lm75.html">LM75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/temperature/ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/temperature/max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/temperature/max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/power/max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/potentiometer/ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/ethernet/adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../drivers/gyroscope/adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Example Project STM32</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad738x_fmcz.html">AD738x_FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD9208 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9434-fmc-500ebz.html">AD9434-FMC-500EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adalm-mmsc.html">AD4080 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ad7490sdz.html">EVAL-AD7490SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc-dac/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc-dac/adalm-lsmspg.html">AD5592R/AD5593R/LM75 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4371.html">ADF4371 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/eval-ade9000.html">EVAL-ADE9000 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/eval-ade9153a.html">EVAL-ADE9153A no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rf-transceiver/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rf-transceiver/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../eval/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../eval/apardpfwd.html">AD-APARDPFWD-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../eval/eval-pqmon.html">AD-PQMON-SL Kit no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../eval/fmcdaq3.html">FMCDAQ3 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/dc2903a.html">DC2903A no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/max22007.html">MAX22007EVKIT no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gyroscope/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../led/ltc3208.html">Evaluating the LTC3208</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../led/ltc3220.html">Evaluating the LTC3220</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../projects_doc.html">no-OS projects list</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="ad9208-no-os-example-project">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">AD9208 no-OS Example Project</a><a class="headerlink" href="#ad9208-no-os-example-project" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ad9208-no-os-example-project" id="id1">AD9208 no-OS Example Project</a></p>
+<ul>
+<li><p><a class="reference internal" href="#supported-evaluation-board" id="id2">Supported Evaluation Board</a></p></li>
+<li><p><a class="reference internal" href="#supported-carrier" id="id3">Supported Carrier</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id4">Overview</a></p></li>
+<li><p><a class="reference internal" href="#applications" id="id5">Applications</a></p></li>
+<li><p><a class="reference internal" href="#hardware-specifications" id="id6">Hardware Specifications</a></p></li>
+<li><p><a class="reference internal" href="#no-os-build-setup" id="id7">No-OS Build Setup</a></p></li>
+<li><p><a class="reference internal" href="#no-os-supported-examples" id="id8">No-OS Supported Examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#iio-example" id="id9">IIO example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#no-os-supported-platforms" id="id10">No-OS Supported Platforms</a></p>
+<ul>
+<li><p><a class="reference internal" href="#xilinx" id="id11">Xilinx</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="supported-evaluation-board">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Supported Evaluation Board</a><a class="headerlink" href="#supported-evaluation-board" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9208-DUAL-EBZ" target="_blank">AD9208-DUAL-EBZ</a></p></li>
+</ul>
+</section>
+<section id="supported-carrier">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Supported Carrier</a><a class="headerlink" href="#supported-carrier" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Xilinx VCU118 FPGA Evaluation Kit</p></li>
+</ul>
+</section>
+<section id="overview">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The AD9208-DUAL-EBZ is an evaluation board designed for demonstrating
+the synchronization of dual AD9208 analog-to-digital converters (ADCs)
+using the HMC7044 clock synthesizer. It provides integrated clocking
+solutions not only for the ADCs but also for an associated Field
+Programmable Gate Array (FPGA), operating on a single external 12V
+supply. It interfaces with an FPGA development board, such as the
+VCU118, through an FMC+ (Vita57.4) connector. Leveraging Analog Devices’
+JESD204B IP framework, the board ensures efficient data transfer for
+high-speed applications while utilizing low SWaP high efficiency power
+delivery using Silent Switcher technology. This makes it suitable for
+high-speed data conversion, signal processing, and wideband
+communication systems requiring integration with the VCU118 platform.</p>
+</section>
+<section id="applications">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Applications</a><a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Diversity multiband, multimode digital receivers</p></li>
+<li><p>3G/4G</p></li>
+<li><p>Electronic test and measurement systems</p></li>
+<li><p>Phased array radar and electronic warfare</p></li>
+<li><p>DOCSIS 3.0 CMTS upstream receive paths</p></li>
+<li><p>HFC digital reverse path receivers</p></li>
+</ul>
+</section>
+<section id="hardware-specifications">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Hardware Specifications</a><a class="headerlink" href="#hardware-specifications" title="Link to this heading"></a></h2>
+<p>To establish hardware connections between the AD9208-DUAL-EBZ evaluation
+board and the VCU118 FPGA board, the following interfaces are essential:</p>
+<ul class="simple">
+<li><p><strong>FMC+ Connector</strong>: Ensures physical connectivity and supports
+high-bandwidth data exchange.</p></li>
+<li><p><strong>JESD204B Protocol</strong>: Links the AD9208 board with the VCU118 via
+serial connections using SERDOUT0± to SERDOUT7±.</p></li>
+<li><p><strong>SPI Communication</strong>: Configures the AD9208, allowing control over
+operating parameters and settings.</p></li>
+<li><p><strong>GPIO</strong>: Handles power management tasks.</p></li>
+<li><p><strong>AXI Interfaces</strong>: Facilitate data transfers within the FPGA,
+supporting high-throughput operations.</p></li>
+<li><p><strong>UART Connections</strong>: Established for communication with IIOD
+applications, aiding in remote control and diagnostics.</p></li>
+</ul>
+<p>To ensure stable operation, power delivery and management are handled
+via specific GPIO configurations.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Category</p></td>
+<td><p>Pin Names</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>Digital Input/Output</p></td>
+<td><p>DIGITAL_CAL, SCL,
+SDA, LDAC</p></td>
+<td><p>Pins used for digital
+control and
+configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Decoupling and Power</p></td>
+<td><p>C7A, C8A, C178</p></td>
+<td><p>Capacitors used for
+voltage stabilization
+and noise reduction.</p></td>
+</tr>
+<tr class="row-even"><td><p>Signal Integrity</p></td>
+<td><p>DIG_OUT, DIG_CLK</p></td>
+<td><p>Pins that ensure
+signal reliability
+across connections.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Analog Input</p></td>
+<td><p>J2A, J2B, T1A, T1B</p></td>
+<td><p>Inputs for analog
+signals, including
+amplifiers and
+associated
+components.</p></td>
+</tr>
+<tr class="row-even"><td><p>FMC Connector</p></td>
+<td><p>GND, R1, T1, OUT, IN</p></td>
+<td><p>Pins used for
+interfacing different
+components through an
+FMC connector.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="no-os-build-setup">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">No-OS Build Setup</a><a class="headerlink" href="#no-os-build-setup" title="Link to this heading"></a></h2>
+<p>Please see: <cite>https://wiki.analog.com/resources/no-os/build</cite></p>
+</section>
+<section id="no-os-supported-examples">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">No-OS Supported Examples</a><a class="headerlink" href="#no-os-supported-examples" title="Link to this heading"></a></h2>
+<p>The initialization data used in the examples is taken out from the
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9208/src" target="_blank">Project Source Data Path</a>.</p>
+<section id="iio-example">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">IIO example</a><a class="headerlink" href="#iio-example" title="Link to this heading"></a></h3>
+<p>The IIO example code for the EVAL-AD9208 project establishes multiple
+components necessary for data acquisition using the Industrial I/O (IIO)
+framework. It configures two AD9208 ADC devices, setting up JESD204
+interfaces for high-speed data transfer and DMAC for data movement.
+These components connect to data capture pipelines, utilizing DMA to
+store acquired data in DDR memory. The code also initializes IIO
+interfaces to enable remote communication and control through libiio
+clients. The setup involves UART connectivity, buffer management, and
+data transfer processes. Inputs are configuration structures and
+parameters tailored for hardware, while outputs are ADC samples
+available via IIO clients.</p>
+<p>This project is actually an IIOD demo for the AD9208-DUAL-EBZ evaluation
+board. The project launches the IIOD server on the board, so that the
+user may connect to it to the IIO Oscilloscope Client app. Using the
+IIO Oscilloscope, the user can read samples from the device.</p>
+<p>If you are not familiar with ADI IIO Application, please take a look at:
+<a class="icon link reference external" href="https://wiki.analog.com/resources/tools-software/no-os-software/iio" target="_blank">IIO No-OS</a></p>
+<p>If you are not familiar with ADI IIO Oscilloscope Client, please take a
+look at: <a class="icon link reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope" target="_blank">IIO Oscilloscope</a></p>
+<p>The IIO Application together with the no-OS IIO AD9208 driver take
+care of all the back-end logic needed to setup the IIO server.</p>
+<p>In order to build the IIO example project, make sure you have the
+following configuration in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9208/Makefile" target="_blank">Makefile</a> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure the example you want to enable by setting &#39;y&#39; for enable and &#39;n&#39; for disable</span>
+<span class="nv">IIOD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+</pre></div>
+</div>
+</section>
+</section>
+<section id="no-os-supported-platforms">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">No-OS Supported Platforms</a><a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading"></a></h2>
+<section id="xilinx">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Xilinx</a><a class="headerlink" href="#xilinx" title="Link to this heading"></a></h3>
+<section id="used-hardware">
+<h4>Used Hardware<a class="headerlink" href="#used-hardware" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>AD9208-DUAL-EBZ</p></li>
+<li><p>Xilinx VCU118 FPGA Board</p></li>
+</ul>
+</section>
+<section id="connections">
+<h4>Connections<a class="headerlink" href="#connections" title="Link to this heading"></a></h4>
+<p>The AD9208-DUAL-EBZ evaluation board connects to the Xilinx VCU118 FPGA
+board through the FMC HSPC connector. The JESD204B interface of the
+AD9208 eval board is connected through serial links (SERDOUT0± to
+SERDOUT7±) to the VCU118 board for data transmission. Configuration of
+the AD9208 is facilitated via SPI, enabling specific parameter settings.
+Power management on the AD9208 board is managed through GPIO
+connections.</p>
+<p>Additionally, the VCU118 FPGA board utilizes AXI buses to facilitate
+data transfer between the ADC and the processing elements on the FPGA.
+For communication with the IIOD application, UART connections are
+established. This setup is essential for applications involving
+real-time signal processing and data acquisition.</p>
+<p>This table outlines the critical connections and their functions for
+both the AD9208-DUAL-EBZ evaluation board and the VCU118 board, ensuring
+seamless integration into high-speed data conversion and signal
+processing applications.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Connection Interface</p></td>
+<td><p>Board</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>JESD204B Serial
+Links (P2)</strong></p></td>
+<td><p>AD9208-DUAL-EBZ</p></td>
+<td><p>Utilizes SERDOUT0± to
+SERDOUT7± interfaces
+for data connection
+with the FPGA.
+Configures link
+parameters including
+lanes (L), converters
+(M), and octets per
+frame (F) based on
+application needs.
+Uses JESD204B
+protocol.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>SPI (P2)</strong></p></td>
+<td><p>AD9208-DUAL-EBZ</p></td>
+<td><p>Device configuration
+via SPI write to set
+various operating
+modes and parameters
+necessary for ADC
+operation. Includes
+enabling features
+such as NCO switching
+and gain adjustment.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>GPIO (P2)</strong></p></td>
+<td><p>AD9208-DUAL-EBZ</p></td>
+<td><p>Employs GPIO for
+power management and
+selection of specific
+device states or
+channels. Critical
+for operational
+accuracy in signal
+processing
+applications.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>AXI Connection
+(P2)</strong></p></td>
+<td><p>VCU118</p></td>
+<td><p>Establishes data
+streams through AXI
+buses for
+communication between
+the AD9208 ADC
+outputs and FPGA
+processing units.
+Facilitates data
+transfer crucial for
+high-throughput
+environments.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>UART
+Communication</strong></p></td>
+<td><p>VCU118</p></td>
+<td><p>Supports interactions
+with IIOD
+applications via UART
+channels. Essential
+for remote controls
+and diagnostics in
+data acquisition
+systems.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FMC + HSPC
+Connector (J22)</strong></p></td>
+<td><p>VCU118</p></td>
+<td><p>Enables high-speed
+data exchange between
+FMC cards and the
+FPGA. Provides 160
+single-ended or 80
+differential signals,
+as well as multiple
+clock and power
+connections crucial
+for board
+integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Ethernet Connector
+(J10)</strong></p></td>
+<td><p>VCU118</p></td>
+<td><p>Provides network
+connectivity vital
+for board-based
+communications and
+data transactions
+across networked
+systems.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>USB-to-UART Bridge
+(J4)</strong></p></td>
+<td><p>VCU118</p></td>
+<td><p>Converts USB data
+signals into UART
+protocol for direct
+FPGA communication,
+facilitating serial
+data flow essential
+for debugging and
+setup processes.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Power Input
+Connector (J15)</strong></p></td>
+<td><p>VCU118</p></td>
+<td><p>Connects power supply
+to the evaluation
+board. Ensures stable
+power delivery
+necessary for
+dependable board
+operations in various
+conditions.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="build-command">
+<h4>Build Command<a class="headerlink" href="#build-command" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>&lt;SOME_PATH&gt;/system_top.xsa<span class="w"> </span>.
+<span class="c1"># to delete current build</span>
+make<span class="w"> </span>reset<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>xilinx
+<span class="c1"># to build the IIO project</span>
+make<span class="w"> </span><span class="nv">EXAMPLE</span><span class="o">=</span>iio<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>xilinx
+<span class="c1"># to flash the code</span>
+make<span class="w"> </span>run
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ad9081.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ad9081 no-OS Example Project</a>
+    <a href="ad9434-fmc-500ebz.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9434-FMC-500EBZ no-OS Example Project</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

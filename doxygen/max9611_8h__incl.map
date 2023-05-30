@@ -1,0 +1,23 @@
+<map id="drivers/adc/max9611pmb/max9611.h" name="drivers/adc/max9611pmb/max9611.h">
+<area shape="rect" id="Node000001" title="Header file of max9611 Family Driver." alt="" coords="176,5,364,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="104,167,174,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,41,78,63,38,78,14,95,9,106,9,116,15,126,26,135,56,151,91,164,90,169,54,156,23,140,11,129,4,118,4,105,10,92,36,73,76,58,175,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="386,167,457,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="330,43,367,63,400,92,415,122,422,152,417,153,410,123,396,95,364,67,327,48"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="24,93,123,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,48,116,91,114,86,222,43"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="285,93,385,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="287,44,319,81,315,84,283,47"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="460,93,570,119"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="329,43,467,87,465,92,328,48"/>
+<area shape="rect" id="Node000009" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="148,93,261,119"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="256,47,225,84,221,81,252,44"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="86,117,121,155,117,158,82,121"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="304,121,185,164,183,159,303,116"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="351,117,399,156,395,160,347,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="279,167,362,192"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="335,120,328,154,323,153,330,118"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="481,167,549,192"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="518,119,518,153,512,153,512,119"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="195,121,161,158,157,155,192,117"/>
+</map>

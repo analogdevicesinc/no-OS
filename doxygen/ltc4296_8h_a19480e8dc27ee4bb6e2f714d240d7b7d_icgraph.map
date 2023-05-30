@@ -1,0 +1,9 @@
+<map id="ltc4296_reset" name="ltc4296_reset">
+<area shape="rect" id="Node000001" title="Software reset." alt="" coords="408,42,519,67"/>
+<area shape="rect" id="Node000002" href="$ltc4296_8c.html#aebc83ee39584effbc89eedd89cc11f00" title="Check global events." alt="" coords="213,5,360,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="394,46,360,40,361,35,395,41"/>
+<area shape="rect" id="Node000003" href="$ltc4296_8c.html#a2f4cd2b12d9fd083bd0c557cf87d4a51" title="Device initialization." alt="" coords="237,70,336,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="395,68,337,78,336,72,394,63"/>
+<area shape="rect" id="Node000004" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,70,165,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="224,85,166,85,166,80,224,80"/>
+</map>

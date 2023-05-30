@@ -1,0 +1,15 @@
+<map id="drivers/api/no_os_timer.c" name="drivers/api/no_os_timer.c">
+<area shape="rect" id="Node000001" title="Implementation of the timer Interface." alt="" coords="134,5,319,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,80,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,33,87,76,85,71,196,28"/>
+<area shape="rect" id="Node000003" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="104,79,213,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,33,181,70,177,67,214,29"/>
+<area shape="rect" id="Node000005" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="238,79,351,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="240,29,276,67,272,70,236,33"/>
+<area shape="rect" id="Node000007" href="$no__os__mutex_8h.html" title=" " alt="" coords="375,79,497,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="261,28,390,72,388,77,259,33"/>
+<area shape="rect" id="Node000004" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="125,152,193,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="161,104,161,138,156,138,156,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="259,152,330,177"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="297,104,297,138,292,138,292,104"/>
+</map>

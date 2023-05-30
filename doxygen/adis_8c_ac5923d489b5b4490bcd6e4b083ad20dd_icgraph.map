@@ -1,0 +1,5 @@
+<map id="adis_write_lpf" name="adis_write_lpf">
+<area shape="rect" id="Node000001" title="Configure filter for the given filter frequency." alt="" coords="189,5,303,31"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#ac75103dfd80247d5138fd31c30ad7eeb" title="Handles the write request for lpf attribute." alt="" coords="5,5,141,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,21,142,21,142,15,176,15"/>
+</map>

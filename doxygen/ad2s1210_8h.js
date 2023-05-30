@@ -1,0 +1,57 @@
+var ad2s1210_8h =
+[
+    [ "ad2s1210_init_param", "structad2s1210__init__param.html", "structad2s1210__init__param" ],
+    [ "ad2s1210_dev", "structad2s1210__dev.html", "structad2s1210__dev" ],
+    [ "AD2S1210_CONTROL_RES0_MASK", "ad2s1210_8h.html#a75171efe3b0f71935ac2f33a6648c8c4", null ],
+    [ "AD2S1210_CONTROL_RES1_MASK", "ad2s1210_8h.html#a1788eb22169410d7c3d728496ff4cd3d", null ],
+    [ "AD2S1210_CONTROL_RES_MASK", "ad2s1210_8h.html#ab489168ae145757e3d08dde4d65674ac", null ],
+    [ "AD2S1210_ENABLE_HYSTERESIS", "ad2s1210_8h.html#a8265bfde298968d2f92e7372c191d3f8", null ],
+    [ "AD2S1210_MAX_CLKIN", "ad2s1210_8h.html#adb24bbfcd5acf03802f16935d74211ec", null ],
+    [ "AD2S1210_MAX_EXCIT", "ad2s1210_8h.html#afc606359785ec3f428db203a6d73bae6", null ],
+    [ "AD2S1210_MAX_FCW", "ad2s1210_8h.html#a7090703d510bfa71696ccae2e422e6e6", null ],
+    [ "AD2S1210_MIN_CLKIN", "ad2s1210_8h.html#a9040b0ce613711e244669bf734006a33", null ],
+    [ "AD2S1210_MIN_EXCIT", "ad2s1210_8h.html#ac6c766012d2b368a869903523ea312d1", null ],
+    [ "AD2S1210_MIN_FCW", "ad2s1210_8h.html#adbcc79d7dfaeccf301f2ccee85a87acf", null ],
+    [ "AD2S1210_POS_MASK", "ad2s1210_8h.html#a33068d8e0a27c8744d9148f6967eb412", null ],
+    [ "AD2S1210_REG_CONTROL", "ad2s1210_8h.html#a443601bc48f658f95e3e794ef20a3f23", null ],
+    [ "AD2S1210_REG_DOS_MIS_THRD", "ad2s1210_8h.html#a277f0ae453fb501263b936ca4478e7f0", null ],
+    [ "AD2S1210_REG_DOS_OVR_THRD", "ad2s1210_8h.html#aa7846324cc0493b1de1b05d23bfdfcb6", null ],
+    [ "AD2S1210_REG_DOS_RST_MAX_THRD", "ad2s1210_8h.html#ab2a6f6fc4591867e4bab825ef306b146", null ],
+    [ "AD2S1210_REG_DOS_RST_MIN_THRD", "ad2s1210_8h.html#a3af1f7e453c7590c3c600e0aafb358d8", null ],
+    [ "AD2S1210_REG_EXCIT_FREQ", "ad2s1210_8h.html#a064c09bff14adb87291e9d373e25e927", null ],
+    [ "AD2S1210_REG_FAULT", "ad2s1210_8h.html#ab31b8c87278acb57118b17ce321eed66", null ],
+    [ "AD2S1210_REG_LOS_THRD", "ad2s1210_8h.html#ad971cc389c4a769f15b8d61f8cbf2d5e", null ],
+    [ "AD2S1210_REG_LOT_HIGH_THRD", "ad2s1210_8h.html#aa016c1a6ae95aca7edafdd328796c709", null ],
+    [ "AD2S1210_REG_LOT_LOW_THRD", "ad2s1210_8h.html#a41d615dd75306ad7480312fdf7c86225", null ],
+    [ "AD2S1210_REG_MIN", "ad2s1210_8h.html#ae5427ed1af2646bb8f63429833e8db56", null ],
+    [ "AD2S1210_REG_POSITION", "ad2s1210_8h.html#a24536e6630fe524905356b8f070ed6ba", null ],
+    [ "AD2S1210_REG_SOFT_RESET", "ad2s1210_8h.html#affac3bf05ab826260e14fa570cdfd654", null ],
+    [ "AD2S1210_REG_VELOCITY", "ad2s1210_8h.html#ac067bdda76afdb086365cb3945d4fbaf", null ],
+    [ "AD2S1210_STEP_EXCIT", "ad2s1210_8h.html#aae64c8c42793a349c9aab62abeaf088e", null ],
+    [ "AD2S1210_VEL_MASK", "ad2s1210_8h.html#aff38cbeae666e98d33139cd52341a404", null ],
+    [ "ad2s1210_channel", "ad2s1210_8h.html#a90ca2c54420ca507459901d05ae1eb2f", [
+      [ "AD2S1210_POS", "ad2s1210_8h.html#a90ca2c54420ca507459901d05ae1eb2fa4266a48c0b39ce3564866766bd24d083", null ],
+      [ "AD2S1210_VEL", "ad2s1210_8h.html#a90ca2c54420ca507459901d05ae1eb2fa56144e9b35bda5b8a8dfbc73419a73e4", null ]
+    ] ],
+    [ "ad2s1210_mode", "ad2s1210_8h.html#a3b619a4213fac42497a233fcb67c6b6e", [
+      [ "MODE_POS", "ad2s1210_8h.html#a3b619a4213fac42497a233fcb67c6b6eaa9ab61ce33312ce1e2fd99853d55987d", null ],
+      [ "MODE_RESERVED", "ad2s1210_8h.html#a3b619a4213fac42497a233fcb67c6b6ead4d1ae7686a47544139c663913665dfe", null ],
+      [ "MODE_VEL", "ad2s1210_8h.html#a3b619a4213fac42497a233fcb67c6b6ea0acc21ad5ba5667be3521e14e1317687", null ],
+      [ "MODE_CONFIG", "ad2s1210_8h.html#a3b619a4213fac42497a233fcb67c6b6ea8f10c68a3822c4def8d461f119b81fa4", null ]
+    ] ],
+    [ "ad2s1210_res", "ad2s1210_8h.html#a189c9a87cb8df82238c0122dc9a44f47", [
+      [ "AD2S1210_RES_10BIT", "ad2s1210_8h.html#a189c9a87cb8df82238c0122dc9a44f47ac5f1744e4f68cbf326bd64f6f0f5493f", null ],
+      [ "AD2S1210_RES_12BIT", "ad2s1210_8h.html#a189c9a87cb8df82238c0122dc9a44f47aa0eddd7a79950ba53d13facfd6a2208b", null ],
+      [ "AD2S1210_RES_14BIT", "ad2s1210_8h.html#a189c9a87cb8df82238c0122dc9a44f47ac9cda951d04e3c257e202e0c1189fc0b", null ],
+      [ "AD2S1210_RES_16BIT", "ad2s1210_8h.html#a189c9a87cb8df82238c0122dc9a44f47a3e684b357ad85354fec11f56f8d1a114", null ]
+    ] ],
+    [ "ad2s1210_get_excitation_frequency", "ad2s1210_8h.html#a6f2dc06a2bb5f01f35e31438e5e08201", null ],
+    [ "ad2s1210_hysteresis_is_enabled", "ad2s1210_8h.html#ade2f729598a628eac536bdd96f1b3b07", null ],
+    [ "ad2s1210_init", "ad2s1210_8h.html#af5f06949a9e57917a8494b1fd80c2870", null ],
+    [ "ad2s1210_reg_read", "ad2s1210_8h.html#a8bfa93078559db631111a3302ff9dac2", null ],
+    [ "ad2s1210_reg_write", "ad2s1210_8h.html#a174b12705f86c6d4e699138d551df28b", null ],
+    [ "ad2s1210_reinit_excitation_frequency", "ad2s1210_8h.html#abf9498d3ee159b0c139629577f0110f0", null ],
+    [ "ad2s1210_remove", "ad2s1210_8h.html#a4d2e450fd0ca037deb27d50d9b511d8c", null ],
+    [ "ad2s1210_set_hysteresis", "ad2s1210_8h.html#ac682f673390d2830cec0e4f3c6acc6be", null ],
+    [ "ad2s1210_spi_single_conversion", "ad2s1210_8h.html#ab343d5fd38a9eac3b4473b1a9c392b48", null ]
+];

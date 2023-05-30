@@ -1,0 +1,29 @@
+<map id="ad5460_reg_update" name="ad5460_reg_update">
+<area shape="rect" id="Node000001" title="Update a register&#39;s field." alt="" coords="591,213,741,239"/>
+<area shape="rect" id="Node000002" href="$ad5460_8c.html#ad471a43947952188e3a610532cdbd3b6" title="Disable the slew rate control." alt="" coords="352,5,543,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="652,202,636,166,612,124,580,81,541,46,517,33,520,28,544,41,584,78,616,121,641,164,657,200"/>
+<area shape="rect" id="Node000003" href="$ad5460_8c.html#aac918d0ef7ccced541dd5a2dea1c1f5a" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="353,184,541,209"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="576,217,541,212,542,207,577,211"/>
+<area shape="rect" id="Node000005" href="$ad5460_8c.html#a6cd01d861931c7143b76dcf328f38834" title="Set the logic value of a GPO pin." alt="" coords="172,324,304,349"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="649,252,605,298,576,321,544,338,482,354,418,360,357,358,304,352,305,347,358,353,418,354,481,349,542,333,573,316,602,294,645,248"/>
+<area shape="rect" id="Node000007" href="$ad5460_8c.html#a2600dd2518974e069aabe05ffc13df08" title="Set the operation mode for a specific channel." alt="" coords="370,55,525,95"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="644,204,600,157,572,131,541,110,518,98,520,93,544,105,575,127,604,153,648,201"/>
+<area shape="rect" id="Node000008" href="$ad5460_8c.html#ab28233c258899eb128072d1a9ba0a3da" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="370,234,525,274"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="577,240,525,247,525,241,576,235"/>
+<area shape="rect" id="Node000009" href="$ad5460_8c.html#a23a5339051563cc2c6c7661da874e6ea" title="Set the current range for a specific channel." alt="" coords="370,399,525,439"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="653,252,609,316,579,352,544,383,512,402,509,397,541,379,575,348,605,313,648,249"/>
+<area shape="rect" id="Node000011" href="$ad5460_8c.html#ad7956bd7223b6059837e6f5338e7e917" title="Set the voltage range for a specific channel." alt="" coords="370,119,525,159"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="624,210,542,174,509,162,511,157,544,169,627,205"/>
+<area shape="rect" id="Node000012" href="$ad5460_8c.html#a95c59e288f1bd30c50076e67c742d2e0" title="Set the GPIO operation mode." alt="" coords="358,299,537,324"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="631,248,544,288,504,301,502,296,542,284,628,243"/>
+<area shape="rect" id="Node000004" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="179,156,297,181"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="339,185,297,179,298,174,340,180"/>
+<area shape="rect" id="Node000006" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,324,124,349"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="158,339,124,339,124,334,158,334"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="370,103,353,110,262,158,259,153,351,105,368,98"/>
+<area shape="rect" id="Node000010" href="$current__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current output example main execution." alt="" coords="179,407,297,432"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="356,422,298,422,298,417,356,417"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="357,155,298,163,298,158,356,149"/>
+<area shape="poly" id="edge15_Node000012_Node000004" title=" " alt="" coords="366,296,351,288,317,263,287,234,246,183,250,180,291,231,320,259,353,284,369,291"/>
+<area shape="poly" id="edge14_Node000012_Node000005" title=" " alt="" coords="345,326,304,331,304,326,344,321"/>
+</map>

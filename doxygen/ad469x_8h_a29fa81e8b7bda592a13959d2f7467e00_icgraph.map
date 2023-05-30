@@ -1,0 +1,63 @@
+<map id="ad469x_spi_reg_read" name="ad469x_spi_reg_read">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1101,146,1261,171"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a7434be359b6fde84674e24e3077dc3cd" title="Get the status of analog input high Z mode." alt="" coords="884,5,1044,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1155,138,1109,99,1052,60,1027,48,1030,43,1055,55,1113,95,1159,134"/>
+<area shape="rect" id="Node000003" href="$ad469x_8c.html#a18edcd3a7118bd76d357e1a1cecf97fb" title="Get the value of reference." alt="" coords="881,70,1047,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1130,144,1000,98,1002,93,1132,139"/>
+<area shape="rect" id="Node000004" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="213,362,312,387"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1088,151,985,145,860,143,726,151,658,159,593,172,523,188,470,205,421,229,362,267,334,291,309,317,274,363,270,360,305,314,330,287,358,263,418,224,468,200,522,183,591,167,657,154,725,145,860,138,985,139,1088,146"/>
+<area shape="rect" id="Node000007" href="$ad469x_8c.html#a8c1119c2b26ad1832cae39c5befb608c" title="Resets the ad469x device." alt="" coords="381,278,523,303"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1088,157,984,157,859,163,725,180,658,194,593,212,557,226,523,245,471,280,468,276,521,240,555,221,591,207,656,189,724,175,859,158,984,151,1088,152"/>
+<area shape="rect" id="Node000008" href="$ad469x_8c.html#a1ead06cbf08ce55e3968fbe012404cf0" title=" " alt="" coords="877,525,1051,550"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1181,185,1173,251,1153,340,1137,387,1115,433,1088,476,1055,514,1036,527,1033,522,1052,510,1084,473,1111,430,1132,385,1148,338,1168,250,1176,185"/>
+<area shape="rect" id="Node000009" href="$ad469x_8c.html#a1d320a09c42214fd9a3a3e817905f68a" title=" " alt="" coords="875,475,1053,501"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="1166,185,976,477,971,474,1162,182"/>
+<area shape="rect" id="Node000005" href="$ad469x__evb_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,337,165,362"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="200,368,165,363,166,358,200,363"/>
+<area shape="rect" id="Node000006" href="$ad469x__evb_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,386,157,411"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="200,386,157,392,157,386,199,380"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="411,311,294,364,292,359,409,307"/>
+<area shape="rect" id="Node000010" href="$ad469x_8c.html#a6a54b9f28e37a2c3013a2fa29aebea2d" title="Configure over sampling ratio in advanced sequencer mode." alt="" coords="630,222,789,247"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="952,463,936,419,910,364,873,308,850,283,825,262,788,245,790,240,828,258,854,280,877,305,914,361,941,417,957,461"/>
+<area shape="rect" id="Node000012" href="$ad469x_8c.html#aef0ac4841f289df5fbdf1814444af477" title="Configure advanced sequencer number of slots, temp channel not included." alt="" coords="624,272,795,312"/>
+<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="947,465,899,395,865,358,825,326,794,311,796,306,828,322,868,354,903,392,951,462"/>
+<area shape="rect" id="Node000013" href="$ad469x_8c.html#af7fcfce092cbb65e39671977873db213" title="Configure analog input high Z mode." alt="" coords="627,387,791,427"/>
+<area shape="poly" id="edge15_Node000009_Node000013" title=" " alt="" coords="916,473,826,441,786,429,788,424,827,436,918,468"/>
+<area shape="rect" id="Node000014" href="$ad469x_8c.html#a9d0b903c127a29bfdbe2f48cb7e085f7" title="Enter conversion mode. To exit conversion mode send a 5 bit conversion mode command AD469x_CMD_REG_CO..." alt="" coords="593,337,826,362"/>
+<area shape="poly" id="edge16_Node000009_Node000014" title=" " alt="" coords="940,467,891,421,859,397,826,377,792,365,794,360,828,372,862,392,894,417,944,463"/>
+<area shape="rect" id="Node000015" href="$ad469x_8c.html#a8b72a2fecde49c1b9b24d68208ea5564" title="Disable temperature read at the end of the sequence, for standard and advanced sequencer." alt="" coords="592,451,827,477"/>
+<area shape="poly" id="edge18_Node000009_Node000015" title=" " alt="" coords="861,481,827,478,827,472,861,476"/>
+<area shape="rect" id="Node000016" href="$ad469x_8c.html#a80ed0cdb13565e54690ef469ce3bc7fe" title="Enable temperature read at the end of the sequence, for standard and advanced sequencer." alt="" coords="594,649,825,674"/>
+<area shape="poly" id="edge19_Node000009_Node000016" title=" " alt="" coords="882,510,877,514,864,529,858,543,854,575,849,607,842,623,828,638,808,651,805,646,825,634,838,620,844,605,848,574,852,542,860,526,873,510,878,506"/>
+<area shape="rect" id="Node000018" href="$ad469x_8c.html#abdc7812a777bfc86481f0514b2c3ac15" title="Configure converter busy indicator to the output of the specified port." alt="" coords="642,599,777,625"/>
+<area shape="poly" id="edge23_Node000009_Node000018" title=" " alt="" coords="885,509,876,514,861,532,853,551,846,570,828,589,804,602,778,609,776,604,802,597,825,585,841,567,848,549,856,529,873,510,882,504"/>
+<area shape="rect" id="Node000019" href="$ad469x_8c.html#a98894c2703a93e32ac8939521cf05198" title="Set channel sequence." alt="" coords="632,699,787,739"/>
+<area shape="poly" id="edge26_Node000009_Node000019" title=" " alt="" coords="880,510,877,514,861,535,854,555,853,599,853,643,845,665,829,687,810,701,788,711,786,706,807,697,825,683,840,663,847,642,848,598,849,554,856,532,873,510,877,506"/>
+<area shape="rect" id="Node000020" href="$ad469x_8c.html#a133301905557dac320c3612d2a50b4a1" title="Set the value of reference." alt="" coords="626,501,793,526"/>
+<area shape="poly" id="edge29_Node000009_Node000020" title=" " alt="" coords="861,501,793,508,793,502,860,496"/>
+<area shape="rect" id="Node000021" href="$ad469x_8c.html#a7378e364d2508802118c9c41c986f4d1" title="Configure register access mode." alt="" coords="599,550,819,575"/>
+<area shape="poly" id="edge30_Node000009_Node000021" title=" " alt="" coords="897,507,876,514,852,527,828,540,784,553,783,547,826,535,850,523,874,510,895,502"/>
+<area shape="rect" id="Node000022" href="$ad469x_8c.html#afd56203eb99ded0592e4af54947ab320" title="Configure the pin pairing option in standard sequencer mode." alt="" coords="621,763,797,789"/>
+<area shape="poly" id="edge33_Node000009_Node000022" title=" " alt="" coords="880,511,877,514,857,543,849,572,850,602,854,632,858,662,858,692,850,723,829,753,815,764,799,771,796,766,812,759,825,749,845,720,853,692,853,662,849,632,844,602,844,571,852,541,873,510,876,507"/>
+<area shape="rect" id="Node000023" href="$ad469x_8c.html#a6785c64a2085f2cbc35baeb76b0aaa54" title="Configure over sampling ratio in standard sequencer mode." alt="" coords="632,813,787,838"/>
+<area shape="poly" id="edge36_Node000009_Node000023" title=" " alt="" coords="880,511,877,514,854,549,846,585,848,621,854,657,861,694,863,730,854,767,829,803,810,817,788,825,786,820,807,812,825,799,849,765,857,730,856,694,849,658,842,622,840,585,849,547,873,510,876,507"/>
+<area shape="rect" id="Node000011" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="360,575,544,601"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="618,248,594,262,574,285,553,321,513,414,480,510,460,576,454,574,475,508,508,413,548,319,569,282,590,258,615,243"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="429,567,273,389,277,386,433,563"/>
+<area shape="poly" id="edge14_Node000012_Node000011" title=" " alt="" coords="612,314,594,326,564,355,538,388,516,424,498,461,472,529,459,576,454,575,467,527,493,459,511,422,533,385,560,351,590,322,610,310"/>
+<area shape="poly" id="edge17_Node000014_Node000011" title=" " alt="" coords="606,370,594,377,567,399,543,425,504,482,476,536,460,576,455,574,471,534,499,479,539,421,563,395,590,372,603,365"/>
+<area shape="poly" id="edge22_Node000016_Node000011" title=" " alt="" coords="629,648,591,639,486,603,487,598,593,633,631,643"/>
+<area shape="rect" id="Node000017" href="$ad469x_8c.html#a8c42a57e73b808c98550cb1b8eccbaa3" title=" " alt="" coords="394,649,510,674"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="580,664,510,664,510,659,580,659"/>
+<area shape="poly" id="edge21_Node000017_Node000004" title=" " alt="" coords="401,645,378,631,358,614,336,585,318,554,290,489,272,430,263,388,269,387,277,428,295,487,322,552,341,582,362,610,381,627,404,640"/>
+<area shape="poly" id="edge25_Node000018_Node000011" title=" " alt="" coords="628,607,544,599,544,594,628,602"/>
+<area shape="poly" id="edge24_Node000018_Node000017" title=" " alt="" coords="630,630,511,653,510,648,629,625"/>
+<area shape="poly" id="edge28_Node000019_Node000011" title=" " alt="" coords="618,701,591,688,575,675,565,663,556,651,542,638,512,619,482,603,484,598,515,614,546,634,560,647,569,660,579,672,593,683,620,696"/>
+<area shape="poly" id="edge27_Node000019_Node000017" title=" " alt="" coords="618,701,509,677,510,671,619,696"/>
+<area shape="poly" id="edge32_Node000021_Node000011" title=" " alt="" coords="586,577,544,582,544,576,586,572"/>
+<area shape="poly" id="edge31_Node000021_Node000017" title=" " alt="" coords="618,581,593,589,478,651,476,646,591,584,616,576"/>
+<area shape="poly" id="edge35_Node000022_Node000011" title=" " alt="" coords="607,764,590,753,577,739,569,724,563,696,559,667,553,652,542,638,517,618,489,603,491,598,520,613,546,634,557,650,564,665,569,695,574,723,581,736,594,749,610,759"/>
+<area shape="poly" id="edge34_Node000022_Node000017" title=" " alt="" coords="617,762,591,753,555,735,520,714,467,676,470,672,523,710,557,731,593,748,619,757"/>
+<area shape="poly" id="edge38_Node000023_Node000011" title=" " alt="" coords="618,820,590,803,574,783,565,763,562,722,561,680,555,659,542,638,519,617,492,603,494,598,522,613,546,634,560,657,567,679,568,721,570,761,578,780,594,799,620,815"/>
+<area shape="poly" id="edge37_Node000023_Node000017" title=" " alt="" coords="617,815,591,804,548,774,510,738,460,676,464,673,514,734,551,770,593,799,619,810"/>
+</map>

@@ -1,0 +1,72 @@
+<map id="oa_tc6_thread" name="oa_tc6_thread">
+<area shape="rect" id="Node000001" title="Transmit all the frames in the OA_BUFF_TX_READY state and receive the frames in the OA_BUFF_RX_COMPLE..." alt="" coords="1153,307,1268,332"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html#a659fe962d24d38fbd9c432e0aa865a8e" title="Read a frame from the RX FIFO." alt="" coords="556,5,703,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1185,299,1148,265,1104,231,1003,167,922,123,836,86,724,45,688,33,690,28,726,39,838,81,924,118,1006,162,1107,226,1152,261,1189,295"/>
+<area shape="rect" id="Node000004" href="$adin1110_8c.html#a8e8d12f2a6d69ae272e8ae78d1d05f9a" title="Write a frame to the TX FIFO." alt="" coords="554,55,705,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1167,304,659,82,661,78,1169,299"/>
+<area shape="rect" id="Node000005" href="$oa__tc6_8c.html#aef3bd2faa41d5487f0cdc9f43a1ee8a8" title="Read a register value." alt="" coords="974,332,1103,357"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="1140,332,1104,338,1103,332,1139,327"/>
+<area shape="rect" id="Node000024" href="$oa__tc6_8c.html#a01f5bc41ca7c56c245e6b8e0c8e96ada" title="Write a register value." alt="" coords="972,455,1105,480"/>
+<area shape="poly" id="edge31_Node000001_Node000024" title=" " alt="" coords="1186,343,1057,456,1053,452,1182,339"/>
+<area shape="rect" id="Node000003" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="129,105,248,131"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="543,32,435,50,318,75,222,108,221,103,317,70,434,44,542,27"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="541,78,318,102,249,112,248,106,317,97,540,73"/>
+<area shape="rect" id="Node000006" href="$adin1110_8c.html#a5ecca2a159685e8358a40e20f634cfb8" title="Read a register&#39;s value." alt="" coords="775,332,922,357"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="960,347,922,347,922,342,960,342"/>
+<area shape="rect" id="Node000021" href="$oa__tc6_8c.html#acc8f5e499db0a8976bfe487d3c525c90" title="Update a field inside a register." alt="" coords="776,504,921,529"/>
+<area shape="poly" id="edge26_Node000005_Node000021" title=" " alt="" coords="1024,371,975,440,948,473,926,495,904,506,902,502,922,491,944,470,970,437,1019,367"/>
+<area shape="poly" id="edge16_Node000006_Node000002" title=" " alt="" coords="842,318,832,261,812,187,796,148,777,110,753,74,724,44,702,31,704,26,727,40,757,71,781,107,801,145,817,185,837,260,847,317"/>
+<area shape="poly" id="edge25_Node000006_Node000003" title=" " alt="" coords="834,321,783,222,752,174,724,146,686,131,634,121,572,114,503,111,363,112,248,117,248,111,363,106,503,106,572,109,635,115,688,126,727,141,756,171,787,219,838,319"/>
+<area shape="poly" id="edge24_Node000006_Node000004" title=" " alt="" coords="833,321,771,191,723,101,690,82,693,78,727,97,776,189,838,319"/>
+<area shape="rect" id="Node000007" href="$adin1110_8c.html#adff719efae401e69148b2ffdc2fc1657" title="Drop a MAC address filter." alt="" coords="533,553,725,579"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="830,370,776,445,763,473,757,498,747,521,727,544,708,555,706,551,724,540,743,518,751,496,758,471,771,442,825,367"/>
+<area shape="rect" id="Node000009" href="$adin1110_8c.html#a663f093302726c642fe34f04141bd1a7" title="Reset both the MAC and PHY." alt="" coords="553,205,706,231"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="822,325,778,288,724,252,678,233,680,228,727,248,781,284,826,320"/>
+<area shape="rect" id="Node000010" href="$adin1110_8c.html#a371f7a12bd86f74e4a42301d59fdf11d" title="Reset the MAC device." alt="" coords="551,652,708,677"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="828,369,801,403,776,444,765,473,761,500,761,549,761,572,757,595,746,619,727,643,710,655,706,651,723,639,742,616,752,593,756,571,756,549,756,499,760,472,771,442,796,400,824,366"/>
+<area shape="rect" id="Node000011" href="$adin1110_8c.html#af26a6d5ce275686cbb9a695b23b372f1" title="Read a PHY register using clause 22." alt="" coords="550,307,709,332"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="761,337,709,331,709,326,762,332"/>
+<area shape="rect" id="Node000012" href="$adin1110_8c.html#ab72acc712925096271a1376383f5d235" title="Read a PHY register using clause 45." alt="" coords="535,356,723,381"/>
+<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="762,357,724,361,723,356,762,351"/>
+<area shape="rect" id="Node000013" href="$adin1110_8c.html#ad4613dba60894c419767d83a47e3da50" title="Write a PHY register using clause 22." alt="" coords="548,455,711,480"/>
+<area shape="poly" id="edge13_Node000006_Node000013" title=" " alt="" coords="827,369,783,409,727,446,698,457,696,452,724,441,780,404,824,365"/>
+<area shape="rect" id="Node000014" href="$adin1110_8c.html#af2d54e7a62c1156af56ffd2a2672fb42" title="Write a PHY register using clause 45." alt="" coords="533,603,725,628"/>
+<area shape="poly" id="edge14_Node000006_Node000014" title=" " alt="" coords="829,370,801,404,776,445,767,466,762,486,759,523,752,558,743,575,727,593,711,605,707,600,724,589,738,572,747,556,754,522,757,485,762,465,771,442,797,401,824,366"/>
+<area shape="rect" id="Node000015" href="$adin1110_8c.html#a3e3ca70d009d0d33694b096c29a726da" title="Reset the PHY device." alt="" coords="553,156,706,181"/>
+<area shape="poly" id="edge15_Node000006_Node000015" title=" " alt="" coords="832,321,789,257,759,223,724,195,701,184,703,179,727,190,763,219,794,254,836,318"/>
+<area shape="rect" id="Node000016" href="$adin1110_8c.html#a5aad78f1917aafb69a6070118d75db49" title="Update a register&#39;s value based on a mask." alt="" coords="548,405,711,431"/>
+<area shape="poly" id="edge17_Node000006_Node000016" title=" " alt="" coords="806,365,726,395,683,408,682,403,724,390,804,360"/>
+<area shape="rect" id="Node000018" href="$adin1110_8c.html#a05609f0807a1f98ed266f3f75073ddea" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="539,504,719,529"/>
+<area shape="poly" id="edge20_Node000006_Node000018" title=" " alt="" coords="831,370,773,444,727,495,703,506,701,501,724,491,769,441,827,367"/>
+<area shape="rect" id="Node000019" href="$adin1110__standalone__example_8c.html#acbf661085a642e031f672cda6c6da4fe" title="Configure the ADIN1110 and read the device ID." alt="" coords="108,435,269,475"/>
+<area shape="poly" id="edge22_Node000006_Node000019" title=" " alt="" coords="811,328,770,310,725,297,671,287,629,283,587,286,534,297,441,325,354,364,278,404,222,438,219,433,275,399,351,359,440,320,533,291,586,281,629,278,672,282,726,291,772,305,813,323"/>
+<area shape="rect" id="Node000008" href="$adin1110_8c.html#ac9e36fefc5436aff5d85c72e9b0f326f" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="325,521,478,561"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="519,556,478,552,479,547,520,551"/>
+<area shape="rect" id="Node000017" href="$adin1110_8c.html#ab568c2726064154ae81093ee1bcad34b" title="Set a port in promiscuous mode. All MAC filters are dropped." alt="" coords="317,180,485,205"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="543,402,532,395,507,374,484,349,447,295,421,244,405,207,410,205,425,242,451,292,488,346,510,370,535,391,546,397"/>
+<area shape="poly" id="edge19_Node000017_Node000003" title=" " alt="" coords="350,178,225,133,227,128,352,173"/>
+<area shape="poly" id="edge21_Node000018_Node000008" title=" " alt="" coords="526,530,479,535,478,530,525,525"/>
+<area shape="rect" id="Node000020" href="$apard32690_2src_2examples_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution." alt="" coords="5,443,60,468"/>
+<area shape="poly" id="edge23_Node000019_Node000020" title=" " alt="" coords="94,458,60,458,60,453,94,453"/>
+<area shape="rect" id="Node000022" href="$oa__tc6_8c.html#ac834e375cba83325c672b8f026f5d03b" title="Allocate resources for the OA TC6 driver." alt="" coords="583,751,676,776"/>
+<area shape="poly" id="edge27_Node000021_Node000022" title=" " alt="" coords="843,544,829,587,805,641,772,695,751,720,727,742,703,755,677,762,676,757,701,750,724,737,747,716,767,692,800,638,824,585,838,542"/>
+<area shape="rect" id="Node000023" href="$adin1110_8c.html#a230ee39d596b871f215c208d06d5526b" title="Initialize the device." alt="" coords="346,655,457,680"/>
+<area shape="poly" id="edge28_Node000022_Node000023" title=" " alt="" coords="569,754,532,742,470,712,421,683,424,678,473,707,534,737,570,748"/>
+<area shape="poly" id="edge30_Node000023_Node000003" title=" " alt="" coords="373,646,343,614,315,574,288,497,251,363,191,131,196,130,256,362,294,495,320,571,347,611,377,643"/>
+<area shape="poly" id="edge29_Node000023_Node000019" title=" " alt="" coords="376,646,208,478,212,474,379,643"/>
+<area shape="poly" id="edge44_Node000024_Node000021" title=" " alt="" coords="977,486,899,506,898,501,975,481"/>
+<area shape="rect" id="Node000025" href="$adin1110_8c.html#a7bba90f2f6c1ccdea27b8346948a9d8f" title="Write a register&#39;s value." alt="" coords="773,455,924,480"/>
+<area shape="poly" id="edge32_Node000024_Node000025" title=" " alt="" coords="958,470,924,470,924,465,958,465"/>
+<area shape="poly" id="edge43_Node000025_Node000004" title=" " alt="" coords="824,446,796,412,771,370,759,337,753,307,751,254,747,203,739,175,723,145,708,125,690,108,653,82,656,78,693,104,712,122,728,142,744,173,752,202,756,254,758,306,764,335,776,368,800,409,828,443"/>
+<area shape="poly" id="edge33_Node000025_Node000007" title=" " alt="" coords="788,488,775,495,761,507,752,519,742,532,727,544,701,556,699,551,724,540,738,528,747,516,757,503,772,490,785,483"/>
+<area shape="poly" id="edge34_Node000025_Node000010" title=" " alt="" coords="781,489,775,494,762,513,755,530,753,568,750,605,742,624,727,643,710,655,707,650,724,639,738,621,745,604,747,567,750,529,757,510,771,491,778,485"/>
+<area shape="poly" id="edge35_Node000025_Node000011" title=" " alt="" coords="829,445,785,394,756,368,724,346,699,335,701,330,727,341,759,364,789,391,833,442"/>
+<area shape="poly" id="edge36_Node000025_Node000012" title=" " alt="" coords="817,449,774,421,724,395,691,384,693,379,726,390,777,416,820,444"/>
+<area shape="poly" id="edge37_Node000025_Node000013" title=" " alt="" coords="759,470,711,470,711,465,759,465"/>
+<area shape="poly" id="edge38_Node000025_Node000014" title=" " alt="" coords="783,489,775,495,765,506,758,518,752,543,746,568,739,581,727,593,708,605,706,600,724,589,735,578,741,566,747,542,753,516,760,503,772,491,779,485"/>
+<area shape="poly" id="edge39_Node000025_Node000016" title=" " alt="" coords="778,454,686,433,687,428,779,449"/>
+<area shape="poly" id="edge40_Node000025_Node000018" title=" " alt="" coords="779,486,687,507,686,501,778,480"/>
+<area shape="rect" id="Node000026" href="$adin1110_8c.html#ad3177543bc60c03e31368d7a051d8783" title="Reset both the MAC and PHY." alt="" coords="556,701,703,727"/>
+<area shape="poly" id="edge41_Node000025_Node000026" title=" " alt="" coords="780,490,775,494,759,519,752,543,751,567,753,592,755,617,754,642,746,667,727,692,704,707,701,702,723,688,741,665,748,641,750,617,748,593,745,568,746,542,754,517,771,491,777,486"/>
+<area shape="poly" id="edge42_Node000026_Node000023" title=" " alt="" coords="553,701,456,681,457,676,554,696"/>
+</map>

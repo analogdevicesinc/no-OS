@@ -1,0 +1,24 @@
+<map id="lt3074_read_word" name="lt3074_read_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read word operation." alt="" coords="963,56,1101,81"/>
+<area shape="rect" id="Node000002" href="$lt3074_8c.html#a1739bfd03527b68db62e029bf83a2268" title="Read statuses." alt="" coords="339,5,485,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="967,56,914,46,797,34,680,26,485,21,486,15,680,21,798,28,915,41,968,50"/>
+<area shape="rect" id="Node000004" href="$lt3074_8c.html#a664b04b25ba8a1fc60d6abc53991747f" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="740,56,915,81"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="949,71,915,71,915,66,949,66"/>
+<area shape="rect" id="Node000006" href="$lt3074_8c.html#aaa7a6e7bcdf36dc802fefb3daaa5d275" title="Generic register read wrapper." alt="" coords="764,107,891,132"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="967,87,880,109,879,104,966,82"/>
+<area shape="rect" id="Node000003" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,56,291,81"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="353,37,278,58,277,53,352,32"/>
+<area shape="rect" id="Node000005" href="$lt3074_8c.html#a45b335595ece27fbe90a000129e0eb1b" title="Read a value." alt="" coords="541,56,684,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="726,71,685,71,685,66,726,66"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="527,71,291,71,291,66,527,66"/>
+<area shape="rect" id="Node000007" href="$lt3074_8c.html#ab6c8397a7fd51120ae521f03fb129c6f" title="Initialize the device structure." alt="" coords="367,107,457,132"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="750,122,458,122,458,117,750,117"/>
+<area shape="rect" id="Node000010" href="$lt3074_8c.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="533,157,692,183"/>
+<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="760,138,668,160,666,155,759,133"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="353,106,277,84,278,79,354,101"/>
+<area shape="rect" id="Node000008" href="$iio__lt3074_8c.html#a415078dac56a0cdfeab8963d3e685f23" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,107,289,132"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="353,122,289,122,289,117,353,117"/>
+<area shape="rect" id="Node000009" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,107,124,132"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="160,122,124,122,124,117,160,117"/>
+<area shape="poly" id="edge12_Node000010_Node000007" title=" " alt="" coords="548,156,457,133,459,128,549,151"/>
+</map>

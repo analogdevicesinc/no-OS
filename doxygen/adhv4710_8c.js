@@ -1,0 +1,25 @@
+var adhv4710_8c =
+[
+    [ "adhv4710_clear_shutdown_latch", "adhv4710_8c.html#a087878f42abe0d2dc24fd7490db5f8ca", null ],
+    [ "adhv4710_enable_overtemperature_protection", "adhv4710_8c.html#ae016655cc943b4e41caadc34f81e6755", null ],
+    [ "adhv4710_enable_overvoltage_neg_protection", "adhv4710_8c.html#a04b52d0c8ee516bc875683e48f1f963d", null ],
+    [ "adhv4710_enable_overvoltage_pos_protection", "adhv4710_8c.html#a031a6d2e9700fd27ead08c394375fc18", null ],
+    [ "adhv4710_enable_sink_overcurrent_protection", "adhv4710_8c.html#a8079df2d35a7c38be04f36f1b4a05316", null ],
+    [ "adhv4710_enable_source_overcurrent_protection", "adhv4710_8c.html#a2fdbecdedeace86183061cc0f5442349", null ],
+    [ "adhv4710_get_status", "adhv4710_8c.html#a88c2a9a6d28aa269e4e2aec8a4c8ad63", null ],
+    [ "adhv4710_hw_reset", "adhv4710_8c.html#ab164133a42906200712c29e3f59baff4", null ],
+    [ "adhv4710_init", "adhv4710_8c.html#acd3528815b59994d1dbb097535195747", null ],
+    [ "adhv4710_read", "adhv4710_8c.html#af44574afda865cd8e2b55e2ec84ec817", null ],
+    [ "adhv4710_remove", "adhv4710_8c.html#ad07143510eab06370c5ea790571644af", null ],
+    [ "adhv4710_set_overtemperature_level", "adhv4710_8c.html#a41128c1974c1de32fc1c4bc6ea94149a", null ],
+    [ "adhv4710_set_overvoltage_neg_level", "adhv4710_8c.html#a75838fb4efe8625d2f4a688371dd8d47", null ],
+    [ "adhv4710_set_overvoltage_pos_level", "adhv4710_8c.html#abd585e89112eb3b3b6e0d786f4a0101b", null ],
+    [ "adhv4710_set_quiescent_current", "adhv4710_8c.html#a78d50f15929df4fa8535153a05554294", null ],
+    [ "adhv4710_set_sink_overcurrent_level", "adhv4710_8c.html#abe49c41e97c584900ced278e082a3328", null ],
+    [ "adhv4710_set_source_overcurrent_level", "adhv4710_8c.html#a551cdf6e93577358e4980b032d60ac05", null ],
+    [ "adhv4710_shutdown_amplifier", "adhv4710_8c.html#a91d426c9e635d2cfaa286417f444efcf", null ],
+    [ "adhv4710_sw_reset", "adhv4710_8c.html#a57dff986dd7807f642df21a9c54acee3", null ],
+    [ "adhv4710_update_bits", "adhv4710_8c.html#a67663137d3963ead469ba2bbda6633e0", null ],
+    [ "adhv4710_version_product", "adhv4710_8c.html#a91cf4fa19547811230527d8331d5ff73", null ],
+    [ "adhv4710_write", "adhv4710_8c.html#a201949980440df5ce26bfcfc1f8c6c7b", null ]
+];

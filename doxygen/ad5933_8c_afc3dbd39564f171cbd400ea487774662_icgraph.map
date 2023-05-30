@@ -1,0 +1,7 @@
+<map id="ad5933_get_data" name="ad5933_get_data">
+<area shape="rect" id="Node000001" title="Reads the real and imaginary value from register." alt="" coords="268,42,403,67"/>
+<area shape="rect" id="Node000002" href="$ad5933_8c.html#a58b3907982945d725fa5c40b8b548869" title="Reads the real and the imaginary data and calculates the Gain Factor." alt="" coords="27,5,198,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,47,198,39,199,34,255,41"/>
+<area shape="rect" id="Node000003" href="$ad5933_8c.html#af7159e3dc1e00ce2e03c2943aad4aa34" title="Reads the real and the imaginary data and calculates the Impedance." alt="" coords="5,70,220,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,67,214,73,213,67,254,62"/>
+</map>

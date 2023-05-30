@@ -1,0 +1,7 @@
+<map id="max96792_dev_diag_part_cfg_status" name="max96792_dev_diag_part_cfg_status">
+<area shape="rect" id="Node000001" title="Structure to hold diagnostic configuration status for MAX96792 device." alt="" coords="383,37,573,77"/>
+<area shape="rect" id="Node000002" href="$structmax96792__pipe__diag__src__dst__dt__vc__map__status.html" title="Structure to hold the source and destination data type and virtual channel mapping status for MAX9679..." alt="" coords="5,5,205,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,32,382,46,382,52,219,38"/>
+<area shape="rect" id="Node000003" href="$structmax96792__csi__diag__mipi__phy__lane__polarity__map.html" title="Structure to represent the polarity map of MIPI PHY lanes for the MAX96792 deserializer." alt="" coords="12,69,199,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="212,78,358,65,382,63,383,69,359,71,213,83"/>
+</map>

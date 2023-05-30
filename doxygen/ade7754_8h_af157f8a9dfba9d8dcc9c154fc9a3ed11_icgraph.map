@@ -1,0 +1,7 @@
+<map id="ade7754_period_val" name="ade7754_period_val">
+<area shape="rect" id="Node000001" title="Read period value." alt="" coords="313,5,467,31"/>
+<area shape="rect" id="Node000002" href="$eval-ade7754_2src_2common_2common__data_8c.html#a66b3bb1a4fdb3eed65a3c7168aac3a79" title="print measurements" alt="" coords="108,5,265,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,21,266,21,266,15,299,15"/>
+<area shape="rect" id="Node000003" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

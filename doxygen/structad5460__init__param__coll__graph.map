@@ -1,0 +1,21 @@
+<map id="ad5460_init_param" name="ad5460_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1299,163,1445,189"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,133,1125,158"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1138,151,1299,167,1298,172,1138,157"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,43,184,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="192,39,318,26,475,17,560,17,648,21,735,30,819,44,879,61,936,85,1022,130,1020,135,934,90,877,66,818,49,734,35,647,26,560,23,475,23,318,31,192,44"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,98,786,123"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,59,388,71,607,91,663,98,663,103,606,96,388,76,198,64"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,105,471,130"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,70,209,87,324,106,323,112,207,92,147,75"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,157,472,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,170,961,147,962,152,486,176"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,158,606,133,665,121,666,126,607,139,486,163"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="800,116,962,134,961,139,799,121"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="693,83,702,75,725,71,743,74,755,80,758,90,752,99,747,96,752,89,751,83,742,79,725,77,705,80,696,87"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,113,663,109,663,115,484,118"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,187,1129,213"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1143,200,1208,198,1274,193,1318,186,1319,191,1275,199,1208,204,1143,205"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,229,819,254"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="832,225,957,208,957,214,833,230"/>
+</map>

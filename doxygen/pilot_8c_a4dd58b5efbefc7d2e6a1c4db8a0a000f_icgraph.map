@@ -1,0 +1,13 @@
+<map id="get_count_ms" name="get_count_ms">
+<area shape="rect" id="Node000001" title=" " alt="" coords="535,26,648,52"/>
+<area shape="rect" id="Node000002" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,26,227,52"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="535,26,486,16,381,8,275,16,212,29,211,24,274,11,381,3,487,11,536,20"/>
+<area shape="rect" id="Node000004" href="$state__machine_8c.html#a806ff9cf71b16baf0e504f808d286e04" title="Determine next state based on CP measurements and previous events." alt="" coords="275,26,487,52"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="521,42,487,42,487,36,521,36"/>
+<area shape="rect" id="Node000005" href="$state__machine_8c.html#aa1601b5c73eb9dc58e38a699f36765e7" title="Determine next state based on supply measurements and previous events." alt="" coords="285,76,476,116"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="531,58,455,79,454,74,530,53"/>
+<area shape="rect" id="Node000003" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,26,60,52"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,42,60,42,60,36,94,36"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="261,42,227,42,227,36,261,36"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="292,75,215,54,216,49,293,70"/>
+</map>

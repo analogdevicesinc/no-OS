@@ -1,0 +1,7 @@
+<map id="adaq8092_set_clk_phase_mode" name="adaq8092_set_clk_phase_mode">
+<area shape="rect" id="Node000001" title="Set the clock phase delay mode." alt="" coords="271,5,500,31"/>
+<area shape="rect" id="Node000002" href="$adaq8092_8c.html#a3fd6d9f29c2321a807a1d8791c2b85cd" title="Initialize the device." alt="" coords="108,5,223,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,21,223,21,223,15,257,15"/>
+<area shape="rect" id="Node000003" href="$adaq8092__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

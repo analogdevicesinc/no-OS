@@ -1,0 +1,24 @@
+<map id="no_os_pwm_disable" name="no_os_pwm_disable">
+<area shape="rect" id="Node000001" title="Disable PWM signal generation." alt="" coords="716,104,869,129"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="444,5,668,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="761,98,718,70,667,44,631,33,633,28,669,40,721,65,764,93"/>
+<area shape="rect" id="Node000003" href="$max25603_8c.html#ac9b182a9ed8bf3625d0846b4bd7533b2" title="MAX25603 set and configure BEAM PWM dimming." alt="" coords="475,55,637,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="717,104,617,83,618,77,718,99"/>
+<area shape="rect" id="Node000006" href="$max25603_8c.html#a505e7e1f8ea38019b345f30458c4cd68" title="MAX25603 set and configure ENABLE PWM dimming." alt="" coords="471,104,641,129"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="702,119,641,119,641,114,702,114"/>
+<area shape="rect" id="Node000007" href="$stm32__spi_8c.html#a50f1db6c12a130f00d92ae3acf9c0589" title=" " alt="" coords="463,153,649,179"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="718,135,618,156,617,151,717,130"/>
+<area shape="rect" id="Node000010" href="$stm32__spi_8c.html#ab30b6267353de9d9f7d9dab38b808021" title="Initialize the SPI communication peripheral." alt="" coords="497,203,615,228"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="764,140,720,167,669,192,615,208,614,203,667,188,718,162,761,135"/>
+<area shape="rect" id="Node000004" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,53,165,79"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="480,55,396,43,305,38,214,43,139,56,138,51,213,38,305,32,396,38,480,50"/>
+<area shape="rect" id="Node000005" href="$max25603_8c.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="245,53,364,79"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="461,69,364,69,364,64,461,64"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="232,69,166,69,166,63,232,63"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="458,115,341,106,213,93,146,81,147,76,214,87,341,101,458,109"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="478,104,364,80,365,75,479,99"/>
+<area shape="rect" id="Node000008" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="213,155,396,180"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="449,169,396,170,396,164,449,164"/>
+<area shape="rect" id="Node000009" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="231,205,378,245"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="482,184,445,193,379,209,378,203,443,187,480,179"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="drivers/platform/stm32/stm32_tdm.h" name="drivers/platform/stm32/stm32_tdm.h">
+<area shape="rect" id="Node000001" title="Header file for the stm32 tdm driver." alt="" coords="47,5,219,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,167,105,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,48,38,67,24,80,12,94,9,111,14,127,27,143,43,157,39,161,23,146,10,130,3,111,8,92,20,76,35,63,68,43"/>
+<area shape="rect" id="Node000003" href="$no__os__tdm_8h.html" title="Header file of TDM Interface." alt="" coords="143,93,248,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="150,44,179,81,175,84,146,47"/>
+<area shape="rect" id="Node000005" href="$stm32__hal_8h.html" title=" " alt="" coords="272,93,375,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="179,43,284,86,282,91,177,48"/>
+<area shape="rect" id="Node000007" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="22,93,118,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="120,47,90,84,86,81,115,44"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="176,121,104,162,101,157,174,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="154,167,237,192"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="198,119,198,153,193,153,193,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="290,167,357,192"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="326,119,326,153,321,153,321,119"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="73,119,73,153,67,153,67,119"/>
+</map>

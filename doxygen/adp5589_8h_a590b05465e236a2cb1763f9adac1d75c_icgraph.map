@@ -1,0 +1,17 @@
+<map id="adp5589_set_register_value" name="adp5589_set_register_value">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="231,146,393,186"/>
+<area shape="rect" id="Node000002" href="$adp5589_8c.html#a8f72cb7501f903550bf857f9948a7173" title="Sets the direction of the pins." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,137,240,89,212,65,181,44,156,33,158,28,184,40,215,61,243,85,289,133"/>
+<area shape="rect" id="Node000003" href="$adp5589_8c.html#a0be6cd6c51c1a7e61eeb3e845a4ff211" title="Initializes the communication peripheral and checks if the ADP5589 part is present." alt="" coords="41,55,147,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="269,141,227,116,182,94,146,82,148,77,184,89,230,112,271,136"/>
+<area shape="rect" id="Node000004" href="$adp5589_8c.html#ad27d45de6044faf886de84348f76f71d" title="Initializes keyboard decoder." alt="" coords="26,104,162,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="217,147,150,132,151,127,218,142"/>
+<area shape="rect" id="Node000005" href="$adp5589_8c.html#aca12875a042564b8477e564c7d567eee" title="Initializes the PWM generator in continuous mode." alt="" coords="21,153,167,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="217,169,167,169,167,163,217,163"/>
+<area shape="rect" id="Node000006" href="$adp5589_8c.html#a00c689e4357243d8a5242456a0547006" title="Locks the ADP5589 and requests Password for unlock." alt="" coords="23,203,165,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="218,190,151,205,150,200,217,185"/>
+<area shape="rect" id="Node000007" href="$adp5589_8c.html#a1be7b79145ba9807fe9d046c6c5e63a8" title="Sets the state of the pins." alt="" coords="8,252,180,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="270,196,229,220,184,242,148,254,146,249,182,237,227,215,267,191"/>
+<area shape="rect" id="Node000008" href="$adp5589_8c.html#a9801c2a8869b67d3d192541021b21c05" title="Sets the PWM On and Off times." alt="" coords="22,301,166,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="288,198,243,246,215,270,184,291,155,304,153,299,181,286,212,266,239,242,285,195"/>
+</map>

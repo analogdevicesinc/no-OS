@@ -1,0 +1,19 @@
+<map id="projects/ad5460/src/common/common_data.c" name="projects/ad5460/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="25,5,215,45"/>
+<area shape="rect" id="Node000002" href="$ad5460_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="57,93,183,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,46,123,79,117,79,117,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,121,81,158,76,154,108,117"/>
+<area shape="rect" id="Node000004" href="$ad5460_8h.html" title="Header file of AD5460 Driver." alt="" coords="139,167,221,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="132,117,164,154,159,158,128,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="202,313,273,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="142,195,111,207,83,224,67,243,67,253,72,264,95,287,125,304,158,314,189,319,188,325,156,319,123,308,92,292,67,267,61,254,63,241,80,219,109,202,140,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="81,240,164,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="173,194,143,231,139,227,168,191"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="188,240,287,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="192,191,221,227,217,231,187,194"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="311,240,417,265"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="211,190,322,232,320,237,209,195"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="240,266,240,300,235,300,235,266"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="345,268,271,309,269,304,342,263"/>
+</map>

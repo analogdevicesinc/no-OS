@@ -1,0 +1,7 @@
+<map id="projects/adf4377_sdz/src/platform/mbed/parameters.h" name="projects/adf4377_sdz/src/platform/mbed/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to Mbed platform used by adf4377 project." alt="" coords="104,5,341,45"/>
+<area shape="rect" id="Node000002" href="$adf4377__sdz_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of adf4377 project." alt="" coords="5,93,200,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,56,131,95,128,91,183,51"/>
+<area shape="rect" id="Node000003" href="$adf4377__sdz_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by adf4377 project." alt="" coords="225,93,461,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,51,318,91,315,95,259,56"/>
+</map>

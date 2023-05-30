@@ -1,0 +1,7 @@
+<map id="ad9625_spi_write" name="ad9625_spi_write">
+<area shape="rect" id="Node000001" title="ad9625_spi_write" alt="" coords="167,31,303,56"/>
+<area shape="rect" id="Node000002" href="$ad9625_8c.html#ab8c107f747217b37f303fc1713ac2a2d" title="ad9625_setup" alt="" coords="5,5,119,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,34,118,29,119,24,154,29"/>
+<area shape="rect" id="Node000003" href="$ad9625_8c.html#ae75727562060df96104dba2459428aca" title="ad9625_test" alt="" coords="11,55,113,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,57,114,63,113,58,153,52"/>
+</map>

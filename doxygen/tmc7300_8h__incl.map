@@ -1,0 +1,19 @@
+<map id="drivers/motor/tmc7300/tmc7300.h" name="drivers/motor/tmc7300/tmc7300.h">
+<area shape="rect" id="Node000001" title="Header file for the TMC7300 driver." alt="" coords="5,5,176,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="101,240,171,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,47,51,76,30,113,22,133,19,153,20,172,28,191,39,206,54,218,88,236,86,240,51,222,36,209,23,193,15,173,14,153,17,132,25,111,47,73,70,44"/>
+<area shape="rect" id="Node000003" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="181,93,286,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,43,202,84,199,89,124,48"/>
+<area shape="rect" id="Node000007" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="37,167,144,192"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="93,46,93,153,88,153,88,46"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="228,121,154,230,149,227,223,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="347,240,429,265"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="284,116,327,135,348,148,366,165,382,195,389,225,384,226,377,196,362,168,345,152,325,139,282,121"/>
+<area shape="rect" id="Node000005" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="219,167,352,192"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="244,117,271,154,267,157,240,121"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="262,194,174,236,172,232,260,190"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="303,190,361,230,358,234,300,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="250,240,321,265"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="288,192,288,226,283,226,283,192"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="100,191,124,227,119,230,96,194"/>
+</map>

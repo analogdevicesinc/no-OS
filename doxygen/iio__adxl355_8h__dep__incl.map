@@ -1,0 +1,11 @@
+<map id="drivers/accel/adxl355/iio_adxl355.h" name="drivers/accel/adxl355/iio_adxl355.h">
+<area shape="rect" id="Node000001" title="Header file of IIO ADXL355 Driver." alt="" coords="303,5,464,45"/>
+<area shape="rect" id="Node000002" href="$iio__adxl355_8c.html" title="Implementation of IIO ADXL355 Driver." alt="" coords="5,108,167,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="313,52,180,96,139,110,137,105,178,91,311,47"/>
+<area shape="rect" id="Node000003" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxl355&#45;pmdz project." alt="" coords="191,101,373,155"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="356,57,310,102,307,98,353,53"/>
+<area shape="rect" id="Node000004" href="$iio__lwip__example_8c.html" title="Implementation of IIO LWIP example for eval&#45;adxl355&#45;pmdz project." alt="" coords="397,93,572,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="414,53,452,91,449,95,410,57"/>
+<area shape="rect" id="Node000005" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adxl355&#45;pmdz project." alt="" coords="596,93,803,163"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="456,47,597,91,595,96,455,52"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="adxl367_get_nb_of_fifo_entries" name="adxl367_get_nb_of_fifo_entries">
+<area shape="rect" id="Node000001" title="Reads the number of FIFO entries." alt="" coords="705,5,879,45"/>
+<area shape="rect" id="Node000002" href="$adxl367_8c.html#ab7757e900ce82d9e6edb8d234c941337" title="Reads all available raw values from FIFO. If, after setting FIFO mode, any of x, y,..." alt="" coords="488,13,657,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="691,28,658,28,658,23,691,23"/>
+<area shape="rect" id="Node000003" href="$adxl367_8c.html#adb88147a4a46b716f0e0ea59751d789a" title="Reads converted values from FIFO. If, after setting FIFO mode, any of x, y, z, temp or adc aren&#39;t sel..." alt="" coords="229,13,440,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="474,28,440,28,440,23,474,23"/>
+<area shape="rect" id="Node000004" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,13,181,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="216,28,182,28,182,23,216,23"/>
+</map>

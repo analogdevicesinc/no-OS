@@ -1,0 +1,10 @@
+<map id="ad9361_unregister_clocks" name="ad9361_unregister_clocks">
+<area shape="rect" id="Node000001" title=" " alt="" coords="283,31,473,56"/>
+<area shape="rect" id="Node000002" href="$ad9361__api_8c.html#ab58f5f1831cfcb6bf7a34d14de1edc1f" title=" " alt="" coords="122,5,221,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,33,221,27,221,21,269,27"/>
+<area shape="rect" id="Node000004" href="$ad9361__api_8c.html#a14cb570edb8f559662c7891e5371bf2b" title=" " alt="" coords="108,55,235,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="269,59,235,63,235,57,269,53"/>
+<area shape="rect" id="Node000003" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,32,61,41,60,36,108,27"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,57,60,51,61,45,95,51"/>
+</map>

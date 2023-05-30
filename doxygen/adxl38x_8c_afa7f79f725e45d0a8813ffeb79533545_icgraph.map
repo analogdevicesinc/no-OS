@@ -1,0 +1,5 @@
+<map id="adxl38x_get_xyz_gees" name="adxl38x_get_xyz_gees">
+<area shape="rect" id="Node000001" title="Reads the raw output data of each axis and converts it to g." alt="" coords="213,5,384,31"/>
+<area shape="rect" id="Node000002" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,21,165,21,165,15,200,15"/>
+</map>

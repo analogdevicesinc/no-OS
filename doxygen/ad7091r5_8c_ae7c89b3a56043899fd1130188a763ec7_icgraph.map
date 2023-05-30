@@ -1,0 +1,17 @@
+<map id="ad7091r5_i2c_write_mask" name="ad7091r5_i2c_write_mask">
+<area shape="rect" id="Node000001" title=" " alt="" coords="405,145,597,171"/>
+<area shape="rect" id="Node000002" href="$ad7091r5_8c.html#ab5910ad53c54d79c7fcf4f9a3d0d3e5f" title="Initialize GPIO driver handlers for the GPIOs in the system. ad7091r5_init() helper function." alt="" coords="199,5,322,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="476,138,424,91,391,67,356,46,321,32,323,27,358,41,394,62,428,87,480,134"/>
+<area shape="rect" id="Node000003" href="$ad7091r5_8c.html#a3f8a54fe65cfc89920b07ed66ee3c646" title=" " alt="" coords="185,55,336,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="451,143,356,110,322,98,323,93,358,105,452,138"/>
+<area shape="rect" id="Node000004" href="$ad7091r5_8c.html#ad6f09a2a2f289b0c9c1f7dd64df73e8f" title=" " alt="" coords="164,120,357,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="392,149,357,145,358,140,392,144"/>
+<area shape="rect" id="Node000005" href="$ad7091r5_8c.html#ab7e6212b303777358db1f635c5633da9" title=" " alt="" coords="183,169,338,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="392,172,338,177,338,172,391,166"/>
+<area shape="rect" id="Node000007" href="$ad7091r5_8c.html#a148942113a94c0fd6bddbf28667e9979" title=" " alt="" coords="189,219,332,244"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="452,178,358,209,313,221,311,216,357,203,451,173"/>
+<area shape="rect" id="Node000008" href="$ad7091r5_8c.html#ae02330da130a896a798df4487fc83eb6" title=" " alt="" coords="176,268,345,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="476,182,424,220,358,258,323,270,322,265,356,253,421,216,473,177"/>
+<area shape="rect" id="Node000006" href="$ad7091r5_8c.html#a90e8a880f37bee7db5c860350b3d0215" title=" " alt="" coords="5,169,116,195"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="169,185,116,185,116,179,169,179"/>
+</map>

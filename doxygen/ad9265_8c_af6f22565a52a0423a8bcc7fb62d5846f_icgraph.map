@@ -1,0 +1,10 @@
+<map id="ad9265_outputmode_set" name="ad9265_outputmode_set">
+<area shape="rect" id="Node000001" title="ad9265_setup" alt="" coords="452,31,635,56"/>
+<area shape="rect" id="Node000002" href="$ad9265_8c.html#a1f67322e49a0c38b7834b7095af10578" title="ad9265_calibrate" alt="" coords="269,5,404,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="438,33,404,29,405,24,439,28"/>
+<area shape="rect" id="Node000003" href="$ad9265_8c.html#a93b1899f56931595d1ea398cc472d7ae" title="ad9265_setup" alt="" coords="108,31,221,56"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="438,46,222,46,222,41,438,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="256,33,222,38,221,32,255,27"/>
+<area shape="rect" id="Node000004" href="$ad9265__fmc__125ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,46,60,46,60,41,94,41"/>
+</map>

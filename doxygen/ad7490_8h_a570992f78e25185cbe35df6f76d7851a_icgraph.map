@@ -1,0 +1,9 @@
+<map id="ad7490_init" name="ad7490_init">
+<area shape="rect" id="Node000001" title="AD7490 Initialization function." alt="" coords="341,31,440,56"/>
+<area shape="rect" id="Node000002" href="$iio__ad7490_8c.html#a6a4af5f1a2888c06864cf197f300f466" title=" " alt="" coords="172,5,293,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="327,36,293,30,294,25,328,31"/>
+<area shape="rect" id="Node000004" href="$eval-ad7490sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,55,292,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,56,292,61,292,56,327,50"/>
+<area shape="rect" id="Node000003" href="$eval-ad7490sdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

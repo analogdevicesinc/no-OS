@@ -1,0 +1,5 @@
+<map id="ad6673_soft_reset" name="ad6673_soft_reset">
+<area shape="rect" id="Node000001" title="Resets all registers to their default values." alt="" coords="167,5,308,31"/>
+<area shape="rect" id="Node000002" href="$ad6673_8c.html#a9228c7d4c22253ce20062937317ccf98" title="Configures the device." alt="" coords="5,5,119,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,21,119,21,119,15,153,15"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="adis_write_filt_size_var_b" name="adis_write_filt_size_var_b">
+<area shape="rect" id="Node000001" title="Write filter size variable B value." alt="" coords="396,35,543,75"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="189,5,348,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="382,45,348,40,348,34,383,39"/>
+<area shape="rect" id="Node000003" href="$adis_8c.html#ac5923d489b5b4490bcd6e4b083ad20dd" title="Configure filter for the given filter frequency." alt="" coords="212,70,325,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="383,69,326,77,325,72,382,64"/>
+<area shape="rect" id="Node000004" href="$iio__adis_8c.html#ac75103dfd80247d5138fd31c30ad7eeb" title="Handles the write request for lpf attribute." alt="" coords="5,70,141,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,85,142,85,142,80,198,80"/>
+</map>

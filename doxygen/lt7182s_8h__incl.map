@@ -1,0 +1,17 @@
+<map id="drivers/power/lt7182s/lt7182s.h" name="drivers/power/lt7182s/lt7182s.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="33,5,195,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="133,167,204,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,48,41,62,19,79,9,98,9,107,13,117,35,139,62,155,91,165,120,171,119,177,90,170,60,160,32,143,9,120,4,108,3,96,15,75,38,58,65,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="24,93,95,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="103,47,77,84,73,80,98,44"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="243,93,343,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="158,43,255,85,253,90,156,48"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="119,93,218,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="129,44,155,80,150,84,125,47"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="274,121,202,162,199,157,271,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="243,167,313,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="293,120,286,154,280,153,287,118"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="338,167,421,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="308,117,356,156,353,160,305,121"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="171,119,171,153,166,153,166,119"/>
+</map>

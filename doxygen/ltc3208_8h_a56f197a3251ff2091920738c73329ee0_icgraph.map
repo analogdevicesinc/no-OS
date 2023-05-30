@@ -1,0 +1,51 @@
+<map id="ltc3208_reg_write" name="ltc3208_reg_write">
+<area shape="rect" id="Node000001" title="Writes to the selected register on the device." alt="" coords="789,169,928,195"/>
+<area shape="rect" id="Node000002" href="$ltc3208_8c.html#a4f5277bfc5cac0e4537df6b7099d815d" title="Sets the selected LED register&#39;s current strength." alt="" coords="340,107,507,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="775,173,506,134,507,129,776,168"/>
+<area shape="rect" id="Node000009" href="$ltc3208_8c.html#a4d43ce8b0f9ff21cf88c2df46ca2228a" title="Sets the selected LED register&#39;s current strength." alt="" coords="340,5,507,31"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="815,166,740,135,628,93,515,53,461,33,462,28,517,47,630,88,742,130,817,161"/>
+<area shape="rect" id="Node000010" href="$ltc3208_8c.html#aa3ddcad8881ba494c29a3550714f8d33" title="Sets the DAC settings for each AUX LED." alt="" coords="577,190,728,230"/>
+<area shape="poly" id="edge16_Node000001_Node000010" title=" " alt="" coords="776,196,728,202,728,197,775,191"/>
+<area shape="rect" id="Node000012" href="$ltc3208_8c.html#a0680a7f8e1b02bdb07b4efe37adf7e92" title="Updates the options set on the device." alt="" coords="564,372,741,397"/>
+<area shape="poly" id="edge21_Node000001_Node000012" title=" " alt="" coords="837,206,669,374,665,370,833,203"/>
+<area shape="rect" id="Node000003" href="$ltc3208_8c.html#a1f6140b020a785497780a5b2b7fac267" title="Resets all register of the device." alt="" coords="172,57,283,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="358,106,278,85,279,80,360,101"/>
+<area shape="rect" id="Node000005" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#af68d2b0fb0af9de1ff45c0369656f42c" title=" " alt="" coords="188,205,267,231"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="389,141,284,196,260,208,257,203,281,192,386,136"/>
+<area shape="rect" id="Node000006" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#a3303853e35553f6554d2d38eebbc21f5" title=" " alt="" coords="186,255,269,280"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="403,144,351,194,284,246,263,257,261,252,281,241,348,190,399,140"/>
+<area shape="rect" id="Node000007" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#af9b6567733fa7a488463d757a4eea895" title=" " alt="" coords="175,156,279,181"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="360,138,279,159,278,153,358,133"/>
+<area shape="rect" id="Node000008" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#acbce5d66785664f9e07fbb22b194426f" title=" " alt="" coords="190,107,265,132"/>
+<area shape="poly" id="edge10_Node000002_Node000008" title=" " alt="" coords="326,122,265,122,265,117,326,117"/>
+<area shape="rect" id="Node000004" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,156,124,181"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="185,91,173,98,124,129,84,158,81,154,121,125,171,93,183,86"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="174,205,107,184,108,179,175,200"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="181,251,171,246,120,213,80,183,83,179,123,209,173,241,184,247"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="161,171,124,171,124,166,161,166"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="177,137,108,158,106,153,176,132"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="362,37,277,60,275,55,361,32"/>
+<area shape="poly" id="edge13_Node000009_Node000004" title=" " alt="" coords="327,15,249,22,210,32,173,47,140,71,111,102,75,157,70,154,107,98,136,67,171,42,208,27,248,17,326,9"/>
+<area shape="poly" id="edge15_Node000009_Node000007" title=" " alt="" coords="397,41,333,97,310,123,284,147,264,158,262,154,281,143,306,119,329,93,394,37"/>
+<area shape="poly" id="edge19_Node000010_Node000005" title=" " alt="" coords="564,214,267,220,267,215,564,209"/>
+<area shape="poly" id="edge20_Node000010_Node000007" title=" " alt="" coords="563,203,516,198,279,176,280,170,516,193,564,198"/>
+<area shape="rect" id="Node000011" href="$ltc3208_8c.html#a28f6e68345ac3675b3ca0db584c6fa49" title="Sets the DAC settings for a specific AUX LED." alt="" coords="331,323,516,348"/>
+<area shape="poly" id="edge17_Node000010_Node000011" title=" " alt="" coords="621,241,574,278,517,312,484,325,482,320,515,308,571,274,618,237"/>
+<area shape="poly" id="edge18_Node000011_Node000005" title=" " alt="" coords="342,319,329,312,312,296,304,279,296,262,281,245,261,233,264,229,284,241,300,259,308,276,317,292,332,308,344,315"/>
+<area shape="poly" id="edge22_Node000012_Node000003" title=" " alt="" coords="632,362,597,309,562,243,553,220,549,199,547,162,540,128,530,113,514,97,488,81,460,69,398,56,337,55,283,61,282,56,336,50,398,51,461,63,491,76,518,93,534,110,545,127,552,161,555,198,558,219,566,241,602,306,636,359"/>
+<area shape="rect" id="Node000013" href="$ltc3208_8c.html#ac03f72f46f651eef7617f2dfb3a3cf8c" title="Sets the device&#39;s charge pump to output 1.5x of operating voltage." alt="" coords="355,471,491,496"/>
+<area shape="poly" id="edge23_Node000012_Node000013" title=" " alt="" coords="622,407,573,435,517,462,483,473,481,468,515,457,571,430,619,402"/>
+<area shape="rect" id="Node000014" href="$ltc3208_8c.html#a8644a66a97f9344dc810c27682d68a4d" title="Selects which CAM register to use." alt="" coords="340,421,507,447"/>
+<area shape="poly" id="edge24_Node000012_Node000014" title=" " alt="" coords="580,403,484,424,483,419,579,398"/>
+<area shape="rect" id="Node000015" href="$ltc3208_8c.html#ab7118111679f3b0c8baa31ea4a34c365" title="Sets the device&#39;s charge pump to output 2x of operating voltage." alt="" coords="348,372,499,397"/>
+<area shape="poly" id="edge26_Node000012_Node000015" title=" " alt="" coords="550,387,499,387,499,382,550,382"/>
+<area shape="rect" id="Node000016" href="$ltc3208_8c.html#ac9501180f798d4b534829f5ebc534434" title="Enables RGB and AUX4 dropout signals." alt="" coords="342,258,505,298"/>
+<area shape="poly" id="edge27_Node000012_Node000016" title=" " alt="" coords="617,367,515,314,483,301,485,296,517,309,620,363"/>
+<area shape="rect" id="Node000017" href="$ltc3208_8c.html#a23010807d89e27a9c1e338784daaf8ab" title="Selects if RGB or SUB is controled by ENRGBS pin." alt="" coords="334,520,513,545"/>
+<area shape="poly" id="edge29_Node000012_Node000017" title=" " alt="" coords="634,410,585,461,553,488,517,511,490,522,488,518,515,506,549,484,581,457,631,406"/>
+<area shape="poly" id="edge25_Node000014_Node000006" title=" " alt="" coords="339,418,329,412,294,381,266,344,232,282,237,279,271,341,298,377,332,408,341,413"/>
+<area shape="poly" id="edge28_Node000016_Node000007" title=" " alt="" coords="378,253,281,196,256,184,259,179,284,192,380,248"/>
+<area shape="rect" id="Node000018" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#a74709ee79cd6df40d56f93ca68c275ce" title=" " alt="" coords="178,412,277,437"/>
+<area shape="poly" id="edge30_Node000017_Node000018" title=" " alt="" coords="345,518,329,511,277,475,239,439,242,436,280,471,332,506,347,513"/>
+<area shape="poly" id="edge31_Node000018_Node000004" title=" " alt="" coords="209,402,72,183,76,180,213,399"/>
+</map>

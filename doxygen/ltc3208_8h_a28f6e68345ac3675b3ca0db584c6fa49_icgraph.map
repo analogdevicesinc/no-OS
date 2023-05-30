@@ -1,0 +1,7 @@
+<map id="ltc3208_set_aux_led_dac" name="ltc3208_set_aux_led_dac">
+<area shape="rect" id="Node000001" title="Sets the DAC settings for a specific AUX LED." alt="" coords="299,5,484,31"/>
+<area shape="rect" id="Node000002" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#af68d2b0fb0af9de1ff45c0369656f42c" title=" " alt="" coords="172,5,251,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,21,251,21,251,15,285,15"/>
+<area shape="rect" id="Node000003" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

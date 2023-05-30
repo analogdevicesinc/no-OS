@@ -1,0 +1,15 @@
+<map id="drivers/accel/adxl38x/adxl38x.h" name="drivers/accel/adxl38x/adxl38x.h">
+<area shape="rect" id="Node000001" title="Header file of ADXL38X Driver." alt="" coords="444,5,605,45"/>
+<area shape="rect" id="Node000002" href="$adxl38x_8c.html" title="Implementation of ADXL38X Driver." alt="" coords="5,101,167,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,45,311,68,180,96,151,103,150,98,179,91,310,63,430,40"/>
+<area shape="rect" id="Node000003" href="$eval-adxl38x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl38x examples." alt="" coords="191,101,405,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="467,53,345,103,343,98,465,48"/>
+<area shape="rect" id="Node000005" href="$basic__example__main_8c.html" title="Main program for basic example eval&#45;adxl38x project." alt="" coords="430,93,619,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="527,59,527,93,522,93,522,59"/>
+<area shape="rect" id="Node000006" href="$fifo__example__main_8c.html" title="Main program for FIFO example eval&#45;adxl38x project." alt="" coords="643,93,846,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="583,48,684,91,682,96,581,53"/>
+<area shape="rect" id="Node000007" href="$selftest__example__main_8c.html" title="Main program for self test example eval&#45;adxl38x project." alt="" coords="870,93,1123,148"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="619,43,870,92,869,97,618,48"/>
+<area shape="rect" id="Node000004" href="$eval-adxl38x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl38x examples." alt="" coords="191,196,405,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="301,154,301,196,295,196,295,154"/>
+</map>

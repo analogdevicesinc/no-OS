@@ -1,0 +1,5 @@
+<map id="adf4382_set_ref_div" name="adf4382_set_ref_div">
+<area shape="rect" id="Node000001" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="211,13,365,38"/>
+<area shape="rect" id="Node000002" href="$adf4382_8c.html#a3f4a0e1104b1241c2a4705c469dcd2fe" title="Fast calibration function. Computes Minimum VCO frequency (fmin), uses the minimum NDIV value to gene..." alt="" coords="5,5,163,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,28,163,28,163,23,197,23"/>
+</map>

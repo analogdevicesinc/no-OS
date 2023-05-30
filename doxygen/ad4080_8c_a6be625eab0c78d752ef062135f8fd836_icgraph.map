@@ -1,0 +1,7 @@
+<map id="ad4080_init" name="ad4080_init">
+<area shape="rect" id="Node000001" title="Initialize the device." alt="" coords="365,5,464,31"/>
+<area shape="rect" id="Node000002" href="$iio__ad4080_8c.html#a4c3881b748799947d1bc735745dd48a8" title="Initializes the IIO AD4080 descriptor." alt="" coords="196,5,317,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="352,21,318,21,318,15,352,15"/>
+<area shape="rect" id="Node000003" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="182,21,148,21,148,15,182,15"/>
+</map>

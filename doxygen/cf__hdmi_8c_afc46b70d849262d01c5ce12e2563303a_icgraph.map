@@ -1,0 +1,12 @@
+<map id="DDRAudioWr" name="DDRAudioWr">
+<area shape="rect" id="Node000001" title="DDRAudioWr." alt="" coords="473,31,580,56"/>
+<area shape="rect" id="Node000002" href="$cf__hdmi_8c.html#a9bb8fb3f94df3fde09af8c245b707cb1" title="AudioClick." alt="" coords="335,5,425,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="459,34,425,28,426,23,460,29"/>
+<area shape="rect" id="Node000005" href="$cf__hdmi_8c.html#ae5c28c3b93d482dbe2de75a9f915cb40" title="InitHdmiAudioPcore." alt="" coords="122,56,273,81"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="460,51,273,66,273,60,459,46"/>
+<area shape="rect" id="Node000003" href="$transmitter_8c.html#ac458d6d563b44d7f6d80dfc347f6c931" title="Main function for polling mode operation. This function should be called periodically (at least every..." alt="" coords="108,7,287,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="321,21,287,21,287,16,321,16"/>
+<area shape="rect" id="Node000004" href="$adv7511_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,32,60,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="102,37,61,43,60,38,101,32"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="108,58,60,51,61,46,109,53"/>
+</map>

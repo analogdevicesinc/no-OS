@@ -1,0 +1,20 @@
+<map id="drivers/gmsl/serializer/camera/max96793/max96793_diag.h" name="drivers/gmsl/serializer/camera/max96793/max96793_diag.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,227,60"/>
+<area shape="rect" id="Node000002" href="$max96793_8h.html" title=" " alt="" coords="21,108,123,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,61,87,97,82,94,100,59"/>
+<area shape="rect" id="Node000005" href="$gmsl__common_8h.html" title=" " alt="" coords="103,181,233,207"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="127,59,162,167,157,169,122,61"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="48,255,131,280"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,133,89,241,84,241,71,134"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="158,401,229,427"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="67,135,52,162,38,198,31,239,32,260,38,279,62,316,93,347,127,373,159,392,156,397,124,377,90,351,58,319,34,281,27,261,25,239,33,197,47,160,62,132"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="89,131,143,171,140,175,86,136"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="157,209,114,247,110,244,154,205"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="172,207,193,387,188,387,167,207"/>
+<area shape="rect" id="Node000006" href="$gmsl__reg__access_8h.html" title=" " alt="" coords="206,255,351,280"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="187,204,250,245,247,249,184,209"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="274,282,209,391,205,388,269,279"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="256,328,355,353"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="286,279,299,314,294,316,281,281"/>
+<area shape="poly" id="edge10_Node000007_Node000004" title=" " alt="" coords="289,356,225,396,222,391,286,351"/>
+</map>

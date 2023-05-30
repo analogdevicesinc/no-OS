@@ -1,0 +1,16 @@
+<map id="max22017_remove" name="max22017_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated during init and perform a soft reset." alt="" coords="623,56,771,81"/>
+<area shape="rect" id="Node000002" href="$max22017_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="628,56,574,46,460,33,356,25,357,19,461,27,575,41,628,50"/>
+<area shape="rect" id="Node000003" href="$iio__max22017_8c.html#a8a360915cc677cd521e1ba41c116b11a" title=" " alt="" coords="404,105,575,131"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="630,87,544,108,543,103,629,82"/>
+<area shape="rect" id="Node000006" href="$max22017_8c.html#a30aec5321f3cb133a4a1504ff6223b9d" title="Initialize and configure the MAX22017 device." alt="" coords="430,56,549,81"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="609,71,549,71,549,66,609,66"/>
+<area shape="rect" id="Node000004" href="$max22017_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,81,148,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="390,115,148,101,148,95,390,110"/>
+<area shape="rect" id="Node000005" href="$iio__max22017_8c.html#af886f607d1393c77ca1fc9c6b524aa66" title=" " alt="" coords="205,56,347,81"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="420,105,331,84,332,79,421,100"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="191,82,149,88,148,82,191,77"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="421,55,329,33,331,28,422,50"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="416,71,348,71,348,66,416,66"/>
+</map>

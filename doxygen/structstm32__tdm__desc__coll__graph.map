@@ -1,0 +1,9 @@
+<map id="stm32_tdm_desc" name="stm32_tdm_desc">
+<area shape="rect" id="Node000001" title="stm32 platform specific TDM descriptor" alt="" coords="117,196,250,221"/>
+<area shape="rect" id="Node000002" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="19,93,169,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,129,137,170,166,194,163,198,133,174,104,132"/>
+<area shape="rect" id="Node000003" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,45,97,93,91,93,91,45"/>
+<area shape="rect" id="Node000004" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="193,93,352,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="268,133,259,154,245,174,229,188,212,198,209,194,226,183,241,170,254,151,263,131"/>
+</map>

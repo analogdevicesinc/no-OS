@@ -1,0 +1,10 @@
+<map id="drivers/platform/maxim/max32650/maxim_timer.h" name="drivers/platform/maxim/max32650/maxim_timer.h">
+<area shape="rect" id="Node000001" title="Header file for Maxim timer platform driver." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="11,93,67,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,47,60,84,56,81,87,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="116,167,187,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="112,45,134,118,145,153,140,154,129,119,107,46"/>
+<area shape="rect" id="Node000004" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="143,93,256,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="129,43,176,82,173,86,126,48"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="194,121,169,157,164,154,189,118"/>
+</map>

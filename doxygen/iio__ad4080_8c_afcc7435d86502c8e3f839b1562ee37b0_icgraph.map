@@ -1,0 +1,13 @@
+<map id="iio_ad4080_fifo_unset_watermark" name="iio_ad4080_fifo_unset_watermark">
+<area shape="rect" id="Node000001" title="Unset the watermark configuration and data structure fors ad4080 driver." alt="" coords="561,63,725,103"/>
+<area shape="rect" id="Node000002" href="$iio__ad4080_8c.html#aacf74c6dd1acb9626c23d5356c4b3c96" title="Sets the FIFO watermark for the AD4080 device." alt="" coords="365,5,513,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="558,61,510,48,512,43,559,56"/>
+<area shape="rect" id="Node000003" href="$iio__ad4080_8c.html#a4c3881b748799947d1bc735745dd48a8" title="Initializes the IIO AD4080 descriptor." alt="" coords="196,70,317,95"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="547,85,318,85,318,80,547,80"/>
+<area shape="rect" id="Node000005" href="$iio__ad4080_8c.html#a0d027c587f47f7cde05f71c9495b060c" title="teardown the ad4080 IIO driver" alt="" coords="197,121,317,146"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="548,98,317,128,317,123,547,93"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="363,52,299,72,297,67,361,47"/>
+<area shape="rect" id="Node000004" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,95,148,121"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="183,96,149,101,148,95,182,90"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="182,126,148,121,149,115,183,120"/>
+</map>

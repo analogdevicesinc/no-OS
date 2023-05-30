@@ -1,0 +1,9 @@
+<map id="ad9250_state" name="ad9250_state">
+<area shape="rect" id="Node000001" title=" " alt="" coords="225,93,336,119"/>
+<area shape="rect" id="Node000002" href="$structad9250__platform__data.html" title="Platform specific information." alt="" coords="5,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,34,256,91,254,96,127,39"/>
+<area shape="rect" id="Node000003" href="$structad9250__jesd204b__cfg.html" title="JESD204B interface configuration." alt="" coords="199,5,362,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="283,45,283,93,278,93,278,45"/>
+<area shape="rect" id="Node000004" href="$structad9250__fast__detect__cfg.html" title="Fast Detect module configuration." alt="" coords="387,5,564,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="439,39,366,72,309,96,307,91,364,67,437,34"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="no_os_list_init" name="no_os_list_init">
+<area shape="rect" id="Node000001" title=" " alt="" coords="412,169,527,194"/>
+<area shape="rect" id="Node000002" href="$aducm3029__irq_8c.html#a0b93fd38ff0df79033b4335e9b4c9ea3" title="Registers a IRQ callback function to irq controller." alt="" coords="178,5,357,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="451,159,415,108,390,82,363,60,341,48,344,43,365,55,394,78,419,105,456,155"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__irq_8c.html#a91c4a4a93e184bb53266635bb42aac24" title="Register a callback function to be triggered when an interrupt occurs." alt="" coords="171,70,364,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="441,161,405,134,363,109,332,98,334,93,365,104,408,130,445,157"/>
+<area shape="rect" id="Node000004" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="205,119,329,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="403,168,320,147,321,142,404,163"/>
+<area shape="rect" id="Node000007" href="$pico__irq_8c.html#abe5830316a4b383a5e66fdd2984c1d94" title="Register a callback." alt="" coords="172,169,363,194"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="398,184,363,184,363,179,398,179"/>
+<area shape="rect" id="Node000008" href="$stm32__irq_8c.html#af566f287316bc200dddc34fd6f7948df" title="Register a callback." alt="" coords="195,219,339,259"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="412,200,339,221,337,216,410,195"/>
+<area shape="rect" id="Node000009" href="$xilinx__gpio__irq_8c.html#a05236997187b52134d4cf978f4ea58d1" title="Initialize the GPIO IRQ controller." alt="" coords="191,283,344,309"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="449,207,412,241,365,273,334,286,332,281,363,268,409,237,445,203"/>
+<area shape="rect" id="Node000010" href="$xilinx__i2c_8c.html#a958cc79fc65643791ca95a4d8fe577a9" title="Initialize the I2C communication peripheral." alt="" coords="221,333,313,358"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="459,208,423,266,397,297,365,324,340,336,314,343,313,338,339,331,363,319,393,294,418,263,454,205"/>
+<area shape="rect" id="Node000005" href="$max32650_2maxim__spi_8c.html#aa4c18a500f7b61d872b99f2d8ca86351" title="Initialize the SPI communication peripheral." alt="" coords="11,95,117,121"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="191,126,117,117,117,112,192,120"/>
+<area shape="rect" id="Node000006" href="$stm32__spi_8c.html#ab30b6267353de9d9f7d9dab38b808021" title="Initialize the SPI communication peripheral." alt="" coords="5,145,123,170"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="192,144,123,153,122,147,191,139"/>
+</map>

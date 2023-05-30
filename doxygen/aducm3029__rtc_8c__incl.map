@@ -1,0 +1,25 @@
+<map id="drivers/platform/aducm3029/aducm3029_rtc.c" name="drivers/platform/aducm3029/aducm3029_rtc.c">
+<area shape="rect" id="Node000001" title="Implementation of RTC driver for ADuCM302x." alt="" coords="246,5,453,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="357,167,427,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="357,45,388,153,383,154,352,47"/>
+<area shape="rect" id="Node000003" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,48,116,92,115,87,279,43"/>
+<area shape="rect" id="Node000005" href="$no__os__rtc_8h.html" title="Header of the RTC interface." alt="" coords="139,93,235,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="312,48,224,90,222,85,309,43"/>
+<area shape="rect" id="Node000007" href="$aducm3029__rtc_8h.html" title="Header file of RTC driver for ADuCM302x." alt="" coords="565,93,699,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="418,43,578,87,577,92,416,48"/>
+<area shape="rect" id="Node000009" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="259,93,355,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="341,47,322,83,317,80,337,44"/>
+<area shape="rect" id="Node000010" href="$no__os__alloc_8h.html" title=" " alt="" coords="430,93,541,119"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="383,43,455,84,452,89,381,48"/>
+<area shape="rect" id="Node000004" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,167,94,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="63,119,63,153,57,153,57,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="206,167,277,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,117,226,154,222,157,194,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="558,167,706,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="635,119,635,153,629,153,629,119"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="298,121,263,158,259,155,294,117"/>
+<area shape="poly" id="edge12_Node000010_Node000002" title=" " alt="" coords="472,121,420,160,416,156,469,117"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="452,167,519,192"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="488,119,488,153,483,153,483,119"/>
+</map>

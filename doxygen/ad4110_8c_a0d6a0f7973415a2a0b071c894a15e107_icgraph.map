@@ -1,0 +1,9 @@
+<map id="ad4110_set_adc_mode" name="ad4110_set_adc_mode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="340,31,511,56"/>
+<area shape="rect" id="Node000002" href="$ad4110_8c.html#aae301e33021656c500d1babd965c31f4" title=" " alt="" coords="108,5,292,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="326,35,292,31,293,26,327,30"/>
+<area shape="rect" id="Node000004" href="$ad4110_8c.html#a8a37ca826022ca99eb674bfded3cb7fa" title="ADC data read in single conversion mode." alt="" coords="113,55,287,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="327,57,288,61,287,55,326,51"/>
+<area shape="rect" id="Node000003" href="$ad4110_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

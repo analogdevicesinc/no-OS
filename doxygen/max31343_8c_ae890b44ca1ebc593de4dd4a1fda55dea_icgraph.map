@@ -1,0 +1,9 @@
+<map id="max31343_reg_read" name="max31343_reg_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="412,42,567,67"/>
+<area shape="rect" id="Node000002" href="$max31343_8c.html#a94b2f67bac8b4c1bf1ac803b6904bc9a" title="Read time stamp." alt="" coords="172,5,364,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="398,45,364,41,365,35,398,40"/>
+<area shape="rect" id="Node000003" href="$max31343_8c.html#af6417919db9e15448b7b3d94e0adda30" title="Update specific register bits." alt="" coords="181,70,355,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="399,69,356,74,355,69,398,64"/>
+<area shape="rect" id="Node000004" href="$max31343_8c.html#ab0792afccbd256677379ba776823d85e" title="Initialize the device." alt="" coords="5,70,124,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="167,85,124,85,124,80,167,80"/>
+</map>

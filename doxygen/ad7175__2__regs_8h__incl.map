@@ -1,0 +1,18 @@
+<map id="drivers/adc/ad717x/ad7175_2_regs.h" name="drivers/adc/ad717x/ad7175_2_regs.h">
+<area shape="rect" id="Node000001" title="AD7175_2 Registers Definitions." alt="" coords="60,5,206,45"/>
+<area shape="rect" id="Node000002" href="$ad717x_8h.html" title="AD717X header file. Devices: AD7172&#45;2, AD7172&#45;4, AD7173&#45;8, AD7175&#45;2, AD7175&#45;8, AD7176&#45;2,..." alt="" coords="92,93,174,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,46,136,79,130,79,130,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="36,240,107,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="92,118,48,136,28,150,13,168,9,184,14,200,27,216,43,230,40,234,23,220,10,203,3,184,8,165,24,146,45,131,90,113"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="22,167,121,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="125,121,92,158,88,154,121,117"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="146,167,246,192"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="145,117,178,154,174,158,141,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="242,240,325,265"/>
+<area shape="poly" id="edge9_Node000002_Node000007" title=" " alt="" coords="175,115,219,134,240,148,259,165,276,195,284,225,278,226,271,197,255,168,237,152,216,139,173,120"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="74,192,74,226,69,226,69,192"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="177,194,105,235,102,231,174,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="147,240,218,265"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="196,193,190,227,184,226,191,192"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="211,190,260,229,257,233,208,194"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="ad7606_remove" name="ad7606_remove">
+<area shape="rect" id="Node000001" title="Free any resource used by the driver." alt="" coords="476,55,603,80"/>
+<area shape="rect" id="Node000002" href="$iio__ad7606_8c.html#a87c852e7f94e7ed5b180c4d6ae11b657" title=" " alt="" coords="277,5,428,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,54,401,33,403,28,478,49"/>
+<area shape="rect" id="Node000004" href="$ad7606_8c.html#a2afb3414c61b03e45af8e3564bcf4e24" title="Initialize the ad7606 device structure." alt="" coords="303,55,402,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="462,70,402,70,402,65,462,65"/>
+<area shape="rect" id="Node000006" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="141,105,196,131"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="476,86,428,95,298,111,196,119,196,114,298,106,428,90,475,81"/>
+<area shape="rect" id="Node000003" href="$ad7606x-fmc_2src_2iio__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="264,28,61,44,60,39,264,22"/>
+<area shape="rect" id="Node000005" href="$iio__ad7606_8c.html#a711196dffba30114293e1db85fd666e1" title="Initialize AD7606 for IIO interfacing." alt="" coords="108,56,229,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="289,70,229,71,229,66,289,65"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="293,86,197,113,195,108,292,81"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="94,57,60,51,61,46,95,52"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="drivers/power/ades1754/ades1754.h" name="drivers/power/ades1754/ades1754.h">
+<area shape="rect" id="Node000001" title="Header file for the ADES1754 Driver." alt="" coords="185,5,364,45"/>
+<area shape="rect" id="Node000002" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,167,104,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,48,85,161,82,156,246,43"/>
+<area shape="rect" id="Node000004" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="267,93,373,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="288,44,309,80,304,83,283,47"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="179,167,279,192"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="271,47,239,154,234,153,266,45"/>
+<area shape="rect" id="Node000009" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="397,93,507,119"/>
+<area shape="poly" id="edge14_Node000001_Node000009" title=" " alt="" coords="318,43,415,85,412,90,316,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,240,186,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="72,190,125,229,122,234,69,194"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="268,117,215,135,190,149,169,168,156,196,152,226,147,225,150,195,165,165,187,145,213,130,266,112"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="329,240,412,265"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="374,115,417,133,436,147,452,165,456,186,447,205,430,222,409,236,406,231,426,218,443,202,451,185,447,168,432,151,414,138,372,120"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="304,167,437,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="331,117,357,154,352,157,326,121"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="336,195,200,238,198,233,335,189"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="373,192,373,226,368,226,368,192"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="226,240,297,265"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="355,194,292,235,289,230,352,190"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="218,194,175,233,172,229,215,190"/>
+<area shape="poly" id="edge13_Node000008_Node000005" title=" " alt="" coords="253,190,337,231,334,236,251,194"/>
+<area shape="poly" id="edge12_Node000008_Node000007" title=" " alt="" coords="237,191,253,227,248,229,232,193"/>
+</map>

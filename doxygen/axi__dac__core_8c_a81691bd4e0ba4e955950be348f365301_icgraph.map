@@ -1,0 +1,9 @@
+<map id="axi_dac_dds_from_signed_mag_fmt" name="axi_dac_dds_from_signed_mag_fmt">
+<area shape="rect" id="Node000001" title="AXI DAC Convert from signed magnitude format." alt="" coords="437,37,628,77"/>
+<area shape="rect" id="Node000002" href="$axi__dac__core_8c.html#a059f91ac693379d33c7afdef3709d6e5" title="Get the phase scale calibration values for AXI DAC channel." alt="" coords="221,37,389,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="423,60,389,60,389,55,423,55"/>
+<area shape="rect" id="Node000003" href="$axi__dac__core_8c.html#a7deedbe015196aad9fa87457867bb89c" title="Get the phase calibration values for AXI DAC channel." alt="" coords="5,5,173,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,46,173,40,174,35,208,40"/>
+<area shape="rect" id="Node000004" href="$axi__dac__core_8c.html#a60f51e081e1551d79104925d7bf5e8e6" title="Get the scale calibration values for AXI DAC channel." alt="" coords="5,69,173,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="208,74,174,80,173,74,207,69"/>
+</map>

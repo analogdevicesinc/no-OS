@@ -1,0 +1,11 @@
+<map id="max31827_reg_update_bits" name="max31827_reg_update_bits">
+<area shape="rect" id="Node000001" title="Read&#45;modify&#45;write operation." alt="" coords="505,42,708,67"/>
+<area shape="rect" id="Node000002" href="$max31827_8c.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="273,5,441,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="491,44,441,38,441,33,492,39"/>
+<area shape="rect" id="Node000004" href="$max31827_8c.html#a0c301ae1d6106477de04566e075bc380" title="Shutdown then write register value." alt="" coords="256,70,457,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="492,70,458,74,457,69,491,65"/>
+<area shape="rect" id="Node000003" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="47,13,166,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="259,28,166,28,166,23,259,23"/>
+<area shape="rect" id="Node000005" href="$max31827_8c.html#af4aa71f953a9fb60e16ba9a080fc78f4" title="Write the alarm value to the specified register." alt="" coords="5,70,208,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="242,85,208,85,208,80,242,80"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="lt7182s_init_param" name="lt7182s_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="285,347,432,372"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="37,220,200,245"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,249,338,344,335,349,152,254"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,93,184,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,132,119,219,114,220,97,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="429,93,601,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="516,133,512,173,501,224,482,277,467,302,450,325,432,339,411,349,409,344,429,335,446,321,463,299,477,275,496,223,507,173,511,132"/>
+<area shape="rect" id="Node000006" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="271,220,447,245"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="462,126,428,145,408,163,391,184,367,221,362,219,387,181,404,160,425,141,459,121"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="421,5,609,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="517,45,517,93,512,93,512,45"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="361,259,361,347,356,347,356,259"/>
+<area shape="rect" id="Node000007" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="208,93,400,119"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="304,132,308,157,326,191,349,218,345,221,322,194,303,158,299,133"/>
+</map>

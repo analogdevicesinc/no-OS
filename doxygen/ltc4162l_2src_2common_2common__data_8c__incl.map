@@ -1,0 +1,23 @@
+<map id="projects/ltc4162l/src/common/common_data.c" name="projects/ltc4162l/src/common/common_data.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="56,5,247,45"/>
+<area shape="rect" id="Node000002" href="$ltc4162l_2src_2common_2common__data_8h.html" title=" " alt="" coords="88,93,215,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,46,154,79,149,79,149,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,156,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,121,104,159,100,155,138,117"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_8h.html" title=" " alt="" coords="180,167,267,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="165,117,204,155,200,159,161,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="243,313,313,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="190,195,160,207,134,224,119,243,118,253,123,264,144,286,171,301,201,312,230,318,229,323,199,317,169,306,141,290,118,267,113,254,114,241,130,220,158,203,187,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="133,240,204,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="216,194,188,231,184,228,212,191"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="352,240,452,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="253,190,361,232,359,237,251,195"/>
+<area shape="rect" id="Node000010" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="229,240,327,265"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="234,191,263,228,259,231,230,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="383,268,311,309,309,304,381,263"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="352,313,423,339"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="402,266,395,300,390,299,397,265"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="447,313,530,339"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="418,263,466,302,462,307,414,267"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="281,266,281,300,275,300,275,266"/>
+</map>

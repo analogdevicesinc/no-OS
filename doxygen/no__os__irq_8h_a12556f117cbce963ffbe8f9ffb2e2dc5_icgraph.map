@@ -1,0 +1,9 @@
+<map id="no_os_irq_global_enable" name="no_os_irq_global_enable">
+<area shape="rect" id="Node000001" title="Enable global interrupts." alt="" coords="108,55,291,80"/>
+<area shape="rect" id="Node000002" href="$ad4110_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,53,59,28,61,23,144,48"/>
+<area shape="rect" id="Node000003" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+<area shape="rect" id="Node000004" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="144,86,61,111,59,106,142,81"/>
+</map>

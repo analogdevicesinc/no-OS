@@ -1,0 +1,7 @@
+<map id="mykonosAgcCfg_t" name="mykonosAgcCfg_t">
+<area shape="rect" id="Node000001" title="Data structure to hold general AGC settings for initialization and during use." alt="" coords="148,93,287,119"/>
+<area shape="rect" id="Node000002" href="$structmykonos_peak_det_agc_cfg__t.html" title="Data structure to hold peak detector settings for the AGC." alt="" coords="5,5,200,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,37,203,91,200,95,127,41"/>
+<area shape="rect" id="Node000003" href="$structmykonos_power_meas_agc_cfg__t.html" title="Data structure to hold power measurement settings for the AGC." alt="" coords="225,5,439,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="307,41,235,95,231,91,304,37"/>
+</map>

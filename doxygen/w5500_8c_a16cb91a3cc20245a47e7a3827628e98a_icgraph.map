@@ -1,0 +1,32 @@
+<map id="w5500_reg_read" name="w5500_reg_read">
+<area shape="rect" id="Node000001" title="Read data from a W5500 register." alt="" coords="611,203,740,228"/>
+<area shape="rect" id="Node000002" href="$w5500_8c.html#ae87850f464878b56eae17e00783346d5" title="Check the Ethernet link status." alt="" coords="375,5,563,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="662,191,647,157,625,117,597,78,561,44,541,33,543,28,564,40,601,74,630,114,652,155,667,189"/>
+<area shape="rect" id="Node000005" href="$w5500_8c.html#a422c186880fb0d918541ec33addfb877" title="Get gateway address." alt="" coords="391,55,547,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="657,193,617,142,591,116,561,94,537,82,539,78,564,89,594,112,621,139,661,190"/>
+<area shape="rect" id="Node000006" href="$w5500_8c.html#a15f6cbcf02404dbe477b313d8bc5c026" title="Get IP address." alt="" coords="413,104,525,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="646,196,607,169,562,143,524,130,526,125,564,138,610,164,649,192"/>
+<area shape="rect" id="Node000007" href="$w5500_8c.html#a2d833f1353dd3e3e8ccc32f9080d0cdc" title="Get MAC address." alt="" coords="405,153,533,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="608,202,522,181,523,176,609,197"/>
+<area shape="rect" id="Node000008" href="$w5500_8c.html#a50c50ad31c0df9c56229fadfc304cedf" title="Get subnet mask." alt="" coords="397,203,541,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="597,218,541,218,541,213,597,213"/>
+<area shape="rect" id="Node000009" href="$w5500_8c.html#aaf34c1b82d455d66b0150e2207519dcc" title="Read a 16&#45;bit register reliably by reading until consecutive values match." alt="" coords="384,353,553,379"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="659,241,619,289,593,314,564,336,522,356,520,351,561,332,590,310,615,285,655,238"/>
+<area shape="rect" id="Node000010" href="$w5500_8c.html#a5a5e49b2bdaf0ce3d53b445a164a1169" title="Receive data from a socket." alt="" coords="162,289,311,315"/>
+<area shape="poly" id="edge15_Node000001_Node000010" title=" " alt="" coords="651,239,612,268,564,291,498,307,431,314,367,315,311,313,312,307,367,310,431,308,497,301,562,286,609,263,648,235"/>
+<area shape="rect" id="Node000011" href="$w5500_8c.html#aa4659c1641cf98b560e144b8b4cadaea" title="Receive data from a socket with source address information (UDP)" alt="" coords="147,437,327,463"/>
+<area shape="poly" id="edge16_Node000001_Node000011" title=" " alt="" coords="668,242,653,277,632,318,602,359,564,394,507,423,445,441,384,452,327,455,327,450,383,446,444,436,505,418,561,389,598,356,627,315,649,274,663,240"/>
+<area shape="rect" id="Node000014" href="$w5500_8c.html#a2f75d4542bb4fab5f3669f7a293f7927" title="Reset the W5500 chip using hardware or software method." alt="" coords="416,252,521,277"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="609,234,522,255,521,250,608,229"/>
+<area shape="rect" id="Node000003" href="$w5500_8c.html#ae0074466c6134cfa8d3048b7eb483e81" title="Setup the W5500 chip with basic configuration." alt="" coords="183,123,291,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,37,376,44,340,63,306,85,255,125,251,120,303,81,337,59,374,40,392,32"/>
+<area shape="rect" id="Node000004" href="$w5500_8c.html#a65605a8a9cc9d60a325603ef2ee24013" title="Initialize the device." alt="" coords="5,123,99,148"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="169,138,99,138,99,133,169,133"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="409,352,326,329,285,317,286,312,327,323,411,347"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="429,387,328,429,291,440,289,435,326,423,427,382"/>
+<area shape="rect" id="Node000012" href="$w5500_8c.html#a5277594560890d5cc02ed35b216aad5d" title="Send data through a socket." alt="" coords="161,339,313,364"/>
+<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="370,362,313,359,313,353,370,357"/>
+<area shape="rect" id="Node000013" href="$w5500_8c.html#a23c5030713f505976ab8f3f5037eb615" title="Send data to a specific destination (UDP)" alt="" coords="154,388,319,413"/>
+<area shape="poly" id="edge12_Node000009_Node000013" title=" " alt="" coords="371,383,320,391,319,386,370,378"/>
+<area shape="poly" id="edge14_Node000014_Node000003" title=" " alt="" coords="402,253,374,242,336,220,301,195,249,150,253,146,304,191,339,215,376,237,404,248"/>
+</map>

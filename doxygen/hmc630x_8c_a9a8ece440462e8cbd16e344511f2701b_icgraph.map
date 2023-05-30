@@ -1,0 +1,11 @@
+<map id="hmc6301_set_bb_attn" name="hmc6301_set_bb_attn">
+<area shape="rect" id="Node000001" title=" " alt="" coords="468,31,633,56"/>
+<area shape="rect" id="Node000002" href="$hmc630x_8c.html#a7fcea8769d50f179f5bcd2fa79d110f6" title=" " alt="" coords="299,5,410,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="454,34,410,28,411,22,455,28"/>
+<area shape="rect" id="Node000005" href="$mwc_8c.html#a66bd13abd94e1229ab95038b89023f2a" title=" " alt="" coords="289,55,420,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="455,58,421,62,420,57,454,52"/>
+<area shape="rect" id="Node000003" href="$iio__hmc630x_8c.html#abbb0696b664140d685836a3afcde9223" title=" " alt="" coords="108,5,241,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="286,21,242,21,242,15,286,15"/>
+<area shape="rect" id="Node000004" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

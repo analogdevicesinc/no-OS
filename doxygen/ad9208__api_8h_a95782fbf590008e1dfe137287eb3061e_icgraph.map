@@ -1,0 +1,74 @@
+<map id="ad9208_register_read" name="ad9208_register_read">
+<area shape="rect" id="Node000001" title="Perform SPI register read access to AD9208 Device." alt="" coords="717,933,880,958"/>
+<area shape="rect" id="Node000002" href="$ad9208__api_8c.html#a928e069f0f0499735060f14cc5137f2a" title="Get AD9208 ADC Channel Select." alt="" coords="464,5,651,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="795,919,791,747,784,623,774,488,758,354,736,230,722,176,706,128,688,89,667,59,649,44,653,40,671,56,692,86,711,126,727,174,741,229,763,353,779,488,790,623,796,747,800,919"/>
+<area shape="rect" id="Node000003" href="$ad9208__signal__monitor__api_8c.html#abfb558afd13f3047e260e664d12ed976" title="Get ADC Over range Status." alt="" coords="459,69,655,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="794,919,788,758,770,519,754,394,732,280,703,187,686,150,667,123,654,111,657,107,671,120,691,148,708,185,737,279,759,394,775,518,794,758,800,919"/>
+<area shape="rect" id="Node000004" href="$ad9208__api_8c.html#abc1b518465528c9a956a6e6bdf9c831f" title="Set ADC Channel Power Down Mode." alt="" coords="445,134,669,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="794,919,788,766,769,541,752,425,730,319,702,232,686,199,667,174,651,162,655,157,671,170,690,196,707,230,736,318,758,424,774,541,793,766,799,919"/>
+<area shape="rect" id="Node000005" href="$ad9208__adc__api_8c.html#a140b3b05e6b33f8e64c9183f7566ca6f" title="Set AD9208 ADC Data Format." alt="" coords="476,184,639,224"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="794,919,785,778,763,573,747,468,725,371,699,291,684,261,667,238,654,226,637,218,640,213,657,222,671,234,688,258,704,289,730,369,752,467,768,573,790,778,799,919"/>
+<area shape="rect" id="Node000006" href="$ad9208__adc__api_8c.html#a88cda25c593ff4e0a0b93b0f261c34bd" title="Enable AD9208 ADC DC Offset Calibaration." alt="" coords="461,248,654,288"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="793,919,782,789,759,603,742,508,722,421,697,350,683,323,667,302,652,290,656,285,671,298,687,320,701,348,727,420,748,507,764,603,787,788,798,918"/>
+<area shape="rect" id="Node000007" href="$ad9208__adc__api_8c.html#a30f59361ef2090bb54cf624df71966ca" title="Set AD9208 ADC Operational Mode&#45;decimation rate." alt="" coords="454,313,661,338"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="793,919,781,797,757,626,741,539,720,459,696,394,682,370,667,351,653,340,656,336,671,347,686,367,700,392,725,457,746,537,763,625,786,796,798,918"/>
+<area shape="rect" id="Node000008" href="$ad9208__adc__api_8c.html#a85ba0729404c92c2e87e7d42238683f0" title="Set AD9208 Decimation Filters." alt="" coords="461,362,653,387"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="792,919,779,807,754,650,737,571,717,498,694,440,667,401,652,389,655,385,671,397,699,437,722,497,742,569,759,649,784,806,797,918"/>
+<area shape="rect" id="Node000009" href="$ad9208__adc__api_8c.html#a6b98a3d08be662578b6a84878f78e51c" title="Set AD9208 DDC Gain Stage." alt="" coords="461,411,653,437"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="791,919,777,816,751,675,734,604,714,539,692,486,667,451,650,439,653,435,671,447,696,484,719,537,739,602,756,674,782,815,797,919"/>
+<area shape="rect" id="Node000010" href="$ad9208__adc__api_8c.html#abe0e2f63bfc6170a30e90523d75db6f1" title="Select ADC Source for each DDC Channel." alt="" coords="479,461,636,501"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="795,919,791,840,785,788,774,732,758,673,736,616,706,562,667,515,652,504,635,495,637,490,655,499,671,511,710,559,741,614,763,672,779,731,790,788,796,840,800,919"/>
+<area shape="rect" id="Node000011" href="$ad9208__adc__api_8c.html#a97ea423ee8d46ac19cd9560bf4e7895a" title="API to set DDC Frequency Translation Mode." alt="" coords="479,525,636,565"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="793,919,786,851,766,759,750,710,729,663,701,618,668,579,653,568,635,560,638,555,655,564,671,575,706,615,733,660,755,709,771,758,791,850,799,918"/>
+<area shape="rect" id="Node000012" href="$ad9208__adc__api_8c.html#a601f65ecd07726176ad47dc96bbd0ba0" title="API to trigger a DDC Soft Reset." alt="" coords="479,589,636,629"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="791,919,780,862,758,787,741,748,721,710,697,674,668,643,635,625,638,620,671,639,701,671,726,707,746,746,763,785,785,860,796,918"/>
+<area shape="rect" id="Node000013" href="$ad9208__adc__api_8c.html#af64239e4c3c9bc10f04cf065f04ebf3c" title="Set AD9208 ADC Operational Mode&#45;Number of Channels." alt="" coords="451,654,663,679"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="789,920,776,871,752,809,716,747,694,718,668,694,646,682,649,677,671,690,698,715,721,744,757,807,781,869,794,918"/>
+<area shape="rect" id="Node000014" href="$ad9208__adc__api_8c.html#aff6937b589d678b01294b9fe66e17c51" title="Set AD9208 Input Buffer Configuration." alt="" coords="474,704,641,744"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="785,921,767,884,742,840,708,796,668,758,640,743,642,738,671,754,712,792,746,837,772,882,789,919"/>
+<area shape="rect" id="Node000015" href="$ad9208__adc__api_8c.html#a99a579b018c86450ead1e1804659293f" title="Set AD9208 ADC Synchronized Update mode Mode." alt="" coords="473,768,642,808"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="777,924,731,872,701,845,668,822,641,810,643,805,671,818,704,841,735,868,781,920"/>
+<area shape="rect" id="Node000016" href="$ad9208__api_8c.html#a617e74e148f79d0b7b2a100978a23dfa" title="Get Chip Identification Data." alt="" coords="482,833,633,858"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="767,927,722,898,668,872,632,861,634,855,670,867,725,894,770,923"/>
+<area shape="rect" id="Node000017" href="$ad9208__adc__api_8c.html#a88d93d6be13b28deb26be0bd5f0fae23" title=" " alt="" coords="468,882,647,907"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="723,932,618,910,619,905,725,927"/>
+<area shape="rect" id="Node000018" href="$ad9208__jesd__api_8c.html#adb1fd62c4fcbe1ad25b3afee2acca491" title="Configure the JESD Interface for AD9208." alt="" coords="245,897,392,937"/>
+<area shape="poly" id="edge26_Node000001_Node000018" title=" " alt="" coords="703,942,392,924,392,919,703,937"/>
+<area shape="rect" id="Node000019" href="$ad9208__reg_8c.html#aec632d9e6033e3734ba1e20cce015dd7" title=" " alt="" coords="482,983,633,1023"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="732,964,633,987,632,982,731,959"/>
+<area shape="rect" id="Node000022" href="$ad9208__jesd__api_8c.html#a501bd4a3e6af1fb5443e1c32667a9d78" title="Enable JESD Link." alt="" coords="464,1047,651,1073"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="774,969,728,1004,670,1037,633,1050,632,1045,668,1032,725,1000,771,965"/>
+<area shape="rect" id="Node000023" href="$ad9208__jesd__api_8c.html#a6428678aa75e81f601359763f2a0368f" title="Enable the scrambler for the JESD Link." alt="" coords="480,1097,635,1137"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="784,971,738,1030,706,1061,671,1088,636,1104,634,1099,668,1083,703,1057,734,1026,780,968"/>
+<area shape="rect" id="Node000024" href="$ad9208__jesd__api_8c.html#ac1dd8c8d47664d8612f879e7006e2d27" title="Read back all current JESD parameter settings." alt="" coords="478,1161,637,1201"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="791,972,774,1012,748,1060,714,1109,671,1151,638,1169,636,1164,668,1147,710,1106,744,1057,769,1009,786,970"/>
+<area shape="rect" id="Node000025" href="$ad9208__jesd__api_8c.html#afe77db33051a825b52563c5947ce94b4" title="Get current Lane Cross Bar configuration for the JESD datalink layer." alt="" coords="456,1226,659,1251"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="795,972,782,1024,759,1090,723,1158,699,1189,671,1215,650,1228,647,1223,668,1211,695,1185,718,1155,754,1088,777,1023,790,971"/>
+<area shape="rect" id="Node000026" href="$ad9208__jesd__api_8c.html#a18ce3f5ac6d9ab65a65ffaa40080bd20" title="Get SERDES PLL Status Flags." alt="" coords="480,1276,635,1316"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="797,972,787,1033,765,1112,748,1153,728,1194,702,1233,671,1266,654,1278,636,1286,634,1281,652,1273,668,1262,698,1229,723,1192,743,1151,760,1110,781,1032,792,972"/>
+<area shape="rect" id="Node000027" href="$ad9208__jesd__api_8c.html#a79ac8c8c03929acbf74e720752535cc2" title="Configure the Lane Cross Bar in the JESD datalink layer." alt="" coords="456,1341,659,1366"/>
+<area shape="poly" id="edge27_Node000001_Node000027" title=" " alt="" coords="799,972,793,1044,775,1140,759,1192,736,1242,708,1289,671,1330,652,1343,649,1338,668,1326,703,1286,732,1240,754,1190,770,1139,788,1043,794,972"/>
+<area shape="rect" id="Node000028" href="$ad9208__jesd__api_8c.html#a278e813ae0164269af98ecea98ecadc1" title="Set JESD SYNCHRONIZATION Mode." alt="" coords="460,1390,655,1415"/>
+<area shape="poly" id="edge28_Node000001_Node000028" title=" " alt="" coords="801,972,798,1052,792,1105,782,1162,766,1222,743,1280,712,1334,671,1381,655,1392,652,1388,668,1377,707,1331,738,1277,761,1220,777,1161,787,1104,793,1052,795,972"/>
+<area shape="rect" id="Node000029" href="$ad9208__jesd__api_8c.html#a62c4215e5b30e0193626c6a4a7d20b4e" title="Set SYSREF Signal Capture settings." alt="" coords="449,1439,666,1465"/>
+<area shape="poly" id="edge29_Node000001_Node000029" title=" " alt="" coords="797,972,782,1073,755,1210,738,1280,718,1343,696,1395,671,1430,655,1441,652,1437,667,1426,691,1392,713,1341,733,1278,750,1209,776,1072,791,971"/>
+<area shape="rect" id="Node000030" href="$ad9208__jesd__api_8c.html#a30aa4054c45b3619d40fdde8bb8f4bf7" title="Set JESD LMFC Offset." alt="" coords="467,1489,647,1529"/>
+<area shape="poly" id="edge30_Node000001_Node000030" title=" " alt="" coords="797,972,783,1081,757,1233,740,1311,720,1381,697,1439,671,1479,649,1495,646,1491,667,1476,692,1437,715,1379,735,1309,752,1232,778,1081,792,971"/>
+<area shape="rect" id="Node000031" href="$ad9208__jesd__api_8c.html#aa70d98c5a661cd0834e99a7a3f62f1f0" title="Set JESD SYNCHRONIZATION Mode." alt="" coords="450,1554,665,1579"/>
+<area shape="poly" id="edge31_Node000001_Node000031" title=" " alt="" coords="798,972,786,1094,762,1265,746,1353,725,1433,700,1498,686,1524,671,1543,654,1556,651,1552,667,1539,682,1521,695,1496,720,1431,740,1352,757,1265,781,1093,793,972"/>
+<area shape="rect" id="Node000032" href="$ad9208__jesd__api_8c.html#a13f6170958c5d372058df47cdf065208" title="Get SYSREF status for sysref monitoring." alt="" coords="448,1603,667,1629"/>
+<area shape="poly" id="edge32_Node000001_Node000032" title=" " alt="" coords="799,972,788,1102,766,1289,749,1385,728,1473,702,1545,688,1573,671,1594,657,1605,653,1601,667,1590,683,1570,698,1543,723,1471,744,1384,761,1289,783,1102,793,971"/>
+<area shape="rect" id="Node000033" href="$ad9208__jesd__api_8c.html#ad24aae8e27ba8bd1de4e81413bc6e713" title="Set JESD SYNCHRONIZATION Time Stamp Mode." alt="" coords="482,1653,633,1693"/>
+<area shape="poly" id="edge33_Node000001_Node000033" title=" " alt="" coords="799,972,789,1110,768,1312,751,1415,730,1511,703,1589,688,1620,671,1643,654,1657,634,1666,632,1662,651,1653,667,1640,684,1617,698,1587,725,1509,746,1414,762,1311,784,1110,793,971"/>
+<area shape="rect" id="Node000034" href="$ad9208__reg_8c.html#a3beee5dd672153b7f66289d379af80ee" title=" " alt="" coords="476,1717,639,1757"/>
+<area shape="poly" id="edge34_Node000001_Node000034" title=" " alt="" coords="799,972,792,1122,772,1342,755,1456,733,1561,706,1648,689,1681,671,1707,657,1720,640,1728,638,1724,654,1715,667,1704,685,1679,701,1646,728,1560,750,1455,766,1341,786,1121,794,972"/>
+<area shape="rect" id="Node000035" href="$ad9208__api_8c.html#ac23f4227d44375bd99a1a0561182948e" title="Set AD9208 Input Sample Clock Configuration." alt="" coords="462,1782,653,1807"/>
+<area shape="poly" id="edge35_Node000001_Node000035" title=" " alt="" coords="800,972,795,1134,788,1249,777,1374,761,1499,739,1613,709,1707,691,1743,671,1771,654,1784,651,1780,667,1767,687,1741,704,1705,733,1612,756,1498,772,1374,783,1249,789,1134,794,972"/>
+<area shape="rect" id="Node000036" href="$ad9208__api_8c.html#a02aa6abf14a505250e0a961ce0019cb9" title="Sets the operation of the Power Down pin the AD9208." alt="" coords="458,1831,657,1857"/>
+<area shape="poly" id="edge36_Node000001_Node000036" title=" " alt="" coords="800,972,797,1142,791,1265,780,1398,765,1531,742,1653,728,1707,711,1753,693,1792,671,1822,657,1833,654,1829,667,1818,688,1790,706,1751,723,1705,737,1652,759,1530,775,1397,785,1264,791,1142,795,971"/>
+<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="454,907,393,913,392,908,454,902"/>
+<area shape="rect" id="Node000020" href="$ad9208__adc__api_8c.html#ac034764ebd3abfc102b6fcc5f3130f02" title="API to directly set the NCO Parameters." alt="" coords="240,983,397,1023"/>
+<area shape="poly" id="edge19_Node000019_Node000020" title=" " alt="" coords="468,1005,397,1005,397,1000,468,1000"/>
+<area shape="rect" id="Node000021" href="$ad9208__adc__api_8c.html#a8085bba558039c73e537e3f0bd479de6" title="Set AD9208 NCO based on the Channel Carrier Frequency." alt="" coords="5,990,192,1015"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="226,1005,192,1005,192,1000,226,1000"/>
+</map>

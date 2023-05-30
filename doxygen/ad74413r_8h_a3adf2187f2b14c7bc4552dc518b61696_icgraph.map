@@ -1,0 +1,19 @@
+<map id="ad74413r_remove" name="ad74413r_remove">
+<area shape="rect" id="Node000001" title="Free the device descriptor." alt="" coords="489,80,629,105"/>
+<area shape="rect" id="Node000002" href="$iio__ad74413r_8c.html#a4a0731d5ea48757cf8fb7dad0a729a46" title="Initializes the AD74413R IIO descriptor." alt="" coords="293,5,427,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="518,77,440,44,406,33,408,28,442,40,520,72"/>
+<area shape="rect" id="Node000006" href="$iio__ad74413r_8c.html#a2684709d6ebea71bf30672fd82bffeca" title="Free an iio descriptor." alt="" coords="279,55,441,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="475,85,441,80,442,75,476,79"/>
+<area shape="rect" id="Node000007" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="301,104,419,129"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="476,105,420,112,420,107,475,100"/>
+<area shape="rect" id="Node000008" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="116,129,223,155"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="524,114,485,131,442,145,384,153,325,155,223,151,223,145,325,150,383,147,441,139,483,126,522,109"/>
+<area shape="rect" id="Node000003" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="110,5,229,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="279,21,229,21,229,15,279,15"/>
+<area shape="rect" id="Node000004" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,55,231,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="298,37,220,57,219,52,296,32"/>
+<area shape="rect" id="Node000005" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,105,60,131"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="122,88,61,111,59,106,120,83"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="265,70,231,70,231,65,265,65"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="102,133,60,125,61,120,103,128"/>
+</map>

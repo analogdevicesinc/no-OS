@@ -1,0 +1,28 @@
+var eval_ade7913_2src_2common_2common__data_8h =
+[
+    [ "rms_adc_values", "structrms__adc__values.html", "structrms__adc__values" ],
+    [ "INITIAL", "eval-ade7913_2src_2common_2common__data_8h.html#aa3d063564f6ab16f6d408b8369d0e9ff", null ],
+    [ "SAMPLES", "eval-ade7913_2src_2common_2common__data_8h.html#ad0c329adebc27917fc0a4f51079acf6a", null ],
+    [ "V_DIVIDER", "eval-ade7913_2src_2common_2common__data_8h.html#a2296a0cdba8c69f2e8f8fd017dbfb2d8", null ],
+    [ "V_MULT", "eval-ade7913_2src_2common_2common__data_8h.html#aa573e016458a044c0571f0b8cd9bc711", null ],
+    [ "interface_toggle_led", "eval-ade7913_2src_2common_2common__data_8h.html#ad21963b9439c0721a05f3ab8a9ff36e8", null ],
+    [ "rms_adc_values_read", "eval-ade7913_2src_2common_2common__data_8h.html#afc928510136d60a52ce7761df8622bda", null ],
+    [ "rms_adc_values_read_2", "eval-ade7913_2src_2common_2common__data_8h.html#aae2eb21b934b64c6457c40afdffa4be3", null ],
+    [ "rms_adc_values_read_3", "eval-ade7913_2src_2common_2common__data_8h.html#a23964086731ef2cf4f32e25400f560ac", null ],
+    [ "rms_filter_i", "eval-ade7913_2src_2common_2common__data_8h.html#acb8fa7f91b02ed751d01808edf578921", null ],
+    [ "rms_filter_i_2", "eval-ade7913_2src_2common_2common__data_8h.html#a3ac20f10cd793efa00759386156ee06b", null ],
+    [ "rms_filter_i_3", "eval-ade7913_2src_2common_2common__data_8h.html#a300304f12f89856ff379747d30267c77", null ],
+    [ "rms_filter_v1", "eval-ade7913_2src_2common_2common__data_8h.html#afde2c30a39ccf0bd262b1c161565bd8e", null ],
+    [ "rms_filter_v1_2", "eval-ade7913_2src_2common_2common__data_8h.html#ac439956a44ee2f60de15501495fa6573", null ],
+    [ "rms_filter_v1_3", "eval-ade7913_2src_2common_2common__data_8h.html#a30c719f559b834b3cf53ab9238076ca8", null ],
+    [ "rms_filter_v2", "eval-ade7913_2src_2common_2common__data_8h.html#acd568802a461ffd236a326c28c8fb493", null ],
+    [ "rms_filter_v2_2", "eval-ade7913_2src_2common_2common__data_8h.html#ae5465c1488c34ad23cbe150da36ab313", null ],
+    [ "rms_filter_v2_3", "eval-ade7913_2src_2common_2common__data_8h.html#a233f8d10fdaa55ca6e378016648ae745", null ],
+    [ "supply_scale_v", "eval-ade7913_2src_2common_2common__data_8h.html#ac23c3ef90c166a0e47d6657293276afa", null ],
+    [ "ade7913_gpio_rdy_ip", "eval-ade7913_2src_2common_2common__data_8h.html#a7c01c4b08269af7d84f29c9c2d69cc08", null ],
+    [ "ade7913_spi_ip0", "eval-ade7913_2src_2common_2common__data_8h.html#a52316d5ec6e1e6c16ca56edbd48acfb9", null ],
+    [ "ade7913_spi_ip1", "eval-ade7913_2src_2common_2common__data_8h.html#a6845b8f986b27226615012366a07f345", null ],
+    [ "ade7913_spi_ip2", "eval-ade7913_2src_2common_2common__data_8h.html#a0b3d82cf071b09dc9ca8ff4a23c03881", null ],
+    [ "gpio_led1_ip", "eval-ade7913_2src_2common_2common__data_8h.html#a97754df8b160e6cd254567dd7226c06f", null ],
+    [ "uart_ip", "eval-ade7913_2src_2common_2common__data_8h.html#a899796529544064ac4887c110a2df791", null ]
+];

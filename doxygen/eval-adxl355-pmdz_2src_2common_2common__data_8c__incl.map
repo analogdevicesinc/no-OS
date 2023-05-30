@@ -1,0 +1,26 @@
+<map id="projects/eval&#45;adxl355&#45;pmdz/src/common/common_data.c" name="projects/eval&#45;adxl355&#45;pmdz/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;adxl355&#45;pmdz examples." alt="" coords="17,5,225,60"/>
+<area shape="rect" id="Node000002" href="$eval-adxl355-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl355&#45;pmdz examples." alt="" coords="58,108,185,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,60,124,94,119,94,119,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,115,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,135,81,173,77,169,109,132"/>
+<area shape="rect" id="Node000004" href="$adxl355_8h.html" title="Header file of ADXL355 Driver." alt="" coords="139,181,226,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="133,132,166,169,162,173,129,135"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="221,328,291,353"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="140,208,73,230,44,243,27,256,23,267,28,278,38,288,55,297,102,312,207,331,206,336,101,317,53,302,35,292,23,282,18,267,23,253,41,238,71,225,138,203"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="38,255,109,280"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="167,209,104,249,101,245,164,204"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="379,255,479,280"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="223,204,377,248,376,253,222,209"/>
+<area shape="rect" id="Node000010" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="133,255,232,280"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="185,207,185,241,180,241,180,207"/>
+<area shape="rect" id="Node000011" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="256,255,355,280"/>
+<area shape="poly" id="edge12_Node000004_Node000011" title=" " alt="" coords="204,204,275,245,272,250,201,209"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="402,282,298,325,296,320,400,278"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="341,328,411,353"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="423,282,395,319,391,316,418,279"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="436,328,519,353"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="439,279,464,315,460,318,435,282"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="197,278,236,316,232,320,193,282"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="299,282,274,318,270,315,295,279"/>
+</map>

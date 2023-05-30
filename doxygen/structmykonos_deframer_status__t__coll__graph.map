@@ -1,0 +1,5 @@
+<map id="mykonosDeframerStatus_t" name="mykonosDeframerStatus_t">
+<area shape="rect" id="Node000001" title="Data structure to hold the deframer status." alt="" coords="5,137,201,163"/>
+<area shape="rect" id="Node000002" href="$structmykonos_lane_err__t.html" title="Data structure to hold the error counters per a given lane." alt="" coords="32,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,44,106,137,101,137,101,44"/>
+</map>

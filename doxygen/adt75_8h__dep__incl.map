@@ -1,0 +1,28 @@
+<map id="drivers/temperature/adt75/adt75.h" name="drivers/temperature/adt75/adt75.h">
+<area shape="rect" id="Node000001" title="Header file of ADT75 Driver." alt="" coords="500,5,652,45"/>
+<area shape="rect" id="Node000002" href="$adt75_8c.html" title="Source file of ADT75 Driver." alt="" coords="57,101,209,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="487,44,364,67,229,96,200,103,198,98,227,91,363,62,486,39"/>
+<area shape="rect" id="Node000003" href="$iio__adt75_8c.html" title="Source file of IIO ADT75 Driver." alt="" coords="5,203,157,243"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="486,35,436,42,381,54,325,71,273,96,258,108,248,121,238,135,223,150,175,181,127,206,125,201,172,177,220,146,234,132,244,118,254,104,271,91,323,66,379,49,435,37,486,30"/>
+<area shape="rect" id="Node000004" href="$iio__adt75_8h.html" title="Header file of the IIO ADT75 Driver." alt="" coords="284,101,436,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="521,53,405,103,403,98,519,48"/>
+<area shape="rect" id="Node000007" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8h.html" title="Defines common data to be used by the STOUT project." alt="" coords="461,101,691,141"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="579,59,579,101,573,101,573,59"/>
+<area shape="rect" id="Node000009" href="$adt75_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad74413r examples." alt="" coords="716,101,908,141"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="637,48,765,98,763,103,635,53"/>
+<area shape="rect" id="Node000011" href="$adt75_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for ad74413r project." alt="" coords="933,93,1099,148"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="666,40,921,91,933,94,932,99,919,96,665,45"/>
+<area shape="rect" id="Node000012" href="$swiot1l_2src_2common_2common__data_8h.html" title="Defines common data to be used by the swiot1l project." alt="" coords="1124,101,1316,141"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="666,32,871,55,1112,91,1148,98,1146,103,1112,96,870,60,665,37"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="296,148,134,206,133,201,294,143"/>
+<area shape="rect" id="Node000005" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="182,196,357,251"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="336,153,295,198,291,194,332,149"/>
+<area shape="rect" id="Node000006" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="381,203,529,243"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="389,149,439,201,435,205,385,153"/>
+<area shape="rect" id="Node000008" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8c.html" title="Defines common data to be used by the STOUT project." alt="" coords="553,203,783,243"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="604,149,653,201,649,205,600,153"/>
+<area shape="rect" id="Node000010" href="$adt75_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad74413r examples." alt="" coords="807,203,998,243"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="840,149,888,201,884,205,836,153"/>
+<area shape="rect" id="Node000013" href="$swiot1l_2src_2common_2common__data_8c.html" title="Defines common data to be used by the SWIOT1L firmware." alt="" coords="1125,203,1315,243"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="1223,155,1223,203,1217,203,1217,155"/>
+</map>

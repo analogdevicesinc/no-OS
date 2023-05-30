@@ -1,0 +1,12 @@
+<map id="pcf85263_write" name="pcf85263_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="515,29,637,55"/>
+<area shape="rect" id="Node000002" href="$pcf85263_8c.html#ab0503bfdeaad1a341d4681455628cfed" title="Set date." alt="" coords="108,5,253,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,40,253,25,254,20,501,35"/>
+<area shape="rect" id="Node000004" href="$pcf85263_8c.html#a345542ebb2f61e2de1021c03fac33137" title="Update specific register bits." alt="" coords="301,55,467,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="501,55,467,59,467,54,501,49"/>
+<area shape="rect" id="Node000003" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,35,61,41,60,36,94,30"/>
+<area shape="rect" id="Node000005" href="$pcf85263_8c.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="125,55,236,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="288,70,237,70,237,65,288,65"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="112,59,60,50,61,45,112,54"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="projects/adv7511/src/transmitter_defs.h" name="projects/adv7511/src/transmitter_defs.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="96,5,253,45"/>
+<area shape="rect" id="Node000002" href="$transmitter_8h.html" title=" " alt="" coords="96,93,253,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,59,177,93,172,93,172,59"/>
+<area shape="rect" id="Node000003" href="$adv7511_2src_2main_8c.html" title="The implementation of the main function of the app." alt="" coords="5,181,163,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="147,145,106,183,102,179,143,141"/>
+<area shape="rect" id="Node000004" href="$transmitter_8c.html" title=" " alt="" coords="187,181,344,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="206,141,247,179,243,183,203,145"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="max22196_iio_remove" name="max22196_iio_remove">
+<area shape="rect" id="Node000001" title="Free resources allocated by the init function." alt="" coords="387,5,557,31"/>
+<area shape="rect" id="Node000002" href="$max22196_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="373,21,148,21,148,15,373,15"/>
+<area shape="rect" id="Node000003" href="$iio__max22196_8c.html#ad08520f1860582b8811f4d0afafbbe44" title="Initializes the MAX22196 IIO descriptor." alt="" coords="196,31,339,56"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="373,33,339,37,338,32,372,28"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="182,35,148,30,148,25,183,29"/>
+</map>

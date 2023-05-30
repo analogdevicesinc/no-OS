@@ -1,0 +1,18 @@
+<map id="ade9000_write" name="ade9000_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="543,56,661,81"/>
+<area shape="rect" id="Node000002" href="$ade9000_8c.html#aaf06f0926226f34dfed2d4e875a54468" title="Set User Energy use model." alt="" coords="311,5,495,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="537,55,453,33,454,28,539,50"/>
+<area shape="rect" id="Node000003" href="$ade9000_8c.html#aa0f6201c5b081c10cf75ebeb822abea3" title="Setup the device." alt="" coords="125,56,246,81"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="529,71,246,71,246,66,529,66"/>
+<area shape="rect" id="Node000005" href="$ade9000_8c.html#ab28ef33672c651dd51420e51161866db" title="Update specific register bits." alt="" coords="322,107,483,132"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="539,87,454,109,453,104,537,82"/>
+<area shape="rect" id="Node000004" href="$eval-ade9000_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,105,60,131"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="131,88,109,95,61,111,59,106,107,90,129,83"/>
+<area shape="poly" id="edge9_Node000005_Node000003" title=" " alt="" coords="334,106,240,84,241,79,335,101"/>
+<area shape="rect" id="Node000006" href="$ade9000_8c.html#a796d44fbe01c3180aefbb8268aaa948f" title="Initialize the device." alt="" coords="132,105,239,131"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="308,121,239,121,239,116,308,116"/>
+<area shape="rect" id="Node000007" href="$ade9000_8c.html#a5945f5becded49f6588b4f3a6f013010" title="Read the temperature." alt="" coords="108,155,263,180"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="332,138,244,157,243,152,331,132"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="118,121,60,121,60,115,118,115"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="129,153,107,146,59,130,61,125,109,141,131,148"/>
+</map>

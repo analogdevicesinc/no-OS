@@ -1,0 +1,13 @@
+<map id="drivers/platform/aducm3029/aducm3029_i2c.h" name="drivers/platform/aducm3029/aducm3029_i2c.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="387,5,593,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__i2c_8c.html" title="Implementation of I2C driver for ADuCM302x." alt="" coords="5,101,212,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="400,51,186,103,185,98,399,46"/>
+<area shape="rect" id="Node000003" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="237,101,391,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="444,54,351,103,348,98,441,49"/>
+<area shape="rect" id="Node000004" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="416,101,564,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="493,59,493,101,487,101,487,59"/>
+<area shape="rect" id="Node000005" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="588,93,773,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="542,49,628,91,626,96,540,54"/>
+<area shape="rect" id="Node000006" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="798,101,963,141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="592,46,787,91,815,98,813,103,785,96,591,51"/>
+</map>

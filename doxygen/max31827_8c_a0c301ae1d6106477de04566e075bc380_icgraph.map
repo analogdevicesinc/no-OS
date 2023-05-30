@@ -1,0 +1,5 @@
+<map id="max31827_shutdown_write" name="max31827_shutdown_write">
+<area shape="rect" id="Node000001" title="Shutdown then write register value." alt="" coords="256,5,457,31"/>
+<area shape="rect" id="Node000002" href="$max31827_8c.html#af4aa71f953a9fb60e16ba9a080fc78f4" title="Write the alarm value to the specified register." alt="" coords="5,5,208,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,21,208,21,208,15,242,15"/>
+</map>

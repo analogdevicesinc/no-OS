@@ -1,0 +1,12 @@
+<map id="drivers/adc/ad7799/iio_ad7799.h" name="drivers/adc/ad7799/iio_ad7799.h">
+<area shape="rect" id="Node000001" title="Header file of AD7799 iio." alt="" coords="52,5,199,45"/>
+<area shape="rect" id="Node000002" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="79,93,172,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,46,128,79,123,79,123,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,121,71,159,68,156,111,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="151,240,222,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="130,119,139,152,153,191,173,227,169,230,148,193,134,153,125,120"/>
+<area shape="rect" id="Node000005" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="163,167,333,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="146,116,218,157,215,162,144,121"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="240,194,208,231,204,228,236,191"/>
+</map>

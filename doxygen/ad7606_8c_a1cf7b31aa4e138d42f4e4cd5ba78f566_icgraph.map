@@ -1,0 +1,9 @@
+<map id="ad7606_spi_data_read" name="ad7606_spi_data_read">
+<area shape="rect" id="Node000001" title="Read conversion data." alt="" coords="564,5,732,31"/>
+<area shape="rect" id="Node000002" href="$ad7606_8c.html#ae9a3bbb941edb86d1401bb227403f7d3" title="Blocking conversion start and read data (for a single sample from all channels)." alt="" coords="324,5,516,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="550,21,516,21,516,15,550,15"/>
+<area shape="rect" id="Node000003" href="$ad7606_8c.html#a925b973a7b7a05616a0d429cc7fefe8a" title="Read muliple raw samples from device." alt="" coords="108,5,276,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="310,21,276,21,276,15,310,15"/>
+<area shape="rect" id="Node000004" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

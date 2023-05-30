@@ -1,0 +1,11 @@
+<map id="drivers/frequency/ad9523/ad9523.h" name="drivers/frequency/ad9523/ad9523.h">
+<area shape="rect" id="Node000001" title="Header file of AD9523 Driver." alt="" coords="5,5,193,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="64,167,135,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,47,50,68,33,94,31,112,38,128,51,144,68,157,65,161,48,148,33,131,25,113,27,92,46,65,69,44"/>
+<area shape="rect" id="Node000003" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="43,93,156,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="102,46,102,79,97,79,97,46"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="181,93,279,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="132,43,200,84,198,88,130,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="102,119,102,153,97,153,97,119"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="210,121,134,162,131,158,208,116"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="iio_ad559xr_desc" name="iio_ad559xr_desc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="192,336,327,361"/>
+<area shape="rect" id="Node000002" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="5,224,129,249"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,255,132,282,177,310,229,333,227,338,174,314,129,287,91,260"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="144,225,153,229,156,237,148,247,130,251,129,246,145,243,151,236,149,233,142,229"/>
+<area shape="rect" id="Node000003" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="346,224,434,249"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="367,260,275,338,272,334,364,256"/>
+<area shape="rect" id="Node000004" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="525,103,674,128"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="569,137,412,226,409,221,566,132"/>
+<area shape="rect" id="Node000005" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="511,5,688,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="602,44,602,102,597,102,597,44"/>
+<area shape="rect" id="Node000006" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="211,103,307,128"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="262,142,262,336,257,336,257,142"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="278,138,311,174,343,201,373,222,370,226,340,205,307,178,274,141"/>
+<area shape="rect" id="Node000007" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="159,5,271,31"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="215,44,219,68,231,86,246,101,242,105,227,90,214,70,210,45"/>
+<area shape="rect" id="Node000008" href="$structscan__type.html" title=" " alt="" coords="47,5,135,31"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="110,39,140,67,176,86,214,100,212,105,174,91,136,72,106,43"/>
+<area shape="rect" id="Node000009" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="318,5,419,31"/>
+<area shape="poly" id="edge10_Node000003_Node000009" title=" " alt="" coords="374,44,392,223,386,224,369,45"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="331,39,305,57,284,81,268,104,264,101,279,77,302,53,328,35"/>
+</map>

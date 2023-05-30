@@ -1,0 +1,19 @@
+<map id="ada4250_write" name="ada4250_write">
+<area shape="rect" id="Node000001" title="Writes data to ada4250 over SPI." alt="" coords="657,56,776,81"/>
+<area shape="rect" id="Node000002" href="$ada4250_8c.html#adfb9a0848aabcb2419bbd522c39b65a7" title="Set offset value for ADA4250." alt="" coords="460,31,609,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="643,61,609,56,610,51,644,56"/>
+<area shape="rect" id="Node000003" href="$ada4250_8c.html#a3ce5fac72005fa4c6e9c1895f0d2163c" title="Update ADA4250 register." alt="" coords="469,80,600,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="644,81,600,87,600,81,643,76"/>
+<area shape="rect" id="Node000004" href="$ada4250_8c.html#a20bb94514088aaa21b24674ba857ddd6" title="Enable/Disable Reference Buffer." alt="" coords="264,5,411,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="479,78,459,70,411,44,381,33,383,28,413,40,461,65,481,73"/>
+<area shape="rect" id="Node000005" href="$ada4250_8c.html#ae3a300b8abee90ae471df602dfa575cb" title="Set current bias for ADA4250." alt="" coords="268,55,407,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="455,85,407,79,407,74,456,80"/>
+<area shape="rect" id="Node000006" href="$ada4250_8c.html#acd99812b89506c8eafe0ef88ac29c271" title="Set gain for ADA4250." alt="" coords="267,104,407,129"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="456,105,408,111,407,106,455,100"/>
+<area shape="rect" id="Node000007" href="$ada4250_8c.html#a620ad3b09aade92c35948a253fbf4523" title="Software reset." alt="" coords="263,153,412,179"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="490,113,413,143,377,156,376,151,411,138,488,108"/>
+<area shape="rect" id="Node000008" href="$ada4250_8c.html#afcaeb14f57346669b660ba6004853ef8" title="Initialize the ADA4250 device." alt="" coords="108,153,215,179"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="249,169,215,169,215,163,249,163"/>
+<area shape="rect" id="Node000009" href="$ada4250__ardz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,153,60,179"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="94,169,60,169,60,163,94,163"/>
+</map>

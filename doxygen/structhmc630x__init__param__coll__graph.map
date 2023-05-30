@@ -1,0 +1,11 @@
+<map id="hmc630x_init_param" name="hmc630x_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="187,225,345,251"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="13,93,185,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,126,210,199,247,223,244,228,207,203,120,130"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,45,102,93,97,93,97,45"/>
+<area shape="rect" id="Node000004" href="$structhmc6300__attr.html" title=" " alt="" coords="210,93,322,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="269,132,269,225,263,225,263,132"/>
+<area shape="rect" id="Node000005" href="$structhmc6301__attr.html" title=" " alt="" coords="346,93,458,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="382,130,280,227,276,223,378,126"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad7616_read_data_parallel" name="ad7616_read_data_parallel">
+<area shape="rect" id="Node000001" title="Read from device in parallel mode. Enter register mode to read/write registers." alt="" coords="108,5,307,31"/>
+<area shape="rect" id="Node000002" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

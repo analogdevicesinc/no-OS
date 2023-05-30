@@ -1,0 +1,7 @@
+<map id="iio_buffer_pop_scan" name="iio_buffer_pop_scan">
+<area shape="rect" id="Node000001" title=" " alt="" coords="248,31,399,56"/>
+<area shape="rect" id="Node000002" href="$iio__dac__demo_8c.html#aab99831cbcc20534c7e55fc74d789429" title="Handles trigger: reads one data&#45;set from iio buffer and writes it to the dac buffer." alt="" coords="5,5,200,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,36,200,32,200,27,234,30"/>
+<area shape="rect" id="Node000003" href="$iio__dac__demo_8c.html#a0537b74656e351303315bc8b4043e455" title="function for writing samples to the device." alt="" coords="23,55,182,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,56,182,61,182,56,234,50"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="projects/max25603/src/platform/maxim/parameters.c" name="projects/max25603/src/platform/maxim/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by MAX25603 project." alt="" coords="164,5,387,45"/>
+<area shape="rect" id="Node000002" href="$max25603_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by MAX25603 project." alt="" coords="221,93,330,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,46,278,79,273,79,273,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,124,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="242,121,112,165,111,160,241,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="149,167,263,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="266,121,229,159,225,155,262,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="288,167,401,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="289,117,326,155,322,159,285,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="426,167,578,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="313,116,453,160,451,165,311,121"/>
+</map>

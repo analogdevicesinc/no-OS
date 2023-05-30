@@ -1,0 +1,22 @@
+<map id="drivers/api/no_os_i2c.c" name="drivers/api/no_os_i2c.c">
+<area shape="rect" id="Node000001" title="Implementation of the I2C Interface." alt="" coords="254,5,425,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,92,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="293,33,106,79,105,74,292,28"/>
+<area shape="rect" id="Node000003" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="117,79,215,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="312,33,208,76,206,71,310,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="424,152,495,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="351,29,443,140,439,143,347,33"/>
+<area shape="rect" id="Node000006" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="239,79,349,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="334,32,311,69,306,66,330,30"/>
+<area shape="rect" id="Node000008" href="$no__os__mutex_8h.html" title=" " alt="" coords="424,79,545,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="364,28,450,70,448,75,362,33"/>
+<area shape="rect" id="Node000009" href="$no__os__alloc_8h.html" title=" " alt="" coords="569,79,680,104"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="386,28,566,73,565,78,385,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="131,152,201,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="169,104,169,138,163,138,163,104"/>
+<area shape="rect" id="Node000007" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="260,152,328,177"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="297,104,297,138,291,138,291,104"/>
+<area shape="poly" id="edge10_Node000009_Node000005" title=" " alt="" coords="599,106,500,149,498,144,597,102"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="591,152,658,177"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="627,104,627,138,622,138,622,104"/>
+</map>

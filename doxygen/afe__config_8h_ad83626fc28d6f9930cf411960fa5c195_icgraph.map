@@ -1,0 +1,9 @@
+<map id="config_wfb" name="config_wfb">
+<area shape="rect" id="Node000001" title="configure WFB_CFB register, initialized with start filling" alt="" coords="432,5,524,31"/>
+<area shape="rect" id="Node000002" href="$afe__config_8c.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="313,5,384,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,21,384,21,384,15,418,15"/>
+<area shape="rect" id="Node000003" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,5,265,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="300,21,265,21,265,15,300,15"/>
+<area shape="rect" id="Node000004" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

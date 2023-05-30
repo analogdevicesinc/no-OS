@@ -1,0 +1,9 @@
+<map id="ad74413r_iio_init" name="ad74413r_iio_init">
+<area shape="rect" id="Node000001" title="Initializes the AD74413R IIO descriptor." alt="" coords="279,31,413,56"/>
+<area shape="rect" id="Node000002" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="110,5,229,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="264,34,228,29,229,24,265,29"/>
+<area shape="rect" id="Node000003" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,55,231,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="265,57,231,62,231,56,265,52"/>
+<area shape="rect" id="Node000004" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

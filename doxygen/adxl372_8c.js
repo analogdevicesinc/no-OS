@@ -1,0 +1,27 @@
+var adxl372_8c =
+[
+    [ "adxl372_configure_fifo", "adxl372_8c.html#af7ace6f5f0f98035991501f48a40e9b7", null ],
+    [ "adxl372_get_accel_data", "adxl372_8c.html#aac65b511d55eda69e1c904334ae2a1f1", null ],
+    [ "adxl372_get_fifo_xyz_data", "adxl372_8c.html#a0b5d35949f6ad857a43cba9798d9c801", null ],
+    [ "adxl372_get_highest_peak_data", "adxl372_8c.html#a2c3dd60c74ff1f4ac503523325594895", null ],
+    [ "adxl372_get_status", "adxl372_8c.html#a9fc857b32b221fb10c1bf4f41c54ce86", null ],
+    [ "adxl372_init", "adxl372_8c.html#a30746b358cf0ef10cbdb0a8d49d37d49", null ],
+    [ "adxl372_interrupt_config", "adxl372_8c.html#a4fd41a6332f39b4d6819515715b89158", null ],
+    [ "adxl372_read_reg", "adxl372_8c.html#a62232390d6af1ef3ab65ff62c40c9796", null ],
+    [ "adxl372_read_reg_multiple", "adxl372_8c.html#a4108dc3de04fdbc97d2e75f9f48152a9", null ],
+    [ "adxl372_reset", "adxl372_8c.html#a452f4bf023d100e008e14984f2aa8071", null ],
+    [ "adxl372_service_fifo_ev", "adxl372_8c.html#a75e01bc9a81ed346cab498704749ff9b", null ],
+    [ "adxl372_set_act_proc_mode", "adxl372_8c.html#abb2b66e68f8d41d6e9f233dbd0153ac8", null ],
+    [ "adxl372_set_activity_threshold", "adxl372_8c.html#ab58458ea48380626f579bd4ceea77180", null ],
+    [ "adxl372_set_activity_time", "adxl372_8c.html#a4e33f7bb5a7b55e09785d32272781c4f", null ],
+    [ "adxl372_set_autosleep", "adxl372_8c.html#ac368ef34f5d74049310411eeaa41a407", null ],
+    [ "adxl372_set_bandwidth", "adxl372_8c.html#a5b13864b46cacf22b43d869047ff7b7d", null ],
+    [ "adxl372_set_filter_settle", "adxl372_8c.html#a8f7db05acb5545a97b9f9b4a79bbc2a3", null ],
+    [ "adxl372_set_inactivity_time", "adxl372_8c.html#ad7225d9e61c8185c7719fdd2fe9e77a4", null ],
+    [ "adxl372_set_instant_on_th", "adxl372_8c.html#a47bff3516d740d1dd9ae88e34581c3bd", null ],
+    [ "adxl372_set_odr", "adxl372_8c.html#a07c3d23bbc2a767bc07f3d8d1fbe64ef", null ],
+    [ "adxl372_set_op_mode", "adxl372_8c.html#a283e8465ecfb64de8f1ff3049e04f76b", null ],
+    [ "adxl372_set_wakeup_rate", "adxl372_8c.html#a2ce8217567ad8d72065ec5c4bfc1fa54", null ],
+    [ "adxl372_write_mask", "adxl372_8c.html#a519402d0bd5ef763a64db24159367521", null ],
+    [ "adxl372_write_reg", "adxl372_8c.html#af917cba06550be23c1826308136a656d", null ]
+];

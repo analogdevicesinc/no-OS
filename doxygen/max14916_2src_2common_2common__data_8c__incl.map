@@ -1,0 +1,33 @@
+<map id="projects/max14916/src/common/common_data.c" name="projects/max14916/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by max14916 examples." alt="" coords="107,5,298,45"/>
+<area shape="rect" id="Node000002" href="$max14916_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14916 examples." alt="" coords="139,93,266,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,46,205,79,200,79,200,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="56,167,165,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,121,138,160,134,156,186,117"/>
+<area shape="rect" id="Node000004" href="$max149x6-base_8h.html" title="Header file of MAX149X6 Base Driver." alt="" coords="133,240,272,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="205,119,205,226,200,226,200,119"/>
+<area shape="rect" id="Node000011" href="$max14916_8h.html" title="Header file of MAX14916 Driver." alt="" coords="240,167,343,192"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="218,117,268,156,265,160,215,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="122,387,192,412"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="201,266,185,314,167,374,162,373,180,313,196,264"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="429,387,512,412"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="272,252,314,257,358,268,402,285,440,311,452,325,460,341,470,372,465,373,455,343,447,328,437,315,399,290,357,273,313,263,271,257"/>
+<area shape="rect" id="Node000007" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="194,313,301,339"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="212,264,235,300,231,303,208,267"/>
+<area shape="rect" id="Node000008" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="21,313,120,339"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="182,268,105,309,103,304,180,263"/>
+<area shape="rect" id="Node000009" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="326,313,426,339"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="231,263,336,306,334,310,229,268"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="235,341,185,380,181,376,232,337"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="86,337,134,376,131,380,83,341"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="341,341,206,385,205,380,340,336"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="393,337,446,376,442,380,389,341"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="334,387,404,412"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="377,339,374,373,369,373,372,339"/>
+<area shape="poly" id="edge17_Node000011_Node000004" title=" " alt="" coords="279,194,229,233,226,229,276,190"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="241,188,181,200,115,223,83,239,54,260,30,285,12,314,8,329,11,342,20,353,33,363,69,378,108,388,107,393,67,383,30,367,16,357,6,344,3,329,7,312,26,281,51,256,80,235,112,218,180,195,240,183"/>
+<area shape="poly" id="edge16_Node000011_Node000006" title=" " alt="" coords="320,190,355,208,396,235,436,270,467,312,476,343,477,372,471,373,471,343,463,315,432,273,393,239,353,213,317,195"/>
+<area shape="poly" id="edge18_Node000011_Node000007" title=" " alt="" coords="295,193,294,226,286,266,267,303,262,301,281,264,289,226,290,192"/>
+<area shape="poly" id="edge19_Node000011_Node000008" title=" " alt="" coords="241,191,181,209,150,224,123,242,98,270,82,301,77,299,94,267,119,238,148,219,179,204,239,186"/>
+<area shape="poly" id="edge20_Node000011_Node000009" title=" " alt="" coords="301,191,364,300,360,303,296,194"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ad6676_set_fif" name="ad6676_set_fif">
+<area shape="rect" id="Node000001" title="Set the target IF frequency." alt="" coords="279,31,396,56"/>
+<area shape="rect" id="Node000002" href="$ad6676_8c.html#aedb88fef3a85bf43afd102855bd959cb" title="Initialize the device." alt="" coords="113,5,226,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="265,35,226,29,227,24,266,30"/>
+<area shape="rect" id="Node000004" href="$ad6676_8c.html#abc6bd36627b91af6b336d9c24e9eeb90" title="Reconfigure device for other target frequency and bandwidth and recalibrate." alt="" coords="108,55,231,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="266,56,231,61,230,56,265,51"/>
+<area shape="rect" id="Node000003" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,21,60,21,60,15,99,15"/>
+</map>

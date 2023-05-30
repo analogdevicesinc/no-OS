@@ -1,0 +1,12 @@
+<map id="drivers/dac/max22007/max22007.h" name="drivers/dac/max22007/max22007.h">
+<area shape="rect" id="Node000001" title="Header file of MAX22007 Driver." alt="" coords="193,5,360,45"/>
+<area shape="rect" id="Node000002" href="$max22007_8c.html" title="Source file of MAX22007 Driver." alt="" coords="5,101,172,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,54,128,103,125,98,225,49"/>
+<area shape="rect" id="Node000003" href="$max22007_2src_2common_2common__data_8c.html" title="Defines common data to be used by MAX22007 example." alt="" coords="181,196,372,236"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,58,238,94,233,121,238,147,249,172,263,194,259,197,244,175,233,149,228,121,233,93,251,56"/>
+<area shape="rect" id="Node000004" href="$max22007_2src_2common_2common__data_8h.html" title="Defines common data to be used by max22007 examples." alt="" coords="247,101,439,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="300,55,332,99,328,102,296,58"/>
+<area shape="rect" id="Node000005" href="$max22007_2src_2examples_2basic_2basic__example_8c.html" title="Basic example for MAX22007 project." alt="" coords="463,93,634,148"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="345,47,473,91,471,96,344,52"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="324,153,292,197,288,194,320,150"/>
+</map>

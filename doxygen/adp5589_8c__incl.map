@@ -1,0 +1,17 @@
+<map id="drivers/io&#45;expander/adp5589/adp5589.c" name="drivers/io&#45;expander/adp5589/adp5589.c">
+<area shape="rect" id="Node000001" title="Implementation of ADP5589 Driver." alt="" coords="104,5,257,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="159,167,229,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,46,194,153,189,153,180,46"/>
+<area shape="rect" id="Node000003" href="$adp5589_8h.html" title="Header file of ADP5589 Driver." alt="" coords="39,93,130,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,48,111,87,108,82,156,43"/>
+<area shape="rect" id="Node000006" href="$no__os__alloc_8h.html" title=" " alt="" coords="219,93,329,119"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="205,44,251,82,248,86,202,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="68,121,45,141,26,168,22,182,23,198,31,227,26,228,17,198,17,182,21,166,41,137,65,117"/>
+<area shape="rect" id="Node000005" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="35,167,134,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="87,119,87,153,82,153,82,119"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="80,194,57,230,53,227,75,191"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="263,121,219,160,215,156,259,117"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="254,167,321,192"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="279,119,285,153,280,154,274,119"/>
+</map>

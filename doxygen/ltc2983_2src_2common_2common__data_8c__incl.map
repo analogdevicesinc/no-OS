@@ -1,0 +1,25 @@
+<map id="projects/ltc2983/src/common/common_data.c" name="projects/ltc2983/src/common/common_data.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="295,5,486,45"/>
+<area shape="rect" id="Node000002" href="$ltc2983_2src_2common_2common__data_8h.html" title=" " alt="" coords="271,93,398,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="379,47,353,84,349,80,375,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="363,313,445,339"/>
+<area shape="poly" id="edge13_Node000001_Node000005" title=" " alt="" coords="400,45,413,93,421,129,425,166,426,203,423,240,413,300,407,300,418,239,421,203,420,167,416,130,408,94,395,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="259,167,410,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="337,119,337,153,332,153,332,119"/>
+<area shape="rect" id="Node000004" href="$ltc2983_8h.html" title=" " alt="" coords="152,167,235,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="313,121,230,163,227,158,311,116"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="235,187,314,210,350,223,374,238,393,268,403,299,398,300,389,270,370,242,348,228,312,215,234,193"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,240,112,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="173,194,94,236,92,231,170,190"/>
+<area shape="rect" id="Node000008" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="136,240,235,265"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="195,193,191,227,185,226,189,192"/>
+<area shape="rect" id="Node000009" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="259,240,359,265"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="213,190,280,230,277,235,211,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="150,313,221,339"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="80,263,154,304,151,309,78,268"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="188,266,188,300,183,300,183,266"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="326,263,379,303,376,307,323,267"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="291,268,219,309,216,304,288,263"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="267,313,338,339"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="311,266,308,300,302,300,306,265"/>
+</map>

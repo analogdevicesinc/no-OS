@@ -1,0 +1,15 @@
+<map id="ltc4162l_get_chem_type" name="ltc4162l_get_chem_type">
+<area shape="rect" id="Node000001" title="Get the chemistry type." alt="" coords="439,99,620,125"/>
+<area shape="rect" id="Node000002" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,99,165,125"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="503,93,453,56,422,38,390,25,341,13,302,8,263,12,214,25,180,40,148,61,101,101,97,97,145,57,177,36,212,20,262,7,302,3,342,7,391,20,425,33,456,51,506,88"/>
+<area shape="rect" id="Node000003" href="$ltc4162l_8c.html#a307ec70a0ddee2f825824a817b7f247a" title="Get the vcharge setting." alt="" coords="221,35,383,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="464,99,381,77,382,72,466,93"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_8c.html#a0778d4aeb58c3865f5695bd6ba7807a6" title="Get the average battery voltage." alt="" coords="213,99,391,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="425,115,391,115,391,109,425,109"/>
+<area shape="rect" id="Node000005" href="$ltc4162l_8c.html#a2f75a3a7cf89596b31acd59c08719a24" title="Get the battery voltage." alt="" coords="229,149,375,174"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="457,130,362,151,361,146,456,125"/>
+<area shape="rect" id="Node000006" href="$ltc4162l_8c.html#adefe23a8cac6fb9ec62aef14e501cc75" title="Set the vcharge setting." alt="" coords="222,199,382,239"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="496,134,392,188,360,201,358,196,390,183,493,129"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="200,115,166,115,166,109,200,109"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="232,148,141,127,143,122,233,143"/>
+</map>

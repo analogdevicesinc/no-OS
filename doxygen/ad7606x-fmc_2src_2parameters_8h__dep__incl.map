@@ -1,0 +1,9 @@
+<map id="projects/ad7606x&#45;fmc/src/parameters.h" name="projects/ad7606x&#45;fmc/src/parameters.h">
+<area shape="rect" id="Node000001" title="Parameters definition for AD7606X&#45;FMC." alt="" coords="193,5,357,45"/>
+<area shape="rect" id="Node000002" href="$ad7606x-fmc_2src_2basic__example_8c.html" title="Implementation of a basic example." alt="" coords="5,93,169,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,53,130,96,127,91,221,49"/>
+<area shape="rect" id="Node000003" href="$ad7606x-fmc_2src_2common__data_8c.html" title="Definitions of initialization parameters common for all project variants." alt="" coords="193,93,357,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="278,59,278,93,273,93,273,59"/>
+<area shape="rect" id="Node000004" href="$ad7606x-fmc_2src_2iio__example_8c.html" title="Implementation of an example with the IIO interface." alt="" coords="381,93,545,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="330,49,423,91,421,96,328,53"/>
+</map>

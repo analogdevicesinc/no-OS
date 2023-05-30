@@ -1,0 +1,7 @@
+<map id="adxl38x_selftest" name="adxl38x_selftest">
+<area shape="rect" id="Node000001" title="Executed Selftest on the sensing axes and returns the outcome of the test." alt="" coords="331,5,460,31"/>
+<area shape="rect" id="Node000002" href="$selftest__example__main_8c.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="108,5,283,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="317,21,283,21,283,15,317,15"/>
+<area shape="rect" id="Node000003" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,21,60,21,60,15,95,15"/>
+</map>

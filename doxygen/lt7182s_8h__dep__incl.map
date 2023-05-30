@@ -1,0 +1,18 @@
+<map id="drivers/power/lt7182s/lt7182s.h" name="drivers/power/lt7182s/lt7182s.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="311,5,473,45"/>
+<area shape="rect" id="Node000002" href="$iio__lt7182s_8c.html" title="Source file for the LT7182S IIO Driver." alt="" coords="5,203,168,243"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,41,188,62,143,77,114,95,98,120,89,149,87,178,87,203,82,203,81,178,84,148,93,118,110,91,141,73,187,57,297,36"/>
+<area shape="rect" id="Node000003" href="$iio__lt7182s_8h.html" title="Header file for the LT7182S IIO Driver." alt="" coords="124,101,287,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,54,244,103,242,98,341,49"/>
+<area shape="rect" id="Node000005" href="$lt7182s_8c.html" title=" " alt="" coords="311,101,473,141"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="395,59,395,101,389,101,389,59"/>
+<area shape="rect" id="Node000006" href="$lt7182s_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt7182s examples." alt="" coords="497,101,689,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="446,49,554,98,552,103,444,54"/>
+<area shape="rect" id="Node000008" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt7182s project." alt="" coords="714,93,881,148"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="487,43,702,91,714,94,713,99,701,96,486,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="174,152,111,205,107,201,171,148"/>
+<area shape="rect" id="Node000004" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt7182s project." alt="" coords="193,196,367,251"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="230,150,263,194,258,197,225,153"/>
+<area shape="rect" id="Node000007" href="$lt7182s_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt7182s examples." alt="" coords="498,203,689,243"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="596,155,596,203,591,203,591,155"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="ad9361_en_dis_tx" name="ad9361_en_dis_tx">
+<area shape="rect" id="Node000001" title=" " alt="" coords="504,31,643,56"/>
+<area shape="rect" id="Node000002" href="$ad9361_8c.html#ab8d07708ac33e09fa2cbd8ab7dd3bcbb" title=" " alt="" coords="343,31,456,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="490,46,457,46,457,41,490,41"/>
+<area shape="rect" id="Node000003" href="$ad9361__api_8c.html#ab58f5f1831cfcb6bf7a34d14de1edc1f" title=" " alt="" coords="152,5,251,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="329,37,251,27,251,22,329,32"/>
+<area shape="rect" id="Node000005" href="$ad9361__api_8c.html#a1d88d3cc5a6f7ea3a0e24027d7fef005" title=" " alt="" coords="108,55,295,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="330,54,295,59,295,53,329,49"/>
+<area shape="rect" id="Node000004" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="139,21,60,21,60,15,139,15"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="iio/iio.h" name="iio/iio.h">
+<area shape="rect" id="Node000001" title="Header file of iio." alt="" coords="227,5,298,31"/>
+<area shape="rect" id="Node000002" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="304,79,397,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,29,327,68,324,72,275,33"/>
+<area shape="rect" id="Node000006" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="149,79,254,104"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="255,33,222,70,218,66,251,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,225,88,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="304,103,167,127,106,142,74,154,64,166,57,181,50,212,45,211,52,179,59,164,70,150,104,136,166,122,303,97"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="281,225,351,251"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="398,101,432,114,463,130,475,140,482,152,483,165,477,179,454,202,426,219,395,229,365,235,364,230,393,224,423,214,451,198,472,176,478,164,477,154,470,144,460,135,430,119,396,107"/>
+<area shape="rect" id="Node000005" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="292,152,463,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="358,103,371,138,366,140,353,105"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="369,179,337,217,333,213,365,176"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="149,98,117,103,84,114,54,130,30,153,25,167,25,182,35,212,30,214,19,183,19,166,26,151,51,126,82,109,116,98,148,92"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="213,103,300,213,296,216,209,106"/>
+<area shape="rect" id="Node000007" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,152,217,177"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="195,106,169,142,165,139,191,103"/>
+<area shape="poly" id="edge12_Node000007_Node000003" title=" " alt="" coords="135,180,77,219,74,215,132,175"/>
+<area shape="poly" id="edge11_Node000007_Node000004" title=" " alt="" coords="178,175,278,217,275,222,176,180"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="115,225,186,251"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="153,178,153,212,148,212,148,178"/>
+</map>

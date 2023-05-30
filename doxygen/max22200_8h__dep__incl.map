@@ -1,0 +1,17 @@
+<map id="drivers/digital&#45;io/max22200/max22200.h" name="drivers/digital&#45;io/max22200/max22200.h">
+<area shape="rect" id="Node000001" title="Header file of MAX22200 Driver." alt="" coords="442,5,622,45"/>
+<area shape="rect" id="Node000002" href="$iio__max22200_8h.html" title="Header file of IIO MAX22200 Driver." alt="" coords="112,101,315,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="455,52,278,103,277,98,454,47"/>
+<area shape="rect" id="Node000005" href="$max22200_8c.html" title="Source file of MAX22200 Driver." alt="" coords="339,101,517,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="502,57,451,103,447,99,499,53"/>
+<area shape="rect" id="Node000006" href="$max22200_2src_2common_2common__data_8h.html" title="Common data used by the MAX22200 project." alt="" coords="541,101,733,141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="565,52,618,99,614,103,562,56"/>
+<area shape="rect" id="Node000008" href="$max22200_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="757,93,928,148"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="609,47,758,91,756,96,607,52"/>
+<area shape="rect" id="Node000003" href="$iio__max22200_8c.html" title="Source file of IIO MAX22200 Driver." alt="" coords="5,203,208,243"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="185,152,128,205,125,201,181,148"/>
+<area shape="rect" id="Node000004" href="$max22200_2src_2examples_2iio__example_2iio__example_8c.html" title="Source file for iio example." alt="" coords="233,196,407,251"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="245,148,294,194,290,198,242,152"/>
+<area shape="rect" id="Node000007" href="$max22200_2src_2common_2common__data_8c.html" title="Common data used by the MAX22200 project." alt="" coords="542,203,733,243"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="640,155,640,203,635,203,635,155"/>
+</map>

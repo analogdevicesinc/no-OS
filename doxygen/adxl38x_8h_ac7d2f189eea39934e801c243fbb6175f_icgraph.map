@@ -1,0 +1,8 @@
+<map id="adxl38x_get_raw_data" name="adxl38x_get_raw_data">
+<area shape="rect" id="Node000001" title="Reads the raw output data using burst read." alt="" coords="432,31,601,56"/>
+<area shape="rect" id="Node000002" href="$adxl38x_8c.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="213,5,384,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,35,384,31,385,25,418,29"/>
+<area shape="rect" id="Node000003" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="5,31,165,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="418,46,165,46,165,41,418,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="200,32,166,37,165,31,199,27"/>
+</map>

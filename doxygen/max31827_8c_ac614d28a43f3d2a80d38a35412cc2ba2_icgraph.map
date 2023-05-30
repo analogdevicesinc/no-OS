@@ -1,0 +1,17 @@
+<map id="max31827_reg_read" name="max31827_reg_read">
+<area shape="rect" id="Node000001" title="Read a register value." alt="" coords="756,55,911,80"/>
+<area shape="rect" id="Node000002" href="$max31827_8c.html#a768a7b73e9301586a53fb36f67232427" title="Read a temperature from a register." alt="" coords="523,5,691,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="760,54,665,33,666,28,762,49"/>
+<area shape="rect" id="Node000005" href="$max31827_8c.html#af12781416b9b04a63d2fd67109676e6a" title="Read&#45;modify&#45;write operation." alt="" coords="505,55,708,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="742,70,708,70,708,65,742,65"/>
+<area shape="rect" id="Node000006" href="$max31827_8c.html#a0c301ae1d6106477de04566e075bc380" title="Shutdown then write register value." alt="" coords="256,84,457,109"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="768,86,708,95,578,103,457,103,457,98,577,98,708,90,767,80"/>
+<area shape="rect" id="Node000003" href="$max31827_8c.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="273,9,441,49"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="509,25,441,28,441,22,509,19"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="47,16,166,41"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="259,31,166,31,166,26,259,26"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="510,55,441,44,441,39,511,50"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="492,83,458,88,457,82,491,78"/>
+<area shape="rect" id="Node000007" href="$max31827_8c.html#af4aa71f953a9fb60e16ba9a080fc78f4" title="Write the alarm value to the specified register." alt="" coords="5,84,208,109"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="242,99,208,99,208,94,242,94"/>
+</map>

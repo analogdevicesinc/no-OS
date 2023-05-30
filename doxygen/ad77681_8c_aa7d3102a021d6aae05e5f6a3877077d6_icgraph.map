@@ -1,0 +1,13 @@
+<map id="ad77681_spi_read_mask" name="ad77681_spi_read_mask">
+<area shape="rect" id="Node000001" title=" " alt="" coords="507,63,689,88"/>
+<area shape="rect" id="Node000002" href="$ad77681_8c.html#a30a7d016031a1a7c7f9df3532cee2f1c" title=" " alt="" coords="293,5,443,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,62,419,33,420,28,534,57"/>
+<area shape="rect" id="Node000003" href="$ad77681_8c.html#a99916ee432c0763165175cbea946f432" title=" " alt="" coords="277,55,459,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="493,78,459,78,459,73,493,73"/>
+<area shape="rect" id="Node000004" href="$ad77681_8c.html#a8263dc977620e304b95ba0ea01e04874" title=" " alt="" coords="290,120,446,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="534,94,420,123,419,117,532,89"/>
+<area shape="rect" id="Node000005" href="$ad77681_8c.html#a462935549432e532a6b9526b4807f862" title=" " alt="" coords="108,120,229,145"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="276,135,230,135,230,130,276,130"/>
+<area shape="rect" id="Node000006" href="$ad77681evb_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,120,60,145"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,135,60,135,60,130,94,130"/>
+</map>

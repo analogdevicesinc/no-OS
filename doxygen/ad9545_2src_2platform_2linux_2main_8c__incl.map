@@ -1,0 +1,26 @@
+<map id="projects/ad9545/src/platform/linux/main.c" name="projects/ad9545/src/platform/linux/main.c">
+<area shape="rect" id="Node000001" title="Main file for Maxim platform of ad9545 project." alt="" coords="309,5,476,45"/>
+<area shape="rect" id="Node000002" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,167,119,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="326,48,263,69,198,96,139,128,90,161,87,157,136,124,196,91,261,64,324,43"/>
+<area shape="rect" id="Node000004" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="208,93,313,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="362,48,294,88,291,84,360,43"/>
+<area shape="rect" id="Node000008" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="338,93,447,119"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="395,46,395,79,390,79,390,46"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="472,93,599,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="428,43,504,84,501,89,426,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="623,93,773,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="466,43,641,87,639,92,465,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="121,240,192,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="79,190,132,229,129,234,76,194"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="240,121,211,141,184,168,170,198,162,227,157,226,165,196,180,165,207,137,237,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="322,240,405,265"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="284,117,314,137,342,165,356,196,363,226,358,227,351,198,337,168,311,141,281,121"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="194,167,327,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="263,119,263,153,258,153,258,119"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="245,194,187,234,184,230,242,190"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="279,190,337,230,334,234,276,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="225,240,296,265"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="263,192,263,226,258,226,258,192"/>
+<area shape="rect" id="Node000009" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="403,167,471,192"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="402,118,425,154,420,156,398,120"/>
+</map>

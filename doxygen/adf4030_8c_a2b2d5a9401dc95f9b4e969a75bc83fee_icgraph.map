@@ -1,0 +1,5 @@
+<map id="adf4030_get_channel_direction" name="adf4030_get_channel_direction">
+<area shape="rect" id="Node000001" title="Get the TX direction (TX/RX) of a specific channel." alt="" coords="215,5,376,45"/>
+<area shape="rect" id="Node000002" href="$adf4030_8c.html#a7c0de619e9216955fc3ddc503546f67d" title="Get the termination type for a specific channel." alt="" coords="5,5,167,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,28,167,28,167,23,200,23"/>
+</map>

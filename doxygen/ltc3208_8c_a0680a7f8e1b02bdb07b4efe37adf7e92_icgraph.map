@@ -1,0 +1,26 @@
+<map id="ltc3208_update_options" name="ltc3208_update_options">
+<area shape="rect" id="Node000001" title="Updates the options set on the device." alt="" coords="557,110,735,136"/>
+<area shape="rect" id="Node000002" href="$ltc3208_8c.html#a1f6140b020a785497780a5b2b7fac267" title="Resets all register of the device." alt="" coords="172,10,283,36"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="622,103,573,60,542,40,508,25,450,12,389,8,332,10,283,16,283,10,332,5,390,3,451,7,510,20,545,36,576,56,626,99"/>
+<area shape="rect" id="Node000004" href="$ltc3208_8c.html#ac03f72f46f651eef7617f2dfb3a3cf8c" title="Sets the device&#39;s charge pump to output 1.5x of operating voltage." alt="" coords="352,36,488,61"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="600,108,509,75,471,64,472,58,510,70,602,103"/>
+<area shape="rect" id="Node000005" href="$ltc3208_8c.html#a8644a66a97f9344dc810c27682d68a4d" title="Selects which CAM register to use." alt="" coords="337,85,503,110"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="543,114,503,109,504,104,544,109"/>
+<area shape="rect" id="Node000007" href="$ltc3208_8c.html#ab7118111679f3b0c8baa31ea4a34c365" title="Sets the device&#39;s charge pump to output 2x of operating voltage." alt="" coords="345,134,495,160"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="544,136,496,142,495,136,543,131"/>
+<area shape="rect" id="Node000008" href="$ltc3208_8c.html#ac9501180f798d4b534829f5ebc534434" title="Enables RGB and AUX4 dropout signals." alt="" coords="339,184,501,224"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="598,143,477,187,475,182,596,138"/>
+<area shape="rect" id="Node000010" href="$ltc3208_8c.html#a23010807d89e27a9c1e338784daaf8ab" title="Selects if RGB or SUB is controled by ENRGBS pin." alt="" coords="331,249,509,274"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="625,148,576,194,544,218,511,239,480,251,478,246,508,234,541,213,572,189,622,144"/>
+<area shape="rect" id="Node000003" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,153,124,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="203,47,82,155,78,151,199,43"/>
+<area shape="rect" id="Node000006" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#a3303853e35553f6554d2d38eebbc21f5" title=" " alt="" coords="186,100,269,125"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="323,108,269,112,269,106,322,102"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="175,132,105,155,103,150,174,127"/>
+<area shape="rect" id="Node000009" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#af9b6567733fa7a488463d757a4eea895" title=" " alt="" coords="175,177,279,202"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="325,200,279,196,280,191,325,194"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="161,182,124,177,125,172,162,177"/>
+<area shape="rect" id="Node000011" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#a74709ee79cd6df40d56f93ca68c275ce" title=" " alt="" coords="178,230,277,256"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="317,254,277,250,277,245,317,249"/>
+<area shape="poly" id="edge13_Node000011_Node000003" title=" " alt="" coords="186,227,91,181,94,176,188,222"/>
+</map>

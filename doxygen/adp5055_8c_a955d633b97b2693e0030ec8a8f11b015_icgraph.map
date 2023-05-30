@@ -1,0 +1,5 @@
+<map id="adp5055_set_fast_transient" name="adp5055_set_fast_transient">
+<area shape="rect" id="Node000001" title="Configures fast transient sensitivity per channel." alt="" coords="172,5,375,31"/>
+<area shape="rect" id="Node000002" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

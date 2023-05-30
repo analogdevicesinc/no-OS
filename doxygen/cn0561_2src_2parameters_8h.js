@@ -1,0 +1,27 @@
+var cn0561_2src_2parameters_8h =
+[
+    [ "ADC_BUFFER_SIZE", "cn0561_2src_2parameters_8h.html#a602abb8ec84dcb3b6f854a738310ea46", null ],
+    [ "CN0561_DMA_BASEADDR", "cn0561_2src_2parameters_8h.html#ab808ed443ca497a42e8d59f054c94b2f", null ],
+    [ "CN0561_FMC_CH_NO", "cn0561_2src_2parameters_8h.html#aa41c5b0b436896a98ca4336c6eca7b8d", null ],
+    [ "CN0561_FMC_SAMPLE_NO", "cn0561_2src_2parameters_8h.html#a5177dd05b489dda649f4e76eb8b8cb1e", null ],
+    [ "CN0561_SPI_CS", "cn0561_2src_2parameters_8h.html#af04fba005c762013bcad0e638ded4230", null ],
+    [ "CN0561_SPI_ENG_REF_CLK_FREQ_HZ", "cn0561_2src_2parameters_8h.html#a0c659f347d375dbf270c004e3943fb06", null ],
+    [ "CN0561_SPI_ENGINE_BASEADDR", "cn0561_2src_2parameters_8h.html#aec9ca8ba4b60a4d52e204bc1f9c40461", null ],
+    [ "CORA_Z7S_DATA_CLK_FREQ_HZ", "cn0561_2src_2parameters_8h.html#a8c9f569c25231024bfb6d1e21e530d84", null ],
+    [ "GPIO_0", "cn0561_2src_2parameters_8h.html#a195032917f4b8f4d11b6df67a20888ca", null ],
+    [ "GPIO_1", "cn0561_2src_2parameters_8h.html#a32916a847090b087076a5bec92c78c33", null ],
+    [ "GPIO_2", "cn0561_2src_2parameters_8h.html#ae5b14b85fd16cf9cc9c37cecf533f83b", null ],
+    [ "GPIO_4", "cn0561_2src_2parameters_8h.html#a60e0c1c2d4d967f07766822405733ead", null ],
+    [ "GPIO_5", "cn0561_2src_2parameters_8h.html#a353aa68090892ddb605923082456976b", null ],
+    [ "GPIO_6", "cn0561_2src_2parameters_8h.html#afb5c669d89e2cf0f23270125666f5318", null ],
+    [ "GPIO_7", "cn0561_2src_2parameters_8h.html#a1aa7614f3af0705a5d825f889f38559e", null ],
+    [ "GPIO_DEVICE_ID", "cn0561_2src_2parameters_8h.html#a1556d56c40da47e192e6767b8b15003b", null ],
+    [ "GPIO_DEVICE_ID", "cn0561_2src_2parameters_8h.html#a1556d56c40da47e192e6767b8b15003b", null ],
+    [ "GPIO_MODE", "cn0561_2src_2parameters_8h.html#a9f30425211b75e4ab36c4e7cbea06a41", null ],
+    [ "GPIO_OFFSET", "cn0561_2src_2parameters_8h.html#a3196329f7a722d065bfc558c8ba760a7", null ],
+    [ "GPIO_PDN", "cn0561_2src_2parameters_8h.html#a0c4ad517ff69f2a7490af6c20495f423", null ],
+    [ "GPIO_PINBSPI", "cn0561_2src_2parameters_8h.html#a1916c4c8df7cf93af45577224d03370f", null ],
+    [ "GPIO_RESETN", "cn0561_2src_2parameters_8h.html#a04e3b9aec75bfdf7a655e25fad1b68a0", null ],
+    [ "SPI_DEVICE_ID", "cn0561_2src_2parameters_8h.html#a2264889066fc41987d29395b4772bd17", null ],
+    [ "ZED_DATA_CLK_FREQ_HZ", "cn0561_2src_2parameters_8h.html#af5b89904077ec59b84689a0df34d4712", null ]
+];

@@ -1,0 +1,28 @@
+<map id="projects/eval&#45;ltc4306/src/common/common_data.c" name="projects/eval&#45;ltc4306/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;ltc4306&#45;pmdz examples." alt="" coords="115,5,329,45"/>
+<area shape="rect" id="Node000002" href="$eval-ltc4306_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ltc4306&#45;pmdz examples." alt="" coords="159,93,285,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,46,225,79,219,79,219,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,156,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="200,121,117,163,115,158,198,116"/>
+<area shape="rect" id="Node000004" href="$ltc4306_8h.html" title="Header file of ltc4306 driver." alt="" coords="181,167,263,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="225,119,225,153,219,153,219,119"/>
+<area shape="rect" id="Node000010" href="$max538x_8h.html" title="Header file of max538x Family Driver." alt="" coords="299,167,393,192"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="243,116,315,157,313,162,241,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="232,313,303,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="205,194,186,208,169,226,160,245,160,255,163,264,174,278,188,290,220,308,218,313,185,295,170,282,158,267,154,255,155,244,165,223,182,204,201,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="116,313,187,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="201,194,175,214,154,241,147,270,149,299,143,300,142,270,149,239,171,210,198,190"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="173,240,271,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="225,192,225,226,219,226,219,192"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="296,240,396,265"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="243,190,315,231,313,235,241,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="232,264,255,300,250,303,227,267"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="335,267,292,306,288,302,332,263"/>
+<area shape="poly" id="edge10_Node000008_Node000006" title=" " alt="" coords="316,268,197,311,195,306,314,263"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="374,313,457,339"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="359,264,397,302,393,305,356,268"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="367,190,387,205,405,223,415,244,416,256,411,267,392,288,368,303,317,321,315,316,366,298,388,284,406,264,410,255,410,245,401,226,383,209,364,194"/>
+<area shape="poly" id="edge15_Node000010_Node000007" title=" " alt="" coords="327,194,255,235,253,231,325,190"/>
+<area shape="poly" id="edge16_Node000010_Node000008" title=" " alt="" coords="349,192,349,226,343,226,343,192"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="389,190,425,208,442,222,455,239,460,256,457,274,438,304,434,302,452,272,455,256,450,241,438,226,422,213,386,195"/>
+</map>

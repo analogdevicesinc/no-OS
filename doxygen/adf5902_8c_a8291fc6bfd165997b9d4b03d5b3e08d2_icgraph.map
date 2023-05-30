@@ -1,0 +1,10 @@
+<map id="adf5902_readback" name="adf5902_readback">
+<area shape="rect" id="Node000001" title="Readback data from ADF5902." alt="" coords="372,31,515,56"/>
+<area shape="rect" id="Node000002" href="$adf5902_8c.html#a3778ff2df9023574f987474d5aeb2f77" title="Free resoulces allocated for ADF5902." alt="" coords="140,5,292,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="358,37,292,29,293,24,359,31"/>
+<area shape="rect" id="Node000004" href="$adf5902_8c.html#a4bfc5d5aa71daf83bee66b672bacca07" title="Measure output locked frequency." alt="" coords="108,55,324,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="358,55,324,59,324,53,358,50"/>
+<area shape="rect" id="Node000003" href="$adf5902__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,33,60,42,60,37,126,28"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="105,55,60,49,61,44,106,50"/>
+</map>

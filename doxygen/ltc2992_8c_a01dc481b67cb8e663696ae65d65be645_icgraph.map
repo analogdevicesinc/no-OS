@@ -1,0 +1,25 @@
+<map id="ltc2992_read_reg" name="ltc2992_read_reg">
+<area shape="rect" id="Node000001" title="Read raw data from device register." alt="" coords="456,104,591,129"/>
+<area shape="rect" id="Node000002" href="$ltc2992_8c.html#abecde49247db59f84eb2ba3a8d2f7751" title="Get fault status." alt="" coords="254,5,389,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="493,98,453,70,407,44,376,33,378,28,409,40,456,66,496,93"/>
+<area shape="rect" id="Node000003" href="$ltc2992_8c.html#a378719a0042b7738b82d258e2bb47f58" title="Get GPIO fault status." alt="" coords="236,55,407,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="457,103,374,83,375,77,458,98"/>
+<area shape="rect" id="Node000004" href="$ltc2992_8c.html#a521435abced2f8e4b2ebc87236239878" title="Get GPIO state." alt="" coords="235,104,408,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="442,119,408,119,408,114,442,114"/>
+<area shape="rect" id="Node000005" href="$ltc2992_8c.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="272,153,371,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="458,135,371,157,370,152,457,130"/>
+<area shape="rect" id="Node000006" href="$ltc2992_8c.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="246,203,397,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="496,140,456,167,409,192,375,205,373,200,407,188,453,162,493,136"/>
+<area shape="rect" id="Node000007" href="$ltc2992_8c.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="23,63,169,88"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="242,199,233,192,215,169,208,146,202,124,185,103,164,90,166,86,188,99,206,121,213,145,220,167,236,188,245,194"/>
+<area shape="rect" id="Node000008" href="$ltc2992_8c.html#a95417f0857f108953613c7b35aec63ee" title="Clear GPIO fault status." alt="" coords="24,113,168,153"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="257,201,234,192,186,167,156,155,158,150,188,162,236,188,259,196"/>
+<area shape="rect" id="Node000009" href="$ltc2992_8c.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="9,177,183,203"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="232,208,183,202,184,197,233,203"/>
+<area shape="rect" id="Node000010" href="$ltc2992_8c.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="29,227,163,252"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="233,227,164,235,163,230,232,222"/>
+<area shape="rect" id="Node000011" href="$ltc2992_8c.html#abe1cde6b00057ced36199e948b42b344" title="Enable alert when GPIO level reaches beyond threshold limit." alt="" coords="11,276,181,301"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="275,235,187,266,145,279,144,273,186,261,273,230"/>
+<area shape="rect" id="Node000012" href="$ltc2992_8c.html#a66b88857952e10172af02ab40c2eba6d" title="Set GPIO output." alt="" coords="5,325,187,351"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="297,239,249,278,188,315,155,328,153,323,185,310,246,273,294,235"/>
+</map>

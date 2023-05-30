@@ -1,0 +1,26 @@
+<map id="ltp8800_write_word" name="ltp8800_write_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write word operation." alt="" coords="859,70,1009,95"/>
+<area shape="rect" id="Node000002" href="$ltp8800_8c.html#a613ac6d7323b5995e0e60723902f6cbe" title="Set phase order for polyphase application." alt="" coords="645,5,789,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="871,69,789,47,790,42,873,64"/>
+<area shape="rect" id="Node000007" href="$ltp8800_8c.html#a0c4e0a76ceb3b8ef7b23e8481479ea77" title="Set output voltage and its upper limit." alt="" coords="634,70,801,95"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="845,85,801,85,801,80,845,80"/>
+<area shape="rect" id="Node000008" href="$ltp8800_8c.html#a4d90e4db30fcb51e52ec90f40ca84f82" title="Converts value to register data and do PMBus write word operation." alt="" coords="624,119,811,145"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="865,101,775,122,773,117,864,96"/>
+<area shape="rect" id="Node000003" href="$ltp8800_8c.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="441,14,539,39"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="631,29,540,29,540,24,631,23"/>
+<area shape="rect" id="Node000004" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,91,356,117"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="437,46,405,57,310,94,308,89,403,52,435,41"/>
+<area shape="rect" id="Node000005" href="$iio__ltp8800_8c.html#a31893ef9f84551a575cc2c0f59c8a74d" title="Initializes the LTP8800 IIO descriptor." alt="" coords="215,14,337,39"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="427,29,338,29,338,24,427,24"/>
+<area shape="rect" id="Node000006" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,14,148,39"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="201,29,148,29,148,24,201,24"/>
+<area shape="rect" id="Node000009" href="$ltp8800_8c.html#acf160b5e41252593ae47988845aa8aae" title="Set overvalue and undervalue limits." alt="" coords="404,67,576,93"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="647,119,546,95,547,90,649,114"/>
+<area shape="rect" id="Node000010" href="$ltp8800_8c.html#ae0e78a7f7c33f18b56412a8ff393f5cc" title="Set input voltage window at which power conversion will proceed." alt="" coords="427,117,553,142"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="610,133,553,133,553,127,610,128"/>
+<area shape="rect" id="Node000011" href="$ltp8800_8c.html#ae352a6346715bc18065e55f1eb77ad36" title="Set output voltage command." alt="" coords="415,166,565,191"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="642,150,553,169,552,163,641,145"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="391,94,357,98,356,92,390,88"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="413,123,356,116,356,111,414,118"/>
+<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="427,165,403,157,306,119,308,114,405,152,428,160"/>
+</map>

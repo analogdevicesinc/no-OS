@@ -1,0 +1,16 @@
+<map id="ltc3220_update_reg_blink_grad" name="ltc3220_update_reg_blink_grad">
+<area shape="rect" id="Node000001" title="Updates the configuration set on the device&#39;s Blink/Gradation based on the config." alt="" coords="427,73,577,113"/>
+<area shape="rect" id="Node000002" href="$ltc3220_8c.html#a61572182eba60c62766cdd03440e2cf0" title="Sets the configuration for blinking mode of ULEDs." alt="" coords="191,5,359,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,70,378,45,337,33,339,28,379,39,446,65"/>
+<area shape="rect" id="Node000004" href="$ltc3220_8c.html#a22236b36ef762617c0f0e4a7bb5c0d9f" title="Sets the configuration for blinking mode of ULEDs." alt="" coords="190,55,361,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="412,85,361,80,361,74,413,80"/>
+<area shape="rect" id="Node000005" href="$ltc3220_8c.html#a303b791dafe1786bfcc29bb19e64f316" title="Sets the configuration for the device&#39;s direction of gradation." alt="" coords="172,104,379,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="413,105,379,108,379,103,412,99"/>
+<area shape="rect" id="Node000006" href="$ltc3220_8c.html#a1d332343187c3d9bb764a677731d932c" title="Sets the configuration of the device&#39;s speed of gradation." alt="" coords="186,153,365,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="442,120,379,143,334,156,333,151,378,138,440,115"/>
+<area shape="rect" id="Node000003" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,80,124,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,37,173,45,128,63,90,82,88,78,126,58,171,39,196,32"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="177,82,124,88,124,83,176,77"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="158,106,124,102,125,97,159,101"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="201,152,171,143,90,108,92,103,173,138,202,147"/>
+</map>

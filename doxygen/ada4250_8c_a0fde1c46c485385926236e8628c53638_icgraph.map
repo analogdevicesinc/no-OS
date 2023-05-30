@@ -1,0 +1,11 @@
+<map id="ada4250_update_desc" name="ada4250_update_desc">
+<area shape="rect" id="Node000001" title="Update ADA4250 device descriptor." alt="" coords="513,31,680,56"/>
+<area shape="rect" id="Node000002" href="$ada4250_8c.html#a01316be26bb5f84a959c9a6768f529c0" title="Sets the ADA4250 into normal mode and reconfigures it according to the user input." alt="" coords="263,5,465,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="499,35,465,32,466,26,500,30"/>
+<area shape="rect" id="Node000003" href="$ada4250_8c.html#a620ad3b09aade92c35948a253fbf4523" title="Software reset." alt="" coords="289,55,439,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="499,56,439,62,438,57,499,51"/>
+<area shape="rect" id="Node000004" href="$ada4250_8c.html#afcaeb14f57346669b660ba6004853ef8" title="Initialize the ADA4250 device." alt="" coords="108,55,215,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="276,70,215,70,215,65,276,65"/>
+<area shape="rect" id="Node000005" href="$ada4250__ardz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

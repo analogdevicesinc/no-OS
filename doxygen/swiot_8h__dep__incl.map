@@ -1,0 +1,7 @@
+<map id="projects/swiot1l/src/common/swiot.h" name="projects/swiot1l/src/common/swiot.h">
+<area shape="rect" id="Node000001" title="Header file for the swiot IIO device." alt="" coords="91,5,239,45"/>
+<area shape="rect" id="Node000002" href="$swiot_8c.html" title="Source file for the swiot IIO driver." alt="" coords="5,93,153,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,57,100,95,96,91,134,53"/>
+<area shape="rect" id="Node000003" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="177,93,325,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,53,234,91,230,95,192,57"/>
+</map>

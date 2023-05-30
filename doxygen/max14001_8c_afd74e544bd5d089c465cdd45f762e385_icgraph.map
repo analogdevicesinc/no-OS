@@ -1,0 +1,59 @@
+<map id="max14001_write" name="max14001_write">
+<area shape="rect" id="Node000001" title="Write to device." alt="" coords="672,156,803,181"/>
+<area shape="rect" id="Node000002" href="$max14001_8c.html#aa15814147de171ef96cfe0bd5047a923" title="Full reset, same effect as power on reset." alt="" coords="456,5,615,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="717,147,677,99,651,74,623,52,583,33,585,28,625,48,654,70,681,95,721,143"/>
+<area shape="rect" id="Node000003" href="$max14001_8c.html#a6ad7e18e91c998d372f07b418d2f7bc2" title="Initialize the configurations of device." alt="" coords="5,205,171,231"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="710,148,671,119,623,97,575,85,536,83,447,97,350,119,256,150,117,208,115,203,254,145,348,114,446,91,536,78,576,80,625,91,674,115,713,144"/>
+<area shape="rect" id="Node000004" href="$max14001_8c.html#a2f88053632fe9e657440e3f8a4550b7d" title="Trigger an inrush current pulse." alt="" coords="451,107,620,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="671,155,588,135,589,129,672,150"/>
+<area shape="rect" id="Node000005" href="$max14001_8c.html#a223d2ff0cbfb1136ad932189e162a7bc" title="Software reset. Restores all registers to their POR value." alt="" coords="456,156,615,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="658,171,615,171,615,166,658,166"/>
+<area shape="rect" id="Node000006" href="$max14001_8c.html#af03b76b231f573f5de1acb95cc122d23" title="SPI write to device using a mask." alt="" coords="450,205,621,231"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="672,187,589,208,588,203,671,182"/>
+<area shape="rect" id="Node000007" href="$max14001_8c.html#a6057510ca46acffa0d449d4b6a2e95e7" title="Enable write to registers." alt="" coords="473,255,598,280"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="710,192,671,219,625,244,591,257,589,252,623,240,668,214,707,188"/>
+<area shape="rect" id="Node000008" href="$max14001_8c.html#aee9cd5354ccbc9fdb66516e1f64dc3bd" title="Write to config registers then to corresponding verification register." alt="" coords="447,667,624,707"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="729,195,547,668,542,666,724,193"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="442,206,398,202,309,198,219,202,165,208,164,203,218,197,309,192,399,197,443,201"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="459,255,398,246,279,233,171,225,171,220,280,228,399,241,460,250"/>
+<area shape="rect" id="Node000009" href="$max14001_8c.html#a0b2f4d8ad26efe3ac037a9064c6c78a7" title="Set maximum duty cycle for inrush current over the last 10 seconds." alt="" coords="229,256,389,281"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="530,654,522,579,501,482,484,431,461,381,432,335,397,295,381,284,384,279,400,291,437,332,466,379,489,429,506,481,527,578,535,653"/>
+<area shape="rect" id="Node000010" href="$max14001_8c.html#ae36880ade2d30a024621b266b5b9771f" title="Enable dynamic FAULT signal." alt="" coords="221,305,397,331"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="528,654,517,588,494,505,477,461,456,418,429,378,397,344,380,333,383,328,400,340,433,375,460,415,482,458,499,503,522,587,533,653"/>
+<area shape="rect" id="Node000011" href="$max14001_8c.html#a94ffb87e3d95b570027818f91aae6f17" title="Enable ADC fault." alt="" coords="221,355,396,380"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="526,655,512,598,487,527,470,490,450,455,425,422,397,393,379,382,382,378,400,389,429,418,454,452,475,488,492,525,517,596,531,653"/>
+<area shape="rect" id="Node000012" href="$max14001_8c.html#a2bf03d709bfdb701c158d5631bc75bcd" title="Enable COM fault." alt="" coords="219,404,399,429"/>
+<area shape="poly" id="edge13_Node000008_Node000012" title=" " alt="" coords="523,655,506,607,480,550,444,492,422,466,397,443,378,432,381,427,400,439,426,462,448,489,485,547,511,605,528,653"/>
+<area shape="rect" id="Node000013" href="$max14001_8c.html#a4f14bbd8d3a52e7d06b75de48c0fff9f" title="Enable CRCF fault." alt="" coords="221,453,397,479"/>
+<area shape="poly" id="edge14_Node000008_Node000013" title=" " alt="" coords="518,656,499,617,472,573,438,529,397,492,376,481,379,476,400,488,442,526,477,570,504,615,523,653"/>
+<area shape="rect" id="Node000014" href="$max14001_8c.html#a53cf5087f9616db42ec263c1151d34e2" title="Enable CRCL fault." alt="" coords="221,503,396,528"/>
+<area shape="poly" id="edge15_Node000008_Node000014" title=" " alt="" coords="512,658,464,598,432,568,397,542,373,530,375,526,400,537,436,563,468,595,516,654"/>
+<area shape="rect" id="Node000015" href="$max14001_8c.html#a8c0d9be020758f98c85e639795439f83" title="Enable FET fault." alt="" coords="223,552,394,577"/>
+<area shape="poly" id="edge16_Node000008_Node000015" title=" " alt="" coords="500,660,453,624,398,591,368,580,370,575,400,586,456,620,503,656"/>
+<area shape="rect" id="Node000016" href="$max14001_8c.html#aa5d8550f4b5091575b73610b58563c8a" title="Enable INRD fault." alt="" coords="220,601,397,627"/>
+<area shape="poly" id="edge17_Node000008_Node000016" title=" " alt="" coords="469,665,398,641,359,629,361,624,399,635,470,660"/>
+<area shape="rect" id="Node000017" href="$max14001_8c.html#a61ce80a51e7b2284f8e217f7701aaae2" title="Enable MV fault." alt="" coords="222,651,395,676"/>
+<area shape="poly" id="edge18_Node000008_Node000017" title=" " alt="" coords="432,679,395,675,396,670,433,674"/>
+<area shape="rect" id="Node000018" href="$max14001_8c.html#ac599de4d4c5102ceee4220caf7cbbc75" title="Enable/Disable field&#45;side current sink." alt="" coords="225,700,393,725"/>
+<area shape="poly" id="edge20_Node000008_Node000018" title=" " alt="" coords="433,701,393,706,393,701,433,696"/>
+<area shape="rect" id="Node000019" href="$max14001_8c.html#aad2c248c340c80506637d1f2e24cc502" title="Enable SPI fault." alt="" coords="223,749,394,775"/>
+<area shape="poly" id="edge22_Node000008_Node000019" title=" " alt="" coords="470,715,399,739,358,752,356,747,398,734,468,710"/>
+<area shape="rect" id="Node000020" href="$max14001_8c.html#a611aea7e41eb22080b84b9583a81f596" title="Selects the voltage reference source for the ADC." alt="" coords="223,799,394,824"/>
+<area shape="poly" id="edge23_Node000008_Node000020" title=" " alt="" coords="503,718,456,755,400,788,367,801,365,796,397,784,453,750,500,714"/>
+<area shape="rect" id="Node000021" href="$max14001_8c.html#a0ad4afb2d5167c8774a7b8dadc721ed4" title="Current source connection." alt="" coords="224,848,393,873"/>
+<area shape="poly" id="edge24_Node000008_Node000021" title=" " alt="" coords="516,720,468,780,436,811,400,838,373,850,370,845,397,833,432,807,464,776,512,717"/>
+<area shape="rect" id="Node000022" href="$max14001_8c.html#a59f898278a18ce26d75c91d046f7ccff" title="Enable/Disable fast inrush mode." alt="" coords="224,897,393,923"/>
+<area shape="poly" id="edge25_Node000008_Node000022" title=" " alt="" coords="523,721,503,760,476,804,442,849,400,887,376,900,374,895,397,882,438,845,472,801,499,757,518,719"/>
+<area shape="rect" id="Node000023" href="$max14001_8c.html#ad5ab80cfb23b61a3a4691653099918eb" title="Set number of readings averaged in the ADC filter." alt="" coords="232,947,385,972"/>
+<area shape="poly" id="edge26_Node000008_Node000023" title=" " alt="" coords="527,721,511,769,485,827,448,886,426,913,400,936,378,949,375,944,397,932,422,909,444,883,480,825,506,767,522,719"/>
+<area shape="rect" id="Node000024" href="$max14001_8c.html#acde5a4183e929bab1b8585850dfa40dc" title="Configure 4&#45;bit bias current." alt="" coords="221,996,396,1021"/>
+<area shape="poly" id="edge27_Node000008_Node000024" title=" " alt="" coords="531,721,517,778,492,850,454,923,429,956,400,985,379,998,377,994,397,981,425,953,450,920,487,847,512,777,526,720"/>
+<area shape="rect" id="Node000025" href="$max14001_8c.html#aa81e4e1dc2618341e95293ea4a9722d2" title="Configure 4&#45;bit inrush current." alt="" coords="226,1045,391,1071"/>
+<area shape="poly" id="edge28_Node000008_Node000025" title=" " alt="" coords="533,721,522,787,499,871,482,916,460,959,433,999,400,1035,381,1047,378,1043,397,1031,429,996,455,956,477,914,494,870,517,786,528,720"/>
+<area shape="rect" id="Node000026" href="$max14001_8c.html#ab2cd98d2d0a35869c71e8fa021bb6d43" title="Selects Inrush comparator input multiplexer." alt="" coords="223,1095,395,1120"/>
+<area shape="poly" id="edge29_Node000008_Node000026" title=" " alt="" coords="535,722,527,796,506,893,488,945,466,995,437,1043,400,1084,381,1097,378,1092,397,1080,432,1039,461,993,483,943,500,892,522,795,530,721"/>
+<area shape="rect" id="Node000027" href="$max14001_8c.html#ad4fe38ceb1888a46e3475cd0f8f08004" title="Configure 4&#45;bit inrush time." alt="" coords="225,1144,392,1169"/>
+<area shape="poly" id="edge30_Node000008_Node000027" title=" " alt="" coords="537,721,531,804,524,857,512,914,495,973,471,1031,440,1086,400,1133,382,1146,379,1142,397,1129,436,1083,467,1029,490,972,507,913,519,856,526,803,531,721"/>
+<area shape="poly" id="edge19_Node000017_Node000003" title=" " alt="" coords="223,645,217,640,176,590,145,533,122,472,106,412,95,354,90,302,87,231,92,231,95,301,101,353,111,410,127,471,149,531,180,587,221,636,227,641"/>
+<area shape="poly" id="edge21_Node000018_Node000003" title=" " alt="" coords="223,695,217,689,193,662,172,633,139,569,116,500,100,432,91,367,87,309,86,231,91,231,92,309,96,366,105,431,121,499,144,567,177,630,197,659,221,685,227,691"/>
+</map>

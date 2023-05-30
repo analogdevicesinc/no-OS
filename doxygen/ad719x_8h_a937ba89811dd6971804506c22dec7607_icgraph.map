@@ -1,0 +1,47 @@
+<map id="ad719x_get_register_value" name="ad719x_get_register_value">
+<area shape="rect" id="Node000001" title="Reads the value of a register." alt="" coords="1096,221,1251,261"/>
+<area shape="rect" id="Node000002" href="$ad719x_8c.html#adcb7617f625bad20d98c3f902f5f1e92" title="Returns the average of several conversion results." alt="" coords="833,5,1048,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1148,211,1104,153,1046,92,1004,59,963,33,966,29,1007,54,1050,88,1108,150,1153,208"/>
+<area shape="rect" id="Node000005" href="$ad719x_8c.html#abe338e9c6992908df702bb106f1e651d" title="Initializes the communication peripheral and the initial Values for AD719X Board and resets the devic..." alt="" coords="380,329,479,355"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1147,273,1089,333,1004,407,955,445,901,480,845,510,786,534,727,552,678,561,630,556,573,534,546,516,520,495,479,444,450,394,433,356,438,354,455,391,484,441,524,491,549,512,576,529,631,550,678,555,726,547,784,529,842,505,898,475,952,440,1001,403,1085,329,1143,269"/>
+<area shape="rect" id="Node000006" href="$ad719x_8c.html#a139f83d49871c53c257f6427f1dec80e" title="Write masked data into device register." alt="" coords="835,249,1047,289"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1082,254,1047,259,1047,253,1082,249"/>
+<area shape="rect" id="Node000017" href="$ad719x_8c.html#a8b2be560509098d550618957a4b4ef14" title="Returns the result of a single conversion." alt="" coords="843,103,1038,128"/>
+<area shape="poly" id="edge27_Node000001_Node000017" title=" " alt="" coords="1122,216,964,130,967,126,1125,212"/>
+<area shape="rect" id="Node000003" href="$ad719x_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,132,284,157"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="819,16,714,17,591,24,460,41,395,54,333,71,299,84,267,101,216,134,213,129,264,97,297,80,331,66,394,49,459,36,590,19,714,11,819,10"/>
+<area shape="rect" id="Node000004" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,132,60,157"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,147,60,147,60,142,94,142"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="401,322,210,159,214,155,404,318"/>
+<area shape="rect" id="Node000007" href="$ad719x_8c.html#a7da6e6d09d461bc55b12d59b1906d4f0" title="Enables or disables the buffer on the ADC input channels." alt="" coords="599,280,761,305"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="821,282,761,288,761,283,821,277"/>
+<area shape="rect" id="Node000008" href="$ad719x_8c.html#a911e159361da297a10809f1cf6ba8059" title="Performs the given calibration to the specified channel." alt="" coords="362,81,497,107"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="915,239,892,209,861,176,825,146,784,122,748,108,711,98,633,87,560,85,497,88,497,83,560,80,634,82,712,93,750,103,786,117,828,141,865,172,896,205,920,235"/>
+<area shape="rect" id="Node000009" href="$ad719x_8c.html#a327761313910a3e05b836f3dce745d8b" title="Selects the channels to be enabled." alt="" coords="589,132,771,157"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="902,242,848,205,784,171,751,160,753,155,786,166,851,201,905,238"/>
+<area shape="rect" id="Node000011" href="$ad719x_8c.html#a1f9a83434b00811cd668ee24608ead73" title="Selects the clock source of the ADC." alt="" coords="601,329,759,355"/>
+<area shape="poly" id="edge14_Node000006_Node000011" title=" " alt="" coords="869,295,786,321,741,332,740,327,785,315,867,290"/>
+<area shape="rect" id="Node000012" href="$ad719x_8c.html#a0ac28e19c3aa5715461cbe87b35d08b0" title="Configures the input mode of the ADC." alt="" coords="580,379,780,404"/>
+<area shape="poly" id="edge16_Node000006_Node000012" title=" " alt="" coords="905,299,851,336,786,370,753,381,751,376,784,365,848,331,902,295"/>
+<area shape="rect" id="Node000013" href="$ad719x_8c.html#adba03dbb94c9be6c36bfbf0544f8eee8" title="Selects the filter output data rate of the ADC." alt="" coords="604,429,756,469"/>
+<area shape="poly" id="edge18_Node000006_Node000013" title=" " alt="" coords="917,301,861,361,826,392,787,419,758,433,755,428,784,414,822,388,858,357,913,298"/>
+<area shape="rect" id="Node000014" href="$ad719x_8c.html#aaee2d18fa060aa402f8b9f29f7275ba0" title="Selects the polarity of the conversion and the ADC input range." alt="" coords="601,181,759,207"/>
+<area shape="poly" id="edge20_Node000006_Node000014" title=" " alt="" coords="869,247,785,221,740,209,742,204,786,215,871,242"/>
+<area shape="rect" id="Node000015" href="$ad719x_8c.html#a78080c164d4f5cb68cb301db60f3a8e5" title="Opens or closes the bridge power&#45;down switch of the ADC." alt="" coords="583,493,777,519"/>
+<area shape="poly" id="edge23_Node000006_Node000015" title=" " alt="" coords="927,303,905,344,874,393,835,442,787,483,761,496,759,491,784,478,831,438,870,390,901,342,922,300"/>
+<area shape="rect" id="Node000016" href="$ad719x_8c.html#a80740112683ad61c5e762fffe013476e" title="Sets device into the specified operating mode." alt="" coords="575,231,785,256"/>
+<area shape="poly" id="edge25_Node000006_Node000016" title=" " alt="" coords="821,260,785,256,786,251,821,254"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="602,311,480,335,479,330,601,305"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="602,132,492,109,493,104,603,127"/>
+<area shape="rect" id="Node000010" href="$ad719x_8c.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="332,132,527,157"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="576,147,527,147,527,142,576,142"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="318,147,284,147,284,142,318,142"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="588,345,479,345,479,339,588,339"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="601,379,479,354,480,349,602,373"/>
+<area shape="poly" id="edge19_Node000013_Node000005" title=" " alt="" coords="594,427,574,419,506,387,451,357,454,353,508,383,576,414,595,422"/>
+<area shape="poly" id="edge21_Node000014_Node000005" title=" " alt="" coords="591,214,576,220,534,246,497,277,443,331,440,327,493,273,531,242,573,216,589,209"/>
+<area shape="poly" id="edge22_Node000014_Node000010" title=" " alt="" coords="601,181,494,160,495,155,602,176"/>
+<area shape="poly" id="edge24_Node000015_Node000005" title=" " alt="" coords="591,491,573,483,530,453,491,418,438,357,442,353,495,414,533,449,576,478,594,486"/>
+<area shape="poly" id="edge26_Node000016_Node000005" title=" " alt="" coords="604,262,576,271,508,302,453,332,451,327,505,297,574,266,602,257"/>
+<area shape="poly" id="edge28_Node000017_Node000010" title=" " alt="" coords="829,115,707,115,575,122,490,135,490,129,574,117,707,110,829,109"/>
+</map>

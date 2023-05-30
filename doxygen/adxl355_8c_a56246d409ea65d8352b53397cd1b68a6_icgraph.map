@@ -1,0 +1,14 @@
+<map id="adxl355_set_op_mode" name="adxl355_set_op_mode">
+<area shape="rect" id="Node000001" title="Places the device into the given operation mode." alt="" coords="397,80,565,105"/>
+<area shape="rect" id="Node000002" href="$iio__adxl355_8c.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="198,5,323,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,77,348,45,311,33,312,28,350,39,438,72"/>
+<area shape="rect" id="Node000004" href="$adxl355_8c.html#a6f316752484487d5655670558a954a13" title="Writes the high&#45;pass filter settings." alt="" coords="172,55,349,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="383,84,349,80,350,75,384,79"/>
+<area shape="rect" id="Node000005" href="$adxl355_8c.html#a04f6359f3e9f79c0254ac61465761bb2" title="Writes the low&#45;pass filter settings." alt="" coords="184,104,337,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="384,106,338,111,337,106,383,101"/>
+<area shape="rect" id="Node000006" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,129,124,155"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="443,114,399,131,350,145,290,152,229,155,124,151,124,145,229,149,290,147,349,139,398,126,441,109"/>
+<area shape="rect" id="Node000003" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="184,21,124,21,124,15,184,15"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="170,131,125,137,124,132,170,126"/>
+</map>

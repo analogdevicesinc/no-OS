@@ -1,0 +1,9 @@
+<map id="platform_init" name="platform_init">
+<area shape="rect" id="Node000001" title="Initialize the power controller and set the core and peripherals clock divider." alt="" coords="108,55,215,80"/>
+<area shape="rect" id="Node000002" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,52,59,31,61,26,116,47"/>
+<area shape="rect" id="Node000003" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+<area shape="rect" id="Node000004" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="116,88,61,109,59,104,114,83"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="lt3074_read_block_data" name="lt3074_read_block_data">
+<area shape="rect" id="Node000001" title="Perform a PMBus read block operation." alt="" coords="859,5,1036,31"/>
+<area shape="rect" id="Node000002" href="$lt3074_8c.html#ab6c8397a7fd51120ae521f03fb129c6f" title="Initialize the device structure." alt="" coords="339,31,429,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="845,16,673,15,575,19,478,27,430,35,429,30,477,22,574,14,673,10,845,11"/>
+<area shape="rect" id="Node000006" href="$lt3074_8c.html#aaa7a6e7bcdf36dc802fefb3daaa5d275" title="Generic register read wrapper." alt="" coords="684,31,811,56"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="845,34,811,38,810,33,845,28"/>
+<area shape="rect" id="Node000003" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,36,291,30,291,25,326,31"/>
+<area shape="rect" id="Node000004" href="$iio__lt3074_8c.html#a415078dac56a0cdfeab8963d3e685f23" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="326,55,289,61,288,56,325,50"/>
+<area shape="rect" id="Node000005" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="670,46,430,46,430,41,670,41"/>
+<area shape="rect" id="Node000007" href="$lt3074_8c.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="477,81,636,107"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="686,62,606,84,605,79,685,57"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="498,80,427,59,429,54,500,75"/>
+</map>

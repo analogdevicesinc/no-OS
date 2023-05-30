@@ -1,0 +1,26 @@
+<map id="ltc3220_update_reg_command" name="ltc3220_update_reg_command">
+<area shape="rect" id="Node000001" title="Updates the configuration set on the." alt="" coords="629,105,780,145"/>
+<area shape="rect" id="Node000002" href="$ltc3220_8c.html#a829bfe5b3bb8466ce1fa553e818f2db0" title="Sets the device&#39;s charge pump to output 1.5x of operating voltage." alt="" coords="180,5,347,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="665,98,626,73,580,53,521,37,459,27,347,19,347,14,460,21,522,31,582,47,628,68,668,94"/>
+<area shape="rect" id="Node000004" href="$ltc3220_8c.html#ac5dcf51c6ecf4f21596f780a477dcd09" title="Sets the device&#39;s charge pump to output 1x of operating voltage." alt="" coords="417,63,567,88"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="615,107,547,91,548,85,616,102"/>
+<area shape="rect" id="Node000005" href="$ltc3220_8c.html#ae860908aabe6e695c118354e8688557a" title="Sets the device&#39;s charge pump to output 2x of operating voltage." alt="" coords="417,112,567,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="616,127,567,127,567,122,616,122"/>
+<area shape="rect" id="Node000006" href="$ltc3220_8c.html#a72b9dc8288f05729ae56cd2ad5af85cb" title="Sets the configuration to perform a quick write to the device." alt="" coords="403,169,581,195"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="617,151,541,172,539,167,616,146"/>
+<area shape="rect" id="Node000010" href="$ltc3220_8c.html#a24745e2839883d3bdc9550c3ac0ea6e4" title="Sets the device to shutdown mode, while retaining the register configurations." alt="" coords="409,251,575,276"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="663,155,583,208,514,253,511,248,580,204,660,150"/>
+<area shape="rect" id="Node000003" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,143,124,168"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,38,173,52,144,74,117,100,78,144,74,141,113,96,140,70,171,48,200,33"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="437,111,382,98,315,88,243,86,207,90,173,97,147,106,122,119,83,145,80,140,120,114,145,101,171,91,207,84,243,81,315,83,383,93,438,106"/>
+<area shape="rect" id="Node000007" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a8a2b897c6011f223031b42d5293741df" title="Parallel and Serial LED control. LED 2 to 9 are set to serial, then LED1 is set to display on all LED..." alt="" coords="178,106,349,146"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="426,169,345,149,346,143,427,163"/>
+<area shape="rect" id="Node000008" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a9c14a30ab21d05b3893d5a00d660f1ce" title="individual LED control for all 18 LEDs" alt="" coords="172,171,355,196"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="389,185,355,185,355,180,389,180"/>
+<area shape="rect" id="Node000009" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a27fd88a32eb2f2f1eac3738645a7acbd" title="individual LED control with alternating modes for all 18 LEDs" alt="" coords="172,221,355,261"/>
+<area shape="poly" id="edge11_Node000006_Node000009" title=" " alt="" coords="429,201,343,223,341,218,428,196"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="165,143,125,149,124,144,164,138"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="160,171,124,166,125,161,160,166"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="191,218,171,210,89,170,91,166,173,205,194,213"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="435,282,378,293,310,299,239,294,204,287,171,275,136,253,107,223,70,170,75,167,111,220,139,249,173,270,206,282,240,289,310,293,377,287,434,277"/>
+</map>

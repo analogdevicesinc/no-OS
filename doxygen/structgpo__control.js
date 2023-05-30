@@ -1,0 +1,25 @@
+var structgpo__control =
+[
+    [ "gpo0_inactive_state_high_en", "structgpo__control.html#afde57cfd873999952d73d017e88c3832", null ],
+    [ "gpo0_rx_delay_us", "structgpo__control.html#aa1c1e24dca8a0bdf26f867e5da4f988b", null ],
+    [ "gpo0_slave_rx_en", "structgpo__control.html#a4da11810911312bd66d71c2a762e25d3", null ],
+    [ "gpo0_slave_tx_en", "structgpo__control.html#aa4cd0793698930c0120768dd8a25eaf2", null ],
+    [ "gpo0_tx_delay_us", "structgpo__control.html#a7e79820211016292991650c6b93699b7", null ],
+    [ "gpo1_inactive_state_high_en", "structgpo__control.html#a26f7ba1aa4924df148d3660a3b59f51f", null ],
+    [ "gpo1_rx_delay_us", "structgpo__control.html#ac7b89e970de51f56b7035a9ca6d4419c", null ],
+    [ "gpo1_slave_rx_en", "structgpo__control.html#a4e80aef9f51a95b68da7325bdbe04ffa", null ],
+    [ "gpo1_slave_tx_en", "structgpo__control.html#a5c4ee3e2d8d111e87359cca009929f27", null ],
+    [ "gpo1_tx_delay_us", "structgpo__control.html#ac679f3a625a1cf7cf2e712ebbb39340e", null ],
+    [ "gpo2_inactive_state_high_en", "structgpo__control.html#a6b63b1e94dd02bbfff86c16596a1e4d6", null ],
+    [ "gpo2_rx_delay_us", "structgpo__control.html#a39c191e700b18d1f7a50664ffafd301e", null ],
+    [ "gpo2_slave_rx_en", "structgpo__control.html#a3d323ae02f9e4a5c7233ee6e8133895e", null ],
+    [ "gpo2_slave_tx_en", "structgpo__control.html#aa08ac4df9835c571510b635e55c0fe50", null ],
+    [ "gpo2_tx_delay_us", "structgpo__control.html#aa1fe3a5577305464e35d60828415feb0", null ],
+    [ "gpo3_inactive_state_high_en", "structgpo__control.html#ad61b41fed81c46e318cb269e51018b64", null ],
+    [ "gpo3_rx_delay_us", "structgpo__control.html#a4ca4c219733ef81ba48678aa230c4cc6", null ],
+    [ "gpo3_slave_rx_en", "structgpo__control.html#a1d5170c76d8de400525167adcc20a687", null ],
+    [ "gpo3_slave_tx_en", "structgpo__control.html#a2799aea36961e729652192ae9758955d", null ],
+    [ "gpo3_tx_delay_us", "structgpo__control.html#a25a24d9d42bf365dafd801237d9ad7a0", null ],
+    [ "gpo_manual_mode_en", "structgpo__control.html#af58c5b68f7fd20eba4e629157bf5bdea", null ],
+    [ "gpo_manual_mode_enable_mask", "structgpo__control.html#a7ff3b0a1950e2b4f0837fc78ad7ed4bc", null ]
+];

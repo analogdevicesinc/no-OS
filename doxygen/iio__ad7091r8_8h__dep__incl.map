@@ -1,0 +1,11 @@
+<map id="drivers/adc/ad7091r8/iio_ad7091r8.h" name="drivers/adc/ad7091r8/iio_ad7091r8.h">
+<area shape="rect" id="Node000001" title="Header file of IIO AD7091R8 driver header file." alt="" coords="289,5,448,45"/>
+<area shape="rect" id="Node000002" href="$iio__ad7091r8_8c.html" title="Implementation of IIO AD7091R8 Driver." alt="" coords="5,108,164,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,52,176,96,136,110,134,105,174,91,300,47"/>
+<area shape="rect" id="Node000003" href="$iio__ad7091r8__trig_8c.html" title="Implementation of iio_ad7091r8_trig.c." alt="" coords="188,108,347,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="342,57,288,110,284,106,338,53"/>
+<area shape="rect" id="Node000004" href="$ad7091r8-sdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;ad7091r8&#45;sdz project." alt="" coords="371,101,569,155"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="399,53,445,98,442,102,396,57"/>
+<area shape="rect" id="Node000005" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html" title="Implementation of IIO timer trigger example for eval&#45;ad7091r8&#45;sdz project." alt="" coords="593,93,792,163"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="443,47,594,93,592,98,441,52"/>
+</map>

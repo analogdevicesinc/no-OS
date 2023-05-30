@@ -1,0 +1,11 @@
+<map id="ad4080_set_single_instr" name="ad4080_set_single_instr">
+<area shape="rect" id="Node000001" title="Set Single/Streaming Mode." alt="" coords="723,13,901,38"/>
+<area shape="rect" id="Node000002" href="$ad4080_8c.html#af2317cc392e1fe501c791466d5da325c" title="Configure the config SPI interface during initialization." alt="" coords="512,5,675,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="709,28,675,28,675,23,709,23"/>
+<area shape="rect" id="Node000003" href="$ad4080_8c.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="365,13,464,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="498,28,464,28,464,23,498,23"/>
+<area shape="rect" id="Node000004" href="$iio__ad4080_8c.html#a4c3881b748799947d1bc735745dd48a8" title="Initializes the IIO AD4080 descriptor." alt="" coords="196,13,317,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="352,28,318,28,318,23,352,23"/>
+<area shape="rect" id="Node000005" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,13,148,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="182,28,148,28,148,23,182,23"/>
+</map>

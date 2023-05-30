@@ -1,0 +1,7 @@
+<map id="no_os_i3c_attach_callback" name="no_os_i3c_attach_callback">
+<area shape="rect" id="Node000001" title="Attach event callback." alt="" coords="252,31,447,56"/>
+<area shape="rect" id="Node000002" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="45,5,164,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,35,164,27,164,21,239,29"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#a52434fd19a80dd0a7b91fe2f0adb65a2" title="Detach event callback." alt="" coords="5,55,204,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,57,205,60,204,55,238,52"/>
+</map>

@@ -1,0 +1,34 @@
+<map id="projects/adf5611/src/platform/mbed/parameters.c" name="projects/adf5611/src/platform/mbed/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Mbed platform data used by ADF5611 project." alt="" coords="261,5,474,45"/>
+<area shape="rect" id="Node000002" href="$adf5611_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ADF5611 project." alt="" coords="313,93,422,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="370,46,370,79,365,79,365,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,105,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="318,121,119,166,118,161,317,116"/>
+<area shape="rect" id="Node000004" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="130,167,234,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="339,121,226,164,224,159,337,116"/>
+<area shape="rect" id="Node000007" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="380,167,477,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="379,117,412,154,408,158,375,121"/>
+<area shape="rect" id="Node000008" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="501,167,607,192"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="398,116,512,159,510,164,396,121"/>
+<area shape="rect" id="Node000012" href="$mbed__i2c_8h.html" title="Header containing extra types required for I2C interface." alt="" coords="259,167,356,192"/>
+<area shape="poly" id="edge16_Node000002_Node000012" title=" " alt="" coords="359,121,328,158,324,154,355,117"/>
+<area shape="rect" id="Node000013" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="685,240,783,265"/>
+<area shape="poly" id="edge18_Node000002_Node000013" title=" " alt="" coords="423,111,516,130,569,145,619,164,671,195,713,228,710,232,668,200,617,169,567,150,515,135,422,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="274,240,341,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="203,190,276,231,274,235,201,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="373,313,455,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="192,190,221,226,264,263,312,289,360,307,358,312,309,294,260,268,218,229,188,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="411,194,340,235,337,231,408,190"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="430,192,423,240,418,300,413,299,418,240,424,192"/>
+<area shape="poly" id="edge11_Node000008_Node000006" title=" " alt="" coords="532,194,499,215,467,242,444,272,427,302,422,300,439,269,463,238,496,210,530,190"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="612,313,683,339"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="574,190,600,211,624,239,638,269,646,299,641,300,633,271,620,241,596,215,571,194"/>
+<area shape="rect" id="Node000010" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="477,240,610,265"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="555,193,550,227,544,226,550,192"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="524,268,449,309,446,304,521,263"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="562,263,620,303,617,307,559,268"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="508,313,579,339"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="546,266,546,300,541,300,541,266"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="310,192,310,226,305,226,305,192"/>
+<area shape="poly" id="edge19_Node000013_Node000009" title=" " alt="" coords="722,267,674,307,670,302,718,263"/>
+</map>

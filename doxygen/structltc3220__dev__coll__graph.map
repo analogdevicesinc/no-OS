@@ -1,0 +1,22 @@
+<map id="ltc3220_dev" name="ltc3220_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="983,173,1084,198"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="673,49,795,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="810,62,885,74,923,86,960,103,981,118,1000,136,1026,171,1022,174,996,140,978,122,957,108,922,91,883,80,809,67"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="343,49,490,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,59,672,59,672,64,504,64"/>
+<area shape="rect" id="Node000004" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,18,184,43"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,20,208,20,326,17,417,18,509,25,626,39,673,46,672,51,625,44,508,31,417,24,326,22,208,25,198,26"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,38,343,52,343,57,198,43"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="668,98,800,123"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="815,117,886,129,960,148,1010,170,1008,175,958,153,884,134,814,122"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,98,511,123"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="525,108,668,108,668,113,525,113"/>
+<area shape="rect" id="Node000007" href="$structltc3220__uled__cfg.html" title=" " alt="" coords="668,147,800,173"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="814,164,983,178,982,184,813,169"/>
+<area shape="rect" id="Node000008" href="$structltc3220__command__cfg.html" title=" " alt="" coords="649,197,819,222"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="832,209,895,207,958,201,988,195,989,201,959,207,895,213,833,214"/>
+<area shape="rect" id="Node000009" href="$structltc3220__blink__cfg.html" title=" " alt="" coords="666,246,802,271"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="815,255,886,247,958,229,989,214,1015,196,1018,201,992,219,960,235,887,253,816,260"/>
+<area shape="rect" id="Node000010" href="$structltc3220__grad__cfg.html" title=" " alt="" coords="667,295,801,321"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="814,308,887,299,923,289,957,274,979,257,998,236,1023,197,1028,200,1002,240,983,261,960,278,925,294,888,304,815,313"/>
+</map>

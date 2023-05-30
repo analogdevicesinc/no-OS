@@ -1,0 +1,36 @@
+<map id="drivers/adc/max9611pmb/max9611.c" name="drivers/adc/max9611pmb/max9611.c">
+<area shape="rect" id="Node000001" title="Implementation of max9611 Family Driver." alt="" coords="251,5,439,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="177,240,248,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,40,188,55,122,80,91,97,62,117,36,141,15,168,8,187,13,202,27,214,49,225,106,239,164,246,163,251,105,244,47,230,24,219,8,205,3,187,10,165,32,137,59,113,88,92,120,75,186,50,250,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="447,240,517,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="440,42,493,60,547,85,597,120,618,141,636,165,641,179,636,194,620,207,593,220,531,241,529,236,591,215,617,203,632,190,636,179,632,168,614,144,593,124,544,90,491,65,438,47"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="163,167,262,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="305,48,274,68,245,95,229,124,220,154,215,152,224,122,241,92,270,64,303,43"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="337,167,437,192"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="353,45,383,153,378,154,347,47"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="513,167,622,192"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="374,43,540,156,537,161,371,48"/>
+<area shape="rect" id="Node000009" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="25,167,139,192"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="311,48,225,96,114,162,111,157,222,91,308,43"/>
+<area shape="rect" id="Node000010" href="$no__os__alloc_8h.html" title=" " alt="" coords="697,93,808,119"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="439,42,684,89,683,94,438,47"/>
+<area shape="rect" id="Node000012" href="$max9611_8h.html" title="Header file of max9611 Family Driver." alt="" coords="255,93,349,119"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="337,47,317,83,312,80,332,44"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="215,192,215,226,210,226,210,192"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="360,194,255,237,253,232,358,190"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="404,190,457,229,454,234,401,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="339,240,422,265"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="389,193,386,227,380,226,384,192"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="541,240,609,265"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="571,192,575,226,570,227,566,193"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="104,190,181,231,178,236,102,194"/>
+<area shape="poly" id="edge15_Node000010_Node000003" title=" " alt="" coords="748,121,721,157,701,177,679,194,620,215,531,241,530,236,619,210,677,190,698,173,717,153,743,117"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="747,167,814,192"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="760,118,774,153,769,155,755,120"/>
+<area shape="poly" id="edge17_Node000012_Node000002" title=" " alt="" coords="303,120,294,154,276,193,259,215,241,233,237,229,255,211,272,191,289,152,297,118"/>
+<area shape="poly" id="edge18_Node000012_Node000003" title=" " alt="" coords="350,113,403,132,429,146,452,165,471,195,481,226,476,227,466,197,448,168,426,150,401,136,349,118"/>
+<area shape="poly" id="edge19_Node000012_Node000004" title=" " alt="" coords="289,121,240,160,236,156,286,117"/>
+<area shape="poly" id="edge20_Node000012_Node000005" title=" " alt="" coords="317,117,365,156,361,160,314,121"/>
+<area shape="poly" id="edge21_Node000012_Node000007" title=" " alt="" coords="345,116,512,160,510,166,344,121"/>
+<area shape="poly" id="edge22_Node000012_Node000009" title=" " alt="" coords="267,121,131,165,130,160,266,116"/>
+</map>

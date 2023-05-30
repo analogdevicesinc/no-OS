@@ -1,0 +1,7 @@
+<map id="HAL_I2CReadByte" name="HAL_I2CReadByte">
+<area shape="rect" id="Node000001" title=" " alt="" coords="203,31,341,56"/>
+<area shape="rect" id="Node000002" href="$wrapper_8c.html#aad978d693686cc1a63f69c6e4c4d2adb" title=" " alt="" coords="5,5,155,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,35,154,30,155,25,189,30"/>
+<area shape="rect" id="Node000003" href="$wrapper_8c.html#aab7d4c1a8e2bc99a45abf2bc571bf9bc" title=" " alt="" coords="6,55,154,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,56,154,61,154,55,189,51"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="jesd204_dev_data" name="jesd204_dev_data">
+<area shape="rect" id="Node000001" title="JESD204 device initialization data." alt="" coords="5,269,145,295"/>
+<area shape="rect" id="Node000002" href="$structjesd204__state__op.html" title="JESD204 device per&#45;state op." alt="" coords="7,181,143,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,221,78,269,73,269,73,221"/>
+<area shape="rect" id="Node000003" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="23,93,127,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="78,133,78,181,73,181,73,133"/>
+<area shape="rect" id="Node000004" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="15,5,135,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="78,45,78,93,73,93,73,45"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ltp8800_send_byte" name="ltp8800_send_byte">
+<area shape="rect" id="Node000001" title="Send a PMBus command to the device." alt="" coords="420,45,565,70"/>
+<area shape="rect" id="Node000002" href="$ltp8800_8c.html#a9d09ec6599d408c0a882c9da5bb67115" title="Restore user settings." alt="" coords="213,5,372,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="406,46,372,41,373,35,407,41"/>
+<area shape="rect" id="Node000004" href="$ltp8800_8c.html#aa220bf82c63c0fa840b0466f30ff5a2d" title="Store user settings to EEPROM." alt="" coords="219,69,366,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="407,74,367,80,366,75,406,68"/>
+<area shape="rect" id="Node000003" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,13,165,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="199,28,165,28,165,23,199,23"/>
+</map>

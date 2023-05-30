@@ -1,0 +1,12 @@
+<map id="drivers/net/iio_max24287.h" name="drivers/net/iio_max24287.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="141,5,341,31"/>
+<area shape="rect" id="Node000002" href="$iio__max24287_8c.html" title=" " alt="" coords="5,86,204,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,40,126,88,123,83,207,35"/>
+<area shape="rect" id="Node000003" href="$net_8c.html" title=" " alt="" coords="162,167,319,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="243,44,243,166,238,166,238,44"/>
+<area shape="rect" id="Node000004" href="$net_8h.html" title=" " alt="" coords="278,79,435,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="271,36,330,76,327,81,268,41"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="322,129,268,169,265,164,318,125"/>
+<area shape="rect" id="Node000005" href="$wethlink_2src_2app_2main_8c.html" title=" " alt="" coords="343,167,501,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="381,128,410,165,405,168,377,131"/>
+</map>

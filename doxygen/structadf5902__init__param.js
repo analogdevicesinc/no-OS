@@ -1,0 +1,28 @@
+var structadf5902__init__param =
+[
+    [ "adc_avg", "structadf5902__init__param.html#a10366a8fb03ffc22f88c8ebb8533ed7a", null ],
+    [ "clk1_div_ramp", "structadf5902__init__param.html#a913ba5e944ad9477b8ffb807f449da99", null ],
+    [ "clk2_div", "structadf5902__init__param.html#ad70a1d815a6430df96a799d81cce7a0b", null ],
+    [ "clk2_div_no", "structadf5902__init__param.html#a1cf6c73d364ab96fce77089c1678c7b8", null ],
+    [ "clk_div_mode", "structadf5902__init__param.html#a14d5efdefdfd52e450755ee9f8c8163a", null ],
+    [ "cp_current", "structadf5902__init__param.html#ac9e3e99cf813f5c0b8f3fcf3d8bf7f17", null ],
+    [ "cp_tristate_en", "structadf5902__init__param.html#ad60a749da6d45045eee4b79b67d3023c", null ],
+    [ "delay_wd", "structadf5902__init__param.html#ae2dd1f8286cab79c0224f49deef97fb3", null ],
+    [ "delay_words_no", "structadf5902__init__param.html#ad52f33c18e329873d9c78fece567070e", null ],
+    [ "gpio_ce_param", "structadf5902__init__param.html#afae1657bfa16702b72d6216e9346203a", null ],
+    [ "le_sel", "structadf5902__init__param.html#a89eadde5330d57b83181a39f30f8efed", null ],
+    [ "ramp_delay_en", "structadf5902__init__param.html#ae0c26cc06c7f53553f5afff6c475c9f7", null ],
+    [ "ramp_mode", "structadf5902__init__param.html#ab7c2ad759dfbed9a4b72e429fd150514", null ],
+    [ "ramp_status", "structadf5902__init__param.html#a5fa7e8b38c8c0c21a0f9f70229fd5adc", null ],
+    [ "ref_div2_en", "structadf5902__init__param.html#a174ad9a993c63e9fd112f0bdba428cd4", null ],
+    [ "ref_doubler_en", "structadf5902__init__param.html#ade8372ccad341e54574eeac282fbaa84", null ],
+    [ "ref_in", "structadf5902__init__param.html#a500245757d824316561f8be898a05bb7", null ],
+    [ "rf_out", "structadf5902__init__param.html#a53629e3bad9dfb741aee27dfc8f5b2b7", null ],
+    [ "slopes", "structadf5902__init__param.html#ac2a4d4661d68687ebe712572fc66a066", null ],
+    [ "slopes_no", "structadf5902__init__param.html#a4cbd64fb61066f95b0203817063b8ead", null ],
+    [ "spi_init", "structadf5902__init__param.html#aae73065145adb9b894b9f59e568ef6bd", null ],
+    [ "tx_amp_cal_ref", "structadf5902__init__param.html#a21fc838a61280e921fc1d49debdf74ee", null ],
+    [ "tx_data_invert", "structadf5902__init__param.html#a10cb5442b5c8d3e520c60bab12fdc54a", null ],
+    [ "tx_ramp_clk", "structadf5902__init__param.html#a1ace7a17220833cd244ad291329edbcd", null ],
+    [ "tx_trig_en", "structadf5902__init__param.html#aa2dc0cc273bfed7084627f9c07804b9d", null ]
+];

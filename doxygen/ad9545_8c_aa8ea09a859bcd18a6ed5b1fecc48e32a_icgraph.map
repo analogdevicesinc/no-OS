@@ -1,0 +1,9 @@
+<map id="ad9545_write_reg" name="ad9545_write_reg">
+<area shape="rect" id="Node000001" title=" " alt="" coords="415,31,553,56"/>
+<area shape="rect" id="Node000002" href="$ad9545_8c.html#a2f5e77a1a4824f86f7d46f82458a7153" title=" " alt="" coords="241,5,339,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="400,35,339,27,340,22,401,30"/>
+<area shape="rect" id="Node000004" href="$ad9545_8c.html#a58d26b2da728c70307bd05a751298c73" title=" " alt="" coords="213,55,367,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="401,56,368,60,367,55,400,51"/>
+<area shape="rect" id="Node000003" href="$ad9545_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="227,21,165,21,165,15,227,15"/>
+</map>

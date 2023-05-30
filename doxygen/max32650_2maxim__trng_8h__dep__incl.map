@@ -1,0 +1,5 @@
+<map id="drivers/platform/maxim/max32650/maxim_trng.h" name="drivers/platform/maxim/max32650/maxim_trng.h">
+<area shape="rect" id="Node000001" title="MAX32650 specific header for TRNG driver." alt="" coords="5,5,196,45"/>
+<area shape="rect" id="Node000002" href="$max32650_2maxim__trng_8c.html" title="MAX32650 implementation of true random number generator." alt="" coords="6,93,195,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,98,93,98,59"/>
+</map>

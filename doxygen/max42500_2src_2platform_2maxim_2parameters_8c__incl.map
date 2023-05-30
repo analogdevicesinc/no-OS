@@ -1,0 +1,11 @@
+<map id="projects/max42500/src/platform/maxim/parameters.c" name="projects/max42500/src/platform/maxim/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by max42500 project." alt="" coords="151,5,374,45"/>
+<area shape="rect" id="Node000002" href="$max42500_2src_2platform_2maxim_2parameters_8h.html" title="Definitions used by the MAX42500 project." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,48,104,91,102,86,213,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="139,93,253,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="249,47,217,84,213,81,245,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="277,93,384,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="281,44,314,81,310,84,277,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="409,93,522,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="312,43,424,86,422,91,310,48"/>
+</map>

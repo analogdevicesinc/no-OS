@@ -1,0 +1,13 @@
+<map id="drivers/temperature/adt7420/adt7420.h" name="drivers/temperature/adt7420/adt7420.h">
+<area shape="rect" id="Node000001" title="Header file of ADT7420 Driver." alt="" coords="299,5,451,45"/>
+<area shape="rect" id="Node000002" href="$adt7420_8c.html" title="Implementation of ADT7420 Driver." alt="" coords="5,101,157,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="303,52,141,103,140,98,302,47"/>
+<area shape="rect" id="Node000003" href="$iio__adt7420_8c.html" title="Implementation of IIO ADT7420 Driver." alt="" coords="181,101,352,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="344,56,290,103,287,99,341,52"/>
+<area shape="rect" id="Node000004" href="$adt7420-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="377,101,591,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="409,52,464,99,460,103,405,56"/>
+<area shape="rect" id="Node000006" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example code for adt7420&#45;pmdz project." alt="" coords="616,93,837,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="460,46,628,91,627,96,458,51"/>
+<area shape="rect" id="Node000005" href="$adt7420-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="377,196,591,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="487,154,487,196,481,196,481,154"/>
+</map>

@@ -1,0 +1,33 @@
+<map id="flash_calculate_crc32" name="flash_calculate_crc32">
+<area shape="rect" id="Node000001" title="Calculate CRC32 for data." alt="" coords="1389,149,1551,175"/>
+<area shape="rect" id="Node000002" href="$flash__storage_8c.html#aa6cd6ff8bc5b93b7c826f07a25551e95" title="Read calibration data from flash." alt="" coords="1174,120,1339,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1375,152,1339,147,1340,141,1376,146"/>
+<area shape="rect" id="Node000013" href="$flash__storage_8c.html#a18bf593a7202a6359e450348c47229c1" title="Write calibration data to flash." alt="" coords="1172,177,1341,203"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="1376,177,1342,182,1341,176,1375,172"/>
+<area shape="rect" id="Node000003" href="$flash__storage_8c.html#ad0ded46dfeba1eec6f3a90c2554cc711" title="Check if valid calibration data exists in flash." alt="" coords="925,5,1124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1228,113,1181,79,1123,46,1088,33,1090,28,1125,41,1184,74,1231,109"/>
+<area shape="rect" id="Node000009" href="$flash__storage_8c.html#aeec2db53925723087ac723941432fb5d" title="Load calibration from flash and apply to AFE registers." alt="" coords="943,55,1106,95"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="1191,119,1105,98,1107,93,1192,114"/>
+<area shape="rect" id="Node000011" href="$flash__storage_8c.html#a1f78c0c966345b80d9aa000720eb0d7f" title="Save current calibration context to flash for specified channel." alt="" coords="941,170,1108,210"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="1192,151,1107,173,1105,167,1191,146"/>
+<area shape="rect" id="Node000012" href="$iio__pqm_8c.html#a7579bb84d6998edfe7203f244b85ba6b" title="Read a pqm device attribute." alt="" coords="966,120,1083,145"/>
+<area shape="poly" id="edge14_Node000002_Node000012" title=" " alt="" coords="1160,135,1083,135,1083,130,1160,130"/>
+<area shape="rect" id="Node000004" href="$pqlib__example_8c.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="719,35,877,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="913,35,878,40,877,34,913,30"/>
+<area shape="rect" id="Node000005" href="$pqlib__example_8c.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="484,35,671,60"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="705,50,671,50,671,45,705,45"/>
+<area shape="rect" id="Node000006" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,35,265,60"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="470,50,265,50,265,45,470,45"/>
+<area shape="rect" id="Node000008" href="$pqlib__example_8c.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="313,60,436,85"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="471,63,436,68,436,62,470,58"/>
+<area shape="rect" id="Node000007" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,35,60,60"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,50,60,50,60,45,94,45"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="299,65,265,61,266,55,300,60"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="929,66,877,60,878,54,930,61"/>
+<area shape="rect" id="Node000010" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="737,116,859,141"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="931,100,853,119,852,113,929,95"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="936,169,845,144,846,139,938,164"/>
+<area shape="poly" id="edge17_Node000013_Node000011" title=" " alt="" coords="1158,193,1108,193,1108,187,1158,187"/>
+<area shape="rect" id="Node000014" href="$flash__storage_8c.html#a179f45789534eb226bdb1cbbbd7ba5ff" title="Save all calibration data to flash." alt="" coords="929,235,1120,260"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="1192,209,1077,237,1076,232,1190,203"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="ad9517_write" name="ad9517_write">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="537,116,648,141"/>
+<area shape="rect" id="Node000002" href="$ad9517_8c.html#a1a8ea84bf7f5359de3ffadf2dce5bc03" title="Sets the frequency on the specified channel." alt="" coords="117,20,260,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="574,106,538,64,515,44,488,29,457,19,424,12,357,8,294,13,241,22,240,17,293,8,357,3,425,7,458,14,490,24,518,40,542,60,578,102"/>
+<area shape="rect" id="Node000004" href="$ad9517_8c.html#adc5b854ba12c661a229b379a91195f51" title="Sets the phase on the specified channel." alt="" coords="345,40,461,65"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="550,113,488,87,438,67,440,62,490,82,552,108"/>
+<area shape="rect" id="Node000005" href="$ad9517_8c.html#af14d846dbf6b3655d02980c3e8e31f45" title="Sets the power mode of the specified channel." alt="" coords="108,98,269,124"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="524,128,269,117,270,112,524,123"/>
+<area shape="rect" id="Node000006" href="$ad9517_8c.html#a238147bdb3fc2a80bbcf749657f5db3b" title="Initializes the AD9517." alt="" coords="132,154,245,180"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="524,137,246,164,246,159,523,132"/>
+<area shape="rect" id="Node000007" href="$ad9517_8c.html#a8947daebb804093893721c29e3f83d11" title="Transfers the contents of the buffer registers into the active registers." alt="" coords="342,241,465,266"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="575,153,539,193,491,230,462,243,460,238,488,226,535,189,571,150"/>
+<area shape="rect" id="Node000008" href="$ad9517_8c.html#afb845e0029fe1cdfdf27e311d3cc82db" title="Sets the VCO frequency." alt="" coords="317,192,489,217"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="552,149,490,175,440,194,438,189,488,170,550,144"/>
+<area shape="rect" id="Node000003" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,126,60,152"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,55,110,88,53,128,50,124,106,83,155,51"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="105,129,61,137,60,131,104,123"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="118,157,60,146,61,141,119,152"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="328,249,222,230,163,214,107,193,74,174,47,154,50,150,77,170,109,188,165,209,223,225,329,244"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="341,239,316,231,260,206,212,182,215,177,262,201,318,226,343,234"/>
+<area shape="poly" id="edge12_Node000008_Node000006" title=" " alt="" coords="315,192,245,179,246,174,316,186"/>
+</map>

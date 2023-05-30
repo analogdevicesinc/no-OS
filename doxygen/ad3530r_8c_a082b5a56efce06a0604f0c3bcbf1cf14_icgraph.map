@@ -1,0 +1,7 @@
+<map id="ad3530r_hw_ldac_trigger" name="ad3530r_hw_ldac_trigger">
+<area shape="rect" id="Node000001" title="Trigger the LDAC using hardware." alt="" coords="228,35,413,60"/>
+<area shape="rect" id="Node000002" href="$ad3530r_8c.html#a8a3ac7191cbdf77aba3b02e2c0548ada" title=" " alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,36,180,32,180,27,215,31"/>
+<area shape="rect" id="Node000003" href="$ad3530r_8c.html#a5a341873f52311996625d6488ed9128b" title=" " alt="" coords="9,55,176,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,63,176,68,176,62,214,58"/>
+</map>

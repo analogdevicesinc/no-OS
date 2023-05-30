@@ -1,0 +1,18 @@
+<map id="drivers/power/lt3074/lt3074.h" name="drivers/power/lt3074/lt3074.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="301,5,457,45"/>
+<area shape="rect" id="Node000002" href="$iio__lt3074_8c.html" title="Source file for the LT3074 IIO Driver." alt="" coords="5,203,161,243"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="288,41,182,63,139,78,111,95,95,120,86,149,83,178,84,203,79,203,78,178,81,148,90,118,107,91,136,73,181,58,287,36"/>
+<area shape="rect" id="Node000003" href="$iio__lt3074_8h.html" title="Header file for the LT3074 IIO Driver." alt="" coords="121,101,277,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="332,54,237,103,234,98,330,49"/>
+<area shape="rect" id="Node000005" href="$lt3074_8c.html" title=" " alt="" coords="301,101,457,141"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="382,59,382,101,377,101,377,59"/>
+<area shape="rect" id="Node000006" href="$lt3074_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt3074 examples." alt="" coords="482,101,674,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="433,49,539,98,537,103,431,54"/>
+<area shape="rect" id="Node000008" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt3074 project." alt="" coords="699,93,865,148"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="471,43,687,91,699,94,698,99,685,96,470,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="169,152,107,205,103,201,165,148"/>
+<area shape="rect" id="Node000004" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt3074 project." alt="" coords="185,196,360,251"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="223,150,256,194,251,197,219,153"/>
+<area shape="rect" id="Node000007" href="$lt3074_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt3074 examples." alt="" coords="483,203,673,243"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="581,155,581,203,575,203,575,155"/>
+</map>

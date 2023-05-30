@@ -1,0 +1,5 @@
+<map id="max96793_pipe_diag_config_status" name="max96793_pipe_diag_config_status">
+<area shape="rect" id="Node000001" title="Structure holding the pipe configuration status of the MAX96793 device." alt="" coords="11,108,172,148"/>
+<area shape="rect" id="Node000002" href="$structmax96793__lane__config__status.html" title="Structure holding the lane configuration status of the MAX96793 device." alt="" coords="5,5,177,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,59,94,108,89,108,89,59"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="ad469x_adv_seq_osr" name="ad469x_adv_seq_osr">
+<area shape="rect" id="Node000001" title="Configure over sampling ratio in advanced sequencer mode." alt="" coords="592,31,751,56"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="360,31,544,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="578,46,544,46,544,41,578,41"/>
+<area shape="rect" id="Node000003" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="213,31,312,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="346,46,312,46,312,41,346,41"/>
+<area shape="rect" id="Node000004" href="$ad469x__evb_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,37,165,32,166,27,200,32"/>
+<area shape="rect" id="Node000005" href="$ad469x__evb_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,55,157,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="200,54,157,60,157,55,199,49"/>
+</map>

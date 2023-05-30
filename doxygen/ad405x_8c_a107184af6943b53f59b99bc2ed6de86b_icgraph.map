@@ -1,0 +1,17 @@
+<map id="ad405x_get_sts_reg" name="ad405x_get_sts_reg">
+<area shape="rect" id="Node000001" title="Read the interface status and status registers." alt="" coords="685,70,837,95"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#a7684551c0ee88f28fe808de90bd40fa9" title="Clear reset flags." alt="" coords="488,5,637,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="702,69,632,48,633,43,704,63"/>
+<area shape="rect" id="Node000006" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="173,119,292,145"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="690,101,638,109,448,126,292,133,292,128,448,121,637,104,689,95"/>
+<area shape="rect" id="Node000007" href="$ad405x_8c.html#a2ad41fe31ec82635d42c6f83c782a79a" title="Soft reset of the device. For I3C, the I3C peripheral is not reset, keeping its dynamic address and a..." alt="" coords="492,70,633,95"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="671,85,634,85,634,80,671,80"/>
+<area shape="rect" id="Node000003" href="$ad405x_8c.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the communication device." alt="" coords="341,70,440,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="490,52,431,72,429,67,488,47"/>
+<area shape="rect" id="Node000004" href="$iio__ad405x_8c.html#a25e5b9b70c0d01d27fb470e006568145" title="Initializes the AD405X IIO driver." alt="" coords="172,70,293,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="328,85,294,85,294,80,328,80"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="337,102,275,122,274,117,336,97"/>
+<area shape="rect" id="Node000005" href="$ad405x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,70,124,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,85,124,85,124,80,158,80"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="478,85,440,85,440,80,478,80"/>
+</map>

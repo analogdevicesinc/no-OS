@@ -1,0 +1,51 @@
+<map id="ade9113_write" name="ade9113_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="288,707,407,733"/>
+<area shape="rect" id="Node000002" href="$ade9113_8c.html#aa48a26f583c2e287a64f0ac7a68fa8f9" title="Clear the ADC_SYNC_DONE int mask." alt="" coords="31,5,215,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="343,693,337,560,321,370,308,272,290,182,267,109,253,80,238,59,213,41,216,37,242,55,258,78,272,107,295,181,313,271,327,369,343,560,348,693"/>
+<area shape="rect" id="Node000003" href="$ade9113_8c.html#a648ceb0471f713f4aca1511739e164d9" title="Clear the COM_UP int mask." alt="" coords="23,70,222,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,694,336,570,320,394,306,304,288,222,266,155,252,129,238,110,221,97,224,93,242,106,257,126,270,153,293,220,311,303,325,393,341,570,348,694"/>
+<area shape="rect" id="Node000004" href="$ade9113_8c.html#a14dc7bda1983c4d0f2910b39f1b52bbe" title="Clear the COMFLT_ERR int mask." alt="" coords="40,120,205,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="342,694,333,582,314,425,300,346,283,273,262,214,238,174,223,161,204,152,207,148,225,157,242,170,267,212,288,272,306,345,320,425,338,581,347,693"/>
+<area shape="rect" id="Node000005" href="$ade9113_8c.html#ab07c8b3fab1688ca6b84d4abca0d417b" title="Clear the CRC_CHG int mask." alt="" coords="24,185,221,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="341,694,332,590,312,448,298,376,281,311,261,258,238,223,220,210,223,206,242,219,266,256,287,310,304,375,318,447,337,589,347,693"/>
+<area shape="rect" id="Node000006" href="$ade9113_8c.html#a033fd20b1eaa07744912426218b2bf8e" title="Clear the CRC_DONE int mask." alt="" coords="19,234,226,259"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="341,694,329,600,309,473,295,409,278,352,259,305,238,274,221,262,224,257,242,270,264,303,283,350,300,408,314,472,335,599,346,693"/>
+<area shape="rect" id="Node000007" href="$ade9113_8c.html#a37afd8457eb1d33049531e564784864f" title="Clear the I_WAV_OVRNG int mask." alt="" coords="41,284,204,324"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="344,694,342,623,329,527,316,476,297,426,271,379,238,338,222,326,203,317,205,312,225,321,242,334,276,376,302,424,321,475,334,526,348,623,350,694"/>
+<area shape="rect" id="Node000008" href="$ade9113_8c.html#a0ad7707f463b1179a63dc027220d78cd" title="Clear the ISO_CLK_STBL_ERR int mask." alt="" coords="38,348,207,388"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="343,693,337,633,321,555,307,513,290,473,267,435,238,402,207,383,209,378,242,398,271,432,294,470,312,511,326,553,342,633,348,693"/>
+<area shape="rect" id="Node000009" href="$ade9113_8c.html#a27fb062acf418425338d7abbc260eb5b" title="Clear the ISO_DIG_MOD_I_OVF int mask." alt="" coords="37,412,208,452"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="340,694,331,645,312,584,282,520,262,491,238,466,207,448,210,443,242,462,266,488,287,517,317,582,336,644,345,693"/>
+<area shape="rect" id="Node000010" href="$ade9113_8c.html#af432506c1d55163d66ef2e736f4384ea" title="Clear the ISO_DIG_MOD_V1_OVF int mask." alt="" coords="37,476,208,516"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="336,695,323,658,303,613,275,568,238,530,207,513,210,508,242,526,279,565,308,611,328,656,341,693"/>
+<area shape="rect" id="Node000011" href="$ade9113_8c.html#a8e9d67aeac0d8043ee734fec0153cfec" title="Clear the ISO_DIG_MOD_V2_OVF int mask." alt="" coords="37,540,208,580"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="330,697,293,645,268,617,239,594,207,579,210,574,241,590,271,613,297,641,334,694"/>
+<area shape="rect" id="Node000012" href="$ade9113_8c.html#a19d7cece724c21dda6d700dd9cade7f0" title="Clear the ISO_EFUSE_MEM_ERR int mask." alt="" coords="29,604,216,644"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="316,702,280,679,239,658,206,647,208,642,241,654,283,675,319,697"/>
+<area shape="rect" id="Node000013" href="$ade9113_8c.html#a665304c5f3d3e2ddf2361bb0350ce271" title="Clear the ISO_PHY_CRC_ERR int mask." alt="" coords="35,668,210,708"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="274,712,210,703,211,698,274,707"/>
+<area shape="rect" id="Node000014" href="$ade9113_8c.html#a98bba4eafe3a44c90480901d5de220da" title="Clear the ISO_TEST_MMR_ERR int mask." alt="" coords="35,732,210,772"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="274,733,211,742,210,737,274,728"/>
+<area shape="rect" id="Node000015" href="$ade9113_8c.html#a9ac075177cb951abdde200394b42a606" title="Clear the RESET_DONE int mask." alt="" coords="44,796,201,836"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="319,743,283,765,241,786,203,800,201,795,239,782,280,761,316,738"/>
+<area shape="rect" id="Node000016" href="$ade9113_8c.html#ac2a026cedfe95885b1484ce20e2c141d" title="Clear the SPI_CRC_ERR int mask." alt="" coords="38,860,207,900"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="334,746,297,799,271,827,241,850,209,866,207,861,239,846,268,823,293,795,330,743"/>
+<area shape="rect" id="Node000017" href="$ade9113_8c.html#acfcad64e5dde47e541ee277d25ad7ff0" title="Clear the V1_WAV_OVRNG int mask." alt="" coords="35,924,210,964"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="341,747,328,784,308,829,279,875,242,914,211,931,209,926,238,910,275,872,303,827,323,782,336,745"/>
+<area shape="rect" id="Node000018" href="$ade9113_8c.html#aab1abd59e6e362bde4cb362b7fb6c63d" title="Clear the V2_WAV_OVRNG int mask." alt="" coords="35,988,210,1028"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="345,747,336,796,317,858,287,923,266,952,242,978,212,996,209,992,238,974,262,949,282,920,312,856,331,795,340,746"/>
+<area shape="rect" id="Node000019" href="$ade9113_8c.html#a65751bdaa8618aef969cfae43bd75410" title="Force background register map CRC recalculation." alt="" coords="5,1053,240,1078"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="348,746,343,807,327,887,314,929,296,971,272,1009,242,1042,222,1055,220,1050,238,1038,268,1006,291,968,309,928,322,886,338,807,343,746"/>
+<area shape="rect" id="Node000020" href="$ade9113_8c.html#ae4892af117d6109a3cdd6e06e9051c0b" title="Set EMI HI mask." alt="" coords="23,1102,222,1127"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="350,747,347,816,334,909,321,958,301,1007,276,1052,242,1091,223,1104,220,1100,238,1087,271,1049,297,1005,315,957,329,908,342,815,344,746"/>
+<area shape="rect" id="Node000021" href="$ade9113_8c.html#af3b8e235bfb6eb235e389a1f40b30e99" title="Set EMI LO mask." alt="" coords="23,1151,222,1177"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="346,747,333,835,312,954,281,1066,263,1111,242,1141,224,1153,221,1149,238,1137,258,1108,276,1065,307,952,328,835,340,746"/>
+<area shape="rect" id="Node000022" href="$ade9113_8c.html#ac36c5f753e2d4a5b42a6024a05f8ef9d" title="Reset the device using SW reset." alt="" coords="51,1201,194,1226"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="346,746,336,844,315,977,301,1044,285,1106,265,1156,242,1190,220,1205,195,1213,193,1208,218,1200,238,1186,260,1153,279,1104,296,1043,310,976,330,843,341,746"/>
+<area shape="rect" id="Node000023" href="$ade9113_8c.html#a7842241d63e8d4fcc2c5778a1e5222f3" title="Lock device." alt="" coords="55,1250,190,1275"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="347,747,338,854,319,1002,305,1077,287,1145,267,1201,242,1239,218,1255,191,1264,189,1259,216,1251,238,1235,262,1199,282,1143,299,1076,313,1001,332,854,342,747"/>
+<area shape="rect" id="Node000024" href="$ade9113_8c.html#adc9881539f9cf29fef3e7044aea6ac52" title="Unlock device." alt="" coords="47,1299,198,1325"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="347,746,340,862,322,1025,308,1108,291,1184,269,1246,256,1270,242,1289,222,1303,199,1312,197,1307,219,1298,238,1285,251,1267,264,1244,285,1182,303,1107,317,1024,334,862,342,746"/>
+<area shape="rect" id="Node000025" href="$ade9113_8c.html#a36f2f440a8793ee17bc4032579740c5d" title="Write value in the scratchpad register." alt="" coords="25,1349,221,1374"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="348,746,342,871,325,1049,311,1140,293,1223,271,1291,257,1318,242,1338,222,1352,219,1348,238,1334,253,1315,266,1289,288,1222,306,1139,320,1048,336,871,343,746"/>
+</map>

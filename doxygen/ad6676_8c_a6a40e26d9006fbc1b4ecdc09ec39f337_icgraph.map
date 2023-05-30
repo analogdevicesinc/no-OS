@@ -1,0 +1,14 @@
+<map id="ad6676_spi_write" name="ad6676_spi_write">
+<area shape="rect" id="Node000001" title="SPI write to device." alt="" coords="335,80,471,105"/>
+<area shape="rect" id="Node000002" href="$ad6676_8c.html#a17ab1a8e6afdd9fa9a079f74feb46172" title="Set attenuation in decibels or disable attenuator." alt="" coords="108,5,287,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="362,77,286,45,249,33,251,28,288,39,364,72"/>
+<area shape="rect" id="Node000003" href="$ad6676_8c.html#aedb88fef3a85bf43afd102855bd959cb" title="Initialize the device." alt="" coords="141,55,254,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="320,85,254,77,254,72,321,80"/>
+<area shape="rect" id="Node000005" href="$ad6676_8c.html#aaeb3a0256ee71f85e46323132e739432" title="Perform an interface test." alt="" coords="146,104,249,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="321,105,249,113,249,108,321,100"/>
+<area shape="rect" id="Node000006" href="$ad6676_8c.html#abc6bd36627b91af6b336d9c24e9eeb90" title="Reconfigure device for other target frequency and bandwidth and recalibrate." alt="" coords="136,153,259,179"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="362,114,288,143,247,156,246,151,286,138,360,109"/>
+<area shape="rect" id="Node000004" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,81,61,91,60,86,126,76"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="132,110,60,99,61,94,133,105"/>
+</map>

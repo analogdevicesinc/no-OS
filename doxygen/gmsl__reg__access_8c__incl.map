@@ -1,0 +1,34 @@
+<map id="drivers/gmsl/common/gmsl_reg_access.c" name="drivers/gmsl/common/gmsl_reg_access.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="306,5,470,45"/>
+<area shape="rect" id="Node000002" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="310,48,122,93,121,88,309,43"/>
+<area shape="rect" id="Node000004" href="$no__os__alloc_8h.html" title=" " alt="" coords="142,93,253,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="343,48,239,91,237,86,341,43"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="277,93,377,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="375,47,346,84,342,81,371,44"/>
+<area shape="rect" id="Node000010" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="657,167,756,192"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="471,34,593,56,646,72,682,91,693,105,700,121,708,152,703,153,695,122,688,108,678,95,644,77,591,61,470,39"/>
+<area shape="rect" id="Node000011" href="$gmsl__reg__access_8h.html" title=" " alt="" coords="523,93,669,119"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="439,43,554,86,552,91,437,48"/>
+<area shape="rect" id="Node000012" href="$gmsl__dbg_8h.html" title=" " alt="" coords="401,93,498,119"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="405,44,434,81,430,84,401,47"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="25,167,93,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="62,119,62,153,56,153,57,119"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="212,167,279,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="207,118,232,154,228,157,203,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="117,167,187,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="192,120,169,157,164,154,188,118"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="300,121,194,164,192,159,298,116"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="559,240,630,265"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="328,119,328,154,333,174,343,190,357,200,377,209,430,225,546,244,545,249,429,230,375,214,354,205,339,194,328,176,323,155,322,119"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="353,167,436,192"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="340,117,376,155,372,158,336,121"/>
+<area shape="poly" id="edge11_Node000010_Node000008" title=" " alt="" coords="690,194,626,235,623,230,687,190"/>
+<area shape="poly" id="edge13_Node000011_Node000008" title=" " alt="" coords="599,119,598,226,592,226,593,119"/>
+<area shape="poly" id="edge14_Node000011_Node000010" title=" " alt="" coords="615,116,678,157,675,161,612,121"/>
+<area shape="poly" id="edge19_Node000012_Node000005" title=" " alt="" coords="417,121,292,165,290,160,416,116"/>
+<area shape="poly" id="edge17_Node000012_Node000008" title=" " alt="" coords="475,117,510,137,545,165,569,195,586,226,581,229,564,198,541,169,507,141,472,121"/>
+<area shape="poly" id="edge16_Node000012_Node000009" title=" " alt="" coords="442,121,414,157,410,154,438,117"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="461,167,531,192"/>
+<area shape="poly" id="edge18_Node000012_Node000013" title=" " alt="" coords="459,118,483,154,479,157,455,120"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="max17851_config_gen2" name="max17851_config_gen2">
+<area shape="rect" id="Node000001" title="Configure general settings for MAX17851." alt="" coords="220,31,396,56"/>
+<area shape="rect" id="Node000002" href="$max17851_8c.html#a66a3ec73171c8be3fcdeb686807a4d6f" title="MAX17851 device initialization function." alt="" coords="29,5,148,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,34,148,27,149,22,206,29"/>
+<area shape="rect" id="Node000003" href="$max17851_8c.html#a224e1263a89dc84e1736d4acdc4ddefc" title="Write message over UART using MAX17851." alt="" coords="5,55,172,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,57,173,61,172,56,206,52"/>
+</map>

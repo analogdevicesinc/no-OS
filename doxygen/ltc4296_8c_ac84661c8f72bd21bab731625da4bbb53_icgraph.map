@@ -1,0 +1,33 @@
+<map id="ltc4296_reg_read" name="ltc4296_reg_read">
+<area shape="rect" id="Node000001" title="Register Read." alt="" coords="489,276,624,301"/>
+<area shape="rect" id="Node000002" href="$ltc4296_8c.html#ac85ee4f3f8c86b87deb0c02b18e041a1" title="Clear circuit break faults." alt="" coords="243,120,435,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="539,266,499,211,471,183,440,159,416,148,418,143,443,154,475,179,503,208,543,263"/>
+<area shape="rect" id="Node000004" href="$ltc4296_8c.html#a2f4cd2b12d9fd083bd0c557cf87d4a51" title="Device initialization." alt="" coords="290,383,389,408"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="533,312,492,343,442,372,390,390,388,384,440,368,489,339,529,308"/>
+<area shape="rect" id="Node000006" href="$ltc4296_8c.html#a198893e45b567530bebc87000204cdfe" title="Check device state." alt="" coords="271,5,408,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="548,263,537,215,516,156,484,96,464,69,440,45,407,29,410,24,443,41,468,65,489,93,521,154,542,214,553,261"/>
+<area shape="rect" id="Node000007" href="$ltc4296_8c.html#ae0e18841aa4ef7c903152e5ffebd870d" title="Check if port delivers power." alt="" coords="237,169,441,195"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="530,269,489,238,440,208,409,197,411,192,442,204,492,233,533,265"/>
+<area shape="rect" id="Node000008" href="$ltc4296_8c.html#a68dc7b815f38b9ddb10bffbdce77157b" title="Check if port is enabled/disabled." alt="" coords="248,219,431,244"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="497,275,441,259,392,247,393,242,442,254,498,270"/>
+<area shape="rect" id="Node000009" href="$ltc4296_8c.html#aae2f7be3806f511565ca316675606611" title="Check if port has stable power." alt="" coords="263,269,415,309"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="476,291,416,291,416,286,476,286"/>
+<area shape="rect" id="Node000010" href="$ltc4296_8c.html#a6fa63251c5ecb86f720c5b71983590f9" title="Read global ADC." alt="" coords="267,333,411,359"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="498,308,442,323,393,336,392,331,441,318,497,303"/>
+<area shape="rect" id="Node000011" href="$ltc4296_8c.html#a3fc5abe2c28e91a8a37d0774faf665a9" title="Read global faults." alt="" coords="263,55,416,95"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="544,264,528,229,506,188,476,146,440,109,415,95,418,90,443,105,480,142,510,185,533,227,549,262"/>
+<area shape="rect" id="Node000012" href="$ltc4296_8c.html#a1533917b5444d70dfe5ddbebabd9263f" title="Read port ADC." alt="" coords="255,432,424,457"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="543,314,503,369,475,397,443,422,415,434,413,429,440,417,471,393,499,365,539,311"/>
+<area shape="rect" id="Node000013" href="$ltc4296_8c.html#a14c1fffa9e4fea0e1a22da27726b96b5" title="Read Port Events." alt="" coords="244,481,435,507"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="549,316,534,351,511,394,481,436,443,472,422,483,419,479,440,468,477,433,507,391,529,349,544,313"/>
+<area shape="rect" id="Node000015" href="$ltc4296_8c.html#acaa8782a7cd5abd6c4b497c3b3c22bbc" title="Read Port Status." alt="" coords="246,531,433,556"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="553,315,540,360,519,416,487,473,467,499,443,521,424,533,421,528,440,517,463,495,483,470,514,414,535,359,548,314"/>
+<area shape="rect" id="Node000003" href="$ltc4296_8c.html#aebc83ee39584effbc89eedd89cc11f00" title="Check global events." alt="" coords="24,55,171,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="271,119,170,95,171,90,272,114"/>
+<area shape="rect" id="Node000005" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="17,383,177,408"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="276,398,178,398,178,393,276,393"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="272,36,171,61,170,55,271,31"/>
+<area shape="poly" id="edge12_Node000011_Node000003" title=" " alt="" coords="249,78,171,78,171,73,249,73"/>
+<area shape="rect" id="Node000014" href="$ltc4296_8c.html#a091082997e1350b271177136cb1cc8e9" title="Check port events." alt="" coords="5,481,189,507"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="230,497,190,497,190,491,230,491"/>
+</map>

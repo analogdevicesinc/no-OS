@@ -1,0 +1,28 @@
+<map id="projects/max31855/src/examples/basic/basic_example.c" name="projects/max31855/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="278,5,449,60"/>
+<area shape="rect" id="Node000002" href="$max31855_2src_2examples_2basic_2basic__example_8h.html" title=" " alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,62,124,107,123,102,277,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="322,62,256,103,254,98,320,58"/>
+<area shape="rect" id="Node000004" href="$max31855_8h.html" title=" " alt="" coords="312,108,415,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="366,60,366,94,361,94,361,60"/>
+<area shape="rect" id="Node000010" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="439,108,575,133"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="409,58,478,99,475,103,406,62"/>
+<area shape="rect" id="Node000012" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="565,181,679,207"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="449,42,485,51,522,64,558,82,589,106,609,135,620,167,615,169,605,138,585,110,555,87,520,69,484,56,448,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="347,255,417,280"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="358,135,343,167,340,187,342,206,351,225,364,243,359,246,347,228,337,207,334,187,338,166,353,132"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="351,181,450,207"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="372,132,391,168,386,171,367,135"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="176,181,276,207"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="342,136,262,177,259,173,340,131"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="400,208,391,242,386,241,395,206"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="252,204,345,246,343,251,250,209"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="108,255,179,280"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="214,209,169,248,166,243,211,205"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="203,255,286,280"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="232,206,241,241,236,242,227,208"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="474,181,541,207"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="510,134,510,168,505,168,505,134"/>
+<area shape="poly" id="edge14_Node000012_Node000005" title=" " alt="" coords="584,209,431,254,430,249,583,204"/>
+</map>

@@ -1,0 +1,47 @@
+<map id="adhv4710_write" name="adhv4710_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="641,405,768,431"/>
+<area shape="rect" id="Node000002" href="$adhv4710_8c.html#a78d50f15929df4fa8535153a05554294" title="Program quiescent current of amplifier." alt="" coords="411,183,593,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="680,397,520,225,524,222,684,393"/>
+<area shape="rect" id="Node000004" href="$adhv4710_8c.html#a67663137d3963ead469ba2bbda6633e0" title="Update specific register bits." alt="" coords="417,433,587,459"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="628,431,587,437,586,432,627,426"/>
+<area shape="rect" id="Node000003" href="$eval-adhv4710_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,369,60,395"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="481,173,461,142,433,108,400,76,361,52,291,23,259,14,229,9,200,9,171,16,141,30,110,52,93,75,78,110,56,205,43,302,37,369,32,369,38,301,51,204,73,109,88,72,106,48,139,25,170,11,200,4,230,3,261,8,293,18,364,48,403,72,437,104,465,138,485,170"/>
+<area shape="poly" id="edge28_Node000004_Node000003" title=" " alt="" coords="487,422,408,236,398,193,395,156,387,125,377,110,361,96,328,74,296,59,265,49,234,46,204,49,174,58,142,74,110,96,94,115,81,145,59,226,45,310,38,370,33,369,40,309,54,225,76,144,90,112,106,92,139,69,172,53,203,43,234,41,266,44,298,54,330,70,364,92,381,107,392,122,401,155,403,192,413,234,492,420"/>
+<area shape="rect" id="Node000005" href="$adhv4710_8c.html#a087878f42abe0d2dc24fd7490db5f8ca" title="Clear shutdown latch and re&#45;enable amplifier from shutdown." alt="" coords="138,106,333,146"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="488,422,422,272,386,199,361,160,332,143,335,139,365,156,390,196,426,270,492,419"/>
+<area shape="rect" id="Node000006" href="$adhv4710_8c.html#ae016655cc943b4e41caadc34f81e6755" title="Enable overtemperature protection." alt="" coords="108,170,363,210"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="490,421,472,378,445,324,408,270,386,245,361,224,341,212,344,208,364,220,390,241,412,266,450,321,477,375,495,419"/>
+<area shape="rect" id="Node000007" href="$adhv4710_8c.html#a04b52d0c8ee516bc875683e48f1f963d" title="Enable overvoltage negative protection." alt="" coords="124,234,347,274"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="484,423,435,355,401,319,361,288,337,276,340,272,364,284,405,315,440,352,489,420"/>
+<area shape="rect" id="Node000008" href="$adhv4710_8c.html#a031a6d2e9700fd27ead08c394375fc18" title="Enable overvoltage positive protection." alt="" coords="124,298,347,338"/>
+<area shape="poly" id="edge10_Node000004_Node000008" title=" " alt="" coords="474,426,424,388,362,352,330,340,332,335,364,348,427,384,477,422"/>
+<area shape="rect" id="Node000009" href="$adhv4710_8c.html#a8079df2d35a7c38be04f36f1b4a05316" title="Enable sink overcurrent protection." alt="" coords="147,362,324,402"/>
+<area shape="poly" id="edge12_Node000004_Node000009" title=" " alt="" coords="434,432,319,405,320,399,435,427"/>
+<area shape="rect" id="Node000010" href="$adhv4710_8c.html#a2fdbecdedeace86183061cc0f5442349" title="Enable source overcurrent protection." alt="" coords="142,426,329,466"/>
+<area shape="poly" id="edge14_Node000004_Node000010" title=" " alt="" coords="404,449,329,449,329,443,404,443"/>
+<area shape="rect" id="Node000011" href="$adhv4710_8c.html#a41128c1974c1de32fc1c4bc6ea94149a" title="Set level of overtemperature protection." alt="" coords="120,490,351,530"/>
+<area shape="poly" id="edge16_Node000004_Node000011" title=" " alt="" coords="435,465,320,492,319,487,434,459"/>
+<area shape="rect" id="Node000012" href="$adhv4710_8c.html#a75838fb4efe8625d2f4a688371dd8d47" title="Set level of overvoltage negative protection." alt="" coords="136,554,335,594"/>
+<area shape="poly" id="edge18_Node000004_Node000012" title=" " alt="" coords="477,470,427,508,364,544,332,556,330,551,362,540,424,503,474,466"/>
+<area shape="rect" id="Node000013" href="$adhv4710_8c.html#abd585e89112eb3b3b6e0d786f4a0101b" title="Set level of overvoltage positive protection." alt="" coords="136,618,335,658"/>
+<area shape="poly" id="edge20_Node000004_Node000013" title=" " alt="" coords="489,472,440,540,405,577,364,608,336,622,334,617,361,604,401,573,435,537,484,469"/>
+<area shape="rect" id="Node000014" href="$adhv4710_8c.html#abe49c41e97c584900ced278e082a3328" title="Set level of overcurrent sink protection." alt="" coords="121,682,350,722"/>
+<area shape="poly" id="edge22_Node000004_Node000014" title=" " alt="" coords="495,473,477,516,450,570,412,625,390,650,364,672,344,684,341,679,361,668,386,647,408,622,445,568,472,514,490,471"/>
+<area shape="rect" id="Node000015" href="$adhv4710_8c.html#a551cdf6e93577358e4980b032d60ac05" title="Set level of overcurrent source protection." alt="" coords="154,746,317,786"/>
+<area shape="poly" id="edge24_Node000004_Node000015" title=" " alt="" coords="499,472,485,528,459,599,442,636,420,673,394,707,364,736,342,750,318,759,316,754,340,745,361,732,390,703,416,670,437,634,454,597,480,526,493,471"/>
+<area shape="rect" id="Node000016" href="$adhv4710_8c.html#a91d426c9e635d2cfaa286417f444efcf" title="Shutdown the amplifier." alt="" coords="125,811,346,836"/>
+<area shape="poly" id="edge26_Node000004_Node000016" title=" " alt="" coords="501,472,492,539,469,628,452,675,429,721,400,763,364,800,344,813,341,808,361,796,396,760,424,718,447,673,464,626,487,538,496,472"/>
+<area shape="rect" id="Node000017" href="$adhv4710_8c.html#a57dff986dd7807f642df21a9c54acee3" title="Reset the device using SW reset." alt="" coords="160,860,311,885"/>
+<area shape="poly" id="edge27_Node000004_Node000017" title=" " alt="" coords="503,473,496,548,476,650,458,704,435,758,404,807,364,849,340,865,312,873,310,868,337,860,361,845,399,804,430,755,453,703,471,649,491,547,497,472"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="127,148,110,160,89,184,72,212,50,272,40,329,37,369,32,369,35,328,45,271,68,209,85,181,106,156,124,143"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="116,219,110,224,80,259,59,300,46,339,39,369,34,368,41,338,54,298,75,256,106,220,113,215"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="120,282,110,288,87,307,68,329,43,371,38,368,64,326,83,303,106,284,117,278"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="135,344,109,352,61,372,59,367,107,347,133,339"/>
+<area shape="poly" id="edge13_Node000009_Node000003" title=" " alt="" coords="133,385,60,385,60,379,133,379"/>
+<area shape="poly" id="edge15_Node000010_Node000003" title=" " alt="" coords="133,425,107,416,59,397,61,392,109,411,135,420"/>
+<area shape="poly" id="edge17_Node000011_Node000003" title=" " alt="" coords="117,486,106,480,83,461,64,438,38,396,43,393,68,434,87,457,110,476,120,482"/>
+<area shape="poly" id="edge19_Node000012_Node000003" title=" " alt="" coords="122,555,106,544,75,508,54,466,41,426,34,396,39,394,46,425,59,464,80,505,110,540,125,550"/>
+<area shape="poly" id="edge21_Node000013_Node000003" title=" " alt="" coords="122,620,106,608,85,583,68,555,45,493,35,436,32,395,37,395,40,435,50,492,72,552,89,580,110,604,125,615"/>
+<area shape="poly" id="edge23_Node000014_Node000003" title=" " alt="" coords="110,676,106,672,91,650,78,618,56,537,41,454,33,395,38,394,47,453,62,536,83,616,96,647,110,668,114,672"/>
+<area shape="poly" id="edge25_Node000015_Node000003" title=" " alt="" coords="139,757,122,748,106,736,89,708,74,668,52,567,39,465,32,395,38,394,44,464,58,566,79,667,94,706,110,732,125,744,142,753"/>
+</map>

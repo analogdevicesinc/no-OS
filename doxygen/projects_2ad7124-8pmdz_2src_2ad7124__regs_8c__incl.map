@@ -1,0 +1,23 @@
+<map id="projects/ad7124&#45;8pmdz/src/ad7124_regs.c" name="projects/ad7124&#45;8pmdz/src/ad7124_regs.c">
+<area shape="rect" id="Node000001" title="AD7124 register file." alt="" coords="156,5,331,45"/>
+<area shape="rect" id="Node000002" href="$projects_2ad7124-8pmdz_2src_2ad7124__regs_8h.html" title="AD7124 register file." alt="" coords="185,93,302,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,46,246,79,241,79,241,46"/>
+<area shape="rect" id="Node000003" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="202,167,285,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="246,119,246,153,241,153,241,119"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="165,313,236,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="227,194,203,214,184,241,181,256,182,271,190,300,185,302,176,272,176,255,180,239,199,211,223,190"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="414,313,497,339"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="285,181,320,186,359,196,397,213,431,238,449,268,456,299,451,300,444,270,427,242,394,218,357,201,319,191,284,186"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,240,293,265"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="246,192,246,226,241,226,241,192"/>
+<area shape="rect" id="Node000007" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,240,119,265"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="215,195,105,237,103,232,213,190"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,240,417,265"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="265,190,337,231,334,235,262,194"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="239,267,217,303,212,300,234,264"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="85,263,167,305,165,309,83,268"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="342,268,241,310,239,305,340,263"/>
+<area shape="poly" id="edge12_Node000008_Node000005" title=" " alt="" coords="383,263,432,302,429,307,380,267"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="319,313,389,339"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="368,266,361,300,356,299,363,265"/>
+</map>

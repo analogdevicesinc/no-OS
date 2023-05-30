@@ -1,0 +1,7 @@
+<map id="convert_pct_type" name="convert_pct_type">
+<area shape="rect" id="Node000001" title="Converts ADI_PQLIB_PCT_TYPE to percentage." alt="" coords="171,31,305,56"/>
+<area shape="rect" id="Node000002" href="$iio__pqm_8c.html#a248984e120ec16020a384e9c08a296fd" title="Read a channel attribute." alt="" coords="13,5,115,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,34,115,28,116,23,157,29"/>
+<area shape="rect" id="Node000003" href="$iio__pqm_8c.html#a7579bb84d6998edfe7203f244b85ba6b" title="Read a pqm device attribute." alt="" coords="5,55,123,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,57,123,62,123,57,157,52"/>
+</map>

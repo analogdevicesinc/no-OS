@@ -1,0 +1,7 @@
+<map id="admfm2000_set_channel_config" name="admfm2000_set_channel_config">
+<area shape="rect" id="Node000001" title="Set the channel configuration." alt="" coords="383,5,569,45"/>
+<area shape="rect" id="Node000002" href="$admfm2000_8c.html#a4ba019b42b3ebb0f8ecd819a8362882d" title="Initialize the admfm2000 device." alt="" coords="205,13,335,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="369,28,335,28,335,23,369,23"/>
+<area shape="rect" id="Node000003" href="$iio__admfm2000_8c.html#a93f6f30d3bfa95c550b99c5a181bd52c" title="Initialize the iio device." alt="" coords="5,13,157,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="192,28,157,28,157,23,192,23"/>
+</map>

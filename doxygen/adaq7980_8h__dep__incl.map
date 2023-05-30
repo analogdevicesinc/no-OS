@@ -1,0 +1,7 @@
+<map id="drivers/adc/adaq7980/adaq7980.h" name="drivers/adc/adaq7980/adaq7980.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="100,5,263,45"/>
+<area shape="rect" id="Node000002" href="$adaq7980_8c.html" title="Implementation adaq7980 Driver." alt="" coords="5,93,168,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,57,109,95,106,91,148,53"/>
+<area shape="rect" id="Node000003" href="$adaq7980__sdz_8c.html" title="Implementation of Main Function." alt="" coords="192,93,363,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,53,258,91,254,95,211,57"/>
+</map>

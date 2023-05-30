@@ -1,0 +1,18 @@
+<map id="ad463x_remove" name="ad463x_remove">
+<area shape="rect" id="Node000001" title="Free the memory allocated by ad463x_init()." alt="" coords="592,31,719,56"/>
+<area shape="rect" id="Node000002" href="$ad463x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="384,5,544,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="578,36,544,31,544,26,579,31"/>
+<area shape="rect" id="Node000004" href="$ad463x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="393,55,535,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="579,56,536,61,535,56,578,50"/>
+<area shape="rect" id="Node000003" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="271,5,326,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="370,21,326,21,326,15,370,15"/>
+<area shape="poly" id="edge7_Node000004_Node000003" title=" " alt="" coords="407,53,326,29,327,23,409,48"/>
+<area shape="rect" id="Node000005" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a24add404325f00727126e8cf06932df2" title="IIOD example task." alt="" coords="261,55,336,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="379,70,336,70,336,65,379,65"/>
+<area shape="rect" id="Node000008" href="$adalm-mmsc_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="271,104,326,129"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="409,87,327,111,326,106,407,81"/>
+<area shape="rect" id="Node000006" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="108,55,213,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="248,70,214,70,214,65,248,65"/>
+<area shape="rect" id="Node000007" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

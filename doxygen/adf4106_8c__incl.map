@@ -1,0 +1,23 @@
+<map id="drivers/frequency/adf4106/adf4106.c" name="drivers/frequency/adf4106/adf4106.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="309,5,502,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="417,167,488,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="413,45,435,118,446,153,441,154,430,119,408,46"/>
+<area shape="rect" id="Node000003" href="$adf4106_8h.html" title="Header file of ADF4106 driver. This driver supporting the following devices : ADF4001,..." alt="" coords="173,93,260,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="361,48,258,90,256,85,359,43"/>
+<area shape="rect" id="Node000008" href="$no__os__alloc_8h.html" title=" " alt="" coords="444,93,554,119"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="430,44,476,82,473,86,427,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,240,184,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="173,116,80,137,39,151,14,168,9,180,10,191,17,201,28,211,62,227,100,238,99,244,60,232,26,215,13,205,5,193,3,179,10,165,37,146,79,131,172,111"/>
+<area shape="rect" id="Node000005" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="25,167,138,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="196,121,117,162,115,158,193,116"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="163,167,270,192"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="219,119,219,153,214,153,214,119"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="294,167,392,192"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="238,116,312,157,309,162,235,121"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="95,191,130,228,126,232,91,194"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="207,194,171,232,167,228,203,190"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="313,195,194,238,192,233,311,190"/>
+<area shape="poly" id="edge12_Node000008_Node000002" title=" " alt="" coords="494,120,470,157,465,154,489,118"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="512,167,579,192"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="509,118,533,154,528,157,504,120"/>
+</map>

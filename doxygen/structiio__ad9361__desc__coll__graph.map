@@ -1,0 +1,18 @@
+<map id="iio_ad9361_desc" name="iio_ad9361_desc">
+<area shape="rect" id="Node000001" title="Structure holding iio descriptor." alt="" coords="303,288,434,313"/>
+<area shape="rect" id="Node000002" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="325,200,413,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="371,239,371,287,366,287,366,239"/>
+<area shape="rect" id="Node000003" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="83,103,233,128"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,131,344,197,342,202,195,136"/>
+<area shape="rect" id="Node000004" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,41,152,101,148,104,107,44"/>
+<area shape="rect" id="Node000005" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="321,103,417,128"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="371,142,371,200,366,200,366,142"/>
+<area shape="rect" id="Node000006" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="207,5,319,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="283,39,309,67,352,100,349,105,306,71,279,43"/>
+<area shape="rect" id="Node000007" href="$structscan__type.html" title=" " alt="" coords="343,5,431,31"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="376,44,373,55,370,80,370,102,365,103,364,80,367,54,371,43"/>
+<area shape="rect" id="Node000008" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="482,5,583,31"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="544,44,542,70,529,95,513,117,474,154,432,183,396,202,393,198,429,178,471,150,509,113,525,92,537,69,538,44"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="502,40,473,57,390,105,387,100,470,52,499,35"/>
+</map>

@@ -1,0 +1,24 @@
+<map id="mwc_iio_init_param" name="mwc_iio_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="327,280,481,305"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="562,143,734,168"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="627,179,579,219,517,258,453,282,451,277,515,254,576,215,624,175"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="477,5,665,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="597,39,609,53,633,101,647,141,642,143,628,103,604,56,593,42"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="415,93,547,119"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="539,40,518,57,502,76,490,94,485,92,498,72,514,53,536,36"/>
+<area shape="rect" id="Node000004" href="$structno__os__eeprom__desc.html" title="Structure holding the EEPROM descriptor." alt="" coords="64,192,219,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="187,220,286,253,365,277,364,283,285,259,185,225"/>
+<area shape="rect" id="Node000005" href="$structno__os__eeprom__platform__ops.html" title="Structure holding the EEPROM function pointers that point to the platform specific function." alt="" coords="5,93,216,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="121,131,140,191,135,193,116,133"/>
+<area shape="rect" id="Node000006" href="$structadin1300__desc.html" title=" " alt="" coords="258,192,377,217"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="337,226,362,254,390,278,387,282,358,258,333,230"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="434,126,393,145,358,170,331,194,327,190,355,165,391,140,432,121"/>
+<area shape="rect" id="Node000010" href="$structmax24287__desc.html" title=" " alt="" coords="401,192,529,217"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="480,132,470,192,465,192,475,131"/>
+<area shape="rect" id="Node000008" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="241,93,378,119"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="262,127,245,144,241,155,245,167,258,180,274,190,272,194,254,184,240,169,236,155,240,141,258,124"/>
+<area shape="poly" id="edge12_Node000010_Node000008" title=" " alt="" coords="306,132,306,150,313,166,344,178,402,190,401,195,343,183,309,170,301,152,301,132"/>
+<area shape="rect" id="Node000009" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="244,5,375,31"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="312,45,312,93,307,93,307,45"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="451,230,415,281,410,278,447,227"/>
+</map>

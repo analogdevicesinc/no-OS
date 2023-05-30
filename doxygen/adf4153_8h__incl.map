@@ -1,0 +1,11 @@
+<map id="drivers/frequency/adf4153/adf4153.h" name="drivers/frequency/adf4153/adf4153.h">
+<area shape="rect" id="Node000001" title="Header file of adf4153 driver." alt="" coords="5,5,199,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="67,167,137,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,48,56,68,39,94,37,111,44,128,57,143,72,156,69,160,53,147,39,131,32,112,34,92,51,65,73,44"/>
+<area shape="rect" id="Node000003" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="49,93,155,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="105,46,105,79,99,79,99,46"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="179,93,278,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="134,43,200,84,197,88,131,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="105,119,105,153,99,153,99,119"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="210,121,136,162,133,157,207,116"/>
+</map>

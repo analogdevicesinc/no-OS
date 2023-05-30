@@ -1,0 +1,24 @@
+<map id="ade7978_read" name="ade7978_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="552,131,667,156"/>
+<area shape="rect" id="Node000002" href="$ade7978_8c.html#a4109cca809289e739b0c327c2167eed2" title="Get interrupt indicator from STATUS0 register." alt="" coords="319,5,504,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="588,121,551,82,528,61,503,44,477,33,479,28,505,40,531,57,555,78,592,118"/>
+<area shape="rect" id="Node000003" href="$ade7978_8c.html#ae48befda8e0321f9171fcb4c96794855" title="Get interrupt indicator from STATUS1 register." alt="" coords="319,156,504,181"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="538,155,505,159,504,154,538,150"/>
+<area shape="rect" id="Node000004" href="$ade7978_8c.html#aeaf475d84c4cd829cb87e6674f0a2662" title="Initialize the device." alt="" coords="136,155,243,180"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="538,143,435,142,319,147,243,159,242,153,318,142,434,137,538,138"/>
+<area shape="rect" id="Node000006" href="$ade7978_8c.html#a74eb847ce5afc34a424fb3a335e54ed3" title="Read the measurements for specific phase." alt="" coords="325,55,498,80"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="566,128,503,102,450,83,452,78,505,97,568,123"/>
+<area shape="rect" id="Node000008" href="$ade7978_8c.html#ad9d56ff7a4a3839f4e0702a7445a8947" title="Setup the device." alt="" coords="129,256,250,281"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="593,169,556,210,532,230,505,246,440,267,371,278,306,280,250,278,250,273,306,275,371,272,438,262,503,241,529,226,552,206,589,166"/>
+<area shape="rect" id="Node000009" href="$ade7978_8c.html#aac45be2efb741860cad5f69bb7f436e4" title="Update specific register bits." alt="" coords="331,205,492,231"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="574,165,505,196,469,208,467,203,503,192,572,160"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="304,171,243,170,243,165,304,165"/>
+<area shape="rect" id="Node000005" href="$eval-ade7978_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,205,60,231"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="137,187,61,212,59,207,135,182"/>
+<area shape="rect" id="Node000007" href="$eval-ade7978_2src_2common_2common__data_8c.html#a593d545dbd1ac63e04a76e6ee81b0d0d" title="Saves the current and voltage values of device 1 in rms_adc structure." alt="" coords="108,55,271,80"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="311,70,271,70,271,65,311,65"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="135,254,59,229,61,224,137,249"/>
+<area shape="poly" id="edge11_Node000009_Node000004" title=" " alt="" coords="341,205,242,182,244,177,342,200"/>
+<area shape="poly" id="edge13_Node000009_Node000005" title=" " alt="" coords="316,221,60,221,60,215,316,215"/>
+<area shape="poly" id="edge12_Node000009_Node000008" title=" " alt="" coords="342,236,246,259,245,253,341,231"/>
+</map>

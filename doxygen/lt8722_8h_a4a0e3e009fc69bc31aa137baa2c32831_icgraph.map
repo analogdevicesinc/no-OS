@@ -1,0 +1,11 @@
+<map id="lt8722_set_swen_pin" name="lt8722_set_swen_pin">
+<area shape="rect" id="Node000001" title="Set SWEN pin of LT8722 device." alt="" coords="543,31,701,56"/>
+<area shape="rect" id="Node000002" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="404,31,495,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="529,46,495,46,495,41,529,41"/>
+<area shape="rect" id="Node000003" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,37,356,32,357,27,391,32"/>
+<area shape="rect" id="Node000004" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="219,55,333,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="390,54,334,62,333,57,390,49"/>
+<area shape="rect" id="Node000005" href="$lt8722_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,55,148,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="205,70,148,70,148,65,205,65"/>
+</map>

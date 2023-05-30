@@ -1,0 +1,16 @@
+<map id="projects/iio_aducm3029/src/parameters.h" name="projects/iio_aducm3029/src/parameters.h">
+<area shape="rect" id="Node000001" title="Parameters Definitions." alt="" coords="105,5,283,45"/>
+<area shape="rect" id="Node000002" href="$iio__aducm3029_8h.html" title="iio description of aducm3029 uc" alt="" coords="49,93,182,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,47,139,85,135,82,173,44"/>
+<area shape="rect" id="Node000003" href="$aducm3029__irq_8h.html" title="Header file of IRQ driver for ADuCM302x." alt="" coords="207,93,341,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,44,254,82,250,85,212,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,167,169,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,121,131,164,130,159,243,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="194,167,277,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="270,120,250,156,246,153,265,118"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="321,240,392,265"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="283,118,346,227,341,229,278,120"/>
+<area shape="rect" id="Node000007" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="351,167,447,192"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="295,116,368,157,366,162,293,121"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="395,194,373,230,368,227,390,191"/>
+</map>

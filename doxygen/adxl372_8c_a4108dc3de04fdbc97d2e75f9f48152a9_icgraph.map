@@ -1,0 +1,16 @@
+<map id="adxl372_read_reg_multiple" name="adxl372_read_reg_multiple">
+<area shape="rect" id="Node000001" title=" " alt="" coords="476,75,675,100"/>
+<area shape="rect" id="Node000002" href="$adxl372_8c.html#aac65b511d55eda69e1c904334ae2a1f1" title=" " alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,72,482,54,427,39,365,29,301,23,184,19,184,14,301,18,365,24,429,34,484,49,534,67"/>
+<area shape="rect" id="Node000003" href="$adxl372_8c.html#a0b5d35949f6ad857a43cba9798d9c801" title=" " alt="" coords="232,99,428,124"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="463,101,428,104,428,99,462,96"/>
+<area shape="rect" id="Node000005" href="$adxl372_8c.html#a2c3dd60c74ff1f4ac503523325594895" title=" " alt="" coords="16,121,173,161"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="534,108,484,125,428,139,362,148,294,151,173,149,173,144,294,146,361,142,428,134,482,120,532,103"/>
+<area shape="rect" id="Node000006" href="$adxl372_8c.html#a9fc857b32b221fb10c1bf4f41c54ce86" title=" " alt="" coords="255,49,405,75"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="462,78,404,72,405,67,463,73"/>
+<area shape="rect" id="Node000004" href="$adxl372_8c.html#a75e01bc9a81ed346cab498704749ff9b" title=" " alt="" coords="5,60,184,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="238,99,172,88,173,83,239,94"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="248,49,163,33,164,28,249,44"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="242,69,184,71,184,66,241,63"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="259,81,233,89,142,123,140,118,231,83,258,76"/>
+</map>

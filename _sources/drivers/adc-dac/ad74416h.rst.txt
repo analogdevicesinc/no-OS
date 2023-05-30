@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/adc-dac/ad74416h/README.rst

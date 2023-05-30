@@ -1,0 +1,7 @@
+<map id="CALIBRATION_CONTEXT" name="CALIBRATION_CONTEXT">
+<area shape="rect" id="Node000001" title="Calibration state structure (runtime state)" alt="" coords="86,93,265,119"/>
+<area shape="rect" id="Node000002" href="$struct_c_a_l_i_b_r_a_t_i_o_n___i_n_p_u_t.html" title="Calibration input parameters (user&#45;provided values)" alt="" coords="5,5,161,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,38,164,91,161,95,104,42"/>
+<area shape="rect" id="Node000003" href="$struct_c_a_l_i_b_r_a_t_i_o_n___r_e_s_u_l_t.html" title="Calibration results (computed values)" alt="" coords="186,5,351,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,42,190,95,187,91,244,38"/>
+</map>
