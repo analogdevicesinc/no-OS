@@ -1,0 +1,20 @@
+<map id="ltc3220_update_reg_uled" name="ltc3220_update_reg_uled">
+<area shape="rect" id="Node000001" title="Updates the configuration set on the device&#39;s ULED based on the config." alt="" coords="636,71,821,97"/>
+<area shape="rect" id="Node000002" href="$ltc3220_8c.html#a8d3354001fff4a8fdac88d494084ac45" title="Sets the selected ULED register&#39;s current strength." alt="" coords="403,46,588,71"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="622,75,588,71,588,66,623,70"/>
+<area shape="rect" id="Node000007" href="$ltc3220_8c.html#ad532c85bfc797db06801ee1958146aff" title="Sets the selected ULED register&#39;s operating mode." alt="" coords="407,95,583,121"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="622,98,584,102,583,96,622,92"/>
+<area shape="rect" id="Node000003" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a8a2b897c6011f223031b42d5293741df" title="Parallel and Serial LED control. LED 2 to 9 are set to serial, then LED1 is set to display on all LED..." alt="" coords="178,5,349,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,47,348,40,349,35,394,41"/>
+<area shape="rect" id="Node000005" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a9c14a30ab21d05b3893d5a00d660f1ce" title="individual LED control for all 18 LEDs" alt="" coords="172,70,355,95"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="389,72,355,76,355,71,388,67"/>
+<area shape="rect" id="Node000006" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#a27fd88a32eb2f2f1eac3738645a7acbd" title="individual LED control with alternating modes for all 18 LEDs" alt="" coords="172,120,355,160"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="425,78,404,85,380,97,356,110,326,122,324,117,354,106,377,93,402,80,423,73"/>
+<area shape="rect" id="Node000004" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,70,124,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="181,52,110,72,109,67,180,47"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="158,85,124,85,124,80,158,80"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="180,119,109,98,110,93,181,114"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="427,94,402,85,354,60,324,48,326,43,356,55,404,80,428,89"/>
+<area shape="poly" id="edge10_Node000007_Node000005" title=" " alt="" coords="394,100,355,95,355,90,394,94"/>
+<area shape="poly" id="edge11_Node000007_Node000006" title=" " alt="" coords="394,125,355,130,355,125,394,119"/>
+</map>

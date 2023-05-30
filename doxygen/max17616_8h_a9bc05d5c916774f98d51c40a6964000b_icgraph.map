@@ -1,0 +1,7 @@
+<map id="max17616_read_block_data" name="max17616_read_block_data">
+<area shape="rect" id="Node000001" title="Perform a PMBus read block operation." alt="" coords="303,42,508,67"/>
+<area shape="rect" id="Node000002" href="$max17616_8c.html#a56be0e4be7d3a8d8d7823e4da294d377" title="Read device ID and identify chip variant." alt="" coords="39,5,221,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="289,45,221,38,221,32,289,40"/>
+<area shape="rect" id="Node000003" href="$max17616_8c.html#afaa36008c6acada4f7bb2f5d11107e9f" title="Read and verify manufacturer ID." alt="" coords="5,70,255,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,69,255,73,255,67,289,64"/>
+</map>

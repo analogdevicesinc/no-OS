@@ -1,0 +1,26 @@
+<map id="ltm3360b_reg_write" name="ltm3360b_reg_write">
+<area shape="rect" id="Node000001" title="Write register to LTM3360B device." alt="" coords="891,81,1043,107"/>
+<area shape="rect" id="Node000002" href="$ltm3360b_8c.html#af479ea15e3a9410de40e9716665b68a2" title="Enable or disable ADC." alt="" coords="428,5,593,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="922,79,842,53,777,41,712,32,593,23,594,18,712,27,778,35,843,47,924,73"/>
+<area shape="rect" id="Node000004" href="$ltm3360b_8c.html#aa02e29a73d3df9f56950298615092147" title="Read raw ADC value." alt="" coords="172,57,353,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="877,94,354,76,354,70,877,88"/>
+<area shape="rect" id="Node000005" href="$ltm3360b_8c.html#a21045d7ac46ee730da1384e6c72e4f41" title="Update register bits using mask &#45; modifies only specified bits." alt="" coords="673,107,837,132"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="877,107,838,112,837,107,877,102"/>
+<area shape="rect" id="Node000010" href="$ltm3360b_8c.html#a1db61c160df7ab99c241707ff711930a" title="Set output voltage." alt="" coords="668,181,843,207"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="928,115,785,184,782,179,925,110"/>
+<area shape="rect" id="Node000003" href="$ltm3360b_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,83,124,108"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="415,19,298,25,234,34,173,47,126,65,88,85,85,80,124,60,171,42,234,29,297,20,414,14"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="158,86,125,90,124,85,158,81"/>
+<area shape="rect" id="Node000006" href="$ltm3360b_8c.html#a3e1ca5fedc9a3e899cf3f5a4602e46e7" title="Enable or disable LTM3360B device." alt="" coords="418,107,603,132"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="659,122,604,122,604,117,659,117"/>
+<area shape="rect" id="Node000009" href="$ltm3360b_8c.html#aadd89ca0a187c7dfee7b4277690249b0" title="Set IMON threshold for overcurrent detection." alt="" coords="401,156,620,181"/>
+<area shape="poly" id="edge11_Node000005_Node000009" title=" " alt="" coords="679,137,575,159,574,153,678,132"/>
+<area shape="rect" id="Node000007" href="$ltm3360b_8c.html#a54e53f89a19daca5d0068c8a4d9f88ce" title="Initialize LTM3360B device." alt="" coords="207,156,319,181"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="433,137,320,160,319,155,432,132"/>
+<area shape="rect" id="Node000008" href="$ltm3360b_8c.html#a95a9927ad4fcf873351417abd5bd4928" title="Remove LTM3360B device instance." alt="" coords="192,107,333,132"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="404,122,334,122,334,117,404,117"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="198,155,171,146,90,111,92,106,173,141,199,150"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="178,112,124,105,125,100,179,106"/>
+<area shape="poly" id="edge12_Node000009_Node000007" title=" " alt="" coords="387,171,319,171,319,166,387,166"/>
+<area shape="poly" id="edge14_Node000010_Node000007" title=" " alt="" coords="655,201,533,203,401,197,319,184,320,179,402,191,533,198,655,196"/>
+</map>

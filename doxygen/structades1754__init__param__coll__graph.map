@@ -1,0 +1,7 @@
+<map id="ades1754_init_param" name="ades1754_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,181,180,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__uart__init__param.html" title="Structure holding the parameters for UART initialization." alt="" coords="13,93,184,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,133,101,181,96,181,96,133"/>
+<area shape="rect" id="Node000003" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="5,5,192,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,45,101,93,96,93,96,45"/>
+</map>

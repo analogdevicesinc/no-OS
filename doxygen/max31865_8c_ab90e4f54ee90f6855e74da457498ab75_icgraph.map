@@ -1,0 +1,21 @@
+<map id="max31865_write" name="max31865_write">
+<area shape="rect" id="Node000001" title="Write raw register value." alt="" coords="671,156,801,181"/>
+<area shape="rect" id="Node000002" href="$max31865_8c.html#a3944bc450d0420469cc8f02ac227da93" title="update register contents" alt="" coords="444,131,615,156"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="656,162,615,156,615,151,657,156"/>
+<area shape="rect" id="Node000009" href="$max31865_8c.html#aed7ce874efb83adc5e7afd2aa3c01e08" title="Update the contents of the HIGH and LOW FAULT registers of max31865." alt="" coords="436,180,623,205"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="657,180,623,184,622,179,656,175"/>
+<area shape="rect" id="Node000003" href="$max31865_8c.html#a961cf7d30e3bfd0a87c487b2d036ee60" title="Option for continuous conversions between 50/60 Hz." alt="" coords="205,5,388,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="502,124,451,83,387,44,357,33,359,28,389,40,454,79,505,119"/>
+<area shape="rect" id="Node000004" href="$max31865_8c.html#a5f8b654c7d73aeab89e99c75d85dbf4d" title="Clear all faults in FAULTSTAT." alt="" coords="213,55,380,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="476,129,336,83,337,78,477,124"/>
+<area shape="rect" id="Node000005" href="$max31865_8c.html#aae18daf93299f0050372bda29cc0d9c1" title="Read the raw 16&#45;bit value from the RTD_REG in one shot mode." alt="" coords="5,105,157,131"/>
+<area shape="poly" id="edge8_Node000002_Node000005" title=" " alt="" coords="430,140,157,125,158,120,430,135"/>
+<area shape="rect" id="Node000006" href="$max31865_8c.html#a2232570c49e3759f977d6465b13d3819" title="Option for 50Hz or 60Hz noise filters." alt="" coords="205,156,388,181"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="431,157,388,161,388,156,430,151"/>
+<area shape="rect" id="Node000007" href="$max31865_8c.html#aa3c088db6fed7086d35df03ed771d2a0" title="Enable the bias voltage on the RTD sensor." alt="" coords="209,205,385,231"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="459,162,437,170,413,182,389,195,351,208,350,203,387,190,411,178,435,165,457,157"/>
+<area shape="rect" id="Node000008" href="$max31865_8c.html#a16561ecb3e99985382e4e7f7decf3ba4" title="N&#45;wire option for RTD measurement setup." alt="" coords="217,255,377,280"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="446,164,438,169,422,187,414,206,407,225,390,244,366,257,363,252,386,240,402,222,409,204,417,184,434,165,443,160"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="229,86,137,108,135,103,228,81"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="227,204,204,195,145,164,99,133,102,129,148,159,206,190,229,199"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="axi_dmac_remove" name="axi_dmac_remove">
+<area shape="rect" id="Node000001" title=" " alt="" coords="316,104,459,129"/>
+<area shape="rect" id="Node000002" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="108,5,268,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="356,98,315,71,267,44,237,33,239,28,269,40,318,66,359,94"/>
+<area shape="rect" id="Node000003" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a6fab3c4f8551a0a277a9058ddb0f1914" title="DMA example main execution." alt="" coords="111,55,265,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="322,103,240,83,241,77,323,98"/>
+<area shape="rect" id="Node000005" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="117,104,259,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="302,119,260,119,260,114,302,114"/>
+<area shape="rect" id="Node000006" href="$ad7768__evb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="161,153,215,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="323,135,216,162,215,157,322,130"/>
+<area shape="rect" id="Node000007" href="$spi__engine_8c.html#aa999789bde51c3dc28de4c95a150aadd" title="Free the resources allocated by no_os_spi_init()." alt="" coords="113,203,263,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="359,140,317,166,269,192,236,205,234,200,267,188,315,162,356,135"/>
+<area shape="rect" id="Node000004" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="97,70,60,70,60,65,97,65"/>
+</map>

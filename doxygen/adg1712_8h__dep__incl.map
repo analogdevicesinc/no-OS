@@ -1,0 +1,11 @@
+<map id="drivers/switch/adg1712/adg1712.h" name="drivers/switch/adg1712/adg1712.h">
+<area shape="rect" id="Node000001" title="Header file of ADG1712/ADG2712 Driver." alt="" coords="224,5,397,45"/>
+<area shape="rect" id="Node000002" href="$adg1712_8c.html" title="Implementation of ADG1712/ADG2712 Driver." alt="" coords="5,101,179,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,53,137,103,135,98,253,48"/>
+<area shape="rect" id="Node000003" href="$eval-adg1712_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adg1712 examples." alt="" coords="203,101,418,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="313,59,313,101,308,101,308,59"/>
+<area shape="rect" id="Node000005" href="$eval-adg1712_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example source file for eval&#45;adg1712 project." alt="" coords="443,93,632,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="370,48,475,91,472,96,368,53"/>
+<area shape="rect" id="Node000004" href="$eval-adg1712_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adg1712 examples." alt="" coords="203,196,418,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="313,154,313,196,308,196,308,154"/>
+</map>

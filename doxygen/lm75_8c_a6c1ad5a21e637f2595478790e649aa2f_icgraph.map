@@ -1,0 +1,7 @@
+<map id="lm75_write_os_polarity" name="lm75_write_os_polarity">
+<area shape="rect" id="Node000001" title="Write the polarity of the over temperature line." alt="" coords="287,5,461,31"/>
+<area shape="rect" id="Node000002" href="$lm75_8c.html#a2f106daa31e17217692ea2fe3184fd48" title="Initialize LM75 device driver." alt="" coords="156,5,239,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,21,239,21,239,15,273,15"/>
+<area shape="rect" id="Node000003" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html#a897b461801f0c5c236b9fb1279569532" title=" " alt="" coords="5,5,108,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,21,108,21,108,15,142,15"/>
+</map>

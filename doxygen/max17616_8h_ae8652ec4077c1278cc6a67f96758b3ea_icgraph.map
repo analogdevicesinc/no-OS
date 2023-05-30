@@ -1,0 +1,7 @@
+<map id="max17616_get_vout_uv_fault_limit_config" name="max17616_get_vout_uv_fault_limit_config">
+<area shape="rect" id="Node000001" title="Get VOUT UV fault limit configuration using enums." alt="" coords="237,23,416,63"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#a06842d04ba8765565503d1949435b14f" title="Read attribute function for MAX17616 PMBus IIO driver." alt="" coords="7,5,187,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,35,187,31,188,25,224,29"/>
+<area shape="rect" id="Node000003" href="$iio__max17616_8c.html#ae528f14d22238257654456118c44fe34" title="Write attribute function for MAX17616 output channels." alt="" coords="5,55,189,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,57,190,60,189,55,223,51"/>
+</map>

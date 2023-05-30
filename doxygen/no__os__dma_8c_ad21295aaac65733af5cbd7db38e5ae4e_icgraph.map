@@ -1,0 +1,7 @@
+<map id="no_os_dma_init" name="no_os_dma_init">
+<area shape="rect" id="Node000001" title="Initialize the DMA controller." alt="" coords="171,31,295,56"/>
+<area shape="rect" id="Node000002" href="$max32650_2maxim__spi_8c.html#aa4c18a500f7b61d872b99f2d8ca86351" title="Initialize the SPI communication peripheral." alt="" coords="11,5,117,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,35,117,29,117,23,157,29"/>
+<area shape="rect" id="Node000003" href="$stm32__spi_8c.html#ab30b6267353de9d9f7d9dab38b808021" title="Initialize the SPI communication peripheral." alt="" coords="5,55,123,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,57,123,62,123,56,157,51"/>
+</map>

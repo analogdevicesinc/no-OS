@@ -1,0 +1,5 @@
+<map id="adxl355_get_fifo_data" name="adxl355_get_fifo_data">
+<area shape="rect" id="Node000001" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="172,5,339,31"/>
+<area shape="rect" id="Node000002" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

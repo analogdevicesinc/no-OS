@@ -1,0 +1,27 @@
+var ad7616_8c =
+[
+    [ "AD7616_GET_BIT", "ad7616_8c.html#aec2d97530a8d6667d937a64c0e574381", null ],
+    [ "AD7616_TOGGLE_TIMEOUT_DELAY", "ad7616_8c.html#a69e91d32ac9c3170cc8c9992a75cd459", null ],
+    [ "SPI_ENGINE_WORDS_PER_READ", "ad7616_8c.html#ab70ad3af4e5fee8a7e1e02da20415580", null ],
+    [ "ad7616_disable_sequencer", "ad7616_8c.html#a6798e1d3e151879c041125e8f5b71f24", null ],
+    [ "ad7616_par_read", "ad7616_8c.html#aefa824df5f09692da37163d6064d4d4d", null ],
+    [ "ad7616_par_write", "ad7616_8c.html#ad421ebeeffdf46076eaa0cae52d66ae2", null ],
+    [ "ad7616_read", "ad7616_8c.html#a817f02a759f00931e580d2ca14567e04", null ],
+    [ "ad7616_read_channel_source", "ad7616_8c.html#a92f9553f1d7c315841b5cbfe9465864d", null ],
+    [ "ad7616_read_data_parallel", "ad7616_8c.html#a95be394fec3468f9125bf4547892241b", null ],
+    [ "ad7616_read_data_serial", "ad7616_8c.html#a37eaadc6af54ceaf904390ada4a1c167", null ],
+    [ "ad7616_read_mask", "ad7616_8c.html#ab30f2fa37c770eaa801891fb61d585c4", null ],
+    [ "ad7616_remove", "ad7616_8c.html#ab13a1c4482a2dcd8cee5a5de9476a2c5", null ],
+    [ "ad7616_reset", "ad7616_8c.html#aedc099192a9e33e6e283433a9dfdbc33", null ],
+    [ "ad7616_select_channel_source", "ad7616_8c.html#a23b6958a61f9c3b1161a51c76750904f", null ],
+    [ "ad7616_self_test", "ad7616_8c.html#ab690e8d620d464da766f18fd88b8797c", null ],
+    [ "ad7616_set_mode", "ad7616_8c.html#a7bae55e3393d35a43de018c75c78609f", null ],
+    [ "ad7616_set_oversampling_ratio", "ad7616_8c.html#ad30c9b898f7d6fb6ad4991c8d7cbdc8f", null ],
+    [ "ad7616_set_range", "ad7616_8c.html#a7f5ed5397b17224af60507d8d5312335", null ],
+    [ "ad7616_setup", "ad7616_8c.html#a28a5328adc3dd216fad7dbe17b37dfd8", null ],
+    [ "ad7616_setup_sequencer", "ad7616_8c.html#a9688cf245b09af1f32776f6059079190", null ],
+    [ "ad7616_spi_read", "ad7616_8c.html#ac41cb2f02ae4844c9059246199b5edcb", null ],
+    [ "ad7616_spi_write", "ad7616_8c.html#a219e900ed752994300586a0e7bf707ce", null ],
+    [ "ad7616_write", "ad7616_8c.html#adc7914ad7853e33961965f2c98e2777b", null ],
+    [ "ad7616_write_mask", "ad7616_8c.html#abf90300cc332a8f57b8ba95f6818a86a", null ]
+];

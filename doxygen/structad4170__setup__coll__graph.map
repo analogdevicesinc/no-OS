@@ -1,0 +1,9 @@
+<map id="ad4170_setup" name="ad4170_setup">
+<area shape="rect" id="Node000001" title="Sequencer Setup register settings." alt="" coords="131,93,244,119"/>
+<area shape="rect" id="Node000002" href="$structad4170__misc.html" title="Misc register settings." alt="" coords="5,5,113,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,36,171,91,168,95,86,41"/>
+<area shape="rect" id="Node000003" href="$structad4170__afe.html" title="AFE register settings." alt="" coords="138,5,237,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,45,190,93,185,93,185,45"/>
+<area shape="rect" id="Node000004" href="$structad4170__filter.html" title="Filter register settings." alt="" coords="261,5,367,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="287,41,206,95,203,91,284,36"/>
+</map>

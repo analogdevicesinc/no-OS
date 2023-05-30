@@ -1,0 +1,8 @@
+<map id="ade7754_clear_irq_status" name="ade7754_clear_irq_status">
+<area shape="rect" id="Node000001" title="Clear irq status flags." alt="" coords="263,31,451,56"/>
+<area shape="rect" id="Node000002" href="$ade7754_8c.html#a33b0de79aa3d55bcf7c68099c0e2459a" title="Initialize the device." alt="" coords="108,5,215,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,32,214,27,215,22,249,27"/>
+<area shape="rect" id="Node000003" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="249,46,60,46,60,41,249,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,34,61,41,60,35,94,29"/>
+</map>

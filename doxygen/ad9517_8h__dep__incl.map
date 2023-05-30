@@ -1,0 +1,7 @@
+<map id="drivers/frequency/ad9517/ad9517.h" name="drivers/frequency/ad9517/ad9517.h">
+<area shape="rect" id="Node000001" title="Header file of AD9517 Driver." alt="" coords="101,5,289,45"/>
+<area shape="rect" id="Node000002" href="$ad9517_8c.html" title="Implementation of AD9517 Driver." alt="" coords="5,93,193,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,57,122,95,119,91,162,53"/>
+<area shape="rect" id="Node000003" href="$ad9467__fmc_8c.html" title="Implementation of the program&#39;s main function." alt="" coords="218,93,367,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,52,273,91,269,95,225,56"/>
+</map>

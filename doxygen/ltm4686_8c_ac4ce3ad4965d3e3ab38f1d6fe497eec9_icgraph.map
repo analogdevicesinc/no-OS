@@ -1,0 +1,15 @@
+<map id="ltm4686_read_byte" name="ltm4686_read_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read byte operation." alt="" coords="611,79,759,104"/>
+<area shape="rect" id="Node000002" href="$ltm4686_8c.html#a0b6e2147eb5b7bf8eaee8910cda56cb3" title="Initialize the device structure." alt="" coords="431,29,535,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="618,78,535,57,536,52,620,73"/>
+<area shape="rect" id="Node000006" href="$ltm4686_8c.html#a306c50c5863288699cc4ee356b4245ae" title="Sets the PWM mode for a specific channel of the LTM4686 device." alt="" coords="404,79,563,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="597,94,563,94,563,89,597,89"/>
+<area shape="rect" id="Node000007" href="$ltm4686_8c.html#a66a76854d4d41f63bf79db51df919d78" title="Read statuses." alt="" coords="404,128,563,153"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="620,110,537,131,535,125,618,105"/>
+<area shape="rect" id="Node000003" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="417,37,356,30,356,25,417,32"/>
+<area shape="rect" id="Node000004" href="$iio__ltm4686_8c.html#acdb0c4a357bddeb6e40db66acdedd673" title="Initializes the LTM4686 IIO descriptor." alt="" coords="213,55,339,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="418,53,340,62,339,57,417,47"/>
+<area shape="rect" id="Node000005" href="$ltm4686_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,55,148,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="199,70,148,70,148,65,199,65"/>
+</map>

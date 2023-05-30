@@ -1,0 +1,9 @@
+<map id="ade9113_select_zero_crossing_channel" name="ade9113_select_zero_crossing_channel">
+<area shape="rect" id="Node000001" title="Select zero crossing channel." alt="" coords="416,5,575,45"/>
+<area shape="rect" id="Node000002" href="$supply_8c.html#a4a47d1b835fa05b58961e7215c9feafb" title="Initialize supply component." alt="" coords="275,13,368,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,28,368,28,368,23,402,23"/>
+<area shape="rect" id="Node000003" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,13,227,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,28,227,28,227,23,261,23"/>
+<area shape="rect" id="Node000004" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

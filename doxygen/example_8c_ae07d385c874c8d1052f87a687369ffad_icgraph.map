@@ -1,0 +1,9 @@
+<map id="configure_uart" name="configure_uart">
+<area shape="rect" id="Node000001" title="Configure the UART." alt="" coords="275,31,389,56"/>
+<area shape="rect" id="Node000002" href="$example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function." alt="" coords="108,31,227,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,46,227,46,227,41,261,41"/>
+<area shape="rect" id="Node000003" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,32,60,26,61,20,95,27"/>
+<area shape="rect" id="Node000004" href="$eval-adg1736_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="95,59,61,65,60,60,94,54"/>
+</map>

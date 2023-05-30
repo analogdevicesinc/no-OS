@@ -1,0 +1,13 @@
+<map id="ad9528_clk_set_rate" name="ad9528_clk_set_rate">
+<area shape="rect" id="Node000001" title="Set channel rate." alt="" coords="291,55,447,80"/>
+<area shape="rect" id="Node000002" href="$ad9083_2src_2app__clocking_8c.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="108,5,243,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,54,226,33,227,28,306,49"/>
+<area shape="rect" id="Node000004" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="123,55,227,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="277,70,228,70,228,65,277,65"/>
+<area shape="rect" id="Node000006" href="$headless__mb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="148,104,203,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="306,86,203,113,202,107,305,81"/>
+<area shape="rect" id="Node000003" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+<area shape="rect" id="Node000005" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="109,70,60,70,60,65,109,65"/>
+</map>

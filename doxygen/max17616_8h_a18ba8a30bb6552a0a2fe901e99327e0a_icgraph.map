@@ -1,0 +1,37 @@
+<map id="max17616_write_byte" name="max17616_write_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write byte operation." alt="" coords="1032,173,1199,198"/>
+<area shape="rect" id="Node000002" href="$max17616_8c.html#a47c511a54707ea182fe988fb8a553a0b" title="Set current limit mode." alt="" coords="799,69,969,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1077,168,983,124,951,112,953,107,985,119,1080,164"/>
+<area shape="rect" id="Node000009" href="$max17616_8c.html#a92969e6bba1d8809aee9e0e9aca20910" title="Set current start ratio." alt="" coords="805,133,963,173"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1017,175,963,167,964,162,1018,169"/>
+<area shape="rect" id="Node000010" href="$max17616_8c.html#a18737cf8508ea070813f342b62026c07" title="Set device operation state." alt="" coords="791,325,977,365"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1098,211,1051,263,1020,291,985,316,961,328,959,323,983,311,1016,287,1047,259,1094,207"/>
+<area shape="rect" id="Node000012" href="$max17616_8c.html#ab5cc7ed6103c332e9c7ec9f3753cffc4" title="Set the short&#45;term overcurrent limit ratio." alt="" coords="784,197,984,237"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="1018,201,985,206,984,201,1018,196"/>
+<area shape="rect" id="Node000013" href="$max17616_8c.html#a916d343f838280604198ae5669c2dba1" title="Set short&#45;term overcurrent duration." alt="" coords="784,261,984,301"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="1080,207,985,252,953,264,951,259,983,247,1077,202"/>
+<area shape="rect" id="Node000014" href="$max17616_8c.html#a3532d1c8e3cb52901af2f816038c7a8e" title="Set VOUT UV fault limit configuration using enums." alt="" coords="795,5,973,45"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="1094,164,1047,111,1016,84,983,60,959,48,961,43,985,55,1020,79,1051,108,1098,160"/>
+<area shape="rect" id="Node000003" href="$iio__max17616_8c.html#ae528f14d22238257654456118c44fe34" title="Write attribute function for MAX17616 output channels." alt="" coords="541,141,725,166"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="792,115,684,143,683,138,791,110"/>
+<area shape="rect" id="Node000004" href="$max17616_8c.html#a2dc36cd7da3e0bb2c5e9da6294225946" title="Set manufacturer&#45;specific configuration." alt="" coords="529,197,736,237"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="795,118,786,123,771,137,762,150,753,165,738,179,701,199,698,195,734,175,749,161,758,148,767,133,782,119,792,113"/>
+<area shape="rect" id="Node000005" href="$max17616_8c.html#aac638b2e6fc52133d47fd48c45f09a99" title="Initialize the device structure." alt="" coords="363,237,481,262"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="516,238,482,243,481,238,515,232"/>
+<area shape="rect" id="Node000006" href="$max17616_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="184,211,303,237"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="349,242,302,235,303,230,350,236"/>
+<area shape="rect" id="Node000007" href="$iio__max17616_8c.html#a47cdfba4d1631ec72a43507e9cf8bcea" title="Initializes the MAX17616 IIO descriptor." alt="" coords="172,261,315,286"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="349,262,315,266,315,261,349,256"/>
+<area shape="rect" id="Node000008" href="$max17616_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,261,124,286"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="159,276,125,276,125,271,159,271"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="790,156,725,156,725,151,790,151"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="792,179,712,200,711,195,791,174"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="778,325,735,316,481,264,482,258,737,311,779,320"/>
+<area shape="rect" id="Node000011" href="$iio__max17616_8c.html#a00b4001a23e1e8cb9658b07097c2b694" title="Write global attribute function for MAX17616 IIO device." alt="" coords="555,325,710,365"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="777,348,710,348,710,343,777,343"/>
+<area shape="poly" id="edge15_Node000012_Node000003" title=" " alt="" coords="791,196,683,169,684,164,792,191"/>
+<area shape="poly" id="edge16_Node000012_Node000004" title=" " alt="" coords="770,220,736,220,736,215,770,215"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="791,257,782,251,766,235,758,219,750,203,734,188,695,169,697,164,738,183,754,200,762,216,771,232,786,247,794,253"/>
+<area shape="poly" id="edge19_Node000013_Node000004" title=" " alt="" coords="791,260,711,240,712,235,792,255"/>
+<area shape="poly" id="edge21_Node000014_Node000003" title=" " alt="" coords="801,53,785,60,710,103,652,143,649,138,707,98,783,55,799,48"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="adgs6414d_spi_write" name="adgs6414d_spi_write">
+<area shape="rect" id="Node000001" title=" " alt="" coords="616,55,775,80"/>
+<area shape="rect" id="Node000002" href="$adgs6414d_8c.html#a96759f7ce74c822e4bc4e3694f001715" title=" " alt="" coords="391,5,561,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="624,54,533,33,534,28,626,49"/>
+<area shape="rect" id="Node000003" href="$adgs6414d_8c.html#a30074477376bf0bc4a0287296b1d007b" title=" " alt="" coords="384,55,568,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="602,70,568,70,568,65,602,65"/>
+<area shape="rect" id="Node000006" href="$adgs6414d_8c.html#a9e2d551d0284332fb0ff6f52f78ba5da" title=" " alt="" coords="172,105,336,131"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="625,85,568,95,447,109,337,117,336,111,446,103,568,90,624,80"/>
+<area shape="rect" id="Node000004" href="$adgs6414d_8c.html#a768f83d76ebff5b34c3f76255a312692" title=" " alt="" coords="193,56,315,81"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="370,71,315,71,315,66,370,65"/>
+<area shape="rect" id="Node000005" href="$eval-adgs6414d_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="5,81,124,107"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="180,81,125,89,124,83,179,76"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="158,109,124,104,125,99,159,103"/>
+</map>

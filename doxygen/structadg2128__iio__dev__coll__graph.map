@@ -1,0 +1,25 @@
+<map id="adg2128_iio_dev" name="adg2128_iio_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="815,223,947,248"/>
+<area shape="rect" id="Node000002" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="600,157,688,183"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="702,183,835,220,833,225,701,188"/>
+<area shape="rect" id="Node000003" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="323,24,472,49"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="437,53,560,118,623,155,620,159,557,123,435,58"/>
+<area shape="rect" id="Node000004" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="6,5,183,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,22,323,29,322,35,197,27"/>
+<area shape="rect" id="Node000005" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="349,105,445,131"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="459,128,600,158,599,163,458,133"/>
+<area shape="rect" id="Node000006" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="39,55,151,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="165,74,299,95,350,105,349,110,298,101,164,79"/>
+<area shape="rect" id="Node000007" href="$structscan__type.html" title=" " alt="" coords="51,104,139,129"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="152,114,349,115,349,120,152,120"/>
+<area shape="rect" id="Node000008" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="44,172,145,197"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="160,184,303,186,472,183,600,172,600,178,472,189,303,192,160,190"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="158,168,348,126,349,131,159,173"/>
+<area shape="rect" id="Node000009" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="583,253,705,279"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="719,258,790,250,818,245,819,251,791,255,720,263"/>
+<area shape="rect" id="Node000010" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="324,315,471,340"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="484,313,558,297,614,276,616,281,559,302,485,318"/>
+<area shape="rect" id="Node000011" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,277,184,303"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="198,282,208,282,582,266,583,271,208,287,198,288"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="198,300,324,316,324,321,197,305"/>
+</map>

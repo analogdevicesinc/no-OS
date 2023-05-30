@@ -1,0 +1,12 @@
+<map id="projects/adrv902x/src/common/common_data.h" name="projects/adrv902x/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by adrv902x examples." alt="" coords="138,5,330,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,48,116,89,114,85,196,43"/>
+<area shape="rect" id="Node000003" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="181,93,287,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,46,237,79,231,79,231,46"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="311,93,410,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="266,43,332,84,329,88,263,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="261,167,332,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="246,117,279,154,275,158,242,121"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="352,121,318,158,314,155,348,117"/>
+</map>

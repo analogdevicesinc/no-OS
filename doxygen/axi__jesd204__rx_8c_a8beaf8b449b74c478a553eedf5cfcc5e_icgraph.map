@@ -1,0 +1,26 @@
+<map id="axi_jesd204_rx_remove" name="axi_jesd204_rx_remove">
+<area shape="rect" id="Node000001" title="Free resoulces allocated for JESD204 RX peripheral." alt="" coords="316,179,493,204"/>
+<area shape="rect" id="Node000002" href="$ad9083_2src_2app__jesd_8c.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="134,5,242,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="386,169,337,106,304,73,267,44,241,32,243,27,269,40,307,69,341,103,390,165"/>
+<area shape="rect" id="Node000003" href="$ad9083_2src_2app__jesd_8c.html#a63a2c06f1de93a3baacd6ef0ecfb38bb" title="Free the resources allocated by app_jesd_init()." alt="" coords="119,55,257,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="377,171,328,132,267,94,239,83,241,78,269,89,331,128,381,167"/>
+<area shape="rect" id="Node000005" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="108,104,268,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="357,176,267,143,232,132,234,127,269,138,359,171"/>
+<area shape="rect" id="Node000006" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a6fab3c4f8551a0a277a9058ddb0f1914" title="DMA example main execution." alt="" coords="111,153,265,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="302,182,265,178,266,172,303,177"/>
+<area shape="rect" id="Node000008" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="117,203,259,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="303,205,260,210,259,205,302,200"/>
+<area shape="rect" id="Node000009" href="$adrv9009_2src_2app_2app__jesd_8c.html#a58d0a969b662a323b8105e78817b7a93" title=" " alt="" coords="141,252,235,277"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="356,211,269,242,231,254,229,249,267,237,355,206"/>
+<area shape="rect" id="Node000011" href="$adrv9009_2src_2app_2app__jesd_8c.html#ae5553405b03de1193a617ca30d31a455" title=" " alt="" coords="149,301,227,327"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="380,215,331,253,269,291,228,307,226,302,267,286,328,249,377,211"/>
+<area shape="rect" id="Node000012" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="161,351,215,376"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="389,217,340,278,307,312,269,340,243,353,216,361,215,356,241,348,267,336,303,308,336,275,385,214"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="105,70,60,70,60,65,105,65"/>
+<area shape="rect" id="Node000007" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,153,60,179"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="97,169,60,169,60,163,97,163"/>
+<area shape="rect" id="Node000010" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,276,60,301"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="128,277,61,287,60,282,127,271"/>
+<area shape="poly" id="edge11_Node000011_Node000010" title=" " alt="" coords="136,308,60,296,61,290,137,303"/>
+</map>

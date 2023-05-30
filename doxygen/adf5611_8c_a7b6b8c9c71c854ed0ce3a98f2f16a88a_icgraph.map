@@ -1,0 +1,47 @@
+<map id="adf5611_spi_read" name="adf5611_spi_read">
+<area shape="rect" id="Node000001" title="Reads data from ADF5611 over SPI." alt="" coords="1012,219,1149,244"/>
+<area shape="rect" id="Node000002" href="$adf5611_8c.html#abaa4080b08cd3a858b4c7e9b1f4e56e9" title="Gets the charge pump value from the register. The value will be between 0 and 15 on 8 bits...." alt="" coords="804,5,940,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1068,207,1053,170,1031,126,1001,82,962,44,939,32,942,27,966,40,1005,78,1036,123,1058,168,1073,205"/>
+<area shape="rect" id="Node000003" href="$adf5611_8c.html#a1bc0c87533b9c9baf596bfafd42ab4f9" title="Gets the value of rfoutdiv output block if enable or disable." alt="" coords="780,55,964,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1063,208,1023,151,995,121,963,95,937,83,939,78,965,90,998,117,1027,148,1068,205"/>
+<area shape="rect" id="Node000004" href="$adf5611_8c.html#af87e5881b79c4e6972eb39b0bb08d683" title="Gets the rfoutput power register value." alt="" coords="796,105,948,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1050,213,1010,186,963,159,935,147,938,142,965,154,1013,181,1053,209"/>
+<area shape="rect" id="Node000005" href="$adf5611_8c.html#a8585630c0732aac7471a48e5b7777281" title="Gets the value the reference divider." alt="" coords="795,169,949,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1012,218,926,197,927,192,1014,213"/>
+<area shape="rect" id="Node000006" href="$adf5611_8c.html#aff9e07728b70acca1bbb9a029d08d696" title="Gets the user proposed output frequency." alt="" coords="801,219,943,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="998,234,943,234,943,229,998,229"/>
+<area shape="rect" id="Node000007" href="$adf5611_8c.html#afa09f98dca519b7d9d62a3417e428334" title="Gets the rfoutdiv divider register value." alt="" coords="791,269,953,309"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1021,250,946,271,945,266,1020,245"/>
+<area shape="rect" id="Node000008" href="$adf5611_8c.html#a61475c5cbc317dcfc13d50beb1ecb47b" title="Gets the rfoutdiv power register value." alt="" coords="791,333,953,373"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1057,256,1016,290,965,323,939,335,937,330,963,318,1013,285,1054,252"/>
+<area shape="rect" id="Node000009" href="$adf5611_8c.html#a78d0176d4d45998c3611927d7f2e4563" title="Set the output frequency." alt="" coords="573,383,708,408"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1071,258,1055,290,1032,326,1002,360,965,387,933,401,898,411,828,419,760,418,702,411,703,405,760,413,827,414,897,405,931,396,963,382,999,356,1028,322,1051,287,1066,256"/>
+<area shape="rect" id="Node000018" href="$adf5611_8c.html#afed89c88fb9483e104a60ed6b86a399a" title="Updates the values of the ADF5611 register." alt="" coords="780,461,964,487"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="1072,258,1033,340,1003,388,966,431,939,450,911,464,909,459,937,445,962,427,999,385,1029,338,1068,256"/>
+<area shape="rect" id="Node000010" href="$adf5611_8c.html#aeb9d7346a1652fb351e163f6672986d8" title="Initialize the ADF5611." alt="" coords="373,284,475,309"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="606,378,557,350,500,323,470,312,471,307,502,318,559,346,608,373"/>
+<area shape="rect" id="Node000014" href="$adf5611_8c.html#ab46263e7257acbf73c6433be8f0df282" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="357,333,491,359"/>
+<area shape="poly" id="edge13_Node000009_Node000014" title=" " alt="" coords="571,382,480,361,481,356,572,377"/>
+<area shape="rect" id="Node000015" href="$adf5611_8c.html#a7186fdf8366bdf8cafc5bdb33005caa9" title="Set the desired reference frequency and reset everything over to maximum supported value of 300MHz to..." alt="" coords="347,383,501,408"/>
+<area shape="poly" id="edge14_Node000009_Node000015" title=" " alt="" coords="559,398,501,398,501,393,559,393"/>
+<area shape="rect" id="Node000016" href="$adf5611_8c.html#a539e31cc24688283cfe42189497134fc" title="Set the reference divider value and reset everything over to maximum supported value of 60 to the max..." alt="" coords="347,432,501,457"/>
+<area shape="poly" id="edge15_Node000009_Node000016" title=" " alt="" coords="572,414,481,435,480,429,571,408"/>
+<area shape="rect" id="Node000017" href="$adf5611_8c.html#a9a813cea1bfb24602123ce7bc38e0287" title="Set the desired output frequency and reset everything over to maximum supported value of 14...." alt="" coords="354,481,494,507"/>
+<area shape="poly" id="edge16_Node000009_Node000017" title=" " alt="" coords="563,415,551,422,536,433,527,445,518,458,503,471,476,484,474,479,500,466,514,454,523,442,532,429,548,417,561,411"/>
+<area shape="rect" id="Node000011" href="$iio__adf5611_8c.html#aa5fa0aeeee004bf2315642707dab60fb" title="Initializes the ADF5611 IIO driver." alt="" coords="172,284,299,309"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="359,299,299,299,299,294,359,294"/>
+<area shape="rect" id="Node000013" href="$adf5611_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="176,407,295,432"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="361,317,348,323,318,343,290,367,249,408,246,405,287,363,315,339,345,318,358,312"/>
+<area shape="rect" id="Node000012" href="$adf5611_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,284,124,309"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="158,299,124,299,124,294,158,294"/>
+<area shape="poly" id="edge17_Node000017_Node000013" title=" " alt="" coords="369,480,346,471,262,434,264,430,348,466,370,475"/>
+<area shape="poly" id="edge20_Node000018_Node000009" title=" " alt="" coords="828,458,731,422,693,411,694,405,733,417,830,453"/>
+<area shape="rect" id="Node000019" href="$adf5611_8c.html#aa1ec5626952917353b4c51228e8858d1" title="Sets the rfoutdiv output block to enable or disable. 1 means the block is powered down else block is ..." alt="" coords="549,432,732,457"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="766,463,732,459,733,454,767,458"/>
+<area shape="rect" id="Node000020" href="$adf5611_8c.html#a476d422a65e7cd0dd85bf620360287fb" title="Set the rfoutput power register value and reset everything over to maximum supported value of 3 to th..." alt="" coords="565,482,716,522"/>
+<area shape="poly" id="edge21_Node000018_Node000020" title=" " alt="" coords="767,489,717,496,716,490,766,484"/>
+<area shape="rect" id="Node000021" href="$adf5611_8c.html#ac2610ca3558d3b82454b0328e1259317" title="Set the rfoutdiv frequency divider register value and reset everything over to maximum supported valu..." alt="" coords="561,546,721,586"/>
+<area shape="poly" id="edge22_Node000018_Node000021" title=" " alt="" coords="832,495,733,536,701,548,699,543,731,532,829,490"/>
+<area shape="rect" id="Node000022" href="$adf5611_8c.html#af9ad843f0ae443b7919a7aadb5fe7e9c" title="Set the rfoutdiv power register value and reset everything over to maximum supported value of 3 to th..." alt="" coords="561,610,721,650"/>
+<area shape="poly" id="edge23_Node000018_Node000022" title=" " alt="" coords="852,499,801,549,769,576,733,600,709,612,707,607,731,596,765,572,798,545,849,495"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="no_os_cb_write" name="no_os_cb_write">
+<area shape="rect" id="Node000001" title=" " alt="" coords="933,71,1056,97"/>
+<area shape="rect" id="Node000002" href="$pqlib__afe_8c.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="751,30,861,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="922,71,861,57,862,52,924,66"/>
+<area shape="rect" id="Node000007" href="$iio_8c.html#ad21a979de252c355ad7396776d43422a" title=" " alt="" coords="727,95,885,121"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="920,96,886,101,885,95,919,91"/>
+<area shape="rect" id="Node000003" href="$pqlib__example_8c.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="501,5,661,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="737,40,661,34,662,29,737,35"/>
+<area shape="rect" id="Node000004" href="$pqlib__example_8c.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="313,13,436,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="487,28,436,28,436,23,487,23"/>
+<area shape="rect" id="Node000005" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,13,265,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="300,28,265,28,265,23,300,23"/>
+<area shape="rect" id="Node000006" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+<area shape="rect" id="Node000008" href="$iio__adc__demo_8c.html#a27c975c593389618981fdfba4c71cdc5" title="Handles trigger: reads one data&#45;set and writes it to the buffer." alt="" coords="484,70,679,95"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="713,100,679,96,679,91,713,95"/>
+<area shape="rect" id="Node000009" href="$iio__adc__demo_8c.html#af8d2f8f4b5f8635707796b4f89096d9f" title="function for reading samples from the device." alt="" coords="502,119,661,145"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="713,121,661,126,661,121,712,115"/>
+<area shape="rect" id="Node000010" href="$iio__pqm_8c.html#aae401df2dfda8e88f46d8020d78a4309" title="Handles trigger: reads one data&#45;set and writes it to the buffer." alt="" coords="503,169,660,194"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="764,129,679,160,640,171,638,166,678,155,762,124"/>
+</map>

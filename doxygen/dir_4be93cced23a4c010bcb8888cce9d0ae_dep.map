@@ -1,0 +1,16 @@
+<map id="projects/adrv904x/src/common/hal" name="projects/adrv904x/src/common/hal">
+<area shape="rect" id="node1" href="dir_28faa446aea6fc79cfc1d38921ed5393.html" title="firmware" alt="" coords="27,125,107,151"/>
+<area shape="rect" id="node2" href="dir_4be93cced23a4c010bcb8888cce9d0ae.html" title="hal" alt="" coords="64,52,107,77"/>
+<area shape="poly" id="edge2" href="dir_000646_000631.html" alt="" coords="85,78,76,113,71,112,80,77"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000646_000631.html" title="4" alt="" coords="78,103,87,117"/>
+<area shape="rect" id="node3" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="131,125,197,151"/>
+<area shape="poly" id="edge1" href="dir_000646_000492.html" alt="" coords="100,75,143,114,139,118,96,79"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000646_000492.html" title="1" alt="" coords="139,99,148,114"/>
+<area shape="rect" id="node4" href="dir_6a5cb97f3d4ff2c3ed3d54b8b729fd93.html" title="adrv9001" alt="" coords="221,125,304,151"/>
+<area shape="poly" id="edge3" href="dir_000646_000216.html" alt="" coords="108,72,223,118,221,123,106,77"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000646_000216.html" title="1" alt="" coords="216,103,225,118"/>
+<area shape="rect" id="node5" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="328,125,397,151"/>
+<area shape="poly" id="edge4" href="dir_000646_000726.html" alt="" coords="108,69,315,122,314,127,106,74"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000646_000726.html" title="6" alt="" coords="308,108,317,122"/>
+<area shape="rect" id="clust1" href="dir_2db1ec6f5ebea05724089dcaaacecb51.html" title="common" alt="" coords="16,16,117,161"/>
+</map>

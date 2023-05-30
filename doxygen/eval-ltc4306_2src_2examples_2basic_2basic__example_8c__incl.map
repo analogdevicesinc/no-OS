@@ -1,0 +1,29 @@
+<map id="projects/eval&#45;ltc4306/src/examples/basic/basic_example.c" name="projects/eval&#45;ltc4306/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="Basic example code for eval&#45;ltc4306&#45;pmdz project." alt="" coords="259,5,449,60"/>
+<area shape="rect" id="Node000002" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header for eval&#45;ltc4306 project." alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,63,123,107,121,102,267,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="316,62,255,103,252,98,313,58"/>
+<area shape="rect" id="Node000004" href="$ltc4306_8h.html" title="Header file of ltc4306 driver." alt="" coords="313,108,395,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,60,357,94,351,94,351,60"/>
+<area shape="rect" id="Node000010" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="471,181,584,207"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="384,58,507,170,503,174,381,62"/>
+<area shape="rect" id="Node000011" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="570,108,706,133"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="442,58,588,102,586,107,440,63"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="331,255,401,280"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="351,134,339,167,336,187,338,206,353,242,348,244,333,207,331,186,334,166,346,133"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="99,255,169,280"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="313,135,221,160,181,173,161,183,152,196,145,211,138,242,133,240,140,209,147,193,158,179,179,169,219,155,312,130"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="347,181,446,207"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="363,132,385,168,381,171,359,135"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="172,181,272,207"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="334,136,257,177,254,172,332,131"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="394,208,379,243,374,241,389,206"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="246,204,331,246,329,251,244,209"/>
+<area shape="poly" id="edge10_Node000008_Node000006" title=" " alt="" coords="210,209,161,248,157,244,206,205"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="194,255,277,280"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="227,207,233,241,228,242,222,207"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="502,209,406,251,404,247,500,204"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="609,181,675,207"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="641,134,643,168,638,168,636,134"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="flash_erase_calibration" name="flash_erase_calibration">
+<area shape="rect" id="Node000001" title="Erase calibration data from flash." alt="" coords="175,5,347,31"/>
+<area shape="rect" id="Node000002" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="5,5,127,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,21,127,21,127,15,161,15"/>
+</map>

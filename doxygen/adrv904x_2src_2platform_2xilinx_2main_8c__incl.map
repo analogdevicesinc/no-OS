@@ -1,0 +1,15 @@
+<map id="projects/adrv904x/src/platform/xilinx/main.c" name="projects/adrv904x/src/platform/xilinx/main.c">
+<area shape="rect" id="Node000001" title="Main file for XILINX platform of adrv904x project." alt="" coords="348,5,519,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,171,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,48,152,93,151,88,350,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="195,93,346,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="396,48,308,90,306,85,393,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="370,93,497,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="436,46,436,79,431,79,431,46"/>
+<area shape="rect" id="Node000005" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="521,93,631,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="469,43,544,84,542,89,466,48"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="655,93,750,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="499,43,651,87,650,92,497,48"/>
+<area shape="rect" id="Node000006" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="542,167,610,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="579,119,579,153,573,153,573,119"/>
+</map>

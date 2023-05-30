@@ -1,0 +1,16 @@
+<map id="ade9153a_auto_calibration_cfg" name="ade9153a_auto_calibration_cfg">
+<area shape="rect" id="Node000001" title="Auto calibration config." alt="" coords="801,55,1027,80"/>
+<area shape="rect" id="Node000002" href="$ade9153a_8c.html#a240ff2c469d7822531e2a77920e052d0" title="Start autocalibration AI channel." alt="" coords="554,5,751,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="832,55,720,33,721,28,833,49"/>
+<area shape="rect" id="Node000006" href="$ade9153a_8c.html#a17f277da02d5b845549c2bfc3f3d7af4" title="Start autocalibration AV channel." alt="" coords="552,55,753,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="788,70,753,70,753,65,788,65"/>
+<area shape="rect" id="Node000007" href="$ade9153a_8c.html#a90a56f9b7929d6fa59012686f5ffb517" title="Start autocalibration BI channel." alt="" coords="554,104,751,129"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="833,85,721,107,720,101,832,80"/>
+<area shape="rect" id="Node000003" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a8ab286a0277c4951842d176a2ce4c41c" title="Autocalibration start." alt="" coords="347,31,504,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="540,33,505,37,504,32,540,28"/>
+<area shape="rect" id="Node000004" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a5b32942d81fb899bcf8c3907bc9fde17" title="Autocalibration read values." alt="" coords="108,31,299,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="333,46,299,46,299,41,333,41"/>
+<area shape="rect" id="Node000005" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,46,60,46,60,41,94,41"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="538,58,504,54,505,49,538,53"/>
+</map>

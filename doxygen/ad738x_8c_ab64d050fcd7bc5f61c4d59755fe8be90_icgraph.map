@@ -1,0 +1,21 @@
+<map id="ad738x_spi_reg_write" name="ad738x_spi_reg_write">
+<area shape="rect" id="Node000001" title=" " alt="" coords="853,119,1017,145"/>
+<area shape="rect" id="Node000002" href="$ad738x_8c.html#a0d6745922ecae792c17143e715fc1f6c" title=" " alt="" coords="627,119,805,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="840,135,805,135,805,129,840,129"/>
+<area shape="rect" id="Node000003" href="$ad738x_8c.html#aca0a89e9a8428eafa7581f2c785efa17" title=" " alt="" coords="386,5,553,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="682,115,634,87,578,60,545,48,547,43,580,55,636,82,685,110"/>
+<area shape="rect" id="Node000004" href="$ad738x_8c.html#a4c279aa39bd9c586094dbc1171b412e3" title=" " alt="" coords="368,70,571,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="638,119,533,98,534,93,639,114"/>
+<area shape="rect" id="Node000005" href="$ad738x_8c.html#aa0bed45cdf2573c27e6b35dddb3fec8b" title=" " alt="" coords="387,119,552,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="613,135,552,135,552,129,613,129"/>
+<area shape="rect" id="Node000008" href="$ad738x_8c.html#acca2387acefe808578b83ec69d3b6925" title=" " alt="" coords="414,169,525,194"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="639,150,526,173,524,168,638,145"/>
+<area shape="rect" id="Node000009" href="$ad738x_8c.html#a8a8a9145e11c745cde62a883ffb025af" title=" " alt="" coords="360,218,579,243"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="685,154,636,182,580,208,538,221,536,215,578,203,634,177,682,150"/>
+<area shape="rect" id="Node000006" href="$ad738x_8c.html#a5a643687de5deac9b07cf82ee05503d7" title=" " alt="" coords="213,169,312,194"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="396,150,361,159,311,171,310,166,359,153,395,145"/>
+<area shape="rect" id="Node000007" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,169,165,194"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="200,184,166,184,166,179,200,179"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="400,184,312,184,312,179,400,179"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="399,217,359,208,312,196,313,191,361,203,401,212"/>
+</map>

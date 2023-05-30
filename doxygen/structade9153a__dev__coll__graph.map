@@ -1,0 +1,23 @@
+<map id="ade9153a_dev" name="ade9153a_dev">
+<area shape="rect" id="Node000001" title="ADE9153A Device structure." alt="" coords="945,189,1063,214"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="687,62,810,87"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="824,85,874,100,923,122,965,154,994,187,991,190,961,158,920,126,872,105,823,90"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="722,47,730,39,749,35,765,38,774,44,777,54,772,63,767,61,771,53,770,47,763,43,749,41,733,43,726,51"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,50,490,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,63,687,70,687,75,504,68"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,19,184,45"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,22,208,21,331,18,428,19,524,27,646,45,706,59,705,65,645,51,523,32,428,24,331,23,208,27,198,27"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,39,343,53,343,58,198,44"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,100,491,140"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,108,645,89,687,83,687,88,646,95,506,113"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="683,165,815,190"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="829,182,945,193,945,199,828,187"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,165,511,190"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="525,175,682,175,682,180,525,180"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="674,214,823,239"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="837,219,921,212,945,209,945,214,922,217,837,225"/>
+<area shape="rect" id="Node000009" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="328,214,505,239"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="519,224,673,224,673,229,519,229"/>
+<area shape="rect" id="Node000010" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="669,263,828,289"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="841,259,920,239,979,212,982,217,922,244,842,265"/>
+</map>

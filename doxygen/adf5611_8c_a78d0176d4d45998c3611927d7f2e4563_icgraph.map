@@ -1,0 +1,20 @@
+<map id="adf5611_set_freq" name="adf5611_set_freq">
+<area shape="rect" id="Node000001" title="Set the output frequency." alt="" coords="549,104,684,129"/>
+<area shape="rect" id="Node000002" href="$adf5611_8c.html#aeb9d7346a1652fb351e163f6672986d8" title="Initialize the ADF5611." alt="" coords="373,5,475,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="586,98,546,70,500,44,472,33,474,28,502,40,549,66,589,93"/>
+<area shape="rect" id="Node000006" href="$adf5611_8c.html#ab46263e7257acbf73c6433be8f0df282" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="357,55,491,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="553,103,474,83,475,78,554,98"/>
+<area shape="rect" id="Node000007" href="$adf5611_8c.html#a7186fdf8366bdf8cafc5bdb33005caa9" title="Set the desired reference frequency and reset everything over to maximum supported value of 300MHz to..." alt="" coords="347,104,501,129"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="535,119,501,119,501,114,535,114"/>
+<area shape="rect" id="Node000008" href="$adf5611_8c.html#a539e31cc24688283cfe42189497134fc" title="Set the reference divider value and reset everything over to maximum supported value of 60 to the max..." alt="" coords="347,153,501,179"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="554,135,475,156,474,151,553,130"/>
+<area shape="rect" id="Node000009" href="$adf5611_8c.html#a9a813cea1bfb24602123ce7bc38e0287" title="Set the desired output frequency and reset everything over to maximum supported value of 14...." alt="" coords="354,203,494,228"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="589,140,549,168,502,194,474,205,472,200,500,189,546,163,586,136"/>
+<area shape="rect" id="Node000003" href="$iio__adf5611_8c.html#aa5fa0aeeee004bf2315642707dab60fb" title="Initializes the ADF5611 IIO driver." alt="" coords="172,5,299,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="359,21,299,21,299,15,359,15"/>
+<area shape="rect" id="Node000005" href="$adf5611_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="176,128,295,153"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="361,38,348,44,318,65,290,88,249,130,246,126,287,84,315,60,345,40,358,33"/>
+<area shape="rect" id="Node000004" href="$adf5611_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="365,201,346,194,261,156,263,151,348,189,367,196"/>
+</map>

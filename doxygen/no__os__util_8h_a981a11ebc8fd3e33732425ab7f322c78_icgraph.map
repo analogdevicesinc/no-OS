@@ -1,0 +1,23 @@
+<map id="no_os_hweight8" name="no_os_hweight8">
+<area shape="rect" id="Node000001" title=" " alt="" coords="977,95,1104,120"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#a9511b5fafa6b78c6fab0d827fd0360a3" title="Read multiple samples in continuous read mode." alt="" coords="745,5,929,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1008,89,970,67,928,46,892,33,894,28,930,41,973,62,1010,85"/>
+<area shape="rect" id="Node000003" href="$ad74413r_8c.html#a80de8a9e66f8df896ef57960218c69e2" title="Get the number of active channels." alt="" coords="761,55,914,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="963,98,914,90,914,85,964,93"/>
+<area shape="rect" id="Node000009" href="$ad74416h_8c.html#a48b6b9bb425f28a6f04a7e433f12df49" title="Get the number of active channels." alt="" coords="759,119,915,159"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="964,122,916,130,915,124,963,117"/>
+<area shape="rect" id="Node000011" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="810,184,865,209"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1010,130,973,153,930,174,866,194,864,189,928,169,970,148,1008,126"/>
+<area shape="rect" id="Node000004" href="$ad74413r_8c.html#a84173888281b24e7ab884f95491eb34e" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="509,63,695,88"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="747,78,696,78,696,73,747,73"/>
+<area shape="rect" id="Node000005" href="$ad74413r_8c.html#a85e28f0d13f64bd42e0ca4843c053048" title="Get the ADC real value, according to the operation mode." alt="" coords="275,63,459,88"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="495,78,459,78,459,73,495,73"/>
+<area shape="rect" id="Node000006" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="108,37,227,63"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="261,65,227,60,227,55,262,59"/>
+<area shape="rect" id="Node000007" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="114,87,221,112"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="261,91,221,96,221,90,261,85"/>
+<area shape="rect" id="Node000008" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,87,60,112"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="100,102,60,102,60,97,100,97"/>
+<area shape="rect" id="Node000010" href="$ad74416h_8c.html#a60e2214d680d2e7461601ef123fb09a9" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="507,127,697,152"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="746,142,698,142,698,137,746,137"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="projects/adf4377_sdz/src/platform/xilinx/parameters.c" name="projects/adf4377_sdz/src/platform/xilinx/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Mbed platform data used by adf4377 project." alt="" coords="99,5,259,60"/>
+<area shape="rect" id="Node000002" href="$adf4377__sdz_2src_2platform_2xilinx_2parameters_8h.html" title="Platform dependent parameters." alt="" coords="124,108,233,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,60,181,94,176,94,176,60"/>
+<area shape="rect" id="Node000003" href="$xilinx__spi_8h.html" title=" " alt="" coords="5,181,101,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,136,87,177,84,172,157,131"/>
+<area shape="rect" id="Node000006" href="$xilinx__gpio_8h.html" title=" " alt="" coords="126,181,231,207"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="181,134,181,168,176,168,176,134"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="255,181,372,207"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="202,131,280,172,278,177,199,136"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="38,328,109,353"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="43,209,18,241,12,260,15,279,28,300,46,317,42,321,24,303,9,281,7,259,14,239,38,206"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="24,255,123,280"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="59,206,69,241,64,242,54,208"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="76,280,76,314,71,314,71,280"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="176,208,161,242,137,282,100,321,96,317,133,278,156,240,172,206"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="197,255,280,280"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="191,205,222,242,218,246,187,209"/>
+</map>

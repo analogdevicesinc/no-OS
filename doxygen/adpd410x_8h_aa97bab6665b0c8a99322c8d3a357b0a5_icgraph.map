@@ -1,0 +1,20 @@
+<map id="adpd410x_reg_write" name="adpd410x_reg_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="697,231,852,256"/>
+<area shape="rect" id="Node000002" href="$adpd410x_8c.html#a3398d6eea6ec9b5840cbdbfb21363ac0" title="Do a read and write of a register to update only part of a register." alt="" coords="444,131,641,156"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="730,227,572,159,574,154,732,222"/>
+<area shape="rect" id="Node000004" href="$adpd410x_8c.html#a8c47ad8226f8c0882232750616b4ac6d" title="Setup the device and the driver." alt="" coords="5,56,135,81"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="684,256,557,267,411,273,340,272,276,268,222,259,181,244,158,228,138,208,106,162,84,117,72,82,77,80,89,115,111,160,142,205,162,224,184,240,223,254,276,262,340,267,411,268,557,261,684,251"/>
+<area shape="rect" id="Node000007" href="$adpd410x_8c.html#aeebd23ab85c6cd30017c65946538e5e3" title="Setup an active time slot." alt="" coords="190,205,381,231"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="684,241,381,226,381,220,684,236"/>
+<area shape="rect" id="Node000008" href="$adpd410x_8c.html#adfc05439df83ca920f95cda419f45ee3" title="Set device sampling frequency." alt="" coords="436,307,649,332"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="727,263,650,290,588,309,587,304,648,285,725,258"/>
+<area shape="rect" id="Node000003" href="$adpd410x_8c.html#a7a74b5425d1d67e763df0ab85dc2df12" title="Do a software reset." alt="" coords="222,5,349,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="511,125,455,89,387,52,334,33,336,28,389,48,457,84,514,121"/>
+<area shape="poly" id="edge6_Node000002_Node000004" title=" " alt="" coords="496,128,444,111,387,97,321,86,253,79,135,72,135,67,253,73,321,81,389,91,446,106,497,123"/>
+<area shape="rect" id="Node000005" href="$adpd410x_8c.html#a276c3d1815c3a76bc0c4a8556d51cc3b" title="Set number of active time slots." alt="" coords="183,107,388,132"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="430,136,388,132,388,126,431,130"/>
+<area shape="rect" id="Node000006" href="$adpd410x_8c.html#a2f5eb641289541459498a473a416724d" title="Set operation mode." alt="" coords="199,156,372,181"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="431,157,373,163,372,157,430,152"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="492,163,389,195,341,208,340,203,387,190,490,158"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="218,37,125,59,124,53,216,31"/>
+</map>

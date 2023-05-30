@@ -1,0 +1,7 @@
+<map id="ltm3360b_set_vout_mv" name="ltm3360b_set_vout_mv">
+<area shape="rect" id="Node000001" title="Set output voltage." alt="" coords="332,5,507,31"/>
+<area shape="rect" id="Node000002" href="$ltm3360b_8c.html#a54e53f89a19daca5d0068c8a4d9f88ce" title="Initialize LTM3360B device." alt="" coords="172,5,284,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,21,284,21,284,15,318,15"/>
+<area shape="rect" id="Node000003" href="$ltm3360b_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

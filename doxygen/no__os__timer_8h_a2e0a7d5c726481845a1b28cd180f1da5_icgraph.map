@@ -1,0 +1,7 @@
+<map id="no_os_timer_counter_get" name="no_os_timer_counter_get">
+<area shape="rect" id="Node000001" title="Get the value of the counter register for the timer." alt="" coords="243,31,429,56"/>
+<area shape="rect" id="Node000002" href="$aducm3029__timer_8c.html#ad8c5e44f75937407d7a9857537af2bc2" title="Stop counting the timer instance." alt="" coords="13,5,187,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,35,187,30,188,25,229,29"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__timer_8c.html#a6f9a6faa2bbb1f7988e086ef85633fea" title="Function to set the timer frequency." alt="" coords="5,55,195,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,57,195,60,195,55,229,52"/>
+</map>

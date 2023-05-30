@@ -1,0 +1,11 @@
+<map id="no_os_timer_start" name="no_os_timer_start">
+<area shape="rect" id="Node000001" title="Start a timer." alt="" coords="391,55,529,80"/>
+<area shape="rect" id="Node000002" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO trigger example main execution." alt="" coords="166,5,285,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="387,54,342,45,285,33,286,27,343,39,388,49"/>
+<area shape="rect" id="Node000003" href="$adalm-lsmspg_2src_2platform_2maxim_2main_8c.html#a8965f8841fa6b209be38417ab48be0bc" title=" " alt="" coords="169,55,282,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="377,70,282,70,282,65,377,65"/>
+<area shape="rect" id="Node000004" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,104,343,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="386,85,287,107,286,101,385,80"/>
+<area shape="rect" id="Node000005" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,119,60,119,60,114,94,114"/>
+</map>
