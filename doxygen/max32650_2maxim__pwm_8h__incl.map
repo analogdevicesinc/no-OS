@@ -1,0 +1,17 @@
+<map id="drivers/platform/maxim/max32650/maxim_pwm.h" name="drivers/platform/maxim/max32650/maxim_pwm.h">
+<area shape="rect" id="Node000001" title="Maxim platform specific implementation PWM API." alt="" coords="43,5,239,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,61,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,48,62,87,59,83,114,43"/>
+<area shape="rect" id="Node000003" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="86,93,197,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,46,144,79,139,79,139,46"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="221,93,321,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="174,43,241,84,239,88,171,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="207,167,278,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,116,216,156,213,161,156,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="100,167,183,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="144,119,144,153,139,153,139,119"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="269,120,255,155,250,153,264,118"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="251,121,176,162,174,157,249,116"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="302,167,373,192"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="284,117,319,155,315,158,280,121"/>
+</map>

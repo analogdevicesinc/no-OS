@@ -1,0 +1,18 @@
+<map id="projects/ad719x/src/examples/dummy/dummy_example.c" name="projects/ad719x/src/examples/dummy/dummy_example.c">
+<area shape="rect" id="Node000001" title="DUMMY example for ad719x project." alt="" coords="403,5,601,60"/>
+<area shape="rect" id="Node000002" href="$ad719x_2src_2examples_2dummy_2dummy__example_8h.html" title="DUMMY example header for ad719x project." alt="" coords="5,108,153,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="403,57,149,108,148,103,402,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="177,108,304,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="423,63,289,106,288,101,421,58"/>
+<area shape="rect" id="Node000004" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="329,108,465,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="472,62,423,101,420,97,468,58"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="415,181,482,207"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="499,61,479,134,464,170,459,168,474,132,494,59"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="540,108,611,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="526,58,558,96,554,99,522,62"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="635,108,721,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="557,58,643,100,641,104,555,62"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="745,108,816,133"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="588,58,733,102,731,107,586,63"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="407,132,434,169,430,172,403,135"/>
+</map>

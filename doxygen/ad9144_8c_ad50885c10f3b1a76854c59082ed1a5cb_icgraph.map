@@ -1,0 +1,10 @@
+<map id="ad9144_spi_check_status" name="ad9144_spi_check_status">
+<area shape="rect" id="Node000001" title="ad9144_spi_check_status" alt="" coords="460,56,648,81"/>
+<area shape="rect" id="Node000002" href="$ad9144_8c.html#a08ce45c8bcf99c7da3787d620cf2e55d" title=" " alt="" coords="232,5,396,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="479,56,374,33,375,28,480,50"/>
+<area shape="rect" id="Node000003" href="$ad9144_8c.html#a3c61a56cfb38577042c6af45aa84ac89" title=" " alt="" coords="5,31,168,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="446,66,168,50,168,45,446,60"/>
+<area shape="rect" id="Node000004" href="$ad9144_8c.html#a5c6deb37b6af03fcaef768811b00237e" title="ad9144_short_pattern_test" alt="" coords="216,107,412,132"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="480,87,375,109,374,104,479,82"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="218,31,169,37,168,32,218,26"/>
+</map>

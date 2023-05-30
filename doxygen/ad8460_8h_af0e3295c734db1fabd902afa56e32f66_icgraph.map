@@ -1,0 +1,13 @@
+<map id="ad8460_reg_update_bits" name="ad8460_reg_update_bits">
+<area shape="rect" id="Node000001" title="Read&#45;modify&#45;write operation." alt="" coords="457,43,639,68"/>
+<area shape="rect" id="Node000002" href="$ad8460_8c.html#a4051f00e787b270af00776a820be633e" title="Enable or disable the APG mode." alt="" coords="213,43,409,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,58,409,58,409,53,444,53"/>
+<area shape="rect" id="Node000003" href="$ad8460_8c.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="9,5,161,31"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="475,43,409,33,278,23,162,20,162,15,279,18,410,27,475,37"/>
+<area shape="rect" id="Node000005" href="$ad8460_8c.html#ab77409bb5ceced72a965c9929a6349cf" title="Reset the high voltage driver." alt="" coords="245,92,378,117"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="474,73,374,95,373,89,472,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="220,43,161,33,162,28,221,38"/>
+<area shape="rect" id="Node000004" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,68,165,93"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="200,71,166,74,165,69,199,65"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="230,99,165,92,166,86,231,93"/>
+</map>

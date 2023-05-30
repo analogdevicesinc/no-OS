@@ -1,0 +1,21 @@
+<map id="drivers/frequency/adf5902/iio_adf5902.h" name="drivers/frequency/adf5902/iio_adf5902.h">
+<area shape="rect" id="Node000001" title="Header file of adf5902 IIO." alt="" coords="151,5,345,45"/>
+<area shape="rect" id="Node000002" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="140,93,233,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,47,206,84,202,81,231,44"/>
+<area shape="rect" id="Node000006" href="$adf5902_8h.html" title="Header file for adf5902 Driver." alt="" coords="370,93,457,119"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="289,43,378,85,376,90,286,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="165,121,83,163,80,158,163,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="335,240,406,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="177,120,164,136,153,154,147,173,153,191,163,199,179,208,223,223,322,242,321,248,221,228,177,213,160,204,148,193,142,173,148,152,160,133,173,117"/>
+<area shape="rect" id="Node000005" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="163,167,333,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="199,117,231,154,227,158,195,121"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="269,190,340,231,338,235,266,194"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="412,120,381,227,375,226,407,118"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="408,167,507,192"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="423,118,445,154,441,156,418,120"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="531,167,637,192"/>
+<area shape="poly" id="edge10_Node000006_Node000008" title=" " alt="" coords="442,116,545,159,543,164,440,121"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="445,194,397,233,394,229,442,190"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="551,195,419,238,417,233,549,189"/>
+</map>

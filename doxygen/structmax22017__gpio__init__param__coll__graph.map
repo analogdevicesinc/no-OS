@@ -1,0 +1,19 @@
+<map id="max22017_gpio_init_param" name="max22017_gpio_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the GPIO initialization parameter for the MAX22017 GPIO Controller." alt="" coords="1219,76,1373,116"/>
+<area shape="rect" id="Node000002" href="$structmax22017__desc.html" title="Structure holding the MAX22017 device descriptor." alt="" coords="932,83,1060,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1073,93,1218,93,1218,99,1073,99"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,33,801,58"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="816,58,932,81,931,86,815,63"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,29,511,54"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="525,40,669,42,669,47,525,45"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,127,797,153"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="810,125,931,104,932,109,811,130"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="709,112,717,104,735,101,751,103,760,109,762,119,758,128,753,126,757,118,756,112,749,108,735,106,720,109,713,116"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,142,490,167"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="503,148,674,140,674,145,504,153"/>
+<area shape="rect" id="Node000007" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,111,184,137"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="198,112,208,112,321,110,450,112,646,121,674,125,673,130,645,127,450,118,321,116,208,117,198,118"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="198,131,343,145,343,150,198,136"/>
+<area shape="rect" id="Node000008" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,192,491,232"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="505,195,645,165,696,150,698,155,646,171,506,200"/>
+</map>

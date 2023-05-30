@@ -1,0 +1,19 @@
+<map id="ad9523_spi_write" name="ad9523_spi_write">
+<area shape="rect" id="Node000001" title="Writes a value to the selected register." alt="" coords="561,93,697,119"/>
+<area shape="rect" id="Node000002" href="$ad9523_8c.html#ac41178e43b273796df05a276108302c9" title="Updates the AD9523 configuration." alt="" coords="167,43,301,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="563,93,513,83,401,70,301,62,302,56,402,64,514,78,564,88"/>
+<area shape="rect" id="Node000003" href="$ad9523_8c.html#af26d0ef1d15ebc7f6ea3f4dc5317e3c7" title="Setup the AD9523 device." alt="" coords="5,93,119,119"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="592,89,555,71,513,56,416,29,339,11,302,8,262,10,218,18,168,32,140,45,115,61,77,95,73,91,112,57,138,40,166,27,217,13,262,5,302,3,340,6,418,23,514,51,557,67,595,84"/>
+<area shape="rect" id="Node000004" href="$ad9523_8c.html#a90e60e0e0f1efb4d86363eb1bc8dc120" title="Updates the AD9523 configuration." alt="" coords="361,93,502,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="548,109,502,109,502,103,548,103"/>
+<area shape="rect" id="Node000005" href="$ad9523_8c.html#a67f744ae8790aa813acaf25574620ea4" title="Updates the AD9523 configuration." alt="" coords="181,144,287,169"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="561,124,514,133,393,147,288,156,288,151,392,142,513,127,560,119"/>
+<area shape="rect" id="Node000006" href="$ad9523_8c.html#ac425d68f7e56d755004f9bc503c41967" title="Sets the clock provider for selected channel." alt="" coords="349,195,513,220"/>
+<area shape="poly" id="edge10_Node000001_Node000006" title=" " alt="" coords="599,129,515,178,470,197,468,192,512,173,596,124"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="178,75,107,96,105,91,176,69"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="367,92,283,71,285,65,369,87"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="347,109,119,109,119,103,347,103"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="369,125,285,146,283,141,367,119"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="176,142,105,121,107,116,178,137"/>
+<area shape="poly" id="edge11_Node000006_Node000003" title=" " alt="" coords="335,213,252,206,208,197,166,184,138,171,113,154,74,121,78,117,116,150,141,166,168,179,209,192,252,201,336,208"/>
+</map>

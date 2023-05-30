@@ -1,0 +1,19 @@
+<map id="projects/ltc3337/src/common/common_data.h" name="projects/ltc3337/src/common/common_data.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,5,247,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,47,102,85,98,81,132,44"/>
+<area shape="rect" id="Node000003" href="$ltc3337_8h.html" title="Header file for the LTC3337 Driver." alt="" coords="181,93,263,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,44,204,81,200,85,166,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="187,240,257,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="205,121,187,135,171,152,162,171,163,191,177,212,195,229,191,233,172,215,158,193,156,170,167,149,184,131,202,117"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="296,167,396,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="243,116,315,157,313,162,241,121"/>
+<area shape="rect" id="Node000008" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="173,167,271,192"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="225,119,225,153,219,153,219,119"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="327,194,255,235,253,231,325,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="296,240,367,265"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="346,193,339,227,334,226,341,192"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="391,240,474,265"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="362,190,410,229,406,233,358,194"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="225,192,225,226,219,226,219,192"/>
+</map>

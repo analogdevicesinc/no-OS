@@ -1,0 +1,5 @@
+<map id="xilinx_xcvr_configure_lpm_dfe_mode" name="xilinx_xcvr_configure_lpm_dfe_mode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="148,5,308,45"/>
+<area shape="rect" id="Node000002" href="$axi__adxcvr_8c.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="AXI ADXCVR Device Initialization." alt="" coords="5,13,100,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,28,100,28,100,23,134,23"/>
+</map>

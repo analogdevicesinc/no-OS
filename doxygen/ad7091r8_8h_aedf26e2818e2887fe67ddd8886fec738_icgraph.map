@@ -1,0 +1,32 @@
+<map id="ad7091r8_spi_reg_read" name="ad7091r8_spi_reg_read">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1241,80,1415,105"/>
+<area shape="rect" id="Node000002" href="$ad7091r8_8c.html#a40429299260cc7c1810b535a7bb4f07e" title=" " alt="" coords="1023,5,1171,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1283,77,1193,45,1153,33,1154,28,1194,39,1285,72"/>
+<area shape="rect" id="Node000003" href="$ad7091r8_8c.html#a420a2870fd9a78afc10d726097c09e50" title=" " alt="" coords="1023,55,1171,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1227,84,1171,78,1172,73,1228,79"/>
+<area shape="rect" id="Node000004" href="$ad7091r8_8c.html#a9af59a2e061b9940cb39eb28b24653e7" title=" " alt="" coords="1022,104,1173,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1228,106,1173,112,1172,106,1228,100"/>
+<area shape="rect" id="Node000005" href="$ad7091r8_8c.html#abebb64ecf2aa02f00937291bbeae084f" title=" " alt="" coords="1001,153,1193,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1282,113,1194,143,1150,156,1149,151,1193,138,1280,108"/>
+<area shape="rect" id="Node000006" href="$ad7091r8_8c.html#aeda1a717753c7bfacfb1c767762b25d2" title="Initiate a software reset or hardware reset through the RESET pin." alt="" coords="794,79,917,104"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1026,152,1000,143,976,130,952,118,916,106,917,101,954,113,979,126,1002,138,1028,147"/>
+<area shape="rect" id="Node000013" href="$ad7091r8_8c.html#a7a246a61b90d79cb30bf8a897fc8aece" title=" " alt="" coords="759,128,952,153"/>
+<area shape="poly" id="edge12_Node000005_Node000013" title=" " alt="" coords="988,157,952,153,953,148,988,152"/>
+<area shape="rect" id="Node000014" href="$ad7091r8_8c.html#a895fbeec7666e2c44ecaffa6dd2d1381" title=" " alt="" coords="784,177,927,203"/>
+<area shape="poly" id="edge13_Node000005_Node000014" title=" " alt="" coords="988,180,927,186,926,180,987,174"/>
+<area shape="rect" id="Node000015" href="$ad7091r8_8c.html#a5b948870147de8f86b56a19dcb908423" title="Set device sleep mode." alt="" coords="757,227,953,252"/>
+<area shape="poly" id="edge14_Node000005_Node000015" title=" " alt="" coords="1048,186,954,217,909,229,907,224,953,211,1047,181"/>
+<area shape="rect" id="Node000007" href="$ad7091r8_8c.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="599,153,709,179"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="782,110,758,118,715,136,679,156,676,151,713,132,756,113,780,105"/>
+<area shape="rect" id="Node000008" href="$iio__ad7091r8_8c.html#ab9ebf560e86c6769048fec90dbed9f65" title="Initializes the AD7091R8 IIO driver." alt="" coords="403,128,538,153"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="584,159,538,153,539,147,585,154"/>
+<area shape="rect" id="Node000012" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="391,177,551,203"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="585,178,551,182,551,177,585,172"/>
+<area shape="rect" id="Node000009" href="$ad7091r8-sdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,104,297,129"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="389,135,296,126,297,121,390,130"/>
+<area shape="rect" id="Node000010" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,153,343,179"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="390,152,343,157,343,151,389,146"/>
+<area shape="rect" id="Node000011" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,153,60,179"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="94,169,60,169,60,163,94,163"/>
+<area shape="poly" id="edge15_Node000015_Node000007" title=" " alt="" coords="785,226,756,216,678,181,680,176,758,212,786,220"/>
+</map>

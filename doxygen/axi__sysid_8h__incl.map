@@ -1,0 +1,7 @@
+<map id="drivers/axi_core/axi_sysid/axi_sysid.h" name="drivers/axi_core/axi_sysid/axi_sysid.h">
+<area shape="rect" id="Node000001" title="Driver for the Analog Devices AXI&#45;SYSID core." alt="" coords="12,5,163,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,76,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,47,57,83,52,80,74,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,93,167,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="101,44,122,80,118,83,96,47"/>
+</map>

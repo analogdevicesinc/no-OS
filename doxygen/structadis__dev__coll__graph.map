@@ -1,0 +1,42 @@
+<map id="adis_dev" name="adis_dev">
+<area shape="rect" id="Node000001" title="ADIS device descriptor structure." alt="" coords="1929,328,2009,353"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,301,786,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="800,321,914,332,1042,338,1741,338,1929,338,1929,343,1741,343,1042,343,914,338,800,326"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="693,287,702,278,725,275,743,277,755,283,758,293,752,303,747,300,752,292,751,287,742,282,725,280,705,283,696,291"/>
+<area shape="rect" id="Node000010" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,277,1125,303"/>
+<area shape="poly" id="edge15_Node000010_Node000002" title=" " alt="" coords="800,306,962,293,962,299,800,311"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,273,471,299"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="485,291,663,306,663,311,484,296"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,325,184,351"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,332,472,322,663,314,663,319,472,327,198,337"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="182,320,323,296,324,301,183,326"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="198,343,323,349,478,353,648,349,818,335,913,319,994,300,996,305,914,324,819,341,649,354,478,358,323,355,198,348"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,201,472,241"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="486,242,607,275,684,299,682,304,606,281,484,247"/>
+<area shape="poly" id="edge14_Node000010_Node000005" title=" " alt="" coords="486,223,607,230,713,237,819,247,981,275,980,280,818,253,713,242,607,235,486,228"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="1153,5,1285,31"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="1299,15,1375,20,1465,29,1561,47,1653,75,1733,110,1791,146,1844,190,1907,251,1940,291,1963,326,1958,329,1936,294,1903,254,1841,194,1788,150,1730,115,1651,81,1559,52,1464,35,1375,25,1299,21"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,127,819,152"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="790,121,1166,28,1167,33,792,126"/>
+<area shape="rect" id="Node000011" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,228,1129,253"/>
+<area shape="poly" id="edge17_Node000011_Node000007" title=" " alt="" coords="818,152,877,169,935,193,947,203,959,213,988,225,986,230,956,218,944,207,932,198,875,174,817,158"/>
+<area shape="rect" id="Node000008" href="$structadis__chip__info.html" title="ADIS specific chip information structure." alt="" coords="1683,211,1797,236"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="1779,240,1945,326,1942,330,1777,245"/>
+<area shape="rect" id="Node000009" href="$structadis__init__param.html" title="ADIS device initialization parameters." alt="" coords="1338,257,1465,283"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="1714,247,1686,265,1653,279,1604,289,1554,291,1465,284,1465,279,1554,286,1604,283,1651,274,1683,260,1711,242"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="1478,258,1652,235,1682,231,1683,236,1652,241,1479,264"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="1138,290,1285,286,1337,279,1338,285,1286,291,1139,296"/>
+<area shape="poly" id="edge16_Node000009_Node000011" title=" " alt="" coords="1143,246,1338,262,1338,268,1143,251"/>
+<area shape="rect" id="Node000012" href="$structadis__data__field__map__def.html" title="ADIS filed map definition structure." alt="" coords="1309,191,1493,216"/>
+<area shape="poly" id="edge18_Node000008_Node000012" title=" " alt="" coords="1507,207,1683,217,1682,223,1507,212"/>
+<area shape="rect" id="Node000013" href="$structadis__field.html" title="ADIS device field structure." alt="" coords="1001,179,1085,204"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="1099,196,1153,201,1309,203,1309,208,1153,206,1099,201"/>
+<area shape="rect" id="Node000014" href="$structadis__clk__freq__limit.html" title="ADIS frequency limit for input synchronization clock." alt="" coords="1329,92,1474,117"/>
+<area shape="poly" id="edge20_Node000008_Node000014" title=" " alt="" coords="1488,105,1570,117,1613,129,1653,145,1677,159,1698,176,1730,208,1726,212,1694,180,1674,163,1651,150,1611,134,1569,123,1487,110"/>
+<area shape="rect" id="Node000015" href="$structadis__timeout.html" title="ADIS chip timeouts." alt="" coords="1348,141,1455,167"/>
+<area shape="poly" id="edge21_Node000008_Node000015" title=" " alt="" coords="1469,157,1557,169,1653,189,1710,208,1708,213,1651,194,1556,175,1468,163"/>
+<area shape="rect" id="Node000016" href="$structadis__diag__flags.html" title="Bitfield struct which maps on the diagnosis register." alt="" coords="1679,379,1801,404"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="1815,387,1860,382,1904,371,1947,351,1950,356,1906,377,1861,387,1816,392"/>
+<area shape="rect" id="Node000017" href="$structadis__temp__flags.html" title="Bitfield struct which maps on the temperature fags from the temperature register." alt="" coords="1676,428,1804,453"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="1817,433,1862,424,1904,406,1936,380,1958,352,1962,355,1940,384,1907,411,1863,429,1818,438"/>
+</map>
