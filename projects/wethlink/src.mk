@@ -19,6 +19,10 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
+	$(DRIVERS)/api/no_os_i2c.c \
+	$(DRIVERS)/api/no_os_eeprom.c \
+	$(DRIVERS)/eeprom/24xx32a/24xx32a.c \
 	$(DRIVERS)/api/no_os_mdio.c \
 	$(DRIVERS)/net/mdio_bitbang.c \
 	$(DRIVERS)/net/adin1300.c \
@@ -29,6 +33,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_list.c \
+	$(NO-OS)/util/no_os_crc8.c \
 	$(NO-OS)/util/no_os_pid.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
 
@@ -43,6 +48,10 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.h \
+	$(INCLUDE)/no_os_i2c.h \
+	$(INCLUDE)/no_os_eeprom.h \
+	$(DRIVERS)/eeprom/24xx32a/24xx32a.h \
 	$(INCLUDE)/no_os_mdio.h \
 	$(DRIVERS)/net/mdio_bitbang.h \
 	$(DRIVERS)/net/adin1300.h \
@@ -54,6 +63,7 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_list.h \
+	$(INCLUDE)/no_os_crc8.h \
 	$(INCLUDE)/no_os_pid.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_delay.h \

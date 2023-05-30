@@ -3,10 +3,14 @@
 
 #include "no_os_uart.h"
 #include "no_os_gpio.h"
+#include "no_os_i2c.h"
+#include "no_os_eeprom.h"
 #include "maxim_irq.h"
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
+#include "maxim_i2c.h"
+#include "24xx32a.h"
 
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   115200
@@ -106,5 +110,6 @@ extern struct no_os_gpio_init_param led_tx_det_green_gpio_ip;
 extern struct no_os_gpio_init_param led_rx_det_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_lock_gpio_ip;
 extern struct no_os_gpio_init_param led_rx_lock_gpio_ip;
+extern struct no_os_eeprom_init_param eeprom_ip;
 
 #endif /* __PARAMETERS_H__ */

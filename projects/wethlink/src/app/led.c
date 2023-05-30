@@ -45,8 +45,6 @@ void PWMTimer()
     led_rx_det(0);
 
     MXC_TMR_Start(PWM_TIMER);
-
-    printf("PWM started.\n\n");
 }
 
 int led_init(void)
