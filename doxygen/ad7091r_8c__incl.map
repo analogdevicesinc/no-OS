@@ -1,0 +1,17 @@
+<map id="drivers/adc/ad7091r/ad7091r.c" name="drivers/adc/ad7091r/ad7091r.c">
+<area shape="rect" id="Node000001" title="Implementation of AD7091R Driver." alt="" coords="104,5,255,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="159,167,229,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,46,194,153,189,153,179,46"/>
+<area shape="rect" id="Node000003" href="$ad7091r_8h.html" title="Header file of AD7091R Driver." alt="" coords="41,93,128,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,48,111,86,108,82,155,43"/>
+<area shape="rect" id="Node000006" href="$no__os__alloc_8h.html" title=" " alt="" coords="217,93,328,119"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="204,44,250,82,246,86,200,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="68,121,45,141,26,168,22,182,23,198,31,227,26,228,17,198,17,182,21,166,41,137,65,117"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="35,167,134,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="87,119,87,153,82,153,82,119"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="80,194,57,230,53,227,75,191"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="262,121,219,159,215,156,258,117"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="254,167,321,192"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="278,118,285,153,280,154,272,120"/>
+</map>

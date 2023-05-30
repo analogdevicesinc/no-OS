@@ -1,0 +1,25 @@
+<map id="iio_format_value" name="iio_format_value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="271,290,403,315"/>
+<area shape="rect" id="Node000002" href="$iio__ad405x_8c.html#a976ed1d90b00516c4b7e7d81f49a5e95" title="Handles the read request for average filter length attribute." alt="" coords="34,5,194,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,277,316,230,296,171,265,111,244,83,221,59,193,43,196,38,224,55,249,80,269,108,301,169,322,228,333,276"/>
+<area shape="rect" id="Node000003" href="$iio__ad405x_8c.html#aac590d12545e4a6715d073a50bf19157" title="Handles the read request for debug attributes." alt="" coords="26,69,202,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="324,278,309,243,287,201,257,159,221,123,201,111,204,107,224,119,262,156,291,199,314,241,329,276"/>
+<area shape="rect" id="Node000004" href="$iio__ad405x_8c.html#a8fe2e5ffd5f486bbbc3835c6c0958f13" title="Handles the read request for sample rate attribute." alt="" coords="5,134,223,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="319,280,280,225,252,197,221,173,197,162,199,157,224,168,256,193,284,221,324,277"/>
+<area shape="rect" id="Node000005" href="$iio__adis_8c.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="27,183,201,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="310,283,270,251,222,222,190,211,192,206,224,218,273,247,313,279"/>
+<area shape="rect" id="Node000006" href="$iio__adis_8c.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="24,233,204,258"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="278,289,222,273,171,261,172,255,223,268,280,284"/>
+<area shape="rect" id="Node000007" href="$iio__adis_8c.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="37,283,191,323"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="257,305,192,305,192,300,257,300"/>
+<area shape="rect" id="Node000008" href="$iio__adis_8c.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="48,347,180,373"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="280,322,223,337,172,350,171,345,222,332,278,317"/>
+<area shape="rect" id="Node000009" href="$iio__adis_8c.html#aaedb46cc4fe942a8837df6283c46684c" title="Handles the read request for offset attribute." alt="" coords="38,397,190,422"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="313,326,273,358,224,386,188,399,186,394,222,382,270,353,310,322"/>
+<area shape="rect" id="Node000010" href="$iio__adis_8c.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="45,446,183,471"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="323,328,284,383,256,412,224,436,185,452,183,447,221,431,252,408,279,379,319,325"/>
+<area shape="rect" id="Node000011" href="$iio__adis_8c.html#aa107585de83812d4a0c5d99680614ad9" title="Handles the read request for sampling frequency attribute." alt="" coords="10,495,218,521"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="329,329,314,365,292,407,262,449,224,485,200,498,198,493,221,480,258,446,287,404,309,362,324,327"/>
+<area shape="rect" id="Node000012" href="$iio__adis_8c.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="39,545,189,570"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="333,330,321,374,300,430,268,486,248,512,224,534,190,551,188,547,221,530,244,508,264,483,295,428,315,373,328,328"/>
+</map>

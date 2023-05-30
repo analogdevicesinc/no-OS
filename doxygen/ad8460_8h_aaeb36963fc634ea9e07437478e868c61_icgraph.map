@@ -1,0 +1,22 @@
+<map id="ad8460_reg_write" name="ad8460_reg_write">
+<area shape="rect" id="Node000001" title="Write a register value." alt="" coords="687,105,825,131"/>
+<area shape="rect" id="Node000002" href="$ad8460_8c.html#af0e3295c734db1fabd902afa56e32f66" title="Read&#45;modify&#45;write operation." alt="" coords="457,56,639,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="688,105,602,84,603,79,689,100"/>
+<area shape="rect" id="Node000007" href="$ad8460_8c.html#a088d90521cf22ce3d2c70dc4c61354e8" title="Reset the AD8460 device." alt="" coords="493,131,603,156"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="673,131,604,139,603,134,673,125"/>
+<area shape="rect" id="Node000003" href="$ad8460_8c.html#a4051f00e787b270af00776a820be633e" title="Enable or disable the APG mode." alt="" coords="213,31,409,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="444,60,409,56,410,51,444,55"/>
+<area shape="rect" id="Node000004" href="$ad8460_8c.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="9,5,161,31"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="507,53,461,35,409,21,344,13,279,10,162,13,162,8,279,4,345,7,410,15,462,30,509,48"/>
+<area shape="rect" id="Node000006" href="$ad8460_8c.html#ab77409bb5ceced72a965c9929a6349cf" title="Reset the high voltage driver." alt="" coords="245,80,378,105"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="444,82,378,89,378,83,443,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="199,33,161,29,162,24,200,28"/>
+<area shape="rect" id="Node000005" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,80,165,105"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="240,62,145,83,144,77,239,56"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="231,95,165,95,165,90,231,90"/>
+<area shape="poly" id="edge11_Node000007_Node000005" title=" " alt="" coords="479,143,355,134,213,119,146,108,147,103,214,114,355,129,479,137"/>
+<area shape="rect" id="Node000008" href="$iio__ad8460_8c.html#a83e79ccf85fdba974cfd20853c761264" title="Initializes the AD8460 IIO driver." alt="" coords="251,181,372,207"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="480,161,372,184,371,179,479,155"/>
+<area shape="rect" id="Node000009" href="$eval-ad8460_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,181,157,207"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="237,197,157,197,157,191,237,191"/>
+</map>

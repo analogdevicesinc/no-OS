@@ -1,0 +1,26 @@
+<map id="ad74413r_reset" name="ad74413r_reset">
+<area shape="rect" id="Node000001" title="Perform either a software or hardware reset and wait for device reset time." alt="" coords="677,80,800,105"/>
+<area shape="rect" id="Node000002" href="$ad74413r_8c.html#a8028c875e0d708d943f95172a959b287" title="Initialize the device structure." alt="" coords="504,104,615,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="664,105,615,112,614,107,663,100"/>
+<area shape="rect" id="Node000009" href="$ad74413r_8c.html#a3adf2187f2b14c7bc4552dc518b61696" title="Free the device descriptor." alt="" coords="489,55,629,80"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="663,85,629,80,630,75,664,79"/>
+<area shape="rect" id="Node000003" href="$iio__ad74413r_8c.html#a4a0731d5ea48757cf8fb7dad0a729a46" title="Initializes the AD74413R IIO descriptor." alt="" coords="293,104,427,129"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="490,119,428,119,428,114,490,114"/>
+<area shape="rect" id="Node000007" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="301,55,419,80"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="494,103,412,83,413,77,495,98"/>
+<area shape="rect" id="Node000008" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="307,153,413,179"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="495,135,413,156,412,151,494,130"/>
+<area shape="rect" id="Node000004" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="110,103,229,128"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="279,119,229,118,229,113,279,113"/>
+<area shape="rect" id="Node000005" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,53,231,79"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="297,103,217,81,219,76,299,98"/>
+<area shape="rect" id="Node000006" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="122,86,61,109,59,104,120,81"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="292,166,204,158,107,143,59,129,61,124,109,138,205,153,293,161"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="495,86,413,107,412,101,494,81"/>
+<area shape="poly" id="edge13_Node000009_Node000007" title=" " alt="" coords="476,70,420,70,420,65,476,65"/>
+<area shape="poly" id="edge14_Node000009_Node000008" title=" " alt="" coords="501,88,491,94,477,106,468,118,458,131,443,144,414,157,412,152,440,140,454,128,463,115,473,102,488,89,498,83"/>
+<area shape="rect" id="Node000010" href="$iio__ad74413r_8c.html#a2684709d6ebea71bf30672fd82bffeca" title="Free an iio descriptor." alt="" coords="279,5,441,31"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="494,54,412,33,413,28,495,49"/>
+<area shape="poly" id="edge12_Node000010_Node000005" title=" " alt="" coords="296,37,221,56,220,51,295,32"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ade9113_remove" name="ade9113_remove">
+<area shape="rect" id="Node000001" title="Remove the device and release resources." alt="" coords="416,5,551,31"/>
+<area shape="rect" id="Node000002" href="$supply_8c.html#a4a47d1b835fa05b58961e7215c9feafb" title="Initialize supply component." alt="" coords="275,5,368,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,21,368,21,368,15,402,15"/>
+<area shape="rect" id="Node000003" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,21,227,21,227,15,261,15"/>
+<area shape="rect" id="Node000004" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

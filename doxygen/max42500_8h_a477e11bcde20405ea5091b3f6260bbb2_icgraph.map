@@ -1,0 +1,29 @@
+<map id="max42500_reg_read" name="max42500_reg_read">
+<area shape="rect" id="Node000001" title="Read a raw value from a register." alt="" coords="748,174,903,200"/>
+<area shape="rect" id="Node000002" href="$max42500_8c.html#ab1ee776e9ce01d8bbbdc108c74fabd88" title="Get the status of the voltage monitor input." alt="" coords="219,37,428,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="810,163,793,132,768,96,737,62,699,36,655,20,609,11,562,8,516,10,430,23,363,40,362,34,429,17,515,5,562,3,610,6,657,15,701,31,740,58,773,93,798,129,815,161"/>
+<area shape="rect" id="Node000004" href="$max42500_8c.html#a038c7bfd211a1db049ede34fb35ef918" title="Get the power&#45;down timestamp for a specified voltage monitor input." alt="" coords="507,46,674,86"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="798,167,753,133,699,100,670,88,672,83,701,95,756,129,801,163"/>
+<area shape="rect" id="Node000005" href="$max42500_8c.html#ab4768f16aa58a4804782076410d1c522" title="Get the power&#45;up timestamp for a specified voltage monitor input." alt="" coords="507,110,674,150"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="759,174,672,152,674,147,760,169"/>
+<area shape="rect" id="Node000006" href="$max42500_8c.html#a2e69d1b69e84655c2709232fc48e82bc" title="Initialize the device structure." alt="" coords="264,150,383,176"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="734,185,383,169,383,163,734,180"/>
+<area shape="rect" id="Node000007" href="$max42500_8c.html#a460e7ea60567482b927982c3a00f3716" title="Update a register&#39;s value based on a mask." alt="" coords="505,225,676,250"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="753,205,651,228,650,222,752,200"/>
+<area shape="rect" id="Node000011" href="$max42500_8c.html#a154fb403d51164c516bd0e6e0b6b7fb1" title="Enable/Disable watchdog." alt="" coords="497,275,685,315"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="796,210,752,237,701,264,666,278,665,273,699,259,750,233,793,205"/>
+<area shape="rect" id="Node000012" href="$max42500_8c.html#aefce91748fb02ea8752fb4f9bdf5ff88" title="Update the watchdog key based on the mode and current value." alt="" coords="481,340,700,365"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="811,213,767,272,737,303,701,329,673,342,671,337,699,325,733,299,763,269,807,210"/>
+<area shape="rect" id="Node000003" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,176,165,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="290,72,110,178,107,173,287,67"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="251,173,166,183,165,177,250,168"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="529,224,480,208,433,190,383,177,384,172,434,185,482,203,531,219"/>
+<area shape="rect" id="Node000008" href="$max42500_8c.html#a12d9747d4143e266cb34770695e84a69" title="Set the overvoltage threshold of VM1 to VM5." alt="" coords="225,200,422,225"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="491,231,422,224,423,219,492,226"/>
+<area shape="rect" id="Node000009" href="$max42500_8c.html#a372c0993640464da288a4881836b2dc5" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="225,249,422,274"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="492,249,423,256,422,250,491,244"/>
+<area shape="rect" id="Node000010" href="$max42500_8c.html#aac3ba7534a3177465fd2eac9fec90c02" title="Set watchdog reset hold time." alt="" coords="213,298,433,324"/>
+<area shape="poly" id="edge13_Node000007_Node000010" title=" " alt="" coords="513,256,482,266,434,288,390,301,389,296,432,283,480,261,511,251"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="211,204,165,199,166,194,211,198"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="247,248,213,239,116,204,118,199,214,234,248,243"/>
+</map>

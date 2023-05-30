@@ -1,0 +1,11 @@
+<map id="ATV_GetMsCountNZ" name="ATV_GetMsCountNZ">
+<area shape="rect" id="Node000001" title=" " alt="" coords="612,31,765,56"/>
+<area shape="rect" id="Node000002" href="$wrapper_8c.html#ae1fb4cf74853bbecf27f96762f737c87" title=" " alt="" coords="391,5,508,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="598,36,508,27,509,22,598,31"/>
+<area shape="rect" id="Node000003" href="$transmitter_8c.html#ae1f6a189e7ef2a8169668cf438657df1" title="Checks current AVR operating mode and notify application if mode changed." alt="" coords="335,55,564,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="599,55,565,58,564,53,598,50"/>
+<area shape="rect" id="Node000004" href="$transmitter_8c.html#ac458d6d563b44d7f6d80dfc347f6c931" title="Main function for polling mode operation. This function should be called periodically (at least every..." alt="" coords="108,55,287,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="321,70,287,70,287,65,321,65"/>
+<area shape="rect" id="Node000005" href="$adv7511_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

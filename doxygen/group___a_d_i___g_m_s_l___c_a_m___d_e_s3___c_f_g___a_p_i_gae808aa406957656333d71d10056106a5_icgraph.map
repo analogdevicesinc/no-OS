@@ -1,0 +1,5 @@
+<map id="max96792_csi_set_dphy_config" name="max96792_csi_set_dphy_config">
+<area shape="rect" id="Node000001" title="This API sets the D&#45;PHY configuration for the MAX96792 deserializer." alt="" coords="228,5,411,45"/>
+<area shape="rect" id="Node000002" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#ga3be61569819b300d390953d7276dfd0a" title="This API initializes the PHY for the MAX96792 deserializer." alt="" coords="5,13,180,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,28,180,28,180,23,214,23"/>
+</map>

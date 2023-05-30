@@ -1,0 +1,13 @@
+<map id="ltp8800_write_word_data" name="ltp8800_write_word_data">
+<area shape="rect" id="Node000001" title="Converts value to register data and do PMBus write word operation." alt="" coords="433,55,620,80"/>
+<area shape="rect" id="Node000002" href="$ltp8800_8c.html#acf160b5e41252593ae47988845aa8aae" title="Set overvalue and undervalue limits." alt="" coords="213,5,385,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="454,54,358,33,359,28,455,49"/>
+<area shape="rect" id="Node000004" href="$ltp8800_8c.html#ae0e78a7f7c33f18b56412a8ff393f5cc" title="Set input voltage window at which power conversion will proceed." alt="" coords="237,55,362,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="420,70,362,70,362,65,420,65"/>
+<area shape="rect" id="Node000005" href="$ltp8800_8c.html#ae352a6346715bc18065e55f1eb77ad36" title="Set output voltage command." alt="" coords="224,104,375,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="455,86,359,107,358,101,454,80"/>
+<area shape="rect" id="Node000003" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,55,165,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="231,36,142,57,141,52,230,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="222,70,165,70,165,65,222,65"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="230,103,141,83,142,77,231,98"/>
+</map>

@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/power/lt8722/README.rst

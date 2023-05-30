@@ -1,0 +1,21 @@
+<map id="drivers/adc/adc_demo/iio_adc_demo.h" name="drivers/adc/adc_demo/iio_adc_demo.h">
+<area shape="rect" id="Node000001" title="Header file of ADC Demo iio." alt="" coords="183,5,348,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="157,93,227,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,47,214,85,210,81,246,44"/>
+<area shape="rect" id="Node000003" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="201,167,295,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,46,254,153,248,153,260,46"/>
+<area shape="rect" id="Node000007" href="$adc__demo_8h.html" title="Header file of ADC Demo Driver." alt="" coords="312,93,413,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="291,43,339,82,336,87,287,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,240,88,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="217,195,93,238,91,233,215,190"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="274,313,345,339"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="217,194,189,208,163,224,149,244,148,253,153,264,175,286,202,302,232,312,261,318,260,323,230,317,200,307,171,290,148,267,143,254,144,242,160,220,186,203,215,190"/>
+<area shape="rect" id="Node000006" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="163,240,333,265"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="251,192,251,226,245,226,245,192"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="260,264,292,301,288,305,256,267"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="346,121,280,162,277,157,343,116"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="366,119,364,183,358,225,348,266,329,303,324,301,343,264,353,224,358,182,360,119"/>
+<area shape="rect" id="Node000008" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="408,167,504,192"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="379,117,432,156,428,160,376,121"/>
+<area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="450,194,426,228,391,267,340,308,337,304,387,263,421,225,446,191"/>
+</map>

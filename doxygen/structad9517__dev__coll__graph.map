@@ -1,0 +1,21 @@
+<map id="ad9517_dev" name="ad9517_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="993,158,1095,183"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="751,79,873,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="864,107,1007,155,1005,161,863,112"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="788,64,795,56,812,53,826,55,835,61,837,71,833,80,828,78,832,70,830,64,824,60,812,58,798,61,792,68"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="370,47,517,73"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="531,65,751,84,750,89,530,70"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,42"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,19,208,19,299,19,420,18,515,17,610,25,727,51,760,63,789,77,787,82,758,68,726,56,609,30,515,23,420,24,299,24,208,24,198,24"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,36,370,51,369,56,197,41"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="369,97,518,137"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="532,116,626,114,726,107,756,102,757,107,727,112,626,120,532,121"/>
+<area shape="rect" id="Node000006" href="$structad9517__state.html" title=" " alt="" coords="757,186,867,211"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="881,195,969,187,998,181,999,186,970,192,881,200"/>
+<area shape="rect" id="Node000007" href="$structad9517__platform__data.html" title=" " alt="" coords="359,162,528,187"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="542,178,757,192,756,198,541,184"/>
+<area shape="rect" id="Node000008" href="$structad9517__lvpecl__channel__spec.html" title=" " alt="" coords="338,211,549,237"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="562,220,726,211,756,207,757,212,727,216,562,226"/>
+<area shape="rect" id="Node000009" href="$structad9517__lvds__cmos__channel__spec.html" title=" " alt="" coords="323,261,564,286"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="577,266,652,257,726,240,761,226,790,209,793,214,763,231,727,245,653,262,578,272"/>
+</map>

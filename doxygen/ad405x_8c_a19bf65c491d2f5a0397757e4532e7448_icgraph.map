@@ -1,0 +1,11 @@
+<map id="ad405x_remove" name="ad405x_remove">
+<area shape="rect" id="Node000001" title="Remove device and free the resources allocated by ad405x_init()." alt="" coords="371,55,497,80"/>
+<area shape="rect" id="Node000002" href="$iio__ad405x_8c.html#a25e5b9b70c0d01d27fb470e006568145" title="Initializes the AD405X IIO driver." alt="" coords="187,5,308,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="372,54,296,33,297,28,373,49"/>
+<area shape="rect" id="Node000004" href="$iio__ad405x_8c.html#ad813cf00c632f3193d671f77adae27d9" title="Free the resources allocated by ad405x_iio_init()." alt="" coords="172,55,323,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,70,323,70,323,65,357,65"/>
+<area shape="rect" id="Node000005" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="188,104,307,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="373,86,297,106,296,101,372,81"/>
+<area shape="rect" id="Node000003" href="$ad405x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,21,124,21,124,15,173,15"/>
+</map>

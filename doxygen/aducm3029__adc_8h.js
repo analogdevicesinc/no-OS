@@ -1,0 +1,10 @@
+var aducm3029__adc_8h =
+[
+    [ "adc_init_param", "structadc__init__param.html", "structadc__init__param" ],
+    [ "ADUCM3029_ADC_NUM_CH", "aducm3029__adc_8h.html#a3c2d6fad5f43c46c6c3faa1689ebcb2d", null ],
+    [ "ADUCM3029_CH", "aducm3029__adc_8h.html#a9b4faec23418c70b7d5275e2a4668050", null ],
+    [ "aducm3029_adc_init", "aducm3029__adc_8h.html#ad329a84ae892867c36fb1268eb4e6f73", null ],
+    [ "aducm3029_adc_read", "aducm3029__adc_8h.html#a4af7379d1fc099dae34fbdb5c9d67d13", null ],
+    [ "aducm3029_adc_remove", "aducm3029__adc_8h.html#a862a9cb5e32687ee89659088bf918837", null ],
+    [ "aducm3029_adc_update_active_channels", "aducm3029__adc_8h.html#a2e96048b37a885c4084fa4b2842a4d09", null ]
+];

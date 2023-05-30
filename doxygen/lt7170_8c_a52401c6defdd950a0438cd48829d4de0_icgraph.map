@@ -1,0 +1,14 @@
+<map id="lt7170_read_word" name="lt7170_read_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read word operation." alt="" coords="631,56,769,81"/>
+<area shape="rect" id="Node000002" href="$lt7170_8c.html#a30b2bb5c6fcd4f0cf0afdb61361c7a0e" title="Set output PWM mode." alt="" coords="422,5,569,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="634,55,547,33,548,28,635,50"/>
+<area shape="rect" id="Node000003" href="$lt7170_8c.html#a24dacb372b871d8b33eaea08eeb86e86" title="Read statuses." alt="" coords="213,57,360,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="617,72,360,72,360,67,617,66"/>
+<area shape="rect" id="Node000005" href="$lt7170_8c.html#aec8fc020f348d0de8a47baca0929bc18" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="408,107,583,132"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="635,87,548,109,547,104,634,82"/>
+<area shape="rect" id="Node000004" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,83,165,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,84,166,88,165,83,199,78"/>
+<area shape="rect" id="Node000006" href="$lt7170_8c.html#adafcc4f2933366985fd26164c07ea139" title="Read a value." alt="" coords="215,107,358,132"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="394,122,358,122,358,117,394,117"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="202,112,165,108,166,102,202,107"/>
+</map>

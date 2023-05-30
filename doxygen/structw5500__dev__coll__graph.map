@@ -1,0 +1,19 @@
+<map id="w5500_dev" name="w5500_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="919,109,1015,135"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,17,801,43"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="782,45,935,107,933,112,780,50"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,5,511,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="524,19,669,25,669,30,524,25"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,109,797,135"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="811,119,919,119,919,125,811,125"/>
+<area shape="poly" id="edge8_Node000004_Node000004" title=" " alt="" coords="711,94,718,86,735,83,750,85,759,91,761,101,757,110,752,108,756,100,754,94,748,90,735,88,721,91,715,98"/>
+<area shape="rect" id="Node000005" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,119,490,144"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="503,126,674,121,674,126,504,131"/>
+<area shape="rect" id="Node000006" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,88,184,113"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="198,90,208,90,337,90,480,95,646,103,674,107,673,113,645,109,480,100,336,95,208,95,198,96"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,108,343,122,343,127,198,113"/>
+<area shape="rect" id="Node000007" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,169,491,209"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="505,173,645,146,695,132,696,137,646,151,506,178"/>
+<area shape="rect" id="Node000008" href="$structw5500__socket.html" title=" " alt="" coords="678,159,793,184"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="806,157,894,139,922,132,924,137,895,145,807,162"/>
+</map>

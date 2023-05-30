@@ -1,0 +1,13 @@
+<map id="ad74413r_set_adc_conv_seq" name="ad74413r_set_adc_conv_seq">
+<area shape="rect" id="Node000001" title="Start or stop ADC conversions." alt="" coords="741,31,949,56"/>
+<area shape="rect" id="Node000002" href="$ad74413r_8c.html#a84173888281b24e7ab884f95491eb34e" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="507,31,693,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="728,46,694,46,694,41,728,41"/>
+<area shape="rect" id="Node000003" href="$ad74413r_8c.html#a85e28f0d13f64bd42e0ca4843c053048" title="Get the ADC real value, according to the operation mode." alt="" coords="275,31,459,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="493,46,459,46,459,41,493,41"/>
+<area shape="rect" id="Node000004" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="261,33,227,28,227,23,262,27"/>
+<area shape="rect" id="Node000005" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="114,55,221,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="261,59,221,64,221,58,261,53"/>
+<area shape="rect" id="Node000006" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="100,70,60,70,60,65,100,65"/>
+</map>

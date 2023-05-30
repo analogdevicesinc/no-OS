@@ -1,0 +1,26 @@
+<map id="drivers/platform/aducm3029/aducm3029_i2c.c" name="drivers/platform/aducm3029/aducm3029_i2c.c">
+<area shape="rect" id="Node000001" title="Implementation of I2C driver for ADuCM302x." alt="" coords="421,5,627,45"/>
+<area shape="rect" id="Node000002" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,93,104,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="421,46,118,96,117,91,420,40"/>
+<area shape="rect" id="Node000004" href="$aducm3029__i2c_8h.html" title=" " alt="" coords="128,93,264,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="446,48,258,93,257,88,445,43"/>
+<area shape="rect" id="Node000005" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="288,93,397,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="482,48,383,90,381,85,480,43"/>
+<area shape="rect" id="Node000007" href="$no__os__alloc_8h.html" title=" " alt="" coords="422,93,533,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="515,47,494,83,489,80,510,44"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="535,167,606,192"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="532,45,566,153,561,154,527,47"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="608,93,760,119"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="563,43,649,85,647,90,561,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="784,93,955,119"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="607,43,806,88,805,93,606,48"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="979,93,1050,119"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="628,37,783,59,966,91,966,96,783,65,627,42"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,167,90,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="57,119,57,153,52,153,52,119"/>
+<area shape="rect" id="Node000006" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="309,167,377,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="345,119,345,153,340,153,340,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="444,167,511,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="480,119,480,153,475,153,475,119"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="494,117,546,156,543,160,491,121"/>
+</map>

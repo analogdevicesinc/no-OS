@@ -1,0 +1,11 @@
+<map id="ad5629r_set_input_reg" name="ad5629r_set_input_reg">
+<area shape="rect" id="Node000001" title="Write to input register and read from output register via SPI." alt="" coords="280,80,451,105"/>
+<area shape="rect" id="Node000002" href="$ad5629r_8c.html#a6bf25c9f2fb6762e45a5f60ba02d5dd3" title="Updates selected DAC register." alt="" coords="33,5,205,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,77,231,45,187,33,189,28,233,39,323,72"/>
+<area shape="rect" id="Node000003" href="$ad5629r_8c.html#a19898251ca79798aed0c626041054596" title="Writes a value to Input Register N of selected DAC channel." alt="" coords="39,55,198,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,85,198,78,198,73,266,80"/>
+<area shape="rect" id="Node000004" href="$ad5629r_8c.html#a2bebcfaa968939b044b912f80f419dae" title="Writes a value to Input Register N of selected DAC channel, then updates all." alt="" coords="5,104,232,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="266,105,233,108,232,103,266,100"/>
+<area shape="rect" id="Node000005" href="$ad5629r_8c.html#ae8c205a7c078f25538b4901d387ee914" title="Writes a value to Input Register N and updates the respective DAC channel." alt="" coords="9,153,228,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="321,113,233,143,183,156,182,151,231,138,319,108"/>
+</map>

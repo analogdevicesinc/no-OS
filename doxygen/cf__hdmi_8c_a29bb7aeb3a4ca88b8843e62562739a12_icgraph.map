@@ -1,0 +1,11 @@
+<map id="InitHdmiVideoPcore" name="InitHdmiVideoPcore">
+<area shape="rect" id="Node000001" title="InitHdmiVideoPcore." alt="" coords="536,31,687,56"/>
+<area shape="rect" id="Node000002" href="$cf__hdmi_8c.html#a3a7e63e57e99e2fea790462707ed6ae8" title="SetVideoResolution." alt="" coords="295,5,444,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="522,37,444,28,444,23,522,31"/>
+<area shape="rect" id="Node000004" href="$transmitter_8c.html#a8b3e85ee90b00b7bc69e6a9b8eaf8a88" title="Parse the new EDID segment and set the resolution and the pixel clock according to EDID data." alt="" coords="251,55,488,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="523,55,488,58,488,53,522,49"/>
+<area shape="rect" id="Node000003" href="$adv7511_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="77,5,131,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="281,21,132,21,132,15,281,15"/>
+<area shape="rect" id="Node000005" href="$transmitter_8c.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="5,55,203,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="237,70,203,70,203,65,237,65"/>
+</map>

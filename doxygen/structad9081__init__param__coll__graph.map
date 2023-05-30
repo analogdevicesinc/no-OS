@@ -1,0 +1,32 @@
+<map id="ad9081_init_param" name="ad9081_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1316,179,1463,204"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="991,148,1154,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1168,167,1316,182,1315,187,1168,172"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,60,184,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="132,89,217,129,269,148,323,162,415,176,509,185,603,189,695,189,862,181,991,169,991,174,862,186,695,194,603,194,509,190,414,182,322,167,268,153,215,134,130,94"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="693,44,815,69"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="172,55,208,50,328,38,422,33,516,35,636,41,692,46,692,51,636,46,515,40,422,39,328,43,208,55,173,60"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="339,60,485,85"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="197,70,339,70,339,75,197,75"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,113,487,153"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="501,134,991,155,991,160,500,139"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="499,114,635,85,706,67,707,72,637,90,500,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="830,68,896,87,964,114,988,133,1019,145,1017,150,985,138,961,119,895,92,828,73"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="722,29,732,21,754,17,773,20,784,26,787,36,781,45,777,42,782,35,780,29,771,25,754,23,734,26,726,33"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="499,66,692,57,692,62,499,71"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="987,221,1159,247"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1172,227,1292,214,1346,201,1347,207,1292,219,1173,233"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="660,235,848,260"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="861,240,986,235,986,240,862,246"/>
+<area shape="rect" id="Node000009" href="$structno__os__clk.html" title=" " alt="" coords="1029,328,1116,353"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1129,329,1208,310,1250,295,1291,276,1316,259,1340,239,1375,203,1379,206,1343,243,1319,263,1293,280,1253,300,1210,315,1131,334"/>
+<area shape="rect" id="Node000010" href="$structno__os__clk__hw.html" title=" " alt="" coords="1333,351,1445,376"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="1119,356,1183,373,1222,376,1261,376,1333,370,1333,375,1261,382,1222,382,1182,378,1117,361"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="1319,361,1116,346,1117,341,1320,356"/>
+<area shape="rect" id="Node000011" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="693,328,815,353"/>
+<area shape="poly" id="edge15_Node000009_Node000011" title=" " alt="" coords="829,338,1029,338,1029,343,829,343"/>
+<area shape="rect" id="Node000012" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="323,328,501,353"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="515,338,693,338,693,343,515,343"/>
+<area shape="rect" id="Node000013" href="$structlink__init__param.html" title=" " alt="" coords="1011,99,1134,124"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="1148,119,1219,132,1293,150,1361,176,1359,181,1291,155,1218,137,1147,124"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="projects/adxrs290&#45;pmdz/src/common/common_data.c" name="projects/adxrs290&#45;pmdz/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;adxrs290&#45;pmdz examples." alt="" coords="15,5,230,45"/>
+<area shape="rect" id="Node000002" href="$adxrs290-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxrs290&#45;pmdz examples." alt="" coords="59,93,186,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,46,125,79,120,79,120,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,121,81,158,77,154,110,117"/>
+<area shape="rect" id="Node000004" href="$adxrs290_8h.html" title="Implementation of ADXRS290 Driver." alt="" coords="139,167,234,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="135,117,169,155,165,158,131,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="22,313,93,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="172,194,146,215,118,242,93,273,73,303,69,300,89,270,114,238,142,211,169,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="127,313,209,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="170,194,146,214,126,241,124,257,128,272,147,301,143,304,123,274,118,257,122,239,142,210,166,190"/>
+<area shape="rect" id="Node000007" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="384,240,491,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="228,189,384,234,383,239,226,195"/>
+<area shape="rect" id="Node000009" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="261,240,360,265"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="208,190,280,231,277,235,205,194"/>
+<area shape="rect" id="Node000010" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="137,240,237,265"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="189,192,189,226,184,226,184,192"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="275,313,346,339"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="418,268,345,309,342,304,416,263"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="313,266,313,300,308,300,308,266"/>
+<area shape="poly" id="edge12_Node000010_Node000005" title=" " alt="" coords="167,268,92,309,90,304,165,263"/>
+<area shape="poly" id="edge13_Node000010_Node000006" title=" " alt="" coords="186,266,177,301,172,300,181,265"/>
+<area shape="poly" id="edge11_Node000010_Node000008" title=" " alt="" coords="208,263,280,304,277,309,205,268"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="adf4030_set_channel_delay" name="adf4030_set_channel_delay">
+<area shape="rect" id="Node000001" title="Set the delay for a specific BSYNC channel. This Delay will show up between TDC_SOURCE and channel." alt="" coords="213,5,373,45"/>
+<area shape="rect" id="Node000002" href="$adf4030_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,13,165,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,28,166,28,166,23,200,23"/>
+</map>

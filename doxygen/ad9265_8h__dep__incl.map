@@ -1,0 +1,7 @@
+<map id="drivers/adc/ad9265/ad9265.h" name="drivers/adc/ad9265/ad9265.h">
+<area shape="rect" id="Node000001" title="Header file of AD9265 Driver." alt="" coords="99,5,245,45"/>
+<area shape="rect" id="Node000002" href="$ad9265_8c.html" title="Implementation of AD9265 Driver." alt="" coords="5,101,152,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,57,99,103,96,99,141,53"/>
+<area shape="rect" id="Node000003" href="$ad9265__fmc__125ebz_8c.html" title="Implementation of Main Function." alt="" coords="176,93,357,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,53,242,91,238,95,199,57"/>
+</map>

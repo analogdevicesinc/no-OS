@@ -1,0 +1,13 @@
+<map id="admv8818_spi_update_bits" name="admv8818_spi_update_bits">
+<area shape="rect" id="Node000001" title="Update ADMV8818 register." alt="" coords="599,55,799,80"/>
+<area shape="rect" id="Node000002" href="$admv8818_8c.html#a71af14bc49ed2889d304cf85bc80c39e" title="Set the HPF Frequency." alt="" coords="385,5,551,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="625,54,528,33,529,28,626,49"/>
+<area shape="rect" id="Node000004" href="$admv8818_8c.html#ab2a128203022a3ed084779326ecef8be" title="Initializes the admv8818." alt="" coords="5,80,124,105"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="620,85,551,94,432,101,314,102,124,98,124,93,314,97,432,95,550,89,620,80"/>
+<area shape="rect" id="Node000005" href="$admv8818_8c.html#a2daafde2337819166316bb638fc629bd" title="Set the LPF Frequency." alt="" coords="387,55,549,80"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="585,70,549,70,549,65,585,65"/>
+<area shape="rect" id="Node000003" href="$admv8818_8c.html#a47c936d416652c81326000cf49ade5fa" title="Set the RF Input Band Select." alt="" coords="172,55,337,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="400,36,311,57,310,52,399,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,83,125,87,124,82,158,78"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="374,70,338,70,338,65,374,65"/>
+</map>

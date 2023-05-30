@@ -1,0 +1,13 @@
+<map id="adf4350_sync_config" name="adf4350_sync_config">
+<area shape="rect" id="Node000001" title="Updates the registers values." alt="" coords="739,42,897,67"/>
+<area shape="rect" id="Node000002" href="$adf4350_8c.html#a271f1050395c7b02bf8dd6624895ea58" title="Powers down the PLL." alt="" coords="507,5,691,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="725,45,691,40,691,35,725,40"/>
+<area shape="rect" id="Node000003" href="$adf4350_8c.html#a36f6fb1f03a7c1b263bdf4787defbeb0" title="Sets the ADF4350 frequency." alt="" coords="531,70,666,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="725,69,667,77,666,71,725,64"/>
+<area shape="rect" id="Node000004" href="$adf4350_8c.html#a8c919c6b19796b92b775d6727856ef46" title="Stores PLL 0 frequency in Hz." alt="" coords="275,63,459,103"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="518,85,459,85,459,80,518,80"/>
+<area shape="rect" id="Node000005" href="$adf4350_8c.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="108,70,227,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="261,85,227,85,227,80,261,80"/>
+<area shape="rect" id="Node000006" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,70,60,95"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,85,60,85,60,80,94,80"/>
+</map>

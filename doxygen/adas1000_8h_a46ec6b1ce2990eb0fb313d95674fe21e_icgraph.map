@@ -1,0 +1,15 @@
+<map id="adas1000_write" name="adas1000_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="405,84,531,109"/>
+<area shape="rect" id="Node000002" href="$adas1000_8c.html#a29248f239c75a2d43314d12b1fda1607" title="Reads the specified number of frames." alt="" coords="183,5,341,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,80,356,44,320,33,322,28,358,40,434,75"/>
+<area shape="rect" id="Node000003" href="$adas1000_8c.html#a8cfc29cb8ec02e4382c85c0586d6275f" title="Sets the frame rate." alt="" coords="167,55,357,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="391,88,351,83,352,77,392,83"/>
+<area shape="rect" id="Node000005" href="$adas1000_8c.html#a1b1ef3661bbdfd8ded985b12c60a7773" title="Selects which words are not included in a data frame." alt="" coords="177,105,347,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="392,110,348,116,347,110,391,104"/>
+<area shape="rect" id="Node000006" href="$adas1000_8c.html#a67a5b840b6f092e732563c58c9c0f328" title="Software reset of the device." alt="" coords="184,169,340,195"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="437,119,400,140,358,159,320,172,318,167,356,154,397,135,434,114"/>
+<area shape="rect" id="Node000004" href="$adas1000_8c.html#a53655dc2232c9d893f208871217abcbf" title="Initializes the SPI communication with ADAS1000. The ADAS1000 is configured with the specified frame ..." alt="" coords="5,112,119,137"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,86,167,95,104,114,103,109,166,90,199,81"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="163,127,119,127,119,122,163,122"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="199,168,166,159,103,140,104,135,167,154,200,163"/>
+</map>

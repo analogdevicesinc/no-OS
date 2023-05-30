@@ -1,0 +1,25 @@
+var ad5449_8c =
+[
+    [ "CMD_MASK", "ad5449_8c.html#aede8404e1d3398c2c235eaa17ea2cd5d", null ],
+    [ "CMD_OFFSET", "ad5449_8c.html#af12d26702ce7a88d2a3dae87f000b75e", null ],
+    [ "DATA_MASK", "ad5449_8c.html#a9e6a597bbfd901b2259ad39de928d0c0", null ],
+    [ "LSB_MASK", "ad5449_8c.html#a338d54179ac0da2af2363e3a930bf374", null ],
+    [ "LSB_OFFSET", "ad5449_8c.html#a95f1d9604e403fad0138dd8aee58f452", null ],
+    [ "MAX_RESOLUTION", "ad5449_8c.html#aa9527ce3dd3690a026376b8b7a31bcca", null ],
+    [ "MSB_MASK", "ad5449_8c.html#aace5bee81213f9dba0cec65397c5fd99", null ],
+    [ "MSB_OFFSET", "ad5449_8c.html#a90fc0d3a7940973d34aefac0ded9bac3", null ],
+    [ "PKT_LENGTH", "ad5449_8c.html#a0c783786c30b086aff1ea3b32e0aa0ed", null ],
+    [ "TWO_BIT_MASK", "ad5449_8c.html#a9265784da0d37fde9f58f05d3e15062c", null ],
+    [ "ad5449_clear_scale_setup", "ad5449_8c.html#af280fd25373806a9b93466b0547c6b98", null ],
+    [ "ad5449_daisy_chain_setup", "ad5449_8c.html#a469859e117351ccd205130c057be1b25", null ],
+    [ "ad5449_init", "ad5449_8c.html#a14e962c5ae4576ef28a4fa7f6d38df91", null ],
+    [ "ad5449_load_all", "ad5449_8c.html#ab49a4ca1f6c0a9887c3da20e514e8d1e", null ],
+    [ "ad5449_load_channel", "ad5449_8c.html#a71a141b35ecda6b266f52956fe66fa57", null ],
+    [ "ad5449_load_update_channel", "ad5449_8c.html#abbdeaf0124ab0bc9cad2dccd14fffe92", null ],
+    [ "ad5449_readback_channel", "ad5449_8c.html#ad6f6e34dc5add0c83ab132e0c9b2dffa", null ],
+    [ "ad5449_remove", "ad5449_8c.html#ab4c945fde985a22be659ba7bcd5fff7d", null ],
+    [ "ad5449_sclksetup", "ad5449_8c.html#af67216933ba9f95001afc7e3826728c4", null ],
+    [ "ad5449_sdocontrol", "ad5449_8c.html#ad7db4cf424ae790dc274a57b84f32ff6", null ],
+    [ "ad5449_set_input_shift_reg", "ad5449_8c.html#a73152406d8d8f3cd35276f4d3c74339d", null ],
+    [ "ad5449_update_all", "ad5449_8c.html#a71731a573d93a627e612e031ede50742", null ]
+];

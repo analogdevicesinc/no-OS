@@ -1,0 +1,15 @@
+<map id="projects/ad796x_fmcz/src/platform/xilinx/parameters.h" name="projects/ad796x_fmcz/src/platform/xilinx/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to xilinx platform used by iio project." alt="" coords="173,5,339,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,123,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,63,103,105,101,100,196,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="147,108,242,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,62,213,98,209,95,235,59"/>
+<area shape="rect" id="Node000004" href="$xilinx__uart_8h.html" title=" " alt="" coords="266,108,369,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="277,59,303,95,299,98,273,62"/>
+<area shape="rect" id="Node000005" href="$xilinx__gpio_8h.html" title=" " alt="" coords="393,108,498,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="315,58,409,100,407,105,313,62"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="359,181,430,207"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="439,135,413,172,409,169,435,132"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="455,181,537,207"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="456,132,482,169,478,172,452,135"/>
+</map>

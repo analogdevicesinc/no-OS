@@ -1,0 +1,18 @@
+<map id="no_os_div_u64_rem" name="no_os_div_u64_rem">
+<area shape="rect" id="Node000001" title=" " alt="" coords="507,80,657,105"/>
+<area shape="rect" id="Node000002" href="$ad74413r_8c.html#a85e28f0d13f64bd42e0ca4843c053048" title="Get the ADC real value, according to the operation mode." alt="" coords="275,43,459,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="494,80,440,71,441,65,495,75"/>
+<area shape="rect" id="Node000006" href="$xilinx__delay_8c.html#a7308cd600b696da42724dcfe4ca4386d" title="Get current time." alt="" coords="304,116,429,141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="493,110,430,121,429,116,492,105"/>
+<area shape="rect" id="Node000003" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="284,43,226,32,227,26,285,37"/>
+<area shape="rect" id="Node000004" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="114,55,221,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="261,64,221,67,221,61,261,59"/>
+<area shape="rect" id="Node000005" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="100,70,60,70,60,65,100,65"/>
+<area shape="poly" id="edge6_Node000006_Node000006" title=" " alt="" coords="402,106,392,98,367,95,346,97,335,101,332,107,338,114,334,117,327,108,331,98,344,92,367,89,394,93,405,102"/>
+<area shape="rect" id="Node000007" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,116,227,141"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="290,131,227,131,227,126,290,126"/>
+<area shape="rect" id="Node000008" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,116,60,141"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="94,131,60,131,60,126,94,126"/>
+</map>

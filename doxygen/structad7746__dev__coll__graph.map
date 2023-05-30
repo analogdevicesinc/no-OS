@@ -1,0 +1,20 @@
+<map id="ad7746_dev" name="ad7746_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="787,97,888,122"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="561,47,684,73"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="693,73,787,95,786,100,691,78"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="323,47,469,73"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="483,57,561,57,561,63,483,63"/>
+<area shape="rect" id="Node000004" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,17,184,42"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,19,208,19,301,16,373,18,446,24,538,37,574,45,573,50,537,43,445,29,373,23,301,22,208,24,198,24"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,37,323,50,322,55,198,42"/>
+<area shape="rect" id="Node000005" href="$structad7746__setup.html" title=" " alt="" coords="566,146,679,171"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="691,140,786,118,787,123,693,145"/>
+<area shape="rect" id="Node000006" href="$structad7746__cap.html" title=" " alt="" coords="346,97,446,122"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="461,119,538,136,570,143,568,149,537,141,459,125"/>
+<area shape="rect" id="Node000007" href="$structad7746__vt.html" title=" " alt="" coords="351,146,441,171"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="455,156,566,156,566,161,455,161"/>
+<area shape="rect" id="Node000008" href="$structad7746__exc.html" title=" " alt="" coords="346,195,446,221"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="459,193,537,176,568,169,570,174,538,181,461,198"/>
+<area shape="rect" id="Node000009" href="$structad7746__config.html" title=" " alt="" coords="338,245,454,270"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="448,238,468,231,503,219,536,206,601,169,603,174,539,210,505,224,470,236,450,243"/>
+</map>
