@@ -1,0 +1,13 @@
+<map id="projects/lt3074/src/platform/maxim/parameters.h" name="projects/lt3074/src/platform/maxim/parameters.h">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by lt3074 project." alt="" coords="210,5,433,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,109,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="259,48,110,92,108,87,257,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="133,93,240,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,48,220,89,217,84,288,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="264,93,379,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="324,46,324,79,319,79,319,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="403,93,517,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="356,43,429,84,426,89,353,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="541,93,693,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="393,43,562,87,560,92,392,48"/>
+</map>

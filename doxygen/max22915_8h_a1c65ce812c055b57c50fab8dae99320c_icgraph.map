@@ -1,0 +1,27 @@
+<map id="max22915_reg_read" name="max22915_reg_read">
+<area shape="rect" id="Node000001" title="Read register data from MAX22915." alt="" coords="844,98,999,124"/>
+<area shape="rect" id="Node000002" href="$max22915_8c.html#aa9952bcc9e570e622093d82d48b17885" title="Initialize and configure the MAX22915 device." alt="" coords="172,188,291,213"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="880,95,780,56,714,36,642,20,565,10,487,10,411,22,375,33,340,49,320,62,302,79,272,118,252,157,239,188,234,186,247,155,268,115,298,75,316,58,337,44,373,28,410,17,487,5,565,5,643,14,716,31,782,51,882,90"/>
+<area shape="rect" id="Node000004" href="$max22915_8c.html#a31af7de5fd025dfe57a871079381e63f" title="Write register data to MAX22915 with mask." alt="" coords="593,188,796,213"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="876,131,729,190,727,185,874,126"/>
+<area shape="rect" id="Node000003" href="$max22915_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,188,124,213"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,203,124,203,124,198,158,198"/>
+<area shape="rect" id="Node000005" href="$max22915_8c.html#ab678e1fd3c1e167b565c6d56455ec29d" title="Set the current measurement configuration." alt="" coords="357,59,527,99"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="663,182,609,147,544,113,514,101,516,96,546,108,611,143,666,177"/>
+<area shape="rect" id="Node000006" href="$max22915_8c.html#ad258c4014620c60e4d289805e22a002d" title="Set the open&#45;wire off detection configuration for a channel." alt="" coords="361,123,523,163"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="624,187,522,164,523,158,625,182"/>
+<area shape="rect" id="Node000007" href="$max22915_8c.html#ac7b68b9a804772ed12c4acbe50b431a5" title="Set the open&#45;wire on detection configuration for a channel." alt="" coords="339,188,545,213"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="579,203,546,203,546,198,579,198"/>
+<area shape="rect" id="Node000008" href="$max22915_8c.html#a47a284d4eda8a1b25ccc4236a1bbb770" title="Set the short to VDD detection configuration for a channel." alt="" coords="360,238,524,278"/>
+<area shape="poly" id="edge10_Node000004_Node000008" title=" " alt="" coords="625,219,525,242,524,236,624,213"/>
+<area shape="rect" id="Node000009" href="$max22915_8c.html#aea84ddc6096987363aa273809111b472" title="Set the switch state of a channel." alt="" coords="351,302,533,328"/>
+<area shape="poly" id="edge12_Node000004_Node000009" title=" " alt="" coords="666,223,612,258,546,292,508,305,507,300,544,287,609,254,663,219"/>
+<area shape="rect" id="Node000010" href="$max22915_8c.html#a24da66f4835ebb76fc11833aa3567a7f" title="Set the temperature measurement configuration." alt="" coords="339,352,545,392"/>
+<area shape="poly" id="edge14_Node000004_Node000010" title=" " alt="" coords="676,225,622,284,586,315,547,342,522,354,520,350,544,338,583,311,618,280,673,222"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="353,107,340,113,286,152,246,189,243,185,282,148,337,109,351,102"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="356,169,280,190,278,185,354,164"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="325,203,291,203,291,198,325,198"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="354,236,278,216,280,210,356,231"/>
+<area shape="poly" id="edge13_Node000009_Node000002" title=" " alt="" coords="357,300,337,292,309,274,282,253,242,215,246,211,285,249,312,270,340,287,359,295"/>
+<area shape="poly" id="edge15_Node000010_Node000002" title=" " alt="" coords="346,348,337,342,302,311,273,275,237,214,241,212,278,272,306,308,340,338,349,344"/>
+</map>

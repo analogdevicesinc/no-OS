@@ -1,0 +1,57 @@
+<map id="adis_write_fifo_en" name="adis_write_fifo_en">
+<area shape="rect" id="Node000001" title="Write FIFO enable bit value." alt="" coords="401,392,541,417"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a3f0cfa17d37219930db61f366489560f" title="API to be called after trigger is disabled." alt="" coords="192,5,353,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="467,379,461,312,444,222,429,174,410,127,384,83,352,44,336,33,339,29,355,40,388,80,414,124,434,172,449,221,466,311,472,378"/>
+<area shape="rect" id="Node000003" href="$iio__adis_8c.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="197,55,348,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="465,379,456,320,437,244,422,204,403,164,380,127,352,95,333,82,336,78,355,91,384,124,408,161,427,201,442,242,462,319,470,378"/>
+<area shape="rect" id="Node000004" href="$iio__adis_8c.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="193,105,352,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="462,379,449,333,427,274,395,212,375,184,352,159,335,147,339,143,355,155,379,181,399,210,432,271,454,331,467,378"/>
+<area shape="rect" id="Node000005" href="$adis_8c.html#a36db8ae51d7390f42ef0ba60e8eac164" title="Read raw temperature data." alt="" coords="195,712,350,737"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,431,460,487,440,560,425,599,407,636,383,672,355,703,338,714,335,710,352,699,379,668,402,634,421,597,435,559,455,486,465,430"/>
+<area shape="rect" id="Node000008" href="$adis_8c.html#ac8742db0ae6b5b09e9f24f87a5887572" title="Read raw acceleration data on x axis." alt="" coords="206,761,339,787"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="472,431,465,495,447,581,432,627,412,673,387,715,355,752,339,763,336,759,352,748,383,712,408,670,427,626,442,580,460,495,466,431"/>
+<area shape="rect" id="Node000009" href="$adis_8c.html#a47a132c41144a48ffec3f55ad1f3a3bb" title="Read raw delta angle data on x axis." alt="" coords="195,169,351,195"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="459,380,444,341,422,295,391,248,352,208,333,197,335,192,355,204,395,245,426,292,449,339,464,378"/>
+<area shape="rect" id="Node000010" href="$adis_8c.html#a76d64491528918ff49ef8c1e28ea7601" title="Read raw delta velocity data on x axis." alt="" coords="197,219,349,244"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="455,381,414,319,385,286,352,258,330,246,333,242,355,253,389,282,418,316,459,378"/>
+<area shape="rect" id="Node000011" href="$adis_8c.html#a9156a464b496ef333282f3bb06829eff" title="Read raw gyroscope data on x axis." alt="" coords="205,465,341,491"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="430,425,354,455,317,468,315,463,352,450,428,420"/>
+<area shape="rect" id="Node000012" href="$adis_8c.html#aa81242e3a496e9c06178d64731a2324a" title="Read raw acceleration data on y axis." alt="" coords="206,515,339,540"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="451,429,408,468,355,506,328,517,326,512,352,501,405,464,447,425"/>
+<area shape="rect" id="Node000013" href="$adis_8c.html#abee671f832770a7f4f88b7536068ea9f" title="Read raw delta angle data on y axis." alt="" coords="195,268,351,293"/>
+<area shape="poly" id="edge20_Node000001_Node000013" title=" " alt="" coords="447,384,405,344,352,307,326,296,328,291,355,302,409,340,451,380"/>
+<area shape="rect" id="Node000014" href="$adis_8c.html#a9564607ae5ddb9a6aef87d2a2969baa6" title="Read raw delta velocity data on y axis." alt="" coords="197,317,349,343"/>
+<area shape="poly" id="edge22_Node000001_Node000014" title=" " alt="" coords="430,389,352,356,318,345,320,340,354,352,432,384"/>
+<area shape="rect" id="Node000015" href="$adis_8c.html#a34005ac0792987ea8460c88cf1a2f27e" title="Read raw gyroscope data on y axis." alt="" coords="205,564,341,589"/>
+<area shape="poly" id="edge24_Node000001_Node000015" title=" " alt="" coords="459,431,418,493,389,526,355,555,333,566,330,562,352,550,385,523,414,490,455,428"/>
+<area shape="rect" id="Node000016" href="$adis_8c.html#aaa776d92d2944988cb57385a547c1028" title="Read raw acceleration data on z axis." alt="" coords="207,613,339,639"/>
+<area shape="poly" id="edge27_Node000001_Node000016" title=" " alt="" coords="464,432,449,470,426,516,395,564,355,604,335,615,333,611,352,600,391,560,421,514,444,468,459,430"/>
+<area shape="rect" id="Node000017" href="$adis_8c.html#a0779f9820a9dda34ea31e3b6956385a1" title="Read raw delta angle data on z axis." alt="" coords="195,367,350,392"/>
+<area shape="poly" id="edge30_Node000001_Node000017" title=" " alt="" coords="387,397,350,392,350,387,388,391"/>
+<area shape="rect" id="Node000018" href="$adis_8c.html#a9993363049ee765afffeeafc221c67d8" title="Read raw delta velocity data on z axis." alt="" coords="197,416,348,441"/>
+<area shape="poly" id="edge32_Node000001_Node000018" title=" " alt="" coords="388,417,348,422,348,417,387,412"/>
+<area shape="rect" id="Node000019" href="$adis_8c.html#a923431c5b825bb48123638dacda62e93" title="Read raw gyroscope data on z axis." alt="" coords="205,663,340,688"/>
+<area shape="poly" id="edge34_Node000001_Node000019" title=" " alt="" coords="467,432,455,479,433,539,401,600,380,629,355,653,337,665,334,660,352,649,376,625,396,597,428,537,450,478,462,431"/>
+<area shape="rect" id="Node000006" href="$iio__adis_8c.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="5,465,144,491"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="197,708,190,703,170,679,160,657,153,632,142,603,81,492,86,490,146,601,158,630,165,655,174,677,194,699,200,703"/>
+<area shape="rect" id="Node000007" href="$eval-adis1646x_2src_2examples_2basic__example_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="15,613,134,639"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="208,710,191,703,135,671,91,641,94,637,138,667,193,698,210,705"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="195,756,190,752,175,734,165,716,157,682,154,646,142,603,110,540,82,492,86,490,115,538,146,601,159,645,162,681,170,714,179,731,194,748,198,752"/>
+<area shape="poly" id="edge9_Node000008_Node000007" title=" " alt="" coords="202,758,191,752,155,725,125,694,82,641,87,637,129,691,159,721,193,748,204,754"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="199,204,194,208,166,238,143,273,124,310,109,348,89,417,80,465,75,464,84,416,104,346,119,308,138,270,162,235,190,204,196,200"/>
+<area shape="poly" id="edge13_Node000010_Node000006" title=" " alt="" coords="200,253,194,257,169,281,148,309,115,369,93,426,81,466,76,464,88,424,110,367,144,306,165,278,190,253,197,248"/>
+<area shape="poly" id="edge15_Node000011_Node000006" title=" " alt="" coords="191,481,144,481,144,475,191,475"/>
+<area shape="poly" id="edge16_Node000011_Node000007" title=" " alt="" coords="207,498,193,506,159,532,129,562,87,615,83,612,125,559,156,528,191,501,205,493"/>
+<area shape="poly" id="edge18_Node000012_Node000006" title=" " alt="" coords="207,514,126,493,127,488,209,509"/>
+<area shape="poly" id="edge19_Node000012_Node000007" title=" " alt="" coords="213,547,193,555,138,586,95,615,92,611,136,581,191,550,211,542"/>
+<area shape="poly" id="edge21_Node000013_Node000006" title=" " alt="" coords="201,302,194,307,153,345,121,391,98,434,84,466,79,464,93,431,117,388,149,342,190,303,198,297"/>
+<area shape="poly" id="edge23_Node000014_Node000006" title=" " alt="" coords="204,350,193,356,159,383,129,413,87,467,82,463,125,410,155,379,191,352,202,346"/>
+<area shape="poly" id="edge25_Node000015_Node000006" title=" " alt="" coords="208,562,191,555,135,523,91,493,94,489,138,519,193,550,210,557"/>
+<area shape="poly" id="edge26_Node000015_Node000007" title=" " alt="" coords="209,595,127,616,126,611,207,590"/>
+<area shape="poly" id="edge28_Node000016_Node000006" title=" " alt="" coords="202,610,191,604,155,577,125,546,82,493,87,489,129,543,159,573,193,600,204,606"/>
+<area shape="poly" id="edge29_Node000016_Node000007" title=" " alt="" coords="193,629,134,629,134,623,193,623"/>
+<area shape="poly" id="edge31_Node000017_Node000006" title=" " alt="" coords="210,399,193,406,138,437,94,467,91,463,135,433,191,401,208,394"/>
+<area shape="poly" id="edge33_Node000018_Node000006" title=" " alt="" coords="209,447,127,468,126,463,207,442"/>
+<area shape="poly" id="edge35_Node000019_Node000006" title=" " alt="" coords="198,659,190,653,163,624,132,578,81,492,86,490,136,575,167,620,194,649,201,654"/>
+<area shape="poly" id="edge36_Node000019_Node000007" title=" " alt="" coords="207,662,126,641,127,636,209,657"/>
+</map>

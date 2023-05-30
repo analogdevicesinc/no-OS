@@ -1,0 +1,257 @@
+<map id="include/no_os_dma.h" name="include/no_os_dma.h">
+<area shape="rect" id="Node000001" title="Platform independent function definitions and data types for the DMA API." alt="" coords="2921,5,3080,31"/>
+<area shape="rect" id="Node000002" href="$no__os__dma_8c.html" title="Platform independent implementation for the DMA API." alt="" coords="917,86,1097,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2908,23,2021,41,1499,58,1282,69,1117,81,1065,89,1065,83,1116,76,1281,63,1499,53,2021,35,2907,18"/>
+<area shape="rect" id="Node000003" href="$maxim__dma_8h.html" title="Maxim platform specific header DMA API." alt="" coords="2157,79,2338,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="2908,32,2338,91,2338,85,2907,26"/>
+<area shape="rect" id="Node000006" href="$max32650_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="5,174,188,214"/>
+<area shape="poly" id="edge24_Node000001_Node000006" title=" " alt="" coords="2908,22,2510,22,1965,29,1694,36,1454,47,1269,62,1204,71,1162,81,1146,90,1137,100,1126,112,1110,121,1070,133,1024,142,915,154,790,159,658,160,399,159,288,161,200,169,163,177,162,171,199,164,288,156,399,154,658,155,790,154,914,149,1023,137,1069,128,1108,116,1123,107,1133,97,1143,86,1160,76,1203,66,1268,56,1454,42,1693,31,1964,24,2510,17,2908,16"/>
+<area shape="rect" id="Node000008" href="$max32655_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="212,174,395,214"/>
+<area shape="poly" id="edge27_Node000001_Node000008" title=" " alt="" coords="2907,22,2560,25,2096,33,1868,41,1666,51,1511,64,1456,72,1420,81,1405,90,1395,100,1385,112,1368,121,1326,134,1277,143,1162,156,1031,161,891,161,617,159,500,161,406,169,370,177,369,171,406,164,500,156,617,154,891,156,1031,155,1162,150,1277,138,1325,128,1366,116,1381,107,1391,97,1402,86,1418,76,1455,67,1510,59,1666,46,1867,35,2096,28,2560,20,2907,17"/>
+<area shape="rect" id="Node000010" href="$max32660_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="419,174,601,214"/>
+<area shape="poly" id="edge30_Node000001_Node000010" title=" " alt="" coords="2908,23,2613,28,2230,38,1879,55,1753,67,1679,81,1664,90,1654,100,1643,112,1627,121,1583,134,1531,144,1410,157,1271,162,1124,162,835,159,712,161,613,169,576,177,575,171,612,164,711,156,835,153,1124,157,1271,157,1410,152,1530,139,1582,129,1625,116,1640,107,1650,97,1661,86,1677,76,1752,62,1879,50,2230,32,2613,22,2908,18"/>
+<area shape="rect" id="Node000012" href="$max32662_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="625,174,808,214"/>
+<area shape="poly" id="edge33_Node000001_Node000012" title=" " alt="" coords="2908,24,2365,42,2092,59,1995,70,1938,81,1923,90,1913,101,1902,112,1886,121,1839,135,1785,145,1657,158,1512,163,1356,163,1053,159,923,161,820,169,783,177,782,171,819,164,923,155,1053,153,1356,158,1512,158,1657,153,1784,140,1838,130,1884,116,1899,108,1909,97,1919,86,1936,76,1994,64,2092,54,2365,37,2907,19"/>
+<area shape="rect" id="Node000014" href="$max32665_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="3131,174,3313,214"/>
+<area shape="poly" id="edge36_Node000001_Node000014" title=" " alt="" coords="2983,43,2970,60,2961,80,2958,99,2964,117,2984,125,3030,139,3149,171,3147,177,3028,145,2982,130,2960,120,2952,100,2956,78,2966,58,2978,40"/>
+<area shape="rect" id="Node000016" href="$max32670_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="3337,174,3520,214"/>
+<area shape="poly" id="edge39_Node000001_Node000016" title=" " alt="" coords="3058,32,3113,51,3170,76,3196,97,3222,116,3292,148,3360,171,3358,176,3290,153,3219,121,3193,101,3167,81,3111,56,3057,37"/>
+<area shape="rect" id="Node000018" href="$max32672_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="3544,174,3727,214"/>
+<area shape="poly" id="edge42_Node000001_Node000018" title=" " alt="" coords="3094,16,3169,20,3254,30,3343,48,3428,76,3445,85,3456,95,3481,116,3537,147,3590,171,3588,176,3534,152,3478,121,3452,99,3442,90,3426,81,3341,53,3253,35,3168,25,3094,21"/>
+<area shape="rect" id="Node000020" href="$max32690_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="3751,174,3933,214"/>
+<area shape="poly" id="edge45_Node000001_Node000020" title=" " alt="" coords="3094,18,3240,23,3411,33,3572,50,3638,62,3687,76,3704,85,3715,94,3740,117,3816,172,3813,176,3736,121,3712,98,3701,89,3685,81,3636,67,3571,56,3411,39,3240,29,3094,24"/>
+<area shape="rect" id="Node000022" href="$max78000_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="2924,277,3107,317"/>
+<area shape="poly" id="edge48_Node000001_Node000022" title=" " alt="" coords="3094,19,3596,39,3832,55,3910,65,3946,77,3971,113,3980,150,3971,187,3946,223,3911,235,3834,246,3601,267,3107,294,3107,289,3601,261,3834,241,3909,230,3943,219,3966,185,3974,150,3967,115,3943,81,3909,70,3832,60,3595,44,3094,24"/>
+<area shape="rect" id="Node000023" href="$max78000_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="2924,174,3107,214"/>
+<area shape="poly" id="edge49_Node000001_Node000023" title=" " alt="" coords="2963,39,2939,57,2920,80,2915,99,2920,118,2931,134,2945,149,2977,172,2974,176,2942,153,2927,137,2916,120,2909,99,2916,77,2935,53,2960,35"/>
+<area shape="rect" id="Node000024" href="$max32650_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="1173,79,1356,119"/>
+<area shape="poly" id="edge25_Node000001_Node000024" title=" " alt="" coords="2907,21,2644,22,2265,29,1825,47,1598,62,1376,81,1357,84,1356,78,1375,76,1597,56,1824,41,2265,23,2644,16,2907,16"/>
+<area shape="rect" id="Node000025" href="$max32655_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="1432,79,1615,119"/>
+<area shape="poly" id="edge28_Node000001_Node000025" title=" " alt="" coords="2908,22,2682,25,2367,33,2003,51,1817,64,1634,81,1615,84,1615,78,1634,76,1816,59,2003,46,2367,28,2682,19,2908,17"/>
+<area shape="rect" id="Node000026" href="$max32660_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="1691,79,1873,119"/>
+<area shape="poly" id="edge31_Node000001_Node000026" title=" " alt="" coords="2907,23,2469,38,2183,55,1893,81,1874,84,1873,78,1892,76,2182,50,2469,33,2907,18"/>
+<area shape="rect" id="Node000027" href="$max32662_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="1949,79,2132,119"/>
+<area shape="poly" id="edge34_Node000001_Node000027" title=" " alt="" coords="2908,25,2571,43,2358,59,2145,81,2133,83,2132,78,2144,76,2358,54,2570,37,2907,20"/>
+<area shape="rect" id="Node000028" href="$max32665_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="2975,79,3157,119"/>
+<area shape="poly" id="edge37_Node000001_Node000028" title=" " alt="" coords="3021,39,3052,77,3048,80,3017,43"/>
+<area shape="rect" id="Node000029" href="$max32670_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="3233,79,3416,119"/>
+<area shape="poly" id="edge40_Node000001_Node000029" title=" " alt="" coords="3062,31,3247,76,3246,81,3060,36"/>
+<area shape="rect" id="Node000030" href="$max32672_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="3492,79,3675,119"/>
+<area shape="poly" id="edge43_Node000001_Node000030" title=" " alt="" coords="3094,27,3473,76,3492,79,3491,84,3472,81,3093,33"/>
+<area shape="rect" id="Node000031" href="$max32690_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="3751,79,3933,119"/>
+<area shape="poly" id="edge46_Node000001_Node000031" title=" " alt="" coords="3094,22,3379,41,3555,57,3732,76,3751,79,3750,84,3731,81,3555,62,3379,46,3094,27"/>
+<area shape="rect" id="Node000032" href="$stm32__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="4913,79,5085,119"/>
+<area shape="poly" id="edge50_Node000001_Node000032" title=" " alt="" coords="3094,20,4913,91,4913,97,3094,26"/>
+<area shape="rect" id="Node000037" href="$stm32__xspi_8c.html" title="Implementation of stm32 xspi driver." alt="" coords="5168,174,5340,214"/>
+<area shape="poly" id="edge126_Node000001_Node000037" title=" " alt="" coords="3094,18,4207,36,4799,54,4999,64,5097,76,5140,96,5179,121,5238,172,5234,176,5176,125,5138,100,5096,81,4999,70,4799,59,4207,42,3094,23"/>
+<area shape="rect" id="Node000040" href="$stm32__spi_8h.html" title="Header file for the stm32 spi driver." alt="" coords="9872,79,10044,119"/>
+<area shape="poly" id="edge58_Node000001_Node000040" title=" " alt="" coords="3094,18,9871,94,9871,99,3094,23"/>
+<area shape="rect" id="Node000105" href="$no__os__i3c_8h.html" title="Header file of I3C Interface." alt="" coords="4071,86,4221,111"/>
+<area shape="poly" id="edge127_Node000001_Node000105" title=" " alt="" coords="3094,20,3485,40,3736,56,3990,76,4071,85,4071,90,3990,81,3736,61,3485,45,3094,26"/>
+<area shape="rect" id="Node000004" href="$maxim__dma_8c.html" title="Maxim platform specific implementation DMA API." alt="" coords="832,174,1012,214"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="2143,121,1972,136,1827,141,1580,138,1461,136,1335,139,1192,149,1024,169,987,177,986,171,1023,164,1191,143,1334,133,1461,131,1580,133,1827,136,1972,130,2143,116"/>
+<area shape="rect" id="Node000005" href="$max32650_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1036,174,1216,214"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="2143,121,2003,134,1884,139,1682,140,1585,139,1481,143,1365,152,1228,169,1192,177,1190,171,1227,164,1364,146,1481,137,1585,134,1682,134,1884,134,2003,129,2143,116"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="2143,121,1988,135,1847,143,1595,148,1374,143,1167,134,961,125,741,125,492,137,352,150,200,169,162,177,161,171,199,164,352,145,492,132,741,119,961,120,1167,128,1374,138,1595,143,1847,138,1988,129,2143,116"/>
+<area shape="rect" id="Node000007" href="$max32655_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1240,174,1420,214"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="2143,121,2034,132,1942,138,1784,141,1628,146,1538,155,1432,169,1396,177,1395,171,1431,164,1537,149,1628,141,1784,136,1941,132,2034,127,2143,116"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="2143,121,1878,141,1653,147,1455,143,1271,135,1087,128,890,128,668,140,406,169,369,177,368,171,406,164,667,135,890,123,1087,123,1271,129,1455,137,1653,141,1878,136,2142,116"/>
+<area shape="rect" id="Node000009" href="$max32660_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1444,174,1624,214"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="2144,121,2144,121,2001,136,1889,142,1778,150,1636,169,1601,177,1600,171,1635,164,1777,144,1889,137,2000,131,2143,116,2143,116"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="2143,121,1910,139,1711,145,1537,142,1374,136,1212,131,1039,132,843,143,613,169,576,177,575,171,612,164,843,138,1039,127,1212,126,1374,131,1537,137,1711,140,1909,134,2142,116"/>
+<area shape="rect" id="Node000011" href="$max32662_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1648,174,1828,214"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="2144,121,2144,121,1991,143,1840,169,1808,176,1807,171,1839,164,1991,138,2143,116,2143,116"/>
+<area shape="poly" id="edge11_Node000003_Node000012" title=" " alt="" coords="2143,121,1941,138,1770,143,1618,142,1478,137,1337,134,1188,136,1018,146,820,169,782,177,781,171,819,164,1018,141,1187,130,1337,129,1478,132,1618,136,1769,138,1941,132,2142,116"/>
+<area shape="rect" id="Node000013" href="$max32665_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1852,174,2032,214"/>
+<area shape="poly" id="edge12_Node000003_Node000013" title=" " alt="" coords="2174,125,2004,176,2003,171,2172,120"/>
+<area shape="poly" id="edge13_Node000003_Node000014" title=" " alt="" coords="2352,100,2502,106,2694,117,2906,136,3118,164,3155,171,3154,177,3118,169,2905,141,2693,122,2502,111,2352,105"/>
+<area shape="rect" id="Node000015" href="$max32670_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2056,174,2236,214"/>
+<area shape="poly" id="edge14_Node000003_Node000015" title=" " alt="" coords="2219,130,2168,176,2165,172,2215,126"/>
+<area shape="poly" id="edge15_Node000003_Node000016" title=" " alt="" coords="2352,97,2535,101,2778,111,3051,131,3189,146,3325,164,3362,171,3361,177,3324,169,3189,151,3050,136,2778,116,2535,106,2351,103"/>
+<area shape="rect" id="Node000017" href="$max32672_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2260,174,2440,214"/>
+<area shape="poly" id="edge16_Node000003_Node000017" title=" " alt="" coords="2280,126,2331,172,2327,176,2277,130"/>
+<area shape="poly" id="edge17_Node000003_Node000018" title=" " alt="" coords="2352,100,2956,122,3289,141,3427,152,3532,164,3569,171,3568,177,3531,169,3426,157,3288,146,2955,128,2352,105"/>
+<area shape="rect" id="Node000019" href="$max32690_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2464,174,2644,214"/>
+<area shape="poly" id="edge18_Node000003_Node000019" title=" " alt="" coords="2323,120,2493,171,2491,176,2321,125"/>
+<area shape="poly" id="edge19_Node000003_Node000020" title=" " alt="" coords="2352,101,3113,129,3509,147,3738,164,3776,171,3775,177,3738,169,3508,153,3112,134,2352,106"/>
+<area shape="rect" id="Node000021" href="$max78000_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2668,174,2848,214"/>
+<area shape="poly" id="edge20_Node000003_Node000021" title=" " alt="" coords="2352,112,2496,134,2656,164,2688,171,2687,177,2655,169,2496,140,2351,117"/>
+<area shape="poly" id="edge21_Node000003_Node000022" title=" " alt="" coords="2352,100,2483,106,2630,118,2765,137,2820,149,2861,164,2878,176,2889,190,2899,204,2913,219,2988,275,2984,279,2910,223,2895,207,2885,193,2875,180,2858,169,2818,154,2764,142,2630,123,2483,112,2352,105"/>
+<area shape="poly" id="edge22_Node000003_Node000023" title=" " alt="" coords="2352,104,2604,125,2755,142,2905,164,2942,171,2941,177,2904,169,2754,147,2604,130,2351,109"/>
+<area shape="poly" id="edge23_Node000023_Node000022" title=" " alt="" coords="3018,228,3018,277,3013,277,3013,228"/>
+<area shape="poly" id="edge26_Node000024_Node000006" title=" " alt="" coords="1160,121,1154,121,1009,134,886,139,676,139,575,139,466,142,344,151,200,169,163,177,162,171,199,164,343,146,466,136,575,133,676,134,886,134,1009,129,1154,116,1159,115"/>
+<area shape="poly" id="edge29_Node000025_Node000008" title=" " alt="" coords="1418,121,1413,121,1260,134,1130,140,908,139,802,138,688,141,558,150,406,169,370,177,369,171,406,164,558,145,687,135,802,132,908,133,1130,134,1260,129,1412,116,1418,115"/>
+<area shape="poly" id="edge32_Node000026_Node000010" title=" " alt="" coords="1677,121,1672,121,1511,135,1374,140,1141,138,1029,137,909,140,773,150,613,169,576,177,575,171,612,164,772,144,909,134,1029,132,1141,133,1374,135,1510,130,1671,116,1676,115"/>
+<area shape="poly" id="edge35_Node000027_Node000012" title=" " alt="" coords="1936,121,1930,121,1761,135,1618,141,1374,138,1256,136,1130,139,988,149,820,169,783,176,782,171,819,164,987,143,1130,134,1256,131,1374,133,1618,135,1761,130,1930,116,1935,115"/>
+<area shape="poly" id="edge38_Node000028_Node000014" title=" " alt="" coords="3111,123,3192,172,3189,176,3108,128"/>
+<area shape="poly" id="edge41_Node000029_Node000016" title=" " alt="" coords="3358,126,3409,172,3406,176,3354,130"/>
+<area shape="poly" id="edge44_Node000030_Node000018" title=" " alt="" coords="3603,129,3627,173,3623,175,3598,132"/>
+<area shape="poly" id="edge47_Node000031_Node000020" title=" " alt="" coords="3845,132,3845,174,3839,174,3839,132"/>
+<area shape="rect" id="Node000033" href="$stm32__dma_8c.html" title="Implementation of stm32 DMA functionality." alt="" coords="4869,174,5041,214"/>
+<area shape="poly" id="edge51_Node000032_Node000033" title=" " alt="" coords="4987,132,4967,175,4962,173,4982,130"/>
+<area shape="rect" id="Node000034" href="$stm32__gpdma_8c.html" title="Implementation of STM32 GPDMA functionality." alt="" coords="4673,174,4845,214"/>
+<area shape="poly" id="edge52_Node000032_Node000034" title=" " alt="" coords="4939,126,4809,176,4807,171,4937,121"/>
+<area shape="rect" id="Node000035" href="$stm32__i3c_8c.html" title="Implementation of stm32 I3C driver." alt="" coords="3600,277,3772,317"/>
+<area shape="poly" id="edge53_Node000032_Node000035" title=" " alt="" coords="4900,108,4792,116,4673,128,4566,146,4523,157,4491,169,4476,181,4467,196,4458,211,4441,224,4380,243,4302,255,4212,261,4117,263,3929,263,3849,266,3785,272,3751,279,3750,274,3784,267,3849,260,3929,258,4117,257,4212,255,4302,249,4379,238,4438,219,4454,207,4463,193,4472,178,4489,164,4521,152,4565,140,4673,123,4791,110,4900,102"/>
+<area shape="rect" id="Node000036" href="$stm32__spi_8c.html" title="Implementation of stm32 spi driver." alt="" coords="5364,174,5536,214"/>
+<area shape="poly" id="edge54_Node000032_Node000036" title=" " alt="" coords="5099,114,5352,164,5382,171,5381,177,5351,169,5098,120"/>
+<area shape="poly" id="edge55_Node000032_Node000037" title=" " alt="" coords="5065,121,5203,171,5202,176,5063,126"/>
+<area shape="rect" id="Node000038" href="$ad463x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by ad463x_fmcz project." alt="" coords="5373,277,5613,317"/>
+<area shape="poly" id="edge56_Node000032_Node000038" title=" " alt="" coords="5046,124,5105,165,5120,180,5130,194,5140,207,5156,219,5247,241,5401,274,5400,279,5246,246,5154,224,5137,211,5126,197,5116,184,5102,169,5043,128"/>
+<area shape="rect" id="Node000039" href="$ad738x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad738x project." alt="" coords="5109,277,5349,317"/>
+<area shape="poly" id="edge57_Node000032_Node000039" title=" " alt="" coords="5025,128,5064,173,5113,219,5155,250,5195,274,5192,279,5152,254,5110,223,5060,176,5021,131"/>
+<area shape="poly" id="edge59_Node000040_Node000036" title=" " alt="" coords="9858,103,8987,105,7637,113,6942,122,6320,133,5834,149,5662,159,5548,169,5511,177,5510,171,5547,164,5661,153,5833,144,6320,128,6942,116,7637,108,8987,99,9858,97"/>
+<area shape="rect" id="Node000041" href="$ad463x__fmcz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by ad463x_fmcz project." alt="" coords="5825,174,6067,214"/>
+<area shape="poly" id="edge60_Node000040_Node000041" title=" " alt="" coords="9859,103,9082,110,7900,123,6752,142,6329,155,6080,169,6030,177,6030,171,6079,164,6329,150,6752,137,7900,117,9082,104,9859,98"/>
+<area shape="rect" id="Node000043" href="$ad738x__fmcz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;ad738x project." alt="" coords="5560,174,5801,214"/>
+<area shape="poly" id="edge63_Node000040_Node000043" title=" " alt="" coords="9858,103,9035,109,7769,121,6536,141,6081,154,5813,169,5764,177,5763,171,5812,164,6081,149,6536,136,7769,116,9035,103,9858,98"/>
+<area shape="rect" id="Node000044" href="$ad74413r_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by ad74413r project." alt="" coords="12809,174,13027,214"/>
+<area shape="poly" id="edge65_Node000040_Node000044" title=" " alt="" coords="10058,98,10586,103,11366,114,12166,133,12501,147,12754,164,12814,171,12813,177,12754,169,12501,153,12166,139,11366,119,10586,108,10058,103"/>
+<area shape="rect" id="Node000047" href="$ad74416h_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;ad74416h project." alt="" coords="13249,174,13467,214"/>
+<area shape="poly" id="edge68_Node000040_Node000047" title=" " alt="" coords="10058,97,10522,99,11254,108,12134,128,12591,144,13039,164,13249,179,13248,185,13039,169,12591,149,12134,133,11254,114,10522,105,10058,103"/>
+<area shape="rect" id="Node000050" href="$ad7616-st_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;ad7616 project." alt="" coords="13711,167,13861,221"/>
+<area shape="poly" id="edge71_Node000040_Node000050" title=" " alt="" coords="10058,97,10579,97,11418,104,11913,112,12433,124,12961,141,13479,164,13711,182,13710,188,13479,169,12961,146,12433,129,11913,117,11418,109,10579,102,10058,102"/>
+<area shape="rect" id="Node000053" href="$adf4371_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by adf4371 project." alt="" coords="14038,174,14257,214"/>
+<area shape="poly" id="edge74_Node000040_Node000053" title=" " alt="" coords="10058,98,10770,104,11875,116,13026,136,13509,149,13874,164,14038,178,14038,183,13874,169,13509,154,13026,141,11875,121,10770,109,10058,103"/>
+<area shape="rect" id="Node000056" href="$adf4382_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by adf4382 project." alt="" coords="14478,174,14697,214"/>
+<area shape="poly" id="edge77_Node000040_Node000056" title=" " alt="" coords="10058,98,12053,117,13328,137,13864,149,14269,164,14478,179,14478,185,14269,169,13864,155,13328,142,12053,122,10058,103"/>
+<area shape="rect" id="Node000059" href="$admt4000_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by admt4000 project." alt="" coords="6091,174,6310,214"/>
+<area shape="poly" id="edge80_Node000040_Node000059" title=" " alt="" coords="9858,102,9350,104,8534,112,7548,132,7035,148,6531,169,6310,185,6310,180,6531,164,7035,143,7548,126,8534,106,9350,98,9858,97"/>
+<area shape="rect" id="Node000062" href="$adxrs290-pmdz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="6544,174,6785,214"/>
+<area shape="poly" id="edge83_Node000040_Node000062" title=" " alt="" coords="9858,103,9413,107,8716,117,7880,137,7446,151,7019,169,6786,185,6785,180,7019,164,7445,146,7880,131,8716,112,9413,101,9858,98"/>
+<area shape="rect" id="Node000065" href="$eval-adis1646x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1646x project." alt="" coords="7032,174,7273,214"/>
+<area shape="poly" id="edge86_Node000040_Node000065" title=" " alt="" coords="9858,104,8900,121,8213,140,7507,169,7274,185,7273,180,7507,164,8213,135,8900,115,9858,98"/>
+<area shape="rect" id="Node000068" href="$eval-adis1647x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1647x project." alt="" coords="7520,174,7761,214"/>
+<area shape="poly" id="edge89_Node000040_Node000068" title=" " alt="" coords="9858,105,9086,125,8547,144,7995,169,7762,185,7761,180,7995,164,8547,139,9086,120,9858,99"/>
+<area shape="rect" id="Node000071" href="$eval-adis1650x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1650x project." alt="" coords="8008,174,8249,214"/>
+<area shape="poly" id="edge92_Node000040_Node000071" title=" " alt="" coords="9859,106,9276,130,8483,169,8250,186,8249,180,8483,164,9276,124,9858,101"/>
+<area shape="rect" id="Node000074" href="$eval-adis1654x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1654x project." alt="" coords="8496,174,8737,214"/>
+<area shape="poly" id="edge95_Node000040_Node000074" title=" " alt="" coords="9858,109,8972,169,8738,186,8738,181,8971,164,9858,104"/>
+<area shape="rect" id="Node000077" href="$eval-adis1655x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1655x project." alt="" coords="8984,174,9225,214"/>
+<area shape="poly" id="edge98_Node000040_Node000077" title=" " alt="" coords="9859,113,9226,182,9225,177,9858,108"/>
+<area shape="rect" id="Node000080" href="$eval-adis1657x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1657x project." alt="" coords="9472,174,9713,214"/>
+<area shape="poly" id="edge101_Node000040_Node000080" title=" " alt="" coords="9872,125,9667,177,9666,171,9870,119"/>
+<area shape="rect" id="Node000083" href="$eval-adxl313z_2src_2platform_2stm32_2parameters_8h.html" title=" " alt="" coords="9837,174,10079,214"/>
+<area shape="poly" id="edge104_Node000040_Node000083" title=" " alt="" coords="9961,132,9961,174,9955,174,9955,132"/>
+<area shape="rect" id="Node000086" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="10204,167,10395,221"/>
+<area shape="poly" id="edge107_Node000040_Node000086" title=" " alt="" coords="10041,120,10205,164,10203,169,10039,125"/>
+<area shape="rect" id="Node000089" href="$eval-adxl38x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxl38x project." alt="" coords="10633,174,10875,214"/>
+<area shape="poly" id="edge110_Node000040_Node000089" title=" " alt="" coords="10058,109,10634,176,10633,181,10057,114"/>
+<area shape="rect" id="Node000092" href="$eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html" title="Platform&#45;specific parameter declarations for eval&#45;cn0391&#45;ardz." alt="" coords="11121,167,11304,221"/>
+<area shape="poly" id="edge113_Node000040_Node000092" title=" " alt="" coords="10058,104,10886,164,11121,183,11121,188,10886,169,10058,110"/>
+<area shape="rect" id="Node000095" href="$max14906_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by max14906 project." alt="" coords="11534,174,11753,214"/>
+<area shape="poly" id="edge116_Node000040_Node000095" title=" " alt="" coords="10058,101,10594,125,11316,164,11534,180,11533,186,11315,169,10594,130,10057,107"/>
+<area shape="rect" id="Node000098" href="$max22007_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by MAX22007 example." alt="" coords="11974,174,12193,214"/>
+<area shape="poly" id="edge119_Node000040_Node000098" title=" " alt="" coords="10058,99,10770,120,11262,139,11765,164,11974,180,11974,185,11764,169,11262,144,10769,125,10057,105"/>
+<area shape="rect" id="Node000101" href="$max22915_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by MAX22915 project." alt="" coords="12261,174,12479,214"/>
+<area shape="poly" id="edge122_Node000040_Node000101" title=" " alt="" coords="10058,99,11113,118,11743,138,12006,150,12205,164,12264,171,12264,177,12204,169,12006,155,11743,143,11113,124,10058,104"/>
+<area shape="rect" id="Node000103" href="$pulsar-adc_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;pulsar_adc project." alt="" coords="12591,167,12741,221"/>
+<area shape="poly" id="edge124_Node000040_Node000103" title=" " alt="" coords="10058,98,10542,104,11246,117,11964,136,12264,149,12492,164,12591,177,12590,182,12491,169,12264,155,11964,142,11246,122,10542,110,10058,104"/>
+<area shape="poly" id="edge62_Node000041_Node000038" title=" " alt="" coords="5849,220,5578,279,5577,274,5848,214"/>
+<area shape="rect" id="Node000042" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of ad463x&#45;fmcz project." alt="" coords="5637,277,5836,317"/>
+<area shape="poly" id="edge61_Node000041_Node000042" title=" " alt="" coords="5895,222,5777,279,5775,274,5893,218"/>
+<area shape="poly" id="edge64_Node000043_Node000039" title=" " alt="" coords="5584,220,5314,279,5313,274,5582,214"/>
+<area shape="rect" id="Node000045" href="$ad74413r_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of ad74413r project." alt="" coords="12831,277,13005,317"/>
+<area shape="poly" id="edge66_Node000044_Node000045" title=" " alt="" coords="12921,228,12921,277,12915,277,12915,228"/>
+<area shape="rect" id="Node000046" href="$ad74413r_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by ad74413r project." alt="" coords="13029,277,13247,317"/>
+<area shape="poly" id="edge67_Node000044_Node000046" title=" " alt="" coords="12973,217,13098,274,13096,279,12971,222"/>
+<area shape="rect" id="Node000048" href="$ad74416h_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;ad74416h project." alt="" coords="13271,277,13445,317"/>
+<area shape="poly" id="edge69_Node000047_Node000048" title=" " alt="" coords="13361,228,13361,277,13355,277,13355,228"/>
+<area shape="rect" id="Node000049" href="$ad74416h_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad74416h project." alt="" coords="13469,277,13687,317"/>
+<area shape="poly" id="edge70_Node000047_Node000049" title=" " alt="" coords="13413,217,13538,274,13536,279,13411,222"/>
+<area shape="rect" id="Node000051" href="$ad7616-st_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;ad7616 project." alt="" coords="13711,269,13861,324"/>
+<area shape="poly" id="edge72_Node000050_Node000051" title=" " alt="" coords="13789,235,13789,269,13783,269,13783,235"/>
+<area shape="rect" id="Node000052" href="$ad7616-st_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad7616 project." alt="" coords="13885,269,14036,324"/>
+<area shape="poly" id="edge73_Node000050_Node000052" title=" " alt="" coords="13845,226,13916,267,13914,271,13842,230"/>
+<area shape="rect" id="Node000054" href="$adf4371_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of adf4371 project." alt="" coords="14060,277,14235,317"/>
+<area shape="poly" id="edge75_Node000053_Node000054" title=" " alt="" coords="14150,228,14150,277,14145,277,14145,228"/>
+<area shape="rect" id="Node000055" href="$adf4371_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by adf4371 project." alt="" coords="14259,277,14476,317"/>
+<area shape="poly" id="edge76_Node000053_Node000055" title=" " alt="" coords="14202,217,14327,274,14325,279,14200,222"/>
+<area shape="rect" id="Node000057" href="$adf4382_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of ADF4382 project." alt="" coords="14500,277,14675,317"/>
+<area shape="poly" id="edge78_Node000056_Node000057" title=" " alt="" coords="14590,228,14590,277,14585,277,14585,228"/>
+<area shape="rect" id="Node000058" href="$adf4382_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by adf4382 project." alt="" coords="14699,277,14916,317"/>
+<area shape="poly" id="edge79_Node000056_Node000058" title=" " alt="" coords="14642,217,14767,274,14765,279,14640,222"/>
+<area shape="rect" id="Node000060" href="$admt4000_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of admt4000 project." alt="" coords="6101,277,6276,317"/>
+<area shape="poly" id="edge81_Node000059_Node000060" title=" " alt="" coords="6199,228,6194,277,6188,276,6194,227"/>
+<area shape="rect" id="Node000061" href="$admt4000_2src_2platform_2stm32_2parameters_8c.html" title="Definition of Mbed platform data used by admt4000 project." alt="" coords="5860,277,6077,317"/>
+<area shape="poly" id="edge82_Node000059_Node000061" title=" " alt="" coords="6145,222,6013,279,6011,274,6143,217"/>
+<area shape="rect" id="Node000063" href="$adxrs290-pmdz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="6565,277,6764,317"/>
+<area shape="poly" id="edge84_Node000062_Node000063" title=" " alt="" coords="6667,228,6667,277,6662,277,6662,228"/>
+<area shape="rect" id="Node000064" href="$adxrs290-pmdz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="6301,277,6541,317"/>
+<area shape="poly" id="edge85_Node000062_Node000064" title=" " alt="" coords="6607,222,6467,279,6465,274,6605,217"/>
+<area shape="rect" id="Node000066" href="$eval-adis1646x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1646x project." alt="" coords="7053,277,7252,317"/>
+<area shape="poly" id="edge87_Node000065_Node000066" title=" " alt="" coords="7155,228,7155,277,7150,277,7150,228"/>
+<area shape="rect" id="Node000067" href="$eval-adis1646x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1646x project." alt="" coords="6789,277,7029,317"/>
+<area shape="poly" id="edge88_Node000065_Node000067" title=" " alt="" coords="7095,222,6955,279,6953,274,7093,217"/>
+<area shape="rect" id="Node000069" href="$eval-adis1647x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1647x project." alt="" coords="7541,277,7740,317"/>
+<area shape="poly" id="edge90_Node000068_Node000069" title=" " alt="" coords="7643,228,7643,277,7638,277,7638,228"/>
+<area shape="rect" id="Node000070" href="$eval-adis1647x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1647x project." alt="" coords="7277,277,7517,317"/>
+<area shape="poly" id="edge91_Node000068_Node000070" title=" " alt="" coords="7583,222,7443,279,7441,274,7581,217"/>
+<area shape="rect" id="Node000072" href="$eval-adis1650x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1650x project." alt="" coords="8029,277,8228,317"/>
+<area shape="poly" id="edge93_Node000071_Node000072" title=" " alt="" coords="8131,228,8131,277,8126,277,8126,228"/>
+<area shape="rect" id="Node000073" href="$eval-adis1650x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1650x project." alt="" coords="7765,277,8005,317"/>
+<area shape="poly" id="edge94_Node000071_Node000073" title=" " alt="" coords="8071,222,7931,279,7929,274,8069,217"/>
+<area shape="rect" id="Node000075" href="$eval-adis1654x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1654x project." alt="" coords="8517,277,8716,317"/>
+<area shape="poly" id="edge96_Node000074_Node000075" title=" " alt="" coords="8619,228,8619,277,8614,277,8614,228"/>
+<area shape="rect" id="Node000076" href="$eval-adis1654x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1654x project." alt="" coords="8253,277,8493,317"/>
+<area shape="poly" id="edge97_Node000074_Node000076" title=" " alt="" coords="8559,222,8419,279,8417,274,8557,217"/>
+<area shape="rect" id="Node000078" href="$eval-adis1655x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1655x project." alt="" coords="9005,277,9204,317"/>
+<area shape="poly" id="edge99_Node000077_Node000078" title=" " alt="" coords="9107,228,9107,277,9102,277,9102,228"/>
+<area shape="rect" id="Node000079" href="$eval-adis1655x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1655x project." alt="" coords="8741,277,8981,317"/>
+<area shape="poly" id="edge100_Node000077_Node000079" title=" " alt="" coords="9047,222,8907,279,8905,274,9045,217"/>
+<area shape="rect" id="Node000081" href="$eval-adis1657x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adis1657x project." alt="" coords="9493,277,9692,317"/>
+<area shape="poly" id="edge102_Node000080_Node000081" title=" " alt="" coords="9595,228,9595,277,9590,277,9590,228"/>
+<area shape="rect" id="Node000082" href="$eval-adis1657x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1657x project." alt="" coords="9229,277,9469,317"/>
+<area shape="poly" id="edge103_Node000080_Node000082" title=" " alt="" coords="9535,222,9395,279,9393,274,9533,217"/>
+<area shape="rect" id="Node000084" href="$eval-adxl313z_2src_2platform_2stm32_2main_8c.html" title=" " alt="" coords="9981,277,10180,317"/>
+<area shape="poly" id="edge105_Node000083_Node000084" title=" " alt="" coords="9993,221,10059,275,10056,279,9990,225"/>
+<area shape="rect" id="Node000085" href="$eval-adxl313z_2src_2platform_2stm32_2parameters_8c.html" title=" " alt="" coords="9717,277,9957,317"/>
+<area shape="poly" id="edge106_Node000083_Node000085" title=" " alt="" coords="9927,225,9861,279,9858,275,9923,221"/>
+<area shape="rect" id="Node000087" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="10419,269,10609,324"/>
+<area shape="poly" id="edge108_Node000086_Node000087" title=" " alt="" coords="10369,225,10459,267,10457,272,10366,229"/>
+<area shape="rect" id="Node000088" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="10204,269,10395,324"/>
+<area shape="poly" id="edge109_Node000086_Node000088" title=" " alt="" coords="10302,235,10302,269,10297,269,10297,235"/>
+<area shape="rect" id="Node000090" href="$eval-adxl38x_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxl38x project." alt="" coords="10899,277,11097,317"/>
+<area shape="poly" id="edge111_Node000089_Node000090" title=" " alt="" coords="10814,217,10953,274,10951,279,10812,222"/>
+<area shape="rect" id="Node000091" href="$eval-adxl38x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxl38x project." alt="" coords="10634,277,10874,317"/>
+<area shape="poly" id="edge112_Node000089_Node000091" title=" " alt="" coords="10757,228,10757,277,10751,277,10751,228"/>
+<area shape="rect" id="Node000093" href="$eval-cn0391-ardz_2src_2platform_2stm32_2main_8c.html" title="Main entry point for eval&#45;cn0391&#45;ardz firmware." alt="" coords="11328,269,11511,324"/>
+<area shape="poly" id="edge114_Node000092_Node000093" title=" " alt="" coords="11280,225,11367,267,11364,272,11277,230"/>
+<area shape="rect" id="Node000094" href="$eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8c.html" title="Platform&#45;specific parameter definitions for eval&#45;cn0391&#45;ardz." alt="" coords="11121,269,11304,324"/>
+<area shape="poly" id="edge115_Node000092_Node000094" title=" " alt="" coords="11215,235,11215,269,11210,269,11210,235"/>
+<area shape="rect" id="Node000096" href="$max14906_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of max14906 project." alt="" coords="11776,277,11951,317"/>
+<area shape="poly" id="edge117_Node000095_Node000096" title=" " alt="" coords="11698,217,11823,274,11821,279,11696,222"/>
+<area shape="rect" id="Node000097" href="$max14906_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by max14906 project." alt="" coords="11535,277,11752,317"/>
+<area shape="poly" id="edge118_Node000095_Node000097" title=" " alt="" coords="11646,228,11646,277,11641,277,11641,228"/>
+<area shape="rect" id="Node000099" href="$max22007_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of MAX22007 project." alt="" coords="12216,277,12391,317"/>
+<area shape="poly" id="edge120_Node000098_Node000099" title=" " alt="" coords="12138,217,12263,274,12261,279,12136,222"/>
+<area shape="rect" id="Node000100" href="$max22007_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by MAX22007 project." alt="" coords="11975,277,12192,317"/>
+<area shape="poly" id="edge121_Node000098_Node000100" title=" " alt="" coords="12086,228,12086,277,12081,277,12081,228"/>
+<area shape="rect" id="Node000102" href="$max22915_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by MAX22915 project." alt="" coords="12415,277,12632,317"/>
+<area shape="poly" id="edge123_Node000101_Node000102" title=" " alt="" coords="12412,219,12496,274,12493,279,12409,224"/>
+<area shape="rect" id="Node000104" href="$pulsar-adc_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;pulsar_adc project." alt="" coords="12656,269,12807,324"/>
+<area shape="poly" id="edge125_Node000103_Node000104" title=" " alt="" coords="12693,231,12717,268,12712,271,12688,234"/>
+<area shape="poly" id="edge138_Node000105_Node000035" title=" " alt="" coords="4117,121,4049,169,4022,198,4010,211,3991,224,3937,247,3891,256,3844,261,3785,272,3757,279,3755,274,3784,267,3843,256,3890,251,3935,242,3989,219,4006,207,4018,194,4046,165,4114,116"/>
+<area shape="rect" id="Node000106" href="$ad405x_8h.html" title="Header file of AD405X Driver." alt="" coords="4502,174,4649,214"/>
+<area shape="poly" id="edge128_Node000105_Node000106" title=" " alt="" coords="4212,112,4502,174,4501,179,4211,117"/>
+<area shape="rect" id="Node000114" href="$no__os__i3c_8c.html" title="Implementation of the I3C Interface." alt="" coords="4257,181,4427,207"/>
+<area shape="poly" id="edge137_Node000105_Node000114" title=" " alt="" coords="4184,115,4319,179,4317,184,4181,120"/>
+<area shape="rect" id="Node000115" href="$stm32__i3c_8h.html" title="Header file for the stm32 I3C driver." alt="" coords="4060,174,4232,214"/>
+<area shape="poly" id="edge139_Node000105_Node000115" title=" " alt="" coords="4149,125,4149,174,4143,174,4143,125"/>
+<area shape="rect" id="Node000107" href="$ad405x_8c.html" title="Implementation of AD405X Driver." alt="" coords="4717,277,4863,317"/>
+<area shape="poly" id="edge129_Node000106_Node000107" title=" " alt="" coords="4629,217,4751,274,4749,279,4627,222"/>
+<area shape="rect" id="Node000108" href="$iio__ad405x_8c.html" title=" " alt="" coords="4887,277,5034,317"/>
+<area shape="poly" id="edge130_Node000106_Node000108" title=" " alt="" coords="4649,215,4661,219,4769,243,4876,267,4902,274,4900,279,4875,272,4767,248,4660,224,4647,220"/>
+<area shape="rect" id="Node000109" href="$ad405x_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad405x examples." alt="" coords="4387,372,4577,412"/>
+<area shape="poly" id="edge131_Node000106_Node000109" title=" " alt="" coords="4646,215,4661,219,4732,228,4811,232,4963,234,5022,240,5045,246,5062,255,5071,267,5073,283,5065,303,5048,326,5024,339,4982,350,4858,368,4711,381,4578,389,4577,384,4711,375,4857,362,4981,344,5022,334,5044,322,5061,300,5068,283,5067,270,5058,259,5043,251,5021,246,4962,239,4810,237,4732,234,4660,224,4644,220"/>
+<area shape="rect" id="Node000110" href="$ad405x_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad405x examples." alt="" coords="3797,277,3989,317"/>
+<area shape="poly" id="edge132_Node000106_Node000110" title=" " alt="" coords="4502,220,4484,224,4349,243,4242,250,4136,255,4001,272,3965,279,3964,274,4000,267,4136,250,4242,244,4348,238,4483,219,4501,215"/>
+<area shape="rect" id="Node000111" href="$ad405x_2src_2examples_2basic__example_2basic__example_8c.html" title="Basic example for ad405x project." alt="" coords="4013,269,4205,324"/>
+<area shape="poly" id="edge134_Node000106_Node000111" title=" " alt="" coords="4500,220,4484,224,4351,249,4217,272,4206,274,4205,269,4216,267,4350,244,4483,219,4498,215"/>
+<area shape="rect" id="Node000112" href="$basic__i3c__example_8c.html" title="Basic example for ad405x project." alt="" coords="4229,269,4455,324"/>
+<area shape="poly" id="edge135_Node000106_Node000112" title=" " alt="" coords="4520,222,4404,272,4402,267,4518,217"/>
+<area shape="rect" id="Node000113" href="$i3c__dma__example_8c.html" title="Basic example for ad405x project." alt="" coords="4479,269,4693,324"/>
+<area shape="poly" id="edge136_Node000106_Node000113" title=" " alt="" coords="4581,227,4586,269,4581,269,4576,228"/>
+<area shape="poly" id="edge133_Node000110_Node000109" title=" " alt="" coords="3980,317,4001,321,4207,355,4387,378,4386,383,4207,360,4000,327,3979,322"/>
+<area shape="poly" id="edge140_Node000115_Node000035" title=" " alt="" coords="4060,220,4041,224,3913,248,3785,272,3755,279,3754,274,3784,267,3912,242,4040,219,4059,215"/>
+</map>

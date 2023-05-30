@@ -1,0 +1,5 @@
+<map id="adf4350_out_altvoltage0_refin_frequency" name="adf4350_out_altvoltage0_refin_frequency">
+<area shape="rect" id="Node000001" title="Sets PLL 0 REFin frequency in Hz." alt="" coords="172,5,356,45"/>
+<area shape="rect" id="Node000002" href="$adf4350_8c.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

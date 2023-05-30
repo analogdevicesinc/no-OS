@@ -1,0 +1,13 @@
+<map id="ad917x_register_write_tbl" name="ad917x_register_write_tbl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="441,95,632,121"/>
+<area shape="rect" id="Node000002" href="$group___a_p_i.html#ga61f6bffa132f73240fe51f5a6bcc4410" title="Enable the JESD Interface." alt="" coords="223,5,377,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="485,93,357,48,359,43,487,88"/>
+<area shape="rect" id="Node000003" href="$group___a_p_i.html#gaae631be26fcb6b953153723818b73cd2" title="Configure the DAC Clock Input path based on a the desired dac clock frequency, the applied reference ..." alt="" coords="5,121,159,146"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="428,105,321,104,207,111,134,123,133,118,206,105,321,99,428,100"/>
+<area shape="rect" id="Node000004" href="$group___a_p_i.html#ga1780054921cc0c2dfb4f519ea15abf00" title="Set the DAC CLK Frequency." alt="" coords="207,121,393,146"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="428,122,394,126,393,121,427,117"/>
+<area shape="rect" id="Node000005" href="$group___a_p_i.html#ga9f25e406afc8af656f73efd3fdf4698e" title="Configure the On Chip DAC PLL." alt="" coords="225,171,375,211"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="487,128,359,173,357,168,485,123"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="193,136,159,136,159,131,193,131"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="211,170,131,149,132,144,212,165"/>
+</map>

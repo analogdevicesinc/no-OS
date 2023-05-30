@@ -1,0 +1,16 @@
+<map id="max22196_remove" name="max22196_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated during init." alt="" coords="581,56,729,81"/>
+<area shape="rect" id="Node000002" href="$max22196_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="184,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="586,56,533,46,410,32,303,24,303,18,411,26,534,41,587,50"/>
+<area shape="rect" id="Node000003" href="$iio__max22196_8c.html#aa7f71a798363772ae2fedde627a73d3f" title="Free resources allocated by the init function." alt="" coords="363,105,533,131"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="589,87,503,108,502,103,587,82"/>
+<area shape="rect" id="Node000006" href="$max22196_8c.html#ae963991a50efbd8368b25de6918dad74" title="Initialize and configure the MAX22196 device." alt="" coords="389,56,507,81"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="567,71,508,71,508,66,567,66"/>
+<area shape="rect" id="Node000004" href="$max22196_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,81,124,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="349,115,124,100,125,95,349,109"/>
+<area shape="rect" id="Node000005" href="$iio__max22196_8c.html#ad08520f1860582b8811f4d0afafbbe44" title="Initializes the MAX22196 IIO descriptor." alt="" coords="172,56,315,81"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="381,105,296,84,297,79,382,100"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="159,83,125,88,124,83,158,78"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="382,55,295,33,296,28,383,50"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="374,71,315,71,315,66,374,66"/>
+</map>

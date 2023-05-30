@@ -1,0 +1,13 @@
+<map id="drivers/temperature/lm75/lm75.h" name="drivers/temperature/lm75/lm75.h">
+<area shape="rect" id="Node000001" title="Header file of LM75 Driver." alt="" coords="280,5,432,45"/>
+<area shape="rect" id="Node000002" href="$iio__lm75_8h.html" title="IIO Header file of LM75 Driver." alt="" coords="104,101,256,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="310,54,217,103,214,98,307,49"/>
+<area shape="rect" id="Node000005" href="$lm75_8c.html" title="Source file of LM75 Driver." alt="" coords="280,101,432,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="359,59,359,101,353,101,353,59"/>
+<area shape="rect" id="Node000006" href="$curvetrace__example_8c.html" title="BJT Curve tracer example for AD5592R (NPN) and AD5593R (PNP)." alt="" coords="456,93,691,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="414,48,513,91,511,96,412,53"/>
+<area shape="rect" id="Node000003" href="$iio__lm75_8c.html" title="IIO Source file of LM75 Driver." alt="" coords="5,203,157,243"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="154,153,102,205,98,201,150,149"/>
+<area shape="rect" id="Node000004" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="181,196,379,251"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="210,149,256,194,252,198,207,152"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="ad9152_spi_write" name="ad9152_spi_write">
+<area shape="rect" id="Node000001" title="ad9152_spi_write" alt="" coords="359,55,495,80"/>
+<area shape="rect" id="Node000002" href="$ad9152_8c.html#a705143476843ff958370208e4c003726" title="ad9152_setup" alt="" coords="108,5,311,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="356,54,266,33,267,28,358,49"/>
+<area shape="rect" id="Node000004" href="$ad9152_8c.html#ad5ea3eadd4d829092d271a52c939bca5" title="ad9152_setup" alt="" coords="153,55,266,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="345,70,266,70,266,65,345,65"/>
+<area shape="rect" id="Node000005" href="$ad9152_8c.html#a0ed7e5e95a06425ebe0e06423e41e441" title="ad9152_setup" alt="" coords="111,104,307,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="358,86,267,107,266,101,356,80"/>
+<area shape="rect" id="Node000003" href="$fmcdaq3_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,37,109,45,61,60,59,55,107,39,137,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="139,70,60,70,60,65,139,65"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="141,103,107,94,59,79,61,74,109,89,143,98"/>
+</map>

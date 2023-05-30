@@ -1,0 +1,16 @@
+<map id="ltc2672_current_to_code" name="ltc2672_current_to_code">
+<area shape="rect" id="Node000001" title="get dac code value from current of a selected DAC channel" alt="" coords="387,141,568,166"/>
+<area shape="rect" id="Node000002" href="$ltc2672_8c.html#a1925a7ba84e10d9845b6663853a1a5d2" title="sets the same current for all channels" alt="" coords="180,5,331,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="448,134,398,97,337,60,312,48,315,43,340,55,401,93,451,130"/>
+<area shape="rect" id="Node000004" href="$ltc2672_8c.html#ac94ad5cab8fa0c407aeda8139638dd8c" title="set the current for a selected DAC channel" alt="" coords="180,69,331,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="418,139,325,112,326,107,420,134"/>
+<area shape="rect" id="Node000005" href="$ltc2672_8c.html#a0e6e9a7425d2717f6a620a886255637e" title="setup toggle parameters for a channel" alt="" coords="175,133,336,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="372,156,336,156,336,151,372,151"/>
+<area shape="rect" id="Node000006" href="$ltc2672_8c.html#a0e50093dfbdf5c727590dfe7e9545f70" title="writes to the input registers of all channels" alt="" coords="172,197,339,237"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="420,173,326,200,325,195,418,167"/>
+<area shape="rect" id="Node000007" href="$ltc2672_8c.html#a6147850fb033cb0cee82f3615f85a703" title="writes to the input register of a channel" alt="" coords="180,261,331,301"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="451,177,401,214,340,252,315,264,312,259,337,247,398,209,448,173"/>
+<area shape="rect" id="Node000003" href="$dc2903a_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,77,124,102"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,52,104,79,103,74,181,47"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="181,131,103,105,104,100,183,126"/>
+</map>

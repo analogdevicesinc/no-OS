@@ -1,0 +1,9 @@
+<map id="gnss_ubx_get_unix_epoch_with_micros" name="gnss_ubx_get_unix_epoch_with_micros">
+<area shape="rect" id="Node000001" title="Get Unix epoch time with microsecond precision." alt="" coords="484,35,676,75"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#aca1695030eb7225e23ed18a4065f60b0" title="Get Unix epoch time with best available precision (unified API)" alt="" coords="254,5,415,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="470,44,415,38,416,32,471,39"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx_8c.html#a4d777ec68b02fa44f2c564f35ed007a9" title="Get comprehensive precise time information." alt="" coords="233,70,436,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="471,70,436,74,436,68,470,65"/>
+<area shape="rect" id="Node000004" href="$nmea__ubx_8c.html#a89f1bd80bbe4d28f4edbdd1ef3008b0a" title="Get comprehensive timing information (unified API for both device types)" alt="" coords="5,70,185,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="220,85,185,85,185,80,220,80"/>
+</map>

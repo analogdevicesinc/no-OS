@@ -1,0 +1,13 @@
+<map id="HAL_I2CWriteBlock" name="HAL_I2CWriteBlock">
+<area shape="rect" id="Node000001" title=" " alt="" coords="435,80,581,105"/>
+<area shape="rect" id="Node000002" href="$wrapper_8c.html#a44a49d54d98361c52c5f0b757a74cd74" title=" " alt="" coords="222,5,379,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="465,77,386,45,350,33,351,28,388,39,467,72"/>
+<area shape="rect" id="Node000003" href="$wrapper_8c.html#afa4746abacae9e1629b9db7a1a0355bf" title=" " alt="" coords="215,55,387,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,85,386,80,387,75,421,79"/>
+<area shape="rect" id="Node000004" href="$wrapper_8c.html#a94958535e45d005c5b3de7fce18a845d" title=" " alt="" coords="228,104,373,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="421,105,374,111,373,106,421,100"/>
+<area shape="rect" id="Node000006" href="$wrapper_8c.html#ac28401c343589f8bf0a49e9c5b5d94e8" title=" " alt="" coords="217,153,385,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="465,113,388,143,348,156,347,151,386,138,463,108"/>
+<area shape="rect" id="Node000005" href="$wrapper_8c.html#add4d29543fddc813f608fcc84f33ebcc" title=" " alt="" coords="5,104,167,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="214,119,167,119,167,114,214,114"/>
+</map>

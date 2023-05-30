@@ -1,0 +1,12 @@
+<map id="altera_a10_fpll_remove" name="altera_a10_fpll_remove">
+<area shape="rect" id="Node000001" title="altera_a10_fpll_remove" alt="" coords="276,55,452,80"/>
+<area shape="rect" id="Node000002" href="$adrv9009_2src_2app_2app__clocking_8c.html#a3e4c367a44510658467da3ce7c9e9273" title=" " alt="" coords="108,5,228,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,54,219,33,220,28,300,49"/>
+<area shape="rect" id="Node000004" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="116,55,220,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="262,70,221,70,221,65,262,65"/>
+<area shape="rect" id="Node000005" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="141,104,195,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="300,86,196,113,195,107,299,81"/>
+<area shape="rect" id="Node000003" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,34,61,41,60,36,94,29"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="102,58,60,51,61,45,103,53"/>
+</map>

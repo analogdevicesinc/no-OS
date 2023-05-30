@@ -1,0 +1,28 @@
+<map id="drivers/platform/xilinx/xilinx_i2c.c" name="drivers/platform/xilinx/xilinx_i2c.c">
+<area shape="rect" id="Node000001" title="Implementation of Xilinx I2C Generic Driver." alt="" coords="303,5,470,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="258,167,329,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="363,48,341,69,321,95,308,124,300,154,295,152,303,123,316,92,337,65,360,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="139,93,256,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="342,48,239,90,237,85,340,43"/>
+<area shape="rect" id="Node000004" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="309,48,122,93,120,88,308,43"/>
+<area shape="rect" id="Node000006" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="587,93,685,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="447,43,587,87,586,92,446,48"/>
+<area shape="rect" id="Node000008" href="$xilinx__i2c_8h.html" title=" " alt="" coords="467,93,563,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="419,43,486,84,483,88,416,48"/>
+<area shape="rect" id="Node000009" href="$no__os__list_8h.html" title="List library header." alt="" coords="709,93,808,119"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="471,42,697,89,695,94,470,47"/>
+<area shape="rect" id="Node000011" href="$no__os__alloc_8h.html" title=" " alt="" coords="331,93,442,119"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="389,46,389,79,384,79,384,46"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,167,94,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="63,119,63,153,57,153,57,119"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="601,167,671,192"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="639,119,639,153,633,153,633,119"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="536,116,606,157,603,162,533,121"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="740,121,669,162,666,157,738,116"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="717,167,800,192"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="761,119,761,153,756,153,756,119"/>
+<area shape="poly" id="edge14_Node000011_Node000002" title=" " alt="" coords="373,121,321,160,318,156,370,117"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="353,167,420,192"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="389,119,389,153,384,153,384,119"/>
+</map>

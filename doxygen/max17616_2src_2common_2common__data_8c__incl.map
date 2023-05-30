@@ -1,0 +1,34 @@
+<map id="projects/max17616/src/common/common_data.c" name="projects/max17616/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by max17616 examples." alt="" coords="183,5,374,45"/>
+<area shape="rect" id="Node000002" href="$max17616_2src_2common_2common__data_8h.html" title="Defines common data to be used by max17616 examples." alt="" coords="215,93,342,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="281,46,281,79,276,79,276,46"/>
+<area shape="rect" id="Node000003" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="290,167,395,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="291,117,325,155,321,158,287,121"/>
+<area shape="rect" id="Node000008" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,240,104,265"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="249,121,202,141,152,169,111,200,77,232,73,228,108,196,149,164,200,137,247,116"/>
+<area shape="rect" id="Node000009" href="$max17616_8h.html" title="Header file of the MAX17616 Driver." alt="" coords="163,167,266,192"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="270,121,236,158,232,155,266,117"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="420,167,529,192"/>
+<area shape="poly" id="edge20_Node000002_Node000012" title=" " alt="" coords="311,116,431,159,429,164,309,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="253,313,323,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="339,193,316,241,297,301,292,299,311,239,334,191"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="528,313,611,339"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="396,188,549,217,642,238,647,248,648,258,640,277,624,294,604,308,601,304,620,290,636,274,643,257,642,250,638,242,547,222,395,193"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="451,240,584,265"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="372,190,477,232,475,237,370,194"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="481,268,338,312,336,307,480,263"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="528,264,555,301,551,304,524,267"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="417,313,487,339"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="509,267,474,305,470,301,505,264"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="93,263,240,307,239,313,91,268"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="201,194,186,209,172,227,165,246,169,264,183,281,200,294,241,312,238,317,198,298,179,284,164,267,160,245,168,224,182,205,198,190"/>
+<area shape="poly" id="edge14_Node000009_Node000005" title=" " alt="" coords="267,187,278,189,350,194,446,197,494,201,537,209,573,220,598,238,605,254,604,271,590,303,585,301,599,270,600,255,594,242,571,225,536,214,493,207,445,203,350,199,277,195,266,193"/>
+<area shape="poly" id="edge19_Node000009_Node000008" title=" " alt="" coords="190,194,94,237,92,232,188,190"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="179,240,250,265"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="217,192,217,226,212,226,212,192"/>
+<area shape="rect" id="Node000011" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="326,240,426,265"/>
+<area shape="poly" id="edge15_Node000009_Node000011" title=" " alt="" coords="242,190,338,232,336,237,240,194"/>
+<area shape="poly" id="edge16_Node000011_Node000004" title=" " alt="" coords="364,267,315,307,311,302,360,263"/>
+<area shape="poly" id="edge18_Node000011_Node000005" title=" " alt="" coords="408,263,526,306,524,311,406,268"/>
+<area shape="poly" id="edge17_Node000011_Node000007" title=" " alt="" coords="390,263,431,302,428,306,386,267"/>
+</map>

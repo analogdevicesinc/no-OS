@@ -1,0 +1,19 @@
+<map id="lt3074_read_byte" name="lt3074_read_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read byte operation." alt="" coords="859,31,993,56"/>
+<area shape="rect" id="Node000002" href="$lt3074_8c.html#a1739bfd03527b68db62e029bf83a2268" title="Read statuses." alt="" coords="483,5,630,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="844,40,630,26,630,20,845,35"/>
+<area shape="rect" id="Node000004" href="$lt3074_8c.html#aaa7a6e7bcdf36dc802fefb3daaa5d275" title="Generic register read wrapper." alt="" coords="684,56,811,81"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="846,57,811,62,811,57,845,52"/>
+<area shape="rect" id="Node000003" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,7,291,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="470,21,291,22,291,16,470,16"/>
+<area shape="rect" id="Node000005" href="$lt3074_8c.html#ab6c8397a7fd51120ae521f03fb129c6f" title="Initialize the device structure." alt="" coords="339,56,429,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="670,71,430,71,430,66,670,66"/>
+<area shape="rect" id="Node000008" href="$lt3074_8c.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="477,107,636,132"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="686,88,606,109,605,104,685,82"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="330,54,271,35,273,30,332,49"/>
+<area shape="rect" id="Node000006" href="$iio__lt3074_8c.html#a415078dac56a0cdfeab8963d3e685f23" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,56,289,81"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="325,71,289,71,289,66,325,66"/>
+<area shape="rect" id="Node000007" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,56,124,81"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="160,71,124,71,124,66,160,66"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="498,105,427,84,429,79,500,100"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="projects/adv7511/src/edid.c" name="projects/adv7511/src/edid.c">
+<area shape="rect" id="Node000001" title="EDID control module source." alt="" coords="157,5,315,45"/>
+<area shape="rect" id="Node000002" href="$edid_8h.html" title="EDID control module header." alt="" coords="165,93,227,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,47,211,82,206,80,224,44"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="509,240,579,265"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="263,43,519,230,516,234,260,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,240,88,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,121,70,232,66,229,182,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,240,183,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="195,120,159,228,154,226,190,118"/>
+<area shape="rect" id="Node000005" href="$wrapper_8h.html" title=" " alt="" coords="199,167,286,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="206,118,230,154,225,157,201,120"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="212,195,92,238,91,233,210,190"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="229,194,176,234,173,229,226,190"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="287,188,496,237,495,242,286,193"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="417,240,484,265"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="277,189,405,233,403,238,275,195"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="207,240,278,265"/>
+<area shape="poly" id="edge9_Node000005_Node000008" title=" " alt="" coords="245,192,245,226,240,226,240,192"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="303,240,393,265"/>
+<area shape="poly" id="edge10_Node000005_Node000009" title=" " alt="" coords="261,190,321,230,318,235,258,194"/>
+</map>

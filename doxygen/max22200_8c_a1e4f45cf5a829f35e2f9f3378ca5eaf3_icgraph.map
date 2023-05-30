@@ -1,0 +1,17 @@
+<map id="max22200_set_ch_state" name="max22200_set_ch_state">
+<area shape="rect" id="Node000001" title="Set channel state for specific channel." alt="" coords="596,42,776,67"/>
+<area shape="rect" id="Node000002" href="$iio__max22200_8c.html#a4711de693e4d717392f3d69f2c20890b" title=" " alt="" coords="391,5,548,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="582,43,548,39,548,33,583,38"/>
+<area shape="rect" id="Node000005" href="$max22200_8c.html#a4a64a7cdccf998a19754b88cc67597a8" title="Deallocates all the resources used at initialization." alt="" coords="395,70,543,95"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="583,71,544,76,543,71,582,65"/>
+<area shape="rect" id="Node000003" href="$iio__max22200_8c.html#a4c6e5b3b50c3baf4581ded343d8adf67" title="Initializes the MAX22200 IIO descriptor." alt="" coords="186,17,329,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="377,30,329,31,329,25,377,24"/>
+<area shape="rect" id="Node000004" href="$max22200_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,66,124,91"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,48,116,68,115,63,193,43"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="404,69,308,45,309,39,405,64"/>
+<area shape="rect" id="Node000006" href="$max22200_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="198,66,317,91"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="381,84,317,82,317,77,381,78"/>
+<area shape="rect" id="Node000007" href="$iio__max22200_8c.html#a0c38e46e3759dbe43f2879f04faf4489" title="Free resources allocated by the init function." alt="" coords="172,115,343,141"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="397,101,318,118,317,113,395,96"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="193,115,115,94,116,89,195,109"/>
+</map>

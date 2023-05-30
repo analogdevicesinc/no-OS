@@ -1,0 +1,19 @@
+<map id="adxl345_set_register_value" name="adxl345_set_register_value">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="271,220,429,260"/>
+<area shape="rect" id="Node000002" href="$adxl345_8c.html#afba00ca105a0d3a67bc8abf2d00b703f" title="Enables/disables the activity detection." alt="" coords="35,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="332,209,314,173,289,133,258,93,221,60,192,44,194,39,224,55,262,90,294,130,319,171,337,206"/>
+<area shape="rect" id="Node000003" href="$adxl345_8c.html#af5ac6a0dd16e927e4ea43e2880f87708" title="Enables/disables the free&#45;fall detection." alt="" coords="33,69,195,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="322,211,278,166,250,143,221,124,194,111,197,106,224,119,254,139,281,162,326,208"/>
+<area shape="rect" id="Node000004" href="$adxl345_8c.html#a1cf9afad1c3d6a81e5bc7fd1a745e6f0" title="Enables/disables the inactivity detection." alt="" coords="29,133,199,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,217,222,188,186,176,188,171,224,183,295,212"/>
+<area shape="rect" id="Node000005" href="$adxl345_8c.html#af568732d605456e0d3a7155c19e02e6b" title="Sets an offset value for each axis (Offset Calibration)." alt="" coords="41,198,187,223"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="256,231,186,222,187,217,257,226"/>
+<area shape="rect" id="Node000006" href="$adxl345_8c.html#a437ea06da249a03a3c98ee4a0f86d289" title="Enables/disables the orientation detection (only for adxl346)." alt="" coords="25,248,203,288"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="257,254,204,260,203,255,257,248"/>
+<area shape="rect" id="Node000007" href="$adxl345_8c.html#ac08a9bb3aefcf7f2adb12b0ab0abe2ca" title="Places the device into standby/measure mode." alt="" coords="18,313,210,338"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="300,269,224,303,180,315,179,310,222,297,298,264"/>
+<area shape="rect" id="Node000008" href="$adxl345_8c.html#a6a7c64d2827df1e1277ea1cfb3e87579" title="Selects the measurement range." alt="" coords="5,362,223,387"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="324,272,280,314,253,334,224,352,191,364,189,359,221,347,250,330,276,310,320,268"/>
+<area shape="rect" id="Node000009" href="$adxl345_8c.html#ab061b09e44c20b393e2e6eb935a83dd2" title="Enables/disables the tap detection." alt="" coords="15,411,213,437"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="334,274,290,339,260,373,224,401,197,414,195,409,221,396,256,369,286,335,330,271"/>
+</map>

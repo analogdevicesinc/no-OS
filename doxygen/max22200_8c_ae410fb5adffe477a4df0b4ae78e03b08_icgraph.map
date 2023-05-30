@@ -1,0 +1,53 @@
+<map id="max22200_reg_update" name="max22200_reg_update">
+<area shape="rect" id="Node000001" title="Update data in the desired register." alt="" coords="875,270,1045,295"/>
+<area shape="rect" id="Node000002" href="$max22200_8c.html#a7365ad2c31795e97222e15fab40caba0" title="Set fault mask bits in the status register." alt="" coords="391,294,589,319"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="861,290,590,304,590,299,861,285"/>
+<area shape="rect" id="Node000004" href="$max22200_8c.html#a4a64a7cdccf998a19754b88cc67597a8" title="Deallocates all the resources used at initialization." alt="" coords="416,47,564,72"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="951,257,938,207,914,145,898,113,877,84,853,58,825,37,787,19,746,10,703,8,660,12,582,29,522,49,520,44,580,23,660,6,703,3,746,5,789,14,828,32,857,54,882,81,902,111,919,143,943,205,956,255"/>
+<area shape="rect" id="Node000008" href="$max22200_8c.html#aa59bdce2dc9d750796fa59467c3e638b" title="Set configuration DPM." alt="" coords="399,446,581,471"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="947,308,928,339,901,374,867,407,828,434,767,457,702,469,638,473,581,471,581,466,638,467,701,463,765,452,825,429,864,403,897,370,924,336,943,306"/>
+<area shape="rect" id="Node000009" href="$max22200_8c.html#a1810b8cf2b249ad50dd600c919d8beda" title="Set channel&#39;s enables for different checks, detection and functions." alt="" coords="395,495,585,520"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="952,309,935,348,909,395,873,441,852,461,828,478,769,504,706,518,643,523,585,522,585,516,643,517,705,512,767,499,825,473,848,457,869,437,904,392,930,346,947,307"/>
+<area shape="rect" id="Node000010" href="$max22200_8c.html#a79786b2a9dd3d6aec873437e97be27b8" title="Set channel&#39;s frequency." alt="" coords="403,546,577,571"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="956,309,942,358,917,419,880,479,856,506,828,528,799,545,767,557,701,572,634,576,575,574,575,568,634,571,700,567,765,552,796,540,825,524,852,502,875,476,912,416,936,356,950,308"/>
+<area shape="rect" id="Node000011" href="$max22200_8c.html#a2daa6ab5fd22450fd4dba9b91738db4a" title="Set channel HIT time and HIT current." alt="" coords="650,146,814,171"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="934,262,886,223,825,185,796,173,798,168,828,180,889,218,937,258"/>
+<area shape="rect" id="Node000013" href="$max22200_8c.html#a576feeac2ad98d953addf678587767f0" title="Set channel hold current." alt="" coords="645,195,819,220"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="915,267,826,234,787,223,788,218,827,229,917,262"/>
+<area shape="rect" id="Node000014" href="$max22200_8c.html#ae09f835414d0af285a0b3b38906a567c" title="Set chanmel operation mode, high&#45;side/low&#45;side and drive." alt="" coords="640,395,824,420"/>
+<area shape="poly" id="edge21_Node000001_Node000014" title=" " alt="" coords="937,306,889,346,828,385,795,397,793,392,825,380,886,342,934,302"/>
+<area shape="rect" id="Node000015" href="$max22200_8c.html#a714e847be2fa384cca5287cc6f795417" title="Set channel&#39;s scale to fullscale or half fullscale." alt="" coords="641,244,823,270"/>
+<area shape="poly" id="edge23_Node000001_Node000015" title=" " alt="" coords="860,274,823,270,823,264,861,269"/>
+<area shape="rect" id="Node000016" href="$max22200_8c.html#a1e4f45cf5a829f35e2f9f3378ca5eaf3" title="Set channel state for specific channel." alt="" coords="642,47,822,72"/>
+<area shape="poly" id="edge25_Node000001_Node000016" title=" " alt="" coords="946,258,929,219,902,172,868,125,825,86,804,75,807,70,828,81,872,122,907,169,933,216,951,255"/>
+<area shape="rect" id="Node000018" href="$max22200_8c.html#a826bf2590dc7b73ef93dbd0164e5a531" title="Set channel&#39;s trigger to be either SPI or external trigger." alt="" coords="647,96,817,122"/>
+<area shape="poly" id="edge29_Node000001_Node000018" title=" " alt="" coords="942,260,895,197,862,163,825,135,801,124,804,119,828,131,866,159,899,193,946,257"/>
+<area shape="rect" id="Node000019" href="$max22200_8c.html#adc21301abbddb165ba676ea0bd0797ec" title="Set chopping frequency value." alt="" coords="637,346,827,371"/>
+<area shape="poly" id="edge31_Node000001_Node000019" title=" " alt="" coords="909,302,772,348,770,343,907,297"/>
+<area shape="rect" id="Node000003" href="$max22200_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="198,370,317,395"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="438,326,392,341,298,372,296,367,390,336,436,321"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="405,78,392,87,374,108,355,140,318,224,265,370,260,368,313,222,351,138,370,105,389,83,402,74"/>
+<area shape="rect" id="Node000005" href="$iio__max22200_8c.html#a4c6e5b3b50c3baf4581ded343d8adf67" title="Initializes the MAX22200 IIO descriptor." alt="" coords="186,103,329,128"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="424,78,312,105,310,100,423,73"/>
+<area shape="rect" id="Node000007" href="$iio__max22200_8c.html#a0c38e46e3759dbe43f2879f04faf4489" title="Free resources allocated by the init function." alt="" coords="172,50,343,75"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="402,63,343,64,343,59,402,58"/>
+<area shape="rect" id="Node000006" href="$max22200_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,76,124,102"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="172,106,124,100,124,94,173,101"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="159,79,124,83,124,78,158,73"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="436,444,390,429,296,398,298,392,392,424,438,439"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="410,493,389,485,353,464,320,440,270,397,273,393,323,436,356,459,392,480,412,488"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="407,543,389,534,347,501,311,462,264,397,269,394,315,459,351,497,392,529,410,538"/>
+<area shape="rect" id="Node000012" href="$max22200_8c.html#a4f26af270ae2c73d67e72b8884c24c10" title="MAX22200 descriptor initialization function." alt="" coords="431,179,549,204"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="637,174,550,186,549,181,636,169"/>
+<area shape="poly" id="edge17_Node000012_Node000003" title=" " alt="" coords="464,215,276,372,272,367,461,211"/>
+<area shape="poly" id="edge18_Node000012_Node000005" title=" " alt="" coords="436,177,296,131,298,126,438,172"/>
+<area shape="poly" id="edge20_Node000013_Node000012" title=" " alt="" coords="631,204,549,198,550,193,631,198"/>
+<area shape="poly" id="edge22_Node000014_Node000003" title=" " alt="" coords="626,405,317,388,317,383,626,399"/>
+<area shape="poly" id="edge24_Node000015_Node000012" title=" " alt="" coords="670,243,637,234,537,207,539,202,638,229,671,238"/>
+<area shape="poly" id="edge28_Node000016_Node000004" title=" " alt="" coords="628,62,564,62,564,57,628,57"/>
+<area shape="rect" id="Node000017" href="$iio__max22200_8c.html#a4711de693e4d717392f3d69f2c20890b" title=" " alt="" coords="411,97,569,137"/>
+<area shape="poly" id="edge26_Node000016_Node000017" title=" " alt="" coords="665,78,569,101,568,96,664,73"/>
+<area shape="poly" id="edge27_Node000017_Node000005" title=" " alt="" coords="397,119,329,119,329,113,397,114"/>
+<area shape="poly" id="edge30_Node000018_Node000012" title=" " alt="" coords="663,128,638,135,521,181,519,176,636,130,662,123"/>
+<area shape="poly" id="edge32_Node000019_Node000003" title=" " alt="" coords="623,366,317,382,317,377,623,361"/>
+</map>

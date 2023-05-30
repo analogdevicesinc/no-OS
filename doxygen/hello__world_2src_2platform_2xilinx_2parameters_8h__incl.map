@@ -1,0 +1,9 @@
+<map id="projects/hello_world/src/platform/xilinx/parameters.h" name="projects/hello_world/src/platform/xilinx/parameters.h">
+<area shape="rect" id="Node000001" title="Xilinx platform parameters for hello_world project." alt="" coords="118,5,271,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,123,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,62,95,103,92,98,153,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="147,108,242,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,60,197,94,192,94,192,60"/>
+<area shape="rect" id="Node000004" href="$xilinx__uart_8h.html" title=" " alt="" coords="266,108,369,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,58,291,98,288,102,231,62"/>
+</map>

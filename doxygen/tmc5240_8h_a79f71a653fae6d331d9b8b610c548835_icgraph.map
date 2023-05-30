@@ -1,0 +1,5 @@
+<map id="tmc5240_remove" name="tmc5240_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by the tmc5240_init()" alt="" coords="212,5,348,31"/>
+<area shape="rect" id="Node000002" href="$iio__tmc5240_8c.html#a37314b3164aea84500d7f45673bccea5" title="Free resources allocated by the init function." alt="" coords="5,5,164,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,21,164,21,164,15,198,15"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="projects/adv7511/src/edid.h" name="projects/adv7511/src/edid.h">
+<area shape="rect" id="Node000001" title="EDID control module header." alt="" coords="69,5,227,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,47,64,157,60,154,133,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="113,167,183,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,46,151,153,145,153,145,46"/>
+<area shape="rect" id="Node000004" href="$wrapper_8h.html" title=" " alt="" coords="199,93,286,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="173,43,219,82,216,86,169,48"/>
+<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="212,121,92,164,91,159,210,116"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="229,121,176,160,173,156,226,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="418,167,489,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="277,116,407,160,406,165,276,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="513,167,580,192"/>
+<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="287,114,500,164,499,169,286,120"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="207,167,278,192"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="245,119,245,153,240,153,240,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="303,167,393,192"/>
+<area shape="poly" id="edge9_Node000004_Node000008" title=" " alt="" coords="261,116,321,157,318,161,258,121"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ltc7871_get_mfr_idac_vhigh" name="ltc7871_get_mfr_idac_vhigh">
+<area shape="rect" id="Node000001" title="get the current DAC value to program the VHIGH voltage." alt="" coords="172,5,335,45"/>
+<area shape="rect" id="Node000002" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

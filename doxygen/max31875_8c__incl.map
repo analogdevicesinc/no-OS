@@ -1,0 +1,26 @@
+<map id="drivers/temperature/max31875/max31875.c" name="drivers/temperature/max31875/max31875.c">
+<area shape="rect" id="Node000001" title="Implementation of MAX31875 Driver." alt="" coords="112,5,291,45"/>
+<area shape="rect" id="Node000002" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,48,94,89,92,84,166,43"/>
+<area shape="rect" id="Node000004" href="$no__os__alloc_8h.html" title=" " alt="" coords="146,93,257,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="204,46,204,79,199,79,199,46"/>
+<area shape="rect" id="Node000007" href="$max31875_8h.html" title="Header file of MAX31875 Driver." alt="" coords="307,93,410,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="240,43,324,85,322,89,238,48"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="13,167,81,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="60,119,54,154,49,153,55,119"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="105,167,172,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="193,121,160,158,156,154,189,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="171,240,242,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="204,119,208,226,203,226,199,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="374,240,445,265"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="365,118,403,226,398,228,360,120"/>
+<area shape="rect" id="Node000009" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="429,167,528,192"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="379,116,448,157,446,162,377,121"/>
+<area shape="rect" id="Node000010" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="254,167,354,192"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="352,121,323,157,319,154,348,117"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="469,194,432,232,428,228,465,190"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="290,194,235,234,232,229,287,190"/>
+<area shape="poly" id="edge11_Node000010_Node000008" title=" " alt="" coords="322,190,382,230,380,235,319,194"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="267,240,349,265"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="307,192,309,226,304,227,302,192"/>
+</map>

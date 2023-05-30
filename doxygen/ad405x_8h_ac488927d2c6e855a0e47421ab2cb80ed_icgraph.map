@@ -1,0 +1,7 @@
+<map id="ad405x_set_data_format" name="ad405x_set_data_format">
+<area shape="rect" id="Node000001" title="Set output data format." alt="" coords="237,45,421,70"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#aaf0b06e579c7a4456f9b47f3e1f2cd29" title="Set ADC output data format as straight binary." alt="" coords="5,5,189,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,45,189,41,190,35,224,40"/>
+<area shape="rect" id="Node000003" href="$ad405x_8c.html#a6b35e858396e97762f3eadafdccdbf96" title="Set ADC output data format as two&#39;s complement." alt="" coords="5,69,189,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,75,190,79,189,74,223,69"/>
+</map>

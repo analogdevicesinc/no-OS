@@ -1,0 +1,22 @@
+<map id="drivers/platform/lattice/riscvrx_irq.c" name="drivers/platform/lattice/riscvrx_irq.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="173,5,345,45"/>
+<area shape="rect" id="Node000002" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="10,93,119,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,48,107,91,105,86,212,43"/>
+<area shape="rect" id="Node000004" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="283,167,379,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="271,45,322,153,318,155,266,47"/>
+<area shape="rect" id="Node000006" href="$no__os__alloc_8h.html" title=" " alt="" coords="157,93,268,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="250,47,229,83,224,80,246,44"/>
+<area shape="rect" id="Node000009" href="$riscvrx__irq_8h.html" title=" " alt="" coords="344,93,447,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="293,43,365,84,362,89,291,48"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,167,73,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="63,120,50,155,45,153,58,118"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="296,240,367,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="334,192,334,226,329,226,329,192"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="193,167,259,192"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="217,119,224,153,219,154,212,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="97,167,168,192"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="202,121,158,160,154,156,198,117"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="387,121,353,158,349,155,383,117"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="404,167,459,192"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="404,118,422,153,417,156,399,120"/>
+</map>

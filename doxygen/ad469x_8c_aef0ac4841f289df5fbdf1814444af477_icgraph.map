@@ -1,0 +1,9 @@
+<map id="ad469x_adv_sequence_set_num_slots" name="ad469x_adv_sequence_set_num_slots">
+<area shape="rect" id="Node000001" title="Configure advanced sequencer number of slots, temp channel not included." alt="" coords="551,5,721,45"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="319,13,503,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="537,28,503,28,503,23,537,23"/>
+<area shape="rect" id="Node000003" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="172,13,271,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="305,28,271,28,271,23,305,23"/>
+<area shape="rect" id="Node000004" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

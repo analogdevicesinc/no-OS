@@ -1,0 +1,13 @@
+<map id="projects/adin1320/src/platform/maxim/parameters.h" name="projects/adin1320/src/platform/maxim/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions used by the ADIN1320 project." alt="" coords="247,5,470,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,120,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="288,48,120,92,118,87,287,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="144,93,283,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="325,48,248,89,245,84,323,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="307,93,411,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,46,361,79,356,79,356,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="435,93,541,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="391,43,459,84,456,88,389,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="566,93,679,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="423,43,572,87,570,92,421,48"/>
+</map>

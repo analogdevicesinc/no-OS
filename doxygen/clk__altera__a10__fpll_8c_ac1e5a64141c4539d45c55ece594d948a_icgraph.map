@@ -1,0 +1,32 @@
+<map id="altera_a10_fpll_write" name="altera_a10_fpll_write">
+<area shape="rect" id="Node000001" title="altera_a10_fpll_write" alt="" coords="800,159,959,185"/>
+<area shape="rect" id="Node000002" href="$clk__altera__a10__fpll_8c.html#ad89f1fb9c78d601eaa042315551f6472" title="altera_a10_acquire_arbitration" alt="" coords="593,69,740,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="832,157,718,112,720,107,834,152"/>
+<area shape="rect" id="Node000004" href="$clk__altera__a10__fpll_8c.html#a8174d4dc2a66720898b92f4fafe84d55" title="altera_a10_fpll_set_rate" alt="" coords="355,134,533,159"/>
+<area shape="poly" id="edge14_Node000001_Node000004" title=" " alt="" coords="786,179,687,180,581,175,500,162,501,157,582,169,688,175,786,174"/>
+<area shape="rect" id="Node000008" href="$clk__altera__a10__fpll_8c.html#ad490d7605c5b8ffce221e072c80f3f34" title="altera_a10_fpll_disable" alt="" coords="357,258,531,283"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="828,191,753,213,632,240,523,261,522,255,631,235,751,208,827,186"/>
+<area shape="rect" id="Node000009" href="$clk__altera__a10__fpll_8c.html#ad89d3f8558ae0623aab208de7425dc4c" title="altera_a10_fpll_enable" alt="" coords="359,209,529,234"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="787,185,530,214,529,209,786,180"/>
+<area shape="rect" id="Node000010" href="$clk__altera__a10__fpll_8c.html#accde143d2b5b297d33cdc2720a90dcbb" title="altera_a10_fpll_update" alt="" coords="581,134,752,159"/>
+<area shape="poly" id="edge15_Node000001_Node000010" title=" " alt="" coords="786,164,752,159,753,154,787,158"/>
+<area shape="rect" id="Node000011" href="$clk__altera__a10__fpll_8c.html#ae1f8857e19f6a25bf5ff51742e479dde" title="altera_a10_release_arbitration" alt="" coords="593,5,740,45"/>
+<area shape="poly" id="edge17_Node000001_Node000011" title=" " alt="" coords="856,151,810,105,751,60,728,48,730,43,753,55,814,101,860,147"/>
+<area shape="rect" id="Node000003" href="$clk__altera__a10__fpll_8c.html#a58ce7ef2b7a816eeeb0e1a4b082313ea" title="altera_a10_fpll_recalc_rate" alt="" coords="108,77,307,102"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="579,92,307,92,307,87,579,87"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="581,114,495,137,494,131,579,109"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="377,133,260,105,261,99,378,128"/>
+<area shape="rect" id="Node000005" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="155,233,259,258"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="410,169,308,224,261,238,259,233,306,219,408,164"/>
+<area shape="rect" id="Node000007" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="180,183,235,209"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="370,165,236,193,234,188,369,160"/>
+<area shape="rect" id="Node000006" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,233,60,258"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="142,248,60,248,60,243,142,243"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="343,263,259,253,260,248,344,257"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="375,257,354,249,329,236,306,224,234,204,236,198,308,219,332,232,356,244,377,252"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="345,234,260,243,259,237,345,229"/>
+<area shape="poly" id="edge13_Node000009_Node000007" title=" " alt="" coords="344,213,235,202,235,196,345,208"/>
+<area shape="poly" id="edge16_Node000010_Node000004" title=" " alt="" coords="567,149,534,149,534,144,567,144"/>
+<area shape="poly" id="edge18_Node000011_Node000003" title=" " alt="" coords="580,40,300,79,299,74,579,35"/>
+<area shape="poly" id="edge19_Node000011_Node000004" title=" " alt="" coords="596,53,583,60,516,100,464,136,461,132,513,95,580,55,594,48"/>
+</map>

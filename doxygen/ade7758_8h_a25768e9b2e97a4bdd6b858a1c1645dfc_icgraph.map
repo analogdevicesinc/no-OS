@@ -1,0 +1,7 @@
+<map id="ade7758_freq_source" name="ade7758_freq_source">
+<area shape="rect" id="Node000001" title="Select the source of the measurement of the voltage line frequency." alt="" coords="277,5,439,31"/>
+<area shape="rect" id="Node000002" href="$ade7758_8c.html#ad643b16ba67d694a04b326f1df0a3820" title="Setup the ADE7758 device." alt="" coords="108,5,229,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="263,21,230,21,230,15,263,15"/>
+<area shape="rect" id="Node000003" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

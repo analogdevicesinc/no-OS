@@ -1,0 +1,15 @@
+<map id="MYKONOS_jesdIndWrReg" name="MYKONOS_jesdIndWrReg">
+<area shape="rect" id="Node000001" title="Performs indirect write access to internal JESD register." alt="" coords="296,129,481,155"/>
+<area shape="rect" id="Node000002" href="$mykonos__dbgjesd_8c.html#a46d8bad0f70af7036b69a764ff3af474" title="Performs read back of the error counters for selected lane of the JESD Deframer." alt="" coords="18,5,235,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="362,122,311,82,280,62,247,44,214,33,215,28,249,40,283,57,315,78,366,118"/>
+<area shape="rect" id="Node000003" href="$mykonos__dbgjesd_8c.html#a8b865a314a7edb880dc33bc006d80fd5" title="Performs reset of the selected error type for the selected lane." alt="" coords="16,55,237,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,127,247,94,200,83,201,77,249,89,345,122"/>
+<area shape="rect" id="Node000004" href="$mykonos__dbgjesd_8c.html#a30559c3aa409a3c64cfb131af10cb4d0" title="Performs reset of the selected error type IRQ for the given lane." alt="" coords="21,104,232,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="282,134,232,130,233,124,282,129"/>
+<area shape="rect" id="Node000005" href="$mykonos__dbgjesd_8c.html#aec2eef66b448eef9f087c4301607acc6" title="Performs set JESD Deframer error thresholds." alt="" coords="15,153,238,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="283,154,238,158,238,153,282,149"/>
+<area shape="rect" id="Node000006" href="$mykonos__dbgjesd_8c.html#aa8ea3dbf437e2bf88240574652c30d3e" title="Performs set JESD Deframer IRQ mask that will be used to generates interrupts." alt="" coords="13,203,241,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="342,162,249,193,196,205,195,200,247,187,341,157"/>
+<area shape="rect" id="Node000007" href="$mykonos__dbgjesd_8c.html#a95cdbc77cc5bb09515099181e0b2ea58" title="Performs set JESD Deframer Sync mask." alt="" coords="5,252,248,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="365,166,314,205,249,242,211,254,209,249,247,237,311,201,361,162"/>
+</map>

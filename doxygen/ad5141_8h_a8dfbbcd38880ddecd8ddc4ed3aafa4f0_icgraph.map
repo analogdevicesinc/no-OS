@@ -1,0 +1,5 @@
+<map id="ad5141_dpot_shutdown" name="ad5141_dpot_shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the AD5141 digital potentiometer channel." alt="" coords="188,5,364,31"/>
+<area shape="rect" id="Node000002" href="$ad5141_8c.html#af112ac33db934f34c57aac2f0705d744" title="Initialize the AD5141 digital potentiometer." alt="" coords="5,5,140,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,21,140,21,140,15,174,15"/>
+</map>

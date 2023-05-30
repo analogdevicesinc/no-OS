@@ -1,0 +1,17 @@
+<map id="no_os_i3c_addr_set_status" name="no_os_i3c_addr_set_status">
+<area shape="rect" id="Node000001" title="Set status of an address." alt="" coords="916,35,1065,75"/>
+<area shape="rect" id="Node000002" href="$stm32__i3c_8c.html#acb7fd673626d22c159a56f5d9efdc703" title="I3C target request a dynamic address callback. When called, assigns a dynamic address to the target." alt="" coords="651,5,868,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="902,46,868,42,869,36,903,41"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#a1a8b6ccd9d5a915e699054af2a8e3f68" title="Initialize the I3C bus." alt="" coords="687,70,831,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="902,68,832,77,831,71,902,63"/>
+<area shape="rect" id="Node000004" href="$no__os__i3c_8c.html#ab54a357ab3d63706a3fbe455a4cd6fd8" title="Initialize the I3C device. If the bus of the I3C device is not initialized, it will call to init it." alt="" coords="488,70,603,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="673,85,603,85,603,80,673,80"/>
+<area shape="rect" id="Node000005" href="$ad405x_8c.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the communication device." alt="" coords="341,70,440,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="474,85,440,85,440,80,474,80"/>
+<area shape="rect" id="Node000006" href="$iio__ad405x_8c.html#a25e5b9b70c0d01d27fb470e006568145" title="Initializes the AD405X IIO driver." alt="" coords="172,45,293,70"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="327,75,293,70,294,64,328,70"/>
+<area shape="rect" id="Node000008" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="173,94,292,119"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="328,95,292,100,292,95,327,90"/>
+<area shape="rect" id="Node000007" href="$ad405x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,45,124,70"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="158,60,124,60,124,55,158,55"/>
+</map>

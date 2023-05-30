@@ -1,0 +1,5 @@
+<map id="ltc2992_get_power" name="ltc2992_get_power">
+<area shape="rect" id="Node000001" title="Read bus power output in a sense channel." alt="" coords="232,5,377,31"/>
+<area shape="rect" id="Node000002" href="$ltc2992_8c.html#a147e8309fe1977bd08409f5c17f83324" title="Read sense data at a SENSE channel." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,21,184,21,184,15,218,15"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="adxl355_get_sts_reg" name="adxl355_get_sts_reg">
+<area shape="rect" id="Node000001" title="Reads the status register value." alt="" coords="539,31,695,56"/>
+<area shape="rect" id="Node000002" href="$adxl355_8c.html#a71f7b8a40d6c14dad5998c5aa0e87753" title="Performs a soft reset of the device." alt="" coords="345,5,491,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="525,34,491,30,491,25,525,29"/>
+<area shape="rect" id="Node000005" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="175,55,294,80"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="525,52,294,66,294,61,525,46"/>
+<area shape="rect" id="Node000003" href="$iio__adxl355_8c.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="172,5,297,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="332,21,298,21,298,15,332,15"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="358,37,284,57,282,52,356,32"/>
+<area shape="rect" id="Node000004" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,21,124,21,124,15,159,15"/>
+</map>

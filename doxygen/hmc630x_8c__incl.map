@@ -1,0 +1,29 @@
+<map id="drivers/rf&#45;transceiver/hmc630x/hmc630x.c" name="drivers/rf&#45;transceiver/hmc630x/hmc630x.c">
+<area shape="rect" id="Node000001" title="hmc6300 and hmc6301 device driver implementation." alt="" coords="137,5,299,45"/>
+<area shape="rect" id="Node000002" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,93,73,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,48,79,90,77,85,174,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="127,240,197,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,47,171,68,154,94,145,129,145,164,156,226,151,227,140,165,140,128,149,92,166,65,189,44"/>
+<area shape="rect" id="Node000004" href="$hmc630x_8h.html" title="hmc6300 and hmc6301 device driver header." alt="" coords="485,93,580,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="294,43,474,87,473,93,293,48"/>
+<area shape="rect" id="Node000009" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="291,167,404,192"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="241,44,288,92,335,154,330,157,284,95,237,48"/>
+<area shape="rect" id="Node000010" href="$no__os__alloc_8h.html" title=" " alt="" coords="163,93,273,119"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="221,46,221,79,215,79,215,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="663,240,746,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="581,105,618,109,657,119,695,137,726,165,732,181,732,197,722,229,717,227,727,197,727,182,721,168,692,141,656,124,617,114,580,110"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="452,240,523,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="514,121,489,141,470,168,466,182,467,198,477,227,472,229,462,199,461,182,465,166,486,137,511,117"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="611,167,711,192"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="555,116,629,157,626,162,552,121"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="479,167,586,192"/>
+<area shape="poly" id="edge10_Node000004_Node000008" title=" " alt="" coords="535,119,535,153,530,153,530,119"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="611,193,598,195,383,226,212,248,211,243,382,221,598,189,610,187"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="670,191,693,227,688,230,666,194"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="634,194,529,237,527,232,632,190"/>
+<area shape="poly" id="edge11_Node000008_Node000006" title=" " alt="" coords="527,194,504,230,500,227,523,191"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="371,190,454,231,451,236,369,194"/>
+<area shape="poly" id="edge16_Node000010_Node000003" title=" " alt="" coords="214,120,190,168,171,227,166,226,185,166,209,118"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="199,167,266,192"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="223,118,230,153,225,154,218,120"/>
+</map>

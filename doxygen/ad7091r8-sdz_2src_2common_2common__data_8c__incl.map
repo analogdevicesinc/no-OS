@@ -1,0 +1,18 @@
+<map id="projects/ad7091r8&#45;sdz/src/common/common_data.c" name="projects/ad7091r8&#45;sdz/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by ad7091r8&#45;sdz example." alt="" coords="15,5,230,45"/>
+<area shape="rect" id="Node000002" href="$ad7091r8-sdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad7091r8&#45;sdz examples." alt="" coords="59,93,186,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,46,125,79,120,79,120,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,121,81,158,77,154,110,117"/>
+<area shape="rect" id="Node000004" href="$ad7091r8_8h.html" title="Implementation of AD7091R&#45;8 driver header file." alt="" coords="139,167,234,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="135,117,169,155,165,158,131,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="31,240,113,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="170,194,104,235,101,230,167,190"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="137,240,236,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="189,192,189,226,184,226,184,192"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="260,240,367,265"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="208,190,282,231,279,235,206,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="214,313,285,339"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="199,264,232,301,228,305,195,267"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="305,267,271,305,267,301,301,264"/>
+</map>

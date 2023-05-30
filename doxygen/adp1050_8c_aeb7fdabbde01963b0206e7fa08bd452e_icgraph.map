@@ -1,0 +1,13 @@
+<map id="adp1050_send_command" name="adp1050_send_command">
+<area shape="rect" id="Node000001" title="Send command byte/word to ADP1050." alt="" coords="567,31,755,56"/>
+<area shape="rect" id="Node000002" href="$adp1050_8c.html#a81f834b12dccd706de08f2c3d6f1c83f" title="Change the CHIP/EEPROM password. TRIM password is the same with EEPROM password." alt="" coords="349,5,519,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="553,34,518,30,519,25,553,29"/>
+<area shape="rect" id="Node000003" href="$adp1050_8c.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="381,55,487,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="553,57,488,64,487,59,553,52"/>
+<area shape="rect" id="Node000004" href="$iio__adp1050_8c.html#a982ad0e9e00139947e5d52eacc4f1eb0" title="Initializes the ADP1050 IIO descriptor." alt="" coords="172,29,301,55"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="367,61,301,53,302,48,367,56"/>
+<area shape="rect" id="Node000006" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="177,79,296,104"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="367,78,296,87,296,82,366,73"/>
+<area shape="rect" id="Node000005" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,29,124,55"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,45,124,45,124,39,158,39"/>
+</map>

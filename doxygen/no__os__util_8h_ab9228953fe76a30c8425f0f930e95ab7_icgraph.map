@@ -1,0 +1,27 @@
+<map id="no_os_put_unaligned_le64" name="no_os_put_unaligned_le64">
+<area shape="rect" id="Node000001" title=" " alt="" coords="609,269,804,294"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#ad7cd32bb2965850b80bf71de369cfe99" title="Set configuration value by key." alt="" coords="397,173,535,198"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="660,266,498,201,500,196,662,261"/>
+<area shape="rect" id="Node000010" href="$nmea__ubx_8c.html#a25d49ef35c2804874d1b9c2be36e915e" title="Set configuration value by key (no ACK version)" alt="" coords="371,333,561,358"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="645,300,516,335,514,330,644,295"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx_8c.html#a43ec1437613ea72d6ad616f3e49a0af3" title="Configure UBX device baudrate via UBX commands." alt="" coords="168,69,319,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="424,169,322,124,293,112,295,107,324,119,426,164"/>
+<area shape="rect" id="Node000005" href="$nmea__ubx_8c.html#af0e61c0a0d26cbe7021123bfacda1c26" title="Configure time pulse output for PPS (Pulse Per Second)" alt="" coords="168,5,319,45"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="442,164,390,113,357,85,321,60,299,48,302,43,324,55,360,81,393,109,446,161"/>
+<area shape="rect" id="Node000007" href="$nmea__ubx_8c.html#aa20dbcad395a7b20362f3972e726d093" title="Configure input protocol on UART2." alt="" coords="168,133,319,173"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,176,318,167,319,161,384,171"/>
+<area shape="rect" id="Node000008" href="$nmea__ubx_8c.html#aac8c066aca7e03a65e43339e6b15b6fe" title="Configure output protocol on UART2." alt="" coords="164,197,323,237"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="384,200,323,209,323,203,383,195"/>
+<area shape="rect" id="Node000009" href="$nmea__ubx_8c.html#a8d9fe740145f9d16b909e9a1efc18c64" title="Configure output protocol USB." alt="" coords="164,261,323,301"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="426,206,324,252,295,264,293,259,322,247,424,201"/>
+<area shape="rect" id="Node000004" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="21,333,101,358"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="170,119,166,123,144,148,125,177,95,237,77,293,67,333,62,332,72,291,90,235,120,174,139,145,162,119,167,115"/>
+<area shape="rect" id="Node000006" href="$nmea__ubx_8c.html#a03999543f1b814e2548735c119cf9da8" title="Configure PPS output with optimal settings for timing sync." alt="" coords="5,13,116,38"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="154,28,116,28,116,23,154,23"/>
+<area shape="rect" id="Node000011" href="$nmea__ubx_8c.html#a3a649d0be518d41dded0bf650394911a" title="Configure input protocol on UART1." alt="" coords="168,325,319,365"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="356,348,319,348,319,343,356,343"/>
+<area shape="rect" id="Node000012" href="$nmea__ubx_8c.html#aa6ba062bfb5f5a374cdf0676f3c0e8e3" title="Configure output protocol on UART1." alt="" coords="164,389,323,429"/>
+<area shape="poly" id="edge12_Node000010_Node000012" title=" " alt="" coords="408,365,314,392,313,387,407,359"/>
+<area shape="poly" id="edge11_Node000011_Node000004" title=" " alt="" coords="154,348,101,348,101,343,154,343"/>
+<area shape="poly" id="edge13_Node000012_Node000004" title=" " alt="" coords="172,387,97,361,99,356,174,382"/>
+</map>

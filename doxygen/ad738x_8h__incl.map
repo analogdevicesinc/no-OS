@@ -1,0 +1,14 @@
+<map id="drivers/adc/ad738x/ad738x.h" name="drivers/adc/ad738x/ad738x.h">
+<area shape="rect" id="Node000001" title="Header file for AD738x Driver." alt="" coords="43,5,189,45"/>
+<area shape="rect" id="Node000002" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="129,93,229,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,44,163,81,159,84,129,47"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,93,104,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="103,47,74,84,70,81,99,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="34,167,105,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="163,121,100,161,97,157,160,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="135,167,206,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="180,119,176,153,171,153,175,119"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="231,167,313,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="195,117,248,156,244,160,192,121"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="60,118,67,153,62,154,54,120"/>
+</map>

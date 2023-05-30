@@ -1,0 +1,15 @@
+<map id="drivers/digital&#45;io/max149x6/iio_max14906.h" name="drivers/digital&#45;io/max149x6/iio_max14906.h">
+<area shape="rect" id="Node000001" title="Header file of MAX14906 IIO Driver." alt="" coords="373,5,576,45"/>
+<area shape="rect" id="Node000002" href="$iio__max14906_8c.html" title="Source file of IIO MAX14906 Driver." alt="" coords="5,93,208,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="381,51,188,96,187,91,380,46"/>
+<area shape="rect" id="Node000003" href="$max14906_2src_2examples_2iio_2iio__example_8c.html" title="Source file for iio example." alt="" coords="232,93,437,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="434,55,367,96,364,91,431,50"/>
+<area shape="rect" id="Node000004" href="$swiot_8c.html" title="Source file for the swiot IIO driver." alt="" coords="426,181,574,221"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="482,59,500,181,495,182,477,59"/>
+<area shape="rect" id="Node000005" href="$swiot_8h.html" title="Header file for the swiot IIO device." alt="" coords="513,93,661,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="512,52,563,91,560,95,509,56"/>
+<area shape="rect" id="Node000006" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="611,181,759,221"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="590,40,636,60,656,74,674,92,686,113,692,138,691,181,686,181,686,138,681,115,670,95,653,78,633,64,588,45"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="560,145,521,183,517,179,556,141"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="620,140,665,179,662,183,617,144"/>
+</map>

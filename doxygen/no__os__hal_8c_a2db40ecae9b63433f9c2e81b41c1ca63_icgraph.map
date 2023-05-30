@@ -1,0 +1,14 @@
+<map id="ADIHAL_spiWriteByte" name="ADIHAL_spiWriteByte">
+<area shape="rect" id="Node000001" title="Performs a Single SPI write to an ADI Device." alt="" coords="327,80,489,105"/>
+<area shape="rect" id="Node000002" href="$no__os__hal_8c.html#a1572b179e6c7ecb86c7d50d561274644" title="Writes an array of SPI writes to an ADI Device." alt="" coords="109,5,278,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="363,77,278,45,242,33,243,28,280,39,365,72"/>
+<area shape="rect" id="Node000003" href="$no__os__hal_8c.html#afa9b91010b66b76980d6f69353c99c01" title="Performs a write to the specified field in a SPI register." alt="" coords="112,55,275,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="313,84,275,80,275,74,313,79"/>
+<area shape="rect" id="Node000004" href="$app__talise_8c.html#a51c2ee9f37b849d981c6de38835f5eca" title=" " alt="" coords="108,104,279,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,106,279,110,279,104,313,101"/>
+<area shape="rect" id="Node000006" href="$app__talise_8c.html#a887ab26824e71cac7ea00bd35ab73c18" title=" " alt="" coords="143,153,244,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="363,113,280,143,240,156,238,151,278,138,361,108"/>
+<area shape="rect" id="Node000005" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,129,60,155"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="100,134,61,140,60,135,99,129"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="129,159,60,149,61,143,129,154"/>
+</map>

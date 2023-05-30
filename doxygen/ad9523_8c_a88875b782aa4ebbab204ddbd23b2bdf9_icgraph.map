@@ -1,0 +1,17 @@
+<map id="ad9523_spi_read" name="ad9523_spi_read">
+<area shape="rect" id="Node000001" title="Reads the value of the selected register." alt="" coords="379,107,511,132"/>
+<area shape="rect" id="Node000002" href="$ad9523_8c.html#ac41178e43b273796df05a276108302c9" title="Updates the AD9523 configuration." alt="" coords="181,5,316,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="412,101,329,52,285,33,287,28,332,48,415,97"/>
+<area shape="rect" id="Node000003" href="$ad9523_8c.html#af26d0ef1d15ebc7f6ea3f4dc5317e3c7" title="Setup the AD9523 device." alt="" coords="5,107,119,132"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="384,106,330,97,249,90,167,97,106,109,105,104,166,91,249,85,331,91,385,101"/>
+<area shape="rect" id="Node000004" href="$ad9523_8c.html#aee8468725cd1a4754b570e2afccf9b72" title="Updates the AD9523 configuration." alt="" coords="190,107,307,132"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="365,122,308,122,308,117,365,117"/>
+<area shape="rect" id="Node000005" href="$ad9523_8c.html#a67f744ae8790aa813acaf25574620ea4" title="Updates the AD9523 configuration." alt="" coords="195,156,302,181"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="381,138,301,159,299,153,380,133"/>
+<area shape="rect" id="Node000006" href="$ad9523_8c.html#ac425d68f7e56d755004f9bc503c41967" title="Sets the clock provider for selected channel." alt="" coords="167,205,331,231"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="417,142,378,169,332,195,299,208,297,203,330,190,375,165,414,138"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="199,38,168,52,120,81,81,109,78,104,117,77,165,48,197,33"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="176,122,119,122,119,117,176,117"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="186,155,111,135,112,130,188,150"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="184,203,165,195,115,164,76,134,80,130,118,160,168,190,186,198"/>
+</map>

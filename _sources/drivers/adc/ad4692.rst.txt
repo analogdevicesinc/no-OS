@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/adc/ad4692/README.rst

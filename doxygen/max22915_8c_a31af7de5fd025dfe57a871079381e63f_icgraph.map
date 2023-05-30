@@ -1,0 +1,24 @@
+<map id="max22915_reg_write_mask" name="max22915_reg_write_mask">
+<area shape="rect" id="Node000001" title="Write register data to MAX22915 with mask." alt="" coords="593,163,796,189"/>
+<area shape="rect" id="Node000002" href="$max22915_8c.html#ab678e1fd3c1e167b565c6d56455ec29d" title="Set the current measurement configuration." alt="" coords="357,5,527,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="669,156,615,107,580,82,544,60,518,48,520,43,547,55,583,78,618,103,673,152"/>
+<area shape="rect" id="Node000005" href="$max22915_8c.html#ad258c4014620c60e4d289805e22a002d" title="Set the open&#45;wire off detection configuration for a channel." alt="" coords="361,69,523,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="646,161,544,124,508,112,510,107,546,119,648,156"/>
+<area shape="rect" id="Node000006" href="$max22915_8c.html#ac7b68b9a804772ed12c4acbe50b431a5" title="Set the open&#45;wire on detection configuration for a channel." alt="" coords="339,134,545,159"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="579,165,545,161,546,156,580,160"/>
+<area shape="rect" id="Node000007" href="$max22915_8c.html#a47a284d4eda8a1b25ccc4236a1bbb770" title="Set the short to VDD detection configuration for a channel." alt="" coords="360,184,524,224"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="580,191,524,198,524,192,579,186"/>
+<area shape="rect" id="Node000008" href="$max22915_8c.html#aea84ddc6096987363aa273809111b472" title="Set the switch state of a channel." alt="" coords="351,249,533,274"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="654,197,546,239,502,251,500,246,544,233,652,192"/>
+<area shape="rect" id="Node000009" href="$max22915_8c.html#a24da66f4835ebb76fc11833aa3567a7f" title="Set the temperature measurement configuration." alt="" coords="339,299,545,339"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="671,200,616,244,547,288,516,301,514,296,544,283,613,239,668,196"/>
+<area shape="rect" id="Node000003" href="$max22915_8c.html#aa9952bcc9e570e622093d82d48b17885" title="Initialize and configure the MAX22915 device." alt="" coords="172,163,291,189"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,54,340,60,308,85,281,114,243,165,238,162,277,110,305,81,337,55,348,49"/>
+<area shape="rect" id="Node000004" href="$max22915_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,163,124,189"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,179,124,179,124,173,158,173"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="359,116,340,124,256,166,254,161,338,119,357,111"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="338,164,291,170,291,165,337,159"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="346,194,291,187,292,181,346,189"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="364,247,338,238,289,215,250,191,253,186,292,210,340,234,366,242"/>
+<area shape="poly" id="edge13_Node000009_Node000003" title=" " alt="" coords="351,295,337,288,306,264,278,237,240,190,244,187,282,234,310,260,340,283,354,291"/>
+</map>

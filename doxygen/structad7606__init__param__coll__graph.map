@@ -1,0 +1,29 @@
+<map id="ad7606_init_param" name="ad7606_init_param">
+<area shape="rect" id="Node000001" title="Device driver initialization parameters." alt="" coords="1309,318,1456,343"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,86,1125,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1139,88,1176,91,1215,97,1253,109,1287,128,1310,149,1329,173,1357,227,1374,279,1382,317,1377,318,1369,280,1352,229,1324,176,1306,153,1284,133,1250,114,1214,102,1176,96,1139,94"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,49,184,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="194,44,319,30,475,20,647,18,734,23,819,32,872,42,924,55,1009,83,1008,88,923,61,871,47,818,37,734,28,647,24,476,25,320,36,194,50"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,86,786,111"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,63,607,85,663,90,663,95,606,91,198,68"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,110,471,135"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,76,209,92,324,112,323,117,207,97,147,81"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,163,472,203"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,175,606,165,808,138,975,109,976,114,809,143,607,171,486,181"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,162,606,133,685,109,687,114,607,139,486,168"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="800,96,962,96,962,101,800,101"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="693,71,702,63,725,59,743,62,755,68,758,78,752,87,747,84,752,77,751,71,742,67,725,65,705,68,696,75"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,114,663,100,663,106,484,119"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,242,1129,267"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1143,263,1214,275,1286,291,1354,315,1352,320,1285,296,1213,280,1143,268"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,242,819,267"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="832,252,957,252,957,257,832,257"/>
+<area shape="rect" id="Node000009" href="$structad7606__oversampling.html" title=" " alt="" coords="960,291,1127,317"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1141,309,1309,322,1309,328,1140,314"/>
+<area shape="rect" id="Node000010" href="$structad7606__config.html" title="AD7606_REG_CONFIG configuration parameters." alt="" coords="985,341,1101,366"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1115,353,1197,353,1285,348,1329,341,1330,346,1286,353,1197,359,1115,359"/>
+<area shape="rect" id="Node000011" href="$structad7606__digital__diag.html" title="Oversampling settings." alt="" coords="967,390,1120,415"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="1134,398,1208,391,1285,375,1325,359,1359,341,1362,346,1327,364,1286,380,1209,396,1134,403"/>
+<area shape="rect" id="Node000012" href="$structad7606__range.html" title="Operation range as specified in datasheet (in uV)" alt="" coords="986,439,1101,465"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1114,451,1198,443,1242,433,1284,418,1311,401,1335,381,1370,342,1374,345,1339,385,1314,406,1286,422,1244,438,1199,449,1115,456"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="drivers/platform/linux/linux_uart.h" name="drivers/platform/linux/linux_uart.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="349,5,512,45"/>
+<area shape="rect" id="Node000002" href="$linux__uart_8c.html" title="Implementation of Linux platform UART Driver." alt="" coords="5,93,168,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="343,51,163,96,161,91,341,46"/>
+<area shape="rect" id="Node000003" href="$eval-adis1647x_2src_2platform_2linux_2parameters_8h.html" title="Definitions specific to Linux platform used by eval&#45;adis1647x project." alt="" coords="192,93,424,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="394,55,337,95,334,91,391,51"/>
+<area shape="rect" id="Node000005" href="$max14916_2src_2platform_2linux_2parameters_8h.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="449,93,658,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,51,528,91,525,95,467,55"/>
+<area shape="rect" id="Node000008" href="$max31827-evkit_2src_2platform_2linux_2parameters_8h.html" title=" " alt="" coords="779,93,1011,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="526,41,794,91,793,96,525,47"/>
+<area shape="rect" id="Node000004" href="$eval-adis1647x_2src_2platform_2linux_2parameters_8c.html" title="Definition of Linux platform data used by eval&#45;adis1647x project." alt="" coords="145,181,375,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="293,147,273,182,268,180,288,144"/>
+<area shape="rect" id="Node000006" href="$max14916_2src_2platform_2linux_2main_8c.html" title="Main file for FTD2XX platform of max14916 project." alt="" coords="400,181,571,221"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="532,146,502,183,498,179,528,143"/>
+<area shape="rect" id="Node000007" href="$max14916_2src_2platform_2linux_2parameters_8c.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="595,181,803,221"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="599,138,668,179,665,184,596,143"/>
+<area shape="rect" id="Node000009" href="$max31827-evkit_2src_2platform_2linux_2parameters_8c.html" title=" " alt="" coords="827,181,1058,221"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="914,144,934,180,930,182,910,147"/>
+</map>

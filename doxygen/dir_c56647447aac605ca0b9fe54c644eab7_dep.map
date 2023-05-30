@@ -1,0 +1,19 @@
+<map id="projects/eval&#45;ublox&#45;gnss/src" name="projects/eval&#45;ublox&#45;gnss/src">
+<area shape="rect" id="node5" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="25,136,92,161"/>
+<area shape="poly" id="edge1" href="dir_001275_000532.html" alt="" coords="61,88,61,122,56,122,56,88"/>
+<area shape="rect" id="edge1-headlabel" href="dir_001275_000532.html" title="2" alt="" coords="62,110,72,125"/>
+<area shape="rect" id="node6" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="116,136,185,161"/>
+<area shape="poly" id="edge2" href="dir_001275_000788.html" alt="" coords="71,86,92,107,119,126,116,131,89,111,67,90"/>
+<area shape="rect" id="edge2-headlabel" href="dir_001275_000788.html" title="14" alt="" coords="110,112,127,126"/>
+<area shape="rect" id="node2" href="dir_b720dbd4eca26aebbe0ca8a5c4761863.html" title="common" alt="" coords="206,63,285,88"/>
+<area shape="rect" id="node3" href="dir_9ee65e1c98282ed2ed37be1b205ad900.html" title="interrupt" alt="" coords="103,63,182,88"/>
+<area shape="poly" id="edge3" href="dir_000797_000532.html" alt="" coords="131,90,85,129,81,125,127,86"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000797_000532.html" title="1" alt="" coords="87,123,96,138"/>
+<area shape="poly" id="edge4" href="dir_000797_000788.html" alt="" coords="147,88,151,122,145,123,141,89"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000797_000788.html" title="2" alt="" coords="151,110,160,124"/>
+<area shape="rect" id="node4" href="dir_84595596e913157b4d56a27540c7ad4a.html" title="platform" alt="" coords="309,63,387,88"/>
+<area shape="poly" id="edge5" href="dir_001102_000788.html" alt="" coords="335,90,298,112,248,130,199,142,198,136,246,124,296,107,332,86"/>
+<area shape="rect" id="edge5-headlabel" href="dir_001102_000788.html" title="5" alt="" coords="200,139,210,154"/>
+<area shape="rect" id="clust2" href="dir_c56647447aac605ca0b9fe54c644eab7.html" alt="" coords="27,52,399,99"/>
+<area shape="rect" id="clust1" href="dir_5678a72948f6bda57afee86018e58a9b.html" title="eval&#45;ublox&#45;gnss" alt="" coords="16,16,409,109"/>
+</map>

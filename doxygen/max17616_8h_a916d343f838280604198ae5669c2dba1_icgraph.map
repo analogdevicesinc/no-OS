@@ -1,0 +1,15 @@
+<map id="max17616_set_overcurrent_timeout" name="max17616_set_overcurrent_timeout">
+<area shape="rect" id="Node000001" title="Set short&#45;term overcurrent duration." alt="" coords="784,27,984,67"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#ae528f14d22238257654456118c44fe34" title="Write attribute function for MAX17616 output channels." alt="" coords="541,5,725,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="770,37,725,31,725,26,771,31"/>
+<area shape="rect" id="Node000003" href="$max17616_8c.html#a2dc36cd7da3e0bb2c5e9da6294225946" title="Set manufacturer&#45;specific configuration." alt="" coords="529,55,736,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="771,63,737,66,736,61,770,57"/>
+<area shape="rect" id="Node000004" href="$max17616_8c.html#aac638b2e6fc52133d47fd48c45f09a99" title="Initialize the device structure." alt="" coords="363,63,481,88"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="515,78,482,78,482,73,515,73"/>
+<area shape="rect" id="Node000005" href="$max17616_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="184,37,303,63"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="349,68,302,61,303,56,350,62"/>
+<area shape="rect" id="Node000006" href="$iio__max17616_8c.html#a47cdfba4d1631ec72a43507e9cf8bcea" title="Initializes the MAX17616 IIO descriptor." alt="" coords="172,87,315,112"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="349,88,315,92,315,87,349,82"/>
+<area shape="rect" id="Node000007" href="$max17616_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,87,124,112"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="159,102,125,102,125,97,159,97"/>
+</map>

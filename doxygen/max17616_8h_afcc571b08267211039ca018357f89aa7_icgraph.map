@@ -1,0 +1,9 @@
+<map id="max17616_init" name="max17616_init">
+<area shape="rect" id="Node000001" title="Initialize the device structure." alt="" coords="363,31,481,56"/>
+<area shape="rect" id="Node000002" href="$max17616_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="184,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="349,36,302,29,303,24,350,30"/>
+<area shape="rect" id="Node000003" href="$iio__max17616_8c.html#a47cdfba4d1631ec72a43507e9cf8bcea" title="Initializes the MAX17616 IIO descriptor." alt="" coords="172,55,315,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="349,56,315,60,315,55,349,50"/>
+<area shape="rect" id="Node000004" href="$max17616_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,70,125,70,125,65,159,65"/>
+</map>

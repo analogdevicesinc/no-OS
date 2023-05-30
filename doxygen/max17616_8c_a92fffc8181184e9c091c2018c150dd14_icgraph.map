@@ -1,0 +1,5 @@
+<map id="max17616_read_capability" name="max17616_read_capability">
+<area shape="rect" id="Node000001" title="Read device capability register." alt="" coords="280,5,479,31"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#a0a0fb393a4d6b635c08d32c00982af2c" title="Read global attribute function for MAX17616 IIO device." alt="" coords="5,5,232,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,21,232,21,232,15,266,15"/>
+</map>

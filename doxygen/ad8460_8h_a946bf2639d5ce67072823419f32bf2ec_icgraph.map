@@ -1,0 +1,7 @@
+<map id="ad8460_set_hvdac_word" name="ad8460_set_hvdac_word">
+<area shape="rect" id="Node000001" title="Set the value of a high voltage DAC word." alt="" coords="205,31,388,56"/>
+<area shape="rect" id="Node000002" href="$ad8460_8c.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="5,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,34,157,30,158,24,192,28"/>
+<area shape="rect" id="Node000003" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="22,55,141,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,58,141,63,141,58,192,52"/>
+</map>

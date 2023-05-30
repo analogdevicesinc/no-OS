@@ -1,0 +1,22 @@
+<map id="projects/dc2903a/src/common/common_data.c" name="projects/dc2903a/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by DC2903A examples." alt="" coords="25,5,215,45"/>
+<area shape="rect" id="Node000002" href="$dc2903a_2src_2common_2common__data_8h.html" title="Defines common data to be used by DC2903A examples." alt="" coords="57,93,183,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,46,123,79,117,79,117,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,121,81,158,76,154,108,117"/>
+<area shape="rect" id="Node000004" href="$ltc2672_8h.html" title="Header file of ltc2672 Driver." alt="" coords="139,167,221,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="132,117,164,154,159,158,128,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="49,313,119,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="139,192,65,213,33,227,14,241,10,258,17,274,32,290,52,304,48,308,29,294,13,277,4,258,10,239,30,222,63,208,138,187"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="24,240,107,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="163,194,97,235,94,230,160,190"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="131,240,229,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="183,192,183,226,177,226,177,192"/>
+<area shape="rect" id="Node000008" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="253,240,363,265"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="202,190,276,231,274,235,199,194"/>
+<area shape="rect" id="Node000010" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="387,240,498,265"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="222,189,388,234,386,239,221,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="166,268,112,307,109,303,163,263"/>
+<area shape="rect" id="Node000009" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="274,313,342,339"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="311,266,311,300,305,300,305,266"/>
+</map>

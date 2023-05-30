@@ -1,0 +1,8 @@
+<map id="adg2404_enable" name="adg2404_enable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="403,31,532,56"/>
+<area shape="rect" id="Node000002" href="$adg2404_8c.html#a863589a9d3b49a2647fa60780c1aacc6" title=" " alt="" coords="172,5,355,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="389,36,354,32,355,27,389,31"/>
+<area shape="rect" id="Node000003" href="$eval-adg2404_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function for basic example." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="389,46,125,46,125,41,389,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,34,125,38,124,33,158,29"/>
+</map>

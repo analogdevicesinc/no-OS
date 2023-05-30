@@ -1,0 +1,11 @@
+<map id="projects/eval&#45;adis1647x/src/platform/linux/main.c" name="projects/eval&#45;adis1647x/src/platform/linux/main.c">
+<area shape="rect" id="Node000001" title="Main file for Linux platform of eval&#45;adis1647x project." alt="" coords="65,5,255,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,48,69,88,67,84,129,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,93,223,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,46,163,79,157,79,157,46"/>
+<area shape="rect" id="Node000004" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="248,93,357,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="195,43,271,84,269,89,193,48"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="269,167,337,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="305,119,305,153,300,153,300,119"/>
+</map>

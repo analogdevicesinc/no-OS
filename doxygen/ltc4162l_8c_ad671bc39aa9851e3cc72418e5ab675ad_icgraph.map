@@ -1,0 +1,9 @@
+<map id="ltc4162l_reg_update" name="ltc4162l_reg_update">
+<area shape="rect" id="Node000001" title="Update a register of the LTC4162L." alt="" coords="245,55,400,80"/>
+<area shape="rect" id="Node000002" href="$ltc4162l_8c.html#a54ce5aba264f512645b9d83e9c1df71a" title="Set the iin limit." alt="" coords="21,5,182,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,54,159,33,160,28,252,49"/>
+<area shape="rect" id="Node000003" href="$ltc4162l_8c.html#adf810111cd24e29cc2bf4e86b0e24af6" title="Set the telemetry." alt="" coords="15,55,187,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,70,188,70,188,65,231,65"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_8c.html#aff704397120e87b1e5f776622aaf72e1" title="Set the term current." alt="" coords="5,104,197,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="252,86,160,107,159,101,251,80"/>
+</map>

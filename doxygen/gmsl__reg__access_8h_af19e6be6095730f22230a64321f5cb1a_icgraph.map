@@ -1,0 +1,38 @@
+<map id="gmsl_reg_write" name="gmsl_reg_write">
+<area shape="rect" id="Node000001" title="Write a value to a GMSL register." alt="" coords="716,637,839,663"/>
+<area shape="rect" id="Node000002" href="$gmsl__reg__access_8c.html#a561a2181fa83b812762ea5ea0817332e" title="Update a value in a GMSL register." alt="" coords="515,437,650,463"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="752,629,594,465,598,461,756,625"/>
+<area shape="rect" id="Node000011" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#gac04853848d3e604546d598391f43869e" title="Initialize the CSI port for the MAX96793 device." alt="" coords="6,719,183,744"/>
+<area shape="poly" id="edge20_Node000001_Node000011" title=" " alt="" coords="745,672,691,702,619,737,536,771,450,795,389,807,341,810,292,807,231,795,167,773,115,746,118,742,169,768,233,790,293,801,341,805,388,801,449,790,535,766,617,732,688,697,742,667"/>
+<area shape="rect" id="Node000014" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#ga892b5a56984e75de8e551574caf1ad80" title="Initialize the pipe for the MAX96793 device." alt="" coords="5,41,184,67"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="769,625,744,510,720,431,687,344,645,256,591,172,560,134,526,98,489,66,448,39,408,21,365,11,320,8,275,10,193,25,130,44,128,39,192,20,275,5,320,3,365,6,409,16,451,34,492,62,530,94,564,130,596,169,649,254,692,342,725,429,749,509,774,623"/>
+<area shape="rect" id="Node000016" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#ga219c93fd931d8328e93fe0c6267ad13f" title="Change the serializer address of the MAX96793 device." alt="" coords="497,855,668,895"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="769,677,733,755,705,799,670,839,642,858,639,853,666,835,701,796,728,753,764,675"/>
+<area shape="rect" id="Node000003" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#ga81a15725b62258f6181ff00c17a0604d" title="This API enables Remote control channels of Deserializer device." alt="" coords="259,219,422,259"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="567,426,548,392,522,350,488,309,448,274,421,259,423,255,451,269,492,305,526,347,553,389,572,424"/>
+<area shape="rect" id="Node000004" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#ga29f862b56a517d8f36e457c6de0ae195" title="This API enables the MIPI CSI OUT from the Deserializer." alt="" coords="257,283,424,323"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="559,429,511,384,480,360,448,339,419,326,421,321,451,334,483,355,514,380,562,425"/>
+<area shape="rect" id="Node000005" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#ga13fd5a991f221805e2cb7b8d69d53915" title="Initializes the MAX96792 CSI Deserializer." alt="" coords="269,348,413,373"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="546,433,500,410,448,389,405,376,407,371,450,384,502,405,548,428"/>
+<area shape="rect" id="Node000006" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#ga1d45277e5eaa510d81a43b3fb178917c" title="This API sets the RX link rate for the MAX96792 deserializer." alt="" coords="259,398,422,438"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="501,442,422,431,423,426,502,437"/>
+<area shape="rect" id="Node000007" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#ga8aa3dd2156343137076a5910fc2e3760" title="This API updates the link confguration on MAX96792 Deserializer." alt="" coords="257,462,425,502"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="502,463,425,474,425,468,502,458"/>
+<area shape="rect" id="Node000008" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#gabb0aa9bcbfdb338a9ba58e6a8e2c6f26" title="This API controls the MIPI tunnel pipe for a given pipe." alt="" coords="253,526,428,566"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="547,472,450,517,416,528,414,523,448,512,545,467"/>
+<area shape="rect" id="Node000009" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___c_f_g___a_p_i.html#gabb7d5f18d5bb812525772f450e64828d" title="This API sets the PHY TX mode for a given pipe." alt="" coords="232,591,449,616"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="566,475,518,529,486,557,451,580,420,593,418,588,448,576,483,553,514,525,562,472"/>
+<area shape="rect" id="Node000010" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#gab169aa7ea40b97b99cd9513b71ffbec6" title="Configure the lane polarities for the MAX96793 device." alt="" coords="259,741,422,781"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="578,477,564,528,539,594,502,663,478,696,451,724,422,743,419,738,448,720,474,692,497,661,534,592,559,527,573,475"/>
+<area shape="poly" id="edge15_Node000002_Node000011" title=" " alt="" coords="577,477,561,522,536,578,500,634,477,659,451,680,431,691,403,699,335,713,184,729,183,724,334,708,402,694,428,686,448,676,473,655,495,631,531,576,556,520,572,475"/>
+<area shape="rect" id="Node000012" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#ga1d7d2ebe3086dccb1801b135af6cba04" title="Configure the sensor to serializer lane mapping for the MAX96793 device." alt="" coords="245,155,436,195"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="572,425,556,378,531,320,495,260,473,233,448,209,430,198,432,193,451,205,477,230,499,257,536,318,561,376,577,423"/>
+<area shape="rect" id="Node000013" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#gae13213f84d5ceeca6ea6c771f46d61f2" title="Initialize the MAX96793 device." alt="" coords="269,640,413,665"/>
+<area shape="poly" id="edge13_Node000002_Node000013" title=" " alt="" coords="572,476,554,512,527,554,493,596,451,631,414,647,412,642,448,626,489,592,523,551,549,509,568,474"/>
+<area shape="poly" id="edge14_Node000002_Node000014" title=" " alt="" coords="578,424,573,352,554,258,537,208,515,161,485,118,448,82,413,60,375,46,335,37,295,33,216,34,150,44,149,39,216,29,295,27,336,32,377,41,416,56,451,77,489,114,519,158,542,206,559,256,578,352,584,423"/>
+<area shape="rect" id="Node000015" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#ga5d49eda09a44d6f51f9caf5027a3cf79" title="Enable or disable the pipe of the MAX96793 device." alt="" coords="251,91,430,131"/>
+<area shape="poly" id="edge16_Node000002_Node000015" title=" " alt="" coords="575,425,563,367,540,291,523,252,502,213,477,177,448,145,429,133,432,128,451,141,481,174,507,210,528,249,545,290,568,365,580,423"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="246,752,183,745,184,739,246,747"/>
+<area shape="poly" id="edge12_Node000012_Node000011" title=" " alt="" coords="238,206,234,209,207,250,183,311,162,385,143,466,115,620,100,719,95,718,109,619,138,464,156,384,178,309,203,247,230,206,234,202"/>
+<area shape="poly" id="edge17_Node000015_Node000014" title=" " alt="" coords="240,91,149,69,150,64,242,86"/>
+</map>

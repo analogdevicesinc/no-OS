@@ -1,0 +1,27 @@
+var ad4110_8c =
+[
+    [ "ad4110_compute_crc8", "ad4110_8c.html#a4228f591e56b13c8c687952a5360bb0e", null ],
+    [ "ad4110_compute_xor", "ad4110_8c.html#a255522bd6ee52c1152a5219949227545", null ],
+    [ "ad4110_continuous_read", "ad4110_8c.html#aae301e33021656c500d1babd965c31f4", null ],
+    [ "ad4110_do_single_read", "ad4110_8c.html#a8a37ca826022ca99eb674bfded3cb7fa", null ],
+    [ "ad4110_get_data_size", "ad4110_8c.html#a6b7e9dfcf5c240b317760920d73684c4", null ],
+    [ "ad4110_remove", "ad4110_8c.html#a5c0a4b76de2cd52fc34ce7a225534a12", null ],
+    [ "ad4110_set_adc_clk", "ad4110_8c.html#a4dd0b28c567ceadcd9b1ee609fb26654", null ],
+    [ "ad4110_set_adc_mode", "ad4110_8c.html#a0d6a0f7973415a2a0b071c894a15e107", null ],
+    [ "ad4110_set_afe_clk", "ad4110_8c.html#ae7a2275eacbfe1d4564f47b46c8ba288", null ],
+    [ "ad4110_set_analog_input_buffer", "ad4110_8c.html#a3989dd13c8494043c2d33d8607984224", null ],
+    [ "ad4110_set_bipolar", "ad4110_8c.html#aeccf386b12c8d3049151cd1409231684", null ],
+    [ "ad4110_set_channel_status", "ad4110_8c.html#afb19b7b0dc4b376c3320b09714eea2b8", null ],
+    [ "ad4110_set_gain", "ad4110_8c.html#ad93abb699cd92963da2a60ce87672b87", null ],
+    [ "ad4110_set_odr", "ad4110_8c.html#ae1c569fcea97e0e7e4f4a9a8a76f0b13", null ],
+    [ "ad4110_set_op_mode", "ad4110_8c.html#ab1ea30d2f340eb80d96022236e5327d8", null ],
+    [ "ad4110_set_order", "ad4110_8c.html#a00a1f48cc2c777ffee3c304b01b0ff26", null ],
+    [ "ad4110_set_reference", "ad4110_8c.html#ad71b29362ba93bbfd3b77344ac22c9f1", null ],
+    [ "ad4110_setup", "ad4110_8c.html#a82503a6f416e5e58d61fe8405f516277", null ],
+    [ "ad4110_spi_do_soft_reset", "ad4110_8c.html#aecfd20d5b77640b27b417d2d017d25eb", null ],
+    [ "ad4110_spi_int_data_reg_read", "ad4110_8c.html#a37d04da450f5be8b4de2ba150b33fad1", null ],
+    [ "ad4110_spi_int_reg_read", "ad4110_8c.html#a6bd3fb5c71ace0f888684fd60a32c5bf", null ],
+    [ "ad4110_spi_int_reg_write", "ad4110_8c.html#ad74be44cbe27dc1edec844655bbb271e", null ],
+    [ "ad4110_spi_int_reg_write_msk", "ad4110_8c.html#a95ada55b77023f509baa35fad4db7278", null ],
+    [ "ad4110_wait_for_rdy_low", "ad4110_8c.html#add62052db64dc14260efba4e3f31f8fe", null ]
+];

@@ -1,0 +1,21 @@
+<map id="projects/adrv902x/src/platform/xilinx/parameters.c" name="projects/adrv902x/src/platform/xilinx/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of XILINX platform data used by ad719x project." alt="" coords="157,5,369,45"/>
+<area shape="rect" id="Node000002" href="$adrv902x_2src_2platform_2xilinx_2parameters_8h.html" title="Platform dependent parameters." alt="" coords="208,93,317,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="265,46,265,79,260,79,260,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,123,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="232,121,110,164,109,159,230,116"/>
+<area shape="rect" id="Node000004" href="$xilinx__gpio_8h.html" title=" " alt="" coords="146,167,251,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="254,121,220,158,216,155,250,117"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="276,167,380,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="275,117,310,155,306,158,271,121"/>
+<area shape="rect" id="Node000008" href="$xilinx__spi_8h.html" title=" " alt="" coords="404,167,500,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="294,116,409,159,407,164,292,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="330,313,401,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="202,192,207,227,215,246,226,264,246,281,269,295,317,313,316,318,267,300,243,285,222,267,210,249,202,228,196,192"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="236,240,319,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="213,190,256,229,253,233,210,194"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="438,194,415,215,393,241,380,271,372,300,367,299,375,269,388,239,411,211,434,190"/>
+<area shape="rect" id="Node000009" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="403,240,501,265"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="455,192,455,226,449,226,449,192"/>
+<area shape="poly" id="edge10_Node000009_Node000005" title=" " alt="" coords="440,267,392,307,388,302,436,263"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="max31343_reg_write" name="max31343_reg_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="423,26,581,51"/>
+<area shape="rect" id="Node000002" href="$max31343_8c.html#ab0792afccbd256677379ba776823d85e" title="Initialize the device." alt="" coords="5,26,124,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,25,374,15,273,8,172,15,109,28,108,23,172,10,273,3,375,10,437,20"/>
+<area shape="rect" id="Node000003" href="$max31343_8c.html#ab544e9e3d7186cc5286437c60364738e" title="Set time stamp." alt="" coords="172,26,375,51"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="409,41,375,41,375,36,409,36"/>
+<area shape="rect" id="Node000004" href="$max31343_8c.html#af6417919db9e15448b7b3d94e0adda30" title="Update specific register bits." alt="" coords="186,75,361,100"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="430,56,334,77,332,72,429,51"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="205,74,119,54,120,48,206,69"/>
+</map>

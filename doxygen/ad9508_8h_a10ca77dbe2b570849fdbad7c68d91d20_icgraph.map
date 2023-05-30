@@ -1,0 +1,7 @@
+<map id="ad9508_reg_write" name="ad9508_reg_write">
+<area shape="rect" id="Node000001" title="Write to the ad9508 that is conected to the SPI." alt="" coords="269,5,408,31"/>
+<area shape="rect" id="Node000002" href="$ad9508_8c.html#a6dd50c4b2ba51b8c777d8a252f4658ea" title="Setup the working parameters of the ad9508 chip." alt="" coords="108,5,221,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="256,21,222,21,222,15,256,15"/>
+<area shape="rect" id="Node000003" href="$ad9656__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

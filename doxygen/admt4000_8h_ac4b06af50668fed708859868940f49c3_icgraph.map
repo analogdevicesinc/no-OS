@@ -1,0 +1,26 @@
+<map id="admt4000_reg_update" name="admt4000_reg_update">
+<area shape="rect" id="Node000001" title="Updates the contents of selected register." alt="" coords="505,269,673,294"/>
+<area shape="rect" id="Node000002" href="$admt4000_8c.html#acd442c12d45695e4eb17fc4723e10144" title="Clear all faults from fault registers." alt="" coords="265,5,415,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="577,257,560,215,534,164,499,111,456,66,436,54,415,44,417,39,439,49,459,62,504,108,539,161,565,213,582,255"/>
+<area shape="rect" id="Node000003" href="$admt4000_8c.html#ab3140b39c732ec6ef05671f357bf78d2" title="Configure GPIO mode, direction, and initial state." alt="" coords="5,170,175,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="575,257,558,222,532,180,498,141,478,124,456,110,395,87,368,83,343,83,289,93,223,111,190,123,158,139,109,172,106,168,156,134,188,118,222,105,288,88,343,78,369,78,396,82,459,106,481,119,502,137,537,177,563,219,580,255"/>
+<area shape="rect" id="Node000004" href="$admt4000_8c.html#a3acbfd1a7d046882423d022b8e5b4ccc" title="Sets the filter setting." alt="" coords="249,121,431,146"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="568,260,521,208,490,182,456,160,428,149,430,144,459,155,493,177,525,204,572,256"/>
+<area shape="rect" id="Node000005" href="$admt4000_8c.html#a1232278fe4dee97c05da584de184a664" title="Configures the conversion mode: one shot or continuous." alt="" coords="241,170,439,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="557,263,511,235,456,209,419,198,420,193,458,204,514,230,560,259"/>
+<area shape="rect" id="Node000006" href="$admt4000_8c.html#a836078e407ffcefc20c04f9c5f80cb36" title="Configures conversion synchronization mode." alt="" coords="223,219,457,245"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="511,269,405,247,406,242,512,263"/>
+<area shape="rect" id="Node000007" href="$admt4000_8c.html#a5fd4525326ff988387ea7534054f9dab" title="Configure selected GPIO." alt="" coords="265,269,415,294"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="492,284,416,284,416,279,492,279"/>
+<area shape="rect" id="Node000008" href="$admt4000_8c.html#a6858c1bb4c5e13998a5a9231a30194f5" title="Sets 8th harmonic correction source." alt="" coords="257,318,423,343"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="512,299,406,321,405,315,511,294"/>
+<area shape="rect" id="Node000009" href="$admt4000_8c.html#af94e3406dde7c4a72eda6fd24a007bd3" title="Set harmonic configuration (magnitude and phase together)." alt="" coords="249,367,431,393"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="560,304,513,331,458,357,416,370,415,365,456,352,511,327,557,299"/>
+<area shape="rect" id="Node000010" href="$admt4000_8c.html#a0ae706912c0c20383226b805eb44a3d8" title="Set all harmonic configurations in a single operation." alt="" coords="245,417,435,457"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="571,306,524,357,493,383,459,406,430,420,428,415,456,402,489,379,520,353,568,303"/>
+<area shape="rect" id="Node000011" href="$admt4000_8c.html#ac9b7e9e62d361e74e333ed529df3ad41" title="Sets storage general config." alt="" coords="255,481,425,521"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="580,308,562,345,535,389,501,434,459,472,427,488,424,483,456,467,497,430,531,386,557,342,575,306"/>
+<area shape="rect" id="Node000012" href="$admt4000_8c.html#ac7b81b5aea98f68abc5da7ed4e178606" title="Toggle the CNV to stop/start conversion." alt="" coords="257,546,423,571"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="585,308,571,357,546,419,509,482,486,511,459,536,425,553,422,548,456,531,482,507,505,479,541,417,566,356,580,307"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="251,268,222,258,158,228,109,198,111,193,161,223,224,254,252,263"/>
+</map>

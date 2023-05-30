@@ -1,0 +1,14 @@
+<map id="projects/ada4250_ardz/src/parameters.h" name="projects/ada4250_ardz/src/parameters.h">
+<area shape="rect" id="Node000001" title="ADA4250_ardz Parameters Definitions." alt="" coords="189,5,359,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__irq_8h.html" title="Header file of IRQ driver for ADuCM302x." alt="" coords="207,93,341,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,46,277,79,271,79,271,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,169,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,121,131,164,130,159,243,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="194,167,277,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="270,120,250,156,246,153,265,118"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="321,240,392,265"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="283,118,346,227,341,229,278,120"/>
+<area shape="rect" id="Node000006" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="351,167,447,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="295,116,368,157,366,162,293,121"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="395,194,373,230,368,227,390,191"/>
+</map>

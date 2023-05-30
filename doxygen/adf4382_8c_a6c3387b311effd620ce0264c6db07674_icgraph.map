@@ -1,0 +1,5 @@
+<map id="adf4382_set_rfout" name="adf4382_set_rfout">
+<area shape="rect" id="Node000001" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="172,5,312,31"/>
+<area shape="rect" id="Node000002" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

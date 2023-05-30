@@ -1,0 +1,8 @@
+<map id="convert_rms_type" name="convert_rms_type">
+<area shape="rect" id="Node000001" title="Converts ADI_AFE_RMS_TYPE to voltage/current magnitude." alt="" coords="320,31,459,56"/>
+<area shape="rect" id="Node000002" href="$pqlib__convert_8c.html#a8e66f6f28e000d121e56df360f47edb9" title="Prepare string output for specific event attribute types." alt="" coords="156,5,272,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="306,34,272,29,273,24,307,29"/>
+<area shape="rect" id="Node000003" href="$iio__pqm_8c.html#a248984e120ec16020a384e9c08a296fd" title="Read a channel attribute." alt="" coords="5,31,108,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="306,46,108,46,108,41,306,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="143,32,108,38,108,33,142,27"/>
+</map>

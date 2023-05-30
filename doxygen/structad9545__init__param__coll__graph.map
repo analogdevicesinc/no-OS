@@ -1,0 +1,69 @@
+<map id="ad9545_init_param" name="ad9545_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1548,446,1695,471"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="947,78,1109,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1123,77,1216,75,1269,78,1323,85,1377,97,1430,115,1480,139,1526,171,1555,203,1578,239,1595,279,1607,320,1619,394,1623,446,1617,446,1614,395,1601,321,1590,281,1573,242,1551,206,1522,175,1478,144,1428,120,1376,102,1322,91,1268,84,1216,81,1123,82"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,107,184,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,98,214,55,267,34,322,19,370,14,439,13,605,21,838,40,923,56,990,75,988,80,922,61,837,45,605,26,439,19,371,19,323,24,269,39,216,60,130,103"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="713,129,836,154"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,121,713,137,713,142,198,126"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="339,169,485,194"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="147,134,209,151,339,171,338,177,207,156,146,139"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,33,487,73"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="500,51,688,57,947,79,946,85,688,63,500,57"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="501,67,526,72,608,85,689,103,748,126,746,131,687,108,607,90,525,77,500,73"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="849,124,963,101,964,106,850,129"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="751,114,758,105,775,102,789,104,797,111,799,120,795,130,790,127,794,120,793,114,786,109,775,107,761,110,755,117"/>
+<area shape="rect" id="Node000013" href="$structad9545__dev.html" title=" " alt="" coords="977,559,1079,585"/>
+<area shape="poly" id="edge17_Node000013_Node000005" title=" " alt="" coords="793,164,925,385,1022,558,1017,560,920,388,788,167"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="499,171,688,151,713,147,714,153,688,156,499,176"/>
+<area shape="rect" id="Node000007" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="525,233,688,258"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="661,226,767,202,829,193,891,189,1330,189,1358,192,1386,198,1436,222,1482,256,1521,297,1555,341,1582,382,1616,445,1612,447,1578,385,1551,344,1517,301,1478,260,1433,226,1384,203,1358,197,1330,195,891,195,829,198,768,207,663,232"/>
+<area shape="rect" id="Node000008" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,369,184,394"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="156,363,557,255,558,261,157,368"/>
+<area shape="rect" id="Node000014" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="713,421,836,446"/>
+<area shape="poly" id="edge21_Node000014_Node000008" title=" " alt="" coords="168,394,243,408,323,419,430,427,538,431,713,432,713,437,537,436,430,432,322,424,242,413,167,399"/>
+<area shape="rect" id="Node000015" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="339,369,485,394"/>
+<area shape="poly" id="edge20_Node000015_Node000008" title=" " alt="" coords="197,379,339,379,339,384,197,384"/>
+<area shape="rect" id="Node000009" href="$structad9545__sys__clk.html" title=" " alt="" coords="712,306,837,331"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="803,296,830,281,861,269,929,256,984,254,1110,269,1231,284,1325,300,1415,328,1525,379,1573,412,1609,444,1606,448,1570,416,1523,384,1413,333,1324,305,1230,289,1109,275,984,259,930,261,862,275,832,286,806,301"/>
+<area shape="poly" id="edge23_Node000013_Node000009" title=" " alt="" coords="800,340,1016,557,1012,561,797,343"/>
+<area shape="rect" id="Node000010" href="$structad9545__aux__dpll__clk.html" title=" " alt="" coords="1249,639,1408,665"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1377,632,1448,600,1522,557,1572,511,1608,470,1612,474,1576,515,1526,561,1451,605,1379,637"/>
+<area shape="poly" id="edge24_Node000013_Node000010" title=" " alt="" coords="1241,668,1187,668,1132,657,1103,643,1077,624,1039,587,1042,583,1080,620,1106,638,1134,652,1187,663,1241,663"/>
+<area shape="rect" id="Node000011" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="713,717,836,742"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="806,748,884,796,936,822,993,844,1053,859,1113,864,1142,862,1171,856,1198,845,1224,830,1236,816,1239,801,1240,783,1247,762,1282,705,1314,663,1319,666,1286,708,1252,764,1246,784,1244,802,1241,818,1227,834,1200,850,1172,861,1143,867,1113,870,1052,865,992,849,934,826,882,800,803,752"/>
+<area shape="poly" id="edge41_Node000013_Node000011" title=" " alt="" coords="807,707,1005,583,1008,587,809,711"/>
+<area shape="rect" id="Node000016" href="$structad9545__pll__clk.html" title=" " alt="" coords="1269,921,1388,946"/>
+<area shape="poly" id="edge27_Node000016_Node000011" title=" " alt="" coords="785,754,802,810,834,879,856,913,882,944,912,969,948,987,988,999,1023,1006,1055,1008,1085,1006,1147,993,1225,972,1265,959,1300,944,1302,949,1267,964,1226,977,1148,999,1085,1012,1055,1014,1022,1011,987,1004,946,992,909,974,878,948,851,917,829,882,797,812,780,756"/>
+<area shape="rect" id="Node000018" href="$structad9545__ref__in__clk.html" title=" " alt="" coords="1259,774,1399,799"/>
+<area shape="poly" id="edge30_Node000018_Node000011" title=" " alt="" coords="788,754,817,811,838,842,863,870,896,897,927,917,956,930,986,939,1051,948,1134,956,1182,966,1202,966,1224,956,1234,947,1238,936,1247,908,1316,798,1321,801,1252,910,1243,938,1238,950,1227,961,1203,971,1181,971,1133,961,1051,953,985,944,955,935,925,922,893,902,859,874,834,846,812,814,783,756"/>
+<area shape="rect" id="Node000019" href="$structad9545__out__clk.html" title=" " alt="" coords="1267,359,1391,385"/>
+<area shape="poly" id="edge34_Node000019_Node000011" title=" " alt="" coords="779,703,824,508,859,369,883,348,910,332,967,312,1029,304,1092,306,1154,315,1210,328,1297,357,1295,362,1209,333,1153,320,1092,311,1029,309,968,317,912,337,886,353,864,372,829,509,784,704"/>
+<area shape="rect" id="Node000020" href="$structad9545__aux__nco__clk.html" title=" " alt="" coords="1250,446,1407,471"/>
+<area shape="poly" id="edge36_Node000020_Node000011" title=" " alt="" coords="779,703,821,527,844,441,859,400,891,383,934,374,984,370,1038,370,1145,379,1226,395,1252,404,1276,417,1314,444,1310,448,1273,422,1249,409,1225,400,1144,384,1038,375,984,375,934,379,893,388,863,403,849,443,826,528,784,704"/>
+<area shape="rect" id="Node000021" href="$structad9545__aux__tdc__clk.html" title=" " alt="" coords="1251,570,1406,595"/>
+<area shape="poly" id="edge39_Node000021_Node000011" title=" " alt="" coords="850,736,932,740,1030,734,1081,725,1131,712,1179,694,1224,669,1232,660,1236,650,1239,638,1247,626,1271,607,1296,593,1299,598,1274,612,1251,630,1244,641,1241,651,1237,662,1227,673,1182,698,1133,717,1082,731,1031,739,932,745,849,741"/>
+<area shape="rect" id="Node000012" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="323,717,501,742"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="515,727,713,727,713,732,515,732"/>
+<area shape="poly" id="edge16_Node000010_Node000013" title=" " alt="" coords="1070,588,1134,612,1192,627,1250,638,1249,643,1191,632,1133,617,1068,593"/>
+<area shape="poly" id="edge22_Node000013_Node000013" title=" " alt="" coords="1001,544,1009,536,1028,533,1044,535,1054,541,1056,551,1051,560,1047,558,1051,550,1049,545,1042,540,1028,538,1012,541,1005,548"/>
+<area shape="poly" id="edge26_Node000016_Node000013" title=" " alt="" coords="1052,594,1083,639,1112,694,1118,717,1120,738,1118,774,1118,809,1124,826,1135,845,1164,873,1198,894,1235,910,1270,920,1268,925,1233,915,1196,899,1161,877,1131,848,1119,828,1113,809,1112,774,1115,738,1113,718,1107,696,1079,641,1047,597"/>
+<area shape="poly" id="edge31_Node000018_Node000013" title=" " alt="" coords="1049,594,1086,638,1135,683,1176,711,1220,736,1296,772,1294,776,1217,741,1173,716,1132,687,1083,642,1045,597"/>
+<area shape="poly" id="edge33_Node000019_Node000013" title=" " alt="" coords="1041,546,1078,494,1103,466,1132,442,1156,428,1177,422,1225,411,1296,382,1298,387,1226,416,1178,428,1158,433,1135,446,1107,470,1082,497,1046,549"/>
+<area shape="poly" id="edge37_Node000020_Node000013" title=" " alt="" coords="1083,553,1224,503,1300,469,1302,474,1226,508,1084,558"/>
+<area shape="poly" id="edge40_Node000021_Node000013" title=" " alt="" coords="1093,571,1225,576,1251,577,1251,582,1225,581,1092,577"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="797,455,826,485,863,514,921,541,978,559,976,564,919,546,860,518,823,489,793,459"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="500,387,688,412,719,418,718,423,688,417,499,392"/>
+<area shape="poly" id="edge42_Node000001_Node000016" title=" " alt="" coords="1355,910,1437,836,1482,787,1522,732,1559,658,1586,583,1605,516,1615,471,1620,472,1610,517,1591,584,1564,661,1526,735,1486,790,1441,840,1359,914"/>
+<area shape="poly" id="edge25_Node000013_Node000016" title=" " alt="" coords="1278,952,1243,959,1203,961,1165,954,1147,946,1131,934,1119,915,1113,887,1111,819,1112,748,1111,718,1107,695,1092,663,1074,633,1039,586,1043,583,1078,630,1097,661,1112,694,1116,717,1118,748,1116,819,1118,887,1124,913,1135,930,1150,941,1167,948,1204,955,1242,954,1277,947"/>
+<area shape="rect" id="Node000017" href="$structad9545__dpll__profile.html" title=" " alt="" coords="953,1081,1103,1106"/>
+<area shape="poly" id="edge28_Node000016_Node000017" title=" " alt="" coords="1116,1092,1172,1084,1199,1075,1224,1063,1258,1036,1285,1004,1319,945,1324,947,1289,1007,1261,1040,1227,1068,1201,1080,1173,1089,1117,1098"/>
+<area shape="poly" id="edge43_Node000001_Node000018" title=" " alt="" coords="1361,764,1439,708,1482,670,1522,629,1553,586,1579,541,1613,470,1617,472,1584,544,1558,589,1526,632,1486,674,1442,712,1364,769"/>
+<area shape="poly" id="edge29_Node000013_Node000018" title=" " alt="" coords="1291,808,1255,821,1213,830,1170,828,1150,821,1132,810,1119,797,1113,784,1111,757,1113,728,1107,696,1072,633,1038,586,1042,583,1077,630,1112,694,1118,728,1116,757,1118,783,1124,794,1135,806,1152,817,1171,823,1212,824,1253,816,1290,803"/>
+<area shape="poly" id="edge44_Node000001_Node000019" title=" " alt="" coords="1386,386,1578,443,1577,449,1385,391"/>
+<area shape="poly" id="edge32_Node000013_Node000019" title=" " alt="" coords="1253,368,1192,373,1162,382,1135,396,1113,413,1095,433,1065,480,1046,526,1035,560,1030,559,1041,524,1061,478,1090,430,1110,409,1132,391,1160,377,1191,368,1253,362"/>
+<area shape="poly" id="edge45_Node000001_Node000020" title=" " alt="" coords="1421,456,1548,456,1548,461,1421,461"/>
+<area shape="poly" id="edge35_Node000013_Node000020" title=" " alt="" coords="1237,465,1185,474,1134,490,1106,506,1081,525,1043,561,1039,557,1077,521,1104,501,1132,486,1184,469,1236,460"/>
+<area shape="poly" id="edge46_Node000001_Node000021" title=" " alt="" coords="1371,562,1589,469,1591,474,1373,567"/>
+<area shape="poly" id="edge38_Node000013_Node000021" title=" " alt="" coords="1238,596,1186,598,1133,596,1078,587,1079,582,1134,591,1186,593,1238,591"/>
+</map>

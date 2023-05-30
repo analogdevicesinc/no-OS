@@ -1,0 +1,7 @@
+<map id="max96793_csi_diag_mipi_rx_err_status" name="max96793_csi_diag_mipi_rx_err_status">
+<area shape="rect" id="Node000001" title="Structure holding the MIPI RX error status of the MAX96793 device." alt="" coords="111,108,297,148"/>
+<area shape="rect" id="Node000002" href="$structmax96793__csi__diag__mipi__phy__err__details.html" title="Structure holding the MIPI PHY error details of the MAX96793 device." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,55,141,82,172,106,168,110,137,86,114,59"/>
+<area shape="rect" id="Node000003" href="$structmax96793__csi__diag__mipi__ctrl__err__details.html" title="Structure holding the MIPI controller error details of the MAX96793 device." alt="" coords="216,5,403,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,60,282,86,249,110,246,106,278,82,295,57"/>
+</map>

@@ -1,0 +1,52 @@
+<map id="lt8722_reg_write_mask" name="lt8722_reg_write_mask">
+<area shape="rect" id="Node000001" title="Write to LT8722 device register with mask." alt="" coords="799,391,973,416"/>
+<area shape="rect" id="Node000002" href="$lt8722_8c.html#ab3afb3880e6dc12fe0fb7839542995cb" title="Clear LT8722 device faults." alt="" coords="593,5,739,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="880,378,871,310,850,220,833,173,811,126,783,82,749,44,733,33,736,29,752,40,787,79,815,123,838,171,855,219,876,309,885,377"/>
+<area shape="rect" id="Node000007" href="$lt8722_8c.html#a680d1d094a41e3626f80ef7cdfa4d8d8" title="Shutdown the LT8722 device." alt="" coords="615,55,717,80"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="878,378,867,319,843,242,826,202,805,162,779,125,749,93,734,83,717,77,719,72,736,79,752,89,783,122,809,159,831,199,848,240,872,318,884,377"/>
+<area shape="rect" id="Node000008" href="$lt8722_8c.html#acbcf0e62a653fa0f1e87504c05160ed9" title="Set analog output buffer status of LT8722 device." alt="" coords="591,252,741,277"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="862,383,813,337,782,313,749,292,720,280,722,275,752,288,785,309,816,333,865,379"/>
+<area shape="rect" id="Node000009" href="$lt8722_8c.html#a5420a9ec6300ed15c178d2f18ee1862f" title="Set DAC code of LT8722 device." alt="" coords="606,153,726,179"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="873,379,856,338,829,287,794,236,749,192,725,179,728,175,752,188,798,232,834,284,861,335,878,377"/>
+<area shape="rect" id="Node000011" href="$lt8722_8c.html#ad655b0fe8a65d90ea90962c2db8c9280" title="Set ENABLE_REQ field in LT8722 device." alt="" coords="581,203,751,228"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="869,380,821,312,788,275,749,243,724,231,727,226,752,238,792,271,826,309,873,377"/>
+<area shape="rect" id="Node000013" href="$lt8722_8c.html#a570879b4e54e38d79beb8d61e904f17c" title="Set LDR power dissipation limit of LT8722 device." alt="" coords="591,301,741,327"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="848,387,750,342,713,329,714,324,752,337,850,382"/>
+<area shape="rect" id="Node000014" href="$lt8722_8c.html#a8160879da7967fd0c5575bbc2c8ffff7" title="Set negative output current limit of LT8722 device." alt="" coords="589,351,743,391"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="784,391,742,385,743,380,785,386"/>
+<area shape="rect" id="Node000015" href="$lt8722_8c.html#ad00984b3fcdc6de568898e9ff6e83003" title="Set positive output current limit of LT8722 device." alt="" coords="589,415,743,455"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="785,421,743,427,742,422,784,415"/>
+<area shape="rect" id="Node000016" href="$lt8722_8c.html#adb3fb1d2c2a2e353e1b0971c850f3c0b" title="Set positive output voltage limit of LT8722 device." alt="" coords="593,479,739,519"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="848,425,752,470,722,482,720,477,750,465,846,420"/>
+<area shape="rect" id="Node000017" href="$lt8722_8c.html#a4b0dc0c0140dafddc6f0cb480ad7ba8d" title="Set negative output voltage limit of LT8722 device." alt="" coords="593,543,739,583"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="867,429,818,481,786,509,752,534,730,546,727,541,749,529,783,504,814,477,863,425"/>
+<area shape="rect" id="Node000018" href="$lt8722_8c.html#aee404651e57d76867a6c7990dc3fbe9d" title="Set switching frequency adjustment of LT8722 device." alt="" coords="583,608,749,633"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="876,430,858,467,830,512,795,558,752,598,728,610,726,606,749,593,791,555,826,509,853,464,871,427"/>
+<area shape="rect" id="Node000019" href="$lt8722_8c.html#a50aba850e6825e90ddf215713f9c2229" title="Set switching frequency of LT8722 device." alt="" coords="583,657,749,683"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="880,430,864,477,838,536,801,596,778,624,752,648,733,660,730,655,749,644,775,620,797,593,834,533,859,475,875,428"/>
+<area shape="rect" id="Node000020" href="$lt8722_8c.html#adffad847781986c9ca61a785539f1829" title="Set initial peak inductor current of LT8722 device." alt="" coords="585,707,747,732"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="883,430,870,486,845,558,828,596,807,633,782,667,752,697,734,709,732,704,749,693,778,664,803,630,823,593,840,556,865,484,878,429"/>
+<area shape="rect" id="Node000021" href="$lt8722_8c.html#ae4a4ce84ce7792b55619cecff8b15869" title="Set switching enable of LT8722 device." alt="" coords="587,104,745,129"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="876,378,861,328,836,264,799,199,776,169,749,143,731,132,733,127,752,139,780,165,804,196,841,262,866,326,881,376"/>
+<area shape="rect" id="Node000022" href="$lt8722_8c.html#ad141ec95f3f4787718faa7dfc0521456" title="Set PWM duty cycle of LT8722 device." alt="" coords="595,756,737,781"/>
+<area shape="poly" id="edge26_Node000001_Node000022" title=" " alt="" coords="885,430,874,494,852,579,835,625,813,669,786,710,752,747,735,758,732,754,749,743,781,707,808,666,830,623,847,578,869,493,879,429"/>
+<area shape="rect" id="Node000023" href="$lt8722_8c.html#ae295ce7f869bc18d7babf347bbd83172" title="Set internal circuitry voltage source of LT8722 device." alt="" coords="589,805,743,831"/>
+<area shape="poly" id="edge27_Node000001_Node000023" title=" " alt="" coords="886,430,879,502,858,600,841,653,819,705,789,753,752,796,736,807,733,803,749,792,785,750,814,703,836,651,853,599,874,501,881,429"/>
+<area shape="rect" id="Node000003" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="391,104,481,129"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="602,37,582,44,515,76,460,106,457,102,512,71,580,40,600,32"/>
+<area shape="rect" id="Node000004" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,153,291,179"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="378,133,285,156,284,151,376,128"/>
+<area shape="rect" id="Node000005" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="174,104,289,129"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="377,119,289,119,289,114,377,114"/>
+<area shape="rect" id="Node000006" href="$lt8722_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,104,124,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="160,119,124,119,124,114,160,114"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="602,84,482,110,481,104,601,79"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="592,153,481,129,482,124,594,148"/>
+<area shape="rect" id="Node000010" href="$lt8722_8c.html#ad9a474691b3c502b9663a8cb5c7fe091" title="Set output volatge of LT8722 device." alt="" coords="339,153,533,179"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="592,169,534,169,534,163,592,163"/>
+<area shape="poly" id="edge12_Node000010_Node000004" title=" " alt="" coords="325,169,291,169,291,163,325,163"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="595,200,580,192,565,180,555,167,546,154,532,143,507,132,481,125,483,120,509,127,535,138,550,151,560,164,568,176,583,188,597,195"/>
+<area shape="rect" id="Node000012" href="$lt8722_8c.html#ac73cab22e0f650778dbe7ba66fc82f1b" title="Reset the LT8722 device." alt="" coords="369,203,503,228"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="568,218,503,218,503,213,568,213"/>
+<area shape="poly" id="edge25_Node000021_Node000003" title=" " alt="" coords="573,119,482,119,482,114,573,114"/>
+</map>

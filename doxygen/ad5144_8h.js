@@ -1,0 +1,25 @@
+var ad5144_8h =
+[
+    [ "ad5144_dpot_init_param", "structad5144__dpot__init__param.html", "structad5144__dpot__init__param" ],
+    [ "ad5144_dpot_dev", "structad5144__dpot__dev.html", "structad5144__dpot__dev" ],
+    [ "AD5144_NUM_LINEAR_GAIN_CH", "ad5144_8h.html#a6807230a938c8e5e46cb53a97ec8c6e2", null ],
+    [ "AD5144_NUM_POTENTIOMETER_CH", "ad5144_8h.html#a8735f147e5d9443fc8376117f0fcedbc", null ],
+    [ "AD5144_RESET_DELAY", "ad5144_8h.html#a3fb6e838b116d567192180ba0269fd60", null ],
+    [ "ad5144_dpot_chn_read", "ad5144_8h.html#af043746b41be119b07b25312b84052af", null ],
+    [ "ad5144_dpot_chn_write", "ad5144_8h.html#ad82007f64d2b144fa5c954be532dd2ad", null ],
+    [ "ad5144_dpot_copy_nvm_to_rdac", "ad5144_8h.html#ae795ba53a1a4bc81ed0c63030c0b1ba6", null ],
+    [ "ad5144_dpot_copy_rdac_to_nvm", "ad5144_8h.html#a815000ba6786433091411991d0ee7a14", null ],
+    [ "ad5144_dpot_init", "ad5144_8h.html#aad786f3fe8eeb019a3e72d46fdeaca41", null ],
+    [ "ad5144_dpot_input_reg_read", "ad5144_8h.html#af561af3364f3f482906354fc21ae18d1", null ],
+    [ "ad5144_dpot_input_reg_write", "ad5144_8h.html#af228fa4cf39d65345607df0c6182fd03", null ],
+    [ "ad5144_dpot_nvm_read", "ad5144_8h.html#a098bd8ecb4bfb3ee81756fce5f4914b1", null ],
+    [ "ad5144_dpot_nvm_write", "ad5144_8h.html#a907d39d358e2e33278e8d1d0a15b9ae7", null ],
+    [ "ad5144_dpot_rdac_6db_update", "ad5144_8h.html#a0e26b2b2c5cd09c40ff771bcf2fb0532", null ],
+    [ "ad5144_dpot_rdac_linear_update", "ad5144_8h.html#a549f5201ca015fd1c801f29c6a0a0207", null ],
+    [ "ad5144_dpot_remove", "ad5144_8h.html#ae95b9227f5998bf028f01492d794d003", null ],
+    [ "ad5144_dpot_reset", "ad5144_8h.html#aa40560423f0832ab47a3e7c2b13b7305", null ],
+    [ "ad5144_dpot_send_cmd", "ad5144_8h.html#ae19375d490f35d4f44cf8e9fb675aa65", null ],
+    [ "ad5144_dpot_set_operating_mode", "ad5144_8h.html#a706b7b585ab85476e9666bd4b95025fe", null ],
+    [ "ad5144_dpot_shutdown", "ad5144_8h.html#a299e832187554ddb6fc8c87639f3095e", null ],
+    [ "ad5144_dpot_sw_lrdac_update", "ad5144_8h.html#ab952e78e40e76a5cf0bc40b24bd5ca11", null ]
+];

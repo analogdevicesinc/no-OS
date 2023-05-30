@@ -1,0 +1,11 @@
+<map id="ltm4686_read_word" name="ltm4686_read_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read word operation." alt="" coords="609,31,760,56"/>
+<area shape="rect" id="Node000002" href="$ltm4686_8c.html#a66a76854d4d41f63bf79db51df919d78" title="Read statuses." alt="" coords="389,5,547,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="595,36,547,30,548,25,596,30"/>
+<area shape="rect" id="Node000003" href="$ltm4686_8c.html#a677479368e7d8efe30d29ef89dcbfffb" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="375,55,561,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="596,56,562,60,561,54,595,51"/>
+<area shape="rect" id="Node000004" href="$ltm4686_8c.html#a629cc1e16d3a790dedae59367f07e3a1" title="Read a value." alt="" coords="172,55,327,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="361,70,327,70,327,65,361,65"/>
+<area shape="rect" id="Node000005" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

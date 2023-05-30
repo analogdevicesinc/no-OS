@@ -1,0 +1,25 @@
+var structad77681__status__registers =
+[
+    [ "adc_err_ext_clk_qual", "structad77681__status__registers.html#a929e1fe2209b64bcbfc6a5e33ccc3a4b", null ],
+    [ "adc_error", "structad77681__status__registers.html#a22fce08b63dd58dc153224126824b138", null ],
+    [ "adc_filt_not_settled", "structad77681__status__registers.html#a92af330ac09e2c18f82029ea8b10dfa8", null ],
+    [ "adc_filt_saturated", "structad77681__status__registers.html#a2c8cc6196fd557e33751d0cbab11d84d", null ],
+    [ "aldo_psm_error", "structad77681__status__registers.html#a99b7866940af550cf1598fd86e66d2a2", null ],
+    [ "dig_error", "structad77681__status__registers.html#a0e0ace055ae6ee9ae73222aaee0a0d68", null ],
+    [ "dldo_psm_error", "structad77681__status__registers.html#a825ae784b557393f25eeefb907281f7e", null ],
+    [ "ext_clk_qual_error", "structad77681__status__registers.html#af293fd54ecb46341a370fa2fa756cd19", null ],
+    [ "filt_not_set_error", "structad77681__status__registers.html#a612e0ae1c93f0f4611bb4dcda9fab011", null ],
+    [ "filt_sat_error", "structad77681__status__registers.html#a916453303bbe7fa9e3f7fa3cb84863bf", null ],
+    [ "fuse_crc_error", "structad77681__status__registers.html#ace8237265f745b91ef864fa07bab1331", null ],
+    [ "master_error", "structad77681__status__registers.html#ab3f90e3dfdc0b20cc4003324d73ed12c", null ],
+    [ "memoy_map_crc_error", "structad77681__status__registers.html#abf2998585ab2390d99bfc8160a8b87d9", null ],
+    [ "por_flag", "structad77681__status__registers.html#a0b0e957eb8df89973d8f695d111a2811", null ],
+    [ "ram_crc_error", "structad77681__status__registers.html#a28f73c77b0f25c5e938d486449b47e8e", null ],
+    [ "ref_det_error", "structad77681__status__registers.html#ad197d458ed2abf15e8c9780808ede6cf", null ],
+    [ "spi_clock_count", "structad77681__status__registers.html#ab8086d4f2505d0fcfb844810f77dd2cd", null ],
+    [ "spi_crc_error", "structad77681__status__registers.html#a658fda2ceb14152b6e1c7e994fbcfb8c", null ],
+    [ "spi_error", "structad77681__status__registers.html#af1eb9c3a2ba82e98c6183488b5974cfc", null ],
+    [ "spi_ignore", "structad77681__status__registers.html#a166babb338f872c624e0e620ef3b4114", null ],
+    [ "spi_read_error", "structad77681__status__registers.html#ab99ffd1d527f0ee98299a4fe5c585ec8", null ],
+    [ "spi_write_error", "structad77681__status__registers.html#a87ab46c1ae717dcc7047e0ac24c31c4b", null ]
+];

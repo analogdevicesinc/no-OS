@@ -1,0 +1,26 @@
+var ades1754_8c =
+[
+    [ "ades1754_get_alert", "ades1754_8c.html#ab10ca7d0a1c2731a054bb4fdc0ef4877", null ],
+    [ "ades1754_get_cell_data", "ades1754_8c.html#a01fb57c7549f06f25260bd31a6e0bb5b", null ],
+    [ "ades1754_hello_all", "ades1754_8c.html#a8d5454b5a79290f87d6e85bf54768cd5", null ],
+    [ "ades1754_init", "ades1754_8c.html#a8d3cb097da679fab95e936f8b2cb626f", null ],
+    [ "ades1754_read_all", "ades1754_8c.html#a1e2642c939bb958615c13fd33919e079", null ],
+    [ "ades1754_read_block", "ades1754_8c.html#a69b25b97b9db645b88777f94641bd5ef", null ],
+    [ "ades1754_read_dev", "ades1754_8c.html#a3043ee917cdcdbf9cb3ef43134f920ac", null ],
+    [ "ades1754_remove", "ades1754_8c.html#ab4de2134ccbc42d937ad7d2d0873a681", null ],
+    [ "ades1754_set_adc_method", "ades1754_8c.html#abf0336a8c2479fe281f6890b1e22072e", null ],
+    [ "ades1754_set_alert_thr", "ades1754_8c.html#a552231693c2b02463cdb088adf5c3dfe", null ],
+    [ "ades1754_set_balancing_calib", "ades1754_8c.html#a6b3a12d5e93621a0113c20b392f28a17", null ],
+    [ "ades1754_set_balancing_meas", "ades1754_8c.html#a568a6c93f7660701c4a318aa9b830d49", null ],
+    [ "ades1754_set_balancing_mode", "ades1754_8c.html#a9f3596b0241f3b820fb2fdf73114c513", null ],
+    [ "ades1754_set_buffer_mode", "ades1754_8c.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9", null ],
+    [ "ades1754_set_cell_pol", "ades1754_8c.html#a9087eadd5c714393fed847f75f1419f1", null ],
+    [ "ades1754_set_iir", "ades1754_8c.html#a9badaadef8c37481a4ccceae8b42170c", null ],
+    [ "ades1754_set_iir_ctrl", "ades1754_8c.html#aed1fbc41b15d76f6174710a8077ec948", null ],
+    [ "ades1754_start_scan", "ades1754_8c.html#a415d67f8019842750759f13156278777", null ],
+    [ "ades1754_switch_scan_mode", "ades1754_8c.html#a9f0bfa3719e1e1684c7f16b2aad35599", null ],
+    [ "ades1754_update_dev", "ades1754_8c.html#adab9ebabc29ae19de65b72649e194884", null ],
+    [ "ades1754_write_all", "ades1754_8c.html#afe3771223472e5f0001a4b60cbe92857", null ],
+    [ "ades1754_write_dev", "ades1754_8c.html#abaf68f627944f3c9dd0cc7ca32472ce3", null ],
+    [ "NO_OS_DECLARE_CRC8_TABLE", "ades1754_8c.html#ad3be750552dd3384e3cefad8a510cfba", null ]
+];

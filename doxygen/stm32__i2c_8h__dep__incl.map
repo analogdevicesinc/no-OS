@@ -1,0 +1,16 @@
+<map id="drivers/platform/stm32/stm32_i2c.h" name="drivers/platform/stm32/stm32_i2c.h">
+<area shape="rect" id="Node000001" title="Header file for the stm32 i2c driver." alt="" coords="299,5,471,45"/>
+<area shape="rect" id="Node000002" href="$stm32__i2c_8c.html" title="Implementation of stm32 i2c driver." alt="" coords="5,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,52,156,96,155,91,307,47"/>
+<area shape="rect" id="Node000003" href="$admt4000_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by admt4000 project." alt="" coords="202,93,421,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="362,58,330,95,326,91,358,54"/>
+<area shape="rect" id="Node000006" href="$ltm3360b_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by LTM3360B project." alt="" coords="483,181,700,221"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="410,54,444,92,485,131,521,157,557,179,554,184,518,162,482,135,440,96,406,58"/>
+<area shape="rect" id="Node000007" href="$ltm3360b_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by LTM3360B project." alt="" coords="495,93,714,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="446,48,557,91,556,96,444,53"/>
+<area shape="rect" id="Node000004" href="$admt4000_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of admt4000 project." alt="" coords="17,181,192,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="254,141,151,184,149,179,252,136"/>
+<area shape="rect" id="Node000005" href="$admt4000_2src_2platform_2stm32_2parameters_8c.html" title="Definition of Mbed platform data used by admt4000 project." alt="" coords="216,181,433,221"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="319,146,324,181,319,182,314,147"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="602,147,597,182,592,181,597,146"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="drivers/platform/maxim/max32690/maxim_uart_stdio.h" name="drivers/platform/maxim/max32690/maxim_uart_stdio.h">
+<area shape="rect" id="Node000001" title="Header file for UART driver stdout/stdin redirection." alt="" coords="5,5,235,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="17,93,103,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,47,79,84,75,81,103,44"/>
+<area shape="rect" id="Node000003" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="127,93,233,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,44,165,81,161,84,132,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="46,240,117,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,121,129,141,104,168,91,197,85,227,80,226,86,196,99,165,126,137,156,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="241,240,324,265"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="204,117,233,137,261,165,275,196,283,226,277,227,270,198,256,168,230,141,201,121"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="113,167,247,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="183,119,183,153,177,153,177,119"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="166,194,110,234,107,230,163,190"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="198,190,256,230,253,234,195,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="145,240,215,265"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="183,192,183,226,177,226,177,192"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="projects/eval&#45;ade9430/src/app/parameters.h" name="projects/eval&#45;ade9430/src/app/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to Maxim platform used by eval&#45;ade9430 project." alt="" coords="210,5,377,45"/>
+<area shape="rect" id="Node000002" href="$iot__sample__common_8h.html" title=" " alt="" coords="208,93,379,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="296,46,296,79,291,79,291,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="254,121,100,165,99,160,253,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="112,167,187,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="271,121,186,163,184,158,269,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="211,167,282,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="288,120,264,157,260,154,283,118"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="307,167,373,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="303,118,327,154,323,157,299,120"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="398,167,469,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="317,116,400,158,397,163,315,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="493,167,617,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="336,116,500,160,498,166,335,121"/>
+</map>

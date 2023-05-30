@@ -1,0 +1,22 @@
+<map id="ad5791_set_register_value" name="ad5791_set_register_value">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="448,123,603,163"/>
+<area shape="rect" id="Node000002" href="$ad5791_8c.html#a479517b9876d7d00161ff6b977faca9d" title="Sets the DAC output in one of the three states." alt="" coords="216,5,400,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="493,115,450,78,399,44,371,33,373,28,401,40,454,74,497,111"/>
+<area shape="rect" id="Node000003" href="$ad5791_8c.html#ace052832046054022eceed4d1095ff4f" title="Writes to the DAC register." alt="" coords="223,55,393,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="454,121,399,102,345,83,346,78,401,97,455,116"/>
+<area shape="rect" id="Node000004" href="$cn0531_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="59,80,114,105"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="433,135,114,98,114,93,434,130"/>
+<area shape="rect" id="Node000005" href="$ad5791_8c.html#a89753bea092705e1b56fc9ab9f0bd3a0" title="Configures the output amplifier, DAC coding, SDO state and the linearity error compensation." alt="" coords="251,156,365,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="434,157,365,165,364,159,434,151"/>
+<area shape="rect" id="Node000006" href="$ad5791_8c.html#af9bc13089bf26b479e2c543b1976c237" title="Asserts RESET, CLR or LDAC in a software manner." alt="" coords="219,205,397,231"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="465,171,401,195,359,208,358,203,399,190,463,166"/>
+<area shape="rect" id="Node000009" href="$ad5791_8c.html#a6811049d716e2c50e1f5a5f6e206cc85" title="SPI write to device using a mask." alt="" coords="219,255,397,280"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="496,175,453,212,401,246,373,257,371,252,399,241,450,208,493,171"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="209,81,115,92,114,87,208,76"/>
+<area shape="rect" id="Node000007" href="$ad5791_8c.html#a7d772e9879595d021680f27e5b938b63" title="Clear DAC channel output with the clearcode." alt="" coords="9,156,164,181"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="236,205,144,184,145,179,238,200"/>
+<area shape="rect" id="Node000008" href="$ad5791_8c.html#ad284845f79fa8d876527c16ce9fb69a2" title="Trigger LDAC." alt="" coords="9,205,164,231"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="205,221,164,221,164,215,205,215"/>
+<area shape="rect" id="Node000010" href="$ad5791_8c.html#ac74ee2a2599c5317535cb9feceebd225" title="Set Linearity error compensation based on the reference voltage span." alt="" coords="5,255,168,280"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="205,270,168,270,168,265,205,265"/>
+</map>

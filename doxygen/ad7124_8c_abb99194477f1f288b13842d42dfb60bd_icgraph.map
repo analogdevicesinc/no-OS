@@ -1,0 +1,11 @@
+<map id="ad7124_reset" name="ad7124_reset">
+<area shape="rect" id="Node000001" title="Resets the device." alt="" coords="479,31,589,56"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="317,31,431,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="465,46,431,46,431,41,465,41"/>
+<area shape="rect" id="Node000003" href="$cn0391_8c.html#a0a2eb566f667a8a836fad277eadd773b" title="Initialize CN0391 device: set up AD7124 and configure IOUT." alt="" coords="172,5,269,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="303,34,269,29,270,23,304,29"/>
+<area shape="rect" id="Node000005" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="193,55,248,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="304,57,249,66,248,60,303,52"/>
+<area shape="rect" id="Node000004" href="$eval-cn0391-ardz_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

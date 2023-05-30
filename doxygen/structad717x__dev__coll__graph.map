@@ -1,0 +1,23 @@
+<map id="ad717x_dev" name="ad717x_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="995,147,1096,173"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="673,49,796,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="810,62,890,75,932,85,972,100,1007,122,1034,145,1030,149,1004,126,969,105,930,90,888,80,809,68"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="703,34,712,25,735,22,753,24,765,31,768,40,762,50,757,47,762,40,761,34,752,29,735,27,715,30,706,38"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="333,49,480,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="494,59,673,59,673,64,494,64"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,18,184,43"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,20,208,20,326,17,417,19,509,25,626,39,673,46,673,51,625,44,508,31,417,24,326,22,208,25,198,26"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,38,333,52,333,57,197,43"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="332,99,481,139"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="494,101,625,79,672,70,673,75,626,84,495,107"/>
+<area shape="rect" id="Node000006" href="$structad717x__st__reg.html" title=" " alt="" coords="676,98,793,123"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="807,114,886,124,971,137,1002,145,1001,150,970,143,886,129,807,120"/>
+<area shape="rect" id="Node000007" href="$structad717x__channel__setup.html" title=" " alt="" coords="649,147,820,173"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="834,157,995,157,995,163,834,163"/>
+<area shape="rect" id="Node000008" href="$structad717x__channel__map.html" title=" " alt="" coords="653,197,817,222"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="830,198,970,177,1001,170,1002,175,971,183,831,203"/>
+<area shape="rect" id="Node000009" href="$unionad717x__analog__inputs.html" title=" " alt="" coords="323,197,491,222"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="505,207,652,207,652,212,505,212"/>
+<area shape="rect" id="Node000010" href="$structad717x__filtcon.html" title=" " alt="" coords="676,246,793,271"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="807,253,887,242,929,231,969,216,1004,195,1030,171,1034,175,1007,199,972,221,931,236,888,247,808,258"/>
+</map>

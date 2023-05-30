@@ -1,0 +1,31 @@
+<map id="lt7170_write_word" name="lt7170_write_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write word operation." alt="" coords="599,153,741,179"/>
+<area shape="rect" id="Node000002" href="$lt7170_8c.html#ab0301706845e4d14a472712bf0a95823" title="Initialize the device structure." alt="" coords="416,55,507,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="629,150,489,83,491,78,631,145"/>
+<area shape="rect" id="Node000006" href="$lt7170_8c.html#a30b2bb5c6fcd4f0cf0afdb61361c7a0e" title="Set output PWM mode." alt="" coords="388,153,535,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="585,169,535,169,535,163,585,163"/>
+<area shape="rect" id="Node000007" href="$lt7170_8c.html#ac72b0c4c2cbafe50f388fb9e3adaebb4" title="Converts value to register data and do PMBus write word operation." alt="" coords="372,252,551,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="631,187,491,254,489,249,629,182"/>
+<area shape="rect" id="Node000003" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="189,5,307,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="402,56,303,33,304,28,403,51"/>
+<area shape="rect" id="Node000004" href="$iio__lt7170_8c.html#a649c3cbc7a1d85cb02446a741dcb9b30" title="Initializes the LT7170 IIO descriptor." alt="" coords="191,55,305,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="402,70,305,70,305,65,402,65"/>
+<area shape="rect" id="Node000005" href="$lt7170_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="177,70,124,70,124,65,177,65"/>
+<area shape="rect" id="Node000008" href="$lt7170_8c.html#a26161612639b4a22520ec0b73d037250" title="Set output PWM phase." alt="" coords="174,104,322,129"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="431,245,370,193,347,167,323,144,297,132,299,127,325,140,351,163,374,189,434,241"/>
+<area shape="rect" id="Node000009" href="$lt7170_8c.html#a105003e15e4b73ebb4df2622eae48162" title="Set overvalue and undervalue limits." alt="" coords="185,153,311,179"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="426,247,378,220,323,194,290,181,292,176,325,189,380,216,428,243"/>
+<area shape="rect" id="Node000010" href="$lt7170_8c.html#ae9beffff5489fc537e6e975d70b29c5d" title="Set timing values." alt="" coords="179,203,317,228"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="392,251,303,231,304,225,393,246"/>
+<area shape="rect" id="Node000011" href="$lt7170_8c.html#a8f992af95299159650719a1aca9d4fd9" title="Set input voltage window at which power conversion will proceed." alt="" coords="189,252,307,277"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="358,267,307,267,307,262,358,262"/>
+<area shape="rect" id="Node000012" href="$lt7170_8c.html#ade605b4754f46632075c7ee1d71073e4" title="Set switching frequency." alt="" coords="175,301,321,327"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="393,283,304,304,303,299,392,278"/>
+<area shape="rect" id="Node000013" href="$lt7170_8c.html#a1a277c96ce8532bfff985a372d20ffed" title="Set output voltage margin." alt="" coords="172,351,324,376"/>
+<area shape="poly" id="edge12_Node000007_Node000013" title=" " alt="" coords="429,287,381,314,325,342,295,353,293,348,323,337,378,310,427,282"/>
+<area shape="rect" id="Node000014" href="$lt7170_8c.html#a13612dfb2eb5a8f7193bbf67ef0f9f0c" title="Set output voltage transition rate." alt="" coords="190,400,306,425"/>
+<area shape="poly" id="edge13_Node000007_Node000014" title=" " alt="" coords="442,290,392,340,360,367,325,391,300,402,298,398,323,386,357,363,389,336,438,286"/>
+<area shape="rect" id="Node000015" href="$lt7170_8c.html#a4b0a95d50798584fb60972e4e86323d1" title="Set output voltage and its upper limit." alt="" coords="177,449,319,475"/>
+<area shape="poly" id="edge14_Node000007_Node000015" title=" " alt="" coords="449,291,401,364,366,405,325,440,304,452,301,447,323,436,363,401,397,361,445,288"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ad5706r_set_ldac_config" name="ad5706r_set_ldac_config">
+<area shape="rect" id="Node000001" title="Set ldac config for single channel." alt="" coords="375,5,557,31"/>
+<area shape="rect" id="Node000002" href="$ad5706r_8c.html#a5d7d1fe6f6b4c28b78f78d1420c5a25b" title="Configures the device." alt="" coords="156,5,327,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,21,327,21,327,15,361,15"/>
+<area shape="rect" id="Node000003" href="$ad5706r_8c.html#a0a5ed099aeb489e4de301edf8890056e" title="Initialize the device." alt="" coords="5,5,108,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,21,108,21,108,15,142,15"/>
+</map>

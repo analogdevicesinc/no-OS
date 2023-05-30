@@ -1,0 +1,70 @@
+<map id="axi_clkgen_calc_clk_params" name="axi_clkgen_calc_clk_params">
+<area shape="rect" id="Node000001" title="axi_clkgen_calc_clk_params" alt="" coords="1093,319,1244,359"/>
+<area shape="rect" id="Node000002" href="$clk__axi__clkgen_8c.html#ae7548d3825bf1f445bbdcd39983b96bf" title="axi_clkgen_set_rate" alt="" coords="893,327,1045,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1079,342,1046,342,1046,337,1079,337"/>
+<area shape="rect" id="Node000003" href="$ad3552r_8c.html#a99b8d9b1903e38e171e19132336af7fb" title=" " alt="" coords="661,5,792,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="963,313,953,256,932,183,917,145,897,107,873,73,844,44,819,30,791,22,793,17,821,25,847,40,877,70,902,105,921,142,937,181,958,255,968,312"/>
+<area shape="rect" id="Node000007" href="$ad463x_8c.html#abc56c626223c4f5ba9812f75491260a5" title="Initialize the device." alt="" coords="677,55,776,80"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="960,314,948,266,925,206,891,144,869,117,844,94,811,77,775,70,777,65,813,72,847,89,873,113,896,141,930,203,953,264,966,313"/>
+<area shape="rect" id="Node000009" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="677,104,776,129"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="957,315,942,276,918,229,885,182,866,161,844,143,811,128,776,121,777,115,813,123,847,138,869,157,889,178,923,226,947,274,962,313"/>
+<area shape="rect" id="Node000011" href="$ad738x_8c.html#a5a643687de5deac9b07cf82ee05503d7" title=" " alt="" coords="677,153,776,179"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="953,316,910,253,879,220,844,192,811,178,776,171,777,166,812,173,847,188,883,216,914,249,957,313"/>
+<area shape="rect" id="Node000014" href="$ad7616_8c.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="670,203,783,228"/>
+<area shape="poly" id="edge14_Node000002_Node000014" title=" " alt="" coords="945,319,901,279,874,259,844,242,814,231,783,224,784,218,816,226,846,237,877,254,905,275,949,315"/>
+<area shape="rect" id="Node000016" href="$ad796x_8c.html#ac6aabcda52a1f725b70d93a6855e6aef" title="Initialize the device." alt="" coords="677,252,776,277"/>
+<area shape="poly" id="edge16_Node000002_Node000016" title=" " alt="" coords="928,323,845,291,776,275,777,270,846,286,930,318"/>
+<area shape="rect" id="Node000019" href="$adrv903x_2src_2common_2clkgen__routines_8c.html#abe66af8d2f2c5c1e47b4894a702f7675" title="Initialize and set rates for RX and TX AXI clkgen instances." alt="" coords="673,301,781,327"/>
+<area shape="poly" id="edge19_Node000002_Node000019" title=" " alt="" coords="879,333,781,322,781,317,880,327"/>
+<area shape="rect" id="Node000020" href="$adrv902x_2src_2common_2clkgen__routines_8c.html#a044ace5326bb80c8aaaa7d261c42619f" title="Init and set rates for axi_clkgen components." alt="" coords="673,351,781,376"/>
+<area shape="poly" id="edge20_Node000002_Node000020" title=" " alt="" coords="880,351,781,361,781,355,879,346"/>
+<area shape="rect" id="Node000023" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="675,400,779,425"/>
+<area shape="poly" id="edge23_Node000002_Node000023" title=" " alt="" coords="928,360,846,390,779,406,778,401,845,385,926,355"/>
+<area shape="rect" id="Node000025" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="699,449,754,475"/>
+<area shape="poly" id="edge25_Node000002_Node000025" title=" " alt="" coords="947,364,903,403,876,423,846,439,799,455,755,462,754,457,797,450,844,434,873,418,900,399,944,360"/>
+<area shape="rect" id="Node000026" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="699,499,754,524"/>
+<area shape="poly" id="edge26_Node000002_Node000026" title=" " alt="" coords="957,366,913,428,883,461,847,488,824,499,799,507,754,513,754,508,798,501,822,494,844,484,879,457,909,425,952,363"/>
+<area shape="rect" id="Node000027" href="$pulsar__adc_8c.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="667,548,787,573"/>
+<area shape="poly" id="edge27_Node000002_Node000027" title=" " alt="" coords="962,366,946,405,922,451,889,498,847,538,818,552,788,560,787,555,816,547,844,533,885,495,917,449,941,402,957,364"/>
+<area shape="rect" id="Node000031" href="$cf__hdmi_8c.html#a3a7e63e57e99e2fea790462707ed6ae8" title="SetVideoResolution." alt="" coords="652,597,801,623"/>
+<area shape="poly" id="edge31_Node000002_Node000031" title=" " alt="" coords="965,366,952,414,929,474,895,535,873,563,847,587,826,599,803,607,801,602,824,594,844,583,869,559,891,532,925,472,947,413,960,365"/>
+<area shape="rect" id="Node000033" href="$transmitter_8c.html#a8b3e85ee90b00b7bc69e6a9b8eaf8a88" title="Parse the new EDID segment and set the resolution and the pixel clock according to EDID data." alt="" coords="608,647,845,672"/>
+<area shape="poly" id="edge33_Node000002_Node000033" title=" " alt="" coords="968,366,958,423,937,497,921,536,901,573,877,608,847,637,829,649,826,644,844,633,873,604,897,570,916,533,932,495,953,422,963,365"/>
+<area shape="rect" id="Node000004" href="$ad3552r_8c.html#ae80ba21fae1f11883703b87a0bb676e2" title=" " alt="" coords="410,5,513,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="647,21,513,21,513,15,647,15"/>
+<area shape="rect" id="Node000005" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="396,21,124,21,124,15,396,15"/>
+<area shape="rect" id="Node000006" href="$iio__ad3552r_8c.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="180,31,307,56"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="396,28,307,39,306,33,396,23"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="166,35,124,29,125,24,167,30"/>
+<area shape="rect" id="Node000008" href="$ad463x__fmcz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="402,55,521,80"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="664,70,521,70,521,65,664,65"/>
+<area shape="rect" id="Node000010" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="402,104,521,129"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="664,119,521,119,521,114,664,114"/>
+<area shape="rect" id="Node000012" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="381,153,541,179"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="664,169,541,169,541,163,664,163"/>
+<area shape="rect" id="Node000013" href="$ad738x__fmcz_2src_2platform_2lattice_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="216,153,271,179"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="367,169,271,169,271,163,367,163"/>
+<area shape="rect" id="Node000015" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="434,203,489,228"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="656,218,489,218,489,213,656,213"/>
+<area shape="rect" id="Node000017" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="381,252,541,277"/>
+<area shape="poly" id="edge17_Node000016_Node000017" title=" " alt="" coords="664,267,541,267,541,262,664,262"/>
+<area shape="rect" id="Node000018" href="$ad796x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="390,301,533,327"/>
+<area shape="poly" id="edge18_Node000016_Node000018" title=" " alt="" coords="664,279,531,304,530,299,663,274"/>
+<area shape="rect" id="Node000021" href="$adrv903x_2src_2examples_2basic__example_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main function." alt="" coords="402,351,521,376"/>
+<area shape="poly" id="edge21_Node000020_Node000021" title=" " alt="" coords="659,366,521,366,521,361,659,361"/>
+<area shape="rect" id="Node000022" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="402,400,521,425"/>
+<area shape="poly" id="edge22_Node000020_Node000022" title=" " alt="" coords="659,378,521,404,520,399,658,373"/>
+<area shape="rect" id="Node000024" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="434,449,489,475"/>
+<area shape="poly" id="edge24_Node000023_Node000024" title=" " alt="" coords="661,427,489,460,488,454,660,422"/>
+<area shape="rect" id="Node000028" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="381,499,541,524"/>
+<area shape="poly" id="edge28_Node000027_Node000028" title=" " alt="" coords="653,550,530,527,531,521,654,544"/>
+<area shape="rect" id="Node000029" href="$iio__pulsar__adc_8c.html#a8dc355525e9be45109bec316dad2ae8d" title="Initialize PULSAR_ADC for IIO interfacing." alt="" coords="390,548,533,573"/>
+<area shape="poly" id="edge29_Node000027_Node000029" title=" " alt="" coords="653,563,533,563,533,558,653,558"/>
+<area shape="rect" id="Node000030" href="$pulsar-adc_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="172,548,315,573"/>
+<area shape="poly" id="edge30_Node000029_Node000030" title=" " alt="" coords="376,563,315,563,315,558,376,558"/>
+<area shape="rect" id="Node000032" href="$adv7511_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="434,597,489,623"/>
+<area shape="poly" id="edge32_Node000031_Node000032" title=" " alt="" coords="638,613,489,613,489,607,638,607"/>
+<area shape="rect" id="Node000034" href="$transmitter_8c.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="363,647,560,672"/>
+<area shape="poly" id="edge34_Node000033_Node000034" title=" " alt="" coords="594,662,560,662,560,657,594,657"/>
+</map>

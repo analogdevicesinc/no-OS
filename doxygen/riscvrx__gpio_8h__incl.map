@@ -1,0 +1,10 @@
+<map id="drivers/platform/lattice/riscvrx_gpio.h" name="drivers/platform/lattice/riscvrx_gpio.h">
+<area shape="rect" id="Node000001" title="Header containing extra types used in the Lattice GPIO IP driver." alt="" coords="5,5,177,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="76,167,147,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,47,55,63,43,80,37,99,40,118,57,140,78,157,75,161,53,144,36,120,32,99,39,78,51,59,66,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="50,93,133,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="94,46,94,79,89,79,89,46"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="157,93,263,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="122,43,183,84,180,88,119,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="196,121,140,161,137,156,193,117"/>
+</map>

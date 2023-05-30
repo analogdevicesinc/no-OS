@@ -1,0 +1,24 @@
+<map id="drivers/platform/xilinx/xilinx_irq.c" name="drivers/platform/xilinx/xilinx_irq.c">
+<area shape="rect" id="Node000001" title="Implementation of Xilinx IRQ Generic Driver." alt="" coords="257,5,423,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,123,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="275,48,118,92,117,87,273,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="258,167,329,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="336,47,321,94,303,154,298,153,316,93,331,45"/>
+<area shape="rect" id="Node000004" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="147,93,256,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="308,48,235,89,233,84,305,43"/>
+<area shape="rect" id="Node000006" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="444,167,540,192"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="387,43,422,64,455,92,475,122,488,152,483,154,470,124,451,95,419,68,384,48"/>
+<area shape="rect" id="Node000008" href="$no__os__alloc_8h.html" title=" " alt="" coords="331,93,442,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="354,44,375,80,370,83,349,47"/>
+<area shape="rect" id="Node000010" href="$xilinx__irq_8h.html" title=" " alt="" coords="518,93,613,119"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="395,43,520,86,519,91,393,48"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="166,167,234,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="204,119,203,153,198,153,198,119"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="499,240,570,265"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="501,191,523,227,519,230,497,194"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="373,121,321,160,318,156,370,117"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="353,167,420,192"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="389,119,389,153,384,153,384,119"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="555,121,516,159,512,155,551,117"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="567,119,555,193,545,227,540,226,549,191,561,118"/>
+</map>

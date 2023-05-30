@@ -1,0 +1,12 @@
+<map id="axi_dac_set_ddr" name="axi_dac_set_ddr">
+<area shape="rect" id="Node000001" title="AXI DAC Set DDR (bus double&#45;data&#45;rate) mode." alt="" coords="676,5,803,31"/>
+<area shape="rect" id="Node000002" href="$ad3552r_8c.html#a99b8d9b1903e38e171e19132336af7fb" title=" " alt="" coords="497,5,628,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="662,21,628,21,628,15,662,15"/>
+<area shape="rect" id="Node000003" href="$ad3552r_8c.html#ae80ba21fae1f11883703b87a0bb676e2" title=" " alt="" coords="347,5,449,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="484,21,449,21,449,15,484,15"/>
+<area shape="rect" id="Node000004" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="333,21,125,21,125,15,333,15"/>
+<area shape="rect" id="Node000005" href="$iio__ad3552r_8c.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="172,31,299,56"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="334,31,299,36,299,31,333,25"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="158,35,124,29,125,24,159,29"/>
+</map>

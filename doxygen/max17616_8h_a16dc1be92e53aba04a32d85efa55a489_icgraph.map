@@ -1,0 +1,5 @@
+<map id="max17616_get_istart_ratio" name="max17616_get_istart_ratio">
+<area shape="rect" id="Node000001" title="Get current start ratio." alt="" coords="233,5,393,45"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#a06842d04ba8765565503d1949435b14f" title="Read attribute function for MAX17616 PMBus IIO driver." alt="" coords="5,13,185,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,28,185,28,185,23,219,23"/>
+</map>

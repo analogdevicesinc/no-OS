@@ -1,0 +1,16 @@
+<map id="admv1014_spi_write" name="admv1014_spi_write">
+<area shape="rect" id="Node000001" title="Writes data to ADMV1014 over SPI." alt="" coords="513,55,671,80"/>
+<area shape="rect" id="Node000002" href="$admv1014_8c.html#af54aeecd75abebc7ad4b44d2eb947844" title="Initializes the admv1014." alt="" coords="52,5,171,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="499,61,171,27,171,21,500,55"/>
+<area shape="rect" id="Node000003" href="$admv1014_8c.html#a898a127684be3100b115b70bd66ef9b0" title="Update ADMV1014 register." alt="" coords="265,80,465,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="500,80,466,84,465,79,499,75"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="317,78,217,45,170,33,172,28,218,39,318,73"/>
+<area shape="rect" id="Node000004" href="$admv1014_8c.html#a2f848f997531fdcabe617ff5f3c522b4" title="Set Baseband Amp Gain." alt="" coords="5,55,217,80"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="251,84,217,81,218,75,252,79"/>
+<area shape="rect" id="Node000005" href="$admv1014_8c.html#a5f4cbdd053844a1893904b5a23cfdb44" title="Set Digital Rx Detector." alt="" coords="20,104,203,129"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="252,106,203,111,203,105,251,101"/>
+<area shape="rect" id="Node000006" href="$admv1014_8c.html#a2a23fff172e8a95840dc3cffb903cbb9" title="Set IF Amp Gain." alt="" coords="9,153,214,179"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="315,112,218,143,169,156,168,151,217,138,314,107"/>
+<area shape="rect" id="Node000007" href="$admv1014_8c.html#a3595daf13e57a2467b3fb87cc2763707" title="Set LO Amp Phase." alt="" coords="29,203,193,228"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="340,116,286,156,218,194,185,205,183,200,216,189,284,151,337,112"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="drivers/platform/lattice/riscvrx_ip_uart.h" name="drivers/platform/lattice/riscvrx_ip_uart.h">
+<area shape="rect" id="Node000001" title="Header file of Lattice external UART IP driver for RISC&#45;V RX." alt="" coords="101,5,273,45"/>
+<area shape="rect" id="Node000002" href="$riscvrx__ip__uart_8c.html" title="Source file of Lattice external UART IP driver for RISC&#45;V RX." alt="" coords="5,101,177,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,57,113,103,109,99,156,53"/>
+<area shape="rect" id="Node000003" href="$ad738x__fmcz_2src_2platform_2lattice_2parameters_8h.html" title="Definitions specific to Lattice platform used by ad738x_fmcz project." alt="" coords="202,93,367,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,53,259,91,255,95,215,57"/>
+<area shape="rect" id="Node000004" href="$ad738x__fmcz_2src_2platform_2lattice_2parameters_8c.html" title="Definition of Lattice platform data used by ad738x_fmcz project." alt="" coords="202,196,367,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="287,162,287,196,282,196,282,162"/>
+</map>

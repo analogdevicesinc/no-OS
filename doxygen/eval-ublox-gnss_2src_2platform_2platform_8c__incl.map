@@ -1,0 +1,36 @@
+<map id="projects/eval&#45;ublox&#45;gnss/src/platform/platform.c" name="projects/eval&#45;ublox&#45;gnss/src/platform/platform.c">
+<area shape="rect" id="Node000001" title="Platform configuration for eval&#45;ublox&#45;gnss project." alt="" coords="327,5,537,45"/>
+<area shape="rect" id="Node000002" href="$eval-ublox-gnss_2src_2platform_2platform_8h.html" title="Header file of platform configuration." alt="" coords="320,93,411,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,47,386,84,382,81,414,44"/>
+<area shape="rect" id="Node000003" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,167,112,192"/>
+<area shape="poly" id="edge17_Node000001_Node000003" title=" " alt="" coords="387,48,101,164,99,159,385,43"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="435,93,562,119"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="450,44,482,81,478,84,446,47"/>
+<area shape="rect" id="Node000014" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="663,93,772,119"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="501,43,663,87,662,92,500,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,121,122,166,121,161,319,115"/>
+<area shape="rect" id="Node000005" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="593,167,698,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="411,116,587,161,586,166,410,121"/>
+<area shape="rect" id="Node000009" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="408,240,504,265"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="412,115,482,136,512,150,532,165,537,185,528,204,512,221,492,235,489,231,508,217,524,201,532,185,527,168,510,154,480,141,410,120"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="136,167,251,192"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="339,121,235,164,233,159,337,116"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="275,167,379,192"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="361,120,342,156,337,153,357,118"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="403,167,517,192"/>
+<area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="382,117,435,156,432,160,379,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="463,313,534,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,190,452,306,450,312,93,195"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="629,194,600,215,569,242,540,273,517,304,512,300,536,270,565,238,596,211,626,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="707,313,789,339"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="669,190,699,210,726,238,741,269,748,299,743,301,736,271,722,242,695,214,666,194"/>
+<area shape="rect" id="Node000007" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="579,240,712,265"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="648,192,648,226,643,226,643,192"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="623,268,536,310,534,305,621,263"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="663,263,721,303,718,307,660,268"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="610,313,681,339"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="648,266,648,300,643,300,643,266"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="465,264,487,300,483,303,461,267"/>
+<area shape="rect" id="Node000015" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="722,167,790,192"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="726,118,746,153,741,156,721,120"/>
+</map>

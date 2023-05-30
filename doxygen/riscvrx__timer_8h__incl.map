@@ -1,0 +1,12 @@
+<map id="drivers/platform/lattice/riscvrx_timer.h" name="drivers/platform/lattice/riscvrx_timer.h">
+<area shape="rect" id="Node000001" title="Timer control module header for Lattice RISC&#45;V RX." alt="" coords="86,5,258,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,88,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,48,78,88,75,84,140,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="137,167,207,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,46,156,80,155,118,164,153,159,155,149,119,151,79,161,45"/>
+<area shape="rect" id="Node000004" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="163,93,277,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="186,44,208,80,203,83,181,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="301,93,358,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="211,43,295,85,293,89,209,48"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="214,121,190,157,185,154,210,118"/>
+</map>

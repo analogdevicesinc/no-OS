@@ -1,0 +1,9 @@
+<map id="ltc4162l_init" name="ltc4162l_init">
+<area shape="rect" id="Node000001" title="Initialize the LTC4162L device." alt="" coords="345,31,448,56"/>
+<area shape="rect" id="Node000002" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="175,5,294,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="331,36,294,30,295,25,332,31"/>
+<area shape="rect" id="Node000003" href="$iio__ltc4162l_8c.html#aa69e106317388c027b866a4498ae2480" title=" " alt="" coords="172,55,297,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="332,56,298,61,297,55,331,50"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,70,124,70,124,65,159,65"/>
+</map>

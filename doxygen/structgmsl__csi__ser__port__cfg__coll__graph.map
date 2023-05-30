@@ -1,0 +1,7 @@
+<map id="gmsl_csi_ser_port_cfg" name="gmsl_csi_ser_port_cfg">
+<area shape="rect" id="Node000001" title="A structure that contains configuration parameters for a GMSL camera serializer MIPI port." alt="" coords="7,181,174,207"/>
+<area shape="rect" id="Node000002" href="$structgmsl__link__ser__phy__cfg.html" title="A structure that contains configuration parameters for a GMSL camera serializer MIPI PHY." alt="" coords="5,93,176,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,133,93,181,88,181,88,133"/>
+<area shape="rect" id="Node000003" href="$structgmsl__csi__ser__mipi__cfg.html" title="Configuration structure for GMSL Camera Serializer MIPI CSI2 interface." alt="" coords="6,5,175,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,45,93,93,88,93,88,45"/>
+</map>

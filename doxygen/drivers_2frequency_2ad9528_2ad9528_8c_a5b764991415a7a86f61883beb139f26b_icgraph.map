@@ -1,0 +1,35 @@
+<map id="ad9528_spi_write_n" name="ad9528_spi_write_n">
+<area shape="rect" id="Node000001" title="Writes a value to the selected register." alt="" coords="843,131,993,156"/>
+<area shape="rect" id="Node000002" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#afb5d83bae28bbba78e1e1c786b8927a0" title="Set channel rate." alt="" coords="291,29,447,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="889,124,846,95,794,70,703,47,609,37,521,34,447,37,447,32,521,29,610,31,704,42,796,65,848,90,892,120"/>
+<area shape="rect" id="Node000008" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#aeb3b71fe3d9ceb3f9766c2acb08723a0" title="Updates the AD9528 configuration." alt="" coords="653,80,795,105"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="855,130,773,108,774,103,856,125"/>
+<area shape="rect" id="Node000009" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a300fee1e9b4ba514e195d5312b11eea3" title="Initializes the AD9528." alt="" coords="312,131,425,156"/>
+<area shape="poly" id="edge19_Node000001_Node000009" title=" " alt="" coords="830,159,673,174,584,176,494,171,420,159,421,153,495,166,584,171,673,169,829,154"/>
+<area shape="rect" id="Node000012" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a508b6010b53efae6c7746aef27414b43" title="Updates the AD9528 configuration." alt="" coords="497,131,603,156"/>
+<area shape="poly" id="edge20_Node000001_Node000012" title=" " alt="" coords="829,146,604,146,604,141,829,141"/>
+<area shape="rect" id="Node000013" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a9de32c13fc2804255237417f002620f7" title="Performs a hard reset on the AD9528." alt="" coords="495,232,605,257"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="889,166,846,192,796,215,746,229,696,238,606,246,605,241,695,232,745,223,794,210,844,188,886,162"/>
+<area shape="rect" id="Node000003" href="$ad9083_2src_2app__clocking_8c.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="108,55,243,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="277,57,243,61,243,56,277,51"/>
+<area shape="rect" id="Node000005" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="123,5,227,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="277,33,227,27,228,22,277,28"/>
+<area shape="rect" id="Node000007" href="$headless__mb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="148,104,203,129"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="324,62,244,94,204,109,202,104,242,89,322,57"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+<area shape="rect" id="Node000006" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="109,21,60,21,60,15,109,15"/>
+<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="639,82,605,77,447,55,447,49,606,71,640,77"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="640,103,495,121,426,134,425,128,494,115,639,97"/>
+<area shape="poly" id="edge15_Node000008_Node000012" title=" " alt="" coords="667,112,595,133,594,128,665,107"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="324,128,242,94,212,83,214,78,244,89,326,123"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="343,123,298,84,241,44,217,33,220,28,244,40,301,79,347,119"/>
+<area shape="poly" id="edge14_Node000009_Node000007" title=" " alt="" coords="298,136,203,123,203,118,299,131"/>
+<area shape="rect" id="Node000010" href="$adrv903x_2src_2examples_2basic__example_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main function." alt="" coords="116,203,235,228"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="323,163,244,194,213,205,211,200,242,189,321,158"/>
+<area shape="rect" id="Node000011" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="116,153,235,179"/>
+<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="299,154,235,162,234,156,298,149"/>
+<area shape="poly" id="edge16_Node000012_Node000009" title=" " alt="" coords="483,146,426,146,426,141,483,141"/>
+<area shape="poly" id="edge18_Node000013_Node000009" title=" " alt="" coords="513,227,391,158,394,154,516,223"/>
+</map>

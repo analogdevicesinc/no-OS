@@ -1,0 +1,14 @@
+<map id="iiod_desc" name="iiod_desc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="183,269,266,295"/>
+<area shape="rect" id="Node000002" href="$structiiod__conn__priv.html" title=" " alt="" coords="107,181,223,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,217,218,267,214,270,179,220"/>
+<area shape="rect" id="Node000003" href="$structcomand__desc.html" title=" " alt="" coords="5,93,116,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="67,131,79,156,96,169,116,179,114,184,93,174,75,159,62,134"/>
+<area shape="rect" id="Node000004" href="$structiiod__run__cmd__result.html" title=" " alt="" coords="239,93,392,119"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="285,128,186,183,184,179,282,123"/>
+<area shape="rect" id="Node000005" href="$structiiod__buff.html" title=" " alt="" coords="147,5,225,31"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="185,44,179,94,169,181,163,181,174,93,180,44"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="216,36,299,91,296,95,213,40"/>
+<area shape="rect" id="Node000006" href="$structiiod__ops.html" title=" " alt="" coords="247,181,323,207"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="271,220,235,270,231,267,266,217"/>
+</map>

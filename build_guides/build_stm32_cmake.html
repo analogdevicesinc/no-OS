@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This guide describes how to build a no-OS project for the STM32 platform using the CMake build system. For the legacy Makefile flow, see STM32 Build Prerequisites." name="description" />
+
+    <title>STM32 Build Prerequisites (CMake) &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a8f9a170" />
+    <script async="async" src="../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mbed Build Prerequisites" href="build_mbed.html" />
+    <link rel="prev" title="STM32 Build Prerequisites" href="build_stm32.html" />
+   
+  
+  
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">STM32 Build Prerequisites (CMake)</a><ul>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#install-the-stm32-tools">Install the STM32 tools</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listing-build-combinations">Listing build combinations</a></li>
+<li><a class="reference internal" href="#building-a-project">Building a project</a><ul>
+<li><a class="reference internal" href="#recommended-the-build-helper">Recommended: the build helper</a></li>
+<li><a class="reference internal" href="#manual-cmake-invocation">Manual CMake invocation</a></li>
+<li><a class="reference internal" href="#the-ioc-file">The .ioc file</a></li>
+<li><a class="reference internal" href="#configuring-options-menuconfig">Configuring options (menuconfig)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flashing-and-debugging">Flashing and Debugging</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/amplifiers/adl8113.html">ADL8113 Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/accel/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/accel/adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad4080.html">AD4080 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad4692.html">AD4692 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad717x.html">AD717X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad7490.html">AD7490 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad7799.html">AD7799 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9081.html">AD9081 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9265.html">AD9265 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9434.html">AD9434 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9467.html">AD9467 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ad9680.html">AD9680 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/adaq7980.html">ADAQ7980 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/adaq8092.html">ADAQ8092 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/ltc2378.html">LTC2378-20 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/max9611pmb.html">MAX9611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc/pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc-dac/ad5592r.html">AD5592R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc-dac/ad5592r.html#ad5592r-ad5593r-iio-support">AD5592R/AD5593R IIO Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adc-dac/ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/digital-io/max22915.html">MAX22915 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad3530r.html">AD3530R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad5460.html">AD5460 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad552xr.html">AD552XR no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad5706r.html">AD5706R no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad5710r.html">AD5710R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad7293.html">AD7293 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad9144.html">AD9144 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad9152.html">AD9152 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad917x.html">AD917x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/ad9739a.html">AD9739A no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/max22007.html">MAX22007 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/dac/max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ecg/adas1000.html">ADAS1000 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/filter/admv8818.html">ADMV8818 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/ad9523.html">AD9523 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/ad9545.html">AD9545 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/ad9553.html">AD9553 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf4371.html">ADF4371 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/admv1013.html">ADMV1013 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/admv1014.html">ADMV1014 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/frequency/adrf6780.html">ADRF6780 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/gnss-gps/nmea_ubx.html">GNSS/GPS Driver for no-OS Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/io-link/max22516.html">MAX22516 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/led/ltc3208.html">LTC3208 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/led/ltc3220.html">LTC3220 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/led/max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/mcs/mcs_gpio.html">MCS GPIO no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/meter/ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/meter/ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/meter/ade9000.html">ADE9000 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/meter/ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/meter/ade9153a.html">ADE9153A no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/meter/ade9430.html">ADE9430 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/motor/tmc5240.html">TMC5240 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/mux/adg2404.html">ADG2404/ADG6404 Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/position/admt4000.html">ADMT4000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/rf-transceiver/hmc630x.html">HMC630X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/rf-transceiver/koror.html">ADRV904x (Koror) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/rf-transceiver/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/rf-transceiver/navassa.html">ADRV9002 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/rf-transceiver/palma.html">ADRV903x (Palma) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/rf-transceiver/talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/switch/adg1712.html">ADG1712 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/switch/adg1736.html">ADG736/ADG1736/ADG2736 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/switch/adg2128.html">ADG2128 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/switch/adgm3121.html">ADGM3144/ADGM3121 MEMS Switch Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/switch/adgs6414d.html">ADGS6414D Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/temperature/adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/temperature/lm75.html">LM75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/temperature/ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/temperature/max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/temperature/max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltm3360b.html">LTM3360B no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/max17616.html">MAX17616 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/power/max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/potentiometer/ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ethernet/adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/net/adin1320.html">ADIN1320 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/net/mdio_spi.html">MDIO SPI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/gyroscope/adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad405x.html">AD405X no-OS Example Project STM32</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad463x_fmcz.html">AD463x-FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad4692_ardz.html">AD4692 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad6676-ebz.html">AD6676-EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7124-4sdz.html">AD7124-4SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7124-8pmdz.html">AD7124-8-PMDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad713x_fmcz.html">AD713x FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad719x.html">AD719X no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad738x_fmcz.html">AD738x_FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7616-sdz.html">AD7616-SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad7768-evb.html">AD7768-EVB no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9083.html">AD9083 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9208.html">AD9208 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9265-fmc-125ebz.html">AD9265-FMC-125EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9434-fmc-500ebz.html">AD9434-FMC-500EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ad9656_fmc.html">AD9656_FMC no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/adalm-mmsc.html">AD4080 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/adaq7980_sdz.html">ADAQ7980_SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/adaq8092_fmc.html">ADAQ8092_FMC no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/cn0552.html">CN0552 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/eval-ad7490sdz.html">EVAL-AD7490SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/ltc2378.html">Evaluating the LTC2378-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/max11205pmb1.html">MAX11205PMB1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc-dac/ad74413r.html">AD74413R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc-dac/ad74414h.html">AD74414H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc-dac/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adc-dac/adalm-lsmspg.html">AD5592R/AD5593R/LM75 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/accel/eval-adxl313z.html">EVAL-ADXL313Z no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/accel/eval-adxl355-pmdz.html">EVAL-ADXL355-PMDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/accel/eval-adxl367z.html">EVAL-ADXL367Z no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/afe/ad4110.html">AD4110 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/afe/ad413x.html">AD413x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/ad9545.html">AD9545 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf4371.html">ADF4371 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/frequency/adf5902_sdz.html">ADF5902 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imu/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imu/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imu/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imu/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imu/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imu/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/net/adin1110.html">ADIN1110 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/net/adin1140.html">ADIN1140 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/net/adin1320.html">Evaluating the ADIN1320</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/meter/ade7816.html">ADE7816 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/meter/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/meter/eval-ade9000.html">EVAL-ADE9000 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/meter/eval-ade9153a.html">EVAL-ADE9153A no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/meter/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/ad9361.html">AD9361/AD9364 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/ad9371.html">AD9371 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/adrv9009.html">ADRV9009 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/adrv903x.html">adrv903x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/rf-transceiver/adrv904x.html">adrv904x no-OS Sample Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/ad-acevsecrdset-sl.html">AD-ACEVSECRDSET-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/aducm3029_flash_demo.html">ADuCM3029 Flash Demo no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/aducm_blinky_example.html">ADuCM3029 Blinky no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/apardpfwd.html">AD-APARDPFWD-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/cn0531.html">CN0531 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/cn0561.html">CN0561 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/cn0565.html">CN0565 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/demo_esp.html">Demo ESP no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/display_demo.html">Display Demo no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-adg1712.html">ADG1712 Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-adg1736.html">Evaluating the EVAL-ADG1736</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-adg2404.html">EVAL-ADG2404 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-adgm3121.html">ADGM3121 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-adgs6414d.html">ADGS6414D Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-adl8113.html">EVAL-ADL8113 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-cn0391-ardz.html">EVAL-CN0391-ARDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-ltc4306.html">EVAL-LTC4306 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-pqmon.html">AD-PQMON-SL Kit no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/eval-ublox-gnss.html">no-OS GNSS API - Unified GPS/GNSS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/fmcdaq2.html">FMCDAQ2 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/fmcdaq3.html">FMCDAQ3 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/iio_adpd1080.html">IIO_ADPD1080 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/iio_aducm3029.html">IIO_ADUCM3029 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval/iio_demo_freeRTOS.html">IIO Demo FreeRTOS no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max14906.html">MAX14906 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max14916.html">MAX14916 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max22190.html">MAX22190 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max22196.html">MAX22196 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max22200.html">MAX22200 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/digital-io/max22915.html">MAX22915 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltc3337.html">LTC3337 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltm3360b.html">Evaluating the LTM3360B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/max17616.html">Evaluating the MAX17616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/power/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/ad5460.html">AD5460 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/ad5758-sdz.html">AD5758-SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/ad5766-sdz.html">AD5766-SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/ad9172.html">AD9172 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/dc2903a.html">DC2903A no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/max22007.html">MAX22007EVKIT no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/temperature/adt7420-pmdz.html">ADT7420-PMDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/temperature/adt75.html">ADT75 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/temperature/ltc2983.html">Evaluating the LTC2983 / ADT7604</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/temperature/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/temperature/max31855.html">MAX31855 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/gyroscope/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cdc/ad7746-ebz.html">AD7746-EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/led/ltc3208.html">Evaluating the LTC3208</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/led/ltc3220.html">Evaluating the LTC3220</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/led/max25603.html">MAX25603 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/position/admt4000.html">Evaluating the ADMT4000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/examples/hello_world.html">Hello World no-OS Example Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="build_xilinx.html">Xilinx Build Prerequisites</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="build_xilinx_vitis2025.html">Debugging with Xilinx Vitis IDE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="build_intel.html">Intel/Quartus Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_maxim_cmake.html">Maxim Build Prerequisites (CMake)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_mac.html">MAC Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_stm32.html">STM32 Build Prerequisites</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">STM32 Build Prerequisites (CMake)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_mbed.html">Mbed Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_aducm3029.html">ADuCM3029 Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_pico.html">Raspberry Pi Pico Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_lattice.html">Lattice Propel (RISC-V RX) Build Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_wsl.html">WSL2 USB Passthrough Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../build_guide.html">No-OS Build Guide</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="stm32-build-prerequisites-cmake">
+<h1>STM32 Build Prerequisites (CMake)<a class="headerlink" href="#stm32-build-prerequisites-cmake" title="Link to this heading"></a></h1>
+<p>This guide describes how to build a no-OS project for the STM32 platform using
+the <strong>CMake</strong> build system. For the legacy Makefile flow, see
+<a class="reference internal" href="build_stm32.html"><span class="doc">STM32 Build Prerequisites</span></a>.</p>
+<p>The CMake build is driven by board <em>presets</em> (defined in
+<code class="docutils literal notranslate"><span class="pre">board_configs/stm32/CMakePresets.json</span></code>) and project <em>defconfigs</em> (Kconfig
+fragments inside each project). A small helper script,
+<code class="docutils literal notranslate"><span class="pre">tools/scripts/no_os_build.py</span></code>, discovers the valid project/variant/board
+combinations and orchestrates the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> configure and build steps for you.</p>
+<p>Unlike most platforms, STM32 generates its HAL drivers from a CubeMX <strong>.ioc</strong>
+file at configure time. The build invokes STM32CubeMX to produce the HAL/CMSIS
+sources, startup file and linker script, patches the generated project, and
+links it into the no-OS executable. This happens automatically — you only need
+a valid <code class="docutils literal notranslate"><span class="pre">.ioc</span></code> for the board.</p>
+<section id="supported-boards">
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<p>The following STM32 boards (presets) are available out of the box:</p>
+<blockquote>
+<div><div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Preset / Board</p></th>
+<th class="head"><p>Target chip</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stm32f756_nucleo</span></code></p></td>
+<td><p>STM32F756 (Cortex-M7)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sdp-ck1z</span></code></p></td>
+<td><p>stm32f469 (Cortex-M4)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adin1110ebz</span></code></p></td>
+<td><p>STM32L4S5 (Cortex-M4)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></blockquote>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>CMake</strong> 3.28 or newer (presets v7 are used).</p></li>
+<li><p><strong>Ninja</strong> (the presets use the Ninja generator).</p></li>
+<li><p><strong>Python 3</strong>. The build creates a private virtual environment under
+<code class="docutils literal notranslate"><span class="pre">.no_os_venv</span></code> on first configure and installs the dependencies listed in
+<code class="docutils literal notranslate"><span class="pre">tools/scripts/requirements.txt</span></code> (<code class="docutils literal notranslate"><span class="pre">kconfiglib</span></code>, <code class="docutils literal notranslate"><span class="pre">pylink-square</span></code> and,
+on Windows, <code class="docutils literal notranslate"><span class="pre">windows-curses</span></code>).</p></li>
+<li><p><strong>STM32CubeIDE</strong> — provides the ARM cross toolchain
+(<code class="docutils literal notranslate"><span class="pre">arm-none-eabi-gcc</span></code>) and the OpenOCD used for flashing and debugging.</p></li>
+<li><p><strong>STM32CubeMX</strong> — used to generate the HAL drivers from the project <code class="docutils literal notranslate"><span class="pre">.ioc</span></code>
+file.</p></li>
+</ul>
+<section id="install-the-stm32-tools">
+<h3>Install the STM32 tools<a class="headerlink" href="#install-the-stm32-tools" title="Link to this heading"></a></h3>
+<p>Install both <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">STM32CubeIDE</a>
+and <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubemx.html" target="_blank">STM32CubeMX</a>.</p>
+<p>The build locates them automatically in the common install locations
+(<code class="docutils literal notranslate"><span class="pre">/opt/st</span></code>, <code class="docutils literal notranslate"><span class="pre">$HOME/st</span></code>, <code class="docutils literal notranslate"><span class="pre">C:/ST</span></code>, <code class="docutils literal notranslate"><span class="pre">$ProgramFiles/STMicroelectronics</span></code>,
+<code class="docutils literal notranslate"><span class="pre">/Applications</span></code> on macOS, etc.). If they are installed elsewhere, point the
+build at them with environment variables:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux / macOS — set to the install location</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">STM32CUBEMX</span><span class="o">=</span>/path/to/STM32CubeMX
+<span class="nb">export</span><span class="w"> </span><span class="nv">STM32CUBEIDE</span><span class="o">=</span>/path/to/stm32cubeide
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windows (Git Bash)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">STM32CUBEMX</span><span class="o">=</span>/c/ST/STM32CubeMX
+<span class="nb">export</span><span class="w"> </span><span class="nv">STM32CUBEIDE</span><span class="o">=</span>/c/ST/STM32CubeIDE
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The toolchain and OpenOCD are taken from the GCC and OpenOCD bundled inside
+STM32CubeIDE, so a separate ARM toolchain install is not required. If a
+bundled OpenOCD is not found, a system <code class="docutils literal notranslate"><span class="pre">openocd</span></code> on <code class="docutils literal notranslate"><span class="pre">PATH</span></code> is used as a
+fallback.</p>
+</div>
+<ul>
+<li><p>(Optional) For visual debugging, install Visual Studio Code and the
+Cortex-Debug extension. IDE project files are generated automatically as part
+of the build, including a <code class="docutils literal notranslate"><span class="pre">no-os.code-workspace</span></code> file at the repository
+root.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>To build, debug and run a project from VS Code you <strong>must</strong> open the
+generated <code class="docutils literal notranslate"><span class="pre">no-os.code-workspace</span></code> file, not just the no-OS folder. The
+debug launch configuration and include paths live in that workspace;
+opening the folder on its own will not pick them up. Open it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>code<span class="w"> </span>no-os.code-workspace
+</pre></div>
+</div>
+<p>or from VS Code via <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span> <span class="pre">Workspace</span> <span class="pre">from</span> <span class="pre">File...</span></code>. The build
+utility can also open it for you after a successful build by passing
+<code class="docutils literal notranslate"><span class="pre">--open</span></code> to <code class="docutils literal notranslate"><span class="pre">no_os_build.py</span> <span class="pre">build</span></code>.</p>
+</div>
+<p>VS Code does not always prompt to open the workspace on its own (the
+notification is shown at most once per folder and is suppressed once
+dismissed), so open it explicitly as shown above.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="listing-build-combinations">
+<h2>Listing build combinations<a class="headerlink" href="#listing-build-combinations" title="Link to this heading"></a></h2>
+<p>From the no-OS repository root, list the valid combinations and filter to the
+STM32 boards:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>tools/scripts/no_os_build.py<span class="w"> </span>list<span class="w"> </span>--board<span class="w"> </span>sdp-ck1z
+</pre></div>
+</div>
+</div></blockquote>
+<p>Each row is a <code class="docutils literal notranslate"><span class="pre">PROJECT</span>&#160; <span class="pre">VARIANT</span>&#160; <span class="pre">BOARD</span>&#160; <span class="pre">PLATFORM</span></code> tuple that can be fed back
+to the <code class="docutils literal notranslate"><span class="pre">build</span></code> subcommand.</p>
+</section>
+<section id="building-a-project">
+<h2>Building a project<a class="headerlink" href="#building-a-project" title="Link to this heading"></a></h2>
+<section id="recommended-the-build-helper">
+<h3>Recommended: the build helper<a class="headerlink" href="#recommended-the-build-helper" title="Link to this heading"></a></h3>
+<p>The simplest way to configure and build is via <code class="docutils literal notranslate"><span class="pre">no_os_build.py</span></code>, which selects
+the right preset, defconfig and board config for you:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>tools/scripts/no_os_build.py<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--project<span class="w"> </span>iio_demo<span class="w"> </span>--variant<span class="w"> </span>iio<span class="w"> </span>--board<span class="w"> </span>sdp-ck1z
+</pre></div>
+</div>
+</div></blockquote>
+<p>Useful options:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--clean</span></code> — remove the build directory before configuring.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-j</span> <span class="pre">N</span></code> / <code class="docutils literal notranslate"><span class="pre">--jobs</span> <span class="pre">N</span></code> — parallel compile jobs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--parallel</span></code> — build different boards in parallel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--probe</span> <span class="pre">{openocd,jlink}</span></code> — select the debug probe (needed for flashing).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--flash</span></code> — flash after a successful build (requires <code class="docutils literal notranslate"><span class="pre">--probe</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> — print the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> commands without running them.</p></li>
+</ul>
+</div></blockquote>
+<p>Each combination is built into its own directory named
+<code class="docutils literal notranslate"><span class="pre">build-&lt;project&gt;-&lt;variant&gt;-&lt;board&gt;</span></code> at the repo root (override the location
+with <code class="docutils literal notranslate"><span class="pre">--build-dir</span></code>). The build artifacts (<code class="docutils literal notranslate"><span class="pre">.elf</span></code>, <code class="docutils literal notranslate"><span class="pre">.hex</span></code>, <code class="docutils literal notranslate"><span class="pre">.bin</span></code>) are placed
+in <code class="docutils literal notranslate"><span class="pre">&lt;build-dir&gt;/build</span></code>.</p>
+</section>
+<section id="manual-cmake-invocation">
+<h3>Manual CMake invocation<a class="headerlink" href="#manual-cmake-invocation" title="Link to this heading"></a></h3>
+<p>You can also drive CMake directly. Configure with the board preset and select
+the project/variant with <code class="docutils literal notranslate"><span class="pre">PROJECT_DEFCONFIG</span></code>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cmake<span class="w"> </span>-B<span class="w"> </span>iio_demo<span class="w"> </span>--preset<span class="w"> </span>sdp-ck1z<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>-DPROJECT_DEFCONFIG<span class="o">=</span>iio_demo/iio.conf
+</pre></div>
+</div>
+</div></blockquote>
+<p>Then build the project target (the target name is the project directory name):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>iio_demo<span class="w"> </span>--target<span class="w"> </span>iio_demo
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">PROJECT_DEFCONFIG</span></code> is a path relative to the <code class="docutils literal notranslate"><span class="pre">projects/</span></code> directory of
+the form <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/&lt;variant&gt;.conf</span></code>. When the project provides board
+variants under <code class="docutils literal notranslate"><span class="pre">projects/&lt;project&gt;/boards/&lt;variant&gt;/&lt;board&gt;.conf</span></code>, the
+matching board config is layered on top automatically based on the preset's
+<code class="docutils literal notranslate"><span class="pre">BOARD</span></code> value.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code> is given, the build defaults to
+<code class="docutils literal notranslate"><span class="pre">RelWithDebInfo</span></code> so the ELF contains debug info. Use
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Debug</span></code> for an unoptimized build, or <code class="docutils literal notranslate"><span class="pre">MinSizeRel</span></code> /
+<code class="docutils literal notranslate"><span class="pre">Release</span></code> for size/speed.</p>
+</div>
+</section>
+<section id="the-ioc-file">
+<h3>The .ioc file<a class="headerlink" href="#the-ioc-file" title="Link to this heading"></a></h3>
+<p>The HAL drivers are generated from a CubeMX <code class="docutils literal notranslate"><span class="pre">.ioc</span></code> file. By default the build
+looks for <code class="docutils literal notranslate"><span class="pre">projects/&lt;project&gt;/&lt;board&gt;.ioc</span></code>. To use a different file, set the
+<code class="docutils literal notranslate"><span class="pre">CONFIG_STM32_IOC_PATH</span></code> Kconfig option (relative paths are resolved from the
+project directory):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cmake<span class="w"> </span>-B<span class="w"> </span>iio_demo<span class="w"> </span>--preset<span class="w"> </span>sdp-ck1z<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>-DPROJECT_DEFCONFIG<span class="o">=</span>iio_demo/iio.conf<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>-DCONFIG_STM32_IOC_PATH<span class="o">=</span>sdp-ck1z-usb-cdc-acm.ioc
+</pre></div>
+</div>
+</div></blockquote>
+<p>The CubeMX project is regenerated only when the <code class="docutils literal notranslate"><span class="pre">.ioc</span></code> file or the CubeMX
+executable changes (tracked via a stamp file), so subsequent builds are fast.</p>
+</section>
+<section id="configuring-options-menuconfig">
+<h3>Configuring options (menuconfig)<a class="headerlink" href="#configuring-options-menuconfig" title="Link to this heading"></a></h3>
+<p>Kconfig options can be browsed and changed interactively after configuring:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>iio_demo<span class="w"> </span>--target<span class="w"> </span>menuconfig
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="flashing-and-debugging">
+<h2>Flashing and Debugging<a class="headerlink" href="#flashing-and-debugging" title="Link to this heading"></a></h2>
+<p>Flashing requires a debug probe to be selected at <strong>configure</strong> time via
+<code class="docutils literal notranslate"><span class="pre">-DPROBE=...</span></code>. Two probes are supported:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">openocd</span></code> (default) — uses the OpenOCD bundled with STM32CubeIDE.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jlink</span></code> — uses a SEGGER J-Link via the <code class="docutils literal notranslate"><span class="pre">pylink-square</span></code> Python package.</p></li>
+</ul>
+</div></blockquote>
+<p>Configure with the desired probe, build, then run the <code class="docutils literal notranslate"><span class="pre">flash</span></code> target:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cmake<span class="w"> </span>-B<span class="w"> </span>iio_demo<span class="w"> </span>--preset<span class="w"> </span>sdp-ck1z<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>-DPROJECT_DEFCONFIG<span class="o">=</span>iio_demo/iio.conf<span class="w"> </span>-DPROBE<span class="o">=</span>openocd
+$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>iio_demo<span class="w"> </span>--target<span class="w"> </span>iio_demo
+$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>iio_demo<span class="w"> </span>--target<span class="w"> </span>flash
+</pre></div>
+</div>
+</div></blockquote>
+<p>Or, with the helper script in one step:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>tools/scripts/no_os_build.py<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--project<span class="w"> </span>iio_demo<span class="w"> </span>--variant<span class="w"> </span>iio<span class="w"> </span>--board<span class="w"> </span>sdp-ck1z<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--probe<span class="w"> </span>openocd<span class="w"> </span>--flash
+</pre></div>
+</div>
+</div></blockquote>
+<p>When the OpenOCD probe is selected, the following additional targets are
+available:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">flash</span></code> — program the <code class="docutils literal notranslate"><span class="pre">.elf</span></code> to the target and reset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">erase</span></code> — erase the device flash.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">debug</span></code> — start OpenOCD and attach GDB (Linux/macOS).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">debug_server</span></code> — start OpenOCD and wait for a GDB connection. On
+Windows, run <code class="docutils literal notranslate"><span class="pre">debug_server</span></code> in one terminal and <code class="docutils literal notranslate"><span class="pre">debug_gdb</span></code> in
+another.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>iio_demo<span class="w"> </span>--target<span class="w"> </span>debug
+</pre></div>
+</div>
+</div></blockquote>
+<p>To debug graphically from VS Code, open the generated <code class="docutils literal notranslate"><span class="pre">no-os.code-workspace</span></code>
+(see the install step above) and launch the debug configuration from there;
+opening the no-OS folder without the workspace will not load the debug setup.</p>
+<p>The OpenOCD interface and target configuration are derived automatically from
+the <code class="docutils literal notranslate"><span class="pre">.ioc</span></code> file (MCU family and part number), falling back to the preset's
+<code class="docutils literal notranslate"><span class="pre">TARGET</span></code> when the <code class="docutils literal notranslate"><span class="pre">.ioc</span></code> is unavailable.</p>
+</section>
+<section id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Link to this heading"></a></h2>
+<p>The CMake flow works under Git Bash. Install STM32CubeIDE and STM32CubeMX, then
+export <code class="docutils literal notranslate"><span class="pre">STM32CUBEIDE</span></code> and <code class="docutils literal notranslate"><span class="pre">STM32CUBEMX</span></code> if they are not in a default
+location (see above). Make sure <code class="docutils literal notranslate"><span class="pre">cmake</span></code>, <code class="docutils literal notranslate"><span class="pre">ninja</span></code> and <code class="docutils literal notranslate"><span class="pre">python</span></code> are
+available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in your Git Bash session, then follow the same
+configure/build/flash steps as on Linux.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="build_stm32.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">STM32 Build Prerequisites</a>
+    <a href="build_mbed.html" title="Next document (Alt+Shift+RightArrow)" class="next">Mbed Build Prerequisites</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

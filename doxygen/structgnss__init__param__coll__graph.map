@@ -1,0 +1,17 @@
+<map id="gnss_init_param" name="gnss_init_param">
+<area shape="rect" id="Node000001" title="GNSS Device initialization parameters." alt="" coords="327,196,457,221"/>
+<area shape="rect" id="Node000002" href="$structno__os__uart__init__param.html" title="Structure holding the parameters for UART initialization." alt="" coords="32,93,203,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,122,262,169,343,193,342,198,260,175,151,127"/>
+<area shape="rect" id="Node000003" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="5,5,192,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,43,117,92,112,93,101,45"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="245,93,377,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="322,130,332,151,345,170,373,194,370,198,341,174,327,153,317,133"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="217,5,405,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="313,45,313,93,308,93,308,45"/>
+<area shape="rect" id="Node000006" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="401,93,551,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="460,131,404,198,399,194,456,127"/>
+<area shape="rect" id="Node000007" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="429,5,606,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="508,44,484,94,479,92,503,42"/>
+<area shape="rect" id="Node000008" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="575,93,734,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="617,127,498,174,429,198,427,193,496,170,615,122"/>
+</map>

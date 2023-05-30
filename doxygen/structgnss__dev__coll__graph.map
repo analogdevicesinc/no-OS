@@ -1,0 +1,25 @@
+<map id="gnss_dev" name="gnss_dev">
+<area shape="rect" id="Node000001" title="GNSS Device structure." alt="" coords="696,207,779,233"/>
+<area shape="rect" id="Node000002" href="$structno__os__uart__desc.html" title="Stucture holding the UART descriptor." alt="" coords="352,18,483,43"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="497,17,540,17,587,22,632,35,674,58,690,74,704,93,723,135,733,176,738,207,732,207,728,177,718,137,700,95,686,77,670,62,630,40,586,27,540,22,497,23"/>
+<area shape="rect" id="Node000003" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="6,18,193,43"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="206,28,352,28,352,33,206,33"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="351,82,483,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="497,101,605,117,649,125,673,132,694,149,711,169,733,206,728,208,706,172,690,153,671,137,647,130,604,122,497,107"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,82,193,107"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="207,92,351,92,351,97,207,97"/>
+<area shape="rect" id="Node000006" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="343,131,492,157"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="507,147,588,158,673,180,720,205,717,210,671,185,587,163,506,152"/>
+<area shape="rect" id="Node000007" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="11,131,188,157"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="202,141,342,141,342,147,202,147"/>
+<area shape="rect" id="Node000008" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="338,181,497,206"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="511,198,696,214,695,219,510,204"/>
+<area shape="rect" id="Node000009" href="$structgnss__ubx__nav__pvt.html" title="UBX&#45;NAV&#45;PVT (Position, Velocity, Time) solution message structure." alt="" coords="346,230,489,255"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="503,245,585,245,672,237,701,230,703,235,672,243,585,251,503,251"/>
+<area shape="rect" id="Node000010" href="$structgnss__ubx__nav__timeutc.html" title="UBX&#45;NAV&#45;TIMEUTC (UTC time solution) message structure." alt="" coords="332,279,503,305"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="516,292,593,285,633,277,671,266,699,249,722,231,725,235,702,254,673,270,634,283,594,291,516,298"/>
+<area shape="rect" id="Node000011" href="$structgnss__nmea__time.html" title="GPRMC sentence time data structure for NMEA&#45;only devices." alt="" coords="351,329,484,354"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="498,346,540,346,585,341,629,330,671,311,691,294,708,272,729,232,734,234,713,275,695,298,673,316,631,335,586,346,540,351,498,352"/>
+<area shape="rect" id="Node000012" href="$structgnss__nmea__position.html" title="GPGGA sentence position and fix data structure for NMEA&#45;only devices." alt="" coords="340,378,495,403"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="508,401,549,402,592,397,633,386,670,366,686,352,698,336,717,298,727,261,732,233,737,233,732,263,722,300,703,339,690,356,674,370,635,391,593,402,550,407,508,407"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="projects/eval&#45;adgs6414d/src/common/common_data.c" name="projects/eval&#45;adgs6414d/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by adgs6414d examples." alt="" coords="18,5,233,45"/>
+<area shape="rect" id="Node000002" href="$eval-adgs6414d_2src_2common_2common__data_8h.html" title="Defines common data to be used by adgs6414d examples." alt="" coords="62,93,189,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,46,128,79,123,79,123,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,121,82,158,78,155,113,117"/>
+<area shape="rect" id="Node000004" href="$adgs6414d_8h.html" title="Header file for ADGS6414D Driver." alt="" coords="139,167,245,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="138,117,174,155,170,158,134,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="174,313,245,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="178,194,162,208,147,226,139,245,141,264,157,286,177,304,174,308,153,290,136,266,134,244,143,223,158,205,174,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="151,240,233,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="195,192,195,226,189,226,189,192"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="257,240,356,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="212,190,278,230,275,235,209,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="293,268,238,307,235,303,289,263"/>
+</map>

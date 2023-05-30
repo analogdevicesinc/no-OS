@@ -1,0 +1,9 @@
+<map id="ltm4686_init" name="ltm4686_init">
+<area shape="rect" id="Node000001" title="Initialize the device structure." alt="" coords="347,31,451,56"/>
+<area shape="rect" id="Node000002" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="176,5,295,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="333,36,295,30,295,25,334,31"/>
+<area shape="rect" id="Node000003" href="$iio__ltm4686_8c.html#acdb0c4a357bddeb6e40db66acdedd673" title="Initializes the LTM4686 IIO descriptor." alt="" coords="172,55,299,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="333,56,299,61,299,55,333,50"/>
+<area shape="rect" id="Node000004" href="$ltm4686_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

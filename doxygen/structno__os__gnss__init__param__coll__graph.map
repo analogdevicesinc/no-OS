@@ -1,0 +1,7 @@
+<map id="no_os_gnss_init_param" name="no_os_gnss_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the parameters for GNSS initialization." alt="" coords="107,93,282,119"/>
+<area shape="rect" id="Node000002" href="$structno__os__gnss__pps__config.html" title="GNSS PPS configuration structure for timing synchronization." alt="" coords="5,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,38,182,91,179,95,115,42"/>
+<area shape="rect" id="Node000003" href="$structno__os__gnss__platform__ops.html" title="Structure holding GNSS function pointers that point to the platform specific function." alt="" coords="203,5,394,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="276,41,210,95,207,91,273,37"/>
+</map>

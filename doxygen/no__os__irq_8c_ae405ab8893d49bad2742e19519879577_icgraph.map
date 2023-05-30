@@ -1,0 +1,110 @@
+<map id="no_os_irq_enable" name="no_os_irq_enable">
+<area shape="rect" id="Node000001" title="Enable specific interrupt." alt="" coords="808,776,943,801"/>
+<area shape="rect" id="Node000002" href="$ad4110_8c.html#aae301e33021656c500d1babd965c31f4" title=" " alt="" coords="576,5,760,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="871,763,865,617,848,404,833,294,814,193,789,109,774,76,758,52,746,41,732,33,735,28,749,37,762,48,779,74,794,107,819,191,839,293,853,404,870,617,876,762"/>
+<area shape="rect" id="Node000004" href="$ade9113_8c.html#af8aabfdefe73af0e1191fad0aa75cb05" title="DRDY inerrupt enable." alt="" coords="339,459,528,484"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="870,762,862,706,844,633,830,595,811,560,788,527,758,500,728,482,696,469,661,460,626,455,556,455,496,461,496,456,556,449,626,450,662,455,697,464,731,477,762,496,792,524,816,557,835,593,850,631,868,705,875,762"/>
+<area shape="rect" id="Node000006" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,133,60,159"/>
+<area shape="poly" id="edge31_Node000001_Node000006" title=" " alt="" coords="871,762,868,621,853,418,839,314,819,220,792,144,776,116,758,96,735,82,703,71,665,64,622,61,522,63,414,74,305,91,204,110,61,142,60,137,203,105,304,86,413,69,522,58,622,56,666,59,704,66,737,77,762,92,781,113,797,142,824,219,844,313,858,417,873,621,877,762"/>
+<area shape="rect" id="Node000007" href="$net_8c.html#ac3136f214a7023774a03531efb49eb77" title=" " alt="" coords="615,612,721,637"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="858,765,818,708,790,678,759,652,720,636,723,631,761,648,794,674,822,705,862,762"/>
+<area shape="rect" id="Node000008" href="$net_8c.html#adf5853345417994c989b94f1fc890492" title=" " alt="" coords="398,561,469,587"/>
+<area shape="poly" id="edge39_Node000001_Node000008" title=" " alt="" coords="864,763,851,725,829,680,798,636,780,617,759,602,723,584,684,571,644,564,604,561,528,562,469,570,469,564,528,557,604,555,644,559,685,566,725,579,761,597,783,613,802,633,833,678,855,723,869,761"/>
+<area shape="rect" id="Node000010" href="$aducm3029__irq_8c.html#a40e94a28a0fafe5195bc390b98d9906f" title="Enable all previously enabled interrupts by no_os_irq_enable()." alt="" coords="583,662,753,702"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="845,770,805,743,759,716,732,705,734,700,761,712,808,738,848,765"/>
+<area shape="rect" id="Node000011" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="609,727,727,752"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="807,775,722,755,723,749,809,770"/>
+<area shape="rect" id="Node000012" href="$wake__on__lan_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="609,776,727,801"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="794,791,728,791,728,786,794,786"/>
+<area shape="rect" id="Node000013" href="$voltage__input__irq_8c.html#a2bfc118c928afb7881e002eb11b748aa" title=" " alt="" coords="600,825,736,851"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="809,807,723,828,722,823,807,802"/>
+<area shape="rect" id="Node000015" href="$adalm-lsmspg_2src_2platform_2maxim_2main_8c.html#a8965f8841fa6b209be38417ab48be0bc" title=" " alt="" coords="611,875,725,900"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="848,812,808,839,761,864,726,877,724,872,759,860,805,834,845,808"/>
+<area shape="rect" id="Node000016" href="$iio__trigger_8c.html#a371347a74184b128e62c6b1ec6d7207c" title="Enable system interrupt which is linked to the given trigger." alt="" coords="609,924,727,949"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="860,814,819,865,792,891,761,914,728,928,726,923,759,909,789,887,815,861,856,811"/>
+<area shape="rect" id="Node000019" href="$eval-ade7913_2src_2platform_2platform_8c.html#aa0eef058d4f3ddc9f0dcbad9cc46342d" title="Init NVIC." alt="" coords="629,309,707,335"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="868,763,855,670,831,545,816,482,799,425,779,379,758,348,734,333,706,326,707,321,736,328,762,344,784,376,804,424,821,481,836,544,860,669,873,762"/>
+<area shape="rect" id="Node000021" href="$eval-ade7913_2src_2interrupt_2interrupt_8c.html#aa3e9aea3cb8149b03c6ccb6306151976" title="Initialize data ready interrupt." alt="" coords="628,973,708,999"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="866,816,851,849,828,889,798,929,762,963,736,976,709,984,707,979,734,971,758,958,794,925,823,886,846,847,861,813"/>
+<area shape="rect" id="Node000022" href="$eval-ade7978_2src_2interrupt_2interrupt_8c.html#aa7525705d8c13507bc4016504d0a011a" title="Initialize interrupt." alt="" coords="628,1023,708,1048"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="870,815,857,858,836,911,804,966,784,990,762,1012,736,1026,709,1034,708,1029,734,1022,758,1008,780,987,800,963,831,909,852,856,865,814"/>
+<area shape="rect" id="Node000023" href="$inter_8c.html#a61102c2d0ff81b29bd60a2537e351562" title="Initialize inter phase." alt="" coords="628,359,708,384"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="871,762,867,692,851,597,837,545,817,495,791,447,758,405,735,389,707,379,709,374,737,384,762,401,795,444,822,493,842,544,856,595,872,691,877,762"/>
+<area shape="rect" id="Node000024" href="$eval-ade7753_2src_2interrupt_2interrupt_8c.html#aea86aca7630a4590a0c635f53ce6bc1b" title="Initialize IRQN interrupt." alt="" coords="616,1121,720,1147"/>
+<area shape="poly" id="edge25_Node000001_Node000024" title=" " alt="" coords="875,816,868,876,849,955,835,998,816,1039,792,1077,762,1111,743,1123,721,1131,719,1126,740,1119,758,1107,787,1074,811,1036,830,996,844,954,862,875,870,815"/>
+<area shape="rect" id="Node000026" href="$eval-ade7953_2src_2interrupt_2interrupt_8c.html#a64c0f22d80f42624a5e6ccfcdf7b7e47" title="Initialize IRQN interrupt." alt="" coords="616,1171,720,1196"/>
+<area shape="poly" id="edge27_Node000001_Node000026" title=" " alt="" coords="877,816,872,884,856,977,841,1026,822,1075,795,1120,762,1160,743,1173,721,1181,719,1176,740,1168,758,1156,791,1117,817,1072,836,1024,851,975,867,884,871,815"/>
+<area shape="rect" id="Node000027" href="$eval-ade7753_2src_2interrupt_2interrupt_8c.html#a0ba92cc819a15706a81ac016c98aa426" title="Initialize zx interrupt." alt="" coords="617,1072,719,1097"/>
+<area shape="poly" id="edge28_Node000001_Node000027" title=" " alt="" coords="873,816,863,867,843,934,810,1002,788,1034,762,1061,742,1074,720,1082,719,1077,740,1069,758,1057,784,1030,806,999,838,932,858,866,868,814"/>
+<area shape="rect" id="Node000028" href="$eval-ade7953_2src_2interrupt_2interrupt_8c.html#af8cf12af8c185b63ae18866f7c4f226e" title="Initialize zx interrupt." alt="" coords="617,1220,719,1245"/>
+<area shape="poly" id="edge30_Node000001_Node000028" title=" " alt="" coords="878,815,876,892,871,942,862,997,848,1054,827,1110,799,1163,762,1209,743,1223,721,1231,719,1226,740,1218,758,1205,795,1160,823,1108,843,1053,857,996,866,941,871,891,872,815"/>
+<area shape="rect" id="Node000029" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="641,1269,695,1295"/>
+<area shape="poly" id="edge32_Node000001_Node000029" title=" " alt="" coords="874,816,861,913,838,1046,822,1113,805,1174,785,1224,762,1258,747,1270,730,1277,696,1284,695,1279,728,1272,744,1265,758,1255,780,1222,800,1172,817,1111,832,1045,855,912,868,815"/>
+<area shape="rect" id="Node000030" href="$max11205_8c.html#ae231424231ccb7c1ee925ed0fe3054db" title="Initializes the communication peripheral." alt="" coords="609,1319,727,1344"/>
+<area shape="poly" id="edge33_Node000001_Node000030" title=" " alt="" coords="874,816,863,923,841,1070,826,1145,808,1213,787,1269,762,1308,746,1320,729,1327,727,1322,744,1315,758,1304,782,1267,803,1211,821,1143,836,1069,858,922,869,815"/>
+<area shape="rect" id="Node000034" href="$net_8c.html#a07fadf782270f861e72575c8d9c86c70" title=" " alt="" coords="611,511,725,536"/>
+<area shape="poly" id="edge37_Node000001_Node000034" title=" " alt="" coords="866,763,853,719,831,664,800,607,781,580,758,557,724,538,727,533,762,553,785,577,805,604,836,661,858,717,871,762"/>
+<area shape="rect" id="Node000035" href="$no__os__dma_8c.html#a1d742ab0d931e445bd95ec52d99fd5c0" title="Acquire a channel and configure the list of transfers." alt="" coords="585,1368,751,1393"/>
+<area shape="poly" id="edge40_Node000001_Node000035" title=" " alt="" coords="875,815,865,930,844,1093,829,1176,811,1252,789,1314,776,1338,762,1357,745,1370,742,1366,758,1353,771,1336,784,1312,806,1250,824,1175,839,1092,860,930,870,814"/>
+<area shape="rect" id="Node000039" href="$pilot_8c.html#a7e091d052ec1a86929f927ea9627fecd" title="Set pilot CP analog read interrupts." alt="" coords="586,107,750,132"/>
+<area shape="poly" id="edge44_Node000001_Node000039" title=" " alt="" coords="870,762,861,634,842,451,827,358,808,272,785,201,772,174,758,153,746,142,732,134,735,130,749,138,762,150,777,171,790,199,813,271,832,357,847,451,867,633,875,761"/>
+<area shape="rect" id="Node000041" href="$rcd_8c.html#a82922ab1c6c814cd2c18a04ea647166b" title="Initialize pilot phase." alt="" coords="398,157,469,183"/>
+<area shape="poly" id="edge47_Node000001_Node000041" title=" " alt="" coords="870,762,863,641,845,469,830,381,811,302,787,239,773,215,758,197,725,175,688,159,649,151,608,147,531,152,469,163,468,158,530,147,608,142,650,146,690,154,728,170,762,193,778,212,792,236,816,301,835,380,850,468,868,640,876,762"/>
+<area shape="rect" id="Node000042" href="$self__test_8c.html#a190f7b376da6bd8788dec204bd18b0ca" title="Startup test for RCD." alt="" coords="615,208,721,233"/>
+<area shape="poly" id="edge49_Node000001_Node000042" title=" " alt="" coords="869,763,858,653,836,501,821,423,803,352,782,294,758,254,741,241,720,231,722,227,743,236,762,251,787,292,808,351,826,422,841,500,863,652,874,762"/>
+<area shape="rect" id="Node000044" href="$self__test_8c.html#a467fec0e3bad53875d3b029d41f4446e" title="Running test for RCD." alt="" coords="353,257,514,283"/>
+<area shape="poly" id="edge52_Node000001_Node000044" title=" " alt="" coords="869,762,858,659,837,518,822,447,804,383,783,332,758,299,728,278,694,263,658,254,621,250,549,251,487,260,486,255,548,246,622,245,659,249,696,258,731,273,762,295,787,329,809,382,827,446,843,517,864,658,875,762"/>
+<area shape="rect" id="Node000045" href="$stm32__tdm_8c.html#a056ca840bde6d6da60fc98ba6a3cdab5" title="Initialize the TDM communication peripheral." alt="" coords="606,1417,730,1443"/>
+<area shape="poly" id="edge54_Node000001_Node000045" title=" " alt="" coords="875,815,867,940,847,1117,832,1208,814,1291,790,1359,777,1386,762,1407,748,1418,731,1425,729,1421,745,1413,758,1403,772,1383,785,1357,808,1289,827,1206,842,1116,862,939,870,815"/>
+<area shape="rect" id="Node000046" href="$supply_8c.html#a4a47d1b835fa05b58961e7215c9feafb" title="Initialize supply component." alt="" coords="387,409,480,435"/>
+<area shape="poly" id="edge55_Node000001_Node000046" title=" " alt="" coords="871,763,866,699,850,615,836,572,816,529,791,491,758,459,726,438,691,424,654,414,615,409,542,409,481,416,480,410,541,403,616,404,655,409,693,419,729,433,762,455,795,488,821,527,841,570,855,614,871,698,876,762"/>
+<area shape="rect" id="Node000047" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="607,1467,729,1492"/>
+<area shape="poly" id="edge57_Node000001_Node000047" title=" " alt="" coords="876,815,869,948,850,1140,836,1239,817,1330,792,1404,778,1433,762,1456,747,1468,730,1475,728,1470,745,1463,758,1452,773,1431,787,1402,811,1328,830,1238,845,1139,863,948,870,815"/>
+<area shape="rect" id="Node000049" href="$xilinx__gpio__irq_8c.html#a05236997187b52134d4cf978f4ea58d1" title="Initialize the GPIO IRQ controller." alt="" coords="591,1516,745,1541"/>
+<area shape="poly" id="edge59_Node000001_Node000049" title=" " alt="" coords="876,815,871,958,854,1165,839,1272,820,1370,794,1451,779,1482,762,1507,746,1519,743,1514,758,1503,774,1480,789,1449,815,1369,834,1271,848,1165,865,958,871,815"/>
+<area shape="rect" id="Node000003" href="$ad4110_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="406,5,461,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="562,21,461,21,461,15,562,15"/>
+<area shape="rect" id="Node000005" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="140,233,259,259"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="349,455,337,448,311,427,288,402,249,348,220,298,203,260,208,258,225,295,253,346,292,399,315,423,340,444,352,451"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="164,228,54,161,56,157,167,224"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="601,613,468,584,470,579,602,608"/>
+<area shape="rect" id="Node000009" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="172,561,227,587"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="384,577,227,577,227,571,384,571"/>
+<area shape="rect" id="Node000014" href="$voltage__input__irq_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Voltage input irq example main execution." alt="" coords="374,825,493,851"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="586,841,493,841,493,835,586,835"/>
+<area shape="rect" id="Node000017" href="$iio__adis_8c.html#aa3fb4f6fcd0868abc263f5db5b782538" title="Handles trigger: reads all available samples in FIFO and writes them to the buffer." alt="" coords="344,949,523,989"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="595,949,523,959,523,954,594,944"/>
+<area shape="rect" id="Node000018" href="$ad4692__ardz_2src_2examples_2iio__trigger_2iio__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="374,899,493,924"/>
+<area shape="poly" id="edge17_Node000016_Node000018" title=" " alt="" coords="594,931,492,920,493,915,595,926"/>
+<area shape="rect" id="Node000020" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="406,308,461,333"/>
+<area shape="poly" id="edge19_Node000019_Node000020" title=" " alt="" coords="615,324,461,323,461,318,615,319"/>
+<area shape="poly" id="edge24_Node000023_Node000005" title=" " alt="" coords="615,378,556,380,486,377,411,367,338,347,299,329,263,305,212,261,215,257,267,301,302,324,340,342,412,362,487,371,557,374,614,373"/>
+<area shape="poly" id="edge23_Node000023_Node000020" title=" " alt="" coords="614,363,460,329,462,324,615,357"/>
+<area shape="rect" id="Node000025" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="406,1096,461,1121"/>
+<area shape="poly" id="edge26_Node000024_Node000025" title=" " alt="" coords="602,1130,461,1114,461,1109,603,1124"/>
+<area shape="poly" id="edge29_Node000027_Node000025" title=" " alt="" coords="603,1094,461,1109,461,1103,603,1089"/>
+<area shape="rect" id="Node000031" href="$max11205pmb1_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="374,1319,493,1344"/>
+<area shape="poly" id="edge34_Node000030_Node000031" title=" " alt="" coords="594,1334,493,1334,493,1329,594,1329"/>
+<area shape="rect" id="Node000032" href="$iio__max11205_8c.html#a3096b33647acf69c1bb9132184c42bd4" title="Initializes the max11205 iio driver." alt="" coords="362,1269,505,1295"/>
+<area shape="poly" id="edge35_Node000030_Node000032" title=" " alt="" coords="594,1319,494,1297,495,1292,595,1313"/>
+<area shape="rect" id="Node000033" href="$max11205pmb1_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="140,1269,259,1295"/>
+<area shape="poly" id="edge36_Node000032_Node000033" title=" " alt="" coords="349,1285,259,1285,259,1279,349,1279"/>
+<area shape="poly" id="edge38_Node000034_Node000008" title=" " alt="" coords="598,541,469,569,468,564,597,536"/>
+<area shape="rect" id="Node000036" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="345,1369,521,1409"/>
+<area shape="poly" id="edge41_Node000035_Node000036" title=" " alt="" coords="571,1387,522,1388,521,1383,571,1381"/>
+<area shape="rect" id="Node000037" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="108,1348,291,1373"/>
+<area shape="poly" id="edge42_Node000036_Node000037" title=" " alt="" coords="331,1379,291,1374,291,1369,332,1374"/>
+<area shape="rect" id="Node000038" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="126,1398,273,1438"/>
+<area shape="poly" id="edge43_Node000036_Node000038" title=" " alt="" coords="332,1404,273,1411,272,1406,331,1399"/>
+<area shape="rect" id="Node000040" href="$pilot_8c.html#aedec5c4e1f1d4b7245a861b2de7e2332" title="Initialize pilot phase." alt="" coords="394,107,473,132"/>
+<area shape="poly" id="edge45_Node000039_Node000040" title=" " alt="" coords="572,122,473,122,473,117,572,117"/>
+<area shape="poly" id="edge46_Node000040_Node000005" title=" " alt="" coords="381,132,340,147,303,168,268,192,216,235,213,231,265,188,300,163,338,142,380,127"/>
+<area shape="poly" id="edge48_Node000041_Node000005" title=" " alt="" coords="385,185,339,198,234,236,232,231,338,193,384,179"/>
+<area shape="rect" id="Node000043" href="$self__test_8c.html#a9440e0a0a3091dcda40b03efbb3acd55" title="Startup test." alt="" coords="368,208,499,233"/>
+<area shape="poly" id="edge50_Node000042_Node000043" title=" " alt="" coords="602,223,499,223,499,218,602,218"/>
+<area shape="poly" id="edge51_Node000043_Node000005" title=" " alt="" coords="354,232,259,242,259,237,354,227"/>
+<area shape="poly" id="edge53_Node000044_Node000005" title=" " alt="" coords="339,263,259,255,259,249,339,258"/>
+<area shape="poly" id="edge56_Node000046_Node000005" title=" " alt="" coords="372,409,337,392,295,360,258,323,207,260,212,257,262,319,299,356,340,388,375,404"/>
+<area shape="rect" id="Node000048" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="406,1467,461,1492"/>
+<area shape="poly" id="edge58_Node000047_Node000048" title=" " alt="" coords="593,1482,461,1482,461,1477,593,1477"/>
+</map>

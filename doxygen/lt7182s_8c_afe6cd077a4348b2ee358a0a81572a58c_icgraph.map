@@ -1,0 +1,21 @@
+<map id="lt7182s_read_word" name="lt7182s_read_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read word operation." alt="" coords="603,80,748,105"/>
+<area shape="rect" id="Node000002" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="415,5,513,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="633,77,554,45,513,32,514,27,556,39,635,72"/>
+<area shape="rect" id="Node000006" href="$lt7182s_8c.html#ad40614921c324454a0248a4888a2539e" title="Set output PWM mode." alt="" coords="387,55,541,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="588,85,541,79,541,74,589,80"/>
+<area shape="rect" id="Node000007" href="$lt7182s_8c.html#a26227a7512ddbfaac792ef12ca6431c7" title="Read statuses." alt="" coords="172,107,325,132"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="589,101,326,117,326,112,589,95"/>
+<area shape="rect" id="Node000008" href="$lt7182s_8c.html#a8e554a7c23f2fc5c8990483eb05acedb" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="373,156,555,181"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="628,113,556,139,502,158,500,153,554,134,626,108"/>
+<area shape="rect" id="Node000003" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,107,124,132"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="402,36,116,109,115,104,401,31"/>
+<area shape="rect" id="Node000004" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="188,5,309,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="401,21,309,21,309,15,401,15"/>
+<area shape="rect" id="Node000005" href="$lt7182s_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="174,21,124,21,124,15,174,15"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="158,122,124,122,124,117,158,117"/>
+<area shape="rect" id="Node000009" href="$lt7182s_8c.html#a970492096192f47fe8c8aac1803e4867" title="Read a value." alt="" coords="174,156,323,181"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="359,171,323,171,323,166,359,166"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="187,155,112,135,114,130,188,150"/>
+</map>

@@ -1,0 +1,27 @@
+var structadf4350__init__param =
+[
+    [ "anti_backlash_3ns_enable", "structadf4350__init__param.html#aced6d1a089aadef4402f965d4035952e", null ],
+    [ "aux_output_enable", "structadf4350__init__param.html#aae8da2ef76f4afa4b8212b3e25754666", null ],
+    [ "aux_output_fundamental_enable", "structadf4350__init__param.html#a2f82c74058a6382420874121726e0a22", null ],
+    [ "aux_output_power", "structadf4350__init__param.html#af7ce86c8b1bb95ec40d24de6a8263b5f", null ],
+    [ "band_select_clock_mode_high_enable", "structadf4350__init__param.html#affc21a0ce3a6aebf00599e8c35aaecbd", null ],
+    [ "channel_spacing", "structadf4350__init__param.html#a55e71814c48b6b7518883dfa98afffcf", null ],
+    [ "charge_cancellation_enable", "structadf4350__init__param.html#a27cdafe3b9308dd151ab63622f64b470", null ],
+    [ "charge_pump_current", "structadf4350__init__param.html#ad94903a98f68d63241c9697aff6af10c", null ],
+    [ "clk_divider_12bit", "structadf4350__init__param.html#a7417b9f9e81c5087122ceee6971abecb", null ],
+    [ "clk_divider_mode", "structadf4350__init__param.html#a0b536edb77191b1925cbcb93204fb0a0", null ],
+    [ "clkin", "structadf4350__init__param.html#a325fa13f53bf85764ea07641504752ed", null ],
+    [ "cycle_slip_reduction_enable", "structadf4350__init__param.html#a3e312b6d458de23a696a9ddd451badd5", null ],
+    [ "lock_detect_function_integer_n_enable", "structadf4350__init__param.html#adcfe8ba219436e441c0d91801491c7d6", null ],
+    [ "lock_detect_precision_6ns_enable", "structadf4350__init__param.html#a07cc27627273340895f8e3d836b76926", null ],
+    [ "low_spur_mode_enable", "structadf4350__init__param.html#a148a77e05fceb37155a20d42e29f2d21", null ],
+    [ "mute_till_lock_enable", "structadf4350__init__param.html#a668d5e4eec1984744a29beaa5eded56d", null ],
+    [ "muxout_select", "structadf4350__init__param.html#a46ce91df0cc0e441e005f69b8d94189b", null ],
+    [ "output_power", "structadf4350__init__param.html#ac409fe66fcba25524ecb3df3b97abe11", null ],
+    [ "phase_detector_polarity_positive_enable", "structadf4350__init__param.html#a0b9159b803b67f8cbaae59c93a3a900c", null ],
+    [ "power_up_frequency", "structadf4350__init__param.html#afc10ce33117d18e4b3c89f662e7b2152", null ],
+    [ "reference_div2_enable", "structadf4350__init__param.html#a96b948b31e32f2d0568ba97e08c8512b", null ],
+    [ "reference_div_factor", "structadf4350__init__param.html#a507eb36980806b8bbe9fce6d5d1c6c87", null ],
+    [ "reference_doubler_enable", "structadf4350__init__param.html#a98b4236b2381e7cc0a3be29c1c74fc2b", null ],
+    [ "spi_init", "structadf4350__init__param.html#a7b9e42cf170842a175825f9db4d8e70c", null ]
+];

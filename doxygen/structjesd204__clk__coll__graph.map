@@ -1,0 +1,27 @@
+<map id="jesd204_clk" name="jesd204_clk">
+<area shape="rect" id="Node000001" title=" " alt="" coords="388,299,487,324"/>
+<area shape="rect" id="Node000002" href="$structadxcvr.html" title="ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure." alt="" coords="551,211,617,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="554,245,459,301,456,296,551,241"/>
+<area shape="rect" id="Node000003" href="$structxilinx__xcvr.html" title="xilinx_xcvr parameters structure." alt="" coords="580,299,673,324"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="580,249,579,262,582,273,592,286,605,296,602,300,588,290,578,276,574,262,574,249"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="639,285,641,273,639,261,628,248,613,238,616,234,631,244,644,259,647,273,644,287"/>
+<area shape="rect" id="Node000004" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="433,93,556,119"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="530,124,549,141,571,177,583,209,578,211,566,179,545,144,526,128"/>
+<area shape="rect" id="Node000006" href="$structaxi__jesd204__rx.html" title=" " alt="" coords="392,211,512,236"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="488,133,468,188,459,211,454,209,463,186,483,131"/>
+<area shape="rect" id="Node000010" href="$structaxi__jesd204__tx.html" title=" " alt="" coords="161,211,281,236"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="435,126,403,145,395,155,392,166,388,178,378,189,355,202,331,212,282,222,281,217,329,207,353,197,374,185,383,175,386,164,390,153,400,141,432,121"/>
+<area shape="rect" id="Node000005" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="405,5,584,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="497,45,497,93,492,93,492,45"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="444,249,441,260,439,299,434,298,436,260,439,248"/>
+<area shape="rect" id="Node000007" href="$structjesd204__rx__config.html" title=" " alt="" coords="597,93,736,119"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="663,133,651,162,629,189,585,202,513,215,512,210,584,197,627,184,647,160,658,131"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="190,93,322,119"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="259,132,265,160,281,185,298,194,326,203,392,214,391,219,324,208,296,199,277,189,260,162,254,133"/>
+<area shape="poly" id="edge14_Node000010_Node000008" title=" " alt="" coords="178,124,164,132,153,144,145,164,153,185,165,199,182,208,179,213,162,203,148,188,140,164,148,141,161,128,176,119"/>
+<area shape="rect" id="Node000009" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="162,5,350,31"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="259,45,259,93,253,93,253,45"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="264,239,409,296,407,301,262,244"/>
+<area shape="rect" id="Node000011" href="$structjesd204__tx__config.html" title=" " alt="" coords="5,93,144,119"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="77,132,82,160,95,185,109,197,126,205,162,216,160,221,124,210,106,201,91,188,76,162,72,133"/>
+</map>

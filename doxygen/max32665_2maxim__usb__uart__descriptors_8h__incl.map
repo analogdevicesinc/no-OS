@@ -1,0 +1,9 @@
+<map id="drivers/platform/maxim/max32665/maxim_usb_uart_descriptors.h" name="drivers/platform/maxim/max32665/maxim_usb_uart_descriptors.h">
+<area shape="rect" id="Node000001" title="USB CDC ACM initialization structures." alt="" coords="25,5,233,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,76,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,62,64,100,60,96,100,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="100,108,157,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,60,131,94,126,94,126,60"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="182,108,267,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,58,203,97,200,101,156,62"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="drivers/net/adin1320/adin1320.h" name="drivers/net/adin1320/adin1320.h">
+<area shape="rect" id="Node000001" title="Header file of the ADIN1320 driver." alt="" coords="629,5,785,45"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html" title="Source file of the ADIN1320 driver." alt="" coords="5,101,161,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="616,36,412,58,292,75,173,96,143,103,142,98,172,91,291,69,412,52,616,31"/>
+<area shape="rect" id="Node000003" href="$basic__init_8c.html" title="Basic initialization example for ADIN1320." alt="" coords="185,93,347,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="616,45,494,67,360,96,347,99,346,94,359,91,493,62,615,39"/>
+<area shape="rect" id="Node000004" href="$basic__init__2devices_8c.html" title="Implementation of basic initialization for two ADIN1320 devices example." alt="" coords="371,93,601,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="651,53,549,96,547,91,649,48"/>
+<area shape="rect" id="Node000005" href="$cmd_8c.html" title="Implementation of terminal command control for ADIN1320." alt="" coords="625,101,790,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="710,59,710,101,705,101,705,59"/>
+<area shape="rect" id="Node000006" href="$cmd__list_8c.html" title="Implementation of terminal command list for ADIN1320." alt="" coords="814,101,1006,141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="762,49,870,98,868,103,760,54"/>
+<area shape="rect" id="Node000007" href="$cmd__mode_8c.html" title="Implementation of terminal command control FW modes for ADIN1320." alt="" coords="1031,101,1240,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="800,44,1019,91,1052,98,1051,103,1017,96,799,49"/>
+<area shape="rect" id="Node000008" href="$wake__on__lan_8c.html" title="Implementation of wake&#45;on&#45;LAN configuration for ADIN1320 devices example." alt="" coords="1265,93,1443,148"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="799,32,1008,54,1131,70,1253,91,1265,93,1264,98,1252,96,1130,76,1007,59,799,37"/>
+</map>

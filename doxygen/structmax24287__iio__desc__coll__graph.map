@@ -1,0 +1,28 @@
+<map id="max24287_iio_desc" name="max24287_iio_desc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="831,129,981,154"/>
+<area shape="rect" id="Node000002" href="$structmax24287__desc.html" title=" " alt="" coords="603,57,731,82"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="724,84,864,126,862,131,722,89"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="341,7,473,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="487,32,579,49,603,54,602,59,578,55,486,37"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,7,193,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="207,17,340,17,340,23,207,23"/>
+<area shape="rect" id="Node000005" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="338,57,475,82"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="489,67,603,67,603,72,489,72"/>
+<area shape="rect" id="Node000006" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="34,57,165,82"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="178,67,337,67,337,72,178,72"/>
+<area shape="rect" id="Node000007" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="623,153,711,178"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="725,163,806,159,851,151,851,157,807,164,725,169"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="332,106,481,131"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="492,131,623,155,622,160,491,136"/>
+<area shape="rect" id="Node000009" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="11,106,188,131"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="202,116,332,116,332,121,202,121"/>
+<area shape="rect" id="Node000010" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="359,189,455,214"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="468,190,622,169,623,174,469,195"/>
+<area shape="rect" id="Node000011" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="43,155,155,181"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="169,173,359,194,358,199,169,178"/>
+<area shape="rect" id="Node000012" href="$structscan__type.html" title=" " alt="" coords="55,205,143,230"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="157,214,308,209,358,205,359,210,308,215,157,220"/>
+<area shape="rect" id="Node000013" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="49,271,150,297"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="164,288,231,291,311,291,397,284,481,267,531,248,577,223,647,176,650,181,580,228,533,253,482,272,397,289,311,296,231,297,164,293"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="163,269,307,233,371,212,373,217,309,239,164,274"/>
+</map>

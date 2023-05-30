@@ -1,0 +1,16 @@
+<map id="lt7182s_read_byte" name="lt7182s_read_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read byte operation." alt="" coords="744,29,887,55"/>
+<area shape="rect" id="Node000002" href="$lt7182s_8c.html#a26227a7512ddbfaac792ef12ca6431c7" title="Read statuses." alt="" coords="341,5,495,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="730,40,495,25,495,20,731,34"/>
+<area shape="rect" id="Node000004" href="$lt7182s_8c.html#af90ec06e9a51eb4d82d2873708430caa" title="Configure SYNC pin for clock synchronization." alt="" coords="543,55,696,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="731,56,697,60,696,55,730,50"/>
+<area shape="rect" id="Node000003" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,5,292,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="328,21,292,21,292,15,328,15"/>
+<area shape="rect" id="Node000005" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="369,55,467,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="529,70,468,70,468,65,529,65"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="356,54,281,33,282,28,357,49"/>
+<area shape="rect" id="Node000006" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="172,55,293,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="355,70,293,70,293,65,355,65"/>
+<area shape="rect" id="Node000007" href="$lt7182s_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

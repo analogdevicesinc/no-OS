@@ -1,0 +1,17 @@
+<map id="max14906_remove" name="max14906_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated during init and place all the channels in high&#45;z." alt="" coords="497,55,645,80"/>
+<area shape="rect" id="Node000002" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="305,5,423,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="503,54,418,33,419,28,505,49"/>
+<area shape="rect" id="Node000003" href="$iio__max14906_8c.html#a9c2313da78bf3d7e5c3a69ff4a274bce" title="Initializes the MAX14906 IIO descriptor." alt="" coords="293,104,435,129"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="505,86,419,107,418,101,503,81"/>
+<area shape="rect" id="Node000007" href="$iio__max14906_8c.html#afcfbbd7dad3b9c0a3c70d7746e0b5ef8" title="Free resources allocated by the init function." alt="" coords="279,55,449,80"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="484,70,449,70,449,65,484,65"/>
+<area shape="rect" id="Node000004" href="$max14906_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="110,55,229,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="299,103,220,83,221,78,301,98"/>
+<area shape="rect" id="Node000005" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,104,231,129"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="279,119,231,119,231,114,279,114"/>
+<area shape="rect" id="Node000006" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,119,60,119,60,114,94,114"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="265,70,229,70,229,65,265,65"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="301,86,221,106,220,101,299,81"/>
+</map>

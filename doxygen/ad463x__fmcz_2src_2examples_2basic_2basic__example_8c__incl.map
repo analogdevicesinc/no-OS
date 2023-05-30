@@ -1,0 +1,21 @@
+<map id="projects/ad463x_fmcz/src/examples/basic/basic_example.c" name="projects/ad463x_fmcz/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="Implementation of IIO example for ad463x_fmcz project." alt="" coords="114,5,303,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,62,101,103,98,98,165,58"/>
+<area shape="rect" id="Node000003" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="156,108,261,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,60,211,94,206,94,206,60"/>
+<area shape="rect" id="Node000008" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="299,108,435,133"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="258,58,335,99,333,104,256,62"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="264,255,335,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="230,131,257,152,282,180,294,210,300,240,295,241,289,212,277,183,253,156,227,136"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="57,255,139,280"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="184,136,153,155,124,183,110,212,103,242,98,241,105,210,120,180,149,151,182,131"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="134,181,267,207"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="210,134,206,168,201,168,205,133"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="218,205,274,244,271,249,215,209"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="186,209,128,249,125,244,183,204"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="165,255,236,280"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="203,207,203,241,198,241,198,207"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="342,181,409,207"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="371,133,375,168,370,168,366,134"/>
+</map>

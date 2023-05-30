@@ -1,0 +1,11 @@
+<map id="ad7616_read_mask" name="ad7616_read_mask">
+<area shape="rect" id="Node000001" title=" " alt="" coords="663,13,812,38"/>
+<area shape="rect" id="Node000002" href="$ad7616_8c.html#a92f9553f1d7c315841b5cbfe9465864d" title="Read the current selected channels." alt="" coords="451,5,615,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="649,28,615,28,615,23,649,23"/>
+<area shape="rect" id="Node000003" href="$ad7616_8c.html#ab690e8d620d464da766f18fd88b8797c" title="Perform a self test. Channels selection will be left untouched." alt="" coords="269,13,403,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="437,28,403,28,403,23,437,23"/>
+<area shape="rect" id="Node000004" href="$ad7616_8c.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="108,13,221,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="256,28,221,28,221,23,256,23"/>
+<area shape="rect" id="Node000005" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

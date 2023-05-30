@@ -1,0 +1,28 @@
+var structad463x__dev =
+[
+    [ "capture_data_width", "structad463x__dev.html#a1f096537d4c6294d2736c8ba158c99f1", null ],
+    [ "clkgen", "structad463x__dev.html#a584d588d89d3b967ded3db2578fbbc27", null ],
+    [ "clock_mode", "structad463x__dev.html#a1113467c97a5391c10ccf6d01c2f7005", null ],
+    [ "data_rate", "structad463x__dev.html#a0f4fc1c31933af6de9a7f96460b28604", null ],
+    [ "dcache_invalidate_range", "structad463x__dev.html#afa9e8e0f1c74792cf8ef3bf9a130a5d6", null ],
+    [ "device_id", "structad463x__dev.html#a3395f8737f4512f1e99e63200fee3d30", null ],
+    [ "gpio_cnv", "structad463x__dev.html#a5b8e1aed93ca0def7e1a4879d044e50a", null ],
+    [ "gpio_pgia_a0", "structad463x__dev.html#a869b0423a55e6fcdc79d57dd64de382d", null ],
+    [ "gpio_pgia_a1", "structad463x__dev.html#a1e576c8c5c8af4091e00423e75663cd3", null ],
+    [ "gpio_resetn", "structad463x__dev.html#a1d8ff92f1c2112f081b0e450bc5aa948", null ],
+    [ "has_pgia", "structad463x__dev.html#a2f816da0660d7ec8ffbadedd1e840c89", null ],
+    [ "lane_mode", "structad463x__dev.html#ad25fe79f3891adc649f9b768908ed9a5", null ],
+    [ "offload_enable", "structad463x__dev.html#a0431eac55883656c79666c47bb6aee56", null ],
+    [ "offload_init_param", "structad463x__dev.html#a8f3a2747bbf0bb146e1689b34711ec2f", null ],
+    [ "output_mode", "structad463x__dev.html#a423d3558c55058bc87477559c70ef2b5", null ],
+    [ "pgia_idx", "structad463x__dev.html#a325548c8352caa37493392777d8c1cbd", null ],
+    [ "read_bytes_no", "structad463x__dev.html#a6f019647a3ff8b4988bf3e864a61cfa3", null ],
+    [ "real_bits_precision", "structad463x__dev.html#a8c29858fac9c837b284801e20e2ef3ad", null ],
+    [ "reg_access_speed", "structad463x__dev.html#a51f27af28764f4036c1396cefd3fc65b", null ],
+    [ "reg_data_width", "structad463x__dev.html#a851e56e91443390c2c6f4aa2332d4d72", null ],
+    [ "scale_table", "structad463x__dev.html#a132b8269c341f0b1db5f777a6c4d3691", null ],
+    [ "spi_desc", "structad463x__dev.html#a3b40a87a10fd43812b14a4313b88d3ee", null ],
+    [ "spi_dma_enable", "structad463x__dev.html#a74dbbaefa8dd477cb788931959112ebf", null ],
+    [ "trigger_pwm_desc", "structad463x__dev.html#a3ce06ed2458226291bf101ec16a4e372", null ],
+    [ "vref", "structad463x__dev.html#a92c3f5359be980947bbe46c6d6f1b8ec", null ]
+];

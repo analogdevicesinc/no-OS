@@ -1,0 +1,60 @@
+<map id="tmc5240_reg_write" name="tmc5240_reg_write">
+<area shape="rect" id="Node000001" title="Writes data to a given TMC5240 Register." alt="" coords="1036,452,1183,477"/>
+<area shape="rect" id="Node000002" href="$tmc5240_8c.html#aee47c5f3e6fae0b1aa0c16fe53c1a353" title="Initialize the TMC5240 device." alt="" coords="389,80,495,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1105,438,1101,371,1084,283,1069,237,1048,193,1021,153,986,120,949,102,895,90,830,83,758,80,613,83,496,91,495,85,613,78,758,75,831,78,896,85,951,97,990,116,1025,150,1053,190,1074,235,1089,282,1106,371,1111,438"/>
+<area shape="rect" id="Node000005" href="$tmc5240_8c.html#a1212166c7f60f4e3a8de585da7942969" title="Read&#45;modify&#45;write a TMC5240 register." alt="" coords="814,29,973,55"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1105,438,1100,367,1083,270,1068,218,1047,167,1020,118,986,76,957,57,960,52,990,72,1025,115,1052,164,1073,216,1088,269,1105,366,1110,438"/>
+<area shape="rect" id="Node000007" href="$tmc5240_8c.html#a7cf07192f29ad57781e737a5c5ea9352" title="Set the first acceleration phase (A1) value." alt="" coords="829,624,958,649"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="1097,491,1055,553,1025,587,989,615,959,629,957,624,987,610,1021,583,1051,550,1092,488"/>
+<area shape="rect" id="Node000009" href="$tmc5240_8c.html#a8d6e86fa5f27fb8fd23dafb1c59a1824" title="Set the target position for the TMC5240 motor driver." alt="" coords="351,624,533,649"/>
+<area shape="poly" id="edge23_Node000001_Node000009" title=" " alt="" coords="1111,491,1107,559,1090,648,1075,694,1054,739,1026,779,990,812,954,833,916,845,877,851,837,850,797,844,757,834,678,802,605,762,541,719,456,651,459,647,544,715,608,757,680,798,758,829,798,839,838,845,877,845,915,840,952,828,986,808,1022,776,1049,736,1070,692,1085,646,1101,558,1106,491"/>
+<area shape="rect" id="Node000010" href="$tmc5240_8c.html#aba8a52aef9dd96141d97b2435660ca36" title="Set the second acceleration phase (A2) value." alt="" coords="829,673,958,699"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1102,491,1087,530,1063,577,1031,624,990,664,960,679,957,674,986,660,1027,621,1058,574,1082,528,1097,489"/>
+<area shape="rect" id="Node000011" href="$tmc5240_8c.html#a84cfc9b722f2ee0b56eaa0120d4a1633" title="Set the maximum acceleration (AMAX) value." alt="" coords="818,723,969,748"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="1105,492,1093,539,1070,599,1037,661,1015,689,990,713,970,725,968,720,986,709,1011,685,1032,658,1066,597,1088,538,1100,490"/>
+<area shape="rect" id="Node000012" href="$tmc5240_8c.html#acee33e8108eb3467c884b6835b0c1a73" title="Replace the current position of the motor with a new absolute position value." alt="" coords="799,328,988,353"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1085,444,1042,404,987,367,959,356,961,351,989,362,1045,400,1088,440"/>
+<area shape="rect" id="Node000013" href="$tmc5240_8c.html#a3162f2cc9ca4a3af91edfceca71a1a9b" title="Set the first deceleration phase (D1) value." alt="" coords="829,772,958,797"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1108,492,1098,548,1077,621,1062,660,1043,697,1019,732,990,763,960,779,957,774,986,758,1015,729,1038,695,1057,658,1072,619,1093,547,1103,491"/>
+<area shape="rect" id="Node000014" href="$tmc5240_8c.html#ab35dda65aaf553604f654ff5442c1b73" title="Set the second deceleration phase (D2) value." alt="" coords="829,131,958,156"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="1103,438,1093,382,1073,309,1057,271,1038,234,1015,199,986,169,957,153,960,149,990,165,1019,196,1043,231,1062,269,1078,307,1098,381,1108,438"/>
+<area shape="rect" id="Node000015" href="$tmc5240_8c.html#a2f7d338a706e8ec4d8ccea594217d594" title="Set the maximum deceleration (DMAX) value." alt="" coords="818,180,969,205"/>
+<area shape="poly" id="edge20_Node000001_Node000015" title=" " alt="" coords="1100,439,1088,391,1066,331,1032,270,1011,243,986,219,968,207,970,203,990,214,1015,239,1037,267,1071,329,1093,390,1105,438"/>
+<area shape="rect" id="Node000016" href="$tmc5240_8c.html#a5c810eff374d70a8f5b9acf1c473939d" title="Set the ramp mode configuration." alt="" coords="801,525,985,551"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="1069,485,989,516,950,528,949,523,987,511,1067,480"/>
+<area shape="rect" id="Node000017" href="$tmc5240_8c.html#a72ef06079b564ed582795bbfffaaf96b" title="Set the target velocity for the TMC5240 motor driver." alt="" coords="804,575,983,600"/>
+<area shape="poly" id="edge24_Node000001_Node000017" title=" " alt="" coords="1088,490,1045,529,989,566,960,577,958,572,987,561,1041,524,1084,486"/>
+<area shape="rect" id="Node000018" href="$tmc5240_8c.html#a97690e00c387f79b212d5d1e9f32a99b" title="Set the first velocity threshold (V1) value." alt="" coords="829,229,958,255"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="1097,440,1082,401,1059,355,1027,308,986,268,957,254,960,249,990,264,1031,304,1063,352,1087,399,1102,438"/>
+<area shape="rect" id="Node000019" href="$tmc5240_8c.html#ae17a2fccc40143281c8c8f57bde6ccb9" title="Set the second velocity threshold (V2) value." alt="" coords="829,279,958,304"/>
+<area shape="poly" id="edge27_Node000001_Node000019" title=" " alt="" coords="1093,442,1051,379,1021,346,987,318,957,304,959,299,989,313,1025,342,1055,376,1097,439"/>
+<area shape="rect" id="Node000020" href="$tmc5240_8c.html#a63aa14fd6e322b35872cbcef3d54067a" title="Set the maximum velocity (VMAX) value." alt="" coords="818,377,969,403"/>
+<area shape="poly" id="edge29_Node000001_Node000020" title=" " alt="" coords="1067,448,987,416,949,405,951,400,989,411,1069,444"/>
+<area shape="rect" id="Node000021" href="$tmc5240_8c.html#a2f5654d6639c9cee2102ea63bd69f670" title="Set the start velocity (VSTART) value." alt="" coords="818,427,969,452"/>
+<area shape="poly" id="edge31_Node000001_Node000021" title=" " alt="" coords="1022,457,969,451,969,445,1023,452"/>
+<area shape="rect" id="Node000022" href="$tmc5240_8c.html#a945aaa84efcbb7fe508919d262215a84" title="Set the stop velocity (VSTOP) value." alt="" coords="819,476,968,501"/>
+<area shape="poly" id="edge33_Node000001_Node000022" title=" " alt="" coords="1023,477,969,483,968,478,1022,472"/>
+<area shape="rect" id="Node000023" href="$tmc5240_8c.html#af1d840c7667395d343f21596a3fec700" title="Stop the motor by setting VMAX to 0." alt="" coords="836,873,951,899"/>
+<area shape="poly" id="edge35_Node000001_Node000023" title=" " alt="" coords="1110,491,1105,563,1088,660,1072,712,1052,764,1024,813,990,856,972,869,952,878,950,874,969,865,986,852,1020,810,1047,762,1067,710,1082,659,1100,562,1105,491"/>
+<area shape="rect" id="Node000003" href="$iio__tmc5240_8c.html#a34eeb20fee898c60e8d5e29cd2b6e30d" title="Initializes the tmc5240 IIO driver." alt="" coords="172,80,303,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,95,303,95,303,90,375,90"/>
+<area shape="rect" id="Node000004" href="$admt4000_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,80,124,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,95,124,95,124,90,158,90"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="834,29,780,18,716,10,649,9,582,19,547,32,513,48,461,82,459,77,511,44,545,27,581,14,648,4,717,5,781,13,835,23"/>
+<area shape="rect" id="Node000006" href="$tmc5240_8c.html#a96fdf53cd6e497c24cceb4efc19d0caa" title="Set the shaft direction for the TMC5240 device." alt="" coords="581,29,751,55"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="800,45,751,45,751,39,800,39"/>
+<area shape="rect" id="Node000008" href="$tmc5240_8c.html#ab48a6c070bf2cfa4988e5685e2e23925" title="Set motion profile parameters for the TMC5240 motor driver." alt="" coords="587,419,745,459"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="814,624,797,615,755,579,720,536,693,494,674,461,679,458,697,492,724,533,759,575,800,610,817,619"/>
+<area shape="poly" id="edge9_Node000008_Node000002" title=" " alt="" coords="642,409,449,107,454,104,647,406"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="634,470,460,626,456,622,630,467"/>
+<area shape="poly" id="edge12_Node000010_Node000008" title=" " alt="" coords="814,674,797,664,771,642,749,615,712,558,686,503,671,460,676,459,691,501,717,556,753,612,775,638,800,660,817,670"/>
+<area shape="poly" id="edge14_Node000011_Node000008" title=" " alt="" coords="804,718,797,713,768,685,743,652,722,616,705,580,681,512,668,460,674,459,686,510,710,578,727,614,747,649,772,681,800,709,807,714"/>
+<area shape="poly" id="edge17_Node000013_Node000008" title=" " alt="" coords="814,774,797,763,764,728,737,688,715,645,698,601,677,519,667,460,672,459,682,518,704,599,720,643,742,685,768,725,800,759,817,769"/>
+<area shape="poly" id="edge19_Node000014_Node000008" title=" " alt="" coords="817,159,800,169,772,197,747,230,727,265,710,301,686,369,674,420,668,418,681,367,705,299,722,262,743,227,768,194,797,165,814,155"/>
+<area shape="poly" id="edge21_Node000015_Node000008" title=" " alt="" coords="808,214,800,219,775,241,753,266,717,323,691,377,676,420,671,418,686,375,712,320,749,263,771,237,797,214,805,209"/>
+<area shape="poly" id="edge26_Node000018_Node000008" title=" " alt="" coords="817,259,800,268,759,303,724,345,697,387,679,420,674,418,693,384,720,342,755,300,797,264,814,254"/>
+<area shape="poly" id="edge28_Node000019_Node000008" title=" " alt="" coords="817,310,800,318,765,341,733,369,685,421,681,417,729,365,762,337,797,313,814,305"/>
+<area shape="poly" id="edge30_Node000020_Node000008" title=" " alt="" coords="821,408,746,425,745,419,820,403"/>
+<area shape="poly" id="edge32_Node000021_Node000008" title=" " alt="" coords="804,442,746,442,746,437,804,437"/>
+<area shape="poly" id="edge34_Node000022_Node000008" title=" " alt="" coords="820,476,745,459,746,454,821,470"/>
+</map>

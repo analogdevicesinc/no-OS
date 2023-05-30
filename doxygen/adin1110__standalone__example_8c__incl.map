@@ -1,0 +1,33 @@
+<map id="projects/apard32690/src/examples/adin1110_standalone_example/adin1110_standalone_example.c" name="projects/apard32690/src/examples/adin1110_standalone_example/adin1110_standalone_example.c">
+<area shape="rect" id="Node000001" title="Implementation of the ADIN1110 standalone example." alt="" coords="116,5,345,75"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,123,72,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,77,76,119,74,114,160,72"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,123,223,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,76,179,113,175,110,203,73"/>
+<area shape="rect" id="Node000004" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="248,123,357,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="259,73,287,110,283,113,255,76"/>
+<area shape="rect" id="Node000006" href="$adin1110_8h.html" title=" " alt="" coords="418,123,513,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="316,72,425,115,423,120,314,77"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="250,196,318,221"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="302,149,293,184,288,182,297,148"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="617,343,700,368"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="490,146,523,165,563,192,603,226,636,268,649,299,657,328,652,330,644,300,631,271,599,230,560,196,521,169,487,150"/>
+<area shape="rect" id="Node000008" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="347,269,445,295"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="461,150,434,197,408,257,403,255,430,195,456,147"/>
+<area shape="rect" id="Node000010" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="216,269,323,295"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="451,150,298,263,295,259,448,146"/>
+<area shape="rect" id="Node000011" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="521,269,621,295"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="484,146,510,167,535,194,553,225,566,255,561,257,549,228,531,198,506,171,481,150"/>
+<area shape="rect" id="Node000013" href="$oa__tc6_8h.html" title=" " alt="" coords="444,196,521,221"/>
+<area shape="poly" id="edge15_Node000006_Node000013" title=" " alt="" coords="471,148,479,182,474,184,466,149"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="394,343,465,368"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="404,294,421,329,416,331,399,296"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="296,292,392,335,390,339,294,297"/>
+<area shape="poly" id="edge14_Node000011_Node000007" title=" " alt="" coords="586,293,635,332,632,336,583,297"/>
+<area shape="poly" id="edge12_Node000011_Node000009" title=" " alt="" coords="549,297,466,339,463,334,547,292"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="522,343,593,368"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="571,295,565,330,559,329,566,295"/>
+<area shape="poly" id="edge16_Node000013_Node000008" title=" " alt="" coords="470,223,422,263,419,258,467,219"/>
+<area shape="poly" id="edge18_Node000013_Node000009" title=" " alt="" coords="482,222,460,296,444,331,439,329,455,294,477,221"/>
+<area shape="poly" id="edge17_Node000013_Node000011" title=" " alt="" coords="498,219,547,258,544,263,495,223"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="adrf6780_spi_update_bits" name="adrf6780_spi_update_bits">
+<area shape="rect" id="Node000001" title="Update ADRF6780 register." alt="" coords="387,61,576,86"/>
+<area shape="rect" id="Node000002" href="$adrf6780_8c.html#ad0ffbdbf399514f68df82b7a317b8fc4" title="Initializes the adrf6780." alt="" coords="5,63,113,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="442,57,393,37,338,21,289,12,249,8,211,11,162,21,115,41,78,65,75,61,113,37,161,16,210,5,250,3,289,7,339,16,395,32,444,52"/>
+<area shape="rect" id="Node000003" href="$adrf6780_8c.html#ad0fb53d470a2936c3ea0a787dea3a6f3" title="Read ADC raw data." alt="" coords="161,31,339,57"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="373,62,339,58,339,53,373,57"/>
+<area shape="rect" id="Node000004" href="$adrf6780_8c.html#a2ea47047b2fdcb16ccaba81b32d2e45e" title="Set I/Q Phase Accuracy." alt="" coords="169,81,331,121"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="373,89,332,94,331,89,373,84"/>
+<area shape="rect" id="Node000005" href="$adrf6780_8c.html#a422abf76a99cc5bdf475cee06588d923" title="Software Reset." alt="" coords="175,146,325,171"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="441,94,340,136,300,148,298,143,338,131,439,89"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="183,144,160,136,116,113,79,91,81,87,118,109,162,131,185,139"/>
+</map>

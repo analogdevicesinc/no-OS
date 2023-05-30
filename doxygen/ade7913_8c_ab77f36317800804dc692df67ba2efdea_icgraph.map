@@ -1,0 +1,26 @@
+<map id="ade7913_read" name="ade7913_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="597,204,712,229"/>
+<area shape="rect" id="Node000002" href="$ade7913_8c.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="361,5,539,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="643,192,629,158,609,118,582,78,548,44,528,33,530,28,551,40,586,74,614,115,634,156,648,190"/>
+<area shape="rect" id="Node000003" href="$ade7913_8c.html#a08a8a3b22adb4b752256ab439ba467ef" title="Cnt snapshot." alt="" coords="351,55,549,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="637,193,601,142,576,116,548,94,525,83,527,78,551,89,580,112,605,139,642,190"/>
+<area shape="rect" id="Node000004" href="$ade7913_8c.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="375,104,525,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="627,197,591,169,548,143,518,132,519,127,550,138,594,164,631,193"/>
+<area shape="rect" id="Node000005" href="$ade7913_8c.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="351,153,549,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="589,203,501,181,503,176,590,198"/>
+<area shape="rect" id="Node000006" href="$ade7913_8c.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="369,254,531,294"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="596,236,523,257,521,251,595,231"/>
+<area shape="rect" id="Node000007" href="$ade7913_8c.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="152,261,259,287"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="584,222,474,230,351,245,257,264,256,259,350,239,474,225,584,217"/>
+<area shape="rect" id="Node000009" href="$ade7913_8c.html#a6a672f051e655d14cd926576faf98f99" title="Reset the device using SW reset." alt="" coords="134,315,277,340"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="636,242,599,278,576,295,550,308,480,329,407,339,337,341,277,338,277,333,337,336,407,334,479,324,548,304,573,291,596,274,632,238"/>
+<area shape="rect" id="Node000010" href="$ade7913_8c.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="362,369,538,395"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="643,243,606,298,580,327,551,352,511,372,508,367,548,348,577,323,602,294,638,240"/>
+<area shape="rect" id="Node000011" href="$ade7913_8c.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="108,389,303,415"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="651,244,639,283,620,329,591,374,572,394,551,410,512,427,471,438,428,443,386,443,307,433,244,417,246,412,308,427,386,437,428,437,470,433,510,422,548,405,569,390,587,371,615,327,634,281,645,242"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="356,277,259,277,259,271,356,271"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="357,297,265,317,264,312,355,292"/>
+<area shape="rect" id="Node000008" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,336,60,361"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="142,293,109,306,53,338,51,333,107,301,140,288"/>
+<area shape="poly" id="edge12_Node000011_Node000008" title=" " alt="" coords="150,388,59,359,61,354,151,383"/>
+</map>

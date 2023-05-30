@@ -1,0 +1,9 @@
+<map id="no_os_cb_remove" name="no_os_cb_remove">
+<area shape="rect" id="Node000001" title=" " alt="" coords="315,31,453,56"/>
+<area shape="rect" id="Node000002" href="$iio_8c.html#a3cd4e4597f478a8e0d9cd06f4202a28a" title="Set communication ops and read/write ops." alt="" coords="186,5,253,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="300,33,253,26,253,20,301,28"/>
+<area shape="rect" id="Node000003" href="$iio_8c.html#a995509c23a1ab417b9d1362b980c1239" title="Free the resources allocated by &quot;iio_init()&quot;." alt="" coords="172,55,267,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="302,58,267,63,266,58,301,53"/>
+<area shape="rect" id="Node000004" href="$ad7616-st_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,70,124,70,124,65,159,65"/>
+</map>

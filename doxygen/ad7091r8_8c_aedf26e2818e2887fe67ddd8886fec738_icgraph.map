@@ -1,0 +1,28 @@
+<map id="ad7091r8_spi_reg_read" name="ad7091r8_spi_reg_read">
+<area shape="rect" id="Node000001" title=" " alt="" coords="997,80,1171,105"/>
+<area shape="rect" id="Node000002" href="$ad7091r8_8c.html#a40429299260cc7c1810b535a7bb4f07e" title=" " alt="" coords="779,5,927,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1039,77,949,45,909,33,910,28,950,39,1041,72"/>
+<area shape="rect" id="Node000003" href="$ad7091r8_8c.html#a420a2870fd9a78afc10d726097c09e50" title=" " alt="" coords="779,55,927,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="983,84,927,78,928,73,984,79"/>
+<area shape="rect" id="Node000004" href="$ad7091r8_8c.html#a9af59a2e061b9940cb39eb28b24653e7" title=" " alt="" coords="778,104,929,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="984,106,929,112,928,106,984,100"/>
+<area shape="rect" id="Node000005" href="$ad7091r8_8c.html#abebb64ecf2aa02f00937291bbeae084f" title=" " alt="" coords="757,153,949,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1038,113,950,143,906,156,905,151,949,138,1036,108"/>
+<area shape="rect" id="Node000006" href="$ad7091r8_8c.html#aeda1a717753c7bfacfb1c767762b25d2" title="Initiate a software reset or hardware reset through the RESET pin." alt="" coords="550,79,673,104"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="782,152,756,143,732,130,708,118,672,106,673,101,710,113,735,126,758,138,784,147"/>
+<area shape="rect" id="Node000011" href="$ad7091r8_8c.html#a7a246a61b90d79cb30bf8a897fc8aece" title=" " alt="" coords="515,128,708,153"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="744,157,708,153,709,148,744,152"/>
+<area shape="rect" id="Node000012" href="$ad7091r8_8c.html#a895fbeec7666e2c44ecaffa6dd2d1381" title=" " alt="" coords="540,177,683,203"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="744,180,683,186,682,180,743,174"/>
+<area shape="rect" id="Node000013" href="$ad7091r8_8c.html#a5b948870147de8f86b56a19dcb908423" title="Set device sleep mode." alt="" coords="513,227,709,252"/>
+<area shape="poly" id="edge12_Node000005_Node000013" title=" " alt="" coords="806,186,710,218,668,229,667,224,709,213,804,181"/>
+<area shape="rect" id="Node000007" href="$ad7091r8_8c.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="355,153,465,179"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="538,110,514,118,471,136,435,156,432,151,469,132,512,113,536,105"/>
+<area shape="rect" id="Node000008" href="$iio__ad7091r8_8c.html#ab9ebf560e86c6769048fec90dbed9f65" title="Initializes the AD7091R8 IIO driver." alt="" coords="172,128,307,153"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="341,158,307,153,307,148,342,153"/>
+<area shape="rect" id="Node000010" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="180,177,299,203"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="342,178,299,184,298,179,341,173"/>
+<area shape="rect" id="Node000009" href="$ad7091r8-sdz_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,128,124,153"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="159,143,124,143,124,138,159,138"/>
+<area shape="poly" id="edge13_Node000013_Node000007" title=" " alt="" coords="537,226,512,218,433,181,435,176,514,213,538,221"/>
+</map>

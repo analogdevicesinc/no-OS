@@ -1,0 +1,26 @@
+<map id="iio/iiod.h" name="iio/iiod.h">
+<area shape="rect" id="Node000001" title="Header file of iiod." alt="" coords="188,5,266,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="80,299,150,324"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,33,162,61,106,104,51,160,29,192,11,226,8,237,9,247,21,265,42,280,67,292,65,297,40,285,18,269,4,249,3,237,6,224,24,189,47,156,103,100,159,57,204,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="430,299,512,324"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,28,309,55,375,97,408,124,440,154,467,187,489,224,494,240,494,257,486,287,481,285,489,256,489,241,484,226,463,190,436,157,405,128,371,101,306,60,253,33"/>
+<area shape="rect" id="Node000004" href="$iio_8h.html" title="Header file of iio." alt="" coords="202,79,252,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="230,31,230,65,224,65,224,31"/>
+<area shape="rect" id="Node000005" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="94,152,187,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="215,106,167,145,163,141,211,102"/>
+<area shape="rect" id="Node000007" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="262,152,368,177"/>
+<area shape="poly" id="edge9_Node000004_Node000007" title=" " alt="" coords="243,102,292,141,288,145,239,106"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="95,178,53,196,34,210,20,227,16,236,16,245,26,262,46,278,71,291,68,295,43,282,22,266,11,247,11,235,15,224,31,206,50,191,92,173"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="188,169,316,189,379,204,422,223,437,237,449,253,465,285,460,287,444,255,433,240,419,228,377,210,315,194,187,174"/>
+<area shape="rect" id="Node000006" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="30,225,200,251"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="139,179,126,213,121,212,134,177"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="118,251,118,285,112,285,112,251"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="304,180,264,213,214,253,149,294,146,290,211,248,261,209,300,176"/>
+<area shape="poly" id="edge11_Node000007_Node000003" title=" " alt="" coords="369,170,421,188,446,203,466,224,474,238,478,254,478,285,473,285,473,255,469,240,462,227,443,207,419,193,367,175"/>
+<area shape="rect" id="Node000008" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="275,225,408,251"/>
+<area shape="poly" id="edge12_Node000007_Node000008" title=" " alt="" coords="322,177,335,212,330,214,317,179"/>
+<area shape="poly" id="edge14_Node000008_Node000002" title=" " alt="" coords="306,253,164,297,163,292,304,248"/>
+<area shape="poly" id="edge15_Node000008_Node000003" title=" " alt="" coords="364,248,439,289,436,294,361,253"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="306,299,377,324"/>
+<area shape="poly" id="edge13_Node000008_Node000009" title=" " alt="" coords="344,251,344,285,339,285,339,251"/>
+</map>

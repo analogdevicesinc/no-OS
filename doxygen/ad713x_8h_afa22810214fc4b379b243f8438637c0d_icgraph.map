@@ -1,0 +1,8 @@
+<map id="ad713x_remove" name="ad713x_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by ad713x_init()." alt="" coords="255,31,381,56"/>
+<area shape="rect" id="Node000002" href="$ad713x_8c.html#aeebe94d6a7a09c6dc2a17fb2e2a5858c" title="Initialize the device." alt="" coords="108,5,207,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,34,207,28,207,23,241,29"/>
+<area shape="rect" id="Node000003" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="241,46,60,46,60,41,241,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,33,61,41,60,35,94,28"/>
+</map>

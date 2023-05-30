@@ -1,0 +1,15 @@
+<map id="altera_a10_fpll_calc_params" name="altera_a10_fpll_calc_params">
+<area shape="rect" id="Node000001" title="altera_a10_fpll_calc_params" alt="" coords="599,23,751,63"/>
+<area shape="rect" id="Node000002" href="$clk__altera__a10__fpll_8c.html#a6c3f5d315237e418fdc3db745707c5b3" title="altera_a10_fpll_round_rate" alt="" coords="355,5,551,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="585,36,551,32,551,27,585,30"/>
+<area shape="rect" id="Node000003" href="$clk__altera__a10__fpll_8c.html#a8174d4dc2a66720898b92f4fafe84d55" title="altera_a10_fpll_set_rate" alt="" coords="363,55,542,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="585,56,542,60,542,55,585,50"/>
+<area shape="rect" id="Node000004" href="$clk__altera__a10__fpll_8c.html#a58ce7ef2b7a816eeeb0e1a4b082313ea" title="altera_a10_fpll_recalc_rate" alt="" coords="108,5,307,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="375,55,271,33,272,28,376,49"/>
+<area shape="rect" id="Node000005" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="155,55,259,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="349,70,259,70,259,65,349,65"/>
+<area shape="rect" id="Node000007" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="180,104,235,129"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="376,85,235,114,234,109,375,80"/>
+<area shape="rect" id="Node000006" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="142,70,60,70,60,65,142,65"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="pico_spi_transfer" name="pico_spi_transfer">
+<area shape="rect" id="Node000001" title="Write/read multiple messages to/from SPI." alt="" coords="236,5,369,31"/>
+<area shape="rect" id="Node000002" href="$pico__spi_8c.html#a82a5ce84660f5f35d6bb8d4ff57e8998" title="Write and read data to/from SPI." alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,21,188,21,188,15,222,15"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="drivers/platform/lattice/riscvrx_irq.h" name="drivers/platform/lattice/riscvrx_irq.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="201,5,373,45"/>
+<area shape="rect" id="Node000002" href="$riscvrx__ip__uart_8c.html" title="Source file of Lattice external UART IP driver for RISC&#45;V RX." alt="" coords="5,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,53,135,96,133,91,231,48"/>
+<area shape="rect" id="Node000003" href="$riscvrx__irq_8c.html" title=" " alt="" coords="201,93,373,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,59,290,93,285,93,285,59"/>
+<area shape="rect" id="Node000004" href="$riscvrx__uart_8c.html" title="Source file of UART driver for Lattice RISC&#45;V RX built in UART." alt="" coords="397,93,569,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="344,48,441,91,439,96,342,53"/>
+</map>

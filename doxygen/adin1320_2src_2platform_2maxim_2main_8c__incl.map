@@ -1,0 +1,17 @@
+<map id="projects/adin1320/src/platform/maxim/main.c" name="projects/adin1320/src/platform/maxim/main.c">
+<area shape="rect" id="Node000001" title="Main file for the ADIN1320 project." alt="" coords="197,5,377,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="153,93,279,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="272,47,238,85,234,81,268,44"/>
+<area shape="rect" id="Node000003" href="$adin1320_2src_2platform_2maxim_2parameters_8h.html" title="Definitions used by the ADIN1320 project." alt="" coords="304,93,413,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="306,44,341,81,337,85,302,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,167,120,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="312,121,124,166,123,161,310,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="144,167,283,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="336,121,250,163,248,158,334,116"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="307,167,411,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="361,119,361,153,356,153,356,119"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="435,167,541,192"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="381,116,456,157,453,162,378,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="566,167,679,192"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="402,116,567,160,566,166,400,121"/>
+</map>

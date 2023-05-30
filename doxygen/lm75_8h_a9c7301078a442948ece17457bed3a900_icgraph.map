@@ -1,0 +1,7 @@
+<map id="lm75_raw_to_millicelsius" name="lm75_raw_to_millicelsius">
+<area shape="rect" id="Node000001" title="Convert a raw sensor data to milliCelsius value." alt="" coords="375,5,561,31"/>
+<area shape="rect" id="Node000002" href="$curvetrace__example_8c.html#aaa939bac351fe06154a2d062ebd1ec1a" title=" " alt="" coords="208,5,327,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,21,327,21,327,15,361,15"/>
+<area shape="rect" id="Node000003" href="$curvetrace__example_8c.html#aa8c97b178f1ed4023a2fa5c0217a52c9" title=" " alt="" coords="5,5,160,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="194,21,160,21,160,15,194,15"/>
+</map>

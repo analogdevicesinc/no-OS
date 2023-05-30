@@ -1,0 +1,29 @@
+<map id="max22190_reg_update" name="max22190_reg_update">
+<area shape="rect" id="Node000001" title="Register update function for MAX22190." alt="" coords="863,107,1033,132"/>
+<area shape="rect" id="Node000002" href="$max22190_8c.html#a6626ff97da0a1c28bd80f74261fa94eb" title="Switch selected channel&#39;s state to disabled or enabled." alt="" coords="645,208,815,233"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="918,142,871,170,816,198,781,210,779,205,814,193,868,165,915,137"/>
+<area shape="rect" id="Node000007" href="$max22190_8c.html#a1895f3c3bc31f0b0ff6d52bb7e73a408" title="Set fault enable in the fault registers." alt="" coords="391,107,597,132"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="849,122,597,122,597,117,849,117"/>
+<area shape="rect" id="Node000008" href="$max22190_8c.html#a0eb8e882f00d386aa39adfa14cb2f78a" title="Set filter delay, wite break detection and if the filter is used or bypassed." alt="" coords="653,157,807,183"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="880,138,786,160,785,155,879,133"/>
+<area shape="rect" id="Node000009" href="$max22190_8c.html#a9f49143452b657dabfc214a146594f22" title="MAX22190 Initialization function." alt="" coords="435,5,553,31"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="918,101,871,71,814,46,746,30,676,21,554,18,554,12,676,16,746,25,816,41,873,66,921,96"/>
+<area shape="rect" id="Node000011" href="$max22190_8c.html#a6ea8450178708aeb1d818feebbfdef6f" title="Set Wire Break detection for requested channel." alt="" coords="654,56,806,81"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="879,106,785,84,786,79,880,101"/>
+<area shape="rect" id="Node000003" href="$max22190_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="198,132,317,157"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="632,209,390,171,317,158,318,153,391,166,632,204"/>
+<area shape="rect" id="Node000004" href="$max22190_8c.html#a52906a3e2f40e52332857154f1153d92" title="Free the resources allocated by initialization." alt="" coords="420,259,568,284"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="657,239,554,261,553,256,656,234"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="423,257,389,242,364,220,341,197,281,160,284,155,344,193,368,216,392,237,425,252"/>
+<area shape="rect" id="Node000005" href="$iio__max22190_8c.html#a4990673d3101295b7a39dbac8e3611f0" title="Free the resources allocated by max22190_iio_init()." alt="" coords="172,207,343,232"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="422,258,315,235,316,229,423,253"/>
+<area shape="rect" id="Node000006" href="$max22190_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,157,124,183"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="193,206,115,185,116,180,195,201"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="377,135,317,141,317,136,376,129"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="639,168,317,150,317,145,639,163"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="429,37,392,52,325,94,275,134,271,130,322,90,389,48,427,32"/>
+<area shape="rect" id="Node000010" href="$iio__max22190_8c.html#ae472b7a18c888d04b504f3006734de34" title="Initializes the MAX22190 IIO Descriptor." alt="" coords="186,32,329,57"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="421,29,329,39,329,34,420,24"/>
+<area shape="poly" id="edge14_Node000010_Node000006" title=" " alt="" coords="227,67,87,159,84,155,224,63"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="641,71,521,77,456,85,391,97,334,114,286,134,284,129,333,109,390,91,455,80,521,72,640,66"/>
+</map>

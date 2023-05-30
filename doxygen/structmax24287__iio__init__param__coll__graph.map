@@ -1,0 +1,13 @@
+<map id="max24287_iio_init_param" name="max24287_iio_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="89,269,280,295"/>
+<area shape="rect" id="Node000002" href="$structmax24287__desc.html" title=" " alt="" coords="121,181,249,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,221,187,269,182,269,182,221"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="40,93,172,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,127,176,179,172,183,124,131"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="104,44,108,93,102,93,99,45"/>
+<area shape="rect" id="Node000005" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="208,93,345,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="259,130,229,159,201,183,197,179,226,155,255,127"/>
+<area shape="rect" id="Node000006" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="218,5,349,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="284,45,280,93,275,93,279,44"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad74416h_live_status" name="ad74416h_live_status">
+<area shape="rect" id="Node000001" title="Used to store the live status bit fields." alt="" coords="9,93,173,119"/>
+<area shape="rect" id="Node000002" href="$struct__ad74416h__live__status.html" title="Bitfield struct which maps on the LIVE_STATUS register." alt="" coords="5,5,176,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,45,93,93,88,93,88,45"/>
+</map>

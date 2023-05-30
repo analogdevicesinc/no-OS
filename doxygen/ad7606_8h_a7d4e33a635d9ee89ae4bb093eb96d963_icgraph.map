@@ -1,0 +1,41 @@
+<map id="ad7606_reg_write" name="ad7606_reg_write">
+<area shape="rect" id="Node000001" title="Write a device register via SPI or AXI Parallel core." alt="" coords="975,208,1113,233"/>
+<area shape="rect" id="Node000002" href="$ad7606_8c.html#af543646f8ff88bb2104880eff9881aa6" title="Toggle the CONVST pin to start a conversion." alt="" coords="770,5,890,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1030,197,990,125,961,86,925,52,888,33,890,28,928,48,964,82,995,122,1034,194"/>
+<area shape="rect" id="Node000004" href="$ad7606_8c.html#a925b973a7b7a05616a0d429cc7fefe8a" title="Read muliple raw samples from device." alt="" coords="277,56,445,81"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="1027,198,986,144,958,117,926,96,887,84,835,75,706,66,566,64,445,67,445,62,566,59,706,60,836,70,888,79,928,92,961,113,990,140,1031,195"/>
+<area shape="rect" id="Node000006" href="$ad7606_8c.html#aebc2fc29f39723c768616fbdbb1299b4" title="Write a device register via SPI with masking." alt="" coords="739,107,921,132"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1011,202,971,178,926,154,875,135,877,130,928,149,974,173,1014,198"/>
+<area shape="rect" id="Node000011" href="$ad7606_8c.html#a8b8917b88bf8a962cf4c03bbcc32d787" title="Set the channel gain." alt="" coords="512,157,667,183"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="960,209,926,205,667,178,667,173,927,199,961,204"/>
+<area shape="rect" id="Node000012" href="$ad7606_8c.html#abc9cacda6c8f8496a798487f9bbc727d" title="Set the channel offset." alt="" coords="508,207,671,232"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="961,223,671,222,671,217,961,218"/>
+<area shape="rect" id="Node000013" href="$ad7606_8c.html#a7c95873d263944b0a6fe60ac8491bc4a" title="Set the channel phase." alt="" coords="507,256,672,281"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="961,232,672,263,672,257,960,227"/>
+<area shape="rect" id="Node000014" href="$ad7606_8c.html#a805c34e6e494c53ab140d91581f9e59e" title="Set the device config register." alt="" coords="759,309,901,335"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="1014,243,974,268,928,292,877,312,875,307,926,288,971,264,1011,239"/>
+<area shape="rect" id="Node000015" href="$ad7606_8c.html#a1417edc65b2d70eef23d8cb08b39f915" title="Set the device digital diagnostics configuration." alt="" coords="740,359,920,384"/>
+<area shape="poly" id="edge20_Node000001_Node000015" title=" " alt="" coords="1029,247,987,298,959,325,928,348,900,361,898,356,925,344,956,321,983,295,1025,243"/>
+<area shape="rect" id="Node000016" href="$ad7606_8c.html#abc4948edb50ed62de9ab4a96119360d9" title="Set the oversampling ratio." alt="" coords="733,408,927,433"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="1035,247,1020,282,996,323,966,364,928,399,907,410,904,406,925,394,962,361,992,320,1015,279,1031,245"/>
+<area shape="rect" id="Node000003" href="$ad7606_8c.html#ae9a3bbb941edb86d1401bb227403f7d3" title="Blocking conversion start and read data (for a single sample from all channels)." alt="" coords="493,5,685,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="756,21,685,21,685,15,756,15"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="518,36,420,59,419,53,517,31"/>
+<area shape="rect" id="Node000005" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="141,119,196,144"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="310,88,197,125,195,120,308,83"/>
+<area shape="rect" id="Node000007" href="$ad7606_8c.html#a688199e6d87733064a14c555ae89e51a" title="Set the channel operation range." alt="" coords="508,107,671,132"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="725,122,671,122,671,117,725,117"/>
+<area shape="rect" id="Node000008" href="$ad7606_8c.html#a2afb3414c61b03e45af8e3564bcf4e24" title="Initialize the ad7606 device structure." alt="" coords="312,232,411,257"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="514,139,495,147,459,168,426,191,377,234,374,230,423,187,456,163,492,142,512,134"/>
+<area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="326,227,190,147,193,142,328,223"/>
+<area shape="rect" id="Node000009" href="$iio__ad7606_8c.html#a711196dffba30114293e1db85fd666e1" title="Initialize AD7606 for IIO interfacing." alt="" coords="108,232,229,257"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="298,247,230,247,230,242,298,242"/>
+<area shape="rect" id="Node000010" href="$ad7606x-fmc_2src_2iio__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,232,60,257"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="94,247,60,247,60,242,94,242"/>
+<area shape="poly" id="edge13_Node000011_Node000008" title=" " alt="" coords="521,189,494,197,393,234,391,229,492,191,519,184"/>
+<area shape="poly" id="edge15_Node000012_Node000008" title=" " alt="" coords="495,233,411,242,411,237,494,227"/>
+<area shape="poly" id="edge17_Node000013_Node000008" title=" " alt="" coords="493,261,411,252,411,247,494,256"/>
+<area shape="poly" id="edge19_Node000014_Node000008" title=" " alt="" coords="745,323,625,316,558,307,493,295,437,279,390,260,392,255,439,274,494,290,559,302,625,310,745,318"/>
+<area shape="poly" id="edge21_Node000015_Node000008" title=" " alt="" coords="726,370,612,356,551,343,492,326,459,311,427,293,377,260,380,255,430,289,461,306,494,321,553,338,613,351,727,365"/>
+<area shape="poly" id="edge23_Node000016_Node000008" title=" " alt="" coords="719,423,665,418,607,408,548,393,492,371,452,346,417,314,370,259,374,256,421,311,455,341,495,366,550,388,608,403,666,413,720,417"/>
+</map>

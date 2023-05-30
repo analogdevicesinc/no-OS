@@ -1,0 +1,13 @@
+<map id="adin1320_soft_reset" name="adin1320_soft_reset">
+<area shape="rect" id="Node000001" title="Select and Perform Device Reset." alt="" coords="655,31,808,56"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html#a677ac4cd6d792110049e2adfe564e910" title="Initialize the Device." alt="" coords="496,31,607,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="641,46,607,46,607,41,641,41"/>
+<area shape="rect" id="Node000003" href="$cmd__mode_8c.html#ab812d44de8ad3f20a02f975f978a4cc2" title=" " alt="" coords="342,5,435,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="482,35,435,28,436,23,483,30"/>
+<area shape="rect" id="Node000006" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="329,55,448,80"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="483,56,449,61,448,56,482,51"/>
+<area shape="rect" id="Node000004" href="$cmd_8c.html#ac1fdbd851dca722a4c7ee9bbe2e55de1" title=" " alt="" coords="172,5,281,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="328,21,282,21,282,15,328,15"/>
+<area shape="rect" id="Node000005" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

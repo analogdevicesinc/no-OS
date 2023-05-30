@@ -1,0 +1,38 @@
+<map id="drivers/ecg/adas1000/adas1000.c" name="drivers/ecg/adas1000/adas1000.c">
+<area shape="rect" id="Node000001" title="Implementation of ADAS1000 Driver." alt="" coords="188,5,349,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,76,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,38,124,58,94,74,68,95,52,123,45,154,39,153,47,121,64,92,91,69,122,53,187,33"/>
+<area shape="rect" id="Node000003" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="214,93,323,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,46,271,79,266,79,266,46"/>
+<area shape="rect" id="Node000005" href="$adas1000_8h.html" title="Header file of ADAS1000 Driver." alt="" coords="360,93,457,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="303,43,377,84,375,89,301,48"/>
+<area shape="rect" id="Node000009" href="$no__os__crc_8h.html" title="Generic header file for all CRC computation algorithms." alt="" coords="635,93,734,119"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="350,39,622,90,621,95,349,44"/>
+<area shape="rect" id="Node000014" href="$no__os__alloc_8h.html" title=" " alt="" coords="79,93,189,119"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="238,48,167,89,164,84,235,43"/>
+<area shape="rect" id="Node000004" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="192,167,260,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="264,120,242,156,238,154,259,118"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="583,240,653,265"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="413,118,424,154,434,173,448,190,476,210,507,225,570,243,568,248,505,230,473,215,444,194,430,176,419,156,408,120"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="458,167,541,192"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="425,117,475,156,472,160,422,121"/>
+<area shape="rect" id="Node000008" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="285,167,383,192"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="399,121,358,159,354,155,395,117"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="380,189,570,237,569,242,379,195"/>
+<area shape="rect" id="Node000010" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="565,167,671,192"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="676,121,640,158,636,155,672,117"/>
+<area shape="rect" id="Node000012" href="$no__os__crc16_8h.html" title="Header file of CRC&#45;16 computation." alt="" coords="695,167,810,192"/>
+<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="698,117,734,155,730,158,694,121"/>
+<area shape="rect" id="Node000013" href="$no__os__crc24_8h.html" title="Header file of CRC&#45;24 computation." alt="" coords="834,167,949,192"/>
+<area shape="poly" id="edge16_Node000009_Node000013" title=" " alt="" coords="719,116,846,160,844,165,717,121"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="621,192,621,226,615,226,615,192"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="715,240,790,265"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="641,190,720,231,717,236,638,194"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="732,194,653,236,651,231,730,190"/>
+<area shape="poly" id="edge15_Node000012_Node000011" title=" " alt="" coords="755,192,755,226,750,226,750,192"/>
+<area shape="poly" id="edge17_Node000013_Node000006" title=" " alt="" coords="848,195,667,241,666,236,847,189"/>
+<area shape="poly" id="edge18_Node000013_Node000011" title=" " alt="" coords="870,194,789,236,786,231,868,190"/>
+<area shape="poly" id="edge21_Node000014_Node000002" title=" " alt="" coords="121,121,68,160,65,156,117,117"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="101,167,167,192"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="137,119,137,153,131,153,131,119"/>
+</map>

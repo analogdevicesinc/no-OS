@@ -1,0 +1,11 @@
+<map id="get_afe_input" name="get_afe_input">
+<area shape="rect" id="Node000001" title=" " alt="" coords="692,13,803,38"/>
+<area shape="rect" id="Node000002" href="$pqlib__example_8c.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="484,5,644,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="678,28,644,28,644,23,678,23"/>
+<area shape="rect" id="Node000003" href="$pqlib__example_8c.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="313,13,436,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="470,28,436,28,436,23,470,23"/>
+<area shape="rect" id="Node000004" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,13,265,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="300,28,265,28,265,23,300,23"/>
+<area shape="rect" id="Node000005" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

@@ -1,0 +1,26 @@
+<map id="max14906_ch_func" name="max14906_ch_func">
+<area shape="rect" id="Node000001" title="Configure a channel&#39;s function." alt="" coords="703,79,851,104"/>
+<area shape="rect" id="Node000002" href="$iio__max14906_8c.html#a6821b5e1c7f1557c56453ea435f5278c" title="Configure a set if IIO channels based on the operation modes of the enabled physical channels." alt="" coords="497,129,655,169"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="719,111,647,131,646,126,717,105"/>
+<area shape="rect" id="Node000007" href="$max14906_8c.html#aadb9ea330ffdaf973ddfe5e36c3cd9a0" title="Initialize and configure the MAX14906 device." alt="" coords="517,79,635,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="689,94,635,94,635,89,689,89"/>
+<area shape="rect" id="Node000009" href="$max14906_8c.html#aa4ea1254007543a1679fc6e788da65fc" title="Free the resources allocated during init and place all the channels in high&#45;z." alt="" coords="502,29,650,55"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="711,78,628,57,629,52,712,73"/>
+<area shape="rect" id="Node000003" href="$iio__max14906_8c.html#a9c2313da78bf3d7e5c3a69ff4a274bce" title="Initializes the MAX14906 IIO descriptor." alt="" coords="293,104,435,129"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="483,137,435,130,436,125,484,132"/>
+<area shape="rect" id="Node000004" href="$max14906_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="110,19,229,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="300,102,278,94,191,46,194,42,280,89,302,97"/>
+<area shape="rect" id="Node000005" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,80,231,105"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="279,109,231,103,231,98,279,104"/>
+<area shape="rect" id="Node000006" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,95,60,95,60,90,94,90"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="503,103,436,111,435,106,503,97"/>
+<area shape="rect" id="Node000008" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="305,55,423,80"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="502,86,423,77,424,71,503,80"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="517,61,498,68,450,94,414,106,413,101,448,89,496,64,515,56"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="488,55,424,63,423,58,488,50"/>
+<area shape="rect" id="Node000010" href="$iio__max14906_8c.html#afcfbbd7dad3b9c0a3c70d7746e0b5ef8" title="Free resources allocated by the init function." alt="" coords="279,5,449,31"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="488,35,449,30,450,25,488,29"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="265,27,229,30,229,25,265,22"/>
+<area shape="poly" id="edge14_Node000010_Node000005" title=" " alt="" coords="301,37,280,44,196,82,194,77,278,40,299,32"/>
+</map>

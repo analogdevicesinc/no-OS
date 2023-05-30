@@ -1,0 +1,13 @@
+<map id="drivers/platform/lattice/riscvrx_axi_io.c" name="drivers/platform/lattice/riscvrx_axi_io.c">
+<area shape="rect" id="Node000001" title="Implementation of AXI IO for Lattice RISC&#45;V RX." alt="" coords="105,5,277,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,112,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,48,92,88,89,84,158,43"/>
+<area shape="rect" id="Node000003" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="136,93,245,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,46,193,79,188,79,188,46"/>
+<area shape="rect" id="Node000005" href="$no__os__axi__io_8h.html" title="Header file of AXI IO." alt="" coords="270,93,389,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="225,43,298,84,296,89,223,48"/>
+<area shape="rect" id="Node000004" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="157,167,225,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="193,119,193,153,188,153,188,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="294,167,365,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="332,119,332,153,327,153,327,119"/>
+</map>

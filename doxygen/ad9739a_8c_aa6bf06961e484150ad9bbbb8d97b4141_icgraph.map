@@ -1,0 +1,15 @@
+<map id="ad9739a_write" name="ad9739a_write">
+<area shape="rect" id="Node000001" title="Writes a value to the selected register." alt="" coords="403,107,521,132"/>
+<area shape="rect" id="Node000002" href="$ad9739a_8c.html#a2d27717f6ba2bafffa904e1c0d072c61" title="Sets the full&#45;scale output current for the DAC." alt="" coords="175,5,355,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,101,395,76,353,52,306,33,308,28,356,48,398,72,434,96"/>
+<area shape="rect" id="Node000003" href="$ad9739a_8c.html#a5790358339c8085a397128ede20af842" title="Initializes the AD9739A." alt="" coords="5,56,127,81"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="400,106,354,97,233,82,127,74,127,69,234,76,355,91,401,101"/>
+<area shape="rect" id="Node000004" href="$ad9739a_8c.html#a5881590c76e5a81e42ae475d9fc37d18" title="Powers down LVDS interface and TxDAC." alt="" coords="181,107,348,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="389,122,348,122,348,117,389,117"/>
+<area shape="rect" id="Node000005" href="$ad9739a_8c.html#aacc0537342e976f585595c2cf2d8895d" title="Resets the device." alt="" coords="205,156,324,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="398,138,317,159,316,153,397,133"/>
+<area shape="rect" id="Node000006" href="$ad9739a_8c.html#a0a6d7d62043ea573681ec972ab483243" title="Sets the normal baseband mode or mix&#45;mode." alt="" coords="207,205,322,231"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="436,143,399,170,356,195,322,208,320,203,354,190,396,165,433,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,37,117,59,116,53,200,32"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="194,154,173,146,121,114,81,84,84,79,124,110,176,141,196,149"/>
+</map>

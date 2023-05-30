@@ -1,0 +1,28 @@
+var ad552xr_8c =
+[
+    [ "ad552xr_channel_output_en", "ad552xr_8c.html#a67e43d11207f39e97158025fbd0ea146", null ],
+    [ "ad552xr_func_en", "ad552xr_8c.html#a6f93ab00e06416d94c5c0d5dedff170a", null ],
+    [ "ad552xr_func_mode_select", "ad552xr_8c.html#a96a72841122bd3e900f069b88f027610", null ],
+    [ "ad552xr_hw_ldac_trigger", "ad552xr_8c.html#a8cfa9f867bcd42f42afb725df87784fe", null ],
+    [ "ad552xr_hw_reset", "ad552xr_8c.html#ae060648acd37b5fe531857184623e4da", null ],
+    [ "ad552xr_init", "ad552xr_8c.html#a334349ce84c52ee5feab179709e29af5", null ],
+    [ "ad552xr_remove", "ad552xr_8c.html#ab965590ef723ca66fd747e80c63173db", null ],
+    [ "ad552xr_set_ch_output_range", "ad552xr_8c.html#aeedbfc79954571aa4b96d8f68811cfca", null ],
+    [ "ad552xr_set_dac_a_value", "ad552xr_8c.html#a1bce7c018e3e04ed46f10c787c65daa8", null ],
+    [ "ad552xr_set_dac_b_value", "ad552xr_8c.html#a69969d65e4ce1b877787db35acec414a", null ],
+    [ "ad552xr_set_device_spi", "ad552xr_8c.html#a4f351b697d01b2a65fdf8a91e5887978", null ],
+    [ "ad552xr_set_dither_period", "ad552xr_8c.html#a5c31c2420f5275c072979190db3f6c34", null ],
+    [ "ad552xr_set_dither_phase", "ad552xr_8c.html#a6017b97812aaa8c7895ea9166cf302ee", null ],
+    [ "ad552xr_set_hw_edge_trigger", "ad552xr_8c.html#a37fb285502ded4f612ab6e0b5bbfff73", null ],
+    [ "ad552xr_set_hw_ldac_toggle_pin", "ad552xr_8c.html#a1b23f89c8465d0bc4f33d2045192b9e5", null ],
+    [ "ad552xr_set_hw_sw_ldac", "ad552xr_8c.html#aadbaf02441b1c6bd0ec4a69662d259ce", null ],
+    [ "ad552xr_set_mux_out_select", "ad552xr_8c.html#a389fb8cdc48035ae73154a0210e89a6b", null ],
+    [ "ad552xr_set_ramp_step_size", "ad552xr_8c.html#acd964d0fea9a3525b1d6b5502da48ccb", null ],
+    [ "ad552xr_set_reference", "ad552xr_8c.html#a963e5dd97423beb52a80fa7b69521a02", null ],
+    [ "ad552xr_set_sync_async_ldac", "ad552xr_8c.html#ad24a3551c7558da148568ccabe7f2a71", null ],
+    [ "ad552xr_spi_reg_read", "ad552xr_8c.html#aab97ea7e3096f363af2a623e34e60131", null ],
+    [ "ad552xr_spi_reg_write", "ad552xr_8c.html#a9105fbcd54609a7d7d53b9dbcc0676c0", null ],
+    [ "ad552xr_spi_write_mask", "ad552xr_8c.html#a3b2911f9aae4ed830b52e46a2eb11e4b", null ],
+    [ "ad552xr_sw_ldac_trigger", "ad552xr_8c.html#aa95b7a7b62b06ddb51086cc6380d3d38", null ],
+    [ "ad552xr_sw_reset", "ad552xr_8c.html#a0c3a6565cf554b0fd22c8710c3b864b7", null ]
+];

@@ -1,0 +1,54 @@
+<map id="ltc4306_read" name="ltc4306_read">
+<area shape="rect" id="Node000001" title="Reads the value of a register." alt="" coords="667,434,773,459"/>
+<area shape="rect" id="Node000002" href="$ltc4306_8c.html#af26bd8c8c7c4879c6cbcabdf2f681e06" title="Get downstream connect bit status to see if any downstream bus connected." alt="" coords="439,5,598,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="713,421,700,338,679,230,651,127,635,86,617,59,597,44,600,40,621,56,639,84,656,125,684,229,705,337,718,420"/>
+<area shape="rect" id="Node000003" href="$ltc4306_8c.html#a569db21182c5aa4a94a2bc20194f28d8" title="Gets Connection Requirement bit field." alt="" coords="437,70,601,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="716,420,713,357,700,273,687,229,670,185,646,145,617,110,599,98,602,93,620,106,651,142,674,183,692,227,705,272,718,356,722,420"/>
+<area shape="rect" id="Node000006" href="$ltc4306_8c.html#ab08aec25a4b0501dfe0e39fd1ed93e50" title="Get status of downstream accelerator enable bit field." alt="" coords="425,120,612,160"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="714,421,706,369,690,303,661,234,641,202,617,174,601,162,604,158,620,170,645,199,666,231,695,301,712,368,719,420"/>
+<area shape="rect" id="Node000007" href="$ltc4306_8c.html#ae5438a62091ca02919906b36d934736e" title="Get the connection status of the selected FET." alt="" coords="425,184,612,224"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="711,421,700,381,681,332,654,281,637,258,617,238,600,226,603,222,620,234,641,255,658,278,686,329,705,379,716,420"/>
+<area shape="rect" id="Node000008" href="$ltc4306_8c.html#a142fa55e755a04e75bc79818d1a61bb6" title="Gets GPIO Output Driver state." alt="" coords="427,248,610,288"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="706,423,672,362,647,330,617,302,598,290,600,286,620,298,651,326,676,359,710,420"/>
+<area shape="rect" id="Node000009" href="$ltc4306_8c.html#a404f2d8ff6d6919a1c48e481e692922c" title="Reads Latched Timeout status." alt="" coords="442,312,595,352"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="695,426,660,395,617,366,592,355,594,350,620,362,663,391,698,422"/>
+<area shape="rect" id="Node000010" href="$ltc4306_8c.html#a871e6b0d1c646e10e27cec5c66fee0bc" title="Gets Mass Write Bit Field status." alt="" coords="429,377,609,402"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="667,432,618,417,571,405,573,399,619,412,669,427"/>
+<area shape="rect" id="Node000011" href="$ltc4306_8c.html#aba1a8ed2acfae118145110dc635b993b" title="Reads Realtime Timeout status." alt="" coords="439,427,599,467"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="653,449,599,449,599,444,653,444"/>
+<area shape="rect" id="Node000012" href="$ltc4306_8c.html#a6569d810ae4b0518bbc4ce1fc5ca3dcf" title="Gets LTC4306&#39;s Timeout Mode." alt="" coords="419,491,619,517"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="669,466,619,481,573,494,571,489,618,476,667,461"/>
+<area shape="rect" id="Node000013" href="$ltc4306_8c.html#ae6cf6ed948db0bb2544350f5f8fcdafe" title="Get status of upstream accelerator enable bit field." alt="" coords="435,541,602,581"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="698,471,663,501,620,530,591,544,589,539,617,526,659,497,694,467"/>
+<area shape="rect" id="Node000014" href="$ltc4306_8c.html#a7ae1f846aa3d5d3daec5d61b87a9e031" title="Reads Alert Logic State of selected ALERT pin." alt="" coords="447,605,590,645"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="710,473,676,534,651,567,620,595,592,611,589,607,617,591,647,563,672,531,706,470"/>
+<area shape="rect" id="Node000015" href="$ltc4306_8c.html#aeb632e47d35bea590253d72360054a01" title="Reads bus logic state." alt="" coords="431,669,606,709"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="716,474,705,514,686,564,658,615,641,639,620,659,603,672,600,667,617,655,637,635,654,612,681,562,700,513,711,472"/>
+<area shape="rect" id="Node000016" href="$ltc4306_8c.html#a5981320fbff10b521122f10a78193bf9" title="Reads Failed Connection Attempt bit." alt="" coords="425,734,613,759"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="720,474,712,526,696,594,683,629,667,663,646,695,620,723,601,736,598,732,617,719,642,692,662,661,678,627,691,592,707,525,714,473"/>
+<area shape="rect" id="Node000017" href="$ltc4306_8c.html#a08f37684d42560b6327d62053d73464e" title="Reads logic of selected GPIO." alt="" coords="429,784,608,824"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="721,474,716,534,701,614,688,656,671,698,649,738,621,773,603,786,600,782,617,769,644,735,666,696,683,655,696,613,711,533,716,473"/>
+<area shape="rect" id="Node000018" href="$ltc4306_8c.html#a52f221217225793a4cd64461428035bd" title="Update selected I2C register contents." alt="" coords="443,849,594,874"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="718,474,706,556,685,665,657,769,640,810,621,838,596,854,593,849,617,834,635,807,652,768,680,664,701,556,713,473"/>
+<area shape="rect" id="Node000004" href="$ltc4306_8c.html#af36fa1d04f93bee12ff961fbf5cd88e8" title="Dis/connects to a downstream bus. Bus logic state must be 1 for connection to occur EXCEPT when conn_..." alt="" coords="179,641,364,681"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="427,105,421,110,393,151,367,213,344,288,324,371,294,531,278,642,273,641,289,531,319,370,339,287,362,211,388,148,417,106,423,101"/>
+<area shape="rect" id="Node000005" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,763,124,789"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="187,689,173,696,121,731,81,765,78,761,117,727,171,691,185,684"/>
+<area shape="poly" id="edge15_Node000015_Node000004" title=" " alt="" coords="417,681,364,674,365,669,418,675"/>
+<area shape="poly" id="edge22_Node000018_Node000004" title=" " alt="" coords="429,847,417,838,402,820,395,802,391,765,389,730,382,712,369,695,354,684,357,679,373,691,387,710,394,728,397,765,400,800,407,817,421,834,432,843"/>
+<area shape="rect" id="Node000019" href="$ltc4306_8c.html#a1c2f57e653d010e78aa2c8b04ef9a324" title="Configures GPIO1 and GPIO2 as input or output mode. If selected as output mode, can be configured as ..." alt="" coords="185,706,357,731"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="429,846,417,838,406,826,398,814,392,790,386,766,380,755,369,745,350,734,353,729,372,741,384,752,391,764,397,789,403,812,410,823,420,834,432,842"/>
+<area shape="rect" id="Node000020" href="$ltc4306_8c.html#abf6bb141b301cabbccdac5d3dc727688" title="Sets Connection Requirement bit field." alt="" coords="190,755,353,781"/>
+<area shape="poly" id="edge20_Node000018_Node000020" title=" " alt="" coords="436,847,417,838,402,828,393,816,383,806,369,796,339,783,341,778,372,791,387,802,397,813,406,824,420,834,438,842"/>
+<area shape="rect" id="Node000021" href="$ltc4306_8c.html#ad6e2df274a55b13b7a2c3429bcb88834" title="En/Disables downstream accelerator." alt="" coords="179,805,364,845"/>
+<area shape="poly" id="edge21_Node000018_Node000021" title=" " alt="" coords="429,851,364,841,365,836,430,846"/>
+<area shape="rect" id="Node000022" href="$ltc4306_8c.html#af48459f4ec134962127c8d52bdec8e9a" title="Sets GPIO Output Driver state." alt="" coords="181,869,362,909"/>
+<area shape="poly" id="edge23_Node000018_Node000022" title=" " alt="" coords="430,874,362,882,362,876,429,869"/>
+<area shape="rect" id="Node000023" href="$ltc4306_8c.html#a76c1b8fbfab041606d69c0e46861f729" title="Enables Mass Write." alt="" coords="182,934,361,959"/>
+<area shape="poly" id="edge25_Node000018_Node000023" title=" " alt="" coords="478,882,372,924,328,936,327,931,370,919,476,877"/>
+<area shape="rect" id="Node000024" href="$ltc4306_8c.html#a45f07dc20dcefcdb8c914e9db97827c4" title="Sets LTC4306&#39;s Timeout Mode." alt="" coords="172,983,371,1009"/>
+<area shape="poly" id="edge26_Node000018_Node000024" title=" " alt="" coords="496,886,442,931,408,954,372,974,341,986,339,981,370,970,405,950,439,926,493,881"/>
+<area shape="rect" id="Node000025" href="$ltc4306_8c.html#a1edae0e29cb57043454ade8f78e402e7" title="En/Disables upstream accelerator." alt="" coords="188,1033,355,1073"/>
+<area shape="poly" id="edge27_Node000018_Node000025" title=" " alt="" coords="503,887,450,955,413,992,372,1024,349,1036,347,1031,369,1019,410,988,446,951,499,884"/>
+<area shape="poly" id="edge24_Node000022_Node000005" title=" " alt="" coords="185,867,171,860,118,825,78,791,81,787,121,820,173,855,187,862"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ad5791_init" name="ad5791_init">
+<area shape="rect" id="Node000001" title="Initializes the communication with the device." alt="" coords="277,5,376,31"/>
+<area shape="rect" id="Node000002" href="$iio__ad5791_8c.html#afad979732e25d7ee76cc7f0d366b52f6" title="Initialize the AD5791 IIO driver." alt="" coords="108,5,229,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="264,21,230,21,230,15,264,15"/>
+<area shape="rect" id="Node000003" href="$cn0531_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

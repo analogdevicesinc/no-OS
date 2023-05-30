@@ -1,0 +1,19 @@
+<map id="drivers/adc/ad7124/ad7124.h" name="drivers/adc/ad7124/ad7124.h">
+<area shape="rect" id="Node000001" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="170,5,317,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="165,167,236,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,47,200,68,184,94,181,109,182,124,191,153,185,155,177,125,176,108,180,92,196,65,217,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="414,167,497,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="318,35,377,55,406,71,431,92,448,121,456,153,451,154,443,123,427,95,403,75,375,60,316,40"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,93,293,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="246,46,246,79,241,79,241,46"/>
+<area shape="rect" id="Node000005" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,93,119,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="201,48,102,90,100,85,199,43"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,93,417,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="275,43,339,84,336,88,272,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="239,120,217,156,212,154,234,118"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="85,116,167,158,165,163,83,121"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="342,121,241,164,239,159,340,116"/>
+<area shape="poly" id="edge10_Node000006_Node000003" title=" " alt="" coords="383,117,432,156,429,160,380,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="319,167,389,192"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="368,119,361,154,356,153,363,119"/>
+</map>

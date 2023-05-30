@@ -1,0 +1,21 @@
+<map id="projects/eval&#45;adg1712/src/examples/basic/basic_example.c" name="projects/eval&#45;adg1712/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="BASIC example source file for eval&#45;adg1712 project." alt="" coords="174,5,363,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,63,109,105,107,100,207,58"/>
+<area shape="rect" id="Node000003" href="$adg1712_8h.html" title="Header file of ADG1712/ADG2712 Driver." alt="" coords="157,108,247,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="250,62,222,99,217,95,246,58"/>
+<area shape="rect" id="Node000007" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="280,181,393,207"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="282,59,329,167,324,170,277,61"/>
+<area shape="rect" id="Node000008" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="379,108,515,133"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="324,58,412,100,410,104,322,62"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="167,255,237,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="157,134,83,155,51,168,32,183,26,198,28,211,39,223,56,233,103,248,153,258,152,263,102,254,54,238,36,227,24,214,20,198,28,180,48,164,81,150,156,129"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="42,181,125,207"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="184,136,116,176,113,172,182,131"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="149,181,255,207"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="205,134,205,168,199,168,199,134"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="205,207,205,241,199,241,199,207"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="316,209,237,250,235,246,314,204"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="418,181,485,207"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="451,134,453,168,447,168,445,134"/>
+</map>

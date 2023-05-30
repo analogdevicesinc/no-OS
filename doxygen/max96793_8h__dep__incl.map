@@ -1,0 +1,11 @@
+<map id="drivers/gmsl/serializer/camera/max96793/max96793.h" name="drivers/gmsl/serializer/camera/max96793/max96793.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="142,5,375,45"/>
+<area shape="rect" id="Node000002" href="$max96793_8c.html" title=" " alt="" coords="5,203,237,243"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,53,160,71,138,95,126,122,120,151,121,203,116,203,115,150,121,120,134,92,157,67,185,49"/>
+<area shape="rect" id="Node000003" href="$max96793__diag_8c.html" title=" " alt="" coords="284,196,505,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="332,49,360,67,384,92,396,118,401,145,401,196,396,196,396,146,391,119,379,95,357,71,329,53"/>
+<area shape="rect" id="Node000004" href="$max96793__diag_8h.html" title=" " alt="" coords="148,93,369,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="261,59,261,93,256,93,256,59"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="214,158,149,205,146,201,210,154"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="307,154,361,194,357,198,304,158"/>
+</map>

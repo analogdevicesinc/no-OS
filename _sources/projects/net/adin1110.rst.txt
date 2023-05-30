@@ -1,0 +1,1 @@
+.. include:: ../../../../../projects/adin1110/README.rst

@@ -1,0 +1,7 @@
+<map id="ad9523_state" name="ad9523_state">
+<area shape="rect" id="Node000001" title=" " alt="" coords="35,181,145,207"/>
+<area shape="rect" id="Node000002" href="$structad9523__platform__data.html" title="platform specific information" alt="" coords="5,93,175,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,133,93,181,87,181,87,133"/>
+<area shape="rect" id="Node000003" href="$structad9523__channel__spec.html" title="Output channel configuration." alt="" coords="7,5,173,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,45,93,93,87,93,87,45"/>
+</map>

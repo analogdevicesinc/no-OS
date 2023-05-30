@@ -1,0 +1,5 @@
+<map id="FLASH_CALIBRATION_DATA" name="FLASH_CALIBRATION_DATA">
+<area shape="rect" id="Node000001" title="Complete calibration data structure." alt="" coords="20,93,220,119"/>
+<area shape="rect" id="Node000002" href="$struct_f_l_a_s_h___c_h_a_n_n_e_l___c_a_l_i_b_r_a_t_i_o_n.html" title="Calibration coefficients for a single channel (phase)" alt="" coords="5,5,235,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,45,123,93,117,93,117,45"/>
+</map>

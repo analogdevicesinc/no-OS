@@ -1,0 +1,12 @@
+<map id="adin1320_set_software_powerdown" name="adin1320_set_software_powerdown">
+<area shape="rect" id="Node000001" title="Enter/exit Software Powerdown." alt="" coords="403,87,575,127"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html#ae91cc1eb3963dc7003fd621357ddd2f8" title="Allows the RMII FIFO to be Reset." alt="" coords="172,5,355,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="437,83,354,46,315,33,316,28,356,41,439,78"/>
+<area shape="rect" id="Node000003" href="$adin1320_8c.html#a1970e2b76265673d2c5caa5365cca43f" title="Set Force Speed for SerDes Media." alt="" coords="187,55,339,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="389,96,339,89,340,83,390,91"/>
+<area shape="rect" id="Node000004" href="$adin1320_8c.html#add67269b31776eeb1e30ef04097e4f4c" title="MAC Interface Configuration." alt="" coords="182,119,345,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="389,124,345,130,344,125,389,119"/>
+<area shape="rect" id="Node000005" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,156,124,181"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="446,137,403,158,355,174,294,183,232,186,124,180,125,174,232,181,294,178,354,169,401,153,443,132"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="169,156,125,163,124,157,168,151"/>
+</map>

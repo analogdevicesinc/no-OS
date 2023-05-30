@@ -1,0 +1,7 @@
+<map id="projects/demo_esp/src/platform/aducm3029/parameters.h" name="projects/demo_esp/src/platform/aducm3029/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to aducm3029 platform used by demo_esp project." alt="" coords="112,5,365,45"/>
+<area shape="rect" id="Node000002" href="$demo__esp_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of demo_esp project." alt="" coords="5,93,216,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,56,140,95,138,91,197,51"/>
+<area shape="rect" id="Node000003" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by demo_esp." alt="" coords="241,93,493,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="280,51,340,91,337,95,277,56"/>
+</map>

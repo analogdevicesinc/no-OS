@@ -1,0 +1,31 @@
+<map id="drivers/platform/lattice/riscvrx_timer.c" name="drivers/platform/lattice/riscvrx_timer.c">
+<area shape="rect" id="Node000001" title="Timer control module source for Lattice RISC&#45;V RX." alt="" coords="200,5,372,45"/>
+<area shape="rect" id="Node000002" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,167,73,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,39,92,61,47,76,31,85,20,95,14,108,14,123,26,154,21,156,9,124,9,107,16,92,28,81,45,71,90,55,199,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="379,240,449,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="265,48,236,77,209,114,200,134,195,154,197,173,205,190,230,207,271,222,365,242,364,247,270,227,228,212,201,194,191,174,190,153,195,132,204,112,232,74,261,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="215,167,285,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="282,47,269,94,257,153,251,152,263,93,277,45"/>
+<area shape="rect" id="Node000005" href="$no__os__alloc_8h.html" title=" " alt="" coords="277,93,388,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="300,44,321,80,316,83,295,47"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="30,93,139,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="239,48,128,91,126,86,237,43"/>
+<area shape="rect" id="Node000008" href="$riscvrx__timer_8h.html" title="Timer control module header for Lattice RISC&#45;V RX." alt="" coords="412,93,531,119"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="331,43,433,85,431,90,329,48"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="555,93,609,119"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="362,43,542,90,541,95,360,48"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="634,93,743,119"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="373,41,621,89,620,94,372,46"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="321,121,276,160,272,155,318,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="310,167,377,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="337,119,342,153,337,154,332,119"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="79,120,56,157,52,154,75,118"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="467,120,442,168,423,227,418,225,437,166,462,118"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="451,167,534,192"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="477,118,488,153,483,154,472,120"/>
+<area shape="rect" id="Node000010" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="559,167,672,192"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="496,116,581,158,578,163,493,121"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="696,167,753,192"/>
+<area shape="poly" id="edge14_Node000008_Node000011" title=" " alt="" coords="513,116,684,164,682,169,512,121"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="584,195,460,238,459,233,582,190"/>
+</map>

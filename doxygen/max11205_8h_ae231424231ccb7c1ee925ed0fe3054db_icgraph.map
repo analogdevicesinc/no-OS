@@ -1,0 +1,9 @@
+<map id="max11205_init" name="max11205_init">
+<area shape="rect" id="Node000001" title="Initializes the communication peripheral." alt="" coords="363,31,481,56"/>
+<area shape="rect" id="Node000002" href="$max11205pmb1_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="184,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="349,36,302,29,303,24,350,30"/>
+<area shape="rect" id="Node000003" href="$iio__max11205_8c.html#a3096b33647acf69c1bb9132184c42bd4" title="Initializes the max11205 iio driver." alt="" coords="172,55,315,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="349,56,315,60,315,55,349,50"/>
+<area shape="rect" id="Node000004" href="$max11205pmb1_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,70,125,70,125,65,159,65"/>
+</map>

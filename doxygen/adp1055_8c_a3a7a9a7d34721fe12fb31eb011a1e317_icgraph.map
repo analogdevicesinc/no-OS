@@ -1,0 +1,11 @@
+<map id="adp1055_send_command" name="adp1055_send_command">
+<area shape="rect" id="Node000001" title="Send command byte/word to ADP1055." alt="" coords="504,31,692,56"/>
+<area shape="rect" id="Node000002" href="$adp1055_8c.html#a00e64892f343d5d3a045a2272d11e54a" title="Initialize the ADP1055 device." alt="" coords="349,31,456,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="490,46,456,46,456,41,490,41"/>
+<area shape="rect" id="Node000003" href="$iio__adp1055_8c.html#a5e19414c9b0490f753cf1d1add55fda6" title="Initializes the ADP1050 IIO descriptor." alt="" coords="172,5,301,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="335,36,301,31,302,25,336,31"/>
+<area shape="rect" id="Node000005" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="177,55,296,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="336,56,297,61,296,56,335,50"/>
+<area shape="rect" id="Node000004" href="$adp1055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

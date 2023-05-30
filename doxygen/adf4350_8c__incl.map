@@ -1,0 +1,19 @@
+<map id="drivers/frequency/adf4350/adf4350.c" name="drivers/frequency/adf4350/adf4350.c">
+<area shape="rect" id="Node000001" title="Implementation of ADF4350 Driver." alt="" coords="95,5,288,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,84,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,48,80,89,77,84,155,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="225,167,291,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,45,250,153,245,155,197,47"/>
+<area shape="rect" id="Node000004" href="$adf4350_8h.html" title="Header file of ADF4350 Driver." alt="" coords="108,93,195,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="184,47,166,82,161,80,179,44"/>
+<area shape="rect" id="Node000007" href="$no__os__alloc_8h.html" title=" " alt="" coords="271,93,381,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="225,43,296,84,293,89,222,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="72,240,143,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="135,121,111,141,92,168,89,182,89,198,98,227,93,228,84,198,84,182,88,166,107,137,131,117"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="102,167,201,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="154,119,154,153,149,153,149,119"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="146,194,124,230,119,227,142,191"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="317,121,281,158,277,155,313,117"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="316,167,387,192"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="333,118,345,153,340,155,328,120"/>
+</map>
