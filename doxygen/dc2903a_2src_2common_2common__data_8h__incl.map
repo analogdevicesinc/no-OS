@@ -1,0 +1,20 @@
+<map id="projects/dc2903a/src/common/common_data.h" name="projects/dc2903a/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by DC2903A examples." alt="" coords="55,5,247,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,47,102,85,98,81,132,44"/>
+<area shape="rect" id="Node000003" href="$ltc2672_8h.html" title="Header file of ltc2672 Driver." alt="" coords="181,93,263,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,44,204,81,200,85,166,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="91,240,161,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="181,119,107,140,75,154,56,168,52,185,59,201,74,217,94,231,90,235,71,221,55,204,46,185,52,165,72,149,105,135,180,114"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="66,167,149,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="205,121,139,162,136,157,202,116"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="173,167,271,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="225,119,225,153,219,153,219,119"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="295,167,405,192"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="244,116,318,157,316,162,241,121"/>
+<area shape="rect" id="Node000009" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="429,167,540,192"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="264,116,430,160,428,166,263,121"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="208,194,154,234,151,229,205,190"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="316,240,384,265"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="353,192,353,226,347,226,347,192"/>
+</map>

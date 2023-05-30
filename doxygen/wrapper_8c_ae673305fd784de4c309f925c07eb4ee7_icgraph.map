@@ -1,0 +1,20 @@
+<map id="HAL_GetCurrentMsCount" name="HAL_GetCurrentMsCount">
+<area shape="rect" id="Node000001" title=" " alt="" coords="813,83,996,108"/>
+<area shape="rect" id="Node000002" href="$transmitter_8c.html#ac458d6d563b44d7f6d80dfc347f6c931" title="Main function for polling mode operation. This function should be called periodically (at least every..." alt="" coords="108,81,287,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="867,117,772,156,709,178,639,197,564,211,486,217,409,213,334,197,295,179,259,154,208,109,212,105,262,150,297,174,336,191,410,208,486,212,563,206,638,192,707,173,770,151,865,112"/>
+<area shape="rect" id="Node000003" href="$adv7511_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge11_Node000001_Node000003" title=" " alt="" coords="863,80,816,62,765,47,661,29,554,18,449,11,347,9,173,12,60,18,60,13,173,6,347,3,449,6,555,12,662,24,766,42,818,57,865,75"/>
+<area shape="rect" id="Node000004" href="$wrapper_8c.html#a908cd0003e3a425bac52783398d7d47b" title=" " alt="" coords="615,57,762,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="799,86,762,81,763,76,800,80"/>
+<area shape="rect" id="Node000006" href="$wrapper_8c.html#a86d672b5078f95fd9c46707bc630a468" title=" " alt="" coords="612,107,765,132"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="800,110,766,113,766,108,799,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="156,78,59,33,61,28,158,73"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="602,77,287,92,287,87,601,72"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="601,66,60,23,61,17,602,61"/>
+<area shape="rect" id="Node000005" href="$transmitter_8c.html#ae1f6a189e7ef2a8169668cf438657df1" title="Checks current AVR operating mode and notify application if mode changed." alt="" coords="335,107,564,132"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="614,88,512,109,511,104,613,83"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="321,109,286,106,287,100,321,104"/>
+<area shape="poly" id="edge10_Node000006_Node000005" title=" " alt="" coords="598,122,564,122,564,117,598,117"/>
+<area shape="rect" id="Node000007" href="$wrapper_8c.html#ae1fb4cf74853bbecf27f96762f737c87" title=" " alt="" coords="391,156,508,181"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="614,137,509,159,508,154,613,132"/>
+</map>

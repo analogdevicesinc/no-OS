@@ -1,0 +1,15 @@
+<map id="adf7023_get_status" name="adf7023_get_status">
+<area shape="rect" id="Node000001" title="Reads the status word of the ADF7023." alt="" coords="452,60,603,85"/>
+<area shape="rect" id="Node000002" href="$adf7023_8c.html#a8c05c851064bebafdbc2e810ce6a1cc2" title="Initializes the ADF7023." alt="" coords="271,35,373,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="438,64,373,56,374,51,438,59"/>
+<area shape="rect" id="Node000003" href="$adf7023_8c.html#a1ab67181ff1abfce39f2e8e60c5b9b3f" title="Sets a FW state and waits until the device enters in that state." alt="" coords="240,84,404,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="438,86,404,90,404,84,438,80"/>
+<area shape="rect" id="Node000004" href="$adf7023_8c.html#ae28ba95f1d1002adefe0e6ab790d9829" title="Receives one packet." alt="" coords="9,5,189,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="260,82,239,74,215,59,191,44,158,33,160,28,193,40,217,54,241,69,262,77"/>
+<area shape="rect" id="Node000005" href="$adf7023_8c.html#a2a1cd0e8ec2e86e66259f583474ab3c8" title="Sets the data rate." alt="" coords="13,55,184,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="226,87,184,81,185,76,227,81"/>
+<area shape="rect" id="Node000006" href="$adf7023_8c.html#a86b9fef4e4e5cd52c35be6f77b86018d" title="Sets the frequency deviation." alt="" coords="11,105,186,145"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="227,111,186,116,186,111,226,106"/>
+<area shape="rect" id="Node000007" href="$adf7023_8c.html#a5eaba6edc6968eeb19ef23f796a05750" title="Transmits one packet." alt="" coords="5,169,192,195"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="286,118,193,159,153,172,151,167,191,154,283,113"/>
+</map>

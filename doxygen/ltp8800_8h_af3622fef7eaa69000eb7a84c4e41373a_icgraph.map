@@ -1,0 +1,17 @@
+<map id="ltp8800_read_byte" name="ltp8800_read_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read byte operation." alt="" coords="809,23,952,49"/>
+<area shape="rect" id="Node000002" href="$ltp8800_8c.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="432,23,531,49"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="818,23,761,13,684,8,607,13,532,26,531,21,606,8,684,3,762,8,818,18"/>
+<area shape="rect" id="Node000006" href="$ltp8800_8c.html#aadb528b31012f3e99bac083b6f33cfce" title="Read statuses." alt="" coords="404,73,559,98"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="814,54,762,64,656,76,559,84,559,79,656,71,761,59,813,49"/>
+<area shape="rect" id="Node000007" href="$ltp8800_8c.html#ab98c274210399e147f51fc94f296c36f" title="Enable or disable sync pin." alt="" coords="607,23,761,49"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="796,39,762,39,762,33,796,33"/>
+<area shape="rect" id="Node000003" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,73,356,98"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="420,53,330,75,329,70,418,48"/>
+<area shape="rect" id="Node000004" href="$iio__ltp8800_8c.html#a31893ef9f84551a575cc2c0f59c8a74d" title="Initializes the LTP8800 IIO descriptor." alt="" coords="215,23,337,49"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="419,39,337,39,337,33,419,33"/>
+<area shape="rect" id="Node000005" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,23,148,49"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="201,39,148,39,148,33,201,33"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="391,88,356,88,356,83,391,83"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="593,39,531,39,531,33,593,33"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="drivers/adc/ad4080/ad4080.h" name="drivers/adc/ad4080/ad4080.h">
+<area shape="rect" id="Node000001" title="Header file of AD4080 Driver." alt="" coords="97,5,244,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="213,167,283,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,44,58,57,26,74,15,83,9,94,9,105,15,117,27,127,44,136,92,151,199,170,199,175,91,156,42,141,24,131,11,120,4,106,4,92,11,80,23,69,56,52,96,39"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="26,93,97,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,48,90,87,87,83,143,43"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="375,93,475,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,43,376,87,374,92,231,48"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="121,93,220,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="173,46,173,79,168,79,168,46"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="244,93,351,119"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="203,43,269,84,266,88,200,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="398,121,290,164,289,159,396,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="337,167,407,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="419,121,391,157,387,154,414,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="432,167,515,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="436,118,460,154,456,157,431,121"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="185,117,227,155,223,159,181,121"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="291,121,266,157,262,154,287,117"/>
+</map>

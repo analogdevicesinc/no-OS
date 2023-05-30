@@ -1,0 +1,20 @@
+<map id="no_os_dma_desc" name="no_os_dma_desc">
+<area shape="rect" id="Node000001" title="Describes the state of the DMA controller." alt="" coords="649,265,783,291"/>
+<area shape="rect" id="Node000005" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="865,235,1107,260"/>
+<area shape="poly" id="edge6_Node000005_Node000001" title=" " alt="" coords="796,266,874,257,874,263,796,272"/>
+<area shape="rect" id="Node000002" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="1212,197,1331,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1243,233,1189,264,1149,281,1107,290,1020,298,932,299,783,289,783,284,932,294,1019,293,1106,285,1148,276,1187,260,1240,229"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="1238,232,1189,251,1148,258,1107,260,1107,254,1148,252,1187,246,1236,227"/>
+<area shape="rect" id="Node000003" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="924,103,1048,128"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1063,126,1107,137,1149,150,1189,168,1247,195,1244,200,1187,172,1147,155,1106,142,1061,131"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="955,88,964,79,986,76,1004,78,1016,85,1019,94,1013,104,1008,101,1013,94,1011,88,1003,83,986,81,966,84,958,92"/>
+<area shape="rect" id="Node000004" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="907,152,1065,177"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="1079,177,1212,198,1211,203,1079,182"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="1097,230,1211,215,1212,220,1097,235"/>
+<area shape="rect" id="Node000006" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="321,241,511,267"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="525,260,649,270,649,275,524,265"/>
+<area shape="rect" id="Node000007" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="341,291,491,316"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="504,296,625,287,649,285,649,290,626,293,505,302"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,291,183,316"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="197,301,341,301,341,306,197,306"/>
+</map>

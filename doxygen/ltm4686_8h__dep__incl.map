@@ -1,0 +1,18 @@
+<map id="drivers/power/ltm4686/ltm4686.h" name="drivers/power/ltm4686/ltm4686.h">
+<area shape="rect" id="Node000001" title="Header file of the LTM4686 driver." alt="" coords="321,5,491,45"/>
+<area shape="rect" id="Node000002" href="$iio__ltm4686_8c.html" title="Source file for the LTM4686 IIO Driver." alt="" coords="5,203,175,243"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,40,195,62,147,77,117,95,101,120,93,149,90,178,91,203,85,203,85,178,87,148,96,118,113,91,145,72,193,57,307,35"/>
+<area shape="rect" id="Node000003" href="$iio__ltm4686_8h.html" title="Header file for the LTM4686 IIO Driver." alt="" coords="128,101,297,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="356,54,253,103,251,98,353,49"/>
+<area shape="rect" id="Node000005" href="$ltm4686_8c.html" title="Source code of the LTM4686 driver." alt="" coords="321,101,491,141"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="409,59,409,101,403,101,403,59"/>
+<area shape="rect" id="Node000006" href="$ltm4686_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltm4686 examples." alt="" coords="515,101,707,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="461,48,571,98,569,103,459,53"/>
+<area shape="rect" id="Node000008" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltm4686 project." alt="" coords="732,93,899,148"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="505,43,720,91,732,94,731,99,719,96,503,49"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="181,151,115,205,111,201,177,147"/>
+<area shape="rect" id="Node000004" href="$ltm4686_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltm4686 project." alt="" coords="199,196,373,251"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="237,150,269,194,265,197,232,153"/>
+<area shape="rect" id="Node000007" href="$ltm4686_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltm4686 examples." alt="" coords="516,203,707,243"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="614,155,614,203,609,203,609,155"/>
+</map>

@@ -1,0 +1,298 @@
+<map id="no_os_get_unaligned_be24" name="no_os_get_unaligned_be24">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1091,2772,1289,2797"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#afc422a9dd5287bdd85ab5dc208414991" title="Read conversion data." alt="" coords="875,68,1043,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1186,2758,1177,2278,1152,1459,1133,1028,1108,641,1093,477,1077,340,1060,235,1040,168,1027,146,1011,126,977,96,980,92,1015,122,1032,143,1045,166,1065,234,1083,339,1099,477,1113,641,1138,1028,1157,1458,1182,2278,1191,2758"/>
+<area shape="rect" id="Node000004" href="$ad4858_8c.html#a2107748bd528dfecefe5ff8fc50e20ff" title="Read ADC conversion data over SPI." alt="" coords="875,180,1043,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1186,2759,1183,2352,1177,2021,1166,1646,1148,1259,1122,892,1106,726,1087,576,1065,447,1040,343,1025,302,1005,264,967,207,972,204,1009,261,1030,300,1045,341,1070,446,1092,576,1111,725,1128,892,1154,1259,1171,1646,1182,2020,1188,2352,1191,2758"/>
+<area shape="rect" id="Node000006" href="$ade7753_8c.html#a903a93350a42ef9146271926ba415c59" title="Read device register." alt="" coords="901,355,1016,380"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1185,2758,1172,2498,1145,2035,1101,1458,1073,1156,1040,860,1019,712,996,569,960,381,965,380,1001,569,1025,711,1045,859,1078,1156,1107,1458,1150,2034,1178,2498,1190,2758"/>
+<area shape="rect" id="Node000023" href="$ade7754_8c.html#a4a636e152121aa5336e16cab70145d88" title="Read device register." alt="" coords="901,872,1016,897"/>
+<area shape="poly" id="edge31_Node000001_Node000023" title=" " alt="" coords="1183,2758,959,898,964,897,1188,2758"/>
+<area shape="rect" id="Node000055" href="$ade7758_8c.html#a4cc44962ec1e8a7e71928efc610e91dd" title="Read device register." alt="" coords="901,2220,1016,2245"/>
+<area shape="poly" id="edge83_Node000001_Node000055" title=" " alt="" coords="1176,2760,963,2246,968,2244,1181,2758"/>
+<area shape="rect" id="Node000083" href="$ade7913_8c.html#ab77f36317800804dc692df67ba2efdea" title="Read device register." alt="" coords="901,2772,1016,2797"/>
+<area shape="poly" id="edge127_Node000001_Node000083" title=" " alt="" coords="1077,2787,1016,2787,1016,2782,1077,2782"/>
+<area shape="rect" id="Node000093" href="$ade7953_8c.html#aecb13e52c8fba51cc4fa9b9a1415fc19" title="Read device register." alt="" coords="901,3180,1016,3205"/>
+<area shape="poly" id="edge140_Node000001_Node000093" title=" " alt="" coords="1177,2811,970,3181,965,3179,1172,2808"/>
+<area shape="rect" id="Node000109" href="$ade9153a_8c.html#a6a27a262a62f964b36a391d4a48ff19a" title="Ipeak val." alt="" coords="889,3229,1029,3255"/>
+<area shape="poly" id="edge159_Node000001_Node000109" title=" " alt="" coords="1190,2811,1183,2890,1161,2999,1142,3058,1117,3116,1085,3171,1044,3219,1026,3231,1023,3227,1041,3215,1081,3168,1112,3114,1137,3056,1156,2998,1177,2890,1185,2811"/>
+<area shape="rect" id="Node000110" href="$ade9153a_8c.html#a45a0ee96457ec333dbefeaed83b29384" title="Vpeak val." alt="" coords="887,3279,1031,3304"/>
+<area shape="poly" id="edge160_Node000001_Node000110" title=" " alt="" coords="1191,2811,1187,2898,1179,2956,1167,3020,1149,3086,1123,3152,1089,3214,1044,3268,1026,3281,1023,3276,1041,3264,1084,3211,1118,3150,1143,3085,1162,3019,1174,2955,1181,2897,1186,2811"/>
+<area shape="rect" id="Node000111" href="$ltc2358_8c.html#af841681bc2ff63241cfd1fb01f043fbe" title="Read single channel data." alt="" coords="877,3328,1041,3353"/>
+<area shape="poly" id="edge161_Node000001_Node000111" title=" " alt="" coords="1192,2811,1190,2906,1184,2970,1173,3041,1155,3115,1128,3188,1092,3257,1070,3288,1044,3317,1027,3330,1024,3326,1041,3313,1066,3285,1088,3254,1123,3186,1150,3113,1168,3040,1179,2970,1185,2906,1187,2811"/>
+<area shape="rect" id="Node000112" href="$ltc2992_8c.html#a01dc481b67cb8e663696ae65d65be645" title="Read raw data from device register." alt="" coords="891,3673,1026,3699"/>
+<area shape="poly" id="edge162_Node000001_Node000112" title=" " alt="" coords="1185,2812,1045,3365,966,3674,961,3672,1040,3364,1180,2810"/>
+<area shape="rect" id="Node000003" href="$ad405x_8c.html#ad8537455e65de0a05a94542e6fb39497" title="Trigger conversion and read data." alt="" coords="647,5,781,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="903,66,826,45,778,33,779,28,827,39,904,61"/>
+<area shape="rect" id="Node000005" href="$ad4858_8c.html#a543e38084df829f2e85a9908265bcc36" title="Read ADC data (for all channels)." alt="" coords="643,55,785,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="931,173,884,137,826,102,773,83,775,78,828,97,887,132,934,169"/>
+<area shape="rect" id="Node000007" href="$ade7753_8c.html#a86ba10b7b04a34be7d9e4ce87bfc9d75" title="Clear irq status flags." alt="" coords="108,132,296,157"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="943,343,888,242,855,193,825,164,751,131,672,111,590,101,509,99,431,104,361,113,251,135,250,129,360,108,431,99,509,94,590,96,673,106,753,126,828,160,859,190,892,239,947,341"/>
+<area shape="rect" id="Node000009" href="$ade7753_8c.html#ad4099d28320c2a857e2ae7f513459e76" title="Read energy values." alt="" coords="632,207,796,232"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="938,346,890,294,859,268,825,246,795,234,797,229,828,241,863,263,894,290,941,342"/>
+<area shape="rect" id="Node000010" href="$eval-ade7753_2src_2common_2common__data_8c.html#a15949fe4023e52c618a1a27713a2f456" title="Read measurements." alt="" coords="371,207,527,232"/>
+<area shape="poly" id="edge30_Node000006_Node000010" title=" " alt="" coords="945,343,927,308,902,266,867,227,848,210,825,196,781,180,734,171,685,169,637,172,550,189,484,209,482,204,549,184,637,167,685,164,734,166,782,174,828,192,851,205,871,223,906,263,932,305,950,341"/>
+<area shape="rect" id="Node000011" href="$ade7753_8c.html#a0b1742166bff53d5f8973073bb09e57e" title="Get interrupt indicator from STATUS register." alt="" coords="625,355,803,380"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="888,370,803,370,803,365,888,365"/>
+<area shape="rect" id="Node000013" href="$ade7753_8c.html#a0c08e6b9bb5947203a35ffcfb64df728" title="Read period value." alt="" coords="637,256,791,281"/>
+<area shape="poly" id="edge15_Node000006_Node000013" title=" " alt="" coords="927,349,880,321,826,295,789,284,791,279,828,290,883,317,929,345"/>
+<area shape="rect" id="Node000014" href="$ade7753_8c.html#ae4681fbeffd487a6324e525d0d3d1385" title="read with reset Ipeak val" alt="" coords="637,506,791,546"/>
+<area shape="poly" id="edge17_Node000006_Node000014" title=" " alt="" coords="941,392,894,444,862,471,828,495,793,511,791,506,825,490,859,467,890,440,937,389"/>
+<area shape="rect" id="Node000015" href="$ade7753_8c.html#a94f98f42aee166767e663aa814a9f8b2" title="read with reset Vpeak val" alt="" coords="626,571,802,596"/>
+<area shape="poly" id="edge18_Node000006_Node000015" title=" " alt="" coords="950,394,932,432,906,477,871,522,828,560,803,573,801,568,825,556,867,519,901,474,927,429,945,392"/>
+<area shape="rect" id="Node000016" href="$ade7753_8c.html#a782aa6df37cab3bcce13e1cfc7108834" title="Read rms values." alt="" coords="642,305,786,331"/>
+<area shape="poly" id="edge19_Node000006_Node000016" title=" " alt="" coords="887,356,777,333,778,328,888,351"/>
+<area shape="rect" id="Node000017" href="$ade7753_8c.html#ad117412dc7e71d7cbb04b99a90ceae37" title="Update specific register bits." alt="" coords="633,456,795,481"/>
+<area shape="poly" id="edge21_Node000006_Node000017" title=" " alt="" coords="926,389,880,415,828,439,769,458,767,453,826,434,878,410,924,385"/>
+<area shape="rect" id="Node000022" href="$ade7753_8c.html#abb151efdc4b605a3c2a6b3124d8957bb" title="Version product." alt="" coords="354,308,543,333"/>
+<area shape="poly" id="edge28_Node000006_Node000022" title=" " alt="" coords="908,387,845,402,766,414,724,415,682,413,640,406,600,394,584,383,575,371,566,358,552,347,525,336,527,331,555,342,570,355,579,368,588,379,602,389,642,401,683,408,724,410,766,408,844,397,907,381"/>
+<area shape="rect" id="Node000008" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,259,60,284"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="174,168,110,216,52,261,49,256,106,212,171,163"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="618,222,527,222,527,217,618,217"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="357,233,60,271,60,265,357,228"/>
+<area shape="poly" id="edge14_Node000011_Node000010" title=" " alt="" coords="611,352,600,344,581,321,574,298,568,275,552,253,517,235,520,230,555,249,573,273,579,296,586,319,603,340,614,347"/>
+<area shape="rect" id="Node000012" href="$ade7753_8c.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="149,296,255,321"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="618,353,600,344,585,332,576,319,567,307,552,298,513,285,471,278,387,276,309,285,247,299,246,293,308,280,387,271,472,273,514,280,554,293,571,303,580,316,589,328,603,340,620,348"/>
+<area shape="poly" id="edge13_Node000012_Node000008" title=" " alt="" coords="135,297,59,280,61,275,136,291"/>
+<area shape="poly" id="edge16_Node000013_Node000010" title=" " alt="" coords="631,256,517,235,518,229,632,251"/>
+<area shape="poly" id="edge20_Node000016_Node000010" title=" " alt="" coords="628,306,600,295,585,285,575,274,566,264,552,254,505,235,507,230,555,249,569,260,579,271,588,281,603,290,630,301"/>
+<area shape="poly" id="edge27_Node000017_Node000008" title=" " alt="" coords="620,456,491,433,342,404,204,370,149,352,107,335,71,311,44,286,48,282,74,307,109,330,150,347,206,365,343,398,492,428,621,451"/>
+<area shape="rect" id="Node000018" href="$ade7753_8c.html#a894c298fbec8447aea4fa54cb4b0353a" title="Enable/Disable interrupt." alt="" coords="372,459,525,484"/>
+<area shape="poly" id="edge22_Node000017_Node000018" title=" " alt="" coords="620,472,526,473,526,468,620,467"/>
+<area shape="rect" id="Node000019" href="$ade7753_8c.html#a05069d40bac54d22911d9720fe4305d7" title="Reset the device using SW reset." alt="" coords="377,357,520,383"/>
+<area shape="poly" id="edge23_Node000017_Node000019" title=" " alt="" coords="640,455,600,439,576,422,552,404,502,385,504,380,555,400,579,417,603,434,642,450"/>
+<area shape="rect" id="Node000020" href="$ade7753_8c.html#a45e57845fc7fee8de59a69facb6d7c0c" title="Select source of sampled data for wave register." alt="" coords="361,509,536,549"/>
+<area shape="poly" id="edge25_Node000017_Node000020" title=" " alt="" coords="644,487,602,497,537,512,535,506,601,491,643,482"/>
+<area shape="rect" id="Node000021" href="$ade7753_8c.html#ae9ca805900d6098339024cc66497ac07" title="Select waveform register update rate." alt="" coords="346,573,551,599"/>
+<area shape="poly" id="edge26_Node000017_Node000021" title=" " alt="" coords="621,486,603,496,587,512,580,528,572,546,555,563,529,576,527,571,552,559,567,543,575,526,583,509,600,492,619,482"/>
+<area shape="poly" id="edge24_Node000019_Node000012" title=" " alt="" coords="381,357,343,347,252,324,253,319,345,342,382,351"/>
+<area shape="poly" id="edge29_Node000022_Node000012" title=" " alt="" coords="340,318,255,314,256,309,340,313"/>
+<area shape="rect" id="Node000024" href="$ade7754_8c.html#a6671e182aaf0f9476e82a86dc67abab4" title="Clear irq status flags." alt="" coords="355,623,543,648"/>
+<area shape="poly" id="edge32_Node000023_Node000024" title=" " alt="" coords="947,860,930,819,905,770,870,722,849,701,825,683,792,665,757,651,683,634,609,627,543,628,543,623,609,622,684,629,759,646,794,660,828,678,852,697,874,718,910,768,935,817,952,858"/>
+<area shape="rect" id="Node000027" href="$ade7754_8c.html#a7b039ea745b3516102619386834c709b" title="Read energy values." alt="" coords="632,1271,796,1296"/>
+<area shape="poly" id="edge36_Node000023_Node000027" title=" " alt="" coords="959,911,952,981,932,1076,916,1126,893,1175,864,1220,828,1260,797,1278,795,1273,825,1256,860,1217,889,1172,911,1124,927,1074,947,981,954,911"/>
+<area shape="rect" id="Node000028" href="$ade7754_8c.html#a18b129547cd62f4744848c54630ced46" title="Get interrupt indicator from STATUS register." alt="" coords="360,672,537,697"/>
+<area shape="poly" id="edge37_Node000023_Node000028" title=" " alt="" coords="943,861,924,829,898,791,865,755,825,726,791,710,754,697,678,682,604,677,537,678,537,673,604,671,679,677,756,692,793,705,828,721,869,751,902,788,929,826,948,858"/>
+<area shape="rect" id="Node000029" href="$ade7754_8c.html#af157f8a9dfba9d8dcc9c154fc9a3ed11" title="Read period value." alt="" coords="637,773,791,799"/>
+<area shape="poly" id="edge39_Node000023_Node000029" title=" " alt="" coords="927,867,880,839,826,812,789,801,791,796,828,808,883,834,929,862"/>
+<area shape="rect" id="Node000031" href="$ade7754_8c.html#aa9f4087e85945b454f0de45790469893" title="Read rms values phase A." alt="" coords="611,872,817,897"/>
+<area shape="poly" id="edge42_Node000023_Node000031" title=" " alt="" coords="888,887,817,887,817,882,888,882"/>
+<area shape="rect" id="Node000033" href="$ade7754_8c.html#abd06fd21141d0f9df1d704998d419d85" title="Read rms values phase B." alt="" coords="611,921,817,947"/>
+<area shape="poly" id="edge45_Node000023_Node000033" title=" " alt="" coords="888,901,778,924,777,919,887,896"/>
+<area shape="rect" id="Node000034" href="$ade7754_8c.html#a6840936ce9f49e15d3eda7b2cfc4dd72" title="Read rms values phase C." alt="" coords="612,971,816,996"/>
+<area shape="poly" id="edge47_Node000023_Node000034" title=" " alt="" coords="929,907,882,935,828,960,787,973,785,968,826,956,880,930,926,902"/>
+<area shape="rect" id="Node000035" href="$ade7754_8c.html#aee5a6921b78007b8dc22f9b31ddb12e6" title="Read temperature value." alt="" coords="617,823,811,848"/>
+<area shape="poly" id="edge49_Node000023_Node000035" title=" " alt="" coords="887,873,777,851,778,845,888,868"/>
+<area shape="rect" id="Node000036" href="$ade7754_8c.html#a37fcf1c1eb37d15b7dee88052a308aed" title="Update specific register bits." alt="" coords="633,1221,795,1247"/>
+<area shape="poly" id="edge51_Node000023_Node000036" title=" " alt="" coords="943,910,727,1223,722,1220,938,907"/>
+<area shape="rect" id="Node000054" href="$ade7754_8c.html#ac95bf3c0e9b4d58c44314941482a3f38" title="Version product." alt="" coords="354,721,543,747"/>
+<area shape="poly" id="edge81_Node000023_Node000054" title=" " alt="" coords="939,863,892,810,861,784,826,763,755,740,681,728,608,724,544,726,544,721,608,719,681,723,756,735,828,758,864,779,896,806,943,859"/>
+<area shape="rect" id="Node000025" href="$ade7754_8c.html#a33b0de79aa3d55bcf7c68099c0e2459a" title="Initialize the device." alt="" coords="149,719,255,744"/>
+<area shape="poly" id="edge33_Node000024_Node000025" title=" " alt="" coords="369,654,345,662,279,691,226,721,223,716,277,687,343,657,368,649"/>
+<area shape="rect" id="Node000026" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,769,60,795"/>
+<area shape="poly" id="edge35_Node000024_Node000026" title=" " alt="" coords="341,644,285,652,226,664,166,683,109,708,89,722,71,739,45,771,41,767,67,735,86,718,107,704,164,678,224,659,285,647,340,639"/>
+<area shape="poly" id="edge34_Node000025_Node000026" title=" " alt="" coords="147,751,61,777,60,771,145,745"/>
+<area shape="poly" id="edge38_Node000028_Node000025" title=" " alt="" coords="368,703,256,724,255,719,367,697"/>
+<area shape="rect" id="Node000030" href="$eval-ade7754_2src_2common_2common__data_8c.html#a66b3bb1a4fdb3eed65a3c7168aac3a79" title="print measurements" alt="" coords="370,771,527,796"/>
+<area shape="poly" id="edge40_Node000029_Node000030" title=" " alt="" coords="623,788,527,787,527,781,623,782"/>
+<area shape="poly" id="edge41_Node000030_Node000026" title=" " alt="" coords="356,786,60,785,60,779,356,780"/>
+<area shape="rect" id="Node000032" href="$eval-ade7754_2src_2common_2common__data_8c.html#a39afc136c5d00e25fa65db099cae6335" title="Read rms measurements." alt="" coords="355,820,543,845"/>
+<area shape="poly" id="edge43_Node000031_Node000032" title=" " alt="" coords="635,872,514,848,515,843,636,867"/>
+<area shape="poly" id="edge44_Node000032_Node000026" title=" " alt="" coords="341,822,60,788,60,783,341,817"/>
+<area shape="poly" id="edge46_Node000033_Node000032" title=" " alt="" coords="616,919,600,911,584,898,575,884,566,871,552,859,527,848,529,843,555,854,570,867,580,881,588,894,603,906,619,914"/>
+<area shape="poly" id="edge48_Node000034_Node000032" title=" " alt="" coords="609,966,600,960,588,948,580,934,575,908,569,882,563,870,552,859,533,848,536,843,555,855,567,867,574,880,580,907,585,932,592,944,603,956,612,962"/>
+<area shape="poly" id="edge50_Node000035_Node000030" title=" " alt="" coords="635,823,514,799,515,793,636,817"/>
+<area shape="rect" id="Node000037" href="$ade7754_8c.html#aa86d07cfbba14344442d834770bb9c76" title="Select the formula used for active energy calculation." alt="" coords="360,919,537,959"/>
+<area shape="poly" id="edge52_Node000036_Node000037" title=" " alt="" coords="702,1209,682,1159,650,1095,607,1030,581,1000,552,973,533,962,535,957,555,969,585,996,611,1026,655,1093,687,1157,707,1207"/>
+<area shape="rect" id="Node000039" href="$ade7754_8c.html#a5197802b24e6957718f8bd218a7ec6ec" title="Operation mode of the ADCs." alt="" coords="369,984,528,1009"/>
+<area shape="poly" id="edge55_Node000036_Node000039" title=" " alt="" coords="699,1210,677,1169,644,1118,602,1067,552,1024,526,1012,529,1007,555,1020,606,1063,648,1115,681,1166,703,1208"/>
+<area shape="rect" id="Node000040" href="$ade7754_8c.html#af81b55af7b569a07ba4ceea76b2dd8cd" title="Select the formula used for apparent energy calculation." alt="" coords="351,1034,546,1074"/>
+<area shape="poly" id="edge57_Node000036_Node000040" title=" " alt="" coords="692,1213,633,1151,594,1117,552,1088,527,1077,529,1072,555,1084,598,1113,637,1147,696,1209"/>
+<area shape="rect" id="Node000041" href="$ade7754_8c.html#a7a7afa7be2686a814624ddcab7cf496e" title="Select the gain of the current channels inputs." alt="" coords="365,1099,532,1124"/>
+<area shape="poly" id="edge59_Node000036_Node000041" title=" " alt="" coords="683,1215,625,1176,552,1138,519,1127,520,1122,554,1133,628,1171,686,1211"/>
+<area shape="rect" id="Node000042" href="$ade7754_8c.html#a9febb305670a567a2d74636715f29290" title="Enable/Disable interrupt." alt="" coords="372,1148,525,1173"/>
+<area shape="poly" id="edge61_Node000036_Node000042" title=" " alt="" coords="661,1220,553,1187,507,1176,509,1171,554,1182,662,1215"/>
+<area shape="rect" id="Node000043" href="$ade7754_8c.html#af02d37fb9a064a2a35b85db7130949d1" title="Select part of the line apparent energy formula separately, depending on the line active energy measu..." alt="" coords="348,1509,549,1535"/>
+<area shape="poly" id="edge63_Node000036_Node000043" title=" " alt="" coords="622,1246,603,1260,583,1288,575,1317,575,1347,580,1377,584,1407,584,1438,576,1468,555,1499,538,1511,535,1507,551,1495,571,1466,579,1437,579,1407,574,1377,570,1347,570,1316,578,1286,599,1256,619,1242"/>
+<area shape="rect" id="Node000044" href="$ade7754_8c.html#a1bdcb2fa65bf009f0b4c989cf767865e" title="Select part of the line active energy formula separately, depending on the line active energy measure..." alt="" coords="344,1559,553,1584"/>
+<area shape="poly" id="edge64_Node000036_Node000044" title=" " alt="" coords="622,1246,603,1260,580,1295,571,1329,573,1365,579,1401,586,1438,588,1474,580,1511,555,1548,539,1561,536,1556,551,1544,575,1509,583,1474,581,1438,574,1402,567,1366,566,1329,575,1292,599,1256,619,1242"/>
+<area shape="rect" id="Node000045" href="$ade7754_8c.html#adc800551052e5177a98d0b7786cf7869" title="Select the source of the voltage &amp; current peak detection." alt="" coords="365,1197,532,1223"/>
+<area shape="poly" id="edge65_Node000036_Node000045" title=" " alt="" coords="620,1228,532,1220,533,1215,620,1223"/>
+<area shape="rect" id="Node000046" href="$ade7754_8c.html#a966af054db900934fd91fddde22a6400" title="Select the source of the measurement of the voltage line period." alt="" coords="361,1247,537,1272"/>
+<area shape="poly" id="edge67_Node000036_Node000046" title=" " alt="" coords="620,1246,537,1254,537,1248,619,1240"/>
+<area shape="rect" id="Node000047" href="$ade7754_8c.html#a3396d0a2b7d153d7ddd0751cbafe290a" title="Reset the device using SW reset." alt="" coords="377,869,520,895"/>
+<area shape="poly" id="edge69_Node000036_Node000047" title=" " alt="" coords="698,1210,599,1008,588,978,581,953,572,931,552,909,519,893,521,888,555,905,576,928,586,951,593,977,604,1006,703,1208"/>
+<area shape="rect" id="Node000048" href="$ade7754_8c.html#a8c7f0c71f1a9a47fcfcab1b8eb3a190d" title="Select part of the apparent energy formula separately, depending on the line active energy measuremen..." alt="" coords="350,1608,547,1633"/>
+<area shape="poly" id="edge71_Node000036_Node000048" title=" " alt="" coords="622,1246,603,1260,587,1280,576,1301,567,1342,570,1383,579,1426,589,1468,592,1511,583,1554,572,1576,555,1597,539,1610,536,1606,551,1593,567,1573,578,1552,587,1511,583,1469,574,1427,565,1384,562,1341,571,1299,583,1277,599,1256,619,1242"/>
+<area shape="rect" id="Node000049" href="$ade7754_8c.html#a15686528ac95a059839d652d7070ac3d" title="Select the gain of the voltage channels inputs." alt="" coords="364,1296,533,1321"/>
+<area shape="poly" id="edge72_Node000036_Node000049" title=" " alt="" coords="627,1253,602,1260,579,1273,554,1286,513,1299,512,1293,552,1281,576,1268,600,1256,625,1248"/>
+<area shape="rect" id="Node000050" href="$ade7754_8c.html#a1af3dcc589d74e06687d409d04f4d073" title="Select part of the active energy formula separately, depending on the line active energy measurement ..." alt="" coords="346,1657,551,1683"/>
+<area shape="poly" id="edge74_Node000036_Node000050" title=" " alt="" coords="622,1246,603,1260,585,1283,573,1307,566,1331,563,1354,568,1402,579,1450,591,1499,596,1548,593,1572,586,1597,574,1622,555,1647,539,1659,536,1655,551,1643,569,1619,581,1595,588,1571,590,1548,586,1500,574,1451,562,1403,558,1354,561,1330,568,1305,581,1281,599,1256,619,1242"/>
+<area shape="rect" id="Node000051" href="$ade7754_8c.html#aa781732a6aa513801681a05c0a01a5aa" title="Select source of sampled data for wave register." alt="" coords="361,1346,536,1386"/>
+<area shape="poly" id="edge75_Node000036_Node000051" title=" " alt="" coords="621,1250,603,1260,587,1277,579,1296,572,1315,555,1335,533,1348,530,1344,552,1331,567,1313,574,1294,582,1274,600,1256,619,1246"/>
+<area shape="rect" id="Node000052" href="$ade7754_8c.html#a57b428dbae23668697179d92fbcbcfe8" title="Select waveform register update rate." alt="" coords="346,1411,551,1436"/>
+<area shape="poly" id="edge77_Node000036_Node000052" title=" " alt="" coords="622,1248,603,1260,589,1276,583,1293,580,1328,577,1364,570,1382,555,1400,536,1413,533,1408,552,1396,565,1380,572,1363,574,1328,577,1291,585,1273,600,1256,619,1243"/>
+<area shape="rect" id="Node000053" href="$ade7754_8c.html#aa782c8f0b79956a4feb96b7df4b382f6" title="Select the phases used for counting the number of zero crossing in the line active and apparent accum..." alt="" coords="389,1460,508,1485"/>
+<area shape="poly" id="edge79_Node000036_Node000053" title=" " alt="" coords="622,1247,603,1260,586,1282,579,1305,578,1328,580,1352,582,1376,581,1401,573,1425,555,1449,534,1464,509,1472,507,1467,531,1459,551,1445,568,1423,575,1400,576,1377,574,1353,572,1328,574,1304,582,1280,599,1256,619,1243"/>
+<area shape="rect" id="Node000038" href="$ade7754_8c.html#ae62a8e2b0fe643a68a9f2efed8dce572" title="Setup the ADE7754 device." alt="" coords="141,1172,263,1197"/>
+<area shape="poly" id="edge53_Node000037_Node000038" title=" " alt="" coords="353,968,346,973,319,996,295,1023,256,1080,227,1134,211,1173,206,1171,223,1132,251,1077,291,1019,315,993,342,969,350,964"/>
+<area shape="poly" id="edge54_Node000038_Node000026" title=" " alt="" coords="188,1160,37,796,42,794,193,1158"/>
+<area shape="poly" id="edge56_Node000039_Node000038" title=" " alt="" coords="360,1017,345,1024,300,1060,262,1102,232,1142,213,1173,208,1170,228,1139,258,1098,297,1056,343,1020,358,1012"/>
+<area shape="poly" id="edge58_Node000040_Node000038" title=" " alt="" coords="361,1081,345,1088,273,1132,220,1174,217,1170,270,1128,343,1084,359,1077"/>
+<area shape="poly" id="edge60_Node000041_Node000038" title=" " alt="" coords="375,1130,345,1138,237,1174,236,1169,343,1133,374,1125"/>
+<area shape="poly" id="edge62_Node000042_Node000038" title=" " alt="" coords="358,1172,263,1181,263,1176,358,1167"/>
+<area shape="poly" id="edge66_Node000045_Node000038" title=" " alt="" coords="351,1203,263,1194,263,1188,352,1197"/>
+<area shape="poly" id="edge68_Node000046_Node000038" title=" " alt="" coords="377,1246,343,1237,236,1200,237,1195,345,1231,379,1241"/>
+<area shape="poly" id="edge70_Node000047_Node000025" title=" " alt="" coords="363,868,343,859,301,832,264,801,212,746,216,742,268,797,304,828,345,854,365,863"/>
+<area shape="poly" id="edge73_Node000049_Node000038" title=" " alt="" coords="366,1295,343,1286,305,1266,270,1242,216,1200,219,1196,273,1238,308,1261,345,1281,368,1290"/>
+<area shape="poly" id="edge76_Node000051_Node000038" title=" " alt="" coords="357,1343,343,1335,299,1302,261,1263,210,1199,214,1196,265,1260,303,1298,345,1330,359,1338"/>
+<area shape="poly" id="edge78_Node000052_Node000038" title=" " alt="" coords="355,1408,342,1400,315,1377,291,1351,250,1293,222,1238,205,1199,210,1197,227,1236,255,1290,295,1348,319,1374,346,1396,357,1403"/>
+<area shape="poly" id="edge80_Node000053_Node000038" title=" " alt="" coords="375,1466,342,1450,311,1421,285,1387,262,1351,244,1314,217,1246,204,1198,209,1197,222,1244,249,1312,267,1348,289,1384,315,1417,346,1445,377,1461"/>
+<area shape="poly" id="edge82_Node000054_Node000025" title=" " alt="" coords="340,735,255,735,255,729,340,730"/>
+<area shape="rect" id="Node000056" href="$ade7758_8c.html#a249f6bcc83e667569eebaa495281ff84" title="Clear irq status flags." alt="" coords="355,1707,543,1732"/>
+<area shape="poly" id="edge84_Node000055_Node000056" title=" " alt="" coords="955,2206,951,2128,944,2077,934,2021,917,1963,894,1907,864,1855,825,1809,794,1785,761,1766,725,1750,687,1739,612,1724,543,1719,543,1714,612,1719,688,1733,726,1745,763,1761,797,1781,829,1805,868,1852,899,1905,922,1961,939,2020,950,2076,956,2128,960,2206"/>
+<area shape="rect" id="Node000059" href="$ade7758_8c.html#abc386b01cd89b400f7fee467062228da" title="Read energy values phase A." alt="" coords="632,2003,796,2043"/>
+<area shape="poly" id="edge88_Node000055_Node000059" title=" " alt="" coords="943,2209,925,2175,898,2134,865,2092,825,2058,795,2042,797,2037,828,2053,869,2089,903,2130,929,2172,948,2206"/>
+<area shape="rect" id="Node000061" href="$ade7758_8c.html#aa493dbdd6b50370582cadfe11ada3980" title="Read energy values phase B." alt="" coords="632,2067,796,2107"/>
+<area shape="poly" id="edge90_Node000055_Node000061" title=" " alt="" coords="935,2212,888,2166,858,2142,825,2122,795,2108,797,2104,828,2117,861,2138,891,2162,939,2208"/>
+<area shape="rect" id="Node000062" href="$ade7758_8c.html#ae68965f9ebb288666e6de7c66d49f6ae" title="Read energy values phase C." alt="" coords="632,2131,796,2171"/>
+<area shape="poly" id="edge92_Node000055_Node000062" title=" " alt="" coords="913,2218,826,2186,788,2174,789,2169,828,2181,914,2213"/>
+<area shape="rect" id="Node000063" href="$ade7758_8c.html#a8fd7f4ba21deeeb1930a899d28fbff79" title="Read frequency/period value." alt="" coords="601,2396,827,2421"/>
+<area shape="poly" id="edge94_Node000055_Node000063" title=" " alt="" coords="944,2259,897,2319,865,2351,828,2379,783,2398,781,2394,825,2374,861,2347,893,2315,940,2255"/>
+<area shape="rect" id="Node000064" href="$eval-ade7758_2src_2common_2common__data_8c.html#a66705c23e62f9e1acdb85fc1c2224b3d" title="print measurements" alt="" coords="370,2371,527,2396"/>
+<area shape="poly" id="edge126_Node000055_Node000064" title=" " alt="" coords="937,2257,889,2297,860,2318,828,2334,750,2359,670,2375,594,2383,528,2387,527,2381,593,2378,669,2369,749,2354,826,2329,857,2313,886,2293,933,2253"/>
+<area shape="rect" id="Node000065" href="$ade7758_8c.html#a3ebf76f1da30f309401baea4767666b2" title="Get interrupt indicator from STATUS register." alt="" coords="360,1756,537,1781"/>
+<area shape="poly" id="edge96_Node000055_Node000065" title=" " alt="" coords="953,2207,945,2140,924,2050,907,2002,886,1955,859,1911,825,1873,794,1848,759,1828,722,1811,683,1798,607,1781,537,1773,538,1767,608,1775,685,1793,724,1806,761,1823,797,1844,829,1869,863,1908,891,1953,912,2000,929,2048,950,2139,958,2206"/>
+<area shape="rect" id="Node000066" href="$ade7758_8c.html#a08c0e9e17e5aa038d4003ed4f3caa765" title="read Ipeak val" alt="" coords="630,2445,798,2471"/>
+<area shape="poly" id="edge98_Node000055_Node000066" title=" " alt="" coords="951,2259,933,2299,907,2346,872,2394,828,2435,799,2449,797,2444,825,2430,868,2391,903,2344,929,2296,946,2257"/>
+<area shape="rect" id="Node000067" href="$ade7758_8c.html#a25850cd8719d5449893284ef0b7ab1ab" title="Read rms values phase A." alt="" coords="611,2196,817,2221"/>
+<area shape="poly" id="edge99_Node000055_Node000067" title=" " alt="" coords="888,2228,816,2221,817,2216,888,2223"/>
+<area shape="rect" id="Node000068" href="$ade7758_8c.html#adcb7cc944e27754239046b3705460811" title="Read rms values phase B." alt="" coords="611,2245,817,2271"/>
+<area shape="poly" id="edge101_Node000055_Node000068" title=" " alt="" coords="888,2243,817,2250,816,2245,888,2237"/>
+<area shape="rect" id="Node000069" href="$ade7758_8c.html#a72f0a90993fad8bba667a682d10407da" title="Read rms values phase C." alt="" coords="612,2295,816,2320"/>
+<area shape="poly" id="edge103_Node000055_Node000069" title=" " alt="" coords="916,2253,827,2285,779,2297,777,2292,826,2279,914,2248"/>
+<area shape="rect" id="Node000070" href="$ade7758_8c.html#ae81cf636596267c17e619058e8c31e64" title="Read temperature value." alt="" coords="617,2495,811,2520"/>
+<area shape="poly" id="edge105_Node000055_Node000070" title=" " alt="" coords="954,2259,940,2308,915,2369,878,2431,855,2460,828,2484,806,2497,804,2492,825,2480,851,2456,874,2428,910,2367,935,2306,949,2258"/>
+<area shape="rect" id="Node000071" href="$ade7758_8c.html#ab90b3e3f7e4b70be3ad6442da4b91c6b" title="Update specific register bits." alt="" coords="633,1953,795,1979"/>
+<area shape="poly" id="edge106_Node000055_Node000071" title=" " alt="" coords="948,2208,934,2161,909,2102,873,2043,851,2016,825,1994,794,1978,796,1973,828,1989,854,2013,877,2040,914,2100,939,2159,954,2206"/>
+<area shape="rect" id="Node000081" href="$ade7758_8c.html#a1f93dfac629e849d0823a4908c07a7ea" title="Version product." alt="" coords="354,1805,543,1831"/>
+<area shape="poly" id="edge123_Node000055_Node000081" title=" " alt="" coords="950,2207,937,2152,913,2081,877,2007,853,1973,825,1943,794,1918,760,1896,686,1863,612,1842,543,1829,544,1824,613,1837,688,1858,763,1892,797,1913,828,1939,857,1970,881,2004,918,2079,942,2151,955,2206"/>
+<area shape="rect" id="Node000082" href="$ade7758_8c.html#aa26a7bbcfdeabacf52747bbe7e4f872e" title="read Vpeak val" alt="" coords="646,2544,782,2569"/>
+<area shape="poly" id="edge125_Node000055_Node000082" title=" " alt="" coords="956,2260,945,2317,922,2391,905,2430,884,2468,859,2503,828,2533,807,2546,783,2554,782,2549,805,2542,825,2529,855,2500,880,2465,900,2428,917,2389,940,2316,951,2259"/>
+<area shape="rect" id="Node000057" href="$ade7758_8c.html#a422e1a9832e2a6c7451aa9857d446c90" title="Initialize the device." alt="" coords="149,1793,255,1819"/>
+<area shape="poly" id="edge85_Node000056_Node000057" title=" " alt="" coords="371,1738,345,1746,282,1771,229,1796,227,1791,280,1766,343,1741,370,1733"/>
+<area shape="rect" id="Node000058" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,1793,60,1819"/>
+<area shape="poly" id="edge87_Node000056_Node000058" title=" " alt="" coords="343,1737,230,1756,109,1783,61,1799,59,1793,107,1778,229,1751,342,1731"/>
+<area shape="poly" id="edge86_Node000057_Node000058" title=" " alt="" coords="135,1809,60,1809,60,1803,135,1803"/>
+<area shape="rect" id="Node000060" href="$eval-ade7758_2src_2common_2common__data_8c.html#aa00b46d14528947fba9763a4a33cbfa6" title="Read measurements." alt="" coords="371,2265,527,2291"/>
+<area shape="poly" id="edge89_Node000059_Node000060" title=" " alt="" coords="621,2044,603,2057,586,2081,579,2105,578,2129,580,2154,583,2179,582,2205,574,2230,555,2255,528,2272,525,2267,552,2251,569,2227,576,2204,577,2179,575,2155,573,2130,574,2104,582,2079,599,2053,618,2039"/>
+<area shape="poly" id="edge91_Node000061_Node000060" title=" " alt="" coords="621,2109,603,2121,590,2137,584,2153,580,2187,577,2221,569,2238,555,2255,528,2271,526,2266,552,2251,565,2235,572,2219,575,2186,578,2152,586,2134,600,2117,618,2104"/>
+<area shape="poly" id="edge93_Node000062_Node000060" title=" " alt="" coords="621,2175,603,2185,588,2202,580,2219,572,2237,555,2255,528,2268,525,2264,552,2251,567,2234,575,2217,583,2199,600,2181,618,2170"/>
+<area shape="poly" id="edge95_Node000063_Node000064" title=" " alt="" coords="588,2399,527,2393,528,2388,588,2394"/>
+<area shape="poly" id="edge97_Node000065_Node000057" title=" " alt="" coords="351,1786,256,1801,255,1795,351,1781"/>
+<area shape="poly" id="edge100_Node000067_Node000060" title=" " alt="" coords="631,2227,602,2235,554,2255,510,2268,508,2263,552,2250,600,2230,630,2222"/>
+<area shape="poly" id="edge102_Node000068_Node000060" title=" " alt="" coords="598,2269,527,2275,527,2269,597,2264"/>
+<area shape="poly" id="edge104_Node000069_Node000060" title=" " alt="" coords="598,2297,527,2289,527,2284,599,2292"/>
+<area shape="rect" id="Node000072" href="$ade7758_8c.html#a85ea4d235a62d1d2c1f4198746ef00b8" title="Operation mode of the ADCs." alt="" coords="369,1904,528,1929"/>
+<area shape="poly" id="edge107_Node000071_Node000072" title=" " alt="" coords="631,1953,517,1932,518,1927,632,1948"/>
+<area shape="rect" id="Node000074" href="$ade7758_8c.html#ae42bfdaa8620b923435a3ac51b0ae0ea" title="Select the input to the energy accumulation registers." alt="" coords="385,2216,512,2241"/>
+<area shape="poly" id="edge110_Node000071_Node000074" title=" " alt="" coords="622,1980,603,1993,585,2018,577,2044,577,2070,580,2097,583,2124,582,2151,574,2178,555,2205,536,2219,513,2227,512,2222,533,2214,551,2201,570,2176,577,2150,578,2124,574,2097,571,2070,572,2043,580,2016,599,1989,619,1975"/>
+<area shape="rect" id="Node000075" href="$ade7758_8c.html#af563e84e29d4f693ed1c74396787db67" title="Enable/Disable interrupt." alt="" coords="372,1953,525,1979"/>
+<area shape="poly" id="edge111_Node000071_Node000075" title=" " alt="" coords="620,1969,526,1969,526,1963,620,1963"/>
+<area shape="rect" id="Node000076" href="$ade7758_8c.html#a25768e9b2e97a4bdd6b858a1c1645dfc" title="Select the source of the measurement of the voltage line frequency." alt="" coords="368,2003,529,2028"/>
+<area shape="poly" id="edge113_Node000071_Node000076" title=" " alt="" coords="632,1984,518,2005,517,2000,631,1979"/>
+<area shape="rect" id="Node000077" href="$ade7758_8c.html#a7abd5adabc220a2509032906244a57ef" title="Reset the device using SW reset." alt="" coords="377,1855,520,1880"/>
+<area shape="poly" id="edge115_Node000071_Node000077" title=" " alt="" coords="676,1949,619,1921,552,1894,514,1883,515,1878,554,1889,621,1916,679,1944"/>
+<area shape="rect" id="Node000078" href="$ade7758_8c.html#a6256795cf572104190077c90bd04e58e" title="Select the phase of sampled data for wave register." alt="" coords="353,2052,545,2077"/>
+<area shape="poly" id="edge117_Node000071_Node000078" title=" " alt="" coords="621,1985,603,1994,588,2005,579,2017,570,2029,555,2042,525,2054,523,2049,552,2037,566,2026,575,2014,584,2001,600,1989,619,1980"/>
+<area shape="rect" id="Node000079" href="$ade7758_8c.html#ac77450d3d9e7dd6ed665944487e24ecc" title="Select source of sampled data for wave register." alt="" coords="361,2102,536,2142"/>
+<area shape="poly" id="edge119_Node000071_Node000079" title=" " alt="" coords="622,1982,603,1993,592,2004,585,2016,579,2040,573,2065,566,2078,555,2091,535,2104,532,2100,552,2087,562,2075,568,2063,574,2039,581,2014,588,2001,600,1989,619,1978"/>
+<area shape="rect" id="Node000080" href="$ade7758_8c.html#aae0adecdd5d9ca76c6f6aa88aa82a9a8" title="Select waveform register update rate." alt="" coords="346,2167,551,2192"/>
+<area shape="poly" id="edge121_Node000071_Node000080" title=" " alt="" coords="622,1980,603,1993,588,2012,581,2032,580,2073,579,2114,571,2135,555,2156,537,2169,534,2164,552,2152,566,2133,573,2113,575,2072,576,2031,583,2010,600,1989,619,1976"/>
+<area shape="rect" id="Node000073" href="$ade7758_8c.html#ad643b16ba67d694a04b326f1df0a3820" title="Setup the ADE7758 device." alt="" coords="141,2003,263,2028"/>
+<area shape="poly" id="edge108_Node000072_Node000073" title=" " alt="" coords="369,1935,345,1943,278,1974,225,2005,222,2000,276,1969,343,1938,367,1930"/>
+<area shape="poly" id="edge109_Node000073_Node000058" title=" " alt="" coords="180,1993,42,1821,47,1817,184,1990"/>
+<area shape="poly" id="edge112_Node000075_Node000073" title=" " alt="" coords="371,1984,264,2006,262,2001,370,1979"/>
+<area shape="poly" id="edge114_Node000076_Node000073" title=" " alt="" coords="354,2018,263,2018,263,2013,354,2013"/>
+<area shape="poly" id="edge116_Node000077_Node000057" title=" " alt="" coords="381,1854,343,1845,252,1821,253,1816,345,1839,382,1849"/>
+<area shape="poly" id="edge118_Node000078_Node000073" title=" " alt="" coords="370,2052,262,2030,264,2025,371,2047"/>
+<area shape="poly" id="edge120_Node000079_Node000073" title=" " alt="" coords="366,2100,343,2091,277,2060,224,2031,226,2026,280,2055,345,2086,368,2095"/>
+<area shape="poly" id="edge122_Node000080_Node000073" title=" " alt="" coords="360,2164,343,2156,300,2126,262,2091,211,2030,215,2027,266,2087,303,2122,345,2152,362,2159"/>
+<area shape="poly" id="edge124_Node000081_Node000057" title=" " alt="" coords="340,1815,255,1811,256,1806,340,1810"/>
+<area shape="rect" id="Node000084" href="$ade7913_8c.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="625,2593,803,2619"/>
+<area shape="poly" id="edge128_Node000083_Node000084" title=" " alt="" coords="941,2761,896,2696,863,2661,825,2632,801,2621,803,2616,828,2628,867,2657,900,2692,946,2758"/>
+<area shape="rect" id="Node000085" href="$ade7913_8c.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="639,2643,789,2668"/>
+<area shape="poly" id="edge129_Node000083_Node000085" title=" " alt="" coords="934,2764,886,2721,857,2700,826,2682,789,2669,790,2664,828,2677,860,2695,890,2717,937,2760"/>
+<area shape="rect" id="Node000086" href="$ade7913_8c.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="615,2692,813,2717"/>
+<area shape="poly" id="edge130_Node000083_Node000086" title=" " alt="" coords="911,2770,826,2739,762,2720,763,2715,827,2734,913,2765"/>
+<area shape="rect" id="Node000087" href="$ade7913_8c.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="633,2793,795,2833"/>
+<area shape="poly" id="edge131_Node000083_Node000087" title=" " alt="" coords="888,2795,795,2806,795,2801,888,2790"/>
+<area shape="rect" id="Node000088" href="$ade7913_8c.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="395,2800,502,2825"/>
+<area shape="poly" id="edge136_Node000083_Node000088" title=" " alt="" coords="887,2785,827,2783,714,2779,665,2779,602,2783,548,2792,498,2803,497,2797,547,2786,601,2778,664,2773,714,2774,827,2778,887,2779"/>
+<area shape="rect" id="Node000090" href="$ade7913_8c.html#a6a672f051e655d14cd926576faf98f99" title="Reset the device using SW reset." alt="" coords="377,2907,520,2932"/>
+<area shape="poly" id="edge139_Node000083_Node000090" title=" " alt="" coords="940,2809,893,2856,862,2879,828,2896,789,2910,748,2920,665,2931,587,2933,520,2930,520,2925,587,2928,665,2925,747,2914,787,2905,826,2892,859,2874,889,2852,936,2806"/>
+<area shape="rect" id="Node000091" href="$ade7913_8c.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="626,2959,802,2984"/>
+<area shape="poly" id="edge135_Node000083_Node000091" title=" " alt="" coords="945,2811,899,2876,866,2911,828,2942,785,2961,782,2956,825,2937,862,2908,895,2873,941,2808"/>
+<area shape="rect" id="Node000092" href="$ade7913_8c.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="617,2857,811,2883"/>
+<area shape="poly" id="edge137_Node000083_Node000092" title=" " alt="" coords="922,2806,878,2827,828,2847,783,2860,781,2855,826,2842,876,2822,920,2801"/>
+<area shape="poly" id="edge132_Node000087_Node000088" title=" " alt="" coords="619,2815,502,2815,502,2810,619,2810"/>
+<area shape="poly" id="edge134_Node000087_Node000090" title=" " alt="" coords="624,2839,602,2847,531,2879,474,2909,471,2904,529,2874,600,2842,622,2834"/>
+<area shape="rect" id="Node000089" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="175,2827,229,2852"/>
+<area shape="poly" id="edge133_Node000088_Node000089" title=" " alt="" coords="382,2823,230,2839,229,2834,381,2817"/>
+<area shape="poly" id="edge138_Node000092_Node000089" title=" " alt="" coords="603,2866,230,2844,230,2838,603,2861"/>
+<area shape="rect" id="Node000094" href="$ade7953_8c.html#ad5bc0abd38bc9661f31679d1d5491939" title="Clear irq stata flags." alt="" coords="623,3008,805,3033"/>
+<area shape="poly" id="edge141_Node000093_Node000094" title=" " alt="" coords="941,3170,895,3107,862,3074,825,3047,800,3036,802,3031,828,3042,866,3070,899,3104,945,3167"/>
+<area shape="rect" id="Node000095" href="$ade7953_8c.html#a04fd5c7fe1951b2e1fb750b0a6315ebd" title="Clear irq statb flags." alt="" coords="623,3057,805,3083"/>
+<area shape="poly" id="edge142_Node000093_Node000095" title=" " alt="" coords="933,3173,886,3133,856,3113,826,3096,794,3085,796,3080,828,3092,859,3109,889,3129,936,3169"/>
+<area shape="rect" id="Node000096" href="$ade7953_8c.html#ae30906b8c44755a6816c55f893bc466a" title="Read energy values." alt="" coords="632,3107,796,3132"/>
+<area shape="poly" id="edge143_Node000093_Node000096" title=" " alt="" coords="914,3177,826,3146,782,3135,783,3129,827,3141,916,3172"/>
+<area shape="rect" id="Node000098" href="$ade7953_8c.html#aef59b5560ba18b88d2f78744574de636" title="Get interrupt indicator from STATA register." alt="" coords="629,3304,799,3329"/>
+<area shape="poly" id="edge145_Node000093_Node000098" title=" " alt="" coords="890,3211,876,3219,861,3236,853,3255,846,3275,828,3293,801,3307,799,3303,825,3289,841,3272,848,3253,856,3234,873,3215,887,3206"/>
+<area shape="rect" id="Node000099" href="$ade7953_8c.html#a1ba71bfd27fb0629519064002de83f46" title="Get interrupt indicator from STATB register." alt="" coords="629,3353,799,3379"/>
+<area shape="poly" id="edge146_Node000093_Node000099" title=" " alt="" coords="890,3209,876,3219,864,3233,858,3248,854,3279,849,3311,842,3327,828,3343,801,3359,799,3354,825,3339,838,3324,844,3310,848,3279,853,3247,860,3230,873,3215,887,3205"/>
+<area shape="rect" id="Node000100" href="$ade7953_8c.html#a6f86b1397e5a8dccb8f4df5bd238fe2a" title="Read power quaility values." alt="" coords="609,3156,819,3181"/>
+<area shape="poly" id="edge147_Node000093_Node000100" title=" " alt="" coords="887,3188,819,3182,820,3176,888,3183"/>
+<area shape="rect" id="Node000101" href="$ade7953_8c.html#aa98f89fe1f05c6da5fa28843ecdb6077" title="Read power values." alt="" coords="635,3205,793,3231"/>
+<area shape="poly" id="edge149_Node000093_Node000101" title=" " alt="" coords="888,3203,794,3212,793,3207,887,3197"/>
+<area shape="rect" id="Node000102" href="$ade7953_8c.html#a8e39cfe2c6e3f4f3055a5404fdf0839e" title="reset IApeak val" alt="" coords="624,3403,804,3428"/>
+<area shape="poly" id="edge151_Node000093_Node000102" title=" " alt="" coords="890,3208,877,3219,861,3239,854,3260,854,3304,853,3348,845,3370,828,3392,806,3407,803,3402,825,3388,841,3368,848,3347,849,3304,849,3260,856,3237,873,3215,887,3204"/>
+<area shape="rect" id="Node000103" href="$ade7953_8c.html#a6cd76f9e40ae4293a41fbc5206e4e79c" title="reset IBpeak val" alt="" coords="624,3452,804,3477"/>
+<area shape="poly" id="edge152_Node000093_Node000103" title=" " alt="" coords="891,3208,877,3218,858,3246,851,3273,851,3301,854,3328,858,3357,857,3385,849,3413,829,3441,806,3457,803,3452,825,3437,844,3411,852,3384,852,3357,849,3329,845,3301,845,3272,853,3243,873,3215,887,3204"/>
+<area shape="rect" id="Node000104" href="$ade7953_8c.html#a407ffa49e66bc03da1eb025bc165b3d1" title="reset Vpeak val" alt="" coords="626,3501,802,3527"/>
+<area shape="poly" id="edge153_Node000093_Node000104" title=" " alt="" coords="891,3207,877,3218,855,3252,847,3285,848,3319,854,3353,860,3387,861,3422,852,3456,829,3491,804,3507,801,3503,825,3487,847,3454,856,3421,855,3388,849,3354,843,3320,842,3285,850,3250,873,3215,887,3203"/>
+<area shape="rect" id="Node000105" href="$ade7953_8c.html#a3ac90ffb88f3314a1f5c2ff668d547d9" title="Read rms values." alt="" coords="642,3255,786,3280"/>
+<area shape="poly" id="edge154_Node000093_Node000105" title=" " alt="" coords="895,3212,876,3219,852,3232,828,3244,785,3257,784,3252,826,3240,850,3227,874,3214,894,3207"/>
+<area shape="rect" id="Node000106" href="$ade7953_8c.html#a7a37dc96ebff0a07931b089d42bd9c25" title="Version product." alt="" coords="619,3551,809,3576"/>
+<area shape="poly" id="edge156_Node000093_Node000106" title=" " alt="" coords="891,3207,877,3219,862,3238,852,3258,844,3298,846,3338,854,3378,863,3418,865,3459,856,3499,845,3520,829,3540,811,3554,807,3549,825,3536,840,3517,851,3497,860,3458,857,3419,849,3379,841,3339,838,3298,847,3256,857,3236,873,3215,887,3203"/>
+<area shape="rect" id="Node000097" href="$eval-ade7953_2src_2common_2common__data_8c.html#ae7b728e8b96110ef600f35e74fcc6533" title="Read measurements." alt="" coords="371,3181,527,3207"/>
+<area shape="poly" id="edge144_Node000096_Node000097" title=" " alt="" coords="635,3138,602,3146,485,3184,484,3179,601,3141,634,3132"/>
+<area shape="poly" id="edge148_Node000100_Node000097" title=" " alt="" coords="595,3183,527,3189,527,3184,595,3177"/>
+<area shape="poly" id="edge150_Node000101_Node000097" title=" " alt="" coords="621,3212,527,3204,527,3198,621,3207"/>
+<area shape="poly" id="edge155_Node000105_Node000097" title=" " alt="" coords="639,3254,601,3245,486,3209,488,3204,602,3239,640,3249"/>
+<area shape="rect" id="Node000107" href="$ade7953_8c.html#a6ef6b85b671c2baad9027a4b34973de0" title="Initialize the device." alt="" coords="395,3551,502,3576"/>
+<area shape="poly" id="edge157_Node000106_Node000107" title=" " alt="" coords="606,3566,502,3566,502,3561,606,3561"/>
+<area shape="rect" id="Node000108" href="$eval-ade7953_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="175,3551,229,3576"/>
+<area shape="poly" id="edge158_Node000107_Node000108" title=" " alt="" coords="381,3566,229,3566,229,3561,381,3561"/>
+<area shape="rect" id="Node000113" href="$ltc2992_8c.html#abecde49247db59f84eb2ba3a8d2f7751" title="Get fault status." alt="" coords="647,3600,781,3625"/>
+<area shape="poly" id="edge163_Node000112_Node000113" title=" " alt="" coords="913,3671,826,3641,777,3628,778,3623,827,3635,914,3666"/>
+<area shape="rect" id="Node000114" href="$ltc2992_8c.html#a378719a0042b7738b82d258e2bb47f58" title="Get GPIO fault status." alt="" coords="629,3649,799,3675"/>
+<area shape="poly" id="edge164_Node000112_Node000114" title=" " alt="" coords="877,3681,799,3673,800,3668,878,3675"/>
+<area shape="rect" id="Node000115" href="$ltc2992_8c.html#a521435abced2f8e4b2ebc87236239878" title="Get GPIO state." alt="" coords="627,3699,801,3724"/>
+<area shape="poly" id="edge165_Node000112_Node000115" title=" " alt="" coords="878,3697,801,3705,801,3700,878,3692"/>
+<area shape="rect" id="Node000116" href="$ltc2992_8c.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="665,3748,763,3773"/>
+<area shape="poly" id="edge166_Node000112_Node000116" title=" " alt="" coords="917,3707,827,3739,764,3755,763,3749,826,3734,915,3702"/>
+<area shape="rect" id="Node000117" href="$ltc2992_8c.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="639,3797,789,3823"/>
+<area shape="poly" id="edge167_Node000112_Node000117" title=" " alt="" coords="937,3710,889,3751,859,3771,828,3788,791,3801,789,3796,826,3784,857,3767,886,3746,933,3706"/>
+<area shape="rect" id="Node000118" href="$ltc2992_8c.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="375,3657,522,3683"/>
+<area shape="poly" id="edge168_Node000117_Node000118" title=" " alt="" coords="624,3802,600,3788,588,3777,581,3765,575,3742,568,3718,562,3708,552,3697,521,3682,524,3677,555,3693,566,3705,573,3716,580,3740,586,3763,592,3774,603,3784,627,3797"/>
+<area shape="rect" id="Node000119" href="$ltc2992_8c.html#a95417f0857f108953613c7b35aec63ee" title="Clear GPIO fault status." alt="" coords="377,3707,521,3747"/>
+<area shape="poly" id="edge169_Node000117_Node000119" title=" " alt="" coords="625,3796,600,3788,576,3776,552,3763,517,3750,519,3745,554,3758,578,3771,602,3784,627,3791"/>
+<area shape="rect" id="Node000120" href="$ltc2992_8c.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="361,3772,536,3797"/>
+<area shape="poly" id="edge170_Node000117_Node000120" title=" " alt="" coords="625,3804,536,3796,536,3790,625,3799"/>
+<area shape="rect" id="Node000121" href="$ltc2992_8c.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="381,3821,516,3847"/>
+<area shape="poly" id="edge171_Node000117_Node000121" title=" " alt="" coords="625,3821,517,3831,516,3825,625,3815"/>
+<area shape="rect" id="Node000122" href="$ltc2992_8c.html#abe1cde6b00057ced36199e948b42b344" title="Enable alert when GPIO level reaches beyond threshold limit." alt="" coords="364,3871,533,3896"/>
+<area shape="poly" id="edge172_Node000117_Node000122" title=" " alt="" coords="662,3829,554,3862,509,3873,507,3868,553,3857,661,3824"/>
+<area shape="rect" id="Node000123" href="$ltc2992_8c.html#a66b88857952e10172af02ab40c2eba6d" title="Set GPIO output." alt="" coords="358,3920,539,3945"/>
+<area shape="poly" id="edge173_Node000117_Node000123" title=" " alt="" coords="686,3833,628,3873,554,3911,520,3922,519,3917,552,3906,625,3868,683,3829"/>
+</map>

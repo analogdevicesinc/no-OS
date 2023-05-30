@@ -1,0 +1,9 @@
+<map id="no_os_i3c_send_ccc" name="no_os_i3c_send_ccc">
+<area shape="rect" id="Node000001" title="Send CCC, either to a device device or broadcast to all." alt="" coords="412,31,564,56"/>
+<area shape="rect" id="Node000002" href="$no__os__i3c_8c.html#a1a8b6ccd9d5a915e699054af2a8e3f68" title="Initialize the I3C bus." alt="" coords="194,5,338,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="398,36,338,29,338,24,398,30"/>
+<area shape="rect" id="Node000004" href="$no__os__i3c_8c.html#af844a30d14706273e6a04aa6680acfa0" title="Send CCC to device device." alt="" coords="168,55,364,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="399,56,365,59,364,54,398,50"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#ab54a357ab3d63706a3fbe455a4cd6fd8" title="Initialize the I3C device. If the bus of the I3C device is not initialized, it will call to init it." alt="" coords="5,5,120,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="180,21,120,21,120,15,180,15"/>
+</map>
