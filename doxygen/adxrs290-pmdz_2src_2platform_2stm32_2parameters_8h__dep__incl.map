@@ -1,0 +1,7 @@
+<map id="projects/adxrs290&#45;pmdz/src/platform/stm32/parameters.h" name="projects/adxrs290&#45;pmdz/src/platform/stm32/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="105,5,347,45"/>
+<area shape="rect" id="Node000002" href="$adxrs290-pmdz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="5,93,204,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,55,133,95,130,91,187,51"/>
+<area shape="rect" id="Node000003" href="$adxrs290-pmdz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="229,93,469,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,51,323,91,320,95,263,55"/>
+</map>

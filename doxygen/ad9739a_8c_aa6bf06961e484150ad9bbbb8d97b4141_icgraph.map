@@ -1,0 +1,17 @@
+<map id="ad9739a_write" name="ad9739a_write">
+<area shape="rect" id="Node000001" title="Writes a value to the selected register." alt="" coords="505,107,624,132"/>
+<area shape="rect" id="Node000002" href="$ad9739a_8c.html#a2d27717f6ba2bafffa904e1c0d072c61" title="Sets the full&#45;scale output current for the DAC." alt="" coords="277,5,457,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="534,101,498,76,456,52,409,33,411,28,459,48,500,72,537,96"/>
+<area shape="rect" id="Node000003" href="$ad9739a_8c.html#a5790358339c8085a397128ede20af842" title="Initializes the AD9739A." alt="" coords="108,56,229,81"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="503,106,457,97,336,82,230,74,230,69,336,76,458,91,504,101"/>
+<area shape="rect" id="Node000005" href="$ad9739a_8c.html#a5881590c76e5a81e42ae475d9fc37d18" title="Powers down LVDS interface and TxDAC." alt="" coords="284,107,451,132"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="491,122,451,122,451,117,491,117"/>
+<area shape="rect" id="Node000006" href="$ad9739a_8c.html#aacc0537342e976f585595c2cf2d8895d" title="Resets the device." alt="" coords="308,156,427,181"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="501,138,420,159,418,153,500,133"/>
+<area shape="rect" id="Node000007" href="$ad9739a_8c.html#a0a6d7d62043ea573681ec972ab483243" title="Sets the normal baseband mode or mix&#45;mode." alt="" coords="310,205,425,231"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="539,143,502,170,458,195,425,208,423,203,456,190,499,165,536,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="304,37,220,59,218,53,303,32"/>
+<area shape="rect" id="Node000004" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,71,60,71,60,66,94,66"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="297,154,276,146,224,114,183,84,187,79,227,110,279,141,299,149"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="drivers/meter/ade7816/ade7816.h" name="drivers/meter/ade7816/ade7816.h">
+<area shape="rect" id="Node000001" title="Header file of ADE7816 Driver." alt="" coords="297,5,468,45"/>
+<area shape="rect" id="Node000002" href="$ade7816_8c.html" title="Source file of ADE7816 Driver." alt="" coords="5,93,176,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="306,52,155,96,154,91,305,47"/>
+<area shape="rect" id="Node000003" href="$ade7816__i2c_8c.html" title="Source file of ADE7816 I2C Driver." alt="" coords="200,93,371,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="353,56,309,95,305,91,349,52"/>
+<area shape="rect" id="Node000004" href="$ade7816__spi_8c.html" title="Source file of ADE7816 SPI Driver." alt="" coords="395,93,565,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="416,52,460,91,457,95,413,56"/>
+<area shape="rect" id="Node000005" href="$ade7816_2src_2common_2common__data_8h.html" title="Defines common data to be used by ade7816 example." alt="" coords="589,93,781,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="463,47,620,91,618,96,462,52"/>
+<area shape="rect" id="Node000006" href="$ade7816_2src_2common_2common__data_8c.html" title="Defines common data to be used by ade7816 example." alt="" coords="590,181,781,221"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="688,147,688,181,683,181,683,147"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="drivers/net/w5500/w5500.h" name="drivers/net/w5500/w5500.h">
+<area shape="rect" id="Node000001" title="Header file W5500 Driver." alt="" coords="82,5,281,31"/>
+<area shape="rect" id="Node000002" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,79,104,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,33,89,74,86,69,160,28"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="128,79,235,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="184,31,184,65,179,65,179,31"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="259,79,359,104"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="203,28,277,69,275,74,201,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="146,152,217,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,102,150,143,147,147,74,106"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="184,104,184,138,179,138,179,104"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="290,106,216,147,213,143,287,102"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="257,152,327,177"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="309,105,301,140,295,138,304,104"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="352,152,435,177"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="325,102,371,141,367,145,321,106"/>
+</map>

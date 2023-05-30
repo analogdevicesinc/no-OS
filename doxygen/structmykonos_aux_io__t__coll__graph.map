@@ -1,0 +1,9 @@
+<map id="mykonosAuxIo_t" name="mykonosAuxIo_t">
+<area shape="rect" id="Node000001" title="Data structure to hold auxiliary IO settings (AuxDAC, ARM GPIO, GPIO3.3v, low voltage GPIO,..." alt="" coords="211,93,341,119"/>
+<area shape="rect" id="Node000002" href="$structmykonos_gpio3v3__t.html" title="Data structure to hold 3.3 VDC GPIO settings." alt="" coords="5,5,152,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,34,250,91,248,96,117,39"/>
+<area shape="rect" id="Node000003" href="$structmykonos_gpio_low_voltage__t.html" title="Data structure to hold low voltage GPIO settings." alt="" coords="177,5,375,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="279,45,279,93,273,93,273,45"/>
+<area shape="rect" id="Node000004" href="$structmykonos_arm_gpio_config__t.html" title="Data structure to hold ARM GPIO pin assignments for each ARM input/output pin." alt="" coords="399,5,590,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="454,38,306,96,304,91,452,33"/>
+</map>

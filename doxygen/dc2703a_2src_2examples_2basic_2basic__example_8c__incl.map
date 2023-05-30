@@ -1,0 +1,29 @@
+<map id="projects/dc2703a/src/examples/basic/basic_example.c" name="projects/dc2703a/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="304,5,471,60"/>
+<area shape="rect" id="Node000002" href="$dc2703a_2src_2examples_2basic_2basic__example_8h.html" title=" " alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,59,127,107,126,102,303,54"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="339,62,260,104,257,99,336,58"/>
+<area shape="rect" id="Node000004" href="$lt8491_8h.html" title="Implementation of LT8491 Driver." alt="" coords="313,108,387,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="378,61,363,96,358,94,373,59"/>
+<area shape="rect" id="Node000010" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="396,181,509,207"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="401,59,445,168,440,170,396,61"/>
+<area shape="rect" id="Node000011" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="462,108,598,133"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="432,58,501,99,498,103,430,62"/>
+<area shape="rect" id="Node000013" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="623,108,733,133"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="472,56,627,101,625,107,470,61"/>
+<area shape="rect" id="Node000005" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="273,181,371,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="348,135,334,170,329,168,343,133"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="148,181,248,207"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="327,136,236,178,234,173,324,131"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="287,255,357,280"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="325,207,325,241,319,241,319,207"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="219,204,291,245,289,250,217,209"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="73,255,144,280"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="185,209,136,248,132,244,182,205"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="169,255,251,280"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="203,207,208,241,203,242,197,207"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="433,209,356,250,354,246,430,204"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="534,181,601,207"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="539,132,557,168,553,171,534,135"/>
+</map>

@@ -1,0 +1,23 @@
+<map id="lt8491_reg_write" name="lt8491_reg_write">
+<area shape="rect" id="Node000001" title="Write a register value." alt="" coords="859,132,989,157"/>
+<area shape="rect" id="Node000002" href="$lt8491_8c.html#a70ce007d48579077da50ac25d9ca5021" title="Device and comm init function." alt="" coords="404,5,605,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="884,128,810,97,683,59,571,33,572,28,685,54,812,91,886,123"/>
+<area shape="rect" id="Node000006" href="$lt8491_8c.html#a391e5527ddc51bc0f4ef1838b5ed6fc5" title="Restart the chip." alt="" coords="431,157,578,183"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="845,152,578,168,578,163,845,147"/>
+<area shape="rect" id="Node000007" href="$lt8491_8c.html#a8bb06d2a8425d4d7ccb07ee7c7e32158" title="Write the telemetry battery charging enable." alt="" coords="655,107,809,132"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="845,137,809,132,810,127,845,132"/>
+<area shape="rect" id="Node000008" href="$lt8491_8c.html#aba5cf44f3ab2696902345559541c4e3c" title="Write the scratch register." alt="" coords="653,208,811,233"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="879,165,766,210,764,205,877,160"/>
+<area shape="rect" id="Node000003" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,132,356,157"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="470,40,301,134,299,130,467,35"/>
+<area shape="rect" id="Node000004" href="$iio__lt8491_8c.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="219,56,333,81"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="434,36,334,59,333,53,432,31"/>
+<area shape="rect" id="Node000005" href="$dc2703a_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="205,71,148,71,148,66,205,66"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="417,163,356,156,357,151,418,158"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="461,154,305,84,307,79,463,149"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="641,127,356,143,356,138,641,122"/>
+<area shape="poly" id="edge10_Node000007_Node000004" title=" " alt="" coords="640,112,333,78,334,72,641,107"/>
+<area shape="poly" id="edge11_Node000007_Node000006" title=" " alt="" coords="661,138,563,160,562,155,660,132"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="639,224,526,217,464,209,403,198,348,180,302,160,304,155,350,175,405,193,465,204,526,212,640,218"/>
+</map>

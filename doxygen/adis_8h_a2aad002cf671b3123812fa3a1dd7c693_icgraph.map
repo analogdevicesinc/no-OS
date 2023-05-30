@@ -1,0 +1,5 @@
+<map id="adis_read_ya_scale" name="adis_read_ya_scale">
+<area shape="rect" id="Node000001" title="Read raw acceleration scale adjustment on y axis." alt="" coords="233,5,383,31"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="5,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,21,186,21,186,15,220,15"/>
+</map>

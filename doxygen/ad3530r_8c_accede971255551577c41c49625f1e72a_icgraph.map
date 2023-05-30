@@ -1,0 +1,5 @@
+<map id="ad3530r_reset" name="ad3530r_reset">
+<area shape="rect" id="Node000001" title="Perform a hard/soft reset." alt="" coords="156,5,271,31"/>
+<area shape="rect" id="Node000002" href="$ad3530r_8c.html#a9f4f360a67fe344a9ec9d26973046ed8" title="Initialize the device structure." alt="" coords="5,5,108,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,21,108,21,108,15,143,15"/>
+</map>

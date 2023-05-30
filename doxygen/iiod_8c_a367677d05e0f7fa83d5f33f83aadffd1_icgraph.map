@@ -1,0 +1,9 @@
+<map id="iiod_conn_remove" name="iiod_conn_remove">
+<area shape="rect" id="Node000001" title=" " alt="" coords="339,31,480,56"/>
+<area shape="rect" id="Node000002" href="$iio_8c.html#a995509c23a1ab417b9d1362b980c1239" title="Free the resources allocated by &quot;iio_init()&quot;." alt="" coords="196,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="324,33,291,28,291,23,325,28"/>
+<area shape="rect" id="Node000004" href="$iio_8c.html#a841a0f15f85e6e30224416fe7b1e2d3f" title="Execute an iio step." alt="" coords="207,55,280,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,58,281,65,280,59,324,53"/>
+<area shape="rect" id="Node000003" href="$ad7616-st_2src_2examples_2iio_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="182,21,148,21,148,15,182,15"/>
+</map>

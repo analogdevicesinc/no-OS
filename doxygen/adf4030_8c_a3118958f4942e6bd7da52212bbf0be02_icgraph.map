@@ -1,0 +1,5 @@
+<map id="adf4030_set_single_ch_alignment" name="adf4030_set_single_ch_alignment">
+<area shape="rect" id="Node000001" title="Perform single&#45;channel alignment. Before calling this function, please set tdc_source to the desired ..." alt="" coords="213,5,361,45"/>
+<area shape="rect" id="Node000002" href="$adf4030_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,13,165,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,28,165,28,165,23,199,23"/>
+</map>

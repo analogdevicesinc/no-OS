@@ -1,0 +1,20 @@
+<map id="projects/ades1754/src/platform/maxim/parameters.c" name="projects/ades1754/src/platform/maxim/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by ades1754 project." alt="" coords="377,5,599,45"/>
+<area shape="rect" id="Node000002" href="$ades1754_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by ades1754 project." alt="" coords="267,93,376,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="449,48,359,90,357,85,447,43"/>
+<area shape="rect" id="Node000007" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="435,93,541,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="491,46,491,79,485,79,485,46"/>
+<area shape="rect" id="Node000009" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="565,93,664,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="520,43,586,84,583,88,517,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,112,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="280,121,115,166,114,160,278,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="136,167,240,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="301,121,223,162,221,158,299,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="265,167,378,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="324,119,324,153,319,153,319,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="403,167,555,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="348,116,442,159,440,163,346,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="579,167,650,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="510,116,583,157,581,162,507,121"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="617,119,617,153,612,153,612,119"/>
+</map>

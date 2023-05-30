@@ -1,0 +1,5 @@
+<map id="ad5144_dpot_set_operating_mode" name="ad5144_dpot_set_operating_mode">
+<area shape="rect" id="Node000001" title="Set the AD5144 digital potentiometer operating mode." alt="" coords="188,5,435,31"/>
+<area shape="rect" id="Node000002" href="$ad5144_8c.html#aa85950fd41a565be002f9e71cb4a5225" title="Initialize the AD5144 digital potentiometer." alt="" coords="5,5,140,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,21,140,21,140,15,174,15"/>
+</map>

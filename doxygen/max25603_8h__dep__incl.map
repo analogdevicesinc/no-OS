@@ -1,0 +1,11 @@
+<map id="drivers/led/max25603/max25603.h" name="drivers/led/max25603/max25603.h">
+<area shape="rect" id="Node000001" title="Header file of MAX25603 Driver." alt="" coords="208,5,372,45"/>
+<area shape="rect" id="Node000002" href="$max25603_8c.html" title="Source file of MAX25603 Driver." alt="" coords="5,101,169,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,54,129,103,127,98,235,49"/>
+<area shape="rect" id="Node000003" href="$max25603_2src_2common_2common__data_8h.html" title="Common data used by the MAX25603 project." alt="" coords="194,101,386,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="293,59,293,101,287,101,287,59"/>
+<area shape="rect" id="Node000005" href="$max25603_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="410,93,581,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="345,49,439,91,436,96,343,53"/>
+<area shape="rect" id="Node000004" href="$max25603_2src_2common_2common__data_8c.html" title="Common data used by the MAX25603 project." alt="" coords="195,196,385,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="293,154,293,196,287,196,287,154"/>
+</map>

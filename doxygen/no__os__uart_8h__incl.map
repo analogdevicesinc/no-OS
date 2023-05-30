@@ -1,0 +1,13 @@
+<map id="include/no_os_uart.h" name="include/no_os_uart.h">
+<area shape="rect" id="Node000001" title="Header file of UART interface." alt="" coords="61,5,217,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,152,76,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,33,89,53,63,80,50,109,45,139,39,138,45,108,58,77,85,49,115,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="201,152,283,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,29,193,49,220,77,235,108,242,138,237,139,230,110,216,80,189,53,160,33"/>
+<area shape="rect" id="Node000004" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="73,79,206,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="142,31,142,65,137,65,137,31"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="125,106,69,146,66,142,122,102"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="157,102,215,142,212,146,154,106"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="104,152,175,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="142,104,142,138,137,138,137,104"/>
+</map>

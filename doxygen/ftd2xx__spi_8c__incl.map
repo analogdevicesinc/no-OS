@@ -1,0 +1,28 @@
+<map id="drivers/platform/ftd2xx/mpsse/ftd2xx_spi.c" name="drivers/platform/ftd2xx/mpsse/ftd2xx_spi.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="257,5,429,45"/>
+<area shape="rect" id="Node000002" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,93,73,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="271,48,87,95,86,90,270,43"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="106,167,205,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,34,225,41,192,53,163,71,139,95,133,108,133,123,143,154,138,155,128,124,128,107,134,92,159,67,190,49,223,36,257,29"/>
+<area shape="rect" id="Node000005" href="$no__os__alloc_8h.html" title=" " alt="" coords="597,93,708,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="418,43,595,87,593,92,417,48"/>
+<area shape="rect" id="Node000008" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="437,93,573,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="383,43,470,85,467,90,381,48"/>
+<area shape="rect" id="Node000009" href="$ftd2xx__spi_8h.html" title=" " alt="" coords="149,93,250,119"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="310,48,234,89,231,84,308,43"/>
+<area shape="rect" id="Node000011" href="$ftd2xx__platform_8h.html" title="Implementation of HAL for ftd2xx platform." alt="" coords="274,93,413,119"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="346,46,346,79,341,79,341,46"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="732,93,851,119"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="430,39,719,89,718,95,429,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="120,240,191,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,192,158,226,153,226,153,192"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="498,167,565,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="635,121,564,162,561,157,632,116"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="617,167,688,192"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="655,119,655,153,650,153,650,119"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="512,118,525,153,520,155,507,120"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="194,120,172,156,167,154,190,118"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="267,167,342,192"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="218,116,278,157,275,161,215,121"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="339,120,320,156,315,153,335,118"/>
+</map>

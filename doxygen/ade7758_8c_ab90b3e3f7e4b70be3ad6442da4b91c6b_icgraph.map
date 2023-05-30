@@ -1,0 +1,31 @@
+<map id="ade7758_update_bits" name="ade7758_update_bits">
+<area shape="rect" id="Node000001" title="Update specific register bits." alt="" coords="531,179,692,204"/>
+<area shape="rect" id="Node000002" href="$ade7758_8c.html#a85ea4d235a62d1d2c1f4198746ef00b8" title="Operation mode of the ADCs." alt="" coords="301,5,459,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="594,168,549,105,517,72,481,44,458,33,460,28,484,40,521,68,553,102,598,165"/>
+<area shape="rect" id="Node000005" href="$ade7758_8c.html#ae42bfdaa8620b923435a3ac51b0ae0ea" title="Select the input to the energy accumulation registers." alt="" coords="317,55,443,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="586,171,540,131,512,111,482,94,442,80,444,75,484,89,514,106,543,127,590,167"/>
+<area shape="rect" id="Node000006" href="$ade7758_8c.html#af563e84e29d4f693ed1c74396787db67" title="Enable/Disable interrupt." alt="" coords="303,104,457,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="568,176,482,143,441,132,442,127,483,138,570,171"/>
+<area shape="rect" id="Node000007" href="$ade7758_8c.html#a25768e9b2e97a4bdd6b858a1c1645dfc" title="Select the source of the measurement of the voltage line frequency." alt="" coords="299,153,461,179"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="517,184,461,177,461,172,518,178"/>
+<area shape="rect" id="Node000008" href="$ade7758_8c.html#a7abd5adabc220a2509032906244a57ef" title="Reset the device using SW reset." alt="" coords="309,367,451,392"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="600,218,582,250,556,288,523,326,484,358,453,372,450,367,481,353,519,322,551,285,577,247,595,215"/>
+<area shape="rect" id="Node000010" href="$ade7758_8c.html#a6256795cf572104190077c90bd04e58e" title="Select the phase of sampled data for wave register." alt="" coords="284,203,476,228"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="518,204,477,208,476,203,517,198"/>
+<area shape="rect" id="Node000011" href="$ade7758_8c.html#ac77450d3d9e7dd6ed665944487e24ecc" title="Select source of sampled data for wave register." alt="" coords="293,253,467,293"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="565,212,484,242,445,255,443,250,482,237,563,207"/>
+<area shape="rect" id="Node000012" href="$ade7758_8c.html#aae0adecdd5d9ca76c6f6aa88aa82a9a8" title="Select waveform register update rate." alt="" coords="277,317,483,343"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="592,216,546,263,516,287,484,307,452,320,450,315,481,302,513,282,543,259,589,213"/>
+<area shape="rect" id="Node000003" href="$ade7758_8c.html#ad643b16ba67d694a04b326f1df0a3820" title="Setup the ADE7758 device." alt="" coords="108,203,229,228"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="290,38,279,44,258,62,240,82,210,127,189,171,177,203,172,202,184,169,205,125,236,79,255,58,276,40,287,33"/>
+<area shape="rect" id="Node000004" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,285,60,311"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="136,238,56,287,53,283,134,233"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="298,136,278,143,226,174,186,205,183,200,223,169,276,138,296,131"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="312,184,225,205,223,200,311,179"/>
+<area shape="rect" id="Node000009" href="$ade7758_8c.html#a422e1a9832e2a6c7451aa9857d446c90" title="Initialize the device." alt="" coords="115,309,222,335"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="308,366,277,358,208,337,209,332,278,353,309,361"/>
+<area shape="poly" id="edge11_Node000009_Node000004" title=" " alt="" coords="101,313,60,305,61,300,102,308"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="270,218,230,218,230,213,270,213"/>
+<area shape="poly" id="edge15_Node000011_Node000003" title=" " alt="" coords="292,252,216,231,217,226,293,246"/>
+<area shape="poly" id="edge17_Node000012_Node000003" title=" " alt="" coords="296,315,276,307,247,289,220,268,180,230,184,226,224,264,250,285,279,302,298,311"/>
+</map>

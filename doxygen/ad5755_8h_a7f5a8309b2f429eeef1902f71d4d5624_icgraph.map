@@ -1,0 +1,28 @@
+<map id="ad5755_set_register_value" name="ad5755_set_register_value">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="592,184,747,224"/>
+<area shape="rect" id="Node000002" href="$ad5755_8c.html#aa2876383215b9a110b42a3d7441e9e79" title="Initializes the device and powers&#45;up all channels. The device is initialized with the values held by ..." alt="" coords="5,101,104,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="632,178,579,140,509,95,428,55,385,39,342,27,289,15,246,9,204,12,153,27,125,42,101,63,67,103,63,99,97,59,122,38,151,22,203,6,246,3,289,10,343,22,387,34,430,50,512,91,582,135,635,174"/>
+<area shape="rect" id="Node000003" href="$ad5755_8c.html#a99786cbdda8f693aaef761e5a2a16f1b" title="Sets the range of a channel." alt="" coords="170,36,325,76"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="597,182,305,79,306,74,599,177"/>
+<area shape="rect" id="Node000004" href="$ad5755_8c.html#a8b5d584dad93f6c5389c3d682d5642ca" title="Configures one of the control registers." alt="" coords="393,184,542,224"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="578,207,542,207,542,202,578,202"/>
+<area shape="rect" id="Node000011" href="$ad5755_8c.html#ad077de9ecb99ad5c1d9aa175a5ded99e" title="Sets the output current of a channel." alt="" coords="392,249,543,274"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="586,231,514,252,512,246,584,226"/>
+<area shape="rect" id="Node000012" href="$ad5755_8c.html#adefbedceef256335f569badd878a2f24" title="Sets the output voltage of a channel." alt="" coords="391,298,544,324"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="632,235,591,262,545,288,514,301,512,296,543,283,588,258,629,230"/>
+<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="423,180,385,159,342,142,279,127,214,119,104,115,104,110,215,114,280,122,343,137,387,154,426,175"/>
+<area shape="poly" id="edge8_Node000004_Node000003" title=" " alt="" coords="432,177,341,97,305,79,308,74,344,93,435,173"/>
+<area shape="rect" id="Node000005" href="$ad5755_8c.html#af53d0531c0ef0e528f9ae42ee4db7223" title="Selects if the channel clears when CLEAR pin is activated." alt="" coords="164,151,331,191"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="379,194,330,186,331,181,380,189"/>
+<area shape="rect" id="Node000006" href="$ad5755_8c.html#a03720bc12093fc45c62b9cd4462729fa" title="Write a &quot;service pulse&quot; to the AD5755 watchdog timer when enabled." alt="" coords="156,215,339,255"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="379,219,339,225,338,220,378,214"/>
+<area shape="rect" id="Node000007" href="$ad5755_8c.html#af699c1855cce261506330a97a888b7d1" title="Allows power&#45;up/down of the dc&#45;to&#45;dc converter, DAC and internal amplifiers for the selected channel." alt="" coords="170,279,325,319"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="405,233,392,239,368,254,344,269,315,282,313,277,341,265,365,250,389,234,402,228"/>
+<area shape="rect" id="Node000008" href="$ad5755_8c.html#a97f20e98ab61c1a9c33dd882815f3b3e" title="Configures the Digital Slew Rate Control." alt="" coords="163,344,331,369"/>
+<area shape="poly" id="edge9_Node000004_Node000008" title=" " alt="" coords="398,234,393,238,376,262,370,285,363,310,344,333,323,346,320,341,341,329,358,307,365,284,371,260,389,235,394,230"/>
+<area shape="rect" id="Node000009" href="$ad5755_8c.html#ad197f206e7cf223fc7eb1d597c7a8fb9" title="Performs a software reset to the device." alt="" coords="161,393,334,418"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="396,235,393,238,380,256,373,274,371,310,367,346,359,364,344,382,326,395,323,391,341,378,355,362,362,345,365,309,368,273,375,254,389,235,393,231"/>
+<area shape="rect" id="Node000010" href="$ad5755_8c.html#ac9601238817e9e61090efbec05c40d56" title="Enables/Disables watchdog timer and sets the timeout period." alt="" coords="152,442,343,468"/>
+<area shape="poly" id="edge12_Node000004_Node000010" title=" " alt="" coords="396,235,393,238,377,263,370,287,371,335,373,360,371,384,363,409,345,433,329,445,326,440,341,429,358,406,366,383,368,360,366,336,365,286,372,261,389,235,392,231"/>
+<area shape="poly" id="edge11_Node000009_Node000002" title=" " alt="" coords="158,388,150,382,124,352,102,318,86,281,74,243,59,175,54,127,59,126,64,174,79,242,91,279,107,315,128,349,154,379,161,384"/>
+</map>

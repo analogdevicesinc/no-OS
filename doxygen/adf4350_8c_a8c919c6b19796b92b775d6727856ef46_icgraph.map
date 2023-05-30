@@ -1,0 +1,7 @@
+<map id="adf4350_out_altvoltage0_frequency" name="adf4350_out_altvoltage0_frequency">
+<area shape="rect" id="Node000001" title="Stores PLL 0 frequency in Hz." alt="" coords="275,5,459,45"/>
+<area shape="rect" id="Node000002" href="$adf4350_8c.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="108,13,227,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,28,227,28,227,23,261,23"/>
+<area shape="rect" id="Node000003" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

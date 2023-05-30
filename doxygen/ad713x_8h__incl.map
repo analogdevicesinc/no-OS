@@ -1,0 +1,20 @@
+<map id="drivers/adc/ad713x/ad713x.h" name="drivers/adc/ad713x/ad713x.h">
+<area shape="rect" id="Node000001" title="Header file for the ad713x Driver." alt="" coords="113,5,260,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,43,70,62,51,77,36,95,30,108,29,123,37,154,32,155,24,124,25,107,31,92,47,73,67,58,112,38"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="45,93,112,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,48,108,87,105,83,159,43"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="261,93,360,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="218,43,282,84,279,88,215,48"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="384,93,491,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="247,43,388,87,387,92,246,48"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="137,93,237,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="189,46,189,79,184,79,184,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="275,167,346,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="313,119,313,153,308,153,308,119"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="418,121,345,162,342,157,416,116"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="165,121,83,163,80,158,163,116"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="208,116,280,157,277,162,205,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="151,167,222,192"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="189,119,189,153,184,153,184,119"/>
+</map>

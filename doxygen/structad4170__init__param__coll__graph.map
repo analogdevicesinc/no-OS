@@ -1,0 +1,51 @@
+<map id="ad4170_init_param" name="ad4170_init_param">
+<area shape="rect" id="Node000001" title="AD4170 SPI init paraeter structure, used for initializing the ad4170_dev." alt="" coords="1287,425,1433,450"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="973,139,1135,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1081,172,1347,423,1343,427,1077,176"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,43,184,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="191,39,316,25,474,17,560,17,647,21,734,29,819,44,883,63,943,88,1034,137,1031,142,941,93,881,68,818,49,734,35,647,26,560,22,474,22,317,31,191,44"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,98,786,123"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,59,388,71,607,91,663,98,663,103,606,96,388,76,198,64"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,105,471,130"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,70,209,87,324,106,323,112,207,92,147,75"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,157,472,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,171,972,152,973,158,486,177"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,158,606,133,665,121,666,126,607,139,486,163"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="800,117,973,139,972,144,799,123"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="692,83,702,75,725,71,744,74,756,80,759,90,753,99,748,96,753,89,751,83,742,79,725,77,704,80,695,87"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,113,663,109,663,115,484,118"/>
+<area shape="rect" id="Node000007" href="$structad4170__spi__settings.html" title="AD4170 SPI settings." alt="" coords="977,401,1131,426"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1145,418,1287,429,1286,434,1145,423"/>
+<area shape="rect" id="Node000008" href="$structad4170__config.html" title="AD4170 configuration." alt="" coords="996,450,1112,475"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="1126,457,1262,448,1286,445,1287,451,1263,453,1126,463"/>
+<area shape="rect" id="Node000009" href="$structad4170__pin__muxing.html" title="Pin_Muxing register settings." alt="" coords="648,229,801,254"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="815,227,850,229,884,235,917,248,946,269,961,290,966,311,965,332,960,353,954,395,958,415,970,436,982,446,997,453,995,458,979,450,966,439,953,417,948,395,955,352,959,331,961,311,956,292,942,273,915,253,883,240,849,234,815,233"/>
+<area shape="rect" id="Node000010" href="$structad4170__clock__ctrl.html" title="Clock_Ctrl register settings." alt="" coords="655,278,794,303"/>
+<area shape="poly" id="edge13_Node000008_Node000010" title=" " alt="" coords="808,281,844,283,881,290,915,303,946,325,956,339,961,353,960,381,958,409,961,422,970,436,982,445,997,452,995,457,979,450,966,439,956,424,952,410,954,381,956,354,952,341,942,329,913,308,879,295,843,288,808,286"/>
+<area shape="rect" id="Node000011" href="$structad4170__adc__ctrl.html" title="ADC_Ctrl register settings." alt="" coords="661,327,789,353"/>
+<area shape="poly" id="edge14_Node000008_Node000011" title=" " alt="" coords="803,337,839,342,876,350,913,364,946,385,956,398,959,411,961,424,970,435,997,451,995,455,966,439,957,426,954,412,951,400,942,389,910,369,875,355,838,347,802,343"/>
+<area shape="rect" id="Node000012" href="$structad4170__channel__setup.html" title="Channel_Setup register settings." alt="" coords="639,377,810,402"/>
+<area shape="poly" id="edge15_Node000008_Node000012" title=" " alt="" coords="824,400,945,425,969,435,1008,447,1007,452,967,440,943,431,823,405"/>
+<area shape="rect" id="Node000013" href="$structad4170__channel__map.html" title="Channel_Map register settings. Selects Analog Inputs for This Sequencer Channel." alt="" coords="643,426,807,451"/>
+<area shape="poly" id="edge16_Node000008_Node000013" title=" " alt="" coords="820,443,996,456,996,461,820,448"/>
+<area shape="rect" id="Node000014" href="$structad4170__setup.html" title="Sequencer Setup register settings." alt="" coords="668,475,781,501"/>
+<area shape="poly" id="edge17_Node000008_Node000014" title=" " alt="" coords="795,482,944,472,995,467,996,472,944,477,795,487"/>
+<area shape="rect" id="Node000015" href="$structad4170__misc.html" title="Misc register settings." alt="" coords="343,426,451,451"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="465,445,607,465,668,475,667,481,606,471,465,450"/>
+<area shape="rect" id="Node000016" href="$structad4170__afe.html" title="AFE register settings." alt="" coords="348,475,447,501"/>
+<area shape="poly" id="edge19_Node000014_Node000016" title=" " alt="" coords="460,485,668,485,668,491,460,491"/>
+<area shape="rect" id="Node000017" href="$structad4170__filter.html" title="Filter register settings." alt="" coords="344,525,451,550"/>
+<area shape="poly" id="edge20_Node000014_Node000017" title=" " alt="" coords="464,526,606,505,667,495,668,501,607,511,465,531"/>
+<area shape="rect" id="Node000018" href="$structad4170__ref__control.html" title="Ref_Control register settings." alt="" coords="651,525,798,550"/>
+<area shape="poly" id="edge21_Node000008_Node000018" title=" " alt="" coords="811,525,876,515,943,500,1022,473,1024,478,945,505,877,520,812,530"/>
+<area shape="rect" id="Node000019" href="$structad4170__current__source.html" title="Current_Source register settings." alt="" coords="638,574,811,599"/>
+<area shape="poly" id="edge22_Node000008_Node000019" title=" " alt="" coords="824,574,884,562,943,542,971,526,998,508,1038,473,1042,477,1001,512,974,531,945,546,886,567,825,580"/>
+<area shape="rect" id="Node000020" href="$structad4170__fir__control.html" title="FIR_Control register settings." alt="" coords="653,623,796,649"/>
+<area shape="poly" id="edge23_Node000008_Node000020" title=" " alt="" coords="809,630,877,618,911,606,943,591,977,564,1006,532,1044,474,1048,477,1010,535,981,568,945,596,913,611,878,623,810,635"/>
+<area shape="rect" id="Node000021" href="$structad4170__dac__config.html" title="DAC Config settings (registers HW_LDAC_Mask, HW_Toggle_Mask, Channel_En and DAC_Span)" alt="" coords="651,673,798,698"/>
+<area shape="poly" id="edge24_Node000008_Node000021" title=" " alt="" coords="812,685,879,674,912,662,942,646,964,627,984,606,1014,557,1035,510,1047,475,1052,476,1040,512,1019,559,988,609,968,631,946,650,914,667,880,679,813,690"/>
+<area shape="rect" id="Node000022" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="968,690,1140,715"/>
+<area shape="poly" id="edge25_Node000001_Node000022" title=" " alt="" coords="1078,679,1342,448,1346,452,1082,683"/>
+<area shape="rect" id="Node000023" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,722,819,747"/>
+<area shape="poly" id="edge26_Node000022_Node000023" title=" " alt="" coords="832,734,944,727,1010,713,1011,718,944,732,833,739"/>
+</map>
