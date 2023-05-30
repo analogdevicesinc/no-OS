@@ -1,0 +1,6 @@
+<map id="drivers/accel/adxl355/iio_adxl355.h" name="drivers/accel/adxl355/iio_adxl355.h">
+<area shape="rect" id="node1" title="Header file of IIO ADXL355 Driver." alt="" coords="201,5,363,47"/>
+<area shape="rect" id="node2" href="$iio__adxl355_8c.html" title="Implementation of IIO ADXL355 Driver." alt="" coords="5,109,167,151"/>
+<area shape="rect" id="node3" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxl355&#45;pmdz project." alt="" coords="191,102,373,158"/>
+<area shape="rect" id="node4" href="$iio__lwip__example_8c.html" title="Implementation of IIO LWIP example for eval&#45;adxl355&#45;pmdz project." alt="" coords="397,95,572,165"/>
+</map>

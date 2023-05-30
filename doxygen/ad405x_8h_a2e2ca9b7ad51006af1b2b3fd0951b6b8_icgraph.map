@@ -1,0 +1,4 @@
+<map id="ad405x_set_burst_averaging_mode" name="ad405x_set_burst_averaging_mode">
+<area shape="rect" id="node1" title="Enter Burst Averaging Mode." alt="" coords="264,5,517,32"/>
+<area shape="rect" id="node2" href="$ad405x_8h.html#a09c204a1bf949ac99e72ab02b3571613" title="Set operation mode." alt="" coords="5,5,216,32"/>
+</map>

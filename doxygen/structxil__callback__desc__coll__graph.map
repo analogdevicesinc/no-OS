@@ -1,0 +1,4 @@
+<map id="xil_callback_desc" name="xil_callback_desc">
+<area shape="rect" id="node1" title="Structure holding callback parameters for each pin." alt="" coords="17,95,153,121"/>
+<area shape="rect" id="node2" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="5,5,164,32"/>
+</map>

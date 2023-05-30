@@ -1,0 +1,42 @@
+<map id="no_os_pwm_remove" name="no_os_pwm_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_pwm_init()." alt="" coords="827,385,983,412"/>
+<area shape="rect" id="node2" href="$ad463x_8h.html#a374808fb7455b4797fabf216071869cb" title="Free the memory allocated by ad463x_init()." alt="" coords="638,19,765,45"/>
+<area shape="rect" id="node3" href="$ad469x_8h.html#a3542558ed10a8d3820dbeea607a0e93c" title="Free the memory allocated by ad469x_init()." alt="" coords="638,69,765,96"/>
+<area shape="rect" id="node5" href="$ad738x_8h.html#a3944843fc3a9a91406fe28a93b2ee785" title="Free the resources allocated by ad738x_init()." alt="" coords="638,120,765,147"/>
+<area shape="rect" id="node8" href="$ad7606_8c.html#acb539626bf65185a70700d9a62f036d4" title="Free any resource used by the driver." alt="" coords="624,183,779,209"/>
+<area shape="rect" id="node12" href="$ad7616_8h.html#a24c719144fe6a36190f82580daaf84aa" title=" " alt="" coords="638,259,765,285"/>
+<area shape="rect" id="node13" href="$ad796x_8h.html#abd440e98810ef648a03653bb6ba5046b" title="Remove the device and release resources." alt="" coords="638,309,765,336"/>
+<area shape="rect" id="node15" href="$adp1050_8h.html#a32c3b80439e7763db28ba844977aa755" title="Free the resources allocated by the adp1050_init()" alt="" coords="634,360,769,387"/>
+<area shape="rect" id="node21" href="$lt7170_8h.html#a82f01a8d4e3a55a2e9ef795d9073184d" title="Free or remove device instance." alt="" coords="641,411,761,437"/>
+<area shape="rect" id="node25" href="$lt7182s_8h.html#ac938c18b0d4aa1f8b546fb702be1186b" title="Free or remove device instance." alt="" coords="638,512,765,539"/>
+<area shape="rect" id="node29" href="$ltp8800_8h.html#a4401c20b4e2fa05cb96efdaf0ac7d138" title="Free or remove device instance." alt="" coords="637,613,765,640"/>
+<area shape="rect" id="node33" href="$max25603_8h.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="642,664,761,691"/>
+<area shape="rect" id="node35" href="$max25603_8h.html#a389f3db539bfec1a3e4e8de6047de90d" title="Deallocates all the resources used at initialization." alt="" coords="627,715,775,741"/>
+<area shape="rect" id="node36" href="$pulsar__adc_8h.html#a8ce5f2b49b0250436d202bb90abba68e" title="Free the resources allocated by pulsar_adc_init()." alt="" coords="627,765,776,792"/>
+<area shape="rect" id="node40" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="628,816,775,843"/>
+<area shape="rect" id="node4" href="$ad469x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="410,5,570,32"/>
+<area shape="rect" id="node6" href="$ad738x_8h.html#a5a643687de5deac9b07cf82ee05503d7" title=" " alt="" coords="441,56,539,83"/>
+<area shape="rect" id="node7" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,69,356,96"/>
+<area shape="rect" id="node9" href="$ad7606_8h.html#a5e05c4559d4085940f4e928d72447f40" title="Free any resource used by the driver." alt="" coords="427,157,553,184"/>
+<area shape="rect" id="node10" href="$iio__ad7606_8h.html#a87c852e7f94e7ed5b180c4d6ae11b657" title=" " alt="" coords="201,132,351,159"/>
+<area shape="rect" id="node11" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="249,183,303,209"/>
+<area shape="rect" id="node14" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="410,208,570,235"/>
+<area shape="rect" id="node16" href="$iio__adp1050_8h.html#a87f7c028317506b27121bc0282daf195" title="Free resources allocated by the init function." alt="" coords="197,259,355,285"/>
+<area shape="rect" id="node18" href="$adp1050_8h.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="437,309,543,336"/>
+<area shape="rect" id="node20" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,360,356,387"/>
+<area shape="rect" id="node17" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,284,148,311"/>
+<area shape="rect" id="node19" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="211,309,341,336"/>
+<area shape="rect" id="node22" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="410,411,570,437"/>
+<area shape="rect" id="node23" href="$iio__lt7170_8h.html#ae0e0379351593c18b7dc8c42b2738717" title="Free resources allocated by the init function." alt="" coords="419,461,561,488"/>
+<area shape="rect" id="node24" href="$lt7170_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="205,461,347,488"/>
+<area shape="rect" id="node26" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="410,512,570,539"/>
+<area shape="rect" id="node27" href="$iio__lt7182s_8h.html#afad45ce19612f9db836bd343d9ce4a68" title="Free resources allocated by the init function." alt="" coords="415,563,565,589"/>
+<area shape="rect" id="node28" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="205,563,347,589"/>
+<area shape="rect" id="node30" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="410,613,570,640"/>
+<area shape="rect" id="node31" href="$iio__ltp8800_8h.html#ae734d94cb2d3f2f4b78e173ad9e36eaa" title="Free resources allocated by the init function." alt="" coords="415,664,565,691"/>
+<area shape="rect" id="node32" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="205,664,347,691"/>
+<area shape="rect" id="node34" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="410,715,570,741"/>
+<area shape="rect" id="node37" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,816,356,843"/>
+<area shape="rect" id="node38" href="$iio__pulsar__adc_8h.html#a043c3098ab17f147071efe80db82f3d0" title="Release resources." alt="" coords="404,816,576,843"/>
+<area shape="rect" id="node39" href="$pulsar__adc_8h.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="430,867,550,893"/>
+</map>

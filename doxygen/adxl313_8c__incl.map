@@ -1,0 +1,16 @@
+<map id="drivers/accel/adxl313/adxl313.c" name="drivers/accel/adxl313/adxl313.c">
+<area shape="rect" id="node1" title=" " alt="" coords="268,5,429,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="642,244,713,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="133,244,204,271"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="173,95,241,121"/>
+<area shape="rect" id="node5" href="$adxl313_8h.html" title="Header file of ADXL313 Driver." alt="" coords="265,95,352,121"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="449,169,549,196"/>
+<area shape="rect" id="node11" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="427,95,563,121"/>
+<area shape="rect" id="node13" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="26,95,140,121"/>
+<area shape="rect" id="node14" href="$no__os__alloc_8h.html" title=" " alt="" coords="588,95,698,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="354,169,425,196"/>
+<area shape="rect" id="node9" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="58,169,156,196"/>
+<area shape="rect" id="node10" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="180,169,279,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="458,244,540,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="574,169,640,196"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="ad5460_init" name="ad5460_init">
+<area shape="rect" id="node1" title="Initialize the device structure." alt="" coords="383,81,481,108"/>
+<area shape="rect" id="node2" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="141,5,301,32"/>
+<area shape="rect" id="node3" href="$channel__output__example_8h.html#ae839d5b557e7413ee71a7d30f7b5f8fa" title="Channel output example main execution." alt="" coords="108,56,335,83"/>
+<area shape="rect" id="node5" href="$current__output__example_8h.html#a8d0ccace5dc4c241ce6ae16991f6847a" title="Current output example main execution." alt="" coords="111,107,332,133"/>
+<area shape="rect" id="node6" href="$voltage__output__example_8h.html#af594133c13e2cf78c6d9d72028181857" title="Voltage output example main execution." alt="" coords="109,157,333,184"/>
+<area shape="rect" id="node4" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="5,107,60,133"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="lt7170_read_byte" name="lt7170_read_byte">
+<area shape="rect" id="node1" title="Perform a raw PMBus read byte operation." alt="" coords="408,31,543,57"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#a24dacb372b871d8b33eaea08eeb86e86" title="Read statuses." alt="" coords="213,5,360,32"/>
+<area shape="rect" id="node4" href="$lt7170_8h.html#ae06710b1248bd6cd365141212504488c" title="Configure SYNC pin for clock synchronization." alt="" coords="213,56,360,83"/>
+<area shape="rect" id="node3" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

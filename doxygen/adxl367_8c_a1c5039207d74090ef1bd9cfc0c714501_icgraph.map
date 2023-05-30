@@ -1,0 +1,5 @@
+<map id="adxl367_set_fifo_read_mode" name="adxl367_set_fifo_read_mode">
+<area shape="rect" id="node1" title="Sets FIFO read mode." alt="" coords="423,5,632,32"/>
+<area shape="rect" id="node2" href="$adxl367_8h.html#a63cc2cd00904abdec7f5bd88f19942a1" title="Configures the FIFO feature. Uses ADXL367_14B_CHID read mode as default." alt="" coords="229,5,375,32"/>
+<area shape="rect" id="node3" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,5,181,32"/>
+</map>

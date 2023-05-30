@@ -1,0 +1,5 @@
+<map id="ad7616_read_mask" name="ad7616_read_mask">
+<area shape="rect" id="node1" title=" " alt="" coords="399,13,548,39"/>
+<area shape="rect" id="node2" href="$ad7616_8h.html#a92f9553f1d7c315841b5cbfe9465864d" title="Read the current selected channels." alt="" coords="187,5,351,47"/>
+<area shape="rect" id="node3" href="$ad7616_8c.html#ab690e8d620d464da766f18fd88b8797c" title="Perform a self test. Channels selection will be left untouched." alt="" coords="5,13,139,39"/>
+</map>

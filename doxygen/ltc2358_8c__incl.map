@@ -1,0 +1,12 @@
+<map id="drivers/adc/ltc2358/ltc2358.c" name="drivers/adc/ltc2358/ltc2358.c">
+<area shape="rect" id="node1" title="Implementation of LTC2358 Driver." alt="" coords="79,5,226,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node3" href="$ltc2358_8h.html" title="Implementation of LTC2358 Driver." alt="" coords="285,95,367,121"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="176,95,244,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="41,95,152,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="308,244,379,271"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="294,169,393,196"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="169,169,269,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="178,244,261,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="78,169,145,196"/>
+</map>

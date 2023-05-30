@@ -1,0 +1,12 @@
+<map id="projects/adin1110/src/common/common_data.c" name="projects/adin1110/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by the ADIN1110 examples." alt="" coords="124,5,315,47"/>
+<area shape="rect" id="node2" href="$adin1110_2src_2common_2common__data_8h.html" title="Defines common data to be used by the ADIN1110 examples." alt="" coords="156,95,283,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,156,196"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="69,244,167,271"/>
+<area shape="rect" id="node6" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="335,169,440,196"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="191,244,298,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="255,319,325,345"/>
+<area shape="rect" id="node7" title=" " alt="" coords="501,319,583,345"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="373,244,506,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="404,319,475,345"/>
+</map>

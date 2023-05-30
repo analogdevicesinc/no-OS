@@ -1,0 +1,5 @@
+<map id="ade9153a_rd_rst_en" name="ade9153a_rd_rst_en">
+<area shape="rect" id="node1" title="Energy register read with value reset." alt="" coords="285,5,439,32"/>
+<area shape="rect" id="node2" href="$ade9153a_8h.html#a1b0d3202f129c89f6d407e01ed421bd9" title="ADE9153A setup." alt="" coords="108,5,237,32"/>
+<area shape="rect" id="node3" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,32"/>
+</map>

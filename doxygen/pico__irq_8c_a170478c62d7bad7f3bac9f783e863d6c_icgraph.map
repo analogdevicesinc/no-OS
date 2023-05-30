@@ -1,0 +1,4 @@
+<map id="on_uart0_rx" name="on_uart0_rx">
+<area shape="rect" id="node1" title="UART0 RX interrupt handler." alt="" coords="244,5,343,32"/>
+<area shape="rect" id="node2" href="$pico__irq_8c.html#a4103c327437080d96d6539180ad25173" title="Register a callback." alt="" coords="5,5,196,32"/>
+</map>

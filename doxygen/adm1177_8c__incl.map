@@ -1,0 +1,15 @@
+<map id="drivers/adc/adm1177/adm1177.c" name="drivers/adc/adm1177/adm1177.c">
+<area shape="rect" id="node1" title="Source file of ADM1177 Driver." alt="" coords="269,5,428,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node3" href="$adm1177_8h.html" title=" " alt="" coords="301,95,396,121"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="56,95,167,121"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="457,95,571,121"/>
+<area shape="rect" id="node12" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="614,95,723,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="485,244,556,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="78,169,145,196"/>
+<area shape="rect" id="node6" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="429,169,527,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="169,169,269,196"/>
+<area shape="rect" id="node9" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="293,169,404,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="178,244,261,271"/>
+<area shape="rect" id="node13" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="653,169,721,196"/>
+</map>

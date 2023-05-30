@@ -1,0 +1,12 @@
+<map id="adp1050_read" name="adp1050_read">
+<area shape="rect" id="node1" title="Read data from ADP1050." alt="" coords="651,157,765,184"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#ab8f5b8bd8048dbadf9b9ec50173c51aa" title="Set PWM modulation for requested channel." alt="" coords="404,5,603,32"/>
+<area shape="rect" id="node3" href="$adp1050_8h.html#aff3447b7358bc0c123e42010dd9f75df" title="Read statuses." alt="" coords="423,56,584,83"/>
+<area shape="rect" id="node4" href="$adp1050_8h.html#a20f9b30d6632532b502c67171a45bda8" title="Read VIN/IIN/TEMP/DUTY_CYCLE/FREQ raw value from the ADP1050." alt="" coords="425,157,582,184"/>
+<area shape="rect" id="node5" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,157,356,184"/>
+<area shape="rect" id="node6" href="$adp1050_8h.html#a67e504d9b00f2cc646afc8001518caa1" title="Read Voltage Sense output raw value from the ADP1050." alt="" coords="420,259,587,285"/>
+<area shape="rect" id="node7" href="$adp1050_8h.html#afc314ab80bc8f5e20356cf5ac09b12e4" title="Trim IIN(CS1 pin)/VIN(VF pin)/VOUT(VS pin)." alt="" coords="220,284,332,311"/>
+<area shape="rect" id="node8" href="$adp1050_8h.html#a57b14659730225a28d765a5d4a9c7c1a" title="Unlock CHIP/EEPROM/TRIM password." alt="" coords="421,208,586,235"/>
+<area shape="rect" id="node9" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="211,208,341,235"/>
+<area shape="rect" id="node10" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,208,148,235"/>
+</map>

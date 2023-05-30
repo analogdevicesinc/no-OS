@@ -1,0 +1,6 @@
+<map id="set_default_config" name="set_default_config">
+<area shape="rect" id="node1" title="Sets default configuration of the example as floating points Note that this function doesn&#39;t configur..." alt="" coords="539,5,680,32"/>
+<area shape="rect" id="node2" href="$pqlib__example_8h.html#a706632b98cda205f69858b86a48b4a32" title="Initializes Power Quality Measurement." alt="" coords="313,5,491,32"/>
+<area shape="rect" id="node3" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,5,265,32"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,5,60,32"/>
+</map>

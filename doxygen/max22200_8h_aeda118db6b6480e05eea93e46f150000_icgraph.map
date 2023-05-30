@@ -1,0 +1,20 @@
+<map id="max22200_reg_write" name="max22200_reg_write">
+<area shape="rect" id="node1" title="Write data to desired register for MAX22200." alt="" coords="1117,129,1276,156"/>
+<area shape="rect" id="node2" href="$max22200_8h.html#a1835ac8951625384aedaa5113e914946" title="MAX22200 descriptor initialization function." alt="" coords="450,141,569,168"/>
+<area shape="rect" id="node6" href="$max22200_8h.html#aeac74a0e7d36f39655b548c26408b471" title="Update data in the desired register." alt="" coords="899,268,1069,295"/>
+<area shape="rect" id="node3" href="$max22200_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="201,243,361,269"/>
+<area shape="rect" id="node4" href="$iio__max22200_8h.html#ac94399543264c762f05f9be7ae5bc96c" title="Initializes the MAX22200 IIO descriptor." alt="" coords="210,167,353,193"/>
+<area shape="rect" id="node5" href="$max22200_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,293,148,320"/>
+<area shape="rect" id="node7" href="$max22200_8h.html#a6d378d879494a2cbbfb2071de3cec4e6" title="Set fault mask bits in the status register." alt="" coords="652,344,851,371"/>
+<area shape="rect" id="node8" href="$max22200_8h.html#a646c2233f3682e3c928fd84da879d519" title="Deallocates all the resources used at initialization." alt="" coords="435,395,583,421"/>
+<area shape="rect" id="node10" href="$max22200_8h.html#a54c96baa79be70cc86c451f57c63b830" title="Set configuration DPM." alt="" coords="661,496,842,523"/>
+<area shape="rect" id="node11" href="$max22200_8h.html#a85a1e61ee381787018c36625c1856ac1" title="Set channel&#39;s enables for different checks, detection and functions." alt="" coords="656,547,847,573"/>
+<area shape="rect" id="node12" href="$max22200_8h.html#a59e1958026589d1e01ab86a17144143b" title="Set channel&#39;s frequency." alt="" coords="423,243,596,269"/>
+<area shape="rect" id="node13" href="$max22200_8h.html#a9876d4894a2fe84777266b0aed1cb3dc" title="Set channel HIT time and HIT current." alt="" coords="669,40,833,67"/>
+<area shape="rect" id="node14" href="$max22200_8h.html#ad94e4f073bf41c68ae0fa95fda3c9048" title="Set channel hold current." alt="" coords="664,91,839,117"/>
+<area shape="rect" id="node15" href="$max22200_8h.html#a249aad4b27bc17c8b4a42cab8da9cecc" title="Set channel&#39;s scale to fullscale or half fullscale." alt="" coords="661,141,842,168"/>
+<area shape="rect" id="node16" href="$max22200_8h.html#abd268411a34af0c73257791a867c394b" title="Set channel state for specific channel." alt="" coords="661,445,841,472"/>
+<area shape="rect" id="node17" href="$max22200_8h.html#a7d599fefccdc1a6e68a370951e0954b0" title="Set channel&#39;s trigger to be either SPI or external trigger." alt="" coords="667,192,836,219"/>
+<area shape="rect" id="node18" href="$max22200_8h.html#a3b69588decfa81081e2c84f745e157b3" title="Set chopping frequency value." alt="" coords="415,293,604,320"/>
+<area shape="rect" id="node9" href="$iio__max22200_8h.html#af02821c856af6405d171e69d577097e7" title="Free resources allocated by the init function." alt="" coords="196,344,367,371"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="jesd204_rx_init" name="jesd204_rx_init">
+<area shape="rect" id="node1" title="JESD204B/C Receive Peripheral Initialization Structure." alt="" coords="34,184,155,211"/>
+<area shape="rect" id="node2" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="33,95,156,121"/>
+<area shape="rect" id="node3" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+</map>

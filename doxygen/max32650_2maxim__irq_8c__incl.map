@@ -1,0 +1,23 @@
+<map id="drivers/platform/maxim/max32650/maxim_irq.c" name="drivers/platform/maxim/max32650/maxim_irq.c">
+<area shape="rect" id="node1" title="Implementation of external irq driver." alt="" coords="387,5,567,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="250,319,321,345"/>
+<area shape="rect" id="node3" title=" " alt="" coords="925,319,995,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="692,319,775,345"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="199,95,267,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="292,95,343,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="22,169,82,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="417,95,473,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="335,169,398,196"/>
+<area shape="rect" id="node10" href="$max32650_2maxim__irq_8h.html" title="Header file for maxim irq specifics." alt="" coords="71,95,175,121"/>
+<area shape="rect" id="node11" title=" " alt="" coords="209,169,311,196"/>
+<area shape="rect" id="node14" href="$maxim__dma_8h.html" title="Maxim platform specific header DMA API." alt="" coords="549,95,665,121"/>
+<area shape="rect" id="node18" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="630,169,735,196"/>
+<area shape="rect" id="node20" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="771,244,871,271"/>
+<area shape="rect" id="node21" href="$no__os__alloc_8h.html" title=" " alt="" coords="975,169,1086,196"/>
+<area shape="rect" id="node12" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="72,244,168,271"/>
+<area shape="rect" id="node13" href="$no__os__list_8h.html" title="List library header." alt="" coords="192,244,291,271"/>
+<area shape="rect" id="node15" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="474,169,582,196"/>
+<area shape="rect" id="node16" title=" " alt="" coords="997,244,1064,271"/>
+<area shape="rect" id="node17" href="$no__os__mutex_8h.html" title=" " alt="" coords="366,244,487,271"/>
+<area shape="rect" id="node19" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="563,244,696,271"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="drivers/adc/ad7616/iio_ad7616.h" name="drivers/adc/ad7616/iio_ad7616.h">
+<area shape="rect" id="node1" title="Header file for AD7616 IIO interface." alt="" coords="187,5,334,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="298,319,369,345"/>
+<area shape="rect" id="node3" href="$iio_8h.html" title="Header file of iio." alt="" coords="267,95,318,121"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="196,169,290,196"/>
+<area shape="rect" id="node10" href="$ad7616_8h.html" title="Header file of AD7616 Driver." alt="" coords="314,169,396,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="474,169,580,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="642,319,724,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="35,244,206,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="512,244,646,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="544,319,614,345"/>
+<area shape="rect" id="node11" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="280,244,387,271"/>
+</map>

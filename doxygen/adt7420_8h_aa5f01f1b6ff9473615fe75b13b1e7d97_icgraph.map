@@ -1,0 +1,12 @@
+<map id="adt7420_i2c_reg_read" name="adt7420_i2c_reg_read">
+<area shape="rect" id="node1" title="Reads the value of a register I2C interface device." alt="" coords="884,81,1049,108"/>
+<area shape="rect" id="node2" href="$adt7420_8h.html#ae8c9a7ec123d3b672f551de3dc2bebd6" title="Reads the value of a register." alt="" coords="697,81,836,108"/>
+<area shape="rect" id="node3" href="$adt7420_8h.html#a04499e58b0fca74cdc4dc704a5e44c6a" title="Reads the temperature data and converts it to Celsius degrees." alt="" coords="459,5,649,32"/>
+<area shape="rect" id="node4" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="215,56,391,83"/>
+<area shape="rect" id="node5" href="$adt7420_8h.html#a002fbfa6b776f9d63d6e394710c6fc49" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="503,107,605,133"/>
+<area shape="rect" id="node8" href="$adt7420_8h.html#aa37e104e0f4f67268bb38e7ab79fe910" title="Sets the value of a register SPI/I2C." alt="" coords="461,157,647,184"/>
+<area shape="rect" id="node6" href="$iio__adt7420_8h.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="240,107,367,133"/>
+<area shape="rect" id="node7" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,107,148,133"/>
+<area shape="rect" id="node9" href="$adt7420_8h.html#a6b22b40bd3315083e90bd52beacb1627" title="Sets the operational mode for ADT7420/ADT7320." alt="" coords="196,157,411,184"/>
+<area shape="rect" id="node10" href="$adt7420_8h.html#af3c4b14319003f5a2edf1dd69ac4dcad" title="Sets the resolution for ADT7420/ADT7320." alt="" coords="216,208,391,235"/>
+</map>

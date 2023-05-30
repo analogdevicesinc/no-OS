@@ -1,0 +1,12 @@
+<map id="no_os_put_unaligned_le16" name="no_os_put_unaligned_le16">
+<area shape="rect" id="node1" title=" " alt="" coords="964,39,1159,65"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#ab89b79e0020f4aed46e4ceacb4c7cfca" title="Perform a raw PMBus write word operation." alt="" coords="769,9,912,36"/>
+<area shape="rect" id="node4" href="$ltp8800_8h.html#a84a4646c361e218d30692ab3caccf99c" title="Perform a raw PMBus write word operation." alt="" coords="765,64,916,91"/>
+<area shape="rect" id="node3" href="$lt7170_8h.html#a30b2bb5c6fcd4f0cf0afdb61361c7a0e" title="Set output PWM mode." alt="" coords="561,5,707,32"/>
+<area shape="rect" id="node5" href="$ltp8800_8h.html#a613ac6d7323b5995e0e60723902f6cbe" title="Set phase order for polyphase application." alt="" coords="562,57,706,98"/>
+<area shape="rect" id="node10" href="$ltp8800_8h.html#a0c4e0a76ceb3b8ef7b23e8481479ea77" title="Set output voltage and its upper limit." alt="" coords="551,123,717,149"/>
+<area shape="rect" id="node6" href="$ltp8800_8h.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="404,64,503,91"/>
+<area shape="rect" id="node7" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,39,356,65"/>
+<area shape="rect" id="node8" href="$iio__ltp8800_8h.html#ae91bc4bceb8a86bc476ffae79c750cda" title="Initializes the LTP8800 IIO descriptor." alt="" coords="215,89,337,116"/>
+<area shape="rect" id="node9" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,89,148,116"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="drivers/frequency/adrf6780/adrf6780.c" name="drivers/frequency/adrf6780/adrf6780.c">
+<area shape="rect" id="node1" title="Implementation of adrf6780 Driver." alt="" coords="231,5,429,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="129,95,208,121"/>
+<area shape="rect" id="node3" href="$adrf6780_8h.html" title="Header file for adrf6780 Driver." alt="" coords="284,95,376,121"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="405,95,514,121"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,169,119,196"/>
+<area shape="rect" id="node12" href="$no__os__alloc_8h.html" title=" " alt="" coords="543,95,653,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="183,244,253,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="314,244,397,271"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,169,293,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="368,169,468,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="504,244,575,271"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="492,169,560,196"/>
+<area shape="rect" id="node13" title=" " alt="" coords="635,169,702,196"/>
+</map>

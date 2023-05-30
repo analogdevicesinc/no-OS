@@ -1,0 +1,10 @@
+<map id="projects/ad5460/src/common/common_data.c" name="projects/ad5460/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="56,5,247,47"/>
+<area shape="rect" id="node2" href="$ad5460_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="88,95,215,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,156,196"/>
+<area shape="rect" id="node4" href="$ad5460_8h.html" title="Header file of AD5460 Driver." alt="" coords="181,169,263,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="244,319,315,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="123,244,206,271"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="230,244,329,271"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="353,244,459,271"/>
+</map>

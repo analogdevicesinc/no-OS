@@ -1,0 +1,4 @@
+<map id="ad7606_reg_read" name="ad7606_reg_read">
+<area shape="rect" id="node1" title="Write a device register via SPI or AXI Parallel core." alt="" coords="235,5,369,32"/>
+<area shape="rect" id="node2" href="$ad7606_8c.html#aebc2fc29f39723c768616fbdbb1299b4" title="Write a device register via SPI with masking." alt="" coords="5,5,187,32"/>
+</map>

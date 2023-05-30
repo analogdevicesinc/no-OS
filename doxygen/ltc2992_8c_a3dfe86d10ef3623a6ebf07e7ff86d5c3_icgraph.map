@@ -1,0 +1,6 @@
+<map id="ltc2992_update_reg" name="ltc2992_update_reg">
+<area shape="rect" id="node1" title="Update register value in the device." alt="" coords="228,56,379,83"/>
+<area shape="rect" id="node2" href="$ltc2992_8h.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="19,5,166,32"/>
+<area shape="rect" id="node3" href="$ltc2992_8h.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="5,56,180,83"/>
+<area shape="rect" id="node4" href="$ltc2992_8h.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="25,107,160,133"/>
+</map>

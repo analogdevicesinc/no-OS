@@ -1,0 +1,7 @@
+<map id="axi_jesd204_tx_jesd204_priv" name="axi_jesd204_tx_jesd204_priv">
+<area shape="rect" id="node1" title=" " alt="" coords="27,273,237,300"/>
+<area shape="rect" id="node2" href="$structaxi__jesd204__tx.html" title=" " alt="" coords="72,184,192,211"/>
+<area shape="rect" id="node3" href="$structjesd204__tx__config.html" title=" " alt="" coords="5,95,144,121"/>
+<area shape="rect" id="node4" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="168,95,291,121"/>
+<area shape="rect" id="node5" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="140,5,319,32"/>
+</map>

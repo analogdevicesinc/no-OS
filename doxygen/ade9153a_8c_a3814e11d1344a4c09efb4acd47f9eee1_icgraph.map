@@ -1,0 +1,9 @@
+<map id="ade9153a_auto_calibration_run" name="ade9153a_auto_calibration_run">
+<area shape="rect" id="node1" title="Auto calibration run." alt="" coords="801,56,1028,83"/>
+<area shape="rect" id="node2" href="$ade9153a_8h.html#a240ff2c469d7822531e2a77920e052d0" title="Start autocalibration AI channel." alt="" coords="554,5,751,32"/>
+<area shape="rect" id="node6" href="$ade9153a_8h.html#a17f277da02d5b845549c2bfc3f3d7af4" title="Start autocalibration AV channel." alt="" coords="552,56,753,83"/>
+<area shape="rect" id="node7" href="$ade9153a_8h.html#a90a56f9b7929d6fa59012686f5ffb517" title="Start autocalibration BI channel." alt="" coords="554,107,751,133"/>
+<area shape="rect" id="node3" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a8ab286a0277c4951842d176a2ce4c41c" title="Autocalibration start." alt="" coords="347,31,504,57"/>
+<area shape="rect" id="node4" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a5b32942d81fb899bcf8c3907bc9fde17" title="Autocalibration read values." alt="" coords="108,31,299,57"/>
+<area shape="rect" id="node5" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,57"/>
+</map>

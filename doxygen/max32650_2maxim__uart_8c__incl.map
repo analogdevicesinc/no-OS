@@ -1,0 +1,21 @@
+<map id="drivers/platform/maxim/max32650/maxim_uart.c" name="drivers/platform/maxim/max32650/maxim_uart.c">
+<area shape="rect" id="node1" title="Source file of UART driver for STM32." alt="" coords="414,5,603,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,95,73,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="197,319,268,345"/>
+<area shape="rect" id="node4" href="$max32650_2maxim__irq_8h.html" title="Header file for maxim irq specifics." alt="" coords="685,95,789,121"/>
+<area shape="rect" id="node6" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="903,169,999,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="641,169,701,196"/>
+<area shape="rect" id="node11" href="$max32650_2maxim__uart_8h.html" title="Header file of UART driver." alt="" coords="547,95,660,121"/>
+<area shape="rect" id="node14" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="378,244,511,271"/>
+<area shape="rect" id="node15" title=" " alt="" coords="863,95,954,121"/>
+<area shape="rect" id="node16" title=" " alt="" coords="978,95,1085,121"/>
+<area shape="rect" id="node17" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="253,244,353,271"/>
+<area shape="rect" id="node18" href="$no__os__alloc_8h.html" title=" " alt="" coords="155,95,265,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="725,169,828,196"/>
+<area shape="rect" id="node8" href="$no__os__list_8h.html" title="List library header." alt="" coords="637,244,735,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="564,319,635,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="430,319,513,345"/>
+<area shape="rect" id="node12" title=" " alt="" coords="391,169,487,196"/>
+<area shape="rect" id="node13" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="512,169,617,196"/>
+<area shape="rect" id="node19" title=" " alt="" coords="199,169,266,196"/>
+</map>

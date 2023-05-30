@@ -1,0 +1,11 @@
+<map id="ad7746_iio_init_param" name="ad7746_iio_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="153,273,324,300"/>
+<area shape="rect" id="node2" href="$structad7746__init__param.html" title=" " alt="" coords="165,184,312,211"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="76,95,239,121"/>
+<area shape="rect" id="node4" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node5" href="$structad7746__setup.html" title=" " alt="" coords="325,95,438,121"/>
+<area shape="rect" id="node6" href="$structad7746__vt.html" title=" " alt="" coords="208,5,299,32"/>
+<area shape="rect" id="node7" href="$structad7746__config.html" title=" " alt="" coords="323,5,439,32"/>
+<area shape="rect" id="node8" href="$structad7746__exc.html" title=" " alt="" coords="463,5,563,32"/>
+<area shape="rect" id="node9" href="$structad7746__cap.html" title=" " alt="" coords="587,5,687,32"/>
+</map>

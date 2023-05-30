@@ -1,0 +1,11 @@
+<map id="projects/lt7170/src/common/common_data.h" name="projects/lt7170/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by lt7170 examples." alt="" coords="98,5,290,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,156,121"/>
+<area shape="rect" id="node3" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="139,169,238,196"/>
+<area shape="rect" id="node5" href="$lt7170_8h.html" title=" " alt="" coords="238,95,313,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="240,244,311,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="313,169,384,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="408,169,508,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="379,244,449,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="474,244,557,271"/>
+</map>

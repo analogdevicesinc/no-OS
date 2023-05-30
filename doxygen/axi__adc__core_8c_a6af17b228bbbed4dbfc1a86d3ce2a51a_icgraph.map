@@ -1,0 +1,5 @@
+<map id="axi_adc_get_calib_phase_scale" name="axi_adc_get_calib_phase_scale">
+<area shape="rect" id="node1" title="Get the phase calibration values for AXI ADC channel." alt="" coords="237,23,421,65"/>
+<area shape="rect" id="node2" href="$axi__adc__core_8h.html#ac3be9d8c91a88d4307d68aa2828ef3e3" title="Get the phase calibration values for AXI ADC channel." alt="" coords="5,5,189,32"/>
+<area shape="rect" id="node3" href="$axi__adc__core_8h.html#ab3189e6ffb45925b9bd98a7d7de9beed" title="Get the scale calibration values for AXI ADC channel." alt="" coords="8,56,187,83"/>
+</map>

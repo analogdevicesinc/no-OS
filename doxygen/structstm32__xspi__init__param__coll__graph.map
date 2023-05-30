@@ -1,0 +1,7 @@
+<map id="stm32_xspi_init_param" name="stm32_xspi_init_param">
+<area shape="rect" id="node1" title="Structure holding the initialization parameters for stm32 platform. specific XSPI parameters." alt="" coords="186,184,361,211"/>
+<area shape="rect" id="node2" href="$structstm32__dma__channel.html" title="STM32 DMA Channels." alt="" coords="5,95,163,121"/>
+<area shape="rect" id="node3" href="$structno__os__dma__init__param.html" title="Initialization parameter for the DMA controller." alt="" coords="187,95,360,121"/>
+<area shape="rect" id="node4" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="179,5,368,32"/>
+<area shape="rect" id="node5" href="$structstm32__xspi__command.html" title="Structure holding the stm32 platform specific XSPI command parameters." alt="" coords="385,95,554,121"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="projects/max14919/src/common/common_data.h" name="projects/max14919/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by max14919 example." alt="" coords="65,5,257,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="11,95,162,121"/>
+<area shape="rect" id="node3" href="$max14919_8h.html" title="Header file of MAX14919 Driver." alt="" coords="186,95,289,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="94,244,165,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="284,244,367,271"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,169,112,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="187,169,287,196"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="367,169,476,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="189,244,259,271"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="391,244,459,271"/>
+</map>

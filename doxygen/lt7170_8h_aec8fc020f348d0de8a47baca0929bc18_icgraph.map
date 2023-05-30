@@ -1,0 +1,5 @@
+<map id="lt7170_read_word_data" name="lt7170_read_word_data">
+<area shape="rect" id="node1" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="404,5,579,32"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#adafcc4f2933366985fd26164c07ea139" title="Read a value." alt="" coords="213,5,356,32"/>
+<area shape="rect" id="node3" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="ltp8800_write_byte" name="ltp8800_write_byte">
+<area shape="rect" id="node1" title="Perform a raw PMBus write byte operation." alt="" coords="860,85,1007,112"/>
+<area shape="rect" id="node2" href="$ltp8800_8h.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="457,56,556,83"/>
+<area shape="rect" id="node6" href="$ltp8800_8h.html#a957cff13308f6c42a9d7869d98365a75" title="Program loop compensation for regulator transient response." alt="" coords="404,5,609,32"/>
+<area shape="rect" id="node7" href="$ltp8800_8h.html#aa220bf82c63c0fa840b0466f30ff5a2d" title="Store user settings to EEPROM." alt="" coords="661,107,808,149"/>
+<area shape="rect" id="node8" href="$ltp8800_8h.html#ab98c274210399e147f51fc94f296c36f" title="Enable or disable sync pin." alt="" coords="657,173,812,200"/>
+<area shape="rect" id="node3" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,32"/>
+<area shape="rect" id="node4" href="$iio__ltp8800_8h.html#ae91bc4bceb8a86bc476ffae79c750cda" title="Initializes the LTP8800 IIO descriptor." alt="" coords="215,56,337,83"/>
+<area shape="rect" id="node5" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+</map>
