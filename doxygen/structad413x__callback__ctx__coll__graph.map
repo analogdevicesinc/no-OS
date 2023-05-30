@@ -1,0 +1,27 @@
+<map id="ad413x_callback_ctx" name="ad413x_callback_ctx">
+<area shape="rect" id="Node000001" title="Callback structure." alt="" coords="1143,215,1301,241"/>
+<area shape="rect" id="Node000002" href="$structad413x__dev.html" title="Device structure." alt="" coords="964,215,1065,241"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1079,225,1142,225,1142,231,1079,231"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="687,75,809,101"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="796,103,866,133,941,172,999,213,996,217,939,177,864,138,794,108"/>
+<area shape="poly" id="edge7_Node000003_Node000003" title=" " alt="" coords="719,61,728,52,748,49,765,51,775,57,778,67,773,77,768,74,773,66,771,61,763,56,748,54,730,57,723,64"/>
+<area shape="rect" id="Node000004" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,51,490,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="504,68,686,81,686,86,503,73"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,21,184,46"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="198,23,208,23,332,18,428,18,525,27,646,51,716,73,714,78,645,56,524,33,428,24,332,23,208,28,198,28"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="198,40,343,54,343,60,198,46"/>
+<area shape="rect" id="Node000006" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,101,491,141"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="505,112,645,99,686,94,686,99,646,104,505,117"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="682,166,814,191"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="828,188,941,208,964,213,963,218,939,213,827,193"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,166,511,191"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="525,176,682,176,682,181,525,181"/>
+<area shape="rect" id="Node000009" href="$structad413x__preset.html" title="Preset setting." alt="" coords="689,215,807,241"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="822,225,964,225,964,231,822,231"/>
+<area shape="rect" id="Node000010" href="$structad413x__ref__buf.html" title="ADC reference buffer selection." alt="" coords="355,215,478,241"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="492,225,688,225,688,231,492,231"/>
+<area shape="rect" id="Node000011" href="$structad413x__channel.html" title="Channel setting." alt="" coords="684,265,812,290"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="825,265,939,245,969,238,970,243,941,251,826,270"/>
+<area shape="rect" id="Node000012" href="$structad413x__standby__ctrl.html" title="Standby control flags." alt="" coords="669,314,827,339"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="840,312,890,300,939,282,972,261,999,239,1002,243,975,265,941,286,891,305,841,317"/>
+</map>

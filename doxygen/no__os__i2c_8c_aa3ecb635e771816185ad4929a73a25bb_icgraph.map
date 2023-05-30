@@ -1,0 +1,256 @@
+<map id="no_os_i2c_init" name="no_os_i2c_init">
+<area shape="rect" id="Node000001" title="Initialize the I2C communication peripheral." alt="" coords="733,1288,848,1313"/>
+<area shape="rect" id="Node000002" href="$ad5110_8c.html#a3448460175919318a5b9a634933d38fe" title="Initializes the communication with the device." alt="" coords="555,5,653,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="786,1274,780,1023,763,631,750,430,732,253,710,117,697,71,683,44,670,32,652,25,655,20,672,28,687,40,702,69,715,116,738,252,755,430,769,631,785,1023,792,1274"/>
+<area shape="rect" id="Node000003" href="$ad5141_8c.html#af112ac33db934f34c57aac2f0705d744" title="Initialize the AD5141 digital potentiometer." alt="" coords="537,55,671,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="786,1274,779,1032,762,656,748,463,731,293,709,163,697,119,683,93,670,82,673,78,687,90,702,117,714,162,736,292,754,463,767,655,785,1032,791,1274"/>
+<area shape="rect" id="Node000004" href="$ad5142_8c.html#a932087212190822d3484e7b913131993" title="Initialize the AD5142 digital potentiometer." alt="" coords="537,104,671,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="786,1274,779,1040,761,680,747,496,730,333,708,209,696,168,683,142,670,131,673,127,687,139,701,166,713,208,735,332,752,495,766,679,784,1040,791,1274"/>
+<area shape="rect" id="Node000005" href="$ad5143_8c.html#a9f5ae7a25ca0e9b18f1720abfce93f12" title="Initialize the AD5143 digital potentiometer." alt="" coords="537,153,671,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="786,1274,778,1049,759,704,745,529,728,374,707,255,696,216,683,192,670,180,673,176,687,188,701,214,713,254,733,373,751,528,764,704,783,1049,791,1274"/>
+<area shape="rect" id="Node000006" href="$ad5144_8c.html#aa85950fd41a565be002f9e71cb4a5225" title="Initialize the AD5144 digital potentiometer." alt="" coords="537,203,671,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="786,1274,777,1059,758,729,744,562,727,414,706,302,695,264,683,241,670,230,673,226,687,238,700,262,712,300,732,414,749,562,763,729,782,1058,791,1274"/>
+<area shape="rect" id="Node000007" href="$ad525x_8c.html#ad7ec79dd130985fa7ae0c14a069bf77a" title="Initialize SPI and Initial Values for AD5172 Board." alt="" coords="555,252,653,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="786,1275,776,1068,756,755,742,596,725,455,706,348,695,312,683,290,670,279,652,272,654,267,672,274,687,287,700,310,711,347,731,454,748,595,762,754,782,1068,791,1274"/>
+<area shape="rect" id="Node000008" href="$ad5593r_8c.html#a30d1442f4f8fd980e5aa615e52568a0a" title=" " alt="" coords="553,301,655,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="786,1275,775,1077,755,779,741,629,724,495,705,394,694,360,683,340,670,329,654,322,657,317,673,324,687,336,699,358,710,393,729,495,746,628,760,779,781,1077,791,1274"/>
+<area shape="rect" id="Node000009" href="$ad5629r_8c.html#a5d5c52f8a3f5513e169a235da42c0552" title="Initializes the communication with the device." alt="" coords="553,351,655,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="785,1274,775,1085,753,804,739,661,722,536,704,440,694,408,683,389,670,378,654,371,656,366,673,374,687,386,699,406,709,439,728,535,744,661,759,803,780,1085,791,1274"/>
+<area shape="rect" id="Node000010" href="$ad5686_8c.html#aa4a4256f0190f9e81f6e77d6711b27b8" title="Initializes the communication peripheral and the initial Values for AD5686 Board." alt="" coords="555,400,653,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="787,1274,787,1107,784,986,777,856,765,725,746,605,719,506,702,467,683,438,670,427,653,420,655,415,672,423,687,435,707,465,724,504,751,604,770,724,782,855,790,986,793,1106,793,1274"/>
+<area shape="rect" id="Node000011" href="$ad5933_8c.html#ac086b59be4e3f1cb3344614b7a1b8ec0" title="Initializes the communication peripheral and the initial Values for AD5933 Board." alt="" coords="555,449,653,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="787,1274,786,1115,774,879,762,756,743,644,717,551,701,515,683,488,670,477,653,470,655,465,672,472,687,484,706,512,722,549,748,643,767,756,780,878,791,1115,792,1274"/>
+<area shape="rect" id="Node000012" href="$ad7091r5_8c.html#a90e8a880f37bee7db5c860350b3d0215" title=" " alt="" coords="549,499,659,524"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="787,1275,784,1124,771,903,759,788,740,683,715,596,700,562,683,537,672,527,658,521,661,516,675,523,687,534,705,560,720,594,746,682,764,787,777,902,790,1124,792,1275"/>
+<area shape="rect" id="Node000013" href="$ad7156_8c.html#abf1912546bb46e9017d48747a5398569" title="Initializes the communication peripheral and the initial Values for AD7156 Board." alt="" coords="555,548,653,573"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="786,1274,783,1132,768,926,755,819,737,721,714,641,699,610,683,586,670,575,653,568,655,563,672,571,687,583,704,607,719,639,743,720,761,818,774,925,788,1132,792,1274"/>
+<area shape="rect" id="Node000014" href="$ad7746_8c.html#a2f5d9a49f99bf836d5614406c98897c4" title="Initialize the ad7606 device structure." alt="" coords="555,597,653,623"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="786,1275,781,1142,766,950,752,851,735,761,712,686,698,657,683,636,669,625,652,618,654,613,672,620,687,632,703,655,717,684,740,759,758,850,771,949,786,1141,792,1274"/>
+<area shape="rect" id="Node000017" href="$ad799x_8c.html#a5cf26ad49fe3939cf6535c06847bf1e4" title="Initializes I2C." alt="" coords="555,647,653,672"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="786,1275,779,1150,763,973,749,882,732,799,710,731,697,705,683,685,669,674,652,667,654,662,672,670,687,682,702,702,715,729,737,798,755,882,768,973,785,1150,791,1274"/>
+<area shape="rect" id="Node000018" href="$ad9545_8c.html#a2f5e77a1a4824f86f7d46f82458a7153" title=" " alt="" coords="555,696,653,721"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="785,1275,777,1159,760,997,746,914,729,839,708,776,696,753,683,735,670,724,653,717,655,712,672,719,687,731,701,750,713,774,734,837,751,913,765,996,783,1159,791,1274"/>
+<area shape="rect" id="Node000020" href="$ade7816_8c.html#ac294be7c53212f7157e0f12ba10a04be" title="Initialize and configure the ADE7816 device." alt="" coords="551,745,657,771"/>
+<area shape="poly" id="edge20_Node000001_Node000020" title=" " alt="" coords="785,1274,775,1167,756,1020,743,945,726,877,706,822,683,784,671,774,656,767,658,762,674,769,687,780,711,819,731,876,748,944,762,1019,781,1167,790,1274"/>
+<area shape="rect" id="Node000022" href="$adm1177_8c.html#a5a0ffed7a7310caacae8870e519d32e6" title="Initializes I2C." alt="" coords="549,795,659,820"/>
+<area shape="poly" id="edge22_Node000001_Node000022" title=" " alt="" coords="784,1274,773,1177,753,1044,740,977,723,917,705,867,683,833,658,817,661,813,687,829,709,864,728,915,745,976,759,1043,779,1176,790,1274"/>
+<area shape="rect" id="Node000025" href="$adp1050_8c.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="551,844,657,869"/>
+<area shape="poly" id="edge25_Node000001_Node000025" title=" " alt="" coords="784,1275,771,1186,750,1069,720,956,703,912,683,882,671,873,656,866,659,861,674,868,687,879,707,910,725,954,755,1068,777,1186,789,1274"/>
+<area shape="rect" id="Node000029" href="$adp1055_8c.html#a00e64892f343d5d3a045a2272d11e54a" title="Initialize the ADP1055 device." alt="" coords="551,893,657,919"/>
+<area shape="poly" id="edge29_Node000001_Node000029" title=" " alt="" coords="787,1274,785,1206,771,1114,758,1065,740,1017,715,972,683,932,671,923,657,916,659,911,674,918,687,928,720,969,745,1014,763,1063,776,1113,790,1205,793,1274"/>
+<area shape="rect" id="Node000033" href="$adp5055_8c.html#ace46ac8c2d3b18ff79bcd2bfe9e9436a" title="Initialize the ADP5055 device." alt="" coords="551,943,657,968"/>
+<area shape="poly" id="edge33_Node000001_Node000033" title=" " alt="" coords="786,1274,780,1214,765,1135,752,1094,734,1053,712,1015,684,981,656,965,659,961,687,977,716,1012,739,1050,757,1092,770,1134,786,1213,791,1274"/>
+<area shape="rect" id="Node000037" href="$adp5589_8c.html#a0be6cd6c51c1a7e61eeb3e845a4ff211" title="Initializes the communication peripheral and checks if the ADP5589 part is present." alt="" coords="551,992,657,1017"/>
+<area shape="poly" id="edge37_Node000001_Node000037" title=" " alt="" coords="784,1275,776,1223,758,1158,729,1089,708,1058,684,1031,656,1015,659,1011,687,1027,712,1055,733,1087,764,1156,781,1222,790,1274"/>
+<area shape="rect" id="Node000038" href="$adpd188_8c.html#ad498aa08ccb8f2c328fcc761f391738d" title="Initialize the ADPD188 driver." alt="" coords="551,1041,657,1067"/>
+<area shape="poly" id="edge38_Node000001_Node000038" title=" " alt="" coords="782,1275,771,1233,752,1180,723,1126,705,1102,684,1080,656,1065,659,1060,687,1076,709,1098,728,1123,757,1178,776,1231,787,1274"/>
+<area shape="rect" id="Node000041" href="$adpd410x_8c.html#a8c47ad8226f8c0882232750616b4ac6d" title="Setup the device and the driver." alt="" coords="539,1091,669,1116"/>
+<area shape="poly" id="edge41_Node000001_Node000041" title=" " alt="" coords="778,1276,764,1242,744,1203,717,1163,684,1129,665,1118,667,1114,687,1125,721,1160,749,1200,769,1240,783,1274"/>
+<area shape="rect" id="Node000042" href="$adt7420_8c.html#a002fbfa6b776f9d63d6e394710c6fc49" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="553,1140,655,1165"/>
+<area shape="poly" id="edge42_Node000001_Node000042" title=" " alt="" coords="773,1278,736,1227,712,1201,684,1179,654,1165,657,1160,687,1174,715,1197,740,1224,777,1275"/>
+<area shape="rect" id="Node000046" href="$adt75_8c.html#a2999620606b565fe9ff6a0c197a9bc95" title="Initialize the device structure." alt="" coords="561,1189,647,1215"/>
+<area shape="poly" id="edge46_Node000001_Node000046" title=" " alt="" coords="763,1281,727,1254,684,1228,647,1214,648,1209,686,1224,730,1249,766,1277"/>
+<area shape="rect" id="Node000054" href="$adxl313_8c.html#acedc3d2093ee5bef7e57269f1098b88e" title=" " alt="" coords="553,1239,655,1264"/>
+<area shape="poly" id="edge54_Node000001_Node000054" title=" " alt="" coords="728,1287,653,1267,654,1262,730,1282"/>
+<area shape="rect" id="Node000058" href="$adxl345_8c.html#a4e9e8761ad2bfa6baeb1d1f1c82e0a7d" title="Initializes the communication peripheral and checks if the ADXL345 part is present." alt="" coords="553,1288,655,1313"/>
+<area shape="poly" id="edge58_Node000001_Node000058" title=" " alt="" coords="719,1303,656,1303,656,1298,719,1298"/>
+<area shape="rect" id="Node000059" href="$adxl355_8c.html#a856ba86fac725f93403ffe8971a803ce" title="Initializes the communication peripheral and checks if the ADXL355 part is present." alt="" coords="553,1337,655,1363"/>
+<area shape="poly" id="edge59_Node000001_Node000059" title=" " alt="" coords="730,1319,654,1340,653,1335,728,1314"/>
+<area shape="rect" id="Node000063" href="$adxl367_8c.html#a9441469bf596dc90e47226420481f41f" title="Initializes communication with the device and checks if the part is present by reading the device id." alt="" coords="553,1387,655,1412"/>
+<area shape="poly" id="edge63_Node000001_Node000063" title=" " alt="" coords="765,1324,729,1351,687,1376,655,1389,653,1384,684,1372,726,1347,762,1320"/>
+<area shape="rect" id="Node000067" href="$adxl372_8c.html#a30746b358cf0ef10cbdb0a8d49d37d49" title=" " alt="" coords="553,1436,655,1461"/>
+<area shape="poly" id="edge67_Node000001_Node000067" title=" " alt="" coords="777,1326,740,1376,715,1403,687,1426,657,1440,654,1435,684,1421,712,1399,736,1373,773,1323"/>
+<area shape="rect" id="Node000068" href="$adxl38x_8c.html#aaccec48025bf537298b1d2738b911f39" title="Initializes the device and checks for valid peripheral communication." alt="" coords="553,1485,655,1511"/>
+<area shape="poly" id="edge68_Node000001_Node000068" title=" " alt="" coords="783,1327,769,1361,749,1400,721,1440,687,1475,657,1491,654,1486,684,1471,717,1437,744,1398,764,1358,778,1325"/>
+<area shape="rect" id="Node000073" href="$24xx32a_8c.html#a0fb7b57ae0cbee83a14da6dc7e2dc5e2" title="Initialize the 24XX32A EEPROM." alt="" coords="523,1535,685,1560"/>
+<area shape="poly" id="edge74_Node000001_Node000073" title=" " alt="" coords="787,1328,775,1370,756,1423,727,1477,709,1502,687,1524,667,1537,664,1532,684,1520,705,1499,723,1474,751,1421,770,1369,782,1326"/>
+<area shape="rect" id="Node000074" href="$lt3074_8c.html#ab6c8397a7fd51120ae521f03fb129c6f" title="Initialize the device structure." alt="" coords="559,1584,649,1609"/>
+<area shape="poly" id="edge75_Node000001_Node000074" title=" " alt="" coords="789,1328,781,1379,763,1445,733,1513,712,1545,687,1573,670,1585,650,1593,648,1588,667,1581,684,1569,708,1542,728,1511,758,1443,776,1378,784,1327"/>
+<area shape="rect" id="Node000078" href="$lt7170_8c.html#ab0301706845e4d14a472712bf0a95823" title="Initialize the device structure." alt="" coords="559,1683,649,1708"/>
+<area shape="poly" id="edge79_Node000001_Node000078" title=" " alt="" coords="788,1328,777,1384,758,1460,728,1543,709,1584,688,1622,657,1658,625,1685,622,1680,653,1654,683,1619,705,1581,723,1541,753,1458,772,1383,783,1327"/>
+<area shape="rect" id="Node000082" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="555,1745,653,1771"/>
+<area shape="poly" id="edge83_Node000001_Node000082" title=" " alt="" coords="793,1327,790,1402,777,1505,764,1562,746,1618,720,1672,687,1721,670,1737,650,1748,647,1743,667,1732,683,1718,716,1670,741,1616,759,1561,772,1505,785,1402,787,1327"/>
+<area shape="rect" id="Node000086" href="$lt8491_8c.html#ad86595d4051d6b16d9dc353bca505617" title="Device and comm init function." alt="" coords="559,1795,649,1820"/>
+<area shape="poly" id="edge87_Node000001_Node000086" title=" " alt="" coords="790,1328,779,1427,759,1563,745,1633,729,1696,710,1748,687,1784,670,1797,650,1805,648,1800,668,1792,683,1780,705,1745,724,1694,740,1631,754,1563,774,1427,784,1327"/>
+<area shape="rect" id="Node000090" href="$ltc2992_8c.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="555,1844,653,1869"/>
+<area shape="poly" id="edge91_Node000001_Node000090" title=" " alt="" coords="790,1327,781,1436,762,1587,749,1664,732,1735,711,1793,687,1833,672,1845,655,1853,653,1848,669,1841,683,1830,707,1791,727,1733,743,1663,757,1586,776,1435,785,1327"/>
+<area shape="rect" id="Node000091" href="$ltc3337_8c.html#a4500ef2529c43659dad9b11220833780" title=" " alt="" coords="555,1893,653,1919"/>
+<area shape="poly" id="edge92_Node000001_Node000091" title=" " alt="" coords="791,1327,783,1445,765,1611,752,1696,735,1774,713,1838,701,1863,687,1882,672,1895,654,1902,652,1897,669,1890,683,1879,696,1860,708,1836,729,1772,746,1695,760,1610,778,1445,785,1327"/>
+<area shape="rect" id="Node000093" href="$ltc3350_8c.html#afecfb7444568d9f1bd24ac7174f2232b" title="Initializes the communication peripheral and checks if the LTC3350 part is present." alt="" coords="555,1943,653,1968"/>
+<area shape="poly" id="edge94_Node000001_Node000093" title=" " alt="" coords="791,1328,785,1454,768,1635,755,1728,737,1813,715,1883,702,1911,687,1932,672,1944,655,1952,652,1947,669,1939,683,1928,697,1908,710,1881,732,1811,750,1727,763,1634,779,1454,786,1327"/>
+<area shape="rect" id="Node000094" href="$ltc4162l_8c.html#a0a144b7381ce7fa0b8adf93faf500c1b" title="Initialize the LTC4162L device." alt="" coords="553,2016,655,2041"/>
+<area shape="poly" id="edge95_Node000001_Node000094" title=" " alt="" coords="791,1328,783,1461,765,1654,751,1755,734,1847,713,1925,688,1981,666,2003,640,2018,638,2014,663,1999,683,1978,708,1923,729,1846,746,1754,760,1654,778,1461,786,1327"/>
+<area shape="rect" id="Node000098" href="$ltc4306_8c.html#a9def59b80110ee73a4fce208f8257303" title="Initializes the communication peripheral and checks if the ltc4306 part is present." alt="" coords="555,2361,653,2387"/>
+<area shape="poly" id="edge99_Node000001_Node000098" title=" " alt="" coords="791,1327,782,1541,762,1866,748,2031,731,2177,711,2288,700,2326,687,2350,672,2363,655,2371,652,2366,670,2359,683,2347,695,2324,706,2287,726,2176,743,2030,757,1865,777,1541,786,1327"/>
+<area shape="rect" id="Node000100" href="$ltc7841_8c.html#a2fcb18b33431e2e40329ccc8befa7fdf" title="Initialize the device structure." alt="" coords="555,2065,653,2091"/>
+<area shape="poly" id="edge101_Node000001_Node000100" title=" " alt="" coords="792,1327,789,1476,775,1693,763,1806,744,1909,720,1995,705,2029,687,2054,672,2067,655,2074,653,2070,670,2062,683,2051,700,2026,715,1993,739,1908,757,1805,770,1693,784,1476,787,1327"/>
+<area shape="rect" id="Node000104" href="$ltm4686_8c.html#a0b6e2147eb5b7bf8eaee8910cda56cb3" title="Initialize the device structure." alt="" coords="552,2115,656,2140"/>
+<area shape="poly" id="edge105_Node000001_Node000104" title=" " alt="" coords="792,1327,790,1483,778,1716,766,1836,747,1948,721,2040,706,2076,687,2104,674,2115,657,2123,655,2118,671,2111,683,2100,701,2073,716,2038,742,1947,760,1836,773,1715,785,1483,787,1327"/>
+<area shape="rect" id="Node000108" href="$ltp8800_8c.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="555,2164,653,2189"/>
+<area shape="poly" id="edge109_Node000001_Node000108" title=" " alt="" coords="792,1327,792,1492,781,1739,769,1868,750,1987,723,2085,707,2123,687,2153,672,2166,655,2173,653,2168,670,2161,683,2150,702,2121,718,2083,745,1986,763,1867,776,1739,787,1492,787,1327"/>
+<area shape="rect" id="Node000112" href="$cn0565_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="577,2263,631,2288"/>
+<area shape="poly" id="edge113_Node000001_Node000112" title=" " alt="" coords="791,1328,780,1523,759,1816,745,1965,728,2096,709,2196,699,2230,687,2252,675,2262,661,2270,632,2277,631,2272,659,2265,672,2258,683,2248,694,2228,704,2195,723,2095,740,1964,754,1816,775,1523,785,1327"/>
+<area shape="rect" id="Node000113" href="$max31343_8c.html#ab0792afccbd256677379ba776823d85e" title="Initialize the device." alt="" coords="545,2312,663,2337"/>
+<area shape="poly" id="edge114_Node000001_Node000113" title=" " alt="" coords="791,1327,781,1532,761,1841,747,1998,730,2136,710,2242,699,2278,687,2301,665,2317,662,2313,683,2298,694,2276,705,2241,725,2136,741,1997,756,1841,776,1532,786,1327"/>
+<area shape="rect" id="Node000114" href="$max31827_8c.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="545,2460,663,2485"/>
+<area shape="poly" id="edge115_Node000001_Node000114" title=" " alt="" coords="791,1327,784,1558,765,1915,751,2097,734,2258,713,2381,701,2423,687,2449,665,2466,662,2461,683,2446,696,2421,708,2379,729,2257,746,2096,760,1914,778,1558,786,1327"/>
+<area shape="rect" id="Node000119" href="$max31875_8c.html#aab2c03aafe05ba98503addd53c99691e" title="Initialize the device driver befre use." alt="" coords="545,2411,663,2436"/>
+<area shape="poly" id="edge120_Node000001_Node000119" title=" " alt="" coords="791,1327,783,1549,764,1890,750,2063,733,2217,712,2334,700,2375,687,2400,665,2416,662,2412,683,2396,695,2373,707,2333,727,2216,745,2063,759,1890,777,1549,786,1327"/>
+<area shape="rect" id="Node000120" href="$max42500_8c.html#a2e69d1b69e84655c2709232fc48e82bc" title="Initialize the device structure." alt="" coords="545,2509,663,2535"/>
+<area shape="poly" id="edge121_Node000001_Node000120" title=" " alt="" coords="791,1327,784,1566,767,1939,753,2129,736,2298,714,2427,701,2471,687,2498,665,2515,662,2511,683,2495,696,2469,709,2425,730,2297,748,2129,761,1938,779,1566,786,1327"/>
+<area shape="rect" id="Node000122" href="$max538x_8c.html#a707a5b07b11a4bf8cd2cf1912435a73d" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="549,2213,659,2239"/>
+<area shape="poly" id="edge123_Node000001_Node000122" title=" " alt="" coords="791,1327,779,1514,758,1791,744,1932,727,2055,708,2150,698,2182,687,2202,675,2213,661,2220,658,2216,672,2209,683,2199,693,2180,703,2148,722,2054,738,1931,753,1791,774,1514,785,1327"/>
+<area shape="rect" id="Node000123" href="$max9611_8c.html#a8dd6a844e74cf6ab71b510c82a50d04a" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="549,2559,659,2584"/>
+<area shape="poly" id="edge125_Node000001_Node000123" title=" " alt="" coords="792,1327,785,1576,768,1964,754,2162,737,2338,715,2473,702,2519,687,2548,675,2559,661,2566,658,2561,672,2554,683,2544,697,2517,710,2472,732,2338,749,2162,763,1964,780,1576,786,1327"/>
+<area shape="rect" id="Node000124" href="$pcf85263_8c.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="549,2608,659,2633"/>
+<area shape="poly" id="edge126_Node000001_Node000124" title=" " alt="" coords="792,1327,786,1585,770,1990,756,2197,739,2380,716,2521,703,2568,687,2598,675,2609,661,2616,659,2611,672,2605,683,2595,698,2567,711,2519,733,2379,751,2196,765,1989,781,1585,786,1327"/>
+<area shape="rect" id="Node000126" href="$ssd__1306_8c.html#ab457949aa215087ddac57c178807acc3" title="Initializes ssd_1306 for display screening." alt="" coords="549,2657,659,2683"/>
+<area shape="poly" id="edge128_Node000001_Node000126" title=" " alt="" coords="792,1327,787,1594,771,2014,758,2229,740,2421,717,2567,703,2617,687,2648,675,2659,661,2666,658,2661,672,2654,683,2644,698,2615,712,2566,735,2420,753,2229,766,2014,781,1594,786,1327"/>
+<area shape="rect" id="Node000015" href="$iio__ad7746_8c.html#aab1cf957b500cb5329bf0629c00031e5" title=" " alt="" coords="326,299,447,324"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="540,601,521,587,500,555,492,525,491,494,495,464,499,435,499,405,492,375,473,345,461,334,446,326,449,322,464,330,477,342,497,373,505,404,504,435,501,465,497,495,497,524,505,553,525,583,543,596"/>
+<area shape="rect" id="Node000016" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="152,324,207,349"/>
+<area shape="poly" id="edge16_Node000014_Node000016" title=" " alt="" coords="541,601,521,587,503,561,496,535,495,509,498,484,500,459,499,435,491,412,473,389,454,377,425,367,350,353,270,344,207,340,207,335,271,339,351,347,426,362,456,373,476,385,495,410,504,434,505,460,503,485,500,510,501,534,508,559,525,583,544,596"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="313,323,207,336,206,331,312,318"/>
+<area shape="rect" id="Node000019" href="$ad9545_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="307,400,467,425"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="540,699,521,685,500,653,492,621,492,590,497,559,501,529,501,498,493,468,473,438,459,428,462,423,477,435,498,466,506,498,506,529,502,560,497,590,497,621,505,651,525,681,543,695"/>
+<area shape="rect" id="Node000021" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="307,449,467,475"/>
+<area shape="poly" id="edge21_Node000020_Node000021" title=" " alt="" coords="537,747,521,734,500,703,492,671,492,639,497,608,501,578,501,548,493,518,473,488,459,477,462,473,477,484,498,516,506,547,506,578,502,609,497,640,497,670,505,700,525,731,540,743"/>
+<area shape="rect" id="Node000023" href="$iio__adm1177_8c.html#a97115e321188fb0f7ec817fabf8dcbea" title=" " alt="" coords="319,499,454,524"/>
+<area shape="poly" id="edge23_Node000022_Node000023" title=" " alt="" coords="534,795,521,784,500,752,492,720,492,689,497,658,501,627,501,597,493,567,473,537,453,523,456,519,477,533,498,565,506,596,506,628,502,659,497,689,497,720,505,750,525,780,538,791"/>
+<area shape="rect" id="Node000024" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="152,499,207,524"/>
+<area shape="poly" id="edge24_Node000023_Node000024" title=" " alt="" coords="305,514,207,514,207,509,305,509"/>
+<area shape="rect" id="Node000026" href="$iio__adp1050_8c.html#a982ad0e9e00139947e5d52eacc4f1eb0" title="Initializes the ADP1050 IIO descriptor." alt="" coords="322,548,451,573"/>
+<area shape="poly" id="edge26_Node000025_Node000026" title=" " alt="" coords="537,846,521,833,500,801,492,769,492,738,497,707,501,677,501,646,493,616,473,587,450,571,453,567,477,583,498,614,506,646,506,677,502,708,497,738,497,769,505,799,525,830,540,841"/>
+<area shape="rect" id="Node000028" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="327,597,446,623"/>
+<area shape="poly" id="edge28_Node000025_Node000028" title=" " alt="" coords="537,845,521,833,503,808,495,782,494,757,496,732,499,707,497,683,490,660,473,636,460,626,445,619,447,615,463,622,477,632,495,657,503,682,504,708,502,732,500,757,501,781,508,805,525,829,540,841"/>
+<area shape="rect" id="Node000027" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="120,548,239,573"/>
+<area shape="poly" id="edge27_Node000026_Node000027" title=" " alt="" coords="308,563,239,563,239,558,308,558"/>
+<area shape="rect" id="Node000030" href="$iio__adp1055_8c.html#a5e19414c9b0490f753cf1d1add55fda6" title="Initializes the ADP1050 IIO descriptor." alt="" coords="322,647,451,672"/>
+<area shape="poly" id="edge30_Node000029_Node000030" title=" " alt="" coords="537,895,521,883,503,857,495,832,494,806,496,781,499,757,497,733,490,709,473,685,450,671,453,666,477,681,495,707,503,732,504,757,502,782,500,806,501,831,508,855,525,879,540,890"/>
+<area shape="rect" id="Node000032" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="327,696,446,721"/>
+<area shape="poly" id="edge32_Node000029_Node000032" title=" " alt="" coords="536,894,521,883,506,864,499,844,496,807,494,770,487,752,473,735,445,719,448,714,476,731,491,749,499,769,502,806,504,843,511,861,525,879,539,890"/>
+<area shape="rect" id="Node000031" href="$adp1055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="120,647,239,672"/>
+<area shape="poly" id="edge31_Node000030_Node000031" title=" " alt="" coords="308,662,239,662,239,657,308,657"/>
+<area shape="rect" id="Node000034" href="$iio__adp5055_8c.html#ac4644065226f939d8c615e9fd5a2409d" title="Initializes the ADP5055 IIO descriptor." alt="" coords="322,745,451,771"/>
+<area shape="poly" id="edge34_Node000033_Node000034" title=" " alt="" coords="536,943,521,932,506,913,499,894,496,856,494,819,487,801,473,784,450,770,453,765,476,780,491,799,499,818,502,855,504,892,511,910,525,928,539,939"/>
+<area shape="rect" id="Node000036" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="327,795,446,820"/>
+<area shape="poly" id="edge36_Node000033_Node000036" title=" " alt="" coords="537,942,521,932,509,919,502,906,496,881,490,856,484,845,473,833,445,819,448,814,476,829,488,842,495,854,501,880,507,905,514,916,524,928,539,938"/>
+<area shape="rect" id="Node000035" href="$adp5055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="120,745,239,771"/>
+<area shape="poly" id="edge35_Node000034_Node000035" title=" " alt="" coords="308,761,239,761,239,755,308,755"/>
+<area shape="rect" id="Node000039" href="$iio__adpd188_8c.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="322,844,451,869"/>
+<area shape="poly" id="edge39_Node000038_Node000039" title=" " alt="" coords="536,1042,521,1031,506,1012,499,992,496,955,494,918,487,900,473,883,450,869,453,864,476,879,491,897,499,917,502,954,504,991,511,1009,525,1027,539,1038"/>
+<area shape="rect" id="Node000040" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="152,844,207,869"/>
+<area shape="poly" id="edge40_Node000039_Node000040" title=" " alt="" coords="308,859,207,859,207,854,308,854"/>
+<area shape="rect" id="Node000043" href="$iio__adt7420_8c.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="323,893,450,919"/>
+<area shape="poly" id="edge43_Node000042_Node000043" title=" " alt="" coords="538,1142,521,1129,503,1104,495,1078,494,1053,496,1028,499,1003,497,979,490,956,473,932,449,917,452,912,476,928,495,953,503,978,504,1004,502,1028,500,1053,501,1077,508,1101,525,1125,541,1138"/>
+<area shape="rect" id="Node000045" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="327,943,446,968"/>
+<area shape="poly" id="edge45_Node000042_Node000045" title=" " alt="" coords="538,1142,521,1129,506,1110,499,1091,496,1053,494,1016,487,999,473,981,445,965,448,961,476,977,491,996,499,1015,502,1053,504,1090,511,1108,525,1125,541,1137"/>
+<area shape="rect" id="Node000044" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="120,893,239,919"/>
+<area shape="poly" id="edge44_Node000043_Node000044" title=" " alt="" coords="309,909,239,909,239,903,309,903"/>
+<area shape="rect" id="Node000047" href="$iio__adt75_8c.html#a50437084f22880ce77e5b16a172b440d" title="Initializes the ADT75 IIO descriptor." alt="" coords="331,992,442,1017"/>
+<area shape="poly" id="edge47_Node000046_Node000047" title=" " alt="" coords="546,1195,521,1179,506,1160,499,1140,496,1103,494,1066,487,1048,473,1031,458,1020,441,1013,443,1009,461,1016,476,1027,491,1045,499,1065,502,1102,504,1139,511,1157,524,1175,549,1190"/>
+<area shape="rect" id="Node000051" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="307,1041,467,1067"/>
+<area shape="poly" id="edge51_Node000046_Node000051" title=" " alt="" coords="546,1193,521,1179,509,1166,502,1153,496,1128,490,1103,484,1091,473,1080,455,1069,458,1064,476,1076,488,1088,495,1101,501,1126,507,1151,514,1163,524,1175,549,1189"/>
+<area shape="rect" id="Node000052" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="327,1091,446,1116"/>
+<area shape="poly" id="edge52_Node000046_Node000052" title=" " alt="" coords="546,1191,521,1179,506,1166,497,1153,488,1141,473,1130,445,1117,447,1112,476,1125,492,1138,501,1150,510,1163,524,1174,549,1186"/>
+<area shape="rect" id="Node000048" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,1017,251,1043"/>
+<area shape="poly" id="edge48_Node000047_Node000048" title=" " alt="" coords="318,1016,251,1024,250,1019,317,1010"/>
+<area shape="rect" id="Node000049" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="118,968,241,993"/>
+<area shape="poly" id="edge49_Node000047_Node000049" title=" " alt="" coords="317,999,241,990,241,985,318,994"/>
+<area shape="rect" id="Node000050" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,968,60,993"/>
+<area shape="poly" id="edge50_Node000049_Node000050" title=" " alt="" coords="104,983,60,983,60,978,104,978"/>
+<area shape="rect" id="Node000053" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="152,1091,207,1116"/>
+<area shape="poly" id="edge53_Node000052_Node000053" title=" " alt="" coords="313,1106,207,1106,207,1101,313,1101"/>
+<area shape="rect" id="Node000055" href="$iio__adxl313_8c.html#ae25b9cd3de1b08c9797d8bd11778471f" title=" " alt="" coords="324,1140,449,1165"/>
+<area shape="poly" id="edge55_Node000054_Node000055" title=" " alt="" coords="539,1237,521,1228,506,1216,497,1203,488,1191,473,1179,448,1168,450,1163,476,1174,492,1187,501,1200,510,1212,524,1224,541,1232"/>
+<area shape="rect" id="Node000057" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="307,1189,467,1215"/>
+<area shape="poly" id="edge57_Node000054_Node000057" title=" " alt="" coords="539,1239,443,1217,444,1212,540,1234"/>
+<area shape="rect" id="Node000056" href="$eval-adxl313z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,1140,251,1165"/>
+<area shape="poly" id="edge56_Node000055_Node000056" title=" " alt="" coords="310,1155,251,1155,251,1150,310,1150"/>
+<area shape="rect" id="Node000060" href="$iio__adxl355_8c.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="324,1239,449,1264"/>
+<area shape="poly" id="edge60_Node000059_Node000060" title=" " alt="" coords="539,1336,521,1327,506,1314,497,1301,488,1289,473,1278,448,1266,450,1261,476,1273,492,1286,501,1298,510,1311,524,1322,541,1331"/>
+<area shape="rect" id="Node000062" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="327,1288,446,1313"/>
+<area shape="poly" id="edge62_Node000059_Node000062" title=" " alt="" coords="539,1338,443,1316,444,1311,540,1333"/>
+<area shape="rect" id="Node000061" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="120,1239,239,1264"/>
+<area shape="poly" id="edge61_Node000060_Node000061" title=" " alt="" coords="310,1254,239,1254,239,1249,310,1249"/>
+<area shape="rect" id="Node000064" href="$iio__adxl367_8c.html#ab0285a11dd056b3295e75c6f3b5c64bd" title="Initializes the ADXL367 IIO driver." alt="" coords="324,1337,449,1363"/>
+<area shape="poly" id="edge64_Node000063_Node000064" title=" " alt="" coords="539,1387,443,1365,444,1360,540,1382"/>
+<area shape="rect" id="Node000066" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="299,1387,475,1412"/>
+<area shape="poly" id="edge66_Node000063_Node000066" title=" " alt="" coords="539,1402,475,1402,475,1397,539,1397"/>
+<area shape="rect" id="Node000065" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,1337,251,1363"/>
+<area shape="poly" id="edge65_Node000064_Node000065" title=" " alt="" coords="310,1353,251,1353,251,1347,310,1347"/>
+<area shape="rect" id="Node000069" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="307,1436,467,1461"/>
+<area shape="poly" id="edge69_Node000068_Node000069" title=" " alt="" coords="539,1486,443,1464,444,1459,540,1481"/>
+<area shape="rect" id="Node000070" href="$fifo__example__main_8c.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="313,1485,460,1511"/>
+<area shape="poly" id="edge70_Node000068_Node000070" title=" " alt="" coords="539,1501,460,1501,460,1495,539,1495"/>
+<area shape="rect" id="Node000072" href="$selftest__example__main_8c.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="299,1535,474,1560"/>
+<area shape="poly" id="edge72_Node000068_Node000072" title=" " alt="" coords="540,1515,444,1537,443,1532,539,1510"/>
+<area shape="rect" id="Node000071" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="152,1511,207,1536"/>
+<area shape="poly" id="edge71_Node000070_Node000071" title=" " alt="" coords="300,1511,207,1523,207,1517,299,1506"/>
+<area shape="poly" id="edge73_Node000072_Node000071" title=" " alt="" coords="285,1538,207,1529,207,1524,286,1533"/>
+<area shape="rect" id="Node000075" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="327,1584,446,1609"/>
+<area shape="poly" id="edge76_Node000074_Node000075" title=" " alt="" coords="545,1599,446,1599,446,1594,545,1594"/>
+<area shape="rect" id="Node000076" href="$iio__lt3074_8c.html#a415078dac56a0cdfeab8963d3e685f23" title="Initializes the LT3074 IIO descriptor." alt="" coords="329,1633,444,1659"/>
+<area shape="poly" id="edge77_Node000074_Node000076" title=" " alt="" coords="546,1612,444,1636,443,1631,545,1607"/>
+<area shape="rect" id="Node000077" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="120,1633,239,1659"/>
+<area shape="poly" id="edge78_Node000076_Node000077" title=" " alt="" coords="315,1649,239,1649,239,1643,315,1643"/>
+<area shape="rect" id="Node000079" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,1683,467,1708"/>
+<area shape="poly" id="edge80_Node000078_Node000079" title=" " alt="" coords="545,1698,467,1698,467,1693,545,1693"/>
+<area shape="rect" id="Node000080" href="$iio__lt7170_8c.html#a649c3cbc7a1d85cb02446a741dcb9b30" title="Initializes the LT7170 IIO descriptor." alt="" coords="329,1732,444,1757"/>
+<area shape="poly" id="edge81_Node000078_Node000080" title=" " alt="" coords="546,1711,444,1735,443,1729,545,1706"/>
+<area shape="rect" id="Node000081" href="$lt7170_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,1732,251,1757"/>
+<area shape="poly" id="edge82_Node000080_Node000081" title=" " alt="" coords="315,1747,251,1747,251,1742,315,1742"/>
+<area shape="rect" id="Node000083" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,1781,467,1807"/>
+<area shape="poly" id="edge84_Node000082_Node000083" title=" " alt="" coords="542,1771,464,1784,463,1779,541,1766"/>
+<area shape="rect" id="Node000084" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="326,1831,447,1856"/>
+<area shape="poly" id="edge85_Node000082_Node000084" title=" " alt="" coords="543,1776,524,1784,500,1802,476,1820,444,1833,442,1828,473,1816,497,1798,521,1780,541,1771"/>
+<area shape="rect" id="Node000085" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,1831,251,1856"/>
+<area shape="poly" id="edge86_Node000084_Node000085" title=" " alt="" coords="312,1846,251,1846,251,1841,312,1841"/>
+<area shape="rect" id="Node000087" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,1880,467,1905"/>
+<area shape="poly" id="edge88_Node000086_Node000087" title=" " alt="" coords="546,1824,524,1834,500,1851,476,1870,444,1882,442,1877,473,1865,497,1847,521,1829,544,1819"/>
+<area shape="rect" id="Node000088" href="$iio__lt8491_8c.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="329,1929,444,1955"/>
+<area shape="poly" id="edge89_Node000086_Node000088" title=" " alt="" coords="547,1821,524,1833,508,1854,501,1875,494,1897,476,1919,445,1935,443,1930,473,1915,489,1894,496,1873,503,1851,521,1829,544,1816"/>
+<area shape="rect" id="Node000089" href="$dc2703a_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,1929,251,1955"/>
+<area shape="poly" id="edge90_Node000088_Node000089" title=" " alt="" coords="315,1945,251,1945,251,1939,315,1939"/>
+<area shape="rect" id="Node000092" href="$ltc3337_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,1979,467,2004"/>
+<area shape="poly" id="edge93_Node000091_Node000092" title=" " alt="" coords="543,1924,524,1932,500,1950,476,1968,444,1981,442,1976,473,1964,497,1946,521,1928,541,1919"/>
+<area shape="rect" id="Node000095" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,2028,467,2053"/>
+<area shape="poly" id="edge96_Node000094_Node000095" title=" " alt="" coords="539,2035,467,2039,467,2034,539,2030"/>
+<area shape="rect" id="Node000096" href="$iio__ltc4162l_8c.html#aa69e106317388c027b866a4498ae2480" title=" " alt="" coords="324,2077,449,2103"/>
+<area shape="poly" id="edge97_Node000094_Node000096" title=" " alt="" coords="546,2048,433,2080,432,2075,544,2043"/>
+<area shape="rect" id="Node000097" href="$ltc4162l_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,2077,251,2103"/>
+<area shape="poly" id="edge98_Node000096_Node000097" title=" " alt="" coords="310,2093,251,2093,251,2087,310,2087"/>
+<area shape="rect" id="Node000099" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="307,2423,467,2448"/>
+<area shape="poly" id="edge100_Node000098_Node000099" title=" " alt="" coords="546,2393,433,2425,432,2420,544,2388"/>
+<area shape="rect" id="Node000101" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="327,2127,446,2152"/>
+<area shape="poly" id="edge102_Node000100_Node000101" title=" " alt="" coords="546,2097,433,2129,432,2124,544,2092"/>
+<area shape="rect" id="Node000102" href="$iio__ltc7841_8c.html#a08c7b193ba1977f985581017243ec512" title="Initializes the LTC7841 IIO descriptor." alt="" coords="326,2176,447,2201"/>
+<area shape="poly" id="edge103_Node000100_Node000102" title=" " alt="" coords="543,2094,524,2104,509,2119,501,2134,492,2150,476,2166,449,2179,446,2174,473,2161,488,2147,496,2131,505,2115,521,2100,540,2090"/>
+<area shape="rect" id="Node000103" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="120,2176,239,2201"/>
+<area shape="poly" id="edge104_Node000102_Node000103" title=" " alt="" coords="312,2191,239,2191,239,2186,312,2186"/>
+<area shape="rect" id="Node000105" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,2225,467,2251"/>
+<area shape="poly" id="edge106_Node000104_Node000105" title=" " alt="" coords="540,2145,524,2153,509,2168,501,2183,492,2199,476,2215,451,2228,448,2223,473,2210,488,2196,496,2181,505,2165,521,2149,538,2140"/>
+<area shape="rect" id="Node000106" href="$iio__ltm4686_8c.html#acdb0c4a357bddeb6e40db66acdedd673" title="Initializes the LTM4686 IIO descriptor." alt="" coords="323,2275,450,2300"/>
+<area shape="poly" id="edge107_Node000104_Node000106" title=" " alt="" coords="541,2143,524,2153,513,2166,506,2180,501,2207,496,2236,489,2250,476,2264,452,2279,449,2274,473,2260,484,2247,491,2234,496,2206,501,2178,509,2163,521,2149,538,2138"/>
+<area shape="rect" id="Node000107" href="$ltm4686_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,2275,251,2300"/>
+<area shape="poly" id="edge108_Node000106_Node000107" title=" " alt="" coords="309,2290,251,2290,251,2285,309,2285"/>
+<area shape="rect" id="Node000109" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="307,2324,467,2349"/>
+<area shape="poly" id="edge110_Node000108_Node000109" title=" " alt="" coords="543,2191,524,2203,513,2216,506,2229,501,2257,496,2285,489,2299,476,2313,456,2326,453,2322,473,2309,484,2296,491,2283,496,2256,501,2227,509,2213,521,2199,540,2186"/>
+<area shape="rect" id="Node000110" href="$iio__ltp8800_8c.html#a31893ef9f84551a575cc2c0f59c8a74d" title="Initializes the LTP8800 IIO descriptor." alt="" coords="325,2373,448,2399"/>
+<area shape="poly" id="edge111_Node000108_Node000110" title=" " alt="" coords="543,2190,525,2203,510,2222,503,2241,501,2281,500,2322,492,2342,476,2363,450,2379,447,2375,473,2359,487,2340,494,2320,496,2281,498,2240,505,2219,521,2199,540,2186"/>
+<area shape="rect" id="Node000111" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,2373,251,2399"/>
+<area shape="poly" id="edge112_Node000110_Node000111" title=" " alt="" coords="312,2389,251,2389,251,2383,312,2383"/>
+<area shape="rect" id="Node000115" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="327,2472,446,2497"/>
+<area shape="poly" id="edge116_Node000114_Node000115" title=" " alt="" coords="531,2479,446,2484,446,2479,531,2474"/>
+<area shape="rect" id="Node000116" href="$iio__max31827_8c.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="315,2521,458,2547"/>
+<area shape="poly" id="edge117_Node000114_Node000116" title=" " alt="" coords="546,2492,433,2524,432,2519,544,2487"/>
+<area shape="rect" id="Node000117" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="120,2521,239,2547"/>
+<area shape="poly" id="edge118_Node000116_Node000117" title=" " alt="" coords="301,2537,239,2537,239,2531,301,2531"/>
+<area shape="rect" id="Node000118" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,2521,60,2547"/>
+<area shape="poly" id="edge119_Node000117_Node000118" title=" " alt="" coords="106,2537,60,2537,60,2531,106,2531"/>
+<area shape="rect" id="Node000121" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="307,2571,467,2596"/>
+<area shape="poly" id="edge122_Node000120_Node000121" title=" " alt="" coords="546,2541,433,2573,432,2568,544,2536"/>
+<area shape="poly" id="edge124_Node000122_Node000099" title=" " alt="" coords="537,2242,525,2252,510,2271,503,2290,501,2330,500,2371,492,2392,477,2412,458,2425,455,2420,473,2408,487,2389,494,2370,496,2330,498,2289,505,2269,521,2248,534,2238"/>
+<area shape="rect" id="Node000125" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="359,2620,414,2645"/>
+<area shape="poly" id="edge127_Node000124_Node000125" title=" " alt="" coords="535,2627,414,2634,414,2629,535,2622"/>
+</map>

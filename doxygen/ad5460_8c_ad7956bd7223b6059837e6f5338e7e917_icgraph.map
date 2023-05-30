@@ -1,0 +1,5 @@
+<map id="ad5460_set_channel_vout_range" name="ad5460_set_channel_vout_range">
+<area shape="rect" id="Node000001" title="Set the voltage range for a specific channel." alt="" coords="172,5,327,45"/>
+<area shape="rect" id="Node000002" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

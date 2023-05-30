@@ -1,0 +1,15 @@
+<map id="drivers/meter/ade7913/ade7913.h" name="drivers/meter/ade7913/ade7913.h">
+<area shape="rect" id="Node000001" title="Header file of ADE7913 Driver." alt="" coords="329,5,500,45"/>
+<area shape="rect" id="Node000002" href="$ade7913_8c.html" title="Implementation of ADE7913 Driver." alt="" coords="5,93,176,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="331,51,162,96,161,91,330,46"/>
+<area shape="rect" id="Node000003" href="$eval-ade7913_2src_2common_2common__data_8h.html" title="Defines common data to be used by ADE7913 example project." alt="" coords="201,93,415,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="382,56,333,95,330,91,379,52"/>
+<area shape="rect" id="Node000005" href="$eval-ade7913_2src_2main_8c.html" title="Main function of ADE7913 example." alt="" coords="439,93,606,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="451,52,500,91,497,95,448,56"/>
+<area shape="rect" id="Node000006" href="$eval-ade7913_2src_2platform_2platform_8h.html" title="Defines platform data to be used by ADE7913 example project." alt="" coords="630,93,807,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="496,47,653,91,651,96,494,52"/>
+<area shape="rect" id="Node000004" href="$eval-ade7913_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADE7913 example project." alt="" coords="201,181,415,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="311,147,311,181,305,181,305,147"/>
+<area shape="rect" id="Node000007" href="$eval-ade7913_2src_2platform_2platform_8c.html" title="Defines platform data to be used by ADE7913 example project." alt="" coords="631,181,807,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="721,147,721,181,716,181,716,147"/>
+</map>

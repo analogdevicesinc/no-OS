@@ -1,0 +1,28 @@
+<map id="ades1754_write_dev" name="ades1754_write_dev">
+<area shape="rect" id="Node000001" title="ADES1754 write device command message." alt="" coords="503,80,659,105"/>
+<area shape="rect" id="Node000002" href="$ades1754_8c.html#a552231693c2b02463cdb088adf5c3dfe" title="Set specific alert thershold value." alt="" coords="280,5,455,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="537,77,454,45,417,33,419,28,456,39,539,72"/>
+<area shape="rect" id="Node000003" href="$ades1754_8c.html#a9087eadd5c714393fed847f75f1419f1" title="Set Cell Polarity." alt="" coords="283,55,452,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="488,84,452,80,453,75,489,79"/>
+<area shape="rect" id="Node000004" href="$ades1754_8c.html#a415d67f8019842750759f13156278777" title="ADES1754 Start/Stop Scanning function." alt="" coords="39,36,198,61"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="489,103,388,105,333,101,279,94,255,85,231,75,187,64,189,59,233,70,257,80,281,89,334,96,388,100,489,98"/>
+<area shape="rect" id="Node000005" href="$ades1754_8c.html#adab9ebabc29ae19de65b72649e194884" title="ADES1754 update device command message." alt="" coords="283,225,451,251"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="551,116,389,227,386,223,548,111"/>
+<area shape="poly" id="edge12_Node000005_Node000004" title=" " alt="" coords="344,217,278,138,257,103,247,89,231,75,197,60,199,55,233,70,251,85,261,100,282,135,348,213"/>
+<area shape="rect" id="Node000006" href="$ades1754_8c.html#abf0336a8c2479fe281f6890b1e22072e" title="Set ADC scan method." alt="" coords="19,85,218,111"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="344,217,295,170,264,146,231,126,198,113,200,108,233,121,267,141,299,166,348,213"/>
+<area shape="rect" id="Node000007" href="$ades1754_8c.html#a6b3a12d5e93621a0113c20b392f28a17" title="Cell&#45;Balancing Calibration Period Selection." alt="" coords="27,135,210,175"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="321,223,231,190,193,178,195,173,233,185,323,218"/>
+<area shape="rect" id="Node000008" href="$ades1754_8c.html#a568a6c93f7660701c4a318aa9b830d49" title="Cell&#45;Ballancing Measurement Enable/Disable." alt="" coords="6,200,231,225"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="269,231,231,227,232,221,270,225"/>
+<area shape="rect" id="Node000009" href="$ades1754_8c.html#a9f3596b0241f3b820fb2fdf73114c513" title="Set Cell Balancing mode." alt="" coords="5,249,232,275"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="270,250,233,254,232,248,269,245"/>
+<area shape="rect" id="Node000010" href="$ades1754_8c.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9" title="Set Buffer mode for data acquisition." alt="" coords="18,299,219,324"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="322,258,233,289,183,301,182,296,231,283,320,253"/>
+<area shape="rect" id="Node000011" href="$ades1754_8c.html#a9badaadef8c37481a4ccceae8b42170c" title="Set IIR filter coefficient." alt="" coords="53,348,185,373"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="344,262,295,301,233,338,186,353,184,348,231,333,292,297,341,258"/>
+<area shape="rect" id="Node000012" href="$ades1754_8c.html#aed1fbc41b15d76f6174710a8077ec948" title="Set speciic IIR filter settings." alt="" coords="39,397,199,423"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="353,264,305,326,272,359,233,387,200,401,198,396,231,382,268,355,301,323,349,261"/>
+<area shape="rect" id="Node000013" href="$ades1754_8c.html#a9f0bfa3719e1e1684c7f16b2aad35599" title="Select Scan Mode of the cells." alt="" coords="11,447,226,472"/>
+<area shape="poly" id="edge13_Node000005_Node000013" title=" " alt="" coords="358,265,340,304,314,351,278,398,234,438,211,449,209,444,230,433,274,395,309,348,336,302,354,263"/>
+</map>

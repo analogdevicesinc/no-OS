@@ -1,0 +1,5 @@
+<map id="adis_read_lpf" name="adis_read_lpf">
+<area shape="rect" id="Node000001" title="Read configured filter frequency." alt="" coords="185,5,295,31"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="5,5,137,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,21,138,21,138,15,172,15"/>
+</map>

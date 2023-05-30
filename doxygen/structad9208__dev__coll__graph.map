@@ -1,0 +1,25 @@
+<map id="ad9208_dev" name="ad9208_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="964,167,1065,193"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,85,797,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="793,111,971,165,970,170,791,116"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="707,70,715,62,735,58,752,60,762,67,765,76,760,86,755,83,760,76,758,70,750,65,735,63,718,66,711,74"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,53,490,78"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,71,674,89,674,94,503,77"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,22,184,47"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,24,208,24,332,19,429,18,526,28,646,56,711,82,709,87,645,61,525,33,429,23,332,24,208,29,198,30"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,42,343,56,343,61,198,47"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,103,491,143"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,120,645,112,676,107,676,113,646,117,505,125"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,167,801,193"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="815,177,964,177,964,183,815,183"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,167,511,193"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="525,177,669,177,669,183,525,183"/>
+<area shape="rect" id="Node000008" href="$structad9208__state.html" title=" " alt="" coords="680,241,791,266"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="798,235,939,197,966,190,967,195,941,203,799,240"/>
+<area shape="rect" id="Node000009" href="$structad9208__handle__t.html" title=" " alt="" coords="350,217,483,242"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="497,233,680,247,679,252,497,238"/>
+<area shape="rect" id="Node000010" href="$structad9208__ddc.html" title=" " alt="" coords="367,266,467,291"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="480,274,645,264,679,260,680,265,646,269,481,280"/>
+<area shape="rect" id="Node000011" href="$structjesd__param__t.html" title=" " alt="" coords="361,315,472,341"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="486,321,563,311,645,292,680,279,710,264,713,269,682,284,646,297,564,316,486,326"/>
+</map>

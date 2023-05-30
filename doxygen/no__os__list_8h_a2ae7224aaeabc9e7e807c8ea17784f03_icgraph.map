@@ -1,0 +1,26 @@
+<map id="no_os_list_get_first" name="no_os_list_get_first">
+<area shape="rect" id="Node000001" title=" " alt="" coords="701,96,848,121"/>
+<area shape="rect" id="Node000002" href="$max32650_2maxim__irq_8c.html#a27ef731c999b762011fe8aece4fd49f2" title="Free the resources allocated by no_os_irq_ctrl_init()" alt="" coords="482,21,642,47"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="732,93,652,61,615,49,617,44,654,55,734,88"/>
+<area shape="rect" id="Node000003" href="$no__os__dma_8c.html#a5348cf029fbed8be89cf5296b401b40d" title="Acquire a channel and configure the list of transfers." alt="" coords="475,71,649,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="687,101,649,96,650,91,688,96"/>
+<area shape="rect" id="Node000007" href="$no__os__dma_8c.html#a6f9f8b3688bec7db3fc05dc892da8a37" title="Abort the ongoing and any other future transfers scheduled for a channel." alt="" coords="477,120,647,145"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="688,121,648,126,647,120,687,116"/>
+<area shape="rect" id="Node000012" href="$xilinx__gpio__irq_8c.html#ad3c98022bb7c327ce457e09ec71bb93d" title="Remove the GPIO IRQ controller." alt="" coords="471,169,653,195"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="732,129,654,159,613,172,611,167,652,154,730,124"/>
+<area shape="rect" id="Node000004" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="241,26,417,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="468,71,417,63,418,57,469,66"/>
+<area shape="rect" id="Node000005" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="227,36,188,32,188,26,228,31"/>
+<area shape="rect" id="Node000006" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,55,170,95"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="228,61,170,69,170,63,227,56"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="492,118,470,110,445,95,421,80,393,69,395,64,424,76,448,91,472,105,494,113"/>
+<area shape="rect" id="Node000008" href="$stm32__i3c_8c.html#a5218a6a965be8a9597698563fc25b5b7" title="DMA callback handler." alt="" coords="236,91,423,116"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="463,123,422,118,423,112,463,118"/>
+<area shape="rect" id="Node000009" href="$stm32__i3c_8c.html#a11ae5b36e171a3fa07ccae3dfe065593" title="Abort the ongoing DMA transaction." alt="" coords="256,141,403,181"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="463,147,403,155,403,149,462,142"/>
+<area shape="rect" id="Node000010" href="$stm32__i3c_8c.html#ac495964d975b4f37c85831608e066169" title="Configure and start a series of transfers using DMA." alt="" coords="256,205,403,245"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="488,152,472,159,448,176,424,195,398,207,395,202,421,190,445,172,469,154,486,147"/>
+<area shape="rect" id="Node000011" href="$stm32__spi_8c.html#ac383af549ce0203aa73ff2c293158684" title="Abort SPI transfers." alt="" coords="256,269,403,309"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="479,154,472,159,461,170,455,182,449,207,443,233,436,246,424,259,405,272,402,268,421,255,432,243,438,231,444,206,450,180,457,167,469,155,476,150"/>
+</map>

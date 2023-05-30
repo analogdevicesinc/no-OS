@@ -1,0 +1,31 @@
+<map id="ade9153a_write" name="ade9153a_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="585,207,712,232"/>
+<area shape="rect" id="Node000002" href="$ade9153a_8c.html#af2b3784b3383441ce8a13692509c716a" title="Set PGA gain for current channel B." alt="" coords="347,5,537,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="636,195,622,160,600,119,572,78,536,44,515,33,518,28,539,40,576,75,605,116,626,158,641,193"/>
+<area shape="rect" id="Node000003" href="$ade9153a_8c.html#aabf054f4ac17617bd9b93ccb35ac1548" title="COMPMODE." alt="" coords="359,55,525,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="629,197,590,149,564,123,536,102,495,82,497,78,539,97,568,119,594,145,633,194"/>
+<area shape="rect" id="Node000004" href="$ade9153a_8c.html#a1b0d3202f129c89f6d407e01ed421bd9" title="ADE9153A setup." alt="" coords="139,105,268,131"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="622,199,583,170,536,146,467,127,395,118,327,115,269,116,269,110,327,109,395,113,468,122,538,141,586,166,625,195"/>
+<area shape="rect" id="Node000006" href="$ade9153a_8c.html#af89ce9721bb6412b724367405adb65b2" title="Start measurements." alt="" coords="385,156,499,181"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="582,206,494,184,495,179,583,201"/>
+<area shape="rect" id="Node000008" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a5b32942d81fb899bcf8c3907bc9fde17" title="Autocalibration read values." alt="" coords="108,207,299,232"/>
+<area shape="poly" id="edge15_Node000001_Node000008" title=" " alt="" coords="572,222,299,222,299,217,572,217"/>
+<area shape="rect" id="Node000009" href="$ade9153a_8c.html#a78a3139cbb4fb1dbf5cf3d3b436b4b83" title="Stop measurements." alt="" coords="381,257,503,283"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="583,238,495,260,494,255,582,233"/>
+<area shape="rect" id="Node000010" href="$ade9153a_8c.html#a6bbe212f26b3327fea7e5cfe2919f071" title="Lock device." alt="" coords="371,307,513,332"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="624,243,585,271,538,298,507,309,505,304,536,293,582,267,620,239"/>
+<area shape="rect" id="Node000011" href="$ade9153a_8c.html#a84c95b7f7f2788a321ae3d26a529966a" title="Unlock device." alt="" coords="363,356,521,381"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="635,245,596,297,569,324,539,347,514,358,512,354,536,342,566,320,592,293,630,242"/>
+<area shape="rect" id="Node000012" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a8ab286a0277c4951842d176a2ce4c41c" title="Autocalibration start." alt="" coords="363,405,521,431"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="641,246,626,280,604,321,575,362,539,396,518,408,515,403,536,392,571,358,600,318,621,278,636,244"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="368,86,264,108,263,103,367,80"/>
+<area shape="rect" id="Node000005" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,156,60,181"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="140,137,109,146,61,162,59,157,107,141,138,132"/>
+<area shape="rect" id="Node000007" href="$ade9153a_8c.html#ad93af9e1aabc3f67b04304db2fd36912" title="Initialize the device." alt="" coords="146,156,261,181"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="371,171,261,171,261,166,371,166"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="372,186,265,209,263,204,370,181"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="132,171,60,171,60,166,132,166"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="142,206,107,195,59,180,61,175,109,190,144,200"/>
+<area shape="poly" id="edge12_Node000009_Node000008" title=" " alt="" coords="367,257,263,235,264,229,368,252"/>
+<area shape="poly" id="edge17_Node000012_Node000008" title=" " alt="" coords="356,402,345,396,298,357,258,311,228,267,209,234,214,231,233,264,262,308,301,353,348,392,359,398"/>
+</map>

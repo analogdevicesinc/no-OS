@@ -1,0 +1,7 @@
+<map id="ssd_1306_move_cursor" name="ssd_1306_move_cursor">
+<area shape="rect" id="Node000001" title="Moves cursor to desired row/column." alt="" coords="219,31,393,56"/>
+<area shape="rect" id="Node000002" href="$ssd__1306_8c.html#a340aebe8804fe85f08151b8724baa370" title="Prints character at selected position." alt="" coords="9,5,167,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,34,167,30,167,24,205,29"/>
+<area shape="rect" id="Node000003" href="$ssd__1306_8c.html#a361f0ba36e9c64b13ca2a5e742f8aab3" title="Print entire screen buffer." alt="" coords="5,55,171,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,57,171,61,171,56,205,52"/>
+</map>

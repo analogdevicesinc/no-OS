@@ -1,0 +1,22 @@
+<map id="drivers/io&#45;expander/ltc4332/ltc4332.c" name="drivers/io&#45;expander/ltc4332/ltc4332.c">
+<area shape="rect" id="Node000001" title="Implementation of the SPI ltc4332 Interface." alt="" coords="235,5,384,45"/>
+<area shape="rect" id="Node000002" href="$ltc4332_8h.html" title="Header file of SPI ltc4332 Interface." alt="" coords="13,93,96,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,48,106,92,104,87,248,43"/>
+<area shape="rect" id="Node000005" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="120,93,229,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="278,48,208,89,205,84,276,43"/>
+<area shape="rect" id="Node000007" href="$no__os__alloc_8h.html" title=" " alt="" coords="254,93,365,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="312,46,312,79,307,79,307,46"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="367,167,438,192"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="336,44,359,65,380,92,393,123,401,152,396,154,388,124,375,95,355,69,333,48"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="441,93,511,119"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="350,43,440,85,438,90,348,48"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,167,104,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="57,119,57,153,52,153,52,119"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="19,240,90,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="57,192,57,226,52,226,52,192"/>
+<area shape="rect" id="Node000006" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="141,167,209,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="177,119,177,153,172,153,172,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="276,167,343,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="312,119,312,153,307,153,307,119"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="326,117,378,156,375,160,323,121"/>
+</map>

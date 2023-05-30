@@ -1,0 +1,19 @@
+<map id="projects/max31827&#45;evkit/src/platform/linux/parameters.h" name="projects/max31827&#45;evkit/src/platform/linux/parameters.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,237,45"/>
+<area shape="rect" id="Node000002" href="$linux__i2c_8h.html" title=" " alt="" coords="15,93,107,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,47,81,84,76,81,105,44"/>
+<area shape="rect" id="Node000003" href="$linux__uart_8h.html" title=" " alt="" coords="132,93,231,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="138,44,166,81,162,84,134,47"/>
+<area shape="rect" id="Node000004" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="129,167,234,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="184,119,184,153,179,153,179,119"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="47,313,118,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="160,194,131,214,105,241,92,271,87,301,81,300,87,269,100,239,127,210,157,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="243,313,325,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="205,190,235,210,262,238,277,269,284,299,279,301,272,271,258,242,231,214,202,194"/>
+<area shape="rect" id="Node000007" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="115,240,248,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="184,192,184,226,179,226,179,192"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="167,268,111,307,108,303,164,263"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="199,263,257,303,254,307,196,268"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="146,313,217,339"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="184,266,184,300,179,300,179,266"/>
+</map>

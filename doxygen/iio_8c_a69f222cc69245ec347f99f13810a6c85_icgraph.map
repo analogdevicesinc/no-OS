@@ -1,0 +1,13 @@
+<map id="iio_parse_value" name="iio_parse_value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="265,112,389,137"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a668f0e032ce85e71e07e298e044488d3" title="Handles the write request for calibbias attribute." alt="" coords="23,5,200,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,104,263,73,216,44,186,33,188,28,218,40,266,69,305,100"/>
+<area shape="rect" id="Node000003" href="$iio__adis_8c.html#aedca9e1cc912124ab7272928dcf8c349" title="Handles the write request for calibscale attribute." alt="" coords="19,55,203,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,111,217,95,167,83,168,78,218,90,272,106"/>
+<area shape="rect" id="Node000004" href="$iio__adis_8c.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="32,105,191,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,127,191,127,191,122,251,122"/>
+<area shape="rect" id="Node000005" href="$iio__adis_8c.html#ac75103dfd80247d5138fd31c30ad7eeb" title="Handles the write request for lpf attribute." alt="" coords="43,169,179,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="272,144,218,159,168,172,167,167,217,154,271,139"/>
+<area shape="rect" id="Node000006" href="$iio__adis_8c.html#a797f08ea5dd75bd9138701d8fad04e0a" title="Handles the write request for sampling frequency attribute." alt="" coords="5,219,217,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="304,149,265,180,218,208,184,221,182,216,216,204,262,176,300,145"/>
+</map>

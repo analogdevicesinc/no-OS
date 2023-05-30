@@ -1,0 +1,15 @@
+<map id="ssd1306_buffer_transmit" name="ssd1306_buffer_transmit">
+<area shape="rect" id="Node000001" title=" " alt="" coords="451,105,633,131"/>
+<area shape="rect" id="Node000002" href="$ssd__1306_8c.html#a428c4663bffffbe71c32d6b49f71b829" title="ssd_1306 turns display on/off." alt="" coords="219,5,403,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="508,100,459,72,402,44,368,33,370,28,404,40,461,67,511,96"/>
+<area shape="rect" id="Node000003" href="$ssd__1306_8c.html#ab457949aa215087ddac57c178807acc3" title="Initializes ssd_1306 for display screening." alt="" coords="255,55,366,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="469,105,366,82,367,77,470,100"/>
+<area shape="rect" id="Node000004" href="$ssd__1306_8c.html#a91b64b46dca132974241b334a100f216" title="Moves cursor to desired row/column." alt="" coords="223,156,398,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="471,136,370,159,369,153,469,131"/>
+<area shape="rect" id="Node000005" href="$ssd__1306_8c.html#a340aebe8804fe85f08151b8724baa370" title="Prints character at selected position." alt="" coords="9,132,167,157"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="437,127,167,143,167,137,437,121"/>
+<area shape="rect" id="Node000006" href="$ssd__1306_8c.html#a361f0ba36e9c64b13ca2a5e742f8aab3" title="Print entire screen buffer." alt="" coords="5,181,171,207"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="514,141,465,172,435,186,403,197,344,208,282,212,171,208,171,202,282,206,343,202,402,191,433,181,462,167,512,137"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="209,160,167,156,167,150,210,155"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="210,183,171,187,170,182,209,178"/>
+</map>

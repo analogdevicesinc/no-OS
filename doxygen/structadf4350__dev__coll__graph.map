@@ -1,0 +1,15 @@
+<map id="adf4350_dev" name="adf4350_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="329,284,436,309"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="200,196,323,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,227,368,282,365,286,288,232"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="338,200,349,209,341,216,323,219,322,214,339,212,344,209,335,205"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="188,101,335,126"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="264,140,264,196,259,196,259,140"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="87,44,78,88,79,111,88,132,110,156,138,175,169,188,200,196,199,202,168,193,136,179,107,160,83,135,74,112,72,88,82,43"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="128,35,242,98,239,103,126,40"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="359,93,508,133"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="388,142,284,198,281,194,385,138"/>
+<area shape="rect" id="Node000006" href="$structadf4350__platform__data.html" title=" " alt="" coords="418,196,593,221"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="479,232,401,286,398,282,476,227"/>
+</map>
