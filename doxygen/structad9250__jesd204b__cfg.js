@@ -1,0 +1,26 @@
+var structad9250__jesd204b__cfg =
+[
+    [ "align_sync_in_b", "structad9250__jesd204b__cfg.html#a8e3c7a49c6a85d10ac243f7bde03a7b7", null ],
+    [ "align_sys_ref", "structad9250__jesd204b__cfg.html#aa06611ee0adbf1745045118d52c856c7", null ],
+    [ "bid", "structad9250__jesd204b__cfg.html#ad8c22f68890d5313580e8e97050249e5", null ],
+    [ "cml_level", "structad9250__jesd204b__cfg.html#ade7adaf28b6076c05787b1c0820282c9", null ],
+    [ "ctrl_bits_assign", "structad9250__jesd204b__cfg.html#a84496afe69bbde26e6448a5d67707a6c", null ],
+    [ "ctrl_bits_no", "structad9250__jesd204b__cfg.html#ac9ae7342d96ce378d76563e3a0260960", null ],
+    [ "did", "structad9250__jesd204b__cfg.html#a8a6d7102dec4e0819618d08b9d4a8e31", null ],
+    [ "en_ilas_test", "structad9250__jesd204b__cfg.html#a187423c1a4418909ff6d4e50e117961b", null ],
+    [ "en_sync_in_b", "structad9250__jesd204b__cfg.html#a23c4c2a006ed94e6fd193647715d1c61", null ],
+    [ "en_sys_ref", "structad9250__jesd204b__cfg.html#a6156f80ae30a35f6018c3b8609b46769", null ],
+    [ "ilas_mode", "structad9250__jesd204b__cfg.html#ab10ca57899e1790a6402fbccfca59d56", null ],
+    [ "invert_logic_bits", "structad9250__jesd204b__cfg.html#aaa5358482f3c4ad5a902ff9ff2f32eea", null ],
+    [ "jtx_in_standby", "structad9250__jesd204b__cfg.html#ad078c90d7d6d4b8ff0fa8ca590398c03", null ],
+    [ "k", "structad9250__jesd204b__cfg.html#a560788893386d2d60884a1ab209453a9", null ],
+    [ "lane0_assign", "structad9250__jesd204b__cfg.html#a6a9af60a20f810a064370d7188fbe878", null ],
+    [ "lane1_assign", "structad9250__jesd204b__cfg.html#ad69c5d3ec78040e6eb854f55db982230", null ],
+    [ "lid0", "structad9250__jesd204b__cfg.html#a4f0f3bb4135e956d5038f5104f438488", null ],
+    [ "lid1", "structad9250__jesd204b__cfg.html#a5f766144a19db6c5dd447315c6c9d9cc", null ],
+    [ "quick_cfg_option", "structad9250__jesd204b__cfg.html#ad2a0ff937f0e090ce2a5f0f74fca8007", null ],
+    [ "scrambling", "structad9250__jesd204b__cfg.html#ac9ee84f5542161db42265ba543916f7f", null ],
+    [ "subclass", "structad9250__jesd204b__cfg.html#a32aa4e958ea79b81c823e688ea3fe384", null ],
+    [ "sys_ref_mode", "structad9250__jesd204b__cfg.html#a483f9a9266b719f751928302efd33595", null ],
+    [ "tail_bits_mode", "structad9250__jesd204b__cfg.html#a1d8832d96970fb9c79754726f6444897", null ]
+];

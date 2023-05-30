@@ -1,0 +1,22 @@
+<map id="drivers/adc/ltc2312/ltc2312.c" name="drivers/adc/ltc2312/ltc2312.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="50,5,197,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,76,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,48,46,67,23,95,19,109,19,124,29,153,24,155,14,125,13,108,18,92,43,63,73,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="33,93,101,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="112,47,86,84,81,80,108,44"/>
+<area shape="rect" id="Node000004" href="$ltc2312_8h.html" title=" " alt="" coords="299,93,382,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="176,43,297,86,295,91,174,48"/>
+<area shape="rect" id="Node000008" href="$no__os__alloc_8h.html" title=" " alt="" coords="125,93,236,119"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="139,44,166,80,162,84,135,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="367,240,437,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="384,113,428,131,449,146,466,165,470,184,464,203,450,220,434,234,430,230,446,216,459,200,465,184,461,168,445,150,426,136,382,118"/>
+<area shape="rect" id="Node000006" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="215,167,328,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="331,121,294,159,290,155,327,117"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="353,167,451,192"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="353,117,385,154,381,158,349,121"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="294,190,370,231,368,236,291,194"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="405,192,405,226,399,226,399,192"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="159,121,77,163,74,158,157,116"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="123,167,190,192"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="179,120,167,154,162,153,174,118"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="adin1110_clear_mac_addr" name="adin1110_clear_mac_addr">
+<area shape="rect" id="Node000001" title="Drop a MAC address filter." alt="" coords="207,13,399,38"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html#ac9e36fefc5436aff5d85c72e9b0f326f" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="5,5,159,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,28,159,28,159,23,193,23"/>
+</map>

@@ -1,0 +1,54 @@
+<map id="drivers/platform" name="drivers/platform">
+<area shape="rect" id="node2" href="dir_75733106c77e08a47153c295292fc58e.html" title="aducm3029" alt="" coords="475,63,573,88"/>
+<area shape="rect" id="node10" href="dir_d2978f006c706e2a0b14af72fbbcec25.html" title="mbed" alt="" coords="256,136,315,161"/>
+<area shape="poly" id="edge1" href="dir_000208_000784.html" alt="" coords="486,91,329,137,327,132,485,85"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000208_000784.html" title="1" alt="" coords="330,134,339,149"/>
+<area shape="rect" id="node15" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="1221,136,1291,161"/>
+<area shape="poly" id="edge2" href="dir_000208_000631.html" alt="" coords="574,84,586,85,760,102,896,107,1032,114,1206,133,1208,134,1207,139,1205,139,1031,119,895,113,759,108,585,91,573,89"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000208_000631.html" title="61" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="node3" href="dir_0ae676e87a0dbb1a4743e6cd33f4a7a7.html" title="altera" alt="" coords="705,63,765,88"/>
+<area shape="poly" id="edge3" href="dir_000228_000631.html" alt="" coords="765,83,778,85,897,103,991,111,1086,117,1206,133,1208,134,1207,139,1205,139,1085,123,991,116,897,109,777,91,764,88"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000228_000631.html" title="13" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="node4" href="dir_a013653facc10bc44dccc8ae566e22e4.html" title="chibios" alt="" coords="382,63,450,88"/>
+<area shape="poly" id="edge4" href="dir_000319_000784.html" alt="" coords="396,90,320,132,317,127,394,86"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000319_000784.html" title="3" alt="" coords="322,127,331,142"/>
+<area shape="poly" id="edge5" href="dir_000319_000631.html" alt="" coords="451,83,463,85,575,100,671,107,834,110,997,113,1093,120,1206,133,1208,134,1207,139,1205,139,1093,125,997,118,834,116,670,113,575,105,462,91,450,88"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000319_000631.html" title="18" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="node5" href="dir_19a7e2fb042922fa75a281eefbb7a02a.html" title="freeRTOS" alt="" coords="597,63,680,88"/>
+<area shape="poly" id="edge6" href="dir_000551_000631.html" alt="" coords="681,83,692,85,836,102,949,109,1062,116,1206,133,1208,134,1207,139,1205,139,1061,121,949,114,836,108,692,91,680,89"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000551_000631.html" title="4" alt="" coords="1200,120,1210,135"/>
+<area shape="rect" id="node6" href="dir_a10e8f5a04357e4b6d6d8a937b65724a.html" title="ftd2xx" alt="" coords="295,63,358,88"/>
+<area shape="poly" id="edge8" href="dir_000553_000784.html" alt="" coords="322,90,301,125,297,123,318,87"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000553_000784.html" title="1" alt="" coords="304,117,313,132"/>
+<area shape="poly" id="edge7" href="dir_000553_000631.html" alt="" coords="359,83,370,85,496,102,603,110,787,112,971,112,1079,119,1206,133,1208,134,1207,139,1205,139,1078,124,971,118,787,117,603,116,495,107,369,91,358,88"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000553_000631.html" title="17" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="node7" href="dir_33df6b6a98ac2cf98a99d4cd9bc23d89.html" title="generic" alt="" coords="1015,63,1086,88"/>
+<area shape="poly" id="edge9" href="dir_000554_000631.html" alt="" coords="1085,85,1211,129,1209,134,1083,91"/>
+<area shape="rect" id="edge9-headlabel" href="dir_000554_000631.html" title="22" alt="" coords="1200,115,1217,129"/>
+<area shape="rect" id="node8" href="dir_05506eb3a9f632991c1e37ae03347b32.html" title="linux" alt="" coords="217,63,271,88"/>
+<area shape="poly" id="edge10" href="dir_000644_000784.html" alt="" coords="253,87,274,123,269,125,249,90"/>
+<area shape="rect" id="edge10-headlabel" href="dir_000644_000784.html" title="1" alt="" coords="272,109,281,123"/>
+<area shape="poly" id="edge11" href="dir_000644_000631.html" alt="" coords="272,83,283,85,422,105,541,114,645,116,743,114,947,112,1066,118,1206,133,1208,134,1207,139,1205,139,1065,123,946,117,743,120,645,121,540,119,422,110,282,91,271,88"/>
+<area shape="rect" id="edge11-headlabel" href="dir_000644_000631.html" title="19" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="node9" href="dir_3d6ca3fb4d19696a07ddd3baa647c5fd.html" title="maxim" alt="" coords="125,63,193,88"/>
+<area shape="poly" id="edge12" href="dir_000725_000784.html" alt="" coords="180,86,254,127,251,131,178,90"/>
+<area shape="rect" id="edge12-headlabel" href="dir_000725_000784.html" title="66" alt="" coords="244,112,262,127"/>
+<area shape="poly" id="edge13" href="dir_000725_000631.html" alt="" coords="193,83,204,85,356,104,484,112,598,113,704,111,811,109,925,110,1054,117,1206,133,1208,134,1207,139,1205,139,1053,122,924,115,811,114,704,117,598,119,484,117,355,109,204,91,192,89"/>
+<area shape="rect" id="edge13-headlabel" href="dir_000725_000631.html" title="543" alt="" coords="1192,120,1218,135"/>
+<area shape="rect" id="node11" href="dir_48d6b6364e6b4be46aaf3267480e6169.html" title="pico" alt="" coords="942,63,991,88"/>
+<area shape="poly" id="edge14" href="dir_000806_000631.html" alt="" coords="992,82,1005,85,1209,134,1207,139,1003,91,991,87"/>
+<area shape="rect" id="edge14-headlabel" href="dir_000806_000631.html" title="40" alt="" coords="1197,120,1214,134"/>
+<area shape="rect" id="node12" href="dir_71100023361704796b90f142b5c96730.html" title="stm32" alt="" coords="38,63,101,88"/>
+<area shape="poly" id="edge15" href="dir_001053_000784.html" alt="" coords="102,84,244,131,242,136,100,89"/>
+<area shape="rect" id="edge15-headlabel" href="dir_001053_000784.html" title="13" alt="" coords="233,117,250,131"/>
+<area shape="poly" id="edge16" href="dir_001053_000631.html" alt="" coords="101,83,112,85,277,106,418,115,542,116,658,113,774,109,899,109,1040,116,1206,133,1208,134,1207,139,1205,139,1039,121,899,115,774,115,658,118,542,121,418,120,277,111,112,91,100,88"/>
+<area shape="rect" id="edge16-headlabel" href="dir_001053_000631.html" title="69" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="node13" href="dir_22e3362022d911bd85ddb4c2ef60e657.html" title="win" alt="" coords="872,63,917,88"/>
+<area shape="poly" id="edge17" href="dir_001095_000631.html" alt="" coords="918,82,931,85,1008,102,1068,111,1206,133,1208,134,1207,139,1205,139,1067,117,1007,107,930,91,917,87"/>
+<area shape="rect" id="edge17-headlabel" href="dir_001095_000631.html" title="3" alt="" coords="1201,120,1210,135"/>
+<area shape="rect" id="node14" href="dir_d48df8048749553b33f54529a54c55cb.html" title="xilinx" alt="" coords="789,63,848,88"/>
+<area shape="poly" id="edge18" href="dir_001097_000631.html" alt="" coords="849,83,861,85,957,102,1033,111,1109,119,1206,133,1208,134,1207,139,1205,139,1108,124,1032,116,956,107,859,91,848,88"/>
+<area shape="rect" id="edge18-headlabel" href="dir_001097_000631.html" title="32" alt="" coords="1196,120,1214,135"/>
+<area shape="rect" id="clust2" href="dir_481058711dd13ded877a88795a4a55f2.html" alt="" coords="27,52,1200,172"/>
+<area shape="rect" id="clust1" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="16,16,1211,183"/>
+</map>

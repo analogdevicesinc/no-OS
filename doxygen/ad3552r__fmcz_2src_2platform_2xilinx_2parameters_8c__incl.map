@@ -1,0 +1,21 @@
+<map id="projects/ad3552r_fmcz/src/platform/xilinx/parameters.c" name="projects/ad3552r_fmcz/src/platform/xilinx/parameters.c">
+<area shape="rect" id="Node000001" title="Implementation of Main Function." alt="" coords="172,5,343,60"/>
+<area shape="rect" id="Node000002" href="$ad3552r__fmcz_2src_2platform_2xilinx_2parameters_8h.html" title="Parameters Definitions." alt="" coords="203,108,312,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,60,260,94,255,94,255,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,123,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="227,136,109,179,107,174,225,131"/>
+<area shape="rect" id="Node000004" href="$xilinx__spi_8h.html" title=" " alt="" coords="147,181,243,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="249,135,216,173,212,169,245,132"/>
+<area shape="rect" id="Node000007" href="$xilinx__gpio_8h.html" title=" " alt="" coords="267,181,373,207"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="270,132,303,169,299,173,266,135"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="397,181,491,207"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="288,131,402,174,400,179,286,136"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="178,328,249,353"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="184,209,159,241,152,260,155,279,168,300,186,317,182,321,164,303,149,281,147,259,154,238,179,206"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="164,255,263,280"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="200,206,209,241,204,242,195,208"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="216,280,216,314,211,314,211,280"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="318,208,301,242,277,282,240,321,236,317,273,278,297,240,313,206"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="337,255,420,280"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="332,205,363,243,359,246,328,209"/>
+</map>

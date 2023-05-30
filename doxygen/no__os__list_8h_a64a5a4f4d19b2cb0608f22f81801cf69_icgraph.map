@@ -1,0 +1,29 @@
+<map id="no_os_list_remove" name="no_os_list_remove">
+<area shape="rect" id="Node000001" title=" " alt="" coords="703,146,847,171"/>
+<area shape="rect" id="Node000002" href="$aducm3029__irq_8c.html#a8d81135992828217a529c55f4f37c896" title="Unregister IRQ handling function for the specified irq_id." alt="" coords="460,5,655,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="750,138,707,98,653,60,628,48,630,43,656,55,711,94,754,134"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__irq_8c.html#a27ef731c999b762011fe8aece4fd49f2" title="Free the resources allocated by no_os_irq_ctrl_init()" alt="" coords="477,70,637,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="726,143,654,117,597,98,599,93,656,112,728,138"/>
+<area shape="rect" id="Node000004" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="262,121,386,146"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="688,157,386,139,386,134,689,151"/>
+<area shape="rect" id="Node000007" href="$no__os__dma_8c.html#a935f01d6ca284b7605900f40ca188748" title="Remove resources allocated for the DMA controller." alt="" coords="481,171,634,197"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="689,171,635,178,634,172,689,166"/>
+<area shape="rect" id="Node000012" href="$xilinx__gpio__irq_8c.html#a05236997187b52134d4cf978f4ea58d1" title="Initialize the GPIO IRQ controller." alt="" coords="481,221,634,246"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="734,180,656,211,613,223,612,218,654,205,732,175"/>
+<area shape="rect" id="Node000013" href="$xilinx__gpio__irq_8c.html#ad3c98022bb7c327ce457e09ec71bb93d" title="Remove the GPIO IRQ controller." alt="" coords="466,270,649,295"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="754,184,711,223,656,260,624,272,622,267,653,255,708,218,750,180"/>
+<area shape="rect" id="Node000005" href="$max32650_2maxim__spi_8c.html#aa4c18a500f7b61d872b99f2d8ca86351" title="Initialize the SPI communication peripheral." alt="" coords="44,121,149,146"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="248,136,150,136,150,131,248,131"/>
+<area shape="rect" id="Node000006" href="$stm32__spi_8c.html#ab30b6267353de9d9f7d9dab38b808021" title="Initialize the SPI communication peripheral." alt="" coords="38,170,155,195"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="252,152,156,173,155,167,251,146"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="484,171,383,149,384,143,485,166"/>
+<area shape="poly" id="edge11_Node000007_Node000006" title=" " alt="" coords="467,186,156,186,156,180,467,181"/>
+<area shape="rect" id="Node000008" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="236,221,412,261"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="492,203,406,224,405,219,491,197"/>
+<area shape="rect" id="Node000011" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="251,286,397,311"/>
+<area shape="poly" id="edge12_Node000007_Node000011" title=" " alt="" coords="471,204,462,210,446,225,438,242,430,259,414,275,389,288,387,283,410,271,426,256,433,239,442,222,458,206,469,200"/>
+<area shape="rect" id="Node000009" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,223,188,249"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="222,242,188,241,188,235,222,236"/>
+<area shape="rect" id="Node000010" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,273,170,313"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="223,267,171,279,169,274,222,262"/>
+</map>
