@@ -232,9 +232,11 @@ int hmc630x_init(struct hmc630x_dev **dev, struct hmc630x_init_param *init)
 			goto error;
 	}
 
-	ret = hmc630x_set_vco(d, init->vco);
-	if (ret)
-		goto error;
+	if (init->enabled) {
+		ret = hmc630x_set_vco(d, init->vco);
+		if (ret)
+			goto error;
+	}
 
 	*dev = d;
 	return 0;
