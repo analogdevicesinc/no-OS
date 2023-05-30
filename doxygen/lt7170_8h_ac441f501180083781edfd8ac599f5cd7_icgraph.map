@@ -1,0 +1,17 @@
+<map id="lt7170_send_byte" name="lt7170_send_byte">
+<area shape="rect" id="Node000001" title="Send a PMBus command to the device." alt="" coords="692,80,829,105"/>
+<area shape="rect" id="Node000002" href="$lt7170_8c.html#ab644f01f8b3f267685bba2c3535de601" title="Clear all asserted faults." alt="" coords="487,31,634,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="695,79,612,59,614,53,696,74"/>
+<area shape="rect" id="Node000007" href="$lt7170_8c.html#a04128a0d564876f87e321f863270f63e" title="Perform commands for non&#45;volatile memory (NVM)" alt="" coords="493,80,628,105"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="678,95,628,95,628,90,678,90"/>
+<area shape="rect" id="Node000008" href="$lt7170_8c.html#aeb649be8fcf512b48d3b7f006830ea0a" title="Perform a device software reset." alt="" coords="477,129,644,155"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="696,111,614,132,612,127,695,106"/>
+<area shape="rect" id="Node000003" href="$lt7170_8c.html#ab0301706845e4d14a472712bf0a95823" title="Initialize the device structure." alt="" coords="339,31,429,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="473,46,430,46,430,41,473,41"/>
+<area shape="rect" id="Node000004" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="325,36,291,30,291,25,326,31"/>
+<area shape="rect" id="Node000005" href="$iio__lt7170_8c.html#a649c3cbc7a1d85cb02446a741dcb9b30" title="Initializes the LT7170 IIO descriptor." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="326,55,289,61,288,56,325,50"/>
+<area shape="rect" id="Node000006" href="$lt7170_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="ade9430_update_bits" name="ade9430_update_bits">
+<area shape="rect" id="Node000001" title="Update specific register bits." alt="" coords="479,29,640,55"/>
+<area shape="rect" id="Node000002" href="$ade9430_8c.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="115,5,221,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="465,39,221,24,222,19,465,34"/>
+<area shape="rect" id="Node000004" href="$ade9430_8c.html#accf20aba0ba1faa72a1d10d63de51da3" title="Read the temperature." alt="" coords="276,55,431,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="465,56,431,60,431,55,465,51"/>
+<area shape="rect" id="Node000003" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,33,61,41,60,36,101,28"/>
+<area shape="rect" id="Node000005" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="108,55,228,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="262,70,228,70,228,65,262,65"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="94,57,60,51,61,45,95,52"/>
+</map>

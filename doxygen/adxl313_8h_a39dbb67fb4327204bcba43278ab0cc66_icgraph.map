@@ -1,0 +1,12 @@
+<map id="adxl313_set_fifo_mode" name="adxl313_set_fifo_mode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="357,55,531,80"/>
+<area shape="rect" id="Node000002" href="$iio__adxl313_8c.html#ae25b9cd3de1b08c9797d8bd11778471f" title=" " alt="" coords="178,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="377,54,293,33,294,28,379,49"/>
+<area shape="rect" id="Node000004" href="$adxl313_8c.html#ac1a3c5c02583812f53aa9def997270c0" title=" " alt="" coords="172,55,309,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="344,70,310,70,310,65,344,65"/>
+<area shape="rect" id="Node000005" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,80,124,105"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="376,85,310,95,212,100,124,98,124,93,212,94,309,90,375,80"/>
+<area shape="rect" id="Node000003" href="$eval-adxl313z_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,21,124,21,124,15,164,15"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="159,82,124,87,124,82,158,77"/>
+</map>

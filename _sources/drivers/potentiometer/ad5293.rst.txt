@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/potentiometer/ad5293/README.rst

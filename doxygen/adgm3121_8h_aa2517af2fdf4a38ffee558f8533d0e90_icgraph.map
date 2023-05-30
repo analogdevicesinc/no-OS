@@ -1,0 +1,16 @@
+<map id="adgm3121_write_register" name="adgm3121_write_register">
+<area shape="rect" id="Node000001" title="Write to device register via SPI." alt="" coords="841,132,1029,157"/>
+<area shape="rect" id="Node000002" href="$adgm3121_8c.html#a98c21e5bcdb8216eceb5dd2032f50c18" title="Set multiple switches at once using bitmask." alt="" coords="611,132,793,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,147,793,147,793,142,827,142"/>
+<area shape="rect" id="Node000003" href="$adgm3121_8c.html#a3528ba8ccee259b42c465cf478103341" title="Reset all switches to off state." alt="" coords="368,81,563,107"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="628,132,525,109,526,104,629,126"/>
+<area shape="rect" id="Node000005" href="$eval-adgm3121_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,81,124,107"/>
+<area shape="poly" id="edge8_Node000002_Node000005" title=" " alt="" coords="597,161,506,168,398,170,284,165,171,147,123,130,84,109,87,104,126,125,173,142,285,159,398,165,505,162,597,155"/>
+<area shape="rect" id="Node000004" href="$adgm3121_8c.html#a3805e18992c49ce8e5f194db46fb0ab6" title="Initialize the device." alt="" coords="187,5,305,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="414,79,283,33,285,28,416,74"/>
+<area shape="poly" id="edge7_Node000003_Node000005" title=" " alt="" coords="354,97,124,97,124,91,354,91"/>
+<area shape="rect" id="Node000006" href="$adgm3121_8c.html#a32eb50f4e2102005b779e06eb10272e3" title="Free resources allocated by adgm3121_init()" alt="" coords="172,107,320,132"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="355,109,321,113,320,108,354,104"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="203,38,97,84,95,79,201,34"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="158,110,124,105,125,100,159,104"/>
+</map>

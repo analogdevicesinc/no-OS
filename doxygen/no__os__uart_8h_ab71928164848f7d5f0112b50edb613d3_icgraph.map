@@ -1,0 +1,43 @@
+<map id="no_os_uart_stdio" name="no_os_uart_stdio">
+<area shape="rect" id="Node000001" title=" " alt="" coords="555,317,687,343"/>
+<area shape="rect" id="Node000002" href="$adin1110__standalone__example_8c.html#acbf661085a642e031f672cda6c6da4fe" title="Configure the ADIN1110 and read the device ID." alt="" coords="310,154,471,194"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="602,308,562,257,535,231,505,208,470,192,473,187,508,204,539,227,566,253,606,304"/>
+<area shape="rect" id="Node000004" href="$apard32690_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="311,55,471,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="612,304,601,258,581,201,549,142,529,116,505,93,489,83,470,76,472,71,491,79,508,89,533,112,554,139,585,198,606,256,617,303"/>
+<area shape="rect" id="Node000005" href="$hello__world_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Hello World application entry point." alt="" coords="311,104,471,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="609,305,595,268,573,224,543,181,505,144,470,128,472,123,508,140,547,177,577,222,600,266,614,303"/>
+<area shape="rect" id="Node000006" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="312,268,469,293"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="549,317,506,307,453,296,454,291,507,302,550,312"/>
+<area shape="rect" id="Node000008" href="$cmd_8c.html#a87f501fc90d5f0f69db7b44288b9a1c8" title=" " alt="" coords="347,317,434,343"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="541,333,434,333,434,327,541,327"/>
+<area shape="rect" id="Node000010" href="$example_8c.html#ae07d385c874c8d1052f87a687369ffad" title="Configure the UART." alt="" coords="333,613,448,639"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="619,357,609,409,590,476,575,511,557,545,535,576,508,603,480,619,449,627,447,622,478,614,505,599,531,572,553,542,571,509,585,474,604,408,614,356"/>
+<area shape="rect" id="Node000014" href="$esh__example_8c.html#ad05dbea90848469c4a5f6555c04452bd" title="Basic example main execution." alt="" coords="316,219,465,244"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="592,311,552,283,506,258,465,245,466,240,508,253,555,278,595,306"/>
+<area shape="rect" id="Node000015" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="331,367,450,392"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="548,348,451,369,450,364,547,343"/>
+<area shape="rect" id="Node000016" href="$eval-adg1736_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="331,416,450,441"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="594,354,555,381,508,406,451,423,450,417,506,401,552,376,591,349"/>
+<area shape="rect" id="Node000017" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="363,465,418,491"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="606,356,566,406,539,433,508,455,462,472,419,479,418,474,461,467,505,450,535,429,562,403,602,352"/>
+<area shape="rect" id="Node000018" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="363,515,418,540"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="612,357,597,391,575,431,545,471,508,504,486,516,463,523,419,530,418,524,461,518,484,511,505,500,541,467,570,428,592,388,607,355"/>
+<area shape="rect" id="Node000019" href="$cn0565_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="363,564,418,589"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="616,357,604,400,583,454,551,508,531,532,508,553,487,566,463,574,419,580,418,574,462,569,485,561,505,549,527,529,547,505,578,451,599,399,611,356"/>
+<area shape="rect" id="Node000020" href="$tcp__echo__server__example_8c.html#a71a933205bd5c61d181123850b2c6e9b" title="TCP echo example main execution." alt="" coords="275,5,507,31"/>
+<area shape="poly" id="edge20_Node000001_Node000020" title=" " alt="" coords="615,304,606,249,588,178,573,141,555,105,532,72,505,44,488,33,491,29,508,40,537,69,560,103,578,139,593,176,611,248,620,303"/>
+<area shape="rect" id="Node000003" href="$apard32690_2src_2examples_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution." alt="" coords="140,161,195,187"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="296,177,195,177,195,171,296,171"/>
+<area shape="rect" id="Node000007" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="140,268,195,293"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="298,283,195,283,195,278,298,278"/>
+<area shape="rect" id="Node000009" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="108,317,227,343"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="334,333,227,333,227,327,334,327"/>
+<area shape="rect" id="Node000011" href="$example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function." alt="" coords="108,613,227,639"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="320,629,227,629,227,623,320,623"/>
+<area shape="rect" id="Node000012" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,588,60,613"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="94,615,60,608,61,603,95,610"/>
+<area shape="rect" id="Node000013" href="$adin1320_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,637,60,663"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="95,642,61,648,60,643,94,636"/>
+<area shape="poly" id="edge14_Node000014_Node000003" title=" " alt="" coords="314,218,274,209,194,185,196,180,275,203,315,213"/>
+<area shape="poly" id="edge21_Node000020_Node000003" title=" " alt="" coords="288,38,276,44,242,72,214,104,177,162,173,160,209,101,238,68,273,40,285,33"/>
+</map>

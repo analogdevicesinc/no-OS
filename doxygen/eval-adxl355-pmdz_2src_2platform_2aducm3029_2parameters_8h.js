@@ -1,0 +1,24 @@
+var eval_adxl355_pmdz_2src_2platform_2aducm3029_2parameters_8h =
+[
+    [ "ADXL355_GPIO_CB_HANDLE", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a9fa82cda0eff74a1df93cc02cf309004", null ],
+    [ "ADXL355_GPIO_TRIG_IRQ_ID", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a5708993fab5f0d5b8c31ef40c07a96cd", null ],
+    [ "GPIO_DRDY_PIN_NUM", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a520c25131909d8307856159e3f336a62", null ],
+    [ "GPIO_DRDY_PORT_NUM", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a463e4d00eb2eab929da076ebfeb3d954", null ],
+    [ "GPIO_EXTRA", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a1b3d6026509c7f462a79b5d9f86f9e71", null ],
+    [ "GPIO_IRQ_EXTRA", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a36b90756f810e6f213d23ac0ac77c270", null ],
+    [ "GPIO_IRQ_ID", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a50e7f9b9641f6e08148e6b6ce68ed244", null ],
+    [ "GPIO_IRQ_OPS", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a3ced08d727efdd130b9fa3bbceb70c34", null ],
+    [ "GPIO_OPS", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#aa00c79541f5bcf66f6cfadcdc90e82e1", null ],
+    [ "SPI_BAUDRATE", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a4dad4b502d445b46f33cdd159e04051a", null ],
+    [ "SPI_CS", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#ade4259fa3cbb71732a4e73c18dcb9b0d", null ],
+    [ "SPI_DEVICE_ID", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a2264889066fc41987d29395b4772bd17", null ],
+    [ "SPI_EXTRA", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a66db4b9b440d992b52d4e6a6e5779e69", null ],
+    [ "SPI_OPS", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a58f6638bccd9f8463f2cb95d378b6505", null ],
+    [ "UART_BAUDRATE", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_EXTRA", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#aef2e6b5fc83c0dc37191e4212e578f7f", null ],
+    [ "UART_IRQ_ID", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#adff4ff00d8f3375e4fb198270ae24597", null ],
+    [ "UART_OPS", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#ae64afa3f3792f9fce17061e4e8733413", null ],
+    [ "adxl355_gpio_drdy_ip", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a466247d8125648924f47d4c691e0e28d", null ],
+    [ "adxl355_spi_extra_ip", "eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html#a3e2de70a1ad24cf95d1e97da135f8f2a", null ]
+];

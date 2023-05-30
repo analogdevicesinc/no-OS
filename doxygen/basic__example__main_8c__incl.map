@@ -1,0 +1,26 @@
+<map id="projects/eval&#45;adxl38x/src/examples/basic/basic_example_main.c" name="projects/eval&#45;adxl38x/src/examples/basic/basic_example_main.c">
+<area shape="rect" id="Node000001" title="Main program for basic example eval&#45;adxl38x project." alt="" coords="293,5,482,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="27,108,154,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,63,144,107,142,102,296,58"/>
+<area shape="rect" id="Node000003" href="$adxl38x_8h.html" title="Header file of ADXL38X Driver." alt="" coords="178,108,264,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="338,62,257,104,254,99,336,58"/>
+<area shape="rect" id="Node000008" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="375,181,488,207"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="397,60,416,133,426,167,421,169,411,134,392,61"/>
+<area shape="rect" id="Node000009" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="425,108,561,133"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="422,58,470,97,466,101,418,62"/>
+<area shape="rect" id="Node000011" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="586,108,654,133"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="460,58,577,101,575,106,458,63"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="204,255,275,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="178,134,77,159,34,172,12,183,8,194,13,205,24,215,40,223,87,238,191,258,191,263,86,244,38,228,21,219,8,208,3,194,9,180,32,167,75,154,177,129"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="22,181,105,207"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="197,136,103,178,101,173,195,131"/>
+<area shape="rect" id="Node000006" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="129,181,228,207"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="216,135,195,171,190,168,212,132"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="252,181,350,207"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="236,131,280,170,276,174,232,135"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="191,205,223,242,219,246,187,209"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="293,209,261,246,257,242,289,205"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="402,209,285,252,283,247,400,204"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="513,181,580,207"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="504,132,532,169,528,172,500,135"/>
+</map>

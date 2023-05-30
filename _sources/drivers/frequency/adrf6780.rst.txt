@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/frequency/adrf6780/README.rst

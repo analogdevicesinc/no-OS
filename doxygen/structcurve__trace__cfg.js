@@ -1,0 +1,25 @@
+var structcurve__trace__cfg =
+[
+    [ "abs_current_plot", "structcurve__trace__cfg.html#a6d32c1c45b18020621fa48d67d0456a6", null ],
+    [ "bjt_label", "structcurve__trace__cfg.html#a66d1ab9c0ebc6f278a5d48d92b4a6c26", null ],
+    [ "bus_label", "structcurve__trace__cfg.html#a86929a340472e0aecd991df9ad95b52b", null ],
+    [ "csv_curves", "structcurve__trace__cfg.html#ae62c19b5dddaa7b23b47989a56e02080", null ],
+    [ "csv_tag", "structcurve__trace__cfg.html#ad00422eb13a107abf043e65977d8910b", null ],
+    [ "dac_test_sweep", "structcurve__trace__cfg.html#a97f2e1ae2fe759043c214bf2fcbb25fc", null ],
+    [ "dev_ip", "structcurve__trace__cfg.html#a64c7dda27c06690d3c8681b00ce5fd71", null ],
+    [ "device_name", "structcurve__trace__cfg.html#a1c8114674b9bee31e26c750353f11282", null ],
+    [ "emitter_channel", "structcurve__trace__cfg.html#a42b188a4570895a44e5ab964d92f7546", null ],
+    [ "emitter_drive_mv", "structcurve__trace__cfg.html#a14624caf0999102f64e7b4ab76b3c558", null ],
+    [ "init", "structcurve__trace__cfg.html#a4df1940e2333606409963d00d388524e", null ],
+    [ "invert_y", "structcurve__trace__cfg.html#a44706ef22607970683dc64d4d694d7e1", null ],
+    [ "num_curves", "structcurve__trace__cfg.html#a5260e5560b4348004568482dffaf3836", null ],
+    [ "read_adc", "structcurve__trace__cfg.html#a8154e75f7d951d5749081cadf20cf89e", null ],
+    [ "remove", "structcurve__trace__cfg.html#aa65cfed2675f5d0a94a65ae3c07950cf", null ],
+    [ "reverse_fill", "structcurve__trace__cfg.html#abab98b630b0b08d263c4ee080744a454", null ],
+    [ "vb_start_mv", "structcurve__trace__cfg.html#aeb54587978b1c2d621e847ec2b0f8ab6", null ],
+    [ "vb_step_mv", "structcurve__trace__cfg.html#ad81a3723bf9110dbefa3342f51238113", null ],
+    [ "vc_start_mv", "structcurve__trace__cfg.html#aa79e92927e796b5181492116983830a1", null ],
+    [ "vc_step_mv", "structcurve__trace__cfg.html#ad99b08ac979f5ad834010d9252577ead", null ],
+    [ "verbose_init", "structcurve__trace__cfg.html#aee5df0e5d546f02c78db82f5cc075400", null ],
+    [ "write_dac", "structcurve__trace__cfg.html#ae9aeabea29c461bc6d30a0b918de3b58", null ]
+];

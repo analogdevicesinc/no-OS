@@ -1,0 +1,9 @@
+<map id="lt8491_configure_telemetry" name="lt8491_configure_telemetry">
+<area shape="rect" id="Node000001" title="Device and comm init function." alt="" coords="339,31,540,56"/>
+<area shape="rect" id="Node000002" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,32,291,28,292,23,325,27"/>
+<area shape="rect" id="Node000003" href="$iio__lt8491_8c.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="325,59,289,63,289,58,325,54"/>
+<area shape="rect" id="Node000004" href="$dc2703a_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+</map>

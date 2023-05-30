@@ -1,0 +1,25 @@
+<map id="ad5686_set_shift_reg" name="ad5686_set_shift_reg">
+<area shape="rect" id="Node000001" title="Write to input shift register." alt="" coords="255,252,415,277"/>
+<area shape="rect" id="Node000002" href="$ad5686_8c.html#a19948ba80bf52832f6356679b690089c" title="Set up DCEN register (daisy&#45;chain enable)" alt="" coords="17,5,195,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="323,239,308,196,284,143,250,89,229,65,205,44,186,33,188,29,208,40,233,61,254,86,289,140,313,194,328,237"/>
+<area shape="rect" id="Node000003" href="$ad5686_8c.html#ae9a2c1ac19cc79b87f4cdee9c2b88602" title="Set Gain mode." alt="" coords="31,55,181,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="320,241,302,207,276,167,244,127,205,94,180,81,182,76,208,89,248,123,281,164,306,204,324,238"/>
+<area shape="rect" id="Node000004" href="$ad5686_8c.html#a6170466526b42a3de6f8571bc496228b" title="Write to Internal reference setup register." alt="" coords="8,104,204,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,243,268,192,238,165,205,143,179,132,181,127,208,138,242,161,272,188,318,239"/>
+<area shape="rect" id="Node000005" href="$ad5686_8c.html#a97c30168a4d652976a1856598ee77ac1" title="Set hardware LDAC mask register." alt="" coords="33,153,179,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="303,246,258,218,206,192,172,181,173,176,208,188,261,214,306,242"/>
+<area shape="rect" id="Node000006" href="$ad5686_8c.html#aea51a3634ebc5d8d4f51b2a18da69e9d" title="Set Power&#45;down mode for DAC channel n." alt="" coords="25,203,187,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="261,252,165,231,166,225,262,246"/>
+<area shape="rect" id="Node000007" href="$ad5686_8c.html#aafba15362684ae3efb1ea930ed1fdb19" title="Set up readback register (readback enable)" alt="" coords="23,252,189,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="241,267,189,267,189,262,241,262"/>
+<area shape="rect" id="Node000008" href="$ad5686_8c.html#a72500211bf6cfd3b3159f7a22c7cf66e" title="Read back Input Register n." alt="" coords="5,301,207,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="262,283,166,304,165,299,261,278"/>
+<area shape="rect" id="Node000009" href="$ad5686_8c.html#a111437ff26adccd56f4da53e66944f9f" title="Software reset (power&#45;on reset)" alt="" coords="19,351,193,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="305,287,260,315,208,340,169,353,168,348,206,336,258,310,302,283"/>
+<area shape="rect" id="Node000010" href="$ad5686_8c.html#a721d6d5395df39a3ddafdd80f4f5008c" title="Update DAC Register n with contents of Input Register n." alt="" coords="17,400,195,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="317,290,271,341,241,367,208,390,178,402,176,397,205,385,238,363,268,337,313,287"/>
+<area shape="rect" id="Node000011" href="$ad5686_8c.html#a85da0ec7b580afc02899f08828a257fb" title="Write to Input Register n (dependent on LDAC)" alt="" coords="23,449,189,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="324,291,306,325,281,365,248,405,208,439,183,452,180,447,205,434,244,401,276,362,302,322,320,288"/>
+<area shape="rect" id="Node000012" href="$ad5686_8c.html#a692eb334565b60d469a3ac44b7970f0f" title="Write to and update DAC channel n." alt="" coords="25,499,187,539"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="328,292,312,334,287,387,253,441,232,466,208,488,187,502,184,497,205,484,228,462,248,438,282,385,307,332,323,290"/>
+</map>

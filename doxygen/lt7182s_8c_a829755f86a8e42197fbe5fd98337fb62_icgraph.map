@@ -1,0 +1,31 @@
+<map id="lt7182s_write_word" name="lt7182s_write_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write word operation." alt="" coords="612,153,761,179"/>
+<area shape="rect" id="Node000002" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="422,55,521,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="645,150,499,83,501,78,647,145"/>
+<area shape="rect" id="Node000006" href="$lt7182s_8c.html#ad40614921c324454a0248a4888a2539e" title="Set output PWM mode." alt="" coords="395,153,548,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="598,169,548,169,548,163,598,163"/>
+<area shape="rect" id="Node000007" href="$lt7182s_8c.html#a30d7bbc62643308c305c0dcec5d54a1f" title="Converts value to register data and do PMBus write word operation." alt="" coords="379,252,564,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="647,187,501,254,499,249,645,182"/>
+<area shape="rect" id="Node000003" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="192,5,311,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="408,56,308,33,309,28,409,51"/>
+<area shape="rect" id="Node000004" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="191,55,312,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="408,70,312,70,312,65,408,65"/>
+<area shape="rect" id="Node000005" href="$lt7182s_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="177,70,124,70,124,65,177,65"/>
+<area shape="rect" id="Node000008" href="$lt7182s_8c.html#a3a24a9d1ca3b1432f6dfe97ccc9ba82e" title="Set output PWM phase." alt="" coords="174,104,329,129"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="440,246,377,193,354,167,344,156,329,144,303,132,305,127,332,140,348,152,358,163,381,189,444,242"/>
+<area shape="rect" id="Node000009" href="$lt7182s_8c.html#a67047b191c7eee28ba6ac9d314f63509" title="Set overvalue and undervalue limits." alt="" coords="184,153,319,179"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="435,247,386,221,330,194,296,181,297,176,332,189,388,216,438,243"/>
+<area shape="rect" id="Node000010" href="$lt7182s_8c.html#ab4c754f18f53dc32bb754e131d73090c" title="Set timing values." alt="" coords="178,203,325,228"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="400,252,308,231,309,225,401,246"/>
+<area shape="rect" id="Node000011" href="$lt7182s_8c.html#a3891e887bc983aec4505e9c1c9dc1709" title="Set input voltage window at which power conversion will proceed." alt="" coords="189,252,313,277"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="365,267,314,267,314,262,365,262"/>
+<area shape="rect" id="Node000012" href="$lt7182s_8c.html#aa408b856baa27c190f84a3fda69cfb18" title="Set switching frequency." alt="" coords="175,301,327,327"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="401,283,309,304,308,299,400,278"/>
+<area shape="rect" id="Node000013" href="$lt7182s_8c.html#a500a3537e89858e955943ce859c4e975" title="Set output voltage margin." alt="" coords="172,351,331,376"/>
+<area shape="poly" id="edge12_Node000007_Node000013" title=" " alt="" coords="439,287,389,314,332,342,300,353,298,348,330,337,387,310,436,282"/>
+<area shape="rect" id="Node000014" href="$lt7182s_8c.html#a3b312ddcbc0b4e5759c8049992ba0422" title="Set output voltage transition rate." alt="" coords="190,400,313,425"/>
+<area shape="poly" id="edge13_Node000007_Node000014" title=" " alt="" coords="452,290,401,340,368,368,332,391,306,402,304,397,329,386,364,363,397,337,448,286"/>
+<area shape="rect" id="Node000015" href="$lt7182s_8c.html#a8fadf5958b55a1a895aaade7f17f2633" title="Set output voltage and its upper limit." alt="" coords="177,449,326,475"/>
+<area shape="poly" id="edge14_Node000007_Node000015" title=" " alt="" coords="459,291,409,365,374,405,332,440,310,452,307,447,329,436,370,402,405,361,454,288"/>
+</map>

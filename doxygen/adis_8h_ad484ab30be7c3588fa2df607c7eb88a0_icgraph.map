@@ -1,0 +1,7 @@
+<map id="adis_get_temp_scale" name="adis_get_temp_scale">
+<area shape="rect" id="Node000001" title="Read adis device temperature scale in fractional form." alt="" coords="203,31,361,56"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="5,5,155,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,34,154,30,155,25,189,29"/>
+<area shape="rect" id="Node000003" href="$eval-adis1646x_2src_2examples_2basic__example_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="21,55,139,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,57,140,63,139,58,189,52"/>
+</map>

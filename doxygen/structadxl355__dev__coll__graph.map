@@ -1,0 +1,26 @@
+<map id="adxl355_dev" name="adxl355_dev">
+<area shape="rect" id="Node000001" title="ADXL355 Device structure." alt="" coords="1189,171,1295,197"/>
+<area shape="rect" id="Node000002" href="$unionadxl355__comm__desc.html" title=" " alt="" coords="911,146,1070,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1084,165,1189,176,1189,181,1083,171"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="654,51,777,77"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="767,79,954,143,952,148,765,84"/>
+<area shape="rect" id="Node000004" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="324,51,471,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="485,61,654,61,654,67,485,67"/>
+<area shape="rect" id="Node000005" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,14,184,39"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="198,19,208,19,320,17,408,20,607,41,654,49,653,54,606,47,408,25,320,23,208,24,198,24"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="198,37,324,52,324,58,197,42"/>
+<area shape="rect" id="Node000006" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="654,146,777,171"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="790,156,911,156,911,161,790,161"/>
+<area shape="poly" id="edge11_Node000006_Node000006" title=" " alt="" coords="688,131,696,123,715,119,731,122,741,128,744,138,739,147,734,145,739,137,737,131,730,127,715,125,699,128,692,135"/>
+<area shape="rect" id="Node000007" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,165,471,190"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="484,170,653,160,654,165,485,175"/>
+<area shape="rect" id="Node000008" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,121,184,146"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="198,130,388,132,607,143,654,148,654,153,606,148,388,137,198,135"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="196,145,324,164,324,169,195,151"/>
+<area shape="rect" id="Node000009" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,215,472,255"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="485,218,606,189,630,180,666,169,668,174,632,185,607,195,486,223"/>
+<area shape="rect" id="Node000010" href="$unionadxl355__act__en__flags.html" title=" " alt="" coords="909,195,1072,221"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="1085,207,1165,201,1199,194,1201,199,1166,207,1086,213"/>
+<area shape="rect" id="Node000011" href="$struct__adxl355__act__en__flags.html" title=" " alt="" coords="631,195,800,221"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="814,205,909,205,909,211,814,211"/>
+</map>

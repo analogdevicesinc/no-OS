@@ -1,0 +1,18 @@
+<map id="ad8460_reg_read" name="ad8460_reg_read">
+<area shape="rect" id="Node000001" title="Read a register value." alt="" coords="704,44,839,69"/>
+<area shape="rect" id="Node000002" href="$ad8460_8c.html#a1e3068abd070cc03f9dfcb753cf7a70b" title="Read the shutdown flag." alt="" coords="449,5,656,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="689,45,624,33,625,28,690,40"/>
+<area shape="rect" id="Node000004" href="$ad8460_8c.html#af0e3295c734db1fabd902afa56e32f66" title="Read&#45;modify&#45;write operation." alt="" coords="462,68,643,93"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="690,68,644,73,643,68,690,63"/>
+<area shape="rect" id="Node000003" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="22,43,141,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="436,20,324,23,206,33,135,45,134,40,205,27,324,18,435,14"/>
+<area shape="rect" id="Node000005" href="$ad8460_8c.html#a4051f00e787b270af00776a820be633e" title="Enable or disable the APG mode." alt="" coords="205,92,401,117"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="449,93,402,98,401,93,448,88"/>
+<area shape="rect" id="Node000006" href="$ad8460_8c.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="5,117,157,143"/>
+<area shape="poly" id="edge9_Node000004_Node000006" title=" " alt="" coords="510,101,459,119,402,133,338,140,273,143,158,139,158,134,273,137,337,135,401,127,458,114,509,96"/>
+<area shape="rect" id="Node000007" href="$ad8460_8c.html#ab77409bb5ceced72a965c9929a6349cf" title="Reset the high voltage driver." alt="" coords="237,43,370,68"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="448,73,370,65,370,59,449,67"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="232,92,139,71,140,65,233,86"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="192,120,158,124,158,119,191,115"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="223,58,141,58,141,53,223,53"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="max31865_reg_update" name="max31865_reg_update">
+<area shape="rect" id="Node000001" title="update register contents" alt="" coords="436,131,607,156"/>
+<area shape="rect" id="Node000002" href="$max31865_8c.html#a961cf7d30e3bfd0a87c487b2d036ee60" title="Option for continuous conversions between 50/60 Hz." alt="" coords="205,5,388,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="495,123,447,83,387,44,358,33,360,28,389,40,451,79,499,119"/>
+<area shape="rect" id="Node000003" href="$max31865_8c.html#a5f8b654c7d73aeab89e99c75d85dbf4d" title="Clear all faults in FAULTSTAT." alt="" coords="213,55,380,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="469,129,334,83,336,78,471,124"/>
+<area shape="rect" id="Node000004" href="$max31865_8c.html#aae18daf93299f0050372bda29cc0d9c1" title="Read the raw 16&#45;bit value from the RTD_REG in one shot mode." alt="" coords="5,105,157,131"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="422,140,157,125,158,120,422,135"/>
+<area shape="rect" id="Node000005" href="$max31865_8c.html#a2232570c49e3759f977d6465b13d3819" title="Option for 50Hz or 60Hz noise filters." alt="" coords="205,156,388,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="422,157,389,161,388,156,422,152"/>
+<area shape="rect" id="Node000006" href="$max31865_8c.html#aa3c088db6fed7086d35df03ed771d2a0" title="Enable the bias voltage on the RTD sensor." alt="" coords="209,205,385,231"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="477,163,389,195,347,208,345,203,387,190,475,158"/>
+<area shape="rect" id="Node000007" href="$max31865_8c.html#a16561ecb3e99985382e4e7f7decf3ba4" title="N&#45;wire option for RTD measurement setup." alt="" coords="217,255,377,280"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="498,167,450,206,389,244,356,257,354,252,387,240,447,202,495,163"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="229,86,137,108,135,103,228,81"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="227,204,204,195,145,164,99,133,102,129,148,159,206,190,229,199"/>
+</map>

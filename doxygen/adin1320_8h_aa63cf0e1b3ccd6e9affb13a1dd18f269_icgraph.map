@@ -1,0 +1,5 @@
+<map id="adin1320_wol_wake_cfg" name="adin1320_wol_wake_cfg">
+<area shape="rect" id="Node000001" title="Configure Wake&#45;on&#45;LAN Wake&#45;up Events." alt="" coords="172,5,352,31"/>
+<area shape="rect" id="Node000002" href="$wake__on__lan_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,21,124,21,124,15,159,15"/>
+</map>

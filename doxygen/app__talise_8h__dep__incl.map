@@ -1,0 +1,9 @@
+<map id="projects/adrv9009/src/app/app_talise.h" name="projects/adrv9009/src/app/app_talise.h">
+<area shape="rect" id="Node000001" title="Talise initialization and control routines." alt="" coords="192,5,355,45"/>
+<area shape="rect" id="Node000002" href="$adrv9009_2src_2app_2app__clocking_8c.html" title="Clock setup and initialization routines." alt="" coords="5,93,168,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,53,129,96,126,91,219,49"/>
+<area shape="rect" id="Node000003" href="$app__talise_8c.html" title="Talise initialization and control routines." alt="" coords="192,93,355,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="276,59,276,93,271,93,271,59"/>
+<area shape="rect" id="Node000004" href="$headless__arm_8c.html" title="Contains example code for user integration with their application. This file contains code for ARM." alt="" coords="379,93,541,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,49,420,91,418,96,325,53"/>
+</map>

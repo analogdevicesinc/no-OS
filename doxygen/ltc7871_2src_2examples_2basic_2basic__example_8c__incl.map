@@ -1,0 +1,35 @@
+<map id="projects/ltc7871/src/examples/basic/basic_example.c" name="projects/ltc7871/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="Basic example source file for ltc7871 project." alt="" coords="272,5,439,60"/>
+<area shape="rect" id="Node000002" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,108,119,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="272,61,115,107,113,102,271,56"/>
+<area shape="rect" id="Node000004" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="143,108,279,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="313,62,244,103,241,99,310,58"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="190,181,289,207"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="342,61,293,135,261,173,257,170,289,132,338,59"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="681,181,781,207"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="439,51,519,74,600,106,659,138,707,171,704,175,656,143,598,110,517,79,438,56"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="461,108,588,133"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="408,58,491,99,488,104,406,62"/>
+<area shape="rect" id="Node000011" href="$ltc7871_8h.html" title="Header file for the LTC7871 Driver." alt="" coords="354,108,437,133"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="370,59,387,94,382,97,365,61"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="291,255,361,280"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="65,133,70,169,77,188,89,205,121,222,170,237,278,257,277,262,169,242,119,227,86,209,73,191,65,170,59,134"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="99,181,166,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="200,135,157,174,154,170,197,131"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="255,205,303,244,300,248,252,209"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="682,207,375,260,374,255,681,201"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="709,255,780,280"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="736,207,743,241,737,242,731,207"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="602,255,685,280"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="719,209,670,248,667,244,716,205"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="387,135,370,156,354,183,342,213,334,242,328,240,337,211,349,180,366,153,383,132"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="354,136,180,183,179,178,353,131"/>
+<area shape="poly" id="edge18_Node000011_Node000006" title=" " alt="" coords="371,136,278,178,276,173,369,131"/>
+<area shape="poly" id="edge20_Node000011_Node000007" title=" " alt="" coords="437,128,449,131,669,177,668,182,448,136,436,133"/>
+<area shape="poly" id="edge13_Node000011_Node000009" title=" " alt="" coords="437,128,545,154,592,168,618,179,629,193,637,209,644,240,639,241,632,211,625,196,615,183,591,173,544,159,436,133"/>
+<area shape="rect" id="Node000012" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="363,181,470,207"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="401,133,412,167,407,169,396,134"/>
+<area shape="rect" id="Node000013" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="495,181,605,207"/>
+<area shape="poly" id="edge19_Node000011_Node000013" title=" " alt="" coords="421,131,513,173,511,178,419,136"/>
+<area shape="poly" id="edge17_Node000012_Node000003" title=" " alt="" coords="404,209,353,248,350,244,400,205"/>
+</map>

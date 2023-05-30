@@ -1,0 +1,9 @@
+<map id="ltc2983_init" name="ltc2983_init">
+<area shape="rect" id="Node000001" title="Device and comm init function." alt="" coords="341,31,440,56"/>
+<area shape="rect" id="Node000002" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,5,292,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="327,36,292,30,293,25,328,31"/>
+<area shape="rect" id="Node000003" href="$iio__ltc2983_8c.html#a3e75fa3c60ea3f731b27f8f95b1d0f76" title="Initializes the LTC2983 IIO driver." alt="" coords="172,55,293,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="328,55,294,61,293,55,327,50"/>
+<area shape="rect" id="Node000004" href="$ltc2983_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

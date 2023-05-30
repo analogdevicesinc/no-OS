@@ -1,0 +1,17 @@
+<map id="adxl362_set_register_value" name="adxl362_set_register_value">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="245,146,404,186"/>
+<area shape="rect" id="Node000002" href="$adxl362_8c.html#a91a9d6505a4102e0d0676d5efa8583f1" title="Configures the FIFO feature." alt="" coords="29,5,174,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,137,254,89,226,65,196,44,170,33,172,28,199,40,230,60,258,85,302,134"/>
+<area shape="rect" id="Node000003" href="$adxl362_8c.html#a7d4d7e82f2a2f6d3ed88aa013b982e34" title="Selects the Output Data Rate of the device." alt="" coords="10,55,193,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="282,141,241,116,196,94,163,83,164,78,198,89,244,111,285,136"/>
+<area shape="rect" id="Node000004" href="$adxl362_8c.html#aa8b08894551865247233a1d9ac3d08ec" title="Places the device into standby/measure mode." alt="" coords="5,104,197,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,148,159,132,160,127,232,143"/>
+<area shape="rect" id="Node000005" href="$adxl362_8c.html#a248bb86ec9c4ff20e27bca063dce1e75" title="Selects the measurement range." alt="" coords="29,153,174,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="231,169,174,169,174,163,231,163"/>
+<area shape="rect" id="Node000006" href="$adxl362_8c.html#a0cc6fa4ec0b9bb68e1d59dfe139a22d7" title="Configures activity detection." alt="" coords="15,203,188,243"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="234,192,180,206,179,201,232,187"/>
+<area shape="rect" id="Node000007" href="$adxl362_8c.html#aa516c3ee05c5f49b0497aa63d1b28cab" title="Configures inactivity detection." alt="" coords="9,267,194,307"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="291,197,248,228,199,258,171,270,169,265,196,253,245,224,288,192"/>
+<area shape="rect" id="Node000008" href="$adxl362_8c.html#a9253625d2be3399d10b0ede59dc5f95c" title="Resets the device via SPI communication bus." alt="" coords="13,332,190,357"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="307,200,263,262,233,294,199,322,172,334,170,329,196,317,230,290,259,259,303,197"/>
+</map>

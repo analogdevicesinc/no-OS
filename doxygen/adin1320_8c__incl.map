@@ -1,0 +1,33 @@
+<map id="drivers/net/adin1320/adin1320.c" name="drivers/net/adin1320/adin1320.c">
+<area shape="rect" id="Node000001" title="Source file of the ADIN1320 driver." alt="" coords="214,5,370,45"/>
+<area shape="rect" id="Node000002" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="13,93,81,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,48,94,92,93,87,232,43"/>
+<area shape="rect" id="Node000003" href="$no__os__alloc_8h.html" title=" " alt="" coords="105,93,215,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,48,193,88,190,84,259,43"/>
+<area shape="rect" id="Node000006" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="475,240,589,265"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="314,43,511,228,508,232,310,47"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="560,167,667,192"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="371,36,450,56,491,72,529,91,568,121,598,154,594,157,565,125,527,96,489,77,448,61,370,41"/>
+<area shape="rect" id="Node000009" href="$adin1320_8h.html" title="Header file of the ADIN1320 driver." alt="" coords="245,93,339,119"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="295,46,295,79,289,79,289,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="142,121,71,162,69,157,139,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="93,313,163,339"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="158,120,144,167,134,239,131,299,126,299,129,238,139,166,153,118"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="402,313,473,339"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="518,267,465,307,462,303,515,263"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="618,193,618,228,613,249,603,267,578,290,549,306,517,317,487,323,486,318,516,311,546,301,575,285,599,264,608,247,613,227,613,193"/>
+<area shape="poly" id="edge11_Node000009_Node000007" title=" " alt="" coords="335,116,374,135,393,148,409,165,427,198,437,235,442,299,436,300,431,236,422,200,405,168,389,152,371,139,332,121"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="207,313,289,339"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="280,121,232,169,207,203,188,241,185,253,188,264,202,286,220,303,217,307,198,289,183,266,180,253,183,239,202,200,228,166,276,117"/>
+<area shape="rect" id="Node000011" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="198,240,298,265"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="290,120,273,167,257,227,251,226,268,166,285,118"/>
+<area shape="rect" id="Node000012" href="$no__os__mdio_8h.html" title="Header file for MDIO interface driver." alt="" coords="283,167,395,192"/>
+<area shape="poly" id="edge16_Node000009_Node000012" title=" " alt="" coords="302,118,326,154,321,157,297,120"/>
+<area shape="poly" id="edge14_Node000011_Node000005" title=" " alt="" coords="230,268,161,308,158,304,227,263"/>
+<area shape="poly" id="edge13_Node000011_Node000007" title=" " alt="" coords="279,263,394,306,393,311,277,268"/>
+<area shape="poly" id="edge15_Node000011_Node000010" title=" " alt="" coords="251,266,251,300,245,300,245,266"/>
+<area shape="poly" id="edge18_Node000012_Node000007" title=" " alt="" coords="349,191,424,300,419,303,345,194"/>
+<area shape="poly" id="edge17_Node000012_Node000010" title=" " alt="" coords="339,193,330,227,312,267,295,288,276,306,272,302,291,285,307,264,325,225,334,192"/>
+<area shape="poly" id="edge19_Node000012_Node000011" title=" " alt="" coords="326,194,275,233,272,229,322,190"/>
+</map>

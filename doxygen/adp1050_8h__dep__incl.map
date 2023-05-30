@@ -1,0 +1,18 @@
+<map id="drivers/power/adp1050/adp1050.h" name="drivers/power/adp1050/adp1050.h">
+<area shape="rect" id="Node000001" title="Header file for the ADP1050 Driver." alt="" coords="251,5,421,45"/>
+<area shape="rect" id="Node000002" href="$adp1050_8c.html" title="Source file for the ADP1050 Driver." alt="" coords="5,101,176,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="274,53,141,103,139,98,272,48"/>
+<area shape="rect" id="Node000003" href="$iio__adp1050_8c.html" title="Source file for the ADP1050 IIO Driver." alt="" coords="91,203,261,243"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,55,264,73,241,95,221,122,205,152,184,204,179,202,200,150,216,120,237,92,260,69,287,50"/>
+<area shape="rect" id="Node000004" href="$iio__adp1050_8h.html" title="Header file for the ADP1050 IIO Driver." alt="" coords="251,101,421,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="339,59,339,101,333,101,333,59"/>
+<area shape="rect" id="Node000006" href="$adp1050_2src_2common_2common__data_8h.html" title="Defines common data to be used by adp1050 examples." alt="" coords="445,101,637,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="391,48,501,98,499,103,389,53"/>
+<area shape="rect" id="Node000008" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for adp1050 project." alt="" coords="662,93,829,148"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="435,44,650,91,662,94,661,99,649,96,434,49"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="296,150,207,206,205,201,293,146"/>
+<area shape="rect" id="Node000005" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for adp1050 project." alt="" coords="286,196,461,251"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="350,153,366,195,361,197,345,154"/>
+<area shape="rect" id="Node000007" href="$adp1050_2src_2common_2common__data_8c.html" title="Defines common data to be used by adp1050 examples." alt="" coords="485,203,675,243"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="556,153,575,202,570,204,551,155"/>
+</map>

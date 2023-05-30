@@ -1,0 +1,23 @@
+<map id="max22915_init_param" name="max22915_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1172,161,1340,186"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="862,86,1025,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1039,111,1149,135,1222,158,1220,163,1147,140,1038,116"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,49,184,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,44,297,29,440,18,597,17,676,22,754,32,799,42,843,56,915,83,913,88,841,61,798,47,753,37,676,27,597,22,440,24,298,35,184,49"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="631,86,753,111"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,61,388,68,607,84,631,87,630,92,606,89,388,74,198,66"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,110,471,135"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,76,209,92,324,112,323,117,207,97,147,81"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,163,472,203"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="485,176,606,165,680,152,753,136,882,109,884,114,754,141,681,158,607,171,486,182"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,164,606,132,663,109,665,114,608,137,486,169"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="767,96,862,96,862,101,767,101"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="670,71,677,63,692,59,705,62,713,68,715,78,711,87,706,85,709,77,708,71,703,67,692,65,680,67,674,74"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,113,630,101,631,106,485,118"/>
+<area shape="rect" id="Node000007" href="$structmax22915__ow__config.html" title=" " alt="" coords="862,135,1025,161"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1039,153,1172,164,1171,169,1038,158"/>
+<area shape="rect" id="Node000008" href="$structmax22915__current__config.html" title=" " alt="" coords="848,185,1039,210"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="1052,195,1148,189,1191,183,1192,189,1148,195,1053,200"/>
+<area shape="rect" id="Node000009" href="$structmax22915__temp__config.html" title=" " alt="" coords="854,234,1033,259"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1046,233,1147,213,1189,199,1227,184,1229,189,1191,204,1149,219,1047,239"/>
+</map>

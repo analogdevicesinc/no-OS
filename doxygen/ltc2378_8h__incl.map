@@ -1,0 +1,18 @@
+<map id="drivers/adc/ltc2378/ltc2378.h" name="drivers/adc/ltc2378/ltc2378.h">
+<area shape="rect" id="Node000001" title="Header file of the LTC2378 Driver." alt="" coords="126,5,273,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="102,167,172,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,35,95,43,64,54,36,72,14,95,9,106,10,117,15,126,26,135,55,151,89,164,87,169,53,156,22,140,11,130,4,118,3,105,9,92,33,67,62,50,94,38,126,30"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="24,93,122,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,48,104,88,102,84,168,43"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="146,93,253,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="202,46,202,79,197,79,197,46"/>
+<area shape="rect" id="Node000005" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="278,93,391,119"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="233,43,304,84,301,89,231,48"/>
+<area shape="rect" id="Node000006" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="416,93,525,119"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="265,43,418,87,417,92,264,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="85,117,120,155,116,158,82,121"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="191,121,158,158,154,154,187,117"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="303,121,183,164,181,159,302,116"/>
+<area shape="rect" id="Node000007" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="436,167,504,192"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="473,119,473,153,468,153,468,119"/>
+</map>

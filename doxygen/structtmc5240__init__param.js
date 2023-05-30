@@ -1,0 +1,27 @@
+var structtmc5240__init__param =
+[
+    [ "a1", "structtmc5240__init__param.html#ae1a8805e51a140b7353f2ce96b6a4441", null ],
+    [ "a2", "structtmc5240__init__param.html#a90bcb1522d43fb07a80c98a508edf305", null ],
+    [ "amax", "structtmc5240__init__param.html#afe39a60e900a0fd7e0be3ee0b9b4a0c4", null ],
+    [ "clock", "structtmc5240__init__param.html#a492f6b560300f1040a9f71e93cf9ecb0", null ],
+    [ "current_hold", "structtmc5240__init__param.html#a8de16eb32b8a8017e2adb0958a601e40", null ],
+    [ "current_range", "structtmc5240__init__param.html#a965fbc267d91f89c209abbebc1b0c24d", null ],
+    [ "current_run", "structtmc5240__init__param.html#a00490608f2d9986914b08a5b5c0074b6", null ],
+    [ "d1", "structtmc5240__init__param.html#a04b2d012d14c8f2aaee1bd7be5ac4105", null ],
+    [ "d2", "structtmc5240__init__param.html#a7e6df47e246552e67c5200b2841405f2", null ],
+    [ "dmax", "structtmc5240__init__param.html#ad36fb0d9b3dd9d41a07d2f00b19df826", null ],
+    [ "global_scaler", "structtmc5240__init__param.html#aa74258e65a9e6de97bcaa9a33dc72494", null ],
+    [ "iholddelay", "structtmc5240__init__param.html#a7afdc71aa8b11aeee842f09891d1b8e7", null ],
+    [ "irundelay", "structtmc5240__init__param.html#a8218da23594669b4ff06300d2e091d64", null ],
+    [ "microsteps_res", "structtmc5240__init__param.html#acc9b45d8ce3c6b6733049262c808efd7", null ],
+    [ "slope_control", "structtmc5240__init__param.html#a08d69f4473d6c0fcb60aa20bf1178e23", null ],
+    [ "spi_init_param", "structtmc5240__init__param.html#a9acd7dd723e42eec5e5724bd14412870", null ],
+    [ "step_angle_millidegrees", "structtmc5240__init__param.html#ae9d0849f6b41efe30525ed57cbf791b8", null ],
+    [ "tbl", "structtmc5240__init__param.html#acadbc842e2c21e1356de9a5287fef8f1", null ],
+    [ "toff", "structtmc5240__init__param.html#a39c7bdf947a78969d89487702587d039", null ],
+    [ "v1", "structtmc5240__init__param.html#adc7faa58f8d79f59e0e1a28e559464d0", null ],
+    [ "v2", "structtmc5240__init__param.html#a3fd2afd01e8cce74b1dee817eb3afc49", null ],
+    [ "vmax", "structtmc5240__init__param.html#a1cf695ca13181ff14a993a18d92fbaa6", null ],
+    [ "vstart", "structtmc5240__init__param.html#ad15c3f0c0c2cb09d9ed4745f43533770", null ],
+    [ "vstop", "structtmc5240__init__param.html#a4527d72b97f6d142e6730513006da3c1", null ]
+];

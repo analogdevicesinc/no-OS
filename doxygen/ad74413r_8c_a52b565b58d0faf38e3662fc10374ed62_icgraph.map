@@ -1,0 +1,9 @@
+<map id="ad74413r_set_gpo_config" name="ad74413r_set_gpo_config">
+<area shape="rect" id="Node000001" title="Set the GPO operation mode." alt="" coords="256,55,443,80"/>
+<area shape="rect" id="Node000002" href="$ad74413r_8c.html#a1373c37dfab084de98014ddc693b8ff1" title="Set the logic value of a GPO pin." alt="" coords="36,5,177,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="272,55,169,33,171,28,273,49"/>
+<area shape="rect" id="Node000003" href="$ad74413r_8c.html#ae3e2afcd7de29194addc31d86dbc202d" title="Set multiple GPO values at once." alt="" coords="5,55,208,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,70,208,70,208,65,242,65"/>
+<area shape="rect" id="Node000004" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="47,104,166,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="273,85,167,107,166,102,272,80"/>
+</map>

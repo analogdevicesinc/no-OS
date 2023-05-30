@@ -1,0 +1,7 @@
+<map id="no_os_pt1000_resistance_to_temp" name="no_os_pt1000_resistance_to_temp">
+<area shape="rect" id="Node000001" title="Callendar&#45;Van Dusen equation for Pt1000 RTD (IEC 60751). Converts RTD resistance (Ohms) to temperatur..." alt="" coords="413,5,600,45"/>
+<area shape="rect" id="Node000002" href="$cn0391_8c.html#aebf6a56f4ea8daa3f5b5ce50cfd7551d" title="Perform a full temperature measurement cycle. Reads all 3 ADC channels (thermocouple,..." alt="" coords="172,13,365,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="399,28,366,28,366,23,399,23"/>
+<area shape="rect" id="Node000003" href="$eval-cn0391-ardz_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="159,28,124,28,124,23,159,23"/>
+</map>

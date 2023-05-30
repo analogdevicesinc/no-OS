@@ -1,0 +1,25 @@
+<map id="projects/eval&#45;cn0391&#45;ardz/src/common/cn0391.h" name="projects/eval&#45;cn0391&#45;ardz/src/common/cn0391.h">
+<area shape="rect" id="Node000001" title="Header file of CN0391 board support." alt="" coords="293,5,495,45"/>
+<area shape="rect" id="Node000002" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="202,93,285,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,48,279,89,277,84,357,43"/>
+<area shape="rect" id="Node000009" href="$no__os__thermocouple_8h.html" title="Header file of thermocouple temperature conversion routines." alt="" coords="309,93,479,119"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="397,46,397,79,391,79,391,46"/>
+<area shape="rect" id="Node000010" href="$no__os__rtd_8h.html" title="Header file of RTD temperature conversion routines." alt="" coords="503,93,600,119"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="433,43,517,85,515,89,431,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="165,240,236,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="227,121,203,141,184,168,181,182,182,198,190,227,185,228,176,198,176,182,180,166,199,137,223,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="414,240,497,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="285,113,368,135,406,149,431,165,449,194,456,226,451,227,444,196,427,169,403,154,366,140,284,119"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,167,293,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="246,119,246,153,241,153,241,119"/>
+<area shape="rect" id="Node000006" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,167,119,192"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="215,121,105,164,103,159,213,116"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,167,417,192"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="265,116,337,157,334,162,262,121"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="239,194,217,230,212,227,234,191"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="85,190,167,231,165,236,83,194"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="342,194,241,237,239,232,340,190"/>
+<area shape="poly" id="edge11_Node000007_Node000004" title=" " alt="" coords="383,190,432,229,429,233,380,194"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="319,240,389,265"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="368,193,361,227,356,226,363,192"/>
+</map>

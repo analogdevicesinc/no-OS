@@ -1,0 +1,24 @@
+<map id="drivers/platform/xilinx/xilinx_spi.c" name="drivers/platform/xilinx/xilinx_spi.c">
+<area shape="rect" id="Node000001" title="Implementation of Xilinx SPI Generic Driver." alt="" coords="257,5,423,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="258,167,329,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,47,321,94,303,154,298,153,316,93,331,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="139,93,256,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="307,48,231,89,229,84,305,43"/>
+<area shape="rect" id="Node000004" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,48,115,92,114,87,272,43"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="551,167,649,192"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="424,28,463,35,504,47,543,66,577,91,587,105,594,121,601,152,596,154,589,123,583,108,573,95,540,70,502,52,462,41,423,33"/>
+<area shape="rect" id="Node000008" href="$no__os__alloc_8h.html" title=" " alt="" coords="331,93,442,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="354,44,375,80,370,83,349,47"/>
+<area shape="rect" id="Node000010" href="$xilinx__spi_8h.html" title=" " alt="" coords="467,93,563,119"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="383,43,478,85,475,90,381,48"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,167,94,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="63,119,63,153,57,153,57,119"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="521,240,591,265"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="595,194,573,230,568,227,590,191"/>
+<area shape="poly" id="edge9_Node000008_Node000002" title=" " alt="" coords="373,121,321,160,318,156,370,117"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="353,167,420,192"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="389,119,389,153,384,153,384,119"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="530,117,577,156,574,160,527,121"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="520,118,541,191,551,226,546,228,536,193,515,120"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="drivers/gnss&#45;gps/nmea_ubx/nmea_ubx.h" name="drivers/gnss&#45;gps/nmea_ubx/nmea_ubx.h">
+<area shape="rect" id="Node000001" title="Header file of GNSS Driver." alt="" coords="204,5,375,45"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html" title="Implementation of GNSS Driver." alt="" coords="5,101,176,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,54,132,103,130,98,236,49"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx__gnss_8h.html" title="Platform&#45;specific implementation for NMEA/UBX GNSS devices." alt="" coords="200,101,379,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="292,59,292,101,287,101,287,59"/>
+<area shape="rect" id="Node000006" href="$eval-ublox-gnss_2src_2interrupt_2interrupt_8h.html" title="Header file of interrupt configuration for eval&#45;ublox&#45;gnss project." alt="" coords="403,93,549,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="341,49,425,91,422,96,338,54"/>
+<area shape="rect" id="Node000004" href="$nmea__ubx__gnss_8c.html" title="Platform&#45;specific implementation for NMEA/UBX GNSS devices." alt="" coords="21,203,200,243"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,150,145,206,143,201,243,145"/>
+<area shape="rect" id="Node000005" href="$eval-ublox-gnss_2src_2main_8c.html" title="Main function of GNSS example." alt="" coords="224,203,371,243"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="295,154,298,203,293,203,289,154"/>
+<area shape="rect" id="Node000007" href="$eval-ublox-gnss_2src_2interrupt_2interrupt_8c.html" title="Interrupt configuration for eval&#45;ublox&#45;gnss project." alt="" coords="403,196,549,251"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="479,162,479,196,473,196,473,162"/>
+</map>

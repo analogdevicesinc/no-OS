@@ -1,0 +1,7 @@
+<map id="gnss_ubx_get_time_fully_resolved" name="gnss_ubx_get_time_fully_resolved">
+<area shape="rect" id="Node000001" title="Check if the current time is fully resolved." alt="" coords="484,5,668,45"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a4d777ec68b02fa44f2c564f35ed007a9" title="Get comprehensive precise time information." alt="" coords="233,13,436,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="470,28,436,28,436,23,470,23"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx_8c.html#a89f1bd80bbe4d28f4edbdd1ef3008b0a" title="Get comprehensive timing information (unified API for both device types)" alt="" coords="5,13,185,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="220,28,185,28,185,23,220,23"/>
+</map>

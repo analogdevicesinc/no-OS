@@ -1,0 +1,18 @@
+<map id="ltm4686_write_byte" name="ltm4686_write_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write byte operation." alt="" coords="599,55,751,80"/>
+<area shape="rect" id="Node000002" href="$ltm4686_8c.html#a0b6e2147eb5b7bf8eaee8910cda56cb3" title="Initialize the device structure." alt="" coords="413,5,517,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="606,54,516,33,517,27,607,49"/>
+<area shape="rect" id="Node000006" href="$ltm4686_8c.html#a306c50c5863288699cc4ee356b4245ae" title="Sets the PWM mode for a specific channel of the LTM4686 device." alt="" coords="385,55,544,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="585,70,544,70,544,65,585,65"/>
+<area shape="rect" id="Node000007" href="$ltm4686_8c.html#a1a7e5bae59f54ed5ab0f7acb932d8bbc" title="Set channel operation." alt="" coords="379,104,551,129"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="608,86,520,107,519,101,606,81"/>
+<area shape="rect" id="Node000003" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="192,55,311,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="400,36,307,57,306,52,399,30"/>
+<area shape="rect" id="Node000004" href="$iio__ltm4686_8c.html#acdb0c4a357bddeb6e40db66acdedd673" title="Initializes the LTM4686 IIO descriptor." alt="" coords="188,5,315,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="399,21,315,21,315,15,399,15"/>
+<area shape="rect" id="Node000005" href="$ltm4686_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="174,21,125,21,125,15,174,15"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="395,103,306,83,308,77,396,98"/>
+<area shape="rect" id="Node000008" href="$ltm4686_8c.html#af3bb558d214e9f9228312e0fc0cd0ee8" title="Set switching frequency." alt="" coords="172,104,331,129"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="365,119,331,119,331,114,365,114"/>
+</map>

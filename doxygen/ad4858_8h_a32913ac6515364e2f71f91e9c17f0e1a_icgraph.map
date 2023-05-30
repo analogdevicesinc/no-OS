@@ -1,0 +1,9 @@
+<map id="ad4858_set_spi_data_mode" name="ad4858_set_spi_data_mode">
+<area shape="rect" id="Node000001" title="Set the SPI data mode." alt="" coords="452,31,655,56"/>
+<area shape="rect" id="Node000002" href="$ad4858_8c.html#a66fa4d0c785ded69d94ef45d087233cb" title="Set device config interface mode." alt="" coords="152,5,404,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="438,35,404,32,404,27,438,30"/>
+<area shape="rect" id="Node000004" href="$ad4858_8c.html#a49169412cb6a0c76f99dda26d2eb3de3" title="Set device data interface mode." alt="" coords="157,55,399,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="439,56,400,59,399,54,438,51"/>
+<area shape="rect" id="Node000003" href="$ad4858_8c.html#ab0cd8392c85c85d97f45b49372acd02b" title="Initialize an AD4858 device structure." alt="" coords="5,5,104,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,21,104,21,104,15,138,15"/>
+</map>

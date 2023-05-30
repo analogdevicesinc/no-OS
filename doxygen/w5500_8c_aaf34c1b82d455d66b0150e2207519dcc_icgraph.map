@@ -1,0 +1,11 @@
+<map id="w5500_read_16bit_reg" name="w5500_read_16bit_reg">
+<area shape="rect" id="Node000001" title="Read a 16&#45;bit register reliably by reading until consecutive values match." alt="" coords="233,80,403,105"/>
+<area shape="rect" id="Node000002" href="$w5500_8c.html#a5a5e49b2bdaf0ce3d53b445a164a1169" title="Receive data from a socket." alt="" coords="21,5,170,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,77,184,45,146,33,148,28,186,39,275,72"/>
+<area shape="rect" id="Node000003" href="$w5500_8c.html#aa4659c1641cf98b560e144b8b4cadaea" title="Receive data from a socket with source address information (UDP)" alt="" coords="5,55,185,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,84,185,80,186,75,220,79"/>
+<area shape="rect" id="Node000004" href="$w5500_8c.html#a5277594560890d5cc02ed35b216aad5d" title="Send data through a socket." alt="" coords="19,104,171,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="220,106,172,111,171,106,219,101"/>
+<area shape="rect" id="Node000005" href="$w5500_8c.html#a23c5030713f505976ab8f3f5037eb615" title="Send data to a specific destination (UDP)" alt="" coords="13,153,178,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="272,113,186,143,145,156,143,151,185,138,271,108"/>
+</map>

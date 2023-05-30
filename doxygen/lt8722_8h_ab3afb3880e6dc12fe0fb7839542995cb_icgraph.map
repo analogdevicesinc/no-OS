@@ -1,0 +1,11 @@
+<map id="lt8722_clear_faults" name="lt8722_clear_faults">
+<area shape="rect" id="Node000001" title="Clear LT8722 device faults." alt="" coords="477,31,624,56"/>
+<area shape="rect" id="Node000002" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="339,31,429,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="463,46,430,46,430,41,463,41"/>
+<area shape="rect" id="Node000003" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,36,291,30,291,25,326,31"/>
+<area shape="rect" id="Node000004" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="326,55,289,61,288,56,325,50"/>
+<area shape="rect" id="Node000005" href="$lt8722_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+</map>

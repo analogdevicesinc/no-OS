@@ -1,0 +1,9 @@
+<map id="no_os_i3c_send_direct_ccc" name="no_os_i3c_send_direct_ccc">
+<area shape="rect" id="Node000001" title="Send CCC to device device." alt="" coords="415,31,611,56"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#aeaf3fd8e3afd80873cb54659913f25fb" title="Enable/disable IBI (I3C only)." alt="" coords="184,5,355,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="401,34,355,30,355,24,401,29"/>
+<area shape="rect" id="Node000004" href="$ad405x_8c.html#a8481a6ed3c29e82df91aab3e88b087d5" title="Test the GETBCR, GETDCR, GETPID, AND GETSTATUS CCCs (I3C only). Compare received BCR and DCR against ..." alt="" coords="172,55,367,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="401,57,367,60,367,55,401,52"/>
+<area shape="rect" id="Node000003" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="170,21,124,21,124,15,170,15"/>
+</map>

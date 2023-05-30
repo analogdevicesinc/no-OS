@@ -1,0 +1,65 @@
+<map id="ltc7871_reg_read" name="ltc7871_reg_read">
+<area shape="rect" id="Node000001" title="Register Read." alt="" coords="1081,435,1216,461"/>
+<area shape="rect" id="Node000002" href="$ltc7871_8c.html#adb7c08f27f0eb91f95ab8a79c6bd3ba1" title="Get Frequency Spread Range." alt="" coords="843,5,1026,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1145,422,1141,350,1126,253,1111,201,1091,150,1065,102,1031,59,1017,48,1020,43,1035,55,1070,99,1096,148,1116,199,1131,252,1146,350,1150,421"/>
+<area shape="rect" id="Node000003" href="$ltc7871_8c.html#a403441fae9aee8e93867cddac2702dba" title="gets configuration of the controller programmed by the pins." alt="" coords="843,69,1026,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1143,422,1134,363,1115,285,1101,243,1082,203,1059,164,1032,130,1006,112,1010,107,1035,126,1064,161,1087,200,1106,241,1120,283,1139,362,1148,421"/>
+<area shape="rect" id="Node000004" href="$ltc7871_8c.html#aad74faf810cb9b81851e59e5f843e3cd" title="gets configuration of the controller programmed by the pins." alt="" coords="350,120,533,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1138,423,1125,382,1103,333,1072,284,1053,261,1032,242,973,205,910,177,843,157,774,144,707,136,643,132,533,134,533,128,643,127,708,130,775,138,844,152,911,172,976,201,1035,238,1057,258,1077,280,1108,331,1130,381,1143,421"/>
+<area shape="rect" id="Node000006" href="$ltc7871_8c.html#ad35a207279f9f89129a45aa9f8707980" title="gets mfr fault bit." alt="" coords="852,459,1017,485"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1068,460,1018,465,1017,460,1067,454"/>
+<area shape="rect" id="Node000007" href="$ltc7871_8c.html#ac5c828dbbf2b660c9de201acdfdd8149" title="get the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="853,509,1016,549"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1107,469,1034,498,998,512,996,507,1032,494,1105,464"/>
+<area shape="rect" id="Node000008" href="$ltc7871_8c.html#a321acfc7ff75b72febf94d9a2a7d3f74" title="get the current DAC value to program the VHIGH voltage." alt="" coords="360,184,523,224"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1133,424,1094,360,1066,326,1032,298,970,265,903,239,833,221,763,209,695,202,631,198,523,200,523,194,631,193,696,196,764,203,834,216,904,234,972,260,1035,294,1070,322,1099,357,1138,421"/>
+<area shape="rect" id="Node000009" href="$ltc7871_8c.html#aa9893b23b53dcf2bd895c666e51eebf5" title="get the current DAC value to program the VLOW voltage." alt="" coords="341,249,541,274"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="1125,427,1084,388,1032,350,972,321,907,299,841,282,775,271,648,259,541,258,541,253,648,253,775,265,842,277,909,294,974,317,1035,346,1088,384,1129,423"/>
+<area shape="rect" id="Node000010" href="$ltc7871_8c.html#a52bee1814d0dca2b1dd1d19703ea57a7" title="gets status for negative overcurrent fault condition status." alt="" coords="855,573,1014,613"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1131,473,1090,519,1064,543,1035,564,1011,576,1009,571,1032,559,1060,539,1087,515,1127,470"/>
+<area shape="rect" id="Node000011" href="$ltc7871_8c.html#a8b90902b67263c1db7f0a39a36bb5847" title="gets status for overcurrent condition status." alt="" coords="859,637,1010,677"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1140,474,1124,509,1102,550,1072,591,1035,627,1012,641,1009,637,1032,623,1068,588,1097,547,1120,506,1135,472"/>
+<area shape="rect" id="Node000012" href="$ltc7871_8c.html#afa315ff1c1bd2d17169c2a982cdef4e0" title="gets status." alt="" coords="847,702,1022,727"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="1145,475,1133,522,1112,580,1080,640,1059,668,1035,691,1014,704,1011,700,1032,687,1055,664,1076,637,1107,578,1128,520,1140,474"/>
+<area shape="rect" id="Node000013" href="$ltc7871_8c.html#a168200c3918aa692294444999dfe7d84" title="Get Modulation Signal Frequency." alt="" coords="851,751,1018,777"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1148,475,1139,530,1120,603,1105,641,1087,678,1063,712,1035,742,1018,753,1015,749,1032,738,1059,709,1082,675,1100,639,1115,601,1134,529,1142,474"/>
+<area shape="rect" id="Node000014" href="$ltc7871_8c.html#afb23136f4d5429ad9cd56e72ecf515ac" title="Read Write Protect bit for IDAC registers, and MFR_SSFM register." alt="" coords="836,361,1033,386"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1109,432,1032,400,994,389,995,383,1034,395,1111,427"/>
+<area shape="rect" id="Node000020" href="$ltc7871_8c.html#a42ea5fb86c05f571ffbe1180d950e6fd" title="Read PEC fault bit." alt="" coords="848,801,1021,826"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="1149,475,1143,539,1126,624,1112,670,1092,714,1067,755,1035,791,1018,803,1015,798,1032,787,1063,752,1088,712,1107,668,1121,623,1138,538,1144,474"/>
+<area shape="rect" id="Node000021" href="$ltc7871_8c.html#ad89c866c79b2a76217cf8bf976df4a68" title="Write to LTC7871 device register with mask." alt="" coords="844,410,1025,435"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="1067,441,1025,436,1026,431,1068,436"/>
+<area shape="rect" id="Node000005" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,274,292,299"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="353,168,343,174,311,198,284,226,245,275,241,272,280,223,308,194,340,170,351,163"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="362,231,342,238,260,276,258,271,340,234,360,226"/>
+<area shape="poly" id="edge10_Node000009_Node000005" title=" " alt="" coords="328,278,293,282,292,277,328,272"/>
+<area shape="rect" id="Node000015" href="$ltc7871_8c.html#a21c22ab9a7876ab2eac5ef74aa428bb9" title="Set Frequency Spread Range." alt="" coords="598,349,779,389"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="822,374,780,373,780,368,822,369"/>
+<area shape="rect" id="Node000016" href="$ltc7871_8c.html#a6785a0e9c841036825e9a39a8f3124d5" title="stores the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="608,464,769,504"/>
+<area shape="poly" id="edge17_Node000014_Node000016" title=" " alt="" coords="849,393,837,400,823,412,814,425,805,439,790,453,764,466,762,461,786,448,801,436,809,422,819,408,835,395,847,389"/>
+<area shape="rect" id="Node000017" href="$ltc7871_8c.html#a35de5774bc09f4c0991300d2e652d8df" title="stores the current DAC value to program the VHIGH voltage." alt="" coords="608,285,769,325"/>
+<area shape="poly" id="edge18_Node000014_Node000017" title=" " alt="" coords="874,359,761,328,763,323,875,354"/>
+<area shape="rect" id="Node000018" href="$ltc7871_8c.html#aea03d5056be2372d7c846964d8ea7555" title="stores the current DAC value to program the VLOW voltage." alt="" coords="589,414,788,439"/>
+<area shape="poly" id="edge20_Node000014_Node000018" title=" " alt="" coords="863,392,748,417,747,411,861,386"/>
+<area shape="rect" id="Node000019" href="$ltc7871_8c.html#a73042797a3127e7b4eac4b20ba6d2c24" title="Set Modulation Signal Frequency." alt="" coords="605,529,772,554"/>
+<area shape="poly" id="edge22_Node000014_Node000019" title=" " alt="" coords="843,395,838,399,826,413,819,427,815,457,810,488,803,503,790,518,770,531,767,526,786,514,798,500,805,486,809,456,814,426,821,410,834,395,840,391"/>
+<area shape="poly" id="edge19_Node000017_Node000005" title=" " alt="" coords="594,304,292,292,292,286,594,299"/>
+<area shape="poly" id="edge21_Node000018_Node000005" title=" " alt="" coords="622,413,589,404,410,348,270,302,272,297,411,343,590,399,624,408"/>
+<area shape="poly" id="edge31_Node000021_Node000015" title=" " alt="" coords="861,410,779,392,780,386,863,404"/>
+<area shape="poly" id="edge32_Node000021_Node000016" title=" " alt="" coords="869,441,837,449,769,467,767,461,835,444,868,436"/>
+<area shape="poly" id="edge33_Node000021_Node000017" title=" " alt="" coords="848,407,834,399,818,385,809,369,801,354,786,339,765,328,768,323,790,335,805,351,814,366,822,381,838,395,851,402"/>
+<area shape="poly" id="edge34_Node000021_Node000018" title=" " alt="" coords="830,427,788,428,788,422,830,422"/>
+<area shape="poly" id="edge35_Node000021_Node000019" title=" " alt="" coords="847,443,838,449,822,465,814,482,806,501,790,518,765,531,763,526,786,514,802,498,810,480,818,462,834,445,844,439"/>
+<area shape="rect" id="Node000022" href="$ltc7871_8c.html#a0fb37657524d3573d41ffce359ef4e39" title="Clear PEC fault bit." alt="" coords="601,627,777,653"/>
+<area shape="poly" id="edge25_Node000021_Node000022" title=" " alt="" coords="842,445,838,448,822,469,815,489,815,531,814,575,806,597,790,618,774,629,771,625,786,614,802,594,809,574,809,531,810,488,818,466,834,445,838,441"/>
+<area shape="rect" id="Node000023" href="$ltc7871_8c.html#ae12475b6bb0baba3b6b4aba516e7cd19" title="Reset all R/W registers." alt="" coords="633,578,744,603"/>
+<area shape="poly" id="edge26_Node000021_Node000023" title=" " alt="" coords="843,444,838,449,826,462,819,476,815,506,810,537,803,552,790,567,769,581,745,588,743,583,766,576,786,563,798,550,805,535,809,506,814,475,821,459,834,445,840,440"/>
+<area shape="rect" id="Node000027" href="$ltc7871_8c.html#a1774824735eb03c635bb9c318b507ac1" title="set write protect bit." alt="" coords="593,677,784,702"/>
+<area shape="poly" id="edge36_Node000021_Node000027" title=" " alt="" coords="842,445,838,448,819,475,812,501,811,528,815,556,818,583,818,612,810,640,790,667,775,679,771,674,786,663,805,637,812,611,813,584,809,556,806,529,806,500,814,472,834,445,838,441"/>
+<area shape="rect" id="Node000024" href="$ltc7871_8c.html#ad5ce9787e56640bff3e5f7285411d91f" title="Initialize the LTC7871 device." alt="" coords="392,489,491,514"/>
+<area shape="poly" id="edge27_Node000023_Node000024" title=" " alt="" coords="619,577,588,568,523,542,468,517,470,512,525,537,590,563,621,572"/>
+<area shape="poly" id="edge28_Node000024_Node000005" title=" " alt="" coords="412,482,339,415,283,352,242,301,246,298,287,349,343,411,416,478"/>
+<area shape="rect" id="Node000025" href="$iio__ltc7871_8c.html#ae6c8deb0e7a5dccf5477794210cde0b9" title="Initializes the LTC7871 IIO descriptor." alt="" coords="172,489,293,514"/>
+<area shape="poly" id="edge29_Node000024_Node000025" title=" " alt="" coords="378,504,293,504,293,499,378,499"/>
+<area shape="rect" id="Node000026" href="$ltc7871_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,489,124,514"/>
+<area shape="poly" id="edge30_Node000025_Node000026" title=" " alt="" coords="158,504,124,504,124,499,158,499"/>
+</map>

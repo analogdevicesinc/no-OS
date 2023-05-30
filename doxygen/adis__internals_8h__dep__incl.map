@@ -1,0 +1,19 @@
+<map id="drivers/imu/adis_internals.h" name="drivers/imu/adis_internals.h">
+<area shape="rect" id="Node000001" title="Internal include file used for specific chip driver definitions, which are not useful for the user." alt="" coords="663,5,865,31"/>
+<area shape="rect" id="Node000002" href="$adis_8c.html" title="Implementation of adis.c." alt="" coords="5,79,144,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="649,32,421,53,156,81,145,83,144,77,156,76,420,48,649,27"/>
+<area shape="rect" id="Node000003" href="$adis1646x_8c.html" title="Implementation of adis1646x.c." alt="" coords="168,79,347,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="669,35,339,81,339,76,669,30"/>
+<area shape="rect" id="Node000004" href="$adis1647x_8c.html" title="Implementation of adis1647x.c." alt="" coords="371,79,549,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="703,36,510,81,509,76,701,31"/>
+<area shape="rect" id="Node000005" href="$adis1650x_8c.html" title="Implementation of adis1650x.c." alt="" coords="573,79,752,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="738,41,681,81,678,76,735,36"/>
+<area shape="rect" id="Node000006" href="$adis1654x_8c.html" title="Implementation of adis1654x.c." alt="" coords="776,79,955,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="793,36,850,76,847,81,790,41"/>
+<area shape="rect" id="Node000007" href="$adis1655x_8c.html" title="Implementation of adis1655x.c." alt="" coords="979,79,1157,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="827,31,1019,76,1018,81,825,36"/>
+<area shape="rect" id="Node000008" href="$adis1657x_8c.html" title="Implementation of adis1657x.c." alt="" coords="1181,79,1360,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="859,30,1189,76,1189,81,859,35"/>
+<area shape="rect" id="Node000009" href="$iio__adis_8c.html" title="Implementation of iio_adis.c." alt="" coords="1385,79,1546,104"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="879,27,1372,76,1385,77,1384,83,1372,81,879,32"/>
+</map>

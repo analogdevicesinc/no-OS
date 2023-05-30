@@ -1,0 +1,45 @@
+<map id="max22007_reg_read" name="max22007_reg_read">
+<area shape="rect" id="Node000001" title="Read from a register." alt="" coords="983,195,1137,220"/>
+<area shape="rect" id="Node000002" href="$max22007_8c.html#a856a48a4cbad1709374905b1e8d532dd" title="Get channel mode." alt="" coords="713,5,935,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1044,183,1027,151,1002,114,970,76,933,46,907,33,910,28,936,41,974,73,1006,110,1031,148,1049,181"/>
+<area shape="rect" id="Node000003" href="$max22007_8c.html#a72e665a17678fbb04171613e9c2da5c3" title="Get channel power." alt="" coords="735,55,913,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1035,187,990,148,933,110,906,98,908,93,936,105,993,143,1038,183"/>
+<area shape="rect" id="Node000004" href="$max22007_8c.html#aeadc8e5357ba7e72bf34663e946c3a60" title="Get DAC latch mode." alt="" coords="723,120,925,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1018,191,934,159,892,148,893,143,935,154,1020,186"/>
+<area shape="rect" id="Node000005" href="$max22007_8c.html#aea4f4ae372782553bba680b85f865ec7" title="Get reference source." alt="" coords="730,169,918,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="968,200,918,195,918,189,969,195"/>
+<area shape="rect" id="Node000006" href="$max22007_8c.html#ad63c2cbd750f88bf8023c00dd39f6f8c" title="Get timeout configuration." alt="" coords="735,219,913,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="969,219,913,225,913,220,968,214"/>
+<area shape="rect" id="Node000007" href="$max22007_8c.html#a4ce5f3a2e79f0debcebb450808528ab8" title="MAX22007 descriptor initialization function." alt="" coords="225,456,344,481"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1020,228,980,244,935,258,861,271,796,274,684,268,631,265,575,269,515,283,447,310,396,343,352,384,318,426,296,457,292,454,314,422,348,381,392,339,444,305,513,277,575,264,631,260,684,262,796,269,860,266,934,253,978,239,1018,223"/>
+<area shape="rect" id="Node000009" href="$max22007_8c.html#a93ab1cad872f4b5b3bb02293470e79e0" title="Read data from a DAC channel data register." alt="" coords="713,320,935,345"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1037,232,992,268,936,303,884,322,882,317,933,298,989,264,1033,227"/>
+<area shape="rect" id="Node000010" href="$max22007_8c.html#af8db6af1e8bf10c5752dcc357b48bb57" title="Register write with mask." alt="" coords="727,484,921,509"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1042,232,838,485,834,482,1038,229"/>
+<area shape="rect" id="Node000008" href="$max22007_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,633,124,659"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="259,492,84,635,80,631,256,488"/>
+<area shape="rect" id="Node000011" href="$max22007_8c.html#af14d1c7050bcaf5cc1a23af57774966d" title="Configure CRC." alt="" coords="463,320,647,345"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="802,475,744,416,706,385,664,359,636,348,638,343,667,354,709,381,748,412,805,472"/>
+<area shape="rect" id="Node000012" href="$max22007_8c.html#a809d2498bf23dc0039805e557f254220" title="Set channel mode." alt="" coords="445,369,665,395"/>
+<area shape="poly" id="edge12_Node000010_Node000012" title=" " alt="" coords="792,479,734,444,664,410,624,397,626,392,666,405,737,439,794,474"/>
+<area shape="rect" id="Node000013" href="$max22007_8c.html#a4409c44a944239555c9de83e3bd71543" title="Set channel power." alt="" coords="467,419,643,459"/>
+<area shape="poly" id="edge14_Node000010_Node000013" title=" " alt="" coords="750,484,643,461,644,456,751,478"/>
+<area shape="rect" id="Node000014" href="$max22007_8c.html#a2f0296ecdffb65952d0b4fcb6c64610d" title="Set DAC latch mode." alt="" coords="455,484,656,509"/>
+<area shape="poly" id="edge16_Node000010_Node000014" title=" " alt="" coords="713,499,656,499,656,494,713,494"/>
+<area shape="rect" id="Node000015" href="$max22007_8c.html#a0b1fbc0443a88891e764615ae3fb9f4a" title="Set reference source." alt="" coords="462,533,649,559"/>
+<area shape="poly" id="edge18_Node000010_Node000015" title=" " alt="" coords="741,514,626,536,625,531,740,509"/>
+<area shape="rect" id="Node000016" href="$max22007_8c.html#a510cb0ac3e9d5cad579be424dbbe10c7" title="Set timeout configuration." alt="" coords="467,583,643,608"/>
+<area shape="poly" id="edge20_Node000010_Node000016" title=" " alt="" coords="789,518,732,546,666,573,622,585,620,580,664,567,730,541,786,513"/>
+<area shape="rect" id="Node000017" href="$max22007_8c.html#a9f89b4f76dca865e007c94af3e228ea5" title="Write data to a DAC channel data register." alt="" coords="172,633,397,659"/>
+<area shape="poly" id="edge22_Node000010_Node000017" title=" " alt="" coords="804,522,746,575,708,602,666,623,599,643,529,654,460,659,398,658,398,653,460,653,528,649,598,638,664,618,705,598,743,571,800,518"/>
+<area shape="rect" id="Node000018" href="$max22007_8c.html#a2a7a84448798666724631c9fb1dfc501" title="Write to LDAC register to update DAC output." alt="" coords="202,683,367,708"/>
+<area shape="poly" id="edge24_Node000010_Node000018" title=" " alt="" coords="810,522,787,556,754,595,713,633,667,663,630,678,591,690,511,704,435,708,368,707,368,701,435,703,511,698,590,685,628,673,664,658,710,629,750,591,782,552,806,519"/>
+<area shape="poly" id="edge11_Node000011_Node000007" title=" " alt="" coords="466,352,446,359,403,382,362,409,302,458,298,454,359,405,400,378,444,354,464,347"/>
+<area shape="poly" id="edge13_Node000012_Node000007" title=" " alt="" coords="480,401,446,410,376,434,317,458,315,453,374,429,445,405,479,395"/>
+<area shape="poly" id="edge15_Node000013_Node000007" title=" " alt="" coords="454,453,345,465,344,460,453,448"/>
+<area shape="poly" id="edge17_Node000014_Node000007" title=" " alt="" coords="441,488,344,477,344,472,441,482"/>
+<area shape="poly" id="edge19_Node000015_Node000007" title=" " alt="" coords="481,533,445,523,322,484,323,479,446,518,483,528"/>
+<area shape="poly" id="edge21_Node000016_Node000007" title=" " alt="" coords="469,581,444,572,402,552,361,527,301,484,304,479,364,523,404,547,446,568,471,576"/>
+<area shape="poly" id="edge23_Node000017_Node000008" title=" " alt="" coords="158,649,125,649,125,643,158,643"/>
+<area shape="poly" id="edge25_Node000018_Node000008" title=" " alt="" coords="210,682,171,674,118,661,119,656,173,669,211,677"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ade7978_read_data_ph" name="ade7978_read_data_ph">
+<area shape="rect" id="Node000001" title="Read the measurements for specific phase." alt="" coords="216,5,389,31"/>
+<area shape="rect" id="Node000002" href="$eval-ade7978_2src_2common_2common__data_8c.html#a593d545dbd1ac63e04a76e6ee81b0d0d" title="Saves the current and voltage values of device 1 in rms_adc structure." alt="" coords="5,5,168,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,21,168,21,168,15,202,15"/>
+</map>

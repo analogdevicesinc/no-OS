@@ -1,0 +1,17 @@
+<map id="gnss_calculate_unix_epoch" name="gnss_calculate_unix_epoch">
+<area shape="rect" id="Node000001" title="Calculate Unix epoch from date/time components." alt="" coords="759,27,912,67"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a96b08be9808b747a129a9663d17a402a" title="Parse GPRMC sentence for time and date information." alt="" coords="501,5,711,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="745,38,705,33,706,28,745,33"/>
+<area shape="rect" id="Node000005" href="$nmea__ubx_8c.html#ae05185d0301050951cd64eada9b0c796" title="Get Unix epoch time with microsecond precision." alt="" coords="510,55,702,95"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="746,61,703,66,702,61,745,56"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx_8c.html#a2f6c15b7e79c01ad39d076ffb9dda784" title="Get timing data from NMEA&#45;only device via GPRMC parsing." alt="" coords="244,5,453,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="488,21,453,21,453,15,488,15"/>
+<area shape="rect" id="Node000004" href="$nmea__ubx_8c.html#a8bb289e76034531efe564b1b2a2ec21c" title="Refresh timing data from device (unified API for both UBX and NMEA devices)" alt="" coords="5,5,196,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="230,21,196,21,196,15,230,15"/>
+<area shape="rect" id="Node000006" href="$nmea__ubx_8c.html#aca1695030eb7225e23ed18a4065f60b0" title="Get Unix epoch time with best available precision (unified API)" alt="" coords="268,55,429,95"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="496,78,429,78,429,73,496,73"/>
+<area shape="rect" id="Node000007" href="$nmea__ubx_8c.html#a4d777ec68b02fa44f2c564f35ed007a9" title="Get comprehensive precise time information." alt="" coords="247,120,450,145"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="503,101,407,123,406,117,502,96"/>
+<area shape="rect" id="Node000008" href="$nmea__ubx_8c.html#a89f1bd80bbe4d28f4edbdd1ef3008b0a" title="Get comprehensive timing information (unified API for both device types)" alt="" coords="11,120,191,145"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="234,135,191,135,191,130,234,130"/>
+</map>

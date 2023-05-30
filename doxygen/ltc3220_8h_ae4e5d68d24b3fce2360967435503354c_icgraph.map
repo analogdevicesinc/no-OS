@@ -1,0 +1,8 @@
+<map id="ltc3220_remove" name="ltc3220_remove">
+<area shape="rect" id="Node000001" title="Deallocates the resources for the device structure." alt="" coords="319,5,445,31"/>
+<area shape="rect" id="Node000002" href="$ltc3220_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,21,124,21,124,15,305,15"/>
+<area shape="rect" id="Node000003" href="$ltc3220_8c.html#a445be83907e4f146f041de402207b250" title="Initializes the LTC3220 device structure." alt="" coords="172,31,271,56"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="305,33,271,38,271,33,304,28"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="158,36,124,30,125,25,159,31"/>
+</map>

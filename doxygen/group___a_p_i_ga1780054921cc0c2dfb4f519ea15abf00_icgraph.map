@@ -1,0 +1,5 @@
+<map id="ad917x_set_dac_clk_freq" name="ad917x_set_dac_clk_freq">
+<area shape="rect" id="Node000001" title="Set the DAC CLK Frequency." alt="" coords="207,5,393,31"/>
+<area shape="rect" id="Node000002" href="$group___a_p_i.html#gaae631be26fcb6b953153723818b73cd2" title="Configure the DAC Clock Input path based on a the desired dac clock frequency, the applied reference ..." alt="" coords="5,5,159,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,21,159,21,159,15,193,15"/>
+</map>

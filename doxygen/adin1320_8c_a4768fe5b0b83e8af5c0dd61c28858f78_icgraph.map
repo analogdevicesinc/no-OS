@@ -1,0 +1,92 @@
+<map id="adin1320_write_bits" name="adin1320_write_bits">
+<area shape="rect" id="Node000001" title="MDIO Write with Clause22 or Clause45 on a Specific Bit." alt="" coords="969,813,1123,839"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html#aa213a8f89ec5a867fcb1244d166c2c8b" title="Auto MDIX Config." alt="" coords="731,5,917,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1042,800,1036,645,1019,418,1003,300,982,192,954,103,938,69,919,44,906,33,909,29,923,40,942,67,959,101,987,191,1008,299,1024,417,1041,645,1047,799"/>
+<area shape="rect" id="Node000003" href="$adin1320_8c.html#a3c827136a5448d5549c7fa9dff1bca64" title="Enable/disable GE Clock 25MHz Reference." alt="" coords="727,55,921,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1041,800,1034,654,1016,441,1000,331,979,231,952,148,937,117,919,93,906,82,909,78,923,89,941,114,957,146,984,230,1005,331,1021,441,1040,654,1047,800"/>
+<area shape="rect" id="Node000004" href="$adin1320_8c.html#a8a1252bcff2b42d71e8b11de194e188d" title="Configure GP Clock." alt="" coords="735,104,913,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1041,800,1031,665,1010,470,994,370,974,278,949,202,935,173,919,150,907,140,893,132,895,127,910,135,923,147,939,170,954,200,979,276,999,369,1015,470,1037,665,1046,800"/>
+<area shape="rect" id="Node000005" href="$adin1320_8c.html#a11e3a9e45804a61284235ba54bdf1ed3" title="Configure RGMII Tx and Rx Delays." alt="" coords="503,128,672,153"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1041,800,1031,674,1009,496,993,405,973,322,948,254,935,228,919,209,903,198,879,187,816,170,743,158,672,150,673,144,743,152,817,165,881,182,906,193,923,205,939,225,953,252,978,320,998,404,1015,495,1036,673,1046,799"/>
+<area shape="rect" id="Node000007" href="$adin1320_8c.html#a305c2c5640270a4800db5000466d281b" title="Configure Autonegotiation Advertisement Speeds for Copper Media." alt="" coords="505,178,669,218"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1040,800,1029,684,1006,522,990,439,970,364,947,303,933,280,919,263,893,241,863,224,832,212,798,203,731,194,669,193,669,187,731,188,799,198,833,207,866,220,896,237,923,259,938,277,951,301,975,362,995,438,1011,521,1034,683,1045,800"/>
+<area shape="rect" id="Node000008" href="$adin1320_8c.html#a20ebbed1022bde0eefbeecefaf215d16" title="Configure the interrupt mask register for copper media." alt="" coords="749,674,899,714"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1021,806,976,767,920,728,894,716,896,712,923,724,979,762,1024,802"/>
+<area shape="rect" id="Node000009" href="$adin1320_8c.html#a21bb3d71e0f97c54842fe014be7c1f17" title="Set Force Speed for Copper Media." alt="" coords="511,242,663,282"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="1040,800,1027,692,1004,544,987,469,968,401,945,347,919,311,892,290,861,274,828,263,794,256,725,250,664,253,663,248,726,245,795,251,830,258,863,269,895,285,923,307,950,344,973,400,992,468,1009,543,1032,691,1045,799"/>
+<area shape="rect" id="Node000010" href="$adin1320_8c.html#a16415bb6c589488fcfdb869aeed60924" title="Configure LED settings for Copper Media." alt="" coords="745,739,903,764"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1003,810,920,778,881,767,883,762,922,773,1005,805"/>
+<area shape="rect" id="Node000011" href="$adin1320_8c.html#a6d67e60ff6196f60a11b548e2388cdb5" title="Enables/Disables the Link." alt="" coords="743,788,905,813"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="955,818,905,813,906,807,956,813"/>
+<area shape="rect" id="Node000012" href="$adin1320_8c.html#a48766364551163586fefde385a1021c8" title="Configure Downspeed." alt="" coords="729,837,919,863"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="956,838,920,842,919,837,956,833"/>
+<area shape="rect" id="Node000013" href="$adin1320_8c.html#a2c99bcbb59981b1cfb488e9dc01231e1" title="Energy Detect Power Down mode Config." alt="" coords="733,887,915,927"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1001,846,922,877,885,890,883,885,920,871,999,841"/>
+<area shape="rect" id="Node000014" href="$adin1320_8c.html#a677ac4cd6d792110049e2adfe564e910" title="Initialize the Device." alt="" coords="532,587,643,612"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1036,801,1022,757,999,705,965,654,944,632,920,614,886,597,850,586,812,579,775,577,702,580,641,589,640,584,702,575,775,571,813,574,851,581,888,592,923,609,948,628,970,650,1004,703,1027,756,1041,799"/>
+<area shape="rect" id="Node000018" href="$adin1320_8c.html#aa8733b718a24a864dd4d113071bbaea0" title="Configure general LED settings." alt="" coords="756,952,892,977"/>
+<area shape="poly" id="edge20_Node000001_Node000018" title=" " alt="" coords="1028,851,983,897,954,921,923,942,892,954,890,949,920,937,951,917,979,893,1024,847"/>
+<area shape="rect" id="Node000019" href="$adin1320_8c.html#ad9edaf9ff795345ca320453a410ee7f9" title="Configure PHY as Master or Slave for 1 Gb speed only." alt="" coords="735,1053,913,1093"/>
+<area shape="poly" id="edge21_Node000001_Node000019" title=" " alt="" coords="1038,853,1022,892,997,941,964,992,923,1036,894,1055,891,1050,920,1032,960,988,993,938,1017,890,1033,850"/>
+<area shape="rect" id="Node000020" href="$wake__on__lan_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="528,1191,647,1216"/>
+<area shape="poly" id="edge53_Node000001_Node000020" title=" " alt="" coords="1035,852,992,922,960,959,923,991,896,1006,871,1014,825,1018,779,1022,755,1029,728,1043,684,1079,646,1121,617,1161,598,1192,594,1189,613,1158,642,1117,680,1075,725,1038,753,1024,778,1017,824,1013,870,1009,894,1001,920,986,957,955,988,918,1030,850"/>
+<area shape="rect" id="Node000021" href="$adin1320_8c.html#a25c749a1db468f090fc779c9920c8beb" title="Configure Magic Packet Checks." alt="" coords="729,1117,919,1143"/>
+<area shape="poly" id="edge23_Node000001_Node000021" title=" " alt="" coords="1043,853,1032,906,1010,975,994,1011,975,1046,951,1078,923,1107,902,1119,900,1115,920,1103,947,1075,970,1043,989,1008,1005,973,1027,905,1038,852"/>
+<area shape="rect" id="Node000022" href="$adin1320_8c.html#a41498295ae6660525c007f2b715762cc" title="Configure Magic Packet SecureOn Key." alt="" coords="737,1413,911,1439"/>
+<area shape="poly" id="edge25_Node000001_Node000022" title=" " alt="" coords="1045,853,1034,970,1011,1136,994,1220,975,1297,951,1360,938,1385,923,1404,908,1415,905,1411,919,1400,933,1382,946,1358,970,1296,989,1219,1006,1135,1029,970,1040,852"/>
+<area shape="rect" id="Node000023" href="$adin1320_8c.html#adbe7021fee21a7998457b82bb65f3081" title="Configure Magic Packet Address Matchings." alt="" coords="728,1167,920,1192"/>
+<area shape="poly" id="edge26_Node000001_Node000023" title=" " alt="" coords="1046,852,1037,915,1017,997,1001,1041,981,1083,955,1123,923,1157,906,1169,903,1164,920,1153,951,1120,976,1081,996,1039,1012,995,1032,914,1040,852"/>
+<area shape="rect" id="Node000024" href="$adin1320_8c.html#ae91cc1eb3963dc7003fd621357ddd2f8" title="Allows the RMII FIFO to be Reset." alt="" coords="496,472,679,497"/>
+<area shape="poly" id="edge28_Node000001_Node000024" title=" " alt="" coords="1040,801,1030,744,1010,670,994,632,974,595,950,562,920,533,893,516,864,502,801,484,738,477,679,477,679,472,738,472,802,479,866,497,895,511,923,529,954,558,979,592,999,630,1015,668,1035,742,1045,800"/>
+<area shape="rect" id="Node000025" href="$adin1320_8c.html#a22d00cc8a77ab635627fff72a2a5c07f" title="Configure Autonegotiation Advertisement Speeds for SerDes Media." alt="" coords="742,1463,906,1503"/>
+<area shape="poly" id="edge29_Node000001_Node000025" title=" " alt="" coords="1046,853,1035,979,1012,1158,996,1250,976,1335,952,1405,938,1432,923,1453,908,1466,904,1462,919,1450,934,1429,947,1403,971,1333,991,1249,1007,1157,1029,978,1040,852"/>
+<area shape="rect" id="Node000026" href="$adin1320_8c.html#ac7112665a60c3744d15e9a7ef29477ba" title="Configure the interrupt mask register for serdes media." alt="" coords="749,1527,899,1567"/>
+<area shape="poly" id="edge30_Node000001_Node000026" title=" " alt="" coords="1046,853,1037,990,1016,1189,1000,1291,980,1385,954,1463,940,1494,923,1517,901,1534,898,1530,919,1513,935,1491,949,1461,974,1384,995,1290,1011,1188,1032,990,1041,852"/>
+<area shape="rect" id="Node000027" href="$adin1320_8c.html#a1970e2b76265673d2c5caa5365cca43f" title="Set Force Speed for SerDes Media." alt="" coords="511,522,663,562"/>
+<area shape="poly" id="edge31_Node000001_Node000027" title=" " alt="" coords="1038,801,1026,751,1004,689,989,657,970,626,947,599,920,576,890,559,859,546,791,532,724,529,664,532,663,527,724,523,792,527,860,541,893,554,923,572,950,595,974,623,993,654,1009,687,1031,749,1043,799"/>
+<area shape="rect" id="Node000028" href="$adin1320_8c.html#a63263c5bc85f7141dd5865fa67d32804" title="Configure LED settings for SerDes Media." alt="" coords="745,1592,903,1617"/>
+<area shape="poly" id="edge32_Node000001_Node000028" title=" " alt="" coords="1047,853,1040,1002,1022,1220,1006,1333,985,1437,958,1522,941,1556,923,1581,905,1595,902,1591,919,1577,937,1553,953,1520,980,1436,1001,1332,1016,1220,1035,1001,1041,852"/>
+<area shape="rect" id="Node000029" href="$adin1320_8c.html#add67269b31776eeb1e30ef04097e4f4c" title="MAC Interface Configuration." alt="" coords="506,357,669,397"/>
+<area shape="poly" id="edge33_Node000001_Node000029" title=" " alt="" coords="1039,800,1024,709,999,586,982,525,963,470,942,426,920,397,892,379,862,366,829,358,796,353,730,353,669,360,669,355,729,347,797,348,830,353,863,361,895,375,923,393,947,423,968,468,987,523,1004,585,1029,708,1044,800"/>
+<area shape="rect" id="Node000030" href="$adin1320_8c.html#a413577a4fa9536f3406f3f57987e0ad1" title="Downspeed &#45; Number of retries." alt="" coords="729,1642,919,1682"/>
+<area shape="poly" id="edge35_Node000001_Node000030" title=" " alt="" coords="1047,852,1041,1009,1023,1242,1007,1364,986,1475,958,1568,942,1604,923,1632,910,1644,906,1640,919,1628,937,1601,953,1566,981,1474,1002,1363,1018,1242,1036,1009,1042,852"/>
+<area shape="rect" id="Node000031" href="$adin1320_8c.html#ade82b2f0fb435d6c872ac91e28f06a74" title="Set Energy Efficient Ethernet speeds." alt="" coords="517,307,657,332"/>
+<area shape="poly" id="edge36_Node000001_Node000031" title=" " alt="" coords="1039,800,1025,700,1001,566,984,498,965,437,944,388,919,356,890,335,857,320,822,310,786,305,714,303,652,309,651,304,714,298,786,299,823,305,859,315,893,331,923,352,948,385,970,435,990,496,1006,564,1031,699,1044,799"/>
+<area shape="rect" id="Node000032" href="$adin1320_8c.html#a5352526d472b90f7f86fc1c82407d8d7" title="Enter/exit Software Powerdown." alt="" coords="738,407,910,447"/>
+<area shape="poly" id="edge38_Node000001_Node000032" title=" " alt="" coords="1040,800,1032,734,1012,646,997,598,976,551,951,507,919,468,894,450,897,445,923,464,955,504,981,549,1002,596,1017,644,1037,733,1046,799"/>
+<area shape="rect" id="Node000033" href="$adin1320_8c.html#ae2947a32d664601a627d1b41a18a5027" title="Select and Perform Device Reset." alt="" coords="747,624,901,649"/>
+<area shape="poly" id="edge43_Node000001_Node000033" title=" " alt="" coords="1030,802,988,733,957,696,920,664,895,652,897,647,923,660,960,692,992,730,1035,799"/>
+<area shape="rect" id="Node000034" href="$adin1320_8c.html#a8580405df5ec9144d3233aeed594d909" title="Enable/Disable Wake&#45;on&#45;LAN." alt="" coords="743,1216,905,1241"/>
+<area shape="poly" id="edge45_Node000001_Node000034" title=" " alt="" coords="1047,852,1041,923,1024,1018,1008,1069,987,1119,959,1166,923,1207,907,1218,904,1214,920,1203,954,1163,982,1117,1003,1068,1018,1017,1036,922,1042,852"/>
+<area shape="rect" id="Node000035" href="$adin1320_8c.html#a81bdbf8a7e7699257adf2855e6e3b0d5" title="Configure Wake&#45;on&#45;LAN Signal Settings." alt="" coords="741,1265,907,1291"/>
+<area shape="poly" id="edge47_Node000001_Node000035" title=" " alt="" coords="1048,853,1045,931,1040,983,1030,1040,1014,1098,992,1156,962,1209,923,1256,907,1267,904,1263,920,1252,958,1206,988,1153,1009,1097,1025,1039,1035,982,1040,931,1043,852"/>
+<area shape="rect" id="Node000036" href="$adin1320_8c.html#a192826f1860756143777ebe9220510ff" title="Configure Wake&#45;on&#45;LAN System Settings." alt="" coords="740,1315,908,1340"/>
+<area shape="poly" id="edge49_Node000001_Node000036" title=" " alt="" coords="1044,853,1030,952,1004,1088,988,1157,969,1219,947,1270,923,1305,908,1317,904,1312,919,1301,943,1268,964,1217,982,1155,999,1087,1024,952,1039,852"/>
+<area shape="rect" id="Node000037" href="$adin1320_8c.html#aa63cf0e1b3ccd6e9affb13a1dd18f269" title="Configure Wake&#45;on&#45;LAN Wake&#45;up Events." alt="" coords="734,1364,914,1389"/>
+<area shape="poly" id="edge51_Node000001_Node000037" title=" " alt="" coords="1045,852,1032,961,1008,1112,991,1188,972,1258,949,1315,923,1354,908,1366,905,1362,919,1351,944,1313,967,1256,986,1187,1002,1111,1027,960,1039,852"/>
+<area shape="rect" id="Node000006" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="329,307,448,332"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="509,161,498,168,462,201,433,241,398,308,393,305,428,238,458,198,494,164,506,157"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="510,226,497,232,444,271,404,308,401,304,441,267,495,228,507,221"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="505,288,434,309,433,304,504,283"/>
+<area shape="poly" id="edge19_Node000014_Node000006" title=" " alt="" coords="517,590,494,576,468,547,446,515,428,480,414,444,397,378,389,333,394,332,402,377,419,442,433,477,450,512,472,544,498,572,520,585"/>
+<area shape="rect" id="Node000015" href="$cmd__mode_8c.html#ab812d44de8ad3f20a02f975f978a4cc2" title=" " alt="" coords="342,587,435,612"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="518,602,436,602,436,597,518,597"/>
+<area shape="rect" id="Node000016" href="$cmd_8c.html#ac1fdbd851dca722a4c7ee9bbe2e55de1" title=" " alt="" coords="172,587,281,612"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="328,602,282,602,282,597,328,597"/>
+<area shape="rect" id="Node000017" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,587,124,612"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="158,602,124,602,124,597,158,597"/>
+<area shape="poly" id="edge22_Node000019_Node000020" title=" " alt="" coords="746,1100,728,1108,658,1152,606,1193,602,1188,655,1148,725,1104,743,1095"/>
+<area shape="poly" id="edge24_Node000021_Node000020" title=" " alt="" coords="759,1149,727,1158,624,1193,622,1188,726,1153,758,1144"/>
+<area shape="poly" id="edge27_Node000023_Node000020" title=" " alt="" coords="715,1193,647,1200,647,1195,714,1188"/>
+<area shape="poly" id="edge34_Node000029_Node000006" title=" " alt="" coords="504,355,433,335,434,330,505,350"/>
+<area shape="poly" id="edge37_Node000031_Node000006" title=" " alt="" coords="504,322,448,322,448,317,504,317"/>
+<area shape="poly" id="edge42_Node000032_Node000006" title=" " alt="" coords="725,440,671,441,612,438,552,428,495,411,464,395,437,374,398,334,402,330,441,370,467,390,497,406,554,423,613,433,671,436,724,435"/>
+<area shape="poly" id="edge39_Node000032_Node000024" title=" " alt="" coords="728,453,641,475,640,469,727,448"/>
+<area shape="poly" id="edge40_Node000032_Node000027" title=" " alt="" coords="780,457,680,511,648,524,646,519,678,506,777,452"/>
+<area shape="poly" id="edge41_Node000032_Node000029" title=" " alt="" coords="724,409,668,397,669,391,725,403"/>
+<area shape="poly" id="edge44_Node000033_Node000014" title=" " alt="" coords="733,625,642,611,643,605,734,620"/>
+<area shape="poly" id="edge46_Node000034_Node000020" title=" " alt="" coords="728,1221,647,1212,647,1207,729,1216"/>
+<area shape="poly" id="edge48_Node000035_Node000020" title=" " alt="" coords="753,1264,726,1257,620,1219,622,1214,727,1251,755,1259"/>
+<area shape="poly" id="edge50_Node000036_Node000020" title=" " alt="" coords="744,1313,726,1306,688,1285,653,1261,601,1218,604,1214,656,1257,691,1281,728,1301,746,1308"/>
+<area shape="poly" id="edge52_Node000037_Node000020" title=" " alt="" coords="738,1361,725,1355,681,1322,644,1283,594,1218,599,1214,648,1280,685,1318,728,1350,740,1357"/>
+</map>

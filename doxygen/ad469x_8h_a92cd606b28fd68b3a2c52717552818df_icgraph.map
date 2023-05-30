@@ -1,0 +1,8 @@
+<map id="ad469x_read_data" name="ad469x_read_data">
+<area shape="rect" id="Node000001" title="Read from device. Enter register mode to read/write registers." alt="" coords="392,31,535,56"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a947efb0cc9183e2dc0d9aeb3d697601b" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="172,5,344,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="378,36,344,31,345,26,379,30"/>
+<area shape="rect" id="Node000003" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="378,46,124,46,124,41,378,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="159,34,125,38,124,33,158,28"/>
+</map>

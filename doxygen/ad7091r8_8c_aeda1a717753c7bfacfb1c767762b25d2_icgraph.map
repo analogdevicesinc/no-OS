@@ -1,0 +1,11 @@
+<map id="ad7091r8_reset" name="ad7091r8_reset">
+<area shape="rect" id="Node000001" title="Initiate a software reset or hardware reset through the RESET pin." alt="" coords="513,31,636,56"/>
+<area shape="rect" id="Node000002" href="$ad7091r8_8c.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="355,31,465,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="499,46,466,46,466,41,499,41"/>
+<area shape="rect" id="Node000003" href="$iio__ad7091r8_8c.html#ab9ebf560e86c6769048fec90dbed9f65" title="Initializes the AD7091R8 IIO driver." alt="" coords="172,5,307,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="341,36,307,31,307,25,342,31"/>
+<area shape="rect" id="Node000005" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="180,55,299,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="342,56,299,62,298,56,341,50"/>
+<area shape="rect" id="Node000004" href="$ad7091r8-sdz_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,21,124,21,124,15,159,15"/>
+</map>

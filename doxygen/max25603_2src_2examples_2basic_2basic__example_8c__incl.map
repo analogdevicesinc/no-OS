@@ -1,0 +1,49 @@
+<map id="projects/max25603/src/examples/basic/basic_example.c" name="projects/max25603/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="Source file for basic example." alt="" coords="318,5,489,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,58,127,107,126,102,317,53"/>
+<area shape="rect" id="Node000003" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="699,108,804,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="490,52,692,102,691,107,488,58"/>
+<area shape="rect" id="Node000008" href="$max25603_8h.html" title="Header file of MAX25603 Driver." alt="" coords="415,108,517,133"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="425,58,451,95,447,98,420,62"/>
+<area shape="rect" id="Node000015" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="156,108,269,133"/>
+<area shape="poly" id="edge24_Node000001_Node000015" title=" " alt="" coords="346,63,252,105,250,100,344,58"/>
+<area shape="rect" id="Node000016" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="982,108,1118,133"/>
+<area shape="poly" id="edge26_Node000001_Node000016" title=" " alt="" coords="489,43,969,106,968,111,489,48"/>
+<area shape="rect" id="Node000018" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="294,108,390,133"/>
+<area shape="poly" id="edge28_Node000001_Node000018" title=" " alt="" coords="387,62,361,98,356,95,382,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="451,255,521,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="742,136,703,171,650,209,592,236,536,255,534,250,590,231,647,204,699,167,738,132"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="862,255,945,280"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="804,123,866,130,932,141,991,157,1013,167,1028,180,1035,192,1035,204,1029,215,1019,225,992,241,959,254,957,249,989,236,1016,220,1025,212,1029,203,1029,193,1024,183,1010,172,989,162,931,146,865,135,804,128"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="837,181,970,207"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="777,131,867,173,865,178,775,136"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="837,209,535,260,535,255,836,204"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="906,207,906,241,901,241,901,207"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="747,255,817,280"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="885,209,815,250,812,245,882,204"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="453,136,439,150,425,167,418,186,420,206,436,227,456,245,452,249,432,231,416,208,413,186,421,165,435,146,449,132"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="518,121,638,128,785,139,914,156,959,167,984,179,990,189,991,200,982,219,963,236,941,250,938,246,960,232,977,216,986,199,985,191,980,183,957,172,914,161,785,145,638,133,517,127"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="431,181,501,207"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="469,134,469,168,463,168,463,134"/>
+<area shape="rect" id="Node000010" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="249,181,355,207"/>
+<area shape="poly" id="edge13_Node000008_Node000010" title=" " alt="" coords="441,136,342,178,340,173,439,131"/>
+<area shape="rect" id="Node000011" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="525,181,636,207"/>
+<area shape="poly" id="edge15_Node000008_Node000011" title=" " alt="" coords="486,131,552,172,549,176,483,136"/>
+<area shape="rect" id="Node000012" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="712,181,812,207"/>
+<area shape="poly" id="edge18_Node000008_Node000012" title=" " alt="" coords="514,131,701,175,700,181,513,136"/>
+<area shape="rect" id="Node000013" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="115,181,225,207"/>
+<area shape="poly" id="edge22_Node000008_Node000013" title=" " alt="" coords="419,136,232,181,231,175,418,131"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="333,204,444,247,442,252,331,209"/>
+<area shape="poly" id="edge16_Node000011_Node000004" title=" " alt="" coords="567,209,514,248,511,244,564,205"/>
+<area shape="poly" id="edge17_Node000011_Node000005" title=" " alt="" coords="633,204,849,251,848,257,632,209"/>
+<area shape="poly" id="edge19_Node000012_Node000004" title=" " alt="" coords="718,209,535,256,534,251,717,204"/>
+<area shape="poly" id="edge21_Node000012_Node000005" title=" " alt="" coords="786,204,869,246,867,251,784,209"/>
+<area shape="poly" id="edge20_Node000012_Node000007" title=" " alt="" coords="768,206,778,241,773,242,763,208"/>
+<area shape="rect" id="Node000014" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="136,255,204,280"/>
+<area shape="poly" id="edge23_Node000013_Node000014" title=" " alt="" coords="173,207,173,241,167,241,167,207"/>
+<area shape="poly" id="edge25_Node000015_Node000004" title=" " alt="" coords="172,136,137,149,106,165,95,175,89,184,89,194,95,205,117,221,152,235,196,245,245,253,349,261,436,264,436,269,348,266,245,258,195,250,151,240,115,226,91,208,84,195,84,183,91,171,103,161,135,144,170,131"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="1095,181,1162,207"/>
+<area shape="poly" id="edge27_Node000016_Node000017" title=" " alt="" coords="1064,131,1108,170,1104,174,1061,135"/>
+<area shape="poly" id="edge29_Node000018_Node000004" title=" " alt="" coords="294,135,176,162,127,175,105,183,101,194,105,205,127,221,161,234,251,252,352,260,437,263,437,269,351,266,251,257,160,239,125,226,101,208,95,194,101,179,125,170,174,157,293,130"/>
+</map>

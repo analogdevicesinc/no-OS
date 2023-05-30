@@ -1,0 +1,19 @@
+<map id="ade9430_read" name="ade9430_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="700,53,815,78"/>
+<area shape="rect" id="Node000002" href="$ade9430_8c.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="300,27,407,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="724,48,690,31,651,17,584,9,516,11,453,19,402,30,401,25,453,14,516,5,584,4,653,12,692,26,726,43"/>
+<area shape="rect" id="Node000004" href="$ade9430_8c.html#a41447f5ba8b5e0739328ada3bbae63d5" title="Read the power/energy for specific phase." alt="" coords="479,129,652,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="715,86,653,112,603,131,601,126,651,107,713,81"/>
+<area shape="rect" id="Node000006" href="$ade9430_8c.html#accf20aba0ba1faa72a1d10d63de51da3" title="Read the temperature." alt="" coords="276,78,431,103"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="686,72,431,89,431,83,686,67"/>
+<area shape="rect" id="Node000007" href="$ade9430_8c.html#a931208decd557cdbd43246b0076f6845" title="Update specific register bits." alt="" coords="485,27,646,53"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="686,59,646,53,647,48,687,53"/>
+<area shape="rect" id="Node000003" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,53,60,78"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="287,48,61,66,60,61,286,43"/>
+<area shape="rect" id="Node000005" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="108,78,228,103"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="465,139,373,131,276,119,216,106,217,101,276,113,373,126,465,134"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="94,80,60,73,61,68,95,74"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="262,93,228,93,228,88,262,88"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="471,43,407,43,407,37,471,37"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="499,59,408,81,406,75,497,53"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="ad719x_wait_rdy_go_low" name="ad719x_wait_rdy_go_low">
+<area shape="rect" id="Node000001" title="Waits for RDY pin to go low." alt="" coords="837,56,1024,81"/>
+<area shape="rect" id="Node000002" href="$ad719x_8c.html#a911e159361da297a10809f1cf6ba8059" title="Performs the given calibration to the specified channel." alt="" coords="625,5,759,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="856,56,752,33,753,28,857,50"/>
+<area shape="rect" id="Node000003" href="$ad719x_8c.html#adcb7617f625bad20d98c3f902f5f1e92" title="Returns the average of several conversion results." alt="" coords="332,57,547,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="823,72,547,72,547,67,823,66"/>
+<area shape="rect" id="Node000006" href="$ad719x_8c.html#a8b2be560509098d550618957a4b4ef14" title="Returns the result of a single conversion." alt="" coords="595,107,789,132"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="857,87,753,109,752,104,856,82"/>
+<area shape="rect" id="Node000004" href="$ad719x_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,83,284,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="319,85,285,89,284,84,318,80"/>
+<area shape="rect" id="Node000005" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,83,60,108"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,98,60,98,60,93,94,93"/>
+<area shape="rect" id="Node000007" href="$ad719x_8c.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="342,107,537,132"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="581,122,537,122,537,117,581,117"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="328,111,284,107,285,101,329,106"/>
+</map>

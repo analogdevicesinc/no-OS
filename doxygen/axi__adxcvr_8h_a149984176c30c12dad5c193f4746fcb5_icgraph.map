@@ -1,0 +1,9 @@
+<map id="adxcvr_clk_disable" name="adxcvr_clk_disable">
+<area shape="rect" id="Node000001" title="AXI ADXCVR Clock Disable." alt="" coords="244,55,391,80"/>
+<area shape="rect" id="Node000002" href="$axi__adxcvr_8c.html#a95953cb03a2a6cffae96b78658b1e8f2" title=" " alt="" coords="5,5,196,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="247,54,157,33,158,28,248,49"/>
+<area shape="rect" id="Node000003" href="$jesd204__clk_8c.html#ac6c34646d1c05b88bf73af88f24bf6c4" title=" " alt="" coords="24,55,177,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,70,178,70,178,65,230,65"/>
+<area shape="rect" id="Node000004" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="73,104,128,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="248,86,129,113,128,108,247,81"/>
+</map>

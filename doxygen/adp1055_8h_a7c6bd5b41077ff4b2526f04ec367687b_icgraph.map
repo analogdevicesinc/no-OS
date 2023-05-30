@@ -1,0 +1,55 @@
+<map id="adp1055_write" name="adp1055_write">
+<area shape="rect" id="Node000001" title="Write data to ADP1055" alt="" coords="815,483,933,508"/>
+<area shape="rect" id="Node000002" href="$adp1055_8c.html#a3bd137f9f19b85d266f667fb55398094" title="Frequency synchronization of the PWM clock with an external clock Requires syni_desc to be initialize..." alt="" coords="589,5,737,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="867,469,855,377,834,251,803,131,785,84,765,52,752,41,736,33,739,28,755,37,769,48,790,81,808,129,839,250,860,376,872,469"/>
+<area shape="rect" id="Node000003" href="$iio__adp1055_8c.html#a5e19414c9b0490f753cf1d1add55fda6" title="Initializes the ADP1050 IIO descriptor." alt="" coords="172,156,301,181"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="870,469,867,405,852,319,839,273,820,229,796,188,765,152,715,111,667,82,621,65,573,57,524,57,471,65,350,97,321,109,295,125,253,158,250,153,291,120,319,104,348,91,470,59,524,52,574,51,622,60,670,78,718,107,769,148,800,184,825,226,844,271,857,317,872,404,876,469"/>
+<area shape="rect" id="Node000005" href="$adp1055_8c.html#a00e64892f343d5d3a045a2272d11e54a" title="Initialize the ADP1055 device." alt="" coords="377,257,484,283"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="862,471,848,438,827,399,800,362,765,331,731,312,695,297,619,278,546,270,484,269,484,264,546,265,620,273,697,292,734,307,768,327,804,358,832,397,852,435,866,469"/>
+<area shape="rect" id="Node000007" href="$adp1055_8c.html#acd79ef75dd7607641e66b2c3bce749b6" title="Set ADP1055 IOUT calibration gain." alt="" coords="578,457,749,483"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="800,489,748,483,749,478,801,484"/>
+<area shape="rect" id="Node000008" href="$adp1055_8c.html#ad96dbcceb13ab5b993919069e9dc400d" title="Set ADP1055 IOUT calibration offset." alt="" coords="573,507,753,532"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="801,506,754,512,753,506,800,501"/>
+<area shape="rect" id="Node000009" href="$adp1055_8c.html#a43f7046355deb069a186fc1c33fe1ec6" title="Set ADP1055 Light Load Mode Digital Filter." alt="" coords="560,556,767,581"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="838,517,768,547,729,558,727,553,766,542,835,512"/>
+<area shape="rect" id="Node000010" href="$adp1055_8c.html#a7818c7ffab37ba9c2736db929e8b273b" title="Set ADP1055 Normal Mode Digital Filter." alt="" coords="566,605,761,631"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="856,521,818,560,794,580,768,596,740,608,738,603,765,592,791,575,814,556,852,517"/>
+<area shape="rect" id="Node000011" href="$adp1055_8c.html#a8328dc5ead717d2b43569f2c4dfe6aa2" title="PWM modulation configuration for the ADP1055." alt="" coords="349,307,512,332"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="857,472,820,421,794,396,765,375,703,348,636,331,570,323,512,320,512,314,571,317,637,326,704,343,768,370,798,392,824,418,861,469"/>
+<area shape="rect" id="Node000012" href="$adp1055_8c.html#ad10a8a8e6853ffc8c28de916e19a98c9" title="Free the resources allocated by the adp1055_init()" alt="" coords="596,204,731,229"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="866,469,856,422,837,364,807,303,788,275,765,251,749,239,730,231,732,226,751,235,768,247,792,272,812,300,842,362,861,421,871,468"/>
+<area shape="rect" id="Node000014" href="$adp1055_8c.html#a5b5f0d180d202afd381139e2c48e8e90" title="Set PWM channel and frequency." alt="" coords="359,356,503,381"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="849,474,812,442,766,415,698,393,628,380,561,372,503,370,503,365,561,367,629,374,700,388,768,410,815,438,852,470"/>
+<area shape="rect" id="Node000015" href="$adp1055_8c.html#a8e90b88d618ffa171609a1ad8aa53b55" title="Set ADP1055 VIN on/off raw value for input voltage limiting." alt="" coords="597,655,729,680"/>
+<area shape="poly" id="edge21_Node000001_Node000015" title=" " alt="" coords="864,522,828,584,801,618,768,646,731,662,729,657,765,641,797,614,823,581,859,519"/>
+<area shape="rect" id="Node000016" href="$adp1055_8c.html#a099805ad7b93632659670f1784cf1949" title="Set ADP1055 Single Shot Digital Filter." alt="" coords="587,705,739,745"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="868,522,855,560,835,607,806,654,768,695,741,711,738,706,765,691,802,651,830,604,850,558,863,520"/>
+<area shape="rect" id="Node000017" href="$adp1055_8c.html#ae965a2a32271ed465ce91eda477644cb" title="Set ADP1055 Vout Droop." alt="" coords="584,769,743,795"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="872,522,863,573,845,637,815,702,794,732,768,759,744,773,742,769,765,755,789,729,810,700,840,635,858,572,867,521"/>
+<area shape="rect" id="Node000018" href="$adp1055_8c.html#a8295058f9aeca97146bf7cebaa015423" title="Set output voltage offset." alt="" coords="584,819,743,844"/>
+<area shape="poly" id="edge24_Node000001_Node000018" title=" " alt="" coords="875,522,869,582,852,659,839,700,821,740,798,777,768,809,744,824,742,820,765,805,793,774,816,737,834,698,847,658,863,581,869,522"/>
+<area shape="rect" id="Node000019" href="$adp1055_8c.html#a3a99e2ac9c802cc2f44a709cd86e6cdb" title="Set ADP1055 VOUT_SCALE_MONITOR." alt="" coords="353,156,508,181"/>
+<area shape="poly" id="edge25_Node000001_Node000019" title=" " alt="" coords="870,469,865,410,850,333,836,294,818,256,795,222,765,193,733,174,697,160,660,152,622,148,548,149,485,159,484,153,547,144,622,142,661,146,699,155,735,169,768,189,799,219,823,254,841,292,855,332,870,409,875,468"/>
+<area shape="rect" id="Node000020" href="$adp1055_8c.html#a45684be5674d279cf3da25b2091a6136" title="Set ADP1055 vout scale loop." alt="" coords="568,868,759,893"/>
+<area shape="poly" id="edge28_Node000001_Node000020" title=" " alt="" coords="876,522,873,589,859,680,846,729,827,776,801,820,768,859,752,870,749,866,765,855,797,817,822,774,841,727,854,679,868,589,871,522"/>
+<area shape="rect" id="Node000021" href="$adp1055_8c.html#aa8b5c11b1620a8b84f6c62ffdb718701" title="Set ADP1055 VOUT transition rate." alt="" coords="598,917,729,943"/>
+<area shape="poly" id="edge29_Node000001_Node000021" title=" " alt="" coords="872,522,859,609,838,725,807,835,789,878,769,908,750,921,730,928,728,923,748,916,765,904,784,876,802,834,832,723,854,608,867,521"/>
+<area shape="rect" id="Node000022" href="$adp1055_8c.html#aabf0cd49eda673516b9abc3f6bf2715a" title="Set VOUT_COMMAND and VOUT_MAX values." alt="" coords="352,405,509,431"/>
+<area shape="poly" id="edge30_Node000001_Node000022" title=" " alt="" coords="838,479,804,462,766,449,699,435,631,426,509,419,510,414,632,420,700,429,767,443,806,457,841,474"/>
+<area shape="rect" id="Node000004" href="$adp1055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,131,124,156"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,160,124,155,125,149,159,155"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="392,253,261,184,263,179,394,248"/>
+<area shape="rect" id="Node000006" href="$adp1055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="177,281,296,307"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="364,281,297,289,296,284,363,276"/>
+<area shape="poly" id="edge12_Node000011_Node000006" title=" " alt="" coords="335,310,296,304,297,299,336,304"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="594,235,485,260,484,255,593,230"/>
+<area shape="poly" id="edge18_Node000012_Node000006" title=" " alt="" coords="582,219,471,226,410,235,350,247,302,264,262,284,259,279,300,259,349,242,409,229,470,221,582,214"/>
+<area shape="rect" id="Node000013" href="$iio__adp1055_8c.html#a16dce5a4026aae7e71ba35f2e03eab2d" title="Free resources allocated by the init function." alt="" coords="351,107,510,132"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="626,200,572,173,511,146,478,135,480,130,513,141,574,168,628,195"/>
+<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="368,138,288,158,287,153,366,133"/>
+<area shape="poly" id="edge16_Node000013_Node000004" title=" " alt="" coords="338,128,124,142,124,137,337,123"/>
+<area shape="poly" id="edge20_Node000014_Node000006" title=" " alt="" coords="372,354,348,346,264,309,266,304,350,341,374,349"/>
+<area shape="poly" id="edge26_Node000019_Node000003" title=" " alt="" coords="340,171,302,171,302,166,340,166"/>
+<area shape="poly" id="edge27_Node000019_Node000006" title=" " alt="" coords="379,189,351,203,294,244,252,283,249,279,291,240,348,198,376,184"/>
+<area shape="poly" id="edge31_Node000022_Node000006" title=" " alt="" coords="364,403,348,395,317,374,289,351,247,309,251,305,292,347,320,370,351,390,366,398"/>
+</map>

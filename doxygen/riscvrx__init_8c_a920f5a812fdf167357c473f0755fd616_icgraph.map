@@ -1,0 +1,17 @@
+<map id="enter_mmode" name="enter_mmode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="411,80,524,105"/>
+<area shape="rect" id="Node000002" href="$max78000_2maxim__init_8c.html#a9c1b2f121f001dd79a7f2a960604106f" title="Initialize the risc&#45;v rx and run in machine mode." alt="" coords="275,80,363,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="397,95,363,95,363,90,397,90"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__init_8c.html#ae6d9f2508b1dd5180cbde97ad34333ae" title=" " alt="" coords="123,5,211,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="283,75,225,44,200,33,203,28,228,40,286,71"/>
+<area shape="rect" id="Node000004" href="$example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="261,86,227,80,228,75,262,80"/>
+<area shape="rect" id="Node000007" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="140,104,195,129"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="261,104,195,115,194,110,260,99"/>
+<area shape="rect" id="Node000008" href="$eval-ade7978_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="140,153,195,179"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="284,114,228,143,196,157,194,153,226,138,281,110"/>
+<area shape="rect" id="Node000005" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,57,60,51,61,45,95,52"/>
+<area shape="rect" id="Node000006" href="$adin1320_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="95,84,61,90,60,85,94,78"/>
+</map>

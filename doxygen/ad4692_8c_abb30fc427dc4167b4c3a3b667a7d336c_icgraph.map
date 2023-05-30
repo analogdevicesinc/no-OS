@@ -1,0 +1,11 @@
+<map id="ad4692_hardware_reset" name="ad4692_hardware_reset">
+<area shape="rect" id="Node000001" title=" " alt="" coords="488,31,667,56"/>
+<area shape="rect" id="Node000002" href="$ad4692_8c.html#a27d1d820c4b3b2c96e0a9e84413e5a69" title=" " alt="" coords="341,31,440,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="474,46,440,46,440,41,474,41"/>
+<area shape="rect" id="Node000003" href="$iio__ad4692_8c.html#ae960e7754563231c01852ccde37f74e4" title=" " alt="" coords="172,5,293,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="327,36,293,30,294,25,328,31"/>
+<area shape="rect" id="Node000005" href="$ad4692__ardz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,55,292,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="328,56,292,61,292,56,327,50"/>
+<area shape="rect" id="Node000004" href="$ad4692__ardz_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

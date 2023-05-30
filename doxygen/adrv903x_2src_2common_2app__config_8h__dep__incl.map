@@ -1,0 +1,7 @@
+<map id="projects/adrv903x/src/common/app_config.h" name="projects/adrv903x/src/common/app_config.h">
+<area shape="rect" id="Node000001" title="Application configuration parameters for ADRV903X project." alt="" coords="131,5,300,45"/>
+<area shape="rect" id="Node000002" href="$adrv903x_2src_2common_2clkgen__routines_8c.html" title="AXI clkgen setup for ADRV903X project." alt="" coords="5,93,207,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,56,132,95,129,91,179,52"/>
+<area shape="rect" id="Node000003" href="$adrv903x_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADRV903X examples." alt="" coords="231,93,421,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="252,52,303,91,300,95,249,56"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="drivers/net/mdio_spi/mdio_spi.h" name="drivers/net/mdio_spi/mdio_spi.h">
+<area shape="rect" id="Node000001" title="Header file for MDIO implementation." alt="" coords="624,5,779,45"/>
+<area shape="rect" id="Node000002" href="$mdio__spi_8c.html" title="Source file for MDIO implementation." alt="" coords="5,101,160,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="610,36,408,58,290,75,173,96,143,103,142,98,171,91,289,69,408,53,609,31"/>
+<area shape="rect" id="Node000003" href="$adin1320_2src_2common_2common__data_8h.html" title="Defines common data to be used by ADIN1320 examples." alt="" coords="184,101,376,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="611,48,390,96,358,103,357,98,389,91,610,43"/>
+<area shape="rect" id="Node000005" href="$basic__init_8c.html" title="Basic initialization example for ADIN1320." alt="" coords="401,93,562,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="645,53,544,96,542,91,643,48"/>
+<area shape="rect" id="Node000006" href="$basic__init__2devices_8c.html" title="Implementation of basic initialization for two ADIN1320 devices example." alt="" coords="587,93,816,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="704,59,704,93,699,93,699,59"/>
+<area shape="rect" id="Node000007" href="$cmd_8c.html" title="Implementation of terminal command control for ADIN1320." alt="" coords="840,101,1005,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="760,48,879,98,877,103,758,53"/>
+<area shape="rect" id="Node000008" href="$cmd__mode_8c.html" title="Implementation of terminal command control FW modes for ADIN1320." alt="" coords="1030,101,1239,141"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="793,43,1018,91,1051,98,1050,103,1017,96,792,48"/>
+<area shape="rect" id="Node000009" href="$wake__on__lan_8c.html" title="Implementation of wake&#45;on&#45;LAN configuration for ADIN1320 devices example." alt="" coords="1264,93,1443,148"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="792,31,1003,53,1128,70,1252,91,1264,93,1263,98,1252,96,1127,75,1003,59,792,37"/>
+<area shape="rect" id="Node000004" href="$adin1320_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADIN1320 examples." alt="" coords="185,196,375,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="283,154,283,196,277,196,277,154"/>
+</map>

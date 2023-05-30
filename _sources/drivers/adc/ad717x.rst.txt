@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/adc/ad717x/README.rst

@@ -1,0 +1,13 @@
+<map id="max17616_set_operation_state" name="max17616_set_operation_state">
+<area shape="rect" id="Node000001" title="Set device operation state." alt="" coords="565,35,752,75"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#a00b4001a23e1e8cb9658b07097c2b694" title="Write global attribute function for MAX17616 IIO device." alt="" coords="363,5,517,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="551,43,517,38,518,33,552,38"/>
+<area shape="rect" id="Node000003" href="$max17616_8c.html#aac638b2e6fc52133d47fd48c45f09a99" title="Initialize the device structure." alt="" coords="381,70,499,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="552,71,500,78,499,72,551,66"/>
+<area shape="rect" id="Node000004" href="$max17616_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="184,45,303,70"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="367,76,302,68,303,62,367,71"/>
+<area shape="rect" id="Node000005" href="$iio__max17616_8c.html#a47cdfba4d1631ec72a43507e9cf8bcea" title="Initializes the MAX17616 IIO descriptor." alt="" coords="172,94,315,119"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="367,94,315,101,314,95,367,89"/>
+<area shape="rect" id="Node000006" href="$max17616_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,94,124,119"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="159,109,125,109,125,104,159,104"/>
+</map>

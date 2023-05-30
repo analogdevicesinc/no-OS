@@ -1,0 +1,71 @@
+<map id="ade9113_control_interrupt" name="ade9113_control_interrupt">
+<area shape="rect" id="Node000001" title="Enable/disable interrupt." alt="" coords="272,1041,465,1066"/>
+<area shape="rect" id="Node000002" href="$ade9113_8c.html#a0f6e7e658f903d56c3b4f511aa84b7ee" title="Disable ADC_SYNC_DONE interrupt." alt="" coords="33,5,196,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="365,1027,360,837,353,697,342,546,324,393,299,253,283,191,265,138,245,93,222,59,210,48,195,40,197,35,213,44,226,56,249,90,270,136,288,190,304,252,329,393,347,545,359,697,365,836,370,1027"/>
+<area shape="rect" id="Node000003" href="$ade9113_8c.html#a000d15d1143da83045517d19ff6fab12" title="Disable COM_UP interrupt." alt="" coords="31,69,198,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="364,1027,358,847,350,717,338,576,320,434,295,303,280,246,263,196,243,154,222,123,197,105,200,100,226,119,248,152,268,194,285,245,300,302,325,433,343,575,356,717,363,847,370,1027"/>
+<area shape="rect" id="Node000004" href="$ade9113_8c.html#a1ce2fc2d5467ac00599d4462415fbbb3" title="Disable COMFLT_ERR interrupt." alt="" coords="25,133,205,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="364,1027,356,858,347,737,334,606,316,474,291,354,260,254,242,216,222,187,203,172,206,168,226,184,247,213,265,252,297,352,321,473,339,605,353,736,361,858,369,1027"/>
+<area shape="rect" id="Node000005" href="$ade9113_8c.html#a8f178ee95b379465b1b98cddc05f5ed4" title="Disable CRC_CHG interrupt." alt="" coords="35,197,194,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="364,1027,354,870,330,636,312,515,288,404,258,313,241,278,222,251,209,240,193,231,195,227,212,235,226,248,245,275,263,311,293,403,317,514,336,636,359,869,369,1027"/>
+<area shape="rect" id="Node000006" href="$ade9113_8c.html#a1bc10681df7de41edb3e8cd6cac433ef" title="Disable I_WAV_OVRNG interrupt." alt="" coords="26,261,203,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="363,1027,352,881,326,667,308,556,284,455,256,371,239,339,222,315,202,300,205,296,226,311,244,337,261,369,289,453,313,555,332,666,357,880,368,1027"/>
+<area shape="rect" id="Node000007" href="$ade9113_8c.html#a3945acc34fd788aabda4daf1e0b434fa" title="Disable ISO_CLK_STBL_ERR interrupt." alt="" coords="35,325,194,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="363,1027,349,892,323,697,304,597,280,505,253,430,238,401,222,379,209,368,193,360,196,355,212,364,226,376,243,398,258,428,286,504,309,596,328,696,355,892,368,1027"/>
+<area shape="rect" id="Node000008" href="$ade9113_8c.html#a006f04060a2855ec454fcbdb7a11f100" title="Disable ISO_DIG_MOD_I_OVF interrupt." alt="" coords="35,389,194,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="362,1028,347,904,319,728,299,638,277,556,251,488,237,463,222,443,209,432,193,424,196,419,212,428,226,439,241,460,256,486,282,554,305,637,324,727,352,903,367,1027"/>
+<area shape="rect" id="Node000009" href="$ade9113_8c.html#a5b47dc33bf5883eb54a841c61330c38a" title="Disable ISO_DIG_MOD_V1_OVF interrupt." alt="" coords="35,453,195,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="361,1027,344,915,314,759,295,679,273,606,249,547,222,507,194,489,197,484,226,503,253,545,278,605,300,678,320,757,350,914,367,1026"/>
+<area shape="rect" id="Node000010" href="$ade9113_8c.html#aa822b13146318416d72b59f9191e6260" title="Disable ISO_DIG_MOD_V2_OVF interrupt." alt="" coords="35,517,195,557"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="365,1027,361,940,354,882,342,818,325,751,299,686,266,625,222,571,193,553,196,548,226,567,270,622,304,684,330,750,348,816,359,881,366,940,370,1027"/>
+<area shape="rect" id="Node000011" href="$ade9113_8c.html#aee61c188ec16f7b219333c4b75236516" title="Disable ISO_EFUSE_MEM_ERR interrupt." alt="" coords="35,581,194,621"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="364,1027,356,951,334,845,316,788,292,733,261,681,222,635,193,617,196,612,226,631,265,678,297,730,321,787,340,844,361,950,369,1027"/>
+<area shape="rect" id="Node000012" href="$ade9113_8c.html#accb7e72b54b1a25d520488af2d82c272" title="Disable ISO_PHY_CRC_ERR interrupt." alt="" coords="35,645,194,685"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="362,1028,351,961,326,873,308,826,285,780,257,737,222,699,193,682,196,677,226,695,261,733,290,777,313,824,331,871,356,960,367,1027"/>
+<area shape="rect" id="Node000013" href="$ade9113_8c.html#a30e73e7968f6cfdcb5d7584918103d91" title="Disable ISO_TEST_MMR_ERR interrupt." alt="" coords="35,709,194,749"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="359,1028,344,973,318,901,300,864,278,827,252,793,222,763,193,746,196,742,226,759,256,790,282,824,304,861,323,899,350,971,365,1027"/>
+<area shape="rect" id="Node000014" href="$ade9113_8c.html#a04dcd5657636cb3355875f946309a1a2" title="Disable SPI_CRC_ERR interrupt." alt="" coords="35,773,194,813"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="356,1028,337,984,309,930,270,875,248,849,222,828,193,811,195,807,226,823,251,846,275,871,313,927,342,982,361,1026"/>
+<area shape="rect" id="Node000015" href="$ade9113_8c.html#a53793e74c510c251afb5df03fa729ecc" title="Disable STATUS1X interrupt." alt="" coords="5,838,224,863"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="352,1030,332,995,302,953,266,911,223,877,199,866,201,861,225,872,269,908,307,950,336,992,357,1027"/>
+<area shape="rect" id="Node000016" href="$ade9113_8c.html#a9338ef7dd09b2402285c92ab8f611c2e" title="Disable STATUS2X interrupt." alt="" coords="5,887,224,913"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="346,1032,294,979,260,951,223,928,191,915,193,910,225,923,263,947,298,975,350,1028"/>
+<area shape="rect" id="Node000017" href="$ade9113_8c.html#aa205ce49a55ca2008600d537dd8e4362" title="Disable V1_WAV_OVRNG interrupt." alt="" coords="37,937,192,977"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="328,1037,223,992,188,980,189,975,225,987,330,1032"/>
+<area shape="rect" id="Node000018" href="$ade9113_8c.html#aff3c1e4a135c30eda37fec1db535b84b" title="Disable V2_WAV_OVRNG interrupt." alt="" coords="37,1001,192,1041"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="258,1042,192,1034,192,1028,259,1037"/>
+<area shape="rect" id="Node000019" href="$ade9113_8c.html#a7b2077b1d3063713cae6a17937f90295" title="Enable ADC_SYNC_DONE interrupt." alt="" coords="35,1065,194,1105"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="259,1070,194,1078,194,1073,258,1065"/>
+<area shape="rect" id="Node000020" href="$ade9113_8c.html#a691dbafe59769f5a3cea424a189944fd" title="Enable COM_UP interrupt." alt="" coords="33,1129,197,1169"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="330,1075,225,1120,189,1132,188,1127,223,1115,328,1070"/>
+<area shape="rect" id="Node000021" href="$ade9113_8c.html#aee06bb1de0d194eef158fabe5787b98c" title="Enable COMFLT_ERR interrupt." alt="" coords="26,1193,203,1233"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="349,1078,297,1131,262,1159,225,1184,199,1196,197,1191,223,1179,259,1155,293,1127,346,1075"/>
+<area shape="rect" id="Node000022" href="$ade9113_8c.html#a9bfa1d06baa5d74d466bf0f8ee3f39e4" title="Enable CRC_CHG interrupt." alt="" coords="37,1257,192,1297"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="358,1080,337,1117,308,1162,270,1208,225,1248,193,1264,191,1259,223,1243,266,1205,303,1159,333,1114,353,1077"/>
+<area shape="rect" id="Node000023" href="$ade9113_8c.html#acf6a1eb4144bd1143b75a964de4f44af" title="Enable I_WAV_OVRNG interrupt." alt="" coords="27,1321,202,1361"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="362,1081,345,1130,317,1192,278,1256,253,1286,226,1311,204,1325,201,1320,222,1307,250,1282,274,1253,313,1189,340,1128,357,1079"/>
+<area shape="rect" id="Node000024" href="$ade9113_8c.html#a561f6f4bc07e7979efc6a8e7439f05f4" title="Enable ISO_CLK_STBL_ERR interrupt." alt="" coords="37,1385,192,1425"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="366,1080,352,1141,327,1220,308,1262,285,1303,258,1342,226,1375,194,1394,191,1390,222,1371,254,1338,281,1301,303,1260,322,1218,347,1139,361,1079"/>
+<area shape="rect" id="Node000025" href="$ade9113_8c.html#a27daffec5140a85587c85befa4b38f5b" title="Enable ISO_DIG_MOD_I_OVF interrupt." alt="" coords="37,1449,192,1489"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="368,1080,358,1151,335,1248,317,1299,293,1350,263,1398,226,1439,194,1459,191,1454,222,1435,259,1394,288,1348,312,1297,330,1246,353,1150,363,1079"/>
+<area shape="rect" id="Node000026" href="$ade9113_8c.html#aeba638a00b58ac535870065e0e43dcb0" title="Enable ISO_DIG_MOD_V1_OVF interrupt." alt="" coords="35,1513,195,1553"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="370,1080,363,1162,356,1216,343,1275,325,1336,300,1397,267,1453,226,1503,196,1522,193,1518,222,1499,263,1450,295,1394,320,1335,338,1274,350,1215,358,1161,364,1080"/>
+<area shape="rect" id="Node000027" href="$ade9113_8c.html#a9780bc4e361f70eaffba4d371d0f7ff5" title="Enable ISO_DIG_MOD_V2_OVF interrupt." alt="" coords="35,1577,195,1617"/>
+<area shape="poly" id="edge26_Node000001_Node000027" title=" " alt="" coords="371,1080,368,1171,362,1233,351,1302,333,1373,307,1443,272,1509,226,1567,197,1586,194,1582,222,1563,268,1506,303,1441,328,1371,346,1301,357,1233,363,1171,366,1080"/>
+<area shape="rect" id="Node000028" href="$ade9113_8c.html#a5a89fadb97f61b4b3b7e178f48ceb742" title="Enable ISO_EFUSE_MEM_ERR interrupt." alt="" coords="37,1641,192,1681"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="367,1080,351,1198,321,1363,302,1447,280,1524,254,1588,226,1631,211,1643,194,1652,191,1647,208,1639,222,1628,250,1585,275,1522,297,1446,316,1362,345,1197,362,1079"/>
+<area shape="rect" id="Node000029" href="$ade9113_8c.html#a02d871793646c8f848fd96137e6eb13e" title="Enable ISO_PHY_CRC_ERR interrupt." alt="" coords="37,1705,192,1745"/>
+<area shape="poly" id="edge28_Node000001_Node000029" title=" " alt="" coords="368,1080,353,1209,326,1393,306,1488,283,1575,257,1646,242,1674,226,1695,211,1708,193,1716,191,1712,208,1703,222,1691,237,1671,252,1644,278,1573,301,1487,320,1392,348,1208,362,1080"/>
+<area shape="rect" id="Node000030" href="$ade9113_8c.html#a836ced3a89caaed7f63b6030a4d5bfde" title="Enable ISO_TEST_MMR_ERR interrupt." alt="" coords="37,1769,192,1809"/>
+<area shape="poly" id="edge29_Node000001_Node000030" title=" " alt="" coords="368,1080,356,1220,330,1424,311,1529,287,1625,259,1704,243,1735,226,1759,211,1772,194,1781,191,1776,208,1767,222,1756,239,1733,254,1702,282,1624,305,1528,324,1423,350,1219,363,1079"/>
+<area shape="rect" id="Node000031" href="$ade9113_8c.html#aa98b0f5b92d289f569b03ccd27cd6578" title="Enable SPI_CRC_ERR interrupt." alt="" coords="37,1833,192,1873"/>
+<area shape="poly" id="edge30_Node000001_Node000031" title=" " alt="" coords="369,1080,358,1231,333,1454,315,1569,291,1675,262,1763,245,1797,226,1823,211,1836,194,1845,191,1840,208,1831,222,1820,240,1794,257,1761,286,1674,309,1568,328,1453,353,1231,363,1079"/>
+<area shape="rect" id="Node000032" href="$ade9113_8c.html#aabbcd88fe9558d0c9e2f27f3dc18cd54" title="Enable STATUS1X interrupt." alt="" coords="7,1898,223,1923"/>
+<area shape="poly" id="edge31_Node000001_Node000032" title=" " alt="" coords="369,1080,361,1242,339,1485,321,1611,296,1727,265,1822,247,1859,226,1887,209,1900,206,1896,222,1883,242,1856,260,1820,291,1726,315,1611,334,1485,356,1242,364,1079"/>
+<area shape="rect" id="Node000033" href="$ade9113_8c.html#aa52ba0e92920dd3d41e1b7b90552ed19" title="Enable STATUS2X interrupt." alt="" coords="7,1947,223,1973"/>
+<area shape="poly" id="edge32_Node000001_Node000033" title=" " alt="" coords="370,1080,363,1251,355,1375,342,1509,324,1643,299,1766,284,1820,267,1867,248,1907,226,1937,209,1949,206,1945,222,1933,243,1904,262,1865,279,1819,294,1765,319,1642,337,1508,349,1374,358,1251,364,1080"/>
+<area shape="rect" id="Node000034" href="$ade9113_8c.html#a38b1adb8d119cee375ca5c2e62815007" title="Enable V1_WAV_OVRNG interrupt." alt="" coords="21,1997,208,2037"/>
+<area shape="poly" id="edge33_Node000001_Node000034" title=" " alt="" coords="370,1080,363,1259,355,1389,343,1531,325,1672,300,1803,285,1861,267,1911,248,1953,226,1986,210,1999,207,1995,222,1982,243,1951,262,1909,280,1859,295,1802,319,1672,337,1530,350,1389,358,1259,364,1080"/>
+<area shape="rect" id="Node000035" href="$ade9113_8c.html#ab82dd7dfbf671bf2c9d50457febee17e" title="Enable V2_WAV_OVRNG interrupt." alt="" coords="21,2061,208,2101"/>
+<area shape="poly" id="edge34_Node000001_Node000035" title=" " alt="" coords="370,1080,365,1270,359,1410,347,1562,329,1714,304,1855,288,1917,270,1971,249,2016,226,2051,210,2065,207,2061,222,2048,245,2014,265,1969,283,1915,299,1854,324,1713,342,1561,353,1409,360,1270,365,1080"/>
+</map>

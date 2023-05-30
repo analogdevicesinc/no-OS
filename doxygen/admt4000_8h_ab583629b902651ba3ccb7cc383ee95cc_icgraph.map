@@ -1,0 +1,7 @@
+<map id="admt4000_remove" name="admt4000_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by admt4000_init()." alt="" coords="221,31,367,56"/>
+<area shape="rect" id="Node000002" href="$iio__admt4000_8c.html#a180d8c0a0fc9767bd6f8137ae4473cf9" title="Free resources allocated by the init function." alt="" coords="5,5,173,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,35,173,31,174,26,208,30"/>
+<area shape="rect" id="Node000003" href="$admt4000_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main function." alt="" coords="30,55,149,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,56,149,63,149,58,207,51"/>
+</map>

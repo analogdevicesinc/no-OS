@@ -1,0 +1,23 @@
+<map id="projects/max14906/src/platform/maxim/main.c" name="projects/max14906/src/platform/maxim/main.c">
+<area shape="rect" id="Node000001" title="Main file for Maxim platform of max14906 project." alt="" coords="603,5,783,45"/>
+<area shape="rect" id="Node000002" href="$max14906_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by max14906 project." alt="" coords="417,93,527,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="641,48,518,91,517,86,639,43"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="630,93,757,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="696,46,696,79,691,79,691,46"/>
+<area shape="rect" id="Node000010" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="820,93,929,119"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="738,43,836,85,834,90,736,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,109,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="418,119,123,169,122,164,417,114"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="133,167,240,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="427,121,247,166,245,161,426,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="264,167,379,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="449,121,360,163,357,158,447,116"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="403,167,541,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="475,119,475,153,469,153,469,119"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="566,167,679,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="497,116,587,158,584,163,495,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="704,167,856,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="522,116,718,161,717,166,521,121"/>
+<area shape="rect" id="Node000011" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="881,167,949,192"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="884,118,904,153,899,156,879,120"/>
+</map>

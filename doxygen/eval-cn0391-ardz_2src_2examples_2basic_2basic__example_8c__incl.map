@@ -1,0 +1,43 @@
+<map id="projects/eval&#45;cn0391&#45;ardz/src/examples/basic/basic_example.c" name="projects/eval&#45;cn0391&#45;ardz/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="Basic (non&#45;IIO) temperature readout example for eval&#45;cn0391&#45;ardz." alt="" coords="295,5,479,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="144,108,271,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="333,62,245,105,242,100,331,58"/>
+<area shape="rect" id="Node000003" href="$cn0391_8h.html" title="Header file of CN0391 board support." alt="" coords="347,108,428,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="390,60,390,94,385,94,385,60"/>
+<area shape="rect" id="Node000008" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="604,255,717,280"/>
+<area shape="poly" id="edge16_Node000001_Node000008" title=" " alt="" coords="480,42,515,51,551,64,585,82,615,106,637,138,651,174,659,210,663,241,657,241,654,211,646,176,632,141,611,110,582,87,549,69,514,56,479,47"/>
+<area shape="rect" id="Node000013" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="465,108,601,133"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="433,58,503,99,500,103,430,62"/>
+<area shape="rect" id="Node000015" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="5,181,111,207"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="368,62,332,100,285,136,256,148,215,160,125,182,124,176,214,155,254,143,282,131,328,96,365,58"/>
+<area shape="rect" id="Node000004" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="450,181,533,207"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="406,131,464,171,461,175,403,136"/>
+<area shape="rect" id="Node000011" href="$no__os__thermocouple_8h.html" title="Header file of thermocouple temperature conversion routines." alt="" coords="135,181,304,207"/>
+<area shape="poly" id="edge14_Node000003_Node000011" title=" " alt="" coords="361,136,260,178,258,173,359,131"/>
+<area shape="rect" id="Node000012" href="$no__os__rtd_8h.html" title="Header file of RTD temperature conversion routines." alt="" coords="328,181,425,207"/>
+<area shape="poly" id="edge15_Node000003_Node000012" title=" " alt="" coords="388,134,383,168,378,167,383,133"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="400,328,471,353"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="508,205,524,220,539,238,547,260,543,281,532,296,517,309,485,327,483,322,514,305,528,293,538,279,542,260,534,241,520,223,505,209"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="70,328,153,353"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="450,207,438,209,357,214,252,216,199,219,151,226,113,238,87,256,81,270,81,284,96,315,91,318,76,286,75,269,83,253,110,234,150,221,199,214,251,211,357,209,438,204,449,202"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="430,255,529,280"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="492,207,486,242,481,241,487,207"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="520,204,621,247,619,252,518,209"/>
+<area shape="rect" id="Node000009" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="255,255,355,280"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="462,209,349,252,347,247,460,204"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="474,282,452,318,447,315,470,279"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="625,283,485,327,483,322,624,277"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="327,278,403,319,401,324,324,282"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="275,283,156,326,155,321,273,278"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="179,328,249,353"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="292,282,241,321,238,317,288,278"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="557,181,623,207"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="544,132,574,169,570,172,540,135"/>
+<area shape="poly" id="edge20_Node000015_Node000005" title=" " alt="" coords="111,202,369,252,402,282,425,314,421,317,398,285,366,257,110,208"/>
+<area shape="poly" id="edge21_Node000015_Node000006" title=" " alt="" coords="54,208,41,241,39,260,43,279,59,301,79,318,76,322,55,304,38,281,34,261,36,240,49,206"/>
+<area shape="rect" id="Node000016" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="97,255,230,280"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="76,204,136,245,134,249,73,209"/>
+<area shape="poly" id="edge24_Node000016_Node000005" title=" " alt="" coords="208,277,388,324,386,329,206,283"/>
+<area shape="poly" id="edge25_Node000016_Node000006" title=" " alt="" coords="157,282,130,318,126,315,153,279"/>
+<area shape="poly" id="edge23_Node000016_Node000010" title=" " alt="" coords="174,279,200,315,196,318,170,282"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="port2_cfg" name="port2_cfg">
+<area shape="rect" id="Node000001" title=" " alt="" coords="172,5,255,31"/>
+<area shape="rect" id="Node000002" href="$apard__communication__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Configure the output port of the AD&#45;APARDPFWD&#45;SL then open a TCP socket to communicate with the AD&#45;AP..." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="no_os_uart_read_nonblocking" name="no_os_uart_read_nonblocking">
+<area shape="rect" id="Node000001" title="Read data from UART non&#45;blocking." alt="" coords="183,31,397,56"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="30,5,110,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,32,110,25,111,20,170,27"/>
+<area shape="rect" id="Node000003" href="$aducm3029__uart_8c.html#a24dc23e557033c8a852e3572d436077c" title=" " alt="" coords="5,55,135,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,59,135,63,134,58,169,54"/>
+</map>

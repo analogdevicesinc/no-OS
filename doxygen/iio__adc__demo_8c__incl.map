@@ -1,0 +1,49 @@
+<map id="drivers/adc/adc_demo/iio_adc_demo.c" name="drivers/adc/adc_demo/iio_adc_demo.c">
+<area shape="rect" id="Node000001" title="Implementation of iio_adc_demo." alt="" coords="283,5,449,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,92,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,48,106,93,105,88,289,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="117,93,183,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="315,48,195,91,194,86,313,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="433,313,504,339"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="388,44,408,66,427,92,449,131,463,163,481,240,482,271,478,300,472,300,477,271,475,240,458,164,444,133,422,95,404,69,384,47"/>
+<area shape="rect" id="Node000005" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="207,93,317,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="342,48,290,87,287,83,339,43"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="365,240,465,265"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="382,44,395,67,406,93,414,128,418,165,419,226,414,227,413,165,409,129,401,94,390,69,377,47"/>
+<area shape="rect" id="Node000010" href="$iio__adc__demo_8h.html" title="Header file of ADC Demo iio." alt="" coords="557,93,681,119"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="427,43,570,87,568,92,426,48"/>
+<area shape="rect" id="Node000015" href="$iio_8h.html" title="Header file of iio." alt="" coords="341,93,391,119"/>
+<area shape="poly" id="edge22_Node000001_Node000015" title=" " alt="" coords="369,46,369,79,363,79,363,46"/>
+<area shape="rect" id="Node000006" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="183,167,251,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="257,120,234,157,229,154,252,118"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="426,264,454,301,450,304,422,267"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="507,387,577,412"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="416,266,413,300,416,320,424,337,438,353,456,366,494,384,492,389,453,371,435,357,420,340,411,321,408,300,410,265"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="275,313,358,339"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="401,268,345,307,342,303,398,263"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="615,120,579,184,524,267,492,305,488,301,520,264,574,181,611,118"/>
+<area shape="rect" id="Node000011" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="618,240,711,265"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="626,118,659,226,654,228,620,120"/>
+<area shape="rect" id="Node000013" href="$adc__demo_8h.html" title="Header file of ADC Demo Driver." alt="" coords="715,167,817,192"/>
+<area shape="poly" id="edge17_Node000010_Node000013" title=" " alt="" coords="644,116,731,158,729,163,642,121"/>
+<area shape="poly" id="edge14_Node000011_Node000008" title=" " alt="" coords="636,268,601,287,569,315,555,344,547,374,542,372,550,342,565,312,598,282,633,263"/>
+<area shape="poly" id="edge13_Node000011_Node000009" title=" " alt="" coords="618,266,372,316,371,311,617,261"/>
+<area shape="rect" id="Node000012" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="579,313,750,339"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="667,266,667,300,662,300,662,266"/>
+<area shape="poly" id="edge16_Node000012_Node000008" title=" " alt="" coords="646,341,575,382,572,377,644,336"/>
+<area shape="poly" id="edge18_Node000013_Node000008" title=" " alt="" coords="772,191,780,220,785,259,782,302,775,322,764,341,736,359,691,374,592,394,590,389,690,369,733,355,760,337,770,320,776,301,780,260,775,221,767,193"/>
+<area shape="poly" id="edge19_Node000013_Node000011" title=" " alt="" coords="751,194,694,234,691,230,748,190"/>
+<area shape="rect" id="Node000014" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="825,313,921,339"/>
+<area shape="poly" id="edge20_Node000013_Node000014" title=" " alt="" coords="777,191,858,301,854,304,773,194"/>
+<area shape="poly" id="edge21_Node000014_Node000008" title=" " alt="" coords="825,340,591,390,590,385,824,335"/>
+<area shape="poly" id="edge23_Node000015_Node000011" title=" " alt="" coords="391,116,630,232,628,236,389,121"/>
+<area shape="rect" id="Node000016" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="275,167,380,192"/>
+<area shape="poly" id="edge24_Node000015_Node000016" title=" " alt="" coords="362,120,342,156,338,153,357,118"/>
+<area shape="poly" id="edge25_Node000016_Node000008" title=" " alt="" coords="275,193,198,214,166,227,147,242,143,252,147,264,164,292,183,309,239,336,306,361,374,377,439,387,493,393,493,398,439,393,373,382,304,366,237,341,181,314,160,295,142,266,138,252,143,238,163,222,196,209,274,188"/>
+<area shape="poly" id="edge26_Node000016_Node000009" title=" " alt="" coords="329,193,321,300,316,299,324,192"/>
+<area shape="rect" id="Node000017" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="157,240,290,265"/>
+<area shape="poly" id="edge27_Node000016_Node000017" title=" " alt="" coords="312,194,253,234,250,230,309,190"/>
+<area shape="poly" id="edge28_Node000017_Node000004" title=" " alt="" coords="263,263,421,308,420,313,262,268"/>
+<area shape="poly" id="edge29_Node000017_Node000008" title=" " alt="" coords="228,265,240,301,250,321,265,337,305,355,366,370,494,390,493,395,365,376,303,360,262,341,246,324,235,303,223,267"/>
+<area shape="poly" id="edge30_Node000017_Node000009" title=" " alt="" coords="240,263,292,303,289,307,237,267"/>
+</map>

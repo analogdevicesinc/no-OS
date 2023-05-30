@@ -1,0 +1,19 @@
+<map id="lt7182s_dev" name="lt7182s_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="919,99,1020,125"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="669,50,792,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="806,74,895,92,919,97,918,103,894,97,805,79"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="355,50,501,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="515,60,669,60,669,65,515,65"/>
+<area shape="rect" id="Node000004" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="10,6,189,31"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="202,15,405,19,522,27,639,40,678,47,677,53,638,45,522,32,405,24,202,20"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,30,218,32,355,50,354,56,217,37,202,35"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="362,194,494,219"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="481,221,545,237,626,250,713,252,756,247,798,236,848,213,892,181,929,149,955,123,958,127,933,153,896,186,850,217,800,241,757,252,713,257,625,255,544,243,479,226"/>
+<area shape="rect" id="Node000007" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="663,99,799,125"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="482,187,688,122,690,127,483,192"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,194,193,219"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="207,204,361,204,361,209,207,209"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="813,109,918,109,918,115,813,115"/>
+<area shape="rect" id="Node000008" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="332,99,524,125"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="538,109,663,109,663,115,538,115"/>
+</map>

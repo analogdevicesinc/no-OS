@@ -1,0 +1,14 @@
+<map id="lt8722_set_dac" name="lt8722_set_dac">
+<area shape="rect" id="Node000001" title="Set DAC code of LT8722 device." alt="" coords="581,31,701,56"/>
+<area shape="rect" id="Node000002" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="391,55,481,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="568,55,482,65,481,59,567,49"/>
+<area shape="rect" id="Node000006" href="$lt8722_8c.html#ad9a474691b3c502b9663a8cb5c7fe091" title="Set output volatge of LT8722 device." alt="" coords="339,5,533,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="567,37,533,33,534,27,568,32"/>
+<area shape="rect" id="Node000003" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="376,56,284,33,285,28,378,51"/>
+<area shape="rect" id="Node000004" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="377,70,289,70,289,65,377,65"/>
+<area shape="rect" id="Node000005" href="$lt8722_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="325,21,291,21,291,15,325,15"/>
+</map>

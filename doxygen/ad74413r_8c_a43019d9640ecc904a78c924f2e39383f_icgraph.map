@@ -1,0 +1,20 @@
+<map id="ad74413r_clear_errors" name="ad74413r_clear_errors">
+<area shape="rect" id="Node000001" title="Clear the ALERT_STATUS register." alt="" coords="620,104,787,129"/>
+<area shape="rect" id="Node000002" href="$iio__ad74413r_8c.html#a4a0731d5ea48757cf8fb7dad0a729a46" title="Initializes the AD74413R IIO descriptor." alt="" coords="279,53,413,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="628,104,572,94,413,75,414,69,572,89,629,99"/>
+<area shape="rect" id="Node000006" href="$ad74413r_8c.html#a8028c875e0d708d943f95172a959b287" title="Initialize the device structure." alt="" coords="461,104,572,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="606,119,572,119,572,114,606,114"/>
+<area shape="rect" id="Node000007" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="287,155,405,180"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="629,135,572,145,406,165,405,159,572,139,628,129"/>
+<area shape="rect" id="Node000003" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="110,5,229,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="284,52,216,33,218,28,286,47"/>
+<area shape="rect" id="Node000004" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,55,231,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="265,69,231,70,231,64,265,64"/>
+<area shape="rect" id="Node000005" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="95,84,61,90,60,85,94,79"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="459,103,389,81,390,76,461,97"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="461,136,390,157,389,152,459,131"/>
+<area shape="rect" id="Node000008" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="116,104,223,129"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="448,119,223,119,223,114,448,114"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="102,108,60,100,61,95,103,102"/>
+</map>

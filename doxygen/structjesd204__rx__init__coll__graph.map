@@ -1,0 +1,11 @@
+<map id="jesd204_rx_init" name="jesd204_rx_init">
+<area shape="rect" id="Node000001" title="JESD204B/C Receive Peripheral Initialization Structure." alt="" coords="129,211,250,236"/>
+<area shape="rect" id="Node000002" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="43,93,165,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,128,183,209,179,212,119,132"/>
+<area shape="rect" id="Node000003" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,44,105,93,100,93,95,45"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="207,93,379,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,131,229,188,204,212,200,209,225,185,274,128"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="209,5,397,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="303,45,297,93,292,93,297,44"/>
+</map>

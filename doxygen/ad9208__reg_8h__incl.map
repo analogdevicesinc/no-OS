@@ -1,0 +1,14 @@
+<map id="drivers/adc/ad9208/ad9208_api/ad9208_reg.h" name="drivers/adc/ad9208/ad9208_api/ad9208_reg.h">
+<area shape="rect" id="Node000001" title="AD9208 SPI Register Definition Header File." alt="" coords="5,5,199,45"/>
+<area shape="rect" id="Node000002" href="$adc_2ad9208_2ad9208__api_2api__def_8h.html" title="API definitions header file." alt="" coords="61,93,143,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,46,105,79,99,79,99,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="20,240,91,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,120,66,228,61,226,96,118"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="97,167,197,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="112,118,135,154,130,157,107,120"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="134,194,83,234,79,229,131,190"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="115,240,185,265"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="150,192,152,226,146,227,145,192"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="210,240,293,265"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="166,190,224,230,221,234,163,194"/>
+</map>

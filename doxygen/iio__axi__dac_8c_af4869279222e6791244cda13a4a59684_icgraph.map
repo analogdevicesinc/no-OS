@@ -1,0 +1,9 @@
+<map id="iio_axi_dac_get_dev_descriptor" name="iio_axi_dac_get_dev_descriptor">
+<area shape="rect" id="Node000001" title="Create structure describing a device, channels and attributes." alt="" coords="196,47,351,87"/>
+<area shape="rect" id="Node000002" href="$adrv903x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="17,5,136,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,47,128,33,129,28,183,42"/>
+<area shape="rect" id="Node000003" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,55,148,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,70,148,70,148,65,182,65"/>
+<area shape="rect" id="Node000004" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="49,104,104,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="183,93,105,113,103,107,182,87"/>
+</map>

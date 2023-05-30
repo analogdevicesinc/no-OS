@@ -1,0 +1,13 @@
+<map id="drivers/gmsl/common/gmsl_common.h" name="drivers/gmsl/common/gmsl_common.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,169,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="104,240,175,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,47,41,80,35,99,37,118,52,151,73,181,117,229,114,233,69,185,48,154,31,119,30,98,37,77,63,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="46,93,129,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="90,46,90,79,85,79,85,46"/>
+<area shape="rect" id="Node000004" href="$gmsl__reg__access_8h.html" title=" " alt="" coords="153,93,299,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="122,43,195,84,192,89,119,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="212,121,189,141,167,168,154,198,146,227,141,226,149,196,162,165,185,138,208,117"/>
+<area shape="rect" id="Node000005" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="177,167,275,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="229,119,229,153,223,153,223,119"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="214,194,166,233,162,229,210,190"/>
+</map>

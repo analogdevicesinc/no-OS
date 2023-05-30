@@ -1,0 +1,18 @@
+<map id="drivers/net/adin1320/adin1320.h" name="drivers/net/adin1320/adin1320.h">
+<area shape="rect" id="Node000001" title="Header file of the ADIN1320 driver." alt="" coords="36,5,192,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="195,240,278,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,43,204,63,231,92,245,126,250,163,249,198,245,227,240,226,243,198,244,163,240,128,226,95,201,67,169,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,47,87,94,70,130,57,167,46,226,40,225,51,166,65,128,82,92,103,45"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="85,167,185,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="106,46,94,80,92,99,95,118,104,137,117,155,113,158,100,140,90,119,87,99,89,79,101,45"/>
+<area shape="rect" id="Node000006" href="$no__os__mdio_8h.html" title="Header file for MDIO interface driver." alt="" coords="105,93,217,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="128,44,149,80,144,83,123,47"/>
+<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="153,190,210,230,207,234,150,194"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="122,194,69,234,66,229,119,190"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="100,240,171,265"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="138,192,138,226,133,226,133,192"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="170,118,199,165,229,226,224,229,194,168,166,120"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="137,121,105,141,75,168,58,197,48,227,43,226,53,195,71,165,102,136,135,116"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="159,120,146,155,141,153,154,118"/>
+</map>

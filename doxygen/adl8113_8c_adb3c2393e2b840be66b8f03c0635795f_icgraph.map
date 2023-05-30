@@ -1,0 +1,12 @@
+<map id="adl8113_set_mode" name="adl8113_set_mode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="496,31,641,56"/>
+<area shape="rect" id="Node000002" href="$adl8113_8c.html#a0e0b6d1c2bc33745c0b7aeacdfa504bd" title=" " alt="" coords="345,5,448,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="482,33,448,28,449,23,482,28"/>
+<area shape="rect" id="Node000005" href="$eval-adl8113_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function for basic example." alt="" coords="175,55,294,80"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="483,52,294,66,294,60,482,47"/>
+<area shape="rect" id="Node000003" href="$iio__adl8113_8c.html#a3e60c69260ff7e179d5065e998f81410" title="Initialize the ADL8113 IIO driver." alt="" coords="172,5,297,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="331,21,298,21,298,15,331,15"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="342,37,278,57,277,52,340,32"/>
+<area shape="rect" id="Node000004" href="$eval-adl8113_2src_2examples_2iio__example_2iio__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function for IIO example." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,21,124,21,124,15,159,15"/>
+</map>

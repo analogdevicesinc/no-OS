@@ -1,0 +1,5 @@
+<map id="admfm2000_remove" name="admfm2000_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by admfm2000_init()." alt="" coords="235,5,393,31"/>
+<area shape="rect" id="Node000002" href="$iio__admfm2000_8c.html#aa3b1841ddf9d7132aa62653ea6fb4f42" title="Free the resources allocated by admfm2000_iio_init()." alt="" coords="5,5,187,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,21,187,21,187,15,221,15"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="gnss_ubx_get_val" name="gnss_ubx_get_val">
+<area shape="rect" id="Node000001" title="Get configuration value by key." alt="" coords="336,13,475,38"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a8e8bbe768aacb1b570dc5b2072cf0621" title="Check if time pulse is currently enabled." alt="" coords="108,5,288,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="322,28,288,28,288,23,322,23"/>
+<area shape="rect" id="Node000003" href="$eval-ublox-gnss_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

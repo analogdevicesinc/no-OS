@@ -1,0 +1,14 @@
+<map id="projects/ltc7841/src/platform/maxim/parameters.c" name="projects/ltc7841/src/platform/maxim/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by ltc7841 project." alt="" coords="114,5,337,45"/>
+<area shape="rect" id="Node000002" href="$ltc7841_2src_2platform_2maxim_2parameters_8h.html" title="Definitions used by the LTC7841 project." alt="" coords="125,93,235,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,47,196,83,191,80,212,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,120,192"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="184,48,149,68,115,95,92,125,75,155,71,153,88,122,111,91,146,64,182,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="144,167,251,192"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="238,44,251,79,253,100,249,120,238,141,223,159,219,155,233,138,244,118,247,99,245,80,233,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="275,167,389,192"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="241,44,318,154,314,157,237,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="163,121,95,162,92,157,160,116"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="185,118,194,153,189,154,180,120"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="206,116,296,158,294,163,203,121"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad4170_set_current_source" name="ad4170_set_current_source">
+<area shape="rect" id="Node000001" title="Set the AD4170 Excitation Current." alt="" coords="152,5,303,45"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="5,13,104,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,28,104,28,104,23,138,23"/>
+</map>

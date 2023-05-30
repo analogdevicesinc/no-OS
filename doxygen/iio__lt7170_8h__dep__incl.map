@@ -1,0 +1,7 @@
+<map id="drivers/power/lt7170/iio_lt7170.h" name="drivers/power/lt7170/iio_lt7170.h">
+<area shape="rect" id="Node000001" title="Header file for the LT7170 IIO Driver." alt="" coords="108,5,264,45"/>
+<area shape="rect" id="Node000002" href="$iio__lt7170_8c.html" title="Source file for the LT7170 IIO Driver." alt="" coords="5,93,161,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,56,108,95,104,91,151,52"/>
+<area shape="rect" id="Node000003" href="$lt7170_2src_2examples_2iio_2iio__example_8c.html" title="IIO example source file for lt7170 project." alt="" coords="186,93,391,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,52,268,91,264,95,218,56"/>
+</map>

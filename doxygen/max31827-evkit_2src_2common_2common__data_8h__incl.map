@@ -1,0 +1,18 @@
+<map id="projects/max31827&#45;evkit/src/common/common_data.h" name="projects/max31827&#45;evkit/src/common/common_data.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="18,5,233,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,47,80,84,76,81,107,44"/>
+<area shape="rect" id="Node000003" href="$max31827_8h.html" title="Implementation of MAX31827 Driver." alt="" coords="139,93,242,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="143,44,174,81,170,84,139,47"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="80,167,179,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="183,121,150,158,146,154,179,117"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="203,167,303,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="203,117,236,154,232,158,199,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="109,240,179,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="134,192,141,226,136,227,129,193"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="237,194,175,235,172,230,234,190"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="210,240,281,265"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="255,193,251,227,245,226,249,192"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="305,240,388,265"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="270,190,322,229,319,234,267,194"/>
+</map>

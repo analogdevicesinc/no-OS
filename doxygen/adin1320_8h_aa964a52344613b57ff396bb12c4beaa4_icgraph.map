@@ -1,0 +1,7 @@
+<map id="adin1320_cu_autoneg" name="adin1320_cu_autoneg">
+<area shape="rect" id="Node000001" title="Enable/disable and Reset Autonegotiation for Copper Media." alt="" coords="244,31,408,56"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html#a48766364551163586fefde385a1021c8" title="Configure Downspeed." alt="" coords="5,5,196,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,35,196,31,196,26,230,30"/>
+<area shape="rect" id="Node000003" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="41,55,160,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,56,161,64,160,58,230,51"/>
+</map>

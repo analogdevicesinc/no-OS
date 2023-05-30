@@ -1,0 +1,12 @@
+<map id="max22190_chan_state" name="max22190_chan_state">
+<area shape="rect" id="Node000001" title="Switch selected channel&#39;s state to disabled or enabled." alt="" coords="587,29,756,55"/>
+<area shape="rect" id="Node000002" href="$max22190_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="198,5,317,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="573,39,317,24,317,19,573,34"/>
+<area shape="rect" id="Node000003" href="$max22190_8c.html#a52906a3e2f40e52332857154f1153d92" title="Free the resources allocated by initialization." alt="" coords="391,55,539,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="573,57,540,61,539,56,573,51"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="397,54,311,33,312,28,398,49"/>
+<area shape="rect" id="Node000004" href="$iio__max22190_8c.html#a4990673d3101295b7a39dbac8e3611f0" title="Free the resources allocated by max22190_iio_init()." alt="" coords="172,55,343,80"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="377,70,343,70,343,65,377,65"/>
+<area shape="rect" id="Node000005" href="$max22190_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

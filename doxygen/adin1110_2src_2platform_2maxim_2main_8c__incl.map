@@ -1,0 +1,21 @@
+<map id="projects/adin1110/src/platform/maxim/main.c" name="projects/adin1110/src/platform/maxim/main.c">
+<area shape="rect" id="Node000001" title="Main file for Maxim platform of the ADIN1110 project." alt="" coords="481,5,661,45"/>
+<area shape="rect" id="Node000002" href="$adin1110_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by the ADIN1110." alt="" coords="336,93,445,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="529,48,431,90,429,85,526,43"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="507,93,634,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="573,46,573,79,568,79,568,46"/>
+<area shape="rect" id="Node000009" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="677,93,787,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="610,43,697,85,695,90,608,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,109,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="338,121,123,167,122,161,337,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="133,167,240,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="359,121,233,165,232,160,357,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="264,167,379,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="381,121,344,159,340,155,377,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="403,167,517,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="404,117,441,155,437,159,400,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="541,167,693,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="428,116,568,160,567,165,426,121"/>
+<area shape="rect" id="Node000010" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="718,167,786,192"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="738,118,748,153,743,154,733,120"/>
+</map>

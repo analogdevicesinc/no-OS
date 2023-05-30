@@ -1,0 +1,7 @@
+<map id="projects/ad469x_evb/src/platform/xilinx/parameters.h" name="projects/ad469x_evb/src/platform/xilinx/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to xilinx platform used by ad469x_evb project." alt="" coords="96,5,253,60"/>
+<area shape="rect" id="Node000002" href="$ad469x__evb_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of ad469x_evb project." alt="" coords="5,108,163,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,72,110,110,106,106,140,69"/>
+<area shape="rect" id="Node000003" href="$ad469x__evb_2src_2platform_2xilinx_2parameters_8c.html" title="Definition of xilinx platform data used by ad469x_evb project." alt="" coords="187,108,344,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,69,244,106,240,110,206,72"/>
+</map>

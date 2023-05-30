@@ -1,0 +1,7 @@
+<map id="adf4156_set" name="adf4156_set">
+<area shape="rect" id="Node000001" title="Transmits 32 bits on SPI." alt="" coords="188,31,291,56"/>
+<area shape="rect" id="Node000002" href="$adf4156_8c.html#a06c4562cd42e5989c5564a1b1d478c1c" title="Initialize the SPI communication with the device." alt="" coords="21,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,36,124,28,125,23,175,31"/>
+<area shape="rect" id="Node000003" href="$adf4156_8c.html#a14d2922ab161e99b4135b71c08fe5d97" title="Sets the ADF4156 output frequency." alt="" coords="5,55,140,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,55,141,60,140,55,174,50"/>
+</map>

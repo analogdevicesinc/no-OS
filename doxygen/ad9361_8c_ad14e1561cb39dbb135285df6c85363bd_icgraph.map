@@ -1,0 +1,15 @@
+<map id="ad9361_clk_mux_set_parent" name="ad9361_clk_mux_set_parent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="579,47,737,87"/>
+<area shape="rect" id="Node000002" href="$ad9361__api_8c.html#a4ce4a53b1abc906764497153ae709a4f" title=" " alt="" coords="343,5,531,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="565,49,494,33,495,28,566,44"/>
+<area shape="rect" id="Node000003" href="$ad9361__api_8c.html#ac21991065ea660d12fbf54ee150f5c36" title=" " alt="" coords="343,55,531,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="565,70,531,70,531,65,565,65"/>
+<area shape="rect" id="Node000004" href="$ad9361_8c.html#ab8d07708ac33e09fa2cbd8ab7dd3bcbb" title=" " alt="" coords="380,104,493,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="566,91,494,107,493,102,564,85"/>
+<area shape="rect" id="Node000005" href="$ad9361__api_8c.html#ab58f5f1831cfcb6bf7a34d14de1edc1f" title=" " alt="" coords="152,79,251,104"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="366,112,251,99,251,94,367,106"/>
+<area shape="rect" id="Node000007" href="$ad9361__api_8c.html#a1d88d3cc5a6f7ea3a0e24027d7fef005" title=" " alt="" coords="108,128,295,153"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="366,126,295,134,294,129,366,121"/>
+<area shape="rect" id="Node000006" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,79,60,104"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="139,94,60,94,60,89,139,89"/>
+</map>

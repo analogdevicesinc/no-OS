@@ -1,0 +1,27 @@
+var cn0565_2src_2app_2app_8c =
+[
+    [ "APPBUFF_SIZE", "cn0565_2src_2app_2app_8c.html#a22879eda9250df051655091b3f2acf1b", null ],
+    [ "AD5940BiaStructInit", "cn0565_2src_2app_2app_8c.html#a68c4c81855db69071ab7e5d301ed16fb", null ],
+    [ "ADG2128_SwRst", "cn0565_2src_2app_2app_8c.html#a10f48ca1869dda8603b353d8a3c1cefa", null ],
+    [ "app_main", "cn0565_2src_2app_2app_8c.html#a388217d376f9fb3aeccae6a3e7b4c4c1", null ],
+    [ "ClrMCUIntFlag", "cn0565_2src_2app_2app_8c.html#af5c3a24d7c134dd58f1e824791b7b923", null ],
+    [ "configMeasurement", "cn0565_2src_2app_2app_8c.html#aaf9fd428ff8a09de97a66bbb5a1d5652", null ],
+    [ "generateSwitchCombination", "cn0565_2src_2app_2app_8c.html#a3dc45125b2dbb0da3a22ec9f7c4ec408", null ],
+    [ "GetMCUIntFlag", "cn0565_2src_2app_2app_8c.html#a8e5bbf1b9f9ffe2cbcd235949ec05acc", null ],
+    [ "MuxSupportedElectrodeCounts", "cn0565_2src_2app_2app_8c.html#a310d4461358732df121303608ef9c195", null ],
+    [ "ParseConfig", "cn0565_2src_2app_2app_8c.html#af144580bb2e9c0dd04c27c2055077999", null ],
+    [ "ParseQuery", "cn0565_2src_2app_2app_8c.html#a930afd7d95bcdceb56f97c81ae64da3e", null ],
+    [ "ParseResultMode", "cn0565_2src_2app_2app_8c.html#a69df86908c5a3b33bdca5311e4a6d9b8", null ],
+    [ "SendResult", "cn0565_2src_2app_2app_8c.html#a0d34a3b1721fb95fe90f98a25a763e85", null ],
+    [ "SendResultFloat32", "cn0565_2src_2app_2app_8c.html#ac36d194db26698c0a699c9694f79bda5", null ],
+    [ "SendResultIeee754", "cn0565_2src_2app_2app_8c.html#a40e34351e8f3a9ec73d8d57dc1365317", null ],
+    [ "SendResultUint32", "cn0565_2src_2app_2app_8c.html#afdf0deaf6abfccbec2bd843012f8e477", null ],
+    [ "AppBuff", "cn0565_2src_2app_2app_8c.html#a4a650160f26a398eb5720be32abf8bd9", null ],
+    [ "runningCmd", "cn0565_2src_2app_2app_8c.html#a99065c6d86d173d3681910ba7e430800", null ],
+    [ "SinFreqVal", "cn0565_2src_2app_2app_8c.html#a44e5143c2804e8a7c1dffeeb06b61231", null ],
+    [ "SinFreqValUINT", "cn0565_2src_2app_2app_8c.html#a29b736208a5bcc9cf673ea14bcc2ecae", null ],
+    [ "swComboSeq", "cn0565_2src_2app_2app_8c.html#accf64fc398130e9aa09aa5999f07f7e7", null ],
+    [ "szInSring", "cn0565_2src_2app_2app_8c.html#acf576c0f4313942d21fa61e27c025274", null ],
+    [ "uart", "cn0565_2src_2app_2app_8c.html#af87d289165320b25ae4ffacb9a374c3e", null ],
+    [ "ucInterrupted", "cn0565_2src_2app_2app_8c.html#aef9a900766403c0e47af54fe7b1cf74f", null ]
+];

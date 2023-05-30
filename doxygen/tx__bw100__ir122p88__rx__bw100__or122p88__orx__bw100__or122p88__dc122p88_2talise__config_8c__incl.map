@@ -1,0 +1,11 @@
+<map id="projects/adrv9009/profiles/tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88/talise_config.c" name="projects/adrv9009/profiles/tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88/talise_config.c">
+<area shape="rect" id="Node000001" title="Contains Talise configuration settings for the Talise API." alt="" coords="151,5,387,75"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,123,119,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,77,101,119,99,114,193,72"/>
+<area shape="rect" id="Node000003" href="$tx__bw100__ir122p88__rx__bw100__or122p88__orx__bw100__or122p88__dc122p88_2talise__config_8h.html" title="Talise configuration external declarations." alt="" coords="143,123,259,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,76,219,113,215,110,242,73"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="283,123,390,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="295,73,322,110,318,113,291,76"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="415,123,515,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="341,72,429,114,427,119,338,77"/>
+</map>

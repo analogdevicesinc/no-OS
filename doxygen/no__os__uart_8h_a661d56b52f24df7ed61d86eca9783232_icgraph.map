@@ -1,0 +1,40 @@
+<map id="no_os_uart_remove" name="no_os_uart_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by no_os_uart_init()." alt="" coords="383,327,533,352"/>
+<area shape="rect" id="Node000002" href="$ades1754_8c.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="197,5,310,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="451,313,440,257,419,185,404,146,384,109,361,74,333,44,309,30,312,25,336,40,365,71,389,106,409,144,424,183,446,256,456,312"/>
+<area shape="rect" id="Node000004" href="$ades1754_8c.html#ab4de2134ccbc42d937ad7d2d0873a681" title="Deallocate any resources used by the initialization function.." alt="" coords="182,55,325,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="449,314,435,267,413,207,379,146,358,118,333,93,315,82,318,78,336,89,362,114,383,143,417,205,440,265,454,312"/>
+<area shape="rect" id="Node000005" href="$hello__world_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Hello World application entry point." alt="" coords="173,104,333,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="445,315,430,276,406,230,373,183,333,143,313,132,316,127,336,139,377,180,410,227,434,274,450,313"/>
+<area shape="rect" id="Node000006" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="175,153,332,179"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="441,316,398,254,368,221,333,192,311,181,314,176,336,188,371,217,402,251,445,313"/>
+<area shape="rect" id="Node000008" href="$cmd_8c.html#a87f501fc90d5f0f69db7b44288b9a1c8" title=" " alt="" coords="210,203,297,228"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="433,319,389,280,333,242,296,227,298,222,336,237,392,275,437,315"/>
+<area shape="rect" id="Node000010" href="$curvetrace__example_8c.html#aa8c97b178f1ed4023a2fa5c0217a52c9" title=" " alt="" coords="176,252,331,277"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="415,324,334,291,299,280,301,275,336,286,417,319"/>
+<area shape="rect" id="Node000011" href="$ad4692__ardz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="194,301,313,327"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="369,331,313,324,313,319,369,326"/>
+<area shape="rect" id="Node000012" href="$eval-adg1736_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="194,351,313,376"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="369,352,313,359,313,354,369,347"/>
+<area shape="rect" id="Node000013" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="213,400,293,425"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="414,360,336,390,294,403,293,398,334,385,412,355"/>
+<area shape="rect" id="Node000014" href="$nmea__ubx_8c.html#a6326efc5992d3186668ad6264639bf0e" title="Remove the GNSS device and release allocated resources." alt="" coords="199,449,308,475"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="435,364,391,402,336,439,306,452,304,447,333,434,388,398,432,360"/>
+<area shape="rect" id="Node000015" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="172,499,335,524"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="445,365,402,426,371,460,336,488,311,501,308,496,333,484,367,456,397,423,441,362"/>
+<area shape="rect" id="Node000017" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="226,548,281,573"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="450,366,434,404,409,450,377,497,336,537,309,552,282,560,280,555,307,547,333,533,373,494,405,447,429,402,445,364"/>
+<area shape="rect" id="Node000018" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="226,597,281,623"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="453,366,440,414,417,473,383,534,361,562,336,587,310,602,282,610,280,604,308,597,333,583,357,558,378,531,412,470,435,412,448,365"/>
+<area shape="rect" id="Node000019" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="226,647,281,672"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="456,366,445,422,424,494,408,532,389,570,365,605,336,636,310,652,282,659,280,654,308,647,333,632,361,602,384,567,403,530,419,492,440,420,451,365"/>
+<area shape="rect" id="Node000003" href="$spi__uart__bridge__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="SPI&#45;to&#45;UART example main execution." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,30,125,38,124,33,182,25"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="168,59,124,53,125,48,169,54"/>
+<area shape="rect" id="Node000007" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="37,153,92,179"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="161,169,92,169,92,163,161,163"/>
+<area shape="rect" id="Node000009" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,203,124,228"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="196,218,124,218,124,213,196,213"/>
+<area shape="rect" id="Node000016" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,499,124,524"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="158,514,124,514,124,509,158,509"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="drivers/position/admt4000/admt4000.h" name="drivers/position/admt4000/admt4000.h">
+<area shape="rect" id="Node000001" title="Header Implementation of ADMT4000 Driver." alt="" coords="440,5,633,45"/>
+<area shape="rect" id="Node000002" href="$admt4000_8c.html" title="Implementation of ADMT4000 Driver." alt="" coords="5,101,199,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="429,51,212,96,180,103,179,98,211,91,428,45"/>
+<area shape="rect" id="Node000003" href="$iio__admt4000_8c.html" title="Implementation of IIO ADMT4000 driver." alt="" coords="223,101,416,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="481,53,364,103,362,98,479,48"/>
+<area shape="rect" id="Node000004" href="$admt4000_2src_2common_2common__data_8h.html" title=" " alt="" coords="441,101,633,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="539,59,539,101,534,101,534,59"/>
+<area shape="rect" id="Node000006" href="$admt4000_2src_2examples_2basic_2basic__example_8c.html" title="Basic example implementation for ADMT4000." alt="" coords="657,93,824,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="591,49,684,91,682,96,589,53"/>
+<area shape="rect" id="Node000007" href="$admt4000_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of admt4000 project." alt="" coords="848,101,1023,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="639,46,837,91,866,98,865,103,836,96,638,51"/>
+<area shape="rect" id="Node000005" href="$admt4000_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADMT4000 examples." alt="" coords="441,196,632,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="539,154,539,196,534,196,534,154"/>
+</map>

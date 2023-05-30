@@ -1,0 +1,30 @@
+<map id="projects/eval&#45;cn0391&#45;ardz/src/common/common_data.h" name="projects/eval&#45;cn0391&#45;ardz/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;cn0391&#45;ardz examples." alt="" coords="153,5,353,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="106,108,215,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,62,185,100,181,96,223,58"/>
+<area shape="rect" id="Node000003" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="202,181,285,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,60,247,168,242,168,248,60"/>
+<area shape="rect" id="Node000010" href="$cn0391_8h.html" title="Header file of CN0391 board support." alt="" coords="308,108,389,133"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="284,58,327,97,324,101,280,62"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="165,328,236,353"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="227,209,203,229,184,256,181,270,182,286,190,315,185,316,176,286,176,270,180,254,199,225,223,205"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="414,328,497,353"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="285,201,368,223,406,237,431,253,449,282,456,314,451,315,444,284,427,257,403,242,366,228,284,207"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,255,293,280"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="246,207,246,241,241,241,241,207"/>
+<area shape="rect" id="Node000007" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,255,119,280"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="215,209,105,252,103,247,213,204"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,255,417,280"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="265,204,337,245,334,250,262,209"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="239,282,217,318,212,315,234,279"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="85,278,167,319,165,324,83,282"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="342,282,241,325,239,320,340,278"/>
+<area shape="poly" id="edge12_Node000008_Node000005" title=" " alt="" coords="383,278,432,317,429,321,380,282"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="319,328,389,353"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="368,281,361,315,356,314,363,280"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="333,136,273,176,270,171,330,131"/>
+<area shape="rect" id="Node000011" href="$no__os__thermocouple_8h.html" title="Header file of thermocouple temperature conversion routines." alt="" coords="431,181,600,207"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="376,131,477,173,475,178,374,136"/>
+<area shape="rect" id="Node000012" href="$no__os__rtd_8h.html" title="Header file of RTD temperature conversion routines." alt="" coords="309,181,407,207"/>
+<area shape="poly" id="edge16_Node000010_Node000012" title=" " alt="" coords="353,133,357,167,352,168,348,134"/>
+</map>

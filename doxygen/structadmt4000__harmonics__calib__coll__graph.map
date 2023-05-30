@@ -1,0 +1,5 @@
+<map id="admt4000_harmonics_calib" name="admt4000_harmonics_calib">
+<area shape="rect" id="Node000001" title="Harmonic calibration data for all harmonics." alt="" coords="21,137,184,177"/>
+<area shape="rect" id="Node000002" href="$structadmt4000__harmonic__coeff.html" title="Harmonic calibration coefficient." alt="" coords="5,5,200,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,105,137,100,137,100,44"/>
+</map>

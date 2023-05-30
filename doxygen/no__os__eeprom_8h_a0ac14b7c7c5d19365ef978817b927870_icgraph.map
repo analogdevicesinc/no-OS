@@ -1,0 +1,7 @@
+<map id="no_os_eeprom_init" name="no_os_eeprom_init">
+<area shape="rect" id="Node000001" title="Initialize the EEPROM." alt="" coords="172,31,317,56"/>
+<area shape="rect" id="Node000002" href="$admt4000_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,34,124,29,125,24,159,29"/>
+<area shape="rect" id="Node000003" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="37,55,92,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,57,93,66,92,61,158,52"/>
+</map>

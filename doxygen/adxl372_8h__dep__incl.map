@@ -1,0 +1,9 @@
+<map id="drivers/accel/adxl372/adxl372.h" name="drivers/accel/adxl372/adxl372.h">
+<area shape="rect" id="Node000001" title="Header file for adxl372 Driver." alt="" coords="191,5,352,45"/>
+<area shape="rect" id="Node000002" href="$adxl372_8c.html" title="Implementation of adxl372 Core Driver." alt="" coords="5,93,167,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,54,128,96,125,91,217,49"/>
+<area shape="rect" id="Node000003" href="$adxl372__i2c_8c.html" title="Implementation of adxl372 I2C Driver." alt="" coords="191,93,352,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,59,274,93,269,93,269,59"/>
+<area shape="rect" id="Node000004" href="$adxl372__spi_8c.html" title="Implementation of adxl372 SPI Driver." alt="" coords="376,93,537,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="326,49,417,91,415,96,323,54"/>
+</map>

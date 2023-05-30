@@ -1,0 +1,32 @@
+<map id="drivers/adc/ad7616/iio_ad7616.h" name="drivers/adc/ad7616/iio_ad7616.h">
+<area shape="rect" id="Node000001" title="Header file for AD7616 IIO interface." alt="" coords="187,5,333,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="298,313,369,339"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,48,139,86,98,111,60,139,30,169,12,200,9,216,9,232,14,248,25,264,41,277,67,288,136,304,215,315,284,320,284,325,214,320,136,310,65,293,39,281,21,267,10,250,4,233,3,215,7,198,26,166,57,135,95,107,136,81,214,43"/>
+<area shape="rect" id="Node000003" href="$iio_8h.html" title="Header file of iio." alt="" coords="267,93,317,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="270,45,285,80,280,82,265,47"/>
+<area shape="rect" id="Node000004" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="196,167,289,192"/>
+<area shape="poly" id="edge15_Node000001_Node000004" title=" " alt="" coords="261,46,248,153,243,153,255,46"/>
+<area shape="rect" id="Node000010" href="$ad7616_8h.html" title="Header file of AD7616 Driver." alt="" coords="313,167,396,192"/>
+<area shape="poly" id="edge16_Node000001_Node000010" title=" " alt="" coords="287,44,311,65,332,92,345,123,353,152,348,154,340,124,327,95,307,69,284,47"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,121,261,157,256,154,282,117"/>
+<area shape="rect" id="Node000007" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="474,167,579,192"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="318,112,477,160,475,165,317,118"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="247,192,254,226,270,264,287,285,307,303,303,307,283,289,266,267,249,227,242,193"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="641,313,724,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="290,187,302,189,382,195,486,199,588,210,629,221,659,238,670,251,678,267,685,299,680,300,673,269,666,254,656,242,627,226,587,215,486,204,382,200,301,195,289,193"/>
+<area shape="rect" id="Node000006" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="35,240,205,265"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="224,194,153,235,150,231,222,190"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="155,263,287,306,285,311,154,268"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="514,194,420,267,363,308,360,303,417,263,511,190"/>
+<area shape="poly" id="edge10_Node000007_Node000005" title=" " alt="" coords="580,180,612,186,646,196,678,213,704,239,710,254,710,271,700,302,695,300,705,270,705,255,699,241,675,218,644,201,611,191,579,186"/>
+<area shape="rect" id="Node000008" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="512,240,645,265"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="537,191,564,227,560,230,533,194"/>
+<area shape="poly" id="edge13_Node000008_Node000002" title=" " alt="" coords="540,268,382,313,381,308,539,263"/>
+<area shape="poly" id="edge14_Node000008_Node000005" title=" " alt="" coords="597,263,656,303,653,307,594,268"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="543,313,614,339"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="581,266,581,300,576,300,576,266"/>
+<area shape="poly" id="edge19_Node000010_Node000002" title=" " alt="" coords="370,191,397,224,404,245,401,266,386,289,367,307,363,303,382,286,396,264,399,245,392,226,366,194"/>
+<area shape="rect" id="Node000011" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="280,240,387,265"/>
+<area shape="poly" id="edge17_Node000010_Node000011" title=" " alt="" coords="354,193,343,228,338,226,349,192"/>
+<area shape="poly" id="edge18_Node000011_Node000002" title=" " alt="" coords="336,266,336,300,331,300,331,266"/>
+</map>

@@ -1,0 +1,23 @@
+<map id="w5500_socket_command_write" name="w5500_socket_command_write">
+<area shape="rect" id="Node000001" title="Write a command to a socket&#39;s command register." alt="" coords="445,195,632,235"/>
+<area shape="rect" id="Node000002" href="$w5500_8c.html#ad97cbe485e6e3a1a4a556a0a4abff570" title="Close a socket." alt="" coords="225,5,379,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="518,185,469,113,435,76,396,44,373,33,375,28,399,40,439,72,473,110,522,182"/>
+<area shape="rect" id="Node000003" href="$w5500_8c.html#a77ceba7865a139cc6fa95161c38637b6" title="Connect to a remote host (TCP client mode)" alt="" coords="216,55,388,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,187,459,138,429,114,396,94,369,83,371,78,399,89,432,110,463,134,513,183"/>
+<area shape="rect" id="Node000004" href="$w5500_8c.html#af5cfb6fdba4b4ec8845f1be91ed024ca" title="Disconnect a TCP connection." alt="" coords="207,104,397,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="492,191,447,166,396,143,361,132,363,127,398,138,449,161,495,186"/>
+<area shape="rect" id="Node000005" href="$w5500_8c.html#a5c08d746d98282c9ff75631970e99a99" title="Initialize a socket." alt="" coords="231,153,373,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="431,196,363,181,364,176,432,190"/>
+<area shape="rect" id="Node000007" href="$w5500_8c.html#a3580afc6ff26d7e9b7a416f24cdabc89" title="Set socket to listen mode (TCP server)" alt="" coords="223,203,381,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="432,218,381,218,381,213,432,213"/>
+<area shape="rect" id="Node000008" href="$w5500_8c.html#a5a5e49b2bdaf0ce3d53b445a164a1169" title="Receive data from a socket." alt="" coords="227,252,377,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="432,240,364,255,363,249,431,235"/>
+<area shape="rect" id="Node000009" href="$w5500_8c.html#aa4659c1641cf98b560e144b8b4cadaea" title="Receive data from a socket with source address information (UDP)" alt="" coords="212,301,392,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="493,245,448,269,398,291,359,304,358,299,396,286,446,264,491,240"/>
+<area shape="rect" id="Node000010" href="$w5500_8c.html#a5277594560890d5cc02ed35b216aad5d" title="Send data through a socket." alt="" coords="226,351,378,376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="513,247,463,295,432,320,399,340,368,353,366,348,396,336,429,315,459,291,509,244"/>
+<area shape="rect" id="Node000011" href="$w5500_8c.html#a23c5030713f505976ab8f3f5037eb615" title="Send data to a specific destination (UDP)" alt="" coords="219,400,385,425"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="522,249,473,320,438,358,399,390,372,402,370,397,396,385,435,354,469,317,518,246"/>
+<area shape="rect" id="Node000006" href="$w5500_8c.html#a86c9e1fb85bbeb8663db0c08ecca5f14" title="Open a socket with specified protocol." alt="" coords="5,153,159,179"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="216,169,159,169,159,163,216,163"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="adxrs290_reg_read" name="adxrs290_reg_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="555,131,701,156"/>
+<area shape="rect" id="Node000002" href="$adxrs290_8c.html#af368749bc970398a575ef8417014848c" title="Get the high&#45;pass filter pole location." alt="" coords="349,5,488,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="603,122,560,82,505,44,478,33,480,28,508,40,564,78,607,118"/>
+<area shape="rect" id="Node000003" href="$adxrs290_8c.html#a8cab9a37aaeee40a1815ec52fab9924e" title="Get the low&#45;pass filter pole location." alt="" coords="351,55,486,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="578,128,454,83,456,78,580,123"/>
+<area shape="rect" id="Node000004" href="$adxrs290_8c.html#a577b03b60bb2ad4cd1713c1bf712368c" title=" " alt="" coords="172,156,283,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="541,141,440,139,331,146,270,159,269,153,330,141,440,134,541,135"/>
+<area shape="rect" id="Node000006" href="$adxrs290_8c.html#afc1c51c64e22a51dfac92899f21609d2" title="Set the low&#45;pass filter pole location." alt="" coords="350,156,487,181"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="541,156,488,163,487,158,541,151"/>
+<area shape="rect" id="Node000007" href="$adxrs290_8c.html#aaac78320a104deec1e5b3d21fc5105d6" title="Set the low&#45;pass filter pole location." alt="" coords="352,205,485,231"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="586,164,508,195,468,208,466,203,506,190,584,159"/>
+<area shape="rect" id="Node000008" href="$adxrs290_8c.html#ab4e680182efd5eb39184ea282cf56d4d" title="Set device operation mode." alt="" coords="331,255,507,280"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="607,168,563,207,508,244,477,257,475,252,505,240,560,203,603,164"/>
+<area shape="rect" id="Node000005" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,156,124,181"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,171,124,171,124,166,158,166"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="336,171,283,171,283,166,336,166"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="355,204,277,184,278,179,356,199"/>
+</map>

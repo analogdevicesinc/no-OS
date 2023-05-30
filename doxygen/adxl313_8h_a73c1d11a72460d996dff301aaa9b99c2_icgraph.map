@@ -1,0 +1,19 @@
+<map id="adxl313_conf_int_map" name="adxl313_conf_int_map">
+<area shape="rect" id="Node000001" title=" " alt="" coords="649,134,819,159"/>
+<area shape="rect" id="Node000002" href="$adxl313_8c.html#a842d16935a98f00b120d32346c56503d" title=" " alt="" coords="400,13,591,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="707,127,660,89,600,53,565,41,567,36,602,48,663,85,711,123"/>
+<area shape="rect" id="Node000004" href="$adxl313_8c.html#a756aaa36137a481c4ad4eda9b3938772" title=" " alt="" coords="418,63,573,103"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="672,133,570,105,571,100,673,128"/>
+<area shape="rect" id="Node000005" href="$adxl313_8c.html#a1b5c3a4ecb47393e4053ec1fa7927af9" title=" " alt="" coords="424,127,567,167"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="635,149,567,149,567,144,635,144"/>
+<area shape="rect" id="Node000008" href="$adxl313_8c.html#a53ffccfc61a6a9dffa9596217d8c8be4" title=" " alt="" coords="400,191,591,217"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="668,165,602,181,550,194,549,189,601,176,666,160"/>
+<area shape="rect" id="Node000009" href="$adxl313_8c.html#a4fa970d2fead9d43e988060012400db6" title=" " alt="" coords="389,241,601,266"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="707,170,659,202,602,232,568,243,566,238,600,227,657,197,704,166"/>
+<area shape="rect" id="Node000003" href="$adxl313_8c.html#ad14d5588767f1b178ff91d1ebb6034d6" title="Enable the activity detection." alt="" coords="178,5,335,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="386,28,335,28,335,23,386,23"/>
+<area shape="rect" id="Node000006" href="$adxl313_8c.html#aef4533824eea2c42410b877c50d58c75" title="Enables the inactivity detection." alt="" coords="172,127,341,167"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="410,149,342,149,342,144,410,144"/>
+<area shape="rect" id="Node000007" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,134,124,159"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="158,149,124,149,124,144,158,144"/>
+</map>

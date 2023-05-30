@@ -1,0 +1,19 @@
+<map id="ad5293_dev" name="ad5293_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="927,151,1028,177"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="676,70,799,95"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="789,97,940,149,938,154,788,102"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="712,55,720,47,737,43,752,46,762,52,764,62,759,71,755,69,759,61,757,55,750,51,737,49,722,51,716,59"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,51,490,77"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,66,676,76,676,82,504,72"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,21,184,46"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,23,208,23,332,18,428,18,524,27,646,49,705,67,703,72,645,55,524,32,428,23,332,23,208,28,198,28"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,40,343,54,343,60,198,46"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,101,491,141"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,111,645,95,675,90,676,96,646,100,506,116"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="671,151,803,177"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="817,161,927,161,927,167,817,167"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,166,511,191"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="524,171,671,164,671,170,524,176"/>
+<area shape="rect" id="Node000008" href="$structad5293__chip__info.html" title=" " alt="" coords="669,201,805,226"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="818,198,902,181,931,174,933,179,903,187,819,203"/>
+</map>

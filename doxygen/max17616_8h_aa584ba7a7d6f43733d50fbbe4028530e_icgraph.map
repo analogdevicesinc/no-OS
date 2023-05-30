@@ -1,0 +1,10 @@
+<map id="max17616_read_value" name="max17616_read_value">
+<area shape="rect" id="Node000001" title="Read a specific value with automatic data conversion." alt="" coords="503,31,673,56"/>
+<area shape="poly" id="edge4_Node000001_Node000001" title=" " alt="" coords="631,21,628,17,621,13,588,9,562,11,548,16,545,22,553,29,549,32,540,22,545,12,561,6,588,4,622,8,632,13,636,18"/>
+<area shape="rect" id="Node000002" href="$max17616_8c.html#a3d9ae711267742f280c4f4f1baac21dd" title="Read comprehensive telemetry data." alt="" coords="233,31,455,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="489,46,455,46,455,41,489,41"/>
+<area shape="rect" id="Node000003" href="$max17616_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="36,5,155,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="219,33,155,27,155,21,220,28"/>
+<area shape="rect" id="Node000004" href="$iio__max17616_8c.html#a06842d04ba8765565503d1949435b14f" title="Read attribute function for MAX17616 PMBus IIO driver." alt="" coords="5,55,185,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="220,58,186,61,185,56,219,53"/>
+</map>

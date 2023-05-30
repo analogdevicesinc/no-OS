@@ -1,0 +1,41 @@
+<map id="max22190_reg_read" name="max22190_reg_read">
+<area shape="rect" id="Node000001" title="Register read function for MAX22190." alt="" coords="1081,126,1236,152"/>
+<area shape="rect" id="Node000002" href="$max22190_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="198,253,317,278"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1070,127,1033,123,891,109,707,94,614,90,526,92,450,100,392,118,369,130,348,146,312,185,285,224,267,254,263,251,280,221,308,182,344,143,366,126,390,113,449,95,526,87,614,85,708,89,891,104,1034,118,1071,122"/>
+<area shape="rect" id="Node000003" href="$max22190_8c.html#af230b15743283424c6ff24af7c1103df" title="Get fault enable from the fault registers." alt="" coords="391,126,597,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1067,142,598,142,598,136,1067,136"/>
+<area shape="rect" id="Node000004" href="$max22190_8c.html#ad684e0cc253440db0362ee04eb4b03c1" title="Get filter delay, wite break detection and if the filter is used or bypassed." alt="" coords="870,177,1026,202"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="1092,158,1002,180,1001,174,1091,152"/>
+<area shape="rect" id="Node000005" href="$max22190_8c.html#a79d259402314252817ad855c3035e5be" title="Register update function for MAX22190." alt="" coords="863,304,1033,329"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="1134,163,966,305,963,301,1130,159"/>
+<area shape="rect" id="Node000015" href="$max22190_8c.html#a309a9b0c2a4a2f85053fecb40ada0276" title="Get Wire Break detection for requested channel." alt="" coords="871,25,1025,50"/>
+<area shape="poly" id="edge23_Node000001_Node000015" title=" " alt="" coords="1124,122,1032,72,985,53,987,48,1034,67,1126,117"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="429,158,392,173,325,215,275,255,271,251,322,211,389,169,427,153"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="857,195,643,208,517,220,391,236,304,256,303,250,390,231,516,214,643,202,856,190"/>
+<area shape="rect" id="Node000006" href="$max22190_8c.html#a6626ff97da0a1c28bd80f74261fa94eb" title="Switch selected channel&#39;s state to disabled or enabled." alt="" coords="645,380,815,405"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="904,337,816,370,776,382,774,377,814,365,902,332"/>
+<area shape="rect" id="Node000010" href="$max22190_8c.html#a1895f3c3bc31f0b0ff6d52bb7e73a408" title="Set fault enable in the fault registers." alt="" coords="391,278,597,304"/>
+<area shape="poly" id="edge13_Node000005_Node000010" title=" " alt="" coords="849,314,597,299,598,294,849,308"/>
+<area shape="rect" id="Node000011" href="$max22190_8c.html#a0eb8e882f00d386aa39adfa14cb2f78a" title="Set filter delay, wite break detection and if the filter is used or bypassed." alt="" coords="653,329,807,354"/>
+<area shape="poly" id="edge15_Node000005_Node000011" title=" " alt="" coords="849,331,808,335,807,330,848,325"/>
+<area shape="rect" id="Node000012" href="$max22190_8c.html#a9f49143452b657dabfc214a146594f22" title="MAX22190 Initialization function." alt="" coords="435,480,553,505"/>
+<area shape="poly" id="edge17_Node000005_Node000012" title=" " alt="" coords="926,341,878,381,848,402,816,420,748,447,677,467,554,489,553,484,676,461,746,442,814,415,845,398,875,377,923,336"/>
+<area shape="rect" id="Node000014" href="$max22190_8c.html#a6ea8450178708aeb1d818feebbfdef6f" title="Set Wire Break detection for requested channel." alt="" coords="654,228,806,253"/>
+<area shape="poly" id="edge21_Node000005_Node000014" title=" " alt="" coords="897,302,767,256,768,251,899,297"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="631,392,514,379,451,366,390,348,356,333,323,315,273,281,276,276,326,311,358,329,392,343,452,361,515,374,632,387"/>
+<area shape="rect" id="Node000007" href="$max22190_8c.html#a52906a3e2f40e52332857154f1153d92" title="Free the resources allocated by initialization." alt="" coords="420,430,568,456"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="657,411,554,433,553,428,656,405"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="420,428,389,413,348,381,312,344,265,280,269,277,316,340,352,377,392,409,422,423"/>
+<area shape="rect" id="Node000008" href="$iio__max22190_8c.html#a4990673d3101295b7a39dbac8e3611f0" title="Free the resources allocated by max22190_iio_init()." alt="" coords="172,430,343,456"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="406,446,343,446,343,440,406,440"/>
+<area shape="rect" id="Node000009" href="$max22190_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,456,124,481"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="159,459,124,463,124,458,158,453"/>
+<area shape="poly" id="edge14_Node000010_Node000002" title=" " alt="" coords="376,281,317,275,317,269,377,276"/>
+<area shape="poly" id="edge16_Node000011_Node000002" title=" " alt="" coords="639,345,520,338,454,331,390,319,333,301,284,281,286,276,334,296,391,314,455,325,520,333,639,339"/>
+<area shape="poly" id="edge18_Node000012_Node000002" title=" " alt="" coords="420,485,389,471,357,435,320,381,263,280,268,277,325,378,361,432,392,466,423,481"/>
+<area shape="rect" id="Node000013" href="$iio__max22190_8c.html#ae472b7a18c888d04b504f3006734de34" title="Initializes the MAX22190 IIO Descriptor." alt="" coords="186,480,329,505"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="421,495,329,495,329,490,421,490"/>
+<area shape="poly" id="edge20_Node000013_Node000009" title=" " alt="" coords="172,484,124,478,124,473,173,479"/>
+<area shape="poly" id="edge22_Node000014_Node000002" title=" " alt="" coords="640,248,317,265,317,260,640,242"/>
+<area shape="poly" id="edge24_Node000015_Node000002" title=" " alt="" coords="874,25,773,12,712,9,648,9,582,14,516,25,452,44,392,72,366,90,343,113,306,165,280,216,265,254,260,252,275,213,301,162,339,109,363,86,389,67,450,39,515,20,581,9,648,3,713,3,773,7,874,20"/>
+</map>

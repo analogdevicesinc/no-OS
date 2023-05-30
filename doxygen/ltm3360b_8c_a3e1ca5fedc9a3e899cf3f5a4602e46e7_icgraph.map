@@ -1,0 +1,10 @@
+<map id="ltm3360b_enable_device" name="ltm3360b_enable_device">
+<area shape="rect" id="Node000001" title="Enable or disable LTM3360B device." alt="" coords="361,31,547,56"/>
+<area shape="rect" id="Node000002" href="$ltm3360b_8c.html#a54e53f89a19daca5d0068c8a4d9f88ce" title="Initialize LTM3360B device." alt="" coords="187,5,299,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="347,33,299,27,299,22,348,28"/>
+<area shape="rect" id="Node000004" href="$ltm3360b_8c.html#a95a9927ad4fcf873351417abd5bd4928" title="Remove LTM3360B device instance." alt="" coords="172,55,313,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="348,58,314,62,313,57,347,53"/>
+<area shape="rect" id="Node000003" href="$ltm3360b_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,30,125,38,124,32,173,25"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="158,59,124,54,125,49,159,53"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="no_os_aducm_uart_desc" name="no_os_aducm_uart_desc">
+<area shape="rect" id="Node000001" title="Stores specific parameter needed by the UART driver for internal operations." alt="" coords="133,196,315,221"/>
+<area shape="rect" id="Node000002" href="$structno__os__op__desc.html" title="It stores the state of a operation." alt="" coords="5,93,125,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,126,149,170,197,194,194,198,147,174,87,130"/>
+<area shape="rect" id="Node000003" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="149,93,299,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,133,227,196,221,196,221,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="135,5,313,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="227,45,227,93,221,93,221,45"/>
+<area shape="rect" id="Node000005" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="323,93,482,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="371,128,246,198,243,194,369,123"/>
+</map>

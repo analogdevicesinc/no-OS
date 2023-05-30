@@ -1,0 +1,5 @@
+<map id="adin1320_master_slave_config" name="adin1320_master_slave_config">
+<area shape="rect" id="Node000001" title="Configure PHY as Master or Slave for 1 Gb speed only." alt="" coords="172,5,349,45"/>
+<area shape="rect" id="Node000002" href="$wake__on__lan_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,28,125,28,125,23,158,23"/>
+</map>

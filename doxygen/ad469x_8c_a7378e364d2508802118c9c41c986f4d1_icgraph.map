@@ -1,0 +1,12 @@
+<map id="ad469x_set_reg_access_mode" name="ad469x_set_reg_access_mode">
+<area shape="rect" id="Node000001" title="Configure register access mode." alt="" coords="551,31,771,56"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a8c42a57e73b808c98550cb1b8eccbaa3" title=" " alt="" coords="353,5,469,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="536,33,469,26,469,21,537,28"/>
+<area shape="rect" id="Node000005" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="319,55,503,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="537,58,503,61,502,56,537,53"/>
+<area shape="rect" id="Node000003" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="172,31,271,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,30,272,39,271,34,338,25"/>
+<area shape="rect" id="Node000004" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,46,124,46,124,41,158,41"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="305,57,271,52,271,47,305,51"/>
+</map>

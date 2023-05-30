@@ -1,0 +1,5 @@
+<map id="no_os_gnss_desc" name="no_os_gnss_desc">
+<area shape="rect" id="Node000001" title="Structure holding the GNSS descriptor." alt="" coords="33,93,168,119"/>
+<area shape="rect" id="Node000002" href="$structno__os__gnss__platform__ops.html" title="Structure holding GNSS function pointers that point to the platform specific function." alt="" coords="5,5,196,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,45,103,93,98,93,98,45"/>
+</map>

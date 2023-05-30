@@ -1,0 +1,25 @@
+<map id="ad5592r_software_reset" name="ad5592r_software_reset">
+<area shape="rect" id="Node000001" title=" " alt="" coords="619,80,797,105"/>
+<area shape="rect" id="Node000002" href="$ad5592r_8c.html#a2db169af98eba6bfef6138ce39287c63" title=" " alt="" coords="453,104,556,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="605,107,557,113,556,108,605,102"/>
+<area shape="rect" id="Node000006" href="$ad5592r_8c.html#a79633f783942442a506ba0c5ef3e49c4" title=" " alt="" coords="439,153,571,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="660,113,542,156,540,151,658,108"/>
+<area shape="rect" id="Node000007" href="$ad5593r_8c.html#a30d1442f4f8fd980e5aa615e52568a0a" title=" " alt="" coords="453,5,556,31"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="659,78,570,44,539,33,541,28,572,40,661,73"/>
+<area shape="rect" id="Node000009" href="$ad5593r_8c.html#a7d9ece31ee5b52b540a27f6488d42cfb" title=" " alt="" coords="439,55,571,80"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="605,82,571,78,571,73,605,77"/>
+<area shape="rect" id="Node000003" href="$curvetrace__example_8c.html#ad34f8e319f209b37bcc549564ebe8c63" title=" " alt="" coords="208,129,391,155"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="440,127,391,133,391,128,440,122"/>
+<area shape="rect" id="Node000005" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html#a897b461801f0c5c236b9fb1279569532" title=" " alt="" coords="248,80,351,105"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="439,112,351,101,351,96,440,106"/>
+<area shape="rect" id="Node000004" href="$curvetrace__example_8c.html#aa8c97b178f1ed4023a2fa5c0217a52c9" title=" " alt="" coords="5,80,160,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="229,129,139,108,140,103,230,124"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="425,159,391,155,391,150,426,154"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="455,151,438,143,390,119,350,107,352,102,392,114,440,138,457,146"/>
+<area shape="poly" id="edge11_Node000007_Node000005" title=" " alt="" coords="455,38,440,44,392,70,352,83,350,78,390,65,438,40,453,33"/>
+<area shape="rect" id="Node000008" href="$curvetrace__example_8c.html#a5f8b0282631418ff801896c142e28ecd" title=" " alt="" coords="208,31,391,56"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="440,29,391,35,391,29,440,23"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="230,62,140,83,139,77,229,56"/>
+<area shape="poly" id="edge14_Node000009_Node000005" title=" " alt="" coords="425,80,352,89,351,84,425,74"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="425,61,391,57,391,51,426,55"/>
+</map>

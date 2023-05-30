@@ -1,0 +1,19 @@
+<map id="ad4170_spi_reg_write_mask" name="ad4170_spi_reg_write_mask">
+<area shape="rect" id="Node000001" title="SPI write device register using a mask." alt="" coords="383,104,589,129"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#a576b13688c52d149cf2a43b39084a333" title="Perform a software reset." alt="" coords="188,5,299,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="449,100,396,72,334,44,298,33,300,28,336,40,398,67,452,95"/>
+<area shape="rect" id="Node000004" href="$ad4170_8c.html#a3ca58a262948f7d1cc5c3fd562042607" title="Set the AD4170 clock selection configuration." alt="" coords="165,55,322,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="409,104,306,83,307,77,410,99"/>
+<area shape="rect" id="Node000005" href="$ad4170_8c.html#a3216e26d31ef57f5eeab2c46b993fd20" title="Set the AD4170 DCLK configuration." alt="" coords="164,104,323,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="369,119,323,119,323,114,369,114"/>
+<area shape="rect" id="Node000006" href="$ad4170_8c.html#ab4f531eaeb090bbe407873d6792d4f3c" title="Set the AD4170 MCLK configuration." alt="" coords="162,153,325,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="410,135,307,156,306,151,409,129"/>
+<area shape="rect" id="Node000007" href="$ad4170_8c.html#a83d10b0457a777f079f6ccbee72d091b" title="Set the AD4170 SPI settings." alt="" coords="152,203,335,228"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="451,138,398,165,336,192,297,205,295,200,334,188,395,161,449,133"/>
+<area shape="rect" id="Node000003" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="5,104,104,129"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="176,35,153,44,106,75,71,106,67,102,103,71,151,40,174,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="182,86,105,106,104,101,180,81"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="150,119,104,119,104,114,150,114"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="180,152,104,132,105,127,182,147"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="170,201,151,192,103,162,67,131,71,127,107,158,153,188,172,196"/>
+</map>

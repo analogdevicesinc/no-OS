@@ -1,0 +1,7 @@
+<map id="ade7816_read_rms" name="ade7816_read_rms">
+<area shape="rect" id="Node000001" title="ADE7816 read root mean square measurement value function." alt="" coords="201,31,348,56"/>
+<area shape="rect" id="Node000002" href="$ade7816_8c.html#aa6219244f5410f4f39eaddf8bb0868d3" title="ADE7816 root mean square measurement calibration function." alt="" coords="5,5,153,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,35,153,30,154,25,188,29"/>
+<area shape="rect" id="Node000003" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="20,55,139,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,57,139,63,139,57,187,51"/>
+</map>

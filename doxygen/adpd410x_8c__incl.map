@@ -1,0 +1,36 @@
+<map id="drivers/photo&#45;electronic/adpd410x/adpd410x.c" name="drivers/photo&#45;electronic/adpd410x/adpd410x.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="251,5,429,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="369,167,439,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="370,43,393,65,410,92,416,124,413,153,408,153,411,124,406,94,388,68,366,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="639,240,710,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="252,46,219,58,192,73,178,93,177,105,181,118,197,145,214,163,237,176,266,189,336,209,434,225,626,245,625,250,434,230,335,214,264,195,234,181,211,167,193,148,176,120,172,105,173,91,189,69,216,53,250,41"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="190,93,261,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,48,255,88,252,83,311,43"/>
+<area shape="rect" id="Node000005" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="274,48,115,92,114,87,272,43"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="471,93,571,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="384,43,483,85,481,90,382,48"/>
+<area shape="rect" id="Node000009" href="$no__os__alloc_8h.html" title=" " alt="" coords="285,93,395,119"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="343,46,343,79,337,79,337,46"/>
+<area shape="rect" id="Node000011" href="$adpd410x_8h.html" title=" " alt="" coords="625,93,724,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="421,43,613,88,612,93,420,48"/>
+<area shape="rect" id="Node000006" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,167,94,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="63,119,63,153,57,153,57,119"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="504,121,436,162,434,157,501,116"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="516,120,501,154,499,173,505,191,529,215,560,231,594,241,626,247,625,252,593,246,558,236,526,219,500,193,494,174,496,153,511,118"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="515,167,597,192"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="529,118,547,153,542,155,525,120"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="353,117,387,155,383,158,349,121"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="277,167,344,192"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="338,120,323,155,318,153,333,118"/>
+<area shape="poly" id="edge14_Node000011_Node000008" title=" " alt="" coords="657,121,589,162,586,157,654,116"/>
+<area shape="rect" id="Node000012" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="752,167,851,192"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="696,116,770,157,767,162,694,121"/>
+<area shape="rect" id="Node000013" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="875,167,973,192"/>
+<area shape="poly" id="edge17_Node000011_Node000013" title=" " alt="" coords="715,116,871,160,870,165,714,121"/>
+<area shape="rect" id="Node000014" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="621,167,728,192"/>
+<area shape="poly" id="edge19_Node000011_Node000014" title=" " alt="" coords="677,119,677,153,672,153,672,119"/>
+<area shape="poly" id="edge16_Node000012_Node000003" title=" " alt="" coords="782,194,709,235,706,231,780,190"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="885,195,724,240,723,235,883,189"/>
+<area shape="poly" id="edge20_Node000014_Node000003" title=" " alt="" coords="677,192,677,226,672,226,672,192"/>
+</map>

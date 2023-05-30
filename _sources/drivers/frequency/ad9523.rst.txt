@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/frequency/ad9523/README.rst

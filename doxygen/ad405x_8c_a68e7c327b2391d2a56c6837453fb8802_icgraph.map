@@ -1,0 +1,9 @@
+<map id="ad405x_exit_command" name="ad405x_exit_command">
+<area shape="rect" id="Node000001" title="Send EXIT command (SPI only)." alt="" coords="431,31,605,56"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#ae3156f5c940dd1b0489f9d7a76e7f851" title="Enter Configuration Mode (SPI only)." alt="" coords="184,5,371,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,35,371,30,371,25,417,30"/>
+<area shape="rect" id="Node000003" href="$ad405x_8c.html#a09c204a1bf949ac99e72ab02b3571613" title="Set operation mode." alt="" coords="172,55,383,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="417,56,383,59,383,54,417,51"/>
+<area shape="rect" id="Node000004" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

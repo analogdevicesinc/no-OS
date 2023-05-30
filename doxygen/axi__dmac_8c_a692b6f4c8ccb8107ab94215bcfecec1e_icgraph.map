@@ -1,0 +1,55 @@
+<map id="axi_dmac_transfer_wait_completion" name="axi_dmac_transfer_wait_completion">
+<area shape="rect" id="Node000001" title=" " alt="" coords="911,222,1089,262"/>
+<area shape="rect" id="Node000002" href="$ad3552r_8c.html#a5979efa3995167d9c3e596b7f915f0f0" title="Write data samples to dac." alt="" coords="674,5,853,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="983,210,964,171,937,126,903,82,861,44,840,33,842,28,864,40,907,78,942,123,969,169,988,208"/>
+<area shape="rect" id="Node000005" href="$ad7616_8c.html#a95be394fec3468f9125bf4547892241b" title="Read from device in parallel mode. Enter register mode to read/write registers." alt="" coords="664,55,863,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="977,212,929,151,897,120,861,94,837,82,839,78,864,89,900,116,933,147,981,209"/>
+<area shape="rect" id="Node000007" href="$ad796x_8c.html#a55699ecd3ac941f14a14a205ce6d3373" title="Read data samples from adc." alt="" coords="692,104,835,129"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="966,215,918,177,862,143,831,132,833,127,864,138,921,173,969,211"/>
+<area shape="rect" id="Node000009" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="725,153,802,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="923,220,801,181,803,176,925,215"/>
+<area shape="rect" id="Node000010" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="477,179,531,204"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="897,234,531,197,532,191,897,229"/>
+<area shape="rect" id="Node000011" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a6fab3c4f8551a0a277a9058ddb0f1914" title="DMA example main execution." alt="" coords="686,255,841,280"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="897,256,841,262,841,256,896,250"/>
+<area shape="rect" id="Node000013" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="704,304,823,329"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="935,269,863,294,819,306,817,301,862,289,933,264"/>
+<area shape="rect" id="Node000014" href="$iio__axi__adc_8c.html#afc5cd0716e1591bd7876907a090e542c" title="Update active channels." alt="" coords="682,353,845,379"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="967,273,920,310,864,343,829,356,827,351,862,338,917,305,964,269"/>
+<area shape="rect" id="Node000015" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="736,403,791,428"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="980,275,932,335,900,366,864,392,827,408,791,415,790,410,825,403,861,388,897,362,928,331,976,272"/>
+<area shape="rect" id="Node000016" href="$spi__engine_8c.html#a5f6ea0d5ff05d314530571e8dfcbbe1f" title="Initiate a SPI transfer in offload mode." alt="" coords="691,453,835,493"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="987,276,967,314,940,358,905,403,864,441,837,457,834,452,861,437,901,399,935,355,962,312,982,274"/>
+<area shape="rect" id="Node000003" href="$axi__qspi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="451,5,557,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="660,21,557,21,557,15,660,15"/>
+<area shape="rect" id="Node000004" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="199,5,317,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="437,21,317,21,317,15,437,15"/>
+<area shape="rect" id="Node000006" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="477,55,531,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="650,70,532,70,532,65,650,65"/>
+<area shape="rect" id="Node000008" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="424,104,584,129"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="678,119,584,119,584,114,678,114"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="711,174,532,191,531,186,710,168"/>
+<area shape="rect" id="Node000012" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="477,255,531,280"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="672,270,532,270,532,265,672,265"/>
+<area shape="rect" id="Node000017" href="$ad463x_8c.html#ac1cc8e1c72706ef210ea4d3e746a7c0c" title="Read from device. Enter register mode to read/write registers." alt="" coords="407,360,601,385"/>
+<area shape="poly" id="edge17_Node000016_Node000017" title=" " alt="" coords="678,450,663,442,648,431,638,420,629,410,615,400,582,388,584,383,617,396,632,406,642,416,652,427,665,437,681,445"/>
+<area shape="rect" id="Node000020" href="$ad469x_8c.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="392,411,616,436"/>
+<area shape="poly" id="edge20_Node000016_Node000020" title=" " alt="" coords="677,459,571,439,572,433,678,454"/>
+<area shape="rect" id="Node000021" href="$ad469x_8c.html#a92cd606b28fd68b3a2c52717552818df" title="Read from device. Enter register mode to read/write registers." alt="" coords="433,460,575,485"/>
+<area shape="poly" id="edge21_Node000016_Node000021" title=" " alt="" coords="678,475,575,475,575,470,678,470"/>
+<area shape="rect" id="Node000024" href="$adaq7980_8c.html#a1d04d6c8c5b30c8f739bb4ed0f7deecd" title="Read from device. Enter register mode to read/write registers." alt="" coords="433,509,575,535"/>
+<area shape="poly" id="edge25_Node000016_Node000024" title=" " alt="" coords="678,491,572,512,571,507,677,486"/>
+<area shape="rect" id="Node000026" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="477,559,531,584"/>
+<area shape="poly" id="edge27_Node000016_Node000026" title=" " alt="" coords="718,502,670,527,617,550,572,562,532,570,531,565,571,557,615,545,668,522,716,497"/>
+<area shape="rect" id="Node000018" href="$ad463x_8c.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="187,360,329,385"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="393,375,330,375,330,370,393,370"/>
+<area shape="rect" id="Node000019" href="$ad463x__fmcz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,360,124,385"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="173,375,124,375,124,370,173,370"/>
+<area shape="rect" id="Node000022" href="$ad469x_8c.html#a947efb0cc9183e2dc0d9aeb3d697601b" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="172,409,344,435"/>
+<area shape="poly" id="edge22_Node000021_Node000022" title=" " alt="" coords="427,460,320,437,321,432,428,454"/>
+<area shape="rect" id="Node000023" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,435,124,460"/>
+<area shape="poly" id="edge24_Node000021_Node000023" title=" " alt="" coords="419,470,124,453,124,448,419,465"/>
+<area shape="poly" id="edge23_Node000022_Node000023" title=" " alt="" coords="159,438,125,442,124,437,158,432"/>
+<area shape="rect" id="Node000025" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="231,511,285,536"/>
+<area shape="poly" id="edge26_Node000024_Node000025" title=" " alt="" coords="419,525,286,526,286,521,419,520"/>
+</map>

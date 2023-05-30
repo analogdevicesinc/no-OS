@@ -1,0 +1,7 @@
+<map id="max31855_read_raw" name="max31855_read_raw">
+<area shape="rect" id="Node000001" title="Read raw register value." alt="" coords="388,5,547,31"/>
+<area shape="rect" id="Node000002" href="$max31855_8c.html#a88bc0e9d1059be6bd4b4efb9eb93d3b6" title="Read thermocouple and internal temperatures (converted in deg. C)" alt="" coords="172,5,340,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,21,340,21,340,15,374,15"/>
+<area shape="rect" id="Node000003" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

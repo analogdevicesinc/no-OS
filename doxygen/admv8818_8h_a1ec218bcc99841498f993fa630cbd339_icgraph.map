@@ -1,0 +1,16 @@
+<map id="admv8818_spi_write" name="admv8818_spi_write">
+<area shape="rect" id="Node000001" title="Writes data to ADMV8818 over SPI." alt="" coords="847,9,1004,34"/>
+<area shape="rect" id="Node000002" href="$admv8818_8c.html#ab2a128203022a3ed084779326ecef8be" title="Initializes the admv8818." alt="" coords="5,9,124,34"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="833,19,539,9,356,9,172,14,124,17,124,12,172,8,356,3,539,4,833,14"/>
+<area shape="rect" id="Node000003" href="$admv8818_8c.html#a1ec3e721f5dfa9b3f59da8d449ad1538" title="Update ADMV8818 register." alt="" coords="599,34,799,60"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="833,35,799,39,799,33,833,29"/>
+<area shape="poly" id="edge6_Node000003_Node000002" title=" " alt="" coords="585,45,124,27,124,21,585,40"/>
+<area shape="rect" id="Node000004" href="$admv8818_8c.html#a71af14bc49ed2889d304cf85bc80c39e" title="Set the HPF Frequency." alt="" coords="385,60,551,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="585,62,551,66,550,61,585,57"/>
+<area shape="rect" id="Node000006" href="$admv8818_8c.html#a2daafde2337819166316bb638fc629bd" title="Set the LPF Frequency." alt="" coords="387,109,549,134"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="650,67,551,100,515,112,513,106,550,95,648,62"/>
+<area shape="rect" id="Node000005" href="$admv8818_8c.html#a47c936d416652c81326000cf49ade5fa" title="Set the RF Input Band Select." alt="" coords="172,60,337,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="372,75,338,75,338,70,372,70"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="192,59,113,37,114,32,194,54"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="399,109,310,88,311,83,400,103"/>
+</map>

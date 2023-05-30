@@ -1,0 +1,17 @@
+<map id="lt7182s_send_byte" name="lt7182s_send_byte">
+<area shape="rect" id="Node000001" title="Send a PMBus command to the device." alt="" coords="709,80,853,105"/>
+<area shape="rect" id="Node000002" href="$lt7182s_8c.html#a950d068679ed669a2e48e6816ce3c9aa" title="Clear all asserted faults." alt="" coords="498,31,651,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="714,79,628,59,629,53,715,74"/>
+<area shape="rect" id="Node000007" href="$lt7182s_8c.html#a9a4f7bb789424d3294a697ec5343b3d9" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="504,80,645,105"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="695,95,646,95,646,90,695,90"/>
+<area shape="rect" id="Node000008" href="$lt7182s_8c.html#a7196549d3a11d4fabff61ddd331bd797" title="Perform a device software reset." alt="" coords="488,129,661,155"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="715,111,629,132,628,127,714,106"/>
+<area shape="rect" id="Node000003" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="341,31,440,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="484,46,440,46,440,41,484,41"/>
+<area shape="rect" id="Node000004" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,5,292,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="327,36,292,30,293,25,328,31"/>
+<area shape="rect" id="Node000005" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="172,55,293,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="328,55,294,61,293,55,327,50"/>
+<area shape="rect" id="Node000006" href="$lt7182s_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

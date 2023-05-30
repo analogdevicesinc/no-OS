@@ -1,0 +1,26 @@
+var structad4858__dev =
+[
+    [ "addr_ascension_enable", "structad4858__dev.html#ae37df926a079b49aad40934183372106", null ],
+    [ "big_endian", "structad4858__dev.html#aa0a66bc6c52b6cecd71ce3d3cc214698", null ],
+    [ "chn_gain", "structad4858__dev.html#a48a3b741f05052350314d1a8c245a1d1", null ],
+    [ "chn_offset", "structad4858__dev.html#a47a2a54c44013512b253ec36560c46c7", null ],
+    [ "chn_or", "structad4858__dev.html#a0b6ed123c15097c1983b67fbfedfc144", null ],
+    [ "chn_phase", "structad4858__dev.html#a5b115e71e09a5cb7c6a4d7b81a9cec2e", null ],
+    [ "chn_seamless_hdr", "structad4858__dev.html#accba57a5f76cee46ac111582fadf9d8e", null ],
+    [ "chn_sleep_value", "structad4858__dev.html#a65400ddb6810e200ff19a0bcb35e3e36", null ],
+    [ "chn_softspan", "structad4858__dev.html#af09114131402a903c319cbe1942048fb", null ],
+    [ "chn_ur", "structad4858__dev.html#a8ce2c3994638e19338b6677f5b9c1684", null ],
+    [ "gpio_busy", "structad4858__dev.html#a56e9cd908c10240ded2898a21f447c33", null ],
+    [ "gpio_cmos_lvds", "structad4858__dev.html#aea3245cc8b7ea5ebf2c87562233e903f", null ],
+    [ "gpio_cnv", "structad4858__dev.html#afaf469e9b2e130e5a577820ab410a3cf", null ],
+    [ "gpio_pd", "structad4858__dev.html#a48c84446d791e7c1ef96862cbd3ead58", null ],
+    [ "operating_mode", "structad4858__dev.html#a1bed4e86f31465a9358d73486c63ada0", null ],
+    [ "osr_enable", "structad4858__dev.html#a56c2f1ec9571349253edf70f6d17717f", null ],
+    [ "osr_ratio", "structad4858__dev.html#a5d62ba05f699a06d9eff69c32dc9d13f", null ],
+    [ "packet_format", "structad4858__dev.html#aff834f65266c5962daa62745f7c91d00", null ],
+    [ "prod_id", "structad4858__dev.html#aba88d6c9eed27ea80ca6635a16b43038", null ],
+    [ "prod_res", "structad4858__dev.html#a297cbd660e2838713bf423e489654a83", null ],
+    [ "spi_data_mode", "structad4858__dev.html#a44c1260cac2d6f7a99e4e66186ff2041", null ],
+    [ "spi_desc", "structad4858__dev.html#aacd6ddbc641a57ec7ebd746436f7b65c", null ],
+    [ "test_pattern", "structad4858__dev.html#a128f7b2164eeb89b85efed78a8d7ddbb", null ]
+];

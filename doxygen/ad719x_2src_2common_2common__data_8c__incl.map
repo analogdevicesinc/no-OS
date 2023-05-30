@@ -1,0 +1,24 @@
+<map id="projects/ad719x/src/common/common_data.c" name="projects/ad719x/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by ad719x examples." alt="" coords="56,5,247,45"/>
+<area shape="rect" id="Node000002" href="$ad719x_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad719x examples." alt="" coords="88,93,215,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,46,154,79,149,79,149,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,156,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,121,104,159,100,155,138,117"/>
+<area shape="rect" id="Node000004" href="$ad719x_8h.html" title="Header file of AD7190/2/3/4/5 Driver." alt="" coords="181,167,263,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="165,117,203,155,199,159,161,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="201,313,272,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="181,193,145,204,112,220,100,230,93,240,91,251,96,264,114,284,138,298,188,316,187,321,135,303,111,288,92,267,86,252,88,238,96,226,109,216,143,199,179,188"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="106,240,213,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="214,194,181,231,177,228,210,191"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="237,240,335,265"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="235,191,269,228,265,232,231,194"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="360,240,460,265"/>
+<area shape="poly" id="edge9_Node000004_Node000008" title=" " alt="" coords="253,190,367,232,366,237,251,195"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="174,263,216,302,212,306,170,267"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="280,267,255,304,250,301,276,264"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="383,268,279,310,277,306,381,263"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="323,313,393,339"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="404,267,377,304,372,301,399,264"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="418,313,501,339"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="420,264,446,301,441,304,416,267"/>
+</map>

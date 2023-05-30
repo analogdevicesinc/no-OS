@@ -1,0 +1,5 @@
+<map id="max14001_reg_update" name="max14001_reg_update">
+<area shape="rect" id="Node000001" title="SPI write to device using a mask." alt="" coords="219,5,389,31"/>
+<area shape="rect" id="Node000002" href="$max14001_8c.html#a6ad7e18e91c998d372f07b418d2f7bc2" title="Initialize the configurations of device." alt="" coords="5,5,171,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,21,171,21,171,15,205,15"/>
+</map>

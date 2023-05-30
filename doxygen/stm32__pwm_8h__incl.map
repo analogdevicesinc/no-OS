@@ -1,0 +1,14 @@
+<map id="drivers/platform/stm32/stm32_pwm.h" name="drivers/platform/stm32/stm32_pwm.h">
+<area shape="rect" id="Node000001" title="Header file for stm32 pwm specifics." alt="" coords="33,5,205,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="45,167,116,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,48,36,67,12,95,9,112,16,128,30,144,48,157,45,161,27,148,12,131,4,112,7,92,33,63,64,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="22,93,104,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,47,82,84,77,80,103,44"/>
+<area shape="rect" id="Node000004" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="128,93,224,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="135,44,162,80,158,84,131,47"/>
+<area shape="rect" id="Node000005" href="$stm32__hal_8h.html" title=" " alt="" coords="249,93,352,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="164,43,262,85,260,90,162,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="163,121,109,160,106,156,159,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="267,167,334,192"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="303,119,303,153,298,153,298,119"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="drivers/api/no_os_gnss.c" name="drivers/api/no_os_gnss.c">
+<area shape="rect" id="Node000001" title="Implementation of GNSS Interface." alt="" coords="89,5,270,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,152,76,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,33,54,51,36,64,22,80,16,94,16,109,28,139,23,141,11,110,11,93,17,77,33,60,52,46,94,28"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="32,79,100,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,33,97,74,94,69,160,28"/>
+<area shape="rect" id="Node000004" href="$no__os__gnss_8h.html" title="Header file of GNSS Interface." alt="" coords="259,79,369,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="202,28,281,70,279,74,200,33"/>
+<area shape="rect" id="Node000007" href="$no__os__alloc_8h.html" title=" " alt="" coords="124,79,235,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="182,31,182,65,177,65,177,31"/>
+<area shape="rect" id="Node000009" href="$no__os__mutex_8h.html" title=" " alt="" coords="393,79,515,104"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="224,28,397,73,396,78,223,33"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="257,152,328,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="313,105,303,140,297,138,308,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="353,152,435,177"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="329,102,373,141,369,145,325,106"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="158,106,77,148,74,143,156,102"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="146,152,213,177"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="182,104,182,138,177,138,177,104"/>
+</map>

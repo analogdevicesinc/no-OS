@@ -1,0 +1,10 @@
+<map id="adas1000_compute_frame_size" name="adas1000_compute_frame_size">
+<area shape="rect" id="Node000001" title="Compute frame size." alt="" coords="405,35,633,60"/>
+<area shape="rect" id="Node000002" href="$adas1000_8c.html#a8cfc29cb8ec02e4382c85c0586d6275f" title="Sets the frame rate." alt="" coords="167,5,357,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="394,36,357,31,358,26,395,30"/>
+<area shape="rect" id="Node000004" href="$adas1000_8c.html#a1b1ef3661bbdfd8ded985b12c60a7773" title="Selects which words are not included in a data frame." alt="" coords="177,55,347,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="392,64,348,69,347,63,391,59"/>
+<area shape="rect" id="Node000003" href="$adas1000_8c.html#a53655dc2232c9d893f208871217abcbf" title="Initializes the SPI communication with ADAS1000. The ADAS1000 is configured with the specified frame ..." alt="" coords="5,35,119,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="162,35,119,42,118,36,161,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="163,64,118,58,119,53,163,59"/>
+</map>

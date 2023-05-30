@@ -1,0 +1,19 @@
+<map id="projects/adrv9009/src/app/app_talise.h" name="projects/adrv9009/src/app/app_talise.h">
+<area shape="rect" id="Node000001" title="Talise initialization and control routines." alt="" coords="5,5,168,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,240,123,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,47,37,68,20,94,17,106,20,118,30,149,44,179,74,227,69,230,39,181,25,151,15,119,12,106,15,92,33,65,56,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="30,93,143,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,46,89,79,84,79,84,46"/>
+<area shape="rect" id="Node000004" href="$adi__hal_8h.html" title="Contains Talise ADI HAL function prototypes type definitions for adi_hal.c." alt="" coords="167,93,249,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="117,43,180,84,177,88,115,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="181,121,146,140,115,168,101,197,93,227,88,226,96,195,111,165,143,136,178,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="125,167,200,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="203,120,180,157,175,154,198,118"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="225,167,325,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="221,117,256,155,253,158,217,121"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="246,195,132,237,130,233,244,190"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="193,240,263,265"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="269,194,245,230,241,227,265,191"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="288,240,371,265"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="286,191,314,228,310,231,282,194"/>
+</map>

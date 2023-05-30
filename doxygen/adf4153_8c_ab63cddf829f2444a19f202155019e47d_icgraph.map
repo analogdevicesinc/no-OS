@@ -1,0 +1,5 @@
+<map id="adf4153_tune_rcounter" name="adf4153_tune_rcounter">
+<area shape="rect" id="Node000001" title="Increases the R counter value until the ADF4106_PDF_MAX_FREQ is greater than PFD frequency." alt="" coords="228,5,400,31"/>
+<area shape="rect" id="Node000002" href="$adf4153_8c.html#afe3c4f5219f63d71f1f79f2600623c57" title="Sets the output frequency." alt="" coords="5,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,21,180,21,180,15,214,15"/>
+</map>

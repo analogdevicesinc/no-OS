@@ -1,0 +1,28 @@
+<map id="drivers/platform/lattice/riscvrx_gpio.c" name="drivers/platform/lattice/riscvrx_gpio.c">
+<area shape="rect" id="Node000001" title="Implementation of lattice GPIO IP Generic Driver." alt="" coords="223,5,395,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,167,136,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,37,161,45,98,57,46,74,26,84,14,95,9,104,8,112,18,129,37,145,61,158,59,163,34,149,14,132,3,113,4,102,9,92,23,80,44,69,97,52,160,40,222,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="24,93,87,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="249,48,101,93,100,88,247,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="111,93,230,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="277,48,204,89,201,84,274,43"/>
+<area shape="rect" id="Node000005" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="389,93,498,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="342,43,413,84,411,89,340,48"/>
+<area shape="rect" id="Node000007" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="486,167,593,192"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="396,35,457,55,486,71,512,92,531,121,539,152,534,154,526,123,508,95,483,75,455,60,395,40"/>
+<area shape="rect" id="Node000009" href="$no__os__alloc_8h.html" title=" " alt="" coords="254,93,364,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="312,46,312,79,306,79,306,46"/>
+<area shape="rect" id="Node000011" href="$riscvrx__gpio_8h.html" title="Header containing extra types used in the Lattice GPIO IP driver." alt="" coords="574,93,687,119"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="386,43,570,87,569,93,385,48"/>
+<area shape="rect" id="Node000006" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="394,167,462,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="443,120,436,154,430,153,438,118"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="550,240,620,265"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="549,191,572,227,568,230,545,194"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="276,121,148,165,147,160,275,116"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="276,167,342,192"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="312,119,312,153,306,153,306,119"/>
+<area shape="poly" id="edge14_Node000011_Node000007" title=" " alt="" coords="617,121,567,160,564,156,614,117"/>
+<area shape="poly" id="edge12_Node000011_Node000008" title=" " alt="" coords="629,120,607,193,596,228,591,226,602,191,624,118"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="668,167,750,192"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="645,117,688,156,684,159,641,121"/>
+</map>

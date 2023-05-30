@@ -1,0 +1,13 @@
+<map id="projects/ades1754/src/platform/maxim/main.c" name="projects/ades1754/src/platform/maxim/main.c">
+<area shape="rect" id="Node000001" title="Main file for Maxim platform of ades1754 project." alt="" coords="121,5,301,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,132,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,48,103,89,100,84,176,43"/>
+<area shape="rect" id="Node000003" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="157,93,266,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,46,214,79,209,79,209,46"/>
+<area shape="rect" id="Node000005" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="290,93,426,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="248,43,326,84,323,89,245,48"/>
+<area shape="rect" id="Node000004" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="177,167,245,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="214,119,214,153,209,153,209,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="325,167,391,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="361,119,361,153,355,153,355,119"/>
+</map>
