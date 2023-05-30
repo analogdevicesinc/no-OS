@@ -37,7 +37,8 @@ then
 
         git checkout gh-pages
 
-        cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}
+	mkdir -p ${TOP_DIR}/doxygen
+        cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}/doxygen/
 
         rm -rf ${TOP_DIR}/doc/doxygen
 
