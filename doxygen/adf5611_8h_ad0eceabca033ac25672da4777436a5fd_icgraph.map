@@ -1,0 +1,15 @@
+<map id="adf5611_spi_write" name="adf5611_spi_write">
+<area shape="rect" id="node1" title="Writes data to ADF5611 over SPI." alt="" coords="837,100,979,127"/>
+<area shape="rect" id="node2" href="$adf5611_8h.html#aeee2b78a1513622bf7ccbf54df85ce72" title="Initialize the ADF5611." alt="" coords="646,24,749,51"/>
+<area shape="rect" id="node4" href="$adf5611_8h.html#a78d0176d4d45998c3611927d7f2e4563" title="Set the output frequency." alt="" coords="399,100,533,127"/>
+<area shape="rect" id="node9" href="$adf5611_8h.html#afed89c88fb9483e104a60ed6b86a399a" title="Updates the values of the ADF5611 register." alt="" coords="605,180,789,207"/>
+<area shape="rect" id="node3" href="$adf5611_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,100,124,127"/>
+<area shape="rect" id="node5" href="$adf5611_8h.html#ab46263e7257acbf73c6433be8f0df282" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="182,49,317,76"/>
+<area shape="rect" id="node6" href="$adf5611_8h.html#a7186fdf8366bdf8cafc5bdb33005caa9" title="Set the desired reference frequency and reset everything over to maximum supported value of 300MHz to..." alt="" coords="173,100,326,127"/>
+<area shape="rect" id="node7" href="$adf5611_8h.html#a539e31cc24688283cfe42189497134fc" title="Set the reference divider value and reset everything over to maximum supported value of 60 to the max..." alt="" coords="172,151,327,177"/>
+<area shape="rect" id="node8" href="$adf5611_8h.html#a9a813cea1bfb24602123ce7bc38e0287" title="Set the desired output frequency and reset everything over to maximum supported value of 14...." alt="" coords="179,201,319,228"/>
+<area shape="rect" id="node10" href="$adf5611_8h.html#aa1ec5626952917353b4c51228e8858d1" title="Sets the rfoutdiv output block to enable or disable. 1 means the block is powered down else block is ..." alt="" coords="375,151,557,177"/>
+<area shape="rect" id="node11" href="$adf5611_8h.html#a476d422a65e7cd0dd85bf620360287fb" title="Set the rfoutput power register value and reset everything over to maximum supported value of 3 to th..." alt="" coords="391,202,541,243"/>
+<area shape="rect" id="node12" href="$adf5611_8h.html#ac2610ca3558d3b82454b0328e1259317" title="Set the rfoutdiv frequency divider register value and reset everything over to maximum supported valu..." alt="" coords="386,267,546,309"/>
+<area shape="rect" id="node13" href="$adf5611_8h.html#af9ad843f0ae443b7919a7aadb5fe7e9c" title="Set the rfoutdiv power register value and reset everything over to maximum supported value of 3 to th..." alt="" coords="386,333,546,374"/>
+</map>

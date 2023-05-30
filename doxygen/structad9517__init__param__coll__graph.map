@@ -1,0 +1,12 @@
+<map id="ad9517_init_param" name="ad9517_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="1341,220,1488,247"/>
+<area shape="rect" id="node2" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="1059,136,1221,163"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="690,95,813,121"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,40,184,67"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,101,471,128"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,154,472,195"/>
+<area shape="rect" id="node7" href="$structad9517__state.html" title=" " alt="" coords="1085,251,1195,277"/>
+<area shape="rect" id="node8" href="$structad9517__platform__data.html" title=" " alt="" coords="667,225,836,252"/>
+<area shape="rect" id="node9" href="$structad9517__lvds__cmos__channel__spec.html" title=" " alt="" coords="631,276,872,303"/>
+<area shape="rect" id="node10" href="$structad9517__lvpecl__channel__spec.html" title=" " alt="" coords="646,327,857,353"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad6673_jesd204b_invert_logic" name="ad6673_jesd204b_invert_logic">
+<area shape="rect" id="node1" title="Inverts the logic of JESD204B bits." alt="" coords="393,5,575,47"/>
+<area shape="rect" id="node2" href="$ad6673_8h.html#a98bd7b00060d18b6e58080966d2e5c64" title="Configures the JESD204B interface." alt="" coords="167,13,345,39"/>
+<area shape="rect" id="node3" href="$ad6673_8h.html#a9228c7d4c22253ce20062937317ccf98" title="Configures the device." alt="" coords="5,13,119,39"/>
+</map>

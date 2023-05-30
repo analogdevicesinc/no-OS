@@ -1,0 +1,5 @@
+<map id="lt8491_restart_chip" name="lt8491_restart_chip">
+<area shape="rect" id="node1" title="Restart the chip." alt="" coords="213,31,360,57"/>
+<area shape="rect" id="node2" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node3" href="$iio__lt8491_8h.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="28,56,143,83"/>
+</map>

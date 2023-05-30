@@ -1,0 +1,4 @@
+<map id="ltc4306_set_downstream_channel" name="ltc4306_set_downstream_channel">
+<area shape="rect" id="node1" title="Dis/connects to a downstream bus. Bus logic state must be 1 for connection to occur EXCEPT when conn_..." alt="" coords="213,5,399,47"/>
+<area shape="rect" id="node2" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,13,165,39"/>
+</map>

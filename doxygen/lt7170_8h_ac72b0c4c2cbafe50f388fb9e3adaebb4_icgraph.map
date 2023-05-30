@@ -1,0 +1,11 @@
+<map id="lt7170_write_word_data" name="lt7170_write_word_data">
+<area shape="rect" id="node1" title="Converts value to register data and do PMBus write word operation." alt="" coords="205,183,384,209"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#a26161612639b4a22520ec0b73d037250" title="Set output PWM phase." alt="" coords="7,5,155,32"/>
+<area shape="rect" id="node3" href="$lt7170_8h.html#a105003e15e4b73ebb4df2622eae48162" title="Set overvalue and undervalue limits." alt="" coords="18,56,145,83"/>
+<area shape="rect" id="node4" href="$lt7170_8h.html#ae9beffff5489fc537e6e975d70b29c5d" title="Set timing values." alt="" coords="12,107,151,133"/>
+<area shape="rect" id="node5" href="$lt7170_8h.html#a8f992af95299159650719a1aca9d4fd9" title="Set input voltage window at which power conversion will proceed." alt="" coords="23,157,140,184"/>
+<area shape="rect" id="node6" href="$lt7170_8h.html#ade605b4754f46632075c7ee1d71073e4" title="Set switching frequency." alt="" coords="9,208,154,235"/>
+<area shape="rect" id="node7" href="$lt7170_8h.html#a1a277c96ce8532bfff985a372d20ffed" title="Set output voltage margin." alt="" coords="5,259,157,285"/>
+<area shape="rect" id="node8" href="$lt7170_8h.html#a13612dfb2eb5a8f7193bbf67ef0f9f0c" title="Set output voltage transition rate." alt="" coords="23,309,139,336"/>
+<area shape="rect" id="node9" href="$lt7170_8h.html#a4b0a95d50798584fb60972e4e86323d1" title="Set output voltage and its upper limit." alt="" coords="10,360,153,387"/>
+</map>

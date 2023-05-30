@@ -1,0 +1,4 @@
+<map id="drivers/platform/stm32/stm32_usb_uart.h" name="drivers/platform/stm32/stm32_usb_uart.h">
+<area shape="rect" id="node1" title="UART over USB driver for stm32 as a no_os_uart implementation." alt="" coords="5,5,177,47"/>
+<area shape="rect" id="node2" href="$stm32__usb__uart_8c.html" title="UART over USB driver for stm32 as a no_os_uart implementation." alt="" coords="5,95,177,136"/>
+</map>

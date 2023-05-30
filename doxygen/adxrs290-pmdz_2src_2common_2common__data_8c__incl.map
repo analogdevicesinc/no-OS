@@ -1,0 +1,12 @@
+<map id="projects/adxrs290&#45;pmdz/src/common/common_data.c" name="projects/adxrs290&#45;pmdz/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by eval&#45;adxrs290&#45;pmdz examples." alt="" coords="15,5,230,47"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxrs290&#45;pmdz examples." alt="" coords="59,95,186,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,115,196"/>
+<area shape="rect" id="node4" href="$adxrs290_8h.html" title="Implementation of ADXRS290 Driver." alt="" coords="139,169,234,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="22,319,93,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="127,319,209,345"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="384,244,491,271"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="261,244,360,271"/>
+<area shape="rect" id="node10" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="137,244,237,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="275,319,346,345"/>
+</map>

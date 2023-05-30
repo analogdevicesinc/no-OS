@@ -1,0 +1,8 @@
+<map id="drivers/temperature/ltc2983/ltc2983.h" name="drivers/temperature/ltc2983/ltc2983.h">
+<area shape="rect" id="node1" title=" " alt="" coords="287,5,439,47"/>
+<area shape="rect" id="node2" href="$iio__ltc2983_8c.html" title="Implementation of IIO LTC2983 driver." alt="" coords="5,102,165,143"/>
+<area shape="rect" id="node3" href="$ltc2983_8c.html" title="Implementation of LTC2983 Driver." alt="" coords="189,102,341,143"/>
+<area shape="rect" id="node4" href="$ltc2983_2src_2common_2common__data_8h.html" title=" " alt="" coords="365,102,557,143"/>
+<area shape="rect" id="node6" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="582,95,749,151"/>
+<area shape="rect" id="node5" href="$ltc2983_2src_2common_2common__data_8c.html" title=" " alt="" coords="366,199,557,240"/>
+</map>

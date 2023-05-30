@@ -1,0 +1,18 @@
+<map id="adp1050_iio_desc" name="adp1050_iio_desc">
+<area shape="rect" id="node1" title="Structure holding the ADP1050 IIO device descriptor." alt="" coords="1189,199,1328,225"/>
+<area shape="rect" id="node2" href="$structadp1050__desc.html" title="Device descriptor for ADP1050." alt="" coords="929,112,1044,139"/>
+<area shape="rect" id="node3" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="669,89,805,116"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="362,24,494,51"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,24,193,51"/>
+<area shape="rect" id="node6" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="332,88,524,115"/>
+<area shape="rect" id="node7" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="676,140,799,167"/>
+<area shape="rect" id="node8" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="10,164,189,191"/>
+<area shape="rect" id="node9" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="355,201,501,228"/>
+<area shape="rect" id="node10" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="943,240,1031,267"/>
+<area shape="rect" id="node11" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="689,293,785,320"/>
+<area shape="rect" id="node12" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="377,252,479,279"/>
+<area shape="rect" id="node13" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="372,303,484,329"/>
+<area shape="rect" id="node14" href="$structscan__type.html" title=" " alt="" coords="384,353,472,380"/>
+<area shape="rect" id="node15" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="663,379,812,405"/>
+<area shape="rect" id="node16" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="339,404,517,431"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="projects/ad463x_fmcz/src/common/common_data.c" name="projects/ad463x_fmcz/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by ad463x_fmcz examples." alt="" coords="753,5,967,47"/>
+<area shape="rect" id="node2" href="$ad463x__fmcz_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad463x&#45;fmcz examples." alt="" coords="570,95,697,121"/>
+<area shape="rect" id="node11" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="488,393,587,420"/>
+<area shape="rect" id="node15" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="786,393,897,420"/>
+<area shape="rect" id="node17" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="983,319,1089,345"/>
+<area shape="rect" id="node3" title=" " alt="" coords="558,169,709,196"/>
+<area shape="rect" id="node4" href="$ad463x_8h.html" title="Header file of AD463x Driver." alt="" coords="419,169,501,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="459,468,530,495"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="662,393,762,420"/>
+<area shape="rect" id="node9" href="$spi__engine_8h.html" title=" " alt="" coords="408,244,512,271"/>
+<area shape="rect" id="node14" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="5,244,136,271"/>
+<area shape="rect" id="node16" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="160,244,267,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="789,468,859,495"/>
+<area shape="rect" id="node8" title=" " alt="" coords="997,468,1080,495"/>
+<area shape="rect" id="node10" href="$xilinx__spi_8h.html" title=" " alt="" coords="352,319,448,345"/>
+<area shape="rect" id="node12" href="$spi__engine__private_8h.html" title=" " alt="" coords="645,319,803,345"/>
+<area shape="rect" id="node13" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="473,319,570,345"/>
+<area shape="rect" id="node18" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="972,393,1105,420"/>
+</map>

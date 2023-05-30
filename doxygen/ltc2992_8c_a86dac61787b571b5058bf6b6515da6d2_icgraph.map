@@ -1,0 +1,5 @@
+<map id="ltc2992_get_vshunt" name="ltc2992_get_vshunt">
+<area shape="rect" id="node1" title="Read shunt voltage in a sense channel." alt="" coords="431,31,580,57"/>
+<area shape="rect" id="node2" href="$ltc2992_8h.html#a8109cf255ba16ed7a7de91c776c9703f" title="Read bus current along a sense channel." alt="" coords="232,5,383,32"/>
+<area shape="rect" id="node3" href="$ltc2992_8h.html#a147e8309fe1977bd08409f5c17f83324" title="Read sense data at a SENSE channel." alt="" coords="5,31,184,57"/>
+</map>

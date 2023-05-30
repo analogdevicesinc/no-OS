@@ -1,0 +1,9 @@
+<map id="drivers/meter/ade7913/ade7913.h" name="drivers/meter/ade7913/ade7913.h">
+<area shape="rect" id="node1" title="Header file of ADE7913 Driver." alt="" coords="329,5,500,47"/>
+<area shape="rect" id="node2" href="$ade7913_8c.html" title="Implementation of ADE7913 Driver." alt="" coords="5,95,176,136"/>
+<area shape="rect" id="node3" href="$eval-ade7913_2src_2common_2common__data_8h.html" title="Defines common data to be used by ADE7913 example project." alt="" coords="201,95,415,136"/>
+<area shape="rect" id="node5" href="$eval-ade7913_2src_2main_8c.html" title="Main function of ADE7913 example." alt="" coords="439,95,606,136"/>
+<area shape="rect" id="node6" href="$eval-ade7913_2src_2platform_2platform_8h.html" title="Defines platform data to be used by ADE7913 example project." alt="" coords="630,95,807,136"/>
+<area shape="rect" id="node4" href="$eval-ade7913_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADE7913 example project." alt="" coords="201,184,415,225"/>
+<area shape="rect" id="node7" href="$eval-ade7913_2src_2platform_2platform_8c.html" title="Defines platform data to be used by ADE7913 example project." alt="" coords="631,184,807,225"/>
+</map>

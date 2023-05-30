@@ -1,0 +1,5 @@
+<map id="ad5460_reset" name="ad5460_reset">
+<area shape="rect" id="node1" title="Perform software or hardware reset and wait for device reset time." alt="" coords="319,5,429,32"/>
+<area shape="rect" id="node2" href="$ad5460_8h.html#a0c526c188d044e9ee48951ee831ee5c5" title="Initialize the device structure." alt="" coords="172,5,271,32"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

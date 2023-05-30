@@ -1,0 +1,17 @@
+<map id="drivers/meter/ade7880/ade7880.c" name="drivers/meter/ade7880/ade7880.c">
+<area shape="rect" id="node1" title="Implementation of ADE7880 Driver." alt="" coords="338,5,508,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="44,244,114,271"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="276,95,344,121"/>
+<area shape="rect" id="node4" href="$ade7880_8h.html" title="Header file of ADE7880 Driver." alt="" coords="419,95,510,121"/>
+<area shape="rect" id="node13" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="782,95,896,121"/>
+<area shape="rect" id="node14" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="534,95,645,121"/>
+<area shape="rect" id="node15" href="$no__os__alloc_8h.html" title=" " alt="" coords="24,169,134,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="335,244,418,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="656,244,726,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="546,169,617,196"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="370,169,470,196"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="642,169,740,196"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="764,169,871,196"/>
+<area shape="rect" id="node11" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="159,169,295,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="167,244,234,271"/>
+</map>

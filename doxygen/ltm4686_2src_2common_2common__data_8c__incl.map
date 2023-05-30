@@ -1,0 +1,12 @@
+<map id="projects/ltm4686/src/common/common_data.c" name="projects/ltm4686/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by ltm4686 examples." alt="" coords="99,5,289,47"/>
+<area shape="rect" id="node2" href="$ltm4686_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltm4686 examples." alt="" coords="131,95,257,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,156,196"/>
+<area shape="rect" id="node4" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="142,244,241,271"/>
+<area shape="rect" id="node6" href="$ltm4686_8h.html" title="Header file of the LTM4686 driver." alt="" coords="234,169,322,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="243,319,313,345"/>
+<area shape="rect" id="node7" title=" " alt="" coords="316,244,387,271"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="411,244,511,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="381,319,452,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="477,319,559,345"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="ad7616_read_channel_source" name="ad7616_read_channel_source">
+<area shape="rect" id="node1" title="Read the current selected channels." alt="" coords="187,5,351,47"/>
+<area shape="rect" id="node2" href="$ad7616_8c.html#ab690e8d620d464da766f18fd88b8797c" title="Perform a self test. Channels selection will be left untouched." alt="" coords="5,13,139,39"/>
+</map>

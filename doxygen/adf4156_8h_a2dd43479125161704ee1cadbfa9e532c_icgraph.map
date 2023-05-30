@@ -1,0 +1,4 @@
+<map id="adf4156_tune_r_cnt" name="adf4156_tune_r_cnt">
+<area shape="rect" id="node1" title="Increases the R counter value until the PFD frequency is smaller than ADF4351_MAX_FREQ_PFD." alt="" coords="188,5,339,32"/>
+<area shape="rect" id="node2" href="$adf4156_8h.html#a14d2922ab161e99b4135b71c08fe5d97" title="Sets the ADF4156 output frequency." alt="" coords="5,5,140,32"/>
+</map>

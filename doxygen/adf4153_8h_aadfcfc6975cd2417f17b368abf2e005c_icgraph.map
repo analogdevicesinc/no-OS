@@ -1,0 +1,5 @@
+<map id="adf4153_update_latch" name="adf4153_update_latch">
+<area shape="rect" id="node1" title="Update one of the latch via the SPI interface." alt="" coords="228,31,395,57"/>
+<area shape="rect" id="node2" href="$adf4153_8h.html#a47bf87eef52c8574144cef9967f2e828" title="Initialize SPI and Initial Values for ADF4106 Board." alt="" coords="41,5,144,32"/>
+<area shape="rect" id="node3" href="$adf4153_8h.html#afe3c4f5219f63d71f1f79f2600623c57" title="Sets the output frequency." alt="" coords="5,56,180,83"/>
+</map>

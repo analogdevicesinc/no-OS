@@ -1,0 +1,8 @@
+<map id="ade7816_group_sel" name="ade7816_group_sel">
+<area shape="rect" id="node1" title="ADE7816 group selection for channels function." alt="" coords="427,81,575,108"/>
+<area shape="rect" id="node2" href="$ade7816_8h.html#a155b363ec63a49979fbeec7af7506a32" title="ADE7816 angle measurement function." alt="" coords="214,5,378,32"/>
+<area shape="rect" id="node3" href="$ade7816_8h.html#a31d570dab92fb7344f2f020fb5e33433" title="ADE7816 set peak detection for channel function." alt="" coords="213,56,379,83"/>
+<area shape="rect" id="node4" href="$ade7816_8h.html#a00fcd83d9557c2dac98209efcad63c64" title="ADE7816 set power direction for channel function." alt="" coords="221,107,371,133"/>
+<area shape="rect" id="node5" href="$ade7816_8h.html#a7615dc95ad728c4735ecf2a45b5c5ca3" title="ADE7816 zero&#45;crossing detection for channel function." alt="" coords="222,157,370,184"/>
+<area shape="rect" id="node6" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,157,165,184"/>
+</map>

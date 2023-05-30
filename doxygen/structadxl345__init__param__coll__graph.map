@@ -1,0 +1,10 @@
+<map id="adxl345_init_param" name="adxl345_init_param">
+<area shape="rect" id="node1" title="Structure holding the parameters for ADXL345 device initialization." alt="" coords="1211,65,1361,92"/>
+<area shape="rect" id="node2" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="948,17,1111,44"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="631,5,809,32"/>
+<area shape="rect" id="node4" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="948,91,1111,117"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="659,145,781,172"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,108,184,135"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,169,471,196"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,222,472,263"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="adis_read_y_deltang" name="adis_read_y_deltang">
+<area shape="rect" id="node1" title="Read raw delta angle data on y axis." alt="" coords="192,5,348,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="5,5,144,32"/>
+</map>

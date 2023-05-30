@@ -1,0 +1,18 @@
+<map id="ad5754r_write" name="ad5754r_write">
+<area shape="rect" id="node1" title="Write device register." alt="" coords="791,140,905,167"/>
+<area shape="rect" id="node2" href="$ad5754r_8h.html#a2f77de7ae53ce6fdc4ab73a992f6f79b" title="Clear DAC output for all channels." alt="" coords="584,13,743,40"/>
+<area shape="rect" id="node3" href="$ad5754r_8h.html#a948ab1a11e8d2e98185003df8551ddc4" title="Trigger LDAC." alt="" coords="584,64,743,91"/>
+<area shape="rect" id="node4" href="$ad5754r_8h.html#a847d4bd131112efbe6b8e09e62d7ecd2" title="Set output range for specific channel." alt="" coords="359,5,527,32"/>
+<area shape="rect" id="node8" href="$ad5754r_8h.html#a55822587e388a1a94b2cd2f1bf413c86" title="Update specific register bits." alt="" coords="584,165,743,192"/>
+<area shape="rect" id="node15" href="$ad5754r_8h.html#a5b31035541f35d85437905cc89616bd1" title="Update DAC register value for all channels." alt="" coords="585,217,742,258"/>
+<area shape="rect" id="node16" href="$ad5754r_8h.html#a89d8b3c4212251555320b362a08bc9f5" title="Update DAC register value for specific channel." alt="" coords="585,282,742,323"/>
+<area shape="rect" id="node5" href="$ad5754r_8h.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="163,136,294,163"/>
+<area shape="rect" id="node7" href="$ad5754r_8h.html#a1d2888ba68a1b85656c84727efe81148" title="Write to and read back a register to verify SPI." alt="" coords="156,45,301,72"/>
+<area shape="rect" id="node6" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,111,108,137"/>
+<area shape="rect" id="node9" href="$ad5754r_8h.html#a679e14945072b4e54cdbfba468fbc192" title="Set power&#45;up state for specific channel." alt="" coords="357,56,528,83"/>
+<area shape="rect" id="node10" href="$ad5754r_8h.html#a86eb2633b3da97e164056f31216264a8" title="Set clear mode setting for device." alt="" coords="350,107,535,133"/>
+<area shape="rect" id="node11" href="$ad5754r_8h.html#a7fde54cb94c1b6632bc7f26f0502b2b1" title="Apply current clamp setting for device." alt="" coords="365,158,520,199"/>
+<area shape="rect" id="node12" href="$ad5754r_8h.html#a3c216ae4b41db1538b59025b9d0e122d" title="Set Internal Reference Enable/Disable state for device." alt="" coords="367,223,518,265"/>
+<area shape="rect" id="node13" href="$ad5754r_8h.html#aebf248be160290a179b4b7992be0e1ae" title="Set SDO Enable/Disable state for device." alt="" coords="349,289,536,316"/>
+<area shape="rect" id="node14" href="$ad5754r_8h.html#ad1e19f86104f644876be104c09a5791c" title="Apply TSD setting for device." alt="" coords="367,340,519,367"/>
+</map>

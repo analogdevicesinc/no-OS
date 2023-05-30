@@ -1,0 +1,8 @@
+<map id="adxl38x_get_op_mode" name="adxl38x_get_op_mode">
+<area shape="rect" id="node1" title="Gets the current operation mode of the device." alt="" coords="649,132,819,159"/>
+<area shape="rect" id="node2" href="$adxl38x_8h.html#ac7d2f189eea39934e801c243fbb6175f" title="Reads the raw output data using burst read." alt="" coords="432,56,601,83"/>
+<area shape="rect" id="node4" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="5,56,165,83"/>
+<area shape="rect" id="node5" href="$adxl38x_8h.html#ada2c338dfa91317699e28a7febad15d3" title="Reads the raw output data using continuous read." alt="" coords="435,157,598,184"/>
+<area shape="rect" id="node6" href="$adxl38x_8h.html#acf9a35b3f4bec99e5e66d9dc5b204e90" title="Reads the raw temperature data using burst read." alt="" coords="445,208,588,235"/>
+<area shape="rect" id="node3" href="$adxl38x_8h.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="213,5,384,32"/>
+</map>

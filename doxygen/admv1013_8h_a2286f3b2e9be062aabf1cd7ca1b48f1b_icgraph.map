@@ -1,0 +1,7 @@
+<map id="admv1013_spi_write" name="admv1013_spi_write">
+<area shape="rect" id="node1" title="Writes data to ADMV1013 over SPI." alt="" coords="484,31,641,57"/>
+<area shape="rect" id="node2" href="$admv1013_8h.html#a0466df867756a21adaa080f89fb248c4" title="Initializes the admv1013." alt="" coords="37,5,156,32"/>
+<area shape="rect" id="node3" href="$admv1013_8h.html#aa729c77027ff7919370b8844856edb7c" title="Update ADMV1013 register." alt="" coords="236,56,436,83"/>
+<area shape="rect" id="node4" href="$admv1013_8h.html#a5255aa2e282f8b3dedccdf7909b5600c" title="Set I/Q Offset Accuracy." alt="" coords="6,56,187,83"/>
+<area shape="rect" id="node5" href="$admv1013_8h.html#ae0b41f6016b7d7cbbc26f39a2e729f4d" title="Set I/Q Phase Accuracy." alt="" coords="5,107,188,133"/>
+</map>

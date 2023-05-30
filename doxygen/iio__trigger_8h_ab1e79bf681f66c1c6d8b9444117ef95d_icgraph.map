@@ -1,0 +1,4 @@
+<map id="iio_trig_disable" name="iio_trig_disable">
+<area shape="rect" id="node1" title="Disable system interrupt which is linked to the given trigger." alt="" coords="232,13,353,39"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#aa3fb4f6fcd0868abc263f5db5b782538" title="Handles trigger: reads all available samples in FIFO and writes them to the buffer." alt="" coords="5,5,184,47"/>
+</map>

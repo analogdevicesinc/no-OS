@@ -1,0 +1,20 @@
+<map id="iio/iiod.c" name="iio/iiod.c">
+<area shape="rect" id="node1" title="Nonblocking implementation of iiod." alt="" coords="497,5,575,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="67,80,154,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="677,379,747,405"/>
+<area shape="rect" id="node4" title=" " alt="" coords="313,80,383,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="408,80,475,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="499,80,573,107"/>
+<area shape="rect" id="node7" href="$iiod_8h.html" title="Header file of iiod." alt="" coords="597,80,656,107"/>
+<area shape="rect" id="node15" href="$iiod__private_8h.html" title="Private header file of iiod." alt="" coords="178,80,289,107"/>
+<area shape="rect" id="node16" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="837,80,947,107"/>
+<area shape="rect" id="node18" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="662,304,762,331"/>
+<area shape="rect" id="node8" title=" " alt="" coords="254,379,325,405"/>
+<area shape="rect" id="node9" title=" " alt="" coords="479,379,561,405"/>
+<area shape="rect" id="node10" href="$iio_8h.html" title="Header file of iio." alt="" coords="208,155,259,181"/>
+<area shape="rect" id="node11" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="165,229,259,256"/>
+<area shape="rect" id="node13" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="350,229,455,256"/>
+<area shape="rect" id="node12" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="5,304,176,331"/>
+<area shape="rect" id="node14" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="453,304,587,331"/>
+<area shape="rect" id="node17" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="858,155,926,181"/>
+</map>

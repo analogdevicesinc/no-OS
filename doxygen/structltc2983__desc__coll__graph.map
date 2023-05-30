@@ -1,0 +1,10 @@
+<map id="ltc2983_desc" name="ltc2983_desc">
+<area shape="rect" id="node1" title="LTC2983 descriptor." alt="" coords="932,95,1039,121"/>
+<area shape="rect" id="node2" href="$structltc2983__sensor.html" title="common LTC2983 sensor struct" alt="" coords="675,5,795,32"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,95,797,121"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,35,184,61"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,65,490,92"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,117,491,158"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,149,801,176"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,183,511,209"/>
+</map>

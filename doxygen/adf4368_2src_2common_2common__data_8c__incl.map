@@ -1,0 +1,15 @@
+<map id="projects/adf4368/src/common/common_data.c" name="projects/adf4368/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by adf4368 examples." alt="" coords="188,5,378,47"/>
+<area shape="rect" id="node2" href="$adf4368_2src_2common_2common__data_8h.html" title="Defines common data to be used by adf4368 examples." alt="" coords="220,95,346,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="6,169,115,196"/>
+<area shape="rect" id="node4" href="$adf4368_8h.html" title="Implementation of ADF4368 Driver." alt="" coords="373,169,460,196"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="232,244,332,271"/>
+<area shape="rect" id="node11" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="638,244,736,271"/>
+<area shape="rect" id="node12" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="140,169,245,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="248,319,318,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="542,244,613,271"/>
+<area shape="rect" id="node7" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="408,244,518,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="153,319,224,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="46,319,128,345"/>
+<area shape="rect" id="node13" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="23,244,156,271"/>
+</map>

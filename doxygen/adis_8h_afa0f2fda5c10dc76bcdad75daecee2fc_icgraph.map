@@ -1,0 +1,5 @@
+<map id="adis_get_accl_scale" name="adis_get_accl_scale">
+<area shape="rect" id="node1" title="Read adis device acceleration scale in fractional form." alt="" coords="213,31,364,57"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="11,5,160,32"/>
+<area shape="rect" id="node3" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,56,165,83"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="adis_write_burst_sel" name="adis_write_burst_sel">
+<area shape="rect" id="node1" title="Write burst selection encoded value." alt="" coords="255,56,409,83"/>
+<area shape="rect" id="node2" href="$adis1654x_8c.html#a869c26c00f78c2459822ebbf23d20756" title="Read burst data." alt="" coords="5,5,207,32"/>
+<area shape="rect" id="node3" href="$adis1657x_8c.html#ac442d3460a938b11ed36834c5c1bbd59" title="Read burst data." alt="" coords="5,56,207,83"/>
+<area shape="rect" id="node4" href="$adis_8h.html#add978372da385dea5434585683a94449" title="Read burst data." alt="" coords="25,107,187,133"/>
+</map>

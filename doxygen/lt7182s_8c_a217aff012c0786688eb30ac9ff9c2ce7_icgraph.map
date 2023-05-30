@@ -1,0 +1,7 @@
+<map id="lt7182s_read_block_data" name="lt7182s_read_block_data">
+<area shape="rect" id="node1" title="Perform a PMBus read block operation." alt="" coords="551,31,735,57"/>
+<area shape="rect" id="node2" href="$lt7182s_8h.html#a8939c420a775717b905ff79c6dc6799a" title="Initialize the device structure." alt="" coords="404,31,503,57"/>
+<area shape="rect" id="node3" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,32"/>
+<area shape="rect" id="node4" href="$iio__lt7182s_8h.html#a7c5483fc8031d69287e746f226d1935d" title="Initializes the LT7182S IIO descriptor." alt="" coords="215,56,337,83"/>
+<area shape="rect" id="node5" href="$lt7182s_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+</map>

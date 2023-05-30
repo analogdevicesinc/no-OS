@@ -1,0 +1,4 @@
+<map id="adis_read_xg_bias" name="adis_read_xg_bias">
+<area shape="rect" id="node1" title="Read raw gyroscope offset correction on x axis." alt="" coords="227,5,369,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="5,5,179,32"/>
+</map>

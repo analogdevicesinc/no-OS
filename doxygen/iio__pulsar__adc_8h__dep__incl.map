@@ -1,0 +1,5 @@
+<map id="drivers/adc/pulsar_adc/iio_pulsar_adc.h" name="drivers/adc/pulsar_adc/iio_pulsar_adc.h">
+<area shape="rect" id="node1" title="Header file for PULSAR_ADC IIO interface." alt="" coords="106,5,267,47"/>
+<area shape="rect" id="node2" href="$iio__pulsar__adc_8c.html" title="Implementation of pulsar_adc IIO Driver." alt="" coords="5,102,165,143"/>
+<area shape="rect" id="node3" href="$pulsar-adc_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example header for eval&#45;pulsar_adc project." alt="" coords="189,95,387,151"/>
+</map>

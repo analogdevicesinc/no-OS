@@ -1,0 +1,17 @@
+<map id="ad5460_reg_read" name="ad5460_reg_read">
+<area shape="rect" id="node1" title="Read a register&#39;s value." alt="" coords="789,67,924,94"/>
+<area shape="rect" id="node2" href="$ad5460_8h.html#ae57c7427b36b42beb1c7fcbad35dec7a" title="Read the live status bits." alt="" coords="601,92,731,119"/>
+<area shape="rect" id="node3" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="179,151,297,178"/>
+<area shape="rect" id="node4" href="$ad5460_8h.html#adadcf7fc1bf80e2520c82893bff4800e" title="Get the GPO value for a specific channel." alt="" coords="599,42,733,68"/>
+<area shape="rect" id="node5" href="$ad5460_8h.html#a08c7febef35caf12c403e76398eb6b71" title="Update a register&#39;s field." alt="" coords="591,327,741,354"/>
+<area shape="rect" id="node6" href="$ad5460_8h.html#af6dce2561d89992c6132034a42cb6477" title="Disable the slew rate control." alt="" coords="352,327,543,354"/>
+<area shape="rect" id="node7" href="$ad5460_8h.html#ace4100908d1c6f6c7220eb77641d0aea" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="353,210,541,236"/>
+<area shape="rect" id="node8" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="172,403,304,430"/>
+<area shape="rect" id="node10" href="$ad5460_8h.html#a3ac149b8ac0e51abe4a0a543f5cff2d6" title="Set the operation mode for a specific channel." alt="" coords="370,261,525,302"/>
+<area shape="rect" id="node11" href="$ad5460_8h.html#a83ab0c31b4c6787df032e94e1ce55f49" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="370,545,525,586"/>
+<area shape="rect" id="node12" href="$ad5460_8h.html#a15df7e48eca2a50e452eff927a9fc29b" title="Set the current range for a specific channel." alt="" coords="370,480,525,521"/>
+<area shape="rect" id="node14" href="$ad5460_8h.html#a7c17c388ab71313269c2a441ae2a6dbc" title="Set the voltage range for a specific channel." alt="" coords="370,144,525,185"/>
+<area shape="rect" id="node15" href="$ad5460_8h.html#a09df865017b68029dfe0d01b3151cb98" title="Set the GPIO operation mode." alt="" coords="358,378,537,404"/>
+<area shape="rect" id="node9" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,403,124,430"/>
+<area shape="rect" id="node13" href="$current__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current output example main execution." alt="" coords="179,487,297,514"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="getDbgJesdMykonosErrorMessage" name="getDbgJesdMykonosErrorMessage">
+<area shape="rect" id="node1" title="Helper function for return of character string based on 32&#45;bit mykonosDbgErr_t enum value." alt="" coords="580,439,823,465"/>
+<area shape="rect" id="node2" href="$mykonos__dbgjesd_8h.html#a8d019dd1620a76c9724226632145a28e" title="Performs read of enabled JESD Deframer lanes." alt="" coords="11,11,243,37"/>
+<area shape="rect" id="node3" href="$mykonos__dbgjesd_8h.html#aa297a9fe05bc20743c82c38aee7450f7" title="Performs read back lanes in error for the given errType of the JESD Deframer." alt="" coords="14,63,241,89"/>
+<area shape="rect" id="node4" href="$mykonos__dbgjesd_8h.html#a4a683bc25132383ebb49e900d329f98f" title="Performs read JESD Deframer error thresholds." alt="" coords="15,116,239,143"/>
+<area shape="rect" id="node5" href="$mykonos__dbgjesd_8h.html#a7608a9181028ae78f53ba5beb9a82857" title="Performs a read of the JESD IRQ vector for the deframer." alt="" coords="30,173,225,200"/>
+<area shape="rect" id="node6" href="$mykonos__dbgjesd_8h.html#a8d3c0ebb4dbc8f2e800abde0d1cf5103" title="Performs get JESD Deframer SyncMask." alt="" coords="5,236,249,263"/>
+<area shape="rect" id="node7" href="$mykonos__dbgjesd_8h.html#ad8e4fd867124e32fb54920bc3f3ee00b" title="Performs reads to JESD Deframer secondary status register." alt="" coords="311,667,518,693"/>
+<area shape="rect" id="node8" href="$mykonos__dbgjesd_8h.html#a46d8bad0f70af7036b69a764ff3af474" title="Performs read back of the error counters for selected lane of the JESD Deframer." alt="" coords="19,312,236,339"/>
+<area shape="rect" id="node9" href="$mykonos__dbgjesd_8h.html#a8b865a314a7edb880dc33bc006d80fd5" title="Performs reset of the selected error type for the selected lane." alt="" coords="17,413,238,440"/>
+<area shape="rect" id="node10" href="$mykonos__dbgjesd_8h.html#a30559c3aa409a3c64cfb131af10cb4d0" title="Performs reset of the selected error type IRQ for the given lane." alt="" coords="22,363,233,389"/>
+<area shape="rect" id="node11" href="$mykonos__dbgjesd_8h.html#aec2eef66b448eef9f087c4301607acc6" title="Performs set JESD Deframer error thresholds." alt="" coords="16,591,239,617"/>
+<area shape="rect" id="node12" href="$mykonos__dbgjesd_8h.html#aa8ea3dbf437e2bf88240574652c30d3e" title="Performs set JESD Deframer IRQ mask that will be used to generates interrupts." alt="" coords="13,515,241,541"/>
+<area shape="rect" id="node13" href="$mykonos__dbgjesd_8h.html#a95cdbc77cc5bb09515099181e0b2ea58" title="Performs set JESD Deframer Sync mask." alt="" coords="6,464,249,491"/>
+<area shape="rect" id="node14" href="$mykonos__dbgjesd_8h.html#a9888728525b5878f7793e037716763d3" title="Gets JESD framer Pattern generator." alt="" coords="297,717,532,744"/>
+<area shape="rect" id="node15" href="$mykonos__dbgjesd_8h.html#aee160b51aa3952d7fea7ebcc6f8ab382" title="Performs get JESD framer Zero data samples." alt="" coords="303,768,526,795"/>
+<area shape="rect" id="node16" href="$mykonos__dbgjesd_8h.html#aef882e01515c659d7bd8e7b69478bfb1" title="Performs set JESD framer Pattern Generator." alt="" coords="299,819,531,845"/>
+<area shape="rect" id="node17" href="$mykonos__dbgjesd_8h.html#ab05f1b722092245719b54953edde72bb" title="Performs set JESD framer Zero data samples per lane." alt="" coords="304,869,525,896"/>
+<area shape="rect" id="node18" href="$mykonos__dbgjesd_8h.html#a64da4288564ae33bdf38a6455c41a248" title="Performs indirect read access to internal JESD register." alt="" coords="323,211,507,237"/>
+<area shape="rect" id="node19" href="$mykonos__dbgjesd_8h.html#aaccf29aa03a610d9f8f515b7576d607c" title="Performs indirect write access to internal JESD register." alt="" coords="322,464,507,491"/>
+</map>

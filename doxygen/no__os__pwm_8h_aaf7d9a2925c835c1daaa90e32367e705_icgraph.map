@@ -1,0 +1,7 @@
+<map id="no_os_pwm_set_duty_cycle" name="no_os_pwm_set_duty_cycle">
+<area shape="rect" id="node1" title="Set the PWM duty cycle." alt="" coords="597,23,760,65"/>
+<area shape="rect" id="node2" href="$max25603_8h.html#ac9b182a9ed8bf3625d0846b4bd7533b2" title="MAX25603 set and configure BEAM PWM dimming." alt="" coords="383,5,546,32"/>
+<area shape="rect" id="node5" href="$max25603_8h.html#a505e7e1f8ea38019b345f30458c4cd68" title="MAX25603 set and configure ENABLE PWM dimming." alt="" coords="380,56,549,83"/>
+<area shape="rect" id="node3" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,31,165,57"/>
+<area shape="rect" id="node4" href="$max25603_8h.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="213,31,332,57"/>
+</map>

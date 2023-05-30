@@ -1,0 +1,20 @@
+<map id="projects/adf4368/src/examples/iio_example/iio_example.c" name="projects/adf4368/src/examples/iio_example/iio_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO example for adf4368 project." alt="" coords="220,5,395,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="56,109,183,136"/>
+<area shape="rect" id="node3" href="$iio__adf4368_8h.html" title="Implementation of IIO ADF4368 Driver." alt="" coords="312,109,423,136"/>
+<area shape="rect" id="node12" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="207,109,288,136"/>
+<area shape="rect" id="node17" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="447,109,583,136"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="341,184,391,211"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="417,259,510,285"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="287,259,392,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="687,408,770,435"/>
+<area shape="rect" id="node7" title=" " alt="" coords="265,408,336,435"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="363,333,534,360"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="558,333,691,360"/>
+<area shape="rect" id="node11" title=" " alt="" coords="589,408,660,435"/>
+<area shape="rect" id="node13" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="142,333,238,360"/>
+<area shape="rect" id="node14" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="102,184,211,211"/>
+<area shape="rect" id="node16" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,259,119,285"/>
+<area shape="rect" id="node15" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="143,259,211,285"/>
+<area shape="rect" id="node18" title=" " alt="" coords="482,184,549,211"/>
+</map>

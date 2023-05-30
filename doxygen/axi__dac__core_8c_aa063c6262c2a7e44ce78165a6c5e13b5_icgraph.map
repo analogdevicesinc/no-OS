@@ -1,0 +1,14 @@
+<map id="axi_dac_read_poll_timeout" name="axi_dac_read_poll_timeout">
+<area shape="rect" id="node1" title="AXI DAC Read Data until condition is met." alt="" coords="947,44,1144,71"/>
+<area shape="rect" id="node2" href="$axi__dac__core_8h.html#a4d843cad23a06079bb7d6245fe0a277f" title="AXI DAC Bus Data Read." alt="" coords="567,19,706,45"/>
+<area shape="rect" id="node4" href="$axi__dac__core_8h.html#a35b4348d0812ce072dc10f58ab748508" title="AXI DAC Bus Data Write." alt="" coords="756,69,899,96"/>
+<area shape="rect" id="node3" href="$ad3552r_8h.html#acf6f55ec6fb20867e06bcc1237f91909" title=" " alt="" coords="363,5,501,32"/>
+<area shape="rect" id="node5" href="$ad3552r_8h.html#a14cac9936d965b7a9a49bb689f76dfd9" title=" " alt="" coords="565,81,708,108"/>
+<area shape="rect" id="node6" href="$ad3552r_8h.html#a118aa692c26c404334c0f2019043fbeb" title=" " alt="" coords="381,56,483,83"/>
+<area shape="rect" id="node9" href="$ad3552r_8h.html#a4b118dc51ba86b1c81b8a5fbfe1c384f" title=" " alt="" coords="353,107,511,133"/>
+<area shape="rect" id="node12" href="$ad3552r_8h.html#a8e59071eb5dc9e29dcef464b5ee97c37" title=" " alt="" coords="347,158,517,199"/>
+<area shape="rect" id="node7" href="$ltc7871_2src_2platform_2maxim_2main_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,31,124,57"/>
+<area shape="rect" id="node8" href="$iio__ad3552r_8h.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="172,56,299,83"/>
+<area shape="rect" id="node10" href="$generic__spi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="182,107,289,133"/>
+<area shape="rect" id="node11" href="$generic__spi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title=" " alt="" coords="5,107,124,133"/>
+</map>

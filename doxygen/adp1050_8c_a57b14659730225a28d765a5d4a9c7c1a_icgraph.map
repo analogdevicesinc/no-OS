@@ -1,0 +1,6 @@
+<map id="adp1050_unlock_pass" name="adp1050_unlock_pass">
+<area shape="rect" id="node1" title="Unlock CHIP/EEPROM/TRIM password." alt="" coords="349,31,515,57"/>
+<area shape="rect" id="node2" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="172,5,301,32"/>
+<area shape="rect" id="node4" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="177,56,296,83"/>
+<area shape="rect" id="node3" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

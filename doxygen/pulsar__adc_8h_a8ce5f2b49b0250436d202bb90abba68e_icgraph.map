@@ -1,0 +1,6 @@
+<map id="pulsar_adc_remove" name="pulsar_adc_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by pulsar_adc_init()." alt="" coords="433,23,583,50"/>
+<area shape="rect" id="node2" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,23,165,50"/>
+<area shape="rect" id="node3" href="$iio__pulsar__adc_8h.html#a043c3098ab17f147071efe80db82f3d0" title="Release resources." alt="" coords="213,23,385,50"/>
+<area shape="rect" id="node4" href="$pulsar__adc_8h.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="239,74,359,100"/>
+</map>

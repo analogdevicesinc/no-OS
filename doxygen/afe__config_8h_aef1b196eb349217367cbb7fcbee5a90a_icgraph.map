@@ -1,0 +1,10 @@
+<map id="afe_read_status0" name="afe_read_status0">
+<area shape="rect" id="node1" title="Read STATUS0 register." alt="" coords="731,35,865,61"/>
+<area shape="rect" id="node2" href="$afe__config_8h.html#a969a1b69d5fee8ce240851bfc5a8ea89" title="Waits for passed number of cycles." alt="" coords="548,8,683,35"/>
+<area shape="rect" id="node7" href="$pqlib__afe_8h.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="560,60,671,87"/>
+<area shape="rect" id="node3" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="313,5,500,32"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,5,265,32"/>
+<area shape="rect" id="node6" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,60,248,87"/>
+<area shape="rect" id="node5" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node8" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="327,57,487,98"/>
+</map>

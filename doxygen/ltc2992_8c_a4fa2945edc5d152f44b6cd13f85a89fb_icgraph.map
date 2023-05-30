@@ -1,0 +1,4 @@
+<map id="ltc2992_get_sum" name="ltc2992_get_sum">
+<area shape="rect" id="node1" title="Read the shunt voltage sum or power sum of both sense channels." alt="" coords="232,5,365,32"/>
+<area shape="rect" id="node2" href="$ltc2992_8h.html#a147e8309fe1977bd08409f5c17f83324" title="Read sense data at a SENSE channel." alt="" coords="5,5,184,32"/>
+</map>

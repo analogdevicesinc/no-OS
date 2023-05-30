@@ -1,0 +1,5 @@
+<map id="max31827_read_temp" name="max31827_read_temp">
+<area shape="rect" id="node1" title="Read a temperature from a register." alt="" coords="429,13,597,39"/>
+<area shape="rect" id="node2" href="$max31827_8h.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="213,5,381,47"/>
+<area shape="rect" id="node3" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,13,165,39"/>
+</map>

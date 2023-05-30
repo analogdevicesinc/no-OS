@@ -1,0 +1,10 @@
+<map id="drivers/digital&#45;io/max149x6/max14916.h" name="drivers/digital&#45;io/max149x6/max14916.h">
+<area shape="rect" id="node1" title="Header file of MAX14916 Driver." alt="" coords="442,5,622,47"/>
+<area shape="rect" id="node2" href="$iio__max14916_8h.html" title="Header file of IIO MAX14916 Driver." alt="" coords="112,102,315,143"/>
+<area shape="rect" id="node5" href="$max14916_8c.html" title="Source file of MAX14916 Driver." alt="" coords="339,102,517,143"/>
+<area shape="rect" id="node6" href="$max14916_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14916 examples." alt="" coords="541,102,733,143"/>
+<area shape="rect" id="node8" href="$max14916_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="757,95,928,151"/>
+<area shape="rect" id="node3" href="$iio__max14916_8c.html" title="Source file of IIO MAX14916 Driver." alt="" coords="5,206,208,247"/>
+<area shape="rect" id="node4" href="$max14916_2src_2examples_2iio__example_2iio__example_8c.html" title="Source file for iio example." alt="" coords="233,199,407,255"/>
+<area shape="rect" id="node7" href="$max14916_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14916 examples." alt="" coords="542,206,733,247"/>
+</map>

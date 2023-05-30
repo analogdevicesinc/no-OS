@@ -1,0 +1,8 @@
+<map id="max42500_reg_update" name="max42500_reg_update">
+<area shape="rect" id="node1" title="Update a register&#39;s value based on a mask." alt="" coords="481,81,652,108"/>
+<area shape="rect" id="node2" href="$max42500_8h.html#a45a93542ac6c986d6245ffb65a6f8b9a" title="Initialize the device structure." alt="" coords="264,5,383,32"/>
+<area shape="rect" id="node4" href="$max42500_8h.html#a12d9747d4143e266cb34770695e84a69" title="Set the overvoltage threshold of VM1 to VM5." alt="" coords="225,56,422,83"/>
+<area shape="rect" id="node5" href="$max42500_8h.html#a372c0993640464da288a4881836b2dc5" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="225,107,422,133"/>
+<area shape="rect" id="node6" href="$max42500_8h.html#aac3ba7534a3177465fd2eac9fec90c02" title="Set watchdog reset hold time." alt="" coords="213,157,433,184"/>
+<area shape="rect" id="node3" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,56,165,83"/>
+</map>

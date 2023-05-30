@@ -1,0 +1,10 @@
+<map id="no_os_hweight32" name="no_os_hweight32">
+<area shape="rect" id="node1" title=" " alt="" coords="599,81,733,108"/>
+<area shape="rect" id="node2" href="$aducm3029__adc_8h.html#a4af7379d1fc099dae34fbdb5c9d67d13" title="Read adc data. aducm3029_adc_update_active_channels should be called in order to enable channeles." alt="" coords="383,5,547,32"/>
+<area shape="rect" id="node3" href="$iio__axi__adc_8c.html#aca23a80aa2cbb5c102d031473a0d9189" title="Update active channels." alt="" coords="384,56,547,83"/>
+<area shape="rect" id="node4" href="$iio__axi__dac_8c.html#a5391d278882dec3aab5b3caccbb8fdc7" title="Update active channels." alt="" coords="380,107,551,133"/>
+<area shape="rect" id="node5" href="$max31827_8h.html#acf60373c1d4f07f1fb9850b75c1ae299" title="Initialize MAX31827 device setup." alt="" coords="384,157,547,184"/>
+<area shape="rect" id="node6" href="$max31827_8h.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="213,157,332,184"/>
+<area shape="rect" id="node7" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,132,165,159"/>
+<area shape="rect" id="node8" href="$iio__max31827_8h.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="14,183,157,209"/>
+</map>
