@@ -9,13 +9,12 @@
 #include "max24287.h"
 #include "iio_max24287.h"
 
-#if (TARGET_NUM == 32650)
 int net_init(struct adin1300_iio_desc **adin1300_iio, 
 		struct max24287_iio_desc **max24287_iio,
 		unsigned int speed)
 {
 	int ret;
-	uint16_t spd;
+	uint16_t spd = 0;
 	enum adin1300_speed phy_speed_cap;
 	struct adin1300_desc *adin1300;
 	struct max24287_desc *max24287;
@@ -120,5 +119,3 @@ struct adin1300_init_param adin1300_ip = {
 
 	return 0;
 }
-
-#endif

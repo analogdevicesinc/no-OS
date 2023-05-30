@@ -3,6 +3,7 @@
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "no_os_rtc.h"
+#include "no_os_crc8.h"
 #include "parameters.h"
 #include "hmc630x.h"
 #include "iio_hmc630x.h"
@@ -19,7 +20,7 @@ static int mwc_step(void *arg)
 	struct mwc_iio_dev *mwc = arg;
 	if (!heartbeat_pulse)
 		return 0;
-#if (TARGET_NUM == 32650)
+
 	lock = 0;
 	hmc630x_read(mwc->tx_iiodev->dev, HMC630X_LOCKDET, &lock);
 	led_tx_lock(lock);
@@ -27,7 +28,6 @@ static int mwc_step(void *arg)
 	lock = 0;
 	hmc630x_read(mwc->rx_iiodev->dev, HMC630X_LOCKDET, &lock);
 	led_rx_lock(lock);
-#endif
 
 	mwc_algorithms(mwc);
 
@@ -98,12 +98,17 @@ int main(void)
 	enum admv96xx_id id = ID_ADMV96X5;
 	int speed;
 	uint8_t hbtx;
-	uint64_t txfreq, rxfreq;
 	struct no_os_gpio_desc *brd_select;
+	struct no_os_eeprom_desc *eeprom;
+	const uint16_t nvmpsz = sizeof(struct nvmp);
+	uint8_t eebuf[nvmpsz + 1];
+	struct nvmp *nvmp;
 	struct adin1300_iio_desc *iio_adin1300;
 	struct max24287_iio_desc *iio_max24287;
+	NO_OS_DECLARE_CRC8_TABLE(crc8);
+	
+	no_os_crc8_populate_msb(crc8, 0x7);
 
-#if (TARGET_NUM == 32650)
 	// Greeting
 	ret = no_os_uart_init(&console, &uart_console_ip);
 	if (ret)
@@ -121,64 +126,64 @@ int main(void)
 	ret = no_os_gpio_get_value(brd_select, &hbtx);
 	if (ret)
 		goto end;
-#else
-	hbtx = false; // manually set this for the eval kit
-#endif
+
 	sprintf(hw_model_str, "admv96%d%d", hbtx ? 1 : 2, id);
 
 	printf("Board: %s\n", hw_model_str);
-#if (TARGET_NUM == 32650)
+
 	ret = led_init();
 	if (ret)
 		goto end;
-#endif
-
-	switch(id) {
-	case ID_ADMV96X1:
-		txfreq = hbtx ? 63000000000 : 58012500000;
-		rxfreq = hbtx ? 58012500000 : 63000000000;
-		break;
-	case ID_ADMV96X3:
-	case ID_ADMV96X5:
-		txfreq = hbtx ? 63262500000 : 59850000000;
-		rxfreq = hbtx ? 59850000000 : 63262500000;
-		break;
-	default:
-		ret = -EINVAL;
+	
+	ret = no_os_eeprom_init(&eeprom, &eeprom_ip);
+	if (ret)
 		goto end;
-	};
+	
+	ret = no_os_eeprom_read(eeprom, 0, eebuf, nvmpsz+1);
+	if (ret)
+		return ret;
+	
+	uint8_t crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
+	if (crc != eebuf[nvmpsz]) {
+		printf("EEPROM: CRC mismatch, read 0x%x, computed 0x%x\n", eebuf[nvmpsz], crc);
 
-	uint8_t tx_correlation[][5] = {
-		{1, 3, 7, 15, 31}, // index
-		{15, 15, 15, 10, 0}, // if_attn
-	};
-	uint8_t rx_correlation[][5] = {
-		{1, 3, 7, 15, 31}, // index
-		{6, 6, 6, 6, 6}, // if_attn
-		{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_0dB} // lna_attn
-	};
+		memcpy(eebuf, &factory_defaults, nvmpsz);
+		eebuf[nvmpsz] = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
+		ret = no_os_eeprom_write(eeprom, 0, eebuf, nvmpsz+1);
+		if (ret)
+			return ret;
 
-	// patch the temperature correlation table for admv962x
-	if (!hbtx) {
-		tx_correlation[1][3] = 10;
-		tx_correlation[1][4] = 5;
+		ret = no_os_eeprom_read(eeprom, 0, eebuf, nvmpsz+1);
+		if (ret)
+			return ret;
+		
+		crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
+		if (crc != eebuf[nvmpsz]) {
+			printf("EEPROM: failed to store factory defaults.\n");
+			return -EFAULT;
+		}
+
+		printf("EEPROM: stored factory defaults.\n");
 	}
+
+	nvmp = (struct nvmp *)eebuf;
 
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
 		.reset_gpio_ip = &xcvr_reset_gpio_ip,
-		.tx_autotuning = true,
-		.tx_target = 350,
-		.tx_tolerance = 50,
-		.rx_autotuning = id == ID_ADMV96X1 ? false : true,
-		.rx_target = 1950,
-		.rx_tolerance = 50,
-		.tx_auto_ifvga = true,
-		.tx_auto_if_correlation = tx_correlation,
-		.rx_auto_ifvga_rflna = true,
-		.rx_auto_if_lna_correlation = rx_correlation,
+		.tx_autotuning = nvmp->tx_autotuning,
+		.tx_target = nvmp->tx_target,
+		.tx_tolerance = nvmp->tx_tolerance,
+		.rx_autotuning = nvmp->rx_autotuning,
+		.rx_target = nvmp->rx_target,
+		.rx_tolerance = nvmp->rx_tolerance,
+		.tx_auto_ifvga = nvmp->tx_auto_ifvga,
+		.rx_auto_ifvga_rflna = nvmp->rx_auto_ifvga_rflna,
+		.temp_correlation = &nvmp->temp_correlation[hbtx],
 		.id = id,
 		.hbtx = hbtx,
+		.crc8 = crc8,
+		.eeprom = eeprom,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)
@@ -196,11 +201,11 @@ int main(void)
 	txip.clk = xcvr_clk_gpio_ip;
 	txip.data = xcvr_data_gpio_ip;
 	txip.scanout = xcvr_scanout_tx_gpio_ip;
-	txip.vco = txfreq;
-	txip.enabled = true;
+	txip.vco = nvmp->hmc6300_vco[hbtx];
+	txip.enabled = nvmp->hmc6300_enabled;
 	txip.temp_en = true;
-	txip.if_attn = 13;
-	txip.tx.rf_attn = 15;
+	txip.if_attn = nvmp->hmc6300_if_attn;
+	txip.tx.rf_attn = nvmp->hmc6300_rf_attn;
 	struct hmc630x_iio_init_param iio_txip = {
 		.ip = &txip,
 	};
@@ -228,15 +233,15 @@ int main(void)
 	rxip.clk = xcvr_clk_gpio_ip;
 	rxip.data = xcvr_data_gpio_ip;
 	rxip.scanout = xcvr_scanout_rx_gpio_ip;
-	rxip.vco = rxfreq;
-	rxip.enabled = true;
+	rxip.vco = nvmp->hmc6301_vco[hbtx];
+	rxip.enabled = nvmp->hmc6301_enabled;
 	rxip.temp_en = true;
-	rxip.if_attn = 11;
-	rxip.rx.bb_attn1 = HMC6301_BB_ATTN_18dB;
-	rxip.rx.bb_attn2 = HMC6301_BB_ATTN_18dB;
-	rxip.rx.bb_attni_fine = HMC6301_BB_ATTN_FINE_3dB;
-	rxip.rx.bb_attnq_fine = HMC6301_BB_ATTN_FINE_0dB;
-	rxip.rx.lna_attn = HMC6301_LNA_ATTN_12dB;
+	rxip.if_attn = nvmp->hmc6301_if_attn;
+	rxip.rx.bb_attn1 = nvmp->hmc6301_bb_attn1;
+	rxip.rx.bb_attn2 = nvmp->hmc6301_bb_attn2;
+	rxip.rx.bb_attni_fine = nvmp->hmc6301_bb_attni_fine;
+	rxip.rx.bb_attnq_fine = nvmp->hmc6301_bb_attnq_fine;
+	rxip.rx.lna_attn = nvmp->hmc6301_lna_attn;
 	rxip.rx.bb_lpc = HMC6301_BB_LPC_1400MHz;
 	rxip.rx.bb_hpc = HMC6301_BB_HPC_45kHz;
 	struct hmc630x_iio_init_param iio_rxip = {
@@ -253,7 +258,7 @@ int main(void)
 	ret = heartbeat_prepare();
 	if (ret)
 		goto end;
-#if (TARGET_NUM == 32650)
+
 	mwc_algorithms(mwc);
 
 	switch(id) {
@@ -272,7 +277,6 @@ int main(void)
 	ret = net_init(&iio_adin1300, &iio_max24287, speed);
 	if (ret)
 		goto end;
-#endif
 
 	struct iio_app_device iio_devices[] = {
 		{
@@ -338,7 +342,6 @@ int main(void)
 		.post_step_callback = mwc_step,
 		.arg = mwc,
 	};
-
 
 	struct iio_app_desc *app;
 	ret = iio_app_init(&app, aip);
