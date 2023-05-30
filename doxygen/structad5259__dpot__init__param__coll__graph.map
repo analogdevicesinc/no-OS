@@ -1,0 +1,7 @@
+<map id="ad5259_dpot_init_param" name="ad5259_dpot_init_param">
+<area shape="rect" id="Node000001" title="ad5259 digital potentiometer init parameters." alt="" coords="5,181,188,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="15,93,178,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,133,99,181,94,181,94,133"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="7,5,186,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,45,99,93,94,93,94,45"/>
+</map>

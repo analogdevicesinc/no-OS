@@ -1,0 +1,7 @@
+<map id="drivers/platform/xilinx/xilinx_timer.h" name="drivers/platform/xilinx/xilinx_timer.h">
+<area shape="rect" id="Node000001" title="Timer control module header." alt="" coords="99,5,265,45"/>
+<area shape="rect" id="Node000002" href="$xilinx__timer_8c.html" title="Timer and GIC control module source." alt="" coords="5,93,172,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,57,111,95,108,91,149,53"/>
+<area shape="rect" id="Node000003" href="$adv7511_2src_2main_8c.html" title="The implementation of the main function of the app." alt="" coords="197,93,354,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,53,256,91,253,95,211,57"/>
+</map>

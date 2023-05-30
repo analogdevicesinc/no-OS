@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/switch/adgm3121/README.rst

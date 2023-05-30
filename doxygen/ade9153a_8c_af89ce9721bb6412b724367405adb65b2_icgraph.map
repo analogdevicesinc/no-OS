@@ -1,0 +1,10 @@
+<map id="ade9153a_run" name="ade9153a_run">
+<area shape="rect" id="Node000001" title="Start measurements." alt="" coords="347,31,461,56"/>
+<area shape="rect" id="Node000002" href="$ade9153a_8c.html#ad93af9e1aabc3f67b04304db2fd36912" title="Initialize the device." alt="" coords="146,5,261,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="333,37,260,28,261,23,333,32"/>
+<area shape="rect" id="Node000004" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a5b32942d81fb899bcf8c3907bc9fde17" title="Autocalibration read values." alt="" coords="108,55,299,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="334,54,299,59,299,53,333,49"/>
+<area shape="rect" id="Node000003" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,31,61,42,60,37,132,26"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="99,55,60,50,61,44,100,50"/>
+</map>

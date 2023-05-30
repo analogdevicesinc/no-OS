@@ -1,0 +1,14 @@
+<map id="no_os_pwm_set_duty_cycle" name="no_os_pwm_set_duty_cycle">
+<area shape="rect" id="Node000001" title="Set the PWM duty cycle." alt="" coords="597,23,760,63"/>
+<area shape="rect" id="Node000002" href="$max25603_8c.html#ac9b182a9ed8bf3625d0846b4bd7533b2" title="MAX25603 set and configure BEAM PWM dimming." alt="" coords="383,5,546,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="583,35,546,30,547,25,584,29"/>
+<area shape="rect" id="Node000005" href="$max25603_8c.html#a505e7e1f8ea38019b345f30458c4cd68" title="MAX25603 set and configure ENABLE PWM dimming." alt="" coords="380,55,549,80"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="584,57,550,61,549,55,583,51"/>
+<area shape="rect" id="Node000003" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,29,165,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="370,16,293,15,214,19,139,32,138,27,213,14,293,10,370,10"/>
+<area shape="rect" id="Node000004" href="$max25603_8c.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="213,29,332,55"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="370,33,332,37,332,32,369,27"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="199,45,166,45,166,39,199,39"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="366,74,291,74,213,70,138,57,139,52,214,65,291,69,366,69"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="366,57,332,52,333,47,367,52"/>
+</map>

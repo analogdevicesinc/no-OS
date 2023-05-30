@@ -1,0 +1,11 @@
+<map id="ad9523_io_update" name="ad9523_io_update">
+<area shape="rect" id="Node000001" title="Updates the AD9523 configuration." alt="" coords="349,56,491,81"/>
+<area shape="rect" id="Node000002" href="$ad9523_8c.html#ac41178e43b273796df05a276108302c9" title="Updates the AD9523 configuration." alt="" coords="167,5,301,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,55,281,33,282,28,360,50"/>
+<area shape="rect" id="Node000003" href="$ad9523_8c.html#af26d0ef1d15ebc7f6ea3f4dc5317e3c7" title="Setup the AD9523 device." alt="" coords="5,56,119,81"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="336,71,119,71,119,66,336,66"/>
+<area shape="rect" id="Node000004" href="$ad9523_8c.html#a67f744ae8790aa813acaf25574620ea4" title="Updates the AD9523 configuration." alt="" coords="181,107,287,132"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="360,88,282,109,281,104,359,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="178,37,107,58,105,53,176,32"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="176,105,105,84,107,79,178,100"/>
+</map>

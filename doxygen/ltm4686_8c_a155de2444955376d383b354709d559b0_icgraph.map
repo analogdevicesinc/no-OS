@@ -1,0 +1,58 @@
+<map id="ltm4686_set_page" name="ltm4686_set_page">
+<area shape="rect" id="Node000001" title="Set page of the device. Page 0x0 &#45; Channel 0 Page 0x1 &#45; Channel 1 Page 0x2 &#45; Channel 2 Page 0x3 &#45; Cha..." alt="" coords="904,129,1047,155"/>
+<area shape="rect" id="Node000002" href="$ltm4686_8c.html#ab5a10c842a48003c14478e696e027b54" title="Perform a PMBus read block operation." alt="" coords="665,5,856,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="951,121,909,81,855,44,827,33,829,28,857,40,912,77,955,117"/>
+<area shape="rect" id="Node000003" href="$ltm4686_8c.html#ac4ce3ad4965d3e3ab38f1d6fe497eec9" title="Perform a raw PMBus read byte operation." alt="" coords="687,104,835,129"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="890,135,835,128,835,123,891,129"/>
+<area shape="rect" id="Node000010" href="$ltm4686_8c.html#a15c9327d4686624c503b4d76cf597185" title="Perform a raw PMBus read word operation." alt="" coords="685,55,836,80"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="934,126,855,94,817,83,818,77,857,89,936,121"/>
+<area shape="rect" id="Node000013" href="$ltm4686_8c.html#ad29bdf5059dd297e2e0125241e51d200" title="Send a PMBus command to the device." alt="" coords="685,227,836,252"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="935,163,791,229,789,224,933,158"/>
+<area shape="rect" id="Node000016" href="$ltm4686_8c.html#a4a2cadbbf887d3f5e1ee56f79da445d5" title="Perform a raw PMBus write byte operation." alt="" coords="685,153,837,179"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="891,154,837,160,836,155,890,149"/>
+<area shape="rect" id="Node000019" href="$ltm4686_8c.html#a4fe8fbbce8b9357c23bbd97a635ff6eb" title="Perform a raw PMBus write word operation." alt="" coords="683,352,838,377"/>
+<area shape="poly" id="edge24_Node000001_Node000019" title=" " alt="" coords="954,167,776,354,772,350,950,163"/>
+<area shape="rect" id="Node000004" href="$ltm4686_8c.html#a0b6e2147eb5b7bf8eaee8910cda56cb3" title="Initialize the device structure." alt="" coords="470,153,574,179"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="686,135,575,158,574,153,685,130"/>
+<area shape="rect" id="Node000008" href="$ltm4686_8c.html#a306c50c5863288699cc4ee356b4245ae" title="Sets the PWM mode for a specific channel of the LTM4686 device." alt="" coords="443,104,601,129"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="673,119,602,119,602,114,673,114"/>
+<area shape="rect" id="Node000009" href="$ltm4686_8c.html#a66a76854d4d41f63bf79db51df919d78" title="Read statuses." alt="" coords="443,55,601,80"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="685,104,584,83,585,77,686,99"/>
+<area shape="rect" id="Node000005" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,101,165,127"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="456,155,378,142,267,130,165,121,166,116,268,124,379,137,457,150"/>
+<area shape="rect" id="Node000006" href="$iio__ltm4686_8c.html#acdb0c4a357bddeb6e40db66acdedd673" title="Initializes the LTM4686 IIO descriptor." alt="" coords="233,152,359,177"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="456,168,359,168,359,162,456,163"/>
+<area shape="rect" id="Node000007" href="$ltm4686_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,152,157,177"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="219,167,157,167,157,162,219,162"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="672,70,602,70,602,65,672,65"/>
+<area shape="rect" id="Node000011" href="$ltm4686_8c.html#a677479368e7d8efe30d29ef89dcbfffb" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="429,5,615,31"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="685,54,584,33,585,28,686,49"/>
+<area shape="rect" id="Node000012" href="$ltm4686_8c.html#a629cc1e16d3a790dedae59367f07e3a1" title="Read a value." alt="" coords="219,28,373,53"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="415,31,374,36,373,30,415,26"/>
+<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="247,60,124,104,122,99,245,55"/>
+<area shape="poly" id="edge15_Node000013_Node000004" title=" " alt="" coords="712,224,617,193,574,181,575,176,618,187,713,219"/>
+<area shape="rect" id="Node000014" href="$ltm4686_8c.html#a16c6fb8d263e000fbfd2ac79105f8a7e" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="449,301,595,327"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="714,259,618,293,577,304,576,299,617,287,713,254"/>
+<area shape="rect" id="Node000015" href="$ltm4686_8c.html#a95a538945d5db84e44b95d9a6a1c52fa" title="Perform a device software reset." alt="" coords="433,252,611,277"/>
+<area shape="poly" id="edge17_Node000013_Node000015" title=" " alt="" coords="672,251,612,258,611,253,672,246"/>
+<area shape="poly" id="edge19_Node000016_Node000004" title=" " alt="" coords="671,169,574,169,574,163,671,163"/>
+<area shape="poly" id="edge20_Node000016_Node000008" title=" " alt="" coords="685,153,584,132,585,127,686,148"/>
+<area shape="rect" id="Node000017" href="$ltm4686_8c.html#a1a7e5bae59f54ed5ab0f7acb932d8bbc" title="Set channel operation." alt="" coords="436,203,608,228"/>
+<area shape="poly" id="edge21_Node000016_Node000017" title=" " alt="" coords="686,184,585,205,584,200,685,179"/>
+<area shape="poly" id="edge22_Node000017_Node000005" title=" " alt="" coords="422,227,372,226,318,221,264,210,212,191,196,180,187,167,178,154,164,142,137,129,140,124,167,137,182,150,191,164,200,176,215,186,265,205,319,216,372,221,422,221"/>
+<area shape="rect" id="Node000018" href="$ltm4686_8c.html#af3bb558d214e9f9228312e0fc0cd0ee8" title="Set switching frequency." alt="" coords="217,253,375,279"/>
+<area shape="poly" id="edge23_Node000017_Node000018" title=" " alt="" coords="452,234,354,256,353,251,451,228"/>
+<area shape="poly" id="edge25_Node000019_Node000018" title=" " alt="" coords="670,377,613,378,551,374,487,362,425,342,409,331,400,319,391,307,377,295,347,281,349,276,380,290,395,303,404,316,413,327,428,337,488,357,551,368,613,372,670,371"/>
+<area shape="rect" id="Node000020" href="$ltm4686_8c.html#a8f96f283daa0f832af5192d5aebca7fb" title="Converts value to register data and do PMBus write word operation." alt="" coords="427,403,617,428"/>
+<area shape="poly" id="edge26_Node000019_Node000020" title=" " alt="" coords="687,383,583,405,582,400,686,378"/>
+<area shape="rect" id="Node000021" href="$ltm4686_8c.html#adcd418b520d8f121977b500e2aa1d913" title="Set timing values." alt="" coords="220,501,372,527"/>
+<area shape="poly" id="edge27_Node000020_Node000021" title=" " alt="" coords="489,437,439,465,380,492,347,504,345,499,378,488,436,460,487,432"/>
+<area shape="rect" id="Node000022" href="$ltm4686_8c.html#a77908151239205b389786e6286619937" title="Set input voltage window at which power conversion will proceed." alt="" coords="231,304,361,329"/>
+<area shape="poly" id="edge28_Node000020_Node000022" title=" " alt="" coords="458,401,425,386,411,375,401,364,391,354,377,344,348,332,350,327,380,340,395,350,405,361,414,371,428,381,460,396"/>
+<area shape="rect" id="Node000023" href="$ltm4686_8c.html#acca230c7b546f8c032601bbc0ca407a6" title="Set output voltage margin." alt="" coords="213,353,379,379"/>
+<area shape="poly" id="edge29_Node000020_Node000023" title=" " alt="" coords="449,402,354,381,356,376,450,397"/>
+<area shape="rect" id="Node000024" href="$ltm4686_8c.html#a303213529cf5be0b6eaef00dd9338d61" title="Set output voltage transition rate." alt="" coords="231,403,361,428"/>
+<area shape="poly" id="edge30_Node000020_Node000024" title=" " alt="" coords="413,418,361,418,361,413,413,413"/>
+<area shape="rect" id="Node000025" href="$ltm4686_8c.html#aef661dbab0ec14fa13df72d60c1194f2" title="Set output voltage and its upper limit." alt="" coords="219,452,373,477"/>
+<area shape="poly" id="edge31_Node000020_Node000025" title=" " alt="" coords="450,434,356,455,354,449,449,428"/>
+</map>

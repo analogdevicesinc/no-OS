@@ -1,0 +1,13 @@
+<map id="adin1300_init_param" name="adin1300_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="219,181,377,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="13,93,185,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,122,207,155,268,179,266,184,205,160,133,127"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,45,102,93,97,93,97,45"/>
+<area shape="rect" id="Node000004" href="$structno__os__mdio__init__param.html" title="Parameters for an MDIO slave." alt="" coords="209,93,387,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="301,133,301,181,295,181,295,133"/>
+<area shape="rect" id="Node000005" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="233,5,363,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="301,45,301,93,295,93,295,45"/>
+<area shape="rect" id="Node000006" href="$structadin1300__rgmii__config.html" title=" " alt="" coords="411,93,580,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="461,127,391,160,330,184,328,179,389,155,459,122"/>
+</map>

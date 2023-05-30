@@ -1,0 +1,15 @@
+<map id="ad413x_set_adc_mode" name="ad413x_set_adc_mode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="545,56,716,81"/>
+<area shape="rect" id="Node000002" href="$ad413x_8c.html#a7887134fbf7282b4c3f6350d9c2beffa" title=" " alt="" coords="108,5,295,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="556,56,497,46,393,34,295,26,295,21,393,29,498,41,557,51"/>
+<area shape="rect" id="Node000004" href="$ad413x_8c.html#ab877cd5b2f4339b7bcd8e7d1dab39679" title=" " alt="" coords="371,56,469,81"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="532,71,470,71,470,66,532,66"/>
+<area shape="rect" id="Node000006" href="$ad413x_8c.html#aabddf95dcf6e79e062bbcfa8d2fb55ec" title=" " alt="" coords="343,105,497,131"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="563,87,476,108,474,103,562,82"/>
+<area shape="rect" id="Node000003" href="$ad413x_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="146,37,61,63,60,58,144,32"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="357,71,60,71,60,66,357,66"/>
+<area shape="rect" id="Node000005" href="$iio__ad413x_8c.html#a664572ed923615a25c158e97a1593809" title=" " alt="" coords="141,107,262,132"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="358,86,257,109,256,104,356,81"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="144,105,60,79,61,74,146,100"/>
+</map>

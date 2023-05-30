@@ -1,0 +1,5 @@
+<map id="drivers/power/max22216/max22216.h" name="drivers/power/max22216/max22216.h">
+<area shape="rect" id="Node000001" title="Current control." alt="" coords="5,5,189,45"/>
+<area shape="rect" id="Node000002" href="$max22216_8c.html" title="Current control." alt="" coords="5,93,189,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,59,100,93,95,93,95,59"/>
+</map>

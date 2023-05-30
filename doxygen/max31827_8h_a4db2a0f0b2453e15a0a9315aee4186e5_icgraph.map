@@ -1,0 +1,9 @@
+<map id="max31827_remove" name="max31827_remove">
+<area shape="rect" id="Node000001" title="Free resources allocated by the init function." alt="" coords="391,31,539,56"/>
+<area shape="rect" id="Node000002" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="198,5,317,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="376,35,317,28,317,23,377,30"/>
+<area shape="rect" id="Node000003" href="$iio__max31827_8c.html#a59d5d804db04a17bcdeb7ddfb5e869ba" title="Free resources allocated by the init function." alt="" coords="172,55,343,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="378,56,343,60,342,55,377,51"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

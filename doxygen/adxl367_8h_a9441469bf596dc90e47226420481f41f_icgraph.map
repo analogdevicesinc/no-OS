@@ -1,0 +1,9 @@
+<map id="adxl367_init" name="adxl367_init">
+<area shape="rect" id="Node000001" title="Initializes communication with the device and checks if the part is present by reading the device id." alt="" coords="420,31,523,56"/>
+<area shape="rect" id="Node000002" href="$iio__adxl367_8c.html#ab0285a11dd056b3295e75c6f3b5c64bd" title="Initializes the ADXL367 IIO driver." alt="" coords="221,5,347,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="406,37,347,29,347,24,406,32"/>
+<area shape="rect" id="Node000004" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="196,55,372,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="406,54,373,59,372,53,406,49"/>
+<area shape="rect" id="Node000003" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,21,148,21,148,15,207,15"/>
+</map>

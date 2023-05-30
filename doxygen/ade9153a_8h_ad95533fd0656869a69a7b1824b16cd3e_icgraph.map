@@ -1,0 +1,11 @@
+<map id="ade9153a_hw_reset" name="ade9153a_hw_reset">
+<area shape="rect" id="Node000001" title="Reset the device using HW reset." alt="" coords="523,42,675,67"/>
+<area shape="rect" id="Node000002" href="$ade9153a_8c.html#a3c4b2644d56d572e7d8ba29dc761229c" title="Select comms interface Serial." alt="" coords="283,5,462,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="509,46,462,40,463,34,509,40"/>
+<area shape="rect" id="Node000003" href="$ade9153a_8c.html#a4b6ef6f7d176de7c3bca0316227b9fdb" title="Select comms interface SPI." alt="" coords="271,70,475,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,68,475,73,475,67,509,63"/>
+<area shape="rect" id="Node000004" href="$ade9153a_8c.html#ad93af9e1aabc3f67b04304db2fd36912" title="Initialize the device." alt="" coords="108,70,223,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="257,85,223,85,223,80,257,80"/>
+<area shape="rect" id="Node000005" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,70,60,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,85,60,85,60,80,94,80"/>
+</map>

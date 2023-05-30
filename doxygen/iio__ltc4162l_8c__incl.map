@@ -1,0 +1,49 @@
+<map id="drivers/power/ltc4162l/iio_ltc4162l.c" name="drivers/power/ltc4162l/iio_ltc4162l.c">
+<area shape="rect" id="Node000001" title="Implementation of IIO LTC4162L Driver." alt="" coords="411,5,578,45"/>
+<area shape="rect" id="Node000002" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="354,167,422,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,47,406,157,402,154,479,44"/>
+<area shape="rect" id="Node000003" href="$iio__ltc4162l_8h.html" title="Implementation of IIO LTC4162L Driver." alt="" coords="532,93,641,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="519,44,564,82,561,86,515,48"/>
+<area shape="rect" id="Node000012" href="$ltc4162l_8h.html" title=" " alt="" coords="171,240,258,265"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="496,46,491,78,481,118,463,159,435,194,398,220,355,237,312,247,273,252,272,247,311,242,354,232,395,215,432,190,458,156,476,116,486,77,491,45"/>
+<area shape="rect" id="Node000016" href="$no__os__alloc_8h.html" title=" " alt="" coords="702,93,813,119"/>
+<area shape="poly" id="edge25_Node000001_Node000016" title=" " alt="" coords="558,43,707,87,705,92,557,48"/>
+<area shape="rect" id="Node000018" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="297,93,407,119"/>
+<area shape="poly" id="edge28_Node000001_Node000018" title=" " alt="" coords="462,48,386,89,384,84,459,43"/>
+<area shape="rect" id="Node000004" href="$iio_8h.html" title="Header file of iio." alt="" coords="561,167,612,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="589,119,589,153,584,153,584,119"/>
+<area shape="rect" id="Node000005" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="471,240,564,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="577,194,540,232,536,228,573,190"/>
+<area shape="rect" id="Node000009" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="658,240,763,265"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="608,190,680,231,677,235,605,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="669,387,752,412"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="565,257,627,274,658,290,685,312,703,341,711,373,706,374,698,343,681,315,655,295,625,279,564,262"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="447,387,518,412"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="517,266,491,374,486,373,512,265"/>
+<area shape="rect" id="Node000008" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="275,313,445,339"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="493,268,399,310,397,305,491,263"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="381,336,452,377,450,382,378,341"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="764,253,798,258,834,268,867,286,894,312,900,326,894,340,877,351,846,362,766,386,765,381,844,357,875,346,890,337,894,326,890,315,864,290,832,273,797,263,763,258"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="667,268,614,287,560,316,526,346,500,377,496,374,523,342,557,311,612,282,665,263"/>
+<area shape="rect" id="Node000010" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="747,313,880,339"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="729,263,787,303,784,307,726,268"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="798,341,740,381,737,376,795,336"/>
+<area shape="poly" id="edge14_Node000010_Node000007" title=" " alt="" coords="761,341,532,390,531,385,760,336"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="778,387,849,412"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="816,339,816,373,811,373,811,339"/>
+<area shape="poly" id="edge17_Node000012_Node000007" title=" " alt="" coords="202,267,185,283,171,301,163,320,164,329,169,337,186,350,212,361,283,378,363,388,433,393,433,399,362,394,282,383,210,367,183,355,165,340,159,330,158,319,166,298,181,279,198,264"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="179,313,250,339"/>
+<area shape="poly" id="edge18_Node000012_Node000013" title=" " alt="" coords="217,266,217,300,212,300,212,266"/>
+<area shape="rect" id="Node000014" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="571,313,671,339"/>
+<area shape="poly" id="edge19_Node000012_Node000014" title=" " alt="" coords="259,259,558,311,557,316,258,264"/>
+<area shape="rect" id="Node000015" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,313,104,339"/>
+<area shape="poly" id="edge23_Node000012_Node000015" title=" " alt="" coords="190,268,94,310,92,305,188,263"/>
+<area shape="poly" id="edge22_Node000014_Node000006" title=" " alt="" coords="637,337,687,376,684,380,634,341"/>
+<area shape="poly" id="edge20_Node000014_Node000007" title=" " alt="" coords="600,341,519,383,516,378,598,336"/>
+<area shape="poly" id="edge21_Node000014_Node000011" title=" " alt="" coords="653,336,770,379,768,384,651,341"/>
+<area shape="poly" id="edge24_Node000015_Node000007" title=" " alt="" coords="104,333,123,336,434,387,433,393,122,341,104,338"/>
+<area shape="poly" id="edge27_Node000016_Node000011" title=" " alt="" coords="773,117,804,148,845,193,885,249,901,280,915,312,918,326,914,340,891,366,863,384,860,379,888,362,910,337,913,326,909,314,897,283,880,252,841,196,800,151,769,121"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="724,167,791,192"/>
+<area shape="poly" id="edge26_Node000016_Node000017" title=" " alt="" coords="760,119,760,153,755,153,755,119"/>
+<area shape="poly" id="edge29_Node000018_Node000002" title=" " alt="" coords="360,118,378,153,374,156,356,120"/>
+</map>

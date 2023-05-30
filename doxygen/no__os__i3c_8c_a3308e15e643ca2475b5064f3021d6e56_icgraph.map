@@ -1,0 +1,17 @@
+<map id="no_os_i3c_remove" name="no_os_i3c_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by no_os_i3c_init()." alt="" coords="545,31,688,56"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the communication device." alt="" coords="385,5,483,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,34,483,27,484,22,532,29"/>
+<area shape="rect" id="Node000006" href="$ad405x_8c.html#a19bf65c491d2f5a0397757e4532e7448" title="Remove device and free the resources allocated by ad405x_init()." alt="" coords="371,55,497,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="532,57,498,62,497,56,531,52"/>
+<area shape="rect" id="Node000003" href="$iio__ad405x_8c.html#a25e5b9b70c0d01d27fb470e006568145" title="Initializes the AD405X IIO driver." alt="" coords="187,55,308,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="373,37,297,57,296,52,372,32"/>
+<area shape="rect" id="Node000005" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="188,5,307,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="370,21,307,21,307,15,370,15"/>
+<area shape="rect" id="Node000004" href="$ad405x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="173,70,124,70,124,65,173,65"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="357,70,308,70,308,65,357,65"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="372,54,296,33,297,28,373,49"/>
+<area shape="rect" id="Node000007" href="$iio__ad405x_8c.html#ad813cf00c632f3193d671f77adae27d9" title="Free the resources allocated by ad405x_iio_init()." alt="" coords="172,104,323,129"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="373,86,297,106,296,101,372,81"/>
+</map>

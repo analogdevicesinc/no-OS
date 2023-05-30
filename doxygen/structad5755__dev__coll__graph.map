@@ -1,0 +1,19 @@
+<map id="ad5755_dev" name="ad5755_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="936,162,1037,187"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,57,797,82"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="811,76,862,88,913,108,949,134,976,160,972,164,946,138,911,113,861,93,810,81"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="709,42,717,33,735,30,751,32,760,39,763,48,758,58,754,55,758,48,756,42,749,37,735,35,720,38,713,45"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,50,490,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,62,674,65,674,71,503,67"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,19,184,45"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,22,208,21,331,17,428,18,524,25,646,43,694,54,693,59,645,48,523,30,427,23,331,23,208,27,198,27"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,39,343,53,343,58,198,44"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,100,491,140"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="504,107,645,85,676,79,677,85,646,91,505,112"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,162,801,187"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="815,172,936,172,936,177,815,177"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,165,511,190"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="525,174,669,173,669,178,525,179"/>
+<area shape="rect" id="Node000008" href="$structad5755__setup.html" title="Stores the settings that will be written to the device when the &quot;AD5755_Init&quot; functions is called." alt="" coords="679,211,792,237"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="805,211,911,192,941,185,942,190,913,197,806,217"/>
+</map>

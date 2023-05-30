@@ -1,0 +1,49 @@
+<map id="projects/cn0565/src/app/app.c" name="projects/cn0565/src/app/app.c">
+<area shape="rect" id="Node000001" title="EIT application source." alt="" coords="633,5,781,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="633,31,503,36,346,47,199,67,140,80,96,96,72,110,55,124,43,142,31,167,28,198,34,227,28,228,22,198,26,166,38,139,51,120,69,105,94,91,138,75,198,61,346,42,502,31,633,26"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="891,93,958,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="760,43,881,86,879,91,758,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="127,240,210,265"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="633,32,481,42,390,52,299,66,211,83,135,106,76,134,55,150,40,168,36,180,37,190,43,200,53,209,81,225,115,237,113,242,79,230,49,214,39,204,32,192,30,179,36,165,51,147,73,130,133,101,210,78,298,60,390,47,480,37,633,27"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="983,93,1053,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="782,43,970,90,968,95,781,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1077,93,1145,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="782,36,1064,90,1063,96,781,42"/>
+<area shape="rect" id="Node000007" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="309,167,423,192"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="666,48,405,163,403,159,664,43"/>
+<area shape="rect" id="Node000009" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="193,93,299,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="634,42,313,96,312,91,633,37"/>
+<area shape="rect" id="Node000011" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="447,167,546,192"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="683,48,525,161,522,156,680,43"/>
+<area shape="rect" id="Node000012" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="570,167,677,192"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="697,47,668,95,637,155,632,153,664,92,693,44"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1170,93,1322,119"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="782,35,1156,89,1156,94,781,40"/>
+<area shape="rect" id="Node000014" href="$mux__board_8h.html" title="Cross&#45;point switch handling code." alt="" coords="761,93,867,119"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="735,43,788,83,785,87,732,48"/>
+<area shape="rect" id="Node000017" href="$app_8h.html" title="EIT application header." alt="" coords="678,93,737,119"/>
+<area shape="poly" id="edge25_Node000001_Node000017" title=" " alt="" coords="710,46,710,79,705,79,705,46"/>
+<area shape="rect" id="Node000018" href="$cn0565_2src_2app_2parameters_8h.html" title="Parameters Definitions." alt="" coords="1346,93,1455,119"/>
+<area shape="poly" id="edge29_Node000001_Node000018" title=" " alt="" coords="782,30,1023,54,1332,91,1332,96,1022,59,782,36"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="524,240,595,265"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="398,190,516,233,514,238,396,195"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="242,120,184,229,179,227,237,118"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="252,118,268,154,281,174,298,190,350,218,407,236,462,245,511,249,510,254,462,250,406,241,348,223,295,194,277,177,263,157,247,120"/>
+<area shape="rect" id="Node000010" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="50,167,183,192"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="226,121,151,162,149,157,224,116"/>
+<area shape="poly" id="edge12_Node000010_Node000002" title=" " alt="" coords="106,194,65,232,61,229,103,190"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="127,191,154,227,150,230,123,194"/>
+<area shape="poly" id="edge13_Node000010_Node000008" title=" " alt="" coords="184,189,511,241,510,246,183,194"/>
+<area shape="poly" id="edge16_Node000011_Node000008" title=" " alt="" coords="509,191,542,228,538,231,505,194"/>
+<area shape="poly" id="edge18_Node000012_Node000008" title=" " alt="" coords="615,194,581,232,577,228,611,191"/>
+<area shape="poly" id="edge21_Node000014_Node000008" title=" " alt="" coords="841,117,867,131,891,149,905,170,905,182,899,194,879,209,849,221,772,239,685,248,609,253,609,247,684,243,771,233,848,216,876,204,895,190,900,181,900,172,887,153,864,135,839,121"/>
+<area shape="rect" id="Node000015" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="959,167,1058,192"/>
+<area shape="poly" id="edge22_Node000014_Node000015" title=" " alt="" coords="846,116,965,159,963,164,844,121"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="802,167,885,192"/>
+<area shape="poly" id="edge24_Node000014_Node000016" title=" " alt="" coords="821,118,836,153,831,155,816,120"/>
+<area shape="poly" id="edge23_Node000015_Node000008" title=" " alt="" coords="960,192,941,195,609,246,608,241,940,189,959,186"/>
+<area shape="poly" id="edge27_Node000017_Node000004" title=" " alt="" coords="711,119,709,156,703,177,690,194,665,206,620,215,491,232,224,251,224,246,491,227,619,210,663,200,687,190,698,174,704,155,706,119"/>
+<area shape="poly" id="edge26_Node000017_Node000008" title=" " alt="" coords="719,117,738,152,741,174,735,193,709,219,676,236,642,247,609,252,608,247,641,241,674,231,706,215,730,191,736,173,733,154,714,120"/>
+<area shape="poly" id="edge28_Node000017_Node000016" title=" " alt="" coords="730,116,810,158,808,163,728,121"/>
+</map>

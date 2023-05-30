@@ -1,0 +1,27 @@
+var ad9467_8c =
+[
+    [ "ad9467_analog_input_coupling", "ad9467_8c.html#a79ec5e0b953aa7648e3d8ca880a3acee", null ],
+    [ "ad9467_analog_input_disconnect", "ad9467_8c.html#a1125171373d3873d6a144855fc2a0d1c", null ],
+    [ "ad9467_buffer_current_1", "ad9467_8c.html#a597797a641700c750e9a32641c9c11bb", null ],
+    [ "ad9467_buffer_current_2", "ad9467_8c.html#abd5aa1b883075986a7d34cf3494ffa68", null ],
+    [ "ad9467_coarse_lvds_adj", "ad9467_8c.html#a435c341bd1925e56140829983de1008c", null ],
+    [ "ad9467_dco_clock_invert", "ad9467_8c.html#ac538012352eeb265aa262a2cc101926f", null ],
+    [ "ad9467_dco_output_clock_delay", "ad9467_8c.html#a6571c47605fcc7e3c5e98d30cd308b84", null ],
+    [ "ad9467_external_ref", "ad9467_8c.html#a1ee4250c78259778b92cf0473ffb090f", null ],
+    [ "ad9467_full_scale_range", "ad9467_8c.html#a2853eb8b8d9e541b869521d24873c6cf", null ],
+    [ "ad9467_offset_adj", "ad9467_8c.html#afba20cbe33fe60373180154e1738c821", null ],
+    [ "ad9467_output_current_adj", "ad9467_8c.html#a7675d7bae1a339b8905afb6af8075788", null ],
+    [ "ad9467_output_disable", "ad9467_8c.html#a35c640df5935d520d6e21c72a03b84e1", null ],
+    [ "ad9467_output_format", "ad9467_8c.html#a8cf1ef07324f55b9c5ea07b014797e72", null ],
+    [ "ad9467_output_invert", "ad9467_8c.html#a70c8f21b8351059ff7b142d6610c9e8f", null ],
+    [ "ad9467_pwr_mode", "ad9467_8c.html#a75824f422e1e72caf5b140d06b9c4cb1", null ],
+    [ "ad9467_read", "ad9467_8c.html#a18556349ec5236edaf482575f86e7293", null ],
+    [ "ad9467_remove", "ad9467_8c.html#a165717a062114d3880d0464fac8b646d", null ],
+    [ "ad9467_reset_pn23", "ad9467_8c.html#aa4ca255f28a2fdd3b321f285f10ebb42", null ],
+    [ "ad9467_reset_pn9", "ad9467_8c.html#adf0af00c561fb97352c0784c324dd081", null ],
+    [ "ad9467_set_bits_to_reg", "ad9467_8c.html#aab824f18dec438fa27ba61dd2a37f61d", null ],
+    [ "ad9467_setup", "ad9467_8c.html#af1eea7aa6b5fe4a6c7e0b72a479340a9", null ],
+    [ "ad9467_test_mode", "ad9467_8c.html#a1a94cd0931136ab64a76f2aa4f9e6cc4", null ],
+    [ "ad9467_transfer", "ad9467_8c.html#afe6b050a9df654474ee211fff5467ca0", null ],
+    [ "ad9467_write", "ad9467_8c.html#aa49620aceb2fa06bf4edd8c7204f1df4", null ]
+];

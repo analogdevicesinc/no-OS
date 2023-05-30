@@ -1,0 +1,7 @@
+<map id="adgm3121_reset_switches" name="adgm3121_reset_switches">
+<area shape="rect" id="Node000001" title="Reset all switches to off state." alt="" coords="201,31,396,56"/>
+<area shape="rect" id="Node000002" href="$adgm3121_8c.html#a3805e18992c49ce8e5f194db46fb0ab6" title="Initialize the device." alt="" coords="20,5,139,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,33,138,27,139,22,188,28"/>
+<area shape="rect" id="Node000003" href="$adgm3121_8c.html#a32eb50f4e2102005b779e06eb10272e3" title="Free resources allocated by adgm3121_init()" alt="" coords="5,55,153,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,58,154,62,154,57,187,53"/>
+</map>

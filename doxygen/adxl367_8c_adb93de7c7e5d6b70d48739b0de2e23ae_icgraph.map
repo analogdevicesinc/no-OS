@@ -1,0 +1,9 @@
+<map id="adxl367_remove" name="adxl367_remove">
+<area shape="rect" id="Node000001" title="Frees the resources allocated by adxl367_init()." alt="" coords="399,31,529,56"/>
+<area shape="rect" id="Node000002" href="$iio__adxl367_8c.html#ab0285a11dd056b3295e75c6f3b5c64bd" title="Initializes the ADXL367 IIO driver." alt="" coords="211,5,336,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="385,36,336,29,336,24,385,30"/>
+<area shape="rect" id="Node000004" href="$iio__adxl367_8c.html#a5aad3a65ae61b574894046bb69096561" title="Free the resources allocated by adxl367_iio_init()." alt="" coords="196,55,351,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="385,56,351,60,351,55,385,51"/>
+<area shape="rect" id="Node000003" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,21,148,21,148,15,197,15"/>
+</map>

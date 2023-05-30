@@ -1,0 +1,5 @@
+<map id="dpot_dev" name="dpot_dev">
+<area shape="rect" id="Node000001" title="Digital potentiometer device descriptor parameters." alt="" coords="5,93,88,119"/>
+<area shape="rect" id="Node000002" href="$structdpot__ops.html" title="Digital potentiometer common APIs." alt="" coords="6,5,87,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="49,45,49,93,44,93,44,45"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="drivers/switch/adg1736/adg1736.h" name="drivers/switch/adg1736/adg1736.h">
+<area shape="rect" id="Node000001" title="Header file of ADG1736 Driver." alt="" coords="5,5,179,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="77,167,147,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,47,56,63,44,80,38,99,41,118,57,140,79,157,76,161,54,144,36,120,33,99,39,78,52,59,67,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,93,133,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="95,46,95,79,89,79,89,46"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="157,93,264,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="122,43,183,84,180,88,119,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="196,121,141,161,138,156,193,117"/>
+</map>
