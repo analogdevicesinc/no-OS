@@ -1,0 +1,65 @@
+<map id="ad4080_write" name="ad4080_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="896,501,1007,527"/>
+<area shape="rect" id="Node000002" href="$ad4080_8c.html#a9ad65d070c75bb41f98a0ac60d48af42" title="Set AD4080 FIFO Watermark." alt="" coords="645,476,848,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="882,508,848,504,849,499,883,503"/>
+<area shape="rect" id="Node000003" href="$ad4080_8c.html#a728f941826fe1b0ffe27221470f0e193" title="Update specific register bits." alt="" coords="670,525,823,551"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="883,525,824,532,823,526,882,519"/>
+<area shape="rect" id="Node000004" href="$ad4080_8c.html#a75b02dc11cc8f858cddcf554c24d9762" title="Set the GPIO data." alt="" coords="416,5,597,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="656,525,643,514,622,485,607,456,599,426,596,397,602,340,616,283,630,226,637,169,635,140,628,111,615,82,595,52,584,41,571,33,573,28,587,37,599,48,620,79,633,109,640,139,642,169,636,227,621,284,607,341,601,397,604,425,612,454,626,482,647,511,659,521"/>
+<area shape="rect" id="Node000005" href="$ad4080_8c.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="5,607,104,632"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="656,525,643,514,633,498,626,478,619,426,619,366,622,300,624,235,623,176,614,128,606,110,595,96,574,80,553,70,533,65,513,65,468,77,417,96,367,118,325,141,292,165,263,191,211,255,154,342,116,416,88,493,70,560,61,607,56,606,65,559,83,491,111,414,150,339,207,252,259,187,288,160,323,136,364,114,415,92,467,71,512,60,534,60,555,65,577,75,599,92,611,107,619,126,628,176,630,235,627,300,624,366,624,426,631,476,638,496,647,511,659,521"/>
+<area shape="rect" id="Node000006" href="$ad4080_8c.html#a6a704e6558f7114804d76e0ddf0085b2" title="Set Address Ascension." alt="" coords="425,107,588,132"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="656,525,643,514,626,491,614,468,607,444,604,421,608,375,618,329,628,283,632,238,630,215,623,192,612,169,595,147,580,134,583,130,599,143,617,167,628,190,635,214,638,237,634,284,623,330,613,375,609,421,612,443,619,466,630,488,647,511,659,521"/>
+<area shape="rect" id="Node000007" href="$ad4080_8c.html#a964bdf51c7d6d7763ceee3389d063b65" title="Set AD4080 Analog/Digital LDO." alt="" coords="429,157,584,197"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="656,525,643,514,618,477,609,440,609,403,616,366,622,330,624,293,617,255,595,217,574,199,577,195,599,214,622,253,629,292,627,330,621,367,615,403,614,439,623,475,647,511,660,521"/>
+<area shape="rect" id="Node000008" href="$ad4080_8c.html#afd5b47c0c4bc60a62a10c73124642cc1" title="Set AD4080 LVDS/SPI Lane Control." alt="" coords="430,322,583,362"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="656,524,644,515,629,497,621,480,618,444,615,410,608,393,595,376,580,364,584,360,599,372,613,390,620,408,623,444,627,478,634,495,647,511,659,519"/>
+<area shape="rect" id="Node000010" href="$ad4080_8c.html#ab11b11ff63aa576788f723392cacfe0b" title="Set AD4080 Data Interface Configuration." alt="" coords="421,386,592,426"/>
+<area shape="poly" id="edge10_Node000003_Node000010" title=" " alt="" coords="656,522,644,515,626,496,618,477,611,458,596,440,577,428,580,424,599,436,616,455,623,475,631,493,647,511,659,518"/>
+<area shape="rect" id="Node000011" href="$ad4080_8c.html#a646c430d79d7ef53fc6354d93524b2be" title="Set AD4080 Conversion Data FIFO Mode." alt="" coords="422,451,591,476"/>
+<area shape="poly" id="edge12_Node000003_Node000011" title=" " alt="" coords="671,524,644,515,620,502,596,490,562,479,564,473,598,485,623,498,646,510,673,519"/>
+<area shape="rect" id="Node000012" href="$ad4080_8c.html#af4bfb5399bb98cc451b7e887140eb665" title="Configure GPIO as input or output." alt="" coords="169,353,351,393"/>
+<area shape="poly" id="edge14_Node000003_Node000012" title=" " alt="" coords="656,525,643,514,623,484,616,453,617,421,622,390,627,360,627,331,618,303,596,277,577,265,558,257,516,250,473,255,429,269,386,289,347,312,287,355,284,350,344,307,384,284,427,264,472,250,517,245,560,252,580,260,599,273,623,301,632,330,632,360,627,391,622,422,621,452,628,482,647,511,660,521"/>
+<area shape="rect" id="Node000013" href="$ad4080_8c.html#a5ad7e17ffb3c84798ec12a10fcd803fa" title="Configure the GPIO output for a specific function." alt="" coords="152,487,368,512"/>
+<area shape="poly" id="edge16_Node000003_Node000013" title=" " alt="" coords="656,525,643,515,625,489,618,462,618,435,622,408,625,382,624,357,615,334,596,312,551,285,530,280,509,278,465,288,418,312,398,331,390,353,385,379,370,406,324,454,281,489,278,485,321,450,366,403,379,377,385,352,393,329,414,308,464,283,509,273,531,274,553,281,599,308,620,331,629,356,630,382,627,408,623,435,623,461,630,486,647,511,660,521"/>
+<area shape="rect" id="Node000014" href="$ad4080_8c.html#a9f54799720b940bf32d79f1401d36f74" title="Set AD4080 Output Pattern." alt="" coords="417,500,596,525"/>
+<area shape="poly" id="edge18_Node000003_Node000014" title=" " alt="" coords="656,531,596,525,597,519,657,526"/>
+<area shape="rect" id="Node000015" href="$ad4080_8c.html#a63069a89cf413fcca6318d1f8348f551" title="Set AD4080 Interface LDO." alt="" coords="419,549,595,575"/>
+<area shape="poly" id="edge19_Node000003_Node000015" title=" " alt="" coords="656,550,595,556,595,551,656,544"/>
+<area shape="rect" id="Node000016" href="$ad4080_8c.html#a6f3da0885a402914fbf6782651dd5164" title="Set AD4080 Interface clock periods from CNV rising edge." alt="" coords="426,599,587,639"/>
+<area shape="poly" id="edge20_Node000003_Node000016" title=" " alt="" coords="696,558,567,602,566,597,695,553"/>
+<area shape="rect" id="Node000017" href="$ad4080_8c.html#a98a6de8443361651e56698a384465145" title="Set AD4080 LVDS CNV Clock Mode." alt="" coords="426,663,587,703"/>
+<area shape="poly" id="edge22_Node000003_Node000017" title=" " alt="" coords="723,562,668,607,599,654,573,666,571,661,596,649,665,603,720,558"/>
+<area shape="rect" id="Node000018" href="$ad4080_8c.html#a6d7b938c83287bcdd4dca06ca3a6a21b" title="Set AD4080 LVDS Self Clock Mode." alt="" coords="425,727,588,767"/>
+<area shape="poly" id="edge24_Node000003_Node000018" title=" " alt="" coords="733,564,680,639,642,681,599,718,578,730,575,725,596,713,638,677,676,636,729,561"/>
+<area shape="rect" id="Node000019" href="$ad4080_8c.html#a085cb9017c2ccd27624d05a35b9de27d" title="Set AD4080 LVDS Differential Output Voltage." alt="" coords="425,792,588,817"/>
+<area shape="poly" id="edge26_Node000003_Node000019" title=" " alt="" coords="739,565,721,611,691,670,651,730,626,757,599,782,576,794,573,790,596,777,623,754,647,727,687,667,716,609,734,563"/>
+<area shape="rect" id="Node000020" href="$ad4080_8c.html#a1be5d09077b0e9f052586e6c34493617" title="Set Operation Mode." alt="" coords="178,771,342,796"/>
+<area shape="poly" id="edge28_Node000003_Node000020" title=" " alt="" coords="744,565,730,623,704,698,685,736,661,772,633,805,599,831,558,849,514,857,469,856,424,850,343,825,284,799,286,794,345,820,425,844,469,851,513,851,556,844,596,826,629,801,657,769,680,733,699,696,725,622,739,564"/>
+<area shape="rect" id="Node000021" href="$ad4080_8c.html#a62b9dac8804057cc877d94656738a144" title="Set Short Instruction." alt="" coords="420,893,593,919"/>
+<area shape="poly" id="edge30_Node000003_Node000021" title=" " alt="" coords="744,565,730,627,703,710,684,755,660,799,632,840,599,876,567,896,564,891,596,872,628,836,656,796,679,753,698,708,724,626,738,564"/>
+<area shape="rect" id="Node000023" href="$ad4080_8c.html#a3e9051eee1f798e76d98a16c8939cea9" title="Set Single/Streaming Mode." alt="" coords="417,943,596,968"/>
+<area shape="poly" id="edge33_Node000003_Node000023" title=" " alt="" coords="746,564,736,637,712,736,693,789,668,841,637,889,599,932,580,945,577,940,596,928,633,886,664,838,688,787,707,734,731,636,741,564"/>
+<area shape="rect" id="Node000024" href="$ad4080_8c.html#a2c0489fb911a4c42eb2cd972758972d1" title="Set Strict Register Access." alt="" coords="424,993,589,1033"/>
+<area shape="poly" id="edge35_Node000003_Node000024" title=" " alt="" coords="747,565,738,644,716,755,697,815,672,875,639,931,599,981,582,995,579,990,595,977,635,928,667,873,692,813,710,754,733,643,741,564"/>
+<area shape="rect" id="Node000025" href="$ad4080_8c.html#a8b25a0d8ebbc3ff7e6cd6e61ed877cdb" title="Software reset the device." alt="" coords="189,1028,331,1053"/>
+<area shape="poly" id="edge37_Node000003_Node000025" title=" " alt="" coords="744,565,727,672,697,819,677,892,654,959,628,1012,614,1032,599,1047,562,1068,522,1080,480,1086,437,1085,357,1073,295,1056,296,1051,358,1068,437,1080,479,1080,521,1075,560,1063,596,1043,610,1029,624,1009,649,957,672,891,692,817,722,671,739,564"/>
+<area shape="rect" id="Node000009" href="$ad4080_8c.html#ad684669bd8f62b7f60b7f70aa0d52137" title="Configure the data interface during initialization." alt="" coords="179,607,341,632"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="422,372,418,376,404,394,396,411,391,446,387,483,381,503,370,525,350,551,327,574,283,609,279,604,323,570,346,547,366,522,376,501,382,482,385,445,391,409,399,391,414,372,419,368"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="165,622,104,622,104,617,165,617"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="424,435,418,440,401,460,392,479,385,501,370,525,324,573,281,609,277,604,320,569,366,522,380,498,387,477,396,457,414,436,421,431"/>
+<area shape="poly" id="edge13_Node000011_Node000009" title=" " alt="" coords="432,483,417,490,355,540,278,608,274,604,352,536,415,485,430,478"/>
+<area shape="poly" id="edge15_Node000012_Node000005" title=" " alt="" coords="226,404,190,437,154,476,101,549,65,608,61,605,97,546,150,472,186,433,222,400"/>
+<area shape="poly" id="edge17_Node000013_Node000005" title=" " alt="" coords="227,521,79,609,76,604,224,517"/>
+<area shape="poly" id="edge21_Node000016_Node000009" title=" " alt="" coords="412,622,342,622,342,617,412,617"/>
+<area shape="poly" id="edge23_Node000017_Node000009" title=" " alt="" coords="415,662,309,635,311,630,416,657"/>
+<area shape="poly" id="edge25_Node000018_Node000009" title=" " alt="" coords="430,724,415,718,337,674,278,634,281,630,340,669,417,713,432,720"/>
+<area shape="poly" id="edge27_Node000019_Node000009" title=" " alt="" coords="430,789,415,782,366,746,324,704,268,634,272,631,328,700,370,742,417,777,433,785"/>
+<area shape="poly" id="edge29_Node000020_Node000005" title=" " alt="" coords="231,764,70,634,74,630,234,760"/>
+<area shape="rect" id="Node000022" href="$ad4080_8c.html#af2317cc392e1fe501c791466d5da325c" title="Configure the config SPI interface during initialization." alt="" coords="179,910,341,950"/>
+<area shape="poly" id="edge31_Node000021_Node000022" title=" " alt="" coords="407,918,342,925,341,919,406,913"/>
+<area shape="poly" id="edge32_Node000022_Node000005" title=" " alt="" coords="227,902,188,859,150,809,120,760,94,710,59,633,64,631,98,707,124,757,154,806,192,856,231,898"/>
+<area shape="poly" id="edge34_Node000023_Node000022" title=" " alt="" coords="403,947,341,941,342,936,404,942"/>
+<area shape="poly" id="edge36_Node000024_Node000022" title=" " alt="" coords="433,991,320,953,322,948,434,986"/>
+<area shape="poly" id="edge38_Node000025_Node000005" title=" " alt="" coords="219,1023,182,998,150,964,124,919,103,871,74,774,59,689,54,633,59,632,65,688,79,773,108,870,128,917,154,960,186,994,222,1019"/>
+</map>

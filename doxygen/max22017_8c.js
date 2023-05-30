@@ -1,0 +1,26 @@
+var max22017_8c =
+[
+    [ "max22017_config", "max22017_8c.html#a3756e7203c59969bf0619a571b7d65f5", null ],
+    [ "max22017_gain_calib", "max22017_8c.html#a38782c2a66a636da5ff7881867a1a962", null ],
+    [ "max22017_get_data", "max22017_8c.html#a619a6995b16eec0ecbc342c32dd70b24", null ],
+    [ "max22017_gpio_direction_input", "max22017_8c.html#a10c14de12ba5409698b02d3575800e04", null ],
+    [ "max22017_gpio_direction_output", "max22017_8c.html#a5e59562b09b426a97b112696aa40c2ab", null ],
+    [ "max22017_gpio_get", "max22017_8c.html#af87efea498e723603cf471d230b76074", null ],
+    [ "max22017_gpio_get_direction", "max22017_8c.html#a79e7d91a74b6c636fe4c54c33d141cc0", null ],
+    [ "max22017_gpio_get_value", "max22017_8c.html#a8ceee5fa5a9e414197832ce2a854f050", null ],
+    [ "max22017_gpio_remove", "max22017_8c.html#aa1e8feaec3b673a3f0ba352029d44284", null ],
+    [ "max22017_gpio_set_value", "max22017_8c.html#a8233522eeb69e2052205118fb1a93cf8", null ],
+    [ "max22017_init", "max22017_8c.html#a30aec5321f3cb133a4a1504ff6223b9d", null ],
+    [ "max22017_offset_calib", "max22017_8c.html#a0e127d5295bf501fa84f9abd3aa37a18", null ],
+    [ "max22017_op_mode", "max22017_8c.html#aa944393da5461fca8017eab6042091df", null ],
+    [ "max22017_reg_read", "max22017_8c.html#a583b3bc38393acd52093600626b29ae5", null ],
+    [ "max22017_reg_update", "max22017_8c.html#a60ab49ef0892b0443669088a124f4faa", null ],
+    [ "max22017_reg_write", "max22017_8c.html#af7b4e1defe757410ee5bd6737453506c", null ],
+    [ "max22017_remove", "max22017_8c.html#ac2fd9424dde3013e676024d0dfa500af", null ],
+    [ "max22017_set_data", "max22017_8c.html#a7a778829f3870161f19f3b269fa43457", null ],
+    [ "max22017_set_timeout", "max22017_8c.html#aab284c408b16a3e902e66bcc9840d0b8", null ],
+    [ "max22017_slew_rate", "max22017_8c.html#a23a3b98654e7cde5d44cdbf93a690221", null ],
+    [ "max22017_soft_reset", "max22017_8c.html#a0259bc69148e570701f7ea286039b5df", null ],
+    [ "NO_OS_DECLARE_CRC8_TABLE", "max22017_8c.html#ad98376323952ac88a67130558c240a64", null ],
+    [ "max22017_gpio_ops", "max22017_8c.html#a3cf47427b8fcc0c7a9553cf44c6144d7", null ]
+];

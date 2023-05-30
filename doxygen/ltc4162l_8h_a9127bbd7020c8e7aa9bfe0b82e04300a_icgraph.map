@@ -1,0 +1,16 @@
+<map id="ltc4162l_reg_write" name="ltc4162l_reg_write">
+<area shape="rect" id="Node000001" title="Write to a register of the LTC4162L." alt="" coords="453,133,596,159"/>
+<area shape="rect" id="Node000002" href="$ltc4162l_8c.html#ad671bc39aa9851e3cc72418e5ab675ad" title="Update a register of the LTC4162L." alt="" coords="248,53,403,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="478,131,357,81,359,76,480,126"/>
+<area shape="rect" id="Node000005" href="$ltc4162l_8c.html#aff704397120e87b1e5f776622aaf72e1" title="Set the term current." alt="" coords="5,104,197,129"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="439,143,197,126,198,121,440,137"/>
+<area shape="rect" id="Node000006" href="$ltc4162l_8c.html#a008f1a368917c1d8438517fd46dac5a9" title="Set icharge setting." alt="" coords="247,154,403,194"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="440,161,404,166,403,160,439,155"/>
+<area shape="rect" id="Node000007" href="$ltc4162l_8c.html#adefe23a8cac6fb9ec62aef14e501cc75" title="Set the vcharge setting." alt="" coords="245,218,405,258"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="489,168,406,208,379,220,377,216,404,204,486,163"/>
+<area shape="rect" id="Node000003" href="$ltc4162l_8c.html#a54ce5aba264f512645b9d83e9c1df71a" title="Set the iin limit." alt="" coords="21,5,182,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="252,53,161,33,162,28,253,48"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_8c.html#adf810111cd24e29cc2bf4e86b0e24af6" title="Set the telemetry." alt="" coords="15,55,187,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="234,69,188,69,188,64,234,64"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="256,84,159,107,158,101,255,79"/>
+</map>

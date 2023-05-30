@@ -1,0 +1,48 @@
+<map id="drivers/power/lt7182s/lt7182s.c" name="drivers/power/lt7182s/lt7182s.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="432,5,595,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="685,240,755,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="576,43,625,63,673,91,715,122,729,140,741,166,745,182,744,198,735,228,730,226,738,197,739,182,736,168,724,143,711,126,670,96,623,68,574,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="231,240,313,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="432,36,367,44,301,56,245,73,225,84,211,95,198,118,195,140,201,164,212,191,226,212,244,230,240,234,222,216,207,193,195,165,190,141,193,117,207,92,222,79,243,68,300,51,367,39,431,31"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="7,240,78,265"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="432,28,322,30,200,40,142,48,92,60,51,76,24,95,15,110,10,126,10,162,19,197,32,227,27,229,14,199,5,162,5,125,10,107,21,92,49,71,90,55,141,43,199,34,322,25,431,23"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="222,93,290,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="452,48,304,93,302,88,451,43"/>
+<area shape="rect" id="Node000006" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="314,93,425,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="480,48,404,89,401,84,477,43"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="222,167,322,192"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="504,47,476,84,437,121,387,148,336,166,334,161,385,143,434,117,472,81,500,44"/>
+<area shape="rect" id="Node000008" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="951,167,1065,192"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="595,23,667,28,751,38,838,59,881,73,921,91,962,120,993,154,989,157,959,124,919,96,879,78,836,64,750,44,667,33,595,29"/>
+<area shape="rect" id="Node000009" href="$no__os__alloc_8h.html" title=" " alt="" coords="35,93,146,119"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="432,44,160,95,159,89,431,39"/>
+<area shape="rect" id="Node000011" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="346,167,457,192"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="513,46,503,82,483,120,461,144,436,162,433,157,458,140,479,117,498,80,508,45"/>
+<area shape="rect" id="Node000012" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="628,167,727,192"/>
+<area shape="poly" id="edge18_Node000001_Node000012" title=" " alt="" coords="573,43,612,63,647,92,665,122,675,152,670,154,661,124,643,95,609,67,571,48"/>
+<area shape="rect" id="Node000013" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="1031,93,1137,119"/>
+<area shape="poly" id="edge20_Node000001_Node000013" title=" " alt="" coords="595,35,1017,93,1017,98,595,40"/>
+<area shape="rect" id="Node000014" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="801,93,908,119"/>
+<area shape="poly" id="edge22_Node000001_Node000014" title=" " alt="" coords="596,43,792,88,791,93,594,48"/>
+<area shape="rect" id="Node000016" href="$lt7182s_8h.html" title=" " alt="" coords="551,93,633,119"/>
+<area shape="poly" id="edge25_Node000001_Node000016" title=" " alt="" coords="534,44,572,82,569,85,530,47"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="323,187,334,189,671,242,670,247,333,195,322,193"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="275,192,275,226,269,226,269,192"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="236,195,92,239,91,234,234,189"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="962,195,769,242,768,237,961,189"/>
+<area shape="poly" id="edge14_Node000009_Node000004" title=" " alt="" coords="88,120,70,168,52,227,47,226,65,166,83,118"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="80,167,147,192"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="97,118,108,153,103,154,92,120"/>
+<area shape="poly" id="edge16_Node000011_Node000002" title=" " alt="" coords="453,189,672,238,670,243,452,195"/>
+<area shape="poly" id="edge17_Node000011_Node000003" title=" " alt="" coords="382,194,307,235,304,231,379,190"/>
+<area shape="poly" id="edge19_Node000012_Node000002" title=" " alt="" coords="687,191,708,227,704,230,682,194"/>
+<area shape="poly" id="edge21_Node000013_Node000002" title=" " alt="" coords="1090,119,1093,155,1090,176,1079,194,1057,209,1025,222,942,239,849,249,770,253,769,248,849,244,941,234,1024,217,1055,205,1075,190,1085,174,1088,155,1084,119"/>
+<area shape="poly" id="edge23_Node000014_Node000002" title=" " alt="" coords="847,121,784,194,745,233,741,229,781,190,843,117"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="852,167,927,192"/>
+<area shape="poly" id="edge24_Node000014_Node000015" title=" " alt="" coords="863,118,880,153,875,155,858,120"/>
+<area shape="poly" id="edge26_Node000016_Node000002" title=" " alt="" coords="571,121,549,135,529,153,518,172,518,181,522,191,536,206,553,218,591,236,632,246,671,249,670,255,631,251,589,241,550,223,533,210,518,193,512,182,513,171,525,149,546,131,568,116"/>
+<area shape="poly" id="edge28_Node000016_Node000007" title=" " alt="" coords="551,119,336,167,335,161,549,114"/>
+<area shape="poly" id="edge29_Node000016_Node000012" title=" " alt="" coords="607,117,655,156,651,160,604,121"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="533,167,603,192"/>
+<area shape="poly" id="edge27_Node000016_Node000017" title=" " alt="" coords="590,120,579,154,574,153,585,118"/>
+</map>

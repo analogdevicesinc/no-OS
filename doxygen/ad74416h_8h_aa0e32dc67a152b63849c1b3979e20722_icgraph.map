@@ -1,0 +1,83 @@
+<map id="ad74416h_reg_write" name="ad74416h_reg_write">
+<area shape="rect" id="Node000001" title="Write a register&#39;s value." alt="" coords="920,1175,1075,1200"/>
+<area shape="rect" id="Node000002" href="$ad74416h_8c.html#a051ec3f6b2401000daf32d6489f8af01" title="Update a register&#39;s field." alt="" coords="697,632,864,657"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="983,1163,785,659,790,657,988,1161"/>
+<area shape="rect" id="Node000012" href="$temperature__2wire__rtd_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="RTD 2&#45;wire example main execution." alt="" coords="210,996,329,1021"/>
+<area shape="poly" id="edge46_Node000001_Node000012" title=" " alt="" coords="906,1197,780,1202,637,1203,567,1199,504,1192,452,1181,413,1164,393,1144,385,1122,379,1098,365,1074,331,1045,295,1024,298,1019,334,1041,369,1071,384,1096,390,1120,398,1141,416,1160,454,1175,505,1187,568,1194,637,1197,780,1197,906,1191"/>
+<area shape="rect" id="Node000031" href="$ad74416h_8c.html#ac96fe84af02fc3a95f6822cd713cdf94" title="Perform software or hardware reset and wait for device reset time." alt="" coords="717,319,844,344"/>
+<area shape="poly" id="edge40_Node000001_Node000031" title=" " alt="" coords="988,1161,944,938,909,780,869,620,821,458,784,345,789,344,826,456,875,619,914,779,949,937,994,1160"/>
+<area shape="rect" id="Node000033" href="$ad74416h_8c.html#a8d16826bb0d5ff49661f573eabfa156f" title="Set and load a code for the DAC on a specific channel." alt="" coords="695,1225,866,1265"/>
+<area shape="poly" id="edge43_Node000001_Node000033" title=" " alt="" coords="936,1206,857,1227,856,1222,935,1201"/>
+<area shape="rect" id="Node000035" href="$ad74416h_8c.html#a5581440a4100a1e3549dd48083aafe5a" title="Enable or disable the higher thermal reset." alt="" coords="689,1289,872,1315"/>
+<area shape="poly" id="edge45_Node000001_Node000035" title=" " alt="" coords="973,1211,928,1246,873,1279,840,1292,838,1287,871,1274,925,1242,970,1207"/>
+<area shape="rect" id="Node000003" href="$ad74416h_8c.html#a4f880d48a1b4a780350dd51a9c071b38" title="Disable the slew rate control." alt="" coords="425,268,631,293"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="774,619,764,554,741,469,723,425,701,381,673,341,640,307,622,296,625,291,643,303,677,338,706,378,728,422,746,468,769,553,779,618"/>
+<area shape="rect" id="Node000004" href="$ad74416h_8c.html#acd9f7aef1d61728ae2312e0317c1bfc6" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="426,317,630,343"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="772,619,759,563,734,491,717,454,695,418,670,385,640,356,621,345,624,341,643,352,674,381,700,415,721,452,739,489,764,562,777,618"/>
+<area shape="rect" id="Node000005" href="$ad74416h_8c.html#a577d6f0ffaac01d5b5d2a889d1dc56f7" title="Set the DO value of a channel." alt="" coords="460,367,596,392"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="770,620,754,573,727,514,689,455,666,428,640,406,619,394,596,387,597,382,621,389,643,401,670,424,694,452,732,512,759,571,775,618"/>
+<area shape="rect" id="Node000006" href="$ad74416h_8c.html#aa943be99182003f3cf55f06b5f5eca51" title="Set the logic value of a GPO pin." alt="" coords="195,619,343,644"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="710,632,641,622,562,618,482,618,344,626,343,621,482,613,562,612,642,617,710,627"/>
+<area shape="rect" id="Node000008" href="$ad74416h_8c.html#a137e6ec705151de3cfd21b6e7b29ea60" title="Enable/disable a specific ADC channel." alt="" coords="427,154,629,194"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="769,619,639,208,624,196,627,192,644,204,774,618"/>
+<area shape="rect" id="Node000011" href="$ad74416h_8c.html#a445ac1a412a49d995f5174cfebc7fa55" title="Set the ADC Input Node for conversion." alt="" coords="419,996,637,1021"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="779,671,769,735,746,821,728,866,705,910,677,950,643,985,623,998,620,993,640,981,673,947,701,907,723,863,741,819,764,734,774,670"/>
+<area shape="rect" id="Node000013" href="$ad74416h_8c.html#ade9050ff3b78914998cf6427eb36caf6" title="Start or stop ADC conversions." alt="" coords="423,5,633,31"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="767,620,729,506,687,356,679,285,675,192,664,103,654,68,639,44,626,33,629,29,643,40,659,66,670,102,680,192,685,284,692,355,734,504,772,618"/>
+<area shape="rect" id="Node000014" href="$ad74416h_8c.html#aa0e5bf3fb20fad59b83b0a82a039b46e" title="Set the ADC measurement range for a specific channel." alt="" coords="435,947,621,972"/>
+<area shape="poly" id="edge15_Node000002_Node000014" title=" " alt="" coords="777,671,764,727,739,799,721,837,699,873,673,907,643,936,621,949,619,944,640,932,669,903,695,870,716,834,734,797,759,726,772,670"/>
+<area shape="rect" id="Node000015" href="$ad74416h_8c.html#a9a6802bcda87c09efdbd937656dd20b1" title="Set the ADC Conversion Rate for a specific channel." alt="" coords="440,416,616,441"/>
+<area shape="poly" id="edge17_Node000002_Node000015" title=" " alt="" coords="766,620,747,583,719,538,683,493,640,456,615,444,617,439,643,452,687,490,723,535,751,580,771,618"/>
+<area shape="rect" id="Node000016" href="$ad74416h_8c.html#a1bae8d97d9da53b9d7b31c32acb203a5" title="Set the operation mode for a specific channel." alt="" coords="443,466,613,506"/>
+<area shape="poly" id="edge19_Node000002_Node000016" title=" " alt="" coords="758,623,708,571,675,544,640,520,613,508,615,503,643,516,679,540,712,567,762,620"/>
+<area shape="rect" id="Node000017" href="$ad74416h_8c.html#ac144b58fa51fd0aba843849071d32424" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="443,1046,613,1086"/>
+<area shape="poly" id="edge21_Node000002_Node000017" title=" " alt="" coords="781,672,772,743,750,841,733,893,709,944,680,992,643,1035,615,1053,612,1048,640,1031,676,989,705,942,728,891,745,839,767,742,775,671"/>
+<area shape="rect" id="Node000019" href="$ad74416h_8c.html#a6b15b8f15f2c5fae771f149145ffc055" title="Set the voltage range for a specific channel." alt="" coords="443,1110,613,1150"/>
+<area shape="poly" id="edge23_Node000002_Node000019" title=" " alt="" coords="782,671,778,754,771,809,759,869,742,931,717,992,685,1049,643,1100,615,1118,612,1114,640,1096,680,1046,712,990,737,929,754,867,765,808,772,753,777,671"/>
+<area shape="rect" id="Node000020" href="$ad74416h_8c.html#ad9ef32dd1c9555b041056fbcc9221ffe" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="415,733,641,759"/>
+<area shape="poly" id="edge25_Node000002_Node000020" title=" " alt="" coords="747,666,698,692,642,716,582,736,580,731,640,712,696,687,744,662"/>
+<area shape="rect" id="Node000021" href="$ad74416h_8c.html#a0691e05aea05e71f05e09241f5ff9553" title="Set the debounce settle time for the IOx inputs when the ADC is running in digital input mode." alt="" coords="418,783,638,808"/>
+<area shape="poly" id="edge26_Node000002_Node000021" title=" " alt="" coords="762,670,712,722,679,749,643,772,610,785,608,780,640,768,676,745,708,718,759,666"/>
+<area shape="rect" id="Node000022" href="$ad74416h_8c.html#a233cc213e235114cd467a3f1e0caf96f" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="454,832,602,857"/>
+<area shape="poly" id="edge27_Node000002_Node000022" title=" " alt="" coords="769,671,749,705,721,746,685,787,643,822,603,838,601,833,640,817,681,784,717,743,745,703,764,668"/>
+<area shape="rect" id="Node000023" href="$ad74416h_8c.html#aa50e57ba6543156321b8a1bba668d375" title="Enable conversions on a diagnostic register." alt="" coords="425,882,631,922"/>
+<area shape="poly" id="edge28_Node000002_Node000023" title=" " alt="" coords="773,671,755,715,728,768,690,823,668,849,643,871,620,884,618,880,640,867,664,845,686,820,723,766,750,712,768,669"/>
+<area shape="rect" id="Node000024" href="$ad74416h_8c.html#a6cbb1f2fc1db1433486163b9bcdb5a99" title="Set the GPIO operation mode." alt="" coords="431,632,625,657"/>
+<area shape="poly" id="edge29_Node000002_Node000024" title=" " alt="" coords="683,647,625,647,625,642,683,642"/>
+<area shape="rect" id="Node000025" href="$digital__output_8c.html#aa133008ddcc9aefc6da6b37d8f8fc064" title=" " alt="" coords="172,683,367,708"/>
+<area shape="poly" id="edge38_Node000002_Node000025" title=" " alt="" coords="701,662,642,671,498,685,367,694,367,688,497,680,641,666,701,657"/>
+<area shape="rect" id="Node000026" href="$digital__output_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Digital Output example main execution." alt="" coords="5,953,124,979"/>
+<area shape="poly" id="edge39_Node000002_Node000026" title=" " alt="" coords="779,671,765,780,738,930,719,1006,697,1074,672,1128,658,1149,643,1164,582,1204,524,1228,467,1238,410,1235,353,1220,295,1196,235,1164,170,1124,132,1091,102,1050,81,1010,68,980,73,978,86,1008,107,1047,136,1087,174,1120,237,1159,298,1191,355,1215,411,1229,466,1232,522,1223,579,1199,640,1160,654,1146,667,1126,692,1072,714,1004,732,929,759,779,774,671"/>
+<area shape="rect" id="Node000028" href="$ad74416h_8c.html#a269d1abc8d1c7af9b5986a7102d2abf0" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="437,104,619,129"/>
+<area shape="poly" id="edge34_Node000002_Node000028" title=" " alt="" coords="768,619,731,506,687,356,680,322,678,292,679,239,677,215,672,192,660,169,640,144,617,129,620,125,643,140,664,166,677,190,683,215,684,239,684,292,686,322,692,355,736,504,773,618"/>
+<area shape="rect" id="Node000029" href="$digital__input__logic_8c.html#a4ebf0beb5c8317e60c970fd3daddd7f7" title=" " alt="" coords="448,531,608,556"/>
+<area shape="poly" id="edge35_Node000002_Node000029" title=" " alt="" coords="744,628,696,602,640,578,580,559,582,553,642,573,698,598,747,623"/>
+<area shape="rect" id="Node000030" href="$digital__input__logic_8c.html#a7186e0da4a68a01e8109ef2321de6d43" title=" " alt="" coords="455,219,601,244"/>
+<area shape="poly" id="edge37_Node000002_Node000030" title=" " alt="" coords="769,620,706,416,668,312,652,276,639,257,621,245,600,238,602,233,623,241,643,253,657,274,673,310,711,415,774,618"/>
+<area shape="rect" id="Node000007" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,619,124,644"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="181,634,124,634,124,629,181,629"/>
+<area shape="rect" id="Node000009" href="$ad74416h_8c.html#a60e2214d680d2e7461601ef123fb09a9" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="174,59,365,84"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="439,152,414,143,347,114,293,86,295,82,350,109,416,138,441,147"/>
+<area shape="rect" id="Node000010" href="$current__input__ext_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current input External power example main execution." alt="" coords="210,161,329,187"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="414,177,329,177,329,171,414,171"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="406,1011,329,1011,329,1006,406,1006"/>
+<area shape="poly" id="edge13_Node000013_Node000009" title=" " alt="" coords="453,36,332,61,331,56,452,31"/>
+<area shape="poly" id="edge14_Node000013_Node000010" title=" " alt="" coords="429,38,416,44,401,56,391,68,369,97,290,163,286,159,365,93,387,65,397,52,413,40,426,33"/>
+<area shape="poly" id="edge16_Node000014_Node000012" title=" " alt="" coords="448,977,329,1000,328,995,447,972"/>
+<area shape="poly" id="edge18_Node000015_Node000010" title=" " alt="" coords="426,413,413,406,384,381,358,352,317,290,288,230,272,188,277,186,293,228,321,287,362,349,388,377,416,401,429,409"/>
+<area shape="poly" id="edge20_Node000016_Node000010" title=" " alt="" coords="428,465,413,455,381,423,354,387,331,348,312,309,285,237,271,187,276,186,290,236,316,307,335,346,358,384,385,420,416,451,431,461"/>
+<area shape="rect" id="Node000018" href="$multiple__devices_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Multiple Devices example main execution." alt="" coords="210,1085,329,1111"/>
+<area shape="poly" id="edge22_Node000017_Node000018" title=" " alt="" coords="430,1081,329,1093,329,1088,429,1076"/>
+<area shape="poly" id="edge24_Node000019_Node000018" title=" " alt="" coords="429,1120,329,1108,329,1103,430,1115"/>
+<area shape="poly" id="edge30_Node000024_Node000006" title=" " alt="" coords="417,642,344,638,344,632,417,636"/>
+<area shape="poly" id="edge31_Node000024_Node000025" title=" " alt="" coords="449,663,335,685,334,680,448,657"/>
+<area shape="rect" id="Node000027" href="$digital__input__logic_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Digital Input Logic example main execution." alt="" coords="210,556,329,581"/>
+<area shape="poly" id="edge33_Node000024_Node000027" title=" " alt="" coords="470,631,313,584,314,579,471,625"/>
+<area shape="poly" id="edge32_Node000025_Node000026" title=" " alt="" coords="253,720,78,955,74,951,248,717"/>
+<area shape="poly" id="edge36_Node000029_Node000027" title=" " alt="" coords="435,555,329,566,329,560,434,550"/>
+<area shape="rect" id="Node000032" href="$ad74416h_8c.html#a056dbd6eb0c721f7e454d4a337f110cd" title="Initialize the device structure." alt="" coords="471,55,585,80"/>
+<area shape="poly" id="edge41_Node000031_Node000032" title=" " alt="" coords="770,306,753,260,727,202,689,143,666,116,640,94,614,80,585,73,586,68,616,75,643,89,670,112,694,139,732,199,758,258,775,305"/>
+<area shape="poly" id="edge42_Node000032_Node000010" title=" " alt="" coords="458,81,416,94,345,129,290,163,287,159,342,124,414,89,456,76"/>
+<area shape="rect" id="Node000034" href="$current__input__loop_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current input External power example main execution." alt="" coords="469,1276,587,1301"/>
+<area shape="poly" id="edge44_Node000033_Node000034" title=" " alt="" coords="682,1264,588,1281,587,1276,681,1259"/>
+</map>

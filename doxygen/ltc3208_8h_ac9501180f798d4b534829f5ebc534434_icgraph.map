@@ -1,0 +1,7 @@
+<map id="ltc3208_set_droupout_disable" name="ltc3208_set_droupout_disable">
+<area shape="rect" id="Node000001" title="Enables RGB and AUX4 dropout signals." alt="" coords="324,5,487,45"/>
+<area shape="rect" id="Node000002" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#af9b6567733fa7a488463d757a4eea895" title=" " alt="" coords="172,13,276,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="310,28,276,28,276,23,310,23"/>
+<area shape="rect" id="Node000003" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

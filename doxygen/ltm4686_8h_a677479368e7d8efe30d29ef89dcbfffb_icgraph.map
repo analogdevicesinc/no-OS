@@ -1,0 +1,7 @@
+<map id="ltm4686_read_word_data" name="ltm4686_read_word_data">
+<area shape="rect" id="Node000001" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="416,5,603,31"/>
+<area shape="rect" id="Node000002" href="$ltm4686_8c.html#a629cc1e16d3a790dedae59367f07e3a1" title="Read a value." alt="" coords="213,5,368,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,21,368,21,368,15,402,15"/>
+<area shape="rect" id="Node000003" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="200,21,166,21,166,15,200,15"/>
+</map>

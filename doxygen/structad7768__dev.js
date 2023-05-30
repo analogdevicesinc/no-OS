@@ -1,0 +1,27 @@
+var structad7768__dev =
+[
+    [ "avail_freq", "structad7768__dev.html#a2c27a537c449d9a3d5e95597b8b4cd24", null ],
+    [ "ch_mode", "structad7768__dev.html#ac37516d12365f8097b3398ab819dedcb", null ],
+    [ "ch_state", "structad7768__dev.html#ab5ca73a2f886a6e40a640778311ccb21", null ],
+    [ "conv_op", "structad7768__dev.html#afa6e9e1791a6a6bfd5d1b420979fc2a3", null ],
+    [ "crc_sel", "structad7768__dev.html#aa1cecd9703ba010b833eaaf9710839df", null ],
+    [ "datalines", "structad7768__dev.html#ad63f30b6b251406fe0b2aeb15b20b57e", null ],
+    [ "dclk_div", "structad7768__dev.html#ade7a5eb11a5b2a753018db8a7f3c78fd", null ],
+    [ "dec_rate", "structad7768__dev.html#a53e93da5312472bbb60ec523c79d9dc2", null ],
+    [ "filt_type", "structad7768__dev.html#a8e2346ea9f415eab90f8e1b06378419a", null ],
+    [ "gpio_mode0", "structad7768__dev.html#a27cf78dc4e9f2adab5af75ae3b2a5d6a", null ],
+    [ "gpio_mode1", "structad7768__dev.html#a9c247fc77cec9a5c82eadc4bcaf3aaa1", null ],
+    [ "gpio_mode2", "structad7768__dev.html#a67bfa0a9aa06f59ab272666cefdd839f", null ],
+    [ "gpio_mode3", "structad7768__dev.html#a06c09f24bbef1b3f621f706347d787b8", null ],
+    [ "gpio_reset", "structad7768__dev.html#afe5c4dae0363cc09cd9c6d70f3d436ae", null ],
+    [ "gpio_reset_value", "structad7768__dev.html#adc42b5d17de9c5e92515b5167d58de1c", null ],
+    [ "mclk", "structad7768__dev.html#a847ed892037e202ab12eddb7c0f9fa5c", null ],
+    [ "mclk_div", "structad7768__dev.html#a6373f6e55ff7824aca1da68d0574f799", null ],
+    [ "pin_spi_ctrl", "structad7768__dev.html#a9d26ec0a9ce6a6193121c572342bd242", null ],
+    [ "pin_spi_input_value", "structad7768__dev.html#a30d63c8bb3756050bc1b540fe3dd0e30", null ],
+    [ "power_mode", "structad7768__dev.html#a1cb3103ddd02d3e0acd0d89fae213b82", null ],
+    [ "power_mode_raw", "structad7768__dev.html#a94f3adff4d6fb8e56dcc8cb44cca9460", null ],
+    [ "sampling_freq", "structad7768__dev.html#a50b3527e49260b97392b6b8ef7157ce8", null ],
+    [ "sleep_mode", "structad7768__dev.html#a2a44bf7203e42d97e2270ab9dc626e9b", null ],
+    [ "spi_desc", "structad7768__dev.html#a81829e7d93db97196e396e4321737c38", null ]
+];

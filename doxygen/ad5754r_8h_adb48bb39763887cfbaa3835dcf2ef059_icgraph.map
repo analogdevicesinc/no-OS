@@ -1,0 +1,35 @@
+<map id="ad5754r_read" name="ad5754r_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="816,112,927,137"/>
+<area shape="rect" id="Node000002" href="$ad5754r_8c.html#a344b4a76cb99cdb2e01e4f35c7a51b6e" title="Get Over&#45;current status bit for specific channel." alt="" coords="584,5,768,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="846,104,810,73,767,44,739,33,741,28,769,40,814,69,850,100"/>
+<area shape="rect" id="Node000003" href="$ad5754r_8c.html#a32970b5f5357e1ba02f31e4ebae39453" title="Get Thermal Shutdown status bit." alt="" coords="593,55,759,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="817,110,767,95,723,83,725,78,769,90,818,105"/>
+<area shape="rect" id="Node000004" href="$ad5754r_8c.html#ad1bfc4d9c2f5248d68eeb0ba926b5f7f" title="Read DAC register value for specific channel." alt="" coords="595,105,757,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="802,127,757,127,757,122,802,122"/>
+<area shape="rect" id="Node000005" href="$ad5754r_8c.html#a1d2888ba68a1b85656c84727efe81148" title="Write to and read back a register to verify SPI." alt="" coords="156,224,301,249"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="823,144,769,159,652,179,559,187,467,193,350,210,277,227,276,221,349,205,466,188,559,182,651,174,767,154,821,139"/>
+<area shape="rect" id="Node000007" href="$ad5754r_8c.html#a55822587e388a1a94b2cd2f1bf413c86" title="Update specific register bits." alt="" coords="597,327,755,352"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="851,149,691,328,687,325,847,146"/>
+<area shape="rect" id="Node000006" href="$ad5754r_8c.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,303,108,328"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="189,258,87,305,84,300,186,253"/>
+<area shape="rect" id="Node000008" href="$ad5754r_8c.html#a679e14945072b4e54cdbfba468fbc192" title="Set power&#45;up state for specific channel." alt="" coords="357,220,528,245"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="645,321,595,290,535,259,502,248,504,243,537,254,597,285,648,317"/>
+<area shape="rect" id="Node000010" href="$ad5754r_8c.html#a86eb2633b3da97e164056f31216264a8" title="Set clear mode setting for device." alt="" coords="350,269,535,295"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="610,326,494,297,496,292,611,321"/>
+<area shape="rect" id="Node000011" href="$ad5754r_8c.html#a7fde54cb94c1b6632bc7f26f0502b2b1" title="Apply current clamp setting for device." alt="" coords="365,319,520,359"/>
+<area shape="poly" id="edge12_Node000007_Node000011" title=" " alt="" coords="583,342,520,342,520,337,583,337"/>
+<area shape="rect" id="Node000012" href="$ad5754r_8c.html#a3c216ae4b41db1538b59025b9d0e122d" title="Set Internal Reference Enable/Disable state for device." alt="" coords="367,383,518,423"/>
+<area shape="poly" id="edge14_Node000007_Node000012" title=" " alt="" coords="616,358,517,386,516,381,615,353"/>
+<area shape="rect" id="Node000013" href="$ad5754r_8c.html#aebf248be160290a179b4b7992be0e1ae" title="Set SDO Enable/Disable state for device." alt="" coords="349,448,536,473"/>
+<area shape="poly" id="edge16_Node000007_Node000013" title=" " alt="" coords="651,363,600,401,537,438,503,450,501,445,535,433,597,396,648,359"/>
+<area shape="rect" id="Node000014" href="$ad5754r_8c.html#ad1e19f86104f644876be104c09a5791c" title="Apply TSD setting for device." alt="" coords="367,497,519,523"/>
+<area shape="poly" id="edge18_Node000007_Node000014" title=" " alt="" coords="661,365,611,427,576,460,537,488,512,500,510,495,535,484,573,456,607,423,657,362"/>
+<area shape="rect" id="Node000009" href="$ad5754r_8c.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="163,327,294,352"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="368,252,351,259,291,294,246,329,243,324,288,290,348,254,366,247"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="150,331,108,325,109,320,150,326"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="382,301,277,329,276,324,381,296"/>
+<area shape="poly" id="edge13_Node000011_Node000009" title=" " alt="" coords="351,342,294,342,294,337,351,337"/>
+<area shape="poly" id="edge15_Node000012_Node000009" title=" " alt="" coords="361,382,271,355,273,350,363,377"/>
+<area shape="poly" id="edge17_Node000013_Node000009" title=" " alt="" coords="367,446,348,438,316,418,286,395,241,355,244,351,289,391,319,414,351,433,369,441"/>
+<area shape="poly" id="edge19_Node000014_Node000009" title=" " alt="" coords="359,494,348,488,309,456,276,418,234,354,239,351,280,415,313,452,351,484,361,490"/>
+</map>

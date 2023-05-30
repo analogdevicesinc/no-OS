@@ -1,0 +1,7 @@
+<map id="ltc2983_rtd" name="ltc2983_rtd">
+<area shape="rect" id="Node000001" title="RTD sensor descriptor for LTC2983." alt="" coords="103,93,198,119"/>
+<area shape="rect" id="Node000002" href="$structltc2983__sensor.html" title="common LTC2983 sensor struct" alt="" coords="5,5,125,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,39,141,91,137,95,85,43"/>
+<area shape="rect" id="Node000003" href="$structltc2983__custom__sensor.html" title="custom LTC2983 sensor struct" alt="" coords="150,5,325,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,42,165,95,161,91,214,38"/>
+</map>

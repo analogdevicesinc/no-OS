@@ -1,0 +1,10 @@
+<map id="xil_uart_desc" name="xil_uart_desc">
+<area shape="rect" id="Node000001" title="Xilinx platform specific UART descriptor." alt="" coords="127,181,235,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="19,93,169,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,126,170,179,167,183,113,130"/>
+<area shape="rect" id="Node000003" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,45,97,93,91,93,91,45"/>
+<area shape="rect" id="Node000004" href="$structno__os__fifo__element.html" title="Structure holding the fifo element parameters." alt="" coords="193,93,342,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="248,130,195,183,191,179,244,126"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="357,98,369,106,360,113,343,116,342,111,358,109,363,106,355,102"/>
+</map>

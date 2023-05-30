@@ -1,0 +1,11 @@
+<map id="drivers/led/ltc3208/ltc3208.h" name="drivers/led/ltc3208/ltc3208.h">
+<area shape="rect" id="Node000001" title="Header file of LTC3208 Driver." alt="" coords="197,5,340,45"/>
+<area shape="rect" id="Node000002" href="$ltc3208_8c.html" title="Implementation of LTC3208 Driver." alt="" coords="5,101,148,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,54,117,103,114,98,216,49"/>
+<area shape="rect" id="Node000003" href="$ltc3208_2src_2common_2common__data_8h.html" title="Defines common data to be used by LTC3208 examples." alt="" coords="173,101,365,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,59,271,101,266,101,266,59"/>
+<area shape="rect" id="Node000005" href="$ltc3208_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="389,93,556,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="323,49,416,91,414,96,321,53"/>
+<area shape="rect" id="Node000004" href="$ltc3208_2src_2common_2common__data_8c.html" title="Defines common data to be used by LTC3208 examples." alt="" coords="173,196,364,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="271,154,271,196,266,196,266,154"/>
+</map>

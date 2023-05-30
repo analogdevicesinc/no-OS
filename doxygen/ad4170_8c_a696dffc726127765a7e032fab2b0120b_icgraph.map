@@ -1,0 +1,8 @@
+<map id="ad4170_set_pin_muxing" name="ad4170_set_pin_muxing">
+<area shape="rect" id="Node000001" title="Set the AD4170 Pin Muxing settings." alt="" coords="373,5,553,31"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="5,5,104,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="360,21,104,21,104,15,360,15"/>
+<area shape="rect" id="Node000003" href="$ad4170_8c.html#a4e7865cd3f1b0cb3406224e1299f6669" title="Set the AD4170 DAC settings." alt="" coords="152,31,325,56"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="360,32,326,36,325,31,359,27"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="138,32,104,27,105,22,139,27"/>
+</map>

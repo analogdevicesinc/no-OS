@@ -1,0 +1,10 @@
+<map id="projects/cn0565/src/mux_board/mux_board.h" name="projects/cn0565/src/mux_board/mux_board.h">
+<area shape="rect" id="Node000001" title="Cross&#45;point switch handling code." alt="" coords="5,5,193,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="20,167,91,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,47,56,68,40,94,37,109,38,124,46,153,41,155,33,125,32,108,36,92,52,65,73,44"/>
+<area shape="rect" id="Node000003" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="50,93,149,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="102,46,102,79,97,79,97,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="173,93,255,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="129,43,187,83,184,88,126,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="94,120,72,156,67,154,90,118"/>
+</map>

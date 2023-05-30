@@ -1,0 +1,12 @@
+<map id="drivers/platform/maxim/max32650/maxim_i2c.h" name="drivers/platform/maxim/max32650/maxim_i2c.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="33,5,216,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="109,167,180,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,48,43,62,20,78,9,97,9,107,13,117,30,136,50,150,96,167,94,172,48,154,26,140,9,120,3,108,4,96,16,75,40,57,68,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,93,111,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="113,47,86,84,82,80,108,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="135,93,231,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="141,44,168,80,164,84,136,47"/>
+<area shape="rect" id="Node000005" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="255,93,354,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="168,43,266,85,264,90,166,48"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="280,121,184,163,182,159,278,116"/>
+</map>

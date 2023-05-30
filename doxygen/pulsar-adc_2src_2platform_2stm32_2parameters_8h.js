@@ -1,0 +1,26 @@
+var pulsar_adc_2src_2platform_2stm32_2parameters_8h =
+[
+    [ "ADC_DDR_BASEADDR", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#af38f65401ed83788961ed1d07e286bcb", null ],
+    [ "GPIO_CNV", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a2a25b226ff4d5969cb19d3a885e75a80", null ],
+    [ "GPIO_CNV_PORT", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a4f73fdf34f7b3e99bbd4fa3762967254", null ],
+    [ "GPIO_OPS", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#aa00c79541f5bcf66f6cfadcdc90e82e1", null ],
+    [ "GPIO_PORT_A", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a26c950f1ed9bbc330c8a1a778cbb30ac", null ],
+    [ "MAX_SIZE_BASE_ADDR", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#afa3248d9c02c4abec5b76edea62a3e38", null ],
+    [ "PULSAR_ADC_ADC_REF_VOLTAGE", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#ab6dda86d37b2c4278c362082e4dc925a", null ],
+    [ "SAMPLES_PER_CHANNEL_PLATFORM", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a76b04f754009fd7731f1d52bd873162c", null ],
+    [ "SPI_BAUDRATE", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a4dad4b502d445b46f33cdd159e04051a", null ],
+    [ "SPI_CS", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#ade4259fa3cbb71732a4e73c18dcb9b0d", null ],
+    [ "SPI_CS_PORT", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a9912b2a4108ecd9f98ad04eceef5f836", null ],
+    [ "SPI_DEVICE_ID", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a2264889066fc41987d29395b4772bd17", null ],
+    [ "SPI_EXTRA", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a66db4b9b440d992b52d4e6a6e5779e69", null ],
+    [ "SPI_OPS", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a58f6638bccd9f8463f2cb95d378b6505", null ],
+    [ "UART_BAUDRATE", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_EXTRA", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#aef2e6b5fc83c0dc37191e4212e578f7f", null ],
+    [ "UART_IRQ_ID", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#adff4ff00d8f3375e4fb198270ae24597", null ],
+    [ "UART_OPS", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#ae64afa3f3792f9fce17061e4e8733413", null ],
+    [ "huart5", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a25a82fcf0cd24eb6d39977cb5864cec8", null ],
+    [ "in_buff", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a8691d19dfdf43f6b9fe21eaecdfa1c63", null ],
+    [ "pulsar_adc_spi_extra_ip", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#acfc5599abdf72c6217c52eb30266e622", null ],
+    [ "pulsar_adc_uart_extra_ip", "pulsar-adc_2src_2platform_2stm32_2parameters_8h.html#a21679ce25309636d67778c7fb977fb0b", null ]
+];

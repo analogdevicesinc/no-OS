@@ -1,0 +1,7 @@
+<map id="adin1110_reg_update" name="adin1110_reg_update">
+<area shape="rect" id="Node000001" title="Update a register&#39;s value based on a mask." alt="" coords="388,5,551,31"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html#ab568c2726064154ae81093ee1bcad34b" title="Set a port in promiscuous mode. All MAC filters are dropped." alt="" coords="172,5,340,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,21,340,21,340,15,374,15"/>
+<area shape="rect" id="Node000003" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

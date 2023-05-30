@@ -1,0 +1,14 @@
+<map id="lt8722_dac_to_voltage" name="lt8722_dac_to_voltage">
+<area shape="rect" id="Node000001" title="Convert DAC code to nanovolts." alt="" coords="648,31,817,56"/>
+<area shape="rect" id="Node000002" href="$lt8722_8c.html#a2da7094d9892f02cfee358651b38afe2" title="Get output volatge of LT8722 device." alt="" coords="404,5,600,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="634,35,600,31,600,26,634,30"/>
+<area shape="rect" id="Node000004" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="457,55,547,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="634,56,548,65,548,60,634,51"/>
+<area shape="rect" id="Node000003" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,21,356,21,356,15,390,15"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="443,57,334,33,335,28,444,52"/>
+<area shape="rect" id="Node000005" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="219,55,333,80"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="443,70,334,70,334,65,443,65"/>
+<area shape="rect" id="Node000006" href="$lt8722_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,55,148,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="205,70,148,70,148,65,205,65"/>
+</map>

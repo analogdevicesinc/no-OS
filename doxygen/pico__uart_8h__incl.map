@@ -1,0 +1,20 @@
+<map id="drivers/platform/pico/pico_uart.h" name="drivers/platform/pico/pico_uart.h">
+<area shape="rect" id="Node000001" title="Header file of UART driver for pico." alt="" coords="234,5,393,45"/>
+<area shape="rect" id="Node000002" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="146,93,251,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,48,228,88,225,83,284,43"/>
+<area shape="rect" id="Node000007" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="291,167,387,192"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="319,45,337,153,332,153,314,46"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="351,93,476,119"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="339,43,389,82,386,87,336,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="218,240,289,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="208,118,230,166,250,226,245,227,226,168,203,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,240,88,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="152,121,110,139,90,152,73,168,58,196,51,226,46,225,53,195,69,165,86,148,107,135,150,116"/>
+<area shape="rect" id="Node000005" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="83,167,216,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="193,121,167,157,163,154,188,117"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="168,190,226,230,223,234,165,194"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="134,194,76,234,73,230,131,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="114,240,185,265"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="152,192,152,226,147,226,147,192"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="327,194,279,233,276,229,323,190"/>
+</map>

@@ -1,0 +1,32 @@
+<map id="ad4858_reg_read" name="ad4858_reg_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="999,80,1133,105"/>
+<area shape="rect" id="Node000002" href="$ad4858_8c.html#a308fdf9132f0909bcd601d763cf979f9" title="Enable/Disable seamless hdr." alt="" coords="711,5,951,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1027,77,950,45,907,33,909,28,952,39,1029,72"/>
+<area shape="rect" id="Node000003" href="$ad4858_8c.html#a01cf4315146b2fe3860aa3a171dcd644" title="Enable/Disable channel sleep." alt="" coords="738,55,923,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="985,87,923,80,924,75,985,81"/>
+<area shape="rect" id="Node000004" href="$ad4858_8c.html#ab0cd8392c85c85d97f45b49372acd02b" title="Initialize an AD4858 device structure." alt="" coords="5,156,104,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="984,96,556,108,322,121,226,129,153,139,88,158,86,153,151,134,225,124,322,115,555,103,984,91"/>
+<area shape="rect" id="Node000005" href="$ad4858_8c.html#a7131dedc19333c6712e7b4bc32ad9238" title="Update specific register bits of an input register." alt="" coords="760,347,901,372"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1046,118,845,348,841,345,1042,114"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="811,336,787,302,752,263,710,225,662,196,587,170,509,153,429,144,351,141,277,143,210,148,105,162,104,157,209,143,277,138,351,136,430,139,510,148,589,165,664,192,713,221,756,259,791,299,816,333"/>
+<area shape="rect" id="Node000006" href="$ad4858_8c.html#ad2bdbbdba4d502b8a8c96f5bbf5e8189" title="Enable OSR." alt="" coords="483,207,631,232"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="803,340,741,293,702,268,662,247,626,235,627,230,664,242,705,264,744,289,806,336"/>
+<area shape="rect" id="Node000007" href="$ad4858_8c.html#a6500f08e53800e01a79955829a763530" title="Enable/Disable test pattern on ADC data output." alt="" coords="481,257,634,297"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="774,345,624,299,625,294,776,340"/>
+<area shape="rect" id="Node000008" href="$ad4858_8c.html#aaff675e9d2d77ef52a0839e5bf0867b7" title="Set channel softspan." alt="" coords="463,321,652,347"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="746,354,652,345,653,340,747,349"/>
+<area shape="rect" id="Node000009" href="$ad4858_8c.html#a49169412cb6a0c76f99dda26d2eb3de3" title="Set device data interface mode." alt="" coords="157,447,399,472"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="747,370,609,386,453,413,381,430,318,449,317,444,380,425,451,407,608,381,746,364"/>
+<area shape="rect" id="Node000010" href="$ad4858_8c.html#a9d6ef9a6bda2fdf0e875556b9746cbde" title="Set the device operating mode." alt="" coords="452,423,663,448"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="772,378,605,425,603,420,770,373"/>
+<area shape="rect" id="Node000011" href="$ad4858_8c.html#ac4534c16451ccffc90d7b041cca684e0" title="Set OSR ratio." alt="" coords="477,472,638,497"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="802,383,740,423,664,462,625,474,623,469,662,457,738,418,799,378"/>
+<area shape="rect" id="Node000012" href="$ad4858_8c.html#a13c8857e1fc1b833747502e75bbbb58c" title="Set packet format." alt="" coords="458,521,657,547"/>
+<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="812,385,751,449,710,483,664,512,636,524,634,519,661,508,706,479,747,445,808,381"/>
+<area shape="rect" id="Node000013" href="$ad4858_8c.html#a32913ac6515364e2f71f91e9c17f0e1a" title="Set the SPI data mode." alt="" coords="456,571,659,596"/>
+<area shape="poly" id="edge13_Node000005_Node000013" title=" " alt="" coords="818,385,794,424,760,472,716,521,664,562,640,573,637,568,661,557,712,517,756,469,790,421,814,382"/>
+<area shape="poly" id="edge16_Node000013_Node000009" title=" " alt="" coords="468,569,451,562,426,544,402,524,353,496,308,475,310,470,356,492,406,520,429,540,453,557,470,564"/>
+<area shape="rect" id="Node000014" href="$ad4858_8c.html#a66fa4d0c785ded69d94ef45d087233cb" title="Set device config interface mode." alt="" coords="152,533,404,559"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="448,571,373,561,374,556,449,566"/>
+<area shape="poly" id="edge15_Node000014_Node000004" title=" " alt="" coords="217,530,181,512,150,485,123,446,101,404,85,359,72,315,58,236,54,182,59,182,64,235,78,314,90,358,106,402,127,444,154,482,184,508,220,526"/>
+</map>

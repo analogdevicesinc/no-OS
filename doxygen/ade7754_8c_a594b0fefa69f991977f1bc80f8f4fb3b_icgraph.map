@@ -1,0 +1,58 @@
+<map id="ade7754_write" name="ade7754_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="759,453,877,479"/>
+<area shape="rect" id="Node000002" href="$ade7754_8c.html#a37fcf1c1eb37d15b7dee88052a308aed" title="Update specific register bits." alt="" coords="542,404,703,429"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="753,453,673,432,674,427,755,447"/>
+<area shape="rect" id="Node000022" href="$ade7754_8c.html#abc3d348be34771f3df72c441f804b921" title="Write Ipeak val." alt="" coords="537,453,709,479"/>
+<area shape="poly" id="edge32_Node000001_Node000022" title=" " alt="" coords="745,469,709,469,709,463,745,463"/>
+<area shape="rect" id="Node000023" href="$ade7754_8c.html#a7b5f893cc64f7de3f9ffab2a07d443c1" title="Write Vpeak val." alt="" coords="535,503,711,528"/>
+<area shape="poly" id="edge33_Node000001_Node000023" title=" " alt="" coords="755,485,674,505,673,500,753,479"/>
+<area shape="rect" id="Node000003" href="$ade7754_8c.html#aa86d07cfbba14344442d834770bb9c76" title="Select the formula used for active energy calculation." alt="" coords="293,367,471,407"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="528,408,470,401,471,395,528,403"/>
+<area shape="rect" id="Node000006" href="$ade7754_8c.html#a5197802b24e6957718f8bd218a7ec6ec" title="Operation mode of the ADCs." alt="" coords="303,432,461,457"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="528,430,462,438,461,433,528,425"/>
+<area shape="rect" id="Node000007" href="$ade7754_8c.html#af81b55af7b569a07ba4ceea76b2dd8cd" title="Select the formula used for apparent energy calculation." alt="" coords="285,482,479,522"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="558,436,536,444,512,458,488,472,457,484,455,479,486,468,509,454,534,440,556,431"/>
+<area shape="rect" id="Node000008" href="$ade7754_8c.html#a7a7afa7be2686a814624ddcab7cf496e" title="Select the gain of the current channels inputs." alt="" coords="299,596,465,621"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="543,438,537,444,523,461,516,478,514,514,511,551,503,569,488,587,467,600,464,596,485,583,499,566,506,549,508,514,511,477,518,458,533,440,540,434"/>
+<area shape="rect" id="Node000009" href="$ade7754_8c.html#a9febb305670a567a2d74636715f29290" title="Enable/Disable interrupt." alt="" coords="305,695,459,720"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="542,439,537,444,517,473,509,503,510,533,514,563,518,594,519,624,510,655,489,685,475,696,460,703,458,698,472,691,485,681,505,653,513,623,513,594,509,564,504,533,504,502,512,471,533,440,538,435"/>
+<area shape="rect" id="Node000010" href="$ade7754_8c.html#af02d37fb9a064a2a35b85db7130949d1" title="Select part of the line apparent energy formula separately, depending on the line active energy measu..." alt="" coords="281,268,483,293"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="599,396,550,350,519,327,486,307,457,296,459,291,488,302,522,322,553,346,602,392"/>
+<area shape="rect" id="Node000011" href="$ade7754_8c.html#a1bdcb2fa65bf009f0b4c989cf767865e" title="Select part of the line active energy formula separately, depending on the line active energy measure..." alt="" coords="277,317,487,343"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="584,400,538,379,486,358,443,345,444,340,488,353,540,374,586,395"/>
+<area shape="rect" id="Node000012" href="$ade7754_8c.html#adc800551052e5177a98d0b7786cf7869" title="Select the source of the voltage &amp; current peak detection." alt="" coords="299,744,465,769"/>
+<area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="542,439,537,444,514,480,506,516,508,552,514,588,521,624,522,661,513,698,489,735,467,750,464,745,485,731,508,696,517,660,516,625,509,589,502,552,500,515,509,478,533,440,538,435"/>
+<area shape="rect" id="Node000013" href="$ade7754_8c.html#a966af054db900934fd91fddde22a6400" title="Select the source of the measurement of the voltage line period." alt="" coords="294,5,470,31"/>
+<area shape="poly" id="edge17_Node000002_Node000013" title=" " alt="" coords="617,391,610,321,589,227,572,177,549,128,521,83,485,44,468,33,471,28,488,40,525,80,554,126,577,175,594,226,615,320,623,390"/>
+<area shape="rect" id="Node000014" href="$ade7754_8c.html#a3396d0a2b7d153d7ddd0751cbafe290a" title="Reset the device using SW reset." alt="" coords="311,793,453,819"/>
+<area shape="poly" id="edge19_Node000002_Node000014" title=" " alt="" coords="541,439,537,444,521,465,511,486,502,528,505,570,514,613,523,655,526,698,517,741,505,762,489,784,473,796,454,804,452,799,470,792,485,780,501,759,512,739,521,697,518,656,509,614,500,571,497,528,506,484,517,462,533,440,537,436"/>
+<area shape="rect" id="Node000016" href="$ade7754_8c.html#a8c7f0c71f1a9a47fcfcab1b8eb3a190d" title="Select part of the apparent energy formula separately, depending on the line active energy measuremen..." alt="" coords="283,547,481,572"/>
+<area shape="poly" id="edge22_Node000002_Node000016" title=" " alt="" coords="545,438,537,444,520,466,513,489,507,513,488,536,466,549,464,544,485,532,502,511,508,488,515,464,533,440,542,434"/>
+<area shape="rect" id="Node000017" href="$ade7754_8c.html#a15686528ac95a059839d652d7070ac3d" title="Select the gain of the voltage channels inputs." alt="" coords="297,55,467,80"/>
+<area shape="poly" id="edge23_Node000002_Node000017" title=" " alt="" coords="616,391,605,330,582,249,565,207,543,166,517,128,485,95,465,82,468,78,488,91,521,124,548,163,570,205,587,248,610,329,621,390"/>
+<area shape="rect" id="Node000018" href="$ade7754_8c.html#a1af3dcc589d74e06687d409d04f4d073" title="Select part of the active energy formula separately, depending on the line active energy measurement ..." alt="" coords="279,645,485,671"/>
+<area shape="poly" id="edge25_Node000002_Node000018" title=" " alt="" coords="542,439,537,444,520,467,513,491,512,514,514,538,516,563,515,587,507,612,489,636,473,647,470,643,485,632,502,609,509,586,511,563,509,539,507,514,508,490,515,465,533,440,539,435"/>
+<area shape="rect" id="Node000019" href="$ade7754_8c.html#aa781732a6aa513801681a05c0a01a5aa" title="Select source of sampled data for wave register." alt="" coords="295,105,469,145"/>
+<area shape="poly" id="edge26_Node000002_Node000019" title=" " alt="" coords="612,391,597,342,572,279,535,214,511,185,485,159,467,147,470,143,488,155,515,181,539,211,577,277,602,340,618,390"/>
+<area shape="rect" id="Node000020" href="$ade7754_8c.html#a57b428dbae23668697179d92fbcbcfe8" title="Select waveform register update rate." alt="" coords="279,169,485,195"/>
+<area shape="poly" id="edge28_Node000002_Node000020" title=" " alt="" coords="610,392,593,351,566,301,530,250,509,228,485,208,464,197,467,192,488,204,512,224,534,247,571,298,597,349,615,390"/>
+<area shape="rect" id="Node000021" href="$ade7754_8c.html#aa782c8f0b79956a4feb96b7df4b382f6" title="Select the phases used for counting the number of zero crossing in the line active and apparent accum..." alt="" coords="323,219,441,244"/>
+<area shape="poly" id="edge30_Node000002_Node000021" title=" " alt="" coords="606,394,558,325,525,288,485,258,464,247,441,241,442,235,466,242,488,253,528,284,563,322,610,391"/>
+<area shape="rect" id="Node000004" href="$ade7754_8c.html#ae62a8e2b0fe643a68a9f2efed8dce572" title="Setup the ADE7754 device." alt="" coords="108,404,229,429"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="280,404,230,411,229,406,279,399"/>
+<area shape="rect" id="Node000005" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,585,60,611"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="152,442,46,587,41,583,148,439"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="288,435,229,427,230,422,289,430"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="297,480,276,472,192,432,194,427,278,468,299,475"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="285,592,276,587,236,549,206,505,185,463,172,431,177,429,190,460,211,502,241,546,279,583,288,588"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="291,696,275,685,252,644,222,570,172,431,177,429,227,568,257,642,279,682,294,691"/>
+<area shape="poly" id="edge16_Node000012_Node000004" title=" " alt="" coords="284,741,275,734,228,602,172,430,177,429,233,600,279,731,288,737"/>
+<area shape="poly" id="edge18_Node000013_Node000004" title=" " alt="" coords="284,40,279,44,244,86,217,136,198,189,185,242,173,339,172,404,167,404,168,339,179,241,192,187,212,133,239,83,275,40,280,36"/>
+<area shape="rect" id="Node000015" href="$ade7754_8c.html#a33b0de79aa3d55bcf7c68099c0e2459a" title="Initialize the device." alt="" coords="115,609,222,635"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="296,795,276,784,237,749,207,707,186,666,172,636,177,634,190,664,212,704,241,745,279,780,299,790"/>
+<area shape="poly" id="edge21_Node000015_Node000005" title=" " alt="" coords="101,613,60,605,61,600,102,608"/>
+<area shape="poly" id="edge24_Node000017_Node000004" title=" " alt="" coords="287,88,279,95,248,131,223,173,204,218,191,264,177,347,173,404,167,404,171,347,186,262,199,216,218,170,243,128,275,91,284,84"/>
+<area shape="poly" id="edge27_Node000019_Node000004" title=" " alt="" coords="285,154,279,159,253,187,231,220,214,256,200,292,182,358,174,404,169,403,177,357,195,290,209,254,227,218,249,184,275,155,281,150"/>
+<area shape="poly" id="edge29_Node000020_Node000004" title=" " alt="" coords="286,203,279,208,256,230,236,256,205,312,185,366,175,405,170,403,180,364,200,310,231,253,252,226,276,204,283,199"/>
+<area shape="poly" id="edge31_Node000021_Node000004" title=" " alt="" coords="310,243,279,258,241,292,212,334,190,374,177,405,172,403,185,372,207,331,237,289,276,253,308,238"/>
+</map>

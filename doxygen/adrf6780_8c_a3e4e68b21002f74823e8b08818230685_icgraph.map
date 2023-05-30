@@ -1,0 +1,16 @@
+<map id="adrf6780_spi_write" name="adrf6780_spi_write">
+<area shape="rect" id="Node000001" title="Writes data to ADRF6780 over SPI." alt="" coords="640,39,787,64"/>
+<area shape="rect" id="Node000002" href="$adrf6780_8c.html#afd950db8108c0044e380afb7c4a78ec6" title="Set IMD Performance Improvement." alt="" coords="387,14,592,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="626,44,592,41,593,35,626,39"/>
+<area shape="rect" id="Node000003" href="$adrf6780_8c.html#a31a576564c7a540cb8dae46008f09562" title="Update ADRF6780 register." alt="" coords="395,63,584,88"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="626,64,585,68,584,63,626,58"/>
+<area shape="rect" id="Node000004" href="$adrf6780_8c.html#ad0ffbdbf399514f68df82b7a317b8fc4" title="Initializes the adrf6780." alt="" coords="5,66,113,91"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="410,62,385,53,362,37,352,29,338,24,289,12,250,8,211,12,162,24,115,44,78,68,75,63,113,39,161,18,210,7,250,3,290,7,340,18,354,25,365,32,388,48,412,57"/>
+<area shape="rect" id="Node000005" href="$adrf6780_8c.html#ad0fb53d470a2936c3ea0a787dea3a6f3" title="Read ADC raw data." alt="" coords="161,34,339,59"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="381,65,338,60,339,55,381,60"/>
+<area shape="rect" id="Node000006" href="$adrf6780_8c.html#a2ea47047b2fdcb16ccaba81b32d2e45e" title="Set I/Q Phase Accuracy." alt="" coords="169,84,331,124"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="381,91,332,97,331,92,381,86"/>
+<area shape="rect" id="Node000007" href="$adrf6780_8c.html#a422abf76a99cc5bdf475cee06588d923" title="Software Reset." alt="" coords="175,148,325,174"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="447,96,340,138,299,151,297,146,338,133,445,91"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="183,147,160,138,116,116,79,93,81,89,118,111,162,133,185,142"/>
+</map>

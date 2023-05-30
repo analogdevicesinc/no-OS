@@ -1,0 +1,10 @@
+<map id="reset_rcd_flag_state" name="reset_rcd_flag_state">
+<area shape="rect" id="Node000001" title="Reset RCD flag value." alt="" coords="484,31,637,56"/>
+<area shape="rect" id="Node000002" href="$self__test_8c.html#a467fec0e3bad53875d3b029d41f4446e" title="Running test for RCD." alt="" coords="275,5,436,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="470,35,436,31,437,25,471,30"/>
+<area shape="rect" id="Node000003" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,31,227,56"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="470,46,227,46,227,41,470,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,33,227,38,227,33,260,28"/>
+<area shape="rect" id="Node000004" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,46,60,46,60,41,94,41"/>
+</map>
