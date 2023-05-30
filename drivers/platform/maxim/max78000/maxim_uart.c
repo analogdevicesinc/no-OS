@@ -391,10 +391,12 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
-	if (ret != E_NO_ERROR) {
-		ret = -EINVAL;
-		goto error;
+	if (param->device_id == 0) {
+		ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
+		if (ret != E_NO_ERROR) {
+			ret = -EINVAL;
+			goto error;
+		}
 	}
 
 	*desc = descriptor;
