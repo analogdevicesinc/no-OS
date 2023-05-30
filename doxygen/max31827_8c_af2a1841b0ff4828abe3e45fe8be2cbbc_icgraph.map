@@ -1,0 +1,9 @@
+<map id="max31827_init" name="max31827_init">
+<area shape="rect" id="Node000001" title="Device and comm init function." alt="" coords="363,31,481,56"/>
+<area shape="rect" id="Node000002" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="184,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="349,36,302,29,303,24,350,30"/>
+<area shape="rect" id="Node000003" href="$iio__max31827_8c.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="172,55,315,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="349,56,315,60,315,55,349,50"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,70,125,70,125,65,159,65"/>
+</map>

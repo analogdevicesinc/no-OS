@@ -1,0 +1,11 @@
+<map id="ad7490_remove" name="ad7490_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by initialization." alt="" coords="371,55,497,80"/>
+<area shape="rect" id="Node000002" href="$iio__ad7490_8c.html#a6a4af5f1a2888c06864cf197f300f466" title=" " alt="" coords="187,5,308,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="372,54,296,33,297,28,373,49"/>
+<area shape="rect" id="Node000004" href="$iio__ad7490_8c.html#a1e5b19530981e700aa19c5087312ab8d" title=" " alt="" coords="172,55,323,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,70,323,70,323,65,357,65"/>
+<area shape="rect" id="Node000005" href="$eval-ad7490sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="188,104,307,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="373,86,297,106,296,101,372,81"/>
+<area shape="rect" id="Node000003" href="$eval-ad7490sdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,21,124,21,124,15,173,15"/>
+</map>

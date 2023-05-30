@@ -1,0 +1,28 @@
+<map id="drivers/net/oa_tc6/oa_tc6.h" name="drivers/net/oa_tc6/oa_tc6.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="554,5,693,45"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html" title="Source file of the ADIN1110 driver." alt="" coords="5,196,161,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="555,52,174,184,134,198,132,193,172,179,553,47"/>
+<area shape="rect" id="Node000003" href="$adin1110_8h.html" title=" " alt="" coords="545,93,701,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="626,59,626,93,621,93,621,59"/>
+<area shape="rect" id="Node000013" href="$oa__tc6_8c.html" title=" " alt="" coords="726,93,865,133"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="675,49,759,91,756,96,672,54"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="532,125,364,146,268,163,173,184,129,198,127,193,172,179,267,158,363,141,531,120"/>
+<area shape="rect" id="Node000004" href="$frame__rx__tx__example_8c.html" title="Frame receive and transmit example header for the ADIN1110 project." alt="" coords="185,189,365,243"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="538,139,379,184,355,191,353,186,377,179,537,134"/>
+<area shape="rect" id="Node000005" href="$adin1110__standalone__example_8c.html" title="Implementation of the ADIN1110 standalone example." alt="" coords="390,181,619,251"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="592,144,546,183,543,179,589,140"/>
+<area shape="rect" id="Node000006" href="$tcp__echo__server__example_8c.html" title="Implementation of the TCP echo server example." alt="" coords="644,181,840,251"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="658,140,704,179,700,183,654,144"/>
+<area shape="rect" id="Node000007" href="$iio__lwip__example_8c.html" title="Implementation of IIO LWIP example for eval&#45;adxl355&#45;pmdz project." alt="" coords="864,181,1039,251"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="704,135,852,179,864,183,863,188,851,184,702,140"/>
+<area shape="rect" id="Node000008" href="$swiot1l_2src_2common_2common__data_8h.html" title="Defines common data to be used by the swiot1l project." alt="" coords="1063,196,1255,236"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="715,131,811,144,885,152,959,161,1051,179,1104,193,1103,198,1049,184,958,167,885,158,810,150,714,136"/>
+<area shape="rect" id="Node000010" href="$swiot_8h.html" title="Header file for the swiot IIO device." alt="" coords="1280,196,1428,236"/>
+<area shape="poly" id="edge10_Node000003_Node000010" title=" " alt="" coords="715,131,800,140,872,145,995,147,1116,153,1186,162,1268,179,1313,193,1312,198,1267,184,1185,168,1116,158,995,152,872,150,799,146,714,136"/>
+<area shape="rect" id="Node000009" href="$swiot1l_2src_2common_2common__data_8c.html" title="Defines common data to be used by the SWIOT1L firmware." alt="" coords="1064,299,1255,339"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="1162,250,1162,299,1157,299,1157,250"/>
+<area shape="rect" id="Node000011" href="$swiot_8c.html" title="Source file for the swiot IIO driver." alt="" coords="1279,299,1427,339"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="1356,250,1356,299,1350,299,1351,250"/>
+<area shape="rect" id="Node000012" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="1451,299,1599,339"/>
+<area shape="poly" id="edge12_Node000010_Node000012" title=" " alt="" coords="1399,241,1494,296,1491,301,1396,245"/>
+</map>

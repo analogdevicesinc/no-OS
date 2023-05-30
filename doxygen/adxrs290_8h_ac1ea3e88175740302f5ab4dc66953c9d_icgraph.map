@@ -1,0 +1,15 @@
+<map id="adxrs290_reg_write" name="adxrs290_reg_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="555,53,705,78"/>
+<area shape="rect" id="Node000002" href="$adxrs290_8c.html#a577b03b60bb2ad4cd1713c1bf712368c" title=" " alt="" coords="172,28,283,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="592,49,552,31,506,18,457,10,419,8,331,18,270,30,269,25,330,12,419,3,458,5,507,12,554,26,595,44"/>
+<area shape="rect" id="Node000004" href="$adxrs290_8c.html#afc1c51c64e22a51dfac92899f21609d2" title="Set the low&#45;pass filter pole location." alt="" coords="350,28,487,53"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="541,58,487,51,488,46,541,52"/>
+<area shape="rect" id="Node000005" href="$adxrs290_8c.html#aaac78320a104deec1e5b3d21fc5105d6" title="Set the low&#45;pass filter pole location." alt="" coords="352,77,485,102"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="541,78,486,85,485,79,541,73"/>
+<area shape="rect" id="Node000006" href="$adxrs290_8c.html#ab4e680182efd5eb39184ea282cf56d4d" title="Set device operation mode." alt="" coords="331,126,507,152"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="586,86,508,116,467,129,466,124,506,111,585,81"/>
+<area shape="rect" id="Node000003" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,28,124,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,43,124,43,124,38,158,38"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="336,43,283,43,283,38,336,38"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="355,76,277,56,278,51,356,71"/>
+</map>

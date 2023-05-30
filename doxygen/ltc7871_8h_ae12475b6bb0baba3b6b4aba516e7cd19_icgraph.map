@@ -1,0 +1,11 @@
+<map id="ltc7871_reset" name="ltc7871_reset">
+<area shape="rect" id="Node000001" title="Reset all R/W registers." alt="" coords="488,31,599,56"/>
+<area shape="rect" id="Node000002" href="$ltc7871_8c.html#ad5ce9787e56640bff3e5f7285411d91f" title="Initialize the LTC7871 device." alt="" coords="341,31,440,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="474,46,440,46,440,41,474,41"/>
+<area shape="rect" id="Node000003" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,5,292,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="327,36,292,30,293,25,328,31"/>
+<area shape="rect" id="Node000004" href="$iio__ltc7871_8c.html#ae6c8deb0e7a5dccf5477794210cde0b9" title="Initializes the LTC7871 IIO descriptor." alt="" coords="172,55,293,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="328,55,294,61,293,55,327,50"/>
+<area shape="rect" id="Node000005" href="$ltc7871_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

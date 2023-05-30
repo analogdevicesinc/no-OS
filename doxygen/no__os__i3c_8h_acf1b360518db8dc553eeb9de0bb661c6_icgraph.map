@@ -1,0 +1,22 @@
+<map id="no_os_i3c_send_ccc" name="no_os_i3c_send_ccc">
+<area shape="rect" id="Node000001" title="Send CCC, either to a device device or broadcast to all." alt="" coords="1047,32,1199,57"/>
+<area shape="rect" id="Node000002" href="$no__os__i3c_8c.html#a1a8b6ccd9d5a915e699054af2a8e3f68" title="Initialize the I3C bus." alt="" coords="829,7,973,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1033,37,973,30,973,25,1033,32"/>
+<area shape="rect" id="Node000008" href="$no__os__i3c_8c.html#af844a30d14706273e6a04aa6680acfa0" title="Send CCC to device device." alt="" coords="803,56,999,81"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1033,57,999,61,999,55,1033,52"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#ab54a357ab3d63706a3fbe455a4cd6fd8" title="Initialize the I3C device. If the bus of the I3C device is not initialized, it will call to init it." alt="" coords="600,5,715,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="815,22,715,21,715,16,815,16"/>
+<area shape="rect" id="Node000004" href="$ad405x_8c.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the communication device." alt="" coords="377,7,476,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="586,21,476,22,476,16,586,16"/>
+<area shape="rect" id="Node000005" href="$iio__ad405x_8c.html#a25e5b9b70c0d01d27fb470e006568145" title="Initializes the AD405X IIO driver." alt="" coords="172,7,293,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="364,22,294,22,294,17,364,17"/>
+<area shape="rect" id="Node000007" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="173,56,292,81"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="364,38,284,59,283,53,363,33"/>
+<area shape="rect" id="Node000006" href="$ad405x_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,7,124,32"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="158,22,124,22,124,17,158,17"/>
+<area shape="rect" id="Node000009" href="$ad405x_8c.html#aeaf3fd8e3afd80873cb54659913f25fb" title="Enable/disable IBI (I3C only)." alt="" coords="341,56,512,81"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="788,71,512,71,512,66,788,66"/>
+<area shape="rect" id="Node000010" href="$ad405x_8c.html#a8481a6ed3c29e82df91aab3e88b087d5" title="Test the GETBCR, GETDCR, GETPID, AND GETSTATUS CCCs (I3C only). Compare received BCR and DCR against ..." alt="" coords="560,107,755,132"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="826,87,720,109,718,104,825,82"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="327,71,292,71,292,66,327,66"/>
+</map>

@@ -1,0 +1,77 @@
+<map id="ad7124_read_register" name="ad7124_read_register">
+<area shape="rect" id="Node000001" title="Reads the value of the specified register only when the device is ready to accept user requests...." alt="" coords="1481,176,1644,201"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#a3abb8a30f36fae5240e941190d82fe97" title="Reads the conversion result from the device." alt="" coords="121,49,263,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1533,170,1488,139,1432,112,1344,84,1273,70,1200,65,1107,64,645,64,263,64,263,59,645,59,1107,59,1200,60,1274,64,1345,79,1434,107,1490,135,1536,165"/>
+<area shape="rect" id="Node000003" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,78,60,104"/>
+<area shape="poly" id="edge48_Node000001_Node000003" title=" " alt="" coords="1542,167,1496,117,1465,92,1432,71,1347,34,1275,18,1201,13,1107,14,417,14,259,8,192,15,109,39,75,58,49,80,45,76,72,54,107,34,191,9,259,3,417,8,1107,8,1201,8,1276,12,1348,29,1435,66,1469,87,1499,113,1546,163"/>
+<area shape="rect" id="Node000004" href="$ad7124_8c.html#acd614375f473525acd44a404a5b81df3" title="Wrap the read register function to give it a modern signature." alt="" coords="1020,574,1191,600"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1539,212,1435,305,1123,576,1120,572,1432,301,1535,208"/>
+<area shape="rect" id="Node000012" href="$ad7124_8c.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="135,429,249,454"/>
+<area shape="poly" id="edge35_Node000001_Node000012" title=" " alt="" coords="1467,183,1299,172,1107,166,645,166,551,162,475,161,440,165,405,175,367,192,326,217,298,240,274,268,237,329,212,387,199,430,194,428,207,386,232,326,270,264,294,236,322,213,365,187,403,170,439,160,475,156,551,157,645,160,1107,160,1300,166,1468,177"/>
+<area shape="rect" id="Node000022" href="$ad7124_8c.html#ad3a4ed97b6db61e8f13653f10cc5d8d5" title="Waits until a new conversion result is available." alt="" coords="108,99,276,139"/>
+<area shape="poly" id="edge36_Node000001_Node000022" title=" " alt="" coords="1518,173,1433,147,1342,129,1271,119,1199,116,1107,115,645,115,276,120,276,114,645,110,1107,110,1199,110,1271,114,1343,124,1434,142,1519,168"/>
+<area shape="rect" id="Node000023" href="$ad7124_8c.html#a20e8bb5e5a602c5e2fdf1d512de8d8ee" title="Waits until the device can accept read and write user actions." alt="" coords="1258,251,1414,291"/>
+<area shape="poly" id="edge38_Node000001_Node000023" title=" " alt="" coords="1537,210,1434,254,1415,260,1414,255,1432,249,1535,206"/>
+<area shape="rect" id="Node000026" href="$ad7124_8c.html#a444985647470311a6aedde23deac9655" title="Waits until the device finishes the power&#45;on reset operation." alt="" coords="1239,201,1433,226"/>
+<area shape="poly" id="edge45_Node000001_Node000026" title=" " alt="" coords="1468,202,1434,206,1433,200,1467,196"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,80,61,89,60,84,109,74"/>
+<area shape="rect" id="Node000005" href="$ad7124_8c.html#a9fbea736223fec1e93b202c56dbb5a3b" title="Get the AD7124 reference clock." alt="" coords="812,673,941,698"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1075,610,1028,638,973,664,939,676,937,670,971,659,1026,633,1072,605"/>
+<area shape="rect" id="Node000006" href="$ad7124_8c.html#a7cc1ae431c67066f1be5550672ef7885" title="Calculate ODR of the device." alt="" coords="583,673,710,698"/>
+<area shape="poly" id="edge10_Node000004_Node000006" title=" " alt="" coords="1090,613,1042,667,1010,693,973,714,934,725,894,731,854,732,813,729,740,717,683,701,684,696,741,712,814,724,854,727,894,726,933,720,971,709,1007,689,1039,663,1086,609"/>
+<area shape="rect" id="Node000007" href="$ad7124_8c.html#acd98841bac152c871f260cb3174ae727" title="Set ODR of the device." alt="" coords="584,561,709,586"/>
+<area shape="poly" id="edge34_Node000004_Node000007" title=" " alt="" coords="1033,574,972,566,902,562,831,563,710,570,709,565,831,557,902,557,972,560,1034,569"/>
+<area shape="rect" id="Node000008" href="$ad7124_8c.html#a940d43b2414328d7aee4bb6e32066d62" title="Get the filter coefficient for the sample rate." alt="" coords="805,574,948,600"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="1006,590,948,590,948,584,1006,584"/>
+<area shape="rect" id="Node000009" href="$ad7124_8c.html#a7635176c42e792c5d22874a11714eac3" title="Get the ID of the channel of the latest conversion." alt="" coords="781,624,972,649"/>
+<area shape="poly" id="edge11_Node000004_Node000009" title=" " alt="" coords="1033,605,937,626,936,621,1032,600"/>
+<area shape="rect" id="Node000010" href="$ad7124_8c.html#ae2544b0cd942ac8e851e79876438fa47" title="SPI internal register write to device using a mask." alt="" coords="560,486,733,512"/>
+<area shape="poly" id="edge12_Node000004_Node000010" title=" " alt="" coords="1059,572,971,544,847,522,733,508,734,503,848,516,973,539,1061,567"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="798,688,710,688,710,683,798,683"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="799,671,780,664,713,626,662,589,665,584,715,621,782,659,801,666"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="807,606,782,615,719,645,669,675,666,671,717,641,780,610,805,601"/>
+<area shape="poly" id="edge9_Node000008_Node000007" title=" " alt="" coords="792,585,709,580,710,575,792,580"/>
+<area shape="rect" id="Node000011" href="$ad7124_8c.html#abd2fe5b3a0cd71677213110e4ab077c0" title="Assign Setup to Channel." alt="" coords="337,516,499,541"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="547,515,500,521,499,515,546,509"/>
+<area shape="rect" id="Node000013" href="$ad7124_8c.html#affe5f35da3e9ef939acdacfc26495245" title="Set Analog Inputs to channel." alt="" coords="329,566,507,606"/>
+<area shape="poly" id="edge16_Node000010_Node000013" title=" " alt="" coords="604,520,513,556,480,568,478,563,511,551,602,515"/>
+<area shape="rect" id="Node000014" href="$ad7124_8c.html#a30ead44563e37fd120916c800cd650af" title="Enable Input Buffer." alt="" coords="331,630,505,656"/>
+<area shape="poly" id="edge18_Node000010_Node000014" title=" " alt="" coords="607,520,562,552,548,569,540,586,531,603,514,620,489,633,486,628,510,616,526,600,535,584,543,567,558,548,604,516"/>
+<area shape="rect" id="Node000015" href="$ad7124_8c.html#aaca5a4aa118c4dced73a4b1bc2d13c31" title="Set ADC Mode." alt="" coords="333,680,503,705"/>
+<area shape="poly" id="edge20_Node000010_Node000015" title=" " alt="" coords="603,520,581,534,562,552,551,567,545,582,541,612,535,641,527,656,514,670,496,682,493,677,510,666,523,653,530,639,536,611,540,581,547,564,558,548,578,530,600,516"/>
+<area shape="rect" id="Node000016" href="$ad7124_8c.html#aad4312b0661f3ac681111f29997f071d" title="Set the Magnitude of the Burnout Detect Current Source." alt="" coords="341,729,495,754"/>
+<area shape="poly" id="edge22_Node000010_Node000016" title=" " alt="" coords="601,520,580,534,562,551,549,573,543,595,542,637,539,678,530,699,514,720,497,731,494,727,510,716,526,696,534,677,536,636,538,594,544,571,558,548,577,530,598,516"/>
+<area shape="rect" id="Node000017" href="$ad7124_8c.html#a5765430a5163c6ace0cf949be9a602aa" title=" " alt="" coords="341,779,495,819"/>
+<area shape="poly" id="edge24_Node000010_Node000017" title=" " alt="" coords="600,520,579,534,562,551,546,580,540,607,542,661,543,687,542,714,533,741,514,769,497,783,494,779,510,765,528,739,536,713,538,687,536,661,535,607,542,578,558,548,576,530,597,516"/>
+<area shape="rect" id="Node000018" href="$ad7124_8c.html#a8c8e4fafca1dbc9de92e8b4b68235349" title="Select the PGA Gain." alt="" coords="354,302,482,328"/>
+<area shape="poly" id="edge26_Node000010_Node000018" title=" " alt="" coords="629,476,582,409,549,373,511,343,481,329,483,324,513,338,552,369,586,406,634,473"/>
+<area shape="rect" id="Node000019" href="$ad7124_8c.html#a07dfa5af08b9ea0b19f22af47cf540da" title="Set Polarity." alt="" coords="341,352,495,377"/>
+<area shape="poly" id="edge28_Node000010_Node000019" title=" " alt="" coords="622,479,574,435,543,412,511,392,480,380,482,375,513,387,546,407,577,430,626,475"/>
+<area shape="rect" id="Node000020" href="$ad7124_8c.html#ab9d2b0870eb98e7c9fb63ef51de76c9f" title="Select the Power Mode." alt="" coords="324,401,512,426"/>
+<area shape="poly" id="edge30_Node000010_Node000020" title=" " alt="" coords="607,483,511,442,471,429,473,424,513,437,609,478"/>
+<area shape="rect" id="Node000021" href="$ad7124_8c.html#a17bbdd99f7664d3fe5cbf2c0b16685a4" title=" " alt="" coords="335,451,501,491"/>
+<area shape="poly" id="edge32_Node000010_Node000021" title=" " alt="" coords="546,489,501,484,502,479,547,484"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="350,514,323,506,265,481,216,457,219,452,267,476,325,501,351,509"/>
+<area shape="poly" id="edge15_Node000012_Node000003" title=" " alt="" coords="177,417,37,105,42,103,182,415"/>
+<area shape="poly" id="edge17_Node000013_Node000012" title=" " alt="" coords="335,562,323,556,286,532,252,504,203,457,207,453,256,500,289,527,325,551,337,558"/>
+<area shape="poly" id="edge19_Node000014_Node000012" title=" " alt="" coords="335,627,322,620,278,580,241,533,214,489,197,456,202,453,218,486,245,530,281,576,326,616,338,623"/>
+<area shape="poly" id="edge21_Node000015_Node000012" title=" " alt="" coords="330,676,322,671,295,646,271,618,234,556,208,498,194,456,199,454,213,496,239,553,276,615,299,642,326,666,333,671"/>
+<area shape="poly" id="edge23_Node000016_Node000012" title=" " alt="" coords="329,725,322,720,291,689,266,653,244,615,227,576,204,505,193,455,198,454,209,503,232,574,249,613,270,651,295,686,326,716,332,720"/>
+<area shape="poly" id="edge25_Node000017_Node000012" title=" " alt="" coords="328,774,322,769,289,731,262,688,240,642,223,596,201,512,192,456,197,455,207,511,228,594,245,640,266,685,293,728,326,765,331,770"/>
+<area shape="poly" id="edge27_Node000018_Node000012" title=" " alt="" coords="345,335,325,343,290,364,257,388,208,431,204,427,254,384,287,359,323,338,342,330"/>
+<area shape="poly" id="edge29_Node000019_Node000012" title=" " alt="" coords="354,383,325,392,224,432,222,427,323,387,352,378"/>
+<area shape="poly" id="edge31_Node000020_Node000012" title=" " alt="" coords="310,430,249,437,249,432,310,424"/>
+<area shape="poly" id="edge33_Node000021_Node000012" title=" " alt="" coords="320,461,248,452,249,446,321,456"/>
+<area shape="poly" id="edge37_Node000022_Node000003" title=" " alt="" coords="94,105,60,98,61,93,95,99"/>
+<area shape="poly" id="edge39_Node000023_Node000001" title=" " alt="" coords="1380,244,1432,225,1501,199,1503,204,1434,230,1381,249"/>
+<area shape="rect" id="Node000024" href="$ad7124_8c.html#ac5e212d9f95ee1f963ef4ad7d9e7fe0f" title="Writes the value of the specified register only when the device is ready to accept user requests...." alt="" coords="1022,258,1189,284"/>
+<area shape="poly" id="edge40_Node000023_Node000024" title=" " alt="" coords="1244,274,1189,274,1189,268,1244,268"/>
+<area shape="poly" id="edge41_Node000024_Node000012" title=" " alt="" coords="1007,267,841,258,642,255,545,258,456,264,381,276,325,294,303,307,282,323,246,361,219,400,202,430,197,428,215,397,242,358,278,319,300,302,323,289,379,271,455,259,544,252,642,250,841,253,1008,261"/>
+<area shape="rect" id="Node000025" href="$ad7124_8c.html#ab2edd92df4caf38e40c80e97c9d9bd95" title="Wrap the write register function to give it a modern signature." alt="" coords="789,422,964,448"/>
+<area shape="poly" id="edge42_Node000024_Node000025" title=" " alt="" coords="1077,294,897,424,894,420,1074,290"/>
+<area shape="poly" id="edge44_Node000025_Node000007" title=" " alt="" coords="845,458,735,527,672,563,669,559,732,522,843,453"/>
+<area shape="poly" id="edge43_Node000025_Node000010" title=" " alt="" coords="818,454,694,489,693,484,816,449"/>
+<area shape="rect" id="Node000027" href="$ad7124_8c.html#abb99194477f1f288b13842d42dfb60bd" title="Resets the device." alt="" coords="1050,201,1161,226"/>
+<area shape="poly" id="edge46_Node000026_Node000027" title=" " alt="" coords="1225,216,1161,216,1161,211,1225,211"/>
+<area shape="poly" id="edge47_Node000027_Node000012" title=" " alt="" coords="1036,212,872,206,663,206,558,210,463,220,383,235,351,246,325,257,300,275,278,296,241,346,216,394,200,430,195,428,211,392,237,343,274,293,297,271,323,253,349,241,382,230,462,215,558,205,663,200,872,201,1037,207"/>
+</map>

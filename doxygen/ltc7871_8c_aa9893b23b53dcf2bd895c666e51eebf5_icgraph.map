@@ -1,0 +1,5 @@
+<map id="ltc7871_get_mfr_idac_vlow" name="ltc7871_get_mfr_idac_vlow">
+<area shape="rect" id="Node000001" title="get the current DAC value to program the VLOW voltage." alt="" coords="172,5,372,31"/>
+<area shape="rect" id="Node000002" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,21,124,21,124,15,159,15"/>
+</map>

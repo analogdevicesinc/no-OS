@@ -1,0 +1,89 @@
+<map id="ad74413r_iio_desc" name="ad74413r_iio_desc">
+<area shape="rect" id="Node000001" title="Descriptor that stores a iio specific state." alt="" coords="2175,289,2317,315"/>
+<area shape="rect" id="Node000002" href="$structad74413r__desc.html" title="AD74413r device descriptor." alt="" coords="1835,135,1955,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1969,148,2059,162,2107,176,2152,197,2181,218,2205,243,2239,288,2235,291,2201,246,2177,222,2149,202,2105,181,2058,167,1968,153"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="1495,117,1617,143"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1631,131,1834,142,1834,147,1631,136"/>
+<area shape="poly" id="edge7_Node000003_Node000003" title=" " alt="" coords="1523,103,1533,94,1556,91,1575,93,1587,99,1591,109,1585,119,1580,116,1585,108,1583,103,1574,98,1556,96,1535,99,1526,107"/>
+<area shape="rect" id="Node000004" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="1137,120,1283,145"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1297,129,1494,128,1494,133,1297,135"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="784,151,963,176"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="977,165,1116,169,1210,172,1304,169,1405,156,1494,140,1495,145,1405,161,1304,174,1210,177,1116,174,977,170"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="976,151,1136,137,1137,142,977,157"/>
+<area shape="rect" id="Node000006" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="1135,55,1285,95"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="1299,86,1439,109,1495,118,1494,123,1438,114,1298,92"/>
+<area shape="rect" id="Node000007" href="$structad74413r__channel__config.html" title="Device channel state." alt="" coords="1463,177,1649,203"/>
+<area shape="poly" id="edge19_Node000001_Node000007" title=" " alt="" coords="1663,202,1888,235,2151,279,2188,287,2187,292,2150,285,1887,241,1663,207"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="1663,174,1782,159,1834,153,1835,158,1783,165,1663,180"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="1490,19,1622,44"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="1608,46,1857,132,1856,137,1607,51"/>
+<area shape="rect" id="Node000009" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="1116,5,1304,31"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="1318,19,1490,26,1490,31,1317,25"/>
+<area shape="rect" id="Node000010" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="829,341,917,367"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="931,351,1209,351,1896,351,1977,347,2058,337,2192,312,2193,317,2059,343,1978,353,1896,357,1209,357,931,357"/>
+<area shape="rect" id="Node000026" href="$structiio__dev__priv.html" title="Links a physical device instance &quot;void *dev_instance&quot; with a &quot;iio_device *iio&quot; that describes capabil..." alt="" coords="1159,575,1261,600"/>
+<area shape="poly" id="edge37_Node000026_Node000010" title=" " alt="" coords="899,375,941,415,992,457,1097,525,1184,572,1182,577,1094,529,989,461,938,419,896,379"/>
+<area shape="rect" id="Node000011" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="511,237,661,263"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="636,265,838,339,836,344,634,270"/>
+<area shape="rect" id="Node000017" href="$structiio__hw__trig.html" title="IIO hardware trigger structure." alt="" coords="1848,289,1941,315"/>
+<area shape="poly" id="edge47_Node000017_Node000011" title=" " alt="" coords="675,248,872,249,1557,249,1638,253,1718,263,1848,288,1847,293,1717,268,1638,258,1557,254,872,254,675,253"/>
+<area shape="rect" id="Node000012" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="193,237,371,263"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="385,247,511,247,511,253,385,253"/>
+<area shape="rect" id="Node000013" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="538,443,634,468"/>
+<area shape="poly" id="edge14_Node000010_Node000013" title=" " alt="" coords="648,460,701,459,729,455,755,448,788,430,818,408,860,365,864,369,821,412,791,435,757,452,730,460,702,465,648,465"/>
+<area shape="rect" id="Node000014" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="226,441,338,467"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="352,452,395,453,538,453,538,458,395,458,352,458"/>
+<area shape="rect" id="Node000015" href="$structscan__type.html" title=" " alt="" coords="238,491,326,516"/>
+<area shape="poly" id="edge16_Node000013_Node000015" title=" " alt="" coords="339,494,485,473,537,463,538,468,486,478,340,499"/>
+<area shape="rect" id="Node000016" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="231,353,333,379"/>
+<area shape="poly" id="edge18_Node000010_Node000016" title=" " alt="" coords="346,357,395,354,641,349,829,350,829,356,641,354,395,359,347,362"/>
+<area shape="poly" id="edge17_Node000013_Node000016" title=" " alt="" coords="332,381,395,402,539,441,537,446,394,407,330,386"/>
+<area shape="rect" id="Node000034" href="$structiio__trigger.html" title=" " alt="" coords="542,384,630,409"/>
+<area shape="poly" id="edge43_Node000034_Node000016" title=" " alt="" coords="347,370,542,390,541,395,346,375"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="1955,299,2174,299,2174,305,1955,305"/>
+<area shape="rect" id="Node000018" href="$structiio__desc.html" title=" " alt="" coords="1519,549,1593,575"/>
+<area shape="poly" id="edge21_Node000017_Node000018" title=" " alt="" coords="1583,539,1875,313,1878,317,1587,543"/>
+<area shape="rect" id="Node000019" href="$structiiod__desc.html" title=" " alt="" coords="1169,771,1251,796"/>
+<area shape="poly" id="edge22_Node000018_Node000019" title=" " alt="" coords="1265,787,1306,787,1351,783,1396,773,1437,753,1461,734,1481,712,1514,661,1536,611,1549,574,1554,576,1541,613,1519,663,1486,715,1464,738,1440,758,1398,778,1351,789,1306,793,1265,792"/>
+<area shape="rect" id="Node000020" href="$structiiod__conn__priv.html" title=" " alt="" coords="815,789,931,815"/>
+<area shape="poly" id="edge23_Node000019_Node000020" title=" " alt="" coords="945,801,1092,798,1168,788,1169,793,1092,803,945,807"/>
+<area shape="rect" id="Node000021" href="$structcomand__desc.html" title=" " alt="" coords="531,737,641,763"/>
+<area shape="poly" id="edge24_Node000020_Node000021" title=" " alt="" coords="655,760,816,789,815,794,654,765"/>
+<area shape="rect" id="Node000022" href="$structiiod__run__cmd__result.html" title=" " alt="" coords="509,851,663,876"/>
+<area shape="poly" id="edge25_Node000020_Node000022" title=" " alt="" coords="676,848,755,833,831,812,833,817,757,838,677,853"/>
+<area shape="rect" id="Node000023" href="$structiiod__buff.html" title=" " alt="" coords="243,813,321,839"/>
+<area shape="poly" id="edge27_Node000020_Node000023" title=" " alt="" coords="335,821,395,818,815,801,815,807,395,823,335,826"/>
+<area shape="poly" id="edge26_Node000022_Node000023" title=" " alt="" coords="335,830,510,851,509,857,335,835"/>
+<area shape="rect" id="Node000024" href="$structiiod__ops.html" title=" " alt="" coords="835,737,911,763"/>
+<area shape="poly" id="edge29_Node000018_Node000024" title=" " alt="" coords="925,743,1124,720,1228,706,1303,690,1343,677,1372,664,1437,628,1533,573,1535,577,1440,632,1374,668,1345,682,1305,695,1229,711,1125,726,925,748"/>
+<area shape="poly" id="edge28_Node000019_Node000024" title=" " alt="" coords="925,752,1169,777,1168,782,925,758"/>
+<area shape="rect" id="Node000025" href="$structiio__ctx__attr.html" title="Structure holding the context attribute members." alt="" coords="1163,411,1257,436"/>
+<area shape="poly" id="edge30_Node000018_Node000025" title=" " alt="" coords="1271,420,1353,428,1398,438,1440,454,1474,475,1504,501,1547,547,1543,551,1501,504,1471,479,1438,459,1396,444,1352,434,1271,425"/>
+<area shape="poly" id="edge31_Node000018_Node000026" title=" " alt="" coords="1274,580,1518,562,1518,567,1275,585"/>
+<area shape="rect" id="Node000027" href="$structiio__device__data.html" title=" " alt="" coords="811,635,935,660"/>
+<area shape="poly" id="edge32_Node000026_Node000027" title=" " alt="" coords="949,635,1092,611,1158,597,1159,602,1092,617,949,640"/>
+<area shape="rect" id="Node000028" href="$structiio__buffer.html" title=" " alt="" coords="545,647,627,672"/>
+<area shape="poly" id="edge33_Node000027_Node000028" title=" " alt="" coords="641,662,687,665,756,665,810,657,811,663,756,670,687,670,641,667"/>
+<area shape="rect" id="Node000032" href="$structiio__buffer__priv.html" title=" " alt="" coords="816,585,931,611"/>
+<area shape="poly" id="edge39_Node000032_Node000028" title=" " alt="" coords="640,645,815,607,816,613,641,650"/>
+<area shape="rect" id="Node000029" href="$structno__os__circular__buffer.html" title="Circular buffer descriptor." alt="" coords="202,576,362,601"/>
+<area shape="poly" id="edge46_Node000018_Node000029" title=" " alt="" coords="362,571,526,547,623,538,720,534,1211,534,1384,542,1519,555,1518,560,1384,547,1211,539,720,539,624,543,527,552,363,576"/>
+<area shape="poly" id="edge34_Node000028_Node000029" title=" " alt="" coords="336,603,395,619,545,650,544,655,394,625,335,608"/>
+<area shape="poly" id="edge40_Node000032_Node000029" title=" " alt="" coords="376,587,816,594,816,600,376,593"/>
+<area shape="rect" id="Node000030" href="$structno__os__cb__ptr.html" title="Circular buffer pointer." alt="" coords="5,576,112,601"/>
+<area shape="poly" id="edge35_Node000029_Node000030" title=" " alt="" coords="126,586,202,586,202,591,126,591"/>
+<area shape="rect" id="Node000031" href="$structiio__cyclic__buffer__info.html" title=" " alt="" coords="203,656,361,681"/>
+<area shape="poly" id="edge36_Node000028_Node000031" title=" " alt="" coords="375,667,485,665,544,661,545,666,485,670,375,672"/>
+<area shape="poly" id="edge38_Node000026_Node000032" title=" " alt="" coords="945,593,1159,586,1159,592,945,598"/>
+<area shape="rect" id="Node000033" href="$structiio__trig__priv.html" title="Links a physical trigger instance &quot;void *instance&quot; with a &quot;iio_trigger *descriptor&quot; that describes ca..." alt="" coords="992,407,1091,432"/>
+<area shape="poly" id="edge41_Node000018_Node000033" title=" " alt="" coords="1092,436,1094,437,1106,450,1117,461,1162,481,1202,492,1238,497,1273,499,1347,500,1390,505,1439,515,1527,547,1525,552,1438,521,1389,510,1347,505,1273,504,1238,503,1201,497,1160,486,1115,466,1102,454,1090,441,1089,441"/>
+<area shape="poly" id="edge42_Node000033_Node000034" title=" " alt="" coords="644,397,992,414,992,420,644,402"/>
+<area shape="rect" id="Node000035" href="$structno__os__uart__desc.html" title="Stucture holding the UART descriptor." alt="" coords="1145,640,1275,665"/>
+<area shape="poly" id="edge44_Node000018_Node000035" title=" " alt="" coords="1281,634,1438,595,1518,571,1519,577,1439,601,1283,639"/>
+<area shape="rect" id="Node000036" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="780,684,967,709"/>
+<area shape="poly" id="edge45_Node000035_Node000036" title=" " alt="" coords="980,687,1092,674,1153,663,1154,668,1092,679,981,692"/>
+<area shape="rect" id="Node000037" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="1477,289,1635,315"/>
+<area shape="poly" id="edge48_Node000017_Node000037" title=" " alt="" coords="1649,299,1848,299,1848,305,1649,305"/>
+<area shape="rect" id="Node000038" href="$structad74413r__diag__channel__config.html" title="Diagnostics channel state." alt="" coords="1807,391,1983,431"/>
+<area shape="poly" id="edge49_Node000001_Node000038" title=" " alt="" coords="1996,414,2073,407,2112,398,2150,385,2176,370,2199,351,2233,313,2237,317,2203,354,2179,374,2152,390,2114,403,2074,412,1997,419"/>
+</map>

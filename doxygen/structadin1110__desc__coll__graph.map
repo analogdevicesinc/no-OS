@@ -1,0 +1,24 @@
+<map id="adin1110_desc" name="adin1110_desc">
+<area shape="rect" id="Node000001" title="ADIN1110 device descriptor." alt="" coords="1260,149,1379,174"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,147,786,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="800,157,1260,159,1260,164,800,163"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="691,133,701,124,725,121,744,123,756,129,760,139,754,149,749,146,754,138,752,133,743,128,725,126,703,129,694,137"/>
+<area shape="rect" id="Node000008" href="$structoa__tc6__desc.html" title="Holds the frame buffers and the communication descriptor for the OA TC6 driver." alt="" coords="1025,78,1128,103"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="799,143,1025,98,1026,103,800,148"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,147,471,173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="484,157,663,157,663,163,484,163"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,117,184,142"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,119,208,119,320,116,408,118,607,137,663,146,663,151,606,143,408,123,320,121,208,124,198,124"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,137,324,150,324,155,198,142"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,197,472,237"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="485,199,663,168,663,173,486,205"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="1011,210,1143,235"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="1156,220,1196,216,1235,207,1271,191,1300,172,1303,176,1273,195,1237,212,1197,221,1157,226"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,210,819,235"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="832,220,1010,220,1010,225,832,225"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="1135,105,1276,146,1274,151,1134,110"/>
+<area shape="rect" id="Node000009" href="$structoa__tc6__frame__buffer.html" title="Stores an Ethernet frame along with metadata needed for parsing. The MAC driver or the user applicati..." alt="" coords="647,10,803,35"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="817,28,900,39,987,56,1046,75,1044,80,986,61,900,44,817,33"/>
+<area shape="rect" id="Node000010" href="$structoa__tc6__flags.html" title="Stores the status flags which are provided as part of the footer during data transfers...." alt="" coords="673,59,776,85"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="790,73,1025,85,1025,91,789,78"/>
+</map>

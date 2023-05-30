@@ -1,0 +1,7 @@
+<map id="ad405x_get_raw" name="ad405x_get_raw">
+<area shape="rect" id="Node000001" title="Get raw ADC reading." alt="" coords="348,5,477,31"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#a8bb3fbfe0689fcc0f3beb4ddb2a7c3c0" title="Get formatted ADC reading. If gp0 is set as data ready, will be used to delay the acquisition until t..." alt="" coords="172,5,300,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="334,21,301,21,301,15,334,15"/>
+<area shape="rect" id="Node000003" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>
