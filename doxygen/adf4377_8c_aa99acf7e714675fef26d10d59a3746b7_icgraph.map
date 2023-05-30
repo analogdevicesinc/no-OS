@@ -1,0 +1,11 @@
+<map id="adf4377_spi_update_bit" name="adf4377_spi_update_bit">
+<area shape="rect" id="node1" title="Update ADF4377 register." alt="" coords="252,187,429,213"/>
+<area shape="rect" id="node2" href="$adf4377_8h.html#af78d51afb9eb08b039e13dea5b2313f8" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="13,5,197,32"/>
+<area shape="rect" id="node3" href="$adf4377_8h.html#a707fa9b96d7b81b1dd9edf1d01f17003" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="37,56,172,83"/>
+<area shape="rect" id="node4" href="$adf4377_8h.html#abac8fcaff324082a34e0995424ba6e80" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="23,107,186,133"/>
+<area shape="rect" id="node5" href="$adf4377_8h.html#ac0fc8009d3ddee10fa49575483939fb6" title="Set the value of SR_INV_ADJ Adjustment to enable or disable which adds a constant value to the skew a..." alt="" coords="5,157,204,184"/>
+<area shape="rect" id="node6" href="$adf4377_8h.html#a7bdaea992998a0dcd0b5cc74a2813702" title="Set enable/disable sysref monitoring." alt="" coords="19,209,191,250"/>
+<area shape="rect" id="node7" href="$adf4377_8h.html#a6572366719abe30d6cba9e8424a17d04" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="16,275,193,301"/>
+<area shape="rect" id="node8" href="$adf4377_8h.html#a2e743cba2e09dce1b3f1199dfccebf12" title="Set the rfout frequency divider register value and reset everything over to maximum supported value o..." alt="" coords="9,325,201,352"/>
+<area shape="rect" id="node9" href="$adf4377_8h.html#a6ce1ab807906005c953dc7013ac03dc2" title="Set the value of SR_DEL Adjustment Feature Translated to Pico Seconds on the output...." alt="" coords="17,376,192,403"/>
+</map>

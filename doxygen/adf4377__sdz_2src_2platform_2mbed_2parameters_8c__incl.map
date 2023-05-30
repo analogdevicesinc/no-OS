@@ -1,0 +1,16 @@
+<map id="projects/adf4377_sdz/src/platform/mbed/parameters.c" name="projects/adf4377_sdz/src/platform/mbed/parameters.c">
+<area shape="rect" id="node1" title="Definition of Mbed platform data used by adf4377 project." alt="" coords="327,5,563,47"/>
+<area shape="rect" id="node2" href="$adf4377__sdz_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by adf4377 project." alt="" coords="319,95,429,121"/>
+<area shape="rect" id="node14" title=" " alt="" coords="453,95,580,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,105,196"/>
+<area shape="rect" id="node4" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="130,169,234,196"/>
+<area shape="rect" id="node7" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="389,169,487,196"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="511,169,616,196"/>
+<area shape="rect" id="node12" href="$mbed__gpio_8h.html" title="Header containing extra types required for GPIO interface." alt="" coords="258,169,365,196"/>
+<area shape="rect" id="node13" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="691,244,798,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="278,244,345,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="379,319,462,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="619,319,689,345"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="483,244,617,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="515,319,585,345"/>
+</map>

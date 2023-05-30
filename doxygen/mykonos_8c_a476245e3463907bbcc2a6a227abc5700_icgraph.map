@@ -1,0 +1,4 @@
+<map id="MYKONOS_setDefaultObsRxPath" name="MYKONOS_setDefaultObsRxPath">
+<area shape="rect" id="node1" title="Sets the default Obs Rx channel to enter when device moves from radioOff to radioOn." alt="" coords="279,5,512,32"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="5,5,231,32"/>
+</map>

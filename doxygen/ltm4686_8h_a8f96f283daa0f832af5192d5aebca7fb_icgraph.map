@@ -1,0 +1,8 @@
+<map id="ltm4686_write_word_data" name="ltm4686_write_word_data">
+<area shape="rect" id="node1" title="Converts value to register data and do PMBus write word operation." alt="" coords="219,107,409,133"/>
+<area shape="rect" id="node2" href="$ltm4686_8h.html#adcd418b520d8f121977b500e2aa1d913" title="Set timing values." alt="" coords="12,5,164,32"/>
+<area shape="rect" id="node3" href="$ltm4686_8h.html#a77908151239205b389786e6286619937" title="Set input voltage window at which power conversion will proceed." alt="" coords="23,56,153,83"/>
+<area shape="rect" id="node4" href="$ltm4686_8h.html#acca230c7b546f8c032601bbc0ca407a6" title="Set output voltage margin." alt="" coords="5,107,171,133"/>
+<area shape="rect" id="node5" href="$ltm4686_8h.html#a303213529cf5be0b6eaef00dd9338d61" title="Set output voltage transition rate." alt="" coords="23,157,153,184"/>
+<area shape="rect" id="node6" href="$ltm4686_8h.html#aef661dbab0ec14fa13df72d60c1194f2" title="Set output voltage and its upper limit." alt="" coords="11,208,165,235"/>
+</map>

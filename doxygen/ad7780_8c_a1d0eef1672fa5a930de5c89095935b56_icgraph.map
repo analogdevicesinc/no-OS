@@ -1,0 +1,4 @@
+<map id="ad7780_read_sample" name="ad7780_read_sample">
+<area shape="rect" id="node1" title="Reads a 24&#45;bit sample from the ADC." alt="" coords="152,5,313,32"/>
+<area shape="rect" id="node2" href="$ad7780_8h.html#a99d2f22538499f3f242a5c1a52febbd0" title="Initializes the communication peripheral and the initial Values for AD7780 Board and checks if the de..." alt="" coords="5,5,104,32"/>
+</map>

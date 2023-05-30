@@ -1,0 +1,8 @@
+<map id="ade9078_read" name="ade9078_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="341,81,456,108"/>
+<area shape="rect" id="node2" href="$ade9078_8h.html#a931924188e37d8aa33894edabc5e2d93" title="Get interrupt indicator from STATUS0 register." alt="" coords="108,5,293,32"/>
+<area shape="rect" id="node3" href="$ade9078_8h.html#a8022352cf4bb624601de9480cef79046" title="Initialize the device." alt="" coords="147,56,254,83"/>
+<area shape="rect" id="node5" href="$ade9078_8h.html#a6f6c51101e532b2b81a58de6f9bbc3bf" title="Read the power/energy for specific phase." alt="" coords="114,107,287,133"/>
+<area shape="rect" id="node6" href="$ade9078_8h.html#ac4fca029b9c837fa531000780df18236" title="Update specific register bits." alt="" coords="120,157,281,184"/>
+<area shape="rect" id="node4" href="$eval-ade9078_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,81,60,108"/>
+</map>

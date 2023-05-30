@@ -1,0 +1,5 @@
+<map id="lt8722_packet" name="lt8722_packet">
+<area shape="rect" id="node1" title="LT8722 packet structure." alt="" coords="62,95,175,121"/>
+<area shape="rect" id="node2" href="$structlt8722__reg.html" title="LT8722 register structure." alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node3" href="$structlt8722__command.html" title="LT8722 command structure." alt="" coords="121,5,255,32"/>
+</map>

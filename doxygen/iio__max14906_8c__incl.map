@@ -1,0 +1,23 @@
+<map id="drivers/digital&#45;io/max149x6/iio_max14906.c" name="drivers/digital&#45;io/max149x6/iio_max14906.c">
+<area shape="rect" id="node1" title="Source file of IIO MAX14906 Driver." alt="" coords="220,5,422,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="88,393,159,420"/>
+<area shape="rect" id="node3" title=" " alt="" coords="116,169,182,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="510,95,580,121"/>
+<area shape="rect" id="node5" href="$no__os__alloc_8h.html" title=" " alt="" coords="44,95,155,121"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="605,95,714,121"/>
+<area shape="rect" id="node8" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="739,95,850,121"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="119,319,219,345"/>
+<area shape="rect" id="node12" href="$max14906_8h.html" title="Header file of MAX14906 Driver." alt="" coords="399,169,502,196"/>
+<area shape="rect" id="node16" href="$iio__max14906_8h.html" title="Header file of MAX14906 IIO Driver." alt="" coords="359,95,486,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1356,169,1424,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="786,393,856,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="317,393,400,420"/>
+<area shape="rect" id="node13" href="$max149x6-base_8h.html" title="Header file of MAX149X6 Base Driver." alt="" coords="394,244,533,271"/>
+<area shape="rect" id="node14" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="705,319,812,345"/>
+<area shape="rect" id="node15" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="836,319,934,345"/>
+<area shape="rect" id="node17" href="$iio_8h.html" title="Header file of iio." alt="" coords="592,169,642,196"/>
+<area shape="rect" id="node18" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="1054,244,1148,271"/>
+<area shape="rect" id="node20" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="564,244,670,271"/>
+<area shape="rect" id="node19" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="1060,319,1230,345"/>
+<area shape="rect" id="node21" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="396,319,529,345"/>
+</map>

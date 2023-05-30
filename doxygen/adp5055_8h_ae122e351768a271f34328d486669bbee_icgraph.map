@@ -1,0 +1,8 @@
+<map id="adp5055_read" name="adp5055_read">
+<area shape="rect" id="node1" title="Read data from ADP5055." alt="" coords="389,122,504,149"/>
+<area shape="rect" id="node2" href="$adp5055_8h.html#aa8cce68657104326a6d9ffbb8045363f" title="Reads the latched status of a specified channel." alt="" coords="172,5,341,47"/>
+<area shape="rect" id="node3" href="$adp5055_8h.html#a89ef478f678c7091ac27ce677adcfc8b" title="Reads real&#45;time power good status of specified channel." alt="" coords="188,71,325,98"/>
+<area shape="rect" id="node4" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,122,124,149"/>
+<area shape="rect" id="node5" href="$adp5055_8h.html#a43bcea1b1207fcbf1f9fa950d2b9d817" title="Read statuses." alt="" coords="176,173,337,199"/>
+<area shape="rect" id="node6" href="$adp5055_8h.html#a59e199bf3b4bec1a27f7cfb487b1dbd1" title="Sets both enable and disable delay per channel." alt="" coords="179,224,335,265"/>
+</map>

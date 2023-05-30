@@ -1,0 +1,20 @@
+<map id="ltc4296_get_port_addr" name="ltc4296_get_port_addr">
+<area shape="rect" id="node1" title="Get port address." alt="" coords="489,399,656,425"/>
+<area shape="rect" id="node2" href="$ltc4296_8h.html#ae589e14e837a59ca341c89708da399a1" title="Clear Port Events." alt="" coords="268,326,411,367"/>
+<area shape="rect" id="node4" href="$ltc4296_8h.html#a43e962728bfabf996f827ce0811750e8" title="Force port to power mode." alt="" coords="252,56,427,83"/>
+<area shape="rect" id="node5" href="$ltc4296_8h.html#ae0e18841aa4ef7c903152e5ffebd870d" title="Check if port delivers power." alt="" coords="237,107,441,133"/>
+<area shape="rect" id="node6" href="$ltc4296_8h.html#a68dc7b815f38b9ddb10bffbdce77157b" title="Check if port is enabled/disabled." alt="" coords="248,157,431,184"/>
+<area shape="rect" id="node7" href="$ltc4296_8h.html#aae2f7be3806f511565ca316675606611" title="Check if port has stable power." alt="" coords="263,209,415,250"/>
+<area shape="rect" id="node8" href="$ltc4296_8h.html#add5337ca7937c1c999a6cb6cd442e085" title="Check if port is disabled." alt="" coords="261,275,418,301"/>
+<area shape="rect" id="node9" href="$ltc4296_8h.html#a6906acd8493f785d8f983dc4c47033cc" title="Enable specific port." alt="" coords="276,457,403,484"/>
+<area shape="rect" id="node11" href="$ltc4296_8h.html#aa68f91f1a7e08c29a12a525aada778f3" title="Enable specific port and classify." alt="" coords="261,391,418,433"/>
+<area shape="rect" id="node12" href="$ltc4296_8h.html#af4b3d0eaa0f53c41eef4ca623168ea10" title="Stimulate valid wake&#45;up signature for a port." alt="" coords="260,609,419,636"/>
+<area shape="rect" id="node13" href="$ltc4296_8h.html#a50a6a88e46753fa6b57624cfeab9b68b" title="Set port is able to source power." alt="" coords="239,508,440,535"/>
+<area shape="rect" id="node14" href="$ltc4296_8h.html#a1533917b5444d70dfe5ddbebabd9263f" title="Read port ADC." alt="" coords="255,559,424,585"/>
+<area shape="rect" id="node15" href="$ltc4296_8h.html#a14c1fffa9e4fea0e1a22da27726b96b5" title="Read Port Events." alt="" coords="244,5,435,32"/>
+<area shape="rect" id="node16" href="$ltc4296_8h.html#acaa8782a7cd5abd6c4b497c3b3c22bbc" title="Read Port Status." alt="" coords="246,660,433,687"/>
+<area shape="rect" id="node17" href="$ltc4296_8h.html#a52398fe331e6ee75a2e2b578562118bd" title="Set port to maintain full voltage signature." alt="" coords="254,711,425,737"/>
+<area shape="rect" id="node18" href="$ltc4296_8h.html#aaac62d33fbc481b7c7502dff3ec8cb1e" title="Set port to power mode." alt="" coords="259,761,420,788"/>
+<area shape="rect" id="node3" href="$ltc4296_8c.html#a135395f045d8588e52cac9d85c3f80f4" title="Check port events." alt="" coords="5,169,189,196"/>
+<area shape="rect" id="node10" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="17,533,177,560"/>
+</map>

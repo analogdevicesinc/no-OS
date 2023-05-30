@@ -1,0 +1,6 @@
+<map id="ad7799_dev_ready" name="ad7799_dev_ready">
+<area shape="rect" id="node1" title="Read the /RDY bit of status register and check the status of the device." alt="" coords="611,5,756,32"/>
+<area shape="rect" id="node2" href="$ad7799_8h.html#a078b67608f7960dbe19be8d97cd2dea3" title="Read specific ADC channel." alt="" coords="217,5,373,32"/>
+<area shape="rect" id="node4" href="$ad7799_8h.html#a424e4b340124d033e7590e04ddff1f42" title="Set the device mode." alt="" coords="421,31,563,57"/>
+<area shape="rect" id="node3" href="$ad7799_8h.html#a9d4023bec85661f9d865525d3f311a6b" title="Read data from specific ADC channel with specified precision." alt="" coords="5,5,169,32"/>
+</map>

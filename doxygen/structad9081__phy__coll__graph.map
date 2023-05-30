@@ -1,0 +1,17 @@
+<map id="ad9081_phy" name="ad9081_phy">
+<area shape="rect" id="node1" title=" " alt="" coords="988,239,1089,265"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="683,143,805,169"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,128,184,155"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,69,490,96"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,121,491,162"/>
+<area shape="rect" id="node6" href="$structno__os__clk.html" title=" " alt="" coords="701,25,787,52"/>
+<area shape="rect" id="node7" href="$structno__os__clk__hw.html" title=" " alt="" coords="983,5,1095,32"/>
+<area shape="rect" id="node8" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="355,19,478,45"/>
+<area shape="rect" id="node9" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="5,19,184,45"/>
+<area shape="rect" id="node10" href="$structdac__settings__cache.html" title=" " alt="" coords="669,349,819,376"/>
+<area shape="rect" id="node11" href="$structad9081__jesd__link.html" title=" " alt="" coords="677,243,811,269"/>
+<area shape="rect" id="node12" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="365,249,469,276"/>
+<area shape="rect" id="node13" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="35,249,155,276"/>
+<area shape="rect" id="node14" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="678,299,810,325"/>
+<area shape="rect" id="node15" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,300,511,327"/>
+</map>

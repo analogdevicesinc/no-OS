@@ -1,0 +1,19 @@
+<map id="adf4368_spi_update_bits" name="adf4368_spi_update_bits">
+<area shape="rect" id="node1" title="Updates the values of the ADF4368 register." alt="" coords="617,233,801,260"/>
+<area shape="rect" id="node2" href="$adf4368_8h.html#a4a46f0bce7dfc1ea2f6157f5fe03d979" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="380,5,564,32"/>
+<area shape="rect" id="node3" href="$adf4368_8h.html#afb077cc4deb4aca4d3fe320bd12e43f7" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="405,56,539,83"/>
+<area shape="rect" id="node4" href="$adf4368_8h.html#a91bf98deecf19618a2157b56155f2d1b" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="391,107,553,133"/>
+<area shape="rect" id="node5" href="$adf4368_8h.html#a90278d96302d117a57a601fc9059dfaf" title="Set the output frequency." alt="" coords="405,157,539,184"/>
+<area shape="rect" id="node11" href="$adf4368_8h.html#aedfe9504e4e9acdb1f343708595efb6b" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="383,208,561,235"/>
+<area shape="rect" id="node12" href="$adf4368_8h.html#aa0d582003e26d625dde760d8ff16763d" title="Set the phase adjustment in femto&#45;seconds. The phase adjust will enable the Bleed current...." alt="" coords="375,259,569,285"/>
+<area shape="rect" id="node14" href="$adf4368_8h.html#af80752ab0abb00fa4262fbbe12785513" title="Set the phase adjustment in femto&#45;seconds with Sigma Delta Modulation. This approach only support MAX..." alt="" coords="381,309,563,336"/>
+<area shape="rect" id="node15" href="$adf4368_8h.html#a65594d5bca3197ba57fc6bf9e6e9862c" title="Set Software SYNC Request. Setting SW_SYNC resets the RF block. Clearing SW_SYNC makes ready for a ne..." alt="" coords="390,360,554,387"/>
+<area shape="rect" id="node16" href="$adf4368_8h.html#a3cd3076244ce6515331020999ea8936b" title="Set EZSYNC and Timed SYNC features&#39; initial state. Waits for SW_SYNC toggle or SYNC pin." alt="" coords="381,411,563,437"/>
+<area shape="rect" id="node17" href="$adf4368_8h.html#a0f7c2b247f2db962f504a7ad867d3240" title="Set Temperature Readback feature&#39;s initial state. This feature should be disabled after reading tempe..." alt="" coords="377,461,567,488"/>
+<area shape="rect" id="node6" href="$adf4368_8h.html#ae0411e5c2e9caa1c428e64e12a69931c" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="174,66,325,107"/>
+<area shape="rect" id="node7" href="$adf4368_8h.html#a490f37ba07ae0bbe064e5a8e55d9146a" title="Set the desired reference frequency and reset everything over to maximum supported value of 4GHz to t..." alt="" coords="173,132,326,159"/>
+<area shape="rect" id="node8" href="$adf4368_8h.html#a09a46391238432b71f49b061451230b1" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="172,183,327,209"/>
+<area shape="rect" id="node9" href="$adf4368_8h.html#a9c60b517f7deb58ce3165685a3734278" title="Set the desired output frequency and reset everything over to maximum supported value of 12...." alt="" coords="179,233,319,260"/>
+<area shape="rect" id="node10" href="$adf4368_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,259,124,285"/>
+<area shape="rect" id="node13" href="$adf4368_8h.html#ac9b10000c0233a67f11414a65fe3f436" title="Set the phase adjustment in femto&#45;seconds. Function choose the phase adjustment method according to I..." alt="" coords="175,284,323,311"/>
+</map>

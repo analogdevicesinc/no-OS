@@ -1,0 +1,5 @@
+<map id="ad5791_soft_instruction" name="ad5791_soft_instruction">
+<area shape="rect" id="node1" title="Asserts RESET, CLR or LDAC in a software manner." alt="" coords="208,31,385,57"/>
+<area shape="rect" id="node2" href="$ad5791_8h.html#a7d772e9879595d021680f27e5b938b63" title="Clear DAC channel output with the clearcode." alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node3" href="$ad5791_8h.html#ad284845f79fa8d876527c16ce9fb69a2" title="Trigger LDAC." alt="" coords="5,56,160,83"/>
+</map>

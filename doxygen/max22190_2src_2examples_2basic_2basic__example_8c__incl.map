@@ -1,0 +1,16 @@
+<map id="projects/max22190/src/examples/basic/basic_example.c" name="projects/max22190/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example sources file for max22190." alt="" coords="349,5,519,61"/>
+<area shape="rect" id="node2" href="$max22190_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header file for max22190." alt="" coords="5,109,137,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="161,109,288,136"/>
+<area shape="rect" id="node4" href="$max22190_8h.html" title="Header file of MAX22190 Driver." alt="" coords="312,109,415,136"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="556,184,669,211"/>
+<area shape="rect" id="node12" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="570,109,706,136"/>
+<area shape="rect" id="node14" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="743,109,839,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="383,259,453,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="47,259,130,285"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="302,184,409,211"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="433,184,531,211"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="127,184,227,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="155,259,225,285"/>
+<area shape="rect" id="node13" title=" " alt="" coords="694,184,761,211"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="ltc7841_clear_status_word_bits" name="ltc7841_clear_status_word_bits">
+<area shape="rect" id="node1" title="This clears the STATUS_WORD BITS that are clearable." alt="" coords="172,5,328,47"/>
+<area shape="rect" id="node2" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="5,13,124,39"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="axi_adc_remove" name="axi_adc_remove">
+<area shape="rect" id="node1" title="AXI ADC Resources deallocation." alt="" coords="421,81,551,108"/>
+<area shape="rect" id="node2" href="$ad796x_8h.html#abd440e98810ef648a03653bb6ba5046b" title="Remove the device and release resources." alt="" coords="230,5,357,32"/>
+<area shape="rect" id="node4" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="213,56,373,83"/>
+<area shape="rect" id="node5" href="$dma__example_8h.html#a0ecbc6b48b2626c3e722bbe55440bdaa" title="DMA example main execution." alt="" coords="216,107,371,133"/>
+<area shape="rect" id="node7" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="266,157,321,184"/>
+<area shape="rect" id="node3" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node6" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="58,107,113,133"/>
+</map>

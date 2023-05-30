@@ -1,0 +1,18 @@
+<map id="projects/ltc7841/src/examples/basic/basic_example.c" name="projects/ltc7841/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example source file for ltc7841 project." alt="" coords="415,5,581,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="295,109,421,136"/>
+<area shape="rect" id="node3" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,184,119,211"/>
+<area shape="rect" id="node5" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="934,184,1070,211"/>
+<area shape="rect" id="node7" href="$ltc7841_8h.html" title="Header file of LTC7841 Driver." alt="" coords="497,109,579,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="208,259,279,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="894,259,961,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="453,259,535,285"/>
+<area shape="rect" id="node9" title=" " alt="" coords="725,259,796,285"/>
+<area shape="rect" id="node10" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="194,184,293,211"/>
+<area shape="rect" id="node11" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="317,184,413,211"/>
+<area shape="rect" id="node12" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="1094,184,1203,211"/>
+<area shape="rect" id="node14" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="488,184,588,211"/>
+<area shape="rect" id="node15" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="612,184,723,211"/>
+<area shape="rect" id="node16" href="$no__os__alloc_8h.html" title=" " alt="" coords="799,184,909,211"/>
+<area shape="rect" id="node13" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1115,259,1183,285"/>
+</map>

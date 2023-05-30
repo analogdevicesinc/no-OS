@@ -1,0 +1,5 @@
+<map id="ade9000_get_int_status0" name="ade9000_get_int_status0">
+<area shape="rect" id="node1" title="Get interrupt indicator from STATUS0 register." alt="" coords="311,5,496,32"/>
+<area shape="rect" id="node2" href="$ade9000_8h.html#a5945f5becded49f6588b4f3a6f013010" title="Read the temperature." alt="" coords="108,5,263,32"/>
+<area shape="rect" id="node3" href="$eval-ade9000_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,32"/>
+</map>

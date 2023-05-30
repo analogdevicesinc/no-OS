@@ -1,0 +1,9 @@
+<map id="drivers/api/no_os_timer.c" name="drivers/api/no_os_timer.c">
+<area shape="rect" id="node1" title="Implementation of the timer Interface." alt="" coords="134,5,319,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,80,107"/>
+<area shape="rect" id="node3" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="104,80,213,107"/>
+<area shape="rect" id="node5" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="238,80,351,107"/>
+<area shape="rect" id="node7" href="$no__os__mutex_8h.html" title=" " alt="" coords="375,80,497,107"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="125,155,193,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="259,155,330,181"/>
+</map>

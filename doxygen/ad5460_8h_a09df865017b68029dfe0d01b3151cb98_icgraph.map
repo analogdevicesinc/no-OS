@@ -1,0 +1,6 @@
+<map id="ad5460_set_gpio_config" name="ad5460_set_gpio_config">
+<area shape="rect" id="node1" title="Set the GPIO operation mode." alt="" coords="352,31,531,57"/>
+<area shape="rect" id="node2" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="172,5,304,32"/>
+<area shape="rect" id="node4" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="179,56,297,83"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

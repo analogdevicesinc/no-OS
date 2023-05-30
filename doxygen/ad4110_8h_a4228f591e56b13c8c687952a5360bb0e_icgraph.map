@@ -1,0 +1,22 @@
+<map id="ad4110_compute_crc8" name="ad4110_compute_crc8">
+<area shape="rect" id="node1" title=" " alt="" coords="1035,262,1203,288"/>
+<area shape="rect" id="node2" href="$ad4110_8h.html#a37d04da450f5be8b4de2ba150b33fad1" title=" " alt="" coords="583,18,739,60"/>
+<area shape="rect" id="node4" href="$ad4110_8h.html#a6bd3fb5c71ace0f888684fd60a32c5bf" title=" " alt="" coords="803,262,987,288"/>
+<area shape="rect" id="node20" href="$ad4110_8h.html#ad74be44cbe27dc1edec844655bbb271e" title=" " alt="" coords="821,313,969,354"/>
+<area shape="rect" id="node3" href="$ad4110_8h.html#a8a37ca826022ca99eb674bfded3cb7fa" title="ADC data read in single conversion mode." alt="" coords="108,16,283,43"/>
+<area shape="rect" id="node5" href="$ad4110_8h.html#a95ada55b77023f509baa35fad4db7278" title=" " alt="" coords="587,313,735,354"/>
+<area shape="rect" id="node19" href="$ad4110_8h.html#add62052db64dc14260efba4e3f31f8fe" title="Wait for RDY bit to go low indicating conversion completion." alt="" coords="567,143,755,170"/>
+<area shape="rect" id="node6" href="$ad4110_8h.html#a4dd0b28c567ceadcd9b1ee609fb26654" title=" " alt="" coords="348,219,501,246"/>
+<area shape="rect" id="node7" href="$ad4110_8h.html#a82503a6f416e5e58d61fe8405f516277" title=" " alt="" coords="139,379,252,406"/>
+<area shape="rect" id="node9" href="$ad4110_8h.html#a0d6a0f7973415a2a0b071c894a15e107" title=" " alt="" coords="339,67,510,94"/>
+<area shape="rect" id="node10" href="$ad4110_8h.html#ae7a2275eacbfe1d4564f47b46c8ba288" title=" " alt="" coords="349,320,500,347"/>
+<area shape="rect" id="node11" href="$ad4110_8h.html#a3989dd13c8494043c2d33d8607984224" title="Assign analog input buffer." alt="" coords="331,372,519,413"/>
+<area shape="rect" id="node12" href="$ad4110_8h.html#aeccf386b12c8d3049151cd1409231684" title="Set polarity." alt="" coords="350,438,499,464"/>
+<area shape="rect" id="node13" href="$ad4110_8h.html#afb19b7b0dc4b376c3320b09714eea2b8" title="Enable/Disable channel." alt="" coords="347,489,502,530"/>
+<area shape="rect" id="node14" href="$ad4110_8h.html#ad93abb699cd92963da2a60ce87672b87" title=" " alt="" coords="359,555,491,582"/>
+<area shape="rect" id="node15" href="$ad4110_8h.html#ae1c569fcea97e0e7e4f4a9a8a76f0b13" title="Set Output Data Rate." alt="" coords="362,606,487,632"/>
+<area shape="rect" id="node16" href="$ad4110_8h.html#ab1ea30d2f340eb80d96022236e5327d8" title=" " alt="" coords="343,656,507,683"/>
+<area shape="rect" id="node17" href="$ad4110_8h.html#a00a1f48cc2c777ffee3c304b01b0ff26" title="Set Order of Filter." alt="" coords="355,118,494,144"/>
+<area shape="rect" id="node18" href="$ad4110_8h.html#ad71b29362ba93bbfd3b77344ac22c9f1" title=" " alt="" coords="341,168,508,195"/>
+<area shape="rect" id="node8" href="$ad4110_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,379,60,406"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="adpd410x_reg_read" name="adpd410x_reg_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="699,208,849,235"/>
+<area shape="rect" id="node2" href="$adpd410x_8h.html#a4a65d1440f2d41e7f808ef813b77b237" title="Get a full data packet from the device containing data from all active time slots." alt="" coords="468,5,619,32"/>
+<area shape="rect" id="node3" href="$adpd410x_8h.html#a1af8b15290b36ee55a1844a2f6f851d4" title="Get number of bytes in the device FIFO." alt="" coords="436,56,651,83"/>
+<area shape="rect" id="node4" href="$adpd410x_8h.html#a4844c1a7e5060f6586d0242b512ee099" title="Get number of active time slots." alt="" coords="440,107,647,133"/>
+<area shape="rect" id="node5" href="$adpd410x_8h.html#a96d878550eebba0a2e4fb43b8d085f4e" title="Get operation mode." alt="" coords="456,157,631,184"/>
+<area shape="rect" id="node6" href="$adpd410x_8h.html#a0f9ff978aecb9ee80fd528121bc49b3e" title="Get device sampling frequency." alt="" coords="436,208,651,235"/>
+<area shape="rect" id="node7" href="$adpd410x_8h.html#a3398d6eea6ec9b5840cbdbfb21363ac0" title="Do a read and write of a register to update only part of a register." alt="" coords="445,259,642,285"/>
+<area shape="rect" id="node9" href="$adpd410x_8h.html#a8c47ad8226f8c0882232750616b4ac6d" title="Setup the device and the driver." alt="" coords="5,157,135,184"/>
+<area shape="rect" id="node12" href="$adpd410x_8h.html#aeebd23ab85c6cd30017c65946538e5e3" title="Setup an active time slot." alt="" coords="190,309,381,336"/>
+<area shape="rect" id="node13" href="$adpd410x_8h.html#adfc05439df83ca920f95cda419f45ee3" title="Set device sampling frequency." alt="" coords="437,411,650,437"/>
+<area shape="rect" id="node8" href="$adpd410x_8h.html#a7a74b5425d1d67e763df0ab85dc2df12" title="Do a software reset." alt="" coords="222,107,349,133"/>
+<area shape="rect" id="node10" href="$adpd410x_8c.html#a276c3d1815c3a76bc0c4a8556d51cc3b" title="Set number of active time slots." alt="" coords="183,208,388,235"/>
+<area shape="rect" id="node11" href="$adpd410x_8h.html#a2f5eb641289541459498a473a416724d" title="Set operation mode." alt="" coords="199,259,372,285"/>
+</map>

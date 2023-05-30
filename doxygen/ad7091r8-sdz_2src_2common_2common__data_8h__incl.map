@@ -1,0 +1,9 @@
+<map id="projects/ad7091r8&#45;sdz/src/common/common_data.h" name="projects/ad7091r8&#45;sdz/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by ad7091r8&#45;sdz examples." alt="" coords="47,5,261,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,156,121"/>
+<area shape="rect" id="node3" href="$ad7091r8_8h.html" title="Implementation of AD7091R&#45;8 driver header file." alt="" coords="180,95,275,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="71,169,154,196"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="178,169,277,196"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="301,169,407,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="255,244,325,271"/>
+</map>

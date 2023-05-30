@@ -1,0 +1,4 @@
+<map id="ltc2992_get_voltage" name="ltc2992_get_voltage">
+<area shape="rect" id="node1" title="Read bus voltage in a sense channel." alt="" coords="232,5,387,32"/>
+<area shape="rect" id="node2" href="$ltc2992_8h.html#a147e8309fe1977bd08409f5c17f83324" title="Read sense data at a SENSE channel." alt="" coords="5,5,184,32"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="ssd_1306_extra" name="ssd_1306_extra">
+<area shape="rect" id="node1" title="Extra parameters needed for ssd_1306 usage." alt="" coords="1257,93,1381,120"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,11,1129,37"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,19,819,45"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="977,61,1109,88"/>
+<area shape="rect" id="node4" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,115,786,141"/>
+<area shape="rect" id="node8" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,184,1125,211"/>
+<area shape="rect" id="node5" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,115,184,141"/>
+<area shape="rect" id="node7" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,63,471,89"/>
+<area shape="rect" id="node6" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,181,472,222"/>
+</map>

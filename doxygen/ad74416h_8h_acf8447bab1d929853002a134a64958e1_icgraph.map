@@ -1,0 +1,30 @@
+<map id="ad74416h_reg_update" name="ad74416h_reg_update">
+<area shape="rect" id="node1" title="Update a register&#39;s field." alt="" coords="689,536,856,563"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#abc59102ec483d952d870e47d794431be" title="Disable the slew rate control." alt="" coords="425,5,631,32"/>
+<area shape="rect" id="node3" href="$ad74416h_8h.html#ab50ac784343083e2d6650fd97807e356" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="426,56,630,83"/>
+<area shape="rect" id="node4" href="$ad74416h_8h.html#a19b7055a69ac5e060b4df329db3f8503" title="Set the DO value of a channel." alt="" coords="460,107,596,133"/>
+<area shape="rect" id="node5" href="$ad74416h_8h.html#a1f78b57089351637513641367e1e8cee" title="Set the logic value of a GPO pin." alt="" coords="195,284,343,311"/>
+<area shape="rect" id="node7" href="$ad74416h_8h.html#a4260e4717e768e202aa3c7426d8aea7c" title="Enable/disable a specific ADC channel." alt="" coords="427,411,629,453"/>
+<area shape="rect" id="node10" href="$ad74416h_8h.html#ae20f662ed7c9c2fab2197e918351c3c0" title="Set the ADC Input Node for conversion." alt="" coords="419,696,637,723"/>
+<area shape="rect" id="node12" href="$ad74416h_8h.html#a88daa759aee670e104e43119908e682a" title="Start or stop ADC conversions." alt="" coords="423,477,633,504"/>
+<area shape="rect" id="node13" href="$ad74416h_8h.html#ab71c6367818f0dd8b1ad8aeab57da934" title="Set the ADC measurement range for a specific channel." alt="" coords="435,645,621,672"/>
+<area shape="rect" id="node14" href="$ad74416h_8h.html#a3fc5401c4208a8e585bc3919db31c35a" title="Set the ADC Conversion Rate for a specific channel." alt="" coords="440,595,616,621"/>
+<area shape="rect" id="node15" href="$ad74416h_8h.html#abc70a3364d76a693d2feebbe83f4fe11" title="Set the operation mode for a specific channel." alt="" coords="443,529,613,570"/>
+<area shape="rect" id="node16" href="$ad74416h_8h.html#a114663608f8422749cadb6ca608a8588" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="443,813,613,854"/>
+<area shape="rect" id="node18" href="$ad74416h_8h.html#a6b15b8f15f2c5fae771f149145ffc055" title="Set the voltage range for a specific channel." alt="" coords="443,747,613,789"/>
+<area shape="rect" id="node19" href="$ad74416h_8h.html#af31d6e0eda6bf3092932c935dedaceb0" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="415,879,641,905"/>
+<area shape="rect" id="node20" href="$ad74416h_8h.html#ae49d0a596785b33dfe06cf4274362fbb" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="454,929,602,956"/>
+<area shape="rect" id="node21" href="$ad74416h_8h.html#a35358091fd9f02e8f8dd3f4b5364fcee" title="Enable conversions on a diagnostic register." alt="" coords="425,981,631,1022"/>
+<area shape="rect" id="node22" href="$ad74416h_8h.html#a43d2b4cb99d07dbbb084d3368bcba69a" title="Set the GPIO operation mode." alt="" coords="431,259,625,285"/>
+<area shape="rect" id="node23" href="$digital__output_8c.html#aa133008ddcc9aefc6da6b37d8f8fc064" title=" " alt="" coords="172,208,367,235"/>
+<area shape="rect" id="node24" href="$digital__output_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Digital Output example main execution." alt="" coords="5,183,124,209"/>
+<area shape="rect" id="node26" href="$ad74416h_8h.html#a52ff223aaede1c83d9f7d0ee2a0adf87" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="437,1047,619,1073"/>
+<area shape="rect" id="node27" href="$digital__input__logic_8c.html#a4ebf0beb5c8317e60c970fd3daddd7f7" title=" " alt="" coords="448,360,608,387"/>
+<area shape="rect" id="node28" href="$digital__input__logic_8c.html#a7186e0da4a68a01e8109ef2321de6d43" title=" " alt="" coords="455,1097,601,1124"/>
+<area shape="rect" id="node6" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,284,124,311"/>
+<area shape="rect" id="node8" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="174,448,365,475"/>
+<area shape="rect" id="node9" href="$current__input__ext_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current input External power example main execution." alt="" coords="210,517,329,544"/>
+<area shape="rect" id="node11" href="$temperature__2wire__rtd_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="RTD 2&#45;wire example main execution." alt="" coords="210,671,329,697"/>
+<area shape="rect" id="node17" href="$multiple__devices_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Multiple Devices example main execution." alt="" coords="210,787,329,813"/>
+<area shape="rect" id="node25" href="$digital__input__logic_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Digital Input Logic example main execution." alt="" coords="210,348,329,375"/>
+</map>

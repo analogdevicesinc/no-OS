@@ -1,0 +1,16 @@
+<map id="projects/adf4382/src/platform/mbed/main.c" name="projects/adf4382/src/platform/mbed/main.c">
+<area shape="rect" id="node1" title="Main file for Mbed platform of ADF4382 project." alt="" coords="340,5,511,47"/>
+<area shape="rect" id="node2" href="$adf4382_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ADF4382 project." alt="" coords="228,95,337,121"/>
+<area shape="rect" id="node12" title=" " alt="" coords="362,95,489,121"/>
+<area shape="rect" id="node13" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="513,95,623,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="385,169,485,196"/>
+<area shape="rect" id="node4" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="5,169,109,196"/>
+<area shape="rect" id="node7" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="134,169,231,196"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="255,169,361,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="79,244,145,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="167,319,249,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="401,319,471,345"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="271,244,404,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="302,319,373,345"/>
+<area shape="rect" id="node14" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="534,169,602,196"/>
+</map>

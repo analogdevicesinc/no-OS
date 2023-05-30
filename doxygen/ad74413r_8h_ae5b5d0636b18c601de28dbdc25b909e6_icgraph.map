@@ -1,0 +1,5 @@
+<map id="ad74413r_get_adc_single" name="ad74413r_get_adc_single">
+<area shape="rect" id="node1" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="404,5,591,32"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="172,5,356,32"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,5,124,32"/>
+</map>

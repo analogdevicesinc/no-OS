@@ -1,0 +1,9 @@
+<map id="drivers/platform/stm32/stm32_dma.h" name="drivers/platform/stm32/stm32_dma.h">
+<area shape="rect" id="node1" title="Platform independent function definitions and data types for the DMA API." alt="" coords="495,5,667,47"/>
+<area shape="rect" id="node2" href="$stm32__dma_8c.html" title="Implementation of stm32 DMA functionality." alt="" coords="5,95,177,136"/>
+<area shape="rect" id="node3" href="$stm32__gpdma_8c.html" title="Implementation of STM32 GPDMA functionality." alt="" coords="201,95,373,136"/>
+<area shape="rect" id="node4" href="$stm32__spi_8c.html" title="Implementation of stm32 spi driver." alt="" coords="397,95,569,136"/>
+<area shape="rect" id="node5" href="$stm32__xspi_8c.html" title="Implementation of stm32 xspi driver." alt="" coords="593,95,765,136"/>
+<area shape="rect" id="node6" href="$ad463x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by ad463x_fmcz project." alt="" coords="790,95,1030,136"/>
+<area shape="rect" id="node7" href="$ad738x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad738x project." alt="" coords="1054,95,1294,136"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="TRANSMITTER_MonitorAvrMode" name="TRANSMITTER_MonitorAvrMode">
+<area shape="rect" id="node1" title="Checks current AVR operating mode and notify application if mode changed." alt="" coords="232,5,461,32"/>
+<area shape="rect" id="node2" href="$transmitter_8h.html#ac458d6d563b44d7f6d80dfc347f6c931" title="Main function for polling mode operation." alt="" coords="5,5,184,32"/>
+</map>

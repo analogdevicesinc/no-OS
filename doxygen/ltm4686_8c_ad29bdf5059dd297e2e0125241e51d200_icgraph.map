@@ -1,0 +1,5 @@
+<map id="ltm4686_send_byte" name="ltm4686_send_byte">
+<area shape="rect" id="node1" title="Send a PMBus command to the device." alt="" coords="232,31,383,57"/>
+<area shape="rect" id="node2" href="$ltm4686_8h.html#a16c6fb8d263e000fbfd2ac79105f8a7e" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="21,5,168,32"/>
+<area shape="rect" id="node3" href="$ltm4686_8h.html#a95a538945d5db84e44b95d9a6a1c52fa" title="Perform a device software reset." alt="" coords="5,56,184,83"/>
+</map>

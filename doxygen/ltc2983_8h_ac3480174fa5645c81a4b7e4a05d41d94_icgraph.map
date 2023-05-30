@@ -1,0 +1,5 @@
+<map id="ltc2983_chan_read_scale" name="ltc2983_chan_read_scale">
+<area shape="rect" id="node1" title="Set scale of raw channel data / temperature." alt="" coords="405,5,591,32"/>
+<area shape="rect" id="node2" href="$ltc2983_8h.html#a66c3e302cbbbac4a70496397bbf6e495" title="Read channel data / temperature." alt="" coords="213,5,357,32"/>
+<area shape="rect" id="node3" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

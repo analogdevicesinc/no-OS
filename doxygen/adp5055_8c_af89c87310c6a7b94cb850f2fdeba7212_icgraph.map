@@ -1,0 +1,9 @@
+<map id="adp5055_set_enable_mode" name="adp5055_set_enable_mode">
+<area shape="rect" id="node1" title="Configures enabling for all individual channels by hardware and/or software." alt="" coords="739,56,939,83"/>
+<area shape="rect" id="node2" href="$adp5055_8h.html#a0345c350dd0dbb57e9eb74cdce65b5e6" title="Free the resources allocated by the adp5055_init()" alt="" coords="556,56,691,83"/>
+<area shape="rect" id="node3" href="$iio__adp5055_8h.html#a1784820e6698fbbd58053ded24150e74" title="Free resources allocated by the init function." alt="" coords="349,5,508,32"/>
+<area shape="rect" id="node5" href="$adp5055_8h.html#ace46ac8c2d3b18ff79bcd2bfe9e9436a" title="Initialize the ADP5055 device." alt="" coords="375,56,482,83"/>
+<area shape="rect" id="node7" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="177,107,296,133"/>
+<area shape="rect" id="node4" href="$adp5055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,31,124,57"/>
+<area shape="rect" id="node6" href="$iio__adp5055_8h.html#ae39b63f6375e653cc6ed124d0191785d" title="Initializes the ADP5055 IIO descriptor." alt="" coords="172,56,301,83"/>
+</map>

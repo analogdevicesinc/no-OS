@@ -1,0 +1,12 @@
+<map id="lt3074_read_word" name="lt3074_read_word">
+<area shape="rect" id="node1" title="Perform a raw PMBus read word operation." alt="" coords="963,56,1101,83"/>
+<area shape="rect" id="node2" href="$lt3074_8h.html#a1739bfd03527b68db62e029bf83a2268" title="Read statuses." alt="" coords="339,5,485,32"/>
+<area shape="rect" id="node4" href="$lt3074_8h.html#a664b04b25ba8a1fc60d6abc53991747f" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="740,56,915,83"/>
+<area shape="rect" id="node6" href="$lt3074_8h.html#aaa7a6e7bcdf36dc802fefb3daaa5d275" title="Generic register read wrapper." alt="" coords="764,107,891,133"/>
+<area shape="rect" id="node3" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="172,56,291,83"/>
+<area shape="rect" id="node5" href="$lt3074_8h.html#a45b335595ece27fbe90a000129e0eb1b" title="Read a value." alt="" coords="541,56,684,83"/>
+<area shape="rect" id="node7" href="$lt3074_8h.html#adbb25a5e0bfec64795789a60e0b67507" title="Initialize the device structure." alt="" coords="367,107,457,133"/>
+<area shape="rect" id="node10" href="$lt3074_8h.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="533,157,692,184"/>
+<area shape="rect" id="node8" href="$iio__lt3074_8h.html#a0d877a2fe54762f2932c52e49b7f4b5a" title="Initializes the LT3074 IIO descriptor." alt="" coords="174,107,289,133"/>
+<area shape="rect" id="node9" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,107,124,133"/>
+</map>

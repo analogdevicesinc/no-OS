@@ -1,0 +1,4 @@
+<map id="adp5055_set_pg_hw_delay" name="adp5055_set_pg_hw_delay">
+<area shape="rect" id="node1" title="Enables a delay in the PWRGD hardware pin." alt="" coords="172,5,369,32"/>
+<area shape="rect" id="node2" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

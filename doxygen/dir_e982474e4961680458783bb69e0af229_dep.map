@@ -1,0 +1,10 @@
+<map id="projects/ades1754/src/examples/spi_uart_bridge" name="projects/ades1754/src/examples/spi_uart_bridge">
+<area shape="rect" id="node1" href="dir_e982474e4961680458783bb69e0af229.html" title="spi_uart_bridge" alt="" coords="27,52,149,100"/>
+<area shape="rect" id="node2" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="15,148,87,196"/>
+<area shape="rect" id="edge1-headlabel" href="dir_001043_000002.html" title="1" alt="" coords="70,127,79,142"/>
+<area shape="rect" id="node3" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="15,244,87,292"/>
+<area shape="rect" id="edge2-headlabel" href="dir_001043_000279.html" title="2" alt="" coords="84,227,94,242"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000002_000279.html" title="2220" alt="" coords="33,218,67,233"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000279_000002.html" title="1" alt="" coords="47,208,56,222"/>
+<area shape="rect" id="clust1" href="dir_656732ab70dbc40f2e7fd0c6ebffdbe7.html" title="examples" alt="" coords="16,16,160,111"/>
+</map>

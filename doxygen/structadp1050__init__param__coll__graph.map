@@ -1,0 +1,9 @@
+<map id="adp1050_init_param" name="adp1050_init_param">
+<area shape="rect" id="node1" title="Initialization parameter for the ADP1050 device." alt="" coords="281,291,436,317"/>
+<area shape="rect" id="node2" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="37,193,200,219"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,95,184,121"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="429,95,601,121"/>
+<area shape="rect" id="node6" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="271,193,447,219"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="421,5,609,32"/>
+<area shape="rect" id="node7" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="208,95,400,121"/>
+</map>

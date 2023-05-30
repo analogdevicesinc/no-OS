@@ -1,0 +1,8 @@
+<map id="ltm4686_iio_desc_init_param" name="ltm4686_iio_desc_init_param">
+<area shape="rect" id="node1" title="Structure holding the LTM4686 IIO initialization parameter." alt="" coords="113,317,277,359"/>
+<area shape="rect" id="node2" href="$structltm4686__init__param.html" title=" " alt="" coords="118,228,271,255"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="17,95,180,121"/>
+<area shape="rect" id="node4" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="213,95,385,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="209,5,397,32"/>
+</map>

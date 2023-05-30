@@ -1,0 +1,6 @@
+<map id="drivers/platform/mbed/mbed_irq.h" name="drivers/platform/mbed/mbed_irq.h">
+<area shape="rect" id="node1" title="Header containing extra types required for IRQ drivers." alt="" coords="115,5,283,47"/>
+<area shape="rect" id="node2" href="$ad74416h_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ad74416h project." alt="" coords="91,95,306,136"/>
+<area shape="rect" id="node3" href="$ad74416h_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ad74416h project." alt="" coords="5,184,176,225"/>
+<area shape="rect" id="node4" href="$ad74416h_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ad74416h project." alt="" coords="200,184,413,225"/>
+</map>

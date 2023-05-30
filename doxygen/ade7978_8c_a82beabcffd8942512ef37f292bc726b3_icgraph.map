@@ -1,0 +1,7 @@
+<map id="ade7978_write" name="ade7978_write">
+<area shape="rect" id="node1" title="Write device register." alt="" coords="487,56,605,83"/>
+<area shape="rect" id="node2" href="$ade7978_8h.html#aeaf475d84c4cd829cb87e6674f0a2662" title="Initialize the device." alt="" coords="115,5,222,32"/>
+<area shape="rect" id="node4" href="$ade7978_8h.html#ad9d56ff7a4a3839f4e0702a7445a8947" title="Setup the device." alt="" coords="108,107,229,133"/>
+<area shape="rect" id="node5" href="$ade7978_8h.html#aac45be2efb741860cad5f69bb7f436e4" title="Update specific register bits." alt="" coords="277,56,439,83"/>
+<area shape="rect" id="node3" href="$eval-ade7978_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,56,60,83"/>
+</map>

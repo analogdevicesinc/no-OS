@@ -1,0 +1,10 @@
+<map id="include/no_os_dma.h" name="include/no_os_dma.h">
+<area shape="rect" id="node1" title="Platform independent function definitions and data types for the DMA API." alt="" coords="169,5,327,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,72,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="97,80,167,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="255,155,326,181"/>
+<area shape="rect" id="node5" href="$no__os__list_8h.html" title="List library header." alt="" coords="363,80,461,107"/>
+<area shape="rect" id="node7" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="243,80,339,107"/>
+<area shape="rect" id="node8" href="$no__os__mutex_8h.html" title=" " alt="" coords="486,80,607,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="371,155,453,181"/>
+</map>

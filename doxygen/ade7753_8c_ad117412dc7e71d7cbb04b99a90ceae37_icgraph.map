@@ -1,0 +1,9 @@
+<map id="ade7753_update_bits" name="ade7753_update_bits">
+<area shape="rect" id="node1" title="Update specific register bits." alt="" coords="516,107,677,133"/>
+<area shape="rect" id="node2" href="$ade7753_8h.html#a894c298fbec8447aea4fa54cb4b0353a" title="Enable/Disable interrupt." alt="" coords="289,5,442,32"/>
+<area shape="rect" id="node3" href="$ade7753_8h.html#a05069d40bac54d22911d9720fe4305d7" title="Reset the device using SW reset." alt="" coords="294,56,437,83"/>
+<area shape="rect" id="node5" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,81,60,108"/>
+<area shape="rect" id="node6" href="$ade7753_8h.html#a45e57845fc7fee8de59a69facb6d7c0c" title="Select source of sampled data for wave register." alt="" coords="278,158,453,199"/>
+<area shape="rect" id="node7" href="$ade7753_8h.html#ae9ca805900d6098339024cc66497ac07" title="Select waveform register update rate." alt="" coords="263,224,468,251"/>
+<area shape="rect" id="node4" href="$ade7753_8h.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="108,56,215,83"/>
+</map>

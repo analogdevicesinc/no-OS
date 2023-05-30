@@ -1,0 +1,10 @@
+<map id="ad3530r_desc" name="ad3530r_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="947,159,1059,185"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="697,60,820,87"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,48,490,75"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,99,491,141"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="693,159,825,185"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,165,511,192"/>
+<area shape="rect" id="node8" href="$structad3530r__transfer__config.html" title=" " alt="" coords="669,209,848,236"/>
+</map>

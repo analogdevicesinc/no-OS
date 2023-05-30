@@ -1,0 +1,9 @@
+<map id="ade7880_read" name="ade7880_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="563,81,677,108"/>
+<area shape="rect" id="node2" href="$ade7880_8h.html#a6da76df48af0aff69fc8f39df82bb502" title="Get interrupt indicator from STATUS0 register." alt="" coords="329,5,515,32"/>
+<area shape="rect" id="node3" href="$ade7880_8h.html#acbb1d0b3d6852f6d53dc0d73afa6c559" title="Initialize the device." alt="" coords="141,107,248,133"/>
+<area shape="rect" id="node5" href="$ade7880_8h.html#a179f9fbceb7e17054896ccb25e64503d" title="Read the power/energy for specific phase." alt="" coords="108,56,281,83"/>
+<area shape="rect" id="node6" href="$ade7880_8h.html#a289029d193e186764383568d4f8f2c29" title="Update specific register bits." alt="" coords="341,157,503,184"/>
+<area shape="rect" id="node4" href="$eval-ade7880_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,107,60,133"/>
+<area shape="rect" id="node7" href="$ade7880_8h.html#ab0cc4bba34968c40a2b2d5dbe79f305c" title="Setup the device." alt="" coords="134,157,255,184"/>
+</map>

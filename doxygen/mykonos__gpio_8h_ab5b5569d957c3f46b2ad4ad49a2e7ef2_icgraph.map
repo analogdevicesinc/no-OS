@@ -1,0 +1,65 @@
+<map id="getGpioMykonosErrorMessage" name="getGpioMykonosErrorMessage">
+<area shape="rect" id="node1" title="Helper function for return of character string based on 32&#45;bit mykonosGpioErr_t enum value." alt="" coords="1116,1541,1336,1568"/>
+<area shape="rect" id="node2" href="$mykonos__gpio_8h.html#afbdbd1ed10d6530c641a0dfaa7e163c0" title="Sets the General Purpose (GP) interrupt register bit mask to enable interrupt sources to assert the G..." alt="" coords="823,5,1031,32"/>
+<area shape="rect" id="node3" href="$mykonos__gpio_8h.html#a099b074d06952328dc4fa2d24598034f" title="This function gets the programmed CMOS output driver." alt="" coords="839,56,1015,83"/>
+<area shape="rect" id="node4" href="$mykonos__gpio_8h.html#a3318f75fc821fcaf829bc5a5d889aadf" title="Floating point formatter setup function." alt="" coords="821,107,1033,133"/>
+<area shape="rect" id="node5" href="$mykonos__gpio_8h.html#ae373d90939aa37c2c3f101c32c9dd1f8" title="Reads the Mykonos 3.3 VDC GPIO pin direction." alt="" coords="833,157,1021,184"/>
+<area shape="rect" id="node6" href="$mykonos__gpio_8h.html#aa77be34bbd915c89940c2b58843aef2c" title="Reads the Mykonos 3.3 VDC GPIO pin levels for BITBANG mode." alt="" coords="814,208,1039,235"/>
+<area shape="rect" id="node7" href="$mykonos__gpio_8h.html#a22ad41a7538e22f90fbb0c0f85a985a4" title="Reads the Mykonos 3.3 VDC GPIO pin output levels for BITBANG mode." alt="" coords="813,259,1040,285"/>
+<area shape="rect" id="node8" href="$mykonos__gpio_8h.html#ad9f406638f81d6f6b131c8f8bb2545c1" title="Reads the Mykonos 3v3 GPIO source control for different GPIO functionality." alt="" coords="808,309,1045,336"/>
+<area shape="rect" id="node9" href="$mykonos__gpio_8h.html#a9febe0dc56240111bf5e8a43584a086c" title="This function gets the GPIOs drive strength." alt="" coords="842,360,1011,387"/>
+<area shape="rect" id="node10" href="$mykonos__gpio_8h.html#a5c28e15b7dbcb04f55d88a658eb6d518" title="This API function reads the GPIO monitor index from Mykonos." alt="" coords="817,411,1036,437"/>
+<area shape="rect" id="node11" href="$mykonos__gpio_8h.html#a260c78ac1c089ae2628e89553b57cb1e" title="Gets the Mykonos low voltage GPIO output pins direction." alt="" coords="845,512,1009,539"/>
+<area shape="rect" id="node12" href="$mykonos__gpio_8h.html#a04adbb420c23f2df64f8c85959dce4a7" title="Sets the Mykonos low voltage GPIO output pins direction." alt="" coords="550,537,713,564"/>
+<area shape="rect" id="node13" href="$mykonos__gpio_8h.html#a0d42a34f474c5ed45aaca8bc31e162df" title="Sets the input and output GPIO pin selections for ARM related signals." alt="" coords="279,500,477,527"/>
+<area shape="rect" id="node15" href="$mykonos__gpio_8h.html#a76219786e624e59fecdf6afc7892a98a" title="Sets the Mykonos low voltage GPIO configuration registers." alt="" coords="297,613,459,640"/>
+<area shape="rect" id="node16" href="$mykonos__gpio_8h.html#a8dc914746bb9b76d54738dbfe3963c50" title="Reads the Mykonos low voltage GPIO pin levels and returns their contents in a single 32&#45;bit word." alt="" coords="826,664,1027,691"/>
+<area shape="rect" id="node17" href="$mykonos__gpio_8h.html#a7ad4d26cb193406593a83a55515cf7bb" title="Reads the Mykonos GPIO pin output levels for BITBANG mode." alt="" coords="825,715,1028,741"/>
+<area shape="rect" id="node18" href="$mykonos__gpio_8h.html#a06b821b6599b576fa152478aa1927e62" title="This function gets the GPIO slew rate setting." alt="" coords="823,765,1030,792"/>
+<area shape="rect" id="node19" href="$mykonos__gpio_8h.html#a5e0d109545c2f82ce99119a289bd13e3" title="Reads the Mykonos GPIO source control for different GPIO functionality." alt="" coords="820,816,1033,843"/>
+<area shape="rect" id="node20" href="$mykonos__gpio_8h.html#aaeb1add3119211e2fa48e614f782168f" title="This API function gets the pin configuration for AGC Sync gain control of observation channel." alt="" coords="802,867,1051,893"/>
+<area shape="rect" id="node21" href="$mykonos__gpio_8h.html#ab24d5752285fb81e19b50fd28ffc1420" title="Get gain compensation setup and enabled function for the observation channel." alt="" coords="785,917,1068,944"/>
+<area shape="rect" id="node22" href="$mykonos__gpio_8h.html#a5078f5ad18d10645ffa167778d9fd034" title="This API function gets the pin configuration for hybrid gain control of observation channel." alt="" coords="811,969,1042,1010"/>
+<area shape="rect" id="node23" href="$mykonos__gpio_8h.html#a9506dbc0f37bbb1bbfdedec667243513" title="This function will get the programmed Slicer control for observation channel." alt="" coords="818,1035,1035,1061"/>
+<area shape="rect" id="node24" href="$mykonos__gpio_8h.html#a23f8bb3de0f6fdcf8acc954a62deb943" title="Floating point formatter enable and setup function." alt="" coords="807,1085,1046,1112"/>
+<area shape="rect" id="node25" href="$mykonos__gpio_8h.html#a27b17436fd3f91ed7808792d8f0bd95d" title="This API function returns the configuration RX1 gain Pin control." alt="" coords="819,1136,1034,1163"/>
+<area shape="rect" id="node26" href="$mykonos__gpio_8h.html#abd5d62dbcbc8f33cb363c0a1b135e138" title="This API function returns the configuration RX2 gain Pin control." alt="" coords="819,1187,1034,1213"/>
+<area shape="rect" id="node27" href="$mykonos__gpio_8h.html#a53d60798026ed1e0086e067df3aad97e" title="This API function gets the GPIO pin configuration for AGC gain sync control of RX1 and RX2." alt="" coords="815,1237,1039,1264"/>
+<area shape="rect" id="node28" href="$mykonos__gpio_8h.html#a280bd2193ddb320b43e44ec85791c16f" title="Floating point formatter setup function." alt="" coords="810,1288,1043,1315"/>
+<area shape="rect" id="node29" href="$mykonos__gpio_8h.html#a30e70c32c154bbae6139e8c1a565909e" title="Get gain compensation setup and enabled function." alt="" coords="798,1339,1055,1365"/>
+<area shape="rect" id="node30" href="$mykonos__gpio_8h.html#a328f8553386c9eb745df384f9d5538b1" title="This API function gets the pin configuration for hybrid gain control of RX1 and RX2." alt="" coords="789,1389,1064,1416"/>
+<area shape="rect" id="node31" href="$mykonos__gpio_8h.html#a4137ab97c051034143f5fbd5aaf98468" title="This function will get the programmed Slicer control for Rx1 and Rx2 channels." alt="" coords="831,1440,1023,1467"/>
+<area shape="rect" id="node32" href="$mykonos__gpio_8h.html#a003f3502f85a88e127a0f6833c0923a4" title="This API function returns the configuration TX1 attenuation Pin control." alt="" coords="817,1491,1036,1517"/>
+<area shape="rect" id="node33" href="$mykonos__gpio_8h.html#a7ab0d92881ba1f413a9c0d43bb2068bd" title="This API function returns the configuration TX2 attenuation Pin control." alt="" coords="817,1541,1036,1568"/>
+<area shape="rect" id="node34" href="$mykonos__gpio_8h.html#ad8fe4ea8c5babfa441bd14f99b9cf0cf" title="Reads from the selected channel of the auxiliary ADC." alt="" coords="840,1592,1013,1619"/>
+<area shape="rect" id="node35" href="$mykonos__gpio_8h.html#a10e8179f9e84bf6698728bf0edf333c1" title="Reads the General Purpose (GP) interrupt status to determine what caused the GP Interrupt pin to asse..." alt="" coords="807,1643,1046,1669"/>
+<area shape="rect" id="node36" href="$mykonos__gpio_8h.html#a039d5e60463249a54a37b084379aac02" title="Sets the selected channel of the auxiliary ADC." alt="" coords="818,1693,1035,1720"/>
+<area shape="rect" id="node37" href="$mykonos__gpio_8h.html#ad2dff5a01c9c37635ec22b768077b6ea" title="This function sets the CMOS output driver." alt="" coords="839,1744,1014,1771"/>
+<area shape="rect" id="node38" href="$mykonos__gpio_8h.html#a4c0f905f2d85f7464c04f3886a1ba2dd" title="Floating point formatter enable and setup function." alt="" coords="821,1795,1032,1821"/>
+<area shape="rect" id="node39" href="$mykonos__gpio_8h.html#ad514616970129e85b61f6125ace98df4" title="Sets the Mykonos GPIO 3.3 VDC source control for different GPIO fucntionality." alt="" coords="809,1845,1045,1872"/>
+<area shape="rect" id="node40" href="$mykonos__gpio_8h.html#a27759450ee71c57a3fa7e8390abb59ec" title="This function sets the drive strength for the required GPIOs." alt="" coords="843,1896,1011,1923"/>
+<area shape="rect" id="node41" href="$mykonos__gpio_8h.html#a330f3750d09514ea676d76d41b05f72d" title="This API function configures the monitor output function for the GPIOs." alt="" coords="817,1947,1036,1973"/>
+<area shape="rect" id="node42" href="$mykonos__gpio_8h.html#abde904604e1cd1363e65390927eec2b5" title="This function sets the slew rate for the required GPIOs." alt="" coords="823,1997,1030,2024"/>
+<area shape="rect" id="node43" href="$mykonos__gpio_8h.html#af02599dae7cf7edfd7b5f7f486ce859c" title="Sets the Mykonos GPIO source control for different GPIO functionality." alt="" coords="525,1356,737,1383"/>
+<area shape="rect" id="node44" href="$mykonos__gpio_8h.html#a005306192f1c41808714ef0c6099b19e" title="This API function set the pins for AGC gain Sync control." alt="" coords="803,2099,1051,2125"/>
+<area shape="rect" id="node45" href="$mykonos__gpio_8h.html#aba01cc74c779c7850f2708856826158f" title="Gain compensation enable and setup function for the observation channel." alt="" coords="786,2149,1067,2176"/>
+<area shape="rect" id="node46" href="$mykonos__gpio_8h.html#ad7ae436f6bec056f7448181b077244be" title="This API function set the pins for hybrid gain control." alt="" coords="811,2201,1042,2242"/>
+<area shape="rect" id="node47" href="$mykonos__gpio_8h.html#abebb8ad46d4c874337038cc5d7998101" title="Slicer control over GPIO inputs for the observation channel." alt="" coords="819,2267,1035,2293"/>
+<area shape="rect" id="node48" href="$mykonos__gpio_8h.html#af2683af830934fba6a56d64d9e83c06e" title="Floating point formatter enable function for ORx channel." alt="" coords="807,2317,1046,2344"/>
+<area shape="rect" id="node49" href="$mykonos__gpio_8h.html#a708e8f2aee98c7a63ef124bc0f400031" title="This API function configures the GPIO inputs for controlling RX gain." alt="" coords="820,2368,1033,2395"/>
+<area shape="rect" id="node50" href="$mykonos__gpio_8h.html#acaca0dc0d54b2951d89cc0773598f569" title="This API function configures the GPIO inputs for controlling RX gain." alt="" coords="820,2419,1033,2445"/>
+<area shape="rect" id="node51" href="$mykonos__gpio_8h.html#a5b07c00df65c020826a41bee748808a5" title="This API function set the pins for sync AGC gain control." alt="" coords="815,2469,1038,2496"/>
+<area shape="rect" id="node52" href="$mykonos__gpio_8h.html#a05180d8c221a1f18df7f5e83aa4e282a" title="Floating point formatter enable/disable Rx1 and Rx2 function." alt="" coords="811,2520,1043,2547"/>
+<area shape="rect" id="node53" href="$mykonos__gpio_8h.html#a8813625701fd0f31d8301aa8252218e6" title="Gain compensation enable and setup function." alt="" coords="799,2571,1055,2597"/>
+<area shape="rect" id="node54" href="$mykonos__gpio_8h.html#abefdded3c26722be1759df300c332905" title="This API function set the pins for hybrid gain control." alt="" coords="789,2621,1064,2648"/>
+<area shape="rect" id="node55" href="$mykonos__gpio_8h.html#a056e27be162569eda4594c31ebec1952" title="Slicer control over GPIO inputs." alt="" coords="831,2672,1022,2699"/>
+<area shape="rect" id="node56" href="$mykonos_8h.html#ad19505aeda892f3f4754fb7056492dc9" title="Selects the Sniffer RF input to use for the observation receiver when in ObsRx pin mode and ORX_MODE ..." alt="" coords="821,2723,1032,2749"/>
+<area shape="rect" id="node57" href="$mykonos__gpio_8h.html#ae21b53bed363c9d3c175fc01522d53d7" title="This API function configures the GPIO inputs for controlling Tx attenuation settings." alt="" coords="818,2773,1035,2800"/>
+<area shape="rect" id="node58" href="$mykonos__gpio_8h.html#ab3dd2fa4b24e143850d0c64f1f51bd46" title="This API function configures the GPIO inputs for controlling Tx attenuation settings." alt="" coords="818,2824,1035,2851"/>
+<area shape="rect" id="node59" href="$mykonos__gpio_8h.html#ae4bc0651fc6648acb34624dc7985131f" title="Sets up the auxiliary ADC." alt="" coords="833,2875,1020,2901"/>
+<area shape="rect" id="node60" href="$mykonos__gpio_8h.html#af81f4c260b0110fed0d0193bda32518c" title="Sets up the 10 AuxDACs on the Mykonos device." alt="" coords="833,2925,1021,2952"/>
+<area shape="rect" id="node61" href="$mykonos__gpio_8h.html#a0571fc333dd76ebd6132e39361c21af2" title="Sets the Mykonos 3.3 VDC GPIO configuration registers." alt="" coords="834,2976,1019,3003"/>
+<area shape="rect" id="node62" href="$mykonos__gpio_8h.html#aebe5471c98562e72b4b316e08b800dfe" title="This API function configures and enables the secondary SPI port." alt="" coords="832,3027,1021,3053"/>
+<area shape="rect" id="node63" href="$mykonos__gpio_8h.html#aab3d6a4e00d59995cc2a00c6c59d1d5f" title="Writes the current AuxDAC code for a particular AuxDAC." alt="" coords="837,3077,1016,3104"/>
+<area shape="rect" id="node14" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="5,500,231,527"/>
+</map>

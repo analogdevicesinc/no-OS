@@ -1,0 +1,18 @@
+<map id="no_os_irq_ctrl_init" name="no_os_irq_ctrl_init">
+<area shape="rect" id="node1" title="Initialize the IRQ interrupts." alt="" coords="453,233,593,260"/>
+<area shape="rect" id="node2" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="229,5,389,32"/>
+<area shape="rect" id="node3" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO trigger example main execution." alt="" coords="250,56,369,83"/>
+<area shape="rect" id="node4" href="$voltage__input__irq_8c.html#a2bfc118c928afb7881e002eb11b748aa" title=" " alt="" coords="241,107,377,133"/>
+<area shape="rect" id="node6" href="$max11205pmb1_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="238,157,381,184"/>
+<area shape="rect" id="node7" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="213,208,405,235"/>
+<area shape="rect" id="node9" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="228,259,391,285"/>
+<area shape="rect" id="node11" href="$eval-ade7913_2src_2platform_2platform_8h.html#aac2d512681f800201bd2b7307ddc95fd" title="Init NVIC." alt="" coords="271,309,348,336"/>
+<area shape="rect" id="node13" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="282,360,337,387"/>
+<area shape="rect" id="node14" href="$stm32__tdm_8h.html#a056ca840bde6d6da60fc98ba6a3cdab5" title="Initialize the TDM communication peripheral." alt="" coords="247,411,371,437"/>
+<area shape="rect" id="node15" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="248,461,371,488"/>
+<area shape="rect" id="node5" href="$voltage__input__irq_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Voltage input irq example main execution." alt="" coords="26,107,145,133"/>
+<area shape="rect" id="node8" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="58,208,113,235"/>
+<area shape="rect" id="node10" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,259,165,285"/>
+<area shape="rect" id="node12" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="58,309,113,336"/>
+<area shape="rect" id="node16" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="58,461,113,488"/>
+</map>

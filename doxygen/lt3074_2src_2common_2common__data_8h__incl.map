@@ -1,0 +1,11 @@
+<map id="projects/lt3074/src/common/common_data.h" name="projects/lt3074/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by lt3074 examples." alt="" coords="5,5,197,47"/>
+<area shape="rect" id="node2" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="8,169,107,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="47,95,156,121"/>
+<area shape="rect" id="node5" href="$lt3074_8h.html" title=" " alt="" coords="180,95,255,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="109,244,179,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="182,169,253,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="277,169,377,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="247,244,318,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="343,244,425,271"/>
+</map>

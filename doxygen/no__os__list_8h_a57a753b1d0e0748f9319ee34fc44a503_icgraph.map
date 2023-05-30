@@ -1,0 +1,8 @@
+<map id="no_os_list_add_last" name="no_os_list_add_last">
+<area shape="rect" id="node1" title=" " alt="" coords="683,64,832,91"/>
+<area shape="rect" id="node2" href="$no__os__dma_8c.html#a5348cf029fbed8be89cf5296b401b40d" title="Acquire a channel and configure the list of transfers." alt="" coords="460,35,635,61"/>
+<area shape="rect" id="node6" href="$xilinx__gpio__irq_8c.html#a493b4352122333a0e4aaf6ae130ccb20" title="Register pin specific GPIO interrupt." alt="" coords="470,86,625,127"/>
+<area shape="rect" id="node3" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="236,27,412,69"/>
+<area shape="rect" id="node4" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node5" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,57,170,98"/>
+</map>

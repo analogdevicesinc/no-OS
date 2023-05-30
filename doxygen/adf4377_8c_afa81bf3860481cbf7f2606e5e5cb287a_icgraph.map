@@ -1,0 +1,23 @@
+<map id="adf4377_spi_read" name="adf4377_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADF4377 over SPI." alt="" coords="499,304,636,331"/>
+<area shape="rect" id="node2" href="$adf4377_8h.html#a91f9ceeb6ad62dc7e599d7cb7f75ed0f" title="ADF4377 SPI Scratchpad check." alt="" coords="252,5,451,32"/>
+<area shape="rect" id="node3" href="$adf4377_8h.html#acd2c92476a0a613eb41049522408cd7c" title="Gets the value of the set bleed word." alt="" coords="259,56,444,83"/>
+<area shape="rect" id="node4" href="$adf4377_8h.html#a7216add645667d1c77933b0a27717646" title="Gets the charge pump value from the register. The value will be between 0 and 15 on 8 bits...." alt="" coords="283,107,419,133"/>
+<area shape="rect" id="node5" href="$adf4377_8h.html#afc346b5e2acfa8cac1a25be8ce29ce1d" title="Gets the value the output channel if it is enabled or disable." alt="" coords="269,157,433,184"/>
+<area shape="rect" id="node6" href="$adf4377_8h.html#a92c17cfe3e2a3fd3805755df4d2e776f" title="Gets the value the doubler if it is enabled or disable and stores it it the dev structure." alt="" coords="276,209,427,250"/>
+<area shape="rect" id="node7" href="$adf4377_8h.html#ad84879015fab9df376d477a62135fbae" title="Gets the value of the set SR_INV_ADJ Adjustment to enable or disable which adds a constant value to t..." alt="" coords="252,275,451,301"/>
+<area shape="rect" id="node8" href="$adf4377_8h.html#a14e89387c4f031632f9d45545f659967" title="Gets the value of the set sysref monitoring." alt="" coords="265,326,438,367"/>
+<area shape="rect" id="node9" href="$adf4377_8h.html#ae30f1729b0ecdca98ee8b040a3487113" title="Gets the output power register value." alt="" coords="262,392,441,419"/>
+<area shape="rect" id="node10" href="$adf4377_8h.html#a3a69993acab05d0a26737ea6e043dbc6" title="Gets the value the reference divider." alt="" coords="274,443,429,469"/>
+<area shape="rect" id="node11" href="$adf4377_8h.html#ac0bc507b99a074e8f3339c222a149f28" title="Gets the rfout divider register value." alt="" coords="255,493,448,520"/>
+<area shape="rect" id="node12" href="$adf4377_8h.html#a00bd202ed51e872ba5aea0ba92a50d93" title="Gets the value of the set SR_DEL Adjustment Feature Translated to Pico Seconds on the output." alt="" coords="263,544,439,571"/>
+<area shape="rect" id="node13" href="$adf4377_8h.html#aa99acf7e714675fef26d10d59a3746b7" title="Update ADF4377 register." alt="" coords="263,595,440,621"/>
+<area shape="rect" id="node14" href="$adf4377_8h.html#af78d51afb9eb08b039e13dea5b2313f8" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="13,413,197,440"/>
+<area shape="rect" id="node15" href="$adf4377_8h.html#a707fa9b96d7b81b1dd9edf1d01f17003" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="37,464,172,491"/>
+<area shape="rect" id="node16" href="$adf4377_8h.html#abac8fcaff324082a34e0995424ba6e80" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="23,515,186,541"/>
+<area shape="rect" id="node17" href="$adf4377_8h.html#ac0fc8009d3ddee10fa49575483939fb6" title="Set the value of SR_INV_ADJ Adjustment to enable or disable which adds a constant value to the skew a..." alt="" coords="5,565,204,592"/>
+<area shape="rect" id="node18" href="$adf4377_8h.html#a7bdaea992998a0dcd0b5cc74a2813702" title="Set enable/disable sysref monitoring." alt="" coords="19,617,191,658"/>
+<area shape="rect" id="node19" href="$adf4377_8h.html#a6572366719abe30d6cba9e8424a17d04" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="16,683,193,709"/>
+<area shape="rect" id="node20" href="$adf4377_8h.html#a2e743cba2e09dce1b3f1199dfccebf12" title="Set the rfout frequency divider register value and reset everything over to maximum supported value o..." alt="" coords="9,733,201,760"/>
+<area shape="rect" id="node21" href="$adf4377_8h.html#a6ce1ab807906005c953dc7013ac03dc2" title="Set the value of SR_DEL Adjustment Feature Translated to Pico Seconds on the output...." alt="" coords="17,784,192,811"/>
+</map>

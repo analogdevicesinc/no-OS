@@ -1,0 +1,8 @@
+<map id="drivers/platform/stm32/stm32_xspi.h" name="drivers/platform/stm32/stm32_xspi.h">
+<area shape="rect" id="node1" title="Header file for the stm32 xspi driver." alt="" coords="35,5,207,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="47,169,117,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="22,95,105,121"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="129,95,227,121"/>
+<area shape="rect" id="node5" href="$stm32__hal_8h.html" title=" " alt="" coords="252,95,355,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="270,169,337,196"/>
+</map>

@@ -1,0 +1,26 @@
+<map id="projects/eval&#45;adxl355&#45;pmdz/src/platform/pico/main.c" name="projects/eval&#45;adxl355&#45;pmdz/src/platform/pico/main.c">
+<area shape="rect" id="node1" title="Main file for pico platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="447,5,624,61"/>
+<area shape="rect" id="node2" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="481,109,590,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,184,132,211"/>
+<area shape="rect" id="node23" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="845,109,954,136"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="169,333,269,360"/>
+<area shape="rect" id="node8" href="$pico__uart_8h.html" title="Header file of UART driver for pico." alt="" coords="307,184,401,211"/>
+<area shape="rect" id="node13" href="$pico__spi_8h.html" title="Header file for the pico spi driver." alt="" coords="816,184,903,211"/>
+<area shape="rect" id="node16" href="$pico__gpio_8h.html" title="Header file for pico gpio specifics." alt="" coords="927,184,1023,211"/>
+<area shape="rect" id="node18" href="$pico__gpio__irq_8h.html" title="Header file for pico gpio irq specifics." alt="" coords="662,184,782,211"/>
+<area shape="rect" id="node20" href="$pico__irq_8h.html" title="Header file for pico irq specifics." alt="" coords="553,184,638,211"/>
+<area shape="rect" id="node21" href="$pico__timer_8h.html" title="Header file for the pico timer driver." alt="" coords="425,184,528,211"/>
+<area shape="rect" id="node5" title=" " alt="" coords="524,408,595,435"/>
+<area shape="rect" id="node6" title=" " alt="" coords="305,408,376,435"/>
+<area shape="rect" id="node7" title=" " alt="" coords="178,408,261,435"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="357,259,463,285"/>
+<area shape="rect" id="node11" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="538,259,634,285"/>
+<area shape="rect" id="node12" title=" " alt="" coords="207,259,333,285"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="294,333,427,360"/>
+<area shape="rect" id="node14" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="741,333,839,360"/>
+<area shape="rect" id="node15" title=" " alt="" coords="809,259,928,285"/>
+<area shape="rect" id="node17" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="889,333,995,360"/>
+<area shape="rect" id="node19" title=" " alt="" coords="659,259,785,285"/>
+<area shape="rect" id="node22" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="503,333,616,360"/>
+<area shape="rect" id="node24" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1048,184,1116,211"/>
+</map>

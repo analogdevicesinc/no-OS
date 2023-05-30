@@ -1,0 +1,12 @@
+<map id="ad7293_spi_read" name="ad7293_spi_read">
+<area shape="rect" id="node1" title="Reads data from AD7293 over SPI." alt="" coords="465,132,597,159"/>
+<area shape="rect" id="node2" href="$ad7293_8h.html#a134bb4226b149f0df6a6cd309e8d470b" title="Get the range value for ADC channels." alt="" coords="240,5,412,32"/>
+<area shape="rect" id="node3" href="$ad7293_8h.html#ad54bbf8a6a10ab25af83b06bc8ea75eb" title="Read raw value for specific channel and channel type." alt="" coords="247,56,405,83"/>
+<area shape="rect" id="node4" href="$ad7293_8h.html#a3adfe9d02f044f1a6a9ba36ff47a8739" title="Set offset value for specific channel and channel type." alt="" coords="255,107,397,133"/>
+<area shape="rect" id="node5" href="$ad7293_8h.html#a3c09628fc50f54db81d143cc303355dd" title="Initializes the ad7293." alt="" coords="277,157,375,184"/>
+<area shape="rect" id="node6" href="$ad7293_8h.html#a03b72a5e25bb5313a023ef1b7b488c6b" title="Get the gain value for ISENSE channels." alt="" coords="235,208,417,235"/>
+<area shape="rect" id="node7" href="$ad7293_8h.html#a17456e775017996642393838c7794dd1" title="Update AD7293 register." alt="" coords="237,259,415,285"/>
+<area shape="rect" id="node8" href="$ad7293_8h.html#a20cbc717189b2bc5dc8de8e8e2f9033e" title="Set the range value for ADC channels." alt="" coords="11,208,181,235"/>
+<area shape="rect" id="node9" href="$ad7293_8h.html#a04a360cb13161e6c482fb5553e97e1be" title="Set the DAC output raw value." alt="" coords="11,259,181,285"/>
+<area shape="rect" id="node10" href="$ad7293_8h.html#aaf8a483dd479746d930dd36d71a6848a" title="Set the gain value for ISENSE channels." alt="" coords="5,309,187,336"/>
+</map>
