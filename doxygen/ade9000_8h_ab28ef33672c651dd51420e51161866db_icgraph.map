@@ -1,0 +1,7 @@
+<map id="ade9000_update_bits" name="ade9000_update_bits">
+<area shape="rect" id="node1" title="Update specific register bits." alt="" coords="311,56,472,83"/>
+<area shape="rect" id="node2" href="$ade9000_8h.html#a796d44fbe01c3180aefbb8268aaa948f" title="Initialize the device." alt="" coords="132,5,239,32"/>
+<area shape="rect" id="node4" href="$ade9000_8h.html#a5945f5becded49f6588b4f3a6f013010" title="Read the temperature." alt="" coords="108,56,263,83"/>
+<area shape="rect" id="node5" href="$ade9000_8h.html#aa0f6201c5b081c10cf75ebeb822abea3" title="Setup the device." alt="" coords="125,107,246,133"/>
+<area shape="rect" id="node3" href="$eval-ade9000_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,56,60,83"/>
+</map>

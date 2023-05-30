@@ -1,0 +1,18 @@
+<map id="projects/adf5611/src/platform/mbed/main.c" name="projects/adf5611/src/platform/mbed/main.c">
+<area shape="rect" id="node1" title="Main file for Mbed platform of ADF5611 project." alt="" coords="487,5,657,47"/>
+<area shape="rect" id="node2" href="$adf5611_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ADF5611 project." alt="" coords="375,95,484,121"/>
+<area shape="rect" id="node14" title=" " alt="" coords="509,95,635,121"/>
+<area shape="rect" id="node15" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="660,95,769,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="558,169,658,196"/>
+<area shape="rect" id="node4" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="5,169,109,196"/>
+<area shape="rect" id="node7" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="255,169,353,196"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="377,169,482,196"/>
+<area shape="rect" id="node12" href="$mbed__i2c_8h.html" title="Header containing extra types required for I2C interface." alt="" coords="134,169,231,196"/>
+<area shape="rect" id="node13" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="560,244,659,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="149,244,216,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="248,319,331,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="487,319,558,345"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="352,244,485,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="383,319,454,345"/>
+<area shape="rect" id="node16" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="682,169,750,196"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="drivers/adc&#45;dac/ad74413r/iio_ad74413r.h" name="drivers/adc&#45;dac/ad74413r/iio_ad74413r.h">
+<area shape="rect" id="node1" title="Header file of the IIO AD74413r Driver." alt="" coords="513,5,700,47"/>
+<area shape="rect" id="node2" href="$iio__ad74413r_8c.html" title="Source file of the IIO AD74413r Driver." alt="" coords="5,102,192,143"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="217,95,391,151"/>
+<area shape="rect" id="node4" href="$ad74413r_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for AD74413R project." alt="" coords="415,95,646,151"/>
+<area shape="rect" id="node5" href="$swiot_8h.html" title="Header file for the swiot IIO device." alt="" coords="722,102,870,143"/>
+<area shape="rect" id="node6" href="$swiot_8c.html" title="Source file for the swiot IIO driver." alt="" coords="635,199,783,240"/>
+<area shape="rect" id="node7" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="821,199,969,240"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ltc7871_remove" name="ltc7871_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by the LT7871_init()" alt="" coords="373,31,500,57"/>
+<area shape="rect" id="node2" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="7,5,125,32"/>
+<area shape="rect" id="node3" href="$iio__ltc7871_8h.html#a8b7d478e34f6a421e3f2330fcebb6ed3" title="Free resources allocated by the init function." alt="" coords="175,31,325,57"/>
+<area shape="rect" id="node4" href="$ltc7871_8h.html#ad5ce9787e56640bff3e5f7285411d91f" title="Initialize the LTC7871 device." alt="" coords="201,81,299,108"/>
+<area shape="rect" id="node5" href="$iio__ltc7871_8h.html#ae6c8deb0e7a5dccf5477794210cde0b9" title="Initializes the LTC7871 IIO descriptor." alt="" coords="5,81,127,108"/>
+</map>

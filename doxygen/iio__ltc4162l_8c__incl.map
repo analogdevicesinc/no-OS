@@ -1,0 +1,20 @@
+<map id="drivers/power/ltc4162l/iio_ltc4162l.c" name="drivers/power/ltc4162l/iio_ltc4162l.c">
+<area shape="rect" id="node1" title="Implementation of IIO LTC4162L Driver." alt="" coords="411,5,578,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="354,169,422,196"/>
+<area shape="rect" id="node3" href="$iio__ltc4162l_8h.html" title="Implementation of IIO LTC4162L Driver." alt="" coords="532,95,641,121"/>
+<area shape="rect" id="node12" href="$ltc4162l_8h.html" title=" " alt="" coords="171,244,258,271"/>
+<area shape="rect" id="node16" href="$no__os__alloc_8h.html" title=" " alt="" coords="702,95,813,121"/>
+<area shape="rect" id="node18" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="297,95,407,121"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="561,169,612,196"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="471,244,564,271"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="658,244,763,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="669,393,752,420"/>
+<area shape="rect" id="node7" title=" " alt="" coords="447,393,518,420"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="275,319,445,345"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="747,319,880,345"/>
+<area shape="rect" id="node11" title=" " alt="" coords="778,393,849,420"/>
+<area shape="rect" id="node13" title=" " alt="" coords="179,319,250,345"/>
+<area shape="rect" id="node14" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="571,319,671,345"/>
+<area shape="rect" id="node15" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,319,104,345"/>
+<area shape="rect" id="node17" title=" " alt="" coords="724,169,791,196"/>
+</map>

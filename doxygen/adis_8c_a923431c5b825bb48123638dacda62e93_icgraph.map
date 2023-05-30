@@ -1,0 +1,5 @@
+<map id="adis_read_z_gyro" name="adis_read_z_gyro">
+<area shape="rect" id="node1" title="Read raw gyroscope data on z axis." alt="" coords="213,31,348,57"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="16,5,155,32"/>
+<area shape="rect" id="node3" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,56,165,83"/>
+</map>

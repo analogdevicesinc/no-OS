@@ -1,0 +1,5 @@
+<map id="ad469x_sequence_enable_temp" name="ad469x_sequence_enable_temp">
+<area shape="rect" id="node1" title="Enable temperature read at the end of the sequence, for standard and advanced sequencer." alt="" coords="237,31,468,57"/>
+<area shape="rect" id="node2" href="$ad469x_8h.html#a8c42a57e73b808c98550cb1b8eccbaa3" title=" " alt="" coords="39,5,155,32"/>
+<area shape="rect" id="node3" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="5,56,189,83"/>
+</map>

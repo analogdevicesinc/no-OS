@@ -1,0 +1,5 @@
+<map id="ade7754_temperature_val" name="ade7754_temperature_val">
+<area shape="rect" id="node1" title="Read temperature value." alt="" coords="313,5,507,32"/>
+<area shape="rect" id="node2" href="$eval-ade7754_2src_2common_2common__data_8h.html#a66b3bb1a4fdb3eed65a3c7168aac3a79" title="print measurements" alt="" coords="108,5,265,32"/>
+<area shape="rect" id="node3" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,32"/>
+</map>

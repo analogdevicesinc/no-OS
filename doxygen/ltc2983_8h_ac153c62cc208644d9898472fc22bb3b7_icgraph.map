@@ -1,0 +1,6 @@
+<map id="ltc2983_thermocouple_fault_handler" name="ltc2983_thermocouple_fault_handler">
+<area shape="rect" id="node1" title="Fault handling of thermocouple sensors." alt="" coords="628,5,795,47"/>
+<area shape="rect" id="node2" href="$ltc2983_8h.html#a84ea47244c6b2e47b87355c962cf0fe8" title="Read raw channel data / temperature." alt="" coords="405,13,580,39"/>
+<area shape="rect" id="node3" href="$ltc2983_8h.html#a66c3e302cbbbac4a70496397bbf6e495" title="Read channel data / temperature." alt="" coords="213,13,357,39"/>
+<area shape="rect" id="node4" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,13,165,39"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="adp1050_set_pwm" name="adp1050_set_pwm">
+<area shape="rect" id="node1" title="Set PWM channel and frequency." alt="" coords="475,56,619,83"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#a5bb2e480ed792fa100b2fb4ea23c2a4d" title="Set VOUT duty cycle for requested channel." alt="" coords="232,31,427,58"/>
+<area shape="rect" id="node3" href="$adp1050_8h.html#a84fff15376ebe1860172704bff6695d2" title="Set requested ADP1050 channel in Open Loop operation mode." alt="" coords="5,6,184,32"/>
+<area shape="rect" id="node4" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="35,82,154,108"/>
+<area shape="rect" id="node5" href="$adp1050_8h.html#a29f0826c58d2ba1dce0106101657b4ba" title="Set close loop operation." alt="" coords="239,132,420,159"/>
+</map>

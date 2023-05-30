@@ -1,0 +1,4 @@
+<map id="ade7816_i2c_reg_read" name="ade7816_i2c_reg_read">
+<area shape="rect" id="node1" title="ADE7816 I2C Read Register function." alt="" coords="207,5,375,32"/>
+<area shape="rect" id="node2" href="$ade7816_8h.html#aee753094ae017b3041d658565456c84c" title="ADE7816 set communication function." alt="" coords="5,5,159,32"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="drivers/temperature/max31865pmb1" name="drivers/temperature/max31865pmb1">
+<area shape="rect" id="node1" href="dir_3cc6e73161187191794db3a049203490.html" title="max31865pmb1" alt="" coords="27,52,155,100"/>
+<area shape="rect" id="node2" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="17,148,89,196"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000275_000279.html" title="6" alt="" coords="72,127,82,142"/>
+<area shape="rect" id="node3" href="dir_481058711dd13ded877a88795a4a55f2.html" title="platform" alt="" coords="14,244,93,292"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000275_000206.html" title="1" alt="" coords="87,227,96,242"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000279_000206.html" title="1" alt="" coords="48,218,57,233"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000206_000279.html" title="711" alt="" coords="41,208,67,222"/>
+<area shape="rect" id="clust1" href="dir_03ae8155b8b9174898609c87b4e5e3b2.html" title="temperature" alt="" coords="16,16,165,111"/>
+</map>

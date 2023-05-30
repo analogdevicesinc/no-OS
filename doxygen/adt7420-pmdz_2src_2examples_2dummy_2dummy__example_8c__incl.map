@@ -1,0 +1,14 @@
+<map id="projects/adt7420&#45;pmdz/src/examples/dummy/dummy_example.c" name="projects/adt7420&#45;pmdz/src/examples/dummy/dummy_example.c">
+<area shape="rect" id="node1" title="DUMMY example code for adt7420&#45;pmdz project." alt="" coords="212,5,433,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="66,109,193,136"/>
+<area shape="rect" id="node3" href="$adt7420_8h.html" title="Header file of ADT7420 Driver." alt="" coords="217,109,303,136"/>
+<area shape="rect" id="node10" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="330,109,443,136"/>
+<area shape="rect" id="node11" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="469,109,605,136"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="209,184,308,211"/>
+<area shape="rect" id="node6" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="332,184,431,211"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="85,184,185,211"/>
+<area shape="rect" id="node9" title=" " alt="" coords="5,259,88,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="285,259,355,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="113,259,183,285"/>
+<area shape="rect" id="node12" title=" " alt="" coords="505,184,572,211"/>
+</map>

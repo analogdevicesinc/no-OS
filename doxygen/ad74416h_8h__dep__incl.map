@@ -1,0 +1,19 @@
+<map id="drivers/adc&#45;dac/ad74416h/ad74416h.h" name="drivers/adc&#45;dac/ad74416h/ad74416h.h">
+<area shape="rect" id="node1" title="Header file of AD74416h Driver." alt="" coords="1481,5,1672,47"/>
+<area shape="rect" id="node2" href="$ad74416h_8c.html" title="Source file of AD74416H Driver." alt="" coords="5,109,196,151"/>
+<area shape="rect" id="node3" href="$ad74416h_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="221,109,413,151"/>
+<area shape="rect" id="node5" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for eval&#45;ad74416h project." alt="" coords="437,102,604,158"/>
+<area shape="rect" id="node6" href="$current__input__ext_8c.html" title="Current input in External power mode example for ad74416h&#45;pmdz." alt="" coords="628,102,808,158"/>
+<area shape="rect" id="node7" href="$current__input__loop_8c.html" title="Current input in Loop power mode example code for ad74416h&#45;pmdz." alt="" coords="832,102,1025,158"/>
+<area shape="rect" id="node8" href="$current__output_8c.html" title="Current Output example code for ad74416h&#45;pmdz project." alt="" coords="1050,102,1239,158"/>
+<area shape="rect" id="node9" href="$digital__input__logic_8c.html" title="Digital Input Logic example code for ad74416h&#45;pmdz project This example configures Channel A as a Dig..." alt="" coords="1263,102,1458,158"/>
+<area shape="rect" id="node10" href="$digital__input__loop_8c.html" title="Digital Input Loop Powered example code for ad74416h&#45;pmdz project This example configures Channel A a..." alt="" coords="1483,102,1671,158"/>
+<area shape="rect" id="node11" href="$digital__output_8c.html" title="Digital Output example code for ad74416h&#45;pmdz project." alt="" coords="1695,102,1879,158"/>
+<area shape="rect" id="node12" href="$multiple__devices_8c.html" title="Example code with multiple AD74416H devices for ad74416h&#45;pmdz project." alt="" coords="1903,102,2109,158"/>
+<area shape="rect" id="node13" href="$temperature__2wire__rtd_8c.html" title="Temperature measurement 2&#45;Wire RTD Pt&#45;1000 example code for ad74416h&#45;pmdz project." alt="" coords="2133,95,2308,165"/>
+<area shape="rect" id="node14" href="$temperature__3wire__rtd_8c.html" title="Temperature measurement 3&#45;Wire RTD Pt&#45;1000 example code for ad74416h&#45;pmdz project." alt="" coords="2332,95,2507,165"/>
+<area shape="rect" id="node15" href="$voltage__input_8c.html" title="Voltage input example code for ad74416h&#45;pmdz project." alt="" coords="2531,102,2713,158"/>
+<area shape="rect" id="node16" href="$voltage__input__irq_8c.html" title="Voltage input with interrupt example code for ad74416h&#45;pmdz project." alt="" coords="2737,102,2920,158"/>
+<area shape="rect" id="node17" href="$voltage__output_8c.html" title="Voltage Output example code for ad74416h&#45;pmdz project." alt="" coords="2945,102,3137,158"/>
+<area shape="rect" id="node4" href="$ad74416h_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="221,213,412,255"/>
+</map>

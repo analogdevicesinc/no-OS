@@ -1,0 +1,30 @@
+<map id="max149x6_reg_read" name="max149x6_reg_read">
+<area shape="rect" id="node1" title="Read the value of a device register." alt="" coords="1220,577,1375,603"/>
+<area shape="rect" id="node2" href="$max14916_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="304,567,464,594"/>
+<area shape="rect" id="node3" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a32f2e0e32a9b8d4215e10f596e8fcc25" title=" " alt="" coords="545,45,676,71"/>
+<area shape="rect" id="node5" href="$max14906_8h.html#a8e8f5cf746904b790489720a0e45171c" title="Read the (voltage) state of a channel (works for both input or output)." alt="" coords="1016,805,1157,831"/>
+<area shape="rect" id="node6" href="$max14906_8h.html#a9c93560c2ba001eb8216c24e235c2d64" title="Read an output channel&#39;s current limit." alt="" coords="1005,95,1168,122"/>
+<area shape="rect" id="node7" href="$max14906_8h.html#a70b9ff21f795f28138434e77895cbf8c" title="Initialize and configure the MAX14906 device." alt="" coords="551,247,670,274"/>
+<area shape="rect" id="node12" href="$max14916_8h.html#a1b39691ba15c836b540b6b1c72d1fd40" title="Read the high&#45;side state of a channel&#39;s switch." alt="" coords="1016,855,1157,882"/>
+<area shape="rect" id="node13" href="$max14916_8h.html#a6a56efd1014729fae9dbe2d4dd2fec4d" title="Initialize and configure the MAX14916 device." alt="" coords="551,754,670,781"/>
+<area shape="rect" id="node16" href="$max149x6-base_8h.html#a2c9a6e835aa1f51557d2a656a9c475d6" title="Update the value of a device register (read/write sequence)." alt="" coords="1001,450,1172,477"/>
+<area shape="rect" id="node4" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="304,171,464,198"/>
+<area shape="rect" id="node8" href="$iio__max14906_8h.html#a5536d17cd62bda79c445c5b0b009291a" title="Initializes the MAX14906 IIO descriptor." alt="" coords="313,247,455,274"/>
+<area shape="rect" id="node9" href="$max14906_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,298,251,325"/>
+<area shape="rect" id="node10" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="118,247,241,274"/>
+<area shape="rect" id="node11" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,247,60,274"/>
+<area shape="rect" id="node14" href="$iio__max14916_8h.html#ac6ad1ec4dd3e33839e97b18e406c2ee7" title="Initializes the MAX14916 IIO descriptor." alt="" coords="313,754,455,781"/>
+<area shape="rect" id="node15" href="$max14916_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,754,251,781"/>
+<area shape="rect" id="node17" href="$max14906_8h.html#af4756b309c268e992891c55ed0ab45de" title="Configure a channel&#39;s function." alt="" coords="779,298,927,325"/>
+<area shape="rect" id="node21" href="$max14906_8h.html#a3b665e03f9bac545b1ea1811f1a8e103" title="Write the (logic) state of a channel (only for output channels)." alt="" coords="783,501,923,527"/>
+<area shape="rect" id="node22" href="$max14906_8h.html#a8c5c51cd7c3277da963d1049e7d704fc" title="Configure the current limit for output channels." alt="" coords="529,197,692,223"/>
+<area shape="rect" id="node23" href="$max14916_8h.html#a1d5450a6a37c2561e25a63ca56ca4873" title="Write the (logic) state of a channel (on/off)." alt="" coords="783,653,923,679"/>
+<area shape="rect" id="node24" href="$max14916_8h.html#ab08b7f79345927baff29d0c2de2c3196" title="Set FLEDs minimum on&#45;time to requested value." alt="" coords="517,415,704,442"/>
+<area shape="rect" id="node25" href="$max14916_8h.html#afefd95a2dcd1ef10bca7c0218e790579" title="Set current magnitude for the ow off in the config2 register." alt="" coords="769,399,937,426"/>
+<area shape="rect" id="node26" href="$max14916_8h.html#a427bd86835b943811ad8b399a7651e86" title="Set short to vdd threshold in the config2 register." alt="" coords="752,450,953,477"/>
+<area shape="rect" id="node27" href="$max14916_8h.html#ae6829b41cc6c7ae809ade95ae9b73fc8" title="Set watchdog timeout in the config2 register." alt="" coords="781,602,925,629"/>
+<area shape="rect" id="node28" href="$max14916_8h.html#a1eb3ca32a1c4ff1f129d366627f87c09" title="Read an output channel&#39;s current limit." alt="" coords="777,551,929,578"/>
+<area shape="rect" id="node18" href="$iio__max14906_8c.html#a6821b5e1c7f1557c56453ea435f5278c" title="Configure a set if IIO channels based on the operation modes of the enabled physical channels." alt="" coords="532,349,689,391"/>
+<area shape="rect" id="node19" href="$max14906_8h.html#a051bf13d9464604f925e1a67991aa062" title="Free the resources allocated during init and place all the channels in high&#45;z." alt="" coords="537,298,685,325"/>
+<area shape="rect" id="node20" href="$iio__max14906_8h.html#a022d94aa31e63d0f12002b02051c53fd" title="Free resources allocated by the init function." alt="" coords="299,298,469,325"/>
+</map>

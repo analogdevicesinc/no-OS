@@ -1,0 +1,11 @@
+<map id="no_os_hweight8" name="no_os_hweight8">
+<area shape="rect" id="node1" title=" " alt="" coords="875,97,1001,124"/>
+<area shape="rect" id="node2" href="$ad4170_8h.html#a9511b5fafa6b78c6fab0d827fd0360a3" title="Read multiple samples in continuous read mode." alt="" coords="643,5,827,32"/>
+<area shape="rect" id="node3" href="$ad74413r_8h.html#a4516d35a4966c4f22d80c4dbccad1f8b" title="Get the number of active channels." alt="" coords="658,57,811,98"/>
+<area shape="rect" id="node7" href="$ad74416h_8h.html#af577d885d6a1aaadfbb7f1dbf9dbefcd" title="Get the number of active channels." alt="" coords="657,122,813,163"/>
+<area shape="rect" id="node9" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="707,188,762,215"/>
+<area shape="rect" id="node4" href="$ad74413r_8h.html#ae5b5d0636b18c601de28dbdc25b909e6" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="406,64,593,91"/>
+<area shape="rect" id="node5" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="172,64,356,91"/>
+<area shape="rect" id="node6" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,64,124,91"/>
+<area shape="rect" id="node8" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="404,129,595,156"/>
+</map>

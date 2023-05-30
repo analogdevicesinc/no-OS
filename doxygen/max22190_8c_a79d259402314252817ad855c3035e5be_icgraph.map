@@ -1,0 +1,13 @@
+<map id="max22190_reg_update" name="max22190_reg_update">
+<area shape="rect" id="node1" title="Register update function for MAX22190." alt="" coords="887,107,1057,133"/>
+<area shape="rect" id="node2" href="$max22190_8h.html#a67994ce9ad3d70dff92f8578e675856d" title="Switch selected channel&#39;s state to disabled or enabled." alt="" coords="669,208,839,235"/>
+<area shape="rect" id="node7" href="$max22190_8h.html#a474e46ab275e0a1e11c0d8ca4a989be5" title="Set fault enable in the fault registers." alt="" coords="415,107,621,133"/>
+<area shape="rect" id="node8" href="$max22190_8h.html#a92fbe45caaf634fb9bd73da40a76cacc" title="Set filter delay, wite break detection and if the filter is used or bypassed." alt="" coords="677,157,831,184"/>
+<area shape="rect" id="node9" href="$max22190_8h.html#a5df03b296a6f8d3b93a711c047b1b556" title="MAX22190 Initialization function." alt="" coords="459,5,577,32"/>
+<area shape="rect" id="node11" href="$max22190_8h.html#a9a3c5da12415174b795bc30067fb8dd9" title="Set Wire Break detection for requested channel." alt="" coords="678,56,830,83"/>
+<area shape="rect" id="node3" href="$max22190_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="201,132,361,159"/>
+<area shape="rect" id="node4" href="$max22190_8h.html#ad8a790b22600a15fe67e330b14ad6100" title="Free the resources allocated by initialization." alt="" coords="444,259,592,285"/>
+<area shape="rect" id="node5" href="$iio__max22190_8h.html#a7ea1347b3836eb42eb4c0b0938179f78" title="Free the resources allocated by max22190_iio_init()." alt="" coords="196,208,367,235"/>
+<area shape="rect" id="node6" href="$max22190_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,157,148,184"/>
+<area shape="rect" id="node10" href="$iio__max22190_8h.html#a2e9c7002f8a1514d7724af884dfe8e93" title="Initializes the MAX22190 IIO Descriptor." alt="" coords="210,44,353,71"/>
+</map>

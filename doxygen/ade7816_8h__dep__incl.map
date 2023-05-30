@@ -1,0 +1,8 @@
+<map id="drivers/meter/ade7816/ade7816.h" name="drivers/meter/ade7816/ade7816.h">
+<area shape="rect" id="node1" title="Header file of ADE7816 Driver." alt="" coords="297,5,468,47"/>
+<area shape="rect" id="node2" href="$ade7816_8c.html" title="Source file of ADE7816 Driver." alt="" coords="5,95,176,136"/>
+<area shape="rect" id="node3" href="$ade7816__i2c_8c.html" title="Source file of ADE7816 I2C Driver." alt="" coords="200,95,371,136"/>
+<area shape="rect" id="node4" href="$ade7816__spi_8c.html" title="Source file of ADE7816 SPI Driver." alt="" coords="395,95,565,136"/>
+<area shape="rect" id="node5" href="$ade7816_2src_2common_2common__data_8h.html" title="Defines common data to be used by ade7816 example." alt="" coords="589,95,781,136"/>
+<area shape="rect" id="node6" href="$ade7816_2src_2common_2common__data_8c.html" title="Defines common data to be used by ade7816 example." alt="" coords="590,184,781,225"/>
+</map>

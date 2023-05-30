@@ -1,0 +1,10 @@
+<map id="drivers/power/ltc7871/ltc7871.h" name="drivers/power/ltc7871/ltc7871.h">
+<area shape="rect" id="node1" title="Header file for the LTC7871 Driver." alt="" coords="311,5,473,47"/>
+<area shape="rect" id="node2" href="$iio__ltc7871_8c.html" title="Source file for the LTC7871 IIO Driver." alt="" coords="5,206,168,247"/>
+<area shape="rect" id="node3" href="$iio__ltc7871_8h.html" title=" " alt="" coords="124,102,287,143"/>
+<area shape="rect" id="node5" href="$ltc7871_8c.html" title="Source file for the LTC7871 Driver." alt="" coords="311,102,473,143"/>
+<area shape="rect" id="node6" href="$ltc7871_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltc7871 examples." alt="" coords="497,102,689,143"/>
+<area shape="rect" id="node8" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltc7871 project." alt="" coords="714,95,881,151"/>
+<area shape="rect" id="node4" href="$ltc7871_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltc7871 project." alt="" coords="193,199,367,255"/>
+<area shape="rect" id="node7" href="$ltc7871_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltc7871 examples." alt="" coords="498,206,689,247"/>
+</map>

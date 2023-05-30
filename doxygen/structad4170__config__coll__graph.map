@@ -1,0 +1,16 @@
+<map id="ad4170_config" name="ad4170_config">
+<area shape="rect" id="node1" title="AD4170 configuration." alt="" coords="520,233,636,260"/>
+<area shape="rect" id="node2" href="$structad4170__dac__config.html" title="DAC Config settings (registers HW_LDAC_Mask, HW_Toggle_Mask, Channel_En and DAC_Span)" alt="" coords="211,5,357,32"/>
+<area shape="rect" id="node3" href="$structad4170__clock__ctrl.html" title="Clock_Ctrl register settings." alt="" coords="215,56,353,83"/>
+<area shape="rect" id="node4" href="$structad4170__fir__control.html" title="FIR_Control register settings." alt="" coords="213,107,355,133"/>
+<area shape="rect" id="node5" href="$structad4170__ref__control.html" title="Ref_Control register settings." alt="" coords="211,157,357,184"/>
+<area shape="rect" id="node6" href="$structad4170__current__source.html" title="Current_Source register settings." alt="" coords="197,208,371,235"/>
+<area shape="rect" id="node7" href="$structad4170__channel__map.html" title="Channel_Map register settings. Selects Analog Inputs for This Sequencer Channel." alt="" coords="202,259,366,285"/>
+<area shape="rect" id="node8" href="$structad4170__adc__ctrl.html" title="ADC_Ctrl register settings." alt="" coords="220,309,348,336"/>
+<area shape="rect" id="node9" href="$structad4170__setup.html" title="Sequencer Setup register settings." alt="" coords="227,360,341,387"/>
+<area shape="rect" id="node10" href="$structad4170__misc.html" title="Misc register settings." alt="" coords="5,309,113,336"/>
+<area shape="rect" id="node11" href="$structad4170__filter.html" title="Filter register settings." alt="" coords="6,360,113,387"/>
+<area shape="rect" id="node12" href="$structad4170__afe.html" title="AFE register settings." alt="" coords="10,411,109,437"/>
+<area shape="rect" id="node13" href="$structad4170__channel__setup.html" title="Channel_Setup register settings." alt="" coords="199,411,369,437"/>
+<area shape="rect" id="node14" href="$structad4170__pin__muxing.html" title="Pin_Muxing register settings." alt="" coords="207,461,361,488"/>
+</map>

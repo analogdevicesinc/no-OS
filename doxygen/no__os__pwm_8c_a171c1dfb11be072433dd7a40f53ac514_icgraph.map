@@ -1,0 +1,18 @@
+<map id="no_os_pwm_enable" name="no_os_pwm_enable">
+<area shape="rect" id="node1" title="Enable PWM signal generation." alt="" coords="716,157,867,184"/>
+<area shape="rect" id="node2" href="$ad463x_8c.html#ac1cc8e1c72706ef210ea4d3e746a7c0c" title="Read from device. Enter register mode to read/write registers." alt="" coords="459,5,653,32"/>
+<area shape="rect" id="node4" href="$ad469x_8h.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="444,56,668,83"/>
+<area shape="rect" id="node5" href="$ad469x_8h.html#a92cd606b28fd68b3a2c52717552818df" title="Read from device. Enter register mode to read/write registers." alt="" coords="485,107,627,133"/>
+<area shape="rect" id="node8" href="$adaq7980_8h.html#a0db55892937414f2d5dc84a14fd89677" title=" " alt="" coords="491,157,621,184"/>
+<area shape="rect" id="node10" href="$max25603_8h.html#ac9b182a9ed8bf3625d0846b4bd7533b2" title="MAX25603 set and configure BEAM PWM dimming." alt="" coords="475,208,637,235"/>
+<area shape="rect" id="node13" href="$max25603_8h.html#a505e7e1f8ea38019b345f30458c4cd68" title="MAX25603 set and configure ENABLE PWM dimming." alt="" coords="471,259,641,285"/>
+<area shape="rect" id="node14" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="468,353,644,394"/>
+<area shape="rect" id="node3" href="$ad463x_8h.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="233,5,376,32"/>
+<area shape="rect" id="node6" href="$ad469x_8h.html#a947efb0cc9183e2dc0d9aeb3d697601b" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="219,56,391,83"/>
+<area shape="rect" id="node7" href="$ad469x__evb_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,81,165,108"/>
+<area shape="rect" id="node9" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="277,157,332,184"/>
+<area shape="rect" id="node11" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,259,165,285"/>
+<area shape="rect" id="node12" href="$max25603_8h.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="245,259,364,285"/>
+<area shape="rect" id="node15" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="213,360,396,387"/>
+<area shape="rect" id="node16" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="231,411,378,453"/>
+</map>

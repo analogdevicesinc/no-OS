@@ -1,0 +1,16 @@
+<map id="drivers/power/ltc7841/ltc7841.h" name="drivers/power/ltc7841/ltc7841.h">
+<area shape="rect" id="node1" title="Header file of LTC7841 Driver." alt="" coords="457,5,620,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="270,169,341,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="447,169,529,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="591,169,662,196"/>
+<area shape="rect" id="node5" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,95,104,121"/>
+<area shape="rect" id="node6" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="128,95,224,121"/>
+<area shape="rect" id="node7" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="800,95,936,121"/>
+<area shape="rect" id="node9" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="249,95,362,121"/>
+<area shape="rect" id="node10" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="960,95,1069,121"/>
+<area shape="rect" id="node12" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="489,95,589,121"/>
+<area shape="rect" id="node13" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="1094,95,1205,121"/>
+<area shape="rect" id="node14" href="$no__os__alloc_8h.html" title=" " alt="" coords="665,95,775,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="760,169,827,196"/>
+<area shape="rect" id="node11" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="981,169,1049,196"/>
+</map>

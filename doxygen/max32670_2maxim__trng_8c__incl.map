@@ -1,0 +1,14 @@
+<map id="drivers/platform/maxim/max32670/maxim_trng.c" name="drivers/platform/maxim/max32670/maxim_trng.c">
+<area shape="rect" id="node1" title="MAX32670 implementation of true random number generator." alt="" coords="182,5,371,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,65,121"/>
+<area shape="rect" id="node3" href="$max32670_2maxim__trng_8h.html" title="MAX32670 specific header for TRNG driver." alt="" coords="89,95,203,121"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="227,95,327,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="351,95,461,121"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="498,95,607,121"/>
+<area shape="rect" id="node4" href="$no__os__trng_8h.html" title="Header file of true random number generator." alt="" coords="55,169,160,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="117,244,188,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="343,169,413,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="235,169,318,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="438,169,505,196"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="529,169,597,196"/>
+</map>

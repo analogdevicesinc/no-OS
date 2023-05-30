@@ -1,0 +1,17 @@
+<map id="projects/ades1754/src/examples/spi_uart_bridge/spi_uart_bridge_example.c" name="projects/ades1754/src/examples/spi_uart_bridge/spi_uart_bridge_example.c">
+<area shape="rect" id="node1" title="SPI&#45;to&#45;UART example source file for ades1754." alt="" coords="444,5,645,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="220,109,346,136"/>
+<area shape="rect" id="node3" href="$max17851_8h.html" title="Header file of the MAX17851 driver." alt="" coords="370,109,473,136"/>
+<area shape="rect" id="node13" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="601,259,714,285"/>
+<area shape="rect" id="node14" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="651,109,787,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="374,333,445,360"/>
+<area shape="rect" id="node5" title=" " alt="" coords="332,184,402,211"/>
+<area shape="rect" id="node6" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="150,184,256,211"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="356,259,463,285"/>
+<area shape="rect" id="node11" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="427,184,526,211"/>
+<area shape="rect" id="node12" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="24,259,124,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="32,333,115,360"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="148,259,282,285"/>
+<area shape="rect" id="node9" title=" " alt="" coords="160,333,230,360"/>
+<area shape="rect" id="node15" title=" " alt="" coords="686,184,752,211"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="MYKONOS_setArmGpioPins" name="MYKONOS_setArmGpioPins">
+<area shape="rect" id="node1" title="Sets the input and output GPIO pin selections for ARM related signals." alt="" coords="279,5,477,32"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="5,5,231,32"/>
+</map>

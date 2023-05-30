@@ -1,0 +1,15 @@
+<map id="projects/eval&#45;adxl355&#45;pmdz/src/examples/dummy/dummy_example.c" name="projects/eval&#45;adxl355&#45;pmdz/src/examples/dummy/dummy_example.c">
+<area shape="rect" id="node1" title="DUMMY example header for eval&#45;adxl355&#45;pmdz project." alt="" coords="170,5,378,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$adxl355_8h.html" title="Header file of ADXL355 Driver." alt="" coords="293,109,380,136"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="156,109,269,136"/>
+<area shape="rect" id="node12" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="482,109,618,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="215,259,285,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="375,184,445,211"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="469,184,569,211"/>
+<area shape="rect" id="node9" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="78,184,177,211"/>
+<area shape="rect" id="node10" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="201,184,299,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="535,259,605,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="427,259,510,285"/>
+<area shape="rect" id="node13" title=" " alt="" coords="594,184,661,211"/>
+</map>

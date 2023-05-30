@@ -1,0 +1,4 @@
+<map id="adp5055_set_pg_channel_output" name="adp5055_set_pg_channel_output">
+<area shape="rect" id="node1" title="Enables power good signal to external PWRGD hardware pin." alt="" coords="172,5,359,47"/>
+<area shape="rect" id="node2" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,13,124,39"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="ad7689_write_config" name="ad7689_write_config">
+<area shape="rect" id="node1" title="Write the device&#39;s CFG register." alt="" coords="152,5,308,32"/>
+<area shape="rect" id="node2" href="$ad7689_8h.html#acbaca2b51f89737647ae7d4df17ad33c" title="Initialize the ad7689 driver and create a descriptor." alt="" coords="5,5,104,32"/>
+</map>

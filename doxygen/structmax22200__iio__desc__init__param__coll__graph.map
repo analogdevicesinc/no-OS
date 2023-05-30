@@ -1,0 +1,11 @@
+<map id="max22200_iio_desc_init_param" name="max22200_iio_desc_init_param">
+<area shape="rect" id="node1" title="Initalization parameter fr the MAX22200 IIO descriptor." alt="" coords="1639,74,1817,115"/>
+<area shape="rect" id="node2" href="$structmax22200__init__param.html" title=" " alt="" coords="1272,81,1440,108"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,33,1129,60"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,21,819,48"/>
+<area shape="rect" id="node5" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,107,1125,133"/>
+<area shape="rect" id="node6" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,161,786,188"/>
+<area shape="rect" id="node7" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,124,184,151"/>
+<area shape="rect" id="node9" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,185,471,212"/>
+<area shape="rect" id="node8" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,238,472,279"/>
+</map>

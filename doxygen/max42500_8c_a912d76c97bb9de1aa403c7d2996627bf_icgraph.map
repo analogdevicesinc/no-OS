@@ -1,0 +1,13 @@
+<map id="max42500_reg_write" name="max42500_reg_write">
+<area shape="rect" id="node1" title="Write a raw value to a register." alt="" coords="727,237,885,264"/>
+<area shape="rect" id="node2" href="$max42500_8h.html#a460e7ea60567482b927982c3a00f3716" title="Update a register&#39;s value based on a mask." alt="" coords="495,107,665,133"/>
+<area shape="rect" id="node8" href="$max42500_8h.html#a32ced27e2ff131ed9b6f517430bacf54" title="Set nominal voltage for VM1 to VM5." alt="" coords="234,209,413,250"/>
+<area shape="rect" id="node9" href="$max42500_8h.html#ab353b2ff1a33c94892864bce2ede7c8c" title="Set the overvoltage threshold of VM6 and VM7." alt="" coords="481,237,679,264"/>
+<area shape="rect" id="node10" href="$max42500_8h.html#a04ab68740c50af54c848610e5b5ee1b9" title="Set the undervoltage threshold of VM6 and VM7." alt="" coords="481,288,679,315"/>
+<area shape="rect" id="node11" href="$max42500_8h.html#a154fb403d51164c516bd0e6e0b6b7fb1" title="Enable/Disable watchdog." alt="" coords="486,339,674,381"/>
+<area shape="rect" id="node3" href="$max42500_8h.html#a45a93542ac6c986d6245ffb65a6f8b9a" title="Initialize the device structure." alt="" coords="264,5,383,32"/>
+<area shape="rect" id="node5" href="$max42500_8h.html#a12d9747d4143e266cb34770695e84a69" title="Set the overvoltage threshold of VM1 to VM5." alt="" coords="225,56,422,83"/>
+<area shape="rect" id="node6" href="$max42500_8h.html#a372c0993640464da288a4881836b2dc5" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="225,107,422,133"/>
+<area shape="rect" id="node7" href="$max42500_8h.html#aac3ba7534a3177465fd2eac9fec90c02" title="Set watchdog reset hold time." alt="" coords="213,157,433,184"/>
+<area shape="rect" id="node4" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,81,165,108"/>
+</map>

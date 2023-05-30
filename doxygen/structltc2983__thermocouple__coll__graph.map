@@ -1,0 +1,5 @@
+<map id="ltc2983_thermocouple" name="ltc2983_thermocouple">
+<area shape="rect" id="node1" title="thermocouple sensor descriptor for LTC2983" alt="" coords="67,95,234,121"/>
+<area shape="rect" id="node2" href="$structltc2983__sensor.html" title="common LTC2983 sensor struct" alt="" coords="5,5,125,32"/>
+<area shape="rect" id="node3" href="$structltc2983__custom__sensor.html" title="custom LTC2983 sensor struct" alt="" coords="150,5,325,32"/>
+</map>

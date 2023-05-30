@@ -1,0 +1,6 @@
+<map id="max22200_init" name="max22200_init">
+<area shape="rect" id="node1" title="MAX22200 descriptor initialization function." alt="" coords="404,31,523,57"/>
+<area shape="rect" id="node2" href="$max22200_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,32"/>
+<area shape="rect" id="node3" href="$iio__max22200_8h.html#ac94399543264c762f05f9be7ae5bc96c" title="Initializes the MAX22200 IIO descriptor." alt="" coords="205,56,347,83"/>
+<area shape="rect" id="node4" href="$max22200_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+</map>

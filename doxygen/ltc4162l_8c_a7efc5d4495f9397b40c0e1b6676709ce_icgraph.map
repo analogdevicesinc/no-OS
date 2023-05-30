@@ -1,0 +1,8 @@
+<map id="ltc4162l_get_chem_type" name="ltc4162l_get_chem_type">
+<area shape="rect" id="node1" title="Get the chemistry type." alt="" coords="439,102,620,128"/>
+<area shape="rect" id="node2" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,102,165,128"/>
+<area shape="rect" id="node3" href="$ltc4162l_8h.html#a307ec70a0ddee2f825824a817b7f247a" title="Get the vcharge setting." alt="" coords="221,36,383,77"/>
+<area shape="rect" id="node4" href="$ltc4162l_8h.html#a0778d4aeb58c3865f5695bd6ba7807a6" title="Get the average battery voltage." alt="" coords="213,102,391,128"/>
+<area shape="rect" id="node5" href="$ltc4162l_8h.html#a2f75a3a7cf89596b31acd59c08719a24" title="Get the battery voltage." alt="" coords="229,152,375,179"/>
+<area shape="rect" id="node6" href="$ltc4162l_8h.html#adefe23a8cac6fb9ec62aef14e501cc75" title="Set the vcharge setting." alt="" coords="222,204,382,245"/>
+</map>

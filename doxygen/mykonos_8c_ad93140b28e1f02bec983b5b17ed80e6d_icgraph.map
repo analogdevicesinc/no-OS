@@ -1,0 +1,12 @@
+<map id="MYKONOS_getRadioState" name="MYKONOS_getRadioState">
+<area shape="rect" id="node1" title="Reads the current ARM radio state." alt="" coords="560,183,747,209"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#af05cdf9d44499b5a184f28528854dbde" title="Verifies the ARM status once it is start running." alt="" coords="304,31,499,57"/>
+<area shape="rect" id="node5" href="$mykonos_8h.html#a366f39050ef5877e4f98ccfe0744b284" title="This function will configure CLGC settings." alt="" coords="320,81,483,108"/>
+<area shape="rect" id="node6" href="$mykonos_8h.html#a9abc5ff152769a26905f0a454d1713ad" title="This function will configure DPD settings." alt="" coords="321,132,481,159"/>
+<area shape="rect" id="node7" href="$mykonos_8h.html#a7baa5941b75ba68d467285adda7dc8b5" title="This function, when called during RadioOff, will configure VSWR settings." alt="" coords="318,183,485,209"/>
+<area shape="rect" id="node8" href="$mykonos_8h.html#a07971466ea16db91fcced059910eb196" title="Sets which ARM tracking cals are enabled during the radioOn state." alt="" coords="291,233,512,260"/>
+<area shape="rect" id="node9" href="$mykonos_8h.html#a111d88c14bfc69497f06e50c1cd6fd81" title="This function will allow loading of the DPD model file." alt="" coords="298,284,505,311"/>
+<area shape="rect" id="node10" href="$mykonos_8h.html#a7cbadbcfdc64e4b09d05b9fdc279df74" title="This function called during RadioOff, will allow retrieval of the DPD model file." alt="" coords="305,335,497,361"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="11,5,237,32"/>
+<area shape="rect" id="node4" href="$mykonos_8h.html#a4f715363b526e4374ec31e0a5a68e1c2" title="Performs reset to the External Tx LO Leakage tracking calibration channel estimate." alt="" coords="5,56,243,83"/>
+</map>

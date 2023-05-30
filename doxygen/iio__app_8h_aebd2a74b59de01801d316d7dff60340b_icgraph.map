@@ -1,0 +1,10 @@
+<map id="iio_app_init" name="iio_app_init">
+<area shape="rect" id="node1" title=" " alt="" coords="348,107,445,133"/>
+<area shape="rect" id="node2" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="145,5,263,32"/>
+<area shape="rect" id="node3" href="$ad738x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="133,56,275,83"/>
+<area shape="rect" id="node4" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,107,300,133"/>
+<area shape="rect" id="node6" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="177,157,231,184"/>
+<area shape="rect" id="node7" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="143,208,265,235"/>
+<area shape="rect" id="node5" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,107,60,133"/>
+<area shape="rect" id="node8" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,208,60,235"/>
+</map>

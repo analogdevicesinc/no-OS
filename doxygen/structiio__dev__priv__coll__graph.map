@@ -1,0 +1,16 @@
+<map id="iio_dev_priv" name="iio_dev_priv">
+<area shape="rect" id="node1" title="Links a physical device instance &quot;void *dev_instance&quot; with a &quot;iio_device *iio&quot; that describes capabil..." alt="" coords="559,395,660,421"/>
+<area shape="rect" id="node2" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="316,305,404,332"/>
+<area shape="rect" id="node3" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="227,207,323,234"/>
+<area shape="rect" id="node4" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="5,109,107,136"/>
+<area shape="rect" id="node5" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="131,109,243,136"/>
+<area shape="rect" id="node6" href="$structscan__type.html" title=" " alt="" coords="267,109,355,136"/>
+<area shape="rect" id="node7" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="371,207,520,234"/>
+<area shape="rect" id="node8" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="379,109,557,136"/>
+<area shape="rect" id="node9" href="$structiio__buffer__priv.html" title=" " alt="" coords="696,305,811,332"/>
+<area shape="rect" id="node10" href="$structiio__buffer.html" title=" " alt="" coords="661,207,744,234"/>
+<area shape="rect" id="node14" href="$structiio__device__data.html" title=" " alt="" coords="547,305,671,332"/>
+<area shape="rect" id="node11" href="$structiio__cyclic__buffer__info.html" title=" " alt="" coords="581,109,739,136"/>
+<area shape="rect" id="node12" href="$structno__os__circular__buffer.html" title="Circular buffer descriptor." alt="" coords="764,109,924,136"/>
+<area shape="rect" id="node13" href="$structno__os__cb__ptr.html" title="Circular buffer pointer." alt="" coords="791,5,897,32"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="drivers/accel/adxl38x/adxl38x.h" name="drivers/accel/adxl38x/adxl38x.h">
+<area shape="rect" id="node1" title="Header file of ADXL38X Driver." alt="" coords="444,5,605,47"/>
+<area shape="rect" id="node2" href="$adxl38x_8c.html" title="Implementation of ADXL38X Driver." alt="" coords="5,102,167,143"/>
+<area shape="rect" id="node3" href="$eval-adxl38x_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl38x examples." alt="" coords="191,102,405,143"/>
+<area shape="rect" id="node5" href="$basic__example__main_8c.html" title="Main program for basic example eval&#45;adxl38x project." alt="" coords="430,95,619,151"/>
+<area shape="rect" id="node6" href="$fifo__example__main_8c.html" title="Main program for FIFO example eval&#45;adxl38x project." alt="" coords="643,95,846,151"/>
+<area shape="rect" id="node7" href="$selftest__example__main_8c.html" title="Main program for self test example eval&#45;adxl38x project." alt="" coords="870,95,1123,151"/>
+<area shape="rect" id="node4" href="$eval-adxl38x_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl38x examples." alt="" coords="191,199,405,240"/>
+</map>

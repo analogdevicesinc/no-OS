@@ -1,0 +1,9 @@
+<map id="ad8460_reg_read" name="ad8460_reg_read">
+<area shape="rect" id="node1" title="Read a register value." alt="" coords="712,43,847,69"/>
+<area shape="rect" id="node2" href="$ad8460_8h.html#a1e3068abd070cc03f9dfcb753cf7a70b" title="Read the shutdown flag." alt="" coords="457,5,664,32"/>
+<area shape="rect" id="node4" href="$ad8460_8h.html#af0e3295c734db1fabd902afa56e32f66" title="Read&#45;modify&#45;write operation." alt="" coords="470,68,651,95"/>
+<area shape="rect" id="node3" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,43,165,69"/>
+<area shape="rect" id="node5" href="$ad8460_8h.html#a4051f00e787b270af00776a820be633e" title="Enable or disable the APG mode." alt="" coords="213,93,409,120"/>
+<area shape="rect" id="node6" href="$ad8460_8h.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="9,119,161,145"/>
+<area shape="rect" id="node7" href="$ad8460_8h.html#ab77409bb5ceced72a965c9929a6349cf" title="Reset the high voltage driver." alt="" coords="245,43,378,69"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="projects/ad74416h/src/examples/multiple_devices/multiple_devices.c" name="projects/ad74416h/src/examples/multiple_devices/multiple_devices.c">
+<area shape="rect" id="node1" title="Example code with multiple AD74416H devices for ad74416h&#45;pmdz project." alt="" coords="170,5,375,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$ad74416h_8h.html" title="Header file of AD74416h Driver." alt="" coords="157,109,255,136"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="284,109,397,136"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="423,109,559,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="232,259,303,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="49,184,131,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="155,184,254,211"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="278,184,385,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="459,184,526,211"/>
+</map>

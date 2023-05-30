@@ -1,0 +1,13 @@
+<map id="AD717X_WriteRegister" name="AD717X_WriteRegister">
+<area shape="rect" id="node1" title="Writes the value of the specified register." alt="" coords="468,239,639,265"/>
+<area shape="rect" id="node2" href="$ad717x_8h.html#accdb832ce83708ca8a97c2cadedc0ad2" title="Assign Setup to Channel." alt="" coords="231,5,394,32"/>
+<area shape="rect" id="node3" href="$ad717x_8h.html#af92ad585cabc0f6ef31f41589946bb34" title="Initializes the AD717X." alt="" coords="30,239,133,265"/>
+<area shape="rect" id="node4" href="$ad717x_8h.html#a365530ef685533d6a3715789963f6c52" title="Configure ODR for the device." alt="" coords="205,56,420,83"/>
+<area shape="rect" id="node5" href="$ad717x_8h.html#a492035c62137447abf9bb08a860d7b8d" title="Set Analog Inputs to channel." alt="" coords="223,107,402,149"/>
+<area shape="rect" id="node6" href="$ad717x_8c.html#a5402f40f1800be835ffd8a2a18eed6af" title="Enable Input Buffer." alt="" coords="232,173,393,214"/>
+<area shape="rect" id="node7" href="$ad717x_8h.html#aeb5ccdd47b01a6086733688893592690" title="Set ADC Mode." alt="" coords="227,473,398,500"/>
+<area shape="rect" id="node9" href="$ad717x_8h.html#aacac1db5638624d6c1fdd03431255bdb" title="Set channel status &#45; Enable/Disable." alt="" coords="235,407,390,449"/>
+<area shape="rect" id="node10" href="$ad717x_8h.html#abe8871d8919f03e1aa9078b590945ae8" title="Set Polarity." alt="" coords="235,239,390,265"/>
+<area shape="rect" id="node11" href="$ad717x_8h.html#aee6442429a52d68ee8c1b2f418763316" title="Select the reference source." alt="" coords="229,290,396,331"/>
+<area shape="rect" id="node8" href="$ad717x_8h.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,444,157,471"/>
+</map>

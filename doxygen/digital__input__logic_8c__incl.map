@@ -1,0 +1,14 @@
+<map id="projects/ad74416h/src/examples/digital_input_logic/digital_input_logic.c" name="projects/ad74416h/src/examples/digital_input_logic/digital_input_logic.c">
+<area shape="rect" id="node1" title="Digital Input Logic example code for ad74416h&#45;pmdz project This example configures Channel A as a Dig..." alt="" coords="246,5,441,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$ad74416h_8h.html" title="Header file of AD74416h Driver." alt="" coords="294,109,393,136"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="156,109,269,136"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="623,109,759,136"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="452,109,552,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="221,259,292,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="417,184,499,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="294,184,393,211"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="113,184,219,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="670,184,737,211"/>
+<area shape="rect" id="node12" title=" " alt="" coords="575,184,645,211"/>
+</map>

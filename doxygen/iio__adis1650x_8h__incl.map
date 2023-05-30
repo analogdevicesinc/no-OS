@@ -1,0 +1,17 @@
+<map id="drivers/imu/iio_adis1650x.h" name="drivers/imu/iio_adis1650x.h">
+<area shape="rect" id="node1" title="Implementation of iio_adis1650x.h." alt="" coords="538,5,741,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html" title="Internal include file used for specific chip IIO driver definitions which are not useful for the user..." alt="" coords="491,80,639,107"/>
+<area shape="rect" id="node12" href="$adis1650x_8h.html" title="Implementation of adis1650x.h." alt="" coords="686,80,787,107"/>
+<area shape="rect" id="node3" href="$iio_8h.html" title="Header file of iio." alt="" coords="363,155,414,181"/>
+<area shape="rect" id="node11" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="531,304,599,331"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="126,229,219,256"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="336,229,441,256"/>
+<area shape="rect" id="node5" title=" " alt="" coords="451,379,534,405"/>
+<area shape="rect" id="node6" title=" " alt="" coords="301,379,372,405"/>
+<area shape="rect" id="node7" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="26,304,197,331"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="322,304,455,331"/>
+<area shape="rect" id="node10" title=" " alt="" coords="812,379,883,405"/>
+<area shape="rect" id="node13" href="$adis_8h.html" title="Implementation of adis.h." alt="" coords="722,229,783,256"/>
+<area shape="rect" id="node14" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="623,304,722,331"/>
+<area shape="rect" id="node15" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="797,304,897,331"/>
+</map>

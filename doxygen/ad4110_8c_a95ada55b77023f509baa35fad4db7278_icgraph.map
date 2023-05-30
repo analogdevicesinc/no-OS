@@ -1,0 +1,17 @@
+<map id="ad4110_spi_int_reg_write_msk" name="ad4110_spi_int_reg_write_msk">
+<area shape="rect" id="node1" title=" " alt="" coords="567,297,715,338"/>
+<area shape="rect" id="node2" href="$ad4110_8h.html#a4dd0b28c567ceadcd9b1ee609fb26654" title=" " alt="" coords="348,56,501,83"/>
+<area shape="rect" id="node3" href="$ad4110_8h.html#a82503a6f416e5e58d61fe8405f516277" title=" " alt="" coords="139,333,252,360"/>
+<area shape="rect" id="node5" href="$ad4110_8h.html#a0d6a0f7973415a2a0b071c894a15e107" title=" " alt="" coords="339,5,510,32"/>
+<area shape="rect" id="node7" href="$ad4110_8h.html#ae7a2275eacbfe1d4564f47b46c8ba288" title=" " alt="" coords="349,157,500,184"/>
+<area shape="rect" id="node8" href="$ad4110_8h.html#a3989dd13c8494043c2d33d8607984224" title="Assign analog input buffer." alt="" coords="331,209,519,250"/>
+<area shape="rect" id="node9" href="$ad4110_8h.html#aeccf386b12c8d3049151cd1409231684" title="Set polarity." alt="" coords="350,275,499,301"/>
+<area shape="rect" id="node10" href="$ad4110_8h.html#afb19b7b0dc4b376c3320b09714eea2b8" title="Enable/Disable channel." alt="" coords="347,326,502,367"/>
+<area shape="rect" id="node11" href="$ad4110_8h.html#ad93abb699cd92963da2a60ce87672b87" title=" " alt="" coords="359,392,491,419"/>
+<area shape="rect" id="node12" href="$ad4110_8h.html#ae1c569fcea97e0e7e4f4a9a8a76f0b13" title="Set Output Data Rate." alt="" coords="362,443,487,469"/>
+<area shape="rect" id="node13" href="$ad4110_8h.html#ab1ea30d2f340eb80d96022236e5327d8" title=" " alt="" coords="343,493,507,520"/>
+<area shape="rect" id="node14" href="$ad4110_8h.html#a00a1f48cc2c777ffee3c304b01b0ff26" title="Set Order of Filter." alt="" coords="355,544,494,571"/>
+<area shape="rect" id="node15" href="$ad4110_8h.html#ad71b29362ba93bbfd3b77344ac22c9f1" title=" " alt="" coords="341,595,508,621"/>
+<area shape="rect" id="node4" href="$ad4110_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,333,60,360"/>
+<area shape="rect" id="node6" href="$ad4110_8h.html#a8a37ca826022ca99eb674bfded3cb7fa" title="ADC data read in single conversion mode." alt="" coords="108,5,283,32"/>
+</map>

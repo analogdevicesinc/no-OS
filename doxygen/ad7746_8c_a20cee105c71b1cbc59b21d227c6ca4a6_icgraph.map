@@ -1,0 +1,11 @@
+<map id="ad7746_reg_write" name="ad7746_reg_write">
+<area shape="rect" id="node1" title="Writes data into AD7746 registers, starting from the selected register address pointer." alt="" coords="548,110,687,137"/>
+<area shape="rect" id="node2" href="$ad7746_8h.html#a0910d0a1f46726bbfd81d39b3358a4b3" title="Configure the capacitive setup register." alt="" coords="351,34,477,61"/>
+<area shape="rect" id="node5" href="$ad7746_8h.html#a40f2c50f5074aa7b49f24670df77dc95" title="Set the DAC code and enable state for EXCA." alt="" coords="108,34,280,61"/>
+<area shape="rect" id="node6" href="$ad7746_8h.html#acfb3e4e3d33d323d26559285d6a07f6b" title="Set the DAC code and enable state for EXCB." alt="" coords="328,85,500,112"/>
+<area shape="rect" id="node7" href="$ad7746_8h.html#a525964b8724775523f5377ce161240a2" title="Set the configuration register." alt="" coords="343,136,485,162"/>
+<area shape="rect" id="node8" href="$ad7746_8h.html#a4bb798aef3aec00883ae34c7f001877f" title="Configure the excitation setup register." alt="" coords="351,186,477,213"/>
+<area shape="rect" id="node9" href="$ad7746_8h.html#a9c225faf11c8392042d47a84ca028c3c" title="Configure the voltage/temperature setup register." alt="" coords="355,237,473,264"/>
+<area shape="rect" id="node3" href="$ad7746_8h.html#a2f5d9a49f99bf836d5614406c98897c4" title="Initialize the ad7606 device structure." alt="" coords="145,136,243,162"/>
+<area shape="rect" id="node4" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,110,60,137"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="drivers/temperature/max31855/max31855.h" name="drivers/temperature/max31855/max31855.h">
+<area shape="rect" id="node1" title=" " alt="" coords="335,5,515,47"/>
+<area shape="rect" id="node2" href="$iio__max31855_8c.html" title="Implementation of IIO MAX31855 driver." alt="" coords="5,102,208,143"/>
+<area shape="rect" id="node3" href="$max31855_8c.html" title="Implementation of MAX31855 Driver." alt="" coords="232,102,411,143"/>
+<area shape="rect" id="node4" href="$max31855_2src_2common_2common__data_8h.html" title=" " alt="" coords="435,102,627,143"/>
+<area shape="rect" id="node6" href="$max31855_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="651,95,821,151"/>
+<area shape="rect" id="node5" href="$max31855_2src_2common_2common__data_8c.html" title=" " alt="" coords="435,199,626,240"/>
+</map>

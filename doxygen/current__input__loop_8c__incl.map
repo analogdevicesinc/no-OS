@@ -1,0 +1,13 @@
+<map id="projects/ad74416h/src/examples/current_input_loop/current_input_loop.c" name="projects/ad74416h/src/examples/current_input_loop/current_input_loop.c">
+<area shape="rect" id="node1" title="Current input in Loop power mode example code for ad74416h&#45;pmdz." alt="" coords="299,5,493,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="22,109,149,136"/>
+<area shape="rect" id="node3" href="$ad74416h_8h.html" title="Header file of AD74416h Driver." alt="" coords="173,109,272,136"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="383,184,497,211"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="433,109,569,136"/>
+<area shape="rect" id="node11" title=" " alt="" coords="594,109,662,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="206,259,277,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="23,184,105,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="129,184,228,211"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="252,184,359,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="521,184,588,211"/>
+</map>

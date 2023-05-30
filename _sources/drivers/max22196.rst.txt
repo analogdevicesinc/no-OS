@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/digital-io/max22196/README.rst

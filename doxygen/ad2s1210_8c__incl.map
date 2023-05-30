@@ -1,0 +1,16 @@
+<map id="drivers/resolver/ad2s1210/ad2s1210.c" name="drivers/resolver/ad2s1210/ad2s1210.c">
+<area shape="rect" id="node1" title="Source file for the ad2s1210 driver." alt="" coords="303,5,493,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="215,169,285,196"/>
+<area shape="rect" id="node3" href="$ad2s1210_8h.html" title="Header file for the ad2s1210 driver." alt="" coords="615,95,712,121"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="491,95,591,121"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="807,95,917,121"/>
+<area shape="rect" id="node11" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="330,95,466,121"/>
+<area shape="rect" id="node13" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,95,119,121"/>
+<area shape="rect" id="node14" href="$no__os__alloc_8h.html" title=" " alt="" coords="195,95,305,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="612,244,683,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="487,169,570,196"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="775,169,874,196"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="594,169,701,196"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="899,169,967,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="334,169,401,196"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="adf4377_spi_read" name="adf4377_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADF4377 over SPI." alt="" coords="492,216,629,243"/>
+<area shape="rect" id="node2" href="$adf4377_8h.html#a91f9ceeb6ad62dc7e599d7cb7f75ed0f" title="ADF4377 SPI Scratchpad check." alt="" coords="245,5,444,32"/>
+<area shape="rect" id="node3" href="$adf4377_8h.html#acd2c92476a0a613eb41049522408cd7c" title="Gets the value of the set bleed word." alt="" coords="252,56,437,83"/>
+<area shape="rect" id="node4" href="$adf4377_8h.html#a7216add645667d1c77933b0a27717646" title="Gets the charge pump value from the register. The value will be between 0 and 15 on 8 bits...." alt="" coords="277,107,413,133"/>
+<area shape="rect" id="node5" href="$adf4377_8h.html#afc346b5e2acfa8cac1a25be8ce29ce1d" title="Gets the value the output channel if it is enabled or disable." alt="" coords="263,157,427,184"/>
+<area shape="rect" id="node6" href="$adf4377_8h.html#a92c17cfe3e2a3fd3805755df4d2e776f" title="Gets the value the doubler if it is enabled or disable and stores it it the dev structure." alt="" coords="269,209,420,250"/>
+<area shape="rect" id="node7" href="$adf4377_8h.html#ae30f1729b0ecdca98ee8b040a3487113" title="Gets the output power register value." alt="" coords="255,275,434,301"/>
+<area shape="rect" id="node8" href="$adf4377_8h.html#a3a69993acab05d0a26737ea6e043dbc6" title="Gets the value the reference divider." alt="" coords="267,325,422,352"/>
+<area shape="rect" id="node9" href="$adf4377_8h.html#ac0bc507b99a074e8f3339c222a149f28" title="Gets the rfout divider register value." alt="" coords="248,376,441,403"/>
+<area shape="rect" id="node10" href="$adf4377_8h.html#aa99acf7e714675fef26d10d59a3746b7" title="Update ADF4377 register." alt="" coords="256,427,433,453"/>
+<area shape="rect" id="node11" href="$adf4377_8h.html#af78d51afb9eb08b039e13dea5b2313f8" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="9,325,193,352"/>
+<area shape="rect" id="node12" href="$adf4377_8h.html#a707fa9b96d7b81b1dd9edf1d01f17003" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="34,376,169,403"/>
+<area shape="rect" id="node13" href="$adf4377_8h.html#abac8fcaff324082a34e0995424ba6e80" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="20,427,183,453"/>
+<area shape="rect" id="node14" href="$adf4377_8h.html#a6572366719abe30d6cba9e8424a17d04" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="13,477,190,504"/>
+<area shape="rect" id="node15" href="$adf4377_8h.html#a2e743cba2e09dce1b3f1199dfccebf12" title="Set the rfout frequency divider register value and reset everything over to maximum supported value o..." alt="" coords="5,528,197,555"/>
+</map>

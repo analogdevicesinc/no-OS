@@ -1,0 +1,5 @@
+<map id="spi_engine_desc" name="spi_engine_desc">
+<area shape="rect" id="node1" title="Structure representing an SPI engine device." alt="" coords="9,199,138,225"/>
+<area shape="rect" id="node2" href="$structaxi__dmac.html" title=" " alt="" coords="31,95,116,121"/>
+<area shape="rect" id="node3" href="$structaxi__dma__transfer.html" title=" " alt="" coords="5,5,141,32"/>
+</map>

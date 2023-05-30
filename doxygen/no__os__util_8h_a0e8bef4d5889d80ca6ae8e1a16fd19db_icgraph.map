@@ -1,0 +1,118 @@
+<map id="no_os_find_first_set_bit" name="no_os_find_first_set_bit">
+<area shape="rect" id="node1" title=" " alt="" coords="1088,1444,1263,1471"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#a2870a77c140d0932b234263eff8789e5" title="Set multiple GPO values at once." alt="" coords="837,65,1040,92"/>
+<area shape="rect" id="node3" href="$ade7753_8h.html#a0b1742166bff53d5f8973073bb09e57e" title="Get interrupt indicator from STATUS register." alt="" coords="850,116,1027,143"/>
+<area shape="rect" id="node7" href="$ade7754_8h.html#a18b129547cd62f4744848c54630ced46" title="Get interrupt indicator from STATUS register." alt="" coords="850,1241,1027,1268"/>
+<area shape="rect" id="node10" href="$ade7758_8h.html#a3ebf76f1da30f309401baea4767666b2" title="Get interrupt indicator from STATUS register." alt="" coords="850,227,1027,253"/>
+<area shape="rect" id="node13" href="$ade7880_8h.html#a6da76df48af0aff69fc8f39df82bb502" title="Get interrupt indicator from STATUS0 register." alt="" coords="846,684,1031,711"/>
+<area shape="rect" id="node14" href="$ade7913_8h.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="849,735,1028,761"/>
+<area shape="rect" id="node15" href="$ade7913_8h.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="863,785,1014,812"/>
+<area shape="rect" id="node16" href="$ade7913_8h.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="851,836,1027,863"/>
+<area shape="rect" id="node17" href="$ade7953_8h.html#aef59b5560ba18b88d2f78744574de636" title="Get interrupt indicator from STATA register." alt="" coords="853,887,1024,913"/>
+<area shape="rect" id="node18" href="$ade7953_8h.html#a1ba71bfd27fb0629519064002de83f46" title="Get interrupt indicator from STATB register." alt="" coords="853,937,1024,964"/>
+<area shape="rect" id="node19" href="$ade7978_8h.html#a4109cca809289e739b0c327c2167eed2" title="Get interrupt indicator from STATUS0 register." alt="" coords="846,988,1031,1015"/>
+<area shape="rect" id="node20" href="$ade7978_8h.html#ae48befda8e0321f9171fcb4c96794855" title="Get interrupt indicator from STATUS1 register." alt="" coords="846,396,1031,423"/>
+<area shape="rect" id="node23" href="$ade9000_8h.html#a82ad2ddedfc642a3c46690cbcd861b21" title="Get interrupt indicator from STATUS0 register." alt="" coords="846,1039,1031,1065"/>
+<area shape="rect" id="node26" href="$ade9078_8h.html#a931924188e37d8aa33894edabc5e2d93" title="Get interrupt indicator from STATUS0 register." alt="" coords="846,1140,1031,1167"/>
+<area shape="rect" id="node27" href="$ade9078_8h.html#a8022352cf4bb624601de9480cef79046" title="Initialize the device." alt="" coords="885,1089,992,1116"/>
+<area shape="rect" id="node29" href="$ade9113_8h.html#a2f97c22926adcbae167087a7df90d2c0" title="Get interrupt indicator from STATUS register." alt="" coords="850,1191,1027,1217"/>
+<area shape="rect" id="node53" href="$ade9153a_8h.html#a57e069de5937471e21ab9eee24f29f0f" title="Sign of reactive power." alt="" coords="841,1292,1037,1319"/>
+<area shape="rect" id="node54" href="$ade9153a_8h.html#ad906d87846e85753f7c513049e5330dc" title="Sign of active power." alt="" coords="845,1343,1032,1369"/>
+<area shape="rect" id="node55" href="$ade9153a_8h.html#a74580a0b9c067210f62190f4f4ccef49" title="CF1_LT status." alt="" coords="851,1393,1027,1420"/>
+<area shape="rect" id="node56" href="$ade9153a_8h.html#aab29d0296a3331328d4592c57d2d3447" title="Sign of CF1 power." alt="" coords="845,1444,1032,1471"/>
+<area shape="rect" id="node57" href="$ade9153a_8h.html#a651e5d66a6d26e0bf43224b20abbfbd3" title="CF2_LT status." alt="" coords="851,1495,1027,1521"/>
+<area shape="rect" id="node58" href="$ade9153a_8h.html#a89471443fcd9aa354cbaf9566582db40" title="Sign of CF2 power." alt="" coords="845,1545,1032,1572"/>
+<area shape="rect" id="node59" href="$ade9153a_8h.html#a3c638d873f5c963248c61ba62897a6b9" title="Chip status." alt="" coords="855,1596,1022,1623"/>
+<area shape="rect" id="node60" href="$ade9153a_8h.html#a2b0a9ecfab418e2cff2fa52313dafff4" title="External_reference status." alt="" coords="845,1647,1032,1673"/>
+<area shape="rect" id="node61" href="$ade9153a_8h.html#ad5342065ebdf792f625316af398e768a" title="Frequency setting." alt="" coords="347,2679,527,2705"/>
+<area shape="rect" id="node63" href="$ade9153a_8h.html#ac87972472ed6f135a42190bc6dde1c21" title="Get interrupt indicator from STATUS register." alt="" coords="846,2108,1031,2135"/>
+<area shape="rect" id="node90" href="$ade9153a_8h.html#ade82101558dd8f3f79ae6a84ebb47113" title="Get phnoload status." alt="" coords="848,2159,1029,2201"/>
+<area shape="rect" id="node91" href="$ade9153a_8h.html#ada4d7dfeb9676ae148c0868f54df1623" title="Ipeak channel phase." alt="" coords="863,2225,1014,2252"/>
+<area shape="rect" id="node92" href="$ade9153a_8h.html#a4f748d15a106da377fc1b1a291a29714" title="mSure not detected on the last enabled ch" alt="" coords="857,2276,1021,2303"/>
+<area shape="rect" id="node93" href="$ade9153a_8h.html#a273dd168b5fb0c71615e1b84454586f1" title="Invalid config of mSure status." alt="" coords="855,2327,1022,2353"/>
+<area shape="rect" id="node94" href="$ade9153a_8h.html#af68425fe4872db9e42be89aacb66981a" title="mSure ready" alt="" coords="860,2377,1017,2404"/>
+<area shape="rect" id="node95" href="$ade9153a_8h.html#aff99c6ad6972879804dd10483b8405f9" title="mSure shift detected in CC val" alt="" coords="865,2428,1013,2455"/>
+<area shape="rect" id="node96" href="$ade9153a_8h.html#ae7b3b67a1407cbbdd87f0f425915974d" title="New run of mSure ready." alt="" coords="857,2479,1020,2505"/>
+<area shape="rect" id="node97" href="$ade9153a_8h.html#ac78294de936583322f9c84788224c75f" title="mSure timed out (600s)" alt="" coords="853,2529,1024,2556"/>
+<area shape="rect" id="node98" href="$ade9153a_8h.html#a9c101220d188a23efaaa070d5deb9a93" title="mSure status" alt="" coords="848,3071,1029,3097"/>
+<area shape="rect" id="node105" href="$adpd410x_8h.html#a3398d6eea6ec9b5840cbdbfb21363ac0" title="Do a read and write of a register to update only part of a register." alt="" coords="840,3248,1037,3275"/>
+<area shape="rect" id="node111" href="$max31827_8h.html#acf60373c1d4f07f1fb9850b75c1ae299" title="Initialize MAX31827 device setup." alt="" coords="857,3400,1020,3427"/>
+<area shape="rect" id="node115" href="$eval-ade7758_2src_2common_2common__data_8h.html#aa00b46d14528947fba9763a4a33cbfa6" title="Read measurements." alt="" coords="861,3299,1017,3325"/>
+<area shape="rect" id="node116" href="$eval-ade7754_2src_2common_2common__data_8h.html#a39afc136c5d00e25fa65db099cae6335" title="Read rms measurements." alt="" coords="845,1697,1033,1724"/>
+<area shape="rect" id="node4" href="$ade7753_8h.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="629,5,735,32"/>
+<area shape="rect" id="node6" href="$eval-ade7753_2src_2common_2common__data_8h.html#a15949fe4023e52c618a1a27713a2f456" title="Read measurements." alt="" coords="604,56,760,83"/>
+<area shape="rect" id="node5" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="409,31,464,57"/>
+<area shape="rect" id="node8" href="$ade7754_8h.html#a33b0de79aa3d55bcf7c68099c0e2459a" title="Initialize the device." alt="" coords="629,1627,735,1653"/>
+<area shape="rect" id="node9" href="$eval-ade7754_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="409,1652,464,1679"/>
+<area shape="rect" id="node11" href="$ade7758_8h.html#a422e1a9832e2a6c7451aa9857d446c90" title="Initialize the device." alt="" coords="629,107,735,133"/>
+<area shape="rect" id="node12" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="409,107,464,133"/>
+<area shape="rect" id="node21" href="$ade7978_8h.html#aeaf475d84c4cd829cb87e6674f0a2662" title="Initialize the device." alt="" coords="629,157,735,184"/>
+<area shape="rect" id="node22" href="$eval-ade7978_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="409,157,464,184"/>
+<area shape="rect" id="node24" href="$ade9000_8h.html#a5945f5becded49f6588b4f3a6f013010" title="Read the temperature." alt="" coords="605,208,759,235"/>
+<area shape="rect" id="node25" href="$eval-ade9000_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="409,208,464,235"/>
+<area shape="rect" id="node28" href="$eval-ade9078_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="655,259,709,285"/>
+<area shape="rect" id="node30" href="$ade9113_8h.html#ac07342aad30106c1373b0cd92d60f64e" title="Get ADC_SYNC_DONE indicator." alt="" coords="576,1475,788,1501"/>
+<area shape="rect" id="node31" href="$ade9113_8h.html#a15aaf923d728390cfd7b40e72f2501b1" title="Get COM_UP indicator." alt="" coords="600,1525,764,1552"/>
+<area shape="rect" id="node32" href="$ade9113_8h.html#a183988e328ed2fda01ee826cb7e8ac17" title="Get COMFLT_ERR indicator." alt="" coords="593,1576,771,1603"/>
+<area shape="rect" id="node33" href="$ade9113_8h.html#ad8b6326e254e9b5442565bb3c5ddfb0b" title="Get CRC_CHG indicator." alt="" coords="601,309,763,336"/>
+<area shape="rect" id="node34" href="$ade9113_8h.html#a97407c6d4f8092f4651e69d66e5dc18f" title="Get CRC_DONE indicator." alt="" coords="581,360,783,387"/>
+<area shape="rect" id="node35" href="$ade9113_8h.html#a6ecc3569c1c23aec580731e3b5da2e93" title="Get EFUSE_MEM_ERR indicator." alt="" coords="575,411,789,437"/>
+<area shape="rect" id="node36" href="$ade9113_8h.html#aa7ee2ec13907c5aa96c349c1ac3e77d5" title="Get I_WAV_OVRNG indicator." alt="" coords="585,461,779,488"/>
+<area shape="rect" id="node37" href="$ade9113_8h.html#a6c19e18b8c0709e6d7864b90aeefce98" title="Get ISO_CLK_STBL_ERR indicator." alt="" coords="603,513,761,554"/>
+<area shape="rect" id="node38" href="$ade9113_8h.html#a9c4580d035fbb6dfa2350b8051997b2e" title="Get ISO_DIG_MOD_I_OVF indicator." alt="" coords="603,578,761,619"/>
+<area shape="rect" id="node39" href="$ade9113_8h.html#aab58481692c8cccf8f064aac5e1f58f3" title="Get ISO_DIG_MOD_V1_OVF indicator." alt="" coords="603,643,761,685"/>
+<area shape="rect" id="node40" href="$ade9113_8h.html#a8d47289d0de45bd7c2b46912dbb7c057" title="Get ISO_DIG_MOD_V2_OVF indicator." alt="" coords="603,709,761,750"/>
+<area shape="rect" id="node41" href="$ade9113_8h.html#a12efdda72554040d4d6d057b79bcc88b" title="Get ISO_ECC_ERR indicator." alt="" coords="589,775,775,801"/>
+<area shape="rect" id="node42" href="$ade9113_8h.html#a8087931b11f8cf7f6612ff1c7f6a4cda" title="Get ISO_EFUSE_MEM_ERR indicator." alt="" coords="595,826,769,867"/>
+<area shape="rect" id="node43" href="$ade9113_8h.html#a9fe64b5b0a312deefbdbc82b989ee343" title="Get ISO_PHY_CRC_ERR indicator." alt="" coords="601,891,763,933"/>
+<area shape="rect" id="node44" href="$ade9113_8h.html#a0a139d4d62daef09e6a847cb6afdebf7" title="Get ISO_PHY_ERR indicator." alt="" coords="588,957,776,984"/>
+<area shape="rect" id="node45" href="$ade9113_8h.html#a5b3801f7398908bfd4fda50cf8baf091" title="Get ISO_STATUS_RD_ECC_ERR indicator." alt="" coords="593,1009,771,1050"/>
+<area shape="rect" id="node46" href="$ade9113_8h.html#acdf4a4fbd92a34a27bafc7695270f675" title="Get ISO_TEST_MMR_ERR indicator." alt="" coords="600,1074,764,1115"/>
+<area shape="rect" id="node47" href="$ade9113_8h.html#ae1a622415243b36f75fbccbff0fc7f77" title="Get RESET_DONE indicator." alt="" coords="589,1140,775,1167"/>
+<area shape="rect" id="node48" href="$ade9113_8h.html#a744fce7e1911cdd5fe3e0356b24fd9b3" title="Get SPI_CRC_ERR indicator." alt="" coords="591,1191,773,1217"/>
+<area shape="rect" id="node49" href="$ade9113_8h.html#affbfb5ba4f7bf0489af821fb86285ccd" title="Get STATUS1 indicator." alt="" coords="597,1241,767,1268"/>
+<area shape="rect" id="node50" href="$ade9113_8h.html#a44f5f5a5b613ccd73e0895f15cfe98ec" title="Get STATUS2 indicator." alt="" coords="597,1292,767,1319"/>
+<area shape="rect" id="node51" href="$ade9113_8h.html#a6dadfb9485fd867898ba61594ec1a16f" title="Get V1_WAV_OVRNG indicator." alt="" coords="601,1343,763,1385"/>
+<area shape="rect" id="node52" href="$ade9113_8h.html#aa16499c63ab925f8302140b9ad3f7a26" title="Get V2_WAV_OVRNG indicator." alt="" coords="601,1409,763,1450"/>
+<area shape="rect" id="node62" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a9b065d0400a39009e3266707f94e0439" title="Read measurements." alt="" coords="125,2495,281,2521"/>
+<area shape="rect" id="node64" href="$ade9153a_8h.html#a5900330af664e03211d461792fe33c76" title="Get APA (active power) sign change indicator." alt="" coords="579,2539,785,2565"/>
+<area shape="rect" id="node65" href="$ade9153a_8h.html#a99dd155f9f68f5a37b609c74e0b8757c" title="Get CF1 pulse issued indicator." alt="" coords="611,2589,753,2616"/>
+<area shape="rect" id="node66" href="$ade9153a_8h.html#ad6156a7b1a5ee7b47df9cac991b41db4" title="Get CF1 polarity change indicator." alt="" coords="597,2640,767,2667"/>
+<area shape="rect" id="node67" href="$ade9153a_8h.html#a50a790b901c1c0c252ce35ace4754f19" title="Get CF2 pulse issued indicator." alt="" coords="611,2691,753,2717"/>
+<area shape="rect" id="node68" href="$ade9153a_8h.html#af858607d8c42cebc209676bf73d8f8fe" title="Get CF2 polarity change indicator." alt="" coords="597,2741,767,2768"/>
+<area shape="rect" id="node69" href="$ade9153a_8h.html#ab102603c73021574525977582ee5811e" title="Get chip status indicator." alt="" coords="592,2792,772,2819"/>
+<area shape="rect" id="node70" href="$ade9153a_8h.html#a795feb91e1df87a4c8aca6d905368b3c" title="Get CRC change indicator." alt="" coords="597,2843,767,2869"/>
+<area shape="rect" id="node71" href="$ade9153a_8h.html#a1ef0cd963c4dd874405bb11fe6444df4" title="Get CRC done indicator." alt="" coords="593,2893,771,2920"/>
+<area shape="rect" id="node72" href="$ade9153a_8h.html#a998c503c9f3ef4934fb1ca0544389474" title="Get new waveform samples ready indicator." alt="" coords="599,2944,765,2971"/>
+<area shape="rect" id="node73" href="$ade9153a_8h.html#ab7a23853e43f3ce42572465bb453871c" title="Get power values egy ready indicator." alt="" coords="599,1779,765,1805"/>
+<area shape="rect" id="node74" href="$ade9153a_8h.html#a12627d10ca88b7e277ef6a7592c2304b" title="Get event status indicator." alt="" coords="587,1829,777,1856"/>
+<area shape="rect" id="node75" href="$ade9153a_8h.html#a0237039b90c920fcfb327a3c83af93aa" title="Get fundamental reactive energy no load condition indicator." alt="" coords="603,1880,761,1907"/>
+<area shape="rect" id="node76" href="$ade9153a_8h.html#a40f308df3428fc7f907d7e4da34200a4" title="Get MS status indicator." alt="" coords="595,1931,769,1957"/>
+<area shape="rect" id="node77" href="$ade9153a_8h.html#a532aa0769531b09bf2629657d65086a6" title="Get PF ready indicator." alt="" coords="601,1981,763,2008"/>
+<area shape="rect" id="node78" href="$ade9153a_8h.html#ade9d493a4c4ffd0703505d4dae920e3e" title="Get power values registers update indicator." alt="" coords="599,2032,765,2059"/>
+<area shape="rect" id="node79" href="$ade9153a_8h.html#a9cb3bf7b1c0609065ae3abe541f6ef0d" title="Get RMS_OC values update indicator." alt="" coords="584,2083,780,2109"/>
+<area shape="rect" id="node80" href="$ade9153a_8h.html#a495403440bbb7f7dcf66d4ff808c4d4c" title="Get RPA (reactive power) sign change indicator." alt="" coords="581,2133,783,2160"/>
+<area shape="rect" id="node81" href="$ade9153a_8h.html#aaae8ca3efebb8f84d21d72ce3c55f94b" title="Get reset done indicator." alt="" coords="597,2184,767,2211"/>
+<area shape="rect" id="node82" href="$ade9153a_8h.html#afbafce13b8a8beac8d506ea37286f826" title="Get new temperature reading ready indicator." alt="" coords="591,1728,773,1755"/>
+<area shape="rect" id="node84" href="$ade9153a_8h.html#a2d47824fc9cbf1bb93d61738606a24c6" title="Get total apparent energy no load condition indicator." alt="" coords="607,2235,757,2261"/>
+<area shape="rect" id="node85" href="$ade9153a_8h.html#ae057c4e4c170d5ba1f1519a7aad1b36d" title="Get total active energy no load condition indicator." alt="" coords="601,2285,763,2312"/>
+<area shape="rect" id="node86" href="$ade9153a_8h.html#ad68e3c2fd6a64ce58af4b468be0b6efb" title="Get zero crossing detect on I ch A indicator." alt="" coords="608,2336,756,2363"/>
+<area shape="rect" id="node87" href="$ade9153a_8h.html#a4f1c56c99522dfa35f05581bd85f984f" title="Get zero crossing detect on V ch indicator." alt="" coords="606,2387,758,2413"/>
+<area shape="rect" id="node88" href="$ade9153a_8h.html#a0cdbfa2f7008aeec74b68aaeba2186f7" title="Get zero crossing detect on I ch B indicator." alt="" coords="608,2437,756,2464"/>
+<area shape="rect" id="node89" href="$ade9153a_8h.html#afdeb67169c05afa9f7b4a8725ffbf4b0" title="Get zero crossing timout on V ch indicator." alt="" coords="599,2488,765,2515"/>
+<area shape="rect" id="node83" href="$ade9153a_8h.html#a97870faa000dbef25c9705e5aefdc356" title="Temperature value in deg C." alt="" coords="359,2311,514,2337"/>
+<area shape="rect" id="node99" href="$ade9153a_8h.html#a240ff2c469d7822531e2a77920e052d0" title="Start autocalibration AI channel." alt="" coords="583,3147,781,3173"/>
+<area shape="rect" id="node103" href="$ade9153a_8h.html#a17f277da02d5b845549c2bfc3f3d7af4" title="Start autocalibration AV channel." alt="" coords="581,3045,783,3072"/>
+<area shape="rect" id="node104" href="$ade9153a_8h.html#a90a56f9b7929d6fa59012686f5ffb517" title="Start autocalibration BI channel." alt="" coords="583,3096,781,3123"/>
+<area shape="rect" id="node100" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a8ab286a0277c4951842d176a2ce4c41c" title="Autocalibration start." alt="" coords="358,3096,515,3123"/>
+<area shape="rect" id="node101" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a5b32942d81fb899bcf8c3907bc9fde17" title="Autocalibration read values." alt="" coords="108,3096,299,3123"/>
+<area shape="rect" id="node102" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,3096,60,3123"/>
+<area shape="rect" id="node106" href="$adpd410x_8h.html#a7a74b5425d1d67e763df0ab85dc2df12" title="Do a software reset." alt="" coords="619,3400,745,3427"/>
+<area shape="rect" id="node107" href="$adpd410x_8h.html#a8c47ad8226f8c0882232750616b4ac6d" title="Setup the device and the driver." alt="" coords="372,3311,501,3337"/>
+<area shape="rect" id="node108" href="$adpd410x_8c.html#a276c3d1815c3a76bc0c4a8556d51cc3b" title="Set number of active time slots." alt="" coords="579,3299,785,3325"/>
+<area shape="rect" id="node109" href="$adpd410x_8h.html#a2f5eb641289541459498a473a416724d" title="Set operation mode." alt="" coords="595,3349,769,3376"/>
+<area shape="rect" id="node110" href="$adpd410x_8h.html#aeebd23ab85c6cd30017c65946538e5e3" title="Setup an active time slot." alt="" coords="587,3197,777,3224"/>
+<area shape="rect" id="node112" href="$max31827_8h.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="623,3451,741,3477"/>
+<area shape="rect" id="node113" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="357,3476,517,3503"/>
+<area shape="rect" id="node114" href="$iio__max31827_8h.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="365,3425,508,3452"/>
+</map>

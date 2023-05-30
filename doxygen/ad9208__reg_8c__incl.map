@@ -1,0 +1,12 @@
+<map id="drivers/adc/ad9208/ad9208_api/ad9208_reg.c" name="drivers/adc/ad9208/ad9208_api/ad9208_reg.c">
+<area shape="rect" id="node1" title="Contains AD9208 APIs for ADC Register Configuration and Control." alt="" coords="99,5,291,47"/>
+<area shape="rect" id="node2" href="$ad9208__api_8h.html" title=" " alt="" coords="141,95,250,121"/>
+<area shape="rect" id="node8" href="$ad9208__reg_8h.html" title="AD9208 SPI Register Definition Header File." alt="" coords="5,95,116,121"/>
+<area shape="rect" id="node9" href="$adc_2ad9208_2ad9208__api_2api__errors_8h.html" title="API error codes header file." alt="" coords="274,95,373,121"/>
+<area shape="rect" id="node3" href="$adc_2ad9208_2ad9208__api_2api__def_8h.html" title="API definitions header file." alt="" coords="69,169,151,196"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="145,244,245,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="68,319,139,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="163,319,233,345"/>
+<area shape="rect" id="node7" title=" " alt="" coords="258,319,341,345"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="289,169,357,196"/>
+</map>

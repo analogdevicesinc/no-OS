@@ -1,0 +1,6 @@
+<map id="adpd410x_timeslot_init" name="adpd410x_timeslot_init">
+<area shape="rect" id="node1" title="Initialization structure for time slots." alt="" coords="140,228,315,255"/>
+<area shape="rect" id="node2" href="$unionadpd410x__led__control.html" title="Union of the LED mapping and value so they can be accessed both ways." alt="" coords="9,95,174,121"/>
+<area shape="rect" id="node3" href="$struct__adpd410x__led__control.html" title="Structure mapping LED output option and LED strength to one byte." alt="" coords="5,5,177,32"/>
+<area shape="rect" id="node4" href="$structadpd410x__ts__inputs.html" title="Structure holding time slot input configuration." alt="" coords="198,95,350,121"/>
+</map>

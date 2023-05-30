@@ -1,0 +1,26 @@
+<map id="ad9467_read" name="ad9467_read">
+<area shape="rect" id="node1" title="Reads data from a register." alt="" coords="755,534,861,561"/>
+<area shape="rect" id="node2" href="$ad9467_8h.html#a79ec5e0b953aa7648e3d8ca880a3acee" title="Sets the AC coupling(0) or DC coupling(1) mode." alt="" coords="288,5,449,47"/>
+<area shape="rect" id="node3" href="$ad9467_8h.html#a1125171373d3873d6a144855fc2a0d1c" title="Disconnects (1) or connects (0) the analog input from or to the the ADC channel." alt="" coords="288,72,449,113"/>
+<area shape="rect" id="node4" href="$ad9467_8h.html#a597797a641700c750e9a32641c9c11bb" title="Changes the input buffer current(1)." alt="" coords="277,139,460,166"/>
+<area shape="rect" id="node5" href="$ad9467_8h.html#abd5aa1b883075986a7d34cf3494ffa68" title="Changes the input buffer current(2)." alt="" coords="277,194,460,221"/>
+<area shape="rect" id="node6" href="$ad9467_8h.html#a435c341bd1925e56140829983de1008c" title="Determines LVDS output properties." alt="" coords="278,253,459,279"/>
+<area shape="rect" id="node7" href="$ad9467_8h.html#ac538012352eeb265aa262a2cc101926f" title="Activates the normal (0) or inverted (1) DCO clock." alt="" coords="275,318,462,345"/>
+<area shape="rect" id="node8" href="$ad9467_8h.html#a6571c47605fcc7e3c5e98d30cd308b84" title="Configures the clock delay setting." alt="" coords="516,316,707,357"/>
+<area shape="rect" id="node9" href="$ad9467_8h.html#a1ee4250c78259778b92cf0473ffb090f" title="Enables (1) or disables (0) the external voltage reference." alt="" coords="291,398,447,425"/>
+<area shape="rect" id="node10" href="$ad9467_8h.html#a2853eb8b8d9e541b869521d24873c6cf" title="Configures the full&#45;scale input voltage selection." alt="" coords="277,465,460,491"/>
+<area shape="rect" id="node11" href="$ad9467_8h.html#afba20cbe33fe60373180154e1738c821" title="Sets the offset adjustment." alt="" coords="541,483,682,510"/>
+<area shape="rect" id="node12" href="$ad9467_8h.html#a7675d7bae1a339b8905afb6af8075788" title="Sets the output current adjustment." alt="" coords="269,547,468,574"/>
+<area shape="rect" id="node13" href="$ad9467_8h.html#a35c640df5935d520d6e21c72a03b84e1" title="Disables (1) or enables (0) the data output." alt="" coords="282,610,455,637"/>
+<area shape="rect" id="node14" href="$ad9467_8h.html#a8cf1ef07324f55b9c5ea07b014797e72" title="Specifies the output format." alt="" coords="283,889,454,915"/>
+<area shape="rect" id="node16" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,889,60,915"/>
+<area shape="rect" id="node17" href="$ad9467_8h.html#a70c8f21b8351059ff7b142d6610c9e8f" title="Activates the inverted (1) or normal (0) output mode." alt="" coords="287,686,451,713"/>
+<area shape="rect" id="node18" href="$ad9467_8h.html#a75824f422e1e72caf5b140d06b9c4cb1" title="Configures the power mode." alt="" coords="296,787,441,814"/>
+<area shape="rect" id="node19" href="$ad9467_8h.html#aa4ca255f28a2fdd3b321f285f10ebb42" title="Sets (1) or clears (0) the reset long PN sequence bit(PN23)." alt="" coords="294,737,443,763"/>
+<area shape="rect" id="node20" href="$ad9467_8h.html#adf0af00c561fb97352c0784c324dd081" title="Sets (1) or clears (0) the reset short PN sequence bit(PN9)." alt="" coords="298,838,439,865"/>
+<area shape="rect" id="node21" href="$ad9467_8h.html#aab824f18dec438fa27ba61dd2a37f61d" title="Sets a bit or a group of bits inside a register without modifying the other bits." alt="" coords="523,534,699,561"/>
+<area shape="rect" id="node22" href="$ad9467_8h.html#a1a94cd0931136ab64a76f2aa4f9e6cc4" title="Sets the ADC&#39;s test mode." alt="" coords="295,939,442,966"/>
+<area shape="rect" id="node23" href="$ad9467_8h.html#afe6b050a9df654474ee211fff5467ca0" title="Initiates a transfer and waits for the operation to end." alt="" coords="305,1041,433,1067"/>
+<area shape="rect" id="node15" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="126,939,203,966"/>
+<area shape="rect" id="node24" href="$ad9467_8h.html#af1eea7aa6b5fe4a6c7e0b72a479340a9" title="Configures the test mode and the output mode to a default state." alt="" coords="108,1041,221,1067"/>
+</map>

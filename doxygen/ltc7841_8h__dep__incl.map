@@ -1,0 +1,10 @@
+<map id="drivers/power/ltc7841/ltc7841.h" name="drivers/power/ltc7841/ltc7841.h">
+<area shape="rect" id="node1" title="Header file of LTC7841 Driver." alt="" coords="395,5,557,47"/>
+<area shape="rect" id="node2" href="$iio__ltc7841_8h.html" title="Header file for the LTC7841 IIO Driver." alt="" coords="108,102,271,143"/>
+<area shape="rect" id="node5" href="$ltc7841_8c.html" title="Source file for the LTC7841 Driver." alt="" coords="295,102,457,143"/>
+<area shape="rect" id="node6" href="$ltc7841_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltc7841 examples." alt="" coords="481,102,673,143"/>
+<area shape="rect" id="node8" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltc7841 project." alt="" coords="698,95,865,151"/>
+<area shape="rect" id="node3" href="$iio__ltc7841_8c.html" title="Source file for the LTC7841 IIO Driver." alt="" coords="5,206,168,247"/>
+<area shape="rect" id="node4" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltc7841 project." alt="" coords="193,199,367,255"/>
+<area shape="rect" id="node7" href="$ltc7841_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltc7841 examples." alt="" coords="482,206,673,247"/>
+</map>

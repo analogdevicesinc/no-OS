@@ -1,0 +1,26 @@
+<map id="no_os_div_s64_rem" name="no_os_div_s64_rem">
+<area shape="rect" id="node1" title=" " alt="" coords="583,233,733,260"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="343,5,527,32"/>
+<area shape="rect" id="node4" href="$adxl313_8h.html#abe3973b9472473f33e98502f802b7241" title=" " alt="" coords="352,56,519,83"/>
+<area shape="rect" id="node6" href="$adxl313_8h.html#aba7db8244b208799c405fe572044c926" title=" " alt="" coords="369,107,501,133"/>
+<area shape="rect" id="node7" href="$adxl355_8h.html#a3dfc3d88cc09e28b63a815471ebb25c6" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="352,157,519,184"/>
+<area shape="rect" id="node9" href="$adxl355_8h.html#ab2cca702bfd799f169c4c82cb13ecbb8" title="Reads the raw temperature data and converts it to millidegrees Celsius." alt="" coords="364,208,507,235"/>
+<area shape="rect" id="node10" href="$adxl355_8h.html#a31457c441689b591b9177bc6e4d877d0" title="Reads the raw output data of each axis and converts it to g." alt="" coords="369,259,501,285"/>
+<area shape="rect" id="node11" href="$adxl38x_8h.html#a62978924f7d955a44d1229e513c1e754" title="Function to convert accel data to gees." alt="" coords="336,309,535,336"/>
+<area shape="rect" id="node14" href="$adxl38x_8h.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="350,360,521,387"/>
+<area shape="rect" id="node16" href="$iio_8h.html#a5de19adb6399a7b8b228beba45f1e739" title=" " alt="" coords="369,487,501,513"/>
+<area shape="rect" id="node23" href="$max31855_8h.html#abdca58ca6d3ed48396082f3ea8ed60ed" title="Read thermocouple and internal temperatures (converted in deg. C)" alt="" coords="351,613,519,640"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="139,5,257,32"/>
+<area shape="rect" id="node5" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="118,81,278,108"/>
+<area shape="rect" id="node8" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="139,208,257,235"/>
+<area shape="rect" id="node12" href="$fifo__example__main_8h.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="125,284,271,311"/>
+<area shape="rect" id="node13" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,284,60,311"/>
+<area shape="rect" id="node15" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="118,335,278,361"/>
+<area shape="rect" id="node17" href="$iio__adis__internals_8h.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="111,385,285,412"/>
+<area shape="rect" id="node18" href="$iio__adis__internals_8h.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="108,436,288,463"/>
+<area shape="rect" id="node19" href="$iio__adis__internals_8h.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="132,487,264,513"/>
+<area shape="rect" id="node20" href="$iio__adis__internals_8h.html#aaedb46cc4fe942a8837df6283c46684c" title="Handles the read request for offset attribute." alt="" coords="122,537,274,564"/>
+<area shape="rect" id="node21" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="129,588,267,615"/>
+<area shape="rect" id="node22" href="$iio__adis__internals_8h.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="123,639,273,665"/>
+<area shape="rect" id="node24" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="118,689,278,716"/>
+</map>

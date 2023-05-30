@@ -1,0 +1,15 @@
+<map id="projects/ltm4686/src/examples/basic/basic_example.c" name="projects/ltm4686/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example source file for ltm4686 project." alt="" coords="243,5,409,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$ltm4686_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header file for ltm4686 project." alt="" coords="156,109,288,136"/>
+<area shape="rect" id="node4" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="260,184,373,211"/>
+<area shape="rect" id="node6" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="363,109,499,136"/>
+<area shape="rect" id="node8" href="$ltm4686_8h.html" title="Header file of the LTM4686 driver." alt="" coords="531,109,619,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="573,259,644,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="398,184,465,211"/>
+<area shape="rect" id="node9" title=" " alt="" coords="540,184,611,211"/>
+<area shape="rect" id="node10" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="759,184,859,211"/>
+<area shape="rect" id="node13" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="635,184,734,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="723,259,793,285"/>
+<area shape="rect" id="node12" title=" " alt="" coords="818,259,901,285"/>
+</map>

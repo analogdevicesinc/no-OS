@@ -1,0 +1,23 @@
+<map id="ltc7841_reg_write" name="ltc7841_reg_write">
+<area shape="rect" id="node1" title="Write a raw value to a register." alt="" coords="849,499,988,526"/>
+<area shape="rect" id="node2" href="$ltc7841_8h.html#a8e5911c872850899ff69b6b0520c74ea" title="Change margin high command." alt="" coords="599,5,777,47"/>
+<area shape="rect" id="node3" href="$ltc7841_8h.html#a5b56219b210e66790d9886c1c3e6138b" title="Change margin low command." alt="" coords="599,71,777,112"/>
+<area shape="rect" id="node4" href="$ltc7841_8h.html#ad33c8252b948624318720ba09054d36c" title="Perform change of rail address of LTC7841." alt="" coords="612,136,764,177"/>
+<area shape="rect" id="node5" href="$ltc7841_8h.html#a585c109dd1cce2487c82338a532a093b" title="Change to Fast Slew Rate for LTC7841." alt="" coords="600,201,776,243"/>
+<area shape="rect" id="node6" href="$ltc7841_8h.html#a3e244eea01c494d76a5b448b6f053b71" title="Change to Internal Die Temeperature Reading for LTC7841." alt="" coords="587,267,789,308"/>
+<area shape="rect" id="node7" href="$ltc7841_8h.html#a6ca77375525f0eb02d6c8d59e227f5fe" title="Change to Nominal Slew Rate for LTC7841." alt="" coords="586,332,790,373"/>
+<area shape="rect" id="node8" href="$ltc7841_8h.html#af149a0be53b9c04ed99cc896b2c3cbfa" title="Change to Slow Slew Rate for LTC7841." alt="" coords="597,397,779,439"/>
+<area shape="rect" id="node9" href="$ltc7841_8h.html#abbb9114003478b799dc99f53dea04ffd" title="Change to TSNS PIN VOLTAGE for LTC7841." alt="" coords="599,463,777,504"/>
+<area shape="rect" id="node10" href="$ltc7841_8h.html#a3e2c5021908337684ab8c8664cb06e3f" title="Change Vout command." alt="" coords="608,631,768,672"/>
+<area shape="rect" id="node15" href="$ltc7841_8h.html#a2d59b371c40e4de1d261d10628b247be" title="This clears the STATUS_WORD BITS that are clearable." alt="" coords="356,521,512,563"/>
+<area shape="rect" id="node16" href="$ltc7841_8h.html#a457ba3d99f38d70c11c8e713997ca5d2" title="This clears the MFR peak data values." alt="" coords="341,587,527,614"/>
+<area shape="rect" id="node17" href="$ltc7841_8h.html#aa94b9e6e18dd6125ed36214062456fe9" title="Margin High for LTC7841 Operation." alt="" coords="575,697,801,723"/>
+<area shape="rect" id="node18" href="$ltc7841_8h.html#a8870d106b5a210371380ea6cfdcb7589" title="Margin Low for LTC7841 Operation." alt="" coords="577,747,799,774"/>
+<area shape="rect" id="node19" href="$ltc7841_8h.html#a18c2693f8b5fe29e30ffbe8959ceba74" title="Perform a reset to the LTC7841." alt="" coords="633,798,743,825"/>
+<area shape="rect" id="node20" href="$ltc7841_8h.html#a623410da44591acb959251306239ed97" title="Turn off LTC7841." alt="" coords="625,849,751,875"/>
+<area shape="rect" id="node21" href="$ltc7841_8h.html#a80ca28df9f7736bfa07ced6bb60cbc9a" title="Turn on LTC7841." alt="" coords="625,899,751,926"/>
+<area shape="rect" id="node11" href="$ltc7841_8h.html#a2fcb18b33431e2e40329ccc8befa7fdf" title="Initialize the device structure." alt="" coords="385,638,483,665"/>
+<area shape="rect" id="node12" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="173,587,292,614"/>
+<area shape="rect" id="node13" href="$iio__ltc7841_8h.html#a08c7b193ba1977f985581017243ec512" title="Initializes the LTC7841 IIO descriptor." alt="" coords="172,638,293,665"/>
+<area shape="rect" id="node14" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="5,638,124,665"/>
+</map>
