@@ -1,0 +1,11 @@
+<map id="adc_demo_init" name="adc_demo_init">
+<area shape="rect" id="Node000001" title="init function for the adc demo driver" alt="" coords="391,55,508,80"/>
+<area shape="rect" id="Node000002" href="$iio__demo_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,5,297,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="383,54,342,45,289,33,291,28,343,39,384,49"/>
+<area shape="rect" id="Node000003" href="$iio__sw__trigger__example_8c.html#a89aade8edb6d89b267280af1c3bb6ac0" title="IIO sw trigger example main execution." alt="" coords="117,55,334,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="377,70,334,70,334,65,377,65"/>
+<area shape="rect" id="Node000005" href="$iio__demo_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,104,343,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="380,86,343,94,286,106,285,101,342,89,379,80"/>
+<area shape="rect" id="Node000004" href="$iio__demo_2src_2platform_2aducm3029_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for aducm3029 platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,70,60,70,60,65,103,65"/>
+</map>

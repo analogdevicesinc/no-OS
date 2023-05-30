@@ -1,0 +1,7 @@
+<map id="projects/ad5766&#45;sdz/src/ad5766_core.h" name="projects/ad5766&#45;sdz/src/ad5766_core.h">
+<area shape="rect" id="Node000001" title="Header file of AD5766 Core Driver." alt="" coords="93,5,247,45"/>
+<area shape="rect" id="Node000002" href="$ad5766__core_8c.html" title="Implementation of AD5766 Core Driver." alt="" coords="5,93,159,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,57,103,95,100,91,139,53"/>
+<area shape="rect" id="Node000003" href="$ad5766__sdz_8c.html" title="Implementation of Main Function." alt="" coords="183,93,336,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,53,241,91,238,95,198,57"/>
+</map>

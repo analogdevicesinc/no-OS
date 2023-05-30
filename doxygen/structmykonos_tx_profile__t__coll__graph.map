@@ -1,0 +1,5 @@
+<map id="mykonosTxProfile_t" name="mykonosTxProfile_t">
+<area shape="rect" id="Node000001" title="Data structure to hold settings for the current Tx specific use case profile." alt="" coords="5,93,156,119"/>
+<area shape="rect" id="Node000002" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="26,5,135,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,45,83,93,78,93,78,45"/>
+</map>

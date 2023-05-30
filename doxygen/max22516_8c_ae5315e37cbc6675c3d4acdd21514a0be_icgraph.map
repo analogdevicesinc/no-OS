@@ -1,0 +1,38 @@
+<map id="max22516_read" name="max22516_read">
+<area shape="rect" id="Node000001" title="Reads data from max22516 over SPI." alt="" coords="647,277,773,303"/>
+<area shape="rect" id="Node000002" href="$max22516_8c.html#a377f6f4c2bba8c0b3bf76d91f22a65ba" title="MAX22516 do get." alt="" coords="425,5,568,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="702,264,692,216,672,157,641,95,621,68,597,44,567,28,569,23,600,40,625,64,646,93,677,155,697,215,707,263"/>
+<area shape="rect" id="Node000003" href="$max22516_8c.html#a13605d65594ec92d3fb5f7e3849ab6cb" title="MAX22516 get cq stat." alt="" coords="410,55,583,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="699,264,686,226,665,179,635,133,597,93,578,82,580,78,600,89,640,129,670,177,691,224,704,263"/>
+<area shape="rect" id="Node000004" href="$max22516_8c.html#a1fb139d6f2dd4aefaecb7035fc028dab" title="MAX22516 get dl mode." alt="" coords="405,104,588,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="695,266,657,203,630,170,597,143,575,132,577,127,600,138,634,167,662,200,699,264"/>
+<area shape="rect" id="Node000005" href="$max22516_8c.html#a0105ad768e2c8b665e064b13f350bcc5" title="MAX22516 get do stat." alt="" coords="409,153,584,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="688,269,648,229,624,209,597,192,570,181,572,176,600,188,627,205,652,225,691,265"/>
+<area shape="rect" id="Node000006" href="$max22516_8c.html#ae62ae50e0813c5404ce4c9177c2b1161" title="MAX22516 get frm err cnt." alt="" coords="396,203,597,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="671,274,598,242,559,231,561,225,600,237,674,269"/>
+<area shape="rect" id="Node000007" href="$max22516_8c.html#a4288b2ca4480d242f6f84e015f72e51d" title="MAX22516 get iol err cnt." alt="" coords="399,252,594,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="633,284,594,279,594,274,633,278"/>
+<area shape="rect" id="Node000008" href="$max22516_8c.html#a68d1cc6bbcbb073d5f16607fbc4a0bf2" title="MAX22516 get mst ctmr." alt="" coords="403,301,591,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="633,301,591,306,591,301,633,296"/>
+<area shape="rect" id="Node000009" href="$max22516_8c.html#a99c2d689b2aa965f40726b4d5ab6b1ca" title="MAX22516 get THD." alt="" coords="423,351,570,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="672,311,600,341,556,353,555,348,598,335,670,306"/>
+<area shape="rect" id="Node000010" href="$max22516_8c.html#a740ed3fc895bd93b0911a7cf1372adf5" title="MAX22516 get v24." alt="" coords="421,400,572,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="690,315,651,354,600,390,568,402,566,397,597,385,648,350,687,312"/>
+<area shape="rect" id="Node000011" href="$max22516_8c.html#a52e1b00eb7aa2cd3983924ceb5311782" title="MAX22516 setup watchdog." alt="" coords="395,449,599,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="699,316,661,378,633,411,600,439,574,452,572,447,597,434,629,407,657,375,694,314"/>
+<area shape="rect" id="Node000012" href="$max22516_8c.html#aabbe654b656b5addc9bd1fe8b8966d44" title="MAX22516 tx get." alt="" coords="427,499,566,524"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="704,317,690,355,669,402,639,448,600,488,568,505,565,500,597,484,635,445,664,399,685,353,699,315"/>
+<area shape="rect" id="Node000014" href="$max22516_8c.html#a4a2579ad68b7fefa457a8179356798fa" title="Update MAX22516 register." alt="" coords="425,560,568,585"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="707,317,695,363,675,422,644,483,624,512,600,537,580,552,557,562,555,557,577,547,597,533,620,509,639,481,670,420,690,362,701,315"/>
+<area shape="rect" id="Node000013" href="$max22516_8c.html#a6786b6d2d641d74ee2c4398a6cd05940" title="MAX22516 get cq." alt="" coords="199,485,341,511"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="413,509,341,505,341,499,413,504"/>
+<area shape="rect" id="Node000015" href="$max22516_8c.html#a6f8764f664b871d843917d904fa86fc1" title="MAX22516 do set." alt="" coords="199,535,341,560"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="411,566,341,558,341,553,412,561"/>
+<area shape="rect" id="Node000016" href="$max22516_8c.html#a6adc1e843f960601d831b5abfba8b792" title="MAX22516 tx set." alt="" coords="201,584,339,609"/>
+<area shape="poly" id="edge15_Node000014_Node000016" title=" " alt="" coords="412,584,340,592,339,587,411,579"/>
+<area shape="rect" id="Node000018" href="$max22516_8c.html#a53bf50b71fcc5c956338c7f87f5820ef" title="MAX22516 txen set." alt="" coords="193,633,347,659"/>
+<area shape="poly" id="edge17_Node000014_Node000018" title=" " alt="" coords="444,592,311,636,309,631,442,587"/>
+<area shape="rect" id="Node000017" href="$max22516_8c.html#a6b7ec792151ee38bd99fdf22b4cc0420" title="MAX22516 set cq." alt="" coords="5,609,145,635"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="187,610,146,615,146,610,187,605"/>
+<area shape="poly" id="edge18_Node000018_Node000017" title=" " alt="" coords="179,637,145,633,146,628,180,632"/>
+</map>

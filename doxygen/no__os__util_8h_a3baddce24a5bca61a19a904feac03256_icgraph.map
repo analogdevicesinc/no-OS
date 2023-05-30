@@ -1,0 +1,28 @@
+<map id="no_os_sign_extend16" name="no_os_sign_extend16">
+<area shape="rect" id="Node000001" title=" " alt="" coords="811,160,973,185"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#abad1f58c2afa0d134fb84cfd8f1a4497" title="Get threshold configuration." alt="" coords="596,135,763,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="796,164,762,160,763,155,797,159"/>
+<area shape="rect" id="Node000003" href="$ade7913_8c.html#ab77f36317800804dc692df67ba2efdea" title="Read device register." alt="" coords="622,184,737,209"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="797,186,738,193,737,188,796,181"/>
+<area shape="rect" id="Node000004" href="$ade7913_8c.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="360,5,539,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="608,183,594,173,581,157,574,140,570,106,566,74,559,59,546,44,530,33,532,29,550,40,564,56,571,73,575,106,579,138,585,154,598,169,611,179"/>
+<area shape="rect" id="Node000005" href="$ade7913_8c.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="374,55,525,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="608,182,594,173,577,153,570,132,563,112,546,93,523,81,526,77,550,89,567,109,575,130,582,150,598,169,611,178"/>
+<area shape="rect" id="Node000006" href="$ade7913_8c.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="351,104,548,129"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="619,182,595,174,547,151,492,132,494,127,549,146,597,169,621,177"/>
+<area shape="rect" id="Node000007" href="$ade7913_8c.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="369,205,530,245"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="609,208,531,218,530,212,608,203"/>
+<area shape="rect" id="Node000008" href="$ade7913_8c.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="152,212,259,237"/>
+<area shape="poly" id="edge11_Node000003_Node000008" title=" " alt="" coords="608,197,548,195,449,191,406,191,351,195,300,204,253,214,252,209,299,198,350,190,406,186,449,186,548,190,608,191"/>
+<area shape="rect" id="Node000010" href="$ade7913_8c.html#a6a672f051e655d14cd926576faf98f99" title="Reset the device using SW reset." alt="" coords="134,265,277,291"/>
+<area shape="poly" id="edge14_Node000003_Node000010" title=" " alt="" coords="646,219,601,241,549,259,477,273,405,281,277,284,277,278,404,275,476,268,547,254,599,236,644,214"/>
+<area shape="rect" id="Node000011" href="$ade7913_8c.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="361,320,537,345"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="657,221,610,262,549,303,502,322,500,317,547,298,606,258,654,217"/>
+<area shape="rect" id="Node000012" href="$ade7913_8c.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="108,340,303,365"/>
+<area shape="poly" id="edge12_Node000003_Node000012" title=" " alt="" coords="669,223,651,256,625,295,591,332,549,360,511,375,471,384,429,388,389,388,312,381,251,368,252,363,313,375,389,383,429,383,470,379,509,370,547,356,587,328,620,292,646,254,664,221"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="355,227,259,227,259,222,355,222"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="356,248,265,268,264,263,355,243"/>
+<area shape="rect" id="Node000009" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,287,60,312"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="142,244,109,256,53,289,51,284,107,252,140,239"/>
+<area shape="poly" id="edge13_Node000012_Node000009" title=" " alt="" coords="150,338,59,310,61,305,151,333"/>
+</map>

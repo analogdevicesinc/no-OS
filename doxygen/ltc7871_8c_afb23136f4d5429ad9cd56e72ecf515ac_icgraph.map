@@ -1,0 +1,16 @@
+<map id="ltc7871_is_write_protected" name="ltc7871_is_write_protected">
+<area shape="rect" id="Node000001" title="Read Write Protect bit for IDAC registers, and MFR_SSFM register." alt="" coords="419,141,616,166"/>
+<area shape="rect" id="Node000002" href="$ltc7871_8c.html#a21c22ab9a7876ab2eac5ef74aa428bb9" title="Set Frequency Spread Range." alt="" coords="181,5,362,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="487,134,434,97,369,60,341,48,343,43,372,55,437,93,490,130"/>
+<area shape="rect" id="Node000003" href="$ltc7871_8c.html#a6785a0e9c841036825e9a39a8f3124d5" title="stores the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="191,69,352,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="453,140,348,112,350,107,455,134"/>
+<area shape="rect" id="Node000004" href="$ltc7871_8c.html#a35de5774bc09f4c0991300d2e652d8df" title="stores the current DAC value to program the VHIGH voltage." alt="" coords="191,133,352,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="405,156,352,156,352,151,405,151"/>
+<area shape="rect" id="Node000006" href="$ltc7871_8c.html#aea03d5056be2372d7c846964d8ea7555" title="stores the current DAC value to program the VLOW voltage." alt="" coords="172,198,371,223"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="449,172,327,201,326,195,448,167"/>
+<area shape="rect" id="Node000007" href="$ltc7871_8c.html#a73042797a3127e7b4eac4b20ba6d2c24" title="Set Modulation Signal Frequency." alt="" coords="188,247,355,273"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="487,176,434,207,372,237,333,250,331,245,370,232,432,202,484,171"/>
+<area shape="rect" id="Node000005" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,170,124,195"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="177,169,124,177,124,172,177,164"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="164,199,124,193,125,188,165,194"/>
+</map>

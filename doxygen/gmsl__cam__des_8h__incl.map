@@ -1,0 +1,18 @@
+<map id="drivers/gmsl/common/gmsl_cam_des.h" name="drivers/gmsl/common/gmsl_cam_des.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,169,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="200,313,271,339"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,46,67,94,68,150,74,191,97,229,129,261,164,286,197,305,195,310,161,291,125,265,93,232,69,193,63,150,62,93,77,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="99,167,182,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="97,45,135,153,129,154,92,47"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="143,240,242,265"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="84,46,78,76,74,114,76,153,90,191,112,215,141,232,139,237,109,219,85,193,71,155,68,113,72,75,79,45"/>
+<area shape="rect" id="Node000005" href="$gmsl__common_8h.html" title=" " alt="" coords="189,93,319,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="128,43,218,85,216,90,126,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="202,264,224,300,219,303,197,267"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="295,116,324,128,351,145,368,166,370,179,367,193,347,229,321,260,266,307,263,303,317,257,343,226,362,191,365,179,363,168,347,149,322,133,293,121"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="237,121,172,162,169,157,234,116"/>
+<area shape="rect" id="Node000006" href="$gmsl__reg__access_8h.html" title=" " alt="" coords="207,167,352,192"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="261,118,273,153,268,155,256,120"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="278,193,257,266,246,301,241,299,251,265,273,191"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="267,194,219,233,216,229,264,190"/>
+</map>

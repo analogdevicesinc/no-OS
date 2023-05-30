@@ -1,0 +1,29 @@
+<map id="ltc7871_reg_write_mask" name="ltc7871_reg_write_mask">
+<area shape="rect" id="Node000001" title="Write to LTC7871 device register with mask." alt="" coords="827,205,1008,231"/>
+<area shape="rect" id="Node000002" href="$ltc7871_8c.html#a0fb37657524d3573d41ffce359ef4e39" title="Clear PEC fault bit." alt="" coords="595,5,771,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="901,194,881,160,854,119,818,78,777,44,755,33,757,28,780,40,822,75,858,116,886,157,906,192"/>
+<area shape="rect" id="Node000003" href="$ltc7871_8c.html#ae12475b6bb0baba3b6b4aba516e7cd19" title="Reset all R/W registers." alt="" coords="628,55,739,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="895,197,845,145,813,118,777,95,738,80,740,75,780,90,816,114,849,141,899,193"/>
+<area shape="rect" id="Node000008" href="$ltc7871_8c.html#a21c22ab9a7876ab2eac5ef74aa428bb9" title="Set Frequency Spread Range." alt="" coords="593,105,774,145"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="876,202,778,159,745,147,747,142,780,154,878,197"/>
+<area shape="rect" id="Node000009" href="$ltc7871_8c.html#a6785a0e9c841036825e9a39a8f3124d5" title="stores the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="603,169,764,209"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="813,208,764,201,764,196,813,202"/>
+<area shape="rect" id="Node000010" href="$ltc7871_8c.html#a35de5774bc09f4c0991300d2e652d8df" title="stores the current DAC value to program the VHIGH voltage." alt="" coords="360,219,521,259"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="813,225,522,238,521,233,812,220"/>
+<area shape="rect" id="Node000011" href="$ltc7871_8c.html#aea03d5056be2372d7c846964d8ea7555" title="stores the current DAC value to program the VLOW voltage." alt="" coords="341,284,540,309"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="826,236,519,287,518,281,826,230"/>
+<area shape="rect" id="Node000012" href="$ltc7871_8c.html#a73042797a3127e7b4eac4b20ba6d2c24" title="Set Modulation Signal Frequency." alt="" coords="600,335,767,360"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="892,242,842,280,780,318,732,337,730,332,777,313,839,275,889,238"/>
+<area shape="rect" id="Node000013" href="$ltc7871_8c.html#a1774824735eb03c635bb9c318b507ac1" title="set write protect bit." alt="" coords="588,384,779,409"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="903,244,854,310,820,345,780,375,755,386,753,381,777,370,816,341,850,306,899,241"/>
+<area shape="rect" id="Node000004" href="$ltc7871_8c.html#ad5ce9787e56640bff3e5f7285411d91f" title="Initialize the LTC7871 device." alt="" coords="391,112,490,137"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="616,86,491,116,490,111,615,81"/>
+<area shape="rect" id="Node000005" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,227,292,252"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="406,146,258,229,256,224,403,142"/>
+<area shape="rect" id="Node000006" href="$iio__ltc7871_8c.html#ae6c8deb0e7a5dccf5477794210cde0b9" title="Initializes the LTC7871 IIO descriptor." alt="" coords="172,112,293,137"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="378,127,294,127,294,122,378,122"/>
+<area shape="rect" id="Node000007" href="$ltc7871_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,112,124,137"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="158,127,124,127,124,122,158,122"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="347,242,292,242,292,237,347,237"/>
+<area shape="poly" id="edge12_Node000011_Node000005" title=" " alt="" coords="375,283,341,274,275,255,276,250,342,269,376,278"/>
+</map>

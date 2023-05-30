@@ -1,0 +1,16 @@
+<map id="drivers/rf&#45;transceiver/hmc630x/hmc630x.h" name="drivers/rf&#45;transceiver/hmc630x/hmc630x.h">
+<area shape="rect" id="Node000001" title="hmc6300 and hmc6301 device driver header." alt="" coords="107,5,269,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,48,113,68,83,95,66,124,55,154,50,153,61,122,79,92,110,64,144,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="207,167,278,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,45,236,153,231,154,192,47"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="94,93,194,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="180,47,160,83,155,80,175,44"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="269,93,376,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="222,43,292,84,290,89,219,48"/>
+<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="130,121,75,160,72,156,127,117"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="161,117,217,156,214,161,158,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="113,167,183,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="147,119,149,153,144,153,142,119"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="312,121,268,160,264,156,308,117"/>
+</map>

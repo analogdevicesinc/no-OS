@@ -1,0 +1,46 @@
+<map id="adaq8092_write" name="adaq8092_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="765,161,892,186"/>
+<area shape="rect" id="Node000002" href="$adaq8092_8c.html#a3fd6d9f29c2321a807a1d8791c2b85cd" title="Initialize the device." alt="" coords="108,334,223,359"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="797,155,702,96,637,64,565,35,489,15,413,8,376,11,340,19,305,32,272,51,240,81,216,117,197,158,185,200,172,279,169,334,164,333,166,278,179,199,192,156,211,115,236,78,269,47,303,27,338,14,375,6,413,3,490,10,567,30,640,59,705,92,800,150"/>
+<area shape="rect" id="Node000004" href="$adaq8092_8c.html#a4da10512b37f14639e3c1095634af284" title="Update specific register bits." alt="" coords="548,309,717,334"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="801,197,653,310,649,306,798,192"/>
+<area shape="rect" id="Node000003" href="$adaq8092__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,457,60,482"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,371,50,458,46,454,138,367"/>
+<area shape="rect" id="Node000005" href="$adaq8092_8c.html#a34eb071f7e851d99b3874913edc3eec7" title="Set the alternate bit polarity mode." alt="" coords="292,62,479,87"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="621,296,605,253,580,199,544,145,523,121,498,101,478,90,480,85,502,96,527,118,549,142,585,197,610,251,626,294"/>
+<area shape="rect" id="Node000006" href="$adaq8092_8c.html#a54585c02d08868aef3d766dd36092a3e" title="Set the clock duty cycle stabilizer mode." alt="" coords="283,111,488,137"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="617,298,599,263,572,223,539,183,499,150,476,139,478,134,501,146,543,179,577,220,603,261,622,295"/>
+<area shape="rect" id="Node000007" href="$adaq8092_8c.html#a00f767c17ea43a9f56aa74b612cd9df2" title="Set the clock phase delay mode." alt="" coords="271,161,500,186"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="611,300,564,248,533,222,499,200,471,188,473,183,501,195,536,217,568,244,615,296"/>
+<area shape="rect" id="Node000008" href="$adaq8092_8c.html#a4f4c8cb3f278ed6e69de79a0e5f53fad" title="Set the clock polarity mode." alt="" coords="280,210,491,235"/>
+<area shape="poly" id="edge10_Node000004_Node000008" title=" " alt="" coords="601,303,554,275,499,249,462,238,463,233,501,244,556,270,603,299"/>
+<area shape="rect" id="Node000009" href="$adaq8092_8c.html#ac7a01efbe8048c22dd2f9bce3bf63757" title="Set the data output randomizer mode." alt="" coords="281,259,489,285"/>
+<area shape="poly" id="edge12_Node000004_Node000009" title=" " alt="" coords="555,308,449,287,450,282,556,303"/>
+<area shape="rect" id="Node000010" href="$adaq8092_8c.html#a91f808ba0436c84867ea12cdc43ea2e5" title="Set digital outputs." alt="" coords="299,309,471,334"/>
+<area shape="poly" id="edge14_Node000004_Node000010" title=" " alt="" coords="534,324,471,324,471,319,534,319"/>
+<area shape="rect" id="Node000011" href="$adaq8092_8c.html#a44e081b2a9efffdf62c8afc960955fed" title="Set the digital output mode." alt="" coords="289,358,482,383"/>
+<area shape="poly" id="edge16_Node000004_Node000011" title=" " alt="" coords="556,339,450,360,449,355,555,334"/>
+<area shape="rect" id="Node000012" href="$adaq8092_8c.html#a9a5feb1c1e347b452c5012a798879a53" title="Set the LVDS output current mode." alt="" coords="276,407,495,433"/>
+<area shape="poly" id="edge18_Node000004_Node000012" title=" " alt="" coords="603,344,556,371,501,397,459,410,458,405,499,392,553,366,600,339"/>
+<area shape="rect" id="Node000013" href="$adaq8092_8c.html#a08261e86a1f0779e1850fdca090dd768" title="Set the LVDS internal temination mode." alt="" coords="271,457,500,482"/>
+<area shape="poly" id="edge20_Node000004_Node000013" title=" " alt="" coords="615,346,568,397,536,424,501,446,469,459,467,454,499,442,533,420,564,393,611,343"/>
+<area shape="rect" id="Node000014" href="$adaq8092_8c.html#a6964b66131c437c4ecb487876cb0a7c5" title="Set the device powerodown mode." alt="" coords="295,506,475,531"/>
+<area shape="poly" id="edge22_Node000004_Node000014" title=" " alt="" coords="622,348,603,382,576,422,542,462,501,495,475,508,473,503,499,491,538,458,572,419,598,379,617,345"/>
+<area shape="rect" id="Node000015" href="$adaq8092_8c.html#a7c6e9c1789e833974bf96e2e869089f9" title="Set digital output test pattern mode." alt="" coords="291,605,480,630"/>
+<area shape="poly" id="edge24_Node000004_Node000015" title=" " alt="" coords="629,348,616,401,592,468,575,503,555,537,530,568,502,595,482,607,479,603,498,591,526,565,550,534,571,501,587,466,611,399,624,347"/>
+<area shape="rect" id="Node000016" href="$adaq8092_8c.html#a79c30f982cb2e94fbc63229ac9e64782" title="Set the Tows Complement mode." alt="" coords="288,555,483,581"/>
+<area shape="poly" id="edge27_Node000004_Node000016" title=" " alt="" coords="626,348,610,391,584,445,548,499,526,524,502,545,478,557,476,553,498,540,523,520,544,496,580,442,605,389,621,346"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="281,94,272,101,246,127,225,158,208,191,195,226,178,289,171,334,165,333,173,288,190,224,203,189,221,155,242,124,269,97,278,90"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="280,145,272,150,250,170,231,194,201,247,182,297,172,334,167,333,177,295,197,244,227,191,246,167,269,146,277,141"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="282,194,272,199,237,231,208,269,187,306,174,335,169,333,182,304,204,266,233,227,269,195,279,189"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="286,242,272,249,242,269,216,292,178,336,174,332,212,288,239,264,269,244,284,237"/>
+<area shape="poly" id="edge13_Node000009_Node000002" title=" " alt="" coords="298,290,272,298,227,317,190,336,187,331,225,312,270,293,297,285"/>
+<area shape="poly" id="edge15_Node000010_Node000002" title=" " alt="" coords="286,335,223,343,223,337,285,330"/>
+<area shape="poly" id="edge17_Node000011_Node000002" title=" " alt="" coords="274,361,223,355,223,350,275,356"/>
+<area shape="poly" id="edge19_Node000012_Node000002" title=" " alt="" coords="302,407,270,397,189,362,192,357,272,392,304,401"/>
+<area shape="poly" id="edge21_Node000013_Node000002" title=" " alt="" coords="288,455,269,446,239,427,213,403,174,361,178,357,216,399,243,422,272,442,291,450"/>
+<area shape="poly" id="edge23_Node000014_Node000002" title=" " alt="" coords="282,503,269,495,233,464,204,426,183,389,170,361,174,358,188,387,209,423,237,460,272,491,285,498"/>
+<area shape="poly" id="edge25_Node000015_Node000002" title=" " alt="" coords="277,601,269,595,246,568,236,541,231,512,220,477,170,360,175,358,225,475,236,510,241,540,250,566,272,591,280,597"/>
+<area shape="poly" id="edge26_Node000015_Node000003" title=" " alt="" coords="295,604,270,596,206,569,144,538,53,484,55,480,147,533,208,564,272,591,297,599"/>
+<area shape="poly" id="edge28_Node000016_Node000002" title=" " alt="" coords="279,551,269,545,242,511,213,458,170,361,174,359,218,456,246,508,272,541,282,547"/>
+</map>

@@ -1,0 +1,24 @@
+<map id="admv1014_spi_read" name="admv1014_spi_read">
+<area shape="rect" id="Node000001" title="Reads data from ADMV1014 over SPI." alt="" coords="527,129,680,155"/>
+<area shape="rect" id="Node000002" href="$admv1014_8c.html#a87e396e130b262c99fba91526e116d16" title="Get Baseband Amp Gain." alt="" coords="265,5,479,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="579,121,534,82,507,61,478,44,448,33,450,28,480,40,510,57,538,77,582,117"/>
+<area shape="rect" id="Node000003" href="$admv1014_8c.html#a75070edf9a36848a9fa9d0586680a15d" title="Get Digital Rx Detector." alt="" coords="281,55,463,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="561,126,478,94,437,83,438,78,479,89,563,121"/>
+<area shape="rect" id="Node000004" href="$admv1014_8c.html#af7b9270faed9c5ad6c22b6054fe5349e" title="Get IF Amp Gain." alt="" coords="269,104,475,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="513,135,475,131,476,125,513,129"/>
+<area shape="rect" id="Node000005" href="$admv1014_8c.html#a6fecd9df68fa0f420cbe71667a1d6e1f" title="Get LO Amp Phase." alt="" coords="289,153,455,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="513,154,455,160,455,155,513,149"/>
+<area shape="rect" id="Node000006" href="$admv1014_8c.html#af54aeecd75abebc7ad4b44d2eb947844" title="Initializes the admv1014." alt="" coords="52,192,171,217"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="565,163,525,179,479,193,396,205,312,211,171,211,171,206,312,206,396,200,478,187,523,174,563,158"/>
+<area shape="rect" id="Node000007" href="$admv1014_8c.html#a898a127684be3100b115b70bd66ef9b0" title="Update ADMV1014 register." alt="" coords="272,267,472,292"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="579,166,534,202,480,238,411,269,409,264,477,233,531,197,575,162"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="322,265,217,231,170,220,172,214,218,226,323,260"/>
+<area shape="rect" id="Node000008" href="$admv1014_8c.html#a2f848f997531fdcabe617ff5f3c522b4" title="Set Baseband Amp Gain." alt="" coords="5,241,217,267"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="258,271,217,267,218,262,258,266"/>
+<area shape="rect" id="Node000009" href="$admv1014_8c.html#a5f4cbdd053844a1893904b5a23cfdb44" title="Set Digital Rx Detector." alt="" coords="20,291,203,316"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="259,292,203,298,203,292,258,287"/>
+<area shape="rect" id="Node000010" href="$admv1014_8c.html#a2a23fff172e8a95840dc3cffb903cbb9" title="Set IF Amp Gain." alt="" coords="9,340,214,365"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="320,299,218,330,169,343,168,337,217,325,319,294"/>
+<area shape="rect" id="Node000011" href="$admv1014_8c.html#a3595daf13e57a2467b3fb87cc2763707" title="Set LO Amp Phase." alt="" coords="29,389,193,415"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="346,303,289,342,218,380,184,392,183,387,216,376,286,338,343,298"/>
+</map>

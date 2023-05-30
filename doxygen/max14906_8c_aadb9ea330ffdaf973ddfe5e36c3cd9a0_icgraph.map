@@ -1,0 +1,13 @@
+<map id="max14906_init" name="max14906_init">
+<area shape="rect" id="Node000001" title="Initialize and configure the MAX14906 device." alt="" coords="507,31,625,56"/>
+<area shape="rect" id="Node000002" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="299,5,459,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="493,36,459,31,459,26,493,31"/>
+<area shape="rect" id="Node000003" href="$iio__max14906_8c.html#a9c2313da78bf3d7e5c3a69ff4a274bce" title="Initializes the MAX14906 IIO descriptor." alt="" coords="307,55,450,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="493,55,451,61,450,56,492,50"/>
+<area shape="rect" id="Node000004" href="$max14906_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,29,251,55"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="293,59,251,54,252,48,294,54"/>
+<area shape="rect" id="Node000005" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="118,79,241,104"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="294,80,241,87,241,81,293,75"/>
+<area shape="rect" id="Node000006" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,79,60,104"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="104,94,60,94,60,89,104,89"/>
+</map>

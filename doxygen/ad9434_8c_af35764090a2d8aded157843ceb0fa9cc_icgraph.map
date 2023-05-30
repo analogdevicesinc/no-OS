@@ -1,0 +1,15 @@
+<map id="ad9434_spi_write" name="ad9434_spi_write">
+<area shape="rect" id="Node000001" title="ad9434_spi_write" alt="" coords="553,56,689,81"/>
+<area shape="rect" id="Node000002" href="$ad9434_8c.html#aef787466729a14b4c7b6adbdc3564e99" title="ad9434_data_delay" alt="" coords="339,7,489,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="553,55,468,35,469,29,555,50"/>
+<area shape="rect" id="Node000003" href="$ad9434_8c.html#a787b1d8fa71d79d940b9e279a5b5900d" title="ad9434_setup" alt="" coords="323,56,505,81"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="540,71,506,71,506,66,540,66"/>
+<area shape="rect" id="Node000006" href="$ad9434_8c.html#ad524e7f045c086b35926300f9a9d1698" title="ad9434_testmode_set" alt="" coords="108,107,275,132"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="557,87,506,97,385,111,275,118,275,113,385,105,505,91,556,82"/>
+<area shape="rect" id="Node000004" href="$ad9434_8c.html#a71d0943da2f014cd0ac18dc5a093f59a" title="ad9434_setup" alt="" coords="135,5,248,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="343,55,247,33,248,28,344,50"/>
+<area shape="rect" id="Node000005" href="$ad9434__fmc__500ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="309,71,60,71,60,66,309,66"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="139,37,61,63,59,58,137,32"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="137,105,59,80,61,75,139,100"/>
+</map>

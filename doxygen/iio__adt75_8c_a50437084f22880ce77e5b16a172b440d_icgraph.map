@@ -1,0 +1,9 @@
+<map id="adt75_iio_init" name="adt75_iio_init">
+<area shape="rect" id="Node000001" title="Initializes the ADT75 IIO descriptor." alt="" coords="299,31,409,56"/>
+<area shape="rect" id="Node000002" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,5,251,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,36,251,31,252,26,285,31"/>
+<area shape="rect" id="Node000003" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="118,55,241,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="285,55,241,62,240,56,284,50"/>
+<area shape="rect" id="Node000004" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="104,70,60,70,60,65,104,65"/>
+</map>

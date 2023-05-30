@@ -1,0 +1,5 @@
+<map id="admfm2000_init" name="admfm2000_init">
+<area shape="rect" id="Node000001" title="Initialize the admfm2000 device." alt="" coords="205,5,335,31"/>
+<area shape="rect" id="Node000002" href="$iio__admfm2000_8c.html#a93f6f30d3bfa95c550b99c5a181bd52c" title="Initialize the iio device." alt="" coords="5,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,21,157,21,157,15,192,15"/>
+</map>

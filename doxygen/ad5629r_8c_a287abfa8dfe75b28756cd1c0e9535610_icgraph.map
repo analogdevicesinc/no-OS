@@ -1,0 +1,13 @@
+<map id="ad5629r_set_ctrl" name="ad5629r_set_ctrl">
+<area shape="rect" id="Node000001" title="Write to input register and read from output register via SPI." alt="" coords="247,119,377,145"/>
+<area shape="rect" id="Node000002" href="$ad5629r_8c.html#ad2fc18091d5d91cf9004a8fac805cee4" title="Loads the Clear Code Register with a certain value." alt="" coords="27,5,177,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="282,113,243,86,197,60,169,48,171,43,200,55,246,81,285,109"/>
+<area shape="rect" id="Node000003" href="$ad5629r_8c.html#af9c260f65b587ac1144ce9923be8edd9" title="Loads the LDAC register with a certain value." alt="" coords="16,70,188,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,119,156,98,158,93,245,114"/>
+<area shape="rect" id="Node000004" href="$ad5629r_8c.html#a9598efa57983f7a6d613209d17d61b84" title="Makes a power&#45;on reset." alt="" coords="45,119,159,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,135,159,135,159,129,233,129"/>
+<area shape="rect" id="Node000005" href="$ad5629r_8c.html#a156a7464e44712495e4d0aca8309b2e8" title="Sets the power mode for one or more selected DAC channels." alt="" coords="5,169,199,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="245,150,158,171,156,166,244,145"/>
+<area shape="rect" id="Node000006" href="$ad5629r_8c.html#abc1261a2ca90a704fd4782e0290e19b7" title="Turns on/off the internal reference." alt="" coords="39,218,165,243"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="285,155,246,182,200,208,164,220,162,215,198,203,243,178,282,151"/>
+</map>
