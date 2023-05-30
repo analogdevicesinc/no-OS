@@ -1,0 +1,4 @@
+<map id="ad6676_set_fif" name="ad6676_set_fif">
+<area shape="rect" id="node1" title="Set the target IF frequency." alt="" coords="176,5,293,32"/>
+<area shape="rect" id="node2" href="$ad6676_8h.html#abc6bd36627b91af6b336d9c24e9eeb90" title="Reconfigure device for other target frequency and bandwidth and recalibrate." alt="" coords="5,5,128,32"/>
+</map>

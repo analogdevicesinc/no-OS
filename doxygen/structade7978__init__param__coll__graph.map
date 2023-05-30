@@ -1,0 +1,10 @@
+<map id="ade7978_init_param" name="ade7978_init_param">
+<area shape="rect" id="node1" title="ADE7978 Device initialization parameters." alt="" coords="1243,163,1397,189"/>
+<area shape="rect" id="node2" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="957,132,1120,159"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,97,786,124"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,43,184,69"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,104,471,131"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,157,472,198"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="973,188,1105,215"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,228,819,255"/>
+</map>

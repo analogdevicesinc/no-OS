@@ -1,0 +1,39 @@
+<map id="adis_update_diag_flags" name="adis_update_diag_flags">
+<area shape="rect" id="node1" title="Update device diagnosis flags according to the received parameter." alt="" coords="936,879,1111,905"/>
+<area shape="rect" id="node2" href="$adis1657x_8c.html#ac442d3460a938b11ed36834c5c1bbd59" title="Read burst data." alt="" coords="687,828,888,855"/>
+<area shape="rect" id="node3" href="$adis_8h.html#add978372da385dea5434585683a94449" title="Read burst data." alt="" coords="707,879,868,905"/>
+<area shape="rect" id="node4" href="$adis_8h.html#adbba62f95a88d948f1239872997f8eed" title="Read diag status register and update device diag flags." alt="" coords="711,929,863,956"/>
+<area shape="rect" id="node5" href="$adis_8h.html#ac138d46e3aaa5696d6000b8309707c82" title="Device initial setup." alt="" coords="454,5,601,32"/>
+<area shape="rect" id="node8" href="$adis_8h.html#abe30b2ac68529f4d7504ad3111536b01" title="Diagnosis: read accelerometer self test error flag value." alt="" coords="451,57,604,98"/>
+<area shape="rect" id="node10" href="$adis_8h.html#a8a76e886134d399da683ea87c2e65bba" title="Diagnosis: read ADuC microcontroller fault flag value." alt="" coords="448,122,607,163"/>
+<area shape="rect" id="node11" href="$adis_8h.html#adb678e91b25c42d1173e13a12fcdac3f" title="Diagnosis: read boot memory failure error flag value." alt="" coords="449,187,605,229"/>
+<area shape="rect" id="node12" href="$adis_8h.html#a7ba0b972f5c2a32e6b8f9288eb73e9f5" title="Diagnosis: read clock error flag value." alt="" coords="442,253,613,280"/>
+<area shape="rect" id="node13" href="$adis_8h.html#a316bc6bf4b23859133f993199cafae94" title="Diagnosis: read configuration and/or calibration CRC error flag value." alt="" coords="444,305,611,346"/>
+<area shape="rect" id="node14" href="$adis_8h.html#a7b52e6c8a05abffeb1f334bfebe4820e" title="Diagnosis: read data path overrun flag value." alt="" coords="449,370,605,411"/>
+<area shape="rect" id="node15" href="$adis_8h.html#a01cfb23f23af644a50073f55bc87f176" title="Diagnosis: read external 5V supply error flag value." alt="" coords="453,435,601,477"/>
+<area shape="rect" id="node16" href="$adis_8h.html#ab9dcb2ade01b32de80a1b4abe24671b1" title="Diagnosis: read flash memory update error flag value." alt="" coords="445,501,609,542"/>
+<area shape="rect" id="node17" href="$adis_8h.html#af6470af6a3a304778913e10789237294" title="Diagnosis: read gyroscope1 self test error flag value." alt="" coords="445,566,609,607"/>
+<area shape="rect" id="node18" href="$adis_8h.html#a7f1b633b0630fb67fdc65974de833a1b" title="Diagnosis: read gyroscope2 self test error flag value." alt="" coords="445,631,609,673"/>
+<area shape="rect" id="node19" href="$adis_8h.html#a063b6c621beddf79cb43f487480af07e" title="Diagnosis: read internal processor supply error flag value." alt="" coords="455,697,599,738"/>
+<area shape="rect" id="node20" href="$adis_8h.html#a80c12358d97a5cbec383c804ec29da09" title="Diagnosis: read internal regulator error flag value." alt="" coords="455,762,599,803"/>
+<area shape="rect" id="node21" href="$adis_8h.html#a83e9df53d911f270f84bca297003ce59" title="Diagnosis: read internal sensor supply error flag value." alt="" coords="455,827,599,869"/>
+<area shape="rect" id="node22" href="$adis_8h.html#a2d8bf61e08a8aad9610a14ff897256d2" title="Diagnosis: read flash memory test error flag value." alt="" coords="447,893,608,934"/>
+<area shape="rect" id="node23" href="$adis_8h.html#a0340474aa9eee9698529a0cb880d05c3" title="Diagnosis: read overrange for inertial sensors flag value." alt="" coords="431,959,624,985"/>
+<area shape="rect" id="node24" href="$adis_8h.html#a255be6cfb268a7eabff98a5c2d04848b" title="Diagnosis: read power supply error flag value." alt="" coords="444,1010,611,1051"/>
+<area shape="rect" id="node25" href="$adis_8h.html#af15a85bf42d6d1df6d42105f20154ec7" title="Diagnosis: read register NVM error flag value." alt="" coords="453,1075,601,1117"/>
+<area shape="rect" id="node26" href="$adis_8h.html#a72d4be4919c0f97b0ec876b87b546cd4" title="Diagnosis: read sensor self test error flag value." alt="" coords="450,1141,605,1182"/>
+<area shape="rect" id="node27" href="$adis_8h.html#ac1a9d6a5cc64a8215b6defa62990540f" title="Diagnosis: read sensor initialization failure flag value." alt="" coords="450,1206,605,1247"/>
+<area shape="rect" id="node28" href="$adis_8h.html#a8888f8eaf682594846b05977239dc0c0" title="Diagnosis: read spi communication error flag value." alt="" coords="454,1271,601,1313"/>
+<area shape="rect" id="node29" href="$adis_8h.html#acb3b0c39c1b7de567a82aca95e10616b" title="Diagnosis: read standby mode flag value." alt="" coords="416,1337,639,1364"/>
+<area shape="rect" id="node30" href="$adis_8h.html#a4ec1f4b60c721b74f110f2127b472dbe" title="Diagnosis: read temperature error flag value." alt="" coords="434,1388,621,1415"/>
+<area shape="rect" id="node31" href="$adis_8h.html#a1bc950589dff68f4af58391b9f303fa2" title="Diagnosis: read watchdog timer flag value." alt="" coords="450,1439,605,1481"/>
+<area shape="rect" id="node32" href="$adis_8h.html#a48fc58859b392e38b45644af7bd9e61a" title="Diagnosis: read X&#45;Axis Accelerometer failure flag value." alt="" coords="443,1505,612,1546"/>
+<area shape="rect" id="node33" href="$adis_8h.html#a26c1a22297b8af746875ebe32006db2d" title="Diagnosis: read X&#45;Axis Gyroscope failure flag value." alt="" coords="443,1570,612,1611"/>
+<area shape="rect" id="node34" href="$adis_8h.html#a65ddeda266406d291a7284012a9dea66" title="Diagnosis: read Y&#45;Axis Accelerometer failure flag value." alt="" coords="443,1635,612,1677"/>
+<area shape="rect" id="node35" href="$adis_8h.html#ab3fa95f055ecb940a253a57e9cf8ac75" title="Diagnosis: read Y&#45;Axis Gyroscope failure flag value." alt="" coords="443,1701,612,1742"/>
+<area shape="rect" id="node36" href="$adis_8h.html#a8a8fffcbcc32164537faad73949e9052" title="Diagnosis: read Z&#45;Axis Accelerometer failure flag value." alt="" coords="443,1766,611,1807"/>
+<area shape="rect" id="node37" href="$adis_8h.html#a55e87b91a75d7428caee49a67d8fd76b" title="Diagnosis: read Z&#45;Axis Gyroscope failure flag value." alt="" coords="443,1831,611,1873"/>
+<area shape="rect" id="node6" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="252,5,329,32"/>
+<area shape="rect" id="node7" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node9" href="$iio__adis__internals_8h.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="213,981,368,1022"/>
+</map>

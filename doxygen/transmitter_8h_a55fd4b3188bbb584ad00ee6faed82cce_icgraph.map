@@ -1,0 +1,5 @@
+<map id="ADIAPI_TransmitterGetDetectedMode" name="ADIAPI_TransmitterGetDetectedMode">
+<area shape="rect" id="node1" title="Gets the operating mode based on HDMI HPD and MSEN state." alt="" coords="509,5,775,32"/>
+<area shape="rect" id="node2" href="$transmitter_8h.html#ae1f6a189e7ef2a8169668cf438657df1" title="Checks current AVR operating mode and notify application if mode changed." alt="" coords="232,5,461,32"/>
+<area shape="rect" id="node3" href="$transmitter_8h.html#ac458d6d563b44d7f6d80dfc347f6c931" title="Main function for polling mode operation." alt="" coords="5,5,184,32"/>
+</map>

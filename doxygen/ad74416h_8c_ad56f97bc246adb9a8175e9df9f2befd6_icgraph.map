@@ -1,0 +1,4 @@
+<map id="ad74416h_get_adc_rate" name="ad74416h_get_adc_rate">
+<area shape="rect" id="node1" title="Get the ADC Conversion Rate for a specific channel." alt="" coords="244,5,421,32"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="5,5,196,32"/>
+</map>

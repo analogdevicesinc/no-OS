@@ -1,0 +1,5 @@
+<map id="ade7978_get_int_status1" name="ade7978_get_int_status1">
+<area shape="rect" id="node1" title="Get interrupt indicator from STATUS1 register." alt="" coords="263,5,448,32"/>
+<area shape="rect" id="node2" href="$ade7978_8h.html#aeaf475d84c4cd829cb87e6674f0a2662" title="Initialize the device." alt="" coords="108,5,215,32"/>
+<area shape="rect" id="node3" href="$eval-ade7978_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,32"/>
+</map>

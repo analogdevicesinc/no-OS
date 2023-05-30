@@ -1,0 +1,7 @@
+<map id="drivers/afe/ad413x/ad413x.h" name="drivers/afe/ad413x/ad413x.h">
+<area shape="rect" id="node1" title="Header file of AD413X Driver." alt="" coords="228,5,372,47"/>
+<area shape="rect" id="node2" href="$ad413x_8c.html" title="Implementation of AD413X Driver." alt="" coords="5,95,149,136"/>
+<area shape="rect" id="node3" href="$iio__ad413x_8h.html" title="Header file of iio_ad413x." alt="" coords="173,95,317,136"/>
+<area shape="rect" id="node4" href="$iio__ad413x_8c.html" title=" " alt="" coords="228,184,372,225"/>
+<area shape="rect" id="node5" href="$ad413x_2src_2app_2main_8c.html" title="Implementation of Main Function." alt="" coords="392,95,541,136"/>
+</map>

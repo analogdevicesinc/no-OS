@@ -1,0 +1,13 @@
+<map id="afe_write_16bit_reg" name="afe_write_16bit_reg">
+<area shape="rect" id="node1" title="write the 16bit value to the register" alt="" coords="956,79,1107,106"/>
+<area shape="rect" id="node2" href="$afe__config_8h.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="592,29,663,55"/>
+<area shape="rect" id="node5" href="$afe__config_8h.html#a15a51e39b44ded5b109e75d36622a1cb" title="sets ACCMODE register for nominal frequency, ICONSEL, VCONSEL." alt="" coords="760,79,903,106"/>
+<area shape="rect" id="node9" href="$afe__config_8h.html#aae3486554a0920eeaf96c3f060a2f400" title="sets refChannel." alt="" coords="755,130,908,157"/>
+<area shape="rect" id="node10" href="$afe__config_8h.html#ae2bc9941587fb8de9a5c684bfd504648" title="Starts the AFE." alt="" coords="587,178,667,205"/>
+<area shape="rect" id="node11" href="$afe__config_8h.html#ad83626fc28d6f9930cf411960fa5c195" title="configure WFB_CFB register, initialized with start filling" alt="" coords="785,29,877,55"/>
+<area shape="rect" id="node3" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,39,265,66"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,39,60,66"/>
+<area shape="rect" id="node6" href="$pqlib__example_8h.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="548,102,707,129"/>
+<area shape="rect" id="node7" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="313,102,500,129"/>
+<area shape="rect" id="node8" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,102,248,129"/>
+</map>

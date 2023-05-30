@@ -1,0 +1,13 @@
+<map id="admfm2000_iio_dev" name="admfm2000_iio_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="291,305,445,332"/>
+<area shape="rect" id="node2" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="257,216,345,243"/>
+<area shape="rect" id="node3" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="211,103,307,130"/>
+<area shape="rect" id="node4" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="5,5,107,32"/>
+<area shape="rect" id="node5" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="131,5,243,32"/>
+<area shape="rect" id="node6" href="$structscan__type.html" title=" " alt="" coords="267,5,355,32"/>
+<area shape="rect" id="node7" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="352,103,501,130"/>
+<area shape="rect" id="node8" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="379,5,557,32"/>
+<area shape="rect" id="node9" href="$structadmfm2000__dev.html" title=" " alt="" coords="449,216,581,243"/>
+<area shape="rect" id="node10" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="569,103,701,130"/>
+<area shape="rect" id="node11" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="581,5,769,32"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="drivers/afe/ad4110/ad4110.c" name="drivers/afe/ad4110/ad4110.c">
+<area shape="rect" id="node1" title="Implementation of AD4110 Driver." alt="" coords="349,5,493,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="59,169,125,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="205,169,275,196"/>
+<area shape="rect" id="node4" href="$ad4110_8h.html" title="Header file of AD4110 Driver." alt="" coords="545,95,628,121"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="900,169,996,196"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="371,95,471,121"/>
+<area shape="rect" id="node12" href="$no__os__alloc_8h.html" title=" " alt="" coords="185,95,295,121"/>
+<area shape="rect" id="node13" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="703,95,812,121"/>
+<area shape="rect" id="node15" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="24,95,160,121"/>
+<area shape="rect" id="node16" title=" " alt="" coords="837,95,907,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="645,244,715,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="351,169,433,196"/>
+<area shape="rect" id="node7" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="762,169,875,196"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="457,169,564,196"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="588,169,687,196"/>
+<area shape="rect" id="node14" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1021,169,1089,196"/>
+</map>

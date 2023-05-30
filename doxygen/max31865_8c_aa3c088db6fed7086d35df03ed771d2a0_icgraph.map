@@ -1,0 +1,4 @@
+<map id="max31865_enable_bias" name="max31865_enable_bias">
+<area shape="rect" id="node1" title="Enable the bias voltage on the RTD sensor." alt="" coords="205,5,381,32"/>
+<area shape="rect" id="node2" href="$max31865_8h.html#adff97c6f37771e070f594f511150ff13" title="Read the raw 16&#45;bit value from the RTD_REG in one shot mode." alt="" coords="5,5,157,32"/>
+</map>

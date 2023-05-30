@@ -1,0 +1,5 @@
+<map id="drivers/platform/aducm3029/aducm3029_adc.h" name="drivers/platform/aducm3029/aducm3029_adc.h">
+<area shape="rect" id="node1" title="Interface of aducm3029_adc.c." alt="" coords="113,5,320,47"/>
+<area shape="rect" id="node2" href="$aducm3029__adc_8c.html" title="Implementation of aducm3029_adc.c." alt="" coords="5,95,212,136"/>
+<area shape="rect" id="node3" href="$iio__aducm3029_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="236,95,413,136"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ltc7841_init_param" name="ltc7841_init_param">
+<area shape="rect" id="node1" title="Initialization parameter for the device descriptor." alt="" coords="118,184,265,211"/>
+<area shape="rect" id="node2" href="$structno__os__irq__init__param.html" title="Structure holding the initial parameters for Interrupt Request." alt="" coords="17,95,179,121"/>
+<area shape="rect" id="node3" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,32"/>
+<area shape="rect" id="node4" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="211,95,374,121"/>
+<area shape="rect" id="node5" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="207,5,386,32"/>
+</map>

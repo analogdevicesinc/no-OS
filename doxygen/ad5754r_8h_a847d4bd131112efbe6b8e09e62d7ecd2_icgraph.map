@@ -1,0 +1,6 @@
+<map id="ad5754r_set_ch_range" name="ad5754r_set_ch_range">
+<area shape="rect" id="node1" title="Set output range for specific channel." alt="" coords="349,31,517,57"/>
+<area shape="rect" id="node2" href="$ad5754r_8h.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="163,5,294,32"/>
+<area shape="rect" id="node4" href="$ad5754r_8h.html#a1d2888ba68a1b85656c84727efe81148" title="Write to and read back a register to verify SPI." alt="" coords="156,56,301,83"/>
+<area shape="rect" id="node3" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,31,108,57"/>
+</map>

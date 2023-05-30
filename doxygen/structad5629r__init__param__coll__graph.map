@@ -1,0 +1,12 @@
+<map id="ad5629r_init_param" name="ad5629r_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="1244,67,1396,93"/>
+<area shape="rect" id="node2" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="962,7,1125,33"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="635,7,814,33"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,64,1129,91"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,61,819,88"/>
+<area shape="rect" id="node6" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,168,1125,195"/>
+<area shape="rect" id="node7" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,201,786,228"/>
+<area shape="rect" id="node8" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,164,184,191"/>
+<area shape="rect" id="node10" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,225,471,252"/>
+<area shape="rect" id="node9" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,278,472,319"/>
+</map>

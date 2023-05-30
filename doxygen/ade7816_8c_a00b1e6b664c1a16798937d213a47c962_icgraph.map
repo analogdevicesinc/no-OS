@@ -1,0 +1,26 @@
+<map id="ade7816_read_reg" name="ade7816_read_reg">
+<area shape="rect" id="node1" title="Register read wrapper function." alt="" coords="917,309,1060,336"/>
+<area shape="rect" id="node2" href="$ade7816_8h.html#abb6b482f6d9703d38c662b1424239816" title="ADE7816 get active energy threshold value function." alt="" coords="685,5,863,32"/>
+<area shape="rect" id="node3" href="$ade7816_8h.html#a9536de586dd79d8b6abafe1c7bf3e760" title="ADE7816 get gain value for channel function." alt="" coords="703,56,845,83"/>
+<area shape="rect" id="node4" href="$ade7816_8h.html#ac8634dc3e9c8e3be937e81da18ee633f" title="ADE7816 get interrupts function." alt="" coords="689,107,859,133"/>
+<area shape="rect" id="node5" href="$ade7816_8h.html#a9d18f0718caef95ba9a176f706bea5e0" title="ADE7816 get offset value for channel function." alt="" coords="699,157,849,184"/>
+<area shape="rect" id="node6" href="$ade7816_8h.html#afcee752b46b0c9efe92283984c9fe663" title="ADE7816 get reactive energy threshold value function." alt="" coords="679,208,869,235"/>
+<area shape="rect" id="node7" href="$ade7816_8h.html#a7e96c58b9643c767128763c293abbe8c" title="ADE7816 read active energy function." alt="" coords="453,462,614,503"/>
+<area shape="rect" id="node8" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,469,165,496"/>
+<area shape="rect" id="node9" href="$ade7816_8h.html#a575b901f7944970149bd8a8443bd0e0d" title="ADE7816 get power direction for channel function." alt="" coords="705,360,843,387"/>
+<area shape="rect" id="node10" href="$ade7816_8h.html#afc0eb612a028ad3283dc2ea1de738271" title="ADE7816 read period value function." alt="" coords="693,411,855,437"/>
+<area shape="rect" id="node11" href="$ade7816_8h.html#a64c419482395092ebbe7cd714f519392" title="ADE7816 read reactive energy value function." alt="" coords="446,934,621,975"/>
+<area shape="rect" id="node12" href="$ade7816_8h.html#abffa6ed370b14e9471852ff3a018cab7" title="ADE7816 read root mean square measurement value function." alt="" coords="701,461,847,488"/>
+<area shape="rect" id="node14" href="$ade7816_8h.html#a156317c4f843bef9d6262fd28eee69cb" title="Register update function." alt="" coords="695,680,853,707"/>
+<area shape="rect" id="node24" href="$ade7816_8h.html#ae30f95d4462a4feb10811c870269d718" title="ADE7816 root mean square measurement value conversion to microunits function." alt="" coords="213,259,388,285"/>
+<area shape="rect" id="node13" href="$ade7816_8h.html#aa6219244f5410f4f39eaddf8bb0868d3" title="ADE7816 root mean square measurement calibration function." alt="" coords="459,360,607,387"/>
+<area shape="rect" id="node15" href="$ade7816_8h.html#a155b363ec63a49979fbeec7af7506a32" title="ADE7816 angle measurement function." alt="" coords="219,768,383,795"/>
+<area shape="rect" id="node16" href="$ade7816_8h.html#ad654d8d9adf2a6fe790bb089bb1305df" title="ADE7816 group selection for channels function." alt="" coords="459,579,607,605"/>
+<area shape="rect" id="node18" href="$ade7816_8h.html#a00fcd83d9557c2dac98209efcad63c64" title="ADE7816 set power direction for channel function." alt="" coords="226,676,375,703"/>
+<area shape="rect" id="node20" href="$ade7816_8h.html#aee753094ae017b3041d658565456c84c" title="ADE7816 set communication function." alt="" coords="457,680,610,707"/>
+<area shape="rect" id="node21" href="$ade7816_8h.html#a76148c378ebe80d81e5c887037a2a6d1" title="ADE7816 set interrupts function." alt="" coords="449,731,617,757"/>
+<area shape="rect" id="node22" href="$ade7816_8h.html#a366c172ff092625010bf86cb50112035" title="ADE7816 set line cycle mode function." alt="" coords="436,781,631,808"/>
+<area shape="rect" id="node23" href="$ade7816_8h.html#a2017aa9e0dec9eef9ab713efe3d7af13" title="ADE7816 software reset function." alt="" coords="462,832,605,859"/>
+<area shape="rect" id="node17" href="$ade7816_8h.html#a31d570dab92fb7344f2f020fb5e33433" title="ADE7816 set peak detection for channel function." alt="" coords="218,625,383,652"/>
+<area shape="rect" id="node19" href="$ade7816_8h.html#a7615dc95ad728c4735ecf2a45b5c5ca3" title="ADE7816 zero&#45;crossing detection for channel function." alt="" coords="227,575,375,601"/>
+</map>

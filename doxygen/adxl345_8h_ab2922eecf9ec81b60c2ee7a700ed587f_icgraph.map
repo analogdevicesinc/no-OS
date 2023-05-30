@@ -1,0 +1,11 @@
+<map id="adxl345_get_register_value" name="adxl345_get_register_value">
+<area shape="rect" id="node1" title="Reads the value of a register." alt="" coords="271,221,429,262"/>
+<area shape="rect" id="node2" href="$adxl345_8h.html#a4e9e8761ad2bfa6baeb1d1f1c82e0a7d" title="Initializes the communication peripheral and checks if the ADXL345 part is present." alt="" coords="63,5,165,32"/>
+<area shape="rect" id="node3" href="$adxl345_8h.html#afba00ca105a0d3a67bc8abf2d00b703f" title="Enables/disables the activity detection." alt="" coords="35,57,193,98"/>
+<area shape="rect" id="node4" href="$adxl345_8h.html#af5ac6a0dd16e927e4ea43e2880f87708" title="Enables/disables the free&#45;fall detection." alt="" coords="33,122,195,163"/>
+<area shape="rect" id="node5" href="$adxl345_8h.html#a1cf9afad1c3d6a81e5bc7fd1a745e6f0" title="Enables/disables the inactivity detection." alt="" coords="29,187,199,229"/>
+<area shape="rect" id="node6" href="$adxl345_8h.html#a437ea06da249a03a3c98ee4a0f86d289" title="Enables/disables the orientation detection (only for adxl346)." alt="" coords="25,253,203,294"/>
+<area shape="rect" id="node7" href="$adxl345_8h.html#ac08a9bb3aefcf7f2adb12b0ab0abe2ca" title="Places the device into standby/measure mode." alt="" coords="18,319,210,345"/>
+<area shape="rect" id="node8" href="$adxl345_8h.html#a6a7c64d2827df1e1277ea1cfb3e87579" title="Selects the measurement range." alt="" coords="5,369,223,396"/>
+<area shape="rect" id="node9" href="$adxl345_8h.html#ab061b09e44c20b393e2e6eb935a83dd2" title="Enables/disables the tap detection." alt="" coords="15,420,213,447"/>
+</map>

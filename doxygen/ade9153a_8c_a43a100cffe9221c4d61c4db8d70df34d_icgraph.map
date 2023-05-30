@@ -1,0 +1,4 @@
+<map id="ade9153a_power_quality_vals" name="ade9153a_power_quality_vals">
+<area shape="rect" id="node1" title="Read power quaility values." alt="" coords="209,5,428,32"/>
+<area shape="rect" id="node2" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a9b065d0400a39009e3266707f94e0439" title="Read measurements." alt="" coords="5,5,161,32"/>
+</map>

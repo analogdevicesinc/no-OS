@@ -1,0 +1,15 @@
+<map id="drivers/adc/ad713x/ad713x.c" name="drivers/adc/ad713x/ad713x.c">
+<area shape="rect" id="node1" title="Implementation of ad713x Driver." alt="" coords="197,5,343,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node3" href="$ad713x_8h.html" title="Header file for the ad713x Driver." alt="" coords="229,95,311,121"/>
+<area shape="rect" id="node10" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="413,95,527,121"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="590,95,699,121"/>
+<area shape="rect" id="node13" href="$no__os__alloc_8h.html" title=" " alt="" coords="56,95,167,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="185,244,267,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="78,169,145,196"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="345,169,443,196"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="467,169,574,196"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="220,169,320,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="421,244,492,271"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="649,169,717,196"/>
+</map>

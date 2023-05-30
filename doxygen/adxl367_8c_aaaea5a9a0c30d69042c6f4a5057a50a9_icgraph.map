@@ -1,0 +1,22 @@
+<map id="adxl367_set_register_value" name="adxl367_set_register_value">
+<area shape="rect" id="node1" title="Writes data into a register." alt="" coords="943,434,1101,475"/>
+<area shape="rect" id="node2" href="$adxl367_8h.html#adc6977137d3ec0f887140ce5f3814f17" title="Enables specified events to interrupt pin." alt="" coords="497,5,632,32"/>
+<area shape="rect" id="node3" href="$adxl367_8h.html#a78d0858b659112bfb2412caa33f29a73" title="Performs a masked write to a register." alt="" coords="717,376,895,403"/>
+<area shape="rect" id="node11" href="$adxl367_8h.html#ad1dbfab30d151aee1c3d50c51c2b9185" title="Sets the number of FIFO sample sets." alt="" coords="473,57,657,98"/>
+<area shape="rect" id="node16" href="$adxl367_8h.html#aec52d576eb2b0923f2f80030840aa1b9" title="Configures activity detection." alt="" coords="478,630,651,671"/>
+<area shape="rect" id="node17" href="$adxl367_8h.html#aaf918c9fcb2c60280f5e1b53d84a11df" title="Configures inactivity detection." alt="" coords="472,695,657,737"/>
+<area shape="rect" id="node19" href="$adxl367_8h.html#ab466164f9df4ffc0920010a15c4b6ad0" title="Performs soft&#45;reset." alt="" coords="717,689,895,716"/>
+<area shape="rect" id="node4" href="$adxl367_8h.html#a877441252e4b442f2329aa295f108070" title="Enables ADC reading. Disables temperature reading." alt="" coords="483,427,646,453"/>
+<area shape="rect" id="node5" href="$adxl367_8h.html#a683f866c35c8a9164d469649ab69a638" title="Performs self test." alt="" coords="252,579,389,605"/>
+<area shape="rect" id="node7" href="$adxl367_8h.html#a96ee300c63caca6e96372c70a21fe8f4" title="Sets FIFO format." alt="" coords="475,173,655,200"/>
+<area shape="rect" id="node9" href="$adxl367_8h.html#ad15c6b1fe67f74de9a55507467348cbf" title="Sets FIFO mode." alt="" coords="478,376,651,403"/>
+<area shape="rect" id="node10" href="$adxl367_8h.html#a1c5039207d74090ef1bd9cfc0c714501" title="Sets FIFO read mode." alt="" coords="460,224,669,251"/>
+<area shape="rect" id="node12" href="$adxl367_8h.html#a8996aea72d7344de37ae2aeffdf2b6b1" title="Sets offset for each axis." alt="" coords="492,275,637,301"/>
+<area shape="rect" id="node13" href="$adxl367_8h.html#ac7c20a9664e0fe67c11d6d0f4d65ef24" title="Selects the Output Data Rate of the device." alt="" coords="229,148,412,175"/>
+<area shape="rect" id="node14" href="$adxl367_8h.html#a34db7312f51b4e9bcacf624a14f4124d" title="Places the device into standby/measure mode." alt="" coords="469,528,661,555"/>
+<area shape="rect" id="node15" href="$adxl367_8h.html#a179273472ef6a6efbf7b35e4e91a9085" title="Selects the measurement range." alt="" coords="492,325,637,352"/>
+<area shape="rect" id="node18" href="$adxl367_8h.html#aefadfadafcf61aefc24d14f7bdb34b94" title="Enables temperature reading." alt="" coords="233,477,408,504"/>
+<area shape="rect" id="node6" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,503,181,529"/>
+<area shape="rect" id="node8" href="$adxl367_8h.html#a63cc2cd00904abdec7f5bd88f19942a1" title="Configures the FIFO feature. Uses ADXL367_14B_CHID read mode as default." alt="" coords="248,224,393,251"/>
+<area shape="rect" id="node20" href="$adxl367_8h.html#a9441469bf596dc90e47226420481f41f" title="Initializes communication with the device and checks if the part is present by reading the device id." alt="" coords="269,695,372,721"/>
+</map>

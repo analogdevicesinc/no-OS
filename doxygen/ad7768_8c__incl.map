@@ -1,0 +1,14 @@
+<map id="drivers/adc/ad7768/ad7768.c" name="drivers/adc/ad7768/ad7768.c">
+<area shape="rect" id="node1" title="Implementation of AD7768 Driver." alt="" coords="191,5,337,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,169,72,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="97,169,167,196"/>
+<area shape="rect" id="node4" href="$ad7768_8h.html" title="Header file of AD7768 Driver." alt="" coords="263,95,345,121"/>
+<area shape="rect" id="node8" href="$no__os__alloc_8h.html" title=" " alt="" coords="77,95,187,121"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="585,95,695,121"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="414,95,514,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="323,244,394,271"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="243,169,349,196"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="373,169,472,196"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="654,169,722,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="547,169,629,196"/>
+</map>

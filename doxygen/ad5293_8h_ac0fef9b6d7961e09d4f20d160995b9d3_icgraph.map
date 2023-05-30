@@ -1,0 +1,4 @@
+<map id="ad5293_hard_reset" name="ad5293_hard_reset">
+<area shape="rect" id="node1" title="Reset ad5293 through Hardware Reset Pin." alt="" coords="152,5,299,32"/>
+<area shape="rect" id="node2" href="$ad5293_8h.html#a5669db09491b868f943f4f6c88957352" title="Initialize the ad5293 device structure." alt="" coords="5,5,104,32"/>
+</map>

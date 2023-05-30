@@ -1,0 +1,10 @@
+<map id="no_os_put_unaligned_be24" name="no_os_put_unaligned_be24">
+<area shape="rect" id="node1" title=" " alt="" coords="613,31,812,57"/>
+<area shape="rect" id="node2" href="$ade7953_8h.html#a6be0d8273cfe7ef3c43f147b237e8c57" title="Write device register." alt="" coords="437,5,555,32"/>
+<area shape="rect" id="node3" href="$ltc2992_8h.html#a62a5d30b35ba73d25ab53de13ac759bb" title="Write raw data to device register." alt="" coords="427,56,565,83"/>
+<area shape="rect" id="node4" href="$ltc2992_8h.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="254,31,353,57"/>
+<area shape="rect" id="node5" href="$ltc2992_8h.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="228,81,379,108"/>
+<area shape="rect" id="node6" href="$ltc2992_8h.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="19,31,166,57"/>
+<area shape="rect" id="node7" href="$ltc2992_8h.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="5,81,180,108"/>
+<area shape="rect" id="node8" href="$ltc2992_8h.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="25,132,160,159"/>
+</map>

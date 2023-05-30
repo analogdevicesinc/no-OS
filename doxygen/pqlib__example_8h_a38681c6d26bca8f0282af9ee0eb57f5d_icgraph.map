@@ -1,0 +1,8 @@
+<map id="populate_event_config" name="populate_event_config">
+<area shape="rect" id="node1" title="Populates event configuration using user configuration Serves as an example on how to convert thresho..." alt="" coords="755,31,924,57"/>
+<area shape="rect" id="node2" href="$pqlib__example_8h.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="548,31,707,57"/>
+<area shape="rect" id="node3" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="313,31,500,57"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,5,265,32"/>
+<area shape="rect" id="node6" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,56,248,83"/>
+<area shape="rect" id="node5" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,5,60,32"/>
+</map>

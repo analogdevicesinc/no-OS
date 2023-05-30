@@ -1,0 +1,5 @@
+<map id="adpd188_mode_set" name="adpd188_mode_set">
+<area shape="rect" id="node1" title="Set the mode of operation of the ADPD188." alt="" coords="285,5,435,32"/>
+<area shape="rect" id="node2" href="$iio__adpd188_8h.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="108,5,237,32"/>
+<area shape="rect" id="node3" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,32"/>
+</map>

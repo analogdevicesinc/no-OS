@@ -1,0 +1,9 @@
+<map id="adf4377_spi_read" name="adf4377_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADF4377 over SPI." alt="" coords="700,98,837,125"/>
+<area shape="rect" id="node2" href="$adf4377_8h.html#a7c03f81d085f5b3ab3e0ce5861ec4517" title="ADF4377 SPI Scratchpad check." alt="" coords="453,174,652,201"/>
+<area shape="rect" id="node3" href="$adf4377_8h.html#a0dd8ab44b3943f2f325d5bd6101b7dc1" title="Initializes the ADF4377." alt="" coords="108,123,211,150"/>
+<area shape="rect" id="node4" href="$adf4377__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,199,60,226"/>
+<area shape="rect" id="node5" href="$adf4377_8h.html#a02d1a4ab16723215f14941318fd2d51e" title=" " alt="" coords="265,123,399,150"/>
+<area shape="rect" id="node6" href="$adf4377_8h.html#ac3f82f8aa9a657609a11e2252688c74c" title="Software reset." alt="" coords="259,73,405,99"/>
+<area shape="rect" id="node7" href="$adf4377_8h.html#aa2785f8422b80c1b8f15253e8b5fdf47" title="Update ADF4377 register." alt="" coords="461,73,645,99"/>
+</map>

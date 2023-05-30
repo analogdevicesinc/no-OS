@@ -1,0 +1,9 @@
+<map id="iio_format_value" name="iio_format_value">
+<area shape="rect" id="node1" title=" " alt="" coords="233,132,365,159"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="9,5,182,32"/>
+<area shape="rect" id="node3" href="$iio__adis__internals_8h.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="5,56,185,83"/>
+<area shape="rect" id="node4" href="$iio__adis__internals_8h.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="29,107,161,133"/>
+<area shape="rect" id="node5" href="$iio__adis__internals_8h.html#aaedb46cc4fe942a8837df6283c46684c" title="Handles the read request for offset attribute." alt="" coords="19,157,171,184"/>
+<area shape="rect" id="node6" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="26,208,165,235"/>
+<area shape="rect" id="node7" href="$iio__adis__internals_8h.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="21,259,170,285"/>
+</map>

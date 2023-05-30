@@ -1,0 +1,19 @@
+<map id="drivers/power/lt7170/lt7170.c" name="drivers/power/lt7170/lt7170.c">
+<area shape="rect" id="node1" title=" " alt="" coords="436,5,592,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="685,244,756,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="231,244,314,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="8,244,78,271"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="222,95,290,121"/>
+<area shape="rect" id="node6" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="314,95,425,121"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="222,169,322,196"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="952,169,1065,196"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="36,95,146,121"/>
+<area shape="rect" id="node11" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="346,169,457,196"/>
+<area shape="rect" id="node12" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="628,169,727,196"/>
+<area shape="rect" id="node13" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="1031,95,1138,121"/>
+<area shape="rect" id="node14" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="802,95,908,121"/>
+<area shape="rect" id="node16" href="$lt7170_8h.html" title=" " alt="" coords="551,95,626,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="80,169,147,196"/>
+<area shape="rect" id="node15" title=" " alt="" coords="852,169,927,196"/>
+<area shape="rect" id="node17" title=" " alt="" coords="533,169,604,196"/>
+</map>

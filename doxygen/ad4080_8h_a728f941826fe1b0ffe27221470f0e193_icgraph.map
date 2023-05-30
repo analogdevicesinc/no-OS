@@ -1,0 +1,21 @@
+<map id="ad4080_update_bits" name="ad4080_update_bits">
+<area shape="rect" id="node1" title="Update specific register bits." alt="" coords="443,447,596,473"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a6a704e6558f7114804d76e0ddf0085b2" title="Set Address Ascension." alt="" coords="224,5,387,32"/>
+<area shape="rect" id="node3" href="$ad4080_8h.html#a964bdf51c7d6d7763ceee3389d063b65" title="Set AD4080 Analog/Digital LDO." alt="" coords="228,57,383,98"/>
+<area shape="rect" id="node4" href="$ad4080_8h.html#afd5b47c0c4bc60a62a10c73124642cc1" title="Set AD4080 LVDS/SPI Lane Control." alt="" coords="229,122,382,163"/>
+<area shape="rect" id="node6" href="$ad4080_8h.html#ab11b11ff63aa576788f723392cacfe0b" title="Set AD4080 Data Interface Configuration." alt="" coords="220,187,391,229"/>
+<area shape="rect" id="node7" href="$ad4080_8h.html#a646c430d79d7ef53fc6354d93524b2be" title="Set AD4080 Conversion Data FIFO Mode." alt="" coords="221,253,390,280"/>
+<area shape="rect" id="node8" href="$ad4080_8h.html#a9f54799720b940bf32d79f1401d36f74" title="Set AD4080 Output Pattern." alt="" coords="216,304,395,331"/>
+<area shape="rect" id="node9" href="$ad4080_8h.html#a63069a89cf413fcca6318d1f8348f551" title="Set AD4080 Interface LDO." alt="" coords="217,355,393,381"/>
+<area shape="rect" id="node10" href="$ad4080_8h.html#a6f3da0885a402914fbf6782651dd5164" title="Set AD4080 Interface clock periods from CNV rising edge." alt="" coords="225,406,386,447"/>
+<area shape="rect" id="node11" href="$ad4080_8h.html#a98a6de8443361651e56698a384465145" title="Set AD4080 LVDS CNV Clock Mode." alt="" coords="225,471,386,513"/>
+<area shape="rect" id="node12" href="$ad4080_8h.html#a6d7b938c83287bcdd4dca06ca3a6a21b" title="Set AD4080 LVDS Self Clock Mode." alt="" coords="224,537,387,578"/>
+<area shape="rect" id="node13" href="$ad4080_8h.html#a085cb9017c2ccd27624d05a35b9de27d" title="Set AD4080 LVDS Differential Output Voltage." alt="" coords="224,603,387,629"/>
+<area shape="rect" id="node14" href="$ad4080_8h.html#a1be5d09077b0e9f052586e6c34493617" title="Set Operation Mode." alt="" coords="223,653,387,680"/>
+<area shape="rect" id="node15" href="$ad4080_8h.html#a62b9dac8804057cc877d94656738a144" title="Set Short Instruction." alt="" coords="219,704,392,731"/>
+<area shape="rect" id="node17" href="$ad4080_8h.html#a3e9051eee1f798e76d98a16c8939cea9" title="Set Single/Streaming Mode." alt="" coords="216,755,395,781"/>
+<area shape="rect" id="node18" href="$ad4080_8h.html#a2c0489fb911a4c42eb2cd972758972d1" title="Set Strict Register Access." alt="" coords="223,806,388,847"/>
+<area shape="rect" id="node19" href="$ad4080_8h.html#a8b25a0d8ebbc3ff7e6cd6e61ed877cdb" title="Software reset the device." alt="" coords="235,872,376,899"/>
+<area shape="rect" id="node5" href="$ad4080_8h.html#a39a7f7a31ecbd353673ef4094dca02e4" title="Configure the data interface during initialization." alt="" coords="5,413,168,440"/>
+<area shape="rect" id="node16" href="$ad4080_8h.html#a668ebef8b83d588a3a0b3a97fd2a4708" title="Configure the config SPI interface during initialization." alt="" coords="5,747,168,789"/>
+</map>

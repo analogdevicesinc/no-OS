@@ -1,0 +1,7 @@
+<map id="lt7170_write_byte" name="lt7170_write_byte">
+<area shape="rect" id="node1" title="Perform a raw PMBus write byte operation." alt="" coords="212,81,351,108"/>
+<area shape="rect" id="node2" href="$lt7170_8h.html#abc0d64fcd7709ef5a279d9193f8955d2" title="Configure ADC control." alt="" coords="12,5,157,32"/>
+<area shape="rect" id="node3" href="$lt7170_8h.html#a04128a0d564876f87e321f863270f63e" title="Perform commands for non&#45;volatile memory (NVM)" alt="" coords="17,56,152,83"/>
+<area shape="rect" id="node4" href="$lt7170_8h.html#ad1a0da4a1de1dba3aa561c64b1cbd7a9" title="Set channel operation." alt="" coords="5,107,164,133"/>
+<area shape="rect" id="node5" href="$lt7170_8h.html#ae06710b1248bd6cd365141212504488c" title="Configure SYNC pin for clock synchronization." alt="" coords="11,157,158,184"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="max22200_reg_read" name="max22200_reg_read">
+<area shape="rect" id="node1" title="Read data from desired register for MAX22200." alt="" coords="1147,639,1301,665"/>
+<area shape="rect" id="node2" href="$max22200_8h.html#ae588c8bfe89b17695626cc9da502af57" title="Fault mask bit get function." alt="" coords="900,5,1099,32"/>
+<area shape="rect" id="node3" href="$max22200_8h.html#a5726311deab9e798a72bf26a70544594" title="Read configuration for the detection of the plunger movement of the device." alt="" coords="908,56,1091,83"/>
+<area shape="rect" id="node4" href="$max22200_8h.html#af0c97582b23d2c85ded837bfc1a9e9a5" title="Read channel&#39;s enable bits state." alt="" coords="903,107,1095,133"/>
+<area shape="rect" id="node5" href="$max22200_8h.html#a4e70b5f3bdbcd6f035a3f143601b4f48" title="Read channel&#39;s frequency." alt="" coords="423,613,597,640"/>
+<area shape="rect" id="node7" href="$max22200_8h.html#a9854bd6998b084c1ab0157c06ac30c7e" title="Read channel HIT configuration." alt="" coords="917,715,1082,741"/>
+<area shape="rect" id="node8" href="$max22200_8h.html#a6b563253db0448200326b5df3eef252d" title="Read channel HOLD configuration." alt="" coords="911,765,1087,792"/>
+<area shape="rect" id="node9" href="$max22200_8h.html#a02ce731c5127e40e7b689551d6fd0f11" title="Read channel&#39;s scale." alt="" coords="908,816,1091,843"/>
+<area shape="rect" id="node10" href="$max22200_8h.html#a57d72c873420e9e38f37beeb06cab198" title="Read the state of a channel." alt="" coords="909,867,1090,893"/>
+<area shape="rect" id="node11" href="$max22200_8h.html#a9072b32e409f73fbe0610c165792a257" title="Read channel&#39;s selected trigger for specific channel." alt="" coords="914,917,1085,944"/>
+<area shape="rect" id="node12" href="$max22200_8h.html#a01ee3ff0e1e9e6d6376615d9b32da83b" title="Read chopping frequency." alt="" coords="415,664,605,691"/>
+<area shape="rect" id="node13" href="$max22200_8h.html#a1835ac8951625384aedaa5113e914946" title="MAX22200 descriptor initialization function." alt="" coords="451,208,569,235"/>
+<area shape="rect" id="node16" href="$max22200_8h.html#aeac74a0e7d36f39655b548c26408b471" title="Update data in the desired register." alt="" coords="914,335,1085,361"/>
+<area shape="rect" id="node6" href="$max22200_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="201,563,361,589"/>
+<area shape="rect" id="node14" href="$iio__max22200_8h.html#ac94399543264c762f05f9be7ae5bc96c" title="Initializes the MAX22200 IIO descriptor." alt="" coords="210,183,353,209"/>
+<area shape="rect" id="node15" href="$max22200_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,152,148,179"/>
+<area shape="rect" id="node17" href="$max22200_8h.html#a6d378d879494a2cbbfb2071de3cec4e6" title="Set fault mask bits in the status register." alt="" coords="653,411,852,437"/>
+<area shape="rect" id="node18" href="$max22200_8h.html#a646c2233f3682e3c928fd84da879d519" title="Deallocates all the resources used at initialization." alt="" coords="436,107,584,133"/>
+<area shape="rect" id="node20" href="$max22200_8h.html#a54c96baa79be70cc86c451f57c63b830" title="Set configuration DPM." alt="" coords="662,461,843,488"/>
+<area shape="rect" id="node21" href="$max22200_8h.html#a85a1e61ee381787018c36625c1856ac1" title="Set channel&#39;s enables for different checks, detection and functions." alt="" coords="657,512,848,539"/>
+<area shape="rect" id="node22" href="$max22200_8h.html#a59e1958026589d1e01ab86a17144143b" title="Set channel&#39;s frequency." alt="" coords="423,436,597,463"/>
+<area shape="rect" id="node23" href="$max22200_8h.html#a9876d4894a2fe84777266b0aed1cb3dc" title="Set channel HIT time and HIT current." alt="" coords="671,157,835,184"/>
+<area shape="rect" id="node24" href="$max22200_8h.html#ad94e4f073bf41c68ae0fa95fda3c9048" title="Set channel hold current." alt="" coords="665,208,840,235"/>
+<area shape="rect" id="node25" href="$max22200_8h.html#a249aad4b27bc17c8b4a42cab8da9cecc" title="Set channel&#39;s scale to fullscale or half fullscale." alt="" coords="662,259,843,285"/>
+<area shape="rect" id="node26" href="$max22200_8h.html#abd268411a34af0c73257791a867c394b" title="Set channel state for specific channel." alt="" coords="663,56,843,83"/>
+<area shape="rect" id="node27" href="$max22200_8h.html#a7d599fefccdc1a6e68a370951e0954b0" title="Set channel&#39;s trigger to be either SPI or external trigger." alt="" coords="668,309,837,336"/>
+<area shape="rect" id="node28" href="$max22200_8h.html#a3b69588decfa81081e2c84f745e157b3" title="Set chopping frequency value." alt="" coords="415,563,605,589"/>
+<area shape="rect" id="node19" href="$iio__max22200_8h.html#af02821c856af6405d171e69d577097e7" title="Free resources allocated by the init function." alt="" coords="196,120,367,147"/>
+</map>

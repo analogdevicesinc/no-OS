@@ -1,0 +1,13 @@
+<map id="projects/max11205pmb1/src/common/common_data.c" name="projects/max11205pmb1/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by max11205pmb1 examples." alt="" coords="123,5,338,47"/>
+<area shape="rect" id="node2" href="$max11205pmb1_2src_2common_2common__data_8h.html" title="Defines common data to be used by max11205pmb1 examples." alt="" coords="167,95,294,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="81,169,231,196"/>
+<area shape="rect" id="node4" href="$max11205_8h.html" title="Implementation of max11205.h." alt="" coords="255,169,358,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="226,319,297,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="527,319,609,345"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="299,244,405,271"/>
+<area shape="rect" id="node8" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,244,101,271"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="125,244,224,271"/>
+<area shape="rect" id="node10" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="430,244,530,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="431,319,502,345"/>
+</map>

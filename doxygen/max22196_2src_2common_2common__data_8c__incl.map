@@ -1,0 +1,12 @@
+<map id="projects/max22196/src/common/common_data.c" name="projects/max22196/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by max22196 examples." alt="" coords="65,5,255,47"/>
+<area shape="rect" id="node2" href="$max22196_2src_2common_2common__data_8h.html" title="Defines common data to be used by max22196 examples." alt="" coords="97,95,223,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="10,169,161,196"/>
+<area shape="rect" id="node4" href="$max22196_8h.html" title="Header file of MAX22196 Driver." alt="" coords="185,169,287,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="158,319,229,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="407,319,489,345"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="187,244,285,271"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,244,112,271"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="310,244,410,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="311,319,382,345"/>
+</map>

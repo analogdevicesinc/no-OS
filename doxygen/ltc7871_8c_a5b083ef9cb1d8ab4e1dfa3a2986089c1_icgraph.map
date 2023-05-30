@@ -1,0 +1,15 @@
+<map id="ltc7871_reg_write" name="ltc7871_reg_write">
+<area shape="rect" id="node1" title="Register Write." alt="" coords="889,209,1028,236"/>
+<area shape="rect" id="node2" href="$ltc7871_8h.html#ad89c866c79b2a76217cf8bf976df4a68" title="Write to LTC7871 device register with mask." alt="" coords="660,209,841,236"/>
+<area shape="rect" id="node3" href="$ltc7871_8h.html#a0fb37657524d3573d41ffce359ef4e39" title="Clear PEC fault bit." alt="" coords="429,5,605,32"/>
+<area shape="rect" id="node4" href="$ltc7871_8h.html#ae12475b6bb0baba3b6b4aba516e7cd19" title="Reset all R/W registers." alt="" coords="461,56,572,83"/>
+<area shape="rect" id="node8" href="$ltc7871_8h.html#a21c22ab9a7876ab2eac5ef74aa428bb9" title="Set Frequency Spread Range." alt="" coords="426,107,607,149"/>
+<area shape="rect" id="node9" href="$ltc7871_8h.html#a6785a0e9c841036825e9a39a8f3124d5" title="stores the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="436,173,597,214"/>
+<area shape="rect" id="node10" href="$ltc7871_8h.html#a35de5774bc09f4c0991300d2e652d8df" title="stores the current DAC value to program the VHIGH voltage." alt="" coords="193,223,355,265"/>
+<area shape="rect" id="node11" href="$ltc7871_8h.html#aea03d5056be2372d7c846964d8ea7555" title="stores the current DAC value to program the VLOW voltage." alt="" coords="175,289,373,316"/>
+<area shape="rect" id="node12" href="$ltc7871_8h.html#a73042797a3127e7b4eac4b20ba6d2c24" title="Set Modulation Signal Frequency." alt="" coords="433,340,600,367"/>
+<area shape="rect" id="node13" href="$ltc7871_8h.html#a1774824735eb03c635bb9c318b507ac1" title="set write protect bit." alt="" coords="421,391,612,417"/>
+<area shape="rect" id="node5" href="$ltc7871_8h.html#ad5ce9787e56640bff3e5f7285411d91f" title="Initialize the LTC7871 device." alt="" coords="225,115,323,141"/>
+<area shape="rect" id="node6" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="7,231,125,257"/>
+<area shape="rect" id="node7" href="$iio__ltc7871_8h.html#ae6c8deb0e7a5dccf5477794210cde0b9" title="Initializes the LTC7871 IIO descriptor." alt="" coords="5,115,127,141"/>
+</map>

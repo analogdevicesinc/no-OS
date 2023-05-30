@@ -1,0 +1,4 @@
+<map id="ad5460_live_status" name="ad5460_live_status">
+<area shape="rect" id="node1" title="Used to store the live status bit fields." alt="" coords="9,95,157,121"/>
+<area shape="rect" id="node2" href="$struct__ad5460__live__status.html" title="Bitfield struct which maps on the LIVE_STATUS register." alt="" coords="5,5,160,32"/>
+</map>

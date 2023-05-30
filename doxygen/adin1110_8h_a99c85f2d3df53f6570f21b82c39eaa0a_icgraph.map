@@ -1,0 +1,4 @@
+<map id="adin1110_write_fifo" name="adin1110_write_fifo">
+<area shape="rect" id="node1" title="Write a frame to the TX FIFO." alt="" coords="172,5,323,32"/>
+<area shape="rect" id="node2" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="5,5,124,32"/>
+</map>

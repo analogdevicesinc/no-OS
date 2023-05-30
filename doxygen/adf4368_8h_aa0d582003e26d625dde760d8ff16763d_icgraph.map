@@ -1,0 +1,5 @@
+<map id="adf4368_set_phase_bleedi" name="adf4368_set_phase_bleedi">
+<area shape="rect" id="node1" title="Set the phase adjustment in femto&#45;seconds. The phase adjust will enable the Bleed current...." alt="" coords="368,5,563,32"/>
+<area shape="rect" id="node2" href="$adf4368_8h.html#ac9b10000c0233a67f11414a65fe3f436" title="Set the phase adjustment in femto&#45;seconds. Function choose the phase adjustment method according to I..." alt="" coords="172,5,320,32"/>
+<area shape="rect" id="node3" href="$adf4368_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,32"/>
+</map>

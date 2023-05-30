@@ -1,0 +1,5 @@
+<map id="MYKONOS_setTx1Attenuation" name="MYKONOS_setTx1Attenuation">
+<area shape="rect" id="node1" title="Sets the Tx1 RF output Attenuation." alt="" coords="479,5,693,32"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a4de52516e6f9fefafd7abc62d45c0f5a" title="Write indirect registers (Programmable FIRs, Rx gain tables, JESD204B settings). Must be done after M..." alt="" coords="196,5,431,32"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a6f62c877342da46ec31250276e7fb49d" title="Resets the ARM processor and performs initialization." alt="" coords="5,5,148,32"/>
+</map>

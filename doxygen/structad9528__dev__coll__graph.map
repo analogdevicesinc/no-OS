@@ -1,0 +1,14 @@
+<map id="ad9528_dev" name="ad9528_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="995,167,1096,193"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="693,53,815,80"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,48,490,75"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,99,491,141"/>
+<area shape="rect" id="node6" href="$structad9528__state.html" title=" " alt="" coords="699,107,809,133"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="688,165,820,192"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,165,511,192"/>
+<area shape="rect" id="node9" href="$structad9528__platform__data.html" title="platform specific information" alt="" coords="669,216,839,243"/>
+<area shape="rect" id="node10" href="$structad9528__channel__spec.html" title="Output channel configuration." alt="" coords="334,216,499,243"/>
+<area shape="rect" id="node11" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="693,267,815,293"/>
+<area shape="rect" id="node12" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="327,267,506,293"/>
+</map>
