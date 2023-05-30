@@ -1,0 +1,25 @@
+var ade7913_8c =
+[
+    [ "ade7913_adc_freq", "ade7913_8c.html#a77080357e423e795dc37cbda3524761c", null ],
+    [ "ade7913_adc_na_status", "ade7913_8c.html#affe2c710bf923154606b4bbb9bd2a1d7", null ],
+    [ "ade7913_cnt_snapshot_val", "ade7913_8c.html#a08a8a3b22adb4b752256ab439ba467ef", null ],
+    [ "ade7913_crc_status", "ade7913_8c.html#aca4f2bfa1643d0ca56959b4b920789b0", null ],
+    [ "ade7913_emi_ctrl", "ade7913_8c.html#a329cd7893bc50c5433e97ac2a0da7ecd", null ],
+    [ "ade7913_get_sync_cnt_val", "ade7913_8c.html#a6c5a9b9d244eb8d592f694cc3ebc865f", null ],
+    [ "ade7913_get_version_product", "ade7913_8c.html#a1755d14d44a5427775abffdb159ce0cc", null ],
+    [ "ade7913_ic_prot_status", "ade7913_8c.html#a4044929913dee523e72953d26b275ba8", null ],
+    [ "ade7913_init", "ade7913_8c.html#a58e08cbf7c0230e4c2d8b203effce384", null ],
+    [ "ade7913_lfp_bw", "ade7913_8c.html#a41129ef8cc4549e7ced9d123a66954a7", null ],
+    [ "ade7913_pwrdwn", "ade7913_8c.html#a04a808901b1747c5c69b722631326d45", null ],
+    [ "ade7913_read", "ade7913_8c.html#ab77f36317800804dc692df67ba2efdea", null ],
+    [ "ade7913_read_waveforms", "ade7913_8c.html#af4617b5195956538abce707fb595e362", null ],
+    [ "ade7913_remove", "ade7913_8c.html#af4f786f29c3a6ab0057341de5bacb80a", null ],
+    [ "ade7913_set_clkout_en", "ade7913_8c.html#a98dea29d48f3193928c2460beef34f13", null ],
+    [ "ade7913_sw_reset", "ade7913_8c.html#a6a672f051e655d14cd926576faf98f99", null ],
+    [ "ade7913_sync_en", "ade7913_8c.html#a3709543b6565e9839abfd5cf96e948b7", null ],
+    [ "ade7913_temp_en", "ade7913_8c.html#a2d56424a00931393659c72e64df5d82b", null ],
+    [ "ade7913_wr_lock", "ade7913_8c.html#a0f7db5e49df1285160e0124f6fe03d40", null ],
+    [ "ade7913_wr_unlock", "ade7913_8c.html#acb195dfa437803cb18f90e4b3cf2f852", null ],
+    [ "ade7913_write", "ade7913_8c.html#aa391c294b2bab2ad514b4ead84f5b68f", null ],
+    [ "ade7913_write_broadcast", "ade7913_8c.html#a8cd6283e9418b32331af4cf8b1ae2370", null ]
+];

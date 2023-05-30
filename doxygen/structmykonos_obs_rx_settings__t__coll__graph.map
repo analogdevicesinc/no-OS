@@ -1,0 +1,19 @@
+<map id="mykonosObsRxSettings_t" name="mykonosObsRxSettings_t">
+<area shape="rect" id="Node000001" title="Data structure to hold ORx data path settings." alt="" coords="723,106,911,131"/>
+<area shape="rect" id="Node000002" href="$structmykonos_rx_profile__t.html" title="Data structure to hold settings for the current Rx specific use case profile." alt="" coords="381,7,532,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="546,29,621,44,699,64,750,83,792,103,790,108,747,88,698,69,620,49,545,35"/>
+<area shape="rect" id="Node000003" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="58,7,167,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,17,381,17,381,23,181,23"/>
+<area shape="rect" id="Node000004" href="$structmykonos_o_rx_gain_control__t.html" title="Data structure to hold ORx gain control settings for initialization and during use." alt="" coords="358,57,555,82"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="569,79,699,96,745,103,744,109,698,101,569,84"/>
+<area shape="rect" id="Node000005" href="$structmykonos_agc_cfg__t.html" title="Data structure to hold general AGC settings for initialization and during use." alt="" coords="387,106,526,131"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="540,116,723,116,723,121,540,121"/>
+<area shape="rect" id="Node000006" href="$structmykonos_peak_det_agc_cfg__t.html" title="Data structure to hold peak detector settings for the AGC." alt="" coords="15,82,210,107"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="224,100,387,111,387,117,224,105"/>
+<area shape="rect" id="Node000007" href="$structmykonos_power_meas_agc_cfg__t.html" title="Data structure to hold power measurement settings for the AGC." alt="" coords="5,131,220,157"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="233,133,313,127,387,121,387,126,314,132,234,138"/>
+<area shape="rect" id="Node000008" href="$structmykonos_sniffer_gain_control__t.html" title="Data structure to hold SnRx gain control settings for initialization and during use." alt="" coords="351,155,563,181"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="576,152,698,136,744,129,745,134,699,141,577,157"/>
+<area shape="rect" id="Node000009" href="$structmykonos_jesd204b_framer_config__t.html" title="Data structure to hold Mykonos JESD204b Framer configuration settings." alt="" coords="337,205,576,230"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="568,200,633,187,698,169,748,150,791,129,793,134,750,155,699,175,634,192,569,205"/>
+</map>

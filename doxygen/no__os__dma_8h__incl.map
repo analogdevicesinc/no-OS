@@ -1,0 +1,19 @@
+<map id="include/no_os_dma.h" name="include/no_os_dma.h">
+<area shape="rect" id="Node000001" title="Platform independent function definitions and data types for the DMA API." alt="" coords="169,5,327,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,72,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,33,86,77,84,72,214,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,79,167,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,33,164,74,161,69,228,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="255,152,326,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="244,32,232,65,229,84,233,103,246,124,264,141,260,145,242,127,228,105,224,84,226,64,239,30"/>
+<area shape="rect" id="Node000005" href="$no__os__list_8h.html" title="List library header." alt="" coords="363,79,461,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="275,28,374,71,372,76,273,33"/>
+<area shape="rect" id="Node000007" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="243,79,339,104"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="257,30,279,66,275,68,253,32"/>
+<area shape="rect" id="Node000008" href="$no__os__mutex_8h.html" title=" " alt="" coords="486,79,607,104"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="297,28,486,73,484,78,295,33"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="394,106,323,147,321,143,391,102"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="371,152,453,177"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="415,104,415,138,409,138,409,104"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="293,104,293,138,288,138,288,104"/>
+</map>

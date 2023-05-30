@@ -1,0 +1,32 @@
+<map id="drivers/platform/aducm3029/aducm3029_timer.c" name="drivers/platform/aducm3029/aducm3029_timer.c">
+<area shape="rect" id="Node000001" title="Implementation of TIMER driver for ADuCM302x." alt="" coords="355,5,561,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="355,31,266,37,173,48,94,67,65,80,45,95,36,110,29,126,25,161,28,196,35,226,30,227,23,197,20,161,24,124,31,107,41,92,62,75,92,62,172,43,265,32,354,26"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="553,93,715,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="501,43,597,85,594,90,499,48"/>
+<area shape="rect" id="Node000004" href="$aducm3029__timer_8h.html" title="Header file of TIMER driver for ADuCM302x." alt="" coords="327,93,477,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="447,47,420,84,416,80,442,44"/>
+<area shape="rect" id="Node000008" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="528,167,641,192"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="476,44,568,154,564,158,472,48"/>
+<area shape="rect" id="Node000010" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="739,93,849,119"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="539,43,732,88,731,93,538,48"/>
+<area shape="rect" id="Node000012" href="$no__os__alloc_8h.html" title=" " alt="" coords="56,93,167,119"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="376,48,176,93,175,88,374,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="461,240,532,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="420,117,444,138,467,165,483,196,493,226,488,227,478,198,462,168,440,142,416,121"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="352,167,452,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="405,119,405,153,399,153,399,119"/>
+<area shape="poly" id="edge9_Node000004_Node000008" title=" " alt="" coords="432,116,543,159,541,164,430,121"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="169,167,328,192"/>
+<area shape="poly" id="edge11_Node000004_Node000009" title=" " alt="" coords="378,121,287,163,285,158,376,116"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="352,193,90,244,89,239,351,188"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="419,190,472,229,469,234,416,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="354,240,437,265"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="404,193,400,227,395,226,398,192"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="572,194,523,233,520,229,569,190"/>
+<area shape="rect" id="Node000011" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="760,167,828,192"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="797,119,797,153,791,153,791,119"/>
+<area shape="poly" id="edge17_Node000012_Node000002" title=" " alt="" coords="103,120,85,142,68,168,56,198,48,227,43,226,51,196,64,165,81,139,99,117"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="78,167,145,192"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="114,119,114,153,109,153,109,119"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="drivers/power/ltc4162l/ltc4162l.h" name="drivers/power/ltc4162l/ltc4162l.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="297,5,464,45"/>
+<area shape="rect" id="Node000002" href="$iio__ltc4162l_8c.html" title="Implementation of IIO LTC4162L Driver." alt="" coords="5,101,172,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="309,52,148,103,147,98,308,47"/>
+<area shape="rect" id="Node000003" href="$ltc4162l_8c.html" title=" " alt="" coords="196,101,363,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="352,57,302,103,298,99,348,53"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_2src_2common_2common__data_8h.html" title=" " alt="" coords="387,101,579,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="413,53,464,99,461,103,410,57"/>
+<area shape="rect" id="Node000006" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="604,93,771,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="456,47,605,92,603,97,455,52"/>
+<area shape="rect" id="Node000005" href="$ltc4162l_2src_2common_2common__data_8c.html" title=" " alt="" coords="388,196,579,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="486,154,486,196,481,196,481,154"/>
+</map>

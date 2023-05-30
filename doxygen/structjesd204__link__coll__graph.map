@@ -1,0 +1,5 @@
+<map id="jesd204_link" name="jesd204_link">
+<area shape="rect" id="Node000001" title="JESD204 link configuration settings." alt="" coords="13,93,117,119"/>
+<area shape="rect" id="Node000002" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="5,5,125,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,45,68,93,63,93,63,45"/>
+</map>

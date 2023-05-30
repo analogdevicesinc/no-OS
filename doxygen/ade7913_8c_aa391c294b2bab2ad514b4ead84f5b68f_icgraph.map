@@ -1,0 +1,14 @@
+<map id="ade7913_write" name="ade7913_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="345,104,464,129"/>
+<area shape="rect" id="Node000002" href="$ade7913_8c.html#a329cd7893bc50c5433e97ac2a0da7ecd" title="Set EMI CTRL register." alt="" coords="133,5,272,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="377,97,340,70,296,44,265,33,267,28,298,40,343,65,380,93"/>
+<area shape="rect" id="Node000003" href="$ade7913_8c.html#a0f7db5e49df1285160e0124f6fe03d40" title="Lock device." alt="" coords="135,55,270,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="338,103,255,83,256,77,339,98"/>
+<area shape="rect" id="Node000004" href="$ade7913_8c.html#acb195dfa437803cb18f90e4b3cf2f852" title="Unlock device." alt="" coords="127,104,278,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="332,119,278,119,278,114,332,114"/>
+<area shape="rect" id="Node000005" href="$ade7913_8c.html#a8cd6283e9418b32331af4cf8b1ae2370" title="Write broadcast." alt="" coords="108,153,297,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="339,135,256,156,255,151,338,130"/>
+<area shape="rect" id="Node000006" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,179,60,204"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="382,141,345,169,298,193,232,206,166,209,106,205,60,199,61,194,106,200,166,203,232,200,296,187,342,165,379,137"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="104,183,61,190,60,185,103,178"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="ades1754_read_dev" name="ades1754_read_dev">
+<area shape="rect" id="Node000001" title="ADES1754 read device command message." alt="" coords="507,55,659,80"/>
+<area shape="rect" id="Node000002" href="$ades1754_8c.html#ab10ca7d0a1c2731a054bb4fdc0ef4877" title="Read specific alert state." alt="" coords="294,5,445,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="513,54,424,33,426,28,514,49"/>
+<area shape="rect" id="Node000004" href="$ades1754_8c.html#a01fb57c7549f06f25260bd31a6e0bb5b" title="ADES1754 read cell data." alt="" coords="280,55,459,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="493,70,459,70,459,65,493,65"/>
+<area shape="rect" id="Node000005" href="$ades1754_8c.html#adab9ebabc29ae19de65b72649e194884" title="ADES1754 update device command message." alt="" coords="285,243,453,268"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="558,91,387,244,383,240,555,87"/>
+<area shape="rect" id="Node000003" href="$spi__uart__bridge__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="SPI&#45;to&#45;UART example main execution." alt="" coords="59,5,178,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="280,21,178,21,178,15,280,15"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="291,55,178,32,179,27,292,49"/>
+<area shape="rect" id="Node000006" href="$ades1754_8c.html#abf0336a8c2479fe281f6890b1e22072e" title="Set ADC scan method." alt="" coords="19,55,218,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="352,232,332,200,304,163,270,126,231,95,203,82,205,78,233,90,274,122,309,159,337,197,357,229"/>
+<area shape="rect" id="Node000007" href="$ades1754_8c.html#a6b3a12d5e93621a0113c20b392f28a17" title="Cell&#45;Balancing Calibration Period Selection." alt="" coords="27,105,210,145"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="342,236,293,197,231,159,202,147,204,142,233,154,296,192,345,231"/>
+<area shape="rect" id="Node000008" href="$ades1754_8c.html#a568a6c93f7660701c4a318aa9b830d49" title="Cell&#45;Ballancing Measurement Enable/Disable." alt="" coords="6,169,231,195"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="323,240,231,209,186,197,187,192,233,203,325,235"/>
+<area shape="rect" id="Node000009" href="$ades1754_8c.html#a9f3596b0241f3b820fb2fdf73114c513" title="Set Cell Balancing mode." alt="" coords="5,219,232,244"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="272,249,232,245,233,240,272,243"/>
+<area shape="rect" id="Node000010" href="$ades1754_8c.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9" title="Set Buffer mode for data acquisition." alt="" coords="18,268,219,293"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="272,268,220,273,219,268,271,263"/>
+<area shape="rect" id="Node000011" href="$ades1754_8c.html#a9badaadef8c37481a4ccceae8b42170c" title="Set IIR filter coefficient." alt="" coords="53,317,185,343"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="325,275,233,307,183,320,182,315,231,302,323,270"/>
+<area shape="rect" id="Node000012" href="$ades1754_8c.html#aed1fbc41b15d76f6174710a8077ec948" title="Set speciic IIR filter settings." alt="" coords="39,367,199,392"/>
+<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="346,279,296,319,233,356,197,369,195,364,231,352,293,315,343,275"/>
+<area shape="rect" id="Node000013" href="$ades1754_8c.html#a415d67f8019842750759f13156278777" title="ADES1754 Start/Stop Scanning function." alt="" coords="39,416,198,441"/>
+<area shape="poly" id="edge13_Node000005_Node000013" title=" " alt="" coords="355,281,306,344,272,378,233,406,199,420,197,415,231,401,269,373,302,340,351,278"/>
+<area shape="rect" id="Node000014" href="$ades1754_8c.html#a9f0bfa3719e1e1684c7f16b2aad35599" title="Select Scan Mode of the cells." alt="" coords="11,465,226,491"/>
+<area shape="poly" id="edge14_Node000005_Node000014" title=" " alt="" coords="360,282,342,321,315,369,279,416,234,456,211,468,209,463,230,452,275,413,310,366,338,319,356,280"/>
+</map>

@@ -1,0 +1,23 @@
+<map id="drivers/platform/xilinx/xilinx_timer.c" name="drivers/platform/xilinx/xilinx_timer.c">
+<area shape="rect" id="Node000001" title="Timer and GIC control module source." alt="" coords="179,5,346,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="181,167,251,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="259,47,244,94,226,154,221,153,239,93,254,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,123,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,33,146,41,112,52,81,70,57,95,51,108,49,123,56,153,51,154,44,123,46,107,52,92,78,66,110,48,144,35,179,28"/>
+<area shape="rect" id="Node000004" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="389,93,502,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="307,43,407,85,405,90,305,48"/>
+<area shape="rect" id="Node000006" href="$xilinx__timer_8h.html" title="Timer control module header." alt="" coords="67,93,178,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="230,48,157,89,154,84,228,43"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="527,93,636,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="340,43,522,87,521,93,338,48"/>
+<area shape="rect" id="Node000009" href="$no__os__alloc_8h.html" title=" " alt="" coords="254,93,365,119"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="276,44,298,80,293,83,272,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="410,167,481,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="448,119,448,153,443,153,443,119"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="115,121,84,158,80,155,111,117"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="547,167,615,192"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="584,119,584,153,579,153,579,119"/>
+<area shape="poly" id="edge11_Node000009_Node000002" title=" " alt="" coords="296,121,244,160,240,156,293,117"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="276,167,343,192"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="312,119,312,153,307,153,307,119"/>
+</map>

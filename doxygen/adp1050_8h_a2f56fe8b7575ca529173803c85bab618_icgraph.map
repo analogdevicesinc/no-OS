@@ -1,0 +1,93 @@
+<map id="adp1050_write" name="adp1050_write">
+<area shape="rect" id="Node000001" title="Write data to ADP1050." alt="" coords="888,837,1007,863"/>
+<area shape="rect" id="Node000002" href="$adp1050_8c.html#a81f834b12dccd706de08f2c3d6f1c83f" title="Change the CHIP/EEPROM password. TRIM password is the same with EEPROM password." alt="" coords="656,5,825,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="944,824,943,665,931,430,918,309,899,197,873,105,856,70,838,44,824,32,827,28,842,40,861,68,878,104,904,196,923,308,936,430,948,665,949,824"/>
+<area shape="rect" id="Node000003" href="$adp1050_8c.html#af30cb14703832c85fd7b42a1bf824ef6" title="Adjust filter settings of the normal mode compensator." alt="" coords="683,55,798,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="943,824,941,674,928,454,915,340,896,236,871,151,855,118,838,93,820,80,797,72,799,67,822,75,842,89,860,115,876,149,901,235,920,339,933,453,946,674,949,824"/>
+<area shape="rect" id="Node000004" href="$adp1050_8c.html#ad4dd86738d3cb2e195290dcff6bfaac0" title="Frequency synchronization of the PWM clock with an external clock Requires syni_desc to be initialize..." alt="" coords="667,104,815,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="943,824,938,685,923,483,909,378,891,283,867,204,853,174,838,150,826,140,812,132,814,127,829,135,842,147,858,171,872,202,896,282,914,378,928,482,943,684,948,824"/>
+<area shape="rect" id="Node000005" href="$iio__adp1050_8c.html#a982ad0e9e00139947e5d52eacc4f1eb0" title="Initializes the ADP1050 IIO descriptor." alt="" coords="197,193,326,219"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="943,823,937,696,922,517,908,425,890,342,867,274,853,248,838,229,809,205,776,185,742,170,705,158,629,146,551,146,475,153,405,166,299,196,298,191,404,161,474,148,550,140,629,141,707,153,744,165,779,180,812,200,842,225,858,245,872,272,895,340,914,424,927,516,943,696,948,823"/>
+<area shape="rect" id="Node000007" href="$adp1050_8c.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="443,255,549,280"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="942,823,932,717,913,571,899,497,882,430,862,375,838,338,807,313,771,294,733,280,693,271,616,263,550,264,549,259,616,258,694,266,735,275,774,289,810,309,842,335,867,372,887,428,905,496,919,570,938,717,947,823"/>
+<area shape="rect" id="Node000009" href="$adp1050_8c.html#a3406fcfa7ab857a37c98373950557c26" title="Adjust filter settings of the light mode compensator." alt="" coords="681,812,800,837"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="874,844,800,835,800,829,874,838"/>
+<area shape="rect" id="Node000010" href="$adp1050_8c.html#ab3b16c7a07e3c475059e0b1f31c04ab0" title="Lock CHIP/EEPROM password. TRIM passwor dis locked of the EEPROM password is locked." alt="" coords="666,861,815,887"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="874,861,816,868,815,863,874,856"/>
+<area shape="rect" id="Node000011" href="$adp1050_8c.html#acf4048a23d002f96e341267bfdeb0507" title="Enable or disbale the pulse skipping mode." alt="" coords="649,911,832,936"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="911,871,841,902,803,913,801,908,839,897,909,867"/>
+<area shape="rect" id="Node000012" href="$adp1050_8c.html#a5bb2e480ed792fa100b2fb4ea23c2a4d" title="Set VOUT duty cycle for requested channel." alt="" coords="399,559,593,584"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="941,824,933,774,916,712,902,680,885,649,864,622,838,599,806,580,770,566,732,557,694,553,619,553,556,561,555,556,619,548,694,548,733,552,771,561,808,575,842,595,868,618,890,646,907,677,921,710,938,773,946,823"/>
+<area shape="rect" id="Node000013" href="$adp1050_8c.html#a84fff15376ebe1860172704bff6695d2" title="Set requested ADP1050 channel in Open Loop operation mode." alt="" coords="172,660,351,685"/>
+<area shape="poly" id="edge28_Node000001_Node000013" title=" " alt="" coords="911,833,877,817,839,803,774,788,717,781,618,780,520,778,463,769,398,751,363,737,330,720,279,688,282,683,333,716,365,733,400,746,464,764,520,772,619,775,717,776,775,783,841,798,879,812,913,829"/>
+<area shape="rect" id="Node000014" href="$adp1050_8c.html#ab8f5b8bd8048dbadf9b9ec50173c51aa" title="Set PWM modulation for requested channel." alt="" coords="641,960,840,985"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="929,875,891,914,867,934,841,951,814,962,812,958,839,946,864,930,888,910,925,872"/>
+<area shape="rect" id="Node000015" href="$adp1050_8c.html#a32c3b80439e7763db28ba844977aa755" title="Free the resources allocated by the adp1050_init()" alt="" coords="673,349,808,375"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="941,824,929,729,908,601,894,536,877,477,859,429,838,396,824,384,807,376,809,371,827,380,842,392,863,426,882,475,899,535,913,600,934,728,946,823"/>
+<area shape="rect" id="Node000017" href="$adp1050_8c.html#aef78c2007b18478bbc0187878ca669eb" title="Set current limit fast fault for overcurrent protection and current limit cycle&#45;by&#45;cycle reference." alt="" coords="666,1009,815,1035"/>
+<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="937,877,901,939,874,972,841,1000,817,1012,814,1008,839,996,870,969,896,936,933,874"/>
+<area shape="rect" id="Node000018" href="$adp1050_8c.html#a29f0826c58d2ba1dce0106101657b4ba" title="Set close loop operation." alt="" coords="405,457,587,483"/>
+<area shape="poly" id="edge23_Node000001_Node000018" title=" " alt="" coords="939,824,926,748,904,648,874,555,857,520,838,497,805,476,769,462,731,453,691,448,615,450,550,460,549,455,614,445,691,443,731,447,771,457,808,472,842,493,861,517,879,553,909,647,931,746,945,823"/>
+<area shape="rect" id="Node000019" href="$adp1050_8c.html#adcfe5cb5bdc99c657d6f282ea0274070" title="Set current sense settings." alt="" coords="644,1059,837,1084"/>
+<area shape="poly" id="edge25_Node000001_Node000019" title=" " alt="" coords="942,877,929,916,909,962,880,1010,842,1049,822,1061,819,1056,838,1045,876,1006,904,960,924,914,937,875"/>
+<area shape="rect" id="Node000020" href="$adp1050_8c.html#a53a89f096889ee3b07669a9fc1e3e825" title="Enable or disable voltage input feedforward for edge modulation." alt="" coords="645,1108,836,1133"/>
+<area shape="poly" id="edge26_Node000001_Node000020" title=" " alt="" coords="945,877,935,925,916,985,886,1046,866,1074,842,1099,824,1110,821,1106,838,1095,862,1071,882,1044,911,983,930,924,940,876"/>
+<area shape="rect" id="Node000021" href="$adp1050_8c.html#acfa8d565f961b351f348c54f650d99b5" title="Set FLAGIN response to FLGI pin signal." alt="" coords="641,1157,840,1183"/>
+<area shape="poly" id="edge27_Node000001_Node000021" title=" " alt="" coords="947,877,940,933,923,1006,910,1045,892,1083,870,1118,842,1148,825,1159,822,1155,838,1144,865,1114,887,1080,905,1043,918,1005,935,932,942,876"/>
+<area shape="rect" id="Node000022" href="$adp1050_8c.html#a70e4fb7682ef209fae24d94cd5580e31" title="Set PWM channel and frequency." alt="" coords="669,508,813,533"/>
+<area shape="poly" id="edge29_Node000001_Node000022" title=" " alt="" coords="942,824,934,768,917,696,903,658,886,620,865,585,838,555,807,536,810,531,842,551,869,582,891,618,908,656,922,695,939,767,947,823"/>
+<area shape="rect" id="Node000023" href="$adp1050_8c.html#a814f3ee903f5659bef32c647966d843a" title="Set ADP1050 VIN on/off raw value for input voltage limiting." alt="" coords="675,1207,807,1232"/>
+<area shape="poly" id="edge34_Node000001_Node000023" title=" " alt="" coords="949,877,945,941,930,1028,917,1074,898,1119,873,1161,842,1197,826,1209,808,1216,806,1211,823,1204,838,1193,869,1158,893,1116,912,1072,925,1027,940,941,944,876"/>
+<area shape="rect" id="Node000024" href="$adp1050_8c.html#a40f283584d4b3c7878b6eac3a672f7c9" title="Software reset the ADP1050." alt="" coords="650,1256,831,1281"/>
+<area shape="poly" id="edge35_Node000001_Node000024" title=" " alt="" coords="945,876,932,960,910,1071,880,1177,862,1218,842,1247,826,1258,823,1254,838,1243,857,1216,875,1175,905,1070,927,959,940,876"/>
+<area shape="rect" id="Node000025" href="$adp1050_8c.html#afc314ab80bc8f5e20356cf5ac09b12e4" title="Trim IIN(CS1 pin)/VIN(VF pin)/VOUT(VS pin)." alt="" coords="440,711,552,736"/>
+<area shape="poly" id="edge36_Node000001_Node000025" title=" " alt="" coords="934,825,921,794,900,759,873,726,839,700,817,693,786,690,710,692,626,703,553,715,552,710,625,697,709,687,786,685,818,688,841,696,877,722,904,756,925,792,939,823"/>
+<area shape="rect" id="Node000026" href="$adp1050_8c.html#a57b14659730225a28d765a5d4a9c7c1a" title="Unlock CHIP/EEPROM/TRIM password." alt="" coords="413,205,579,231"/>
+<area shape="poly" id="edge37_Node000001_Node000026" title=" " alt="" coords="942,824,935,708,917,544,904,461,886,386,864,325,852,301,838,284,811,261,780,244,747,231,713,221,643,212,579,212,579,207,643,207,714,216,749,226,783,239,814,257,842,280,856,298,869,322,891,385,909,460,923,544,940,707,948,824"/>
+<area shape="rect" id="Node000027" href="$adp1050_8c.html#a20a8f5df60a258e07bbe64f4c66d071b" title="Set VOUT margins value." alt="" coords="657,1305,824,1331"/>
+<area shape="poly" id="edge40_Node000001_Node000027" title=" " alt="" coords="946,877,934,970,913,1095,899,1159,883,1216,864,1264,842,1296,826,1308,823,1303,838,1292,859,1261,878,1215,894,1157,908,1094,929,969,941,876"/>
+<area shape="rect" id="Node000028" href="$adp1050_8c.html#a405544a81a0dec91aa7b6ccaf16ecf54" title="Set output voltage offset." alt="" coords="661,711,820,736"/>
+<area shape="poly" id="edge41_Node000001_Node000028" title=" " alt="" coords="924,829,886,792,839,758,794,739,796,734,841,753,890,788,928,825"/>
+<area shape="rect" id="Node000029" href="$adp1050_8c.html#a06942e99daeb429b3da88ea7f7208c60" title="Set ADP1050 VOUT scale, regarding the resistor divider assigned to the VS pins." alt="" coords="663,407,818,432"/>
+<area shape="poly" id="edge43_Node000001_Node000029" title=" " alt="" coords="944,824,943,751,930,652,916,599,897,546,872,497,838,453,809,434,812,430,842,449,876,494,902,544,922,597,935,651,948,751,950,824"/>
+<area shape="rect" id="Node000030" href="$adp1050_8c.html#ac232dae8089087167efe99933d37d1b7" title="Set ADP1050 VOUT transition rate." alt="" coords="675,1355,806,1380"/>
+<area shape="poly" id="edge47_Node000001_Node000030" title=" " alt="" coords="947,876,936,979,917,1119,903,1190,886,1255,866,1309,842,1345,826,1357,807,1365,805,1360,823,1353,838,1342,861,1306,881,1254,897,1189,911,1118,931,978,941,876"/>
+<area shape="rect" id="Node000031" href="$adp1050_8c.html#adc1a5eddca26ebe15dd78c0cd5e7c60d" title="Set VOUT_COMMAND and VOUT_MAX values." alt="" coords="662,609,819,635"/>
+<area shape="poly" id="edge48_Node000001_Node000031" title=" " alt="" coords="936,825,923,787,903,742,875,696,838,656,804,637,807,633,842,652,879,692,908,739,928,785,941,823"/>
+<area shape="rect" id="Node000032" href="$adp1050_8c.html#a1ed70daa62cd30ef79b5ff7c50aa3d7b" title="Set light load and deep light load common setting." alt="" coords="645,1405,836,1445"/>
+<area shape="poly" id="edge51_Node000001_Node000032" title=" " alt="" coords="947,877,938,988,918,1142,904,1221,887,1293,867,1353,842,1394,828,1407,824,1402,838,1391,862,1351,882,1292,899,1220,913,1142,932,987,942,876"/>
+<area shape="rect" id="Node000033" href="$adp1050_8c.html#af6312235fed7ed4e713cf5f642a10b43" title="Set light load and deep light load." alt="" coords="643,1469,838,1495"/>
+<area shape="poly" id="edge52_Node000001_Node000033" title=" " alt="" coords="948,877,941,1000,924,1174,910,1263,892,1345,870,1412,857,1438,842,1459,825,1471,822,1467,838,1455,852,1436,865,1410,887,1344,905,1262,918,1173,935,999,942,876"/>
+<area shape="rect" id="Node000034" href="$adp1050_8c.html#a5f2d535e70edc556b936ce640176f9a6" title="Set the IOUT calibration gain for ADP1051." alt="" coords="641,1519,840,1544"/>
+<area shape="poly" id="edge53_Node000001_Node000034" title=" " alt="" coords="948,877,943,1009,927,1199,914,1296,895,1385,872,1459,858,1487,842,1509,827,1521,824,1517,838,1505,853,1485,867,1457,890,1384,908,1295,922,1198,937,1009,943,877"/>
+<area shape="rect" id="Node000035" href="$adp1050_8c.html#ad7702d9c094b6db99744953aabbb4799" title="Set the IOUT OC fault limit for ADP1051." alt="" coords="661,1569,820,1609"/>
+<area shape="poly" id="edge54_Node000001_Node000035" title=" " alt="" coords="948,876,943,1016,928,1220,915,1326,897,1423,873,1503,858,1534,842,1558,822,1574,819,1570,838,1555,854,1532,868,1501,891,1421,910,1325,923,1220,938,1016,943,876"/>
+<area shape="rect" id="Node000036" href="$adp1050_8c.html#afac5ccfce820029895efe0a88e0b2403" title="Set ADP1051 vout droop for setting the rate of output voltage and current." alt="" coords="648,1633,833,1659"/>
+<area shape="poly" id="edge55_Node000001_Node000036" title=" " alt="" coords="949,876,947,1028,934,1252,921,1368,902,1474,876,1562,860,1596,842,1622,826,1635,822,1631,838,1619,856,1594,871,1560,897,1473,915,1367,928,1252,941,1028,943,876"/>
+<area shape="rect" id="Node000006" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,156,124,181"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="183,194,124,183,125,177,184,189"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="432,254,398,245,310,221,311,216,399,239,434,249"/>
+<area shape="rect" id="Node000008" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="202,432,321,457"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="468,291,281,434,278,429,465,287"/>
+<area shape="poly" id="edge14_Node000012_Node000008" title=" " alt="" coords="434,557,397,542,328,499,276,460,280,455,331,495,400,537,436,552"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="454,592,293,662,291,657,452,587"/>
+<area shape="poly" id="edge20_Node000015_Node000007" title=" " alt="" coords="698,346,592,302,537,283,539,278,594,297,700,341"/>
+<area shape="poly" id="edge21_Node000015_Node000008" title=" " alt="" coords="660,375,399,417,316,434,315,429,398,411,659,370"/>
+<area shape="rect" id="Node000016" href="$iio__adp1050_8c.html#ab4c0fd0b08c2717dd625240ff8dc3bf7" title="Free resources allocated by the init function." alt="" coords="417,104,575,129"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="719,340,664,273,591,195,551,159,514,132,517,127,554,155,595,191,668,269,723,337"/>
+<area shape="poly" id="edge18_Node000016_Node000005" title=" " alt="" coords="442,136,400,151,292,196,290,191,398,146,440,131"/>
+<area shape="poly" id="edge19_Node000016_Node000006" title=" " alt="" coords="403,130,125,164,124,159,403,125"/>
+<area shape="poly" id="edge24_Node000018_Node000008" title=" " alt="" coords="391,461,321,454,321,448,392,456"/>
+<area shape="poly" id="edge33_Node000022_Node000008" title=" " alt="" coords="654,523,533,516,465,508,398,497,339,479,290,460,292,455,341,474,399,491,466,503,533,511,655,518"/>
+<area shape="poly" id="edge30_Node000022_Node000012" title=" " alt="" coords="665,539,559,561,557,556,664,534"/>
+<area shape="poly" id="edge32_Node000022_Node000013" title=" " alt="" coords="708,543,655,571,594,598,529,619,462,637,341,663,340,657,460,632,527,614,592,593,653,566,705,538"/>
+<area shape="poly" id="edge31_Node000022_Node000018" title=" " alt="" coords="664,508,557,485,559,480,665,502"/>
+<area shape="poly" id="edge38_Node000026_Node000005" title=" " alt="" coords="399,216,326,212,326,207,399,210"/>
+<area shape="poly" id="edge39_Node000026_Node000008" title=" " alt="" coords="409,239,400,244,375,265,352,290,313,344,286,395,270,433,265,431,281,393,309,341,347,286,371,261,397,240,406,234"/>
+<area shape="poly" id="edge42_Node000028_Node000025" title=" " alt="" coords="648,726,552,726,552,721,648,721"/>
+<area shape="poly" id="edge44_Node000029_Node000005" title=" " alt="" coords="687,405,640,389,517,346,464,325,397,294,331,256,279,221,282,217,334,251,400,289,466,320,519,341,642,383,689,400"/>
+<area shape="poly" id="edge46_Node000029_Node000008" title=" " alt="" coords="650,427,321,444,321,439,649,421"/>
+<area shape="poly" id="edge45_Node000029_Node000025" title=" " alt="" coords="708,442,674,466,643,497,627,522,618,545,610,568,596,597,550,663,510,712,506,709,546,660,591,594,605,566,613,543,622,520,639,494,671,462,704,437"/>
+<area shape="poly" id="edge50_Node000031_Node000008" title=" " alt="" coords="648,635,590,637,526,633,460,621,397,598,352,567,315,528,286,489,267,459,272,456,290,486,319,524,356,563,400,593,461,615,526,627,590,631,648,630"/>
+<area shape="poly" id="edge49_Node000031_Node000025" title=" " alt="" coords="677,641,643,656,619,675,595,694,547,713,545,708,592,689,616,671,640,652,675,637"/>
+</map>

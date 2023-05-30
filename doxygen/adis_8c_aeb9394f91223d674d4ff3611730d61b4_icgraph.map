@@ -1,0 +1,7 @@
+<map id="adis_validate_checksum" name="adis_validate_checksum">
+<area shape="rect" id="Node000001" title="Check if the checksum for burst data is correct." alt="" coords="255,31,437,56"/>
+<area shape="rect" id="Node000002" href="$adis1657x_8c.html#ac442d3460a938b11ed36834c5c1bbd59" title="Read burst data." alt="" coords="5,5,207,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,35,207,31,207,26,242,30"/>
+<area shape="rect" id="Node000003" href="$adis_8c.html#add978372da385dea5434585683a94449" title="Read burst data." alt="" coords="25,55,187,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="241,56,187,62,187,57,241,51"/>
+</map>

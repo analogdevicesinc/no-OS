@@ -1,0 +1,15 @@
+<map id="max42500_reg_update" name="max42500_reg_update">
+<area shape="rect" id="Node000001" title="Update a register&#39;s value based on a mask." alt="" coords="481,80,652,105"/>
+<area shape="rect" id="Node000002" href="$max42500_8c.html#a2e69d1b69e84655c2709232fc48e82bc" title="Initialize the device structure." alt="" coords="264,5,383,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="522,77,433,45,383,32,384,27,434,39,524,72"/>
+<area shape="rect" id="Node000004" href="$max42500_8c.html#a12d9747d4143e266cb34770695e84a69" title="Set the overvoltage threshold of VM1 to VM5." alt="" coords="225,55,422,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="467,85,422,80,423,75,468,80"/>
+<area shape="rect" id="Node000005" href="$max42500_8c.html#a372c0993640464da288a4881836b2dc5" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="225,104,422,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="468,105,423,110,422,104,467,100"/>
+<area shape="rect" id="Node000006" href="$max42500_8c.html#aac3ba7534a3177465fd2eac9fec90c02" title="Set watchdog reset hold time." alt="" coords="213,153,433,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="522,113,434,143,386,156,385,151,433,138,520,108"/>
+<area shape="rect" id="Node000003" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,55,165,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="251,36,148,57,147,52,250,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="211,70,165,70,165,65,211,65"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="248,104,147,83,148,77,249,99"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="pcf85263_read" name="pcf85263_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="489,31,608,56"/>
+<area shape="rect" id="Node000002" href="$pcf85263_8c.html#ae0567f721992536a48b633d71b53c0c8" title="Read time stamp." alt="" coords="290,5,427,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="475,36,427,30,428,24,476,31"/>
+<area shape="rect" id="Node000005" href="$pcf85263_8c.html#a345542ebb2f61e2de1021c03fac33137" title="Update specific register bits." alt="" coords="276,55,441,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="476,55,442,60,441,54,475,50"/>
+<area shape="rect" id="Node000003" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="108,5,228,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="277,21,228,21,228,15,277,15"/>
+<area shape="rect" id="Node000004" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,34,61,41,60,36,94,29"/>
+<area shape="rect" id="Node000006" href="$pcf85263_8c.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="113,55,223,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="262,70,224,70,224,65,262,65"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="99,58,60,51,61,45,100,52"/>
+</map>

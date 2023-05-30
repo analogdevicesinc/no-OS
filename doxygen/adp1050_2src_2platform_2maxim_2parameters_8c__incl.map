@@ -1,0 +1,15 @@
+<map id="projects/adp1050/src/platform/maxim/parameters.c" name="projects/adp1050/src/platform/maxim/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of Maxim platform data used by adp1050 project." alt="" coords="210,5,433,45"/>
+<area shape="rect" id="Node000002" href="$adp1050_2src_2platform_2maxim_2parameters_8h.html" title="Definition of Maxim platform data used by adp1050 project." alt="" coords="267,93,376,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="324,46,324,79,319,79,319,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,109,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="280,121,114,166,113,160,278,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="133,167,240,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="301,121,222,162,220,158,298,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="264,167,379,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="324,119,324,153,319,153,319,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="403,167,517,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="345,116,426,158,424,163,342,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="541,167,693,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="370,116,557,161,556,166,368,121"/>
+</map>

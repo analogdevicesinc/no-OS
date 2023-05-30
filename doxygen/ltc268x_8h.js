@@ -1,0 +1,87 @@
+var ltc268x_8h =
+[
+    [ "ltc268x_span_tbl", "structltc268x__span__tbl.html", "structltc268x__span__tbl" ],
+    [ "ltc268x_dev", "structltc268x__dev.html", "structltc268x__dev" ],
+    [ "ltc268x_init_param", "structltc268x__init__param.html", "structltc268x__init__param" ],
+    [ "LTC268X_CH_DIT_PER", "ltc268x_8h.html#a29feb1227c968e10f078178a81dea691", null ],
+    [ "LTC268X_CH_DIT_PER_MSK", "ltc268x_8h.html#ae7185383e4c421dcdead87842f9bdbfa", null ],
+    [ "LTC268X_CH_DIT_PH", "ltc268x_8h.html#a25dad22467e7a7c466f175fac4df3822", null ],
+    [ "LTC268X_CH_DIT_PH_MSK", "ltc268x_8h.html#a4d5f74aaf2175ad93925ccb9d5b4b55a", null ],
+    [ "LTC268X_CH_MODE", "ltc268x_8h.html#a5ba94e5c3a539ef0315e40cea98aaac8", null ],
+    [ "LTC268X_CH_SPAN", "ltc268x_8h.html#a821a372a8bcefc9b6d95fbbe264cd7f5", null ],
+    [ "LTC268X_CH_SPAN_MSK", "ltc268x_8h.html#a337432f5d30888de57083f1d88b6ef69", null ],
+    [ "LTC268X_CH_TD_SEL", "ltc268x_8h.html#a08a5128309a8f97afed425fffa786858", null ],
+    [ "LTC268X_CH_TD_SEL_MSK", "ltc268x_8h.html#aff0f74dec4e1624c07e7ee7356ddf271", null ],
+    [ "LTC268X_CHANNEL_SEL", "ltc268x_8h.html#ad7a9b7cb631fa1a57d999201b43fd610", null ],
+    [ "LTC268X_CMD_A_B_SELECT_REG", "ltc268x_8h.html#a8c86e6fa6066672cfacd620b00923c03", null ],
+    [ "LTC268X_CMD_CH_CODE", "ltc268x_8h.html#a851e330b4a0209f44af0df54e9b3e5f9", null ],
+    [ "LTC268X_CMD_CH_CODE_UPDATE", "ltc268x_8h.html#a269da6ad5c2fd7c7357054418fc51acc", null ],
+    [ "LTC268X_CMD_CH_CODE_UPDATE_ALL", "ltc268x_8h.html#ab9a8ea78ca3785c9928f255921605f60", null ],
+    [ "LTC268X_CMD_CH_GAIN", "ltc268x_8h.html#a02412fc7d2359433fed293b5395372af", null ],
+    [ "LTC268X_CMD_CH_OFFSET", "ltc268x_8h.html#a99e3765b7c713daef248577036739108", null ],
+    [ "LTC268X_CMD_CH_SETTING", "ltc268x_8h.html#a94ca805099e03a6707bdb95320b166d8", null ],
+    [ "LTC268X_CMD_CH_UPDATE", "ltc268x_8h.html#a08c19d3407de19f5b32571e5640fba25", null ],
+    [ "LTC268X_CMD_CODE_ALL", "ltc268x_8h.html#a18292b6198342d2cf8cc448c0ba1f02c", null ],
+    [ "LTC268X_CMD_CODE_UPDATE_ALL", "ltc268x_8h.html#a288402d5953880f193190639d7aa5063", null ],
+    [ "LTC268X_CMD_CONFIG_REG", "ltc268x_8h.html#a2e3d0893cf9fa5927962ddac870e07ab", null ],
+    [ "LTC268X_CMD_FAULT_REG", "ltc268x_8h.html#a7e646c809b7ea086141482af581a8662", null ],
+    [ "LTC268X_CMD_MUX_CTRL_REG", "ltc268x_8h.html#aee99ab41b2f0079320001e70e1e384d3", null ],
+    [ "LTC268X_CMD_NOOP", "ltc268x_8h.html#ad8f886a4434ef6679084fead9d1605ae", null ],
+    [ "LTC268X_CMD_POWERDOWN_REG", "ltc268x_8h.html#ac95035c825418bce9f6d0a6a84aaed4a", null ],
+    [ "LTC268X_CMD_SETTING_ALL", "ltc268x_8h.html#a8b92257de6ccb5e7b73061f3e35dad1b", null ],
+    [ "LTC268X_CMD_SETTING_UPDATE_ALL", "ltc268x_8h.html#ad1eda1349cf17218c6c39e8e1bbe8efa", null ],
+    [ "LTC268X_CMD_SW_TOGGLE_REG", "ltc268x_8h.html#a4c9df08721f3bf0b261a372eb8120d82", null ],
+    [ "LTC268X_CMD_TOGGLE_DITHER_EN_REG", "ltc268x_8h.html#aa167eb5b12667b337fe46e40f0b8b882", null ],
+    [ "LTC268X_CMD_UPDATE_ALL", "ltc268x_8h.html#abf57f72bb6568a9d47656afafacf42af", null ],
+    [ "LTC268X_CONFIG_RST", "ltc268x_8h.html#a8479729a656a05673704b9ede5ccf7b9", null ],
+    [ "LTC268X_DITH_EN", "ltc268x_8h.html#aba6d1185b85ba114e18ae8c1c67e8184", null ],
+    [ "LTC268X_PWDN", "ltc268x_8h.html#a0f5fc1ab827b2f4061cc7691b2e32acb", null ],
+    [ "LTC268X_READ_OPERATION", "ltc268x_8h.html#a0b3331064fbcdb99a8aae4668122dca2", null ],
+    [ "ltc268x_a_b_register", "ltc268x_8h.html#a7993b98f4c10dab0fc7a080584d3a16c", [
+      [ "LTC268X_SELECT_A_REG", "ltc268x_8h.html#a7993b98f4c10dab0fc7a080584d3a16ca2ef1fda4978a3060ba4defb93677b468", null ],
+      [ "LTC268X_SELECT_B_REG", "ltc268x_8h.html#a7993b98f4c10dab0fc7a080584d3a16ca7420eab540d8f1b822055b7db3348317", null ]
+    ] ],
+    [ "ltc268x_clk_input", "ltc268x_8h.html#a25e38ab523d634cb9fc75f2e92c6f2c2", [
+      [ "LTC268X_SOFT_TGL", "ltc268x_8h.html#a25e38ab523d634cb9fc75f2e92c6f2c2ace5c1da58e832f0f65b1a3eac1d0eef6", null ],
+      [ "LTC268X_TGP0", "ltc268x_8h.html#a25e38ab523d634cb9fc75f2e92c6f2c2a2ba69fcfacc54d43d27999c1aa2d2713", null ],
+      [ "LTC268X_TGP1", "ltc268x_8h.html#a25e38ab523d634cb9fc75f2e92c6f2c2a07750a50dea1b3aea53b7e409a23d6c8", null ],
+      [ "LTC268X_TGP2", "ltc268x_8h.html#a25e38ab523d634cb9fc75f2e92c6f2c2a98f8ff95274349e8bf8aff7e0c6f5ad3", null ]
+    ] ],
+    [ "ltc268x_device_id", "ltc268x_8h.html#a2eee387eb9239dc80c8286fc022b4535", [
+      [ "LTC2686", "ltc268x_8h.html#a2eee387eb9239dc80c8286fc022b4535ab1bf95ccb24b5c93a07772b7845bf1fe", null ],
+      [ "LTC2688", "ltc268x_8h.html#a2eee387eb9239dc80c8286fc022b4535ae535e071b6e695bddb8711e8af1a053a", null ]
+    ] ],
+    [ "ltc268x_dither_period", "ltc268x_8h.html#a7c46a6afe0dafe2deed994ce6d5f9683", [
+      [ "LTC268X_DITH_PERIOD_4", "ltc268x_8h.html#a7c46a6afe0dafe2deed994ce6d5f9683af611a28c485ffb86d6786b528f0887ae", null ],
+      [ "LTC268X_DITH_PERIOD_8", "ltc268x_8h.html#a7c46a6afe0dafe2deed994ce6d5f9683a33b7814a49e3e21914ca532e9473d067", null ],
+      [ "LTC268X_DITH_PERIOD_16", "ltc268x_8h.html#a7c46a6afe0dafe2deed994ce6d5f9683a84333fd5d26729275b53c883493653da", null ],
+      [ "LTC268X_DITH_PERIOD_32", "ltc268x_8h.html#a7c46a6afe0dafe2deed994ce6d5f9683a110683956ac06229782466ec96dcd731", null ],
+      [ "LTC268X_DITH_PERIOD_64", "ltc268x_8h.html#a7c46a6afe0dafe2deed994ce6d5f9683aac4bb2a52607c4c2b6a7b8e2eef6251d", null ]
+    ] ],
+    [ "ltc268x_dither_phase", "ltc268x_8h.html#aa1552b908bdec3304dd2f2755c95210d", [
+      [ "LTC268X_DITH_PHASE_0", "ltc268x_8h.html#aa1552b908bdec3304dd2f2755c95210dacf0bb480af6125e91c8f334c5390cd42", null ],
+      [ "LTC268X_DITH_PHASE_90", "ltc268x_8h.html#aa1552b908bdec3304dd2f2755c95210da0bb762e5a90313937f6a673e02f1dc92", null ],
+      [ "LTC268X_DITH_PHASE_180", "ltc268x_8h.html#aa1552b908bdec3304dd2f2755c95210da318f5638aa2169952d06673e604ec64b", null ],
+      [ "LTC268X_DITH_PHASE_270", "ltc268x_8h.html#aa1552b908bdec3304dd2f2755c95210dacfc238942065e2f237c82a4e6c383bf6", null ]
+    ] ],
+    [ "ltc268x_voltage_range", "ltc268x_8h.html#a62f18eb5c69580d9c4ad9a9921b80f56", [
+      [ "LTC268X_VOLTAGE_RANGE_0V_5V", "ltc268x_8h.html#a62f18eb5c69580d9c4ad9a9921b80f56a68d7c791c283bdfb7b704bfa1cbe16f9", null ],
+      [ "LTC268X_VOLTAGE_RANGE_0V_10V", "ltc268x_8h.html#a62f18eb5c69580d9c4ad9a9921b80f56a3e5e2593071e1da5db602c75c123378f", null ],
+      [ "LTC268X_VOLTAGE_RANGE_M5V_5V", "ltc268x_8h.html#a62f18eb5c69580d9c4ad9a9921b80f56a8b13504cf443b5765e3ff7c33fd3f19b", null ],
+      [ "LTC268X_VOLTAGE_RANGE_M10V_10V", "ltc268x_8h.html#a62f18eb5c69580d9c4ad9a9921b80f56a92181ba63b1d42a4ebdfbb28a2ceb733", null ],
+      [ "LTC268X_VOLTAGE_RANGE_M15V_15V", "ltc268x_8h.html#a62f18eb5c69580d9c4ad9a9921b80f56aaadfc68016595aa80a8b2cdb908463ef", null ]
+    ] ],
+    [ "ltc268x_init", "ltc268x_8h.html#a3a84f9a511f93146f1dc1b802a8718e6", null ],
+    [ "ltc268x_remove", "ltc268x_8h.html#ae78f384dd78e66b8a4b601ad354c168b", null ],
+    [ "ltc268x_select_reg", "ltc268x_8h.html#aff75e9bc1f7cc0cdf3be70586f17b6cb", null ],
+    [ "ltc268x_select_tg_dith_clk", "ltc268x_8h.html#a6bbc25339e6173943a917614fb29ba44", null ],
+    [ "ltc268x_set_dither_mode", "ltc268x_8h.html#a724a123978a77493336f3af7ea3029ac", null ],
+    [ "ltc268x_set_dither_period", "ltc268x_8h.html#a2f53465771fbc413bd3b8899a5137e17", null ],
+    [ "ltc268x_set_dither_phase", "ltc268x_8h.html#a4528bcd201efb291614e270f6afffc7a", null ],
+    [ "ltc268x_set_dither_toggle", "ltc268x_8h.html#a8c358fb6d261cf220a2498e6e0f8aa89", null ],
+    [ "ltc268x_set_pwr_dac", "ltc268x_8h.html#af9e6f7a83ec864530ddc019bc05f2c3d", null ],
+    [ "ltc268x_set_span", "ltc268x_8h.html#a86432efdce53f82304e1b991dc2e576a", null ],
+    [ "ltc268x_set_voltage", "ltc268x_8h.html#acc8d5975569cba1e5c43057fc6e119ac", null ],
+    [ "ltc268x_software_reset", "ltc268x_8h.html#a80ae6c363b514f837670834c222c4cba", null ],
+    [ "ltc268x_software_toggle", "ltc268x_8h.html#a9f1df6177266e0a072b6cbe1c995c335", null ]
+];

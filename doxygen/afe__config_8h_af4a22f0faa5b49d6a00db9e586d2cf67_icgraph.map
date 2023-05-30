@@ -1,0 +1,32 @@
+<map id="afe_read_16bit_buff" name="afe_read_16bit_buff">
+<area shape="rect" id="Node000001" title="reads the 16bit value from the register and saves to a 16bitbuffer." alt="" coords="1125,78,1276,104"/>
+<area shape="rect" id="Node000002" href="$afe__config_8c.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="763,29,833,54"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1172,71,1129,42,1103,29,1077,19,1044,12,1011,9,944,11,882,21,834,33,833,28,881,16,943,6,1011,4,1045,7,1078,14,1106,24,1132,38,1175,67"/>
+<area shape="rect" id="Node000005" href="$afe__config_8c.html#a2bde554353ebc39a8173482742486ce6" title="reads angle registers." alt="" coords="940,78,1063,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1111,94,1063,94,1063,88,1111,88"/>
+<area shape="rect" id="Node000009" href="$afe__config_8c.html#a2c439b6d3229e353d9eef6b78da9d489" title="reads waveform buffer." alt="" coords="925,128,1077,153"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="1136,110,1054,130,1053,125,1135,104"/>
+<area shape="rect" id="Node000010" href="$afe__config_8c.html#a15a51e39b44ded5b109e75d36622a1cb" title="sets ACCMODE register for nominal frequency, ICONSEL, VCONSEL." alt="" coords="930,177,1073,202"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1171,114,1128,141,1078,168,1049,179,1047,174,1076,163,1126,137,1169,109"/>
+<area shape="rect" id="Node000013" href="$afe__config_8c.html#ad83626fc28d6f9930cf411960fa5c195" title="configure WFB_CFB register, initialized with start filling" alt="" coords="955,29,1047,54"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1135,78,1047,56,1048,50,1136,72"/>
+<area shape="rect" id="Node000003" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,101,265,126"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="749,47,558,62,314,91,245,104,244,98,313,86,558,57,749,42"/>
+<area shape="rect" id="Node000004" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,101,60,126"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,116,60,116,60,111,94,111"/>
+<area shape="rect" id="Node000006" href="$pqlib__afe_8c.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="743,98,853,124"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="927,101,854,108,853,103,926,96"/>
+<area shape="rect" id="Node000007" href="$pqlib__example_8c.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="497,91,657,131"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="729,114,658,114,658,108,729,108"/>
+<area shape="rect" id="Node000008" href="$pqlib__example_8c.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="313,101,436,126"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="483,115,437,116,437,110,483,110"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="300,116,265,116,265,111,300,111"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="911,130,853,122,854,116,912,125"/>
+<area shape="rect" id="Node000011" href="$pqlib__example_8c.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="719,172,877,197"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="916,190,877,189,877,184,916,185"/>
+<area shape="rect" id="Node000012" href="$pqlib__example_8c.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="484,156,671,181"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="705,180,671,178,671,172,705,175"/>
+<area shape="poly" id="edge14_Node000012_Node000003" title=" " alt="" coords="470,160,313,140,249,129,250,124,314,135,470,155"/>
+<area shape="poly" id="edge15_Node000012_Node000008" title=" " alt="" coords="516,155,422,129,423,124,517,150"/>
+<area shape="poly" id="edge17_Node000013_Node000002" title=" " alt="" coords="942,44,834,44,834,39,942,39"/>
+</map>
