@@ -431,22 +431,6 @@
 /******************************************************************************/
 
 /**
- * @brief DAC output ranges in Vout mode
- */
-enum ad74416h_vout_range {
-	AD74416H_VOUT_RANGE_RNG_0_12V,
-	AD74416H_VOUT_RANGE_RNG_NEG12_12V,
-};
-
-/**
- * @brief DAC Current limits in Vout mode
- */
-enum ad74416h_i_limit {
-	AD74416H_I_LIMIT0,
-	AD74416H_I_LIMIT1,
-};
-
-/**
  * @brief Operation modes of the device.
  */
 enum ad74416h_op_mode {
@@ -483,10 +467,10 @@ enum ad74416h_adc_range {
 	AD74416H_RNG_NEG12_12_V,
 	AD74416H_RNG_NEG0P3125_0P3125V,
 	AD74416H_RNG_NEG0P3125_0V,
-	AD74416H_RNG_0_0P3125V,   
-	AD74416H_RNG_0_0P625V,    
+	AD74416H_RNG_0_0P3125V,
+	AD74416H_RNG_0_0P625V,
 	AD74416H_RNG_NEG104_104MV,
-	AD74416H_RNG_NEG2P5_2P5V 
+	AD74416H_RNG_NEG2P5_2P5V,
 };
 
 /**
@@ -503,14 +487,14 @@ enum ad74416h_adc_rate {
 };
 
 /**
- * @Brief ADC input configuration values.
+ * @brief ADC input configuration values.
  */
 enum ad74416h_adc_conv_mux {
-	AD74416H_MUX_LF_TO_AGND,     
-	AD74416H_MUX_HF_TO_LF,       
+	AD74416H_MUX_LF_TO_AGND,
+	AD74416H_MUX_HF_TO_LF,
 	AD74416H_MUX_VSENSEN_TO_AGND,
-	AD74416H_MUX_LF_TO_VSENSEN,  
-	AD74416H_MUX_AGND_TO_AGND,   
+	AD74416H_MUX_LF_TO_VSENSEN,
+	AD74416H_MUX_AGND_TO_AGND,
 };
 
 /**
@@ -569,6 +553,22 @@ enum ad74416h_lin_rate {
 	AD74416H_LIN_RATE_76KHZ8,
 	AD74416H_LIN_RATE_153KHZ6,
 	AD74416H_LIN_RATE_230KHZ4,
+};
+
+/**
+ * @brief Possible voltage output ranges for the DAC
+ */
+enum ad74416h_vout_range {
+	AD74416H_VOUT_RANGE_0_12V,
+	AD74416H_VOUT_RANGE_NEG12_12V,
+};
+
+/**
+ * @brief DAC Current limits in Vout mode
+ */
+enum ad74416h_i_limit {
+	AD74416H_I_LIMIT0,
+	AD74416H_I_LIMIT1,
 };
 
 /**
@@ -631,8 +631,9 @@ struct ad74416h_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/** Converts a millivolt value in the corresponding DAC 16 bit code */
-int ad74416h_dac_voltage_to_code(uint32_t, uint32_t *);
+/** Converts a millivolt value in the corresponding DAC 13 bit code */
+int ad74416h_dac_voltage_to_code(struct ad74416h_desc *, int32_t,
+				 uint32_t *, uint32_t);
 
 /** Converts a microamp value in the corresponding DAC 16 bit code */
 int ad74416h_dac_current_to_code(uint32_t, uint16_t *);
@@ -663,13 +664,13 @@ int ad74416h_set_info(struct ad74416h_desc *desc, uint16_t mode);
 int ad74416h_set_channel_function(struct ad74416h_desc *,
 				  uint32_t, enum ad74416h_op_mode);
 
-/** Set the voltage range for a specific channel DAC */
-int ad74416h_set_channel_vout_range(struct ad74416h_desc *,
-				    uint32_t, enum ad74416h_vout_range);
+/** Set the voltage range for a specific channel */
+int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc, uint32_t ch,
+				    enum ad74416h_vout_range vout_range);
 
-/** Set the current limit for vout mode for a specific channel DAC */
-int ad74416h_set_channel_i_limit(struct ad74416h_desc *,
-				 uint32_t, enum ad74416h_i_limit);
+/** Set the current limit for a specific DAC channel in vout mode */
+int ad74416h_set_channel_i_limit(struct ad74416h_desc *, uint32_t,
+				 enum ad74416h_i_limit);
 
 /** Read the raw ADC raw conversion value */
 int ad74416h_get_raw_adc_result(struct ad74416h_desc *, uint32_t,
