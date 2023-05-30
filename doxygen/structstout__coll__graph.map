@@ -1,0 +1,13 @@
+<map id="stout" name="stout">
+<area shape="rect" id="node1" title="Structure for Stout machine." alt="" coords="1168,239,1223,265"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="683,244,815,271"/>
+<area shape="rect" id="node4" href="$structade9113__dev.html" title="ADE9113 Device structure." alt="" coords="949,149,1059,176"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,244,511,271"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="687,56,810,83"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,48,490,75"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,99,491,141"/>
+<area shape="rect" id="node9" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="669,111,828,137"/>
+<area shape="rect" id="node10" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="674,163,823,189"/>
+<area shape="rect" id="node11" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="328,165,505,192"/>
+</map>

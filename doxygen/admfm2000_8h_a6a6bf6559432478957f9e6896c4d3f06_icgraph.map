@@ -1,0 +1,4 @@
+<map id="admfm2000_set_channel_config" name="admfm2000_set_channel_config">
+<area shape="rect" id="node1" title="Set the channel configuration." alt="" coords="183,5,369,47"/>
+<area shape="rect" id="node2" href="$admfm2000_8h.html#a4ba019b42b3ebb0f8ecd819a8362882d" title="Initialize the admfm2000 device." alt="" coords="5,13,135,39"/>
+</map>

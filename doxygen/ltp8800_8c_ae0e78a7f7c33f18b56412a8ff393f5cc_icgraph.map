@@ -1,0 +1,4 @@
+<map id="ltp8800_set_vin" name="ltp8800_set_vin">
+<area shape="rect" id="node1" title="Set input voltage window at which power conversion will proceed." alt="" coords="213,5,339,32"/>
+<area shape="rect" id="node2" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

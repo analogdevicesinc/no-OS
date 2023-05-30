@@ -1,0 +1,30 @@
+<map id="ltc7871_get_pec_byte" name="ltc7871_get_pec_byte">
+<area shape="rect" id="node1" title="Compute the PEC." alt="" coords="1101,432,1265,459"/>
+<area shape="rect" id="node2" href="$ltc7871_8h.html#a65965303766dee3355a4aa0d67480004" title="Register Read." alt="" coords="917,457,1051,484"/>
+<area shape="rect" id="node28" href="$ltc7871_8h.html#a5b083ef9cb1d8ab4e1dfa3a2986089c1" title="Register Write." alt="" coords="915,265,1053,292"/>
+<area shape="rect" id="node3" href="$ltc7871_8h.html#adb7c08f27f0eb91f95ab8a79c6bd3ba1" title="Get Frequency Spread Range." alt="" coords="677,275,859,317"/>
+<area shape="rect" id="node4" href="$ltc7871_8h.html#a403441fae9aee8e93867cddac2702dba" title="gets configuration of the controller programmed by the pins." alt="" coords="677,341,859,382"/>
+<area shape="rect" id="node5" href="$ltc7871_8h.html#aad74faf810cb9b81851e59e5f843e3cd" title="gets configuration of the controller programmed by the pins." alt="" coords="183,339,366,381"/>
+<area shape="rect" id="node7" href="$ltc7871_8h.html#ad35a207279f9f89129a45aa9f8707980" title="gets mfr fault bit." alt="" coords="685,660,851,687"/>
+<area shape="rect" id="node8" href="$ltc7871_8h.html#ac5c828dbbf2b660c9de201acdfdd8149" title="get the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="687,711,849,753"/>
+<area shape="rect" id="node9" href="$ltc7871_8h.html#a321acfc7ff75b72febf94d9a2a7d3f74" title="get the current DAC value to program the VHIGH voltage." alt="" coords="193,417,356,458"/>
+<area shape="rect" id="node10" href="$ltc7871_8h.html#aa9893b23b53dcf2bd895c666e51eebf5" title="get the current DAC value to program the VLOW voltage." alt="" coords="175,508,375,535"/>
+<area shape="rect" id="node11" href="$ltc7871_8h.html#a52bee1814d0dca2b1dd1d19703ea57a7" title="gets status for negative overcurrent fault condition status." alt="" coords="689,777,847,818"/>
+<area shape="rect" id="node12" href="$ltc7871_8h.html#a8b90902b67263c1db7f0a39a36bb5847" title="gets status for overcurrent condition status." alt="" coords="693,842,843,883"/>
+<area shape="rect" id="node13" href="$ltc7871_8h.html#afa315ff1c1bd2d17169c2a982cdef4e0" title="gets status." alt="" coords="681,173,855,200"/>
+<area shape="rect" id="node14" href="$ltc7871_8h.html#a168200c3918aa692294444999dfe7d84" title="Get Modulation Signal Frequency." alt="" coords="685,224,851,251"/>
+<area shape="rect" id="node15" href="$ltc7871_8h.html#afb23136f4d5429ad9cd56e72ecf515ac" title="Read Write Protect bit for IDAC registers, and MFR_SSFM register." alt="" coords="669,407,867,433"/>
+<area shape="rect" id="node21" href="$ltc7871_8h.html#a42ea5fb86c05f571ffbe1180d950e6fd" title="Read PEC fault bit." alt="" coords="681,609,855,636"/>
+<area shape="rect" id="node22" href="$ltc7871_8h.html#ad89c866c79b2a76217cf8bf976df4a68" title="Write to LTC7871 device register with mask." alt="" coords="677,123,859,149"/>
+<area shape="rect" id="node6" href="$ltc7871_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="7,311,125,337"/>
+<area shape="rect" id="node16" href="$ltc7871_8h.html#a21c22ab9a7876ab2eac5ef74aa428bb9" title="Set Frequency Spread Range." alt="" coords="431,326,613,367"/>
+<area shape="rect" id="node17" href="$ltc7871_8h.html#a6785a0e9c841036825e9a39a8f3124d5" title="stores the current DAC value to program the sourcing current of the SETCUR pin." alt="" coords="441,391,603,433"/>
+<area shape="rect" id="node18" href="$ltc7871_8h.html#a35de5774bc09f4c0991300d2e652d8df" title="stores the current DAC value to program the VHIGH voltage." alt="" coords="441,158,603,199"/>
+<area shape="rect" id="node19" href="$ltc7871_8h.html#aea03d5056be2372d7c846964d8ea7555" title="stores the current DAC value to program the VLOW voltage." alt="" coords="423,275,621,301"/>
+<area shape="rect" id="node20" href="$ltc7871_8h.html#a73042797a3127e7b4eac4b20ba6d2c24" title="Set Modulation Signal Frequency." alt="" coords="439,224,605,251"/>
+<area shape="rect" id="node23" href="$ltc7871_8h.html#a0fb37657524d3573d41ffce359ef4e39" title="Clear PEC fault bit." alt="" coords="434,56,610,83"/>
+<area shape="rect" id="node24" href="$ltc7871_8h.html#ae12475b6bb0baba3b6b4aba516e7cd19" title="Reset all R/W registers." alt="" coords="467,5,577,32"/>
+<area shape="rect" id="node27" href="$ltc7871_8h.html#a1774824735eb03c635bb9c318b507ac1" title="set write protect bit." alt="" coords="427,107,617,133"/>
+<area shape="rect" id="node25" href="$ltc7871_8h.html#ad5ce9787e56640bff3e5f7285411d91f" title="Initialize the LTC7871 device." alt="" coords="225,77,324,104"/>
+<area shape="rect" id="node26" href="$iio__ltc7871_8h.html#ae6c8deb0e7a5dccf5477794210cde0b9" title="Initializes the LTC7871 IIO descriptor." alt="" coords="5,77,127,104"/>
+</map>

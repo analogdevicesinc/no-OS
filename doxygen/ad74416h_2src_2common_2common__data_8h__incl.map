@@ -1,0 +1,9 @@
+<map id="projects/ad74416h/src/common/common_data.h" name="projects/ad74416h/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="28,5,220,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,115,121"/>
+<area shape="rect" id="node3" href="$ad74416h_8h.html" title="Header file of AD74416h Driver." alt="" coords="139,95,237,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="210,244,281,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="89,169,172,196"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="196,169,295,196"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="319,169,425,196"/>
+</map>

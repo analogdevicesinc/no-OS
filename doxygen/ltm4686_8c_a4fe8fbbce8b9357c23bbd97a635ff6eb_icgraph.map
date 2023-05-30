@@ -1,0 +1,4 @@
+<map id="ltm4686_write_word" name="ltm4686_write_word">
+<area shape="rect" id="node1" title="Perform a raw PMBus write word operation." alt="" coords="212,5,367,32"/>
+<area shape="rect" id="node2" href="$ltm4686_8h.html#af3bb558d214e9f9228312e0fc0cd0ee8" title="Set switching frequency." alt="" coords="5,5,164,32"/>
+</map>

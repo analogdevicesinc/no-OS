@@ -1,0 +1,9 @@
+<map id="adt75_remove" name="adt75_remove">
+<area shape="rect" id="node1" title="Free the device descriptor." alt="" coords="487,56,603,83"/>
+<area shape="rect" id="node2" href="$iio__adt75_8h.html#a9d117ec2b377298c75d8f59f5938e71f" title="Free an iio descriptor." alt="" coords="289,5,428,32"/>
+<area shape="rect" id="node5" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="279,56,439,83"/>
+<area shape="rect" id="node6" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="299,107,418,133"/>
+<area shape="rect" id="node3" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,5,231,32"/>
+<area shape="rect" id="node4" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node7" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="142,107,197,133"/>
+</map>

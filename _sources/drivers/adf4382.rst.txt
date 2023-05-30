@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/frequency/adf4382/README.rst

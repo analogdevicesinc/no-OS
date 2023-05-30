@@ -1,0 +1,13 @@
+<map id="projects/adt7420&#45;pmdz/src/examples/iio_example/iio_example.c" name="projects/adt7420&#45;pmdz/src/examples/iio_example/iio_example.c">
+<area shape="rect" id="node1" title="IIO example code for adt7420&#45;pmdz project." alt="" coords="199,5,396,61"/>
+<area shape="rect" id="node2" href="$iio__adt7420_8h.html" title="Header file of IIO ADT7420 Driver." alt="" coords="171,109,282,136"/>
+<area shape="rect" id="node11" title=" " alt="" coords="306,109,433,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="81,408,151,435"/>
+<area shape="rect" id="node4" title=" " alt="" coords="461,408,531,435"/>
+<area shape="rect" id="node5" href="$iio_8h.html" title="Header file of iio." alt="" coords="201,184,252,211"/>
+<area shape="rect" id="node6" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="93,259,187,285"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="262,259,367,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="299,408,381,435"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="31,333,201,360"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="377,333,511,360"/>
+</map>

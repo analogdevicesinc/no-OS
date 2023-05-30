@@ -1,0 +1,10 @@
+<map id="drivers/power/adp1050/adp1050.h" name="drivers/power/adp1050/adp1050.h">
+<area shape="rect" id="node1" title="Header file for the ADP1050 Driver." alt="" coords="251,5,421,47"/>
+<area shape="rect" id="node2" href="$adp1050_8c.html" title="Source file for the ADP1050 Driver." alt="" coords="5,102,176,143"/>
+<area shape="rect" id="node3" href="$iio__adp1050_8c.html" title="Source file for the ADP1050 IIO Driver." alt="" coords="91,206,261,247"/>
+<area shape="rect" id="node4" href="$iio__adp1050_8h.html" title="Header file for the ADP1050 IIO Driver." alt="" coords="251,102,421,143"/>
+<area shape="rect" id="node6" href="$adp1050_2src_2common_2common__data_8h.html" title="Defines common data to be used by adp1050 examples." alt="" coords="445,102,637,143"/>
+<area shape="rect" id="node8" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for adp1050 project." alt="" coords="662,95,829,151"/>
+<area shape="rect" id="node5" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for adp1050 project." alt="" coords="286,199,461,255"/>
+<area shape="rect" id="node7" href="$adp1050_2src_2common_2common__data_8c.html" title="Defines common data to be used by adp1050 examples." alt="" coords="485,206,675,247"/>
+</map>

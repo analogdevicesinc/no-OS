@@ -1,0 +1,30 @@
+<map id="ad4170_spi_reg_write" name="ad4170_spi_reg_write">
+<area shape="rect" id="node1" title="Write device register." alt="" coords="491,568,655,595"/>
+<area shape="rect" id="node2" href="$ad4170_8h.html#a4ee88f7b83c8add1218557e4bdbe9e86" title="Perform a software LDAC." alt="" coords="260,5,419,32"/>
+<area shape="rect" id="node3" href="$ad4170_8h.html#ac58404d3205391dfc9465732dc06adfc" title="Perform a software toggle." alt="" coords="253,56,426,83"/>
+<area shape="rect" id="node4" href="$ad4170_8h.html#a7348c2a3d10114cb5f529d6cabb3e22b" title="Set the AD4170 ADC Control." alt="" coords="262,107,417,133"/>
+<area shape="rect" id="node5" href="$ad4170_8h.html#a0cb65692b12ff8d82d9a60ec47edcbc0" title="Enable AD4170 channels." alt="" coords="250,157,429,184"/>
+<area shape="rect" id="node6" href="$ad4170_8h.html#a9aa8ef7e1dcca520045ea5ca03c5a7fd" title="Set the AD4170 Channel specific map." alt="" coords="244,208,435,235"/>
+<area shape="rect" id="node7" href="$ad4170_8h.html#a913d8cf5bb45e550dd0c73c98dbf92c1" title="Set the AD4170 Channel specific setup." alt="" coords="262,259,417,301"/>
+<area shape="rect" id="node8" href="$ad4170_8h.html#ac3750b6998e816b49a064691528b35c8" title="Set the AD4170 Excitation Current." alt="" coords="264,325,415,366"/>
+<area shape="rect" id="node9" href="$ad4170_8h.html#a4e7865cd3f1b0cb3406224e1299f6669" title="Set the AD4170 DAC settings." alt="" coords="10,593,183,620"/>
+<area shape="rect" id="node10" href="$ad4170_8h.html#aab1ae83a16972cdf8d782feb74ae5a7b" title="Set the AD4170 DAC data by directly writing the DAT_DATA register." alt="" coords="258,441,421,468"/>
+<area shape="rect" id="node11" href="$ad4170_8h.html#a284a103c310a1b01291c2844203a7712" title="Set the AD4170 DAC data by writing the INPUTA register to be loaded separately by LDAC or Toggle oper..." alt="" coords="252,492,427,519"/>
+<area shape="rect" id="node12" href="$ad4170_8h.html#a3e020e8aa8c6f8268e10ccbd1a1db847" title="Set the AD4170 DAC data by writing the INPUTB register to be loaded separately by LDAC or Toggle oper..." alt="" coords="252,543,427,569"/>
+<area shape="rect" id="node13" href="$ad4170_8h.html#af67de722abf048ed3b2d2b75e4f4db53" title="Set the Error register with a value to clear specific errors." alt="" coords="272,593,407,620"/>
+<area shape="rect" id="node14" href="$ad4170_8h.html#a52ac9826934af1774019aa61a0aa1eb9" title="Set the AD4170 Error enable settings." alt="" coords="260,644,419,671"/>
+<area shape="rect" id="node15" href="$ad4170_8h.html#a02426e197d1c8ba3b6365feb43879a58" title="Set the AD4170 FIR control settings." alt="" coords="255,695,424,721"/>
+<area shape="rect" id="node16" href="$ad4170_8h.html#a920a1be4513dc6cc70a7830eee428a05" title="Set the AD4170 Input pullup." alt="" coords="262,745,417,772"/>
+<area shape="rect" id="node17" href="$ad4170_8h.html#a696dffc726127765a7e032fab2b0120b" title="Set the AD4170 Pin Muxing settings." alt="" coords="249,796,429,823"/>
+<area shape="rect" id="node18" href="$ad4170_8h.html#a70f4c15b6e5979154ef3c4cbe035f67d" title="Set the AD4170 Powerdown switches settings." alt="" coords="237,847,441,873"/>
+<area shape="rect" id="node19" href="$ad4170_8h.html#a7ed98962cf31d844ebf85c8e74fe7819" title="Set the AD4170 Ref Control." alt="" coords="252,897,427,924"/>
+<area shape="rect" id="node20" href="$ad4170_8h.html#a29f1cb01d8f5e56d6961bc9873ee1e8b" title="Configure an ADC setup." alt="" coords="269,948,409,975"/>
+<area shape="rect" id="node21" href="$ad4170_8h.html#a8017b551282c8d0998e08196a0d91a05" title="Set the AD4170 Standby control settings." alt="" coords="247,999,431,1025"/>
+<area shape="rect" id="node22" href="$ad4170_8h.html#a00b743d616320636286aa33e22c9f5ff" title="Set the AD4170 Voltage bias." alt="" coords="266,1049,413,1076"/>
+<area shape="rect" id="node23" href="$ad4170_8h.html#ae24263d5528343a6218ae8189af0054e" title="SPI write device register using a mask." alt="" coords="236,1100,443,1127"/>
+<area shape="rect" id="node24" href="$ad4170_8h.html#a576b13688c52d149cf2a43b39084a333" title="Perform a software reset." alt="" coords="41,999,152,1025"/>
+<area shape="rect" id="node25" href="$ad4170_8h.html#a3ca58a262948f7d1cc5c3fd562042607" title="Set the AD4170 clock selection configuration." alt="" coords="18,1049,175,1076"/>
+<area shape="rect" id="node26" href="$ad4170_8h.html#a235862ccc6dddd05420432900c3fedbb" title="Set the AD4170 DCLK configuration." alt="" coords="17,1100,176,1127"/>
+<area shape="rect" id="node27" href="$ad4170_8h.html#a8ee0c2d9530b516c27c3be372a061a4e" title="Set the AD4170 MCLK configuration." alt="" coords="15,1151,178,1177"/>
+<area shape="rect" id="node28" href="$ad4170_8c.html#a83d10b0457a777f079f6ccbee72d091b" title="Set the AD4170 SPI settings." alt="" coords="5,1201,188,1228"/>
+</map>

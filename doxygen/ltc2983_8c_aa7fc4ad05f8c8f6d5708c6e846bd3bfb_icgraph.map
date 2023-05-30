@@ -1,0 +1,7 @@
+<map id="ltc2983_thermocouple_assign_chan" name="ltc2983_thermocouple_assign_chan">
+<area shape="rect" id="node1" title="Channel assignment for thermocouple sensors." alt="" coords="521,23,688,65"/>
+<area shape="rect" id="node2" href="$ltc2983_8h.html#a5655675f5f3bd8f06be94f26f6c7159a" title="Device setup." alt="" coords="360,31,473,57"/>
+<area shape="rect" id="node3" href="$ltc2983_8h.html#a7c50410b8e4eec5c61c859b203f7c967" title="Device and comm init function." alt="" coords="213,31,312,57"/>
+<area shape="rect" id="node4" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node5" href="$iio__ltc2983_8h.html#a775884a0df62b521424fb4c6ff61df66" title="Initializes the LTC2983 IIO driver." alt="" coords="25,56,146,83"/>
+</map>

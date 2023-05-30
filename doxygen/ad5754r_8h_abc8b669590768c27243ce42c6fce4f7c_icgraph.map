@@ -1,0 +1,4 @@
+<map id="ad5754r_gpio_init" name="ad5754r_gpio_init">
+<area shape="rect" id="node1" title="Do GPIO initialization and config for AD5754R." alt="" coords="156,5,295,32"/>
+<area shape="rect" id="node2" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,5,108,32"/>
+</map>

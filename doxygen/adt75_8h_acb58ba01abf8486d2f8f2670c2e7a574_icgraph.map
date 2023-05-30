@@ -1,0 +1,10 @@
+<map id="adt75_init" name="adt75_init">
+<area shape="rect" id="node1" title="Initialize the device structure." alt="" coords="507,81,593,108"/>
+<area shape="rect" id="node2" href="$iio__adt75_8h.html#a68980aab7e3046c5c327fe0fc5277d6a" title="Initializes the ADT75 IIO descriptor." alt="" coords="323,31,434,57"/>
+<area shape="rect" id="node6" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="299,81,459,108"/>
+<area shape="rect" id="node7" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="319,132,438,159"/>
+<area shape="rect" id="node3" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,5,251,32"/>
+<area shape="rect" id="node4" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="118,56,241,83"/>
+<area shape="rect" id="node5" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node8" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="152,132,207,159"/>
+</map>

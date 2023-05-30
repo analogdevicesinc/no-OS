@@ -1,0 +1,11 @@
+<map id="ade7978_read" name="ade7978_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="552,132,667,159"/>
+<area shape="rect" id="node2" href="$ade7978_8h.html#a4109cca809289e739b0c327c2167eed2" title="Get interrupt indicator from STATUS0 register." alt="" coords="319,5,504,32"/>
+<area shape="rect" id="node3" href="$ade7978_8h.html#ae48befda8e0321f9171fcb4c96794855" title="Get interrupt indicator from STATUS1 register." alt="" coords="319,157,504,184"/>
+<area shape="rect" id="node4" href="$ade7978_8h.html#aeaf475d84c4cd829cb87e6674f0a2662" title="Initialize the device." alt="" coords="136,157,243,184"/>
+<area shape="rect" id="node6" href="$ade7978_8h.html#a74eb847ce5afc34a424fb3a335e54ed3" title="Read the measurements for specific phase." alt="" coords="325,56,498,83"/>
+<area shape="rect" id="node8" href="$ade7978_8h.html#ad9d56ff7a4a3839f4e0702a7445a8947" title="Setup the device." alt="" coords="129,259,250,285"/>
+<area shape="rect" id="node9" href="$ade7978_8h.html#aac45be2efb741860cad5f69bb7f436e4" title="Update specific register bits." alt="" coords="331,208,492,235"/>
+<area shape="rect" id="node5" href="$eval-ade7978_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,208,60,235"/>
+<area shape="rect" id="node7" href="$eval-ade7978_2src_2common_2common__data_8h.html#a593d545dbd1ac63e04a76e6ee81b0d0d" title="Saves the current and voltage values of device 1 in rms_adc structure." alt="" coords="108,56,271,83"/>
+</map>

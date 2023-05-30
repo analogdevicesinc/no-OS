@@ -1,0 +1,4 @@
+<map id="ad4080_set_short_instr" name="ad4080_set_short_instr">
+<area shape="rect" id="node1" title="Set Short Instruction." alt="" coords="216,13,389,39"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a668ebef8b83d588a3a0b3a97fd2a4708" title="Configure the config SPI interface during initialization." alt="" coords="5,5,168,47"/>
+</map>

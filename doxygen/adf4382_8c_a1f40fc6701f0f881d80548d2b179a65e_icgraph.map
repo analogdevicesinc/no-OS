@@ -1,0 +1,32 @@
+<map id="adf4382_spi_read" name="adf4382_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADF4382 over SPI." alt="" coords="881,340,1019,367"/>
+<area shape="rect" id="node2" href="$adf4382_8h.html#ae59733204be128e0a2544500098b4778" title="Gets the value of the set bleed word." alt="" coords="647,5,833,32"/>
+<area shape="rect" id="node3" href="$adf4382_8h.html#a86e9a52aaf7ccff537dde04882a90d22" title="Gets the charge pump value from the register. The value will be between 0 and 15 on 8 bits...." alt="" coords="672,56,808,83"/>
+<area shape="rect" id="node4" href="$adf4382_8h.html#a0dbb3789ea8f88836443e648ec665d0f" title="Gets the value the output channel if it is enabled or disable." alt="" coords="658,107,822,133"/>
+<area shape="rect" id="node5" href="$adf4382_8h.html#a5965319e0a3ab0a907979fec463b9289" title="Gets Fast calibration LUT Calibration status." alt="" coords="665,158,815,199"/>
+<area shape="rect" id="node6" href="$adf4382_8h.html#a0ff38d6e686887fca815d834a046bb9a" title="Gets the value the doubler if it is enabled or disable and stores it it the dev structure." alt="" coords="665,223,815,265"/>
+<area shape="rect" id="node7" href="$adf4382_8h.html#a99c37b69631afeb3223d1a3ded801095" title="Gets the output power register value." alt="" coords="651,289,829,316"/>
+<area shape="rect" id="node8" href="$adf4382_8h.html#abef0178606a3f24071fb1232255d1ee1" title="Gets the polarity of the phase adjust." alt="" coords="652,340,828,367"/>
+<area shape="rect" id="node9" href="$adf4382_8h.html#ab0544f9e4997a3ec0cbba77e5b41da41" title="Gets the value of the SYNC powerdown bit." alt="" coords="647,391,833,433"/>
+<area shape="rect" id="node10" href="$adf4382_8h.html#a3f89491132f9b3c04be5b68f639a427a" title="Gets the value the reference divider." alt="" coords="663,457,817,484"/>
+<area shape="rect" id="node11" href="$adf4382_8h.html#ab71c0ccd909a5ae93e5d449c4581b18b" title="Gets the value of the SW_SYNC bit." alt="" coords="657,508,823,535"/>
+<area shape="rect" id="node12" href="$adf4382_8h.html#ae67cc4fbbcd296824b50fdad021443a8" title="Will output on the terminal the values of all the ADF4382 registers." alt="" coords="667,559,813,585"/>
+<area shape="rect" id="node13" href="$adf4382_8h.html#a3f4a0e1104b1241c2a4705c469dcd2fe" title="Fast calibration function. Computes Minimum VCO frequency (fmin), uses the minimum NDIV value to gene..." alt="" coords="428,506,585,547"/>
+<area shape="rect" id="node14" href="$adf4382_8h.html#a757680a0978c8bab202e3877011aaa22" title="Updates the values of the ADF4382 register." alt="" coords="648,755,832,781"/>
+<area shape="rect" id="node15" href="$adf4382_8h.html#a852efef52e399e72459cce02555bb5dd" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="425,572,588,599"/>
+<area shape="rect" id="node16" href="$adf4382_8h.html#a3be833c93a77ff0f9c8ad6f9d3b8aebe" title="Sets Fast calibration LUT Calibration. Refer to en_fastcal function to first generate fastcal Lookup ..." alt="" coords="432,623,581,665"/>
+<area shape="rect" id="node17" href="$adf4382_8h.html#a4712eb3ced902ced893bf49622498f36" title="Set the EZSYNC features&#39; initial state. Awaits the SW_SYNC toggle." alt="" coords="429,689,584,730"/>
+<area shape="rect" id="node18" href="$adf4382_8h.html#a42f85422e7f1541fcd6235b2a678df73" title="Set the output frequency." alt="" coords="439,755,574,781"/>
+<area shape="rect" id="node26" href="$adf4382_8h.html#abaccee7f877e8f82d1aebdb37237cedf" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="418,805,595,832"/>
+<area shape="rect" id="node27" href="$adf4382_8h.html#abfbbf0996cba0aaa13b6f84647673daa" title="Set the phase adjustment in pico&#45;seconds. The phase adjust will enable the Bleed current option as we..." alt="" coords="172,907,367,933"/>
+<area shape="rect" id="node28" href="$adf4382_8h.html#ae04f11139e36334d3ee35c44016217e5" title="Set the phase polarity. If pol = 0 then it will add the phase value otherwise it will subtract the ph..." alt="" coords="419,907,594,933"/>
+<area shape="rect" id="node29" href="$adf4382_8h.html#a255bb294a8cc86e9119a51f34286ab16" title="Set Software SYNC Request. Setting SW_SYNC resets the RF block. Clearing SW_SYNC makes ready for a ne..." alt="" coords="425,957,589,984"/>
+<area shape="rect" id="node30" href="$adf4382_8h.html#a68d33a672ca123ef92ec514e79a9b7ae" title="Set Timed SYNC features&#39; initial state. Uses SYNC pin." alt="" coords="415,1009,599,1050"/>
+<area shape="rect" id="node19" href="$adf4382_8h.html#a90a2e1956072778acaeb2885373e50e7" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="177,587,361,613"/>
+<area shape="rect" id="node20" href="$adf4382_8h.html#a9545e93dd75ebffedeedd8a88a19c5ce" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="202,637,337,664"/>
+<area shape="rect" id="node21" href="$adf4382_8h.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="194,689,345,730"/>
+<area shape="rect" id="node22" href="$adf4382_8h.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="193,755,346,781"/>
+<area shape="rect" id="node23" href="$adf4382_8h.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="192,805,347,832"/>
+<area shape="rect" id="node24" href="$adf4382_8h.html#a6c3387b311effd620ce0264c6db07674" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="199,856,339,883"/>
+<area shape="rect" id="node25" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,881,124,908"/>
+</map>

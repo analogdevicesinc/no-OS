@@ -1,0 +1,15 @@
+<map id="afe_write_32bit_reg" name="afe_write_32bit_reg">
+<area shape="rect" id="node1" title="write the 32bit value to the register" alt="" coords="920,107,1071,133"/>
+<area shape="rect" id="node2" href="$afe__config_8h.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="580,56,651,83"/>
+<area shape="rect" id="node5" href="$afe__config_8h.html#aef1b196eb349217367cbb7fcbee5a90a" title="Read STATUS0 register." alt="" coords="734,157,869,184"/>
+<area shape="rect" id="node11" href="$afe__config_8h.html#a5f38b9cf8c3d64723726e875b21a286d" title="Read STATUS1 register." alt="" coords="731,208,872,235"/>
+<area shape="rect" id="node12" href="$afe__config_8h.html#ae2bc9941587fb8de9a5c684bfd504648" title="Starts the AFE." alt="" coords="575,107,655,133"/>
+<area shape="rect" id="node13" href="$afe__config_8h.html#a8be876f4837bad48f90910656aee9ade" title="Configures IRQ flags." alt="" coords="745,5,858,32"/>
+<area shape="rect" id="node3" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,91,265,117"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,91,60,117"/>
+<area shape="rect" id="node6" href="$afe__config_8h.html#a969a1b69d5fee8ce240851bfc5a8ea89" title="Waits for passed number of cycles." alt="" coords="548,157,683,184"/>
+<area shape="rect" id="node9" href="$pqlib__afe_8h.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="560,208,671,235"/>
+<area shape="rect" id="node7" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="313,117,500,144"/>
+<area shape="rect" id="node8" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,145,248,172"/>
+<area shape="rect" id="node10" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="327,179,487,221"/>
+</map>

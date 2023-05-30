@@ -1,0 +1,7 @@
+<map id="ade7880_write" name="ade7880_write">
+<area shape="rect" id="node1" title="Write device register." alt="" coords="487,31,605,57"/>
+<area shape="rect" id="node2" href="$ade7880_8h.html#acbb1d0b3d6852f6d53dc0d73afa6c559" title="Initialize the device." alt="" coords="115,5,222,32"/>
+<area shape="rect" id="node4" href="$ade7880_8h.html#ab0cc4bba34968c40a2b2d5dbe79f305c" title="Setup the device." alt="" coords="108,56,229,83"/>
+<area shape="rect" id="node5" href="$ade7880_8h.html#a289029d193e186764383568d4f8f2c29" title="Update specific register bits." alt="" coords="277,31,439,57"/>
+<area shape="rect" id="node3" href="$eval-ade7880_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,57"/>
+</map>

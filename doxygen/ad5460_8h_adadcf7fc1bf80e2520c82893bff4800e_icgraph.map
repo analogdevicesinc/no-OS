@@ -1,0 +1,4 @@
+<map id="ad5460_gpio_get" name="ad5460_gpio_get">
+<area shape="rect" id="node1" title="Get the GPO value for a specific channel." alt="" coords="172,5,305,32"/>
+<area shape="rect" id="node2" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="5,5,124,32"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="iio_axi_adc_desc" name="iio_axi_adc_desc">
+<area shape="rect" id="node1" title="iio_axi_adc_descriptor" alt="" coords="536,291,668,317"/>
+<area shape="rect" id="node2" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="271,201,359,228"/>
+<area shape="rect" id="node3" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="359,103,455,130"/>
+<area shape="rect" id="node4" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="207,5,309,32"/>
+<area shape="rect" id="node5" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="333,5,445,32"/>
+<area shape="rect" id="node6" href="$structscan__type.html" title=" " alt="" coords="495,5,583,32"/>
+<area shape="rect" id="node7" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="23,103,173,130"/>
+<area shape="rect" id="node8" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,32"/>
+<area shape="rect" id="node9" href="$structaxi__adc.html" title="AXI ADC Device Descriptor." alt="" coords="603,201,675,228"/>
+<area shape="rect" id="node10" href="$structaxi__dmac.html" title=" " alt="" coords="699,201,785,228"/>
+<area shape="rect" id="node11" href="$structaxi__dma__transfer.html" title=" " alt="" coords="674,103,810,130"/>
+</map>

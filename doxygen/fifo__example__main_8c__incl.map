@@ -1,0 +1,16 @@
+<map id="projects/eval&#45;adxl38x/src/examples/fifo_example/fifo_example_main.c" name="projects/eval&#45;adxl38x/src/examples/fifo_example/fifo_example_main.c">
+<area shape="rect" id="node1" title="Main program for FIFO example eval&#45;adxl38x project." alt="" coords="442,5,645,61"/>
+<area shape="rect" id="node2" href="$fifo__example__main_8h.html" title="Main header for FIFO example eval&#45;adxl38x project." alt="" coords="5,109,164,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="188,109,315,136"/>
+<area shape="rect" id="node4" href="$adxl38x_8h.html" title="Header file of ADXL38X Driver." alt="" coords="339,109,425,136"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="625,109,761,136"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="449,109,549,136"/>
+<area shape="rect" id="node12" title=" " alt="" coords="559,184,629,211"/>
+<area shape="rect" id="node13" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="785,109,853,136"/>
+<area shape="rect" id="node14" title=" " alt="" coords="877,109,948,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,259,301,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="401,184,483,211"/>
+<area shape="rect" id="node7" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="155,184,254,211"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="278,184,377,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="659,184,726,211"/>
+</map>

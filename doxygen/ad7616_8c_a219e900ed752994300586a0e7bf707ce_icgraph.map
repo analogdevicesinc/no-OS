@@ -1,0 +1,14 @@
+<map id="ad7616_spi_write" name="ad7616_spi_write">
+<area shape="rect" id="node1" title=" " alt="" coords="959,60,1095,87"/>
+<area shape="rect" id="node2" href="$ad7616_8h.html#adc7914ad7853e33961965f2c98e2777b" title=" " alt="" coords="779,20,889,47"/>
+<area shape="rect" id="node4" href="$ad7616_8h.html#abf90300cc332a8f57b8ba95f6818a86a" title=" " alt="" coords="757,85,911,112"/>
+<area shape="rect" id="node3" href="$ad7616_8h.html#a9688cf245b09af1f32776f6059079190" title="Setup the sequencer layers." alt="" coords="517,5,703,32"/>
+<area shape="rect" id="node5" href="$ad7616_8h.html#a6798e1d3e151879c041125e8f5b71f24" title=" " alt="" coords="511,56,709,83"/>
+<area shape="rect" id="node6" href="$ad7616_8h.html#a23b6958a61f9c3b1161a51c76750904f" title="Select a new source for a channel." alt="" coords="523,107,697,149"/>
+<area shape="rect" id="node8" href="$ad7616_8h.html#ad30c9b898f7d6fb6ad4991c8d7cbdc8f" title=" " alt="" coords="269,166,463,207"/>
+<area shape="rect" id="node11" href="$ad7616_8h.html#a7f5ed5397b17224af60507d8d5312335" title=" " alt="" coords="539,228,681,255"/>
+<area shape="rect" id="node7" href="$ad7616_8c.html#ab690e8d620d464da766f18fd88b8797c" title="Perform a self test. Channels selection will be left untouched." alt="" coords="299,115,433,141"/>
+<area shape="rect" id="node9" href="$ad7616_8h.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="108,203,221,229"/>
+<area shape="rect" id="node10" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,203,60,229"/>
+<area shape="rect" id="node12" href="$ad7616_8h.html#a7bae55e3393d35a43de018c75c78609f" title=" " alt="" coords="295,232,437,259"/>
+</map>

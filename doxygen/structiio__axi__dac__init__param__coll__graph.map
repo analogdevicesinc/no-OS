@@ -1,0 +1,7 @@
+<map id="iio_axi_dac_init_param" name="iio_axi_dac_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="53,184,225,211"/>
+<area shape="rect" id="node2" href="$structaxi__dmac.html" title=" " alt="" coords="45,95,131,121"/>
+<area shape="rect" id="node3" href="$structaxi__dma__transfer.html" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node4" href="$structaxi__dac.html" title="AXI DAC Device Descriptor." alt="" coords="181,95,253,121"/>
+<area shape="rect" id="node5" href="$structaxi__dac__channel.html" title=" " alt="" coords="165,5,296,32"/>
+</map>

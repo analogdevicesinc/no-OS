@@ -1,0 +1,6 @@
+<map id="max17851_clear_buff" name="max17851_clear_buff">
+<area shape="rect" id="node1" title="Clear RX/TX buffer inside the MAX17851 memory." alt="" coords="220,56,383,83"/>
+<area shape="rect" id="node2" href="$max17851_8h.html#a66a3ec73171c8be3fcdeb686807a4d6f" title="MAX17851 device initialization function." alt="" coords="29,5,148,32"/>
+<area shape="rect" id="node3" href="$max17851_8h.html#a6b15d6812360d0e61a9b26ef1c2dcc79" title="Read message over UART from the MAX17851." alt="" coords="7,56,170,83"/>
+<area shape="rect" id="node4" href="$max17851_8h.html#a224e1263a89dc84e1736d4acdc4ddefc" title="Write message over UART using MAX17851." alt="" coords="5,107,172,133"/>
+</map>

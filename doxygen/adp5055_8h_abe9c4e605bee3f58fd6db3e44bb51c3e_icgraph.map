@@ -1,0 +1,11 @@
+<map id="adp5055_write" name="adp5055_write">
+<area shape="rect" id="node1" title="Write data to ADP5055." alt="" coords="801,165,920,192"/>
+<area shape="rect" id="node2" href="$adp5055_8h.html#a0345c350dd0dbb57e9eb74cdce65b5e6" title="Free the resources allocated by the adp5055_init()" alt="" coords="601,81,735,108"/>
+<area shape="rect" id="node8" href="$adp5055_8h.html#a59e199bf3b4bec1a27f7cfb487b1dbd1" title="Sets both enable and disable delay per channel." alt="" coords="379,158,535,199"/>
+<area shape="rect" id="node9" href="$adp5055_8h.html#a47c3e5f12854d3d0ec0666e7819a0d15" title="Sets 8&#45;bit code of output voltage reference of a channel." alt="" coords="583,220,753,247"/>
+<area shape="rect" id="node3" href="$iio__adp5055_8h.html#a1784820e6698fbbd58053ded24150e74" title="Free resources allocated by the init function." alt="" coords="172,5,331,32"/>
+<area shape="rect" id="node5" href="$adp5055_8h.html#ace46ac8c2d3b18ff79bcd2bfe9e9436a" title="Initialize the ADP5055 device." alt="" coords="403,56,510,83"/>
+<area shape="rect" id="node7" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="192,136,311,163"/>
+<area shape="rect" id="node4" href="$adp5055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,31,124,57"/>
+<area shape="rect" id="node6" href="$iio__adp5055_8h.html#ae39b63f6375e653cc6ed124d0191785d" title="Initializes the ADP5055 IIO descriptor." alt="" coords="187,56,316,83"/>
+</map>

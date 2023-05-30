@@ -1,0 +1,16 @@
+<map id="projects/ad&#45;acevsecrdset&#45;sl/src/common/common_data.c" name="projects/ad&#45;acevsecrdset&#45;sl/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by the STOUT project." alt="" coords="217,5,448,47"/>
+<area shape="rect" id="node2" href="$ad-acevsecrdset-sl_2src_2common_2common__data_8h.html" title="Defines common data to be used by the STOUT project." alt="" coords="269,95,396,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="154,169,263,196"/>
+<area shape="rect" id="node4" href="$ade9113_8h.html" title="Header file of ADE9113 Driver." alt="" coords="287,169,378,196"/>
+<area shape="rect" id="node13" href="$adt75_8h.html" title="Header file of ADT75 Driver." alt="" coords="715,169,785,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="73,319,155,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="468,319,539,345"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="152,244,252,271"/>
+<area shape="rect" id="node10" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="327,244,426,271"/>
+<area shape="rect" id="node11" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="450,244,557,271"/>
+<area shape="rect" id="node12" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="581,244,677,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="180,319,251,345"/>
+<area shape="rect" id="node14" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="701,244,799,271"/>
+</map>

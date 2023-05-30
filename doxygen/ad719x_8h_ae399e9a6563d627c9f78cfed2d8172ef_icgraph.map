@@ -1,0 +1,16 @@
+<map id="ad719x_set_masked_register_value" name="ad719x_set_masked_register_value">
+<area shape="rect" id="node1" title="Write masked data into device register." alt="" coords="833,191,1045,233"/>
+<area shape="rect" id="node2" href="$ad719x_8h.html#a7da6e6d09d461bc55b12d59b1906d4f0" title="Enables or disables the buffer on the ADC input channels." alt="" coords="599,199,761,225"/>
+<area shape="rect" id="node6" href="$ad719x_8h.html#a911e159361da297a10809f1cf6ba8059" title="Performs the given calibration to the specified channel." alt="" coords="362,21,497,48"/>
+<area shape="rect" id="node7" href="$ad719x_8h.html#a327761313910a3e05b836f3dce745d8b" title="Selects the channels to be enabled." alt="" coords="589,47,771,73"/>
+<area shape="rect" id="node9" href="$ad719x_8h.html#a1f9a83434b00811cd668ee24608ead73" title="Selects the clock source of the ADC." alt="" coords="601,249,759,276"/>
+<area shape="rect" id="node10" href="$ad719x_8h.html#a0ac28e19c3aa5715461cbe87b35d08b0" title="Configures the input mode of the ADC." alt="" coords="580,351,780,377"/>
+<area shape="rect" id="node11" href="$ad719x_8h.html#adba03dbb94c9be6c36bfbf0544f8eee8" title="Selects the filter output data rate of the ADC." alt="" coords="604,402,756,443"/>
+<area shape="rect" id="node12" href="$ad719x_8h.html#ae33e1b28ed3ad57936c490e6c7051b74" title="Selects the polarity of the conversion and the ADC input range." alt="" coords="601,97,759,124"/>
+<area shape="rect" id="node13" href="$ad719x_8h.html#a78080c164d4f5cb68cb301db60f3a8e5" title="Opens or closes the bridge power&#45;down switch of the ADC." alt="" coords="583,148,777,175"/>
+<area shape="rect" id="node14" href="$ad719x_8h.html#a80740112683ad61c5e762fffe013476e" title="Sets device into the specified operating mode." alt="" coords="575,300,785,327"/>
+<area shape="rect" id="node3" href="$ad719x_8h.html#abe338e9c6992908df702bb106f1e651d" title="Initializes the communication peripheral and the initial Values for AD719X Board and resets the devic..." alt="" coords="380,224,479,251"/>
+<area shape="rect" id="node4" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,173,284,200"/>
+<area shape="rect" id="node5" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,173,60,200"/>
+<area shape="rect" id="node8" href="$ad719x_8h.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="332,97,527,124"/>
+</map>

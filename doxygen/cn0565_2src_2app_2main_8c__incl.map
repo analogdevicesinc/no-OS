@@ -1,0 +1,19 @@
+<map id="projects/cn0565/src/app/main.c" name="projects/cn0565/src/app/main.c">
+<area shape="rect" id="node1" title="EIT main." alt="" coords="657,5,805,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="38,244,109,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="964,95,1031,121"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1055,95,1123,121"/>
+<area shape="rect" id="node5" href="$cn0565_2src_2app_2parameters_8h.html" title="Parameters Definitions." alt="" coords="1148,95,1257,121"/>
+<area shape="rect" id="node6" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="262,95,367,121"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="785,169,892,196"/>
+<area shape="rect" id="node11" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="916,169,1015,196"/>
+<area shape="rect" id="node12" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="1039,169,1137,196"/>
+<area shape="rect" id="node13" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="615,169,711,196"/>
+<area shape="rect" id="node14" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="674,95,787,121"/>
+<area shape="rect" id="node15" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="23,169,123,196"/>
+<area shape="rect" id="node16" href="$app_8h.html" title="EIT application header." alt="" coords="447,95,505,121"/>
+<area shape="rect" id="node17" title=" " alt="" coords="508,169,591,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="627,244,698,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="179,244,261,271"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="199,169,332,196"/>
+</map>

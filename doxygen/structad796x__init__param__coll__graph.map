@@ -1,0 +1,10 @@
+<map id="ad796x_init_param" name="ad796x_init_param">
+<area shape="rect" id="node1" title="AD796X Device initialization parameters." alt="" coords="993,109,1140,136"/>
+<area shape="rect" id="node2" href="$structaxi__clkgen__init.html" title=" " alt="" coords="691,5,811,32"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="342,89,514,116"/>
+<area shape="rect" id="node7" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="663,57,839,84"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,89,193,116"/>
+<area shape="rect" id="node5" href="$structaxi__adc__init.html" title="AXI ADC Initialization Parameters structure." alt="" coords="701,171,801,197"/>
+<area shape="rect" id="node6" href="$structaxi__dmac__init.html" title=" " alt="" coords="694,221,807,248"/>
+<area shape="rect" id="node8" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="332,20,524,47"/>
+</map>

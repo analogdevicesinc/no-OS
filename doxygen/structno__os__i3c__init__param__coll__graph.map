@@ -1,0 +1,5 @@
+<map id="no_os_i3c_init_param" name="no_os_i3c_init_param">
+<area shape="rect" id="node1" title="Structure holding the parameters for I3C initialization. Works like a device tree,..." alt="" coords="5,5,168,32"/>
+<area shape="rect" id="node2" href="$structno__os__i3c__bus__init__param.html" title="Structure holding the parameters for I3C initialization." alt="" coords="81,95,225,136"/>
+<area shape="rect" id="node3" href="$structno__os__i3c__platform__ops.html" title="Structure holding I3C function pointers that point to the platform specific function." alt="" coords="192,5,371,32"/>
+</map>

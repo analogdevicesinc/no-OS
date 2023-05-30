@@ -1,0 +1,13 @@
+<map id="projects/ad7091r8&#45;sdz/src/platform/maxim/main.c" name="projects/ad7091r8&#45;sdz/src/platform/maxim/main.c">
+<area shape="rect" id="node1" title="Main file for Maxim platform of ad7091r8&#45;sdz project." alt="" coords="291,5,494,47"/>
+<area shape="rect" id="node2" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,169,119,196"/>
+<area shape="rect" id="node4" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="208,95,313,121"/>
+<area shape="rect" id="node8" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="338,95,447,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="472,95,599,121"/>
+<area shape="rect" id="node11" title=" " alt="" coords="623,95,773,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="121,244,192,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="322,244,405,271"/>
+<area shape="rect" id="node6" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="194,169,327,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="225,244,296,271"/>
+<area shape="rect" id="node9" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="403,169,471,196"/>
+</map>

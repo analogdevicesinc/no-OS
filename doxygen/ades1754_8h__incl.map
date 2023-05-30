@@ -1,0 +1,11 @@
+<map id="drivers/power/ades1754/ades1754.h" name="drivers/power/ades1754/ades1754.h">
+<area shape="rect" id="node1" title="Header file for the ADES1754 Driver." alt="" coords="185,5,364,47"/>
+<area shape="rect" id="node2" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,169,104,196"/>
+<area shape="rect" id="node4" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="267,95,373,121"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="179,169,279,196"/>
+<area shape="rect" id="node9" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="397,95,507,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="115,244,186,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="329,244,412,271"/>
+<area shape="rect" id="node6" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="304,169,437,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="226,244,297,271"/>
+</map>

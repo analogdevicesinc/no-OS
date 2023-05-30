@@ -1,0 +1,4 @@
+<map id="adxl313_int_map_reg_flags" name="adxl313_int_map_reg_flags">
+<area shape="rect" id="node1" title="Union holding the flags for ADXL313 interrupt mapping." alt="" coords="9,95,172,136"/>
+<area shape="rect" id="node2" href="$struct__adxl313__int__reg__flags.html" title="Structure holding the flags for ADXL313 interrupt sources." alt="" coords="5,5,176,32"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="projects/aducm3029_flash_demo/src/main.c" name="projects/aducm3029_flash_demo/src/main.c">
+<area shape="rect" id="node1" title="Implementation of Main Function." alt="" coords="373,5,547,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,72,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="97,95,213,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="237,95,355,121"/>
+<area shape="rect" id="node5" href="$no__os__flash_8h.html" title="Header file for flash controller driver." alt="" coords="326,244,437,271"/>
+<area shape="rect" id="node7" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="412,169,508,196"/>
+<area shape="rect" id="node8" href="$platform__init_8h.html" title="ADuCM3029 platform initialization header." alt="" coords="971,95,1090,121"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="959,169,1065,196"/>
+<area shape="rect" id="node13" href="$aducm3029__uart_8h.html" title="Header file of UART driver for ADuCM302x." alt="" coords="546,95,689,121"/>
+<area shape="rect" id="node17" href="$aducm3029__uart__stdio_8h.html" title="Header file for UART driver stdout/stdin redirection." alt="" coords="765,95,947,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="510,319,581,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="880,319,963,345"/>
+<area shape="rect" id="node11" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="751,244,884,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="782,319,853,345"/>
+<area shape="rect" id="node14" title=" " alt="" coords="583,169,750,196"/>
+<area shape="rect" id="node15" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="775,169,884,196"/>
+<area shape="rect" id="node16" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="607,244,675,271"/>
+</map>

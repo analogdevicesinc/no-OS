@@ -1,0 +1,84 @@
+<map id="no_os_get_unaligned_be24" name="no_os_get_unaligned_be24">
+<area shape="rect" id="node1" title=" " alt="" coords="1087,1623,1285,1649"/>
+<area shape="rect" id="node2" href="$ad405x_8h.html#afc422a9dd5287bdd85ab5dc208414991" title="Read conversion data." alt="" coords="871,69,1039,96"/>
+<area shape="rect" id="node4" href="$ad4858_8h.html#a2107748bd528dfecefe5ff8fc50e20ff" title="Read ADC conversion data over SPI." alt="" coords="871,183,1039,209"/>
+<area shape="rect" id="node6" href="$ade7753_8h.html#a903a93350a42ef9146271926ba415c59" title="Read device register." alt="" coords="897,360,1012,387"/>
+<area shape="rect" id="node23" href="$ade7758_8h.html#a4cc44962ec1e8a7e71928efc610e91dd" title="Read device register." alt="" coords="897,1075,1012,1101"/>
+<area shape="rect" id="node51" href="$ade7913_8h.html#ab77f36317800804dc692df67ba2efdea" title="Read device register." alt="" coords="897,1623,1012,1649"/>
+<area shape="rect" id="node60" href="$ade7953_8h.html#aecb13e52c8fba51cc4fa9b9a1415fc19" title="Read device register." alt="" coords="897,2044,1012,2071"/>
+<area shape="rect" id="node74" href="$ade9153a_8h.html#a6a27a262a62f964b36a391d4a48ff19a" title="Ipeak val." alt="" coords="885,2095,1025,2121"/>
+<area shape="rect" id="node75" href="$ade9153a_8h.html#a45a0ee96457ec333dbefeaed83b29384" title="Vpeak val." alt="" coords="883,2145,1027,2172"/>
+<area shape="rect" id="node76" href="$ltc2992_8h.html#a01dc481b67cb8e663696ae65d65be645" title="Read raw data from device register." alt="" coords="887,2475,1022,2501"/>
+<area shape="rect" id="node3" href="$ad405x_8h.html#ad8537455e65de0a05a94542e6fb39497" title="Trigger conversion and read data." alt="" coords="643,5,777,32"/>
+<area shape="rect" id="node5" href="$ad4858_8h.html#a543e38084df829f2e85a9908265bcc36" title="Read ADC data (for all channels)." alt="" coords="639,56,781,83"/>
+<area shape="rect" id="node7" href="$ade7753_8h.html#a86ba10b7b04a34be7d9e4ce87bfc9d75" title="Clear irq status flags." alt="" coords="108,133,296,160"/>
+<area shape="rect" id="node9" href="$ade7753_8h.html#ad4099d28320c2a857e2ae7f513459e76" title="Read energy values." alt="" coords="628,208,792,235"/>
+<area shape="rect" id="node10" href="$eval-ade7753_2src_2common_2common__data_8h.html#a15949fe4023e52c618a1a27713a2f456" title="Read measurements." alt="" coords="369,208,525,235"/>
+<area shape="rect" id="node11" href="$ade7753_8h.html#a0b1742166bff53d5f8973073bb09e57e" title="Get interrupt indicator from STATUS register." alt="" coords="621,360,799,387"/>
+<area shape="rect" id="node13" href="$ade7753_8h.html#a0c08e6b9bb5947203a35ffcfb64df728" title="Read period value." alt="" coords="633,259,787,285"/>
+<area shape="rect" id="node14" href="$ade7753_8h.html#ae4681fbeffd487a6324e525d0d3d1385" title="read with reset Ipeak val" alt="" coords="633,513,787,554"/>
+<area shape="rect" id="node15" href="$ade7753_8h.html#a94f98f42aee166767e663aa814a9f8b2" title="read with reset Vpeak val" alt="" coords="622,579,798,605"/>
+<area shape="rect" id="node16" href="$ade7753_8h.html#a782aa6df37cab3bcce13e1cfc7108834" title="Read rms values." alt="" coords="638,309,782,336"/>
+<area shape="rect" id="node17" href="$ade7753_8h.html#ad117412dc7e71d7cbb04b99a90ceae37" title="Update specific register bits." alt="" coords="629,461,791,488"/>
+<area shape="rect" id="node22" href="$ade7753_8h.html#abb151efdc4b605a3c2a6b3124d8957bb" title="Version product." alt="" coords="352,309,541,336"/>
+<area shape="rect" id="node8" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,260,60,287"/>
+<area shape="rect" id="node12" href="$ade7753_8h.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="149,297,255,324"/>
+<area shape="rect" id="node18" href="$ade7753_8h.html#a894c298fbec8447aea4fa54cb4b0353a" title="Enable/Disable interrupt." alt="" coords="370,461,523,488"/>
+<area shape="rect" id="node19" href="$ade7753_8h.html#a05069d40bac54d22911d9720fe4305d7" title="Reset the device using SW reset." alt="" coords="375,360,518,387"/>
+<area shape="rect" id="node20" href="$ade7753_8h.html#a45e57845fc7fee8de59a69facb6d7c0c" title="Select source of sampled data for wave register." alt="" coords="359,513,534,554"/>
+<area shape="rect" id="node21" href="$ade7753_8h.html#ae9ca805900d6098339024cc66497ac07" title="Select waveform register update rate." alt="" coords="344,579,549,605"/>
+<area shape="rect" id="node24" href="$ade7758_8h.html#a249f6bcc83e667569eebaa495281ff84" title="Clear irq status flags." alt="" coords="353,629,541,656"/>
+<area shape="rect" id="node27" href="$ade7758_8h.html#abc386b01cd89b400f7fee467062228da" title="Read energy values phase A." alt="" coords="628,970,792,1011"/>
+<area shape="rect" id="node29" href="$ade7758_8h.html#aa493dbdd6b50370582cadfe11ada3980" title="Read energy values phase B." alt="" coords="628,1035,792,1077"/>
+<area shape="rect" id="node30" href="$ade7758_8h.html#ae68965f9ebb288666e6de7c66d49f6ae" title="Read energy values phase C." alt="" coords="628,1101,792,1142"/>
+<area shape="rect" id="node31" href="$ade7758_8c.html#a8fd7f4ba21deeeb1930a899d28fbff79" title="Read frequency/period value." alt="" coords="597,852,823,879"/>
+<area shape="rect" id="node32" href="$eval-ade7758_2src_2common_2common__data_8c.html#a66705c23e62f9e1acdb85fc1c2224b3d" title="print measurements" alt="" coords="368,781,525,808"/>
+<area shape="rect" id="node33" href="$ade7758_8h.html#a3ebf76f1da30f309401baea4767666b2" title="Get interrupt indicator from STATUS register." alt="" coords="358,680,535,707"/>
+<area shape="rect" id="node34" href="$ade7758_8h.html#a08c0e9e17e5aa038d4003ed4f3caa765" title="read Ipeak val" alt="" coords="626,1319,794,1345"/>
+<area shape="rect" id="node35" href="$ade7758_8h.html#a25850cd8719d5449893284ef0b7ab1ab" title="Read rms values phase A." alt="" coords="607,1167,813,1193"/>
+<area shape="rect" id="node36" href="$ade7758_8h.html#adcb7cc944e27754239046b3705460811" title="Read rms values phase B." alt="" coords="607,1217,813,1244"/>
+<area shape="rect" id="node37" href="$ade7758_8h.html#a72f0a90993fad8bba667a682d10407da" title="Read rms values phase C." alt="" coords="608,1268,812,1295"/>
+<area shape="rect" id="node38" href="$ade7758_8c.html#ae81cf636596267c17e619058e8c31e64" title="Read temperature value." alt="" coords="613,1369,807,1396"/>
+<area shape="rect" id="node39" href="$ade7758_8h.html#ab90b3e3f7e4b70be3ad6442da4b91c6b" title="Update specific register bits." alt="" coords="629,919,791,945"/>
+<area shape="rect" id="node49" href="$ade7758_8h.html#a1f93dfac629e849d0823a4908c07a7ea" title="Version product." alt="" coords="352,731,541,757"/>
+<area shape="rect" id="node50" href="$ade7758_8h.html#aa26a7bbcfdeabacf52747bbe7e4f872e" title="read Vpeak val" alt="" coords="642,1420,778,1447"/>
+<area shape="rect" id="node25" href="$ade7758_8h.html#a422e1a9832e2a6c7451aa9857d446c90" title="Initialize the device." alt="" coords="149,731,255,757"/>
+<area shape="rect" id="node26" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,756,60,783"/>
+<area shape="rect" id="node28" href="$eval-ade7758_2src_2common_2common__data_8h.html#aa00b46d14528947fba9763a4a33cbfa6" title="Read measurements." alt="" coords="369,1253,525,1280"/>
+<area shape="rect" id="node40" href="$ade7758_8h.html#a85ea4d235a62d1d2c1f4198746ef00b8" title="Operation mode of the ADCs." alt="" coords="367,883,526,909"/>
+<area shape="rect" id="node42" href="$ade7758_8h.html#ae42bfdaa8620b923435a3ac51b0ae0ea" title="Select the input to the energy accumulation registers." alt="" coords="383,933,510,960"/>
+<area shape="rect" id="node43" href="$ade7758_8h.html#af563e84e29d4f693ed1c74396787db67" title="Enable/Disable interrupt." alt="" coords="370,984,523,1011"/>
+<area shape="rect" id="node44" href="$ade7758_8h.html#a25768e9b2e97a4bdd6b858a1c1645dfc" title="Select the source of the measurement of the voltage line frequency." alt="" coords="366,1035,527,1061"/>
+<area shape="rect" id="node45" href="$ade7758_8h.html#a7abd5adabc220a2509032906244a57ef" title="Reset the device using SW reset." alt="" coords="375,832,518,859"/>
+<area shape="rect" id="node46" href="$ade7758_8h.html#a6256795cf572104190077c90bd04e58e" title="Select the phase of sampled data for wave register." alt="" coords="351,1085,543,1112"/>
+<area shape="rect" id="node47" href="$ade7758_8h.html#ac77450d3d9e7dd6ed665944487e24ecc" title="Select source of sampled data for wave register." alt="" coords="359,1137,534,1178"/>
+<area shape="rect" id="node48" href="$ade7758_8h.html#aae0adecdd5d9ca76c6f6aa88aa82a9a8" title="Select waveform register update rate." alt="" coords="344,1203,549,1229"/>
+<area shape="rect" id="node41" href="$ade7758_8h.html#ad643b16ba67d694a04b326f1df0a3820" title="Setup the ADE7758 device." alt="" coords="141,1009,263,1036"/>
+<area shape="rect" id="node52" href="$ade7913_8h.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="621,1471,799,1497"/>
+<area shape="rect" id="node53" href="$ade7913_8h.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="635,1521,785,1548"/>
+<area shape="rect" id="node54" href="$ade7913_8h.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="611,1572,809,1599"/>
+<area shape="rect" id="node55" href="$ade7913_8h.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="629,1674,791,1715"/>
+<area shape="rect" id="node56" href="$ade7913_8h.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="393,1681,500,1708"/>
+<area shape="rect" id="node58" href="$ade7913_8h.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="622,1791,798,1817"/>
+<area shape="rect" id="node59" href="$ade7913_8h.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="349,1736,544,1763"/>
+<area shape="rect" id="node57" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="175,1708,229,1735"/>
+<area shape="rect" id="node61" href="$ade7953_8h.html#ad5bc0abd38bc9661f31679d1d5491939" title="Clear irq stata flags." alt="" coords="619,1841,801,1868"/>
+<area shape="rect" id="node62" href="$ade7953_8h.html#a04fd5c7fe1951b2e1fb750b0a6315ebd" title="Clear irq statb flags." alt="" coords="619,1892,801,1919"/>
+<area shape="rect" id="node63" href="$ade7953_8h.html#ae30906b8c44755a6816c55f893bc466a" title="Read energy values." alt="" coords="628,1943,792,1969"/>
+<area shape="rect" id="node65" href="$ade7953_8h.html#aef59b5560ba18b88d2f78744574de636" title="Get interrupt indicator from STATA register." alt="" coords="625,2145,795,2172"/>
+<area shape="rect" id="node66" href="$ade7953_8h.html#a1ba71bfd27fb0629519064002de83f46" title="Get interrupt indicator from STATB register." alt="" coords="625,2196,795,2223"/>
+<area shape="rect" id="node67" href="$ade7953_8h.html#a6f86b1397e5a8dccb8f4df5bd238fe2a" title="Read power quaility values." alt="" coords="605,1993,815,2020"/>
+<area shape="rect" id="node68" href="$ade7953_8h.html#aa98f89fe1f05c6da5fa28843ecdb6077" title="Read power values." alt="" coords="631,2044,789,2071"/>
+<area shape="rect" id="node69" href="$ade7953_8h.html#a8e39cfe2c6e3f4f3055a5404fdf0839e" title="reset IApeak val" alt="" coords="620,2247,800,2273"/>
+<area shape="rect" id="node70" href="$ade7953_8h.html#a6cd76f9e40ae4293a41fbc5206e4e79c" title="reset IBpeak val" alt="" coords="620,2297,800,2324"/>
+<area shape="rect" id="node71" href="$ade7953_8h.html#a407ffa49e66bc03da1eb025bc165b3d1" title="reset Vpeak val" alt="" coords="622,2348,798,2375"/>
+<area shape="rect" id="node72" href="$ade7953_8h.html#a3ac90ffb88f3314a1f5c2ff668d547d9" title="Read rms values." alt="" coords="638,2095,782,2121"/>
+<area shape="rect" id="node73" href="$ade7953_8h.html#a7a37dc96ebff0a07931b089d42bd9c25" title="Version product." alt="" coords="615,2399,805,2425"/>
+<area shape="rect" id="node64" href="$eval-ade7953_2src_2common_2common__data_8h.html#ae7b728e8b96110ef600f35e74fcc6533" title="Read measurements." alt="" coords="369,2019,525,2045"/>
+<area shape="rect" id="node77" href="$ltc2992_8h.html#abecde49247db59f84eb2ba3a8d2f7751" title="Get fault status." alt="" coords="643,2449,777,2476"/>
+<area shape="rect" id="node78" href="$ltc2992_8h.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="661,2500,759,2527"/>
+<area shape="rect" id="node79" href="$ltc2992_8h.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="635,2551,785,2577"/>
+<area shape="rect" id="node80" href="$ltc2992_8h.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="373,2500,520,2527"/>
+<area shape="rect" id="node81" href="$ltc2992_8h.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="359,2551,534,2577"/>
+<area shape="rect" id="node82" href="$ltc2992_8h.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="379,2601,514,2628"/>
+</map>

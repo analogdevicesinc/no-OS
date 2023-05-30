@@ -1,0 +1,4 @@
+<map id="no_os_i3c_init_bus" name="no_os_i3c_init_bus">
+<area shape="rect" id="node1" title="Initialize the I3C bus." alt="" coords="168,5,312,32"/>
+<area shape="rect" id="node2" href="$no__os__i3c_8c.html#ab54a357ab3d63706a3fbe455a4cd6fd8" title="Initialize the I3C device. If the bus of the I3C device is not initialized, it will call to init it." alt="" coords="5,5,120,32"/>
+</map>

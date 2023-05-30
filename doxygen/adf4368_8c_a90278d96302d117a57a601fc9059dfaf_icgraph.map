@@ -1,0 +1,8 @@
+<map id="adf4368_set_freq" name="adf4368_set_freq">
+<area shape="rect" id="node1" title="Set the output frequency." alt="" coords="375,97,509,123"/>
+<area shape="rect" id="node2" href="$adf4368_8h.html#ae0411e5c2e9caa1c428e64e12a69931c" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="174,5,325,47"/>
+<area shape="rect" id="node3" href="$adf4368_8h.html#a490f37ba07ae0bbe064e5a8e55d9146a" title="Set the desired reference frequency and reset everything over to maximum supported value of 4GHz to t..." alt="" coords="173,71,326,98"/>
+<area shape="rect" id="node4" href="$adf4368_8h.html#a09a46391238432b71f49b061451230b1" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="172,122,327,149"/>
+<area shape="rect" id="node5" href="$adf4368_8h.html#a9c60b517f7deb58ce3165685a3734278" title="Set the desired output frequency and reset everything over to maximum supported value of 12...." alt="" coords="179,173,319,199"/>
+<area shape="rect" id="node6" href="$adf4368_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,173,124,199"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ad8460_reg_update_bits" name="ad8460_reg_update_bits">
+<area shape="rect" id="node1" title="Read&#45;modify&#45;write operation." alt="" coords="457,31,639,57"/>
+<area shape="rect" id="node2" href="$ad8460_8h.html#a4051f00e787b270af00776a820be633e" title="Enable or disable the APG mode." alt="" coords="213,31,409,57"/>
+<area shape="rect" id="node3" href="$ad8460_8h.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="9,5,161,32"/>
+<area shape="rect" id="node5" href="$ad8460_8h.html#ab77409bb5ceced72a965c9929a6349cf" title="Reset the high voltage driver." alt="" coords="245,81,378,108"/>
+<area shape="rect" id="node4" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,68,165,95"/>
+</map>

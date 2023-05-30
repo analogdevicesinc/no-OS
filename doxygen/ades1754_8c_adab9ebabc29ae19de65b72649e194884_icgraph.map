@@ -1,0 +1,12 @@
+<map id="ades1754_update_dev" name="ades1754_update_dev">
+<area shape="rect" id="node1" title="ADES1754 update device command message." alt="" coords="280,224,448,251"/>
+<area shape="rect" id="node2" href="$ades1754_8h.html#abf0336a8c2479fe281f6890b1e22072e" title="Set ADC scan method." alt="" coords="19,5,218,32"/>
+<area shape="rect" id="node3" href="$ades1754_8h.html#a6b3a12d5e93621a0113c20b392f28a17" title="Cell&#45;Balancing Calibration Period Selection." alt="" coords="27,57,210,98"/>
+<area shape="rect" id="node4" href="$ades1754_8h.html#a568a6c93f7660701c4a318aa9b830d49" title="Cell&#45;Ballancing Measurement Enable/Disable." alt="" coords="6,123,231,149"/>
+<area shape="rect" id="node5" href="$ades1754_8h.html#a9f3596b0241f3b820fb2fdf73114c513" title="Set Cell Balancing mode." alt="" coords="5,173,232,200"/>
+<area shape="rect" id="node6" href="$ades1754_8h.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9" title="Set Buffer mode for data acquisition." alt="" coords="18,224,219,251"/>
+<area shape="rect" id="node7" href="$ades1754_8h.html#a9badaadef8c37481a4ccceae8b42170c" title="Set IIR filter coefficient." alt="" coords="53,275,185,301"/>
+<area shape="rect" id="node8" href="$ades1754_8h.html#aed1fbc41b15d76f6174710a8077ec948" title="Set speciic IIR filter settings." alt="" coords="39,325,199,352"/>
+<area shape="rect" id="node9" href="$ades1754_8h.html#a415d67f8019842750759f13156278777" title="ADES1754 Start/Stop Scanning function." alt="" coords="39,376,198,403"/>
+<area shape="rect" id="node10" href="$ades1754_8h.html#a9f0bfa3719e1e1684c7f16b2aad35599" title="Select Scan Mode of the cells." alt="" coords="11,427,226,453"/>
+</map>

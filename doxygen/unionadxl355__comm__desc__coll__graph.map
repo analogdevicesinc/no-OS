@@ -1,0 +1,10 @@
+<map id="adxl355_comm_desc" name="adxl355_comm_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="863,144,1021,171"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="631,88,753,115"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,11,184,37"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,55,471,81"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,106,472,147"/>
+<area shape="rect" id="node6" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="631,173,753,200"/>
+<area shape="rect" id="node7" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,191,184,217"/>
+<area shape="rect" id="node8" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="324,235,471,261"/>
+</map>

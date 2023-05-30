@@ -1,0 +1,16 @@
+<map id="ad3530r_reg_read" name="ad3530r_reg_read">
+<area shape="rect" id="node1" title="Read from device register." alt="" coords="727,140,865,167"/>
+<area shape="rect" id="node2" href="$ad3530r_8h.html#accede971255551577c41c49625f1e72a" title="Perform a hard/soft reset." alt="" coords="280,5,395,32"/>
+<area shape="rect" id="node4" href="$ad3530r_8h.html#affcc4cfb845310a896d06b72eb499570" title="SPI write to device using a mask." alt="" coords="495,165,679,192"/>
+<area shape="rect" id="node3" href="$ad3530r_8h.html#a9f4f360a67fe344a9ec9d26973046ed8" title="Initialize the device structure." alt="" coords="41,31,144,57"/>
+<area shape="rect" id="node5" href="$ad3530r_8h.html#a45f0c36ead8fdf6a2330277bae4727bd" title=" " alt="" coords="248,107,427,133"/>
+<area shape="rect" id="node7" href="$ad3530r_8h.html#aa36c5429be3704bee573884d15c0d633" title=" " alt="" coords="254,158,421,199"/>
+<area shape="rect" id="node8" href="$ad3530r_8h.html#af0a5badacfee47157cff054d8894f780" title=" " alt="" coords="230,224,445,251"/>
+<area shape="rect" id="node9" href="$ad3530r_8h.html#a4a206b1a7dcb061a1386abe79b8c315f" title=" " alt="" coords="262,275,413,317"/>
+<area shape="rect" id="node10" href="$ad3530r_8h.html#a568e7651537627d1cd0aa5c8f229ec56" title=" " alt="" coords="252,341,423,368"/>
+<area shape="rect" id="node11" href="$ad3530r_8h.html#a5815e99e0ad280385f829c2a20018188" title="Trigger the LDAC using software." alt="" coords="245,392,429,419"/>
+<area shape="rect" id="node14" href="$ad3530r_8h.html#af8b8629966943af864d6b8c3799e94d5" title="Updates the interface configuration." alt="" coords="228,56,447,83"/>
+<area shape="rect" id="node6" href="$ad3530r_8c.html#adf657d70dc5ad1db0cc23dad3e739158" title="Configures the device." alt="" coords="7,224,178,251"/>
+<area shape="rect" id="node12" href="$ad3530r_8h.html#a8a3ac7191cbdf77aba3b02e2c0548ada" title=" " alt="" coords="5,363,180,389"/>
+<area shape="rect" id="node13" href="$ad3530r_8h.html#a5a341873f52311996625d6488ed9128b" title=" " alt="" coords="9,414,176,455"/>
+</map>

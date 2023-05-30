@@ -1,0 +1,10 @@
+<map id="drivers/platform/generic/generic_spi.c" name="drivers/platform/generic/generic_spi.c">
+<area shape="rect" id="node1" title=" " alt="" coords="99,5,277,47"/>
+<area shape="rect" id="node2" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,95,115,121"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="139,95,237,121"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="262,95,362,121"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,169,94,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="159,169,230,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="269,169,339,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="364,169,447,196"/>
+</map>

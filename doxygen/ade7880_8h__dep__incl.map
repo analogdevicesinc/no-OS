@@ -1,0 +1,7 @@
+<map id="drivers/meter/ade7880/ade7880.h" name="drivers/meter/ade7880/ade7880.h">
+<area shape="rect" id="node1" title="Header file of ADE7880 Driver." alt="" coords="199,5,369,47"/>
+<area shape="rect" id="node2" href="$ade7880_8c.html" title="Implementation of ADE7880 Driver." alt="" coords="5,95,176,136"/>
+<area shape="rect" id="node3" href="$eval-ade7880_2src_2main_8c.html" title="Main function of ADE7880 example." alt="" coords="201,95,367,136"/>
+<area shape="rect" id="node4" href="$eval-ade7880_2src_2platform_2platform_8h.html" title="Defines common data to be used by ADE7880 example project." alt="" coords="391,95,569,136"/>
+<area shape="rect" id="node5" href="$eval-ade7880_2src_2platform_2platform_8c.html" title="Defines common data to be used by ADE7880 example project." alt="" coords="392,184,568,225"/>
+</map>

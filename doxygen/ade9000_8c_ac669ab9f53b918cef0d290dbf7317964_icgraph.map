@@ -1,0 +1,10 @@
+<map id="ade9000_read" name="ade9000_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="544,83,659,110"/>
+<area shape="rect" id="node2" href="$ade9000_8h.html#a82ad2ddedfc642a3c46690cbcd861b21" title="Get interrupt indicator from STATUS0 register." alt="" coords="311,32,496,59"/>
+<area shape="rect" id="node3" href="$ade9000_8h.html#a5945f5becded49f6588b4f3a6f013010" title="Read the temperature." alt="" coords="108,32,263,59"/>
+<area shape="rect" id="node5" href="$ade9000_8h.html#a796d44fbe01c3180aefbb8268aaa948f" title="Initialize the device." alt="" coords="132,134,239,160"/>
+<area shape="rect" id="node6" href="$ade9000_8h.html#a9a4523cf75c302a9a9e6fd93a4b85843" title="Read the power/energy for specific phase." alt="" coords="317,184,490,211"/>
+<area shape="rect" id="node7" href="$ade9000_8h.html#ab28ef33672c651dd51420e51161866db" title="Update specific register bits." alt="" coords="323,83,484,110"/>
+<area shape="rect" id="node4" href="$eval-ade9000_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,108,60,135"/>
+<area shape="rect" id="node8" href="$ade9000_8h.html#aa0f6201c5b081c10cf75ebeb822abea3" title="Setup the device." alt="" coords="125,83,246,110"/>
+</map>

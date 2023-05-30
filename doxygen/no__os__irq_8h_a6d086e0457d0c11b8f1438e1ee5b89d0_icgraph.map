@@ -1,0 +1,17 @@
+<map id="no_os_irq_unregister_callback" name="no_os_irq_unregister_callback">
+<area shape="rect" id="node1" title="Unregisters a generic IRQ handling function." alt="" coords="704,158,861,199"/>
+<area shape="rect" id="node2" href="$ade7816_8h.html#aa53025a679994f040b17e8e0e993bdf9" title="Free the resources allocated during init." alt="" coords="509,5,644,32"/>
+<area shape="rect" id="node4" href="$ade9113_8h.html#a70245c89427f7c191241fc84243ebab3" title="Remove the device and release resources." alt="" coords="509,56,644,83"/>
+<area shape="rect" id="node5" href="$ade9153a_8h.html#a1e0dcb9a162f1a9150681d852588cbb3" title="Remove the device and release resources." alt="" coords="505,107,648,133"/>
+<area shape="rect" id="node6" href="$aducm3029__irq_8c.html#a2f6b5f5b261530e4349952342fd0c48d" title="Free the resources allocated by no_os_irq_ctrl_init()" alt="" coords="501,158,652,199"/>
+<area shape="rect" id="node7" href="$max11205_8h.html#adff8b4d146093da04e57377b4624cf4c" title="Free memory allocated by max11205_init()." alt="" coords="503,224,651,251"/>
+<area shape="rect" id="node9" href="$no__os__dma_8c.html#a935f01d6ca284b7605900f40ca188748" title="Remove resources allocated for the DMA controller." alt="" coords="500,275,653,301"/>
+<area shape="rect" id="node15" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="497,325,656,352"/>
+<area shape="rect" id="node3" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="281,5,441,32"/>
+<area shape="rect" id="node8" href="$iio__max11205_8h.html#a2310b65fd7b0f421f0e5215fd96b6335" title="Free the resources allocated by max11205_iio_init()." alt="" coords="276,195,447,221"/>
+<area shape="rect" id="node10" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="299,245,423,272"/>
+<area shape="rect" id="node11" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="273,297,449,338"/>
+<area shape="rect" id="node14" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="288,363,435,389"/>
+<area shape="rect" id="node12" href="$stm32__spi_8c.html#adfcb8034a96850d7940dd91d67f273eb" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="24,267,207,309"/>
+<area shape="rect" id="node13" href="$stm32__spi_8c.html#a8f89053d3059828cf294d3061322d974" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,333,225,360"/>
+</map>

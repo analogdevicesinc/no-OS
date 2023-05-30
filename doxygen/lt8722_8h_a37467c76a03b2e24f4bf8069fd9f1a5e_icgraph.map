@@ -1,0 +1,7 @@
+<map id="lt8722_remove" name="lt8722_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by the lt8722_init()" alt="" coords="404,31,524,57"/>
+<area shape="rect" id="node2" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node3" href="$iio__lt8722_8h.html#a815ec86c7bf7c51fccd1f650b56b0cd2" title="Free resources allocated by the init function." alt="" coords="213,31,356,57"/>
+<area shape="rect" id="node4" href="$lt8722_8h.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="239,81,330,108"/>
+<area shape="rect" id="node5" href="$iio__lt8722_8h.html#a23141fac16f901e00b4a6068918ee0d6" title="Initializes the LT8722 IIO descriptor." alt="" coords="28,81,143,108"/>
+</map>
