@@ -1,0 +1,7 @@
+<map id="pcf85263_write" name="pcf85263_write">
+<area shape="rect" id="node1" title="Write device register." alt="" coords="515,31,637,57"/>
+<area shape="rect" id="node2" href="$pcf85263_8h.html#ab0503bfdeaad1a341d4681455628cfed" title="Set date." alt="" coords="108,5,253,32"/>
+<area shape="rect" id="node4" href="$pcf85263_8h.html#a345542ebb2f61e2de1021c03fac33137" title="Update specific register bits." alt="" coords="301,56,467,83"/>
+<area shape="rect" id="node3" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,31,60,57"/>
+<area shape="rect" id="node5" href="$pcf85263_8h.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="125,56,236,83"/>
+</map>

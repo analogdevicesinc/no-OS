@@ -1,0 +1,46 @@
+<map id="drivers/platform/stm32/stm32_irq.h" name="drivers/platform/stm32/stm32_irq.h">
+<area shape="rect" id="node1" title="Header file for stm32 irq specifics." alt="" coords="2588,5,2760,47"/>
+<area shape="rect" id="node2" href="$stm32__dma_8c.html" title="Implementation of stm32 DMA functionality." alt="" coords="5,102,177,143"/>
+<area shape="rect" id="node3" href="$stm32__irq_8c.html" title="Implementation of external irq driver." alt="" coords="201,102,373,143"/>
+<area shape="rect" id="node4" href="$stm32__pwm_8c.html" title=" " alt="" coords="397,102,569,143"/>
+<area shape="rect" id="node5" href="$stm32__tdm_8c.html" title="Implementation of TDM driver using STM32&#39;s SAI peripheral." alt="" coords="593,102,765,143"/>
+<area shape="rect" id="node6" href="$stm32__uart_8c.html" title="Source file of UART driver for STM32." alt="" coords="789,102,961,143"/>
+<area shape="rect" id="node7" href="$ad463x__fmcz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by ad463x_fmcz project." alt="" coords="985,102,1227,143"/>
+<area shape="rect" id="node9" href="$ad738x__fmcz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;ad738x project." alt="" coords="1251,102,1492,143"/>
+<area shape="rect" id="node11" href="$ad74413r_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by ad74413r project." alt="" coords="1517,102,1735,143"/>
+<area shape="rect" id="node13" href="$ad74416h_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;ad74416h project." alt="" coords="1759,102,1978,143"/>
+<area shape="rect" id="node15" href="$ad7616-st_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;ad7616 project." alt="" coords="2003,95,2153,151"/>
+<area shape="rect" id="node17" href="$adf4382_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by adf4382 project." alt="" coords="2178,102,2397,143"/>
+<area shape="rect" id="node19" href="$adxrs290-pmdz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="2421,102,2663,143"/>
+<area shape="rect" id="node21" href="$eval-adis1646x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1646x project." alt="" coords="2687,102,2928,143"/>
+<area shape="rect" id="node23" href="$eval-adis1647x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1647x project." alt="" coords="2952,102,3193,143"/>
+<area shape="rect" id="node25" href="$eval-adis1650x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1650x project." alt="" coords="3217,102,3459,143"/>
+<area shape="rect" id="node27" href="$eval-adis1654x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1654x project." alt="" coords="3483,102,3724,143"/>
+<area shape="rect" id="node29" href="$eval-adis1655x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1655x project." alt="" coords="3748,102,3989,143"/>
+<area shape="rect" id="node31" href="$eval-adis1657x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adis1657x project." alt="" coords="4013,102,4255,143"/>
+<area shape="rect" id="node33" href="$eval-adxl313z_2src_2platform_2stm32_2parameters_8h.html" title=" " alt="" coords="4279,102,4520,143"/>
+<area shape="rect" id="node35" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="4544,95,4735,151"/>
+<area shape="rect" id="node37" href="$eval-adxl38x_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxl38x project." alt="" coords="4759,102,5000,143"/>
+<area shape="rect" id="node39" href="$iio__demo_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to stm32 platform used by iio_demo project." alt="" coords="5025,102,5243,143"/>
+<area shape="rect" id="node41" href="$max14906_2src_2platform_2stm32_2parameters_8h.html" title=" " alt="" coords="5267,102,5486,143"/>
+<area shape="rect" id="node43" href="$pulsar-adc_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;pulsar_adc project." alt="" coords="5511,95,5661,151"/>
+<area shape="rect" id="node8" href="$ad463x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by ad463x_fmcz project." alt="" coords="986,206,1226,247"/>
+<area shape="rect" id="node10" href="$ad738x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad738x project." alt="" coords="1251,206,1491,247"/>
+<area shape="rect" id="node12" href="$ad74413r_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by ad74413r project." alt="" coords="1517,206,1735,247"/>
+<area shape="rect" id="node14" href="$ad74416h_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad74416h project." alt="" coords="1760,206,1977,247"/>
+<area shape="rect" id="node16" href="$ad7616-st_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad7616 project." alt="" coords="2003,199,2153,255"/>
+<area shape="rect" id="node18" href="$adf4382_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by adf4382 project." alt="" coords="2179,206,2396,247"/>
+<area shape="rect" id="node20" href="$adxrs290-pmdz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="2422,206,2662,247"/>
+<area shape="rect" id="node22" href="$eval-adis1646x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1646x project." alt="" coords="2687,206,2927,247"/>
+<area shape="rect" id="node24" href="$eval-adis1647x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1647x project." alt="" coords="2953,206,3193,247"/>
+<area shape="rect" id="node26" href="$eval-adis1650x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1650x project." alt="" coords="3218,206,3458,247"/>
+<area shape="rect" id="node28" href="$eval-adis1654x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1654x project." alt="" coords="3483,206,3723,247"/>
+<area shape="rect" id="node30" href="$eval-adis1655x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1655x project." alt="" coords="3749,206,3989,247"/>
+<area shape="rect" id="node32" href="$eval-adis1657x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adis1657x project." alt="" coords="4014,206,4254,247"/>
+<area shape="rect" id="node34" href="$eval-adxl313z_2src_2platform_2stm32_2parameters_8c.html" title=" " alt="" coords="4279,206,4519,247"/>
+<area shape="rect" id="node36" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="4544,199,4735,255"/>
+<area shape="rect" id="node38" href="$eval-adxl38x_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxl38x project." alt="" coords="4759,206,4999,247"/>
+<area shape="rect" id="node40" href="$iio__demo_2src_2platform_2stm32_2parameters_8c.html" title="Definition of stm32 platform data used by iio_demo project." alt="" coords="5025,206,5243,247"/>
+<area shape="rect" id="node42" href="$max14906_2src_2platform_2stm32_2parameters_8c.html" title=" " alt="" coords="5268,206,5485,247"/>
+<area shape="rect" id="node44" href="$pulsar-adc_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;pulsar_adc project." alt="" coords="5511,199,5661,255"/>
+</map>

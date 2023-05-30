@@ -1,0 +1,9 @@
+<map id="ade9430_read" name="ade9430_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="597,53,712,80"/>
+<area shape="rect" id="node2" href="$ade9430_8h.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="197,16,304,43"/>
+<area shape="rect" id="node4" href="$ade9430_8h.html#a41447f5ba8b5e0739328ada3bbae63d5" title="Read the power/energy for specific phase." alt="" coords="376,129,549,156"/>
+<area shape="rect" id="node6" href="$ade9430_8h.html#accf20aba0ba1faa72a1d10d63de51da3" title="Read the temperature." alt="" coords="173,79,328,105"/>
+<area shape="rect" id="node7" href="$ade9430_8h.html#a931208decd557cdbd43246b0076f6845" title="Update specific register bits." alt="" coords="382,28,543,55"/>
+<area shape="rect" id="node3" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="38,16,93,43"/>
+<area shape="rect" id="node5" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="5,92,125,119"/>
+</map>

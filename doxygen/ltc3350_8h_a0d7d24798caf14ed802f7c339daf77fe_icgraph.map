@@ -1,0 +1,6 @@
+<map id="ltc3350_read_device_data" name="ltc3350_read_device_data">
+<area shape="rect" id="node1" title="Reads data from the device (I2C)." alt="" coords="224,56,416,83"/>
+<area shape="rect" id="node2" href="$ltc3350_8h.html#a3775388cf171335c66a0184d0ef96d26" title="Reads the ESR data." alt="" coords="28,5,153,32"/>
+<area shape="rect" id="node3" href="$ltc3350_8h.html#ae54fffa5efd75feda2a5d8cf86829392" title="Gets number of capacitors configured based on PIN." alt="" coords="5,56,176,83"/>
+<area shape="rect" id="node4" href="$ltc3350_8h.html#a27b1290dc407323579b2eb1cac79fdbb" title="Reads the Vcap data for selected capacitor." alt="" coords="23,107,159,133"/>
+</map>

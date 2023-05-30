@@ -1,0 +1,14 @@
+<map id="drivers/adc/max9611pmb/max9611.c" name="drivers/adc/max9611pmb/max9611.c">
+<area shape="rect" id="node1" title="Implementation of max9611 Family Driver." alt="" coords="251,5,439,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="177,244,248,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="447,244,517,271"/>
+<area shape="rect" id="node4" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="163,169,262,196"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="337,169,437,196"/>
+<area shape="rect" id="node7" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="513,169,622,196"/>
+<area shape="rect" id="node9" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="25,169,139,196"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="697,95,808,121"/>
+<area shape="rect" id="node12" href="$max9611_8h.html" title="Header file of max9611 Family Driver." alt="" coords="255,95,349,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="339,244,422,271"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="541,244,609,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="747,169,814,196"/>
+</map>

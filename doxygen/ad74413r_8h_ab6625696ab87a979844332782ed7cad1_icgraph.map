@@ -1,0 +1,7 @@
+<map id="ad74413r_clear_errors" name="ad74413r_clear_errors">
+<area shape="rect" id="node1" title="Clear the ALERT_STATUS register." alt="" coords="491,31,657,57"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#a8573c97f5310399cc7fb7a25b7cd5ac4" title="Initialize the device structure." alt="" coords="332,56,443,83"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,5,284,32"/>
+<area shape="rect" id="node4" href="$swiot1l__mqtt_8h.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="143,56,249,83"/>
+<area shape="rect" id="node5" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,56,60,83"/>
+</map>

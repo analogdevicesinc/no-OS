@@ -1,0 +1,23 @@
+<map id="no_os_get_unaligned_be24" name="no_os_get_unaligned_be24">
+<area shape="rect" id="node1" title=" " alt="" coords="812,267,1011,293"/>
+<area shape="rect" id="node2" href="$ad405x_8h.html#afc422a9dd5287bdd85ab5dc208414991" title="Read conversion data." alt="" coords="596,85,764,112"/>
+<area shape="rect" id="node4" href="$ade7913_8h.html#ab77f36317800804dc692df67ba2efdea" title="Read device register." alt="" coords="623,216,737,243"/>
+<area shape="rect" id="node13" href="$ade9153a_8h.html#a6a27a262a62f964b36a391d4a48ff19a" title="Ipeak val." alt="" coords="610,267,750,293"/>
+<area shape="rect" id="node14" href="$ade9153a_8h.html#a45a0ee96457ec333dbefeaed83b29384" title="Vpeak val." alt="" coords="608,317,752,344"/>
+<area shape="rect" id="node15" href="$ltc2992_8h.html#a01dc481b67cb8e663696ae65d65be645" title="Read raw data from device register." alt="" coords="613,452,747,479"/>
+<area shape="rect" id="node3" href="$ad405x_8h.html#ad8537455e65de0a05a94542e6fb39497" title="Trigger conversion and read data." alt="" coords="383,5,516,32"/>
+<area shape="rect" id="node5" href="$ade7913_8h.html#affe2c710bf923154606b4bbb9bd2a1d7" title="ADC not accesed during one period status." alt="" coords="360,56,539,83"/>
+<area shape="rect" id="node6" href="$ade7913_8h.html#aca4f2bfa1643d0ca56959b4b920789b0" title="CRC of config registers status." alt="" coords="374,107,525,133"/>
+<area shape="rect" id="node7" href="$ade7913_8h.html#a6c5a9b9d244eb8d592f694cc3ebc865f" title="Get synchronization counter value." alt="" coords="351,157,548,184"/>
+<area shape="rect" id="node8" href="$ade7913_8h.html#a1755d14d44a5427775abffdb159ce0cc" title="Get version product value." alt="" coords="369,209,530,250"/>
+<area shape="rect" id="node9" href="$ade7913_8h.html#a58e08cbf7c0230e4c2d8b203effce384" title="Initialize the device." alt="" coords="152,275,259,301"/>
+<area shape="rect" id="node11" href="$ade7913_8h.html#a4044929913dee523e72953d26b275ba8" title="IC config regs protection status." alt="" coords="361,325,537,352"/>
+<area shape="rect" id="node12" href="$ade7913_8h.html#af4617b5195956538abce707fb595e362" title="Read multiple devices." alt="" coords="108,351,303,377"/>
+<area shape="rect" id="node10" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,313,60,340"/>
+<area shape="rect" id="node16" href="$ltc2992_8h.html#abecde49247db59f84eb2ba3a8d2f7751" title="Get fault status." alt="" coords="382,427,517,453"/>
+<area shape="rect" id="node17" href="$ltc2992_8h.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="400,477,499,504"/>
+<area shape="rect" id="node18" href="$ltc2992_8h.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="374,528,525,555"/>
+<area shape="rect" id="node19" href="$ltc2992_8h.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="132,477,279,504"/>
+<area shape="rect" id="node20" href="$ltc2992_8h.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="118,528,293,555"/>
+<area shape="rect" id="node21" href="$ltc2992_8h.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="138,579,273,605"/>
+</map>

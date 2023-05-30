@@ -1,0 +1,32 @@
+<map id="adp1050_write" name="adp1050_write">
+<area shape="rect" id="node1" title="Write data to ADP1050." alt="" coords="912,729,1031,756"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#a81f834b12dccd706de08f2c3d6f1c83f" title="Change the CHIP/EEPROM password. TRIM password is the same with EEPROM password." alt="" coords="680,5,849,32"/>
+<area shape="rect" id="node3" href="$adp1050_8h.html#af30cb14703832c85fd7b42a1bf824ef6" title="Adjust filter settings of the normal mode compensator." alt="" coords="707,56,822,83"/>
+<area shape="rect" id="node4" href="$adp1050_8h.html#ad4dd86738d3cb2e195290dcff6bfaac0" title="Frequency synchronization of the PWM clock with an external clock Requires syni_desc to be initialize..." alt="" coords="691,107,839,133"/>
+<area shape="rect" id="node5" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="221,248,350,275"/>
+<area shape="rect" id="node7" href="$adp1050_8h.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="467,248,573,275"/>
+<area shape="rect" id="node9" href="$adp1050_8h.html#ab3b16c7a07e3c475059e0b1f31c04ab0" title="Lock CHIP/EEPROM password. TRIM passwor dis locked of the EEPROM password is locked." alt="" coords="690,856,839,883"/>
+<area shape="rect" id="node10" href="$adp1050_8h.html#acf4048a23d002f96e341267bfdeb0507" title="Enable or disbale the pulse skipping mode." alt="" coords="673,907,856,933"/>
+<area shape="rect" id="node11" href="$adp1050_8h.html#a5bb2e480ed792fa100b2fb4ea23c2a4d" title="Set VOUT duty cycle for requested channel." alt="" coords="423,603,617,629"/>
+<area shape="rect" id="node12" href="$adp1050_8h.html#a84fff15376ebe1860172704bff6695d2" title="Set requested ADP1050 channel in Open Loop operation mode." alt="" coords="196,653,375,680"/>
+<area shape="rect" id="node13" href="$adp1050_8h.html#ab8f5b8bd8048dbadf9b9ec50173c51aa" title="Set PWM modulation for requested channel." alt="" coords="665,957,864,984"/>
+<area shape="rect" id="node14" href="$adp1050_8h.html#a32c3b80439e7763db28ba844977aa755" title="Free the resources allocated by the adp1050_init()" alt="" coords="697,375,832,401"/>
+<area shape="rect" id="node16" href="$adp1050_8h.html#aef78c2007b18478bbc0187878ca669eb" title="Set current limit fast fault for overcurrent protection and current limit cycle&#45;by&#45;cycle reference." alt="" coords="690,1008,839,1035"/>
+<area shape="rect" id="node17" href="$adp1050_8h.html#a29f0826c58d2ba1dce0106101657b4ba" title="Set close loop operation." alt="" coords="429,501,611,528"/>
+<area shape="rect" id="node18" href="$adp1050_8h.html#adcfe5cb5bdc99c657d6f282ea0274070" title="Set current sense settings." alt="" coords="668,1059,861,1085"/>
+<area shape="rect" id="node19" href="$adp1050_8h.html#a53a89f096889ee3b07669a9fc1e3e825" title="Enable or disable voltage input feedforward for edge modulation." alt="" coords="669,1109,860,1136"/>
+<area shape="rect" id="node20" href="$adp1050_8h.html#acfa8d565f961b351f348c54f650d99b5" title="Set FLAGIN response to FLGI pin signal." alt="" coords="665,1160,864,1187"/>
+<area shape="rect" id="node21" href="$adp1050_8h.html#a70e4fb7682ef209fae24d94cd5580e31" title="Set PWM channel and frequency." alt="" coords="693,552,837,579"/>
+<area shape="rect" id="node22" href="$adp1050_8h.html#a814f3ee903f5659bef32c647966d843a" title="Set ADP1050 VIN on/off raw value for input voltage limiting." alt="" coords="699,1211,831,1237"/>
+<area shape="rect" id="node23" href="$adp1050_8h.html#a40f283584d4b3c7878b6eac3a672f7c9" title="Software reset the ADP1050." alt="" coords="674,1261,855,1288"/>
+<area shape="rect" id="node24" href="$adp1050_8h.html#afc314ab80bc8f5e20356cf5ac09b12e4" title="Trim IIN(CS1 pin)/VIN(VF pin)/VOUT(VS pin)." alt="" coords="464,805,576,832"/>
+<area shape="rect" id="node25" href="$adp1050_8h.html#a57b14659730225a28d765a5d4a9c7c1a" title="Unlock CHIP/EEPROM/TRIM password." alt="" coords="437,197,603,224"/>
+<area shape="rect" id="node26" href="$adp1050_8h.html#a20a8f5df60a258e07bbe64f4c66d071b" title="Set VOUT margins value." alt="" coords="681,1312,848,1339"/>
+<area shape="rect" id="node27" href="$adp1050_8h.html#a405544a81a0dec91aa7b6ccaf16ecf54" title="Set output voltage offset." alt="" coords="685,805,844,832"/>
+<area shape="rect" id="node28" href="$adp1050_8h.html#a06942e99daeb429b3da88ea7f7208c60" title="Set ADP1050 VOUT scale, regarding the resistor divider assigned to the VS pins." alt="" coords="687,451,842,477"/>
+<area shape="rect" id="node29" href="$adp1050_8h.html#ac232dae8089087167efe99933d37d1b7" title="Set ADP1050 VOUT transition rate." alt="" coords="699,1363,830,1389"/>
+<area shape="rect" id="node30" href="$adp1050_8h.html#adc1a5eddca26ebe15dd78c0cd5e7c60d" title="Set VOUT_COMMAND and VOUT_MAX values." alt="" coords="686,704,843,731"/>
+<area shape="rect" id="node6" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,287,148,313"/>
+<area shape="rect" id="node8" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="205,476,365,503"/>
+<area shape="rect" id="node15" href="$iio__adp1050_8h.html#a87f7c028317506b27121bc0282daf195" title="Free resources allocated by the init function." alt="" coords="206,324,365,351"/>
+</map>

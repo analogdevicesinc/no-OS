@@ -1,0 +1,15 @@
+<map id="afe_read_16bit_buff" name="afe_read_16bit_buff">
+<area shape="rect" id="node1" title="reads the 16bit value from the register and saves to a 16bitbuffer." alt="" coords="955,107,1105,133"/>
+<area shape="rect" id="node2" href="$afe__config_8h.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="592,56,663,83"/>
+<area shape="rect" id="node5" href="$afe__config_8h.html#a2bde554353ebc39a8173482742486ce6" title="reads angle registers." alt="" coords="769,157,892,184"/>
+<area shape="rect" id="node9" href="$afe__config_8h.html#a2c439b6d3229e353d9eef6b78da9d489" title="reads waveform buffer." alt="" coords="755,208,907,235"/>
+<area shape="rect" id="node10" href="$afe__config_8h.html#a15a51e39b44ded5b109e75d36622a1cb" title="sets ACCMODE register for nominal frequency, ICONSEL, VCONSEL." alt="" coords="759,107,902,133"/>
+<area shape="rect" id="node13" href="$afe__config_8h.html#ad83626fc28d6f9930cf411960fa5c195" title="configure WFB_CFB register, initialized with start filling" alt="" coords="785,5,877,32"/>
+<area shape="rect" id="node3" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,81,265,108"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,81,60,108"/>
+<area shape="rect" id="node6" href="$pqlib__afe_8h.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="572,165,683,192"/>
+<area shape="rect" id="node7" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="327,158,487,199"/>
+<area shape="rect" id="node8" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,136,248,163"/>
+<area shape="rect" id="node11" href="$pqlib__example_8h.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="548,107,707,133"/>
+<area shape="rect" id="node12" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="313,107,500,133"/>
+</map>

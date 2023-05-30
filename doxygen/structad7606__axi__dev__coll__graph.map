@@ -1,0 +1,9 @@
+<map id="ad7606_axi_dev" name="ad7606_axi_dev">
+<area shape="rect" id="node1" title="Structure for AXI FPGA cores." alt="" coords="130,288,258,315"/>
+<area shape="rect" id="node2" href="$structaxi__clkgen.html" title=" " alt="" coords="5,191,97,218"/>
+<area shape="rect" id="node3" href="$structspi__engine__offload__init__param.html" title="Structure containing the init parameters needed by the offload module." alt="" coords="122,184,266,225"/>
+<area shape="rect" id="node4" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="290,191,426,218"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="177,95,309,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="149,5,337,32"/>
+<area shape="rect" id="node7" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="334,95,526,121"/>
+</map>

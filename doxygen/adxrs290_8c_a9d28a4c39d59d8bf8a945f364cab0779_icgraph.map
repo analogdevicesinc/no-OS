@@ -1,0 +1,12 @@
+<map id="adxrs290_reg_read" name="adxrs290_reg_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="671,132,817,159"/>
+<area shape="rect" id="node2" href="$adxrs290_8h.html#af368749bc970398a575ef8417014848c" title="Get the high&#45;pass filter pole location." alt="" coords="465,5,604,32"/>
+<area shape="rect" id="node3" href="$adxrs290_8h.html#a8cab9a37aaeee40a1815ec52fab9924e" title="Get the low&#45;pass filter pole location." alt="" coords="467,56,602,83"/>
+<area shape="rect" id="node4" href="$adxrs290_8h.html#a577b03b60bb2ad4cd1713c1bf712368c" title=" " alt="" coords="288,157,399,184"/>
+<area shape="rect" id="node8" href="$adxrs290_8h.html#afc1c51c64e22a51dfac92899f21609d2" title="Set the low&#45;pass filter pole location." alt="" coords="466,157,603,184"/>
+<area shape="rect" id="node9" href="$adxrs290_8h.html#aaac78320a104deec1e5b3d21fc5105d6" title="Set the low&#45;pass filter pole location." alt="" coords="468,208,601,235"/>
+<area shape="rect" id="node10" href="$adxrs290_8h.html#ab4e680182efd5eb39184ea282cf56d4d" title="Set device operation mode." alt="" coords="447,259,623,285"/>
+<area shape="rect" id="node5" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="51,107,194,133"/>
+<area shape="rect" id="node6" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="5,157,240,184"/>
+<area shape="rect" id="node7" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="27,208,219,235"/>
+</map>

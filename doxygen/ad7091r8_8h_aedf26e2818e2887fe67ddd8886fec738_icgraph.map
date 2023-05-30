@@ -1,0 +1,13 @@
+<map id="ad7091r8_spi_reg_read" name="ad7091r8_spi_reg_read">
+<area shape="rect" id="node1" title=" " alt="" coords="856,81,1029,108"/>
+<area shape="rect" id="node2" href="$ad7091r8_8h.html#a40429299260cc7c1810b535a7bb4f07e" title=" " alt="" coords="638,5,786,32"/>
+<area shape="rect" id="node3" href="$ad7091r8_8h.html#a420a2870fd9a78afc10d726097c09e50" title=" " alt="" coords="638,56,786,83"/>
+<area shape="rect" id="node4" href="$ad7091r8_8h.html#aea7926691861dac9633c5525e80bc1c2" title=" " alt="" coords="637,107,787,133"/>
+<area shape="rect" id="node5" href="$ad7091r8_8h.html#abebb64ecf2aa02f00937291bbeae084f" title=" " alt="" coords="616,157,808,184"/>
+<area shape="rect" id="node6" href="$ad7091r8_8c.html#aeda1a717753c7bfacfb1c767762b25d2" title="Initiate a software reset or hardware reset through the RESET pin." alt="" coords="409,81,531,108"/>
+<area shape="rect" id="node9" href="$ad7091r8_8h.html#a7a246a61b90d79cb30bf8a897fc8aece" title=" " alt="" coords="373,132,567,159"/>
+<area shape="rect" id="node10" href="$ad7091r8_8h.html#a895fbeec7666e2c44ecaffa6dd2d1381" title=" " alt="" coords="399,183,541,209"/>
+<area shape="rect" id="node11" href="$ad7091r8_8h.html#a5b948870147de8f86b56a19dcb908423" title="Set device sleep mode." alt="" coords="372,233,568,260"/>
+<area shape="rect" id="node7" href="$ad7091r8_8h.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="213,157,324,184"/>
+<area shape="rect" id="node8" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,157,165,184"/>
+</map>

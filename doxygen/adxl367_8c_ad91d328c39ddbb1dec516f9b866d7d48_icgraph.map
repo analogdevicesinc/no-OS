@@ -1,0 +1,6 @@
+<map id="adxl367_get_nb_of_fifo_entries" name="adxl367_get_nb_of_fifo_entries">
+<area shape="rect" id="node1" title="Reads the number of FIFO entries." alt="" coords="705,5,879,47"/>
+<area shape="rect" id="node2" href="$adxl367_8h.html#ab7757e900ce82d9e6edb8d234c941337" title="Reads all available raw values from FIFO. If, after setting FIFO mode, any of x, y,..." alt="" coords="488,13,657,39"/>
+<area shape="rect" id="node3" href="$adxl367_8h.html#adb88147a4a46b716f0e0ea59751d789a" title="Reads converted values from FIFO. If, after setting FIFO mode, any of x, y, z, temp or adc aren&#39;t sel..." alt="" coords="229,13,440,39"/>
+<area shape="rect" id="node4" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,13,181,39"/>
+</map>

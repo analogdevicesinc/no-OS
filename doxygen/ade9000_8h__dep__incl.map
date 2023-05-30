@@ -1,0 +1,10 @@
+<map id="drivers/meter/ade9000/ade9000.h" name="drivers/meter/ade9000/ade9000.h">
+<area shape="rect" id="node1" title="Header file of ADE9000 Driver." alt="" coords="128,5,299,47"/>
+<area shape="rect" id="node2" href="$ade9000_8c.html" title="Implementation of ADE9000 Driver." alt="" coords="5,95,176,136"/>
+<area shape="rect" id="node3" href="$eval-ade9000_2src_2main_8c.html" title="Main function of ADE9000 example." alt="" coords="86,184,253,225"/>
+<area shape="rect" id="node4" href="$eval-ade9000_2src_2platform_2platform_8h.html" title="Defines common data to be used by ADE9000 example project." alt="" coords="405,95,582,136"/>
+<area shape="rect" id="node5" href="$eval-ade7913_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADE7913 example project." alt="" coords="277,184,491,225"/>
+<area shape="rect" id="node6" href="$interrupt_8c.html" title=" " alt="" coords="516,184,692,225"/>
+<area shape="rect" id="node7" href="$eval-ade7913_2src_2main_8c.html" title="Main function of ADE7913 example." alt="" coords="717,184,883,225"/>
+<area shape="rect" id="node8" href="$eval-ade9000_2src_2platform_2platform_8c.html" title="Defines common data to be used by ADE9000 example project." alt="" coords="908,184,1084,225"/>
+</map>

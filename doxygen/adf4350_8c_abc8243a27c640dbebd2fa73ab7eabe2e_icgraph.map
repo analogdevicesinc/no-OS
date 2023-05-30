@@ -1,0 +1,9 @@
+<map id="adf4350_write" name="adf4350_write">
+<area shape="rect" id="node1" title="Writes 4 bytes of data to ADF4350." alt="" coords="945,42,1060,69"/>
+<area shape="rect" id="node2" href="$adf4350_8c.html#a924b7827392173a147dd0a248e9f2a9e" title="Updates the registers values." alt="" coords="739,42,897,69"/>
+<area shape="rect" id="node3" href="$adf4350_8h.html#a271f1050395c7b02bf8dd6624895ea58" title="Powers down the PLL." alt="" coords="507,5,691,47"/>
+<area shape="rect" id="node4" href="$adf4350_8c.html#a36f6fb1f03a7c1b263bdf4787defbeb0" title="Sets the ADF4350 frequency." alt="" coords="531,71,666,98"/>
+<area shape="rect" id="node5" href="$adf4350_8h.html#a8c919c6b19796b92b775d6727856ef46" title="Stores PLL 0 frequency in Hz." alt="" coords="275,64,459,105"/>
+<area shape="rect" id="node6" href="$adf4350_8h.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="108,71,227,98"/>
+<area shape="rect" id="node7" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,71,60,98"/>
+</map>

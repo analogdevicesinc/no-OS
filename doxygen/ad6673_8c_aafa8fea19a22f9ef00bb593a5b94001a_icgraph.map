@@ -1,0 +1,5 @@
+<map id="ad6673_transfer" name="ad6673_transfer">
+<area shape="rect" id="node1" title="Initiates a transfer and waits for the operation to end. Note: This function may be called after a sh..." alt="" coords="393,31,521,57"/>
+<area shape="rect" id="node2" href="$ad6673_8h.html#a98bd7b00060d18b6e58080966d2e5c64" title="Configures the JESD204B interface." alt="" coords="167,5,345,32"/>
+<area shape="rect" id="node3" href="$ad6673_8h.html#a9228c7d4c22253ce20062937317ccf98" title="Configures the device." alt="" coords="5,31,119,57"/>
+</map>

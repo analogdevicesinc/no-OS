@@ -1,0 +1,53 @@
+<map id="MYKONOS_waitArmCmdStatus" name="MYKONOS_waitArmCmdStatus">
+<area shape="rect" id="node1" title="Mykonos ARM command status wait function polls command status until opcode completes." alt="" coords="871,867,1092,893"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#afffc680c61b58cea30b473cfe3dfb935" title="Aborts from an on going ARM init calibration operation." alt="" coords="613,5,791,32"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a55197f5ddf2a415cd790f032c717dd24" title="Get the Suspended or Resumed state for tracking calibrations." alt="" coords="591,56,813,83"/>
+<area shape="rect" id="node4" href="$mykonos_8h.html#a28f4d05559a096dd207c98fcb6c42e11" title="This function reads the CLGC calibration status from the Mykonos ARM processor." alt="" coords="609,107,795,133"/>
+<area shape="rect" id="node5" href="$mykonos_8h.html#a1949b1602f06e1acd1d229be5e43fdbc" title="This function reads the current error counters for all the DPD error codes from mykonosDpdErrors_t." alt="" coords="587,157,817,184"/>
+<area shape="rect" id="node6" href="$mykonos_8h.html#a3e1602a28ebc2d52ffe0f65fe21aebbf" title="This function reads the DPD calibration status from the Mykonos ARM processor." alt="" coords="611,208,793,235"/>
+<area shape="rect" id="node7" href="$mykonos_8h.html#a74d01791d37c66e69aaa80bcdd9e6120" title="Gets the device initialization calibration status." alt="" coords="603,309,801,336"/>
+<area shape="rect" id="node8" href="$mykonos_8h.html#a2e91d2b8e26d53381928a63ae3bf62e8" title="Blocking waits for the Mykonos initialization calibrations to complete." alt="" coords="320,284,492,311"/>
+<area shape="rect" id="node9" href="$mykonos_8h.html#aabbaeaa1805920d18d0fd2eeab50ccb9" title="Reads back the currently enabled Observation Rx channel in the radioOn state." alt="" coords="587,360,817,387"/>
+<area shape="rect" id="node10" href="$mykonos_8h.html#a63633dd49c522d2bbba8541f44b9553a" title="Returns the status of the ORxQEC tracking calibration." alt="" coords="599,411,805,437"/>
+<area shape="rect" id="node11" href="$mykonos_8h.html#a1b58e3b590e3b97704cb1185279bdd73" title="This function will read the current path delay settings for the selected calibration." alt="" coords="611,461,793,488"/>
+<area shape="rect" id="node12" href="$mykonos_8h.html#aab5d1b83d40ee33518afd5f96e2c7855" title="Gets the RF PLL local oscillator frequency (RF carrier frequency)." alt="" coords="595,512,809,539"/>
+<area shape="rect" id="node13" href="$mykonos_8h.html#a9e5988b7e1412cc99086aa3a7a6920e9" title="Gets the RF PLL loop filter bandwidth and stability." alt="" coords="597,563,807,589"/>
+<area shape="rect" id="node14" href="$mykonos_8h.html#a6fc181c74969b9044a2b00c637f22a80" title="Returns the status of the RxQEC tracking calibration." alt="" coords="603,613,801,640"/>
+<area shape="rect" id="node15" href="$mykonos_8h.html#a766a557775138a0d67c5a7aecf4532eb" title="Get the Suspended or Resumed state for individual tracking calibration." alt="" coords="589,664,815,691"/>
+<area shape="rect" id="node16" href="$mykonos_8h.html#a6368877b1d30bf37cd5f9ec11ef25aa5" title="Returns the status of the TxLOL external tracking calibration." alt="" coords="606,715,798,741"/>
+<area shape="rect" id="node17" href="$mykonos_8h.html#a5af827cff44f637f2055bb9f87d0fd8e" title="Returns the status of the TxQEC tracking calibration." alt="" coords="603,765,801,792"/>
+<area shape="rect" id="node18" href="$mykonos_8h.html#a5a2956cea73829d4d357dbf74773c249" title="This function reads the VSWR calibration status from the Mykonos ARM processor." alt="" coords="607,816,797,843"/>
+<area shape="rect" id="node19" href="$mykonos_8h.html#a422542bd98f4e9feff94afd1709674e2" title="Instructs the ARM processor to move the radio state to the off state." alt="" coords="629,867,775,893"/>
+<area shape="rect" id="node20" href="$mykonos_8h.html#af504d6da479a8a58f311d61174029284" title="Instructs the ARM processor to move the radio state to the Radio ON state." alt="" coords="629,917,775,944"/>
+<area shape="rect" id="node21" href="$mykonos_8h.html#af1f706ec4634e43391b1ef7c24fb3f3b" title="Low level helper function used by Mykonos API to read the ARM memory config structures." alt="" coords="606,1019,798,1045"/>
+<area shape="rect" id="node28" href="$mykonos_8h.html#a1fa7fc3db564c9c22db23af155cfd645" title="Suspend or resume tracking calibrations in RADIO_ON." alt="" coords="7,976,229,1003"/>
+<area shape="rect" id="node29" href="$mykonos_8h.html#acc5a05a9ab38cfe8bbdb737139a1d6df" title="Suspend or resume individual tracking calibration." alt="" coords="6,1212,230,1239"/>
+<area shape="rect" id="node31" href="$mykonos_8h.html#a1e96bc6fdec13e2b6b775f8815e06c04" title="Reschedules a tracking calibration to run. Can be used to override the tracking calibration timer and..." alt="" coords="581,1120,823,1147"/>
+<area shape="rect" id="node32" href="$mykonos_8h.html#a4a9f359dbf62566b362385121df42fd2" title="This function resets the DPD model." alt="" coords="625,1171,779,1197"/>
+<area shape="rect" id="node33" href="$mykonos_8h.html#a4f715363b526e4374ec31e0a5a68e1c2" title="Performs reset to the External Tx LO Leakage tracking calibration channel estimate." alt="" coords="583,1221,821,1248"/>
+<area shape="rect" id="node34" href="$mykonos_8h.html#a111d88c14bfc69497f06e50c1cd6fd81" title="This function will allow loading of the DPD model file." alt="" coords="599,1272,805,1299"/>
+<area shape="rect" id="node35" href="$mykonos__gpio_8h.html#a0d42a34f474c5ed45aaca8bc31e162df" title="Sets the input and output GPIO pin selections for ARM related signals." alt="" coords="307,1391,505,1417"/>
+<area shape="rect" id="node37" href="$mykonos_8h.html#a71a2d8a03ab5af56cb668d7bd4dacf9f" title="This function updates the CLGC desired gain parameter." alt="" coords="615,1373,789,1400"/>
+<area shape="rect" id="node38" href="$mykonos_8h.html#abbfa96d04ff534775275507b9dcedfa4" title="This function sets the state of the DPD actuator." alt="" coords="604,1424,800,1451"/>
+<area shape="rect" id="node39" href="$mykonos_8h.html#a6188d54bbdf9830caf2d7a42c8f4a93f" title="Powers up or down the Observation Rx signal chain in the radioOn state." alt="" coords="587,1475,817,1501"/>
+<area shape="rect" id="node40" href="$mykonos_8h.html#a42e222e6dc5237978034cca4582f83b1" title="Configures the Radio power up/down control for Rx and Tx paths to be controlled by pins (TX1/2_ENABLE..." alt="" coords="279,1509,533,1536"/>
+<area shape="rect" id="node41" href="$mykonos_8h.html#a98d61cecb6eed941484e6db331da2ec8" title="Sets the RF PLL local oscillator frequency (RF carrier frequency)." alt="" coords="596,1576,808,1603"/>
+<area shape="rect" id="node42" href="$mykonos_8h.html#aeeb1bc8b52c08d6855c6aeaf6acc518e" title="Sets the RF PLL loop filter bandwith." alt="" coords="597,1627,807,1653"/>
+<area shape="rect" id="node43" href="$mykonos_8h.html#ad19505aeda892f3f4754fb7056492dc9" title="Selects the Sniffer RF input to use for the observation receiver when in ObsRx pin mode and ORX_MODE ..." alt="" coords="597,1677,807,1704"/>
+<area shape="rect" id="node44" href="$mykonos_8h.html#a098948dc72e67594cf6e5cf65743f049" title="Low level helper function used by Mykonos API to write the ARM memory config structures." alt="" coords="604,1728,800,1755"/>
+<area shape="rect" id="node22" href="$mykonos_8h.html#a0d0bab75bcba76495c4774b2d13773fe" title="Get configuration for CLGC Tx attenuation tuning range." alt="" coords="295,1070,517,1111"/>
+<area shape="rect" id="node23" href="$mykonos_8h.html#a3032e6143e5a20db8d799601416686b3" title=" " alt="" coords="313,1136,499,1163"/>
+<area shape="rect" id="node24" href="$mykonos_8h.html#a12e2744cbdf0fc0cf5f39d2e420dbac2" title="Get configuration for DPD actuator check." alt="" coords="287,867,525,893"/>
+<area shape="rect" id="node25" href="$mykonos_8h.html#a09af6d0909a6485db03fdf0c28fe5d80" title="Get configuration for bypassing DPD actuator." alt="" coords="291,917,521,944"/>
+<area shape="rect" id="node26" href="$mykonos_8h.html#af5b1d7b5af3d269ef37c0eb68f59ff74" title=" " alt="" coords="315,968,497,995"/>
+<area shape="rect" id="node27" href="$mykonos_8h.html#ab18eda84d5bba4b6a784a23c39e4bd21" title="Reads back which ARM tracking cals are enabled." alt="" coords="281,1187,531,1213"/>
+<area shape="rect" id="node30" href="$mykonos_8h.html#a2e643b611e680a22090f097baeb40041" title=" " alt="" coords="311,1019,501,1045"/>
+<area shape="rect" id="node36" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="5,1509,231,1536"/>
+<area shape="rect" id="node45" href="$mykonos_8h.html#a366f39050ef5877e4f98ccfe0744b284" title="This function will configure CLGC settings." alt="" coords="325,1829,487,1856"/>
+<area shape="rect" id="node46" href="$mykonos_8h.html#a9abc5ff152769a26905f0a454d1713ad" title="This function will configure DPD settings." alt="" coords="326,1880,486,1907"/>
+<area shape="rect" id="node47" href="$mykonos_8h.html#a7baa5941b75ba68d467285adda7dc8b5" title="This function, when called during RadioOff, will configure VSWR settings." alt="" coords="323,1611,489,1637"/>
+<area shape="rect" id="node48" href="$mykonos_8h.html#a16cf26692afd555ee9e355493f365679" title="CLGC feature to set the TX attenuation tuning range to a relative range around a nominal value." alt="" coords="296,1662,516,1703"/>
+<area shape="rect" id="node49" href="$mykonos_8h.html#a476245e3463907bbcc2a6a227abc5700" title="Sets the default Obs Rx channel to enter when device moves from radioOff to radioOn." alt="" coords="289,1560,523,1587"/>
+<area shape="rect" id="node50" href="$mykonos_8h.html#a6dde751ed5cc38f1086a158760e5bb9d" title="DPD feature to set the actuator gain difference check. If the gain before and after the actuator exce..." alt="" coords="288,1728,524,1755"/>
+<area shape="rect" id="node51" href="$mykonos_8h.html#aec69a32ff6353cfe1178f07c584f90ce" title="DPD feature to set the bypassing actuator when Tx signal power is below a programmable threshold give..." alt="" coords="291,1779,521,1805"/>
+</map>

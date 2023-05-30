@@ -1,0 +1,16 @@
+<map id="drivers/adc/ad4858/ad4858.c" name="drivers/adc/ad4858/ad4858.c">
+<area shape="rect" id="node1" title="Source file for the ad4858 drivers." alt="" coords="175,5,322,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="7,169,74,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="181,244,252,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="295,244,378,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="670,95,741,121"/>
+<area shape="rect" id="node6" href="$ad4858_8h.html" title=" " alt="" coords="426,95,508,121"/>
+<area shape="rect" id="node13" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="533,95,646,121"/>
+<area shape="rect" id="node14" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="24,95,160,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="602,244,673,271"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="286,169,386,196"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="462,169,560,196"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="584,169,691,196"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="766,169,875,196"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="786,244,854,271"/>
+</map>

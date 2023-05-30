@@ -1,0 +1,13 @@
+<map id="projects/ad74413r/src/examples/dummy/dummy_example.c" name="projects/ad74413r/src/examples/dummy/dummy_example.c">
+<area shape="rect" id="node1" title="DUMMY example header for ad74413r project." alt="" coords="276,5,475,61"/>
+<area shape="rect" id="node2" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8h.html" title="DUMMY example header for ad74413r project." alt="" coords="5,109,153,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="177,109,304,136"/>
+<area shape="rect" id="node4" href="$ad74413r_8h.html" title="Header file of AD74413r Driver." alt="" coords="328,109,423,136"/>
+<area shape="rect" id="node9" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="516,184,629,211"/>
+<area shape="rect" id="node10" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="615,109,751,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="339,259,409,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="155,184,238,211"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="262,184,361,211"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="385,184,491,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="654,184,721,211"/>
+</map>

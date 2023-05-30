@@ -1,0 +1,4 @@
+<map id="ad4110_wait_for_rdy_low" name="ad4110_wait_for_rdy_low">
+<area shape="rect" id="node1" title="Wait for RDY bit to go low indicating conversion completion." alt="" coords="228,5,416,32"/>
+<area shape="rect" id="node2" href="$ad4110_8h.html#a8a37ca826022ca99eb674bfded3cb7fa" title="ADC data read in single conversion mode." alt="" coords="5,5,180,32"/>
+</map>

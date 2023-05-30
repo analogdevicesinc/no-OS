@@ -1,0 +1,4 @@
+<map id="adin1110_set_mac_addr" name="adin1110_set_mac_addr">
+<area shape="rect" id="node1" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="207,13,387,39"/>
+<area shape="rect" id="node2" href="$adin1110_8h.html#a32b2d0fa3b54c8b0219e6b8ed5992d14" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="5,5,159,47"/>
+</map>

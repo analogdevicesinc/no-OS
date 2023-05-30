@@ -1,0 +1,14 @@
+<map id="drivers/frequency/admv1013/admv1013.c" name="drivers/frequency/admv1013/admv1013.c">
+<area shape="rect" id="node1" title="Implementation of admv1013 Driver." alt="" coords="165,5,374,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="46,95,125,121"/>
+<area shape="rect" id="node3" href="$admv1013_8h.html" title="Header file for admv1013 Driver." alt="" coords="149,95,252,121"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="428,95,538,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="280,95,390,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="37,244,108,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="164,244,247,271"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="23,169,122,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="146,169,246,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="290,244,361,271"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="464,169,532,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="372,169,439,196"/>
+</map>

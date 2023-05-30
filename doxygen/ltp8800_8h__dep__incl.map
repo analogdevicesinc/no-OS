@@ -1,0 +1,10 @@
+<map id="drivers/power/ltp8800/ltp8800.h" name="drivers/power/ltp8800/ltp8800.h">
+<area shape="rect" id="node1" title=" " alt="" coords="313,5,477,47"/>
+<area shape="rect" id="node2" href="$iio__ltp8800_8c.html" title="Source file for the LTP8800 IIO Driver." alt="" coords="5,206,169,247"/>
+<area shape="rect" id="node3" href="$iio__ltp8800_8h.html" title="Header file for the LTP8800 IIO Driver." alt="" coords="125,102,289,143"/>
+<area shape="rect" id="node5" href="$ltp8800_8c.html" title=" " alt="" coords="313,102,477,143"/>
+<area shape="rect" id="node6" href="$ltp8800_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltp8800 examples." alt="" coords="502,102,694,143"/>
+<area shape="rect" id="node8" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltp8800 project." alt="" coords="719,95,885,151"/>
+<area shape="rect" id="node4" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for ltp8800 project." alt="" coords="193,199,368,255"/>
+<area shape="rect" id="node7" href="$ltp8800_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltp8800 examples." alt="" coords="503,206,693,247"/>
+</map>

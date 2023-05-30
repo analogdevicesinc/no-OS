@@ -1,0 +1,9 @@
+<map id="no_os_list_get_first" name="no_os_list_get_first">
+<area shape="rect" id="node1" title=" " alt="" coords="739,67,885,94"/>
+<area shape="rect" id="node2" href="$no__os__dma_8c.html#a6f9f8b3688bec7db3fc05dc892da8a37" title="Abort the ongoing and any other future transfers scheduled for a channel." alt="" coords="514,42,685,69"/>
+<area shape="rect" id="node7" href="$xilinx__gpio__irq_8c.html#a607992ac5707856c00e5c9ae436269e9" title="Remove the GPIO IRQ controller." alt="" coords="508,93,691,119"/>
+<area shape="rect" id="node3" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="279,5,455,47"/>
+<area shape="rect" id="node6" href="$stm32__spi_8c.html#a50f1db6c12a130f00d92ae3acf9c0589" title=" " alt="" coords="273,71,460,98"/>
+<area shape="rect" id="node4" href="$stm32__spi_8c.html#adfcb8034a96850d7940dd91d67f273eb" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="24,5,207,47"/>
+<area shape="rect" id="node5" href="$stm32__spi_8c.html#a8f89053d3059828cf294d3061322d974" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,71,225,98"/>
+</map>

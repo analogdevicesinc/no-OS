@@ -1,0 +1,13 @@
+<map id="drivers/adc/ad717x/ad717x.c" name="drivers/adc/ad717x/ad717x.c">
+<area shape="rect" id="node1" title="AD717X implementation file. Devices: AD7172&#45;2, AD7172&#45;4, AD7173&#45;8, AD7175&#45;2, AD7175&#45;8,..." alt="" coords="243,5,389,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="113,244,183,271"/>
+<area shape="rect" id="node3" href="$ad717x_8h.html" title="AD717X header file. Devices: AD7172&#45;2, AD7172&#45;4, AD7173&#45;8, AD7175&#45;2, AD7175&#45;8, AD7176&#45;2,..." alt="" coords="188,95,271,121"/>
+<area shape="rect" id="node8" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="496,95,605,121"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="347,95,458,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="207,244,278,271"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="267,169,365,196"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="91,169,191,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,244,88,271"/>
+<area shape="rect" id="node9" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="531,169,599,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="440,169,507,196"/>
+</map>

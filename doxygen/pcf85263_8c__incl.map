@@ -1,0 +1,14 @@
+<map id="drivers/rtc/pcf85263/pcf85263.c" name="drivers/rtc/pcf85263/pcf85263.c">
+<area shape="rect" id="node1" title="Implementation of PCF85263 Driver." alt="" coords="102,5,254,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="8,244,79,271"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="31,95,99,121"/>
+<area shape="rect" id="node4" href="$pcf85263_8h.html" title="Header file of pcf85263 Driver." alt="" coords="284,95,379,121"/>
+<area shape="rect" id="node10" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="461,95,575,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="123,95,233,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="412,244,483,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="296,169,367,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="172,169,272,196"/>
+<area shape="rect" id="node9" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="442,169,541,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="181,244,263,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="81,169,147,196"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="drivers/adc/ad4170/ad4170.c" name="drivers/adc/ad4170/ad4170.c">
+<area shape="rect" id="node1" title="Source file for the ad4170 driver." alt="" coords="433,5,580,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,72,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="74,244,145,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="169,244,252,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="770,95,841,121"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="917,95,1027,121"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="827,169,941,196"/>
+<area shape="rect" id="node10" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="588,95,695,121"/>
+<area shape="rect" id="node12" href="$ad4170_8h.html" title="Header file for the ad4170 driver." alt="" coords="407,95,489,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="965,169,1033,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="519,244,590,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="728,169,803,196"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="249,169,349,196"/>
+<area shape="rect" id="node14" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="547,169,653,196"/>
+<area shape="rect" id="node15" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="373,169,472,196"/>
+</map>

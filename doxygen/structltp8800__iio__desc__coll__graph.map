@@ -1,0 +1,18 @@
+<map id="ltp8800_iio_desc" name="ltp8800_iio_desc">
+<area shape="rect" id="node1" title="Structure holding the LTP8800 IIO device descriptor." alt="" coords="1185,213,1316,240"/>
+<area shape="rect" id="node2" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="957,113,1045,140"/>
+<area shape="rect" id="node3" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="689,93,785,120"/>
+<area shape="rect" id="node4" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="377,24,479,51"/>
+<area shape="rect" id="node5" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="372,87,484,113"/>
+<area shape="rect" id="node6" href="$structscan__type.html" title=" " alt="" coords="384,137,472,164"/>
+<area shape="rect" id="node7" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="663,160,812,187"/>
+<area shape="rect" id="node8" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="339,188,517,215"/>
+<area shape="rect" id="node9" href="$structltp8800__dev.html" title=" " alt="" coords="949,247,1052,273"/>
+<area shape="rect" id="node10" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="669,291,805,317"/>
+<area shape="rect" id="node11" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="362,251,494,277"/>
+<area shape="rect" id="node12" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,251,193,277"/>
+<area shape="rect" id="node13" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="332,309,524,336"/>
+<area shape="rect" id="node14" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="676,361,799,388"/>
+<area shape="rect" id="node15" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="10,385,189,412"/>
+<area shape="rect" id="node16" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="355,423,501,449"/>
+</map>

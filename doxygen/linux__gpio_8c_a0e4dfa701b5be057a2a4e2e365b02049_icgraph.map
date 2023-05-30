@@ -1,0 +1,4 @@
+<map id="linux_gpio_set_value" name="linux_gpio_set_value">
+<area shape="rect" id="node1" title="Set the value of the specified GPIO." alt="" coords="207,13,365,39"/>
+<area shape="rect" id="node2" href="$linux__gpio_8c.html#a86013356654f4ae784b94f479ecdbf08" title="Enable the output direction of the specified GPIO." alt="" coords="5,5,159,47"/>
+</map>

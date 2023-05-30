@@ -1,0 +1,17 @@
+<map id="projects/adxrs290&#45;pmdz/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c" name="projects/adxrs290&#45;pmdz/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO trigger example for iio_demo project." alt="" coords="201,5,400,76"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8h.html" title="IIO timer trigger example header for iio_demo project." alt="" coords="5,124,212,151"/>
+<area shape="rect" id="node3" href="$iio__adxrs290_8h.html" title="Implementation of ADXRS290 iio." alt="" coords="490,124,607,151"/>
+<area shape="rect" id="node8" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="429,199,527,225"/>
+<area shape="rect" id="node14" title=" " alt="" coords="339,124,465,151"/>
+<area shape="rect" id="node15" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="191,423,291,449"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="475,348,569,375"/>
+<area shape="rect" id="node5" title=" " alt="" coords="155,497,238,524"/>
+<area shape="rect" id="node6" title=" " alt="" coords="476,497,547,524"/>
+<area shape="rect" id="node7" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="574,423,745,449"/>
+<area shape="rect" id="node9" href="$iio_8h.html" title="Header file of iio." alt="" coords="426,273,477,300"/>
+<area shape="rect" id="node13" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="669,273,765,300"/>
+<area shape="rect" id="node10" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="337,348,443,375"/>
+<area shape="rect" id="node11" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="315,423,449,449"/>
+<area shape="rect" id="node12" title=" " alt="" coords="327,497,397,524"/>
+</map>

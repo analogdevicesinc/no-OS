@@ -1,0 +1,4 @@
+<map id="adis_read_sync_4khz" name="adis_read_sync_4khz">
+<area shape="rect" id="node1" title="Read 4khz internal sync enable bit value." alt="" coords="208,13,368,39"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="5,5,160,47"/>
+</map>
