@@ -1,0 +1,25 @@
+<map id="include/no_os_init.h" name="include/no_os_init.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1062,5,1213,31"/>
+<area shape="rect" id="Node000002" href="$max32650_2maxim__init_8c.html" title=" " alt="" coords="5,79,189,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1048,24,679,41,441,57,202,81,190,83,189,78,201,76,441,52,678,35,1048,19"/>
+<area shape="rect" id="Node000003" href="$max32655_2maxim__init_8c.html" title=" " alt="" coords="213,79,397,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1048,27,763,46,587,61,410,81,398,83,397,78,409,76,586,56,763,40,1048,21"/>
+<area shape="rect" id="Node000004" href="$max32660_2maxim__init_8c.html" title=" " alt="" coords="421,79,605,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1049,30,851,51,618,81,606,83,605,78,617,76,850,46,1048,25"/>
+<area shape="rect" id="Node000005" href="$max32662_2maxim__init_8c.html" title=" " alt="" coords="629,79,813,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1064,36,814,83,813,77,1063,31"/>
+<area shape="rect" id="Node000006" href="$max32665_2maxim__init_8c.html" title=" " alt="" coords="837,79,1021,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1095,38,980,81,978,76,1094,33"/>
+<area shape="rect" id="Node000007" href="$max32670_2maxim__init_8c.html" title=" " alt="" coords="1045,79,1229,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1140,44,1140,79,1135,79,1135,44"/>
+<area shape="rect" id="Node000008" href="$max32690_2maxim__init_8c.html" title=" " alt="" coords="1253,79,1437,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1181,33,1296,76,1294,81,1179,38"/>
+<area shape="rect" id="Node000009" href="$max78000_2maxim__init_8c.html" title=" " alt="" coords="1461,79,1645,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1212,31,1462,77,1461,83,1211,36"/>
+<area shape="rect" id="Node000010" href="$ad-acevsecrdset-sl_2src_2main_8c.html" title="Main file for the stout project. This includes general initialization routines for the uC." alt="" coords="1670,79,1855,119"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1227,25,1425,46,1658,76,1670,78,1669,83,1657,81,1424,52,1226,30"/>
+<area shape="rect" id="Node000011" href="$apard32690_2src_2examples_2main_8c.html" title="Main file for the apard32690 project." alt="" coords="1879,79,2041,119"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1226,20,1513,39,1690,55,1868,76,1880,78,1879,83,1868,81,1690,60,1512,44,1226,26"/>
+<area shape="rect" id="Node000012" href="$example_8c.html" title="Implementation of ssd1306 example for demo project." alt="" coords="2065,79,2287,119"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1226,20,1588,38,1820,54,2054,76,2065,77,2064,83,2053,81,1819,60,1588,43,1226,25"/>
+</map>

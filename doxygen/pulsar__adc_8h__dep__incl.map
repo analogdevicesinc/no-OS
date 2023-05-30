@@ -1,0 +1,20 @@
+<map id="drivers/adc/pulsar_adc/pulsar_adc.h" name="drivers/adc/pulsar_adc/pulsar_adc.h">
+<area shape="rect" id="Node000001" title="Header file for pulsar_adc Driver." alt="" coords="344,5,483,45"/>
+<area shape="rect" id="Node000002" href="$iio__pulsar__adc_8c.html" title="Implementation of pulsar_adc IIO Driver." alt="" coords="5,203,165,243"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="331,36,263,44,193,56,133,73,111,83,97,95,83,120,78,150,79,178,83,203,78,204,74,179,73,149,78,119,93,92,109,79,132,68,192,51,262,38,330,30"/>
+<area shape="rect" id="Node000003" href="$iio__pulsar__adc_8h.html" title="Header file for PULSAR_ADC IIO interface." alt="" coords="107,101,269,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="356,53,235,103,233,98,354,48"/>
+<area shape="rect" id="Node000004" href="$pulsar-adc_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example header for eval&#45;pulsar_adc project." alt="" coords="197,196,395,251"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="372,56,352,74,334,95,321,120,312,147,301,196,296,195,306,145,316,118,330,92,348,70,369,52"/>
+<area shape="rect" id="Node000005" href="$pulsar__adc_8c.html" title="Implementation of pulsar_adc Driver." alt="" coords="344,101,483,141"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="416,59,416,101,411,101,411,59"/>
+<area shape="rect" id="Node000006" href="$pulsar-adc_2src_2common_2common__data_8c.html" title="Defines common data to be used by pulsar&#45;adc examples." alt="" coords="423,203,638,243"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="458,52,479,70,497,92,512,120,522,151,532,203,526,204,517,152,507,122,492,95,475,74,454,56"/>
+<area shape="rect" id="Node000007" href="$pulsar-adc_2src_2common_2common__data_8h.html" title="Defines common data to be used by pulsar&#45;adc examples." alt="" coords="558,101,773,141"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="478,48,615,98,613,103,476,53"/>
+<area shape="rect" id="Node000008" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of IIO example for basic_demo project." alt="" coords="797,93,995,148"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="496,38,786,91,797,93,796,98,785,96,495,43"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="161,152,106,205,103,201,157,148"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="220,148,269,194,266,198,217,152"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="631,151,557,205,554,201,628,147"/>
+</map>

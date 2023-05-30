@@ -1,0 +1,11 @@
+<map id="projects/adf4030/src/platform" name="projects/adf4030/src/platform">
+<area shape="rect" id="node2" href="dir_726889cdbfdc5bfddf743fa2d3605ba8.html" title="mbed" alt="" coords="55,63,113,88"/>
+<area shape="rect" id="node3" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="5,136,72,161"/>
+<area shape="poly" id="edge1" href="dir_000782_000430.html" alt="" coords="79,90,56,126,51,123,74,87"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000782_000430.html" title="2" alt="" coords="58,118,68,133"/>
+<area shape="rect" id="node4" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="96,136,165,161"/>
+<area shape="poly" id="edge2" href="dir_000782_000627.html" alt="" coords="94,87,118,123,113,126,89,90"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000782_000627.html" title="2" alt="" coords="116,109,125,123"/>
+<area shape="rect" id="clust2" href="dir_2346f5ea4e24de06cca72dc49b8064e6.html" alt="" coords="44,52,228,99"/>
+<area shape="rect" id="clust1" href="dir_05b63baa06f87808bbaf15da41298a69.html" title="src" alt="" coords="33,16,239,109"/>
+</map>

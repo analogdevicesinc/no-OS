@@ -1,0 +1,25 @@
+<map id="drivers/axi_core/iio_axi_adc/iio_axi_adc.h" name="drivers/axi_core/iio_axi_adc/iio_axi_adc.h">
+<area shape="rect" id="Node000001" title="Header file of iio_axi_adc." alt="" coords="197,5,365,45"/>
+<area shape="rect" id="Node000002" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="82,93,176,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,48,165,89,163,84,243,43"/>
+<area shape="rect" id="Node000006" href="$axi__adc__core_8h.html" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="222,93,340,119"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="284,46,284,79,278,79,278,46"/>
+<area shape="rect" id="Node000009" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="364,93,462,119"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="314,43,383,84,380,88,311,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="41,240,124,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,120,44,138,26,152,13,168,9,185,16,201,31,217,50,231,47,235,28,221,12,204,4,185,8,165,23,148,41,134,81,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="242,240,312,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="147,117,207,165,262,227,258,231,203,169,144,121"/>
+<area shape="rect" id="Node000005" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="22,167,193,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="128,120,118,154,112,153,123,118"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="136,190,238,232,236,237,134,194"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="283,119,280,226,275,226,278,119"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="319,167,419,192"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="297,117,346,156,342,160,293,121"/>
+<area shape="poly" id="edge11_Node000007_Node000003" title=" " alt="" coords="324,195,138,240,136,235,322,189"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="356,194,304,234,301,229,353,190"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="336,240,407,265"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="372,192,373,226,368,227,367,192"/>
+<area shape="poly" id="edge13_Node000009_Node000004" title=" " alt="" coords="423,118,437,153,439,174,432,194,416,208,389,220,327,241,325,236,387,216,413,203,428,190,434,173,432,154,418,120"/>
+<area shape="poly" id="edge14_Node000009_Node000007" title=" " alt="" coords="408,120,386,156,381,154,403,118"/>
+</map>

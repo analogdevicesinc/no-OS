@@ -1,0 +1,15 @@
+<map id="drivers/platform/aducm3029/aducm3029_uart_stdio.h" name="drivers/platform/aducm3029/aducm3029_uart_stdio.h">
+<area shape="rect" id="Node000001" title="Header file for UART driver stdout/stdin redirection." alt="" coords="281,5,487,45"/>
+<area shape="rect" id="Node000002" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="5,101,160,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="311,52,144,103,143,98,309,47"/>
+<area shape="rect" id="Node000003" href="$aducm3029__flash__demo_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="185,101,359,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="352,56,296,103,293,99,349,52"/>
+<area shape="rect" id="Node000004" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="384,93,611,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="419,52,467,91,464,95,416,56"/>
+<area shape="rect" id="Node000007" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="635,93,821,148"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="468,46,636,92,634,97,466,52"/>
+<area shape="rect" id="Node000005" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="259,196,485,251"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="455,159,406,198,403,194,452,155"/>
+<area shape="rect" id="Node000006" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="509,196,736,251"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="543,155,592,194,588,198,539,159"/>
+</map>

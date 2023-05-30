@@ -1,0 +1,46 @@
+<map id="include/no_os_rtc.h" name="include/no_os_rtc.h">
+<area shape="rect" id="Node000001" title="Header of the RTC interface." alt="" coords="1239,5,1386,31"/>
+<area shape="rect" id="Node000002" href="$aducm3029__irq_8c.html" title="Implementation of External IRQ driver for ADuCM302x." alt="" coords="5,79,212,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1226,24,795,39,511,56,224,81,213,83,212,77,223,76,510,51,794,34,1226,18"/>
+<area shape="rect" id="Node000003" href="$aducm3029__rtc_8c.html" title="Implementation of RTC driver for ADuCM302x." alt="" coords="236,79,443,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1226,26,890,45,677,61,462,81,443,84,443,78,462,76,677,55,890,39,1225,20"/>
+<area shape="rect" id="Node000004" href="$max32650_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="443,167,623,207"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1225,22,1036,24,809,32,703,40,611,50,543,64,521,72,508,80,499,100,501,122,510,145,521,165,517,168,505,147,496,123,494,99,504,77,519,67,542,59,610,45,702,35,809,27,1036,19,1225,17"/>
+<area shape="rect" id="Node000005" href="$max32650_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="518,79,699,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1226,29,996,49,718,81,700,84,699,79,718,76,996,44,1226,23"/>
+<area shape="rect" id="Node000006" href="$max32655_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="672,167,852,207"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1226,25,1096,32,950,43,827,59,786,69,764,81,753,100,751,123,758,166,753,167,745,123,748,98,760,77,784,64,826,54,950,38,1095,26,1226,20"/>
+<area shape="rect" id="Node000007" href="$max32655_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="774,79,955,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="1234,36,956,84,955,79,1234,30"/>
+<area shape="rect" id="Node000008" href="$max32660_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="928,167,1108,207"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="1226,28,1165,34,1103,45,1051,60,1033,70,1020,80,1010,100,1007,123,1014,166,1009,167,1002,123,1005,99,1016,77,1030,65,1050,55,1102,40,1164,29,1225,22"/>
+<area shape="rect" id="Node000009" href="$max32660_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="1030,79,1211,119"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="1273,38,1168,81,1166,76,1271,33"/>
+<area shape="rect" id="Node000010" href="$max32662_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="1184,167,1364,207"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="1296,43,1285,60,1277,79,1271,126,1273,166,1268,167,1265,125,1271,78,1280,58,1291,40"/>
+<area shape="rect" id="Node000011" href="$max32662_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="1286,79,1467,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="1333,40,1363,77,1359,80,1329,43"/>
+<area shape="rect" id="Node000012" href="$max32665_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="1440,167,1620,207"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1394,32,1440,49,1481,77,1499,98,1513,121,1528,166,1523,167,1508,124,1495,101,1478,81,1437,54,1392,37"/>
+<area shape="rect" id="Node000013" href="$max32665_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="1542,79,1723,119"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1373,31,1556,76,1555,81,1372,37"/>
+<area shape="rect" id="Node000014" href="$max32670_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="1735,167,1915,207"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="1400,22,1587,40,1675,55,1710,65,1737,76,1763,96,1786,119,1817,165,1813,168,1782,123,1760,100,1734,81,1708,70,1674,61,1586,45,1400,27"/>
+<area shape="rect" id="Node000015" href="$max32670_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="1798,79,1979,119"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="1400,27,1780,76,1798,79,1797,84,1779,81,1399,32"/>
+<area shape="rect" id="Node000016" href="$max32690_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="2004,79,2184,119"/>
+<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="1400,22,1665,41,1828,57,1992,76,2004,78,2004,83,1991,81,1828,62,1665,47,1400,27"/>
+<area shape="rect" id="Node000017" href="$max78000_2maxim__rtc_8c.html" title="Implementation of RTC driver." alt="" coords="2196,167,2376,207"/>
+<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="1400,19,1603,25,1850,36,2071,53,2150,64,2196,76,2224,95,2247,119,2279,165,2274,168,2243,122,2221,99,2194,81,2149,69,2071,58,1850,42,1603,30,1400,24"/>
+<area shape="rect" id="Node000018" href="$max78000_2maxim__rtc_8h.html" title="Header file of RTC driver." alt="" coords="2259,79,2441,119"/>
+<area shape="poly" id="edge23_Node000001_Node000018" title=" " alt="" coords="1400,19,1767,36,2003,53,2241,76,2259,78,2258,84,2240,81,2002,58,1766,41,1400,25"/>
+<area shape="rect" id="Node000019" href="$wethlink_2src_2app_2main_8c.html" title=" " alt="" coords="2465,79,2622,119"/>
+<area shape="poly" id="edge25_Node000001_Node000019" title=" " alt="" coords="1400,17,1590,19,1852,28,2151,46,2303,59,2453,76,2465,78,2464,83,2452,81,2303,64,2150,51,1851,33,1590,25,1400,22"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="585,131,551,168,547,165,581,127"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="833,130,786,168,783,164,830,126"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="1089,130,1042,168,1039,164,1086,126"/>
+<area shape="poly" id="edge14_Node000011_Node000010" title=" " alt="" coords="1345,130,1298,168,1295,164,1342,126"/>
+<area shape="poly" id="edge17_Node000013_Node000012" title=" " alt="" coords="1601,130,1554,168,1551,164,1598,126"/>
+<area shape="poly" id="edge20_Node000015_Node000014" title=" " alt="" coords="1868,132,1841,168,1837,165,1864,128"/>
+<area shape="poly" id="edge24_Node000018_Node000017" title=" " alt="" coords="2330,132,2302,168,2298,165,2325,128"/>
+</map>

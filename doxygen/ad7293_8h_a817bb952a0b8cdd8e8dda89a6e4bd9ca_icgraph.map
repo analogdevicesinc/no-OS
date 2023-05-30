@@ -1,0 +1,7 @@
+<map id="ad7293_soft_reset" name="ad7293_soft_reset">
+<area shape="rect" id="Node000001" title="Perform software reset." alt="" coords="311,5,452,31"/>
+<area shape="rect" id="Node000002" href="$ad7293_8c.html#ab51f9381bfee7cb42516124836094363" title="Perform both hardware and software reset." alt="" coords="152,5,263,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,21,263,21,263,15,297,15"/>
+<area shape="rect" id="Node000003" href="$ad7293_8c.html#a3c09628fc50f54db81d143cc303355dd" title="Initializes the ad7293." alt="" coords="5,5,104,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,21,104,21,104,15,138,15"/>
+</map>

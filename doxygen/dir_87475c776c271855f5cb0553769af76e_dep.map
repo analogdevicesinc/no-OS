@@ -1,0 +1,10 @@
+<map id="projects/ad74416h/src/examples/digital_input_logic" name="projects/ad74416h/src/examples/digital_input_logic">
+<area shape="rect" id="node1" href="dir_87475c776c271855f5cb0553769af76e.html" title="digital_input_logic" alt="" coords="27,52,168,77"/>
+<area shape="rect" id="node2" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="19,125,85,151"/>
+<area shape="poly" id="edge1" href="dir_000422_000430.html" alt="" coords="92,79,69,115,64,112,88,76"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000422_000430.html" title="1" alt="" coords="72,107,81,122"/>
+<area shape="rect" id="node3" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="109,125,179,151"/>
+<area shape="poly" id="edge2" href="dir_000422_000627.html" alt="" coords="107,76,131,112,127,115,103,79"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000422_000627.html" title="3" alt="" coords="129,98,138,113"/>
+<area shape="rect" id="clust1" href="dir_dd8b564053952d81f895e65df39946e5.html" title="examples" alt="" coords="16,16,179,88"/>
+</map>

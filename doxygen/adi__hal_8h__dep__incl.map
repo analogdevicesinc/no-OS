@@ -1,0 +1,35 @@
+<map id="projects/adrv9009/src/devices/adi_hal/adi_hal.h" name="projects/adrv9009/src/devices/adi_hal/adi_hal.h">
+<area shape="rect" id="Node000001" title="Contains Talise ADI HAL function prototypes type definitions for adi_hal.c." alt="" coords="562,5,753,45"/>
+<area shape="rect" id="Node000002" href="$adrv9009_2src_2app_2app__clocking_8c.html" title="Clock setup and initialization routines." alt="" coords="26,181,188,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="549,33,396,40,229,52,88,71,41,82,16,95,9,106,9,116,20,139,44,160,72,179,69,183,41,165,16,142,3,117,4,104,12,91,39,77,87,65,229,47,396,35,548,27"/>
+<area shape="rect" id="Node000003" href="$adrv9009_2src_2app_2app__clocking_8h.html" title="Clock setup and initialization routines." alt="" coords="26,93,188,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="549,44,201,96,189,98,188,93,200,91,548,38"/>
+<area shape="rect" id="Node000004" href="$headless__arm_8c.html" title="Contains example code for user integration with their application. This file contains code for ARM." alt="" coords="326,181,488,221"/>
+<area shape="poly" id="edge19_Node000001_Node000004" title=" " alt="" coords="550,40,491,60,463,76,440,95,426,115,417,138,410,182,405,181,412,137,421,112,436,92,460,71,488,55,548,35"/>
+<area shape="rect" id="Node000005" href="$adrv9009_2src_2app_2app__jesd_8c.html" title="JESD setup and initialization routines." alt="" coords="512,181,675,221"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="655,60,646,96,634,134,609,182,604,180,629,132,641,95,649,59"/>
+<area shape="rect" id="Node000006" href="$adrv9009_2src_2app_2app__jesd_8h.html" title="JESD setup and initialization routines." alt="" coords="695,93,858,133"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="697,51,752,91,749,95,694,56"/>
+<area shape="rect" id="Node000007" href="$app__talise_8c.html" title="Talise initialization and control routines." alt="" coords="699,181,862,221"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="767,32,796,40,825,53,851,69,872,92,878,105,879,118,866,143,843,165,817,184,814,179,840,161,862,140,873,117,873,106,868,95,847,74,822,57,795,45,766,37"/>
+<area shape="rect" id="Node000008" href="$app__transceiver_8c.html" title="FPGA XCVR setup and initialization routines." alt="" coords="886,181,1054,221"/>
+<area shape="poly" id="edge16_Node000001_Node000008" title=" " alt="" coords="767,39,832,59,864,73,894,91,917,111,937,135,963,180,959,183,932,138,913,115,891,95,862,78,830,64,766,44"/>
+<area shape="rect" id="Node000009" href="$app__talise_8h.html" title="Talise initialization and control routines." alt="" coords="212,93,375,133"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="565,51,374,96,373,91,564,46"/>
+<area shape="rect" id="Node000010" href="$app__transceiver_8h.html" title="FPGA XCVR setup and initialization routines." alt="" coords="450,93,620,133"/>
+<area shape="poly" id="edge17_Node000001_Node000010" title=" " alt="" coords="621,55,564,95,561,91,618,51"/>
+<area shape="rect" id="Node000011" href="$headless__mb_8c.html" title="Contains example code for user integration with their application. This file contains code for MicroB..." alt="" coords="983,93,1146,133"/>
+<area shape="poly" id="edge20_Node000001_Node000011" title=" " alt="" coords="761,46,984,92,982,98,760,51"/>
+<area shape="rect" id="Node000012" href="$no__os__hal_8c.html" title="No&#45;OS Hardware Abstraction Layer." alt="" coords="1170,93,1377,133"/>
+<area shape="poly" id="edge21_Node000001_Node000012" title=" " alt="" coords="767,38,1158,91,1170,93,1170,98,1157,96,766,43"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="110,147,110,181,104,181,104,147"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="187,135,342,179,341,184,185,140"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="683,139,489,184,487,179,681,134"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="725,142,635,184,633,179,723,137"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="781,147,782,181,777,181,775,147"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="833,137,929,179,926,184,830,141"/>
+<area shape="poly" id="edge13_Node000009_Node000002" title=" " alt="" coords="242,141,149,184,147,179,240,137"/>
+<area shape="poly" id="edge15_Node000009_Node000004" title=" " alt="" coords="331,140,384,179,380,183,328,144"/>
+<area shape="poly" id="edge14_Node000009_Node000007" title=" " alt="" coords="389,127,688,179,699,181,699,186,687,184,388,133"/>
+<area shape="poly" id="edge18_Node000010_Node000004" title=" " alt="" coords="497,144,437,183,434,179,494,139"/>
+</map>

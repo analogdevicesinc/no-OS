@@ -1,0 +1,7 @@
+<map id="stm32_dma_init_param" name="stm32_dma_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,181,181,207"/>
+<area shape="rect" id="Node000002" href="$structstm32__dma__channel.html" title="STM32 DMA Channels." alt="" coords="15,93,172,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,133,96,181,91,181,91,133"/>
+<area shape="rect" id="Node000003" href="$structstm32__dma__trigger.html" title="Trigger descriptor for triggering a DMA transfer." alt="" coords="19,5,168,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,45,96,93,91,93,91,45"/>
+</map>

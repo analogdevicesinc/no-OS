@@ -1,0 +1,9 @@
+<map id="adt75_iio_init_param" name="adt75_iio_init_param">
+<area shape="rect" id="Node000001" title="Init parameter for the iio descriptor." alt="" coords="15,269,174,295"/>
+<area shape="rect" id="Node000002" href="$structadt75__init__param.html" title="Initialization parameter for the device descriptor." alt="" coords="27,181,163,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,221,97,269,92,269,92,221"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="13,93,176,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,133,97,181,92,181,92,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="97,45,97,93,92,93,92,45"/>
+</map>
