@@ -1,0 +1,26 @@
+<map id="projects/ad7124&#45;8pmdz/src/common/common_data.h" name="projects/ad7124&#45;8pmdz/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Declarations of common data to be used by ad7124&#45;8pmdz examples." alt="" coords="90,5,305,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,48,94,89,91,84,163,43"/>
+<area shape="rect" id="Node000003" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="204,167,287,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,43,252,65,270,92,274,109,273,125,262,155,257,153,268,124,269,109,266,94,248,68,225,47"/>
+<area shape="rect" id="Node000010" href="$projects_2ad7124-8pmdz_2src_2common_2ad7124__regs_8h.html" title="AD7124&#45;8 register initialization file for ad7124&#45;8pmdz project." alt="" coords="139,93,256,119"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="200,46,200,79,195,79,195,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="167,313,238,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="229,194,205,214,186,241,183,256,184,271,192,300,187,302,178,272,178,255,182,239,201,211,225,190"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="416,313,499,339"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="287,181,322,186,361,196,399,213,433,238,451,268,458,299,453,300,446,270,429,242,396,218,359,201,321,191,286,186"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="196,240,295,265"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="248,192,248,226,243,226,243,192"/>
+<area shape="rect" id="Node000007" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="7,240,121,265"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="217,195,107,237,105,232,215,190"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="319,240,419,265"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="267,190,339,231,336,235,264,194"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="241,267,219,303,214,300,236,264"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="87,263,169,305,167,309,85,268"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="344,268,243,310,241,305,342,263"/>
+<area shape="poly" id="edge12_Node000008_Node000005" title=" " alt="" coords="385,263,434,302,431,307,382,267"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="321,313,391,339"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="370,266,363,300,358,299,365,265"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="207,118,232,154,228,157,203,121"/>
+</map>

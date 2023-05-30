@@ -1,0 +1,27 @@
+var eval_cn0391_ardz_2src_2platform_2stm32_2parameters_8h =
+[
+    [ "ADIN1110_GPIO_RESET_PIN", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a7f2c753ee166cf19f5ad6f886e2780c8", null ],
+    [ "ADIN1110_GPIO_RESET_PORT", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a11e27e0034af62b909750b6d9e6d96b9", null ],
+    [ "ADIN1110_SPI_CLK_RATE", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#ac60329db3654c2bb8dc202ed7062df25", null ],
+    [ "ADIN1110_SPI_CS", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a64386e21ddfdf57bd8dd5acef2bc552d", null ],
+    [ "ADIN1110_SPI_CS_PORT", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a39fc8e78b0c9214d34d052cd42a070b7", null ],
+    [ "ADIN1110_SPI_DEVICE_ID", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a08f9b080f0245f35fc5598735d204d6f", null ],
+    [ "GPIO_OPS", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#aa00c79541f5bcf66f6cfadcdc90e82e1", null ],
+    [ "SPI_BAUDRATE", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a4dad4b502d445b46f33cdd159e04051a", null ],
+    [ "SPI_CS", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#ade4259fa3cbb71732a4e73c18dcb9b0d", null ],
+    [ "SPI_CS_PORT", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a9912b2a4108ecd9f98ad04eceef5f836", null ],
+    [ "SPI_DEVICE_ID", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a2264889066fc41987d29395b4772bd17", null ],
+    [ "SPI_EXTRA", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a66db4b9b440d992b52d4e6a6e5779e69", null ],
+    [ "SPI_OPS", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a58f6638bccd9f8463f2cb95d378b6505", null ],
+    [ "UART_BAUDRATE", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_EXTRA", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#aef2e6b5fc83c0dc37191e4212e578f7f", null ],
+    [ "UART_INSTANCE", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a8a613b898e7eba29471760ac57aa2d61", null ],
+    [ "UART_IRQ_ID", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#adff4ff00d8f3375e4fb198270ae24597", null ],
+    [ "UART_OPS", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#ae64afa3f3792f9fce17061e4e8733413", null ],
+    [ "adin1110_reset_gpio_extra_ip", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#ab65df1731c4898e7fc1191aaba5f7478", null ],
+    [ "adin1110_spi_extra_ip", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a7bcae485ecd98e40a39b5fc87a184e87", null ],
+    [ "cn0391_spi_extra_ip", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a4450035382b7f49d5353f54eea1ae47c", null ],
+    [ "cn0391_uart_extra_ip", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#ac066efbb55d87371083bea97846ae281", null ],
+    [ "huart1", "eval-cn0391-ardz_2src_2platform_2stm32_2parameters_8h.html#a2cf715bef37f7e8ef385a30974a5f0d5", null ]
+];

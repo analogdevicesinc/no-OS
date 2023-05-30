@@ -1,0 +1,11 @@
+<map id="ad7124_fclk_get" name="ad7124_fclk_get">
+<area shape="rect" id="Node000001" title="Get the AD7124 reference clock." alt="" coords="376,31,505,56"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#a7cc1ae431c67066f1be5550672ef7885" title="Calculate ODR of the device." alt="" coords="201,5,328,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="362,35,328,30,329,24,363,29"/>
+<area shape="rect" id="Node000004" href="$ad7124_8c.html#acd98841bac152c871f260cb3174ae727" title="Set ODR of the device." alt="" coords="202,55,327,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="363,57,328,61,327,56,362,51"/>
+<area shape="rect" id="Node000003" href="$ad7124_8c.html#aa7fb88acd3e8d0284dfa65f3862f455a" title="Get ODR for a hardware channel (resolves setup via register read)." alt="" coords="5,5,153,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="187,21,153,21,153,15,187,15"/>
+<area shape="rect" id="Node000005" href="$ad7124_8c.html#a5ab24d9e85086db23cabbeb69404a465" title="Set ODR for a hardware channel (resolves setup via register read)." alt="" coords="6,55,153,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="188,70,153,70,153,65,188,65"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="drivers/platform/aducm3029/aducm3029_i2c.h" name="drivers/platform/aducm3029/aducm3029_i2c.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="476,5,683,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__i2c_8c.html" title="Implementation of I2C driver for ADuCM302x." alt="" coords="5,101,212,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="463,50,225,96,191,103,190,98,224,91,462,45"/>
+<area shape="rect" id="Node000003" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="237,101,391,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="514,52,368,103,367,98,512,47"/>
+<area shape="rect" id="Node000004" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="416,101,564,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="554,57,510,102,506,99,550,53"/>
+<area shape="rect" id="Node000005" href="$cn0565_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by cn0565 project." alt="" coords="589,93,751,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="609,53,646,91,643,95,605,57"/>
+<area shape="rect" id="Node000008" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="776,93,961,148"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="652,47,788,91,786,96,650,52"/>
+<area shape="rect" id="Node000011" href="$iio__adpd1080_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by iio_adpd1080 project." alt="" coords="1091,93,1276,148"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="697,42,1091,102,1090,108,696,47"/>
+<area shape="rect" id="Node000006" href="$cn0565_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of cn0565 project." alt="" coords="402,196,565,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="611,157,534,198,531,193,608,152"/>
+<area shape="rect" id="Node000007" href="$cn0565_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by cn0565 project." alt="" coords="589,196,751,251"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="673,162,673,196,667,196,667,162"/>
+<area shape="rect" id="Node000009" href="$eval-ltc4306_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;ltc4306&#45;pmdz project." alt="" coords="776,196,961,251"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="871,162,871,196,866,196,866,162"/>
+<area shape="rect" id="Node000010" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="985,196,1171,251"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="937,151,1025,194,1022,198,934,156"/>
+<area shape="rect" id="Node000012" href="$iio__adpd1080_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of iio_adpd1080 project." alt="" coords="1195,196,1380,251"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1222,156,1262,194,1258,198,1219,160"/>
+</map>

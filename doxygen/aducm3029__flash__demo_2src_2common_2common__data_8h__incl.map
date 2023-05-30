@@ -1,0 +1,23 @@
+<map id="projects/aducm3029_flash_demo/src/common/common_data.h" name="projects/aducm3029_flash_demo/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by aducm3029_flash_demo examples." alt="" coords="83,5,271,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,115,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,62,88,102,85,98,140,58"/>
+<area shape="rect" id="Node000003" href="$no__os__flash_8h.html" title="Header file for flash controller driver." alt="" coords="19,181,130,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,61,151,97,129,135,98,173,94,170,124,132,146,95,164,59"/>
+<area shape="rect" id="Node000005" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="155,181,251,207"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="184,60,201,167,196,168,179,61"/>
+<area shape="rect" id="Node000006" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="290,108,395,133"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="229,58,310,99,307,104,227,62"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="210,255,281,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,204,206,247,204,252,101,209"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="212,206,234,242,229,244,207,208"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="337,135,263,245,259,242,332,132"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="453,255,536,280"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="391,131,434,149,455,163,473,180,489,209,496,240,490,241,484,211,469,183,452,167,432,154,389,136"/>
+<area shape="rect" id="Node000008" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="325,181,459,207"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="353,132,378,169,374,172,349,135"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="370,209,283,251,280,246,367,204"/>
+<area shape="poly" id="edge12_Node000008_Node000007" title=" " alt="" coords="410,204,468,244,465,249,407,209"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="357,255,427,280"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="395,207,395,241,389,241,389,207"/>
+</map>

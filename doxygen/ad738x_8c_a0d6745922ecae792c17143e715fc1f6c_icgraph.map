@@ -1,0 +1,23 @@
+<map id="ad738x_spi_write_mask" name="ad738x_spi_write_mask">
+<area shape="rect" id="Node000001" title=" " alt="" coords="729,145,908,171"/>
+<area shape="rect" id="Node000002" href="$ad738x_8c.html#aac29ec884d87179ff99bb78ae89ec153" title=" " alt="" coords="498,5,646,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="795,137,746,90,714,66,680,46,646,33,647,28,682,41,717,62,749,86,799,133"/>
+<area shape="rect" id="Node000003" href="$ad738x_8c.html#aca0a89e9a8428eafa7581f2c785efa17" title=" " alt="" coords="489,55,655,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="772,143,680,110,643,98,645,93,682,105,773,138"/>
+<area shape="rect" id="Node000004" href="$ad738x_8c.html#a4c279aa39bd9c586094dbc1171b412e3" title=" " alt="" coords="471,120,673,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="715,150,673,146,674,140,716,145"/>
+<area shape="rect" id="Node000005" href="$ad738x_8c.html#aa0bed45cdf2573c27e6b35dddb3fec8b" title=" " alt="" coords="489,169,655,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="716,171,655,177,655,171,715,165"/>
+<area shape="rect" id="Node000009" href="$ad738x_8c.html#acca2387acefe808578b83ec69d3b6925" title=" " alt="" coords="517,219,627,244"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="772,178,682,209,628,222,627,217,681,203,771,173"/>
+<area shape="rect" id="Node000010" href="$ad738x_8c.html#a8a8a9145e11c745cde62a883ffb025af" title=" " alt="" coords="463,268,681,293"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="795,182,745,221,682,258,646,270,645,265,680,253,742,216,791,178"/>
+<area shape="rect" id="Node000006" href="$ad738x_8c.html#a5a643687de5deac9b07cf82ee05503d7" title=" " alt="" coords="316,219,415,244"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="499,200,463,209,414,221,413,216,462,203,497,195"/>
+<area shape="rect" id="Node000007" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="108,219,268,244"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="302,234,268,234,268,229,302,229"/>
+<area shape="rect" id="Node000008" href="$ad738x__fmcz_2src_2platform_2lattice_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,219,60,244"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="94,234,60,234,60,229,94,229"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="503,234,415,234,415,229,503,229"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="502,267,462,258,414,246,416,241,463,253,503,262"/>
+</map>

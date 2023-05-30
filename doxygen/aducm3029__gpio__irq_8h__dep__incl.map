@@ -1,0 +1,27 @@
+<map id="drivers/platform/aducm3029/aducm3029_gpio_irq.h" name="drivers/platform/aducm3029/aducm3029_gpio_irq.h">
+<area shape="rect" id="Node000001" title="Header file of GPIO IRQ interface for ADuCM3029 platform." alt="" coords="496,5,703,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__gpio__irq_8c.html" title="Source file for GPIO IRQ driver." alt="" coords="77,101,284,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="500,51,296,96,263,103,262,98,295,91,499,46"/>
+<area shape="rect" id="Node000003" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="308,93,493,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="548,54,458,96,455,91,546,49"/>
+<area shape="rect" id="Node000006" href="$cn0565_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by cn0565 project." alt="" coords="518,93,681,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="602,59,602,93,597,93,597,59"/>
+<area shape="rect" id="Node000009" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="798,93,1025,148"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="676,47,824,91,823,96,675,52"/>
+<area shape="rect" id="Node000012" href="$iio__adpd1080_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by iio_adpd1080 project." alt="" coords="1175,93,1360,148"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="717,40,1175,104,1174,109,716,46"/>
+<area shape="rect" id="Node000004" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="5,196,191,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="310,155,178,198,176,193,308,150"/>
+<area shape="rect" id="Node000005" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="215,196,400,251"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="369,160,334,198,330,194,365,157"/>
+<area shape="rect" id="Node000007" href="$cn0565_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of cn0565 project." alt="" coords="425,196,587,251"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="567,160,532,198,528,194,563,157"/>
+<area shape="rect" id="Node000008" href="$cn0565_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by cn0565 project." alt="" coords="611,196,774,251"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="635,157,670,194,666,198,631,160"/>
+<area shape="rect" id="Node000010" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="798,196,1025,251"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="914,162,914,196,909,196,909,162"/>
+<area shape="rect" id="Node000011" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="1049,196,1275,251"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="990,150,1098,193,1096,198,988,155"/>
+<area shape="rect" id="Node000013" href="$iio__adpd1080_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of iio_adpd1080 project." alt="" coords="1300,196,1485,251"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1313,155,1362,194,1358,198,1309,159"/>
+</map>

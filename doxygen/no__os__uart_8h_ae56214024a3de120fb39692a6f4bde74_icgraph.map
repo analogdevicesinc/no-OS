@@ -1,0 +1,59 @@
+<map id="no_os_uart_init" name="no_os_uart_init">
+<area shape="rect" id="Node000001" title="Initialize the UART communication peripheral." alt="" coords="831,380,952,405"/>
+<area shape="rect" id="Node000002" href="$ades1754_8c.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="610,5,723,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="888,366,884,300,870,213,856,167,838,122,813,80,781,44,754,28,723,21,724,15,756,23,784,40,817,77,842,119,861,165,875,212,889,300,893,366"/>
+<area shape="rect" id="Node000004" href="$adin1110__standalone__example_8c.html#acbf661085a642e031f672cda6c6da4fe" title="Configure the ADIN1110 and read the device ID." alt="" coords="586,401,747,441"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="817,405,748,413,747,408,817,399"/>
+<area shape="rect" id="Node000006" href="$apard32690_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="587,104,747,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="884,367,875,318,856,257,826,195,805,167,781,143,765,132,746,125,748,120,767,128,784,139,809,163,830,192,861,255,880,317,889,366"/>
+<area shape="rect" id="Node000007" href="$hello__world_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Hello World application entry point." alt="" coords="587,153,747,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="881,368,869,328,849,280,820,232,802,211,781,192,746,175,748,171,784,188,806,207,824,229,854,278,874,326,886,366"/>
+<area shape="rect" id="Node000008" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="588,55,745,80"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="886,367,880,309,863,235,850,196,832,158,809,123,781,93,764,82,745,75,747,70,767,78,784,89,813,120,836,156,854,194,868,233,885,308,892,366"/>
+<area shape="rect" id="Node000010" href="$cmd_8c.html#a87f501fc90d5f0f69db7b44288b9a1c8" title=" " alt="" coords="623,203,710,228"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="877,369,841,304,814,270,781,242,746,226,710,219,711,214,748,221,784,237,818,266,845,301,882,366"/>
+<area shape="rect" id="Node000012" href="$example_8c.html#ae07d385c874c8d1052f87a687369ffad" title="Configure the UART." alt="" coords="609,252,724,277"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="870,371,832,329,808,308,781,291,753,280,724,273,725,267,755,275,784,286,811,304,836,325,874,367"/>
+<area shape="rect" id="Node000019" href="$curvetrace__example_8c.html#aa8c97b178f1ed4023a2fa5c0217a52c9" title=" " alt="" coords="589,351,744,376"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="817,386,744,376,745,371,817,380"/>
+<area shape="rect" id="Node000020" href="$esh__example_8c.html#ad05dbea90848469c4a5f6555c04452bd" title="Basic example main execution." alt="" coords="592,301,741,327"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="856,375,821,357,782,341,741,329,742,324,784,335,823,352,858,371"/>
+<area shape="rect" id="Node000021" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="607,465,726,491"/>
+<area shape="poly" id="edge21_Node000001_Node000021" title=" " alt="" coords="861,415,825,436,784,455,727,471,725,466,782,450,822,431,858,410"/>
+<area shape="rect" id="Node000022" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="607,515,726,540"/>
+<area shape="poly" id="edge22_Node000001_Node000022" title=" " alt="" coords="875,418,837,462,812,485,784,504,756,516,727,524,726,519,754,511,781,500,809,481,833,459,871,415"/>
+<area shape="rect" id="Node000023" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="627,564,707,589"/>
+<area shape="poly" id="edge23_Node000001_Node000023" title=" " alt="" coords="883,419,868,450,846,487,818,523,784,554,746,571,707,578,706,573,745,565,781,549,815,520,842,484,863,448,878,417"/>
+<area shape="rect" id="Node000024" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="585,761,748,787"/>
+<area shape="poly" id="edge24_Node000001_Node000024" title=" " alt="" coords="893,419,890,486,876,576,862,624,843,671,818,714,784,752,768,763,750,771,748,766,765,759,781,748,813,711,838,668,857,622,871,575,885,486,888,419"/>
+<area shape="rect" id="Node000026" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="639,663,694,688"/>
+<area shape="poly" id="edge26_Node000001_Node000026" title=" " alt="" coords="890,420,881,470,862,533,831,598,810,628,784,653,763,666,739,674,694,679,694,674,738,669,761,662,781,649,806,624,826,596,857,531,875,469,884,419"/>
+<area shape="rect" id="Node000027" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="639,712,694,737"/>
+<area shape="poly" id="edge27_Node000001_Node000027" title=" " alt="" coords="892,419,886,478,869,555,855,595,837,635,814,671,784,703,763,716,740,724,695,729,694,723,738,719,761,711,781,699,809,668,832,632,850,593,864,554,880,478,886,419"/>
+<area shape="rect" id="Node000028" href="$tcp__echo__server__example_8c.html#a71a933205bd5c61d181123850b2c6e9b" title="TCP echo example main execution." alt="" coords="551,613,783,639"/>
+<area shape="poly" id="edge28_Node000001_Node000028" title=" " alt="" coords="887,420,875,461,855,511,825,562,806,584,784,604,765,615,762,611,781,600,802,581,821,558,850,509,870,459,882,418"/>
+<area shape="rect" id="Node000003" href="$spi__uart__bridge__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="SPI&#45;to&#45;UART example main execution." alt="" coords="384,5,503,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="596,21,503,21,503,15,596,15"/>
+<area shape="rect" id="Node000005" href="$apard32690_2src_2examples_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution." alt="" coords="416,408,471,433"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="572,423,471,423,471,418,572,418"/>
+<area shape="rect" id="Node000009" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="416,55,471,80"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="574,70,471,70,471,65,574,65"/>
+<area shape="rect" id="Node000011" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="384,203,503,228"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="610,218,503,218,503,213,610,213"/>
+<area shape="rect" id="Node000013" href="$example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function." alt="" coords="384,252,503,277"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="596,267,503,267,503,262,596,262"/>
+<area shape="rect" id="Node000014" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a8801b43474e3771ddc626c282082ae95" title="IIOD example task." alt="" coords="261,203,336,228"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="392,250,336,231,337,225,393,245"/>
+<area shape="rect" id="Node000017" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="271,252,326,277"/>
+<area shape="poly" id="edge16_Node000013_Node000017" title=" " alt="" coords="370,267,326,267,326,262,370,262"/>
+<area shape="rect" id="Node000018" href="$adin1320_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="271,301,326,327"/>
+<area shape="poly" id="edge17_Node000013_Node000018" title=" " alt="" coords="394,284,327,307,325,302,392,279"/>
+<area shape="rect" id="Node000015" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="108,203,213,228"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="248,218,214,218,214,213,248,213"/>
+<area shape="rect" id="Node000016" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,203,60,228"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="94,218,60,218,60,213,94,213"/>
+<area shape="poly" id="edge20_Node000020_Node000005" title=" " alt="" coords="579,330,552,340,524,356,498,375,459,410,455,406,495,371,521,352,550,336,578,325"/>
+<area shape="rect" id="Node000025" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="384,761,503,787"/>
+<area shape="poly" id="edge25_Node000024_Node000025" title=" " alt="" coords="571,777,503,777,503,771,571,771"/>
+<area shape="poly" id="edge29_Node000028_Node000005" title=" " alt="" coords="557,609,549,604,527,585,508,564,478,515,457,469,446,435,451,433,462,467,483,513,512,560,531,582,552,600,560,605"/>
+</map>

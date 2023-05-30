@@ -1,0 +1,5 @@
+<map id="ade7758_energy_vals_phase_b" name="ade7758_energy_vals_phase_b">
+<area shape="rect" id="Node000001" title="Read energy values phase B." alt="" coords="209,5,373,45"/>
+<area shape="rect" id="Node000002" href="$eval-ade7758_2src_2common_2common__data_8c.html#aa00b46d14528947fba9763a4a33cbfa6" title="Read measurements." alt="" coords="5,13,161,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,28,162,28,162,23,195,23"/>
+</map>

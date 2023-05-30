@@ -1,0 +1,16 @@
+<map id="admv1013_spi_read" name="admv1013_spi_read">
+<area shape="rect" id="Node000001" title="Reads data from ADMV1013 over SPI." alt="" coords="484,80,637,105"/>
+<area shape="rect" id="Node000002" href="$admv1013_8c.html#a83a456b6d6c0f76257982ab292b605ae" title="Get I/Q Offset Accuracy." alt="" coords="245,5,427,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="518,77,435,45,395,33,397,28,437,39,520,72"/>
+<area shape="rect" id="Node000003" href="$admv1013_8c.html#a538d3d34d69e3564538ef26dbdb0d6b3" title="Get I/Q Phase Accuracy." alt="" coords="244,55,428,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="470,85,428,80,428,75,470,80"/>
+<area shape="rect" id="Node000004" href="$admv1013_8c.html#a0466df867756a21adaa080f89fb248c4" title="Initializes the admv1013." alt="" coords="37,105,156,131"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="470,100,156,117,156,112,470,95"/>
+<area shape="rect" id="Node000005" href="$admv1013_8c.html#aa729c77027ff7919370b8844856edb7c" title="Update ADMV1013 register." alt="" coords="236,156,436,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="512,113,437,139,379,158,377,153,435,134,511,108"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="261,156,156,133,157,128,262,150"/>
+<area shape="rect" id="Node000006" href="$admv1013_8c.html#a5255aa2e282f8b3dedccdf7909b5600c" title="Set I/Q Offset Accuracy." alt="" coords="6,155,187,180"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="222,171,188,171,188,165,222,165"/>
+<area shape="rect" id="Node000007" href="$admv1013_8c.html#ae0b41f6016b7d7cbbc26f39a2e729f4d" title="Set I/Q Phase Accuracy." alt="" coords="5,204,188,229"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="259,187,161,207,160,201,258,181"/>
+</map>

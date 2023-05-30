@@ -1,0 +1,23 @@
+<map id="ad9144_spi_read" name="ad9144_spi_read">
+<area shape="rect" id="Node000001" title="ad9144_spi_read" alt="" coords="711,129,843,155"/>
+<area shape="rect" id="Node000002" href="$ad9144_8c.html#aaf06c22427ee662beb6ac3e5e502c636" title="ad9144_datapath_prbs_test" alt="" coords="460,5,663,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="754,121,714,81,688,61,661,44,634,33,636,28,664,40,692,57,717,77,757,117"/>
+<area shape="rect" id="Node000003" href="$ad9144_8c.html#a37f9b383ea7e7bf5a39f3f9ba6ec260b" title=" " alt="" coords="498,55,625,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="737,125,662,94,623,83,624,77,664,89,739,121"/>
+<area shape="rect" id="Node000005" href="$ad9144_8c.html#a9cf8f8625202c1d8328936053a415603" title=" " alt="" coords="472,104,651,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="697,135,650,130,651,125,697,130"/>
+<area shape="rect" id="Node000006" href="$ad9144_8c.html#a3c61a56cfb38577042c6af45aa84ac89" title=" " alt="" coords="5,205,168,231"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="698,152,481,173,216,202,169,208,168,203,216,197,480,167,697,146"/>
+<area shape="rect" id="Node000007" href="$ad9144_8c.html#ad50885c10f3b1a76854c59082ed1a5cb" title="ad9144_spi_check_status" alt="" coords="467,205,655,231"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="732,163,664,189,606,208,604,203,662,183,730,158"/>
+<area shape="rect" id="Node000010" href="$ad9144_8c.html#a6110170d89a1e8340f07e4c044797cf1" title="ad9144_status &#45; return the status of the JESD interface" alt="" coords="503,255,620,280"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="757,167,717,207,691,227,664,244,621,260,620,255,661,240,688,223,713,203,754,163"/>
+<area shape="rect" id="Node000004" href="$fmcdaq2_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="287,55,341,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="484,70,342,70,342,65,484,65"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="454,221,168,221,168,215,454,215"/>
+<area shape="rect" id="Node000008" href="$ad9144_8c.html#a08ce45c8bcf99c7da3787d620cf2e55d" title=" " alt="" coords="232,256,396,281"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="485,236,377,259,376,253,484,231"/>
+<area shape="rect" id="Node000009" href="$ad9144_8c.html#a5c6deb37b6af03fcaef768811b00237e" title="ad9144_short_pattern_test" alt="" coords="216,305,412,331"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="474,238,461,244,447,256,438,269,429,282,413,295,385,308,383,303,411,290,425,278,434,266,443,252,459,240,472,233"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="242,256,144,233,145,228,243,250"/>
+</map>

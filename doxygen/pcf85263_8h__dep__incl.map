@@ -1,0 +1,7 @@
+<map id="drivers/rtc/pcf85263/pcf85263.h" name="drivers/rtc/pcf85263/pcf85263.h">
+<area shape="rect" id="Node000001" title="Header file of pcf85263 Driver." alt="" coords="105,5,257,45"/>
+<area shape="rect" id="Node000002" href="$pcf85263_8c.html" title="Implementation of PCF85263 Driver." alt="" coords="5,101,157,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,57,103,103,100,99,149,53"/>
+<area shape="rect" id="Node000003" href="$iot__example_8c.html" title="Sensor&#45;to&#45;Cloud (MQTT / Azure IoT Hub) example for EVAL&#45;ADE9430." alt="" coords="182,93,381,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,53,255,91,251,95,210,57"/>
+</map>

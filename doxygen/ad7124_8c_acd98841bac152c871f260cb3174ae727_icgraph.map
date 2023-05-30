@@ -1,0 +1,5 @@
+<map id="ad7124_set_odr" name="ad7124_set_odr">
+<area shape="rect" id="Node000001" title="Set ODR of the device." alt="" coords="200,5,325,31"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#a5ab24d9e85086db23cabbeb69404a465" title="Set ODR for a hardware channel (resolves setup via register read)." alt="" coords="5,5,152,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,21,153,21,153,15,186,15"/>
+</map>

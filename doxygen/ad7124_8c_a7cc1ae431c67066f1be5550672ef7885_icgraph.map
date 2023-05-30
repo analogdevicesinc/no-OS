@@ -1,0 +1,5 @@
+<map id="ad7124_get_odr" name="ad7124_get_odr">
+<area shape="rect" id="Node000001" title="Calculate ODR of the device." alt="" coords="201,5,328,31"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#aa7fb88acd3e8d0284dfa65f3862f455a" title="Get ODR for a hardware channel (resolves setup via register read)." alt="" coords="5,5,153,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,21,153,21,153,15,187,15"/>
+</map>

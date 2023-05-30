@@ -1,0 +1,5 @@
+<map id="iio_ch_info" name="iio_ch_info">
+<area shape="rect" id="Node000001" title="Structure holding channel attributess." alt="" coords="15,93,107,119"/>
+<area shape="rect" id="Node000002" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="5,5,117,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,45,64,93,59,93,59,45"/>
+</map>

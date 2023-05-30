@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/adc/ad4080/README.rst

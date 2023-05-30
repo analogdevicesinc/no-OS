@@ -1,0 +1,22 @@
+<map id="drivers/platform/stm32/stm32_i2c.h" name="drivers/platform/stm32/stm32_i2c.h">
+<area shape="rect" id="Node000001" title="Header file for the stm32 i2c driver." alt="" coords="551,5,723,45"/>
+<area shape="rect" id="Node000002" href="$stm32__i2c_8c.html" title="Implementation of stm32 i2c driver." alt="" coords="16,93,188,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="538,43,201,96,189,98,188,93,200,91,537,38"/>
+<area shape="rect" id="Node000003" href="$admt4000_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by admt4000 project." alt="" coords="213,93,431,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="555,52,392,96,390,91,554,46"/>
+<area shape="rect" id="Node000006" href="$cn0565_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by cn0565 project." alt="" coords="527,93,746,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="639,59,639,93,634,93,634,59"/>
+<area shape="rect" id="Node000009" href="$ltm3360b_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by LTM3360B project." alt="" coords="885,181,1103,221"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="689,49,956,179,954,184,686,54"/>
+<area shape="rect" id="Node000010" href="$ltm3360b_2src_2platform_2stm32_2parameters_8h.html" title="Definition of STM32 platform data used by LTM3360B project." alt="" coords="875,93,1094,133"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="727,46,909,91,908,96,726,51"/>
+<area shape="rect" id="Node000004" href="$admt4000_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of admt4000 project." alt="" coords="5,181,180,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="260,141,144,184,142,179,258,136"/>
+<area shape="rect" id="Node000005" href="$admt4000_2src_2platform_2stm32_2parameters_8c.html" title="Definition of Mbed platform data used by admt4000 project." alt="" coords="204,181,421,221"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="321,147,317,181,312,181,316,147"/>
+<area shape="rect" id="Node000007" href="$cn0565_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of cn0565 project." alt="" coords="445,181,620,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="605,144,557,183,554,179,601,140"/>
+<area shape="rect" id="Node000008" href="$cn0565_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by cn0565 project." alt="" coords="644,181,861,221"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="675,140,729,179,725,183,672,144"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="991,147,995,181,989,181,986,147"/>
+</map>

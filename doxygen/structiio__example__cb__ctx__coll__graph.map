@@ -1,0 +1,29 @@
+<map id="iio_example_cb_ctx" name="iio_example_cb_ctx">
+<area shape="rect" id="Node000001" title="Callback context for LED updates." alt="" coords="615,420,765,445"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="705,103,837,128"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="772,142,767,191,766,250,764,276,757,309,744,342,729,374,700,421,696,418,724,371,739,340,751,307,759,275,760,250,762,191,766,142"/>
+<area shape="rect" id="Node000005" href="$structadl8113__dev.html" title="ADL8113 Device Descriptor." alt="" coords="640,215,745,240"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="738,137,723,149,711,163,700,190,696,215,690,214,695,188,706,160,719,145,734,133"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="677,5,865,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="774,44,774,102,769,102,769,44"/>
+<area shape="rect" id="Node000004" href="$structadl8113__iio__dev.html" title="ADL8113 IIO device descriptor." alt="" coords="521,332,649,357"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="611,364,677,418,674,422,608,368"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="677,253,627,310,601,334,597,330,623,306,673,249"/>
+<area shape="rect" id="Node000006" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="325,215,413,240"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="393,248,428,278,471,306,502,319,534,329,533,334,501,324,469,310,425,282,389,252"/>
+<area shape="rect" id="Node000007" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="61,103,210,128"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="174,132,346,212,343,217,171,136"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="107,42,133,101,128,103,102,44"/>
+<area shape="rect" id="Node000009" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="321,103,417,128"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="371,142,371,214,366,214,366,142"/>
+<area shape="rect" id="Node000010" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="207,5,319,31"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="283,39,309,67,352,100,349,105,306,71,279,43"/>
+<area shape="rect" id="Node000011" href="$structscan__type.html" title=" " alt="" coords="343,5,431,31"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="376,44,373,55,370,80,370,102,365,103,364,80,367,54,371,43"/>
+<area shape="rect" id="Node000012" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="491,5,593,31"/>
+<area shape="poly" id="edge13_Node000006_Node000012" title=" " alt="" coords="546,45,542,70,522,111,501,140,474,164,438,193,398,217,395,212,435,188,471,160,497,136,518,108,537,69,541,44"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="507,39,473,57,389,105,386,100,470,52,505,34"/>
+<area shape="rect" id="Node000013" href="$structadl8113__iio__gain__config.html" title="IIO&#45;only gain configuration entry." alt="" coords="437,215,615,240"/>
+<area shape="poly" id="edge14_Node000004_Node000013" title=" " alt="" coords="528,253,532,280,542,307,552,319,565,330,562,334,548,323,537,309,527,282,523,254"/>
+</map>

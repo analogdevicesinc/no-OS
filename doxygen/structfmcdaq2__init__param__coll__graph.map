@@ -1,0 +1,59 @@
+<map id="fmcdaq2_init_param" name="fmcdaq2_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1615,376,1771,401"/>
+<area shape="rect" id="Node000002" href="$structad9523__init__param.html" title=" " alt="" coords="1275,236,1421,261"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1436,250,1513,264,1554,276,1592,292,1621,310,1647,333,1684,374,1680,378,1643,337,1618,315,1589,296,1552,281,1512,269,1435,256"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,145,1125,171"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1095,173,1154,191,1300,233,1299,239,1153,197,1094,178"/>
+<area shape="rect" id="Node000010" href="$structad9144__init__param.html" title=" " alt="" coords="1275,168,1421,193"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="1138,162,1275,173,1274,178,1138,168"/>
+<area shape="rect" id="Node000011" href="$structad9680__init__param.html" title=" " alt="" coords="1275,100,1421,125"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="1138,141,1274,121,1275,126,1139,147"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,108,184,133"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="194,104,319,90,475,79,647,78,734,82,819,91,872,101,924,115,1009,143,1008,148,923,120,871,106,818,97,734,87,647,83,476,84,320,95,194,109"/>
+<area shape="rect" id="Node000006" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,145,786,171"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="198,122,607,145,663,149,663,155,606,150,198,127"/>
+<area shape="rect" id="Node000007" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,169,471,195"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="148,135,209,151,324,171,323,176,207,157,147,140"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,222,472,262"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="486,234,606,223,807,196,974,168,974,173,808,202,607,229,486,239"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="485,222,606,193,685,168,687,173,607,198,486,227"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="800,155,962,155,962,161,800,161"/>
+<area shape="poly" id="edge10_Node000006_Node000006" title=" " alt="" coords="693,131,702,122,725,119,743,121,755,127,758,137,752,147,747,144,752,136,751,131,742,126,725,124,705,127,696,135"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="484,173,663,160,663,165,484,178"/>
+<area shape="rect" id="Node000008" href="$structad9523__platform__data.html" title="platform specific information" alt="" coords="959,264,1128,289"/>
+<area shape="poly" id="edge11_Node000002_Node000008" title=" " alt="" coords="1142,265,1274,253,1275,258,1142,270"/>
+<area shape="rect" id="Node000009" href="$structad9523__channel__spec.html" title="Output channel configuration." alt="" coords="642,293,807,319"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="820,295,958,282,958,287,821,300"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1436,182,1515,198,1555,212,1592,233,1628,267,1657,307,1677,345,1689,375,1684,377,1672,348,1652,310,1624,270,1589,237,1553,217,1514,203,1435,187"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="1436,111,1475,117,1516,127,1556,142,1592,165,1617,189,1637,217,1666,277,1684,334,1692,375,1687,376,1679,336,1661,279,1632,220,1612,193,1589,169,1554,147,1515,132,1474,122,1435,116"/>
+<area shape="rect" id="Node000012" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="991,17,1095,43"/>
+<area shape="poly" id="edge17_Node000011_Node000012" title=" " alt="" coords="1105,44,1301,97,1299,102,1103,49"/>
+<area shape="rect" id="Node000013" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="665,5,785,31"/>
+<area shape="poly" id="edge18_Node000012_Node000013" title=" " alt="" coords="798,18,991,25,991,31,798,23"/>
+<area shape="rect" id="Node000014" href="$structadxcvr__init.html" title=" " alt="" coords="1301,304,1395,329"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="1409,320,1496,332,1591,351,1660,373,1658,378,1590,357,1495,338,1409,326"/>
+<area shape="rect" id="Node000015" href="$structjesd204__tx__init.html" title="JESD204B/C Transmit Peripheral Initialization Structure." alt="" coords="1287,353,1409,379"/>
+<area shape="poly" id="edge20_Node000001_Node000015" title=" " alt="" coords="1423,368,1615,381,1614,386,1422,374"/>
+<area shape="rect" id="Node000016" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="982,452,1105,477"/>
+<area shape="poly" id="edge21_Node000015_Node000016" title=" " alt="" coords="1071,441,1108,417,1152,396,1221,377,1287,367,1288,373,1222,382,1154,400,1111,422,1074,446"/>
+<area shape="rect" id="Node000020" href="$structjesd204__rx__init.html" title="JESD204B/C Receive Peripheral Initialization Structure." alt="" coords="1287,403,1409,428"/>
+<area shape="poly" id="edge26_Node000020_Node000016" title=" " alt="" coords="1107,477,1141,481,1178,482,1215,478,1249,466,1257,461,1261,454,1265,445,1273,437,1295,426,1297,430,1276,441,1269,448,1266,456,1261,464,1252,471,1216,483,1178,488,1141,487,1106,482"/>
+<area shape="rect" id="Node000017" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="635,452,814,477"/>
+<area shape="poly" id="edge22_Node000016_Node000017" title=" " alt="" coords="827,462,982,462,982,467,827,467"/>
+<area shape="rect" id="Node000018" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,363,1129,388"/>
+<area shape="poly" id="edge23_Node000015_Node000018" title=" " alt="" coords="1107,357,1153,350,1202,347,1251,350,1287,354,1287,359,1250,355,1202,353,1154,355,1108,362"/>
+<area shape="poly" id="edge27_Node000020_Node000018" title=" " alt="" coords="1072,394,1109,420,1154,439,1196,446,1239,443,1279,435,1313,426,1314,431,1280,441,1240,448,1196,451,1153,445,1107,424,1069,399"/>
+<area shape="rect" id="Node000019" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,363,819,388"/>
+<area shape="poly" id="edge24_Node000018_Node000019" title=" " alt="" coords="832,373,957,373,957,378,832,378"/>
+<area shape="poly" id="edge25_Node000001_Node000020" title=" " alt="" coords="1422,410,1590,399,1614,397,1615,402,1591,405,1423,415"/>
+<area shape="rect" id="Node000021" href="$structaxi__adc__init.html" title="AXI ADC Initialization Parameters structure." alt="" coords="1298,452,1398,477"/>
+<area shape="poly" id="edge28_Node000001_Node000021" title=" " alt="" coords="1411,459,1497,449,1590,430,1631,416,1666,399,1668,404,1633,420,1591,435,1498,454,1412,464"/>
+<area shape="rect" id="Node000022" href="$structaxi__dac__init.html" title=" " alt="" coords="1298,501,1398,527"/>
+<area shape="poly" id="edge29_Node000001_Node000022" title=" " alt="" coords="1412,512,1499,503,1545,492,1590,476,1617,459,1642,439,1679,400,1683,403,1646,442,1620,463,1592,480,1547,497,1499,508,1412,517"/>
+<area shape="rect" id="Node000023" href="$structaxi__dac__channel.html" title=" " alt="" coords="978,521,1109,547"/>
+<area shape="poly" id="edge30_Node000022_Node000023" title=" " alt="" coords="1123,534,1185,534,1250,530,1297,523,1298,528,1251,535,1185,539,1123,540"/>
+<area shape="rect" id="Node000024" href="$structaxi__dmac__init.html" title=" " alt="" coords="1291,551,1405,576"/>
+<area shape="poly" id="edge31_Node000001_Node000024" title=" " alt="" coords="1419,572,1460,574,1504,572,1548,563,1589,545,1609,531,1627,513,1655,472,1674,432,1685,401,1690,402,1679,434,1659,475,1631,516,1613,535,1592,550,1550,568,1505,577,1460,579,1419,577"/>
+<area shape="rect" id="Node000025" href="$structlink__init__param.html" title=" " alt="" coords="1287,611,1409,636"/>
+<area shape="poly" id="edge32_Node000001_Node000025" title=" " alt="" coords="1419,635,1461,639,1505,637,1549,628,1589,609,1614,588,1635,561,1651,532,1664,501,1680,443,1687,401,1693,402,1686,445,1669,503,1656,534,1639,564,1618,591,1592,614,1551,633,1506,643,1461,644,1419,641"/>
+</map>

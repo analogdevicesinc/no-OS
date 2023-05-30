@@ -1,0 +1,16 @@
+<map id="axi_jesd204_tx_remove" name="axi_jesd204_tx_remove">
+<area shape="rect" id="Node000001" title="Free resoulces allocated for JESD204 TX peripheral." alt="" coords="275,104,452,129"/>
+<area shape="rect" id="Node000002" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="327,99,225,44,200,33,203,28,228,40,330,94"/>
+<area shape="rect" id="Node000003" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="298,103,218,83,219,77,300,98"/>
+<area shape="rect" id="Node000004" href="$adrv9009_2src_2app_2app__jesd_8c.html#a58d0a969b662a323b8105e78817b7a93" title=" " alt="" coords="121,104,214,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="261,119,214,119,214,114,261,114"/>
+<area shape="rect" id="Node000006" href="$adrv9009_2src_2app_2app__jesd_8c.html#ae5553405b03de1193a617ca30d31a455" title=" " alt="" coords="129,153,206,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="300,135,207,159,205,154,298,130"/>
+<area shape="rect" id="Node000007" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="140,203,195,228"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="329,139,228,192,196,207,194,202,225,188,327,134"/>
+<area shape="rect" id="Node000005" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,129,60,155"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="108,131,61,140,60,134,107,125"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="115,159,60,149,61,144,116,154"/>
+</map>

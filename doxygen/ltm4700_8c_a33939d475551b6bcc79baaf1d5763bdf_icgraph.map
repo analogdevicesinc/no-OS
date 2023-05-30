@@ -1,0 +1,18 @@
+<map id="ltm4700_read_word" name="ltm4700_read_word">
+<area shape="rect" id="Node000001" title="Perform a PMBus read_word operation." alt="" coords="609,57,760,83"/>
+<area shape="rect" id="Node000002" href="$ltm4700_8c.html#af8f042b29659a9578b76c019caa6d1ed" title="Initialize the device structure." alt="" coords="416,8,520,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="614,57,520,35,521,30,616,52"/>
+<area shape="rect" id="Node000006" href="$ltm4700_8c.html#ad902aabcabd5cf42788dea49d4722ecf" title="Read status." alt="" coords="389,57,547,83"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="595,73,547,73,547,67,595,67"/>
+<area shape="rect" id="Node000007" href="$ltm4700_8c.html#ad2eda843cff37ddada4864f81f6c41c3" title="Perform a PMBus read_word operation then perform conversion." alt="" coords="375,107,561,132"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="616,88,525,109,524,104,615,83"/>
+<area shape="rect" id="Node000003" href="$ltm4700_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,81,124,107"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="403,35,125,86,124,81,402,30"/>
+<area shape="rect" id="Node000004" href="$iio__ltm4700_8c.html#ae2c8be1dd3d8b826126f20240ed29c08" title="Initializes the LTM4700 IIO driver." alt="" coords="186,5,313,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="402,23,313,21,313,16,402,17"/>
+<area shape="rect" id="Node000005" href="$ltm4700_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="173,21,124,21,124,15,173,15"/>
+<area shape="rect" id="Node000008" href="$ltm4700_8c.html#a0f2bb9ccaae9b01ce0a23cd3938e72c9" title="Read specific value type." alt="" coords="172,107,327,132"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="361,122,327,122,327,117,361,117"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="158,109,124,105,124,99,159,104"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="projects/eval&#45;adis1647x/src/platform/linux/parameters.h" name="projects/eval&#45;adis1647x/src/platform/linux/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to Linux platform used by eval&#45;adis1647x project." alt="" coords="61,5,293,45"/>
+<area shape="rect" id="Node000002" href="$linux__gpio_8h.html" title=" " alt="" coords="5,93,107,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,48,87,88,84,84,147,43"/>
+<area shape="rect" id="Node000003" href="$linux__spi_8h.html" title=" " alt="" coords="131,93,223,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,46,180,79,175,79,175,46"/>
+<area shape="rect" id="Node000004" href="$linux__uart_8h.html" title=" " alt="" coords="248,93,347,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="208,43,270,84,267,88,205,48"/>
+<area shape="rect" id="Node000005" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="245,167,350,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="300,119,300,153,295,153,295,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="163,313,234,339"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="276,194,247,214,221,241,208,271,203,301,197,300,203,269,216,239,243,210,273,190"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="359,313,441,339"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="321,190,351,210,378,238,393,269,400,299,395,301,388,271,374,242,347,214,318,194"/>
+<area shape="rect" id="Node000008" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="231,240,364,265"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="300,192,300,226,295,226,295,192"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="283,268,227,307,224,303,280,263"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="315,263,373,303,370,307,312,268"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="262,313,333,339"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="300,266,300,300,295,300,295,266"/>
+</map>

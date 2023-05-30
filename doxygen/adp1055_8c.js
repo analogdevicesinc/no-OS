@@ -1,0 +1,26 @@
+var adp1055_8c =
+[
+    [ "adp1055_freq_sync", "adp1055_8c.html#a3bd137f9f19b85d266f667fb55398094", null ],
+    [ "adp1055_init", "adp1055_8c.html#a00e64892f343d5d3a045a2272d11e54a", null ],
+    [ "adp1055_iout_cal_gain", "adp1055_8c.html#acd79ef75dd7607641e66b2c3bce749b6", null ],
+    [ "adp1055_iout_cal_offset", "adp1055_8c.html#ad96dbcceb13ab5b993919069e9dc400d", null ],
+    [ "adp1055_lightload_mode_df", "adp1055_8c.html#a43f7046355deb069a186fc1c33fe1ec6", null ],
+    [ "adp1055_normal_mode_df", "adp1055_8c.html#a7818c7ffab37ba9c2736db929e8b273b", null ],
+    [ "adp1055_pwm_config", "adp1055_8c.html#a8328dc5ead717d2b43569f2c4dfe6aa2", null ],
+    [ "adp1055_read", "adp1055_8c.html#aca66320e558b9243b5527254ad4a0157", null ],
+    [ "adp1055_read_status", "adp1055_8c.html#ad8cadf8379b80b096981faef77b2230e", null ],
+    [ "adp1055_read_value", "adp1055_8c.html#a94cf556461eda735f0e3d78a8d694bfd", null ],
+    [ "adp1055_read_vsense", "adp1055_8c.html#a3363ae3574b63617f25204ed228b9287", null ],
+    [ "adp1055_remove", "adp1055_8c.html#ad10a8a8e6853ffc8c28de916e19a98c9", null ],
+    [ "adp1055_send_command", "adp1055_8c.html#a3a7a9a7d34721fe12fb31eb011a1e317", null ],
+    [ "adp1055_set_pwm", "adp1055_8c.html#a5b5f0d180d202afd381139e2c48e8e90", null ],
+    [ "adp1055_set_vin", "adp1055_8c.html#a8e90b88d618ffa171609a1ad8aa53b55", null ],
+    [ "adp1055_singleshot_mode_df", "adp1055_8c.html#a099805ad7b93632659670f1784cf1949", null ],
+    [ "adp1055_vout_droop", "adp1055_8c.html#ae965a2a32271ed465ce91eda477644cb", null ],
+    [ "adp1055_vout_offset", "adp1055_8c.html#a8295058f9aeca97146bf7cebaa015423", null ],
+    [ "adp1055_vout_scale", "adp1055_8c.html#a3a99e2ac9c802cc2f44a709cd86e6cdb", null ],
+    [ "adp1055_vout_scale_loop", "adp1055_8c.html#a45684be5674d279cf3da25b2091a6136", null ],
+    [ "adp1055_vout_tr", "adp1055_8c.html#aa8b5c11b1620a8b84f6c62ffdb718701", null ],
+    [ "adp1055_vout_value", "adp1055_8c.html#aabf0cd49eda673516b9abc3f6bf2715a", null ],
+    [ "adp1055_write", "adp1055_8c.html#a7c6bd5b41077ff4b2526f04ec367687b", null ]
+];

@@ -1,0 +1,9 @@
+<map id="no_os_timer_remove" name="no_os_timer_remove">
+<area shape="rect" id="Node000001" title="Free the memory allocated by timer_init()." alt="" coords="172,55,331,80"/>
+<area shape="rect" id="Node000002" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger_2iio__timer__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO trigger example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,54,113,33,115,28,190,49"/>
+<area shape="rect" id="Node000003" href="$adalm-lsmspg_2src_2platform_2maxim_2main_8c.html#abcfe03c80e333256b97046aa756e25a2" title=" " alt="" coords="6,55,123,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,70,123,70,123,65,159,65"/>
+<area shape="rect" id="Node000004" href="$adalm-lsmspg_2src_2platform_2maxim_2main_8c.html#a8965f8841fa6b209be38417ab48be0bc" title=" " alt="" coords="8,104,121,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="190,86,115,106,113,101,189,81"/>
+</map>

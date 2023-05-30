@@ -1,0 +1,19 @@
+<map id="max17616_read_word" name="max17616_read_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read word operation." alt="" coords="743,80,909,105"/>
+<area shape="rect" id="Node000002" href="$max17616_8c.html#ab54e40344182c79e5f9cb25d1e8c3fdf" title="Read MAX17616 device status." alt="" coords="514,7,689,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="781,77,694,46,655,35,656,30,695,41,782,72"/>
+<area shape="rect" id="Node000005" href="$max17616_8c.html#aa584ba7a7d6f43733d50fbbe4028530e" title="Read a specific value with automatic data conversion." alt="" coords="516,80,687,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="729,95,687,95,687,90,729,90"/>
+<area shape="rect" id="Node000008" href="$max17616_8c.html#a54cfd8ef4212b341e37ba82308dd8f08" title="Verify PMBus revision." alt="" coords="508,130,695,170"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="763,111,681,133,679,127,762,106"/>
+<area shape="rect" id="Node000003" href="$iio__max17616_8c.html#a06842d04ba8765565503d1949435b14f" title="Read attribute function for MAX17616 PMBus IIO driver." alt="" coords="5,5,185,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="500,21,460,21,186,20,186,15,460,15,500,16"/>
+<area shape="rect" id="Node000004" href="$iio__max17616_8c.html#a0a0fb393a4d6b635c08d32c00982af2c" title="Read global attribute function for MAX17616 IIO device." alt="" coords="233,31,460,56"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="501,31,461,35,460,30,500,26"/>
+<area shape="poly" id="edge8_Node000005_Node000005" title=" " alt="" coords="642,71,631,62,601,59,577,61,565,66,562,71,569,78,565,82,557,72,561,62,576,56,601,53,633,57,645,67"/>
+<area shape="rect" id="Node000006" href="$max17616_8c.html#a3d9ae711267742f280c4f4f1baac21dd" title="Read comprehensive telemetry data." alt="" coords="236,80,457,105"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="502,95,458,95,458,90,502,90"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="264,79,233,71,126,33,128,28,234,66,265,74"/>
+<area shape="rect" id="Node000007" href="$max17616_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="36,80,155,105"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="222,95,155,95,155,90,222,90"/>
+</map>

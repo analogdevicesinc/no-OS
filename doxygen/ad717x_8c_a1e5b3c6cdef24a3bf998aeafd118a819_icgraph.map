@@ -1,0 +1,43 @@
+<map id="AD717X_ComputeCRC8" name="AD717X_ComputeCRC8">
+<area shape="rect" id="Node000001" title="Computes the CRC checksum for a data buffer." alt="" coords="687,417,861,443"/>
+<area shape="rect" id="Node000002" href="$ad717x_8c.html#a1a8a9ea16d3cb31aef2d82be24292ffd" title="Reads the value of the specified register." alt="" coords="469,492,637,517"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="723,450,593,495,591,489,721,445"/>
+<area shape="rect" id="Node000007" href="$ad717x_8c.html#a263a0ab1b0b8e24e4f177aa2901de460" title="Writes the value of the specified register." alt="" coords="468,256,639,281"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="742,411,571,284,574,280,746,407"/>
+<area shape="rect" id="Node000003" href="$ad717x_8c.html#af92ad585cabc0f6ef31f41589946bb34" title="Initializes the AD717X." alt="" coords="30,256,133,281"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="486,491,419,475,358,465,308,461,260,451,233,441,204,424,163,391,129,351,103,312,87,283,91,280,108,309,133,347,167,387,207,420,236,436,261,446,308,456,358,460,421,470,487,486"/>
+<area shape="rect" id="Node000004" href="$ad717x_8c.html#add8ae6c28ff4f84338b5a57c53a84ccc" title="Reads the conversion result from the device." alt="" coords="240,599,385,624"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="526,528,479,560,421,590,387,601,385,596,419,585,476,555,523,523"/>
+<area shape="rect" id="Node000006" href="$ad717x_8c.html#a923f206a19c5d23586d670226593d421" title="Waits until a new conversion result is available." alt="" coords="227,549,398,575"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="487,523,421,539,368,552,367,547,419,534,485,518"/>
+<area shape="rect" id="Node000005" href="$ad717x_8c.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,520,157,545"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="232,598,204,590,151,569,106,548,109,543,153,564,206,585,233,593"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="213,552,157,545,158,540,214,547"/>
+<area shape="poly" id="edge16_Node000007_Node000003" title=" " alt="" coords="454,274,420,274,205,274,133,273,133,267,205,269,420,269,454,268"/>
+<area shape="rect" id="Node000008" href="$ad717x_8c.html#accdb832ce83708ca8a97c2cadedc0ad2" title="Assign Setup to Channel." alt="" coords="231,335,394,360"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="505,289,421,318,359,337,357,332,419,313,504,284"/>
+<area shape="rect" id="Node000009" href="$ad717x_8c.html#a365530ef685533d6a3715789963f6c52" title="Configure ODR for the device." alt="" coords="205,5,420,31"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="542,244,526,200,500,146,465,91,443,67,418,46,396,33,398,28,422,41,447,63,469,88,505,143,531,198,547,242"/>
+<area shape="rect" id="Node000010" href="$ad717x_8c.html#a492035c62137447abf9bb08a860d7b8d" title="Set Analog Inputs to channel." alt="" coords="223,55,402,95"/>
+<area shape="poly" id="edge12_Node000007_Node000010" title=" " alt="" coords="536,245,490,178,457,141,419,110,396,98,399,93,421,105,460,137,494,174,540,242"/>
+<area shape="rect" id="Node000011" href="$ad717x_8c.html#a16caf3a1ca02c0830838e72082b930a2" title="Enable input and reference buffers." alt="" coords="226,120,399,145"/>
+<area shape="poly" id="edge14_Node000007_Node000011" title=" " alt="" coords="530,248,482,202,451,179,419,159,390,148,392,143,421,154,455,174,485,198,533,244"/>
+<area shape="rect" id="Node000012" href="$ad717x_8c.html#a57f7e5c00c7d1ed755f2896406c7b023" title="Set ADC Mode." alt="" coords="227,384,398,409"/>
+<area shape="poly" id="edge17_Node000007_Node000012" title=" " alt="" coords="532,293,484,335,453,357,421,375,390,386,389,381,419,370,451,352,480,331,528,289"/>
+<area shape="rect" id="Node000013" href="$ad717x_8c.html#aacac1db5638624d6c1fdd03431255bdb" title="Set channel status &#45; Enable/Disable." alt="" coords="235,485,390,525"/>
+<area shape="poly" id="edge20_Node000007_Node000013" title=" " alt="" coords="536,294,487,355,422,424,382,458,345,486,342,482,379,454,418,420,483,351,532,291"/>
+<area shape="rect" id="Node000014" href="$ad717x_8c.html#abe8871d8919f03e1aa9078b590945ae8" title="Set Polarity." alt="" coords="235,169,390,195"/>
+<area shape="poly" id="edge23_Node000007_Node000014" title=" " alt="" coords="515,252,470,230,419,210,376,197,377,192,421,205,472,225,518,247"/>
+<area shape="rect" id="Node000015" href="$ad717x_8c.html#aee6442429a52d68ee8c1b2f418763316" title="Select the reference source." alt="" coords="229,219,396,259"/>
+<area shape="poly" id="edge25_Node000007_Node000015" title=" " alt="" coords="454,259,396,252,396,247,455,254"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="253,333,204,318,113,284,115,279,206,313,255,328"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="217,39,207,45,181,69,159,97,124,157,101,215,88,256,83,255,96,213,119,155,154,94,177,65,204,41,214,34"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="216,104,207,109,167,145,133,187,91,257,87,254,129,184,163,141,204,105,213,99"/>
+<area shape="poly" id="edge15_Node000011_Node000003" title=" " alt="" coords="221,152,207,159,171,182,140,209,95,258,91,254,136,205,168,178,204,154,219,148"/>
+<area shape="poly" id="edge18_Node000012_Node000003" title=" " alt="" coords="220,382,204,375,169,354,138,329,92,283,96,280,141,325,172,349,207,370,222,377"/>
+<area shape="poly" id="edge19_Node000012_Node000005" title=" " alt="" coords="279,419,106,522,103,518,277,414"/>
+<area shape="poly" id="edge21_Node000013_Node000003" title=" " alt="" coords="223,481,204,468,159,422,125,369,100,319,85,283,90,281,105,317,129,366,163,418,207,464,226,476"/>
+<area shape="poly" id="edge22_Node000013_Node000005" title=" " alt="" coords="222,518,158,526,157,521,221,513"/>
+<area shape="poly" id="edge24_Node000014_Node000003" title=" " alt="" coords="235,201,206,210,151,234,106,258,103,253,149,229,204,205,233,196"/>
+<area shape="poly" id="edge26_Node000015_Node000003" title=" " alt="" coords="216,254,133,265,132,260,215,249"/>
+</map>

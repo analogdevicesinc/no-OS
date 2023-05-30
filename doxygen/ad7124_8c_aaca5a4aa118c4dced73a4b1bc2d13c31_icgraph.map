@@ -1,0 +1,21 @@
+<map id="ad7124_set_adc_mode" name="ad7124_set_adc_mode">
+<area shape="rect" id="Node000001" title="Set ADC Mode." alt="" coords="640,105,811,131"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#a013528551687cdf64b1b859aef9865a3" title="Perform system zero&#45;scale or full&#45;scale calibration on a channel." alt="" coords="418,5,587,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="693,100,646,72,591,44,558,33,560,28,593,40,648,67,696,96"/>
+<area shape="rect" id="Node000003" href="$ad7124_8c.html#ae6ea3197809d427f07edba04882b4fac" title="Read one raw sample from the internal temperature sensor (hw ch 15). Configures hw channel 15 with se..." alt="" coords="413,55,592,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="655,105,559,83,560,77,656,100"/>
+<area shape="rect" id="Node000004" href="$ad7124_8c.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="446,156,559,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="656,136,560,159,559,153,655,131"/>
+<area shape="rect" id="Node000005" href="$cn0391_8c.html#a0a2eb566f667a8a836fad277eadd773b" title="Initialize CN0391 device: set up AD7124 and configure IOUT." alt="" coords="220,105,317,131"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="626,121,318,121,318,115,626,115"/>
+<area shape="rect" id="Node000009" href="$cn0391_8c.html#aebf6a56f4ea8daa3f5b5ce50cfd7551d" title="Perform a full temperature measurement cycle. Reads all 3 ADC channels (thermocouple,..." alt="" coords="172,253,365,279"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="696,140,649,169,593,195,533,216,471,232,357,256,356,251,470,227,531,211,591,190,646,164,693,136"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="432,156,317,131,318,126,433,151"/>
+<area shape="rect" id="Node000007" href="$ad7124-8pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="209,155,328,180"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="433,171,328,170,328,165,433,166"/>
+<area shape="rect" id="Node000008" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="241,204,296,229"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="433,186,297,214,296,209,432,180"/>
+<area shape="rect" id="Node000006" href="$eval-cn0391-ardz_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,180,124,205"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="208,134,173,144,91,182,88,177,171,140,206,129"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="196,252,171,244,89,208,91,203,173,240,197,247"/>
+</map>

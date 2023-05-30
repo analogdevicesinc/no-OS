@@ -1,0 +1,38 @@
+<map id="no_os_uart_remove" name="no_os_uart_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by no_os_uart_init()." alt="" coords="383,301,533,327"/>
+<area shape="rect" id="Node000002" href="$ades1754_8c.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="197,5,310,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="450,288,438,237,416,171,382,102,359,71,333,44,309,30,312,26,336,40,363,68,386,100,421,169,443,235,455,287"/>
+<area shape="rect" id="Node000004" href="$ades1754_8c.html#ab4de2134ccbc42d937ad7d2d0873a681" title="Deallocate any resources used by the initialization function.." alt="" coords="182,55,325,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="447,289,432,246,409,193,376,139,356,115,333,93,314,82,317,78,336,89,360,111,380,136,414,191,437,244,452,287"/>
+<area shape="rect" id="Node000005" href="$hello__world_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Hello World application entry point." alt="" coords="173,104,333,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="443,290,426,256,402,217,370,177,333,143,312,132,315,127,336,138,374,173,406,214,431,254,448,287"/>
+<area shape="rect" id="Node000006" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="175,153,332,179"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="437,292,394,241,365,215,333,192,309,181,312,176,336,188,368,211,397,238,441,289"/>
+<area shape="rect" id="Node000008" href="$cmd_8c.html#a87f501fc90d5f0f69db7b44288b9a1c8" title=" " alt="" coords="210,203,297,228"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="426,295,383,268,334,242,296,228,298,223,336,237,386,263,429,291"/>
+<area shape="rect" id="Node000010" href="$curvetrace__example_8c.html#aa8c97b178f1ed4023a2fa5c0217a52c9" title=" " alt="" coords="176,252,331,277"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="391,301,306,280,307,275,392,296"/>
+<area shape="rect" id="Node000011" href="$flash__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Flash example main execution." alt="" coords="194,301,313,327"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="369,317,313,317,313,311,369,311"/>
+<area shape="rect" id="Node000012" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="194,351,313,376"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="392,332,307,353,306,348,391,327"/>
+<area shape="rect" id="Node000013" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="213,400,293,425"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="428,337,385,364,336,390,295,405,293,400,334,385,383,359,425,332"/>
+<area shape="rect" id="Node000014" href="$nmea__ubx_8c.html#a6326efc5992d3186668ad6264639bf0e" title="Remove the GNSS device and release allocated resources." alt="" coords="199,449,308,475"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="441,339,397,389,368,416,336,439,309,452,306,447,333,434,365,412,393,386,437,336"/>
+<area shape="rect" id="Node000015" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="172,499,335,524"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="448,340,406,413,374,454,336,488,312,501,310,496,333,484,370,450,401,410,443,338"/>
+<area shape="rect" id="Node000017" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="226,548,281,573"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="452,341,437,383,413,436,380,490,360,515,336,537,309,552,282,560,280,555,307,547,333,533,356,512,376,487,409,434,432,381,447,339"/>
+<area shape="rect" id="Node000018" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="226,597,281,623"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="455,341,443,392,420,458,386,527,363,559,336,587,310,602,281,610,280,605,308,597,333,583,359,555,381,524,415,456,438,391,450,340"/>
+<area shape="rect" id="Node000003" href="$spi__uart__bridge__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="SPI&#45;to&#45;UART example main execution." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,30,125,38,124,33,182,25"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="168,59,124,53,125,48,169,54"/>
+<area shape="rect" id="Node000007" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="37,153,92,179"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="161,169,92,169,92,163,161,163"/>
+<area shape="rect" id="Node000009" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,203,124,228"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="196,218,124,218,124,213,196,213"/>
+<area shape="rect" id="Node000016" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,499,124,524"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="158,514,124,514,124,509,158,509"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="ltp8800_read_word" name="ltp8800_read_word">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read word operation." alt="" coords="776,70,923,95"/>
+<area shape="rect" id="Node000002" href="$ltp8800_8c.html#a613ac6d7323b5995e0e60723902f6cbe" title="Set phase order for polyphase application." alt="" coords="565,5,709,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="788,69,708,47,710,42,789,64"/>
+<area shape="rect" id="Node000007" href="$ltp8800_8c.html#aadb528b31012f3e99bac083b6f33cfce" title="Read statuses." alt="" coords="343,70,497,95"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="762,85,498,85,498,80,762,80"/>
+<area shape="rect" id="Node000008" href="$ltp8800_8c.html#af01d8d377ad762a7229ac5d274fe50d2" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="545,121,728,146"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="782,101,691,123,690,118,781,96"/>
+<area shape="rect" id="Node000003" href="$ltp8800_8c.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="371,17,469,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="551,30,469,31,469,26,551,24"/>
+<area shape="rect" id="Node000004" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="174,70,293,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="362,48,279,73,278,67,361,43"/>
+<area shape="rect" id="Node000005" href="$iio__ltp8800_8c.html#a31893ef9f84551a575cc2c0f59c8a74d" title="Initializes the LTP8800 IIO descriptor." alt="" coords="172,17,295,42"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="357,32,295,32,295,27,357,27"/>
+<area shape="rect" id="Node000006" href="$ltp8800_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,17,124,42"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="158,32,124,32,124,27,158,27"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="329,85,293,85,293,80,329,80"/>
+<area shape="rect" id="Node000009" href="$ltp8800_8c.html#a6b4bf00310c6727864ac8ac8c601a43d" title="Read a value." alt="" coords="345,119,495,145"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="532,135,496,135,496,130,532,130"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="358,118,282,98,283,93,359,113"/>
+</map>

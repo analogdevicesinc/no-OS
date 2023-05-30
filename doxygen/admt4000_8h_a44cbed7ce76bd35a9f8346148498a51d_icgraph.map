@@ -1,0 +1,5 @@
+<map id="admt4000_get_harmonic" name="admt4000_get_harmonic">
+<area shape="rect" id="Node000001" title="Get harmonic configuration (magnitude and phase together)." alt="" coords="244,13,428,38"/>
+<area shape="rect" id="Node000002" href="$admt4000_8c.html#ab551e3a6f9d1b522cee6393af8f91c4a" title="Get all harmonic configurations in a single operation." alt="" coords="5,5,196,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,28,196,28,196,23,230,23"/>
+</map>

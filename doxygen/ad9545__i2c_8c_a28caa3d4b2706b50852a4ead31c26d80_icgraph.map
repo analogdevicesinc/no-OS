@@ -1,0 +1,7 @@
+<map id="ad9545_i2c_reg_read" name="ad9545_i2c_reg_read">
+<area shape="rect" id="Node000001" title=" " alt="" coords="319,5,479,31"/>
+<area shape="rect" id="Node000002" href="$ad9545_8c.html#a2f5e77a1a4824f86f7d46f82458a7153" title=" " alt="" coords="172,5,271,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,21,271,21,271,15,305,15"/>
+<area shape="rect" id="Node000003" href="$ad9545_2src_2examples_2basic__example_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="max17616_read_status" name="max17616_read_status">
+<area shape="rect" id="Node000001" title="Read MAX17616 device status." alt="" coords="280,31,455,56"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#a06842d04ba8765565503d1949435b14f" title="Read attribute function for MAX17616 PMBus IIO driver." alt="" coords="29,5,209,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,36,209,30,209,25,267,30"/>
+<area shape="rect" id="Node000003" href="$iio__max17616_8c.html#a0a0fb393a4d6b635c08d32c00982af2c" title="Read global attribute function for MAX17616 IIO device." alt="" coords="5,55,232,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="267,56,233,59,232,54,266,50"/>
+</map>

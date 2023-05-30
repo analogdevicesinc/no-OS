@@ -1,0 +1,9 @@
+<map id="ltm4700_send_byte" name="ltm4700_send_byte">
+<area shape="rect" id="Node000001" title="Send a PMBus command to the device." alt="" coords="232,55,383,80"/>
+<area shape="rect" id="Node000002" href="$ltm4700_8c.html#a7cfcfb2cfc16b9c718add9028dde060a" title="Clear peak values." alt="" coords="14,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,54,150,33,151,28,239,49"/>
+<area shape="rect" id="Node000003" href="$ltm4700_8c.html#a314f2238652ffef0ba4a1e55bd6646d0" title="NVM/EEPROM user commands." alt="" coords="21,55,168,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,70,168,70,168,65,218,65"/>
+<area shape="rect" id="Node000004" href="$ltm4700_8c.html#a8bf62f4e28d79e48049e5f112f5dfce6" title="Software reset." alt="" coords="5,104,184,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,86,151,107,150,101,238,81"/>
+</map>

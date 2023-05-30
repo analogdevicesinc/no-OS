@@ -1,0 +1,23 @@
+<map id="altera_a10_cdr_pll_round_rate" name="altera_a10_cdr_pll_round_rate">
+<area shape="rect" id="Node000001" title="altera_a10_cdr_pll_round_rate" alt="" coords="608,122,749,162"/>
+<area shape="rect" id="Node000002" href="$altera__adxcvr_8c.html#a98773bfa82d9b792e1998638b299470a" title="adxcvr_round_rate" alt="" coords="417,129,560,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="594,145,560,145,560,139,594,139"/>
+<area shape="rect" id="Node000003" href="$altera__adxcvr_8c.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="adxcvr_init" alt="" coords="275,129,369,155"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="404,145,369,145,369,139,404,139"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app__jesd_8c.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="113,5,221,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="301,120,268,82,225,44,205,33,207,28,228,40,272,78,305,116"/>
+<area shape="rect" id="Node000005" href="$ad9081_2src_2app__jesd_8c.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="113,55,221,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="285,125,226,94,200,83,203,78,228,89,288,120"/>
+<area shape="rect" id="Node000007" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="108,104,227,129"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="261,135,226,129,227,124,262,129"/>
+<area shape="rect" id="Node000008" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="108,153,227,179"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="262,154,227,159,227,154,261,149"/>
+<area shape="rect" id="Node000009" href="$app__transceiver_8c.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="110,203,225,228"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="286,163,228,192,200,205,198,200,226,188,283,159"/>
+<area shape="rect" id="Node000011" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="140,252,195,277"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="304,167,271,205,228,242,196,258,194,253,225,237,267,201,300,164"/>
+<area shape="rect" id="Node000006" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="100,70,60,70,60,65,100,65"/>
+<area shape="rect" id="Node000010" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,203,60,228"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="96,218,60,218,60,213,96,213"/>
+</map>

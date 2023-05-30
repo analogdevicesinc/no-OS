@@ -1,0 +1,87 @@
+<map id="adf4377_spi_read" name="adf4377_spi_read">
+<area shape="rect" id="Node000001" title="Reads data from ADF4377 over SPI." alt="" coords="900,476,1037,501"/>
+<area shape="rect" id="Node000002" href="$adf4377_8c.html#a91f9ceeb6ad62dc7e599d7cb7f75ed0f" title="ADF4377 SPI Scratchpad check." alt="" coords="653,5,852,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="961,463,947,371,922,248,890,129,871,83,850,52,821,33,824,29,854,48,875,81,895,127,928,247,952,370,966,462"/>
+<area shape="rect" id="Node000003" href="$adf4377_8c.html#a0dd8ab44b3943f2f325d5bd6101b7dc1" title="Initializes the ADF4377." alt="" coords="455,31,557,56"/>
+<area shape="poly" id="edge23_Node000001_Node000003" title=" " alt="" coords="961,463,946,379,922,268,889,162,870,122,850,96,829,84,799,73,720,59,633,50,557,47,558,42,634,45,721,53,800,68,832,79,854,92,875,119,894,160,927,266,951,378,966,462"/>
+<area shape="rect" id="Node000007" href="$adf4377_8c.html#a65d0131cff20828ff5e91f31cce32cbd" title="Get the bleed delay in femtoseconds." alt="" coords="658,107,847,132"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="964,462,958,398,941,312,927,266,907,222,882,181,850,145,834,134,837,130,854,141,886,178,912,220,932,265,946,311,963,397,969,462"/>
+<area shape="rect" id="Node000008" href="$adf4377_8c.html#a3bce009c2ff7ee47333a5184fa0ad918" title="Gets the value of the set bleed word." alt="" coords="660,156,845,181"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="962,463,954,406,935,334,920,296,901,258,878,224,850,195,833,184,836,179,854,191,882,221,906,256,925,293,940,332,959,405,968,462"/>
+<area shape="rect" id="Node000009" href="$adf4377_8c.html#a50703eaa7467ccc3ed4a4ec22ec81a1a" title="Get the clock output inversion." alt="" coords="675,205,831,231"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="960,463,949,415,928,356,896,295,875,268,850,244,830,232,832,227,854,240,879,264,900,292,933,354,954,414,965,462"/>
+<area shape="rect" id="Node000011" href="$adf4377_8c.html#a7216add645667d1c77933b0a27717646" title="Gets the charge pump value from the register. The value will be between 0 and 15 on 8 bits...." alt="" coords="685,255,821,280"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="957,463,943,425,920,379,890,332,850,294,820,278,822,274,854,289,894,329,925,376,947,423,962,461"/>
+<area shape="rect" id="Node000012" href="$adf4377_8c.html#afc346b5e2acfa8cac1a25be8ce29ce1d" title="Gets the value the output channel if it is enabled or disable." alt="" coords="671,304,835,329"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="952,465,912,404,884,371,851,344,825,332,827,327,853,340,887,368,916,401,957,462"/>
+<area shape="rect" id="Node000013" href="$adf4377_8c.html#a92c17cfe3e2a3fd3805755df4d2e776f" title="Gets the value the doubler if it is enabled or disable and stores it it the dev structure." alt="" coords="677,354,828,394"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="940,469,900,438,851,408,824,397,826,392,853,404,903,434,944,465"/>
+<area shape="rect" id="Node000014" href="$adf4377_8c.html#ad84879015fab9df376d477a62135fbae" title="Gets the value of the set SR_INV_ADJ Adjustment to enable or disable which adds a constant value to t..." alt="" coords="653,419,852,444"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="908,475,851,459,803,447,805,441,853,454,910,470"/>
+<area shape="rect" id="Node000015" href="$adf4377_8c.html#a14e89387c4f031632f9d45545f659967" title="Gets the value of the set sysref monitoring." alt="" coords="666,469,839,509"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="886,491,839,491,839,486,886,486"/>
+<area shape="rect" id="Node000016" href="$adf4377_8c.html#a58f91282c854ae5ba3d508147cd640e0" title="Gets the value of the set NDEL (N divider Delay) register." alt="" coords="683,533,822,559"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="910,508,853,523,805,536,803,531,851,518,908,502"/>
+<area shape="rect" id="Node000017" href="$adf4377_8c.html#ae30f1729b0ecdca98ee8b040a3487113" title="Gets the output power register value." alt="" coords="663,583,842,608"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="944,513,903,543,853,572,818,585,816,580,851,568,900,539,941,508"/>
+<area shape="rect" id="Node000018" href="$adf4377_8c.html#a75a3fee7e078614afeabaa7458e4a7cb" title="Gets the value of the set RDEL (R divider Delay) register." alt="" coords="685,632,820,657"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="955,515,914,569,885,597,853,622,822,636,819,631,851,617,882,593,909,565,950,511"/>
+<area shape="rect" id="Node000019" href="$adf4377_8c.html#a3a69993acab05d0a26737ea6e043dbc6" title="Gets the value the reference divider." alt="" coords="675,681,830,707"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="961,515,945,551,922,593,892,635,854,671,830,684,827,679,850,666,888,631,918,590,940,548,956,513"/>
+<area shape="rect" id="Node000020" href="$adf4377_8c.html#a298bb6a4a729512132b4e1cccfadb4d0" title="Gets the user proposed output frequency." alt="" coords="682,731,823,756"/>
+<area shape="poly" id="edge20_Node000001_Node000020" title=" " alt="" coords="964,516,951,560,930,616,898,672,877,698,854,720,825,736,822,731,850,716,873,694,893,669,925,613,946,559,959,514"/>
+<area shape="rect" id="Node000021" href="$adf4377_8c.html#ac0bc507b99a074e8f3339c222a149f28" title="Gets the rfout divider register value." alt="" coords="656,780,849,805"/>
+<area shape="poly" id="edge21_Node000001_Node000021" title=" " alt="" coords="967,515,957,569,937,637,922,673,904,708,881,741,854,769,833,782,830,778,850,765,877,738,899,706,917,671,932,635,952,567,962,514"/>
+<area shape="rect" id="Node000022" href="$adf4377_8c.html#a00bd202ed51e872ba5aea0ba92a50d93" title="Gets the value of the set SR_DEL Adjustment Feature Translated to Pico Seconds on the output." alt="" coords="665,829,841,855"/>
+<area shape="poly" id="edge22_Node000001_Node000022" title=" " alt="" coords="969,515,962,577,944,659,929,702,910,745,885,784,854,819,835,831,832,827,850,815,880,781,905,742,924,700,939,657,956,576,963,515"/>
+<area shape="rect" id="Node000023" href="$adf4377_8c.html#aae5b3651e2d7cb2441cb028af3ce7a81" title=" " alt="" coords="439,769,573,795"/>
+<area shape="poly" id="edge24_Node000001_Node000023" title=" " alt="" coords="966,516,952,598,927,705,912,758,895,805,875,843,854,868,828,885,803,896,779,902,756,903,707,892,652,868,635,855,626,839,618,823,604,808,572,794,575,789,607,804,623,819,631,836,639,851,655,864,709,887,756,897,779,897,801,891,825,880,850,864,871,840,890,803,907,756,922,703,946,596,961,515"/>
+<area shape="rect" id="Node000028" href="$adf4377_8c.html#aa99acf7e714675fef26d10d59a3746b7" title="Update ADF4377 register." alt="" coords="664,1041,841,1067"/>
+<area shape="poly" id="edge29_Node000001_Node000028" title=" " alt="" coords="966,515,953,586,931,686,898,800,854,912,833,952,809,988,767,1043,763,1040,805,985,829,949,850,910,893,798,926,685,948,585,961,515"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="640,32,558,41,557,35,639,27"/>
+<area shape="rect" id="Node000004" href="$iio__adf4377_8c.html#af84bd86ae139c2945076450b848947cb" title="Initialize the ADF4377 IIO device." alt="" coords="202,7,329,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="441,40,329,28,329,23,441,34"/>
+<area shape="rect" id="Node000006" href="$adf4377__sdz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="206,56,325,81"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="441,53,325,65,325,60,441,47"/>
+<area shape="rect" id="Node000005" href="$adf4377__sdz_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,7,124,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="188,22,124,22,124,17,188,17"/>
+<area shape="rect" id="Node000010" href="$adf4377_8c.html#ac0746ed8126c9b1ef9d98716a30c79a8" title="Get the channel inversion." alt="" coords="412,312,600,337"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="676,237,654,244,583,280,527,314,524,310,580,275,652,240,674,232"/>
+<area shape="poly" id="edge14_Node000014_Node000010" title=" " alt="" coords="678,417,652,408,581,373,525,340,528,335,583,369,654,404,680,412"/>
+<area shape="rect" id="Node000024" href="$adf4377_8c.html#a08f2c1c84711e139d71372dd9c272c37" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="190,681,341,721"/>
+<area shape="poly" id="edge25_Node000023_Node000024" title=" " alt="" coords="454,767,324,723,326,718,456,762"/>
+<area shape="rect" id="Node000025" href="$adf4377_8c.html#a0ea1b3126955879798c5a2e558681ea1" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="189,745,342,771"/>
+<area shape="poly" id="edge26_Node000023_Node000025" title=" " alt="" coords="424,777,342,768,343,763,425,771"/>
+<area shape="rect" id="Node000026" href="$adf4377_8c.html#a7f19e75c1223f2da1d50aceea1cdab36" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="188,795,343,820"/>
+<area shape="poly" id="edge27_Node000023_Node000026" title=" " alt="" coords="425,793,343,802,342,797,425,788"/>
+<area shape="rect" id="Node000027" href="$adf4377_8c.html#a0ffea34a8701485d8a263906cff45bb0" title="Set the desired output frequency and reset everything over to maximum supported value of 12...." alt="" coords="195,844,335,869"/>
+<area shape="poly" id="edge28_Node000023_Node000027" title=" " alt="" coords="430,801,408,808,384,821,360,834,321,847,320,841,358,829,381,816,406,804,429,796"/>
+<area shape="poly" id="edge39_Node000028_Node000023" title=" " alt="" coords="731,1032,692,978,651,913,638,881,632,855,624,831,604,808,572,792,575,787,607,804,628,829,637,853,643,880,656,910,697,975,735,1029"/>
+<area shape="rect" id="Node000029" href="$adf4377_8c.html#a0c5006579bdf10b9d4c3d2872ae3094f" title="Set the bleed delay in femtoseconds." alt="" coords="412,819,600,844"/>
+<area shape="poly" id="edge30_Node000028_Node000029" title=" " alt="" coords="733,1032,662,930,626,882,604,857,582,846,584,842,607,853,630,879,666,927,737,1028"/>
+<area shape="rect" id="Node000030" href="$adf4377_8c.html#af78d51afb9eb08b039e13dea5b2313f8" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="414,868,598,893"/>
+<area shape="poly" id="edge31_Node000028_Node000030" title=" " alt="" coords="733,1032,680,969,644,935,604,907,579,896,581,891,607,902,648,931,684,965,737,1029"/>
+<area shape="rect" id="Node000031" href="$adf4377_8c.html#ab67f49258d11de09fde714cd21caff06" title="Set the clock output inversion." alt="" coords="429,917,583,943"/>
+<area shape="poly" id="edge32_Node000028_Node000031" title=" " alt="" coords="725,1035,671,995,604,956,572,945,574,940,606,952,674,990,728,1031"/>
+<area shape="rect" id="Node000033" href="$adf4377_8c.html#a707fa9b96d7b81b1dd9edf1d01f17003" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="439,967,573,992"/>
+<area shape="poly" id="edge34_Node000028_Node000033" title=" " alt="" coords="704,1039,605,1006,562,995,564,989,606,1001,705,1034"/>
+<area shape="rect" id="Node000034" href="$adf4377_8c.html#abac8fcaff324082a34e0995424ba6e80" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="425,1016,587,1041"/>
+<area shape="poly" id="edge35_Node000028_Node000034" title=" " alt="" coords="650,1046,587,1040,588,1034,651,1041"/>
+<area shape="rect" id="Node000035" href="$adf4377_8c.html#ac0fc8009d3ddee10fa49575483939fb6" title="Set the value of SR_INV_ADJ Adjustment to enable or disable which adds a constant value to the skew a..." alt="" coords="407,1065,605,1091"/>
+<area shape="poly" id="edge36_Node000028_Node000035" title=" " alt="" coords="651,1067,606,1071,605,1066,650,1061"/>
+<area shape="rect" id="Node000036" href="$adf4377_8c.html#a7bdaea992998a0dcd0b5cc74a2813702" title="Set enable/disable sysref monitoring." alt="" coords="420,1115,592,1155"/>
+<area shape="poly" id="edge38_Node000028_Node000036" title=" " alt="" coords="701,1074,568,1118,567,1113,699,1069"/>
+<area shape="rect" id="Node000037" href="$adf4377_8c.html#a335eaacc2b1cea170db9c593da88f6be" title="Set the NDEL (N divider Delay) register value." alt="" coords="437,1180,575,1205"/>
+<area shape="poly" id="edge40_Node000028_Node000037" title=" " alt="" coords="731,1078,677,1125,643,1149,606,1170,573,1182,571,1177,604,1165,640,1144,674,1120,727,1074"/>
+<area shape="rect" id="Node000038" href="$adf4377_8c.html#a6572366719abe30d6cba9e8424a17d04" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="417,1229,595,1255"/>
+<area shape="poly" id="edge41_Node000028_Node000038" title=" " alt="" coords="739,1080,686,1149,649,1187,607,1219,579,1232,576,1227,604,1214,646,1183,682,1146,734,1077"/>
+<area shape="rect" id="Node000039" href="$adf4377_8c.html#ab594dec4cb5d3e831fce2b6bc7fb7ee6" title="Set the RDEL (R divider Delay) register value." alt="" coords="439,1279,573,1304"/>
+<area shape="poly" id="edge42_Node000028_Node000039" title=" " alt="" coords="743,1081,724,1122,694,1173,655,1225,607,1268,575,1284,572,1279,604,1264,651,1221,690,1170,719,1120,739,1079"/>
+<area shape="rect" id="Node000040" href="$adf4377_8c.html#a2e743cba2e09dce1b3f1199dfccebf12" title="Set the rfout frequency divider register value and reset everything over to maximum supported value o..." alt="" coords="410,1328,602,1353"/>
+<area shape="poly" id="edge43_Node000028_Node000040" title=" " alt="" coords="747,1081,730,1131,702,1195,661,1261,636,1291,607,1317,584,1330,582,1326,604,1313,632,1288,657,1258,697,1193,725,1129,742,1079"/>
+<area shape="rect" id="Node000041" href="$adf4377_8c.html#a6ce1ab807906005c953dc7013ac03dc2" title="Set the value of SR_DEL Adjustment Feature Translated to Pico Seconds on the output...." alt="" coords="419,1377,593,1403"/>
+<area shape="poly" id="edge44_Node000028_Node000041" title=" " alt="" coords="749,1081,735,1140,709,1217,690,1258,667,1298,639,1335,607,1367,586,1380,583,1375,604,1363,635,1331,662,1295,685,1256,704,1215,730,1139,744,1080"/>
+<area shape="rect" id="Node000032" href="$adf4377_8c.html#ae0a69227b2f1c625fc18e1f22f355361" title="Set the channel inversion." alt="" coords="172,991,359,1016"/>
+<area shape="poly" id="edge33_Node000031_Node000032" title=" " alt="" coords="436,949,407,957,301,993,299,988,406,951,435,943"/>
+<area shape="poly" id="edge37_Node000035_Node000032" title=" " alt="" coords="438,1064,406,1055,299,1019,301,1014,407,1050,440,1059"/>
+</map>

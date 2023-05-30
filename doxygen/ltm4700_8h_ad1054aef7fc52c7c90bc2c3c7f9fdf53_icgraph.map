@@ -1,0 +1,7 @@
+<map id="ltm4700_write_byte" name="ltm4700_write_byte">
+<area shape="rect" id="Node000001" title="Perform a PMBus write_byte operation." alt="" coords="392,5,544,31"/>
+<area shape="rect" id="Node000002" href="$ltm4700_8c.html#a47d902f88abe1974e9d2da2436ed94e5" title="Set operation mode." alt="" coords="172,5,344,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="378,21,344,21,344,15,378,15"/>
+<area shape="rect" id="Node000003" href="$ltm4700_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

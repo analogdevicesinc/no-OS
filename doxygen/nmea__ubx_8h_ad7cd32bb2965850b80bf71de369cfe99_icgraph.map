@@ -1,0 +1,17 @@
+<map id="gnss_ubx_set_val" name="gnss_ubx_set_val">
+<area shape="rect" id="Node000001" title="Set configuration value by key." alt="" coords="371,141,508,166"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a43ec1437613ea72d6ad616f3e49a0af3" title="Configure UBX device baudrate via UBX commands." alt="" coords="168,5,319,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="414,133,372,96,321,60,299,48,301,43,324,55,376,92,417,129"/>
+<area shape="rect" id="Node000004" href="$nmea__ubx_8c.html#af0e61c0a0d26cbe7021123bfacda1c26" title="Configure time pulse output for PPS (Pulse Per Second)" alt="" coords="168,69,319,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="386,139,304,112,306,107,387,134"/>
+<area shape="rect" id="Node000006" href="$nmea__ubx_8c.html#aa20dbcad395a7b20362f3972e726d093" title="Configure input protocol on UART2." alt="" coords="168,133,319,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="357,156,319,156,319,151,357,151"/>
+<area shape="rect" id="Node000007" href="$nmea__ubx_8c.html#aac8c066aca7e03a65e43339e6b15b6fe" title="Configure output protocol on UART2." alt="" coords="164,197,323,237"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="387,173,306,200,304,195,386,168"/>
+<area shape="rect" id="Node000008" href="$nmea__ubx_8c.html#a8d9fe740145f9d16b909e9a1efc18c64" title="Configure output protocol USB." alt="" coords="164,261,323,301"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="417,178,376,215,324,252,301,264,299,259,321,247,372,210,414,174"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="21,13,101,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="154,28,101,28,101,23,154,23"/>
+<area shape="rect" id="Node000005" href="$nmea__ubx_8c.html#a03999543f1b814e2548735c119cf9da8" title="Configure PPS output with optimal settings for timing sync." alt="" coords="5,77,116,102"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="154,92,116,92,116,87,154,87"/>
+</map>

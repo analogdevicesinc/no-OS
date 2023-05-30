@@ -1,0 +1,5 @@
+<map id="gnss_configure_nmea_device" name="gnss_configure_nmea_device">
+<area shape="rect" id="Node000001" title="Configure NMEA&#45;only device for timing operation." alt="" coords="133,5,296,45"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a88aa1624acfdf3fe74e864aaabe97b92" title="Initialize the GNSS device and configure communication." alt="" coords="5,13,85,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,28,86,28,86,23,119,23"/>
+</map>

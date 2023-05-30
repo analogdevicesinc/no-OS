@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/ecg/adas1000/README.rst

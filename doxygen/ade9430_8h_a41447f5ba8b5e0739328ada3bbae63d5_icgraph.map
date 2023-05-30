@@ -1,0 +1,9 @@
+<map id="ade9430_read_data_ph" name="ade9430_read_data_ph">
+<area shape="rect" id="Node000001" title="Read the power/energy for specific phase." alt="" coords="340,31,513,56"/>
+<area shape="rect" id="Node000002" href="$eval-ade9430_2src_2examples_2basic__example_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="173,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="326,33,291,28,292,23,326,28"/>
+<area shape="rect" id="Node000003" href="$iot__example_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="172,55,292,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="326,58,293,63,292,57,326,53"/>
+<area shape="rect" id="Node000004" href="$iot__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Main function execution for maxim platform." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

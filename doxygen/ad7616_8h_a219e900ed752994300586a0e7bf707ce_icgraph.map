@@ -1,0 +1,28 @@
+<map id="ad7616_spi_write" name="ad7616_spi_write">
+<area shape="rect" id="Node000001" title=" " alt="" coords="959,60,1095,85"/>
+<area shape="rect" id="Node000002" href="$ad7616_8c.html#adc7914ad7853e33961965f2c98e2777b" title=" " alt="" coords="779,20,889,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="951,60,889,47,890,41,952,54"/>
+<area shape="rect" id="Node000004" href="$ad7616_8c.html#abf90300cc332a8f57b8ba95f6818a86a" title=" " alt="" coords="757,84,911,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="945,85,911,90,910,84,944,80"/>
+<area shape="rect" id="Node000003" href="$ad7616_8c.html#a9688cf245b09af1f32776f6059079190" title="Setup the sequencer layers." alt="" coords="517,5,703,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="765,31,704,27,704,21,765,26"/>
+<area shape="poly" id="edge14_Node000004_Node000003" title=" " alt="" coords="794,80,708,45,670,33,671,28,710,39,796,75"/>
+<area shape="rect" id="Node000005" href="$ad7616_8c.html#a6798e1d3e151879c041125e8f5b71f24" title=" " alt="" coords="511,55,709,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="743,88,707,83,708,77,744,82"/>
+<area shape="rect" id="Node000006" href="$ad7616_8c.html#a23b6958a61f9c3b1161a51c76750904f" title="Select a new source for a channel." alt="" coords="523,105,697,145"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="744,111,698,116,697,111,744,105"/>
+<area shape="rect" id="Node000010" href="$ad7616_8c.html#ad30c9b898f7d6fb6ad4991c8d7cbdc8f" title=" " alt="" coords="269,162,463,202"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="802,119,760,141,710,159,647,173,582,181,463,187,463,182,582,176,646,168,709,154,757,136,800,114"/>
+<area shape="rect" id="Node000011" href="$ad7616_8c.html#a7f5ed5397b17224af60507d8d5312335" title=" " alt="" coords="539,223,681,248"/>
+<area shape="poly" id="edge11_Node000004_Node000011" title=" " alt="" coords="813,121,768,162,711,203,659,225,657,220,708,198,765,158,809,117"/>
+<area shape="rect" id="Node000007" href="$ad7616_8c.html#ab690e8d620d464da766f18fd88b8797c" title="Perform a self test. Channels selection will be left untouched." alt="" coords="299,112,433,137"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="509,127,433,127,433,122,509,122"/>
+<area shape="rect" id="Node000008" href="$ad7616_8c.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="108,169,221,195"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="303,144,270,153,206,172,205,167,269,147,301,138"/>
+<area shape="rect" id="Node000009" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,169,60,195"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="94,185,60,185,60,179,94,179"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="255,185,221,185,221,179,255,179"/>
+<area shape="rect" id="Node000012" href="$ad7616_8c.html#a7bae55e3393d35a43de018c75c78609f" title=" " alt="" coords="295,227,437,252"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="525,239,437,241,437,236,525,234"/>
+<area shape="poly" id="edge13_Node000012_Node000008" title=" " alt="" coords="301,226,269,217,205,197,206,192,270,211,303,220"/>
+</map>

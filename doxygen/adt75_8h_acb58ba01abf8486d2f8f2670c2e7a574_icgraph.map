@@ -1,0 +1,17 @@
+<map id="adt75_init" name="adt75_init">
+<area shape="rect" id="Node000001" title="Initialize the device structure." alt="" coords="445,79,532,104"/>
+<area shape="rect" id="Node000002" href="$iio__adt75_8c.html#a50437084f22880ce77e5b16a172b440d" title="Initializes the ADT75 IIO descriptor." alt="" coords="283,29,393,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,77,377,57,379,52,437,72"/>
+<area shape="rect" id="Node000006" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="279,79,397,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="432,94,397,94,397,89,432,89"/>
+<area shape="rect" id="Node000007" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="279,128,397,153"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="437,111,379,130,377,125,436,106"/>
+<area shape="rect" id="Node000003" href="$adt75_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="110,5,229,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="268,35,229,29,230,24,269,30"/>
+<area shape="rect" id="Node000004" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="108,55,231,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="269,55,231,61,230,56,268,50"/>
+<area shape="rect" id="Node000005" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+<area shape="rect" id="Node000008" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="142,128,197,153"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="265,143,197,143,197,138,265,138"/>
+</map>

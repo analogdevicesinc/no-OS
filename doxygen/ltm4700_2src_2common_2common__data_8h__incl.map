@@ -1,0 +1,35 @@
+<map id="projects/ltm4700/src/common/common_data.h" name="projects/ltm4700/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by ltm4700 examples." alt="" coords="285,5,477,45"/>
+<area shape="rect" id="Node000002" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="390,93,495,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="398,44,427,81,423,84,394,47"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,167,104,192"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="342,48,93,163,91,158,340,43"/>
+<area shape="rect" id="Node000008" href="$ltm4700_8h.html" title="Header file of the LTM4700 driver." alt="" coords="277,93,365,119"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="369,47,341,84,336,81,365,44"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="520,93,629,119"/>
+<area shape="poly" id="edge21_Node000001_Node000012" title=" " alt="" coords="429,43,535,86,533,91,427,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="345,240,415,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="440,120,393,228,388,226,435,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="659,240,741,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="496,114,772,164,778,175,779,185,771,203,755,220,735,235,732,231,751,216,767,200,774,184,773,176,769,169,495,119"/>
+<area shape="rect" id="Node000005" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="581,167,715,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="477,116,603,160,601,165,475,121"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="606,195,430,241,428,236,604,189"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="659,191,686,227,681,230,654,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="509,240,579,265"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="633,194,574,234,571,230,630,190"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="105,189,332,238,331,243,104,194"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="316,120,300,153,297,173,301,191,319,214,343,231,339,235,315,218,296,193,292,173,295,152,311,118"/>
+<area shape="poly" id="edge13_Node000008_Node000004" title=" " alt="" coords="366,114,379,116,458,121,562,123,615,126,662,134,701,146,729,165,736,181,735,198,720,230,715,227,730,196,731,182,725,168,699,151,661,139,614,132,562,128,458,126,378,121,365,119"/>
+<area shape="poly" id="edge18_Node000008_Node000007" title=" " alt="" coords="279,121,112,166,111,160,278,116"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="310,167,381,192"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="328,118,340,153,335,154,323,120"/>
+<area shape="rect" id="Node000010" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="457,167,557,192"/>
+<area shape="poly" id="edge14_Node000008_Node000010" title=" " alt="" coords="352,116,465,159,463,164,350,121"/>
+<area shape="rect" id="Node000011" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="128,167,235,192"/>
+<area shape="poly" id="edge19_Node000008_Node000011" title=" " alt="" coords="300,121,217,163,215,158,298,116"/>
+<area shape="poly" id="edge15_Node000010_Node000003" title=" " alt="" coords="488,194,414,235,411,231,485,190"/>
+<area shape="poly" id="edge17_Node000010_Node000004" title=" " alt="" coords="539,190,657,233,655,238,537,195"/>
+<area shape="poly" id="edge16_Node000010_Node000006" title=" " alt="" coords="515,191,534,227,529,229,510,194"/>
+<area shape="poly" id="edge20_Node000011_Node000003" title=" " alt="" coords="214,190,335,233,334,238,212,195"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="adt75_reg_read" name="adt75_reg_read">
+<area shape="rect" id="Node000001" title="Read the raw value of a register." alt="" coords="395,31,517,56"/>
+<area shape="rect" id="Node000002" href="$adt75_8c.html#a7aa705348acd023fab0b86fdb15ce643" title="Read the current temperature sample (in milliCelsius)" alt="" coords="172,5,347,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="381,36,347,32,347,27,381,31"/>
+<area shape="rect" id="Node000004" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="200,55,319,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="381,55,319,63,319,57,381,50"/>
+<area shape="rect" id="Node000003" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+<area shape="rect" id="Node000005" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="37,55,92,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="186,70,92,70,92,65,186,65"/>
+</map>

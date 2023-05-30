@@ -1,0 +1,7 @@
+<map id="ad7124_read_data" name="ad7124_read_data">
+<area shape="rect" id="Node000001" title="Reads the conversion result from the device." alt="" coords="232,31,375,56"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#ae6ea3197809d427f07edba04882b4fac" title="Read one raw sample from the internal temperature sensor (hw ch 15). Configures hw channel 15 with se..." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,36,184,31,185,26,219,30"/>
+<area shape="rect" id="Node000003" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="67,55,122,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,56,122,67,122,62,218,50"/>
+</map>

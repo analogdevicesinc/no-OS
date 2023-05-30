@@ -1,0 +1,20 @@
+<map id="projects/eval&#45;adxl367z/src/platform/xilinx/main.c" name="projects/eval&#45;adxl367z/src/platform/xilinx/main.c">
+<area shape="rect" id="Node000001" title="Main file for XILINX platform of eval&#45;adxl367z project." alt="" coords="165,5,358,45"/>
+<area shape="rect" id="Node000002" href="$eval-adxl367z_2src_2platform_2xilinx_2parameters_8h.html" title="Definitions specific to XILINX platform used by eval&#45;adxl367z project." alt="" coords="64,93,173,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,48,153,89,150,84,226,43"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="198,93,325,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="264,46,264,79,259,79,259,46"/>
+<area shape="rect" id="Node000008" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="349,93,459,119"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="297,43,372,84,370,89,294,48"/>
+<area shape="rect" id="Node000003" href="$xilinx__spi_8h.html" title=" " alt="" coords="5,167,101,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,121,75,158,71,155,106,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="125,167,243,192"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="131,117,166,155,162,158,127,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="18,313,89,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="51,193,41,225,38,245,39,265,47,300,42,301,33,266,33,245,36,224,46,191"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="48,240,147,265"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="63,191,85,227,81,230,58,194"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="92,267,70,303,65,300,88,264"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="370,167,438,192"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="407,119,407,153,401,153,401,119"/>
+</map>

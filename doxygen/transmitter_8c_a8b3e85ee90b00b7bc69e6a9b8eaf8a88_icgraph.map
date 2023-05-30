@@ -1,0 +1,5 @@
+<map id="TRANSMITTER_NewEdidSegment" name="TRANSMITTER_NewEdidSegment">
+<area shape="rect" id="Node000001" title="Parse the new EDID segment and set the resolution and the pixel clock according to EDID data." alt="" coords="251,5,488,31"/>
+<area shape="rect" id="Node000002" href="$transmitter_8c.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="5,5,203,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="237,21,203,21,203,15,237,15"/>
+</map>

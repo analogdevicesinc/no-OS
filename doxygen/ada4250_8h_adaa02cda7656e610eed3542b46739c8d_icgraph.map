@@ -1,0 +1,24 @@
+<map id="ada4250_read" name="ada4250_read">
+<area shape="rect" id="Node000001" title="Reads data from ada4250 over SPI." alt="" coords="792,132,907,158"/>
+<area shape="rect" id="Node000002" href="$ada4250_8c.html#afcaeb14f57346669b660ba6004853ef8" title="Initialize the ADA4250 device." alt="" coords="172,84,279,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="812,128,759,102,689,72,611,44,529,25,472,15,427,9,382,11,328,25,301,37,277,53,240,86,237,82,274,49,299,32,326,20,382,6,427,4,473,10,530,20,612,39,691,67,761,97,814,124"/>
+<area shape="rect" id="Node000004" href="$ada4250_8c.html#a620ad3b09aade92c35948a253fbf4523" title="Software reset." alt="" coords="353,183,503,208"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="779,156,503,189,503,184,778,151"/>
+<area shape="rect" id="Node000005" href="$ada4250_8c.html#a3ce5fac72005fa4c6e9c1895f0d2163c" title="Update ADA4250 register." alt="" coords="595,107,726,132"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="778,138,726,131,727,126,779,133"/>
+<area shape="rect" id="Node000009" href="$ada4250_8c.html#a0fde1c46c485385926236e8628c53638" title="Update ADA4250 device descriptor." alt="" coords="577,208,744,234"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="807,165,745,191,696,211,694,206,743,186,805,161"/>
+<area shape="rect" id="Node000003" href="$ada4250__ardz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,84,124,110"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,100,124,100,124,94,158,94"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="343,181,325,174,276,143,239,112,242,108,279,139,328,169,345,176"/>
+<area shape="poly" id="edge9_Node000005_Node000004" title=" " alt="" coords="615,140,578,154,530,174,490,186,488,180,528,169,576,149,613,135"/>
+<area shape="rect" id="Node000006" href="$ada4250_8c.html#a20bb94514088aaa21b24674ba857ddd6" title="Enable/Disable Reference Buffer." alt="" coords="355,134,501,159"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="582,131,502,141,501,135,582,126"/>
+<area shape="rect" id="Node000007" href="$ada4250_8c.html#ae3a300b8abee90ae471df602dfa575cb" title="Set current bias for ADA4250." alt="" coords="359,35,497,60"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="615,104,529,74,487,63,488,58,530,69,616,99"/>
+<area shape="rect" id="Node000008" href="$ada4250_8c.html#acd99812b89506c8eafe0ef88ac29c271" title="Set gain for ADA4250." alt="" coords="358,84,498,110"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="582,115,498,106,499,101,582,109"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="563,213,502,206,503,201,563,208"/>
+<area shape="rect" id="Node000010" href="$ada4250_8c.html#a01316be26bb5f84a959c9a6768f529c0" title="Sets the ADA4250 into normal mode and reconfigures it according to the user input." alt="" coords="327,232,529,258"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="564,234,530,237,529,232,563,228"/>
+</map>

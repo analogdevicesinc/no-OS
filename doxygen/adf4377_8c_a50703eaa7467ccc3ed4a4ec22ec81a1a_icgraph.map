@@ -1,0 +1,5 @@
+<map id="adf4377_get_clk_inv" name="adf4377_get_clk_inv">
+<area shape="rect" id="Node000001" title="Get the clock output inversion." alt="" coords="241,5,397,31"/>
+<area shape="rect" id="Node000002" href="$adf4377_8c.html#ac0746ed8126c9b1ef9d98716a30c79a8" title="Get the channel inversion." alt="" coords="5,5,193,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,21,194,21,194,15,227,15"/>
+</map>

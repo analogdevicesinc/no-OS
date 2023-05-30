@@ -1,0 +1,9 @@
+<map id="adpd188_slot_setup" name="adpd188_slot_setup">
+<area shape="rect" id="Node000001" title="Enable slot and setup its FIFO interaction." alt="" coords="396,35,548,60"/>
+<area shape="rect" id="Node000002" href="$iio__adpd188_8c.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="195,5,325,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="382,38,324,30,325,24,383,32"/>
+<area shape="rect" id="Node000004" href="$adpd188_8c.html#ab8a0efa4cbeda4444394df7c4c327938" title="Do initial configuration of the device to use as a smoke detector. The configuration is described in ..." alt="" coords="172,55,348,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="383,62,349,66,348,61,382,57"/>
+<area shape="rect" id="Node000003" href="$iio__adpd1080_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,21,124,21,124,15,181,15"/>
+</map>

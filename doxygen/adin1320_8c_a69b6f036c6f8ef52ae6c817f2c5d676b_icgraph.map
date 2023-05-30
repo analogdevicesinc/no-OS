@@ -1,0 +1,23 @@
+<map id="adin1320_write" name="adin1320_write">
+<area shape="rect" id="Node000001" title="MDIO Write with Clause22 or Clause45." alt="" coords="579,104,701,129"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html#a41498295ae6660525c007f2b715762cc" title="Configure Magic Packet SecureOn Key." alt="" coords="347,5,522,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="612,97,574,70,530,44,498,33,500,28,532,40,577,65,615,93"/>
+<area shape="rect" id="Node000003" href="$adin1320_8c.html#a14de302d634c3813393729863e075e50" title="Configure Wake&#45;on&#45;LAN Station Address." alt="" coords="349,55,520,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="573,103,488,83,489,77,574,98"/>
+<area shape="rect" id="Node000005" href="$cmd__list_8c.html#ab67b768735afd30ad091271e2e0ec79e" title=" " alt="" coords="369,104,500,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="565,119,500,119,500,114,565,114"/>
+<area shape="rect" id="Node000008" href="$cmd__mode_8c.html#a7b56f17d0914d03695f95fe7e711aad5" title=" " alt="" coords="344,153,525,179"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="574,135,489,156,488,151,573,130"/>
+<area shape="rect" id="Node000010" href="$cmd__mode_8c.html#adb34ddb8110d29ccad596a853eb8db4b" title=" " alt="" coords="339,203,531,228"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="615,140,577,167,532,192,497,205,495,200,530,188,574,163,611,136"/>
+<area shape="rect" id="Node000004" href="$wake__on__lan_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="172,55,291,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="335,70,291,70,291,65,335,65"/>
+<area shape="rect" id="Node000006" href="$cmd_8c.html#a6cf169a34e4a3811a07093de72919f4b" title=" " alt="" coords="178,104,285,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="356,119,285,119,285,114,356,114"/>
+<area shape="rect" id="Node000007" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,129,124,155"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="165,129,125,136,124,130,164,124"/>
+<area shape="rect" id="Node000009" href="$cmd_8c.html#ac1fdbd851dca722a4c7ee9bbe2e55de1" title=" " alt="" coords="177,153,286,179"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="330,169,286,169,286,163,330,163"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="162,159,124,153,125,148,163,154"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="368,202,284,181,285,176,369,197"/>
+</map>

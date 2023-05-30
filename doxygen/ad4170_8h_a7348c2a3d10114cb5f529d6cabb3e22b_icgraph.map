@@ -1,0 +1,7 @@
+<map id="ad4170_set_adc_ctrl" name="ad4170_set_adc_ctrl">
+<area shape="rect" id="Node000001" title="Set the AD4170 ADC Control." alt="" coords="296,31,451,56"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#ae841b1cc0c1181eb62c10b2deedc76d1" title="Exit continuous transmit mode." alt="" coords="5,5,248,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="282,37,248,33,249,28,283,31"/>
+<area shape="rect" id="Node000003" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="77,55,176,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="283,55,176,65,176,60,282,50"/>
+</map>

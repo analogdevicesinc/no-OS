@@ -1,0 +1,16 @@
+<map id="lt8722_remove" name="lt8722_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by the lt8722_init()" alt="" coords="529,56,649,81"/>
+<area shape="rect" id="Node000002" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="527,55,481,46,380,32,291,24,291,19,381,27,482,41,528,50"/>
+<area shape="rect" id="Node000003" href="$iio__lt8722_8c.html#a091a9548e6dbd63b978bbffd9e549d97" title="Free resources allocated by the init function." alt="" coords="339,105,481,131"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="530,88,458,108,457,103,528,83"/>
+<area shape="rect" id="Node000006" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="365,56,455,81"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="515,71,455,71,455,66,515,66"/>
+<area shape="rect" id="Node000004" href="$lt8722_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,81,124,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="325,115,124,101,124,95,325,109"/>
+<area shape="rect" id="Node000005" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="174,56,289,81"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="349,104,278,84,279,79,351,99"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="161,82,125,88,124,82,160,77"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="351,55,276,33,278,28,352,50"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="350,71,289,71,289,66,350,66"/>
+</map>

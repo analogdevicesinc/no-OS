@@ -1,0 +1,14 @@
+<map id="pcf85263_read" name="pcf85263_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="553,31,672,56"/>
+<area shape="rect" id="Node000002" href="$pcf85263_8c.html#ae0567f721992536a48b633d71b53c0c8" title="Read time stamp." alt="" coords="354,5,491,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="539,36,491,30,492,24,540,31"/>
+<area shape="rect" id="Node000005" href="$pcf85263_8c.html#a345542ebb2f61e2de1021c03fac33137" title="Update specific register bits." alt="" coords="340,55,505,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="540,55,506,60,505,54,539,50"/>
+<area shape="rect" id="Node000003" href="$iot__example_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="172,5,292,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="341,21,292,21,292,15,341,15"/>
+<area shape="rect" id="Node000004" href="$iot__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Main function execution for maxim platform." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,32,124,37,124,32,158,26"/>
+<area shape="rect" id="Node000006" href="$pcf85263_8c.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="177,55,287,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="326,70,288,70,288,65,326,65"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="162,60,124,54,125,49,163,55"/>
+</map>

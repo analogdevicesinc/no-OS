@@ -1,0 +1,12 @@
+<map id="max22516_update" name="max22516_update">
+<area shape="rect" id="Node000001" title="Update MAX22516 register." alt="" coords="395,55,537,80"/>
+<area shape="rect" id="Node000002" href="$max22516_8c.html#a6f8764f664b871d843917d904fa86fc1" title="MAX22516 do set." alt="" coords="199,5,341,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="401,54,321,33,322,28,402,49"/>
+<area shape="rect" id="Node000003" href="$max22516_8c.html#a6adc1e843f960601d831b5abfba8b792" title="MAX22516 tx set." alt="" coords="201,55,339,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="381,70,339,70,339,65,381,65"/>
+<area shape="rect" id="Node000005" href="$max22516_8c.html#a53bf50b71fcc5c956338c7f87f5820ef" title="MAX22516 txen set." alt="" coords="193,104,347,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="402,86,322,107,321,101,401,81"/>
+<area shape="rect" id="Node000004" href="$max22516_8c.html#a6b7ec792151ee38bd99fdf22b4cc0420" title="MAX22516 set cq." alt="" coords="5,80,145,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="187,81,146,86,146,81,187,75"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="179,108,145,104,146,99,180,103"/>
+</map>

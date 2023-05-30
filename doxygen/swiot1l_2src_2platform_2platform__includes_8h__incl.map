@@ -1,0 +1,19 @@
+<map id="projects/swiot1l/src/platform/platform_includes.h" name="projects/swiot1l/src/platform/platform_includes.h">
+<area shape="rect" id="Node000001" title="Includes used by the swiot1l project." alt="" coords="349,5,563,45"/>
+<area shape="rect" id="Node000002" href="$swiot1l_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by the swiot1l project." alt="" coords="377,93,535,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="459,46,459,79,453,79,453,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,109,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="392,121,124,169,123,164,391,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="133,167,240,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="413,121,244,166,243,161,412,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="264,167,379,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="436,121,357,162,354,158,433,116"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="403,167,509,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="459,119,459,153,453,153,453,119"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="534,167,655,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="479,116,561,158,559,163,477,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="679,167,793,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="502,116,678,161,677,166,500,121"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="817,167,969,192"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="527,116,810,162,809,167,526,121"/>
+</map>

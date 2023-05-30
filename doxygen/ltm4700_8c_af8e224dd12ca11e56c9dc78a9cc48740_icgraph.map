@@ -1,0 +1,16 @@
+<map id="ltm4700_read_block_data" name="ltm4700_read_block_data">
+<area shape="rect" id="Node000001" title="Read a block of bytes." alt="" coords="781,35,972,60"/>
+<area shape="rect" id="Node000002" href="$ltm4700_8c.html#a5271be6d8648dd174f4fe92833cbd021" title="Verify manufacturer ID." alt="" coords="499,5,733,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="768,38,729,33,729,28,768,32"/>
+<area shape="rect" id="Node000007" href="$ltm4700_8c.html#ace483a00f38e298a086d68db10604801" title="Verify manufacturer model." alt="" coords="509,55,723,95"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="768,62,724,66,723,61,767,56"/>
+<area shape="rect" id="Node000003" href="$ltm4700_8c.html#af8f042b29659a9578b76c019caa6d1ed" title="Initialize the device structure." alt="" coords="347,35,451,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="508,35,451,43,451,38,508,30"/>
+<area shape="rect" id="Node000004" href="$ltm4700_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="176,9,295,35"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="333,40,295,34,295,29,334,35"/>
+<area shape="rect" id="Node000005" href="$iio__ltm4700_8c.html#ae2c8be1dd3d8b826126f20240ed29c08" title="Initializes the LTM4700 IIO driver." alt="" coords="172,59,299,84"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="333,60,299,65,299,59,333,54"/>
+<area shape="rect" id="Node000006" href="$ltm4700_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,59,124,84"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="158,74,124,74,124,69,158,69"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="495,62,451,57,451,51,495,57"/>
+</map>

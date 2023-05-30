@@ -1,0 +1,15 @@
+<map id="projects/ad9083/src/uc/uc_settings.c" name="projects/ad9083/src/uc/uc_settings.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="116,5,265,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,48,75,89,72,84,153,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,93,171,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,47,152,84,148,80,175,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="195,93,304,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="207,44,234,80,230,84,203,47"/>
+<area shape="rect" id="Node000005" href="$uc__settings_8h.html" title="Use Case Settings of AD9083 project." alt="" coords="329,93,437,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="238,43,343,86,341,91,236,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="273,167,343,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="373,121,332,159,328,155,369,117"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="368,167,547,192"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="396,117,437,155,433,159,393,121"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="projects/aducm3029_flash_demo/src/examples/flash_example/flash_example.c" name="projects/aducm3029_flash_demo/src/examples/flash_example/flash_example.c">
+<area shape="rect" id="Node000001" title="Implementation of flash example for aducm3029_flash_demo project." alt="" coords="146,5,377,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,72,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,63,82,105,80,100,192,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,108,223,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,62,186,101,182,97,229,58"/>
+<area shape="rect" id="Node000004" href="$no__os__flash_8h.html" title="Header file for flash controller driver." alt="" coords="129,181,239,207"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="260,61,252,97,237,135,208,173,204,170,232,132,247,95,255,59"/>
+<area shape="rect" id="Node000006" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="264,181,360,207"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="272,59,307,167,302,169,267,61"/>
+<area shape="rect" id="Node000007" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="399,108,505,133"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="321,58,415,100,413,105,318,63"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="319,255,390,280"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="212,204,315,247,313,252,210,209"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="321,206,343,242,339,244,317,208"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="446,135,372,245,368,242,442,132"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="563,255,645,280"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="501,131,543,149,564,163,582,180,598,209,605,240,600,241,593,211,578,183,561,167,541,154,498,136"/>
+<area shape="rect" id="Node000009" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="435,181,568,207"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="462,132,488,169,483,172,458,135"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="479,209,392,251,390,246,477,204"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="519,204,577,244,574,249,516,209"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="466,255,537,280"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="504,207,504,241,499,241,499,207"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="ad7124_get_ch_setup" name="ad7124_get_ch_setup">
+<area shape="rect" id="Node000001" title="Get the setup ID assigned to a hardware channel (reads from HW)." alt="" coords="212,104,375,129"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#aa8cd1d28d4e91d4674f190a124695257" title="Get bipolar/unipolar mode for a hardware channel." alt="" coords="9,5,160,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,99,215,71,163,44,133,33,135,28,165,40,218,67,263,94"/>
+<area shape="rect" id="Node000003" href="$ad7124_8c.html#aa7fb88acd3e8d0284dfa65f3862f455a" title="Get ODR for a hardware channel (resolves setup via register read)." alt="" coords="11,55,159,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,103,139,83,140,77,226,98"/>
+<area shape="rect" id="Node000004" href="$ad7124_8c.html#ae3fd15f1f99fb19eab0c1343675503e1" title="Get PGA bits (0&#45;7, gain = 2^pga_bits) for a hardware channel." alt="" coords="20,104,149,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,119,150,119,150,114,198,114"/>
+<area shape="rect" id="Node000005" href="$ad7124_8c.html#a5db8819f808728608c42f61370500943" title="Get reference voltage in mV for a hardware channel." alt="" coords="5,153,164,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="226,135,140,156,139,151,225,130"/>
+<area shape="rect" id="Node000006" href="$ad7124_8c.html#a5ab24d9e85086db23cabbeb69404a465" title="Set ODR for a hardware channel (resolves setup via register read)." alt="" coords="11,203,158,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="263,139,217,166,165,192,132,205,130,200,163,188,215,161,260,134"/>
+</map>

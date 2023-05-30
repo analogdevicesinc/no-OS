@@ -1,0 +1,12 @@
+<map id="include/no_os_gnss.h" name="include/no_os_gnss.h">
+<area shape="rect" id="Node000001" title="Header file of GNSS Interface." alt="" coords="220,5,380,31"/>
+<area shape="rect" id="Node000002" href="$no__os__gnss_8c.html" title="Implementation of GNSS Interface." alt="" coords="5,86,187,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="259,38,127,88,125,83,257,33"/>
+<area shape="rect" id="Node000003" href="$nmea__ubx__gnss_8h.html" title="Platform&#45;specific implementation for NMEA/UBX GNSS devices." alt="" coords="211,79,389,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="303,44,303,79,297,79,297,44"/>
+<area shape="rect" id="Node000005" href="$eval-ublox-gnss_2src_2main_8c.html" title="Main function of GNSS example." alt="" coords="353,167,500,207"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="347,34,377,52,403,77,416,99,423,123,429,166,424,167,418,124,411,101,399,80,374,56,344,39"/>
+<area shape="rect" id="Node000004" href="$nmea__ubx__gnss_8c.html" title="Platform&#45;specific implementation for NMEA/UBX GNSS devices." alt="" coords="151,167,329,207"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="281,131,255,168,251,165,277,128"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="341,124,400,164,397,169,338,129"/>
+</map>

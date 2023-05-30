@@ -1,0 +1,24 @@
+<map id="projects/lt7182s/src/common/common_data.c" name="projects/lt7182s/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by lt7182s examples." alt="" coords="57,5,247,45"/>
+<area shape="rect" id="Node000002" href="$lt7182s_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt7182s examples." alt="" coords="89,93,215,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,46,155,79,149,79,149,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="139,121,87,160,84,156,136,117"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="99,240,197,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="154,119,151,226,146,226,149,119"/>
+<area shape="rect" id="Node000006" href="$lt7182s_8h.html" title=" " alt="" coords="193,167,276,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="167,117,212,155,209,160,164,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="199,313,270,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="164,263,212,302,208,307,160,267"/>
+<area shape="poly" id="edge12_Node000006_Node000004" title=" " alt="" coords="222,194,174,233,171,229,219,190"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="237,192,237,300,232,300,232,192"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="273,240,343,265"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="249,190,288,228,284,232,245,194"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="367,240,467,265"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="265,190,376,232,374,237,263,195"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="389,268,278,311,276,306,387,263"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="338,313,409,339"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="412,267,390,303,385,300,408,264"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="433,313,516,339"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="429,264,459,301,455,304,425,267"/>
+</map>

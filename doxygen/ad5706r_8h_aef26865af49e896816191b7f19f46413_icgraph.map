@@ -1,0 +1,7 @@
+<map id="ad5706r_set_ch_output_range" name="ad5706r_set_ch_output_range">
+<area shape="rect" id="Node000001" title="Set output range for a channel." alt="" coords="375,5,548,45"/>
+<area shape="rect" id="Node000002" href="$ad5706r_8c.html#a5d7d1fe6f6b4c28b78f78d1420c5a25b" title="Configures the device." alt="" coords="156,13,327,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="360,28,327,28,327,23,360,23"/>
+<area shape="rect" id="Node000003" href="$ad5706r_8c.html#a0a5ed099aeb489e4de301edf8890056e" title="Initialize the device." alt="" coords="5,13,108,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,28,108,28,108,23,142,23"/>
+</map>

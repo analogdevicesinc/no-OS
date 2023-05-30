@@ -1,0 +1,17 @@
+<map id="ad7746_init_param" name="ad7746_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="164,181,311,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="75,93,237,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,127,228,179,224,183,174,131"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,41,150,91,145,94,109,44"/>
+<area shape="rect" id="Node000004" href="$structad7746__setup.html" title=" " alt="" coords="322,93,435,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="350,128,258,183,255,179,347,123"/>
+<area shape="rect" id="Node000005" href="$structad7746__cap.html" title=" " alt="" coords="209,5,309,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="288,37,364,91,361,95,285,41"/>
+<area shape="rect" id="Node000006" href="$structad7746__vt.html" title=" " alt="" coords="333,5,424,31"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="381,45,381,93,376,93,376,45"/>
+<area shape="rect" id="Node000007" href="$structad7746__exc.html" title=" " alt="" coords="449,5,549,31"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="473,41,397,95,393,91,470,37"/>
+<area shape="rect" id="Node000008" href="$structad7746__config.html" title=" " alt="" coords="573,5,689,31"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="584,38,413,96,412,91,583,33"/>
+</map>

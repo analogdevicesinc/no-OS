@@ -1,0 +1,5 @@
+<map id="max_spi_transfer" name="max_spi_transfer">
+<area shape="rect" id="Node000001" title="Write/read multiple messages to/from SPI." alt="" coords="237,5,372,31"/>
+<area shape="rect" id="Node000002" href="$max32650_2maxim__spi_8c.html#a097bcd6a4a5b89191b9fc103aa4cad98" title="Write and read data to/from SPI." alt="" coords="5,5,189,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,21,189,21,189,15,223,15"/>
+</map>

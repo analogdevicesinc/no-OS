@@ -1,0 +1,7 @@
+<map id="adxl38x_set_self_test_registers" name="adxl38x_set_self_test_registers">
+<area shape="rect" id="Node000001" title="Sets the part to execute self&#45;test routine." alt="" coords="349,5,513,45"/>
+<area shape="rect" id="Node000002" href="$adxl38x_8c.html#a491ab20d0eb87e53ac22b04c8693cff5" title="Executed Selftest on the sensing axes and returns the outcome of the test." alt="" coords="172,13,301,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,28,302,28,302,23,336,23"/>
+<area shape="rect" id="Node000003" href="$selftest__example__main_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Example main execution." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

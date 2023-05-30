@@ -1,0 +1,35 @@
+<map id="projects/cn0565/src/examples/eit/eit.c" name="projects/cn0565/src/examples/eit/eit.c">
+<area shape="rect" id="Node000001" title="Basic EIT (UART console) example for cn0565 project." alt="" coords="263,5,411,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,48,87,95,85,90,265,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,93,223,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="296,48,200,90,197,85,294,43"/>
+<area shape="rect" id="Node000004" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="401,93,506,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="367,43,426,83,423,88,364,48"/>
+<area shape="rect" id="Node000009" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="39,167,137,192"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="322,47,285,84,237,121,189,146,141,165,139,160,187,141,235,116,282,80,319,43"/>
+<area shape="rect" id="Node000010" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="161,167,257,192"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="330,47,310,82,282,120,238,160,235,156,278,117,305,79,326,44"/>
+<area shape="rect" id="Node000011" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="281,167,388,192"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="340,46,338,153,332,153,334,46"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="772,167,855,192"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="412,28,476,34,550,46,627,64,702,91,754,122,794,155,791,159,751,126,700,96,626,69,549,51,475,39,411,33"/>
+<area shape="rect" id="Node000013" href="$app_8h.html" title="EIT application header." alt="" coords="631,93,689,119"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="412,42,618,92,617,97,411,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="345,240,415,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="450,120,394,229,390,226,445,118"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="643,240,725,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="507,106,544,112,585,122,626,139,661,165,671,179,678,194,685,226,680,227,673,196,667,181,657,169,623,144,584,127,543,117,506,112"/>
+<area shape="rect" id="Node000007" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="513,167,647,192"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="475,116,549,157,546,162,472,121"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="549,195,427,238,425,233,547,190"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="598,190,657,230,654,234,595,194"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="545,240,615,265"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="583,192,583,226,577,226,577,192"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="136,189,332,237,330,242,134,195"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="238,190,341,232,339,237,236,194"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="344,191,368,227,363,230,340,194"/>
+<area shape="poly" id="edge18_Node000013_Node000005" title=" " alt="" coords="631,118,571,139,503,169,450,201,406,234,403,229,447,197,500,164,569,134,630,113"/>
+<area shape="poly" id="edge19_Node000013_Node000006" title=" " alt="" coords="674,117,691,138,705,166,708,182,707,199,699,228,693,227,702,198,703,182,700,168,687,141,670,120"/>
+<area shape="poly" id="edge20_Node000013_Node000012" title=" " alt="" coords="686,116,777,158,775,163,684,121"/>
+</map>

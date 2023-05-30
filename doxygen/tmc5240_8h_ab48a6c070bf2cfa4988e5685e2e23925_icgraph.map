@@ -1,0 +1,11 @@
+<map id="tmc5240_set_motion_profile" name="tmc5240_set_motion_profile">
+<area shape="rect" id="Node000001" title="Set motion profile parameters for the TMC5240 motor driver." alt="" coords="581,23,740,63"/>
+<area shape="rect" id="Node000002" href="$tmc5240_8c.html#aee47c5f3e6fae0b1aa0c16fe53c1a353" title="Initialize the TMC5240 device." alt="" coords="389,5,495,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="567,35,496,27,496,22,568,30"/>
+<area shape="rect" id="Node000005" href="$tmc5240_8c.html#a8d6e86fa5f27fb8fd23dafb1c59a1824" title="Set the target position for the TMC5240 motor driver." alt="" coords="351,55,533,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="568,56,534,60,533,55,567,51"/>
+<area shape="rect" id="Node000003" href="$iio__tmc5240_8c.html#a34eeb20fee898c60e8d5e29cd2b6e30d" title="Initializes the tmc5240 IIO driver." alt="" coords="172,5,303,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,21,303,21,303,15,375,15"/>
+<area shape="rect" id="Node000004" href="$admt4000_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

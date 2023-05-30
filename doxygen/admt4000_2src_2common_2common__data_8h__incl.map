@@ -1,0 +1,29 @@
+<map id="projects/admt4000/src/common/common_data.h" name="projects/admt4000/src/common/common_data.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="254,5,446,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="166,93,275,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="320,48,253,88,250,84,317,43"/>
+<area shape="rect" id="Node000003" href="$admt4000_8h.html" title="Header Implementation of ADMT4000 Driver." alt="" coords="300,93,400,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="353,46,353,79,347,79,347,46"/>
+<area shape="rect" id="Node000011" href="$24xx32a_8h.html" title="Header file of 24AA32A/24LC32A Interface." alt="" coords="522,93,613,119"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="403,43,523,86,522,91,401,48"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="301,167,399,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="353,119,353,153,347,153,347,119"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="423,167,530,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="372,116,445,157,443,162,369,121"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="41,167,141,192"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="309,121,147,166,146,160,308,116"/>
+<area shape="rect" id="Node000010" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="165,167,276,192"/>
+<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="330,121,255,162,253,157,328,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="441,240,512,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="372,190,445,231,443,235,369,194"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="479,192,479,226,474,226,474,192"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="142,187,153,189,428,240,427,245,152,195,141,193"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="85,194,59,230,55,227,81,191"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="101,240,183,265"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="102,191,128,227,124,230,98,194"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="568,120,561,154,544,193,527,215,507,233,503,229,523,212,540,191,556,152,563,119"/>
+<area shape="rect" id="Node000012" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="605,167,703,192"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="583,117,631,156,628,160,580,121"/>
+<area shape="poly" id="edge15_Node000012_Node000005" title=" " alt="" coords="626,194,519,237,517,232,625,190"/>
+</map>

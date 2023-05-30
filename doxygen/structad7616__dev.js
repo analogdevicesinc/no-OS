@@ -1,0 +1,25 @@
+var structad7616__dev =
+[
+    [ "clkgen", "structad7616__dev.html#a3dbe3f762f9bd28e190bc0151f4df4b2", null ],
+    [ "core_baseaddr", "structad7616__dev.html#a2e7846dc3362070d4c66fa9bd2c3223b", null ],
+    [ "crc", "structad7616__dev.html#ab50c2a15a99445658438a0e4ae65aec5", null ],
+    [ "dcache_invalidate_range", "structad7616__dev.html#af45c640f0a97ffdfb2443efd6d5be75c", null ],
+    [ "gpio_busy", "structad7616__dev.html#a93e6febc48468ee0fbd1f94950a9ffed", null ],
+    [ "gpio_convst", "structad7616__dev.html#aa857950f0c83aa251d361b0f0cd935c1", null ],
+    [ "gpio_hw_rngsel0", "structad7616__dev.html#a167e7c49535c8b9caf9578fa588d3b99", null ],
+    [ "gpio_hw_rngsel1", "structad7616__dev.html#a026a15aace0193fe7c47818541ef600f", null ],
+    [ "gpio_os0", "structad7616__dev.html#ac4d6f82fec2b2789df63c711fbc72790", null ],
+    [ "gpio_os1", "structad7616__dev.html#a6f93f3e17bf364d9440022ddb25dba82", null ],
+    [ "gpio_os2", "structad7616__dev.html#a695418efd9f5a79995cfac45e49b634e", null ],
+    [ "gpio_reset", "structad7616__dev.html#a5a06e8be60900e061b947c6f866a6e16", null ],
+    [ "interface", "structad7616__dev.html#aa8bb51b02251335c3686eed4be500b1b", null ],
+    [ "layers_nb", "structad7616__dev.html#a2f8828ef130e612b50435898f74e7724", null ],
+    [ "mode", "structad7616__dev.html#a01eafe9d7157ba5df9d5124dc36ff533", null ],
+    [ "offload_init_param", "structad7616__dev.html#af19aa46e424ca0c00ca99a72b8f81375", null ],
+    [ "osr", "structad7616__dev.html#a050024b7ccda607dfce52b72924c7595", null ],
+    [ "reg_access_speed", "structad7616__dev.html#a6bf2aab79f0052d37da9782809c12e89", null ],
+    [ "spi_desc", "structad7616__dev.html#a571d50539f814cdcd89ff912913133f0", null ],
+    [ "trigger_pwm_desc", "structad7616__dev.html#a75d37cba5cfffbe4d7c4acd486cd84db", null ],
+    [ "va", "structad7616__dev.html#a110708412411e7c49165489388934e43", null ],
+    [ "vb", "structad7616__dev.html#a699bcae98fcb001c86de12d77bdef8f1", null ]
+];

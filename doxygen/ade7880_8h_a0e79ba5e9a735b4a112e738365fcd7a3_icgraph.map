@@ -1,0 +1,7 @@
+<map id="ade7880_set_power_mode" name="ade7880_set_power_mode">
+<area shape="rect" id="Node000001" title="Set power mode." alt="" coords="263,5,459,31"/>
+<area shape="rect" id="Node000002" href="$ade7880_8c.html#acbb1d0b3d6852f6d53dc0d73afa6c559" title="Initialize the device." alt="" coords="108,5,215,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,21,215,21,215,15,248,15"/>
+<area shape="rect" id="Node000003" href="$eval-ade7880_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

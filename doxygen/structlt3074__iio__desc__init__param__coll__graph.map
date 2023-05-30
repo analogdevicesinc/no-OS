@@ -1,0 +1,13 @@
+<map id="lt3074_iio_desc_init_param" name="lt3074_iio_desc_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the LT3074 IIO initialization parameter." alt="" coords="119,299,270,339"/>
+<area shape="rect" id="Node000002" href="$structlt3074__init__param.html" title=" " alt="" coords="125,211,265,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,250,197,298,192,298,192,250"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="17,93,180,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,128,187,209,183,212,115,131"/>
+<area shape="rect" id="Node000004" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,44,101,93,95,93,93,45"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="213,93,385,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="281,131,207,212,203,209,277,127"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="209,5,397,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="304,45,302,93,297,93,299,44"/>
+</map>

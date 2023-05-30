@@ -1,0 +1,16 @@
+<map id="drivers/photo&#45;electronic/adpd188/adpd188.h" name="drivers/photo&#45;electronic/adpd188/adpd188.h">
+<area shape="rect" id="Node000001" title="ADPD188 driver header file." alt="" coords="243,5,420,45"/>
+<area shape="rect" id="Node000002" href="$adpd188_8c.html" title="ADPD188 driver implementation." alt="" coords="41,93,219,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="275,53,175,96,173,91,273,48"/>
+<area shape="rect" id="Node000003" href="$iio__adpd188_8h.html" title="Header of the ADPD188 IIO driver." alt="" coords="243,93,420,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="334,59,334,93,329,93,329,59"/>
+<area shape="rect" id="Node000005" href="$iio__adpd1080_2src_2common_2common__data_8h.html" title="Defines common data to be used by iio_adpd1080 examples." alt="" coords="429,189,644,229"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="377,51,433,91,484,141,523,187,519,190,480,145,430,95,374,55"/>
+<area shape="rect" id="Node000004" href="$iio__adpd188_8c.html" title="Implementation of the ADPD188 IIO driver." alt="" coords="5,189,183,229"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="272,141,143,191,141,186,270,136"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="386,136,496,186,494,191,384,141"/>
+<area shape="rect" id="Node000007" href="$iio__adpd1080_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for iio_adpd1080 project." alt="" coords="207,181,405,236"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="325,147,316,182,311,181,320,146"/>
+<area shape="rect" id="Node000006" href="$iio__adpd1080_2src_2common_2common__data_8c.html" title="Defines common data to be used by iio_adpd1080 examples." alt="" coords="429,284,644,324"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="539,242,539,284,534,284,534,242"/>
+</map>

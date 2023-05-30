@@ -1,0 +1,12 @@
+<map id="pcf85263_write" name="pcf85263_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="579,29,701,55"/>
+<area shape="rect" id="Node000002" href="$pcf85263_8c.html#ab0503bfdeaad1a341d4681455628cfed" title="Set date." alt="" coords="172,5,317,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="565,40,317,25,318,20,565,35"/>
+<area shape="rect" id="Node000004" href="$pcf85263_8c.html#a345542ebb2f61e2de1021c03fac33137" title="Update specific register bits." alt="" coords="365,55,531,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="565,55,531,59,531,54,565,49"/>
+<area shape="rect" id="Node000003" href="$iot__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Main function execution for maxim platform." alt="" coords="5,31,124,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="159,33,125,38,124,32,158,28"/>
+<area shape="rect" id="Node000005" href="$pcf85263_8c.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="189,55,300,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="352,70,301,70,301,65,352,65"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="175,61,124,54,125,49,176,56"/>
+</map>

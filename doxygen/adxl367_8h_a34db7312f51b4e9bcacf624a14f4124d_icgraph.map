@@ -1,0 +1,12 @@
+<map id="adxl367_set_power_mode" name="adxl367_set_power_mode">
+<area shape="rect" id="Node000001" title="Places the device into standby/measure mode." alt="" coords="357,55,549,80"/>
+<area shape="rect" id="Node000002" href="$iio__adxl367_8c.html#ab0285a11dd056b3295e75c6f3b5c64bd" title="Initializes the ADXL367 IIO driver." alt="" coords="178,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="384,54,296,33,297,28,385,49"/>
+<area shape="rect" id="Node000004" href="$adxl367_8c.html#a683f866c35c8a9164d469649ab69a638" title="Performs self test." alt="" coords="172,55,309,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="343,70,310,70,310,65,343,65"/>
+<area shape="rect" id="Node000005" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,80,124,105"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="381,85,310,95,212,100,124,98,124,93,212,94,309,90,380,80"/>
+<area shape="rect" id="Node000003" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,21,124,21,124,15,164,15"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="159,82,124,87,124,82,158,77"/>
+</map>

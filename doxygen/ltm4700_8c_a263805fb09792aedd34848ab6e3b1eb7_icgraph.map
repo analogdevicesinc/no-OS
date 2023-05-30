@@ -1,0 +1,11 @@
+<map id="ltm4700_write_word" name="ltm4700_write_word">
+<area shape="rect" id="Node000001" title="Perform a PMBus write_word operation." alt="" coords="457,55,612,80"/>
+<area shape="rect" id="Node000002" href="$ltm4700_8c.html#a3ec70f589c9c2960de596e34dfeddaa0" title="Perform conversion then perform a PMBus write_word operation." alt="" coords="219,55,409,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,70,410,70,410,65,444,65"/>
+<area shape="rect" id="Node000003" href="$ltm4700_8c.html#af014d27c2f6ba835e1bacc03f41baaf0" title="Set timing values." alt="" coords="12,5,164,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="241,54,146,33,148,28,242,49"/>
+<area shape="rect" id="Node000004" href="$ltm4700_8c.html#a7d9a080aa43b3ceea2ccd11cbca11c5f" title="Set VOUT margins." alt="" coords="5,55,171,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="205,70,171,70,171,65,205,65"/>
+<area shape="rect" id="Node000005" href="$ltm4700_8c.html#a0d71040c6561eb2d9b0126b2a023d562" title="Set VOUT parameters." alt="" coords="11,104,165,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="242,86,148,107,146,101,241,80"/>
+</map>

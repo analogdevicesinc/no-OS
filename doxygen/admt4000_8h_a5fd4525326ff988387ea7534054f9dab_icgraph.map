@@ -1,0 +1,5 @@
+<map id="admt4000_set_gpio" name="admt4000_set_gpio">
+<area shape="rect" id="Node000001" title="Configure selected GPIO." alt="" coords="223,5,373,31"/>
+<area shape="rect" id="Node000002" href="$admt4000_8c.html#ab3140b39c732ec6ef05671f357bf78d2" title="Configure GPIO mode, direction, and initial state." alt="" coords="5,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,21,175,21,175,15,209,15"/>
+</map>

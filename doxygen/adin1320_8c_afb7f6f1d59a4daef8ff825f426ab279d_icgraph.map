@@ -1,0 +1,14 @@
+<map id="adin1320_cu_get_mii_status" name="adin1320_cu_get_mii_status">
+<area shape="rect" id="Node000001" title="Get Different Status from Copper Media MII Status Register." alt="" coords="569,47,729,87"/>
+<area shape="rect" id="Node000002" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="366,5,485,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="555,49,483,33,484,28,556,44"/>
+<area shape="rect" id="Node000003" href="$cmd__mode_8c.html#a7b56f17d0914d03695f95fe7e711aad5" title=" " alt="" coords="335,55,516,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="555,70,516,70,516,65,555,65"/>
+<area shape="rect" id="Node000006" href="$cmd__mode_8c.html#adb34ddb8110d29ccad596a853eb8db4b" title=" " alt="" coords="329,104,521,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="556,91,484,107,483,101,555,85"/>
+<area shape="rect" id="Node000004" href="$cmd_8c.html#ac1fdbd851dca722a4c7ee9bbe2e55de1" title=" " alt="" coords="172,80,281,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="322,83,282,88,281,83,321,78"/>
+<area shape="rect" id="Node000005" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,80,124,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,95,124,95,124,90,158,90"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="315,106,281,102,282,97,316,101"/>
+</map>

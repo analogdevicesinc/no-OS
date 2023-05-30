@@ -1,0 +1,82 @@
+<map id="ad4170_spi_reg_write" name="ad4170_spi_reg_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="697,559,861,584"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#a4ee88f7b83c8add1218557e4bdbe9e86" title="Perform a software LDAC." alt="" coords="467,5,625,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="773,545,759,436,733,285,716,208,696,139,673,82,647,44,624,29,627,24,651,40,678,79,701,137,721,207,738,284,764,435,778,545"/>
+<area shape="rect" id="Node000003" href="$ad4170_8c.html#ac58404d3205391dfc9465732dc06adfc" title="Perform a software toggle." alt="" coords="459,55,633,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="776,545,774,460,769,403,759,341,743,277,720,213,688,154,648,101,619,82,621,78,651,97,693,151,725,211,748,275,764,340,774,403,779,460,782,545"/>
+<area shape="rect" id="Node000004" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="5,804,104,829"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="772,546,756,454,729,332,712,271,693,216,671,173,648,145,605,124,545,108,475,98,399,94,323,97,253,106,195,122,172,133,154,145,136,166,120,195,95,273,78,369,67,475,58,677,58,804,53,804,53,677,62,475,73,369,90,272,115,193,132,163,150,141,169,128,193,117,252,101,322,91,399,89,475,93,546,103,607,119,651,141,676,170,698,214,717,269,735,330,761,453,777,545"/>
+<area shape="rect" id="Node000005" href="$ad4170_8c.html#a7348c2a3d10114cb5f529d6cabb3e22b" title="Set the AD4170 ADC Control." alt="" coords="469,156,623,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="774,545,766,477,746,385,730,335,708,287,681,242,648,203,617,184,620,179,651,199,686,239,713,285,735,333,751,383,771,476,779,544"/>
+<area shape="rect" id="Node000007" href="$ad4170_8c.html#a0cb65692b12ff8d82d9a60ec47edcbc0" title="Enable AD4170 channels." alt="" coords="184,269,363,295"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="772,546,760,492,738,426,721,391,701,359,677,330,648,306,610,285,568,271,525,263,481,259,398,262,329,272,328,267,397,256,482,253,526,257,570,266,612,280,651,301,681,326,705,356,726,389,743,424,765,491,777,544"/>
+<area shape="rect" id="Node000008" href="$ad4170_8c.html#a9aa8ef7e1dcca520045ea5ca03c5a7fd" title="Set the AD4170 Channel specific map." alt="" coords="178,333,369,359"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="770,546,756,499,733,441,717,412,697,385,674,361,648,342,606,322,561,311,514,306,467,307,381,319,313,336,312,331,380,313,467,302,514,301,562,306,608,317,651,337,678,357,701,382,721,410,738,439,762,497,775,544"/>
+<area shape="rect" id="Node000009" href="$ad4170_8c.html#a913d8cf5bb45e550dd0c73c98dbf92c1" title="Set the AD4170 Channel specific setup." alt="" coords="196,413,351,453"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="768,546,753,505,728,456,693,409,672,389,648,372,605,355,559,348,511,350,464,357,419,369,378,384,311,415,309,410,376,379,418,364,463,352,511,344,559,343,606,350,651,368,675,384,697,405,732,453,757,503,773,544"/>
+<area shape="rect" id="Node000010" href="$ad4170_8c.html#ac3750b6998e816b49a064691528b35c8" title="Set the AD4170 Excitation Current." alt="" coords="198,535,349,575"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="765,547,748,512,722,473,689,435,648,406,593,383,546,376,499,383,444,406,427,418,419,432,410,448,397,466,351,506,308,537,304,533,348,501,393,463,406,446,414,429,424,414,441,401,497,378,546,370,595,378,651,401,693,431,727,469,752,510,770,545"/>
+<area shape="rect" id="Node000011" href="$ad4170_8c.html#a4e7865cd3f1b0cb3406224e1299f6669" title="Set the AD4170 DAC settings." alt="" coords="187,604,360,629"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="760,549,715,496,684,469,648,450,591,428,542,417,519,417,495,423,471,433,444,449,429,464,422,480,419,515,418,553,411,571,396,589,380,601,361,610,359,605,377,597,393,585,406,569,413,552,414,515,417,478,425,461,441,445,468,428,494,417,518,412,542,412,592,423,650,445,687,465,718,492,764,546"/>
+<area shape="rect" id="Node000012" href="$ad4170_8c.html#aab1ae83a16972cdf8d782feb74ae5a7b" title="Set the AD4170 DAC data by directly writing the DAT_DATA register." alt="" coords="465,460,627,485"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="747,553,702,525,648,499,613,488,615,483,650,494,704,521,750,549"/>
+<area shape="rect" id="Node000013" href="$ad4170_8c.html#a284a103c310a1b01291c2844203a7712" title="Set the AD4170 DAC data by writing the INPUTA register to be loaded separately by LDAC or Toggle oper..." alt="" coords="459,509,633,535"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="705,558,606,537,607,532,706,553"/>
+<area shape="rect" id="Node000014" href="$ad4170_8c.html#a3e020e8aa8c6f8268e10ccbd1a1db847" title="Set the AD4170 DAC data by writing the INPUTB register to be loaded separately by LDAC or Toggle oper..." alt="" coords="459,559,633,584"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="684,574,633,574,633,569,684,569"/>
+<area shape="rect" id="Node000015" href="$ad4170_8c.html#af67de722abf048ed3b2d2b75e4f4db53" title="Set the Error register with a value to clear specific errors." alt="" coords="479,608,613,633"/>
+<area shape="poly" id="edge20_Node000001_Node000015" title=" " alt="" coords="706,589,607,611,606,605,705,584"/>
+<area shape="rect" id="Node000016" href="$ad4170_8c.html#a52ac9826934af1774019aa61a0aa1eb9" title="Set the AD4170 Error enable settings." alt="" coords="194,705,353,731"/>
+<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="763,597,717,650,686,676,650,696,613,710,574,721,495,732,419,734,353,731,353,725,419,729,494,727,573,715,612,705,648,692,683,672,714,646,759,594"/>
+<area shape="rect" id="Node000017" href="$ad4170_8c.html#a02426e197d1c8ba3b6365feb43879a58" title="Set the AD4170 FIR control settings." alt="" coords="189,755,358,780"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="769,598,751,632,725,671,692,710,651,740,615,757,578,769,500,782,425,786,358,782,358,777,425,780,499,777,576,764,613,752,648,736,688,706,721,668,747,629,764,596"/>
+<area shape="rect" id="Node000018" href="$ad4170_8c.html#a920a1be4513dc6cc70a7830eee428a05" title="Set the AD4170 Input pullup." alt="" coords="196,804,351,829"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="774,598,759,642,734,696,699,748,676,772,651,791,614,810,574,824,533,833,491,838,411,838,343,832,343,827,411,833,491,832,532,827,573,818,612,805,648,786,673,768,694,745,729,693,754,640,769,597"/>
+<area shape="rect" id="Node000019" href="$ad4170_8c.html#a696dffc726127765a7e032fab2b0120b" title="Set the AD4170 Pin Muxing settings." alt="" coords="456,657,636,683"/>
+<area shape="poly" id="edge27_Node000001_Node000019" title=" " alt="" coords="749,594,704,621,650,647,611,660,609,655,648,642,701,617,746,589"/>
+<area shape="rect" id="Node000020" href="$ad4170_8c.html#a70f4c15b6e5979154ef3c4cbe035f67d" title="Set the AD4170 Powerdown switches settings." alt="" coords="444,860,648,885"/>
+<area shape="poly" id="edge30_Node000001_Node000020" title=" " alt="" coords="775,598,762,649,738,715,702,783,678,815,651,843,617,862,614,858,648,839,674,812,697,781,733,713,757,648,770,597"/>
+<area shape="rect" id="Node000021" href="$ad4170_8c.html#a7ed98962cf31d844ebf85c8e74fe7819" title="Set the AD4170 Ref Control." alt="" coords="459,909,633,935"/>
+<area shape="poly" id="edge32_Node000001_Node000021" title=" " alt="" coords="778,598,768,660,747,741,730,784,709,826,683,865,651,899,631,912,628,907,648,895,679,861,705,823,726,782,742,739,763,659,773,597"/>
+<area shape="rect" id="Node000022" href="$ad4170_8c.html#a29f1cb01d8f5e56d6961bc9873ee1e8b" title="Configure an ADC setup." alt="" coords="476,959,616,984"/>
+<area shape="poly" id="edge34_Node000001_Node000022" title=" " alt="" coords="780,598,773,668,754,762,737,813,715,862,687,908,651,948,635,959,617,967,615,962,633,954,648,944,683,905,710,860,732,811,748,761,768,667,774,597"/>
+<area shape="rect" id="Node000023" href="$ad4170_8c.html#a8017b551282c8d0998e08196a0d91a05" title="Set the AD4170 Standby control settings." alt="" coords="454,1008,638,1033"/>
+<area shape="poly" id="edge36_Node000001_Node000023" title=" " alt="" coords="781,598,777,676,771,728,760,784,744,842,721,898,690,951,651,997,632,1010,629,1006,648,993,686,948,716,896,739,840,755,783,765,727,772,676,776,598"/>
+<area shape="rect" id="Node000024" href="$ad4170_8c.html#a00b743d616320636286aa33e22c9f5ff" title="Set the AD4170 Voltage bias." alt="" coords="473,1057,619,1083"/>
+<area shape="poly" id="edge38_Node000001_Node000024" title=" " alt="" coords="777,598,761,697,734,831,717,899,697,961,675,1012,651,1047,637,1057,621,1065,619,1060,634,1053,647,1043,671,1009,692,959,712,898,729,830,756,696,772,597"/>
+<area shape="rect" id="Node000025" href="$ad4170_8c.html#ae24263d5528343a6218ae8189af0054e" title="SPI write device register using a mask." alt="" coords="443,1181,649,1207"/>
+<area shape="poly" id="edge40_Node000001_Node000025" title=" " alt="" coords="779,598,771,685,750,812,734,883,712,956,685,1028,652,1095,633,1123,610,1147,567,1183,564,1179,606,1143,628,1119,647,1093,680,1026,707,954,729,882,745,811,766,685,774,598"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="456,186,271,221,194,241,168,250,154,259,140,277,128,302,107,367,91,446,78,533,64,698,59,804,54,803,59,697,73,532,85,445,102,365,123,300,136,274,150,255,165,246,192,236,270,216,455,181"/>
+<area shape="rect" id="Node000006" href="$ad4170_8c.html#ae841b1cc0c1181eb62c10b2deedc76d1" title="Exit continuous transmit mode." alt="" coords="152,156,395,181"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="455,171,395,171,395,166,455,166"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="181,302,154,322,131,361,112,419,96,489,84,564,67,709,59,804,54,804,61,709,78,564,91,487,107,417,127,359,150,319,178,298"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="207,366,178,381,154,402,135,435,118,483,90,604,70,724,60,804,55,804,65,723,85,603,113,482,131,433,150,399,175,377,204,361"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="224,462,187,490,154,525,131,562,112,602,84,683,68,755,60,804,55,803,62,754,79,682,107,600,127,559,150,522,183,486,221,458"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="186,574,154,593,131,618,112,646,84,707,68,763,60,804,55,803,63,762,79,705,108,643,127,614,150,589,184,569"/>
+<area shape="poly" id="edge16_Node000011_Node000004" title=" " alt="" coords="178,637,154,651,118,688,91,731,73,773,62,805,57,803,68,771,87,729,114,684,150,647,175,632"/>
+<area shape="poly" id="edge22_Node000016_Node000004" title=" " alt="" coords="181,734,153,744,106,775,70,806,67,802,102,770,151,740,179,729"/>
+<area shape="poly" id="edge24_Node000017_Node000004" title=" " alt="" coords="192,785,153,794,102,807,101,801,151,789,191,780"/>
+<area shape="poly" id="edge26_Node000018_Node000004" title=" " alt="" coords="182,819,105,819,105,814,182,814"/>
+<area shape="poly" id="edge28_Node000019_Node000004" title=" " alt="" coords="460,658,390,653,311,654,230,667,190,679,153,695,121,719,96,749,64,805,59,803,91,746,118,715,151,690,189,674,228,661,311,649,391,647,460,653"/>
+<area shape="poly" id="edge29_Node000019_Node000011" title=" " alt="" coords="466,657,338,632,339,627,467,652"/>
+<area shape="poly" id="edge31_Node000020_Node000004" title=" " alt="" coords="430,871,296,861,152,843,100,832,101,827,152,838,297,856,430,866"/>
+<area shape="poly" id="edge33_Node000021_Node000004" title=" " alt="" coords="445,923,304,910,226,896,151,875,107,855,72,832,74,827,110,850,153,870,228,891,305,905,445,918"/>
+<area shape="poly" id="edge35_Node000022_Node000004" title=" " alt="" coords="462,980,393,980,312,973,229,956,189,943,151,926,121,905,95,879,61,831,65,828,99,875,124,901,153,921,191,938,231,951,313,968,393,975,462,975"/>
+<area shape="poly" id="edge37_Node000023_Node000004" title=" " alt="" coords="450,1037,380,1041,302,1036,223,1019,186,1005,151,986,130,969,112,950,85,906,67,863,57,830,62,829,72,861,89,903,117,947,134,965,153,981,188,1000,225,1014,303,1031,380,1035,450,1032"/>
+<area shape="poly" id="edge39_Node000024_Node000004" title=" " alt="" coords="459,1077,375,1078,285,1075,205,1066,174,1057,151,1046,125,1023,104,995,88,964,76,933,60,873,54,830,60,829,66,872,81,931,93,962,109,992,129,1019,153,1041,176,1052,206,1060,286,1070,375,1073,459,1072"/>
+<area shape="rect" id="Node000026" href="$ad4170_8c.html#a576b13688c52d149cf2a43b39084a333" title="Perform a software reset." alt="" coords="218,1256,329,1281"/>
+<area shape="poly" id="edge41_Node000025_Node000026" title=" " alt="" coords="499,1214,395,1247,329,1262,328,1257,394,1242,497,1209"/>
+<area shape="rect" id="Node000027" href="$ad4170_8c.html#a3ca58a262948f7d1cc5c3fd562042607" title="Set the AD4170 clock selection configuration." alt="" coords="195,1305,352,1331"/>
+<area shape="poly" id="edge43_Node000025_Node000027" title=" " alt="" coords="521,1218,465,1258,431,1279,396,1296,353,1310,351,1305,394,1292,429,1274,462,1254,517,1214"/>
+<area shape="rect" id="Node000028" href="$ad4170_8c.html#a3216e26d31ef57f5eeab2c46b993fd20" title="Set the AD4170 DCLK configuration." alt="" coords="194,1108,353,1133"/>
+<area shape="poly" id="edge45_Node000025_Node000028" title=" " alt="" coords="496,1179,394,1147,345,1136,346,1131,395,1142,498,1174"/>
+<area shape="rect" id="Node000029" href="$ad4170_8c.html#ab4f531eaeb090bbe407873d6792d4f3c" title="Set the AD4170 MCLK configuration." alt="" coords="192,1157,355,1183"/>
+<area shape="poly" id="edge47_Node000025_Node000029" title=" " alt="" coords="429,1186,355,1180,355,1174,429,1181"/>
+<area shape="rect" id="Node000030" href="$ad4170_8c.html#a83d10b0457a777f079f6ccbee72d091b" title="Set the AD4170 SPI settings." alt="" coords="182,1207,365,1232"/>
+<area shape="poly" id="edge49_Node000025_Node000030" title=" " alt="" coords="430,1207,365,1214,365,1208,429,1202"/>
+<area shape="poly" id="edge42_Node000026_Node000004" title=" " alt="" coords="203,1271,175,1263,150,1247,128,1213,109,1164,94,1104,81,1039,63,914,54,830,60,829,68,913,86,1038,99,1103,114,1163,133,1211,154,1243,177,1258,205,1266"/>
+<area shape="poly" id="edge44_Node000027_Node000004" title=" " alt="" coords="180,1314,164,1307,150,1296,126,1258,106,1203,90,1136,78,1063,61,922,54,830,59,829,66,922,83,1062,96,1135,111,1202,131,1256,154,1292,167,1302,182,1310"/>
+<area shape="poly" id="edge46_Node000028_Node000004" title=" " alt="" coords="179,1109,150,1091,123,1060,102,1025,85,987,73,949,59,879,54,830,59,829,64,878,78,948,90,985,106,1022,127,1057,154,1087,182,1104"/>
+<area shape="poly" id="edge48_Node000029_Node000004" title=" " alt="" coords="178,1163,150,1147,118,1109,94,1066,77,1020,65,973,54,887,53,829,58,829,59,887,70,972,82,1018,99,1064,123,1106,154,1143,180,1159"/>
+<area shape="poly" id="edge50_Node000030_Node000004" title=" " alt="" coords="168,1210,150,1197,130,1168,112,1125,84,1016,65,905,55,830,60,829,70,905,89,1015,117,1124,135,1166,154,1193,171,1205"/>
+</map>

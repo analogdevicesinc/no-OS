@@ -1,0 +1,66 @@
+<map id="adf4030_spi_update_bits" name="adf4030_spi_update_bits">
+<area shape="rect" id="Node000001" title="Updates the values of the ADF4030 register." alt="" coords="875,559,1059,584"/>
+<area shape="rect" id="Node000002" href="$adf4030_8c.html#aead0710a3f5640307b155b8063769c8d" title="Get the TDC measurement result. Reads bitfileds and calculates the TDC result with period of the BSYN..." alt="" coords="347,163,575,188"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="960,546,950,482,927,398,909,354,887,311,859,272,825,239,797,220,768,205,703,184,637,173,575,170,575,165,638,168,704,178,770,200,800,215,828,235,863,268,891,308,914,351,932,396,955,481,966,545"/>
+<area shape="rect" id="Node000004" href="$adf4030_8c.html#a935bd6fb4e53596993c055b909691904" title="Gets the value of the approximate die temperature." alt="" coords="629,423,820,448"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="942,551,891,506,859,483,826,463,793,451,794,446,828,458,862,478,894,502,945,547"/>
+<area shape="rect" id="Node000005" href="$adf4030_8c.html#af70cdc0c3a09d04a52ebeb731d24f29d" title="Set the iteration number of alignment." alt="" coords="623,472,827,497"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="927,555,826,513,783,500,784,495,828,507,929,550"/>
+<area shape="rect" id="Node000006" href="$adf4030_8c.html#a3792a265c2d6b48a3472d268f0ee3db1" title="Set the alignment threshold in femtoseconds." alt="" coords="637,522,812,562"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="861,561,812,555,812,550,861,556"/>
+<area shape="rect" id="Node000007" href="$adf4030_8c.html#a3e092fbc3e52eb01dd07cfbe55e8db19" title="Set background serial alignment for multiple BSYNC channels." alt="" coords="368,605,553,645"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="861,585,554,618,553,612,860,580"/>
+<area shape="rect" id="Node000008" href="$adf4030_8c.html#a2819509fd1dd0bf924d574ae51014587" title="Set the BSYNC frequency in Hz. Output divider will be choose according to odiv sel argument." alt="" coords="635,55,815,80"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="963,545,961,458,955,400,944,337,926,271,902,207,868,147,825,95,807,82,810,78,828,91,873,144,907,205,932,270,949,336,960,400,966,458,969,545"/>
+<area shape="rect" id="Node000012" href="$adf4030_8c.html#adf1103399323e20a1288f99a43e82d30" title="Set the delay for a specific BSYNC channel. This Delay will show up between TDC_SOURCE and channel." alt="" coords="381,326,541,366"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="953,547,935,507,908,460,871,414,849,394,825,378,791,361,755,349,680,336,606,333,541,337,541,331,606,327,680,330,756,344,793,356,828,373,853,390,875,410,912,457,940,505,958,545"/>
+<area shape="rect" id="Node000013" href="$adf4030_8c.html#a848922db8bcdee4508f5c69b1359b8e2" title="Set the TX&#45;RX direction of a specific channel." alt="" coords="645,105,805,145"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="961,545,953,471,931,370,913,315,890,261,861,210,825,165,799,147,803,143,829,161,865,207,895,259,918,313,936,369,958,470,967,544"/>
+<area shape="rect" id="Node000014" href="$adf4030_8c.html#aa8211ec516bdb17dd01b923f3b05c033" title="Set the inversion state for the BSYNC channel." alt="" coords="645,687,805,727"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="943,595,892,637,828,678,800,690,798,685,825,673,889,632,940,591"/>
+<area shape="rect" id="Node000015" href="$adf4030_8c.html#a1182beb9446bbad60d81a20e0fe671c5" title="Set the output divider selection for a specific channel. If odivb_en is enabled, the output divider b..." alt="" coords="645,751,805,791"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="953,598,904,669,869,708,828,742,806,753,804,749,825,737,865,704,900,666,949,595"/>
+<area shape="rect" id="Node000016" href="$adf4030_8c.html#a452b3d2537160d84fd035332a149ca19" title="Set the PRBS (Pseudo&#45;Random Binary Sequence) state for a specific channel." alt="" coords="627,816,822,841"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="960,598,943,644,915,700,877,757,854,783,828,806,805,818,802,814,825,801,851,779,873,754,911,697,938,641,955,596"/>
+<area shape="rect" id="Node000017" href="$adf4030_8c.html#a86b02b9e377b368e5dd309f92c12c8df" title="Set the termination type for a specific channel." alt="" coords="645,866,805,906"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="962,598,948,652,921,721,882,793,857,827,828,856,806,870,803,866,825,852,853,823,878,791,917,719,942,650,957,597"/>
+<area shape="rect" id="Node000018" href="$adf4030_8c.html#a3e3c59b3c12215253fb94694cd20b6d9" title="Set the voltage level for the BSYNC channel." alt="" coords="645,930,805,970"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="965,598,954,663,930,749,912,795,890,840,862,883,828,920,807,935,804,930,825,916,858,879,885,838,907,793,925,747,949,662,960,597"/>
+<area shape="rect" id="Node000019" href="$adf4030_8c.html#a62c37ebee993bfcc494aaf797749b742" title="Set the output divider A (ODIVA) value." alt="" coords="652,995,797,1020"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="967,598,961,674,940,778,923,834,899,889,868,940,828,984,799,1001,796,996,825,980,863,936,894,886,918,832,935,777,955,673,962,598"/>
+<area shape="rect" id="Node000020" href="$adf4030_8c.html#af90463b7ed71f1dace35f0d87aab3a6d" title="Set the output divider B (ODIVB) value." alt="" coords="652,1044,797,1069"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="969,598,965,682,958,739,947,800,930,864,905,926,872,984,828,1035,799,1052,796,1047,825,1031,867,981,900,924,925,862,942,799,953,738,960,682,963,598"/>
+<area shape="rect" id="Node000021" href="$adf4030_8c.html#ad5e4a598fe3fe8708cbca6dfb050a28a" title="Set the reference divider (RDIV) value." alt="" coords="657,1093,792,1119"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="964,598,948,704,919,850,900,924,879,991,855,1046,829,1084,812,1096,793,1103,791,1098,809,1091,825,1080,850,1044,874,989,895,923,913,849,942,703,959,598"/>
+<area shape="rect" id="Node000022" href="$adf4030_8c.html#a45cc1ed4bf7b8ec21b1a4c1178f5cc25" title="Set serial alignment for multiple BSYNC channels." alt="" coords="652,1143,797,1183"/>
+<area shape="poly" id="edge25_Node000001_Node000022" title=" " alt="" coords="965,598,949,712,921,872,902,954,880,1029,856,1091,829,1133,815,1145,799,1153,796,1148,812,1140,825,1130,851,1088,875,1027,897,953,915,871,944,712,960,597"/>
+<area shape="rect" id="Node000023" href="$adf4030_8c.html#a3118958f4942e6bd7da52212bbf0be02" title="Perform single&#45;channel alignment. Before calling this function, please set tdc_source to the desired ..." alt="" coords="387,262,535,302"/>
+<area shape="poly" id="edge26_Node000001_Node000023" title=" " alt="" coords="956,546,940,500,913,442,875,385,852,359,825,338,791,318,754,303,677,284,601,277,535,278,535,272,602,272,678,279,756,298,793,313,828,333,855,355,879,381,918,440,945,498,961,545"/>
+<area shape="rect" id="Node000024" href="$adf4030_8c.html#a80090349d73c9be3e6e25d47b9d39813" title="Set the TDC measurement target and start the measurement. Before calling this function,..." alt="" coords="347,391,574,416"/>
+<area shape="poly" id="edge28_Node000001_Node000024" title=" " alt="" coords="950,548,931,515,903,476,868,440,825,412,787,398,746,388,663,380,585,384,519,393,519,388,584,379,663,375,747,383,789,393,828,408,871,436,907,473,935,512,955,545"/>
+<area shape="rect" id="Node000025" href="$adf4030_8c.html#a7b5d9f0a34be5022a94c9d50e75711fe" title="Set the TDC source." alt="" coords="371,212,550,237"/>
+<area shape="poly" id="edge30_Node000001_Node000025" title=" " alt="" coords="958,546,945,491,920,421,902,384,881,349,855,317,825,289,794,270,760,254,688,233,616,223,550,221,550,216,616,218,689,227,762,249,796,265,828,285,859,313,885,346,907,381,925,419,950,489,963,545"/>
+<area shape="rect" id="Node000026" href="$adf4030_8c.html#ada5f34638176ce825c498ac33e332f53" title="Set Temperature Readback feature&#39;s initial state. This function should be called before reading tempe..." alt="" coords="629,637,820,663"/>
+<area shape="poly" id="edge32_Node000001_Node000026" title=" " alt="" coords="916,591,827,621,768,640,766,635,826,615,914,586"/>
+<area shape="rect" id="Node000027" href="$adf4030_8c.html#ae28be5984c0a9ece5a66cdb760bc174b" title="Set the desired VCO frequency." alt="" coords="642,5,807,31"/>
+<area shape="poly" id="edge34_Node000001_Node000027" title=" " alt="" coords="959,545,943,436,915,285,896,208,875,138,851,82,825,44,806,31,809,27,829,40,856,79,880,137,901,207,920,284,949,435,965,545"/>
+<area shape="rect" id="Node000003" href="$adf4030_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="176,212,295,237"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="386,194,347,202,291,215,290,209,346,197,385,188"/>
+<area shape="rect" id="Node000009" href="$adf4030_8c.html#ad34c12425a76f1d9e4ab57cdaf6936cf" title="Initializes the adf4030." alt="" coords="409,59,512,84"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="621,72,512,73,512,68,621,66"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="397,87,348,108,316,133,287,162,247,214,243,210,283,159,312,129,345,104,395,82"/>
+<area shape="rect" id="Node000010" href="$iio__adf4030_8c.html#a7d6deb72f2e5767105166f8c9cd476ba" title="Initializes the ADF4030 IIO driver." alt="" coords="172,59,299,84"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="395,74,299,74,299,69,395,69"/>
+<area shape="rect" id="Node000011" href="$adf4030_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,59,124,84"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="158,74,124,74,124,69,158,69"/>
+<area shape="poly" id="edge13_Node000012_Node000003" title=" " alt="" coords="366,326,345,316,316,298,288,277,247,240,251,236,292,273,319,294,348,312,368,321"/>
+<area shape="poly" id="edge16_Node000013_Node000003" title=" " alt="" coords="631,120,567,120,495,123,420,134,348,153,319,165,293,182,252,214,249,210,290,177,317,160,346,147,419,128,494,118,567,114,631,115"/>
+<area shape="poly" id="edge15_Node000013_Node000009" title=" " alt="" coords="631,108,512,84,513,79,632,103"/>
+<area shape="poly" id="edge27_Node000023_Node000003" title=" " alt="" coords="373,262,286,240,287,235,374,257"/>
+<area shape="poly" id="edge29_Node000024_Node000003" title=" " alt="" coords="359,388,345,380,307,347,276,307,254,268,240,239,244,236,258,266,281,304,311,343,348,376,361,383"/>
+<area shape="poly" id="edge31_Node000025_Node000003" title=" " alt="" coords="357,227,295,227,295,222,357,222"/>
+<area shape="poly" id="edge33_Node000026_Node000007" title=" " alt="" coords="615,642,553,636,554,631,616,637"/>
+<area shape="poly" id="edge35_Node000027_Node000009" title=" " alt="" coords="648,36,513,64,512,58,647,31"/>
+<area shape="rect" id="Node000028" href="$adf4030_8c.html#a48c6310339d93a9ffe4d8a0aad352854" title="Set the desired reference frequency and reset everything over to maximum supported value of 250MHz to..." alt="" coords="384,5,537,31"/>
+<area shape="poly" id="edge36_Node000027_Node000028" title=" " alt="" coords="628,21,538,21,538,15,628,15"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="lt8491_write_enable" name="lt8491_write_enable">
+<area shape="rect" id="Node000001" title="Write the telemetry battery charging enable." alt="" coords="533,29,688,55"/>
+<area shape="rect" id="Node000002" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="545,29,485,19,412,17,339,19,291,20,291,14,339,14,412,11,486,14,546,24"/>
+<area shape="rect" id="Node000003" href="$iio__lt8491_8c.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="546,60,486,70,381,75,289,73,289,68,381,70,485,65,545,55"/>
+<area shape="rect" id="Node000005" href="$lt8491_8c.html#a391e5527ddc51bc0f4ef1838b5ed6fc5" title="Restart the chip." alt="" coords="339,29,485,55"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="519,45,486,45,486,39,519,39"/>
+<area shape="rect" id="Node000004" href="$dc2703a_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="324,33,290,28,291,23,325,28"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="325,57,290,62,289,57,324,52"/>
+</map>

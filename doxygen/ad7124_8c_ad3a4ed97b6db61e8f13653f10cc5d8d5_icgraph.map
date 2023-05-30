@@ -1,0 +1,9 @@
+<map id="ad7124_wait_for_conv_ready" name="ad7124_wait_for_conv_ready">
+<area shape="rect" id="Node000001" title="Waits until a new conversion result is available." alt="" coords="232,47,400,87"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#a013528551687cdf64b1b859aef9865a3" title="Perform system zero&#45;scale or full&#45;scale calibration on a channel." alt="" coords="10,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,48,152,33,153,28,219,43"/>
+<area shape="rect" id="Node000003" href="$ad7124_8c.html#ae6ea3197809d427f07edba04882b4fac" title="Read one raw sample from the internal temperature sensor (hw ch 15). Configures hw channel 15 with se..." alt="" coords="5,55,184,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,70,184,70,184,65,218,65"/>
+<area shape="rect" id="Node000004" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="67,104,122,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="219,92,123,113,122,108,218,86"/>
+</map>

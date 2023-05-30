@@ -1,0 +1,57 @@
+<map id="adxl367_reg_write_msk" name="adxl367_reg_write_msk">
+<area shape="rect" id="Node000001" title="Performs a masked write to a register." alt="" coords="624,441,801,467"/>
+<area shape="rect" id="Node000002" href="$adxl367_8c.html#a877441252e4b442f2329aa295f108070" title="Enables ADC reading. Disables temperature reading." alt="" coords="389,5,552,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="708,428,703,352,684,248,667,192,643,138,613,88,574,44,551,30,554,25,578,40,617,84,648,136,672,190,689,247,708,351,714,428"/>
+<area shape="rect" id="Node000003" href="$adxl367_8c.html#adc6977137d3ec0f887140ce5f3814f17" title="Enables specified events to interrupt pin." alt="" coords="403,55,538,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="707,428,698,360,677,269,660,221,637,174,609,131,574,93,557,82,537,75,539,70,559,77,578,89,613,127,642,171,665,219,682,267,704,359,712,427"/>
+<area shape="rect" id="Node000004" href="$adxl367_8c.html#a02bcad9efbb4dd9e70d2dc36e4cff1cb" title=" " alt="" coords="369,104,572,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="705,428,694,368,670,291,653,250,632,210,606,174,574,143,557,132,559,127,578,139,610,171,636,208,658,248,675,289,699,367,711,427"/>
+<area shape="rect" id="Node000005" href="$adxl367_8c.html#ac59bedb7c2513d5f0ccb69d0a580135c" title=" " alt="" coords="375,153,567,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="703,429,689,378,664,313,626,247,602,218,574,192,555,181,558,176,578,188,606,214,630,244,668,311,694,376,708,427"/>
+<area shape="rect" id="Node000006" href="$adxl367_8c.html#a74ff0cccd66c5896fbcbad8b4b439607" title=" " alt="" coords="365,203,576,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="700,429,683,387,656,336,620,284,598,261,575,242,554,231,556,226,577,237,602,257,624,281,661,333,688,385,705,427"/>
+<area shape="rect" id="Node000007" href="$adxl367_8c.html#a683f866c35c8a9164d469649ab69a638" title="Performs self test." alt="" coords="176,515,313,540"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="611,470,366,507,311,517,310,512,365,502,610,465"/>
+<area shape="rect" id="Node000009" href="$adxl367_8c.html#a96ee300c63caca6e96372c70a21fe8f4" title="Sets FIFO format." alt="" coords="381,367,561,392"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="667,439,575,406,533,395,534,390,577,401,669,434"/>
+<area shape="rect" id="Node000011" href="$adxl367_8c.html#ad15c6b1fe67f74de9a55507467348cbf" title="Sets FIFO mode." alt="" coords="384,416,557,441"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="610,446,557,440,558,435,611,441"/>
+<area shape="rect" id="Node000012" href="$adxl367_8c.html#a1c5039207d74090ef1bd9cfc0c714501" title="Sets FIFO read mode." alt="" coords="366,252,575,277"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="696,431,648,361,614,324,575,292,548,280,550,275,577,288,618,320,652,358,700,428"/>
+<area shape="rect" id="Node000013" href="$adxl367_8c.html#ad1dbfab30d151aee1c3d50c51c2b9185" title="Sets the number of FIFO sample sets." alt="" coords="379,302,563,342"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="685,434,636,395,575,356,547,345,549,340,577,352,639,390,689,430"/>
+<area shape="rect" id="Node000014" href="$adxl367_8c.html#a8996aea72d7344de37ae2aeffdf2b6b1" title="Sets offset for each axis." alt="" coords="398,517,543,543"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="661,473,577,501,515,520,513,515,575,495,659,468"/>
+<area shape="rect" id="Node000015" href="$adxl367_8c.html#ac7c20a9664e0fe67c11d6d0f4d65ef24" title="Selects the Output Data Rate of the device." alt="" coords="379,844,562,869"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="713,480,705,551,684,646,667,697,644,747,614,793,578,833,558,846,555,842,574,829,610,790,639,744,662,695,679,645,700,550,707,480"/>
+<area shape="rect" id="Node000018" href="$adxl367_8c.html#a34db7312f51b4e9bcacf624a14f4124d" title="Places the device into standby/measure mode." alt="" coords="375,567,567,592"/>
+<area shape="poly" id="edge22_Node000001_Node000018" title=" " alt="" coords="689,478,640,518,577,556,542,569,540,564,575,552,637,514,686,474"/>
+<area shape="rect" id="Node000019" href="$adxl367_8c.html#a179273472ef6a6efbf7b35e4e91a9085" title="Selects the measurement range." alt="" coords="398,665,543,691"/>
+<area shape="poly" id="edge26_Node000001_Node000019" title=" " alt="" coords="704,481,686,520,659,568,622,616,577,656,545,671,543,666,575,652,618,612,654,565,681,518,699,478"/>
+<area shape="rect" id="Node000020" href="$adxl367_8c.html#aec52d576eb2b0923f2f80030840aa1b9" title="Configures activity detection." alt="" coords="384,715,557,755"/>
+<area shape="poly" id="edge27_Node000001_Node000020" title=" " alt="" coords="707,481,691,529,665,589,627,652,604,680,578,705,559,717,556,713,574,701,600,677,623,649,660,587,686,527,702,479"/>
+<area shape="rect" id="Node000021" href="$adxl367_8c.html#aaf918c9fcb2c60280f5e1b53d84a11df" title="Configures inactivity detection." alt="" coords="378,779,563,819"/>
+<area shape="poly" id="edge28_Node000001_Node000021" title=" " alt="" coords="710,481,698,540,674,617,656,658,635,699,609,736,578,769,561,781,558,777,574,765,605,733,630,696,652,656,669,615,693,538,705,480"/>
+<area shape="rect" id="Node000022" href="$adxl367_8c.html#aefadfadafcf61aefc24d14f7bdb34b94" title="Enables temperature reading." alt="" coords="383,616,558,641"/>
+<area shape="poly" id="edge29_Node000001_Node000022" title=" " alt="" coords="699,480,650,544,616,578,577,607,552,618,550,613,575,602,613,574,646,541,694,477"/>
+<area shape="rect" id="Node000023" href="$adxl367_8c.html#a5621d44057525bbdf7516517c7b69e3e" title=" " alt="" coords="384,894,557,934"/>
+<area shape="poly" id="edge32_Node000001_Node000023" title=" " alt="" coords="714,481,708,559,688,667,671,725,648,783,617,836,578,884,559,898,556,893,574,880,613,833,643,780,666,723,683,666,702,558,708,481"/>
+<area shape="rect" id="Node000008" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,565,124,591"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="186,546,111,568,110,563,185,541"/>
+<area shape="rect" id="Node000010" href="$adxl367_8c.html#a63cc2cd00904abdec7f5bd88f19942a1" title="Configures the FIFO feature. Uses ADXL367_14B_CHID read mode as default." alt="" coords="172,367,317,392"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="367,382,317,382,317,377,367,377"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="225,404,79,567,75,563,221,401"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="398,416,303,395,304,389,399,410"/>
+<area shape="poly" id="edge14_Node000012_Node000010" title=" " alt="" coords="388,284,366,292,335,310,306,331,261,369,257,365,302,326,332,306,364,288,386,279"/>
+<area shape="poly" id="edge16_Node000013_Node000010" title=" " alt="" coords="379,348,296,369,295,364,377,343"/>
+<area shape="poly" id="edge21_Node000015_Node000008" title=" " alt="" coords="388,843,364,834,305,806,261,780,220,750,170,707,112,645,73,593,77,589,116,641,174,703,223,745,264,776,307,802,366,829,390,838"/>
+<area shape="rect" id="Node000016" href="$iio__adxl367_8c.html#ab0285a11dd056b3295e75c6f3b5c64bd" title="Initializes the ADXL367 IIO driver." alt="" coords="182,667,307,692"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="377,841,364,833,316,775,254,694,258,691,320,772,367,829,380,836"/>
+<area shape="rect" id="Node000017" href="$eval-adxl367z_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,667,124,692"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="168,682,124,682,124,677,168,677"/>
+<area shape="poly" id="edge24_Node000018_Node000007" title=" " alt="" coords="401,566,300,543,301,537,402,561"/>
+<area shape="poly" id="edge25_Node000018_Node000008" title=" " alt="" coords="361,582,124,581,124,576,361,576"/>
+<area shape="poly" id="edge23_Node000018_Node000016" title=" " alt="" coords="391,598,366,607,309,638,264,669,261,664,306,633,364,602,389,593"/>
+<area shape="poly" id="edge31_Node000022_Node000008" title=" " alt="" coords="369,619,124,588,125,583,370,614"/>
+<area shape="poly" id="edge30_Node000022_Node000016" title=" " alt="" coords="400,647,303,669,301,664,399,642"/>
+</map>

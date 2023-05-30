@@ -1,0 +1,9 @@
+<map id="ad469x_enter_conversion_mode" name="ad469x_enter_conversion_mode">
+<area shape="rect" id="Node000001" title="Enter conversion mode. To exit conversion mode send a 5 bit conversion mode command AD469x_CMD_REG_CO..." alt="" coords="551,5,784,31"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="319,5,503,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="537,21,503,21,503,15,537,15"/>
+<area shape="rect" id="Node000003" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="172,5,271,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="305,21,271,21,271,15,305,15"/>
+<area shape="rect" id="Node000004" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

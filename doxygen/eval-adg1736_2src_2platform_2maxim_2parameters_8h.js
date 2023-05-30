@@ -1,0 +1,27 @@
+var eval_adg1736_2src_2platform_2maxim_2parameters_8h =
+[
+    [ "GPIO_D_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a74833c100ef7e052e520e71715f69973", null ],
+    [ "GPIO_D_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a9c3e177c9a49416c0df615a8ddb0e5fe", null ],
+    [ "GPIO_EN_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a82d8bf6c93b06c1b90bdd11871a78da4", null ],
+    [ "GPIO_EN_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a25d3a2445c90857c67391f5da305e13b", null ],
+    [ "GPIO_EXTRA", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a1b3d6026509c7f462a79b5d9f86f9e71", null ],
+    [ "GPIO_IN1_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#ad03a52123dd864dc5cd5487c83c90c77", null ],
+    [ "GPIO_IN1_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a39a04bcadafc769bef4b5f3750cc8bf5", null ],
+    [ "GPIO_IN2_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a336300baeef2fa646339fce679b592a0", null ],
+    [ "GPIO_IN2_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a459f279b5efac48d2053df2366ced6b2", null ],
+    [ "GPIO_OPS", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#aa00c79541f5bcf66f6cfadcdc90e82e1", null ],
+    [ "GPIO_S_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a6b6aa16faebccd2a98b0d04de432bd82", null ],
+    [ "GPIO_S_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a5251db543a1baee8a3c01ddfea800cd1", null ],
+    [ "LED_GREEN_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a0539be032702009fb24beec89c6fa0c0", null ],
+    [ "LED_GREEN_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a3ed8b1ac183679013d04fa3ebe0e44e5", null ],
+    [ "LED_RED_PIN", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#ab9824ab080c30006c1baaa0dd7e863c5", null ],
+    [ "LED_RED_PORT", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a7959a54f2383757d0007ee4b96071186", null ],
+    [ "TEST_SIDE", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a260268cefb2fa61bf8dba33c28e7e717", null ],
+    [ "TEST_SWITCH", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a62dbbd2c3cc301fee5c673502e8d2224", null ],
+    [ "UART_BAUDRATE", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_EXTRA", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#aef2e6b5fc83c0dc37191e4212e578f7f", null ],
+    [ "UART_OPS", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#ae64afa3f3792f9fce17061e4e8733413", null ],
+    [ "adg1736_gpio_extra", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#ac89696be726b9affb453e0e58848655d", null ],
+    [ "adg1736_uart_extra", "eval-adg1736_2src_2platform_2maxim_2parameters_8h.html#a0b9530f5c18f7881b192ba50c4ecb031", null ]
+];

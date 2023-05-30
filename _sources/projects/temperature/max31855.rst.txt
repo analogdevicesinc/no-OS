@@ -1,0 +1,1 @@
+.. include:: ../../../../../projects/max31855/README.rst

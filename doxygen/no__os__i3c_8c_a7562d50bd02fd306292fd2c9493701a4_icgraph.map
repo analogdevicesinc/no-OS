@@ -1,0 +1,7 @@
+<map id="no_os_i3c_call_irq" name="no_os_i3c_call_irq">
+<area shape="rect" id="Node000001" title="Non&#45;blocking I3C interrupt. Since a payload is always retrieved with it, also update the no_os_i3c_cc..." alt="" coords="232,31,372,56"/>
+<area shape="rect" id="Node000002" href="$stm32__i3c_8c.html#aa14ca01a0ace8c767e2dd473f1ec6c4b" title=" " alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,36,184,32,184,26,219,31"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#a1da9f9d7c5f659f473d540630ca4f770" title="Wait I3C interrupt. Set async_irq on call to false to ensure single entry point." alt="" coords="22,55,167,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,56,168,62,167,56,218,50"/>
+</map>

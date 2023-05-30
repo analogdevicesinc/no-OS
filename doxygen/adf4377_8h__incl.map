@@ -1,0 +1,21 @@
+<map id="drivers/frequency/adf4377/adf4377.h" name="drivers/frequency/adf4377/adf4377.h">
+<area shape="rect" id="Node000001" title="Header file for adf4377 Driver." alt="" coords="168,5,361,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="102,167,173,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,43,74,64,37,78,14,95,9,106,9,116,15,126,25,135,55,151,90,163,88,168,53,156,22,139,11,129,4,118,4,105,10,92,34,74,73,59,167,37"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="375,167,458,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="322,43,359,63,392,92,408,121,416,152,411,153,403,123,387,95,356,67,319,48"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="24,93,123,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="220,48,115,91,113,86,218,43"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="147,93,254,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="251,47,221,84,216,81,247,44"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="278,93,378,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="282,44,312,81,308,84,278,47"/>
+<area shape="rect" id="Node000008" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="454,93,565,119"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="324,43,462,87,460,92,322,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="86,117,120,155,116,158,82,121"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="192,121,159,158,155,154,188,117"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="298,121,183,164,181,159,297,116"/>
+<area shape="poly" id="edge10_Node000006_Node000003" title=" " alt="" coords="344,117,393,156,389,160,341,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="280,167,350,192"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="329,119,322,154,317,153,323,119"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="dpot_init_param" name="dpot_init_param">
+<area shape="rect" id="Node000001" title="Digital potentiometer init parameters." alt="" coords="5,93,133,119"/>
+<area shape="rect" id="Node000002" href="$structdpot__ops.html" title="Digital potentiometer common APIs." alt="" coords="29,5,110,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,45,72,93,67,93,67,45"/>
+</map>

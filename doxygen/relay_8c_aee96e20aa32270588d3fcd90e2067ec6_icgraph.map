@@ -1,0 +1,18 @@
+<map id="relay_state" name="relay_state">
+<area shape="rect" id="Node000001" title="Relay command line state." alt="" coords="876,56,971,81"/>
+<area shape="rect" id="Node000002" href="$self__test_8c.html#a5d7d85bfcc82779bf0e98653f996ad83" title="Running test for relay." alt="" coords="661,5,828,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="864,55,790,33,791,28,865,50"/>
+<area shape="rect" id="Node000003" href="$self__test_8c.html#a20e5f2d063314f7d70c97e6d0d1095b0" title="Startup test for power supply." alt="" coords="469,31,597,56"/>
+<area shape="poly" id="edge9_Node000001_Node000003" title=" " alt="" coords="862,67,597,50,598,45,862,62"/>
+<area shape="rect" id="Node000007" href="$self__test_8c.html#a8fc8deedebdb6c317450ca2a910445a7" title="Relay test." alt="" coords="453,107,613,132"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="862,79,614,112,613,106,862,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="648,32,598,38,598,33,647,27"/>
+<area shape="rect" id="Node000004" href="$self__test_8c.html#a9440e0a0a3091dcda40b03efbb3acd55" title="Startup test." alt="" coords="275,5,405,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="455,36,405,29,406,24,456,31"/>
+<area shape="rect" id="Node000005" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,56,227,81"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="456,51,227,67,227,62,455,46"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="283,37,212,58,211,53,282,32"/>
+<area shape="rect" id="Node000006" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,71,60,71,60,66,94,66"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="439,109,227,79,227,74,440,104"/>
+</map>

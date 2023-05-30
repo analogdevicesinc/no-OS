@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/dac/ad7293/README.rst

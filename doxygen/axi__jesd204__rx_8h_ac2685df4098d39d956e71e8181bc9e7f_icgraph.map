@@ -1,0 +1,9 @@
+<map id="axi_jesd204_rx_watchdog" name="axi_jesd204_rx_watchdog">
+<area shape="rect" id="Node000001" title="JESD204 RX Watchdog." alt="" coords="295,31,485,56"/>
+<area shape="rect" id="Node000002" href="$adrv9009_2src_2app_2app__jesd_8c.html#a502dd44d42a20c9cbb938ab187689551" title=" " alt="" coords="108,5,247,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="280,33,247,29,247,24,281,28"/>
+<area shape="rect" id="Node000004" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="150,55,205,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="281,58,205,67,205,62,280,53"/>
+<area shape="rect" id="Node000003" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

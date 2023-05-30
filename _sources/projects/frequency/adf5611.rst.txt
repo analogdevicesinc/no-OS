@@ -1,0 +1,1 @@
+.. include:: ../../../../../projects/adf5611/README.rst

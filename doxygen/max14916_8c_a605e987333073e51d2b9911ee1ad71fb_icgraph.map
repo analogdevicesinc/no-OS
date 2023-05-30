@@ -1,0 +1,11 @@
+<map id="max14916_ch_set" name="max14916_ch_set">
+<area shape="rect" id="Node000001" title="Write the (logic) state of a channel (on/off)." alt="" coords="529,31,669,56"/>
+<area shape="rect" id="Node000002" href="$max14916_8c.html#ae699a7641185ddb8c874077c7450a89d" title="Initialize and configure the MAX14916 device." alt="" coords="363,31,481,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="516,46,482,46,482,41,516,41"/>
+<area shape="rect" id="Node000003" href="$max14916_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="184,5,303,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="349,36,302,29,303,24,350,30"/>
+<area shape="rect" id="Node000004" href="$iio__max14916_8c.html#ad81756ab2e8b282c4f1e2fe65af8f9c9" title="Initializes the MAX14916 IIO descriptor." alt="" coords="172,55,315,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="349,56,315,60,315,55,349,50"/>
+<area shape="rect" id="Node000005" href="$max14916_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="159,70,125,70,125,65,159,65"/>
+</map>

@@ -1,0 +1,49 @@
+<map id="ltc4296_reg_write" name="ltc4296_reg_write">
+<area shape="rect" id="Node000001" title="Register Write." alt="" coords="653,438,792,463"/>
+<area shape="rect" id="Node000002" href="$ltc4296_8c.html#ac85ee4f3f8c86b87deb0c02b18e041a1" title="Clear circuit break faults." alt="" coords="409,282,601,307"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="704,428,663,374,635,346,604,322,576,310,579,305,607,318,639,342,667,371,709,425"/>
+<area shape="rect" id="Node000004" href="$ltc4296_8c.html#a94d5e1bab7c9859218cd26a0485f5906" title="Clear global faults." alt="" coords="427,69,583,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="717,425,709,364,690,283,676,240,657,198,633,159,604,125,581,109,584,105,607,121,637,156,661,196,681,238,696,282,714,363,722,424"/>
+<area shape="rect" id="Node000005" href="$ltc4296_8c.html#ae589e14e837a59ca341c89708da399a1" title="Clear Port Events." alt="" coords="433,5,576,45"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="719,424,715,352,699,254,684,202,664,150,638,102,604,59,575,41,578,36,607,55,642,99,669,148,689,200,704,253,720,352,724,424"/>
+<area shape="rect" id="Node000007" href="$ltc4296_8c.html#a425040b9a2bb2b4fb794b362b88f9561" title="Disable the global ADC." alt="" coords="423,183,586,209"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="713,425,700,381,679,326,647,270,627,245,604,223,583,211,585,207,607,219,631,242,651,267,683,324,705,379,718,424"/>
+<area shape="rect" id="Node000008" href="$ltc4296_8c.html#a43e962728bfabf996f827ce0811750e8" title="Force port to power mode." alt="" coords="417,233,592,258"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="710,426,694,391,671,349,641,308,604,273,580,260,583,256,607,268,645,304,676,347,699,389,714,424"/>
+<area shape="rect" id="Node000009" href="$ltc4296_8c.html#a2f4cd2b12d9fd083bd0c557cf87d4a51" title="Device initialization." alt="" coords="215,495,313,521"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="670,470,606,485,526,496,446,504,314,510,313,505,445,498,525,491,605,480,669,465"/>
+<area shape="rect" id="Node000011" href="$ltc4296_8c.html#add5337ca7937c1c999a6cb6cd442e085" title="Check if port is disabled." alt="" coords="426,331,583,357"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="694,431,654,400,604,372,569,359,571,354,606,367,656,396,698,427"/>
+<area shape="rect" id="Node000012" href="$ltc4296_8c.html#a6906acd8493f785d8f983dc4c47033cc" title="Enable specific port." alt="" coords="201,746,327,771"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="720,477,706,560,682,669,666,723,648,771,629,810,607,835,587,848,565,857,519,864,472,860,425,848,381,830,341,810,282,774,285,769,343,805,383,825,427,842,473,854,519,858,564,852,584,843,604,831,624,807,644,769,661,721,676,668,700,559,715,477"/>
+<area shape="rect" id="Node000013" href="$ltc4296_8c.html#aa68f91f1a7e08c29a12a525aada778f3" title="Enable specific port and classify." alt="" coords="426,431,583,471"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="639,453,583,453,583,448,639,448"/>
+<area shape="rect" id="Node000014" href="$ltc4296_8c.html#af4b3d0eaa0f53c41eef4ca623168ea10" title="Stimulate valid wake&#45;up signature for a port." alt="" coords="185,597,343,622"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="710,477,670,534,641,563,607,586,540,610,471,622,403,625,343,622,343,617,403,620,470,617,539,605,604,582,637,559,666,531,706,474"/>
+<area shape="rect" id="Node000015" href="$ltc4296_8c.html#a50a6a88e46753fa6b57624cfeab9b68b" title="Set port is able to source power." alt="" coords="404,546,605,571"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="696,474,655,502,606,529,555,548,554,543,604,524,652,497,693,469"/>
+<area shape="rect" id="Node000016" href="$ltc4296_8c.html#a19480e8dc27ee4bb6e2f714d240d7b7d" title="Software reset." alt="" coords="449,381,560,406"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="662,437,605,421,556,409,557,403,606,416,663,432"/>
+<area shape="rect" id="Node000017" href="$ltc4296_8c.html#a055027c6637764f6a5dacef447d7d4fd" title="Set the global ADC to measure voltage." alt="" coords="423,647,586,673"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="714,477,698,511,674,553,644,594,607,630,569,650,567,645,604,626,640,591,670,550,693,509,709,475"/>
+<area shape="rect" id="Node000018" href="$ltc4296_8c.html#ae409b18a37fe20787370ca634f99e707" title="Configure Global ADC to read output voltage." alt="" coords="419,697,590,722"/>
+<area shape="poly" id="edge22_Node000001_Node000018" title=" " alt="" coords="719,478,706,523,684,580,652,638,631,665,607,687,588,699,585,694,604,683,627,661,648,635,680,578,701,522,713,476"/>
+<area shape="rect" id="Node000019" href="$ltc4296_8c.html#a52398fe331e6ee75a2e2b578562118bd" title="Set port to maintain full voltage signature." alt="" coords="419,746,590,771"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="721,478,711,532,692,602,677,639,658,675,635,708,607,737,589,748,586,744,604,733,631,705,653,672,672,637,687,601,706,531,716,477"/>
+<area shape="rect" id="Node000020" href="$ltc4296_8c.html#aaac62d33fbc481b7c7502dff3ec8cb1e" title="Set port to power mode." alt="" coords="424,795,585,821"/>
+<area shape="poly" id="edge24_Node000001_Node000020" title=" " alt="" coords="723,477,716,540,698,624,684,668,664,711,639,751,607,786,587,799,584,794,604,782,634,748,659,708,679,666,693,622,711,539,718,477"/>
+<area shape="rect" id="Node000021" href="$ltc4296_8c.html#a233877755eabb35a0c8373b8bea6a3f5" title="Device unlock." alt="" coords="445,134,565,159"/>
+<area shape="poly" id="edge25_Node000001_Node000021" title=" " alt="" coords="716,425,706,372,686,304,671,268,653,234,630,202,604,174,585,162,564,155,566,150,588,158,607,170,634,198,657,231,676,266,691,302,711,371,721,424"/>
+<area shape="rect" id="Node000003" href="$ltc4296_8c.html#aebc83ee39584effbc89eedd89cc11f00" title="Check global events." alt="" coords="191,201,337,241"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="432,281,403,273,317,244,318,239,405,268,434,276"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="423,117,405,125,342,164,291,203,287,199,339,160,403,120,421,112"/>
+<area shape="rect" id="Node000006" href="$ltc4296_8c.html#a091082997e1350b271177136cb1cc8e9" title="Check port events." alt="" coords="172,13,356,38"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="419,28,356,28,356,23,419,23"/>
+<area shape="rect" id="Node000010" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,597,124,622"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="227,529,92,599,89,594,225,525"/>
+<area shape="poly" id="edge13_Node000012_Node000010" title=" " alt="" coords="234,740,81,624,84,620,237,736"/>
+<area shape="poly" id="edge16_Node000014_Node000010" title=" " alt="" coords="171,612,124,612,124,607,171,607"/>
+<area shape="poly" id="edge19_Node000016_Node000003" title=" " alt="" coords="435,385,403,372,362,342,326,307,276,243,281,240,330,303,365,338,405,367,437,380"/>
+<area shape="poly" id="edge20_Node000016_Node000009" title=" " alt="" coords="437,410,405,421,336,460,283,497,280,493,333,455,403,416,435,405"/>
+<area shape="poly" id="edge26_Node000021_Node000003" title=" " alt="" coords="437,165,405,175,319,204,317,199,403,169,436,160"/>
+</map>

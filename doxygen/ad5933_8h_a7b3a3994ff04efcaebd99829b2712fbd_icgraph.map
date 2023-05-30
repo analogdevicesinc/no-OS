@@ -1,0 +1,24 @@
+<map id="ad5933_set_register_value" name="ad5933_set_register_value">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="523,171,677,211"/>
+<area shape="rect" id="Node000002" href="$ad5933_8c.html#ad0784276ebcb6d9445892f3ea374d7aa" title="Configures the sweep parameters: Start frequency, Frequency increment and Number of increments." alt="" coords="289,5,454,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="578,161,535,100,506,70,473,44,449,33,452,28,476,40,510,66,540,97,583,158"/>
+<area shape="rect" id="Node000003" href="$ad5933_8c.html#afc3dbd39564f171cbd400ea487774662" title="Reads the real and imaginary value from register." alt="" coords="304,55,439,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="568,164,525,127,473,94,438,81,440,76,476,89,528,122,571,159"/>
+<area shape="rect" id="Node000006" href="$ad5933_8c.html#a124cb2de4fbcb440c16006c4ca8e233c" title="Reads the temperature from the part and returns the data in degrees Celsius." alt="" coords="278,104,465,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="541,168,474,143,433,132,435,127,475,138,543,163"/>
+<area shape="rect" id="Node000007" href="$ad5933_8c.html#a2e26b83eb857f404768f289338c980d2" title="Resets the device." alt="" coords="316,153,427,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="508,184,427,175,427,169,509,179"/>
+<area shape="rect" id="Node000008" href="$ad5933_8c.html#a170de42560e2a346b6e90b55094f1180" title="Starts the sweep operation." alt="" coords="35,168,191,193"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="509,196,268,194,191,190,191,184,268,189,509,190"/>
+<area shape="rect" id="Node000009" href="$ad5933_8c.html#a54f4c92b425f6132a8874d0cdca0cd38" title="Selects the range and gain of the device." alt="" coords="268,255,475,280"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="531,219,476,238,415,257,414,252,474,233,530,214"/>
+<area shape="rect" id="Node000010" href="$ad5933_8c.html#af1a666a8d9f591e8725387227552df5f" title="Selects the number of settling cycles of the device." alt="" coords="276,304,467,329"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="571,224,529,261,476,295,446,306,444,301,473,290,525,257,568,220"/>
+<area shape="rect" id="Node000011" href="$ad5933_8c.html#a0e9a5378edfb0cfad844827c8d5cee73" title="Selects the source of the system clock." alt="" coords="282,353,461,379"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="583,225,540,286,510,318,476,344,452,356,450,351,473,340,507,314,536,283,579,222"/>
+<area shape="rect" id="Node000004" href="$ad5933_8c.html#a58b3907982945d725fa5c40b8b548869" title="Reads the real and the imaginary data and calculates the Gain Factor." alt="" coords="27,33,198,73"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="290,65,198,60,198,55,290,60"/>
+<area shape="rect" id="Node000005" href="$ad5933_8c.html#af7159e3dc1e00ce2e03c2943aad4aa34" title="Reads the real and the imaginary data and calculates the Impedance." alt="" coords="5,97,220,123"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="291,83,191,100,190,95,290,78"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="302,173,191,179,191,174,302,167"/>
+</map>

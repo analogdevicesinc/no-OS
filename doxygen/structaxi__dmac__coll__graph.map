@@ -1,0 +1,5 @@
+<map id="axi_dmac" name="axi_dmac">
+<area shape="rect" id="Node000001" title=" " alt="" coords="31,93,116,119"/>
+<area shape="rect" id="Node000002" href="$structaxi__dma__transfer.html" title=" " alt="" coords="5,5,141,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,45,76,93,71,93,71,45"/>
+</map>

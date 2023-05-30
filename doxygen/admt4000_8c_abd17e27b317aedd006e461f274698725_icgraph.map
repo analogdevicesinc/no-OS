@@ -1,0 +1,9 @@
+<map id="admt4000_init" name="admt4000_init">
+<area shape="rect" id="Node000001" title="Initializes the admt4000." alt="" coords="359,31,475,56"/>
+<area shape="rect" id="Node000002" href="$iio__admt4000_8c.html#a6c3063fb3bcfede4d2933c62eed3938c" title="Initializes the ADMT4000 IIO driver." alt="" coords="172,5,311,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="345,36,311,31,311,25,345,30"/>
+<area shape="rect" id="Node000004" href="$admt4000_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main function." alt="" coords="182,55,301,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="345,56,301,62,300,57,345,50"/>
+<area shape="rect" id="Node000003" href="$admt4000_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

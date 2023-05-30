@@ -1,0 +1,95 @@
+<map id="axi_clkgen_remove" name="axi_clkgen_remove">
+<area shape="rect" id="Node000001" title="axi_clkgen_remove" alt="" coords="904,376,1053,401"/>
+<area shape="rect" id="Node000002" href="$ad463x_8c.html#abc56c626223c4f5ba9812f75491260a5" title="Initialize the device." alt="" coords="729,5,828,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="973,363,966,299,946,213,931,167,911,122,886,81,854,44,827,28,830,24,858,40,890,78,916,120,936,165,952,211,971,298,979,362"/>
+<area shape="rect" id="Node000004" href="$ad463x_8c.html#a374808fb7455b4797fabf216071869cb" title="Free the memory allocated by ad463x_init()." alt="" coords="715,55,842,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="972,363,961,307,940,234,925,196,905,159,882,124,854,93,837,82,840,78,858,89,886,121,910,156,929,194,945,233,966,306,977,362"/>
+<area shape="rect" id="Node000005" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="729,104,828,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="969,363,956,316,933,257,900,195,879,167,854,143,827,128,829,123,858,139,883,164,904,192,938,254,961,314,974,362"/>
+<area shape="rect" id="Node000007" href="$ad469x_8c.html#a3542558ed10a8d3820dbeea607a0e93c" title="Free the memory allocated by ad469x_init()." alt="" coords="715,153,842,179"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="966,364,950,326,926,280,894,232,854,192,835,181,838,177,858,188,899,229,931,277,955,324,971,362"/>
+<area shape="rect" id="Node000008" href="$ad738x_8c.html#a3944843fc3a9a91406fe28a93b2ee785" title="Free the resources allocated by ad738x_init()." alt="" coords="715,203,842,228"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="961,366,919,303,889,270,855,242,833,230,835,226,857,237,892,266,923,300,966,363"/>
+<area shape="rect" id="Node000012" href="$ad7606_8c.html#acb539626bf65185a70700d9a62f036d4" title="Free any resource used by the driver." alt="" coords="701,252,856,277"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="953,368,910,329,855,291,829,280,831,275,857,286,913,325,957,364"/>
+<area shape="rect" id="Node000019" href="$ad7616_8c.html#ab13a1c4482a2dcd8cee5a5de9476a2c5" title=" " alt="" coords="715,301,842,327"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="935,373,855,341,822,329,824,324,857,335,937,368"/>
+<area shape="rect" id="Node000022" href="$ad796x_8c.html#abd440e98810ef648a03653bb6ba5046b" title="Remove the device and release resources." alt="" coords="715,351,842,376"/>
+<area shape="poly" id="edge26_Node000001_Node000022" title=" " alt="" coords="890,380,842,374,843,369,891,375"/>
+<area shape="rect" id="Node000026" href="$adrv903x_2src_2common_2clkgen__routines_8c.html#a70e01f5a456135011750b05e0e72feb8" title="Remove AXI clkgen instances." alt="" coords="717,400,840,425"/>
+<area shape="poly" id="edge32_Node000001_Node000026" title=" " alt="" coords="891,402,840,408,840,403,890,397"/>
+<area shape="rect" id="Node000027" href="$adrv902x_2src_2common_2clkgen__routines_8c.html#aa5b95ec560d01d868dea140112df0f85" title="remove axi_clkgen structs." alt="" coords="717,449,840,475"/>
+<area shape="poly" id="edge33_Node000001_Node000027" title=" " alt="" coords="935,409,857,439,820,452,819,447,855,434,933,404"/>
+<area shape="rect" id="Node000030" href="$adrv903x_2src_2common_2clkgen__routines_8c.html#abe66af8d2f2c5c1e47b4894a702f7675" title="Initialize and set rates for RX and TX AXI clkgen instances." alt="" coords="725,548,833,573"/>
+<area shape="poly" id="edge36_Node000001_Node000030" title=" " alt="" coords="965,415,922,476,892,509,857,538,833,550,830,546,855,533,888,505,918,472,961,412"/>
+<area shape="rect" id="Node000031" href="$adrv902x_2src_2common_2clkgen__routines_8c.html#a044ace5326bb80c8aaaa7d261c42619f" title="Init and set rates for axi_clkgen components." alt="" coords="725,499,833,524"/>
+<area shape="poly" id="edge37_Node000001_Node000031" title=" " alt="" coords="956,414,912,451,857,488,828,501,826,496,855,484,909,447,952,409"/>
+<area shape="rect" id="Node000032" href="$adrv9009_2src_2app_2app__clocking_8c.html#a3e4c367a44510658467da3ce7c9e9273" title=" " alt="" coords="719,597,839,623"/>
+<area shape="poly" id="edge40_Node000001_Node000032" title=" " alt="" coords="970,416,954,454,930,500,898,546,858,587,835,600,833,595,854,583,894,543,925,497,949,451,966,414"/>
+<area shape="rect" id="Node000034" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="727,647,831,672"/>
+<area shape="poly" id="edge42_Node000001_Node000034" title=" " alt="" coords="974,416,960,463,937,522,904,583,882,611,858,636,832,651,829,646,854,632,878,608,899,580,933,519,955,461,969,414"/>
+<area shape="rect" id="Node000035" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="751,696,806,721"/>
+<area shape="poly" id="edge44_Node000001_Node000035" title=" " alt="" coords="977,415,966,471,944,543,929,581,909,619,886,654,858,685,833,700,807,708,805,703,831,696,854,681,882,651,905,616,924,579,939,541,961,469,971,414"/>
+<area shape="rect" id="Node000036" href="$pulsar__adc_8c.html#a8ce5f2b49b0250436d202bb90abba68e" title="Free the resources allocated by pulsar_adc_init()." alt="" coords="704,745,853,771"/>
+<area shape="poly" id="edge45_Node000001_Node000036" title=" " alt="" coords="978,415,970,479,951,565,935,610,915,655,889,697,858,735,839,747,836,743,854,731,885,694,910,653,930,608,946,563,965,478,973,415"/>
+<area shape="rect" id="Node000003" href="$ad463x__fmcz_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="531,28,649,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="716,28,650,36,649,31,715,23"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="701,59,649,52,650,46,702,54"/>
+<area shape="rect" id="Node000006" href="$ad469x__evb_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="basic example main execution." alt="" coords="531,100,649,125"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="715,118,649,117,649,111,715,113"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="719,152,635,128,636,123,721,147"/>
+<area shape="rect" id="Node000009" href="$ad738x_8c.html#a5a643687de5deac9b07cf82ee05503d7" title=" " alt="" coords="541,201,639,227"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="701,217,640,217,640,212,701,212"/>
+<area shape="rect" id="Node000010" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="313,149,473,175"/>
+<area shape="poly" id="edge13_Node000008_Node000010" title=" " alt="" coords="711,202,653,191,473,171,473,165,654,186,712,197"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="527,200,441,177,442,172,528,195"/>
+<area shape="rect" id="Node000011" href="$ad738x__fmcz_2src_2platform_2lattice_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="156,149,211,175"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="299,165,211,165,211,159,299,159"/>
+<area shape="rect" id="Node000013" href="$ad7606_8c.html#a5e05c4559d4085940f4e928d72447f40" title="Free any resource used by the driver." alt="" coords="527,251,653,276"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="688,267,653,266,654,261,688,261"/>
+<area shape="rect" id="Node000014" href="$iio__ad7606_8c.html#a87c852e7f94e7ed5b180c4d6ae11b657" title=" " alt="" coords="108,200,259,225"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="526,250,478,241,363,227,259,219,259,214,363,221,479,235,527,245"/>
+<area shape="rect" id="Node000016" href="$ad7606_8c.html#a2afb3414c61b03e45af8e3564bcf4e24" title="Initialize the ad7606 device structure." alt="" coords="343,251,442,276"/>
+<area shape="poly" id="edge18_Node000013_Node000016" title=" " alt="" coords="513,266,443,266,443,261,513,261"/>
+<area shape="rect" id="Node000018" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="156,301,211,327"/>
+<area shape="poly" id="edge22_Node000013_Node000018" title=" " alt="" coords="524,282,479,290,327,307,211,315,211,310,327,302,478,285,523,276"/>
+<area shape="rect" id="Node000015" href="$ad7606x-fmc_2src_2iio__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,225,60,251"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="95,230,61,236,60,231,94,225"/>
+<area shape="rect" id="Node000017" href="$iio__ad7606_8c.html#a711196dffba30114293e1db85fd666e1" title="Initialize AD7606 for IIO interfacing." alt="" coords="123,251,244,276"/>
+<area shape="poly" id="edge19_Node000016_Node000017" title=" " alt="" coords="329,266,244,266,244,261,329,261"/>
+<area shape="poly" id="edge21_Node000016_Node000018" title=" " alt="" coords="330,281,211,310,210,305,329,276"/>
+<area shape="poly" id="edge20_Node000017_Node000015" title=" " alt="" coords="109,254,60,245,61,240,110,248"/>
+<area shape="rect" id="Node000020" href="$ad7616_8c.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="533,300,647,325"/>
+<area shape="poly" id="edge24_Node000019_Node000020" title=" " alt="" coords="701,316,647,316,647,310,701,311"/>
+<area shape="rect" id="Node000021" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="365,352,420,377"/>
+<area shape="poly" id="edge25_Node000020_Node000021" title=" " alt="" coords="529,331,421,360,420,355,527,326"/>
+<area shape="rect" id="Node000023" href="$ad796x_8c.html#ac6aabcda52a1f725b70d93a6855e6aef" title="Initialize the device." alt="" coords="541,401,639,427"/>
+<area shape="poly" id="edge27_Node000022_Node000023" title=" " alt="" coords="718,382,639,404,638,399,717,377"/>
+<area shape="rect" id="Node000024" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="313,401,473,427"/>
+<area shape="poly" id="edge30_Node000022_Node000024" title=" " alt="" coords="702,372,527,391,455,404,454,399,526,386,701,367"/>
+<area shape="rect" id="Node000025" href="$ad796x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="321,452,464,477"/>
+<area shape="poly" id="edge31_Node000022_Node000025" title=" " alt="" coords="714,384,703,390,689,402,680,415,671,428,655,440,607,458,557,468,509,473,464,473,464,468,508,467,557,463,606,453,652,436,667,425,676,412,685,399,700,385,711,379"/>
+<area shape="poly" id="edge28_Node000023_Node000024" title=" " alt="" coords="527,417,473,417,473,411,527,411"/>
+<area shape="poly" id="edge29_Node000023_Node000025" title=" " alt="" coords="528,432,444,455,442,449,527,427"/>
+<area shape="rect" id="Node000028" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="531,552,649,577"/>
+<area shape="poly" id="edge34_Node000027_Node000028" title=" " alt="" coords="713,483,703,488,688,501,679,514,670,527,655,541,631,554,629,550,652,537,666,524,675,511,684,497,700,484,710,478"/>
+<area shape="rect" id="Node000029" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="531,503,649,528"/>
+<area shape="poly" id="edge35_Node000027_Node000029" title=" " alt="" coords="721,481,636,505,635,500,719,476"/>
+<area shape="poly" id="edge38_Node000031_Node000028" title=" " alt="" coords="721,530,636,555,635,549,719,525"/>
+<area shape="poly" id="edge39_Node000031_Node000029" title=" " alt="" coords="711,515,650,517,649,511,711,510"/>
+<area shape="rect" id="Node000033" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="563,623,617,648"/>
+<area shape="poly" id="edge41_Node000032_Node000033" title=" " alt="" coords="705,622,618,634,617,629,705,617"/>
+<area shape="poly" id="edge43_Node000034_Node000033" title=" " alt="" coords="713,654,617,641,618,636,713,648"/>
+<area shape="rect" id="Node000037" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="313,695,473,720"/>
+<area shape="poly" id="edge46_Node000036_Node000037" title=" " alt="" coords="708,745,653,735,473,716,473,710,654,730,709,740"/>
+<area shape="rect" id="Node000038" href="$iio__pulsar__adc_8c.html#aa6aeb456d8d8f17aa93126567f8e40aa" title="Release resources." alt="" coords="307,795,479,820"/>
+<area shape="poly" id="edge47_Node000036_Node000038" title=" " alt="" coords="709,776,654,786,479,804,479,799,653,781,708,771"/>
+<area shape="rect" id="Node000040" href="$pulsar__adc_8c.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="530,745,650,771"/>
+<area shape="poly" id="edge49_Node000036_Node000040" title=" " alt="" coords="690,761,651,761,651,755,690,755"/>
+<area shape="rect" id="Node000039" href="$pulsar-adc_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="112,769,255,795"/>
+<area shape="poly" id="edge48_Node000038_Node000039" title=" " alt="" coords="292,798,255,793,256,788,293,793"/>
+<area shape="poly" id="edge50_Node000040_Node000037" title=" " alt="" coords="526,744,442,723,443,717,527,739"/>
+<area shape="rect" id="Node000041" href="$iio__pulsar__adc_8c.html#a8dc355525e9be45109bec316dad2ae8d" title="Initialize PULSAR_ADC for IIO interfacing." alt="" coords="321,745,464,771"/>
+<area shape="poly" id="edge51_Node000040_Node000041" title=" " alt="" coords="516,761,464,761,464,755,516,755"/>
+<area shape="poly" id="edge52_Node000041_Node000039" title=" " alt="" coords="307,770,255,776,255,771,307,765"/>
+</map>

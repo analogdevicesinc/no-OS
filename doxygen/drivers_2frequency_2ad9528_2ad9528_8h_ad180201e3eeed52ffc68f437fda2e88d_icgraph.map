@@ -1,0 +1,32 @@
+<map id="ad9528_spi_read_n" name="ad9528_spi_read_n">
+<area shape="rect" id="Node000001" title="Reads the value of the selected register." alt="" coords="872,81,1019,107"/>
+<area shape="rect" id="Node000002" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a18cfa7989b6c7af9ee4829234b16fc8b" title="Get the current frequency of the clock." alt="" coords="649,5,824,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="896,79,772,33,774,28,898,74"/>
+<area shape="rect" id="Node000003" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#afb5d83bae28bbba78e1e1c786b8927a0" title="Set channel rate." alt="" coords="291,63,447,88"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="858,94,447,80,447,75,858,89"/>
+<area shape="rect" id="Node000009" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a2f2e5cde9a42164c6e8508b5641eb176" title="Poll register." alt="" coords="686,157,787,183"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="898,114,774,160,772,155,896,109"/>
+<area shape="rect" id="Node000010" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a300fee1e9b4ba514e195d5312b11eea3" title="Initializes the AD9528." alt="" coords="312,132,425,157"/>
+<area shape="poly" id="edge17_Node000001_Node000010" title=" " alt="" coords="859,104,426,142,425,137,858,99"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app__clocking_8c.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="108,27,243,52"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,63,243,55,244,49,287,58"/>
+<area shape="rect" id="Node000006" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="123,76,227,101"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="277,84,228,88,228,82,277,79"/>
+<area shape="rect" id="Node000008" href="$headless__mb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="148,125,203,151"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="317,95,204,132,202,127,315,90"/>
+<area shape="rect" id="Node000005" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,27,60,52"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,42,60,42,60,37,94,37"/>
+<area shape="rect" id="Node000007" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,76,60,101"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="109,91,60,91,60,86,109,86"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="677,188,591,202,542,203,494,198,438,181,392,160,395,155,440,176,495,193,542,198,590,197,677,183"/>
+<area shape="rect" id="Node000013" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a508b6010b53efae6c7746aef27414b43" title="Updates the AD9528 configuration." alt="" coords="495,157,601,183"/>
+<area shape="poly" id="edge15_Node000009_Node000013" title=" " alt="" coords="672,173,602,173,602,167,672,167"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="331,127,289,102,266,83,241,66,217,55,219,50,244,61,269,78,292,97,334,123"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="310,131,220,104,221,99,312,126"/>
+<area shape="poly" id="edge14_Node000010_Node000008" title=" " alt="" coords="298,145,203,142,203,136,298,140"/>
+<area shape="rect" id="Node000011" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="116,224,235,249"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="336,167,244,215,216,226,214,221,242,210,333,162"/>
+<area shape="rect" id="Node000012" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="116,175,235,200"/>
+<area shape="poly" id="edge13_Node000010_Node000012" title=" " alt="" coords="299,163,234,177,233,172,298,157"/>
+<area shape="poly" id="edge16_Node000013_Node000010" title=" " alt="" coords="481,163,425,155,426,150,481,158"/>
+</map>

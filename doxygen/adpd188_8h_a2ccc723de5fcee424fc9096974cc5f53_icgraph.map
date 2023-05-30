@@ -1,0 +1,41 @@
+<map id="adpd188_reg_write" name="adpd188_reg_write">
+<area shape="rect" id="Node000001" title="Write one 16 bit register of the ADPD188." alt="" coords="861,335,1008,360"/>
+<area shape="rect" id="Node000002" href="$adpd188_8c.html#affd812b74f601c87ad1011142ccf4fef" title="Set sample frequency of the ADC." alt="" coords="619,5,813,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="928,322,917,266,896,193,881,155,862,118,839,83,812,52,780,33,783,29,815,48,843,79,867,115,886,153,901,192,922,265,933,321"/>
+<area shape="rect" id="Node000003" href="$adpd188_8c.html#ab8a0efa4cbeda4444394df7c4c327938" title="Do initial configuration of the device to use as a smoke detector. The configuration is described in ..." alt="" coords="395,42,571,82"/>
+<area shape="poly" id="edge19_Node000001_Node000003" title=" " alt="" coords="926,322,915,273,893,213,860,152,838,125,812,103,784,86,755,74,692,58,629,52,571,53,571,48,629,47,693,53,757,69,787,82,815,99,842,122,864,149,898,210,920,271,932,320"/>
+<area shape="rect" id="Node000004" href="$iio__adpd1080_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,132,124,157"/>
+<area shape="poly" id="edge23_Node000001_Node000004" title=" " alt="" coords="923,323,908,285,884,241,853,198,833,180,812,164,787,153,756,143,678,130,585,124,484,122,281,129,125,142,124,136,281,124,484,117,585,118,679,125,757,138,789,148,815,160,837,176,857,195,889,238,912,283,928,321"/>
+<area shape="rect" id="Node000005" href="$adpd188_8c.html#a58dcdaeaea13b7cede4ff91b17bdc673" title="Do internal 32MHz clock calibration. This calibration requires the 32kHz clock to be calibrated first..." alt="" coords="172,157,347,183"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="920,324,903,293,879,258,849,224,812,198,775,185,726,175,601,166,466,165,347,168,347,163,465,159,601,160,726,170,777,180,815,193,852,220,883,254,908,290,924,321"/>
+<area shape="rect" id="Node000006" href="$adpd188_8c.html#ac3baebd256bcb88c876657e053332af5" title="Empty the FIFO." alt="" coords="643,411,789,436"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="887,367,814,394,758,413,756,408,812,389,885,362"/>
+<area shape="rect" id="Node000007" href="$adpd188_8c.html#a4de4eaf34b044fef4fc71952c643ab3b" title="Set the number of 16 bit words that need to be in the FIFO to trigger an interrupt." alt="" coords="625,460,807,485"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="914,372,871,413,844,433,815,451,786,462,784,457,812,446,841,429,867,409,911,368"/>
+<area shape="rect" id="Node000008" href="$adpd188_8c.html#ab223f6408746c282f88ed468144ad05c" title="Setup the GPIO source." alt="" coords="626,509,806,535"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="923,374,881,437,850,471,815,500,791,512,789,507,812,496,847,468,876,434,918,371"/>
+<area shape="rect" id="Node000009" href="$adpd188_8c.html#abc11fae86542999dc0381978a94faa14" title="Setup drive and polarity of the GPIOs. Also enable GPIO if necessary." alt="" coords="638,559,794,584"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="928,374,912,413,889,461,856,509,815,549,795,561,792,556,812,545,852,505,884,458,907,411,923,372"/>
+<area shape="rect" id="Node000010" href="$iio__adpd188_8c.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="195,259,324,284"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="847,344,641,326,394,298,324,286,325,281,395,293,641,321,848,339"/>
+<area shape="rect" id="Node000011" href="$adpd188_8c.html#ad0a577b65b64df5ed10a5ecedbad965c" title="Clear the slot and FIFO interrupt flags." alt="" coords="626,608,806,633"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="931,374,919,422,896,483,863,545,841,574,815,599,796,610,793,606,812,595,837,570,858,543,892,481,914,420,926,372"/>
+<area shape="rect" id="Node000012" href="$adpd188_8c.html#abc82bd34fefd0372b5ccb60a923d19c1" title="Enable the slot and FIFO interrupt flags." alt="" coords="634,657,798,683"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="933,374,924,431,903,505,888,544,868,582,844,617,815,648,797,659,795,655,812,644,840,614,864,579,883,542,898,503,918,430,928,373"/>
+<area shape="rect" id="Node000013" href="$adpd188_8c.html#a1528b746a9b5267058f97c57bfca0942" title="Set the mode of operation of the ADPD188." alt="" coords="408,360,557,385"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="848,355,558,371,557,366,847,350"/>
+<area shape="rect" id="Node000014" href="$adpd188_8c.html#ad71f0c49d59a0a13a416871efbe4cf1f" title="Enable slot and setup its FIFO interaction." alt="" coords="640,208,792,233"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="910,326,867,286,812,248,781,236,783,231,815,244,870,282,914,322"/>
+<area shape="rect" id="Node000015" href="$adpd188_8c.html#ac05d2aa664470028697dd810520fdd5d" title="Do software reset of the device." alt="" coords="645,259,787,284"/>
+<area shape="poly" id="edge20_Node000001_Node000015" title=" " alt="" coords="885,332,812,306,756,287,758,282,814,301,887,327"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="635,36,571,48,570,43,634,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="605,18,503,21,395,33,331,46,282,61,173,103,96,134,94,129,171,98,281,56,330,41,394,27,502,15,605,12"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="158,159,124,155,125,150,158,154"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="226,253,84,160,87,155,229,249"/>
+<area shape="poly" id="edge15_Node000013_Node000010" title=" " alt="" coords="430,358,394,343,282,287,285,282,396,338,432,353"/>
+<area shape="poly" id="edge18_Node000014_Node000003" title=" " alt="" coords="683,202,512,84,515,80,686,198"/>
+<area shape="poly" id="edge17_Node000014_Node000010" title=" " alt="" coords="626,228,516,236,395,249,321,261,320,256,394,243,515,230,626,222"/>
+<area shape="rect" id="Node000016" href="$adpd188_8c.html#ad498aa08ccb8f2c328fcc761f391738d" title="Initialize the ADPD188 driver." alt="" coords="429,259,536,284"/>
+<area shape="poly" id="edge21_Node000015_Node000016" title=" " alt="" coords="631,274,536,274,536,269,631,269"/>
+<area shape="poly" id="edge22_Node000016_Node000010" title=" " alt="" coords="415,274,324,274,324,269,415,269"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="projects/ad7124&#45;8pmdz/src/common/ad7124_regs.h" name="projects/ad7124&#45;8pmdz/src/common/ad7124_regs.h">
+<area shape="rect" id="Node000001" title="AD7124&#45;8 register initialization file for ad7124&#45;8pmdz project." alt="" coords="121,5,326,45"/>
+<area shape="rect" id="Node000002" href="$projects_2ad7124-8pmdz_2src_2common_2ad7124__regs_8c.html" title="AD7124&#45;8 register initialization file for ad7124&#45;8pmdz project." alt="" coords="5,93,209,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,56,135,95,131,91,185,52"/>
+<area shape="rect" id="Node000003" href="$ad7124-8pmdz_2src_2common_2common__data_8h.html" title="Declarations of common data to be used by ad7124&#45;8pmdz examples." alt="" coords="233,93,448,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,52,316,91,313,95,259,56"/>
+<area shape="rect" id="Node000004" href="$ad7124-8pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad7124&#45;8pmdz examples." alt="" coords="233,181,448,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="343,147,343,181,338,181,338,147"/>
+</map>

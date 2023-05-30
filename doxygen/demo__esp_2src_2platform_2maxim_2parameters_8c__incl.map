@@ -1,0 +1,15 @@
+<map id="projects/demo_esp/src/platform/maxim/parameters.c" name="projects/demo_esp/src/platform/maxim/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of maxim platform data used by demo_esp." alt="" coords="183,5,406,45"/>
+<area shape="rect" id="Node000002" href="$demo__esp_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to maxim platform used by demo_esp project." alt="" coords="240,93,349,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,46,297,79,292,79,292,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="254,121,86,168,85,162,253,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="97,167,218,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="274,121,193,163,191,158,271,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="243,167,347,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="297,119,297,153,292,153,292,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="371,167,485,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="317,116,395,158,393,162,315,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="509,167,624,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="339,116,510,161,509,166,338,121"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="projects/aducm_blinky_example/src/platform/aducm3029/parameters.h" name="projects/aducm_blinky_example/src/platform/aducm3029/parameters.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="101,5,295,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,76,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,62,75,104,73,99,149,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,108,175,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,62,156,98,152,95,177,59"/>
+<area shape="rect" id="Node000004" href="$platform__init_8h.html" title="ADuCM3029 platform initialization header." alt="" coords="200,108,319,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="219,59,245,95,241,98,215,62"/>
+<area shape="rect" id="Node000005" href="$aducm3029__gpio_8h.html" title=" " alt="" coords="343,108,488,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="265,58,375,101,373,105,263,63"/>
+</map>

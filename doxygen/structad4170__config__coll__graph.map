@@ -1,0 +1,29 @@
+<map id="ad4170_config" name="ad4170_config">
+<area shape="rect" id="Node000001" title="AD4170 configuration." alt="" coords="520,229,636,254"/>
+<area shape="rect" id="Node000002" href="$structad4170__pin__muxing.html" title="Pin_Muxing register settings." alt="" coords="207,7,361,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="375,14,439,25,470,37,498,54,518,73,534,96,558,145,572,193,578,228,573,229,566,194,553,147,530,98,514,77,494,58,467,41,437,30,374,19"/>
+<area shape="rect" id="Node000003" href="$structad4170__clock__ctrl.html" title="Clock_Ctrl register settings." alt="" coords="215,57,353,82"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="368,68,434,81,467,93,498,110,527,137,549,170,575,228,570,230,545,173,523,141,494,114,465,98,433,86,367,73"/>
+<area shape="rect" id="Node000004" href="$structad4170__adc__ctrl.html" title="ADC_Ctrl register settings." alt="" coords="220,106,348,131"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="363,123,430,137,464,148,497,163,539,194,569,227,565,230,536,198,495,168,462,153,428,142,361,128"/>
+<area shape="rect" id="Node000005" href="$structad4170__channel__setup.html" title="Channel_Setup register settings." alt="" coords="199,155,369,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="383,179,440,190,497,204,552,226,550,231,495,209,439,195,382,184"/>
+<area shape="rect" id="Node000006" href="$structad4170__channel__map.html" title="Channel_Map register settings. Selects Analog Inputs for This Sequencer Channel." alt="" coords="202,205,366,230"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="380,222,520,234,520,239,379,228"/>
+<area shape="rect" id="Node000007" href="$structad4170__setup.html" title="Sequencer Setup register settings." alt="" coords="227,254,341,279"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="354,262,496,252,520,249,520,254,496,257,355,267"/>
+<area shape="rect" id="Node000008" href="$structad4170__misc.html" title="Misc register settings." alt="" coords="5,205,113,230"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="128,229,228,252,227,257,127,235"/>
+<area shape="rect" id="Node000009" href="$structad4170__afe.html" title="AFE register settings." alt="" coords="10,254,109,279"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="122,264,227,264,227,269,122,269"/>
+<area shape="rect" id="Node000010" href="$structad4170__filter.html" title="Filter register settings." alt="" coords="6,303,113,329"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="125,299,226,276,228,282,127,304"/>
+<area shape="rect" id="Node000011" href="$structad4170__ref__control.html" title="Ref_Control register settings." alt="" coords="211,303,357,329"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="370,306,432,296,495,280,527,267,555,252,557,256,529,272,497,285,433,301,371,311"/>
+<area shape="rect" id="Node000012" href="$structad4170__current__source.html" title="Current_Source register settings." alt="" coords="197,353,371,378"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="384,357,440,345,495,323,517,308,537,289,566,253,570,256,541,292,521,312,497,328,442,350,385,362"/>
+<area shape="rect" id="Node000013" href="$structad4170__fir__control.html" title="FIR_Control register settings." alt="" coords="213,402,355,427"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="369,413,434,402,465,391,494,375,524,347,546,313,561,280,570,253,576,255,566,282,550,316,528,351,498,379,468,396,435,407,370,418"/>
+<area shape="rect" id="Node000014" href="$structad4170__dac__config.html" title="DAC Config settings (registers HW_LDAC_Mask, HW_Toggle_Mask, Channel_En and DAC_Span)" alt="" coords="211,451,357,477"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="371,467,403,464,435,458,466,447,494,430,514,411,530,388,554,338,567,290,573,254,578,255,572,291,559,340,535,391,518,414,498,434,469,451,437,463,404,469,372,472"/>
+</map>

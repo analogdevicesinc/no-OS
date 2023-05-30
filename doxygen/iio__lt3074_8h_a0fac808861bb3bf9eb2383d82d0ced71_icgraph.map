@@ -1,0 +1,8 @@
+<map id="lt3074_iio_remove" name="lt3074_iio_remove">
+<area shape="rect" id="Node000001" title="Free resources allocated by the init function." alt="" coords="335,5,477,31"/>
+<area shape="rect" id="Node000002" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,21,124,21,124,15,321,15"/>
+<area shape="rect" id="Node000003" href="$iio__lt3074_8c.html#a415078dac56a0cdfeab8963d3e685f23" title="Initializes the LT3074 IIO descriptor." alt="" coords="172,31,287,56"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="321,33,287,38,286,33,321,28"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="158,35,124,30,125,24,159,30"/>
+</map>

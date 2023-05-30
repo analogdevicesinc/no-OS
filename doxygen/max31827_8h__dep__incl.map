@@ -1,0 +1,13 @@
+<map id="drivers/temperature/max31827/max31827.h" name="drivers/temperature/max31827/max31827.h">
+<area shape="rect" id="Node000001" title="Implementation of MAX31827 Driver." alt="" coords="342,5,522,45"/>
+<area shape="rect" id="Node000002" href="$iio__max31827_8c.html" title="Implementation of IIO MAX31827 Driver." alt="" coords="5,101,208,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="354,52,173,103,172,98,352,47"/>
+<area shape="rect" id="Node000003" href="$max31827_8c.html" title="Implementation of MAX31827 Driver." alt="" coords="232,101,411,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="401,56,345,103,342,99,397,52"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2common_2common__data_8h.html" title=" " alt="" coords="435,101,650,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="467,52,522,99,519,103,463,56"/>
+<area shape="rect" id="Node000006" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="675,93,864,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="514,47,675,91,674,96,513,52"/>
+<area shape="rect" id="Node000005" href="$max31827-evkit_2src_2common_2common__data_8c.html" title=" " alt="" coords="435,196,650,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="545,154,545,196,540,196,540,154"/>
+</map>

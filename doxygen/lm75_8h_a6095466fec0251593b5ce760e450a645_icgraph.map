@@ -1,0 +1,9 @@
+<map id="lm75_remove" name="lm75_remove">
+<area shape="rect" id="Node000001" title="Uninitialize LM75 device driver." alt="" coords="375,31,487,56"/>
+<area shape="rect" id="Node000002" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html#a897b461801f0c5c236b9fb1279569532" title=" " alt="" coords="216,5,319,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,35,319,29,319,23,362,30"/>
+<area shape="rect" id="Node000003" href="$curvetrace__example_8c.html#aaa939bac351fe06154a2d062ebd1ec1a" title=" " alt="" coords="208,55,327,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="361,56,327,61,327,56,361,51"/>
+<area shape="rect" id="Node000004" href="$curvetrace__example_8c.html#aa8c97b178f1ed4023a2fa5c0217a52c9" title=" " alt="" coords="5,55,160,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="194,70,160,70,160,65,194,65"/>
+</map>

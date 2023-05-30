@@ -1,0 +1,23 @@
+<map id="ad552xr_dev" name="ad552xr_dev">
+<area shape="rect" id="Node000001" title="AD552XR device descriptor." alt="" coords="979,219,1085,245"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="692,54,815,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="829,68,894,83,926,95,956,113,983,137,1003,167,1028,218,1024,220,999,169,979,141,953,117,924,100,892,88,828,74"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="723,39,732,31,753,27,771,30,782,36,785,46,779,55,775,53,780,45,778,39,769,35,753,33,734,36,727,43"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,49,490,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,60,692,63,692,68,503,65"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,18,184,43"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,20,208,20,331,17,427,18,523,26,646,41,700,51,699,57,645,47,523,31,427,24,331,22,208,25,198,26"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,38,343,52,343,57,198,43"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,99,491,139"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,104,645,83,691,75,692,80,646,88,506,109"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="687,162,819,187"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="834,185,955,209,985,217,984,222,954,215,833,191"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,163,511,189"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="524,173,687,172,687,178,524,178"/>
+<area shape="rect" id="Node000008" href="$structad552xr__device__spi__settings.html" title="AD552XR device SPI settings." alt="" coords="678,212,829,252"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="843,229,979,229,979,235,843,235"/>
+<area shape="rect" id="Node000009" href="$structad552xr__ldac__settings.html" title="AD552XR device LDAC settings." alt="" coords="669,277,837,302"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="843,272,954,249,984,242,985,247,955,255,844,277"/>
+<area shape="rect" id="Node000010" href="$structad552xr__dev__info.html" title="AD552XR active device info." alt="" coords="684,326,823,351"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="836,325,895,310,953,288,989,266,1016,243,1020,247,992,270,956,293,896,315,837,330"/>
+</map>

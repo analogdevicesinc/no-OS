@@ -1,0 +1,5 @@
+<map id="no_os_udelay" name="no_os_udelay">
+<area shape="rect" id="Node000001" title="Generate microseconds delay." alt="" coords="169,5,280,31"/>
+<area shape="rect" id="Node000002" href="$riscvrx__delay_8c.html#aa86f6721c09eeef0e8cddf25b4678df8" title="Generate miliseconds delay." alt="" coords="5,5,121,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,21,122,21,122,15,156,15"/>
+</map>

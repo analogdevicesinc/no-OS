@@ -1,0 +1,17 @@
+<map id="drivers/potentiometer/ad525x/ad525x.h" name="drivers/potentiometer/ad525x/ad525x.h">
+<area shape="rect" id="Node000001" title="Header file of AD525X Driver for Microblaze processor. This driver supporting the following devices :..." alt="" coords="137,5,301,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="183,167,254,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,38,83,48,36,65,20,75,10,87,9,101,17,117,40,134,80,148,170,168,169,173,78,153,38,138,13,120,4,102,6,85,16,71,34,60,81,43,136,32"/>
+<area shape="rect" id="Node000003" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="27,93,141,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,48,117,89,114,84,185,43"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="165,93,272,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="221,46,221,79,216,79,216,46"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="296,93,395,119"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="251,43,317,84,314,88,248,48"/>
+<area shape="rect" id="Node000006" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="419,93,517,119"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="279,43,419,87,418,92,278,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="107,116,186,158,183,162,104,121"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="221,119,221,153,216,153,216,119"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="326,121,253,162,250,157,324,116"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="429,121,268,167,267,162,427,116"/>
+</map>

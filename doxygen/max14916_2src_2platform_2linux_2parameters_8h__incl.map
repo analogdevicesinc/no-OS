@@ -1,0 +1,19 @@
+<map id="projects/max14916/src/platform/linux/parameters.h" name="projects/max14916/src/platform/linux/parameters.h">
+<area shape="rect" id="Node000001" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="7,5,216,45"/>
+<area shape="rect" id="Node000002" href="$linux__spi_8h.html" title=" " alt="" coords="5,93,97,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,47,71,84,66,81,95,44"/>
+<area shape="rect" id="Node000003" href="$linux__uart_8h.html" title=" " alt="" coords="122,93,221,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="128,44,156,81,152,84,124,47"/>
+<area shape="rect" id="Node000004" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="119,167,224,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="174,119,174,153,169,153,169,119"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="37,313,108,339"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="150,194,121,214,95,241,82,271,77,301,71,300,77,269,90,239,117,210,147,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="233,313,315,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="195,190,225,210,252,238,267,269,274,299,269,301,262,271,248,242,221,214,192,194"/>
+<area shape="rect" id="Node000007" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="105,240,238,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="174,192,174,226,169,226,169,192"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="157,268,101,307,98,303,154,263"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="189,263,247,303,244,307,186,268"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="136,313,207,339"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="174,266,174,300,169,300,169,266"/>
+</map>

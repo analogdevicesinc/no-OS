@@ -1,0 +1,22 @@
+<map id="projects/ltc2983/src/common/common_data.h" name="projects/ltc2983/src/common/common_data.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="40,5,232,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="21,93,131,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,47,95,84,91,81,119,44"/>
+<area shape="rect" id="Node000003" href="$ltc2983_8h.html" title=" " alt="" coords="155,93,237,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,44,181,81,177,84,148,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,240,88,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="155,120,112,139,92,152,74,168,59,197,51,226,46,225,54,195,70,165,88,148,110,134,153,115"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="332,167,439,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="227,116,342,159,341,164,225,121"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="209,167,308,192"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="208,117,241,154,237,158,204,121"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="85,167,185,192"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="188,121,156,158,152,154,184,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="223,240,294,265"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="366,194,293,235,290,231,364,190"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="261,192,261,226,256,226,256,192"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="122,194,73,233,70,229,119,190"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="156,190,228,231,225,235,153,194"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="113,240,183,265"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="139,192,146,226,141,227,134,193"/>
+</map>

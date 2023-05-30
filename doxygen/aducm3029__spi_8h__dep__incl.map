@@ -1,0 +1,41 @@
+<map id="drivers/platform/aducm3029/aducm3029_spi.h" name="drivers/platform/aducm3029/aducm3029_spi.h">
+<area shape="rect" id="Node000001" title="ADuCM302x specific header for SPI driver." alt="" coords="936,5,1143,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__spi_8c.html" title="Implementation of SPI driver for ADuCM302x." alt="" coords="89,101,296,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="922,35,641,56,474,73,308,96,269,103,268,98,307,91,474,68,641,51,922,30"/>
+<area shape="rect" id="Node000003" href="$ad7124-8pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by ad7124&#45;8pmdz project." alt="" coords="320,93,505,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="923,47,506,108,505,103,922,41"/>
+<area shape="rect" id="Node000006" href="$ada4250__ardz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by ada4250_ardz project." alt="" coords="633,93,819,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="964,52,815,96,813,91,962,47"/>
+<area shape="rect" id="Node000009" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="947,93,1132,148"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1042,59,1042,93,1037,93,1037,59"/>
+<area shape="rect" id="Node000012" href="$cn0531_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by cn0531 project." alt="" coords="1262,93,1425,148"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1115,47,1263,92,1261,97,1113,52"/>
+<area shape="rect" id="Node000015" href="$cn0565_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by cn0565 project." alt="" coords="1635,93,1798,148"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1157,40,1635,106,1635,111,1156,45"/>
+<area shape="rect" id="Node000018" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="2009,93,2235,148"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="1157,34,2009,107,2008,112,1156,39"/>
+<area shape="rect" id="Node000004" href="$ad7124-8pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of ad7124&#45;8pmdz project." alt="" coords="5,196,191,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="319,155,181,198,179,193,317,150"/>
+<area shape="rect" id="Node000005" href="$ad7124-8pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definitions specific to aducm3029 platform used by ad7124&#45;8pmdz project." alt="" coords="215,196,400,251"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="377,160,337,198,333,194,373,156"/>
+<area shape="rect" id="Node000007" href="$ada4250__ardz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of ada4250_ardz project." alt="" coords="424,196,609,251"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="660,156,572,198,570,194,658,151"/>
+<area shape="rect" id="Node000008" href="$ada4250__ardz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by ada4250_ardz project." alt="" coords="633,196,819,251"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="729,162,729,196,723,196,723,162"/>
+<area shape="rect" id="Node000010" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="843,196,1028,251"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1004,160,964,198,961,194,1000,156"/>
+<area shape="rect" id="Node000011" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="1052,196,1237,251"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="1079,156,1119,194,1115,198,1075,160"/>
+<area shape="rect" id="Node000013" href="$cn0531_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of cn0531 project." alt="" coords="1262,196,1425,251"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1346,162,1346,196,1341,196,1341,162"/>
+<area shape="rect" id="Node000014" href="$cn0531_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by cn0531 project." alt="" coords="1449,196,1611,251"/>
+<area shape="poly" id="edge13_Node000012_Node000014" title=" " alt="" coords="1405,152,1482,193,1480,198,1403,157"/>
+<area shape="rect" id="Node000016" href="$cn0565_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of cn0565 project." alt="" coords="1635,196,1798,251"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="1719,162,1719,196,1714,196,1714,162"/>
+<area shape="rect" id="Node000017" href="$cn0565_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by cn0565 project." alt="" coords="1822,196,1985,251"/>
+<area shape="poly" id="edge16_Node000015_Node000017" title=" " alt="" coords="1778,152,1856,193,1853,198,1776,157"/>
+<area shape="rect" id="Node000019" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="2009,196,2235,251"/>
+<area shape="poly" id="edge18_Node000018_Node000019" title=" " alt="" coords="2125,162,2125,196,2119,196,2119,162"/>
+<area shape="rect" id="Node000020" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="2259,196,2486,251"/>
+<area shape="poly" id="edge19_Node000018_Node000020" title=" " alt="" coords="2201,150,2308,193,2306,198,2199,155"/>
+</map>

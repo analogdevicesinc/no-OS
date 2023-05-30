@@ -1,0 +1,16 @@
+<map id="ltp8800_init_param" name="ltp8800_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="285,273,433,299"/>
+<area shape="rect" id="Node000002" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="37,183,200,209"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,211,328,271,326,276,162,216"/>
+<area shape="rect" id="Node000003" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,93,184,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,131,118,182,113,184,99,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="429,93,601,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="515,133,502,192,488,223,467,251,447,266,425,276,423,271,445,261,463,247,484,221,497,190,510,132"/>
+<area shape="rect" id="Node000006" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="271,183,447,209"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="469,126,428,145,398,165,373,185,370,181,395,161,425,140,466,121"/>
+<area shape="rect" id="Node000005" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="421,5,609,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="517,45,517,93,512,93,512,45"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="361,222,361,273,356,273,356,222"/>
+<area shape="rect" id="Node000007" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="208,93,400,119"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="303,132,308,156,319,170,334,181,331,185,316,174,303,158,298,133"/>
+</map>

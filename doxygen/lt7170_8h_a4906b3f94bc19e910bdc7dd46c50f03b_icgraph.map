@@ -1,0 +1,16 @@
+<map id="lt7170_read_byte" name="lt7170_read_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus read byte operation." alt="" coords="728,29,863,55"/>
+<area shape="rect" id="Node000002" href="$lt7170_8c.html#a24dacb372b871d8b33eaea08eeb86e86" title="Read statuses." alt="" coords="339,5,485,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="714,40,485,25,486,20,714,34"/>
+<area shape="rect" id="Node000004" href="$lt7170_8c.html#ae06710b1248bd6cd365141212504488c" title="Configure SYNC pin for clock synchronization." alt="" coords="533,55,680,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="715,55,681,60,680,55,714,50"/>
+<area shape="rect" id="Node000003" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,21,291,21,291,15,325,15"/>
+<area shape="rect" id="Node000005" href="$lt7170_8c.html#ab0301706845e4d14a472712bf0a95823" title="Initialize the device structure." alt="" coords="367,55,457,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="519,70,458,70,458,65,519,65"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="353,54,278,33,279,28,354,49"/>
+<area shape="rect" id="Node000006" href="$iio__lt7170_8c.html#a649c3cbc7a1d85cb02446a741dcb9b30" title="Initializes the LT7170 IIO descriptor." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="353,70,289,70,289,65,353,65"/>
+<area shape="rect" id="Node000007" href="$lt7170_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+</map>

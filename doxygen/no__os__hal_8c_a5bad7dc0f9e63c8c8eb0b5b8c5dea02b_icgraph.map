@@ -1,0 +1,16 @@
+<map id="ADIHAL_spiReadByte" name="ADIHAL_spiReadByte">
+<area shape="rect" id="Node000001" title="Performs a Single SPI Read from an ADI Device." alt="" coords="327,104,487,129"/>
+<area shape="rect" id="Node000002" href="$no__os__hal_8c.html#a670e8e00c6b1129300091002c5516987" title="Performs a Multi SPI Read from an ADI Device." alt="" coords="110,5,277,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="375,99,330,71,278,44,246,33,248,28,280,40,332,66,377,94"/>
+<area shape="rect" id="Node000003" href="$no__os__hal_8c.html#acab3e8da311a67494b32dd7e735d0faa" title="Performs a read from a particular bit field in a SPI register." alt="" coords="113,55,274,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="337,103,248,83,250,77,338,98"/>
+<area shape="rect" id="Node000004" href="$no__os__hal_8c.html#afa9b91010b66b76980d6f69353c99c01" title="Performs a write to the specified field in a SPI register." alt="" coords="112,104,275,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="313,119,275,119,275,114,313,114"/>
+<area shape="rect" id="Node000005" href="$app__talise_8c.html#a51c2ee9f37b849d981c6de38835f5eca" title=" " alt="" coords="108,153,279,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="338,135,250,156,248,151,337,130"/>
+<area shape="rect" id="Node000007" href="$app__talise_8c.html#a887ab26824e71cac7ea00bd35ab73c18" title=" " alt="" coords="143,203,244,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="376,139,332,166,280,192,245,205,243,200,278,188,329,162,374,135"/>
+<area shape="rect" id="Node000006" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,179,60,204"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="100,183,61,190,60,184,99,178"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="129,208,60,198,61,193,129,203"/>
+</map>

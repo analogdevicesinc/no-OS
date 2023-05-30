@@ -1,0 +1,11 @@
+<map id="lt7182s_sync_config" name="lt7182s_sync_config">
+<area shape="rect" id="Node000001" title="Configure SYNC pin for clock synchronization." alt="" coords="488,31,641,56"/>
+<area shape="rect" id="Node000002" href="$lt7182s_8c.html#a232f5cb72522a304668d28d48ba1c250" title="Initialize the device structure." alt="" coords="341,31,440,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="474,46,440,46,440,41,474,41"/>
+<area shape="rect" id="Node000003" href="$lt7182s_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="173,5,292,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="327,36,292,30,293,25,328,31"/>
+<area shape="rect" id="Node000004" href="$iio__lt7182s_8c.html#a1dd33cda61790ef724f45ab1a92dd93e" title="Initializes the LT7182S IIO descriptor." alt="" coords="172,55,293,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="328,55,294,61,293,55,327,50"/>
+<area shape="rect" id="Node000005" href="$lt7182s_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

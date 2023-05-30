@@ -1,0 +1,5 @@
+<map id="ltm4700_read_byte" name="ltm4700_read_byte">
+<area shape="rect" id="Node000001" title="Perform a PMBus read_byte operation." alt="" coords="212,5,360,31"/>
+<area shape="rect" id="Node000002" href="$ltm4700_8c.html#ad902aabcabd5cf42788dea49d4722ecf" title="Read status." alt="" coords="5,5,164,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,21,164,21,164,15,198,15"/>
+</map>

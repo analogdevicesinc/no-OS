@@ -1,0 +1,7 @@
+<map id="adpd188_mode_set" name="adpd188_mode_set">
+<area shape="rect" id="Node000001" title="Set the mode of operation of the ADPD188." alt="" coords="349,5,499,31"/>
+<area shape="rect" id="Node000002" href="$iio__adpd188_8c.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="172,5,301,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,21,302,21,302,15,336,15"/>
+<area shape="rect" id="Node000003" href="$iio__adpd1080_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

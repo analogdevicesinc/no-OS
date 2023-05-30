@@ -1,0 +1,11 @@
+<map id="drivers/switch/adgs6414d/adgs6414d.h" name="drivers/switch/adgs6414d/adgs6414d.h">
+<area shape="rect" id="Node000001" title="Header file for ADGS6414D Driver." alt="" coords="231,5,419,45"/>
+<area shape="rect" id="Node000002" href="$adgs6414d_8c.html" title="Implementation of ADGS6414D Driver." alt="" coords="5,101,193,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,53,146,103,144,98,266,48"/>
+<area shape="rect" id="Node000003" href="$eval-adgs6414d_2src_2common_2common__data_8h.html" title="Defines common data to be used by adgs6414d examples." alt="" coords="217,101,432,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,59,327,101,322,101,322,59"/>
+<area shape="rect" id="Node000005" href="$eval-adgs6414d_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example for adgs6414d project." alt="" coords="457,93,646,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="384,48,489,91,486,96,382,53"/>
+<area shape="rect" id="Node000004" href="$eval-adgs6414d_2src_2common_2common__data_8c.html" title="Defines common data to be used by adgs6414d examples." alt="" coords="217,196,432,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="327,154,327,196,322,196,322,154"/>
+</map>

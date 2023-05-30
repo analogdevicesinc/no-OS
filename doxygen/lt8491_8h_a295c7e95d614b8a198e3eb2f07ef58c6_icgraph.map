@@ -1,0 +1,23 @@
+<map id="lt8491_reg_write" name="lt8491_reg_write">
+<area shape="rect" id="Node000001" title="Write a register value." alt="" coords="793,132,924,157"/>
+<area shape="rect" id="Node000002" href="$lt8491_8c.html#a70ce007d48579077da50ac25d9ca5021" title="Device and comm init function." alt="" coords="339,5,540,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="819,128,744,97,618,59,505,33,506,28,619,54,746,91,821,123"/>
+<area shape="rect" id="Node000006" href="$lt8491_8c.html#a391e5527ddc51bc0f4ef1838b5ed6fc5" title="Restart the chip." alt="" coords="366,157,513,183"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="780,152,513,168,513,163,780,147"/>
+<area shape="rect" id="Node000007" href="$lt8491_8c.html#a8bb06d2a8425d4d7ccb07ee7c7e32158" title="Write the telemetry battery charging enable." alt="" coords="589,107,744,132"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="779,137,744,132,745,127,780,132"/>
+<area shape="rect" id="Node000008" href="$lt8491_8c.html#aba5cf44f3ab2696902345559541c4e3c" title="Write the scratch register." alt="" coords="588,208,745,233"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="814,165,701,210,699,205,812,160"/>
+<area shape="rect" id="Node000003" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,132,291,157"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="407,40,255,134,252,130,404,36"/>
+<area shape="rect" id="Node000004" href="$iio__lt8491_8c.html#a21e3ffd12b934112e76eddef3db8ae12" title="Initializes the LT8491 IIO driver." alt="" coords="174,56,289,81"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="374,37,285,59,283,53,372,31"/>
+<area shape="rect" id="Node000005" href="$dc2703a_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,56,124,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="160,71,124,71,124,66,160,66"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="352,162,291,154,291,149,353,157"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="399,154,257,84,260,79,401,149"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="576,127,291,144,291,139,575,122"/>
+<area shape="poly" id="edge10_Node000007_Node000004" title=" " alt="" coords="575,111,289,78,289,73,576,106"/>
+<area shape="poly" id="edge11_Node000007_Node000006" title=" " alt="" coords="596,138,498,160,496,155,595,132"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="574,225,460,219,398,211,338,198,291,180,252,160,255,155,293,175,339,193,399,206,461,214,574,220"/>
+</map>

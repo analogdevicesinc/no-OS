@@ -1,0 +1,7 @@
+<map id="drivers/amplifiers/ada4250/iio_ada4250.h" name="drivers/amplifiers/ada4250/iio_ada4250.h">
+<area shape="rect" id="Node000001" title="Header file of ada4250 iio." alt="" coords="110,5,287,45"/>
+<area shape="rect" id="Node000002" href="$iio__ada4250_8c.html" title="Implementation of ada4250 IIO Driver." alt="" coords="5,101,181,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,56,116,103,113,99,166,52"/>
+<area shape="rect" id="Node000003" href="$ada4250__ardz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for ada4250_ardz project." alt="" coords="205,93,403,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,52,276,91,273,95,228,56"/>
+</map>

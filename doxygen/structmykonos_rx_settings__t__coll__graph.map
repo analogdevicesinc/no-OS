@@ -1,0 +1,17 @@
+<map id="mykonosRxSettings_t" name="mykonosRxSettings_t">
+<area shape="rect" id="Node000001" title="Data structure to hold Rx data path settings." alt="" coords="695,82,857,107"/>
+<area shape="rect" id="Node000002" href="$structmykonos_rx_profile__t.html" title="Data structure to hold settings for the current Rx specific use case profile." alt="" coords="381,7,532,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="546,32,671,59,739,79,738,84,670,64,545,37"/>
+<area shape="rect" id="Node000003" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="58,7,167,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,17,381,17,381,23,181,23"/>
+<area shape="rect" id="Node000004" href="$structmykonos_jesd204b_framer_config__t.html" title="Data structure to hold Mykonos JESD204b Framer configuration settings." alt="" coords="337,57,576,82"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="590,77,695,86,694,91,590,83"/>
+<area shape="rect" id="Node000005" href="$structmykonos_rx_gain_control__t.html" title="Data structure to hold Rx gain control settings for initialization and during use." alt="" coords="363,106,550,131"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="564,117,670,111,712,105,713,110,671,116,564,122"/>
+<area shape="rect" id="Node000006" href="$structmykonos_agc_cfg__t.html" title="Data structure to hold general AGC settings for initialization and during use." alt="" coords="387,155,526,181"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="540,159,604,150,670,136,712,121,749,105,751,110,714,126,671,141,605,156,541,164"/>
+<area shape="rect" id="Node000007" href="$structmykonos_peak_det_agc_cfg__t.html" title="Data structure to hold peak detector settings for the AGC." alt="" coords="15,130,210,155"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="224,148,387,160,387,166,224,153"/>
+<area shape="rect" id="Node000008" href="$structmykonos_power_meas_agc_cfg__t.html" title="Data structure to hold power measurement settings for the AGC." alt="" coords="5,179,220,205"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="234,188,313,184,387,176,388,181,314,189,234,193"/>
+</map>

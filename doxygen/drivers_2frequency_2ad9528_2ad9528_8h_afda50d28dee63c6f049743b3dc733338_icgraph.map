@@ -1,0 +1,23 @@
+<map id="ad9528_remove" name="ad9528_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by ad9528_setup()." alt="" coords="320,153,447,179"/>
+<area shape="rect" id="Node000002" href="$ad9083_2src_2app__clocking_8c.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="123,5,257,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="365,143,326,93,300,67,271,44,247,33,250,28,273,40,303,63,330,89,369,140"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app__clocking_8c.html#a1bb34b6beb186aaa7fb729777832d452" title="Free the resources allocated by app_clocking_init()." alt="" coords="108,55,272,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="354,147,316,120,271,94,242,83,244,78,273,89,319,115,357,143"/>
+<area shape="rect" id="Node000005" href="$adrv9009_2src_2app_2app__clocking_8c.html#a3e4c367a44510658467da3ce7c9e9273" title=" " alt="" coords="130,104,250,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="319,153,240,132,242,127,321,147"/>
+<area shape="rect" id="Node000007" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="138,153,242,179"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="306,169,242,169,242,163,306,163"/>
+<area shape="rect" id="Node000008" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="131,203,249,228"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="321,185,242,205,240,200,319,179"/>
+<area shape="rect" id="Node000009" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="131,252,249,277"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="357,189,318,216,273,242,241,254,239,249,271,237,315,212,354,185"/>
+<area shape="rect" id="Node000010" href="$fmcdaq3_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="163,301,217,327"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="368,192,329,242,303,268,273,291,246,304,218,312,217,307,244,299,271,286,299,264,325,238,364,189"/>
+<area shape="rect" id="Node000003" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,43,60,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,37,61,52,59,46,122,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,63,60,60,60,55,94,57"/>
+<area shape="rect" id="Node000006" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,116,60,141"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="116,125,60,129,60,124,116,120"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="124,153,60,138,61,132,125,148"/>
+</map>

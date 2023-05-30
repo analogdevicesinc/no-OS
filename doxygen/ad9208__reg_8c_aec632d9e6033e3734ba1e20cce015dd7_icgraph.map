@@ -1,0 +1,7 @@
+<map id="ad9208_is_sync_spi_update_enabled" name="ad9208_is_sync_spi_update_enabled">
+<area shape="rect" id="Node000001" title=" " alt="" coords="445,5,596,45"/>
+<area shape="rect" id="Node000002" href="$ad9208__adc__api_8c.html#ac034764ebd3abfc102b6fcc5f3130f02" title="API to directly set the NCO Parameters." alt="" coords="240,5,397,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,28,398,28,398,23,431,23"/>
+<area shape="rect" id="Node000003" href="$ad9208__adc__api_8c.html#a8085bba558039c73e537e3f0bd479de6" title="Set AD9208 NCO based on the Channel Carrier Frequency." alt="" coords="5,13,192,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="226,28,192,28,192,23,226,23"/>
+</map>

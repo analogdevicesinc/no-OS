@@ -1,0 +1,87 @@
+<map id="no_os_div_u64" name="no_os_div_u64">
+<area shape="rect" id="Node000001" title=" " alt="" coords="852,465,971,491"/>
+<area shape="rect" id="Node000002" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a300fee1e9b4ba514e195d5312b11eea3" title="Initializes the AD9528." alt="" coords="650,129,763,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="899,453,861,360,834,304,802,249,759,196,720,157,724,153,763,193,806,246,839,301,866,358,904,451"/>
+<area shape="rect" id="Node000010" href="$adf4368_8c.html#a7fe1e663fdb5759349ca15b62d0e4e5f" title="Get the phase adjustment in femto&#45;seconds with Sigma Delta Modulation." alt="" coords="615,260,799,285"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="898,453,884,420,863,381,836,341,802,307,766,288,769,283,806,303,840,337,868,378,889,418,903,451"/>
+<area shape="rect" id="Node000012" href="$adf4368_8c.html#ab57c760f2baf2c5b51378a48fbd6f801" title="Gets the user proposed output frequency." alt="" coords="636,317,777,343"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="894,455,856,404,831,378,803,356,777,344,779,340,805,352,835,374,860,401,898,452"/>
+<area shape="rect" id="Node000013" href="$adf4368_8c.html#a90278d96302d117a57a601fc9059dfaf" title="Set the output frequency." alt="" coords="639,465,774,491"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="838,481,774,481,774,475,838,475"/>
+<area shape="rect" id="Node000022" href="$adf4368_8c.html#aa0d582003e26d625dde760d8ff16763d" title="Set the phase adjustment in femto&#45;seconds. The phase adjust will enable the Bleed current...." alt="" coords="609,416,804,441"/>
+<area shape="poly" id="edge22_Node000001_Node000022" title=" " alt="" coords="844,465,760,444,761,439,846,460"/>
+<area shape="rect" id="Node000024" href="$adf4368_8c.html#af80752ab0abb00fa4262fbbe12785513" title="Set the phase adjustment in femto&#45;seconds with Sigma Delta Modulation. This approach only support MAX..." alt="" coords="615,367,798,392"/>
+<area shape="poly" id="edge25_Node000001_Node000024" title=" " alt="" coords="884,459,847,431,803,406,772,395,774,389,805,401,850,427,887,454"/>
+<area shape="rect" id="Node000025" href="$adf4382_8c.html#a9b0b0287bfb7ba601170be6fd3d44a93" title="Gets the user proposed output frequency." alt="" coords="636,515,777,540"/>
+<area shape="poly" id="edge27_Node000001_Node000025" title=" " alt="" coords="846,496,761,517,760,512,844,491"/>
+<area shape="rect" id="Node000026" href="$adf4382_8c.html#a42f85422e7f1541fcd6235b2a678df73" title="Set the output frequency." alt="" coords="639,728,774,753"/>
+<area shape="poly" id="edge28_Node000001_Node000026" title=" " alt="" coords="894,503,720,729,716,726,890,500"/>
+<area shape="rect" id="Node000038" href="$adf4382_8c.html#abfbbf0996cba0aaa13b6f84647673daa" title="Set the phase adjustment in pico&#45;seconds. The phase adjust will enable the Bleed current option as we..." alt="" coords="609,777,804,803"/>
+<area shape="poly" id="edge42_Node000001_Node000038" title=" " alt="" coords="911,505,903,560,886,631,873,669,855,705,833,739,806,768,789,779,786,775,802,764,829,735,850,702,868,666,881,630,898,559,906,505"/>
+<area shape="rect" id="Node000039" href="$adf5611_8c.html#aff9e07728b70acca1bbb9a029d08d696" title="Gets the user proposed output frequency." alt="" coords="636,827,777,852"/>
+<area shape="poly" id="edge44_Node000001_Node000039" title=" " alt="" coords="913,505,908,568,893,652,879,697,861,741,837,782,806,817,779,833,776,829,802,813,832,779,856,739,874,695,888,651,903,568,907,504"/>
+<area shape="rect" id="Node000040" href="$riscvrx__delay_8c.html#a7308cd600b696da42724dcfe4ca4386d" title="Get current time." alt="" coords="644,876,769,901"/>
+<area shape="poly" id="edge45_Node000001_Node000040" title=" " alt="" coords="909,505,895,587,873,695,843,799,825,839,806,867,789,878,771,886,769,881,787,874,802,863,821,836,838,797,868,694,890,586,904,504"/>
+<area shape="rect" id="Node000003" href="$ad9083_2src_2app__clocking_8c.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="402,55,537,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="658,127,561,94,521,83,522,78,562,89,659,122"/>
+<area shape="rect" id="Node000005" href="$adrv9009_2src_2app_2app__clocking_8c.html#adab63a630c95f109e3b4330b5b0253b6" title=" " alt="" coords="417,104,521,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="636,137,521,125,522,120,636,132"/>
+<area shape="rect" id="Node000007" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="410,153,529,179"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="636,152,529,163,528,157,636,146"/>
+<area shape="rect" id="Node000008" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="410,203,529,228"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="657,162,562,193,519,205,517,200,561,187,655,157"/>
+<area shape="rect" id="Node000009" href="$headless__mb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="442,5,497,31"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="679,123,626,83,560,44,528,33,496,25,498,20,529,27,562,40,629,78,682,118"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="223,55,278,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="388,70,278,70,278,65,388,65"/>
+<area shape="rect" id="Node000006" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="223,104,278,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="403,119,279,119,279,114,403,114"/>
+<area shape="rect" id="Node000011" href="$adf4368_8c.html#ae38a4831d6115e00c18d0e73412ec38e" title="Get the phase adjustment in femto&#45;seconds. Function choose the phase adjustment method according to I..." alt="" coords="395,252,544,277"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="601,272,544,270,544,265,601,266"/>
+<area shape="rect" id="Node000014" href="$adf4368_8c.html#a2a137ef36451ebb33a35077ed19f03d0" title="Initializes the adf4368." alt="" coords="418,564,521,589"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="627,496,611,504,596,516,587,528,578,541,563,554,522,570,520,565,560,549,574,537,583,525,592,512,608,500,625,492"/>
+<area shape="rect" id="Node000018" href="$adf4368_8c.html#ae0411e5c2e9caa1c428e64e12a69931c" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="394,401,545,441"/>
+<area shape="poly" id="edge17_Node000013_Node000018" title=" " alt="" coords="639,465,544,441,545,436,641,459"/>
+<area shape="rect" id="Node000019" href="$adf4368_8c.html#a490f37ba07ae0bbe064e5a8e55d9146a" title="Set the desired reference frequency and reset everything over to maximum supported value of 4GHz to t..." alt="" coords="393,465,546,491"/>
+<area shape="poly" id="edge18_Node000013_Node000019" title=" " alt="" coords="625,481,546,481,546,475,625,475"/>
+<area shape="rect" id="Node000020" href="$adf4368_8c.html#a09a46391238432b71f49b061451230b1" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="392,515,547,540"/>
+<area shape="poly" id="edge19_Node000013_Node000020" title=" " alt="" coords="632,496,532,517,531,512,631,491"/>
+<area shape="rect" id="Node000021" href="$adf4368_8c.html#a9c60b517f7deb58ce3165685a3734278" title="Set the desired output frequency and reset everything over to maximum supported value of 12...." alt="" coords="399,351,539,376"/>
+<area shape="poly" id="edge20_Node000013_Node000021" title=" " alt="" coords="625,464,608,455,591,439,583,422,575,406,560,391,535,378,538,374,563,387,579,403,588,420,596,436,611,451,628,460"/>
+<area shape="rect" id="Node000015" href="$iio__adf4368_8c.html#aed6935c2bd59341698bbb423c2eb8911" title="Initializes the ADF4368 IIO driver." alt="" coords="187,564,314,589"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="404,579,314,579,314,574,404,574"/>
+<area shape="rect" id="Node000017" href="$adf4368_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="191,351,310,376"/>
+<area shape="poly" id="edge16_Node000014_Node000017" title=" " alt="" coords="403,568,376,554,352,533,331,510,295,460,270,412,254,377,259,375,274,410,300,457,335,507,356,530,379,549,406,563"/>
+<area shape="rect" id="Node000016" href="$adf4368_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,564,124,589"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="174,579,124,579,124,574,174,574"/>
+<area shape="poly" id="edge21_Node000021_Node000017" title=" " alt="" coords="386,366,310,366,310,361,386,361"/>
+<area shape="rect" id="Node000023" href="$adf4368_8c.html#ac9b10000c0233a67f11414a65fe3f436" title="Set the phase adjustment in femto&#45;seconds. Function choose the phase adjustment method according to I..." alt="" coords="395,301,543,327"/>
+<area shape="poly" id="edge23_Node000022_Node000023" title=" " alt="" coords="620,413,608,405,591,389,583,372,575,355,560,340,538,329,540,324,563,336,579,352,588,370,596,386,611,401,623,408"/>
+<area shape="poly" id="edge24_Node000023_Node000017" title=" " alt="" coords="400,332,308,353,307,348,399,327"/>
+<area shape="poly" id="edge26_Node000024_Node000023" title=" " alt="" coords="641,366,609,357,561,341,520,329,522,324,562,335,610,351,643,361"/>
+<area shape="rect" id="Node000027" href="$adf4382_8c.html#af72d0899bbe73092b615195d788b8bab" title="Initializes the ADF4382." alt="" coords="418,829,521,855"/>
+<area shape="poly" id="edge29_Node000026_Node000027" title=" " alt="" coords="628,760,611,768,596,779,587,789,578,801,563,812,519,832,517,827,560,808,574,797,583,786,593,775,608,764,626,755"/>
+<area shape="rect" id="Node000031" href="$adf4382_8c.html#a90a2e1956072778acaeb2885373e50e7" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="377,879,561,904"/>
+<area shape="poly" id="edge33_Node000026_Node000031" title=" " alt="" coords="628,757,611,768,600,780,594,792,588,817,582,843,575,857,563,869,544,881,541,876,560,865,571,854,577,842,583,816,589,790,596,777,608,764,625,753"/>
+<area shape="rect" id="Node000032" href="$adf4382_8c.html#a9545e93dd75ebffedeedd8a88a19c5ce" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="402,928,537,953"/>
+<area shape="poly" id="edge34_Node000026_Node000032" title=" " alt="" coords="628,756,611,768,597,786,590,804,588,841,586,880,578,900,563,919,538,934,535,929,560,915,574,897,581,879,583,841,585,803,592,783,608,764,625,752"/>
+<area shape="rect" id="Node000033" href="$adf4382_8c.html#a3f4a0e1104b1241c2a4705c469dcd2fe" title="Fast calibration function. Computes Minimum VCO frequency (fmin), uses the minimum NDIV value to gene..." alt="" coords="172,689,329,729"/>
+<area shape="poly" id="edge35_Node000026_Node000033" title=" " alt="" coords="643,759,586,769,519,776,447,777,377,769,327,752,285,731,287,727,329,747,378,763,448,772,519,771,585,764,642,754"/>
+<area shape="rect" id="Node000034" href="$adf4382_8c.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="394,663,545,703"/>
+<area shape="poly" id="edge36_Node000026_Node000034" title=" " alt="" coords="639,727,544,704,545,699,641,722"/>
+<area shape="rect" id="Node000035" href="$adf4382_8c.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="393,728,546,753"/>
+<area shape="poly" id="edge37_Node000026_Node000035" title=" " alt="" coords="625,743,546,743,546,738,625,738"/>
+<area shape="rect" id="Node000036" href="$adf4382_8c.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="392,613,547,639"/>
+<area shape="poly" id="edge38_Node000026_Node000036" title=" " alt="" coords="676,722,624,688,560,654,525,641,527,636,562,649,626,683,679,718"/>
+<area shape="rect" id="Node000037" href="$adf4382_8c.html#a6c3387b311effd620ce0264c6db07674" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="399,977,539,1003"/>
+<area shape="poly" id="edge40_Node000026_Node000037" title=" " alt="" coords="628,756,611,768,594,792,586,816,586,841,588,866,590,891,589,917,582,943,563,968,541,983,538,978,559,964,577,940,584,916,585,891,583,866,580,841,581,815,589,789,607,764,625,751"/>
+<area shape="rect" id="Node000028" href="$iio__adf4382_8c.html#a98024760107fb7218ace561900ad4b6a" title="Initializes the ADF4382 IIO driver." alt="" coords="187,829,314,855"/>
+<area shape="poly" id="edge30_Node000027_Node000028" title=" " alt="" coords="404,845,314,845,314,839,404,839"/>
+<area shape="rect" id="Node000030" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="191,977,310,1003"/>
+<area shape="poly" id="edge32_Node000027_Node000030" title=" " alt="" coords="406,858,379,870,342,895,309,926,264,979,259,975,305,922,339,891,376,865,404,853"/>
+<area shape="rect" id="Node000029" href="$adf4382_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,829,124,855"/>
+<area shape="poly" id="edge31_Node000028_Node000029" title=" " alt="" coords="174,845,124,845,124,839,174,839"/>
+<area shape="poly" id="edge39_Node000036_Node000033" title=" " alt="" coords="405,645,378,654,293,691,291,686,376,649,403,640"/>
+<area shape="poly" id="edge41_Node000037_Node000030" title=" " alt="" coords="386,993,310,993,310,987,386,987"/>
+<area shape="poly" id="edge43_Node000038_Node000030" title=" " alt="" coords="617,812,611,817,594,841,588,867,588,892,591,918,594,944,593,970,584,995,563,1017,528,1037,490,1048,450,1050,409,1047,334,1028,277,1005,279,1000,335,1023,410,1041,450,1045,489,1043,526,1033,560,1013,579,992,588,969,589,945,586,919,582,893,582,866,589,839,607,814,613,808"/>
+</map>

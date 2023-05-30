@@ -1,0 +1,7 @@
+<map id="drivers/power/max17616/iio_max17616.h" name="drivers/power/max17616/iio_max17616.h">
+<area shape="rect" id="Node000001" title="Header file of the MAX17616 IIO Driver." alt="" coords="107,5,291,45"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html" title="Source file of the MAX17616 IIO Driver." alt="" coords="5,101,189,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,57,120,103,116,99,166,53"/>
+<area shape="rect" id="Node000003" href="$max17616_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for max17616 project." alt="" coords="214,93,389,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,52,274,91,271,95,228,56"/>
+</map>

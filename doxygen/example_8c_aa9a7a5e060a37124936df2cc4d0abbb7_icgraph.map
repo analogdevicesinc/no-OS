@@ -1,0 +1,15 @@
+<map id="startup_screen" name="startup_screen">
+<area shape="rect" id="Node000001" title="Display startup screen." alt="" coords="551,55,669,80"/>
+<area shape="rect" id="Node000002" href="$example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function." alt="" coords="384,55,503,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="537,70,503,70,503,65,537,65"/>
+<area shape="rect" id="Node000003" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a8801b43474e3771ddc626c282082ae95" title="IIOD example task." alt="" coords="261,5,336,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="392,53,336,33,337,28,393,48"/>
+<area shape="rect" id="Node000006" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="271,55,326,80"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="370,70,326,70,326,65,370,65"/>
+<area shape="rect" id="Node000007" href="$adin1320_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="271,104,326,129"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="394,87,327,110,325,105,392,82"/>
+<area shape="rect" id="Node000004" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="108,5,213,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="248,21,214,21,214,15,248,15"/>
+<area shape="rect" id="Node000005" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

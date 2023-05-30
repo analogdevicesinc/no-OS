@@ -1,0 +1,9 @@
+<map id="adxl313_remove" name="adxl313_remove">
+<area shape="rect" id="Node000001" title=" " alt="" coords="375,31,505,56"/>
+<area shape="rect" id="Node000002" href="$iio__adxl313_8c.html#ae25b9cd3de1b08c9797d8bd11778471f" title=" " alt="" coords="187,5,312,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,36,312,29,312,24,361,30"/>
+<area shape="rect" id="Node000004" href="$iio__adxl313_8c.html#a0a4a90d5b7f88ff3895b1dec03b7e177" title=" " alt="" coords="172,55,327,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,56,327,60,327,55,361,51"/>
+<area shape="rect" id="Node000003" href="$eval-adxl313z_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,21,124,21,124,15,173,15"/>
+</map>

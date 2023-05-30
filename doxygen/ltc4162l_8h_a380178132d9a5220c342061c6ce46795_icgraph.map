@@ -1,0 +1,61 @@
+<map id="ltc4162l_reg_read" name="ltc4162l_reg_read">
+<area shape="rect" id="Node000001" title="Read from a register of the LTC4162L." alt="" coords="653,540,792,566"/>
+<area shape="rect" id="Node000002" href="$ltc4162l_8c.html#aeac3beab3298444973a44147d684bb82" title="Get the number of cells." alt="" coords="421,103,596,128"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="719,527,716,452,701,351,687,296,666,242,639,191,604,147,579,131,582,126,607,143,643,188,671,240,692,294,706,350,721,452,725,527"/>
+<area shape="rect" id="Node000004" href="$ltc4162l_8c.html#a307ec70a0ddee2f825824a817b7f247a" title="Get the vcharge setting." alt="" coords="187,206,349,246"/>
+<area shape="poly" id="edge24_Node000001_Node000004" title=" " alt="" coords="716,527,708,473,688,403,674,367,655,332,632,301,604,274,575,255,544,241,477,224,410,217,349,219,349,214,410,212,478,218,546,236,578,251,607,270,636,297,660,329,679,365,693,401,713,471,722,526"/>
+<area shape="rect" id="Node000005" href="$ltc4162l_8c.html#a0778d4aeb58c3865f5695bd6ba7807a6" title="Get the average battery voltage." alt="" coords="179,42,357,67"/>
+<area shape="poly" id="edge25_Node000001_Node000005" title=" " alt="" coords="716,527,704,430,681,298,666,232,648,172,627,124,603,92,574,71,540,56,505,46,468,40,396,38,332,44,332,39,396,33,469,35,506,41,542,51,576,67,607,89,631,121,653,170,671,230,686,297,709,429,721,527"/>
+<area shape="rect" id="Node000006" href="$ltc4162l_8c.html#a2f75a3a7cf89596b31acd59c08719a24" title="Get the battery voltage." alt="" coords="195,271,341,296"/>
+<area shape="poly" id="edge30_Node000001_Node000006" title=" " alt="" coords="715,527,704,480,683,421,650,362,629,337,604,315,573,298,540,285,470,271,401,269,340,274,339,268,401,263,471,266,542,280,576,293,607,311,633,333,655,359,688,419,709,478,720,526"/>
+<area shape="rect" id="Node000008" href="$ltc4162l_8c.html#aa7f47972d5d72da0238dcb78d3dfea5e" title="Get the charge status." alt="" coords="432,362,585,402"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="705,530,664,473,636,443,604,417,583,405,585,400,607,412,639,439,668,470,709,527"/>
+<area shape="rect" id="Node000009" href="$ltc4162l_8c.html#a2dec6ea224585512b47f682043eae547" title="Get the charger state." alt="" coords="429,426,588,466"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="692,535,651,507,604,481,576,469,578,464,607,476,654,503,695,530"/>
+<area shape="rect" id="Node000010" href="$ltc4162l_8c.html#a7efc5d4495f9397b40c0e1b6676709ce" title="Get the chemistry type." alt="" coords="418,158,599,183"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="717,527,710,463,692,377,678,332,658,287,634,244,603,207,588,195,569,186,571,181,590,190,607,203,638,241,663,284,683,330,697,376,716,462,723,526"/>
+<area shape="rect" id="Node000011" href="$ltc4162l_8c.html#a857d94b7e8890a8602109ac4048470e0" title="Get the die temperature." alt="" coords="423,491,594,516"/>
+<area shape="poly" id="edge17_Node000001_Node000011" title=" " alt="" coords="653,540,564,519,565,514,654,535"/>
+<area shape="rect" id="Node000012" href="$ltc4162l_8c.html#ac1af5cfb7d62836a0b8de3d6804d7883" title="Get icharge value." alt="" coords="430,540,587,566"/>
+<area shape="poly" id="edge18_Node000001_Node000012" title=" " alt="" coords="640,556,587,556,587,550,640,550"/>
+<area shape="rect" id="Node000013" href="$ltc4162l_8c.html#a6642e6cb5e0b82170ccc9d60ec5d1bc0" title="Get icharge setting." alt="" coords="430,590,587,630"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="662,572,584,593,583,588,661,567"/>
+<area shape="rect" id="Node000014" href="$ltc4162l_8c.html#a64ea52dfd707801b9e52da28f3ee5879" title="Get the iin limit." alt="" coords="427,655,590,680"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="700,577,659,612,607,645,573,658,571,653,604,640,655,608,697,573"/>
+<area shape="rect" id="Node000015" href="$ltc4162l_8c.html#a4d4ca4f3cb23926ccb397c65724a72a4" title="Get the online status." alt="" coords="434,705,583,745"/>
+<area shape="poly" id="edge21_Node000001_Node000015" title=" " alt="" coords="709,579,668,636,639,667,607,694,583,707,580,703,604,690,635,663,663,633,705,576"/>
+<area shape="rect" id="Node000016" href="$ltc4162l_8c.html#a20301856964acfdc85edb499b9b11149" title="Get the telemetry." alt="" coords="422,770,595,795"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="716,580,702,620,679,668,648,717,607,759,584,772,582,767,604,755,644,714,675,666,697,618,711,578"/>
+<area shape="rect" id="Node000017" href="$ltc4162l_8c.html#a92829bd929abc1a62a7bf6824e29eaf3" title="Get the term current." alt="" coords="412,819,605,844"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="720,580,708,629,687,690,654,754,632,783,607,809,586,821,583,817,604,804,628,780,649,751,682,688,703,627,714,579"/>
+<area shape="rect" id="Node000018" href="$ltc4162l_8c.html#a418dd24e54a740f4e0d0ae0f620d829d" title="Get the battery current." alt="" coords="197,320,339,346"/>
+<area shape="poly" id="edge26_Node000001_Node000018" title=" " alt="" coords="712,528,699,487,678,438,646,390,626,370,604,353,571,336,535,324,498,317,461,314,389,315,327,323,327,318,388,310,461,308,499,312,537,319,573,331,607,348,630,366,650,387,682,435,704,485,718,526"/>
+<area shape="rect" id="Node000019" href="$ltc4162l_8c.html#a560c5cd3e3d780323e53e83b1e770f55" title="Get the input current." alt="" coords="433,869,584,909"/>
+<area shape="poly" id="edge28_Node000001_Node000019" title=" " alt="" coords="721,580,712,637,692,711,677,751,658,789,635,825,607,858,586,873,583,869,604,854,631,822,654,787,672,748,687,709,707,636,716,579"/>
+<area shape="rect" id="Node000020" href="$ltc4162l_8c.html#a1d0a9a26cf95b84adb94dbd1ece5e04a" title="Get the input voltage." alt="" coords="433,933,584,973"/>
+<area shape="poly" id="edge29_Node000001_Node000020" title=" " alt="" coords="723,580,718,647,701,739,686,788,666,837,640,883,607,923,586,938,583,934,604,919,636,880,661,835,681,787,696,738,712,647,718,579"/>
+<area shape="rect" id="Node000021" href="$ltc4162l_8c.html#ad671bc39aa9851e3cc72418e5ab675ad" title="Update a register of the LTC4162L." alt="" coords="431,998,586,1023"/>
+<area shape="poly" id="edge31_Node000001_Node000021" title=" " alt="" coords="720,580,706,671,682,793,648,910,629,956,607,987,588,1000,585,996,603,983,624,953,643,908,676,792,701,670,715,579"/>
+<area shape="rect" id="Node000023" href="$ltc4162l_8c.html#adf810111cd24e29cc2bf4e86b0e24af6" title="Set the telemetry." alt="" coords="182,1047,354,1072"/>
+<area shape="poly" id="edge35_Node000001_Node000023" title=" " alt="" coords="722,580,710,682,688,820,673,890,654,953,633,1004,607,1038,574,1060,538,1075,499,1084,459,1088,382,1086,318,1075,319,1070,383,1080,459,1083,498,1079,536,1070,572,1055,603,1034,628,1001,649,951,668,889,683,819,705,681,716,579"/>
+<area shape="rect" id="Node000003" href="$ltc4162l_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,156,124,182"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="480,97,428,61,397,44,363,32,309,17,266,9,223,12,173,31,137,58,108,94,87,129,73,157,69,155,82,127,103,90,133,54,171,27,222,7,266,4,311,12,365,27,399,39,431,56,483,92"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="446,135,413,148,353,178,301,209,299,204,350,173,411,143,445,130"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="444,102,318,70,319,65,446,97"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="429,137,414,147,402,160,396,174,391,203,386,232,378,246,366,261,343,274,340,270,362,256,374,243,381,230,386,202,391,172,398,158,410,143,425,132"/>
+<area shape="rect" id="Node000007" href="$ltc4162l_8c.html#adefe23a8cac6fb9ec62aef14e501cc75" title="Set the vcharge setting." alt="" coords="188,92,348,132"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="407,117,348,116,348,110,408,111"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="192,74,173,82,145,100,119,120,80,158,76,154,115,116,142,95,171,77,190,69"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="190,269,171,261,142,243,115,222,76,184,80,180,119,218,145,239,173,256,192,264"/>
+<area shape="poly" id="edge12_Node000010_Node000003" title=" " alt="" coords="404,173,124,172,124,167,404,167"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="441,189,349,210,348,205,440,184"/>
+<area shape="poly" id="edge14_Node000010_Node000005" title=" " alt="" coords="435,155,410,142,395,126,386,111,378,96,362,82,337,70,339,65,366,78,382,93,391,108,399,123,414,138,438,151"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="481,193,428,228,365,261,329,273,327,268,363,256,426,223,478,189"/>
+<area shape="poly" id="edge16_Node000010_Node000007" title=" " alt="" coords="442,157,347,134,349,129,443,152"/>
+<area shape="poly" id="edge27_Node000018_Node000003" title=" " alt="" coords="184,318,170,310,135,280,106,244,70,183,74,181,111,241,139,276,174,306,186,313"/>
+<area shape="rect" id="Node000022" href="$ltc4162l_8c.html#a54ce5aba264f512645b9d83e9c1df71a" title="Set the iin limit." alt="" coords="187,948,349,974"/>
+<area shape="poly" id="edge32_Node000021_Node000022" title=" " alt="" coords="432,998,330,976,331,971,433,992"/>
+<area shape="poly" id="edge33_Node000021_Node000023" title=" " alt="" coords="433,1029,331,1050,330,1044,432,1023"/>
+<area shape="rect" id="Node000024" href="$ltc4162l_8c.html#aff704397120e87b1e5f776622aaf72e1" title="Set the term current." alt="" coords="172,998,364,1023"/>
+<area shape="poly" id="edge34_Node000021_Node000024" title=" " alt="" coords="417,1013,364,1013,364,1008,417,1008"/>
+</map>

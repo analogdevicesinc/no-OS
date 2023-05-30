@@ -1,0 +1,13 @@
+<map id="lt8722_set_enable_req" name="lt8722_set_enable_req">
+<area shape="rect" id="Node000001" title="Set ENABLE_REQ field in LT8722 device." alt="" coords="520,55,689,80"/>
+<area shape="rect" id="Node000002" href="$lt8722_8c.html#a5281f9b5b9698c9d86a4705d2fdd6849" title="Initialize the LT8722 device." alt="" coords="360,29,451,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="506,58,451,50,451,45,507,52"/>
+<area shape="rect" id="Node000006" href="$lt8722_8c.html#ac73cab22e0f650778dbe7ba66fc82f1b" title="Reset the LT8722 device." alt="" coords="339,79,472,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="507,82,473,86,472,81,506,77"/>
+<area shape="rect" id="Node000003" href="$lt8722_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="172,5,291,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="346,37,290,29,291,24,347,31"/>
+<area shape="rect" id="Node000004" href="$iio__lt8722_8c.html#aeb92105564fb6f80c107bdb1475872f4" title="Initializes the LT8722 IIO descriptor." alt="" coords="174,55,289,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="347,53,289,62,289,56,346,48"/>
+<area shape="rect" id="Node000005" href="$lt8722_2src_2examples_2iio_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="160,70,124,70,124,65,160,65"/>
+</map>

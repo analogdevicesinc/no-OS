@@ -1,0 +1,73 @@
+<map id="drivers/platform/aducm3029/aducm3029_uart.h" name="drivers/platform/aducm3029/aducm3029_uart.h">
+<area shape="rect" id="Node000001" title="Header file of UART driver for ADuCM302x." alt="" coords="1560,5,1767,45"/>
+<area shape="rect" id="Node000002" href="$aducm3029__irq_8c.html" title="Implementation of External IRQ driver for ADuCM302x." alt="" coords="5,101,212,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1546,32,869,54,496,73,341,84,224,96,183,103,182,98,223,91,341,78,496,67,869,49,1546,27"/>
+<area shape="rect" id="Node000003" href="$aducm3029__uart_8c.html" title="Implementation of UART driver for ADuCM302x." alt="" coords="236,101,443,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1546,29,1340,32,1068,42,762,62,606,77,454,96,414,103,413,98,454,91,606,72,762,57,1067,37,1339,27,1546,24"/>
+<area shape="rect" id="Node000004" href="$ad7124-8pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by ad7124&#45;8pmdz project." alt="" coords="467,93,652,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1546,31,1374,35,1154,46,910,65,665,96,653,98,652,93,664,91,909,60,1154,41,1374,30,1546,25"/>
+<area shape="rect" id="Node000007" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="677,101,831,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1546,31,1404,37,1228,48,1035,67,844,96,813,103,812,98,843,91,1035,62,1227,43,1403,32,1546,26"/>
+<area shape="rect" id="Node000008" href="$ada4250__ardz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by ada4250_ardz project." alt="" coords="856,93,1041,148"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1546,37,1317,59,1185,75,1053,96,1042,98,1041,93,1052,91,1184,70,1317,54,1546,32"/>
+<area shape="rect" id="Node000011" href="$aducm3029__flash__demo_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by aducm3029_flash_demo project." alt="" coords="1065,93,1259,148"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1547,47,1271,96,1260,98,1259,93,1269,91,1546,42"/>
+<area shape="rect" id="Node000013" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="1283,93,1468,148"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1593,52,1457,96,1456,91,1591,47"/>
+<area shape="rect" id="Node000016" href="$cn0531_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by cn0531 project." alt="" coords="1493,93,1655,148"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1638,57,1601,95,1597,91,1634,53"/>
+<area shape="rect" id="Node000019" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="1680,101,1828,141"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="1693,53,1738,99,1734,102,1689,57"/>
+<area shape="rect" id="Node000020" href="$cn0565_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by cn0565 project." alt="" coords="1859,93,2022,148"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="1733,47,1863,91,1862,96,1732,52"/>
+<area shape="rect" id="Node000023" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by demo_esp project." alt="" coords="2211,101,2465,141"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="1780,40,2211,99,2210,104,1780,45"/>
+<area shape="rect" id="Node000026" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="2745,93,2971,148"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="1780,33,2745,108,2744,113,1780,38"/>
+<area shape="rect" id="Node000029" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="3121,93,3307,148"/>
+<area shape="poly" id="edge28_Node000001_Node000029" title=" " alt="" coords="1781,27,2302,48,2641,67,2984,91,3121,105,3121,110,2983,96,2641,72,2302,54,1780,33"/>
+<area shape="rect" id="Node000032" href="$iio__adpd1080_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to ADuCM3029 platform used by iio_adpd1080 project." alt="" coords="3331,93,3516,148"/>
+<area shape="poly" id="edge31_Node000001_Node000032" title=" " alt="" coords="1781,26,2117,32,2560,44,2998,63,3180,76,3318,91,3331,93,3330,98,3318,96,3180,81,2998,69,2560,50,2117,37,1781,31"/>
+<area shape="rect" id="Node000034" href="$iio__aducm3029_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="3540,101,3717,141"/>
+<area shape="poly" id="edge33_Node000001_Node000034" title=" " alt="" coords="1781,25,2155,29,2660,40,3162,60,3371,74,3529,91,3566,98,3565,103,3528,96,3370,79,3162,65,2660,46,2155,35,1781,30"/>
+<area shape="rect" id="Node000035" href="$iio__demo_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by iio_demo project." alt="" coords="3807,101,4061,141"/>
+<area shape="poly" id="edge34_Node000001_Node000035" title=" " alt="" coords="1780,24,2114,26,2596,35,3157,55,3447,71,3730,91,3807,99,3807,104,3730,96,3446,76,3157,61,2596,41,2114,32,1780,29"/>
+<area shape="rect" id="Node000005" href="$ad7124-8pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of ad7124&#45;8pmdz project." alt="" coords="17,196,203,251"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="453,151,215,199,204,201,202,196,213,193,452,146"/>
+<area shape="rect" id="Node000006" href="$ad7124-8pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definitions specific to aducm3029 platform used by ad7124&#45;8pmdz project." alt="" coords="227,196,412,251"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="486,156,383,198,381,193,484,151"/>
+<area shape="rect" id="Node000009" href="$ada4250__ardz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of ada4250_ardz project." alt="" coords="436,196,621,251"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="843,151,633,199,622,201,621,196,632,193,842,146"/>
+<area shape="rect" id="Node000010" href="$ada4250__ardz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by ada4250_ardz project." alt="" coords="645,196,831,251"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="883,156,794,198,792,194,880,151"/>
+<area shape="rect" id="Node000012" href="$aducm3029__flash__demo_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of aducm3029_flash_demo project." alt="" coords="855,196,1042,251"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1095,156,1005,198,1003,194,1093,151"/>
+<area shape="rect" id="Node000014" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="1067,196,1252,251"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="1308,156,1217,198,1214,194,1306,151"/>
+<area shape="rect" id="Node000015" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="1276,196,1461,251"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="1375,162,1373,196,1368,196,1370,162"/>
+<area shape="rect" id="Node000017" href="$cn0531_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of cn0531 project." alt="" coords="1486,196,1649,251"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="1574,162,1572,196,1566,196,1569,162"/>
+<area shape="rect" id="Node000018" href="$cn0531_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by cn0531 project." alt="" coords="1673,196,1835,251"/>
+<area shape="poly" id="edge17_Node000016_Node000018" title=" " alt="" coords="1634,152,1708,193,1705,198,1632,157"/>
+<area shape="rect" id="Node000021" href="$cn0565_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of cn0565 project." alt="" coords="1859,196,2022,251"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="1943,162,1943,196,1938,196,1938,162"/>
+<area shape="rect" id="Node000022" href="$cn0565_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of ADuCM3029 platform data used by cn0565 project." alt="" coords="2046,196,2209,251"/>
+<area shape="poly" id="edge21_Node000020_Node000022" title=" " alt="" coords="2002,152,2080,193,2077,198,2000,157"/>
+<area shape="rect" id="Node000024" href="$demo__esp_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of demo_esp project." alt="" coords="2233,203,2443,243"/>
+<area shape="poly" id="edge23_Node000023_Node000024" title=" " alt="" coords="2341,155,2341,203,2335,203,2335,155"/>
+<area shape="rect" id="Node000025" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by demo_esp." alt="" coords="2468,203,2720,243"/>
+<area shape="poly" id="edge24_Node000023_Node000025" title=" " alt="" coords="2400,143,2547,201,2545,206,2398,148"/>
+<area shape="rect" id="Node000027" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="2745,196,2971,251"/>
+<area shape="poly" id="edge26_Node000026_Node000027" title=" " alt="" coords="2861,162,2861,196,2855,196,2855,162"/>
+<area shape="rect" id="Node000028" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="2995,196,3222,251"/>
+<area shape="poly" id="edge27_Node000026_Node000028" title=" " alt="" coords="2937,150,3044,193,3042,198,2935,155"/>
+<area shape="rect" id="Node000030" href="$eval-ltc4306_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;ltc4306&#45;pmdz project." alt="" coords="3247,196,3432,251"/>
+<area shape="poly" id="edge29_Node000029_Node000030" title=" " alt="" coords="3259,155,3308,194,3305,198,3256,159"/>
+<area shape="rect" id="Node000031" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="3456,196,3641,251"/>
+<area shape="poly" id="edge30_Node000029_Node000031" title=" " alt="" coords="3315,149,3462,193,3461,198,3313,154"/>
+<area shape="rect" id="Node000033" href="$iio__adpd1080_2src_2platform_2aducm3029_2main_8c.html" title="Main file for ADuCM3029 platform of iio_adpd1080 project." alt="" coords="3665,196,3851,251"/>
+<area shape="poly" id="edge32_Node000032_Node000033" title=" " alt="" coords="3524,149,3672,193,3670,198,3523,154"/>
+<area shape="rect" id="Node000036" href="$iio__demo_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by iio_demo project." alt="" coords="3875,203,4127,243"/>
+<area shape="poly" id="edge35_Node000035_Node000036" title=" " alt="" coords="3956,151,3990,202,3986,205,3952,154"/>
+</map>

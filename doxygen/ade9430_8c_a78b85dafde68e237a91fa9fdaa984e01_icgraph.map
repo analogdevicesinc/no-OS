@@ -1,0 +1,7 @@
+<map id="ade9430_init" name="ade9430_init">
+<area shape="rect" id="Node000001" title="Initialize the device." alt="" coords="172,31,279,56"/>
+<area shape="rect" id="Node000002" href="$iot__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Main function execution for maxim platform." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,35,124,30,125,25,159,30"/>
+<area shape="rect" id="Node000003" href="$eval-ade9430_2src_2examples_2basic__example_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main execution." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,56,125,61,124,56,158,51"/>
+</map>

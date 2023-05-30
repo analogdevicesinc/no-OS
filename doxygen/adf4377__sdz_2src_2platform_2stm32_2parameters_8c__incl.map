@@ -1,0 +1,70 @@
+<map id="projects/adf4377_sdz/src/platform/stm32/parameters.c" name="projects/adf4377_sdz/src/platform/stm32/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of STM32 platform data used by adf4377 project." alt="" coords="525,5,765,45"/>
+<area shape="rect" id="Node000002" href="$adf4377__sdz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by adf4377 project." alt="" coords="520,93,629,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="630,47,596,85,592,81,626,44"/>
+<area shape="rect" id="Node000023" title=" " alt="" coords="654,93,781,119"/>
+<area shape="poly" id="edge45_Node000001_Node000023" title=" " alt="" coords="665,44,699,81,695,85,661,47"/>
+<area shape="rect" id="Node000003" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="258,313,369,339"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="520,114,457,120,390,131,331,147,309,157,295,168,286,183,282,200,282,235,291,270,303,300,298,302,286,272,277,236,276,199,282,181,291,165,307,152,329,142,389,126,457,115,519,108"/>
+<area shape="rect" id="Node000008" href="$stm32__irq_8h.html" title="Header file for stm32 irq specifics." alt="" coords="572,313,671,339"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="580,118,619,299,613,300,575,120"/>
+<area shape="rect" id="Node000010" href="$stm32__spi_8h.html" title="Header file for the stm32 spi driver." alt="" coords="785,240,887,265"/>
+<area shape="poly" id="edge11_Node000002_Node000010" title=" " alt="" coords="597,117,805,231,802,236,594,121"/>
+<area shape="rect" id="Node000017" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="1220,313,1327,339"/>
+<area shape="poly" id="edge44_Node000002_Node000017" title=" " alt="" coords="612,116,1225,307,1223,312,610,121"/>
+<area shape="rect" id="Node000018" href="$stm32__uart_8h.html" title="Header file of UART driver for STM32." alt="" coords="441,240,549,265"/>
+<area shape="poly" id="edge28_Node000002_Node000018" title=" " alt="" coords="570,120,510,229,505,227,566,118"/>
+<area shape="rect" id="Node000021" href="$stm32__uart__stdio_8h.html" title="Header file of stm32 UART driver stdout/stdin redirection." alt="" coords="305,167,452,192"/>
+<area shape="poly" id="edge40_Node000002_Node000021" title=" " alt="" coords="544,121,424,164,423,159,542,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="666,460,737,485"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="315,339,316,375,322,394,332,410,373,421,459,435,653,462,652,468,459,440,371,426,329,414,317,396,311,376,309,339"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,460,88,485"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="259,341,146,365,98,378,74,389,64,401,57,416,50,447,45,446,52,414,59,398,70,385,96,373,144,360,257,335"/>
+<area shape="rect" id="Node000006" href="$stm32__hal_8h.html" title=" " alt="" coords="343,387,446,412"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="328,337,373,376,369,380,325,341"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="361,460,428,485"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="397,412,397,446,392,446,392,412"/>
+<area shape="poly" id="edge10_Node000008_Node000006" title=" " alt="" coords="586,341,445,385,444,380,584,336"/>
+<area shape="rect" id="Node000009" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="521,387,617,412"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="615,341,588,377,584,374,611,337"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="592,410,669,451,667,456,589,414"/>
+<area shape="poly" id="edge27_Node000010_Node000003" title=" " alt="" coords="785,264,383,318,382,313,785,258"/>
+<area shape="poly" id="edge12_Node000010_Node000004" title=" " alt="" coords="883,263,954,285,1027,318,1055,339,1074,361,1078,387,1074,400,1065,414,1043,430,1011,443,926,461,832,470,751,473,751,468,831,465,925,455,1009,438,1040,425,1061,410,1069,398,1073,386,1069,364,1052,343,1024,323,952,290,881,268"/>
+<area shape="poly" id="edge26_Node000010_Node000006" title=" " alt="" coords="821,268,762,304,684,341,626,360,566,374,460,393,459,388,565,369,624,355,682,336,759,299,818,263"/>
+<area shape="rect" id="Node000011" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="1097,313,1196,339"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="887,263,1084,308,1083,313,885,268"/>
+<area shape="rect" id="Node000012" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="782,313,890,339"/>
+<area shape="poly" id="edge15_Node000010_Node000012" title=" " alt="" coords="839,266,839,300,833,300,833,266"/>
+<area shape="poly" id="edge24_Node000010_Node000017" title=" " alt="" coords="888,259,1207,310,1206,316,887,265"/>
+<area shape="poly" id="edge14_Node000011_Node000004" title=" " alt="" coords="1152,339,1153,375,1148,396,1137,414,1108,432,1067,446,1017,457,961,464,846,472,750,474,750,469,846,467,960,459,1016,451,1066,441,1106,427,1133,410,1143,394,1147,375,1146,339"/>
+<area shape="poly" id="edge18_Node000012_Node000004" title=" " alt="" coords="891,329,952,337,1011,352,1033,363,1048,377,1052,394,1042,414,1022,429,992,441,914,459,827,468,751,473,750,468,826,463,913,454,991,436,1019,424,1038,410,1047,393,1044,379,1030,367,1009,357,951,342,890,334"/>
+<area shape="poly" id="edge22_Node000012_Node000009" title=" " alt="" coords="794,341,627,386,625,380,792,336"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="815,387,881,412"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="841,339,846,373,841,374,835,339"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="531,460,602,485"/>
+<area shape="poly" id="edge17_Node000012_Node000014" title=" " alt="" coords="798,341,741,361,681,389,632,421,591,453,588,449,629,417,679,384,739,356,796,336"/>
+<area shape="rect" id="Node000015" href="$no__os__list_8h.html" title="List library header." alt="" coords="692,387,791,412"/>
+<area shape="poly" id="edge19_Node000012_Node000015" title=" " alt="" coords="822,341,769,380,766,376,819,337"/>
+<area shape="rect" id="Node000016" href="$no__os__mutex_8h.html" title=" " alt="" coords="906,387,1027,412"/>
+<area shape="poly" id="edge23_Node000012_Node000016" title=" " alt="" coords="858,336,935,378,932,382,856,341"/>
+<area shape="poly" id="edge20_Node000015_Node000004" title=" " alt="" coords="737,414,717,449,712,447,732,411"/>
+<area shape="poly" id="edge21_Node000015_Node000005" title=" " alt="" coords="692,408,102,468,102,463,692,403"/>
+<area shape="poly" id="edge25_Node000017_Node000004" title=" " alt="" coords="1264,341,1221,378,1191,398,1160,414,1125,425,1079,435,966,451,751,471,750,465,965,446,1078,430,1124,420,1158,410,1189,394,1217,374,1260,337"/>
+<area shape="poly" id="edge29_Node000018_Node000004" title=" " alt="" coords="494,266,490,295,488,333,493,374,501,393,511,410,533,426,569,439,653,460,652,465,568,444,531,430,507,414,496,396,488,375,482,333,484,294,489,265"/>
+<area shape="poly" id="edge30_Node000018_Node000005" title=" " alt="" coords="441,266,428,268,339,277,269,280,200,289,162,299,117,316,58,342,38,359,20,388,16,403,18,418,32,448,27,450,13,419,11,402,15,386,34,356,56,337,115,311,160,294,199,284,268,275,339,272,428,263,440,261"/>
+<area shape="poly" id="edge39_Node000018_Node000006" title=" " alt="" coords="489,267,412,377,408,374,484,264"/>
+<area shape="poly" id="edge38_Node000018_Node000009" title=" " alt="" coords="503,265,559,373,555,375,498,267"/>
+<area shape="rect" id="Node000019" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="129,313,234,339"/>
+<area shape="poly" id="edge31_Node000018_Node000019" title=" " alt="" coords="445,268,246,313,245,308,444,263"/>
+<area shape="poly" id="edge32_Node000019_Node000004" title=" " alt="" coords="196,337,246,374,278,393,313,409,365,421,458,436,653,462,652,468,457,441,364,426,311,415,276,398,243,378,193,341"/>
+<area shape="poly" id="edge33_Node000019_Node000005" title=" " alt="" coords="129,335,102,342,75,352,50,367,30,388,25,402,25,417,35,447,30,449,20,418,20,401,26,385,47,363,72,347,101,337,128,330"/>
+<area shape="rect" id="Node000020" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,387,217,412"/>
+<area shape="poly" id="edge34_Node000019_Node000020" title=" " alt="" coords="179,340,163,375,159,373,174,338"/>
+<area shape="poly" id="edge36_Node000020_Node000004" title=" " alt="" coords="218,407,236,409,614,457,653,462,652,468,613,463,236,415,217,412"/>
+<area shape="poly" id="edge37_Node000020_Node000005" title=" " alt="" coords="135,414,77,454,74,450,132,410"/>
+<area shape="poly" id="edge35_Node000020_Node000014" title=" " alt="" coords="218,409,518,460,517,466,217,415"/>
+<area shape="poly" id="edge43_Node000021_Node000018" title=" " alt="" coords="399,190,465,230,463,235,396,194"/>
+<area shape="poly" id="edge42_Node000021_Node000019" title=" " alt="" coords="364,194,210,307,207,303,361,190"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="331,240,416,265"/>
+<area shape="poly" id="edge41_Node000021_Node000022" title=" " alt="" coords="380,193,378,227,373,226,375,192"/>
+</map>

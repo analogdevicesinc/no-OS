@@ -1,0 +1,5 @@
+<map id="adf4377_get_en_sr_inv_adj" name="adf4377_get_en_sr_inv_adj">
+<area shape="rect" id="Node000001" title="Gets the value of the set SR_INV_ADJ Adjustment to enable or disable which adds a constant value to t..." alt="" coords="241,5,440,31"/>
+<area shape="rect" id="Node000002" href="$adf4377_8c.html#ac0746ed8126c9b1ef9d98716a30c79a8" title="Get the channel inversion." alt="" coords="5,5,193,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,21,193,21,193,15,228,15"/>
+</map>

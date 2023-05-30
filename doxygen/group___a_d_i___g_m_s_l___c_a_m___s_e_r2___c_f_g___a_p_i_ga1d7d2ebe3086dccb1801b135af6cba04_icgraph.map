@@ -1,0 +1,5 @@
+<map id="max96793_csi_config_sensor_to_ser_lane_map" name="max96793_csi_config_sensor_to_ser_lane_map">
+<area shape="rect" id="Node000001" title="Configure the sensor to serializer lane mapping for the MAX96793 device." alt="" coords="231,5,421,45"/>
+<area shape="rect" id="Node000002" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#gac04853848d3e604546d598391f43869e" title="Initialize the CSI port for the MAX96793 device." alt="" coords="5,13,183,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,28,183,28,183,23,216,23"/>
+</map>

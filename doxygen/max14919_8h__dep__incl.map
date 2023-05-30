@@ -1,0 +1,11 @@
+<map id="drivers/digital&#45;io/max14919/max14919.h" name="drivers/digital&#45;io/max14919/max14919.h">
+<area shape="rect" id="Node000001" title="Header file of MAX14919 Driver." alt="" coords="214,5,394,45"/>
+<area shape="rect" id="Node000002" href="$max14919_8c.html" title="Source file of MAX14919 Driver." alt="" coords="5,101,184,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,53,138,103,136,98,248,48"/>
+<area shape="rect" id="Node000003" href="$max14919_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14919 example." alt="" coords="208,101,400,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="307,59,307,101,301,101,301,59"/>
+<area shape="rect" id="Node000005" href="$max14919_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="424,93,595,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="359,49,453,91,450,96,357,53"/>
+<area shape="rect" id="Node000004" href="$max14919_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14919 example." alt="" coords="209,196,399,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="307,154,307,196,301,196,301,154"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="ade7753_update_bits" name="ade7753_update_bits">
+<area shape="rect" id="Node000001" title="Update specific register bits." alt="" coords="516,105,677,131"/>
+<area shape="rect" id="Node000002" href="$ade7753_8c.html#a894c298fbec8447aea4fa54cb4b0353a" title="Enable/Disable interrupt." alt="" coords="289,5,442,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="565,100,520,71,467,44,433,33,434,28,469,40,523,66,568,95"/>
+<area shape="rect" id="Node000003" href="$ade7753_8c.html#a05069d40bac54d22911d9720fe4305d7" title="Reset the device using SW reset." alt="" coords="294,55,437,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="524,105,423,83,425,77,525,100"/>
+<area shape="rect" id="Node000005" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="502,116,60,97,61,91,502,111"/>
+<area shape="rect" id="Node000006" href="$ade7753_8c.html#a45e57845fc7fee8de59a69facb6d7c0c" title="Select source of sampled data for wave register." alt="" coords="278,155,453,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="532,137,447,158,446,153,531,131"/>
+<area shape="rect" id="Node000007" href="$ade7753_8c.html#ae9ca805900d6098339024cc66497ac07" title="Select waveform register update rate." alt="" coords="263,220,468,245"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="572,142,526,177,469,210,434,222,432,217,467,205,523,173,568,138"/>
+<area shape="rect" id="Node000004" href="$ade7753_8c.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="108,55,215,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="280,70,215,70,215,65,280,65"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="95,83,61,90,60,85,94,78"/>
+</map>

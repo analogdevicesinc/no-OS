@@ -1,0 +1,5 @@
+<map id="gnss_ubx_get_precise_time" name="gnss_ubx_get_precise_time">
+<area shape="rect" id="Node000001" title="Get comprehensive precise time information." alt="" coords="233,5,436,31"/>
+<area shape="rect" id="Node000002" href="$nmea__ubx_8c.html#a89f1bd80bbe4d28f4edbdd1ef3008b0a" title="Get comprehensive timing information (unified API for both device types)" alt="" coords="5,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,21,185,21,185,15,220,15"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="max31855_dev" name="max31855_dev">
+<area shape="rect" id="Node000001" title="MAX31855 descriptor." alt="" coords="971,107,1093,133"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="701,78,824,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="839,96,971,111,970,116,838,101"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="735,63,743,55,763,51,779,54,789,60,792,70,787,79,782,77,786,69,785,63,777,59,763,57,746,60,738,67"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="351,49,498,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="512,66,701,83,701,88,512,71"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,18,184,43"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,20,296,17,413,18,539,28,662,51,733,75,732,80,661,56,538,34,413,24,296,22,198,25"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,38,351,52,351,57,198,43"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="350,99,499,139"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="513,116,585,114,661,108,706,101,706,106,662,113,586,119,513,122"/>
+<area shape="rect" id="Node000006" href="$unionmax31855__fault__sts.html" title=" " alt="" coords="685,131,840,157"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="853,143,946,137,985,130,986,135,947,143,854,148"/>
+<area shape="rect" id="Node000007" href="$struct__max31855__fault__sts__mask.html" title=" " alt="" coords="323,163,527,189"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="540,162,685,149,685,154,541,168"/>
+</map>

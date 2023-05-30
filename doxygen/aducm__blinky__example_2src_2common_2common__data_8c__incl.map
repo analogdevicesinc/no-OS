@@ -1,0 +1,11 @@
+<map id="projects/aducm_blinky_example/src/common/common_data.c" name="projects/aducm_blinky_example/src/common/common_data.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="10,5,241,60"/>
+<area shape="rect" id="Node000002" href="$aducm__blinky__example_2src_2common_2common__data_8h.html" title=" " alt="" coords="62,108,189,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,60,128,94,123,94,123,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,115,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,135,82,173,78,169,113,132"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="139,181,245,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="138,132,174,169,170,173,134,135"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="157,255,227,280"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="195,207,195,241,189,241,189,207"/>
+</map>

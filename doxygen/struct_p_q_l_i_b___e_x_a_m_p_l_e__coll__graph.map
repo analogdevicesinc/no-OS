@@ -1,0 +1,9 @@
+<map id="PQLIB_EXAMPLE" name="PQLIB_EXAMPLE">
+<area shape="rect" id="Node000001" title=" " alt="" coords="88,196,216,221"/>
+<area shape="rect" id="Node000002" href="$struct_e_x_a_m_p_l_e___c_o_n_f_i_g.html" title=" " alt="" coords="5,108,147,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,145,99,170,130,194,126,198,95,174,81,147"/>
+<area shape="rect" id="Node000003" href="$structno__os__circular__buffer.html" title="Circular buffer descriptor." alt="" coords="171,108,331,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,145,202,174,171,198,167,194,198,170,228,142"/>
+<area shape="rect" id="Node000004" href="$structno__os__cb__ptr.html" title="Circular buffer pointer." alt="" coords="197,5,304,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="253,45,253,108,248,108,248,45"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="drivers/platform/lattice/riscvrx_irq.h" name="drivers/platform/lattice/riscvrx_irq.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,5,189,45"/>
+<area shape="rect" id="Node000002" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,93,101,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,47,70,83,66,80,88,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="126,93,181,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="117,44,141,80,136,83,113,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="18,167,89,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="56,119,56,153,51,153,51,119"/>
+</map>

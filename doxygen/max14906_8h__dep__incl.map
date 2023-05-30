@@ -1,0 +1,31 @@
+<map id="drivers/digital&#45;io/max149x6/max14906.h" name="drivers/digital&#45;io/max149x6/max14906.h">
+<area shape="rect" id="Node000001" title="Header file of MAX14906 Driver." alt="" coords="561,5,741,45"/>
+<area shape="rect" id="Node000002" href="$iio__max14906_8c.html" title="Source file of IIO MAX14906 Driver." alt="" coords="5,196,208,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="547,35,484,42,414,54,342,71,273,96,230,118,190,146,128,198,124,194,186,142,227,114,271,91,340,66,413,49,483,37,546,30"/>
+<area shape="rect" id="Node000003" href="$iio__max14906_8h.html" title="Header file of MAX14906 IIO Driver." alt="" coords="284,101,487,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="585,52,440,103,438,98,583,47"/>
+<area shape="rect" id="Node000006" href="$swiot_8h.html" title="Header file for the swiot IIO device." alt="" coords="513,196,661,236"/>
+<area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="593,54,569,72,552,95,545,120,550,147,561,173,574,194,570,197,556,175,545,149,540,120,547,92,566,68,590,50"/>
+<area shape="rect" id="Node000008" href="$max14906_8c.html" title="Source file of MAX14906 Driver." alt="" coords="561,101,740,141"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="653,59,653,101,648,101,648,59"/>
+<area shape="rect" id="Node000009" href="$max14906_2src_2common_2common__data_8h.html" title="Defines common data to be used by max14906 examples." alt="" coords="764,101,956,141"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="707,48,819,98,817,103,704,53"/>
+<area shape="rect" id="Node000011" href="$max14906_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="980,93,1151,148"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="755,44,969,91,981,94,979,99,967,96,754,50"/>
+<area shape="rect" id="Node000012" href="$swiot1l_2src_2common_2common__data_8h.html" title="Defines common data to be used by the swiot1l project." alt="" coords="1175,101,1367,141"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="755,34,945,57,1163,91,1198,98,1197,103,1162,96,944,62,754,40"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="317,148,164,198,162,193,315,143"/>
+<area shape="rect" id="Node000004" href="$max14906_2src_2examples_2iio_2iio__example_8c.html" title="Source file for iio example." alt="" coords="283,196,488,236"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="388,154,388,196,383,196,383,154"/>
+<area shape="rect" id="Node000005" href="$swiot_8c.html" title="Source file for the swiot IIO driver." alt="" coords="569,284,717,324"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="495,141,608,168,651,181,674,194,683,217,680,242,671,265,659,285,655,282,666,263,675,240,678,218,670,198,649,186,607,173,493,146"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="440,144,547,194,545,198,437,149"/>
+<area shape="rect" id="Node000007" href="$swiot__fw_8c.html" title="Main project file for the swiot1l project." alt="" coords="313,284,461,324"/>
+<area shape="poly" id="edge9_Node000003_Node000007" title=" " alt="" coords="325,149,295,170,273,197,267,216,273,235,298,262,330,282,328,286,295,266,268,237,261,216,268,195,292,166,322,145"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="609,246,633,282,628,285,604,249"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="531,244,432,286,429,282,529,239"/>
+<area shape="rect" id="Node000010" href="$max14906_2src_2common_2common__data_8c.html" title="Defines common data to be used by max14906 examples." alt="" coords="765,196,955,236"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="863,154,863,196,857,196,857,154"/>
+<area shape="rect" id="Node000013" href="$swiot1l_2src_2common_2common__data_8c.html" title="Defines common data to be used by the SWIOT1L firmware." alt="" coords="1175,196,1366,236"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="1273,154,1273,196,1268,196,1268,154"/>
+</map>

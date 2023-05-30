@@ -1,0 +1,7 @@
+<map id="ad405x_set_averaging_mode" name="ad405x_set_averaging_mode">
+<area shape="rect" id="Node000001" title="Enter Averaging Mode (SPI only)." alt="" coords="431,5,644,31"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#a09c204a1bf949ac99e72ab02b3571613" title="Set operation mode." alt="" coords="172,5,383,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,21,383,21,383,15,417,15"/>
+<area shape="rect" id="Node000003" href="$basic__i3c__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

@@ -1,0 +1,28 @@
+<map id="projects/swiot1l/src" name="projects/swiot1l/src">
+<area shape="rect" id="node2" href="dir_1e2ff918b27499cfd72051e0923f312c.html" title="common" alt="" coords="38,136,117,161"/>
+<area shape="poly" id="edge3" href="dir_001360_000513.html" alt="" coords="64,88,73,122,68,124,59,89"/>
+<area shape="rect" id="edge3-headlabel" href="dir_001360_000513.html" title="1" alt="" coords="73,109,83,124"/>
+<area shape="rect" id="node5" href="dir_0bb79d6a83cfcf0ad99764c4144043fa.html" title="iio" alt="" coords="15,209,54,235"/>
+<area shape="poly" id="edge1" href="dir_001360_000733.html" alt="" coords="52,90,39,111,28,137,26,167,30,195,25,196,20,167,23,135,34,108,48,87"/>
+<area shape="rect" id="edge1-headlabel" href="dir_001360_000733.html" title="2" alt="" coords="30,182,39,197"/>
+<area shape="rect" id="node6" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="96,209,163,235"/>
+<area shape="poly" id="edge2" href="dir_001360_000548.html" alt="" coords="82,86,108,106,130,135,138,166,137,196,132,195,133,166,126,137,105,110,78,90"/>
+<area shape="rect" id="edge2-headlabel" href="dir_001360_000548.html" title="14" alt="" coords="135,185,152,200"/>
+<area shape="rect" id="node7" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="196,209,265,235"/>
+<area shape="poly" id="edge4" href="dir_001360_000821.html" alt="" coords="81,86,115,107,152,134,186,166,214,196,210,200,182,169,149,138,112,111,78,90"/>
+<area shape="rect" id="edge4-headlabel" href="dir_001360_000821.html" title="13" alt="" coords="207,182,225,197"/>
+<area shape="poly" id="edge5" href="dir_000513_000733.html" alt="" coords="73,163,51,199,46,196,68,160"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000513_000733.html" title="1" alt="" coords="54,191,63,205"/>
+<area shape="poly" id="edge6" href="dir_000513_000548.html" alt="" coords="88,160,115,197,111,200,84,163"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000513_000548.html" title="11" alt="" coords="108,182,126,197"/>
+<area shape="poly" id="edge7" href="dir_000513_000821.html" alt="" coords="103,159,194,201,192,206,101,164"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000513_000821.html" title="4" alt="" coords="188,187,197,201"/>
+<area shape="rect" id="node3" href="dir_b0be6c787cc511b3ff53843b9b717497.html" title="examples" alt="" coords="103,63,190,88"/>
+<area shape="poly" id="edge8" href="dir_000703_000821.html" alt="" coords="172,86,201,106,226,135,236,165,237,195,231,195,230,166,222,137,198,110,169,90"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000703_000821.html" title="5" alt="" coords="238,184,247,199"/>
+<area shape="rect" id="node4" href="dir_90388bf7274749fadcfc66be84d90fa6.html" title="platform" alt="" coords="214,63,293,88"/>
+<area shape="poly" id="edge9" href="dir_001181_000821.html" alt="" coords="263,87,280,130,283,157,277,184,263,202,259,199,272,182,277,157,274,132,258,89"/>
+<area shape="rect" id="edge9-headlabel" href="dir_001181_000821.html" title="1" alt="" coords="265,197,275,212"/>
+<area shape="rect" id="clust2" href="dir_d4d19868ed262df6c0f49ce587083cce.html" alt="" coords="27,52,304,172"/>
+<area shape="rect" id="clust1" href="dir_4e3706a14d2d8c012348f03a9654b027.html" title="swiot1l" alt="" coords="16,16,315,183"/>
+</map>

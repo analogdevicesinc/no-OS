@@ -1,0 +1,60 @@
+<map id="ad9467_write" name="ad9467_write">
+<area shape="rect" id="Node000001" title="Writes data into a register." alt="" coords="805,640,916,665"/>
+<area shape="rect" id="Node000002" href="$ad9467_8c.html#a6571c47605fcc7e3c5e98d30cd308b84" title="Configures the clock delay setting." alt="" coords="567,351,757,391"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="853,626,844,579,826,519,797,458,778,430,756,405,739,393,742,389,759,401,782,426,802,455,831,518,849,578,858,625"/>
+<area shape="rect" id="Node000003" href="$ad9467_8c.html#afba20cbe33fe60373180154e1738c821" title="Sets the offset adjustment." alt="" coords="591,416,733,441"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="851,626,839,588,820,541,793,494,756,454,732,441,734,436,759,450,797,491,825,539,844,586,856,625"/>
+<area shape="rect" id="Node000004" href="$ad9467_8c.html#aab824f18dec438fa27ba61dd2a37f61d" title="Sets a bit or a group of bits inside a register without modifying the other bits." alt="" coords="574,465,750,490"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="833,632,676,492,679,488,836,628"/>
+<area shape="rect" id="Node000017" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,713,60,738"/>
+<area shape="poly" id="edge34_Node000001_Node000017" title=" " alt="" coords="827,674,771,705,696,741,610,776,519,801,403,827,310,841,265,842,218,836,166,823,107,801,85,789,66,772,40,740,44,737,70,769,88,785,109,796,168,818,219,831,265,836,309,836,402,822,518,796,608,771,694,737,769,700,825,670"/>
+<area shape="rect" id="Node000023" href="$ad9467_8c.html#af1eea7aa6b5fe4a6c7e0b72a479340a9" title="Configures the test mode and the output mode to a default state." alt="" coords="133,914,247,940"/>
+<area shape="poly" id="edge28_Node000001_Node000023" title=" " alt="" coords="860,679,852,728,835,789,822,820,805,850,784,877,759,900,727,919,694,935,624,958,550,970,476,973,405,970,340,962,237,942,238,937,340,957,406,965,476,968,549,965,622,953,692,930,725,915,756,895,781,874,801,847,817,818,830,787,847,727,855,678"/>
+<area shape="rect" id="Node000024" href="$ad9467_8c.html#afe6b050a9df654474ee211fff5467ca0" title="Initiates a transfer and waits for the operation to end." alt="" coords="355,864,483,889"/>
+<area shape="poly" id="edge30_Node000001_Node000024" title=" " alt="" coords="856,679,845,718,826,764,798,810,780,830,759,846,726,865,691,878,617,892,545,894,483,890,484,884,545,889,617,887,689,873,724,860,756,842,776,826,793,806,821,762,840,716,851,678"/>
+<area shape="rect" id="Node000005" href="$ad9467_8c.html#a79ec5e0b953aa7648e3d8ca880a3acee" title="Sets the AC coupling(0) or DC coupling(1) mode." alt="" coords="339,139,500,179"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="570,459,565,454,542,421,534,388,534,355,539,322,544,289,545,257,537,225,517,193,499,178,502,174,521,189,542,223,550,257,550,290,544,323,539,355,539,387,547,419,569,450,574,455"/>
+<area shape="rect" id="Node000006" href="$ad9467_8c.html#a1125171373d3873d6a144855fc2a0d1c" title="Disconnects (1) or connects (0) the analog input from or to the the ADC channel." alt="" coords="339,203,500,243"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="570,459,565,454,547,429,539,404,537,379,539,354,542,329,541,305,533,281,517,257,499,243,502,239,521,253,538,279,546,304,547,329,545,354,543,379,544,403,551,427,569,450,574,455"/>
+<area shape="rect" id="Node000007" href="$ad9467_8c.html#a597797a641700c750e9a32641c9c11bb" title="Changes the input buffer current(1)." alt="" coords="328,268,511,293"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="571,460,565,454,550,435,543,416,540,378,538,341,531,323,517,306,501,295,504,291,520,302,536,321,543,340,546,378,548,415,555,433,569,450,575,456"/>
+<area shape="rect" id="Node000008" href="$ad9467_8c.html#abd5aa1b883075986a7d34cf3494ffa68" title="Changes the input buffer current(2)." alt="" coords="328,317,511,342"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="574,461,565,454,553,442,546,429,540,403,534,378,528,367,517,356,499,345,501,340,520,351,532,364,539,377,545,402,551,427,558,439,568,450,577,456"/>
+<area shape="rect" id="Node000009" href="$ad9467_8c.html#a435c341bd1925e56140829983de1008c" title="Determines LVDS output properties." alt="" coords="329,366,510,392"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="581,462,565,454,550,442,541,429,532,417,517,405,492,394,494,389,520,401,536,413,545,426,554,438,568,450,583,458"/>
+<area shape="rect" id="Node000010" href="$ad9467_8c.html#ac538012352eeb265aa262a2cc101926f" title="Activates the normal (0) or inverted (1) DCO clock." alt="" coords="326,416,513,441"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="585,465,482,444,483,438,586,459"/>
+<area shape="rect" id="Node000011" href="$ad9467_8c.html#a1ee4250c78259778b92cf0473ffb090f" title="Enables (1) or disables (0) the external voltage reference." alt="" coords="341,465,497,490"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="560,480,497,480,497,475,560,475"/>
+<area shape="rect" id="Node000012" href="$ad9467_8c.html#a2853eb8b8d9e541b869521d24873c6cf" title="Configures the full&#45;scale input voltage selection." alt="" coords="328,514,511,540"/>
+<area shape="poly" id="edge11_Node000004_Node000012" title=" " alt="" coords="586,496,483,517,482,512,585,490"/>
+<area shape="rect" id="Node000013" href="$ad9467_8c.html#a7675d7bae1a339b8905afb6af8075788" title="Sets the output current adjustment." alt="" coords="320,564,519,589"/>
+<area shape="poly" id="edge12_Node000004_Node000013" title=" " alt="" coords="629,499,579,527,520,553,480,566,478,561,518,548,576,522,627,495"/>
+<area shape="rect" id="Node000014" href="$ad9467_8c.html#a35c640df5935d520d6e21c72a03b84e1" title="Disables (1) or enables (0) the data output." alt="" coords="333,613,506,638"/>
+<area shape="poly" id="edge13_Node000004_Node000014" title=" " alt="" coords="642,502,590,553,556,580,520,603,488,615,486,610,517,598,553,575,587,549,639,499"/>
+<area shape="rect" id="Node000015" href="$ad9467_8c.html#a8cf1ef07324f55b9c5ea07b014797e72" title="Specifies the output format." alt="" coords="334,662,505,688"/>
+<area shape="poly" id="edge14_Node000004_Node000015" title=" " alt="" coords="650,503,629,537,599,577,563,618,520,652,493,665,491,660,517,647,559,614,595,574,624,534,645,501"/>
+<area shape="rect" id="Node000018" href="$ad9467_8c.html#a70c8f21b8351059ff7b142d6610c9e8f" title="Activates the inverted (1) or normal (0) output mode." alt="" coords="108,762,272,788"/>
+<area shape="poly" id="edge18_Node000004_Node000018" title=" " alt="" coords="658,504,644,558,618,626,600,661,577,695,551,725,520,750,490,767,457,779,389,793,321,795,262,790,262,785,321,790,388,787,456,774,488,762,517,746,547,721,573,692,595,659,613,624,639,557,653,503"/>
+<area shape="rect" id="Node000019" href="$ad9467_8c.html#a75824f422e1e72caf5b140d06b9c4cb1" title="Configures the power mode." alt="" coords="347,89,492,114"/>
+<area shape="poly" id="edge20_Node000004_Node000019" title=" " alt="" coords="569,459,565,454,549,433,538,412,529,371,532,330,540,289,549,248,551,208,542,168,532,149,517,129,505,119,491,112,493,107,508,114,521,125,536,146,547,167,556,208,554,249,545,290,537,330,535,370,543,410,553,430,569,450,573,455"/>
+<area shape="rect" id="Node000020" href="$ad9467_8c.html#aa4ca255f28a2fdd3b321f285f10ebb42" title="Sets (1) or clears (0) the reset long PN sequence bit(PN23)." alt="" coords="115,120,265,145"/>
+<area shape="poly" id="edge21_Node000004_Node000020" title=" " alt="" coords="569,459,565,454,555,438,548,417,541,367,540,307,543,242,546,178,544,120,536,72,528,54,517,41,493,23,471,13,449,9,426,9,378,22,321,41,285,57,253,79,205,121,202,117,249,75,283,53,319,36,376,17,426,4,449,3,472,8,496,19,521,37,532,51,541,71,549,119,551,178,549,242,546,307,546,367,553,416,559,436,569,451,573,455"/>
+<area shape="rect" id="Node000021" href="$ad9467_8c.html#adf0af00c561fb97352c0784c324dd081" title="Sets (1) or clears (0) the reset short PN sequence bit(PN9)." alt="" coords="119,300,261,325"/>
+<area shape="poly" id="edge23_Node000004_Node000021" title=" " alt="" coords="569,459,565,454,547,430,535,405,529,380,528,355,534,306,546,258,558,210,561,164,558,142,550,120,537,99,517,78,493,60,469,48,446,41,423,40,399,44,375,51,322,78,302,108,266,173,200,300,196,298,262,171,297,106,318,74,373,47,398,38,423,35,447,36,471,43,496,55,520,74,541,96,555,118,563,141,567,164,563,211,551,259,539,307,533,356,535,379,541,403,552,427,569,450,573,455"/>
+<area shape="rect" id="Node000022" href="$ad9467_8c.html#a1a94cd0931136ab64a76f2aa4f9e6cc4" title="Sets the ADC&#39;s test mode." alt="" coords="346,712,493,737"/>
+<area shape="poly" id="edge25_Node000004_Node000022" title=" " alt="" coords="654,504,636,547,607,601,569,655,546,680,520,701,494,715,492,710,517,697,542,676,565,652,603,598,631,545,649,502"/>
+<area shape="rect" id="Node000016" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="151,713,229,738"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="348,693,230,720,228,715,347,688"/>
+<area shape="poly" id="edge17_Node000015_Node000017" title=" " alt="" coords="321,665,217,664,162,670,109,681,76,696,50,715,47,711,74,692,107,676,161,664,217,659,321,660"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="138,728,60,728,60,723,138,723"/>
+<area shape="poly" id="edge19_Node000018_Node000017" title=" " alt="" coords="134,761,107,752,59,737,61,731,109,747,136,756"/>
+<area shape="poly" id="edge22_Node000020_Node000017" title=" " alt="" coords="175,158,142,216,111,288,92,350,77,415,55,541,43,647,37,713,32,712,37,646,50,540,71,414,87,349,105,286,137,214,170,156"/>
+<area shape="poly" id="edge24_Node000021_Node000017" title=" " alt="" coords="182,339,41,714,36,712,177,337"/>
+<area shape="poly" id="edge26_Node000022_Node000016" title=" " alt="" coords="332,727,229,728,229,723,332,722"/>
+<area shape="poly" id="edge27_Node000022_Node000017" title=" " alt="" coords="347,712,234,698,171,697,109,703,61,717,59,712,107,698,171,692,235,693,347,706"/>
+<area shape="poly" id="edge29_Node000023_Node000017" title=" " alt="" coords="125,910,106,897,76,857,54,812,41,770,34,739,39,738,46,769,59,810,80,854,110,893,128,906"/>
+<area shape="poly" id="edge32_Node000024_Node000016" title=" " alt="" coords="396,855,342,803,308,776,271,752,228,736,230,731,273,747,311,771,346,799,399,851"/>
+<area shape="poly" id="edge33_Node000024_Node000017" title=" " alt="" coords="342,889,287,890,226,886,164,872,134,861,106,846,79,822,59,793,35,739,40,737,63,790,83,819,110,842,137,856,166,867,227,881,287,885,342,883"/>
+<area shape="poly" id="edge31_Node000024_Node000023" title=" " alt="" coords="348,895,248,917,246,912,347,889"/>
+</map>

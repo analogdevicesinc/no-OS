@@ -1,0 +1,19 @@
+<map id="adin1320_hard_reset" name="adin1320_hard_reset">
+<area shape="rect" id="Node000001" title="Perform Device Hard Reset." alt="" coords="655,56,813,81"/>
+<area shape="rect" id="Node000002" href="$adin1320_8c.html#a677ac4cd6d792110049e2adfe564e910" title="Initialize the Device." alt="" coords="496,5,607,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="674,55,597,33,599,28,675,50"/>
+<area shape="rect" id="Node000006" href="$basic__init_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="329,56,448,81"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="641,71,448,71,448,66,641,66"/>
+<area shape="rect" id="Node000007" href="$cmd__list_8c.html#a2276545c3be21b80b7fa89860dced383" title=" " alt="" coords="506,107,597,132"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="675,88,598,109,596,104,673,83"/>
+<area shape="rect" id="Node000003" href="$cmd__mode_8c.html#ab812d44de8ad3f20a02f975f978a4cc2" title=" " alt="" coords="342,7,435,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="482,21,436,22,436,16,482,16"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="497,37,431,58,430,53,496,32"/>
+<area shape="rect" id="Node000004" href="$cmd_8c.html#ac1fdbd851dca722a4c7ee9bbe2e55de1" title=" " alt="" coords="172,20,281,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="328,27,282,31,281,26,328,22"/>
+<area shape="rect" id="Node000005" href="$cmd_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,57,124,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="159,51,121,60,120,55,158,46"/>
+<area shape="rect" id="Node000008" href="$cmd_8c.html#a6cf169a34e4a3811a07093de72919f4b" title=" " alt="" coords="173,81,280,107"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="492,117,280,101,280,95,493,112"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="159,87,124,81,125,76,160,81"/>
+</map>

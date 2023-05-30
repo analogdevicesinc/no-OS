@@ -1,0 +1,19 @@
+<map id="axi_adc_remove" name="axi_adc_remove">
+<area shape="rect" id="Node000001" title="AXI ADC Resources deallocation." alt="" coords="535,104,664,129"/>
+<area shape="rect" id="Node000002" href="$ad796x_8c.html#abd440e98810ef648a03653bb6ba5046b" title="Remove the device and release resources." alt="" coords="360,29,487,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="556,101,486,70,455,57,457,52,488,65,558,96"/>
+<area shape="rect" id="Node000006" href="$adrv903x_2src_2examples_2dma__example_2dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="DMA example main function." alt="" coords="364,79,483,104"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="521,108,483,103,483,97,522,103"/>
+<area shape="rect" id="Node000007" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="DMA example main execution." alt="" coords="364,128,483,153"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="521,130,483,135,483,130,520,125"/>
+<area shape="rect" id="Node000008" href="$ad7768__evb_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="396,177,451,203"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="559,137,488,168,452,183,450,178,486,164,557,133"/>
+<area shape="rect" id="Node000003" href="$ad796x_8c.html#ac6aabcda52a1f725b70d93a6855e6aef" title="Initialize the device." alt="" coords="213,29,312,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="346,45,312,45,312,39,346,39"/>
+<area shape="rect" id="Node000004" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="364,29,312,19,237,15,166,16,166,10,237,9,312,14,365,24"/>
+<area shape="rect" id="Node000005" href="$ad796x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,55,157,80"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="365,60,312,70,232,75,157,74,157,69,232,69,312,65,364,55"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="199,36,165,31,166,26,200,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="200,54,157,60,157,55,199,48"/>
+</map>

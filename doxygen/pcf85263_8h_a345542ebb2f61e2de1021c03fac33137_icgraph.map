@@ -1,0 +1,7 @@
+<map id="pcf85263_update_bits" name="pcf85263_update_bits">
+<area shape="rect" id="Node000001" title="Update specific register bits." alt="" coords="331,5,496,31"/>
+<area shape="rect" id="Node000002" href="$pcf85263_8c.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="172,5,283,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="317,21,283,21,283,15,317,15"/>
+<area shape="rect" id="Node000003" href="$iot__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Main function execution for maxim platform." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

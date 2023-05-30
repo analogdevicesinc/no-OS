@@ -1,0 +1,15 @@
+<map id="ad7124_assign_setup" name="ad7124_assign_setup">
+<area shape="rect" id="Node000001" title="Assign Setup to Channel." alt="" coords="565,31,728,56"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#ae6ea3197809d427f07edba04882b4fac" title="Read one raw sample from the internal temperature sensor (hw ch 15). Configures hw channel 15 with se..." alt="" coords="339,5,517,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="551,35,517,31,518,26,552,30"/>
+<area shape="rect" id="Node000003" href="$ad7124_8c.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="371,55,485,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="552,56,485,64,485,59,551,51"/>
+<area shape="rect" id="Node000004" href="$cn0391_8c.html#a0a2eb566f667a8a836fad277eadd773b" title="Initialize CN0391 device: set up AD7124 and configure IOUT." alt="" coords="183,5,280,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="363,54,280,33,281,28,364,49"/>
+<area shape="rect" id="Node000006" href="$ad7124-8pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="172,55,291,80"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="357,70,291,70,291,65,357,65"/>
+<area shape="rect" id="Node000007" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="204,104,259,129"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="364,86,260,113,259,107,363,81"/>
+<area shape="rect" id="Node000005" href="$eval-cn0391-ardz_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="169,21,124,21,124,15,169,15"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="ad7124_enable_buffers" name="ad7124_enable_buffers">
+<area shape="rect" id="Node000001" title="Enable Input Buffer." alt="" coords="500,55,673,80"/>
+<area shape="rect" id="Node000002" href="$ad7124_8c.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="339,55,452,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="486,70,452,70,452,65,486,65"/>
+<area shape="rect" id="Node000003" href="$cn0391_8c.html#a0a2eb566f667a8a836fad277eadd773b" title="Initialize CN0391 device: set up AD7124 and configure IOUT." alt="" coords="183,5,280,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,53,274,33,275,28,340,48"/>
+<area shape="rect" id="Node000005" href="$ad7124-8pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="172,55,291,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="325,70,291,70,291,65,325,65"/>
+<area shape="rect" id="Node000006" href="$ad7124-4sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="204,104,259,129"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="340,87,260,111,258,106,339,81"/>
+<area shape="rect" id="Node000004" href="$eval-cn0391-ardz_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="169,21,124,21,124,15,169,15"/>
+</map>
