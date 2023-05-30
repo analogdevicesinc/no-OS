@@ -1,0 +1,8 @@
+<map id="adf4371_dev" name="adf4371_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="194,273,301,300"/>
+<area shape="rect" id="node2" href="$structadf4371__cp__settings.html" title=" " alt="" coords="5,184,161,211"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="186,184,309,211"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="121,5,299,32"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="303,95,450,121"/>
+<area shape="rect" id="node6" href="$structadf4371__channel__config.html" title=" " alt="" coords="403,184,582,211"/>
+</map>

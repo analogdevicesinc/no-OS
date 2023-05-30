@@ -1,0 +1,9 @@
+<map id="admv1013_spi_read" name="admv1013_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADMV1013 over SPI." alt="" coords="484,81,637,108"/>
+<area shape="rect" id="node2" href="$admv1013_8h.html#a83a456b6d6c0f76257982ab292b605ae" title="Get I/Q Offset Accuracy." alt="" coords="245,5,427,32"/>
+<area shape="rect" id="node3" href="$admv1013_8h.html#a538d3d34d69e3564538ef26dbdb0d6b3" title="Get I/Q Phase Accuracy." alt="" coords="244,56,428,83"/>
+<area shape="rect" id="node4" href="$admv1013_8h.html#a0466df867756a21adaa080f89fb248c4" title="Initializes the admv1013." alt="" coords="37,107,156,133"/>
+<area shape="rect" id="node5" href="$admv1013_8h.html#aa729c77027ff7919370b8844856edb7c" title="Update ADMV1013 register." alt="" coords="236,157,436,184"/>
+<area shape="rect" id="node6" href="$admv1013_8h.html#a5255aa2e282f8b3dedccdf7909b5600c" title="Set I/Q Offset Accuracy." alt="" coords="6,157,187,184"/>
+<area shape="rect" id="node7" href="$admv1013_8h.html#ae0b41f6016b7d7cbbc26f39a2e729f4d" title="Set I/Q Phase Accuracy." alt="" coords="5,208,188,235"/>
+</map>

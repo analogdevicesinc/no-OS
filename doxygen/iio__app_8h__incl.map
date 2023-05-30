@@ -1,0 +1,15 @@
+<map id="iio/iio_app/iio_app.h" name="iio/iio_app/iio_app.h">
+<area shape="rect" id="node1" title="Header file of iio_app." alt="" coords="343,5,495,32"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="393,80,444,107"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="425,155,530,181"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,229,101,256"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="521,80,631,107"/>
+<area shape="rect" id="node13" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="255,80,369,107"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="253,155,347,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="601,304,684,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="323,304,394,331"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="125,229,296,256"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="472,229,605,256"/>
+<area shape="rect" id="node9" title=" " alt="" coords="503,304,574,331"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="554,155,622,181"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="projects/eval&#45;adxl367z/src/examples/dummy/dummy_example.c" name="projects/eval&#45;adxl367z/src/examples/dummy/dummy_example.c">
+<area shape="rect" id="node1" title="DUMMY example for eval&#45;adxl367z project." alt="" coords="399,5,621,61"/>
+<area shape="rect" id="node2" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html" title="DUMMY example header for eval&#45;adxl367z project." alt="" coords="5,109,153,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="177,109,304,136"/>
+<area shape="rect" id="node4" href="$adxl367_8h.html" title="Header file of ADXL367 Driver." alt="" coords="328,109,415,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="275,259,345,285"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="495,109,631,136"/>
+<area shape="rect" id="node10" title=" " alt="" coords="583,184,650,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="707,109,793,136"/>
+<area shape="rect" id="node12" title=" " alt="" coords="817,109,888,136"/>
+<area shape="rect" id="node6" title=" " alt="" coords="93,184,175,211"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="199,184,298,211"/>
+<area shape="rect" id="node8" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="322,184,421,211"/>
+</map>

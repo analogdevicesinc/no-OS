@@ -1,0 +1,4 @@
+<map id="ad74416h_get_diag" name="ad74416h_get_diag">
+<area shape="rect" id="node1" title="Get the diagnostic value for a specific channel." alt="" coords="208,5,357,32"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#ada267d6352cfe89288b9be230f7ad357" title="Read the die&#39;s temperature from the diagnostic register." alt="" coords="5,5,160,32"/>
+</map>

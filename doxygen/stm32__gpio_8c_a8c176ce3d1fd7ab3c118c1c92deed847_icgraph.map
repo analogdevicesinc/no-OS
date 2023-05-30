@@ -1,0 +1,4 @@
+<map id="stm32_gpio_get" name="stm32_gpio_get">
+<area shape="rect" id="node1" title="Obtain the GPIO decriptor." alt="" coords="240,5,367,32"/>
+<area shape="rect" id="node2" href="$stm32__gpio_8c.html#a07a87cae00c5e2f0fe624e1d6b9e259c" title="Get the value of an optional GPIO." alt="" coords="5,5,192,32"/>
+</map>

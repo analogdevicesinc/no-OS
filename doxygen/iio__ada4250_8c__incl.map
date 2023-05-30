@@ -1,0 +1,14 @@
+<map id="drivers/amplifiers/ada4250/iio_ada4250.c" name="drivers/amplifiers/ada4250/iio_ada4250.c">
+<area shape="rect" id="node1" title="Implementation of ada4250 IIO Driver." alt="" coords="259,5,435,47"/>
+<area shape="rect" id="node2" href="$iio__ada4250_8h.html" title="Header file of ada4250 iio." alt="" coords="243,95,357,121"/>
+<area shape="rect" id="node7" href="$ada4250_8h.html" title="Header file for ada4250 Driver." alt="" coords="436,169,527,196"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="243,169,336,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="659,319,741,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="314,319,385,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="5,244,176,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="731,244,799,271"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="432,244,531,271"/>
+<area shape="rect" id="node10" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="251,244,357,271"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="555,244,655,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="563,319,634,345"/>
+</map>

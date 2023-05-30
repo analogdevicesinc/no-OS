@@ -1,0 +1,13 @@
+<map id="drivers/platform/altera/altera_gpio.c" name="drivers/platform/altera/altera_gpio.c">
+<area shape="rect" id="node1" title="Implementation of Altera GPIO Generic Driver." alt="" coords="337,5,506,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="55,169,126,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="24,95,208,121"/>
+<area shape="rect" id="node4" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="403,169,509,196"/>
+<area shape="rect" id="node6" href="$altera__gpio_8h.html" title=" " alt="" coords="368,95,475,121"/>
+<area shape="rect" id="node7" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="549,95,659,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="233,95,343,121"/>
+<area shape="rect" id="node11" title=" " alt="" coords="683,95,792,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="421,244,491,271"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="570,169,638,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="255,169,321,196"/>
+</map>

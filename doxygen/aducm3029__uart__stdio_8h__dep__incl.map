@@ -1,0 +1,8 @@
+<map id="drivers/platform/aducm3029/aducm3029_uart_stdio.h" name="drivers/platform/aducm3029/aducm3029_uart_stdio.h">
+<area shape="rect" id="node1" title="Header file for UART driver stdout/stdin redirection." alt="" coords="281,5,487,47"/>
+<area shape="rect" id="node2" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="5,102,160,143"/>
+<area shape="rect" id="node3" href="$aducm3029__flash__demo_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="185,102,359,143"/>
+<area shape="rect" id="node4" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="384,95,611,151"/>
+<area shape="rect" id="node6" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="635,95,821,151"/>
+<area shape="rect" id="node5" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="384,199,611,255"/>
+</map>

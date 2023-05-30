@@ -1,0 +1,8 @@
+<map id="ad9739a_read" name="ad9739a_read">
+<area shape="rect" id="node1" title="Reads the value of the selected register." alt="" coords="505,81,620,108"/>
+<area shape="rect" id="node2" href="$ad9739a_8h.html#a2d27717f6ba2bafffa904e1c0d072c61" title="Sets the full&#45;scale output current for the DAC." alt="" coords="277,5,457,32"/>
+<area shape="rect" id="node3" href="$ad9739a_8h.html#a5790358339c8085a397128ede20af842" title="Initializes the AD9739A." alt="" coords="108,31,229,57"/>
+<area shape="rect" id="node5" href="$ad9739a_8h.html#a5881590c76e5a81e42ae475d9fc37d18" title="Powers down LVDS interface and TxDAC." alt="" coords="284,107,451,133"/>
+<area shape="rect" id="node6" href="$ad9739a_8c.html#a0a6d7d62043ea573681ec972ab483243" title="Sets the normal baseband mode or mix&#45;mode." alt="" coords="310,157,425,184"/>
+<area shape="rect" id="node4" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,31,60,57"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ad9625_init_param" name="ad9625_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="13,363,160,389"/>
+<area shape="rect" id="node2" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="5,273,168,300"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="115,184,237,211"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="87,5,265,32"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="291,95,437,121"/>
+</map>

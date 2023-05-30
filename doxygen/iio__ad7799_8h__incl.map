@@ -1,0 +1,7 @@
+<map id="drivers/adc/ad7799/iio_ad7799.h" name="drivers/adc/ad7799/iio_ad7799.h">
+<area shape="rect" id="node1" title="Header file of AD7799 iio." alt="" coords="52,5,199,47"/>
+<area shape="rect" id="node2" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="79,95,172,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,88,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="151,244,222,271"/>
+<area shape="rect" id="node5" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="163,169,333,196"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="ad9152_spi_read" name="ad9152_spi_read">
+<area shape="rect" id="node1" title="ad9152_spi_read" alt="" coords="359,81,491,108"/>
+<area shape="rect" id="node2" href="$ad9152_8h.html#a705143476843ff958370208e4c003726" title="ad9152_setup" alt="" coords="108,5,311,32"/>
+<area shape="rect" id="node4" href="$ad9152_8h.html#ad5ea3eadd4d829092d271a52c939bca5" title="ad9152_setup" alt="" coords="153,56,266,83"/>
+<area shape="rect" id="node5" href="$ad9152_8h.html#a0ed7e5e95a06425ebe0e06423e41e441" title="ad9152_setup" alt="" coords="111,107,307,133"/>
+<area shape="rect" id="node6" href="$ad9152_8h.html#ab1b891f60c3a39809d7b93695299ac6e" title="ad9152_setup" alt="" coords="151,157,268,184"/>
+<area shape="rect" id="node3" href="$fmcdaq3_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,81,60,108"/>
+</map>

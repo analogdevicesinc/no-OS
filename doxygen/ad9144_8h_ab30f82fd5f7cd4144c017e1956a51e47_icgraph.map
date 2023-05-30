@@ -1,0 +1,10 @@
+<map id="ad9144_spi_write" name="ad9144_spi_write">
+<area shape="rect" id="node1" title="ad9144_spi_write" alt="" coords="467,157,603,184"/>
+<area shape="rect" id="node2" href="$ad9144_8h.html#a08ce45c8bcf99c7da3787d620cf2e55d" title=" " alt="" coords="235,5,399,32"/>
+<area shape="rect" id="node3" href="$ad9144_8h.html#aaf06c22427ee662beb6ac3e5e502c636" title="ad9144_datapath_prbs_test" alt="" coords="216,56,419,83"/>
+<area shape="rect" id="node4" href="$ad9144_8h.html#a37f9b383ea7e7bf5a39f3f9ba6ec260b" title=" " alt="" coords="254,107,381,133"/>
+<area shape="rect" id="node5" href="$ad9144_8h.html#a9cf8f8625202c1d8328936053a415603" title=" " alt="" coords="228,157,407,184"/>
+<area shape="rect" id="node6" href="$ad9144_8h.html#a3c61a56cfb38577042c6af45aa84ac89" title=" " alt="" coords="5,259,168,285"/>
+<area shape="rect" id="node7" href="$ad9144_8h.html#a5c6deb37b6af03fcaef768811b00237e" title="ad9144_short_pattern_test" alt="" coords="219,259,415,285"/>
+<area shape="rect" id="node8" href="$ad9144_8c.html#a1aa061ffd6111ad64ee00dd031753c69" title=" " alt="" coords="234,309,401,336"/>
+</map>

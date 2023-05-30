@@ -1,0 +1,14 @@
+<map id="drivers/frequency/adf4371/adf4371.c" name="drivers/frequency/adf4371/adf4371.c">
+<area shape="rect" id="node1" title="Implementation of ADF4371 Driver." alt="" coords="239,5,433,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="254,169,325,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,88,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="165,95,251,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="357,169,424,196"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="625,95,735,121"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="41,95,141,121"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="327,95,438,121"/>
+<area shape="rect" id="node11" href="$adf4371_8h.html" title="Header file of ADF4371 Driver." alt="" coords="514,95,601,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="646,169,714,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="435,244,506,271"/>
+<area shape="rect" id="node12" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="508,169,607,196"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="MYKONOS_resetRxAgc" name="MYKONOS_resetRxAgc">
+<area shape="rect" id="node1" title="This function resets the AGC state machine." alt="" coords="449,31,619,57"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#ad89fbd9107db3085e1b1a086f9b42fe5" title="Sets up the device ObsRx Automatic Gain Control (AGC) registers." alt="" coords="204,5,401,32"/>
+<area shape="rect" id="node4" href="$mykonos_8h.html#a459c151c61d9d97d0c55704157a82ff7" title="Sets up the device Rx Automatic Gain Control (AGC) registers." alt="" coords="217,56,389,83"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a26b695db592df334a9ef189d9d66125f" title="Initializes the Mykonos device based on the desired device settings." alt="" coords="5,31,156,57"/>
+</map>

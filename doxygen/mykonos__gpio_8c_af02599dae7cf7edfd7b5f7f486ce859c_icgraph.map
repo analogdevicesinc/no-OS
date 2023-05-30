@@ -1,0 +1,4 @@
+<map id="MYKONOS_setGpioSourceCtrl" name="MYKONOS_setGpioSourceCtrl">
+<area shape="rect" id="node1" title="Sets the Mykonos GPIO source control for different GPIO functionality." alt="" coords="215,5,427,32"/>
+<area shape="rect" id="node2" href="$mykonos__gpio_8h.html#a76219786e624e59fecdf6afc7892a98a" title="Sets the Mykonos low voltage GPIO configuration registers." alt="" coords="5,5,167,32"/>
+</map>

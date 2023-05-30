@@ -1,0 +1,9 @@
+<map id="adrf6780_spi_write" name="adrf6780_spi_write">
+<area shape="rect" id="node1" title="Writes data to ADRF6780 over SPI." alt="" coords="640,37,787,64"/>
+<area shape="rect" id="node2" href="$adrf6780_8h.html#afd950db8108c0044e380afb7c4a78ec6" title="Set IMD Performance Improvement." alt="" coords="387,12,592,38"/>
+<area shape="rect" id="node3" href="$adrf6780_8h.html#a31a576564c7a540cb8dae46008f09562" title="Update ADRF6780 register." alt="" coords="395,62,584,89"/>
+<area shape="rect" id="node4" href="$adrf6780_8h.html#ad0ffbdbf399514f68df82b7a317b8fc4" title="Initializes the adrf6780." alt="" coords="5,66,113,93"/>
+<area shape="rect" id="node5" href="$adrf6780_8h.html#ad0fb53d470a2936c3ea0a787dea3a6f3" title="Read ADC raw data." alt="" coords="161,33,339,60"/>
+<area shape="rect" id="node6" href="$adrf6780_8h.html#a2ea47047b2fdcb16ccaba81b32d2e45e" title="Set I/Q Phase Accuracy." alt="" coords="169,84,331,126"/>
+<area shape="rect" id="node7" href="$adrf6780_8h.html#a422abf76a99cc5bdf475cee06588d923" title="Software Reset." alt="" coords="175,150,325,177"/>
+</map>

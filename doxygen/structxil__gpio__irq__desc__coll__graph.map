@@ -1,0 +1,6 @@
+<map id="xil_gpio_irq_desc" name="xil_gpio_irq_desc">
+<area shape="rect" id="node1" title="Xilinx platform specific GPIO IRQ descriptor." alt="" coords="120,231,255,257"/>
+<area shape="rect" id="node2" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="5,118,129,145"/>
+<area shape="rect" id="node3" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="235,118,385,145"/>
+<area shape="rect" id="node4" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="221,5,399,32"/>
+</map>

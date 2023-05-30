@@ -1,0 +1,10 @@
+<map id="ssd_1306_extra" name="ssd_1306_extra">
+<area shape="rect" id="node1" title="Extra parameters needed for ssd_1306 usage." alt="" coords="279,377,403,404"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="5,273,177,300"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="67,184,255,211"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="201,273,333,300"/>
+<area shape="rect" id="node4" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="321,184,443,211"/>
+<area shape="rect" id="node7" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="467,273,630,300"/>
+<area shape="rect" id="node5" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="351,5,530,32"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="367,95,514,121"/>
+</map>

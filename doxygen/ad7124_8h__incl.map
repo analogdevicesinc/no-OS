@@ -1,0 +1,9 @@
+<map id="drivers/adc/ad7124/ad7124.h" name="drivers/adc/ad7124/ad7124.h">
+<area shape="rect" id="node1" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="170,5,317,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="165,169,236,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="414,169,497,196"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,95,293,121"/>
+<area shape="rect" id="node5" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,95,119,121"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,95,417,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="319,169,389,196"/>
+</map>

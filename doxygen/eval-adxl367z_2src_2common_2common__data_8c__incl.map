@@ -1,0 +1,10 @@
+<map id="projects/eval&#45;adxl367z/src/common/common_data.c" name="projects/eval&#45;adxl367z/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="44,5,259,47"/>
+<area shape="rect" id="node2" href="$eval-adxl367z_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="88,95,215,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,156,196"/>
+<area shape="rect" id="node4" href="$adxl367_8h.html" title="Header file of ADXL367 Driver." alt="" coords="180,169,267,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="245,319,316,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="125,244,207,271"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="231,244,330,271"/>
+<area shape="rect" id="node8" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="354,244,453,271"/>
+</map>

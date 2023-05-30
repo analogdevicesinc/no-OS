@@ -1,0 +1,4 @@
+<map id="ad74416h_nb_active_channels" name="ad74416h_nb_active_channels">
+<area shape="rect" id="node1" title="Get the number of active channels." alt="" coords="244,5,400,47"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="5,13,196,39"/>
+</map>

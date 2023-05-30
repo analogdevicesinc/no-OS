@@ -1,0 +1,11 @@
+<map id="ad9172_dev" name="ad9172_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="909,101,1011,128"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="661,48,783,75"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node4" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,48,490,75"/>
+<area shape="rect" id="node5" href="$structad9172__state.html" title=" " alt="" coords="667,101,777,128"/>
+<area shape="rect" id="node6" href="$structad917x__handle__t.html" title=" " alt="" coords="350,99,483,125"/>
+<area shape="rect" id="node7" href="$structjesd__param__t.html" title=" " alt="" coords="361,149,472,176"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="656,196,788,223"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,200,511,227"/>
+</map>

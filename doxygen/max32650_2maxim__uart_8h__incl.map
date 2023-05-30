@@ -1,0 +1,12 @@
+<map id="drivers/platform/maxim/max32650/maxim_uart.h" name="drivers/platform/maxim/max32650/maxim_uart.h">
+<area shape="rect" id="node1" title="Header file of UART driver." alt="" coords="175,5,365,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,65,121"/>
+<area shape="rect" id="node3" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="394,169,490,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="219,95,321,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="346,95,442,121"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="89,95,195,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="248,244,319,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="35,244,118,271"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="113,169,246,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="144,244,215,271"/>
+</map>

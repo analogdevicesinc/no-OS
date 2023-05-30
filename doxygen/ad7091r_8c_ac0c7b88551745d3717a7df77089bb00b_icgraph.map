@@ -1,0 +1,4 @@
+<map id="ad7091r_software_reset" name="ad7091r_software_reset">
+<area shape="rect" id="node1" title="Initiate a software reset of the device. The AD7091R requires the user to initiate a software reset w..." alt="" coords="156,5,335,32"/>
+<area shape="rect" id="node2" href="$ad7091r_8h.html#a07c6213d4422a95bc3c4ef1f461733e3" title="Initializes the communication peripheral and the initial Values for AD7092R Board." alt="" coords="5,5,108,32"/>
+</map>

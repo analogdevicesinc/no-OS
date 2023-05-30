@@ -1,0 +1,4 @@
+<map id="max31875_reg_write" name="max31875_reg_write">
+<area shape="rect" id="node1" title="Write a device register through the I2C interface." alt="" coords="256,5,415,32"/>
+<area shape="rect" id="node2" href="$max31875_8h.html#a9da6db9199dca47473b618012bf214ad" title="Read&#45;modify&#45;write operation on a field of a register." alt="" coords="5,5,208,32"/>
+</map>

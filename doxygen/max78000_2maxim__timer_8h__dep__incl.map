@@ -1,0 +1,11 @@
+<map id="drivers/platform/maxim/max78000/maxim_timer.h" name="drivers/platform/maxim/max78000/maxim_timer.h">
+<area shape="rect" id="node1" title="Header file for Maxim timer platform driver." alt="" coords="458,5,657,47"/>
+<area shape="rect" id="node2" href="$max78000_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="5,95,203,136"/>
+<area shape="rect" id="node3" href="$demo__esp_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to maxim platform used by demo_esp project." alt="" coords="227,95,450,136"/>
+<area shape="rect" id="node5" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="474,95,641,136"/>
+<area shape="rect" id="node6" href="$iio__demo_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="665,95,887,136"/>
+<area shape="rect" id="node8" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="911,95,1158,136"/>
+<area shape="rect" id="node4" href="$demo__esp_2src_2platform_2maxim_2parameters_8c.html" title="Definition of maxim platform data used by demo_esp." alt="" coords="227,184,450,225"/>
+<area shape="rect" id="node7" href="$iio__demo_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo project." alt="" coords="665,184,887,225"/>
+<area shape="rect" id="node9" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo_freeRTOS project." alt="" coords="912,184,1157,225"/>
+</map>

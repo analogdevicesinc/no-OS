@@ -1,0 +1,7 @@
+<map id="ltc6953_dev" name="ltc6953_dev">
+<area shape="rect" id="node1" title="LTC6953 Device Descriptor." alt="" coords="223,273,324,300"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="33,184,156,211"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node4" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="188,95,335,121"/>
+<area shape="rect" id="node5" href="$structltc6953__channel__spec.html" title="Output channel configuration." alt="" coords="251,184,416,211"/>
+</map>

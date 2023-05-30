@@ -1,0 +1,4 @@
+<map id="chibios_gpio_get" name="chibios_gpio_get">
+<area shape="rect" id="node1" title="Obtain the GPIO descriptor." alt="" coords="244,5,375,32"/>
+<area shape="rect" id="node2" href="$chibios__gpio_8c.html#a1f221955a82150b9a40bf4ae504407f8" title="Get the value of an optional GPIO." alt="" coords="5,5,196,32"/>
+</map>

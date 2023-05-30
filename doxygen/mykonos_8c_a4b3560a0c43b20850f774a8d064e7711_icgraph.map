@@ -1,0 +1,35 @@
+<map id="MYKONOS_readArmMem" name="MYKONOS_readArmMem">
+<area shape="rect" id="node1" title="Read from the Mykonos ARM program or data memory." alt="" coords="855,512,1039,539"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#afffc680c61b58cea30b473cfe3dfb935" title="Aborts from an on going ARM init calibration operation." alt="" coords="602,5,781,32"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a55197f5ddf2a415cd790f032c717dd24" title="Get the Suspended or Resumed state for tracking calibrations." alt="" coords="580,56,803,83"/>
+<area shape="rect" id="node4" href="$mykonos_8h.html#a5737227ffb4dc244387b5daed42cff7d" title="Reads back the version of the ARM binary loaded into the Mykonos ARM memory." alt="" coords="596,107,787,133"/>
+<area shape="rect" id="node5" href="$mykonos_8h.html#a28f4d05559a096dd207c98fcb6c42e11" title="This function reads the CLGC calibration status from the Mykonos ARM processor." alt="" coords="599,157,784,184"/>
+<area shape="rect" id="node6" href="$mykonos_8h.html#a1949b1602f06e1acd1d229be5e43fdbc" title="This function reads the current error counters for all the DPD error codes from mykonosDpdErrors_t." alt="" coords="576,208,807,235"/>
+<area shape="rect" id="node7" href="$mykonos_8h.html#a3e1602a28ebc2d52ffe0f65fe21aebbf" title="This function reads the DPD calibration status from the Mykonos ARM processor." alt="" coords="600,259,783,285"/>
+<area shape="rect" id="node8" href="$mykonos_8h.html#a74d01791d37c66e69aaa80bcdd9e6120" title="Gets the device initialization calibration status." alt="" coords="592,309,791,336"/>
+<area shape="rect" id="node10" href="$mykonos_8h.html#aabbaeaa1805920d18d0fd2eeab50ccb9" title="Reads back the currently enabled Observation Rx channel in the radioOn state." alt="" coords="576,360,807,387"/>
+<area shape="rect" id="node11" href="$mykonos_8h.html#a63633dd49c522d2bbba8541f44b9553a" title="Returns the status of the ORxQEC tracking calibration." alt="" coords="589,411,794,437"/>
+<area shape="rect" id="node12" href="$mykonos_8h.html#a1b58e3b590e3b97704cb1185279bdd73" title="This function will read the current path delay settings for the selected calibration." alt="" coords="600,461,783,488"/>
+<area shape="rect" id="node13" href="$mykonos_8h.html#aab5d1b83d40ee33518afd5f96e2c7855" title="Gets the RF PLL local oscillator frequency (RF carrier frequency)." alt="" coords="585,512,798,539"/>
+<area shape="rect" id="node14" href="$mykonos_8h.html#a9e5988b7e1412cc99086aa3a7a6920e9" title="Gets the RF PLL loop filter bandwidth and stability." alt="" coords="586,563,797,589"/>
+<area shape="rect" id="node15" href="$mykonos_8h.html#a6fc181c74969b9044a2b00c637f22a80" title="Returns the status of the RxQEC tracking calibration." alt="" coords="592,613,791,640"/>
+<area shape="rect" id="node16" href="$mykonos_8h.html#a766a557775138a0d67c5a7aecf4532eb" title="Get the Suspended or Resumed state for individual tracking calibration." alt="" coords="579,664,804,691"/>
+<area shape="rect" id="node17" href="$mykonos_8h.html#a6368877b1d30bf37cd5f9ec11ef25aa5" title="Returns the status of the TxLOL external tracking calibration." alt="" coords="595,715,787,741"/>
+<area shape="rect" id="node18" href="$mykonos_8h.html#a5af827cff44f637f2055bb9f87d0fd8e" title="Returns the status of the TxQEC tracking calibration." alt="" coords="592,765,791,792"/>
+<area shape="rect" id="node19" href="$mykonos_8h.html#a5a2956cea73829d4d357dbf74773c249" title="This function reads the VSWR calibration status from the Mykonos ARM processor." alt="" coords="597,816,786,843"/>
+<area shape="rect" id="node20" href="$mykonos_8h.html#af1f706ec4634e43391b1ef7c24fb3f3b" title="Low level helper function used by Mykonos API to read the ARM memory config structures." alt="" coords="595,867,787,893"/>
+<area shape="rect" id="node30" href="$mykonos_8h.html#a111d88c14bfc69497f06e50c1cd6fd81" title="This function will allow loading of the DPD model file." alt="" coords="588,917,795,944"/>
+<area shape="rect" id="node31" href="$mykonos_8h.html#a7cbadbcfdc64e4b09d05b9fdc279df74" title="This function called during RadioOff, will allow retrieval of the DPD model file." alt="" coords="595,968,787,995"/>
+<area shape="rect" id="node32" href="$mykonos_8h.html#a487a6a3703711a6a4bd1900b0ff1920c" title="Verifies the ARM checksum value." alt="" coords="578,1019,805,1045"/>
+<area shape="rect" id="node9" href="$mykonos_8h.html#a2e91d2b8e26d53381928a63ae3bf62e8" title="Blocking waits for the Mykonos initialization calibrations to complete." alt="" coords="317,309,489,336"/>
+<area shape="rect" id="node21" href="$mykonos_8h.html#a0d0bab75bcba76495c4774b2d13773fe" title="Get configuration for CLGC Tx attenuation tuning range." alt="" coords="292,674,513,715"/>
+<area shape="rect" id="node22" href="$mykonos_8h.html#a3032e6143e5a20db8d799601416686b3" title=" " alt="" coords="310,740,495,767"/>
+<area shape="rect" id="node23" href="$mykonos_8h.html#a12e2744cbdf0fc0cf5f39d2e420dbac2" title="Get configuration for DPD actuator check." alt="" coords="284,791,521,817"/>
+<area shape="rect" id="node24" href="$mykonos_8h.html#a09af6d0909a6485db03fdf0c28fe5d80" title="Get configuration for bypassing DPD actuator." alt="" coords="287,841,518,868"/>
+<area shape="rect" id="node25" href="$mykonos_8h.html#af5b1d7b5af3d269ef37c0eb68f59ff74" title=" " alt="" coords="311,892,494,919"/>
+<area shape="rect" id="node26" href="$mykonos_8h.html#ab18eda84d5bba4b6a784a23c39e4bd21" title="Reads back which ARM tracking cals are enabled." alt="" coords="277,943,528,969"/>
+<area shape="rect" id="node29" href="$mykonos_8h.html#a2e643b611e680a22090f097baeb40041" title=" " alt="" coords="308,993,497,1020"/>
+<area shape="rect" id="node27" href="$mykonos_8h.html#a1fa7fc3db564c9c22db23af155cfd645" title="Suspend or resume tracking calibrations in RADIO_ON." alt="" coords="7,917,228,944"/>
+<area shape="rect" id="node28" href="$mykonos_8h.html#acc5a05a9ab38cfe8bbdb737139a1d6df" title="Suspend or resume individual tracking calibration." alt="" coords="5,968,229,995"/>
+<area shape="rect" id="node33" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="290,1044,515,1071"/>
+</map>

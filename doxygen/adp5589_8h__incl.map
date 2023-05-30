@@ -1,0 +1,5 @@
+<map id="drivers/io&#45;expander/adp5589/adp5589.h" name="drivers/io&#45;expander/adp5589/adp5589.h">
+<area shape="rect" id="node1" title="Header file of ADP5589 Driver." alt="" coords="5,5,160,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="47,169,118,196"/>
+<area shape="rect" id="node3" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="77,95,176,121"/>
+</map>

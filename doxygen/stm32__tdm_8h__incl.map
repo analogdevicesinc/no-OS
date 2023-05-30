@@ -1,0 +1,9 @@
+<map id="drivers/platform/stm32/stm32_tdm.h" name="drivers/platform/stm32/stm32_tdm.h">
+<area shape="rect" id="node1" title="Header file for the stm32 tdm driver." alt="" coords="47,5,219,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="35,169,105,196"/>
+<area shape="rect" id="node3" href="$no__os__tdm_8h.html" title="Header file of TDM Interface." alt="" coords="143,95,248,121"/>
+<area shape="rect" id="node5" href="$stm32__hal_8h.html" title=" " alt="" coords="272,95,375,121"/>
+<area shape="rect" id="node7" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="22,95,118,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="154,169,237,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="290,169,357,196"/>
+</map>

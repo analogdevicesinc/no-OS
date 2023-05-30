@@ -1,0 +1,6 @@
+<map id="drivers/platform/stm32/stm32_timer.h" name="drivers/platform/stm32/stm32_timer.h">
+<area shape="rect" id="node1" title="Header file for the stm32 timer driver." alt="" coords="115,5,287,47"/>
+<area shape="rect" id="node2" href="$stm32__timer_8c.html" title="Implementation of stm32 timer driver." alt="" coords="5,95,177,136"/>
+<area shape="rect" id="node3" href="$iio__demo_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to stm32 platform used by iio_demo project." alt="" coords="202,95,421,136"/>
+<area shape="rect" id="node4" href="$iio__demo_2src_2platform_2stm32_2parameters_8c.html" title="Definition of stm32 platform data used by iio_demo project." alt="" coords="203,184,420,225"/>
+</map>

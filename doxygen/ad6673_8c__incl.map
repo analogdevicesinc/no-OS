@@ -1,0 +1,12 @@
+<map id="drivers/adc/ad6673/ad6673.c" name="drivers/adc/ad6673/ad6673.c">
+<area shape="rect" id="node1" title="Implementation of AD6673 Driver." alt="" coords="106,5,253,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="191,169,261,196"/>
+<area shape="rect" id="node3" href="$ad6673_8h.html" title="Header file of AD6673 Driver." alt="" coords="42,169,125,196"/>
+<area shape="rect" id="node8" href="$ad6673__cfg_8h.html" title="Header file of AD6673 Driver Configuration." alt="" coords="79,95,189,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="264,95,375,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,319,76,345"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="34,244,133,271"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="157,244,266,271"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="177,319,245,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="286,169,353,196"/>
+</map>

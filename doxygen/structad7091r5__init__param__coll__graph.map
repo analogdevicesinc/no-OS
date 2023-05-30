@@ -1,0 +1,7 @@
+<map id="ad7091r5_init_param" name="ad7091r5_init_param">
+<area shape="rect" id="node1" title="Structure containing the init parameters needed by the ad7091r5 device." alt="" coords="115,184,275,211"/>
+<area shape="rect" id="node2" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="17,95,180,121"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="213,95,385,121"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="209,5,397,32"/>
+</map>

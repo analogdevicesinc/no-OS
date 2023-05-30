@@ -1,0 +1,5 @@
+<map id="ad4858_convst" name="ad4858_convst">
+<area shape="rect" id="node1" title="Toggle the CNV pin to start a conversion." alt="" coords="411,5,531,32"/>
+<area shape="rect" id="node2" href="$ad4858_8h.html#a895b2bfb2c292e9a33a7baf5e2f5b7c9" title="Perform ADC conversion." alt="" coords="196,5,363,32"/>
+<area shape="rect" id="node3" href="$ad4858_8h.html#a543e38084df829f2e85a9908265bcc36" title="Read ADC data (for all channels)." alt="" coords="5,5,148,32"/>
+</map>

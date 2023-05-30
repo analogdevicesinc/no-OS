@@ -1,0 +1,5 @@
+<map id="drivers/accel/adxl313/iio_adxl313.h" name="drivers/accel/adxl313/iio_adxl313.h">
+<area shape="rect" id="node1" title="Header file of IIO ADXL355 Driver." alt="" coords="107,5,268,47"/>
+<area shape="rect" id="node2" href="$iio__adxl313_8c.html" title=" " alt="" coords="5,102,167,143"/>
+<area shape="rect" id="node3" href="$eval-adxl313z_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxl313z project." alt="" coords="191,95,389,151"/>
+</map>

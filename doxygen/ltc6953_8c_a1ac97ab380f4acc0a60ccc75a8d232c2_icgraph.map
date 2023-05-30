@@ -1,0 +1,4 @@
+<map id="ltc6953_reset" name="ltc6953_reset">
+<area shape="rect" id="node1" title="Software reset of the device." alt="" coords="152,5,263,32"/>
+<area shape="rect" id="node2" href="$ltc6953_8h.html#af5625c1ca9661596d8f88c1d461e7016" title="Initializes the SPI communication with LTC6953." alt="" coords="5,5,104,32"/>
+</map>

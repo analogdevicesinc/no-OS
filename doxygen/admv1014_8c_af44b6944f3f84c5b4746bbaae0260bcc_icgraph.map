@@ -1,0 +1,13 @@
+<map id="admv1014_spi_read" name="admv1014_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADMV1014 over SPI." alt="" coords="527,132,680,159"/>
+<area shape="rect" id="node2" href="$admv1014_8h.html#a87e396e130b262c99fba91526e116d16" title="Get Baseband Amp Gain." alt="" coords="265,5,479,32"/>
+<area shape="rect" id="node3" href="$admv1014_8h.html#a75070edf9a36848a9fa9d0586680a15d" title="Get Digital Rx Detector." alt="" coords="281,56,463,83"/>
+<area shape="rect" id="node4" href="$admv1014_8h.html#af7b9270faed9c5ad6c22b6054fe5349e" title="Get IF Amp Gain." alt="" coords="269,107,475,133"/>
+<area shape="rect" id="node5" href="$admv1014_8h.html#a6fecd9df68fa0f420cbe71667a1d6e1f" title="Get LO Amp Phase." alt="" coords="289,157,455,184"/>
+<area shape="rect" id="node6" href="$admv1014_8h.html#af54aeecd75abebc7ad4b44d2eb947844" title="Initializes the admv1014." alt="" coords="52,195,171,221"/>
+<area shape="rect" id="node7" href="$admv1014_8h.html#a898a127684be3100b115b70bd66ef9b0" title="Update ADMV1014 register." alt="" coords="272,271,472,297"/>
+<area shape="rect" id="node8" href="$admv1014_8h.html#a2f848f997531fdcabe617ff5f3c522b4" title="Set Baseband Amp Gain." alt="" coords="5,245,217,272"/>
+<area shape="rect" id="node9" href="$admv1014_8h.html#a5f4cbdd053844a1893904b5a23cfdb44" title="Set Digital Rx Detector." alt="" coords="20,296,203,323"/>
+<area shape="rect" id="node10" href="$admv1014_8h.html#a2a23fff172e8a95840dc3cffb903cbb9" title="Set IF Amp Gain." alt="" coords="9,347,214,373"/>
+<area shape="rect" id="node11" href="$admv1014_8h.html#a3595daf13e57a2467b3fb87cc2763707" title="Set LO Amp Phase." alt="" coords="29,397,193,424"/>
+</map>

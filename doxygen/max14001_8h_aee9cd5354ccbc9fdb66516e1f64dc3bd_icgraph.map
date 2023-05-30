@@ -1,0 +1,23 @@
+<map id="max14001_write_config_verify" name="max14001_write_config_verify">
+<area shape="rect" id="node1" title="Write to config registers then to corresponding verification register." alt="" coords="447,454,624,495"/>
+<area shape="rect" id="node2" href="$max14001_8h.html#a0b2f4d8ad26efe3ac037a9064c6c78a7" title="Set maximum duty cycle for inrush current over the last 10 seconds." alt="" coords="229,5,389,32"/>
+<area shape="rect" id="node3" href="$max14001_8h.html#ae36880ade2d30a024621b266b5b9771f" title="Enable dynamic FAULT signal." alt="" coords="221,56,397,83"/>
+<area shape="rect" id="node4" href="$max14001_8h.html#a94ffb87e3d95b570027818f91aae6f17" title="Enable ADC fault." alt="" coords="221,107,396,133"/>
+<area shape="rect" id="node5" href="$max14001_8h.html#a2bf03d709bfdb701c158d5631bc75bcd" title="Enable COM fault." alt="" coords="219,157,399,184"/>
+<area shape="rect" id="node6" href="$max14001_8h.html#a4f14bbd8d3a52e7d06b75de48c0fff9f" title="Enable CRCF fault." alt="" coords="221,208,397,235"/>
+<area shape="rect" id="node7" href="$max14001_8h.html#a53cf5087f9616db42ec263c1151d34e2" title="Enable CRCL fault." alt="" coords="221,259,396,285"/>
+<area shape="rect" id="node8" href="$max14001_8h.html#a8c0d9be020758f98c85e639795439f83" title="Enable FET fault." alt="" coords="223,309,394,336"/>
+<area shape="rect" id="node9" href="$max14001_8h.html#aa5d8550f4b5091575b73610b58563c8a" title="Enable INRD fault." alt="" coords="220,360,397,387"/>
+<area shape="rect" id="node10" href="$max14001_8h.html#a61ce80a51e7b2284f8e217f7701aaae2" title="Enable MV fault." alt="" coords="222,411,395,437"/>
+<area shape="rect" id="node12" href="$max14001_8h.html#ac599de4d4c5102ceee4220caf7cbbc75" title="Enable/Disable field&#45;side current sink." alt="" coords="225,461,393,488"/>
+<area shape="rect" id="node13" href="$max14001_8h.html#aad2c248c340c80506637d1f2e24cc502" title="Enable SPI fault." alt="" coords="223,512,394,539"/>
+<area shape="rect" id="node14" href="$max14001_8h.html#a611aea7e41eb22080b84b9583a81f596" title="Selects the voltage reference source for the ADC." alt="" coords="223,563,394,589"/>
+<area shape="rect" id="node15" href="$max14001_8h.html#a0ad4afb2d5167c8774a7b8dadc721ed4" title="Current source connection." alt="" coords="224,613,393,640"/>
+<area shape="rect" id="node16" href="$max14001_8h.html#a59f898278a18ce26d75c91d046f7ccff" title="Enable/Disable fast inrush mode." alt="" coords="224,664,393,691"/>
+<area shape="rect" id="node17" href="$max14001_8h.html#ad5ab80cfb23b61a3a4691653099918eb" title="Set number of readings averaged in the ADC filter." alt="" coords="232,715,385,741"/>
+<area shape="rect" id="node18" href="$max14001_8h.html#acde5a4183e929bab1b8585850dfa40dc" title="Configure 4&#45;bit bias current." alt="" coords="221,765,396,792"/>
+<area shape="rect" id="node19" href="$max14001_8h.html#aa81e4e1dc2618341e95293ea4a9722d2" title="Configure 4&#45;bit inrush current." alt="" coords="226,816,391,843"/>
+<area shape="rect" id="node20" href="$max14001_8h.html#ab2cd98d2d0a35869c71e8fa021bb6d43" title="Selects Inrush comparator input multiplexer." alt="" coords="223,867,395,893"/>
+<area shape="rect" id="node21" href="$max14001_8h.html#ad4fe38ceb1888a46e3475cd0f8f08004" title="Configure 4&#45;bit inrush time." alt="" coords="225,917,392,944"/>
+<area shape="rect" id="node11" href="$max14001_8h.html#a6ad7e18e91c998d372f07b418d2f7bc2" title="Initialize the configurations of device." alt="" coords="5,436,171,463"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="drivers/axi_core/jesd204/altera_adxcvr.c" name="drivers/axi_core/jesd204/altera_adxcvr.c">
+<area shape="rect" id="node1" title="Driver for the Altera ADXCVR Configuration." alt="" coords="481,5,662,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="490,169,560,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="632,169,698,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="750,95,836,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="860,95,907,121"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="932,95,1041,121"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="387,95,487,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="563,95,674,121"/>
+<area shape="rect" id="node12" href="$altera__a10__atx__pll_8h.html" title=" " alt="" coords="30,95,185,121"/>
+<area shape="rect" id="node13" href="$altera__adxcvr_8h.html" title="Driver for the Altera ADXCVR Configuration." alt="" coords="225,169,348,196"/>
+<area shape="rect" id="node14" href="$altera__a10__cdr__pll_8h.html" title="Driver for the Altera CDR/CMU PLL dynamic reconfiguration." alt="" coords="210,95,363,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="952,169,1020,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="275,244,346,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="382,244,465,271"/>
+</map>

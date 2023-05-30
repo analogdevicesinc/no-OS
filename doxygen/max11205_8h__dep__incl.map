@@ -1,0 +1,8 @@
+<map id="drivers/adc/max11205/max11205.h" name="drivers/adc/max11205/max11205.h">
+<area shape="rect" id="node1" title="Implementation of max11205.h." alt="" coords="303,5,469,47"/>
+<area shape="rect" id="node2" href="$iio__max11205_8c.html" title="Implementation of iio max11205 driver." alt="" coords="5,102,172,143"/>
+<area shape="rect" id="node3" href="$max11205_8c.html" title="Implementation of max11205.c." alt="" coords="196,102,363,143"/>
+<area shape="rect" id="node4" href="$max11205pmb1_2src_2common_2common__data_8h.html" title="Defines common data to be used by max11205pmb1 examples." alt="" coords="387,102,601,143"/>
+<area shape="rect" id="node6" href="$max11205pmb1_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of basic example for max11205pmb1 project." alt="" coords="625,95,840,151"/>
+<area shape="rect" id="node5" href="$max11205pmb1_2src_2common_2common__data_8c.html" title="Defines common data to be used by max11205pmb1 examples." alt="" coords="387,199,601,240"/>
+</map>

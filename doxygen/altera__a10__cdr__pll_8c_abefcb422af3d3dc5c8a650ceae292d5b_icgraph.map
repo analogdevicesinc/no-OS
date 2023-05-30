@@ -1,0 +1,13 @@
+<map id="altera_a10_cdr_lookup_vco_speed" name="altera_a10_cdr_lookup_vco_speed">
+<area shape="rect" id="node1" title="altera_a10_cdr_lookup_vco_speed" alt="" coords="843,78,1011,119"/>
+<area shape="rect" id="node2" href="$altera__a10__cdr__pll_8h.html#acd3ba325a22ad7690f934b858087ce25" title="altera_a10_cdr_pll_set_rate" alt="" coords="653,78,795,119"/>
+<area shape="rect" id="node3" href="$altera__adxcvr_8h.html#a684db50fe066ad6dd6df4aac1cad609c" title="adxcvr_init" alt="" coords="471,56,598,83"/>
+<area shape="rect" id="node10" href="$altera__a10__cdr__pll_8h.html#ae16cfdb6dcf52acfad2cd4480144d642" title="altera_a10_cdr_pll_recalc_rate" alt="" coords="464,107,605,149"/>
+<area shape="rect" id="node4" href="$axi__adxcvr_8h.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="adxcvr_init" alt="" coords="296,56,391,83"/>
+<area shape="rect" id="node5" href="$ad9081_2src_2app__jesd_8h.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="111,5,219,32"/>
+<area shape="rect" id="node7" href="$app__transceiver_8h.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="108,56,223,83"/>
+<area shape="rect" id="node9" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="138,107,193,133"/>
+<area shape="rect" id="node6" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node8" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node11" href="$altera__adxcvr_8h.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="271,115,416,141"/>
+</map>

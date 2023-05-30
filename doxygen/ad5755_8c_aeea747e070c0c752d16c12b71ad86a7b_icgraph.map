@@ -1,0 +1,9 @@
+<map id="ad5755_get_register_value" name="ad5755_get_register_value">
+<area shape="rect" id="node1" title="Reads the value of a register." alt="" coords="244,165,399,207"/>
+<area shape="rect" id="node2" href="$ad5755_8h.html#af53d0531c0ef0e528f9ae42ee4db7223" title="Selects if the channel clears when CLEAR pin is activated." alt="" coords="17,5,184,47"/>
+<area shape="rect" id="node3" href="$ad5755_8h.html#af699c1855cce261506330a97a888b7d1" title="Allows power&#45;up/down of the dc&#45;to&#45;dc converter, DAC and internal amplifiers for the selected channel." alt="" coords="23,71,178,112"/>
+<area shape="rect" id="node4" href="$ad5755_8h.html#a99786cbdda8f693aaef761e5a2a16f1b" title="Sets the range of a channel." alt="" coords="23,136,178,177"/>
+<area shape="rect" id="node5" href="$ad5755_8h.html#ad077de9ecb99ad5c1d9aa175a5ded99e" title="Sets the output current of a channel." alt="" coords="25,202,176,229"/>
+<area shape="rect" id="node6" href="$ad5755_8h.html#adefbedceef256335f569badd878a2f24" title="Sets the output voltage of a channel." alt="" coords="24,253,177,279"/>
+<area shape="rect" id="node7" href="$ad5755_8h.html#ac9601238817e9e61090efbec05c40d56" title="Enables/Disables watchdog timer and sets the timeout period." alt="" coords="5,303,196,330"/>
+</map>

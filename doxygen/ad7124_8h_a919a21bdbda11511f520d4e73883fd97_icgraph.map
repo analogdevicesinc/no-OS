@@ -1,0 +1,5 @@
+<map id="ad7124_update_dev_spi_settings" name="ad7124_update_dev_spi_settings">
+<area shape="rect" id="node1" title="Updates the device SPI interface settings." alt="" coords="269,5,448,47"/>
+<area shape="rect" id="node2" href="$ad7124_8h.html#ab8ab34afc0cfb9795819ca9f2f886ee7" title="Initializes the AD7124." alt="" coords="108,13,221,39"/>
+<area shape="rect" id="node3" href="$ad7124-8pmdz_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,13,60,39"/>
+</map>

@@ -1,0 +1,35 @@
+<map id="ad9208_register_write" name="ad9208_register_write">
+<area shape="rect" id="node1" title="Perform SPI register write access to AD9208 Device." alt="" coords="747,881,913,907"/>
+<area shape="rect" id="node2" href="$ad9208__signal__monitor__api_8c.html#abfb558afd13f3047e260e664d12ed976" title="Get ADC Over range Status." alt="" coords="489,5,685,47"/>
+<area shape="rect" id="node3" href="$ad9208__api_8h.html#abc1b518465528c9a956a6e6bdf9c831f" title="Set ADC Channel Power Down Mode." alt="" coords="475,71,699,98"/>
+<area shape="rect" id="node4" href="$ad9208__api_8h.html#afba8a654271a4bd5bd79bbc4adc26b71" title="Set AD9208 ADC Channel Select." alt="" coords="494,123,679,164"/>
+<area shape="rect" id="node5" href="$ad9208__api_8h.html#a65a8a4f9fb08192c2e18738e4f29f7ed" title="Set AD9208 ADC Clock Phase Adjust." alt="" coords="510,188,663,229"/>
+<area shape="rect" id="node6" href="$ad9208__api_8h.html#a140b3b05e6b33f8e64c9183f7566ca6f" title="Set AD9208 ADC Data Format." alt="" coords="505,253,668,295"/>
+<area shape="rect" id="node7" href="$ad9208__api_8h.html#a88cda25c593ff4e0a0b93b0f261c34bd" title="Enable AD9208 ADC DC Offset Calibaration." alt="" coords="490,319,683,360"/>
+<area shape="rect" id="node8" href="$ad9208__api_8h.html#a6b98a3d08be662578b6a84878f78e51c" title="Set AD9208 DDC Gain Stage." alt="" coords="491,385,683,411"/>
+<area shape="rect" id="node9" href="$ad9208__api_8h.html#abe0e2f63bfc6170a30e90523d75db6f1" title="Select ADC Source for each DDC Channel." alt="" coords="508,436,665,477"/>
+<area shape="rect" id="node10" href="$ad9208__api_8h.html#ac034764ebd3abfc102b6fcc5f3130f02" title="API to directly set the NCO Parameters." alt="" coords="255,965,412,1007"/>
+<area shape="rect" id="node12" href="$ad9208__api_8h.html#a97ea423ee8d46ac19cd9560bf4e7895a" title="API to set DDC Frequency Translation Mode." alt="" coords="508,553,665,595"/>
+<area shape="rect" id="node13" href="$ad9208__api_8h.html#a01ceb200e63d1b699e677c9b29f2475f" title="Set AD9208 NCO Phase Offset." alt="" coords="508,619,665,660"/>
+<area shape="rect" id="node14" href="$ad9208__api_8h.html#a601f65ecd07726176ad47dc96bbd0ba0" title="API to trigger a DDC Soft Reset." alt="" coords="508,684,665,725"/>
+<area shape="rect" id="node15" href="$ad9208__api_8h.html#af64239e4c3c9bc10f04cf065f04ebf3c" title="Set AD9208 ADC Operational Mode&#45;Number of Channels." alt="" coords="481,750,693,777"/>
+<area shape="rect" id="node16" href="$ad9208__signal__monitor__api_8c.html#ad86394659df7a3875dab28774348fc77" title="Configure The Fast Detect Overange Signal Thresholds." alt="" coords="475,801,698,827"/>
+<area shape="rect" id="node17" href="$ad9208__api_8h.html#a6d8cf90f94067d786962df0f35cf552a" title="Set AD9208 ADC Input Configuration." alt="" coords="489,851,684,878"/>
+<area shape="rect" id="node18" href="$ad9208__api_8h.html#ac25f2ddc842ac6e42be0cf463698e7c9" title=" " alt="" coords="503,903,670,944"/>
+<area shape="rect" id="node19" href="$ad9208__api_8h.html#a99a579b018c86450ead1e1804659293f" title="Set AD9208 ADC Synchronized Update mode Mode." alt="" coords="502,968,671,1009"/>
+<area shape="rect" id="node20" href="$ad9208__jesd__api_8c.html#a6428678aa75e81f601359763f2a0368f" title="Enable the scrambler for the JESD Link." alt="" coords="509,1033,664,1075"/>
+<area shape="rect" id="node21" href="$ad9208__jesd__api_8c.html#a79ac8c8c03929acbf74e720752535cc2" title="Configure the Lane Cross Bar in the JESD datalink layer." alt="" coords="485,1099,688,1126"/>
+<area shape="rect" id="node22" href="$ad9208__jesd__api_8c.html#a278e813ae0164269af98ecea98ecadc1" title="Set JESD SYNCHRONIZATION Mode." alt="" coords="489,1150,684,1177"/>
+<area shape="rect" id="node23" href="$ad9208__jesd__api_8c.html#a62c4215e5b30e0193626c6a4a7d20b4e" title="Set SYSREF Signal Capture settings." alt="" coords="478,1201,695,1227"/>
+<area shape="rect" id="node24" href="$ad9208__jesd__api_8c.html#a30aa4054c45b3619d40fdde8bb8f4bf7" title="Set JESD LMFC Offset." alt="" coords="497,1252,677,1293"/>
+<area shape="rect" id="node25" href="$ad9208__jesd__api_8c.html#aa70d98c5a661cd0834e99a7a3f62f1f0" title="Set JESD SYNCHRONIZATION Mode." alt="" coords="479,1318,694,1345"/>
+<area shape="rect" id="node26" href="$ad9208__jesd__api_8c.html#ad24aae8e27ba8bd1de4e81413bc6e713" title="Set JESD SYNCHRONIZATION Time Stamp Mode." alt="" coords="511,1369,662,1411"/>
+<area shape="rect" id="node27" href="$ad9208__reg_8h.html#ae4ae491ae5b57edde9b7a10084bd98a3" title=" " alt="" coords="506,1435,667,1476"/>
+<area shape="rect" id="node28" href="$ad9208__reg_8h.html#a1054f70dd6150fa74814e84d66711fb8" title=" " alt="" coords="491,1501,682,1527"/>
+<area shape="rect" id="node30" href="$ad9208__api_8h.html#a4595ce92cd6b4f446be6eae99f1c75dc" title="Reset the AD9208." alt="" coords="531,1551,642,1578"/>
+<area shape="rect" id="node31" href="$ad9208__api_8h.html#ac23f4227d44375bd99a1a0561182948e" title="Set AD9208 Input Sample Clock Configuration." alt="" coords="491,1602,682,1629"/>
+<area shape="rect" id="node32" href="$ad9208__api_8h.html#a462ad62e3ffb671cd4740d30de2aa52a" title="Set AD9208 Input Sample Clock Duty Cycle Enablers." alt="" coords="503,1653,670,1695"/>
+<area shape="rect" id="node33" href="$ad9208__api_8h.html#a02aa6abf14a505250e0a961ce0019cb9" title="Sets the operation of the Power Down pin the AD9208." alt="" coords="487,1719,686,1746"/>
+<area shape="rect" id="node11" href="$ad9208__api_8h.html#a8085bba558039c73e537e3f0bd479de6" title="Set AD9208 NCO based on the Channel Carrier Frequency." alt="" coords="5,973,192,999"/>
+<area shape="rect" id="node29" href="$ad9208__jesd__api_8c.html#a501bd4a3e6af1fb5443e1c32667a9d78" title="Enable JESD Link." alt="" coords="240,1501,427,1527"/>
+</map>

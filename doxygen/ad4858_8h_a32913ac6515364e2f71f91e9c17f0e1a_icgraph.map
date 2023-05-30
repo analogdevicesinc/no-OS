@@ -1,0 +1,4 @@
+<map id="ad4858_set_spi_data_mode" name="ad4858_set_spi_data_mode">
+<area shape="rect" id="node1" title="Set the SPI data mode." alt="" coords="305,5,508,32"/>
+<area shape="rect" id="node2" href="$ad4858_8h.html#a66fa4d0c785ded69d94ef45d087233cb" title="Set device config interface mode." alt="" coords="5,5,257,32"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="drivers/frequency/adf4377/adf4377.c" name="drivers/frequency/adf4377/adf4377.c">
+<area shape="rect" id="node1" title="Implementation of adf4377 Driver." alt="" coords="192,5,385,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,84,121"/>
+<area shape="rect" id="node3" href="$adf4377_8h.html" title="Header file for adf4377 Driver." alt="" coords="245,95,332,121"/>
+<area shape="rect" id="node10" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="603,95,713,121"/>
+<area shape="rect" id="node12" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="108,95,221,121"/>
+<area shape="rect" id="node13" href="$no__os__alloc_8h.html" title=" " alt="" coords="455,95,565,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="81,244,152,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="311,244,394,271"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="67,169,166,196"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="190,169,297,196"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="372,169,472,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="456,244,527,271"/>
+<area shape="rect" id="node11" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="639,169,707,196"/>
+<area shape="rect" id="node14" title=" " alt="" coords="547,169,614,196"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="adxl355_read_device_data" name="adxl355_read_device_data">
+<area shape="rect" id="node1" title="Reads from the device." alt="" coords="915,299,1111,326"/>
+<area shape="rect" id="node2" href="$adxl355_8h.html#adee32d841ce0cc8e7275d105382da9a3" title="Reads the number of FIFO entries register value." alt="" coords="691,5,865,47"/>
+<area shape="rect" id="node3" href="$adxl355_8h.html#a87d487d5c1307498ea083fe451934f2c" title="Reads fifo data and returns the raw values." alt="" coords="444,71,641,98"/>
+<area shape="rect" id="node6" href="$adxl355_8h.html#a24c924929fb326a83cfff5216ee91018" title="Gets the current operation mode of the device." alt="" coords="693,122,863,149"/>
+<area shape="rect" id="node7" href="$adxl355_8h.html#a5a713beae7da66b3cf9ab6642a7d0c03" title="Reads the raw temperature." alt="" coords="691,173,865,199"/>
+<area shape="rect" id="node9" href="$adxl355_8h.html#a9dfdf6c018dabf65a714422398fb93c7" title="Reads the raw output data." alt="" coords="697,223,859,250"/>
+<area shape="rect" id="node11" href="$adxl355_8h.html#ad4ce0375e5c06b483579a570ea976efb" title="Reads the status register value." alt="" coords="700,274,856,301"/>
+<area shape="rect" id="node12" href="$adxl355_8h.html#a71f7b8a40d6c14dad5998c5aa0e87753" title="Performs a soft reset of the device." alt="" coords="470,325,615,351"/>
+<area shape="rect" id="node13" href="$adxl355_8h.html#a856ba86fac725f93403ffe8971a803ce" title="Initializes the communication peripheral and checks if the ADXL355 part is present." alt="" coords="261,375,364,402"/>
+<area shape="rect" id="node14" href="$adxl355_8h.html#a6f316752484487d5655670558a954a13" title="Writes the high&#45;pass filter settings." alt="" coords="689,426,867,453"/>
+<area shape="rect" id="node15" href="$adxl355_8h.html#a5ebd6b97e3c1722a3a7c63ce77b030ed" title="Sets the interrupt polarity." alt="" coords="702,477,854,503"/>
+<area shape="rect" id="node16" href="$adxl355_8h.html#a04f6359f3e9f79c0254ac61465761bb2" title="Writes the low&#45;pass filter settings." alt="" coords="236,477,389,503"/>
+<area shape="rect" id="node17" href="$adxl355_8h.html#a0343f1bcddcf796e5b1e74004f3a0b79" title="Sets the measurement range register value." alt="" coords="705,578,851,605"/>
+<area shape="rect" id="node4" href="$adxl355_8h.html#a3dfc3d88cc09e28b63a815471ebb25c6" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="229,97,396,123"/>
+<area shape="rect" id="node5" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,274,181,301"/>
+<area shape="rect" id="node8" href="$adxl355_8h.html#ab2cca702bfd799f169c4c82cb13ecbb8" title="Reads the raw temperature data and converts it to millidegrees Celsius." alt="" coords="241,173,384,199"/>
+<area shape="rect" id="node10" href="$adxl355_8h.html#a31457c441689b591b9177bc6e4d877d0" title="Reads the raw output data of each axis and converts it to g." alt="" coords="477,223,609,250"/>
+</map>

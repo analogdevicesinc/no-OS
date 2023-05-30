@@ -1,0 +1,4 @@
+<map id="ad7799_get_channel" name="ad7799_get_channel">
+<area shape="rect" id="node1" title="Read specific ADC channel." alt="" coords="217,5,373,32"/>
+<area shape="rect" id="node2" href="$ad7799_8h.html#a9d4023bec85661f9d865525d3f311a6b" title="Read data from specific ADC channel with specified precision." alt="" coords="5,5,169,32"/>
+</map>

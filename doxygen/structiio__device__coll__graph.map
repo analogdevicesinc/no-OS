@@ -1,0 +1,9 @@
+<map id="iio_device" name="iio_device">
+<area shape="rect" id="node1" title="Structure holding channels and attributes of a device." alt="" coords="189,201,277,228"/>
+<area shape="rect" id="node2" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="185,103,281,130"/>
+<area shape="rect" id="node3" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="5,5,107,32"/>
+<area shape="rect" id="node4" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="133,5,245,32"/>
+<area shape="rect" id="node5" href="$structscan__type.html" title=" " alt="" coords="269,5,357,32"/>
+<area shape="rect" id="node6" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="351,103,500,130"/>
+<area shape="rect" id="node7" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="382,5,559,32"/>
+</map>

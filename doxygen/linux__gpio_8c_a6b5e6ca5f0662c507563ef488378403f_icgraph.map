@@ -1,0 +1,4 @@
+<map id="linux_gpio_get" name="linux_gpio_get">
+<area shape="rect" id="node1" title="Obtain the GPIO decriptor." alt="" coords="231,5,348,32"/>
+<area shape="rect" id="node2" href="$linux__gpio_8c.html#ace92039abbc730d6743eeec20f20f0e0" title="Get the value of an optional GPIO." alt="" coords="5,5,183,32"/>
+</map>

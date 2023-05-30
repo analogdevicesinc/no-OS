@@ -1,0 +1,14 @@
+<map id="ad7156_get_register_value" name="ad7156_get_register_value">
+<area shape="rect" id="node1" title="Performs a burst read of a specified number of registers." alt="" coords="535,175,689,217"/>
+<area shape="rect" id="node2" href="$ad7156_8h.html#a6cd927732f1fadbef1401432166df250" title="Enables or disables conversion on the selected channel." alt="" coords="285,5,453,32"/>
+<area shape="rect" id="node3" href="$ad7156_8h.html#a4c777653d93acf42c71ad5cccb16e0af" title="Reads the range bits from the device and returns the range in pF." alt="" coords="298,107,441,133"/>
+<area shape="rect" id="node4" href="$ad7156_8h.html#aff4df363af93715fa75cd724df080892" title="Sets the input range of the specified channel." alt="" coords="34,56,175,83"/>
+<area shape="rect" id="node6" href="$ad7156_8h.html#abf1912546bb46e9017d48747a5398569" title="Initializes the communication peripheral and the initial Values for AD7156 Board." alt="" coords="320,157,419,184"/>
+<area shape="rect" id="node7" href="$ad7156_8h.html#ade01fa2388c868b3df58ef6d3f7ce692" title="Reads a 12&#45;bit sample from the selected channel." alt="" coords="269,208,469,235"/>
+<area shape="rect" id="node9" href="$ad7156_8h.html#a1baa5f16bef109f1bfe0258545891b66" title="Sets the converter mode of operation." alt="" coords="275,259,463,285"/>
+<area shape="rect" id="node10" href="$ad7156_8h.html#ae2b4dbcc2eb52fac731cd934577afe74" title="Selects the threshold mode of operation." alt="" coords="265,309,474,336"/>
+<area shape="rect" id="node11" href="$ad7156_8h.html#a58c404bee549781c62767a21ea475374" title="Waits for a finished CDC conversion and reads a 12&#45;bit sample from the selected channel." alt="" coords="252,360,487,387"/>
+<area shape="rect" id="node5" href="$ad7156_8h.html#aa80cfa5cd961c7bde4355b47eeab0675" title="Writes to the threshold register when threshold fixed mode is enabled." alt="" coords="22,107,187,133"/>
+<area shape="rect" id="node8" href="$ad7156_8h.html#a2441eed2bab5b9ca5ba44ce7ec31189b" title="Reads a sample the selected channel and converts the data to picofarads(pF)." alt="" coords="23,201,187,242"/>
+<area shape="rect" id="node12" href="$ad7156_8h.html#aadbc4753dd57c1a2296aaa705ea7829d" title="Waits for a finished CDC conversion the selected channel, reads a sample and converts the data to pic..." alt="" coords="5,353,204,394"/>
+</map>

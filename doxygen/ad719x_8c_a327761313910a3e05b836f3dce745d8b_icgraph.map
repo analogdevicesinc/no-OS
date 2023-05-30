@@ -1,0 +1,7 @@
+<map id="ad719x_channels_select" name="ad719x_channels_select">
+<area shape="rect" id="node1" title="Selects the channels to be enabled." alt="" coords="575,31,756,57"/>
+<area shape="rect" id="node2" href="$ad719x_8h.html#a911e159361da297a10809f1cf6ba8059" title="Performs the given calibration to the specified channel." alt="" coords="362,5,497,32"/>
+<area shape="rect" id="node3" href="$ad719x_8h.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="332,56,527,83"/>
+<area shape="rect" id="node4" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,56,284,83"/>
+<area shape="rect" id="node5" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,56,60,83"/>
+</map>

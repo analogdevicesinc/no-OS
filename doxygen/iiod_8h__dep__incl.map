@@ -1,0 +1,5 @@
+<map id="iio/iiod.h" name="iio/iiod.h">
+<area shape="rect" id="node1" title="Header file of iiod." alt="" coords="49,5,127,32"/>
+<area shape="rect" id="node2" href="$iio_8c.html" title="Implementation of iio. This module implements read/write ops, required by libtinyiiod and further cal..." alt="" coords="5,80,75,107"/>
+<area shape="rect" id="node3" href="$iiod_8c.html" title="Nonblockin implementation of libtinyiiod. Based on https://github.com/analogdevicesinc/libtinyiiod." alt="" coords="99,80,176,107"/>
+</map>

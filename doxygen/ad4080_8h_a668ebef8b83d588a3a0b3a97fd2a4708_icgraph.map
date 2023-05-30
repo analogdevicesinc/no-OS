@@ -1,0 +1,4 @@
+<map id="ad4080_configuration_intf_init" name="ad4080_configuration_intf_init">
+<area shape="rect" id="node1" title="Configure the config SPI interface during initialization." alt="" coords="152,5,315,47"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="5,13,104,39"/>
+</map>

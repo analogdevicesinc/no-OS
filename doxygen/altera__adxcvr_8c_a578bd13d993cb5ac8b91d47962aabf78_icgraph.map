@@ -1,0 +1,14 @@
+<map id="adxcfg_release_arbitration" name="adxcfg_release_arbitration">
+<area shape="rect" id="node1" title="adxcfg_release_arbitration" alt="" coords="843,71,1039,98"/>
+<area shape="rect" id="node2" href="$altera__a10__cdr__pll_8h.html#ae16cfdb6dcf52acfad2cd4480144d642" title="altera_a10_cdr_pll_recalc_rate" alt="" coords="464,5,605,47"/>
+<area shape="rect" id="node4" href="$altera__a10__cdr__pll_8h.html#acd3ba325a22ad7690f934b858087ce25" title="altera_a10_cdr_pll_set_rate" alt="" coords="653,64,795,105"/>
+<area shape="rect" id="node12" href="$altera__adxcvr_8h.html#aecd3c23ef57fd83ab95939ea6322532d" title="xcvr_calib_tx" alt="" coords="670,130,778,157"/>
+<area shape="rect" id="node3" href="$altera__adxcvr_8h.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="271,13,416,39"/>
+<area shape="rect" id="node5" href="$altera__adxcvr_8h.html#a684db50fe066ad6dd6df4aac1cad609c" title="adxcvr_init" alt="" coords="471,71,598,98"/>
+<area shape="rect" id="node6" href="$axi__adxcvr_8h.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="adxcvr_init" alt="" coords="296,71,391,98"/>
+<area shape="rect" id="node7" href="$ad9081_2src_2app__jesd_8h.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="111,21,219,47"/>
+<area shape="rect" id="node9" href="$app__transceiver_8h.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="108,71,223,98"/>
+<area shape="rect" id="node11" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="138,122,193,149"/>
+<area shape="rect" id="node8" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,21,60,47"/>
+<area shape="rect" id="node10" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,71,60,98"/>
+</map>

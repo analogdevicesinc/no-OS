@@ -1,0 +1,14 @@
+<map id="max14906_reg_read" name="max14906_reg_read">
+<area shape="rect" id="node1" title="Read the value of a device register." alt="" coords="859,81,1013,108"/>
+<area shape="rect" id="node2" href="$max14906_8h.html#a6e5a3675dbcafa97092d45a413c64fdf" title="Read the (voltage) state of a channel (works for both input or output)." alt="" coords="655,5,796,32"/>
+<area shape="rect" id="node3" href="$max14906_8h.html#aa4195d7856a89319a60059cd3a9d5c63" title="Read an output channel&#39;s current limit." alt="" coords="644,56,807,83"/>
+<area shape="rect" id="node4" href="$max14906_8h.html#af52569104fb21ebf27fbd9f61ea2ccbe" title="Initialize and configure the MAX14906 device." alt="" coords="243,105,362,132"/>
+<area shape="rect" id="node6" href="$max14906_8h.html#a8cc1a3fc2b39623f8144de069919a547" title="Update the value of a device register (read/write sequence)." alt="" coords="640,183,811,209"/>
+<area shape="rect" id="node5" href="$iio__max14906_8h.html#a5536d17cd62bda79c445c5b0b009291a" title="Initializes the MAX14906 IIO descriptor." alt="" coords="19,105,162,132"/>
+<area shape="rect" id="node7" href="$max14906_8h.html#ae6cb795422de08127ed6d6b14384b399" title="Configure a channel&#39;s function." alt="" coords="437,161,585,188"/>
+<area shape="rect" id="node11" href="$max14906_8h.html#afec869dab0c5df207d1b4bbdae6a7518" title="Write the (logic) state of a channel (only for output channels)." alt="" coords="441,212,581,239"/>
+<area shape="rect" id="node12" href="$max14906_8h.html#a605609e9aac55d9e269bd915dbae2256" title="Configure the current limit for output channels." alt="" coords="429,263,592,289"/>
+<area shape="rect" id="node8" href="$iio__max14906_8c.html#a6821b5e1c7f1557c56453ea435f5278c" title="Configure a set if IIO channels based on the operation modes of the enabled physical channels." alt="" coords="224,157,381,198"/>
+<area shape="rect" id="node9" href="$max14906_8h.html#ae8b4998f84da870cb84e9e8dfabea4c2" title="Free the resources allocated during init and place all the channels in high&#45;z." alt="" coords="229,223,377,249"/>
+<area shape="rect" id="node10" href="$iio__max14906_8h.html#a022d94aa31e63d0f12002b02051c53fd" title="Free resources allocated by the init function." alt="" coords="5,223,176,249"/>
+</map>

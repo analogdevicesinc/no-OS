@@ -1,0 +1,13 @@
+<map id="adxrs290_reg_read" name="adxrs290_reg_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="773,132,920,159"/>
+<area shape="rect" id="node2" href="$adxrs290_8h.html#af368749bc970398a575ef8417014848c" title="Get the high&#45;pass filter pole location." alt="" coords="568,5,707,32"/>
+<area shape="rect" id="node3" href="$adxrs290_8h.html#a8cab9a37aaeee40a1815ec52fab9924e" title="Get the low&#45;pass filter pole location." alt="" coords="570,56,705,83"/>
+<area shape="rect" id="node4" href="$adxrs290_8h.html#a577b03b60bb2ad4cd1713c1bf712368c" title=" " alt="" coords="391,157,501,184"/>
+<area shape="rect" id="node9" href="$adxrs290_8h.html#afc1c51c64e22a51dfac92899f21609d2" title="Set the low&#45;pass filter pole location." alt="" coords="569,157,706,184"/>
+<area shape="rect" id="node10" href="$adxrs290_8h.html#aaac78320a104deec1e5b3d21fc5105d6" title="Set the low&#45;pass filter pole location." alt="" coords="571,208,704,235"/>
+<area shape="rect" id="node11" href="$adxrs290_8h.html#ab4e680182efd5eb39184ea282cf56d4d" title="Set device operation mode." alt="" coords="549,259,725,285"/>
+<area shape="rect" id="node5" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,107,297,133"/>
+<area shape="rect" id="node6" href="$iio__demo_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8h.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,157,343,184"/>
+<area shape="rect" id="node8" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="129,208,321,235"/>
+<area shape="rect" id="node7" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,157,60,184"/>
+</map>

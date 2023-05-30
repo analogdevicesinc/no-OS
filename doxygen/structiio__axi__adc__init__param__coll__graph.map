@@ -1,0 +1,6 @@
+<map id="iio_axi_adc_init_param" name="iio_axi_adc_init_param">
+<area shape="rect" id="node1" title="iio configuration." alt="" coords="5,184,177,211"/>
+<area shape="rect" id="node2" href="$structaxi__adc.html" title="AXI ADC Device Descriptor." alt="" coords="10,95,82,121"/>
+<area shape="rect" id="node3" href="$structaxi__dmac.html" title=" " alt="" coords="106,95,191,121"/>
+<area shape="rect" id="node4" href="$structaxi__dma__transfer.html" title=" " alt="" coords="81,5,217,32"/>
+</map>

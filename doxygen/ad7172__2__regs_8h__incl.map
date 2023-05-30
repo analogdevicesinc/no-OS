@@ -1,0 +1,9 @@
+<map id="drivers/adc/ad717x/ad7172_2_regs.h" name="drivers/adc/ad717x/ad7172_2_regs.h">
+<area shape="rect" id="node1" title="AD7172_2 Registers Definitions." alt="" coords="60,5,206,47"/>
+<area shape="rect" id="node2" href="$ad717x_8h.html" title="AD717X header file. Devices: AD7172&#45;2, AD7172&#45;4, AD7173&#45;8, AD7175&#45;2, AD7175&#45;8, AD7176&#45;2,..." alt="" coords="92,95,174,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="36,244,107,271"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="22,169,121,196"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="146,169,246,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="242,244,325,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="147,244,218,271"/>
+</map>

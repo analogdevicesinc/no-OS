@@ -1,0 +1,12 @@
+<map id="no_os_mutex_init" name="no_os_mutex_init">
+<area shape="rect" id="node1" title="Initialize mutex. mutex &#45; Pointer toward the mutex." alt="" coords="576,81,713,108"/>
+<area shape="rect" id="node2" href="$no__os__i2c_8c.html#a01ee72a3cf98054b436f4332c80bd4aa" title="Initialize the i2c bus communication peripheral." alt="" coords="391,5,528,32"/>
+<area shape="rect" id="node3" href="$no__os__pwm_8c.html#aa308736af8784447c2d2646bd980f52f" title="Initialize the PWM peripheral." alt="" coords="396,56,523,83"/>
+<area shape="rect" id="node7" href="$no__os__spi_8c.html#a28b2d2f56d7c423bfc021dda383ae594" title="Initialize the SPI bus communication peripheral." alt="" coords="391,107,528,133"/>
+<area shape="rect" id="node8" href="$no__os__timer_8c.html#a5b7907bf19cee0c54acd61ca161fcca9" title="Initialize hardware timer and the handler structure associated with it." alt="" coords="394,157,525,184"/>
+<area shape="rect" id="node4" href="$adaq7980_8h.html#a0db55892937414f2d5dc84a14fd89677" title=" " alt="" coords="161,31,290,57"/>
+<area shape="rect" id="node6" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="198,81,253,108"/>
+<area shape="rect" id="node5" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,31,60,57"/>
+<area shape="rect" id="node9" href="$iio__demo_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8h.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,157,343,184"/>
+<area shape="rect" id="node10" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,157,60,184"/>
+</map>

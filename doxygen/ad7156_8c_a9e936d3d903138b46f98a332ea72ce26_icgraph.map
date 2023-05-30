@@ -1,0 +1,9 @@
+<map id="ad7156_set_register_value" name="ad7156_set_register_value">
+<area shape="rect" id="node1" title="Writes data into one or two registers." alt="" coords="263,125,417,166"/>
+<area shape="rect" id="node2" href="$ad7156_8h.html#a6cd927732f1fadbef1401432166df250" title="Enables or disables conversion on the selected channel." alt="" coords="26,5,194,32"/>
+<area shape="rect" id="node3" href="$ad7156_8h.html#a1baa5f16bef109f1bfe0258545891b66" title="Sets the converter mode of operation." alt="" coords="16,56,204,83"/>
+<area shape="rect" id="node4" href="$ad7156_8h.html#aff4df363af93715fa75cd724df080892" title="Sets the input range of the specified channel." alt="" coords="39,107,181,133"/>
+<area shape="rect" id="node5" href="$ad7156_8h.html#a27be5c43d46c4a545a2c4a226262b2d9" title="Writes a value(pF) to the sensitivity register. This functions should be used when adaptive threshold..." alt="" coords="24,157,196,184"/>
+<area shape="rect" id="node6" href="$ad7156_8h.html#aa80cfa5cd961c7bde4355b47eeab0675" title="Writes to the threshold register when threshold fixed mode is enabled." alt="" coords="27,208,193,235"/>
+<area shape="rect" id="node7" href="$ad7156_8h.html#ae2b4dbcc2eb52fac731cd934577afe74" title="Selects the threshold mode of operation." alt="" coords="5,259,215,285"/>
+</map>

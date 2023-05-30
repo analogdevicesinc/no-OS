@@ -1,0 +1,20 @@
+<map id="drivers/axi_core/iio_axi_adc/iio_axi_adc.c" name="drivers/axi_core/iio_axi_adc/iio_axi_adc.c">
+<area shape="rect" id="node1" title="Implementation of iio_axi_adc. This instantiates iio_axi_adc and iio_axi_dac devices,..." alt="" coords="233,5,400,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,92,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="119,169,186,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="323,319,393,345"/>
+<area shape="rect" id="node5" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="935,95,1045,121"/>
+<area shape="rect" id="node7" href="$no__os__alloc_8h.html" title=" " alt="" coords="168,95,279,121"/>
+<area shape="rect" id="node8" href="$iio_8h.html" title="Header file of iio." alt="" coords="489,95,539,121"/>
+<area shape="rect" id="node15" href="$iio__axi__adc_8h.html" title="Header file of iio_axi_adc." alt="" coords="677,95,783,121"/>
+<area shape="rect" id="node6" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1021,169,1089,196"/>
+<area shape="rect" id="node9" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="619,169,713,196"/>
+<area shape="rect" id="node13" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="461,169,567,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="498,319,581,345"/>
+<area shape="rect" id="node11" title=" " alt="" coords="753,319,824,345"/>
+<area shape="rect" id="node12" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="703,244,874,271"/>
+<area shape="rect" id="node14" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="343,244,477,271"/>
+<area shape="rect" id="node16" href="$axi__adc__core_8h.html" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="757,169,876,196"/>
+<area shape="rect" id="node18" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="900,169,997,196"/>
+<area shape="rect" id="node17" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="899,244,999,271"/>
+</map>

@@ -1,0 +1,140 @@
+<map id="include/no_os_i2c.h" name="include/no_os_i2c.h">
+<area shape="rect" id="node1" title="Header file of I2C Interface." alt="" coords="7999,5,8149,32"/>
+<area shape="rect" id="node2" href="$adxl313_8h.html" title="Header file of ADXL313 Driver." alt="" coords="444,80,605,121"/>
+<area shape="rect" id="node8" href="$adxl345_8h.html" title="Header file of ADXL345 Driver." alt="" coords="1051,80,1212,121"/>
+<area shape="rect" id="node10" href="$adxl355_8h.html" title="Header file of ADXL355 Driver." alt="" coords="1456,80,1617,121"/>
+<area shape="rect" id="node16" href="$adxl367_8h.html" title="Header file of ADXL367 Driver." alt="" coords="2305,80,2467,121"/>
+<area shape="rect" id="node22" href="$adxl372_8h.html" title="Header file for adxl372 Driver." alt="" coords="2985,80,3147,121"/>
+<area shape="rect" id="node26" href="$ad7091r5_8h.html" title="Header file for ad7091r5 Driver." alt="" coords="3288,80,3447,121"/>
+<area shape="rect" id="node28" href="$ad799x_8h.html" title="Header file of AD799x Driver." alt="" coords="3485,80,3631,121"/>
+<area shape="rect" id="node30" href="$max9611_8c.html" title="Implementation of max9611 Family Driver." alt="" coords="3617,177,3805,218"/>
+<area shape="rect" id="node31" href="$max9611_8h.html" title="Header file of max9611 Family Driver." alt="" coords="3859,80,4047,121"/>
+<area shape="rect" id="node32" href="$ad5592r-base_8h.html" title="Header file of AD5592R Base Driver." alt="" coords="4274,80,4453,121"/>
+<area shape="rect" id="node38" href="$no__os__i2c_8c.html" title="Implementation of the I2C Interface." alt="" coords="4698,87,4869,114"/>
+<area shape="rect" id="node39" href="$ad7156_8h.html" title="Header file of AD7156 Driver." alt="" coords="4893,80,5039,121"/>
+<area shape="rect" id="node41" href="$ad7746_8h.html" title="Header file of AD7746 Driver." alt="" coords="5063,80,5208,121"/>
+<area shape="rect" id="node44" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="5049,177,5203,218"/>
+<area shape="rect" id="node45" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="5228,177,5376,218"/>
+<area shape="rect" id="node46" href="$ad5629r_8h.html" title="Header file of AD5629R Driver for Microblaze processor." alt="" coords="5420,80,5571,121"/>
+<area shape="rect" id="node48" href="$ad5686_8h.html" title="Header file of AD5686 Driver. This driver supporting the following devices: AD5684R,..." alt="" coords="5615,80,5762,121"/>
+<area shape="rect" id="node50" href="$max538x_8h.html" title="Header file of max538x Family Driver." alt="" coords="5957,80,6116,121"/>
+<area shape="rect" id="node51" href="$max538x_8c.html" title="Implementation of max538x Family Driver." alt="" coords="5747,177,5905,218"/>
+<area shape="rect" id="node54" href="$24xx32a_8h.html" title="Header file of 24AA32A/24LC32A Interface." alt="" coords="6494,80,6675,121"/>
+<area shape="rect" id="node55" href="$24xx32a_8c.html" title="24AA32A/24LC32A EEPROM Interfaces" alt="" coords="6555,177,6737,218"/>
+<area shape="rect" id="node56" href="$ad5933_8h.html" title="Header file of AD5933 Driver." alt="" coords="6751,80,6955,121"/>
+<area shape="rect" id="node58" href="$adp5589_8h.html" title="Header file of ADP5589 Driver." alt="" coords="6979,80,7134,121"/>
+<area shape="rect" id="node60" href="$ltc4306_8c.html" title="Implementation of ltc4306 driver." alt="" coords="6382,177,6531,218"/>
+<area shape="rect" id="node61" href="$ltc4306_8h.html" title="Header file of ltc4306 driver." alt="" coords="6229,80,6378,121"/>
+<area shape="rect" id="node63" href="$adpd188_8h.html" title="ADPD188 driver header file." alt="" coords="7159,80,7336,121"/>
+<area shape="rect" id="node68" href="$adpd410x_8h.html" title=" " alt="" coords="7360,80,7537,121"/>
+<area shape="rect" id="node71" href="$aducm3029__i2c_8c.html" title="Implementation of I2C driver for ADuCM302x." alt="" coords="7561,80,7768,121"/>
+<area shape="rect" id="node72" href="$altera__i2c_8c.html" title="Implementation of Altera I2C Generic Driver." alt="" coords="7792,80,7961,121"/>
+<area shape="rect" id="node73" href="$chibios__i2c_8c.html" title="Implementation of chibios i2c driver." alt="" coords="7988,177,8165,218"/>
+<area shape="rect" id="node74" href="$chibios__i2c_8h.html" title="Header file for the chibios i2c driver." alt="" coords="7985,80,8163,121"/>
+<area shape="rect" id="node75" href="$generic__i2c_8c.html" title=" " alt="" coords="8238,80,8417,121"/>
+<area shape="rect" id="node76" href="$linux__i2c_8c.html" title="Implementation of Linux platform I2C Driver." alt="" coords="8441,80,8603,121"/>
+<area shape="rect" id="node77" href="$max32650_2maxim__i2c_8h.html" title=" " alt="" coords="8628,80,8811,121"/>
+<area shape="rect" id="node79" href="$max32655_2maxim__i2c_8h.html" title=" " alt="" coords="8835,80,9017,121"/>
+<area shape="rect" id="node81" href="$max32660_2maxim__i2c_8h.html" title=" " alt="" coords="9041,80,9224,121"/>
+<area shape="rect" id="node83" href="$max32665_2maxim__i2c_8h.html" title=" " alt="" coords="9248,80,9431,121"/>
+<area shape="rect" id="node85" href="$max32670_2maxim__i2c_8h.html" title=" " alt="" coords="9455,80,9637,121"/>
+<area shape="rect" id="node87" href="$max32690_2maxim__i2c_8h.html" title=" " alt="" coords="9661,80,9844,121"/>
+<area shape="rect" id="node89" href="$max78000_2maxim__i2c_8h.html" title=" " alt="" coords="9927,80,10109,121"/>
+<area shape="rect" id="node95" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="10671,177,10837,218"/>
+<area shape="rect" id="node100" href="$pico__i2c_8h.html" title="Header file for the pico i2c driver." alt="" coords="10524,80,10683,121"/>
+<area shape="rect" id="node102" href="$stm32__i2c_8c.html" title="Implementation of stm32 i2c driver." alt="" coords="11221,177,11393,218"/>
+<area shape="rect" id="node103" href="$stm32__i2c_8h.html" title="Header file for the stm32 i2c driver." alt="" coords="10707,80,10879,121"/>
+<area shape="rect" id="node104" href="$xilinx__i2c_8c.html" title="Implementation of Xilinx I2C Generic Driver." alt="" coords="10955,80,11121,121"/>
+<area shape="rect" id="node105" href="$ad5110_8h.html" title="Header file of ad5110 Driver for Microblaze processor." alt="" coords="11200,80,11364,121"/>
+<area shape="rect" id="node107" href="$ad525x_8h.html" title="Header file of AD525X Driver for Microblaze processor. This driver supporting the following devices :..." alt="" coords="11497,80,11661,121"/>
+<area shape="rect" id="node109" href="$ltc3337_8h.html" title="Header file for the LTC3337 Driver." alt="" coords="11794,80,11957,121"/>
+<area shape="rect" id="node114" href="$pcf85263_8h.html" title="Header file of pcf85263 Driver." alt="" coords="10347,80,10499,121"/>
+<area shape="rect" id="node116" href="$iio__adg2128_8c.html" title=" " alt="" coords="11981,80,12154,121"/>
+<area shape="rect" id="node117" href="$adt7420_8h.html" title="Header file of ADT7420 Driver." alt="" coords="12583,80,12735,121"/>
+<area shape="rect" id="node119" href="$iio__adt7420_8c.html" title="Implementation of IIO ADT7420 Driver." alt="" coords="12389,177,12559,218"/>
+<area shape="rect" id="node123" href="$adt75_8h.html" title="Header file of ADT75 Driver." alt="" coords="13265,80,13417,121"/>
+<area shape="rect" id="node130" href="$adt75_2src_2examples_2basic_2basic__example_8c.html" title="BASIC example header for ad74413r project." alt="" coords="13864,169,14031,225"/>
+<area shape="rect" id="node131" href="$max31875_8h.html" title="Header file of MAX31875 Driver." alt="" coords="13492,80,13672,121"/>
+<area shape="rect" id="node133" href="$adv7511_2src_2main_8c.html" title="The implementation of the main function of the app." alt="" coords="13697,80,13854,121"/>
+<area shape="rect" id="node134" href="$wrapper_8c.html" title=" " alt="" coords="13878,80,14035,121"/>
+<area shape="rect" id="node135" href="$cn0565_2src_2app_2main_8c.html" title="EIT main." alt="" coords="14060,80,14208,121"/>
+<area shape="rect" id="node136" href="$mux__board_8h.html" title="Cross&#45;point switch handling code." alt="" coords="14257,80,14445,121"/>
+<area shape="rect" id="node3" href="$adxl313_8c.html" title=" " alt="" coords="644,177,805,218"/>
+<area shape="rect" id="node4" href="$iio__adxl313_8c.html" title=" " alt="" coords="5,177,167,218"/>
+<area shape="rect" id="node5" href="$eval-adxl313z_2src_2common_2common__data_8h.html" title=" " alt="" coords="191,177,405,218"/>
+<area shape="rect" id="node7" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="430,169,619,225"/>
+<area shape="rect" id="node6" href="$eval-adxl313z_2src_2common_2common__data_8c.html" title=" " alt="" coords="191,281,405,322"/>
+<area shape="rect" id="node9" href="$adxl345_8c.html" title="Implementation of ADXL345 Driver." alt="" coords="829,177,991,218"/>
+<area shape="rect" id="node11" href="$adxl355_8c.html" title="Implementation of ADXL355 Driver." alt="" coords="1665,177,1827,218"/>
+<area shape="rect" id="node12" href="$iio__adxl355_8c.html" title="Implementation of IIO ADXL355 Driver." alt="" coords="1015,177,1176,218"/>
+<area shape="rect" id="node13" href="$eval-adxl355-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl355&#45;pmdz examples." alt="" coords="1201,169,1409,225"/>
+<area shape="rect" id="node15" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example header for eval&#45;adxl355&#45;pmdz project." alt="" coords="1433,169,1641,225"/>
+<area shape="rect" id="node14" href="$eval-adxl355-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl355&#45;pmdz examples." alt="" coords="1201,273,1409,329"/>
+<area shape="rect" id="node17" href="$adxl367_8c.html" title="Implementation of ADXL367 Driver." alt="" coords="2521,177,2683,218"/>
+<area shape="rect" id="node18" href="$iio__adxl367_8c.html" title="IIO part of the ADXL367 driver." alt="" coords="1851,177,2012,218"/>
+<area shape="rect" id="node19" href="$eval-adxl367z_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="2036,177,2251,218"/>
+<area shape="rect" id="node21" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example for eval&#45;adxl367z project." alt="" coords="2275,169,2497,225"/>
+<area shape="rect" id="node20" href="$eval-adxl367z_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="2036,281,2251,322"/>
+<area shape="rect" id="node23" href="$adxl372_8c.html" title="Implementation of adxl372 Core Driver." alt="" coords="2707,177,2868,218"/>
+<area shape="rect" id="node24" href="$adxl372__i2c_8c.html" title="Implementation of adxl372 I2C Driver." alt="" coords="2892,177,3053,218"/>
+<area shape="rect" id="node25" href="$adxl372__spi_8c.html" title="Implementation of adxl372 SPI Driver." alt="" coords="3077,177,3239,218"/>
+<area shape="rect" id="node27" href="$ad7091r5_8c.html" title="Implementation of ad7091r5 Driver." alt="" coords="3263,177,3421,218"/>
+<area shape="rect" id="node29" href="$ad799x_8c.html" title="Implementation of AD799x Driver." alt="" coords="3446,177,3593,218"/>
+<area shape="rect" id="node33" href="$ad5592r-base_8c.html" title="Implementation of AD5592R Base Driver." alt="" coords="3830,177,4009,218"/>
+<area shape="rect" id="node34" href="$ad5592r_8c.html" title="Implementation of AD5592R driver." alt="" coords="4095,281,4274,322"/>
+<area shape="rect" id="node35" href="$ad5592r_8h.html" title="Header file of AD5592R driver." alt="" coords="4033,177,4211,218"/>
+<area shape="rect" id="node36" href="$ad5593r_8c.html" title="Implementation of AD5593R driver." alt="" coords="4355,281,4534,322"/>
+<area shape="rect" id="node37" href="$ad5593r_8h.html" title="Header file of AD5593R driver." alt="" coords="4286,177,4465,218"/>
+<area shape="rect" id="node40" href="$ad7156_8c.html" title="Implementation of AD7156 Driver." alt="" coords="4540,177,4685,218"/>
+<area shape="rect" id="node42" href="$ad7746_8c.html" title="Implementation of AD7746 Driver." alt="" coords="4879,177,5024,218"/>
+<area shape="rect" id="node43" href="$iio__ad7746_8c.html" title=" " alt="" coords="4709,177,4855,218"/>
+<area shape="rect" id="node47" href="$ad5629r_8c.html" title="Implementation of ad5629r Driver for Microblaze processor." alt="" coords="5400,177,5551,218"/>
+<area shape="rect" id="node49" href="$ad5686_8c.html" title="Implementation of AD5686 Driver." alt="" coords="5575,177,5722,218"/>
+<area shape="rect" id="node52" href="$eval-ltc4306_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ltc4306&#45;pmdz examples." alt="" coords="5929,177,6144,218"/>
+<area shape="rect" id="node53" href="$eval-ltc4306_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ltc4306&#45;pmdz examples." alt="" coords="5929,281,6144,322"/>
+<area shape="rect" id="node57" href="$ad5933_8c.html" title="Implementation of AD5933 Driver." alt="" coords="6761,177,6965,218"/>
+<area shape="rect" id="node59" href="$adp5589_8c.html" title="Implementation of ADP5589 Driver." alt="" coords="6989,177,7143,218"/>
+<area shape="rect" id="node62" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html" title="Basic example code for eval&#45;ltc4306&#45;pmdz project." alt="" coords="6169,169,6358,225"/>
+<area shape="rect" id="node64" href="$adpd188_8c.html" title="ADPD188 driver implementation." alt="" coords="7368,177,7545,218"/>
+<area shape="rect" id="node65" href="$iio__adpd188_8h.html" title="Header of the ADPD188 IIO driver." alt="" coords="7167,177,7344,218"/>
+<area shape="rect" id="node66" href="$iio__adpd188_8c.html" title="Implementation of the ADPD188 IIO driver." alt="" coords="7265,281,7443,322"/>
+<area shape="rect" id="node67" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="7075,281,7241,322"/>
+<area shape="rect" id="node69" href="$adpd410x_8c.html" title=" " alt="" coords="7787,177,7964,218"/>
+<area shape="rect" id="node70" href="$iio__adpd410x_8c.html" title="Implementation of adpd410x iio." alt="" coords="7570,177,7762,218"/>
+<area shape="rect" id="node78" href="$max32650_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="8189,177,8372,218"/>
+<area shape="rect" id="node80" href="$max32655_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="8396,177,8579,218"/>
+<area shape="rect" id="node82" href="$max32660_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="8603,177,8785,218"/>
+<area shape="rect" id="node84" href="$max32665_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="8809,177,8992,218"/>
+<area shape="rect" id="node86" href="$max32670_2maxim__i2c_8c.html" title="Implementation of max32670 I2C driver." alt="" coords="9016,177,9199,218"/>
+<area shape="rect" id="node88" href="$max32690_2maxim__i2c_8c.html" title="Implementation of max32690 I2C driver." alt="" coords="9223,177,9405,218"/>
+<area shape="rect" id="node90" href="$max78000_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="9429,177,9612,218"/>
+<area shape="rect" id="node91" href="$adt7420-pmdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to MAXIM platform used by adt7420&#45;pmdz project." alt="" coords="9636,177,9883,218"/>
+<area shape="rect" id="node93" href="$adt75_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by adt75." alt="" coords="9907,177,10129,218"/>
+<area shape="rect" id="node96" href="$eval-ltc4306_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to MAXIM platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="10153,177,10400,218"/>
+<area shape="rect" id="node98" href="$ltc3337_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="10424,177,10647,218"/>
+<area shape="rect" id="node92" href="$adt7420-pmdz_2src_2platform_2maxim_2parameters_8c.html" title="Definition of MAXIM platform data used by adt7420&#45;pmdz project." alt="" coords="9637,281,9882,322"/>
+<area shape="rect" id="node94" href="$adt75_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by adt75 project." alt="" coords="9907,281,10129,322"/>
+<area shape="rect" id="node97" href="$eval-ltc4306_2src_2platform_2maxim_2parameters_8c.html" title="Definition of MAXIM platform data used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="10154,281,10399,322"/>
+<area shape="rect" id="node99" href="$ltc3337_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="10424,281,10647,322"/>
+<area shape="rect" id="node101" href="$pico__i2c_8c.html" title="Implementation of pico i2c driver." alt="" coords="11039,177,11197,218"/>
+<area shape="rect" id="node106" href="$ad5110_8c.html" title="Implementation of AD5110 Driver for Microblaze processor." alt="" coords="11417,177,11581,218"/>
+<area shape="rect" id="node108" href="$ad525x_8c.html" title=" " alt="" coords="11605,177,11769,218"/>
+<area shape="rect" id="node110" href="$ltc3337_8c.html" title="Implementation file for the LTC3337 Driver." alt="" coords="11794,177,11957,218"/>
+<area shape="rect" id="node111" href="$ltc3337_2src_2common_2common__data_8h.html" title=" " alt="" coords="11981,177,12173,218"/>
+<area shape="rect" id="node113" href="$ltc3337_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="12197,169,12364,225"/>
+<area shape="rect" id="node112" href="$ltc3337_2src_2common_2common__data_8c.html" title=" " alt="" coords="11981,281,12172,322"/>
+<area shape="rect" id="node115" href="$pcf85263_8c.html" title="Implementation of PCF85263 Driver." alt="" coords="10862,177,11014,218"/>
+<area shape="rect" id="node118" href="$adt7420_8c.html" title="Implementation of ADT7420 Driver." alt="" coords="12583,177,12735,218"/>
+<area shape="rect" id="node120" href="$adt7420-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="12760,177,12975,218"/>
+<area shape="rect" id="node122" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html" title="DUMMY example code for adt7420&#45;pmdz project." alt="" coords="12999,169,13221,225"/>
+<area shape="rect" id="node121" href="$adt7420-pmdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="12760,281,12975,322"/>
+<area shape="rect" id="node124" href="$adt75_8c.html" title="Source file of ADT75 Driver." alt="" coords="13687,177,13839,218"/>
+<area shape="rect" id="node125" href="$iio__adt75_8h.html" title="Header file of the IIO ADT75 Driver." alt="" coords="13511,177,13663,218"/>
+<area shape="rect" id="node126" href="$iio__adt75_8c.html" title="Source file of IIO ADT75 Driver." alt="" coords="13429,281,13581,322"/>
+<area shape="rect" id="node128" href="$adt75_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad74413r examples." alt="" coords="13245,177,13437,218"/>
+<area shape="rect" id="node127" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="13605,273,13780,329"/>
+<area shape="rect" id="node129" href="$adt75_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad74413r examples." alt="" coords="13213,281,13404,322"/>
+<area shape="rect" id="node132" href="$max31875_8c.html" title="Implementation of MAX31875 Driver." alt="" coords="14055,177,14234,218"/>
+<area shape="rect" id="node137" href="$cn0565_2src_2app_2app_8c.html" title="EIT application source." alt="" coords="14469,177,14617,218"/>
+<area shape="rect" id="node138" href="$mux__board_8c.html" title="Cross&#45;point switch handling code." alt="" coords="14258,177,14445,218"/>
+</map>

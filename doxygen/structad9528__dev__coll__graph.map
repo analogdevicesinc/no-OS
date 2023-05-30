@@ -1,0 +1,11 @@
+<map id="ad9528_dev" name="ad9528_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="948,120,1049,147"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="673,44,795,71"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,52,184,79"/>
+<area shape="rect" id="node4" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,83,490,109"/>
+<area shape="rect" id="node5" href="$structad9528__state.html" title=" " alt="" coords="679,95,789,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="668,145,800,172"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,145,511,172"/>
+<area shape="rect" id="node8" href="$structad9528__platform__data.html" title="platform specific information" alt="" coords="649,196,819,223"/>
+<area shape="rect" id="node9" href="$structad9528__channel__spec.html" title="Output channel configuration." alt="" coords="334,196,499,223"/>
+</map>

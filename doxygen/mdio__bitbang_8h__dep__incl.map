@@ -1,0 +1,4 @@
+<map id="drivers/net/mdio_bitbang.h" name="drivers/net/mdio_bitbang.h">
+<area shape="rect" id="node1" title="Header file for MDIO implementation using gpio bit banging." alt="" coords="5,5,203,32"/>
+<area shape="rect" id="node2" href="$mdio__bitbang_8c.html" title="Source file for MDIO implementation using gpio bit banging." alt="" coords="6,80,202,107"/>
+</map>

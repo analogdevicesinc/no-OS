@@ -1,0 +1,4 @@
+<map id="MYKONOS_getInitCalStatus" name="MYKONOS_getInitCalStatus">
+<area shape="rect" id="node1" title="Gets the device initialization calibration status." alt="" coords="225,5,424,32"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a2e91d2b8e26d53381928a63ae3bf62e8" title="Blocking waits for the Mykonos initialization calibrations to complete." alt="" coords="5,5,177,32"/>
+</map>

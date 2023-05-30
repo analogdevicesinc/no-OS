@@ -1,0 +1,21 @@
+<map id="no_os_gpio_direction_input" name="no_os_gpio_direction_input">
+<area shape="rect" id="node1" title="Enable the input direction of the specified GPIO." alt="" coords="631,201,789,242"/>
+<area shape="rect" id="node2" href="$ad413x_8h.html#ab877cd5b2f4339b7bcd8e7d1dab39679" title=" " alt="" coords="437,5,536,32"/>
+<area shape="rect" id="node4" href="$ad5770r_8h.html#a91549ef06cfe7ec6c7119ed89a44927d" title=" " alt="" coords="435,56,538,83"/>
+<area shape="rect" id="node5" href="$ad719x_8h.html#abe338e9c6992908df702bb106f1e651d" title="Initializes the communication peripheral and the initial Values for AD719X Board and resets the devic..." alt="" coords="437,107,536,133"/>
+<area shape="rect" id="node8" href="$ad7768__evb_8c.html#ac58fafc30e663c4d7e2f794abb31ac22" title="ad7768evb_verify_status" alt="" coords="391,157,583,184"/>
+<area shape="rect" id="node9" href="$ad7780_8h.html#a99d2f22538499f3f242a5c1a52febbd0" title="Initializes the communication peripheral and the initial Values for AD7780 Board and checks if the de..." alt="" coords="437,208,536,235"/>
+<area shape="rect" id="node10" href="$adpd188_8h.html#ad498aa08ccb8f2c328fcc761f391738d" title="Initialize the ADPD188 driver." alt="" coords="433,259,540,285"/>
+<area shape="rect" id="node13" href="$adxl372_8h.html#a30746b358cf0ef10cbdb0a8d49d37d49" title=" " alt="" coords="435,309,538,336"/>
+<area shape="rect" id="node14" href="$adxrs290_8h.html#a577b03b60bb2ad4cd1713c1bf712368c" title=" " alt="" coords="431,360,542,387"/>
+<area shape="rect" id="node19" href="$eval-adis1650x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="459,411,514,437"/>
+<area shape="rect" id="node3" href="$ad413x_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="198,5,253,32"/>
+<area shape="rect" id="node6" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="137,107,313,133"/>
+<area shape="rect" id="node7" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,107,60,133"/>
+<area shape="rect" id="node11" href="$iio__adpd188_8h.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="161,259,290,285"/>
+<area shape="rect" id="node12" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,259,60,285"/>
+<area shape="rect" id="node15" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,309,297,336"/>
+<area shape="rect" id="node16" href="$iio__demo_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8h.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,360,343,387"/>
+<area shape="rect" id="node18" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="129,411,321,437"/>
+<area shape="rect" id="node17" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,360,60,387"/>
+</map>

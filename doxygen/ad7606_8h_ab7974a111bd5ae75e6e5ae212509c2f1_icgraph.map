@@ -1,0 +1,12 @@
+<map id="ad7606_spi_reg_read" name="ad7606_spi_reg_read">
+<area shape="rect" id="node1" title="Read a device register via SPI." alt="" coords="459,284,619,311"/>
+<area shape="rect" id="node2" href="$ad7606_8h.html#a5438391d9471eaea26f267ca8a49f946" title="Write a device register via SPI." alt="" coords="247,208,411,235"/>
+<area shape="rect" id="node10" href="$ad7606_8h.html#a6adb5704bfa72226e1fa25e0ac6db8f4" title="Write a device register via SPI with masking." alt="" coords="13,360,191,387"/>
+<area shape="rect" id="node3" href="$ad7606_8h.html#af543646f8ff88bb2104880eff9881aa6" title="Toggle the CONVST pin to start a conversion." alt="" coords="42,5,162,32"/>
+<area shape="rect" id="node4" href="$ad7606_8h.html#a8b8917b88bf8a962cf4c03bbcc32d787" title="Set the channel gain." alt="" coords="25,56,179,83"/>
+<area shape="rect" id="node5" href="$ad7606_8h.html#abc9cacda6c8f8496a798487f9bbc727d" title="Set the channel offset." alt="" coords="21,107,183,133"/>
+<area shape="rect" id="node6" href="$ad7606_8h.html#a7c95873d263944b0a6fe60ac8491bc4a" title="Set the channel phase." alt="" coords="19,157,185,184"/>
+<area shape="rect" id="node7" href="$ad7606_8h.html#a805c34e6e494c53ab140d91581f9e59e" title="Set the device config register." alt="" coords="31,208,173,235"/>
+<area shape="rect" id="node8" href="$ad7606_8h.html#a1417edc65b2d70eef23d8cb08b39f915" title="Set the device digital diagnostics configuration." alt="" coords="12,259,192,285"/>
+<area shape="rect" id="node9" href="$ad7606_8h.html#abc4948edb50ed62de9ab4a96119360d9" title="Set the oversampling ratio." alt="" coords="5,309,199,336"/>
+</map>

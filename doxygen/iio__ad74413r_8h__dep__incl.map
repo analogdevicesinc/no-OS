@@ -1,0 +1,6 @@
+<map id="drivers/adc&#45;dac/ad74413r/iio_ad74413r.h" name="drivers/adc&#45;dac/ad74413r/iio_ad74413r.h">
+<area shape="rect" id="node1" title="Header file of the IIO AD74413r Driver." alt="" coords="211,5,397,47"/>
+<area shape="rect" id="node2" href="$iio__ad74413r_8c.html" title="Source file of the IIO AD74413r Driver." alt="" coords="5,102,192,143"/>
+<area shape="rect" id="node3" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="217,95,391,151"/>
+<area shape="rect" id="node4" href="$ad74413r_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for AD74413R project." alt="" coords="415,95,646,151"/>
+</map>

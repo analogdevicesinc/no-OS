@@ -1,0 +1,14 @@
+<map id="drivers/platform/aducm3029/aducm3029_trng.c" name="drivers/platform/aducm3029/aducm3029_trng.c">
+<area shape="rect" id="node1" title="Implementation of true random number generator." alt="" coords="392,5,599,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="473,169,544,196"/>
+<area shape="rect" id="node3" href="$aducm3029__trng_8h.html" title="ADuCM302x specific header for TRNG driver." alt="" coords="141,95,284,121"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="357,95,457,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="533,95,644,121"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="669,95,778,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="135,169,291,196"/>
+<area shape="rect" id="node5" href="$no__os__trng_8h.html" title="Header file of true random number generator." alt="" coords="5,169,111,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="157,244,228,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="366,169,449,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="569,169,635,196"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="689,169,757,196"/>
+</map>

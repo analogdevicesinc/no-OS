@@ -1,0 +1,5 @@
+<map id="jesd204_state_op" name="jesd204_state_op">
+<area shape="rect" id="node1" title="JESD204 device per&#45;state op." alt="" coords="5,184,141,211"/>
+<area shape="rect" id="node2" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="21,95,125,121"/>
+<area shape="rect" id="node3" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="13,5,133,32"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="drivers/adc/ad7689/ad7689.h" name="drivers/adc/ad7689/ad7689.h">
+<area shape="rect" id="node1" title="Header file for the ad7689 driver." alt="" coords="5,5,152,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="61,169,131,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="37,95,120,121"/>
+<area shape="rect" id="node4" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="144,95,243,121"/>
+</map>

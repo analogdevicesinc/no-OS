@@ -1,0 +1,4 @@
+<map id="spi_engine_read" name="spi_engine_read">
+<area shape="rect" id="node1" title="Read SPI Engine&#39;s axi registers." alt="" coords="173,29,301,56"/>
+<area shape="rect" id="node2" href="$spi__engine_8h.html#aa111895bead28b30b7d716312883d6d3" title="Initialize the spi engine." alt="" coords="5,29,125,56"/>
+</map>

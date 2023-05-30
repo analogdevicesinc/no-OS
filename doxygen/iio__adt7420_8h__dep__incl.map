@@ -1,0 +1,5 @@
+<map id="drivers/temperature/adt7420/iio_adt7420.h" name="drivers/temperature/adt7420/iio_adt7420.h">
+<area shape="rect" id="node1" title="Header file of IIO ADT7420 Driver." alt="" coords="109,5,280,47"/>
+<area shape="rect" id="node2" href="$iio__adt7420_8c.html" title="Implementation of IIO ADT7420 Driver." alt="" coords="5,102,176,143"/>
+<area shape="rect" id="node3" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example code for adt7420&#45;pmdz project." alt="" coords="200,95,397,151"/>
+</map>

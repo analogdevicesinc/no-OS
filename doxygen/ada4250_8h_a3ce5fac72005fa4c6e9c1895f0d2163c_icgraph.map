@@ -1,0 +1,9 @@
+<map id="ada4250_update" name="ada4250_update">
+<area shape="rect" id="node1" title="Update ADA4250 register." alt="" coords="460,81,591,108"/>
+<area shape="rect" id="node2" href="$ada4250_8h.html#a20bb94514088aaa21b24674ba857ddd6" title="Enable/Disable Reference Buffer." alt="" coords="264,5,411,32"/>
+<area shape="rect" id="node3" href="$ada4250_8h.html#ae3a300b8abee90ae471df602dfa575cb" title="Set current bias for ADA4250." alt="" coords="268,56,407,83"/>
+<area shape="rect" id="node4" href="$ada4250_8h.html#acd99812b89506c8eafe0ef88ac29c271" title="Set gain for ADA4250." alt="" coords="267,107,407,133"/>
+<area shape="rect" id="node5" href="$ada4250_8h.html#a620ad3b09aade92c35948a253fbf4523" title="Software reset." alt="" coords="263,157,412,184"/>
+<area shape="rect" id="node6" href="$ada4250_8h.html#afcaeb14f57346669b660ba6004853ef8" title="Initialize the ADA4250 device." alt="" coords="108,157,215,184"/>
+<area shape="rect" id="node7" href="$ada4250__ardz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="5,157,60,184"/>
+</map>

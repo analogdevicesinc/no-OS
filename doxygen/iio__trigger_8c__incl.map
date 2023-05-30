@@ -1,0 +1,18 @@
+<map id="iio/iio_trigger.c" name="iio/iio_trigger.c">
+<area shape="rect" id="node1" title="Implementation of generic iio trigger." alt="" coords="282,5,401,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="125,379,195,405"/>
+<area shape="rect" id="node3" title=" " alt="" coords="459,80,530,107"/>
+<area shape="rect" id="node4" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="555,80,664,107"/>
+<area shape="rect" id="node6" href="$no__os__alloc_8h.html" title=" " alt="" coords="11,80,122,107"/>
+<area shape="rect" id="node8" href="$iio_8h.html" title="Header file of iio." alt="" coords="333,155,384,181"/>
+<area shape="rect" id="node15" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="336,80,435,107"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="575,155,643,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,155,72,181"/>
+<area shape="rect" id="node9" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="423,229,516,256"/>
+<area shape="rect" id="node13" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="277,229,382,256"/>
+<area shape="rect" id="node10" title=" " alt="" coords="273,379,356,405"/>
+<area shape="rect" id="node11" title=" " alt="" coords="557,379,627,405"/>
+<area shape="rect" id="node12" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="507,304,677,331"/>
+<area shape="rect" id="node14" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="248,304,381,331"/>
+<area shape="rect" id="node16" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="628,229,724,256"/>
+</map>

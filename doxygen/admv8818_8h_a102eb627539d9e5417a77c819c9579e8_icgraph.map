@@ -1,0 +1,4 @@
+<map id="admv8818_spi_update_bits" name="admv8818_spi_update_bits">
+<area shape="rect" id="node1" title="Update ADMV8818 register." alt="" coords="172,5,372,32"/>
+<area shape="rect" id="node2" href="$admv8818_8h.html#ab2a128203022a3ed084779326ecef8be" title="Initializes the admv8818." alt="" coords="5,5,124,32"/>
+</map>

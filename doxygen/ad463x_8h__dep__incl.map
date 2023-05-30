@@ -1,0 +1,5 @@
+<map id="drivers/adc/ad463x/ad463x.h" name="drivers/adc/ad463x/ad463x.h">
+<area shape="rect" id="node1" title="Header file of AD463x Driver." alt="" coords="95,5,241,47"/>
+<area shape="rect" id="node2" href="$ad463x_8c.html" title="Implementation of AD463x Driver." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$ad463x__fmc_8c.html" title="Implementation of Main Function." alt="" coords="176,95,341,136"/>
+</map>

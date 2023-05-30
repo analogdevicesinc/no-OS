@@ -1,0 +1,10 @@
+<map id="mykonosTxSettings_t" name="mykonosTxSettings_t">
+<area shape="rect" id="node1" title="Data structure to hold Tx data path settings." alt="" coords="599,107,761,133"/>
+<area shape="rect" id="node2" href="$structmykonos_vswr_config__t.html" title="Structure to configure VSWR (Only valid for a DPD&#45;enabled transceiver)" alt="" coords="263,5,429,32"/>
+<area shape="rect" id="node3" href="$structmykonos_tx_profile__t.html" title="Data structure to hold settings for the current Tx specific use case profile." alt="" coords="271,56,421,83"/>
+<area shape="rect" id="node4" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="5,56,115,83"/>
+<area shape="rect" id="node5" href="$structmykonos_clgc_config__t.html" title="Structure to configure CLGC (Closed Loop Gain Control) (Only valid for a DPD&#45;enabled transceiver)" alt="" coords="265,107,427,133"/>
+<area shape="rect" id="node6" href="$structmykonos_jesd204b_deframer_config__t.html" title="Data structure to hold the settings for the deserializer and deframer configuration." alt="" coords="219,157,473,184"/>
+<area shape="rect" id="node7" href="$structmykonos_dpd_config__t.html" title="Structure to configure DPD (Only valid for a DPD&#45;enabled transceiver) deprecated robustModeling membe..." alt="" coords="266,208,426,235"/>
+<area shape="rect" id="node8" href="$structint8__cpx.html" title="Structure used within the DPD config structure to hold a int8_t complex number." alt="" coords="21,208,99,235"/>
+</map>

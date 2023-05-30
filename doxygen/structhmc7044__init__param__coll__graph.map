@@ -1,0 +1,8 @@
+<map id="hmc7044_init_param" name="hmc7044_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="74,363,233,389"/>
+<area shape="rect" id="node2" href="$structhmc7044__chan__spec.html" title=" " alt="" coords="5,273,163,300"/>
+<area shape="rect" id="node3" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="187,273,349,300"/>
+<area shape="rect" id="node4" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="279,184,401,211"/>
+<area shape="rect" id="node5" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="251,5,429,32"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="455,95,601,121"/>
+</map>

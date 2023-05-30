@@ -1,0 +1,16 @@
+<map id="adin1110_reg_read" name="adin1110_reg_read">
+<area shape="rect" id="node1" title="Read a register&#39;s value." alt="" coords="460,259,607,285"/>
+<area shape="rect" id="node2" href="$adin1110_8c.html#adff719efae401e69148b2ffdc2fc1657" title="Drop a MAC address filter." alt="" coords="213,5,405,32"/>
+<area shape="rect" id="node4" href="$adin1110_8h.html#a27e02adfe419b1646c268d291e25333a" title="Reset both the MAC and PHY." alt="" coords="233,56,386,83"/>
+<area shape="rect" id="node5" href="$adin1110_8h.html#a9f5add21eeddbb548eb4c86436a6b00c" title="Reset the MAC device." alt="" coords="231,107,388,133"/>
+<area shape="rect" id="node6" href="$adin1110_8h.html#a976ff9c87dee57812cdc31869fb00afa" title="Read a PHY register using clause 22." alt="" coords="230,157,389,184"/>
+<area shape="rect" id="node7" href="$adin1110_8h.html#a36cc242f605b3251d5a5662fea41f534" title="Read a PHY register using clause 45." alt="" coords="215,208,403,235"/>
+<area shape="rect" id="node8" href="$adin1110_8h.html#af976653778ae7d9acc44b2e745987a73" title="Write a PHY register using clause 22." alt="" coords="228,259,391,285"/>
+<area shape="rect" id="node9" href="$adin1110_8h.html#aa2b694efd5f31849bdeb6228b7070394" title="Write a PHY register using clause 45." alt="" coords="213,309,405,336"/>
+<area shape="rect" id="node10" href="$adin1110_8h.html#a9f59c78bf9e0857b7522f1410725f373" title="Reset the PHY device." alt="" coords="233,360,386,387"/>
+<area shape="rect" id="node11" href="$adin1110_8h.html#a72d9ad4ea11c49d3a4a76ec024d4be81" title="Update a register&#39;s value based on a mask." alt="" coords="228,411,391,437"/>
+<area shape="rect" id="node12" href="$adin1110_8h.html#a05609f0807a1f98ed266f3f75073ddea" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="219,461,399,488"/>
+<area shape="rect" id="node13" href="$frame__rx__tx__example_8h.html#abe0fb5a74cb63c5acfcb582ace42a4ee" title="Frame receive an transmit example main execution." alt="" coords="207,512,412,539"/>
+<area shape="rect" id="node3" href="$adin1110_8h.html#a32b2d0fa3b54c8b0219e6b8ed5992d14" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="5,222,159,263"/>
+<area shape="rect" id="node14" href="$adin1110_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="55,512,109,539"/>
+</map>

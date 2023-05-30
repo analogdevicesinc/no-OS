@@ -1,0 +1,14 @@
+<map id="drivers/platform/chibios/chibios_uart.c" name="drivers/platform/chibios/chibios_uart.c">
+<area shape="rect" id="node1" title="Source file of UART driver for chibios." alt="" coords="114,5,291,47"/>
+<area shape="rect" id="node2" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,95,115,121"/>
+<area shape="rect" id="node4" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="109,169,214,196"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="331,95,442,121"/>
+<area shape="rect" id="node11" href="$chibios__uart_8h.html" title="Header file of UART driver for chibiOS." alt="" coords="194,95,307,121"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="17,169,85,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="219,319,290,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="111,319,193,345"/>
+<area shape="rect" id="node7" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="147,244,280,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="345,319,415,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="317,169,384,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="238,169,293,196"/>
+</map>

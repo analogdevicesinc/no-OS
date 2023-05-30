@@ -1,0 +1,25 @@
+<map id="ad917x_register_write" name="ad917x_register_write">
+<area shape="rect" id="node1" title="Perform SPI register write access to AD917X Device." alt="" coords="473,610,640,637"/>
+<area shape="rect" id="node2" href="$group___a_p_i.html#ga417dc89142884e87474ed4491b8c728d" title="Set DC Test Tone enable status." alt="" coords="223,122,410,149"/>
+<area shape="rect" id="node3" href="$group___a_p_i.html#ga45fcbdbcecb280893d0f33e1346e3adc" title="Set NCO." alt="" coords="19,97,146,123"/>
+<area shape="rect" id="node4" href="$group___a_p_i.html#ga50323fcdd15472080734e542b5f8d5ff" title="Set Main DAC Cal DC Input." alt="" coords="236,5,397,47"/>
+<area shape="rect" id="node5" href="$group___a_p_i.html#ga859a5bfb0cff6f2bdfe9045c55e4c15d" title="Configure the JESD Datapath for AD917X." alt="" coords="241,173,392,215"/>
+<area shape="rect" id="node6" href="$group___a_p_i.html#ga61f6bffa132f73240fe51f5a6bcc4410" title="Enable the JESD Interface." alt="" coords="5,788,160,829"/>
+<area shape="rect" id="node7" href="$group___a_p_i.html#ga0ba18ba647ff38a682d855562b30f4e8" title="Enable JESD Link." alt="" coords="223,290,410,317"/>
+<area shape="rect" id="node8" href="$group___a_p_i.html#ga1cf81afbec962b0860020d8e318f31f5" title="Invert or un&#45;invert logical lanes." alt="" coords="225,341,409,367"/>
+<area shape="rect" id="node9" href="$group___a_p_i.html#ga0b495f25f7df98691a07611ca00f935c" title="Configure the Lane Cross Bar in the JESD datalink layer." alt="" coords="215,391,418,418"/>
+<area shape="rect" id="node10" href="$group___a_p_i.html#gad74426d51cc4a3d11cf51f5c683c988a" title="Set the LMFC Delay and Variance for the JESD Links." alt="" coords="233,443,400,484"/>
+<area shape="rect" id="node11" href="$group___a_p_i.html#ga5eb602a6442b863bd4a0b6b1e8568331" title="Enable the SYNCOUTB Output Signal." alt="" coords="218,508,415,549"/>
+<area shape="rect" id="node12" href="$group___a_p_i.html#gafc5f1dcc522a197410c60a03873fc728" title="Enable SysRef Input." alt="" coords="227,573,406,615"/>
+<area shape="rect" id="node13" href="$group___a_p_i.html#ga5d5c005883a660aee704aa237f0a9baf" title="NCO Enable." alt="" coords="241,639,392,666"/>
+<area shape="rect" id="node14" href="$group___a_p_i.html#gac1a2d7c182f1ef6c144394282548030c" title="Get NCO phase offset." alt="" coords="229,691,404,732"/>
+<area shape="rect" id="node15" href="$group___a_p_i.html#ga2274d16fc5e9a818b0d13195895e8c04" title="Set FTW, ACC and MOD values." alt="" coords="239,71,394,98"/>
+<area shape="rect" id="node16" href="$group___a_p_i.html#ga030fcf91aea218b140b7a0d785f41349" title="Set NCO phase offset." alt="" coords="230,808,403,849"/>
+<area shape="rect" id="node17" href="$ad917x__reg_8h.html#a36572027780012a74a065433288aecef" title=" " alt="" coords="221,874,412,901"/>
+<area shape="rect" id="node18" href="$group___a_p_i.html#ga9f25e406afc8af656f73efd3fdf4698e" title="Configure the On Chip DAC PLL." alt="" coords="7,892,158,933"/>
+<area shape="rect" id="node19" href="$group___a_p_i.html#ga81ecd4e111118bcf30e72342ad6361a8" title="Reset the AD917X." alt="" coords="261,975,372,1002"/>
+<area shape="rect" id="node20" href="$group___a_p_i.html#ga484d94353e38fd5add9825955cb29d9c" title="Set Channel gain." alt="" coords="221,1026,412,1053"/>
+<area shape="rect" id="node21" href="$group___a_p_i.html#ga77c4f50cdadbf9c3640755920a6054bd" title="Set CLKOUT configuration." alt="" coords="222,1077,411,1103"/>
+<area shape="rect" id="node22" href="$group___a_p_i.html#ga5e4d708beab7c4836ea78b8f2c2ea4f0" title="Set DC Calibration tone." alt="" coords="208,1127,425,1154"/>
+<area shape="rect" id="node23" href="$group___a_p_i.html#ga444d7c748021abb3bc71da518d29448a" title="Select Page." alt="" coords="235,1178,398,1205"/>
+</map>

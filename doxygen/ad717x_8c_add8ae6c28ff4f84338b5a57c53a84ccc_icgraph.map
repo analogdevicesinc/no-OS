@@ -1,0 +1,4 @@
+<map id="AD717X_ReadData" name="AD717X_ReadData">
+<area shape="rect" id="node1" title="Reads the conversion result from the device." alt="" coords="205,5,351,32"/>
+<area shape="rect" id="node2" href="$ad717x_8h.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,5,157,32"/>
+</map>

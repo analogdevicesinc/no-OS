@@ -1,0 +1,64 @@
+<map id="no_os_put_unaligned_be16" name="no_os_put_unaligned_be16">
+<area shape="rect" id="node1" title=" " alt="" coords="1068,553,1267,580"/>
+<area shape="rect" id="node2" href="$ad3552r_8h.html#a14cac9936d965b7a9a49bb689f76dfd9" title=" " alt="" coords="861,64,1004,91"/>
+<area shape="rect" id="node6" href="$ade9430_8h.html#a8c1c91c705d4889023814e717ecc3255" title="Write device register." alt="" coords="873,173,992,200"/>
+<area shape="rect" id="node13" href="$adin1110_8h.html#a3ff5742f3a4039bedf915fb119306d7f" title="Read a register&#39;s value." alt="" coords="859,503,1006,529"/>
+<area shape="rect" id="node27" href="$adin1110_8h.html#a7f157de82c57768ef1e93c512c97f608" title="Write a register&#39;s value." alt="" coords="857,440,1008,467"/>
+<area shape="rect" id="node30" href="$adt75_8h.html#a04154a14d69e6208c62ac096fc6f9b39" title="Write a raw value to a register." alt="" coords="869,553,996,580"/>
+<area shape="rect" id="node31" href="$24xx32a_8c.html#ac88a4d64bf29d7576a30f648f39ebf57" title="Read the 24XX32A EEPROM data." alt="" coords="847,604,1018,631"/>
+<area shape="rect" id="node32" href="$24xx32a_8c.html#a4b42294ab9b7b008bb63d079cfd48e02" title="Write the 24XX32A EEPROM data." alt="" coords="845,655,1020,681"/>
+<area shape="rect" id="node33" href="$max14001_8h.html#a73ed1580c63243a693a1df2ed5479271" title="Read from device." alt="" coords="869,908,996,935"/>
+<area shape="rect" id="node58" href="$max14001_8h.html#afd74e544bd5d089c465cdd45f762e385" title="Write to device." alt="" coords="867,1748,998,1775"/>
+<area shape="rect" id="node3" href="$ad3552r_8h.html#a4b118dc51ba86b1c81b8a5fbfe1c384f" title=" " alt="" coords="614,5,773,32"/>
+<area shape="rect" id="node5" href="$ad3552r_8h.html#a8e59071eb5dc9e29dcef464b5ee97c37" title=" " alt="" coords="608,57,779,98"/>
+<area shape="rect" id="node4" href="$ad3552r__fmcz_2srcs_2main_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="398,5,505,32"/>
+<area shape="rect" id="node7" href="$ade9430_8h.html#a953e9b4c0e73792266381e34b63a8298" title="Set User Energy use model." alt="" coords="601,123,785,149"/>
+<area shape="rect" id="node9" href="$ade9430_8h.html#a931208decd557cdbd43246b0076f6845" title="Update specific register bits." alt="" coords="613,173,774,200"/>
+<area shape="rect" id="node8" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="183,148,238,175"/>
+<area shape="rect" id="node10" href="$ade9430_8h.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="398,173,505,200"/>
+<area shape="rect" id="node11" href="$ade9430_8h.html#accf20aba0ba1faa72a1d10d63de51da3" title="Read the temperature." alt="" coords="374,224,529,251"/>
+<area shape="rect" id="node12" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="151,224,271,251"/>
+<area shape="rect" id="node14" href="$adin1110_8c.html#adff719efae401e69148b2ffdc2fc1657" title="Drop a MAC address filter." alt="" coords="597,427,789,453"/>
+<area shape="rect" id="node16" href="$adin1110_8h.html#a27e02adfe419b1646c268d291e25333a" title="Reset both the MAC and PHY." alt="" coords="617,731,770,757"/>
+<area shape="rect" id="node17" href="$adin1110_8h.html#a9f5add21eeddbb548eb4c86436a6b00c" title="Reset the MAC device." alt="" coords="615,528,772,555"/>
+<area shape="rect" id="node18" href="$adin1110_8h.html#a976ff9c87dee57812cdc31869fb00afa" title="Read a PHY register using clause 22." alt="" coords="614,579,773,605"/>
+<area shape="rect" id="node19" href="$adin1110_8h.html#a36cc242f605b3251d5a5662fea41f534" title="Read a PHY register using clause 45." alt="" coords="599,629,787,656"/>
+<area shape="rect" id="node20" href="$adin1110_8h.html#af976653778ae7d9acc44b2e745987a73" title="Write a PHY register using clause 22." alt="" coords="612,275,775,301"/>
+<area shape="rect" id="node21" href="$adin1110_8h.html#aa2b694efd5f31849bdeb6228b7070394" title="Write a PHY register using clause 45." alt="" coords="597,325,789,352"/>
+<area shape="rect" id="node22" href="$adin1110_8h.html#a9f59c78bf9e0857b7522f1410725f373" title="Reset the PHY device." alt="" coords="617,680,770,707"/>
+<area shape="rect" id="node23" href="$adin1110_8h.html#a72d9ad4ea11c49d3a4a76ec024d4be81" title="Update a register&#39;s value based on a mask." alt="" coords="612,376,775,403"/>
+<area shape="rect" id="node24" href="$adin1110_8h.html#a05609f0807a1f98ed266f3f75073ddea" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="603,477,783,504"/>
+<area shape="rect" id="node25" href="$frame__rx__tx__example_8h.html#abe0fb5a74cb63c5acfcb582ace42a4ee" title="Frame receive an transmit example main execution." alt="" coords="108,552,313,579"/>
+<area shape="rect" id="node15" href="$adin1110_8h.html#a32b2d0fa3b54c8b0219e6b8ed5992d14" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="375,445,528,486"/>
+<area shape="rect" id="node26" href="$adin1110_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,552,60,579"/>
+<area shape="rect" id="node28" href="$adin1110_8h.html#aedf3f21c23621ec1abcdec2374996711" title="Reset both the MAC and PHY." alt="" coords="620,224,767,251"/>
+<area shape="rect" id="node29" href="$adin1110_8h.html#a635de87c5f9555429501be7482f7d2bb" title="Initialize the device." alt="" coords="396,321,507,348"/>
+<area shape="rect" id="node34" href="$max14001_8h.html#aee5f9e0507987747ebb75e55ac75ff50" title="Get filtered adc data." alt="" coords="589,832,797,859"/>
+<area shape="rect" id="node35" href="$max14001_8h.html#a9b0ce3c935e25f57bc5305da606cff30" title="Get adc data." alt="" coords="600,883,787,909"/>
+<area shape="rect" id="node36" href="$max14001_8h.html#a6ad7e18e91c998d372f07b418d2f7bc2" title="Initialize the configurations of device." alt="" coords="128,1769,293,1796"/>
+<area shape="rect" id="node37" href="$max14001_8h.html#af03b76b231f573f5de1acb95cc122d23" title="SPI write to device using a mask." alt="" coords="608,984,779,1011"/>
+<area shape="rect" id="node38" href="$max14001_8h.html#aee9cd5354ccbc9fdb66516e1f64dc3bd" title="Write to config registers then to corresponding verification register." alt="" coords="605,1483,782,1525"/>
+<area shape="rect" id="node39" href="$max14001_8h.html#a0b2f4d8ad26efe3ac037a9064c6c78a7" title="Set maximum duty cycle for inrush current over the last 10 seconds." alt="" coords="371,1845,531,1872"/>
+<area shape="rect" id="node40" href="$max14001_8h.html#ae36880ade2d30a024621b266b5b9771f" title="Enable dynamic FAULT signal." alt="" coords="363,1896,539,1923"/>
+<area shape="rect" id="node41" href="$max14001_8h.html#a94ffb87e3d95b570027818f91aae6f17" title="Enable ADC fault." alt="" coords="364,1947,539,1973"/>
+<area shape="rect" id="node42" href="$max14001_8h.html#a2bf03d709bfdb701c158d5631bc75bcd" title="Enable COM fault." alt="" coords="361,1035,541,1061"/>
+<area shape="rect" id="node43" href="$max14001_8h.html#a4f14bbd8d3a52e7d06b75de48c0fff9f" title="Enable CRCF fault." alt="" coords="363,1085,539,1112"/>
+<area shape="rect" id="node44" href="$max14001_8h.html#a53cf5087f9616db42ec263c1151d34e2" title="Enable CRCL fault." alt="" coords="364,1136,539,1163"/>
+<area shape="rect" id="node45" href="$max14001_8h.html#a8c0d9be020758f98c85e639795439f83" title="Enable FET fault." alt="" coords="366,1187,537,1213"/>
+<area shape="rect" id="node46" href="$max14001_8h.html#aa5d8550f4b5091575b73610b58563c8a" title="Enable INRD fault." alt="" coords="363,1237,540,1264"/>
+<area shape="rect" id="node47" href="$max14001_8h.html#a61ce80a51e7b2284f8e217f7701aaae2" title="Enable MV fault." alt="" coords="365,1744,538,1771"/>
+<area shape="rect" id="node48" href="$max14001_8h.html#ac599de4d4c5102ceee4220caf7cbbc75" title="Enable/Disable field&#45;side current sink." alt="" coords="367,1795,535,1821"/>
+<area shape="rect" id="node49" href="$max14001_8h.html#aad2c248c340c80506637d1f2e24cc502" title="Enable SPI fault." alt="" coords="366,1288,537,1315"/>
+<area shape="rect" id="node50" href="$max14001_8h.html#a611aea7e41eb22080b84b9583a81f596" title="Selects the voltage reference source for the ADC." alt="" coords="366,1339,537,1365"/>
+<area shape="rect" id="node51" href="$max14001_8h.html#a0ad4afb2d5167c8774a7b8dadc721ed4" title="Current source connection." alt="" coords="367,1389,536,1416"/>
+<area shape="rect" id="node52" href="$max14001_8h.html#a59f898278a18ce26d75c91d046f7ccff" title="Enable/Disable fast inrush mode." alt="" coords="367,1440,536,1467"/>
+<area shape="rect" id="node53" href="$max14001_8h.html#ad5ab80cfb23b61a3a4691653099918eb" title="Set number of readings averaged in the ADC filter." alt="" coords="375,1491,528,1517"/>
+<area shape="rect" id="node54" href="$max14001_8h.html#acde5a4183e929bab1b8585850dfa40dc" title="Configure 4&#45;bit bias current." alt="" coords="364,1541,539,1568"/>
+<area shape="rect" id="node55" href="$max14001_8h.html#aa81e4e1dc2618341e95293ea4a9722d2" title="Configure 4&#45;bit inrush current." alt="" coords="369,1592,534,1619"/>
+<area shape="rect" id="node56" href="$max14001_8h.html#ab2cd98d2d0a35869c71e8fa021bb6d43" title="Selects Inrush comparator input multiplexer." alt="" coords="365,1643,537,1669"/>
+<area shape="rect" id="node57" href="$max14001_8h.html#ad4fe38ceb1888a46e3475cd0f8f08004" title="Configure 4&#45;bit inrush time." alt="" coords="368,1693,535,1720"/>
+<area shape="rect" id="node59" href="$max14001_8h.html#aa15814147de171ef96cfe0bd5047a923" title="Full reset, same effect as power on reset." alt="" coords="614,1723,773,1749"/>
+<area shape="rect" id="node60" href="$max14001_8h.html#a2f88053632fe9e657440e3f8a4550b7d" title="Trigger an inrush current pulse." alt="" coords="609,1773,778,1800"/>
+<area shape="rect" id="node61" href="$max14001_8h.html#a223d2ff0cbfb1136ad932189e162a7bc" title="Software reset. Restores all registers to their POR value." alt="" coords="614,2099,773,2125"/>
+<area shape="rect" id="node62" href="$max14001_8h.html#a2877082d44ae50dd7de3091a7e6d8fd5" title="Enable write to registers." alt="" coords="631,2048,756,2075"/>
+</map>

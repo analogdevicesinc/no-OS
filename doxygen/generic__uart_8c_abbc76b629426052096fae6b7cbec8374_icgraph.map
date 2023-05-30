@@ -1,0 +1,6 @@
+<map id="no_os_uart_read" name="no_os_uart_read">
+<area shape="rect" id="node1" title="Read data from UART device." alt="" coords="243,31,372,57"/>
+<area shape="rect" id="node2" href="$stm32__uart__stdio_8h.html#ab60e5acd5530805f1421802fc0dc1d35" title=" " alt="" coords="122,5,181,32"/>
+<area shape="rect" id="node3" href="$cn0565_2src_2app_2app_8c.html#a388217d376f9fb3aeccae6a3e7b4c4c1" title=" " alt="" coords="108,56,195,83"/>
+<area shape="rect" id="node4" href="$cn0565_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,56,60,83"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ad9523_init_param" name="ad9523_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="150,363,297,389"/>
+<area shape="rect" id="node2" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="23,273,186,300"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="43,184,166,211"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="15,5,194,32"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="219,95,366,121"/>
+<area shape="rect" id="node6" href="$structad9523__platform__data.html" title="platform specific information" alt="" coords="239,273,408,300"/>
+<area shape="rect" id="node7" href="$structad9523__channel__spec.html" title="Output channel configuration." alt="" coords="261,184,426,211"/>
+</map>

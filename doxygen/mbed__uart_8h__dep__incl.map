@@ -1,0 +1,7 @@
+<map id="drivers/platform/mbed/mbed_uart.h" name="drivers/platform/mbed/mbed_uart.h">
+<area shape="rect" id="node1" title="Header containing extra types required for UART interface." alt="" coords="154,5,322,47"/>
+<area shape="rect" id="node2" href="$ad74416h_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ad74416h project." alt="" coords="5,95,220,136"/>
+<area shape="rect" id="node4" href="$adt7420-pmdz_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by adt7420&#45;pmdz project." alt="" coords="245,95,482,136"/>
+<area shape="rect" id="node3" href="$ad74416h_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ad74416h project." alt="" coords="6,184,219,225"/>
+<area shape="rect" id="node5" href="$adt7420-pmdz_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by adt7420&#45;pmdz project." alt="" coords="245,184,481,225"/>
+</map>

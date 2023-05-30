@@ -1,0 +1,6 @@
+<map id="drivers/platform/aducm3029/aducm3029_trng.h" name="drivers/platform/aducm3029/aducm3029_trng.h">
+<area shape="rect" id="node1" title="ADuCM302x specific header for TRNG driver." alt="" coords="57,5,264,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,161,121"/>
+<area shape="rect" id="node3" href="$no__os__trng_8h.html" title="Header file of true random number generator." alt="" coords="185,95,291,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="203,169,273,196"/>
+</map>

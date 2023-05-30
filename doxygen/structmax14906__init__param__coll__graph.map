@@ -1,0 +1,10 @@
+<map id="max14906_init_param" name="max14906_init_param">
+<area shape="rect" id="node1" title="Initialization parameter for the MAX14906 device." alt="" coords="190,363,358,389"/>
+<area shape="rect" id="node2" href="$structmax14906__ch__config.html" title="Configuration structure for a MAX14906 channel." alt="" coords="5,273,164,300"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="188,273,360,300"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="180,184,368,211"/>
+<area shape="rect" id="node5" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="385,273,547,300"/>
+<area shape="rect" id="node6" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="489,184,611,211"/>
+<area shape="rect" id="node7" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="461,5,639,32"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="665,95,811,121"/>
+</map>

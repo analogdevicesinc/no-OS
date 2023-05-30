@@ -1,0 +1,8 @@
+<map id="drivers/temperature/max31855/max31855.h" name="drivers/temperature/max31855/max31855.h">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,185,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="60,169,131,196"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="46,95,145,121"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="169,95,269,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="169,169,240,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="265,169,347,196"/>
+</map>

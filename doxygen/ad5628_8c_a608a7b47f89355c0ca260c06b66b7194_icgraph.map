@@ -1,0 +1,4 @@
+<map id="ad5628_reset" name="ad5628_reset">
+<area shape="rect" id="node1" title="Resets the device." alt="" coords="152,5,263,32"/>
+<area shape="rect" id="node2" href="$ad5628_8h.html#a1206c55252c05153d608d3c28ddc93bb" title="Initializes the communication peripheral and the initial Values for AD5628 Board and resets the devic..." alt="" coords="5,5,104,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="adxl313_act_inact_ctl_flags" name="adxl313_act_inact_ctl_flags">
+<area shape="rect" id="node1" title="Union holding the flags corresponding to ACT AC/DC and INACT AC/DC Bits." alt="" coords="5,109,168,151"/>
+<area shape="rect" id="node2" href="$struct__adxl313__act__inact__ctl__flags.html" title="Structure holding the flags corresponding to ACT AC/DC and INACT AC/DC Bits." alt="" coords="13,5,160,47"/>
+</map>

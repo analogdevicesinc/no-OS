@@ -1,0 +1,50 @@
+<map id="no_os_gpio_get_value" name="no_os_gpio_get_value">
+<area shape="rect" id="node1" title="Get the value of the specified GPIO." alt="" coords="1100,259,1267,285"/>
+<area shape="rect" id="node2" href="$ad413x_8h.html#a7887134fbf7282b4c3f6350d9c2beffa" title=" " alt="" coords="863,5,1049,32"/>
+<area shape="rect" id="node4" href="$ad413x_8h.html#aabddf95dcf6e79e062bbcfa8d2fb55ec" title=" " alt="" coords="879,56,1033,83"/>
+<area shape="rect" id="node5" href="$ad4858_8h.html#a895b2bfb2c292e9a33a7baf5e2f5b7c9" title="Perform ADC conversion." alt="" coords="873,107,1039,133"/>
+<area shape="rect" id="node7" href="$ad719x_8h.html#a9f998dc152f194f4830094059f8e0f32" title="Waits for RDY pin to go low." alt="" coords="863,157,1049,184"/>
+<area shape="rect" id="node14" href="$ad7280a_8h.html#a01d8178a75054564a3f06f0520799f2a" title=" " alt="" coords="885,208,1027,235"/>
+<area shape="rect" id="node15" href="$ad7768__evb_8c.html#ac58fafc30e663c4d7e2f794abb31ac22" title="ad7768evb_verify_status" alt="" coords="860,259,1052,285"/>
+<area shape="rect" id="node16" href="$adf7023_8h.html#a8c05c851064bebafdbc2e810ce6a1cc2" title="Initializes the ADF7023." alt="" coords="905,309,1007,336"/>
+<area shape="rect" id="node17" href="$adxrs290_8h.html#a2cd7532db4ac92531213eaa43ad8ff35" title="Get the state of data ready." alt="" coords="861,360,1051,387"/>
+<area shape="rect" id="node18" href="$hmc630x_8h.html#a0899de2f3e23cd3ba65f6ab731e52c6d" title=" " alt="" coords="881,411,1031,437"/>
+<area shape="rect" id="node44" href="$fmcadc5_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="929,461,983,488"/>
+<area shape="rect" id="node45" href="$blinky__example_8c.html#a34bd0710853dee4a1ba9600f95eb8d27" title=" " alt="" coords="925,943,987,969"/>
+<area shape="rect" id="node3" href="$ad413x_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="667,5,722,32"/>
+<area shape="rect" id="node6" href="$ad4858_8h.html#a543e38084df829f2e85a9908265bcc36" title="Read ADC data (for all channels)." alt="" coords="623,56,766,83"/>
+<area shape="rect" id="node8" href="$ad719x_8h.html#a911e159361da297a10809f1cf6ba8059" title="Performs the given calibration to the specified channel." alt="" coords="627,107,762,133"/>
+<area shape="rect" id="node9" href="$ad719x_8h.html#adcb7617f625bad20d98c3f902f5f1e92" title="Returns the average of several conversion results." alt="" coords="587,157,802,184"/>
+<area shape="rect" id="node12" href="$ad719x_8h.html#a8b2be560509098d550618957a4b4ef14" title="Returns the result of a single conversion." alt="" coords="597,208,792,235"/>
+<area shape="rect" id="node10" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,31,284,57"/>
+<area shape="rect" id="node11" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,31,60,57"/>
+<area shape="rect" id="node13" href="$ad719x_8h.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="333,56,528,83"/>
+<area shape="rect" id="node19" href="$hmc630x_8h.html#ab7e32d8e5d3239202fb1814a51d13c18" title=" " alt="" coords="350,107,511,133"/>
+<area shape="rect" id="node20" href="$hmc630x_8h.html#a732b6c34afff58b657c68b2f914ddab9" title=" " alt="" coords="635,385,754,412"/>
+<area shape="rect" id="node32" href="$hmc630x_8h.html#a2fdfc952d2d097526a779d31513fff65" title=" " alt="" coords="607,436,782,463"/>
+<area shape="rect" id="node33" href="$hmc630x_8h.html#a0cc41502b228b0f70a78dac24e0df9d4" title=" " alt="" coords="633,816,756,843"/>
+<area shape="rect" id="node43" href="$hmc630x_8h.html#a525eaa1ade81429a7c6f532b6789aa50" title=" " alt="" coords="605,867,784,893"/>
+<area shape="rect" id="node21" href="$hmc630x_8h.html#a5a76438c2a42e2713136e57a7f4efbb1" title=" " alt="" coords="351,157,510,184"/>
+<area shape="rect" id="node22" href="$hmc630x_8h.html#a559fa7251259b8dddab72f97ab336349" title=" " alt="" coords="351,208,511,235"/>
+<area shape="rect" id="node23" href="$hmc630x_8h.html#a5863d6e611ca1d13eead0fbba405b70d" title=" " alt="" coords="347,259,514,285"/>
+<area shape="rect" id="node24" href="$hmc630x_8h.html#a94869c2c50091f39502a33d32c553c06" title=" " alt="" coords="332,309,529,336"/>
+<area shape="rect" id="node25" href="$hmc630x_8h.html#a93f5a3fdfa24c43a7732036a0d16099a" title=" " alt="" coords="336,360,525,387"/>
+<area shape="rect" id="node26" href="$hmc630x_8h.html#a07015cf27b0f93082bfa4be14515efab" title=" " alt="" coords="345,411,517,437"/>
+<area shape="rect" id="node27" href="$hmc630x_8h.html#a44afde8e71ce375112ffed72c6371243" title=" " alt="" coords="351,461,510,488"/>
+<area shape="rect" id="node28" href="$hmc630x_8h.html#a1e8f15216c968329835ed1f1d7880df5" title=" " alt="" coords="355,512,506,539"/>
+<area shape="rect" id="node29" href="$hmc630x_8h.html#a4a55c3a939803dff15f6473202c55d4d" title=" " alt="" coords="343,563,518,589"/>
+<area shape="rect" id="node30" href="$hmc630x_8h.html#ad160bf93a58eb6bea8fed8ca763c1d4b" title=" " alt="" coords="361,613,501,640"/>
+<area shape="rect" id="node31" href="$hmc630x_8h.html#a302da32caef29a84521f625a9c8d0829" title=" " alt="" coords="361,664,500,691"/>
+<area shape="rect" id="node34" href="$hmc630x_8h.html#a76f06ef1ea0debb11bec0d8c798e6628" title=" " alt="" coords="352,715,509,741"/>
+<area shape="rect" id="node35" href="$hmc630x_8h.html#ad2e537eb575550c4e38a8dc325425d10" title=" " alt="" coords="351,765,510,792"/>
+<area shape="rect" id="node36" href="$hmc630x_8h.html#a9a8ece440462e8cbd16e344511f2701b" title=" " alt="" coords="348,816,513,843"/>
+<area shape="rect" id="node37" href="$hmc630x_8h.html#ae1585d47ac0ff8c61caac74697463d4f" title=" " alt="" coords="333,867,529,893"/>
+<area shape="rect" id="node38" href="$hmc630x_8h.html#ab63def67e811694eb646a04c058ba91d" title=" " alt="" coords="337,917,525,944"/>
+<area shape="rect" id="node39" href="$hmc630x_8h.html#a629d15d66f1e1929c7aa9cb3e9a59ade" title=" " alt="" coords="345,968,516,995"/>
+<area shape="rect" id="node40" href="$hmc630x_8h.html#a304baebcf4fab24f2e94b5b4030a0e0b" title=" " alt="" coords="351,1019,511,1045"/>
+<area shape="rect" id="node41" href="$hmc630x_8h.html#a4031a0777d2c8a9135dfadc31cc8593d" title=" " alt="" coords="351,1069,510,1096"/>
+<area shape="rect" id="node42" href="$hmc630x_8h.html#abf278dc5b8c172b150730ef73cdf8980" title=" " alt="" coords="344,1120,517,1147"/>
+<area shape="rect" id="node46" href="$blinky__example_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="667,917,722,944"/>
+<area shape="rect" id="node47" href="$mykonos__dbgjesd_8h.html#a9888728525b5878f7793e037716763d3" title="Gets JESD framer Pattern generator." alt="" coords="577,968,812,995"/>
+<area shape="rect" id="node48" href="$mykonos__dbgjesd_8h.html#aef882e01515c659d7bd8e7b69478bfb1" title="Performs set JESD framer Pattern Generator." alt="" coords="579,1019,811,1045"/>
+</map>

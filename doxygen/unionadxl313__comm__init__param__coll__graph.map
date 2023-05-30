@@ -1,0 +1,9 @@
+<map id="adxl313_comm_init_param" name="adxl313_comm_init_param">
+<area shape="rect" id="node1" title="Structure holding the parameters for ADXL313 communication initialization." alt="" coords="89,363,287,389"/>
+<area shape="rect" id="node2" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="13,273,176,300"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,184,184,211"/>
+<area shape="rect" id="node4" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="200,273,363,300"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="304,184,427,211"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="276,5,455,32"/>
+<area shape="rect" id="node7" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="480,95,627,121"/>
+</map>

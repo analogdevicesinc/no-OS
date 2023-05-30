@@ -1,0 +1,7 @@
+<map id="drivers/platform/stm32/stm32_timer.h" name="drivers/platform/stm32/stm32_timer.h">
+<area shape="rect" id="node1" title="Header file for the stm32 timer driver." alt="" coords="5,5,177,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="9,169,80,196"/>
+<area shape="rect" id="node3" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="35,95,148,121"/>
+<area shape="rect" id="node4" href="$stm32__hal_8h.html" title=" " alt="" coords="172,95,275,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="190,169,257,196"/>
+</map>

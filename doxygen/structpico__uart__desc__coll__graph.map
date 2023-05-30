@@ -1,0 +1,6 @@
+<map id="pico_uart_desc" name="pico_uart_desc">
+<area shape="rect" id="node1" title="pico platform specific UART descriptor" alt="" coords="80,184,199,211"/>
+<area shape="rect" id="node2" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="5,95,164,121"/>
+<area shape="rect" id="node3" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="189,95,338,121"/>
+<area shape="rect" id="node4" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="175,5,352,32"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="drivers/frequency/hmc7044/hmc7044.h" name="drivers/frequency/hmc7044/hmc7044.h">
+<area shape="rect" id="node1" title="Header file of HMC7044, HMC7043 Driver." alt="" coords="72,5,272,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,88,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="185,169,255,196"/>
+<area shape="rect" id="node4" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="163,95,277,121"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="301,95,400,121"/>
+</map>

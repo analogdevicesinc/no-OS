@@ -1,0 +1,14 @@
+<map id="drivers/rf&#45;transceiver/hmc630x/iio_hmc630x.h" name="drivers/rf&#45;transceiver/hmc630x/iio_hmc630x.h">
+<area shape="rect" id="node1" title="Header file of hmc6300 and hmc6301 driver extension for IIOD." alt="" coords="417,5,603,47"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="454,95,505,121"/>
+<area shape="rect" id="node10" href="$hmc630x_8h.html" title="hmc6300 and hmc6301 device driver header." alt="" coords="551,169,645,196"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="433,169,526,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="245,169,351,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="39,319,122,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="501,319,572,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="451,244,622,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="118,244,251,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="220,319,291,345"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="276,244,376,271"/>
+<area shape="rect" id="node12" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="697,244,803,271"/>
+</map>

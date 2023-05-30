@@ -1,0 +1,7 @@
+<map id="adrf6780_spi_update_bits" name="adrf6780_spi_update_bits">
+<area shape="rect" id="node1" title="Update ADRF6780 register." alt="" coords="387,60,576,87"/>
+<area shape="rect" id="node2" href="$adrf6780_8h.html#ad0ffbdbf399514f68df82b7a317b8fc4" title="Initializes the adrf6780." alt="" coords="5,64,113,91"/>
+<area shape="rect" id="node3" href="$adrf6780_8h.html#ad0fb53d470a2936c3ea0a787dea3a6f3" title="Read ADC raw data." alt="" coords="161,31,339,58"/>
+<area shape="rect" id="node4" href="$adrf6780_8h.html#a2ea47047b2fdcb16ccaba81b32d2e45e" title="Set I/Q Phase Accuracy." alt="" coords="169,82,331,124"/>
+<area shape="rect" id="node5" href="$adrf6780_8h.html#a422abf76a99cc5bdf475cee06588d923" title="Software Reset." alt="" coords="175,148,325,175"/>
+</map>

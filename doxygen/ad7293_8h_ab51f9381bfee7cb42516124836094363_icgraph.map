@@ -1,0 +1,4 @@
+<map id="ad7293_reset" name="ad7293_reset">
+<area shape="rect" id="node1" title="Perform both hardware and software reset." alt="" coords="152,5,263,32"/>
+<area shape="rect" id="node2" href="$ad7293_8h.html#a3c09628fc50f54db81d143cc303355dd" title="Initializes the ad7293." alt="" coords="5,5,104,32"/>
+</map>

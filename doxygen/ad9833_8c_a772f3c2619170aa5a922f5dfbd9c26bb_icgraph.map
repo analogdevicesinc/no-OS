@@ -1,0 +1,4 @@
+<map id="ad9833_set_phase" name="ad9833_set_phase">
+<area shape="rect" id="node1" title="Loads a phase value in a register." alt="" coords="152,5,295,32"/>
+<area shape="rect" id="node2" href="$ad9833_8h.html#aaf7b32900432e682c63e548c4a7236ce" title="Initialize the SPI communication with the device." alt="" coords="5,5,104,32"/>
+</map>

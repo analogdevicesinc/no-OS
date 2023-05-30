@@ -1,0 +1,11 @@
+<map id="drivers/accel/adxl367/iio_adxl367.h" name="drivers/accel/adxl367/iio_adxl367.h">
+<area shape="rect" id="node1" title="Header file of IIO ADXL367 Driver." alt="" coords="182,5,343,47"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="237,95,288,121"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="304,169,397,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="149,169,254,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,319,88,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="281,319,351,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="292,244,463,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,244,217,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="115,319,186,345"/>
+</map>

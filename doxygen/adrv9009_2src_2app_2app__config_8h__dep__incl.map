@@ -1,0 +1,6 @@
+<map id="projects/adrv9009/src/app/app_config.h" name="projects/adrv9009/src/app/app_config.h">
+<area shape="rect" id="node1" title="Config file for ADRV9009 project." alt="" coords="192,5,355,47"/>
+<area shape="rect" id="node2" href="$adrv9009_2src_2app_2app__clocking_8c.html" title="Clock setup and initialization routines." alt="" coords="5,95,168,136"/>
+<area shape="rect" id="node3" href="$app__talise_8c.html" title="Talise initialization and control routines." alt="" coords="192,95,355,136"/>
+<area shape="rect" id="node4" href="$adrv9009_2src_2app_2headless_8c.html" title="Contains example code for user integration with their application." alt="" coords="379,95,541,136"/>
+</map>

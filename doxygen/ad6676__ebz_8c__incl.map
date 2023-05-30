@@ -1,0 +1,31 @@
+<map id="projects/ad6676&#45;ebz/src/ad6676_ebz.c" name="projects/ad6676&#45;ebz/src/ad6676_ebz.c">
+<area shape="rect" id="node1" title="Implementation of Main Function." alt="" coords="780,5,935,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="8,169,75,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="186,95,273,121"/>
+<area shape="rect" id="node4" href="$ad6676-ebz_2src_2parameters_8h.html" title="Platform dependent parameters." alt="" coords="297,95,407,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="385,169,503,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="481,95,572,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="597,95,691,121"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="771,169,869,196"/>
+<area shape="rect" id="node11" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="589,169,696,196"/>
+<area shape="rect" id="node12" href="$xilinx__spi_8h.html" title=" " alt="" coords="767,95,863,121"/>
+<area shape="rect" id="node13" href="$xilinx__gpio_8h.html" title=" " alt="" coords="1643,169,1749,196"/>
+<area shape="rect" id="node15" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="894,169,1007,196"/>
+<area shape="rect" id="node16" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="1899,95,2008,121"/>
+<area shape="rect" id="node18" href="$ad6676_8h.html" title="Header file of AD6676 Driver." alt="" coords="988,95,1071,121"/>
+<area shape="rect" id="node21" href="$axi__adc__core_8h.html" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="1095,95,1214,121"/>
+<area shape="rect" id="node22" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="1238,95,1335,121"/>
+<area shape="rect" id="node23" href="$axi__jesd204__rx_8h.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;RX peripheral." alt="" coords="1379,95,1511,121"/>
+<area shape="rect" id="node27" href="$axi__adxcvr_8h.html" title="Driver for the ADI AXI&#45;ADXCVR Module." alt="" coords="1716,95,1820,121"/>
+<area shape="rect" id="node29" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="25,95,161,121"/>
+<area shape="rect" id="node5" href="$ad6676-ebz_2src_2app__config_8h.html" title="Config file for AD6676 project." alt="" coords="257,169,361,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1215,244,1286,271"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1700,244,1783,271"/>
+<area shape="rect" id="node17" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="2049,169,2117,196"/>
+<area shape="rect" id="node19" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="1083,169,1183,196"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1098,244,1169,271"/>
+<area shape="rect" id="node24" href="$jesd204_8h.html" title=" " alt="" coords="1533,169,1619,196"/>
+<area shape="rect" id="node26" href="$no__os__clk_8h.html" title="Header file of Clock Driver." alt="" coords="1309,169,1408,196"/>
+<area shape="rect" id="node25" title=" " alt="" coords="1539,244,1613,271"/>
+<area shape="rect" id="node28" href="$xilinx__transceiver_8h.html" title="Driver for the Xilinx High&#45;speed transceiver dynamic reconfiguration." alt="" coords="1824,169,1973,196"/>
+</map>

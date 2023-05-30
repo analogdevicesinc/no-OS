@@ -1,0 +1,8 @@
+<map id="drivers/platform/aducm3029/aducm3029_i2c.h" name="drivers/platform/aducm3029/aducm3029_i2c.h">
+<area shape="rect" id="node1" title=" " alt="" coords="387,5,593,47"/>
+<area shape="rect" id="node2" href="$aducm3029__i2c_8c.html" title="Implementation of I2C driver for ADuCM302x." alt="" coords="5,102,212,143"/>
+<area shape="rect" id="node3" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="237,102,391,143"/>
+<area shape="rect" id="node4" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="416,102,564,143"/>
+<area shape="rect" id="node5" href="$eval-ltc4306_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="588,95,773,151"/>
+<area shape="rect" id="node6" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="798,102,963,143"/>
+</map>

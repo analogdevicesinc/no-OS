@@ -1,0 +1,4 @@
+<map id="ad5755_software_reset" name="ad5755_software_reset">
+<area shape="rect" id="node1" title="Performs a software reset to the device." alt="" coords="152,5,325,32"/>
+<area shape="rect" id="node2" href="$ad5755_8h.html#aa2876383215b9a110b42a3d7441e9e79" title="Initializes the device and powers&#45;up all channels. The device is initialized with the values held by ..." alt="" coords="5,5,104,32"/>
+</map>

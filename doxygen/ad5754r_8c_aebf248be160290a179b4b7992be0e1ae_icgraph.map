@@ -1,0 +1,5 @@
+<map id="ad5754r_set_sdo_disable" name="ad5754r_set_sdo_disable">
+<area shape="rect" id="node1" title="Set SDO Enable/Disable state for device." alt="" coords="335,5,521,32"/>
+<area shape="rect" id="node2" href="$ad5754r_8h.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="156,5,287,32"/>
+<area shape="rect" id="node3" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,5,108,32"/>
+</map>

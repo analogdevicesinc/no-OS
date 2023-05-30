@@ -1,0 +1,8 @@
+<map id="adt7420_i2c_reg_write" name="adt7420_i2c_reg_write">
+<area shape="rect" id="node1" title="Write a value of a register via I2C." alt="" coords="693,56,863,83"/>
+<area shape="rect" id="node2" href="$adt7420_8h.html#a0af155dc632cc1c7658d2e56122ba56a" title="Sets the value of a register SPI/I2C." alt="" coords="503,56,645,83"/>
+<area shape="rect" id="node3" href="$adt7420_8h.html#aa37e104e0f4f67268bb38e7ab79fe910" title="Sets the value of a register SPI/I2C." alt="" coords="268,31,455,57"/>
+<area shape="rect" id="node6" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="273,81,449,108"/>
+<area shape="rect" id="node4" href="$adt7420_8h.html#a6b22b40bd3315083e90bd52beacb1627" title="Sets the operational mode for ADT7420/ADT7320." alt="" coords="5,5,220,32"/>
+<area shape="rect" id="node5" href="$adt7420_8h.html#af3c4b14319003f5a2edf1dd69ac4dcad" title="Sets the resolution for ADT7420/ADT7320." alt="" coords="25,56,200,83"/>
+</map>

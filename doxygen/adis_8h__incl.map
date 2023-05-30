@@ -1,0 +1,9 @@
+<map id="drivers/imu/adis.h" name="drivers/imu/adis.h">
+<area shape="rect" id="node1" title="Implementation of adis.h." alt="" coords="160,5,299,32"/>
+<area shape="rect" id="node2" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,80,104,107"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="179,80,279,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="163,155,234,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="267,155,349,181"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="355,80,423,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="53,155,123,181"/>
+</map>

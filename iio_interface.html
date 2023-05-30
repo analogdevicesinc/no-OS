@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>no-OS IIO interface &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing to no-OS" href="contributing.html" />
+    <link rel="prev" title="no-OS drivers guide" href="drivers_guide.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="no-os-iio-interface">
+<h1>no-OS IIO interface<a class="headerlink" href="#no-os-iio-interface" title="Permalink to this headline">¶</a></h1>
+<p>To get registered with the no-OS IIO framework, each device should export a
+populated <strong>struct iio_device</strong> - what data can be accessed by an IIO client
+is defined here:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">iio_device</span> <span class="p">{</span>
+        <span class="k">struct</span> <span class="nc">no_os_irq_ctrl_desc</span> <span class="o">*</span><span class="n">irq_desc</span><span class="p">;</span>
+        <span class="kt">uint16_t</span> <span class="n">num_ch</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_channel</span> <span class="o">*</span><span class="n">channels</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_context_attribute</span> <span class="o">*</span><span class="n">context_attributes</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_attribute</span> <span class="o">*</span><span class="n">attributes</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_attribute</span> <span class="o">*</span><span class="n">debug_attributes</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_attribute</span> <span class="o">*</span><span class="n">buffer_attributes</span><span class="p">;</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">read_dev</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buff</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">nb_samples</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">write_dev</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buff</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">nb_samples</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">pre_enable</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">mask</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">post_disable</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">submit</span><span class="p">)(</span><span class="k">struct</span> <span class="nc">iio_device_data</span> <span class="o">*</span><span class="n">dev</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">trigger_handler</span><span class="p">)(</span><span class="k">struct</span> <span class="nc">iio_device_data</span> <span class="o">*</span><span class="n">dev</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">debug_reg_read</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="o">*</span><span class="n">readval</span><span class="p">);</span>
+        <span class="kt">int32_t</span> <span class="p">(</span><span class="o">*</span><span class="n">debug_reg_write</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">writeval</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>An IIO device can have one (e.g., single channel ADC) or more (e.g.,
+multichannel ADC) channels, so <strong>.num_ch</strong> will be set accordingly.</p>
+<p>An IIO device channel defines the channel’s specifications (e.g., type:
+voltage, current, power, acceleration, …, or direction: input, output) and
+attributes (e.g., raw, scale, offset, …), and <strong>.channels</strong> is an array with
+all the available channels.</p>
+<p>Most of the time, some global (not channel specific) attributes need to be
+defined through <strong>.attributes</strong>. One example can be the sampling frequency of
+an ADC, that is most likely device specific, so, by changing it, all the
+channels will be affected.</p>
+<p><strong>.read_dev</strong> is the device specific function that will be called for filling
+an IIO buffer with samples. If some additional steps are required before
+starting the actual capture (e.g., IIO client needs to capture data only from
+a selection of channels instead of all), a <strong>.pre_enable</strong> function can be
+implemented. <strong>.post_disable</strong>, if implemented, will be called after the
+capture was done.</p>
+<p>Usually for debug purposes, <strong>.debug_reg_read</strong> and <strong>.debug_reg_write</strong> can
+expose low level device register access.</p>
+<p>Once an <strong>struct iio_device</strong> is available, an application specific <strong>struct
+iio_device_init</strong> should be defined:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">iio_device_init</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_device</span> <span class="o">*</span><span class="n">dev_descriptor</span><span class="p">;</span>
+        <span class="kt">int8_t</span> <span class="o">*</span><span class="n">raw_buf</span><span class="p">;</span>
+        <span class="kt">uint32_t</span> <span class="n">raw_buf_len</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">trigger_id</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>This will link the actual instance of a device (<strong>.dev</strong>) with a corresponding
+IIO layer (<strong>.dev_descriptor</strong>). If user wants to provide an external buffer to
+IIO, this can be done here too (<strong>.raw_buf</strong>); otherwise, IIO will allocate
+memory for the buffer when needed.</p>
+<p>The last step before initializing the entire IIO framework by calling
+<strong>iio_init()</strong> is the definition of a <strong>struct iio_init_param</strong>:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">iio_init_param</span> <span class="p">{</span>
+        <span class="k">enum</span> <span class="n">pysical_link_type</span>  <span class="n">phy_type</span><span class="p">;</span>
+        <span class="k">union</span> <span class="p">{</span>
+                <span class="k">struct</span> <span class="nc">no_os_uart_desc</span> <span class="o">*</span><span class="n">uart_desc</span><span class="p">;</span>
+                <span class="k">struct</span> <span class="nc">tcp_socket_init_param</span> <span class="o">*</span><span class="n">tcp_socket_init_param</span><span class="p">;</span>
+        <span class="p">};</span>
+        <span class="k">struct</span> <span class="nc">iio_device_init</span> <span class="o">*</span><span class="n">devs</span><span class="p">;</span>
+        <span class="kt">uint32_t</span> <span class="n">nb_devs</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">iio_trigger_init</span> <span class="o">*</span><span class="n">trigs</span><span class="p">;</span>
+        <span class="kt">uint32_t</span> <span class="n">nb_trigs</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>In addition to the list of all the IIO devices to get registered (<strong>.devs</strong>)
+and their number (<strong>.nb_devs</strong>), the physical link between the IIO server and
+the IIO client must be set (<strong>.phy_type</strong>).</p>
+<p>Having a <strong>struct iio_init_param</strong>, <strong>iio_init()</strong> can be called.</p>
+<p>Next, <strong>iio_step()</strong> can listen/answer IIO commands.</p>
+<p><strong>iio_app_run()</strong> is an example of using what it was described so far (it calls <strong>iio_init()</strong> and <strong>iio_step()</strong>).</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/adi_logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">no-OS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">no-OS IIO interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to no-OS</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="drivers_guide.html" title="previous chapter">no-OS drivers guide</a></li>
+      <li>Next: <a href="contributing.html" title="next chapter">Contributing to no-OS</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Analog Devices, Inc..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/iio_interface.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

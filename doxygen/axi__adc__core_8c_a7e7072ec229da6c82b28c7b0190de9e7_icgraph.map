@@ -1,0 +1,4 @@
+<map id="axi_adc_update_active_channels" name="axi_adc_update_active_channels">
+<area shape="rect" id="node1" title="Update active AXI ADC channels." alt="" coords="205,5,376,47"/>
+<area shape="rect" id="node2" href="$iio__axi__adc_8c.html#af7d00c44f5edd36cdca063ce45d767db" title="Update active channels." alt="" coords="5,5,157,47"/>
+</map>

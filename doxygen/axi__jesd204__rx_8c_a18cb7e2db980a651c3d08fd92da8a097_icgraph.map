@@ -1,0 +1,4 @@
+<map id="axi_jesd204_rx_get_lane_errors" name="axi_jesd204_rx_get_lane_errors">
+<area shape="rect" id="node1" title="Read the JESD204 RX Lane Errors." alt="" coords="269,5,417,47"/>
+<area shape="rect" id="node2" href="$axi__jesd204__rx_8h.html#a0e78d5746da23fb8cd47caad96cd0378" title="Read JESD204 RX Lane Info." alt="" coords="5,13,221,39"/>
+</map>

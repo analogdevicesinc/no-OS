@@ -1,0 +1,19 @@
+<map id="projects/eval&#45;adxl313z/src/platform/stm32/parameters.c" name="projects/eval&#45;adxl313z/src/platform/stm32/parameters.c">
+<area shape="rect" id="node1" title=" " alt="" coords="149,5,389,47"/>
+<area shape="rect" id="node2" href="$eval-adxl313z_2src_2platform_2stm32_2parameters_8h.html" title=" " alt="" coords="215,95,324,121"/>
+<area shape="rect" id="node3" href="$stm32__hal_8h.html" title=" " alt="" coords="98,319,201,345"/>
+<area shape="rect" id="node5" href="$stm32__irq_8h.html" title="Header file for stm32 irq specifics." alt="" coords="181,244,280,271"/>
+<area shape="rect" id="node8" href="$stm32__spi_8h.html" title="Header file for the stm32 spi driver." alt="" coords="5,244,107,271"/>
+<area shape="rect" id="node10" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="437,244,547,271"/>
+<area shape="rect" id="node12" href="$stm32__uart_8h.html" title="Header file of UART driver for STM32." alt="" coords="305,244,413,271"/>
+<area shape="rect" id="node16" href="$stm32__uart__stdio_8h.html" title="Header file of stm32 UART driver stdout/stdin redirection." alt="" coords="499,169,645,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="169,393,236,420"/>
+<area shape="rect" id="node6" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="225,319,321,345"/>
+<area shape="rect" id="node7" title=" " alt="" coords="323,468,394,495"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="47,393,145,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="652,468,735,495"/>
+<area shape="rect" id="node13" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="511,319,617,345"/>
+<area shape="rect" id="node14" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="497,393,631,420"/>
+<area shape="rect" id="node15" title=" " alt="" coords="529,468,599,495"/>
+<area shape="rect" id="node17" title=" " alt="" coords="623,244,708,271"/>
+</map>

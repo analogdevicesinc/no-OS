@@ -1,0 +1,23 @@
+<map id="ad6673_set_bits_to_reg" name="ad6673_set_bits_to_reg">
+<area shape="rect" id="node1" title="Sets a bit/group of bits inside a register without modifying other bits." alt="" coords="657,507,833,533"/>
+<area shape="rect" id="node2" href="$ad6673_8h.html#adda4a75b71d9030c18ba5b98dd0afdfb" title="Enables the Build&#45;In&#45;Self&#45;Test." alt="" coords="425,5,577,32"/>
+<area shape="rect" id="node3" href="$ad6673_8h.html#a5b62f19fb93f532a8a18ba73beb8b59a" title="Resets the Build&#45;In&#45;Self&#45;Test." alt="" coords="431,56,572,83"/>
+<area shape="rect" id="node4" href="$ad6673_8h.html#a864dfe4e7e9ce9aea7b20c6a5c841a54" title="Configures the power mode of the chip." alt="" coords="412,107,591,133"/>
+<area shape="rect" id="node5" href="$ad6673_8h.html#a18f0ffca487b0cd9d25d387f0de73ba9" title="Selects the bandwidth value for the DC correction circuit." alt="" coords="414,157,589,184"/>
+<area shape="rect" id="node6" href="$ad6673_8h.html#a42326e2ddfa6459ff4a63e3b7e2a35ba" title="Enables DC correction for use in the output data signal path." alt="" coords="426,208,577,235"/>
+<area shape="rect" id="node7" href="$ad6673_8h.html#a8afce46c3b5b2f2fa9fcdb1592500dc6" title="Freezes DC correction value." alt="" coords="428,259,575,285"/>
+<area shape="rect" id="node8" href="$ad6673_8h.html#a3401cc4da0c2287772d454c2cbd84978" title="Inverts the logic of JESD204B bits." alt="" coords="411,310,592,351"/>
+<area shape="rect" id="node9" href="$ad6673_8h.html#a98bd7b00060d18b6e58080966d2e5c64" title="Configures the JESD204B interface." alt="" coords="167,376,345,403"/>
+<area shape="rect" id="node10" href="$ad6673_8h.html#a9228c7d4c22253ce20062937317ccf98" title="Configures the device." alt="" coords="5,401,119,428"/>
+<area shape="rect" id="node11" href="$ad6673_8h.html#a62b89e8c97839097f8c410bb78de23cd" title="Configures the power mode of the JESD204B data transmit block." alt="" coords="396,477,607,504"/>
+<area shape="rect" id="node12" href="$ad6673_8h.html#a1d404efb72a60c4f465c90dc4380d530" title="Selects the point in the processing path of a lane, where the test data will be inserted." alt="" coords="410,529,593,570"/>
+<area shape="rect" id="node13" href="$ad6673_8h.html#a0751aa030cbc242bcc8311fbaaa08e83" title="Selects a JESD204B test mode." alt="" coords="395,595,607,621"/>
+<area shape="rect" id="node14" href="$ad6673_8h.html#ae88ee7291546c7a0e2682d445c1289ed" title="Selects the NSR Bandwidth mode." alt="" coords="393,645,609,672"/>
+<area shape="rect" id="node15" href="$ad6673_8h.html#ae54f60d7875a3b34be1483ad3d988e62" title="Enables the Noise shaped requantizer(NRS)." alt="" coords="427,696,575,723"/>
+<area shape="rect" id="node16" href="$ad6673_8h.html#a0be301f7f220b0042692c983e72015d6" title="Disables (1) or enables (0) the data output. Note: This function modifies a shadowed register,..." alt="" coords="415,747,588,773"/>
+<area shape="rect" id="node17" href="$ad6673_8h.html#aeca9b4374fbf3ea1a7f101191b1f759e" title="Specifies the output format. Note: This function modifies a shadowed register, therefore a call of ad..." alt="" coords="416,797,587,824"/>
+<area shape="rect" id="node18" href="$ad6673_8h.html#ace67094b4c057d39eae10ec0056d85a2" title="Activates the inverted (1) or normal (0) output mode. Note: This function modifies a shadowed registe..." alt="" coords="419,848,583,875"/>
+<area shape="rect" id="node19" href="$ad6673_8h.html#a77e0f8cc78247a7703762b1a7be413ec" title="Sets (1) or clears (0) the reset long PN sequence bit(PN23)." alt="" coords="427,899,576,925"/>
+<area shape="rect" id="node20" href="$ad6673_8h.html#aff4078cac0f7e16b63b3c2f9207e91db" title="Sets (1) or clears (0) the reset short PN sequence bit(PN9)." alt="" coords="431,949,572,976"/>
+<area shape="rect" id="node21" href="$ad6673_8h.html#a4aa39cc3079b889703c8a09a9e7e42b9" title="Sets the ADC&#39;s test mode." alt="" coords="428,1000,575,1027"/>
+</map>

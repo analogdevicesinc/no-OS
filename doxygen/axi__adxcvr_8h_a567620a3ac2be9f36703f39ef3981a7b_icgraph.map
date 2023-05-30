@@ -1,0 +1,19 @@
+<map id="adxcvr_read" name="adxcvr_read">
+<area shape="rect" id="node1" title="adxcvr_read" alt="" coords="1268,144,1371,171"/>
+<area shape="rect" id="node2" href="$axi__adxcvr_8c.html#a1c4673e85efd63e11006c05f5ca53ecd" title="Read AXI ADXCVR DRP status." alt="" coords="1060,56,1220,83"/>
+<area shape="rect" id="node5" href="$altera__adxcvr_8c.html#ad2482b05b7ec9e14718dec1eb00eab99" title="adxcvr_finalize_lane_rate_change" alt="" coords="1063,107,1217,149"/>
+<area shape="rect" id="node9" href="$axi__adxcvr_8h.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="adxcvr_init" alt="" coords="296,148,391,175"/>
+<area shape="rect" id="node17" href="$axi__adxcvr_8h.html#af6a658580a8c19c4a625c6d5aa890867" title="AXI ADXCVR Status Read." alt="" coords="1065,224,1215,251"/>
+<area shape="rect" id="node3" href="$axi__adxcvr_8h.html#a8d899f5b5004a4f001e45d725c0469f0" title="AXI ADXCVR DPR Port Read." alt="" coords="862,5,993,32"/>
+<area shape="rect" id="node4" href="$axi__adxcvr_8h.html#aced69997b25476d0e77f8e3f99e40995" title="AXI ADXCVR DPR Port Write." alt="" coords="860,56,995,83"/>
+<area shape="rect" id="node6" href="$altera__adxcvr_8h.html#aab91976af36cb321f9015da9571ac77f" title="adxcvr_post_lane_rate_change" alt="" coords="843,107,1012,149"/>
+<area shape="rect" id="node7" href="$altera__a10__cdr__pll_8h.html#acd3ba325a22ad7690f934b858087ce25" title="altera_a10_cdr_pll_set_rate" alt="" coords="653,107,795,149"/>
+<area shape="rect" id="node8" href="$altera__adxcvr_8h.html#a684db50fe066ad6dd6df4aac1cad609c" title="adxcvr_init" alt="" coords="471,123,598,149"/>
+<area shape="rect" id="node15" href="$altera__a10__cdr__pll_8h.html#ae16cfdb6dcf52acfad2cd4480144d642" title="altera_a10_cdr_pll_recalc_rate" alt="" coords="464,57,605,98"/>
+<area shape="rect" id="node10" href="$ad9081_2src_2app__jesd_8h.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="111,97,219,124"/>
+<area shape="rect" id="node12" href="$app__transceiver_8h.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="108,148,223,175"/>
+<area shape="rect" id="node14" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="138,199,193,225"/>
+<area shape="rect" id="node11" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,97,60,124"/>
+<area shape="rect" id="node13" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,148,60,175"/>
+<area shape="rect" id="node16" href="$altera__adxcvr_8h.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="271,64,416,91"/>
+</map>

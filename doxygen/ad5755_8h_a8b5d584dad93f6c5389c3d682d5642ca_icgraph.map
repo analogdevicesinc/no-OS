@@ -1,0 +1,11 @@
+<map id="ad5755_set_control_registers" name="ad5755_set_control_registers">
+<area shape="rect" id="node1" title="Configures one of the control registers." alt="" coords="391,221,540,263"/>
+<area shape="rect" id="node2" href="$ad5755_8h.html#af53d0531c0ef0e528f9ae42ee4db7223" title="Selects if the channel clears when CLEAR pin is activated." alt="" coords="164,5,331,47"/>
+<area shape="rect" id="node3" href="$ad5755_8h.html#a03720bc12093fc45c62b9cd4462729fa" title="Write a &quot;service pulse&quot; to the AD5755 watchdog timer when enabled." alt="" coords="156,71,339,112"/>
+<area shape="rect" id="node4" href="$ad5755_8h.html#aa2876383215b9a110b42a3d7441e9e79" title="Initializes the device and powers&#45;up all channels. The device is initialized with the values held by ..." alt="" coords="5,254,104,281"/>
+<area shape="rect" id="node5" href="$ad5755_8h.html#af699c1855cce261506330a97a888b7d1" title="Allows power&#45;up/down of the dc&#45;to&#45;dc converter, DAC and internal amplifiers for the selected channel." alt="" coords="170,188,325,229"/>
+<area shape="rect" id="node6" href="$ad5755_8h.html#a99786cbdda8f693aaef761e5a2a16f1b" title="Sets the range of a channel." alt="" coords="170,253,325,295"/>
+<area shape="rect" id="node7" href="$ad5755_8h.html#a97f20e98ab61c1a9c33dd882815f3b3e" title="Configures the Digital Slew Rate Control." alt="" coords="163,319,331,346"/>
+<area shape="rect" id="node8" href="$ad5755_8h.html#ad197f206e7cf223fc7eb1d597c7a8fb9" title="Performs a software reset to the device." alt="" coords="161,370,334,397"/>
+<area shape="rect" id="node9" href="$ad5755_8h.html#ac9601238817e9e61090efbec05c40d56" title="Enables/Disables watchdog timer and sets the timeout period." alt="" coords="152,421,343,447"/>
+</map>

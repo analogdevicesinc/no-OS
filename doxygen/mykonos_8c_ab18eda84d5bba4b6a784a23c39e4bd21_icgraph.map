@@ -1,0 +1,5 @@
+<map id="MYKONOS_getEnabledTrackingCals" name="MYKONOS_getEnabledTrackingCals">
+<area shape="rect" id="node1" title="Reads back which ARM tracking cals are enabled." alt="" coords="277,31,528,57"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a1fa7fc3db564c9c22db23af155cfd645" title="Suspend or resume tracking calibrations in RADIO_ON." alt="" coords="7,5,228,32"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#acc5a05a9ab38cfe8bbdb737139a1d6df" title="Suspend or resume individual tracking calibration." alt="" coords="5,56,229,83"/>
+</map>

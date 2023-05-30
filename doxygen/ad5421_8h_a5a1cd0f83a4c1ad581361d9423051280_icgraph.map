@@ -1,0 +1,14 @@
+<map id="ad5421_set" name="ad5421_set">
+<area shape="rect" id="node1" title="Send data via SPI." alt="" coords="196,259,293,285"/>
+<area shape="rect" id="node2" href="$ad5421_8h.html#ab4f5955af89fac85b8de98e935671ef4" title="Read from the DAC register." alt="" coords="13,5,141,32"/>
+<area shape="rect" id="node3" href="$ad5421_8h.html#a158d03999c3dec8f0d71f7dab578a2e6" title="Read from the Fault register." alt="" coords="9,56,144,83"/>
+<area shape="rect" id="node4" href="$ad5421_8h.html#a4c0ab23e462e103fd02ca9dd74c383fe" title="Read from the Gain Adjust register." alt="" coords="10,107,143,133"/>
+<area shape="rect" id="node5" href="$ad5421_8h.html#ab2257ad387862c9e8d672b0dbabb0397" title="Read from the Offset Adjust register." alt="" coords="5,157,148,184"/>
+<area shape="rect" id="node6" href="$ad5421_8h.html#a01385905e15bb13168d0dede0ce029a7" title="Read the temperature from Fault register." alt="" coords="7,208,146,235"/>
+<area shape="rect" id="node7" href="$ad5421_8h.html#ab7cbe0be0ee8be64c8bbf0255224b83c" title="Read VLoop&#45;COM from Fault register." alt="" coords="6,259,147,285"/>
+<area shape="rect" id="node8" href="$ad5421_8h.html#a1a8f05a31b53b4db7b508d0b31522188" title="Initialize SPI and Initial Values for AD5421 Board." alt="" coords="27,309,126,336"/>
+<area shape="rect" id="node9" href="$ad5421_8h.html#a4b81e278a79cd9aa76f48a71e20a8d7c" title="Resets the ad5421 device." alt="" coords="21,360,132,387"/>
+<area shape="rect" id="node10" href="$ad5421_8h.html#ac21da7c29dc36f22eafcc0bbbd69c5ee" title="Write to the DAC register." alt="" coords="13,411,140,437"/>
+<area shape="rect" id="node11" href="$ad5421_8h.html#a39287086c4952b28936e65df8e83df33" title="Write to the Gain Adjust register." alt="" coords="11,461,143,488"/>
+<area shape="rect" id="node12" href="$ad5421_8h.html#ac51c7d41f421975b0ed2159894b55079" title="Write to the Offset Adjust register." alt="" coords="6,512,147,539"/>
+</map>

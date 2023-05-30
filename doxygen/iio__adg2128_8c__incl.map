@@ -1,0 +1,21 @@
+<map id="drivers/switch/adg2128/iio_adg2128.c" name="drivers/switch/adg2128/iio_adg2128.c">
+<area shape="rect" id="node1" title=" " alt="" coords="302,5,476,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="84,393,155,420"/>
+<area shape="rect" id="node3" title=" " alt="" coords="117,169,184,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="572,95,659,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="683,95,751,121"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="776,95,885,121"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="656,244,770,271"/>
+<area shape="rect" id="node10" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="597,169,696,196"/>
+<area shape="rect" id="node11" href="$iio_8h.html" title="Header file of iio." alt="" coords="350,169,401,196"/>
+<area shape="rect" id="node17" href="$iio__adg2128_8h.html" title="Header file of iio_adg2128." alt="" coords="332,95,446,121"/>
+<area shape="rect" id="node18" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="95,319,195,345"/>
+<area shape="rect" id="node19" href="$no__os__alloc_8h.html" title=" " alt="" coords="44,95,155,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="796,169,864,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="579,393,650,420"/>
+<area shape="rect" id="node12" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="506,244,600,271"/>
+<area shape="rect" id="node15" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="298,244,403,271"/>
+<area shape="rect" id="node13" title=" " alt="" coords="217,393,300,420"/>
+<area shape="rect" id="node14" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="529,319,700,345"/>
+<area shape="rect" id="node16" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="270,319,404,345"/>
+</map>

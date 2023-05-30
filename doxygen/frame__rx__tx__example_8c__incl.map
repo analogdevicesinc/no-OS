@@ -1,0 +1,16 @@
+<map id="projects/adin1110/src/examples/frame_rx_tx/frame_rx_tx_example.c" name="projects/adin1110/src/examples/frame_rx_tx/frame_rx_tx_example.c">
+<area shape="rect" id="node1" title="Frame receive and transmit example header for the ADIN1110 project." alt="" coords="352,5,532,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,76,136"/>
+<area shape="rect" id="node3" href="$frame__rx__tx__example_8h.html" title="Frame receive and trasmit example header for the ADIN1110 project." alt="" coords="100,109,277,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="301,109,428,136"/>
+<area shape="rect" id="node5" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="928,184,1041,211"/>
+<area shape="rect" id="node7" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="453,109,589,136"/>
+<area shape="rect" id="node9" href="$adin1110_8h.html" title=" " alt="" coords="613,109,708,136"/>
+<area shape="rect" id="node6" title=" " alt="" coords="751,259,821,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="407,184,474,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="470,259,553,285"/>
+<area shape="rect" id="node11" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="674,184,773,211"/>
+<area shape="rect" id="node12" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="797,184,903,211"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="549,184,649,211"/>
+<area shape="rect" id="node14" title=" " alt="" coords="577,259,648,285"/>
+</map>

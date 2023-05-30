@@ -1,0 +1,22 @@
+<map id="adxcvr_write" name="adxcvr_write">
+<area shape="rect" id="node1" title="adxcvr_write" alt="" coords="1263,132,1369,159"/>
+<area shape="rect" id="node2" href="$axi__adxcvr_8h.html#a149984176c30c12dad5c193f4746fcb5" title="AXI ADXCVR Clock Disable." alt="" coords="1064,31,1211,57"/>
+<area shape="rect" id="node6" href="$axi__adxcvr_8h.html#a8d899f5b5004a4f001e45d725c0469f0" title="AXI ADXCVR DPR Port Read." alt="" coords="1072,81,1203,108"/>
+<area shape="rect" id="node7" href="$axi__adxcvr_8h.html#aced69997b25476d0e77f8e3f99e40995" title="AXI ADXCVR DPR Port Write." alt="" coords="1070,132,1205,159"/>
+<area shape="rect" id="node8" href="$altera__adxcvr_8c.html#ad2482b05b7ec9e14718dec1eb00eab99" title="adxcvr_finalize_lane_rate_change" alt="" coords="1060,183,1215,225"/>
+<area shape="rect" id="node20" href="$altera__adxcvr_8h.html#ae36bf5814d413bbe7ab6da07c4c37844" title="adxcvr_pre_lane_rate_change" alt="" coords="846,246,1009,287"/>
+<area shape="rect" id="node3" href="$jesd204__clk_8h.html#ac6c34646d1c05b88bf73af88f24bf6c4" title=" " alt="" coords="851,5,1004,32"/>
+<area shape="rect" id="node5" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="900,56,955,83"/>
+<area shape="rect" id="node4" href="$ad9083_2src_2app__jesd_8h.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="670,5,778,32"/>
+<area shape="rect" id="node9" href="$altera__adxcvr_8h.html#aab91976af36cb321f9015da9571ac77f" title="adxcvr_post_lane_rate_change" alt="" coords="843,181,1012,222"/>
+<area shape="rect" id="node10" href="$altera__a10__cdr__pll_8h.html#acd3ba325a22ad7690f934b858087ce25" title="altera_a10_cdr_pll_set_rate" alt="" coords="653,213,795,254"/>
+<area shape="rect" id="node11" href="$altera__adxcvr_8h.html#a684db50fe066ad6dd6df4aac1cad609c" title="adxcvr_init" alt="" coords="471,191,598,217"/>
+<area shape="rect" id="node18" href="$altera__a10__cdr__pll_8h.html#ae16cfdb6dcf52acfad2cd4480144d642" title="altera_a10_cdr_pll_recalc_rate" alt="" coords="464,242,605,283"/>
+<area shape="rect" id="node12" href="$axi__adxcvr_8h.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="adxcvr_init" alt="" coords="296,191,391,217"/>
+<area shape="rect" id="node13" href="$ad9081_2src_2app__jesd_8h.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="111,140,219,167"/>
+<area shape="rect" id="node15" href="$app__transceiver_8h.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="108,191,223,217"/>
+<area shape="rect" id="node17" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="138,241,193,268"/>
+<area shape="rect" id="node14" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,140,60,167"/>
+<area shape="rect" id="node16" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,191,60,217"/>
+<area shape="rect" id="node19" href="$altera__adxcvr_8h.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="271,249,416,276"/>
+</map>

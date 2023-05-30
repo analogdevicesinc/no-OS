@@ -1,0 +1,7 @@
+<map id="projects/ad9083/src/uc/uc_settings.h" name="projects/ad9083/src/uc/uc_settings.h">
+<area shape="rect" id="node1" title="Use Case Settings of AD9083 project." alt="" coords="263,5,412,47"/>
+<area shape="rect" id="node2" href="$ad9083_8c.html" title="Implementation of ad9083 Driver." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$ad9083_2src_2app__clocking_8c.html" title="Clock setup and initialization routines." alt="" coords="176,95,325,136"/>
+<area shape="rect" id="node4" href="$ad9083_2src_2app__jesd_8c.html" title="Application JESD setup." alt="" coords="349,95,499,136"/>
+<area shape="rect" id="node5" href="$uc__settings_8c.html" title=" " alt="" coords="523,95,672,136"/>
+</map>

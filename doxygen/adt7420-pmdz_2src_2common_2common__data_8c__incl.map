@@ -1,0 +1,12 @@
+<map id="projects/adt7420&#45;pmdz/src/common/common_data.c" name="projects/adt7420&#45;pmdz/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="59,5,274,47"/>
+<area shape="rect" id="node2" href="$adt7420-pmdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by adt7420&#45;pmdz examples." alt="" coords="103,95,230,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="21,169,171,196"/>
+<area shape="rect" id="node4" href="$adt7420_8h.html" title="Header file of ADT7420 Driver." alt="" coords="195,169,282,196"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,244,104,271"/>
+<area shape="rect" id="node7" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="128,244,227,271"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="251,244,351,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="348,319,431,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="142,319,213,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="253,319,323,345"/>
+</map>

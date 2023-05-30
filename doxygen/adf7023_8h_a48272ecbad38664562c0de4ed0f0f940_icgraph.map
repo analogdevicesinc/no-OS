@@ -1,0 +1,8 @@
+<map id="adf7023_set_command" name="adf7023_set_command">
+<area shape="rect" id="node1" title="Initiates a command." alt="" coords="445,81,620,108"/>
+<area shape="rect" id="node2" href="$adf7023_8h.html#a8c05c851064bebafdbc2e810ce6a1cc2" title="Initializes the ADF7023." alt="" coords="264,5,367,32"/>
+<area shape="rect" id="node3" href="$adf7023_8h.html#a2a1cd0e8ec2e86e66259f583474ab3c8" title="Sets the data rate." alt="" coords="10,56,181,83"/>
+<area shape="rect" id="node4" href="$adf7023_8h.html#a86b9fef4e4e5cd52c35be6f77b86018d" title="Sets the frequency deviation." alt="" coords="8,158,183,199"/>
+<area shape="rect" id="node5" href="$adf7023_8h.html#a1ab67181ff1abfce39f2e8e60c5b9b3f" title="Sets a FW state and waits until the device enters in that state." alt="" coords="233,107,397,133"/>
+<area shape="rect" id="node6" href="$adf7023_8h.html#ae28ba95f1d1002adefe0e6ab790d9829" title="Receives one packet." alt="" coords="5,107,185,133"/>
+</map>

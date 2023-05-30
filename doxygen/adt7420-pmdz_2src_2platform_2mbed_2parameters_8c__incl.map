@@ -1,0 +1,13 @@
+<map id="projects/adt7420&#45;pmdz/src/platform/mbed/parameters.c" name="projects/adt7420&#45;pmdz/src/platform/mbed/parameters.c">
+<area shape="rect" id="node1" title="Definition of Mbed platform data used by adt7420&#45;pmdz project." alt="" coords="123,5,359,47"/>
+<area shape="rect" id="node2" href="$adt7420-pmdz_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by adt7420&#45;pmdz project." alt="" coords="186,95,295,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,105,196"/>
+<area shape="rect" id="node4" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="251,169,355,196"/>
+<area shape="rect" id="node7" href="$mbed__i2c_8h.html" title="Header containing extra types required for I2C interface." alt="" coords="129,169,227,196"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="392,169,497,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="178,244,245,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="306,319,389,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="515,319,585,345"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="385,244,518,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="416,319,487,345"/>
+</map>

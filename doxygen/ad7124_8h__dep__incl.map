@@ -1,0 +1,11 @@
+<map id="drivers/adc/ad7124/ad7124.h" name="drivers/adc/ad7124/ad7124.h">
+<area shape="rect" id="node1" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="347,5,493,47"/>
+<area shape="rect" id="node2" href="$ad7124_8c.html" title="AD7124 implementation file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$drivers_2adc_2ad7124_2ad7124__regs_8h.html" title="AD7124 register file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="176,95,323,136"/>
+<area shape="rect" id="node5" href="$iio__ad7124_8c.html" title="Implementation of iio_ad7124.c." alt="" coords="347,95,493,136"/>
+<area shape="rect" id="node6" href="$ad7124-4sdz_8c.html" title="ad7124 application example." alt="" coords="433,184,594,225"/>
+<area shape="rect" id="node7" href="$projects_2ad7124-8pmdz_2src_2ad7124__regs_8h.html" title="AD7124 register file." alt="" coords="602,95,777,136"/>
+<area shape="rect" id="node4" href="$drivers_2adc_2ad7124_2ad7124__regs_8c.html" title="AD7124 register file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="176,184,323,225"/>
+<area shape="rect" id="node8" href="$projects_2ad7124-8pmdz_2src_2ad7124__regs_8c.html" title="AD7124 register file." alt="" coords="618,184,793,225"/>
+<area shape="rect" id="node9" href="$ad7124-8pmdz_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="817,184,991,225"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ad74413r_channel_map" name="ad74413r_channel_map">
+<area shape="rect" id="node1" title="Structure used to store a set of channel specific to an operation mode." alt="" coords="98,184,275,211"/>
+<area shape="rect" id="node2" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="139,95,235,121"/>
+<area shape="rect" id="node3" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="5,5,107,32"/>
+<area shape="rect" id="node4" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="131,5,243,32"/>
+<area shape="rect" id="node5" href="$structscan__type.html" title=" " alt="" coords="267,5,355,32"/>
+</map>

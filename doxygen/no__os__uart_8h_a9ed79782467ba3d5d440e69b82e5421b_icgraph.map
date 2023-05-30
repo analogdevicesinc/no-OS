@@ -1,0 +1,4 @@
+<map id="no_os_uart_write" name="no_os_uart_write">
+<area shape="rect" id="node1" title="Write to UART." alt="" coords="116,5,249,32"/>
+<area shape="rect" id="node2" href="$stm32__uart__stdio_8h.html#a0c1fa2d02c07b22bf2ebd769a028b852" title=" " alt="" coords="5,5,68,32"/>
+</map>

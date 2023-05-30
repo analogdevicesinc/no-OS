@@ -1,0 +1,13 @@
+<map id="drivers/platform/maxim/max78000/maxim_i2c.h" name="drivers/platform/maxim/max78000/maxim_i2c.h">
+<area shape="rect" id="node1" title=" " alt="" coords="612,5,795,47"/>
+<area shape="rect" id="node2" href="$max78000_2maxim__i2c_8c.html" title="Implementation of max32660 I2C driver." alt="" coords="5,95,188,136"/>
+<area shape="rect" id="node3" href="$adt7420-pmdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to MAXIM platform used by adt7420&#45;pmdz project." alt="" coords="212,95,459,136"/>
+<area shape="rect" id="node5" href="$adt75_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by adt75." alt="" coords="483,95,705,136"/>
+<area shape="rect" id="node7" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="729,95,896,136"/>
+<area shape="rect" id="node8" href="$eval-ltc4306_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to MAXIM platform used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="920,95,1167,136"/>
+<area shape="rect" id="node10" href="$ltc3337_2src_2platform_2maxim_2parameters_8h.html" title=" " alt="" coords="1191,95,1413,136"/>
+<area shape="rect" id="node4" href="$adt7420-pmdz_2src_2platform_2maxim_2parameters_8c.html" title="Definition of MAXIM platform data used by adt7420&#45;pmdz project." alt="" coords="213,184,458,225"/>
+<area shape="rect" id="node6" href="$adt75_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by adt75 project." alt="" coords="483,184,705,225"/>
+<area shape="rect" id="node9" href="$eval-ltc4306_2src_2platform_2maxim_2parameters_8c.html" title="Definition of MAXIM platform data used by eval&#45;ltc4306&#45;pmdz project." alt="" coords="921,184,1166,225"/>
+<area shape="rect" id="node11" href="$ltc3337_2src_2platform_2maxim_2parameters_8c.html" title=" " alt="" coords="1191,184,1413,225"/>
+</map>

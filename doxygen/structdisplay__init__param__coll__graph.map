@@ -1,0 +1,4 @@
+<map id="display_init_param" name="display_init_param">
+<area shape="rect" id="node1" title="Display Device Initial Parameters." alt="" coords="16,95,163,121"/>
+<area shape="rect" id="node2" href="$structdisplay__controller__ops.html" title="Structure holding display controller function pointers that point to the controller specific function..." alt="" coords="5,5,173,32"/>
+</map>

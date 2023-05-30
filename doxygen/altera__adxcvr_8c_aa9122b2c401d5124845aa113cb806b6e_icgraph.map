@@ -1,0 +1,7 @@
+<map id="atx_pll_read" name="atx_pll_read">
+<area shape="rect" id="node1" title="atx_pll_read" alt="" coords="389,78,492,105"/>
+<area shape="rect" id="node2" href="$altera__a10__atx__pll_8h.html#ac5f5e49c8c41f6c40c74b5afa05d53a1" title="altera_a10_atx_pll_recalc_rate" alt="" coords="199,5,341,47"/>
+<area shape="rect" id="node4" href="$altera__adxcvr_8h.html#ab4da47a21e27d1bf7187ffd00e31d211" title="atx_pll_calibration_check" alt="" coords="199,71,341,112"/>
+<area shape="rect" id="node5" href="$altera__adxcvr_8h.html#a84e2fc8872820363a69f58dc372a96b5" title="atx_pll_update" alt="" coords="211,137,329,163"/>
+<area shape="rect" id="node3" href="$altera__adxcvr_8h.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="5,13,151,39"/>
+</map>

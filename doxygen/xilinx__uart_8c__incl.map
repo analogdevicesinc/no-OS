@@ -1,0 +1,16 @@
+<map id="drivers/platform/xilinx/xilinx_uart.c" name="drivers/platform/xilinx/xilinx_uart.c">
+<area shape="rect" id="node1" title=" " alt="" coords="375,5,542,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,123,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="139,169,205,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="269,244,339,271"/>
+<area shape="rect" id="node5" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="717,95,827,121"/>
+<area shape="rect" id="node7" href="$no__os__alloc_8h.html" title=" " alt="" coords="198,95,309,121"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="406,95,511,121"/>
+<area shape="rect" id="node12" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="600,169,696,196"/>
+<area shape="rect" id="node13" href="$xilinx__uart_8h.html" title=" " alt="" coords="851,95,954,121"/>
+<area shape="rect" id="node14" href="$xilinx__irq_8h.html" title=" " alt="" coords="598,95,693,121"/>
+<area shape="rect" id="node6" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="771,169,839,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="570,244,641,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="391,244,473,271"/>
+<area shape="rect" id="node11" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="392,169,525,196"/>
+</map>

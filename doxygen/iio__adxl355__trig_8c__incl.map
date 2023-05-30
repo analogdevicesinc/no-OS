@@ -1,0 +1,13 @@
+<map id="drivers/accel/adxl355/iio_adxl355_trig.c" name="drivers/accel/adxl355/iio_adxl355_trig.c">
+<area shape="rect" id="node1" title="Implementation of adxl355 iio trigger." alt="" coords="174,5,335,47"/>
+<area shape="rect" id="node2" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="163,95,261,121"/>
+<area shape="rect" id="node3" href="$iio_8h.html" title="Header file of iio." alt="" coords="268,169,319,196"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="209,244,303,271"/>
+<area shape="rect" id="node11" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,169,101,196"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="342,244,447,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="473,393,556,420"/>
+<area shape="rect" id="node6" title=" " alt="" coords="221,393,291,420"/>
+<area shape="rect" id="node7" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="48,319,219,345"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="344,319,477,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="375,393,446,420"/>
+</map>

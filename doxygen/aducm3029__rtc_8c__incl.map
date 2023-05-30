@@ -1,0 +1,13 @@
+<map id="drivers/platform/aducm3029/aducm3029_rtc.c" name="drivers/platform/aducm3029/aducm3029_rtc.c">
+<area shape="rect" id="node1" title="Implementation of RTC driver for ADuCM302x." alt="" coords="246,5,453,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="357,169,427,196"/>
+<area shape="rect" id="node3" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,95,115,121"/>
+<area shape="rect" id="node5" href="$no__os__rtc_8h.html" title="Header of the RTC interface." alt="" coords="139,95,235,121"/>
+<area shape="rect" id="node7" href="$aducm3029__rtc_8h.html" title="Header file of RTC driver for ADuCM302x." alt="" coords="565,95,699,121"/>
+<area shape="rect" id="node9" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="259,95,355,121"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="430,95,541,121"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,169,94,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="206,169,277,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="558,169,706,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="452,169,519,196"/>
+</map>

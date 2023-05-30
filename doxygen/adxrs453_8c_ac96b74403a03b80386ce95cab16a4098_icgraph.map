@@ -1,0 +1,6 @@
+<map id="adxrs453_get_register_value" name="adxrs453_get_register_value">
+<area shape="rect" id="node1" title="Reads the value of a register." alt="" coords="252,49,419,90"/>
+<area shape="rect" id="node2" href="$adxrs453_8h.html#a90bd4348ba9947f0d49f75a69ff67f31" title="Reads the rate data and converts it to degrees/second." alt="" coords="33,5,176,32"/>
+<area shape="rect" id="node3" href="$adxrs453_8h.html#aaa02b98bb2215e08c5f7185e02c4777e" title="Reads the temperature sensor data and converts it to degrees Celsius." alt="" coords="5,56,204,83"/>
+<area shape="rect" id="node4" href="$adxrs453_8h.html#a1f8d87424e41eb7cd41449488c549d50" title="Initializes the ADXRS453 and checks if the device is present." alt="" coords="49,107,160,133"/>
+</map>

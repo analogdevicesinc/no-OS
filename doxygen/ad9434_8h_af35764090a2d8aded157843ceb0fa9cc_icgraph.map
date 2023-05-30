@@ -1,0 +1,8 @@
+<map id="ad9434_spi_write" name="ad9434_spi_write">
+<area shape="rect" id="node1" title="ad9434_spi_write" alt="" coords="553,56,689,83"/>
+<area shape="rect" id="node2" href="$ad9434_8c.html#aef787466729a14b4c7b6adbdc3564e99" title="ad9434_data_delay" alt="" coords="339,5,489,32"/>
+<area shape="rect" id="node3" href="$ad9434_8h.html#a787b1d8fa71d79d940b9e279a5b5900d" title="ad9434_setup" alt="" coords="323,56,505,83"/>
+<area shape="rect" id="node6" href="$ad9434_8h.html#ad524e7f045c086b35926300f9a9d1698" title="ad9434_testmode_set" alt="" coords="108,107,275,133"/>
+<area shape="rect" id="node4" href="$ad9434_8h.html#a71d0943da2f014cd0ac18dc5a093f59a" title="ad9434_setup" alt="" coords="135,5,248,32"/>
+<area shape="rect" id="node5" href="$ad9434__fmc__500ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,56,60,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="adis_read_fls_mem_wr_cntr" name="adis_read_fls_mem_wr_cntr">
+<area shape="rect" id="node1" title="Read flash memory write cycle counter value." alt="" coords="252,5,455,32"/>
+<area shape="rect" id="node2" href="$adis_8h.html#ad20edced99aea5826a8b71374c1c9d3d" title="Command: flash memory update." alt="" coords="5,5,204,32"/>
+</map>

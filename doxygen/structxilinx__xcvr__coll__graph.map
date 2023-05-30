@@ -1,0 +1,4 @@
+<map id="xilinx_xcvr" name="xilinx_xcvr">
+<area shape="rect" id="node1" title="xilinx_xcvr parameters structure." alt="" coords="10,5,104,32"/>
+<area shape="rect" id="node2" href="$structadxcvr.html" title="ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure." alt="" coords="24,95,90,121"/>
+</map>

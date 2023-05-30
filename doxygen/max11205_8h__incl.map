@@ -1,0 +1,10 @@
+<map id="drivers/adc/max11205/max11205.h" name="drivers/adc/max11205/max11205.h">
+<area shape="rect" id="node1" title="Implementation of max11205.h." alt="" coords="223,5,390,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="226,169,297,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="527,169,609,196"/>
+<area shape="rect" id="node4" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="299,95,405,121"/>
+<area shape="rect" id="node5" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,95,101,121"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="125,95,224,121"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="430,95,530,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="431,169,502,196"/>
+</map>

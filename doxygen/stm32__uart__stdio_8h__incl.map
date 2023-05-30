@@ -1,0 +1,13 @@
+<map id="drivers/platform/stm32/stm32_uart_stdio.h" name="drivers/platform/stm32/stm32_uart_stdio.h">
+<area shape="rect" id="node1" title="Header file of stm32 UART driver stdout/stdin redirection." alt="" coords="162,5,334,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="125,95,211,121"/>
+<area shape="rect" id="node3" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="195,169,301,196"/>
+<area shape="rect" id="node8" href="$stm32__uart_8h.html" title="Header file of UART driver for STM32." alt="" coords="286,95,394,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="262,319,333,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,319,88,345"/>
+<area shape="rect" id="node6" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,244,217,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="115,319,186,345"/>
+<area shape="rect" id="node9" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="292,244,388,271"/>
+<area shape="rect" id="node10" href="$stm32__hal_8h.html" title=" " alt="" coords="463,169,566,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="481,244,548,271"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="drivers/platform/linux/linux_timer.c" name="drivers/platform/linux/linux_timer.c">
+<area shape="rect" id="node1" title="Source file for Linux timer platform driver." alt="" coords="249,5,412,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,88,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="139,169,205,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="230,169,301,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="299,95,363,121"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="437,95,547,121"/>
+<area shape="rect" id="node8" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="571,95,685,121"/>
+<area shape="rect" id="node10" href="$no__os__alloc_8h.html" title=" " alt="" coords="163,95,274,121"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="458,169,526,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="593,169,663,196"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="projects/max11205pmb1/src/examples/iio_example/iio_example.c" name="projects/max11205pmb1/src/examples/iio_example/iio_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO example for max11205pmb1 project." alt="" coords="340,5,537,61"/>
+<area shape="rect" id="node2" href="$max11205pmb1_2src_2examples_2iio__example_2iio__example_8h.html" title="IIO example header for max11205pmb1 project." alt="" coords="185,109,300,136"/>
+<area shape="rect" id="node3" href="$iio__max11205_8h.html" title="Header file of iio max11205 driver." alt="" coords="325,109,451,136"/>
+<area shape="rect" id="node12" title=" " alt="" coords="527,109,654,136"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="459,333,559,360"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="343,184,393,211"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="183,259,276,285"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="315,259,421,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="512,408,595,435"/>
+<area shape="rect" id="node7" title=" " alt="" coords="229,408,299,435"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="5,333,176,360"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="301,333,435,360"/>
+<area shape="rect" id="node11" title=" " alt="" coords="353,408,423,435"/>
+</map>

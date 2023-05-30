@@ -1,0 +1,16 @@
+<map id="drivers/adc/adc_demo/adc_demo.c" name="drivers/adc/adc_demo/adc_demo.c">
+<area shape="rect" id="node1" title="Implementation of ADC Demo Driver." alt="" coords="291,5,456,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="373,169,440,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="131,95,202,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="489,169,559,196"/>
+<area shape="rect" id="node5" href="$adc__demo_8h.html" title="Header file of ADC Demo Driver." alt="" coords="5,95,107,121"/>
+<area shape="rect" id="node11" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="227,95,336,121"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="598,95,698,121"/>
+<area shape="rect" id="node14" href="$no__os__alloc_8h.html" title=" " alt="" coords="411,95,522,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="187,319,258,345"/>
+<area shape="rect" id="node7" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="87,169,180,196"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="332,244,428,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="491,244,573,271"/>
+<area shape="rect" id="node9" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="137,244,308,271"/>
+<area shape="rect" id="node12" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="255,169,323,196"/>
+</map>

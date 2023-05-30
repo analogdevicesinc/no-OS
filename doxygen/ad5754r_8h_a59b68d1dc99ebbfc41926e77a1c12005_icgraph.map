@@ -1,0 +1,5 @@
+<map id="ad5754r_remove_gpios" name="ad5754r_remove_gpios">
+<area shape="rect" id="node1" title="Remove GPIOs and free resources." alt="" coords="185,31,360,57"/>
+<area shape="rect" id="node2" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="20,5,123,32"/>
+<area shape="rect" id="node3" href="$ad5754r_8h.html#ad0be5d6910b270f742c0f9e8cec730c6" title="Remove the device and release resources." alt="" coords="5,56,137,83"/>
+</map>

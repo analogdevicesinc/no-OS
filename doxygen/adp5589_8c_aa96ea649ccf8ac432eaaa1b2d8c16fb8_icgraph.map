@@ -1,0 +1,6 @@
+<map id="adp5589_get_register_value" name="adp5589_get_register_value">
+<area shape="rect" id="node1" title="Reads the value of a register." alt="" coords="227,49,389,90"/>
+<area shape="rect" id="node2" href="$adp5589_8h.html#afdd05e4025e183669d7ca8c597be7e53" title="Reads the state of the pins." alt="" coords="5,5,179,32"/>
+<area shape="rect" id="node3" href="$adp5589_8h.html#a0be6cd6c51c1a7e61eeb3e845a4ff211" title="Initializes the communication peripheral and checks if the ADP5589 part is present." alt="" coords="39,56,145,83"/>
+<area shape="rect" id="node4" href="$adp5589_8h.html#a00c689e4357243d8a5242456a0547006" title="Locks the ADP5589 and requests Password for unlock." alt="" coords="21,107,163,133"/>
+</map>

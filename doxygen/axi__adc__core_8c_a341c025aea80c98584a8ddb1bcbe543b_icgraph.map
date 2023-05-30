@@ -1,0 +1,5 @@
+<map id="axi_slave_adc_read" name="axi_slave_adc_read">
+<area shape="rect" id="node1" title="Slave AXI ADC Data read." alt="" coords="424,13,575,39"/>
+<area shape="rect" id="node2" href="$axi__adc__core_8h.html#a7e7072ec229da6c82b28c7b0190de9e7" title="Update active AXI ADC channels." alt="" coords="205,5,376,47"/>
+<area shape="rect" id="node3" href="$iio__axi__adc_8c.html#af7d00c44f5edd36cdca063ce45d767db" title="Update active channels." alt="" coords="5,5,157,47"/>
+</map>

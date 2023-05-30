@@ -1,0 +1,4 @@
+<map id="admv8818_rfin_select" name="admv8818_rfin_select">
+<area shape="rect" id="node1" title="Set the RF Input Band Select." alt="" coords="172,5,337,32"/>
+<area shape="rect" id="node2" href="$admv8818_8h.html#ab2a128203022a3ed084779326ecef8be" title="Initializes the admv8818." alt="" coords="5,5,124,32"/>
+</map>

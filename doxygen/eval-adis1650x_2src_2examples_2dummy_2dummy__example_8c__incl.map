@@ -1,0 +1,17 @@
+<map id="projects/eval&#45;adis1650x/src/examples/dummy/dummy_example.c" name="projects/eval&#45;adis1650x/src/examples/dummy/dummy_example.c">
+<area shape="rect" id="node1" title="DUMMY example header for eval&#45;adis1650x project." alt="" coords="275,5,497,61"/>
+<area shape="rect" id="node2" href="$eval-adis1650x_2src_2examples_2dummy_2dummy__example_8h.html" title="DUMMY example header for eval&#45;adis1650x project." alt="" coords="5,109,153,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="177,109,304,136"/>
+<area shape="rect" id="node4" href="$adis1650x_8h.html" title="Implementation of adis1650x.h." alt="" coords="379,109,481,136"/>
+<area shape="rect" id="node12" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="247,184,360,211"/>
+<area shape="rect" id="node13" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="505,109,641,136"/>
+<area shape="rect" id="node15" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="665,109,776,136"/>
+<area shape="rect" id="node5" href="$adis_8h.html" title="Implementation of adis.h." alt="" coords="426,184,487,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="246,259,345,285"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="461,259,561,285"/>
+<area shape="rect" id="node9" title=" " alt="" coords="485,333,556,360"/>
+<area shape="rect" id="node10" title=" " alt="" coords="599,333,682,360"/>
+<area shape="rect" id="node11" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="369,259,437,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="260,333,331,360"/>
+<area shape="rect" id="node14" title=" " alt="" coords="539,184,606,211"/>
+</map>

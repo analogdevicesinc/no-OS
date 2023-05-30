@@ -1,0 +1,9 @@
+<map id="projects/iio_aducm3029/src/parameters.h" name="projects/iio_aducm3029/src/parameters.h">
+<area shape="rect" id="node1" title="Parameters Definitions." alt="" coords="105,5,283,47"/>
+<area shape="rect" id="node2" href="$iio__aducm3029_8h.html" title="iio description of aducm3029 uc" alt="" coords="49,95,182,121"/>
+<area shape="rect" id="node3" href="$aducm3029__irq_8h.html" title="Header file of IRQ driver for ADuCM302x." alt="" coords="207,95,341,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,169,169,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="194,169,277,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="321,244,392,271"/>
+<area shape="rect" id="node7" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="351,169,447,196"/>
+</map>

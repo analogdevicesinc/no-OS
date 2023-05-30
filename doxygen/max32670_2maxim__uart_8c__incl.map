@@ -1,0 +1,20 @@
+<map id="drivers/platform/maxim/max32670/maxim_uart.c" name="drivers/platform/maxim/max32670/maxim_uart.c">
+<area shape="rect" id="node1" title="Source file of UART driver for STM32." alt="" coords="334,5,523,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,95,73,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="171,319,241,345"/>
+<area shape="rect" id="node4" href="$max32670_2maxim__irq_8h.html" title="Header file for maxim irq specifics." alt="" coords="605,95,709,121"/>
+<area shape="rect" id="node6" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="783,169,879,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="521,169,581,196"/>
+<area shape="rect" id="node11" href="$max32670_2maxim__uart_8h.html" title="Header file of UART driver." alt="" coords="467,95,580,121"/>
+<area shape="rect" id="node13" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="325,244,458,271"/>
+<area shape="rect" id="node14" title=" " alt="" coords="783,95,874,121"/>
+<area shape="rect" id="node15" title=" " alt="" coords="898,95,1005,121"/>
+<area shape="rect" id="node16" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="200,244,300,271"/>
+<area shape="rect" id="node17" href="$no__os__alloc_8h.html" title=" " alt="" coords="155,95,265,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="605,169,708,196"/>
+<area shape="rect" id="node8" href="$no__os__list_8h.html" title="List library header." alt="" coords="583,244,682,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="511,319,581,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="377,319,459,345"/>
+<area shape="rect" id="node12" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="392,169,497,196"/>
+<area shape="rect" id="node18" title=" " alt="" coords="199,169,266,196"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="drivers/adc/ad717x/ad717x.h" name="drivers/adc/ad717x/ad717x.h">
+<area shape="rect" id="node1" title="AD717X header file. Devices: AD7172&#45;2, AD7172&#45;4, AD7173&#45;8, AD7175&#45;2, AD7175&#45;8, AD7176&#45;2,..." alt="" coords="688,5,835,47"/>
+<area shape="rect" id="node2" href="$ad411x__regs_8h.html" title="ad4111 Registers Definitions." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$ad7172__2__regs_8h.html" title="AD7172_2 Registers Definitions." alt="" coords="176,95,323,136"/>
+<area shape="rect" id="node4" href="$ad7172__4__regs_8h.html" title="AD7172_4 Registers Definitions." alt="" coords="347,95,493,136"/>
+<area shape="rect" id="node5" href="$ad7173__8__regs_8h.html" title="AD7173_8 Registers Definitions." alt="" coords="517,95,664,136"/>
+<area shape="rect" id="node6" href="$ad7175__2__regs_8h.html" title="AD7175_2 Registers Definitions." alt="" coords="688,95,835,136"/>
+<area shape="rect" id="node7" href="$ad7175__8__regs_8h.html" title="AD7175_8 Registers Definitions." alt="" coords="859,95,1005,136"/>
+<area shape="rect" id="node8" href="$ad7176__2__regs_8h.html" title="AD7176_2 Registers Definitions." alt="" coords="1029,95,1176,136"/>
+<area shape="rect" id="node9" href="$ad7177__2__regs_8h.html" title=" " alt="" coords="1200,95,1347,136"/>
+<area shape="rect" id="node10" href="$ad717x_8c.html" title="AD717X implementation file. Devices: AD7172&#45;2, AD7172&#45;4, AD7173&#45;8, AD7175&#45;2, AD7175&#45;8,..." alt="" coords="1371,95,1517,136"/>
+</map>

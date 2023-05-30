@@ -1,0 +1,13 @@
+<map id="projects/ad9083/src/app_jesd.h" name="projects/ad9083/src/app_jesd.h">
+<area shape="rect" id="node1" title="Application JESD initialization." alt="" coords="10,5,159,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="169,319,240,345"/>
+<area shape="rect" id="node3" href="$no__os__clk_8h.html" title="Header file of Clock Driver." alt="" coords="51,244,150,271"/>
+<area shape="rect" id="node4" href="$jesd204__clk_8h.html" title="Analog Devices JESD204 clock." alt="" coords="106,95,217,121"/>
+<area shape="rect" id="node8" href="$axi__jesd204__rx_8h.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;RX peripheral." alt="" coords="252,169,384,196"/>
+<area shape="rect" id="node5" href="$axi__adxcvr_8h.html" title="Driver for the ADI AXI&#45;ADXCVR Module." alt="" coords="483,169,587,196"/>
+<area shape="rect" id="node11" href="$axi__jesd204__tx_8h.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;TX peripheral." alt="" coords="96,169,228,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="458,319,540,345"/>
+<area shape="rect" id="node7" href="$xilinx__transceiver_8h.html" title="Driver for the Xilinx High&#45;speed transceiver dynamic reconfiguration." alt="" coords="536,244,686,271"/>
+<area shape="rect" id="node9" href="$jesd204_8h.html" title=" " alt="" coords="275,244,360,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="280,319,355,345"/>
+</map>

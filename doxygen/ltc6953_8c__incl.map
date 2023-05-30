@@ -1,0 +1,14 @@
+<map id="drivers/frequency/ltc6953/ltc6953.c" name="drivers/frequency/ltc6953/ltc6953.c">
+<area shape="rect" id="node1" title="Implementation of LTC6953 Driver." alt="" coords="281,5,469,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,244,73,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="731,95,799,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="545,169,616,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="324,244,395,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="337,169,419,196"/>
+<area shape="rect" id="node7" href="$ltc6953_8h.html" title="Implementation of LTC6953 Driver." alt="" coords="161,95,243,121"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="214,169,313,196"/>
+<area shape="rect" id="node9" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="30,169,139,196"/>
+<area shape="rect" id="node10" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="369,95,469,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="596,95,707,121"/>
+<area shape="rect" id="node12" title=" " alt="" coords="641,169,707,196"/>
+</map>

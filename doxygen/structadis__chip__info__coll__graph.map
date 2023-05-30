@@ -1,0 +1,16 @@
+<map id="adis_chip_info" name="adis_chip_info">
+<area shape="rect" id="node1" title="ADIS specific chip information structure." alt="" coords="1648,231,1763,257"/>
+<area shape="rect" id="node2" href="$structadis__scale__fractional.html" title="ADIS fractional scale format structure; scale = dividend/divisor." alt="" coords="1289,103,1447,129"/>
+<area shape="rect" id="node3" href="$structadis__data__field__map__def.html" title="ADIS filed map definition structure." alt="" coords="1276,153,1460,180"/>
+<area shape="rect" id="node4" href="$structadis__field.html" title="ADIS device field structure." alt="" coords="979,153,1063,180"/>
+<area shape="rect" id="node5" href="$structadis__scale__fractional__log2.html" title="ADIS fractional log2 scale format structure; scale = dividend/2^power." alt="" coords="1271,205,1465,232"/>
+<area shape="rect" id="node6" href="$structadis__timeout.html" title="ADIS chip timeouts." alt="" coords="1315,256,1421,283"/>
+<area shape="rect" id="node7" href="$structadis__clk__freq__limit.html" title="ADIS frequency limit for input synchronization clock." alt="" coords="1295,313,1441,340"/>
+<area shape="rect" id="node8" href="$structadis__init__param.html" title="ADIS device initialization parameters." alt="" coords="1305,364,1431,391"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="935,340,1107,367"/>
+<area shape="rect" id="node10" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="608,340,796,367"/>
+<area shape="rect" id="node11" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="939,391,1102,417"/>
+<area shape="rect" id="node12" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="641,480,763,507"/>
+<area shape="rect" id="node13" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,443,184,469"/>
+<area shape="rect" id="node14" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="323,504,469,531"/>
+</map>

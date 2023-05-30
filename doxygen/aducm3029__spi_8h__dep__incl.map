@@ -1,0 +1,10 @@
+<map id="drivers/platform/aducm3029/aducm3029_spi.h" name="drivers/platform/aducm3029/aducm3029_spi.h">
+<area shape="rect" id="node1" title="ADuCM302x specific header for SPI driver." alt="" coords="419,5,625,47"/>
+<area shape="rect" id="node2" href="$aducm3029__spi_8c.html" title="Implementation of SPI driver for ADuCM302x." alt="" coords="5,102,212,143"/>
+<area shape="rect" id="node3" href="$ada4250__ardz_8c.html" title="Implementation of Main Function." alt="" coords="236,102,405,143"/>
+<area shape="rect" id="node4" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="429,95,615,151"/>
+<area shape="rect" id="node6" href="$cn0531_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="639,102,787,143"/>
+<area shape="rect" id="node7" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="811,95,1038,151"/>
+<area shape="rect" id="node5" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="429,199,615,255"/>
+<area shape="rect" id="node8" href="$eval-adxl355-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="811,199,1038,255"/>
+</map>

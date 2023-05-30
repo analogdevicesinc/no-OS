@@ -1,0 +1,7 @@
+<map id="app_ad9083_init" name="app_ad9083_init">
+<area shape="rect" id="node1" title="Structure holding the parameters for ad9083 app initialization." alt="" coords="5,273,135,300"/>
+<area shape="rect" id="node2" href="$structno__os__clk.html" title=" " alt="" coords="135,184,221,211"/>
+<area shape="rect" id="node3" href="$structno__os__clk__hw.html" title=" " alt="" coords="167,273,279,300"/>
+<area shape="rect" id="node4" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="117,95,239,121"/>
+<area shape="rect" id="node5" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="89,5,267,32"/>
+</map>

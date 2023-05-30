@@ -1,0 +1,5 @@
+<map id="atx_pll_release_arbitration" name="atx_pll_release_arbitration">
+<area shape="rect" id="node1" title="atx_pll_release_arbitration" alt="" coords="389,13,585,39"/>
+<area shape="rect" id="node2" href="$altera__a10__atx__pll_8h.html#ac5f5e49c8c41f6c40c74b5afa05d53a1" title="altera_a10_atx_pll_recalc_rate" alt="" coords="199,5,341,47"/>
+<area shape="rect" id="node3" href="$altera__adxcvr_8h.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="5,13,151,39"/>
+</map>

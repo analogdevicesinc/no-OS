@@ -1,0 +1,11 @@
+<map id="ad7124_init_param" name="ad7124_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="296,363,443,389"/>
+<area shape="rect" id="node2" href="$structad7124__st__reg.html" title=" " alt="" coords="5,273,123,300"/>
+<area shape="rect" id="node3" href="$structad7124__channel__map.html" title="Channel mapping." alt="" coords="147,273,311,300"/>
+<area shape="rect" id="node4" href="$structad7124__analog__inputs.html" title="Positive and negative analog inputs." alt="" coords="145,184,313,211"/>
+<area shape="rect" id="node5" href="$structad7124__channel__setup.html" title="Channel setup." alt="" coords="336,273,507,300"/>
+<area shape="rect" id="node6" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="531,273,693,300"/>
+<area shape="rect" id="node7" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="623,184,745,211"/>
+<area shape="rect" id="node8" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="595,5,773,32"/>
+<area shape="rect" id="node9" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="799,95,945,121"/>
+</map>

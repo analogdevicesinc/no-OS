@@ -1,0 +1,14 @@
+<map id="drivers/adc/max11205/max11205.c" name="drivers/adc/max11205/max11205.c">
+<area shape="rect" id="node1" title="Implementation of max11205.c." alt="" coords="582,5,749,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="583,244,654,271"/>
+<area shape="rect" id="node3" href="$max11205_8h.html" title="Implementation of max11205.h." alt="" coords="341,95,443,121"/>
+<area shape="rect" id="node10" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="791,95,859,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="657,95,767,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="270,244,341,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="457,244,540,271"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,169,112,196"/>
+<area shape="rect" id="node7" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="136,169,232,196"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="256,169,355,196"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="430,169,530,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="656,169,723,196"/>
+</map>

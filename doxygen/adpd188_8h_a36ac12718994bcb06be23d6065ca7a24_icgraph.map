@@ -1,0 +1,19 @@
+<map id="adpd188_reg_read" name="adpd188_reg_read">
+<area shape="rect" id="node1" title="Read one 16 bit register of the ADPD188." alt="" coords="576,385,719,412"/>
+<area shape="rect" id="node2" href="$adpd188_8h.html#a94f8513c131437ede9532a6cafd6ed5e" title="Get sample frequency of the ADC." alt="" coords="332,5,528,32"/>
+<area shape="rect" id="node3" href="$adpd188_8h.html#a58dcdaeaea13b7cede4ff91b17bdc673" title="Do internal 32MHz clock calibration. This calibration requires the 32kHz clock to be calibrated first..." alt="" coords="343,56,517,83"/>
+<area shape="rect" id="node4" href="$adpd188_8h.html#ac3baebd256bcb88c876657e053332af5" title="Empty the FIFO." alt="" coords="357,107,503,133"/>
+<area shape="rect" id="node5" href="$adpd188_8h.html#af8cf6758753eccd6cadf55b23743c374" title="Get the number of bytes currently present in FIFO." alt="" coords="339,157,521,184"/>
+<area shape="rect" id="node6" href="$adpd188_8h.html#a4de4eaf34b044fef4fc71952c643ab3b" title="Set the number of 16 bit words that need to be in the FIFO to trigger an interrupt." alt="" coords="339,208,521,235"/>
+<area shape="rect" id="node7" href="$adpd188_8h.html#ab223f6408746c282f88ed468144ad05c" title="Setup the GPIO source." alt="" coords="340,259,520,285"/>
+<area shape="rect" id="node8" href="$adpd188_8h.html#abc11fae86542999dc0381978a94faa14" title="Setup drive and polarity of the GPIOs. Also enable GPIO if necessary." alt="" coords="352,309,508,336"/>
+<area shape="rect" id="node9" href="$iio__adpd188_8h.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="131,436,261,463"/>
+<area shape="rect" id="node10" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,385,60,412"/>
+<area shape="rect" id="node11" href="$adpd188_8h.html#ad498aa08ccb8f2c328fcc761f391738d" title="Initialize the ADPD188 driver." alt="" coords="377,411,483,437"/>
+<area shape="rect" id="node12" href="$adpd188_8h.html#ad0a577b65b64df5ed10a5ecedbad965c" title="Clear the slot and FIFO interrupt flags." alt="" coords="340,512,520,539"/>
+<area shape="rect" id="node13" href="$adpd188_8h.html#abc82bd34fefd0372b5ccb60a923d19c1" title="Enable the slot and FIFO interrupt flags." alt="" coords="348,563,512,589"/>
+<area shape="rect" id="node14" href="$adpd188_8h.html#ae966fc779c67a898b07758b57583fcc0" title="Get the slot and FIFO interrupt flags." alt="" coords="345,613,515,640"/>
+<area shape="rect" id="node15" href="$adpd188_8h.html#aa5234f9448e830cf73ead5eccaf5d68c" title="Get the mode of operation of the ADPD188." alt="" coords="355,664,505,691"/>
+<area shape="rect" id="node16" href="$adpd188_8h.html#ad71f0c49d59a0a13a416871efbe4cf1f" title="Enable slot and setup its FIFO interaction." alt="" coords="354,715,506,741"/>
+<area shape="rect" id="node17" href="$adpd188_8h.html#ab8a0efa4cbeda4444394df7c4c327938" title="Do initial configuration of the device to use as a smoke detector. The configuration is described in ..." alt="" coords="108,733,284,774"/>
+</map>

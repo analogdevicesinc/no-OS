@@ -1,0 +1,7 @@
+<map id="AD717X_ReadRegister" name="AD717X_ReadRegister">
+<area shape="rect" id="node1" title="Reads the value of the specified register." alt="" coords="424,56,592,83"/>
+<area shape="rect" id="node2" href="$ad717x_8h.html#af92ad585cabc0f6ef31f41589946bb34" title="Initializes the AD717X." alt="" coords="239,5,342,32"/>
+<area shape="rect" id="node3" href="$ad717x_8h.html#add8ae6c28ff4f84338b5a57c53a84ccc" title="Reads the conversion result from the device." alt="" coords="218,56,363,83"/>
+<area shape="rect" id="node5" href="$ad717x_8h.html#a923f206a19c5d23586d670226593d421" title="Waits until a new conversion result is available." alt="" coords="205,107,376,133"/>
+<area shape="rect" id="node4" href="$ad717x_8h.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,81,157,108"/>
+</map>

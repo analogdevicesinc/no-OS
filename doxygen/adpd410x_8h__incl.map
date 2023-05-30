@@ -1,0 +1,8 @@
+<map id="drivers/photo&#45;electronic/adpd410x/adpd410x.h" name="drivers/photo&#45;electronic/adpd410x/adpd410x.h">
+<area shape="rect" id="node1" title=" " alt="" coords="134,5,311,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,88,121"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="112,95,211,121"/>
+<area shape="rect" id="node5" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="235,95,333,121"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="357,95,464,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="249,169,319,196"/>
+</map>

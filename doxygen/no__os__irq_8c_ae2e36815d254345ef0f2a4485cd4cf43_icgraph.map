@@ -1,0 +1,9 @@
+<map id="no_os_irq_disable" name="no_os_irq_disable">
+<area shape="rect" id="node1" title="Disable specific interrupt." alt="" coords="449,97,588,123"/>
+<area shape="rect" id="node2" href="$aducm3029__irq_8c.html#a2cafe4a6bd11cb2fec5e1fd4954e0369" title="Disable all external interrupts." alt="" coords="232,5,401,47"/>
+<area shape="rect" id="node3" href="$iio__trigger_8h.html#ab1e79bf681f66c1c6d8b9444117ef95d" title="Disable system interrupt which is linked to the given trigger." alt="" coords="256,71,377,98"/>
+<area shape="rect" id="node5" href="$max11205_8h.html#adff8b4d146093da04e57377b4624cf4c" title="Free memory allocated by max11205_init()." alt="" coords="243,122,391,149"/>
+<area shape="rect" id="node7" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="237,173,396,199"/>
+<area shape="rect" id="node4" href="$iio__adis_8h.html#aa3fb4f6fcd0868abc263f5db5b782538" title="Handles trigger: reads all available samples in FIFO and writes them to the buffer." alt="" coords="5,60,184,101"/>
+<area shape="rect" id="node6" href="$iio__max11205_8h.html#a2310b65fd7b0f421f0e5215fd96b6335" title="Free the resources allocated by max11205_iio_init()." alt="" coords="9,126,180,153"/>
+</map>

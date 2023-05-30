@@ -1,0 +1,16 @@
+<map id="max9611_read" name="max9611_read">
+<area shape="rect" id="node1" title="Reads data from device register (I2C)" alt="" coords="419,157,537,184"/>
+<area shape="rect" id="node2" href="$max9611_8h.html#a7fc99ace4628168fff72c9ccc875cbd1" title="Get MAX9611 configured delay time." alt="" coords="212,5,367,32"/>
+<area shape="rect" id="node3" href="$max9611_8h.html#a1288b75d9995b4542a16bde83f52b111" title="Get LR bit value." alt="" coords="226,56,353,83"/>
+<area shape="rect" id="node4" href="$max9611_8h.html#af301db2467ebad736beccb45ed26cf25" title="Get the MAX9611 operating mode." alt="" coords="212,107,367,133"/>
+<area shape="rect" id="node5" href="$max9611_8h.html#ad1291b31653dfd330ece9ec4aac156f1" title="Get the internal MUX settings." alt="" coords="216,157,363,184"/>
+<area shape="rect" id="node6" href="$max9611_8h.html#ab11d851aa93b5e5c315ff23a468ba24a" title="Receive data from ADC (single value only)." alt="" coords="218,208,361,235"/>
+<area shape="rect" id="node7" href="$max9611_8h.html#a72823a2a5b13b85cf2b04f45bbc3e173" title="Get MAX9611 configured retry time." alt="" coords="215,259,364,285"/>
+<area shape="rect" id="node8" href="$max9611_8h.html#a705e39818ba4cefb522ba28f2f2993f8" title="Update selected I2C register contents." alt="" coords="208,309,371,336"/>
+<area shape="rect" id="node9" href="$max9611_8h.html#ad35655d8b6147f1c0f142dff01732405" title="Configures MAX9611 delay time." alt="" coords="6,183,159,209"/>
+<area shape="rect" id="node10" href="$max9611_8h.html#a73149820869b0b1fd986669612ee047e" title="Configure LR bit operation." alt="" coords="19,233,146,260"/>
+<area shape="rect" id="node11" href="$max9611_8h.html#aed49ffe1818884bbaf9351aeafe18c50" title="Configures MAX9611 operating mode." alt="" coords="5,284,160,311"/>
+<area shape="rect" id="node12" href="$max9611_8h.html#a5358fd37d5a5358c42dc6e99d5b3a9b3" title="Configures the internal MUX settings." alt="" coords="9,335,156,361"/>
+<area shape="rect" id="node13" href="$max9611_8h.html#a6a32d751ecc4363280c7f8229aeeb149" title="Configures MAX9611 retry time." alt="" coords="9,385,157,412"/>
+<area shape="rect" id="node14" href="$max9611_8h.html#a9b82e483c22b90d478dad88629c8b29f" title="Device shutdown or power up." alt="" coords="6,436,159,463"/>
+</map>

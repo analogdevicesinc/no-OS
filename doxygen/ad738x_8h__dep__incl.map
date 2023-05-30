@@ -1,0 +1,5 @@
+<map id="drivers/adc/ad738x/ad738x.h" name="drivers/adc/ad738x/ad738x.h">
+<area shape="rect" id="node1" title="Header file for AD738x Driver." alt="" coords="95,5,241,47"/>
+<area shape="rect" id="node2" href="$ad738x_8c.html" title="Implementation of AD738x Driver." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$ad738x__fmc_8c.html" title="Implementation of Main Function." alt="" coords="176,95,341,136"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="MYKONOS_setSpiSettings" name="MYKONOS_setSpiSettings">
+<area shape="rect" id="node1" title="Sets the Mykonos device SPI settings (3wire/4wire, MSBFirst, etc)." alt="" coords="204,5,392,32"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a26b695db592df334a9ef189d9d66125f" title="Initializes the Mykonos device based on the desired device settings." alt="" coords="5,5,156,32"/>
+</map>

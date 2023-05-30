@@ -1,0 +1,9 @@
+<map id="adf7023_dev" name="adf7023_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="213,288,320,315"/>
+<area shape="rect" id="node2" href="$structadf7023__bbram.html" title=" " alt="" coords="14,184,138,211"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="184,184,307,211"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="188,95,335,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="402,184,534,211"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="374,95,562,121"/>
+</map>

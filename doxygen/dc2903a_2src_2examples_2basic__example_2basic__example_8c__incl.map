@@ -1,0 +1,16 @@
+<map id="projects/dc2903a/src/examples/basic_example/basic_example.c" name="projects/dc2903a/src/examples/basic_example/basic_example.c">
+<area shape="rect" id="node1" title="Implementation of basic example for DC2903A project." alt="" coords="333,5,525,61"/>
+<area shape="rect" id="node2" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8h.html" title="basic example header for DC2903A project" alt="" coords="93,109,225,136"/>
+<area shape="rect" id="node3" href="$ltc2672_8h.html" title="Header file of ltc2672 Driver." alt="" coords="249,109,332,136"/>
+<area shape="rect" id="node9" title=" " alt="" coords="557,109,683,136"/>
+<area shape="rect" id="node10" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="708,109,844,136"/>
+<area shape="rect" id="node12" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="313,184,426,211"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="433,109,533,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="286,259,357,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="451,184,533,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="139,184,237,211"/>
+<area shape="rect" id="node7" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,184,115,211"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,259,94,285"/>
+<area shape="rect" id="node11" title=" " alt="" coords="743,184,809,211"/>
+<area shape="rect" id="node14" title=" " alt="" coords="609,184,679,211"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="mykonosObsRxSettings_t" name="mykonosObsRxSettings_t">
+<area shape="rect" id="node1" title="Data structure to hold ORx data path settings." alt="" coords="723,111,911,137"/>
+<area shape="rect" id="node2" href="$structmykonos_jesd204b_framer_config__t.html" title="Data structure to hold Mykonos JESD204b Framer configuration settings." alt="" coords="337,5,576,32"/>
+<area shape="rect" id="node3" href="$structmykonos_rx_profile__t.html" title="Data structure to hold settings for the current Rx specific use case profile." alt="" coords="381,60,532,87"/>
+<area shape="rect" id="node4" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="58,60,167,87"/>
+<area shape="rect" id="node5" href="$structmykonos_o_rx_gain_control__t.html" title="Data structure to hold ORx gain control settings for initialization and during use." alt="" coords="358,111,555,137"/>
+<area shape="rect" id="node6" href="$structmykonos_agc_cfg__t.html" title="Data structure to hold general AGC settings for initialization and during use." alt="" coords="387,161,526,188"/>
+<area shape="rect" id="node7" href="$structmykonos_peak_det_agc_cfg__t.html" title="Data structure to hold peak detector settings for the AGC." alt="" coords="15,136,210,163"/>
+<area shape="rect" id="node8" href="$structmykonos_power_meas_agc_cfg__t.html" title="Data structure to hold power measurement settings for the AGC." alt="" coords="5,187,220,213"/>
+<area shape="rect" id="node9" href="$structmykonos_sniffer_gain_control__t.html" title="Data structure to hold SnRx gain control settings for initialization and during use." alt="" coords="351,212,563,239"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="no_os_mdio_desc" name="no_os_mdio_desc">
+<area shape="rect" id="node1" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="5,95,143,121"/>
+<area shape="rect" id="node2" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="9,5,139,32"/>
+</map>

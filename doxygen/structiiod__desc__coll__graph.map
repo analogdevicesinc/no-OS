@@ -1,0 +1,8 @@
+<map id="iiod_desc" name="iiod_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="42,273,125,300"/>
+<area shape="rect" id="node2" href="$structiiod__ops.html" title=" " alt="" coords="16,184,92,211"/>
+<area shape="rect" id="node3" href="$structiiod__conn__priv.html" title=" " alt="" coords="116,184,232,211"/>
+<area shape="rect" id="node4" href="$structiiod__run__cmd__result.html" title=" " alt="" coords="97,95,251,121"/>
+<area shape="rect" id="node5" href="$structiiod__buff.html" title=" " alt="" coords="5,5,84,32"/>
+<area shape="rect" id="node6" href="$structcomand__desc.html" title=" " alt="" coords="275,95,385,121"/>
+</map>

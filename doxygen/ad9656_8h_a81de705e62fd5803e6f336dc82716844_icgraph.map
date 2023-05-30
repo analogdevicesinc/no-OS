@@ -1,0 +1,7 @@
+<map id="ad9656_reg_write" name="ad9656_reg_write">
+<area shape="rect" id="node1" title="Write to the ad9656 that is conected to the SPI." alt="" coords="333,56,472,83"/>
+<area shape="rect" id="node2" href="$ad9656_8h.html#a93ebc224a9ef1fb96064994bd9d83e10" title="Launch the JESD204 test functionality for the receive path for the ad9656 chip." alt="" coords="115,5,278,32"/>
+<area shape="rect" id="node4" href="$ad9656_8h.html#ab61e88ca0626ae6931233680606b395c" title="Setup the working parameters of the ad9656 chip." alt="" coords="140,56,253,83"/>
+<area shape="rect" id="node5" href="$ad9656_8h.html#ae4e108d8747fe5a402b4109d9c1e2c43" title="Launch the user input test functionality for the receive path for the ad9656 chip...." alt="" coords="108,107,285,133"/>
+<area shape="rect" id="node3" href="$ad9656__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,56,60,83"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="drivers/cdc/ad7746/ad7746.h" name="drivers/cdc/ad7746/ad7746.h">
+<area shape="rect" id="node1" title="Header file of AD7746 Driver." alt="" coords="261,5,407,47"/>
+<area shape="rect" id="node2" href="$ad7746_8c.html" title="Implementation of AD7746 Driver." alt="" coords="5,95,151,136"/>
+<area shape="rect" id="node3" href="$iio__ad7746_8c.html" title=" " alt="" coords="175,95,320,136"/>
+<area shape="rect" id="node4" href="$ad7746-ebz_2src_2app_2headless_8c.html" title="AD7746&#45;EBZ demo project main file." alt="" coords="345,95,499,136"/>
+<area shape="rect" id="node5" href="$cn0552_2src_2app_2headless_8c.html" title="CN0552 IIO demo project main file." alt="" coords="524,95,672,136"/>
+</map>

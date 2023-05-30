@@ -1,0 +1,4 @@
+<map id="ad4080_soft_reset" name="ad4080_soft_reset">
+<area shape="rect" id="node1" title="Software reset the device." alt="" coords="152,5,293,32"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="5,5,104,32"/>
+</map>

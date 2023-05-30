@@ -1,0 +1,11 @@
+<map id="adxl313_conf_int_map" name="adxl313_conf_int_map">
+<area shape="rect" id="node1" title=" " alt="" coords="691,137,860,163"/>
+<area shape="rect" id="node2" href="$adxl313_8h.html#a842d16935a98f00b120d32346c56503d" title=" " alt="" coords="441,13,632,39"/>
+<area shape="rect" id="node4" href="$adxl313_8h.html#a756aaa36137a481c4ad4eda9b3938772" title=" " alt="" coords="459,64,614,105"/>
+<area shape="rect" id="node5" href="$adxl313_8h.html#a1b5c3a4ecb47393e4053ec1fa7927af9" title=" " alt="" coords="465,129,608,171"/>
+<area shape="rect" id="node8" href="$adxl313_8h.html#a53ffccfc61a6a9dffa9596217d8c8be4" title=" " alt="" coords="441,195,632,222"/>
+<area shape="rect" id="node9" href="$adxl313_8h.html#a4fa970d2fead9d43e988060012400db6" title=" " alt="" coords="431,246,643,273"/>
+<area shape="rect" id="node3" href="$adxl313_8h.html#ad14d5588767f1b178ff91d1ebb6034d6" title="Enable the activity detection." alt="" coords="219,5,377,47"/>
+<area shape="rect" id="node6" href="$adxl313_8h.html#a61d431fad6242c88fc9ba605179e2dea" title="Enables the inactivity detection." alt="" coords="213,129,383,171"/>
+<area shape="rect" id="node7" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,137,165,163"/>
+</map>

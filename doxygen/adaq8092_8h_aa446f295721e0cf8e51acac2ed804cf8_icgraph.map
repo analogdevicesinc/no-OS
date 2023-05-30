@@ -1,0 +1,18 @@
+<map id="adaq8092_write" name="adaq8092_write">
+<area shape="rect" id="node1" title="Write device register." alt="" coords="765,162,892,189"/>
+<area shape="rect" id="node2" href="$adaq8092_8h.html#a3fd6d9f29c2321a807a1d8791c2b85cd" title="Initialize the device." alt="" coords="108,340,223,366"/>
+<area shape="rect" id="node4" href="$adaq8092_8h.html#a4da10512b37f14639e3c1095634af284" title="Update specific register bits." alt="" coords="548,314,717,341"/>
+<area shape="rect" id="node3" href="$adaq8092__fmc_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,466,60,493"/>
+<area shape="rect" id="node5" href="$adaq8092_8h.html#a34eb071f7e851d99b3874913edc3eec7" title="Set the alternate bit polarity mode." alt="" coords="292,61,479,88"/>
+<area shape="rect" id="node6" href="$adaq8092_8h.html#a54585c02d08868aef3d766dd36092a3e" title="Set the clock duty cycle stabilizer mode." alt="" coords="283,112,488,138"/>
+<area shape="rect" id="node7" href="$adaq8092_8h.html#a00f767c17ea43a9f56aa74b612cd9df2" title="Set the clock phase delay mode." alt="" coords="271,162,500,189"/>
+<area shape="rect" id="node8" href="$adaq8092_8h.html#a4f4c8cb3f278ed6e69de79a0e5f53fad" title="Set the clock polarity mode." alt="" coords="280,213,491,240"/>
+<area shape="rect" id="node9" href="$adaq8092_8h.html#ac7a01efbe8048c22dd2f9bce3bf63757" title="Set the data output randomizer mode." alt="" coords="281,264,489,290"/>
+<area shape="rect" id="node10" href="$adaq8092_8h.html#a91f808ba0436c84867ea12cdc43ea2e5" title="Set digital outputs." alt="" coords="299,314,471,341"/>
+<area shape="rect" id="node11" href="$adaq8092_8h.html#a44e081b2a9efffdf62c8afc960955fed" title="Set the digital output mode." alt="" coords="289,365,482,392"/>
+<area shape="rect" id="node12" href="$adaq8092_8h.html#a9a5feb1c1e347b452c5012a798879a53" title="Set the LVDS output current mode." alt="" coords="276,416,495,442"/>
+<area shape="rect" id="node13" href="$adaq8092_8h.html#a08261e86a1f0779e1850fdca090dd768" title="Set the LVDS internal temination mode." alt="" coords="271,466,500,493"/>
+<area shape="rect" id="node14" href="$adaq8092_8h.html#a6964b66131c437c4ecb487876cb0a7c5" title="Set the device powerodown mode." alt="" coords="295,517,475,544"/>
+<area shape="rect" id="node15" href="$adaq8092_8h.html#a7c6e9c1789e833974bf96e2e869089f9" title="Set digital output test pattern mode." alt="" coords="291,618,480,645"/>
+<area shape="rect" id="node16" href="$adaq8092_8h.html#a79c30f982cb2e94fbc63229ac9e64782" title="Set the Tows Complement mode." alt="" coords="288,568,483,594"/>
+</map>

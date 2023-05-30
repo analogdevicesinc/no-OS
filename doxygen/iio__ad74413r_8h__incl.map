@@ -1,0 +1,13 @@
+<map id="drivers/adc&#45;dac/ad74413r/iio_ad74413r.h" name="drivers/adc&#45;dac/ad74413r/iio_ad74413r.h">
+<area shape="rect" id="node1" title="Header file of the IIO AD74413r Driver." alt="" coords="306,5,493,47"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="343,95,394,121"/>
+<area shape="rect" id="node10" href="$ad74413r_8h.html" title="Header file of AD74413r Driver." alt="" coords="537,169,632,196"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="322,169,415,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="116,169,221,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="153,319,235,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="395,319,465,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="283,244,454,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="25,244,158,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="56,319,127,345"/>
+<area shape="rect" id="node11" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="579,244,678,271"/>
+</map>

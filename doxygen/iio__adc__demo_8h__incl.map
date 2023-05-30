@@ -1,0 +1,10 @@
+<map id="drivers/adc/adc_demo/iio_adc_demo.h" name="drivers/adc/adc_demo/iio_adc_demo.h">
+<area shape="rect" id="node1" title="Header file of ADC Demo iio." alt="" coords="183,5,348,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="157,95,227,121"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="201,169,295,196"/>
+<area shape="rect" id="node7" href="$adc__demo_8h.html" title="Header file of ADC Demo Driver." alt="" coords="312,95,413,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,244,88,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="274,319,345,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="163,244,333,271"/>
+<area shape="rect" id="node8" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="408,169,504,196"/>
+</map>

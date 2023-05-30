@@ -1,0 +1,24 @@
+<map id="max22516_write" name="max22516_write">
+<area shape="rect" id="node1" title="Writes data to max22516 over SPI." alt="" coords="647,411,777,437"/>
+<area shape="rect" id="node2" href="$max22516_8h.html#a4735f18f87572d1849c81646f7f19bf5" title="MAX22516 clr frm err cnt." alt="" coords="399,5,595,32"/>
+<area shape="rect" id="node3" href="$max22516_8h.html#ad7f493e16c222ba5f046532ad14e5c77" title="MAX22516 clr iol err cnt." alt="" coords="402,56,591,83"/>
+<area shape="rect" id="node4" href="$max22516_8h.html#aacc0e7178ec1260132a8fe01d65f7dcc" title="MAX22516 set event." alt="" coords="415,107,578,133"/>
+<area shape="rect" id="node5" href="$max22516_8h.html#a1d36de4d6ea0b6ab3b85bb041f33c6a7" title="MAX22516 set id." alt="" coords="428,157,565,184"/>
+<area shape="rect" id="node6" href="$max22516_8h.html#aa6f64094a0458bd74d92a6845d1460a1" title="MAX22516 set led1." alt="" coords="420,208,573,235"/>
+<area shape="rect" id="node7" href="$max22516_8h.html#a93ebafce04b70d34671c290b19e539f8" title="MAX22516 set led2." alt="" coords="420,259,573,285"/>
+<area shape="rect" id="node8" href="$max22516_8h.html#aabba2848d73319e4b3a0dea0658337e1" title="MAX22516 set min ctmr." alt="" coords="403,309,590,336"/>
+<area shape="rect" id="node9" href="$max22516_8h.html#a078462ff4978b205c3b7b3e4c3931b1f" title="MAX22516 setup cq dis." alt="" coords="405,360,588,387"/>
+<area shape="rect" id="node10" href="$max22516_8h.html#a28d0f5e2cdc0236364f647d3d143ee25" title="MAX22516 setup cq npn." alt="" coords="403,411,590,437"/>
+<area shape="rect" id="node11" href="$max22516_8h.html#a4c0650ca954229842d8ff05f6e8b000a" title="MAX22516 setup cq pnp." alt="" coords="403,461,590,488"/>
+<area shape="rect" id="node12" href="$max22516_8h.html#a1550da5725bbeed7be70f5ad029d2ade" title="MAX22516 setup cq pp." alt="" coords="407,512,586,539"/>
+<area shape="rect" id="node13" href="$max22516_8h.html#aa6cde72a41815dc8ddec4ab74b2c178d" title="MAX22516 setup do dis." alt="" coords="405,563,588,589"/>
+<area shape="rect" id="node14" href="$max22516_8h.html#a459f0224030ca6f062264e0a911b2618" title="MAX22516 setup do npn." alt="" coords="403,613,591,640"/>
+<area shape="rect" id="node15" href="$max22516_8h.html#abb846012ff15964f533205b8828a1a67" title="MAX22516 setup do pnp." alt="" coords="403,664,591,691"/>
+<area shape="rect" id="node16" href="$max22516_8h.html#ab683a15f4382e9422886b55ff2e19b24" title="MAX22516 setup do pp." alt="" coords="407,715,587,741"/>
+<area shape="rect" id="node17" href="$max22516_8h.html#a52e1b00eb7aa2cd3983924ceb5311782" title="MAX22516 setup watchdog." alt="" coords="395,765,599,792"/>
+<area shape="rect" id="node18" href="$max22516_8h.html#a4a2579ad68b7fefa457a8179356798fa" title="Update MAX22516 register." alt="" coords="425,816,568,843"/>
+<area shape="rect" id="node19" href="$max22516_8h.html#a6f8764f664b871d843917d904fa86fc1" title="MAX22516 do set." alt="" coords="199,765,341,792"/>
+<area shape="rect" id="node20" href="$max22516_8h.html#a6adc1e843f960601d831b5abfba8b792" title="MAX22516 tx set." alt="" coords="201,816,339,843"/>
+<area shape="rect" id="node22" href="$max22516_8h.html#a53bf50b71fcc5c956338c7f87f5820ef" title="MAX22516 txen set." alt="" coords="193,867,347,893"/>
+<area shape="rect" id="node21" href="$max22516_8h.html#a6b7ec792151ee38bd99fdf22b4cc0420" title="MAX22516 set cq." alt="" coords="5,841,145,868"/>
+</map>

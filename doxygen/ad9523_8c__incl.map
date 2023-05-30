@@ -1,0 +1,10 @@
+<map id="drivers/frequency/ad9523/ad9523.c" name="drivers/frequency/ad9523/ad9523.c">
+<area shape="rect" id="node1" title="Implementation of AD9523 Driver." alt="" coords="84,5,272,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,169,76,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="101,169,167,196"/>
+<area shape="rect" id="node4" href="$ad9523_8h.html" title="Header file of AD9523 Driver." alt="" coords="262,95,345,121"/>
+<area shape="rect" id="node8" href="$no__os__alloc_8h.html" title=" " alt="" coords="76,95,187,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="268,244,339,271"/>
+<area shape="rect" id="node6" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="247,169,360,196"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="385,169,483,196"/>
+</map>

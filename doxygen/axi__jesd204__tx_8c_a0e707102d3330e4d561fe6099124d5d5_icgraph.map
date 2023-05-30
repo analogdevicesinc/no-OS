@@ -1,0 +1,6 @@
+<map id="axi_jesd204_tx_remove" name="axi_jesd204_tx_remove">
+<area shape="rect" id="node1" title="Free resoulces allocated for JESD204 TX peripheral." alt="" coords="249,31,427,57"/>
+<area shape="rect" id="node2" href="$adrv9009_2src_2app_2app__jesd_8h.html#a58d0a969b662a323b8105e78817b7a93" title=" " alt="" coords="108,5,201,32"/>
+<area shape="rect" id="node4" href="$adrv9009_2src_2app_2app__jesd_8h.html#ae5553405b03de1193a617ca30d31a455" title=" " alt="" coords="116,56,193,83"/>
+<area shape="rect" id="node3" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,57"/>
+</map>

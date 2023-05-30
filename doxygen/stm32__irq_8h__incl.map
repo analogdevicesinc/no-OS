@@ -1,0 +1,7 @@
+<map id="drivers/platform/stm32/stm32_irq.h" name="drivers/platform/stm32/stm32_irq.h">
+<area shape="rect" id="node1" title="Header file for stm32 irq specifics." alt="" coords="29,5,201,47"/>
+<area shape="rect" id="node2" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,95,101,121"/>
+<area shape="rect" id="node4" href="$stm32__hal_8h.html" title=" " alt="" coords="126,95,229,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="18,169,89,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="144,169,211,196"/>
+</map>

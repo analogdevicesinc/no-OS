@@ -1,0 +1,9 @@
+<map id="max31865_reg_update" name="max31865_reg_update">
+<area shape="rect" id="node1" title="update register contents" alt="" coords="436,132,607,159"/>
+<area shape="rect" id="node2" href="$max31865_8h.html#a7016d502f93a2283010a5f85d28dc80d" title="Option for continuous conversions between 50/60 Hz." alt="" coords="205,5,388,32"/>
+<area shape="rect" id="node3" href="$max31865_8h.html#ad8b107cf10bc9bdb9898d05e0a4aa135" title="Clear all faults in FAULTSTAT." alt="" coords="213,56,380,83"/>
+<area shape="rect" id="node4" href="$max31865_8h.html#adff97c6f37771e070f594f511150ff13" title="Read the raw 16&#45;bit value from the RTD_REG in one shot mode." alt="" coords="5,107,157,133"/>
+<area shape="rect" id="node5" href="$max31865_8h.html#a9bd2ab536934586f546a2f15eadd76b1" title="Option for 50Hz or 60Hz noise filters." alt="" coords="205,157,388,184"/>
+<area shape="rect" id="node6" href="$max31865_8h.html#a6381d8d1ecf8dec8121d2184288396a8" title="Enable the bias voltage on the RTD sensor." alt="" coords="209,208,385,235"/>
+<area shape="rect" id="node7" href="$max31865_8h.html#a6c8e76cc609c1df6ffd57ec970136eeb" title="N&#45;wire option for RTD measurement setup." alt="" coords="217,259,377,285"/>
+</map>

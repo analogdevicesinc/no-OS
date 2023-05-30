@@ -1,0 +1,10 @@
+<map id="projects/ad7124&#45;8pmdz/src/ad7124_regs.h" name="projects/ad7124&#45;8pmdz/src/ad7124_regs.h">
+<area shape="rect" id="node1" title="AD7124 register file." alt="" coords="156,5,331,47"/>
+<area shape="rect" id="node2" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="202,95,285,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="165,244,236,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="414,244,497,271"/>
+<area shape="rect" id="node5" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,169,293,196"/>
+<area shape="rect" id="node6" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,169,119,196"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,169,417,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="319,244,389,271"/>
+</map>

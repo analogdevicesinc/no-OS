@@ -1,0 +1,8 @@
+<map id="drivers/power/ltc3337/ltc3337.h" name="drivers/power/ltc3337/ltc3337.h">
+<area shape="rect" id="node1" title="Header file for the LTC3337 Driver." alt="" coords="5,5,168,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="51,169,122,196"/>
+<area shape="rect" id="node3" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="161,95,261,121"/>
+<area shape="rect" id="node6" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="37,95,136,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="161,169,231,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="256,169,339,196"/>
+</map>

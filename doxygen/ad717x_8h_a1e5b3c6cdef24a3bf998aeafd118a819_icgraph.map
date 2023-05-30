@@ -1,0 +1,17 @@
+<map id="AD717X_ComputeCRC8" name="AD717X_ComputeCRC8">
+<area shape="rect" id="node1" title="Computes the CRC checksum for a data buffer." alt="" coords="687,440,861,467"/>
+<area shape="rect" id="node2" href="$ad717x_8h.html#a1a8a9ea16d3cb31aef2d82be24292ffd" title="Reads the value of the specified register." alt="" coords="469,516,637,543"/>
+<area shape="rect" id="node7" href="$ad717x_8h.html#a7f24a7cd5283b2a5683907c3ac376eba" title="Writes the value of the specified register." alt="" coords="468,276,639,303"/>
+<area shape="rect" id="node3" href="$ad717x_8h.html#af92ad585cabc0f6ef31f41589946bb34" title="Initializes the AD717X." alt="" coords="30,276,133,303"/>
+<area shape="rect" id="node4" href="$ad717x_8h.html#add8ae6c28ff4f84338b5a57c53a84ccc" title="Reads the conversion result from the device." alt="" coords="240,625,385,652"/>
+<area shape="rect" id="node6" href="$ad717x_8h.html#a923f206a19c5d23586d670226593d421" title="Waits until a new conversion result is available." alt="" coords="227,575,398,601"/>
+<area shape="rect" id="node5" href="$ad717x_8h.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,545,157,572"/>
+<area shape="rect" id="node8" href="$ad717x_8h.html#accdb832ce83708ca8a97c2cadedc0ad2" title="Assign Setup to Channel." alt="" coords="231,356,394,383"/>
+<area shape="rect" id="node9" href="$ad717x_8h.html#a365530ef685533d6a3715789963f6c52" title="Configure ODR for the device." alt="" coords="205,5,420,32"/>
+<area shape="rect" id="node10" href="$ad717x_8h.html#a492035c62137447abf9bb08a860d7b8d" title="Set Analog Inputs to channel." alt="" coords="223,57,402,98"/>
+<area shape="rect" id="node11" href="$ad717x_8c.html#a5402f40f1800be835ffd8a2a18eed6af" title="Enable Input Buffer." alt="" coords="232,122,393,163"/>
+<area shape="rect" id="node12" href="$ad717x_8h.html#aeb5ccdd47b01a6086733688893592690" title="Set ADC Mode." alt="" coords="227,407,398,433"/>
+<area shape="rect" id="node13" href="$ad717x_8h.html#aacac1db5638624d6c1fdd03431255bdb" title="Set channel status &#45; Enable/Disable." alt="" coords="235,509,390,550"/>
+<area shape="rect" id="node14" href="$ad717x_8h.html#abe8871d8919f03e1aa9078b590945ae8" title="Set Polarity." alt="" coords="235,188,390,215"/>
+<area shape="rect" id="node15" href="$ad717x_8h.html#aee6442429a52d68ee8c1b2f418763316" title="Select the reference source." alt="" coords="229,239,396,281"/>
+</map>

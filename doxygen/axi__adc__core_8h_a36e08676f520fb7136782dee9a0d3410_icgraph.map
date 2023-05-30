@@ -1,0 +1,26 @@
+<map id="axi_adc_write" name="axi_adc_write">
+<area shape="rect" id="node1" title="AXI ADC Data Write." alt="" coords="796,249,908,276"/>
+<area shape="rect" id="node2" href="$ad9265_8h.html#a1f67322e49a0c38b7834b7095af10578" title="ad9265_calibrate" alt="" coords="359,47,493,73"/>
+<area shape="rect" id="node5" href="$ad9361__conv_8c.html#a8470c5d87c88378877debec96221c63a" title=" " alt="" coords="575,300,738,327"/>
+<area shape="rect" id="node8" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="387,199,465,225"/>
+<area shape="rect" id="node9" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="170,220,225,247"/>
+<area shape="rect" id="node10" href="$axi__adc__core_8h.html#a338ea95c9f41e80b4da191909fe8ff2b" title="Set input/output delay primitive for specific interface line." alt="" coords="583,47,730,73"/>
+<area shape="rect" id="node14" href="$axi__adc__core_8h.html#a1d52b9aff0d444bd88c1878b98c96d28" title="AXI ADC Main Initialization." alt="" coords="607,351,707,377"/>
+<area shape="rect" id="node16" href="$axi__adc__core_8h.html#a3f8de28c2195f5524197a9cf2b9e543a" title="Monitor the AXI ADC PN Sequence." alt="" coords="361,148,491,175"/>
+<area shape="rect" id="node18" href="$axi__adc__core_8h.html#a9c9ab05770c548d33106e95518a542e2" title="Calibrate bias for specific AXI ADC channel." alt="" coords="571,401,742,428"/>
+<area shape="rect" id="node19" href="$axi__adc__core_8c.html#ae36b237348e2791fc03dae04d8037a6d" title="Calibrate phase for specific AXI ADC channel." alt="" coords="565,453,748,494"/>
+<area shape="rect" id="node22" href="$axi__adc__core_8h.html#afdaae27794182d7114aa087c1871b908" title="Set AXI ADC PN sequence." alt="" coords="586,148,727,175"/>
+<area shape="rect" id="node23" href="$axi__adc__core_8h.html#a7e7072ec229da6c82b28c7b0190de9e7" title="Update active AXI ADC channels." alt="" coords="571,518,742,559"/>
+<area shape="rect" id="node3" href="$ad9265_8h.html#a93b1899f56931595d1ea398cc472d7ae" title="ad9265_setup" alt="" coords="141,47,254,73"/>
+<area shape="rect" id="node4" href="$ad9265__fmc__125ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,47,60,73"/>
+<area shape="rect" id="node6" href="$ad9361_8h.html#ae41064273d5d2b8e5506c22396ed2ffc" title=" " alt="" coords="343,300,509,327"/>
+<area shape="rect" id="node7" href="$ad9361__conv_8c.html#ad8a136112b1adb63e98063006c3ac178" title=" " alt="" coords="116,293,279,334"/>
+<area shape="rect" id="node11" href="$axi__adc__core_8h.html#a52f36bc7c6ddeedae6c52a7f53122c5f" title="Set input/output delay primitive for number of lines." alt="" coords="355,97,497,124"/>
+<area shape="rect" id="node12" href="$axi__adc__core_8h.html#a6373e572a9a14904476526e344ee80ad" title="Calibrate Delay using specific PN sequence." alt="" coords="108,97,287,124"/>
+<area shape="rect" id="node13" href="$ad9434__fmc__500ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,97,60,124"/>
+<area shape="rect" id="node15" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="399,351,453,377"/>
+<area shape="rect" id="node17" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="170,148,225,175"/>
+<area shape="rect" id="node20" href="$axi__adc__core_8h.html#add160e0d47dc5a3c833ac87863945d50" title="Calibrate phase for specific AXI ADC channel." alt="" coords="335,412,517,439"/>
+<area shape="rect" id="node21" href="$axi__adc__core_8h.html#a7e5138632b8d83ba3329b26ef1dc5547" title="Calibrate scale for specific AXI ADC channel." alt="" coords="337,463,515,489"/>
+<area shape="rect" id="node24" href="$iio__axi__adc_8c.html#af7d00c44f5edd36cdca063ce45d767db" title="Update active channels." alt="" coords="350,518,502,559"/>
+</map>

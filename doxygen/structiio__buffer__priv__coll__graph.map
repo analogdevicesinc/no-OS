@@ -1,0 +1,7 @@
+<map id="iio_buffer_priv" name="iio_buffer_priv">
+<area shape="rect" id="node1" title=" " alt="" coords="167,288,282,315"/>
+<area shape="rect" id="node2" href="$structiio__buffer.html" title=" " alt="" coords="138,199,221,225"/>
+<area shape="rect" id="node3" href="$structiio__cyclic__buffer__info.html" title=" " alt="" coords="5,109,164,136"/>
+<area shape="rect" id="node4" href="$structno__os__circular__buffer.html" title="Circular buffer descriptor." alt="" coords="189,109,349,136"/>
+<area shape="rect" id="node5" href="$structno__os__cb__ptr.html" title="Circular buffer pointer." alt="" coords="215,5,322,32"/>
+</map>

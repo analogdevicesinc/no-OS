@@ -1,0 +1,8 @@
+<map id="ad5629r_set_ctrl" name="ad5629r_set_ctrl">
+<area shape="rect" id="node1" title="Write to input register and read from output register via SPI." alt="" coords="247,122,377,149"/>
+<area shape="rect" id="node2" href="$ad5629r_8h.html#ad2fc18091d5d91cf9004a8fac805cee4" title="Loads the Clear Code Register with a certain value." alt="" coords="27,5,177,47"/>
+<area shape="rect" id="node3" href="$ad5629r_8h.html#af9c260f65b587ac1144ce9923be8edd9" title="Loads the LDAC register with a certain value." alt="" coords="16,71,188,98"/>
+<area shape="rect" id="node4" href="$ad5629r_8h.html#a9598efa57983f7a6d613209d17d61b84" title="Makes a power&#45;on reset." alt="" coords="45,122,159,149"/>
+<area shape="rect" id="node5" href="$ad5629r_8h.html#a156a7464e44712495e4d0aca8309b2e8" title="Sets the power mode for one or more selected DAC channels." alt="" coords="5,173,199,199"/>
+<area shape="rect" id="node6" href="$ad5629r_8h.html#abc1261a2ca90a704fd4782e0290e19b7" title="Turns on/off the internal reference." alt="" coords="39,223,165,250"/>
+</map>

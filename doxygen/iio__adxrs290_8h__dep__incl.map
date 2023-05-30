@@ -1,0 +1,6 @@
+<map id="drivers/gyro/adxrs290/iio_adxrs290.h" name="drivers/gyro/adxrs290/iio_adxrs290.h">
+<area shape="rect" id="node1" title="Implementation of ADXRS290 iio." alt="" coords="245,5,409,47"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for eval&#45;adxrs290&#45;pmdz project." alt="" coords="5,102,203,158"/>
+<area shape="rect" id="node3" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html" title="Implementation of IIO trigger example for iio_demo project." alt="" coords="227,95,426,165"/>
+<area shape="rect" id="node4" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html" title="Implementation of IIO trigger example for eval&#45;adxrs290&#45;pmdz project." alt="" coords="450,102,681,158"/>
+</map>

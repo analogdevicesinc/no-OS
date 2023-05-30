@@ -1,0 +1,6 @@
+<map id="MYKONOS_setGpioOe" name="MYKONOS_setGpioOe">
+<area shape="rect" id="node1" title="Sets the Mykonos low voltage GPIO output pins direction." alt="" coords="525,31,688,57"/>
+<area shape="rect" id="node2" href="$mykonos__gpio_8h.html#a0d42a34f474c5ed45aaca8bc31e162df" title="Sets the input and output GPIO pin selections for ARM related signals." alt="" coords="279,5,477,32"/>
+<area shape="rect" id="node4" href="$mykonos__gpio_8h.html#a76219786e624e59fecdf6afc7892a98a" title="Sets the Mykonos low voltage GPIO configuration registers." alt="" coords="297,56,459,83"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="5,5,231,32"/>
+</map>

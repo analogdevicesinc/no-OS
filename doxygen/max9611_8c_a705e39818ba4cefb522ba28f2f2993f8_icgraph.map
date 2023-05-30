@@ -1,0 +1,9 @@
+<map id="max9611_reg_update" name="max9611_reg_update">
+<area shape="rect" id="node1" title="Update selected I2C register contents." alt="" coords="208,132,371,159"/>
+<area shape="rect" id="node2" href="$max9611_8h.html#ad35655d8b6147f1c0f142dff01732405" title="Configures MAX9611 delay time." alt="" coords="6,5,159,32"/>
+<area shape="rect" id="node3" href="$max9611_8h.html#a73149820869b0b1fd986669612ee047e" title="Configure LR bit operation." alt="" coords="19,56,146,83"/>
+<area shape="rect" id="node4" href="$max9611_8h.html#aed49ffe1818884bbaf9351aeafe18c50" title="Configures MAX9611 operating mode." alt="" coords="5,107,160,133"/>
+<area shape="rect" id="node5" href="$max9611_8h.html#a5358fd37d5a5358c42dc6e99d5b3a9b3" title="Configures the internal MUX settings." alt="" coords="9,157,156,184"/>
+<area shape="rect" id="node6" href="$max9611_8h.html#a6a32d751ecc4363280c7f8229aeeb149" title="Configures MAX9611 retry time." alt="" coords="9,208,157,235"/>
+<area shape="rect" id="node7" href="$max9611_8h.html#a9b82e483c22b90d478dad88629c8b29f" title="Device shutdown or power up." alt="" coords="6,259,159,285"/>
+</map>

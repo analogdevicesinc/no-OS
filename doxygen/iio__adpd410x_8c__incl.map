@@ -1,0 +1,17 @@
+<map id="drivers/photo&#45;electronic/adpd410x/iio_adpd410x.c" name="drivers/photo&#45;electronic/adpd410x/iio_adpd410x.c">
+<area shape="rect" id="node1" title="Implementation of adpd410x iio." alt="" coords="715,5,907,47"/>
+<area shape="rect" id="node2" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="536,95,629,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="785,169,855,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="848,95,915,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="939,95,1010,121"/>
+<area shape="rect" id="node9" href="$adpd410x_8h.html" title=" " alt="" coords="259,95,357,121"/>
+<area shape="rect" id="node13" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="673,95,773,121"/>
+<area shape="rect" id="node14" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="1035,95,1144,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="381,169,464,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="405,244,475,271"/>
+<area shape="rect" id="node5" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="488,169,659,196"/>
+<area shape="rect" id="node10" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="259,169,357,196"/>
+<area shape="rect" id="node11" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,169,104,196"/>
+<area shape="rect" id="node12" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="128,169,235,196"/>
+<area shape="rect" id="node15" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="1055,169,1123,196"/>
+</map>

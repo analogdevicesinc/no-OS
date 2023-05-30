@@ -1,0 +1,6 @@
+<map id="adas1000_compute_frame_size" name="adas1000_compute_frame_size">
+<area shape="rect" id="node1" title="Compute frame size." alt="" coords="405,35,633,61"/>
+<area shape="rect" id="node2" href="$adas1000_8h.html#a8cfc29cb8ec02e4382c85c0586d6275f" title="Sets the frame rate." alt="" coords="167,5,357,32"/>
+<area shape="rect" id="node4" href="$adas1000_8h.html#a1b1ef3661bbdfd8ded985b12c60a7773" title="Selects which words are not included in a data frame." alt="" coords="177,57,347,98"/>
+<area shape="rect" id="node3" href="$adas1000_8h.html#a53655dc2232c9d893f208871217abcbf" title="Initializes the SPI communication with ADAS1000. The ADAS1000 is configured with the specified frame ..." alt="" coords="5,35,119,61"/>
+</map>

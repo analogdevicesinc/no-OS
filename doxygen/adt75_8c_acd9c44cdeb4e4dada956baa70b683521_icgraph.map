@@ -1,0 +1,5 @@
+<map id="adt75_reg_read" name="adt75_reg_read">
+<area shape="rect" id="node1" title="Read the raw value of a register." alt="" coords="436,5,559,32"/>
+<area shape="rect" id="node2" href="$adt75_8h.html#ac560d739d40415c90549577bf308285d" title="Read the current temperature sample (in milliCelsius)" alt="" coords="213,5,388,32"/>
+<area shape="rect" id="node3" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="ltc2672_transaction" name="ltc2672_transaction">
+<area shape="rect" id="node1" title="Write raw register value." alt="" coords="455,316,605,343"/>
+<area shape="rect" id="node2" href="$ltc2672_8h.html#a850efd657cabbae8b96d9e1f24408762" title="power down ltc2672" alt="" coords="213,5,407,32"/>
+<area shape="rect" id="node4" href="$ltc2672_8h.html#a0872a6dfdc83e5a3dc81b7b46600b0e3" title="configures the fault detection bits" alt="" coords="216,56,404,83"/>
+<area shape="rect" id="node5" href="$ltc2672_8h.html#a938e9af411c0fbfa8d7b7f48e497a501" title="enables or disables selected channel/s for toggling" alt="" coords="225,107,395,149"/>
+<area shape="rect" id="node6" href="$ltc2672_8h.html#a7ea1e5501d92731ae1c396828b752ca1" title="enables or disables global toggle bit" alt="" coords="227,173,393,200"/>
+<area shape="rect" id="node7" href="$ltc2672_8h.html#a9fb4d37cebb58443472da1d52d6b8cd0" title="configures mux output depending on target measurement" alt="" coords="228,224,392,251"/>
+<area shape="rect" id="node8" href="$ltc2672_8h.html#ac446819af4b066980eb27da07ee58646" title="power down ALL channels" alt="" coords="231,275,389,317"/>
+<area shape="rect" id="node9" href="$ltc2672_8h.html#a462ee3391a58948b3c4beb0a3d7e1fba" title="power down a channel" alt="" coords="231,341,389,382"/>
+<area shape="rect" id="node10" href="$ltc2672_8h.html#acfa646f3ce8bb1c108bd2b83b4b366bd" title="sets the same current for all channels" alt="" coords="235,406,385,447"/>
+<area shape="rect" id="node11" href="$ltc2672_8h.html#a2faeb0d278c1d336ac9ba332abb31e6e" title="set the current for a selected DAC channel" alt="" coords="235,471,385,513"/>
+<area shape="rect" id="node12" href="$ltc2672_8h.html#ada52a49dad505778d179a6fb8b3231e2" title="sets the same output span for all channels" alt="" coords="231,537,389,578"/>
+<area shape="rect" id="node13" href="$ltc2672_8h.html#a9bb67e86de7634c93a2ca321b502f1d2" title="sets output span for channel" alt="" coords="213,603,407,629"/>
+<area shape="rect" id="node14" href="$ltc2672_8h.html#a912c47e3ae66975de7ed1f8428dd5b23" title="setup toggle parameters for a channel" alt="" coords="229,654,391,695"/>
+<area shape="rect" id="node3" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,224,165,251"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="drivers/adc/ad4858/ad4858.h" name="drivers/adc/ad4858/ad4858.h">
+<area shape="rect" id="node1" title=" " alt="" coords="191,5,338,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="102,169,173,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="372,169,455,196"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="278,95,378,121"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="24,95,123,121"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="147,95,254,121"/>
+<area shape="rect" id="node8" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="458,95,567,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="277,169,348,196"/>
+<area shape="rect" id="node9" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="480,169,548,196"/>
+</map>

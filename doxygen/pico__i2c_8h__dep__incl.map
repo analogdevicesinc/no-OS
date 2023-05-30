@@ -1,0 +1,4 @@
+<map id="drivers/platform/pico/pico_i2c.h" name="drivers/platform/pico/pico_i2c.h">
+<area shape="rect" id="node1" title="Header file for the pico i2c driver." alt="" coords="5,5,164,47"/>
+<area shape="rect" id="node2" href="$pico__i2c_8c.html" title="Implementation of pico i2c driver." alt="" coords="5,95,164,136"/>
+</map>

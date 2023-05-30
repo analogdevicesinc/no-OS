@@ -1,0 +1,5 @@
+<map id="ad9083_reg_get" name="ad9083_reg_get">
+<area shape="rect" id="node1" title="Read register." alt="" coords="328,13,455,39"/>
+<area shape="rect" id="node2" href="$app__ad9083_8h.html#aa93a97556e52b787cf8a82e5ed77f80f" title="Check AD9083 subclass 1 link status." alt="" coords="108,5,280,47"/>
+<area shape="rect" id="node3" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,13,60,39"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="adpd188_iio_desc" name="adpd188_iio_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="30,288,169,315"/>
+<area shape="rect" id="node2" href="$structadpd188__dev.html" title="Driver descriptor structure." alt="" coords="45,199,154,225"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="33,95,165,121"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,32"/>
+</map>

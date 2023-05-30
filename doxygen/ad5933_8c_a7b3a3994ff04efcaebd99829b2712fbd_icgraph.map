@@ -1,0 +1,13 @@
+<map id="ad5933_set_register_value" name="ad5933_set_register_value">
+<area shape="rect" id="node1" title="Writes data into a register." alt="" coords="523,175,677,217"/>
+<area shape="rect" id="node2" href="$ad5933_8h.html#ad0784276ebcb6d9445892f3ea374d7aa" title="Configures the sweep parameters: Start frequency, Frequency increment and Number of increments." alt="" coords="289,5,454,32"/>
+<area shape="rect" id="node3" href="$ad5933_8h.html#afc3dbd39564f171cbd400ea487774662" title="Reads the real and imaginary value from register." alt="" coords="304,56,439,83"/>
+<area shape="rect" id="node6" href="$ad5933_8h.html#a124cb2de4fbcb440c16006c4ca8e233c" title="Reads the temperature from the part and returns the data in degrees Celsius." alt="" coords="278,107,465,133"/>
+<area shape="rect" id="node7" href="$ad5933_8h.html#a2e26b83eb857f404768f289338c980d2" title="Resets the device." alt="" coords="316,157,427,184"/>
+<area shape="rect" id="node8" href="$ad5933_8h.html#a170de42560e2a346b6e90b55094f1180" title="Starts the sweep operation." alt="" coords="35,172,191,199"/>
+<area shape="rect" id="node9" href="$ad5933_8h.html#a54f4c92b425f6132a8874d0cdca0cd38" title="Selects the range and gain of the device." alt="" coords="268,259,475,285"/>
+<area shape="rect" id="node10" href="$ad5933_8h.html#aaa3c92f75c6162c5058fe12b05c4863e" title="Selects the number of settling cycles of the device." alt="" coords="276,309,467,336"/>
+<area shape="rect" id="node11" href="$ad5933_8h.html#a0e9a5378edfb0cfad844827c8d5cee73" title="Selects the source of the system clock." alt="" coords="282,360,461,387"/>
+<area shape="rect" id="node4" href="$ad5933_8h.html#a58b3907982945d725fa5c40b8b548869" title="Reads the real and the imaginary data and calculates the Gain Factor." alt="" coords="27,34,198,75"/>
+<area shape="rect" id="node5" href="$ad5933_8h.html#af7159e3dc1e00ce2e03c2943aad4aa34" title="Reads the real and the imaginary data and calculates the Impedance." alt="" coords="5,100,220,127"/>
+</map>

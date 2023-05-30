@@ -1,0 +1,9 @@
+<map id="ad719x_wait_rdy_go_low" name="ad719x_wait_rdy_go_low">
+<area shape="rect" id="node1" title="Waits for RDY pin to go low." alt="" coords="837,56,1024,83"/>
+<area shape="rect" id="node2" href="$ad719x_8h.html#a911e159361da297a10809f1cf6ba8059" title="Performs the given calibration to the specified channel." alt="" coords="625,5,759,32"/>
+<area shape="rect" id="node3" href="$ad719x_8h.html#adcb7617f625bad20d98c3f902f5f1e92" title="Returns the average of several conversion results." alt="" coords="332,56,547,83"/>
+<area shape="rect" id="node6" href="$ad719x_8h.html#a8b2be560509098d550618957a4b4ef14" title="Returns the result of a single conversion." alt="" coords="595,107,789,133"/>
+<area shape="rect" id="node4" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,81,284,108"/>
+<area shape="rect" id="node5" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,81,60,108"/>
+<area shape="rect" id="node7" href="$ad719x_8h.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="342,107,537,133"/>
+</map>

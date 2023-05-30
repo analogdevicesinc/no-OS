@@ -1,0 +1,5 @@
+<map id="ad4080_set_cnv_spi_lvds_lanes" name="ad4080_set_cnv_spi_lvds_lanes">
+<area shape="rect" id="node1" title="Set AD4080 LVDS/SPI Lane Control." alt="" coords="363,5,516,47"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a39a7f7a31ecbd353673ef4094dca02e4" title="Configure the data interface during initialization." alt="" coords="152,13,315,39"/>
+<area shape="rect" id="node3" href="$ad4080_8h.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="5,13,104,39"/>
+</map>

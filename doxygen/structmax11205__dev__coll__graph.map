@@ -1,0 +1,11 @@
+<map id="max11205_dev" name="max11205_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="917,120,1040,147"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="667,44,790,71"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,52,184,79"/>
+<area shape="rect" id="node4" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,83,490,109"/>
+<area shape="rect" id="node5" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="649,95,808,121"/>
+<area shape="rect" id="node6" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="663,145,795,172"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,145,511,172"/>
+<area shape="rect" id="node8" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="654,196,803,223"/>
+<area shape="rect" id="node9" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="328,196,505,223"/>
+</map>

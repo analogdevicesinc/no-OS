@@ -1,0 +1,9 @@
+<map id="MYKONOS_jesdIndWrReg" name="MYKONOS_jesdIndWrReg">
+<area shape="rect" id="node1" title="Performs indirect write access to internal JESD register." alt="" coords="296,132,481,159"/>
+<area shape="rect" id="node2" href="$mykonos__dbgjesd_8h.html#a46d8bad0f70af7036b69a764ff3af474" title="Performs read back of the error counters for selected lane of the JESD Deframer." alt="" coords="18,5,235,32"/>
+<area shape="rect" id="node3" href="$mykonos__dbgjesd_8h.html#a8b865a314a7edb880dc33bc006d80fd5" title="Performs reset of the selected error type for the selected lane." alt="" coords="16,56,237,83"/>
+<area shape="rect" id="node4" href="$mykonos__dbgjesd_8h.html#a30559c3aa409a3c64cfb131af10cb4d0" title="Performs reset of the selected error type IRQ for the given lane." alt="" coords="21,107,232,133"/>
+<area shape="rect" id="node5" href="$mykonos__dbgjesd_8h.html#aec2eef66b448eef9f087c4301607acc6" title="Performs set JESD Deframer error thresholds." alt="" coords="15,157,238,184"/>
+<area shape="rect" id="node6" href="$mykonos__dbgjesd_8h.html#aa8ea3dbf437e2bf88240574652c30d3e" title="Performs set JESD Deframer IRQ mask that will be used to generates interrupts." alt="" coords="13,208,241,235"/>
+<area shape="rect" id="node7" href="$mykonos__dbgjesd_8h.html#a95cdbc77cc5bb09515099181e0b2ea58" title="Performs set JESD Deframer Sync mask." alt="" coords="5,259,248,285"/>
+</map>

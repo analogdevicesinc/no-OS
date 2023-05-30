@@ -1,0 +1,6 @@
+<map id="drivers/platform/xilinx/xilinx_uart.h" name="drivers/platform/xilinx/xilinx_uart.h">
+<area shape="rect" id="node1" title=" " alt="" coords="112,5,279,47"/>
+<area shape="rect" id="node2" href="$xilinx__uart_8c.html" title=" " alt="" coords="5,95,172,136"/>
+<area shape="rect" id="node3" href="$iio__demo_2src_2platform_2xilinx_2parameters_8h.html" title="Definitions specific to xilinx platform used by iio_demo project." alt="" coords="197,95,410,136"/>
+<area shape="rect" id="node4" href="$iio__demo_2src_2platform_2xilinx_2parameters_8c.html" title="Definition of xilinx platform data used by iio_demo project." alt="" coords="197,184,409,225"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="drivers/temperature/adt75/iio_adt75.h" name="drivers/temperature/adt75/iio_adt75.h">
+<area shape="rect" id="node1" title="Header file of the IIO ADT75 Driver." alt="" coords="332,5,484,47"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="352,95,403,121"/>
+<area shape="rect" id="node10" href="$adt75_8h.html" title="Header file of ADT75 Driver." alt="" coords="515,169,586,196"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="331,169,424,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="150,169,255,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,319,88,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="403,319,474,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="292,244,463,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,244,217,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="115,319,186,345"/>
+<area shape="rect" id="node11" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="588,244,687,271"/>
+</map>

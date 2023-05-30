@@ -1,0 +1,4 @@
+<map id="no_os_trng_desc" name="no_os_trng_desc">
+<area shape="rect" id="node1" title="TRNG Descriptor." alt="" coords="33,95,164,121"/>
+<area shape="rect" id="node2" href="$structno__os__trng__platform__ops.html" title="Structure holding TRNG function pointers that point to the platform specific function." alt="" coords="5,5,192,32"/>
+</map>

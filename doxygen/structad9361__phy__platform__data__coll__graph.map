@@ -1,0 +1,12 @@
+<map id="ad9361_phy_platform_data" name="ad9361_phy_platform_data">
+<area shape="rect" id="node1" title=" " alt="" coords="288,208,488,235"/>
+<area shape="rect" id="node2" href="$structrssi__control.html" title=" " alt="" coords="29,5,127,32"/>
+<area shape="rect" id="node3" href="$structelna__control.html" title=" " alt="" coords="27,56,129,83"/>
+<area shape="rect" id="node4" href="$structtx__monitor__control.html" title=" " alt="" coords="5,107,151,133"/>
+<area shape="rect" id="node5" href="$structauxadc__control.html" title=" " alt="" coords="17,157,139,184"/>
+<area shape="rect" id="node6" href="$structauxdac__control.html" title=" " alt="" coords="17,208,139,235"/>
+<area shape="rect" id="node7" href="$structport__control.html" title=" " alt="" coords="28,259,128,285"/>
+<area shape="rect" id="node8" href="$structctrl__outs__control.html" title=" " alt="" coords="13,309,143,336"/>
+<area shape="rect" id="node9" href="$structgpo__control.html" title=" " alt="" coords="29,360,127,387"/>
+<area shape="rect" id="node10" href="$structgain__control.html" title=" " alt="" coords="27,411,129,437"/>
+</map>

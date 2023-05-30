@@ -1,0 +1,7 @@
+<map id="adf4350_tune_r_cnt" name="adf4350_tune_r_cnt">
+<area shape="rect" id="node1" title="Increases the R counter value until the ADF4350_MAX_FREQ_PFD is greater than PFD frequency." alt="" coords="689,13,840,39"/>
+<area shape="rect" id="node2" href="$adf4350_8c.html#a36f6fb1f03a7c1b263bdf4787defbeb0" title="Sets the ADF4350 frequency." alt="" coords="507,13,641,39"/>
+<area shape="rect" id="node3" href="$adf4350_8h.html#a8c919c6b19796b92b775d6727856ef46" title="Stores PLL 0 frequency in Hz." alt="" coords="275,5,459,47"/>
+<area shape="rect" id="node4" href="$adf4350_8h.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="108,13,227,39"/>
+<area shape="rect" id="node5" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,13,60,39"/>
+</map>

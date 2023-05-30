@@ -1,0 +1,6 @@
+<map id="drivers/rf&#45;transceiver/hmc630x/hmc630x.h" name="drivers/rf&#45;transceiver/hmc630x/hmc630x.h">
+<area shape="rect" id="node1" title="hmc6300 and hmc6301 device driver header." alt="" coords="202,5,365,47"/>
+<area shape="rect" id="node2" href="$hmc630x_8c.html" title="hmc6300 and hmc6301 device driver implementation." alt="" coords="5,95,167,136"/>
+<area shape="rect" id="node3" href="$iio__hmc630x_8h.html" title="Header file of hmc6300 and hmc6301 driver extension for IIOD." alt="" coords="191,95,376,136"/>
+<area shape="rect" id="node4" href="$iio__hmc630x_8c.html" title="Source file of hmc6300 and hmc6301 driver extension for IIOD." alt="" coords="257,184,441,225"/>
+</map>

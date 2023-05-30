@@ -1,0 +1,7 @@
+<map id="ade9430_update_bits" name="ade9430_update_bits">
+<area shape="rect" id="node1" title="Update specific register bits." alt="" coords="376,31,537,57"/>
+<area shape="rect" id="node2" href="$ade9430_8h.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="197,5,304,32"/>
+<area shape="rect" id="node4" href="$ade9430_8h.html#accf20aba0ba1faa72a1d10d63de51da3" title="Read the temperature." alt="" coords="173,56,328,83"/>
+<area shape="rect" id="node3" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="38,5,93,32"/>
+<area shape="rect" id="node5" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="5,56,125,83"/>
+</map>

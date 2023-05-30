@@ -1,0 +1,5 @@
+<map id="ad4080_set_single_instr" name="ad4080_set_single_instr">
+<area shape="rect" id="node1" title="Set Single/Streaming Mode." alt="" coords="363,13,541,39"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a668ebef8b83d588a3a0b3a97fd2a4708" title="Configure the config SPI interface during initialization." alt="" coords="152,5,315,47"/>
+<area shape="rect" id="node3" href="$ad4080_8h.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="5,13,104,39"/>
+</map>

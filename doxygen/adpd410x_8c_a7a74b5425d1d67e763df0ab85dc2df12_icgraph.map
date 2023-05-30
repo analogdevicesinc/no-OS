@@ -1,0 +1,4 @@
+<map id="adpd410x_reset" name="adpd410x_reset">
+<area shape="rect" id="node1" title="Do a software reset." alt="" coords="183,5,309,32"/>
+<area shape="rect" id="node2" href="$adpd410x_8h.html#a8c47ad8226f8c0882232750616b4ac6d" title="Setup the device and the driver." alt="" coords="5,5,135,32"/>
+</map>

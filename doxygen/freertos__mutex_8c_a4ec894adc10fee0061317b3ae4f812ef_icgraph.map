@@ -1,0 +1,9 @@
+<map id="no_os_mutex_remove" name="no_os_mutex_remove">
+<area shape="rect" id="node1" title="Remove mutex. mutex &#45; Pointer toward the mutex." alt="" coords="489,81,656,108"/>
+<area shape="rect" id="node2" href="$no__os__pwm_8c.html#a8609106ff888b943fe019840c6826806" title="Free the resources allocated by no_os_pwm_init()." alt="" coords="284,31,440,57"/>
+<area shape="rect" id="node6" href="$no__os__timer_8c.html#adc4b78b15091eaaa84b297e524cc15c0" title="Free the memory allocated by timer_init()." alt="" coords="283,81,441,108"/>
+<area shape="rect" id="node7" href="$no__os__uart_8c.html#a661d56b52f24df7ed61d86eca9783232" title="Free the resources allocated by no_os_uart_init()." alt="" coords="287,132,437,159"/>
+<area shape="rect" id="node3" href="$ad463x_8h.html#a374808fb7455b4797fabf216071869cb" title="Free the memory allocated by ad463x_init()." alt="" coords="108,5,235,32"/>
+<area shape="rect" id="node5" href="$ad469x_8h.html#a3542558ed10a8d3820dbeea607a0e93c" title="Free the memory allocated by ad469x_init()." alt="" coords="108,56,235,83"/>
+<area shape="rect" id="node4" href="$ad463x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,60,32"/>
+</map>

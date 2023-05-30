@@ -1,0 +1,96 @@
+*******************
+no-OS IIO interface
+*******************
+
+To get registered with the no-OS IIO framework, each device should export a
+populated **struct iio_device** - what data can be accessed by an IIO client
+is defined here:
+
+.. code-block:: C
+
+	struct iio_device {
+		struct no_os_irq_ctrl_desc *irq_desc;
+		uint16_t num_ch;
+		struct iio_channel *channels;
+		struct iio_context_attribute *context_attributes;
+		struct iio_attribute *attributes;
+		struct iio_attribute *debug_attributes;
+		struct iio_attribute *buffer_attributes;
+		int32_t	(*read_dev)(void *dev, void *buff, uint32_t nb_samples);
+		int32_t	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
+		int32_t (*pre_enable)(void *dev, uint32_t mask);
+		int32_t (*post_disable)(void *dev);
+		int32_t	(*submit)(struct iio_device_data *dev);
+		int32_t (*trigger_handler)(struct iio_device_data *dev);
+		int32_t (*debug_reg_read)(void *dev, uint32_t reg, uint32_t *readval);
+		int32_t (*debug_reg_write)(void *dev, uint32_t reg, uint32_t writeval);
+	};
+
+An IIO device can have one (e.g., single channel ADC) or more (e.g.,
+multichannel ADC) channels, so **.num_ch** will be set accordingly.
+
+An IIO device channel defines the channel's specifications (e.g., type:
+voltage, current, power, acceleration, ..., or direction: input, output) and
+attributes (e.g., raw, scale, offset, ...), and **.channels** is an array with
+all the available channels.
+
+Most of the time, some global (not channel specific) attributes need to be
+defined through **.attributes**. One example can be the sampling frequency of
+an ADC, that is most likely device specific, so, by changing it, all the
+channels will be affected.
+
+**.read_dev** is the device specific function that will be called for filling
+an IIO buffer with samples. If some additional steps are required before
+starting the actual capture (e.g., IIO client needs to capture data only from
+a selection of channels instead of all), a **.pre_enable** function can be
+implemented. **.post_disable**, if implemented, will be called after the
+capture was done.
+
+Usually for debug purposes, **.debug_reg_read** and **.debug_reg_write** can
+expose low level device register access.
+
+Once an **struct iio_device** is available, an application specific **struct
+iio_device_init** should be defined:
+
+.. code-block:: C
+
+	struct iio_device_init {
+		char *name;
+		void *dev;
+		struct iio_device *dev_descriptor;
+		int8_t *raw_buf;
+		uint32_t raw_buf_len;
+		char *trigger_id;
+	};
+
+This will link the actual instance of a device (**.dev**) with a corresponding
+IIO layer (**.dev_descriptor**). If user wants to provide an external buffer to
+IIO, this can be done here too (**.raw_buf**); otherwise, IIO will allocate
+memory for the buffer when needed.
+
+The last step before initializing the entire IIO framework by calling
+**iio_init()** is the definition of a **struct iio_init_param**:
+
+.. code-block:: C
+
+	struct iio_init_param {
+		enum pysical_link_type	phy_type;
+		union {
+			struct no_os_uart_desc *uart_desc;
+			struct tcp_socket_init_param *tcp_socket_init_param;
+		};
+		struct iio_device_init *devs;
+		uint32_t nb_devs;
+		struct iio_trigger_init *trigs;
+		uint32_t nb_trigs;
+	};
+
+In addition to the list of all the IIO devices to get registered (**.devs**)
+and their number (**.nb_devs**), the physical link between the IIO server and
+the IIO client must be set (**.phy_type**).
+
+Having a **struct iio_init_param**, **iio_init()** can be called.
+
+Next, **iio_step()** can listen/answer IIO commands.
+
+**iio_app_run()** is an example of using what it was described so far (it calls **iio_init()** and **iio_step()**).

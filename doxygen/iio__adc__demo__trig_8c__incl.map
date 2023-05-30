@@ -1,0 +1,18 @@
+<map id="drivers/adc/adc_demo/iio_adc_demo_trig.c" name="drivers/adc/adc_demo/iio_adc_demo_trig.c">
+<area shape="rect" id="node1" title="Implementation of iio_adc_demo_trig.c." alt="" coords="355,5,520,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="21,393,91,420"/>
+<area shape="rect" id="node3" title=" " alt="" coords="579,95,650,121"/>
+<area shape="rect" id="node4" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="675,95,784,121"/>
+<area shape="rect" id="node6" href="$iio_8h.html" title="Header file of iio." alt="" coords="263,169,313,196"/>
+<area shape="rect" id="node13" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="456,95,555,121"/>
+<area shape="rect" id="node15" href="$iio__adc__demo_8h.html" title="Header file of ADC Demo iio." alt="" coords="307,95,431,121"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="695,169,763,196"/>
+<area shape="rect" id="node7" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="369,244,463,271"/>
+<area shape="rect" id="node11" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="226,244,331,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="223,393,305,420"/>
+<area shape="rect" id="node9" title=" " alt="" coords="442,393,513,420"/>
+<area shape="rect" id="node10" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="453,319,624,345"/>
+<area shape="rect" id="node12" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="93,319,227,345"/>
+<area shape="rect" id="node14" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="689,244,785,271"/>
+<area shape="rect" id="node16" href="$adc__demo_8h.html" title="Header file of ADC Demo Driver." alt="" coords="499,169,600,196"/>
+</map>

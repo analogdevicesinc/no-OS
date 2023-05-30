@@ -1,0 +1,13 @@
+<map id="adf7023_write_read_byte" name="adf7023_write_read_byte">
+<area shape="rect" id="node1" title="Transfers one byte of data." alt="" coords="668,249,855,276"/>
+<area shape="rect" id="node2" href="$adf7023_8h.html#a3060de64f0a0a0931768e75f633175c2" title="Reads data from the RAM." alt="" coords="247,5,383,32"/>
+<area shape="rect" id="node4" href="$adf7023_8h.html#acc558c6c00fe5451b9eac4b631df8c2c" title="Reads the status word of the ADF7023." alt="" coords="457,275,608,301"/>
+<area shape="rect" id="node9" href="$adf7023_8h.html#a48272ecbad38664562c0de4ed0f0f940" title="Initiates a command." alt="" coords="445,325,620,352"/>
+<area shape="rect" id="node10" href="$adf7023_8h.html#ac35daa2e704fbe40c23a692cb42a3278" title="Writes data to RAM." alt="" coords="465,195,600,221"/>
+<area shape="rect" id="node3" href="$adf7023_8h.html#ae28ba95f1d1002adefe0e6ab790d9829" title="Receives one packet." alt="" coords="5,56,185,83"/>
+<area shape="rect" id="node5" href="$adf7023_8h.html#a8c05c851064bebafdbc2e810ce6a1cc2" title="Initializes the ADF7023." alt="" coords="264,275,367,301"/>
+<area shape="rect" id="node6" href="$adf7023_8h.html#a1ab67181ff1abfce39f2e8e60c5b9b3f" title="Sets a FW state and waits until the device enters in that state." alt="" coords="233,325,397,352"/>
+<area shape="rect" id="node7" href="$adf7023_8h.html#a2a1cd0e8ec2e86e66259f583474ab3c8" title="Sets the data rate." alt="" coords="10,296,181,323"/>
+<area shape="rect" id="node8" href="$adf7023_8h.html#a86b9fef4e4e5cd52c35be6f77b86018d" title="Sets the frequency deviation." alt="" coords="8,347,183,389"/>
+<area shape="rect" id="node11" href="$adf7023_8h.html#a9e3dd925823c4525d3b1a31f0265fcb9" title="Sets the channel frequency." alt="" coords="235,158,395,199"/>
+</map>

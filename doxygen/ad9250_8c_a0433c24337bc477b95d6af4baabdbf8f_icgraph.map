@@ -1,0 +1,28 @@
+<map id="ad9250_read" name="ad9250_read">
+<area shape="rect" id="node1" title="Reads the value of the selected register." alt="" coords="980,537,1087,564"/>
+<area shape="rect" id="node2" href="$ad9250_8h.html#ad302673d9bd396559f0ca119e7b41dc0" title="Enables the Build&#45;In&#45;Self&#45;Test." alt="" coords="526,56,678,83"/>
+<area shape="rect" id="node3" href="$ad9250_8h.html#ae8077c73dca227904bbd6f1d31107721" title="Resets the Build&#45;In&#45;Self&#45;Test." alt="" coords="531,107,673,133"/>
+<area shape="rect" id="node4" href="$ad9250_8h.html#a3d85c8bb5b1511ae1cba7405dcda00eb" title="Configures the power mode of the chip." alt="" coords="513,157,691,184"/>
+<area shape="rect" id="node5" href="$ad9250_8h.html#aa945a337893b06659be7f256c50e64e9" title="Selects the bandwidth value for the DC correction circuit." alt="" coords="515,208,689,235"/>
+<area shape="rect" id="node6" href="$ad9250_8h.html#a00e69938d680fd76ddefdfacdbe789ff" title="Enables DC correction for use in the output data signal path." alt="" coords="527,259,677,285"/>
+<area shape="rect" id="node7" href="$ad9250_8h.html#a607beaaca56af408cd22032bc5940eac" title="Freezes DC correction value." alt="" coords="529,309,675,336"/>
+<area shape="rect" id="node8" href="$ad9250_8h.html#ac29e8576e6dc14c9f6abe7be170842fa" title="Inverts the logic of JESD204B bits." alt="" coords="511,918,693,959"/>
+<area shape="rect" id="node12" href="$ad9250_8h.html#aafd21c34825b7575735a69ffa1dcaeb9" title="Configures the power mode of the JESD204B data transmit block." alt="" coords="497,360,707,387"/>
+<area shape="rect" id="node13" href="$ad9250_8h.html#ab9800992ef707e3cd8194dcf4119b1c5" title="Selects the point in the processing path of a lane, where the test data will be inserted." alt="" coords="511,563,693,605"/>
+<area shape="rect" id="node14" href="$ad9250_8c.html#a11a4249e4a442897738293bf7c1a3537" title="Sets number of frames per multiframe (K)." alt="" coords="763,1035,925,1077"/>
+<area shape="rect" id="node15" href="$ad9250_8h.html#a00a105897e7fb39e9071002c74a09393" title="Selects a JESD204B test mode." alt="" coords="496,629,708,656"/>
+<area shape="rect" id="node16" href="$ad9250_8h.html#a94ea5e510a5fc80bdc0abee7c60160b1" title="Sets the offset adjustment." alt="" coords="773,563,915,589"/>
+<area shape="rect" id="node17" href="$ad9250_8h.html#a9528c853339aed3b05740ad2e491c39c" title="Disables (1) or enables (0) the data output. Note: This function modifies a shadowed register,..." alt="" coords="515,680,689,707"/>
+<area shape="rect" id="node18" href="$ad9250_8h.html#ae34131b64e1143ee14d24a25ff88f73d" title="Specifies the output format. Note: This function modifies a shadowed register, therefore a call of ad..." alt="" coords="517,5,687,32"/>
+<area shape="rect" id="node19" href="$ad9250_8h.html#a7f9cc51f41a39617eba3900c54e4ddce" title="Activates the inverted (1) or normal (0) output mode. Note: This function modifies a shadowed registe..." alt="" coords="520,731,684,757"/>
+<area shape="rect" id="node20" href="$ad9250_8h.html#a6d2c7ccead677f4a870683bba4335282" title="Sets (1) or clears (0) the reset long PN sequence bit(PN23)." alt="" coords="527,781,677,808"/>
+<area shape="rect" id="node21" href="$ad9250_8c.html#aaab791e9f2a18673e99f76021fb9e4a9" title="Sets (1) or clears (0) the reset short PN sequence bit(PN9)." alt="" coords="531,832,673,859"/>
+<area shape="rect" id="node22" href="$ad9250_8h.html#aa310e837dac77ac2e47a984c619c43e5" title="Selects a channel as the current channel for further configurations." alt="" coords="757,867,931,909"/>
+<area shape="rect" id="node23" href="$ad9250_8c.html#ac1ea3ba6761add56213beb1ce18bc9f7" title="Sets a bit/group of bits inside a register without modifying other bits." alt="" coords="756,461,932,488"/>
+<area shape="rect" id="node24" href="$ad9250_8h.html#ae07ff9dde005814f4467fc2b1be7ceb5" title="Sets the ADC&#39;s test mode." alt="" coords="529,411,675,437"/>
+<area shape="rect" id="node25" href="$ad9250_8h.html#a2200cd197472ebf4907cc06bc1359d71" title="Resets all registers to their default values." alt="" coords="288,904,429,931"/>
+<area shape="rect" id="node26" href="$ad9250_8h.html#ae077d0fae76bbf9790d7d5faa8c6f4fa" title="Initiates a transfer and waits for the operation to end. Note: This function may be called after a sh..." alt="" coords="538,1085,666,1112"/>
+<area shape="rect" id="node9" href="$ad9250_8h.html#a551739be15001adffde6400d724f2940" title="Configures the JESD204B interface." alt="" coords="269,955,448,981"/>
+<area shape="rect" id="node10" href="$ad9250_8h.html#a68f5ae795f91832c2eb63c5836bf2861" title="Configures the device." alt="" coords="108,904,221,931"/>
+<area shape="rect" id="node11" href="$fmcjesdadc1_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,657,60,684"/>
+</map>

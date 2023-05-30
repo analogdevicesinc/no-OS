@@ -1,0 +1,5 @@
+<map id="drivers/temperature/adt75/iio_adt75.h" name="drivers/temperature/adt75/iio_adt75.h">
+<area shape="rect" id="node1" title="Header file of the IIO ADT75 Driver." alt="" coords="99,5,251,47"/>
+<area shape="rect" id="node2" href="$iio__adt75_8c.html" title="Source file of IIO ADT75 Driver." alt="" coords="5,102,157,143"/>
+<area shape="rect" id="node3" href="$adt75_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for AD74413R project." alt="" coords="182,95,357,151"/>
+</map>

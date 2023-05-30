@@ -1,0 +1,7 @@
+<map id="adis_remove" name="adis_remove">
+<area shape="rect" id="node1" title="Remove adis device." alt="" coords="463,31,569,57"/>
+<area shape="rect" id="node2" href="$iio__adis1650x_8h.html#a591dbc2f48219626f06b62969c19a7ec" title="Remove adis1650x iio device." alt="" coords="245,5,415,32"/>
+<area shape="rect" id="node4" href="$iio__adis1657x_8h.html#a474238376dd1457d1e84fccedb536de5" title="Remove adis1657x iio device." alt="" coords="245,56,415,83"/>
+<area shape="rect" id="node3" href="$eval-adis1650x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="5,5,197,32"/>
+<area shape="rect" id="node5" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="5,56,197,83"/>
+</map>

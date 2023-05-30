@@ -1,0 +1,4 @@
+<map id="no_os_eeprom_desc" name="no_os_eeprom_desc">
+<area shape="rect" id="node1" title="Structure holding the EEPROM descriptor." alt="" coords="33,95,188,121"/>
+<area shape="rect" id="node2" href="$structno__os__eeprom__platform__ops.html" title="Structure holding the EEPROM function pointers that point to the platform specific function." alt="" coords="5,5,216,32"/>
+</map>
