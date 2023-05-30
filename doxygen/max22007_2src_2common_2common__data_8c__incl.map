@@ -1,0 +1,21 @@
+<map id="projects/max22007/src/common/common_data.c" name="projects/max22007/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by MAX22007 example." alt="" coords="45,5,235,45"/>
+<area shape="rect" id="Node000002" href="$max22007_2src_2common_2common__data_8h.html" title="Defines common data to be used by max22007 examples." alt="" coords="26,93,153,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,47,107,83,102,80,125,44"/>
+<area shape="rect" id="Node000004" href="$max22007_8h.html" title="Header file of MAX22007 Driver." alt="" coords="139,167,242,192"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="150,45,167,92,186,153,181,154,161,94,145,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,115,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,120,72,155,68,153,82,118"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="107,116,164,156,161,161,104,121"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="80,240,179,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="183,194,150,231,146,228,179,191"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="203,240,303,265"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="203,191,236,228,232,231,199,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="109,313,179,339"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="134,265,141,299,136,300,129,266"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="237,268,175,308,172,303,234,263"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="210,313,281,339"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="255,266,251,300,245,300,249,265"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="305,313,388,339"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="270,263,322,303,319,307,267,267"/>
+</map>

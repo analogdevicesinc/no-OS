@@ -1,0 +1,5 @@
+<map id="adpd188_clk32mhz_cal" name="adpd188_clk32mhz_cal">
+<area shape="rect" id="Node000001" title="Do internal 32MHz clock calibration. This calibration requires the 32kHz clock to be calibrated first..." alt="" coords="108,5,283,31"/>
+<area shape="rect" id="Node000002" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,21,60,21,60,15,95,15"/>
+</map>

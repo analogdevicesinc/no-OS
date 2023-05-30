@@ -1,0 +1,5 @@
+<map id="gmsl_pipe_des_pipe_cfg" name="gmsl_pipe_des_pipe_cfg">
+<area shape="rect" id="Node000001" title="A structure that contains video pipe configurations for Deserializer." alt="" coords="5,108,187,133"/>
+<area shape="rect" id="Node000002" href="$structgmsl__pipe__des__dt__vc__remap.html" title="A structure that contains data type and virtual channel ID mappings for the Deserializer." alt="" coords="15,5,177,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,59,99,108,93,108,93,59"/>
+</map>

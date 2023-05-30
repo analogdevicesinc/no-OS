@@ -1,0 +1,36 @@
+<map id="drivers/platform/maxim/common/maxim_dma.h" name="drivers/platform/maxim/common/maxim_dma.h">
+<area shape="rect" id="Node000001" title="Maxim platform specific header DMA API." alt="" coords="1543,5,1725,45"/>
+<area shape="rect" id="Node000002" href="$maxim__dma_8c.html" title="Maxim platform specific implementation DMA API." alt="" coords="5,93,185,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1530,29,1291,32,961,42,582,62,388,77,198,96,186,98,185,92,198,91,388,72,582,57,961,37,1291,27,1529,24"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="209,93,389,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1530,31,1322,35,1042,46,724,66,402,96,390,98,389,92,402,91,723,60,1042,41,1322,30,1530,25"/>
+<area shape="rect" id="Node000004" href="$max32650_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="413,93,596,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1530,32,1125,51,868,70,609,96,597,98,596,92,608,91,868,64,1125,46,1529,27"/>
+<area shape="rect" id="Node000005" href="$max32655_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="620,93,800,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1530,34,1209,56,1011,73,813,96,800,98,800,92,812,91,1011,68,1208,50,1529,29"/>
+<area shape="rect" id="Node000006" href="$max32655_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="824,93,1007,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1530,38,1296,62,1020,96,1008,98,1007,93,1019,91,1295,56,1529,33"/>
+<area shape="rect" id="Node000007" href="$max32660_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1031,93,1211,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1530,46,1224,96,1211,98,1210,93,1223,91,1529,40"/>
+<area shape="rect" id="Node000008" href="$max32660_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="1235,93,1417,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1554,52,1394,96,1393,91,1553,46"/>
+<area shape="rect" id="Node000009" href="$max32662_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1441,93,1621,133"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1602,56,1556,95,1552,91,1599,52"/>
+<area shape="rect" id="Node000010" href="$max32662_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="1645,93,1828,133"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1669,52,1716,91,1712,95,1666,56"/>
+<area shape="rect" id="Node000011" href="$max32665_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="1852,93,2032,133"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1715,46,1875,91,1874,96,1714,52"/>
+<area shape="rect" id="Node000012" href="$max32665_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="2056,93,2239,133"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1739,40,2045,91,2056,93,2055,98,2044,96,1738,46"/>
+<area shape="rect" id="Node000013" href="$max32690_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2263,93,2443,133"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1738,33,1974,56,2252,91,2263,92,2262,98,2251,96,1973,61,1738,38"/>
+<area shape="rect" id="Node000014" href="$max32690_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="2467,93,2649,133"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1739,29,2060,50,2257,68,2456,91,2467,92,2466,97,2455,96,2257,73,2059,56,1738,34"/>
+<area shape="rect" id="Node000015" href="$max78000_2maxim__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2673,93,2853,133"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1738,27,2144,45,2402,64,2662,91,2673,92,2672,97,2662,96,2402,69,2144,51,1738,32"/>
+<area shape="rect" id="Node000016" href="$max78000_2maxim__spi_8c.html" title="Implementation of SPI driver." alt="" coords="2864,181,3047,221"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1739,25,2019,30,2370,40,2539,49,2687,60,2801,74,2841,82,2867,91,2894,110,2917,133,2948,180,2944,183,2913,137,2891,114,2865,96,2839,87,2800,79,2687,65,2539,54,2370,46,2019,35,1739,30"/>
+<area shape="rect" id="Node000017" href="$max78000_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="2929,93,3112,133"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1739,25,1953,31,2244,42,2575,61,2910,91,2929,93,2929,98,2910,96,2575,66,2244,47,1953,36,1739,31"/>
+<area shape="poly" id="edge17_Node000017_Node000016" title=" " alt="" coords="3000,146,2972,183,2968,179,2996,143"/>
+</map>

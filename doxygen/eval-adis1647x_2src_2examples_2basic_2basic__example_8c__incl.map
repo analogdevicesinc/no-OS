@@ -1,0 +1,35 @@
+<map id="projects/eval&#45;adis1647x/src/examples/basic/basic_example.c" name="projects/eval&#45;adis1647x/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="BASIC example header for eval&#45;adis1647x project." alt="" coords="275,5,465,60"/>
+<area shape="rect" id="Node000002" href="$eval-adis1647x_2src_2examples_2basic_2basic__example_8h.html" title="BASIC example header for eval&#45;adis1647x project." alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="279,63,125,107,123,102,278,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,62,257,103,255,99,324,58"/>
+<area shape="rect" id="Node000004" href="$adis1647x_8h.html" title="Implementation of adis1647x.h." alt="" coords="363,108,465,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="386,59,404,94,399,97,381,61"/>
+<area shape="rect" id="Node000012" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="231,181,344,207"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="359,61,302,170,297,168,354,59"/>
+<area shape="rect" id="Node000013" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="489,108,625,133"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="428,58,521,100,518,105,426,62"/>
+<area shape="rect" id="Node000015" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="649,108,760,133"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="466,56,647,102,646,107,464,61"/>
+<area shape="rect" id="Node000005" href="$adis_8h.html" title="Implementation of adis.h." alt="" coords="410,181,471,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="421,133,434,168,429,170,416,135"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="230,255,329,280"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="416,209,319,251,317,247,414,204"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="445,255,545,280"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="452,205,480,242,476,245,448,209"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="469,328,540,353"/>
+<area shape="poly" id="edge12_Node000005_Node000009" title=" " alt="" coords="473,199,520,217,542,233,560,253,565,272,560,290,548,307,533,321,530,317,544,303,555,288,560,272,556,256,539,237,517,222,471,204"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="583,328,666,353"/>
+<area shape="poly" id="edge13_Node000005_Node000010" title=" " alt="" coords="473,200,526,219,554,234,580,253,603,283,619,314,614,316,599,286,576,257,551,238,524,224,471,205"/>
+<area shape="rect" id="Node000011" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="353,255,421,280"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="434,209,406,245,402,242,430,205"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="244,328,315,353"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="282,280,282,314,277,314,277,280"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="461,283,328,326,326,321,460,277"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="500,280,504,314,499,315,494,281"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="517,278,592,319,590,323,515,282"/>
+<area shape="poly" id="edge15_Node000012_Node000007" title=" " alt="" coords="268,209,241,228,220,256,218,273,224,289,236,304,251,318,248,322,232,308,220,292,213,273,216,254,238,225,264,205"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="523,181,590,207"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="559,134,559,168,554,168,554,134"/>
+</map>

@@ -1,0 +1,40 @@
+<map id="adxl355_write_device_data" name="adxl355_write_device_data">
+<area shape="rect" id="Node000001" title="Writes to the device." alt="" coords="636,304,836,329"/>
+<area shape="rect" id="Node000002" href="$adxl355_8c.html#a64607f7b7cbcf243b554434ce1cbf8fa" title="Configures the activity enable register." alt="" coords="413,5,572,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="726,292,710,239,682,172,641,103,616,71,586,44,567,33,570,28,590,40,620,68,646,100,687,169,715,237,731,290"/>
+<area shape="rect" id="Node000003" href="$adxl355_8c.html#a6f8e248ad933c1c53c7fa4fff15d9647" title="Configures the activity threshold registers." alt="" coords="412,55,573,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="723,292,704,248,675,194,635,139,612,115,587,94,566,83,569,78,589,89,616,111,639,136,679,191,708,246,728,290"/>
+<area shape="rect" id="Node000004" href="$adxl355_8c.html#a54521cc8bd35fe08425cf39d61f123a8" title="Configures the interrupt map for INT1 and INT2 pins." alt="" coords="403,104,582,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="719,293,697,259,667,218,630,177,587,143,563,132,565,127,589,138,633,173,671,215,701,256,723,290"/>
+<area shape="rect" id="Node000005" href="$adxl355_8c.html#a5497fb2e1541f39faad1a9bd79b78896" title="Writes the activity count register value." alt="" coords="401,153,584,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="712,295,659,243,624,216,587,192,559,181,561,176,589,188,627,211,662,239,716,292"/>
+<area shape="rect" id="Node000006" href="$adxl355_8c.html#ab739160dfde18dfc0094e8e78b5532d6" title="Sets the number of FIFO samples register value." alt="" coords="397,203,588,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="696,300,587,250,534,231,536,226,589,245,699,295"/>
+<area shape="rect" id="Node000007" href="$adxl355_8c.html#a6f316752484487d5655670558a954a13" title="Writes the high&#45;pass filter settings." alt="" coords="172,253,349,279"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="655,304,588,294,463,281,349,273,350,268,463,276,588,289,656,299"/>
+<area shape="rect" id="Node000008" href="$adxl355_8c.html#a5ebd6b97e3c1722a3a7c63ce77b030ed" title="Sets the interrupt polarity." alt="" coords="417,455,569,480"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="716,341,662,393,627,421,589,444,558,457,556,452,587,440,624,416,659,389,712,338"/>
+<area shape="rect" id="Node000009" href="$adxl355_8c.html#a04f6359f3e9f79c0254ac61465761bb2" title="Writes the low&#45;pass filter settings." alt="" coords="184,355,337,380"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="651,334,588,343,456,357,338,366,338,360,456,351,588,338,651,329"/>
+<area shape="rect" id="Node000011" href="$adxl355_8c.html#ae4dd92d4bdfdf1f774bfa00055ae6d72" title="Sets an offset value for each axis (Offset Calibration)." alt="" coords="420,504,565,529"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="723,343,701,378,671,419,633,460,589,495,565,506,563,502,587,490,630,456,667,415,697,375,719,340"/>
+<area shape="rect" id="Node000012" href="$adxl355_8c.html#a56246d409ea65d8352b53397cd1b68a6" title="Places the device into the given operation mode." alt="" coords="409,304,577,329"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="622,319,577,319,577,314,622,314"/>
+<area shape="rect" id="Node000015" href="$adxl355_8c.html#a0343f1bcddcf796e5b1e74004f3a0b79" title="Sets the measurement range register value." alt="" coords="420,553,565,579"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="728,344,708,388,679,442,639,497,616,522,589,544,567,556,564,552,587,540,612,519,635,494,675,439,704,385,723,342"/>
+<area shape="rect" id="Node000016" href="$adxl355_8c.html#afdab818a6666878ce7a1ce693b824022" title="Triggers the self&#45;test feature." alt="" coords="411,603,575,628"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="731,343,715,396,687,464,646,534,620,566,590,593,570,605,567,600,586,589,616,562,641,531,682,462,710,394,726,342"/>
+<area shape="rect" id="Node000017" href="$adxl355_8c.html#a71f7b8a40d6c14dad5998c5aa0e87753" title="Performs a soft reset of the device." alt="" coords="420,405,565,431"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="699,338,589,388,536,408,534,403,587,384,696,333"/>
+<area shape="rect" id="Node000010" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,355,124,380"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="170,370,124,370,124,365,170,365"/>
+<area shape="poly" id="edge14_Node000012_Node000007" title=" " alt="" coords="420,304,319,281,320,276,421,298"/>
+<area shape="poly" id="edge15_Node000012_Node000009" title=" " alt="" coords="421,335,320,357,319,352,420,330"/>
+<area shape="poly" id="edge16_Node000012_Node000010" title=" " alt="" coords="395,323,288,331,172,345,113,357,112,352,172,339,287,325,395,318"/>
+<area shape="rect" id="Node000013" href="$iio__adxl355_8c.html#acc81f6d971407ad60920364240023f77" title="Initializes the ADXL355 IIO driver." alt="" coords="198,404,323,429"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="460,339,409,366,350,394,313,406,312,401,348,389,407,362,457,334"/>
+<area shape="rect" id="Node000014" href="$eval-adxl355-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,404,124,429"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="184,419,124,419,124,414,184,414"/>
+<area shape="poly" id="edge21_Node000017_Node000010" title=" " alt="" coords="413,435,350,443,299,450,259,457,219,457,171,443,154,432,145,420,136,406,122,393,102,382,105,378,126,389,140,403,149,416,158,428,173,438,220,452,258,452,298,445,349,438,412,430"/>
+<area shape="poly" id="edge20_Node000017_Node000013" title=" " alt="" coords="406,420,324,420,324,414,406,415"/>
+</map>

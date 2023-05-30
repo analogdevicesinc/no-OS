@@ -1,0 +1,7 @@
+<map id="adis_write_fifo_overflow" name="adis_write_fifo_overflow">
+<area shape="rect" id="Node000001" title="Write FIFO overflow bit value." alt="" coords="212,35,392,60"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="9,5,160,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,36,160,31,161,26,199,31"/>
+<area shape="rect" id="Node000003" href="$iio__adis_8c.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="5,55,164,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,63,165,68,164,62,198,58"/>
+</map>

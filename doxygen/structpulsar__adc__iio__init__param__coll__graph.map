@@ -1,0 +1,32 @@
+<map id="pulsar_adc_iio_init_param" name="pulsar_adc_iio_init_param">
+<area shape="rect" id="Node000001" title="pulsar_adc IIO initialization structure" alt="" coords="1643,260,1785,300"/>
+<area shape="rect" id="Node000002" href="$structpulsar__adc__init__param.html" title=" " alt="" coords="1351,267,1520,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1534,277,1642,277,1642,283,1534,283"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="1007,126,1169,151"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1184,152,1256,170,1328,198,1382,232,1422,265,1419,269,1379,236,1325,202,1254,175,1182,157"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,49,184,74"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="188,44,321,29,489,18,582,17,676,20,770,28,862,43,921,59,978,81,1065,123,1063,128,976,86,920,64,861,48,769,34,676,25,582,22,490,23,321,34,189,49"/>
+<area shape="rect" id="Node000006" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="704,97,827,122"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="198,63,405,74,646,92,704,98,703,104,645,97,404,79,197,68"/>
+<area shape="rect" id="Node000007" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,110,490,135"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="147,76,209,92,343,113,342,118,207,97,146,81"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,163,491,203"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="505,174,1006,141,1007,147,505,180"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="504,164,645,136,714,119,716,125,646,141,505,170"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="841,113,1006,129,1006,134,840,119"/>
+<area shape="poly" id="edge10_Node000006_Node000006" title=" " alt="" coords="733,82,743,73,765,70,784,72,796,79,799,88,793,98,789,95,794,88,792,82,783,77,765,75,745,78,736,86"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="503,117,703,109,704,114,504,122"/>
+<area shape="rect" id="Node000008" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="1000,267,1176,293"/>
+<area shape="poly" id="edge11_Node000002_Node000008" title=" " alt="" coords="1190,277,1351,277,1351,283,1190,283"/>
+<area shape="rect" id="Node000009" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="679,235,851,261"/>
+<area shape="poly" id="edge16_Node000002_Node000009" title=" " alt="" coords="865,239,885,239,1010,236,1107,237,1203,244,1327,257,1374,265,1373,270,1326,263,1203,249,1106,243,1010,241,885,244,865,245"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="866,255,1000,269,999,274,865,261"/>
+<area shape="rect" id="Node000010" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,235,511,261"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="525,245,679,245,679,251,525,251"/>
+<area shape="rect" id="Node000011" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="669,286,861,311"/>
+<area shape="poly" id="edge14_Node000008_Node000011" title=" " alt="" coords="875,298,976,295,1016,290,1016,295,976,300,875,304"/>
+<area shape="rect" id="Node000012" href="$structaxi__clkgen__init.html" title=" " alt="" coords="1028,317,1148,342"/>
+<area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="1162,319,1326,297,1369,290,1370,295,1327,303,1162,324"/>
+<area shape="rect" id="Node000013" href="$structspi__engine__offload__init__param.html" title="Structure containing the init parameters needed by the offload module." alt="" coords="1016,367,1160,407"/>
+<area shape="poly" id="edge17_Node000002_Node000013" title=" " alt="" coords="1173,372,1248,356,1326,333,1373,312,1412,290,1415,295,1375,317,1328,339,1250,361,1174,377"/>
+</map>

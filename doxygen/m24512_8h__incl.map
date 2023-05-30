@@ -1,0 +1,20 @@
+<map id="drivers/eeprom/m24512/m24512.h" name="drivers/eeprom/m24512/m24512.h">
+<area shape="rect" id="Node000001" title="Header file for M24512 EEPROM driver." alt="" coords="157,5,336,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="213,167,283,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,35,95,45,41,61,22,72,11,84,9,99,18,117,29,127,46,136,94,151,200,170,199,175,92,156,44,140,26,131,14,120,4,100,6,82,19,68,39,56,94,40,157,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="28,93,111,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,48,109,90,107,85,203,43"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="135,93,233,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,47,204,84,200,81,229,44"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="257,93,364,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="264,44,294,81,290,84,260,47"/>
+<area shape="rect" id="Node000006" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="543,93,652,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="331,43,533,88,532,93,330,48"/>
+<area shape="rect" id="Node000008" href="$no__os__eeprom_8h.html" title="Header file for EEPROM APIs." alt="" coords="389,93,518,119"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="297,43,411,86,409,91,295,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="196,117,231,155,227,158,193,121"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="302,121,269,158,265,154,298,117"/>
+<area shape="rect" id="Node000007" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="563,167,631,192"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="600,119,600,153,595,153,595,119"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="421,121,295,165,293,160,419,116"/>
+</map>

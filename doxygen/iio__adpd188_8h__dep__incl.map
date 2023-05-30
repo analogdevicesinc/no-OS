@@ -1,0 +1,7 @@
+<map id="drivers/photo&#45;electronic/adpd188/iio_adpd188.h" name="drivers/photo&#45;electronic/adpd188/iio_adpd188.h">
+<area shape="rect" id="Node000001" title="Header of the ADPD188 IIO driver." alt="" coords="103,5,280,45"/>
+<area shape="rect" id="Node000002" href="$iio__adpd188_8c.html" title="Implementation of the ADPD188 IIO driver." alt="" coords="5,93,183,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,56,117,95,114,91,158,52"/>
+<area shape="rect" id="Node000003" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="207,93,373,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,52,270,91,266,95,222,56"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="adpd188_remove" name="adpd188_remove">
+<area shape="rect" id="Node000001" title="Free resources allocated by adpd188_init()." alt="" coords="315,31,449,56"/>
+<area shape="rect" id="Node000002" href="$iio__adpd188_8c.html#ad4e7b974902520383dcf1d16b4c80169" title="Initialize the IIO driver and allocate memory." alt="" coords="123,5,252,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,35,252,29,253,24,301,30"/>
+<area shape="rect" id="Node000004" href="$iio__adpd188_8c.html#a9d97b04973215c0d461dccc283912e42" title="Free mmory allocated by adpd188_iio_init()." alt="" coords="108,55,267,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="301,56,267,60,266,55,301,51"/>
+<area shape="rect" id="Node000003" href="$iio__adpd1080_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,21,60,21,60,15,109,15"/>
+</map>

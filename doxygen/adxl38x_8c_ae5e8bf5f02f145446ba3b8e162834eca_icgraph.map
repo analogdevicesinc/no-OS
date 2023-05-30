@@ -1,0 +1,9 @@
+<map id="adxl38x_get_sts_reg" name="adxl38x_get_sts_reg">
+<area shape="rect" id="Node000001" title="Reads the status registers." alt="" coords="331,31,487,56"/>
+<area shape="rect" id="Node000002" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="115,5,275,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="316,35,275,30,276,25,317,30"/>
+<area shape="rect" id="Node000003" href="$selftest__example__main_8c.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="108,55,283,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="317,56,283,60,282,55,316,51"/>
+<area shape="rect" id="Node000004" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,70,60,70,60,65,95,65"/>
+</map>
