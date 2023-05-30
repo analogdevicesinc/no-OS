@@ -380,7 +380,7 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		break;
 
 	case NO_OS_TIM_IRQ:
-		if (_events[NO_OS_EVT_RTC].actions == NULL) {
+		if (_events[NO_OS_EVT_TIM_ELAPSED].actions == NULL) {
 			ret = no_os_list_init(&_events[NO_OS_EVT_TIM_ELAPSED].actions,
 					      NO_OS_LIST_PRIORITY_LIST,
 					      irq_action_cmp);
