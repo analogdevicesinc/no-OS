@@ -1,0 +1,13 @@
+<map id="include/no_os_mdio.h" name="include/no_os_mdio.h">
+<area shape="rect" id="Node000001" title="Header file for MDIO interface driver." alt="" coords="67,5,229,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,152,88,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,33,112,54,89,80,71,111,58,140,53,138,66,108,85,77,108,50,132,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="207,152,278,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,29,189,50,212,77,228,108,238,138,233,139,223,110,207,80,185,54,162,33"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="98,79,198,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="151,31,151,65,145,65,145,31"/>
+<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="133,106,76,146,73,142,130,102"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="165,102,218,141,215,146,162,106"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="113,152,183,177"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="151,104,151,138,145,138,145,104"/>
+</map>

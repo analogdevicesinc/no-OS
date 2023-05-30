@@ -1,0 +1,8 @@
+<map id="drivers/frequency/adf4371/adf4371.h" name="drivers/frequency/adf4371/adf4371.h">
+<area shape="rect" id="Node000001" title="Header file of ADF4371 Driver." alt="" coords="5,5,199,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="67,167,137,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,46,89,80,87,118,96,153,91,154,82,119,83,79,92,45"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="97,93,195,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,44,135,80,130,83,110,47"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="141,120,119,156,114,154,136,118"/>
+</map>

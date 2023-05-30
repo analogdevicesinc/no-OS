@@ -1,0 +1,9 @@
+<map id="ad9517_state" name="ad9517_state">
+<area shape="rect" id="Node000001" title=" " alt="" coords="249,93,360,119"/>
+<area shape="rect" id="Node000002" href="$structad9517__platform__data.html" title=" " alt="" coords="5,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,34,277,91,275,96,131,38"/>
+<area shape="rect" id="Node000003" href="$structad9517__lvpecl__channel__spec.html" title=" " alt="" coords="199,5,410,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="307,45,307,93,302,93,302,45"/>
+<area shape="rect" id="Node000004" href="$structad9517__lvds__cmos__channel__spec.html" title=" " alt="" coords="435,5,676,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="514,38,420,72,344,96,343,91,418,67,512,33"/>
+</map>

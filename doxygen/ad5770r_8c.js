@@ -1,0 +1,25 @@
+var ad5770r_8c =
+[
+    [ "ad5770r_channel_config", "ad5770r_8c.html#a9271e9a89381f6d6534fd8b8b46a3152", null ],
+    [ "ad5770r_get_interface_status", "ad5770r_8c.html#a3632abaff6e6a9363f7016e7b742756f", null ],
+    [ "ad5770r_get_status", "ad5770r_8c.html#ac9b459470e83dd110d3a08c1a6615460", null ],
+    [ "ad5770r_init", "ad5770r_8c.html#a91549ef06cfe7ec6c7119ed89a44927d", null ],
+    [ "ad5770r_remove", "ad5770r_8c.html#ac1dad0a614522d2c5dc111ba044aed24", null ],
+    [ "ad5770r_set_alarm", "ad5770r_8c.html#a194cb9c54c32a51026bcde0bfaefa481", null ],
+    [ "ad5770r_set_dac_input", "ad5770r_8c.html#ae121931aa1a5da6dd95e5332f2f47047", null ],
+    [ "ad5770r_set_dac_value", "ad5770r_8c.html#ab43f472b8eb575ea8d9e0d7270590995", null ],
+    [ "ad5770r_set_device_spi", "ad5770r_8c.html#a114ec63f21e9dc34b056b6e99a0fe8bc", null ],
+    [ "ad5770r_set_hw_ldac", "ad5770r_8c.html#ac52979fea5901ff53540884bfd9c54f1", null ],
+    [ "ad5770r_set_mask_channel", "ad5770r_8c.html#a6c74e389e48f702afa2b8609f3042741", null ],
+    [ "ad5770r_set_monitor_setup", "ad5770r_8c.html#ab1a47705f3e0da77e12f6ba7f798f5d3", null ],
+    [ "ad5770r_set_output_filter", "ad5770r_8c.html#a98af4bd37562ec7d39e1528b1d2b2214", null ],
+    [ "ad5770r_set_output_mode", "ad5770r_8c.html#af57fa6263a4c57a982117f56b96ccea6", null ],
+    [ "ad5770r_set_page_mask", "ad5770r_8c.html#a4725043c09c4f6a5c1ac8ca77ae52a7c", null ],
+    [ "ad5770r_set_reference", "ad5770r_8c.html#a5c695bc92264eca9814f9c9313cc4c89", null ],
+    [ "ad5770r_set_sw_ldac", "ad5770r_8c.html#a26b5560dce70d3f4eebda1c745c218c3", null ],
+    [ "ad5770r_spi_reg_read", "ad5770r_8c.html#afd17e6b7e309c5e703c3c318e656ba7a", null ],
+    [ "ad5770r_spi_reg_read_multiple", "ad5770r_8c.html#ad2d7dae4cde50442dde72aaffd1bddb0", null ],
+    [ "ad5770r_spi_reg_write", "ad5770r_8c.html#a5f834d633ab8d49d6e7f53d6c4f097fc", null ],
+    [ "ad5770r_spi_reg_write_multiple", "ad5770r_8c.html#a8caf175b6fe7227d956c1f4ce1fe02ae", null ],
+    [ "ad5770r_spi_write_mask", "ad5770r_8c.html#a909c6021a22656060dd5ece70c28ead2", null ]
+];

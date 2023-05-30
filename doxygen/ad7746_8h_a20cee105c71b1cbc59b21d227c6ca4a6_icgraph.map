@@ -1,0 +1,28 @@
+<map id="ad7746_reg_write" name="ad7746_reg_write">
+<area shape="rect" id="Node000001" title="Writes data into AD7746 registers, starting from the selected register address pointer." alt="" coords="731,127,869,152"/>
+<area shape="rect" id="Node000002" href="$ad7746_8c.html#a0910d0a1f46726bbfd81d39b3358a4b3" title="Configure the capacitive setup register." alt="" coords="533,52,660,78"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="759,124,682,91,646,80,648,75,684,86,761,119"/>
+<area shape="rect" id="Node000006" href="$ad7746_8c.html#a40f2c50f5074aa7b49f24670df77dc95" title="Set the DAC code and enable state for EXCA." alt="" coords="108,26,280,51"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="778,118,737,76,711,57,682,42,626,25,567,15,508,9,450,8,341,15,255,28,255,23,341,10,450,3,508,4,568,9,627,20,684,37,714,52,741,72,782,114"/>
+<area shape="rect" id="Node000007" href="$ad7746_8c.html#acfb3e4e3d33d323d26559285d6a07f6b" title="Set the DAC code and enable state for EXCB." alt="" coords="511,102,683,127"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="716,132,683,128,683,122,717,127"/>
+<area shape="rect" id="Node000008" href="$ad7746_8c.html#a525964b8724775523f5377ce161240a2" title="Set the configuration register." alt="" coords="525,250,668,275"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="779,164,738,203,684,241,657,252,655,247,681,236,734,199,776,160"/>
+<area shape="rect" id="Node000010" href="$ad7746_8c.html#a4bb798aef3aec00883ae34c7f001877f" title="Configure the excitation setup register." alt="" coords="533,151,660,176"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="717,152,660,159,660,153,716,147"/>
+<area shape="rect" id="Node000011" href="$ad7746_8c.html#a9c225faf11c8392042d47a84ca028c3c" title="Configure the voltage/temperature setup register." alt="" coords="538,200,655,226"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="759,160,684,190,644,203,643,198,682,185,757,155"/>
+<area shape="rect" id="Node000003" href="$ad7746_8c.html#a2f5d9a49f99bf836d5614406c98897c4" title="Initialize the ad7606 device structure." alt="" coords="346,151,445,176"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="529,84,512,91,457,122,414,153,411,149,454,118,510,86,527,79"/>
+<area shape="rect" id="Node000004" href="$iio__ad7746_8c.html#aab1cf957b500cb5329bf0629c00031e5" title=" " alt="" coords="133,100,255,126"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="332,151,244,128,246,123,334,145"/>
+<area shape="rect" id="Node000005" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,100,60,126"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="332,164,227,157,107,139,60,126,61,120,109,134,227,152,333,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="119,116,60,116,60,110,119,110"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="154,59,62,103,59,98,152,54"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="527,248,510,241,454,209,411,178,414,174,457,205,512,236,529,243"/>
+<area shape="rect" id="Node000009" href="$ad7746_8c.html#a58fa38513e2e6b5f781d8dccd072b523" title="Perform offset/gain calibration." alt="" coords="328,250,463,275"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="512,265,463,265,463,260,512,260"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="519,166,445,166,445,161,519,161"/>
+<area shape="poly" id="edge15_Node000011_Node000003" title=" " alt="" coords="531,200,444,178,446,173,532,194"/>
+</map>

@@ -1,0 +1,27 @@
+var ad717x_8c =
+[
+    [ "COMM_ERR", "ad717x_8c.html#a469666c81e1ee94306c09fbdb682c363", null ],
+    [ "INVALID_VAL", "ad717x_8c.html#ac1e34602b7b91d1a30a048936ebf8121", null ],
+    [ "TIMEOUT", "ad717x_8c.html#a45ba202b05caf39795aeca91b0ae547e", null ],
+    [ "ad717x_assign_setup", "ad717x_8c.html#accdb832ce83708ca8a97c2cadedc0ad2", null ],
+    [ "AD717X_ComputeCRC8", "ad717x_8c.html#a1e5b3c6cdef24a3bf998aeafd118a819", null ],
+    [ "AD717X_ComputeDataregSize", "ad717x_8c.html#a37ab086f10a4f8d2dc33c04f72884394", null ],
+    [ "AD717X_ComputeXOR8", "ad717x_8c.html#a667b81049eb3877ac6e5fe36c43cbdfb", null ],
+    [ "ad717x_configure_device_odr", "ad717x_8c.html#a365530ef685533d6a3715789963f6c52", null ],
+    [ "ad717x_connect_analog_input", "ad717x_8c.html#a492035c62137447abf9bb08a860d7b8d", null ],
+    [ "ad717x_enable_input_buffer", "ad717x_8c.html#a5402f40f1800be835ffd8a2a18eed6af", null ],
+    [ "AD717X_GetReg", "ad717x_8c.html#a25f5501445b41b7647a8557a6fd13778", null ],
+    [ "AD717X_Init", "ad717x_8c.html#af92ad585cabc0f6ef31f41589946bb34", null ],
+    [ "AD717X_ReadData", "ad717x_8c.html#add8ae6c28ff4f84338b5a57c53a84ccc", null ],
+    [ "AD717X_ReadRegister", "ad717x_8c.html#a1a8a9ea16d3cb31aef2d82be24292ffd", null ],
+    [ "AD717X_remove", "ad717x_8c.html#a402765837c4164087d6b21fa60a65ef9", null ],
+    [ "AD717X_Reset", "ad717x_8c.html#ab5d0165743938ef97cf37d277403871b", null ],
+    [ "ad717x_set_adc_mode", "ad717x_8c.html#a57f7e5c00c7d1ed755f2896406c7b023", null ],
+    [ "ad717x_set_channel_status", "ad717x_8c.html#aacac1db5638624d6c1fdd03431255bdb", null ],
+    [ "ad717x_set_polarity", "ad717x_8c.html#abe8871d8919f03e1aa9078b590945ae8", null ],
+    [ "ad717x_set_reference_source", "ad717x_8c.html#aee6442429a52d68ee8c1b2f418763316", null ],
+    [ "ad717x_single_read", "ad717x_8c.html#a89992ef25955f947d86b6f587e98349c", null ],
+    [ "AD717X_UpdateCRCSetting", "ad717x_8c.html#a6473c46727fec29cacb5926420d5d4d0", null ],
+    [ "AD717X_WaitForReady", "ad717x_8c.html#a923f206a19c5d23586d670226593d421", null ],
+    [ "AD717X_WriteRegister", "ad717x_8c.html#a263a0ab1b0b8e24e4f177aa2901de460", null ]
+];

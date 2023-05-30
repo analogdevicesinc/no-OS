@@ -1,0 +1,31 @@
+<map id="adxl372_init_param" name="adxl372_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1285,315,1436,341"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="975,125,1138,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1108,152,1183,184,1263,230,1314,273,1350,313,1346,317,1310,277,1260,234,1181,189,1106,157"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,41,184,66"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,37,323,25,479,17,650,21,735,29,819,41,881,57,941,79,1033,122,1030,127,939,84,880,63,818,47,735,34,649,26,479,23,324,30,198,42"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,95,786,121"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,56,388,68,607,88,663,96,663,101,606,93,388,74,198,61"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,102,471,127"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,68,209,84,324,104,323,109,207,89,147,73"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,155,472,195"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="485,167,975,139,975,145,486,172"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,155,606,131,665,118,666,123,607,136,486,160"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="800,112,975,128,975,133,799,117"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="693,81,702,72,725,69,743,71,755,77,758,87,752,97,747,94,752,86,751,81,742,76,725,74,705,77,696,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,110,663,107,663,112,484,116"/>
+<area shape="rect" id="Node000007" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="975,223,1138,249"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1152,243,1207,254,1262,270,1307,291,1343,313,1340,318,1304,295,1260,274,1206,259,1151,248"/>
+<area shape="rect" id="Node000008" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="635,226,814,251"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="828,235,975,234,975,239,828,241"/>
+<area shape="rect" id="Node000009" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="971,278,1143,303"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1156,300,1285,316,1285,321,1156,305"/>
+<area shape="rect" id="Node000010" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,278,819,303"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="833,288,970,288,970,293,833,293"/>
+<area shape="rect" id="Node000011" href="$structadxl372__activity__threshold.html" title=" " alt="" coords="957,351,1156,377"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="1170,368,1216,367,1261,361,1298,351,1332,338,1334,343,1300,356,1262,367,1216,372,1170,374"/>
+<area shape="rect" id="Node000012" href="$structadxl372__fifo__config.html" title=" " alt="" coords="983,401,1131,426"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1144,410,1202,403,1260,388,1306,365,1342,339,1345,343,1309,369,1262,393,1203,408,1144,415"/>
+<area shape="rect" id="Node000013" href="$structadxl372__irq__config.html" title=" " alt="" coords="985,459,1129,485"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1142,470,1202,462,1232,453,1260,440,1291,418,1316,390,1350,340,1355,342,1320,394,1294,422,1263,445,1234,458,1203,467,1143,476"/>
+</map>

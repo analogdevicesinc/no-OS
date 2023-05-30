@@ -1,0 +1,55 @@
+<map id="mykonosDevice_t" name="mykonosDevice_t">
+<area shape="rect" id="Node000001" title="Data structure to hold Mykonos device settings." alt="" coords="1052,453,1191,478"/>
+<area shape="rect" id="Node000002" href="$structspi_settings__t.html" title="Data structure to hold SPI settings for all system device types." alt="" coords="779,127,886,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="900,149,928,162,969,193,1005,231,1035,272,1061,315,1099,396,1119,451,1114,453,1094,398,1057,318,1031,275,1001,234,965,197,925,166,898,154"/>
+<area shape="rect" id="Node000003" href="$structmykonos_rx_settings__t.html" title="Data structure to hold Rx data path settings." alt="" coords="751,177,914,202"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="860,210,1030,370,1110,451,1106,454,1026,374,856,213"/>
+<area shape="rect" id="Node000004" href="$structmykonos_rx_profile__t.html" title="Data structure to hold settings for the current Rx specific use case profile." alt="" coords="389,247,540,273"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="500,238,553,214,615,193,685,184,751,182,751,187,685,189,617,199,555,219,502,243"/>
+<area shape="rect" id="Node000018" href="$structmykonos_obs_rx_settings__t.html" title="Data structure to hold ORx data path settings." alt="" coords="739,327,927,353"/>
+<area shape="poly" id="edge19_Node000018_Node000004" title=" " alt="" coords="555,270,715,301,795,325,794,330,714,307,554,275"/>
+<area shape="rect" id="Node000005" href="$structmykonos_fir__t.html" title="Data structure to hold Mykonos FIR filter settings." alt="" coords="58,365,167,390"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="151,356,235,319,337,281,388,269,389,274,338,287,237,323,153,361"/>
+<area shape="rect" id="Node000012" href="$structmykonos_tx_profile__t.html" title="Data structure to hold settings for the current Tx specific use case profile." alt="" coords="389,445,540,470"/>
+<area shape="poly" id="edge12_Node000012_Node000005" title=" " alt="" coords="177,391,338,429,398,442,397,447,337,435,176,396"/>
+<area shape="rect" id="Node000006" href="$structmykonos_jesd204b_framer_config__t.html" title="Data structure to hold Mykonos JESD204b Framer configuration settings." alt="" coords="345,297,584,322"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="578,289,590,282,598,275,602,266,606,257,614,249,642,235,681,222,770,199,771,205,683,227,644,240,618,253,610,260,607,269,602,278,594,286,580,294"/>
+<area shape="poly" id="edge23_Node000018_Node000006" title=" " alt="" coords="598,318,739,330,738,335,598,323"/>
+<area shape="rect" id="Node000007" href="$structmykonos_rx_gain_control__t.html" title="Data structure to hold Rx gain control settings for initialization and during use." alt="" coords="371,18,558,43"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="563,15,602,16,643,22,682,35,716,58,727,71,731,84,730,111,729,137,732,150,741,162,758,174,754,179,737,166,727,152,723,138,725,111,726,85,722,73,713,62,680,40,642,27,602,21,562,20"/>
+<area shape="rect" id="Node000008" href="$structmykonos_agc_cfg__t.html" title="Data structure to hold general AGC settings for initialization and during use." alt="" coords="395,89,534,114"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="523,83,568,76,618,74,669,82,694,91,716,103,728,118,730,133,732,148,741,162,760,174,757,179,737,166,727,150,725,134,723,120,713,107,691,95,668,87,618,80,568,81,523,88"/>
+<area shape="poly" id="edge21_Node000018_Node000008" title=" " alt="" coords="548,112,646,134,688,148,716,163,727,175,731,186,741,212,785,277,823,326,819,329,781,280,736,215,726,188,722,178,713,167,685,153,644,139,547,117"/>
+<area shape="rect" id="Node000009" href="$structmykonos_peak_det_agc_cfg__t.html" title="Data structure to hold peak detector settings for the AGC." alt="" coords="15,114,210,139"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="224,116,395,104,395,109,224,121"/>
+<area shape="rect" id="Node000010" href="$structmykonos_power_meas_agc_cfg__t.html" title="Data structure to hold power measurement settings for the AGC." alt="" coords="5,65,220,90"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="234,83,395,94,395,99,234,88"/>
+<area shape="rect" id="Node000011" href="$structmykonos_tx_settings__t.html" title="Data structure to hold Tx data path settings." alt="" coords="751,518,914,543"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="902,512,1064,475,1065,481,904,518"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="555,466,715,495,792,515,790,520,714,500,554,472"/>
+<area shape="rect" id="Node000013" href="$structmykonos_jesd204b_deframer_config__t.html" title="Data structure to hold the settings for the deserializer and deframer configuration." alt="" coords="337,642,592,667"/>
+<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="605,637,660,625,714,607,771,575,815,541,818,546,774,579,716,612,662,630,606,642"/>
+<area shape="rect" id="Node000014" href="$structmykonos_dpd_config__t.html" title="Structure to configure DPD (Only valid for a DPD&#45;enabled transceiver) deprecated robustModeling membe..." alt="" coords="385,593,545,618"/>
+<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="558,594,635,584,714,568,799,541,800,546,715,573,636,589,559,599"/>
+<area shape="rect" id="Node000015" href="$structint8__cpx.html" title="Structure used within the DPD config structure to hold a int8_t complex number." alt="" coords="74,593,151,618"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="165,603,385,603,385,608,165,608"/>
+<area shape="rect" id="Node000016" href="$structmykonos_clgc_config__t.html" title="Structure to configure CLGC (Closed Loop Gain Control) (Only valid for a DPD&#45;enabled transceiver)" alt="" coords="383,494,546,519"/>
+<area shape="poly" id="edge16_Node000011_Node000016" title=" " alt="" coords="560,510,751,523,751,528,559,515"/>
+<area shape="rect" id="Node000017" href="$structmykonos_vswr_config__t.html" title="Structure to configure VSWR (Only valid for a DPD&#45;enabled transceiver)" alt="" coords="381,543,548,569"/>
+<area shape="poly" id="edge17_Node000011_Node000017" title=" " alt="" coords="562,550,714,541,751,538,751,543,715,547,562,556"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="877,356,1092,450,1090,455,874,361"/>
+<area shape="rect" id="Node000019" href="$structmykonos_o_rx_gain_control__t.html" title="Data structure to hold ORx gain control settings for initialization and during use." alt="" coords="366,346,563,371"/>
+<area shape="poly" id="edge20_Node000018_Node000019" title=" " alt="" coords="577,362,645,362,714,359,773,350,774,355,715,364,645,368,577,367"/>
+<area shape="rect" id="Node000020" href="$structmykonos_sniffer_gain_control__t.html" title="Data structure to hold SnRx gain control settings for initialization and during use." alt="" coords="359,395,571,421"/>
+<area shape="poly" id="edge22_Node000018_Node000020" title=" " alt="" coords="584,401,649,395,714,383,762,368,804,350,806,355,764,373,715,388,650,400,585,407"/>
+<area shape="rect" id="Node000021" href="$structmykonos_aux_io__t.html" title="Data structure to hold auxiliary IO settings (AuxDAC, ARM GPIO, GPIO3.3v, low voltage GPIO,..." alt="" coords="767,691,898,717"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="858,680,1103,476,1106,480,862,684"/>
+<area shape="rect" id="Node000022" href="$structmykonos_gpio3v3__t.html" title="Data structure to hold 3.3 VDC GPIO settings." alt="" coords="391,741,538,766"/>
+<area shape="poly" id="edge25_Node000021_Node000022" title=" " alt="" coords="552,742,714,721,767,713,768,718,715,727,553,747"/>
+<area shape="rect" id="Node000023" href="$structmykonos_gpio_low_voltage__t.html" title="Data structure to hold low voltage GPIO settings." alt="" coords="365,790,564,815"/>
+<area shape="poly" id="edge26_Node000021_Node000023" title=" " alt="" coords="577,796,647,782,681,771,713,755,720,749,724,742,729,734,737,726,766,712,768,717,740,730,733,737,729,744,725,752,716,760,683,776,649,788,578,802"/>
+<area shape="rect" id="Node000024" href="$structmykonos_arm_gpio_config__t.html" title="Data structure to hold ARM GPIO pin assignments for each ARM input/output pin." alt="" coords="369,691,560,717"/>
+<area shape="poly" id="edge27_Node000021_Node000024" title=" " alt="" coords="574,701,767,701,767,707,574,707"/>
+<area shape="rect" id="Node000025" href="$structmykonos_dig_clocks__t.html" title="Data structure to hold digital clock settings." alt="" coords="753,741,912,766"/>
+<area shape="poly" id="edge28_Node000001_Node000025" title=" " alt="" coords="910,733,925,726,963,699,996,667,1026,632,1052,595,1091,526,1113,477,1117,479,1095,528,1056,598,1030,635,1000,671,966,703,928,730,912,738"/>
+</map>

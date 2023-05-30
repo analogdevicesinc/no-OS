@@ -1,0 +1,26 @@
+var axi__adc__core_8c =
+[
+    [ "axi_adc_delay_calibrate", "axi__adc__core_8c.html#a1fc3d3db40a3740c37103d5f2c057674", null ],
+    [ "axi_adc_delay_set", "axi__adc__core_8c.html#a52f36bc7c6ddeedae6c52a7f53122c5f", null ],
+    [ "axi_adc_get_calib_bias", "axi__adc__core_8c.html#ae7289bd14b9c458c2f0c250d14855f80", null ],
+    [ "axi_adc_get_calib_phase", "axi__adc__core_8c.html#ac3be9d8c91a88d4307d68aa2828ef3e3", null ],
+    [ "axi_adc_get_calib_phase_scale", "axi__adc__core_8c.html#a6af17b228bbbed4dbfc1a86d3ce2a51a", null ],
+    [ "axi_adc_get_calib_scale", "axi__adc__core_8c.html#ab3189e6ffb45925b9bd98a7d7de9beed", null ],
+    [ "axi_adc_get_sampling_freq", "axi__adc__core_8c.html#a43a5410d1924a8549878f6c1c836592c", null ],
+    [ "axi_adc_idelay_set", "axi__adc__core_8c.html#a338ea95c9f41e80b4da191909fe8ff2b", null ],
+    [ "axi_adc_init", "axi__adc__core_8c.html#a1d52b9aff0d444bd88c1878b98c96d28", null ],
+    [ "axi_adc_init_begin", "axi__adc__core_8c.html#aad06e3011d8ccbf6130ce2efa8064a65", null ],
+    [ "axi_adc_init_finish", "axi__adc__core_8c.html#ac63e4a1c1a9490a7f0a8afe8e1ba75a7", null ],
+    [ "axi_adc_pn_mon", "axi__adc__core_8c.html#a3f8de28c2195f5524197a9cf2b9e543a", null ],
+    [ "axi_adc_read", "axi__adc__core_8c.html#a50a1ebd07f45076adabc60ef78c08f82", null ],
+    [ "axi_adc_remove", "axi__adc__core_8c.html#a250491168c96a82cf340805e583e7db0", null ],
+    [ "axi_adc_set_calib_bias", "axi__adc__core_8c.html#a9c9ab05770c548d33106e95518a542e2", null ],
+    [ "axi_adc_set_calib_phase", "axi__adc__core_8c.html#add160e0d47dc5a3c833ac87863945d50", null ],
+    [ "axi_adc_set_calib_phase_scale", "axi__adc__core_8c.html#ae36b237348e2791fc03dae04d8037a6d", null ],
+    [ "axi_adc_set_calib_scale", "axi__adc__core_8c.html#a7e5138632b8d83ba3329b26ef1dc5547", null ],
+    [ "axi_adc_set_pnsel", "axi__adc__core_8c.html#afdaae27794182d7114aa087c1871b908", null ],
+    [ "axi_adc_update_active_channels", "axi__adc__core_8c.html#a7e7072ec229da6c82b28c7b0190de9e7", null ],
+    [ "axi_adc_write", "axi__adc__core_8c.html#a36e08676f520fb7136782dee9a0d3410", null ],
+    [ "axi_slave_adc_read", "axi__adc__core_8c.html#a341c025aea80c98584a8ddb1bcbe543b", null ],
+    [ "axi_slave_adc_write", "axi__adc__core_8c.html#a919a0b100edcc160ea1f48e7c52afe01", null ]
+];

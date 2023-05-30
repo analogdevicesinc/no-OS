@@ -1,0 +1,24 @@
+<map id="ad5449_set_input_shift_reg" name="ad5449_set_input_shift_reg">
+<area shape="rect" id="Node000001" title="Write to input register and read from output register via SPI." alt="" coords="395,263,595,289"/>
+<area shape="rect" id="Node000002" href="$ad5449_8c.html#af280fd25373806a9b93466b0547c6b98" title="Set up the scale where to the output will be cleared on active CLR signal." alt="" coords="174,5,325,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="481,252,461,210,431,158,392,105,345,59,324,47,326,42,348,55,396,102,436,155,465,207,485,249"/>
+<area shape="rect" id="Node000003" href="$ad5449_8c.html#a469859e117351ccd205130c057be1b25" title="Enable/disable the Daisy&#45;Chain mode." alt="" coords="172,69,327,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="473,254,420,194,384,160,345,130,310,112,313,107,348,126,387,156,423,190,477,251"/>
+<area shape="rect" id="Node000004" href="$ad5449_8c.html#a14e962c5ae4576ef28a4fa7f6d38df91" title="Initialize SPI and Initial Values for AD5449 Board." alt="" coords="5,106,104,131"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="468,256,414,214,381,192,346,174,282,153,217,138,104,124,104,118,218,133,284,148,348,170,383,188,417,209,471,252"/>
+<area shape="rect" id="Node000005" href="$ad5449_8c.html#ab49a4ca1f6c0a9887c3da20e514e8d1e" title="Load the DAC input registers. This function has a physical result just with devices with two channels..." alt="" coords="185,185,313,210"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="449,261,346,224,306,213,307,208,347,219,451,256"/>
+<area shape="rect" id="Node000006" href="$ad5449_8c.html#a71a141b35ecda6b266f52956fe66fa57" title="Load selected DAC input register with a given value." alt="" coords="168,234,331,259"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="381,265,330,259,331,254,381,260"/>
+<area shape="rect" id="Node000007" href="$ad5449_8c.html#abbdeaf0124ab0bc9cad2dccd14fffe92" title="Loads and updates the selected DAC with a given value." alt="" coords="171,284,328,324"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="381,292,328,298,328,292,381,286"/>
+<area shape="rect" id="Node000008" href="$ad5449_8c.html#ad6f6e34dc5add0c83ab132e0c9b2dffa" title="Read from the selected DAC register." alt="" coords="152,349,347,374"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="454,297,348,339,305,351,303,346,346,333,452,292"/>
+<area shape="rect" id="Node000009" href="$ad5449_8c.html#af67216933ba9f95001afc7e3826728c4" title="Set up the active clock edge of the SPI interface." alt="" coords="180,398,319,423"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="471,300,417,344,384,368,348,388,314,400,312,395,346,383,381,363,414,340,468,296"/>
+<area shape="rect" id="Node000010" href="$ad5449_8c.html#ad7db4cf424ae790dc274a57b84f32ff6" title="Control the SDO output driver strength. This function is supported by the devices : AD5415,..." alt="" coords="177,447,322,473"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="480,302,427,369,390,406,348,437,320,450,318,445,345,432,386,402,423,366,475,299"/>
+<area shape="rect" id="Node000011" href="$ad5449_8c.html#a71731a573d93a627e612e031ede50742" title="Update the DAC outputs. This function has a physical result just with devices with two channels." alt="" coords="177,497,322,522"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="485,303,465,344,435,393,396,444,348,486,323,499,321,494,345,482,392,440,430,390,460,341,480,301"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,106,104,114,104,109,158,100"/>
+</map>

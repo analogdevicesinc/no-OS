@@ -1,0 +1,8 @@
+<map id="drivers/adc/ad6673/ad6673.h" name="drivers/adc/ad6673/ad6673.h">
+<area shape="rect" id="Node000001" title="Header file of AD6673 Driver." alt="" coords="5,5,152,45"/>
+<area shape="rect" id="Node000002" href="$ad6673_8c.html" title="Implementation of AD6673 Driver." alt="" coords="5,181,152,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,59,52,94,49,113,52,133,60,158,70,180,65,182,55,160,47,134,44,113,47,93,59,57"/>
+<area shape="rect" id="Node000003" href="$ad6673__cfg_8h.html" title="Header file of AD6673 Driver Configuration." alt="" coords="61,93,208,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="101,56,125,92,120,95,96,58"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="117,146,93,183,89,180,113,144"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="ad5791_get_register_value" name="ad5791_get_register_value">
+<area shape="rect" id="Node000001" title="Reads the value of a register." alt="" coords="448,73,603,113"/>
+<area shape="rect" id="Node000002" href="$ad5791_8c.html#a479517b9876d7d00161ff6b977faca9d" title="Sets the DAC output in one of the three states." alt="" coords="216,5,400,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="465,70,399,45,361,33,363,28,401,39,467,65"/>
+<area shape="rect" id="Node000003" href="$ad5791_8c.html#a89753bea092705e1b56fc9ab9f0bd3a0" title="Configures the output amplifier, DAC coding, SDO state and the linearity error compensation." alt="" coords="251,55,365,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="434,85,364,77,365,71,434,79"/>
+<area shape="rect" id="Node000004" href="$ad5791_8c.html#a6811049d716e2c50e1f5a5f6e206cc85" title="SPI write to device using a mask." alt="" coords="219,104,397,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="434,105,398,109,397,104,434,100"/>
+<area shape="rect" id="Node000006" href="$cn0531_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="281,153,335,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="464,120,401,143,336,162,335,157,399,138,462,115"/>
+<area shape="rect" id="Node000005" href="$ad5791_8c.html#ac74ee2a2599c5317535cb9feceebd225" title="Set Linearity error compensation based on the reference voltage span." alt="" coords="5,104,168,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="205,119,168,119,168,114,205,114"/>
+</map>

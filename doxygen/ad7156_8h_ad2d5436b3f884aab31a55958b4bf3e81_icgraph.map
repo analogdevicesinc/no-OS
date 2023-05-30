@@ -1,0 +1,26 @@
+<map id="ad7156_get_register_value" name="ad7156_get_register_value">
+<area shape="rect" id="Node000001" title="Performs a burst read of a specified number of registers." alt="" coords="535,174,689,214"/>
+<area shape="rect" id="Node000002" href="$ad7156_8c.html#a6cd927732f1fadbef1401432166df250" title="Enables or disables conversion on the selected channel." alt="" coords="285,5,453,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="589,164,546,106,517,77,485,52,442,33,444,28,488,48,521,73,550,103,594,161"/>
+<area shape="rect" id="Node000003" href="$ad7156_8c.html#a4c777653d93acf42c71ad5cccb16e0af" title="Reads the range bits from the device and returns the range in pF." alt="" coords="298,107,441,132"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="554,171,486,146,440,134,442,129,487,141,556,166"/>
+<area shape="rect" id="Node000004" href="$ad7156_8c.html#aff4df363af93715fa75cd724df080892" title="Sets the input range of the specified channel." alt="" coords="34,57,175,83"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="582,166,539,128,513,110,486,96,446,83,405,74,322,63,243,62,175,65,175,59,243,56,322,58,406,69,448,78,488,92,516,106,542,123,585,162"/>
+<area shape="rect" id="Node000006" href="$ad7156_8c.html#abf1912546bb46e9017d48747a5398569" title="Initializes the communication peripheral and the initial Values for AD7156 Board." alt="" coords="320,156,419,181"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="520,187,418,176,419,171,521,182"/>
+<area shape="rect" id="Node000007" href="$ad7156_8c.html#ade01fa2388c868b3df58ef6d3f7ce692" title="Reads a 12&#45;bit sample from the selected channel." alt="" coords="269,205,469,231"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="521,206,470,211,469,205,520,200"/>
+<area shape="rect" id="Node000009" href="$ad7156_8c.html#a1baa5f16bef109f1bfe0258545891b66" title="Sets the converter mode of operation." alt="" coords="275,255,463,280"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="552,222,487,245,438,257,437,252,486,239,550,217"/>
+<area shape="rect" id="Node000010" href="$ad7156_8c.html#ae2b4dbcc2eb52fac731cd934577afe74" title="Selects the threshold mode of operation." alt="" coords="265,304,474,329"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="583,226,540,262,488,294,452,306,451,301,486,289,537,257,579,222"/>
+<area shape="rect" id="Node000011" href="$ad7156_8c.html#a58c404bee549781c62767a21ea475374" title="Waits for a finished CDC conversion and reads a 12&#45;bit sample from the selected channel." alt="" coords="252,353,487,379"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="595,228,552,288,522,319,488,344,463,356,461,351,485,340,519,315,548,285,591,225"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="287,107,173,85,174,80,288,102"/>
+<area shape="rect" id="Node000005" href="$ad7156_8c.html#aa80cfa5cd961c7bde4355b47eeab0675" title="Writes to the threshold register when threshold fixed mode is enabled." alt="" coords="22,107,187,132"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="284,122,188,122,188,117,284,117"/>
+<area shape="rect" id="Node000008" href="$ad7156_8c.html#a2441eed2bab5b9ca5ba44ce7ec31189b" title="Reads a sample the selected channel and converts the data to picofarads(pF)." alt="" coords="23,198,187,238"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="256,221,187,221,187,215,256,215"/>
+<area shape="rect" id="Node000012" href="$ad7156_8c.html#aadbc4753dd57c1a2296aaa705ea7829d" title="Waits for a finished CDC conversion the selected channel, reads a sample and converts the data to pic..." alt="" coords="5,346,204,386"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="238,369,204,369,204,363,238,363"/>
+</map>
