@@ -1,0 +1,35 @@
+<map id="projects/max22196/src/examples/basic/basic_example.c" name="projects/max22196/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title="Basic example sources file for max22196." alt="" coords="350,5,521,60"/>
+<area shape="rect" id="Node000002" href="$max22196_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header file for max22196." alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,57,134,107,133,102,349,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="372,63,266,105,264,100,370,58"/>
+<area shape="rect" id="Node000004" href="$max22196_8h.html" title="Header file of MAX22196 Driver." alt="" coords="312,108,415,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="415,62,384,99,380,96,411,58"/>
+<area shape="rect" id="Node000011" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="560,181,673,207"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="467,58,595,170,591,174,464,62"/>
+<area shape="rect" id="Node000012" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="574,108,710,133"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="499,58,603,100,601,105,497,63"/>
+<area shape="rect" id="Node000014" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="747,108,843,133"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="522,52,735,102,734,107,520,57"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="383,255,453,280"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="344,136,323,150,304,167,293,186,292,196,296,205,311,222,329,236,370,254,368,259,326,240,307,226,292,208,287,196,288,185,299,164,319,145,341,131"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="51,255,134,280"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="312,134,195,159,146,172,120,183,110,196,103,211,96,241,91,240,98,209,105,193,116,179,144,167,194,154,311,129"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="306,181,405,207"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="365,134,361,168,355,168,359,133"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="429,181,535,207"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="384,131,452,172,449,176,381,136"/>
+<area shape="rect" id="Node000009" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="131,181,231,207"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="335,136,224,179,222,174,333,131"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="368,205,401,242,397,246,364,209"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="473,209,439,246,435,243,469,205"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="220,204,370,249,368,254,218,209"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="168,209,119,248,116,244,165,205"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="159,255,229,280"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="185,207,192,241,187,242,180,207"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="586,209,464,252,463,247,584,204"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="698,181,765,207"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="658,131,708,170,704,175,655,135"/>
+<area shape="poly" id="edge19_Node000014_Node000005" title=" " alt="" coords="799,134,797,170,791,191,779,209,756,223,723,235,639,252,547,262,468,267,467,262,546,257,638,247,722,230,753,219,775,205,786,189,792,170,794,134"/>
+</map>

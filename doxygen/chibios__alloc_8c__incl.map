@@ -1,0 +1,13 @@
+<map id="drivers/platform/chibios/chibios_alloc.c" name="drivers/platform/chibios/chibios_alloc.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="103,5,281,45"/>
+<area shape="rect" id="Node000002" href="$no__os__alloc_8h.html" title=" " alt="" coords="30,93,141,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,48,114,87,111,83,165,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="165,93,219,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="195,46,195,79,189,79,189,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="243,93,314,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="215,44,257,82,254,86,211,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="80,120,56,157,52,154,75,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="97,167,167,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="95,118,119,154,115,157,91,120"/>
+</map>

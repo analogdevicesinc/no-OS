@@ -1,0 +1,13 @@
+<map id="ad5933_get_register_value" name="ad5933_get_register_value">
+<area shape="rect" id="Node000001" title="Reads the value of a register." alt="" coords="503,83,657,123"/>
+<area shape="rect" id="Node000002" href="$ad5933_8c.html#afc3dbd39564f171cbd400ea487774662" title="Reads the real and imaginary value from register." alt="" coords="294,41,429,66"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="489,85,418,69,419,63,490,80"/>
+<area shape="rect" id="Node000005" href="$ad5933_8c.html#a124cb2de4fbcb440c16006c4ca8e233c" title="Reads the temperature from the part and returns the data in degrees Celsius." alt="" coords="268,90,455,115"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="489,105,455,105,455,100,489,100"/>
+<area shape="rect" id="Node000006" href="$ad5933_8c.html#a170de42560e2a346b6e90b55094f1180" title="Starts the sweep operation." alt="" coords="283,139,439,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="490,126,419,142,418,137,489,120"/>
+<area shape="rect" id="Node000003" href="$ad5933_8c.html#a58b3907982945d725fa5c40b8b548869" title="Reads the real and the imaginary data and calculates the Gain Factor." alt="" coords="27,5,198,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="280,47,198,38,199,32,280,42"/>
+<area shape="rect" id="Node000004" href="$ad5933_8c.html#af7159e3dc1e00ce2e03c2943aad4aa34" title="Reads the real and the imaginary data and calculates the Impedance." alt="" coords="5,70,220,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="280,66,220,73,220,67,280,60"/>
+</map>

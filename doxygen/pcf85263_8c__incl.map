@@ -1,0 +1,30 @@
+<map id="drivers/rtc/pcf85263/pcf85263.c" name="drivers/rtc/pcf85263/pcf85263.c">
+<area shape="rect" id="Node000001" title="Implementation of PCF85263 Driver." alt="" coords="102,5,254,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="8,240,78,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,42,57,62,37,76,21,95,13,111,9,127,11,163,20,198,33,227,28,229,15,200,6,164,4,127,8,109,17,92,33,73,54,57,100,37"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="30,93,98,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,48,94,87,91,83,149,43"/>
+<area shape="rect" id="Node000004" href="$pcf85263_8h.html" title="Header file of pcf85263 Driver." alt="" coords="284,93,378,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="216,43,298,85,295,89,213,48"/>
+<area shape="rect" id="Node000010" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="461,93,574,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="254,42,455,88,454,93,253,47"/>
+<area shape="rect" id="Node000011" href="$no__os__alloc_8h.html" title=" " alt="" coords="122,93,233,119"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="180,46,180,79,175,79,175,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="412,240,482,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="342,117,381,165,431,228,427,231,377,168,338,120"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="296,167,366,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="334,119,334,153,328,153,328,119"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="172,167,272,192"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="315,121,252,161,250,157,312,116"/>
+<area shape="rect" id="Node000009" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="442,167,540,192"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="358,116,453,159,451,163,356,121"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="194,195,86,237,84,232,192,190"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="259,189,399,234,398,239,257,195"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="180,240,263,265"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="224,192,224,226,219,226,219,192"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="486,194,463,230,459,227,481,191"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="531,117,554,151,559,172,555,193,543,208,529,221,497,239,494,234,526,217,539,205,550,191,554,173,549,153,527,120"/>
+<area shape="poly" id="edge16_Node000011_Node000002" title=" " alt="" coords="142,121,104,140,86,153,70,168,55,197,48,227,43,225,50,195,66,165,82,149,101,135,140,116"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="80,167,147,192"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="169,121,135,158,131,155,165,117"/>
+</map>

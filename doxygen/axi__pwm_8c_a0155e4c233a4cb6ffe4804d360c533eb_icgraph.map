@@ -1,0 +1,7 @@
+<map id="axi_pwm_set_period" name="axi_pwm_set_period">
+<area shape="rect" id="Node000001" title="Set period of PWM generator device." alt="" coords="265,5,421,31"/>
+<area shape="rect" id="Node000002" href="$axi__pwm_8c.html#ae2588a2dad883803d9fc8f036c1c5dcb" title="Initialize the pwm axi generator and the handler associated with it." alt="" coords="108,5,217,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,21,218,21,218,15,251,15"/>
+<area shape="rect" id="Node000003" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

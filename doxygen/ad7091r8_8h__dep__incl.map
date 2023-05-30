@@ -1,0 +1,13 @@
+<map id="drivers/adc/ad7091r8/ad7091r8.h" name="drivers/adc/ad7091r8/ad7091r8.h">
+<area shape="rect" id="Node000001" title="Implementation of AD7091R&#45;8 driver header file." alt="" coords="293,5,452,45"/>
+<area shape="rect" id="Node000002" href="$ad7091r8_8c.html" title="Implementation of AD7091R&#45;8 Driver." alt="" coords="5,101,164,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,52,144,103,142,98,301,47"/>
+<area shape="rect" id="Node000003" href="$iio__ad7091r8_8c.html" title="Implementation of IIO AD7091R8 Driver." alt="" coords="188,101,347,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,56,290,103,287,99,340,52"/>
+<area shape="rect" id="Node000004" href="$ad7091r8-sdz_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad7091r8&#45;sdz examples." alt="" coords="371,101,585,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="406,52,458,99,455,103,402,56"/>
+<area shape="rect" id="Node000006" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for ad7091r8&#45;sdz project." alt="" coords="610,93,799,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="454,47,612,91,610,96,452,52"/>
+<area shape="rect" id="Node000005" href="$ad7091r8-sdz_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad7091r8&#45;sdz example." alt="" coords="371,196,585,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="481,154,481,196,475,196,475,154"/>
+</map>

@@ -1,0 +1,38 @@
+<map id="ad713x_spi_reg_write" name="ad713x_spi_reg_write">
+<area shape="rect" id="Node000001" title="Write to device." alt="" coords="821,299,985,325"/>
+<area shape="rect" id="Node000002" href="$ad713x_8c.html#aeebe94d6a7a09c6dc2a17fb2e2a5858c" title="Initialize the device." alt="" coords="141,270,240,295"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="881,291,829,235,751,163,705,127,654,93,601,63,546,40,483,19,430,9,406,9,380,14,353,24,323,40,293,63,267,92,246,125,230,159,207,224,197,271,191,269,202,223,225,157,242,122,263,89,289,59,320,35,351,19,379,9,405,4,431,3,484,14,548,35,603,58,657,88,708,123,754,159,832,231,885,287"/>
+<area shape="rect" id="Node000004" href="$ad713x_8c.html#a293d6298174f55ffeffa3649a9e661aa" title="SPI write to device using a mask." alt="" coords="595,299,773,325"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="808,315,773,315,773,309,808,309"/>
+<area shape="rect" id="Node000008" href="$cn0561_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="163,582,218,607"/>
+<area shape="poly" id="edge21_Node000001_Node000008" title=" " alt="" coords="885,337,833,395,755,469,709,507,658,542,604,573,548,597,502,610,455,617,361,620,278,613,218,603,219,598,279,608,361,615,454,612,501,605,546,592,602,568,655,538,706,503,752,465,829,391,881,334"/>
+<area shape="rect" id="Node000003" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,330,60,355"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="145,303,61,335,59,330,143,298"/>
+<area shape="rect" id="Node000005" href="$ad713x_8c.html#a4a2313d11b9b01c9c0513e2536c3bf24" title="Multidevice synchronization between channels on different devices." alt="" coords="108,447,273,473"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="675,339,657,376,630,420,593,463,572,481,548,496,505,512,459,520,412,520,366,516,283,497,221,475,222,470,284,492,367,511,412,515,458,514,503,507,546,491,569,477,590,459,625,417,652,373,670,336"/>
+<area shape="rect" id="Node000006" href="$ad713x_8c.html#afe7b88477a788866018549d0fbd772e7" title="Enable/Disable CLKOUT output." alt="" coords="340,149,528,174"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="662,290,613,238,581,212,545,189,514,177,516,172,548,184,584,207,616,235,666,287"/>
+<area shape="rect" id="Node000007" href="$ad713x_8c.html#a9bde2318f0a6aae97235df92824770ca" title="Digital filter type selection for each channel." alt="" coords="343,557,525,582"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="677,339,660,383,633,437,596,492,573,517,548,540,510,559,508,554,545,535,569,514,591,489,628,434,655,380,672,337"/>
+<area shape="rect" id="Node000009" href="$ad713x_8c.html#ad4d91646cb5ae2811b0ce4dba1e81e05" title="DOUTx output format configuration." alt="" coords="355,199,513,239"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="644,296,546,253,510,241,512,236,548,248,646,291"/>
+<area shape="rect" id="Node000010" href="$ad713x_8c.html#a1104462843a912706f8fbc7dd71047f1" title="Magnitude and phase matching calibration clock delay enable for all channels at 2 clock delay...." alt="" coords="345,263,523,303"/>
+<area shape="poly" id="edge12_Node000004_Node000010" title=" " alt="" coords="580,303,523,296,524,291,581,297"/>
+<area shape="rect" id="Node000011" href="$ad713x_8c.html#a982a923283f9d0494ae6f9d8c7debf2c" title="Change magnitude and phase calibration clock delay mode for a specific channel." alt="" coords="345,441,523,481"/>
+<area shape="poly" id="edge14_Node000004_Node000011" title=" " alt="" coords="664,337,614,385,582,410,548,432,521,444,519,439,545,427,579,406,611,381,660,333"/>
+<area shape="rect" id="Node000012" href="$ad713x_8c.html#af1105e0368c71e013a517fa3959baf94" title="Enable/Disable reference gain correction." alt="" coords="321,327,547,353"/>
+<area shape="poly" id="edge15_Node000004_Node000012" title=" " alt="" coords="581,326,547,330,547,325,581,321"/>
+<area shape="rect" id="Node000013" href="$ad713x_8c.html#abd07d304db3a97bbbbff17a92e52e85b" title="ADC conversion data output frame control." alt="" coords="353,377,515,417"/>
+<area shape="poly" id="edge17_Node000004_Node000013" title=" " alt="" coords="639,333,548,367,506,380,504,375,546,362,637,328"/>
+<area shape="rect" id="Node000014" href="$ad713x_8c.html#a315e4a9808efd589b7637bfaf450a281" title="Device power mode control." alt="" coords="340,50,528,75"/>
+<area shape="poly" id="edge19_Node000004_Node000014" title=" " alt="" coords="672,288,656,244,629,189,592,135,570,110,545,89,525,78,527,73,548,85,574,106,597,131,634,187,661,241,677,286"/>
+<area shape="rect" id="Node000015" href="$ad713x_8c.html#a8c081cd3183727ce3142bbf328cbcf95" title="Select the wideband filter bandwidth for a channel. The option is relative to ODR,..." alt="" coords="338,99,530,125"/>
+<area shape="poly" id="edge20_Node000004_Node000015" title=" " alt="" coords="668,288,649,254,621,213,587,172,545,138,522,127,525,123,548,134,590,168,626,209,653,251,673,286"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="160,441,49,358,52,353,163,437"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="345,181,322,189,288,208,255,231,207,272,203,268,252,227,285,204,320,184,343,176"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="329,583,219,595,218,589,328,578"/>
+<area shape="poly" id="edge11_Node000009_Node000002" title=" " alt="" coords="345,245,241,273,239,267,343,240"/>
+<area shape="poly" id="edge13_Node000010_Node000002" title=" " alt="" coords="331,285,240,285,240,280,331,280"/>
+<area shape="poly" id="edge16_Node000012_Node000002" title=" " alt="" coords="362,327,321,317,240,298,241,292,322,312,364,322"/>
+<area shape="poly" id="edge18_Node000013_Node000002" title=" " alt="" coords="341,375,320,367,257,332,208,298,211,294,260,327,322,362,343,370"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="complete_callback" name="complete_callback">
+<area shape="rect" id="Node000001" title="Basic callback to an irq event." alt="" coords="172,5,316,31"/>
+<area shape="rect" id="Node000002" href="$i3c__dma__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution for I3C variant. Loops through two states:" alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

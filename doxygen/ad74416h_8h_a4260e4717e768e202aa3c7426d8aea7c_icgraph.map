@@ -1,0 +1,7 @@
+<map id="ad74416h_set_adc_channel_enable" name="ad74416h_set_adc_channel_enable">
+<area shape="rect" id="Node000001" title="Enable/disable a specific ADC channel." alt="" coords="244,23,445,63"/>
+<area shape="rect" id="Node000002" href="$ad74416h_8c.html#a60e2214d680d2e7461601ef123fb09a9" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="5,5,196,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,34,196,31,197,25,231,29"/>
+<area shape="rect" id="Node000003" href="$current__input__ext_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current input External power example main execution." alt="" coords="41,55,160,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,57,160,64,160,59,230,52"/>
+</map>

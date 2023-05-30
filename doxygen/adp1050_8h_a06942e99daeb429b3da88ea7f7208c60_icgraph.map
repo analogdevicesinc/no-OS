@@ -1,0 +1,11 @@
+<map id="adp1050_vout_scale" name="adp1050_vout_scale">
+<area shape="rect" id="Node000001" title="Set ADP1050 VOUT scale, regarding the resistor divider assigned to the VS pins." alt="" coords="349,55,504,80"/>
+<area shape="rect" id="Node000002" href="$iio__adp1050_8c.html#a982ad0e9e00139947e5d52eacc4f1eb0" title="Initializes the ADP1050 IIO descriptor." alt="" coords="172,5,301,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="363,54,286,33,287,28,365,49"/>
+<area shape="rect" id="Node000004" href="$adp1050_8c.html#afc314ab80bc8f5e20356cf5ac09b12e4" title="Trim IIN(CS1 pin)/VIN(VF pin)/VOUT(VS pin)." alt="" coords="181,55,293,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="336,70,293,70,293,65,336,65"/>
+<area shape="rect" id="Node000005" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="177,104,296,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="365,86,287,106,286,101,363,81"/>
+<area shape="rect" id="Node000003" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

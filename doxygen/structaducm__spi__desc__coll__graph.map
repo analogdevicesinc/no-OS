@@ -1,0 +1,7 @@
+<map id="aducm_spi_desc" name="aducm_spi_desc">
+<area shape="rect" id="Node000001" title="SPI specific descriptor for the ADuCM3029. The structure is available in the extra parameter from spi..." alt="" coords="117,93,247,119"/>
+<area shape="rect" id="Node000002" href="$structaducm__spi__init__param.html" title="Configuration structure sent in the extra parameter from no_os_spi_init_param." alt="" coords="5,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,38,171,91,167,95,111,42"/>
+<area shape="rect" id="Node000003" href="$structaducm__device__desc.html" title="Structure describing the physical SPI devices." alt="" coords="199,5,352,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,43,233,71,202,95,198,91,230,67,256,39"/>
+</map>

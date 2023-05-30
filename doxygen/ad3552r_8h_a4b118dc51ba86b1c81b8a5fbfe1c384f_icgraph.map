@@ -1,0 +1,13 @@
+<map id="ad3552r_ldac_trigger" name="ad3552r_ldac_trigger">
+<area shape="rect" id="Node000001" title=" " alt="" coords="564,31,723,56"/>
+<area shape="rect" id="Node000002" href="$ad3552r_8c.html#a19e686b2bc91948778bcbbfec309a3af" title=" " alt="" coords="339,5,516,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="550,35,516,31,517,26,551,30"/>
+<area shape="rect" id="Node000005" href="$generic__spi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="374,55,481,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="550,56,481,64,481,59,550,51"/>
+<area shape="rect" id="Node000003" href="$axi__qspi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="178,5,285,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,21,285,21,285,15,325,15"/>
+<area shape="rect" id="Node000004" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="164,21,124,21,124,15,164,15"/>
+<area shape="rect" id="Node000006" href="$generic__spi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="172,55,291,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="360,70,291,70,291,65,360,65"/>
+</map>

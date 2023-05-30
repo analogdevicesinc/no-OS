@@ -1,0 +1,7 @@
+<map id="lt3074_read_word_data" name="lt3074_read_word_data">
+<area shape="rect" id="Node000001" title="Perform a PMBus read word operation and converts to actual value." alt="" coords="363,5,537,31"/>
+<area shape="rect" id="Node000002" href="$lt3074_8c.html#a45b335595ece27fbe90a000129e0eb1b" title="Read a value." alt="" coords="172,5,315,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="349,21,315,21,315,15,349,15"/>
+<area shape="rect" id="Node000003" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="159,21,125,21,125,15,159,15"/>
+</map>

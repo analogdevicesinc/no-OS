@@ -1,0 +1,35 @@
+<map id="drivers/api/no_os_dma.c" name="drivers/api/no_os_dma.c">
+<area shape="rect" id="Node000001" title="Platform independent implementation for the DMA API." alt="" coords="312,5,492,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,92,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,33,106,81,105,76,345,28"/>
+<area shape="rect" id="Node000003" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="303,79,411,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="397,32,374,69,369,66,392,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="95,152,165,177"/>
+<area shape="poly" id="edge12_Node000001_Node000005" title=" " alt="" coords="317,33,222,53,183,66,157,81,147,93,140,108,134,139,128,138,135,106,143,90,154,77,180,61,221,48,316,28"/>
+<area shape="rect" id="Node000007" href="$no__os__list_8h.html" title="List library header." alt="" coords="451,152,550,177"/>
+<area shape="poly" id="edge20_Node000001_Node000007" title=" " alt="" coords="412,30,487,139,483,142,408,33"/>
+<area shape="rect" id="Node000009" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="331,152,427,177"/>
+<area shape="poly" id="edge16_Node000001_Node000009" title=" " alt="" coords="411,30,424,63,427,84,425,105,415,125,402,143,398,140,410,123,419,103,422,84,419,65,406,32"/>
+<area shape="rect" id="Node000010" href="$no__os__mutex_8h.html" title=" " alt="" coords="575,152,696,177"/>
+<area shape="poly" id="edge15_Node000001_Node000010" title=" " alt="" coords="422,29,607,142,604,147,419,33"/>
+<area shape="rect" id="Node000011" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="686,79,795,104"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="457,28,673,73,672,78,456,33"/>
+<area shape="rect" id="Node000013" href="$no__os__alloc_8h.html" title=" " alt="" coords="168,79,279,104"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="374,33,266,76,264,71,372,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="190,152,257,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="336,106,258,148,256,143,334,102"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="321,107,179,151,178,146,319,101"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="344,225,415,251"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="348,106,325,138,319,157,322,176,335,197,353,215,349,218,331,201,317,178,314,157,320,136,343,103"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="381,102,466,143,464,148,379,106"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="363,104,374,138,369,140,358,105"/>
+<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="402,101,578,146,576,151,401,107"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="483,180,412,221,409,216,480,175"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="459,225,542,251"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="503,178,503,212,498,212,498,178"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="382,178,382,212,377,212,377,178"/>
+<area shape="rect" id="Node000012" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="720,152,788,177"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="745,104,752,138,747,139,740,105"/>
+<area shape="poly" id="edge18_Node000013_Node000004" title=" " alt="" coords="226,104,226,138,221,138,221,104"/>
+<area shape="poly" id="edge19_Node000013_Node000005" title=" " alt="" coords="210,106,158,146,154,141,207,102"/>
+</map>

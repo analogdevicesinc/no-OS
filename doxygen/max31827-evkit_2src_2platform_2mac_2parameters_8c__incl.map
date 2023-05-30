@@ -1,0 +1,27 @@
+<map id="projects/max31827&#45;evkit/src/platform/mac/parameters.c" name="projects/max31827&#45;evkit/src/platform/mac/parameters.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="175,5,402,45"/>
+<area shape="rect" id="Node000002" href="$max31827-evkit_2src_2platform_2mac_2parameters_8h.html" title=" " alt="" coords="234,93,343,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,46,291,79,286,79,286,46"/>
+<area shape="rect" id="Node000003" href="$ftd2xx__uart_8h.html" title=" " alt="" coords="189,167,297,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="283,120,260,157,256,154,279,118"/>
+<area shape="rect" id="Node000009" href="$ftd2xx__i2c_8h.html" title=" " alt="" coords="310,240,411,265"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="297,118,351,226,346,229,292,120"/>
+<area shape="rect" id="Node000004" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="173,240,278,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="243,193,234,228,229,226,238,192"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="37,387,108,412"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="174,264,79,284,38,298,13,315,8,330,14,347,28,363,45,377,41,381,24,366,10,349,3,331,9,312,35,293,77,278,173,259"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="275,387,358,412"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="245,264,270,284,293,312,307,342,315,372,310,374,302,344,289,315,266,288,242,268"/>
+<area shape="rect" id="Node000007" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="146,313,279,339"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="226,266,220,300,215,299,221,265"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="191,341,108,383,106,378,189,336"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="231,336,289,376,286,381,228,341"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="177,387,248,412"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="215,339,215,373,210,373,210,339"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="360,266,338,339,327,374,322,373,333,338,355,265"/>
+<area shape="rect" id="Node000010" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="23,313,122,339"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="315,268,133,313,132,307,314,263"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="404,313,479,339"/>
+<area shape="poly" id="edge14_Node000009_Node000011" title=" " alt="" coords="375,263,420,302,416,306,372,267"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="75,339,75,373,70,373,70,339"/>
+</map>

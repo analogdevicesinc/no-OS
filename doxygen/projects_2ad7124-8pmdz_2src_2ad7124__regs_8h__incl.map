@@ -1,0 +1,21 @@
+<map id="projects/ad7124&#45;8pmdz/src/ad7124_regs.h" name="projects/ad7124&#45;8pmdz/src/ad7124_regs.h">
+<area shape="rect" id="Node000001" title="AD7124 register file." alt="" coords="156,5,331,45"/>
+<area shape="rect" id="Node000002" href="$ad7124_8h.html" title="AD7124 header file. Devices: AD7124&#45;4, AD7124&#45;8." alt="" coords="202,93,285,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,46,246,79,241,79,241,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="165,240,236,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="227,121,203,141,184,168,181,182,182,198,190,227,185,228,176,198,176,182,180,166,199,137,223,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="414,240,497,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="285,107,320,113,359,123,397,140,431,165,449,194,456,226,451,227,444,196,427,168,394,144,357,128,319,118,284,112"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="194,167,293,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="246,119,246,153,241,153,241,119"/>
+<area shape="rect" id="Node000006" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,167,119,192"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="215,121,105,164,103,159,213,116"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="317,167,417,192"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="265,116,337,157,334,162,262,121"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="239,194,217,230,212,227,234,191"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="85,190,167,231,165,236,83,194"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="342,194,241,237,239,232,340,190"/>
+<area shape="poly" id="edge11_Node000007_Node000004" title=" " alt="" coords="383,190,432,229,429,233,380,194"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="319,240,389,265"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="368,193,361,227,356,226,363,192"/>
+</map>

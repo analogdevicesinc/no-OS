@@ -1,0 +1,5 @@
+<map id="adis_get_deltaangl_scale" name="adis_get_deltaangl_scale">
+<area shape="rect" id="Node000001" title="Read adis device delta angle scale in fractional form." alt="" coords="203,5,348,45"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="5,13,155,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,28,155,28,155,23,189,23"/>
+</map>

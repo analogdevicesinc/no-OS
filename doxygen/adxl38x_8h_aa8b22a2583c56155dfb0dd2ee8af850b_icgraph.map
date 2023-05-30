@@ -1,0 +1,15 @@
+<map id="adxl38x_get_op_mode" name="adxl38x_get_op_mode">
+<area shape="rect" id="Node000001" title="Gets the current operation mode of the device." alt="" coords="649,132,819,157"/>
+<area shape="rect" id="Node000002" href="$adxl38x_8c.html#ac7d2f189eea39934e801c243fbb6175f" title="Reads the raw output data using burst read." alt="" coords="432,56,601,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="683,130,553,84,555,79,685,125"/>
+<area shape="rect" id="Node000004" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="5,56,165,81"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="635,136,165,81,166,75,636,131"/>
+<area shape="rect" id="Node000005" href="$adxl38x_8c.html#ada2c338dfa91317699e28a7febad15d3" title="Reads the raw output data using continuous read." alt="" coords="435,157,598,183"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="636,159,599,163,598,158,635,153"/>
+<area shape="rect" id="Node000006" href="$adxl38x_8c.html#a84bdfe34c402d7941796106b0885cc3a" title="Reads the raw temperature data using burst read." alt="" coords="445,207,588,232"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="690,165,602,198,566,209,564,204,600,193,688,160"/>
+<area shape="rect" id="Node000003" href="$adxl38x_8c.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="213,5,384,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="447,55,353,33,355,28,449,50"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="418,71,165,71,165,66,418,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="232,37,140,59,139,53,230,31"/>
+</map>

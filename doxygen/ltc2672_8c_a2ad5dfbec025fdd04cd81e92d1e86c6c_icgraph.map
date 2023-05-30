@@ -1,0 +1,5 @@
+<map id="ltc2672_set_code_channel" name="ltc2672_set_code_channel">
+<area shape="rect" id="Node000001" title="sets the dac code for channel" alt="" coords="204,13,397,38"/>
+<area shape="rect" id="Node000002" href="$ltc2672_8c.html#ac94ad5cab8fa0c407aeda8139638dd8c" title="set the current for a selected DAC channel" alt="" coords="5,5,156,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,28,157,28,157,23,190,23"/>
+</map>

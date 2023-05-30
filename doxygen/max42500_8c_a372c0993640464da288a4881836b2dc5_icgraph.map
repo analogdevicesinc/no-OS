@@ -1,0 +1,5 @@
+<map id="max42500_set_uv_thresh1" name="max42500_set_uv_thresh1">
+<area shape="rect" id="Node000001" title="Set the undervoltage threshold of VM1 to VM5." alt="" coords="213,5,411,31"/>
+<area shape="rect" id="Node000002" href="$max42500_2src_2examples_2basic_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,21,165,21,165,15,200,15"/>
+</map>

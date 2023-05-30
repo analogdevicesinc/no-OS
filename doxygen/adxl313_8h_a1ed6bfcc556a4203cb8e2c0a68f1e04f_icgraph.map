@@ -1,0 +1,19 @@
+<map id="adxl313_set_range" name="adxl313_set_range">
+<area shape="rect" id="Node000001" title=" " alt="" coords="629,91,775,116"/>
+<area shape="rect" id="Node000002" href="$adxl313_8c.html#a27d58d94fd379ab1535959618d2e9b07" title=" " alt="" coords="399,40,581,66"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="634,90,543,68,544,63,635,85"/>
+<area shape="rect" id="Node000003" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,40,165,66"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="674,84,632,54,607,40,581,30,520,17,457,10,394,8,332,11,220,25,135,43,134,38,220,20,332,6,394,3,458,4,521,11,582,25,609,35,635,49,677,80"/>
+<area shape="rect" id="Node000004" href="$adxl313_8c.html#a281a09a49200d12ecd93ed5bd9280946" title=" " alt="" coords="400,142,580,167"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="635,122,544,144,543,139,634,117"/>
+<area shape="rect" id="Node000005" href="$iio__adxl313_8c.html#ae25b9cd3de1b08c9797d8bd11778471f" title=" " alt="" coords="219,167,345,192"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="677,128,635,158,609,172,582,182,520,195,456,199,396,197,344,192,345,187,397,192,456,193,519,189,581,177,607,167,632,153,674,123"/>
+<area shape="rect" id="Node000007" href="$adxl313_8c.html#ac1a3c5c02583812f53aa9def997270c0" title=" " alt="" coords="213,91,351,116"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="615,106,351,106,351,101,615,101"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="385,56,166,56,166,50,385,50"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="387,170,345,175,345,169,386,164"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="423,141,334,119,335,114,424,136"/>
+<area shape="rect" id="Node000006" href="$eval-adxl313z_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,167,157,192"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="205,182,157,182,157,177,205,177"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="218,90,135,68,136,63,219,85"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="axi_adc_set_calib_phase_scale" name="axi_adc_set_calib_phase_scale">
+<area shape="rect" id="Node000001" title="Calibrate phase for specific AXI ADC channel." alt="" coords="236,23,419,63"/>
+<area shape="rect" id="Node000002" href="$axi__adc__core_8c.html#add160e0d47dc5a3c833ac87863945d50" title="Calibrate phase for specific AXI ADC channel." alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,34,188,31,188,25,223,29"/>
+<area shape="rect" id="Node000003" href="$axi__adc__core_8c.html#a7e5138632b8d83ba3329b26ef1dc5547" title="Calibrate scale for specific AXI ADC channel." alt="" coords="7,55,186,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,57,187,61,186,55,222,52"/>
+</map>

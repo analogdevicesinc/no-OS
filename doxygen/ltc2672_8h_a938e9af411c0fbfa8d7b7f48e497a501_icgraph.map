@@ -1,0 +1,9 @@
+<map id="ltc2672_enable_toggle_channel" name="ltc2672_enable_toggle_channel">
+<area shape="rect" id="Node000001" title="enables or disables selected channel/s for toggling" alt="" coords="220,55,389,95"/>
+<area shape="rect" id="Node000002" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="9,5,169,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,54,137,33,138,28,216,49"/>
+<area shape="rect" id="Node000003" href="$ltc2672_8c.html#a0e50093dfbdf5c727590dfe7e9545f70" title="writes to the input registers of all channels" alt="" coords="5,55,172,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,78,172,78,172,73,206,73"/>
+<area shape="rect" id="Node000004" href="$ltc2672_8c.html#a6147850fb033cb0cee82f3615f85a703" title="writes to the input register of a channel" alt="" coords="13,119,164,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,102,157,122,156,117,222,97"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="ad4110_init_param" name="ad4110_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1216,163,1363,189"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="947,133,1109,158"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1123,154,1216,165,1215,170,1122,159"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,43,184,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="190,39,314,25,469,17,554,17,640,21,725,30,809,44,867,61,923,85,1007,130,1005,135,921,90,865,66,807,49,724,35,639,26,554,22,470,22,315,31,191,44"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="658,98,781,123"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,58,388,71,607,91,658,98,657,103,606,96,388,76,198,64"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,105,471,130"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,70,209,87,324,106,323,112,207,92,147,75"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,157,472,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,170,947,147,947,152,486,176"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,158,606,133,663,121,664,126,607,139,486,163"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="795,116,947,134,946,139,794,122"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="688,83,698,75,719,71,737,74,748,80,751,90,746,99,741,97,746,89,744,83,736,79,719,77,700,80,692,87"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,113,658,109,658,115,484,118"/>
+<area shape="rect" id="Node000007" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="953,187,1103,213"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1116,198,1192,193,1235,186,1236,191,1192,199,1116,203"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="631,229,808,254"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="822,225,953,207,953,213,822,230"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="w5500_socket_clear_interrupt" name="w5500_socket_clear_interrupt">
+<area shape="rect" id="Node000001" title="Clear specific socket interrupt flags." alt="" coords="203,5,356,45"/>
+<area shape="rect" id="Node000002" href="$w5500_8c.html#a5a5e49b2bdaf0ce3d53b445a164a1169" title="Receive data from a socket." alt="" coords="5,13,155,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,28,155,28,155,23,189,23"/>
+</map>

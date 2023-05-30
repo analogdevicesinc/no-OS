@@ -1,0 +1,5 @@
+<map id="flash_save_calibration_channel" name="flash_save_calibration_channel">
+<area shape="rect" id="Node000001" title="Save current calibration context to flash for specified channel." alt="" coords="175,5,341,45"/>
+<area shape="rect" id="Node000002" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="5,13,127,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,28,127,28,127,23,161,23"/>
+</map>

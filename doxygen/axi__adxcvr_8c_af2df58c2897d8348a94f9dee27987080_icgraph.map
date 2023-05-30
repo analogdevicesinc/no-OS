@@ -1,0 +1,29 @@
+<map id="adxcvr_write" name="adxcvr_write">
+<area shape="rect" id="Node000001" title="AXI ADXCVR Write." alt="" coords="541,252,648,277"/>
+<area shape="rect" id="Node000002" href="$axi__adxcvr_8c.html#a149984176c30c12dad5c193f4746fcb5" title="AXI ADXCVR Clock Disable." alt="" coords="347,80,493,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="569,244,433,108,436,104,573,240"/>
+<area shape="rect" id="Node000006" href="$axi__adxcvr_8c.html#a508bce6b00ea4fb0e316517b9c6dd0f9" title="AXI ADXCVR Clock Enable." alt="" coords="349,203,491,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="535,251,465,231,467,226,537,246"/>
+<area shape="rect" id="Node000012" href="$axi__adxcvr_8c.html#a8d899f5b5004a4f001e45d725c0469f0" title="AXI ADXCVR DPR Port Read." alt="" coords="355,252,485,277"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="528,267,485,267,485,262,528,262"/>
+<area shape="rect" id="Node000013" href="$axi__adxcvr_8c.html#aced69997b25476d0e77f8e3f99e40995" title="AXI ADXCVR DPR Port Write." alt="" coords="353,301,487,327"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="537,284,467,304,465,299,535,279"/>
+<area shape="rect" id="Node000014" href="$axi__adxcvr_8c.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="AXI ADXCVR Device Initialization." alt="" coords="373,351,467,376"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="571,288,536,316,495,342,468,353,466,348,492,337,533,311,567,284"/>
+<area shape="rect" id="Node000003" href="$axi__adxcvr_8c.html#a95953cb03a2a6cffae96b78658b1e8f2" title=" " alt="" coords="108,5,299,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="378,77,298,45,259,33,261,28,300,39,380,72"/>
+<area shape="rect" id="Node000004" href="$jesd204__clk_8c.html#ac6c34646d1c05b88bf73af88f24bf6c4" title=" " alt="" coords="127,55,280,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="332,85,280,79,281,74,333,80"/>
+<area shape="rect" id="Node000005" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="176,104,231,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="333,105,231,116,231,111,333,100"/>
+<area shape="rect" id="Node000007" href="$axi__adxcvr_8c.html#a32cf9657d258ef0794e9c9e5c2d9337c" title=" " alt="" coords="109,153,297,179"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="350,202,259,181,261,176,351,197"/>
+<area shape="rect" id="Node000008" href="$app__transceiver_8c.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="146,203,261,228"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="335,218,261,218,261,213,335,213"/>
+<area shape="rect" id="Node000010" href="$jesd204__clk_8c.html#a6e197a63ac1e02eb48611524cfe27f67" title=" " alt="" coords="128,252,279,277"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="351,234,261,255,259,249,350,228"/>
+<area shape="rect" id="Node000011" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="176,301,231,327"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="359,236,348,242,334,254,325,266,316,279,300,291,265,306,231,313,230,308,263,301,297,286,312,275,321,263,330,250,345,237,356,231"/>
+<area shape="rect" id="Node000009" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,203,60,228"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="132,218,60,218,60,213,132,213"/>
+</map>

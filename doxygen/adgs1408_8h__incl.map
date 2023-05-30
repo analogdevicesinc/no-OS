@@ -1,0 +1,8 @@
+<map id="drivers/mux/adgs1408/adgs1408.h" name="drivers/mux/adgs1408/adgs1408.h">
+<area shape="rect" id="Node000001" title="Header file of ADGS1408 Driver." alt="" coords="5,5,172,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,167,124,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,46,75,80,74,118,82,153,77,154,69,119,70,79,79,45"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="83,93,182,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="102,44,122,80,117,83,97,47"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="128,120,105,156,101,154,123,118"/>
+</map>

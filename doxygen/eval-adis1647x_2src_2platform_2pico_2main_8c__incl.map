@@ -1,0 +1,11 @@
+<map id="projects/eval&#45;adis1647x/src/platform/pico/main.c" name="projects/eval&#45;adis1647x/src/platform/pico/main.c">
+<area shape="rect" id="Node000001" title="Main file for pico platform of eval&#45;adis1647x project." alt="" coords="151,5,335,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,48,118,90,116,85,203,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="180,93,307,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,46,246,79,241,79,241,46"/>
+<area shape="rect" id="Node000004" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="331,93,441,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="279,43,354,84,352,89,276,48"/>
+<area shape="rect" id="Node000005" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="352,167,420,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="389,119,389,153,383,153,383,119"/>
+</map>
