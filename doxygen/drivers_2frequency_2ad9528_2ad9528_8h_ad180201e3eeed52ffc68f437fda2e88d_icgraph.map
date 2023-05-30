@@ -1,0 +1,9 @@
+<map id="ad9528_spi_read_n" name="ad9528_spi_read_n">
+<area shape="rect" id="node1" title="Reads the value of the selected register." alt="" coords="513,56,660,83"/>
+<area shape="rect" id="node2" href="$drivers_2frequency_2ad9528_2ad9528_8c.html#a18cfa7989b6c7af9ee4829234b16fc8b" title="Get the current frequency of the clock." alt="" coords="291,5,465,32"/>
+<area shape="rect" id="node3" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#afb5d83bae28bbba78e1e1c786b8927a0" title="Set channel rate." alt="" coords="300,56,456,83"/>
+<area shape="rect" id="node6" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#a2f2e5cde9a42164c6e8508b5641eb176" title="Poll register." alt="" coords="327,107,429,133"/>
+<area shape="rect" id="node4" href="$ad9083_2src_2app__clocking_8h.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="108,56,243,83"/>
+<area shape="rect" id="node5" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node7" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#a508b6010b53efae6c7746aef27414b43" title="Updates the AD9528 configuration." alt="" coords="122,107,229,133"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="stm32_spi_desc" name="stm32_spi_desc">
+<area shape="rect" id="node1" title="stm32 platform specific SPI descriptor" alt="" coords="1007,137,1133,164"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="651,5,823,32"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="322,85,510,112"/>
+<area shape="rect" id="node14" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="671,160,803,187"/>
+<area shape="rect" id="node4" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="357,356,475,383"/>
+<area shape="rect" id="node5" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="949,357,1191,384"/>
+<area shape="rect" id="node6" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="670,211,803,237"/>
+<area shape="rect" id="node7" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="321,156,511,183"/>
+<area shape="rect" id="node8" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="341,207,491,233"/>
+<area shape="rect" id="node9" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,207,183,233"/>
+<area shape="rect" id="node10" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="15,405,173,432"/>
+<area shape="rect" id="node11" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="32,355,156,381"/>
+<area shape="rect" id="node12" href="$structstm32__gpio__init__param.html" title="Structure holding the initialization parameters for stm32 platform." alt="" coords="649,56,824,83"/>
+<area shape="rect" id="node13" href="$structstm32__dma__channel.html" title="STM32 DMA Channels." alt="" coords="658,109,815,136"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="ltc2992_dev" name="ltc2992_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="123,273,225,300"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="33,184,165,211"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,95,193,121"/>
+<area shape="rect" id="node4" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="190,184,313,211"/>
+<area shape="rect" id="node5" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="178,5,357,32"/>
+<area shape="rect" id="node6" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="361,95,507,121"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="stm32_spi_init_param" name="stm32_spi_init_param">
+<area shape="rect" id="node1" title="Structure holding the initialization parameters for stm32 platform specific SPI parameters." alt="" coords="73,199,239,225"/>
+<area shape="rect" id="node2" href="$structstm32__dma__channel.html" title="STM32 DMA Channels." alt="" coords="5,95,163,121"/>
+<area shape="rect" id="node3" href="$structno__os__dma__init__param.html" title="Initialization parameter for the DMA controller." alt="" coords="187,95,360,121"/>
+<area shape="rect" id="node4" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="179,5,368,32"/>
+</map>

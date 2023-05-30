@@ -1,0 +1,13 @@
+<map id="drivers/platform/stm32/stm32_dma.h" name="drivers/platform/stm32/stm32_dma.h">
+<area shape="rect" id="node1" title="Platform independent function definitions and data types for the DMA API." alt="" coords="269,5,441,47"/>
+<area shape="rect" id="node2" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="237,95,345,121"/>
+<area shape="rect" id="node10" href="$stm32__hal_8h.html" title=" " alt="" coords="491,95,594,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,72,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="97,169,167,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="255,244,326,271"/>
+<area shape="rect" id="node6" href="$no__os__list_8h.html" title="List library header." alt="" coords="363,169,461,196"/>
+<area shape="rect" id="node8" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="243,169,339,196"/>
+<area shape="rect" id="node9" href="$no__os__mutex_8h.html" title=" " alt="" coords="486,169,607,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="371,244,453,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="632,169,699,196"/>
+</map>

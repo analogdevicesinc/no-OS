@@ -1,0 +1,13 @@
+<map id="no_os_irq_ctrl_remove" name="no_os_irq_ctrl_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_irq_ctrl_init()." alt="" coords="761,132,931,159"/>
+<area shape="rect" id="node2" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="521,5,713,32"/>
+<area shape="rect" id="node3" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="536,56,699,83"/>
+<area shape="rect" id="node5" href="$intrpt__handler_8h.html#a02c354e260745a4c096276213983128d" title="Initialize interrupt from ade9430 for STATUS polling." alt="" coords="564,107,671,133"/>
+<area shape="rect" id="node9" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="590,157,645,184"/>
+<area shape="rect" id="node10" href="$stm32__dma_8c.html#a9a2bedfbb3463411630b83a164f4e782" title="Free the resources allocated for a DMA descriptor." alt="" coords="539,208,695,235"/>
+<area shape="rect" id="node11" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="538,259,697,285"/>
+<area shape="rect" id="node4" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="313,56,473,83"/>
+<area shape="rect" id="node6" href="$afe__config_8h.html#aa5ae2b85e6ae493033c208fb2afbf145" title="Initializes SPI handler, AFE register values." alt="" coords="358,107,429,133"/>
+<area shape="rect" id="node7" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,107,265,133"/>
+<area shape="rect" id="node8" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,107,60,133"/>
+</map>

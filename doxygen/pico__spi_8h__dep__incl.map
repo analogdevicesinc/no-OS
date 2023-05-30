@@ -1,0 +1,20 @@
+<map id="drivers/platform/pico/pico_spi.h" name="drivers/platform/pico/pico_spi.h">
+<area shape="rect" id="node1" title="Header file for the pico spi driver." alt="" coords="975,5,1133,47"/>
+<area shape="rect" id="node2" href="$pico__spi_8c.html" title="Implementation of pico spi driver." alt="" coords="5,102,164,143"/>
+<area shape="rect" id="node3" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by adxrs290 project." alt="" coords="189,102,415,143"/>
+<area shape="rect" id="node5" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1646x project." alt="" coords="439,102,666,143"/>
+<area shape="rect" id="node7" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1647x project." alt="" coords="690,102,917,143"/>
+<area shape="rect" id="node9" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1650x project." alt="" coords="941,102,1167,143"/>
+<area shape="rect" id="node11" href="$eval-adis1654x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1654x project." alt="" coords="1191,102,1418,143"/>
+<area shape="rect" id="node13" href="$eval-adis1655x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1655x project." alt="" coords="1442,102,1669,143"/>
+<area shape="rect" id="node15" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1657x project." alt="" coords="1693,102,1919,143"/>
+<area shape="rect" id="node17" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="1944,95,2121,151"/>
+<area shape="rect" id="node4" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by adxrs290 project." alt="" coords="189,206,415,247"/>
+<area shape="rect" id="node6" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1646x project." alt="" coords="439,206,666,247"/>
+<area shape="rect" id="node8" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1647x project." alt="" coords="690,206,917,247"/>
+<area shape="rect" id="node10" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1650x project." alt="" coords="941,206,1167,247"/>
+<area shape="rect" id="node12" href="$eval-adis1654x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1654x project." alt="" coords="1191,206,1418,247"/>
+<area shape="rect" id="node14" href="$eval-adis1655x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1655x project." alt="" coords="1442,206,1669,247"/>
+<area shape="rect" id="node16" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1657x project." alt="" coords="1693,206,1919,247"/>
+<area shape="rect" id="node18" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="1944,199,2121,255"/>
+</map>

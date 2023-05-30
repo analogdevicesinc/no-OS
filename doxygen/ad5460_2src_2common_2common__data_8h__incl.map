@@ -1,0 +1,9 @@
+<map id="projects/ad5460/src/common/common_data.h" name="projects/ad5460/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="55,5,247,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,156,121"/>
+<area shape="rect" id="node3" href="$ad5460_8h.html" title="Header file of AD5460 Driver." alt="" coords="181,95,263,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="244,244,315,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="123,169,206,196"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="230,169,329,196"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="353,169,459,196"/>
+</map>

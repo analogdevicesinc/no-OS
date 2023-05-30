@@ -1,0 +1,17 @@
+<map id="projects/ad796x_fmcz/src/examples/basic_example/basic_example.c" name="projects/ad796x_fmcz/src/examples/basic_example/basic_example.c">
+<area shape="rect" id="node1" title="Implementation of BASIC example." alt="" coords="198,5,413,61"/>
+<area shape="rect" id="node2" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8h.html" title="BASIC example header." alt="" coords="22,109,154,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="178,109,305,136"/>
+<area shape="rect" id="node4" href="$ad796x_8h.html" title="Header file of AD796X Driver." alt="" coords="329,109,412,136"/>
+<area shape="rect" id="node14" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="519,109,655,136"/>
+<area shape="rect" id="node5" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,259,112,285"/>
+<area shape="rect" id="node7" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="517,259,627,285"/>
+<area shape="rect" id="node9" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="255,184,353,211"/>
+<area shape="rect" id="node12" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="136,259,267,285"/>
+<area shape="rect" id="node13" href="$axi__adc__core_8h.html" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="377,184,495,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="291,333,362,360"/>
+<area shape="rect" id="node8" title=" " alt="" coords="516,333,599,360"/>
+<area shape="rect" id="node10" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="393,259,493,285"/>
+<area shape="rect" id="node11" title=" " alt="" coords="407,333,478,360"/>
+<area shape="rect" id="node15" title=" " alt="" coords="571,184,637,211"/>
+</map>

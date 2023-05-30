@@ -1,0 +1,9 @@
+<map id="iio_hw_trig_handler" name="iio_hw_trig_handler">
+<area shape="rect" id="node1" title="Trigger interrupt handler. This function will be called when a system interrupt is asserted for the c..." alt="" coords="560,56,709,83"/>
+<area shape="rect" id="node2" href="$iio__trigger_8h.html#ac463acd613c3864b48d7c5d8671d7bef" title="Initialize hardware trigger." alt="" coords="391,56,512,83"/>
+<area shape="rect" id="node3" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,5,343,32"/>
+<area shape="rect" id="node4" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="129,56,321,83"/>
+<area shape="rect" id="node6" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="164,107,287,133"/>
+<area shape="rect" id="node5" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node7" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,107,60,133"/>
+</map>

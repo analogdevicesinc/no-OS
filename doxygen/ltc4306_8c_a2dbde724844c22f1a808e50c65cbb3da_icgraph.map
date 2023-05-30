@@ -1,0 +1,24 @@
+<map id="ltc4306_read" name="ltc4306_read">
+<area shape="rect" id="node1" title="Reads the value of a register." alt="" coords="708,378,815,405"/>
+<area shape="rect" id="node2" href="$ltc4306_8h.html#af26bd8c8c7c4879c6cbcabdf2f681e06" title="Get downstream connect bit status to see if any downstream bus connected." alt="" coords="481,5,639,47"/>
+<area shape="rect" id="node3" href="$ltc4306_8h.html#a569db21182c5aa4a94a2bc20194f28d8" title="Gets Connection Requirement bit field." alt="" coords="478,71,642,98"/>
+<area shape="rect" id="node6" href="$ltc4306_8h.html#ab08aec25a4b0501dfe0e39fd1ed93e50" title="Get status of downstream accelerator enable bit field." alt="" coords="467,123,653,164"/>
+<area shape="rect" id="node7" href="$ltc4306_8h.html#ae5438a62091ca02919906b36d934736e" title="Get the connection status of the selected FET." alt="" coords="467,188,653,229"/>
+<area shape="rect" id="node8" href="$ltc4306_8h.html#a404f2d8ff6d6919a1c48e481e692922c" title="Reads Latched Timeout status." alt="" coords="483,253,637,295"/>
+<area shape="rect" id="node9" href="$ltc4306_8h.html#a871e6b0d1c646e10e27cec5c66fee0bc" title="Gets Mass Write Bit Field status." alt="" coords="470,319,650,346"/>
+<area shape="rect" id="node10" href="$ltc4306_8h.html#aba1a8ed2acfae118145110dc635b993b" title="Reads Realtime Timeout status." alt="" coords="480,371,640,412"/>
+<area shape="rect" id="node11" href="$ltc4306_8h.html#a6569d810ae4b0518bbc4ce1fc5ca3dcf" title="Gets LTC4306&#39;s Timeout Mode." alt="" coords="460,437,660,463"/>
+<area shape="rect" id="node12" href="$ltc4306_8h.html#ae6cf6ed948db0bb2544350f5f8fcdafe" title="Get status of upstream accelerator enable bit field." alt="" coords="477,488,643,529"/>
+<area shape="rect" id="node13" href="$ltc4306_8h.html#a7ae1f846aa3d5d3daec5d61b87a9e031" title="Reads Alert Logic State of selected ALERT pin." alt="" coords="489,553,631,595"/>
+<area shape="rect" id="node14" href="$ltc4306_8h.html#adfc1883853fcec5306570c9bbebcd58e" title="Reads bus logic state." alt="" coords="473,619,647,660"/>
+<area shape="rect" id="node15" href="$ltc4306_8h.html#a5981320fbff10b521122f10a78193bf9" title="Reads Failed Connection Attempt bit." alt="" coords="466,685,654,711"/>
+<area shape="rect" id="node16" href="$ltc4306_8h.html#a52f221217225793a4cd64461428035bd" title="Update selected I2C register contents." alt="" coords="485,735,635,762"/>
+<area shape="rect" id="node4" href="$ltc4306_8h.html#af36fa1d04f93bee12ff961fbf5cd88e8" title="Dis/connects to a downstream bus. Bus logic state must be 1 for connection to occur EXCEPT when conn_..." alt="" coords="220,560,405,601"/>
+<area shape="rect" id="node5" href="$eval-ltc4306_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,567,165,594"/>
+<area shape="rect" id="node17" href="$ltc4306_8h.html#a1c2f57e653d010e78aa2c8b04ef9a324" title="Configures GPIO1 and GPIO2 as input or output mode. If selected as output mode, can be configured as ..." alt="" coords="227,626,399,653"/>
+<area shape="rect" id="node18" href="$ltc4306_8h.html#abf6bb141b301cabbccdac5d3dc727688" title="Sets Connection Requirement bit field." alt="" coords="231,677,394,703"/>
+<area shape="rect" id="node19" href="$ltc4306_8h.html#ad6e2df274a55b13b7a2c3429bcb88834" title="En/Disables downstream accelerator." alt="" coords="220,728,405,769"/>
+<area shape="rect" id="node20" href="$ltc4306_8h.html#a76c1b8fbfab041606d69c0e46861f729" title="Enables Mass Write." alt="" coords="223,794,402,821"/>
+<area shape="rect" id="node21" href="$ltc4306_8h.html#a45f07dc20dcefcdb8c914e9db97827c4" title="Sets LTC4306&#39;s Timeout Mode." alt="" coords="213,845,412,871"/>
+<area shape="rect" id="node22" href="$ltc4306_8h.html#a1edae0e29cb57043454ade8f78e402e7" title="En/Disables upstream accelerator." alt="" coords="229,896,396,937"/>
+</map>

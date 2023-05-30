@@ -1,0 +1,14 @@
+<map id="no_os_irq_unregister_callback" name="no_os_irq_unregister_callback">
+<area shape="rect" id="node1" title="Unregisters a generic IRQ handling function." alt="" coords="704,115,861,157"/>
+<area shape="rect" id="node2" href="$ade9113_8h.html#a70245c89427f7c191241fc84243ebab3" title="Remove the device and release resources." alt="" coords="509,5,644,32"/>
+<area shape="rect" id="node3" href="$aducm3029__irq_8c.html#ae16785f8773a98fdb8cbfa65c2e0f4d2" title="Free the resources allocated by no_os_irq_ctrl_init()" alt="" coords="501,57,652,98"/>
+<area shape="rect" id="node4" href="$max11205_8h.html#adff8b4d146093da04e57377b4624cf4c" title="Free memory allocated by max11205_init()." alt="" coords="503,123,651,149"/>
+<area shape="rect" id="node6" href="$no__os__dma_8c.html#a935f01d6ca284b7605900f40ca188748" title="Remove resources allocated for the DMA controller." alt="" coords="500,173,653,200"/>
+<area shape="rect" id="node12" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="497,224,656,251"/>
+<area shape="rect" id="node5" href="$iio__max11205_8h.html#a2310b65fd7b0f421f0e5215fd96b6335" title="Free the resources allocated by max11205_iio_init()." alt="" coords="276,93,447,120"/>
+<area shape="rect" id="node7" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="299,144,423,171"/>
+<area shape="rect" id="node8" href="$stm32__spi_8c.html#a5a38b41251289177ba99770804ab4de7" title="Configure and start a series of transfers using DMA." alt="" coords="273,195,449,237"/>
+<area shape="rect" id="node11" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="288,261,435,288"/>
+<area shape="rect" id="node9" href="$stm32__spi_8c.html#adfcb8034a96850d7940dd91d67f273eb" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="24,166,207,207"/>
+<area shape="rect" id="node10" href="$stm32__spi_8c.html#a8f89053d3059828cf294d3061322d974" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,232,225,259"/>
+</map>

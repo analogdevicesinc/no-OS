@@ -1,0 +1,8 @@
+<map id="pcf85263_read" name="pcf85263_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="489,31,608,57"/>
+<area shape="rect" id="node2" href="$pcf85263_8h.html#ae0567f721992536a48b633d71b53c0c8" title="Read time stamp." alt="" coords="290,5,427,32"/>
+<area shape="rect" id="node4" href="$pcf85263_8h.html#a345542ebb2f61e2de1021c03fac33137" title="Update specific register bits." alt="" coords="276,56,441,83"/>
+<area shape="rect" id="node3" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="108,5,228,32"/>
+<area shape="rect" id="node5" href="$pcf85263_8h.html#a9d506ed2d377a6366f247527de0c52bb" title="Initialize the device." alt="" coords="113,56,223,83"/>
+<area shape="rect" id="node6" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,56,60,83"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad5460_set_channel_iout_range" name="ad5460_set_channel_iout_range">
+<area shape="rect" id="node1" title="Set the current range for a specific channel." alt="" coords="377,5,532,47"/>
+<area shape="rect" id="node2" href="$current__output__example_8h.html#a8d0ccace5dc4c241ce6ae16991f6847a" title="Current output example main execution." alt="" coords="108,13,329,39"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="5,13,60,39"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="process_pqlib_error" name="process_pqlib_error">
+<area shape="rect" id="node1" title="Prints error message for errors from the library. Serves as an examples on how to handle the errors f..." alt="" coords="825,81,975,108"/>
+<area shape="rect" id="node2" href="$pqlib__example_8h.html#a85c5a643a924d82ab67e0c474d69a8b2" title="Configures AFE and the library . This serves as an example on how to call APIs adi_pqlib_SetConfig an..." alt="" coords="619,56,777,83"/>
+<area shape="rect" id="node7" href="$pqlib__example_8h.html#a745b9ba2a18d97a8cb77e6541b2ba241" title="Call adi_pqlib_Open with required buffers. Serves as an example how to call adi_pqlib_Open API." alt="" coords="651,5,745,32"/>
+<area shape="rect" id="node9" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="176,129,336,170"/>
+<area shape="rect" id="node10" href="$pqlib__example_8h.html#a856e2f7b4478d1c5d2c9f5871d231157" title="Sets library internal time using RTC time. Serves as an example how to call the APIs...." alt="" coords="645,107,751,133"/>
+<area shape="rect" id="node3" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="384,56,571,83"/>
+<area shape="rect" id="node4" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="177,11,335,37"/>
+<area shape="rect" id="node6" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="5,91,128,117"/>
+<area shape="rect" id="node5" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="39,11,94,37"/>
+<area shape="rect" id="node8" href="$pqlib__example_8h.html#a706632b98cda205f69858b86a48b4a32" title="Initializes Power Quality Measurement." alt="" coords="389,5,566,32"/>
+<area shape="rect" id="node11" href="$pqlib__example_8h.html#a42415be9286013c250d6b95c82d75259" title="Looks at the return code from library and checks whether there is a zero crossing timeout...." alt="" coords="392,107,563,133"/>
+</map>

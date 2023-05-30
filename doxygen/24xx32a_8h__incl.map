@@ -1,0 +1,5 @@
+<map id="drivers/eeprom/24xx32a/24xx32a.h" name="drivers/eeprom/24xx32a/24xx32a.h">
+<area shape="rect" id="node1" title="Header file of 24AA32A/24LC32A Interface." alt="" coords="5,5,187,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="61,169,131,196"/>
+<area shape="rect" id="node3" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="91,95,189,121"/>
+</map>

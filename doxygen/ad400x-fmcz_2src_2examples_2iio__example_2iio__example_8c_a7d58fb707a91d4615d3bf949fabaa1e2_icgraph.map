@@ -1,0 +1,7 @@
+<map id="iio_example_main" name="iio_example_main">
+<area shape="rect" id="node1" title="IIO example main execution." alt="" coords="384,31,527,57"/>
+<area shape="rect" id="node2" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a24add404325f00727126e8cf06932df2" title="IIOD example task." alt="" coords="261,5,336,32"/>
+<area shape="rect" id="node5" href="$ad400x-fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="271,56,326,83"/>
+<area shape="rect" id="node3" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="108,5,213,32"/>
+<area shape="rect" id="node4" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,5,60,32"/>
+</map>

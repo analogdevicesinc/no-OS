@@ -1,0 +1,7 @@
+<map id="drivers/dac/ad917x/ad917x_api/ad917x_reg.h" name="drivers/dac/ad917x/ad917x_api/ad917x_reg.h">
+<area shape="rect" id="node1" title="AD917x SPI Register Definition Header File." alt="" coords="360,5,553,47"/>
+<area shape="rect" id="node2" href="$ad917x__api_8c.html" title="Contains AD917x APIs for DAC configuration and control." alt="" coords="5,95,196,136"/>
+<area shape="rect" id="node3" href="$ad917x__jesd__api_8c.html" title="Contains AD917x APIs for JESD configuration and control." alt="" coords="220,95,445,136"/>
+<area shape="rect" id="node4" href="$ad917x__nco__api_8c.html" title="Contains AD917x APIs for NCO configuration and control." alt="" coords="470,95,691,136"/>
+<area shape="rect" id="node5" href="$ad917x__reg_8c.html" title="Contains AD917x APIs for SPI Register configuration and control." alt="" coords="715,95,907,136"/>
+</map>

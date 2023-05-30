@@ -1,0 +1,6 @@
+<map id="no_os_hweight32" name="no_os_hweight32">
+<area shape="rect" id="node1" title=" " alt="" coords="224,56,359,83"/>
+<area shape="rect" id="node2" href="$aducm3029__adc_8h.html#a4af7379d1fc099dae34fbdb5c9d67d13" title="Read adc data. aducm3029_adc_update_active_channels should be called in order to enable channeles." alt="" coords="9,5,173,32"/>
+<area shape="rect" id="node3" href="$iio__axi__adc_8c.html#aca23a80aa2cbb5c102d031473a0d9189" title="Update active channels." alt="" coords="9,56,172,83"/>
+<area shape="rect" id="node4" href="$iio__axi__dac_8c.html#a5391d278882dec3aab5b3caccbb8fdc7" title="Update active channels." alt="" coords="5,107,176,133"/>
+</map>

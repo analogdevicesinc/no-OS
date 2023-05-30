@@ -1,0 +1,16 @@
+<map id="projects/ltc4296/src/examples/basic/basic_example.c" name="projects/ltc4296/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example source file for ltc4296 project." alt="" coords="332,5,499,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$ltc4296_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header file for ltc4296 project." alt="" coords="156,109,288,136"/>
+<area shape="rect" id="node4" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="572,109,685,136"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="553,184,651,211"/>
+<area shape="rect" id="node7" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="710,109,846,136"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="247,184,347,211"/>
+<area shape="rect" id="node12" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="112,184,223,211"/>
+<area shape="rect" id="node13" href="$ltc4296_8h.html" title="Header file for the LTC4296 Driver." alt="" coords="414,109,497,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="397,259,468,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="745,184,811,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="261,259,332,285"/>
+<area shape="rect" id="node11" title=" " alt="" coords="141,259,223,285"/>
+<area shape="rect" id="node14" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="422,184,529,211"/>
+</map>

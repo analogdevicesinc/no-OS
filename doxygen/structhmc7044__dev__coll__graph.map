@@ -1,0 +1,10 @@
+<map id="hmc7044_dev" name="hmc7044_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="928,105,1041,132"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="677,51,800,77"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="339,48,485,75"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,99,487,141"/>
+<area shape="rect" id="node6" href="$structhmc7044__chan__spec.html" title=" " alt="" coords="660,105,817,132"/>
+<area shape="rect" id="node7" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="677,164,800,191"/>
+<area shape="rect" id="node8" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="323,165,501,192"/>
+</map>

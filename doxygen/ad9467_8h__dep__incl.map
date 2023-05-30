@@ -1,0 +1,5 @@
+<map id="drivers/adc/ad9467/ad9467.h" name="drivers/adc/ad9467/ad9467.h">
+<area shape="rect" id="node1" title="Header file of AD9467 Driver." alt="" coords="91,5,237,47"/>
+<area shape="rect" id="node2" href="$ad9467_8c.html" title="Implementation of AD9467 Driver." alt="" coords="5,95,152,136"/>
+<area shape="rect" id="node3" href="$ad9467__fmc_8c.html" title="Implementation of the program&#39;s main function." alt="" coords="176,95,325,136"/>
+</map>

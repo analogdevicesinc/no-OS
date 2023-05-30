@@ -1,0 +1,15 @@
+<map id="drivers/power/ltc2992/ltc2992.c" name="drivers/power/ltc2992/ltc2992.c">
+<area shape="rect" id="node1" title=" " alt="" coords="427,5,589,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="125,244,195,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="533,244,603,271"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="725,95,793,121"/>
+<area shape="rect" id="node5" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="423,169,523,196"/>
+<area shape="rect" id="node7" href="$no__os__alloc_8h.html" title=" " alt="" coords="590,95,701,121"/>
+<area shape="rect" id="node9" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="24,169,123,196"/>
+<area shape="rect" id="node10" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="817,95,927,121"/>
+<area shape="rect" id="node11" href="$ltc2992_8h.html" title=" " alt="" coords="269,95,352,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="425,244,508,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="649,169,716,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="329,169,399,196"/>
+<area shape="rect" id="node13" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="197,169,304,196"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="adxl355_write_device_data" name="adxl355_write_device_data">
+<area shape="rect" id="node1" title="Writes to the device." alt="" coords="693,309,893,336"/>
+<area shape="rect" id="node2" href="$adxl355_8h.html#a64607f7b7cbcf243b554434ce1cbf8fa" title="Configures the activity enable register." alt="" coords="471,5,629,32"/>
+<area shape="rect" id="node3" href="$adxl355_8h.html#a6f8e248ad933c1c53c7fa4fff15d9647" title="Configures the activity threshold registers." alt="" coords="469,56,631,83"/>
+<area shape="rect" id="node4" href="$adxl355_8h.html#a54521cc8bd35fe08425cf39d61f123a8" title="Configures the interrupt map for INT1 and INT2 pins." alt="" coords="461,107,639,133"/>
+<area shape="rect" id="node5" href="$adxl355_8h.html#a5497fb2e1541f39faad1a9bd79b78896" title="Writes the activity count register value." alt="" coords="459,157,641,184"/>
+<area shape="rect" id="node6" href="$adxl355_8h.html#ab739160dfde18dfc0094e8e78b5532d6" title="Sets the number of FIFO samples register value." alt="" coords="455,208,645,235"/>
+<area shape="rect" id="node7" href="$adxl355_8h.html#a6f316752484487d5655670558a954a13" title="Writes the high&#45;pass filter settings." alt="" coords="229,259,407,285"/>
+<area shape="rect" id="node8" href="$adxl355_8h.html#a5ebd6b97e3c1722a3a7c63ce77b030ed" title="Sets the interrupt polarity." alt="" coords="474,461,626,488"/>
+<area shape="rect" id="node9" href="$adxl355_8h.html#a04f6359f3e9f79c0254ac61465761bb2" title="Writes the low&#45;pass filter settings." alt="" coords="241,360,395,387"/>
+<area shape="rect" id="node11" href="$adxl355_8h.html#ae4dd92d4bdfdf1f774bfa00055ae6d72" title="Sets an offset value for each axis (Offset Calibration)." alt="" coords="477,512,623,539"/>
+<area shape="rect" id="node12" href="$adxl355_8h.html#a56246d409ea65d8352b53397cd1b68a6" title="Places the device into the given operation mode." alt="" coords="466,309,634,336"/>
+<area shape="rect" id="node13" href="$adxl355_8h.html#a0343f1bcddcf796e5b1e74004f3a0b79" title="Sets the measurement range register value." alt="" coords="477,563,623,589"/>
+<area shape="rect" id="node14" href="$adxl355_8h.html#afdab818a6666878ce7a1ce693b824022" title="Triggers the self&#45;test feature." alt="" coords="468,613,632,640"/>
+<area shape="rect" id="node15" href="$adxl355_8h.html#a71f7b8a40d6c14dad5998c5aa0e87753" title="Performs a soft reset of the device." alt="" coords="245,411,391,437"/>
+<area shape="rect" id="node10" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,360,181,387"/>
+</map>

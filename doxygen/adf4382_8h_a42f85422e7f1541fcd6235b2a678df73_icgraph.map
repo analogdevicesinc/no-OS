@@ -1,0 +1,10 @@
+<map id="adf4382_set_freq" name="adf4382_set_freq">
+<area shape="rect" id="node1" title="Set the output frequency." alt="" coords="445,144,580,171"/>
+<area shape="rect" id="node2" href="$adf4382_8h.html#a90a2e1956072778acaeb2885373e50e7" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="213,5,397,32"/>
+<area shape="rect" id="node3" href="$adf4382_8h.html#a9545e93dd75ebffedeedd8a88a19c5ce" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="238,56,373,83"/>
+<area shape="rect" id="node4" href="$adf4382_8h.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="230,107,381,149"/>
+<area shape="rect" id="node5" href="$adf4382_8h.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="229,173,382,200"/>
+<area shape="rect" id="node6" href="$adf4382_8h.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="228,224,383,251"/>
+<area shape="rect" id="node7" href="$adf4382_8h.html#a6c3387b311effd620ce0264c6db07674" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="235,275,375,301"/>
+<area shape="rect" id="node8" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,275,165,301"/>
+</map>

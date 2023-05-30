@@ -1,0 +1,10 @@
+<map id="drivers/platform/stm32/stm32_usb_uart.h" name="drivers/platform/stm32/stm32_usb_uart.h">
+<area shape="rect" id="node1" title="UART over USB driver for stm32 as a no_os_uart implementation." alt="" coords="168,5,340,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="207,244,290,271"/>
+<area shape="rect" id="node4" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="124,95,229,121"/>
+<area shape="rect" id="node7" href="$stm32__hal_8h.html" title=" " alt="" coords="337,95,440,121"/>
+<area shape="rect" id="node5" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="78,169,211,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="109,244,180,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="355,169,422,196"/>
+</map>

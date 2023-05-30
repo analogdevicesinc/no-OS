@@ -1,0 +1,107 @@
+<map id="adis_write_reg" name="adis_write_reg">
+<area shape="rect" id="node1" title="Write N bytes to register." alt="" coords="1379,415,1496,442"/>
+<area shape="rect" id="node2" href="$adis_8h.html#aa865694682e498a838d0c045631b570b" title="Command: bias correction update." alt="" coords="1156,5,1307,47"/>
+<area shape="rect" id="node3" href="$adis_8h.html#a9d4695b61028583dc771b76b3a61071f" title="Command: factory calibration restore." alt="" coords="1154,71,1309,112"/>
+<area shape="rect" id="node4" href="$adis_8h.html#a515a062a940fc82e2211cd4f54f51b2f" title="Command: fifo flush." alt="" coords="931,226,1082,253"/>
+<area shape="rect" id="node6" href="$adis_8h.html#a9b865e6ec3350201072b772340312343" title="Command: flash memory test." alt="" coords="1142,339,1321,366"/>
+<area shape="rect" id="node7" href="$adis_8h.html#ad20edced99aea5826a8b71374c1c9d3d" title="Command: flash memory update." alt="" coords="1132,390,1331,417"/>
+<area shape="rect" id="node8" href="$adis_8h.html#ad70518a4637a31923a65d64602ab76b9" title="Command: sensor self test." alt="" coords="1141,137,1322,163"/>
+<area shape="rect" id="node12" href="$adis_8h.html#a4a32c45bf378aa99ccd15c36dcefae4f" title="Command: software reset." alt="" coords="1163,187,1299,214"/>
+<area shape="rect" id="node13" href="$adis_8h.html#af783c79282e6fa8900a3f7b7725f6fe6" title="Command: write lock." alt="" coords="1152,441,1311,467"/>
+<area shape="rect" id="node14" href="$iio__adis__internals_8h.html#a7517291700d23c197ea61393facf9fbe" title="Wrapper for writing to adis register." alt="" coords="1161,491,1301,518"/>
+<area shape="rect" id="node15" href="$adis_8h.html#a95ab498c9b8f1ef357cd6e8bc042cf19" title="Update the desired bits of reg in accordance with mask and val." alt="" coords="1146,289,1317,315"/>
+<area shape="rect" id="node100" href="$adis_8h.html#a157d7cbac364735959319c7b1d4e78af" title="Write FIR Filter Coefficient Bank A idx value." alt="" coords="1159,543,1303,584"/>
+<area shape="rect" id="node101" href="$adis_8h.html#ad1b5da0f6e695144c10b37c4af990884" title="Write FIR Filter Coefficient Bank B idx value." alt="" coords="1159,608,1303,649"/>
+<area shape="rect" id="node102" href="$adis_8h.html#a1ac1ea4d1f8240d011528eeca0bad4f3" title="Write FIR Filter Coefficient Bank C idx value." alt="" coords="1159,673,1303,715"/>
+<area shape="rect" id="node103" href="$adis_8h.html#a89320bd7cd9d0f3a7ba756eabd38eeff" title="Write FIR Filter Coefficient Bank D idx value." alt="" coords="1159,739,1303,780"/>
+<area shape="rect" id="node104" href="$adis_8h.html#a954bf97ce7587cb0c6330d1b4e8f2a25" title="Write gpio direction configuration." alt="" coords="1157,805,1305,831"/>
+<area shape="rect" id="node105" href="$adis_8h.html#aa450f6195792768e30d83c7bb18d065a" title="Write gpio level configuration." alt="" coords="1158,855,1305,882"/>
+<area shape="rect" id="node5" href="$iio__adis__internals_8h.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="219,338,369,365"/>
+<area shape="rect" id="node9" href="$adis_8h.html#ac138d46e3aaa5696d6000b8309707c82" title="Device initial setup." alt="" coords="933,150,1080,177"/>
+<area shape="rect" id="node10" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="255,287,333,314"/>
+<area shape="rect" id="node11" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="5,3163,165,3190"/>
+<area shape="rect" id="node16" href="$adis__internals_8h.html#af31ac4aed35022666bc21bd791872782" title="Write field from uint32 value." alt="" coords="929,1881,1084,1907"/>
+<area shape="rect" id="node99" href="$adis_8h.html#a8662479ca0ccedc3d7da6a239f454d51" title="Write FIR Filter Coefficient C_coef_idx value." alt="" coords="935,289,1079,315"/>
+<area shape="rect" id="node17" href="$adis_8h.html#a29cc37efa52777d3f1160b0bad6191be" title="Write accelerometer FIR filter control bit value." alt="" coords="705,961,848,1003"/>
+<area shape="rect" id="node18" href="$adis_8h.html#a06c809427d10100673eeb82bac049bc7" title="Write alarm enable encoded value." alt="" coords="684,1027,869,1054"/>
+<area shape="rect" id="node19" href="$adis_8h.html#a8d3109f6306d08497d7e9ed937b90ed1" title="Write alarm polarity encoded value." alt="" coords="681,1078,872,1105"/>
+<area shape="rect" id="node20" href="$adis_8h.html#a45c185f2cf92d2104eb6e49cc5e16aa6" title="Write alarm selection encoded value." alt="" coords="677,1129,877,1155"/>
+<area shape="rect" id="node21" href="$adis_8h.html#a8e75e96eeec046986ddaa428e2b38bf1" title="Write x axis accelerometer bias correction enable bit value." alt="" coords="699,1180,854,1221"/>
+<area shape="rect" id="node22" href="$adis_8h.html#a286fe9dd83dc9144b6c4faf4950acced" title="Write x axis gyroscope bias correction enable bit value." alt="" coords="699,1245,854,1287"/>
+<area shape="rect" id="node23" href="$adis_8h.html#a8eefbed56894c47242c6a2f46f5263b4" title="Write y axis accelerometer bias correction enable bit value." alt="" coords="699,1311,854,1352"/>
+<area shape="rect" id="node24" href="$adis_8h.html#a52c9d9e0797e5f7c2ff4f02bb4ecfe74" title="Write y axis gyroscope bias correction enable bit value." alt="" coords="699,1376,854,1417"/>
+<area shape="rect" id="node25" href="$adis_8h.html#abe5074bdd8a8739f78e9537033bf4e2c" title="Write z axis accelerometer bias correction enable bit value." alt="" coords="699,1441,854,1483"/>
+<area shape="rect" id="node26" href="$adis_8h.html#a22a9e6c58ba482c609310fde2a2ccdfb" title="Write z axis gyroscope bias correction enable bit value." alt="" coords="699,1507,854,1548"/>
+<area shape="rect" id="node27" href="$adis_8h.html#a19faab713d2c965c8ae50e9ddb725974" title="Write time base control value." alt="" coords="685,1573,868,1599"/>
+<area shape="rect" id="node28" href="$adis_8h.html#ad2ac754c4ad285a2d2774be0020fe079" title="Write burst32 enable bit value." alt="" coords="704,859,849,886"/>
+<area shape="rect" id="node31" href="$adis_8h.html#aaa796b8131feb7d199b52b8e307ace10" title="Write burst selection encoded value." alt="" coords="699,910,854,937"/>
+<area shape="rect" id="node33" href="$adis_8h.html#a564fc028339629102517b80fac70065b" title="Write decimation rate value." alt="" coords="701,1725,853,1751"/>
+<area shape="rect" id="node34" href="$adis_8h.html#a67bda7d4d19829d47566a819c0e1b082" title="Write data ready enable encoded value." alt="" coords="443,439,603,466"/>
+<area shape="rect" id="node36" href="$adis_8h.html#abb94501ce03ae5c47ea0c5fc138db12d" title="Write data ready polarity encoded value." alt="" coords="440,490,607,517"/>
+<area shape="rect" id="node37" href="$adis_8h.html#a68ba892298fc0e46496e6cd818991a2a" title="Write data ready selection encoded value." alt="" coords="436,541,611,567"/>
+<area shape="rect" id="node38" href="$adis_8h.html#a9b083a98a1c653f5fb4274e4d9af9e0a" title="Write FIFO enable bit value." alt="" coords="453,3341,593,3367"/>
+<area shape="rect" id="node54" href="$adis_8h.html#aac50ca4413fea35cfb810802e0f57351" title="Write FIFO overflow bit value." alt="" coords="433,338,613,365"/>
+<area shape="rect" id="node55" href="$adis_8h.html#a2a64cb19b898ce41c01ee7df18d318fb" title="Write FIFO watermark interrupt enable bit value." alt="" coords="449,592,597,633"/>
+<area shape="rect" id="node56" href="$adis_8h.html#a879be8ba570ef90ec3b0f064df416bff" title="Write FIFO watermark interrupt polarity bit value." alt="" coords="449,657,597,699"/>
+<area shape="rect" id="node57" href="$adis_8h.html#a7992482f1877af1860279bc29cda581e" title="Write FIFO watermark threshold level value." alt="" coords="438,723,609,750"/>
+<area shape="rect" id="node58" href="$adis_8h.html#a90db9c14edf21aa48eae2cc3b5b5ce20" title="Write filter size variable B value." alt="" coords="450,775,597,816"/>
+<area shape="rect" id="node59" href="$adis_8h.html#a5d9d740282e11ace70f7b89a97ce5cb7" title="Write x axis accelerometer filter bank selection encoded value." alt="" coords="703,1776,851,1817"/>
+<area shape="rect" id="node60" href="$adis_8h.html#a9737db36b4bb0ef73589e82dd2043258" title="Write x axis gyroscope filter bank selection encoded value." alt="" coords="703,1841,851,1883"/>
+<area shape="rect" id="node61" href="$adis_8h.html#a7f115f26e6f765433500063664fc69b8" title="Write y axis accelerometer filter bank selection encoded value." alt="" coords="703,1907,851,1948"/>
+<area shape="rect" id="node62" href="$adis_8h.html#aecfd52752b005871836b61a56a1ee99b" title="Write y axis gyroscope filter bank selection encoded value." alt="" coords="703,1972,851,2013"/>
+<area shape="rect" id="node63" href="$adis_8h.html#a2f62cdc981bc7644b9b407dd1ebc27ba" title="Write z axis accelerometer filter bank selection encoded value." alt="" coords="703,2037,851,2079"/>
+<area shape="rect" id="node64" href="$adis_8h.html#a933538d2f9fd1b6d9bb1fa15dd0a6817" title="Write z axis gyroscope filter bank selection encoded value." alt="" coords="703,2103,851,2144"/>
+<area shape="rect" id="node65" href="$adis_8h.html#a87e792a0ac1cfcdd22ca7275e65eb65e" title="Write x axis accelerometer filter enable bit value." alt="" coords="699,2169,854,2195"/>
+<area shape="rect" id="node66" href="$adis_8h.html#a01fdb468ca75187fe8a1c7f995afe526" title="Write x axis gyroscope filter enable bit value." alt="" coords="699,2219,854,2246"/>
+<area shape="rect" id="node67" href="$adis_8h.html#a66ecc2d3c61017d315eacab161eb9bb4" title="Write y axis accelerometer filter enable bit value." alt="" coords="699,2270,854,2297"/>
+<area shape="rect" id="node68" href="$adis_8h.html#aa61960920535ebe3fea63db4a88b0114" title="Write y axis gyroscope filter enable bit value." alt="" coords="699,2321,854,2347"/>
+<area shape="rect" id="node69" href="$adis_8h.html#a93d808d55c0bee692622730121826d18" title="Write z axis accelerometer filter enable bit value." alt="" coords="699,2371,854,2398"/>
+<area shape="rect" id="node70" href="$adis_8h.html#aa2a2d9e1dd2e20612ce682cecc06bbc5" title="Write z axis gyroscope filter enable bit value." alt="" coords="699,2422,854,2449"/>
+<area shape="rect" id="node71" href="$adis_8h.html#a1614f6a8ee1839203f704d6f2082cd28" title="Write gyroscope FIR filter control bit value." alt="" coords="704,2473,849,2515"/>
+<area shape="rect" id="node72" href="$adis_8h.html#ab528508506c3fee9aacf0f9d4d061f52" title="Write linear acceleration compensation enable bit value." alt="" coords="672,2539,881,2566"/>
+<area shape="rect" id="node73" href="$adis_8h.html#a12be31fe34df79c0fc5468c7c94d747d" title="Write point of percussion alignment enable bit value." alt="" coords="695,2591,859,2632"/>
+<area shape="rect" id="node74" href="$adis_8h.html#a97a6dc5551898a29ed8adfa09768b98a" title="Write internal sensor bandwidth encoded value." alt="" coords="701,2657,853,2683"/>
+<area shape="rect" id="node75" href="$adis_8h.html#a25500ec3c1b0f1bbed19311d73867732" title="Write 4khz internal sync enable bit value." alt="" coords="695,2707,859,2734"/>
+<area shape="rect" id="node76" href="$adis_8h.html#af3f09f782cb5607fb43ebcc7c8f36c7f" title="Update synchronization mode." alt="" coords="438,287,609,314"/>
+<area shape="rect" id="node77" href="$adis_8h.html#a1766410c489f867c5fc5f98435e83c39" title="Write sync polarity encoded value." alt="" coords="432,841,615,867"/>
+<area shape="rect" id="node78" href="$adis_8h.html#a3b274d7f1818635bc163cad48dfd80c4" title="Write sync selection encoded value." alt="" coords="427,389,619,415"/>
+<area shape="rect" id="node79" href="$adis_8h.html#a04274eeb313f80ac67cd3f5fb8054b37" title="Write timestamp32 enable bit value." alt="" coords="685,2758,868,2785"/>
+<area shape="rect" id="node80" href="$adis_8h.html#a358ff26569317c1d7376c00a23abfbc7" title="Write external clock scale factor value." alt="" coords="700,251,853,278"/>
+<area shape="rect" id="node81" href="$adis_8h.html#acb5ea74de74e42bb6bd4be96a1a32e94" title="Write user scratch register 1 value." alt="" coords="698,2809,855,2835"/>
+<area shape="rect" id="node82" href="$adis_8h.html#a28196805e6891507c8e1326cf4e82801" title="Write user scratch register 2 value." alt="" coords="698,2859,855,2886"/>
+<area shape="rect" id="node83" href="$adis_8h.html#a126fdeaf5c03f3b9f155a13a33fa2bcf" title="Write user scratch register 3 value." alt="" coords="698,2910,855,2937"/>
+<area shape="rect" id="node84" href="$adis_8h.html#a76746e80a2f66c744989438d2fd0a23a" title="Write user scratch register 4 value." alt="" coords="698,2961,855,2987"/>
+<area shape="rect" id="node85" href="$adis_8h.html#ada2bedbc6369c85eb3abf0c8135b20ba" title="Write raw acceleration offset correction on x axis." alt="" coords="703,3011,850,3038"/>
+<area shape="rect" id="node87" href="$adis_8h.html#a9842713e523f38646bf673a0ba3cb79d" title="Write raw acceleration scale adjustment on x axis." alt="" coords="700,3315,853,3342"/>
+<area shape="rect" id="node89" href="$adis_8h.html#a5d75043de5d8cc6db932328c13ed1be3" title="Write raw gyroscope offset correction on x axis." alt="" coords="703,3062,850,3089"/>
+<area shape="rect" id="node90" href="$adis_8h.html#aaba22b64f65dbee3128cf9c588d5e12d" title="Write raw gyroscope scale adjustment on x axis." alt="" coords="700,3366,853,3393"/>
+<area shape="rect" id="node91" href="$adis_8h.html#a4f5ad59ecbca09b05b6b7d7bd6fb4743" title="Write raw acceleration offset correction on y axis." alt="" coords="703,3113,850,3139"/>
+<area shape="rect" id="node92" href="$adis_8h.html#aa8beabfc4fa4dfa73388aeb285cd8f2d" title="Write raw acceleration scale adjustment on y axis." alt="" coords="700,3417,853,3443"/>
+<area shape="rect" id="node93" href="$adis_8h.html#aa671999a278387ae70e7d7fcc0ef6d4a" title="Write raw gyroscope offset correction on y axis." alt="" coords="703,3163,850,3190"/>
+<area shape="rect" id="node94" href="$adis_8h.html#ad377a4a0ce1349ad502f84f7ce1b0266" title="Write raw gyroscope scale adjustment on y axis." alt="" coords="700,3467,853,3494"/>
+<area shape="rect" id="node95" href="$adis_8h.html#a68f893814446f484e050a83fb854cfdd" title="Write raw acceleration offset correction on z axis." alt="" coords="704,1623,849,1650"/>
+<area shape="rect" id="node96" href="$adis_8h.html#a6fd1c63035d763d40aeb8f577fb96512" title="Write raw acceleration scale adjustment on z axis." alt="" coords="701,3214,853,3241"/>
+<area shape="rect" id="node97" href="$adis_8h.html#abb914fb94b5f49e93a9bd08a6c331505" title="Write raw gyroscope offset correction on z axis." alt="" coords="704,1674,849,1701"/>
+<area shape="rect" id="node98" href="$adis_8h.html#a148aec1a1f2bf3ee7e49182e994f2619" title="Write raw gyroscope scale adjustment on z axis." alt="" coords="701,3265,853,3291"/>
+<area shape="rect" id="node29" href="$adis1657x_8c.html#ac442d3460a938b11ed36834c5c1bbd59" title="Read burst data." alt="" coords="423,942,624,969"/>
+<area shape="rect" id="node30" href="$adis_8h.html#add978372da385dea5434585683a94449" title="Read burst data." alt="" coords="443,891,604,918"/>
+<area shape="rect" id="node32" href="$adis1654x_8c.html#a869c26c00f78c2459822ebbf23d20756" title="Read burst data." alt="" coords="423,993,624,1019"/>
+<area shape="rect" id="node35" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="215,563,373,604"/>
+<area shape="rect" id="node39" href="$iio__adis__internals_8h.html#a59559d0650b39a30f0c2e98189eaca69" title="API to be called after trigger is disabled." alt="" coords="213,3037,375,3063"/>
+<area shape="rect" id="node40" href="$adis_8h.html#a36db8ae51d7390f42ef0ba60e8eac164" title="Read raw temperature data." alt="" coords="217,3290,371,3317"/>
+<area shape="rect" id="node42" href="$adis_8h.html#ac8742db0ae6b5b09e9f24f87a5887572" title="Read raw acceleration data on x axis." alt="" coords="227,3341,361,3367"/>
+<area shape="rect" id="node43" href="$adis_8h.html#a47a132c41144a48ffec3f55ad1f3a3bb" title="Read raw delta angle data on x axis." alt="" coords="216,3645,372,3671"/>
+<area shape="rect" id="node44" href="$adis_8h.html#a76d64491528918ff49ef8c1e28ea7601" title="Read raw delta velocity data on x axis." alt="" coords="218,3391,370,3418"/>
+<area shape="rect" id="node45" href="$adis_8h.html#a9156a464b496ef333282f3bb06829eff" title="Read raw gyroscope data on x axis." alt="" coords="226,3087,362,3114"/>
+<area shape="rect" id="node46" href="$adis_8h.html#aa81242e3a496e9c06178d64731a2324a" title="Read raw acceleration data on y axis." alt="" coords="227,3138,361,3165"/>
+<area shape="rect" id="node47" href="$adis_8h.html#abee671f832770a7f4f88b7536068ea9f" title="Read raw delta angle data on y axis." alt="" coords="216,3442,372,3469"/>
+<area shape="rect" id="node48" href="$adis_8h.html#a9564607ae5ddb9a6aef87d2a2969baa6" title="Read raw delta velocity data on y axis." alt="" coords="218,3493,370,3519"/>
+<area shape="rect" id="node49" href="$adis_8h.html#a34005ac0792987ea8460c88cf1a2f27e" title="Read raw gyroscope data on y axis." alt="" coords="226,2986,362,3013"/>
+<area shape="rect" id="node50" href="$adis_8h.html#aaa776d92d2944988cb57385a547c1028" title="Read raw acceleration data on z axis." alt="" coords="228,3189,360,3215"/>
+<area shape="rect" id="node51" href="$adis_8h.html#a0779f9820a9dda34ea31e3b6956385a1" title="Read raw delta angle data on z axis." alt="" coords="217,3543,371,3570"/>
+<area shape="rect" id="node52" href="$adis_8h.html#a9993363049ee765afffeeafc221c67d8" title="Read raw delta velocity data on z axis." alt="" coords="219,3594,369,3621"/>
+<area shape="rect" id="node53" href="$adis_8h.html#a923431c5b825bb48123638dacda62e93" title="Read raw gyroscope data on z axis." alt="" coords="227,3239,361,3266"/>
+<area shape="rect" id="node41" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="16,3341,155,3367"/>
+<area shape="rect" id="node86" href="$iio__adis__internals_8h.html#a668f0e032ce85e71e07e298e044488d3" title="Handles the write request for calibbias attribute." alt="" coords="435,3037,612,3063"/>
+<area shape="rect" id="node88" href="$iio__adis__internals_8h.html#aedca9e1cc912124ab7272928dcf8c349" title="Handles the write request for calibscale attribute." alt="" coords="431,3290,615,3317"/>
+</map>

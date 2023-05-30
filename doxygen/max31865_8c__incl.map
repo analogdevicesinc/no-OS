@@ -1,0 +1,13 @@
+<map id="drivers/temperature/max31865pmb1/max31865.c" name="drivers/temperature/max31865pmb1/max31865.c">
+<area shape="rect" id="node1" title="Implementation of MAX31865 Driver." alt="" coords="282,5,498,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,95,73,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="127,244,197,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="581,244,652,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="350,244,433,271"/>
+<area shape="rect" id="node6" href="$max31865_8h.html" title="Header File of MAX31865 Driver." alt="" coords="428,95,531,121"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="567,169,666,196"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="341,169,441,196"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="155,95,265,121"/>
+<area shape="rect" id="node11" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="741,169,855,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="199,169,266,196"/>
+</map>

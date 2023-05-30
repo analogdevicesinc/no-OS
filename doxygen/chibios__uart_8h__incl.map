@@ -1,0 +1,9 @@
+<map id="drivers/platform/chibios/chibios_uart.h" name="drivers/platform/chibios/chibios_uart.h">
+<area shape="rect" id="node1" title="Header file of UART driver for chibiOS." alt="" coords="103,5,280,47"/>
+<area shape="rect" id="node2" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="87,95,192,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="216,95,271,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="201,244,283,271"/>
+<area shape="rect" id="node5" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="73,169,206,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="104,244,175,271"/>
+</map>

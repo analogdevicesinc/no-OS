@@ -1,0 +1,10 @@
+<map id="projects/ad796x_fmcz/src/platform/xilinx/parameters.c" name="projects/ad796x_fmcz/src/platform/xilinx/parameters.c">
+<area shape="rect" id="node1" title="Definition of xilinx platform data used by iio project." alt="" coords="173,5,339,61"/>
+<area shape="rect" id="node2" href="$ad796x__fmcz_2src_2platform_2xilinx_2parameters_8h.html" title="Definitions specific to xilinx platform used by iio project." alt="" coords="201,109,311,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,184,123,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="147,184,242,211"/>
+<area shape="rect" id="node5" href="$xilinx__uart_8h.html" title=" " alt="" coords="266,184,369,211"/>
+<area shape="rect" id="node6" href="$xilinx__gpio_8h.html" title=" " alt="" coords="393,184,498,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="359,259,430,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="455,259,537,285"/>
+</map>

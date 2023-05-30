@@ -1,0 +1,4 @@
+<map id="no_os_timer_counter_get" name="no_os_timer_counter_get">
+<area shape="rect" id="node1" title="Get the value of the counter register for the timer." alt="" coords="228,5,415,32"/>
+<area shape="rect" id="node2" href="$aducm3029__timer_8c.html#ad8c5e44f75937407d7a9857537af2bc2" title="Stop counting the timer instance." alt="" coords="5,5,180,32"/>
+</map>

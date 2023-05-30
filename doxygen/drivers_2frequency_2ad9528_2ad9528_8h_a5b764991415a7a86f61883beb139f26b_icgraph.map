@@ -1,0 +1,9 @@
+<map id="ad9528_spi_write_n" name="ad9528_spi_write_n">
+<area shape="rect" id="node1" title="Writes a value to the selected register." alt="" coords="684,56,835,83"/>
+<area shape="rect" id="node2" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#afb5d83bae28bbba78e1e1c786b8927a0" title="Set channel rate." alt="" coords="291,5,447,32"/>
+<area shape="rect" id="node5" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#aeb3b71fe3d9ceb3f9766c2acb08723a0" title="Updates the AD9528 configuration." alt="" coords="495,31,636,57"/>
+<area shape="rect" id="node6" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#a508b6010b53efae6c7746aef27414b43" title="Updates the AD9528 configuration." alt="" coords="315,56,422,83"/>
+<area shape="rect" id="node7" href="$drivers_2frequency_2ad9528_2ad9528_8h.html#a9de32c13fc2804255237417f002620f7" title="Performs a hard reset on the AD9528." alt="" coords="510,132,621,159"/>
+<area shape="rect" id="node3" href="$ad9083_2src_2app__clocking_8h.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="108,5,243,32"/>
+<area shape="rect" id="node4" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,5,60,32"/>
+</map>

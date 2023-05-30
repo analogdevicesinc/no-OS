@@ -1,0 +1,6 @@
+<map id="ad74413r_nb_active_channels" name="ad74413r_nb_active_channels">
+<area shape="rect" id="node1" title="Get the number of active channels." alt="" coords="696,5,849,47"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#ae5b5d0636b18c601de28dbdc25b909e6" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="461,13,648,39"/>
+<area shape="rect" id="node3" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="229,13,413,39"/>
+<area shape="rect" id="node4" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,13,181,39"/>
+</map>

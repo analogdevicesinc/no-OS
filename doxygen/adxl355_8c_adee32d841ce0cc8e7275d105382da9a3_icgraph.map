@@ -1,0 +1,6 @@
+<map id="adxl355_get_nb_of_fifo_entries" name="adxl355_get_nb_of_fifo_entries">
+<area shape="rect" id="node1" title="Reads the number of FIFO entries register value." alt="" coords="689,5,863,47"/>
+<area shape="rect" id="node2" href="$adxl355_8h.html#a87d487d5c1307498ea083fe451934f2c" title="Reads fifo data and returns the raw values." alt="" coords="444,13,641,39"/>
+<area shape="rect" id="node3" href="$adxl355_8h.html#a3dfc3d88cc09e28b63a815471ebb25c6" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="229,13,396,39"/>
+<area shape="rect" id="node4" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,13,181,39"/>
+</map>

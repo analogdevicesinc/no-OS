@@ -1,0 +1,5 @@
+<map id="ad7156_get_range" name="ad7156_get_range">
+<area shape="rect" id="node1" title="Reads the range bits from the device and returns the range in pF." alt="" coords="219,31,361,57"/>
+<area shape="rect" id="node2" href="$ad7156_8h.html#aff4df363af93715fa75cd724df080892" title="Sets the input range of the specified channel." alt="" coords="17,5,159,32"/>
+<area shape="rect" id="node3" href="$ad7156_8h.html#aa80cfa5cd961c7bde4355b47eeab0675" title="Writes to the threshold register when threshold fixed mode is enabled." alt="" coords="5,56,171,83"/>
+</map>

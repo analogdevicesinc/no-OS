@@ -1,0 +1,4 @@
+<map id="ad7156_read_channel_data" name="ad7156_read_channel_data">
+<area shape="rect" id="node1" title="Reads a 12&#45;bit sample from the selected channel." alt="" coords="217,13,417,39"/>
+<area shape="rect" id="node2" href="$ad7156_8h.html#a2441eed2bab5b9ca5ba44ce7ec31189b" title="Reads a sample the selected channel and converts the data to picofarads(pF)." alt="" coords="5,5,169,47"/>
+</map>

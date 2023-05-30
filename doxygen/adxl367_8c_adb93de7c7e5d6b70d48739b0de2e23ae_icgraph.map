@@ -1,0 +1,4 @@
+<map id="adxl367_remove" name="adxl367_remove">
+<area shape="rect" id="node1" title="Frees the resources allocated by adxl367_init()." alt="" coords="208,5,339,32"/>
+<area shape="rect" id="node2" href="$iio__adxl367_8h.html#a5aad3a65ae61b574894046bb69096561" title="Free the resources allocated by adxl367_iio_init()." alt="" coords="5,5,160,32"/>
+</map>

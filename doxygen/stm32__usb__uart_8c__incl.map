@@ -1,0 +1,16 @@
+<map id="drivers/platform/stm32/stm32_usb_uart.c" name="drivers/platform/stm32/stm32_usb_uart.c">
+<area shape="rect" id="node1" title="UART over USB driver for stm32 as a no_os_uart implementation." alt="" coords="257,5,429,47"/>
+<area shape="rect" id="node2" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="5,95,73,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="261,319,332,345"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="291,244,391,271"/>
+<area shape="rect" id="node7" href="$stm32__usb__uart_8h.html" title="UART over USB driver for stm32 as a no_os_uart implementation." alt="" coords="510,95,649,121"/>
+<area shape="rect" id="node9" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="415,244,549,271"/>
+<area shape="rect" id="node12" href="$no__os__alloc_8h.html" title=" " alt="" coords="195,95,305,121"/>
+<area shape="rect" id="node14" title=" " alt="" coords="673,95,768,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="625,319,696,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="466,319,549,345"/>
+<area shape="rect" id="node8" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="609,169,715,196"/>
+<area shape="rect" id="node10" href="$stm32__hal_8h.html" title=" " alt="" coords="791,169,893,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="809,244,875,271"/>
+<area shape="rect" id="node13" title=" " alt="" coords="149,169,215,196"/>
+</map>

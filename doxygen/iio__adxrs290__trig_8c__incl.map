@@ -1,0 +1,13 @@
+<map id="drivers/gyro/adxrs290/iio_adxrs290_trig.c" name="drivers/gyro/adxrs290/iio_adxrs290_trig.c">
+<area shape="rect" id="node1" title="Implementation of adxrs290 iio trigger." alt="" coords="279,5,443,47"/>
+<area shape="rect" id="node2" href="$iio_8h.html" title="Header file of iio." alt="" coords="305,169,356,196"/>
+<area shape="rect" id="node10" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="356,95,455,121"/>
+<area shape="rect" id="node3" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="331,244,424,271"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="150,244,255,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,393,88,420"/>
+<area shape="rect" id="node5" title=" " alt="" coords="342,393,413,420"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="292,319,463,345"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,319,217,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="115,393,186,420"/>
+<area shape="rect" id="node11" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="480,169,576,196"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="ad7606_axi_init_param" name="ad7606_axi_init_param">
+<area shape="rect" id="node1" title="AXI driver(s) initialization parameters." alt="" coords="31,273,206,300"/>
+<area shape="rect" id="node2" href="$structaxi__clkgen__init.html" title=" " alt="" coords="5,184,125,211"/>
+<area shape="rect" id="node3" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="149,184,325,211"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="22,95,194,121"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="14,5,202,32"/>
+<area shape="rect" id="node6" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="219,95,411,121"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="max22190_fault_enable_get" name="max22190_fault_enable_get">
+<area shape="rect" id="node1" title="Get fault enable from the fault registers." alt="" coords="213,5,420,32"/>
+<area shape="rect" id="node2" href="$max22190_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,5,165,32"/>
+</map>
