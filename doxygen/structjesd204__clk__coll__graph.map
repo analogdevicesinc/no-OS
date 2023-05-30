@@ -1,0 +1,22 @@
+<map id="jesd204_clk" name="jesd204_clk">
+<area shape="rect" id="Node000001" title=" " alt="" coords="199,269,298,295"/>
+<area shape="rect" id="Node000002" href="$structadxcvr.html" title="ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure." alt="" coords="64,181,131,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,211,229,267,227,271,128,216"/>
+<area shape="rect" id="Node000003" href="$structxilinx__xcvr.html" title="xilinx_xcvr parameters structure." alt="" coords="6,269,99,295"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="87,220,61,270,56,268,83,218"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="17,263,5,248,3,239,6,229,18,217,32,207,63,197,65,202,35,212,21,221,11,232,8,239,9,245,21,259"/>
+<area shape="rect" id="Node000004" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="119,93,242,119"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="143,128,122,144,110,163,103,182,98,180,106,161,118,141,140,123"/>
+<area shape="rect" id="Node000006" href="$structaxi__jesd204__rx.html" title=" " alt="" coords="171,181,291,207"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="179,132,184,156,194,169,208,179,205,183,191,173,179,158,174,133"/>
+<area shape="rect" id="Node000008" href="$structaxi__jesd204__tx.html" title=" " alt="" coords="315,181,435,207"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="213,123,267,155,334,179,332,184,265,160,210,128"/>
+<area shape="rect" id="Node000005" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="91,5,270,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="183,45,183,93,178,93,178,45"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="239,220,249,268,243,269,233,221"/>
+<area shape="rect" id="Node000007" href="$structjesd204__rx__config.html" title=" " alt="" coords="290,93,428,119"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="351,133,331,159,309,174,285,184,283,179,307,169,328,155,347,130"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="348,217,267,271,264,267,345,212"/>
+<area shape="rect" id="Node000009" href="$structjesd204__tx__config.html" title=" " alt="" coords="452,93,591,119"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="491,128,396,183,394,179,489,123"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="adf7023_get_ram" name="adf7023_get_ram">
+<area shape="rect" id="Node000001" title="Reads data from the RAM." alt="" coords="240,31,376,56"/>
+<area shape="rect" id="Node000002" href="$adf7023_8c.html#ae28ba95f1d1002adefe0e6ab790d9829" title="Receives one packet." alt="" coords="9,5,189,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,36,189,32,189,26,226,31"/>
+<area shape="rect" id="Node000003" href="$adf7023_8c.html#a5eaba6edc6968eeb19ef23f796a05750" title="Transmits one packet." alt="" coords="5,55,192,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,55,193,59,192,54,226,50"/>
+</map>

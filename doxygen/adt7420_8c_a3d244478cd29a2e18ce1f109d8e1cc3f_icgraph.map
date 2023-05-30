@@ -1,0 +1,43 @@
+<map id="adt7420_is_spi" name="adt7420_is_spi">
+<area shape="rect" id="Node000001" title="Check if the interface of the selected device is SPI." alt="" coords="864,219,983,244"/>
+<area shape="rect" id="Node000002" href="$adt7420_8c.html#a04499e58b0fca74cdc4dc704a5e44c6a" title="Reads the temperature data and converts it to Celsius degrees." alt="" coords="435,246,625,271"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="851,239,626,255,625,249,850,234"/>
+<area shape="rect" id="Node000004" href="$adt7420_8c.html#a002fbfa6b776f9d63d6e394710c6fc49" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="479,295,581,320"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="851,249,817,256,582,301,581,296,815,250,850,244"/>
+<area shape="rect" id="Node000007" href="$adt7420_8c.html#ae8c9a7ec123d3b672f551de3dc2bebd6" title="Reads the value of a register." alt="" coords="675,194,814,219"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="850,224,814,219,815,214,851,219"/>
+<area shape="rect" id="Node000009" href="$adt7420_8c.html#a6b22b40bd3315083e90bd52beacb1627" title="Sets the operational mode for ADT7420/ADT7320." alt="" coords="172,6,387,31"/>
+<area shape="poly" id="edge26_Node000001_Node000009" title=" " alt="" coords="908,208,872,148,846,117,815,91,764,64,709,44,652,28,595,18,484,9,387,10,387,5,484,4,596,13,654,23,711,38,766,59,817,87,850,113,877,145,913,205"/>
+<area shape="rect" id="Node000010" href="$adt7420_8c.html#af3c4b14319003f5a2edf1dd69ac4dcad" title="Sets the resolution for ADT7420/ADT7320." alt="" coords="192,80,367,106"/>
+<area shape="poly" id="edge27_Node000001_Node000010" title=" " alt="" coords="901,210,863,171,815,135,757,109,696,91,633,79,569,73,450,73,353,83,352,78,450,68,570,68,633,74,697,85,759,104,817,131,867,167,905,206"/>
+<area shape="rect" id="Node000011" href="$adt7420_8c.html#a0af155dc632cc1c7658d2e56122ba56a" title="Sets the value of a register SPI/I2C." alt="" coords="673,144,816,170"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="883,215,815,185,782,172,784,167,817,180,885,211"/>
+<area shape="rect" id="Node000012" href="$adt7420_8c.html#a08ee099177977a9d753f4e0e81510ec5" title="Free the resources allocated by adt7420_init()." alt="" coords="679,396,811,422"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="913,258,876,322,849,356,818,386,795,399,792,394,814,382,845,352,872,319,908,256"/>
+<area shape="rect" id="Node000014" href="$adt7420_8c.html#a1dee00bd9f80c821fd4d46cacbee9bd0" title="Resets the SPI or I2C inteface for the ADT7420/ADT7320." alt="" coords="687,346,802,371"/>
+<area shape="poly" id="edge22_Node000001_Node000014" title=" " alt="" coords="902,257,864,292,817,329,780,348,778,343,815,324,861,288,899,253"/>
+<area shape="rect" id="Node000003" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="220,271,339,296"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="421,272,339,280,339,275,421,267"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="465,304,339,292,339,287,465,299"/>
+<area shape="rect" id="Node000005" href="$iio__adt7420_8c.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="216,447,343,472"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="498,330,303,449,300,445,495,325"/>
+<area shape="rect" id="Node000006" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,447,124,472"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="202,462,124,462,124,457,202,457"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="679,225,584,248,582,243,678,220"/>
+<area shape="poly" id="edge13_Node000007_Node000003" title=" " alt="" coords="662,212,554,220,435,237,370,254,314,274,312,269,369,249,434,232,553,214,662,206"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="718,230,676,259,626,286,582,301,581,296,624,281,674,254,715,225"/>
+<area shape="rect" id="Node000008" href="$adt7420_8c.html#aa37e104e0f4f67268bb38e7ab79fe910" title="Sets the value of a register SPI/I2C." alt="" coords="437,94,623,119"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="689,191,672,185,605,152,551,121,554,117,608,147,674,180,691,187"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="479,92,315,34,317,29,481,87"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="423,103,367,100,367,95,423,98"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="660,165,552,179,493,191,436,206,360,239,302,273,299,269,358,234,434,201,492,185,551,174,659,160"/>
+<area shape="poly" id="edge15_Node000011_Node000008" title=" " alt="" coords="676,144,584,122,585,117,677,139"/>
+<area shape="poly" id="edge21_Node000012_Node000003" title=" " alt="" coords="664,406,554,391,493,378,434,362,359,331,300,299,303,294,361,326,436,357,494,373,555,385,665,400"/>
+<area shape="poly" id="edge20_Node000012_Node000004" title=" " alt="" coords="691,394,672,386,606,353,552,323,554,318,608,348,674,381,693,389"/>
+<area shape="poly" id="edge18_Node000012_Node000005" title=" " alt="" coords="731,435,690,490,661,517,626,538,575,555,532,558,488,551,434,538,394,526,357,509,298,475,301,470,359,504,396,521,435,533,489,546,532,553,574,550,624,533,657,513,686,487,727,432"/>
+<area shape="rect" id="Node000013" href="$iio__adt7420_8c.html#a6f99a0f08df4284b452792705428fffe" title="Free the resources allocated by adt7420_iio_init()." alt="" coords="453,498,607,523"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="715,431,673,456,626,481,576,500,574,495,624,476,671,452,712,427"/>
+<area shape="poly" id="edge25_Node000014_Node000003" title=" " alt="" coords="673,360,560,353,434,336,369,319,312,299,314,294,370,313,435,330,561,348,673,355"/>
+<area shape="poly" id="edge24_Node000014_Node000004" title=" " alt="" coords="676,345,581,322,582,317,677,340"/>
+<area shape="poly" id="edge23_Node000014_Node000005" title=" " alt="" coords="674,376,339,450,338,444,673,371"/>
+</map>

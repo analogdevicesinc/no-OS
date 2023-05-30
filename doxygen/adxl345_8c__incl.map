@@ -1,0 +1,20 @@
+<map id="drivers/accel/adxl345/adxl345.c" name="drivers/accel/adxl345/adxl345.c">
+<area shape="rect" id="Node000001" title="Implementation of ADXL345 Driver." alt="" coords="176,5,338,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="268,167,339,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="265,45,286,118,298,153,293,154,281,119,260,46"/>
+<area shape="rect" id="Node000003" href="$adxl345_8h.html" title="Header file of ADXL345 Driver." alt="" coords="104,93,191,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,48,177,87,173,83,229,43"/>
+<area shape="rect" id="Node000007" href="$no__os__alloc_8h.html" title=" " alt="" coords="295,93,406,119"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="281,44,328,82,324,86,278,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="36,240,107,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="105,116,54,133,31,148,13,168,8,184,14,200,27,216,43,230,40,234,23,220,10,203,3,184,8,165,28,144,52,128,103,111"/>
+<area shape="rect" id="Node000005" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="22,167,121,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="137,121,96,159,92,155,134,117"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="145,167,244,192"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="158,118,181,154,177,157,153,120"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="74,192,74,226,69,226,69,192"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="176,194,105,235,102,231,173,190"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="345,120,321,157,317,154,340,118"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="364,167,430,192"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="360,118,384,154,380,157,356,120"/>
+</map>

@@ -1,0 +1,63 @@
+<map id="ad917x_register_write" name="ad917x_register_write">
+<area shape="rect" id="Node000001" title="Perform SPI register write access to AD917X Device." alt="" coords="707,631,873,656"/>
+<area shape="rect" id="Node000002" href="$group___a_p_i.html#ga417dc89142884e87474ed4491b8c728d" title="Set DC Test Tone enable status." alt="" coords="457,49,643,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="783,617,770,503,745,344,727,263,707,189,683,129,657,89,640,77,643,73,661,85,688,127,712,188,733,262,750,343,775,502,789,617"/>
+<area shape="rect" id="Node000003" href="$group___a_p_i.html#ga45fcbdbcecb280893d0f33e1346e3adc" title="Set NCO." alt="" coords="237,107,363,132"/>
+<area shape="poly" id="edge16_Node000001_Node000003" title=" " alt="" coords="785,617,775,492,753,315,736,225,714,145,688,80,673,56,657,39,637,25,615,16,569,8,520,13,471,27,424,46,382,69,320,109,317,104,379,64,422,42,469,22,519,8,569,3,617,11,639,20,660,34,677,53,693,77,719,143,741,224,758,314,780,491,790,616"/>
+<area shape="rect" id="Node000004" href="$group___a_p_i.html#ga50323fcdd15472080734e542b5f8d5ff" title="Set Main DAC Cal DC Input." alt="" coords="469,99,631,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="783,618,767,516,740,376,722,305,702,241,680,188,657,153,630,135,633,130,661,149,685,186,707,239,727,304,745,375,772,515,788,617"/>
+<area shape="rect" id="Node000005" href="$group___a_p_i.html#ga859a5bfb0cff6f2bdfe9045c55e4c15d" title="Configure the JESD Datapath for AD917X." alt="" coords="475,263,625,303"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="783,617,771,557,749,479,732,437,712,396,687,358,657,324,624,303,627,298,660,320,691,354,716,393,737,435,754,477,777,556,788,616"/>
+<area shape="rect" id="Node000006" href="$group___a_p_i.html#ga61f6bffa132f73240fe51f5a6bcc4410" title="Enable the JESD Interface." alt="" coords="223,307,377,347"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="782,618,770,565,746,498,730,464,710,431,686,401,657,376,625,357,590,342,516,324,443,318,378,320,378,315,443,313,517,319,592,337,627,352,660,372,689,397,714,428,735,461,751,496,775,564,787,617"/>
+<area shape="rect" id="Node000007" href="$group___a_p_i.html#ga0ba18ba647ff38a682d855562b30f4e8" title="Enable JESD Link." alt="" coords="457,581,643,607"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="714,630,612,609,613,604,715,625"/>
+<area shape="rect" id="Node000008" href="$group___a_p_i.html#ga1cf81afbec962b0860020d8e318f31f5" title="Invert or un&#45;invert logical lanes." alt="" coords="458,631,642,656"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="693,646,642,646,642,641,693,641"/>
+<area shape="rect" id="Node000009" href="$group___a_p_i.html#ga0b495f25f7df98691a07611ca00f935c" title="Configure the Lane Cross Bar in the JESD datalink layer." alt="" coords="449,680,651,705"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="715,661,613,682,612,677,714,656"/>
+<area shape="rect" id="Node000010" href="$group___a_p_i.html#gad74426d51cc4a3d11cf51f5c683c988a" title="Set the LMFC Delay and Variance for the JESD Links." alt="" coords="467,730,633,770"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="760,666,714,693,660,720,628,732,626,727,658,715,711,689,757,661"/>
+<area shape="rect" id="Node000011" href="$group___a_p_i.html#ga87159279b4a7efbd4d9b2c2d39c66844" title="Enable the de&#45;scrambler for the JESD Interface." alt="" coords="449,794,651,834"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="775,669,728,726,696,757,660,784,636,796,634,791,657,780,692,753,724,723,770,665"/>
+<area shape="rect" id="Node000012" href="$group___a_p_i.html#ga5eb602a6442b863bd4a0b6b1e8568331" title="Enable the SYNCOUTB Output Signal." alt="" coords="451,858,649,898"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="782,670,764,709,738,757,704,806,660,848,640,860,638,855,657,844,700,803,734,754,760,707,777,668"/>
+<area shape="rect" id="Node000013" href="$group___a_p_i.html#gafc5f1dcc522a197410c60a03873fc728" title="Enable SysRef Input." alt="" coords="461,922,639,962"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="786,670,772,721,748,786,711,854,688,885,660,912,641,925,638,920,657,908,684,881,707,851,743,784,767,719,781,668"/>
+<area shape="rect" id="Node000014" href="$group___a_p_i.html#ga5d5c005883a660aee704aa237f0a9baf" title="NCO Enable." alt="" coords="475,987,625,1012"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="789,670,779,733,758,815,741,859,720,902,693,942,660,976,644,987,627,994,625,989,642,982,657,972,689,938,715,899,736,857,753,814,774,731,784,669"/>
+<area shape="rect" id="Node000015" href="$group___a_p_i.html#gac1a2d7c182f1ef6c144394282548030c" title="Get NCO phase offset." alt="" coords="463,1037,637,1077"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="790,670,783,740,763,836,747,887,724,938,696,985,660,1026,639,1041,636,1037,657,1023,692,982,720,935,742,885,758,834,778,739,785,669"/>
+<area shape="rect" id="Node000016" href="$group___a_p_i.html#ga2274d16fc5e9a818b0d13195895e8c04" title="Set FTW, ACC and MOD values." alt="" coords="473,164,627,189"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="787,617,784,536,778,482,768,423,752,363,729,304,697,250,657,202,643,192,626,185,628,180,645,188,660,199,702,247,733,302,757,362,773,422,783,481,789,535,792,617"/>
+<area shape="rect" id="Node000017" href="$group___a_p_i.html#ga030fcf91aea218b140b7a0d785f41349" title="Set NCO phase offset." alt="" coords="463,1101,637,1141"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="792,670,788,750,782,804,771,863,755,924,732,984,701,1041,660,1090,638,1106,635,1102,657,1087,696,1038,727,982,750,922,766,862,777,804,783,750,786,669"/>
+<area shape="rect" id="Node000018" href="$ad917x__reg_8c.html#a36572027780012a74a065433288aecef" title=" " alt="" coords="455,429,645,455"/>
+<area shape="poly" id="edge20_Node000001_Node000018" title=" " alt="" coords="774,620,729,548,696,509,657,476,617,457,619,452,660,472,700,505,733,545,778,617"/>
+<area shape="rect" id="Node000019" href="$group___a_p_i.html#gaae631be26fcb6b953153723818b73cd2" title="Configure the DAC Clock Input path based on a the desired dac clock frequency, the applied reference ..." alt="" coords="5,452,159,477"/>
+<area shape="poly" id="edge30_Node000001_Node000019" title=" " alt="" coords="759,625,713,597,658,572,591,555,534,547,482,546,433,548,332,549,274,542,206,527,149,505,103,480,105,475,151,500,207,522,274,537,332,544,433,542,482,541,534,542,592,550,660,567,716,592,762,621"/>
+<area shape="rect" id="Node000020" href="$group___a_p_i.html#ga1780054921cc0c2dfb4f519ea15abf00" title="Set the DAC CLK Frequency." alt="" coords="207,372,393,397"/>
+<area shape="poly" id="edge31_Node000001_Node000020" title=" " alt="" coords="780,617,765,572,740,517,705,462,683,439,657,419,625,401,590,388,517,374,444,371,380,375,380,369,444,365,517,368,591,383,627,396,660,414,686,435,709,459,745,515,770,570,785,616"/>
+<area shape="rect" id="Node000021" href="$group___a_p_i.html#ga9f25e406afc8af656f73efd3fdf4698e" title="Configure the On Chip DAC PLL." alt="" coords="225,473,375,513"/>
+<area shape="poly" id="edge32_Node000001_Node000021" title=" " alt="" coords="769,621,722,571,692,546,658,527,586,504,511,491,438,487,376,488,376,483,439,482,511,486,587,498,660,522,695,542,726,567,773,618"/>
+<area shape="rect" id="Node000022" href="$group___a_p_i.html#ga81ecd4e111118bcf30e72342ad6361a8" title="Reset the AD917X." alt="" coords="495,1165,605,1191"/>
+<area shape="poly" id="edge27_Node000001_Node000022" title=" " alt="" coords="788,670,773,776,747,921,729,995,709,1062,686,1117,661,1154,635,1171,606,1179,605,1174,633,1166,657,1151,682,1114,704,1060,724,993,742,920,768,775,783,669"/>
+<area shape="rect" id="Node000023" href="$group___a_p_i.html#ga484d94353e38fd5add9825955cb29d9c" title="Set Channel gain." alt="" coords="455,1215,645,1240"/>
+<area shape="poly" id="edge28_Node000001_Node000023" title=" " alt="" coords="789,670,776,785,750,946,733,1028,713,1102,688,1163,675,1187,661,1205,645,1217,642,1212,657,1201,671,1184,684,1161,707,1101,728,1026,745,945,770,784,784,669"/>
+<area shape="rect" id="Node000024" href="$group___a_p_i.html#ga77c4f50cdadbf9c3640755920a6054bd" title="Set CLKOUT configuration." alt="" coords="455,1264,645,1289"/>
+<area shape="poly" id="edge29_Node000001_Node000024" title=" " alt="" coords="789,670,778,793,754,969,737,1059,716,1141,690,1208,676,1235,661,1254,645,1266,642,1262,657,1251,672,1232,686,1206,710,1140,731,1058,749,968,772,793,784,669"/>
+<area shape="rect" id="Node000025" href="$group___a_p_i.html#ga5e4d708beab7c4836ea78b8f2c2ea4f0" title="Set DC Calibration tone." alt="" coords="441,213,659,239"/>
+<area shape="poly" id="edge33_Node000001_Node000025" title=" " alt="" coords="786,617,780,544,761,446,745,393,722,342,693,294,657,253,639,241,642,237,660,249,698,291,727,340,750,391,766,445,785,544,791,617"/>
+<area shape="rect" id="Node000026" href="$group___a_p_i.html#ga444d7c748021abb3bc71da518d29448a" title="Select Page." alt="" coords="469,1313,631,1339"/>
+<area shape="poly" id="edge35_Node000001_Node000026" title=" " alt="" coords="790,670,780,803,757,993,740,1091,718,1181,692,1254,677,1282,660,1304,633,1321,630,1317,657,1300,673,1279,687,1252,713,1179,735,1090,752,993,774,803,785,670"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="481,80,357,109,355,104,480,75"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="456,122,364,122,364,117,456,117"/>
+<area shape="poly" id="edge18_Node000016_Node000003" title=" " alt="" coords="480,163,355,134,357,129,481,158"/>
+<area shape="poly" id="edge21_Node000018_Node000006" title=" " alt="" coords="514,424,458,393,392,362,362,350,364,345,394,357,460,389,517,420"/>
+<area shape="poly" id="edge22_Node000018_Node000019" title=" " alt="" coords="441,450,159,463,159,458,441,444"/>
+<area shape="poly" id="edge23_Node000018_Node000020" title=" " alt="" coords="480,429,355,400,357,395,481,423"/>
+<area shape="poly" id="edge25_Node000018_Node000021" title=" " alt="" coords="473,460,376,480,375,475,472,455"/>
+<area shape="poly" id="edge24_Node000020_Node000019" title=" " alt="" coords="249,404,208,419,116,454,114,449,206,414,247,399"/>
+<area shape="poly" id="edge26_Node000021_Node000019" title=" " alt="" coords="211,484,158,477,159,472,211,478"/>
+<area shape="poly" id="edge34_Node000025_Node000003" title=" " alt="" coords="467,212,440,203,371,168,318,134,321,130,374,164,442,198,469,207"/>
+</map>

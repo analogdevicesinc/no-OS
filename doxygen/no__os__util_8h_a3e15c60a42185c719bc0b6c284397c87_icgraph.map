@@ -1,0 +1,11 @@
+<map id="no_os_find_closest" name="no_os_find_closest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="492,31,636,56"/>
+<area shape="rect" id="Node000002" href="$ad463x_8c.html#a82a1f489062ba53301eca1677a5a3d31" title="Calculate the PGIA gain." alt="" coords="271,5,444,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="478,36,444,31,444,26,479,30"/>
+<area shape="rect" id="Node000003" href="$adf4371_8c.html#a193a11338c8401b7d591366c527fc3df" title=" " alt="" coords="306,55,409,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="478,56,409,64,408,59,478,51"/>
+<area shape="rect" id="Node000004" href="$app__clock_8c.html#ac95a42f4c3d213e62ef9eb7223d9f41a" title="Application clock setup." alt="" coords="108,55,223,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="292,70,223,70,223,65,292,65"/>
+<area shape="rect" id="Node000005" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

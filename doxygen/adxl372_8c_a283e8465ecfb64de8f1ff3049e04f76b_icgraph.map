@@ -1,0 +1,11 @@
+<map id="adxl372_set_op_mode" name="adxl372_set_op_mode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="373,56,541,81"/>
+<area shape="rect" id="Node000002" href="$adxl372_8c.html#af7ace6f5f0f98035991501f48a40e9b7" title=" " alt="" coords="156,5,325,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="388,55,295,33,296,28,390,50"/>
+<area shape="rect" id="Node000003" href="$adxl372_8c.html#a30746b358cf0ef10cbdb0a8d49d37d49" title=" " alt="" coords="5,56,108,81"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="360,71,108,71,108,66,360,66"/>
+<area shape="rect" id="Node000004" href="$adxl372_8c.html#a452f4bf023d100e008e14984f2aa8071" title=" " alt="" coords="183,107,298,132"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="390,87,296,109,295,104,388,82"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,37,104,58,103,53,180,32"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="180,105,103,84,104,79,181,100"/>
+</map>

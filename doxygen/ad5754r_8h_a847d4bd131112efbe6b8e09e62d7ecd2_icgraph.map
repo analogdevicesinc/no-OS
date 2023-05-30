@@ -1,0 +1,10 @@
+<map id="ad5754r_set_ch_range" name="ad5754r_set_ch_range">
+<area shape="rect" id="Node000001" title="Set output range for specific channel." alt="" coords="349,31,517,56"/>
+<area shape="rect" id="Node000002" href="$ad5754r_8c.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="163,5,294,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,34,294,29,295,23,336,29"/>
+<area shape="rect" id="Node000004" href="$ad5754r_8c.html#a1d2888ba68a1b85656c84727efe81148" title="Write to and read back a register to verify SPI." alt="" coords="156,55,301,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="336,57,302,61,302,56,336,52"/>
+<area shape="rect" id="Node000003" href="$ad5754r_8c.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,31,108,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="150,32,109,38,108,33,150,27"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="142,58,108,53,109,48,142,53"/>
+</map>

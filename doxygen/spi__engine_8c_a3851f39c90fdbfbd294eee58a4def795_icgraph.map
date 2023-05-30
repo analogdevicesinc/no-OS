@@ -1,0 +1,28 @@
+<map id="spi_engine_offload_init" name="spi_engine_offload_init">
+<area shape="rect" id="Node000001" title="Initialize the SPI engine&#39;s offload module." alt="" coords="808,107,980,132"/>
+<area shape="rect" id="Node000002" href="$ad463x_8c.html#ac1cc8e1c72706ef210ea4d3e746a7c0c" title="Read from device. Enter register mode to read/write registers." alt="" coords="551,7,745,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="861,102,814,73,759,47,719,35,720,30,761,42,817,69,864,97"/>
+<area shape="rect" id="Node000006" href="$ad469x_8c.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="536,57,760,83"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="816,107,712,85,713,80,817,101"/>
+<area shape="rect" id="Node000007" href="$ad469x_8c.html#a92cd606b28fd68b3a2c52717552818df" title="Read from device. Enter register mode to read/write registers." alt="" coords="577,107,719,132"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="795,122,720,122,720,117,795,117"/>
+<area shape="rect" id="Node000011" href="$adaq7980_8c.html#a1d04d6c8c5b30c8f739bb4ed0f7deecd" title="Read from device. Enter register mode to read/write registers." alt="" coords="577,156,719,181"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="817,137,713,159,712,153,816,132"/>
+<area shape="rect" id="Node000013" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="621,205,675,231"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="864,142,817,170,761,196,716,210,676,217,675,212,715,204,759,192,814,165,862,137"/>
+<area shape="rect" id="Node000003" href="$ad463x_8c.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="331,5,473,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="537,21,474,21,474,16,537,16"/>
+<area shape="rect" id="Node000004" href="$ad463x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="108,5,268,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="316,21,268,21,268,15,316,15"/>
+<area shape="rect" id="Node000005" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+<area shape="rect" id="Node000008" href="$ad469x_8c.html#a947efb0cc9183e2dc0d9aeb3d697601b" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="316,107,488,132"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="563,122,488,122,488,117,563,117"/>
+<area shape="rect" id="Node000009" href="$ad469x__evb_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="108,56,268,81"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="563,108,488,98,268,77,268,72,488,93,564,103"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="333,106,242,84,243,79,335,101"/>
+<area shape="rect" id="Node000010" href="$ad469x__evb_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="117,107,259,132"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="302,122,260,122,260,117,302,117"/>
+<area shape="rect" id="Node000012" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="375,156,429,181"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="563,171,430,171,430,166,563,166"/>
+</map>

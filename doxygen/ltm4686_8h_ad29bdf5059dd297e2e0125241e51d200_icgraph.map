@@ -1,0 +1,15 @@
+<map id="ltm4686_send_byte" name="ltm4686_send_byte">
+<area shape="rect" id="Node000001" title="Send a PMBus command to the device." alt="" coords="631,79,781,104"/>
+<area shape="rect" id="Node000002" href="$ltm4686_8c.html#a0b6e2147eb5b7bf8eaee8910cda56cb3" title="Initialize the device structure." alt="" coords="441,29,545,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="637,78,545,57,546,51,638,73"/>
+<area shape="rect" id="Node000006" href="$ltm4686_8c.html#a16c6fb8d263e000fbfd2ac79105f8a7e" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="420,79,567,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="617,94,567,94,567,89,617,89"/>
+<area shape="rect" id="Node000007" href="$ltm4686_8c.html#a95a538945d5db84e44b95d9a6a1c52fa" title="Perform a device software reset." alt="" coords="404,128,583,153"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="638,110,550,131,548,125,637,105"/>
+<area shape="rect" id="Node000003" href="$ltm4686_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="427,37,356,29,357,24,428,32"/>
+<area shape="rect" id="Node000004" href="$iio__ltm4686_8c.html#acdb0c4a357bddeb6e40db66acdedd673" title="Initializes the LTM4686 IIO descriptor." alt="" coords="213,55,339,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="428,52,340,63,339,57,428,47"/>
+<area shape="rect" id="Node000005" href="$ltm4686_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,55,148,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="199,70,148,70,148,65,199,65"/>
+</map>

@@ -1,0 +1,61 @@
+<map id="ade7816_write_reg" name="ade7816_write_reg">
+<area shape="rect" id="Node000001" title="Register write wrapper function." alt="" coords="920,512,1067,537"/>
+<area shape="rect" id="Node000002" href="$ade7816_8c.html#aa6219244f5410f4f39eaddf8bb0868d3" title="ADE7816 root mean square measurement calibration function." alt="" coords="703,5,851,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="986,499,972,401,947,267,931,199,912,137,892,86,870,52,857,41,842,33,844,28,860,37,874,48,897,84,917,135,936,197,952,265,977,400,991,498"/>
+<area shape="rect" id="Node000003" href="$ade7816_8c.html#ac294be7c53212f7157e0f12ba10a04be" title="Initialize and configure the ADE7816 device." alt="" coords="249,740,355,765"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="992,552,982,605,961,673,945,709,926,743,902,774,874,800,818,837,766,860,717,873,667,877,617,872,563,862,438,830,403,818,370,801,319,768,322,763,372,796,405,813,439,825,564,857,617,867,667,871,716,868,764,855,815,832,870,796,898,770,922,740,941,707,956,672,976,604,986,551"/>
+<area shape="rect" id="Node000004" href="$ade7816_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,360,165,385"/>
+<area shape="poly" id="edge36_Node000001_Node000004" title=" " alt="" coords="977,501,935,434,905,397,870,365,811,327,759,306,633,277,515,244,420,220,374,216,327,218,274,229,214,250,175,273,141,304,115,336,97,361,92,358,110,333,137,300,172,269,212,245,273,224,326,213,374,210,420,215,516,239,634,271,761,300,813,322,874,361,909,394,940,431,982,499"/>
+<area shape="rect" id="Node000005" href="$ade7816_8c.html#a31d570dab92fb7344f2f020fb5e33433" title="ADE7816 set peak detection for channel function." alt="" coords="219,259,385,284"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="964,506,907,464,827,410,733,357,683,333,632,314,569,296,504,285,385,275,385,269,504,280,570,291,634,309,685,329,736,352,830,406,910,459,967,501"/>
+<area shape="rect" id="Node000006" href="$ade7816_8c.html#a156317c4f843bef9d6262fd28eee69cb" title="Register update function." alt="" coords="697,487,856,512"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="906,517,856,511,857,506,906,512"/>
+<area shape="rect" id="Node000013" href="$ade7816_8c.html#aee753094ae017b3041d658565456c84c" title="ADE7816 set communication function." alt="" coords="459,740,613,765"/>
+<area shape="poly" id="edge26_Node000001_Node000013" title=" " alt="" coords="907,532,777,547,720,561,698,569,683,579,668,596,661,613,659,651,657,690,650,710,635,729,615,743,612,739,632,725,646,708,652,689,654,651,656,612,664,593,680,575,696,564,718,556,776,542,906,526"/>
+<area shape="rect" id="Node000015" href="$ade7816_8c.html#a366c172ff092625010bf86cb50112035" title="ADE7816 set line cycle mode function." alt="" coords="439,789,633,815"/>
+<area shape="poly" id="edge28_Node000001_Node000015" title=" " alt="" coords="987,551,971,590,948,638,915,686,874,727,817,759,754,781,692,795,634,802,633,797,691,790,753,776,814,754,870,723,911,683,943,635,967,588,982,549"/>
+<area shape="rect" id="Node000017" href="$ade7816_8c.html#aad8fc82a6f06b28645a44354341d8c95" title="ADE7816 set active energy threshold value function." alt="" coords="213,57,391,83"/>
+<area shape="poly" id="edge24_Node000001_Node000017" title=" " alt="" coords="986,499,971,409,947,291,931,231,912,178,892,136,870,108,836,90,786,76,725,67,658,62,516,61,391,66,391,61,516,56,658,57,726,62,787,71,838,85,874,104,897,133,917,176,936,230,952,289,977,408,991,498"/>
+<area shape="rect" id="Node000018" href="$ade7816_8c.html#aff6e0c6e6d86f41cd0ac847ffe855930" title="ADE7816 set gain value for channel function." alt="" coords="707,588,847,613"/>
+<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="946,545,873,571,817,590,815,585,871,566,944,540"/>
+<area shape="rect" id="Node000019" href="$ade7816_8c.html#a1c687f7f6c3daa7928b231b0758715fe" title="ADE7816 set no load condition function." alt="" coords="695,637,858,663"/>
+<area shape="poly" id="edge29_Node000001_Node000019" title=" " alt="" coords="973,550,930,590,902,611,873,628,845,640,843,635,871,624,899,606,926,586,969,546"/>
+<area shape="rect" id="Node000020" href="$ade7816_8c.html#aae003119a717834e4278145d685a7785" title="ADE7816 set offset value for channel function." alt="" coords="702,687,851,712"/>
+<area shape="poly" id="edge30_Node000001_Node000020" title=" " alt="" coords="981,551,939,615,909,649,873,678,850,689,848,684,871,673,905,645,935,611,977,548"/>
+<area shape="rect" id="Node000021" href="$ade7816_8c.html#a392bcf5f205c378fff8a46471dbba346" title="ADE7816 set phase calibration coefficient function." alt="" coords="227,107,377,132"/>
+<area shape="poly" id="edge31_Node000001_Node000021" title=" " alt="" coords="990,498,988,425,982,378,973,328,958,277,937,228,908,184,870,147,834,129,782,116,718,109,648,105,502,107,378,115,377,110,502,102,648,100,719,104,783,111,836,124,874,142,912,180,941,225,963,275,978,327,988,378,993,425,996,498"/>
+<area shape="rect" id="Node000022" href="$ade7816_8c.html#a26577d8a57c0d3ded8c9fcc9792bde4c" title="ADE7816 set reactive energy threshold value function." alt="" coords="681,157,872,183"/>
+<area shape="poly" id="edge33_Node000001_Node000022" title=" " alt="" coords="987,498,978,438,958,359,943,317,923,276,899,238,870,204,840,185,842,181,874,200,904,235,928,274,948,315,963,358,983,437,992,498"/>
+<area shape="rect" id="Node000023" href="$ade7816_8c.html#a636fdd9f2fdd8d84f0680941c1070546" title="ADE7816 zero&#45;crossing detection timeout value function." alt="" coords="697,891,856,916"/>
+<area shape="poly" id="edge35_Node000001_Node000023" title=" " alt="" coords="993,551,985,616,966,702,951,748,931,793,905,836,874,873,843,893,840,888,870,869,901,832,926,791,946,746,961,700,980,615,988,551"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="266,734,237,713,211,685,184,645,161,602,124,515,100,438,87,386,92,385,105,436,129,513,166,600,189,642,215,682,241,709,269,730"/>
+<area shape="poly" id="edge23_Node000006_Node000004" title=" " alt="" coords="683,499,429,483,303,470,213,451,180,438,149,421,101,388,104,383,152,416,182,433,214,446,304,464,429,478,684,493"/>
+<area shape="rect" id="Node000007" href="$ade7816_8c.html#a155b363ec63a49979fbeec7af7506a32" title="ADE7816 angle measurement function." alt="" coords="220,309,384,335"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="758,476,737,446,708,411,673,377,632,351,570,329,505,318,441,314,384,316,384,310,441,309,506,312,572,324,635,346,676,373,712,407,742,443,763,473"/>
+<area shape="rect" id="Node000008" href="$ade7816_8c.html#ad654d8d9adf2a6fe790bb089bb1305df" title="ADE7816 group selection for channels function." alt="" coords="462,360,610,385"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="747,480,695,444,632,407,583,388,585,383,634,402,698,439,750,476"/>
+<area shape="rect" id="Node000009" href="$ade7816_8c.html#a00fcd83d9557c2dac98209efcad63c64" title="ADE7816 set power direction for channel function." alt="" coords="227,411,377,436"/>
+<area shape="poly" id="edge13_Node000006_Node000009" title=" " alt="" coords="727,485,633,458,497,438,377,429,377,424,498,433,634,453,729,479"/>
+<area shape="rect" id="Node000011" href="$ade7816_8c.html#a7e96c58b9643c767128763c293abbe8c" title="ADE7816 read active energy function." alt="" coords="455,611,617,651"/>
+<area shape="poly" id="edge14_Node000006_Node000011" title=" " alt="" coords="708,519,683,533,668,550,660,567,651,584,635,601,614,614,612,609,632,597,647,581,655,564,663,547,680,529,706,515"/>
+<area shape="rect" id="Node000012" href="$ade7816_8c.html#a64c419482395092ebbe7cd714f519392" title="ADE7816 read reactive energy value function." alt="" coords="449,675,623,715"/>
+<area shape="poly" id="edge16_Node000006_Node000012" title=" " alt="" coords="701,520,683,533,671,549,664,565,660,598,656,631,649,648,635,665,619,677,616,673,631,661,644,646,651,630,655,597,659,564,666,546,679,529,698,516"/>
+<area shape="poly" id="edge18_Node000006_Node000013" title=" " alt="" coords="699,520,683,533,667,557,660,581,659,605,661,630,663,655,661,680,653,704,635,729,615,744,611,739,631,725,649,702,656,679,658,655,656,630,653,606,654,580,662,555,679,530,696,516"/>
+<area shape="rect" id="Node000014" href="$ade7816_8c.html#a76148c378ebe80d81e5c887037a2a6d1" title="ADE7816 set interrupts function." alt="" coords="452,512,620,537"/>
+<area shape="poly" id="edge20_Node000006_Node000014" title=" " alt="" coords="684,512,621,518,620,513,683,506"/>
+<area shape="poly" id="edge21_Node000006_Node000015" title=" " alt="" coords="743,522,711,546,684,578,670,606,665,632,666,682,667,706,664,731,654,755,635,780,620,791,616,787,631,776,650,752,659,729,661,706,661,682,660,632,665,604,679,575,707,542,739,517"/>
+<area shape="rect" id="Node000016" href="$ade7816_8c.html#a2017aa9e0dec9eef9ab713efe3d7af13" title="ADE7816 software reset function." alt="" coords="465,561,607,587"/>
+<area shape="poly" id="edge22_Node000006_Node000016" title=" " alt="" coords="725,519,682,534,634,553,594,564,593,559,632,547,680,529,723,514"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="500,355,449,328,390,300,350,287,351,282,392,296,451,323,502,351"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="463,360,361,337,362,332,464,354"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="464,391,362,413,361,408,463,386"/>
+<area shape="rect" id="Node000010" href="$ade7816_8c.html#a7615dc95ad728c4735ecf2a45b5c5ca3" title="ADE7816 zero&#45;crossing detection for channel function." alt="" coords="228,360,376,385"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="448,375,376,375,376,370,448,370"/>
+<area shape="poly" id="edge12_Node000010_Node000004" title=" " alt="" coords="214,375,166,375,166,370,214,370"/>
+<area shape="poly" id="edge15_Node000011_Node000004" title=" " alt="" coords="455,609,337,563,273,532,212,495,176,468,144,438,96,387,100,384,147,434,180,463,215,490,275,527,339,558,457,604"/>
+<area shape="poly" id="edge17_Node000012_Node000004" title=" " alt="" coords="435,683,380,670,322,651,264,624,212,589,186,566,164,538,128,480,103,426,88,386,93,385,107,423,132,477,168,535,190,562,215,585,267,619,323,646,381,665,436,678"/>
+<area shape="poly" id="edge19_Node000013_Node000003" title=" " alt="" coords="445,755,355,755,355,750,445,750"/>
+<area shape="poly" id="edge25_Node000017_Node000004" title=" " alt="" coords="221,91,215,96,185,127,160,162,140,200,123,239,101,311,91,360,86,359,96,309,118,237,135,198,156,159,181,123,212,92,218,87"/>
+<area shape="poly" id="edge32_Node000021_Node000004" title=" " alt="" coords="237,140,215,153,190,178,168,205,132,265,107,321,93,360,88,359,102,319,127,263,164,202,186,174,212,149,234,135"/>
+<area shape="poly" id="edge34_Node000022_Node000004" title=" " alt="" coords="699,158,597,146,537,142,472,143,406,148,340,159,275,178,215,204,191,220,170,239,135,283,109,327,94,361,89,359,105,325,130,280,166,235,188,216,212,200,273,173,338,154,405,143,472,138,537,137,598,140,700,152"/>
+</map>

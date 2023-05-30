@@ -1,0 +1,11 @@
+<map id="drivers/gmsl/common/gmsl_cam_ser.h" name="drivers/gmsl/common/gmsl_cam_ser.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="306,5,470,45"/>
+<area shape="rect" id="Node000002" href="$max96793__csi_8h.html" title=" " alt="" coords="127,101,385,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,56,284,103,281,98,348,51"/>
+<area shape="rect" id="Node000005" href="$max96793__diag_8c.html" title=" " alt="" coords="409,93,631,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="427,51,484,91,481,95,424,55"/>
+<area shape="rect" id="Node000003" href="$max96793_8c.html" title=" " alt="" coords="5,196,237,236"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="219,151,150,198,147,194,216,146"/>
+<area shape="rect" id="Node000004" href="$max96793__csi_8c.html" title=" " alt="" coords="262,196,519,236"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="296,146,365,194,362,198,293,151"/>
+</map>
