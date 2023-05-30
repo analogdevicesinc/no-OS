@@ -529,7 +529,7 @@ int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc,
 {
 	int ret;
 
-	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
+	ret = ad74416h_reg_update(desc, AD74416H_OUTPUT_CONFIG(ch),
 				  AD74416H_VOUT_RANGE_MSK, range);
 	if (ret)
 		return ret;
