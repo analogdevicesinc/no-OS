@@ -60,7 +60,7 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 
 const struct no_os_spi_init_param adin1110_spi_ip = {
 	.device_id = 2,
-	.max_speed_hz = 15000000,
+	.max_speed_hz = 5000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
@@ -80,7 +80,7 @@ const struct adt75_init_param adt75_ip = {
 	.comm_param = adt75_comm_param,
 };
 
-const struct no_os_gpio_init_param adin1110_int_gpio_ip = {
+const struct no_os_gpio_init_param adin1110_int_ip = {
 	.port = 2,
 	.number = 6,
 	.pull = NO_OS_PULL_UP,
@@ -107,7 +107,7 @@ const struct no_os_gpio_init_param tx_perf_gpio_ip = {
 const struct no_os_gpio_init_param ad74413r_reset_ip = {
 	.port = 0,
 	.number = 26,
-	.pull = NO_OS_PULL_UP,
+	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
 };
@@ -160,10 +160,18 @@ const struct no_os_gpio_init_param max14906_d4_ip = {
 	.extra = &adin1110_rst_gpio_extra,
 };
 
+const struct no_os_gpio_init_param max14906_synch_ip = {
+	.port = 3,
+	.number = 6,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
 const struct no_os_gpio_init_param adin1110_swpd_ip = {
 	.port = 2,
 	.number = 25,
-	.pull = NO_OS_PULL_NONE,
+	.pull = NO_OS_PULL_UP,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
 };
@@ -171,6 +179,14 @@ const struct no_os_gpio_init_param adin1110_swpd_ip = {
 const struct no_os_gpio_init_param adin1110_tx2p4_ip = {
 	.port = 2,
 	.number = 10,
+	.pull = NO_OS_PULL_DOWN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
+const struct no_os_gpio_init_param adin1110_mssel_ip = {
+	.port = 2,
+	.number = 9,
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
@@ -187,7 +203,23 @@ const struct no_os_gpio_init_param adin1110_cfg0_ip = {
 const struct no_os_gpio_init_param adin1110_cfg1_ip = {
 	.port = 2,
 	.number = 0,
-	.pull = NO_OS_PULL_NONE,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
+const struct no_os_gpio_init_param swiot_led1_ip = {
+	.port = 2,
+	.number = 15,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
+const struct no_os_gpio_init_param swiot_led2_ip = {
+	.port = 2,
+	.number = 14,
+	.pull = NO_OS_PULL_UP,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
 };
@@ -204,9 +236,10 @@ const struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
 	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_rst_gpio_ip,
+	.mssel_param = adin1110_mssel_ip,
 	// .int_param = adin1110_int_gpio_ip,
-	.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
-	.append_crc = true,
+	.mac_address = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80},
+	.append_crc = false,
 };
 
 struct no_os_spi_init_param ad74413r_spi_ip = {
@@ -221,7 +254,7 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 
 struct no_os_spi_init_param max14906_spi_ip = {
 	.device_id = 1,
-	.max_speed_hz = 10000000,
+	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,

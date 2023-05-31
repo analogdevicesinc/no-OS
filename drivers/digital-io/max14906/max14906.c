@@ -112,10 +112,13 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 		.cs_change = 1,
 	};
 	uint8_t crc;
+	uint32_t ready;
 	int ret;
 
 	if (desc->crc_en)
 		xfer.bytes_number++;
+
+	// ready = MXC_GPIO_OutGet(MXC_GPIO_GET_);
 
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);

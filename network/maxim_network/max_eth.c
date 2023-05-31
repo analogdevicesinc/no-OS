@@ -82,8 +82,16 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	struct adin1110_desc *mac_desc;
 	struct adin1110_eth_buff buff;
 	uint32_t frame_len;
+	static uint32_t frame_cnt = 0;
+	uint32_t reg_val;
+	uint32_t crc_err_cnt;
+	uint32_t align_err_cnt;
+	uint32_t phy_err_cnt;
+	uint32_t ls_err_cnt;
+	uint16_t pd;
 	int ret;
 
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 0);
 	eth_desc = netif->state;
 	mac_desc = eth_desc->mac_desc;
 
@@ -96,6 +104,39 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
 	ret = adin1110_write_fifo(mac_desc, 0, &buff);
+	if (ret)
+		return ret;
+
+	adin1110_mdio_read_c45(mac_desc, 0x1, 0x01, 0x830B, &pd);
+	printf("MSE %hu\n", pd);
+	adin1110_mdio_read_c45(mac_desc, 0x1, 0x03, 0x08E7, &pd);
+
+	// adin1110_reg_read(mac_desc, 0x43, &reg_val);
+	// adin1110_reg_read(mac_desc, 0x44, &reg_val);
+	// adin1110_reg_read(mac_desc, 0x45, &reg_val);
+	// adin1110_reg_read(mac_desc, 0x46, &reg_val);
+	// adin1110_reg_read(mac_desc, 0x47, &reg_val);
+	// adin1110_reg_read(mac_desc, 0x48, &reg_val);
+	// adin1110_reg_read(mac_desc, 0x49, &reg_val);
+
+	// adin1110_reg_read(mac_desc, 0xA0, &reg_val);
+	// adin1110_reg_read(mac_desc, 0xAE, &reg_val);
+	// adin1110_reg_read(mac_desc, 0xA7, &phy_err_cnt);
+	// adin1110_reg_read(mac_desc, 0xA6, &ls_err_cnt);
+	// adin1110_reg_read(mac_desc, 0xA5, &align_err_cnt);
+	// adin1110_reg_read(mac_desc, 0xA4, &crc_err_cnt);
+	// adin1110_reg_read(mac_desc, 0x8, &reg_val);
+
+	// if (reg_val & 0x3F)
+	// 	return ret;
+
+	// adin1110_reg_read(mac_desc, 0x9, &reg_val);
+	// if (reg_val & (0x7 << 10))
+	// 	return ret;
+
+	// frame_cnt++;
+
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 1 << 15);
 
 	return ret;
 }
@@ -247,7 +288,7 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	struct max_eth_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t dhcp_timeout = 50000;
+	uint32_t dhcp_timeout = 5000;
 	uint32_t reg_val;
 	char *addr;
 	int ret;
@@ -278,6 +319,8 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		goto free_descriptor;
 
+	ret = adin1110_reg_read(descriptor->mac_desc, 0x1, &reg_val);
+
 	lwip_init();
 
 	/* This doesn't support static IP assignment and requires a DHCP server. */
@@ -302,6 +345,9 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		return ret;
 
+	// ret = adin1110_reg_update(descriptor->mac_desc, 0x6, 1 << 2, 1 << 2);
+	// ret = adin1110_reg_read(descriptor->mac_desc, 0x6, &reg_val);
+
 	descriptor->name[0] = param->name[0];
 	descriptor->name[1] = param->name[1];
 
@@ -315,8 +361,14 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	while (!netif_descriptor->ip_addr.addr && dhcp_timeout > 0) {
 		max_lwip_tick(descriptor);
 		dhcp_timeout--;
-		// no_os_mdelay(1);
+		no_os_mdelay(1);
 	}
+
+	// if (!dhcp_timeout)
+	// 	return 0;
+
+	ret = adin1110_reg_read(descriptor->mac_desc, 0xA0, &reg_val);
+	ret = adin1110_reg_read(descriptor->mac_desc, 0xAD, &reg_val);
 
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);
 	if (ret)

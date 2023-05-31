@@ -370,9 +370,9 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		goto err_init;
 
 	spi = MXC_SPI_GET_SPI(descriptor->device_id);
-	spi->ss_time |= 10;
-	spi->ss_time |= 10 << 8;
-	spi->ss_time |= 10 << 16;
+	spi->ss_time |= 100;
+	spi->ss_time |= 100 << 8;
+	spi->ss_time |= 100 << 16;
 
 	// NVIC_SetPriority(DMA0_IRQn, 0);
 	// NVIC_SetPriority(DMA1_IRQn, 0);

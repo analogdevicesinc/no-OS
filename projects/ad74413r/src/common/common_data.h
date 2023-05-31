@@ -62,8 +62,12 @@ extern const struct no_os_gpio_init_param rx_perf_gpio_ip;
 extern const struct no_os_gpio_init_param adin1110_rst_gpio_ip;
 extern const struct no_os_gpio_init_param adin1110_swpd_ip;
 extern const struct no_os_gpio_init_param adin1110_tx2p4_ip;
+extern const struct no_os_gpio_init_param adin1110_mssel_ip;
 extern const struct no_os_gpio_init_param adin1110_cfg1_ip;
 extern const struct no_os_gpio_init_param adin1110_cfg0_ip;
+extern const struct no_os_gpio_init_param adin1110_int_ip;
+extern const struct no_os_gpio_init_param swiot_led1_ip;
+extern const struct no_os_gpio_init_param swiot_led2_ip;
 extern const struct no_os_gpio_init_param ad74413r_reset_ip;
 extern const struct no_os_gpio_init_param ad74413r_ldac_ip;
 extern const struct no_os_gpio_init_param max14906_en_ip;
@@ -71,6 +75,7 @@ extern const struct no_os_gpio_init_param max14906_d1_ip;
 extern const struct no_os_gpio_init_param max14906_d2_ip;
 extern const struct no_os_gpio_init_param max14906_d3_ip;
 extern const struct no_os_gpio_init_param max14906_d4_ip;
+extern const struct no_os_gpio_init_param max14906_synch_ip;
 
 #define AD74413R_GPIO_TRIG_NAME "ad74413r-dev0"
 
