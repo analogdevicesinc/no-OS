@@ -259,8 +259,6 @@ int main(void)
 	if (ret)
 		goto end;
 
-	mwc_algorithms(mwc);
-
 	switch(id) {
 	case ID_ADMV96X1:
 		speed = 100;
