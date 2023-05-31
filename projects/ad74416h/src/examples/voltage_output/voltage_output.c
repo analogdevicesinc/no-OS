@@ -61,6 +61,7 @@ int voltage_output_example_main()
 	int ret;
 
 	uint16_t reg_value = 0xAAAA;
+	uint32_t dac_code = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -68,17 +69,13 @@ int voltage_output_example_main()
 
 	pr_info("ad74416h successfully initialized!\r\n");
 
-	//Configure voltage range to +-10 V
-	ad74416h_reg_read(ad74416h_desc, AD74416H_OUTPUT_CONFIG(0), &reg_value);
-	pr_info("Value of register before write = %0x\r\n", reg_value);
+	//Configure voltage range to +-12 V
 	ret = ad74416h_set_channel_vout_range(ad74416h_desc, 0,
-					      AD74416H_VOUT_RANGE_RNG_NEG12_12V);
+					      AD74416H_VOUT_RANGE_NEG12_12V);
 	if (ret) {
-		pr_info("Error setting Channel 0 to range +-10 V");
+		pr_info("Error setting Channel 0 to range +-12 V");
 		goto error_ad74416h;
 	}
-	ad74416h_reg_read(ad74416h_desc, AD74416H_OUTPUT_CONFIG(0), &reg_value);
-	pr_info("Value of register after write = %0x\r\n", reg_value);
 
 	//Configure Current Limit for channel A in Vout mode to 8mA
 	ret = ad74416h_set_channel_i_limit(ad74416h_desc, 0, AD74416H_I_LIMIT1);
@@ -94,8 +91,13 @@ int voltage_output_example_main()
 		goto error_ad74416h;
 	}
 
-	//Configure Channel A code to middle range
-	ret = ad74416h_set_channel_dac_code(ad74416h_desc, 0, 0x8000);
+	//Configure Channel A code to -6V output
+	ad74416h_dac_voltage_to_code(ad74416h_desc, -6000, &dac_code, 0);
+	pr_info("Calculated DAC CODE for -6V is: 0x%0x\r\n", dac_code);
+	ret = ad74416h_set_channel_dac_code(ad74416h_desc, 0, dac_code);
+
+        ad74416h_reg_read(ad74416h_desc, AD74416H_DAC_CODE(0), &reg_value);
+	pr_info("DAC CODE = 0x%0x\r\n", reg_value);
 
 error_ad74416h:
 	ad74416h_remove(ad74416h_desc);
