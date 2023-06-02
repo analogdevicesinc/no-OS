@@ -71,7 +71,7 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	
 CFLAGS += -mthumb                                                               \
         -mcpu=cortex-m4                                                         \
-	-O2									\
+	-O0									\
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \

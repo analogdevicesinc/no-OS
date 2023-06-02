@@ -241,13 +241,13 @@ int iio_example_main()
 	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
 	no_os_gpio_direction_output(ad74413r_ldac_gpio, 0);
 	no_os_gpio_direction_output(max14906_en_gpio, 1);
+	no_os_gpio_direction_output(max14906_synch_gpio, 0);
 	no_os_gpio_direction_output(max14906_d1_gpio, 0);
 	no_os_gpio_direction_output(max14906_d2_gpio, 0);
 	no_os_gpio_direction_output(max14906_d3_gpio, 0);
 	no_os_gpio_direction_output(max14906_d4_gpio, 0);
-	no_os_gpio_direction_output(max14906_synch_gpio, 1);
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
-	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 0);
+	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 1);
 	no_os_gpio_direction_output(adin1110_mssel_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
@@ -359,8 +359,8 @@ int iio_example_main()
 		app->arg = &step_p;		
 
 		ret = iio_app_run(app);
-		// if (ret != -ENOTCONN)
-		// 	return ret;
+		if (ret != -ENOTCONN)
+			return ret;
 
 		max14906_iio_ip.channel_configs = &swiot_iio_desc->max14906_configs;
 		ad74413r_iio_ip.channel_configs = &swiot_iio_desc->ad74413r_configs;

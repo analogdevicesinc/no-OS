@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "max14906.h"
 #include "no_os_util.h"
+#include "mxc_device.h"
 
 static uint8_t max14906_crc_encode(uint8_t *data)
 {
@@ -105,21 +106,22 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 
 int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 {
+	uint8_t val_reg[3];
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
-		.rx_buff = desc->buff,
+		.rx_buff = val_reg,
 		.bytes_number = MAX14906_FRAME_SIZE,
 		.cs_change = 1,
 	};
 	uint8_t crc;
-	uint32_t ready;
+	volatile uint32_t ready;
 	int ret;
 
 	if (desc->crc_en)
 		xfer.bytes_number++;
 
-	// ready = MXC_GPIO_OutGet(MXC_GPIO_GET_);
-
+	// ready = MXC_GPIO_OutGet(MXC_GPIO_GET_GPIO(1), 1 << 23);
+	memset(desc->buff, 0, 3);
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 0);
@@ -212,6 +214,13 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		goto err;
 
 	descriptor->crc_en = param->crc_en;
+
+	ret = max14906_reg_write(descriptor, 0x0, 0xF);
+	ret = max14906_reg_read(descriptor, 0x0, &reg_val);
+
+	ret = max14906_reg_read(descriptor, 0xF, &reg_val);
+	if (ret)
+		return ret;
 
 	ret = max14906_reg_read(descriptor, MAX14906_DOILEVEL_REG, &reg_val);
 	if (ret)

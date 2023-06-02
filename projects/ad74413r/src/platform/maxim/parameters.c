@@ -45,7 +45,7 @@ struct max_uart_init_param adin1110_uart_extra_ip = {
 };
 
 struct max_spi_init_param adin1110_spi_extra_ip  = {
-	.num_slaves = 1,
+	.num_slaves = 3,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
