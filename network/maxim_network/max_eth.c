@@ -107,9 +107,9 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	if (ret)
 		return ret;
 
-	adin1110_mdio_read_c45(mac_desc, 0x1, 0x01, 0x830B, &pd);
-	printf("MSE %hu\n", pd);
-	adin1110_mdio_read_c45(mac_desc, 0x1, 0x03, 0x08E7, &pd);
+	// adin1110_mdio_read_c45(mac_desc, 0x1, 0x01, 0x830B, &pd);
+	// printf("MSE %hu\n", pd);
+	// adin1110_mdio_read_c45(mac_desc, 0x1, 0x03, 0x08E7, &pd);
 
 	// adin1110_reg_read(mac_desc, 0x43, &reg_val);
 	// adin1110_reg_read(mac_desc, 0x44, &reg_val);
@@ -119,13 +119,13 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	// adin1110_reg_read(mac_desc, 0x48, &reg_val);
 	// adin1110_reg_read(mac_desc, 0x49, &reg_val);
 
-	adin1110_reg_read(mac_desc, 0xA0, &reg_val);
-	adin1110_reg_read(mac_desc, 0xAE, &reg_val);
-	adin1110_reg_read(mac_desc, 0xA7, &phy_err_cnt);
-	adin1110_reg_read(mac_desc, 0xA6, &ls_err_cnt);
-	adin1110_reg_read(mac_desc, 0xA5, &align_err_cnt);
-	adin1110_reg_read(mac_desc, 0xA4, &crc_err_cnt);
-	adin1110_reg_read(mac_desc, 0x8, &reg_val);
+	// adin1110_reg_read(mac_desc, 0xA0, &reg_val);
+	// adin1110_reg_read(mac_desc, 0xAE, &reg_val);
+	// adin1110_reg_read(mac_desc, 0xA7, &phy_err_cnt);
+	// adin1110_reg_read(mac_desc, 0xA6, &ls_err_cnt);
+	// adin1110_reg_read(mac_desc, 0xA5, &align_err_cnt);
+	// adin1110_reg_read(mac_desc, 0xA4, &crc_err_cnt);
+	// adin1110_reg_read(mac_desc, 0x8, &reg_val);
 
 	// if (reg_val & 0x3F)
 	// 	return ret;

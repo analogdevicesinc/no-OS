@@ -370,9 +370,9 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		goto err_init;
 
 	spi = MXC_SPI_GET_SPI(descriptor->device_id);
-	spi->ss_time |= 100;
-	spi->ss_time |= 100 << 8;
-	spi->ss_time |= 100 << 16;
+	spi->ss_time |= 15;
+	spi->ss_time |= 15 << 8;
+	spi->ss_time |= 15 << 16;
 
 	// NVIC_SetPriority(DMA0_IRQn, 0);
 	// NVIC_SetPriority(DMA1_IRQn, 0);
@@ -577,7 +577,7 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
-	.transfer = &max_spi_transfer,
-	//.transfer = &max_spi_transfer_ll,
+	// .transfer = &max_spi_transfer,
+	.transfer = &max_spi_transfer_ll,
 	.remove = &max_spi_remove
 };

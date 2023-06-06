@@ -138,6 +138,7 @@ int iio_example_main()
 	struct no_os_gpio_desc *rx_gpio;
 	struct no_os_gpio_desc *ad74413r_reset_gpio;
 	struct no_os_gpio_desc *ad74413r_ldac_gpio;
+	struct no_os_gpio_desc *ad74413r_irq_gpio;
 	struct no_os_gpio_desc *max14906_en_gpio;
 	struct no_os_gpio_desc *max14906_d1_gpio;
 	struct no_os_gpio_desc *max14906_d2_gpio;
@@ -224,6 +225,7 @@ int iio_example_main()
 	no_os_gpio_get(&adin1110_cfg0_gpio, &adin1110_cfg0_ip);
 	no_os_gpio_get(&ad74413r_reset_gpio, &ad74413r_reset_ip);
 	no_os_gpio_get(&ad74413r_ldac_gpio, &ad74413r_ldac_ip);
+	no_os_gpio_get(&ad74413r_irq_gpio, &ad74413r_irq_ip);
 	no_os_gpio_get(&max14906_en_gpio, &max14906_en_ip);
 	no_os_gpio_get(&max14906_d1_gpio, &max14906_d1_ip);
 	no_os_gpio_get(&max14906_d2_gpio, &max14906_d2_ip);
@@ -241,19 +243,20 @@ int iio_example_main()
 	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
 	no_os_gpio_direction_output(ad74413r_ldac_gpio, 0);
 	no_os_gpio_direction_output(max14906_en_gpio, 1);
-	no_os_gpio_direction_output(max14906_synch_gpio, 0);
 	no_os_gpio_direction_output(max14906_d1_gpio, 0);
 	no_os_gpio_direction_output(max14906_d2_gpio, 0);
 	no_os_gpio_direction_output(max14906_d3_gpio, 0);
 	no_os_gpio_direction_output(max14906_d4_gpio, 0);
+	no_os_gpio_direction_output(max14906_synch_gpio, 1);
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
-	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 1);
+	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 0);
 	no_os_gpio_direction_output(adin1110_mssel_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
-	no_os_gpio_direction_output(swiot_led1_gpio, 1);
-	no_os_gpio_direction_output(swiot_led2_gpio, 1);
+	no_os_gpio_direction_output(swiot_led1_gpio, 0);
+	no_os_gpio_direction_output(swiot_led2_gpio, 0);
 	no_os_gpio_direction_input(adin1110_int_gpio);
+	no_os_gpio_direction_input(ad74413r_irq_gpio);
 	no_os_gpio_direction_output(adin1110_reset_gpio, 0);
 
 	ret = max_eth_init(&netif_desc, &eth_param);
@@ -381,9 +384,9 @@ int iio_example_main()
 		swiot_ip.max14906 = max14906_iio_desc;
 		swiot_ip.mode = 1;
 
-		// ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
-		// if (ret)
-		// 	return ret;
+		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
+		if (ret)
+			return ret;
 
 		iio_devices[0].dev = swiot_iio_desc;
 		iio_devices[0].dev_descriptor = swiot_iio_desc->iio_dev;

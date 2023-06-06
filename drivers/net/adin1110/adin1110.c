@@ -924,16 +924,20 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto free_rst_gpio;
 
-	// ret = adin1110_sw_reset(descriptor);
-	// if (ret)
-	// 	goto free_rst_gpio;
-
 	/* Wait for the MAC and PHY digital interface to intialize */
 	no_os_mdelay(90);
 
 	ret = no_os_spi_init(&descriptor->comm_desc, &param->comm_param);
 	if (ret)
 		goto free_rst_gpio;
+
+	// ret = adin1110_sw_reset(descriptor);
+	// if (ret)
+	// 	goto free_rst_gpio;
+
+	// no_os_mdelay(90);
+
+	ret = adin1110_reg_read(descriptor, 0x1, &reg_val);
 
 	ret = adin1110_reg_read(descriptor, 0x3B, &reg_val);
 	if (reg_val != 0x3)
@@ -951,17 +955,19 @@ int adin1110_init(struct adin1110_desc **desc,
 	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8818, &pd);
 	/* Disable AN */
 	// adin1110_mdio_write_c45(descriptor, 0x1, 0x07, 0x0200, 0x0);
-	/* Set forced AN */
+	// // /* Set forced AN */
 	// adin1110_mdio_write_c45(descriptor, 0x1, 0x07, 0x8000, 0x1);
-	/* Enable PMA loopback */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x01, 0x08F6, 0x1);
-	/* Set test mode 1 */
+	// // /* Enable PMA loopback */
+	// // // adin1110_mdio_write_c45(descriptor, 0x1, 0x01, 0x08F6, 0x1);
+	// // /* Set test mode 1 */
 	// adin1110_mdio_write_c45(descriptor, 0x1, 0x01, 0x08F8, 0x1 << 13);
-	/* Enable PCS loopback */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x03, 0x08E6, 1 << 14);
-	/* Exit SWPD */
+	// // /* Enable PCS loopback */
+	// // // adin1110_mdio_write_c45(descriptor, 0x1, 0x03, 0x08E6, 1 << 14);
+	// // /* Exit SWPD */
 	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8812, 0);
-	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8812, &pd);
+	// // // adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8812, &pd);
+
+	// while(1);
 
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)

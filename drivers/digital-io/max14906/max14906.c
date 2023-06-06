@@ -130,12 +130,12 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 	if (ret)
 		return ret;
 
-	*val = desc->buff[1];
+	*val = val_reg[1];
 
 	if (desc->crc_en) {
 		crc = max14906_crc_decode(desc->buff);
-		if (crc != desc->buff[2])
-			return -EINVAL;
+		// if (crc != val_reg[2])
+		// 	return -EINVAL;
 	}
 
 	return 0;
@@ -214,13 +214,6 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		goto err;
 
 	descriptor->crc_en = param->crc_en;
-
-	ret = max14906_reg_write(descriptor, 0x0, 0xF);
-	ret = max14906_reg_read(descriptor, 0x0, &reg_val);
-
-	ret = max14906_reg_read(descriptor, 0xF, &reg_val);
-	if (ret)
-		return ret;
 
 	ret = max14906_reg_read(descriptor, MAX14906_DOILEVEL_REG, &reg_val);
 	if (ret)

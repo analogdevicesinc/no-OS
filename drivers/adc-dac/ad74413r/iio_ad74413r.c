@@ -905,8 +905,7 @@ static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 	switch (channel->type) {
 	case IIO_RESISTANCE:
 		ret = ad74413r_adc_get_value(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
-					     AD74413R_OUTPUT_CONFIG(channel->address),
-					     &decimal_val);
+					     channel->address, &decimal_val);
 		if (ret)
 			return ret;
 		val = decimal_val.integer;

@@ -149,6 +149,9 @@ static int32_t max_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 static int32_t max_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			      uint32_t bytes_number)
 {
+	mxc_uart_req_t uart_req;
+	uint32_t transfered = 0;
+	uint32_t block_size = 8;
 	int32_t ret;
 
 	if(!desc || !data || !bytes_number)

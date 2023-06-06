@@ -70,6 +70,7 @@ extern const struct no_os_gpio_init_param swiot_led1_ip;
 extern const struct no_os_gpio_init_param swiot_led2_ip;
 extern const struct no_os_gpio_init_param ad74413r_reset_ip;
 extern const struct no_os_gpio_init_param ad74413r_ldac_ip;
+extern const struct no_os_gpio_init_param ad74413r_irq_ip;
 extern const struct no_os_gpio_init_param max14906_en_ip;
 extern const struct no_os_gpio_init_param max14906_d1_ip;
 extern const struct no_os_gpio_init_param max14906_d2_ip;
