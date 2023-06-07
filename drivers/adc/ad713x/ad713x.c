@@ -453,6 +453,8 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 		no_os_mdelay(100);
 	}
 
+	no_os_mdelay(10);
+
 	return 0;
 }
 
