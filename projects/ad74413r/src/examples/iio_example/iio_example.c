@@ -184,7 +184,7 @@ int iio_example_main()
 
 	struct no_os_gpio_init_param swiot_psu_gpio_ip = {
 		.port = 3,
-		.number = 1,
+		.number = 9,
 		.platform_ops = &max_gpio_ops,
 		.pull = NO_OS_PULL_UP,
 		.extra = &max14906_gpio_param
@@ -249,7 +249,7 @@ int iio_example_main()
 	no_os_gpio_direction_output(max14906_d4_gpio, 0);
 	no_os_gpio_direction_output(max14906_synch_gpio, 1);
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
-	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 0);
+	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 1);
 	no_os_gpio_direction_output(adin1110_mssel_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
@@ -348,8 +348,8 @@ int iio_example_main()
 
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = 1;
-		app_init_param.trigs = NULL;
-		app_init_param.nb_trigs = 0;
+		app_init_param.trigs = trigs;
+		app_init_param.nb_trigs = 1;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
 

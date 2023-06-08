@@ -89,19 +89,29 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 		.bytes_number = MAX14906_FRAME_SIZE,
 		.cs_change = 1,
 	};
+	uint32_t read_val;
 	int ret;
 
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 1);
-	desc->buff[1] = val;
+	desc->buff[1] = (uint8_t)val;
 
 	if (desc->crc_en) {
 		xfer.bytes_number++;
 		desc->buff[2] = max14906_crc_encode(desc->buff);
 	}
 
-	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+
+	ret = max14906_reg_read(desc, addr, &read_val);
+	if (ret)
+		return ret;
+
+	if (read_val != val)
+		return -EINVAL;
+
+	return 0;
 }
 
 int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
@@ -114,7 +124,6 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 		.cs_change = 1,
 	};
 	uint8_t crc;
-	volatile uint32_t ready;
 	int ret;
 
 	if (desc->crc_en)
@@ -122,6 +131,7 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 
 	// ready = MXC_GPIO_OutGet(MXC_GPIO_GET_GPIO(1), 1 << 23);
 	memset(desc->buff, 0, 3);
+	memset(val_reg, 0, 3);
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 0);
@@ -130,13 +140,13 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 	if (ret)
 		return ret;
 
-	*val = val_reg[1];
-
 	if (desc->crc_en) {
-		crc = max14906_crc_decode(desc->buff);
-		// if (crc != val_reg[2])
-		// 	return -EINVAL;
+		crc = max14906_crc_decode(val_reg);
+		if (crc != val_reg[2])
+			return -EINVAL;
 	}
+
+	*val = val_reg[1];
 
 	return 0;
 }
@@ -145,7 +155,7 @@ int max14906_reg_update(struct max14906_desc *desc, uint32_t addr,
 			uint32_t mask, uint32_t val)
 {
 	int ret;
-	uint32_t reg_val;
+	uint32_t reg_val = 0;
 
 	ret = max14906_reg_read(desc, addr, &reg_val);
 	if (ret)

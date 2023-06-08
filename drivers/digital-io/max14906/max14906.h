@@ -80,7 +80,6 @@ struct max14906_init_param {
 struct max14906_desc {
 	uint32_t chip_address;
 	struct no_os_spi_desc *comm_desc;
-	struct no_os_gpio_desc *dio[MAX14906_CHANNELS];
 	uint8_t buff[MAX14906_FRAME_SIZE + 1];
 	bool crc_en;
 };

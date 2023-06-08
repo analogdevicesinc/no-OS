@@ -556,6 +556,9 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 
 	mdns_conflict_id = 0;
 
+	MEM_STATS_DISPLAY();
+	MEMP_STATS_DISPLAY(0);
+
 	return 0;
 }
 
