@@ -480,6 +480,93 @@ int ltc6953_enable_temp_stat(struct ltc6953_dev *dev, bool is_en)
 }
 
 /**
+ * @brief Read LTC6953 Check VCO Input stats.
+ * @param dev - The device structure.
+ * @param is_ok - True if VCOOK bit is 1, False if VCOOK bit is 0
+ * @return Returns 0 in case of success or negative error code.
+ */
+int ltc6953_vco_status(struct ltc6953_dev *dev, bool *is_ok)
+{
+	int ret;
+	uint8_t readval;
+
+	ret = ltc6953_read(dev, LTC6953_REG_VCO_STATUS, &readval);
+	if (ret)
+		return ret;
+
+	*is_ok = (bool)no_os_field_get(LTC6953_VCOOK_MSK, readval);
+
+	return 0;
+}
+
+/**
+ * @brief Read LTC6953 INVSTAT bit.
+ * @param dev - The device structure.
+ * @param status - Container variable for INVSTAT pin.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int ltc6953_get_invstat(struct ltc6953_dev *dev, bool *status)
+{
+	int ret;
+	uint8_t readval;
+
+	ret = ltc6953_read(dev, LTC6953_REG_STAT, &readval);
+	if (ret)
+		return ret;
+
+	*status = (bool)no_os_field_get(LTC6953_INVSTAT_MSK, readval);
+
+	return 0;
+}
+
+/**
+ * @brief Write LTC6953 INVSTAT bit.
+ * @param dev - The device structure.
+ * @param status - Container for INVSTAT value
+ * @return Returns 0 in case of success or negative error code.
+ */
+int ltc6953_set_invstat(struct ltc6953_dev *dev, bool status)
+{
+	return ltc6953_update(dev, LTC6953_REG_STAT, LTC6953_INVSTAT_MSK,
+			      no_os_field_prep(LTC6953_INVSTAT_MSK, (uint8_t)status));
+}
+
+/**
+ * @brief Set LTC6953 x bitfield status.
+ * @param dev - The device structure.
+ * @param x - Value for x bitfield
+ * @return Returns 0 in case of success or negative error code.
+ */
+int ltc6953_set_x(struct ltc6953_dev *dev, uint8_t x)
+{
+	if (x > LTC6953_X_MAX)
+		return -EINVAL;
+
+	return ltc6953_update(dev, LTC6953_REG_STAT, LTC6953_STAT_OUT_MSK,
+			      no_os_field_prep(LTC6953_STAT_OUT_MSK, x));
+}
+
+/**
+ * @brief Set LTC6953 x bitfield status.
+ * @param dev - The device structure.
+ * @param x - Container value for x bitfield.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int ltc6953_get_x(struct ltc6953_dev *dev, uint8_t *x)
+{
+	int ret;
+	uint8_t readval;
+
+	ret = ltc6953_read(dev, LTC6953_REG_STAT, &readval);
+	if (ret)
+		return ret;
+
+	*x = no_os_field_get(LTC6953_STAT_OUT_MSK, readval);
+
+	return 0;
+}
+
+/**
  * @brief Read LTC6953 Part number.
  * @param dev - The device structure.
  * @param rev - container variable for Revision number.

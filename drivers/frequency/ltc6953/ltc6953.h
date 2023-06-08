@@ -121,6 +121,7 @@
 
 #define LTC6953_OUT_DIV_MIN		1
 #define LTC6953_OUT_DIV_MAX		1048576
+#define LTC6953_X_MAX			127
 
 #define LTC6953_ADDRX 			0
 #define LTC6953_DXMSB 			1
@@ -254,6 +255,21 @@ int ltc6953_num_pulse(struct ltc6953_dev *dev, uint8_t num_pulse);
 
 /** LTC6953 Enable Temperature Measurement from STAT pin **/
 int ltc6953_enable_temp_stat(struct ltc6953_dev *dev, bool is_en);
+
+/** LTC6953 Check VCO Input status **/
+int ltc6953_vco_status(struct ltc6953_dev *dev, bool *is_ok);
+
+/** LTC6953 Get INVSTAT bit **/
+int ltc6953_get_invstat(struct ltc6953_dev *dev, bool *status);
+
+/** LTC6953 Set INVSTAT bit **/
+int ltc6953_set_invstat(struct ltc6953_dev *dev, bool status);
+
+/** LTC6953 Set X **/
+int ltc6953_set_x(struct ltc6953_dev *dev, uint8_t x);
+
+/** LTC6953 Get X **/
+int ltc6953_get_x(struct ltc6953_dev *dev, uint8_t *x);
 
 /** LTC6953 Get Revision Number **/
 int ltc6953_read_rev(struct ltc6953_dev *dev, uint8_t *rev);
