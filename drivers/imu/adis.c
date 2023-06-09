@@ -962,6 +962,14 @@ void adis_read_diag_fls_mem_wr_cnt_exceed(struct adis_dev *adis,
  */
 int adis_read_x_gyro(struct adis_dev *adis, int32_t *x_gyro)
 {
+	int ret;
+
+	if (adis->fifo_enabled) {
+		ret = adis_write_fifo_en(adis, 0);
+		if (ret)
+			return ret;
+	}
+
 	return adis_read_field_s32(adis, adis->info->field_map->x_gyro, x_gyro);
 }
 
@@ -973,6 +981,14 @@ int adis_read_x_gyro(struct adis_dev *adis, int32_t *x_gyro)
  */
 int adis_read_y_gyro(struct adis_dev *adis, int32_t *y_gyro)
 {
+	int ret;
+
+	if (adis->fifo_enabled) {
+		ret = adis_write_fifo_en(adis, 0);
+		if (ret)
+			return ret;
+	}
+
 	return adis_read_field_s32(adis, adis->info->field_map->y_gyro, y_gyro);
 }
 
@@ -984,6 +1000,14 @@ int adis_read_y_gyro(struct adis_dev *adis, int32_t *y_gyro)
  */
 int adis_read_z_gyro(struct adis_dev *adis, int32_t *z_gyro)
 {
+	int ret;
+
+	if (adis->fifo_enabled) {
+		ret = adis_write_fifo_en(adis, 0);
+		if (ret)
+			return ret;
+	}
+
 	return adis_read_field_s32(adis, adis->info->field_map->z_gyro, z_gyro);
 }
 
