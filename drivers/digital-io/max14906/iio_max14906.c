@@ -468,8 +468,12 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
 	 * mirror's the state.
 	 */
 	for (i = 0; i < MAX14906_CHANNELS; i++) {
-		if (!ch_cfg[i].enabled)
+		if (!ch_cfg[i].enabled || ch_cfg[i].function == MAX14906_HIGH_Z) {
+			ret = max14906_ch_func(desc->max14906_desc, i, MAX14906_HIGH_Z);
+			if (ret)
+				return ret;
 			continue;
+		}
 
 		max14906_iio_channels[ch_offset] = (struct iio_channel)MAX14906_CHANNEL(i);
 
@@ -477,16 +481,16 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
 		if (ch_cfg[i].function == MAX14906_IN) {
 			max14906_iio_channels[ch_offset].attributes = max14906_in_attrs;
 			max14906_iio_channels[ch_offset].ch_out = 0;
-		} else {
+			ch_offset++;
+		} else if (ch_cfg[i].function == MAX14906_OUT) {
 			max14906_iio_channels[ch_offset].attributes = max14906_out_attrs;
 			max14906_iio_channels[ch_offset].ch_out = 1;
-		}
+			ch_offset++;
+		}		
 
 		ret = max14906_ch_func(desc->max14906_desc, i, ch_cfg[i].function);
 		if (ret)
 			return ret;
-
-		ch_offset++;
 	}
 
 	max14906_iio_channels[ch_offset++] = (struct iio_channel)MAX14906_FAULT_CHANNEL;

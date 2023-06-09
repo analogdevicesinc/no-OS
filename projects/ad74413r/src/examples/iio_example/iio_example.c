@@ -192,6 +192,7 @@ int iio_example_main()
 
 	struct swiot_iio_desc_init_param swiot_ip = {
 		.psu_gpio_param = swiot_psu_gpio_ip,
+		.identify_gpio_param = swiot_led2_ip,
 	};
 
 	struct max14906_init_param max14906_ip = {
@@ -239,10 +240,10 @@ int iio_example_main()
 	no_os_gpio_get(&adin1110_cfg1_gpio, &adin1110_cfg1_ip);
 	no_os_gpio_get(&adin1110_int_gpio, &adin1110_int_ip);
 	no_os_gpio_get(&swiot_led1_gpio, &swiot_led1_ip);
-	no_os_gpio_get(&swiot_led2_gpio, &swiot_led2_ip);
+	// no_os_gpio_get(&swiot_led2_gpio, &swiot_led2_ip);
 	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
-	no_os_gpio_direction_output(ad74413r_ldac_gpio, 0);
-	no_os_gpio_direction_output(max14906_en_gpio, 1);
+	no_os_gpio_direction_output(ad74413r_ldac_gpio, 1);
+	no_os_gpio_direction_output(max14906_en_gpio, 0);
 	no_os_gpio_direction_output(max14906_d1_gpio, 0);
 	no_os_gpio_direction_output(max14906_d2_gpio, 0);
 	no_os_gpio_direction_output(max14906_d3_gpio, 0);
@@ -254,7 +255,7 @@ int iio_example_main()
 	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
 	no_os_gpio_direction_output(swiot_led1_gpio, 0);
-	no_os_gpio_direction_output(swiot_led2_gpio, 0);
+	// no_os_gpio_direction_output(swiot_led2_gpio, 0);
 	no_os_gpio_direction_input(adin1110_int_gpio);
 	no_os_gpio_direction_input(ad74413r_irq_gpio);
 	no_os_gpio_direction_output(adin1110_reset_gpio, 0);
@@ -421,10 +422,23 @@ int iio_example_main()
 		step_p.iio_app = app;
 		app->arg = &step_p;		
 
-		ret = iio_app_run(app);
-		if (ret != -ENOTCONN)
-			return ret;
+		// ad74413r_set_channel_dac_code(ad74413r_iio_desc->ad74413r_desc, 0, 1000);
+		// while(1);
+		// int dac_code = 0;
+		// while (1) {
+		// 	ad74413r_set_channel_dac_code(ad74413r_iio_desc->ad74413r_desc, 0, dac_code % 8192);
+		// 	dac_code++;
+		// 	no_os_mdelay(1);
+		// }
 
+		no_os_gpio_set_value(max14906_en_gpio, 1);
+		ret = iio_app_run(app);
+		if (ret != -ENOTCONN) {
+			no_os_gpio_set_value(max14906_en_gpio, 0);
+			return ret;
+		}
+
+		no_os_gpio_set_value(max14906_en_gpio, 0);
 		ret = ad74413r_iio_remove(ad74413r_iio_desc);
 		if (ret)
 			return ret;

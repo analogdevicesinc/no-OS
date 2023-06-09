@@ -102,16 +102,7 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 		desc->buff[2] = max14906_crc_encode(desc->buff);
 	}
 
-	no_os_spi_transfer(desc->comm_desc, &xfer, 1);
-
-	ret = max14906_reg_read(desc, addr, &read_val);
-	if (ret)
-		return ret;
-
-	if (read_val != val)
-		return -EINVAL;
-
-	return 0;
+	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
 int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
@@ -200,9 +191,13 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 	if (function == MAX14906_HIGH_Z) {
 		ret = max14906_reg_update(desc, MAX14906_CONFIG_DO_REG, MAX14906_DO_MASK(ch),
 					  no_os_field_prep(MAX14906_DO_MASK(ch),
-					  MAX14906_PUSH_PULL_CLAMP));
+					  MAX14906_PUSH_PULL));
 		if (ret)
 			return ret;
+
+		return  max14906_reg_update(desc, MAX14906_SETOUT_REG,
+					    MAX14906_CH_DIR_MASK(ch),
+					    no_os_field_prep(MAX14906_CH_DIR_MASK(ch), 1));
 	}
 
 	return max14906_reg_update(desc, MAX14906_SETOUT_REG, MAX14906_CH_DIR_MASK(ch),
@@ -227,29 +222,37 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 
 	ret = max14906_reg_read(descriptor, MAX14906_DOILEVEL_REG, &reg_val);
 	if (ret)
-		return ret;
+		goto spi_err;
 
 	/* Clear the latched faults generated at power up */
 	ret = max14906_reg_read(descriptor, MAX14906_OPN_WIR_FLT_REG, &reg_val);
 	if (ret)
-		return ret;
+		goto spi_err;
 
 	ret = max14906_reg_read(descriptor, MAX14906_SHD_VDD_FLT_REG, &reg_val);
 	if (ret)
-		return ret;
+		goto spi_err;
 
 	ret = max14906_reg_read(descriptor, MAX14906_GLOBAL_FLT_REG, &reg_val);
 	if (ret)
-		return ret;
+		goto spi_err;
 
 	ret = max14906_reg_update(descriptor, 0xA, NO_OS_GENMASK(1, 0), 0);
 	if (ret)
-		return ret;
+		goto spi_err;
+
+	for (int i = 0; i < 4; i++) {
+		ret = max14906_ch_func(descriptor, i, MAX14906_HIGH_Z);
+		if (ret)
+			goto spi_err;
+	}
 
 	*desc = descriptor;
 
 	return 0;
 
+spi_err:
+	no_os_spi_remove(descriptor->comm_desc);
 err:
 	free(descriptor);
 
@@ -262,6 +265,12 @@ int max14906_remove(struct max14906_desc *desc)
 
 	if (!desc)
 		return -ENODEV;
+
+	for (int i = 0; i < 4; i++) {
+		ret = max14906_ch_func(desc, i, MAX14906_HIGH_Z);
+		if (ret)
+			return ret;
+	}
 
 	ret = no_os_spi_remove(desc->comm_desc);
 	if (ret)

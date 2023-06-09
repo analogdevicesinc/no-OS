@@ -375,6 +375,18 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
 {
 	int ret;
 
+	ret = ad74413r_set_channel_dac_code(desc, ch, 0);
+	if (ret)
+		return ret;
+
+	ret = ad74413r_reg_update(desc, AD74413R_CH_FUNC_SETUP(ch),
+				  AD74413R_CH_FUNC_SETUP_MASK, AD74413R_HIGH_Z);
+	if (ret)
+		return ret;
+
+	/* Each function should be selected for at least 130 us. */
+	no_os_udelay(150);
+
 	ret = ad74413r_reg_update(desc, AD74413R_CH_FUNC_SETUP(ch),
 				  AD74413R_CH_FUNC_SETUP_MASK, ch_func);
 	if (ret)
@@ -384,6 +396,9 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
 				  AD74413R_CH_200K_TO_GND_MASK, 1);
 	if (ret)
 		return ret;
+
+	/* No writes to the DACx registers may be done for 150 us after changing function */
+	no_os_udelay(150);
 
 	desc->channel_configs[ch].function = ch_func;
 
@@ -599,9 +614,9 @@ int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
 
 	// /** Wait for all channels to complete the conversion. */
 	if (delay < 1000)
-		no_os_udelay(delay * nb_active_channels);
+		no_os_udelay(2 * delay * nb_active_channels);
 	else
-		no_os_mdelay((delay * nb_active_channels) / 1000);
+		no_os_mdelay((2 * delay * nb_active_channels) / 1000);
 
 	ret = ad74413r_get_raw_adc_result(desc, ch, val);
 	if (ret)
@@ -1055,6 +1070,12 @@ int ad74413r_init(struct ad74413r_desc **desc,
 
 	descriptor->chip_id = init_param->chip_id;
 
+	for (int i = 0; i < 4; i++) {
+		ret = ad74413r_set_channel_function(descriptor, i, AD74413R_HIGH_Z);
+		if (ret)
+			return ret;
+	}
+
 	*desc = descriptor;
 
 	return 0;
@@ -1075,9 +1096,14 @@ err:
 int ad74413r_remove(struct ad74413r_desc *desc)
 {
 	int ret;
+	int i;
 
 	if (!desc)
 		return -EINVAL;
+
+	ret = ad74413r_reset(desc);
+	if (ret)
+		return ret;
 
 	ret = no_os_spi_remove(desc->comm_desc);
 	if (ret)
