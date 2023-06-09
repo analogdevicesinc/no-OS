@@ -92,7 +92,7 @@
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
-static const uint8_t burst_size_bytes[] = {
+STATIC const uint8_t burst_size_bytes[] = {
 	[ADIS_16_BIT_BURST_SIZE] = ADIS_MSG_SIZE_16_BIT_BURST,
 	[ADIS_32_BIT_BURST_SIZE] = ADIS_MSG_SIZE_32_BIT_BURST,
 };
@@ -395,7 +395,7 @@ int adis_write_reg(struct adis_dev *adis, uint32_t reg, uint32_t val,
  * @param field_val - The read field value.
  * @return 0 in case of success, error code otherwise.
  */
-static int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
+STATIC int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
 			       uint32_t *field_val)
 {
 	int ret;
@@ -416,7 +416,7 @@ static int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
  * @param field_val - The read field value.
  * @return 0 in case of success, error code otherwise.
  */
-static int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
+STATIC int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
 			       int32_t *field_val)
 {
 	int ret;
@@ -440,7 +440,7 @@ static int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
  * @param field_val - The field value to be written.
  * @return 0 in case of success, error code otherwise.
  */
-static int adis_write_field_u32(struct adis_dev *adis, struct adis_field field,
+STATIC int adis_write_field_u32(struct adis_dev *adis, struct adis_field field,
 				uint32_t field_val)
 {
 	if (field_val > no_os_field_get(field.field_mask, field.field_mask))
@@ -480,7 +480,7 @@ int adis_update_bits_base(struct adis_dev *adis, uint32_t reg,
  * @param size   - The size of the buffer.
  * @return 0 in case of success, error code otherwise.
  */
-static bool adis_validate_checksum(uint8_t *buffer, uint8_t size)
+STATIC bool adis_validate_checksum(uint8_t *buffer, uint8_t size)
 {
 	uint8_t i;
 	uint16_t checksum = no_os_get_unaligned_be16(&buffer[size-ADIS_CHECKSUM_SIZE]);
@@ -496,7 +496,7 @@ static bool adis_validate_checksum(uint8_t *buffer, uint8_t size)
  * @param adis      - The adis device.
  * @param diag_stat - Diagnosis flags.
  */
-static void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
+STATIC void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
 {
 	const struct adis_data_field_map_def *field_map = adis->info->field_map;
 
