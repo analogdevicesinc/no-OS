@@ -455,9 +455,6 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err_t err;
 	int ret;
 
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 1 << 17);
-
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
 		return -EINVAL;
@@ -482,8 +479,6 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 		if (err != ERR_OK)
 			return err;
 	}
-
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
 
 	return size;
 }
