@@ -115,7 +115,7 @@ const struct no_os_gpio_init_param ad74413r_reset_ip = {
 const struct no_os_gpio_init_param ad74413r_ldac_ip = {
 	.port = 0,
 	.number = 27,
-	.pull = NO_OS_PULL_DOWN,
+	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
 };
@@ -131,7 +131,7 @@ const struct no_os_gpio_init_param ad74413r_irq_ip = {
 const struct no_os_gpio_init_param max14906_en_ip = {
 	.port = 1,
 	.number = 25,
-	.pull = NO_OS_PULL_UP,
+	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
 };

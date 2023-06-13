@@ -73,7 +73,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DATA_BUFFER_SIZE 5000
+#define DATA_BUFFER_SIZE 1000
 #define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 /******************************************************************************/
@@ -236,15 +236,21 @@ int iio_example_main()
 	// no_os_gpio_direction_output(tx_gpio, 0);
 	// no_os_gpio_direction_output(rx_gpio, 0);
 
-	no_os_gpio_get(&adin1110_cfg0_gpio, &adin1110_cfg0_ip);
-	no_os_gpio_get(&ad74413r_reset_gpio, &ad74413r_reset_ip);
-	no_os_gpio_get(&ad74413r_ldac_gpio, &ad74413r_ldac_ip);
-	no_os_gpio_get(&ad74413r_irq_gpio, &ad74413r_irq_ip);
-	no_os_gpio_get(&max14906_en_gpio, &max14906_en_ip);
 	no_os_gpio_get(&max14906_d1_gpio, &max14906_d1_ip);
 	no_os_gpio_get(&max14906_d2_gpio, &max14906_d2_ip);
 	no_os_gpio_get(&max14906_d3_gpio, &max14906_d3_ip);
 	no_os_gpio_get(&max14906_d4_gpio, &max14906_d4_ip);
+	no_os_gpio_direction_output(max14906_d1_gpio, 0);
+	no_os_gpio_direction_output(max14906_d2_gpio, 0);
+	no_os_gpio_direction_output(max14906_d3_gpio, 0);
+	no_os_gpio_direction_output(max14906_d4_gpio, 0);
+	no_os_gpio_get(&max14906_en_gpio, &max14906_en_ip);
+	no_os_gpio_direction_output(max14906_en_gpio, 0);
+
+	no_os_gpio_get(&adin1110_cfg0_gpio, &adin1110_cfg0_ip);
+	no_os_gpio_get(&ad74413r_reset_gpio, &ad74413r_reset_ip);
+	no_os_gpio_get(&ad74413r_ldac_gpio, &ad74413r_ldac_ip);
+	no_os_gpio_get(&ad74413r_irq_gpio, &ad74413r_irq_ip);
 	no_os_gpio_get(&max14906_synch_gpio, &max14906_synch_ip);
 	no_os_gpio_get(&adin1110_reset_gpio, &adin1110_rst_gpio_ip);
 	no_os_gpio_get(&adin1110_swpd_gpio, &adin1110_swpd_ip);
@@ -256,11 +262,6 @@ int iio_example_main()
 	// no_os_gpio_get(&swiot_led2_gpio, &swiot_led2_ip);
 	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
 	no_os_gpio_direction_output(ad74413r_ldac_gpio, 1);
-	no_os_gpio_direction_output(max14906_en_gpio, 0);
-	no_os_gpio_direction_output(max14906_d1_gpio, 0);
-	no_os_gpio_direction_output(max14906_d2_gpio, 0);
-	no_os_gpio_direction_output(max14906_d3_gpio, 0);
-	no_os_gpio_direction_output(max14906_d4_gpio, 0);
 	no_os_gpio_direction_output(max14906_synch_gpio, 1);
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
 	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 1);
@@ -271,7 +272,6 @@ int iio_example_main()
 	// no_os_gpio_direction_output(swiot_led2_gpio, 0);
 	no_os_gpio_direction_input(adin1110_int_gpio);
 	no_os_gpio_direction_input(ad74413r_irq_gpio);
-	no_os_gpio_direction_output(adin1110_reset_gpio, 0);
 
 	ret = max_eth_init(&netif_desc, &eth_param);
 	if (ret)
@@ -392,6 +392,7 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
+		// no_os_gpio_direction_output(adin1110_reset_gpio, 1);
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
 		if (ret)
 			return ret;
@@ -477,6 +478,7 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
+		// no_os_gpio_direction_output(adin1110_reset_gpio, 0);
 		// ret = no_os_irq_ctrl_remove(ad74413r_irq_desc);
 		// if (ret)
 		// 	return ret;

@@ -84,6 +84,7 @@
 /******************************************************************************/
 
 static char uart_buff[IIOD_CONN_BUFFER_SIZE];
+static uint8_t c_buff[IIOD_CONN_BUFFER_SIZE];
 
 static char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -1432,7 +1433,8 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 			return ret;
 
 		data.conn = sock;
-		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = c_buff;
+		// data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1481,7 +1483,8 @@ int iio_step(struct iio_desc *desc)
 		if (desc->server) {
 			iiod_conn_remove(desc->iiod, conn_id, &data);
 			socket_remove(data.conn);
-			no_os_free(data.buf);
+			memset(data.buf, 0, IIOD_CONN_BUFFER_SIZE);
+			// no_os_free(data.buf);
 		}
 #endif
 	} else {

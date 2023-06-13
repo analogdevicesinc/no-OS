@@ -345,9 +345,6 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		return ret;
 
-	// ret = adin1110_reg_update(descriptor->mac_desc, 0x6, 1 << 2, 1 << 2);
-	// ret = adin1110_reg_read(descriptor->mac_desc, 0x6, &reg_val);
-
 	descriptor->name[0] = param->name[0];
 	descriptor->name[1] = param->name[1];
 
@@ -366,9 +363,6 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 
 	// if (!dhcp_timeout)
 	// 	return 0;
-
-	ret = adin1110_reg_read(descriptor->mac_desc, 0xA0, &reg_val);
-	ret = adin1110_reg_read(descriptor->mac_desc, 0xAD, &reg_val);
 
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);
 	if (ret)
@@ -434,12 +428,13 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 		ret = tcp_close(sock->pcb);
 	} while(ret != ERR_OK);
 
+	while (sock->p->ref)
+		pbuf_free(sock->p);
+
 	sock->p_idx = 0;
 	sock->pcb = NULL;
 	sock->p = NULL;
 	_release_socket(desc, sock_id);
-
-	// printf("Closing: %d state %s\n", sock_id, tcp_debug_state_str(sock->pcb->state));
 
 	return 0;
 }
@@ -551,9 +546,6 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 
 	mdns_conflict_id = 0;
 
-	MEM_STATS_DISPLAY();
-	MEMP_STATS_DISPLAY(0);
-
 	return 0;
 }
 
@@ -593,8 +585,7 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data,
 			if (p)
 				pbuf_ref(p);
 
-			if (old_p->ref > 0)
-				pbuf_free(old_p);
+			pbuf_free(old_p);
 
 			tcp_recved(sock->pcb, sock->p_idx);
 			sock->p_idx = 0;
