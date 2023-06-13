@@ -1,0 +1,7 @@
+{
+    "aducm3029": {
+        "basic_example": {
+            "flags" : "BASIC_EXAMPLE=y"
+        }
+    }
+}
