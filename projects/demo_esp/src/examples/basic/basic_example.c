@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   demo_esp8266.c
- *   @brief  Example of using esp8266 module
- *   @author Mihail Chindirs (mihail.chindris@analog.com)
+ *   @file   basic_example.c
+ *   @brief  Basic example header for demo_esp project
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -38,54 +37,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include <stdio.h>
-
-#include "no_os_print_log.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "basic_example.h"
+#include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_timer.h"
 #include "no_os_irq.h"
+#include "no_os_print_log.h"
 #include "mqtt_client.h"
-#include "parameters.h"
-#include "platform_init.h"
-#include "aducm3029_spi.h"
 #include "tcp_socket.h"
 #include "wifi.h"
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 {
 	static struct no_os_irq_ctrl_desc	*irq_ctrl;
 	static struct no_os_uart_desc		*udesc;
 
-	struct no_os_irq_init_param		irq_par;
 	struct wifi_init_param			wifi_param;
-	struct no_os_uart_init_param		uart_param;
 	int32_t				ret;
 
-	/* Initialize irq controller */
-	irq_par = (struct no_os_irq_init_param) {
-		.irq_ctrl_id = 0,
-		.platform_ops = IRQ_OPS,
-		.extra = 0
-	};
-	ret = no_os_irq_ctrl_init(&irq_ctrl, &irq_par);
+	ret = no_os_irq_ctrl_init(&irq_ctrl, &irq_ip);
 	if (ret) {
 		pr_err("Error irq_ctrl_init\n");
 		return ret;
 	}
 
-	/* Initialize uart device */
-	uart_param = (struct no_os_uart_init_param) {
-		.device_id = UART_DEVICE_ID,
-		.baud_rate = UART_CONFIG_BAUDRATE,
-		.size = NO_OS_UART_CS_8,
-		.parity = NO_OS_UART_PAR_NO,
-		.stop = NO_OS_UART_STOP_1_BIT,
-		.platform_ops = UART_OPS,
-		.extra = NULL
-	};
-	ret = no_os_uart_init(&udesc, &uart_param);
+	ret = no_os_uart_init(&udesc, &uart_ip);
 	if (ret) {
 		pr_err("Error uart_init\n");
 		goto error_irq;
@@ -99,6 +84,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		.uart_irq_id = UART_CONFIG_IRQ_ID,
 		.sw_reset_en = true
 	};
+
 	ret = wifi_init(wifi, &wifi_param);
 	if (ret) {
 		pr_err("Error wifi_init\n");
@@ -180,17 +166,9 @@ int init_and_connect_to_mqtt_broker(struct mqtt_desc **mqtt,
 
 	printf("Connection with \"%s\" established\n", SERVER_ADDR);
 
-	struct no_os_timer_init_param timer_init_param = {
-		.id = TIMER_ID,
-		.freq_hz = MQTT_TIMER_FREQ,
-		.ticks_count = 0,
-		.platform_ops = TIMER_OPS,
-		.extra = TIMER_EXTRA
-	};
-
 	/* Initialize mqtt descriptor */
 	mqtt_init_param = (struct mqtt_init_param) {
-		.timer_init_param = &timer_init_param,
+		.timer_init_param = &timer_ip,
 		.sock = sock,
 		.command_timeout_ms = MQTT_CONFIG_CMD_TIMEOUT,
 		.send_buff = send_buff,
@@ -262,17 +240,18 @@ int32_t read_and_send(struct mqtt_desc *mqtt)
 	return mqtt_publish(mqtt, MQTT_PUBLISH_TOPIC, &msg);
 }
 
-int main(int argc, char *argv[])
+
+/***************************************************************************//**
+ * @brief Basic example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
+*******************************************************************************/
+int basic_example_main()
 {
 	struct wifi_desc	*wifi;
 	struct mqtt_desc	*mqtt;
 	int32_t			ret;
-
-	ret = platform_init();
-	if (ret) {
-		pr_err("Error platform_init\n");
-		return ret;
-	}
 
 	ret = init_and_connect_wifi(&wifi);
 	if (ret) {
