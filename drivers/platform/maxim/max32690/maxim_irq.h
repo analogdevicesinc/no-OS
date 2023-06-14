@@ -41,6 +41,7 @@
 
 #include "max32690.h"
 #include "no_os_irq.h"
+#include "no_os_list.h"
 #include "uart.h"
 
 /**

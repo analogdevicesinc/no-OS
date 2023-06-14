@@ -43,7 +43,6 @@
 #include "tmr.h"
 #include "maxim_timer.h"
 #include "no_os_error.h"
-#include "no_os_timer.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 

@@ -50,8 +50,6 @@
 #include "tmr.h"
 #include "maxim_irq.h"
 #include "max32655.h"
-#include "no_os_irq.h"
-#include "no_os_list.h"
 #include "no_os_uart.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"

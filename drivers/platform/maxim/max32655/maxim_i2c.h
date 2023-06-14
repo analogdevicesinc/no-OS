@@ -45,6 +45,7 @@
 #include "i2c_regs.h"
 #include "max32655.h"
 #include "gpio.h"
+#include "no_os_i2c.h"
 
 /**
  * @struct max_i2c_extra

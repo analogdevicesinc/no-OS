@@ -42,6 +42,7 @@
 
 #include "tmr.h"
 #include "stdint.h"
+#include "no_os_timer.h"
 
 #define SOURCE_CLOCK_FREQ       PeripheralClock
 
