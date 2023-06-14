@@ -43,7 +43,6 @@
 
 #include "i2c.h"
 #include "no_os_error.h"
-#include "no_os_i2c.h"
 #include "no_os_util.h"
 #include "maxim_i2c.h"
 #include "mxc_errors.h"

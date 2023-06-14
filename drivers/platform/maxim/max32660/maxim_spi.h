@@ -43,6 +43,7 @@
 #include <stdint.h>
 #include "max32660.h"
 #include "gpio.h"
+#include "no_os_spi.h"
 
 /**
  * @brief maxim specific SPI platform ops structure

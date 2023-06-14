@@ -47,7 +47,6 @@
 #include "mxc_errors.h"
 #include "mxc_pins.h"
 #include "maxim_spi.h"
-#include "no_os_spi.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 

@@ -43,6 +43,7 @@
 #include <stdint.h>
 #include "i2c_regs.h"
 #include "max32690.h"
+#include "no_os_i2c.h"
 
 #ifndef MXC_I2C_GET_I2C
 #define MXC_I2C_GET_I2C(i)	((i) == 0 ? MXC_I2C0 :		\

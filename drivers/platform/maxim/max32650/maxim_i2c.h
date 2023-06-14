@@ -44,6 +44,7 @@
 #include <stdint.h>
 #include "i2c_regs.h"
 #include "mxc_pins.h"
+#include "no_os_i2c.h"
 
 /**
  * @struct max_i2c_extra

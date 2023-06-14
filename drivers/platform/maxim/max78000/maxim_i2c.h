@@ -45,6 +45,7 @@
 #include "i2c_regs.h"
 #include "max78000.h"
 #include "gpio.h"
+#include "no_os_i2c.h"
 
 #ifndef MXC_I2C_GET_I2C
 #define MXC_I2C_GET_I2C(i)	((i) == 0 ? MXC_I2C0 :		\
