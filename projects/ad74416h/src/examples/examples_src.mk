@@ -34,6 +34,12 @@ SRCS += $(PROJECT)/src/examples/current_input_ext/current_input_ext.c
 INCS += $(PROJECT)/src/examples/current_input_ext/current_input_ext.h
 endif
 
+ifeq (y,$(strip $(CURRENT_INPUT_LOOP_EXAMPLE)))
+CFLAGS += -DCURRENT_INPUT_LOOP_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/current_input_loop/current_input_loop.c
+INCS += $(PROJECT)/src/examples/current_input_loop/current_input_loop.h
+endif
+
 ifeq (y,$(strip $(MULTIPLE_DEVICES_EXAMPLE)))
 CFLAGS += -DMULTIPLE_DEVICES_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/multiple_devices/multiple_devices.c
