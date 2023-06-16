@@ -34,5 +34,11 @@ SRCS += $(PROJECT)/src/examples/current_input_ext/current_input_ext.c
 INCS += $(PROJECT)/src/examples/current_input_ext/current_input_ext.h
 endif
 
+ifeq (y,$(strip $(MULTIPLE_DEVICES_EXAMPLE)))
+CFLAGS += -DMULTIPLE_DEVICES_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/multiple_devices/multiple_devices.c
+INCS += $(PROJECT)/src/examples/multiple_devices/multiple_devices.h
+endif
+
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
