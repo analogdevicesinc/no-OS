@@ -46,5 +46,11 @@ SRCS += $(PROJECT)/src/examples/multiple_devices/multiple_devices.c
 INCS += $(PROJECT)/src/examples/multiple_devices/multiple_devices.h
 endif
 
+ifeq (y,$(strip $(DIGITAL_INPUT_LOGIC_EXAMPLE)))
+CFLAGS += -DDIGITAL_INPUT_LOGIC_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/digital_input_logic/digital_input_logic.c
+INCS += $(PROJECT)/src/examples/digital_input_logic/digital_input_logic.h
+endif
+
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h

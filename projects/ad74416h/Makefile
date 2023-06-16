@@ -5,8 +5,9 @@ VOLTAGE_OUTPUT_EXAMPLE = n
 CURRENT_OUTPUT_EXAMPLE = n
 VOLTAGE_INPUT_EXAMPLE = n
 CURRENT_INPUT_EXT_EXAMPLE = n
-CURRENT_INPUT_LOOP_EXAMPLE = y
+CURRENT_INPUT_LOOP_EXAMPLE = n
 MULTIPLE_DEVICES_EXAMPLE = n
+DIGITAL_INPUT_LOGIC_EXAMPLE = y
 
 # Select the device you want to enable by choosing y for enabling and n for disabling
 include ../../tools/scripts/generic_variables.mk
