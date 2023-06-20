@@ -239,7 +239,7 @@ class BuildConfig:
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
-			err = run_cmd_stm("timeout 100s " + cmd + ' VERBOSE=y -j%d all' % (1))
+			err = run_cmd_stm("timeout 100s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
 			if err != 0 and err != 31744:
 				return err
 		else:
@@ -254,7 +254,7 @@ class BuildConfig:
 			err = run_cmd(cmd + ' clean')
 			if err != 0:
 				return err
-			err = run_cmd(cmd + ' -j%d all' % (1))
+			err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
 			if err != 0:
 				return err
 		
