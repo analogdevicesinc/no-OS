@@ -6,6 +6,9 @@ TEMP_DIR	= $(BUILD_DIR)/tmp
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 BOOT_BIN_DIR    = $(BUILD_DIR)/output_boot_bin
 FSBL_PATH	= $(TEMP_DIR)/output/hw0/export/hw0/sw/hw0/boot/fsbl.elf
+TEMP_DIR_RUN = $(PROJECT)/tmp
+FSBL_PATH_RUN	= $(TEMP_DIR_RUN)/output/hw0/export/hw0/sw/hw0/boot/fsbl.elf
+FILE := $(wildcard *.elf)
 comma	:= ,
 
 ifeq (y,$(strip $(NETWORKING)))
@@ -22,6 +25,7 @@ define tcl_util
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
+ARCH_RUN = $(shell $(call read_file, $(TEMP_DIR_RUN)/arch.txt))
 
 define create_bif_file
 $(call print_line_in_file,the_ROM_image:, $(BOOT_BIN_DIR)/project.bif)
@@ -158,9 +162,46 @@ endif
 #Add more dependencies to $(BINARY) rule.
 $(BINARY): $(TEMP_DIR)/arch.txt
 
-PHONY += xilinx_run
-xilinx_run: all
-	$(MUTE) $(call tcl_util, upload) $(JTAG_CABLE_ID) $(HIDE)
+xilinx_run:
+ifneq (, $(wildcard *.elf))
+	$(call print,Elf exists $(FILE))
+	$(MUTE) $(MAKE) --no-print-directory $(TEMP_DIR_RUN)
+	$(MUTE) xsct $(PLATFORM_TOOLS)/util.tcl					\
+	     upload							\
+	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
+	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE)       \
+		 $(FSBL_PATH_RUN) $(JTAG_CABLE_ID) $(HIDE)
+else
+ifneq (, $(wildcard build))
+	$(call print, build folder exists)
+	$(MUTE)	$(call tcl_util, upload) $(FSBL_PATH) $(JTAG_CABLE_ID) $(HIDE)
+else
+	$(call print,Can not perform make run command)
+endif
+endif
+
+$(TEMP_DIR_RUN): $(HARDWARE)
+	$(call print,Creating tmp directory)
+	$(MUTE) $(call mk_dir,$(TEMP_DIR_RUN)) $(HIDE)
+	$(MUTE) $(call copy_file,$(HARDWARE),$(TEMP_DIR_RUN)) $(HIDE)
+	$(MUTE) xsct $(PLATFORM_TOOLS)/util.tcl					\
+	     get_arch						\
+	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
+	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
+	$(MUTE) $(MAKE) --no-print-directory create_fsbl
+
+PHONY += create_fsbl
+create_fsbl:
+ifeq ($(findstring cortexa53,$(strip $(ARCH_RUN))),cortexa53)
+	$(call print,genera $(ARCH_RUN) fsbl)
+	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
+	$(MUTE) xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+endif
+ifeq ($(findstring cortexr5,$(strip $(ARCH_RUN))),cortexr5)
+	$(call print,genera $(ARCH_RUN) fsbl)
+	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
+	$(MUTE) xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+endif
 
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(MUTE) $(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
