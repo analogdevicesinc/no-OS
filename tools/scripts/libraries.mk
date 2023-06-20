@@ -18,6 +18,12 @@ CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
 CFLAGS += -DIIO_SUPPORT
 endif
 
+# FreeRTOS
+ifeq '$(FREERTOS)' 'y'
+CFLAGS += -DFREERTOS
+include $(NO-OS)/tools/scripts/freertos.mk
+endif
+
 #	MBEDTLS
 ifneq ($(if $(findstring mbedtls, $(LIBRARIES)), 1),)
 # Generic part
