@@ -58,5 +58,11 @@ SRCS += $(PROJECT)/src/examples/digital_input_loop/digital_input_loop.c
 INCS += $(PROJECT)/src/examples/digital_input_loop/digital_input_loop.h
 endif
 
+ifeq (y,$(strip $(TEMPERATURE_2WIRE_RTD_EXAMPLE)))
+CFLAGS += -DTEMPERATURE_2WIRE_RTD_EXAMPLE
+SRCS += $(PROJECT)/src/examples/temperature_2wire_rtd/temperature_2wire_rtd.c
+INCS += $(PROJECT)/src/examples/temperature_2wire_rtd/temperature_2wire_rtd.h
+endif
+
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
