@@ -52,7 +52,7 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /***************************************************************************//**
- * @brief Voltage input example main execution.
+ * @brief RTD 2-wire example main execution.
  *
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
@@ -123,7 +123,7 @@ int temperature_2wire_rtd_example_main()
 			//Interpret ADC Data
 			//RTD = ADC_CODE * R_ref / (2^24 * ADC_gain)
 			//For ADC range 0-12V --> ADC_gain = 1/4.8
-			Rrtd = adc_value * 12 / (pow(2, 24) / 4.8);
+			Rrtd = adc_value * 2012 / (pow(2, 24) / 4.8);
 			pr_info("Rrtd value = %f\r\n", Rrtd);
 		}
 	}

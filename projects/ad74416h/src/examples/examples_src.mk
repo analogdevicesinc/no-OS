@@ -64,5 +64,11 @@ SRCS += $(PROJECT)/src/examples/temperature_2wire_rtd/temperature_2wire_rtd.c
 INCS += $(PROJECT)/src/examples/temperature_2wire_rtd/temperature_2wire_rtd.h
 endif
 
+ifeq (y,$(strip $(TEMPERATURE_3WIRE_RTD_EXAMPLE)))
+CFLAGS += -DTEMPERATURE_3WIRE_RTD_EXAMPLE
+SRCS += $(PROJECT)/src/examples/temperature_3wire_rtd/temperature_3wire_rtd.c
+INCS += $(PROJECT)/src/examples/temperature_3wire_rtd/temperature_3wire_rtd.h
+endif
+
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
