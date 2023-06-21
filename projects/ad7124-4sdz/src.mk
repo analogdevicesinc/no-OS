@@ -18,7 +18,8 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(NO-OS)/util/no_os_util.c \
-	$(NO-OS)/util/no_os_alloc.c
+	$(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c
 INCS += $(DRIVERS)/adc/ad7124/ad7124.h \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.h
 
@@ -35,4 +36,5 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h \
-	$(INCLUDE)/no_os_alloc.h
+	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_mutex.h

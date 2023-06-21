@@ -35,6 +35,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c \
 	$(NO-OS)/util/no_os_clk.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
@@ -49,6 +50,7 @@ INCS +=	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_mutex.h \
 	$(INCLUDE)/no_os_clk.h \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
