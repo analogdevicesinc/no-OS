@@ -7,7 +7,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
 	$(DRIVERS)/dac/ad5758/ad5758.c \
 	$(NO-OS)/util/no_os_util.c \
-        $(NO-OS)/util/no_os_alloc.c
+        $(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c
 
 INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_spi.h \
@@ -16,6 +17,7 @@ INCS += $(INCLUDE)/no_os_gpio.h \
         $(INCLUDE)/no_os_print_log.h \
         $(INCLUDE)/no_os_util.h \
         $(INCLUDE)/no_os_alloc.h \
+        $(INCLUDE)/no_os_mutex.h \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h	\
 	$(DRIVERS)/dac/ad5758/ad5758.h

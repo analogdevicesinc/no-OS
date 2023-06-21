@@ -25,7 +25,8 @@ SRCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/api/no_os_timer.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_list.c \
-	$(NO-OS)/util/no_os_alloc.c
+	$(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
@@ -64,7 +65,8 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_i2c.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_timer.h \
-	$(INCLUDE)/no_os_alloc.h
+	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_mutex.h
 INCS +=	$(PROJECT)/TX/tx_lib.h \
 	$(PROJECT)/TX/HAL/COMMON/tx_cfg.h \
 	$(PROJECT)/TX/HAL/COMMON/tx_hal.h \

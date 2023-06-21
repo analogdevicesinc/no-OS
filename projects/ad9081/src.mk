@@ -38,6 +38,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(NO-OS)/util/no_os_clk.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c \
 	$(NO-OS)/jesd204/jesd204-core.c \
 	$(NO-OS)/jesd204/jesd204-fsm.c
 ifeq (y,$(strip $(QUAD_MXFE)))
@@ -99,6 +100,7 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_mutex.h \
 	$(INCLUDE)/jesd204.h \
 	$(NO-OS)/jesd204/jesd204-priv.h
 ifeq (y,$(strip $(QUAD_MXFE)))

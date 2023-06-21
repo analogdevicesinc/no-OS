@@ -13,7 +13,8 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_rtc.h \
 	$(INCLUDE)/no_os_gpio.h \
-	$(INCLUDE)/no_os_alloc.h
+	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_mutex.h
 
 SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
@@ -25,6 +26,7 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c \
 	$(DRIVERS)/afe/ad5940/bia_measurement.c \
 	$(DRIVERS)/afe/ad5940/ad5940.c
 

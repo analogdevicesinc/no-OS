@@ -14,7 +14,8 @@ SRCS += $(PROJECT)/src/ad7768_evb.c
 SRCS += $(NO-OS)/util/no_os_fifo.c
 SRCS += $(NO-OS)/util/no_os_util.c
 SRCS += $(NO-OS)/util/no_os_list.c
-SRCS += $(NO-OS)/util/no_os_alloc.c
+SRCS += $(NO-OS)/util/no_os_alloc.c \
+	$(NO-OS)/util/no_os_mutex.c
 
 # Add to INCS inlcude files to be build in the project
 INCS += $(INCLUDE)/no_os_error.h
@@ -31,7 +32,8 @@ INCS +=	$(INCLUDE)/no_os_irq.h
 INCS += $(INCLUDE)/no_os_list.h
 INCS += $(INCLUDE)/no_os_fifo.h
 INCS += $(INCLUDE)/no_os_alloc.h
-INCS += $(PROJECT)/src/parameters.h
+INCS += $(PROJECT)/src/parameters.h \
+	$(INCLUDE)/no_os_mutex.h
 
 # Add to SRC_DIRS directories to be used in the build. All .c and .h files from
 # the directory and subdirectories will be added to the build (recursively)

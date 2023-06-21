@@ -23,7 +23,8 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/no_os_util.c \
-	$(NO-OS)/util/no_os_crc8.c
+	$(NO-OS)/util/no_os_crc8.c \
+	$(NO-OS)/util/no_os_mutex.c
 
 INCS += $(DRIVERS)/afe/ad413x/ad413x.h
 
@@ -41,7 +42,8 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_list.h \
 	$(INCLUDE)/no_os_crc8.h \
-	$(INCLUDE)/no_os_alloc.h
+	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_mutex.h
 
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
