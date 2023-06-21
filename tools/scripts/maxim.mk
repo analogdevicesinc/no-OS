@@ -106,10 +106,12 @@ endif
 # Add lwip
 #INCS += $(NO-OS)/network/maxim_network
 SRC_DIRS += $(NO-OS)/network/maxim_network
+INCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/Ext_Flash.h
+SRCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/mx25.c
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 
-LSCRIPT = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
+LSCRIPT = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_hpb.ld
 ASM_SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).S
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/heap.c
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/system_$(TARGET_LCASE).c

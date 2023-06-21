@@ -46,6 +46,7 @@
 #include "ad74413r.h"
 #include "adin1110.h"
 #include "adt75.h"
+#include "maxq1065.h"
 #include "iio_trigger.h"
 
 extern struct no_os_uart_init_param adin1110_uart_ip;
@@ -54,7 +55,9 @@ extern const struct adin1110_init_param adin1110_ip;
 extern const struct no_os_spi_init_param adin1110_spi_ip;
 extern struct no_os_spi_init_param ad74413r_spi_ip;
 extern struct no_os_spi_init_param max14906_spi_ip;
+extern const struct no_os_spi_init_param maxq1065_spi_ip;
 extern struct ad74413r_init_param ad74413r_ip;
+extern const struct maxq1065_init_param maxq1065_ip;
 extern const struct adt75_init_param adt75_ip;
 extern const struct no_os_gpio_init_param adin1110_int_gpio_ip;
 extern const struct no_os_gpio_init_param tx_perf_gpio_ip;
@@ -77,6 +80,8 @@ extern const struct no_os_gpio_init_param max14906_d2_ip;
 extern const struct no_os_gpio_init_param max14906_d3_ip;
 extern const struct no_os_gpio_init_param max14906_d4_ip;
 extern const struct no_os_gpio_init_param max14906_synch_ip;
+extern const struct no_os_gpio_init_param maxq1065_reset_ip;
+extern const struct no_os_gpio_init_param maxq1065_mode_ip;
 
 #define AD74413R_GPIO_TRIG_NAME "ad74413r-dev0"
 

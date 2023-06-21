@@ -14,7 +14,7 @@ static const char *const max14906_function_avail[MAX14906_FUNCTION_CNT] = {
 
 static const char *max14906_do_mode_avail[4] = {
 	[MAX14906_HIGH_SIDE] = "High_side",
-	[MAX14906_HIGH_SIDE_INRUSH] = "High_side_inrush",
+	[MAX14906_HIGH_SIDE_INRUSH] = "High_side_2x_inrush",
 	[MAX14906_PUSH_PULL_CLAMP] = "Push_pull_clamp",
 	[MAX14906_PUSH_PULL] = "Push_pull",
 };

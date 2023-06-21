@@ -108,6 +108,11 @@ CFLAGS += -I$(AZURE_DIR)/sdk/inc
 
 endif
 
+ifneq ($(if $(findstring maxq1065_lib, $(LIBRARIES)), 1),)
+EXTRA_LIBS += $(NO-OS)/projects/ad74413r/libmaxq1065_api.a
+EXTRA_LIBS_PATHS += $(NO-OS)/projects/ad74413r
+endif
+
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))

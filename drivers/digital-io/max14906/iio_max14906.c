@@ -64,20 +64,7 @@ static int max14906_iio_read_config_iec_available(void *dev, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv);
-static int max14906_iio_read_config_enabled(void *dev, char *buf, uint32_t len,
-					const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
 
-static int max14906_iio_read_config_apply(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_write_config_apply(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
-
-static int max14906_iio_read_runtime_back(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
 
 static int max14906_iio_reg_read(struct max14906_iio_desc *, uint32_t, uint32_t *);
 static int max14906_iio_reg_write(struct max14906_iio_desc *, uint32_t, uint32_t);
@@ -384,7 +371,7 @@ static int max14906_iio_read_config_iec(void *dev, char *buf, uint32_t len,
 	struct max14906_iio_desc *iio_desc = dev;
 	enum max14906_iec_type iec_type;
 	struct max14906_desc *desc;
-	uint8_t val;
+	uint32_t val;
 	int ret;
 
 	desc = iio_desc->max14906_desc;

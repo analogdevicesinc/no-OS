@@ -937,111 +937,36 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	// no_os_mdelay(90);
 
-	ret = adin1110_reg_read(descriptor, 0x1, &reg_val);
-
-	ret = adin1110_reg_read(descriptor, 0x3B, &reg_val);
-	if (reg_val != 0x3)
-		return ret;
-
-	adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x882C, 0x1);
-	adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8819, 0x1);
-
 	ret = no_os_gpio_get(&descriptor->mssel_gpio, &param->mssel_param);
 	if (ret)
 		goto free_rst_gpio;
 
 	no_os_gpio_direction_input(descriptor->mssel_gpio);
 
-	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8818, &pd);
-	/* Disable AN */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x07, 0x0200, 0x0);
-	// // /* Set forced AN */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x07, 0x8000, 0x1);
-	// // /* Enable PMA loopback */
-	// // // adin1110_mdio_write_c45(descriptor, 0x1, 0x01, 0x08F6, 0x1);
-	// // /* Set test mode 1 */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x01, 0x08F8, 0x1 << 13);
-	// // /* Enable PCS loopback */
-	// // // adin1110_mdio_write_c45(descriptor, 0x1, 0x03, 0x08E6, 1 << 14);
-	// // /* Exit SWPD */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8812, 0);
-	// // // adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8812, &pd);
-
-	// while(1);
-
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
 		goto free_spi;
 
-	// ret = adin1110_setup_phy(descriptor);
-	// if (ret)
-	// 	goto free_spi;
+	ret = adin1110_setup_phy(descriptor);
+	if (ret)
+		goto free_spi;
 
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_spi;
 
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x01, 0x830B, &pd);
+	uint16_t mdio_val;
 
-	// adin1110_mdio_read_c45(descriptor, 0x1, 0x07, 0x8001, &pd);
-	// adin1110_mdio_read_c45(descriptor, 0x1, 0x07, 0x8030, &pd);
-
-	// adin1110_reg_update(descriptor, 0x06, 1 << 2, 1 << 2);
-	// adin1110_reg_update(descriptor, 0x06, 1 << 4, 1 << 4);
-	// adin1110_reg_write(descriptor, 0xB5, 0);
-	// adin1110_reg_write(descriptor, 0xB6, 0xFFFF);
-	// adin1110_reg_write(descriptor, 0xB7, 0);
-	// adin1110_reg_read(descriptor, 0x04, &reg_val);
-	// adin1110_reg_read(descriptor, 0x06, &reg_val);
-	// adin1110_reg_update(descriptor, 0x06, 1 << 4, 1 << 4);
-
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x01, 0x08F8, 0x1 << 13);
-	/* Frame generator continuos mode */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1F, 0x8022, 0x1);
-	// // /* Frame generator start */
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1F, 0x8021, 0x4);
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1F, 0x8020, 0x1);
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1F, 0x8020, 0x1);
-	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1F, 0x8005, 0x1);
-
-	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x8005, &pd);
-	// adin1110_mdio_read_c45(descriptor, 0x1, 0x07, 0x8001, &pd);
-
-	// while (1) {
-	// 	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x8029, &pd);
-	// 	if (pd)
-	// 		break;
-	// }
-
-	// while(1) {
-	// adin1110_reg_read(descriptor, 0xA7, &phy_err_cnt);
-	// adin1110_reg_read(descriptor, 0xA6, &ls_err_cnt);
-	// adin1110_reg_read(descriptor, 0xA5, &align_err_cnt);
-	// adin1110_reg_read(descriptor, 0xA4, &crc_err_cnt);
-
-	// no_os_mdelay(5000);
-
-	// adin1110_reg_read(descriptor, 0x08, &reg_val);
-	// adin1110_reg_read(descriptor, 0x09, &reg_val);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x8008, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x8009, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x800A, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x800B, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x800C, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x800D, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x800E, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x800F, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x8010, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x1F, 0x8011, &pd);
-	adin1110_reg_read(descriptor, 0xA0, &reg_val);
-
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x01, 0x830B, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x01, 0x830B, &pd);
-	adin1110_mdio_read_c45(descriptor, 0x1, 0x01, 0x830B, &pd);
-
-	// adin1110_reg_read(descriptor, 0xA4, &crc_err_cnt);
-	// // }
-	// adin1110_reg_read(descriptor, 0x3B, &reg_val);
+	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8C56, 0xF0);
+	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8C83, 0xA);
+	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8C83, &mdio_val);
+	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8C82, &mdio_val);
+	// mdio_val &= ~NO_OS_GENMASK(12, 8);
+	// mdio_val |= 0xF << 8;
+	// mdio_val &= ~NO_OS_GENMASK(4, 0);
+	// mdio_val |= 0xF;
+	// adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8C82, mdio_val);
+	// adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8C82, &mdio_val);
 
 	*desc = descriptor;
 

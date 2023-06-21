@@ -5,6 +5,7 @@ IIO_TRIGGER_EXAMPLE = n
 
 PLATFORM = maxim
 TARGET = max32650
+LIBRARIES += maxq1065_lib
 
 include ../../tools/scripts/generic_variables.mk
 
@@ -12,5 +13,9 @@ include src.mk
 
 include ../../tools/scripts/generic.mk
 
+CFLAGS += -DMXQ_ON_NO_OS
 CFLAGS += -DNO_OS_NETWORKING
+CFLAGS += -DEXT_FLASH_MX25
 CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
+
+# CFLAGS += -l$(NO-OS)/projects/ad74413r/libmaxq1065_api.a

@@ -1063,7 +1063,6 @@ int ad74413r_init(struct ad74413r_desc **desc,
 	ret = ad74413r_clear_errors(descriptor);
 	if (ret)
 		goto comm_err;
-
 	ret = ad74413r_scratch_test(descriptor);
 	if (ret)
 		goto comm_err;

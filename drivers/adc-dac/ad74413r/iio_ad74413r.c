@@ -199,6 +199,10 @@ static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
 static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
 					     const struct iio_ch_info *channel,
 					     intptr_t priv);
+static int ad74413r_iio_read_threshold(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
+				        const struct iio_ch_info *channel, intptr_t priv);
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask);
 static int ad74413r_iio_buffer_disable(void *dev);
 static int ad74413r_iio_read_samples(void *dev, uint32_t *buf,
@@ -256,6 +260,14 @@ static struct iio_attribute ad74413r_iio_adc_resistance_attrs[] = {
 		.name = "raw",
 		.show = ad74413r_iio_read_raw
 	},
+		{
+		.name = "offset",
+		.show = ad74413r_iio_read_offset
+	},
+		{
+		.name = "scale",
+		.show = ad74413r_iio_read_scale
+	},
 	{
 		.name = "sampling_frequency",
 		.shared = IIO_SHARED_BY_ALL,
@@ -299,6 +311,32 @@ static struct iio_attribute ad74413r_iio_adc_attrs[] = {
 	{
 		.name = "offset",
 		.show = ad74413r_iio_read_offset,
+		.priv = AD74413R_ADC,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_attribute ad74413r_iio_digital_attrs[] = {
+	{
+		.name = "sampling_frequency",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = ad74413r_iio_read_sampling_freq,
+		.store = ad74413r_iio_write_sampling_freq,
+	},
+	{
+		.name = "sampling_frequency_available",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = ad74413r_iio_read_sampling_freq_avail
+	},
+	{
+		.name = "raw",
+		.show = ad74413r_iio_read_raw,
+		.priv = AD74413R_ADC,
+	},
+	{
+		.name = "threshold",
+		.show = ad74413r_iio_read_threshold,
+		.store = ad74413r_iio_write_threshold,
 		.priv = AD74413R_ADC,
 	},
 	END_ATTRIBUTES_ARRAY
@@ -436,11 +474,11 @@ static struct iio_channel ad74413r_resistance_input_channels[] = {
 };
 
 static struct iio_channel ad74413r_digital_input_channels[] = {
-	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs)
+	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_digital_attrs)
 };
 
 static struct iio_channel ad74413r_digital_input_loop_channels[] = {
-	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs),
+	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_digital_attrs),
 	AD74413R_DAC_CHANNEL(IIO_CURRENT)
 };
 
@@ -649,12 +687,10 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 	int ret;
 	uint32_t val = 0;
 
-	// return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
-
 	if (channel->ch_out)
-		return -EINVAL;
-
-	if (priv)
+		ret = ad74413r_reg_read(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
+					AD74413R_DAC_CODE(channel->address), &val);
+	else if (priv)
 		ret = ad74413r_get_diag(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
 					channel->address, &val);
 	else
@@ -814,7 +850,7 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		case IIO_VOLTAGE:
 			if (channel->ch_out) {
 				val[0] = 1;
-				val[1] = 342937;
+				val[1] = 342773;
 			} else {
 				val[0] = 0;
 				val[1] = 152590;
@@ -823,11 +859,11 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 			break;
 		case IIO_CURRENT:
 			if (channel->ch_out) {
-				val[0] = 0;
-				val[1] = 152590 / MILLI;
+				val[0] = 3;
+				val[1] = 51758;
 			} else {
 				val[0] = 0;
-				val[1] = 381470 / MILLI;
+				val[1] = 381476;
 			}
 			break;
 		default:
@@ -1072,6 +1108,43 @@ static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
 	return strlen(buf);
 }
 
+static int ad74413r_iio_read_threshold(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint32_t reg_val;
+	int ret;
+
+	if (desc->ad74413_conv_mode != AD74413R_STOP_PWR_DOWN)
+		return -EINVAL;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIN_THRESH, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val = no_os_field_get(AD74413R_COMP_THRESH_MASK, reg_val);
+
+	/* Convert to mV */
+	reg_val = reg_val * AD74413R_THRESHOLD_RANGE / AD74413R_THRESHOLD_DAC_RANGE;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&reg_val);
+}
+
+static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint32_t reg_val;
+	int ret;
+
+	if (desc->ad74413_conv_mode != AD74413R_STOP_PWR_DOWN)
+		return -EINVAL;
+
+	iio_parse_value(buf, IIO_VAL_INT, &reg_val, NULL);
+
+	return ad74413r_set_threshold(desc->ad74413r_desc, channel->address, reg_val);
+}
+
 static int ad74413r_iio_read_diag_function(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -1172,6 +1245,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc,
 	struct iio_channel *chan;
 	struct iio_channel *chan_buffer;
 	struct ad74413r_channel_map channels_info;
+	int ret;
 
 	config = &init_param->channel_configs[0];
 
@@ -1209,6 +1283,19 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc,
 			chan_buffer[n_chan] = chan[ch_idx];
 			iio_desc->iio_dev->num_ch++;
 			n_chan++;
+
+			/* Enable the comparator for digital input channels */
+			if (config[i].function == AD74413R_DIGITAL_INPUT ||
+			    config[i].function == AD74413R_DIGITAL_INPUT_LOOP) {
+				// ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_DIN_CONFIG(ch_idx),
+				// 			  NO_OS_BIT(12), 1);
+				// if (ret)
+				// 	return ret;
+				ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_DIN_THRESH,
+							  AD74413R_DIN_THRESH_MODE_MASK, 1);
+				if (ret)
+					return ret;
+			}
 		}
 
 		iio_desc->no_of_active_adc_channels++;
@@ -1287,7 +1374,11 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 
 	ret = ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_START_CONT);
 out:
+	if (!ret)
+		iio_desc->ad74413_conv_mode = AD74413R_START_CONT;
+
 	__enable_irq();
+
 	return ret;
 	// if (ret)
 	// 	return ret;
@@ -1310,8 +1401,10 @@ static int ad74413r_iio_buffer_disable(void *dev)
 
 	__disable_irq();
 	ret = ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_STOP_PWR_DOWN);
+	if (!ret)
+		iio_desc->ad74413_conv_mode = AD74413R_STOP_PWR_DOWN;
 	__enable_irq();
-
+	
 	return ret;
 }
 
@@ -1359,14 +1452,17 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	uint8_t buff[32] = {0};
 	uint32_t buffer_idx = 0;
 	struct ad74413r_desc *desc;
+	struct ad74413r_channel_config *config;
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
+	uint32_t digital_val;
 
 	__disable_irq();
 
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
+	config = iio_desc->channel_configs;
 
 	for (i = 0; i < iio_desc->no_of_active_adc_channels + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
@@ -1374,13 +1470,24 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 			if (ret)
 				continue;
 
-			if (ch < active_adc_ch)
-				ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
-							    &buff[buffer_idx]);
-			else
+			if (ch < 4) {
+				if (config[ch].function == AD74413R_DIGITAL_INPUT ||
+				    config[ch].function == AD74413R_DIGITAL_INPUT_LOOP) {
+					ret = ad74413r_reg_read_raw(desc, AD74413R_DIN_COMP_OUT,
+								    &buff[buffer_idx]);
+					digital_val = no_os_field_get((1 << ch), buff[buffer_idx + 2]);
+					buff[buffer_idx + 1] = 0x0;
+					buff[buffer_idx + 2] = 0x0;
+					buff[buffer_idx + 2] = digital_val;
+				} else {
+					ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
+								    &buff[buffer_idx]);
+				}
+			} else {
 				ret = ad74413r_reg_read_raw(desc,
 							    AD74413R_DIAG_RESULT(ch - 4),
 							    &buff[buffer_idx]);
+			}
 			if (ret)
 				goto out;
 
@@ -1570,6 +1677,8 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	ret = ad74413r_iio_setup_channels(descriptor, init_param);
 	if (ret)
 		goto err;
+
+	descriptor->channel_configs = init_param->channel_configs;
 
 	*iio_desc = descriptor;
 

@@ -69,3 +69,7 @@ ifeq (y,$(strip $(IIO_EXAMPLE)))
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
 endif
+
+INCS += $(DRIVERS)/crypto/maxq1065/maxq1065.h
+SRCS += $(DRIVERS)/crypto/maxq1065/maxq1065.c
+SRC_DIRS += $(DRIVERS)/crypto/maxq1065/maxq1065_include

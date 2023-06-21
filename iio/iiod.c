@@ -565,7 +565,7 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 
 		conn->cmd_data.bytes_count -= conn->nb_buf.len;
 		conn->nb_buf.len = 0;
-		printf("Bytes count: %d\n", conn->cmd_data.bytes_count);
+		// printf("Bytes count: %d\n", conn->cmd_data.bytes_count);
 		if (conn->cmd_data.bytes_count)
 			return -EAGAIN;
 	}

@@ -68,6 +68,16 @@ const struct no_os_spi_init_param adin1110_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+const struct no_os_spi_init_param maxq1065_spi_ip = {
+	.device_id = 0,
+	.max_speed_hz = 1000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS,
+	.chip_select = 0,
+	.extra = SPI_EXTRA,
+};
+
 const struct no_os_i2c_init_param adt75_comm_param = {
 	.device_id = 1,
 	.max_speed_hz = 400000,
@@ -232,6 +242,29 @@ const struct no_os_gpio_init_param swiot_led2_ip = {
 	.extra = &adin1110_rst_gpio_extra,
 };
 
+const struct no_os_gpio_init_param maxq1065_reset_ip = {
+	.port = 0,
+	.number = 2,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
+const struct no_os_gpio_init_param maxq1065_rdy_ip = {
+	.port = 2,
+	.number = 16,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
+const struct maxq1065_init_param maxq1065_ip = {
+	.device_id = 0,
+	.comm_param = maxq1065_spi_ip,
+	.reset_gpio_param = maxq1065_reset_ip,
+	.rdy_gpio_param = maxq1065_rdy_ip,
+};
+
 // const struct no_os_gpio_init_param rx_perf_gpio_ip = {
 // 	.port = 2,
 // 	.number = 17,
@@ -262,7 +295,7 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 
 struct no_os_spi_init_param max14906_spi_ip = {
 	.device_id = 1,
-	.max_speed_hz = 10000000,
+	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,

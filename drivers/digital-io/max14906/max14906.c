@@ -95,7 +95,7 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 1);
-	desc->buff[1] = (uint8_t)val;
+	desc->buff[1] = val;
 
 	if (desc->crc_en) {
 		xfer.bytes_number++;
@@ -120,7 +120,6 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 	if (desc->crc_en)
 		xfer.bytes_number++;
 
-	// ready = MXC_GPIO_OutGet(MXC_GPIO_GET_GPIO(1), 1 << 23);
 	memset(desc->buff, 0, 3);
 	memset(val_reg, 0, 3);
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
@@ -246,6 +245,15 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		if (ret)
 			goto spi_err;
 	}
+
+	/* Set current limit to 130mA for all channels */
+	ret = max14906_reg_write(descriptor, 0x0E, 0x55);
+	if (ret)
+		return ret;
+
+	ret = max14906_reg_read(descriptor, 0x03, &reg_val);
+	if (ret)
+		return ret;
 
 	*desc = descriptor;
 

@@ -91,7 +91,6 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	uint16_t pd;
 	int ret;
 
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 0);
 	eth_desc = netif->state;
 	mac_desc = eth_desc->mac_desc;
 
@@ -103,42 +102,7 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	ret = adin1110_write_fifo(mac_desc, 0, &buff);
-	if (ret)
-		return ret;
-
-	// adin1110_mdio_read_c45(mac_desc, 0x1, 0x01, 0x830B, &pd);
-	// printf("MSE %hu\n", pd);
-	// adin1110_mdio_read_c45(mac_desc, 0x1, 0x03, 0x08E7, &pd);
-
-	// adin1110_reg_read(mac_desc, 0x43, &reg_val);
-	// adin1110_reg_read(mac_desc, 0x44, &reg_val);
-	// adin1110_reg_read(mac_desc, 0x45, &reg_val);
-	// adin1110_reg_read(mac_desc, 0x46, &reg_val);
-	// adin1110_reg_read(mac_desc, 0x47, &reg_val);
-	// adin1110_reg_read(mac_desc, 0x48, &reg_val);
-	// adin1110_reg_read(mac_desc, 0x49, &reg_val);
-
-	// adin1110_reg_read(mac_desc, 0xA0, &reg_val);
-	// adin1110_reg_read(mac_desc, 0xAE, &reg_val);
-	// adin1110_reg_read(mac_desc, 0xA7, &phy_err_cnt);
-	// adin1110_reg_read(mac_desc, 0xA6, &ls_err_cnt);
-	// adin1110_reg_read(mac_desc, 0xA5, &align_err_cnt);
-	// adin1110_reg_read(mac_desc, 0xA4, &crc_err_cnt);
-	// adin1110_reg_read(mac_desc, 0x8, &reg_val);
-
-	// if (reg_val & 0x3F)
-	// 	return ret;
-
-	// adin1110_reg_read(mac_desc, 0x9, &reg_val);
-	// if (reg_val & (0x7 << 10))
-	// 	return ret;
-
-	// frame_cnt++;
-
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 1 << 15);
-
-	return ret;
+	return adin1110_write_fifo(mac_desc, 0, &buff);
 }
 
 static err_t max_eth_netif_init(struct netif *netif)
@@ -171,9 +135,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	// __disable_irq();
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
-	// __enable_irq();
 	if (ret || !mac_buff.len)
 		goto out;
 
@@ -181,6 +143,8 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
 	if (p != NULL)
 		pbuf_take(p, lwip_buff, mac_buff.len);
+	else
+		return NULL;
 
 out:
 	return p;
@@ -319,8 +283,6 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		goto free_descriptor;
 
-	ret = adin1110_reg_read(descriptor->mac_desc, 0x1, &reg_val);
-
 	lwip_init();
 
 	/* This doesn't support static IP assignment and requires a DHCP server. */
@@ -402,6 +364,7 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 	struct max_eth_desc *desc = net;
 	struct socket_desc *sock;
 	struct pbuf *p, *old_p;
+	uint8_t pb_free;
 	err_t ret;
 
 	sock = _get_sock(desc, sock_id);
@@ -414,7 +377,7 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 
 	if (sock->p) {
 		tcp_recved(sock->pcb, sock->p->tot_len);
-		pbuf_free(sock->p);
+		pb_free = pbuf_free(sock->p);
 	}
 
 	tcp_recv(sock->pcb, NULL);
@@ -424,12 +387,9 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 	 * This may fail if there is not enough memory for the RST pbuf.
 	 * In such case retry.
 	 */
-	do {
-		ret = tcp_close(sock->pcb);
-	} while(ret != ERR_OK);
-
-	while (sock->p->ref)
-		pbuf_free(sock->p);
+	// do {
+	ret = tcp_close(sock->pcb);
+	// } while(ret != ERR_OK);
 
 	sock->p_idx = 0;
 	sock->pcb = NULL;
@@ -486,6 +446,9 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *pcb, struct pbuf *p,
 
 	/* A NULL pbuf signals that the other end has closed the connection */
 	if (!p) {
+		// while (sock->p->ref)
+		// 	pbuf_free(sock->p);
+
 		ret = max_socket_close(sock->desc, sock->id);
 		if (ret)
 			return ret;
@@ -498,12 +461,19 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *pcb, struct pbuf *p,
 		return err;
 	}
 
+	// if (sock->state == SOCKET_CLOSED) {
+	// 	tcp_recved(sock->pcb, p->tot_len);
+	// 	sock->p = NULL;
+	// 	pbuf_free(p);
+
+	// 	return ERR_OK;
+	// }
+
 	if (!sock->p) {
 		sock->p = p;
 		sock->p_idx = 0;
 	} else {
-		if (p != sock->p)
-			pbuf_chain(sock->p, p);
+		pbuf_cat(sock->p, p);
 	}
 
 	return ERR_OK;
@@ -536,6 +506,11 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 
 	ip_set_option(pcb, SOF_REUSEADDR);
 
+	// for (int i = 0; i < MAX_SOCKETS; i++) {
+	// 	if (desc->sockets[i].p != NULL)
+	// 		return 0;
+	// }
+
 	desc->sockets[sock_id].pcb = pcb;
 	desc->sockets[sock_id].desc = desc;
 	desc->sockets[sock_id].id = sock_id;
@@ -545,6 +520,8 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 	tcp_nagle_disable(pcb);
 
 	mdns_conflict_id = 0;
+
+	MEMP_STATS_DISPLAY(MEMP_PBUF_POOL);
 
 	return 0;
 }
@@ -586,6 +563,7 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data,
 				pbuf_ref(p);
 
 			pbuf_free(old_p);
+			old_p = NULL;
 
 			tcp_recved(sock->pcb, sock->p_idx);
 			sock->p_idx = 0;

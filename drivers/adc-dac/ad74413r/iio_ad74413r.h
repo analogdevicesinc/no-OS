@@ -76,6 +76,8 @@ struct ad74413r_iio_desc {
 	uint8_t no_of_active_channels;
 	uint8_t no_of_active_adc_channels;
 	uint32_t diag_reg_base;
+	struct ad74413r_channel_config (*channel_configs)[AD74413R_N_CHANNELS];
+	enum ad74413r_conv_seq ad74413_conv_mode;
 };
 
 /**
