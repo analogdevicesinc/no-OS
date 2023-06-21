@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by demo_esp project.
+ *   @file   main.c
+ *   @brief  Main file for maxim platform of demo_esp project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -36,18 +36,31 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+#include "basic_example.h"
+
+/***************************************************************************//**
+ * @brief Main function execution for maxim platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret;
+
+	ret = basic_example_main();
+	if (ret)
+		goto error;
+
+#if (BASIC_EXAMPLE != 1)
+#error Please enable the example and re-build the project.
 #endif
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+error:
+	return ret;
+}

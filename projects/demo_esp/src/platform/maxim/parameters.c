@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by demo_esp project.
+ *   @file   parameters.c
+ *   @brief  Definition of maxim platform data used by demo_esp
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -36,18 +36,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#endif
+#include "parameters.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+struct max_uart_init_param uart_extra_ip = {
+	.flow = UART_FLOW_DIS
+};
