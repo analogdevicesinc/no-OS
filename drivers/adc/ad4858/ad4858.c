@@ -261,6 +261,22 @@ int ad4858_set_config_interface_mode(struct ad4858_dev *dev)
 }
 
 /**
+ * @brief Set device data interface mode.
+ * @param dev - Pointer to the device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad4858_set_data_interface_mode(struct ad4858_dev *dev)
+{
+	struct ad4858_conv_data conv_data;
+
+	if (!dev)
+		return -EINVAL;
+
+	/* Read dummy conversion results to enter into data conversion mode */
+	return ad4858_spi_data_read(dev, &conv_data);
+}
+
+/**
  * @brief Enable OSR.
  * @param dev - Pointer to the device structure.
  * @param osr_status - OSR enable/disable status.

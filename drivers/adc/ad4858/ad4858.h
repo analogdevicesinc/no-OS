@@ -367,6 +367,9 @@ int ad4858_set_spi_data_mode(struct ad4858_dev *dev,
 /* Set device config interface mode. */
 int ad4858_set_config_interface_mode(struct ad4858_dev *dev);
 
+/* Set device data interface mode. */
+int ad4858_set_data_interface_mode(struct ad4858_dev *dev);
+
 /* Enable/Disable OSR */
 int ad4858_enable_osr(struct ad4858_dev *dev, bool osr_status);
 
