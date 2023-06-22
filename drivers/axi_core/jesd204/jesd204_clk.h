@@ -56,6 +56,11 @@ struct jesd204_clk {
 	struct axi_jesd204_tx *jesd_tx;
 };
 
+/**
+ * @brief jesd204 specific CLK platform ops structure
+ */
+extern const struct no_os_clk_platform_ops jesd204_clk_ops;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
