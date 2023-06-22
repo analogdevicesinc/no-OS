@@ -63,7 +63,6 @@
 #include "maxim_uart.h"
 #include "no_os_irq.h"
 #include "no_os_error.h"
-#include "max_eth.h"
 #endif
 
 #ifdef NO_OS_NETWORKING
@@ -86,6 +85,10 @@
 
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
+
+#ifdef NO_OS_LWIP_NETWORKING
+struct lwip_network_desc *lwip_desc;
+#endif
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -169,17 +172,24 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 				  struct iio_init_param *iio_init_param)
 {
 	static struct tcp_socket_init_param socket_param;
+	static bool is_initialized = false;
 	int ret;
 
-	ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
-	if (ret)
-		return ret;
+	if (!is_initialized) {
+		ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
+		if (ret)
+			return ret;
 
-	socket_param.net = &app->lwip_desc->no_os_net;
+		lwip_desc = app->lwip_desc;
+	}
+
+	socket_param.net = &lwip_desc->no_os_net;
 	socket_param.max_buff_size = 0;
 
 	iio_init_param->phy_type = USE_NETWORK;
 	iio_init_param->tcp_socket_init_param = &socket_param;
+
+	is_initialized = true;
 
 	return 0;
 }

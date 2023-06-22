@@ -283,7 +283,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t dhcp_timeout = 5000;
+	uint32_t dhcp_timeout = 500000;
 	int ret;
 	int i;
 
@@ -397,12 +397,16 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 {
 	struct lwip_network_desc *desc = net;
 	struct lwip_socket_desc *sock;
+	err_t ret;
 
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
 		return -EINVAL;
 
 	if (!sock->pcb)
+		return 0;
+
+	if (sock->state == SOCKET_CLOSED)
 		return 0;
 
 	tcp_recv(sock->pcb, NULL);
@@ -413,7 +417,9 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 		pbuf_free(sock->p);
 	}
 
-	tcp_close(sock->pcb);
+	do {
+		ret = tcp_close(sock->pcb);
+	} while(ret);
 
 	sock->p_idx = 0;
 	sock->pcb = NULL;
@@ -439,11 +445,7 @@ static err_t lwip_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 	/* The remote side has closed the connection. */
 	if (!p) {
 		tcp_recv(sock->pcb, NULL);
-		sock->state = SOCKET_CLOSED;
-
-		lwip_socket_close(sock->desc, sock->id);
-
-		return ERR_OK;
+		return lwip_socket_close(sock->desc, sock->id);
 	}
 
 	if (err != ERR_OK) {
@@ -455,8 +457,7 @@ static err_t lwip_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 		sock->p = p;
 		sock->p_idx = 0;
 	} else {
-		if (p != sock->p)
-			pbuf_chain(sock->p, p);
+		pbuf_cat(sock->p, p); 
 	}
 
 	return ERR_OK;
@@ -608,8 +609,7 @@ static int32_t lwip_socket_recv(void *net, uint32_t sock_id, void *data,
 			if (p)
 				pbuf_ref(p);
 
-			if (old_p->ref > 0)
-				pbuf_free(old_p);
+			pbuf_free(old_p);
 
 			tcp_recved(socket->pcb, socket->p_idx);
 			socket->p_idx = 0;
@@ -659,15 +659,17 @@ static int32_t lwip_socket_listen(void *net, uint32_t sock_id,
 	struct lwip_network_desc *desc = net;
 	struct lwip_socket_desc *socket;
 	struct tcp_pcb *pcb;
+	err_t err;
 
 	socket = _get_sock(desc, sock_id);
 	if (!socket)
 		return -EINVAL;
 
-	pcb = tcp_listen_with_backlog(socket->pcb, back_log);
+	pcb = tcp_listen_with_backlog_and_err(socket->pcb, back_log, &err);
 	if (!pcb) {
 		printf("Unable to listen on socket\n");
-		return -ENOMEM;
+		socket->state = SOCKET_LISTENING;
+		return 0;
 	}
 	socket->pcb = pcb;
 	socket->state = SOCKET_LISTENING;

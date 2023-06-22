@@ -53,9 +53,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_util.c \
 		$(NO-OS)/util/no_os_alloc.c
 
-INCS += $(DRIVERS)/net/adin1110/adin1110.h
-SRCS += $(DRIVERS)/net/adin1110/adin1110.c
-
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 
@@ -73,3 +70,10 @@ endif
 INCS += $(DRIVERS)/crypto/maxq1065/maxq1065.h
 SRCS += $(DRIVERS)/crypto/maxq1065/maxq1065.c
 SRC_DIRS += $(DRIVERS)/crypto/maxq1065/maxq1065_include
+
+INCS += $(INCLUDE)/no_os_crc8.h
+INCS += $(DRIVERS)/net/adin1110/adin1110.h
+INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h
+SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c
+SRCS += $(DRIVERS)/net/adin1110/adin1110.c
+SRCS += $(NO-OS)/util/no_os_crc8.c

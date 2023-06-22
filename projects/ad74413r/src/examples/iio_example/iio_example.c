@@ -59,7 +59,6 @@
 #include "iiod.h"
 
 #include "no_os_timer.h"
-#include "max_eth.h"
 
 #include "lwip/init.h"
 #include "lwip/netif.h"
@@ -67,6 +66,8 @@
 
 #include "lwip/apps/lwiperf.h"
 #include "lwip/ip_addr.h"
+#include "lwip_socket.h"
+#include "lwip_adin1110.h"
 
 #include "hpb.h"
 #include "Ext_Flash.h"
@@ -213,6 +214,8 @@ int iio_example_main()
 	struct tcp_pcb *pcb;
 	uint32_t client_id;
 
+	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x00};
+
 	mxc_hpb_mem_config_t mem;
 	mxc_hpb_mem_config_t mem2;
 	mxc_hpb_cfg_reg_val_t cfg_reg[1];
@@ -306,12 +309,12 @@ int iio_example_main()
 		.crc_en = true,
 	};
 
-	struct netif *netif_desc;
-	struct max_eth_desc *eth_desc;
-	struct max_eth_param eth_param = {
-		.name = "e7",
-		.adin1110_ip = adin1110_ip,
-	};
+	// struct netif *netif_desc;
+	// struct max_eth_desc *eth_desc;
+	// struct max_eth_param eth_param = {
+	// 	.name = "e7",
+	// 	.adin1110_ip = adin1110_ip,
+	// };
 
 	struct no_os_irq_ctrl_desc *ad74413r_nvic;
 	struct no_os_irq_init_param ad74413r_nvic_ip = {
@@ -458,11 +461,14 @@ int iio_example_main()
 	no_os_gpio_direction_input(adin1110_int_gpio);
 	no_os_gpio_direction_input(ad74413r_irq_gpio);
 
-	ret = max_eth_init(&netif_desc, &eth_param);
-	if (ret)
-		return ret;
+	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
-	maxim_net.net = netif_desc->state;
+	// ret = max_eth_init(&netif_desc, &eth_param);
+	// if (ret)
+	// 	return ret;
+
+	// maxim_net.net = netif_desc->state;
 
 	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
 	if (ret)
@@ -529,6 +535,9 @@ int iio_example_main()
 		app_init_param.nb_trigs = 1;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
+		app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
+		app_init_param.lwip_param.mac_param = &adin1110_ip;
+		app_init_param.lwip_param.extra = NULL;
 
 		ret = iio_app_init(&app, app_init_param);
 		if (ret)

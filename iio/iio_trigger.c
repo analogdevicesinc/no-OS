@@ -185,7 +185,7 @@ int iio_sw_trig_init(struct iio_sw_trig **iio_trig,
 {
 	struct iio_sw_trig *trig_desc;
 
-	if (!init_param->iio_desc || !init_param->name)
+	if (!init_param->name)
 		return -EINVAL;
 
 	trig_desc = (struct iio_sw_trig*)no_os_calloc(1, sizeof(*trig_desc));

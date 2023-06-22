@@ -46,7 +46,7 @@
 
 #define NO_OS_LWIP_BUFF_SIZE	1530
 #define NO_OS_MTU_SIZE		1500
-#define NO_OS_DOMAIN_NAME	"analog"
+#define NO_OS_DOMAIN_NAME	"testing"
 #define NO_OS_MAX_SOCKETS	10
 
 struct lwip_network_desc;

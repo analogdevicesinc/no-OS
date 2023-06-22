@@ -62,7 +62,6 @@
 #ifdef NO_OS_NETWORKING
 #include "no_os_delay.h"
 #include "tcp_socket.h"
-#include "max_eth.h"
 #include "mxc_device.h"
 #endif
 
@@ -90,7 +89,6 @@
 /******************************************************************************/
 
 static char uart_buff[IIOD_CONN_BUFFER_SIZE];
-static uint8_t c_buff[IIOD_CONN_BUFFER_SIZE];
 
 static char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -1439,8 +1437,7 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 			return ret;
 
 		data.conn = sock;
-		data.buf = c_buff;
-		// data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1957,7 +1954,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	return 0;
 
 free_pylink:
-#ifdef NO_OS_NETWORKING
+#ifdef NO_OS_NETWORKING || NO_OS_LWIP_NETWORKING
 	socket_remove(ldesc->server);
 #endif
 free_conns:

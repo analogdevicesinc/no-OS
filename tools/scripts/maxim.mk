@@ -71,14 +71,13 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	
 CFLAGS += -mthumb                                                               \
         -mcpu=cortex-m4                                                         \
-	-O0									\
+	-O3									\
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
         -fsingle-precision-constant                                             \
         -MD                                                                     \
         -Wall                                                                   \
-        -Wpedantic                                                                   \
         -Wdouble-promotion                                                      \
         -Wno-format                                                    		\
 	-D__HEAP_SIZE=0x50000							\
@@ -106,7 +105,7 @@ endif
 
 # Add lwip
 #INCS += $(NO-OS)/network/maxim_network
-SRC_DIRS += $(NO-OS)/network/maxim_network
+# SRC_DIRS += $(NO-OS)/network/maxim_network
 INCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/Ext_Flash.h
 SRCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/mx25.c
 

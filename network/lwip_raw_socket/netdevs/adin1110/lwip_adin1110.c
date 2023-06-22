@@ -122,10 +122,8 @@ static int32_t adin1110_step(struct lwip_network_desc *desc, void *data)
 		if (len) {
 			LINK_STATS_INC(link.recv);
 			ret = netif_desc->input(p, netif_desc);
-			if (ret) {
-				if (p->ref)
-					pbuf_free(p);
-			}
+			if (ret)
+				pbuf_free(p);
 		}
 	} while(len);
 
@@ -187,6 +185,10 @@ static int32_t adin1110_lwip_init(void **desc, void *param)
 	ret = adin1110_set_mac_addr(adin1110, mdns_mcast_addr);
 	if (ret)
 		goto free_descriptor;
+
+	ret = adin1110_set_promisc(adin1110, 0, true);
+	if (ret)
+		return ret;
 
 	*desc = adin1110;
 
