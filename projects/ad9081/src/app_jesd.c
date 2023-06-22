@@ -175,5 +175,33 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	clk[1].name = "jesd_tx";
 	clk[1].hw = &jesd_tx_hw;
 
+	struct no_os_clk_desc *rx_jesd_clk_desc;
+	struct no_os_clk_desc *tx_jesd_clk_desc;
+
+	struct no_os_clk_init_param rx_clk_desc_init = { 0 };
+	struct no_os_clk_init_param tx_clk_desc_init = { 0 };
+
+	rx_clk_desc_init.dev_desc = &rx_jesd_clk;
+	rx_clk_desc_init.hw_ch_num = 0;
+	rx_clk_desc_init.name = "jesd_rx";
+	rx_clk_desc_init.platform_ops = &jesd204_clk_ops;
+
+	ret = no_os_clk_init(&rx_jesd_clk_desc, &rx_clk_desc_init);
+	if (ret)
+		return ret;
+
+	clk[0].clk_desc = rx_jesd_clk_desc;
+
+	tx_clk_desc_init.dev_desc = &tx_jesd_clk;
+	tx_clk_desc_init.hw_ch_num = 0;
+	tx_clk_desc_init.name = "jesd_tx";
+	tx_clk_desc_init.platform_ops = &jesd204_clk_ops;
+
+	ret = no_os_clk_init(&tx_jesd_clk_desc, &tx_clk_desc_init);
+	if (ret)
+		return ret;
+
+	clk[1].clk_desc = tx_jesd_clk_desc;
+
 	return 0;
 }
