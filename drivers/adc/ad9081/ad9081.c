@@ -499,7 +499,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	uint64_t rx_lane_rate_kbps;
 	uint32_t timeout;
 
-	no_os_clk_recalc_rate(phy->dev_clk, &dev_frequency_hz);
+	no_os_clk_recalc_rate(phy->dev_clk->clk_desc, &dev_frequency_hz);
 
 	tx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jrx_link_tx,
 			    phy->dac_frequency_hz,
@@ -507,13 +507,13 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	/* The 204c calibration routine requires the link to be up */
 	if (phy->jesd_tx_clk) {
-		ret = no_os_clk_set_rate(phy->jesd_tx_clk, tx_lane_rate_kbps);
+		ret = no_os_clk_set_rate(phy->jesd_tx_clk->clk_desc, tx_lane_rate_kbps);
 		if (ret < 0) {
 			printf("Failed to set lane rate to %llu kHz: %"PRId32"\n",
 			       tx_lane_rate_kbps, ret);
 		}
 		if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) {
-			ret = no_os_clk_enable(phy->jesd_tx_clk);
+			ret = no_os_clk_enable(phy->jesd_tx_clk->clk_desc);
 			if (ret < 0) {
 				printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
 				return ret;
@@ -704,7 +704,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 				    phy->adc_frequency_hz,
 				    dcm);
 
-		ret = no_os_clk_set_rate(phy->jesd_rx_clk, rx_lane_rate_kbps);
+		ret = no_os_clk_set_rate(phy->jesd_rx_clk->clk_desc, rx_lane_rate_kbps);
 		if (ret < 0) {
 			printf("Failed to set lane rate to %llu kHz: %"PRId32"\n",
 			       rx_lane_rate_kbps, ret);
@@ -744,7 +744,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (phy->jesd_rx_clk) {
 		timeout = 2000;
 		while(timeout) {
-			ret = no_os_clk_enable(phy->jesd_rx_clk);
+			ret = no_os_clk_enable(phy->jesd_rx_clk->clk_desc);
 			if (ret) {
 				no_os_mdelay(100);
 				timeout -= 100;
@@ -763,7 +763,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	    (phy->jrx_link_tx.jesd_param.jesd_jesdv == 1)) {
 		timeout = 2000;
 		while(timeout) {
-			ret = no_os_clk_enable(phy->jesd_tx_clk);
+			ret = no_os_clk_enable(phy->jesd_tx_clk->clk_desc);
 			if (ret) {
 				no_os_mdelay(100);
 				timeout -= 100;
@@ -798,11 +798,11 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 					return ret;
 
 				if (phy->jesd_tx_clk) {
-					no_os_clk_disable(phy->jesd_tx_clk);
+					no_os_clk_disable(phy->jesd_tx_clk->clk_desc);
 
 					no_os_mdelay(100);
 
-					ret = no_os_clk_enable(phy->jesd_tx_clk);
+					ret = no_os_clk_enable(phy->jesd_tx_clk->clk_desc);
 					if (ret < 0) {
 						printf("Failed to enable JESD204 link: %"PRId32"\n",
 						       ret);
