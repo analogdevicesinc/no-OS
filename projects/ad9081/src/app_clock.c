@@ -346,6 +346,21 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	dev_refclk[0].hw = &hmc7044_hw;
 	dev_refclk[0].hw_ch_num = 0;
 	dev_refclk[0].name = "dev_refclk";
+
+	struct no_os_clk_desc *clk_desc;
+	struct no_os_clk_init_param clk_desc_init = { 0 };
+
+	clk_desc_init.dev_desc = hmc7044_dev;
+	clk_desc_init.hw_ch_num = 0;
+	clk_desc_init.name = "dev_refclk";
+	clk_desc_init.platform_ops = &hmc7044_clk_ops;
+
+	ret = no_os_clk_init(&clk_desc, &clk_desc_init);
+	if (ret)
+		return ret;
+
+	dev_refclk[0].clk_desc = clk_desc;
+
 #endif
 
 	return 0;
