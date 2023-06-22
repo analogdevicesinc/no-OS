@@ -50,7 +50,7 @@
 #include "maxim_uart_stdio.h"
 #include "maxim_timer.h"
 
-#include "mxc_eth.h"
+// #include "mxc_eth.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
