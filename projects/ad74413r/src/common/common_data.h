@@ -86,6 +86,7 @@ extern const struct no_os_gpio_init_param maxq1065_mode_ip;
 #define AD74413R_GPIO_TRIG_NAME "ad74413r-dev0"
 
 extern struct iio_trigger ad74413r_iio_trig_desc;
+extern struct iio_trigger swiot_trigger;
 extern struct iio_hw_trig_init_param ad74413r_gpio_trig_ip;
 extern struct no_os_irq_init_param ad74413r_gpio_irq_ip;
 

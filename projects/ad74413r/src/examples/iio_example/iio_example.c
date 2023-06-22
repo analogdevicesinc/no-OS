@@ -224,6 +224,7 @@ int iio_example_main()
 	struct step_param step_p;
 	struct iio_desc *iio_desc;
 	struct adin1110_desc *adin1110;
+	struct iio_sw_trig *sw_trig;
 	struct swiot_iio_desc *swiot_iio_desc;
 	struct iio_hw_trig *ad74413r_trig_desc;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
@@ -317,6 +318,11 @@ int iio_example_main()
 		.irq_ctrl_id = 0,
 		.platform_ops = &max_irq_ops,
 		.extra = NULL,
+	};
+
+	struct iio_sw_trig_init_param sw_trig_ip = {
+		.iio_desc = iio_desc,
+		.name = "useless_trig"
 	};
 
 	struct max14906_iio_desc *max14906_iio_desc;
@@ -482,8 +488,14 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
+	ret = iio_sw_trig_init(&sw_trig, &sw_trig_ip);
+	if (ret)
+		return ret;
+
 	struct iio_trigger_init trigs[] = {
 		IIO_APP_TRIGGER(AD74413R_GPIO_TRIG_NAME, ad74413r_trig_desc,
+				&ad74413r_iio_trig_desc),
+		IIO_APP_TRIGGER("useless_trig", sw_trig,
 				&ad74413r_iio_trig_desc)
 	};
 
@@ -493,7 +505,6 @@ int iio_example_main()
 		ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 
 		swiot_ip.mode = 0;
-
 		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
 		if (ret)
 			return ret;
@@ -514,7 +525,7 @@ int iio_example_main()
 
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = 1;
-		app_init_param.trigs = trigs;
+		app_init_param.trigs = &trigs[1];
 		app_init_param.nb_trigs = 1;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
@@ -554,8 +565,6 @@ int iio_example_main()
 			iio_devices[2].dev_descriptor = adt75_iio_desc->iio_dev;
 			iio_devices[2].read_buff = &buff4;
 			ndev++;
-		} else {
-			adt75_iio_desc = NULL;
 		}
 
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
@@ -566,8 +575,6 @@ int iio_example_main()
 			iio_devices[3].read_buff = &buff;
 			ntrig++;
 			ndev++;
-		} else {
-			ad74413r_iio_desc = NULL;
 		}
 
 		swiot_ip.ad74413r = ad74413r_iio_desc;
@@ -581,7 +588,7 @@ int iio_example_main()
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = ndev;
 		app_init_param.trigs = trigs;
-		app_init_param.nb_trigs = ntrig;
+		app_init_param.nb_trigs = 2;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
 
