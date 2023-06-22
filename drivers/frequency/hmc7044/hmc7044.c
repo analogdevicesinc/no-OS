@@ -45,6 +45,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_clk.h"
 #include "hmc7044.h"
 
 /******************************************************************************/
@@ -792,6 +793,13 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	struct hmc7044_dev *dev;
 	int32_t ret;
 	unsigned int i;
+	struct no_os_clk_desc **clocks;
+	struct no_os_clk_init_param clk_init;
+	const char *names[HMC7044_NUM_CHAN] = {
+		"clock_0", "clock_1", "clock_2", "clock_3", "clock_4",
+		"clock_5", "clock_6", "clock_7", "clock_8", "clock_9",
+		"clock_10", "clock_11", "clock_12", "clock_13"
+	};
 
 	dev = (struct hmc7044_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
@@ -800,6 +808,28 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
+
+	if (init_param->export_no_os_clk) {
+		clocks = malloc(HMC7044_NUM_CHAN * sizeof(struct no_os_clk_desc *));
+		if (!clocks)
+			return -1;
+		for (i = 0; i < HMC7044_NUM_CHAN; i++) {
+			clocks[i] = malloc(sizeof(struct no_os_clk_desc));
+			if (!clocks[i])
+				return -1;
+			/* Initialize clk component */
+			clk_init.name = names[i];
+			clk_init.hw_ch_num = i;
+			clk_init.platform_ops = &hmc7044_clk_ops;
+			clk_init.dev_desc = dev;
+
+			ret = no_os_clk_init(&clocks[i], &clk_init);
+			if (ret)
+				return ret;
+		}
+	}
+
+	dev->clk_desc = clocks;
 
 	dev->is_hmc7043 = init_param->is_hmc7043;
 
@@ -897,3 +927,97 @@ int32_t hmc7044_remove(struct hmc7044_dev *device)
 
 	return ret;
 }
+
+/**
+ * @brief Initialize the CLK structure.
+ *
+ * @param desc - The CLK descriptor.
+ * @param init_param - The structure holding the device initial parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int hmc7044_clk_init(struct no_os_clk_desc **desc,
+			    const struct no_os_clk_init_param *init_param)
+{
+	struct hmc7044_dev *hmc7044_d;
+
+	/* Exit if we have no init_params */
+	if (!init_param) {
+		return -EINVAL;
+	}
+
+	*desc = no_os_calloc(1, sizeof(**desc));
+	/* Exit if memory cannot be allocated */
+	if(!*desc) {
+		free(*desc);
+		return -ENOMEM;
+	}
+
+	hmc7044_d = init_param->dev_desc;
+	/* Exit if no hardware device specified in init_param */
+	if(!hmc7044_d) {
+		free(*desc);
+		return -ENOMEM;
+	}
+
+	(*desc)->name = init_param->name;
+	(*desc)->hw_ch_num = init_param->hw_ch_num;
+
+	(*desc)->dev_desc = (void *)no_os_calloc(1, sizeof(struct hmc7044_dev));
+
+	(*desc)->dev_desc = init_param->dev_desc;
+
+	return 0;
+}
+
+
+/**
+ * @brief Remove the CLK structure.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int hmc7044_clk_remove(struct no_os_clk_desc *desc)
+{
+	struct hmc7044_dev *hmc7044_dev;
+	int ret;
+
+	hmc7044_dev = desc->dev_desc;
+
+	if(!hmc7044_dev)
+		return -ENODEV;
+
+	free(desc);
+
+	ret = hmc7044_remove(desc->dev_desc);
+	if (ret) {
+		free(desc->dev_desc);
+		return ret;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Start the clock.
+ *
+ * @param desc - The CLK descriptor.
+ * @param rate - The desiered rate.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int hmc7044_recalc_rate(struct no_os_clk_desc *desc, uint64_t *rate)
+{
+	return hmc7044_clk_recalc_rate(desc->dev_desc, desc->hw_ch_num,
+				       rate);
+}
+
+/**
+ * @brief ad9523 platform specific CLK platform ops structure
+ */
+const struct no_os_clk_platform_ops hmc7044_clk_ops = {
+	.init = &hmc7044_clk_init,
+	.clk_recalc_rate =&hmc7044_recalc_rate,
+	.remove = &hmc7044_clk_remove
+};

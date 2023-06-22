@@ -68,6 +68,8 @@ struct hmc7044_chan_spec {
 
 struct hmc7044_dev {
 	struct no_os_spi_desc	*spi_desc;
+	/* CLK descriptors */
+	struct no_os_clk_desc	**clk_desc;
 	bool		is_hmc7043;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
@@ -92,6 +94,8 @@ struct hmc7044_dev {
 
 struct hmc7044_init_param {
 	struct no_os_spi_init_param	*spi_init;
+	/* Init CLK channel descriptors */
+	bool		export_no_os_clk;
 	bool		is_hmc7043;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
@@ -113,6 +117,11 @@ struct hmc7044_init_param {
 	uint32_t	num_channels;
 	struct hmc7044_chan_spec	*channels;
 };
+
+/**
+ * @brief hmc7044 specific CLK platform ops structure
+ */
+extern const struct no_os_clk_platform_ops hmc7044_clk_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
