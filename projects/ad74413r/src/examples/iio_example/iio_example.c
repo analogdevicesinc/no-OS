@@ -219,6 +219,8 @@ int iio_example_main()
 
 	int ret;
 	uint32_t reg_val;
+	uint32_t ndev;
+	uint32_t ntrig;
 	struct step_param step_p;
 	struct iio_desc *iio_desc;
 	struct adin1110_desc *adin1110;
@@ -490,17 +492,6 @@ int iio_example_main()
 		max14906_iio_ip.max14906_init_param = &max14906_ip;
 		ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 
-		// /* Probe the iio drivers in config mode */
-		// ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
-		// if (ret)
-		// 	return ret;
-
-		// ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
-		// if (ret)
-		// 	return ret;
-
-		// swiot_ip.ad74413r = ad74413r_iio_desc;
-		// swiot_ip.max14906 = max14906_iio_desc;
 		swiot_ip.mode = 0;
 
 		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
@@ -514,30 +505,12 @@ int iio_example_main()
 				.dev_descriptor = swiot_iio_desc->iio_dev,
 				.read_buff = &buff2,
 			},
-			// {
-			// 	.name = "ad74413r",
-			// 	.dev = ad74413r_iio_desc,
-			// 	.dev_descriptor = ad74413r_iio_desc->iio_dev,
-			// 	.read_buff = &buff,
-			// },
-			// {
-			// 	.name = "max14906",
-			// 	.dev = max14906_iio_desc,
-			// 	.dev_descriptor = max14906_iio_desc->iio_dev,
-			// 	.read_buff = &buff2,
-			// },
 		};
 
 		iio_devices[0].name = "swiot";
 		iio_devices[0].dev = swiot_iio_desc;
 		iio_devices[0].dev_descriptor = swiot_iio_desc->iio_dev;
 		iio_devices[0].read_buff = &buff2;
-
-		// iio_devices[1].dev = ad74413r_iio_desc;
-		// iio_devices[1].dev_descriptor = ad74413r_iio_desc->iio_dev;
-
-		// iio_devices[2].dev = max14906_iio_desc;
-		// iio_devices[2].dev_descriptor = max14906_iio_desc->iio_dev;
 
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = 1;
@@ -558,21 +531,44 @@ int iio_example_main()
 		if (ret != -ENOTCONN)
 			return ret;
 
+		ndev = 1;
+		ntrig = 0;
 		max14906_iio_ip.channel_configs = &swiot_iio_desc->max14906_configs;
 		ad74413r_iio_ip.channel_configs = &swiot_iio_desc->ad74413r_configs;
 		/* Probe the drivers in the run mode */
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
-		if (ret)
-			return ret;
+		if (!ret) {
+			iio_devices[1].name = "max14906";
+			iio_devices[1].dev = max14906_iio_desc;
+			iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
+			iio_devices[1].read_buff = &buff3;
+			ndev++;
+		} else {
+			max14906_iio_desc = NULL;
+		}
 
 		ret = adt75_iio_init(&adt75_iio_desc, &adt75_iio_ip);
-		if (ret)
-			return ret;
+		if (!ret) {
+			iio_devices[2].name = "adt75";
+			iio_devices[2].dev = adt75_iio_desc;
+			iio_devices[2].dev_descriptor = adt75_iio_desc->iio_dev;
+			iio_devices[2].read_buff = &buff4;
+			ndev++;
+		} else {
+			adt75_iio_desc = NULL;
+		}
 
-		// no_os_gpio_direction_output(adin1110_reset_gpio, 1);
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
-		if (ret)
-			return ret;
+		if (!ret) {
+			iio_devices[3].name = "ad74413r";
+			iio_devices[3].dev = ad74413r_iio_desc;
+			iio_devices[3].dev_descriptor = ad74413r_iio_desc->iio_dev;
+			iio_devices[3].read_buff = &buff;
+			ntrig++;
+			ndev++;
+		} else {
+			ad74413r_iio_desc = NULL;
+		}
 
 		swiot_ip.ad74413r = ad74413r_iio_desc;
 		swiot_ip.max14906 = max14906_iio_desc;
@@ -582,29 +578,10 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		iio_devices[0].dev = swiot_iio_desc;
-		iio_devices[0].dev_descriptor = swiot_iio_desc->iio_dev;
-		iio_devices[0].read_buff = &buff2;
-
-		iio_devices[1].name = "ad74413r";
-		iio_devices[1].dev = ad74413r_iio_desc;
-		iio_devices[1].dev_descriptor = ad74413r_iio_desc->iio_dev;
-		iio_devices[1].read_buff = &buff;
-
-		iio_devices[2].name = "max14906";
-		iio_devices[2].dev = max14906_iio_desc;
-		iio_devices[2].dev_descriptor = max14906_iio_desc->iio_dev;
-		iio_devices[2].read_buff = &buff3;
-
-		iio_devices[3].name = "adt75";
-		iio_devices[3].dev = adt75_iio_desc;
-		iio_devices[3].dev_descriptor = adt75_iio_desc->iio_dev;
-		iio_devices[3].read_buff = &buff4;
-
 		app_init_param.devices = iio_devices;
-		app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+		app_init_param.nb_devices = ndev;
 		app_init_param.trigs = trigs;
-		app_init_param.nb_trigs = 1;
+		app_init_param.nb_trigs = ntrig;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
 
@@ -612,24 +589,10 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		// if (!app->iio_desc) {
-		// 	app->iio_desc = calloc(1, 1);
-		// 	if (!app->iio_desc)
-		// 		return -EINVAL;
-		// }
-
 		ad74413r_trig_desc->iio_desc = app->iio_desc;
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;
 		app->arg = &step_p;
-
-		// ad74413r_set_channel_dac_code(ad74413r_iio_desc->ad74413r_desc, 0, 0);
-		// int dac_code = 0;
-		// while (1) {
-		// 	ad74413r_set_channel_dac_code(ad74413r_iio_desc->ad74413r_desc, 0, dac_code % 8192);
-		// 	dac_code++;
-		// 	no_os_mdelay(5);
-		// }
 
 		no_os_gpio_set_value(max14906_en_gpio, 1);
 		ret = iio_app_run(app);
@@ -654,18 +617,5 @@ int iio_example_main()
 		ret = swiot_iio_remove(swiot_iio_desc);
 		if (ret)
 			return ret;
-
-		// no_os_gpio_direction_output(adin1110_reset_gpio, 0);
-		// ret = no_os_irq_ctrl_remove(ad74413r_irq_desc);
-		// if (ret)
-		// 	return ret;
-
-		// ret = no_os_irq_ctrl_remove(ad74413r_nvic);
-		// if (ret)
-		// 	return ret;
-
-		// ret = iio_hw_trig_remove(ad74413r_trig_desc);
-		// if (ret)
-		// 	return ret;
 	}
 }

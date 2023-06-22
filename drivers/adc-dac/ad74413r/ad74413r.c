@@ -173,18 +173,6 @@ void ad74413r_format_reg_write(uint8_t reg, uint32_t val, uint8_t *buff)
 int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
 			  uint8_t *val)
 {
-	struct no_os_spi_msg xfer[2] = {
-		{
-			.tx_buff = desc->comm_buff,
-			.bytes_number = AD74413R_FRAME_SIZE,
-			.cs_change = 1,
-		},
-		{
-			.rx_buff = val,
-			.bytes_number = AD74413R_FRAME_SIZE,
-			.cs_change = 1,
-		}
-	};
 	int ret;
 	/**
 	 * Reading a register on AD74413r requires writing the address to the READ_SELECT
@@ -193,13 +181,12 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
 	 */
 	ad74413r_format_reg_write(AD74413R_READ_SELECT, addr, desc->comm_buff);
 
-	// ret = no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
-	// 			       AD74413R_FRAME_SIZE);
-	// if (ret)
-	// 	return ret;
+	ret = no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
+				       AD74413R_FRAME_SIZE);
+	if (ret)
+		return ret;
 
-	// return no_os_spi_write_and_read(desc->comm_desc, val, AD74413R_FRAME_SIZE);
-	return no_os_spi_transfer(desc->comm_desc, xfer, 2);
+	return no_os_spi_write_and_read(desc->comm_desc, val, AD74413R_FRAME_SIZE);
 }
 
 /**
@@ -212,17 +199,11 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
 int ad74413r_reg_write(struct ad74413r_desc *desc, uint32_t addr, uint32_t val)
 {
 	int ret;
-	struct no_os_spi_msg xfer = {
-		.tx_buff = desc->comm_buff,
-		.bytes_number = AD74413R_FRAME_SIZE,
-		.cs_change = 1,
-	};
 
 	ad74413r_format_reg_write(addr, val, desc->comm_buff);
 
-	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
-	// return no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
-	// 				AD74413R_FRAME_SIZE);
+	return no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
+					AD74413R_FRAME_SIZE);
 }
 
 /**

@@ -89,8 +89,6 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 		.bytes_number = MAX14906_FRAME_SIZE,
 		.cs_change = 1,
 	};
-	uint32_t read_val;
-	int ret;
 
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
@@ -110,7 +108,7 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 	uint8_t val_reg[3];
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
-		.rx_buff = val_reg,
+		.rx_buff = desc->buff,
 		.bytes_number = MAX14906_FRAME_SIZE,
 		.cs_change = 1,
 	};
@@ -131,12 +129,12 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 		return ret;
 
 	if (desc->crc_en) {
-		crc = max14906_crc_decode(val_reg);
-		if (crc != val_reg[2])
+		crc = max14906_crc_decode(&desc->buff[0]);
+		if (crc != desc->buff[2])
 			return -EINVAL;
 	}
 
-	*val = val_reg[1];
+	*val = desc->buff[1];
 
 	return 0;
 }
@@ -201,6 +199,34 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 
 	return max14906_reg_update(desc, MAX14906_SETOUT_REG, MAX14906_CH_DIR_MASK(ch),
 				   no_os_field_prep(MAX14906_CH_DIR_MASK(ch), function));
+}
+
+int max14906_climit_set(struct max14906_desc *desc, uint32_t ch,
+		     	enum max14906_climit climit)
+{
+	if (climit < MAX14906_CL_600 || climit > MAX14906_CL_1200)
+		return -EINVAL;
+
+	return max14906_reg_update(desc, MAX14906_CONFIG_CURR_LIM, MAX14906_CL_MASK(ch),
+				   no_os_field_prep(MAX14906_CL_MASK(ch), climit));
+}
+
+int max14906_climit_get(struct max14906_desc *desc, uint32_t ch,
+		     	enum max14906_climit *climit)
+{
+	uint32_t reg_val;
+	int ret;
+
+	if (!climit)
+		return -EINVAL;
+
+	ret = max14906_reg_read(desc, MAX14906_CONFIG_CURR_LIM, &reg_val);
+	if (ret)
+		return ret;
+
+	*climit = no_os_field_get(MAX14906_CL_MASK(ch), reg_val);
+
+	return 0;
 }
 
 int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)

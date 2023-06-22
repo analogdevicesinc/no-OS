@@ -63,6 +63,13 @@ enum max14906_do_mode {
 	MAX14906_PUSH_PULL
 };
 
+enum max14906_climit {
+	MAX14906_CL_600,
+	MAX14906_CL_130,
+	MAX14906_CL_300,
+	MAX14906_CL_1200,
+};
+
 struct max14906_ch_config {
 	bool enabled;
 	enum max14906_function function;
@@ -90,6 +97,8 @@ int max14906_reg_update(struct max14906_desc *, uint32_t, uint32_t, uint32_t);
 int max14906_ch_get(struct max14906_desc *, uint32_t, uint32_t *);
 int max14906_ch_set(struct max14906_desc *, uint32_t, uint32_t);
 int max14906_ch_func(struct max14906_desc *, uint32_t, enum max14906_function);
+int max14906_climit_set(struct max14906_desc *, uint32_t, enum max14906_climit);
+int max14906_climit_get(struct max14906_desc *, uint32_t, enum max14906_climit *);
 int max14906_init(struct max14906_desc **, struct max14906_init_param *);
 int max14906_remove(struct max14906_desc *);
 

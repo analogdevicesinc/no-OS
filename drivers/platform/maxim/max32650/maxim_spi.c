@@ -512,10 +512,6 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 
 	/* CS is deasserted at the end of the transaction */
 	spi->ctrl0 &= (NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(8));
-	/* Enable the RX threshold interrupt */
-	// spi->int_en |= NO_OS_BIT(2);
-	// spi->int_en |= NO_OS_BIT(0);
-	/* Clear master done */
 
 	for (i = 0; i < len; i++) {
 		/* Flush the RX and TX FIFOs */
@@ -564,8 +560,6 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 
 		/* Disable the RX and TX FIFOs */
 		spi->dma &= (NO_OS_GENMASK(31, 0) ^ (NO_OS_BIT(6) | NO_OS_BIT(22)));
-
-		// spi->ctrl0 ^= ~0x1;
 	}
 
 	return 0;

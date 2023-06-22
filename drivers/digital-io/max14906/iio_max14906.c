@@ -133,16 +133,7 @@ static struct iio_attribute max14906_in_attrs[] = {
 		.name = "IEC_type_available",
 		.show = max14906_iio_read_config_iec_available,
 	},
-	// {
-	// 	.name = "current_limit",
-	// 	.show = max14906_iio_read_climit,
-	// 	.store = max14906_iio_write_climit,
-	// },
-	// {
-	// 	.name = "current_limit_available",
-	// 	.shared = IIO_SHARED_BY_ALL,
-	// 	.show = max14906_iio_read_climit_avail
-	// },
+	
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -493,25 +484,6 @@ static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 	int32_t val = 0;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-static int max14906_iio_read_config_enabled(void *dev, char *buf, uint32_t len,
-					const struct iio_ch_info *channel, intptr_t priv)
-{
-	int32_t enabled = max14906_ch_configs[channel->address].enabled;
-
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &enabled);
-}
-
-static int max14906_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	int32_t enabled;
-
-	iio_parse_value(buf, IIO_VAL_INT, &enabled, NULL);
-	max14906_ch_configs[channel->address].enabled = !!enabled;
-
-	return 0;
 }
 
 static int max14906_iio_reg_read(struct max14906_iio_desc *dev, uint32_t reg,
