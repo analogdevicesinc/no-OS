@@ -90,6 +90,8 @@
 struct lwip_network_desc *lwip_desc;
 #endif
 
+volatile static uint64_t ts = 0;
+
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
 	uint32_t ms = 1000ul * len * 8 / UART_BAUDRATE_DEFAULT;
@@ -316,6 +318,7 @@ int iio_app_init(struct iio_app_desc **app,
 	int status;
 	void *irq_desc = app_init_param.irq_desc;
 
+	ts = 0;
 	application = (struct iio_app_desc *)no_os_calloc(1, sizeof(*application));
 	if (!application)
 		return -ENOMEM;
@@ -438,6 +441,7 @@ int iio_app_run(struct iio_app_desc *app)
 	int status;
 
 	do {
+		ts++;
 		if (!app)
 			return -EINVAL;
 		status = iio_step(app->iio_desc);

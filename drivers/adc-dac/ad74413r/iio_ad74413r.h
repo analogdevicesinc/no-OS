@@ -53,7 +53,6 @@
 #define AD74413R_FUNCTION_CNT	11
 
 static const char *const ad74413r_function_available[AD74413R_FUNCTION_CNT] = {
-	[AD74413R_HIGH_Z] = "high_z",
 	[AD74413R_VOLTAGE_OUT] = "voltage_out",
 	[AD74413R_CURRENT_OUT] = "current_out",
 	[AD74413R_VOLTAGE_IN] = "voltage_in",
@@ -64,6 +63,7 @@ static const char *const ad74413r_function_available[AD74413R_FUNCTION_CNT] = {
 	[AD74413R_DIGITAL_INPUT_LOOP] = "digital_input_loop",
 	[AD74413R_CURRENT_IN_EXT_HART] = "current_in_ext_hart",
 	[AD74413R_CURRENT_IN_LOOP_HART] = "current_in_loop_hart"
+	[AD74413R_HIGH_Z] = "high_z",
 };
 
 /**

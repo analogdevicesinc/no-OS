@@ -409,6 +409,7 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 	if (sock->state == SOCKET_CLOSED)
 		return 0;
 
+	printf("Closing socket %d\n", sock_id);
 	tcp_recv(sock->pcb, NULL);
 	tcp_err(sock->pcb, NULL);
 
@@ -421,6 +422,7 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 		ret = tcp_close(sock->pcb);
 	} while(ret);
 
+	printf("Socket state %d\n", sock->pcb->state);
 	sock->p_idx = 0;
 	sock->pcb = NULL;
 	sock->p = NULL;
@@ -444,7 +446,7 @@ static err_t lwip_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 
 	/* The remote side has closed the connection. */
 	if (!p) {
-		tcp_recv(sock->pcb, NULL);
+		// tcp_recv(sock->pcb, NULL);
 		return lwip_socket_close(sock->desc, sock->id);
 	}
 
@@ -496,27 +498,36 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 	if (proto != PROTOCOL_TCP)
 		return -EPROTONOSUPPORT;
 
-	ret = _get_closed_socket(desc, &socket_id);
-	if (ret)
-		return ret;
+	// ret = _get_closed_socket(desc, &socket_id);
+	// if (ret)
+	// 	return ret;
 
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
 	if (!pcb) {
-		_release_socket(desc, socket_id);
+		_release_socket(desc, 0);
 		return -ENOMEM;
 	}
 
 	ip_set_option(pcb, SOF_REUSEADDR);
 
-	desc->sockets[socket_id].pcb = pcb;
-	desc->sockets[socket_id].desc = desc;
-	desc->sockets[socket_id].id = socket_id;
-	desc->sockets[socket_id].p = NULL;
+	desc->sockets[0].pcb = pcb;
+	desc->sockets[0].desc = desc;
+	desc->sockets[0].id = 0;
+	desc->sockets[0].p = NULL;
 
-	lwip_config_socket(&desc->sockets[socket_id]);
+	lwip_config_socket(&desc->sockets[0]);
 
 	mdns_conflict_id = 0;
 	*sock_id = socket_id;
+
+	int socks = 0;
+	for(int i = 0; i < NO_OS_MAX_SOCKETS; i++)
+		if (desc->sockets[i].state != SOCKET_CLOSED) {
+			socks++;
+			printf("State: %d\n", desc->sockets[i].state);
+		}
+
+	printf("Sockets: %d\n", socks);
 
 	return 0;
 }
@@ -667,9 +678,11 @@ static int32_t lwip_socket_listen(void *net, uint32_t sock_id,
 
 	pcb = tcp_listen_with_backlog_and_err(socket->pcb, back_log, &err);
 	if (!pcb) {
-		printf("Unable to listen on socket\n");
-		socket->state = SOCKET_LISTENING;
-		return 0;
+		if (err == ERR_USE) {
+			socket->state = SOCKET_LISTENING;
+			return 0;
+		}
+		return -EBUSY;
 	}
 	socket->pcb = pcb;
 	socket->state = SOCKET_LISTENING;

@@ -764,6 +764,7 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 {
 	struct ad74413r_iio_desc *desc = dev;
 	enum ad74413r_diag_mode diag_func;
+	enum ad74413r_adc_range range;
 	uint32_t reg_val;
 	int32_t val[2];
 	int ret;
@@ -773,23 +774,22 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		switch (channel->type) {
 		case IIO_VOLTAGE:
 			if (channel->ch_out) {
-				val[0] = 0;
-				val[1] = 762940;
+				val[0] = 11000;
+				val[1] = 8192;
 			} else {
-				val[0] = 0;
-				val[1] = 152590;
+				val[0] = 10000;
+				val[1] = AD74413R_ADC_MAX_VALUE;
 			}
-
-			break;
+			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
 		case IIO_CURRENT:
 			if (channel->ch_out) {
-				val[0] = 0;
-				val[1] = 152590 / MILLI;
+				val[0] = 2500000;
+				val[1] = 8192;
 			} else {
-				val[0] = 0;
-				val[1] = 381470 / MILLI;
+				val[0] = 2500000;
+				val[1] = AD74413R_ADC_MAX_VALUE;
 			}
-			break;
+			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
 		default:
 			return -EINVAL;
 		}
@@ -1208,7 +1208,6 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc,
 			iio_desc->iio_dev->num_ch++;
 			n_chan++;
 
-			/* Enable the comparator for digital input channels */
 			if (config[i].function == AD74413R_DIGITAL_INPUT ||
 			    config[i].function == AD74413R_DIGITAL_INPUT_LOOP) {
 				ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_DIN_THRESH,

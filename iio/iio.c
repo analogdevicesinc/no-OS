@@ -78,7 +78,7 @@
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
-#define IIOD_CONN_BUFFER_SIZE	0x5000
+#define IIOD_CONN_BUFFER_SIZE	0x1000
 #define NO_TRIGGER				(uint32_t)-1
 
 #define NO_OS_STRINGIFY(x) #x
@@ -89,6 +89,7 @@
 /******************************************************************************/
 
 static char uart_buff[IIOD_CONN_BUFFER_SIZE];
+static char c_buff[IIOD_CONN_BUFFER_SIZE];
 
 static char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -1437,7 +1438,8 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 			return ret;
 
 		data.conn = sock;
-		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = c_buff;
+		// data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1487,7 +1489,7 @@ int iio_step(struct iio_desc *desc)
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 		iiod_conn_remove(desc->iiod, conn_id, &data);
 		socket_remove(data.conn);
-		no_os_free(data.buf);
+		// no_os_free(data.buf);
 #endif
 	} else {
 		_push_conn(desc, conn_id);
@@ -1954,7 +1956,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	return 0;
 
 free_pylink:
-#ifdef NO_OS_NETWORKING || NO_OS_LWIP_NETWORKING
+#ifdef NO_OS_NETWORKING
 	socket_remove(ldesc->server);
 #endif
 free_conns:

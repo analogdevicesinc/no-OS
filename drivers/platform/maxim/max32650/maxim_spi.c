@@ -473,27 +473,6 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	return 0;
 }
 
-/**
- * @brief Write and read data to/from SPI.
- * @param desc - The SPI descriptor.
- * @param data - The buffer with the transmitted/received data.
- * @param bytes_number - Number of bytes to write/read.
- * @return 0 in case of success, errno codes otherwise.
- */
-int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
-			       uint8_t *data,
-			       uint16_t bytes_number)
-{
-	struct no_os_spi_msg xfer = {
-		.rx_buff = data,
-		.tx_buff = data,
-		.bytes_number = bytes_number,
-		.cs_change = 1,
-	};
-
-	return max_spi_transfer(desc, &xfer, 1);
-}
-
 int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 			    struct no_os_spi_msg *msgs,
 			    uint32_t len)
@@ -563,6 +542,27 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	}
 
 	return 0;
+}
+
+/**
+ * @brief Write and read data to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param data - The buffer with the transmitted/received data.
+ * @param bytes_number - Number of bytes to write/read.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
+			       uint8_t *data,
+			       uint16_t bytes_number)
+{
+	struct no_os_spi_msg xfer = {
+		.rx_buff = data,
+		.tx_buff = data,
+		.bytes_number = bytes_number,
+		.cs_change = 1,
+	};
+
+	return max_spi_transfer_ll(desc, &xfer, 1);
 }
 
 /**

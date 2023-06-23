@@ -64,10 +64,11 @@
 #include "lwip/netif.h"
 #include "lwip/tcp.h"
 
-#include "lwip/apps/lwiperf.h"
 #include "lwip/ip_addr.h"
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
+
+#include "lwip/apps/lwiperf.h"
 
 #include "hpb.h"
 #include "Ext_Flash.h"
@@ -126,10 +127,15 @@ int step_callback(void *arg)
 	struct step_param *param = arg;
 	struct iio_app_desc *iio_app = param->iio_app;
 	struct swiot_iio_desc *swiot = param->swiot;
+	int ret;
 
 	if (swiot->mode_change) {
-		swiot->mode_change = 0;
-		iio_app_remove(iio_app);
+		swiot->mode_change = false;
+		ret = iio_app_remove(iio_app);
+		if (ret) {
+			printf("dasda");
+			return ret;
+		}
 
 		return -ENOTCONN;
 	}
@@ -214,7 +220,7 @@ int iio_example_main()
 	struct tcp_pcb *pcb;
 	uint32_t client_id;
 
-	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x00};
+	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
 
 	mxc_hpb_mem_config_t mem;
 	mxc_hpb_mem_config_t mem2;
@@ -325,7 +331,7 @@ int iio_example_main()
 
 	struct iio_sw_trig_init_param sw_trig_ip = {
 		.iio_desc = iio_desc,
-		.name = "useless_trig"
+		.name = "sw_trig"
 	};
 
 	struct max14906_iio_desc *max14906_iio_desc;
@@ -501,7 +507,7 @@ int iio_example_main()
 	struct iio_trigger_init trigs[] = {
 		IIO_APP_TRIGGER(AD74413R_GPIO_TRIG_NAME, ad74413r_trig_desc,
 				&ad74413r_iio_trig_desc),
-		IIO_APP_TRIGGER("useless_trig", sw_trig,
+		IIO_APP_TRIGGER("sw_trig", sw_trig,
 				&ad74413r_iio_trig_desc)
 	};
 
@@ -545,7 +551,7 @@ int iio_example_main()
 
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;
-		app->arg = &step_p;		
+		app->arg = &step_p;	
 
 		ret = iio_app_run(app);
 		if (ret != -ENOTCONN)
@@ -564,7 +570,7 @@ int iio_example_main()
 			iio_devices[1].read_buff = &buff3;
 			ndev++;
 		} else {
-			max14906_iio_desc = NULL;
+			return ret;
 		}
 
 		ret = adt75_iio_init(&adt75_iio_desc, &adt75_iio_ip);
@@ -574,6 +580,8 @@ int iio_example_main()
 			iio_devices[2].dev_descriptor = adt75_iio_desc->iio_dev;
 			iio_devices[2].read_buff = &buff4;
 			ndev++;
+		} else {
+			return ret;
 		}
 
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
@@ -584,15 +592,13 @@ int iio_example_main()
 			iio_devices[3].read_buff = &buff;
 			ntrig++;
 			ndev++;
+		} else {
+			return ret;
 		}
 
-		swiot_ip.ad74413r = ad74413r_iio_desc;
-		swiot_ip.max14906 = max14906_iio_desc;
-		swiot_ip.mode = 1;
-
-		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
-		if (ret)
-			return ret;
+		swiot_iio_desc->ad74413r = ad74413r_iio_desc;
+		swiot_iio_desc->max14906 = max14906_iio_desc;
+		swiot_iio_desc->mode = 1;
 
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = ndev;
