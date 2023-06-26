@@ -100,7 +100,9 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_mutex.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/jesd204.h \
 	$(NO-OS)/jesd204/jesd204-priv.h
 ifeq (y,$(strip $(QUAD_MXFE)))
