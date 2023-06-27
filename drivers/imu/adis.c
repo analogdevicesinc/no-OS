@@ -337,6 +337,8 @@ int adis_write_reg(struct adis_dev *adis, uint32_t reg, uint32_t val,
 		{
 			.tx_buff = adis->tx + 6,
 			.bytes_number = 2,
+			.cs_change = 1,
+			.cs_change_delay = adis->info->cs_change_delay,
 			.cs_delay_last = adis->info->write_delay,
 		},
 		{
