@@ -208,7 +208,7 @@ int adin1300_config_speed(struct adin1300_desc *dev, enum adin1300_speed speed_c
 		return ret;
 
 	affected = ADIN1300_HD_1000_ADV_MASK | ADIN1300_FD_1000_ADV_MASK;
-	bits = no_os_field_prep(ADIN1300_HD_1000_ADV_MASK, 1);
+	bits = no_os_field_prep(ADIN1300_HD_1000_ADV_MASK, 0); // 1000 half-duplex is not supported
 	if (speed_cap >= ADIN1300_1000_BASE_T_FULLDUPLEX)
 		bits |= no_os_field_prep(ADIN1300_FD_1000_ADV_MASK, 1);
 
