@@ -60,7 +60,7 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 
 const struct no_os_spi_init_param adin1110_spi_ip = {
 	.device_id = 2,
-	.max_speed_hz = 30000000,
+	.max_speed_hz = 15000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
@@ -285,7 +285,7 @@ const struct adin1110_init_param adin1110_ip = {
 
 struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = 3,
-	.max_speed_hz = 20000000,
+	.max_speed_hz = 15000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_2,
 	.platform_ops = SPI_OPS,

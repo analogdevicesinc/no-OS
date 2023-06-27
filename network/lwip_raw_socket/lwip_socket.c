@@ -385,6 +385,7 @@ static void lwip_err_callback(void *arg, err_t err)
 	struct lwip_socket_desc *socket = arg;
 
 	socket->state = SOCKET_CLOSED;
+	printf("Error");
 }
 
 /**
@@ -409,24 +410,21 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 	if (sock->state == SOCKET_CLOSED)
 		return 0;
 
-	printf("Closing socket %d\n", sock_id);
-	tcp_recv(sock->pcb, NULL);
-	tcp_err(sock->pcb, NULL);
-
 	if (sock->p) {
 		tcp_recved(sock->pcb, sock->p->tot_len);
 		pbuf_free(sock->p);
 	}
 
+	_release_socket(desc, sock_id);
+	printf("Closing pcb %d\n", sock_id);
+
 	do {
 		ret = tcp_close(sock->pcb);
 	} while(ret);
 
-	printf("Socket state %d\n", sock->pcb->state);
 	sock->p_idx = 0;
 	sock->pcb = NULL;
 	sock->p = NULL;
-	_release_socket(desc, sock_id);
 
 	return 0;
 }
@@ -518,16 +516,20 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 	lwip_config_socket(&desc->sockets[0]);
 
 	mdns_conflict_id = 0;
-	*sock_id = socket_id;
+	*sock_id = 0;
 
-	int socks = 0;
-	for(int i = 0; i < NO_OS_MAX_SOCKETS; i++)
-		if (desc->sockets[i].state != SOCKET_CLOSED) {
-			socks++;
-			printf("State: %d\n", desc->sockets[i].state);
-		}
+	// int socks = 0;
+	// for(int i = 0; i < NO_OS_MAX_SOCKETS; i++)
+	// 	if (desc->sockets[i].state != SOCKET_CLOSED) {
+	// 		socks++;
+	// 		printf("State: %d\n", desc->sockets[i].state);
+	// 	}
 
-	printf("Sockets: %d\n", socks);
+	// printf("Sockets: %d\n", socks);
+
+	MEMP_STATS_DISPLAY(MEMP_TCP_PCB);
+	MEMP_STATS_DISPLAY(MEMP_PBUF_POOL);
+	MEMP_STATS_DISPLAY(MEMP_TCP_PCB_LISTEN);
 
 	return 0;
 }
@@ -678,10 +680,10 @@ static int32_t lwip_socket_listen(void *net, uint32_t sock_id,
 
 	pcb = tcp_listen_with_backlog_and_err(socket->pcb, back_log, &err);
 	if (!pcb) {
-		if (err == ERR_USE) {
-			socket->state = SOCKET_LISTENING;
-			return 0;
-		}
+		// if (err == ERR_USE) {
+		// 	socket->state = SOCKET_LISTENING;
+		// 	return 0;
+		// }
 		return -EBUSY;
 	}
 	socket->pcb = pcb;
@@ -705,14 +707,16 @@ static err_t lwip_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t err)
 	struct lwip_socket_desc *serv_sock = arg;
 	struct lwip_network_desc *desc = serv_sock->desc;
 
-	if (err != ERR_OK) {
-		printf("Accept callback err %d\n", err);
-		return err;
-	}
+	// if (err != ERR_OK) {
+	// 	printf("Accept callback err %d\n", err);
+	// 	return err;
+	// }
 
 	ret = _get_closed_socket(desc, &id);
 	if (ret)
 		return ret;
+
+	tcp_accepted(new_pcb);
 
 	socket = _get_sock(desc, id);
 	socket->pcb = new_pcb;

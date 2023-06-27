@@ -62,7 +62,6 @@
 #ifdef NO_OS_NETWORKING
 #include "no_os_delay.h"
 #include "tcp_socket.h"
-#include "mxc_device.h"
 #endif
 
 #ifdef NO_OS_LWIP_NETWORKING
@@ -1437,6 +1436,7 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
+		memset(c_buff, 0, IIOD_CONN_BUFFER_SIZE);
 		data.conn = sock;
 		data.buf = c_buff;
 		// data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
@@ -1956,9 +1956,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	return 0;
 
 free_pylink:
-#ifdef NO_OS_NETWORKING
 	socket_remove(ldesc->server);
-#endif
 free_conns:
 	no_os_cb_remove(ldesc->conns);
 free_iiod:
@@ -1985,9 +1983,7 @@ int iio_remove(struct iio_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-#ifdef NO_OS_NETWORKING
 	socket_remove(desc->server);
-#endif
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
 	no_os_free(desc->devs);

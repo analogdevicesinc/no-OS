@@ -77,13 +77,13 @@ int main()
 #endif
 
 #ifdef IIO_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
+	// struct no_os_uart_desc *uart_desc;
 
-	ret = no_os_uart_init(&uart_desc, &adin1110_uart_ip);
-	if (ret)
-		return ret;
+	// ret = no_os_uart_init(&uart_desc, &adin1110_uart_ip);
+	// if (ret)
+	// 	return ret;
 
-	no_os_uart_stdio(uart_desc);
+	// no_os_uart_stdio(uart_desc);
 	ret = iio_example_main();
 #endif
 
