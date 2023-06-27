@@ -285,6 +285,7 @@ static struct iio_attribute ad74413r_iio_digital_attrs[] = {
 	},
 	{
 		.name = "threshold",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_threshold,
 		.store = ad74413r_iio_write_threshold,
 		.priv = AD74413R_ADC,
@@ -508,6 +509,27 @@ static int ad74413r_iio_write_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 	return ad74413r_reg_write(dev->ad74413r_desc, reg, (uint32_t)writeval);
 }
 
+static int ad74413r_range_to_voltage_offset(enum ad74413r_adc_range range, uint32_t *val)
+{
+	switch (range)
+	{
+	case AD74413R_ADC_RANGE_10V:
+	case AD74413R_ADC_RANGE_2P5V_EXT_POW:
+		*val = 0;
+		break;
+	case AD74413R_ADC_RANGE_2P5V_INT_POW:
+		*val = (-(int)AD74413R_ADC_MAX_VALUE);
+		break;
+	case AD74413R_ADC_RANGE_5V_BI_DIR:
+		*val = (-(int)AD74413R_ADC_MAX_VALUE / 2);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
 /**
  * @brief Read the offset attribute for a specific channel
  * @param dev - The iio device structure.
@@ -523,47 +545,41 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	struct ad74413r_iio_desc *desc = dev;
 	enum ad74413r_diag_mode diag_func;
 	enum ad74413r_adc_range range;
+	int32_t raw_offset;
+	int32_t range_val;
 	uint32_t reg_val;
 	int32_t val;
 	int ret;
+
+	__disable_irq();
+	ret = ad74413r_get_adc_range(desc->ad74413r_desc, channel->address, &range);
+	if (ret)
+		return ret;
 
 	switch (priv) {
 	case AD74413R_ADC:
 		switch (channel->type) {
 		case IIO_VOLTAGE:
-			val = 0;
+			ret = ad74413r_range_to_voltage_offset(range, &val);
 			break;
 		case IIO_CURRENT:
 			if (channel->ch_out) {
 				val = 0;
 			} else {
-				ad74413r_get_adc_range(desc->ad74413r_desc,
-						       channel->address, &range);
-
-				switch (range) {
-				case AD74413R_ADC_RANGE_10V:
-				case AD74413R_ADC_RANGE_2P5V_EXT_POW:
-					val = 0;
-					break;
-				case AD74413R_ADC_RANGE_2P5V_INT_POW:
-					val = -AD74413R_ADC_MAX_VALUE;
-					break;
-				case AD74413R_ADC_RANGE_5V_BI_DIR:
-					val = -(AD74413R_ADC_MAX_VALUE / 2);
-					break;
-				default:
-					return -EINVAL;
-				}
+				ret = ad74413r_range_to_voltage_offset(range, &val);
 			}
 			break;
 		default:
+			__enable_irq();
 			return -EINVAL;
 		}
 		break;
 	case AD74413R_DIAG:
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN, &reg_val);
-		if (ret)
+		if (ret) {
+			__enable_irq();
 			return ret;
+		}
 
 		diag_func = reg_val;
 		switch (diag_func) {
@@ -586,12 +602,18 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 			val = 0;
 			break;
 		default:
+			__enable_irq();
 			return -EINVAL;
 		}
 		break;
 	default:
+		__enable_irq();
 		return -EINVAL;
 	}
+
+	__enable_irq();
+	if (ret)
+		return ret;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
@@ -765,29 +787,50 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 	struct ad74413r_iio_desc *desc = dev;
 	enum ad74413r_diag_mode diag_func;
 	enum ad74413r_adc_range range;
+	uint32_t range_val;
 	uint32_t reg_val;
 	int32_t val[2];
 	int ret;
+
+	__disable_irq();
 
 	switch (priv) {
 	case AD74413R_ADC:
 		switch (channel->type) {
 		case IIO_VOLTAGE:
 			if (channel->ch_out) {
-				val[0] = 11000;
-				val[1] = 8192;
+				val[0] = AD74413R_DAC_RANGE;
+				val[1] = AD74413R_DAC_RESOLUTION;
 			} else {
-				val[0] = 10000;
-				val[1] = AD74413R_ADC_MAX_VALUE;
+				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+							     channel->address, &range);
+				if (ret)
+					return ret;
+
+				ret = ad74413r_range_to_voltage_range(range, &range_val);
+				if (ret)
+					return ret;
+
+				val[0] = range_val;
+				val[1] = AD74413R_ADC_RESOLUTION;
 			}
-			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
 		case IIO_CURRENT:
 			if (channel->ch_out) {
 				val[0] = 2500000;
-				val[1] = 8192;
+				val[1] = AD74413R_SENSE_RESISTOR_OHMS * AD74413R_DAC_CODE_MAX * 1000;
 			} else {
-				val[0] = 2500000;
-				val[1] = AD74413R_ADC_MAX_VALUE;
+				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+							     channel->address, &range);
+				if (ret)
+					return ret;
+
+				ret = ad74413r_range_to_voltage_range(range, &range_val);
+				if (ret)
+					return ret;
+
+				val[0] = range_val;
+				val[1] = AD74413R_ADC_CODE_MAX * AD74413R_SENSE_RESISTOR_OHMS;
 			}
 			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
 		default:
@@ -854,6 +897,7 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		return -EINVAL;
 	}
 
+	__enable_irq();
 	return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 1, val);
 }
 
@@ -1376,8 +1420,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	uint32_t active_adc_ch;
 	uint32_t digital_val;
 
-	__disable_irq();
-
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
@@ -1396,7 +1438,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 								    &buff[buffer_idx]);
 					digital_val = no_os_field_get((1 << ch), buff[buffer_idx + 2]);
 					buff[buffer_idx + 1] = 0x0;
-					buff[buffer_idx + 2] = 0x0;
 					buff[buffer_idx + 2] = digital_val;
 				} else {
 					ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
@@ -1416,11 +1457,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 
 	iio_buffer_push_scan(dev_data->buffer, buff);
 
-	__enable_irq();
 	return 0;
 out:
-	__enable_irq();
-
 	return ret;
 }
 
@@ -1445,18 +1483,14 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-	// if (config) {
-	// 	descriptor->iio_dev = &ad74413r_iio_config_dev;
-	// 	*iio_desc = descriptor;
-	// 	return 0;
-	// }
-
 	descriptor->iio_dev = &ad74413r_iio_dev;
 
 	ret = ad74413r_init(&descriptor->ad74413r_desc,
 			    init_param->ad74413r_init_param);
-	if (ret)
+	if (ret) {
+		no_os_mdelay(10000);
 		goto err;
+	}
 
 	ret = ad74413r_clear_errors(descriptor->ad74413r_desc);
 	if (ret)
@@ -1467,7 +1501,7 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 		if ((*init_param->channel_configs)[i].enabled) {
 			ret = ad74413r_set_adc_channel_enable(descriptor->ad74413r_desc, i, true);
 			if (ret)
-				return ret;
+				goto err;
 
 			ret = ad74413r_set_channel_function(descriptor->ad74413r_desc, i,
 							    (*init_param->channel_configs)[i].function);
@@ -1477,16 +1511,16 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 			ret = ad74413r_set_adc_rate(descriptor->ad74413r_desc, i,
 						    AD74413R_ADC_SAMPLE_4800HZ);
 			if (ret)
-				return ret;
+				goto err;
 		} else {
 			ret = ad74413r_set_adc_channel_enable(descriptor->ad74413r_desc, i, false);
 			if (ret)
-				return ret;
+				goto err;
 		}
 
 		ret = ad74413r_set_diag_channel_enable(descriptor->ad74413r_desc, i, true);
 		if (ret)
-			return ret;
+			goto err;
 	}
 
 	ret = ad74413r_iio_setup_channels(descriptor, init_param);

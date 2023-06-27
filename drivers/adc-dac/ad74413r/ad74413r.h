@@ -146,6 +146,11 @@
 #define AD74413R_DAC_RANGE			11000
 /** 13 bit DAC */
 #define AD74413R_DAC_RESOLUTION			13
+#define AD74413R_DAC_CODE_MAX			8192
+
+#define AD74413R_ADC_RANGE			10000
+#define AD74413R_ADC_RESOLUTION			16
+#define AD74413R_ADC_CODE_MAX			65536
 
 /** The number of possible DAC values */
 #define AD74413R_THRESHOLD_DAC_RANGE		29
@@ -164,6 +169,7 @@
 #define AD74413R_RANGE_5V_SCALE_DIV		1000000ULL
 #define AD74413R_RANGE_5V_OFFSET		-(AD74413R_ADC_MAX_VALUE / 2)
 #define AD74413R_RTD_PULL_UP			2100000ULL
+#define AD74413R_SENSE_RESISTOR_OHMS		100
 
 /**
  * @brief The chips supported by this driver.
@@ -348,6 +354,8 @@ struct ad74413r_desc {
 	uint8_t comm_buff[4];
 	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS + 4];
 };
+
+int ad74413r_range_to_voltage_range(enum ad74413r_adc_range, uint32_t *);
 
 /** Converts a millivolt value in the corresponding DAC 13 bit code */
 int ad74413r_dac_voltage_to_code(uint32_t, uint32_t *);
