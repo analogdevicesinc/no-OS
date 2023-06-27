@@ -15,6 +15,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
@@ -43,6 +44,7 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.h \
 	$(INCLUDE)/no_os_rtc.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h \
 	$(INCLUDE)/no_os_uart.h \

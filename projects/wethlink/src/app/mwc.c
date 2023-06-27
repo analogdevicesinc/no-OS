@@ -634,6 +634,8 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 	d->hbtx = init_param->hbtx;
 	d->crc8 = init_param->crc8;
 	d->eeprom = init_param->eeprom;
+	d->adin1300 = init_param->adin1300;
+	d->max24287 = init_param->max24287;
 
 	// initialize reset gpio separately
 	ret = no_os_gpio_get(&d->reset_gpio, init_param->reset_gpio_ip);

@@ -34,6 +34,8 @@ struct mwc_iio_dev {
 	bool hbtx;
 	const uint8_t *crc8;
 	struct no_os_eeprom_desc *eeprom;
+	struct adin1300_desc *adin1300;
+	struct max24287_desc *max24287;
 };
 
 struct mwc_iio_init_param {
@@ -51,6 +53,8 @@ struct mwc_iio_init_param {
 	bool hbtx;
 	const uint8_t *crc8;
 	struct no_os_eeprom_desc *eeprom;
+	struct adin1300_desc *adin1300;
+	struct max24287_desc *max24287;
 };
 
 enum mwc_iio_attr_id {

@@ -18,8 +18,6 @@
 #define UART_IRQ_ID     UART0_IRQn
 #define INTC_DEVICE_ID  0
 
-// full-fledged firmware
-#if (TARGET_NUM==32650)
 #define XCVR_RESET_PORT		2
 #define XCVR_RESET_PIN		0
 
@@ -50,11 +48,19 @@
 #define ADIN1300_MDC_PORT	1
 #define ADIN1300_MDC_PIN	5
 
+#define ADIN1300_INT_PORT	2
+#define ADIN1300_INT_PIN	16
+#define ADIN1300_INT_IRQn	GPIO2_IRQn
+
 #define MAX24287_MDIO_PORT	1
 #define MAX24287_MDIO_PIN	6
 
 #define MAX24287_MDC_PORT	1
 #define MAX24287_MDC_PIN	7
+
+#define MAX24287_INT_PORT	1
+#define MAX24287_INT_PIN	0
+#define MAX24287_INT_IRQn	GPIO1_IRQn
 
 #define BRD_SELECT_PORT		0
 #define BRD_SELECT_PIN		20
@@ -70,27 +76,6 @@
 #define LED_RX_LOCK_PORT	0
 #define LED_RX_LOCK_PIN		7
 
-// stripped down firmware that only controls the transceivers
-#elif (TARGET_NUM==78000)
-#define XCVR_RESET_PORT		0
-#define XCVR_RESET_PIN		9
-
-#define XCVR_EN_PORT		0
-#define XCVR_EN_PIN		11
-
-#define XCVR_CLK_PORT		0
-#define XCVR_CLK_PIN		7
-
-#define XCVR_DATA_PORT		0
-#define XCVR_DATA_PIN		5
-
-#define XCVR_SCANOUT_TX_PORT	0
-#define XCVR_SCANOUT_TX_PIN	6
-
-#define XCVR_SCANOUT_RX_PORT	0
-#define XCVR_SCANOUT_RX_PIN 	8
-#endif  
-
 extern struct no_os_uart_init_param uart_console_ip;
 extern struct no_os_gpio_init_param xcvr_reset_gpio_ip;
 extern struct no_os_gpio_init_param xcvr_en_gpio_ip;
@@ -102,8 +87,10 @@ extern struct no_os_gpio_init_param adin1300_reset_gpio_ip;
 extern struct no_os_gpio_init_param max24287_reset_gpio_ip;
 extern struct no_os_gpio_init_param adin1300_mdc_gpio_ip;
 extern struct no_os_gpio_init_param adin1300_mdio_gpio_ip;
+extern struct no_os_gpio_init_param adin1300_int_gpio_ip;
 extern struct no_os_gpio_init_param max24287_mdc_gpio_ip;
 extern struct no_os_gpio_init_param max24287_mdio_gpio_ip;
+extern struct no_os_gpio_init_param max24287_int_gpio_ip;
 extern struct no_os_gpio_init_param brd_select_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_det_red_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_det_green_gpio_ip;
