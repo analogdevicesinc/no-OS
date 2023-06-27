@@ -68,7 +68,6 @@ struct no_os_gpio_init_param xcvr_scanout_rx_gpio_ip = {
 	.extra = &xgpio,
 };
 
-#if (TARGET_NUM == 32650)
 struct no_os_gpio_init_param adin1300_reset_gpio_ip = {
 	.port = ADIN1300_RESET_PORT,
 	.number = ADIN1300_RESET_PIN,
@@ -97,6 +96,13 @@ struct no_os_gpio_init_param adin1300_mdio_gpio_ip = {
 	.extra = &xgpio,
 };
 
+struct no_os_gpio_init_param adin1300_int_gpio_ip = {
+	.port = ADIN1300_INT_PORT,
+	.number = ADIN1300_INT_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
 struct no_os_gpio_init_param max24287_mdc_gpio_ip = {
 	.port = MAX24287_MDC_PORT,
 	.number = MAX24287_MDC_PIN,
@@ -107,6 +113,13 @@ struct no_os_gpio_init_param max24287_mdc_gpio_ip = {
 struct no_os_gpio_init_param max24287_mdio_gpio_ip = {
 	.port = MAX24287_MDIO_PORT,
 	.number = MAX24287_MDIO_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
+struct no_os_gpio_init_param max24287_int_gpio_ip = {
+	.port = MAX24287_INT_PORT,
+	.number = MAX24287_INT_PIN,
 	.platform_ops = &max_gpio_ops,
 	.extra = &xgpio,
 };
@@ -166,4 +179,3 @@ struct no_os_eeprom_init_param eeprom_ip = {
 	.platform_ops = &eeprom_24xx32a_ops,
 	.extra = &(struct eeprom_24xx32a_init_param) { .i2c_init = &eeprom_i2c_ip }
 };
-#endif

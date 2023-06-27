@@ -12,7 +12,7 @@
 #include "led.h"
 #include "net.h"
 
-volatile bool heartbeat_pulse;
+volatile bool heartbeat_pulse = false;
 
 static int mwc_step(void *arg)
 {
@@ -63,7 +63,6 @@ static int heartbeat_prepare(void)
 		.platform_ops = &max_irq_ops,
 	};
 	ret = no_os_irq_ctrl_init(&nvic, &nvic_param);
-
 
 	struct no_os_callback_desc rtc_cb = {
 		.callback = heartbeat,
@@ -168,6 +167,23 @@ int main(void)
 
 	nvmp = (struct nvmp *)eebuf;
 
+	switch(id) {
+	case ID_ADMV96X1:
+		speed = 100;
+		break;
+	case ID_ADMV96X3:
+		speed = 100;
+		break;
+	default:
+	case ID_ADMV96X5:
+		speed = 1000;
+		break;
+	};
+
+	ret = net_init(&iio_adin1300, &iio_max24287, speed);
+	if (ret)
+		goto end;
+
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
 		.reset_gpio_ip = &xcvr_reset_gpio_ip,
@@ -184,6 +200,8 @@ int main(void)
 		.hbtx = hbtx,
 		.crc8 = crc8,
 		.eeprom = eeprom,
+		.adin1300 = iio_adin1300->dev,
+		.max24287 = iio_max24287->dev,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)
@@ -256,23 +274,6 @@ int main(void)
 	mwc->rx_iiodev = iio_rx;
 
 	ret = heartbeat_prepare();
-	if (ret)
-		goto end;
-
-	switch(id) {
-	case ID_ADMV96X1:
-		speed = 100;
-		break;
-	case ID_ADMV96X3:
-		speed = 100;
-		break;
-	default:
-	case ID_ADMV96X5:
-		speed = 1000;
-		break;
-	};
-
-	ret = net_init(&iio_adin1300, &iio_max24287, speed);
 	if (ret)
 		goto end;
 
