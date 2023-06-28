@@ -41,6 +41,13 @@
 #include "no_os_i2c.h"
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_mutex.h"
+#include "no_os_alloc.h"
+
+/**
+ * @brief i2c_table contains the pointers towards the i2c buses
+*/
+static void *i2c_table[I2C_MAX_BUS_NUMBER + 1];
 
 /**
  * @brief Initialize the I2C communication peripheral.
@@ -58,15 +65,54 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 
 	if (!param->platform_ops->i2c_ops_init)
 		return -ENOSYS;
-
+	if ( param->device_id > I2C_MAX_BUS_NUMBER)
+		return -EINVAL;
+	// Initializing BUS descriptor
+	if (i2c_table[param->device_id] == NULL) {
+		ret = no_os_i2cbus_init(param);
+		if (ret)
+			return ret;
+	}
+	// Initilize I2C descriptor
 	ret = param->platform_ops->i2c_ops_init(desc, param);
 	if (ret)
 		return ret;
-
+	(*desc)->bus = i2c_table[param->device_id];
 	(*desc)->platform_ops = param->platform_ops;
 
 	return 0;
 }
+
+/**
+ * @brief Initialize the i2c bus communication peripheral.
+ * @param param - The structure that containes the i2c bus parameters
+ * @return 0 in case of success, error code otherwise
+*/
+int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
+{
+	struct no_os_i2cbus_desc *bus = (struct no_os_i2cbus_desc *)no_os_calloc(1,
+					sizeof(struct no_os_i2cbus_desc));
+
+	if (!bus)
+		return -ENOMEM;
+
+	no_os_mutex_init(bus->mutex);
+
+	if (bus->mutex == NULL) {
+		no_os_free(bus);
+		return -ENOMEM;
+	}
+
+	bus->device_id = param->device_id;
+	bus->max_speed_hz = param->max_speed_hz;
+	bus->platform_ops = param->platform_ops;
+	bus->extra = param->extra;
+
+	i2c_table[param->device_id] = bus;
+
+	return 0;
+}
+
 
 /**
  * @brief Free the resources allocated by no_os_i2c_init().
@@ -75,6 +121,9 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
  */
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
+	// Remove I2C bus
+	no_os_i2cbus_remove(desc->device_id);
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
@@ -82,6 +131,25 @@ int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 		return -ENOSYS;
 
 	return desc->platform_ops->i2c_ops_remove(desc);
+}
+
+/**
+ * @brief Removes i2c bus instance
+ * @param bus_number - i2c bus number
+*/
+void no_os_i2cbus_remove(uint32_t bus_number)
+{
+	struct no_os_i2cbus_desc *i2c_bus_desriptor = (struct no_os_i2cbus_desc *)
+			i2c_table[bus_number];
+
+	if (i2c_bus_desriptor->mutex != NULL) {
+		no_os_mutex_remove(i2c_bus_desriptor->mutex);
+		i2c_bus_desriptor->mutex = NULL;
+	}
+	if (i2c_bus_desriptor != NULL) {
+		no_os_free(i2c_bus_desriptor);
+		i2c_bus_desriptor = NULL;
+	}
 }
 
 /**
