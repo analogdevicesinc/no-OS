@@ -428,10 +428,11 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	extra = desc->extra;
-
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
-	no_os_irq_ctrl_remove(extra->nvic);
+	if (desc->extra) {
+		extra = desc->extra;
+		no_os_irq_ctrl_remove(extra->nvic);
+	}
 	free(desc->extra);
 	free(desc);
 

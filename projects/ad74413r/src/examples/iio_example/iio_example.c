@@ -132,10 +132,8 @@ int step_callback(void *arg)
 	if (swiot->mode_change) {
 		swiot->mode_change = false;
 		ret = iio_app_remove(iio_app);
-		if (ret) {
-			printf("dasda");
+		if (ret)
 			return ret;
-		}
 
 		return -ENOTCONN;
 	}
@@ -555,7 +553,6 @@ int iio_example_main()
 			goto error;
 		}
 
-		no_os_uart_stdio(app->uart_desc);
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;
 		app->arg = &step_p;	
@@ -632,7 +629,6 @@ int iio_example_main()
 		}
 		no_os_gpio_set_value(swiot_led2_gpio, 0);
 
-		no_os_uart_stdio(app->uart_desc);
 		ad74413r_trig_desc->iio_desc = app->iio_desc;
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;

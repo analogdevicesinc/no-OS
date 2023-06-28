@@ -71,7 +71,7 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	
 CFLAGS += -mthumb                                                               \
         -mcpu=cortex-m4                                                         \
-	-O2							\
+	-O2									\
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
@@ -80,7 +80,7 @@ CFLAGS += -mthumb                                                               
         -Wall                                                                   \
         -Wdouble-promotion                                                      \
         -Wno-format                                                    		\
-	-D__HEAP_SIZE=0xFFFFF						\
+	-D__HEAP_SIZE=0x100000							\
 	-g3									\
 	-c	
 

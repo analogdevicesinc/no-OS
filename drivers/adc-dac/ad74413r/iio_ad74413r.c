@@ -354,8 +354,8 @@ static struct iio_attribute ad74413r_iio_dac_attrs[] = {
 	},
 	{
 		.name = "slew_rate",
-		.show = ad74413r_iio_read_slew_step,
-		.store = ad74413r_iio_write_slew_step,
+		.show = ad74413r_iio_read_slew_rate,
+		.store = ad74413r_iio_write_slew_rate,
 	},
 	{
 		.name = "slew_rate_available",
@@ -364,8 +364,8 @@ static struct iio_attribute ad74413r_iio_dac_attrs[] = {
 	},
 	{
 		.name = "slew_step",
-		.show = ad74413r_iio_read_slew_rate,
-		.store = ad74413r_iio_write_slew_rate,
+		.show = ad74413r_iio_read_slew_step,
+		.store = ad74413r_iio_write_slew_step,
 	},
 	{
 		.name = "slew_step_available",

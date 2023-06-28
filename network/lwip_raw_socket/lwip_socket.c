@@ -527,9 +527,10 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 
 	// printf("Sockets: %d\n", socks);
 
-	MEMP_STATS_DISPLAY(MEMP_TCP_PCB);
-	MEMP_STATS_DISPLAY(MEMP_PBUF_POOL);
-	MEMP_STATS_DISPLAY(MEMP_TCP_PCB_LISTEN);
+	MEM_STATS_DISPLAY();
+	// MEMP_STATS_DISPLAY(MEMP_TCP_PCB);
+	// MEMP_STATS_DISPLAY(MEMP_PBUF_POOL);
+	// MEMP_STATS_DISPLAY(MEMP_TCP_PCB_LISTEN);
 
 	return 0;
 }

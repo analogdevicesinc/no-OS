@@ -91,6 +91,7 @@ struct lwip_network_desc *lwip_desc;
 #endif
 
 volatile static uint64_t ts = 0;
+int status = 0;
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -174,7 +175,7 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 				  struct iio_init_param *iio_init_param)
 {
 	static struct tcp_socket_init_param socket_param;
-	static volatile bool is_initialized = false;
+	static bool is_initialized = false;
 	int ret;
 
 	if (!is_initialized) {
@@ -256,7 +257,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
 #if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM)
 		.irq_id = uart_init_par->irq_id,
-		.asynchronous_rx = false,
+		.asynchronous_rx = true,
 #endif
 		.baud_rate = UART_BAUDRATE_DEFAULT,
 		.size = NO_OS_UART_CS_8,
@@ -311,16 +312,15 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 int iio_app_init(struct iio_app_desc **app,
 		 struct iio_app_init_param app_init_param)
 {
-	struct iio_device_init *iio_init_devs;
+	// struct iio_device_init *iio_init_devs;
+	struct iio_device_init iio_init_devs[app_init_param.nb_devices];
 	struct iio_init_param iio_init_param;
 	struct no_os_uart_desc *uart_desc;
 	struct iio_app_desc *application;
 	struct iio_data_buffer *buff;
 	unsigned int i;
-	volatile int status;
 	void *irq_desc = app_init_param.irq_desc;
 
-	ts = 0;
 	application = (struct iio_app_desc *)no_os_calloc(1, sizeof(*application));
 	if (!application)
 		return -ENOMEM;
@@ -355,7 +355,7 @@ int iio_app_init(struct iio_app_desc **app,
 	// if (status < 0)
 	// 	goto error;
 
-	// application->uart_desc = uart_desc;
+	uart_desc = application->uart_desc;
 #if defined(NO_OS_LWIP_NETWORKING)
 	status = lwip_network_setup(application, app_init_param, &iio_init_param);
 	if (status) {
@@ -371,12 +371,12 @@ int iio_app_init(struct iio_app_desc **app,
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
-	iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
-	if (!iio_init_devs) {
-		status = -ENOMEM;
-		no_os_mdelay(10000);
-		goto error;
-	}
+	// iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
+	// if (!iio_init_devs) {
+	// 	status = -ENOMEM;
+	// 	no_os_mdelay(10000);
+	// 	goto error;
+	// }
 
 	for (i = 0; i < app_init_param.nb_devices; ++i) {
 		/*
@@ -418,7 +418,7 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 	}
 
-	no_os_free(iio_init_devs);
+	// no_os_free(iio_init_devs);
 
 	*app = application;
 
@@ -432,9 +432,6 @@ error_uart:
 	status = print_uart_error_message(&uart_desc,
 					  &app_init_param.uart_init_params, status);
 	no_os_uart_remove(uart_desc);
-
-	if (application->uart_desc < 0x1000)
-		no_os_mdelay(10000);
 
 	return status;
 }
