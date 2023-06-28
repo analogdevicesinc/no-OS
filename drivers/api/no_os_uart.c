@@ -41,6 +41,12 @@
 #include "no_os_uart.h"
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_mutex.h"
+
+/**
+ * @brief - UART mutex
+*/
+static void *uart_mutex_table[UART_MAX_NUMBER + 1];
 
 /**
  * @brief Initialize the UART communication peripheral.
@@ -64,6 +70,9 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
+	(*desc)-> mutex = uart_mutex_table[param->device_id];
+
+	no_os_mutex_init(&((*desc)->mutex));
 
 	return 0;
 }
@@ -80,6 +89,8 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
+
+	no_os_mutex_remove(desc->mutex);
 
 	return desc->platform_ops->remove(desc);
 }
@@ -111,13 +122,19 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc,
 			uint8_t *data,
 			uint32_t bytes_number)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops || !data)
 		return -EINVAL;
 
 	if (!desc->platform_ops->read)
 		return -ENOSYS;
 
-	return desc->platform_ops->read(desc, data, bytes_number);
+	no_os_mutex_lock(desc->mutex);
+	ret = desc->platform_ops->read(desc, data, bytes_number);
+	no_os_mutex_unlock(desc->mutex);
+
+	return ret;
 }
 
 /**
@@ -131,13 +148,19 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc,
 			 const uint8_t *data,
 			 uint32_t bytes_number)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops || !data)
 		return -EINVAL;
 
 	if (!desc->platform_ops->write)
 		return -ENOSYS;
 
-	return desc->platform_ops->write(desc, data, bytes_number);
+	no_os_mutex_lock(desc->mutex);
+	ret = desc->platform_ops->write(desc, data, bytes_number);
+	no_os_mutex_unlock(desc->mutex);
+
+	return ret;
 }
 
 /**
@@ -151,13 +174,19 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
 				    uint8_t *data,
 				    uint32_t bytes_number)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops || !data)
 		return -EINVAL;
 
 	if (!desc->platform_ops->read_nonblocking)
 		return -ENOSYS;
 
-	return desc->platform_ops->read_nonblocking(desc, data, bytes_number);
+	no_os_mutex_lock(desc->mutex);
+	ret = desc->platform_ops->read_nonblocking(desc, data, bytes_number);
+	no_os_mutex_unlock(desc->mutex);
+
+	return ret;
 }
 
 /**
@@ -171,13 +200,19 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 				     const uint8_t *data,
 				     uint32_t bytes_number)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops || !data)
 		return -EINVAL;
 
 	if (!desc->platform_ops->write_nonblocking)
 		return -ENOSYS;
 
-	return desc->platform_ops->write_nonblocking(desc, data, bytes_number);
+	no_os_mutex_lock(desc->mutex);
+	ret = desc->platform_ops->write_nonblocking(desc, data, bytes_number);
+	no_os_mutex_unlock(desc->mutex);
+
+	return ret;
 }
 
 

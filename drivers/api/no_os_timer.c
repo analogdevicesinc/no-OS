@@ -42,10 +42,16 @@
 /******************************************************************************/
 #include "no_os_error.h"
 #include "no_os_timer.h"
+#include "no_os_mutex.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+/**
+ * @brief - TIMER mutex
+*/
+static void *timer_mutex_table[TIMER_MAX_TABLE + 1];
+
 /**
  * @brief Initialize hardware timer and the handler structure associated with
  *        it.
@@ -69,6 +75,9 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
+	(*desc)->mutex = timer_mutex_table[param->id];
+
+	no_os_mutex_init(&((*desc)->mutex));
 
 	return 0;
 }
@@ -85,6 +94,8 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
+
+	no_os_mutex_remove(desc->mutex);
 
 	return desc->platform_ops->remove(desc);
 }
@@ -118,6 +129,7 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 	if (!desc->platform_ops->stop)
 		return -ENOSYS;
 
+	no_os_mutex_unlock(desc->mutex);
 	return desc->platform_ops->stop(desc);
 }
 
