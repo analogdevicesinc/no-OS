@@ -41,6 +41,13 @@
 #include "no_os_spi.h"
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_mutex.h"
+#include "no_os_alloc.h"
+
+/**
+ * @brief spi_table contains the pointers towards the SPI buses
+*/
+static void *spi_table[SPI_MAX_BUS_NUMBER + 1];
 
 /**
  * @brief Initialize the SPI communication peripheral.
@@ -58,13 +65,53 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 
 	if (!param->platform_ops->init)
 		return -ENOSYS;
-
+	if (param->device_id > SPI_MAX_BUS_NUMBER)
+		return -EINVAL;
+	// Initializing BUS descriptor
+	if (!spi_table[param->device_id]) {
+		ret = no_os_spibus_init(param);
+		if (ret)
+			return ret;
+	}
+	// Initilize SPI descriptor
 	ret = param->platform_ops->init(desc, param);
 	if (ret)
 		return ret;
-
+	(*desc)->bus = spi_table[param->device_id];
 	(*desc)->platform_ops = param->platform_ops;
 	(*desc)->parent = param->parent;
+
+	return 0;
+}
+
+/**
+ * @brief Initialize the SPI bus communication peripheral.
+ * @param param - The structure that containes the SPI bus parameters
+ * @return 0 in case of success, error code otherwise
+*/
+int32_t no_os_spibus_init(const struct no_os_spi_init_param *param)
+{
+	struct no_os_spibus_desc *bus = (struct no_os_spibus_desc *)no_os_calloc(1,
+					sizeof(struct no_os_spibus_desc));
+
+	if (!bus)
+		return -ENOMEM;
+
+	no_os_mutex_init(bus->mutex);
+
+	if (!bus->mutex) {
+		no_os_free(bus);
+		return -ENOMEM;
+	}
+
+	bus->device_id = param->device_id;
+	bus->max_speed_hz = param->max_speed_hz;
+	bus->mode = param->mode;
+	bus->bit_order = param->bit_order;
+	bus->platform_ops = param->platform_ops;
+	bus->extra = param->extra;
+
+	spi_table[param->device_id] = bus;
 
 	return 0;
 }
@@ -76,13 +123,34 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
  */
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
+	// Remove SPI bus
+	no_os_spibus_remove(desc->device_id);
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
-
 	return desc->platform_ops->remove(desc);
+}
+
+/**
+ * @brief Removes SPI bus instance
+ * @param bus_number - SPI bus number
+*/
+void no_os_spibus_remove(uint32_t bus_number)
+{
+	struct no_os_spibus_desc *spi_bus_desriptor = (struct no_os_spibus_desc *)
+			spi_table[bus_number];
+
+	if (spi_bus_desriptor->mutex) {
+		no_os_mutex_remove(spi_bus_desriptor->mutex);
+		spi_bus_desriptor->mutex = 0;
+	}
+	if (spi_bus_desriptor) {
+		no_os_free(spi_bus_desriptor);
+		spi_bus_desriptor = 0;
+	}
 }
 
 /**
