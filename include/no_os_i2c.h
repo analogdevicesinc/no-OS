@@ -47,6 +47,12 @@
 #include <stdint.h>
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define I2C_MAX_BUS_NUMBER 4
+
+/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
@@ -75,10 +81,30 @@ struct no_os_i2c_init_param {
 };
 
 /**
+ * @struct no_os_i2cbus_desc
+ * @brief Structure holding I2C bus descriptor
+ */
+struct no_os_i2cbus_desc {
+	/** I2C bus mutex(lock)*/
+	void* mutex;
+	/** I2C bus Device ID */
+	uint32_t	device_id;
+	/** I2C bus maximum transfer speed supported */
+	uint32_t	max_speed_hz;
+	/** I2C bus platform specific functions */
+	const struct no_os_i2c_platform_ops *platform_ops;
+	/** I2C bus extra parameters (device specific parameters) */
+	void		*extra;
+};
+
+
+/**
  * @struct no_os_i2c_desc
- * @brief Structure holding I2C descriptor
+ * @brief Structure holding I2C address descriptor
  */
 struct no_os_i2c_desc {
+	/** I2C bus address*/
+	struct no_os_i2cbus_desc *bus;
 	/** Device ID */
 	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
@@ -130,5 +156,11 @@ int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t *data,
 		       uint8_t bytes_number,
 		       uint8_t stop_bit);
+
+/* Initialize I2C bus descriptor*/
+int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param);
+
+/* Free the resources allocated for I2C  bus desc*/
+void no_os_i2cbus_remove(uint32_t bus_number);
 
 #endif // _NO_OS_I2C_H_
