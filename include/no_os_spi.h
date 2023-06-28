@@ -52,6 +52,7 @@
 
 #define	NO_OS_SPI_CPHA	0x01
 #define	NO_OS_SPI_CPOL	0x02
+#define SPI_MAX_BUS_NUMBER 8
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -137,11 +138,34 @@ struct no_os_spi_init_param {
 };
 
 /**
+ * @struct no_os_spibus_desc
+ * @brief SPI bus descriptor
+*/
+struct no_os_spibus_desc {
+	/** SPI bus mutex (lock) */
+	void 		*mutex;
+	/** SPI bus device id */
+	uint32_t	device_id;
+	/** SPI bus max speed */
+	uint32_t	max_speed_hz;
+	/** SPI bus mode */
+	enum no_os_spi_mode	mode;
+	/** SPI bus bit order */
+	enum no_os_spi_bit_order	bit_order;
+	/** SPI bus platform ops */
+	const struct no_os_spi_platform_ops *platform_ops;
+	/** SPI bus extra */
+	void		*extra;
+};
+
+/**
  * @struct no_os_spi_desc
  * @brief Structure holding SPI descriptor.
  */
 struct no_os_spi_desc {
-	/** Device ID */
+	/** SPI bus address */
+	struct no_os_spibus_desc	*bus;
+	/** SPI bus number (0 for SPI0, 1 for SPI1, ...) */
 	uint32_t	device_id;
 	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
@@ -194,6 +218,12 @@ int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
 int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 			   struct no_os_spi_msg *msgs,
 			   uint32_t len);
+
+/* Initialize SPI bus descriptor*/
+int32_t no_os_spibus_init(const struct no_os_spi_init_param *param);
+
+/* Free the resources allocated for SPI bus desc*/
+void no_os_spibus_remove(uint32_t bus_number);
 
 
 #endif // _NO_OS_SPI_H_
