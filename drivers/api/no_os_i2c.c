@@ -96,7 +96,7 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 	if (!bus)
 		return -ENOMEM;
 
-	no_os_mutex_init(bus->mutex);
+	no_os_mutex_init(&(bus->mutex));
 
 	bus->device_id = param->device_id;
 	bus->max_speed_hz = param->max_speed_hz;
