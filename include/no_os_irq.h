@@ -89,7 +89,8 @@ enum no_os_irq_peripheral {
 	NO_OS_UART_IRQ,
 	NO_OS_RTC_IRQ,
 	NO_OS_TIM_IRQ,
-	NO_OS_DMA_IRQ
+	NO_OS_TDM_DMA_IRQ,
+	NO_OS_TIM_DMA_IRQ
 };
 
 /**
