@@ -1977,6 +1977,7 @@ int iio_remove(struct iio_desc *desc)
 	iiod_remove(desc->iiod);
 	no_os_free(desc->devs);
 	no_os_free(desc->trigs);
+	no_os_free(desc->xml_desc);
 	no_os_free(desc);
 
 	return 0;
