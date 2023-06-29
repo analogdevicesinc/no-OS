@@ -1,6 +1,3 @@
-#NETWORKING = y
-#DISABLE_SECURE_SOCKETS = y
-
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
 include $(PROJECT)/src/examples/examples_src.mk
 

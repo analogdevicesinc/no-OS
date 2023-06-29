@@ -382,6 +382,24 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 
 void iiod_remove(struct iiod_desc *desc)
 {
+	struct iiod_conn_data data;
+	int ret;
+	int i;
+
+	if (!desc)
+		return -EINVAL;
+
+	for (i = 0; i < IIOD_MAX_CONNECTIONS; i++) {
+		if (!desc->conns[i].used)
+			continue;
+
+		iiod_conn_remove(desc, i, &data);
+		free(data.buf);
+// #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
+// 		socket_remove(data.conn);
+// #endif
+	}
+
 	free(desc);
 }
 
@@ -512,7 +530,7 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 {
 	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
 	static uint32_t wr_idx = 0;
-	volatile int32_t ret, len;
+	int32_t ret, len;
 	uint32_t rem;
 	void *buf;
 
@@ -565,7 +583,6 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 
 		conn->cmd_data.bytes_count -= conn->nb_buf.len;
 		conn->nb_buf.len = 0;
-		// printf("Bytes count: %d\n", conn->cmd_data.bytes_count);
 		if (conn->cmd_data.bytes_count)
 			return -EAGAIN;
 	}

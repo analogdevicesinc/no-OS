@@ -374,9 +374,6 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	spi->ss_time |= 10 << 8;
 	spi->ss_time |= 10 << 16;
 
-	// NVIC_SetPriority(DMA0_IRQn, 0);
-	// NVIC_SetPriority(DMA1_IRQn, 0);
-
 	*desc = descriptor;
 
 	return 0;

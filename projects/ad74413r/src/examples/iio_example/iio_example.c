@@ -73,6 +73,7 @@
 #include "hpb.h"
 #include "Ext_Flash.h"
 #include "spixf.h"
+#include "adc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -335,9 +336,9 @@ int iio_example_main()
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct max14906_iio_desc_init_param max14906_iio_ip;
 
-	// ret = maxq1065_init(&maxq1065, &maxq1065_ip);
-	// if (ret)
-	// 	return ret;
+	ret = maxq1065_init(&maxq1065, &maxq1065_ip);
+	if (ret)
+		return ret;
 
 	// no_os_gpio_get(&tx_gpio, &tx_perf_gpio_ip);
 	// no_os_gpio_get(&rx_gpio, &rx_perf_gpio_ip);
@@ -467,6 +468,9 @@ int iio_example_main()
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+
+	if (MXC_ADC_Init())
+		return -EINVAL;
 
 	// ret = max_eth_init(&netif_desc, &eth_param);
 	// if (ret)

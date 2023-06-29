@@ -65,7 +65,6 @@ static int max14906_iio_read_config_iec_available(void *dev, char *buf,
 		const struct iio_ch_info *channel,
 		intptr_t priv);
 
-
 static int max14906_iio_reg_read(struct max14906_iio_desc *, uint32_t, uint32_t *);
 static int max14906_iio_reg_write(struct max14906_iio_desc *, uint32_t, uint32_t);
 
@@ -436,7 +435,7 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
 		if (ch_cfg[i].enabled)
 			enabled_ch++;
 
-	max14906_iio_channels = calloc(enabled_ch, sizeof(*max14906_iio_channels));
+	max14906_iio_channels = no_os_calloc(enabled_ch, sizeof(*max14906_iio_channels));
 	if (!max14906_iio_channels)
 		return -ENOMEM;
 
@@ -490,22 +489,22 @@ static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 	ret = max14906_reg_read(desc, MAX14906_OVR_LD_REG, &reg_val);
 	if (ret)
 		return ret;
-	val = reg_val;
+	val = reg_val << 24;
 
 	ret = max14906_reg_read(desc, MAX14906_OPN_WIR_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
-	val |= reg_val << 8;
+	val |= reg_val << 16;
 
 	ret = max14906_reg_read(desc, MAX14906_SHD_VDD_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
-	val |= reg_val << 16;
+	val |= reg_val << 8;
 
 	ret = max14906_reg_read(desc, MAX14906_GLOBAL_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
-	val |= reg_val << 24;
+	val |= reg_val;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
@@ -540,13 +539,6 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 			    init_param->max14906_init_param);
 	if (ret)
 		goto free_desc;
-
-	// if (config) {
-	// 	*iio_desc = descriptor;
-	// 	descriptor->iio_dev = &max14906_iio_config_dev;
-
-	// 	return 0;
-	// }
 
 	descriptor->iio_dev = &max14906_iio_dev;
 

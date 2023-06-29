@@ -77,7 +77,7 @@
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
-#define IIOD_CONN_BUFFER_SIZE	0x4000
+#define IIOD_CONN_BUFFER_SIZE	0x5000
 #define NO_TRIGGER				(uint32_t)-1
 
 #define NO_OS_STRINGIFY(x) #x
@@ -1436,10 +1436,8 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
-		memset(c_buff, 0, IIOD_CONN_BUFFER_SIZE);
 		data.conn = sock;
-		data.buf = c_buff;
-		// data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1489,7 +1487,7 @@ int iio_step(struct iio_desc *desc)
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 		iiod_conn_remove(desc->iiod, conn_id, &data);
 		socket_remove(data.conn);
-		// no_os_free(data.buf);
+		no_os_free(data.buf);
 #endif
 	} else {
 		_push_conn(desc, conn_id);
@@ -1984,8 +1982,8 @@ int iio_remove(struct iio_desc *desc)
 		return -EINVAL;
 
 	socket_remove(desc->server);
-	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
+	no_os_cb_remove(desc->conns);
 	no_os_free(desc->devs);
 	no_os_free(desc->xml_desc);
 	no_os_free(desc->trigs);
