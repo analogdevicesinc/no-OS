@@ -160,14 +160,8 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	tx_jesd_clk.jesd_tx = tx_jesd;
 
 	jesd_rx_hw.dev = &rx_jesd_clk;
-	jesd_rx_hw.dev_clk_enable = jesd204_clk_enable;
-	jesd_rx_hw.dev_clk_disable = jesd204_clk_disable;
-	jesd_rx_hw.dev_clk_set_rate = jesd204_clk_set_rate;
 
 	jesd_tx_hw.dev = &tx_jesd_clk;
-	jesd_tx_hw.dev_clk_enable = jesd204_clk_enable;
-	jesd_tx_hw.dev_clk_disable = jesd204_clk_disable;
-	jesd_tx_hw.dev_clk_set_rate = jesd204_clk_set_rate;
 
 	clk[0].name = "jesd_rx";
 	clk[0].hw = &jesd_rx_hw;
