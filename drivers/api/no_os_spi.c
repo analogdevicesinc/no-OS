@@ -99,11 +99,6 @@ int32_t no_os_spibus_init(const struct no_os_spi_init_param *param)
 
 	no_os_mutex_init(bus->mutex);
 
-	if (!bus->mutex) {
-		no_os_free(bus);
-		return -ENOMEM;
-	}
-
 	bus->device_id = param->device_id;
 	bus->max_speed_hz = param->max_speed_hz;
 	bus->mode = param->mode;
@@ -143,10 +138,8 @@ void no_os_spibus_remove(uint32_t bus_number)
 	struct no_os_spibus_desc *spi_bus_desriptor = (struct no_os_spibus_desc *)
 			spi_table[bus_number];
 
-	if (spi_bus_desriptor->mutex) {
-		no_os_mutex_remove(spi_bus_desriptor->mutex);
-		spi_bus_desriptor->mutex = 0;
-	}
+	no_os_mutex_remove(spi_bus_desriptor->mutex);
+
 	if (spi_bus_desriptor) {
 		no_os_free(spi_bus_desriptor);
 		spi_bus_desriptor = 0;
@@ -164,13 +157,19 @@ int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
 				 uint16_t bytes_number)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
 	if (!desc->platform_ops->write_and_read)
 		return -ENOSYS;
 
-	return desc->platform_ops->write_and_read(desc, data, bytes_number);
+	no_os_mutex_lock(desc->bus->mutex);
+	ret =  desc->platform_ops->write_and_read(desc, data, bytes_number);
+	no_os_mutex_unlock(desc->bus->mutex);
+
+	return ret;
 }
 
 /**
@@ -193,14 +192,21 @@ int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 	if (desc->platform_ops->transfer)
 		return desc->platform_ops->transfer(desc, msgs, len);
 
+	no_os_mutex_lock(desc->bus->mutex);
+
 	for (i = 0; i < len; i++) {
-		if (msgs[i].rx_buff != msgs[i].tx_buff || !msgs[i].tx_buff)
-			return -EINVAL;
+		if (msgs[i].rx_buff != msgs[i].tx_buff || !msgs[i].tx_buff) {
+			ret = -EINVAL;
+			goto out;
+		}
 		ret = no_os_spi_write_and_read(desc, msgs[i].rx_buff,
 					       msgs[i].bytes_number);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			goto out;
+		}
 	}
 
+out:
+	no_os_mutex_unlock(desc->bus->mutex);
 	return 0;
 }
