@@ -109,30 +109,32 @@ int dummy_example_main()
 		no_os_mdelay(1000);
 		ret = adis_read_x_gyro(adis16505_desc, &val[0]);
 		if (ret)
-			goto error;
+			goto error_remove;
 		ret = adis_read_y_gyro(adis16505_desc, &val[1]);
 		if (ret)
-			goto error;
+			goto error_remove;
 		ret = adis_read_z_gyro(adis16505_desc, &val[2]);
 		if (ret)
-			goto error;
+			goto error_remove;
 		ret = adis_read_x_accl(adis16505_desc, &val[3]);
 		if (ret)
-			goto error;
+			goto error_remove;
 		ret = adis_read_y_accl(adis16505_desc, &val[4]);
 		if (ret)
-			goto error;
+			goto error_remove;
 		ret = adis_read_z_accl(adis16505_desc, &val[5]);
 		if (ret)
-			goto error;
+			goto error_remove;
 		ret = adis_read_temp_out(adis16505_desc, &val[6]);
 		if (ret)
-			goto error;
+			goto error_remove;
 
 		for (uint8_t i = 0; i < 7; i++)
 			pr_info("%s %.5f %s \n", output_data[i], val[i]* output_scale[i],
 				output_unit[i]);
 	}
+error_remove:
+	adis_remove(adis16505_desc);
 error:
 	pr_info("Error!\n");
 	return 0;
