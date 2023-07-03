@@ -388,7 +388,10 @@ pre_build:
 	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_OBJECT_FILES_NAMES_FILE)) $(cmd_separator)\
 		$(foreach object_file_name,$(sort $(OBJS)),$(call APPEND_TEXT_TO_FILE,$(object_file_name),$(PROJECT_OBJECT_FILES_NAMES_FILE))\
 		$(cmd_separator)) echo . $(HIDE)
-
+ifeq ($(OS), Windows_NT)
+	$(MUTE) cmd /C $(NO-OS)/tools/scripts/echo_remove.bat $(subst /,\,$(sort $(PROJECT_CFLAGS_NAMES_FILE))) $(subst /,\,$(sort $(PROJECT_CPPFLAGS_NAMES_FILE)))\
+				   $(subst /,\,$(sort $(PROJECT_ASFLAGS_NAMES_FILE))) $(subst /,\,$(sort $(PROJECT_OBJECT_FILES_NAMES_FILE)))
+endif
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
