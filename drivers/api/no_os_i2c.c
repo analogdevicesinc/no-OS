@@ -98,11 +98,6 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 
 	no_os_mutex_init(bus->mutex);
 
-	if (bus->mutex == NULL) {
-		no_os_free(bus);
-		return -ENOMEM;
-	}
-
 	bus->device_id = param->device_id;
 	bus->max_speed_hz = param->max_speed_hz;
 	bus->platform_ops = param->platform_ops;
@@ -142,10 +137,8 @@ void no_os_i2cbus_remove(uint32_t bus_number)
 	struct no_os_i2cbus_desc *i2c_bus_desriptor = (struct no_os_i2cbus_desc *)
 			i2c_table[bus_number];
 
-	if (i2c_bus_desriptor->mutex != NULL) {
-		no_os_mutex_remove(i2c_bus_desriptor->mutex);
-		i2c_bus_desriptor->mutex = NULL;
-	}
+	no_os_mutex_remove(i2c_bus_desriptor->mutex);
+
 	if (i2c_bus_desriptor != NULL) {
 		no_os_free(i2c_bus_desriptor);
 		i2c_bus_desriptor = NULL;
@@ -167,14 +160,20 @@ int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t bytes_number,
 			uint8_t stop_bit)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
 	if (!desc->platform_ops->i2c_ops_write)
 		return -ENOSYS;
 
-	return desc->platform_ops->i2c_ops_write(desc, data, bytes_number,
-			stop_bit);
+	no_os_mutex_lock(desc->bus->mutex);
+	ret = desc->platform_ops->i2c_ops_write(desc, data, bytes_number,
+						stop_bit);
+	no_os_mutex_unlock(desc->bus->mutex);
+
+	return ret;
 }
 
 /**
@@ -192,12 +191,18 @@ int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t bytes_number,
 		       uint8_t stop_bit)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
 	if (!desc->platform_ops->i2c_ops_read)
 		return -ENOSYS;
 
-	return desc->platform_ops->i2c_ops_read(desc, data, bytes_number,
-						stop_bit);
+	no_os_mutex_lock(desc->bus->mutex);
+	ret = desc->platform_ops->i2c_ops_read(desc, data, bytes_number,
+					       stop_bit);
+	no_os_mutex_unlock(desc->bus->mutex);
+
+	return ret;
 }
