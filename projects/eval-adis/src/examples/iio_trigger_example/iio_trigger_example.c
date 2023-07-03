@@ -84,19 +84,19 @@ int iio_trigger_example_main()
 	/* Initialize interrupt controller */
 	ret = no_os_irq_ctrl_init(&adis16505_irq_desc, &adis16505_gpio_irq_ip);
 	if (ret)
-		return ret;
+		goto err_irq_init;
 
 	ret = no_os_irq_set_priority(adis16505_irq_desc, adis16505_gpio_trig_ip.irq_id,
 				     1);
 	if (ret)
-		return ret;
+		goto err_irq_set_prio;
 
 	adis16505_gpio_trig_ip.irq_ctrl = adis16505_irq_desc;
 
 	/* Initialize hardware trigger */
 	ret = iio_hw_trig_init(&adis16505_trig_desc, &adis16505_gpio_trig_ip);
 	if (ret)
-		return ret;
+		goto err_irq_set_prio;
 
 	/* List of devices */
 	struct iio_app_device iio_devices[] = {
@@ -123,10 +123,25 @@ int iio_trigger_example_main()
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
-		return ret;
+		goto err_iio_app_init;
 
 	// update the reference to iio_desc
 	adis16505_trig_desc->iio_desc = app->iio_desc;
 
-	return iio_app_run(app);
+	ret = iio_app_run(app);
+	if (ret)
+		goto iio_app_err;
+
+	return 0;
+
+iio_app_err:
+	iio_app_remove(app);
+err_iio_app_init:
+	iio_hw_trig_remove(adis16505_trig_desc);
+err_irq_set_prio:
+	no_os_irq_ctrl_remove(adis16505_irq_desc);
+err_irq_init:
+	adis16505_iio_remove(adis16505_iio_desc);
+	pr_info("Error!\n");
+	return ret;
 }
