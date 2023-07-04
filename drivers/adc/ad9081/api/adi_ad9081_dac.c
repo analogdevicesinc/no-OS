@@ -460,7 +460,9 @@ int32_t adi_ad9081_dac_duc_nco_ftw_set(adi_ad9081_device_t *device,
 #endif
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
-
+	if (acc_modulus + acc_delta >= (1ULL << 48)) {
+		return API_CMS_ERROR_INVALID_PARAM;
+	}
 	for (i = 0; i < 4; i++) {
 		dac = dacs & (AD9081_DAC_0 << i);
 		if (dac > 0) {
@@ -611,6 +613,80 @@ int32_t adi_ad9081_dac_duc_nco_ftw_set(adi_ad9081_device_t *device,
 				device, AD9081_DAC_NONE, channel, ftw);
 			AD9081_ERROR_RETURN(err);
 		}
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_dac_duc_main_nco_ftw_get(adi_ad9081_device_t *device,
+					    uint8_t dacs, uint64_t *ftw,
+					    uint64_t *acc_modulus,
+					    uint64_t *acc_delta)
+{
+	int32_t err;
+	uint8_t acc_modulus_en;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_dac_select_set(device, dacs);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_get(device, REG_DDSM_FTW0_ADDR,
+				    BF_DDSM_FTW_INFO, (uint8_t *)ftw,
+				    8); /* paged */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_get(device, REG_DDSC_DATAPATH_CFG_ADDR,
+				    BF_DDSC_MODULUS_EN_INFO, &acc_modulus_en,
+				    1); /* paged */
+	AD9081_ERROR_RETURN(err);
+	if (acc_modulus_en) {
+		err = adi_ad9081_hal_bf_get(device, REG_DDSM_ACC_MODULUS0_ADDR,
+					    BF_DDSM_ACC_MODULUS_INFO,
+					    (uint8_t *)acc_modulus,
+					    8); /* paged */
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_hal_bf_get(device, REG_DDSM_ACC_MODULUS0_ADDR,
+					    BF_DDSM_ACC_MODULUS_INFO,
+					    (uint8_t *)acc_delta,
+					    8); /* paged */
+		AD9081_ERROR_RETURN(err);
+	} else {
+		*acc_modulus = 0;
+		*acc_delta = 0;
+	}
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_dac_duc_channel_nco_ftw_get(adi_ad9081_device_t *device,
+					       uint8_t channels, uint64_t *ftw,
+					       uint64_t *acc_modulus,
+					       uint64_t *acc_delta)
+{
+	int32_t err;
+	uint8_t acc_modulus_en;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_dac_chan_select_set(device, channels);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_get(device, REG_DDSC_FTW0_ADDR,
+				    BF_DDSC_FTW_INFO, (uint8_t *)ftw,
+				    8); /* paged */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_get(device, REG_DDSC_DATAPATH_CFG_ADDR,
+				    BF_DDSC_MODULUS_EN_INFO, &acc_modulus_en,
+				    1); /* paged */
+	AD9081_ERROR_RETURN(err);
+	if (acc_modulus_en) {
+		err = adi_ad9081_hal_bf_get(device, REG_DDSC_ACC_MODULUS0_ADDR,
+					    BF_DDSC_ACC_MODULUS_INFO,
+					    (uint8_t *)acc_modulus,
+					    8); /* paged */
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_hal_bf_get(device, REG_DDSC_ACC_DELTA0_ADDR,
+					    BF_DDSC_ACC_DELTA_INFO,
+					    (uint8_t *)acc_delta,
+					    8); /* paged */
+		AD9081_ERROR_RETURN(err);
 	}
 
 	return API_CMS_ERROR_OK;
