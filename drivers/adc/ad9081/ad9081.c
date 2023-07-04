@@ -319,7 +319,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jesd_rx_clk)
-			no_os_clk_disable(phy->jesd_rx_clk);
+			no_os_clk_disable(phy->jesd_rx_clk->clk_desc);
 
 		break;
 	case 1:
@@ -331,7 +331,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jesd_rx_clk) {
-			ret = no_os_clk_enable(phy->jesd_rx_clk);
+			ret = no_os_clk_enable(phy->jesd_rx_clk->clk_desc);
 			if (ret < 0) {
 				printf("Failed to enable JESD204 link: %d\n",
 				       ret);
@@ -349,13 +349,13 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jesd_tx_clk)
-			no_os_clk_disable(phy->jesd_tx_clk);
+			no_os_clk_disable(phy->jesd_tx_clk->clk_desc);
 
 		break;
 	case 3:
 		/* enable txfe TX (JRX) link */
 		if (phy->jesd_tx_clk) {
-			ret = no_os_clk_enable(phy->jesd_tx_clk);
+			ret = no_os_clk_enable(phy->jesd_tx_clk->clk_desc);
 			if (ret < 0) {
 				printf("Failed to enable JESD204 link: %d\n",
 				       ret);
@@ -463,13 +463,13 @@ void ad9081_work_func(struct ad9081_phy *phy)
 							   AD9081_LINK_ALL : AD9081_LINK_0, 0);
 
 			if (phy->jesd_tx_clk)
-				no_os_clk_disable(phy->jesd_tx_clk);
+				no_os_clk_disable(phy->jesd_tx_clk->clk_desc);
 
 			no_os_mdelay(20);
 
 			/* enable txfe TX (JRX) link */
 			if (phy->jesd_tx_clk)
-				no_os_clk_enable(phy->jesd_tx_clk);
+				no_os_clk_enable(phy->jesd_tx_clk->clk_desc);
 
 			adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
 							   (phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
