@@ -283,7 +283,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t dhcp_timeout = 500000;
+	uint32_t dhcp_timeout = 20000;
 	int ret;
 	int i;
 
@@ -307,9 +307,15 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	lwip_init();
 
+#if NO_OS_STATIC_IP
+	IP4_ADDR(&ipaddr, 192, 168, 95, 171);
+	IP4_ADDR(&netmask, 255, 255, 255, 0);
+	IP4_ADDR(&gw, 127, 0, 0, 1);
+#else
 	ip4_addr_set_zero(&ipaddr);
 	ip4_addr_set_zero(&netmask);
 	ip4_addr_set_zero(&gw);
+#endif
 
 	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, descriptor, lwip_netif_init,
 		  ethernet_input);
@@ -325,6 +331,8 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	netif_set_up(netif_descriptor);
 
 	netif_set_link_up(netif_descriptor);
+
+#ifndef NO_OS_STATIC_IP
 	ret = dhcp_start(netif_descriptor);
 	if (ret)
 		goto platform_remove;
@@ -344,13 +352,16 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 		ret = -ETIMEDOUT;
 		goto platform_remove;
 	}
-
+#endif
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);
 	if (ret)
 		goto platform_remove;
 
 	lwip_config_if(descriptor);
 
+	printf("IP address: %s\n", ip4addr_ntoa(&netif_descriptor->ip_addr));
+	printf("Network mask: %s\n", ip4addr_ntoa(&netif_descriptor->netmask));
+	printf("Gateway's IP address: %s\n", ip4addr_ntoa(&netif_descriptor->gw));
 	for (i = 0; i < NO_OS_MAX_SOCKETS; i++) {
 		descriptor->sockets[i].state = SOCKET_CLOSED;
 		descriptor->sockets[i].desc = descriptor;
@@ -416,7 +427,6 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 	}
 
 	_release_socket(desc, sock_id);
-	printf("Closing pcb %d\n", sock_id);
 
 	do {
 		ret = tcp_close(sock->pcb);
@@ -496,10 +506,6 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 	if (proto != PROTOCOL_TCP)
 		return -EPROTONOSUPPORT;
 
-	// ret = _get_closed_socket(desc, &socket_id);
-	// if (ret)
-	// 	return ret;
-
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
 	if (!pcb) {
 		_release_socket(desc, 0);
@@ -517,20 +523,6 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 
 	mdns_conflict_id = 0;
 	*sock_id = 0;
-
-	// int socks = 0;
-	// for(int i = 0; i < NO_OS_MAX_SOCKETS; i++)
-	// 	if (desc->sockets[i].state != SOCKET_CLOSED) {
-	// 		socks++;
-	// 		printf("State: %d\n", desc->sockets[i].state);
-	// 	}
-
-	// printf("Sockets: %d\n", socks);
-
-	// MEM_STATS_DISPLAY();
-	// MEMP_STATS_DISPLAY(MEMP_TCP_PCB);
-	// MEMP_STATS_DISPLAY(MEMP_PBUF_POOL);
-	// MEMP_STATS_DISPLAY(MEMP_TCP_PCB_LISTEN);
 
 	return 0;
 }
@@ -680,13 +672,9 @@ static int32_t lwip_socket_listen(void *net, uint32_t sock_id,
 		return -EINVAL;
 
 	pcb = tcp_listen_with_backlog_and_err(socket->pcb, back_log, &err);
-	if (!pcb) {
-		// if (err == ERR_USE) {
-		// 	socket->state = SOCKET_LISTENING;
-		// 	return 0;
-		// }
+	if (!pcb)
 		return -EBUSY;
-	}
+
 	socket->pcb = pcb;
 	socket->state = SOCKET_LISTENING;
 
@@ -708,10 +696,10 @@ static err_t lwip_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t err)
 	struct lwip_socket_desc *serv_sock = arg;
 	struct lwip_network_desc *desc = serv_sock->desc;
 
-	// if (err != ERR_OK) {
-	// 	printf("Accept callback err %d\n", err);
-	// 	return err;
-	// }
+	if (err != ERR_OK) {
+		printf("Accept callback err %d\n", err);
+		return err;
+	}
 
 	ret = _get_closed_socket(desc, &id);
 	if (ret)

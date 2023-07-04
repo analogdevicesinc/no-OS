@@ -154,7 +154,7 @@ void spixf_cfg_setup()
 
 	MXC_SPIXF_SetCmdValue(EXT_FLASH_CMD_QREAD);
 	MXC_SPIXF_SetCmdWidth(MXC_SPIXF_SINGLE_SDIO);
-	MXC_SPIXF_SetAddrWidth(MXC_SPIXF_SINGLE_SDIO);
+	MXC_SPIXF_SetAddrWidth(MXC_SPIXF_QUAD_SDIO);
 	MXC_SPIXF_SetDataWidth(MXC_SPIXF_WIDTH_4);
 	MXC_SPIXF_SetModeClk(EXT_FLASH_QREAD_DUMMY);
 
@@ -404,28 +404,47 @@ int iio_example_main()
 	// Ext_Flash_Init();
     	// Ext_Flash_Reset();
 	// uint32_t flash_id = Ext_Flash_ID();
-	// // Ext_Flash_Erase(0x00000, Ext_Flash_Erase_64K);
-	// ret = Ext_Flash_Quad(0);
+	// Ext_Flash_Erase(0x00000, Ext_Flash_Erase_64K);
+	// ret = Ext_Flash_Quad(1);
 	// if (ret)
 	// 	return ret;
 
-	// uint8_t flash_val[3] = {0x12, 0x34, 0x5D};
-	// uint8_t flash_readback[3] = {0x0};
+
+	// uint8_t flash_val[3] = {0x12, 0x34, 0xFA};
+	// uint8_t flash_readback[10] = {0x0};
+
+	// ret = Ext_Flash_Program_Page(0xF, flash_val, 3, Ext_Flash_DataLine_Quad);
+	// ret = Ext_Flash_Program_Page(0xF, flash_readback, 3, Ext_Flash_DataLine_Single);
+
+	// ret = Ext_Flash_Read(0x0, flash_readback, 10, Ext_Flash_DataLine_Single);
 	// ret = Ext_Flash_Program_Page(0x0, &__load_start_xip, (uint32_t)(&__load_length_xip), Ext_Flash_DataLine_Single);
 	// if (ret)
 	// 	return ret;
+	// ret = Ext_Flash_Read(0x0, flash_readback, 10, Ext_Flash_DataLine_Single);
 
 	// spixf_cfg_setup();
+
+	// *((uint8_t *)0x08000000) = 0xFE;
+	// ret = Ext_Flash_Program_Page(0x0, flash_val, 3, Ext_Flash_DataLine_Quad);
+	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
+	// flash_val[2] = 0xFE;
+	// ret = Ext_Flash_Program_Page(0x0, flash_val, 3, Ext_Flash_DataLine_Quad);
+	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
+	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
+	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
+	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
+	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
 
 	// func = (void(*)(void))((uint32_t)&__load_start_xip | 1);
 	// func();
 
-	// // ret = Ext_Flash_Program_Page(0xF, flash_val, 3, Ext_Flash_DataLine_Quad);
-	// a = *((uint8_t *)0x08000000);
-	// *((uint8_t *)0x08000000) = 0x0;
+	// ret = Ext_Flash_Program_Page(0xF, flash_val, 3, Ext_Flash_DataLine_Quad);
+	// volatile uint8_t a = *((uint8_t *)0x08000000);
+	// ret = Ext_Flash_Program_Page(0x0, flash_val, 3, Ext_Flash_DataLine_Single);
+	// *((uint8_t *)0x08000000) = 0xFE;
 	// a = *((uint8_t *)0x08000000);
 
-	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
+	// ret = Ext_Flash_Read(0xF, flash_readback, 10, Ext_Flash_DataLine_Single);
 	// if (ret)
 	// 	return ret;
 
@@ -507,10 +526,10 @@ int iio_example_main()
 		return ret;
 
 	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER("sw_trig", sw_trig,
+				&ad74413r_iio_trig_desc),
 		IIO_APP_TRIGGER(AD74413R_GPIO_TRIG_NAME, ad74413r_trig_desc,
 				&ad74413r_iio_trig_desc),
-		IIO_APP_TRIGGER("sw_trig", sw_trig,
-				&ad74413r_iio_trig_desc)
 	};
 
 	while (1) {
@@ -542,8 +561,8 @@ int iio_example_main()
 
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = 1;
-		app_init_param.trigs = &trigs[1];
-		app_init_param.nb_trigs = 1;
+		app_init_param.trigs = trigs;
+		app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
 		app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;

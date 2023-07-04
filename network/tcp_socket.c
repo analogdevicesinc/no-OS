@@ -287,8 +287,6 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 		return ret;
 	}
 
-	printf("Socket id %d", ldesc->id);
-
 #ifndef DISABLE_SECURE_SOCKET
 	if (!param->secure_init_param)
 		ldesc->secure = NULL;

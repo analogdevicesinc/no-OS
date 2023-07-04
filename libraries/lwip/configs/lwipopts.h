@@ -383,7 +383,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define ICMP_TTL                		255
 
 /* ---------- DHCP Options ---------- */
-#define LWIP_DHCP               		LWIP_UDP
+#define LWIP_DHCP               		1
 #define LWIP_NETIF_STATUS_CALLBACK		1
 
 /* ---------- AUTOIP Options ------- */

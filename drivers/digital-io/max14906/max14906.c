@@ -124,6 +124,7 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 0);
 
+	desc->buff[2] = max14906_crc_encode(&desc->buff[0]);
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 	if (ret)
 		return ret;
@@ -255,6 +256,10 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		goto spi_err;
 
 	ret = max14906_reg_read(descriptor, MAX14906_SHD_VDD_FLT_REG, &reg_val);
+	if (ret)
+		goto spi_err;
+
+	ret = max14906_reg_read(descriptor, MAX14906_GLOBAL_FLT_REG, &reg_val);
 	if (ret)
 		goto spi_err;
 
