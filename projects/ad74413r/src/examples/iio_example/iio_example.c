@@ -539,11 +539,8 @@ int iio_example_main()
 
 		swiot_ip.mode = 0;
 		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
-		if (ret) {
-			printf("Error 1\n");
-			no_os_mdelay(10000);
+		if (ret)
 			goto error;
-		}
 
 		struct iio_app_device iio_devices[4] = {
 			{
@@ -571,8 +568,6 @@ int iio_example_main()
 
 		ret = iio_app_init(&app, app_init_param);
 		if (ret) {
-			printf("Error 2\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
@@ -582,8 +577,6 @@ int iio_example_main()
 
 		ret = iio_app_run(app);
 		if (ret != -ENOTCONN) {
-			printf("Error 3");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
@@ -600,8 +593,6 @@ int iio_example_main()
 			iio_devices[1].read_buff = &buff3;
 			ndev++;
 		} else {
-			printf("Error 4\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
@@ -613,8 +604,6 @@ int iio_example_main()
 			iio_devices[2].read_buff = &buff4;
 			ndev++;
 		} else {
-			printf("Error 5\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
@@ -627,8 +616,6 @@ int iio_example_main()
 			ntrig++;
 			ndev++;
 		} else {
-			printf("Error 6\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
@@ -646,8 +633,6 @@ int iio_example_main()
 		no_os_gpio_set_value(swiot_led2_gpio, 1);
 		ret = iio_app_init(&app, app_init_param);
 		if (ret) {
-			printf("Error 7\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 		no_os_gpio_set_value(swiot_led2_gpio, 0);
@@ -660,8 +645,6 @@ int iio_example_main()
 		no_os_gpio_set_value(max14906_en_gpio, 1);
 		ret = iio_app_run(app);
 		if (ret != -ENOTCONN) {
-			printf("Error 8\n");
-			no_os_mdelay(10000);
 			no_os_gpio_set_value(max14906_en_gpio, 0);
 			goto error;
 		}
@@ -669,29 +652,21 @@ int iio_example_main()
 		no_os_gpio_set_value(max14906_en_gpio, 0);
 		ret = ad74413r_iio_remove(ad74413r_iio_desc);
 		if (ret) {
-			printf("Error 9\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
 		ret = max14906_iio_remove(max14906_iio_desc);
 		if (ret) {
-			printf("Error 10\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
 		ret = adt75_iio_remove(adt75_iio_desc);
 		if (ret) {
-			printf("Error 11\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 
 		ret = swiot_iio_remove(swiot_iio_desc);
 		if (ret) {
-			printf("Error 12\n");
-			no_os_mdelay(10000);
 			goto error;
 		}
 	}

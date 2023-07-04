@@ -180,10 +180,8 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 
 	if (!is_initialized) {
 		ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
-		if (ret) {
-			no_os_mdelay(10000);
+		if (ret)
 			return ret;
-		}
 
 		lwip_desc = app->lwip_desc;
 	}
@@ -358,10 +356,9 @@ int iio_app_init(struct iio_app_desc **app,
 	uart_desc = application->uart_desc;
 #if defined(NO_OS_LWIP_NETWORKING)
 	status = lwip_network_setup(application, app_init_param, &iio_init_param);
-	if (status) {
-		no_os_mdelay(10000);
+	if (status)
 		goto error;
-	}
+
 #elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
 	if(status < 0)
@@ -374,7 +371,6 @@ int iio_app_init(struct iio_app_desc **app,
 	// iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
 	// if (!iio_init_devs) {
 	// 	status = -ENOMEM;
-	// 	no_os_mdelay(10000);
 	// 	goto error;
 	// }
 
@@ -413,10 +409,8 @@ int iio_app_init(struct iio_app_desc **app,
 	iio_init_param.nb_ctx_attr = app_init_param.nb_ctx_attr;
 
 	status = iio_init(&application->iio_desc, &iio_init_param);
-	if(status < 0) {
-		no_os_mdelay(10000);
+	if(status < 0)
 		goto error;
-	}
 
 	// no_os_free(iio_init_devs);
 

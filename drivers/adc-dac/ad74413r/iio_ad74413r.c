@@ -1487,10 +1487,8 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 
 	ret = ad74413r_init(&descriptor->ad74413r_desc,
 			    init_param->ad74413r_init_param);
-	if (ret) {
-		no_os_mdelay(10000);
+	if (ret)
 		goto err;
-	}
 
 	ret = ad74413r_clear_errors(descriptor->ad74413r_desc);
 	if (ret)

@@ -360,10 +360,8 @@ static int ad74413r_scratch_test(struct ad74413r_desc *desc)
 	if (ret)
 		return ret;
 
-	if (val != test_val) {
-		no_os_mdelay(10000);
+	if (val != test_val)
 		return -EINVAL;
-	}
 
 	return 0;
 }
@@ -1080,39 +1078,31 @@ int ad74413r_init(struct ad74413r_desc **desc,
 	struct ad74413r_desc *descriptor;
 	uint32_t reg_val;
 
-	if (!init_param) {
-		no_os_mdelay(10000);
+	if (!init_param)
 		return -EINVAL;
-	}
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
 	ret = no_os_spi_init(&descriptor->comm_desc, &init_param->comm_param);
-	if (ret) {
-		no_os_mdelay(10000);
+	if (ret)
 		goto err;
-	}
 
 	no_os_crc8_populate_msb(_crc_table, AD74413R_CRC_POLYNOMIAL);
 
 	ret = ad74413r_reset(descriptor);
 	if (ret) {
-		no_os_mdelay(10000);
 		goto comm_err;
 	}
 	no_os_mdelay(10);
 
 	ret = ad74413r_clear_errors(descriptor);
-	if (ret) {
-		no_os_mdelay(10000);
+	if (ret)
 		goto comm_err;
-	}
 
 	ret = ad74413r_scratch_test(descriptor);
 	if (ret) {
-		no_os_mdelay(10000);
 		goto comm_err;
 	}
 
@@ -1120,10 +1110,9 @@ int ad74413r_init(struct ad74413r_desc **desc,
 
 	for (int i = 0; i < 4; i++) {
 		ret = ad74413r_set_channel_function(descriptor, i, AD74413R_HIGH_Z);
-		// if (ret) {
-		// 	no_os_mdelay(10000);
-		// 	goto comm_err;
-		// }
+		if (ret) {
+			goto comm_err;
+		}
 	}
 
 	*desc = descriptor;
@@ -1131,10 +1120,8 @@ int ad74413r_init(struct ad74413r_desc **desc,
 	return 0;
 
 comm_err:
-	no_os_mdelay(10000);
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_mdelay(10000);
 	no_os_free(descriptor);
 
 	return ret;
