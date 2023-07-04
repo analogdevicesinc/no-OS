@@ -19,7 +19,7 @@ export BOOTOBJ
 #	WINDOWS
 ifeq ($(OS), Windows_NT)
 SHELL=cmd
-ROOT_DRIVE ?= C:
+ROOT_DRIVE = C:
 # It is slow to print timestamp in windows
 #TIMESTAMP = $(shell powershell Get-Date -Format "HH:mm.ss")
 TIMESTAMP = 00:00:00
@@ -78,16 +78,6 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 # Creates file with the specified name
 set_one_time_rule = echo Target file. Do not delete > $1
 
-# Append text to file
-APPEND_TEXT_TO_FILE = echo $1 >> $2
-
-# Add blank line to a file
-ifeq ($(OS), Windows_NT)
-ADD_BLANK_LINE_TO_FILE = echo. > $1
-else
-ADD_BLANK_LINE_TO_FILE = echo> $1
-endif
-
 # Transform full path to relative path to be used in build
 # $(PROJECT)/something -> srcs/something
 # $(NO-OS)/something -> noos/something
@@ -144,8 +134,7 @@ endif
 PROJECT_NAME	= $(notdir $(PROJECT))
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
-BINARY_FILE_NAME ?= $(PROJECT_NAME)
-BINARY			?= $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
+BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
 
 # New line variable
@@ -213,15 +202,10 @@ ifeq 'pico' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/pico.mk
 endif
 
-ifeq 'mbed' '$(PLATFORM)'
-include $(NO-OS)/tools/scripts/mbed.mk
-endif
-
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
 CFLAGS += $(NEW_CFLAGS)
-CPPFLAGS += $(NEW_CFLAGS)
 CFLAGS += -Wall								\
 	 -Wextra							\
 	 -Wno-unused-parameter						\
@@ -247,24 +231,23 @@ endif
 
 SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 
-# Get all .c, .cpp and .h files from SRC_DIRS
+# Get all .c and .h files from SRC_DIRS
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
-SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.cpp))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
 # all files from inside the directory will be ignored
-ALL_IGNORED_FILES += $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*))
+ALL_IGNORED_FILES = $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*))
 
 # Remove ignored files
 SRCS     := $(filter-out $(ALL_IGNORED_FILES),$(SRCS))
 INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 
 # Get all src files that are not in SRC_DRIS
-FILES_OUT_OF_DIRS := $(filter-out $(foreach source_directory_name,$(sort $(SRC_DIRS)),$(wildcard $(source_directory_name)/*)),$(SRCS) $(INCS))
+FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS)) 
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
-OBJS = $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(REL_SRCS)))
+OBJS = $(REL_SRCS:.c=.o)
 
 REL_ASM_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(ASM_SRCS)))
 ASM_OBJS_s = $(REL_ASM_SRCS:.s=.o)
@@ -286,7 +269,7 @@ INCS := $(sort $(INCS))
 CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
 SRCS_IN_BUILD = $(call relative_to_project, $(SRCS))
 INCS_IN_BUILD = $(call relative_to_project, $(INCS))
-DIRS_TO_CREATE = $(sort $(call relative_to_project, $(dir $(FILES_OUT_OF_DIRS)) $(SRC_DIRS) $(PLATFORM_DIRS)))
+DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS) $(PLATFORM_DIRS))))
 # Prefixes from get_relative_path
 DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
@@ -296,13 +279,6 @@ EXTRA_INC_PATHS := $(filter-out $(call relative_to_project,$(NO-OS)/include/),$(
 EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
 
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
-CPPFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
-
-# Text files containing build pre-requisite names.
-PROJECT_OBJECT_FILES_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-object-files-names.txt
-PROJECT_CFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags-names.txt
-PROJECT_CPPFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags-names.txt
-PROJECT_ASFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags-names.txt
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
@@ -343,44 +319,23 @@ $(OBJECTS_DIR)%/.:
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
-	$(MUTE) $(CC) -c @$(PROJECT_CFLAGS_NAMES_FILE) $< -o $@
-
-$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).cpp | $$(@D)/.
-	@$(call print,[CPP] $(notdir $<))
-	$(MUTE) $(CPP) -c @$(PROJECT_CPPFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c @$(PROJECT_ASFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c @$(PROJECT_ASFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 
 ifneq ($(strip $(LSCRIPT)),)
 LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
-PHONY += pre_build
-pre_build:
-	$(MUTE) $(call print, putting project build pre-requisite names to text files)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach c_flag_name,$(subst \",\\\",$(CFLAGS)),$(call APPEND_TEXT_TO_FILE,$(c_flag_name),$(PROJECT_CFLAGS_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CPPFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach cpp_flag_name,$(subst \",\\\",$(CPPFLAGS)),$(call APPEND_TEXT_TO_FILE,$(cpp_flag_name),$(PROJECT_CPPFLAGS_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_ASFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach as_flag_name,$(subst \",\\\",$(ASFLAGS)),$(call APPEND_TEXT_TO_FILE,$(as_flag_name),$(PROJECT_ASFLAGS_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_OBJECT_FILES_NAMES_FILE)) $(cmd_separator)\
-		$(foreach object_file_name,$(sort $(OBJS)),$(call APPEND_TEXT_TO_FILE,$(object_file_name),$(PROJECT_OBJECT_FILES_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-
-
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(PROJECT_OBJECT_FILES_NAMES_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
@@ -407,10 +362,12 @@ update: $(PROJECT_TARGET)
 	@$(call print, $(ACTION) srcs to created project)
 	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
 	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
-	$(MUTE) $(foreach file,$(sort $(SRCS) $(INCS)),\
+	$(MUTE) $(foreach dir,$(sort $(SRC_DIRS)),\
+		$(call update_dir,$(dir),$(call relative_to_project,$(dir))) $(HIDE)\
+		$(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(foreach file,$(sort $(FILES_OUT_OF_DIRS)),\
 		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
 		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(MAKE) --no-print-directory pre_build MAKEFLAGS=$(MAKEOVERRIDES)
 
 standalone:
 	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
@@ -444,6 +401,3 @@ list:
 	$(call print_lines, $(sort $(SRCS) $(INCS)))
 
 .PHONY: $(PHONY)
-
-# Adding header files dependancy on object files
--include $(OBJS:.o=.d)
