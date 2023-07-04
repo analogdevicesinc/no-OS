@@ -39,7 +39,7 @@
 #define __FUNCTION_NAME__ __FUNCTION__
 #endif
 
-#define AD9081_API_REV 0x00010202
+#define AD9081_API_REV 0x00010500
 #define AD9081_API_HW_RESET_LOW 600000
 #define AD9081_API_RESET_WAIT 500000
 #define AD9081_PLL_LOCK_TRY 75
@@ -48,6 +48,7 @@
 #define AD9081_JESD_MAN_CAL_WAIT 200000
 #define AD9081_JESD_RX_204C_CAL_WAIT 500000
 #define AD9081_JESD_FG_CAL_WAIT 200000
+#define AD9081_JESD_BG_CAL_WAIT 10000
 #define AD9081_SERDES_RST_WAIT 50000
 #define AD9081_DESER_MODE_204B_BR_TRESH 8000000000ULL
 #define AD9081_DESER_MODE_204C_BR_TRESH 16000000000ULL
@@ -636,23 +637,6 @@ int32_t adi_ad9081_adc_common_hop_en_set(adi_ad9081_device_t *device,
 					 uint8_t enable);
 
 /**
- * \brief Enables trig NCO reset for specified coarse DDCs.
- *
- *
- * \param[in]  device	         Pointer to device handler structure.
- * \param[in]  cddcs             0bXXXX, set X==1 to specify cddcs you wish to affect:
- *                                  Bit 3: cddc 3  (MSB)
- *                                  Bit 2: cddc 2
- *                                  Bit 1: cddc 1
- *                                  Bit 0: cddc 0  (LSB)
- * \param[in]  enable            1: enable, 0: disable.
- *
- * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
- */
-int32_t adi_ad9081_adc_ddc_coarse_trig_nco_reset_enable_set(
-	adi_ad9081_device_t *device, uint8_t cddcs, uint8_t enable);
-
-/**
  * \brief Changes Profile Update Mode/ Phase Update Mode for specified coarse DDCs.
  *
  *
@@ -956,6 +940,39 @@ adi_ad9081_jesd_determine_common_nc(adi_ad9081_jesd_link_select_e links,
  */
 int32_t adi_ad9081_jesd_sysref_d2acenter_enable_set(adi_ad9081_device_t *device,
 						    uint8_t enable);
+
+/**
+ * \brief Set hardware sysref control
+ *
+ * \param[in] device      Pointer to the device structure
+ *
+ * \return API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
+ */
+int32_t adi_ad9081_sync_sysref_ctrl(adi_ad9081_device_t *device);
+
+/**
+ * \brief Sets JTX_BR_LOG2_RATIO for specified links.
+ *
+ * \param[in]   device           Pointer to device handler structure.
+ * \param[in]   chip_op_mode     Chip operating mode, 1 : Tx Only, 2 : Rx Only, 3 : Tx + Rx Only.
+ * \param[in]   jesd_param       @see adi_cms_jesd_param_t, pass array with 2 elements for dual link.
+ * \param[in]   links            Choose AD9081 link(s) to set mask for:
+ *                                  0x1 - AD9081_LINK_0
+ *                                  0x2 - AD9081_LINK_1
+ *                                  0x3 - Both
+ * \param[in]   jtx_lane_rate    jtx_lane_rate[0] - lane rate in bps for AD9081_LINK_0.
+ *                               jtx_lane_rate[1] - lane rate in bps for AD9081_LINK_1.
+ * \param[out]  jtx_brr          jtx_brr[0] - JTX_BR_LOG2_RATIO value for AD9081_LINK_0.
+ *                               jtx_brr[1] - JTX_BR_LOG2_RATIO value for AD9081_LINK_1.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
+ */
+int32_t adi_ad9081_jesd_tx_calc_br_ratio(adi_ad9081_device_t *device,
+					 adi_cms_chip_op_mode_t chip_op_mode,
+					 adi_cms_jesd_param_t *jesd_param,
+					 adi_ad9081_jesd_link_select_e links,
+					 uint64_t jtx_lane_rate[2],
+					 uint8_t jtx_brr[2]);
 
 #if AD9081_USE_FLOATING_TYPE > 0
 int32_t adi_ad9081_hal_calc_nco_ftw_f(adi_ad9081_device_t *device, double freq,
