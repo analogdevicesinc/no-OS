@@ -183,7 +183,7 @@ int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 			   struct no_os_spi_msg *msgs,
 			   uint32_t len)
 {
-	int32_t  ret;
+	int32_t  ret = 0;
 	uint32_t i;
 
 	if (!desc || !desc->platform_ops)
@@ -208,5 +208,5 @@ int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 
 out:
 	no_os_mutex_unlock(desc->bus->mutex);
-	return 0;
+	return ret;
 }
