@@ -1,0 +1,27 @@
+{
+  "stm32": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n"
+    },
+    "iio_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+    },
+    "iio_trigger_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y"
+    }
+  },
+  "maxim": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max78000"
+    },
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32655"
+    },
+    "iio_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000"
+    },
+    "iio_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32655"
+    }
+  }
+}
