@@ -346,30 +346,31 @@ static int swiot_adc_read_raw(void *dev, char *buf, uint32_t len,
 			      intptr_t priv)
 {
 	mxc_adc_conversion_req_t req = {
-		.scale = MXC_ADC_SCALE_1,
+		// .scale = MXC_ADC_SCALE_1,
 	};
 
 	uint16_t adc_val;
 	int32_t val;
 	int ret;
 
-	switch (priv)
-	{
-	case 0:
-		req.channel = MXC_ADC_CH_VCORE;
-		break;
-	case 1:
-		req.channel = MXC_ADC_CH_VDDIOH_DIV4;
-		break;
-	default:
-		return -EINVAL;
-	}
+	// switch (priv)
+	// {
+	// case 0:
+	// 	req.channel = MXC_ADC_CH_VCORE;
+	// 	break;
+	// case 1:
+	// 	req.channel = MXC_ADC_CH_VDDIOH_DIV4;
+	// 	break;
+	// default:
+	// 	return -EINVAL;
+	// }
 
-	ret = MXC_ADC_Convert(&req);
-	if (ret)
-		return ret;
+	// ret = MXC_ADC_Convert(&req);
+	// if (ret)
+	// 	return ret;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&req.rawADCValue);
+	// return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&req.rawADCValue);
+	return 0;
 }
 
 static int swiot_adc_read_scale(void *dev, char *buf, uint32_t len,
