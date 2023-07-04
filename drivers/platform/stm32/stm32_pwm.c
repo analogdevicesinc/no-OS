@@ -256,6 +256,7 @@ static int32_t stm32_init_pwm(struct stm32_pwm_desc *desc,
 
 	desc->mode = sparam->mode;
 	desc->timer_chn = sparam->timer_chn;
+	desc->complementary_channel = sparam->complementary_channel;
 
 	return 0;
 }
@@ -368,7 +369,11 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
 
-	ret = HAL_TIM_PWM_Start(&sparam->htimer, chn_num);
+	if (sparam->complementary_channel)
+		ret = HAL_TIMEx_PWMN_Start(&sparam->htimer, chn_num);
+	else
+		ret = HAL_TIM_PWM_Start(&sparam->htimer, chn_num);
+
 	if (ret != HAL_OK)
 		return -EIO;
 
@@ -392,7 +397,11 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
 
-	ret = HAL_TIM_PWM_Stop(&sparam->htimer, chn_num);
+	if (sparam->complementary_channel)
+		ret = HAL_TIMEx_PWMN_Stop(&sparam->htimer, chn_num);
+	else
+		ret = HAL_TIM_PWM_Stop(&sparam->htimer, chn_num);
+
 	if (ret != HAL_OK)
 		return -EIO;
 

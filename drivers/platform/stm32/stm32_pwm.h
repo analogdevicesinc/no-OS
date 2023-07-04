@@ -76,6 +76,8 @@ struct stm32_pwm_init_param {
 	enum TimOCMode mode;
 	/** PWM timer channel */
 	uint32_t timer_chn;
+	/** Complementary channel */
+	bool complementary_channel;
 	/** Get timer source clock function */
 	uint32_t (*get_timer_clock)(void);
 	/** Get timer source clock divider */
@@ -99,6 +101,8 @@ struct stm32_pwm_desc {
 	enum TimOCMode mode;
 	/** PWM timer channel */
 	uint32_t timer_chn;
+	/** Complementary channel */
+	bool complementary_channel;
 	/** Get timer source clock function */
 	uint32_t (*get_timer_clock)(void);
 	/** Get timer source clock divider */
