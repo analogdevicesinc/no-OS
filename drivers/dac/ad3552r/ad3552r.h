@@ -161,7 +161,6 @@
 #define AD3552R_REG_ADDR_MAX		0x4B
 
 /* Useful defines */
-#define AD3552R_NUM_CH					2
 #define AD3552R_MASK_CH(ch)				NO_OS_BIT(ch)
 #define AD3552R_MASK_ALL_CH				(NO_OS_BIT(0) | NO_OS_BIT(1))
 #define AD3552R_MASK_DAC_12B				0xFFF0
@@ -171,13 +170,20 @@
 #define AD3552R_STORAGE_BITS_FAST_MODE			16
 #define AD3552R_MAX_OFFSET				511
 #define AD3552R_LDAC_PULSE_US				1
+#define AD3552R_BOTH_CH_SELECT			(NO_OS_BIT(0) | NO_OS_BIT(1))
+#define AD3552R_BOTH_CH_DESELECT		0x0
+
+/* Maximum number of channels in this family of devices */
+#define AD3552R_MAX_NUM_CH		2
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 enum ad3552r_id {
+	AD3541R_ID,
 	AD3542R_ID,
+	AD3551R_ID,
 	AD3552R_ID
 };
 
@@ -213,25 +219,37 @@ enum ad3552r_ch_output_range {
 	AD3552R_CH_OUTPUT_RANGE_0__5V,
 	/* Range from 0 V to 10 V. Requires Rfb2x connection  */
 	AD3552R_CH_OUTPUT_RANGE_0__10V,
-	/* Range from -2.5 V to 7.5 V. Requires Rfb2x connection  */
+	/* Range from -5 V to 5 V. Requires Rfb2x connection  */
 	AD3552R_CH_OUTPUT_RANGE_NEG_5__5V,
-	/* Range from -6.5 V to 3.5 V. Requires Rfb4x connection  */
+	/* Range from -10 V to 10 V. Requires Rfb4x connection  */
 	AD3552R_CH_OUTPUT_RANGE_NEG_10__10V,
 };
 
 enum ad3542r_ch_output_range {
 	/* Range from 0 V to 2.5 V. Requires Rfb1x connection */
 	AD3542R_CH_OUTPUT_RANGE_0__2P5V,
-	/* Range from 0 V to 3 V. Requires Rfb1x connection  */
-	AD3542R_CH_OUTPUT_RANGE_0__3V,
 	/* Range from 0 V to 5 V. Requires Rfb1x connection  */
 	AD3542R_CH_OUTPUT_RANGE_0__5V,
 	/* Range from 0 V to 10 V. Requires Rfb2x connection  */
 	AD3542R_CH_OUTPUT_RANGE_0__10V,
+	/* Range from -5 V to 5 V. Requires Rfb2x connection  */
+	AD3542R_CH_OUTPUT_RANGE_NEG_5__5V,
 	/* Range from -2.5 V to 7.5 V. Requires Rfb2x connection  */
 	AD3542R_CH_OUTPUT_RANGE_NEG_2P5__7P5V,
-	/* Range from -6.5 V to 3.5 V. Requires Rfb4x connection  */
-	AD3542R_CH_OUTPUT_RANGE_NEG_5__5V,
+};
+
+enum ad3552r_sdio_drive_strength {
+	AD3552R_LOW_SDIO_DRIVE_STRENGTH,
+	AD3552R_MEDIUM_LOW_SDIO_DRIVE_STRENGTH,
+	AD3552R_MEDIUM_HIGH_SDIO_DRIVE_STRENGTH,
+	AD3552R_HIGH_SDIO_DRIVE_STRENGTH
+};
+
+enum num_channels {
+	AD3541R_NUM_CHANNELS=1,
+	AD3542R_NUM_CHANNELS=2,
+	AD3551R_NUM_CHANNELS=1,
+	AD3552R_NUM_CHANNELS=2
 };
 
 #define AD3552R_CH_OUTPUT_RANGE_CUSTOM 100
@@ -302,7 +320,7 @@ enum ad3552r_ch_attributes {
 	AD3552R_CH_HW_LDAC_MASK,
 	/* Rfb value */
 	AD3552R_CH_RFB,
-	/* Write to fast regs (only 12 bits of data) */
+	/* Write to fast regs (only 16 bits of data) */
 	AD3552R_CH_FAST_EN,
 	/* Channel select. When set allow Input -> DAC and Mask -> DAC */
 	AD3552R_CH_SELECT,
@@ -382,10 +400,11 @@ struct ad3552r_desc {
 	struct no_os_spi_desc *spi;
 	struct no_os_gpio_desc *ldac;
 	struct no_os_gpio_desc *reset;
-	struct ad3552r_ch_data ch_data[AD3552R_NUM_CH];
+	struct ad3552r_ch_data ch_data[AD3552R_MAX_NUM_CH];
 	uint8_t crc_table[NO_OS_CRC8_TABLE_SIZE];
 	uint8_t chip_id;
 	uint8_t crc_en : 1;
+	uint8_t is_simultaneous : 1;
 };
 
 struct ad3552r_custom_output_range_cfg {
@@ -397,7 +416,7 @@ struct ad3552r_custom_output_range_cfg {
 	   From 0 to 3 */
 	uint8_t gain_scaling_n_inv_log2;
 	/* RFB value */
-	uint8_t rfb_ohms;
+	uint16_t rfb_ohms;
 };
 
 struct ad3552r_channel_init {
@@ -426,14 +445,17 @@ struct ad3552r_init_param {
 	bool vref_out_enable;
 	/* From 0 to 3 */
 	uint8_t sdo_drive_strength;
-	struct ad3552r_channel_init channels[AD3552R_NUM_CH];
+	struct ad3552r_channel_init channels[AD3552R_MAX_NUM_CH];
 	/* Set to enable CRC */
 	bool crc_en;
+	bool is_simultaneous;
 };
 
 /*****************************************************************************/
 /************************* Functions Declarations ****************************/
 /*****************************************************************************/
+
+uint8_t ad3552r_reg_len(uint8_t addr);
 
 int32_t ad3552r_init(struct ad3552r_desc **desc,
 		     struct ad3552r_init_param *init_param);
@@ -479,7 +501,8 @@ int32_t ad3552r_get_scale(struct ad3552r_desc *desc, uint8_t ch,
 int32_t ad3552r_get_offset(struct ad3552r_desc *desc, uint8_t ch,
 			   int32_t *integer, int32_t *dec);
 
-int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask);
+int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask,
+			     uint8_t is_fast);
 
 /* Send one sample at a time, one after an other or at a LDAC_period interval.
  * If LDAC pin set, send LDAC signal. Otherwise software LDAC is used. */
@@ -487,4 +510,5 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 			      uint32_t samples, uint32_t ch_mask,
 			      enum ad3552r_write_mode mode);
 
+int32_t ad3552r_simulatneous_update_enable(struct ad3552r_desc *desc);
 #endif /* _AD3552R_H_ */

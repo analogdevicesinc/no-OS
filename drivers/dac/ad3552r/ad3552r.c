@@ -91,9 +91,8 @@ enum ad3552r_spi_attributes {
 #define AD3552R_SCRATCH_PAD_TEST_VAL1			0x34
 #define AD3552R_SCRATCH_PAD_TEST_VAL2			0xB2
 
-#define AD3552R_RANGE_MAX_VALUE(id) ((id) == AD3542R_ID ?\
-					AD3542R_CH_OUTPUT_RANGE_NEG_5__5V :\
-					AD3552R_CH_OUTPUT_RANGE_NEG_10__10V)
+#define AD3552R_MAX_CH_NUM(id) ((id) == AD3542R_ID || (id) == AD3552R_ID ?\
+					AD3552R_NUM_CHANNELS : AD3551R_NUM_CHANNELS)
 
 #define REG_DATA_LEN(is_fast) ((is_fast) ? AD3552R_STORAGE_BITS_FAST_MODE / 8 :\
 					   AD3552R_STORAGE_BITS_PREC_MODE / 8)
@@ -191,11 +190,10 @@ static const uint16_t addr_mask_map_ch[][3] = {
 
 static const int32_t ad3542r_ch_ranges[][2] = {
 	[AD3542R_CH_OUTPUT_RANGE_0__2P5V]	= {0, 2500},
-	[AD3542R_CH_OUTPUT_RANGE_0__3V]		= {0, 3000},
 	[AD3542R_CH_OUTPUT_RANGE_0__5V]		= {0, 5000},
 	[AD3542R_CH_OUTPUT_RANGE_0__10V]	= {0, 10000},
-	[AD3542R_CH_OUTPUT_RANGE_NEG_2P5__7P5V]	= {-2500, 7500},
-	[AD3542R_CH_OUTPUT_RANGE_NEG_5__5V]	= {-5000, 5000}
+	[AD3542R_CH_OUTPUT_RANGE_NEG_5__5V]	= {-5000, 5000},
+	[AD3542R_CH_OUTPUT_RANGE_NEG_2P5__7P5V]	= {-2500, 7500}
 };
 
 static const int32_t ad3552r_ch_ranges[][2] = {
@@ -214,11 +212,13 @@ static const int32_t gains_scaling_table[] = {
 };
 
 static const uint16_t ad3552r_chip_ids[] = {
-	[AD3542R_ID] = 0x4008,
-	[AD3552R_ID] = 0x4009,
+	[AD3541R_ID] = 0x400B,
+	[AD3542R_ID] = 0x4009,
+	[AD3551R_ID] = 0x400A,
+	[AD3552R_ID] = 0x4008,
 };
 
-static uint8_t _ad3552r_reg_len(uint8_t addr)
+uint8_t ad3552r_reg_len(uint8_t addr)
 {
 	switch (addr) {
 	case AD3552R_REG_ADDR_HW_LDAC_16B:
@@ -356,7 +356,7 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 		else
 			addr = data->addr + inc;
 		addr %= AD3552R_REG_ADDR_MAX;
-		reg_len = _ad3552r_reg_len(addr);
+		reg_len = ad3552r_reg_len(addr);
 
 		/* Prepare CRC to send */
 		msg.bytes_number = reg_len + 1;
@@ -449,7 +449,7 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 	if (!desc)
 		return -ENODEV;
 
-	reg_len = _ad3552r_reg_len(addr);
+	reg_len = ad3552r_reg_len(addr);
 	if (reg_len == 0 ||
 	    (addr >= AD3552R_SECONDARY_REGION_ADDR && desc->spi_cfg.addr_asc))
 		return -EINVAL;
@@ -458,8 +458,6 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 	msg.addr = addr;
 	msg.data = buf;
 	msg.len = reg_len;
-	if (reg_len == 2)
-		val &= AD3552R_MASK_DAC_12B;
 	if (reg_len == 1)
 		buf[0] = val & 0xFF;
 	else
@@ -479,7 +477,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 	if (!desc || !val)
 		return -ENODEV;
 
-	reg_len = _ad3552r_reg_len(addr);
+	reg_len = ad3552r_reg_len(addr);
 	if (reg_len == 0 ||
 	    (addr >= AD3552R_SECONDARY_REGION_ADDR && desc->spi_cfg.addr_asc))
 		return -EINVAL;
@@ -607,16 +605,39 @@ static int32_t _ad3552r_set_code_value(struct ad3552r_desc *desc,
 				       uint8_t ch,
 				       uint16_t val)
 {
-	uint16_t code;
 	uint8_t addr;
 
-	addr = _get_code_reg_addr(ch, 1, 0);
-	if (desc->ch_data[ch].fast_en)
-		code = val & AD3552R_MASK_DAC_12B;
-	else
-		code = val;
+	addr = _get_code_reg_addr(ch, 1, desc->ch_data[ch].fast_en);
+	return ad3552r_write_reg(desc, addr, val);
+}
 
-	return ad3552r_write_reg(desc, addr, code);
+int32_t ad3552r_simulatneous_update_enable(struct ad3552r_desc *desc)
+{
+	if (desc->ch_data[0].fast_en != desc->ch_data[1].fast_en)
+		return -EINVAL;
+	if (desc->is_simultaneous) {
+		if (desc->ch_data[0].fast_en)
+			return ad3552r_write_reg(desc, AD3552R_REG_ADDR_CH_SELECT_16B,
+						 AD3552R_BOTH_CH_SELECT);
+		return ad3552r_write_reg(desc, AD3552R_REG_ADDR_CH_SELECT_24B,
+					 AD3552R_BOTH_CH_SELECT);
+	}
+	if (desc->ch_data[0].fast_en)
+		return ad3552r_write_reg(desc, AD3552R_REG_ADDR_CH_SELECT_16B,
+					 AD3552R_BOTH_CH_DESELECT);
+	return ad3552r_write_reg(desc, AD3552R_REG_ADDR_CH_SELECT_24B,
+				 AD3552R_BOTH_CH_DESELECT);
+}
+
+static int32_t ad3552r_write_simulatneously(struct ad3552r_desc *desc,
+		uint8_t ch,
+		uint16_t val)
+{
+	if (desc->ch_data[0].fast_en != desc->ch_data[1].fast_en)
+		return -EINVAL;
+	if (desc->ch_data[ch].fast_en)
+		return ad3552r_write_reg(desc, AD3552R_REG_ADDR_DAC_PAGE_MASK_16B, val);
+	return ad3552r_write_reg(desc, AD3552R_REG_ADDR_DAC_PAGE_MASK_24B, val);
 }
 
 static int32_t _ad3552r_get_code_value(struct ad3552r_desc *desc,
@@ -626,7 +647,7 @@ static int32_t _ad3552r_get_code_value(struct ad3552r_desc *desc,
 	int32_t err;
 	uint8_t addr;
 
-	addr = _get_code_reg_addr(ch, 1, 0);
+	addr = _get_code_reg_addr(ch, 1, desc->ch_data[ch].fast_en);
 	err = ad3552r_read_reg(desc, addr, val);
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
@@ -638,25 +659,29 @@ static int32_t _ad3552r_get_code_value(struct ad3552r_desc *desc,
 static void ad3552r_get_custom_range(struct ad3552r_desc *dac, uint8_t i,
 				     int32_t *v_min, int32_t *v_max)
 {
-	int64_t vref, tmp, common, offset, gn, gp;
+	int64_t vref, tmp, common, offset, gn, gp, offset_polarity=0;
 	/*
 	 * From datasheet formula (In Volts):
-	 *	Vmin = 2.5 + [(GainN + Offset / 1024) * 2.5 * Rfb * 1.03]
-	 *	Vmax = 2.5 - [(GainP + Offset / 1024) * 2.5 * Rfb * 1.03]
+	 *	Vmin = 2.5 + [((CH_Offset * Offset_polarity) / 1024 - GainP) * 1.6 * Rfb]
+	 *	Vmax = 2.5 + [((CH_Offset * Offset_polarity) / 1024 + GainN) * 1.6 * Rfb]
 	 * Calculus are converted to milivolts
 	 */
+	if (dac->ch_data[i].offset_polarity)
+		offset_polarity = -1;
+	else
+		offset_polarity = 1;
+
 	vref = 2500;
-	/* 2.5 * 1.03 * 1000 (To mV) */
-	common = 2575 * dac->ch_data[i].rfb;
-	offset = dac->ch_data[i].gain_offset;
+	common = 1.6 * dac->ch_data[i].rfb;
+	offset = dac->ch_data[i].offset;
 
 	gn = gains_scaling_table[dac->ch_data[i].n];
-	tmp = (1024 * gn + AD3552R_GAIN_SCALE * offset) * common;
-	tmp = tmp / (1024  * AD3552R_GAIN_SCALE);
+	tmp = (1024 * gn + AD3552R_GAIN_SCALE * offset * offset_polarity) * common;
+	tmp = tmp / (1024 * AD3552R_GAIN_SCALE);
 	*v_max = vref + tmp;
 
 	gp = gains_scaling_table[dac->ch_data[i].p];
-	tmp = (1024 * gp - AD3552R_GAIN_SCALE * offset) * common;
+	tmp = (1024 * gp - AD3552R_GAIN_SCALE * offset * offset_polarity) * common;
 	tmp = tmp / (1024 * AD3552R_GAIN_SCALE);
 	*v_min = vref - tmp;
 }
@@ -671,7 +696,7 @@ static void ad3552r_calc_gain_and_offset(struct ad3552r_desc *dac, uint8_t ch)
 	} else {
 		/* Normal range */
 		idx = dac->ch_data[ch].range;
-		if (dac->chip_id == AD3542R_ID) {
+		if (dac->chip_id == AD3542R_ID || dac->chip_id == AD3541R_ID) {
 			v_min = ad3542r_ch_ranges[idx][0];
 			v_max = ad3542r_ch_ranges[idx][1];
 		} else {
@@ -716,8 +741,10 @@ static int32_t _ad3552r_set_gain_value(struct ad3552r_desc *desc,
 
 	switch (attr) {
 	case AD3552R_CH_GAIN_OFFSET:
+		if (val > 0x1FF)
+			return -EINVAL;
 		desc->ch_data[ch].offset = val;
-		err = ad3552r_write_reg(desc,  AD3552R_MASK_CH_OFFSET_BITS_0_7,
+		err = ad3552r_write_reg(desc, AD3552R_REG_ADDR_CH_OFFSET(ch),
 					val & AD3552R_MASK_CH_OFFSET_BITS_0_7);
 		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
@@ -772,13 +799,13 @@ static int32_t _ad3552r_get_gain_value(struct ad3552r_desc *desc,
 
 	switch (attr) {
 	case AD3552R_CH_GAIN_OFFSET:
-		*val = reg;
-		err = ad3552r_read_reg(desc, AD3552R_REG_ADDR_CH_GAIN(ch), &reg);
+		*val = no_os_field_get(AD3552R_MASK_CH_OFFSET_BIT_8, reg);
+		*val = *val << 8;
+		err = ad3552r_read_reg(desc, AD3552R_REG_ADDR_CH_OFFSET(ch), &reg);
 		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
-
-		*val |= (reg & AD3552R_MASK_CH_OFFSET_BIT_8) << 8;
-
+		*val |= reg;
+		*val &= 0x1FF;
 		return 0;
 	case AD3552R_CH_RANGE_OVERRIDE:
 		reg_mask = AD3552R_MASK_CH_RANGE_OVERRIDE;
@@ -863,6 +890,8 @@ int32_t ad3552r_set_ch_value(struct ad3552r_desc *desc,
 		desc->ch_data[ch].fast_en = !!val;
 		return 0;
 	case AD3552R_CH_CODE:
+		if (desc->is_simultaneous)
+			return ad3552r_write_simulatneously(desc, ch,val);
 		return _ad3552r_set_code_value(desc, ch, val);
 	case AD3552R_CH_RFB:
 		desc->ch_data[ch].rfb = val;
@@ -884,7 +913,7 @@ int32_t ad3552r_set_ch_value(struct ad3552r_desc *desc,
 
 	/* Update software structures */
 	if (attr == AD3552R_CH_OUTPUT_RANGE_SEL) {
-		val %= AD3552R_RANGE_MAX_VALUE(desc->chip_id) + 1;
+		val %= AD3552R_CH_OUTPUT_RANGE_NEG_10__10V + 1;
 		desc->ch_data[ch].range = val;
 		ad3552r_calc_gain_and_offset(desc, ch);
 	}
@@ -927,7 +956,7 @@ static int32_t ad3552r_check_scratch_pad(struct ad3552r_desc *desc)
 int32_t ad3552r_get_scale(struct ad3552r_desc *desc, uint8_t ch,
 			  int32_t *integer, int32_t *dec)
 {
-	if (!integer || !desc || ch >= AD3552R_NUM_CH)
+	if (!integer || !desc || ch >= AD3552R_MAX_NUM_CH)
 		return -EINVAL;
 
 	*integer = desc->ch_data[ch].scale_int;
@@ -939,7 +968,7 @@ int32_t ad3552r_get_scale(struct ad3552r_desc *desc, uint8_t ch,
 int32_t ad3552r_get_offset(struct ad3552r_desc *desc, uint8_t ch,
 			   int32_t *integer, int32_t *dec)
 {
-	if (!integer || !desc || ch >= AD3552R_NUM_CH)
+	if (!integer || !desc || ch >= AD3552R_MAX_NUM_CH)
 		return -EINVAL;
 
 	*integer = desc->ch_data[ch].offset_int;
@@ -949,43 +978,43 @@ int32_t ad3552r_get_offset(struct ad3552r_desc *desc, uint8_t ch,
 }
 
 static int32_t ad3552r_config_custom_gain(struct ad3552r_desc *desc,
-		struct ad3552r_custom_output_range_cfg *cfg)
+		struct ad3552r_custom_output_range_cfg *cfg, uint8_t channel_num)
 {
 	int32_t err;
 
-	err = ad3552r_set_dev_value(desc, AD3552R_CH_RANGE_OVERRIDE, 1);
+	err = ad3552r_set_ch_value(desc, AD3552R_CH_RANGE_OVERRIDE, channel_num, 1);
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
-	err = ad3552r_set_dev_value(desc, AD3552R_CH_GAIN_OFFSET_POLARITY,
-				    cfg->gain_offset < 0);
+	err = ad3552r_set_ch_value(desc, AD3552R_CH_GAIN_OFFSET_POLARITY, channel_num,
+				   cfg->gain_offset < 0);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Error setting gain offset\n");
 		return err;
 	}
 
-	err = ad3552r_set_dev_value(desc, AD3552R_CH_GAIN_OFFSET,
-				    abs(cfg->gain_offset));
+	err = ad3552r_set_ch_value(desc, AD3552R_CH_GAIN_OFFSET, channel_num,
+				   abs(cfg->gain_offset));
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Error setting scaling_p\n");
 		return err;
 	}
 
-	err = ad3552r_set_dev_value(desc, AD3552R_CH_GAIN_SCALING_P,
-				    cfg->gain_scaling_p_inv_log2);
+	err = ad3552r_set_ch_value(desc, AD3552R_CH_GAIN_SCALING_P, channel_num,
+				   cfg->gain_scaling_p_inv_log2);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Error setting scaling p\n");
 		return err;
 	}
 
-	err = ad3552r_set_dev_value(desc, AD3552R_CH_GAIN_SCALING_N,
-				    cfg->gain_scaling_n_inv_log2);
+	err = ad3552r_set_ch_value(desc, AD3552R_CH_GAIN_SCALING_N, channel_num,
+				   cfg->gain_scaling_n_inv_log2);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Error setting scaling n\n");
 		return err;
 	}
 
-	err = ad3552r_set_dev_value(desc, AD3552R_CH_RFB, cfg->rfb_ohms);
+	err = ad3552r_set_ch_value(desc, AD3552R_CH_RFB, channel_num, cfg->rfb_ohms);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Error setting RFB\n");
 		return err;
@@ -1021,12 +1050,12 @@ static int32_t ad3552r_configure_device(struct ad3552r_desc *desc,
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
-	for (i = 0; i < AD3552R_NUM_CH; ++i) {
+	for (i = 0; i < AD3552R_MAX_CH_NUM(desc->chip_id); ++i) {
 		range = param->channels[i].range;
 		if (param->channels[i].en) {
 			desc->ch_data[i].fast_en = param->channels[i].fast_en;
 			if (range != AD3552R_CH_OUTPUT_RANGE_CUSTOM) {
-				if (range > AD3552R_RANGE_MAX_VALUE(desc->chip_id)) {
+				if (range > AD3552R_CH_OUTPUT_RANGE_NEG_10__10V) {
 					pr_err("Invalid range for channel %"PRIu16"\n", i);
 					return -EINVAL;
 				}
@@ -1037,16 +1066,25 @@ static int32_t ad3552r_configure_device(struct ad3552r_desc *desc,
 					return err;
 			} else {
 				err = ad3552r_config_custom_gain(desc,
-								 &param->channels[i].custom_range);
+								 &param->channels[i].custom_range,i);
 				if (NO_OS_IS_ERR_VALUE(err)) {
 					pr_err("Custom gain configuration failed for channel %"PRIu16"\n", i);
 					return err;
 				}
 			}
 		} else {
-			err = ad3552r_set_ch_value(desc, AD3552R_CH_AMPLIFIER_POWERDOWN, i, 1);
-			if (NO_OS_IS_ERR_VALUE(err))
-				return err;
+			if (desc->chip_id == AD3541R_ID || desc->chip_id == AD3542R_ID) {
+				err = ad3552r_set_ch_value(desc, AD3552R_CH_AMPLIFIER_POWERDOWN, i, 1);
+				if (NO_OS_IS_ERR_VALUE(err))
+					return err;
+				err = ad3552r_set_ch_value(desc, AD3552R_CH_DAC_POWERDOWN, i, 1);
+				if (NO_OS_IS_ERR_VALUE(err))
+					return err;
+			} else {
+				err = ad3552r_set_ch_value(desc, AD3552R_CH_DAC_POWERDOWN, i, 1);
+				if (NO_OS_IS_ERR_VALUE(err))
+					return err;
+			}
 		}
 	}
 
@@ -1134,7 +1172,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 		goto err_reset;
 	}
 	ldesc->chip_id = param->chip_id;
-
+	ldesc->is_simultaneous = param->is_simultaneous;
 	err = ad3552r_configure_device(ldesc, param);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		err = -ENODEV;
@@ -1209,16 +1247,27 @@ int32_t ad3552r_reset(struct ad3552r_desc *desc)
 	return _ad3552r_set_reg_attr(desc, AD3552R_ADDR_ASCENSION, 0);
 }
 
-int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask)
+int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask,
+			     uint8_t is_fast)
 {
-	if (!desc->ldac)
+	int32_t err;
+
+	if (!desc->ldac) {
+		if (is_fast)
+			return ad3552r_write_reg(desc, AD3552R_REG_ADDR_SW_LDAC_16B,
+						 mask);
 		return ad3552r_write_reg(desc, AD3552R_REG_ADDR_SW_LDAC_24B,
 					 mask);
+	} else {
+		err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_LOW);
+		if (NO_OS_IS_ERR_VALUE(err))
+			return err;
 
-	no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_LOW);
-	no_os_udelay(AD3552R_LDAC_PULSE_US);
-	no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
-
+		no_os_udelay(AD3552R_LDAC_PULSE_US);
+		err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
+		if (NO_OS_IS_ERR_VALUE(err))
+			return err;
+	}
 	return 0;
 }
 
@@ -1228,24 +1277,18 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 {
 	struct ad3552_transfer_data msg = {0};
 	int32_t err;
-	uint8_t buff[AD3552R_NUM_CH * AD3552R_MAX_REG_SIZE + 1] = {0};
+	uint8_t buff[AD3552R_MAX_NUM_CH * AD3552R_MAX_REG_SIZE + 1] = { 0 };
 	uint8_t len, is_fast;
 
 	is_fast = desc->ch_data[0].fast_en;
 	no_os_put_unaligned_be16(data[0], buff);
 	len = 2;
-	if (is_fast)
-		buff[1] &= 0xF0;
-	else
+	if (!is_fast)
 		++len;
-
 	no_os_put_unaligned_be16(data[1], buff + len);
 	len += 2;
-	if (is_fast)
-		buff[len + 1] &= 0xF0;
-	else
+	if (!is_fast)
 		++len;
-
 	if (mode == AD3552R_WRITE_INPUT_REGS_AND_TRIGGER_LDAC)
 		if (!desc->ldac)
 			buff[len++] = AD3552R_MASK_ALL_CH;
@@ -1260,7 +1303,7 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 		return err;
 
 	if (mode == AD3552R_WRITE_INPUT_REGS_AND_TRIGGER_LDAC)
-		return ad3552r_ldac_trigger(desc, AD3552R_MASK_ALL_CH);
+		return ad3552r_ldac_trigger(desc, AD3552R_MASK_ALL_CH, is_fast);
 
 	return 0;
 }
@@ -1302,7 +1345,7 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 			return err;
 
 		if (mode == AD3552R_WRITE_INPUT_REGS_AND_TRIGGER_LDAC) {
-			err = ad3552r_ldac_trigger(desc, ch_mask);
+			err = ad3552r_ldac_trigger(desc, ch_mask, desc->ch_data[ch].fast_en);
 			if (NO_OS_IS_ERR_VALUE(err))
 				return err;
 		}
