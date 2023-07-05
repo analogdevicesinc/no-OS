@@ -560,14 +560,16 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	case AD74413R_ADC:
 		switch (channel->type) {
 		case IIO_VOLTAGE:
-			ret = ad74413r_range_to_voltage_offset(range, &val);
+			if (channel->ch_out)
+				val = 0;
+			else
+				ret = ad74413r_range_to_voltage_offset(range, &val);
 			break;
 		case IIO_CURRENT:
-			if (channel->ch_out) {
+			if (channel->ch_out)
 				val = 0;
-			} else {
+			else
 				ret = ad74413r_range_to_voltage_offset(range, &val);
-			}
 			break;
 		default:
 			__enable_irq();
