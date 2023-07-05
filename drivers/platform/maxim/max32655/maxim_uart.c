@@ -84,24 +84,24 @@ static void _discard_callback(mxc_uart_req_t *req, int result)
  */
 static int32_t _max_uart_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 {
-	mxc_gpio_cfg_t *uart_pins;
+	mxc_gpio_cfg_t uart_pins;
 
 	switch (device_id) {
 	case 0:
-		uart_pins = (mxc_gpio_cfg_t *)&gpio_cfg_uart0;
+		uart_pins = gpio_cfg_uart0;
 		break;
 	case 1:
-		uart_pins = (mxc_gpio_cfg_t *)&gpio_cfg_uart1;
+		uart_pins = gpio_cfg_uart1;
 		break;
 	case 2:
-		uart_pins = (mxc_gpio_cfg_t *)&gpio_cfg_uart2;
+		uart_pins = gpio_cfg_uart2;
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	uart_pins->vssel = vssel;
-	MXC_GPIO_Config(uart_pins);
+	uart_pins.vssel = vssel;
+	MXC_GPIO_Config(&uart_pins);
 
 	return 0;
 }
