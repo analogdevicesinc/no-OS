@@ -80,7 +80,7 @@ enum ad3552r_iio_attrs {
 };
 
 struct iio_ad3552r_desc {
-	struct iio_channel channels[AD3552R_NUM_CH];
+	struct iio_channel channels[AD3552R_MAX_NUM_CH];
 	struct iio_device iio_desc;
 	struct ad3552r_desc *dac;
 	uint32_t mask;
@@ -252,7 +252,7 @@ int32_t iio_ad3552r_init(struct iio_ad3552r_desc **iio_dac,
 	}
 
 	j = 0;
-	for (i = 0; i < AD3552R_NUM_CH; ++i)
+	for (i = 0; i < AD3552R_MAX_NUM_CH; ++i)
 		if (param->channels[i].en)
 			liio_dac->channels[j++] = AD3552R_DAC_CH(i);
 
