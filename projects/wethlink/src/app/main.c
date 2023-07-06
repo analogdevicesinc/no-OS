@@ -97,7 +97,10 @@ int main(void)
 	enum admv96xx_id id = ID_ADMV96X5;
 	int speed;
 	uint8_t hbtx;
+	uint8_t pin;
+	uint8_t crc;
 	struct no_os_gpio_desc *brd_select;
+	struct no_os_gpio_desc *factory_defaults_gpio;
 	struct no_os_eeprom_desc *eeprom;
 	const uint16_t nvmpsz = sizeof(struct nvmp);
 	uint8_t eebuf[nvmpsz + 1];
@@ -113,7 +116,7 @@ int main(void)
 	if (ret)
 		return ret;
 	no_os_uart_stdio(console);
-	printf("\nwethlink-firmware %s\n", NO_OS_TOSTRING(NO_OS_VERSION));
+	printf("\nwethlink-firmware %s for revision %c\n", NO_OS_TOSTRING(NO_OS_VERSION), 'A' + HW_VERSION);
 
 	// Detect board type switch state
 	ret = no_os_gpio_get(&brd_select, &brd_select_gpio_ip);
@@ -128,7 +131,7 @@ int main(void)
 
 	sprintf(hw_model_str, "admv96%d%d", hbtx ? 1 : 2, id);
 
-	printf("Board: %s\n", hw_model_str);
+	printf("Transceiver: %s\n", hw_model_str);
 
 	ret = led_init();
 	if (ret)
@@ -137,34 +140,59 @@ int main(void)
 	ret = no_os_eeprom_init(&eeprom, &eeprom_ip);
 	if (ret)
 		goto end;
-	
-	ret = no_os_eeprom_read(eeprom, 0, eebuf, nvmpsz+1);
+
+	// Detect request to reset to factory defaults
+	ret = no_os_gpio_get(&factory_defaults_gpio, &factory_defaults_gpio_ip);
 	if (ret)
-		return ret;
-	
-	uint8_t crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
-	if (crc != eebuf[nvmpsz]) {
-		printf("EEPROM: CRC mismatch, read 0x%x, computed 0x%x\n", eebuf[nvmpsz], crc);
+		goto end;
+	ret = no_os_gpio_direction_input(factory_defaults_gpio);
+	if (ret)
+		goto end;
+	ret = no_os_gpio_get_value(factory_defaults_gpio, &pin);
+	if (ret)
+		goto end;
 
-		memcpy(eebuf, &factory_defaults, nvmpsz);
-		eebuf[nvmpsz] = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
-		ret = no_os_eeprom_write(eeprom, 0, eebuf, nvmpsz+1);
-		if (ret)
-			return ret;
-
-		ret = no_os_eeprom_read(eeprom, 0, eebuf, nvmpsz+1);
+	if (!pin && HW_VERSION >= 1)
+apply_factory_defaults:
+	{
+		printf("EEPROM: loading factory defaults...\n");
+		ret = no_os_eeprom_read(eeprom, 2048, eebuf, nvmpsz+1);
 		if (ret)
 			return ret;
 		
 		crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
-		if (crc != eebuf[nvmpsz]) {
-			printf("EEPROM: failed to store factory defaults.\n");
-			return -EFAULT;
+		if (crc == eebuf[nvmpsz])
+		{
+			ret = no_os_eeprom_write(eeprom, 0, eebuf, nvmpsz+1);
+			if (ret)
+				return ret;
+			printf("EEPROM: loaded factory defaults.\n");
 		}
+		else
+		{
+			printf("EEPROM: CRC mismatch, read 0x%x, computed 0x%x\n", eebuf[nvmpsz], crc);
+			printf("EEPROM: cannot load bad factory defaults.\n");
+			
+			memcpy(eebuf, &factory_defaults_template, nvmpsz);
+			printf("EEPROM: loaded hardcoded parameters instead.\n");
 
-		printf("EEPROM: stored factory defaults.\n");
+			goto post_eeprom;
+		}
 	}
-
+	
+	printf("EEPROM: loading non-volatile parameters...\n");
+	ret = no_os_eeprom_read(eeprom, 0, eebuf, nvmpsz+1);
+	if (ret)
+		return ret;
+	
+	crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
+	if (crc != eebuf[nvmpsz]) {
+		printf("EEPROM: CRC mismatch, read 0x%x, computed 0x%x\n", eebuf[nvmpsz], crc);
+		printf("EEPROM: cannot load bad non-volatile parameters.\n");
+		goto apply_factory_defaults;
+	}
+	printf("EEPROM: loaded non-volatile parameters.\n");
+post_eeprom:
 	nvmp = (struct nvmp *)eebuf;
 
 	switch(id) {
@@ -202,6 +230,11 @@ int main(void)
 		.eeprom = eeprom,
 		.adin1300 = iio_adin1300->dev,
 		.max24287 = iio_max24287->dev,
+		.hw_serial = nvmp->hw_serial,
+		.hw_version = nvmp->hw_version,
+		.carrier_model = nvmp->carrier_model,
+		.carrier_serial = nvmp->carrier_serial,
+		.carrier_version = nvmp->carrier_version,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)

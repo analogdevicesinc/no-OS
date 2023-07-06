@@ -131,6 +131,13 @@ struct no_os_gpio_init_param brd_select_gpio_ip = {
 	.extra = &xgpio_1p8,
 };
 
+struct no_os_gpio_init_param factory_defaults_gpio_ip = {
+	.port = FACTORY_DEFAULTS_PORT,
+	.number = FACTORY_DEFAULTS_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
 struct no_os_gpio_init_param led_tx_lock_gpio_ip = {
 	.port = LED_TX_LOCK_PORT,
 	.number = LED_TX_LOCK_PIN,
