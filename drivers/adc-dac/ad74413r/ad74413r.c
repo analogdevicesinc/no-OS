@@ -1115,6 +1115,8 @@ int ad74413r_init(struct ad74413r_desc **desc,
 		}
 	}
 
+	no_os_mdelay(500);
+
 	*desc = descriptor;
 
 	return 0;

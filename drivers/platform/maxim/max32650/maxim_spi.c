@@ -568,7 +568,7 @@ int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
 const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
-	.transfer = &max_spi_transfer,
-	// .transfer = &max_spi_transfer_ll,
+	// .transfer = &max_spi_transfer,
+	.transfer = &max_spi_transfer_ll,
 	.remove = &max_spi_remove
 };

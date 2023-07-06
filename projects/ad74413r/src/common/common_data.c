@@ -68,14 +68,20 @@ const struct no_os_spi_init_param adin1110_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+struct max_spi_init_param maxq1065_spi_extra_ip  = {
+	.num_slaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIO,
+};
+
 const struct no_os_spi_init_param maxq1065_spi_ip = {
 	.device_id = 0,
-	.max_speed_hz = 10000000,
+	.max_speed_hz = 3000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_0,
+	.mode = NO_OS_SPI_MODE_3,
 	.platform_ops = SPI_OPS,
 	.chip_select = 0,
-	.extra = SPI_EXTRA,
+	.extra = &maxq1065_spi_extra_ip,
 };
 
 const struct no_os_i2c_init_param adt75_comm_param = {
