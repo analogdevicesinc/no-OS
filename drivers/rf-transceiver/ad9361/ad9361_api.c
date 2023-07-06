@@ -602,7 +602,7 @@ out:
 int32_t ad9361_remove(struct ad9361_rf_phy *phy)
 {
 	ad9361_unregister_clocks(phy);
-	no_os_spi_remove(phy->spi);
+	//no_os_spi_remove(phy->spi);
 	no_os_gpio_remove(phy->gpio_desc_resetb);
 	no_os_gpio_remove(phy->gpio_desc_sync);
 	no_os_gpio_remove(phy->gpio_desc_cal_sw1);

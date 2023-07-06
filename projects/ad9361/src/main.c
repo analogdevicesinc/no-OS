@@ -162,7 +162,7 @@ struct axi_dac_init tx_dac_init = {
 	TX_CORE_BASEADDR,
 	4,
 	NULL,
-	3
+	1
 };
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
@@ -362,10 +362,10 @@ AD9361_InitParam default_init_param = {
 	0,		//fdd_rx_rate_2tx_enable *** adi,fdd-rx-rate-2tx-enable
 	0,		//swap_ports_enable *** adi,swap-ports-enable
 	0,		//single_data_rate_enable *** adi,single-data-rate-enable
-	1,		//lvds_mode_enable *** adi,lvds-mode-enable
+	0,		//lvds_mode_enable *** adi,lvds-mode-enable
 	0,		//half_duplex_mode_enable *** adi,half-duplex-mode-enable
 	0,		//single_port_mode_enable *** adi,single-port-mode-enable
-	0,		//full_port_enable *** adi,full-port-enable
+	1,		//full_port_enable *** adi,full-port-enable
 	0,		//full_duplex_swap_bits_enable *** adi,full-duplex-swap-bits-enable
 	0,		//delay_rx_data *** adi,delay-rx-data
 	0,		//rx_data_clock_delay *** adi,rx-data-clock-delay
@@ -580,8 +580,17 @@ int main(void)
 
 	ad9361_init(&ad9361_phy, &default_init_param);
 
+	uint32_t val = 0;
+	ad9361_get_rx_sampling_freq(ad9361_phy, &val);
+	printf("Sampling frequency is: %d\n", val);
+	ad9361_set_rx_sampling_freq(ad9361_phy, val/2);
+	ad9361_get_rx_sampling_freq(ad9361_phy, &val);
+	printf("New sampling frequency is: %d\n", val);
+
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
+
+	ad9361_bist_loopback(ad9361_phy, 1);
 
 #ifdef FMCOMMS5
 #ifdef LINUX_PLATFORM
