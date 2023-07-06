@@ -36,6 +36,11 @@ struct mwc_iio_dev {
 	struct no_os_eeprom_desc *eeprom;
 	struct adin1300_desc *adin1300;
 	struct max24287_desc *max24287;
+	char *hw_version;
+	char *hw_serial;
+	char *carrier_model;
+	char *carrier_version;
+	char *carrier_serial;
 };
 
 struct mwc_iio_init_param {
@@ -55,6 +60,11 @@ struct mwc_iio_init_param {
 	struct no_os_eeprom_desc *eeprom;
 	struct adin1300_desc *adin1300;
 	struct max24287_desc *max24287;
+	char *hw_version;
+	char *hw_serial;
+	char *carrier_model;
+	char *carrier_version;
+	char *carrier_serial;
 };
 
 enum mwc_iio_attr_id {
@@ -68,14 +78,20 @@ enum mwc_iio_attr_id {
 	MWC_IIO_ATTR_RX_AUTO_IFVGA_RFLNA,
 	MWC_IIO_ATTR_RESET,
 	MWC_IIO_ATTR_SAVE,
+	MWC_IIO_ATTR_SAVE_FACTORY_DEFAULTS,
+	MWC_IIO_ATTR_HW_VERSION,
+	MWC_IIO_ATTR_HW_SERIAL,
+	MWC_IIO_ATTR_CARRIER_MODEL,
+	MWC_IIO_ATTR_CARRIER_VERSION,
+	MWC_IIO_ATTR_CARRIER_SERIAL,
 };
 
 struct nvmp {
-	char hw_version[10];
-	char hw_serial[10];
+	char hw_version[2];
+	char hw_serial[12];
 	char carrier_model[20];
-	char carrier_version[10];
-	char carrier_serial[10];
+	char carrier_version[2];
+	char carrier_serial[12];
 	bool tx_autotuning;
 	unsigned int tx_target;
 	unsigned int tx_tolerance;
@@ -101,7 +117,7 @@ struct nvmp {
 	enum hmc6301_bb_attn_fine hmc6301_bb_attnq_fine;
 };
 
-extern const struct nvmp factory_defaults;
+extern const struct nvmp factory_defaults_template;
 
 int mwc_iio_init(struct mwc_iio_dev **iio_dev,
 			struct mwc_iio_init_param *init_param);
@@ -109,6 +125,6 @@ int mwc_iio_remove(struct mwc_iio_dev *desc);
 int mwc_tx_rx_reset(struct mwc_iio_dev *mwc);
 
 int mwc_algorithms(struct mwc_iio_dev *mwc);
-int mwc_save_to_eeprom(struct mwc_iio_dev *mwc);
+int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address);
 
 #endif

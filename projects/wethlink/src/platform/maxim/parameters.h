@@ -12,6 +12,12 @@
 #include "maxim_i2c.h"
 #include "24xx32a.h"
 
+#ifndef HW_VERSION
+// 0 is for Revision A, 1 is for Revision B etc.
+// Use the highest available revision as default.
+#define HW_VERSION	1
+#endif
+
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   115200
 #define UART_STOPBITS   NO_OS_UART_STOP_2_BIT
@@ -65,6 +71,9 @@
 #define BRD_SELECT_PORT		0
 #define BRD_SELECT_PIN		20
 
+#define FACTORY_DEFAULTS_PORT	3
+#define FACTORY_DEFAULTS_PIN	9
+
 #define LED_TX_DET_RED_PORT	0
 #define LED_TX_DET_RED_PIN	4
 #define LED_TX_DET_GREEN_PORT	0
@@ -92,6 +101,7 @@ extern struct no_os_gpio_init_param max24287_mdc_gpio_ip;
 extern struct no_os_gpio_init_param max24287_mdio_gpio_ip;
 extern struct no_os_gpio_init_param max24287_int_gpio_ip;
 extern struct no_os_gpio_init_param brd_select_gpio_ip;
+extern struct no_os_gpio_init_param factory_defaults_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_det_red_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_det_green_gpio_ip;
 extern struct no_os_gpio_init_param led_rx_det_gpio_ip;
