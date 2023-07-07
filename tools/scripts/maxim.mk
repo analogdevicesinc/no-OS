@@ -15,7 +15,7 @@ UNIX_TOOLS_PATH = $(MAXIM_LIBRARIES)/../Tools/MSYS2/usr/bin
 export PATH := $(PATH):$(UNIX_TOOLS_PATH)
 ARM_COMPILER_PATH := $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc.exe))
 else
-PYTHON = python
+PYTHON = python3
 WHICH = which
 ARM_COMPILER_PATH = $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc)))
 endif
@@ -52,8 +52,6 @@ include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGE
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
-include $(NO-OS)/tools/scripts/lwip.mk
-
 HEX=$(basename $(BINARY)).hex
 TARGET_REV=0x4131
 
@@ -69,18 +67,18 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	-mfpu=fpv4-sp-d16 	\
 	--entry=Reset_Handler		
 	
-CFLAGS += -mthumb                                                               \
+CFLAGS += -mthumb                                                                 \
         -mcpu=cortex-m4                                                         \
-	-O0									\
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
         -fsingle-precision-constant                                             \
+        -ffunction-sections                                                     \
+        -fdata-sections                                                         \
         -MD                                                                     \
         -Wall                                                                   \
         -Wdouble-promotion                                                      \
-        -Wno-format                                                    		\
-	-D__HEAP_SIZE=0x100000							\
+        -Wno-format                                                      \
 	-g3									\
 	-c	
 
@@ -102,12 +100,6 @@ DRIVER_INCLUDE_DIR = $(foreach src,$(INCLUDE_DIR_TMP),$(addprefix $(MAXIM_LIBRAR
 ifeq ($(OS),Windows_NT)
 INCLUDE_DIR_TMP += /Include/$(TARGET_UCASE)
 endif
-
-# Add lwip
-#INCS += $(NO-OS)/network/maxim_network
-# SRC_DIRS += $(NO-OS)/network/maxim_network
-INCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/Ext_Flash.h
-SRCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/mx25.c
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 
@@ -152,6 +144,8 @@ $(HEX): $(BINARY)
 	$(MUTE) $(call print,[HEX] $(notdir $@))
 	$(MUTE) $(OC) -O ihex $(BINARY) $(HEX)
 	$(MUTE) $(call print,$(notdir $@) is ready)
+
+.NOTINTERMEDIATE: $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).s
 
 post_build: $(HEX)
 
