@@ -488,8 +488,8 @@ int iio_example_main()
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
-	if (MXC_ADC_Init())
-		return -EINVAL;
+	// if (MXC_ADC_Init())
+	// 	return -EINVAL;
 
 	// ret = max_eth_init(&netif_desc, &eth_param);
 	// if (ret)

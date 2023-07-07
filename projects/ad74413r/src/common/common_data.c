@@ -69,8 +69,8 @@ const struct no_os_spi_init_param adin1110_spi_ip = {
 };
 
 const struct no_os_spi_init_param maxq1065_spi_ip = {
-	.device_id = 0,
-	.max_speed_hz = 10000000,
+	.device_id = 2,
+	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
