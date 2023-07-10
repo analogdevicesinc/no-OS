@@ -15,7 +15,7 @@ UNIX_TOOLS_PATH = $(MAXIM_LIBRARIES)/../Tools/MSYS2/usr/bin
 export PATH := $(PATH):$(UNIX_TOOLS_PATH)
 ARM_COMPILER_PATH := $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc.exe))
 else
-PYTHON = python3
+PYTHON = python
 WHICH = which
 ARM_COMPILER_PATH = $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc)))
 endif
@@ -49,6 +49,7 @@ PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET)
 
 ifeq ($(TARGET), $(filter $(TARGET),max32655 max32690))
 include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET)_memory.mk
+CFLAGS += $(PROJ_AFLAGS)
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
@@ -148,6 +149,7 @@ $(HEX): $(BINARY)
 .NOTINTERMEDIATE: $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).s
 
 post_build: $(HEX)
+	arm-none-eabi-size $(BINARY)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))

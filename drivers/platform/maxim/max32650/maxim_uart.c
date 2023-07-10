@@ -139,17 +139,34 @@ static int32_t max_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 static int32_t max_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			      uint32_t bytes_number)
 {
+	mxc_uart_req_t uart_req;
 	int32_t ret;
+	int32_t transfered = 0;
+	int block_size = 8;
 
 	if(!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id), (uint8_t *)data,
-			     (int *)&bytes_number);
-	if (ret != E_SUCCESS)
-		return -EIO;
+	while (bytes_number) {
+		if (bytes_number > 8)
+			block_size = 8;
+		else
+			block_size = bytes_number;
 
-	return bytes_number;
+		while(!(MXC_UART_GetStatus(MXC_UART_GET_UART(desc->device_id)) &
+			MXC_F_UART_STATUS_TX_EM));
+		ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id),
+				     (uint8_t *)(data + transfered),
+				     &block_size);
+
+		transfered += block_size;
+		bytes_number -= block_size;
+
+		if (ret != E_SUCCESS)
+			return -EIO;
+	}
+
+	return transfered;
 }
 
 /**
