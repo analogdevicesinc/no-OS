@@ -83,7 +83,7 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 
 	// maxq1065_first_bytes_spi("abcd", 4, NULL);
 
-	// ret = MXQ_GetStatus(&s);
+	ret = MXQ_GetStatus(&s);
 	r = MXQ_Ping(1);
 	if (r != MXQ_OK)
 		return r;
@@ -155,12 +155,8 @@ mxq_err_t maxq1065_exchange_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1*
 	if (ret)
 		return ret;
 
-	// for (int i = 0; i < len; i++) {
-	// 	buff = no_os_bit_swap_constant_8(rx[i]);
-	// 	rx[i] = buff;
-	// }
-
-	memcpy(dest, maxq1065_local_desc->rx_buff, len);
+	for (int i = 0; i < len; i++)
+		dest[i] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[i]);
 
 	return len;
 }
@@ -191,10 +187,10 @@ mxq_err_t maxq1065_receive_bytes_spi(mxq_u1* dest, mxq_length len)
 	if (ret)
 		return ret;
 
-	// for (int i = 0; i < len; i++)
-	// 	rx[i] = no_os_bit_swap_constant_8(rx[i]);
+	for (int i = 0; i < len; i++)
+		dest[i] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[i]);
 
-	memcpy(dest, maxq1065_local_desc->rx_buff, len);
+	// memcpy(dest, maxq1065_local_desc->rx_buff, len);
 
 	return len;
 }
