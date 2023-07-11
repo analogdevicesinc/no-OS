@@ -76,21 +76,19 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 		return ret;
 
 	ret = no_os_gpio_get_value(descriptor->rdy_gpio, &rdy_val);
-	// MXQ_DisplayStatus(&s);
 	ret = no_os_gpio_get_value(descriptor->rdy_gpio, &rdy_val);
 
 	MXQ_TLS_Enable();
 
-	// maxq1065_first_bytes_spi("abcd", 4, NULL);
-
-	ret = MXQ_GetStatus(&s);
-	r = MXQ_Ping(1);
+	r = MXQ_Ping(32);
 	if (r != MXQ_OK)
 		return r;
 
-	ret = MXQ_GetStatus(&s);
-	if (ret != MXQ_OK)
-		return ret;
+	r = MXQ_GetStatus(&s);
+	if (r != MXQ_OK)
+		return r;
+
+	MXQ_DisplayStatus(&s);
 
 	*desc = descriptor;
 
@@ -124,7 +122,6 @@ mxq_err_t maxq1065_init_serial(void)
 
 mxq_err_t maxq1065_exchange_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1* dest)
 {
-	uint8_t rx[len];
 	uint8_t buff;
 	uint32_t crc;
 	struct no_os_spi_msg xfer = {
@@ -132,16 +129,12 @@ mxq_err_t maxq1065_exchange_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1*
 		.rx_buff = maxq1065_local_desc->rx_buff,
 		.bytes_number = len,
 		.cs_change = 1,
-		.cs_delay_first = 3,
-		.cs_delay_last = 3,
-		.cs_change_delay = 3,
 	};
 	uint8_t rdy;
 	int ret;
 
 	memset(maxq1065_local_desc->rx_buff, 0, 512);
 	memset(maxq1065_local_desc->tx_buff, 0, 512);
-	memset(rx, 0, len);
 	memcpy(xfer.tx_buff, src, len);
 
 	// for (int i = 0; i < len; i++) {
@@ -155,8 +148,10 @@ mxq_err_t maxq1065_exchange_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1*
 	if (ret)
 		return ret;
 
-	for (int i = 0; i < len; i++)
-		dest[i] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[i]);
+	memcpy(dest, maxq1065_local_desc->rx_buff, len);
+
+	// for (int i = 0; i < len; i++)
+	// 	dest[i] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[i]);
 
 	return len;
 }
@@ -187,15 +182,15 @@ mxq_err_t maxq1065_receive_bytes_spi(mxq_u1* dest, mxq_length len)
 	if (ret)
 		return ret;
 
-	for (int i = 0; i < len; i++)
-		dest[i] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[i]);
+	// for (int i = 0; i < len; i++)
+	// 	dest[i] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[i]);
 
-	// memcpy(dest, maxq1065_local_desc->rx_buff, len);
+	memcpy(dest, maxq1065_local_desc->rx_buff, len);
 
 	return len;
 }
 
-mxq_err_t maxq1065_first_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1* dest)
+mxq_err_t maxq1065_first_bytes_spi(mxq_u1* dest, mxq_length len)
 {
 	uint8_t rx[10] = {0};
 	struct no_os_spi_msg xfer = {
@@ -203,17 +198,13 @@ mxq_err_t maxq1065_first_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1* de
 		.rx_buff = maxq1065_local_desc->rx_buff,
 		.bytes_number = 1,
 		.cs_change = 1,
-		.cs_delay_first = 3,
-		.cs_delay_last = 3,
-		.cs_change_delay = 3,
 	};
 	uint32_t timeout = 1000;
 	mxq_u1 dummy = 0xCC;
 	uint8_t rdy = 0;
 	int ret;
 
-	while (maxq1065_local_desc->rx_buff[0] != 0x55 &&
-	       maxq1065_local_desc->rx_buff[0] != 0xaa && timeout) {
+	while (maxq1065_local_desc->rx_buff[0] != 0x55 && timeout) {
 		no_os_spi_transfer(maxq1065_local_desc->comm_desc, &xfer, 1);
 		timeout--;
 		no_os_mdelay(1);
@@ -222,15 +213,13 @@ mxq_err_t maxq1065_first_bytes_spi(const mxq_u1* src, mxq_length len, mxq_u1* de
 	if (!timeout)
 		return -ETIMEDOUT;
 
-	dest[0] = no_os_bit_swap_constant_8(maxq1065_local_desc->rx_buff[0]);
-	dest++;
-	len--;
+	dest[0] = 0x55;
 
-	ret = maxq1065_receive_bytes_spi(dest, len);
+	ret = maxq1065_receive_bytes_spi(&dest[1], len - 1);
 	if (ret < 0)
 		return ret;
 
-	return len + 1;
+	return len;
 }
 
 mxq_err_t maxq1065_activate_tls(void)
