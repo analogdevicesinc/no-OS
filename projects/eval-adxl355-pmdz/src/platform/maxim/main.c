@@ -66,6 +66,11 @@ int main()
 	int ret = -EINVAL;
 
 	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
+	no_os_init();
+
+#ifdef IIO_LWIP_EXAMPLE
+	ret = iio_lwip_example_main();
+#endif
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main();
@@ -116,9 +121,9 @@ int main()
 	ret = dummy_example_main();
 #endif
 
-#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE + IIO_LWIP_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE + IIO_LWIP_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif

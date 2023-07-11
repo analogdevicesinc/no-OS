@@ -899,12 +899,6 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	// no_os_mdelay(90);
 
-	ret = no_os_gpio_get(&descriptor->mssel_gpio, &param->mssel_param);
-	if (ret)
-		goto free_rst_gpio;
-
-	no_os_gpio_direction_input(descriptor->mssel_gpio);
-
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
 		goto free_spi;

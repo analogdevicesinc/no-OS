@@ -41,7 +41,7 @@
 #include "mxc_delay.h"
 
 /* ************************************************************************** */
-__weak int no_os_init(void)
+int no_os_init(void)
 {
 	SysTick_Config(SystemCoreClock / 1000);
 	/* This has o be performed so the en state of SysTick is saved. */

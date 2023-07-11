@@ -110,12 +110,12 @@ const struct no_os_gpio_init_param adin1110_reset_ip = {
 };
 
 const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = ADIN1110_SPI_DEVICE_ID,
-	.max_speed_hz = ADIN1110_SPI_CLK_RATE,
+	.device_id = 3,
+	.max_speed_hz = 25000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
-	.chip_select = ADIN1110_SPI_CS,
+	.chip_select = 0,
 	.extra = &adin1110_spi_extra_ip,
 };
 

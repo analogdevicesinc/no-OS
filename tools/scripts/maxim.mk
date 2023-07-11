@@ -69,7 +69,7 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	--entry=Reset_Handler		
 	
 CFLAGS += -mthumb                                                                 \
-        -mcpu=cortex-m4                                                         \
+        -mcpu=cortex-m4    \
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \

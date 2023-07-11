@@ -69,3 +69,15 @@ struct max_spi_init_param adxl355_spi_extra_ip  = {
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
+
+#ifdef IIO_LWIP_EXAMPLE
+struct max_gpio_init_param adin1110_reset_gpio_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+struct max_spi_init_param adin1110_spi_extra_ip  = {
+	.num_slaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+#endif
