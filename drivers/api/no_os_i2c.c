@@ -78,6 +78,7 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 	if (ret)
 		return ret;
 	(*desc)->bus = i2c_table[param->device_id];
+	(*desc)->bus->slave_number++;
 	(*desc)->platform_ops = param->platform_ops;
 
 	return 0;
@@ -98,6 +99,7 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 
 	no_os_mutex_init(&(bus->mutex));
 
+	bus->slave_number = 0;
 	bus->device_id = param->device_id;
 	bus->max_speed_hz = param->max_speed_hz;
 	bus->platform_ops = param->platform_ops;
@@ -117,7 +119,7 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	// Remove I2C bus
-	no_os_i2cbus_remove(desc->device_id);
+	no_os_i2cbus_remove(desc->bus->device_id);
 
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
@@ -134,14 +136,19 @@ int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 */
 void no_os_i2cbus_remove(uint32_t bus_number)
 {
-	struct no_os_i2cbus_desc *i2c_bus_desriptor = (struct no_os_i2cbus_desc *)
-			i2c_table[bus_number];
+	struct no_os_i2cbus_desc *bus = (struct no_os_i2cbus_desc *)
+					i2c_table[bus_number];
 
-	no_os_mutex_remove(i2c_bus_desriptor->mutex);
+	if (bus->slave_number > 0)
+		bus->slave_number--;
 
-	if (i2c_bus_desriptor != NULL) {
-		no_os_free(i2c_bus_desriptor);
-		i2c_bus_desriptor = NULL;
+	if (bus->slave_number == 0) {
+		no_os_mutex_remove(bus->mutex);
+
+		if (bus != NULL) {
+			no_os_free(bus);
+			bus = NULL;
+		}
 	}
 }
 

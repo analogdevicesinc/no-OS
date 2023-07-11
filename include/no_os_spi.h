@@ -144,6 +144,8 @@ struct no_os_spi_init_param {
 struct no_os_spibus_desc {
 	/** SPI bus mutex (lock) */
 	void 		*mutex;
+	/** SPI bus slave number*/
+	uint8_t         slave_number;
 	/** SPI bus device id */
 	uint32_t	device_id;
 	/** SPI bus max speed */
