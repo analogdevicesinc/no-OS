@@ -182,7 +182,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		tdesc->rx_callback.callback = param->rx_complete_callback;
 		tdesc->rx_callback.ctx = tdm_desc;
 		tdesc->rx_callback.event = NO_OS_EVT_DMA_RX_COMPLETE;
-		tdesc->rx_callback.peripheral = NO_OS_DMA_IRQ;
+		tdesc->rx_callback.peripheral = NO_OS_TDM_DMA_IRQ;
 		tdesc->rx_callback.handle = &tdesc->hsai;
 
 		ret = no_os_irq_register_callback(tdesc->nvic_rxcplt, param->irq_id,
@@ -207,7 +207,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		tdesc->rx_half_callback.callback = param->rx_half_complete_callback;
 		tdesc->rx_half_callback.ctx = tdm_desc;
 		tdesc->rx_half_callback.event = NO_OS_EVT_DMA_RX_HALF_COMPLETE;
-		tdesc->rx_half_callback.peripheral = NO_OS_DMA_IRQ;
+		tdesc->rx_half_callback.peripheral = NO_OS_TDM_DMA_IRQ;
 		tdesc->rx_half_callback.handle = &tdesc->hsai;
 
 
