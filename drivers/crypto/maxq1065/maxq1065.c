@@ -89,6 +89,7 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 		return r;
 
 	MXQ_DisplayStatus(&s);
+	MXQ_DisplayConfig(&s);
 
 	*desc = descriptor;
 
