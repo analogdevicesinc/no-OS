@@ -78,6 +78,7 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 	if (ret)
 		return ret;
 	(*desc)->bus = spi_table[param->device_id];
+	(*desc)->bus->slave_number++;
 	(*desc)->platform_ops = param->platform_ops;
 	(*desc)->parent = param->parent;
 
@@ -99,6 +100,7 @@ int32_t no_os_spibus_init(const struct no_os_spi_init_param *param)
 
 	no_os_mutex_init(&(bus->mutex));
 
+	bus->slave_number = 0;
 	bus->device_id = param->device_id;
 	bus->max_speed_hz = param->max_speed_hz;
 	bus->mode = param->mode;
@@ -119,7 +121,7 @@ int32_t no_os_spibus_init(const struct no_os_spi_init_param *param)
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
 	// Remove SPI bus
-	no_os_spibus_remove(desc->device_id);
+	no_os_spibus_remove(desc->bus->device_id);
 
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
@@ -135,14 +137,19 @@ int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 */
 void no_os_spibus_remove(uint32_t bus_number)
 {
-	struct no_os_spibus_desc *spi_bus_desriptor = (struct no_os_spibus_desc *)
-			spi_table[bus_number];
+	struct no_os_spibus_desc *bus = (struct no_os_spibus_desc *)
+					spi_table[bus_number];
 
-	no_os_mutex_remove(spi_bus_desriptor->mutex);
+	if (bus->slave_number > 0)
+		bus->slave_number--;
 
-	if (spi_bus_desriptor) {
-		no_os_free(spi_bus_desriptor);
-		spi_bus_desriptor = 0;
+	if (bus->slave_number == 0) {
+		no_os_mutex_remove(bus->mutex);
+
+		if (bus) {
+			no_os_free(bus);
+			bus = NULL;
+		}
 	}
 }
 

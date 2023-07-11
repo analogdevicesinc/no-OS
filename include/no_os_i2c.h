@@ -87,6 +87,8 @@ struct no_os_i2c_init_param {
 struct no_os_i2cbus_desc {
 	/** I2C bus mutex(lock)*/
 	void* mutex;
+	/** I2C bus slave number*/
+	uint8_t         slave_number;
 	/** I2C bus Device ID */
 	uint32_t	device_id;
 	/** I2C bus maximum transfer speed supported */
