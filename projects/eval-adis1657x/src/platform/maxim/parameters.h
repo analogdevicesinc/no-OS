@@ -69,7 +69,7 @@
 #define SPI_DEVICE_ID   1
 #define SPI_CS          1
 
-#define SPI_BAUDRATE    1000000
+#define SPI_BAUDRATE    8000000
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adis1657x_spi_extra_ip
 
