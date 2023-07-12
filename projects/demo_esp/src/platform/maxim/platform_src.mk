@@ -5,6 +5,7 @@ INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h     \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h      \
+        $(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.h      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_timer.h
 
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c     \
@@ -15,4 +16,5 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c     \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_init.c      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c      \
+        $(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.c      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_timer.c
