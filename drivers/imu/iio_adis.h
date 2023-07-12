@@ -304,4 +304,11 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 /*! Callback for adis iio debug attributes writing. */
 int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv);
+
+/*! Wrapper for reading adis register. */
+int adis_iio_read_reg(struct adis_iio_dev *device, uint32_t reg,
+		      uint32_t *readval);
+/*! Wrapper for writing adis register. */
+int adis_iio_write_reg(struct adis_iio_dev *device, uint32_t reg,
+		       uint32_t writeval);
 #endif
