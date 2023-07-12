@@ -52,7 +52,17 @@
 int main()
 {
 	int ret;
+	ret = no_os_init();
+	if (ret)
+		return ret;
 
+	struct no_os_uart_desc *uart_desc;
+	ret = no_os_uart_init(&uart_desc, &uart_stdio_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+	printf("blabla\n");
 	ret = basic_example_main();
 	if (ret)
 		goto error;

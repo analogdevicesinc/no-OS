@@ -70,8 +70,8 @@
 #define BUFF_LEN		200
 
 /* Wifi network parameters */
-#define WIFI_SSID		"WifiSSID"
-#define WIFI_PASS		"Password"
+#define WIFI_SSID		"moto 5G"
+#define WIFI_PASS		"blabla1234"
 
 /* Mqtt configuration */
 #define MQTT_PUBLISH_TOPIC	"adxl"
@@ -87,6 +87,7 @@
 /* Time between each scan mq*/
 #define SCAN_SENSOR_TIME	500
 
+extern struct no_os_uart_init_param uart_stdio_ip;
 extern struct no_os_uart_init_param uart_ip;
 extern struct no_os_irq_init_param irq_ip;
 extern struct no_os_timer_init_param timer_ip;

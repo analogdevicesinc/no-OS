@@ -25,6 +25,7 @@ INCS += $(INCLUDE)/no_os_delay.h		\
 	$(INCLUDE)/no_os_units.h		\
 	$(INCLUDE)/no_os_util.h			\
 	$(INCLUDE)/no_os_list.h			\
+	$(INCLUDE)/no_os_init.h			\
 	$(INCLUDE)/no_os_circular_buffer.h	\
 	$(INCLUDE)/no_os_alloc.h		\
 	$(INCLUDE)/no_os_mutex.h

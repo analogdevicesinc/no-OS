@@ -46,5 +46,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 struct max_uart_init_param uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = UART_FLOW_DIS,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };

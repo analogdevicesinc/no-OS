@@ -64,6 +64,46 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 	struct wifi_init_param			wifi_param;
 	int32_t				ret;
 
+	struct max_gpio_init_param gpio_extra_ip = {
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	};
+
+	struct no_os_gpio_init_param gpio_wifi_rst_ip = {
+		.port = 3,
+		.number = 9,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip
+	};
+	struct no_os_gpio_desc *wifi_rst_gpio;
+
+	ret = no_os_gpio_get(&wifi_rst_gpio, &gpio_wifi_rst_ip);
+	if (ret) {
+		pr_err("Error getting wifi reset gpio!\n");
+		return ret;
+	}
+	if (ret) {
+		pr_err("Error setting wifi reset gpio low!\n");
+		return ret;
+	}
+
+	ret = no_os_gpio_direction_output(wifi_rst_gpio, NO_OS_GPIO_LOW);
+	if (ret) {
+		pr_err("Error setting wifi reset gpio low!\n");
+		return ret;
+	}
+
+	no_os_mdelay(2000);
+
+	ret = no_os_gpio_set_value(wifi_rst_gpio, NO_OS_GPIO_HIGH);
+	if (ret) {
+		pr_err("Error setting wifi reset gpio high!\n");
+		return ret;
+	}
+
+	/* Allow the wifi module to bring up after reset */
+	// no_os_mdelay(2000);
+
 	ret = no_os_irq_ctrl_init(&irq_ctrl, &irq_ip);
 	if (ret) {
 		pr_err("Error irq_ctrl_init\n");
@@ -82,7 +122,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		.uart_desc = udesc,
 		.uart_irq_conf = udesc,
 		.uart_irq_id = UART_CONFIG_IRQ_ID,
-		.sw_reset_en = true
+		.sw_reset_en = false
 	};
 
 	ret = wifi_init(wifi, &wifi_param);

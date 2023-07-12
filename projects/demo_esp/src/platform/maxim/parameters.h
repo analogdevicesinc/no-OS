@@ -47,14 +47,17 @@
 #include "maxim_timer.h"
 #include "maxim_irq.h"
 #include "maxim_uart.h"
+#include "maxim_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define UART_CONFIG_BAUDRATE	115200
-#define UART_CONFIG_IRQ_ID	UART2_IRQn
-#define UART_DEVICE_ID		2
+#define UART_STDIO_DEVICE_ID  	0
+#define UART_BAUDRATE   57600
+#define UART_CONFIG_BAUDRATE	57600
+#define UART_CONFIG_IRQ_ID	UART1_IRQn
+#define UART_DEVICE_ID		1
 #define UART_EXTRA		&uart_extra_ip
 
 #define TIMER_ID		1

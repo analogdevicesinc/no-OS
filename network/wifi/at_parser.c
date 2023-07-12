@@ -421,7 +421,7 @@ dummy_read:
 static void at_callback_rd_done(struct at_desc *desc)
 {
 	static const struct at_buff ready_msg = {PUI8("ready\r\n"), 7};
-
+	printf("%c\n", desc->read_ch);
 	switch (desc->callback_operation) {
 	case RESETTING_MODULE:
 		if (match_message(&ready_msg, &desc->ready_idx,

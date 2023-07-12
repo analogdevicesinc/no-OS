@@ -12,6 +12,7 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c     \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.c  \
+        $(PLATFORM_DRIVERS)/$(PLATFORM)_init.c      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_timer.c

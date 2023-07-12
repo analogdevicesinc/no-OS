@@ -57,6 +57,16 @@ struct no_os_uart_init_param uart_ip = {
 	.extra = UART_EXTRA
 };
 
+struct no_os_uart_init_param uart_stdio_ip = {
+	.device_id = UART_STDIO_DEVICE_ID,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.platform_ops = UART_OPS,
+	.extra = UART_EXTRA
+};
+
 struct no_os_irq_init_param irq_ip = {
 	.irq_ctrl_id = 0,
 	.platform_ops = IRQ_OPS,
