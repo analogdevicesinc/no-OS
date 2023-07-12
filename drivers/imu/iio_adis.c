@@ -70,6 +70,32 @@ static const uint32_t adis_3db_freqs[] = {
 /******************************************************************************/
 
 /**
+ * @brief Wrapper for reading adis register.
+ * @param device  - The iio device structure.
+ * @param reg	  - Address of the register to be read from.
+ * @param readval - Read data.
+ * @return ret    - Result of the reading procedure.
+ */
+int adis_iio_read_reg(struct adis_iio_dev *device, uint32_t reg,
+		      uint32_t *readval)
+{
+	return adis_read_reg(device->adis_dev, reg, readval, 2);
+}
+
+/**
+ * @brief Wrapper for writing to adis register.
+ * @param device   - The iio device structure.
+ * @param reg	    - Address of the register to be written to.
+ * @param writeval - Data to be written.
+ * @return ret     - Result of the writing procedure.
+ */
+int adis_iio_write_reg(struct adis_iio_dev *device, uint32_t reg,
+		       uint32_t writeval)
+{
+	return adis_write_reg(device->adis_dev, reg, writeval, 2);
+}
+
+/**
  * @brief Handles the read request for raw attribute.
  * @param dev     - The iio device structure.
  * @param buf	  - Command buffer to be filled with requested data.
