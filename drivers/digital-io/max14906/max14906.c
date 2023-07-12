@@ -198,6 +198,14 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 					    no_os_field_prep(MAX14906_CH_DIR_MASK(ch), 1));
 	}
 
+	if (function == MAX14906_IN) {
+		ret = max14906_reg_update(desc, MAX14906_CONFIG_DO_REG, MAX14906_DO_MASK(ch),
+					  no_os_field_prep(MAX14906_DO_MASK(ch),
+					  MAX14906_HIGH_SIDE));
+		if (ret)
+			return ret;
+	}
+
 	return max14906_reg_update(desc, MAX14906_SETOUT_REG, MAX14906_CH_DIR_MASK(ch),
 				   no_os_field_prep(MAX14906_CH_DIR_MASK(ch), function));
 }
