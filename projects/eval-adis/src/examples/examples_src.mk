@@ -15,9 +15,9 @@ ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
 INCS += $(DRIVERS)/imu/iio_adis.h \
-	$(DRIVERS)/imu/iio_adis16505.h
+	$(DRIVERS)/imu/iio_adis1650x.h
 SRCS += $(DRIVERS)/imu/iio_adis.c \
-	$(DRIVERS)/imu/iio_adis16505.c
+	$(DRIVERS)/imu/iio_adis1650x.c
 endif
 
 ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))

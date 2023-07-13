@@ -47,15 +47,15 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-struct max_uart_init_param adis16505_uart_extra_ip = {
+struct max_uart_init_param adis1650x_uart_extra_ip = {
 	.flow = UART_FLOW_DIS
 };
 
-struct max_gpio_init_param adis16505_gpio_extra_ip = {
+struct max_gpio_init_param adis1650x_gpio_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-struct max_spi_init_param adis16505_spi_extra_ip  = {
+struct max_spi_init_param adis1650x_spi_extra_ip  = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,

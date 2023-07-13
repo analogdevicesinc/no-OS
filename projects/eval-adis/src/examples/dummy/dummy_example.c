@@ -43,7 +43,7 @@
 
 #include "dummy_example.h"
 #include "common_data.h"
-#include "adis16505.h"
+#include "adis1650x.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_units.h"
@@ -94,38 +94,38 @@ static const float output_scale[] = {
  */
 int dummy_example_main()
 {
-	struct adis_dev *adis16505_desc;
+	struct adis_dev *adis1650x_desc;
 	int ret;
 	int val[7];
 
-	adis16505_chip_info.ip = &adis16505_ip;
+	adis1650x_chip_info.ip = &adis1650x_ip;
 
-	ret = adis_init(&adis16505_desc, &adis16505_chip_info);
+	ret = adis_init(&adis1650x_desc, &adis1650x_chip_info);
 	if (ret)
 		goto error;
 
 	while(1) {
 		pr_info ("while loop \n");
 		no_os_mdelay(1000);
-		ret = adis_read_x_gyro(adis16505_desc, &val[0]);
+		ret = adis_read_x_gyro(adis1650x_desc, &val[0]);
 		if (ret)
 			goto error_remove;
-		ret = adis_read_y_gyro(adis16505_desc, &val[1]);
+		ret = adis_read_y_gyro(adis1650x_desc, &val[1]);
 		if (ret)
 			goto error_remove;
-		ret = adis_read_z_gyro(adis16505_desc, &val[2]);
+		ret = adis_read_z_gyro(adis1650x_desc, &val[2]);
 		if (ret)
 			goto error_remove;
-		ret = adis_read_x_accl(adis16505_desc, &val[3]);
+		ret = adis_read_x_accl(adis1650x_desc, &val[3]);
 		if (ret)
 			goto error_remove;
-		ret = adis_read_y_accl(adis16505_desc, &val[4]);
+		ret = adis_read_y_accl(adis1650x_desc, &val[4]);
 		if (ret)
 			goto error_remove;
-		ret = adis_read_z_accl(adis16505_desc, &val[5]);
+		ret = adis_read_z_accl(adis1650x_desc, &val[5]);
 		if (ret)
 			goto error_remove;
-		ret = adis_read_temp_out(adis16505_desc, &val[6]);
+		ret = adis_read_temp_out(adis1650x_desc, &val[6]);
 		if (ret)
 			goto error_remove;
 
@@ -134,7 +134,7 @@ int dummy_example_main()
 				output_unit[i]);
 	}
 error_remove:
-	adis_remove(adis16505_desc);
+	adis_remove(adis1650x_desc);
 error:
 	pr_info("Error!\n");
 	return 0;

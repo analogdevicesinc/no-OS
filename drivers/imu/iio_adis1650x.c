@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adis16505.c
- *   @brief  Implementation of iio_adis16505.c
+ *   @file   iio_adis1650x.c
+ *   @brief  Implementation of iio_adis1650x.c
  *   @author RBolboac (ramona.bolboaca@analog.com)
  *******************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "iio_adis16505.h"
+#include "iio_adis1650x.h"
 #include "no_os_alloc.h"
 #include "no_os_units.h"
 
@@ -50,44 +50,44 @@
 /******************************************************************************/
 
 /* Values from datasheet for 32-bit data */
-static const struct adis_iio_scale_fractional adis16505_gyro_scale[] = {
+static const struct adis_iio_scale_fractional adis1650x_gyro_scale[] = {
 	[ADIS16505_1] = {1, RAD_TO_DEGREE(10485760)},
 	[ADIS16505_2] = {1, RAD_TO_DEGREE(2621440)},
 	[ADIS16505_3] = {1, RAD_TO_DEGREE(655360)},
 };
 
-static const struct adis_iio_scale_fractional adis16505_accl_scale[] = {
+static const struct adis_iio_scale_fractional adis1650x_accl_scale[] = {
 	[ADIS16505_1] = {1, 26756268},
 	[ADIS16505_2] = {1, 26756268},
 	[ADIS16505_3] = {1, 26756268},
 };
 
-static const struct adis_iio_scale_fractional_log2 adis16505_rot_scale[] = {
+static const struct adis_iio_scale_fractional_log2 adis1650x_rot_scale[] = {
 	[ADIS16505_1] = {360, 31},
 	[ADIS16505_2] = {720, 31},
 	[ADIS16505_3] = {2160, 31},
 };
 
-static const struct adis_iio_scale_fractional_log2 adis16505_vel_scale[] = {
+static const struct adis_iio_scale_fractional_log2 adis1650x_vel_scale[] = {
 	[ADIS16505_1] = {100, 31},
 	[ADIS16505_2] = {100, 31},
 	[ADIS16505_3] = {100, 31},
 };
 
 /* IIO uses milli-degrees Celsius for temperature */
-static const struct adis_iio_scale_fractional adis16505_temp_scale[] = {
+static const struct adis_iio_scale_fractional adis1650x_temp_scale[] = {
 	[ADIS16505_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 };
 
-static const char * const adis16505_rang_mdl_txt[] = {
+static const char * const adis1650x_rang_mdl_txt[] = {
 	[ADIS16505_1] = "+/-125_degrees_per_sec",
 	[ADIS16505_2] = "+/-500_degrees_per_sec",
 	[ADIS16505_3] = "+/-2000_degrees_per_sec",
 };
 
-static struct scan_type adis16505_iio_accel_scan_type = {
+static struct scan_type adis1650x_iio_accel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -95,7 +95,7 @@ static struct scan_type adis16505_iio_accel_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis16505_iio_anglvel_scan_type = {
+static struct scan_type adis1650x_iio_anglvel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -103,7 +103,7 @@ static struct scan_type adis16505_iio_anglvel_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis16505_iio_delta_vel_scan_type = {
+static struct scan_type adis1650x_iio_delta_vel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -111,7 +111,7 @@ static struct scan_type adis16505_iio_delta_vel_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis16505_iio_delta_angl_scan_type = {
+static struct scan_type adis1650x_iio_delta_angl_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -119,7 +119,7 @@ static struct scan_type adis16505_iio_delta_angl_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis16505_iio_temp_scan_type = {
+static struct scan_type adis1650x_iio_temp_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -127,7 +127,7 @@ static struct scan_type adis16505_iio_temp_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis16505_iio_data_counter_scan_type = {
+static struct scan_type adis1650x_iio_data_counter_scan_type = {
 	.sign 		= 'u',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -135,24 +135,24 @@ static struct scan_type adis16505_iio_data_counter_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct iio_channel adis16505_channels[] = {
-	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		16505),
-	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		16505),
-	ADIS_GYRO_CHAN		(Z, 	ADIS_GYRO_Z, 		16505),
-	ADIS_ACCEL_CHAN		(X,	ADIS_ACCEL_X, 		16505),
-	ADIS_ACCEL_CHAN		(Y,	ADIS_ACCEL_Y, 		16505),
-	ADIS_ACCEL_CHAN		(Z,	ADIS_ACCEL_Z, 		16505),
-	ADIS_TEMP_CHAN		(ADIS_TEMP, 			16505),
-	ADIS_DELTA_ANGL_CHAN	(X, 	ADIS_DELTA_ANGL_X, 	16505),
-	ADIS_DELTA_ANGL_CHAN	(Y, 	ADIS_DELTA_ANGL_Y, 	16505),
-	ADIS_DELTA_ANGL_CHAN	(Z, 	ADIS_DELTA_ANGL_Z, 	16505),
-	ADIS_DELTA_VEL_CHAN	(X, 	ADIS_DELTA_VEL_X, 	16505),
-	ADIS_DELTA_VEL_CHAN	(Y, 	ADIS_DELTA_VEL_Y, 	16505),
-	ADIS_DELTA_VEL_CHAN	(Z, 	ADIS_DELTA_VEL_Z, 	16505),
-	ADIS_DATA_COUNTER_CHAN	(ADIS_DATA_COUNTER,		16505),
+static struct iio_channel adis1650x_channels[] = {
+	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		1650x),
+	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		1650x),
+	ADIS_GYRO_CHAN		(Z, 	ADIS_GYRO_Z, 		1650x),
+	ADIS_ACCEL_CHAN		(X,	ADIS_ACCEL_X, 		1650x),
+	ADIS_ACCEL_CHAN		(Y,	ADIS_ACCEL_Y, 		1650x),
+	ADIS_ACCEL_CHAN		(Z,	ADIS_ACCEL_Z, 		1650x),
+	ADIS_TEMP_CHAN		(ADIS_TEMP, 			1650x),
+	ADIS_DELTA_ANGL_CHAN	(X, 	ADIS_DELTA_ANGL_X, 	1650x),
+	ADIS_DELTA_ANGL_CHAN	(Y, 	ADIS_DELTA_ANGL_Y, 	1650x),
+	ADIS_DELTA_ANGL_CHAN	(Z, 	ADIS_DELTA_ANGL_Z, 	1650x),
+	ADIS_DELTA_VEL_CHAN	(X, 	ADIS_DELTA_VEL_X, 	1650x),
+	ADIS_DELTA_VEL_CHAN	(Y, 	ADIS_DELTA_VEL_Y, 	1650x),
+	ADIS_DELTA_VEL_CHAN	(Z, 	ADIS_DELTA_VEL_Z, 	1650x),
+	ADIS_DATA_COUNTER_CHAN	(ADIS_DATA_COUNTER,		1650x),
 };
 
-static struct iio_attribute adis16505_debug_attrs[] = {
+static struct iio_attribute adis1650x_debug_attrs[] = {
 
 	{
 		.name = "diag_data_path_overrun",
@@ -378,10 +378,10 @@ static struct iio_attribute adis16505_debug_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_device adis16505_iio_dev = {
-	.num_ch 		= NO_OS_ARRAY_SIZE(adis16505_channels),
-	.channels 		= adis16505_channels,
-	.debug_attributes 	= adis16505_debug_attrs,
+static struct iio_device adis1650x_iio_dev = {
+	.num_ch 		= NO_OS_ARRAY_SIZE(adis1650x_channels),
+	.channels 		= adis1650x_channels,
+	.debug_attributes 	= adis1650x_debug_attrs,
 	.attributes		= adis_dev_attrs,
 	.pre_enable 		= (int32_t (*)())adis_iio_pre_enable,
 	.trigger_handler 	= (int32_t (*)())adis_iio_trigger_handler,
@@ -394,12 +394,12 @@ static struct iio_device adis16505_iio_dev = {
 /******************************************************************************/
 
 /**
- * @brief Initialize adis16505 iio device.
- * @param iio_dev    - The adis16505 iio device.
+ * @brief Initialize adis1650x iio device.
+ * @param iio_dev    - The adis1650x iio device.
  * @param init_param - The structure that contains the device initial parameters.
  * @return 0 in case of success, error code otherwise.
  */
-int adis16505_iio_init(struct adis_iio_dev **iio_dev,
+int adis1650x_iio_init(struct adis_iio_dev **iio_dev,
 		       struct adis_init_param *init_param)
 {
 	int ret;
@@ -409,36 +409,36 @@ int adis16505_iio_init(struct adis_iio_dev **iio_dev,
 	if (!desc)
 		return -ENOMEM;
 
-	desc->iio_dev = &adis16505_iio_dev;
+	desc->iio_dev = &adis1650x_iio_dev;
 
-	adis16505_chip_info.ip = init_param;
+	adis1650x_chip_info.ip = init_param;
 
 	/* Update scales based on the device id */
-	desc->gyro_scale = adis16505_gyro_scale[init_param->dev_id];
-	desc->accl_scale = adis16505_accl_scale[init_param->dev_id];
-	desc->rot_scale = adis16505_rot_scale[init_param->dev_id];
-	desc->vel_scale = adis16505_vel_scale[init_param->dev_id];
-	desc->temp_scale = adis16505_temp_scale[init_param->dev_id];
-	desc->rang_mdl_txt = adis16505_rang_mdl_txt[init_param->dev_id];
+	desc->gyro_scale = adis1650x_gyro_scale[init_param->dev_id];
+	desc->accl_scale = adis1650x_accl_scale[init_param->dev_id];
+	desc->rot_scale = adis1650x_rot_scale[init_param->dev_id];
+	desc->vel_scale = adis1650x_vel_scale[init_param->dev_id];
+	desc->temp_scale = adis1650x_temp_scale[init_param->dev_id];
+	desc->rang_mdl_txt = adis1650x_rang_mdl_txt[init_param->dev_id];
 
-	ret = adis_init(&desc->adis_dev, &adis16505_chip_info);
+	ret = adis_init(&desc->adis_dev, &adis1650x_chip_info);
 	if (ret)
-		goto error_adis16505_init;
+		goto error_adis1650x_init;
 
 	*iio_dev = desc;
 
 	return 0;
 
-error_adis16505_init:
+error_adis1650x_init:
 	no_os_free(desc);
 	return ret;
 }
 
 /**
- * @brief Remove adis16505 iio device.
- * @param desc - The adis16505 iio device.
+ * @brief Remove adis1650x iio device.
+ * @param desc - The adis1650x iio device.
  */
-void adis16505_iio_remove(struct adis_iio_dev *desc)
+void adis1650x_iio_remove(struct adis_iio_dev *desc)
 {
 	adis_remove(desc->adis_dev);
 	no_os_free(desc);

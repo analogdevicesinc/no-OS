@@ -45,9 +45,9 @@
 /******************************************************************************/
 
 #include "platform_includes.h"
-#include "adis16505.h"
+#include "adis1650x.h"
 #ifdef IIO_SUPPORT
-#include "iio_adis16505.h"
+#include "iio_adis1650x.h"
 #include "iio_adis.h"
 #ifdef IIO_TRIGGER_EXAMPLE
 #include "iio_trigger.h"
@@ -58,16 +58,16 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-extern struct no_os_uart_init_param adis16505_uart_ip;
-extern struct no_os_spi_init_param adis16505_spi_ip;
-extern struct no_os_gpio_init_param adis16505_gpio_reset_ip;
-extern struct adis_init_param adis16505_ip;
+extern struct no_os_uart_init_param adis1650x_uart_ip;
+extern struct no_os_spi_init_param adis1650x_spi_ip;
+extern struct no_os_gpio_init_param adis1650x_gpio_reset_ip;
+extern struct adis_init_param adis1650x_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define ADIS16505_GPIO_TRIG_NAME "adis16505-2-dev0"
+#define ADIS1650X_GPIO_TRIG_NAME "adis16505-2-dev0"
 
-extern struct iio_hw_trig_init_param adis16505_gpio_trig_ip;
-extern struct no_os_irq_init_param adis16505_gpio_irq_ip;
+extern struct iio_hw_trig_init_param adis1650x_gpio_trig_ip;
+extern struct no_os_irq_init_param adis1650x_gpio_irq_ip;
 #endif
 
 #endif /* __COMMON_DATA_H__ */

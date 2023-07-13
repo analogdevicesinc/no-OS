@@ -110,7 +110,7 @@ void test_adis1657x_write_reg(void)
 	test_adis_write_reg_2();
 }
 
-void test_adis16505_read_field_s32(void)
+void test_adis1657x_read_field_s32(void)
 {
 	test_adis_read_field_s32();
 }

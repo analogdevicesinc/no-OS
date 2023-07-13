@@ -47,14 +47,14 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-struct pico_spi_init_param adis16505_spi_extra_ip  = {
+struct pico_spi_init_param adis1650x_spi_extra_ip  = {
 	.spi_tx_pin = SPI0_TX_GP19,
 	.spi_rx_pin = SPI0_RX_GP16,
 	.spi_sck_pin = SPI0_SCK_GP18,
 	.spi_cs_pin = SPI0_CS_GP17
 };
 
-struct pico_uart_init_param adis16505_uart_extra_ip = {
+struct pico_uart_init_param adis1650x_uart_extra_ip = {
 	.uart_tx_pin = UART_TX_PIN,
 	.uart_rx_pin = UART_RX_PIN,
 };

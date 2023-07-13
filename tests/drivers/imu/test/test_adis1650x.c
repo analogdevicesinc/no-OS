@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   test_adis16505.c
- *   @brief  Implementation of test_adis16505.c
+ *   @file   test_adis1650x.c
+ *   @brief  Implementation of test_adis1650x.c
  *   @author RBolboac (ramona.bolboaca@analog.com)
  *******************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -43,7 +43,7 @@
 
 #include "unity.h"
 #include "adis.h"
-#include "adis16505.h"
+#include "adis1650x.h"
 #include "test_adis.c"
 #include "mock_no_os_delay.h"
 #include "mock_no_os_util.h"
@@ -65,7 +65,7 @@ struct adis_chip_info *adis_chip_info;
 
 void setUp(void)
 {
-	adis_chip_info = &adis16505_chip_info;
+	adis_chip_info = &adis1650x_chip_info;
 }
 
 void tearDown(void)
@@ -76,7 +76,7 @@ void tearDown(void)
  *    TESTS
  ******************************************************************************/
 
-void test_adis16505_init(void)
+void test_adis1650x_init(void)
 {
 	test_adis_init_1();
 	test_adis_init_2();
@@ -86,300 +86,300 @@ void test_adis16505_init(void)
 	test_adis_init_6();
 }
 
-void test_adis16505_remove(void)
+void test_adis1650x_remove(void)
 {
 	test_adis_remove_1();
 	test_adis_remove_2();
 }
 
-void test_adis16505_initial_startup(void)
+void test_adis1650x_initial_startup(void)
 {
 	test_adis_initial_startup_1();
 	test_adis_initial_startup_2();
 	test_adis_initial_startup_3();
 }
 
-void test_adis16505_read_reg(void)
+void test_adis1650x_read_reg(void)
 {
 	test_adis_read_reg();
 }
 
-void test_adis16505_read_field_s32(void)
+void test_adis1650x_read_field_s32(void)
 {
 	test_adis_read_field_s32();
 }
 
-void test_adis16505_write_reg(void)
+void test_adis1650x_write_reg(void)
 {
 	test_adis_write_reg_1();
 	test_adis_write_reg_2();
 }
 
-void test_adis16505_read_diag_data_path_overrun(void)
+void test_adis1650x_read_diag_data_path_overrun(void)
 {
 	test_adis_read_diag_data_path_overrun_1();
 	test_adis_read_diag_data_path_overrun_2();
 	test_adis_read_diag_data_path_overrun_3();
 }
 
-void test_adis16505_read_diag_fls_mem_update_failure(void)
+void test_adis1650x_read_diag_fls_mem_update_failure(void)
 {
 	test_adis_read_diag_fls_mem_update_failure_1();
 	test_adis_read_diag_fls_mem_update_failure_2();
 	test_adis_read_diag_fls_mem_update_failure_3();
 }
 
-void test_adis16505_read_diag_spi_comm_err(void)
+void test_adis1650x_read_diag_spi_comm_err(void)
 {
 	test_adis_read_diag_spi_comm_err_1();
 	test_adis_read_diag_spi_comm_err_2();
 	test_adis_read_diag_spi_comm_err_3();
 }
 
-void test_adis16505_read_diag_standby_mode(void)
+void test_adis1650x_read_diag_standby_mode(void)
 {
 	test_adis_read_diag_standby_mode_1();
 	test_adis_read_diag_standby_mode_2();
 	test_adis_read_diag_standby_mode_3();
 }
 
-void test_adis16505_read_diag_snsr_failure(void)
+void test_adis1650x_read_diag_snsr_failure(void)
 {
 	test_adis_read_diag_snsr_failure_1();
 	test_adis_read_diag_snsr_failure_2();
 	test_adis_read_diag_snsr_failure_3();
 }
 
-void test_adis16505_read_diag_mem_failure(void)
+void test_adis1650x_read_diag_mem_failure(void)
 {
 	test_adis_read_diag_mem_failure_1();
 	test_adis_read_diag_mem_failure_2();
 	test_adis_read_diag_mem_failure_3();
 }
 
-void test_adis16505_read_diag_clk_err(void)
+void test_adis1650x_read_diag_clk_err(void)
 {
 	test_adis_read_diag_clk_err_1();
 	test_adis_read_diag_clk_err_2();
 	test_adis_read_diag_clk_err_3();
 }
 
-void test_adis16505_read_diag_gyro2_failure(void)
+void test_adis1650x_read_diag_gyro2_failure(void)
 {
 	test_adis_read_diag_gyro2_failure_1();
 	test_adis_read_diag_gyro2_failure_2();
 	test_adis_read_diag_gyro2_failure_3();
 }
 
-void test_adis16505_read_diag_gyro1_failure(void)
+void test_adis1650x_read_diag_gyro1_failure(void)
 {
 	test_adis_read_diag_gyro1_failure_1();
 	test_adis_read_diag_gyro1_failure_2();
 	test_adis_read_diag_gyro1_failure_3();
 }
 
-void test_adis16505_read_diag_accl_failure(void)
+void test_adis1650x_read_diag_accl_failure(void)
 {
 	test_adis_read_diag_accl_failure_1();
 	test_adis_read_diag_accl_failure_2();
 	test_adis_read_diag_accl_failure_3();
 }
 
-void test_adis16505_read_diag_checksum_err(void)
+void test_adis1650x_read_diag_checksum_err(void)
 {
 	test_adis_read_diag_checksum_err_1();
 	test_adis_read_diag_checksum_err_2();
 }
 
-void test_adis16505_read_diag_fls_mem_wr_cnt_exceed(void)
+void test_adis1650x_read_diag_fls_mem_wr_cnt_exceed(void)
 {
 	test_adis_read_diag_fls_mem_wr_cnt_exceed_1();
 	test_adis_read_diag_fls_mem_wr_cnt_exceed_2();
 }
 
-void test_adis16505_read_x_gyro(void)
+void test_adis1650x_read_x_gyro(void)
 {
 	test_adis_read_x_gyro_3();
 }
 
-void test_adis16505_read_y_gyro(void)
+void test_adis1650x_read_y_gyro(void)
 {
 	test_adis_read_y_gyro_3();
 }
 
-void test_adis16505_read_z_gyro(void)
+void test_adis1650x_read_z_gyro(void)
 {
 	test_adis_read_z_gyro_3();
 }
 
-void test_adis16505_read_x_accl(void)
+void test_adis1650x_read_x_accl(void)
 {
 	test_adis_read_x_accl_3();
 }
 
-void test_adis16505_read_y_accl(void)
+void test_adis1650x_read_y_accl(void)
 {
 	test_adis_read_y_accl_3();
 }
 
-void test_adis16505_read_z_accl(void)
+void test_adis1650x_read_z_accl(void)
 {
 	test_adis_read_z_accl_3();
 }
 
-void test_adis16505_read_temp_out(void)
+void test_adis1650x_read_temp_out(void)
 {
 	test_adis_read_temp_out_3();
 }
 
-void test_adis16505_read_time_stamp(void)
+void test_adis1650x_read_time_stamp(void)
 {
 	test_adis_read_time_stamp_size16();
 }
 
-void test_adis16505_read_data_cntr(void)
+void test_adis1650x_read_data_cntr(void)
 {
 	test_adis_read_data_cntr();
 }
 
-void test_adis16505_read_x_deltang(void)
+void test_adis1650x_read_x_deltang(void)
 {
 	test_adis_read_x_deltang_3();
 }
 
-void test_adis16505_read_y_deltang(void)
+void test_adis1650x_read_y_deltang(void)
 {
 	test_adis_read_y_deltang_3();
 }
 
-void test_adis16505_read_z_deltang(void)
+void test_adis1650x_read_z_deltang(void)
 {
 	test_adis_read_z_deltang_3();
 }
 
-void test_adis16505_read_x_deltvel(void)
+void test_adis1650x_read_x_deltvel(void)
 {
 	test_adis_read_x_deltvel_3();
 }
 
-void test_adis16505_read_y_deltvel(void)
+void test_adis1650x_read_y_deltvel(void)
 {
 	test_adis_read_y_deltvel_3();
 }
 
-void test_adis16505_read_z_deltvel(void)
+void test_adis1650x_read_z_deltvel(void)
 {
 	test_adis_read_z_deltvel_3();
 }
 
-void test_adis16505_read_xg_bias(void)
+void test_adis1650x_read_xg_bias(void)
 {
 	test_adis_read_xg_bias();
 }
 
-void test_adis16505_write_xg_bias(void)
+void test_adis1650x_write_xg_bias(void)
 {
 	test_adis_write_xg_bias();
 }
 
-void test_adis16505_read_yg_bias(void)
+void test_adis1650x_read_yg_bias(void)
 {
 	test_adis_read_yg_bias();
 }
 
-void test_adis16505_write_yg_bias(void)
+void test_adis1650x_write_yg_bias(void)
 {
 	test_adis_write_yg_bias();
 }
 
-void test_adis16505_read_zg_bias(void)
+void test_adis1650x_read_zg_bias(void)
 {
 	test_adis_read_zg_bias();
 }
 
-void test_adis16505_write_zg_bias(void)
+void test_adis1650x_write_zg_bias(void)
 {
 	test_adis_write_zg_bias();
 }
 
-void test_adis16505_read_xa_bias(void)
+void test_adis1650x_read_xa_bias(void)
 {
 	test_adis_read_xa_bias();
 }
 
-void test_adis16505_write_xa_bias(void)
+void test_adis1650x_write_xa_bias(void)
 {
 	test_adis_write_xa_bias();
 }
 
-void test_adis16505_read_ya_bias(void)
+void test_adis1650x_read_ya_bias(void)
 {
 	test_adis_read_ya_bias();
 }
 
-void test_adis16505_write_ya_bias(void)
+void test_adis1650x_write_ya_bias(void)
 {
 	test_adis_write_ya_bias();
 }
 
-void test_adis16505_read_za_bias(void)
+void test_adis1650x_read_za_bias(void)
 {
 	test_adis_read_za_bias();
 }
 
-void test_adis16505_write_za_bias(void)
+void test_adis1650x_write_za_bias(void)
 {
 	test_adis_write_za_bias();
 }
 
 
-void test_adis16505_read_filt_size_var_b(void)
+void test_adis1650x_read_filt_size_var_b(void)
 {
 	test_adis_read_filt_size_var_b();
 }
 
-void test_adis16505_write_filt_size_var_b(void)
+void test_adis1650x_write_filt_size_var_b(void)
 {
 	test_adis_write_filt_size_var_b_1();
 	test_adis_write_filt_size_var_b_2();
 	test_adis_write_filt_size_var_b_3();
 }
 
-void test_adis16505_read_gyro_meas_range(void)
+void test_adis1650x_read_gyro_meas_range(void)
 {
 	test_adis_read_gyro_meas_range();
 }
 
-void test_adis16505_read_dr_polarity(void)
+void test_adis1650x_read_dr_polarity(void)
 {
 	test_adis_read_dr_polarity();
 }
 
-void test_adis16505_write_dr_polarity(void)
+void test_adis1650x_write_dr_polarity(void)
 {
 	test_adis_write_dr_polarity_1();
 	test_adis_write_dr_polarity_2();
 	test_adis_write_dr_polarity_3();
 }
 
-void test_adis16505_read_sync_polarity(void)
+void test_adis1650x_read_sync_polarity(void)
 {
 	test_adis_read_sync_polarity();
 }
 
-void test_adis16505_write_sync_polarity(void)
+void test_adis1650x_write_sync_polarity(void)
 {
 	test_adis_write_sync_polarity_1();
 	test_adis_write_sync_polarity_2();
 	test_adis_write_sync_polarity_3();
 }
 
-void test_adis16505_read_sync_mode(void)
+void test_adis1650x_read_sync_mode(void)
 {
 	test_adis_read_sync_mode();
 }
 
-void test_adis16505_write_sync_mode(void)
+void test_adis1650x_write_sync_mode(void)
 {
 	test_adis_write_sync_mode_1();
 	test_adis_write_sync_mode_2();
@@ -392,67 +392,67 @@ void test_adis16505_write_sync_mode(void)
 	test_adis_write_sync_mode_9();
 }
 
-void test_adis16505_read_sens_bw(void)
+void test_adis1650x_read_sens_bw(void)
 {
 	test_adis_read_sens_bw();
 }
 
-void test_adis16505_write_sens_bw(void)
+void test_adis1650x_write_sens_bw(void)
 {
 	test_adis_write_sens_bw_1();
 	test_adis_write_sens_bw_2();
 }
 
-void test_adis16505_read_pt_of_perc_algnmt(void)
+void test_adis1650x_read_pt_of_perc_algnmt(void)
 {
 	test_adis_read_pt_of_perc_algnmt();
 }
 
-void test_adis16505_write_pt_of_perc_algnmt(void)
+void test_adis1650x_write_pt_of_perc_algnmt(void)
 {
 	test_adis_write_pt_of_perc_algnmt_1();
 	test_adis_write_pt_of_perc_algnmt_2();
 }
 
-void test_adis16505_read_linear_accl_comp(void)
+void test_adis1650x_read_linear_accl_comp(void)
 {
 	test_adis_read_linear_accl_comp();
 }
 
-void test_adis16505_write_linear_accl_comp(void)
+void test_adis1650x_write_linear_accl_comp(void)
 {
 	test_adis_write_linear_accl_comp_1();
 	test_adis_write_linear_accl_comp_2();
 }
 
-void test_adis16505_read_burst_sel(void)
+void test_adis1650x_read_burst_sel(void)
 {
 	test_adis_read_burst_sel();
 }
 
-void test_adis16505_write_burst_sel(void)
+void test_adis1650x_write_burst_sel(void)
 {
 	test_adis_write_burst_sel_1();
 	test_adis_write_burst_sel_2();
 }
 
-void test_adis16505_read_burst32(void)
+void test_adis1650x_read_burst32(void)
 {
 	test_adis_read_burst32();
 }
 
-void test_adis16505_write_burst32(void)
+void test_adis1650x_write_burst32(void)
 {
 	test_adis_write_burst32_1();
 	test_adis_write_burst32_2();
 }
 
-void test_adis16505_read_up_scale(void)
+void test_adis1650x_read_up_scale(void)
 {
 	test_adis_read_up_scale();
 }
 
-void test_adis16505_write_up_scale(void)
+void test_adis1650x_write_up_scale(void)
 {
 	test_adis_write_up_scale_1();
 	test_adis_write_up_scale_2();
@@ -460,123 +460,123 @@ void test_adis16505_write_up_scale(void)
 	test_adis_write_up_scale_4();
 }
 
-void test_adis16505_read_dec_rate(void)
+void test_adis1650x_read_dec_rate(void)
 {
 	test_adis_read_dec_rate();
 }
 
-void test_adis16505_write_dec_rate(void)
+void test_adis1650x_write_dec_rate(void)
 {
 	test_adis_write_dec_rate_1();
 	test_adis_write_dec_rate_2();
 	test_adis_write_dec_rate_3();
 }
 
-void test_adis16505_cmd_fact_calib_restore(void)
+void test_adis1650x_cmd_fact_calib_restore(void)
 {
 	test_adis_cmd_fact_calib_restore_1();
 	test_adis_cmd_fact_calib_restore_2();
 }
 
-void test_adis16505_cmd_snsr_self_test()
+void test_adis1650x_cmd_snsr_self_test()
 {
 	test_adis_cmd_snsr_self_test_1();
 	test_adis_cmd_snsr_self_test_2();
 }
 
-void test_adis16505_cmd_fls_mem_update(void)
+void test_adis1650x_cmd_fls_mem_update(void)
 {
 	test_adis_cmd_fls_mem_update_1();
 	test_adis_cmd_fls_mem_update_2();
 }
 
-void test_adis16505_cmd_fls_mem_test(void)
+void test_adis1650x_cmd_fls_mem_test(void)
 {
 	test_adis_cmd_fls_mem_test_1();
 	test_adis_cmd_fls_mem_test_2();
 }
 
-void test_adis16505_cmd_sw_res(void)
+void test_adis1650x_cmd_sw_res(void)
 {
 	test_adis_cmd_sw_res_1();
 	test_adis_cmd_sw_res_2();
 }
 
-void test_adis16505_read_firm_rev(void)
+void test_adis1650x_read_firm_rev(void)
 {
 	test_adis_read_firm_rev();
 }
 
-void test_adis16505_read_firm_d(void)
+void test_adis1650x_read_firm_d(void)
 {
 	test_adis_read_firm_d();
 }
 
-void test_adis16505_read_firm_m(void)
+void test_adis1650x_read_firm_m(void)
 {
 	test_adis_read_firm_m();
 }
 
-void test_adis16505_read_firm_y(void)
+void test_adis1650x_read_firm_y(void)
 {
 	test_adis_read_firm_y();
 }
 
-void test_adis16505_read_prod_id(void)
+void test_adis1650x_read_prod_id(void)
 {
 	test_adis_read_prod_id();
 }
 
-void test_adis16505_read_serial_num(void)
+void test_adis1650x_read_serial_num(void)
 {
 	test_adis_read_serial_num();
 }
 
-void test_adis16505_read_usr_scr_1(void)
+void test_adis1650x_read_usr_scr_1(void)
 {
 	test_adis_read_usr_scr_1();
 }
 
-void test_adis16505_write_usr_scr_1(void)
+void test_adis1650x_write_usr_scr_1(void)
 {
 	test_adis_write_usr_scr_1();
 }
 
-void test_adis16505_read_usr_scr_2(void)
+void test_adis1650x_read_usr_scr_2(void)
 {
 	test_adis_read_usr_scr_2();
 }
 
-void test_adis16505_write_usr_scr_2(void)
+void test_adis1650x_write_usr_scr_2(void)
 {
 	test_adis_write_usr_scr_2();
 }
 
-void test_adis16505_read_usr_scr_3(void)
+void test_adis1650x_read_usr_scr_3(void)
 {
 	test_adis_read_usr_scr_3();
 }
 
-void test_adis16505_write_usr_scr_3(void)
+void test_adis1650x_write_usr_scr_3(void)
 {
 	test_adis_write_usr_scr_3();
 }
 
-void test_adis16505_read_fls_mem_wr_cntr(void)
+void test_adis1650x_read_fls_mem_wr_cntr(void)
 {
 	test_adis_read_fls_mem_wr_cntr_1();
 	test_adis_read_fls_mem_wr_cntr_2();
 	test_adis_read_fls_mem_wr_cntr_3();
 }
 
-void test_adis16505_read_burst_data(void)
+void test_adis1650x_read_burst_data(void)
 {
 	test_adis_read_burst_data_1();
 	test_adis_read_burst_data_3();
 	test_adis_read_burst_data_5();
 }
 
-void test_adis16505_update_ext_clk_freq(void)
+void test_adis1650x_update_ext_clk_freq(void)
 {
 	test_adis_update_ext_clk_freq_1();
 	test_adis_update_ext_clk_freq_2();
@@ -586,7 +586,7 @@ void test_adis16505_update_ext_clk_freq(void)
 	test_adis_update_ext_clk_freq_6();
 }
 
-void test_adis16505_get_sync_clk_freq(void)
+void test_adis1650x_get_sync_clk_freq(void)
 {
 	test_adis_get_sync_clk_freq_1();
 	test_adis_get_sync_clk_freq_2();

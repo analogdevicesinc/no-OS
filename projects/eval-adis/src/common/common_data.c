@@ -48,7 +48,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-struct no_os_uart_init_param adis16505_uart_ip = {
+struct no_os_uart_init_param adis1650x_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
 	.asynchronous_rx = true,
@@ -60,7 +60,7 @@ struct no_os_uart_init_param adis16505_uart_ip = {
 	.platform_ops = UART_OPS,
 };
 
-struct no_os_spi_init_param adis16505_spi_ip = {
+struct no_os_spi_init_param adis1650x_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
 	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
@@ -71,7 +71,7 @@ struct no_os_spi_init_param adis16505_spi_ip = {
 };
 
 /* Initialization for Sync pin */
-struct no_os_gpio_init_param adis16505_gpio_reset_ip = {
+struct no_os_gpio_init_param adis1650x_gpio_reset_ip = {
 	.port = GPIO_RESET_PORT_NUM,
 	.number = GPIO_RESET_PIN_NUM,
 	.pull = NO_OS_PULL_NONE,
@@ -79,15 +79,15 @@ struct no_os_gpio_init_param adis16505_gpio_reset_ip = {
 	.extra = GPIO_EXTRA
 };
 
-struct adis_init_param adis16505_ip = {
-	.gpio_reset = &adis16505_gpio_reset_ip,
+struct adis_init_param adis1650x_ip = {
+	.gpio_reset = &adis1650x_gpio_reset_ip,
 	.sync_mode = ADIS_SYNC_OUTPUT,
 	.dev_id = ADIS16505_2,
 };
 
 #ifdef IIO_TRIGGER_EXAMPLE
 /* GPIO trigger */
-struct no_os_irq_init_param adis16505_gpio_irq_ip = {
+struct no_os_irq_init_param adis1650x_gpio_irq_ip = {
 	.irq_ctrl_id = GPIO_IRQ_ID,
 	.platform_ops = GPIO_IRQ_OPS,
 	.extra = GPIO_IRQ_EXTRA,
@@ -96,13 +96,13 @@ struct no_os_irq_init_param adis16505_gpio_irq_ip = {
 const struct iio_hw_trig_cb_info gpio_cb_info = {
 	.event = NO_OS_EVT_GPIO,
 	.peripheral = NO_OS_GPIO_IRQ,
-	.handle = ADIS16505_GPIO_CB_HANDLE,
+	.handle = ADIS1650X_GPIO_CB_HANDLE,
 };
 
-struct iio_hw_trig_init_param adis16505_gpio_trig_ip = {
-	.irq_id = ADIS16505_GPIO_TRIG_IRQ_ID,
+struct iio_hw_trig_init_param adis1650x_gpio_trig_ip = {
+	.irq_id = ADIS1650X_GPIO_TRIG_IRQ_ID,
 	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
 	.cb_info = gpio_cb_info,
-	.name = ADIS16505_GPIO_TRIG_NAME,
+	.name = ADIS1650X_GPIO_TRIG_NAME,
 };
 #endif
