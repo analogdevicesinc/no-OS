@@ -1,6 +1,7 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Definitions specific to pico platform used by eval-adis project.
+ *   @brief  Definitions specific to pico platform used by eval-adis1657x
+ *           project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.

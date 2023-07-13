@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   common_data.c
- *   @brief  Defines common data to be used by eval-adis examples.
+ *   @brief  Defines common data to be used by eval-adis1657x examples.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
