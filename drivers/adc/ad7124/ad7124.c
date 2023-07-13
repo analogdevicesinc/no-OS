@@ -65,7 +65,7 @@
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg* p_reg)
+				      struct ad7124_st_reg* p_reg)
 {
 	int32_t ret = 0;
 	uint8_t buffer[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -90,9 +90,9 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 
 	/* Read data from the device */
 	ret = no_os_spi_write_and_read(dev->spi_desc,
-		buffer,
-		((dev->use_crc != AD7124_DISABLE_CRC) ? p_reg->size + 1
-	 : p_reg->size) + 1 + add_status_length);
+				       buffer,
+				       ((dev->use_crc != AD7124_DISABLE_CRC) ? p_reg->size + 1
+					: p_reg->size) + 1 + add_status_length);
 	if (ret)
 		return ret;
 
@@ -134,7 +134,7 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg reg)
+				       struct ad7124_st_reg reg)
 {
 	int32_t reg_value = 0;
 	uint8_t wr_buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -162,9 +162,9 @@ int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
 	}
 
 	return no_os_spi_write_and_read(dev->spi_desc,
-		wr_buf,
-		(dev->use_crc != AD7124_DISABLE_CRC) ? reg.size + 2
-		: reg.size + 1);
+					wr_buf,
+					(dev->use_crc != AD7124_DISABLE_CRC) ? reg.size + 2
+					: reg.size + 1);
 }
 
 /***************************************************************************//**
@@ -179,19 +179,19 @@ int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_read_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg* p_reg)
+			     struct ad7124_st_reg* p_reg)
 {
 	int32_t ret;
 
 	if (p_reg->addr != AD7124_ERR_REG && dev->check_ready) {
 		ret = ad7124_wait_for_spi_ready(dev,
-			dev->spi_rdy_poll_cnt);
+						dev->spi_rdy_poll_cnt);
 		if (ret)
 			return ret;
 	}
 
 	return ad7124_no_check_read_register(dev,
-		p_reg);
+					     p_reg);
 }
 
 /***************************************************************************//**
@@ -202,8 +202,8 @@ int32_t ad7124_read_register(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 ***************************************************************************/
 int32_t ad7124_read_register2(struct ad7124_dev *dev,
-	uint32_t reg,
-	uint32_t *readval)
+			      uint32_t reg,
+			      uint32_t *readval)
 {
 	int32_t ret;
 
@@ -226,19 +226,19 @@ int32_t ad7124_read_register2(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 ********************************************************************************/
 int32_t ad7124_write_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg p_reg)
+			      struct ad7124_st_reg p_reg)
 {
 	int32_t ret;
 
 	if (dev->check_ready) {
 		ret = ad7124_wait_for_spi_ready(dev,
-			dev->spi_rdy_poll_cnt);
+						dev->spi_rdy_poll_cnt);
 		if (ret)
 			return ret;
 	}
 
 	return ad7124_no_check_write_register(dev,
-		p_reg);
+					      p_reg);
 }
 
 /***************************************************************************//**
@@ -249,8 +249,8 @@ int32_t ad7124_write_register(struct ad7124_dev *dev,
  * @return 0 in case of success, error code otherwise.
 ******************************************************************************/
 int32_t ad7124_write_register2(struct ad7124_dev *dev,
-	uint32_t reg,
-	uint32_t writeval)
+			       uint32_t reg,
+			       uint32_t writeval)
 {
 	dev->regs[reg].value = writeval;
 
@@ -295,7 +295,7 @@ int32_t ad7124_reset(struct ad7124_dev *dev)
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_wait_for_spi_ready(struct ad7124_dev *dev,
-	uint32_t timeout)
+				  uint32_t timeout)
 {
 	struct ad7124_st_reg *regs;
 	int32_t ret;
@@ -331,7 +331,7 @@ int32_t ad7124_wait_for_spi_ready(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_wait_to_power_on(struct ad7124_dev *dev,
-	uint32_t timeout)
+				uint32_t timeout)
 {
 	struct ad7124_st_reg *regs;
 	int32_t ret;
@@ -344,7 +344,7 @@ int32_t ad7124_wait_to_power_on(struct ad7124_dev *dev,
 
 	while (!powered_on && timeout--) {
 		ret = ad7124_read_register(dev,
-			&regs[AD7124_Status]);
+					   &regs[AD7124_Status]);
 		if (ret)
 			return ret;
 
@@ -367,7 +367,7 @@ int32_t ad7124_wait_to_power_on(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
-	uint32_t timeout)
+				   uint32_t timeout)
 {
 	struct ad7124_st_reg *regs;
 	int32_t ret;
@@ -401,7 +401,7 @@ int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_read_data(struct ad7124_dev *dev,
-	int32_t* p_data)
+			 int32_t* p_data)
 {
 	struct ad7124_st_reg *regs;
 	int32_t ret;
@@ -459,8 +459,7 @@ uint8_t ad7124_compute_crc8(uint8_t * p_buf, uint8_t buf_size)
 				/* MSB of CRC register XOR input Bit from Data */
 				crc <<= 1;
 				crc ^= AD7124_CRC8_POLYNOMIAL_REPRESENTATION;
-			}
-			else
+			} else
 				crc <<= 1;
 		}
 		p_buf++;
@@ -555,8 +554,8 @@ int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk)
  * @return Returns 0 for success or negative error code otherwise.
 ******************************************************************************/
 int32_t ad7124_fltcoff_get(struct ad7124_dev *dev,
-	int16_t chn_num,
-	uint16_t *flt_coff)
+			   int16_t chn_num,
+			   uint16_t *flt_coff)
 {
 	uint16_t power_mode;
 	int32_t ret;
@@ -618,8 +617,8 @@ float ad7124_get_odr(struct ad7124_dev *dev, int16_t chn_num)
 		return ret;
 
 	ret = ad7124_read_register2(dev,
-		(AD7124_Filter_0 + chn_num),
-		&reg_temp);
+				    (AD7124_Filter_0 + chn_num),
+				    &reg_temp);
 	if (ret)
 		return ret;
 
@@ -656,8 +655,8 @@ float ad7124_get_odr(struct ad7124_dev *dev, int16_t chn_num)
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_set_odr(struct ad7124_dev *dev,
-	float odr,
-	int16_t chn_num)
+		       float odr,
+		       int16_t chn_num)
 {
 	float f_clk;
 	uint16_t flt_coff, fs_value;
@@ -679,8 +678,8 @@ int32_t ad7124_set_odr(struct ad7124_dev *dev,
 		fs_value = 2047;
 
 	ret = ad7124_read_register2(dev,
-		(AD7124_Filter_0 + chn_num),
-		&reg_temp);
+				    (AD7124_Filter_0 + chn_num),
+				    &reg_temp);
 	if (ret)
 		return ret;
 
@@ -699,9 +698,9 @@ int32_t ad7124_set_odr(struct ad7124_dev *dev,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int ad7124_reg_write_msk(struct ad7124_dev *dev,
-	uint32_t reg_addr,
-	uint32_t data,
-	uint32_t mask)
+			 uint32_t reg_addr,
+			 uint32_t data,
+			 uint32_t mask)
 {
 	int ret;
 	uint32_t reg_data;
@@ -730,9 +729,9 @@ int ad7124_set_adc_mode(struct ad7124_dev *device, enum ad7124_mode adc_mode)
 		return -EINVAL;
 
 	ret = ad7124_reg_write_msk(device,
-		AD7124_ADC_CTRL_REG,
-		no_os_field_prep(AD7124_ADC_CTRL_REG_MODE_MSK, adc_mode),
-		AD7124_ADC_CTRL_REG_MODE_MSK);
+				   AD7124_ADC_CTRL_REG,
+				   no_os_field_prep(AD7124_ADC_CTRL_REG_MODE_MSK, adc_mode),
+				   AD7124_ADC_CTRL_REG_MODE_MSK);
 	if (ret)
 		return ret;
 
@@ -749,8 +748,8 @@ int ad7124_set_adc_mode(struct ad7124_dev *device, enum ad7124_mode adc_mode)
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int ad7124_set_channel_status(struct ad7124_dev *device,
-	uint8_t chn_num,
-	bool channel_status)
+			      uint8_t chn_num,
+			      bool channel_status)
 {
 	int ret;
 
@@ -760,9 +759,9 @@ int ad7124_set_channel_status(struct ad7124_dev *device,
 		channel_status = 0x0U;
 
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CH0_MAP_REG+chn_num,
-		channel_status,
-		AD7124_CH_MAP_REG_CH_ENABLE);
+				   AD7124_CH0_MAP_REG+chn_num,
+				   channel_status,
+				   AD7124_CH_MAP_REG_CH_ENABLE);
 	if (ret)
 		return ret;
 
@@ -779,24 +778,24 @@ int ad7124_set_channel_status(struct ad7124_dev *device,
  * @return Returns 0 for success or negative error code otherwise.
 *****************************************************************************/
 int ad7124_connect_analog_input(struct ad7124_dev *device,
-	uint8_t chn_num,
-	struct ad7124_analog_inputs analog_input)
+				uint8_t chn_num,
+				struct ad7124_analog_inputs analog_input)
 {
 	int ret;
 
 	/* Select the Positive Analog Input */
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CH0_MAP_REG+chn_num,
-		no_os_field_prep(AD7124_CHMAP_REG_AINPOS_MSK, analog_input.ainp),
-		AD7124_CHMAP_REG_AINPOS_MSK);
+				   AD7124_CH0_MAP_REG+chn_num,
+				   no_os_field_prep(AD7124_CHMAP_REG_AINPOS_MSK, analog_input.ainp),
+				   AD7124_CHMAP_REG_AINPOS_MSK);
 	if (ret)
 		return ret;
 
 	/* Select the Negative Analog Input */
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CH0_MAP_REG+chn_num,
-		no_os_field_prep(AD7124_CHMAP_REG_AINNEG_MSK, analog_input.ainm),
-		AD7124_CHMAP_REG_AINNEG_MSK);
+				   AD7124_CH0_MAP_REG+chn_num,
+				   no_os_field_prep(AD7124_CHMAP_REG_AINNEG_MSK, analog_input.ainm),
+				   AD7124_CHMAP_REG_AINNEG_MSK);
 	if (ret)
 		return ret;
 
@@ -816,16 +815,16 @@ int ad7124_connect_analog_input(struct ad7124_dev *device,
  * @return Returns 0 for success or negative error code otherwise.
 ******************************************************************************/
 int ad7124_assign_setup(struct ad7124_dev *device,
-	uint8_t chn_num,
-	uint8_t setup)
+			uint8_t chn_num,
+			uint8_t setup)
 {
 	int ret;
 
 	/* Assign setup to the Channel Register. */
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CH0_MAP_REG+chn_num,
-		no_os_field_prep(AD7124_CHMAP_REG_SETUP_SEL_MSK, setup),
-		AD7124_CHMAP_REG_SETUP_SEL_MSK);
+				   AD7124_CH0_MAP_REG+chn_num,
+				   no_os_field_prep(AD7124_CHMAP_REG_SETUP_SEL_MSK, setup),
+				   AD7124_CHMAP_REG_SETUP_SEL_MSK);
 	if (ret)
 		return (ret);
 
@@ -843,8 +842,8 @@ int ad7124_assign_setup(struct ad7124_dev *device,
  * @return Returns 0 for success or negative error code otherwise.
 *****************************************************************************/
 int ad7124_set_polarity(struct ad7124_dev* device,
-	bool bipolar,
-	uint8_t setup_id)
+			bool bipolar,
+			uint8_t setup_id)
 {
 	int ret;
 
@@ -854,9 +853,9 @@ int ad7124_set_polarity(struct ad7124_dev* device,
 		bipolar = 0x0U;
 
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CFG0_REG+setup_id,
-		bipolar,
-		AD7124_CFG_REG_BIPOLAR);
+				   AD7124_CFG0_REG+setup_id,
+				   bipolar,
+				   AD7124_CFG_REG_BIPOLAR);
 	if (ret)
 		return ret;
 
@@ -873,9 +872,9 @@ int ad7124_set_polarity(struct ad7124_dev* device,
  * @return Returns 0 for success or negative error code otherwise.
 ******************************************************************************/
 int ad7124_set_reference_source(struct ad7124_dev* device,
-	enum ad7124_reference_source ref_source,
-	uint8_t setup_id,
-	bool ref_en)
+				enum ad7124_reference_source ref_source,
+				uint8_t setup_id,
+				bool ref_en)
 {
 	int ret;
 
@@ -883,9 +882,9 @@ int ad7124_set_reference_source(struct ad7124_dev* device,
 		return -EINVAL;
 
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CFG0_REG+setup_id,
-		no_os_field_prep(AD7124_SETUP_CONF_REG_REF_SEL_MSK, ref_source),
-		AD7124_SETUP_CONF_REG_REF_SEL_MSK);
+				   AD7124_CFG0_REG+setup_id,
+				   no_os_field_prep(AD7124_SETUP_CONF_REG_REF_SEL_MSK, ref_source),
+				   AD7124_SETUP_CONF_REG_REF_SEL_MSK);
 	if (ret)
 		return ret;
 
@@ -899,9 +898,9 @@ int ad7124_set_reference_source(struct ad7124_dev* device,
 	/* Enable the REF_EN Bit in case of Internal reference */
 	if (ref_source == INTERNAL_REF) {
 		ret = ad7124_reg_write_msk(device,
-			AD7124_ADC_CTRL_REG,
-			ref_en,
-			AD7124_ADC_CTRL_REG_REF_EN);
+					   AD7124_ADC_CTRL_REG,
+					   ref_en,
+					   AD7124_ADC_CTRL_REG_REF_EN);
 		if (ret)
 			return ret;
 	}
@@ -920,9 +919,9 @@ int ad7124_set_reference_source(struct ad7124_dev* device,
  * @return Returns 0 for success or negative error code otherwise.
 ******************************************************************************/
 int ad7124_enable_buffers(struct ad7124_dev* device,
-	bool inbuf_en,
-	bool refbuf_en,
-	uint8_t setup_id)
+			  bool inbuf_en,
+			  bool refbuf_en,
+			  uint8_t setup_id)
 {
 	int ret;
 	uint32_t reg_val;
@@ -930,28 +929,28 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 	if (inbuf_en)
 		/* Enable input buffer for the chosen set up. */
 		reg_val = (AD7124_CFG_REG_AIN_BUFP |
-			AD7124_CFG_REG_AINN_BUFM);
+			   AD7124_CFG_REG_AINN_BUFM);
 	else
 		reg_val =  0;
 
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CFG0_REG+setup_id,
-		reg_val,
-		AD7124_AIN_BUF_MSK);
+				   AD7124_CFG0_REG+setup_id,
+				   reg_val,
+				   AD7124_AIN_BUF_MSK);
 	if (ret)
 		return ret;
 
 	if (refbuf_en)
 		/* Enable reference buffer for the chosen set up */
 		reg_val = (AD7124_CFG_REG_REF_BUFP |
-			AD7124_CFG_REG_REF_BUFM);
+			   AD7124_CFG_REG_REF_BUFM);
 	else
 		reg_val = 0;
 
 	ret = ad7124_reg_write_msk(device,
-		AD7124_CFG0_REG+setup_id,
-		reg_val,
-		AD7124_REF_BUF_MSK);
+				   AD7124_CFG0_REG+setup_id,
+				   reg_val,
+				   AD7124_REF_BUF_MSK);
 	if (ret)
 		return ret;
 
@@ -969,7 +968,7 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
  * @return Returns 0 for success or negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_setup(struct ad7124_dev **device,
-	struct ad7124_init_param *init_param)
+		     struct ad7124_init_param *init_param)
 {
 	int32_t ret;
 	struct ad7124_dev *dev;
@@ -1014,30 +1013,29 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	if (dev->active_device == ID_AD7124_4) {
 		if (!(dev->regs[AD7124_ID_REG].value = AD7124_4_ID))
 			goto error_spi;
-	}
-	else if (dev->active_device == ID_AD7124_8) {
+	} else if (dev->active_device == ID_AD7124_8) {
 		if (!(dev->regs[AD7124_ID_REG].value = AD7124_8_ID))
 			goto error_spi;
 	}
 
 	for (setup_index = 0; setup_index < AD7124_MAX_SETUPS; setup_index++) {
 		ret = ad7124_set_polarity(dev,
-			init_param->setups[setup_index].bi_unipolar,
-			setup_index);
+					  init_param->setups[setup_index].bi_unipolar,
+					  setup_index);
 		if (ret)
 			goto error_spi;
 
 		ret = ad7124_set_reference_source(dev,
-			init_param->setups[setup_index].ref_source,
-			setup_index,
-			init_param->ref_en);
+						  init_param->setups[setup_index].ref_source,
+						  setup_index,
+						  init_param->ref_en);
 		if (ret)
 			goto error_spi;
 
 		ret = ad7124_enable_buffers(dev,
-			init_param->setups[setup_index].ain_buff,
-			init_param->setups[setup_index].ref_buff,
-			setup_index);
+					    init_param->setups[setup_index].ain_buff,
+					    init_param->setups[setup_index].ref_buff,
+					    setup_index);
 		if (ret)
 			goto error_spi;
 	}
@@ -1048,20 +1046,20 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 
 	for (ch_index = 0; ch_index < AD7124_MAX_CHANNELS; ch_index++) {
 		ret = ad7124_connect_analog_input(dev,
-			ch_index,
-			init_param->chan_map[ch_index].ain);
+						  ch_index,
+						  init_param->chan_map[ch_index].ain);
 		if (ret)
 			goto error_spi;
 
 		ret = ad7124_assign_setup(dev,
-			ch_index,
-			init_param->chan_map[ch_index].setup_sel);
+					  ch_index,
+					  init_param->chan_map[ch_index].setup_sel);
 		if (ret)
 			goto error_spi;
 
 		ret = ad7124_set_channel_status(dev,
-			ch_index,
-			init_param->chan_map[ch_index].channel_enable);
+						ch_index,
+						init_param->chan_map[ch_index].channel_enable);
 		if (ret)
 			goto error_spi;
 	}
@@ -1069,7 +1067,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	*device = dev;
 
 	return 0;
-	
+
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:

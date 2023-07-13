@@ -306,7 +306,7 @@ enum ad7124_mode {
 };
 
 /**
- * @enum ad7124_input
+ * @enum ad7124_analog_input
  * @brief ADC input sources for each channel.
  **/
 enum ad7124_analog_input {
@@ -506,59 +506,59 @@ struct ad7124_init_param {
 /******************************************************************************/
 /* Reads the value of the specified register without a device state check. */
 int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg* p_reg);
+				      struct ad7124_st_reg* p_reg);
 
 /* Writes the value of the specified register without a device state check. */
 int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg reg);
+				       struct ad7124_st_reg reg);
 
 /* Reads the value of the specified register. */
 int32_t ad7124_read_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg* p_reg);
+			     struct ad7124_st_reg* p_reg);
 
 /* Wrap the read register function to give it a modern signature. */
 int32_t ad7124_read_register2(struct ad7124_dev *dev,
-	uint32_t reg,
-	uint32_t *readval);
+			      uint32_t reg,
+			      uint32_t *readval);
 
 /* Writes the value of the specified register. */
 int32_t ad7124_write_register(struct ad7124_dev *dev,
-	struct ad7124_st_reg reg);
+			      struct ad7124_st_reg reg);
 
 /* Wrap the write register function to give it a modern signature. */
 int32_t ad7124_write_register2(struct ad7124_dev *dev,
-	uint32_t reg,
-	uint32_t writeval);
+			       uint32_t reg,
+			       uint32_t writeval);
 
 /* Resets the device. */
 int32_t ad7124_reset(struct ad7124_dev *dev);
 
 /* Waits until the device can accept read and write user actions. */
 int32_t ad7124_wait_for_spi_ready(struct ad7124_dev *dev,
-	uint32_t timeout);
+				  uint32_t timeout);
 
 /* Waits until the device finishes the power-on reset operation. */
 int32_t ad7124_wait_to_power_on(struct ad7124_dev *dev,
-	uint32_t timeout);
+				uint32_t timeout);
 
 /* Waits until a new conversion result is available. */
 int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
-	uint32_t timeout);
+				   uint32_t timeout);
 
 /* Reads the conversion result from the device. */
 int32_t ad7124_read_data(struct ad7124_dev *dev,
-	int32_t* p_data);
+			 int32_t* p_data);
 
 /* Get the ID of the channel of the latest conversion. */
 int32_t ad7124_get_read_chan_id(struct ad7124_dev *dev, uint32_t *status);
 
 /* Computes the CRC checksum for a data buffer. */
 uint8_t ad7124_compute_crc8(uint8_t* p_buf,
-	uint8_t buf_size);
+			    uint8_t buf_size);
 
 /* Computes the XOR checksum for a data buffer. */
 uint8_t AD7124_ComputeXOR8(uint8_t * p_buf,
-	uint8_t buf_size);
+			   uint8_t buf_size);
 
 /* Updates the CRC settings. */
 void ad7124_update_crcsetting(struct ad7124_dev *dev);
@@ -571,61 +571,61 @@ int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk);
 
 /* Get the filter coefficient for the sample rate. */
 int32_t ad7124_fltcoff_get(struct ad7124_dev *dev,
-	int16_t chn_no,
-	uint16_t *flt_coff);
+			   int16_t chn_no,
+			   uint16_t *flt_coff);
 
 /* Calculate ODR of the device. */
 float ad7124_get_odr(struct ad7124_dev *dev, int16_t ch_no);
 
 /* Set ODR of the device. */
 int32_t ad7124_set_odr(struct ad7124_dev *dev,
-	float odr,
-	int16_t chn_no);
+		       float odr,
+		       int16_t chn_no);
 
 /* SPI write to device using a mask. */
 int ad7124_reg_write_msk(struct ad7124_dev *dev,
-	uint32_t reg_addr,
-	uint32_t data,
-	uint32_t mask);
+			 uint32_t reg_addr,
+			 uint32_t data,
+			 uint32_t mask);
 
 /* Set ADC Mode */
 int ad7124_set_adc_mode(struct ad7124_dev *device, enum ad7124_mode mode);
 
 /* Enable/Disable Channels */
 int ad7124_set_channel_status(struct ad7124_dev *device,
-	uint8_t chn_no,
-	bool channel_status);
+			      uint8_t chn_no,
+			      bool channel_status);
 
 /* Configure Analog inputs to channel */
 int ad7124_connect_analog_input(struct ad7124_dev *device,
-	uint8_t chn_no,
-	struct ad7124_analog_inputs analog_input);
+				uint8_t chn_no,
+				struct ad7124_analog_inputs analog_input);
 
 /* Assign setup to channel */
 int ad7124_assign_setup(struct ad7124_dev *device,
-	uint8_t ch_no,
-	uint8_t setup);
+			uint8_t ch_no,
+			uint8_t setup);
 
 /* Assign polarity to setup */
 int ad7124_set_polarity(struct ad7124_dev* device,
-	bool bipolar,
-	uint8_t setup_id);
+			bool bipolar,
+			uint8_t setup_id);
 
 /* Assign reference source to setup */
 int ad7124_set_reference_source(struct ad7124_dev* device,
-	enum ad7124_reference_source ref_source,
-	uint8_t setup_id,
-	bool ref_en);
+				enum ad7124_reference_source ref_source,
+				uint8_t setup_id,
+				bool ref_en);
 
 /* Enable/Disable input and reference buffers to setup */
 int ad7124_enable_buffers(struct ad7124_dev* device,
-	bool ain_buff,
-	bool ref_buff,
-	uint8_t setup_id);
+			  bool ain_buff,
+			  bool ref_buff,
+			  uint8_t setup_id);
 
 /* Initializes the AD7124 */
 int32_t ad7124_setup(struct ad7124_dev **device,
-	struct ad7124_init_param *init_param);
+		     struct ad7124_init_param *init_param);
 
 /* Free the resources allocated by ad7124_setup(). */
 int32_t ad7124_remove(struct ad7124_dev *dev);
