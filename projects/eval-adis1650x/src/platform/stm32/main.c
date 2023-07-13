@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-adis project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of eval-adis1650x project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -41,28 +41,58 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "parameters.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-struct stm32_uart_init_param adis1650x_uart_extra_ip = {
-	.huart = &huart5,
-};
-
-
-struct stm32_spi_init_param adis1650x_spi_extra_ip  = {
-	.chip_select_port = SPI_CS_PORT,
-};
-
-struct stm32_gpio_init_param adis1650x_gpio_reset_extra_ip = {
-	.mode = GPIO_MODE_OUTPUT_OD,
-	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
-};
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
 
 #ifdef IIO_TRIGGER_EXAMPLE
-struct stm32_gpio_irq_init_param adis1650x_gpio_irq_extra_ip = {
-	.port_nb = 0, /* Port A */
-};
+#include "iio_trigger_example.h"
 #endif
+
+#ifdef DUMMY_EXAMPLE
+#include "dummy_example.h"
+#endif
+
+/******************************************************************************/
+/************************* Functions Definitions ******************************/
+/******************************************************************************/
+
+/**
+ * @brief Main function execution for STM32 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+ */
+int main()
+{
+	int ret = -EINVAL;
+	adis1650x_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
+	adis1650x_ip.spi_init = &adis1650x_spi_ip;
+
+	stm32_init();
+
+#ifdef IIO_TRIGGER_EXAMPLE
+	ret = iio_trigger_example_main();
+#endif
+
+#ifdef DUMMY_EXAMPLE
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &adis1650x_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+	ret = dummy_example_main();
+	if (ret)
+		no_os_uart_remove(uart_desc);
+#endif
+
+#if (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}

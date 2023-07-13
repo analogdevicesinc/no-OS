@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Maxim platform data used by eval-adis project.
+ *   @file   platform_includes.h
+ *   @brief  Includes for used platforms used by eval-adis1650x project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,41 +37,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef __PLATFORM_INCLUDES_H__
+#define __PLATFORM_INCLUDES_H__
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "parameters.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-struct max_uart_init_param adis1650x_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
-};
-
-struct max_gpio_init_param adis1650x_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
-struct max_spi_init_param adis1650x_spi_extra_ip  = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
-#ifdef IIO_TRIGGER_EXAMPLE
-/* Initialization for Sync pin GPIO. */
-struct no_os_gpio_init_param adis_gpio_drdy_ip = {
-	.port = GPIO_DRDY_PORT_NUM,
-	.number = GPIO_DRDY_PIN_NUM,
-	.pull = NO_OS_PULL_NONE,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA
-};
-
-struct max_gpio_init_param adis_gpio_drdy_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
+#ifdef PICO_PLATFORM
+#include "pico/parameters.h"
 #endif
+
+#ifdef MAXIM_PLATFORM
+#include "maxim/parameters.h"
+#endif
+
+#ifdef STM32_PLATFORM
+#include "stm32/parameters.h"
+#endif
+
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#endif
+
+#endif /* __PLATFORM_INCLUDES_H__ */
