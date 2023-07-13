@@ -855,6 +855,7 @@ int adin1110_init(struct adin1110_desc **desc,
 		  struct adin1110_init_param *param)
 {
 	struct adin1110_desc *descriptor;
+	uint16_t led_ctrl;
 	int ret;
 
 	if (!param->mac_address)
@@ -916,6 +917,23 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_spi;
+
+	ret = adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8C82, &led_ctrl);
+	if (ret)
+		return ret;
+
+	led_ctrl &= ~NO_OS_GENMASK(4, 0);
+	led_ctrl &= ~NO_OS_GENMASK(12, 8);
+	led_ctrl |= no_os_field_prep(NO_OS_GENMASK(4, 0), 0xE);
+	led_ctrl |= no_os_field_prep(NO_OS_GENMASK(12, 8), 0xE);
+
+	ret = adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8C82, led_ctrl);
+	if (ret)
+		return ret;
+
+	ret = adin1110_mdio_read_c45(descriptor, 0x1, 0x1E, 0x8C82, &led_ctrl);
+	if (ret)
+		return ret;
 
 	*desc = descriptor;
 
