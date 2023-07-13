@@ -4,7 +4,7 @@
 *   	     Devices AD7124-4, AD7124-8
 *
 ********************************************************************************
-* Copyright 2015-2019(c) Analog Devices, Inc.
+* Copyright 2015-2019, 2023(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -49,7 +49,7 @@
 #include "no_os_delay.h"
 
 /******************************************************************************/
-/******************* Register map and register definitions ********************/
+/******************* Macros and Constants Definitions ********************/
 /******************************************************************************/
 
 #define	AD7124_RW 1   /* Read and Write */
@@ -257,11 +257,15 @@
 #define AD7124_FILT_REG_SINGLE_CYCLE      (1 << 16)
 #define AD7124_FILT_REG_FS(x)             (((x) & 0x7FF) << 0)
 
+#define AD7124_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
+#define AD7124_DISABLE_CRC 0
+#define AD7124_USE_CRC 1
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/*! Device register info */
+/* Device register info */
 struct ad7124_st_reg {
 	int32_t addr;
 	int32_t value;
@@ -269,9 +273,9 @@ struct ad7124_st_reg {
 	int32_t rw;
 };
 
-/*! AD7124 registers list*/
+/* AD7124 registers list*/
 enum ad7124_registers {
-	AD7124_Status = 0x00,
+	AD7124_Status,
 	AD7124_ADC_Control,
 	AD7124_Data,
 	AD7124_IOCon1,
@@ -362,90 +366,92 @@ struct ad7124_init_param {
 };
 
 /******************************************************************************/
-/******************* AD7124 Constants *****************************************/
-/******************************************************************************/
-#define AD7124_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
-#define AD7124_DISABLE_CRC 0
-#define AD7124_USE_CRC 1
-
-/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-
-/*! Reads the value of the specified register. */
-int32_t ad7124_read_register(struct ad7124_dev *dev,
-			     struct ad7124_st_reg* p_reg);
-
-/*! Wrap the read register function to give it a modern signature. */
-int32_t ad7124_read_register2(struct ad7124_dev *dev, uint32_t reg,
-			      uint32_t *readval);
-
-/*! Writes the value of the specified register. */
-int32_t ad7124_write_register(struct ad7124_dev *dev,
-			      struct ad7124_st_reg reg);
-
-/*! Wrap the write register function to give it a modern signature. */
-int32_t ad7124_write_register2(struct ad7124_dev *dev, uint32_t reg,
-			       uint32_t writeval);
-
-/*! Reads the value of the specified register without a device state check. */
+/* Reads the value of the specified register without a device state check. */
 int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 				      struct ad7124_st_reg* p_reg);
 
-/*! Writes the value of the specified register without a device state check. */
+/* Writes the value of the specified register without a device state check. */
 int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
 				       struct ad7124_st_reg reg);
 
-/*! Resets the device. */
+/* Reads the value of the specified register. */
+int32_t ad7124_read_register(struct ad7124_dev *dev,
+			     struct ad7124_st_reg* p_reg);
+
+/* Wrap the read register function to give it a modern signature. */
+int32_t ad7124_read_register2(struct ad7124_dev *dev,
+			      uint32_t reg,
+			      uint32_t *readval);
+
+/* Writes the value of the specified register. */
+int32_t ad7124_write_register(struct ad7124_dev *dev,
+			      struct ad7124_st_reg reg);
+
+/* Wrap the write register function to give it a modern signature. */
+int32_t ad7124_write_register2(struct ad7124_dev *dev,
+			       uint32_t reg,
+			       uint32_t writeval);
+
+/* Resets the device. */
 int32_t ad7124_reset(struct ad7124_dev *dev);
 
-/*! Waits until the device can accept read and write user actions. */
+/* Waits until the device can accept read and write user actions. */
 int32_t ad7124_wait_for_spi_ready(struct ad7124_dev *dev,
 				  uint32_t timeout);
 
-/*! Waits until the device finishes the power-on reset operation. */
+/* Waits until the device finishes the power-on reset operation. */
 int32_t ad7124_wait_to_power_on(struct ad7124_dev *dev,
 				uint32_t timeout);
 
-/*! Waits until a new conversion result is available. */
+/* Waits until a new conversion result is available. */
 int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
 				   uint32_t timeout);
 
-/*! Reads the conversion result from the device. */
+/* Reads the conversion result from the device. */
 int32_t ad7124_read_data(struct ad7124_dev *dev,
 			 int32_t* p_data);
 
-/*! Get the ID of the channel of the latest conversion. */
+/* Get the ID of the channel of the latest conversion. */
 int32_t ad7124_get_read_chan_id(struct ad7124_dev *dev, uint32_t *status);
 
-/*! Computes the CRC checksum for a data buffer. */
+/* Computes the CRC checksum for a data buffer. */
 uint8_t ad7124_compute_crc8(uint8_t* p_buf,
 			    uint8_t buf_size);
 
-/*! Updates the CRC settings. */
+/* Computes the XOR checksum for a data buffer. */
+uint8_t AD7124_ComputeXOR8(uint8_t * p_buf,
+			   uint8_t buf_size);
+
+/* Updates the CRC settings. */
 void ad7124_update_crcsetting(struct ad7124_dev *dev);
 
-/*! Updates the device SPI interface settings. */
+/* Updates the device SPI interface settings. */
 void ad7124_update_dev_spi_settings(struct ad7124_dev *dev);
 
-/*! Get the AD7124 reference clock. */
+/* Get the AD7124 reference clock. */
 int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk);
 
-/*! Get the filter coefficient for the sample rate. */
-int32_t ad7124_fltcoff_get(struct ad7124_dev *dev, int16_t ch_no,
+/* Get the filter coefficient for the sample rate. */
+int32_t ad7124_fltcoff_get(struct ad7124_dev *dev,
+			   int16_t chn_no,
 			   uint16_t *flt_coff);
 
-/*! Calculate ODR of the device. */
+/* Calculate ODR of the device. */
 float ad7124_get_odr(struct ad7124_dev *dev, int16_t ch_no);
 
-/*! Set ODR of the device. */
-int32_t ad7124_set_odr(struct ad7124_dev *dev, float odr,
-		       int16_t ch_no);
+/* Set ODR of the device. */
+int32_t ad7124_set_odr(struct ad7124_dev *dev,
+		       float odr,
+		       int16_t chn_no);
 
-/*! Initializes the AD7124. */
+/* Initializes the AD7124. */
 int32_t ad7124_setup(struct ad7124_dev **device,
 		     struct ad7124_init_param *init_param);
-/*! Free the resources allocated by AD7124_Setup(). */
+
+/* Free the resources allocated by ad7124_setup(). */
 int32_t ad7124_remove(struct ad7124_dev *dev);
 
 #endif /* __AD7124_H__ */
+
