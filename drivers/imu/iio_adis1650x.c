@@ -51,40 +51,64 @@
 
 /* Values from datasheet for 32-bit data */
 static const struct adis_iio_scale_fractional adis1650x_gyro_scale[] = {
+	[ADIS16500]   = {1, RAD_TO_DEGREE(655360)},
 	[ADIS16505_1] = {1, RAD_TO_DEGREE(10485760)},
 	[ADIS16505_2] = {1, RAD_TO_DEGREE(2621440)},
 	[ADIS16505_3] = {1, RAD_TO_DEGREE(655360)},
+	[ADIS16507_1] = {1, RAD_TO_DEGREE(10485760)},
+	[ADIS16507_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16507_3] = {1, RAD_TO_DEGREE(655360)},
 };
 
 static const struct adis_iio_scale_fractional adis1650x_accl_scale[] = {
-	[ADIS16505_1] = {1, 26756268},
-	[ADIS16505_2] = {1, 26756268},
-	[ADIS16505_3] = {1, 26756268},
+	[ADIS16500]   = {1, 5349877},
+	[ADIS16505_1] = {1, 26783550},
+	[ADIS16505_2] = {1, 26783550},
+	[ADIS16505_3] = {1, 26783550},
+	[ADIS16507_1] = {1, 5349877},
+	[ADIS16507_2] = {1, 5349877},
+	[ADIS16507_3] = {1, 5349877},
 };
 
 static const struct adis_iio_scale_fractional_log2 adis1650x_rot_scale[] = {
+	[ADIS16500]   = {2160, 31},
 	[ADIS16505_1] = {360, 31},
 	[ADIS16505_2] = {720, 31},
 	[ADIS16505_3] = {2160, 31},
+	[ADIS16507_1] = {360, 31},
+	[ADIS16507_2] = {720, 31},
+	[ADIS16507_3] = {2160, 31},
 };
 
 static const struct adis_iio_scale_fractional_log2 adis1650x_vel_scale[] = {
+	[ADIS16500]   = {400, 31},
 	[ADIS16505_1] = {100, 31},
 	[ADIS16505_2] = {100, 31},
 	[ADIS16505_3] = {100, 31},
+	[ADIS16507_1] = {400, 31},
+	[ADIS16507_2] = {400, 31},
+	[ADIS16507_3] = {400, 31},
 };
 
 /* IIO uses milli-degrees Celsius for temperature */
 static const struct adis_iio_scale_fractional adis1650x_temp_scale[] = {
+	[ADIS16500]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16507_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16507_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16507_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 };
 
 static const char * const adis1650x_rang_mdl_txt[] = {
+	[ADIS16500]   = "+/-2000_degrees_per_sec",
 	[ADIS16505_1] = "+/-125_degrees_per_sec",
 	[ADIS16505_2] = "+/-500_degrees_per_sec",
 	[ADIS16505_3] = "+/-2000_degrees_per_sec",
+	[ADIS16507_1] = "+/-125_degrees_per_sec",
+	[ADIS16507_2] = "+/-500_degrees_per_sec",
+	[ADIS16507_3] = "+/-2000_degrees_per_sec",
 };
 
 static struct scan_type adis1650x_iio_accel_scan_type = {
