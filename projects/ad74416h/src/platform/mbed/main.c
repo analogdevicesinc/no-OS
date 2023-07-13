@@ -83,6 +83,10 @@
 #include "digital_input_loop.h"
 #endif
 
+#ifdef DIGITAL_OUTPUT_EXAMPLE
+#include "digital_output.h"
+#endif
+
 #ifdef TEMPERATURE_2WIRE_RTD_EXAMPLE
 #include "temperature_2wire_rtd.h"
 #endif
@@ -250,6 +254,22 @@ int main()
         }
 #endif
 
+#ifdef DIGITAL_OUTPUT_EXAMPLE
+        struct no_os_uart_desc* uart;
+        ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+        if(ret) {
+                no_os_uart_remove(uart);
+                return ret;
+        }
+        no_os_uart_stdio(uart);
+        ret = digital_output_example_main();
+        if (ret) {
+                no_os_uart_remove(uart);
+                return ret;
+        }
+#endif
+
+
 #ifdef TEMPERATURE_2WIRE_RTD_EXAMPLE
         struct no_os_uart_desc* uart;
         ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
@@ -281,7 +301,7 @@ int main()
 #endif
 
 
-#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE+VOLTAGE_INPUT_EXAMPLE+CURRENT_INPUT_EXT_EXAMPLE+MULTIPLE_DEVICES_EXAMPLE+CURRENT_INPUT_LOOP_EXAMPLE+DIGITAL_INPUT_LOGIC_EXAMPLE+DIGITAL_INPUT_LOOP_EXAMPLE+TEMPERATURE_2WIRE_RTD_EXAMPLE+TEMPERATURE_3WIRE_RTD_EXAMPLE != 1)
+#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE+VOLTAGE_INPUT_EXAMPLE+CURRENT_INPUT_EXT_EXAMPLE+MULTIPLE_DEVICES_EXAMPLE+CURRENT_INPUT_LOOP_EXAMPLE+DIGITAL_INPUT_LOGIC_EXAMPLE+DIGITAL_INPUT_LOOP_EXAMPLE+DIGITAL_OUTPUT_EXAMPLE+TEMPERATURE_2WIRE_RTD_EXAMPLE+TEMPERATURE_3WIRE_RTD_EXAMPLE != 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
