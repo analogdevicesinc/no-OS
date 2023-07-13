@@ -73,9 +73,13 @@
  * @brief Supported device ids
  */
 enum adis_device_id {
+	ADIS16500,
 	ADIS16505_1,
 	ADIS16505_2,
 	ADIS16505_3,
+	ADIS16507_1,
+	ADIS16507_2,
+	ADIS16507_3,
 	ADIS16575_2,
 	ADIS16575_3,
 	ADIS16576_2,
