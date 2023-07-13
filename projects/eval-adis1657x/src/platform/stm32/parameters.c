@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-adis project.
+ *   @brief  Definition of STM32 platform data used by eval-adis1657x project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.

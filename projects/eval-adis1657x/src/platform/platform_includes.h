@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @brief  Includes for used platforms used by eval-adis1657x project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.

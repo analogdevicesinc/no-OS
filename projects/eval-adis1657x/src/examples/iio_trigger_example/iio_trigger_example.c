@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   iio_trigger_example.c
- *   @brief  Implementation of IIO trigger example for eval-adis project.
+ *   @brief  Implementation of IIO trigger example for eval-adis1657x project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.

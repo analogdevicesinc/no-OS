@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Definitions specific to Maxim platform used by eval-adis
+ *   @brief  Definitions specific to Maxim platform used by eval-adis1657x
  *           project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************

@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   dummy_example.h
- *   @brief  DUMMY example header for eval-adis project
+ *   @brief  DUMMY example header for eval-adis1657x project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.

@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Main file for Maxim platform of eval-adis project.
+ *   @brief  Main file for Maxim platform of eval-adis1657x project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
