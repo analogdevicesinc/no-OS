@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   dummy_example.c
- *   @brief  DUMMY example header for eval-adis project
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by eval-adis1650x examples.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -41,101 +41,68 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "dummy_example.h"
 #include "common_data.h"
-#include "adis1650x.h"
-#include "no_os_delay.h"
-#include "no_os_print_log.h"
-#include "no_os_units.h"
+#include "no_os_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-static const char * const output_data[] = {
-	"angular velocity x axis: ",
-	"angular velocity y axis: ",
-	"angular velocity z axis: ",
-	"acceleration x axis    : ",
-	"acceleration y axis    : ",
-	"acceleration z axis    : ",
-	"temperature            : "
+struct no_os_uart_init_param adis1650x_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
 };
 
-static const char * const output_unit[] = {
-	"rad/s",
-	"rad/s",
-	"rad/s",
-	"m/s^2",
-	"m/s^2",
-	"m/s^2",
-	"°C"
+struct no_os_spi_init_param adis1650x_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
 };
 
-static const float output_scale[] = {
-	1.0/RAD_TO_DEGREE(40 << 16),
-	1.0/RAD_TO_DEGREE(40 << 16),
-	1.0/RAD_TO_DEGREE(40 << 16),
-	78.0/ (32000 << 16),
-	78.0/ (32000 << 16),
-	78.0/ (32000 << 16),
-	1.0/10,
+/* Initialization for Sync pin */
+struct no_os_gpio_init_param adis1650x_gpio_reset_ip = {
+	.port = GPIO_RESET_PORT_NUM,
+	.number = GPIO_RESET_PIN_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
 };
 
-/******************************************************************************/
-/************************* Functions Definitions ******************************/
-/******************************************************************************/
+struct adis_init_param adis1650x_ip = {
+	.gpio_reset = &adis1650x_gpio_reset_ip,
+	.sync_mode = ADIS_SYNC_OUTPUT,
+	.dev_id = ADIS16505_2,
+};
 
-/**
- * @brief Dummy example main execution.
- *
- * @return ret - Result of the example execution. If working correctly, will
- *               execute continuously the while(1) loop and will not return.
- */
-int dummy_example_main()
-{
-	struct adis_dev *adis1650x_desc;
-	int ret;
-	int val[7];
+#ifdef IIO_TRIGGER_EXAMPLE
+/* GPIO trigger */
+struct no_os_irq_init_param adis1650x_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
 
-	adis1650x_chip_info.ip = &adis1650x_ip;
+const struct iio_hw_trig_cb_info gpio_cb_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = ADIS1650X_GPIO_CB_HANDLE,
+};
 
-	ret = adis_init(&adis1650x_desc, &adis1650x_chip_info);
-	if (ret)
-		goto error;
-
-	while(1) {
-		pr_info ("while loop \n");
-		no_os_mdelay(1000);
-		ret = adis_read_x_gyro(adis1650x_desc, &val[0]);
-		if (ret)
-			goto error_remove;
-		ret = adis_read_y_gyro(adis1650x_desc, &val[1]);
-		if (ret)
-			goto error_remove;
-		ret = adis_read_z_gyro(adis1650x_desc, &val[2]);
-		if (ret)
-			goto error_remove;
-		ret = adis_read_x_accl(adis1650x_desc, &val[3]);
-		if (ret)
-			goto error_remove;
-		ret = adis_read_y_accl(adis1650x_desc, &val[4]);
-		if (ret)
-			goto error_remove;
-		ret = adis_read_z_accl(adis1650x_desc, &val[5]);
-		if (ret)
-			goto error_remove;
-		ret = adis_read_temp_out(adis1650x_desc, &val[6]);
-		if (ret)
-			goto error_remove;
-
-		for (uint8_t i = 0; i < 7; i++)
-			pr_info("%s %.5f %s \n", output_data[i], val[i]* output_scale[i],
-				output_unit[i]);
-	}
-error_remove:
-	adis_remove(adis1650x_desc);
-error:
-	pr_info("Error!\n");
-	return 0;
-}
+struct iio_hw_trig_init_param adis1650x_gpio_trig_ip = {
+	.irq_id = ADIS1650X_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = gpio_cb_info,
+	.name = ADIS1650X_GPIO_TRIG_NAME,
+};
+#endif

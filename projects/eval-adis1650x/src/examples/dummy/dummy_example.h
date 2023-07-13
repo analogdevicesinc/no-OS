@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   dummy_example.h
+ *   @brief  DUMMY example header for eval-adis1650x project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,27 +37,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __DUMMY_EXAMPLE_H__
+#define __DUMMY_EXAMPLE_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+int dummy_example_main();
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+#endif /* __DUMMY_EXAMPLE_H__ */

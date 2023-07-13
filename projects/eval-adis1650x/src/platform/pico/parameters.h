@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of eval-adis project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to pico platform used by eval-adis1650x
+ *           project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,92 +38,59 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "platform_includes.h"
 #include "common_data.h"
-#include "no_os_error.h"
-
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
-#endif
-
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
+#include "no_os_util.h"
+#include "pico_uart.h"
+#include "pico_spi.h"
+#include "pico_gpio.h"
+#include "pico_gpio_irq.h"
+#include "pico_irq.h"
+#include "pico_timer.h"
 
 /******************************************************************************/
-/************************* Functions Definitions ******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-/**
- * @brief Main function execution for STM32 platform.
- *
- * @return ret - Result of the enabled examples execution.
- */
-int main()
-{
-	int ret = -EINVAL;
+#define UART_DEVICE_ID  0
+#define UART_BAUDRATE   115200
+#define UART_IRQ_ID     20
+#define UART_EXTRA      &adis1650x_uart_extra_ip
+#define UART_OPS        &pico_uart_ops
 
-	adis1650x_ip.spi_init = &adis1650x_spi_ip;
+#define UART_TX_PIN     UART0_TX_GP0
+#define UART_RX_PIN     UART0_RX_GP1
 
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
+#define SPI_DEVICE_ID   0
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          SPI0_CS_GP17
+#define SPI_OPS         &pico_spi_ops
+#define SPI_EXTRA       &adis1650x_spi_extra_ip
 
-	ret = no_os_uart_init(&uart_desc, &adis1650x_uart_ip);
-	if (ret)
-		return ret;
+extern struct pico_spi_init_param adis1650x_spi_extra_ip;
+extern struct pico_uart_init_param adis1650x_uart_extra_ip;
 
-	no_os_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
-#endif
+#define GPIO_RESET_PIN_NUM   20
+#define GPIO_RESET_PORT_NUM  0
+#define GPIO_OPS            &pico_gpio_ops
+#define GPIO_EXTRA          NULL /* Not used for pico platform */
 
 #ifdef IIO_TRIGGER_EXAMPLE
-	struct no_os_gpio_desc *adis_gpio_desc;
-	struct no_os_irq_ctrl_desc *nvic_desc;
-	struct no_os_irq_init_param nvic_ip = {
-		.platform_ops = &max_irq_ops,
-	};
+#define GPIO_DRDY_PIN_NUM   21
+#define GPIO_DRDY_PORT_NUM  0 /* Not used for pico platform */
 
-	/* Initialize DATA READY pin */
-	ret = no_os_gpio_get_optional(&adis_gpio_desc, &adis_gpio_drdy_ip);
-	if (ret)
-		return ret;
+#define ADIS1650X_GPIO_TRIG_IRQ_ID     GPIO_DRDY_PIN_NUM
+#define ADIS1650X_GPIO_CB_HANDLE       NULL /* Not used in pico platform */
 
-	ret = no_os_gpio_direction_input(adis_gpio_desc);
-	if (ret)
-		goto error_gpio;
-
-	/* Initialize GPIO IRQ controller */
-	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
-	if (ret)
-		goto error_gpio;
-
-	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
-	if (ret)
-		goto error_irq;
-
-	ret = iio_trigger_example_main();
-	if (ret)
-		goto error_irq;
-
-error_irq:
-	no_os_irq_ctrl_remove(nvic_desc);
-error_gpio:
-	no_os_gpio_remove(adis_gpio_desc);
+#define GPIO_IRQ_ID             GPIO_DRDY_PIN_NUM
+#define GPIO_IRQ_OPS            &pico_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          NULL /* Not used for pico platform */
 #endif
 
-#if (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
-
-	return ret;
-}
-
+#endif /* __PARAMETERS_H__ */

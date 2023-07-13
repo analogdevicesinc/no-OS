@@ -1,6 +1,7 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Definitions specific to pico platform used by eval-adis project.
+ *   @brief  Definitions specific to STM32 platform used by eval-adis1650x
+ *           project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -44,52 +45,61 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "common_data.h"
-#include "no_os_util.h"
-#include "pico_uart.h"
-#include "pico_spi.h"
-#include "pico_gpio.h"
-#include "pico_gpio_irq.h"
-#include "pico_irq.h"
-#include "pico_timer.h"
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
+#include "stm32_spi.h"
+#include "stm32_gpio.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define UART_DEVICE_ID  0
+extern UART_HandleTypeDef huart5;
+
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#endif
+
+#define UART_DEVICE_ID  5
 #define UART_BAUDRATE   115200
-#define UART_IRQ_ID     20
 #define UART_EXTRA      &adis1650x_uart_extra_ip
-#define UART_OPS        &pico_uart_ops
+#define UART_OPS        &stm32_uart_ops
+#define UART_IRQ_ID     UART5_IRQn
 
-#define UART_TX_PIN     UART0_TX_GP0
-#define UART_RX_PIN     UART0_RX_GP1
-
-#define SPI_DEVICE_ID   0
+#define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    1000000
-#define SPI_CS          SPI0_CS_GP17
-#define SPI_OPS         &pico_spi_ops
+#define SPI_CS          15
+#define SPI_CS_PORT     0
+#define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &adis1650x_spi_extra_ip
 
-extern struct pico_spi_init_param adis1650x_spi_extra_ip;
-extern struct pico_uart_init_param adis1650x_uart_extra_ip;
+extern struct stm32_uart_init_param adis1650x_uart_extra_ip;
+extern struct stm32_spi_init_param adis1650x_spi_extra_ip;
 
-#define GPIO_RESET_PIN_NUM   20
+#define GPIO_RESET_PIN_NUM   4
 #define GPIO_RESET_PORT_NUM  0
-#define GPIO_OPS            &pico_gpio_ops
-#define GPIO_EXTRA          NULL /* Not used for pico platform */
+#define GPIO_OPS            &stm32_gpio_ops
+#define GPIO_EXTRA          &adis1650x_gpio_reset_extra_ip
+extern struct stm32_gpio_init_param adis1650x_gpio_reset_extra_ip ;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define GPIO_DRDY_PIN_NUM   21
-#define GPIO_DRDY_PORT_NUM  0 /* Not used for pico platform */
 
-#define ADIS1650X_GPIO_TRIG_IRQ_ID     GPIO_DRDY_PIN_NUM
-#define ADIS1650X_GPIO_CB_HANDLE       NULL /* Not used in pico platform */
+#define GPIO_DRDY_PIN_NUM   2
+#define GPIO_DRDY_PORT_NUM  0
 
-#define GPIO_IRQ_ID             GPIO_DRDY_PIN_NUM
-#define GPIO_IRQ_OPS            &pico_gpio_irq_ops
-#define GPIO_IRQ_EXTRA          NULL /* Not used for pico platform */
+extern struct stm32_gpio_irq_init_param adis1650x_gpio_irq_extra_ip;
+/* Setting for PortA Pin2 used for DATA_READY.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define ADIS1650X_GPIO_TRIG_IRQ_ID     0    /* Not used in stm32 platform */
+#define ADIS1650X_GPIO_CB_HANDLE       NULL /* Not used in stm32 platform */
+
+#define GPIO_IRQ_ID             2 /* Pin 2 */
+#define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          &adis1650x_gpio_irq_extra_ip
 #endif
 
 #endif /* __PARAMETERS_H__ */

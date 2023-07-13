@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for pico platform of eval-adis project.
+ *   @file   eval-adis1650x/src/common/common_data.h
+ *   @brief  Defines common data to be used by eval-adis1650x examples.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,59 +37,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
 #include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
-
+#include "adis1650x.h"
+#ifdef IIO_SUPPORT
+#include "iio_adis1650x.h"
+#include "iio_adis.h"
 #ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
+#include "iio_trigger.h"
 #endif
-
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
 #endif
 
 /******************************************************************************/
-/************************* Functions Definitions ******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-/**
- * @brief Main function execution for pico platform.
- *
- * @return ret - Result of the enabled examples execution.
- */
-int main()
-{
-	int ret = -EINVAL;
-	adis1650x_ip.spi_init = &adis1650x_spi_ip;
-
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adis1650x_uart_ip);
-	if (ret)
-		return ret;
-
-	ret = dummy_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
-#endif
+extern struct no_os_uart_init_param adis1650x_uart_ip;
+extern struct no_os_spi_init_param adis1650x_spi_ip;
+extern struct no_os_gpio_init_param adis1650x_gpio_reset_ip;
+extern struct adis_init_param adis1650x_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-	ret = iio_trigger_example_main();
+#define ADIS1650X_GPIO_TRIG_NAME "adis16505-2-dev0"
+
+extern struct iio_hw_trig_init_param adis1650x_gpio_trig_ip;
+extern struct no_os_irq_init_param adis1650x_gpio_irq_ip;
 #endif
 
-
-#if (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
-
-	return ret;
-}
+#endif /* __COMMON_DATA_H__ */
