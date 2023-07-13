@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adis16505.h
- *   @brief  Implementation of iio_adis16505.h
+ *   @file   iio_adis1650x.h
+ *   @brief  Implementation of iio_adis1650x.h
  *   @author RBolboac (ramona.bolboaca@analog.com)
  *******************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,25 +37,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-#ifndef IIO_ADIS16505_H
-#define IIO_ADIS16505_H
+#ifndef IIO_ADIS1650X_H
+#define IIO_ADIS1650X_H
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
 #include "iio_adis.h"
-#include "adis16505.h"
+#include "adis1650x.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/*! Initialize adis16505 iio device. */
-int adis16505_iio_init(struct adis_iio_dev **iio_dev,
+/*! Initialize adis1650x iio device. */
+int adis1650x_iio_init(struct adis_iio_dev **iio_dev,
 		       struct adis_init_param *init_param);
 
-/*! Remove adis16505 iio device. */
-void adis16505_iio_remove(struct adis_iio_dev *desc);
+/*! Remove adis1650x iio device. */
+void adis1650x_iio_remove(struct adis_iio_dev *desc);
 
 #endif

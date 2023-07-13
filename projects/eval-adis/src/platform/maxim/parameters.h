@@ -61,7 +61,7 @@
 
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
-#define UART_EXTRA      &adis16505_uart_extra_ip
+#define UART_EXTRA      &adis1650x_uart_extra_ip
 #define UART_OPS        &max_uart_ops
 #define UART_IRQ_ID     UART0_IRQn
 
@@ -71,14 +71,14 @@
 
 #define SPI_BAUDRATE    1000000
 #define SPI_OPS         &max_spi_ops
-#define SPI_EXTRA       &adis16505_spi_extra_ip
+#define SPI_EXTRA       &adis1650x_spi_extra_ip
 
 #define GPIO_OPS            &max_gpio_ops
-#define GPIO_EXTRA          &adis16505_gpio_extra_ip
+#define GPIO_EXTRA          &adis1650x_gpio_extra_ip
 
-extern struct max_uart_init_param adis16505_uart_extra_ip;
-extern struct max_spi_init_param adis16505_spi_extra_ip;
-extern struct max_gpio_init_param adis16505_gpio_extra_ip;
+extern struct max_uart_init_param adis1650x_uart_extra_ip;
+extern struct max_spi_init_param adis1650x_spi_extra_ip;
+extern struct max_gpio_init_param adis1650x_gpio_extra_ip;
 
 #define GPIO_RESET_PIN_NUM   19
 #define GPIO_RESET_PORT_NUM  0
@@ -90,8 +90,8 @@ extern struct max_gpio_init_param adis16505_gpio_extra_ip;
 
 #define NVIC_GPIO_IRQ   GPIO1_IRQn
 
-#define ADIS16505_GPIO_TRIG_IRQ_ID    GPIO_DRDY_PIN_NUM
-#define ADIS16505_GPIO_CB_HANDLE      MXC_GPIO_GET_GPIO(GPIO_DRDY_PORT_NUM)
+#define ADIS1650X_GPIO_TRIG_IRQ_ID    GPIO_DRDY_PIN_NUM
+#define ADIS1650X_GPIO_CB_HANDLE      MXC_GPIO_GET_GPIO(GPIO_DRDY_PORT_NUM)
 
 #define GPIO_IRQ_ID             GPIO_DRDY_PORT_NUM
 #define GPIO_IRQ_OPS            &max_gpio_irq_ops

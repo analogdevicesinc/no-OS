@@ -60,7 +60,7 @@
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   115200
 #define UART_IRQ_ID     20
-#define UART_EXTRA      &adis16505_uart_extra_ip
+#define UART_EXTRA      &adis1650x_uart_extra_ip
 #define UART_OPS        &pico_uart_ops
 
 #define UART_TX_PIN     UART0_TX_GP0
@@ -70,10 +70,10 @@
 #define SPI_BAUDRATE    1000000
 #define SPI_CS          SPI0_CS_GP17
 #define SPI_OPS         &pico_spi_ops
-#define SPI_EXTRA       &adis16505_spi_extra_ip
+#define SPI_EXTRA       &adis1650x_spi_extra_ip
 
-extern struct pico_spi_init_param adis16505_spi_extra_ip;
-extern struct pico_uart_init_param adis16505_uart_extra_ip;
+extern struct pico_spi_init_param adis1650x_spi_extra_ip;
+extern struct pico_uart_init_param adis1650x_uart_extra_ip;
 
 #define GPIO_RESET_PIN_NUM   20
 #define GPIO_RESET_PORT_NUM  0
@@ -84,8 +84,8 @@ extern struct pico_uart_init_param adis16505_uart_extra_ip;
 #define GPIO_DRDY_PIN_NUM   21
 #define GPIO_DRDY_PORT_NUM  0 /* Not used for pico platform */
 
-#define ADIS16505_GPIO_TRIG_IRQ_ID     GPIO_DRDY_PIN_NUM
-#define ADIS16505_GPIO_CB_HANDLE       NULL /* Not used in pico platform */
+#define ADIS1650X_GPIO_TRIG_IRQ_ID     GPIO_DRDY_PIN_NUM
+#define ADIS1650X_GPIO_CB_HANDLE       NULL /* Not used in pico platform */
 
 #define GPIO_IRQ_ID             GPIO_DRDY_PIN_NUM
 #define GPIO_IRQ_OPS            &pico_gpio_irq_ops

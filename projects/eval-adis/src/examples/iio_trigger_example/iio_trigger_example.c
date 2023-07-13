@@ -67,35 +67,35 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE*14*sizeof(int)];
 int iio_trigger_example_main()
 {
 	int ret;
-	struct adis_iio_dev *adis16505_iio_desc;
+	struct adis_iio_dev *adis1650x_iio_desc;
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE*14*sizeof(int)
 	};
 
-	struct iio_hw_trig *adis16505_trig_desc;
-	struct no_os_irq_ctrl_desc *adis16505_irq_desc;
+	struct iio_hw_trig *adis1650x_trig_desc;
+	struct no_os_irq_ctrl_desc *adis1650x_irq_desc;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
-	ret = adis16505_iio_init(&adis16505_iio_desc, &adis16505_ip);
+	ret = adis1650x_iio_init(&adis1650x_iio_desc, &adis1650x_ip);
 	if (ret)
 		return ret;
 
 	/* Initialize interrupt controller */
-	ret = no_os_irq_ctrl_init(&adis16505_irq_desc, &adis16505_gpio_irq_ip);
+	ret = no_os_irq_ctrl_init(&adis1650x_irq_desc, &adis1650x_gpio_irq_ip);
 	if (ret)
 		goto err_irq_init;
 
-	ret = no_os_irq_set_priority(adis16505_irq_desc, adis16505_gpio_trig_ip.irq_id,
+	ret = no_os_irq_set_priority(adis1650x_irq_desc, adis1650x_gpio_trig_ip.irq_id,
 				     1);
 	if (ret)
 		goto err_irq_set_prio;
 
-	adis16505_gpio_trig_ip.irq_ctrl = adis16505_irq_desc;
+	adis1650x_gpio_trig_ip.irq_ctrl = adis1650x_irq_desc;
 
 	/* Initialize hardware trigger */
-	ret = iio_hw_trig_init(&adis16505_trig_desc, &adis16505_gpio_trig_ip);
+	ret = iio_hw_trig_init(&adis1650x_trig_desc, &adis1650x_gpio_trig_ip);
 	if (ret)
 		goto err_irq_set_prio;
 
@@ -103,31 +103,31 @@ int iio_trigger_example_main()
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "adis16505-2",
-			.dev = adis16505_iio_desc,
-			.dev_descriptor = adis16505_iio_desc->iio_dev,
+			.dev = adis1650x_iio_desc,
+			.dev_descriptor = adis1650x_iio_desc->iio_dev,
 			.read_buff = &data_buff,
 		}
 	};
 
 	/* List of triggers */
 	struct iio_trigger_init trigs[] = {
-		IIO_APP_TRIGGER(ADIS16505_GPIO_TRIG_NAME, adis16505_trig_desc,
+		IIO_APP_TRIGGER(ADIS1650X_GPIO_TRIG_NAME, adis1650x_trig_desc,
 				&adis_iio_trig_desc)
 	};
 
 	app_init_param.devices = iio_devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
-	app_init_param.uart_init_params = adis16505_uart_ip;
+	app_init_param.uart_init_params = adis1650x_uart_ip;
 	app_init_param.trigs = trigs;
 	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
-	app_init_param.irq_desc = adis16505_irq_desc;
+	app_init_param.irq_desc = adis1650x_irq_desc;
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
 		goto err_iio_app_init;
 
 	// update the reference to iio_desc
-	adis16505_trig_desc->iio_desc = app->iio_desc;
+	adis1650x_trig_desc->iio_desc = app->iio_desc;
 
 	ret = iio_app_run(app);
 	if (ret)
@@ -138,11 +138,11 @@ int iio_trigger_example_main()
 iio_app_err:
 	iio_app_remove(app);
 err_iio_app_init:
-	iio_hw_trig_remove(adis16505_trig_desc);
+	iio_hw_trig_remove(adis1650x_trig_desc);
 err_irq_set_prio:
-	no_os_irq_ctrl_remove(adis16505_irq_desc);
+	no_os_irq_ctrl_remove(adis1650x_irq_desc);
 err_irq_init:
-	adis16505_iio_remove(adis16505_iio_desc);
+	adis1650x_iio_remove(adis1650x_iio_desc);
 	pr_info("Error!\n");
 	return ret;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   adis16505.h
- *   @brief  Implementation of adis16505.h
+ *   @file   adis1650x.h
+ *   @brief  Implementation of adis1650x.h
  *   @author RBolboac (ramona.bolboaca@analog.com)
  *******************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-#ifndef __ADIS16505_H__
-#define __ADIS16505_H__
+#ifndef __ADIS1650X_H__
+#define __ADIS1650X_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -50,6 +50,6 @@
 /************************ Variables Declarations ******************************/
 /******************************************************************************/
 
-extern struct adis_chip_info adis16505_chip_info;
+extern struct adis_chip_info adis1650x_chip_info;
 
 #endif

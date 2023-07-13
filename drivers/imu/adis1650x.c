@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   adis16505.c
- *   @brief  Implementation of adis16505.c
+ *   @file   adis1650x.c
+ *   @brief  Implementation of adis1650x.c
  *   @author RBolboac (ramona.bolboaca@analog.com)
  *******************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -42,13 +42,13 @@
 /******************************************************************************/
 
 #include "adis.h"
-#include "adis16505.h"
+#include "adis1650x.h"
 
 /******************************************************************************/
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
-static const struct adis_data_field_map_def adis16505_def = {
+static const struct adis_data_field_map_def adis1650x_def = {
 	.x_gyro 		= {.reg_addr = 0x04, .reg_size = 0x04, .field_mask = 0xFFFFFFFF},
 	.y_gyro 		= {.reg_addr = 0x08, .reg_size = 0x04, .field_mask = 0xFFFFFFFF},
 	.z_gyro 		= {.reg_addr = 0x0C, .reg_size = 0x04, .field_mask = 0xFFFFFFFF},
@@ -110,7 +110,7 @@ static const struct adis_data_field_map_def adis16505_def = {
 	.diag_accl_failure_mask 		= NO_OS_BIT(10),
 };
 
-static const struct adis_timeout adis16505_timeouts = {
+static const struct adis_timeout adis1650x_timeouts = {
 	.reset_ms 			= 310,
 	.fact_calib_restore_ms		= 136,
 	.self_test_ms 			= 24,
@@ -123,29 +123,29 @@ static const struct adis_timeout adis16505_timeouts = {
 	.sens_bw_update_ms 		= 250,
 };
 
-static const struct adis_clk_freq_limit adis16505_sync_clk_freq_limits[] = {
+static const struct adis_clk_freq_limit adis1650x_sync_clk_freq_limits[] = {
 	[ADIS_SYNC_DEFAULT] = { },
 	[ADIS_SYNC_DIRECT] = { 1900, 2100 },
 	[ADIS_SYNC_SCALED] = { 1, 128 },
 	[ADIS_SYNC_OUTPUT] = { },
 };
 
-static const struct adis_clk_freq_limit adis16505_sampling_clk_limits = {
+static const struct adis_clk_freq_limit adis1650x_sampling_clk_limits = {
 	.min_freq = 1900,
 	.max_freq = 2100,
 };
 
-struct adis_chip_info adis16505_chip_info = {
+struct adis_chip_info adis1650x_chip_info = {
 	.cs_change_delay 	= 16,
 	.read_delay 		= 8,
 	.write_delay 		= 0,
-	.timeouts 		= &adis16505_timeouts,
-	.field_map 		= &adis16505_def,
+	.timeouts 		= &adis1650x_timeouts,
+	.field_map 		= &adis1650x_def,
 	.filt_size_var_b_max 	= 6,
 	.dec_rate_max 		= 1999,
 	.sync_mode_max 		= ADIS_SYNC_OUTPUT,
 	.fls_mem_wr_cntr_max 	= 10000,
 	.int_clk		= 2000,
-	.sync_clk_freq_limits	= adis16505_sync_clk_freq_limits,
-	.sampling_clk_limits	= adis16505_sampling_clk_limits,
+	.sync_clk_freq_limits	= adis1650x_sync_clk_freq_limits,
+	.sampling_clk_limits	= adis1650x_sampling_clk_limits,
 };
