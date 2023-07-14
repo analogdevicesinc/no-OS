@@ -82,7 +82,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		.uart_desc = udesc,
 		.uart_irq_conf = udesc,
 		.uart_irq_id = UART_CONFIG_IRQ_ID,
-		.sw_reset_en = true
+		.sw_reset_en = WIFI_SW_RESET
 	};
 
 	ret = wifi_init(wifi, &wifi_param);
