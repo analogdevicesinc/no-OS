@@ -594,6 +594,7 @@ int iio_example_main()
 			iio_devices[1].read_buff = &buff3;
 			ndev++;
 		} else {
+			printf("Error 6\n");
 			goto error;
 		}
 
@@ -605,6 +606,7 @@ int iio_example_main()
 			iio_devices[2].read_buff = &buff4;
 			ndev++;
 		} else {
+			printf("Error 7\n");
 			goto error;
 		}
 
@@ -617,6 +619,7 @@ int iio_example_main()
 			ntrig++;
 			ndev++;
 		} else {
+			printf("Error 8\n");
 			goto error;
 		}
 
@@ -634,6 +637,7 @@ int iio_example_main()
 		no_os_gpio_set_value(swiot_led2_gpio, 1);
 		ret = iio_app_init(&app, app_init_param);
 		if (ret) {
+			printf("Error 5\n");
 			goto error;
 		}
 		no_os_gpio_set_value(swiot_led2_gpio, 0);
@@ -648,27 +652,32 @@ int iio_example_main()
 		ret = iio_app_run(app);
 		if (ret != -ENOTCONN) {
 			no_os_gpio_set_value(max14906_en_gpio, 0);
+			printf("Error 0\n");
 			goto error;
 		}
 
 		no_os_gpio_set_value(max14906_en_gpio, 0);
 		ret = ad74413r_iio_remove(ad74413r_iio_desc);
 		if (ret) {
+			printf("Error 1\n");
 			goto error;
 		}
 
 		ret = max14906_iio_remove(max14906_iio_desc);
 		if (ret) {
+			printf("Error 2\n");
 			goto error;
 		}
 
 		ret = adt75_iio_remove(adt75_iio_desc);
 		if (ret) {
+			printf("Error 3\n");
 			goto error;
 		}
 
 		ret = swiot_iio_remove(swiot_iio_desc);
 		if (ret) {
+			printf("Error 4\n");
 			goto error;
 		}
 	}
