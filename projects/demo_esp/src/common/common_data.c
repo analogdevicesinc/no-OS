@@ -70,3 +70,11 @@ struct no_os_timer_init_param timer_ip = {
 	.platform_ops = TIMER_OPS,
 	.extra = TIMER_EXTRA
 };
+
+struct no_os_gpio_init_param gpio_wifi_rst_ip = {
+	.port = GPIO_PORT,
+	.number = GPIO_NR,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};

@@ -90,5 +90,6 @@
 extern struct no_os_uart_init_param uart_ip;
 extern struct no_os_irq_init_param irq_ip;
 extern struct no_os_timer_init_param timer_ip;
+extern struct no_os_gpio_init_param gpio_wifi_rst_ip;
 
 #endif /* __COMMON_DATA_H__ */
