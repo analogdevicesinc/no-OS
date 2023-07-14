@@ -157,6 +157,24 @@ static int swiot_read_function_avail(void *dev, char *buf, uint32_t len,
 	return strlen(buf);
 }
 
+static int swiot_read_signal_mse(void *dev, char *buf, uint32_t len,
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
+{
+	struct swiot_iio_desc *swiot = dev;
+	int32_t iio_val = 0;
+	uint16_t val = 0;
+	int ret;
+
+	ret = adin1110_mdio_read_c45(swiot->adin1110, 0x1, 0x1, 0x830B, &val);
+	if (ret)
+		return ret;
+
+	iio_val = val;
+	
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &iio_val);
+}
+
 static int swiot_read_ext_psu(void *dev, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
@@ -195,6 +213,7 @@ static int swiot_write_device(void *dev, char *buf, uint32_t len,
 	for (i = 0; i < SWIOT_DEV_CNT; i++) {
 		if (!strcmp(buf, swiot_devices_available[i])) {
 			swiot_config[ch_num].device = i;
+			swiot_config[ch_num].function = 0;
 			break;
 		}
 
@@ -418,6 +437,10 @@ static struct iio_attribute swiot_attrs[] = {
 	{
 		.name = "ext_psu",
 		.show = swiot_read_ext_psu,
+	},
+	{
+		.name = "signal_mse",
+		.show = swiot_read_signal_mse,
 	},
 	{
 		.name = "ch0_enable",

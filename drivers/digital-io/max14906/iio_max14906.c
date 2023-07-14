@@ -439,11 +439,6 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
 	if (!max14906_iio_channels)
 		return -ENOMEM;
 
-	/*
-	 * Once get to setup the IIO channels, the device is already configured
-	 * with the attributes specified by the configuration context. This only
-	 * mirror's the state.
-	 */
 	for (i = 0; i < MAX14906_CHANNELS; i++) {
 		if (!ch_cfg[i].enabled || ch_cfg[i].function == MAX14906_HIGH_Z) {
 			ret = max14906_ch_func(desc->max14906_desc, i, MAX14906_HIGH_Z);

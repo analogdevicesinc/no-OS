@@ -571,6 +571,7 @@ int iio_example_main()
 			goto error;
 		}
 
+		swiot.adin1110 = app->lwip_desc->mac_desc;
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;
 		app->arg = &step_p;	
@@ -637,6 +638,7 @@ int iio_example_main()
 		}
 		no_os_gpio_set_value(swiot_led2_gpio, 0);
 
+		swiot.adin1110 = app->lwip_desc->mac_desc;
 		ad74413r_trig_desc->iio_desc = app->iio_desc;
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;
