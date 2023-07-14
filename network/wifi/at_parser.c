@@ -913,6 +913,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	struct no_os_callback_desc	callback_desc_err;
 	uint32_t		conn;
 	uint8_t			*str;
+	int			retry = 2, err;
 
 	if (!desc || !param || !param->connection_callback)
 		return -1;
@@ -966,8 +967,12 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 		if (at_run_cmd(ldesc, AT_RESET, AT_EXECUTE_OP, NULL))
 			goto free_irq;
 
-	/* Disable echoing response */
-	if (0 != stop_echo(ldesc))
+	/* Disable echoing response (try 2 times)*/
+	do {
+		err = stop_echo(ldesc);
+	} while (--retry && err);
+
+	if (err)
 		goto free_irq;
 
 	/* Test AT */
