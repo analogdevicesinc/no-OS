@@ -66,6 +66,8 @@
 #define TIMER_OPS		&aducm_timer_ops
 #define TIMER_EXTRA		&timer_extra_ip
 
+#define WIFI_SW_RESET		true
+
 extern struct aducm_timer_init_param timer_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

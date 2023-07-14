@@ -65,6 +65,8 @@
 #define TIMER_OPS		&max_timer_ops
 #define TIMER_EXTRA		NULL
 
+#define WIFI_SW_RESET		false
+
 extern struct max_uart_init_param uart_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
