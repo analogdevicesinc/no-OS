@@ -48,6 +48,7 @@
 #include "aducm3029_timer.h"
 #include "aducm3029_irq.h"
 #include "aducm3029_uart.h"
+#include "aducm3029_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -57,6 +58,10 @@
 #define UART_CONFIG_IRQ_ID	ADUCM_UART_INT_ID
 #define UART_DEVICE_ID		0
 #define UART_EXTRA		NULL
+
+#define GPIO_PORT		NULL
+#define GPIO_NR			NULL
+#define GPIO_EXTRA		NULL
 
 #define TIMER_ID		1
 #define TIMER_FREQ		1000
