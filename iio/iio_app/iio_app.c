@@ -442,7 +442,6 @@ int iio_app_run(struct iio_app_desc *app)
 	int status;
 
 	do {
-		ts++;
 		if (!app)
 			return -EINVAL;
 		status = iio_step(app->iio_desc);

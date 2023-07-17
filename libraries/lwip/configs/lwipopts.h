@@ -239,7 +239,7 @@
 
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
-#define MEM_SIZE               			50000
+#define MEM_SIZE               			200000
 
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
@@ -287,7 +287,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* ---------- PBUF Options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
 //#define PBUF_POOL_SIZE          		48
-#define PBUF_POOL_SIZE          		48
+#define PBUF_POOL_SIZE          		90
 
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
 //#define PBUF_POOL_BUFSIZE       		256
@@ -345,11 +345,11 @@ a lot of data that needs to be copied, this should be set high. */
 /* TCP sender buffer space (bytes). */
 //#define TCP_SND_BUF             		2048
 //#define TCP_SND_BUF             		2048
-#define TCP_SND_BUF             		10000
+#define TCP_SND_BUF             		64000
 
 /* TCP sender buffer space (pbufs). This must be at least = 2 *
    TCP_SND_BUF/TCP_MSS for things to work. */
-#define TCP_SND_QUEUELEN   ((4 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS))
+#define TCP_SND_QUEUELEN   ((40 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS))
 
 /* TCP writable space (bytes). This must be less than or equal
    to TCP_SND_BUF. It is the amount of space which must be

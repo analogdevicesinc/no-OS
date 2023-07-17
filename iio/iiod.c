@@ -868,6 +868,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 				return 0;
 			}
 		}
+
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 

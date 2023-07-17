@@ -551,7 +551,6 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	int32_t val;
 	int ret;
 
-	__disable_irq();
 	ret = ad74413r_get_adc_range(desc->ad74413r_desc, channel->address, &range);
 	if (ret)
 		return ret;
@@ -572,14 +571,12 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 				ret = ad74413r_range_to_voltage_offset(range, &val);
 			break;
 		default:
-			__enable_irq();
 			return -EINVAL;
 		}
 		break;
 	case AD74413R_DIAG:
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN, &reg_val);
 		if (ret) {
-			__enable_irq();
 			return ret;
 		}
 
@@ -609,11 +606,9 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 		}
 		break;
 	default:
-		__enable_irq();
 		return -EINVAL;
 	}
 
-	__enable_irq();
 	if (ret)
 		return ret;
 
@@ -794,8 +789,6 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 	int32_t val[2];
 	int ret;
 
-	__disable_irq();
-
 	switch (priv) {
 	case AD74413R_ADC:
 		switch (channel->type) {
@@ -899,7 +892,6 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		return -EINVAL;
 	}
 
-	__enable_irq();
 	return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 1, val);
 }
 
