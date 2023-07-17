@@ -44,7 +44,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_uart.c \
 		$(DRIVERS)/api/no_os_i2c.c \
 		$(DRIVERS)/api/no_os_timer.c \
-		$(DRIVERS)/api//no_os_mdio.c \
+		$(DRIVERS)/api/no_os_mdio.c \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_crc8.c \
 		$(NO-OS)/util/no_os_util.c \
