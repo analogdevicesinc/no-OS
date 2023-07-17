@@ -1566,8 +1566,7 @@ out:
  * @return 0 in case of success, an error code otherwise.
  */
 int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
-		      struct ad74413r_iio_desc_init_param *init_param,
-		      bool config)
+		      struct ad74413r_iio_desc_init_param *init_param)
 {
 	int ret;
 	uint32_t i;

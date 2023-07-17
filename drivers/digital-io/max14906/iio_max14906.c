@@ -1,6 +1,45 @@
+/***************************************************************************//**
+ *   @file   iio_max14906.c
+ *   @brief  Source file of IIO MAX14906 Driver.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
+********************************************************************************
+ * Copyright 2022(c) Analog Devices, Inc.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -47,28 +86,17 @@ static int max14906_iio_read_climit_avail(void *dev, char *buf, uint32_t len,
 					  intptr_t priv);
 static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_write_config_function(void *dev, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_read_config_function_available(void *dev, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv);
 static int max14906_iio_read_config_iec(void *dev, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv);
 static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
+					const struct iio_ch_info *channel, intptr_t priv);
 static int max14906_iio_read_config_iec_available(void *dev, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv);
+						  uint32_t len, const struct iio_ch_info *channel,
+						  intptr_t priv);
 
 static int max14906_iio_reg_read(struct max14906_iio_desc *, uint32_t, uint32_t *);
 static int max14906_iio_reg_write(struct max14906_iio_desc *, uint32_t, uint32_t);
 
-struct max14906_ch_config max14906_ch_configs[MAX14906_CHANNELS];
 static uint32_t max14906_limit_avail[4] = {600, 130, 300, 1200};
 
 static struct iio_attribute max14906_out_attrs[] = {
@@ -303,58 +331,6 @@ static int max14906_iio_read_climit_avail(void *dev, char *buf, uint32_t len,
 	return length;
 }
 
-static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	int32_t function_dev;
-	char *function;
-
-	function_dev = max14906_ch_configs[channel->address].function;
-	function = max14906_function_avail[function_dev];
-
-	strcpy(buf, function);
-
-	return strlen(buf);
-}
-
-static int max14906_iio_write_config_function(void *dev, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	size_t i;
-
-	for (i = 0; i < 2; i++) {
-		if (!strcmp(buf, max14906_function_avail[i])) {
-			max14906_ch_configs[channel->address].function = i;
-			break;
-		}
-
-		if (i == 1)
-			return -EINVAL;
-	}
-
-	return 0;
-}
-
-static int max14906_iio_read_config_function_available(void *dev, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
-{
-	size_t i;
-
-	strcpy(buf, "");
-
-	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_function_avail); i++) {
-		strcat(buf, max14906_function_avail[i]);
-
-		if (i != NO_OS_ARRAY_SIZE(max14906_function_avail) - 1)
-			strcat(buf, " ");
-	}
-
-	return strlen(buf);
-}
-
 static int max14906_iio_read_config_iec(void *dev, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -504,21 +480,40 @@ static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
 
+/**
+ * @brief Register read wrapper
+ * @param dev - The iio device structure.
+ * @param reg - The register's address.
+ * @param readval - Register value
+ * @return 0 in case of success, error code otherwise
+ */
 static int max14906_iio_reg_read(struct max14906_iio_desc *dev, uint32_t reg,
 				 uint32_t *readval)
 {
 	return max14906_reg_read(dev->max14906_desc, reg, readval);
 }
 
+/**
+ * @brief Register write wrapper
+ * @param dev - The iio device structure.
+ * @param reg - The register's address.
+ * @param readval - Register value
+ * @return 0 in case of success, error code otherwise
+ */
 static int max14906_iio_reg_write(struct max14906_iio_desc *dev, uint32_t reg,
 				  uint32_t writeval)
 {
 	return max14906_reg_write(dev->max14906_desc, reg, writeval);
 }
 
+/**
+ * @brief Initializes the MAX14906 IIO descriptor.
+ * @param iio_desc - The iio device descriptor.
+ * @param init_param - The structure that contains the device initial parameters.
+ * @return 0 in case of success, an error code otherwise.
+ */
 int max14906_iio_init(struct max14906_iio_desc **iio_desc,
-		      struct max14906_iio_desc_init_param *init_param,
-		      bool config)
+		      struct max14906_iio_desc_init_param *init_param)
 {
 	struct max14906_iio_desc *descriptor;
 	int ret;

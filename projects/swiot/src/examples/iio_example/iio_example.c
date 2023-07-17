@@ -586,7 +586,7 @@ int iio_example_main()
 		max14906_iio_ip.channel_configs = &swiot_iio_desc->max14906_configs;
 		ad74413r_iio_ip.channel_configs = &swiot_iio_desc->ad74413r_configs;
 		/* Probe the drivers in the run mode */
-		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
+		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip);
 		if (!ret) {
 			iio_devices[1].name = "max14906";
 			iio_devices[1].dev = max14906_iio_desc;
@@ -610,7 +610,7 @@ int iio_example_main()
 			goto error;
 		}
 
-		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
+		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip);
 		if (!ret) {
 			iio_devices[3].name = "ad74413r";
 			iio_devices[3].dev = ad74413r_iio_desc;

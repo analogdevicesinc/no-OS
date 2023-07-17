@@ -206,7 +206,6 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
 			.cs_change = 1,
 		}
 	};
-	int ret;
 	/**
 	 * Reading a register on AD74413r requires writing the address to the READ_SELECT
 	 * register first and then doing another spi read, which will contain the requested
@@ -214,12 +213,6 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
 	 */
 	ad74413r_format_reg_write(AD74413R_READ_SELECT, addr, desc->comm_buff);
 
-	// ret = no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
-	// 			       AD74413R_FRAME_SIZE);
-	// if (ret)
-	// 	return ret;
-
-	// return no_os_spi_write_and_read(desc->comm_desc, val, AD74413R_FRAME_SIZE);
 	return no_os_spi_transfer(desc->comm_desc, xfer, 2);
 }
 
@@ -232,7 +225,6 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
  */
 int ad74413r_reg_write(struct ad74413r_desc *desc, uint32_t addr, uint32_t val)
 {
-	int ret;
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->comm_buff,
 		.bytes_number = AD74413R_FRAME_SIZE,
@@ -690,9 +682,11 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 	case AD74413R_CURRENT_IN_EXT_HART:
 		if (desc->chip_id == AD74412R)
 			return -EOPNOTSUPP;
+		/* fallthrough */
 	case AD74413R_CURRENT_IN_LOOP_HART:
 		if (desc->chip_id == AD74412R)
 			return -EOPNOTSUPP;
+		/* fallthrough */
 	case AD74413R_CURRENT_IN_EXT:
 	case AD74413R_CURRENT_IN_LOOP:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RANGE_2V5_SCALE,
@@ -1074,9 +1068,9 @@ int ad74413r_set_therm_rst(struct ad74413r_desc *desc, bool enable)
 int ad74413r_init(struct ad74413r_desc **desc,
 		  struct ad74413r_init_param *init_param)
 {
-	volatile int ret;
+	int i;
+	int ret;
 	struct ad74413r_desc *descriptor;
-	uint32_t reg_val;
 
 	if (!init_param)
 		return -EINVAL;
@@ -1108,7 +1102,7 @@ int ad74413r_init(struct ad74413r_desc **desc,
 
 	descriptor->chip_id = init_param->chip_id;
 
-	for (int i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++) {
 		ret = ad74413r_set_channel_function(descriptor, i, AD74413R_HIGH_Z);
 		if (ret) {
 			goto comm_err;
@@ -1137,7 +1131,6 @@ err:
 int ad74413r_remove(struct ad74413r_desc *desc)
 {
 	int ret;
-	int i;
 
 	if (!desc)
 		return -EINVAL;
