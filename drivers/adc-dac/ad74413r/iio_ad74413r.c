@@ -493,7 +493,13 @@ static int _get_ch_by_idx(struct iio_device *iio_dev, int scan_index, uint32_t *
 static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 				 uint32_t *readval)
 {
-	return ad74413r_reg_read(dev->ad74413r_desc, reg, (uint32_t *)readval);
+	int ret;
+
+	__disable_irq();
+	ret = ad74413r_reg_read(dev->ad74413r_desc, reg, (uint32_t *)readval);
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -506,7 +512,13 @@ static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 static int ad74413r_iio_write_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 				  uint32_t writeval)
 {
-	return ad74413r_reg_write(dev->ad74413r_desc, reg, (uint32_t)writeval);
+	int ret;
+
+	__disable_irq();
+	ret = ad74413r_reg_write(dev->ad74413r_desc, reg, (uint32_t)writeval);
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_range_to_voltage_offset(enum ad74413r_adc_range range, uint32_t *val)
@@ -551,9 +563,10 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	int32_t val;
 	int ret;
 
+	__disable_irq();
 	ret = ad74413r_get_adc_range(desc->ad74413r_desc, channel->address, &range);
 	if (ret)
-		return ret;
+		goto out;
 
 	switch (priv) {
 	case AD74413R_ADC:
@@ -571,14 +584,14 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 				ret = ad74413r_range_to_voltage_offset(range, &val);
 			break;
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	case AD74413R_DIAG:
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN, &reg_val);
-		if (ret) {
-			return ret;
-		}
+		if (ret)
+			goto out;
 
 		diag_func = reg_val;
 		switch (diag_func) {
@@ -601,18 +614,24 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 			val = 0;
 			break;
 		default:
-			__enable_irq();
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
+		goto out;
 	}
 
 	if (ret)
-		return ret;
+		goto out;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -630,6 +649,8 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 	int ret;
 	uint32_t val = 0;
 
+	__disable_irq();
+
 	if (channel->ch_out)
 		ret = ad74413r_reg_read(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
 					AD74413R_DAC_CODE(channel->address), &val);
@@ -641,9 +662,14 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 					      channel->address, &val);
 
 	if (ret)
-		return ret;
+		goto out;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -659,21 +685,32 @@ static int ad74413r_iio_write_raw(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val;
+	int ret;
+
+	__disable_irq();
 
 	switch (channel->type) {
 	case IIO_VOLTAGE: /* fallthrough */
 	case IIO_CURRENT:
-		if (!channel->ch_out)
-			return -EINVAL;
+		if (!channel->ch_out) {
+			ret = -EINVAL;
+			goto out;
+		}
 
 		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
-		return ad74413r_set_channel_dac_code(((struct ad74413r_iio_desc *)
-						      dev)->ad74413r_desc, channel->address, val);
+		ret = ad74413r_set_channel_dac_code(((struct ad74413r_iio_desc *)
+						    dev)->ad74413r_desc, channel->address, val);
 
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
+		goto out;
 	}
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -695,14 +732,14 @@ static int ad74413r_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 	__disable_irq();
 	ret = ad74413r_get_adc_rate(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
 				    0, &val);
-	if (ret) {
-		__enable_irq();
-		return ret;
-	}
+	if (ret)
+		goto out;
 
 	sample_rate = val;
 
 	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &sample_rate);
+
+out:
 	__enable_irq();
 
 	return ret;
@@ -725,27 +762,33 @@ static int ad74413r_iio_write_sampling_freq(void *dev, char *buf, uint32_t len,
 	size_t i;
 	int ret;
 
+	__disable_irq();
 	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&val, NULL);
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		ret = ad74413r_set_adc_rate(iio_desc->ad74413r_desc, i, val);
 		if (ret)
-			return ret;
+			goto out;
 	}
 
 	/* Set the sampling frequency for all the diagnostics channels */
 	switch (val) {
 	case AD74413R_ADC_SAMPLE_1200HZ:
 	case AD74413R_ADC_SAMPLE_4800HZ:
-		return ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
-					   AD74413R_EN_REJ_DIAG_MASK, 0);
+		ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
+					  AD74413R_EN_REJ_DIAG_MASK, 0);
 	case AD74413R_ADC_SAMPLE_10HZ:
 	case AD74413R_ADC_SAMPLE_20HZ:
-		return ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
-					   AD74413R_EN_REJ_DIAG_MASK, 1);
+		ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
+					  AD74413R_EN_REJ_DIAG_MASK, 1);
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
 	}
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -789,6 +832,8 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 	int32_t val[2];
 	int ret;
 
+	__disable_irq();
+
 	switch (priv) {
 	case AD74413R_ADC:
 		switch (channel->type) {
@@ -800,16 +845,17 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
 							     channel->address, &range);
 				if (ret)
-					return ret;
+					goto out;
 
 				ret = ad74413r_range_to_voltage_range(range, &range_val);
 				if (ret)
-					return ret;
+					goto out;
 
 				val[0] = range_val;
 				val[1] = AD74413R_ADC_RESOLUTION;
 			}
-			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
+			ret = iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
+			goto out;
 		case IIO_CURRENT:
 			if (channel->ch_out) {
 				val[0] = 2500000;
@@ -827,16 +873,18 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 				val[0] = range_val;
 				val[1] = AD74413R_ADC_CODE_MAX * AD74413R_SENSE_RESISTOR_OHMS;
 			}
-			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+			ret = iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+			goto out;
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	case AD74413R_DIAG:
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN,
 					&reg_val);
 		if (ret)
-			return ret;
+			goto out;
 
 		diag_func = reg_val;
 		switch (diag_func) {
@@ -885,14 +933,24 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 			val[1] = 457770;
 			break;
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
+		goto out;
 	}
 
-	return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 1, val);
+	if (ret)
+		goto out;
+
+	ret = iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 1, val);
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -911,18 +969,26 @@ static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 	int32_t val;
 	struct ad74413r_decimal decimal_val;
 
+	__disable_irq();
+
 	switch (channel->type) {
 	case IIO_RESISTANCE:
 		ret = ad74413r_adc_get_value(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
 					     channel->address, &decimal_val);
 		if (ret)
-			return ret;
+			goto out;
 		val = decimal_val.integer;
 
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
 	}
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_iio_read_slew_en(void *dev, char *buf, uint32_t len,
@@ -932,14 +998,20 @@ static int ad74413r_iio_read_slew_en(void *dev, char *buf, uint32_t len,
 	uint32_t val;
 	int ret;
 
+	__disable_irq();
 	ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_OUTPUT_CONFIG(channel->address),
 				&val);
 	if (ret)
-		return ret;
+		goto out;
 
 	val = !!no_os_field_get(AD74413R_SLEW_EN_MASK, val);
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_iio_write_slew_en(void *dev, char *buf, uint32_t len,
@@ -947,11 +1019,16 @@ static int ad74413r_iio_write_slew_en(void *dev, char *buf, uint32_t len,
 {
 	struct ad74413r_iio_desc *desc = dev;
 	int32_t val;
+	int ret;
 
 	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
-	return ad74413r_reg_update(desc->ad74413r_desc, AD74413R_OUTPUT_CONFIG(channel->address),
+	__disable_irq();
+	ret =  ad74413r_reg_update(desc->ad74413r_desc, AD74413R_OUTPUT_CONFIG(channel->address),
 				   AD74413R_SLEW_EN_MASK, !!val);
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_iio_read_slew_step(void *dev, char *buf, uint32_t len,
@@ -961,15 +1038,21 @@ static int ad74413r_iio_read_slew_step(void *dev, char *buf, uint32_t len,
 	uint32_t val;
 	int ret;
 
+	__disable_irq();
 	ret = ad74413r_reg_read(desc->ad74413r_desc,
 				AD74413R_OUTPUT_CONFIG(channel->address), &val);
 	if (ret)
-		return ret;
+		goto out;
 
 	val = no_os_field_get(AD74413R_SLEW_LIN_STEP_MASK, val);
 	val = ad74413r_slew_step_avail[val];
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
@@ -978,6 +1061,7 @@ static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
 	struct ad74413r_iio_desc *desc = dev;
 	enum ad74413r_slew_lin_step step;
 	int32_t val;
+	int ret;
 
 	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
@@ -998,9 +1082,13 @@ static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
 			return -EINVAL;
 	}
 
-	return ad74413r_reg_update(desc->ad74413r_desc,
-				   AD74413R_OUTPUT_CONFIG(channel->address),
-				   AD74413R_SLEW_LIN_STEP_MASK, step);
+	__disable_irq();
+	ret = ad74413r_reg_update(desc->ad74413r_desc,
+				  AD74413R_OUTPUT_CONFIG(channel->address),
+				  AD74413R_SLEW_LIN_STEP_MASK, step);
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
@@ -1010,8 +1098,10 @@ static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
 	uint32_t val;
 	int ret;
 
+	__disable_irq();
 	ret = ad74413r_reg_read(desc->ad74413r_desc,
 				AD74413R_OUTPUT_CONFIG(channel->address), &val);
+	__enable_irq();
 	if (ret)
 		return ret;
 
@@ -1027,6 +1117,7 @@ static int ad74413r_iio_write_slew_rate(void *dev, char *buf, uint32_t len,
 	struct ad74413r_iio_desc *desc = dev;
 	enum ad74413r_lin_rate rate;
 	int32_t val;
+	int ret;
 
 	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
@@ -1047,9 +1138,13 @@ static int ad74413r_iio_write_slew_rate(void *dev, char *buf, uint32_t len,
 			return -EINVAL;
 	}
 
-	return ad74413r_reg_update(desc->ad74413r_desc,
-				   AD74413R_OUTPUT_CONFIG(channel->address),
-				   AD74413R_SLEW_LIN_RATE_MASK, rate);
+	__disable_irq();
+	ret = ad74413r_reg_update(desc->ad74413r_desc,
+				  AD74413R_OUTPUT_CONFIG(channel->address),
+				  AD74413R_SLEW_LIN_RATE_MASK, rate);
+	__enable_irq();
+
+	return ret;
 }
 
 static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
@@ -1413,11 +1508,16 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
 	uint32_t digital_val;
+	uint32_t irq_enabled;
 
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
 	config = iio_desc->channel_configs;
+
+	// irq_enabled = (__get_PRIMASK() == 0);
+	// if (irq_enabled)
+	// 	__disable_irq();
 
 	for (i = 0; i < iio_desc->no_of_active_adc_channels + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
@@ -1453,6 +1553,9 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 
 	return 0;
 out:
+	// if (irq_enabled)
+	// 	__enable_irq();
+
 	return ret;
 }
 
