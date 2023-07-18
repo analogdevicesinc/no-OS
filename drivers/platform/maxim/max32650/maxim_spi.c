@@ -369,11 +369,6 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (ret)
 		goto err_init;
 
-	spi = MXC_SPI_GET_SPI(descriptor->device_id);
-	spi->ss_time |= 100;
-	spi->ss_time |= 100 << 8;
-	spi->ss_time |= 100 << 16;
-
 	*desc = descriptor;
 
 	return 0;
