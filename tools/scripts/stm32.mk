@@ -136,6 +136,7 @@ AS = arm-none-eabi-gcc
 CC = arm-none-eabi-gcc
 GDB = arm-none-eabi-gdb
 OC = arm-none-eabi-objcopy
+SIZE=arm-none-eabi-size
 
 .PHONY: $(BINARY).openocd
 $(BINARY).openocd:

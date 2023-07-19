@@ -22,6 +22,7 @@ LIB_FLAGS = -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys  -Wl,--end
 CC = arm-none-eabi-gcc
 CPP = arm-none-eabi-g++
 OC = arm-none-eabi-objcopy
+SIZE = arm-none-eabi-size
 
 # Project related build Files
 LSCRIPT = $(BUILD_DIR)/$(PROJECT_NAME)-linker-file.ld

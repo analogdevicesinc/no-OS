@@ -121,6 +121,7 @@ LDFLAGS	= -Wl,--gc-sections -mcpu=cortex-m3 -mthumb -lm
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
+SIZE = arm-none-eabi-size
 
 HEX = $(basename $(BINARY)).hex
 

@@ -417,6 +417,7 @@ $(PROJECT_TARGET): $(LIB_TARGETS)
 
 # Platform specific post build dependencies can be added to this rule.
 post_build:
+	$(MUTE) $(SIZE) --format=Berkley $(BINARY) $(HEX)
 
 PHONY += update
 update: $(PROJECT_TARGET)

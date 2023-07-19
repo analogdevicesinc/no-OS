@@ -1,4 +1,5 @@
 CC ?= gcc
+SIZE ?= size
 
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).out
 

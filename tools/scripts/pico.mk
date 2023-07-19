@@ -17,6 +17,7 @@ AR=arm-none-eabi-ar
 AS=arm-none-eabi-gcc
 GDB=gdb-multiarch
 OC=arm-none-eabi-objcopy	
+SIZE=arm-none-eabi-size
 
 # ELF2UF2 is used to convert elf binary in uf2 format
 # For flashing UF2 file can be dragged onto USB Mass Storage Device 

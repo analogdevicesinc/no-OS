@@ -42,6 +42,7 @@ LSCRIPT = $(BUILD_DIR)/bsp/linker.x
 LIB_PATHS += -L$(BUILD_DIR)/bsp
 
 CC = nios2-elf-gcc 
+SIZE = nios2-elf-size
 
 LD = nios2-elf-g++
 

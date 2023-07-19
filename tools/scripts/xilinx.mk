@@ -61,6 +61,7 @@ ifneq (,$(findstring cortexa9,$(strip $(ARCH))))
 
 CC := arm-none-eabi-gcc
 AR := arm-none-eabi-ar
+SIZE := arm-none-eabi-size
 
 LD := $(CC)
 
@@ -83,6 +84,7 @@ ifneq (,$(findstring cortexa53,$(strip $(ARCH))))
 
 CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
+SIZE := aarch64-none-elf-size
 
 LD := $(CC)
 endif
@@ -91,6 +93,7 @@ ifneq (,$(findstring cortexr5,$(strip $(ARCH))))
 
 CC := armr5-none-eabi-gcc 
 AR := armr5-none-eabi-ar
+SIZE := armr5-none-eabi-size
 
 LD := $(CC)
 
@@ -111,6 +114,7 @@ ifneq (,$(findstring cortexa72,$(strip $(ARCH))))
 
 CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
+SIZE := aarch64-none-elf-size
 
 LD := $(CC)
 endif
@@ -123,9 +127,11 @@ ifneq (,$(findstring sys_mb,$(strip $(ARCH))))
 ifeq ($(OS), Windows_NT)
 CC := mb-gcc
 AR := mb-ar
+SIZE := mb-size
 else
 CC := microblaze-xilinx-elf-gcc
 AR := microblaze-xilinx-elf-ar
+SIZE := microblaze-xilinx-elf-size
 endif
 
 LD := $(CC)
