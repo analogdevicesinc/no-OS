@@ -7,6 +7,7 @@ AR=arm-none-eabi-ar
 AS=arm-none-eabi-gcc
 GDB=arm-none-eabi-gdb
 OC=arm-none-eabi-objcopy
+SIZE=arm-none-eabi-size
 
 ifeq ($(OS),Windows_NT)
 PYTHON = python
