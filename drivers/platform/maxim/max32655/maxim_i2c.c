@@ -88,24 +88,24 @@ void I2C2_IRQHandler(void)
  */
 static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 {
-	mxc_gpio_cfg_t *i2c_pins;
+	mxc_gpio_cfg_t i2c_pins;
 
 	switch (device_id) {
 	case 0:
-		i2c_pins = (mxc_gpio_cfg_t *)&gpio_cfg_i2c0;
+		i2c_pins = gpio_cfg_i2c0;
 		break;
 	case 1:
-		i2c_pins = (mxc_gpio_cfg_t *)&gpio_cfg_i2c1;
+		i2c_pins = gpio_cfg_i2c1;
 		break;
 	case 2:
-		i2c_pins = (mxc_gpio_cfg_t *)&gpio_cfg_i2c2;
+		i2c_pins = gpio_cfg_i2c2;
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	i2c_pins->vssel = vssel;
-	MXC_GPIO_Config(i2c_pins);
+	i2c_pins.vssel = vssel;
+	MXC_GPIO_Config(&i2c_pins);
 
 	return 0;
 }
