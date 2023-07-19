@@ -216,10 +216,10 @@ static void mdns_name_result(struct netif* netif, u8_t result, s8_t slot)
 	mdns_is_conflict = false;
 }
 
-static void srv_txt(struct mdns_service *service, void *txt_userdata)
-{
-	mdns_resp_add_service_txtitem(service, "path=/", 6);
-}
+// static void srv_txt(struct mdns_service *service, void *txt_userdata)
+// {
+// 	mdns_resp_add_service_txtitem(service, "path=/", 6);
+// }
 
 /**
  * @brief Start the domain name allocation process.
@@ -261,7 +261,7 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 	} while (mdns_is_conflict);
 
 	ret = mdns_resp_add_service(netif, "analog", "_iio", DNSSD_PROTO_TCP,
-				    30431, srv_txt, NULL);
+				    30431, NULL, NULL);
 	if (ret)
 		return ret;
 

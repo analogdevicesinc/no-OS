@@ -777,12 +777,15 @@ static int ad74413r_iio_write_sampling_freq(void *dev, char *buf, uint32_t len,
 	case AD74413R_ADC_SAMPLE_4800HZ:
 		ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
 					  AD74413R_EN_REJ_DIAG_MASK, 0);
+		break;
 	case AD74413R_ADC_SAMPLE_10HZ:
 	case AD74413R_ADC_SAMPLE_20HZ:
 		ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
 					  AD74413R_EN_REJ_DIAG_MASK, 1);
+		break;
 	default:
 		ret = -EINVAL;
+		break;
 	}
 
 out:
