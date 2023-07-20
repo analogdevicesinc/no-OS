@@ -201,6 +201,7 @@ static int ext_flash_clock(unsigned len, unsigned deassert)
 __attribute__((section(".hpb_cs0_section"))) void test_func(void)
 {
 	printf("RAM");
+	fflush(stdout);
 }
 
 __attribute__((section(".ext_flash"))) void flash_test_func(void)
@@ -345,37 +346,37 @@ int iio_example_main()
 	// no_os_gpio_direction_output(tx_gpio, 0);
 	// no_os_gpio_direction_output(rx_gpio, 0);
 
-	// cfg_reg[0].addr = 0x01000;
-	// cfg_reg[0].val  = 0x801f;
-        // mem.base_addr = (unsigned int)&__hpb_cs0_start;
-	// mem.device_type     = MXC_HPB_DEV_HYPER_RAM;
-	// mem.cfg_reg_val     = cfg_reg;
-	// mem.cfg_reg_val_len = 1;
-	// mem.read_cs_high    = MXC_HPB_CS_HIGH_10_5;
-	// mem.write_cs_high   = MXC_HPB_CS_HIGH_10_5;
-	// mem.read_cs_setup   = MXC_HPB_CS_SETUP_HOLD_16;
-	// mem.write_cs_setup  = MXC_HPB_CS_SETUP_HOLD_14;
-	// mem.read_cs_hold    = MXC_HPB_CS_SETUP_HOLD_5;
-	// mem.write_cs_hold   = MXC_HPB_CS_SETUP_HOLD_12;
-	// mem.latency_cycle   = MXC_V_HPB_MTR_LATENCY_6CLK;
-	// mem.fixed_latency   = 0;
+	cfg_reg[0].addr = 0x01000;
+	cfg_reg[0].val  = 0x801f;
+        mem.base_addr = (unsigned int)&__hpb_cs0_start;
+	mem.device_type     = MXC_HPB_DEV_HYPER_RAM;
+	mem.cfg_reg_val     = cfg_reg;
+	mem.cfg_reg_val_len = 1;
+	mem.read_cs_high    = MXC_HPB_CS_HIGH_10_5;
+	mem.write_cs_high   = MXC_HPB_CS_HIGH_10_5;
+	mem.read_cs_setup   = MXC_HPB_CS_SETUP_HOLD_16;
+	mem.write_cs_setup  = MXC_HPB_CS_SETUP_HOLD_14;
+	mem.read_cs_hold    = MXC_HPB_CS_SETUP_HOLD_5;
+	mem.write_cs_hold   = MXC_HPB_CS_SETUP_HOLD_12;
+	mem.latency_cycle   = MXC_V_HPB_MTR_LATENCY_6CLK;
+	mem.fixed_latency   = 0;
 
-	// mem2.base_addr = (unsigned int)&__hpb_cs1_start;
-	// mem2.device_type     = MXC_HPB_DEV_HYPER_RAM;
-	// mem2.cfg_reg_val     = cfg_reg;
-	// mem2.cfg_reg_val_len = 1;
-	// mem2.read_cs_high    = MXC_HPB_CS_HIGH_10_5;
-	// mem2.write_cs_high   = MXC_HPB_CS_HIGH_10_5;
-	// mem2.read_cs_setup   = MXC_HPB_CS_SETUP_HOLD_16;
-	// mem2.write_cs_setup  = MXC_HPB_CS_SETUP_HOLD_14;
-	// mem2.read_cs_hold    = MXC_HPB_CS_SETUP_HOLD_5;
-	// mem2.write_cs_hold   = MXC_HPB_CS_SETUP_HOLD_12;
-	// mem2.latency_cycle   = MXC_V_HPB_MTR_LATENCY_6CLK;
-	// mem2.fixed_latency   = 0;
+	mem2.base_addr = (unsigned int)&__hpb_cs1_start;
+	mem2.device_type     = MXC_HPB_DEV_HYPER_RAM;
+	mem2.cfg_reg_val     = cfg_reg;
+	mem2.cfg_reg_val_len = 1;
+	mem2.read_cs_high    = MXC_HPB_CS_HIGH_10_5;
+	mem2.write_cs_high   = MXC_HPB_CS_HIGH_10_5;
+	mem2.read_cs_setup   = MXC_HPB_CS_SETUP_HOLD_16;
+	mem2.write_cs_setup  = MXC_HPB_CS_SETUP_HOLD_14;
+	mem2.read_cs_hold    = MXC_HPB_CS_SETUP_HOLD_5;
+	mem2.write_cs_hold   = MXC_HPB_CS_SETUP_HOLD_12;
+	mem2.latency_cycle   = MXC_V_HPB_MTR_LATENCY_6CLK;
+	mem2.fixed_latency   = 0;
 
 	// memset(0x68000000, 0xA9, 10000000);
 	// memset(0x78000000, 0xAF, 10000000);
-        // ret = MXC_HPB_Init(&mem, &mem2);
+        ret = MXC_HPB_Init(&mem, &mem2);
 	// memset(0x68000000, 0xA8, 10000000);
 	// memset(0x78000000, 0xA0, 10000000);
 	// memset(0x98000000, 0xAF, 100);
@@ -383,11 +384,13 @@ int iio_example_main()
 	// volatile uint8_t *ram_addr = (volatile uint8_t *)0x68000000;
 	// volatile uint8_t a = *(ram_addr + 7000000);
 
-	// memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0, (uint32_t)&__load_length_hpb_cs0);
-	// void (*func)(void);
+	no_os_mdelay(10);
+	memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0, (uint32_t)&__load_length_hpb_cs0);
+	void (*func)(void);
 
-	// func = (void(*)(void))((uint32_t)&__hpb_cs0_start | 1);
-	// func();
+	func = (void(*)(void))((uint32_t)&__hpb_cs0_start | 1);
+	func();
+	no_os_mdelay(10);
 
 	// *ram_addr = 0xA3;
 	// a = *ram_addr;

@@ -595,13 +595,13 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 
 		diag_func = reg_val;
 		switch (diag_func) {
-		case AD74413R_DIAG_REFOUT:
+		case AD74413R_DIAG_AVSS:
 			val = 33671;
 			break;
 		case AD74413R_DIAG_AGND:
 			/* fallthrough */
+		case AD74413R_DIAG_REFOUT:
 		case AD74413R_DIAG_AVDD:
-		case AD74413R_DIAG_AVSS:
 		case AD74413R_DIAG_ALDO_5V:
 		case AD74413R_DIAG_ALDO_1V8:
 		case AD74413R_DIAG_DLDO_1V8:
@@ -884,6 +884,15 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		}
 		break;
 	case AD74413R_DIAG:
+		ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+					     channel->address, &range);
+		if (ret)
+			goto out;
+
+		ret = ad74413r_range_to_voltage_range(range, &range_val);
+		if (ret)
+			goto out;
+
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN,
 					&reg_val);
 		if (ret)
@@ -892,63 +901,59 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		diag_func = reg_val;
 		switch (diag_func) {
 		case AD74413R_DIAG_AGND:
-			val[0] = 0;
-			val[1] = 38147;
+			val[0] = 2500;
+			val[1] = 65535;
 			break;
 		case AD74413R_DIAG_AVDD:
-			val[0] = 0;
-			val[1] = 610360;
+			val[0] = 2500 * 16;
+			val[1] = 65535;
 			break;
 		case AD74413R_DIAG_AVSS:
-			val[0] = 0;
-			val[1] = 177;
+			val[0] = 1;
+			val[1] = 5624;
 			break;
 		case AD74413R_DIAG_REFOUT:
-			val[0] = 0;
-			val[1] = 50062;
+			val[0] = 2500;
+			val[1] = (762 * 65535) / 1000;
 			break;
 		case AD74413R_DIAG_ALDO_5V:
-			val[0] = 0;
-			val[1] = 267029;
+			val[0] = 7 * 2500;
+			val[1] = 65535;
 			break;
 		case AD74413R_DIAG_ALDO_1V8:
-			val[0] = 0;
-			val[1] = 88883;
+			val[0] = 2330 * 2500;
+			val[1] = 65535 * 1000;
 			break;
 		case AD74413R_DIAG_DLDO_1V8:
-			val[0] = 0;
-			val[1] = 114442;
+			val[0] = 3 * 2500;
+			val[1] = 65535;
 			break;
 		case AD74413R_DIAG_DVCC:
-			val[0] = 0;
-			val[1] = 125886;
+			val[0] = 3300 * 2500;
+			val[1] = 65535 * 1000;
 			break;
 		case AD74413R_DIAG_IOVDD:
-			val[0] = 0;
-			val[1] = 125886;
+			val[0] = 3300 * 2500;
+			val[1] = 65535 * 1000;
 			break;
 		case AD74413R_SENSEL_A:
 			/* fallthrough */
 		case AD74413R_SENSEL_B:
 		case AD74413R_SENSEL_C:
 		case AD74413R_SENSEL_D:
-			val[0] = 0;
-			val[1] = 457770;
+			val[0] = 12 * 2500;
+			val[1] = 65535;
 			break;
 		default:
 			ret = -EINVAL;
 			goto out;
 		}
+		ret = iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
 		break;
 	default:
 		ret = -EINVAL;
 		goto out;
 	}
-
-	if (ret)
-		goto out;
-
-	ret = iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 1, val);
 
 out:
 	__enable_irq();
