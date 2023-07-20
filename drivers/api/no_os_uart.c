@@ -70,9 +70,9 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
-	(*desc)-> mutex = uart_mutex_table[param->device_id];
 
-	no_os_mutex_init(&((*desc)->mutex));
+	no_os_mutex_init(&(uart_mutex_table[param->device_id]));
+	(*desc)-> mutex = uart_mutex_table[param->device_id];
 
 	return 0;
 }

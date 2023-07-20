@@ -75,9 +75,9 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
-	(*desc)->mutex = timer_mutex_table[param->id];
 
-	no_os_mutex_init(&((*desc)->mutex));
+	no_os_mutex_init(&timer_mutex_table[param->id]);
+	(*desc)->mutex = timer_mutex_table[param->id];
 
 	return 0;
 }

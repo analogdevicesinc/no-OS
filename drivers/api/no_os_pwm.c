@@ -70,9 +70,9 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
-	(*desc)->mutex = pwm_mutex_table[param->id];
 
-	no_os_mutex_init(&((*desc)->mutex));
+	no_os_mutex_init(&pwm_mutex_table[param->id]);
+	(*desc)->mutex = pwm_mutex_table[param->id];
 
 	return 0;
 }
