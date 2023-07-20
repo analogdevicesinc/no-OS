@@ -96,6 +96,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 		return -ENOSYS;
 
 	no_os_mutex_remove(desc->mutex);
+	timer_mutex_table[desc->id] = NULL;
 
 	return desc->platform_ops->remove(desc);
 }

@@ -91,6 +91,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 		return -ENOSYS;
 
 	no_os_mutex_remove(desc->mutex);
+	uart_mutex_table[desc->device_id] = NULL;
 
 	return desc->platform_ops->remove(desc);
 }
