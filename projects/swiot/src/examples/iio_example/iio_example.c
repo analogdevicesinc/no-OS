@@ -384,13 +384,11 @@ int iio_example_main()
 	// volatile uint8_t *ram_addr = (volatile uint8_t *)0x68000000;
 	// volatile uint8_t a = *(ram_addr + 7000000);
 
-	no_os_mdelay(10);
 	memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0, (uint32_t)&__load_length_hpb_cs0);
 	void (*func)(void);
 
 	func = (void(*)(void))((uint32_t)&__hpb_cs0_start | 1);
 	func();
-	no_os_mdelay(10);
 
 	// *ram_addr = 0xA3;
 	// a = *ram_addr;
