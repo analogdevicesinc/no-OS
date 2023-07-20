@@ -40,6 +40,7 @@
 #include <FreeRTOS.h>
 #include "no_os_mutex.h"
 #include "semphr.h"
+#include "queue.h"
 
 /**
  * @brief Initialize mutex.
@@ -48,9 +49,12 @@
  */
 __attribute__((weak)) inline void no_os_mutex_init(void **mutex)
 {
-	if ((*mutex) == NULL) {
-		(*mutex) = (SemaphoreHandle_t *)no_os_malloc(sizeof(SemaphoreHandle_t));
-		(*mutex) = xSemaphoreCreateMutex();
+	if (*mutex == NULL) {
+		SemaphoreHandle_t* mutexTmp = (SemaphoreHandle_t *)no_os_calloc(1,
+					      sizeof(SemaphoreHandle_t));
+
+		*mutex = xSemaphoreCreateBinary();
+		xSemaphoreGive(*mutex);
 	}
 }
 
@@ -62,10 +66,8 @@ __attribute__((weak)) inline void no_os_mutex_init(void **mutex)
 __attribute__((weak)) inline void no_os_mutex_lock(void *mutex)
 {
 	if (mutex != NULL)
-		xSemaphoreTake(mutex,
-			       freeRTOS_WAIT_TIME); //replace with define from freertos config file
+		xSemaphoreTake((SemaphoreHandle_t)mutex, portMAX_DELAY);
 }
-
 /**
  * @brief Unlock mutex.
  * mutex - Pointer toward the mutex.
@@ -74,7 +76,7 @@ __attribute__((weak)) inline void no_os_mutex_lock(void *mutex)
 __attribute((weak)) inline void no_os_mutex_unlock(void *mutex)
 {
 	if (mutex != NULL)
-		xSemaphoreGive(mutex);
+		xSemaphoreGive((SemaphoreHandle_t)mutex);
 }
 
 /**
@@ -84,7 +86,8 @@ __attribute((weak)) inline void no_os_mutex_unlock(void *mutex)
  */
 __attribute__((weak)) inline void no_os_mutex_remove(void *mutex)
 {
-	if (mutex != NULL)
-		no_os_free(mutex);
+	if (mutex != NULL) {
+		vSemaphoreDelete((SemaphoreHandle_t)mutex);
+	}
 }
 

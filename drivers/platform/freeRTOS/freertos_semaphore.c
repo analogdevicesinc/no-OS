@@ -48,7 +48,13 @@
  */
 __attribute__((weak)) inline void no_os_semaphore_init(void **semaphore)
 {
-	*semaphore = (SemaphoreHandle_t *)no_os_malloc(sizeof(SemaphoreHandle_t));
+	if (*semaphore == NULL) {
+		SemaphoreHandle_t* semaphoreTmp = (SemaphoreHandle_t *)no_os_calloc(1,
+						  sizeof(SemaphoreHandle_t));
+
+		*semaphore = xSemaphoreCreate();
+		xSemaphoreGive(*semaphore);
+	}
 }
 
 /**
@@ -58,8 +64,8 @@ __attribute__((weak)) inline void no_os_semaphore_init(void **semaphore)
  */
 __attribute__((weak)) inline void no_os_semaphore_take(void *semaphore)
 {
-	xSemaphoreTake(semaphore,
-		       freeRTOS_WAIT_TIME);
+	if (semaphore != NULL)
+		xSemaphoreTake((SemaphoreHandle_t)semaphore, portMAX_DELAY);
 }
 
 /**
@@ -69,7 +75,8 @@ __attribute__((weak)) inline void no_os_semaphore_take(void *semaphore)
  */
 __attribute((weak)) inline void no_os_semaphore_give(void *semaphore)
 {
-	xSemaphoreGive(semaphore);
+	if (semaphore != NULL)
+		xSemaphoreGive((SemaphoreHandle_t)semaphore);
 }
 
 /**
@@ -79,5 +86,7 @@ __attribute((weak)) inline void no_os_semaphore_give(void *semaphore)
  */
 __attribute__((weak)) inline void no_os_semaphore_remove(void *semaphore)
 {
-	no_os_free(semaphore);
+	if (semaphore != NULL) {
+		vSemaphoreDelete((SemaphoreHandle_t)semaphore);
+	}
 }
