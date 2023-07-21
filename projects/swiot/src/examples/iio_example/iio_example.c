@@ -91,6 +91,10 @@ uint8_t iio_data_buffer2[100 * sizeof(uint32_t) * 8];
 uint8_t iio_data_buffer3[100 * sizeof(uint32_t) * 8];
 uint8_t iio_data_buffer4[100 * sizeof(uint32_t) * 8];
 
+static bool flash_test = false;
+static bool ram1_test = false;
+static bool ram2_test = false;
+
 extern int ad74413r_apply;
 extern int max14906_apply;
 extern int ad74413r_back;
@@ -198,15 +202,19 @@ static int ext_flash_clock(unsigned len, unsigned deassert)
     return MXC_SPIXF_Clocks(len, deassert);
 }
 
-__attribute__((section(".hpb_cs0_section"))) void test_func(void)
+__attribute__((section(".hpb_cs0_section"))) void test_func1(void)
 {
-	printf("RAM");
-	fflush(stdout);
+	ram1_test = true;
 }
 
-__attribute__((section(".ext_flash"))) void flash_test_func(void)
+__attribute__((section(".hpb_cs1_section"))) void test_func2(void)
 {
-	printf("Flash");
+	ram2_test = true;
+}
+
+__attribute__((section(".xip_section"))) void flash_test_func(void)
+{
+	flash_test = true;
 }
 
 /***************************************************************************//**
@@ -337,9 +345,16 @@ int iio_example_main()
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct max14906_iio_desc_init_param max14906_iio_ip;
 
+	no_os_gpio_get(&swiot_led1_gpio, &swiot_led1_ip);
+	no_os_gpio_get(&swiot_led2_gpio, &swiot_led2_ip);
+
+	printf("UART test: PASSED\n");
+
 	ret = maxq1065_init(&maxq1065, &maxq1065_ip);
 	if (ret)
 		return ret;
+
+	printf("MAXQ1065 ping: PASSED\n");
 
 	// no_os_gpio_get(&tx_gpio, &tx_perf_gpio_ip);
 	// no_os_gpio_get(&rx_gpio, &rx_perf_gpio_ip);
@@ -385,30 +400,34 @@ int iio_example_main()
 	// volatile uint8_t a = *(ram_addr + 7000000);
 
 	memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0, (uint32_t)&__load_length_hpb_cs0);
-	void (*func)(void);
+	memcpy(&__hpb_cs1_start, &__load_start_hpb_cs1, (uint32_t)&__load_length_hpb_cs1);
+	void (*func_ram1)(void);
+	void (*func_ram2)(void);
 
-	func = (void(*)(void))((uint32_t)&__hpb_cs0_start | 1);
-	func();
+	func_ram1 = (void(*)(void))((uint32_t)&__hpb_cs0_start | 1);
+	func_ram2 = (void(*)(void))((uint32_t)&__hpb_cs1_start | 1);
+	func_ram1();
+	func_ram2();
 
 	// *ram_addr = 0xA3;
 	// a = *ram_addr;
 
-	// Ext_Flash_Config_t exf_cfg = {.init  = ext_flash_board_init,
-        //                           .read  = ext_flash_board_read,
-        //                           .write = ext_flash_board_write,
-        //                           .clock = ext_flash_clock};
+	Ext_Flash_Config_t exf_cfg = {.init  = ext_flash_board_init,
+                                  .read  = ext_flash_board_read,
+                                  .write = ext_flash_board_write,
+                                  .clock = ext_flash_clock};
 
-	// ret = Ext_Flash_Configure(&exf_cfg);
-	// if (ret)
-	// 	return ret;
+	ret = Ext_Flash_Configure(&exf_cfg);
+	if (ret)
+		return ret;
 
-	// Ext_Flash_Init();
-    	// Ext_Flash_Reset();
-	// uint32_t flash_id = Ext_Flash_ID();
-	// Ext_Flash_Erase(0x00000, Ext_Flash_Erase_64K);
-	// ret = Ext_Flash_Quad(1);
-	// if (ret)
-	// 	return ret;
+	Ext_Flash_Init();
+    	Ext_Flash_Reset();
+	uint32_t flash_id = Ext_Flash_ID();
+	Ext_Flash_Erase(0x00000, Ext_Flash_Erase_64K);
+	ret = Ext_Flash_Quad(1);
+	if (ret)
+		return ret;
 
 
 	// uint8_t flash_val[3] = {0x12, 0x34, 0xFA};
@@ -418,12 +437,12 @@ int iio_example_main()
 	// ret = Ext_Flash_Program_Page(0xF, flash_readback, 3, Ext_Flash_DataLine_Single);
 
 	// ret = Ext_Flash_Read(0x0, flash_readback, 10, Ext_Flash_DataLine_Single);
-	// ret = Ext_Flash_Program_Page(0x0, &__load_start_xip, (uint32_t)(&__load_length_xip), Ext_Flash_DataLine_Single);
+	ret = Ext_Flash_Program_Page(0x0, &__load_start_xip, (uint32_t)(&__load_length_xip), Ext_Flash_DataLine_Single);
 	// if (ret)
 	// 	return ret;
 	// ret = Ext_Flash_Read(0x0, flash_readback, 10, Ext_Flash_DataLine_Single);
 
-	// spixf_cfg_setup();
+	spixf_cfg_setup();
 
 	// *((uint8_t *)0x08000000) = 0xFE;
 	// ret = Ext_Flash_Program_Page(0x0, flash_val, 3, Ext_Flash_DataLine_Quad);
@@ -436,8 +455,8 @@ int iio_example_main()
 	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
 	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
 
-	// func = (void(*)(void))((uint32_t)&__load_start_xip | 1);
-	// func();
+	func_ram1 = (void(*)(void))((uint32_t)&__load_start_xip | 1);
+	func_ram1();
 
 	// ret = Ext_Flash_Program_Page(0xF, flash_val, 3, Ext_Flash_DataLine_Quad);
 	// volatile uint8_t a = *((uint8_t *)0x08000000);
@@ -448,6 +467,24 @@ int iio_example_main()
 	// ret = Ext_Flash_Read(0xF, flash_readback, 10, Ext_Flash_DataLine_Single);
 	// if (ret)
 	// 	return ret;
+
+	printf("RAM chip 1: ");
+	if (ram1_test)
+		printf("PASSED \n");
+	else
+		printf("FAILED \n");
+
+	printf("RAM chip 2: ");
+	if (ram2_test)
+		printf("PASSED \n");
+	else
+		printf("FAILED \n");
+
+	printf("Flash chip: ");
+	if (flash_test)
+		printf("PASSED \n");
+	else
+		printf("FAILED \n");
 
 	no_os_gpio_get(&max14906_d1_gpio, &max14906_d1_ip);
 	no_os_gpio_get(&max14906_d2_gpio, &max14906_d2_ip);
@@ -471,8 +508,6 @@ int iio_example_main()
 	no_os_gpio_get(&adin1110_mssel_gpio, &adin1110_mssel_ip);
 	no_os_gpio_get(&adin1110_cfg1_gpio, &adin1110_cfg1_ip);
 	no_os_gpio_get(&adin1110_int_gpio, &adin1110_int_ip);
-	no_os_gpio_get(&swiot_led1_gpio, &swiot_led1_ip);
-	no_os_gpio_get(&swiot_led2_gpio, &swiot_led2_ip);
 	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
 	no_os_gpio_direction_output(ad74413r_ldac_gpio, 1);
 	no_os_gpio_direction_output(max14906_synch_gpio, 1);
@@ -481,8 +516,8 @@ int iio_example_main()
 	no_os_gpio_direction_output(adin1110_mssel_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
 	no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
-	no_os_gpio_direction_output(swiot_led1_gpio, 0);
-	no_os_gpio_direction_output(swiot_led2_gpio, 0);
+	no_os_gpio_direction_output(swiot_led1_gpio, 1);
+	no_os_gpio_direction_output(swiot_led2_gpio, 1);
 	no_os_gpio_direction_input(adin1110_int_gpio);
 	no_os_gpio_direction_input(ad74413r_irq_gpio);
 
@@ -491,12 +526,6 @@ int iio_example_main()
 
 	if (MXC_ADC_Init())
 		return -EINVAL;
-
-	// ret = max_eth_init(&netif_desc, &eth_param);
-	// if (ret)
-	// 	return ret;
-
-	// maxim_net.net = netif_desc->state;
 
 	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
 	if (ret)

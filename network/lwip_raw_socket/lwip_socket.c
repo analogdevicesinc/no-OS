@@ -308,9 +308,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	lwip_init();
 
 #if NO_OS_STATIC_IP
-	IP4_ADDR(&ipaddr, 192, 168, 95, 171);
-	IP4_ADDR(&netmask, 255, 255, 255, 0);
-	IP4_ADDR(&gw, 127, 0, 0, 1);
+	IP4_ADDR(&ipaddr, 169, 254, 97, 40);
+	IP4_ADDR(&netmask, 255, 255, 0, 0);
+	IP4_ADDR(&gw, 0, 0, 0, 0);
 #else
 	ip4_addr_set_zero(&ipaddr);
 	ip4_addr_set_zero(&netmask);

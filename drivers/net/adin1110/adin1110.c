@@ -926,10 +926,8 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		return ret;
 
-	led_ctrl &= ~NO_OS_GENMASK(4, 0);
 	led_ctrl &= ~NO_OS_GENMASK(12, 8);
-	led_ctrl |= no_os_field_prep(NO_OS_GENMASK(4, 0), 0xD);
-	led_ctrl |= no_os_field_prep(NO_OS_GENMASK(12, 8), 0xD);
+	led_ctrl |= no_os_field_prep(NO_OS_GENMASK(12, 8), 0x3);
 
 	ret = adin1110_mdio_write_c45(descriptor, 0x1, 0x1E, 0x8C82, led_ctrl);
 	if (ret)

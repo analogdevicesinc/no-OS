@@ -11,9 +11,9 @@ static struct maxq1065_desc *maxq1065_local_desc;
 mxq_err_t maxq1065_reset(void)
 {
 	no_os_gpio_set_value(maxq1065_local_desc->reset_gpio, NO_OS_GPIO_LOW);
-	no_os_mdelay(300);
+	no_os_mdelay(150);
 	no_os_gpio_set_value(maxq1065_local_desc->reset_gpio, NO_OS_GPIO_HIGH);
-	no_os_mdelay(700);
+	no_os_mdelay(150);
 
 	return MXQ_OK;
 }
@@ -61,22 +61,11 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 	if (ret)
 		return ret;
 
-	// ret = no_os_gpio_get(&descriptor->mode_gpio, &param->mode_gpio_param);
-	// if (ret)
-	// 	goto free_reset;
-
-	// ret = no_os_gpio_direction_output(descriptor->mode_gpio, NO_OS_GPIO_HIGH);
-	// if (ret)
-	// 	goto free_mode;
-
 	HOST_set_interface(&maxq1065_ops);
 
 	ret = MXQ_Module_Init();
 	if (ret)
 		return ret;
-
-	ret = no_os_gpio_get_value(descriptor->rdy_gpio, &rdy_val);
-	ret = no_os_gpio_get_value(descriptor->rdy_gpio, &rdy_val);
 
 	MXQ_TLS_Enable();
 
@@ -84,12 +73,12 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 	if (r != MXQ_OK)
 		return r;
 
-	r = MXQ_GetStatus(&s);
-	if (r != MXQ_OK)
-		return r;
+	// r = MXQ_GetStatus(&s);
+	// if (r != MXQ_OK)
+	// 	return r;
 
-	MXQ_DisplayStatus(&s);
-	MXQ_DisplayConfig(&s);
+	// MXQ_DisplayStatus(&s);
+	// MXQ_DisplayConfig(&s);
 
 	*desc = descriptor;
 
