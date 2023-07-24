@@ -57,10 +57,6 @@
 *******************************************************************************/
 int multiple_devices_example_main()
 {
-	struct ad74416h_init_param ad74416h_ad1_ip = {
-		.dev_addr = 1,
-	};
-
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
 
