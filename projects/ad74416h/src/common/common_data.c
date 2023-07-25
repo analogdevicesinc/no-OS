@@ -74,3 +74,12 @@ struct ad74416h_init_param ad74416h_ip = {
 struct ad74416h_init_param ad74416h_ad1_ip = {
 	.dev_addr = 1,
 };
+
+struct ad74416h_init_param ad74416h_ad2_ip = {
+	.dev_addr = 2,
+};
+
+struct ad74416h_init_param ad74416h_ad3_ip = {
+	.dev_addr = 3,
+};
+

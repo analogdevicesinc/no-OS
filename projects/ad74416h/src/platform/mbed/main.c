@@ -102,6 +102,9 @@ int main()
 {
 	int ret;
 	ad74416h_ip.spi_ip = ad74416h_spi_ip;
+	ad74416h_ad1_ip.spi_ip = ad74416h_spi_ip;
+	ad74416h_ad2_ip.spi_ip = ad74416h_spi_ip;
+	ad74416h_ad3_ip.spi_ip = ad74416h_spi_ip;
 
 #ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc* uart;
