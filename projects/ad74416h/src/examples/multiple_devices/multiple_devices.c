@@ -62,10 +62,18 @@ int multiple_devices_example_main()
 
 	uint16_t reg_value = 0xAAAA;
 	uint32_t dac_code = 0;
-
-	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ad1_ip);
+	
+	//Initialize an AD74416H Descriptor with the desired Device Address - Uncomment as desired
+	//The descriptors for the different Device Addresses are in project/ad74416h/common/common_data.c
+	
+	//ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip); //Device address 0
+	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ad1_ip); //Device address 1
+	//ret = ad74416h_init(&ad74416h_desc, &ad74416h_ad2_ip); //Device address 2
+	//ret = ad74416h_init(&ad74416h_desc, &ad74416h_ad3_ip); //Device address 3
 	if (ret)
+	{
 		goto error;
+	}
 
 	pr_info("ad74416h successfully initialized!\r\n");
 
