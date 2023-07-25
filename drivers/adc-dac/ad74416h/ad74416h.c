@@ -163,7 +163,8 @@ int ad74416h_reg_read_raw(struct ad74416h_desc *desc, uint32_t addr,
 		return ret;
 
 	/* Make sure that NOP sequence is written for the second frame */
-	memset(val, AD74416H_NOP, AD74416H_FRAME_SIZE);
+	ad74416h_format_reg_write(desc->dev_addr, AD74416H_NOP, AD74416H_NOP,
+				  val);
 
 	return no_os_spi_write_and_read(desc->spi_desc, val, AD74416H_FRAME_SIZE);
 }
