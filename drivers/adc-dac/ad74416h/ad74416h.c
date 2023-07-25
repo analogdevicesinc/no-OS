@@ -163,7 +163,8 @@ int ad74416h_reg_read_raw(struct ad74416h_desc *desc, uint32_t addr,
 		return ret;
 
 	/* Make sure that NOP sequence is written for the second frame */
-	memset(val, AD74416H_NOP, AD74416H_FRAME_SIZE);
+	ad74416h_format_reg_write(desc->dev_addr, AD74416H_NOP, AD74416H_NOP,
+						val);
 
 	return no_os_spi_write_and_read(desc->spi_desc, val, AD74416H_FRAME_SIZE);
 }
@@ -816,7 +817,7 @@ int ad74416h_set_therm_rst(struct ad74416h_desc *desc, bool enable)
 }
 
 /**
- * @brief Perform a soft reset.
+ * @brief Perform a soft reset and wait for device reset time
  * @param desc - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -828,7 +829,11 @@ int ad74416h_reset(struct ad74416h_desc *desc)
 	if (ret)
 		return ret;
 
-	return ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_2);
+	ret = ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_2);
+
+	//Wait for the device reset time and calbration memory time
+	no_os_mdelay(1);
+	return ret;
 }
 
 /**
