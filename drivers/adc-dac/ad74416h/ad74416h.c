@@ -816,7 +816,7 @@ int ad74416h_set_therm_rst(struct ad74416h_desc *desc, bool enable)
 }
 
 /**
- * @brief Perform a soft reset.
+ * @brief Perform a soft reset and wait for device reset time.
  * @param desc - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -828,7 +828,14 @@ int ad74416h_reset(struct ad74416h_desc *desc)
 	if (ret)
 		return ret;
 
-	return ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_2);
+	ret = ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_2);
+	if (ret)
+		return ret;
+
+	/* Time taken for device reset (datasheet value = 1ms) */
+	no_os_mdelay(1);
+
+	return 0;
 }
 
 /**
