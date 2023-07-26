@@ -134,22 +134,25 @@ else:
 
 HW_DIR_NAME = 'hardware'
 NEW_HW_DIR_NAME = 'new_hardware'
-FILE_TO_DOWNLOAD = 'latest.zip'
 
-def download_all_hw(builds_dir):
+def configfile_and_download_all_hw(_platform, noos, _builds_dir):
+	try:
+		with open(os.path.expanduser('~')+'/configure.txt') as configure_file:
+			lines = configure_file.readlines()
+			server_base_path = lines[0].rstrip()
+			environment_path_files = lines[1].rstrip()
+	except OSError:
+		print("Configuration file needed")
 	if SKIP_DOWNLOAD == 1:
-		return 0
-	release_link = os.path.join('https://github.com/amiclaus/hdl/releases/download/latest', FILE_TO_DOWNLOAD)
-	new_harware = os.path.join(builds_dir, FILE_TO_DOWNLOAD)
-	new_harware_dir = os.path.join(builds_dir, NEW_HW_DIR_NAME)
-	err = run_cmd('wget %s -O %s' % (release_link, new_harware))
-	if err != 0:
-		return err
+		return environment_path_files
 
-	err = run_cmd('unzip -o %s -d %s' % (new_harware, new_harware_dir))
-	if err != 0:
-		return err
-	return 0
+	if (_platform is None or _platform == 'xilinx'):
+		new_hardwares = os.path.join(_builds_dir, NEW_HW_DIR_NAME)
+		run_cmd("test -d {0} || mkdir -p {0}".format(new_hardwares))
+		err = os.system("python " + noos + "/tools/scripts/download_files.py " + noos + " " + _builds_dir + " " + server_base_path)
+		if err != 0:
+			return
+	return environment_path_files
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
@@ -159,7 +162,6 @@ def get_hardware(hardware, platform, builds_dir):
 		ext = 'sopcinfo'
 		base_name = 'system_bd'
 
-	new_hdf = 0
 	new_name = "%s.%s" % (base_name, ext)
 	tmp_filename = os.path.join(builds_dir, NEW_HW_DIR_NAME, hardware, new_name)
 	old_name = "%s.%s" % (hardware, ext)
@@ -284,10 +286,7 @@ def main():
 		hardwares = os.path.join(_builds_dir, HW_DIR_NAME)
 		run_cmd(create_dir_cmd.format(hardwares))
 
-	err = download_all_hw(_builds_dir)
-	if err != 0:
-		return
-
+	environment_path_files = configfile_and_download_all_hw(_platform, noos, _builds_dir)
 	for project in os.listdir(projets):
 		binary_created = False
 		if _project is not None:
@@ -322,7 +321,7 @@ def main():
 						if _hw != hardware:
 							continue
 					env = dict(os.environ)
-					shell_source("~/." + platform + "_environment.sh")
+					shell_source(environment_path_files + platform + "_environment.sh")
 
 					new_build = BuildConfig(project_dir,
 								platform,
