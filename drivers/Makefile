@@ -2,7 +2,8 @@ CC = arm-none-eabi-gcc
 
 SKIPDIR = -path ./platform -prune -o \
 	-path ./axi_core -prune -o \
-	-path ./rf-transceiver/navassa -prune -o
+	-path ./rf-transceiver/navassa -prune -o \
+	-path ./adc/ad9081 -prune -o
 
 INCLUDES = -I../include/ \
 	 -I../projects/drivers/util/ \
@@ -11,7 +12,6 @@ INCLUDES = -I../include/ \
 	 -I./adc/ad9208/ad9208_api \
 	 -I./adc/ad9083/ad9083_api \
 	 -I../projects/ad9083/src/uc \
-	 -I./adc/ad9081/api \
 	 -I./axi_core/axi_adc_core \
 	 -I./axi_core/axi_dac_core \
 	 -I./axi_core/spi_engine \
