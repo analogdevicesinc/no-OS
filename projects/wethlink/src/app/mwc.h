@@ -88,10 +88,10 @@ enum mwc_iio_attr_id {
 
 struct nvmp {
 	char hw_version[2];
-	char hw_serial[12];
+	char hw_serial[15];
 	char carrier_model[20];
 	char carrier_version[2];
-	char carrier_serial[12];
+	char carrier_serial[15];
 	bool tx_autotuning;
 	unsigned int tx_target;
 	unsigned int tx_tolerance;

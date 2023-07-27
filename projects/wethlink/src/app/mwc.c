@@ -495,12 +495,12 @@ static int mwc_iio_write_str_attr(void *device, char *buf,
 		p = iiodev->hw_version;
 		break;
 	case MWC_IIO_ATTR_HW_SERIAL:
-		if (len > 12)
+		if (len > 15)
 			return -EINVAL;
 		p = iiodev->hw_serial;
 		break;
 	case MWC_IIO_ATTR_CARRIER_SERIAL:
-		if (len > 12)
+		if (len > 15)
 			return -EINVAL;
 		p = iiodev->carrier_serial;
 		break;
