@@ -59,5 +59,7 @@ for hardware in unique_hardware_list:
                         print("Hardware " + hardware + " found on next timestamp " + timestamp_folder)
                     FOUND = True
                     break
+            else:
+                break
     if FOUND is False:
         print("Project " + hardware + " was not found on server")
