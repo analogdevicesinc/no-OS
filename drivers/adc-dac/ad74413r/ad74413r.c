@@ -330,7 +330,7 @@ static int ad74413r_scratch_test(struct ad74413r_desc *desc)
 }
 
 /**
- * @brief Perform a soft reset.
+ * @brief Perform a soft reset and wait for device reset time.
  * @param desc - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -342,7 +342,14 @@ int ad74413r_reset(struct ad74413r_desc *desc)
 	if (ret)
 		return ret;
 
-	return ad74413r_reg_write(desc, AD74413R_CMD_KEY, AD74413R_CMD_KEY_RESET_2);
+	ret = ad74413r_reg_write(desc, AD74413R_CMD_KEY, AD74413R_CMD_KEY_RESET_2);
+	if (ret)
+		return ret;
+
+	/* Time taken for device reset (datasheet value = 1ms) */
+	no_os_mdelay(1);
+
+	return 0;
 }
 
 /**
