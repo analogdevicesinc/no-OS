@@ -7,6 +7,7 @@ import subprocess
 import multiprocessing
 import sys
 import filecmp
+import requests
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -39,10 +40,11 @@ def parse_input():
 	parser.add_argument('-hardware', help="Name of hardware to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	parser.add_argument('-builds_dir', default=(os.getcwd() +'/builds'), help="Directory where to build projects")
+	parser.add_argument('-hdl_branch', default='master', help="Name of hdl_branch from which to downlaod hardware")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
-		args.platform, args.build_name, args.builds_dir, args.hardware)
+		args.platform, args.build_name, args.builds_dir, args.hardware, args.hdl_branch)
 
 ERR = 0
 LOG_START = " -> "
@@ -58,6 +60,7 @@ def log_success(msg):
 
 DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
+create_dir_cmd = "test -d {0} || mkdir -p {0}"
 
 def shell_source(script):
 	"""
@@ -135,24 +138,40 @@ else:
 HW_DIR_NAME = 'hardware'
 NEW_HW_DIR_NAME = 'new_hardware'
 
-def configfile_and_download_all_hw(_platform, noos, _builds_dir):
+def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	try:
-		with open(os.path.expanduser('~')+'/configure.txt') as configure_file:
+		with open(os.path.expanduser('~') + '/configure_hdl_new.txt') as configure_file:
 			lines = configure_file.readlines()
 			server_base_path = lines[0].rstrip()
 			environment_path_files = lines[1].rstrip()
 	except OSError:
 		print("Configuration file needed")
-	if SKIP_DOWNLOAD == 1:
-		return environment_path_files
+	if hdl_branch == "master":
+		hdl_branch_path = hdl_branch + '/hdl_output'
+	else:
+		if requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
+			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output'
+		elif requests.get(server_base_path + 'releases/' + hdl_branch, stream=True).status_code == 200:
+			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output'
+		else:
+			print("Error related to hdl branch name: " + hdl_branch)
+			exit()
 
+	builds_dir = _builds_dir + '_' + hdl_branch
+	run_cmd(create_dir_cmd.format(builds_dir))
+	if SKIP_DOWNLOAD == 1:
+		return (environment_path_files, builds_dir)
+	hardwares = os.path.join(builds_dir, HW_DIR_NAME)
+	run_cmd(create_dir_cmd.format(hardwares))
+	server_full_path = server_base_path + hdl_branch_path
 	if (_platform is None or _platform == 'xilinx'):
-		new_hardwares = os.path.join(_builds_dir, NEW_HW_DIR_NAME)
-		run_cmd("test -d {0} || mkdir -p {0}".format(new_hardwares))
-		err = os.system("python " + noos + "/tools/scripts/download_files.py " + noos + " " + _builds_dir + " " + server_base_path)
+		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
+		run_cmd(create_dir_cmd.format(new_hardwares))
+		err = os.system("python " + noos + "/tools/scripts/download_files.py " + noos + \
+		  " " + builds_dir + " " + server_full_path)
 		if err != 0:
 			return
-	return environment_path_files
+	return (environment_path_files, builds_dir)
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
@@ -185,10 +204,7 @@ class BuildConfig:
 	def __init__(self, project_dir, platform, flags, build_name, hardware,
 	             _builds_dir, log_dir):
 		self.project_dir = project_dir
-		if _builds_dir is None:
-			self.builds_dir = project_dir
-		else:
-			self.builds_dir = _builds_dir
+		self.builds_dir = _builds_dir
 		self.log_dir = log_dir
 		self.project = os.path.basename(project_dir)
 		self.platform = platform
@@ -277,18 +293,12 @@ class BuildConfig:
 
 		return 0
 def main():
-	create_dir_cmd = "test -d {0} || mkdir -p {0}"
 	(noos, export_dir, log_dir, _project,
-	 _platform, _build_name, _builds_dir, _hw) = parse_input()
+	 _platform, _build_name, _builds_dir, _hw, hdl_branch) = parse_input()
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
-	if _builds_dir is not None:
-		run_cmd(create_dir_cmd.format(_builds_dir))
-		hardwares = os.path.join(_builds_dir, HW_DIR_NAME)
-		run_cmd(create_dir_cmd.format(hardwares))
-
-	environment_path_files = configfile_and_download_all_hw(_platform, noos, _builds_dir)
+	(environment_path_files, builds_dir) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		binary_created = False
 		if _project is not None:
@@ -330,7 +340,7 @@ def main():
 								flags,
 								build_name,
 								hardware,
-								_builds_dir, 
+								builds_dir,
 								log_dir)
 					err = new_build.build()
 					os.environ.clear()
