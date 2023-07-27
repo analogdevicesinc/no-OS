@@ -114,7 +114,7 @@ def run_cmd_stm(cmd):
 		ERR = 1
 		return err
 	err = os.system(cmd + ' >> %s 2>&1' % log_file)
-	if err != 0 and err != 31744 and tmp[0] != 'cp':
+	if err != 0 and tmp[0] != 'cp':
 		log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
@@ -252,7 +252,9 @@ class BuildConfig:
 			if err != 0:
 				return err
 			err = run_cmd_stm("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() / 2))
-			if err != 0 and err != 31744:
+			if err != 0:
+				if err == 124:
+					log("Build not finished, stopped by timeout")
 				return err
 		else:
 			if new_hdf:
