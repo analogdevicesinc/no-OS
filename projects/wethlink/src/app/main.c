@@ -230,11 +230,6 @@ post_eeprom:
 		.eeprom = eeprom,
 		.adin1300 = iio_adin1300->dev,
 		.max24287 = iio_max24287->dev,
-		.hw_serial = nvmp->hw_serial,
-		.hw_version = nvmp->hw_version,
-		.carrier_model = nvmp->carrier_model,
-		.carrier_serial = nvmp->carrier_serial,
-		.carrier_version = nvmp->carrier_version,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)
