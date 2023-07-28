@@ -1466,62 +1466,9 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->ad9081.hal_info.spi_xfer = ad9081_spi_xfer;
 	phy->ad9081.hal_info.log_write = ad9081_log_write;
 
-	phy->ad9081.serdes_info = (adi_ad9081_serdes_settings_t) {
-		.ser_settings = { /* txfe jtx */
-			.lane_settings = {
-				{
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				}, {
-					.swing_setting = AD9081_SER_SWING_850,
-					.pre_emp_setting = AD9081_SER_PRE_EMP_0DB,
-					.post_emp_setting = AD9081_SER_POST_EMP_0DB
-				},
-			},
-			.invert_mask = 0x00,
-			.lane_mapping = {
-				{ 0, 1, 2, 3, 4, 5, 6, 7 },
-				{ 7, 7, 7, 7, 7, 7, 7, 7 }
-			}, /* link0, link1 */
-		},
-		.des_settings = { /* txfe jrx */
-			.boost_mask = 0xff,
-			.invert_mask = 0x00,
-			.ctle_filter = { 2, 2, 2, 2, 2, 2, 2, 2 },
-			.lane_mapping =  {
-				{ 0, 1, 2, 3, 4, 5, 6, 7 },
-				{ 0, 1, 2, 3, 4, 5, 6, 7 }
-			}, /* link0, link1 */
-		}
-	};
-
-//	phy->ad9081.clk_info.sysref_ctrl = ad9081_sysref_ctrl;
-//	phy->ad9081.clk_info.sysref_clk = phy;
+	for (uint8_t i = 0; i < MAX_NUM_CHANNELIZER; i++) {
+		phy->ad9081.serdes_info.des_settings.ctle_filter[i] = 1;
+	}
 
 	ret = no_os_gpio_direction_output(phy->gpio_reset, 1);
 	if (ret < 0)
@@ -1539,8 +1486,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 		goto error_3;
 	}
 
-	if (((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9081) &&
-	    ((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9082)) {
+	if ((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9081) {
 		printf("%s: Unrecognized CHIP_ID 0x%X\n", __func__,
 		       chip_id.prod_id);
 		ret = -1;
@@ -1552,13 +1498,6 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 		printf("%s: ad9081_setup failed (%"PRId32")\n", __func__, ret);
 		goto error_3;
 	}
-
-	ret = jesd204_dev_register(&phy->jdev, &jesd204_ad9081_init);
-	if (ret < 0)
-		goto error_3;
-	priv = jesd204_dev_priv(phy->jdev);
-	priv->phy = phy;
-
 
 	adi_ad9081_device_api_revision_get(&phy->ad9081, &api_rev[0],
 					   &api_rev[1], &api_rev[2]);
