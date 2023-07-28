@@ -242,6 +242,7 @@ endif
 
 PHONY += create_boot_bin
 create_boot_bin:
+ifneq ($(findstring cortexa72,$(strip $(ARCH))),cortexa72)
 ifneq ($(findstring sys_mb,$(strip $(ARCH))),sys_mb)
 	$(call print,Creating BOOT.BIN and archive with files)
 	$(MUTE) $(call remove_dir,$(BOOT_BIN_DIR)) $(HIDE)
@@ -269,6 +270,7 @@ else
 	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(MUTE) $(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
 	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BUILD_DIR)/boot_files/*
+endif
 endif
 
 reset: xilinx_clean_all
