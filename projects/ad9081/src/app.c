@@ -126,7 +126,7 @@ int main(void)
 		.dual_link = 0,
 		.version = AD9081_TX_JESD_VERSION,
 		.logical_lane_mapping = AD9081_TX_LOGICAL_LANE_MAPPING,
-		.tpl_phase_adjust = AD9081_JRX_TPL_PHASE_ADJUST
+		.tpl_phase_adjust = 0x3b
 	};
 	struct link_init_param jtx_link_rx = {
 		.device_id = 0,
@@ -206,7 +206,7 @@ int main(void)
 		.name = "tx_dac",
 		.base = TX_CORE_BASEADDR,
 		.channels = NULL,
-		.rate = 3
+		.rate = 0
 	};
 	struct axi_dac *tx_dac;
 	struct axi_dmac_init rx_dmac_init = {
@@ -262,7 +262,7 @@ int main(void)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
 	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
+			33333333, 375000, 375000, 24750000, 24750000);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
