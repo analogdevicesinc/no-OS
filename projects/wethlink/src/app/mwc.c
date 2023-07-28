@@ -260,12 +260,6 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 	static struct nvmp nvmp = factory_defaults_template;
 
 	// firmware specific parameters
-	strcpy(nvmp.hw_serial, mwc->hw_serial);
-	strcpy(nvmp.hw_version, mwc->hw_version);
-	strcpy(nvmp.carrier_model, mwc->carrier_model);
-	strcpy(nvmp.carrier_serial, mwc->carrier_serial);
-	strcpy(nvmp.carrier_version, mwc->carrier_version);
-
 	nvmp.tx_autotuning = mwc->tx_autotuning;
 	nvmp.tx_target = mwc->tx_target;
 	nvmp.tx_tolerance = mwc->tx_tolerance;
@@ -385,7 +379,6 @@ static int mwc_iio_read_attr(void *device, char *buf,
 		break;
 	case MWC_IIO_ATTR_RESET:
 	case MWC_IIO_ATTR_SAVE:
-	case MWC_IIO_ATTR_SAVE_FACTORY_DEFAULTS:
 		val = 0; // dummy, to avoid attribute read error
 		break;
 	default:
@@ -393,36 +386,6 @@ static int mwc_iio_read_attr(void *device, char *buf,
 	};
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-static int mwc_iio_read_str_attr(void *device, char *buf,
-			     uint32_t len, const struct iio_ch_info *channel,
-			     intptr_t priv)
-{
-	struct mwc_iio_dev *iiodev = (struct mwc_iio_dev *)device;
-	char *p;
-
-	switch (priv) {
-	case MWC_IIO_ATTR_HW_VERSION:
-		p = iiodev->hw_version;
-		break;
-	case MWC_IIO_ATTR_HW_SERIAL:
-		p = iiodev->hw_serial;
-		break;
-	case MWC_IIO_ATTR_CARRIER_SERIAL:
-		p = iiodev->carrier_serial;
-		break;
-	case MWC_IIO_ATTR_CARRIER_VERSION:
-		p = iiodev->carrier_version;
-		break;
-	case MWC_IIO_ATTR_CARRIER_MODEL:
-		p = iiodev->carrier_model;
-		break;
-	default:
-		return -EINVAL;
-	};
-
-	return sprintf(buf, "%s", p);
 }
 
 static int mwc_iio_write_attr(void *device, char *buf,
@@ -468,58 +431,12 @@ static int mwc_iio_write_attr(void *device, char *buf,
 	case MWC_IIO_ATTR_SAVE:
 		ret = mwc_save_to_eeprom(iiodev, 0);
 		break;
-	case MWC_IIO_ATTR_SAVE_FACTORY_DEFAULTS:
-		ret = mwc_save_to_eeprom(iiodev, 2048);
-		break;
 	default:
 		ret = -EINVAL;
 		break;
 	};
 
 	return ret;
-}
-
-static int mwc_iio_write_str_attr(void *device, char *buf,
-			      uint32_t len, const struct iio_ch_info *channel,
-			      intptr_t priv)
-{
-	int ret = 0;
-	char *p;
-	struct mwc_iio_dev *iiodev = (struct mwc_iio_dev *)device;
-	
-
-	switch (priv) {
-	case MWC_IIO_ATTR_HW_VERSION:
-		if (len > 2)
-			return -EINVAL;
-		p = iiodev->hw_version;
-		break;
-	case MWC_IIO_ATTR_HW_SERIAL:
-		if (len > 15)
-			return -EINVAL;
-		p = iiodev->hw_serial;
-		break;
-	case MWC_IIO_ATTR_CARRIER_SERIAL:
-		if (len > 15)
-			return -EINVAL;
-		p = iiodev->carrier_serial;
-		break;
-	case MWC_IIO_ATTR_CARRIER_VERSION:
-		if (len > 2)
-			return -EINVAL;
-		p = iiodev->carrier_version;
-		break;
-	case MWC_IIO_ATTR_CARRIER_MODEL:
-		if (len > 20)
-			return -EINVAL;
-		p = iiodev->carrier_model;
-		break;
-	default:
-		ret = -EINVAL;
-		break;
-	};
-
-	return sprintf(p, "%s", buf);
 }
 
 static int mwc_iio_read_raw(void *device, char *buf, uint32_t len,
@@ -679,42 +596,6 @@ static struct iio_attribute mwc_iio_attrs[] = {
 		.show = mwc_iio_read_attr,
 		.store = mwc_iio_write_attr,
 	},
-	{
-		.name = "save_defaults",
-		.priv = MWC_IIO_ATTR_SAVE_FACTORY_DEFAULTS,
-		.show = mwc_iio_read_attr,
-		.store = mwc_iio_write_attr,
-	},
-	{
-		.name = "hw_version",
-		.priv = MWC_IIO_ATTR_HW_VERSION,
-		.show = mwc_iio_read_str_attr,
-		.store = mwc_iio_write_str_attr,
-	},
-	{
-		.name = "hw_serial",
-		.priv = MWC_IIO_ATTR_HW_SERIAL,
-		.show = mwc_iio_read_str_attr,
-		.store = mwc_iio_write_str_attr,
-	},
-	{
-		.name = "carrier_model",
-		.priv = MWC_IIO_ATTR_CARRIER_MODEL,
-		.show = mwc_iio_read_str_attr,
-		.store = mwc_iio_write_str_attr,
-	},
-	{
-		.name = "carrier_version",
-		.priv = MWC_IIO_ATTR_CARRIER_VERSION,
-		.show = mwc_iio_read_str_attr,
-		.store = mwc_iio_write_str_attr,
-	},
-	{
-		.name = "carrier_serial",
-		.priv = MWC_IIO_ATTR_CARRIER_SERIAL,
-		.show = mwc_iio_read_str_attr,
-		.store = mwc_iio_write_str_attr,
-	},
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -756,11 +637,6 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 	d->eeprom = init_param->eeprom;
 	d->adin1300 = init_param->adin1300;
 	d->max24287 = init_param->max24287;
-	d->hw_version = init_param->hw_version;
-	d->hw_serial = init_param->hw_serial;
-	d->carrier_model = init_param->carrier_model;
-	d->carrier_version = init_param->carrier_version;
-	d->carrier_serial = init_param->carrier_serial;
 
 	// initialize reset gpio separately
 	ret = no_os_gpio_get(&d->reset_gpio, init_param->reset_gpio_ip);

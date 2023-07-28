@@ -60,11 +60,6 @@ struct mwc_iio_init_param {
 	struct no_os_eeprom_desc *eeprom;
 	struct adin1300_desc *adin1300;
 	struct max24287_desc *max24287;
-	char *hw_version;
-	char *hw_serial;
-	char *carrier_model;
-	char *carrier_version;
-	char *carrier_serial;
 };
 
 enum mwc_iio_attr_id {
@@ -78,12 +73,6 @@ enum mwc_iio_attr_id {
 	MWC_IIO_ATTR_RX_AUTO_IFVGA_RFLNA,
 	MWC_IIO_ATTR_RESET,
 	MWC_IIO_ATTR_SAVE,
-	MWC_IIO_ATTR_SAVE_FACTORY_DEFAULTS,
-	MWC_IIO_ATTR_HW_VERSION,
-	MWC_IIO_ATTR_HW_SERIAL,
-	MWC_IIO_ATTR_CARRIER_MODEL,
-	MWC_IIO_ATTR_CARRIER_VERSION,
-	MWC_IIO_ATTR_CARRIER_SERIAL,
 };
 
 struct nvmp {
