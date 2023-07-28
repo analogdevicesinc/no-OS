@@ -81,7 +81,7 @@ int main(void)
 	struct no_os_clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
 	struct no_os_clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
-#ifdef PLATFORM_MB
+#if (defined(PLATFORM_MB) || defined(versal))
 		.type = GPIO_PL,
 #else
 		.type = GPIO_PS,
