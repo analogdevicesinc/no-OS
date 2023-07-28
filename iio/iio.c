@@ -109,8 +109,9 @@ static char header[] =
 	"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
 	"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
 	"]>"
-	"<context name=\"xml\" description=\"no-OS "
-	NO_OS_TOSTRING(NO_OS_VERSION) "\" >";
+	"<context name=\"xml\" description=\"no-OS/projects/"
+	NO_OS_TOSTRING(NO_OS_PROJECT)" "
+	NO_OS_TOSTRING(NO_OS_VERSION)"\" >";
 static char header_end[] = "</context>";
 
 static const char * const iio_chan_type_string[] = {
