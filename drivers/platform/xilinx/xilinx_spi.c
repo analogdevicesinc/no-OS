@@ -62,6 +62,9 @@
 #elif defined(PLATFORM_ZYNQMP)
 #define SPI_CLK_FREQ_HZ(dev)	(XPAR_PSU_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
 #define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
+#elif defined(versal)
+#define SPI_CLK_FREQ_HZ(dev)	(XPAR_XSPIPS_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
 #else
 #define SPI_NUM_INSTANCES	0
 #endif
