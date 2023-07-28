@@ -69,6 +69,7 @@
 #define IRQ_OPS			&aducm_irq_ops
 #define UART_OPS		&aducm_uart_ops
 #define TIMER_OPS		&aducm_timer_ops
+#define GPIO_OPS		&aducm_gpio_ops
 #define TIMER_EXTRA		&timer_extra_ip
 
 #define WIFI_SW_RESET		true
