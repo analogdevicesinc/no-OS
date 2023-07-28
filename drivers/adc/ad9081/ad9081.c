@@ -1087,6 +1087,10 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->ad9081.hal_info.spi_xfer = ad9081_spi_xfer;
 	phy->ad9081.hal_info.log_write = ad9081_log_write;
 
+	for (uint8_t i = 0; i < MAX_NUM_CHANNELIZER; i++) {
+		phy->ad9081.serdes_info.des_settings.ctle_filter[i] = 1;
+	}
+
 	ret = no_os_gpio_direction_output(phy->gpio_reset, 1);
 	if (ret < 0)
 		goto error_3;
