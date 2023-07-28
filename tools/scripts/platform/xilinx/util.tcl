@@ -7,7 +7,7 @@ proc _file_is_xsa {} {
 }
 
 proc _get_processor {} {
-	set proc_list [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
+	set proc_list [hsi::get_cells * -hier -filter {IP_TYPE==PROCESSOR}]
 
 	if {[llength $proc_list] == 0} {
 		return 0
