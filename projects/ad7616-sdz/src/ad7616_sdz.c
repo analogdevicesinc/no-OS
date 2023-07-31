@@ -44,7 +44,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "spi_engine.h"
 #include <xil_cache.h>
 #include <xparameters.h>
 #include "no_os_error.h"
