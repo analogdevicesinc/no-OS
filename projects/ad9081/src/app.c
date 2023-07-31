@@ -48,6 +48,7 @@
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "ad9081.h"
+#include "hmc7044.h"
 #include "app_clock.h"
 #include "app_jesd.h"
 #include "axi_jesd204_rx.h"
@@ -75,6 +76,11 @@ static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned));
 
 extern struct axi_jesd204_rx *rx_jesd;
 extern struct axi_jesd204_tx *tx_jesd;
+extern struct hmc7044_dev* hmc7044_dev;
+
+uint32_t dac_buffer[1024] __attribute__ ((aligned));
+uint16_t adc_buffer[1024 * 8] __attribute__ ((
+			aligned));
 
 int main(void)
 {
@@ -124,7 +130,7 @@ int main(void)
 		.dual_link = 0,
 		.version = AD9081_TX_JESD_VERSION,
 		.logical_lane_mapping = AD9081_TX_LOGICAL_LANE_MAPPING,
-		.tpl_phase_adjust = 0x3b
+		.tpl_phase_adjust = AD9081_JRX_TPL_PHASE_ADJUST
 	};
 	struct link_init_param jtx_link_rx = {
 		.device_id = 0,
@@ -151,6 +157,8 @@ int main(void)
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
+		.sysref_cmos_input_enable = 0,
+		.config_sync_0a_cmos_enable = 0,
 		.multidevice_instance_count = 1,
 #ifdef QUAD_MXFE
 		.jesd_sync_pins_01_swap_enable = true,
@@ -159,6 +167,11 @@ int main(void)
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
+		.nco_sync_direct_sysref_mode_enable = 0,
+		.sysref_average_cnt_exp = 7,
+		.continuous_sysref_mode_disable = 0,
+		.tx_disable = false,
+		.rx_disable = false,
 		/* TX */
 		.dac_frequency_hz = AD9081_DAC_FREQUENCY,
 		/* The 4 DAC Main Datapaths */
@@ -169,7 +182,8 @@ int main(void)
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
 		.tx_channel_gain = AD9081_TX_CHAN_GAIN,
-		.jrx_link_tx = &jrx_link_tx,
+		.jrx_link_tx[0] = &jrx_link_tx,
+		.jrx_link_tx[1] = NULL,
 		/* RX */
 		.adc_frequency_hz = AD9081_ADC_FREQUENCY,
 		.nyquist_zone = AD9081_ADC_NYQUIST_ZONE,
@@ -272,8 +286,8 @@ int main(void)
 		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
 					    phy[i]->jtx_link_rx[1].jesd_param.jesd_m;
 
-		tx_dac_init.num_channels += phy[i]->jrx_link_tx.jesd_param.jesd_m *
-					    (phy[i]->jrx_link_tx.jesd_param.jesd_duallink > 0 ? 2 : 1);
+		tx_dac_init.num_channels += phy[i]->jrx_link_tx[0].jesd_param.jesd_m *
+					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
 
 	axi_jesd204_rx_watchdog(rx_jesd);
@@ -287,7 +301,95 @@ int main(void)
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
-#ifdef IIO_SUPPORT
+	struct jesd204_topology *topology;
+	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = hmc7044_dev->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_sysref_provider = true,
+		},
+		{
+			.jdev = rx_jesd->jdev,
+			.link_ids = {FRAMER_LINK0_RX},
+			.links_number = 1,
+		},
+		{
+			.jdev = tx_jesd->jdev,
+			.link_ids = {DEFRAMER_LINK0_TX},
+			.links_number = 1,
+		},
+#if MULTIDEVICE_INSTANCE_COUNT == 4
+		{
+			.jdev = phy[0]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[1]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[2]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[3]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_top_device = true,
+		},
+#else
+		{
+			.jdev = phy[0]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_top_device = true,
+		},
+#endif
+	};
+
+	jesd204_topology_init(&topology, devs,
+		sizeof(devs)/sizeof(*devs));
+
+	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+
+	for(uint8_t chan = 0; chan < 8; chan++) {
+		//status = axi_dac_set_datasel(tx_dac, chan, AXI_DAC_DATA_SEL_DMA);
+		tx_dac->channels[chan].sel = AXI_DAC_DATA_SEL_DDS;
+		if (status)
+			printf("Could not set data selection for channel %d.\n", chan);
+	}
+
+	axi_dac_data_setup(tx_dac);
+//	/* DMA Example */
+//	extern const uint32_t sine_lut_iq[1024];
+//	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
+//				 NO_OS_ARRAY_SIZE(sine_lut_iq), (uintptr_t)dac_buffer);
+//
+//	struct axi_dma_transfer transfer_tx = {
+//		// Number of bytes to write/read
+//		.size = NO_OS_ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t) / 8,
+//		// Transfer done flag
+//		.transfer_done = 0,
+//		// Signal transfer mode
+//		.cyclic = CYCLIC,
+//		// Address of data source
+//		.src_addr = (uintptr_t)dac_buffer,
+//		// Address of data destination
+//		.dest_addr = 0
+//	};
+//	status = axi_dmac_transfer_start(tx_dmac, &transfer_tx);
+//	if (status)
+//		return status;
+
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
+
+//#ifdef IIO_SUPPORT
+#if 0
 
 	/* iio axi adc configurations. */
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
@@ -399,3 +501,5 @@ int main(void)
 #endif
 
 }
+
+
