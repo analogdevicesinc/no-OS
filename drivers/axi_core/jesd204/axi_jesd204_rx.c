@@ -960,6 +960,8 @@ int32_t axi_jesd204_rx_init_jesd_fsm(struct axi_jesd204_rx **jesd204,
 	else if (jesd->encoder >= JESD204_ENCODER_MAX)
 		goto err;
 
+	axi_jesd204_rx_lane_clk_disable(jesd);
+
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_rx_init);
 	if (ret)
 		goto err;
