@@ -48,6 +48,11 @@
 #include "mbed_i2c.h"
 #include "mbed_spi.h"
 #include "no_os_uart.h"
+#include "no_os_gpio.h"
+#include "mbed_gpio.h"
+#include "no_os_irq.h"
+#include "mbed_irq.h"
+#include "mbed_gpio_irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -76,5 +81,9 @@
 extern struct mbed_uart_init_param ad74416h_uart_extra_ip;
 extern struct mbed_i2c_init_param ad74416h_i2c_extra;
 extern struct mbed_spi_init_param ad74416h_spi_extra;
+extern struct no_os_gpio_init_param trigger_gpio_param;
+extern struct no_os_irq_init_param trigger_gpio_irq_params;
+extern struct mbed_gpio_init_param mbed_trigger_gpio_extra_init_params;
+extern struct mbed_gpio_irq_init_param mbed_trigger_gpio_irq_init_params;
 
 #endif /* __PARAMETERS_H__ */
