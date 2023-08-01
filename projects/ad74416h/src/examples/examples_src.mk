@@ -76,5 +76,11 @@ SRCS += $(PROJECT)/src/examples/temperature_3wire_rtd/temperature_3wire_rtd.c
 INCS += $(PROJECT)/src/examples/temperature_3wire_rtd/temperature_3wire_rtd.h
 endif
 
+ifeq (y,$(strip $(VOLTAGE_INPUT_IRQ_EXAMPLE)))
+CFLAGS += -DVOLTAGE_INPUT_IRQ_EXAMPLE
+SRCS += $(PROJECT)/src/examples/voltage_input_irq/voltage_input_irq.c
+INCS += $(PROJECT)/src/examples/voltage_input_irq/voltage_input_irq.h
+endif
+
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h

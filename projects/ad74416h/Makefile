@@ -9,9 +9,10 @@ CURRENT_INPUT_LOOP_EXAMPLE = n
 MULTIPLE_DEVICES_EXAMPLE = n
 DIGITAL_INPUT_LOGIC_EXAMPLE = n
 DIGITAL_INPUT_LOOP_EXAMPLE = n
-DIGITAL_OUTPUT_EXAMPLE = y
+DIGITAL_OUTPUT_EXAMPLE = n
 TEMPERATURE_2WIRE_RTD_EXAMPLE = n
 TEMPERATURE_3WIRE_RTD_EXAMPLE = n
+VOLTAGE_INPUT_IRQ_EXAMPLE = y
 
 # Select the device you want to enable by choosing y for enabling and n for disabling
 include ../../tools/scripts/generic_variables.mk

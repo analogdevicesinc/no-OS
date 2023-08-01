@@ -91,6 +91,10 @@
 #include "temperature_2wire_rtd.h"
 #endif
 
+#ifdef VOLTAGE_INPUT_IRQ_EXAMPLE
+#include "voltage_input_irq.h"
+#endif
+
 
 /***************************************************************************//**
  * @brief Main function for Mbed platform.
@@ -303,8 +307,24 @@ int main()
         }
 #endif
 
+#ifdef VOLTAGE_INPUT_IRQ_EXAMPLE
+        struct no_os_uart_desc* uart;
+        ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+        if(ret) {
+                no_os_uart_remove(uart);
+                return ret;
+        }
+        no_os_uart_stdio(uart);
+        ret = voltage_input_irq_example_main();
+        if (ret) {
+                no_os_uart_remove(uart);
+                return ret;
+        }
+#endif
 
-#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE+VOLTAGE_INPUT_EXAMPLE+CURRENT_INPUT_EXT_EXAMPLE+MULTIPLE_DEVICES_EXAMPLE+CURRENT_INPUT_LOOP_EXAMPLE+DIGITAL_INPUT_LOGIC_EXAMPLE+DIGITAL_INPUT_LOOP_EXAMPLE+DIGITAL_OUTPUT_EXAMPLE+TEMPERATURE_2WIRE_RTD_EXAMPLE+TEMPERATURE_3WIRE_RTD_EXAMPLE != 1)
+
+
+#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE+VOLTAGE_INPUT_EXAMPLE+CURRENT_INPUT_EXT_EXAMPLE+MULTIPLE_DEVICES_EXAMPLE+CURRENT_INPUT_LOOP_EXAMPLE+DIGITAL_INPUT_LOGIC_EXAMPLE+DIGITAL_INPUT_LOOP_EXAMPLE+DIGITAL_OUTPUT_EXAMPLE+TEMPERATURE_2WIRE_RTD_EXAMPLE+TEMPERATURE_3WIRE_RTD_EXAMPLE+VOLTAGE_INPUT_IRQ_EXAMPLE != 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
