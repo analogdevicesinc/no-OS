@@ -154,10 +154,10 @@ taliseInit_t talInit = {
 			.thb3Interpolation = 1,                    /* Tx Halfband3 filter interpolation (1,2)*/
 			.txInt5Interpolation = 1,                    /* Tx Int5 filter interpolation (1,5) */
 			.txInputRate_kHz = 491520,                    /* Primary Signal BW */
-			.primarySigBandwidth_Hz = 150000000,    /* The Rx RF passband bandwidth for the profile */
-			.rfBandwidth_Hz = 400000000,            /* The Tx RF passband bandwidth for the profile */
-			.txDac3dBCorner_kHz = 400000,                /* The DAC filter 3dB corner in kHz */
-			.txBbf3dBCorner_kHz = 200000,                /* The BBF 3dB corner in kHz */
+			.primarySigBandwidth_Hz = 200000000,    /* The Rx RF passband bandwidth for the profile */
+			.rfBandwidth_Hz = 450000000,            /* The Tx RF passband bandwidth for the profile */
+			.txDac3dBCorner_kHz = 450000,                /* The DAC filter 3dB corner in kHz */
+			.txBbf3dBCorner_kHz = 225000,                /* The BBF 3dB corner in kHz */
 			.loopBackAdcProfile = {186, 148, 176, 90, 1280, 901, 1479, 225, 1401, 85, 995, 21, 48, 48, 36, 207, 0, 0, 0, 0, 52, 0, 0, 6, 24, 0, 0, 6, 24, 0, 25, 27, 0, 0, 25, 27, 0, 0, 165, 44, 15, 905}
 		},
 		.deframerSel = TAL_DEFRAMER_A,                    /* Talise JESD204b deframer config for the Tx data path */
