@@ -216,12 +216,12 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		},
 		/* CORE_CLK_TX_OBS_AB */
 		{
-			.disable = 0, .num = 8, .divider = 24, .driver_mode = 0,
+			.disable = 0, .num = 8, .divider = hmc7044_param.pll2_freq / tx_div40_rate_hz, .driver_mode = 0,
 			.driver_impedance = 1
 		},
 		/* CORE_CLK_RX_AB */
 		{
-			.disable = 0, .num = 9, .divider = 12, .driver_mode = 0,
+			.disable = 0, .num = 9, .divider = hmc7044_param.pll2_freq / rx_div40_rate_hz, .driver_mode = 0,
 			.driver_impedance = 1
 		}
 #endif
