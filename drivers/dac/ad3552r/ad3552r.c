@@ -584,8 +584,8 @@ int32_t ad3552r_set_dev_value(struct ad3552r_desc *desc,
 	return 0;
 }
 
-static inline uint8_t _get_code_reg_addr(uint8_t ch, uint8_t is_dac,
-		uint8_t is_fast)
+uint8_t ad3552r_get_code_reg_addr(uint8_t ch, uint8_t is_dac,
+				  uint8_t is_fast)
 {
 	if (is_dac) {
 		if (is_fast)
@@ -607,7 +607,7 @@ static int32_t _ad3552r_set_code_value(struct ad3552r_desc *desc,
 {
 	uint8_t addr;
 
-	addr = _get_code_reg_addr(ch, 1, desc->ch_data[ch].fast_en);
+	addr = ad3552r_get_code_reg_addr(ch, 1, desc->ch_data[ch].fast_en);
 	return ad3552r_write_reg(desc, addr, val);
 }
 
@@ -647,7 +647,7 @@ static int32_t _ad3552r_get_code_value(struct ad3552r_desc *desc,
 	int32_t err;
 	uint8_t addr;
 
-	addr = _get_code_reg_addr(ch, 1, desc->ch_data[ch].fast_en);
+	addr = ad3552r_get_code_reg_addr(ch, 1, desc->ch_data[ch].fast_en);
 	err = ad3552r_read_reg(desc, addr, val);
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
@@ -1293,8 +1293,8 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 		if (!desc->ldac)
 			buff[len++] = AD3552R_MASK_ALL_CH;
 
-	msg.addr = _get_code_reg_addr(1, mode == AD3552R_WRITE_DAC_REGS,
-				      is_fast);
+	msg.addr = ad3552r_get_code_reg_addr(1, mode == AD3552R_WRITE_DAC_REGS,
+					     is_fast);
 	msg.len = len;
 	msg.data = buff;
 
@@ -1338,7 +1338,7 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 
 	ch = no_os_find_first_set_bit(ch_mask);
 	is_input = (mode == AD3552R_WRITE_DAC_REGS);
-	addr = _get_code_reg_addr(ch, is_input, desc->ch_data[ch].fast_en);
+	addr = ad3552r_get_code_reg_addr(ch, is_input, desc->ch_data[ch].fast_en);
 	for (i = 0; i < samples; ++i) {
 		err = ad3552r_write_reg(desc, addr, data[i]);
 		if (NO_OS_IS_ERR_VALUE(err))

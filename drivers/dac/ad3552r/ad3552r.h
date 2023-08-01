@@ -457,6 +457,8 @@ struct ad3552r_init_param {
 
 uint8_t ad3552r_reg_len(uint8_t addr);
 
+uint8_t ad3552r_get_code_reg_addr(uint8_t ch, uint8_t is_dac, uint8_t is_fast);
+
 int32_t ad3552r_init(struct ad3552r_desc **desc,
 		     struct ad3552r_init_param *init_param);
 
