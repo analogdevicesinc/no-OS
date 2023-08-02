@@ -34,7 +34,7 @@ jobs:
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)'
+      artifact: '$(ARTIFACT_NAME)_Xilinx'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
     condition: true
@@ -65,7 +65,7 @@ jobs:
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)'
+      artifact: '$(ARTIFACT_NAME)_STM32'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
     condition: true
@@ -96,7 +96,7 @@ jobs:
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)'
+      artifact: '$(ARTIFACT_NAME)_Maxim'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
     condition: true
@@ -127,7 +127,7 @@ jobs:
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)'
+      artifact: '$(ARTIFACT_NAME)_Mbed'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
     condition: true
@@ -158,7 +158,7 @@ jobs:
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)'
+      artifact: '$(ARTIFACT_NAME)_Pico'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
     condition: true
@@ -189,7 +189,7 @@ jobs:
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)'
+      artifact: '$(ARTIFACT_NAME)_ADuCM3029'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
     condition: true
