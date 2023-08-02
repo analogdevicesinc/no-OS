@@ -44,6 +44,7 @@
 #include "common_data.h"
 #include "basic_example.h"
 
+
 /***************************************************************************//**
  * @brief Main function execution for maxim platform.
  *
