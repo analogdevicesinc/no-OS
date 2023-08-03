@@ -529,7 +529,7 @@ int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk)
 	if (ret)
 		return ret;
 
-	switch ((reg_temp & AD7124_ADC_CTRL_REG_POWER_MODE(3)) >> 6) {
+	switch (dev->power_mode) {
 	case 0:
 		*f_clk = f_clk_lp;
 		break;
@@ -566,7 +566,7 @@ int32_t ad7124_fltcoff_get(struct ad7124_dev *dev,
 	if (ret)
 		return ret;
 
-	power_mode = (reg_temp & AD7124_ADC_CTRL_REG_POWER_MODE(3)) >> 6;
+	power_mode = dev->power_mode;
 
 	ret = ad7124_read_register2(dev, (AD7124_Filter_0 + chn_num), &reg_temp);
 	if (ret)
@@ -691,6 +691,277 @@ int32_t ad7124_set_odr(struct ad7124_dev *dev,
 }
 
 /***************************************************************************//**
+ * @brief		   - SPI internal register write to device using a mask.
+ * @param dev      - The device structure.
+ * @param reg_addr - The register address.
+ * @param data     - The register data.
+ * @param mask     - The mask.
+ * @return Returns 0 for success or negative error code otherwise.
+*******************************************************************************/
+int ad7124_reg_write_msk(struct ad7124_dev *dev,
+			 uint32_t reg_addr,
+			 uint32_t data,
+			 uint32_t mask)
+{
+	int ret;
+	uint32_t reg_data;
+
+	ret = ad7124_read_register2(dev, reg_addr, &reg_data);
+	if (ret)
+		return ret;
+
+	reg_data &= ~mask;
+	reg_data |= data;
+
+	return ad7124_write_register2(dev, reg_addr, reg_data);
+}
+
+/***************************************************************************//**
+ * @brief Set ADC Mode
+ * @param device - AD7124 Device Descriptor
+ * @param adc_mode - ADC Mode to be configured
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int ad7124_set_adc_mode(struct ad7124_dev *device, enum ad7124_mode adc_mode)
+{
+	int ret;
+
+	if (!device || adc_mode >= ADC_MAX_MODES)
+		return -EINVAL;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_ADC_CTRL_REG,
+				   no_os_field_prep(AD7124_ADC_CTRL_REG_MODE_MSK, adc_mode),
+				   AD7124_ADC_CTRL_REG_MODE_MSK);
+	if (ret)
+		return ret;
+
+	device->mode = adc_mode;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * Enable/disable channel.
+ * @param device - The device structure.
+ * @param chn_num - The channel number.
+ * @param channel_status - Channel status.
+ * @return Returns 0 for success or negative error code otherwise.
+*******************************************************************************/
+int ad7124_set_channel_status(struct ad7124_dev *device,
+			      uint8_t chn_num,
+			      bool channel_status)
+{
+	int ret;
+
+	if (channel_status)
+		channel_status = AD7124_CH_MAP_REG_CH_ENABLE;
+	else
+		channel_status = 0x0U;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CH0_MAP_REG+chn_num,
+				   channel_status,
+				   AD7124_CH_MAP_REG_CH_ENABLE);
+	if (ret)
+		return ret;
+
+	device->chan_map[chn_num].channel_enable = channel_status;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set Analog Inputs to channel.
+ * @param device - AD7124 Device Descriptor.
+ * @param chn_num - Channel whose Analog input is to be configured.
+ * @param analog_input - Analog Inputs to the Channel.
+ * @return Returns 0 for success or negative error code otherwise.
+*****************************************************************************/
+int ad7124_connect_analog_input(struct ad7124_dev *device,
+				uint8_t chn_num,
+				struct ad7124_analog_inputs analog_input)
+{
+	int ret;
+
+	/* Select the Positive Analog Input */
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CH0_MAP_REG+chn_num,
+				   no_os_field_prep(AD7124_CHMAP_REG_AINPOS_MSK, analog_input.ainp),
+				   AD7124_CHMAP_REG_AINPOS_MSK);
+	if (ret)
+		return ret;
+
+	/* Select the Negative Analog Input */
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CH0_MAP_REG+chn_num,
+				   no_os_field_prep(AD7124_CHMAP_REG_AINNEG_MSK, analog_input.ainm),
+				   AD7124_CHMAP_REG_AINNEG_MSK);
+	if (ret)
+		return ret;
+
+	device->chan_map[chn_num].ain.ainp =
+		analog_input.ainp;
+	device->chan_map[chn_num].ain.ainm =
+		analog_input.ainm;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Assign Setup to Channel.
+ * @param device - AD7124 Device Descriptor.
+ * @param chn_num - Channel ID (number).
+ * @param setup - Setup ID (number).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int ad7124_assign_setup(struct ad7124_dev *device,
+			uint8_t chn_num,
+			uint8_t setup)
+{
+	int ret;
+
+	/* Assign setup to the Channel Register. */
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CH0_MAP_REG+chn_num,
+				   no_os_field_prep(AD7124_CHMAP_REG_SETUP_SEL_MSK, setup),
+				   AD7124_CHMAP_REG_SETUP_SEL_MSK);
+	if (ret)
+		return (ret);
+
+	device->chan_map[chn_num].setup_sel = setup;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set Polarity
+ * @param device - AD7124 Device Descriptor.
+ * @param bipolar - Polarity Select:True in case of Bipolar,
+ *					False in case of Unipolar.
+ * @param setup_id - Setup ID (number).
+ * @return Returns 0 for success or negative error code otherwise.
+*****************************************************************************/
+int ad7124_set_polarity(struct ad7124_dev* device,
+			bool bipolar,
+			uint8_t setup_id)
+{
+	int ret;
+
+	if (bipolar)
+		bipolar = AD7124_CFG_REG_BIPOLAR;
+	else
+		bipolar = 0x0U;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CFG0_REG+setup_id,
+				   bipolar,
+				   AD7124_CFG_REG_BIPOLAR);
+	if (ret)
+		return ret;
+
+	device->setups[setup_id].bi_unipolar = bipolar;
+
+	return 0;
+}
+
+/***************************************************************************//*
+ * @brief Select the reference source.
+ * @param device - AD7124 Device Descriptor.
+ * @param ref_source - Reference source.
+ * @param setup_id - Setup ID (Number).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int ad7124_set_reference_source(struct ad7124_dev* device,
+				enum ad7124_reference_source ref_source,
+				uint8_t setup_id,
+				bool ref_en)
+{
+	int ret;
+
+	if (!device || ref_source >= MAX_REF_SOURCES)
+		return -EINVAL;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CFG0_REG+setup_id,
+				   no_os_field_prep(AD7124_SETUP_CONF_REG_REF_SEL_MSK, ref_source),
+				   AD7124_SETUP_CONF_REG_REF_SEL_MSK);
+	if (ret)
+		return ret;
+
+	device->setups[setup_id].ref_source = ref_source;
+
+	if (ref_en)
+		ref_en = AD7124_ADC_CTRL_REG_REF_EN;
+	else
+		ref_en = 0x0U;
+
+	/* Enable the REF_EN Bit in case of Internal reference */
+	if (ref_source == INTERNAL_REF) {
+		ret = ad7124_reg_write_msk(device,
+					   AD7124_ADC_CTRL_REG,
+					   ref_en,
+					   AD7124_ADC_CTRL_REG_REF_EN);
+		if (ret)
+			return ret;
+	}
+
+	device->ref_en = ref_en;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Enable Input Buffer.
+ * @param device - AD7124 Device Descriptor.
+ * @param inbuf_en - Enable Input Buffer.
+ * @param refbuf_en - Enable reference Buffer.
+ * @param setup_id - Setup ID (Number).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int ad7124_enable_buffers(struct ad7124_dev* device,
+			  bool inbuf_en,
+			  bool refbuf_en,
+			  uint8_t setup_id)
+{
+	int ret;
+	uint32_t reg_val;
+
+	if (inbuf_en)
+		/* Enable input buffer for the chosen set up. */
+		reg_val = (AD7124_CFG_REG_AIN_BUFP |
+			   AD7124_CFG_REG_AINN_BUFM);
+	else
+		reg_val =  0;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CFG0_REG+setup_id,
+				   reg_val,
+				   AD7124_AIN_BUF_MSK);
+	if (ret)
+		return ret;
+
+	if (refbuf_en)
+		/* Enable reference buffer for the chosen set up */
+		reg_val = (AD7124_CFG_REG_REF_BUFP |
+			   AD7124_CFG_REG_REF_BUFM);
+	else
+		reg_val = 0;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CFG0_REG+setup_id,
+				   reg_val,
+				   AD7124_REF_BUF_MSK);
+	if (ret)
+		return ret;
+
+	device->setups[setup_id].ain_buff = inbuf_en;
+	device->setups[setup_id].ref_buff = refbuf_en;
+
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief Initializes the AD7124.
  * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -701,12 +972,13 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 		     struct ad7124_init_param *init_param)
 {
 	int32_t ret;
-	enum ad7124_registers reg_nr;
 	struct ad7124_dev *dev;
+	uint8_t setup_index;
+	uint8_t ch_index;
 
 	dev = (struct ad7124_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -EINVAL;
+		return -ENOMEM;
 
 	dev->regs = init_param->regs;
 	dev->spi_rdy_poll_cnt = init_param->spi_rdy_poll_cnt;
@@ -714,33 +986,94 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	/* Initialize the SPI communication. */
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret)
-		return ret;
+		goto error_dev;
+
+	/* Update the device structure with power-on/reset settings. */
+	dev->check_ready = init_param->check_ready;
 
 	/*  Reset the device interface.*/
 	ret = ad7124_reset(dev);
 	if (ret)
-		return ret;
+		goto error_spi;
 
-	/* Update the device structure with power-on/reset settings */
-	dev->check_ready = 1;
+	/* Initialize ADC mode register. */
+	ret = ad7124_write_register(dev, dev->regs[AD7124_ADC_CTRL_REG]);
+	if (ret)
+		goto error_spi;
 
-	/* Initialize registers AD7124_ADC_Control through AD7124_Filter_7. */
-	for (reg_nr = AD7124_Status; (reg_nr < AD7124_Offset_0) && !(ret < 0);
-	     reg_nr++) {
-		if (dev->regs[reg_nr].rw == AD7124_RW) {
-			ret = ad7124_write_register(dev, dev->regs[reg_nr]);
-			if (ret < 0)
-				break;
-		}
+	/* Get CRC State. */
+	ad7124_update_crcsetting(dev);
+	ad7124_update_dev_spi_settings(dev);
 
-		/* Get CRC State and device SPI interface settings */
-		if (reg_nr == AD7124_Error_En) {
-			ad7124_update_crcsetting(dev);
-			ad7124_update_dev_spi_settings(dev);
-		}
+	dev->active_device = init_param->active_device;
+	dev->power_mode = init_param->power_mode;
+
+	/* Read ID register to identify the part. */
+	ret = ad7124_read_register(dev, &dev->regs[AD7124_ID_REG]);
+	if (ret)
+		goto error_spi;
+	if (dev->active_device == ID_AD7124_4) {
+		if (!(dev->regs[AD7124_ID_REG].value = AD7124_4_ID))
+			goto error_spi;
+	} else if (dev->active_device == ID_AD7124_8) {
+		if (!(dev->regs[AD7124_ID_REG].value = AD7124_8_ID))
+			goto error_spi;
+	}
+
+	for (setup_index = 0; setup_index < AD7124_MAX_SETUPS; setup_index++) {
+		ret = ad7124_set_polarity(dev,
+					  init_param->setups[setup_index].bi_unipolar,
+					  setup_index);
+		if (ret)
+			goto error_spi;
+
+		ret = ad7124_set_reference_source(dev,
+						  init_param->setups[setup_index].ref_source,
+						  setup_index,
+						  init_param->ref_en);
+		if (ret)
+			goto error_spi;
+
+		ret = ad7124_enable_buffers(dev,
+					    init_param->setups[setup_index].ain_buff,
+					    init_param->setups[setup_index].ref_buff,
+					    setup_index);
+		if (ret)
+			goto error_spi;
+	}
+
+	ret = ad7124_set_adc_mode(dev, init_param->mode);
+	if (ret)
+		goto error_spi;
+
+	for (ch_index = 0; ch_index < AD7124_MAX_CHANNELS; ch_index++) {
+		ret = ad7124_connect_analog_input(dev,
+						  ch_index,
+						  init_param->chan_map[ch_index].ain);
+		if (ret)
+			goto error_spi;
+
+		ret = ad7124_assign_setup(dev,
+					  ch_index,
+					  init_param->chan_map[ch_index].setup_sel);
+		if (ret)
+			goto error_spi;
+
+		ret = ad7124_set_channel_status(dev,
+						ch_index,
+						init_param->chan_map[ch_index].channel_enable);
+		if (ret)
+			goto error_spi;
 	}
 
 	*device = dev;
+
+	return 0;
+
+error_spi:
+	no_os_spi_remove(dev->spi_desc);
+error_dev:
+	free(dev);
 
 	return ret;
 }
