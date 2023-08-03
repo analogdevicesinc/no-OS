@@ -5,7 +5,7 @@
 # PLATFORM = stm32
 # PLATFORM = linux
 
-# Select the example you want to enable by chossing y for enabling and n for disabling
+# Select the example you want to enable by choosing y for enabling and n for disabling
 IIO_EXAMPLE = y
 IIO_SW_TRIGGER_EXAMPLE = n
 IIO_TIMER_TRIGGER_EXAMPLE = n
