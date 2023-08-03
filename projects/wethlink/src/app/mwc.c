@@ -214,17 +214,12 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 			if (match_count == 10 || iter_count == 20) {
 				done = true;
-				uint8_t if_attn;
-				enum hmc6301_lna_attn rflna_attn;
-				hmc630x_get_if_attn(rx, &if_attn);
-				hmc6301_get_lna_gain(rx, &rflna_attn);
-				float gain = 69 - (float)if_attn * 1.3 - (float)rflna_attn * 6 - 
-						attn1 * 6 - attn2 * 6 - attni_fine;
-				float s = mwc->hbtx ? 10 : 18;
-				float e = mwc->hbtx ? 31.2 : 37.2;
-				if ((gain - s) < 0)
-					gain = s;
-				led_rx_det(100 - (int)(100 * (gain - s) / (e - s)));
+				led_rx_det_green(false);
+				led_rx_det_red(false);
+				if (abs((int)mV - (int)mwc->rx_target) <= mwc->rx_tolerance)
+					led_rx_det_green(true);
+				else
+					led_rx_det_red(true);
 			}
 
 			iter_count++;

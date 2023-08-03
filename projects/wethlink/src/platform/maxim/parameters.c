@@ -166,9 +166,16 @@ struct no_os_gpio_init_param led_tx_det_red_gpio_ip = {
 	.extra = &xgpio,
 };
 
-struct no_os_gpio_init_param led_rx_det_gpio_ip = {
-	.port = LED_RX_DET_PORT,
-	.number = LED_RX_DET_PIN,
+struct no_os_gpio_init_param led_rx_det_red_gpio_ip = {
+	.port = LED_RX_DET_RED_PORT,
+	.number = LED_RX_DET_RED_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
+struct no_os_gpio_init_param led_rx_det_green_gpio_ip = {
+	.port = LED_RX_DET_GREEN_PORT,
+	.number = LED_RX_DET_GREEN_PIN,
 	.platform_ops = &max_gpio_ops,
 	.extra = &xgpio,
 };
