@@ -1,7 +1,7 @@
 /***************************************************************************//**
 *   @file    ad7124.h
 *   @brief   AD7124 header file.
-*   	     Devices AD7124-4, AD7124-8
+*   	     Devices: AD7124-4, AD7124-8
 *
 ********************************************************************************
 * Copyright 2015-2019, 2023(c) Analog Devices, Inc.
@@ -37,7 +37,6 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
 #ifndef __AD7124_H__
 #define __AD7124_H__
 
@@ -45,16 +44,25 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "no_os_spi.h"
 #include "no_os_delay.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
-/******************* Macros and Constants Definitions ********************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-
 #define	AD7124_RW 1   /* Read and Write */
 #define	AD7124_R  2   /* Read only */
 #define AD7124_W  3   /* Write only */
+
+/* Total Number of Setups */
+#define AD7124_MAX_SETUPS	8
+/* Maximum number of channels */
+#define AD7124_MAX_CHANNELS	16
+/* Device IDs */
+#define AD7124_4_ID         0x14
+#define AD7124_8_ID	        0x16
 
 /* AD7124 Register Map */
 #define AD7124_COMM_REG      0x00
@@ -260,10 +268,136 @@
 #define AD7124_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
 #define AD7124_DISABLE_CRC 0
 #define AD7124_USE_CRC 1
+#define AD7124_CHMAP_REG_SETUP_SEL_MSK  	NO_OS_GENMASK(14,12)
+#define AD7124_CHMAP_REG_AINPOS_MSK    		NO_OS_GENMASK(9,5)
+#define AD7124_CHMAP_REG_AINNEG_MSK    		NO_OS_GENMASK(4,0)
+#define AD7124_ADC_CTRL_REG_MODE_MSK   		NO_OS_GENMASK(5,2)
+#define AD7124_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(4,3)
+#define AD7124_REF_BUF_MSK                  NO_OS_GENMASK(8,7)
+#define AD7124_AIN_BUF_MSK                  NO_OS_GENMASK(6,5)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+/**
+ * @enum	ad7124_device_type
+ * @details AD7124 Device definitions
+**/
+enum ad7124_device_type {
+	ID_AD7124_4,
+	ID_AD7124_8
+};
+
+/**
+ * @enum  ad7124_mode
+ * @brief ADC Modes of Operation
+**/
+enum ad7124_mode {
+	AD7124_CONTINUOUS,
+	AD7124_SINGLE,
+	AD7124_STANDBY,
+	AD7124_POWER_DOWN,
+	AD7124_IDLE,
+	AD7124_IN_ZERO_SCALE_OFF,
+	AD7124_IN_FULL_SCALE_GAIN,
+	AD7124_SYS_ZERO_SCALE_OFF,
+	AD7124_SYS_ZERO_SCALE_GAIN,
+	ADC_MAX_MODES
+};
+
+/**
+ * @enum ad7124_analog_input
+ * @brief ADC input sources for each channel.
+ **/
+enum ad7124_analog_input {
+	AD7124_AIN0,
+	AD7124_AIN1,
+	AD7124_AIN2,
+	AD7124_AIN3,
+	AD7124_AIN4,
+	AD7124_AIN5,
+	AD7124_AIN6,
+	AD7124_AIN7,
+	AD7124_AIN8,
+	AD7124_AIN9,
+	AD7124_AIN10,
+	AD7124_AIN11,
+	AD7124_AIN12,
+	AD7124_AIN13,
+	AD7124_AIN14,
+	AD7124_AIN15,
+	AD7124_AVSS,
+	AD7124_TEMP_SENSOR,
+	AD7124_IN_REF,
+	AD7124_DGND,
+	AD7124_AVDD_AVSS_P,
+	AD7124_AVDD_AVSS_M,
+	AD7124_IOVDD_DGND_P,
+	AD7124_IOVDD_DGND_M,
+	AD7124_ALDO_AVSS_P,
+	AD7124_ALDO_AVSS_M,
+	AD7124_DLDO_DGND_P,
+	AD7124_DLDO_DGND_M,
+	AD7124_V_20MV_P,
+	AD7124_V_20MV_M
+};
+
+/**
+ * @struct ad7124_analog_inputs
+ * @brief Positive and negative analog inputs
+**/
+struct ad7124_analog_inputs {
+	enum ad7124_analog_input ainp;
+	enum ad7124_analog_input ainm;
+};
+
+/**
+ * @struct ad7124_channel_map
+ * @brief Channel mapping
+**/
+struct ad7124_channel_map {
+	bool channel_enable;
+	uint8_t setup_sel;
+	struct ad7124_analog_inputs ain;
+};
+
+/**
+ * @enum ad7124_reference_source
+ * @brief Type of ADC Reference
+**/
+enum ad7124_reference_source {
+	/* External Reference REFIN1+/-*/
+	EXTERNAL_REFIN1,
+	/* External Reference REFIN2+/-*/
+	EXTERNAL_REFIN2,
+	/* Internal 2.5V Reference */
+	INTERNAL_REF,
+	/* AVDD - AVSS */
+	AVDD_AVSS,
+	/* Maximum Reference Sources */
+	MAX_REF_SOURCES
+};
+
+/**
+  * @struct ad7124_channel_setup
+  * @brief Channel setup
+**/
+struct ad7124_channel_setup {
+	bool bi_unipolar;
+	bool ref_buff;
+	bool  ain_buff;
+	enum ad7124_reference_source ref_source;
+};
+
+/**
+  * @enum ad7124_power_mode
+  * @brief Power modes
+**/
+enum ad7124_power_mode {
+	AD7124_LOW_POWER,
+	AD7124_MID_POWER,
+	AD7124_HIGH_POWER
+};
 
 /* Device register info */
 struct ad7124_st_reg {
@@ -273,7 +407,7 @@ struct ad7124_st_reg {
 	int32_t rw;
 };
 
-/* AD7124 registers list*/
+/* AD7124 registers list */
 enum ad7124_registers {
 	AD7124_Status,
 	AD7124_ADC_Control,
@@ -335,18 +469,10 @@ enum ad7124_registers {
 	AD7124_REG_NO
 };
 
-/*
+/**
  * The structure describes the device and is used with the ad7124 driver.
- * @spi_desc: A reference to the SPI configuration of the device.
- * @regs: A reference to the register list of the device that the user must
- *       provide when calling the Setup() function.
- * @userCRC: Whether to do or not a cyclic redundancy check on SPI transfers.
- * @check_ready: When enabled all register read and write calls will first wait
- *               until the device is ready to accept user requests.
- * @spi_rdy_poll_cnt: Number of times the driver should read the Error register
- *                    to check if the device is ready to accept user requests,
- *                    before a timeout error will be issued.
- */
+ * @brief Device Structure
+ **/
 struct ad7124_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
@@ -355,6 +481,17 @@ struct ad7124_dev {
 	int16_t use_crc;
 	int16_t check_ready;
 	int16_t spi_rdy_poll_cnt;
+	enum ad7124_mode mode;
+	/* Active Device */
+	enum ad7124_device_type active_device;
+	/* Reference enable */
+	bool ref_en;
+	/* Power modes */
+	enum ad7124_power_mode power_mode;
+	/* Setups */
+	struct ad7124_channel_setup setups[AD7124_MAX_SETUPS];
+	/* Channel Mapping*/
+	struct ad7124_channel_map chan_map[AD7124_MAX_CHANNELS];
 };
 
 struct ad7124_init_param {
@@ -362,7 +499,20 @@ struct ad7124_init_param {
 	struct no_os_spi_init_param		*spi_init;
 	/* Device Settings */
 	struct ad7124_st_reg	*regs;
+	int16_t use_crc;
+	int16_t check_ready;
 	int16_t spi_rdy_poll_cnt;
+	enum ad7124_mode mode;
+	/* Active Device */
+	enum ad7124_device_type active_device;
+	/* Reference enable */
+	bool ref_en;
+	/* Power modes */
+	enum ad7124_power_mode power_mode;
+	/* Setups */
+	struct ad7124_channel_setup setups[AD7124_MAX_SETUPS];
+	/* Channel Mapping*/
+	struct ad7124_channel_map chan_map[AD7124_MAX_CHANNELS];
 };
 
 /******************************************************************************/
@@ -446,7 +596,48 @@ int32_t ad7124_set_odr(struct ad7124_dev *dev,
 		       float odr,
 		       int16_t chn_no);
 
-/* Initializes the AD7124. */
+/* SPI write to device using a mask. */
+int ad7124_reg_write_msk(struct ad7124_dev *dev,
+			 uint32_t reg_addr,
+			 uint32_t data,
+			 uint32_t mask);
+
+/* Set ADC Mode */
+int ad7124_set_adc_mode(struct ad7124_dev *device, enum ad7124_mode mode);
+
+/* Enable/Disable Channels */
+int ad7124_set_channel_status(struct ad7124_dev *device,
+			      uint8_t chn_no,
+			      bool channel_status);
+
+/* Configure Analog inputs to channel */
+int ad7124_connect_analog_input(struct ad7124_dev *device,
+				uint8_t chn_no,
+				struct ad7124_analog_inputs analog_input);
+
+/* Assign setup to channel */
+int ad7124_assign_setup(struct ad7124_dev *device,
+			uint8_t ch_no,
+			uint8_t setup);
+
+/* Assign polarity to setup */
+int ad7124_set_polarity(struct ad7124_dev* device,
+			bool bipolar,
+			uint8_t setup_id);
+
+/* Assign reference source to setup */
+int ad7124_set_reference_source(struct ad7124_dev* device,
+				enum ad7124_reference_source ref_source,
+				uint8_t setup_id,
+				bool ref_en);
+
+/* Enable/Disable input and reference buffers to setup */
+int ad7124_enable_buffers(struct ad7124_dev* device,
+			  bool ain_buff,
+			  bool ref_buff,
+			  uint8_t setup_id);
+
+/* Initializes the AD7124 */
 int32_t ad7124_setup(struct ad7124_dev **device,
 		     struct ad7124_init_param *init_param);
 
