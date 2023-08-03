@@ -1,4 +1,4 @@
-# Select the example you want to enable by chossing y for enabling and n for disabling
+# Select the example you want to enable by choosing y for enabling and n for disabling
 BASIC_EXAMPLE = y
 IIO_EXAMPLE = n
 
