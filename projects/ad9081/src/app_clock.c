@@ -213,6 +213,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 3,		// DEV_SYSREF
 			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}, {
 			.num = 6,		// CORE_CLK_TX
 			.divider = 12,		// 250 MHz
@@ -233,6 +234,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 13,		// FPGA_SYSREF
 			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}
 	};
 #elif defined(PLATFORM_MB)
@@ -283,15 +285,17 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 3,		// DEV_SYSREF
-			.divider = 768,
+			.divider = 1536,
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}, {
 			.num = 6,		// CORE_CLK_TX
 			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
+
 		}, {
 			.num = 8,		// CORE_CLK_RX_ALT2
-			.divider = 12,
+			.divider = 4,
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 10,		// CORE_CLK_RX_ALT
@@ -303,8 +307,9 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 13,		// FPGA_SYSREF
-			.divider = 768,
+			.divider = 1536,
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}
 	};
 #endif
@@ -333,7 +338,8 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = false,
 		.pulse_gen_mode = 0x0,
-		.channels = chan_spec
+		.channels = chan_spec,
+		.jesd204_sysref_provider = 1
 	};
 #endif
 
@@ -381,14 +387,14 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	hmc7044_hw.dev_clk_set_rate = hmc7044_clk_set_rate;
 
 	dev_refclk[0].hw = &hmc7044_hw;
-	dev_refclk[0].hw_ch_num = 0;
+	dev_refclk[0].hw_ch_num = 2;
 	dev_refclk[0].name = "dev_refclk";
 
 	struct no_os_clk_desc *clk_desc;
 	struct no_os_clk_init_param clk_desc_init = { 0 };
 
 	clk_desc_init.dev_desc = hmc7044_dev;
-	clk_desc_init.hw_ch_num = 0;
+	clk_desc_init.hw_ch_num = 2;
 	clk_desc_init.name = "dev_refclk";
 	clk_desc_init.platform_ops = &hmc7044_clk_ops;
 
@@ -397,7 +403,6 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		return ret;
 
 	dev_refclk[0].clk_desc = clk_desc;
-
 #endif
 
 	return 0;
