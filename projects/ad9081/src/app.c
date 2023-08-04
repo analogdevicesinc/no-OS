@@ -59,6 +59,7 @@
 #include "parameters.h"
 #include "app_config.h"
 #include "xil_cache.h"
+#include "no_os_axi_io.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -78,9 +79,19 @@ extern struct axi_jesd204_rx *rx_jesd;
 extern struct axi_jesd204_tx *tx_jesd;
 extern struct hmc7044_dev* hmc7044_dev;
 
-uint32_t dac_buffer[1024] __attribute__ ((aligned));
-uint16_t adc_buffer[1024 * 8] __attribute__ ((
+uint32_t dac_buffer_dma[16535] __attribute__ ((aligned));
+uint16_t adc_buffer_dma[1024 * 8] __attribute__ ((
 			aligned));
+
+void dcache_invalidate_range(uint32_t address, uint32_t bytes_count)
+{
+	Xil_DCacheInvalidateRange(address, bytes_count);
+}
+
+void dcache_flush_range(uint32_t address, uint32_t bytes_count)
+{
+	Xil_DCacheFlushRange(address, bytes_count);
+}
 
 int main(void)
 {
@@ -158,12 +169,14 @@ int main(void)
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
 		.sysref_cmos_input_enable = 0,
-		.config_sync_0a_cmos_enable = 0,
+		.sysref_cmos_single_end_term_pos = 1, //default value, does not appear in dt
+		.sysref_cmos_single_end_term_neg = 15, //default value, does not appear in dt
 		.multidevice_instance_count = 1,
-#ifdef QUAD_MXFE
-		.jesd_sync_pins_01_swap_enable = true,
-#else
 		.jesd_sync_pins_01_swap_enable = false,
+#ifdef QUAD_MXFE
+		.config_sync_0a_cmos_enable = true,
+#else
+		.config_sync_0a_cmos_enable = false,
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
@@ -178,6 +191,8 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_maindp_dac_1x_non1x_crossbar_select = AD9081_TX_DAC_1X_NON1X_CROSSBAR,
+		.tx_full_scale_current_ua = AD9081_TX_FSC,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
@@ -191,12 +206,21 @@ int main(void)
 		.rx_main_nco_frequency_shift_hz = AD9081_RX_MAIN_NCO_SHIFT,
 		.rx_main_decimation = AD9081_RX_MAIN_DECIMATION,
 		.rx_main_complex_to_real_enable = {0, 0, 0, 0},
+		.rx_main_digital_gain_6db_enable = {0, 0, 0, 0},
 		.rx_main_enable = AD9081_RX_MAIN_ENABLE,
 		/* The 8 ADC Channelizers */
 		.rx_channel_nco_frequency_shift_hz = AD9081_RX_CHAN_NCO_SHIFT,
 		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
+		.rx_channel_nco_mixer_mode = {AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+				AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+				AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF},
+		.rx_channel_digital_gain_6db_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
+		.rx_cddc_nco_channel_select_mode = AD9081_RX_CDDC_NCO_CHANNEL_SELECT_MODE,
+		.rx_ffh_gpio_mux_selection = {AD9081_PERI_SEL_SYNCINB1_N, AD9081_PERI_SEL_SYNCINB1_P,
+				AD9081_PERI_SEL_GPIO6, AD9081_PERI_SEL_GPIO7, AD9081_PERI_SEL_GPIO8,
+				AD9081_PERI_SEL_GPIO9},
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
 	};
@@ -265,8 +289,9 @@ int main(void)
 	if (status != 0)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
-	status = app_jesd_init(jesd_clk,
-			33333333, 375000, 375000, 24750000, 24750000);
+	status = app_jesd_init(jesd_clk, ADXCVR_REF_CLK_KHZ,
+				ADXCVR_RX_DEV_CLK_KHZ, ADXCVR_TX_DEV_CLK_KHZ,
+				ADXCVR_RX_LANE_CLK_KHZ, ADXCVR_TX_LANE_CLK_KHZ);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
@@ -289,17 +314,6 @@ int main(void)
 		tx_dac_init.num_channels += phy[i]->jrx_link_tx[0].jesd_param.jesd_m *
 					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
-
-	axi_jesd204_rx_watchdog(rx_jesd);
-
-	axi_jesd204_tx_status_read(tx_jesd);
-	axi_jesd204_rx_status_read(rx_jesd);
-
-	axi_dac_init(&tx_dac, &tx_dac_init);
-	axi_adc_init(&rx_adc, &rx_adc_init);
-
-	axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
@@ -356,6 +370,17 @@ int main(void)
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
+	axi_jesd204_rx_watchdog(rx_jesd);
+
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
+
+	axi_dac_init(&tx_dac, &tx_dac_init);
+	axi_adc_init(&rx_adc, &rx_adc_init);
+
+	axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	axi_dmac_init(&rx_dmac, &rx_dmac_init);
+
 	for(uint8_t chan = 0; chan < 8; chan++) {
 		//status = axi_dac_set_datasel(tx_dac, chan, AXI_DAC_DATA_SEL_DMA);
 		tx_dac->channels[chan].sel = AXI_DAC_DATA_SEL_DDS;
@@ -364,32 +389,8 @@ int main(void)
 	}
 
 	axi_dac_data_setup(tx_dac);
-//	/* DMA Example */
-//	extern const uint32_t sine_lut_iq[1024];
-//	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-//				 NO_OS_ARRAY_SIZE(sine_lut_iq), (uintptr_t)dac_buffer);
-//
-//	struct axi_dma_transfer transfer_tx = {
-//		// Number of bytes to write/read
-//		.size = NO_OS_ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t) / 8,
-//		// Transfer done flag
-//		.transfer_done = 0,
-//		// Signal transfer mode
-//		.cyclic = CYCLIC,
-//		// Address of data source
-//		.src_addr = (uintptr_t)dac_buffer,
-//		// Address of data destination
-//		.dest_addr = 0
-//	};
-//	status = axi_dmac_transfer_start(tx_dmac, &transfer_tx);
-//	if (status)
-//		return status;
 
-	axi_jesd204_tx_status_read(tx_jesd);
-	axi_jesd204_rx_status_read(rx_jesd);
-
-//#ifdef IIO_SUPPORT
-#if 0
+#ifdef IIO_SUPPORT
 
 	/* iio axi adc configurations. */
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
@@ -437,8 +438,7 @@ int main(void)
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
 #ifndef PLATFORM_MB
-		.dcache_invalidate_range = (void (*)(uint32_t,
-						     uint32_t))Xil_DCacheInvalidateRange
+		.dcache_invalidate_range = dcache_invalidate_range,
 #endif
 	};
 
@@ -455,7 +455,7 @@ int main(void)
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
 #ifndef PLATFORM_MB
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+		.dcache_flush_range = dcache_flush_range,
 #endif
 	};
 
@@ -501,5 +501,4 @@ int main(void)
 #endif
 
 }
-
 
