@@ -81,6 +81,7 @@ struct hmc7044_dev {
 	uint32_t	pll1_loop_bw;
 	uint32_t	sysref_timer_div;
 	unsigned int	pll1_ref_prio_ctrl;
+	bool		pll1_ref_autorevert_en;
 	bool		clkin0_rfsync_en;
 	bool		clkin1_vcoin_en;
 	bool		high_performance_mode_clock_dist_en;
@@ -92,7 +93,7 @@ struct hmc7044_dev {
 	uint32_t	gpo_ctrl[4];
 	uint32_t	num_channels;
 	struct hmc7044_chan_spec	*channels;
-	struct jesd204_dev			*jdev;
+	struct jesd204_dev		*jdev;
 	uint32_t	jdev_lmfc_lemc_rate;
 	uint32_t	jdev_lmfc_lemc_gcd;
 	uint32_t	jdev_max_sysref_freq;
@@ -115,6 +116,7 @@ struct hmc7044_init_param {
 	uint32_t	pll1_loop_bw;
 	uint32_t	sysref_timer_div;
 	unsigned int	pll1_ref_prio_ctrl;
+	bool		pll1_ref_autorevert_enable;
 	bool		clkin0_rfsync_en;
 	bool		clkin1_vcoin_en;
 	bool		high_performance_mode_clock_dist_en;
