@@ -381,15 +381,6 @@ int main(void)
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
-	for(uint8_t chan = 0; chan < 8; chan++) {
-		//status = axi_dac_set_datasel(tx_dac, chan, AXI_DAC_DATA_SEL_DMA);
-		tx_dac->channels[chan].sel = AXI_DAC_DATA_SEL_DDS;
-		if (status)
-			printf("Could not set data selection for channel %d.\n", chan);
-	}
-
-	axi_dac_data_setup(tx_dac);
-
 #ifdef IIO_SUPPORT
 
 	/* iio axi adc configurations. */
