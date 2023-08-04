@@ -475,8 +475,7 @@ int ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy,
 				ret = -EIO;
 
 			if (ret == 0 || retry == 0)
-				pr_info(
-					"JESD RX (JTX) Link%d PLL %s, PHASE %s, MODE %s\n",
+				pr_info("JESD RX (JTX) Link%d PLL %s, PHASE %s, MODE %s\n",
 					lnk->link_id,
 					stat & NO_OS_BIT(5) ? "locked" : "unlocked",
 					stat & NO_OS_BIT(6) ? "established" : "lost",
@@ -490,8 +489,7 @@ int ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy,
 				ret = -EIO;
 
 			if (ret == 0 || retry == 0)
-				pr_info(
-					"JESD RX (JTX) Link%d in %s, SYNC %s, PLL %s, PHASE %s, MODE %s\n",
+				pr_info("JESD RX (JTX) Link%d in %s, SYNC %s, PLL %s, PHASE %s, MODE %s\n",
 					lnk->link_id, ad9081_jtx_qbf_states[stat & 0xF],
 					stat & NO_OS_BIT(4) ? "deasserted" : "asserted",
 					stat & NO_OS_BIT(5) ? "locked" : "unlocked",
@@ -565,17 +563,16 @@ static int ad9081_setup_tx(struct ad9081_phy *phy)
 
 	sample_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(phy->dac_frequency_hz,
 			phy->tx_main_interp * phy->tx_chan_interp);
-	no_os_clk_set_rate(phy->jesd_tx_clk[0].clk_desc, sample_rate);
 //	clk_set_rate_scaled(phy->clks[TX_SAMPL_CLK], sample_rate,
 //		&phy->clkscale[TX_SAMPL_CLK]);
 
-//	for (i = 0; i < ARRAY_SIZE(phy->tx_dac_fsc); i++) {
-//		if (phy->tx_dac_fsc[i]) {
-//			ret = adi_ad9081_dac_fsc_set(&phy->ad9081, NO_OS_BIT(i), phy->tx_dac_fsc[i], 1);
-//			if (ret != 0)
-//				return ret;
-//		}
-//	}
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_dac_fsc); i++) {
+		if (phy->tx_dac_fsc[i]) {
+			ret = adi_ad9081_dac_fsc_set(&phy->ad9081, NO_OS_BIT(i), phy->tx_dac_fsc[i], 1);
+			if (ret != 0)
+				return ret;
+		}
+	}
 
 	if (phy->tx_ffh_hopf_via_gpio_en) {
 		adi_ad9081_jesd_rx_syncb_mode_set(&phy->ad9081, 0);
@@ -636,7 +633,7 @@ static int ad9081_setup_rx(struct ad9081_phy *phy)
 	/* start txfe rx */
 	ret = adi_ad9081_device_startup_rx(&phy->ad9081, phy->rx_cddc_select,
 					   phy->rx_fddc_select,
-					   phy->rx_cddc_shift[0],
+					   phy->rx_cddc_shift,
 					   phy->rx_fddc_shift, phy->rx_cddc_dcm,
 					   phy->rx_fddc_dcm, phy->rx_cddc_c2r,
 					   phy->rx_fddc_c2r, jesd_param,
@@ -727,14 +724,11 @@ static int ad9081_setup_rx(struct ad9081_phy *phy)
 	sample_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(phy->adc_frequency_hz, phy->adc_dcm[0]);
 //	clk_set_rate_scaled(phy->clks[RX_SAMPL_CLK], sample_rate,
 //		&phy->clkscale[RX_SAMPL_CLK]);
-	no_os_clk_set_rate(phy->jesd_rx_clk[0].clk_desc, sample_rate);
-
 
 	if (ad9081_link_is_dual(phy->jtx_link_rx)) {
-		sample_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(phy->adc_frequency_hz, phy->adc_dcm[1]);
+//		sample_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(phy->adc_frequency_hz, phy->adc_dcm[1]);
 //		clk_set_rate_scaled(phy->clks[RX_SAMPL_CLK_LINK2], sample_rate,
 //			&phy->clkscale[RX_SAMPL_CLK_LINK2]);
-		no_os_clk_set_rate(phy->jesd_rx_clk[1].clk_desc, sample_rate);
 	}
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->rx_ffh_gpio_mux_sel); i++)
@@ -970,6 +964,8 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	phy->sync_ms_gpio_num = init_param->master_slave_sync_gpio_num;
 	phy->sysref_coupling_ac_en = init_param->sysref_coupling_ac_en;
 	phy->sysref_cmos_input_en = init_param->sysref_cmos_input_enable;
+	phy->sysref_cmos_single_end_term_pos = init_param->sysref_cmos_input_enable;
+	phy->sysref_cmos_single_end_term_neg = init_param->sysref_cmos_input_enable;
 	phy->multidevice_instance_count = init_param->multidevice_instance_count;
 	phy->config_sync_01_swapped = init_param->jesd_sync_pins_01_swap_enable;
 	phy->config_sync_0a_cmos_en = init_param->config_sync_0a_cmos_enable;
@@ -989,6 +985,8 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	for (i = 0; i < MAX_NUM_MAIN_DATAPATHS; i++) {
 		phy->tx_main_shift[i] = init_param->tx_main_nco_frequency_shift_hz[i];
 		phy->tx_dac_chan_xbar[i] = init_param->tx_dac_channel_crossbar_select[i];
+		phy->tx_dac_chan_xbar_1x_non1x[i] = init_param->tx_maindp_dac_1x_non1x_crossbar_select[i];
+		phy->tx_dac_fsc[i] = init_param->tx_full_scale_current_ua[i];
 	}
 	/* The 8 DAC Channelizers */
 	phy->tx_chan_interp = init_param->tx_channel_interpolation;
@@ -1016,29 +1014,24 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->rx_cddc_shift[i] = init_param->rx_main_nco_frequency_shift_hz[i];
 		phy->adc_main_decimation[i] = init_param->rx_main_decimation[i];
 		phy->rx_cddc_c2r[i] = init_param->rx_main_complex_to_real_enable[i];
+		phy->rx_cddc_gain_6db_en[i] = init_param->rx_main_digital_gain_6db_enable[i];
 		if (init_param->rx_main_enable[i])
 			phy->rx_cddc_select |= NO_OS_BIT(i);
+		phy->rx_cddc_nco_channel_select_mode[i] = init_param->rx_cddc_nco_channel_select_mode[i];
 	}
 	/* The 8 ADC Channelizers */
 	for (i = 0; i < MAX_NUM_CHANNELIZER; i++) {
 		phy->rx_fddc_shift[i] = init_param->rx_channel_nco_frequency_shift_hz[i];
 		phy->adc_chan_decimation[i] = init_param->rx_channel_decimation[i];
 		phy->rx_fddc_c2r[i] = init_param->rx_channel_complex_to_real_enable[i];
+		phy->rx_fddc_mxr_if[i] = init_param->rx_channel_nco_mixer_mode[i];
+		phy->rx_fddc_gain_6db_en[i] = init_param->rx_channel_digital_gain_6db_enable[i];
 		if (init_param->rx_channel_enable[i])
 			phy->rx_fddc_select |= NO_OS_BIT(i);
-
-		phy->rx_fddc_mxr_if[i] = AD9081_ADC_NCO_VIF;
-		phy->rx_fddc_gain_6db_en[i] = 0;
 	}
 
-	for (i = 0; i < MAX_NUM_MAIN_DATAPATHS; i++) {
-		phy->rx_cddc_gain_6db_en[i] = 0;
-		phy->rx_cddc_nco_channel_select_mode[i] = 0;
-
-	}
-
-	for (i = 0; i < 6; i++) {
-		phy->rx_ffh_gpio_mux_sel[i] == 0;
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->rx_ffh_gpio_mux_sel); i++) {
+		phy->rx_ffh_gpio_mux_sel[i] = init_param->rx_ffh_gpio_mux_selection[i];
 	}
 
 	/* RX JESD Link */
@@ -1409,6 +1402,16 @@ static const struct jesd204_dev_data jesd204_ad9081_init = {
 	.sizeof_priv = sizeof(struct ad9081_jesd204_priv),
 };
 
+//static int ad9081_sysref_ctrl(void *clk_src)
+//{
+//	struct ad9081_phy *phy = clk_src;
+//
+//	if (phy->jdev)
+//		return jesd204_sysref_async_force(phy->jdev);
+//
+//	return 0;
+//}
+
 /**
  * Initialize the device.
  * @param dev - The device structure.
@@ -1447,6 +1450,8 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->dev_clk = init_param->dev_clk;
 	phy->jesd_rx_clk = init_param->jesd_rx_clk;
 	phy->jesd_tx_clk = init_param->jesd_tx_clk;
+
+	ad9081_parse_init_param(phy, init_param);
 
 	phy->ad9081.hal_info.user_data = phy;
 	phy->ad9081.hal_info.delay_us = ad9081_udelay;
@@ -1512,7 +1517,8 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 		}
 	};
 
-	ad9081_parse_init_param(phy, init_param);
+//	phy->ad9081.clk_info.sysref_ctrl = ad9081_sysref_ctrl;
+//	phy->ad9081.clk_info.sysref_clk = phy;
 
 	ret = no_os_gpio_direction_output(phy->gpio_reset, 1);
 	if (ret < 0)
@@ -1547,7 +1553,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	ret = jesd204_dev_register(&phy->jdev, &jesd204_ad9081_init);
 	if (ret < 0)
 		goto error_3;
-	priv = jesd204_dev_priv(phy->jdev);;
+	priv = jesd204_dev_priv(phy->jdev);
 	priv->phy = phy;
 
 

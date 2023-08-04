@@ -90,7 +90,7 @@ struct ad9081_phy {
 	struct ad9081_jesd_link	jtx_link_rx[2];
 	uint32_t	multidevice_instance_count;
 	bool		config_sync_01_swapped;
-	bool 		config_sync_0a_cmos_en;
+	bool		config_sync_0a_cmos_en;
 	uint32_t	lmfc_delay;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
 	bool		nco_sync_direct_sysref_mode_en;
@@ -132,7 +132,6 @@ struct ad9081_phy {
 	uint8_t		rx_fddc_gain_6db_en[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_select;
 	uint8_t		rx_cddc_nco_channel_select_mode[MAX_NUM_MAIN_DATAPATHS];
-
 	uint8_t		rx_ffh_gpio_mux_sel[6];
 };
 
@@ -168,6 +167,8 @@ struct ad9081_init_param {
 	uint8_t		master_slave_sync_gpio_num;
 	bool		sysref_coupling_ac_en;
 	bool		sysref_cmos_input_enable;
+	uint8_t 	sysref_cmos_single_end_term_pos;
+	uint8_t 	sysref_cmos_single_end_term_neg;
 	uint32_t	multidevice_instance_count;
 	bool		jesd_sync_pins_01_swap_enable;
 	bool 		config_sync_0a_cmos_enable;
@@ -184,6 +185,8 @@ struct ad9081_init_param {
 	uint32_t	tx_main_interpolation;
 	int64_t		tx_main_nco_frequency_shift_hz[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		tx_dac_channel_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		tx_maindp_dac_1x_non1x_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
+	uint32_t	tx_full_scale_current_ua[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_channel_interpolation;
 	int64_t		tx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
@@ -196,14 +199,40 @@ struct ad9081_init_param {
 	int64_t		rx_main_nco_frequency_shift_hz[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	rx_main_decimation[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_main_complex_to_real_enable[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_main_digital_gain_6db_enable[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_main_enable[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 ADC Channelizers */
 	int64_t		rx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
 	uint32_t	rx_channel_decimation[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_complex_to_real_enable[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_channel_nco_mixer_mode[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_channel_digital_gain_6db_enable[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_cddc_nco_channel_select_mode[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_ffh_gpio_mux_selection[6];
 	struct link_init_param	*jtx_link_rx[2];
 };
+
+/* ffh: 2 - gpio6, 3 - gpio7, 4 - gpio8, 5 - gpio9, 6 - gpio10, 7 - syncinb1_p, 8 - syncinb1_n */
+
+#define AD9081_PERI_SEL_GPIO6		2
+#define AD9081_PERI_SEL_GPIO7		3
+#define AD9081_PERI_SEL_GPIO8		4
+#define AD9081_PERI_SEL_GPIO9		5
+#define AD9081_PERI_SEL_GPIO10		6
+#define AD9081_PERI_SEL_SYNCINB1_P	7
+#define AD9081_PERI_SEL_SYNCINB1_N	8
+
+#define AD9081_FFH_CHAN_SEL_REG_MODE		0 /* 0:  Register Map control (Use ddc_nco_regmap_chan_sel) */
+#define AD9081_FFH_CHAN_SEL_1GPIO_MODE		1 /* 1:  profile_pins[0]     is used. Pin level control {3'b0, profile_pins[0]} */
+#define AD9081_FFH_CHAN_SEL_2GPIO_MODE		2 /* 2:  profile_pins[1 :0] are used. Pin level control {2'b0, profile_pins[1:0]} */
+#define AD9081_FFH_CHAN_SEL_3GPIO_MODE		3 /* 3:  profile_pins[2 :0] are used. Pin level control {1'b0, profile_pins[2:0]} */
+#define AD9081_FFH_CHAN_SEL_4GPIO_MODE		4 /* 4:  profile_pins[3 :0] are used. Pin level control { profile_pins[3:0]} */
+#define AD9081_FFH_CHAN_SEL_GPIO0_EDGE_MODE	8 /* 8:  profile_pins[0] Pin edge control- increment internal counter when rising edge of profile_pins[0] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO1_EDGE_MODE	9 /* 9:  profile_pins[1] Pin edge control- increment internal counter when rising edge of profile_pins[1] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO2_EDGE_MODE	10 /* 10: profile_pins[2] Pin edge control- increment internal counter when rising edge of profile_pins[2] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO3_EDGE_MODE	11 /* 11: profile_pins[3] Pin edge control- increment internal counter when rising edge of profile_pins[3] Pin. */
+#define AD9081_FFH_CHAN_SEL_FHT_EXP_MODE	12 /* 12: FHT expire based control - increment internal counter when FHT is expired. */
 
 /*
  * JESD204-FSM defines
