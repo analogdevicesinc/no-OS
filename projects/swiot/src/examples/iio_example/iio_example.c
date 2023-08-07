@@ -49,6 +49,7 @@
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
 #include "iio_adt75.h"
+#include "maxq1065.h"
 #include "swiot.h"
 #include "common_data.h"
 #include "no_os_util.h"

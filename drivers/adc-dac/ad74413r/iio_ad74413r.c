@@ -560,7 +560,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	int32_t raw_offset;
 	int32_t range_val;
 	uint32_t reg_val;
-	int32_t val;
+	uint32_t val;
 	int ret;
 
 	__disable_irq();
@@ -598,6 +598,9 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 		case AD74413R_DIAG_AVSS:
 			val = 33671;
 			break;
+		case AD74413R_DIAG_TEMP:
+			val = 267;
+			break;
 		case AD74413R_DIAG_AGND:
 			/* fallthrough */
 		case AD74413R_DIAG_REFOUT:
@@ -626,7 +629,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	if (ret)
 		goto out;
 
-	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 out:
 	__enable_irq();
@@ -903,6 +906,10 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		case AD74413R_DIAG_AGND:
 			val[0] = 2500;
 			val[1] = 65535;
+			break;
+		case AD74413R_DIAG_TEMP:
+			val[0] = 1000;
+			val[1] = 8950;
 			break;
 		case AD74413R_DIAG_AVDD:
 			val[0] = 2500 * 16;
@@ -1205,7 +1212,7 @@ static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
 	if (desc->ad74413_conv_mode != AD74413R_STOP_PWR_DOWN)
 		return -EINVAL;
 
-	iio_parse_value(buf, IIO_VAL_INT, &reg_val, NULL);
+	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&reg_val, NULL);
 
 	return ad74413r_set_threshold(desc->ad74413r_desc, channel->address, reg_val);
 }
@@ -1312,7 +1319,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc,
 	struct ad74413r_channel_map channels_info;
 	int ret;
 
-	config = &init_param->channel_configs[0];
+	config = init_param->channel_configs[0];
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
@@ -1512,7 +1519,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	uint8_t buff[32] = {0};
 	uint32_t buffer_idx = 0;
 	struct ad74413r_desc *desc;
-	struct ad74413r_channel_config *config;
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
 	uint32_t digital_val;
@@ -1521,7 +1527,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
-	config = iio_desc->channel_configs;
 
 	// irq_enabled = (__get_PRIMASK() == 0);
 	// if (irq_enabled)
@@ -1534,8 +1539,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 				continue;
 
 			if (ch < 4) {
-				if (config[ch].function == AD74413R_DIGITAL_INPUT ||
-				    config[ch].function == AD74413R_DIGITAL_INPUT_LOOP) {
+				if (iio_desc->channel_configs[ch]->function == AD74413R_DIGITAL_INPUT ||
+				    iio_desc->channel_configs[ch]->function == AD74413R_DIGITAL_INPUT_LOOP) {
 					ret = ad74413r_reg_read_raw(desc, AD74413R_DIN_COMP_OUT,
 								    &buff[buffer_idx]);
 					digital_val = no_os_field_get((1 << ch), buff[buffer_idx + 2]);

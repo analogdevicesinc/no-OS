@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <errno.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "iio.h"
 #include "swiot.h"
