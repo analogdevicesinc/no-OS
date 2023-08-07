@@ -26,6 +26,10 @@ if {$m_type == "MICROBLAZE"} {
   targets -set -filter {name =~ "*MicroBlaze #0*"}
 }
 
+if {$m_type == "VERSAL"} {
+  targets -set -filter {name =~ "*A72*#0*"}
+}
+
 after 1000
 
 if { $storage_bits  == "" } {
