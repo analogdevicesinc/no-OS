@@ -147,7 +147,7 @@ int32_t run_example(struct ad3552r_desc *dac)
 		no_os_udelay(time_between_samples_us);
 
 		i = (i + 1) % nb_samples;
-		err = ad3552r_ldac_trigger(dac, AD3552R_MASK_ALL_CH);
+		err = ad3552r_ldac_trigger(dac, AD3552R_MASK_ALL_CH, false);
 	} while (!NO_OS_IS_ERR_VALUE(err));
 
 	return err;
