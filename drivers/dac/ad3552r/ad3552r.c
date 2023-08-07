@@ -1258,16 +1258,16 @@ int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask,
 						 mask);
 		return ad3552r_write_reg(desc, AD3552R_REG_ADDR_SW_LDAC_24B,
 					 mask);
-	} else {
-		err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_LOW);
-		if (NO_OS_IS_ERR_VALUE(err))
-			return err;
-
-		no_os_udelay(AD3552R_LDAC_PULSE_US);
-		err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
-		if (NO_OS_IS_ERR_VALUE(err))
-			return err;
 	}
+	err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_LOW);
+	if (NO_OS_IS_ERR_VALUE(err))
+		return err;
+
+	no_os_udelay(AD3552R_LDAC_PULSE_US);
+	err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
+	if (NO_OS_IS_ERR_VALUE(err))
+		return err;
+
 	return 0;
 }
 
