@@ -172,6 +172,22 @@ static int ext_flash_board_init(void)
     return MXC_SPIXF_Init(0, EXT_FLASH_BAUD);
 }
 
+// static int pmod_test()
+// {
+// 	struct no_os_gpio_desc *pmod_sclk_gpio;
+// 	struct no_os_gpio_desc *pmod_mosi_gpio;
+// 	struct no_os_gpio_desc *pmod_miso_gpio;
+// 	struct no_os_gpio_desc *pmod_cs_gpio;
+// 	int ret;
+
+// 	no_os_gpio_get(&pmod_sclk_gpio, pmod_sclk_ip);
+// 	no_os_gpio_get(&pmod_mosi_gpio, &pmod_mosi_ip);
+// 	no_os_gpio_get(&pmod_miso_gpio, &pmod_miso_ip);
+// 	no_os_gpio_get(&pmod_cs_gpio, &pmod_cs_ip);
+
+
+// }
+
 /******************************************************************************/
 static int ext_flash_board_read(uint8_t* read, unsigned len, unsigned deassert,
                                 Ext_Flash_DataLine_t width)

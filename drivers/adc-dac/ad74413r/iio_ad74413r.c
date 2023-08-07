@@ -701,7 +701,7 @@ static int ad74413r_iio_write_raw(void *dev, char *buf, uint32_t len,
 
 		ret = ad74413r_set_channel_dac_code(((struct ad74413r_iio_desc *)
 						    dev)->ad74413r_desc, channel->address, val);
-
+		break;
 	default:
 		ret = -EINVAL;
 		goto out;
@@ -898,7 +898,7 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 		if (ret)
 			goto out;
 
-		diag_func = reg_val;
+		diag_func = no_os_field_get(NO_OS_GENMASK(3, 0) << (4 * channel->address), reg_val);
 		switch (diag_func) {
 		case AD74413R_DIAG_AGND:
 			val[0] = 2500;
