@@ -347,7 +347,7 @@ int iio_app_init(struct iio_app_desc **app,
 	if (status < 0)
 		goto error_uart;
 
-	status = print_uart_hello_message(&uart_desc,
+	status = print_uart_hello_message(&application->uart_desc,
 					  &app_init_param.uart_init_params);
 	if (status < 0)
 		goto error;

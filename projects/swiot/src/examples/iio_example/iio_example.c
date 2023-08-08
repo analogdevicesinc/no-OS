@@ -306,7 +306,8 @@ int iio_example_main()
 	struct adt75_iio_init_param adt75_iio_ip;
 	struct ad74413r_init_param ad74413r_ip = {
 		.chip_id = AD74413R,
-		.comm_param = ad74413r_spi_ip
+		.comm_param = ad74413r_spi_ip,
+		.reset_gpio_param = &ad74413r_reset_ip,
 	};
 	struct iio_app_init_param app_init_param = { 0 };
 
@@ -515,17 +516,14 @@ int iio_example_main()
 	no_os_gpio_direction_output(max14906_en_gpio, 0);
 
 	no_os_gpio_get(&adin1110_cfg0_gpio, &adin1110_cfg0_ip);
-	no_os_gpio_get(&ad74413r_reset_gpio, &ad74413r_reset_ip);
 	no_os_gpio_get(&ad74413r_ldac_gpio, &ad74413r_ldac_ip);
 	no_os_gpio_get(&ad74413r_irq_gpio, &ad74413r_irq_ip);
 	no_os_gpio_get(&max14906_synch_gpio, &max14906_synch_ip);
-	no_os_gpio_get(&adin1110_reset_gpio, &adin1110_rst_gpio_ip);
 	no_os_gpio_get(&adin1110_swpd_gpio, &adin1110_swpd_ip);
 	no_os_gpio_get(&adin1110_tx2p4_gpio, &adin1110_tx2p4_ip);
 	no_os_gpio_get(&adin1110_mssel_gpio, &adin1110_mssel_ip);
 	no_os_gpio_get(&adin1110_cfg1_gpio, &adin1110_cfg1_ip);
 	no_os_gpio_get(&adin1110_int_gpio, &adin1110_int_ip);
-	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
 	no_os_gpio_direction_output(ad74413r_ldac_gpio, 1);
 	no_os_gpio_direction_output(max14906_synch_gpio, 1);
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
@@ -624,9 +622,8 @@ int iio_example_main()
 		app->arg = &step_p;	
 
 		ret = iio_app_run(app);
-		if (ret != -ENOTCONN) {
+		if (ret != -ENOTCONN)
 			goto error;
-		}
 
 		ndev = 1;
 		ntrig = 0;
@@ -641,7 +638,6 @@ int iio_example_main()
 			iio_devices[1].read_buff = &buff3;
 			ndev++;
 		} else {
-			printf("Error 6\n");
 			goto error;
 		}
 
@@ -653,7 +649,6 @@ int iio_example_main()
 			iio_devices[2].read_buff = &buff4;
 			ndev++;
 		} else {
-			printf("Error 7\n");
 			goto error;
 		}
 
@@ -666,7 +661,6 @@ int iio_example_main()
 			ntrig++;
 			ndev++;
 		} else {
-			printf("Error 8\n");
 			goto error;
 		}
 
@@ -683,12 +677,10 @@ int iio_example_main()
 
 		no_os_gpio_set_value(swiot_led2_gpio, 1);
 		ret = iio_app_init(&app, app_init_param);
-		if (ret) {
-			printf("Error 5\n");
+		if (ret)
 			goto error;
-		}
-		no_os_gpio_set_value(swiot_led2_gpio, 0);
 
+		no_os_gpio_set_value(swiot_led2_gpio, 0);
 		ad74413r_trig_desc->iio_desc = app->iio_desc;
 		swiot_iio_desc->adin1110 = app->lwip_desc->mac_desc;
 		step_p.swiot = swiot_iio_desc;
@@ -699,34 +691,25 @@ int iio_example_main()
 		ret = iio_app_run(app);
 		if (ret != -ENOTCONN) {
 			no_os_gpio_set_value(max14906_en_gpio, 0);
-			printf("Error 0\n");
 			goto error;
 		}
 
 		no_os_gpio_set_value(max14906_en_gpio, 0);
 		ret = ad74413r_iio_remove(ad74413r_iio_desc);
-		if (ret) {
-			printf("Error 1\n");
+		if (ret)
 			goto error;
-		}
 
 		ret = max14906_iio_remove(max14906_iio_desc);
-		if (ret) {
-			printf("Error 2\n");
+		if (ret)
 			goto error;
-		}
 
 		ret = adt75_iio_remove(adt75_iio_desc);
-		if (ret) {
-			printf("Error 3\n");
+		if (ret)
 			goto error;
-		}
 
 		ret = swiot_iio_remove(swiot_iio_desc);
-		if (ret) {
-			printf("Error 4\n");
+		if (ret)
 			goto error;
-		}
 	}
 
 error:

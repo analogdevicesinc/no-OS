@@ -1068,7 +1068,6 @@ int ad74413r_set_therm_rst(struct ad74413r_desc *desc, bool enable)
 int ad74413r_init(struct ad74413r_desc **desc,
 		  struct ad74413r_init_param *init_param)
 {
-	int i;
 	int ret;
 	struct ad74413r_desc *descriptor;
 
@@ -1085,34 +1084,45 @@ int ad74413r_init(struct ad74413r_desc **desc,
 
 	no_os_crc8_populate_msb(_crc_table, AD74413R_CRC_POLYNOMIAL);
 
-	ret = ad74413r_reset(descriptor);
-	if (ret) {
+	ret = no_os_gpio_get_optional(&descriptor->reset_gpio,
+				      init_param->reset_gpio_param);
+	if (ret)
 		goto comm_err;
+	if (descriptor->reset_gpio) {
+		ret = no_os_gpio_direction_output(descriptor->reset_gpio,
+						  NO_OS_GPIO_LOW);
+		if (ret)
+			goto free_reset;
+
+		/* Minimum RESET signal pulse duration */
+		no_os_udelay(50);
+		ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
+	} else {
+		ret = ad74413r_reset(descriptor);
 	}
-	no_os_mdelay(10);
+
+	if (ret)
+		goto free_reset;
+
+	/* Time taken for device reset (datasheet value = 1ms) */
+	no_os_mdelay(1);
 
 	ret = ad74413r_clear_errors(descriptor);
 	if (ret)
-		goto comm_err;
+		goto free_reset;
 
 	ret = ad74413r_scratch_test(descriptor);
-	if (ret) {
-		goto comm_err;
-	}
+	if (ret)
+		goto free_reset;
 
 	descriptor->chip_id = init_param->chip_id;
-
-	for (i = 0; i < 4; i++) {
-		ret = ad74413r_set_channel_function(descriptor, i, AD74413R_HIGH_Z);
-		if (ret) {
-			goto comm_err;
-		}
-	}
 
 	*desc = descriptor;
 
 	return 0;
 
+free_reset:
+	no_os_gpio_remove(descriptor->reset_gpio);
 comm_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
