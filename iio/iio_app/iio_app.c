@@ -310,8 +310,7 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 int iio_app_init(struct iio_app_desc **app,
 		 struct iio_app_init_param app_init_param)
 {
-	// struct iio_device_init *iio_init_devs;
-	struct iio_device_init iio_init_devs[app_init_param.nb_devices];
+	struct iio_device_init *iio_init_devs;
 	struct iio_init_param iio_init_param;
 	struct no_os_uart_desc *uart_desc;
 	struct iio_app_desc *application;
@@ -348,10 +347,10 @@ int iio_app_init(struct iio_app_desc **app,
 	if (status < 0)
 		goto error_uart;
 
-	// status = print_uart_hello_message(&uart_desc,
-	// 				  &app_init_param.uart_init_params);
-	// if (status < 0)
-	// 	goto error;
+	status = print_uart_hello_message(&uart_desc,
+					  &app_init_param.uart_init_params);
+	if (status < 0)
+		goto error;
 
 	uart_desc = application->uart_desc;
 #if defined(NO_OS_LWIP_NETWORKING)
@@ -368,11 +367,11 @@ int iio_app_init(struct iio_app_desc **app,
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
-	// iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
-	// if (!iio_init_devs) {
-	// 	status = -ENOMEM;
-	// 	goto error;
-	// }
+	iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
+	if (!iio_init_devs) {
+		status = -ENOMEM;
+		goto error;
+	}
 
 	for (i = 0; i < app_init_param.nb_devices; ++i) {
 		/*
@@ -412,7 +411,7 @@ int iio_app_init(struct iio_app_desc **app,
 	if(status < 0)
 		goto error;
 
-	// no_os_free(iio_init_devs);
+	no_os_free(iio_init_devs);
 
 	*app = application;
 
