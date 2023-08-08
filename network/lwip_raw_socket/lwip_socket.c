@@ -344,6 +344,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	if (!dhcp_timeout && !netif_descriptor->ip_addr.addr) {
 		ret = -ETIMEDOUT;
+		printf("LWIP configuration timed out\n");
 		goto platform_remove;
 	}
 
@@ -353,6 +354,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	lwip_config_if(descriptor);
 
+	printf("IP address: %s\n", ip4addr_ntoa(&netif_descriptor->ip_addr));
+	printf("Network mask: %s\n", ip4addr_ntoa(&netif_descriptor->netmask));
+	printf("Gateway's IP address: %s\n", ip4addr_ntoa(&netif_descriptor->gw));
 	for (i = 0; i < NO_OS_MAX_SOCKETS; i++) {
 		descriptor->sockets[i].state = SOCKET_CLOSED;
 		descriptor->sockets[i].desc = descriptor;
