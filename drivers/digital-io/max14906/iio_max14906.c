@@ -281,7 +281,7 @@ static int max14906_iio_read_climit(void *dev, char *buf, uint32_t len,
 {
 	struct max14906_iio_desc *iio_desc = dev;
 	struct max14906_desc *desc = iio_desc->max14906_desc;
-	uint8_t current_limit;
+	uint32_t current_limit;
 	int ret;
 
 	ret = max14906_reg_read(desc, MAX14906_CONFIG_CURR_LIM, &current_limit);
@@ -292,7 +292,7 @@ static int max14906_iio_read_climit(void *dev, char *buf, uint32_t len,
 					current_limit);
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1,
-				&max14906_limit_avail[current_limit]);
+				(int32_t *)&max14906_limit_avail[current_limit]);
 }
 
 static int max14906_iio_write_climit(void *dev, char *buf, uint32_t len,
@@ -300,13 +300,13 @@ static int max14906_iio_write_climit(void *dev, char *buf, uint32_t len,
 {
 	struct max14906_iio_desc *iio_desc = dev;
 	struct max14906_desc *desc = iio_desc->max14906_desc;
-	char climit[5];
-	int ret;
-	int i;
+	uint32_t val;
+	uint32_t i;
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_limit_avail); i++) {
-		sprintf(climit, "%d", max14906_limit_avail[i]);
-		if (!strcmp(buf, climit))
+	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&val, NULL);
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_limit_avail) ; i++) {
+		if (val == max14906_limit_avail[i])
 			break;
 
 		if (i == NO_OS_ARRAY_SIZE(max14906_limit_avail) - 1)
@@ -323,7 +323,7 @@ static int max14906_iio_read_climit_avail(void *dev, char *buf, uint32_t len,
 					  intptr_t priv)
 {
 	uint32_t length = 0;
-	int i;
+	uint32_t i;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_limit_avail); i++)
 		length += sprintf(buf + length, "%d ", max14906_limit_avail[i]);

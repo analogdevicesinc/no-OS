@@ -46,24 +46,13 @@
 
 #define MAX14906_FUNCTION_CNT	3
 
-// enum {
-// 	MAX14906_CL_FAULT,
-// 	MAX14906_OV_FAULT,
-// 	MAX14906_ABOVE_VDD_FAULT,
-// 	MAX14906_OW_FAULT,
-// 	MAX14906_OV_FAULT,
-// 	MAX14906_VDDOV_FAULT,
-// 	MAX14906_SHVDD_FAULT,
-// 	MAX14906_GLOBAL_FAULT,
-// };
-
 static const char *const max14906_function_avail[MAX14906_FUNCTION_CNT] = {
 	[MAX14906_OUT] = "output",
 	[MAX14906_IN] = "input",
 	[MAX14906_HIGH_Z] = "high_z"
 };
 
-static const char *max14906_do_mode_avail[4] = {
+static const char *const max14906_do_mode_avail[4] = {
 	[MAX14906_HIGH_SIDE] = "High_side",
 	[MAX14906_HIGH_SIDE_INRUSH] = "High_side_2x_inrush",
 	[MAX14906_PUSH_PULL_CLAMP] = "Push_pull_clamp",
