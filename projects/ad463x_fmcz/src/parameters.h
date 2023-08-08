@@ -48,7 +48,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD463x_DMA_BASEADDR             XPAR_AXI_AD463X_DMA_BASEADDR
-#define AD463x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD463X_AXI_REGMAP_BASEADDR
+#define AD463x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD463X_SPI_AD463X_AXI_REGMAP_BASEADDR
 #define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
 #define AXI_PWMGEN_BASEADDR		XPAR_CNV_GENERATOR_BASEADDR
 #define AD463x_SPI_CS                   0
