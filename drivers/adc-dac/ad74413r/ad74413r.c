@@ -133,6 +133,12 @@ static int ad74413r_rejection_to_rate(enum ad74413r_rejection rejection,
 	return 0;
 }
 
+/**
+ * @brief Convert the measuring range of the ADC from range enum values to millivolts.
+ * @param rate - ADC sample rate
+ * @param rejection - Rejection register value
+ * @return 0 in case of success, -EINVAL otherwise
+ */
 int ad74413r_range_to_voltage_range(enum ad74413r_adc_range range, uint32_t *val)
 {
 	switch (range)
@@ -446,7 +452,7 @@ int ad74413r_set_adc_channel_enable(struct ad74413r_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	//desc->channel_configs[ch].enabled = status;
+	desc->channel_configs[ch].enabled = status;
 
 	return 0;
 }
