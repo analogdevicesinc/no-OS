@@ -312,3 +312,9 @@ struct iio_hw_trig_init_param ad74413r_gpio_trig_ip = {
 	.cb_info = gpio_cb_info,
 	.name = AD74413R_GPIO_TRIG_NAME,
 };
+
+struct iio_trigger ad74413r_iio_trig_desc = {
+	.is_synchronous = true,
+	.enable = iio_trig_enable,
+	.disable = iio_trig_disable
+};

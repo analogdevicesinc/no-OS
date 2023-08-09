@@ -86,5 +86,6 @@ extern struct iio_trigger ad74413r_iio_trig_desc;
 extern struct iio_trigger swiot_trigger;
 extern struct iio_hw_trig_init_param ad74413r_gpio_trig_ip;
 extern struct no_os_irq_init_param ad74413r_gpio_irq_ip;
+extern struct iio_trigger ad74413r_iio_trig_desc;
 
 #endif /* __COMMON_DATA_H__ */
