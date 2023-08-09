@@ -64,7 +64,6 @@ SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
-SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r_trig.c
 
 INCS += $(DRIVERS)/digital-io/max14906/iio_max14906.h
 SRCS += $(DRIVERS)/digital-io/max14906/iio_max14906.c
