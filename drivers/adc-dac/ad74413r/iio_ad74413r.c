@@ -579,7 +579,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 		if (ret)
 			return ret;
 
-		diag_func = reg_val;
+		diag_func = no_os_field_get(NO_OS_GENMASK(3, 0) << (4 * channel->address), reg_val);
 		switch (diag_func) {
 		case AD74413R_DIAG_AVSS:
 			val = 33671;
