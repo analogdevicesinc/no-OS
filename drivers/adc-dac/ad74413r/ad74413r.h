@@ -42,6 +42,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "no_os_spi.h"
+#include "no_os_gpio.h"
 
 #define AD74413R_N_CHANNELS             4
 
@@ -292,6 +293,7 @@ enum ad74413r_adc_sample {
 struct ad74413r_init_param {
 	enum ad74413r_chip_id chip_id;
 	struct no_os_spi_init_param comm_param;
+	struct no_os_gpio_init_param *reset_gpio_param;
 };
 
 /**
@@ -346,6 +348,7 @@ struct ad74413r_desc {
 	struct no_os_spi_desc *comm_desc;
 	uint8_t comm_buff[4];
 	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS];
+	struct no_os_gpio_desc *reset_gpio;
 };
 
 /** Converts a millivolt value in the corresponding DAC 13 bit code */
@@ -376,7 +379,7 @@ int ad74413r_clear_errors(struct ad74413r_desc *);
  */
 int ad74413r_set_info(struct ad74413r_desc *desc, uint16_t mode);
 
-/** Perform a soft reset */
+/** Perform either a software or hardware reset and wait for device reset time. */
 int ad74413r_reset(struct ad74413r_desc *);
 
 /** Set the operation mode for a specific channel */
