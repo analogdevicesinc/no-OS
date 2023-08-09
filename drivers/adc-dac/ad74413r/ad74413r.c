@@ -1084,6 +1084,17 @@ int ad74413r_remove(struct ad74413r_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
+	/* Perform a reset to bring the device in the default state */
+	ret = ad74413r_reset(desc);
+	if (ret)
+		return ret;
+
+	if (desc->reset_gpio) {
+		ret = no_os_gpio_remove(desc->reset_gpio);
+		if (ret)
+			return ret;
+	}
+
 	ret = no_os_spi_remove(desc->comm_desc);
 	if (ret)
 		return ret;
