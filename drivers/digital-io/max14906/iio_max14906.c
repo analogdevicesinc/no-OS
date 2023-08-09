@@ -455,27 +455,46 @@ static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 	struct max14906_desc *desc = iio_desc->max14906_desc;
 	uint32_t reg_val;
 	int32_t val = 0;
+	uint8_t swap_val;
 	int ret;
 
 	ret = max14906_reg_read(desc, MAX14906_OVR_LD_REG, &reg_val);
 	if (ret)
 		return ret;
+
+	swap_val = reg_val;
+	swap_val = no_os_bit_swap_constant_8(swap_val);
+	reg_val = swap_val;
 	val = reg_val << 24;
 
 	ret = max14906_reg_read(desc, MAX14906_OPN_WIR_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
+
+	swap_val = reg_val;
+	swap_val = no_os_bit_swap_constant_8(swap_val);
+	reg_val = swap_val;
 	val |= reg_val << 16;
 
 	ret = max14906_reg_read(desc, MAX14906_SHD_VDD_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
+
+	swap_val = reg_val;
+	swap_val = no_os_bit_swap_constant_8(swap_val);
+	reg_val = swap_val;
 	val |= reg_val << 8;
 
 	ret = max14906_reg_read(desc, MAX14906_GLOBAL_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
+
+	swap_val = reg_val;
+	swap_val = no_os_bit_swap_constant_8(swap_val);
+	reg_val = swap_val;
 	val |= reg_val;
+
+	// val = no_os_bswap_constant_32(val);
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
