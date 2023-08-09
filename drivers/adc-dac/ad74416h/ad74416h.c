@@ -67,7 +67,9 @@ static const unsigned int ad74416h_debounce_map[AD74416H_DIN_DEBOUNCE_LEN] = {
 };
 
 /** The ADC conversion rates */
-static const uint32_t conv_rate_ad74416h[] = { 10, 20, 1200, 4800, 9600, 200 };
+static const uint32_t conv_rate_ad74416h[] = {
+	10, 20, 1200, 4800, 9600, 19200, 200,
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
