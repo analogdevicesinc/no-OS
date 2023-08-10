@@ -146,7 +146,9 @@ static int32_t ad7768_if_gpio_setup(uint32_t gpio_no, uint8_t gpio_val)
 int main(void)
 {
 	ad7768_dev	*dev;
+#ifdef XPAR_AD7768_GPIO_DEVICE_ID
 	struct xil_gpio_init_param axi_gpio_init;
+#endif
 	struct axi_dmac_init dma_initial = {
 		.name = "ad7768_dma",
 		.base = AD7768_DMA_BASEADDR,
@@ -256,6 +258,7 @@ int main(void)
 	if (ret != 0)
 		return -1;
 
+#ifdef XPAR_AD7768_GPIO_DEVICE_ID
 	axi_gpio_init.type = GPIO_PL;
 	axi_gpio_init.device_id = XPAR_AD7768_GPIO_DEVICE_ID;
 
@@ -264,6 +267,7 @@ int main(void)
 		printf("Interface errors\n");
 	else
 		printf("Interface OK\n");
+#endif
 
 	ret = axi_dmac_init(&dma_desc, &dma_initial);
 	if (ret != 0)
@@ -294,10 +298,12 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,data_size);
 	printf("Capture done\n");
 
+#ifdef XPAR_AD7768_GPIO_DEVICE_ID
 	if (ad7768_evb_verify_status(&axi_gpio_init))
 		printf("Interface errors\n");
 	else
 		printf("Interface OK\n");
+#endif
 
 	printf("   CH0      CH1      CH2      CH3      CH4      CH5      CH6      CH7   ");
 	for (i = 0; i < (sample_no * chan_no); i++) {
