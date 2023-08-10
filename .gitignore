@@ -33,3 +33,6 @@ aducm_build
 
 local_variables.mk
 *generated*
+
+.github/CODEOWNERS
+.github/PULL_REQUEST_TEMPLATE.md
