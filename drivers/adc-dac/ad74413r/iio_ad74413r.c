@@ -551,9 +551,11 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	uint32_t val;
 	int ret;
 
+	__disable_irq();
+
 	ret = ad74413r_get_adc_range(desc->ad74413r_desc, channel->address, &range);
 	if (ret)
-		return ret;
+		goto out;
 
 	switch (priv) {
 	case AD74413R_ADC:
@@ -571,13 +573,14 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 				ret = ad74413r_range_to_voltage_offset(range, &val);
 			break;
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	case AD74413R_DIAG:
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN, &reg_val);
 		if (ret)
-			return ret;
+			goto out;
 
 		diag_func = no_os_field_get(NO_OS_GENMASK(3, 0) << (4 * channel->address), reg_val);
 		switch (diag_func) {
@@ -603,17 +606,21 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 			val = 0;
 			break;
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
+		goto out;
 	}
 
-	if (ret)
-		return ret;
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+out:
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -789,6 +796,8 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 	int32_t val[2];
 	int ret;
 
+	__disable_irq();
+
 	switch (priv) {
 	case AD74413R_ADC:
 		switch (channel->type) {
@@ -800,16 +809,17 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
 							     channel->address, &range);
 				if (ret)
-					return ret;
+					goto out;
 
 				ret = ad74413r_range_to_voltage_range(range, &range_val);
 				if (ret)
-					return ret;
+					goto out;
 
 				val[0] = range_val;
 				val[1] = AD74413R_ADC_RESOLUTION;
 			}
-			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
+			ret = iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
+			break;
 		
 		case IIO_CURRENT:
 			if (channel->ch_out) {
@@ -819,35 +829,38 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
 							     channel->address, &range);
 				if (ret)
-					return ret;
+					goto out;
 
 				ret = ad74413r_range_to_voltage_range(range, &range_val);
 				if (ret)
-					return ret;
+					goto out;
 
 				val[0] = range_val;
 				val[1] = AD74413R_ADC_CODE_MAX * AD74413R_SENSE_RESISTOR_OHMS;
 			}
 
-			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+			ret = iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+			break;
+
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		break;
 	case AD74413R_DIAG:
 		ret = ad74413r_get_adc_range(desc->ad74413r_desc,
 					     channel->address, &range);
 		if (ret)
-			return ret;
+			goto out;
 
 		ret = ad74413r_range_to_voltage_range(range, &range_val);
 		if (ret)
-			return ret;
+			goto out;
 
 		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN,
 					&reg_val);
 		if (ret)
-			return ret;
+			goto out;
 
 		diag_func = no_os_field_get(NO_OS_GENMASK(3, 0) << (4 * channel->address), reg_val);
 		switch (diag_func) {
@@ -900,13 +913,18 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 			val[1] = 65535;
 			break;
 		default:
-			return -EINVAL;
+			ret = -EINVAL;
+			goto out;
 		}
 		ret = iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
 		break;
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
+		goto out;
 	}
+
+out:
+	__enable_irq();
 
 	return ret;
 }
