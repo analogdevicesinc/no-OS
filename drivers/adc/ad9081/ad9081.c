@@ -912,7 +912,7 @@ static int32_t ad9081_udelay(void *user_data, uint32_t us)
 	return 0;
 }
 
-int32_t ad9081_reset_pin_ctrl(void *user_data, uint8_t enable)
+static int32_t ad9081_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9081_phy *phy = user_data;
 
