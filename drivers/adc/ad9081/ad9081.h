@@ -74,6 +74,7 @@ struct ad9081_phy {
 	struct no_os_clk		*jesd_rx_clk;
 	struct no_os_clk		*jesd_tx_clk;
 	struct no_os_clk		*dev_clk;
+	uint8_t				sync_ms_gpio_num;
 	bool		sysref_coupling_ac_en;
 	adi_ad9081_device_t	ad9081;
 	struct ad9081_jesd_link	jrx_link_tx;
@@ -82,6 +83,9 @@ struct ad9081_phy {
 	bool		config_sync_01_swapped;
 	uint32_t	lmfc_delay;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
+	bool		nco_sync_direct_sysref_mode_en;
+	uint32_t	sysref_average_cnt_exp;
+	bool		sysref_continuous_dis;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
@@ -137,11 +141,15 @@ struct ad9081_init_param {
 	struct no_os_clk	*dev_clk;
 	struct no_os_clk	*jesd_rx_clk;
 	struct no_os_clk	*jesd_tx_clk;
+	uint8_t 	master_slave_sync_gpio_num;
 	bool		sysref_coupling_ac_en;
 	uint32_t	multidevice_instance_count;
 	bool		jesd_sync_pins_01_swap_enable;
 	uint32_t	lmfc_delay_dac_clk_cycles;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
+	bool		nco_sync_direct_sysref_mode_enable;
+	uint32_t	sysref_average_cnt_exp;
+	bool		continuous_sysref_mode_disable;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
