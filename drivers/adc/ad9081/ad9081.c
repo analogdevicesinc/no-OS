@@ -1163,8 +1163,8 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	adi_ad9081_device_api_revision_get(&phy->ad9081, &api_rev[0],
 					   &api_rev[1], &api_rev[2]);
 
-	printf("AD9081 Rev. %u Grade %u (API %u.%u.%u) probed\n",
-	       chip_id.dev_revision, chip_id.prod_grade,
+	printf("AD%x Rev. %u Grade %u (API %u.%u.%u) probed\n",
+	       chip_id.prod_id & CHIPID_MASK, chip_id.dev_revision, chip_id.prod_grade,
 	       api_rev[0], api_rev[1], api_rev[2]);
 
 	*dev = phy;
