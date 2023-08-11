@@ -124,7 +124,7 @@ int main(void)
 		.dual_link = 0,
 		.version = AD9081_TX_JESD_VERSION,
 		.logical_lane_mapping = AD9081_TX_LOGICAL_LANE_MAPPING,
-		.tpl_phase_adjust = 12
+		.tpl_phase_adjust = AD9081_JRX_TPL_PHASE_ADJUST
 	};
 	struct link_init_param jtx_link_rx = {
 		.device_id = 0,
