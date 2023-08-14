@@ -170,7 +170,7 @@ void spixf_cfg_setup()
 
 static int ext_flash_board_init(void)
 {
-    return MXC_SPIXF_Init(0, EXT_FLASH_BAUD);
+	return MXC_SPIXF_Init(0, EXT_FLASH_BAUD);
 }
 
 // static int pmod_test()
@@ -191,32 +191,33 @@ static int ext_flash_board_init(void)
 
 /******************************************************************************/
 static int ext_flash_board_read(uint8_t* read, unsigned len, unsigned deassert,
-                                Ext_Flash_DataLine_t width)
+				Ext_Flash_DataLine_t width)
 {
-    mxc_spixf_req_t req = {deassert, 0, NULL, read, (mxc_spixf_width_t)width, len, 0, 0, NULL};
+	mxc_spixf_req_t req = {deassert, 0, NULL, read, (mxc_spixf_width_t)width, len, 0, 0, NULL};
 
-    if (MXC_SPIXF_Transaction(&req) != len) {
-        return E_COMM_ERR;
-    }
-    return E_NO_ERROR;
+	if (MXC_SPIXF_Transaction(&req) != len) {
+		return E_COMM_ERR;
+	}
+	return E_NO_ERROR;
 }
 
 /******************************************************************************/
-static int ext_flash_board_write(const uint8_t* write, unsigned len, unsigned deassert,
-                                 Ext_Flash_DataLine_t width)
+static int ext_flash_board_write(const uint8_t* write, unsigned len,
+				 unsigned deassert,
+				 Ext_Flash_DataLine_t width)
 {
-    mxc_spixf_req_t req = {deassert, 0, write, NULL, (mxc_spixf_width_t)width, len, 0, 0, NULL};
+	mxc_spixf_req_t req = {deassert, 0, write, NULL, (mxc_spixf_width_t)width, len, 0, 0, NULL};
 
-    if (MXC_SPIXF_Transaction(&req) != len) {
-        return E_COMM_ERR;
-    }
-    return E_NO_ERROR;
+	if (MXC_SPIXF_Transaction(&req) != len) {
+		return E_COMM_ERR;
+	}
+	return E_NO_ERROR;
 }
 
 /******************************************************************************/
 static int ext_flash_clock(unsigned len, unsigned deassert)
 {
-    return MXC_SPIXF_Clocks(len, deassert);
+	return MXC_SPIXF_Clocks(len, deassert);
 }
 
 __attribute__((section(".hpb_cs0_section"))) void test_func1(void)
@@ -381,7 +382,7 @@ int iio_example_main()
 
 	cfg_reg[0].addr = 0x01000;
 	cfg_reg[0].val  = 0x801f;
-        mem.base_addr = (unsigned int)&__hpb_cs0_start;
+	mem.base_addr = (unsigned int)&__hpb_cs0_start;
 	mem.device_type     = MXC_HPB_DEV_HYPER_RAM;
 	mem.cfg_reg_val     = cfg_reg;
 	mem.cfg_reg_val_len = 1;
@@ -409,7 +410,7 @@ int iio_example_main()
 
 	// memset(0x68000000, 0xA9, 10000000);
 	// memset(0x78000000, 0xAF, 10000000);
-        ret = MXC_HPB_Init(&mem, &mem2);
+	ret = MXC_HPB_Init(&mem, &mem2);
 	// memset(0x68000000, 0xA8, 10000000);
 	// memset(0x78000000, 0xA0, 10000000);
 	// memset(0x98000000, 0xAF, 100);
@@ -417,8 +418,10 @@ int iio_example_main()
 	// volatile uint8_t *ram_addr = (volatile uint8_t *)0x68000000;
 	// volatile uint8_t a = *(ram_addr + 7000000);
 
-	memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0, (uint32_t)&__load_length_hpb_cs0);
-	memcpy(&__hpb_cs1_start, &__load_start_hpb_cs1, (uint32_t)&__load_length_hpb_cs1);
+	memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0,
+	       (uint32_t)&__load_length_hpb_cs0);
+	memcpy(&__hpb_cs1_start, &__load_start_hpb_cs1,
+	       (uint32_t)&__load_length_hpb_cs1);
 	void (*func_ram1)(void);
 	void (*func_ram2)(void);
 
@@ -431,16 +434,17 @@ int iio_example_main()
 	// a = *ram_addr;
 
 	Ext_Flash_Config_t exf_cfg = {.init  = ext_flash_board_init,
-                                  .read  = ext_flash_board_read,
-                                  .write = ext_flash_board_write,
-                                  .clock = ext_flash_clock};
+				      .read  = ext_flash_board_read,
+				      .write = ext_flash_board_write,
+				      .clock = ext_flash_clock
+				     };
 
 	ret = Ext_Flash_Configure(&exf_cfg);
 	if (ret)
 		return ret;
 
 	Ext_Flash_Init();
-    	Ext_Flash_Reset();
+	Ext_Flash_Reset();
 	uint32_t flash_id = Ext_Flash_ID();
 	Ext_Flash_Erase(0x00000, Ext_Flash_Erase_64K);
 	ret = Ext_Flash_Quad(1);
@@ -455,7 +459,8 @@ int iio_example_main()
 	// ret = Ext_Flash_Program_Page(0xF, flash_readback, 3, Ext_Flash_DataLine_Single);
 
 	// ret = Ext_Flash_Read(0x0, flash_readback, 10, Ext_Flash_DataLine_Single);
-	ret = Ext_Flash_Program_Page(0x0, &__load_start_xip, (uint32_t)(&__load_length_xip), Ext_Flash_DataLine_Single);
+	ret = Ext_Flash_Program_Page(0x0, &__load_start_xip,
+				     (uint32_t)(&__load_length_xip), Ext_Flash_DataLine_Single);
 	// if (ret)
 	// 	return ret;
 	// ret = Ext_Flash_Read(0x0, flash_readback, 10, Ext_Flash_DataLine_Single);
@@ -537,7 +542,8 @@ int iio_example_main()
 	no_os_gpio_direction_input(ad74413r_irq_gpio);
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
+	       NETIF_MAX_HWADDR_LEN);
 
 	if (MXC_ADC_Init())
 		return -EINVAL;
@@ -545,7 +551,7 @@ int iio_example_main()
 	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
 	if (ret)
 		return ret;
-	
+
 	ret = no_os_irq_enable(ad74413r_nvic, GPIO1_IRQn);
 	if (ret)
 		return ret;
@@ -555,7 +561,8 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 0);
+	ret = no_os_irq_set_priority(ad74413r_irq_desc,
+				     ad74413r_gpio_irq_ip.irq_ctrl_id, 0);
 	if (ret)
 		return ret;
 
@@ -619,7 +626,7 @@ int iio_example_main()
 		swiot_iio_desc->adin1110 = app->lwip_desc->mac_desc;
 		step_p.swiot = swiot_iio_desc;
 		step_p.iio_app = app;
-		app->arg = &step_p;	
+		app->arg = &step_p;
 
 		ret = iio_app_run(app);
 		if (ret != -ENOTCONN)
@@ -653,6 +660,7 @@ int iio_example_main()
 			goto error;
 		}
 
+		ad74413r_iio_ip.trigger = ad74413r_trig_desc;
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip);
 		if (!ret) {
 			iio_devices[3].name = "ad74413r";
