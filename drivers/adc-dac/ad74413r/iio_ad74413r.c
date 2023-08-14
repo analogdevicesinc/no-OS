@@ -383,7 +383,8 @@ static int ad74413r_iio_write_raw(void *dev, char *buf, uint32_t len,
 	struct ad74413r_iio_desc *iio_desc = dev;
 
 	switch (channel->type) {
-	case IIO_VOLTAGE:
+	case IIO_VOLTAGE: /* fallthrough */
+	case IIO_CURRENT:
 		if (!channel->ch_out)
 			return -EINVAL;
 
