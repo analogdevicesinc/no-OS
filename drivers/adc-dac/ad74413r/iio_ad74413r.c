@@ -257,6 +257,11 @@ static struct iio_channel ad74413r_current_input_channels[] = {
 	AD74413R_ADC_CHANNEL(IIO_CURRENT, ad74413r_iio_adc_attrs)
 };
 
+static struct iio_channel ad74413r_current_input_loop_channels[] = {
+	AD74413R_ADC_CHANNEL(IIO_CURRENT, ad74413r_iio_adc_attrs),
+	AD74413R_DAC_CHANNEL(IIO_CURRENT)
+};
+
 static struct iio_channel ad74413r_current_output_channels[] = {
 	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs),
 	AD74413R_DAC_CHANNEL(IIO_CURRENT)
@@ -270,16 +275,21 @@ static struct iio_channel ad74413r_digital_input_channels[] = {
 	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs)
 };
 
+static struct iio_channel ad74413r_digital_input_loop_channels[] = {
+	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs),
+	AD74413R_DAC_CHANNEL(IIO_CURRENT)
+};
+
 static struct ad74413r_channel_map channel_map[] = {
 	[AD74413R_HIGH_Z] = AD74413R_CHANNELS(voltage_input),
 	[AD74413R_VOLTAGE_OUT] = AD74413R_CHANNELS(voltage_output),
 	[AD74413R_CURRENT_OUT] = AD74413R_CHANNELS(current_output),
 	[AD74413R_VOLTAGE_IN] = AD74413R_CHANNELS(voltage_input),
 	[AD74413R_CURRENT_IN_EXT] = AD74413R_CHANNELS(current_input),
-	[AD74413R_CURRENT_IN_LOOP] = AD74413R_CHANNELS(current_input),
+	[AD74413R_CURRENT_IN_LOOP] = AD74413R_CHANNELS(current_input_loop),
 	[AD74413R_RESISTANCE] = AD74413R_CHANNELS(resistance_input),
 	[AD74413R_DIGITAL_INPUT] = AD74413R_CHANNELS(digital_input),
-	[AD74413R_DIGITAL_INPUT_LOOP] = AD74413R_CHANNELS(digital_input),
+	[AD74413R_DIGITAL_INPUT_LOOP] = AD74413R_CHANNELS(digital_input_loop),
 	[AD74413R_CURRENT_IN_EXT_HART] = AD74413R_CHANNELS(current_input),
 	[AD74413R_CURRENT_IN_LOOP_HART] = AD74413R_CHANNELS(current_input),
 };
