@@ -410,39 +410,31 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	enum ad74413r_adc_range range;
 	struct ad74413r_iio_desc *iio_desc = dev;
 
+	ret = ad74413r_get_adc_range(iio_desc->ad74413r_desc,
+				     channel->address, &reg_val);
+	if (ret)
+		return ret;
+
+	range = reg_val;
 	switch (channel->type) {
 	case IIO_VOLTAGE:
-		val = 0;
+		if (channel->ch_out)
+			val = 0;
+		else
+			ret = ad74413r_range_to_voltage_offset(range, &val);
 		break;
 	case IIO_CURRENT:
-		if (channel->ch_out) {
+		if (channel->ch_out)
 			val = 0;
-		} else {
-			ret = ad74413r_get_adc_range(iio_desc->ad74413r_desc,
-						     channel->address, &reg_val);
-			if (ret)
-				return ret;
-
-			range = reg_val;
-			switch (range) {
-			case AD74413R_ADC_RANGE_10V:
-			case AD74413R_ADC_RANGE_2P5V_EXT_POW:
-				val = 0;
-				break;
-			case AD74413R_ADC_RANGE_2P5V_INT_POW:
-				val = -AD74413R_ADC_MAX_VALUE;
-				break;
-			case AD74413R_ADC_RANGE_5V_BI_DIR:
-				val = -(AD74413R_ADC_MAX_VALUE / 2);
-				break;
-			default:
-				return -EINVAL;
-			}
-		}
+		else
+			ret = ad74413r_range_to_voltage_offset(range, &val);
 		break;
 	default:
 		return -EINVAL;
 	}
+
+	if (ret)
+		return ret;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
@@ -591,33 +583,59 @@ static int ad74413r_iio_read_sampling_freq_avail(void *dev, char *buf,
 static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel, intptr_t priv)
 {
+	struct ad74413r_iio_desc *desc = dev;
+	enum ad74413r_adc_range range;
+	uint32_t range_val;
+	uint16_t reg_val;
 	int32_t val[2];
+	int ret;
 
 	switch (channel->type) {
 	case IIO_VOLTAGE:
 		if (channel->ch_out) {
-			val[0] = 0;
-			val[1] = 762940;
+			val[0] = AD74413R_DAC_RANGE;
+			val[1] = AD74413R_DAC_RESOLUTION;
 		} else {
-			val[0] = 0;
-			val[1] = 152590;
+			ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+						     channel->address, &reg_val);
+			if (ret)
+				return ret;
+
+			range = reg_val;
+			ret = ad74413r_range_to_voltage_range(range, &range_val);
+			if (ret)
+				return ret;
+
+			val[0] = range_val;
+			val[1] = AD74413R_ADC_RESOLUTION;
 		}
 
-		break;
+		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
+
 	case IIO_CURRENT:
 		if (channel->ch_out) {
-			val[0] = 0;
-			val[1] = 152590 / MILLI;
+			val[0] = 2500000;
+			val[1] = AD74413R_SENSE_RESISTOR_OHMS * AD74413R_DAC_CODE_MAX * 1000;
 		} else {
-			val[0] = 0;
-			val[1] = 381470 / MILLI;
+			ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+						     channel->address, &reg_val);
+			if (ret)
+				return ret;
+
+			range = reg_val;
+			ret = ad74413r_range_to_voltage_range(range, &range_val);
+			if (ret)
+				return ret;
+
+			val[0] = range_val;
+			val[1] = AD74413R_ADC_CODE_MAX * AD74413R_SENSE_RESISTOR_OHMS;
 		}
-		break;
+
+		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+
 	default:
 		return -EINVAL;
 	}
-
-	return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 1, val);
 }
 
 /**
