@@ -139,6 +139,10 @@ static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
 static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv);
+static int ad74413r_iio_read_threshold(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv);
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask);
 static int ad74413r_iio_buffer_disable(void *dev);
 static int ad74413r_iio_read_samples(void *dev, uint32_t *buf,
@@ -244,6 +248,30 @@ static struct iio_attribute ad74413r_iio_dac_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
+static struct iio_attribute ad74413r_iio_digital_attrs[] = {
+	{
+		.name = "sampling_frequency",
+		.show = ad74413r_iio_read_sampling_freq,
+		.store = ad74413r_iio_write_sampling_freq,
+	},
+	{
+		.name = "sampling_frequency_available",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = ad74413r_iio_read_sampling_freq_avail
+	},
+	{
+		.name = "raw",
+		.show = ad74413r_iio_read_raw,
+	},
+	{
+		.name = "threshold",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = ad74413r_iio_read_threshold,
+		.store = ad74413r_iio_write_threshold,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
 static struct iio_channel ad74413r_voltage_input_channels[] = {
 	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs),
 };
@@ -276,7 +304,7 @@ static struct iio_channel ad74413r_digital_input_channels[] = {
 };
 
 static struct iio_channel ad74413r_digital_input_loop_channels[] = {
-	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs),
+	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_digital_attrs),
 	AD74413R_DAC_CHANNEL(IIO_CURRENT)
 };
 
@@ -778,6 +806,37 @@ static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
 	return strlen(buf);
 }
 
+static int ad74413r_iio_read_threshold(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint16_t reg_val;
+	int32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIN_THRESH, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val = no_os_field_get(AD74413R_COMP_THRESH_MASK, reg_val);
+
+	/* Convert to mV */
+	val = reg_val * AD74413R_THRESHOLD_RANGE / AD74413R_THRESHOLD_DAC_RANGE;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+}
+
+static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint32_t reg_val;
+
+	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&reg_val, NULL);
+
+	return ad74413r_set_threshold(desc->ad74413r_desc, channel->address, reg_val);
+}
+
 /**
  * @brief Configure a set if IIO channels based on the operation modes of the enabled
  * physical channels.
@@ -962,21 +1021,41 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 {
 	int ret;
 	uint32_t i;
-	uint32_t val;
-	uint32_t buff[4];
+	uint32_t ch;
+	uint32_t digital_val;
+	uint8_t buff[32] = {0};
+	uint32_t buffer_idx = 0;
 	struct ad74413r_iio_desc *iio_desc;
+	struct ad74413r_channel_config *config;
 	struct ad74413r_desc *desc;
 
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
+	config = iio_desc->channel_configs;
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
-			ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(i),
-						    (uint8_t *)&val);
+			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
+			if (ret)
+				continue;
+
+			if (config[ch].function == AD74413R_DIGITAL_INPUT ||
+			    config[ch].function == AD74413R_DIGITAL_INPUT_LOOP) {
+				ret = ad74413r_reg_read_raw(desc, AD74413R_DIN_COMP_OUT,
+							    &buff[buffer_idx]);
+				digital_val = no_os_field_get(AD74413R_DIN_COMP_CH(ch),
+							      buff[buffer_idx + 2]);
+				buff[buffer_idx + 1] = 0x0;
+				buff[buffer_idx + 2] = !!digital_val;
+			} else {
+				ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
+							    &buff[buffer_idx]);
+			}
+
 			if (ret)
 				return ret;
-			buff[i] = val;
+
+			buffer_idx += 4;
 		}
 	}
 

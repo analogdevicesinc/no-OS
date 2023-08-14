@@ -134,6 +134,9 @@
 #define AD74413R_COMP_THRESH_MASK		NO_OS_GENMASK(5, 1)
 #define AD74413R_DIN_THRESH_MODE_MASK		NO_OS_BIT(0)
 
+/** DIN_COMP_OUT register */
+#define AD74413R_DIN_COMP_CH(x)			NO_OS_BIT(x)
+
 /** ADC_CONV_CTRL register */
 #define AD74413R_CONV_SEQ_MASK                  NO_OS_GENMASK(9, 8)
 #define AD74413R_DIAG_EN_MASK(x)		(NO_OS_BIT(x) << 4)
