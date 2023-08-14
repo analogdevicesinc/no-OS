@@ -582,7 +582,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 		if (ret)
 			goto out;
 
-		diag_func = no_os_field_get(NO_OS_GENMASK(3, 0) << (4 * channel->address), reg_val);
+		diag_func = no_os_field_get(AD74413R_DIAG_ASSIGN_MASK(channel->address), reg_val);
 		switch (diag_func) {
 		case AD74413R_DIAG_AVSS:
 			val = 33671;
@@ -1251,7 +1251,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc,
 	struct ad74413r_channel_map channels_info;
 	int ret;
 
-	config = init_param->channel_configs[0];
+	config = &init_param->channel_configs[0];
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
@@ -1460,8 +1460,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 				continue;
 
 			if (ch < 4) {
-				if (iio_desc->channel_configs[ch]->function == AD74413R_DIGITAL_INPUT ||
-				    iio_desc->channel_configs[ch]->function == AD74413R_DIGITAL_INPUT_LOOP) {
+				if (iio_desc->channel_configs[ch].function == AD74413R_DIGITAL_INPUT ||
+				    iio_desc->channel_configs[ch].function == AD74413R_DIGITAL_INPUT_LOOP) {
 					ret = ad74413r_reg_read_raw(desc, AD74413R_DIN_COMP_OUT,
 								    &buff[buffer_idx]);
 					digital_val = no_os_field_get((1 << ch), buff[buffer_idx + 2]);
@@ -1519,13 +1519,13 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 
 	/** The operation modes for the physical channels are set only at initialization. */
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
-		if ((*init_param->channel_configs)[i].enabled) {
+		if (init_param->channel_configs[i].enabled) {
 			ret = ad74413r_set_adc_channel_enable(descriptor->ad74413r_desc, i, true);
 			if (ret)
 				goto err;
 
 			ret = ad74413r_set_channel_function(descriptor->ad74413r_desc, i,
-							    (*init_param->channel_configs)[i].function);
+							    init_param->channel_configs[i].function);
 			if (ret)
 				goto err;
 
@@ -1546,14 +1546,18 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 
 	ret = ad74413r_iio_setup_channels(descriptor, init_param);
 	if (ret)
-		goto err;
+		goto free_iio_channels;
 
-	descriptor->channel_configs = init_param->channel_configs;
+	memcpy(&descriptor->channel_configs, &init_param->channel_configs,
+	       sizeof(descriptor->channel_configs));
 	descriptor->ad74413_conv_mode = AD74413R_STOP_PWR_DOWN;
 
 	*iio_desc = descriptor;
 
 	return 0;
+
+free_iio_channels:
+	no_os_free(descriptor->iio_dev->channels);
 err:
 	ad74413r_remove(descriptor->ad74413r_desc);
 	no_os_free(descriptor);
@@ -1574,6 +1578,7 @@ int ad74413r_iio_remove(struct ad74413r_iio_desc *desc)
 	if (ret)
 		return ret;
 
+	no_os_free(desc->iio_dev->channels);
 	no_os_free(desc);
 
 	return 0;
