@@ -285,6 +285,8 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		//.vcxo_freq = 122880000,
 		.clkin_freq = {100000000, 10000000, 0, 0},
 		.vcxo_freq = 100000000,
+		.pfd1_limit = 0,
+		.pll1_cp_current = 0,
 		.pll2_freq = 3000000000,
 		.pll1_loop_bw = 200,
 		.sysref_timer_div = 1024,
@@ -294,6 +296,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.num_channels = sizeof(chan_spec) /
 		sizeof(struct hmc7044_chan_spec),
 		.pll1_ref_prio_ctrl = 0xe4,
+		.pll1_ref_autorevert_en = false,
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = false,
 		.pulse_gen_mode = 0x0,
