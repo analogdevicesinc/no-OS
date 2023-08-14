@@ -134,6 +134,58 @@ static int ad74413r_rejection_to_rate(enum ad74413r_rejection rejection,
 }
 
 /**
+ * @brief Convert the measuring range of the ADC from range enum values to millivolts.
+ * @param range - ADC sample rate
+ * @param val - Rejection register value
+ * @return 0 in case of success, -EINVAL otherwise
+ */
+int ad74413r_range_to_voltage_range(enum ad74413r_adc_range range,
+				    uint32_t *val)
+{
+	switch (range) {
+	case AD74413R_ADC_RANGE_10V:
+		*val = 10000;
+		break;
+	case AD74413R_ADC_RANGE_2P5V_EXT_POW:
+	case AD74413R_ADC_RANGE_2P5V_INT_POW:
+		*val = 2500;
+		break;
+	case AD74413R_ADC_RANGE_5V_BI_DIR:
+		*val = 5000;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Convert the measuring range of the ADC from range enum values to millivolts.
+ * @param range - ADC sample rate
+ * @param val - Rejection register value
+ * @return 0 in case of success, -EINVAL otherwise
+ */
+int ad74413r_range_to_voltage_offset(enum ad74413r_adc_range range,
+				     int32_t *val)
+{
+	switch (range) {
+	case AD74413R_ADC_RANGE_10V:
+	case AD74413R_ADC_RANGE_2P5V_EXT_POW:
+	case AD74413R_ADC_RANGE_2P5V_INT_POW:
+		*val = 0;
+		break;
+	case AD74413R_ADC_RANGE_5V_BI_DIR:
+		*val = (-(int)AD74413R_ADC_MAX_VALUE / 2);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Converts a millivolt value in the corresponding DAC 13 bit code.
  * @param mvolts - The millivolts value.
  * @param code - The resulting DAC code.
