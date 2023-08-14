@@ -465,10 +465,11 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 	int32_t val;
 
 	if (channel->ch_out)
-		return -EINVAL;
-
-	ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
-				      channel->address, &reg_val);
+		ret = ad74413r_reg_read(iio_desc->ad74413r_desc,
+					AD74413R_DAC_CODE(channel->address), &reg_val);
+	else
+		ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
+					      channel->address, &reg_val);
 	if (ret)
 		return ret;
 
