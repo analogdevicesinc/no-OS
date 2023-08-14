@@ -377,6 +377,17 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
 {
 	int ret;
 
+	ret = ad74413r_set_channel_dac_code(desc, ch, 0);
+	if (ret)
+		return ret;
+
+	ret = ad74413r_reg_update(desc, AD74413R_CH_FUNC_SETUP(ch),
+				  AD74413R_CH_FUNC_SETUP_MASK, AD74413R_HIGH_Z);
+	if (ret)
+		return ret;
+
+	/* Each function should be selected for at least 130 us. */
+	no_os_udelay(130);
 	ret = ad74413r_reg_update(desc, AD74413R_CH_FUNC_SETUP(ch),
 				  AD74413R_CH_FUNC_SETUP_MASK, ch_func);
 	if (ret)
@@ -386,6 +397,9 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
 				  AD74413R_CH_200K_TO_GND_MASK, 1);
 	if (ret)
 		return ret;
+
+	/* No writes to the DACx registers may be done for 150 us after changing function */
+	no_os_udelay(150);
 
 	desc->channel_configs[ch].function = ch_func;
 
