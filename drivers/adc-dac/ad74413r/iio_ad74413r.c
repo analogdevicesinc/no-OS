@@ -87,6 +87,14 @@ static int32_t ad74412r_sample_rate_avail[] = {
 	20, 4800
 };
 
+static int32_t ad74413r_slew_rate_avail[] = {
+	4, 64, 150, 240,
+};
+
+static int32_t ad74413r_slew_step_avail[] = {
+	64, 120, 500, 1820,
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -113,6 +121,24 @@ static int ad74413r_iio_read_sampling_freq_avail(void *dev, char *buf,
 		const struct iio_ch_info *channel, intptr_t priv);
 static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_en(void *dev, char *buf, uint32_t len,
+				     const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_slew_en(void *dev, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_slew_rate(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_step(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv);
+static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv);
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask);
 static int ad74413r_iio_buffer_disable(void *dev);
 static int ad74413r_iio_read_samples(void *dev, uint32_t *buf,
@@ -189,6 +215,31 @@ static struct iio_attribute ad74413r_iio_dac_attrs[] = {
 	{
 		.name = "offset",
 		.show = ad74413r_iio_read_offset
+	},
+	{
+		.name = "slew_en",
+		.show = ad74413r_iio_read_slew_en,
+		.store = ad74413r_iio_write_slew_en,
+	},
+	{
+		.name = "slew_rate",
+		.show = ad74413r_iio_read_slew_rate,
+		.store = ad74413r_iio_write_slew_rate,
+	},
+	{
+		.name = "slew_rate_available",
+		.shared = IIO_SHARED_BY_DIR,
+		.show = ad74413r_iio_read_slew_rate_avail,
+	},
+	{
+		.name = "slew_step",
+		.show = ad74413r_iio_read_slew_step,
+		.store = ad74413r_iio_write_slew_step,
+	},
+	{
+		.name = "slew_step_available",
+		.shared = IIO_SHARED_BY_DIR,
+		.show = ad74413r_iio_read_slew_step_avail,
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -539,6 +590,161 @@ static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 	default:
 		return -EINVAL;
 	}
+}
+
+static int ad74413r_iio_read_slew_en(void *dev, char *buf, uint32_t len,
+				     const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint16_t reg_val;
+	int32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc,
+				AD74413R_OUTPUT_CONFIG(channel->address),
+				&reg_val);
+	if (ret)
+		return ret;
+
+	val = !!no_os_field_get(AD74413R_SLEW_EN_MASK, reg_val);
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+}
+
+static int ad74413r_iio_write_slew_en(void *dev, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint16_t reg_val;
+	int32_t val;
+
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+	reg_val = val;
+	return ad74413r_reg_update(desc->ad74413r_desc,
+				   AD74413R_OUTPUT_CONFIG(channel->address),
+				   AD74413R_SLEW_EN_MASK, !!reg_val);
+}
+
+static int ad74413r_iio_read_slew_step(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint16_t reg_val;
+	int32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc,
+				AD74413R_OUTPUT_CONFIG(channel->address), &reg_val);
+	if (ret)
+		return ret;
+
+	val = no_os_field_get(AD74413R_SLEW_LIN_STEP_MASK, reg_val);
+	val = ad74413r_slew_step_avail[val];
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+}
+
+static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	enum ad74413r_slew_lin_step step;
+	int32_t val;
+	int ret;
+
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+	switch (val) {
+	case 64:
+		step = AD74413R_STEP_64;
+		break;
+	case 120:
+		step = AD74413R_STEP_120;
+		break;
+	case 500:
+		step = AD74413R_STEP_500;
+		break;
+	case 1820:
+		step = AD74413R_STEP_1820;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return ad74413r_reg_update(desc->ad74413r_desc,
+				   AD74413R_OUTPUT_CONFIG(channel->address),
+				   AD74413R_SLEW_LIN_STEP_MASK, step);
+}
+
+static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint16_t reg_val;
+	int32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc,
+				AD74413R_OUTPUT_CONFIG(channel->address), &reg_val);
+	if (ret)
+		return ret;
+
+	val = no_os_field_get(AD74413R_SLEW_LIN_RATE_MASK, reg_val);
+	val = ad74413r_slew_rate_avail[val];
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+}
+
+static int ad74413r_iio_write_slew_rate(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint16_t reg_val;
+	int32_t val;
+	int ret;
+
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+	switch (val) {
+	case 4:
+		reg_val = AD74413R_LIN_RATE_4KHZ;
+		break;
+	case 64:
+		reg_val = AD74413R_LIN_RATE_64KHZ;
+		break;
+	case 150:
+		reg_val = AD74413R_LIN_RATE_150KHZ;
+		break;
+	case 240:
+		reg_val = AD74413R_LIN_RATE_240KHZ;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return ad74413r_reg_update(desc->ad74413r_desc,
+				   AD74413R_OUTPUT_CONFIG(channel->address),
+				   AD74413R_SLEW_LIN_RATE_MASK,
+				   reg_val);
+}
+
+static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv)
+{
+	iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_slew_rate_avail);
+
+	return strlen(buf);
+}
+
+static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv)
+{
+	iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_slew_step_avail);
+
+	return strlen(buf);
 }
 
 /**
