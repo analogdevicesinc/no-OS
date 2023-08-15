@@ -48,10 +48,7 @@ END
 
 )
 
-HALF_CORES=$(expr $(grep -c '^processor' /proc/cpuinfo) / 2)
-
-function print_run
-{
+print_run() {
 	local PS4='Running cmd: '
 	local -
 	set -o xtrace
@@ -59,51 +56,63 @@ function print_run
 	"$@"
 }
 
-if [ $# -eq 0 ]; then
-	echo "$USAGE"
-	exit 0
-fi
-
-if [ ! -d ~/.maxflash/hidapi ]; then
-	git clone https://github.com/libusb/hidapi.git ~/.maxflash/hidapi &&
-	pushd ~/.maxflash/hidapi &&
-	./bootstrap &&
-	./configure &&
-	make SHELL='sh' -j$HALF_CORES &&
-	sudo -S make install &&
-	sudo -S ldconfig &&
-	popd
-
-	if [ $? -ne 0 ]; then
-		rm -rf ~/.maxflash/hidapi
-		exit
+parse_input() {
+	if [ $# -eq 0 ]; then
+		echo "$USAGE"
+		exit 0
 	fi
-fi
 
-if [ ! -d ~/.maxflash/openocd ]; then
-	git clone https://github.com/MaximIntegratedMicros/openocd.git ~/.maxflash/openocd &&
-	pushd ~/.maxflash/openocd &&
-	./bootstrap &&
-	./configure --enable-cmsis-dap &&
-	make SHELL='sh' -j$HALF_CORES &&
-	popd
-	
-	if [ $? -ne 0 ]; then
-		rm -rf ~/.maxflash/openocd
-		exit
+	TARGET=$(strings $1 | grep startup_max | sed 's/.*startup_\(.*\)\.o/\1/')
+	if [ -z "TARGET" ]; then
+		echo "$USAGE"
+		exit 0
 	fi
-fi
 
-TARGET=$(strings $1 | grep startup_max | sed 's/.*startup_\(.*\)\.o/\1/')
-if [ -z "TARGET" ]; then
-	echo "$USAGE"
-	exit 0
-fi
+	if [ -z "$2" ]; then
+		DAP_SERIAL=""
+	else
+		DAP_SERIAL="cmsis_dap_serial $2"
+	fi
+}
 
-if [ -z "$2" ]; then
-	DAP_SERIAL=""
-else
-	DAP_SERIAL="cmsis_dap_serial $2"
-fi
+build_prerequisites() {
+	local HALF_CORES=$(expr $(grep -c '^processor' /proc/cpuinfo) / 2)
+
+	if [ ! -d ~/.maxflash/hidapi ]; then
+		git clone https://github.com/libusb/hidapi.git ~/.maxflash/hidapi &&
+		pushd ~/.maxflash/hidapi &&
+		./bootstrap &&
+		./configure &&
+		make SHELL='sh' -j$HALF_CORES &&
+		sudo -S make install &&
+		sudo -S ldconfig &&
+		popd
+
+		if [ $? -ne 0 ]; then
+			rm -rf ~/.maxflash/hidapi
+			exit
+		fi
+	fi
+
+	if [ ! -d ~/.maxflash/openocd ]; then
+		git clone https://github.com/MaximIntegratedMicros/openocd.git ~/.maxflash/openocd &&
+		pushd ~/.maxflash/openocd &&
+		./bootstrap &&
+		./configure --enable-cmsis-dap &&
+		make SHELL='sh' -j$HALF_CORES &&
+		popd
 		
-print_run ~/.maxflash/openocd/src/openocd -s ~/.maxflash/openocd/tcl -c "adapter driver cmsis-dap; transport select swd; $DAP_SERIAL" -f "target/$TARGET.cfg"  -c "program $1 verify reset exit"
+		if [ $? -ne 0 ]; then
+			rm -rf ~/.maxflash/openocd
+			exit
+		fi
+	fi
+}
+
+parse_input $@
+
+build_prerequisites
+
+print_run ~/.maxflash/openocd/src/openocd -s ~/.maxflash/openocd/tcl \
+	  -c "adapter driver cmsis-dap; transport select swd; $DAP_SERIAL" \
+	  -f "target/$TARGET.cfg"  -c "program $1 verify reset exit"
