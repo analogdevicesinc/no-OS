@@ -57,6 +57,9 @@ struct no_os_irq_ctrl_desc *trigger_irq_desc;
 
 struct ad74416h_desc *ad74416h_desc;
 
+volatile uint8_t sendResultToUart = 0;
+volatile int adc_value = 0;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -70,9 +73,6 @@ int voltage_input_irq_example_main()
 {
 	//struct ad74416h_desc *ad74416h_desc;
 	int ret;
-
-	//union ad74416h_live_status status;
-	//uint32_t adc_value = 0;
 
 	/**
 	  * @brief Initialize the trigger GPIO and associated IRQ event
@@ -123,24 +123,11 @@ int voltage_input_irq_example_main()
 	//The following functions needs to be in the appropriate place for the application (while loop, interrupt handler, etc.)
 	while(1)
 	{
-		////Check if there is data ready in the ADC
-		//ret = ad74416h_get_live(ad74416h_desc, &status);
-		//if (ret)
-		//{
-		//	pr_info("Error reading the live status register\r\n");
-		//	goto error_ad74416h;
-		//}
-		////If data is ready, read the ADC result
-		//if (status.status_bits.ADC_DATA_RDY == 1)
-		//{
-		//	ret = ad74416h_get_raw_adc_result(ad74416h_desc, 0, &adc_value);
-		//	if (ret)
-		//	{
-		//		pr_info("Error getting raw adc result in ADC A\r\n");
-		//		goto error_ad74416h;
-		//	}
-		//	pr_info("ADC Input value = %0x\r\n", adc_value);
-		//}
+		if(sendResultToUart == 1)
+		{
+		        pr_info("ADC Input value = %0x\r\n", adc_value);
+			sendResultToUart = 0;
+		}
 	}
 
 error_ad74416h:
@@ -205,25 +192,12 @@ int gpio_trigger_init()
 
 void adc_rdy_event_handler()
 {
-	union ad74416h_live_status status;
-	uint32_t adc_value = 0;
 	int ret;
-	//Check if there is data ready in the ADC
-        ret = ad74416h_get_live(ad74416h_desc, &status);
+        ret = ad74416h_get_raw_adc_result(ad74416h_desc, 0, &adc_value);
         if (ret)
         {
-                pr_info("Error reading the live status register\r\n");
+                pr_info("Error getting raw adc result in ADC A\r\n");
         }
-        //If data is ready, read the ADC result
-        if (status.status_bits.ADC_DATA_RDY == 1)
-        {
-                ret = ad74416h_get_raw_adc_result(ad74416h_desc, 0, &adc_value);
-                if (ret)
-                {
-                        pr_info("Error getting raw adc result in ADC A\r\n");
-                }
-                pr_info("ADC Input value = %0x\r\n", adc_value);
-        }
-
+	sendResultToUart = 1;
 }
 
