@@ -3,5 +3,10 @@
         "basic_example": {
             "flags" : "BASIC_EXAMPLE=y"
         }
+    },
+    "maxim": {
+        "basic_example": {
+            "flags" : "BASIC_EXAMPLE=y TARGET=max32690"
+        }
     }
 }
