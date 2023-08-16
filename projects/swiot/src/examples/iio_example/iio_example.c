@@ -611,7 +611,7 @@ int iio_example_main()
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = 1;
 		app_init_param.trigs = trigs;
-		app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+		app_init_param.nb_trigs = 1;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
 		app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;

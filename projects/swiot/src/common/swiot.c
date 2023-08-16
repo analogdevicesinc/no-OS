@@ -12,6 +12,7 @@
 #include "iio_max14906.h"
 #include "adc.h"
 #include "flc.h"
+#include "mxc_sys.h"
 
 static const char *const swiot_mode_available[] = {
 	"config",
@@ -339,22 +340,35 @@ static int swiot_read_id(void *dev, char *buf, uint32_t len,
 			 const struct iio_ch_info *channel,
 			 intptr_t priv)
 {
-	volatile uint32_t *access_ctrl = (uint32_t *)0x40029040;
+	// volatile uint32_t *access_ctrl = (uint32_t *)0x40029040;
+	// size_t length = 0;
+	// uint32_t usn;
+
+	// MXC_FLC_UnlockInfoBlock(MXC_INFO_MEM_BASE);
+
+	// usn = no_os_field_get(NO_OS_GENMASK(31, 15), *(uint32_t *)0x10800000);
+	// length += sprintf(buf, "%x-", usn);
+	// usn = no_os_field_get(NO_OS_GENMASK(30, 0), *(uint32_t *)0x10800004);
+	// length += sprintf(buf + length, "%x-", usn);
+	// usn = no_os_field_get(NO_OS_GENMASK(31, 15), *(uint32_t *)0x10800008);
+	// length += sprintf(buf + length, "%x-", usn);
+	// usn = no_os_field_get(NO_OS_GENMASK(30, 0), *(uint32_t *)0x1080000C);
+	// length += sprintf(buf + length, "%x-", usn);
+	// usn = no_os_field_get(NO_OS_GENMASK(22, 15), *(uint32_t *)0x10800010);
+	// length += sprintf(buf + length, "%x", usn);
+
 	size_t length = 0;
-	uint32_t usn;
+	uint8_t usn[13];
+	int ret;
 
-	MXC_FLC_UnlockInfoBlock(MXC_INFO_MEM_BASE);
+	ret = MXC_SYS_GetUSN(usn, 13);
+	if (ret)
+		return ret;
 
-	usn = no_os_field_get(NO_OS_GENMASK(31, 15), *(uint32_t *)0x10800000);
-	length += sprintf(buf, "%x-", usn);
-	usn = no_os_field_get(NO_OS_GENMASK(30, 0), *(uint32_t *)0x10800004);
-	length += sprintf(buf + length, "%x-", usn);
-	usn = no_os_field_get(NO_OS_GENMASK(31, 15), *(uint32_t *)0x10800008);
-	length += sprintf(buf + length, "%x-", usn);
-	usn = no_os_field_get(NO_OS_GENMASK(30, 0), *(uint32_t *)0x1080000C);
-	length += sprintf(buf + length, "%x-", usn);
-	usn = no_os_field_get(NO_OS_GENMASK(22, 15), *(uint32_t *)0x10800010);
-	length += sprintf(buf + length, "%x", usn);
+	for (int i = 0; i < 12; i++)
+		length += sprintf(buf + length, "%x-", usn[i]);
+
+	length += sprintf(buf + length, "%x", usn[13]);
 
 	return length;
 }
@@ -600,8 +614,8 @@ static const struct iio_channel swiot_chan[2] = {
 };
 
 static const struct iio_device swiot_iio_dev = {
-	.channels = swiot_chan,
-	.num_ch = 2,
+	// .channels = swiot_chan,
+	// .num_ch = 2,
 	.attributes = swiot_attrs,
 };
 
