@@ -89,7 +89,7 @@ enum max14906_iec_type {
 };
 
 /**
- * @brief Channel configuration options. 
+ * @brief Channel configuration options.
  */
 enum max14906_function {
 	MAX14906_OUT,
@@ -108,7 +108,7 @@ enum max14906_do_mode {
 };
 
 /**
- * @brief Current limit options for output channels. 
+ * @brief Current limit options for output channels.
  */
 enum max14906_climit {
 	MAX14906_CL_600,
@@ -118,65 +118,64 @@ enum max14906_climit {
 };
 
 /**
- * @brief Configuration structure for a MAX14906 channel. 
+ * @brief Configuration structure for a MAX14906 channel.
  */
 struct max14906_ch_config {
 	bool enabled;
 	enum max14906_function function;
-	/** The value set to the GPIO in case it's configured as output */
-	uint32_t val;
 };
 
 /**
- * @brief Initialization parameter for the MAX14906 device. 
+ * @brief Initialization parameter for the MAX14906 device.
  */
 struct max14906_init_param {
 	uint32_t chip_address;
 	struct no_os_spi_init_param *comm_param;
-	struct no_os_gpio_init_param *enable_param;
+	struct no_os_gpio_init_param *en_gpio_param;
 	struct max14906_ch_config ch_config[MAX14906_CHANNELS];
 	bool crc_en;
 };
 
 /**
- * @brief Device descriptor for MAX14906. 
+ * @brief Device descriptor for MAX14906.
  */
 struct max14906_desc {
 	uint32_t chip_address;
 	struct no_os_spi_desc *comm_desc;
-	struct no_os_gpio_desc *enable;
+	struct no_os_gpio_desc *en_gpio;
 	uint8_t buff[MAX14906_FRAME_SIZE + 1];
 	bool crc_en;
 };
 
-/* Write the value of a device register */
+/** Write the value of a device register */
 int max14906_reg_write(struct max14906_desc *, uint32_t, uint32_t);
 
-/* Read the value of a device register */
+/** Read the value of a device register */
 int max14906_reg_read(struct max14906_desc *, uint32_t, uint32_t *);
 
-/* Update the value of a device register */
+/** Update the value of a device register */
 int max14906_reg_update(struct max14906_desc *, uint32_t, uint32_t, uint32_t);
 
-/* Read the state of a channel */
+/** Read the state of a channel */
 int max14906_ch_get(struct max14906_desc *, uint32_t, uint32_t *);
 
-/* Set the state of a channel */
+/** Set the state of a channel */
 int max14906_ch_set(struct max14906_desc *, uint32_t, uint32_t);
 
-/* Configure a channel's function */
+/** Configure a channel's function */
 int max14906_ch_func(struct max14906_desc *, uint32_t, enum max14906_function);
 
-/* Configure the current limit for output channels */
+/** Configure the current limit for output channels */
 int max14906_climit_set(struct max14906_desc *, uint32_t, enum max14906_climit);
 
-/* Read an output channel's current limit */
-int max14906_climit_get(struct max14906_desc *, uint32_t, enum max14906_climit *);
+/** Read an output channel's current limit */
+int max14906_climit_get(struct max14906_desc *, uint32_t,
+			enum max14906_climit *);
 
-/* Initialize and configure the MAX14906 device */
+/** Initialize and configure the MAX14906 device */
 int max14906_init(struct max14906_desc **, struct max14906_init_param *);
 
-/* Free the resources allocated during init and place all the channels in high-z. */
+/** Free the resources allocated during init and place all the channels in high-z. */
 int max14906_remove(struct max14906_desc *);
 
 #endif

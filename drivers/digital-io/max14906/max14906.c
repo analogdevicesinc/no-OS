@@ -41,13 +41,14 @@
 #include <string.h>
 #include "max14906.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /**
  * @brief Compute the CRC5 value for an array of bytes when writing to MAX14906
  * @param data - array of data to encode
  * @return the resulted CRC5
  */
-static uint8_t max14906_crc_encode(uint8_t *data)
+static uint8_t max14906_crc(uint8_t *data, bool encode)
 {
 	uint8_t crc5_start = 0x1f;
 	uint8_t crc5_poly = 0x15;
@@ -55,61 +56,15 @@ static uint8_t max14906_crc_encode(uint8_t *data)
 	uint8_t extra_byte = 0x00;
 	uint8_t data_bit;
 	uint8_t result_bit;
+	int i;
 
 	/*
 	 * This is a custom implementation of a CRC5 algorithm, detailed here:
 	 * https://www.analog.com/en/app-notes/how-to-program-the-max14906-quadchannel-industrial-digital-output-digital-input.html
 	 */
 
-	for (int i = 0; i < 8; i++) {
-		data_bit = (data[0] >> (7 - i)) & 0x01; 
-		result_bit = (crc5_result & 0x10) >> 4;
-		if (data_bit ^ result_bit)
-			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
-		else
-			crc5_result = (crc5_result << 1) & 0x1f;
-	}
-
-	for (int i = 0; i < 8; i++) {
-		data_bit = (data[1] >> (7 - i)) & 0x01; 
-		result_bit = (crc5_result & 0x10) >> 4;
-		if (data_bit ^ result_bit)
-			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
-		else
-			crc5_result = (crc5_result << 1) & 0x1f;
-	}
-
-	for (int i = 0; i < 3; i++) {
-		data_bit = (extra_byte >> (7 - i)) & 0x01; 
-		result_bit = (crc5_result & 0x10) >> 4;
-		if (data_bit ^ result_bit)
-			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
-		else
-			crc5_result = (crc5_result << 1) & 0x1f;
-	}
-
-	return crc5_result;
-}
-
-/**
- * @brief Compute the CRC5 value for an array of bytes when reading from MAX14906
- * @param data - array of data to decode
- * @return the resulted CRC5
- */
-static uint8_t max14906_crc_decode(uint8_t *data)
-{
-	uint8_t crc5_start = 0x1f;
-	uint8_t crc5_poly = 0x15;
-	uint8_t crc5_result = crc5_start;
-	uint8_t extra_byte = 0x00;
-	uint8_t data_bit;
-	uint8_t result_bit;
-
-	/*
-	 * This is a custom implementation of a CRC5 algorithm, detailed here:
-	 * https://www.analog.com/en/app-notes/how-to-program-the-max14906-quadchannel-industrial-digital-output-digital-input.html
-	 */
-	for (int i = 2; i < 8; i++) {
+	i = (encode) ? 0 : 2;
+	for (; i < 8; i++) {
 		data_bit = (data[0] >> (7 - i)) & 0x01;
 		result_bit = (crc5_result & 0x10) >> 4;
 		if (data_bit ^ result_bit)
@@ -143,7 +98,7 @@ static uint8_t max14906_crc_decode(uint8_t *data)
  * @brief Write the value of a device register
  * @param desc - device descriptor for the MAX14906
  * @param addr - address of the register
- * @param data - value of the register
+ * @param val - value of the register
  * @return 0 in case of success, negative error code otherwise
  */
 int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
@@ -161,7 +116,7 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 
 	if (desc->crc_en) {
 		xfer.bytes_number++;
-		desc->buff[2] = max14906_crc_encode(desc->buff);
+		desc->buff[2] = max14906_crc(desc->buff, true);
 	}
 
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
@@ -171,7 +126,7 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
  * @brief Read the value of a device register
  * @param desc - device descriptor for the MAX14906
  * @param addr - address of the register
- * @param data - value of the register
+ * @param val - value of the register
  * @return 0 in case of success, negative error code otherwise
  */
 int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
@@ -194,14 +149,14 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 0);
 
 	if (desc->crc_en)
-		desc->buff[2] = max14906_crc_encode(&desc->buff[0]);
+		desc->buff[2] = max14906_crc(&desc->buff[0], true);
 
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 	if (ret)
 		return ret;
 
 	if (desc->crc_en) {
-		crc = max14906_crc_decode(&desc->buff[0]);
+		crc = max14906_crc(&desc->buff[0], false);
 		if (crc != desc->buff[2])
 			return -EINVAL;
 	}
@@ -216,7 +171,7 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
  * @param desc - device descriptor for the MAX14906
  * @param addr - address of the register
  * @param mask - bit mask of the field to be updated
- * @param data - value of the masked field. Should be bit shifted by using
+ * @param val - value of the masked field. Should be bit shifted by using
  * 		 no_os_field_prep(mask, val)
  * @return 0 in case of success, negative error code otherwise
  */
@@ -239,7 +194,7 @@ int max14906_reg_update(struct max14906_desc *desc, uint32_t addr,
 /**
  * @brief Read the (voltage) state of a channel (works for both input or output).
  * @param desc - device descriptor for the MAX14906
- * @param addr - channel index (0 based).
+ * @param ch - channel index (0 based).
  * @param val - binary value representing a channel's voltage level (0 or 1).
  * @return 0 in case of success, negative error code otherwise
  */
@@ -262,7 +217,7 @@ int max14906_ch_get(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
 /**
  * @brief Write the (voltage) state of a channel (only for output channels).
  * @param desc - device descriptor for the MAX14906
- * @param addr - channel index (0 based).
+ * @param ch - channel index (0 based).
  * @param val - binary value representing a channel's voltage level (0 or 1).
  * @return 0 in case of success, negative error code otherwise
  */
@@ -279,7 +234,7 @@ int max14906_ch_set(struct max14906_desc *desc, uint32_t ch, uint32_t val)
 /**
  * @brief Configure a channel's function.
  * @param desc - device descriptor for the MAX14906
- * @param addr - channel index (0 based).
+ * @param ch - channel index (0 based).
  * @param function - channel configuration (input, output or high-z).
  * @return 0 in case of success, negative error code otherwise
  */
@@ -291,19 +246,19 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 	if (function == MAX14906_HIGH_Z) {
 		ret = max14906_reg_update(desc, MAX14906_CONFIG_DO_REG, MAX14906_DO_MASK(ch),
 					  no_os_field_prep(MAX14906_DO_MASK(ch),
-					  MAX14906_PUSH_PULL));
+							  MAX14906_PUSH_PULL));
 		if (ret)
 			return ret;
 
 		return max14906_reg_update(desc, MAX14906_SETOUT_REG,
-					    MAX14906_CH_DIR_MASK(ch),
-					    no_os_field_prep(MAX14906_CH_DIR_MASK(ch), 1));
+					   MAX14906_CH_DIR_MASK(ch),
+					   no_os_field_prep(MAX14906_CH_DIR_MASK(ch), 1));
 	}
 
 	if (function == MAX14906_IN) {
 		ret = max14906_reg_update(desc, MAX14906_CONFIG_DO_REG, MAX14906_DO_MASK(ch),
 					  no_os_field_prep(MAX14906_DO_MASK(ch),
-					  MAX14906_HIGH_SIDE));
+							  MAX14906_HIGH_SIDE));
 		if (ret)
 			return ret;
 	}
@@ -315,12 +270,12 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 /**
  * @brief Configure the current limit for output channels
  * @param desc - device descriptor for the MAX14906
- * @param addr - channel index (0 based).
- * @param val - current limit value.
+ * @param ch - channel index (0 based).
+ * @param climit - current limit value.
  * @return 0 in case of success, negative error code otherwise
  */
 int max14906_climit_set(struct max14906_desc *desc, uint32_t ch,
-		     	enum max14906_climit climit)
+			enum max14906_climit climit)
 {
 	return max14906_reg_update(desc, MAX14906_CONFIG_CURR_LIM, MAX14906_CL_MASK(ch),
 				   no_os_field_prep(MAX14906_CL_MASK(ch), climit));
@@ -329,12 +284,12 @@ int max14906_climit_set(struct max14906_desc *desc, uint32_t ch,
 /**
  * @brief Read an output channel's current limit
  * @param desc - device descriptor for the MAX14906
- * @param addr - channel index (0 based).
- * @param val - current limit value.
+ * @param ch - channel index (0 based).
+ * @param climit - current limit value.
  * @return 0 in case of success, negative error code otherwise
  */
 int max14906_climit_get(struct max14906_desc *desc, uint32_t ch,
-		     	enum max14906_climit *climit)
+			enum max14906_climit *climit)
 {
 	uint32_t reg_val;
 	int ret;
@@ -357,14 +312,15 @@ int max14906_climit_get(struct max14906_desc *desc, uint32_t ch,
  * @param param - initialization parameter for the device.
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)
+int max14906_init(struct max14906_desc **desc,
+		  struct max14906_init_param *param)
 {
 	struct max14906_desc *descriptor;
 	uint32_t reg_val;
 	int ret;
 	int i;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -374,22 +330,21 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 
 	descriptor->crc_en = param->crc_en;
 
-	ret = no_os_gpio_get_optional(&descriptor->enable, param->enable_param);
-	if (!ret) {
-		ret = no_os_gpio_set_value(descriptor->enable, NO_OS_GPIO_HIGH);
+	ret = no_os_gpio_get_optional(&descriptor->en_gpio, param->en_gpio_param);
+	if (ret)
+		goto gpio_err;
+
+	if (descriptor->en_gpio) {
+		ret = no_os_gpio_set_value(descriptor->en_gpio, NO_OS_GPIO_HIGH);
 		if (ret)
 			goto gpio_err;
 	}
-
-	ret = max14906_reg_read(descriptor, MAX14906_DOILEVEL_REG, &reg_val);
-	if (ret)
-		goto gpio_err;
 
 	/* Clear the latched faults generated at power up */
 	ret = max14906_reg_read(descriptor, MAX14906_OVR_LD_REG, &reg_val);
 	if (ret)
 		goto gpio_err;
-	
+
 	ret = max14906_reg_read(descriptor, MAX14906_OPN_WIR_FLT_REG, &reg_val);
 	if (ret)
 		goto gpio_err;
@@ -406,10 +361,6 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		ret = max14906_ch_func(descriptor, i, MAX14906_HIGH_Z);
 		if (ret)
 			goto gpio_err;
-
-		ret = max14906_climit_set(descriptor, i, MAX14906_CL_130);
-		if (ret)
-			goto gpio_err;
 	}
 
 	*desc = descriptor;
@@ -417,10 +368,10 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 	return 0;
 
 gpio_err:
-	no_os_gpio_remove(descriptor->enable);
+	no_os_gpio_remove(descriptor->en_gpio);
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -433,27 +384,25 @@ err:
 int max14906_remove(struct max14906_desc *desc)
 {
 	int ret;
+	int i;
 
 	if (!desc)
 		return -ENODEV;
 
-	for (int i = 0; i < MAX14906_CHANNELS; i++) {
+	for (i = 0; i < MAX14906_CHANNELS; i++) {
 		ret = max14906_ch_func(desc, i, MAX14906_HIGH_Z);
 		if (ret)
 			return ret;
 	}
 
-	ret = no_os_spi_remove(desc->comm_desc);
-	if (ret)
-		return ret;
+	no_os_spi_remove(desc->comm_desc);
 
-	if (desc->enable) {
-		ret = no_os_gpio_set_value(desc->enable, NO_OS_GPIO_HIGH_Z);
-		if (ret)
-			return ret;
-	}
+	if (desc->en_gpio)
+		no_os_gpio_remove(desc->en_gpio);
 
-	free(desc);
+	no_os_free(desc);
+
+	desc = NULL;
 
 	return 0;
 }

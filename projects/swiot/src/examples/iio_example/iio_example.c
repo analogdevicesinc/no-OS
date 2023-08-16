@@ -634,7 +634,8 @@ int iio_example_main()
 
 		ndev = 1;
 		ntrig = 0;
-		max14906_iio_ip.channel_configs = &swiot_iio_desc->max14906_configs;
+		memcpy(&max14906_iio_ip.channel_configs, &swiot_iio_desc->max14906_configs,
+		       sizeof(max14906_iio_ip.channel_configs));
 		memcpy(&ad74413r_iio_ip.channel_configs, &swiot_iio_desc->ad74413r_configs,
 		       sizeof(ad74413r_iio_ip.channel_configs));
 		/* Probe the drivers in the run mode */

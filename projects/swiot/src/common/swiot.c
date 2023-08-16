@@ -44,12 +44,10 @@ static void swiot_config_devices(struct swiot_iio_desc *swiot)
 			swiot->ad74413r_configs[i].function = swiot_config[i].function;
 			swiot->max14906_configs[i].enabled = false;
 			swiot->max14906_configs[i].function = MAX14906_HIGH_Z;
-			swiot->max14906_configs[i].val = 0;
 			break;
 		case SWIOT_MAX14906:
 			swiot->max14906_configs[i].enabled = true;
 			swiot->max14906_configs[i].function = swiot_config[i].function;
-			swiot->max14906_configs[i].val = AD74413R_HIGH_Z;
 			swiot->ad74413r_configs[i].enabled = false;
 			swiot->ad74413r_configs[i].function = 0;
 			break;
