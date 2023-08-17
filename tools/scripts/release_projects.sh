@@ -33,6 +33,14 @@
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# The No-OS Release procedure consists of 3 tasks in the Releases section of Azure Pipelines:
+# 1. Delete GitHub Release - deletes the old release in order to create a new one with same release
+#                            tag
+# 2. Bash Script - this script (release_projects.sh) is passed as input file from the no-OS sources
+#                  affilated to the Release.
+# 3. Create GitHub Release - generate new release using the same release tag and new sources and
+#                            binaries.
+
 # Release Environment Variables
 RELEASE_TAG="last_commit"
 SRC_ALIAS="noos_projects_binaries"
