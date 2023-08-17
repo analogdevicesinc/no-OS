@@ -44,21 +44,22 @@
 # Release Environment Variables
 RELEASE_TAG="last_commit"
 SRC_ALIAS="noos_projects_binaries"
-BINARY_PATH=$(System.DefaultWorkingDirectory)/$SRC_ALIAS
-#ARTIFACT_NAME=noos_exports #currently set in Azure Pipelines Variables Group
+WORKING_DIRECTORY="${1:-$(System.DefaultWorkingDirectory)}"
+BINARY_PATH=$WORKING_DIRECTORY/$SRC_ALIAS
+ARTIFACT="${2:-$(ARTIFACT_NAME)}" #currently set in Azure Pipelines Variables Group
 
 # List of source directories
 SOURCE_DIRECTORIES=(
-	"$BINARY_PATH/$(ARTIFACT_NAME)_STM32/"
-	"$BINARY_PATH/$(ARTIFACT_NAME)_Maxim/"
-	"$BINARY_PATH/$(ARTIFACT_NAME)_Mbed/"
-	"$BINARY_PATH/$(ARTIFACT_NAME)_Pico/"
-	"$BINARY_PATH/$(ARTIFACT_NAME)_ADuCM3029/"
-	"$BINARY_PATH/$(ARTIFACT_NAME)_Xilinx/"
+	"$BINARY_PATH/${ARTIFACT}_STM32/"
+	"$BINARY_PATH/${ARTIFACT}_Maxim/"
+	"$BINARY_PATH/${ARTIFACT}_Mbed/"
+	"$BINARY_PATH/${ARTIFACT}_Pico/"
+	"$BINARY_PATH/${ARTIFACT}_ADuCM3029/"
+	"$BINARY_PATH/${ARTIFACT}_Xilinx/"
 )
 
 # Destination directory
-DESTINATION_DIRECTORY="$BINARY_PATH/$(ARTIFACT_NAME)"
+DESTINATION_DIRECTORY="$BINARY_PATH/${ARTIFACT}"
 
 #Update Release Tag in preparation for new release
 update_release_tag() {
