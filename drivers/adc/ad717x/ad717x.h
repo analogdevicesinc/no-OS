@@ -95,7 +95,7 @@ enum ad717x_analog_input_pairs {
 	VIN1_VINCOM = 0x30,
 	VIN2_VIN3 = 0x43,
 	VIN2_VINCOM = 0x50,
-	VIN3_VIN2 = 0x63,
+	VIN3_VIN2 = 0x62,
 	VIN3_VINCOM = 0x70,
 	VIN4_VIN5 = 0x85,
 	VIN4_VINCOM = 0x90,
@@ -107,7 +107,10 @@ enum ad717x_analog_input_pairs {
 	VIN7_VINCOM = 0xF0,
 	IIN3P_IIN3M = 0x18B,
 	IIN2P_IIN2M = 0x1AA,
-	IIN1P_IIN1M = 0x1C9
+	IIN1P_IIN1M = 0x1C9,
+	IIN0P_IIN0M = 0x1E8,
+	TEMPERATURE_SENSOR = 0x232,
+	REFERENCE = 0x2B6
 };
 
 /*
