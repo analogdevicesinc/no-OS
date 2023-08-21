@@ -1,8 +1,4 @@
-ifeq ($(OS), Windows_NT)
-remove_fun = del /S /Q $(subst /,\,$1)
-else
 remove_fun = rm -rf $(1)
-endif
 
 MQTT_DIR	= $(realpath .)
 PAHO_DIR	= $(MQTT_DIR)/paho.mqtt.embedded-c

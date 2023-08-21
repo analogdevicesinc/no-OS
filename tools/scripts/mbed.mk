@@ -71,11 +71,16 @@ PLATFORM_INCS = $(MBED_PLATFORM_INCLUDE_PATHS)
 # Extra files for build
 EXTRA_FILES =@$(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
 
+define generate_obj_func
+	echo $(1) >> $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
+endef
+
 # Rule for building Mbed-OS
 $(PROJECT_TARGET): MBED-OS-build
 	-$(MUTE) $(call mk_dir,$(BUILD_DIR)) $(HIDE)
 	$(MUTE) $(call print, putting mbed-os object files names to text file)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)) $(cmd_separator) $(foreach mbed_os_object_file,$(sort $(UPDATE_MBED_GENERATED_ARCHIVE_FILE)),$(call APPEND_TEXT_TO_FILE,$(mbed_os_object_file),$(UPDATED_MBED_GENERATED_ARCHIVE_FILE)) $(cmd_separator)) echo . $(HIDE)
+	echo -n > $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
+	$(call process_items_in_chunks,$(sort $(UPDATE_MBED_GENERATED_ARCHIVE_FILE)),10,generate_obj_func)
 	$(MUTE) $(call set_one_time_rule,$@)
 
 $(MBED_OS_LIBRARY):
@@ -85,7 +90,7 @@ PHONY_TARGET += MBED-OS-build
 MBED-OS-build:
 	-$(MUTE) $(call mk_dir,$(MBED_APP_JSON_DIRECTORY)) $(HIDE)
 	$(MUTE) $(call copy_file,$(MBED_OS_DIRECTORY)/mbed_app.json,$(MBED_APP_JSON_DIRECTORY)/) $(HIDE)
-	$(MUTE) cd $(MBED_OS_DIRECTORY) $(cmd_separator) mbed config root . $(cmd_separator) mbed compile --source $(MBED_OS_DIRECTORY)/mbed-os --source $(MBED_APP_JSON_DIRECTORY) -m $(TARGET_BOARD) -t $(COMPILER) --build $(MBED_OS_BUILD_DIRECTORY) --library
+	$(MUTE) cd $(MBED_OS_DIRECTORY) ; mbed config root . ; mbed compile --source $(MBED_OS_DIRECTORY)/mbed-os --source $(MBED_APP_JSON_DIRECTORY) -m $(TARGET_BOARD) -t $(COMPILER) --build $(MBED_OS_BUILD_DIRECTORY) --library
 	$(MUTE) $(call print, Mbed-OS build completed)
 
 # Linker-Script Preprocessing

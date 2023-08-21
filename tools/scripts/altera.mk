@@ -2,29 +2,8 @@
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
 
-#------------------------------------------------------------------------------
-#                         The adjust-path macro
-#
-# If Make is launched from Windows through
-# Windows Subsystem for Linux (WSL).  The adjust-path macro converts absolute windows 
-# paths into unix style paths (Example: c:/dir -> /c/dir). 
-# The adjust_path_mixed function converts WSL path to Windows path.
-# This will ensure paths are readable by GNU Make.
-#------------------------------------------------------------------------------
-
-ifeq ($(OS), Windows_NT)
-	ifneq ($(strip $(USE_LEGAY)),'y')
-		WSL = wsl
-		adjust_path = $(shell wsl wslpath $1)
-		adjust_path_mixed = $(if $(call eq,$(shell echo $1 | wsl head -c 5),/mnt/),$(shell echo $1 | wsl sed 's/\/mnt\///g;s/\//:\//1'),$1)
-	else
-		adjust_path = $1
-		adjust_path_mixed = $1
-	endif
-else # !Windows_NT
-	adjust_path = $1
-	adjust_path_mixed = $1
-endif
+adjust_path = $1
+adjust_path_mixed = $1
 
 PROJECT_BUILD = $(BUILD_DIR)/app
 

@@ -16,8 +16,9 @@ include ..\..\tools\scripts\local_variables.mk
 endif
 
 #Variables needed by makefile
-NO-OS			?= $(realpath ../..)
 PROJECT			?= $(realpath .)
+NO-OS			?= $(realpath $(PROJECT)/../../)
+ROOT_DRIVE		?= $(firstword $(subst /, ,$(PROJECT)))/
 BUILD_DIR		?= $(PROJECT)/build
 WORKSPACE		?= $(BUILD_DIR)
 
@@ -34,7 +35,6 @@ CFLAGS := -DNO_OS_VERSION=$(GIT_VERSION) \
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------
-
 # By default link noos sources into the build directory of the project.
 # This way all needed files will be in one place and they can be tracked on git
 LINK_SRCS ?= y
