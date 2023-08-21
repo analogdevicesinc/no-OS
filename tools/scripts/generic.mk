@@ -1,20 +1,18 @@
-#------------------------------------------------------------------------------
-#                             EXPORTED VARIABLES                               
-#------------------------------------------------------------------------------
-# Used by nested Makefiles (mbedtls, fatfs, iio)
 export CFLAGS
 export CC
 export AR
-
-# Used by the build utils
 export EXTRA_INC_PATHS
 export FLAGS_WITHOUT_D
 export PROJECT_BUILD
 export JTAG_CABLE_ID
 export BOOTOBJ
-#------------------------------------------------------------------------------
-#                              UTIL FUNCTIONS
-#------------------------------------------------------------------------------
+
+ifeq ($(VERBOSE),y)
+else
+HIDE = > /dev/zero
+.SILENT:
+endif
+
 TIMESTAMP = $(shell date +"%T")
 copy_file = cp $1 $2
 copy_dir = cp -r $1 $2
@@ -25,22 +23,9 @@ mk_dir = mkdir -p $1
 read_file = cat $1 2>/dev/zero
 print_lines = echo $1 | tr ' ' '\n'
 green = \\e[32m$1\\e[39m
-print = @printf "$(call green,[$(TIMESTAMP)]) $1\n"
-HIDE_OUTPUT = > /dev/zero
+print = printf "$(call green,[$(TIMESTAMP)]) $1\n"
 make_dir_link = ln -sf $1 $2
 make_link = ln -sf $1 $2
-
-VERBOSE ?= 0
-export VERBOSE
-
-ifeq ($(strip $(VERBOSE)),0)
-HIDE = $(HIDE_OUTPUT)
-MUTE = @
-endif
-
-ifeq ($(strip $(VERBOSE)),2)
-HIDE = $(HIDE_OUTPUT)
-endif
 
 # Recursive wildcard
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
@@ -68,10 +53,6 @@ endif
 
 # Display the platform for which build is launched
 print_build_type = $(call print,Building for $(call green,$1))
-
-#------------------------------------------------------------------------------
-#                           ENVIRONMENT VARIABLES                              
-#------------------------------------------------------------------------------
 
 ifndef NO-OS
 $(error "NO-OS variable needs to be set")
@@ -110,10 +91,6 @@ Plese clone no-os in a path without spaces,$(ENDL)\
 otherwise the makefile will not work well.$(ENDL)\
 Current path is: $(NO-OS)$(ENDL))
 endif
-
-#------------------------------------------------------------------------------
-#                          INCLUDE SPECIFIC MAKEFILES
-#------------------------------------------------------------------------------
 
 ifeq 'xilinx' '$(PLATFORM)'
 TMP_HW := $(filter %.xsa, $(HARDWARE))
@@ -269,19 +246,19 @@ PHONY += all
 ifneq ($(wildcard $(PROJECT_TARGET)),)
 all:
 	$(call print_build_type,$(PLATFORM))
-	$(MUTE) $(MAKE) --no-print-directory build
+	$(MAKE) --no-print-directory build
 ifeq 'xilinx' '$(PLATFORM)'
-	$(MUTE) $(MAKE) --no-print-directory create_boot_bin
+	$(MAKE) --no-print-directory create_boot_bin
 endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all:
 	$(call print_build_type,$(PLATFORM))
 # Remove -j flag for running project target. (It doesn't work on xilinx on this target)
-	$(MUTE) $(MAKE) --no-print-directory update
-	$(MUTE) $(MAKE) --no-print-directory build
+	$(MAKE) --no-print-directory update
+	$(MAKE) --no-print-directory build
 ifeq 'xilinx' '$(PLATFORM)'
-	$(MUTE) $(MAKE) --no-print-directory create_boot_bin
+	$(MAKE) --no-print-directory create_boot_bin
 endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
@@ -294,28 +271,28 @@ endif
 # Create directories for binary files. This is needed in order to know from which
 # .c it was build
 $(OBJECTS_DIR)/.:
-	-@$(call mk_dir,$@)
+	-$(call mk_dir,$@)
 
 $(OBJECTS_DIR)%/.:
-	-@$(call mk_dir,$@)
+	-$(call mk_dir,$@)
 
 # Build .c files into .o files.
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
-	@$(call print,[CC] $(notdir $<))
-	$(MUTE) $(CC) -c @$(CFLAGS_FILE) $< -o $@
+	$(call print,[CC] $(notdir $<))
+	$(CC) -c @$(CFLAGS_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).cpp | $$(@D)/.
-	@$(call print,[CPP] $(notdir $<))
-	$(MUTE) $(CPP) -c @$(CPPFLAGS_FILE) $< -o $@
+	$(call print,[CPP] $(notdir $<))
+	$(CPP) -c @$(CPPFLAGS_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
-	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c @$(ASFLAGS_FILE) $< -o $@
+	$(call print,[AS] $(notdir $<))
+	$(AS) -c @$(ASFLAGS_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/. 
-	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c @$(ASFLAGS_FILE) $< -o $@
+	$(call print,[AS] $(notdir $<))
+	$(AS) -c @$(ASFLAGS_FILE) $< -o $@
 
 ifneq ($(strip $(LSCRIPT)),)
 LSCRIPT_FLAG = -T$(LSCRIPT)
@@ -339,21 +316,21 @@ endef
 
 PHONY += pre_build
 pre_build:
-	$(MUTE) $(call print,Generating build flags)
-	$(MUTE) echo -n > $(CFLAGS_FILE)
+	$(call print,Generating build flags)
+	echo -n > $(CFLAGS_FILE)
 	$(call process_items_in_chunks,$(CFLAGS),10,generate_cflags_func)
-	$(MUTE) echo -n > $(CPPFLAGS_FILE)
+	echo -n > $(CPPFLAGS_FILE)
 	$(call process_items_in_chunks,$(CPPFLAGS),10,generate_cppflags_func)
-	$(MUTE) @echo -n > $(ASFLAGS_FILE)
+	echo -n > $(ASFLAGS_FILE)
 	$(call process_items_in_chunks,$(ASFLAGS),10,generate_asflags_func)
-	$(MUTE) echo -n > $(OBJS_FILE)
+	echo -n > $(OBJS_FILE)
 	$(call process_items_in_chunks,$(sort $(OBJS)),10,generate_objs_func)
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
-	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
+	$(call print,[LD] $(notdir $(OBJS)))
+	$(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
-	$(MUTE) $(MAKE) --no-print-directory post_build
+	$(MAKE) --no-print-directory post_build
 
 PHONY += $(BINARY).id
 $(BINARY).id:
@@ -364,7 +341,7 @@ endif
 
 PHONY += run
 run: $(PLATFORM)_run
-	@$(call print,$(notdir $(BINARY)) uploaded to board)
+	$(call print,$(notdir $(BINARY)) uploaded to board)
 
 project: $(PROJECT_TARGET)
 
@@ -372,7 +349,7 @@ $(PROJECT_TARGET): $(LIB_TARGETS)
 
 # Platform specific post build dependencies can be added to this rule.
 post_build:
-	$(MUTE) $(SIZE) --format=Berkley $(BINARY) $(HEX)
+	$(SIZE) --format=Berkley $(BINARY) $(HEX)
 
 # Function to process a list in chunks
 # Arguments:
@@ -394,14 +371,14 @@ endef
 
 PHONY += update
 update: $(PROJECT_TARGET)
-	@$(call print, $(ACTION) srcs to created project)
-	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE))
-	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE))
-	$(MUTE) $(call process_items_in_chunks,$(sort $(SRCS) $(INCS)),10,update_file_func)
-	$(MUTE) $(MAKE) --no-print-directory pre_build
+	$(call print,$(ACTION) srcs to created project)
+	$(call remove_dir,$(DIRS_TO_REMOVE))
+	$(call mk_dir,$(DIRS_TO_CREATE))
+	$(call process_items_in_chunks,$(sort $(SRCS) $(INCS)),10,update_file_func)
+	$(MAKE) --no-print-directory pre_build
 
 standalone:
-	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n
+	$(MAKE) --no-print-directory project LINK_SRCS=n
 
 # Build project using generic compiler
 build: $(BINARY)
@@ -419,13 +396,13 @@ sdkopen: $(PLATFORM)_sdkopen
 PHONY += clean
 clean:
 	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
-	$(MUTE) $(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS))
+	$(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS))
 
 # Remove the whole build directory
 PHONY += reset
 reset: clean_libs
-	@$(call print,[Delete] $(BUILD_DIR))
-	$(MUTE) $(call remove_dir,$(BUILD_DIR))
+	$(call print,[Delete] $(BUILD_DIR))
+	$(call remove_dir,$(BUILD_DIR))
 
 PHONY += list
 list:
