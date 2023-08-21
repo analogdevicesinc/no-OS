@@ -1,7 +1,6 @@
 INCS += $(INCLUDE)/no_os_rtc.h
 
-INCS += $(PLATFORM_DRIVERS)/maxim_delay.h     \
-        $(PLATFORM_DRIVERS)/maxim_spi.h       \
+INCS += $(PLATFORM_DRIVERS)/maxim_spi.h       \
         $(PLATFORM_DRIVERS)/maxim_irq.h       \
         $(PLATFORM_DRIVERS)/maxim_rtc.h       \
         $(PLATFORM_DRIVERS)/maxim_uart.h      \
