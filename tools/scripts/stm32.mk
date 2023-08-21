@@ -63,7 +63,7 @@ CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
 $(PROJECT_TARGET):
 	$(call print,Creating IDE project)
-	$(MUTE) $(call mk_dir, $(BUILD_DIR))
+	$(call mk_dir, $(BUILD_DIR))
 	@echo config load $(HARDWARE) > $(BINARY).cubemx
 	@echo project name app >> $(BINARY).cubemx
 	@echo project toolchain STM32CubeIDE >> $(BINARY).cubemx
@@ -72,30 +72,30 @@ $(PROJECT_TARGET):
 	@echo SetStructure Advanced >> $(BINARY).cubemx
 	@echo project generate >> $(BINARY).cubemx
 	@echo exit >> $(BINARY).cubemx
-	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
-	$(MUTE) $(call remove_file,$(BINARY).cubemx) $(HIDE)
-	$(MUTE) $(MAKE) --no-print-directory $(PROJECT_TARGET)_configure
-	$(MUTE) $(call set_one_time_rule,$@)
+	java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
+	$(call remove_file,$(BINARY).cubemx) $(HIDE)
+	$(MAKE) --no-print-directory $(PROJECT_TARGET)_configure
+	$(call set_one_time_rule,$@)
 
 $(PROJECT_TARGET)_configure:
 	$(call print,Configuring project)
-	$(MUTE) sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
-	$(MUTE) sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
-	$(MUTE) sed -i 's/USE_HAL_TIM_REGISTER_CALLBACKS\s*0U/USE_HAL_TIM_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
-	$(MUTE) sed -i 's/USE_HAL_UART_REGISTER_CALLBACKS\s*0U/USE_HAL_UART_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
-	$(MUTE) $(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
-	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
+	sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
+	sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
+	sed -i 's/USE_HAL_TIM_REGISTER_CALLBACKS\s*0U/USE_HAL_TIM_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
+	sed -i 's/USE_HAL_UART_REGISTER_CALLBACKS\s*0U/USE_HAL_UART_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
+	$(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
+	$(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
 
-	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
+	$(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
 
-	$(MUTE) $(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
-	$(MUTE) $(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
-	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
+	$(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
+	$(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
+	$(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
 		$(HIDE)
-	$(MUTE) sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
+	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
-	$(MUTE) $(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
+	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
 
 $(PLATFORM)_sdkopen:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) &
@@ -161,27 +161,27 @@ $(BINARY).gdb:
 HEX = $(basename $(BINARY)).hex
 
 $(HEX): $(BINARY)
-	$(MUTE) $(call print,[HEX] $(notdir $@))
-	$(MUTE) $(OC) -O ihex $(BINARY) $(HEX)
-	$(MUTE) $(call print,$(notdir $@) is ready)
+	$(call print,[HEX] $(notdir $@))
+	$(OC) -O ihex $(BINARY) $(HEX)
+	$(call print,$(notdir $@) is ready)
 
 post_build: $(HEX)
 
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
-	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
+	$(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) -build app $(HIDE)
 
 PHONY += $(PLATFORM)_sdkclean
 $(PLATFORM)_sdkclean:
 	$(call print,[Delete] SDK artefacts from $(DEBUG_DIR))
-	$(MUTE) $(call remove_dir,$(DEBUG_DIR)) $(HIDE)
+	$(call remove_dir,$(DEBUG_DIR)) $(HIDE)
 	$(call print,[Delete] SDK artefacts from $(RELEASE_DIR))
-	$(MUTE) $(call remove_dir,$(RELEASE_DIR)) $(HIDE)
+	$(call remove_dir,$(RELEASE_DIR)) $(HIDE)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	$(MUTE) $(call remove_file,$(HEX)) $(HIDE)
+	$(call remove_file,$(HEX)) $(HIDE)
 
 clean: clean_hex
 

@@ -77,29 +77,29 @@ endef
 
 # Rule for building Mbed-OS
 $(PROJECT_TARGET): MBED-OS-build
-	-$(MUTE) $(call mk_dir,$(BUILD_DIR)) $(HIDE)
-	$(MUTE) $(call print, putting mbed-os object files names to text file)
+	-$(call mk_dir,$(BUILD_DIR)) $(HIDE)
+	$(call print, putting mbed-os object files names to text file)
 	echo -n > $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
 	$(call process_items_in_chunks,$(sort $(UPDATE_MBED_GENERATED_ARCHIVE_FILE)),10,generate_obj_func)
-	$(MUTE) $(call set_one_time_rule,$@)
+	$(call set_one_time_rule,$@)
 
 $(MBED_OS_LIBRARY):
-	$(MUTE) $(MAKE) --no-print-directory MBED-OS-build $(HIDE)
+	$(MAKE) --no-print-directory MBED-OS-build $(HIDE)
 
 PHONY_TARGET += MBED-OS-build 
 MBED-OS-build:
-	-$(MUTE) $(call mk_dir,$(MBED_APP_JSON_DIRECTORY)) $(HIDE)
-	$(MUTE) $(call copy_file,$(MBED_OS_DIRECTORY)/mbed_app.json,$(MBED_APP_JSON_DIRECTORY)/) $(HIDE)
-	$(MUTE) cd $(MBED_OS_DIRECTORY) ; mbed config root . ; mbed compile --source $(MBED_OS_DIRECTORY)/mbed-os --source $(MBED_APP_JSON_DIRECTORY) -m $(TARGET_BOARD) -t $(COMPILER) --build $(MBED_OS_BUILD_DIRECTORY) --library
-	$(MUTE) $(call print, Mbed-OS build completed)
+	-$(call mk_dir,$(MBED_APP_JSON_DIRECTORY)) $(HIDE)
+	$(call copy_file,$(MBED_OS_DIRECTORY)/mbed_app.json,$(MBED_APP_JSON_DIRECTORY)/) $(HIDE)
+	cd $(MBED_OS_DIRECTORY); mbed config root .; mbed compile --source $(MBED_OS_DIRECTORY)/mbed-os --source $(MBED_APP_JSON_DIRECTORY) -m $(TARGET_BOARD) -t $(COMPILER) --build $(MBED_OS_BUILD_DIRECTORY) --library
+	$(call print, Mbed-OS build completed)
 
 # Linker-Script Preprocessing
 $(LSCRIPT): $(LINKER_SCRIPT_BEFORE_PREPROCESSING)
-	$(MUTE) $(MBED_PREPROCESSOR_FLAGS) $< -o $@
+	$(MBED_PREPROCESSOR_FLAGS) $< -o $@
 
 # Binary file creation from elf file
 $(PROJECT_BIN_FILE):$(BINARY)
-	$(MUTE) $(OC) -O binary $< $@
+	$(OC) -O binary $< $@
 	$(call print,Done $(PROJECT_BIN_FILE))
 
 post_build: $(PROJECT_BIN_FILE)

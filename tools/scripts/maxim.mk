@@ -107,12 +107,12 @@ endif
 $(PROJECT_TARGET):
 	$(call print, Building for target $(TARGET_LCASE))
 	$(call print,Creating IDE project)
-	$(MUTE) $(call mk_dir,$(BUILD_DIR))
-	$(MUTE) $(call set_one_time_rule,$@)
+	$(call mk_dir,$(BUILD_DIR))
+	$(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
 	$(shell $(PYTHON) $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
-	$(MUTE) code $(PROJECT)
+	code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
 
@@ -131,9 +131,9 @@ endif
 	@echo c >> $(BINARY).gdb	
 
 $(HEX): $(BINARY)
-	$(MUTE) $(call print,[HEX] $(notdir $@))
-	$(MUTE) $(OC) -O ihex $(BINARY) $(HEX)
-	$(MUTE) $(call print,$(notdir $@) is ready)
+	$(call print,[HEX] $(notdir $@))
+	$(OC) -O ihex $(BINARY) $(HEX)
+	$(call print,$(notdir $@) is ready)
 
 .NOTINTERMEDIATE: $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).s
 
@@ -141,7 +141,7 @@ post_build: $(HEX)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	-$(MUTE) $(call remove_fun,$(HEX))
+	-$(call remove_fun,$(HEX))
 
 clean: clean_hex
 
