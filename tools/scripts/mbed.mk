@@ -14,9 +14,6 @@ MBED_APP_JSON_DIRECTORY = $(MBED_OS_DIRECTORY)/mbed-app-json
 # Finding linker-script in Mbed-OS build directory
 LINKER_SCRIPT_BEFORE_PREPROCESSING = $(sort $(call rwildcard,$(MBED_OS_BUILD_DIRECTORY),*.ld))
 
-PLATFORM_RELATIVE_PATH = $1
-PLATFORM_FULL_PATH = $1
-
 # compiler name and standard libraries
 LIB_FLAGS = -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys  -Wl,--end-group
 CC = arm-none-eabi-gcc

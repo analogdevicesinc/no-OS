@@ -27,9 +27,6 @@ COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
 OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
 
-PLATFORM_RELATIVE_PATH = $1
-PLATFORM_FULL_PATH = $1
-
 # stm32 specific build directory tree (project goes under app, but user .c/.h sources must go under app/Core)
 PROJECT_BUILDROOT = $(BUILD_DIR)/app
 PROJECT_BUILD = $(PROJECT_BUILDROOT)/Core

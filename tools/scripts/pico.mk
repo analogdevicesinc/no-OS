@@ -35,8 +35,6 @@ UF2 = $(basename $(BINARY)).uf2
 #----------------------------------------------------------------------
 TARGET = rp2040
 PROJECT_BUILD = $(BUILD_DIR)/app
-PLATFORM_RELATIVE_PATH = $1
-PLATFORM_FULL_PATH = $1
 
 LSCRIPT = $(PICO_SDK_PATH)/src/rp2_common/pico_standard_link/memmap_default.ld
 

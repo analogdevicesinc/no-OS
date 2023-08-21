@@ -48,8 +48,6 @@ LSCRIPT		:= $(BUILD_DIR)/app/src/lscript.ld
 # Xilinx's generate bsp library path
 LIB_PATHS	+= -L$(BUILD_DIR)/bsp/$(ARCH)/lib
 
-PLATFORM_RELATIVE_PATH = $1
-PLATFORM_FULL_PATH = $1
 JTAG_CABLE_ID = $2
 TARGET_CPU ?= 0
 PROJECT_BUILD = $(BUILD_DIR)/app
