@@ -15,34 +15,6 @@ export BOOTOBJ
 #------------------------------------------------------------------------------
 #                              UTIL FUNCTIONS
 #------------------------------------------------------------------------------
-
-#	WINDOWS
-ifeq ($(OS), Windows_NT)
-SHELL=cmd
-ROOT_DRIVE ?= C:
-# It is slow to print timestamp in windows
-#TIMESTAMP = $(shell powershell Get-Date -Format "HH:mm.ss")
-TIMESTAMP = 00:00:00
-copy_file = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
-copy_dir = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
-remove_file_action = del /S /Q $(subst /,\,$1)
-remove_file = $(if $(wildcard $1),$(call remove_file_action,$(wildcard $1)),\
-			@echo del /S /Q $(subst /,\,$1))
-remove_dir_action = rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1)))
-remove_dir = $(if $(wildcard $1),$(call remove_dir_action,$(wildcard $1)),\
-			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
-mk_dir = md $(subst /,\,$1)
-read_file = type $(subst /,\,$1) 2> NUL
-make_dir_link = mklink /D "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
-make_link = mklink "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
-print_lines = $(foreach f,$1,@echo $f && ) @echo Done
-green = [32m$1[0m
-print = @echo $(call green,[$(TIMESTAMP)]) $1
-cmd_separator = &
-HIDE_OUTPUT = > nul
-
-#	LINUX
-else
 TIMESTAMP = $(shell date +"%T")
 copy_file = cp $1 $2
 copy_dir = cp -r $1 $2
@@ -50,18 +22,13 @@ remove_file = rm -rf $1
 remove_dir_action = rm -rf $1
 remove_dir = rm -rf $1
 mk_dir = mkdir -p $1
-read_file = cat $1 2> /dev/null
-make_dir_link = ln -sf $1 $2
-make_link = ln -sf $1 $2
-print_lines = @echo $1 | tr ' ' '\n'
+read_file = cat $1 2>/dev/zero
+print_lines = echo $1 | tr ' ' '\n'
 green = \\e[32m$1\\e[39m
 print = @printf "$(call green,[$(TIMESTAMP)]) $1\n"
-cmd_separator = ;
-HIDE_OUTPUT = > /dev/null
-endif
-
-print_line_in_file = @echo $1 > $2
-append_file = @echo $1 >> $2
+HIDE_OUTPUT = > /dev/zero
+make_dir_link = ln -sf $1 $2
+make_link = ln -sf $1 $2
 
 VERBOSE ?= 0
 export VERBOSE
@@ -81,36 +48,13 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 # Creates file with the specified name
 set_one_time_rule = echo Target file. Do not delete > $1
 
-# Append text to file
-APPEND_TEXT_TO_FILE = echo $1 >> $2
-
-ifeq ($(OS), Windows_NT)
-# Add blank line to a file
-ADD_BLANK_LINE_TO_FILE = echo. > $1
-# Add extra backslashes to flags
-ADD_BACKSLASHES_TO_FLAG = $1
-else
-ADD_BLANK_LINE_TO_FILE = echo> $1
-ADD_BACKSLASHES_TO_FLAG = $(subst \",\\\",$1)
-endif
-
-# Transform full path to relative path to be used in build
-# $(PROJECT)/something -> srcs/something
-# $(NO-OS)/something -> noos/something
-# $(PLATFORM_TOOLS)/something -> aducm3029/something TODO test without these
+# Convert full path to relative path
+# $(PROJECT)/something <-> srcs/something
+# $(NO-OS)/something <-> noos/something
 RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(PROJECT_NAME)%,$1))
-
-# Transform relative path to full path in order to find the needed .c files
-# Reverse of get_relative_path
 FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(PROJECT_NAME)%,$(PROJECT)%,$1))
-
-ifeq ($(OS), Windows_NT)
-get_relative_path = $(patsubst $(ROOT_DRIVE)%,root%,$(RELATIVE_PATH))
-get_full_path = $(patsubst root%,$(ROOT_DRIVE)%,$(FULL_PATH))
-else
-get_relative_path = $(RELATIVE_PATH)
-get_full_path = $(FULL_PATH)
-endif
+get_relative_path = $(patsubst $(ROOT_DRIVE)%,root/%,$(RELATIVE_PATH))
+get_full_path = $(patsubst root/%,$(ROOT_DRIVE)%,$(FULL_PATH))
 
 ifeq 'y' '$(strip $(LINK_SRCS))'
 update_file = $(make_link)
@@ -151,7 +95,7 @@ PROJECT_NAME	= $(notdir $(PROJECT))
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY_FILE_NAME ?= $(PROJECT_NAME)
-BINARY			?= $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
+BINARY			?=  $(BUILD_DIR)/$(PROJECT_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
 
 # New line variable
@@ -309,10 +253,10 @@ CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 CPPFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 # Text files containing build pre-requisite names.
-PROJECT_OBJECT_FILES_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-object-files-names.txt
-PROJECT_CFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags-names.txt
-PROJECT_CPPFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags-names.txt
-PROJECT_ASFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags-names.txt
+OBJS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-objs.txt
+CFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags.txt
+CPPFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags.txt
+ASFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags.txt
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
@@ -334,7 +278,7 @@ else
 all:
 	$(call print_build_type,$(PLATFORM))
 # Remove -j flag for running project target. (It doesn't work on xilinx on this target)
-	$(MUTE) $(MAKE) --no-print-directory update MAKEFLAGS=$(MAKEOVERRIDES)
+	$(MUTE) $(MAKE) --no-print-directory update
 	$(MUTE) $(MAKE) --no-print-directory build
 ifeq 'xilinx' '$(PLATFORM)'
 	$(MUTE) $(MAKE) --no-print-directory create_boot_bin
@@ -350,53 +294,64 @@ endif
 # Create directories for binary files. This is needed in order to know from which
 # .c it was build
 $(OBJECTS_DIR)/.:
-	-@$(call mk_dir,$@) $(HIDE)
+	-@$(call mk_dir,$@)
 
 $(OBJECTS_DIR)%/.:
-	-@$(call mk_dir,$@) $(HIDE)
+	-@$(call mk_dir,$@)
 
 # Build .c files into .o files.
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
-	$(MUTE) $(CC) -c @$(PROJECT_CFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(CC) -c @$(CFLAGS_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).cpp | $$(@D)/.
 	@$(call print,[CPP] $(notdir $<))
-	$(MUTE) $(CPP) -c @$(PROJECT_CPPFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(CPP) -c @$(CPPFLAGS_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c @$(PROJECT_ASFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(AS) -c @$(ASFLAGS_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c @$(PROJECT_ASFLAGS_NAMES_FILE) $< -o $@
+	$(MUTE) $(AS) -c @$(ASFLAGS_FILE) $< -o $@
 
 ifneq ($(strip $(LSCRIPT)),)
 LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
+define generate_cflags_func
+echo $(subst \",\\\",$(1)) >> $(CFLAGS_FILE)
+endef
+
+define generate_cppflags_func
+echo $(subst \",\\\",$(1)) >> $(CPPFLAGS_FILE)
+endef
+
+define generate_asflags_func
+echo $(subst \",\\\",$(1)) >> $(ASFLAGS_FILE)
+endef
+
+define generate_objs_func
+echo $(1) >> $(OBJS_FILE)
+endef
+
 PHONY += pre_build
 pre_build:
-	$(MUTE) $(call print, putting project build pre-requisite names to text files)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach c_flag_name,$(call ADD_BACKSLASHES_TO_FLAG,$(CFLAGS)),$(call APPEND_TEXT_TO_FILE,$(c_flag_name),$(PROJECT_CFLAGS_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CPPFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach cpp_flag_name,$(call ADD_BACKSLASHES_TO_FLAG,$(CPPFLAGS)),$(call APPEND_TEXT_TO_FILE,$(cpp_flag_name),$(PROJECT_CPPFLAGS_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_ASFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach as_flag_name,$(call ADD_BACKSLASHES_TO_FLAG,$(ASFLAGS)),$(call APPEND_TEXT_TO_FILE,$(as_flag_name),$(PROJECT_ASFLAGS_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_OBJECT_FILES_NAMES_FILE)) $(cmd_separator)\
-		$(foreach object_file_name,$(sort $(OBJS)),$(call APPEND_TEXT_TO_FILE,$(object_file_name),$(PROJECT_OBJECT_FILES_NAMES_FILE))\
-		$(cmd_separator)) echo . $(HIDE)
-
+	$(MUTE) $(call print,Generating build flags)
+	$(MUTE) echo -n > $(CFLAGS_FILE)
+	$(call process_items_in_chunks,$(CFLAGS),10,generate_cflags_func)
+	$(MUTE) echo -n > $(CPPFLAGS_FILE)
+	$(call process_items_in_chunks,$(CPPFLAGS),10,generate_cppflags_func)
+	$(MUTE) @echo -n > $(ASFLAGS_FILE)
+	$(call process_items_in_chunks,$(ASFLAGS),10,generate_asflags_func)
+	$(MUTE) echo -n > $(OBJS_FILE)
+	$(call process_items_in_chunks,$(sort $(OBJS)),10,generate_objs_func)
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(PROJECT_OBJECT_FILES_NAMES_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
@@ -419,18 +374,34 @@ $(PROJECT_TARGET): $(LIB_TARGETS)
 post_build:
 	$(MUTE) $(SIZE) --format=Berkley $(BINARY) $(HEX)
 
+# Function to process a list in chunks
+# Arguments:
+#   $(1) - List of items
+#   $(2) - Chunk size
+#   $(3) - Action to be performed on each item
+define process_items_in_chunks
+	$(eval ITEMS := $(wordlist 1,$(2),$(1)))
+	$(if $(ITEMS), \
+		$(foreach ITEM,$(ITEMS),$(call $(3),$(ITEM));) \
+		$(eval REMAINING := $(subst $(ITEMS),,$(1))) \
+		$(call process_items_in_chunks,$(REMAINING),$(2),$(3)) \
+	)
+endef
+
+define update_file_func
+$(call update_file,$(1),$(call relative_to_project,$(1)))
+endef
+
 PHONY += update
 update: $(PROJECT_TARGET)
 	@$(call print, $(ACTION) srcs to created project)
-	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
-	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
-	$(MUTE) $(foreach file,$(sort $(SRCS) $(INCS)),\
-		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(MAKE) --no-print-directory pre_build MAKEFLAGS=$(MAKEOVERRIDES)
+	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE))
+	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE))
+	$(MUTE) $(call process_items_in_chunks,$(sort $(SRCS) $(INCS)),10,update_file_func)
+	$(MUTE) $(MAKE) --no-print-directory pre_build
 
 standalone:
-	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
+	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n
 
 # Build project using generic compiler
 build: $(BINARY)
@@ -448,13 +419,13 @@ sdkopen: $(PLATFORM)_sdkopen
 PHONY += clean
 clean:
 	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
-	$(MUTE) $(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
+	$(MUTE) $(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS))
 
 # Remove the whole build directory
 PHONY += reset
 reset: clean_libs
 	@$(call print,[Delete] $(BUILD_DIR))
-	$(MUTE) $(call remove_dir,$(BUILD_DIR)) $(HIDE)
+	$(MUTE) $(call remove_dir,$(BUILD_DIR))
 
 PHONY += list
 list:

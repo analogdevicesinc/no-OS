@@ -9,21 +9,12 @@ GDB=arm-none-eabi-gdb
 OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
-ifeq ($(OS),Windows_NT)
-PYTHON = python
-WHICH = where
-UNIX_TOOLS_PATH = $(MAXIM_LIBRARIES)/../Tools/MSYS2/usr/bin
-export PATH := $(PATH):$(UNIX_TOOLS_PATH)
-ARM_COMPILER_PATH := $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc.exe))
-else
 PYTHON = python3
-WHICH = which
-ARM_COMPILER_PATH = $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc)))
-endif
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
-ARM_COMPILER_PATH = $(realpath $(dir $(shell $(WHICH) $(CC))))
+ARM_COMPILER_PATH = $(realpath $(dir $(shell which $(CC))))
 endif
 
 export PATH := $(PATH):$(ARM_COMPILER_PATH)
@@ -116,7 +107,7 @@ endif
 $(PROJECT_TARGET):
 	$(call print, Building for target $(TARGET_LCASE))
 	$(call print,Creating IDE project)
-	$(MUTE) $(call mk_dir,$(BUILD_DIR)) $(HIDE)
+	$(MUTE) $(call mk_dir,$(BUILD_DIR))
 	$(MUTE) $(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
@@ -150,7 +141,7 @@ post_build: $(HEX)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	-$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
+	-$(MUTE) $(call remove_fun,$(HEX))
 
 clean: clean_hex
 
@@ -166,12 +157,6 @@ debug: all $(BINARY).gdb start_openocd
 	$(GDB) --command=$(BINARY).gdb
 
 .PHONY: start_openocd
-ifeq ($(OS),Windows_NT)
-start_openocd:
-	start $(OPENOCD_BIN)/openocd -s "$(OPENOCD_SCRIPTS)" 		\
-		-f interface/cmsis-dap.cfg -f target/$(TARGETCFG)
-else
 start_openocd:
 	$(OPENOCD_BIN)/openocd -s "$(OPENOCD_SCRIPTS)" 	\
 		-f interface/cmsis-dap.cfg -f target/$(TARGETCFG) -c "init" &
-endif

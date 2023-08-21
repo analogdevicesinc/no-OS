@@ -473,11 +473,9 @@ debug: all $(BINARY).gdb start_openocd
 LINK_SRCS = y
 link_srcs: 
 	$(MUTE) $(foreach file,$(sort $(PLATFORM_SRCS)),\
-		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
-		$(cmd_separator)) echo . $(HIDE)
+		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE);) echo . $(HIDE)
 	$(MUTE) $(foreach file,$(sort $(PLATFORM_INCLUDE_FILES)),\
-		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
-		$(cmd_separator)) echo . $(HIDE)
+		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE);) echo . $(HIDE)
 
 post_build: $(HEX) $(UF2) link_srcs
 

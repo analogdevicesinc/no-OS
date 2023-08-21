@@ -1,6 +1,3 @@
-ifeq ($(OS),Windows_NT)
-$(error STM32 builds on Windows are not currently supported.)
-else
 IDE = stm32cubeide
 STM32CUBEIDE ?= $(wildcard /opt/stm32cubeide)
 ifeq ($(STM32CUBEIDE),)
@@ -18,7 +15,6 @@ $(error $(ENDL)$(ENDL)STM32CUBEMX not defined or not found at default path /opt/
 		Please run command "export STM32CUBEMX=/path/to/your/stm32cubemx"$(ENDL)\
 		Ex: export STM32CUBEMX=/opt/stm32cubemx$(ENDL)$(ENDL))
 endif # STM32CUBEMX check
-endif # OS check
 
 # Locate the compiler path under STM32CubeIDE plugins directory
 COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
