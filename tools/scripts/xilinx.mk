@@ -180,8 +180,8 @@ $(BINARY): $(TEMP_DIR)/arch.txt
 xilinx_run:
 ifneq (, $(wildcard *.elf))
 	$(call print,Elf exists $(FILE))
-	$(MUTE) $(MAKE) --no-print-directory $(TEMP_DIR_RUN)
-	$(MUTE) xsct $(PLATFORM_TOOLS)/util.tcl					\
+	$(MAKE) --no-print-directory $(TEMP_DIR_RUN)
+	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     upload							\
 	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
 	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE)       \
@@ -189,7 +189,7 @@ ifneq (, $(wildcard *.elf))
 else
 ifneq (, $(wildcard build))
 	$(call print, build folder exists)
-	$(MUTE)	$(call tcl_util, upload) $(FSBL_PATH) $(JTAG_CABLE_ID) $(HIDE)
+	$(call tcl_util, upload) $(FSBL_PATH) $(JTAG_CABLE_ID) $(HIDE)
 else
 	$(call print,Can not perform make run command)
 endif
@@ -197,87 +197,87 @@ endif
 
 $(TEMP_DIR_RUN): $(HARDWARE)
 	$(call print,Creating tmp directory)
-	$(MUTE) $(call mk_dir,$(TEMP_DIR_RUN)) $(HIDE)
-	$(MUTE) $(call copy_file,$(HARDWARE),$(TEMP_DIR_RUN)) $(HIDE)
-	$(MUTE) xsct $(PLATFORM_TOOLS)/util.tcl					\
+	$(call mk_dir,$(TEMP_DIR_RUN)) $(HIDE)
+	$(call copy_file,$(HARDWARE),$(TEMP_DIR_RUN)) $(HIDE)
+	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     get_arch						\
 	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
 	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
-	$(MUTE) $(MAKE) --no-print-directory create_fsbl
+	$(MAKE) --no-print-directory create_fsbl
 
 PHONY += create_fsbl
 create_fsbl:
 ifeq ($(findstring cortexa53,$(strip $(ARCH_RUN))),cortexa53)
 	$(call print,genera $(ARCH_RUN) fsbl)
-	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
-	$(MUTE) xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
+	xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
 endif
 ifeq ($(findstring cortexr5,$(strip $(ARCH_RUN))),cortexr5)
 	$(call print,genera $(ARCH_RUN) fsbl)
-	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
-	$(MUTE) xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
+	xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
 endif
 
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
-	$(MUTE) $(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
-	$(MUTE) $(call copy_file,$(HARDWARE),$(TEMP_DIR)) $(HIDE)
+	$(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
+	$(call copy_file,$(HARDWARE),$(TEMP_DIR)) $(HIDE)
 	$(call print,Evaluating hardware: $(HARDWARE))
-	$(MUTE)	$(call tcl_util, get_arch) $(HIDE)
+	$(call tcl_util, get_arch) $(HIDE)
 
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
-	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
+	xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 PHONY += $(PLATFORM)_sdkclean
 $(PLATFORM)_sdkclean:
 	$(call print,[Delete] SDK artefacts from $(BUILD_DIR))
-	$(MUTE) $(call tcl_util, clean_build) $(HIDE)
+	$(call tcl_util, clean_build) $(HIDE)
 
 $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
-	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
+	$(call tcl_util, create_project)  $(HIDE)
 ifeq (y,$(strip $(NETWORKING)))
-	$(MUTE) $(call remove_file,$(BUILD_DIR)/app/src/main.c $(BUILD_DIR)/app/src/echo.c) $(HIDE)
+	$(call remove_file,$(BUILD_DIR)/app/src/main.c $(BUILD_DIR)/app/src/echo.c) $(HIDE)
 endif
-	$(MUTE) $(call set_one_time_rule,$@)
+	$(call set_one_time_rule,$@)
 	$(call print,Creating fsbl.elf)
-	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
-	$(MUTE) xsct $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
+	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
+	xsct $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
 
 PHONY += create_boot_bin
 create_boot_bin:
 ifneq ($(findstring cortexa72,$(strip $(ARCH))),cortexa72)
 ifneq ($(findstring sys_mb,$(strip $(ARCH))),sys_mb)
 	$(call print,Creating BOOT.BIN and archive with files)
-	$(MUTE) $(call remove_dir,$(BOOT_BIN_DIR)) $(HIDE)
-	$(MUTE) $(call mk_dir,$(BOOT_BIN_DIR)) $(HIDE)
+	$(call remove_dir,$(BOOT_BIN_DIR)) $(HIDE)
+	$(call mk_dir,$(BOOT_BIN_DIR)) $(HIDE)
 ifeq ($(findstring cortexa53,$(strip $(ARCH))),cortexa53)
-	$(MUTE) $(call create_bif_file,[bootloader$(comma)destination_cpu = a53-0],[destination_device = pl],[destination_cpu = a53-0]) $(HIDE)
-	$(MUTE) bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
+	$(call create_bif_file,[bootloader$(comma)destination_cpu = a53-0],[destination_device = pl],[destination_cpu = a53-0]) $(HIDE)
+	bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
 endif
 ifeq ($(findstring cortexa9,$(strip $(ARCH))),cortexa9)
-	$(MUTE) $(call create_bif_file,[bootloader],,) $(HIDE)
-	$(MUTE) bootgen -arch zynq -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
+	$(call create_bif_file,[bootloader],,) $(HIDE)
+	bootgen -arch zynq -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
 endif
 ifeq ($(findstring cortexr5,$(strip $(ARCH))),cortexr5)
-	$(MUTE) $(call create_bif_file,[bootloader$(comma)destination_cpu = r5-0],[destination_device = pl],[destinatio_cpu = r5-0]) $(HIDE)
-	$(MUTE) bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
+	$(call create_bif_file,[bootloader$(comma)destination_cpu = r5-0],[destination_device = pl],[destinatio_cpu = r5-0]) $(HIDE)
+	bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
 endif
-	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BOOT_BIN_DIR)) $(HIDE)
-	$(MUTE) $(call copy_file,$(FSBL_PATH),$(BOOT_BIN_DIR)) $(HIDE)
-	$(MUTE) $(call copy_file,$(BINARY),$(BOOT_BIN_DIR)) $(HIDE)
-	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BOOT_BIN_DIR)/* -x '*BOOT.BIN'
+	$(call copy_file,$(TEMP_DIR)/system_top.bit,$(BOOT_BIN_DIR)) $(HIDE)
+	$(call copy_file,$(FSBL_PATH),$(BOOT_BIN_DIR)) $(HIDE)
+	$(call copy_file,$(BINARY),$(BOOT_BIN_DIR)) $(HIDE)
+	zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BOOT_BIN_DIR)/* -x '*BOOT.BIN'
 else
 	$(call print,Creating archive with files)
-	$(MUTE) $(call remove_dir,$(BUILD_DIR)/boot_files) $(HIDE)
-	$(MUTE) $(call mk_dir,$(BUILD_DIR)/boot_files) $(HIDE)
-	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BUILD_DIR)/boot_files) $(HIDE)
-	$(MUTE) $(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
-	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BUILD_DIR)/boot_files/*
+	$(call remove_dir,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(call mk_dir,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(call copy_file,$(TEMP_DIR)/system_top.bit,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
+	zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BUILD_DIR)/boot_files/*
 endif
 endif
 
 reset: xilinx_clean_all
 
 xilinx_clean_all:
-	$(MUTE) $(call remove_dir,.Xil) $(HIDE)
+	$(call remove_dir,.Xil) $(HIDE)
