@@ -31,8 +31,6 @@ CCES_EXE = $(CCES_HOME)/Eclipse
 
 export PATH := $(CCES_EXE):$(OPENOCD_SCRIPTS):$(OPENOCD_BIN):$(COMPILER_BIN):$(PATH)
 
-PLATFORM_RELATIVE_PATH = $1
-PLATFORM_FULL_PATH = $1
 PROJECT_BUILD = $(BUILD_DIR)/app
 
 #------------------------------------------------------------------------------

@@ -26,8 +26,6 @@ else # !Windows_NT
 	adjust_path_mixed = $1
 endif
 
-PLATFORM_RELATIVE_PATH = $1
-PLATFORM_FULL_PATH = $1
 PROJECT_BUILD = $(BUILD_DIR)/app
 
 OBJECTS_DIR	= $(BUILD_DIR)/obj
