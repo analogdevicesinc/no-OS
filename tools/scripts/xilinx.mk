@@ -28,13 +28,13 @@ ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
 ARCH_RUN = $(shell $(call read_file, $(TEMP_DIR_RUN)/arch.txt))
 
 define create_bif_file
-$(call print_line_in_file,the_ROM_image:, $(BOOT_BIN_DIR)/project.bif)
-$(call append_file,{, $(BOOT_BIN_DIR)/project.bif)
-$(call append_file,$1 $(FSBL_PATH), $(BOOT_BIN_DIR)/project.bif)
-$(call append_file,$2 $(TEMP_DIR)/system_top.bit, $(BOOT_BIN_DIR)/project.bif)
-$(call append_file,$3 $(BINARY), $(BOOT_BIN_DIR)/project.bif)
-$(call append_file,}, $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, , $(BOOT_BIN_DIR)/project.bif)
+	@echo the_ROM_image: > $(BOOT_BIN_DIR)/project.bif
+	@echo { >> $(BOOT_BIN_DIR)/project.bif
+	@echo $1 $(FSBL_PATH) >> $(BOOT_BIN_DIR)/project.bif
+	@echo $2 $(TEMP_DIR)/system_top.bit >> $(BOOT_BIN_DIR)/project.bif
+	@echo $3 $(BINARY) >> $(BOOT_BIN_DIR)/project.bif
+	@echo } >> $(BOOT_BIN_DIR)/project.bif
+	@echo >> $(BOOT_BIN_DIR)/project.bif
 endef
 
 # Define the platform compiler switch
