@@ -309,8 +309,6 @@ def main():
 		if not os.path.isfile(build_file):
 			continue
 
-		project_export = os.path.join(export_dir, project)
-		run_cmd(create_dir_cmd.format(project_export))
 		fp = open(build_file)
 		configs = json.loads(fp.read())
 		ok = 1
@@ -322,6 +320,8 @@ def main():
 				if _build_name is not None:
 					if _build_name != build_name:
 						continue
+				project_export = os.path.join(export_dir, project)
+				run_cmd(create_dir_cmd.format(project_export))
 				flags = params['flags']
 				if 'hardware' in params:
 					hardwares = params['hardware']
