@@ -478,7 +478,7 @@ int iio_example_main()
 	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
 	// ret = Ext_Flash_Read(0x0, flash_readback, 3, Ext_Flash_DataLine_Single);
 
-	func_ram1 = (void(*)(void))((uint32_t)&__load_start_xip | 1);
+	func_ram1 = (void(*)(void))((uint32_t)&__load_start_xip);
 	func_ram1();
 
 	// ret = Ext_Flash_Program_Page(0xF, flash_val, 3, Ext_Flash_DataLine_Quad);

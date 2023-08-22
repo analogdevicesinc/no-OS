@@ -67,22 +67,6 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-volatile uint32_t dma_done = 0;
-
-void DMA0_IRQHandler(void)
-{
-	MXC_DMA_ChannelClearFlags(0, 0xFF);
-	// MXC_DMA_Handler();
-	dma_done = 1;
-}
-
-void DMA1_IRQHandler(void)
-{
-	MXC_DMA_ChannelClearFlags(1, 0xFF);
-	// MXC_DMA_Handler();
-	dma_done = 1;
-}
-
 /**
  * @brief Configure the VDDIO level for a SPI interface
  * @param desc - the SPI descriptor
@@ -312,9 +296,6 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		goto err_init;
 	}
 
-	// NVIC_EnableIRQ(DMA0_IRQn);
-	// NVIC_EnableIRQ(DMA1_IRQn);
-
 	return 0;
 err_init:
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
@@ -420,14 +401,14 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 
 	spi = MXC_SPI_GET_SPI(desc->device_id);
 
-	// slave_id = desc->chip_select;
-	// if (slave_id != last_slave_id[desc->device_id]) {
-	// 	ret = _max_spi_config(desc);
-	// 	if (ret)
-	// 		return ret;
+	slave_id = desc->chip_select;
+	if (slave_id != last_slave_id[desc->device_id]) {
+		ret = _max_spi_config(desc);
+		if (ret)
+			return ret;
 
-	// 	last_slave_id[desc->device_id] = slave_id;
-	// }
+		last_slave_id[desc->device_id] = slave_id;
+	}
 
 	req.spi = MXC_SPI_GET_SPI(desc->device_id);
 	req.ssIdx = desc->chip_select;
@@ -441,25 +422,15 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		req.rxLen = req.rxData ? msgs[i].bytes_number : 0;
 		req.completeCB = NULL;
 
-		//_max_delay_config(desc, &msgs[i]);
-		if (msgs[i].use_dma && msgs[i].bytes_number >= 16) {
-			MXC_DMA_ReleaseChannel(0);
-			MXC_DMA_ReleaseChannel(1);
-			ret = MXC_SPI_MasterTransactionDMA(&req);
+		_max_delay_config(desc, &msgs[i]);
 
-			while (!dma_done);
-			dma_done = 0;
-		}
-		else {
-			ret = MXC_SPI_MasterTransaction(&req);
-		}
-
+		ret = MXC_SPI_MasterTransaction(&req);
 		if (ret == E_BAD_PARAM)
 			return -EINVAL;
 		if (ret == E_BAD_STATE)
 			return -EBUSY;
 
-		//no_os_udelay(msgs[i].cs_change_delay);
+		no_os_udelay(msgs[i].cs_change_delay);
 	}
 
 	return 0;
