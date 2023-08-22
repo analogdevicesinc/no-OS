@@ -10,7 +10,6 @@
 #include "no_os_delay.h"
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
-#include "adc.h"
 #include "flc.h"
 #include "mxc_sys.h"
 
@@ -340,23 +339,6 @@ static int swiot_read_id(void *dev, char *buf, uint32_t len,
 			 const struct iio_ch_info *channel,
 			 intptr_t priv)
 {
-	// volatile uint32_t *access_ctrl = (uint32_t *)0x40029040;
-	// size_t length = 0;
-	// uint32_t usn;
-
-	// MXC_FLC_UnlockInfoBlock(MXC_INFO_MEM_BASE);
-
-	// usn = no_os_field_get(NO_OS_GENMASK(31, 15), *(uint32_t *)0x10800000);
-	// length += sprintf(buf, "%x-", usn);
-	// usn = no_os_field_get(NO_OS_GENMASK(30, 0), *(uint32_t *)0x10800004);
-	// length += sprintf(buf + length, "%x-", usn);
-	// usn = no_os_field_get(NO_OS_GENMASK(31, 15), *(uint32_t *)0x10800008);
-	// length += sprintf(buf + length, "%x-", usn);
-	// usn = no_os_field_get(NO_OS_GENMASK(30, 0), *(uint32_t *)0x1080000C);
-	// length += sprintf(buf + length, "%x-", usn);
-	// usn = no_os_field_get(NO_OS_GENMASK(22, 15), *(uint32_t *)0x10800010);
-	// length += sprintf(buf + length, "%x", usn);
-
 	size_t length = 0;
 	uint8_t usn[13];
 	int ret;
@@ -372,58 +354,6 @@ static int swiot_read_id(void *dev, char *buf, uint32_t len,
 
 	return length;
 }
-
-static int swiot_adc_read_raw(void *dev, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
-{
-	mxc_adc_conversion_req_t req = {
-		.scale = MXC_ADC_SCALE_1,
-	};
-
-	uint16_t adc_val;
-	int32_t val;
-	int ret;
-
-	switch (priv)
-	{
-	case 0:
-		req.channel = MXC_ADC_CH_VCORE;
-		break;
-	case 1:
-		req.channel = MXC_ADC_CH_VDDIOH_DIV4;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	ret = MXC_ADC_Convert(&req);
-	if (ret)
-		return ret;
-
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&req.rawADCValue);
-}
-
-static int swiot_adc_read_scale(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
-{
-	int32_t val;
-
-	switch (priv) {
-	case 0:
-		val = 0;
-		break;
-	case 1:
-		val = 4;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
 
 static struct iio_attribute swiot_attrs[] = {
 	{
@@ -566,56 +496,7 @@ static struct iio_attribute swiot_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute swiot_vcore_attrs[] = {
-	{
-		.name = "raw",
-		.show = swiot_adc_read_raw,
-		.priv = 0,
-	},
-	{
-		.name = "scale",
-		.show = swiot_adc_read_scale,
-		.priv = 0,
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static struct iio_attribute swiot_vddioh_attrs[] = {
-	{
-		.name = "raw",
-		.show = swiot_adc_read_raw,
-		.priv = 1,
-	},
-	{
-		.name = "scale",
-		.show = swiot_adc_read_scale,
-		.priv = 1,
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static const struct iio_channel swiot_chan[2] = {
-	{
-		.name = "v_core",
-		.ch_type = IIO_VOLTAGE,
-		.channel = 0,
-		.ch_out = false,
-		.indexed = 1,
-		.attributes = swiot_vcore_attrs,
-	},
-	{
-		.name = "vddioh",
-		.ch_type = IIO_VOLTAGE,
-		.channel = 1,
-		.ch_out = false,
-		.indexed = 1,
-		.attributes = swiot_vddioh_attrs,
-	},
-};
-
 static const struct iio_device swiot_iio_dev = {
-	// .channels = swiot_chan,
-	// .num_ch = 2,
 	.attributes = swiot_attrs,
 };
 

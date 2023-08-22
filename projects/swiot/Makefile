@@ -5,7 +5,6 @@ IIO_TRIGGER_EXAMPLE = n
 
 PLATFORM = maxim
 TARGET = max32650
-LIBRARIES += maxq1065_lib
 LIBRARIES += lwip
 
 include ../../tools/scripts/generic_variables.mk
@@ -18,7 +17,6 @@ CFLAGS += -DMXQ_ON_NO_OS
 # CFLAGS += -DNO_OS_NETWORKING
 CFLAGS += -DNO_OS_LWIP_NETWORKING
 CFLAGS += -DEXT_FLASH_MX25
-CFLAGS += -DNO_OS_STATIC_IP
+# CFLAGS += -DNO_OS_STATIC_IP
 CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
 
-# CFLAGS += -l$(NO-OS)/projects/ad74413r/libmaxq1065_api.a

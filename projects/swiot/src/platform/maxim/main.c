@@ -45,13 +45,7 @@
 #include "no_os_error.h"
 #include "no_os_init.h"
 
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+#include "swiot_fw.h"
 
 /***************************************************************************//**
  * @brief Main function execution for Maxim platform.
@@ -60,43 +54,17 @@
 *******************************************************************************/
 int main()
 {
-	int ret = -EINVAL;
+	struct no_os_uart_desc *uart_desc;
+	int ret;
+
 	ret = no_os_init();
 	if (ret)
 		return ret;
 
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
 	ret = no_os_uart_init(&uart_desc, &adin1110_uart_ip);
 	if (ret)
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adin1110_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	ret = iio_example_main();
-#endif
-
-#ifdef IIO_TRIGGER_EXAMPLE
-	ret = iio_trigger_example_main();
-#endif
-
-#if (DUMMY_EXAMPLE + IIO_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
-
-	return ret;
+	return swiot_firmware();
 }
