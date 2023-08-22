@@ -421,7 +421,7 @@ $(PROJECT_TARGET):
 	$(call set_one_time_rule, $@)
 
 $(PLATFORM)_sdkopen:
-	$(shell python3 $(PLATFORM_TOOLS)/run_config.py $(BINARY) $(PROJECT) $(PICO_SDK_PATH) $(TARGET) $(JLINK_SERVER_PATH))
+	$(shell python $(PLATFORM_TOOLS)/run_config.py $(BINARY) $(PROJECT) $(PICO_SDK_PATH) $(TARGET) $(JLINK_SERVER_PATH))
 	code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
@@ -443,7 +443,7 @@ $(BOOTSRC): $(BOOTSRCS)
 	@mkdir -p $(@D)
 	$(CC) $(BOOT_CFLAGS) -T $(BOOTLD) $^ -o $(BOOTELF)
 	$(OC) -Obinary $(BOOTELF) $(BOOTBIN)
-	$(PYTHON3) $(BOOT_STAGE2)/pad_checksum -s 0xffffffff $(BOOTBIN) $@
+	python $(BOOT_STAGE2)/pad_checksum -s 0xffffffff $(BOOTBIN) $@
 
 .SECONDEXPANSION:
 $(BOOTOBJ): $(BOOTSRC)
