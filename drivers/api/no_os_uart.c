@@ -42,6 +42,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_mutex.h"
+#include "no_os_util.h"
 
 /**
  * @brief - UART mutex
@@ -59,7 +60,8 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 {
 	int32_t ret;
 
-	if (!param || !param->platform_ops)
+	if (!param || !param->platform_ops
+	    || param->device_id >= NO_OS_ARRAY_SIZE(uart_mutex_table))
 		return -EINVAL;
 
 	if (!param->platform_ops->init)
