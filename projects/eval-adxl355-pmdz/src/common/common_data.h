@@ -51,6 +51,7 @@
 #endif
 #ifdef IIO_LWIP_EXAMPLE
 #include "adin1110.h"
+#include "spi_open_alliance.h"
 #endif
 #endif
 
