@@ -44,6 +44,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
+#include "no_os_irq.h"
 
 #define ADIN1110_BUFF_LEN			1530
 #define ADIN1110_ETH_ALEN			6
@@ -208,7 +209,13 @@ struct adin1110_desc {
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	uint8_t data[ADIN1110_BUFF_LEN];
 	struct no_os_gpio_desc *reset_gpio;
+	struct no_os_gpio_desc *int_gpio;
 	bool append_crc;
+	bool open_alliance;
+
+	struct no_os_irq_ctrl_desc *nvic_irq;
+	struct no_os_irq_ctrl_desc *gpio_irq;
+	struct no_os_callback_desc *irq_callback;
 };
 
 /**
@@ -218,8 +225,10 @@ struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
 	struct no_os_gpio_init_param reset_param;
+	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
+	bool open_alliance;
 };
 
 /**

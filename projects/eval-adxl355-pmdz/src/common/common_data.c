@@ -109,6 +109,14 @@ const struct no_os_gpio_init_param adin1110_reset_ip = {
 	.extra = &adin1110_reset_gpio_extra_ip,
 };
 
+const struct no_os_gpio_init_param adin1110_int_ip = {
+	.port = 0,
+	.number = 17,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = &adin1110_reset_gpio_extra_ip,
+};
+
 const struct no_os_spi_init_param adin1110_spi_ip = {
 	.device_id = ADIN1110_SPI_DEVICE_ID,
 	.max_speed_hz = ADIN1110_SPI_CLK_RATE,
@@ -123,6 +131,8 @@ struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
 	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_reset_ip,
+	.int_param = adin1110_int_ip,
 	.append_crc = false,
+	.open_alliance = true,
 };
 #endif

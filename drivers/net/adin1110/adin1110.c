@@ -43,6 +43,7 @@
 #include <string.h>
 #include "no_os_spi.h"
 #include "adin1110.h"
+#include "spi_open_alliance.h"
 #include "no_os_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_delay.h"
@@ -75,7 +76,7 @@ static struct _adin1110_priv driver_data[2] = {
  * @param data - register's value
  * @return 0 in case of success, negative error code otherwise
  */
-int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
+static int adin1110_standard_spi_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 {
 	uint32_t header_len = ADIN1110_WR_HDR_SIZE;
 	struct no_os_spi_msg xfer = {
@@ -104,6 +105,14 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
+int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
+{
+	if (desc->open_alliance)
+		return oa_reg_write(desc, addr, data);
+
+	return adin1110_standard_spi_reg_write(desc, addr, data);
+}
+
 /**
  * @brief Read a register's value
  * @param desc - the device descriptor
@@ -111,7 +120,7 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
  * @param data - register's value
  * @return 0 in case of success, negative error code otherwise
  */
-int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
+static int adin1110_standad_spi_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 {
 	uint8_t crc;
 	uint8_t recv_crc;
@@ -151,6 +160,14 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 	*data = no_os_get_unaligned_be32(&desc->data[header_len]);
 
 	return 0;
+}
+
+int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
+{
+	if (desc->open_alliance)
+		return oa_reg_read(desc, addr, data);
+
+	return adin1110_standad_spi_reg_read(desc, addr, data);
 }
 
 /**
@@ -846,6 +863,25 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	return adin1110_set_mac_addr(desc, desc->mac_address);
 }
 
+int adin1110_clear_irq(struct adin1110_desc *desc)
+{
+	return adin1110_reg_write(desc, ADIN1110_STATUS0_REG, 0xFFFFFFFF);
+}
+
+static void oa_irq_rx_tx(void *data)
+{
+	struct adin1110_desc *adin1110 = data;
+	uint32_t reg_val;
+	uint8_t int_val;
+	int ret;
+
+	ret = adin1110_reg_read(adin1110, 0xB, &reg_val);
+	if (ret)
+		return ret;
+
+	return adin1110_clear_irq(adin1110);
+}
+
 /**
  * @brief Initialize the device
  * @param desc - the device descriptor to be initialized
@@ -856,6 +892,8 @@ int adin1110_init(struct adin1110_desc **desc,
 		  struct adin1110_init_param *param)
 {
 	struct adin1110_desc *descriptor;
+	uint32_t reg_val;
+	uint8_t gpio_val;
 	int ret;
 
 	if (!param->mac_address)
@@ -909,6 +947,46 @@ int adin1110_init(struct adin1110_desc **desc,
 		no_os_mdelay(90);
 	}
 
+	descriptor->open_alliance = param->open_alliance;
+
+	ret = adin1110_reg_read(descriptor, 0x1, &reg_val);
+	if (ret)
+		goto free_rst_gpio;
+
+	ret = adin1110_reg_write(descriptor, 0x37, 0xDEADBEEF);
+	ret = adin1110_reg_read(descriptor, 0x37, &reg_val);
+	ret = adin1110_reg_read(descriptor, 0x1, &reg_val);
+
+	if (descriptor->open_alliance) {
+		ret = oa_init(descriptor, param);
+		if (ret)
+			return ret;
+
+		descriptor->irq_callback = no_os_calloc(1, sizeof(*descriptor->irq_callback));
+		if (!descriptor->irq_callback)
+			return ret;
+
+		descriptor->irq_callback->callback = oa_irq_rx_tx;
+		descriptor->irq_callback->ctx = descriptor;
+		descriptor->irq_callback->event = NO_OS_EVT_GPIO;
+		descriptor->irq_callback->peripheral = NO_OS_GPIO_IRQ;
+		descriptor->irq_callback->handle = NULL;
+
+		ret = no_os_irq_register_callback(descriptor->gpio_irq, param->int_param.number,
+						  descriptor->irq_callback);
+		if (ret)
+			return ret;
+
+		ret = no_os_irq_trigger_level_set(descriptor->gpio_irq, descriptor->int_gpio->number,
+						  NO_OS_IRQ_LEVEL_HIGH);
+		if (ret)
+			return ret;
+
+		no_os_gpio_get_value(descriptor->int_gpio, &gpio_val);
+		no_os_gpio_get_value(descriptor->int_gpio, &gpio_val);
+		no_os_gpio_get_value(descriptor->int_gpio, &gpio_val);
+	}
+
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
 		goto free_spi;
@@ -920,6 +998,17 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_spi;
+
+	ret = adin1110_set_promisc(descriptor, 0, true);
+
+	adin1110_clear_irq(descriptor);
+	// adin1110_reg_write(descriptor, 0x9, 0xFFFFFFFF);
+
+	ret = oa_irq_start(descriptor);
+	if (ret)
+		return ret;
+
+	while(1);
 
 	*desc = descriptor;
 

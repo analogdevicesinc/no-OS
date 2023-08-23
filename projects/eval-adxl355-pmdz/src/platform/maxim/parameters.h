@@ -76,8 +76,8 @@
 #define SPI_DEVICE_ID   1
 #define SPI_CS          0
 #elif (TARGET_NUM == 32690)
-#define SPI_DEVICE_ID   0
-#define SPI_CS          1
+#define SPI_DEVICE_ID   4
+#define SPI_CS          0
 #else
 #define SPI_DEVICE_ID   0
 #define SPI_CS          0
@@ -129,6 +129,21 @@ extern struct no_os_gpio_init_param adxl355_gpio_drdy_ip;
 #define GPIO_IRQ_EXTRA  &adxl355_gpio_extra_ip
 
 extern struct max_gpio_init_param adxl355_gpio_extra_ip;
+#endif
+
+#ifdef IIO_LWIP_EXAMPLE
+
+#define GPIO_OPS		&max_gpio_ops
+#define ADIN1110_SPI_DEVICE_ID	3
+#define ADIN1110_SPI_CLK_RATE	25000000
+#define ADIN1110_SPI_CS		0
+
+#define ADIN1110_GPIO_RESET_PORT	0
+#define ADIN1110_GPIO_RESET_PIN		15
+
+extern struct max_gpio_init_param adin1110_reset_gpio_extra_ip;
+extern struct max_spi_init_param adin1110_spi_extra_ip;
+
 #endif
 
 #endif /* __PARAMETERS_H__ */

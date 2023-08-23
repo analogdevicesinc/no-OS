@@ -82,15 +82,15 @@ int iio_lwip_example_main()
 	struct iio_app_init_param app_init_param = { 0 };
 
 	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
-	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
-	if (ret)
-		return ret;
+	// ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
+	// if (ret)
+	// 	return ret;
 
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "adxl355",
 			.dev = adxl355_iio_desc,
-			.dev_descriptor = adxl355_iio_desc->iio_dev,
+			// .dev_descriptor = adxl355_iio_desc->iio_dev,
 			.read_buff = &accel_buff,
 		}
 	};
