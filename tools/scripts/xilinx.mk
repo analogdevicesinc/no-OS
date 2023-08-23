@@ -18,7 +18,7 @@ TEMPLATE	= "Empty Application(C)"
 endif
 
 define tcl_util
-	xsct $(PLATFORM_TOOLS)/util.tcl					\
+	xsct -nodisp $(PLATFORM_TOOLS)/util.tcl					\
 	     $(1)							\
 	     $(WORKSPACE) $(WORKSPACE)/tmp $(notdir $(HARDWARE))	\
 	     $(BINARY) $(TARGET_CPU) $(TEMPLATE)
@@ -181,7 +181,7 @@ xilinx_run:
 ifneq (, $(wildcard *.elf))
 	$(call print,Elf exists $(FILE))
 	$(MAKE) --no-print-directory $(TEMP_DIR_RUN)
-	xsct $(PLATFORM_TOOLS)/util.tcl					\
+	xsct -nodisp $(PLATFORM_TOOLS)/util.tcl					\
 	     upload							\
 	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
 	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE)       \
@@ -199,7 +199,7 @@ $(TEMP_DIR_RUN): $(HARDWARE)
 	$(call print,Creating tmp directory)
 	$(call mk_dir,$(TEMP_DIR_RUN)) $(HIDE)
 	$(call copy_file,$(HARDWARE),$(TEMP_DIR_RUN)) $(HIDE)
-	xsct $(PLATFORM_TOOLS)/util.tcl					\
+	xsct -nodisp $(PLATFORM_TOOLS)/util.tcl					\
 	     get_arch						\
 	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
 	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
@@ -210,12 +210,12 @@ create_fsbl:
 ifeq ($(findstring cortexa53,$(strip $(ARCH_RUN))),cortexa53)
 	$(call print,genera $(ARCH_RUN) fsbl)
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
-	xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+	xsct -nodisp $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
 endif
 ifeq ($(findstring cortexr5,$(strip $(ARCH_RUN))),cortexr5)
 	$(call print,genera $(ARCH_RUN) fsbl)
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
-	xsct $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+	xsct -nodisp $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
 endif
 
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
@@ -226,7 +226,7 @@ $(TEMP_DIR)/arch.txt: $(HARDWARE)
 
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
-	xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
+	xsct -nodisp $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 PHONY += $(PLATFORM)_sdkclean
 $(PLATFORM)_sdkclean:
@@ -242,7 +242,7 @@ endif
 	$(call set_one_time_rule,$@)
 	$(call print,Creating fsbl.elf)
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
-	xsct $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
+	xsct -nodisp $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
 
 PHONY += create_boot_bin
 create_boot_bin:
