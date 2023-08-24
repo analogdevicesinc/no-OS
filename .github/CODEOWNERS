@@ -1,0 +1,11 @@
+# This file contains code owners for No-OS Pull Requests to master/main.
+# Code owners are added automatically as reviewers. All PRs open against 
+# master/main will require approval of at least one code owner.
+#
+# More general documentation about code owners can be found here:
+# https://github.blog/2017-07-06-introducing-code-owners/
+
+# CODEOWNERS file format: <pattern> + <mail address of one or more owners>
+
+##### Global code owners (for whole files from repo) #####
+*	darius.berghe@analog.com ciprian.regus@analog.com dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com george.mois@analog.com
