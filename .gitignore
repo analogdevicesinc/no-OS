@@ -21,6 +21,8 @@ aducm_project
 aducm_build
 .vscode
 .Xil
+.github/CODEOWNERS
+.github/PULL_REQUEST_TEMPLATE.md
 
 *.a
 *.o
