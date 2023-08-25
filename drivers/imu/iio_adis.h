@@ -210,6 +210,7 @@ struct adis_iio_dev {
 	struct adis_iio_scale_fractional temp_scale;
 	/** Gyroscope measurement range value in text. */
 	const char *rang_mdl_txt;
+	struct iio_hw_trig *hw_trig_desc;
 };
 
 /******************************************************************************/

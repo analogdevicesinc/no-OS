@@ -42,10 +42,12 @@
 /******************************************************************************/
 
 #include "iio_adis.h"
+#include "no_os_delay.h"
 #include "no_os_units.h"
 #include <stdio.h>
 #include <string.h>
 #include "adis.h"
+#include "iio_trigger.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1027,6 +1029,11 @@ int adis_iio_pre_enable(void* dev, uint32_t mask)
 
 	if (iio_adis->has_fifo) {
 		/* Set FIFO overflow behavior to overwrite old data when FIFO is full. */
+		ret = adis_cmd_fifo_flush(adis);
+		if (ret)
+			return ret;
+		/* From data-sheet, wait time to finalize the fifo flush command */
+		no_os_udelay(500);
 		ret = adis_write_fifo_overflow(adis, 1);
 		if (ret)
 			return ret;
@@ -1073,7 +1080,7 @@ int adis_iio_post_disable(void* dev, uint32_t mask)
  * @return 0 in case of success, error code otherwise.
  */
 static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
-		uint32_t mask, struct iio_buffer *buffer)
+		uint32_t mask, struct iio_buffer *buffer, bool pop, bool burst_request)
 {
 	struct adis_dev *adis;
 	int ret;
@@ -1089,7 +1096,14 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 
 	adis = iio_adis->adis_dev;
 
-	ret = adis_read_burst_data(adis, sizeof(buff), buff, iio_adis->burst_size);
+	ret = adis_read_burst_data(adis, sizeof(buff), buff, iio_adis->burst_size, pop,
+				   burst_request);
+
+	/* If ret ==  EAGAIN then no data is available to read (will happen
+	for a burst request) */
+	if (ret == -EAGAIN)
+		return 0;
+
 	if (ret)
 		return ret;
 
@@ -1204,7 +1218,7 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
 		return -EINVAL;
 
 	return adis_iio_trigger_push_single_sample(iio_adis,
-			dev_data->buffer->active_mask, dev_data->buffer);
+			dev_data->buffer->active_mask, dev_data->buffer, false, false);
 }
 
 /**
@@ -1229,21 +1243,47 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 	if (!iio_adis->adis_dev)
 		return -EINVAL;
 
+	iio_trig_disable(iio_adis->hw_trig_desc);
+
 	adis = iio_adis->adis_dev;
 
 	ret = adis_read_fifo_cnt(adis, &fifo_cnt);
 	if (ret)
-		return ret;
+		goto trig_enable;
 
-	for (j = 0; j < fifo_cnt; j++) {
+	/* From data-sheet, minimum time between reads */
+	no_os_udelay(10);
+	if (fifo_cnt > dev_data->buffer->samples)
+		fifo_cnt = dev_data->buffer->samples;
 
+	if (fifo_cnt > 2) {
+		/* Burst request */
 		ret = adis_iio_trigger_push_single_sample(iio_adis,
-				dev_data->buffer->active_mask, dev_data->buffer);
+				dev_data->buffer->active_mask, dev_data->buffer, true, true);
 		if (ret)
-			return ret;
+			goto trig_enable;
+
+		/* From data-sheet, minimum time between reads */
+		no_os_udelay(10);
+
+		for (j = 0; j < fifo_cnt - 1; j++) {
+			ret = adis_iio_trigger_push_single_sample(iio_adis,
+					dev_data->buffer->active_mask, dev_data->buffer, true, false);
+			if (ret)
+				goto trig_enable;
+
+			/* From data-sheet, minimum time between reads */
+			no_os_udelay(10);
+		}
+		ret = adis_iio_trigger_push_single_sample(iio_adis,
+				dev_data->buffer->active_mask, dev_data->buffer, false, false);
+		/* From data-sheet, minimum time between reads */
+		no_os_udelay(10);
 	}
 
-	return 0;
+trig_enable:
+	iio_trig_enable(iio_adis->hw_trig_desc);
+	return ret;
 }
 
 struct iio_attribute adis_dev_attrs[] = {

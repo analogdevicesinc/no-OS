@@ -3831,13 +3831,12 @@ void test_adis_read_burst_data_1(void)
 	uint16_t burst_data[14] = {0};
 
 	no_os_spi_write_and_read_IgnoreAndReturn(-1);
-	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0);
+	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0, false, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
 /**
- * @brief Test adis_read_burst_data with unsuccessful SPI burst read when
- * the previous burst request was successful.
+ * @brief Test adis_read_burst_data with burst request requested with fifo
  */
 void test_adis_read_burst_data_2(void)
 {
@@ -3845,10 +3844,8 @@ void test_adis_read_burst_data_2(void)
 	uint16_t burst_data[14] = {0};
 
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
-	no_os_udelay_Ignore();
-	no_os_spi_write_and_read_IgnoreAndReturn(-1);
-	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0);
-	TEST_ASSERT_EQUAL_INT(-1, retval);
+	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0, true, true);
+	TEST_ASSERT_EQUAL_INT(-EAGAIN, retval);
 }
 
 /**
@@ -3862,14 +3859,13 @@ void test_adis_read_burst_data_3(void)
 	device_alloc.info = adis_chip_info;
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
-	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0);
+	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0, false, false);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 	TEST_ASSERT_EQUAL_INT(true, device_alloc.diag_flags.checksum_err);
 }
 
 /**
- * @brief Test adis_read_burst_data with checksum error when
- * the previous burst request was successful.
+ * @brief Test adis_read_burst_data with burst request requested without fifo
  */
 void test_adis_read_burst_data_4(void)
 {
@@ -3877,13 +3873,11 @@ void test_adis_read_burst_data_4(void)
 	uint16_t burst_data[14] = {0};
 
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
-	no_os_udelay_Ignore();
-	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
-	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0);
+	retval = adis_read_burst_data(&device_alloc, 14, burst_data, 0, true, false);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
-	TEST_ASSERT_EQUAL_INT(true, device_alloc.diag_flags.checksum_err);
 }
+
 
 /**
  * @brief Test adis_read_burst_data with unsuccessful SPI burst read when the
@@ -3895,7 +3889,7 @@ void test_adis_read_burst_data_5(void)
 	uint16_t burst_data[20] = {0};
 
 	no_os_spi_write_and_read_IgnoreAndReturn(-1);
-	retval = adis_read_burst_data(&device_alloc, 20, burst_data, 0);
+	retval = adis_read_burst_data(&device_alloc, 20, burst_data, 0, false, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 

@@ -547,10 +547,12 @@ static struct iio_device adis1657x_iio_dev = {
  * @brief Initialize adis1657x iio device.
  * @param iio_dev    - The adis1657x iio device.
  * @param init_param - The structure that contains the device initial parameters.
+ * @param adis1657x_trig_desc - Trigger descriptor for data ready pin.
  * @return 0 in case of success, error code otherwise.
  */
 int adis1657x_iio_init(struct adis_iio_dev **iio_dev,
-		       struct adis_init_param *init_param)
+		       struct adis_init_param *init_param,
+		       struct iio_hw_trig *adis1657x_trig_desc)
 {
 	int ret;
 	struct adis_iio_dev *desc;
@@ -571,6 +573,7 @@ int adis1657x_iio_init(struct adis_iio_dev **iio_dev,
 	desc->temp_scale = adis1657x_temp_scale[init_param->dev_id];
 	desc->rang_mdl_txt = adis1657x_rang_mdl_txt[init_param->dev_id];
 	desc->has_fifo = true;
+	desc->hw_trig_desc = adis1657x_trig_desc;
 
 	ret = adis_init(&desc->adis_dev, &adis1657x_chip_info);
 	if (ret)
