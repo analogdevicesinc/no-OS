@@ -464,10 +464,9 @@ struct adis_chip_info {
 	 *  supports paging.
 	 */
 	bool 					has_paging;
-	/** Chip specific flag to specify wether a burst request is needed
-	 *  before reading burst data.
+	/** Chip specific flag to specify wether the device offers FIFO support.
 	 */
-	bool					burst_request;
+	bool					has_fifo;
 	/** Chip specific filter size variable B field maximum allowed value. */
 	uint16_t 				filt_size_var_b_max;
 	/** Chip specific decimation rate field maximum allowed	value. */
@@ -847,7 +846,8 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr);
 
 /*! Read burst data */
 int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
-			 uint16_t *burst_data, uint8_t burst_size_selection);
+			 uint16_t *burst_data, uint8_t burst_size_selection,
+			 bool fifo_pop, bool burst_request);
 
 /*! Update external clock frequency. */
 int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq);

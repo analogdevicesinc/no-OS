@@ -78,10 +78,6 @@ int iio_trigger_example_main()
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
-	ret = adis1657x_iio_init(&adis1657x_iio_desc, &adis1657x_ip);
-	if (ret)
-		return ret;
-
 	/* Initialize interrupt controller */
 	ret = no_os_irq_ctrl_init(&adis1657x_irq_desc, &adis1657x_gpio_irq_ip);
 	if (ret)
@@ -98,6 +94,11 @@ int iio_trigger_example_main()
 	ret = iio_hw_trig_init(&adis1657x_trig_desc, &adis1657x_gpio_trig_ip);
 	if (ret)
 		goto err_irq_set_prio;
+
+	ret = adis1657x_iio_init(&adis1657x_iio_desc, &adis1657x_ip,
+				 adis1657x_trig_desc);
+	if (ret)
+		return ret;
 
 	/* List of devices */
 	struct iio_app_device iio_devices[] = {

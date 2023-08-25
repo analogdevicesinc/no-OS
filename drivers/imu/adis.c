@@ -62,10 +62,17 @@
 #define ADIS_1_BYTE_SIZE		1
 #define ADIS_16_BIT_BURST_SIZE		0
 #define ADIS_32_BIT_BURST_SIZE		1
+#define ADIS_FIFO_NOT_PRESENT		0
+#define ADIS_FIFO_PRESENT		1
 #define ADIS_MSG_SIZE_16_BIT_BURST 	20 /* in bytes */
 #define ADIS_MSG_SIZE_32_BIT_BURST 	32 /* in bytes */
+#define ADIS_MSG_SIZE_16_BIT_BURST_FIFO	20 /* in bytes */
+#define ADIS_MSG_SIZE_32_BIT_BURST_FIFO	34 /* in bytes */
 #define ADIS_CHECKSUM_SIZE		2  /* in bytes */
+#define ADIS_CHECKSUM_BUF_IDX		0
+#define ADIS_CHECKSUM_BUF_IDX_FIFO	2
 #define ADIS_READ_BURST_DATA_CMD_SIZE	2  /* in bytes */
+#define ADIS_READ_BURST_DATA_NO_POP	0x00
 #define ADIS_READ_BURST_DATA_CMD_MSB	0x68
 #define ADIS_READ_BURST_DATA_CMD_LSB	0x00
 #define ADIS_SIGN_BIT_POS		15
@@ -92,9 +99,11 @@
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
-STATIC const uint8_t burst_size_bytes[] = {
-	[ADIS_16_BIT_BURST_SIZE] = ADIS_MSG_SIZE_16_BIT_BURST,
-	[ADIS_32_BIT_BURST_SIZE] = ADIS_MSG_SIZE_32_BIT_BURST,
+STATIC const uint8_t burst_size_bytes[2][2] = {
+	[ADIS_16_BIT_BURST_SIZE][ADIS_FIFO_NOT_PRESENT] = ADIS_MSG_SIZE_16_BIT_BURST,
+	[ADIS_32_BIT_BURST_SIZE][ADIS_FIFO_NOT_PRESENT] = ADIS_MSG_SIZE_32_BIT_BURST,
+	[ADIS_16_BIT_BURST_SIZE][ADIS_FIFO_PRESENT] = ADIS_MSG_SIZE_16_BIT_BURST_FIFO,
+	[ADIS_32_BIT_BURST_SIZE][ADIS_FIFO_PRESENT] = ADIS_MSG_SIZE_32_BIT_BURST_FIFO,
 };
 
 /******************************************************************************/
@@ -480,14 +489,15 @@ int adis_update_bits_base(struct adis_dev *adis, uint32_t reg,
  * @brief Check if the checksum for burst data is correct.
  * @param buffer - The received burst data buffer.
  * @param size   - The size of the buffer.
+ * @param idx    - The start index in the buffer to check the checksum.
  * @return 0 in case of success, error code otherwise.
  */
-STATIC bool adis_validate_checksum(uint8_t *buffer, uint8_t size)
+STATIC bool adis_validate_checksum(uint8_t *buffer, uint8_t size, uint8_t idx)
 {
 	uint8_t i;
 	uint16_t checksum = no_os_get_unaligned_be16(&buffer[size-ADIS_CHECKSUM_SIZE]);
 
-	for (i = 0; i < size - ADIS_CHECKSUM_SIZE; i++)
+	for (i = idx; i < size - ADIS_CHECKSUM_SIZE; i++)
 		checksum -= buffer[i];
 
 	return checksum == 0;
@@ -2436,21 +2446,32 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
  * @param burst_data           - Array filled with read data.
  * @param burst_data_size      - Size of burst_data.
  * @param burst_size_selection - Burst size selection encoded value.
+ * @param fifo_pop             - In case FIFO is present, will pop the fifo if
+ * true. Unused if FIFO is not present.
+ * @param burst_request        - In case FIFO is present, will send a burst
+ * request and -EAGAIN will be returned. This burst request is needed if the
+ * previous command sent to the device was not a burst read. Unused if FIFO is
+ * not present.
  * @return 0 in case of success, error code otherwise.
  */
 int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
-			 uint16_t *burst_data, uint8_t burst_size_selection)
+			 uint16_t *burst_data, uint8_t burst_size_selection,
+			 bool fifo_pop, bool burst_request)
 {
 	int ret;
 	uint8_t msg_size;
+	uint8_t idx = ADIS_CHECKSUM_BUF_IDX;
 
-	msg_size = burst_size_bytes[burst_size_selection];
+	msg_size = burst_size_bytes[burst_size_selection][adis->info->has_fifo];
 
 	if (burst_data_size > (msg_size - ADIS_CHECKSUM_SIZE))
 		burst_data_size = msg_size - ADIS_CHECKSUM_SIZE;
 
 	uint8_t buffer[msg_size + ADIS_READ_BURST_DATA_CMD_SIZE];
-	buffer[0] = ADIS_READ_BURST_DATA_CMD_MSB;
+	if(adis->info->has_fifo && !fifo_pop)
+		buffer[0] = ADIS_READ_BURST_DATA_NO_POP;
+	else
+		buffer[0] = ADIS_READ_BURST_DATA_CMD_MSB;
 	buffer[1] = ADIS_READ_BURST_DATA_CMD_LSB;
 
 	ret = no_os_spi_write_and_read(adis->spi_desc, buffer,
@@ -2458,17 +2479,15 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
 	if (ret)
 		return ret;
 
-	if (adis->info->burst_request) {
-		/* Delay between consecutive reads */
-		no_os_udelay(adis->info->read_delay + adis->info->cs_change_delay);
+	if (adis->info->has_fifo && burst_request)
+		return -EAGAIN;
 
-		ret = no_os_spi_write_and_read(adis->spi_desc, buffer,
-					       msg_size + ADIS_READ_BURST_DATA_CMD_SIZE);
-		if (ret)
-			return ret;
-	}
+	if (adis->info->has_fifo)
+		/* Diag data not calculated in the checksum for the devices which have FIFO. */
+		idx = ADIS_CHECKSUM_BUF_IDX_FIFO;
 
-	if(!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size)) {
+	if(!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
+				   idx)) {
 		adis->diag_flags.checksum_err = true;
 		return -EINVAL;
 	}
