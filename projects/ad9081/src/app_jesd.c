@@ -143,13 +143,6 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		return ret;
 #endif
 
-	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (ret)
-		return ret;
-	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	if (ret)
-		return ret;
-
 #ifdef RX_XCVR_BASEADDR
 	rx_jesd_clk.xcvr = rx_adxcvr;
 #endif
@@ -169,33 +162,27 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	clk[1].name = "jesd_tx";
 	clk[1].hw = &jesd_tx_hw;
 
-	struct no_os_clk_desc *rx_jesd_clk_desc;
-	struct no_os_clk_desc *tx_jesd_clk_desc;
+	rx_jesd_init.lane_clk.dev_desc = &rx_jesd_clk;
+	rx_jesd_init.lane_clk.hw_ch_num = 0;
+	rx_jesd_init.lane_clk.name = "jesd_rx";
+	rx_jesd_init.lane_clk.platform_ops = &jesd204_clk_ops;
 
-	struct no_os_clk_init_param rx_clk_desc_init = { 0 };
-	struct no_os_clk_init_param tx_clk_desc_init = { 0 };
+	tx_jesd_init.lane_clk.dev_desc = &tx_jesd_clk;
+	tx_jesd_init.lane_clk.hw_ch_num = 0;
+	tx_jesd_init.lane_clk.name = "jesd_tx";
+	tx_jesd_init.lane_clk.platform_ops = &jesd204_clk_ops;
 
-	rx_clk_desc_init.dev_desc = &rx_jesd_clk;
-	rx_clk_desc_init.hw_ch_num = 0;
-	rx_clk_desc_init.name = "jesd_rx";
-	rx_clk_desc_init.platform_ops = &jesd204_clk_ops;
-
-	ret = no_os_clk_init(&rx_jesd_clk_desc, &rx_clk_desc_init);
+	ret = axi_jesd204_tx_init_jesd_fsm(&tx_jesd, &tx_jesd_init);
 	if (ret)
 		return ret;
 
-	clk[0].clk_desc = rx_jesd_clk_desc;
+	clk[1].clk_desc = tx_jesd->lane_clk->clk_desc;
 
-	tx_clk_desc_init.dev_desc = &tx_jesd_clk;
-	tx_clk_desc_init.hw_ch_num = 0;
-	tx_clk_desc_init.name = "jesd_tx";
-	tx_clk_desc_init.platform_ops = &jesd204_clk_ops;
-
-	ret = no_os_clk_init(&tx_jesd_clk_desc, &tx_clk_desc_init);
+	ret = axi_jesd204_rx_init_jesd_fsm(&rx_jesd, &rx_jesd_init);
 	if (ret)
 		return ret;
 
-	clk[1].clk_desc = tx_jesd_clk_desc;
+	clk[0].clk_desc = tx_jesd->lane_clk->clk_desc;
 
 	return 0;
 }
