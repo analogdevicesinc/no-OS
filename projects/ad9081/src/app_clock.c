@@ -213,6 +213,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 3,		// DEV_SYSREF
 			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}, {
 			.num = 6,		// CORE_CLK_TX
 			.divider = 12,		// 250 MHz
@@ -233,6 +234,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 13,		// FPGA_SYSREF
 			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}
 	};
 #elif defined(PLATFORM_MB)
@@ -249,6 +251,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 3,		// DEV_SYSREF
 			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}, {
 			.num = 6,		// CORE_CLK_TX
 			.divider = 12,		// 250 MHz
@@ -269,6 +272,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 13,		// FPGA_SYSREF
 			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
+			.is_sysref = true,
 		}
 	};
 #endif
