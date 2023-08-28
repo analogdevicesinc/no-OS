@@ -288,9 +288,6 @@ int main(void)
 
 	axi_jesd204_rx_watchdog(rx_jesd);
 
-	axi_jesd204_tx_status_read(tx_jesd);
-	axi_jesd204_rx_status_read(rx_jesd);
-
 	axi_dac_init(&tx_dac, &tx_dac_init);
 	axi_adc_init(&rx_adc, &rx_adc_init);
 
@@ -351,6 +348,11 @@ int main(void)
 			      sizeof(devs)/sizeof(*devs));
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
+
+	no_os_mdelay(10);
 
 #ifdef IIO_SUPPORT
 
