@@ -198,16 +198,6 @@ struct adis_iio_dev {
 	uint16_t data[26];
 	/** True if iio device offers FIFO support for buffer reading. */
 	bool has_fifo;
-	/** Gyroscope fractional scale. */
-	struct adis_iio_scale_fractional gyro_scale;
-	/** Accelerometer fractional scale. */
-	struct adis_iio_scale_fractional accl_scale;
-	/** Rotation angle fractional log2 scale. */
-	struct adis_iio_scale_fractional_log2 rot_scale;
-	/** Linear velocity fractional log2 scale. */
-	struct adis_iio_scale_fractional_log2 vel_scale;
-	/** Temperature fractional scale. */
-	struct adis_iio_scale_fractional temp_scale;
 	/** Gyroscope measurement range value in text. */
 	const char *rang_mdl_txt;
 	struct iio_hw_trig *hw_trig_desc;

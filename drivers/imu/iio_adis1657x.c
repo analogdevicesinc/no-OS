@@ -49,57 +49,6 @@
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
-/* Values from datasheet for 32-bit data */
-static const struct adis_iio_scale_fractional adis1657x_gyro_scale[] = {
-	[ADIS16575_2] = {1, RAD_TO_DEGREE(2621440)},
-	[ADIS16575_3] = {1, RAD_TO_DEGREE(655360)},
-	[ADIS16576_2] = {1, RAD_TO_DEGREE(2621440)},
-	[ADIS16576_3] = {1, RAD_TO_DEGREE(655360)},
-	[ADIS16577_2] = {1, RAD_TO_DEGREE(2621440)},
-	[ADIS16577_3] = {1, RAD_TO_DEGREE(655360)},
-};
-
-static const struct adis_iio_scale_fractional adis1657x_accl_scale[] = {
-	/* datasheet scale is in LSB/g = 262144000, need to convert to m/s^2 262144000/9.80665 = 26731249 */
-	[ADIS16575_2] = {1, 26731249},
-	[ADIS16575_3] = {1, 26731249},
-	/* datasheet scale is in LSB/g = 52428800, need to convert to m/s^2 52428800/9.80665 = 5346250 */
-	[ADIS16576_2] = {1, 5346250},
-	[ADIS16576_3] = {1, 5346250},
-	/* datasheet scale is in LSB/g = 52428800, need to convert to m/s^2 52428800/9.80665 = 5346250 */
-	[ADIS16577_2] = {1, 5346250},
-	[ADIS16577_3] = {1, 5346250},
-};
-
-static const struct adis_iio_scale_fractional_log2 adis1657x_rot_scale[] = {
-	[ADIS16575_2] = {450, 31},
-	[ADIS16575_3] = {2000, 31},
-	[ADIS16576_2] = {450, 31},
-	[ADIS16576_3] = {2000, 31},
-	[ADIS16577_2] = {450, 31},
-	[ADIS16577_3] = {2000, 31},
-};
-
-static const struct adis_iio_scale_fractional_log2 adis1657x_vel_scale[] = {
-	[ADIS16575_2] = {100, 31},
-	[ADIS16575_3] = {100, 31},
-	[ADIS16576_2] = {100, 31},
-	[ADIS16576_3] = {100, 31},
-	[ADIS16577_2] = {100, 31},
-	[ADIS16577_3] = {100, 31},
-};
-
-/* IIO uses milli-degrees Celsius for temperature */
-static const struct adis_iio_scale_fractional adis1657x_temp_scale[] = {
-
-	[ADIS16575_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16575_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16576_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16576_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16577_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16577_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-};
-
 static const char * const adis1657x_rang_mdl_txt[] = {
 	[ADIS16575_2] = "+/-450_degrees_per_sec",
 	[ADIS16575_3] = "+/-2000_degrees_per_sec",
@@ -565,12 +514,7 @@ int adis1657x_iio_init(struct adis_iio_dev **iio_dev,
 
 	adis1657x_chip_info.ip = init_param;
 
-	/* Update scales based on the device id */
-	desc->gyro_scale = adis1657x_gyro_scale[init_param->dev_id];
-	desc->accl_scale = adis1657x_accl_scale[init_param->dev_id];
-	desc->rot_scale = adis1657x_rot_scale[init_param->dev_id];
-	desc->vel_scale = adis1657x_vel_scale[init_param->dev_id];
-	desc->temp_scale = adis1657x_temp_scale[init_param->dev_id];
+	/* Update data based on the device id */
 	desc->rang_mdl_txt = adis1657x_rang_mdl_txt[init_param->dev_id];
 	desc->has_fifo = true;
 	desc->hw_trig_desc = adis1657x_trig_desc;

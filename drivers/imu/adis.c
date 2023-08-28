@@ -159,6 +159,12 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 	if (ret)
 		goto error;
 
+	dev->gyro_scale = info->gyro_scale[dev->dev_id];
+	dev->accl_scale = info->accl_scale[dev->dev_id];
+	dev->rot_scale = info->rot_scale[dev->dev_id];
+	dev->vel_scale = info->vel_scale[dev->dev_id];
+	dev->temp_scale = info->temp_scale[dev->dev_id];
+
 	*adis = dev;
 
 	return ret;
@@ -2549,6 +2555,91 @@ int adis_get_sync_clk_freq(struct adis_dev *adis, uint32_t *clk_freq)
 		*clk_freq = adis->int_clk;
 	else
 		*clk_freq = adis->ext_clk;
+
+	return 0;
+}
+
+/**
+ * @brief Read adis device gyroscope scale in fractional form.
+ * @param adis       - The adis device.
+ * @param gyro_scale - The gyroscope scale.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_get_gyro_scale(struct adis_dev *adis,
+			struct adis_scale_fractional *gyro_scale)
+{
+	if (!adis || !gyro_scale)
+		return -EINVAL;
+
+	*gyro_scale = adis->gyro_scale;
+
+	return 0;
+}
+
+/**
+ * @brief Read adis device acceleration scale in fractional form.
+ * @param adis       - The adis device.
+ * @param accl_scale - The acceleration scale.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_get_accl_scale(struct adis_dev *adis,
+			struct adis_scale_fractional *accl_scale)
+{
+	if (!adis || !accl_scale)
+		return -EINVAL;
+
+	*accl_scale = adis->accl_scale;
+
+	return 0;
+}
+
+/**
+ * @brief Read adis device delta angle scale in fractional form.
+ * @param adis      - The adis device.
+ * @param rot_scale - The delta angle scale.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_get_rot_scale(struct adis_dev *adis,
+		       struct adis_scale_fractional_log2 *rot_scale)
+{
+	if (!adis || !rot_scale)
+		return -EINVAL;
+
+	*rot_scale = adis->rot_scale;
+
+	return 0;
+}
+
+/**
+ * @brief Read adis device delta velocity scale in fractional form.
+ * @param adis      - The adis device.
+ * @param vel_scale - The delta velocity scale.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_get_vel_scale(struct adis_dev *adis,
+		       struct adis_scale_fractional_log2 *vel_scale)
+{
+	if (!adis || !vel_scale)
+		return -EINVAL;
+
+	*vel_scale = adis->vel_scale;
+
+	return 0;
+}
+
+/**
+ * @brief Read adis device temperature scale in fractional form.
+ * @param adis       - The adis device.
+ * @param temp_scale - The temperature scale.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_get_temp_scale(struct adis_dev *adis,
+			struct adis_scale_fractional *temp_scale)
+{
+	if (!adis || !temp_scale)
+		return -EINVAL;
+
+	*temp_scale = adis->temp_scale;
 
 	return 0;
 }
