@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include "no_os_clk.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
@@ -669,6 +670,16 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	pr_debug("%s: Link%u set lane rate %lu kHz\n",
 		 __func__, lnk->link_id, lane_rate);
 
+	ret = no_os_clk_set_rate(jesd->lane_clk->clk_desc, lane_rate);
+	if (ret) {
+		pr_err("%s: Link%u set lane rate %lu kHz failed (%d)\n",
+		       __func__, lnk->link_id, lane_rate, ret);
+		return ret;
+	} else {
+		pr_debug("%s: Link%u set lane rate %lu kHz\n",
+			 __func__, lnk->link_id, lane_rate);
+	}
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -725,9 +736,7 @@ static int axi_jesd204_rx_jesd204_link_enable(struct jesd204_dev *jdev,
 {
 	struct axi_jesd204_rx_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct axi_jesd204_rx *jesd = priv->jesd;
-#if 0
 	int ret;
-#endif
 
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
@@ -761,6 +770,12 @@ static int axi_jesd204_rx_jesd204_link_enable(struct jesd204_dev *jdev,
 		return ret;
 	}
 #endif
+	ret = no_os_clk_enable(jesd->lane_clk->clk_desc);
+	if (ret) {
+		pr_err("%s: Link%u enable lane clock failed (%d)\n",
+		       __func__, lnk->link_id, ret);
+		return ret;
+	}
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_SYSREF_STATUS, 0x3);
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x0);
 #if 0
@@ -913,6 +928,8 @@ int32_t axi_jesd204_rx_init_jesd_fsm(struct axi_jesd204_rx **jesd204,
 				     const struct jesd204_rx_init *init)
 {
 	struct axi_jesd204_rx_jesd204_priv *priv;
+	struct no_os_clk_desc *clk_desc;
+	struct no_os_clk *lane_clock;
 	struct axi_jesd204_rx *jesd;
 	uint32_t synth_1;
 	uint32_t magic;
@@ -960,9 +977,39 @@ int32_t axi_jesd204_rx_init_jesd_fsm(struct axi_jesd204_rx **jesd204,
 	else if (jesd->encoder >= JESD204_ENCODER_MAX)
 		goto err;
 
+	jesd->config.octets_per_frame = init->octets_per_frame;
+	jesd->config.frames_per_multiframe = init->frames_per_multiframe;
+	jesd->config.subclass_version = init->subclass;
+
+	lane_clock = (struct no_os_clk *)no_os_calloc(1, sizeof(*lane_clock));
+	if (!lane_clock) {
+		ret = -ENOMEM;
+		goto err_1;
+	}
+
+	lane_clock->hw_ch_num = init->lane_clk.hw_ch_num;
+	lane_clock->name = init->lane_clk.name;
+
+	clk_desc = (struct no_os_clk_desc *)no_os_calloc(1, sizeof(*clk_desc));
+	if (!clk_desc) {
+		ret = -ENOMEM;
+		goto err_1;
+	}
+
+	ret = no_os_clk_init(&clk_desc, &init->lane_clk);
+	if (ret)
+		goto err_2;
+
+	lane_clock->clk_desc = clk_desc;
+	jesd->lane_clk = lane_clock;
+
+	ret = no_os_clk_disable(jesd->lane_clk->clk_desc);
+	if (ret)
+		goto err_2;
+
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_rx_init);
 	if (ret)
-		goto err;
+		goto err_2;
 
 	priv = jesd204_dev_priv(jesd->jdev);
 	priv->jesd = jesd;
@@ -971,6 +1018,10 @@ int32_t axi_jesd204_rx_init_jesd_fsm(struct axi_jesd204_rx **jesd204,
 
 	return 0;
 
+err_2:
+	no_os_free(clk_desc);
+err_1:
+	no_os_free(lane_clock);
 err:
 	no_os_free(jesd);
 
