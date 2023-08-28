@@ -43,6 +43,7 @@
 
 #include "adis.h"
 #include "adis1657x.h"
+#include "no_os_units.h"
 
 /******************************************************************************/
 /************************** Variable Definitions ******************************/
@@ -158,11 +159,67 @@ static const struct adis_clk_freq_limit adis1657x_sampling_clk_limits = {
 	.max_freq = 4100,
 };
 
+/* Values from datasheet for 32-bit data */
+static const struct adis_scale_fractional adis1657x_gyro_scale[] = {
+	[ADIS16575_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16575_3] = {1, RAD_TO_DEGREE(655360)},
+	[ADIS16576_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16576_3] = {1, RAD_TO_DEGREE(655360)},
+	[ADIS16577_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16577_3] = {1, RAD_TO_DEGREE(655360)},
+};
+
+static const struct adis_scale_fractional adis1657x_accl_scale[] = {
+	/* datasheet scale is in LSB/g = 262144000, need to convert to m/s^2 262144000/9.80665 = 26731249 */
+	[ADIS16575_2] = {1, 26731249},
+	[ADIS16575_3] = {1, 26731249},
+	/* datasheet scale is in LSB/g = 52428800, need to convert to m/s^2 52428800/9.80665 = 5346250 */
+	[ADIS16576_2] = {1, 5346250},
+	[ADIS16576_3] = {1, 5346250},
+	/* datasheet scale is in LSB/g = 52428800, need to convert to m/s^2 52428800/9.80665 = 5346250 */
+	[ADIS16577_2] = {1, 5346250},
+	[ADIS16577_3] = {1, 5346250},
+};
+
+static const struct adis_scale_fractional_log2 adis1657x_rot_scale[] = {
+	[ADIS16575_2] = {450, 31},
+	[ADIS16575_3] = {2000, 31},
+	[ADIS16576_2] = {450, 31},
+	[ADIS16576_3] = {2000, 31},
+	[ADIS16577_2] = {450, 31},
+	[ADIS16577_3] = {2000, 31},
+};
+
+static const struct adis_scale_fractional_log2 adis1657x_vel_scale[] = {
+	[ADIS16575_2] = {100, 31},
+	[ADIS16575_3] = {100, 31},
+	[ADIS16576_2] = {100, 31},
+	[ADIS16576_3] = {100, 31},
+	[ADIS16577_2] = {100, 31},
+	[ADIS16577_3] = {100, 31},
+};
+
+/* Milli-degrees Celsius for temperature */
+static const struct adis_scale_fractional adis1657x_temp_scale[] = {
+
+	[ADIS16575_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16575_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16576_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16576_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16577_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16577_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+};
+
 struct adis_chip_info adis1657x_chip_info = {
 	.field_map		= &adis1657x_def,
 	.sync_clk_freq_limits	= adis1657x_sync_clk_freq_limits,
 	.sampling_clk_limits	= adis1657x_sampling_clk_limits,
 	.timeouts 		= &adis1657x_timeouts,
+	.gyro_scale		= adis1657x_gyro_scale,
+	.accl_scale		= adis1657x_accl_scale,
+	.rot_scale		= adis1657x_rot_scale,
+	.vel_scale		= adis1657x_vel_scale,
+	.temp_scale		= adis1657x_temp_scale,
 	.read_delay 		= 5,
 	.write_delay 		= 0,
 	.cs_change_delay 	= 5,

@@ -188,6 +188,10 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 {
 	uint32_t vals[2];
 	struct adis_iio_dev *iio_adis;
+	struct adis_dev *adis;
+	struct adis_scale_fractional scale_frac;
+	struct adis_scale_fractional_log2 scale_frac_log2;
+	int ret;
 
 	if (!dev)
 		return -EINVAL;
@@ -197,26 +201,43 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 	if (!iio_adis->adis_dev)
 		return -EINVAL;
 
+	adis = iio_adis->adis_dev;
+
 	switch (channel->type) {
 	case IIO_ANGL_VEL:
-		vals[0] = iio_adis->gyro_scale.dividend;
-		vals[1] = iio_adis->gyro_scale.divisor;
+		ret = adis_get_gyro_scale(adis, &scale_frac);
+		if (ret)
+			return ret;
+		vals[0] = scale_frac.dividend;
+		vals[1] = scale_frac.divisor;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	case IIO_ACCEL:
-		vals[0] = iio_adis->accl_scale.dividend;
-		vals[1] = iio_adis->accl_scale.divisor;
+		ret = adis_get_accl_scale(adis, &scale_frac);
+		if (ret)
+			return ret;
+		vals[0] = scale_frac.dividend;
+		vals[1] = scale_frac.divisor;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	case IIO_ROT:
-		vals[0] = iio_adis->rot_scale.dividend;
-		vals[1] = iio_adis->rot_scale.power;
+		ret = adis_get_rot_scale(adis, &scale_frac_log2);
+		if (ret)
+			return ret;
+		vals[0] = scale_frac_log2.dividend;
+		vals[1] = scale_frac_log2.power;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, (int32_t*)vals);
 	case IIO_VELOCITY:
-		vals[0] = iio_adis->vel_scale.dividend;
-		vals[1] = iio_adis->vel_scale.power;
+		ret = adis_get_vel_scale(adis, &scale_frac_log2);
+		if (ret)
+			return ret;
+		vals[0] = scale_frac_log2.dividend;
+		vals[1] = scale_frac_log2.power;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, (int32_t*)vals);
 	case IIO_TEMP:
-		vals[0] = iio_adis->temp_scale.dividend;
-		vals[1] = iio_adis->temp_scale.divisor;
+		ret = adis_get_temp_scale(adis, &scale_frac);
+		if (ret)
+			return ret;
+		vals[0] = scale_frac.dividend;
+		vals[1] = scale_frac.divisor;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	default:
 		return -EINVAL;

@@ -189,6 +189,26 @@ struct adis_clk_freq_limit {
 	uint32_t max_freq;
 };
 
+/** @struct adis_scale_fractional
+ *  @brief ADIS fractional scale format structure; scale = dividend/divisor
+ */
+struct adis_scale_fractional {
+	/** Scale dividend. */
+	uint32_t dividend;
+	/** Scale divisor. */
+	uint32_t divisor;
+};
+
+/** @struct adis_scale_fractional_log2
+ *  @brief ADIS fractional log2 scale format structure; scale = dividend/2^power
+ */
+struct adis_scale_fractional_log2 {
+	/** Scale dividend. */
+	uint32_t dividend;
+	/** Scale 2's power. */
+	uint32_t power;
+};
+
 /** @struct adis_dev
  *  @brief ADIS device descriptor structure
  */
@@ -201,6 +221,16 @@ struct adis_dev {
 	const struct adis_chip_info  	*info;
 	/** Current diagnosis flags values. */
 	struct adis_diag_flags 		diag_flags;
+	/** Gyroscope fractional scale. */
+	struct adis_scale_fractional gyro_scale;
+	/** Accelerometer fractional scale. */
+	struct adis_scale_fractional accl_scale;
+	/** Rotation angle fractional log2 scale. */
+	struct adis_scale_fractional_log2 rot_scale;
+	/** Linear velocity fractional log2 scale. */
+	struct adis_scale_fractional_log2 vel_scale;
+	/** Temperature fractional scale. */
+	struct adis_scale_fractional temp_scale;
 	/** Current device id, specified by the user */
 	enum adis_device_id		dev_id;
 	/** Current page to be accessed in register map. */
@@ -454,6 +484,16 @@ struct adis_chip_info {
 	const struct adis_clk_freq_limit	sampling_clk_limits;
 	/** Chip specific timeouts. */
 	const struct adis_timeout 		*timeouts;
+	/** Gyroscope fractional scale. */
+	const struct adis_scale_fractional *gyro_scale;
+	/** Accelerometer fractional scale. */
+	const struct adis_scale_fractional *accl_scale;
+	/** Rotation angle fractional log2 scale. */
+	const struct adis_scale_fractional_log2 *rot_scale;
+	/** Linear velocity fractional log2 scale. */
+	const struct adis_scale_fractional_log2 *vel_scale;
+	/** Temperature fractional scale. */
+	const struct adis_scale_fractional *temp_scale;
 	/** Chip specific read delay for SPI transactions. */
 	uint32_t 				read_delay;
 	/** Chip specific write delay for SPI transactions. */
@@ -855,4 +895,23 @@ int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq);
 /*! Read adis synchronization clock frequency value in Hertz. */
 int adis_get_sync_clk_freq(struct adis_dev *adis, uint32_t *clk_freq);
 
+/*! Read adis device gyroscope scale in fractional form. */
+int adis_get_gyro_scale(struct adis_dev *adis,
+			struct adis_scale_fractional *gyro_scale);
+
+/*! Read adis device acceleration scale in fractional form. */
+int adis_get_accl_scale(struct adis_dev *adis,
+			struct adis_scale_fractional *accl_scale);
+
+/*! Read adis device delta angle scale in fractional form. */
+int adis_get_rot_scale(struct adis_dev *adis,
+		       struct adis_scale_fractional_log2 *rot_scale);
+
+/*! Read adis device delta velocity scale in fractional form. */
+int adis_get_vel_scale(struct adis_dev *adis,
+		       struct adis_scale_fractional_log2 *vel_scale);
+
+/*! Read adis device temperature scale in fractional form. */
+int adis_get_temp_scale(struct adis_dev *adis,
+			struct adis_scale_fractional *temp_scale);
 #endif

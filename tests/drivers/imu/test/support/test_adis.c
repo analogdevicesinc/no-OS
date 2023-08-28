@@ -4056,3 +4056,203 @@ void test_adis_get_sync_clk_freq_4(void)
 	TEST_ASSERT_EQUAL_INT(2100, clk_freq);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
+
+/**
+ * @brief Test adis_get_gyro_scale with null device.
+ */
+void test_adis_get_gyro_scale_1(void)
+{
+	struct adis_scale_fractional scale;
+	retval = adis_get_gyro_scale(NULL, &scale);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_gyro_scale with null device and null scale.
+ */
+void test_adis_get_gyro_scale_2(void)
+{
+	retval = adis_get_gyro_scale(NULL, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_gyro_scale with null scale.
+ */
+void test_adis_get_gyro_scale_3(void)
+{
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_gyro_scale(&device_alloc, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_gyro_scale with valid data.
+ */
+void test_adis_get_gyro_scale_4(void)
+{
+	struct adis_scale_fractional scale;
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_gyro_scale(&device_alloc, &scale);
+	TEST_ASSERT_EQUAL_INT(0, retval);
+}
+
+/**
+ * @brief Test adis_get_accl_scale with null device.
+ */
+void test_adis_get_accl_scale_1(void)
+{
+	struct adis_scale_fractional scale;
+	retval = adis_get_accl_scale(NULL, &scale);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_accl_scale with null device and null scale.
+ */
+void test_adis_get_accl_scale_2(void)
+{
+	retval = adis_get_accl_scale(NULL, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_accl_scale with null scale.
+ */
+void test_adis_get_accl_scale_3(void)
+{
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_accl_scale(&device_alloc, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_accl_scale with valid data.
+ */
+void test_adis_get_accl_scale_4(void)
+{
+	struct adis_scale_fractional scale;
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_accl_scale(&device_alloc, &scale);
+	TEST_ASSERT_EQUAL_INT(0, retval);
+}
+
+/**
+ * @brief Test adis_get_rot_scale with null device.
+ */
+void test_adis_get_rot_scale_1(void)
+{
+	struct adis_scale_fractional_log2 scale;
+	retval = adis_get_rot_scale(NULL, &scale);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_rot_scale with null device and null scale.
+ */
+void test_adis_get_rot_scale_2(void)
+{
+	retval = adis_get_rot_scale(NULL, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_rot_scale with null scale.
+ */
+void test_adis_get_rot_scale_3(void)
+{
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_rot_scale(&device_alloc, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_rot_scale with valid data.
+ */
+void test_adis_get_rot_scale_4(void)
+{
+	struct adis_scale_fractional_log2 scale;
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_rot_scale(&device_alloc, &scale);
+	TEST_ASSERT_EQUAL_INT(0, retval);
+}
+
+/**
+ * @brief Test adis_get_vel_scale with null device.
+ */
+void test_adis_get_vel_scale_1(void)
+{
+	struct adis_scale_fractional_log2 scale;
+	retval = adis_get_vel_scale(NULL, &scale);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_vel_scale with null device and null scale.
+ */
+void test_adis_get_vel_scale_2(void)
+{
+	retval = adis_get_vel_scale(NULL, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_vel_scale with null scale.
+ */
+void test_adis_get_vel_scale_3(void)
+{
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_vel_scale(&device_alloc, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_vel_scale with valid data.
+ */
+void test_adis_get_vel_scale_4(void)
+{
+	struct adis_scale_fractional_log2 scale;
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_vel_scale(&device_alloc, &scale);
+	TEST_ASSERT_EQUAL_INT(0, retval);
+}
+
+/**
+ * @brief Test adis_get_temp_scale with null device.
+ */
+void test_adis_get_temp_scale_1(void)
+{
+	struct adis_scale_fractional scale;
+	retval = adis_get_temp_scale(NULL, &scale);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_temp_scale with null device and null scale.
+ */
+void test_adis_get_temp_scale_2(void)
+{
+	retval = adis_get_temp_scale(NULL, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_temp_scale with null scale.
+ */
+void test_adis_get_temp_scale_3(void)
+{
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_temp_scale(&device_alloc, NULL);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
+}
+
+/**
+ * @brief Test adis_get_temp_scale with valid data.
+ */
+void test_adis_get_temp_scale_4(void)
+{
+	struct adis_scale_fractional scale;
+	device_alloc.info = adis_chip_info;
+	retval = adis_get_temp_scale(&device_alloc, &scale);
+	TEST_ASSERT_EQUAL_INT(0, retval);
+}

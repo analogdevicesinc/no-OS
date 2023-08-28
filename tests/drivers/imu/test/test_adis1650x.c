@@ -593,3 +593,43 @@ void test_adis1650x_get_sync_clk_freq(void)
 	test_adis_get_sync_clk_freq_3();
 	test_adis_get_sync_clk_freq_4();
 }
+
+void test_adis1650x_get_gyro_scale(void)
+{
+	test_adis_get_gyro_scale_1();
+	test_adis_get_gyro_scale_2();
+	test_adis_get_gyro_scale_3();
+	test_adis_get_gyro_scale_4();
+}
+
+void test_adis1650x_get_accl_scale(void)
+{
+	test_adis_get_accl_scale_1();
+	test_adis_get_accl_scale_2();
+	test_adis_get_accl_scale_3();
+	test_adis_get_accl_scale_4();
+}
+
+void test_adis1650x_get_rot_scale(void)
+{
+	test_adis_get_rot_scale_1();
+	test_adis_get_rot_scale_2();
+	test_adis_get_rot_scale_3();
+	test_adis_get_rot_scale_4();
+}
+
+void test_adis1650x_get_vel_scale(void)
+{
+	test_adis_get_vel_scale_1();
+	test_adis_get_vel_scale_2();
+	test_adis_get_vel_scale_3();
+	test_adis_get_vel_scale_4();
+}
+
+void test_adis1650x_get_temp_scale(void)
+{
+	test_adis_get_temp_scale_1();
+	test_adis_get_temp_scale_2();
+	test_adis_get_temp_scale_3();
+	test_adis_get_temp_scale_4();
+}

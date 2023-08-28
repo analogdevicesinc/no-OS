@@ -43,6 +43,7 @@
 
 #include "adis.h"
 #include "adis1650x.h"
+#include "no_os_units.h"
 
 /******************************************************************************/
 /************************** Variable Definitions ******************************/
@@ -135,12 +136,69 @@ static const struct adis_clk_freq_limit adis1650x_sampling_clk_limits = {
 	.max_freq = 2100,
 };
 
+/* Values from datasheet for 32-bit data */
+static const struct adis_scale_fractional adis1650x_gyro_scale[] = {
+	[ADIS16500]   = {1, RAD_TO_DEGREE(655360)},
+	[ADIS16505_1] = {1, RAD_TO_DEGREE(10485760)},
+	[ADIS16505_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16505_3] = {1, RAD_TO_DEGREE(655360)},
+	[ADIS16507_1] = {1, RAD_TO_DEGREE(10485760)},
+	[ADIS16507_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16507_3] = {1, RAD_TO_DEGREE(655360)},
+};
+
+static const struct adis_scale_fractional adis1650x_accl_scale[] = {
+	[ADIS16500]   = {1, 5349877},
+	[ADIS16505_1] = {1, 26783550},
+	[ADIS16505_2] = {1, 26783550},
+	[ADIS16505_3] = {1, 26783550},
+	[ADIS16507_1] = {1, 5349877},
+	[ADIS16507_2] = {1, 5349877},
+	[ADIS16507_3] = {1, 5349877},
+};
+
+static const struct adis_scale_fractional_log2 adis1650x_rot_scale[] = {
+	[ADIS16500]   = {2160, 31},
+	[ADIS16505_1] = {360, 31},
+	[ADIS16505_2] = {720, 31},
+	[ADIS16505_3] = {2160, 31},
+	[ADIS16507_1] = {360, 31},
+	[ADIS16507_2] = {720, 31},
+	[ADIS16507_3] = {2160, 31},
+};
+
+static const struct adis_scale_fractional_log2 adis1650x_vel_scale[] = {
+	[ADIS16500]   = {400, 31},
+	[ADIS16505_1] = {100, 31},
+	[ADIS16505_2] = {100, 31},
+	[ADIS16505_3] = {100, 31},
+	[ADIS16507_1] = {400, 31},
+	[ADIS16507_2] = {400, 31},
+	[ADIS16507_3] = {400, 31},
+};
+
+/* Milli-degrees Celsius for temperature */
+static const struct adis_scale_fractional adis1650x_temp_scale[] = {
+	[ADIS16500]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16505_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16505_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16505_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16507_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16507_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16507_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+};
+
 struct adis_chip_info adis1650x_chip_info = {
 	.cs_change_delay 	= 16,
 	.read_delay 		= 8,
 	.write_delay 		= 0,
 	.timeouts 		= &adis1650x_timeouts,
 	.field_map 		= &adis1650x_def,
+	.gyro_scale		= adis1650x_gyro_scale,
+	.accl_scale		= adis1650x_accl_scale,
+	.rot_scale		= adis1650x_rot_scale,
+	.vel_scale		= adis1650x_vel_scale,
+	.temp_scale		= adis1650x_temp_scale,
 	.filt_size_var_b_max 	= 6,
 	.dec_rate_max 		= 1999,
 	.sync_mode_max 		= ADIS_SYNC_OUTPUT,
