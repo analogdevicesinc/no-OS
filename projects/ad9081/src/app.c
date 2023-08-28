@@ -246,7 +246,7 @@ int main(void)
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param_2
 	};
-	no_os_gpio_desc *ad9081_gpio0_mux;
+	struct no_os_gpio_desc *ad9081_gpio0_mux;
 
 	status = no_os_gpio_get(&ad9081_gpio0_mux, &ad9081_gpio0_mux_init);
 	if (status)
