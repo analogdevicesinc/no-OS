@@ -228,7 +228,7 @@ struct adis_iio_dev {
 }
 
 #define ADIS_DELTA_ANGL_CHAN(mod, idx, adis_nb) { \
-	.ch_type = IIO_ROT, \
+	.ch_type = IIO_DELTA_ANGL, \
 	.modified = true, \
 	.channel = idx, \
 	.channel2 = IIO_MOD_##mod, \
@@ -238,7 +238,7 @@ struct adis_iio_dev {
 }
 
 #define ADIS_DELTA_VEL_CHAN(mod, idx, adis_nb) { \
-	.ch_type = IIO_VELOCITY, \
+	.ch_type = IIO_DELTA_VELOCITY, \
 	.modified = true, \
 	.channel = idx, \
 	.channel2 = IIO_MOD_##mod, \
