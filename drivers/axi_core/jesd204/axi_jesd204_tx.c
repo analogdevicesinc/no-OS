@@ -461,6 +461,10 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 		}
 	}
 
+	if (config->sysref.lmfc_offset != JESD204_LMFC_OFFSET_UNINITIALIZED)
+		axi_jesd204_tx_write(jesd, JESD204_TX_REG_SYSREF_LMFC_OFFSET,
+				     config->sysref.lmfc_offset);
+
 	return 0;
 }
 
