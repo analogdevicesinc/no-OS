@@ -833,7 +833,7 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 	uint32_t magic;
 	uint32_t version;
 	uint32_t tmp;
-	int ret;
+	int ret = -ENODEV;
 
 	jesd = (struct axi_jesd204_tx *)no_os_calloc(1, sizeof(*jesd));
 	if (!jesd)
