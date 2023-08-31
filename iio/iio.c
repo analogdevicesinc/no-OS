@@ -129,6 +129,8 @@ static const char * const iio_chan_type_string[] = {
 	[IIO_ANGL] = "angl",
 	[IIO_ROT] = "rot",
 	[IIO_COUNT] = "count",
+	[IIO_DELTA_ANGL] = "deltaangl",
+	[IIO_DELTA_VELOCITY] = "deltavelocity",
 };
 
 static const char * const iio_modifier_names[] = {
