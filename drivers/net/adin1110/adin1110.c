@@ -883,6 +883,7 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
 	descriptor->chip_type = param->chip_type;
+	descriptor->append_crc = param->append_crc;
 
 	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
