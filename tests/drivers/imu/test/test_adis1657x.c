@@ -821,12 +821,12 @@ void test_adis1657x_get_sync_clk_freq(void)
 	test_adis_get_sync_clk_freq_4();
 }
 
-void test_adis1657x_get_gyro_scale(void)
+void test_adis1657x_get_anglvel_scale(void)
 {
-	test_adis_get_gyro_scale_1();
-	test_adis_get_gyro_scale_2();
-	test_adis_get_gyro_scale_3();
-	test_adis_get_gyro_scale_4();
+	test_adis_get_anglvel_scale_1();
+	test_adis_get_anglvel_scale_2();
+	test_adis_get_anglvel_scale_3();
+	test_adis_get_anglvel_scale_4();
 }
 
 void test_adis1657x_get_accl_scale(void)

@@ -160,7 +160,7 @@ static const struct adis_clk_freq_limit adis1657x_sampling_clk_limits = {
 };
 
 /* Values from datasheet for 32-bit data */
-static const struct adis_scale_fractional adis1657x_gyro_scale[] = {
+static const struct adis_scale_fractional adis1657x_anglvel_scale[] = {
 	[ADIS16575_2] = {1, RAD_TO_DEGREE(2621440)},
 	[ADIS16575_3] = {1, RAD_TO_DEGREE(655360)},
 	[ADIS16576_2] = {1, RAD_TO_DEGREE(2621440)},
@@ -215,7 +215,7 @@ struct adis_chip_info adis1657x_chip_info = {
 	.sync_clk_freq_limits	= adis1657x_sync_clk_freq_limits,
 	.sampling_clk_limits	= adis1657x_sampling_clk_limits,
 	.timeouts 		= &adis1657x_timeouts,
-	.gyro_scale		= adis1657x_gyro_scale,
+	.anglvel_scale		= adis1657x_anglvel_scale,
 	.accl_scale		= adis1657x_accl_scale,
 	.rot_scale		= adis1657x_rot_scale,
 	.vel_scale		= adis1657x_vel_scale,

@@ -4058,42 +4058,42 @@ void test_adis_get_sync_clk_freq_4(void)
 }
 
 /**
- * @brief Test adis_get_gyro_scale with null device.
+ * @brief Test adis_get_anglvel_scale with null device.
  */
-void test_adis_get_gyro_scale_1(void)
+void test_adis_get_anglvel_scale_1(void)
 {
 	struct adis_scale_fractional scale;
-	retval = adis_get_gyro_scale(NULL, &scale);
+	retval = adis_get_anglvel_scale(NULL, &scale);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
- * @brief Test adis_get_gyro_scale with null device and null scale.
+ * @brief Test adis_get_anglvel_scale with null device and null scale.
  */
-void test_adis_get_gyro_scale_2(void)
+void test_adis_get_anglvel_scale_2(void)
 {
-	retval = adis_get_gyro_scale(NULL, NULL);
+	retval = adis_get_anglvel_scale(NULL, NULL);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
- * @brief Test adis_get_gyro_scale with null scale.
+ * @brief Test adis_get_anglvel_scale with null scale.
  */
-void test_adis_get_gyro_scale_3(void)
+void test_adis_get_anglvel_scale_3(void)
 {
 	device_alloc.info = adis_chip_info;
-	retval = adis_get_gyro_scale(&device_alloc, NULL);
+	retval = adis_get_anglvel_scale(&device_alloc, NULL);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
- * @brief Test adis_get_gyro_scale with valid data.
+ * @brief Test adis_get_anglvel_scale with valid data.
  */
-void test_adis_get_gyro_scale_4(void)
+void test_adis_get_anglvel_scale_4(void)
 {
 	struct adis_scale_fractional scale;
 	device_alloc.info = adis_chip_info;
-	retval = adis_get_gyro_scale(&device_alloc, &scale);
+	retval = adis_get_anglvel_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
 
