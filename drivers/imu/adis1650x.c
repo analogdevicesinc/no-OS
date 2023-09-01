@@ -167,7 +167,8 @@ static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
 	[ADIS16507_3] = {2160, 31},
 };
 
-static const struct adis_scale_fractional_log2 adis1650x_vel_scale[] = {
+static const struct adis_scale_fractional_log2 adis1650x_deltavelocity_scale[]
+	= {
 	[ADIS16500]   = {400, 31},
 	[ADIS16505_1] = {100, 31},
 	[ADIS16505_2] = {100, 31},
@@ -197,7 +198,7 @@ struct adis_chip_info adis1650x_chip_info = {
 	.anglvel_scale		= adis1650x_anglvel_scale,
 	.accl_scale		= adis1650x_accl_scale,
 	.deltaangl_scale	= adis1650x_deltaangl_scale,
-	.vel_scale		= adis1650x_vel_scale,
+	.deltavelocity_scale	= adis1650x_deltavelocity_scale,
 	.temp_scale		= adis1650x_temp_scale,
 	.filt_size_var_b_max 	= 6,
 	.dec_rate_max 		= 1999,

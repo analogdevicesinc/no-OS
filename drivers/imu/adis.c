@@ -162,7 +162,7 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 	dev->anglvel_scale = info->anglvel_scale[dev->dev_id];
 	dev->accl_scale = info->accl_scale[dev->dev_id];
 	dev->deltaangl_scale = info->deltaangl_scale[dev->dev_id];
-	dev->vel_scale = info->vel_scale[dev->dev_id];
+	dev->deltavelocity_scale = info->deltavelocity_scale[dev->dev_id];
 	dev->temp_scale = info->temp_scale[dev->dev_id];
 
 	*adis = dev;
@@ -2613,16 +2613,16 @@ int adis_get_deltaangl_scale(struct adis_dev *adis,
 /**
  * @brief Read adis device delta velocity scale in fractional form.
  * @param adis      - The adis device.
- * @param vel_scale - The delta velocity scale.
+ * @param deltavelocity_scale - The delta velocity scale.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_get_vel_scale(struct adis_dev *adis,
-		       struct adis_scale_fractional_log2 *vel_scale)
+int adis_get_deltavelocity_scale(struct adis_dev *adis,
+				 struct adis_scale_fractional_log2 *deltavelocity_scale)
 {
-	if (!adis || !vel_scale)
+	if (!adis || !deltavelocity_scale)
 		return -EINVAL;
 
-	*vel_scale = adis->vel_scale;
+	*deltavelocity_scale = adis->deltavelocity_scale;
 
 	return 0;
 }

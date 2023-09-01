@@ -4178,42 +4178,42 @@ void test_adis_get_deltaangl_scale_4(void)
 }
 
 /**
- * @brief Test adis_get_vel_scale with null device.
+ * @brief Test adis_get_deltavelocity_scale with null device.
  */
-void test_adis_get_vel_scale_1(void)
+void test_adis_get_deltavelocity_scale_1(void)
 {
 	struct adis_scale_fractional_log2 scale;
-	retval = adis_get_vel_scale(NULL, &scale);
+	retval = adis_get_deltavelocity_scale(NULL, &scale);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
- * @brief Test adis_get_vel_scale with null device and null scale.
+ * @brief Test adis_get_deltavelocity_scale with null device and null scale.
  */
-void test_adis_get_vel_scale_2(void)
+void test_adis_get_deltavelocity_scale_2(void)
 {
-	retval = adis_get_vel_scale(NULL, NULL);
+	retval = adis_get_deltavelocity_scale(NULL, NULL);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
- * @brief Test adis_get_vel_scale with null scale.
+ * @brief Test adis_get_deltavelocity_scale with null scale.
  */
-void test_adis_get_vel_scale_3(void)
+void test_adis_get_deltavelocity_scale_3(void)
 {
 	device_alloc.info = adis_chip_info;
-	retval = adis_get_vel_scale(&device_alloc, NULL);
+	retval = adis_get_deltavelocity_scale(&device_alloc, NULL);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
- * @brief Test adis_get_vel_scale with valid data.
+ * @brief Test adis_get_deltavelocity_scale with valid data.
  */
-void test_adis_get_vel_scale_4(void)
+void test_adis_get_deltavelocity_scale_4(void)
 {
 	struct adis_scale_fractional_log2 scale;
 	device_alloc.info = adis_chip_info;
-	retval = adis_get_vel_scale(&device_alloc, &scale);
+	retval = adis_get_deltavelocity_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
 
