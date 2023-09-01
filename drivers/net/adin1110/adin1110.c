@@ -877,7 +877,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto free_spi;
 
-	ret = no_os_gpio_direction_output(descriptor->reset_gpio, NO_OS_GPIO_OUT);
+	ret = no_os_gpio_direction_output(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto free_rst_gpio;
 
