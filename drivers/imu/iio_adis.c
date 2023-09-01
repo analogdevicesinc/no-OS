@@ -205,7 +205,7 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 
 	switch (channel->type) {
 	case IIO_ANGL_VEL:
-		ret = adis_get_gyro_scale(adis, &scale_frac);
+		ret = adis_get_anglvel_scale(adis, &scale_frac);
 		if (ret)
 			return ret;
 		vals[0] = scale_frac.dividend;

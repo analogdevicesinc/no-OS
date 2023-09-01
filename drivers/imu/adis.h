@@ -222,7 +222,7 @@ struct adis_dev {
 	/** Current diagnosis flags values. */
 	struct adis_diag_flags 		diag_flags;
 	/** Gyroscope fractional scale. */
-	struct adis_scale_fractional gyro_scale;
+	struct adis_scale_fractional anglvel_scale;
 	/** Accelerometer fractional scale. */
 	struct adis_scale_fractional accl_scale;
 	/** Rotation angle fractional log2 scale. */
@@ -485,7 +485,7 @@ struct adis_chip_info {
 	/** Chip specific timeouts. */
 	const struct adis_timeout 		*timeouts;
 	/** Gyroscope fractional scale. */
-	const struct adis_scale_fractional *gyro_scale;
+	const struct adis_scale_fractional *anglvel_scale;
 	/** Accelerometer fractional scale. */
 	const struct adis_scale_fractional *accl_scale;
 	/** Rotation angle fractional log2 scale. */
@@ -896,8 +896,8 @@ int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq);
 int adis_get_sync_clk_freq(struct adis_dev *adis, uint32_t *clk_freq);
 
 /*! Read adis device gyroscope scale in fractional form. */
-int adis_get_gyro_scale(struct adis_dev *adis,
-			struct adis_scale_fractional *gyro_scale);
+int adis_get_anglvel_scale(struct adis_dev *adis,
+			   struct adis_scale_fractional *anglvel_scale);
 
 /*! Read adis device acceleration scale in fractional form. */
 int adis_get_accl_scale(struct adis_dev *adis,

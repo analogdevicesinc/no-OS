@@ -159,7 +159,7 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 	if (ret)
 		goto error;
 
-	dev->gyro_scale = info->gyro_scale[dev->dev_id];
+	dev->anglvel_scale = info->anglvel_scale[dev->dev_id];
 	dev->accl_scale = info->accl_scale[dev->dev_id];
 	dev->rot_scale = info->rot_scale[dev->dev_id];
 	dev->vel_scale = info->vel_scale[dev->dev_id];
@@ -2562,16 +2562,16 @@ int adis_get_sync_clk_freq(struct adis_dev *adis, uint32_t *clk_freq)
 /**
  * @brief Read adis device gyroscope scale in fractional form.
  * @param adis       - The adis device.
- * @param gyro_scale - The gyroscope scale.
+ * @param anglvel_scale - The gyroscope scale.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_get_gyro_scale(struct adis_dev *adis,
-			struct adis_scale_fractional *gyro_scale)
+int adis_get_anglvel_scale(struct adis_dev *adis,
+			   struct adis_scale_fractional *anglvel_scale)
 {
-	if (!adis || !gyro_scale)
+	if (!adis || !anglvel_scale)
 		return -EINVAL;
 
-	*gyro_scale = adis->gyro_scale;
+	*anglvel_scale = adis->anglvel_scale;
 
 	return 0;
 }
