@@ -845,12 +845,12 @@ void test_adis1657x_get_deltaangl_scale(void)
 	test_adis_get_deltaangl_scale_4();
 }
 
-void test_adis1657x_get_vel_scale(void)
+void test_adis1657x_get_deltavelocity_scale(void)
 {
-	test_adis_get_vel_scale_1();
-	test_adis_get_vel_scale_2();
-	test_adis_get_vel_scale_3();
-	test_adis_get_vel_scale_4();
+	test_adis_get_deltavelocity_scale_1();
+	test_adis_get_deltavelocity_scale_2();
+	test_adis_get_deltavelocity_scale_3();
+	test_adis_get_deltavelocity_scale_4();
 }
 
 void test_adis1657x_get_temp_scale(void)

@@ -226,7 +226,7 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 		vals[1] = scale_frac_log2.power;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, (int32_t*)vals);
 	case IIO_DELTA_VELOCITY:
-		ret = adis_get_vel_scale(adis, &scale_frac_log2);
+		ret = adis_get_deltavelocity_scale(adis, &scale_frac_log2);
 		if (ret)
 			return ret;
 		vals[0] = scale_frac_log2.dividend;
