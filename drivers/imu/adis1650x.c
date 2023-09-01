@@ -158,13 +158,13 @@ static const struct adis_scale_fractional adis1650x_accl_scale[] = {
 };
 
 static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
-	[ADIS16500]   = {2160, 31},
-	[ADIS16505_1] = {360, 31},
-	[ADIS16505_2] = {720, 31},
-	[ADIS16505_3] = {2160, 31},
-	[ADIS16507_1] = {360, 31},
-	[ADIS16507_2] = {720, 31},
-	[ADIS16507_3] = {2160, 31},
+	[ADIS16500]   = {DEGREE_TO_RAD(2160), 31},
+	[ADIS16505_1] = {DEGREE_TO_RAD(360), 31},
+	[ADIS16505_2] = {DEGREE_TO_RAD(720), 31},
+	[ADIS16505_3] = {DEGREE_TO_RAD(2160), 31},
+	[ADIS16507_1] = {DEGREE_TO_RAD(360), 31},
+	[ADIS16507_2] = {DEGREE_TO_RAD(720), 31},
+	[ADIS16507_3] = {DEGREE_TO_RAD(2160), 31},
 };
 
 static const struct adis_scale_fractional_log2 adis1650x_deltavelocity_scale[]
