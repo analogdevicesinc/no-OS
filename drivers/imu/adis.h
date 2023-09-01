@@ -225,8 +225,8 @@ struct adis_dev {
 	struct adis_scale_fractional anglvel_scale;
 	/** Accelerometer fractional scale. */
 	struct adis_scale_fractional accl_scale;
-	/** Rotation angle fractional log2 scale. */
-	struct adis_scale_fractional_log2 rot_scale;
+	/** Delta angle fractional log2 scale. */
+	struct adis_scale_fractional_log2 deltaangl_scale;
 	/** Linear velocity fractional log2 scale. */
 	struct adis_scale_fractional_log2 vel_scale;
 	/** Temperature fractional scale. */
@@ -488,8 +488,8 @@ struct adis_chip_info {
 	const struct adis_scale_fractional *anglvel_scale;
 	/** Accelerometer fractional scale. */
 	const struct adis_scale_fractional *accl_scale;
-	/** Rotation angle fractional log2 scale. */
-	const struct adis_scale_fractional_log2 *rot_scale;
+	/** Delta angle fractional log2 scale. */
+	const struct adis_scale_fractional_log2 *deltaangl_scale;
 	/** Linear velocity fractional log2 scale. */
 	const struct adis_scale_fractional_log2 *vel_scale;
 	/** Temperature fractional scale. */
@@ -904,8 +904,8 @@ int adis_get_accl_scale(struct adis_dev *adis,
 			struct adis_scale_fractional *accl_scale);
 
 /*! Read adis device delta angle scale in fractional form. */
-int adis_get_rot_scale(struct adis_dev *adis,
-		       struct adis_scale_fractional_log2 *rot_scale);
+int adis_get_deltaangl_scale(struct adis_dev *adis,
+			     struct adis_scale_fractional_log2 *deltaangl_scale);
 
 /*! Read adis device delta velocity scale in fractional form. */
 int adis_get_vel_scale(struct adis_dev *adis,

@@ -610,12 +610,12 @@ void test_adis1650x_get_accl_scale(void)
 	test_adis_get_accl_scale_4();
 }
 
-void test_adis1650x_get_rot_scale(void)
+void test_adis1650x_get_deltaangl_scale(void)
 {
-	test_adis_get_rot_scale_1();
-	test_adis_get_rot_scale_2();
-	test_adis_get_rot_scale_3();
-	test_adis_get_rot_scale_4();
+	test_adis_get_deltaangl_scale_1();
+	test_adis_get_deltaangl_scale_2();
+	test_adis_get_deltaangl_scale_3();
+	test_adis_get_deltaangl_scale_4();
 }
 
 void test_adis1650x_get_vel_scale(void)

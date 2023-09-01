@@ -161,7 +161,7 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 
 	dev->anglvel_scale = info->anglvel_scale[dev->dev_id];
 	dev->accl_scale = info->accl_scale[dev->dev_id];
-	dev->rot_scale = info->rot_scale[dev->dev_id];
+	dev->deltaangl_scale = info->deltaangl_scale[dev->dev_id];
 	dev->vel_scale = info->vel_scale[dev->dev_id];
 	dev->temp_scale = info->temp_scale[dev->dev_id];
 
@@ -2596,16 +2596,16 @@ int adis_get_accl_scale(struct adis_dev *adis,
 /**
  * @brief Read adis device delta angle scale in fractional form.
  * @param adis      - The adis device.
- * @param rot_scale - The delta angle scale.
+ * @param deltaangl_scale - The delta angle scale.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_get_rot_scale(struct adis_dev *adis,
-		       struct adis_scale_fractional_log2 *rot_scale)
+int adis_get_deltaangl_scale(struct adis_dev *adis,
+			     struct adis_scale_fractional_log2 *deltaangl_scale)
 {
-	if (!adis || !rot_scale)
+	if (!adis || !deltaangl_scale)
 		return -EINVAL;
 
-	*rot_scale = adis->rot_scale;
+	*deltaangl_scale = adis->deltaangl_scale;
 
 	return 0;
 }
