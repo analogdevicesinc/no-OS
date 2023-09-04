@@ -294,6 +294,7 @@ static int ad74413r_iio_write_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel, intptr_t priv)
 {
+	int ret;
 	int32_t val;
 	uint16_t reg_val;
 	enum ad74413r_adc_range range;
@@ -309,6 +310,8 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 		} else {
 			ad74413r_get_adc_range(iio_desc->ad74413r_desc,
 					       channel->address, &reg_val);
+			if (ret)
+				return ret;
 
 			range = reg_val;
 			switch (range) {
