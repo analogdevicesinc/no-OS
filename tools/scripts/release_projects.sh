@@ -49,9 +49,9 @@
 
 # Release Environment Variables
 RELEASE_TAG="last_commit"
-SRC_ALIAS="noos_projects_binaries"
+BINARY_ALIAS="noos_projects_binaries"
 WORKING_DIRECTORY="${1:-$(System.DefaultWorkingDirectory)}"
-BINARY_PATH=$WORKING_DIRECTORY/$SRC_ALIAS
+BINARY_PATH=$WORKING_DIRECTORY/$BINARY_ALIAS
 ARTIFACT="${2:-$(ARTIFACT_NAME)}" #currently set in Azure Pipelines Variables Group
 
 # List of source directories
