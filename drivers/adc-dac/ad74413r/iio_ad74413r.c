@@ -772,6 +772,7 @@ int ad74413r_iio_remove(struct ad74413r_iio_desc *desc)
 	if (ret)
 		return ret;
 
+	no_os_free(desc->iio_dev->channels);
 	no_os_free(desc);
 
 	return 0;
