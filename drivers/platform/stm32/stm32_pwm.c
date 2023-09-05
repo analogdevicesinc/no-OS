@@ -42,6 +42,7 @@
 #include "no_os_pwm.h"
 #include "stm32_gpio.h"
 #include "stm32_pwm.h"
+#include "stm32_irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definition ***********************/
@@ -170,7 +171,37 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	desc->clock_divider = sparam->clock_divider;
 	desc->timer_autoreload = sparam->timer_autoreload;
 
+	if (param->pwm_callback) {
+		struct no_os_irq_init_param nvic_tim_cplt = {
+			.platform_ops = &stm32_irq_ops
+		};
+
+		ret = no_os_irq_ctrl_init(&desc->nvic_tim, &nvic_tim_cplt);
+		if (ret < 0)
+			goto error;
+
+		sparam->timer_callback.callback = &param->pwm_callback;
+		sparam->timer_callback.ctx = desc;
+		sparam->timer_callback.event = NO_OS_EVT_TIM_PWM_PULSE_FINISHED;
+		sparam->timer_callback.peripheral = NO_OS_TIM_IRQ;
+		sparam->timer_callback.handle = &desc->htimer;
+
+		ret = no_os_irq_register_callback(desc->nvic_tim, param->irq_id,
+						  &sparam->timer_callback);
+		if (ret < 0)
+			goto error_register;
+
+		ret = no_os_irq_enable(desc->nvic_tim, param->irq_id);
+		if (ret < 0)
+			goto error_enable;
+	}
+
 	return 0;
+error_enable:
+	no_os_irq_unregister_callback(desc->nvic_tim, param->irq_id,
+				      &sparam->timer_callback);
+error_register:
+	no_os_irq_ctrl_remove(desc->nvic_tim);
 error:
 	return ret;
 }
@@ -310,6 +341,7 @@ int32_t stm32_pwm_init(struct no_os_pwm_desc **desc,
 	descriptor->period_ns = param->period_ns;
 	descriptor->phase_ns = param->phase_ns;
 	descriptor->polarity = param->polarity;
+	descriptor->irq_id = param->irq_id;
 	*desc = descriptor;
 
 	return 0;
@@ -346,6 +378,21 @@ int32_t stm32_pwm_remove(struct no_os_pwm_desc *desc)
 	if (ret)
 		return ret;
 
+	if (desc->irq_id) {
+		ret = no_os_irq_unregister_callback(extra->nvic_tim, desc->irq_id,
+						    &extra->timer_callback);
+		if (ret)
+			return ret;
+
+		ret = no_os_irq_disable(extra->nvic_tim);
+		if (ret)
+			return ret;
+
+		ret = no_os_irq_ctrl_remove(extra->nvic_tim);
+		if (ret)
+			return ret;
+	}
+
 	free(desc->extra);
 	free(desc);
 
@@ -369,10 +416,18 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
 
-	if (sparam->complementary_channel)
-		ret = HAL_TIMEx_PWMN_Start(&sparam->htimer, chn_num);
-	else
-		ret = HAL_TIM_PWM_Start(&sparam->htimer, chn_num);
+	if (desc->irq_id) {
+		if (sparam->complementary_channel) {
+			ret = HAL_TIMEx_PWMN_Start_IT(&sparam->htimer, chn_num);
+		} else {
+			ret = HAL_TIM_PWM_Start_IT(&sparam->htimer, chn_num);
+		}
+	} else {
+		if (sparam->complementary_channel)
+			ret = HAL_TIMEx_PWMN_Start(&sparam->htimer, chn_num);
+		else
+			ret = HAL_TIM_PWM_Start(&sparam->htimer, chn_num);
+	}
 
 	if (ret != HAL_OK)
 		return -EIO;
