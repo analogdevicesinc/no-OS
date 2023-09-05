@@ -1219,19 +1219,19 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 		dev->buffer.allocated = 0;
 	}
 
-	dev->buffer.public.active_mask = 0;
-	if (dev->dev_descriptor->post_disable) {
-		ret = dev->dev_descriptor->post_disable(dev->dev_instance);
-		if (ret)
-			return ret;
-	}
-
 	desc = ctx->instance;
 	if(dev->trig_idx != NO_TRIGGER) {
 		trig = &desc->trigs[dev->trig_idx];
-		if (trig->descriptor->disable)
+		if (trig->descriptor->disable) {
 			ret = trig->descriptor->disable(trig->instance);
+			if (ret)
+				return ret;
+		}
 	}
+
+	dev->buffer.public.active_mask = 0;
+	if (dev->dev_descriptor->post_disable)
+		ret = dev->dev_descriptor->post_disable(dev->dev_instance);
 
 	return ret;
 }
