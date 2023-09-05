@@ -71,6 +71,7 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR, .hal_event = HAL_UART_ERROR_CB_ID},
 #ifdef HAL_TIM_MODULE_ENABLED
 	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED, .hal_event = HAL_TIM_PERIOD_ELAPSED_CB_ID},
+	[NO_OS_EVT_TIM_PWM_PULSE_FINISHED] = {.event = NO_OS_EVT_TIM_PWM_PULSE_FINISHED, .hal_event = HAL_TIM_PWM_PULSE_FINISHED_CB_ID},
 #endif
 #ifdef HAL_DMA_MODULE_ENABLED
 	[NO_OS_EVT_DMA_RX_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_COMPLETE, .hal_event = HAL_DMA_XFER_CPLT_CB_ID},
@@ -88,6 +89,22 @@ static int32_t irq_action_cmp(void *data1, void *data2)
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
 {
 	struct event_list *ee = &_events[NO_OS_EVT_TIM_ELAPSED];
+	struct irq_action *a;
+	struct irq_action key = {.handle = htim};
+	int ret;
+
+	/* Find & call callback */
+	ret = no_os_list_read_find(ee->actions, (void **)&a, &key);
+	if (ret < 0)
+		return;
+
+	if(a->callback)
+		a->callback(a->ctx);
+}
+
+void HAL_TIM_PWM_PulseFinishedCallback (TIM_HandleTypeDef *htim)
+{
+	struct event_list *ee = &_events[NO_OS_EVT_TIM_PWM_PULSE_FINISHED];
 	struct irq_action *a;
 	struct irq_action key = {.handle = htim};
 	int ret;
@@ -325,6 +342,9 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 #ifdef HAL_TIM_MODULE_ENABLED
 	case NO_OS_TIM_IRQ:
 		switch(hal_event) {
+		case HAL_TIM_PWM_PULSE_FINISHED_CB_ID:
+			pTimCallback = HAL_TIM_PWM_PulseFinishedCallback;
+			break;
 		case HAL_TIM_PERIOD_ELAPSED_CB_ID:
 			pTimCallback = HAL_TIM_PeriodElapsedCallback;
 			break;

@@ -41,6 +41,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_gpio.h"
+#include "no_os_irq.h"
 #include "stm32_gpio.h"
 #include "stm32_hal.h"
 
@@ -82,6 +83,8 @@ struct stm32_pwm_init_param {
 	uint32_t (*get_timer_clock)(void);
 	/** Get timer source clock divider */
 	uint32_t clock_divider;
+	/** Timer callback */
+	struct no_os_callback_desc timer_callback;
 };
 
 /**
@@ -107,6 +110,10 @@ struct stm32_pwm_desc {
 	uint32_t (*get_timer_clock)(void);
 	/** Get timer source clock divider */
 	uint32_t clock_divider;
+	/** Interrupt controller descriptor */
+	struct no_os_irq_ctrl_desc *nvic_tim;
+	/** Timer callback */
+	struct no_os_callback_desc timer_callback;
 };
 
 /**
