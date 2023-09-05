@@ -33,28 +33,38 @@
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# The No-OS Release procedure consists of 3 tasks in the Releases section of Azure Pipelines:
+# The No-OS Release procedure consists of 4 tasks in the Releases section of Azure Pipelines:
 # 1. Delete GitHub Release - deletes the old release in order to create a new one with same release
-#                            tag
-# 2. Bash Script - this script (release_projects.sh) is passed as input file from the no-OS sources
-#                  affilated to the Release.
+#                            tag.
+# 2. Prepare Release - the release_projects.sh script is passed as input file from the no-OS
+#                      sources affilated to the Release.
 # 3. Create GitHub Release - generate new release using the same release tag and new sources and
-# 4. Bash Script - upload artifacts to artifactory using upload_to_artifactory.py script.
+# 4. Upload Artifactory - the upload_to_artifactory.sh script is passed as input file from the no-OS
+#                         sources affilated to the Release.
 
+# Upload artifacts to Artifactory in conjunction with upload_to_artifactory.py python script.
+
+# Release Environment Variables
 WORKING_DIRECTORY="${1:-$(System.DefaultWorkingDirectory)}"
 ART_PATH="${2:-$(ARTIFACTORY_PATH)}"
 ART_TOKEN="${3:-$(ARTIFACTORY_TOKEN)}"
 BINARY_ALIAS="noos_projects_binaries"
 SRC_ALIAS="_no-os_sources"
 
+# Timestamp Variable
 timestamp=$(date +%Y_%m_%d-%H_%M)
+
+# no-OS supported plafroms list
 platform_list=("Xilinx" "STM32" "Pico" "Mbed" "Maxim" "ADuCM3029")
 
 cd $WORKING_DIRECTORY/$SRC_ALIAS
+# Get latest commit SHA displaying first 7 characters
 short_hash=`git rev-parse --short=7 HEAD`
+# Get current working branch
 branch=`git branch --show-current`
 cd $WORKING_DIRECTORY/$BINARY_ALIAS
 
+# Upload artifacts to Artifactory for each platform
 for platform in "${platform_list[@]}"; do
 	python3 $WORKING_DIRECTORY/$SRC_ALIAS/tools/scripts/upload_to_artifactory.py \
 	--base_path $ART_PATH --server_path no-OS/$branch/${timestamp}/$platform \
