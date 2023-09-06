@@ -59,15 +59,15 @@ timestamp=$(date +%Y_%m_%d-%H_%M)
 # no-OS supported plafroms list
 platform_list=("Xilinx" "STM32" "Pico" "Mbed" "Maxim" "ADuCM3029")
 
-cd $WORKING_DIRECTORY/$SRC_ALIAS
+cd ${WORKING_DIRECTORY}/${SRC_ALIAS}
 # Get latest commit SHA displaying first 7 characters
 short_hash=`git rev-parse --short=7 HEAD`
-cd $WORKING_DIRECTORY/$BINARY_ALIAS
+cd ${WORKING_DIRECTORY}/${BINARY_ALIAS}
 
 # Upload artifacts to Artifactory for each platform
 for platform in "${platform_list[@]}"; do
-	python3 $WORKING_DIRECTORY/$SRC_ALIAS/tools/scripts/upload_to_artifactory.py \
-	--base_path $ART_PATH --server_path no-OS/${BRANCH}/${timestamp}/$platform \
-	--local_path noos_exports_$platform --token $ART_TOKEN --props_level 1 \
+	python3 ${WORKING_DIRECTORY}/${SRC_ALIAS}/tools/scripts/upload_to_artifactory.py \
+	--base_path ${ART_PATH} --server_path no-OS/${BRANCH}/${timestamp}/${platform} \
+	--local_path noos_exports_${platform} --token ${ART_TOKEN} --props_level 1 \
 	--properties "git_sha=${short_hash}" --log_file upload_to_artifactory_log.txt --no_rel_path
 done
