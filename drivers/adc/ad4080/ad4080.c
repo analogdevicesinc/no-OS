@@ -978,8 +978,10 @@ int ad4080_init(struct ad4080_dev **device,
 	if (ret)
 		goto error_spi;
 
-	if (data != AD4080_CHIP_ID)
+	if (data != AD4080_CHIP_ID) {
+		ret = -EINVAL;
 		goto error_spi;
+	}
 
 	/* Software Reset */
 	ret = ad4080_soft_reset(dev);
@@ -997,8 +999,6 @@ int ad4080_init(struct ad4080_dev **device,
 	if (ret)
 		goto error_spi;
 
-	*device = dev;
-
 	/* Configuration SPI Interface Initialization */
 	ret = ad4080_configuration_intf_init(dev, init_param);
 	if (ret)
@@ -1013,6 +1013,8 @@ int ad4080_init(struct ad4080_dev **device,
 	ret = ad4080_set_mspi_drv(dev, init_param.mspi_drv) ;
 	if (ret)
 		goto error_spi;
+
+	*device = dev;
 
 	return 0;
 
