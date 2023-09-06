@@ -841,7 +841,7 @@ int ad74416h_set_therm_rst(struct ad74416h_desc *desc, bool enable)
 }
 
 /**
- * @brief Perform a soft reset and wait for device reset time.
+ * @brief Perform software or hardware reset and wait for device reset time.
  * @param desc - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -849,14 +849,26 @@ int ad74416h_reset(struct ad74416h_desc *desc)
 {
 	int ret;
 
-	ret = ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_1);
-	if (ret)
-		return ret;
+	if (desc->reset_gpio) {
+		ret = no_os_gpio_direction_output(desc->reset_gpio,
+						  NO_OS_GPIO_LOW);
+		if (ret)
+			return ret;
 
-	ret = ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_2);
-	if (ret)
-		return ret;
+		/* Minimum RESET signal pulse duration */
+		no_os_udelay(50);
+		ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_HIGH);
+		if (ret)
+			return ret;
+	} else {
+		ret = ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_1);
+		if (ret)
+			return ret;
 
+		ret = ad74416h_reg_write(desc, AD74416H_CMD_KEY, AD74416H_CMD_KEY_RESET_2);
+		if (ret)
+			return ret;
+	}
 	/* Time taken for device reset (datasheet value = 1ms) */
 	no_os_mdelay(1);
 
@@ -915,18 +927,25 @@ int ad74416h_init(struct ad74416h_desc **desc,
 
 	no_os_crc8_populate_msb(_crc_table, AD74416H_CRC_POLYNOMIAL);
 
-	ret = ad74416h_reset(descriptor);
+	ret = no_os_gpio_get_optional(&descriptor->reset_gpio,
+				      init_param->reset_gpio_param);
 	if (ret)
 		goto comm_err;
 
+	ret = ad74416h_reset(descriptor);
+	if (ret)
+		goto gpio_err;
+
 	ret = ad74416h_scratch_test(descriptor);
 	if (ret)
-		goto comm_err;
+		goto gpio_err;
 
 	*desc = descriptor;
 
 	return 0;
 
+gpio_err:
+	no_os_gpio_remove(descriptor->reset_gpio);
 comm_err:
 	no_os_spi_remove(descriptor->spi_desc);
 err:
@@ -946,6 +965,14 @@ int ad74416h_remove(struct ad74416h_desc *desc)
 
 	if (!desc)
 		return -EINVAL;
+
+	if (desc->reset_gpio) {
+		ret = no_os_gpio_remove(desc->reset_gpio);
+		if (ret)
+			return ret;
+
+		desc->reset_gpio = NULL;
+	}
 
 	ret = no_os_spi_remove(desc->spi_desc);
 	if (ret)

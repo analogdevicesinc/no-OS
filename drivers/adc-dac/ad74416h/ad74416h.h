@@ -46,6 +46,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "no_os_spi.h"
+#include "no_os_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -604,6 +605,7 @@ union ad74416h_live_status {
 struct ad74416h_init_param {
 	uint8_t dev_addr;
 	struct no_os_spi_init_param spi_ip;
+	struct no_os_gpio_init_param *reset_gpio_param;
 };
 
 /**
@@ -625,6 +627,7 @@ struct ad74416h_desc {
 	struct no_os_spi_desc *spi_desc;
 	uint8_t comm_buff[AD74416H_FRAME_SIZE];
 	struct ad74416h_channel_config channel_configs[AD74416H_N_CHANNELS];
+	struct no_os_gpio_desc *reset_gpio;
 };
 
 /******************************************************************************/
