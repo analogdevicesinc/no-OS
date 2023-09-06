@@ -154,6 +154,7 @@ int ad5754r_update_bits(struct ad5754r_dev *dev,
 	if (ret)
 		return ret;
 
+	reg_data &= ~mask;
 	reg_data |= no_os_field_prep(mask, reg_val);
 
 	return ad5754r_write(dev, instr_addr, reg_data);
