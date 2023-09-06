@@ -50,8 +50,8 @@ ART_PATH="${2:-$(ARTIFACTORY_PATH)}"
 ART_TOKEN="${3:-$(ARTIFACTORY_TOKEN)}"
 # Get default working branch
 BRANCH="${4:-$(Build.SourceBranchName)}"
-BINARY_ALIAS="noos_projects_binaries"
-SRC_ALIAS="_no-os_sources"
+BINARY_ALIAS="_master_artifacts"
+SRC_ALIAS="_upload_no-OS"
 
 # Timestamp Variable
 timestamp=$(date +%Y_%m_%d-%H_%M)
