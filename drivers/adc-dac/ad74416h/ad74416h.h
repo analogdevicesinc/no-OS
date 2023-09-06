@@ -636,7 +636,7 @@ struct ad74416h_desc {
 
 /** Converts a millivolt value in the corresponding DAC 13 bit code */
 int ad74416h_dac_voltage_to_code(struct ad74416h_desc *, int32_t,
-				 uint32_t *, uint32_t);
+				 uint16_t *, uint32_t);
 
 /** Converts a microamp value in the corresponding DAC 16 bit code */
 int ad74416h_dac_current_to_code(uint32_t, uint16_t *);
