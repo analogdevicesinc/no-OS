@@ -82,7 +82,7 @@ static const uint32_t conv_rate_ad74416h[] = { 10, 20, 1200, 4800, 9600, 200 };
  * @return 0 in case of success, -EINVAL otherwise
  */
 int ad74416h_dac_voltage_to_code(struct ad74416h_desc *desc, int32_t mvolts,
-				 uint32_t *code, uint32_t ch)
+				 uint16_t *code, uint32_t ch)
 {
 	uint32_t range, offset;
 
@@ -527,7 +527,7 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 				  uint32_t ch, enum ad74416h_op_mode ch_func)
 {
 	int ret;
-	uint32_t dac_code;
+	uint16_t dac_code;
 
 	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
 				  AD74416H_CH_FUNC_SETUP_MSK, AD74416H_HIGH_Z);
