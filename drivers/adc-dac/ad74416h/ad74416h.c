@@ -527,6 +527,25 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 				  uint32_t ch, enum ad74416h_op_mode ch_func)
 {
 	int ret;
+	uint32_t dac_code;
+
+	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
+				  AD74416H_CH_FUNC_SETUP_MSK, AD74416H_HIGH_Z);
+	if (ret)
+		return ret;
+
+	/* Get the DAC code corresponing to 0mV */
+	ret = ad74416h_dac_voltage_to_code(desc, 0, &dac_code, ch);
+	if(ret)
+		return ret;
+
+	ret = ad74416h_reg_update(desc, AD74416H_DAC_CODE(ch),
+				  AD74416H_DAC_CODE_MSK, dac_code);
+	if (ret)
+		return ret;
+
+	/* Datasheet delay required before transition to new desired mode */
+	no_os_udelay(200);
 
 	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
 				  AD74416H_CH_FUNC_SETUP_MSK, ch_func);
@@ -534,6 +553,9 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 		return ret;
 
 	desc->channel_configs[ch].function = ch_func;
+
+	/* Datasheet delay required before updating the new DAC code */
+	no_os_udelay(200);
 
 	return 0;
 }
