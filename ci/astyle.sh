@@ -15,6 +15,8 @@ fi
 
 if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
 then
+	git fetch --depth=50 origin $TARGET_BRANCH
+	git branch $TARGET_BRANCH origin/$TARGET_BRANCH
 	COMMIT_RANGE="${TARGET_BRANCH}.."
 fi
 
