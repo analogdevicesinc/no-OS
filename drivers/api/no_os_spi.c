@@ -149,6 +149,7 @@ void no_os_spibus_remove(uint32_t bus_number)
 		if (bus) {
 			no_os_free(bus);
 			bus = NULL;
+			spi_table[bus_number] = NULL;
 		}
 	}
 }
