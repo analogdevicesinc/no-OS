@@ -190,7 +190,6 @@ int32_t ad7746_remove(struct ad7746_dev *dev)
 		return 0;
 
 	no_os_i2c_remove(dev->i2c_dev);
-	dev->i2c_dev = NULL;
 	no_os_free(dev);
 
 	return 0;

@@ -200,7 +200,6 @@ int ad5940_remove(struct ad5940_dev *dev)
 
 	no_os_gpio_remove(dev->reset_gpio);
 	no_os_spi_remove(dev->spi);
-	dev->spi = NULL;
 	no_os_free(dev);
 
 	return 0;
