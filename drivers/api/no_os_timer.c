@@ -89,6 +89,8 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
  */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
@@ -98,7 +100,13 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 	no_os_mutex_remove(desc->mutex);
 	timer_mutex_table[desc->id] = NULL;
 
-	return desc->platform_ops->remove(desc);
+	ret = desc->platform_ops->remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**

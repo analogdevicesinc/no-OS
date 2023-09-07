@@ -84,6 +84,8 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
  */
 int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
@@ -93,7 +95,13 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 	no_os_mutex_remove(desc->mutex);
 	pwm_mutex_table[desc->id] = NULL;
 
-	return desc->platform_ops->pwm_ops_remove(desc);
+	ret = desc->platform_ops->pwm_ops_remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**

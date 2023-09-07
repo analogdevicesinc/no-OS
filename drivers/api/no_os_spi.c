@@ -120,6 +120,8 @@ int32_t no_os_spibus_init(const struct no_os_spi_init_param *param)
  */
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
+	int32_t ret;
+
 	// Remove SPI bus
 	no_os_spibus_remove(desc->bus->device_id);
 
@@ -128,7 +130,13 @@ int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
-	return desc->platform_ops->remove(desc);
+	ret = desc->platform_ops->remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**

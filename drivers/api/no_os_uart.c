@@ -86,6 +86,8 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
  */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
@@ -95,7 +97,13 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	no_os_mutex_remove(desc->mutex);
 	uart_mutex_table[desc->device_id] = NULL;
 
-	return desc->platform_ops->remove(desc);
+	ret = desc->platform_ops->remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**

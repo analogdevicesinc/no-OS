@@ -118,6 +118,8 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
  */
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
+	int32_t ret;
+
 	// Remove I2C bus
 	no_os_i2cbus_remove(desc->bus->device_id);
 
@@ -127,7 +129,13 @@ int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 	if (!desc->platform_ops->i2c_ops_remove)
 		return -ENOSYS;
 
-	return desc->platform_ops->i2c_ops_remove(desc);
+	ret = desc->platform_ops->i2c_ops_remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**

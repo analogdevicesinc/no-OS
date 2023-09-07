@@ -75,13 +75,21 @@ int32_t no_os_eeprom_init(struct no_os_eeprom_desc **desc,
  */
 int32_t no_os_eeprom_remove(struct no_os_eeprom_desc *desc)
 {
+	int32_t ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
 
-	return desc->platform_ops->remove(desc);
+	ret = desc->platform_ops->remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**

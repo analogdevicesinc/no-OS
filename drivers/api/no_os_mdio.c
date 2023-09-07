@@ -75,13 +75,21 @@ int no_os_mdio_init(struct no_os_mdio_desc **desc,
  */
 int no_os_mdio_remove(struct no_os_mdio_desc *desc)
 {
+	int ret;
+
 	if (!desc || !desc->ops)
 		return -EINVAL;
 
 	if (!desc->ops->remove)
 		return -ENOSYS;
 
-	return desc->ops->remove(desc);
+	ret = desc->ops->remove(desc);
+	if (ret)
+		return ret;
+
+	desc = NULL;
+
+	return 0;
 }
 
 /**
