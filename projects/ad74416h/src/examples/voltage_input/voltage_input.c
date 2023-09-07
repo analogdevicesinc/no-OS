@@ -45,6 +45,7 @@
 #include "ad74416h.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include <math.h>
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -62,6 +63,7 @@ int voltage_input_example_main()
 
 	union ad74416h_live_status status;
 	uint32_t adc_value = 0;
+	double calculated_voltage = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -100,7 +102,7 @@ int voltage_input_example_main()
 		goto error_ad74416h;
 	}
 	
-	//The following functions needs to be in the appropriate place for the application (while loop, interrupt handler, etc.)
+	//This example checks if there is available data in the ADC polling the status register
 	while(1)
 	{
 		//Check if there is data ready in the ADC
@@ -120,6 +122,10 @@ int voltage_input_example_main()
 				goto error_ad74416h;
 			}
 			pr_info("ADC Input value = %0x\r\n", adc_value);
+			//To calculate the Voltage use the formula
+			//Voltage = V0 + (ADC_CODE/2^16) * voltage_range
+			calculated_voltage = (double)adc_value/pow(2,24)*12;
+			pr_info("Calculated voltage = %.5f V\r\n", calculated_voltage);
 		}
 	}
 
