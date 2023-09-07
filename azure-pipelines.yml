@@ -12,7 +12,7 @@ pr:
 variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   runCondition: true
-  targetBranch: $[ variables['Build.SourceBranchName'] ]
+  targetBranch: $[ variables['System.PullRequest.TargetBranchName'] ]
 
 jobs:
 - job: LinuxBuilds
