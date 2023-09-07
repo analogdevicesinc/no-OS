@@ -668,7 +668,7 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 		     int32_t size, int32_t *vals)
 {
-	uint64_t tmp;
+	int64_t tmp;
 	int32_t integer, fractional;
 	bool dB = false;
 	int32_t i = 0;
@@ -690,11 +690,19 @@ int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 		tmp = no_os_div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
 		fractional = vals[1];
 		integer = (int32_t)no_os_div_s64_rem(tmp, 1000000000, &fractional);
+
+		if (integer == 0 && fractional < 0)
+			return snprintf(buf, len, "-0.%09u", abs(fractional));
+
 		return snprintf(buf, len, "%"PRIi32".%09u", integer,
 				abs(fractional));
 	case IIO_VAL_FRACTIONAL_LOG2:
 		tmp = no_os_shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
 		integer = (int32_t)no_os_div_s64_rem(tmp, 1000000000LL, &fractional);
+
+		if (integer == 0 && fractional < 0)
+			return snprintf(buf, len, "-0.%09u", abs(fractional));
+
 		return snprintf(buf, len, "%"PRIi32".%09u", integer,
 				abs(fractional));
 	case IIO_VAL_INT_MULTIPLE: {
