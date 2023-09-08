@@ -355,7 +355,6 @@ int ade9430_remove(struct ade9430_dev *dev)
 		return ret;
 
 	no_os_free(dev);
-	dev = NULL;
 
 	return 0;
 }

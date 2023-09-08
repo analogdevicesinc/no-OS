@@ -409,7 +409,5 @@ int max14906_remove(struct max14906_desc *desc)
 
 	no_os_free(desc);
 
-	desc = NULL;
-
 	return 0;
 }

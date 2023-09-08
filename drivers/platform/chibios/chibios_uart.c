@@ -120,7 +120,6 @@ static int32_t chibios_uart_remove(struct no_os_uart_desc *desc)
 
 	no_os_free(desc->extra);
 	no_os_free(desc);
-	desc = NULL;
 
 	return 0;
 };
