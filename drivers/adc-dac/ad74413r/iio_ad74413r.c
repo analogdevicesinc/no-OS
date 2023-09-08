@@ -308,6 +308,27 @@ static struct iio_device ad74413r_iio_dev = {
 /******************************************************************************/
 /******************************************************************************/
 
+static int _get_ch_by_idx(struct iio_device *iio_dev, int scan_index,
+			  uint32_t *ch)
+{
+	size_t i;
+	struct iio_channel *chan;
+
+	for (i = 0; i < iio_dev->num_ch; i++) {
+		chan = &iio_dev->channels[i];
+		if (chan->ch_out)
+			continue;
+
+		if (chan->scan_index == scan_index) {
+			*ch = chan->channel;
+
+			return 0;
+		}
+	}
+
+	return -EINVAL;
+}
+
 /**
  * @brief Register read wrapper
  * @param dev - The iio device structure.
@@ -659,7 +680,7 @@ static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad74413r_iio_desc *desc = dev;
-	enum ad74413r_slew_lin_step step;
+	uint16_t reg_val;
 	int32_t val;
 	int ret;
 
@@ -667,16 +688,16 @@ static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
 
 	switch (val) {
 	case 64:
-		step = AD74413R_STEP_64;
+		reg_val = AD74413R_STEP_64;
 		break;
 	case 120:
-		step = AD74413R_STEP_120;
+		reg_val = AD74413R_STEP_120;
 		break;
 	case 500:
-		step = AD74413R_STEP_500;
+		reg_val = AD74413R_STEP_500;
 		break;
 	case 1820:
-		step = AD74413R_STEP_1820;
+		reg_val = AD74413R_STEP_1820;
 		break;
 	default:
 		return -EINVAL;
@@ -684,7 +705,7 @@ static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
 
 	return ad74413r_reg_update(desc->ad74413r_desc,
 				   AD74413R_OUTPUT_CONFIG(channel->address),
-				   AD74413R_SLEW_LIN_STEP_MASK, step);
+				   AD74413R_SLEW_LIN_STEP_MASK, reg_val);
 }
 
 static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
@@ -768,14 +789,14 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	uint32_t i;
 	uint32_t n_chan = 0;
 	uint32_t channel_buff_cnt = 0;
-	struct ad74413r_desc *ad74413r_desc;
 	struct ad74413r_channel_config *config;
 	struct iio_channel *chan;
 	struct iio_channel *chan_buffer;
 	struct ad74413r_channel_map channels_info;
+	uint32_t ch_idx;
+	int ret;
 
-	ad74413r_desc = iio_desc->ad74413r_desc;
-	config = ad74413r_desc->channel_configs;
+	config = iio_desc->channel_configs;
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
@@ -788,41 +809,61 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		return -ENOMEM;
 
 	iio_desc->iio_dev->channels = chan_buffer;
+	iio_desc->iio_dev->num_ch = channel_buff_cnt;
 
 	/** Add the ADC channels */
-	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
+	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
 			continue;
+
+		ret = ad74413r_set_channel_function(iio_desc->ad74413r_desc, i,
+						    config[i].function);
+		if (ret)
+			goto free_channels;
+
 		channels_info = channel_map[config[i].function];
 		chan = channels_info.channels;
 
-		chan[0].channel = i;
-		chan[0].address = i;
-		chan[0].scan_index = i;
+		for (ch_idx = 0; ch_idx < channels_info.num_channels; ch_idx++) {
+			/* Only add a scan index to the ADC channels */
+			if (chan[ch_idx].ch_out)
+				continue;
 
-		memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
-		n_chan++;
-		iio_desc->iio_dev->num_ch++;
+			chan[ch_idx].scan_index = n_chan;
+			chan[ch_idx].channel = i;
+			chan[ch_idx].address = i;
+
+			chan_buffer[n_chan] = chan[ch_idx];
+			n_chan++;
+		}
 	}
 
 	/** Add the DAC channels */
-	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
+	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
 			continue;
+
 		channels_info = channel_map[config[i].function];
 		chan = channels_info.channels;
-		if (channels_info.num_channels == 1)
-			continue;
 
-		chan[1].channel = i;
-		chan[1].address = i;
+		for (ch_idx = 0; ch_idx < channels_info.num_channels; ch_idx++) {
+			if (!chan[ch_idx].ch_out)
+				continue;
 
-		memcpy(chan_buffer + n_chan, &chan[1], sizeof(chan[1]));
-		n_chan++;
-		iio_desc->iio_dev->num_ch++;
+			chan[ch_idx].channel = i;
+			chan[ch_idx].address = i;
+
+			chan_buffer[n_chan] = chan[ch_idx];
+			n_chan++;
+		}
 	}
 
 	return 0;
+
+free_channels:
+	no_os_free(chan_buffer);
+
+	return ret;
 }
 
 /**
@@ -834,9 +875,24 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
+	uint32_t ch;
+	size_t i;
+	int ret;
 
 	iio_desc->active_channels = mask;
 	iio_desc->no_of_active_channels = no_os_hweight8(mask);
+
+	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
+		if (mask & NO_OS_BIT(i)) {
+			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
+			if (ret)
+				return ret;
+			ret = ad74413r_set_adc_channel_enable(iio_desc->ad74413r_desc,
+							      ch, true);
+			if (ret)
+				return ret;
+		}
+	}
 
 	return ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_START_CONT);
 }
@@ -849,9 +905,21 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 static int ad74413r_iio_buffer_disable(void *dev)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
+	int ret;
+	int i;
 
-	return ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc,
-					 AD74413R_STOP_PWR_DOWN);
+	ret = ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc,
+					AD74413R_STOP_PWR_DOWN);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
+		ret = ad74413r_set_adc_channel_enable(iio_desc->ad74413r_desc, i, false);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
 }
 
 /**
@@ -925,7 +993,6 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 		      struct ad74413r_iio_desc_init_param *init_param)
 {
 	int ret;
-	uint32_t i;
 	struct ad74413r_iio_desc *descriptor;
 
 	if (!init_param || !init_param->ad74413r_init_param)
@@ -946,24 +1013,8 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	if (ret)
 		goto err;
 
-	/** The operation modes for the physical channels are set only at initialization. */
-	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
-		if (init_param->channel_configs[i].enabled) {
-			ret = ad74413r_set_adc_channel_enable(descriptor->ad74413r_desc, i, true);
-			if (ret)
-				goto err;
-
-			ret = ad74413r_set_channel_function(descriptor->ad74413r_desc, i,
-							    init_param->channel_configs[i].function);
-			if (ret)
-				goto err;
-
-			ret = ad74413r_set_adc_rate(descriptor->ad74413r_desc, i,
-						    AD74413R_ADC_SAMPLE_4800HZ);
-			if (ret)
-				return ret;
-		}
-	}
+	memcpy(&descriptor->channel_configs, &init_param->channel_configs,
+	       sizeof(descriptor->channel_configs));
 
 	ret = ad74413r_iio_setup_channels(descriptor);
 	if (ret)
