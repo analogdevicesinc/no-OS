@@ -978,6 +978,8 @@ int ad74416h_remove(struct ad74416h_desc *desc)
 	if (ret)
 		return ret;
 
+	desc->spi_desc = NULL;
+
 	no_os_free(desc);
 
 	return 0;
