@@ -189,7 +189,6 @@ void adis_remove(struct adis_dev *adis)
 		no_os_spi_remove(adis->spi_desc);
 
 	no_os_free(adis);
-	adis = NULL;
 }
 
 /**

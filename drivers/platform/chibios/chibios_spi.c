@@ -111,7 +111,6 @@ int32_t chibios_spi_remove(struct no_os_spi_desc *desc)
 
 	no_os_free(desc->extra);
 	no_os_free(desc);
-	desc = NULL;
 	return 0;
 }
 

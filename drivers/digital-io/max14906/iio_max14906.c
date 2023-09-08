@@ -634,7 +634,5 @@ int max14906_iio_remove(struct max14906_iio_desc *iio_desc)
 	max14906_remove(iio_desc->max14906_desc);
 	no_os_free(iio_desc);
 
-	iio_desc = NULL;
-
 	return 0;
 }

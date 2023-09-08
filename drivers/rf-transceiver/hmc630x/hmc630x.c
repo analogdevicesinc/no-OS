@@ -281,7 +281,6 @@ int hmc630x_remove(struct hmc630x_dev *dev)
 		return ret;
 
 	no_os_free(dev);
-	dev = NULL;
 
 	return 0;
 }
