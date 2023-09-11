@@ -45,6 +45,8 @@
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_spi.h"
+#include "no_os_util.h"
+#include "jesd204.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -62,7 +64,7 @@
 #define REG_PWRCNTRL0                            0x011 /* Power Control Reg 1 */
 #define REG_TXENMASK1                            0x012 /* TXenable masks */
 #define REG_PWRCNTRL3                            0x013 /* Power control register 3 */
-#define REG_COARSE_GROUP_DLY                     0x014 /* Coarse Group Delay Adjustment */
+#define REG_PWRCNTRL1                            0x014 /* Power control register 1 */
 #define REG_IRQ_ENABLE0                          0x01F /* Interrupt Enable */
 #define REG_IRQ_ENABLE1                          0x020 /* Interrupt Enable */
 #define REG_IRQ_ENABLE2                          0x021 /* Interrupt Enable */
@@ -186,9 +188,11 @@
 #define REG_PRBS_ERROR_I                         0x14C /* PRBS Error Counter Real */
 #define REG_PRBS_ERROR_Q                         0x14D /* PRBS Error Counter Imaginary */
 #define REG_DACPLLT5                             0x1B5 /* ALC/Varactor control */
+#define REG_DACPLLT6                             0x1B6 /* VCO amplitude control */
 #define REG_DACPLLTB                             0x1BB /* VCO Bias Control */
 #define REG_DACPLLTD                             0x1BD /* VCO Cal control */
 #define REG_DACPLLT17                            0x1C4 /* Varactor ControlV */
+#define REG_DACPLLT18                            0x1C5 /* VCO varactor reference  */
 #define REG_ASPI_SPARE0                          0x1C6 /* Spare Register 0 */
 #define REG_ASPI_SPARE1                          0x1C7 /* Spare Register 1 */
 #define REG_SPISTRENGTH                          0x1DF /* Reg 70 Description */
@@ -198,6 +202,7 @@
 #define REG_MASTER_PD                            0x200 /* Master power down for Receiver PHYx */
 #define REG_PHY_PD                               0x201 /* Power down for individual Receiver PHYx */
 #define REG_GENERIC_PD                           0x203 /* Miscellaneous power down controls */
+#define REG_CDR_RESET                            0x206 /* CDR Reset control */
 #define REG_CDR_OPERATING_MODE_REG_0             0x230 /* Clock and data recovery operating modes */
 #define REG_EQ_CONFIG_PHY_0_1                    0x250 /* Equalizer configuration for PHY 0 and PHY 1 */
 #define REG_EQ_CONFIG_PHY_2_3                    0x251 /* Equalizer configuration for PHY 2 and PHY 3 */
@@ -208,9 +213,6 @@
 #define REG_PLL_STATUS                           0x281 /* Rx PLL status readbacks */
 #define REG_REF_CLK_DIVIDER_LDO                  0x289 /* Rx PLL LDO control */
 #define REG_TERM_BLK1_CTRLREG0                   0x2A7 /* Termination controls for PHYs 0, 1, 6, and 7 */
-#define REG_TERM_BLK1_CTRLREG1                   0x2A8 /* Termination controls for PHYs 0, 1, 6, and 7 */
-#define REG_TERM_BLK2_CTRLREG0                   0x2AE /* Termination controls for PHYs 2, 3, 4, and 5 */
-#define REG_TERM_BLK2_CTRLREG1                   0x2AF /* Termination controls for PHYs 2, 3, 4, and 5 */
 #define REG_GENERAL_JRX_CTRL_0                   0x300 /* General JRX Control Register 0 */
 #define REG_GENERAL_JRX_CTRL_1                   0x301 /* General JRX Control Register 1 */
 #define REG_DYN_LINK_LATENCY_0                   0x302 /* Register 1 description */
@@ -219,16 +221,14 @@
 #define REG_LMFC_DELAY_1                         0x305 /* Register 4 description */
 #define REG_LMFC_VAR_0                           0x306 /* Register 5 description */
 #define REG_LMFC_VAR_1                           0x307 /* Register 6 description */
-#define REG_XBAR_LN_0_1                          0x308 /* Register 7 description */
-#define REG_XBAR_LN_2_3                          0x309 /* Register 8 description */
-#define REG_XBAR_LN_4_5                          0x30A /* Register 9 description */
-#define REG_XBAR_LN_6_7                          0x30B /* Register 10 description */
+#define REG_XBAR(x)                              (0x308 +(x)) /* Register 7 description */
 #define REG_FIFO_STATUS_REG_0                    0x30C /* Register 11 description */
 #define REG_FIFO_STATUS_REG_1                    0x30D /* Register 12 description */
 #define REG_FIFO_STATUS_REG_2                    0x30E /* Register 13 description */
 #define REG_SYNCB_GEN_0                          0x311 /* Register 16 description */
 #define REG_SYNCB_GEN_1                          0x312 /* Register 17 description */
 #define REG_SYNCB_GEN_3                          0x313 /* Register 18 description */
+#define REG_SERDES_SPI_REG                       0x314 /* SERDES SPI configuration */
 #define REG_PHY_PRBS_TEST_EN                     0x315 /* PHY PRBS TEST ENABLE FOR INDIVIDUAL LANES */
 #define REG_PHY_PRBS_TEST_CTRL                   0x316 /* Reg 20 Description */
 #define REG_PHY_PRBS_TEST_THRESH_LOBITS          0x317 /* Reg 21 Description */
@@ -283,6 +283,7 @@
 #define REG_ILS_BID                              0x451 /* Reg 81 Description */
 #define REG_ILS_LID0                             0x452 /* Reg 82 Description */
 #define REG_ILS_SCR_L                            0x453 /* Reg 83 Description */
+#define REG_ILS_F                                0x454 /* Reg 84 Description */
 #define REG_ILS_K                                0x455 /* Reg 85 Description */
 #define REG_ILS_M                                0x456 /* Reg 86 Description */
 #define REG_ILS_CS_N                             0x457 /* Reg 87 Description */
@@ -782,6 +783,7 @@
 #define SEL_SIDEBAND                         (1 << 1) /* 1 = Select upper or lower sideband from modulation result */
 #define I_TO_Q                               (1 << 0) /* 1 = send I datapath into Q DAC */
 #define MODULATION_TYPE(x)                   (((x) & 0x3) << 2) /* selects type of modulation operation */
+#define MODULATION_TYPE_MASK                 (0x03 << 2)
 
 /*
  *      REG_INTERP_MODE
@@ -1349,32 +1351,67 @@ struct ad9152_init_param {
 	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t stpl_samples[2][4];
+	uint8_t num_converters;
+	uint8_t num_lanes;
 	uint32_t interpolation;
+	unsigned int fcenter_shift;
+	uint8_t		spi3wire; // set device spi interface 3/4 wires
 	uint32_t prbs_type;
-	uint32_t lane_rate_kbps;
+	uint32_t sampling_frequency_khz;
+
+	uint8_t		lane_mux[4];
+
+	/* Whether to enable the internal DAC PLL (0=disable, 1=enable) */
+	uint8_t		pll_enable;
+	/* When using the DAC PLL this specifies the external reference clock frequency in kHz. */
+	uint32_t	pll_ref_frequency_khz;
+	/* When using the DAC PLL this specifies the target PLL output frequency in kHz. */
+	uint32_t	pll_dac_frequency_khz;
 };
 
 struct ad9152_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
+
+	struct jesd204_dev *jdev;
+	struct jesd204_link link_config;
+
+	unsigned int interpolation;
+	unsigned int fcenter_shift;
+
+	uint32_t sample_rate_khz;
+	uint8_t num_converters;
+	uint8_t num_lanes;
+
+	uint8_t lane_mux[4];
+
+	/* Whether to enable the internal DAC PLL (0=disable, 1=enable) */
+	uint8_t		pll_enable;
+	/* When using the DAC PLL this specifies the external reference clock frequency in kHz. */
+	uint32_t	pll_ref_frequency_khz;
+	/* When using the DAC PLL this specifies the target PLL output frequency in kHz. */
+	uint32_t	pll_dac_frequency_khz;
 };
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+/* Initialize ad9144_dev, JESD FSM ON*/
+int32_t ad9152_setup_jesd_fsm(struct ad9152_dev **device,
+			      const struct ad9152_init_param *init_param);
 int32_t ad9152_spi_read(struct ad9152_dev *dev,
 			uint16_t reg_addr,
 			uint8_t *reg_data);
 int32_t ad9152_spi_write(struct ad9152_dev *dev,
 			 uint16_t reg_addr,
 			 uint8_t reg_data);
-int32_t ad9152_setup(struct ad9152_dev **device,
-		     struct ad9152_init_param init_param);
+int32_t ad9152_setup_legacy(struct ad9152_dev **device,
+			    const struct ad9152_init_param *init_param);
 int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
-				  struct ad9152_init_param init_param);
+				  const struct ad9152_init_param *init_param);
 int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
-				  struct ad9152_init_param init_param);
+				  const struct ad9152_init_param *init_param);
 int32_t ad9152_status(struct ad9152_dev *dev);
 int32_t ad9152_remove(struct ad9152_dev *dev);
 
