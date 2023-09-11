@@ -62,6 +62,17 @@
                 .attributes = attrs				\
         }
 
+#define AD74413R_DIAG_CHANNEL(_addr, _type)			\
+        {							\
+		.ch_type = _type,                         	\
+		.indexed = 1,                                   \
+		.ch_out = 0,					\
+		.channel = _addr,				\
+		.address = _addr - 4,				\
+		.scan_type = &ad74413r_iio_adc_scan_type,	\
+		.attributes = ad74413r_iio_adc_diag_attrs	\
+        }
+
 #define AD74413R_DAC_CHANNEL(type)                              \
         {                                                       \
                 .ch_type = type,                                \
@@ -78,6 +89,11 @@
 
 #define AD74413R_CHANNELS(name) \
         _AD74413R_CHANNELS(ad74413r_ ## name ## _channels)
+
+enum channel_type {
+	AD74413R_ADC,
+	AD74413R_DIAG,
+};
 
 static int32_t ad74413r_sample_rate_avail[] = {
 	20, 4800, 10, 1200
@@ -143,6 +159,16 @@ static int ad74413r_iio_read_threshold(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv);
 static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_diag_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv);
+static int ad74413r_iio_write_diag_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv);
+static int ad74413r_iio_read_diag_function_avail(void *dev, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv);
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask);
 static int ad74413r_iio_buffer_disable(void *dev);
 static int ad74413r_iio_read_samples(void *dev, uint32_t *buf,
@@ -163,16 +189,19 @@ static struct scan_type ad74413r_iio_adc_scan_type = {
 static struct iio_attribute ad74413r_iio_adc_resistance_attrs[] = {
 	{
 		.name = "raw",
-		.show = ad74413r_iio_read_raw
+		.show = ad74413r_iio_read_raw,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "sampling_frequency",
 		.show = ad74413r_iio_read_sampling_freq,
-		.store = ad74413r_iio_write_sampling_freq
+		.store = ad74413r_iio_write_sampling_freq,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "sampling_frequency_available",
-		.show = ad74413r_iio_read_sampling_freq_avail
+		.show = ad74413r_iio_read_sampling_freq_avail,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "processed",
@@ -185,23 +214,28 @@ static struct iio_attribute ad74413r_iio_adc_attrs[] = {
 	{
 		.name = "sampling_frequency",
 		.show = ad74413r_iio_read_sampling_freq,
-		.store = ad74413r_iio_write_sampling_freq
+		.store = ad74413r_iio_write_sampling_freq,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "sampling_frequency_available",
-		.show = ad74413r_iio_read_sampling_freq_avail
+		.show = ad74413r_iio_read_sampling_freq_avail,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "raw",
-		.show = ad74413r_iio_read_raw
+		.show = ad74413r_iio_read_raw,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "scale",
-		.show = ad74413r_iio_read_scale
+		.show = ad74413r_iio_read_scale,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "offset",
-		.show = ad74413r_iio_read_offset
+		.show = ad74413r_iio_read_offset,
+		.priv = AD74413R_ADC
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -253,21 +287,65 @@ static struct iio_attribute ad74413r_iio_digital_attrs[] = {
 		.name = "sampling_frequency",
 		.show = ad74413r_iio_read_sampling_freq,
 		.store = ad74413r_iio_write_sampling_freq,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "sampling_frequency_available",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = ad74413r_iio_read_sampling_freq_avail
+		.show = ad74413r_iio_read_sampling_freq_avail,
+		.priv = AD74413R_ADC
 	},
 	{
 		.name = "raw",
 		.show = ad74413r_iio_read_raw,
+		.priv = AD74413R_ADC,
 	},
 	{
 		.name = "threshold",
 		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_threshold,
 		.store = ad74413r_iio_write_threshold,
+		.priv = AD74413R_ADC,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_attribute ad74413r_iio_adc_diag_attrs[] = {
+	{
+		.name = "sampling_frequency",
+		.show = ad74413r_iio_read_sampling_freq,
+		.store = ad74413r_iio_write_sampling_freq,
+		.priv = AD74413R_DIAG,
+	},
+	{
+		.name = "sampling_frequency_available",
+		.show = ad74413r_iio_read_sampling_freq_avail,
+		.priv = AD74413R_DIAG,
+	},
+	{
+		.name = "diag_function",
+		.show = ad74413r_iio_read_diag_function,
+		.store = ad74413r_iio_write_diag_function,
+	},
+	{
+		.name = "diag_function_available",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = ad74413r_iio_read_diag_function_avail,
+	},
+	{
+		.name = "raw",
+		.show = ad74413r_iio_read_raw,
+		.priv = AD74413R_DIAG,
+	},
+	{
+		.name = "scale",
+		.show = ad74413r_iio_read_scale,
+		.priv = AD74413R_DIAG,
+	},
+	{
+		.name = "offset",
+		.show = ad74413r_iio_read_offset,
+		.priv = AD74413R_DIAG,
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -336,6 +414,19 @@ static struct iio_device ad74413r_iio_dev = {
 /******************************************************************************/
 /******************************************************************************/
 
+static bool ad74413r_is_valid_diag(const struct iio_ch_info *ch,
+				   enum ad74413r_diag_mode diag)
+{
+	if (diag == AD74413R_DIAG_TEMP) {
+		if (ch->type == IIO_TEMP)
+			return true;
+	} else {
+		if (ch->type == IIO_VOLTAGE)
+			return true;
+	}
+
+	return false;
+}
 
 static void ad74413_iio_trig_enable(struct ad74413r_iio_desc *desc, bool enable)
 {
@@ -428,35 +519,89 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 	int32_t val;
 	uint16_t reg_val;
 	enum ad74413r_adc_range range;
+	enum ad74413r_diag_mode diag_func;
 	struct ad74413r_iio_desc *iio_desc = dev;
 
-	ad74413_iio_trig_enable(dev, false);
-	ret = ad74413r_get_adc_range(iio_desc->ad74413r_desc,
-				     channel->address, &reg_val);
-	ad74413_iio_trig_enable(dev, true);
-	if (ret)
-		return ret;
+	switch (priv) {
+	case AD74413R_ADC:
+		switch (channel->type) {
+		case IIO_VOLTAGE:
+			if (channel->ch_out) {
+				val = 0;
+			} else {
+				ad74413_iio_trig_enable(dev, false);
+				ret = ad74413r_get_adc_range(iio_desc->ad74413r_desc, channel->address,
+							     &reg_val);
+				ad74413_iio_trig_enable(dev, true);
+				if (ret)
+					return ret;
 
-	range = reg_val;
-	switch (channel->type) {
-	case IIO_VOLTAGE:
-		if (channel->ch_out)
-			val = 0;
-		else
-			ret = ad74413r_range_to_voltage_offset(range, &val);
+				range = reg_val;
+				ret = ad74413r_range_to_voltage_offset(range, &val);
+				if (ret)
+					return ret;
+			}
+			break;
+		case IIO_CURRENT:
+			if (channel->ch_out) {
+				val = 0;
+			} else {
+				ad74413_iio_trig_enable(dev, false);
+				ret = ad74413r_get_adc_range(iio_desc->ad74413r_desc, channel->address,
+							     &reg_val);
+				ad74413_iio_trig_enable(dev, true);
+				if (ret)
+					return ret;
+
+				range = reg_val;
+				ret = ad74413r_range_to_voltage_offset(range, &val);
+				if (ret)
+					return ret;
+			}
+			break;
+		default:
+			return -EINVAL;
+		}
 		break;
-	case IIO_CURRENT:
-		if (channel->ch_out)
+	case AD74413R_DIAG:
+		ad74413_iio_trig_enable(dev, false);
+		ret = ad74413r_reg_read(iio_desc->ad74413r_desc, AD74413R_DIAG_ASSIGN,
+					&reg_val);
+		ad74413_iio_trig_enable(dev, true);
+		if (ret)
+			return ret;
+
+		diag_func = no_os_field_get(AD74413R_DIAG_ASSIGN_MASK(channel->address),
+					    reg_val);
+		switch (diag_func) {
+		case AD74413R_DIAG_AVSS:
+			val = 33671;
+			break;
+		case AD74413R_DIAG_TEMP:
+			val = 267;
+			break;
+		case AD74413R_DIAG_AGND:
+		/* fallthrough */
+		case AD74413R_DIAG_REFOUT:
+		case AD74413R_DIAG_AVDD:
+		case AD74413R_DIAG_ALDO_5V:
+		case AD74413R_DIAG_ALDO_1V8:
+		case AD74413R_DIAG_DLDO_1V8:
+		case AD74413R_DIAG_DVCC:
+		case AD74413R_DIAG_IOVDD:
+		case AD74413R_SENSEL_A:
+		case AD74413R_SENSEL_B:
+		case AD74413R_SENSEL_C:
+		case AD74413R_SENSEL_D:
 			val = 0;
-		else
-			ret = ad74413r_range_to_voltage_offset(range, &val);
+			break;
+		default:
+			return -EINVAL;
+		}
 		break;
 	default:
 		return -EINVAL;
 	}
-
-	if (ret)
-		return ret;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
@@ -480,12 +625,23 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 
 	ad74413_iio_trig_enable(dev, false);
 
-	if (channel->ch_out)
-		ret = ad74413r_reg_read(iio_desc->ad74413r_desc,
-					AD74413R_DAC_CODE(channel->address), &reg_val);
-	else
+	switch (priv) {
+	case AD74413R_ADC:
+		if (channel->ch_out)
+			ret = ad74413r_reg_read(iio_desc->ad74413r_desc,
+						AD74413R_DAC_CODE(channel->address), &reg_val);
+		else
+			ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
+						      channel->address, &reg_val, false);
+		break;
+	case AD74413R_DIAG:
 		ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
-					      channel->address, &reg_val, false);
+					      channel->address, &reg_val, true);
+		break;
+	default:
+		ret = -EINVAL;
+		break;
+	}
 
 	ad74413_iio_trig_enable(dev, true);
 	if (ret)
@@ -551,8 +707,13 @@ static int ad74413r_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 	enum ad74413r_adc_sample sampling_frequency;
 
 	ad74413_iio_trig_enable(dev, false);
-	ret = ad74413r_get_adc_rate(iio_desc->ad74413r_desc,
-				    channel->address, &sampling_frequency);
+	if (priv == AD74413R_ADC)
+		ret = ad74413r_get_adc_rate(iio_desc->ad74413r_desc,
+					    channel->address, &sampling_frequency);
+	else
+		ret = ad74413r_get_adc_diag_rate(iio_desc->ad74413r_desc,
+						 channel->address, &sampling_frequency);
+
 	ad74413_iio_trig_enable(dev, true);
 	if (ret)
 		return ret;
@@ -579,9 +740,16 @@ static int ad74413r_iio_write_sampling_freq(void *dev, char *buf, uint32_t len,
 	int ret;
 
 	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&val, NULL);
-
 	ad74413_iio_trig_enable(dev, false);
-	ret = ad74413r_set_adc_rate(iio_desc->ad74413r_desc, channel->address, val);
+
+	if (priv == AD74413R_ADC) {
+		ret = ad74413r_set_adc_rate(iio_desc->ad74413r_desc,
+					    channel->address, val);
+	} else {
+		ret = ad74413r_set_adc_diag_rate(iio_desc->ad74413r_desc,
+						 channel->address, val);
+	}
+
 	ad74413_iio_trig_enable(dev, true);
 
 	return ret;
@@ -602,10 +770,14 @@ static int ad74413r_iio_read_sampling_freq_avail(void *dev, char *buf,
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
 
-	if (iio_desc->ad74413r_desc->chip_id == AD74412R)
+	if (iio_desc->ad74413r_desc->chip_id == AD74412R) {
 		iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 2, ad74412r_sample_rate_avail);
-	else
-		iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_sample_rate_avail);
+	} else {
+		if (priv == AD74413R_DIAG)
+			iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 2, ad74412r_sample_rate_avail);
+		else
+			iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_sample_rate_avail);
+	}
 
 	return strlen(buf);
 }
@@ -623,59 +795,128 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad74413r_iio_desc *desc = dev;
+	enum ad74413r_diag_mode diag_func;
 	enum ad74413r_adc_range range;
 	uint32_t range_val;
 	uint16_t reg_val;
 	int32_t val[2];
 	int ret;
 
-	switch (channel->type) {
-	case IIO_VOLTAGE:
-		if (channel->ch_out) {
-			val[0] = AD74413R_DAC_RANGE;
-			val[1] = AD74413R_DAC_RESOLUTION;
-		} else {
-			ad74413_iio_trig_enable(dev, false);
-			ret = ad74413r_get_adc_range(desc->ad74413r_desc,
-						     channel->address, &reg_val);
-			ad74413_iio_trig_enable(dev, true);
-			if (ret)
-				return ret;
+	switch (priv) {
+	case AD74413R_ADC:
+		switch (channel->type) {
+		case IIO_VOLTAGE:
+			if (channel->ch_out) {
+				val[0] = AD74413R_DAC_RANGE;
+				val[1] = AD74413R_DAC_RESOLUTION;
+			} else {
+				ad74413_iio_trig_enable(dev, false);
+				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+							     channel->address, &reg_val);
+				ad74413_iio_trig_enable(dev, true);
+				if (ret)
+					return ret;
 
-			range = reg_val;
-			ret = ad74413r_range_to_voltage_range(range, &range_val);
-			if (ret)
-				return ret;
+				range = reg_val;
+				ret = ad74413r_range_to_voltage_range(range, &range_val);
+				if (ret)
+					return ret;
 
-			val[0] = range_val;
-			val[1] = AD74413R_ADC_RESOLUTION;
+				val[0] = range_val;
+				val[1] = AD74413R_ADC_RESOLUTION;
+			}
+
+			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
+
+		case IIO_CURRENT:
+			if (channel->ch_out) {
+				val[0] = 2500000;
+				val[1] = AD74413R_SENSE_RESISTOR_OHMS * AD74413R_DAC_CODE_MAX * 1000;
+			} else {
+				ad74413_iio_trig_enable(dev, false);
+				ret = ad74413r_get_adc_range(desc->ad74413r_desc,
+							     channel->address, &reg_val);
+				ad74413_iio_trig_enable(dev, true);
+				if (ret)
+					return ret;
+
+				range = reg_val;
+				ret = ad74413r_range_to_voltage_range(range, &range_val);
+				if (ret)
+					return ret;
+
+				val[0] = range_val;
+				val[1] = AD74413R_ADC_CODE_MAX * AD74413R_SENSE_RESISTOR_OHMS;
+			}
+
+			return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
+
+		default:
+			return -EINVAL;
 		}
+	case AD74413R_DIAG:
+		ad74413_iio_trig_enable(dev, false);
+		ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_DIAG_ASSIGN, &reg_val);
+		ad74413_iio_trig_enable(dev, true);
+		if (ret)
+			return ret;
 
-		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
-
-	case IIO_CURRENT:
-		if (channel->ch_out) {
-			val[0] = 2500000;
-			val[1] = AD74413R_SENSE_RESISTOR_OHMS * AD74413R_DAC_CODE_MAX * 1000;
-		} else {
-			ad74413_iio_trig_enable(dev, false);
-			ret = ad74413r_get_adc_range(desc->ad74413r_desc,
-						     channel->address, &reg_val);
-			ad74413_iio_trig_enable(dev, true);
-			if (ret)
-				return ret;
-
-			range = reg_val;
-			ret = ad74413r_range_to_voltage_range(range, &range_val);
-			if (ret)
-				return ret;
-
-			val[0] = range_val;
-			val[1] = AD74413R_ADC_CODE_MAX * AD74413R_SENSE_RESISTOR_OHMS;
+		diag_func = no_os_field_get(AD74413R_DIAG_ASSIGN_MASK(channel->address),
+					    reg_val);
+		switch (diag_func) {
+		case AD74413R_DIAG_AGND:
+			val[0] = 2500;
+			val[1] = 65535;
+			break;
+		case AD74413R_DIAG_TEMP:
+			val[0] = 1000;
+			val[1] = 8950;
+			break;
+		case AD74413R_DIAG_AVDD:
+			val[0] = 2500 * 16;
+			val[1] = 65535;
+			break;
+		case AD74413R_DIAG_AVSS:
+			val[0] = 1;
+			val[1] = 5624;
+			break;
+		case AD74413R_DIAG_REFOUT:
+			val[0] = 2500;
+			val[1] = (762 * 65535) / 1000;
+			break;
+		case AD74413R_DIAG_ALDO_5V:
+			val[0] = 7 * 2500;
+			val[1] = 65535;
+			break;
+		case AD74413R_DIAG_ALDO_1V8:
+			val[0] = 2330 * 2500;
+			val[1] = 65535 * 1000;
+			break;
+		case AD74413R_DIAG_DLDO_1V8:
+			val[0] = 3 * 2500;
+			val[1] = 65535;
+			break;
+		case AD74413R_DIAG_DVCC:
+			val[0] = 3300 * 2500;
+			val[1] = 65535 * 1000;
+			break;
+		case AD74413R_DIAG_IOVDD:
+			val[0] = 3300 * 2500;
+			val[1] = 65535 * 1000;
+			break;
+		case AD74413R_SENSEL_A:
+		/* fallthrough */
+		case AD74413R_SENSEL_B:
+		case AD74413R_SENSEL_C:
+		case AD74413R_SENSEL_D:
+			val[0] = 12 * 2500;
+			val[1] = 65535;
+			break;
+		default:
+			return -EINVAL;
 		}
-
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
-
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -926,6 +1167,77 @@ static int ad74413r_iio_write_threshold(void *dev, char *buf, uint32_t len,
 	return ret;
 }
 
+static int ad74413r_iio_read_diag_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *iio_desc = dev;
+	struct ad74413r_desc *desc = iio_desc->ad74413r_desc;
+	enum ad74413r_diag_mode mode;
+	uint16_t reg_val;
+	uint32_t ch_idx;
+	int ret;
+
+	ch_idx = channel->address;
+
+	ad74413_iio_trig_enable(dev, false);
+	ret = ad74413r_reg_read(desc, AD74413R_DIAG_ASSIGN, &reg_val);
+	ad74413_iio_trig_enable(dev, true);
+	if (ret)
+		return ret;
+
+	mode = no_os_field_get(AD74413R_DIAG_ASSIGN_MASK(ch_idx), reg_val);
+	strcpy(buf, ad74413r_diag_available[mode]);
+
+	return strlen(buf);
+}
+
+static int ad74413r_iio_write_diag_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *iio_desc = dev;
+	struct ad74413r_desc *desc = iio_desc->ad74413r_desc;
+	uint32_t i;
+	int ret;
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad74413r_diag_available); i++) {
+		if (!strcmp(ad74413r_diag_available[i], buf) &&
+		    ad74413r_is_valid_diag(channel, i)) {
+
+			ad74413_iio_trig_enable(dev, false);
+			ret = ad74413r_set_diag(desc, channel->address, i);
+			ad74413_iio_trig_enable(dev, true);
+			if (ret)
+				return ret;
+			break;
+		}
+
+		if (i == NO_OS_ARRAY_SIZE(ad74413r_diag_available) - 1)
+			return -EINVAL;
+	}
+
+	return 0;
+}
+
+static int ad74413r_iio_read_diag_function_avail(void *dev, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	size_t i;
+
+	strcpy(buf, "");
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad74413r_diag_available); i++) {
+		if (!ad74413r_is_valid_diag(channel, i))
+			continue;
+
+		strcat(buf, ad74413r_diag_available[i]);
+
+		if (i != NO_OS_ARRAY_SIZE(ad74413r_diag_available) - 1)
+			strcat(buf, " ");
+	}
+
+	return strlen(buf);
+}
+
 /**
  * @brief Configure a set if IIO channels based on the operation modes of the enabled
  * physical channels.
@@ -938,18 +1250,27 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	uint32_t n_chan = 0;
 	uint32_t channel_buff_cnt = 0;
 	struct ad74413r_channel_config *config;
+	struct ad74413r_diag_channel_config *diag_config;
 	struct iio_channel *chan;
 	struct iio_channel *chan_buffer;
 	struct ad74413r_channel_map channels_info;
+	enum iio_chan_type diag_type;
 	uint32_t ch_idx;
 	int ret;
 
 	config = iio_desc->channel_configs;
+	diag_config = iio_desc->diag_channel_configs;
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
 			continue;
 		channel_buff_cnt += channel_map[config[i].function].num_channels;
+	}
+
+	for (i = 0; i < AD74413R_N_DIAG_CHANNELS; i++) {
+		if (!diag_config[i].enabled)
+			continue;
+		channel_buff_cnt++;
 	}
 
 	chan_buffer = no_os_calloc(channel_buff_cnt, sizeof(*chan_buffer));
@@ -984,6 +1305,28 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 			chan_buffer[n_chan] = chan[ch_idx];
 			n_chan++;
 		}
+	}
+
+	/* Add the diagnostics channels */
+	for (int i = 0; i < AD74413R_N_DIAG_CHANNELS; i++) {
+		if (!diag_config[i].enabled)
+			continue;
+
+		if (diag_config[i].function == AD74413R_DIAG_TEMP)
+			diag_type = IIO_TEMP;
+		else
+			diag_type = IIO_VOLTAGE;
+
+		ret = ad74413r_set_diag(iio_desc->ad74413r_desc, i,
+					diag_config[i].function);
+		if (ret)
+			goto free_channels;
+
+		chan_buffer[n_chan] = (struct iio_channel)
+				      AD74413R_DIAG_CHANNEL(i + AD74413R_N_DIAG_CHANNELS,
+						      diag_type);
+		chan_buffer[n_chan].scan_index = n_chan;
+		n_chan++;
 	}
 
 	/** Add the DAC channels */
@@ -1030,13 +1373,25 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 	iio_desc->active_channels = mask;
 	iio_desc->no_of_active_channels = no_os_hweight8(mask);
 
-	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
+	for (i = 0; i < AD74413R_N_CHANNELS + AD74413R_N_DIAG_CHANNELS; i++) {
 		if (mask & NO_OS_BIT(i)) {
 			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
 			if (ret)
 				return ret;
-			ret = ad74413r_set_adc_channel_enable(iio_desc->ad74413r_desc,
-							      ch, true);
+
+			if (ch < AD74413R_N_CHANNELS) {
+				ret = ad74413r_set_adc_channel_enable(iio_desc->ad74413r_desc,
+								      ch, true);
+			} else {
+				/*
+				 * For diagnostics channels, ch will be in the [4:7] range,
+				 * so, we'll have to subtract 4 (AD74413R_N_CHANNELS) to
+				 * get their actual index.
+				 */
+				ret = ad74413r_set_diag_channel_enable(iio_desc->ad74413r_desc,
+								       ch - AD74413R_N_CHANNELS, true);
+			}
+
 			if (ret)
 				return ret;
 		}
@@ -1069,6 +1424,12 @@ static int ad74413r_iio_buffer_disable(void *dev)
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		ret = ad74413r_set_adc_channel_enable(iio_desc->ad74413r_desc, i, false);
+		if (ret)
+			return ret;
+	}
+
+	for (i = 0; i < AD74413R_N_DIAG_CHANNELS; i++) {
+		ret = ad74413r_set_diag_channel_enable(iio_desc->ad74413r_desc, i, false);
 		if (ret)
 			return ret;
 	}
@@ -1119,6 +1480,7 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	int ret;
 	uint32_t i;
 	uint32_t ch;
+	uint32_t diag_ch_idx;
 	uint32_t digital_val;
 	uint8_t buff[32] = {0};
 	uint32_t buffer_idx = 0;
@@ -1130,22 +1492,29 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	desc = iio_desc->ad74413r_desc;
 	config = iio_desc->channel_configs;
 
-	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
+	for (i = 0; i < AD74413R_N_CHANNELS + AD74413R_N_CHANNELS; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
 			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
 			if (ret)
 				continue;
 
-			if (config[ch].function == AD74413R_DIGITAL_INPUT ||
-			    config[ch].function == AD74413R_DIGITAL_INPUT_LOOP) {
-				ret = ad74413r_reg_read_raw(desc, AD74413R_DIN_COMP_OUT,
-							    &buff[buffer_idx]);
-				digital_val = no_os_field_get(AD74413R_DIN_COMP_CH(ch),
-							      buff[buffer_idx + 2]);
-				buff[buffer_idx + 1] = 0x0;
-				buff[buffer_idx + 2] = !!digital_val;
+			if (ch < AD74413R_N_DIAG_CHANNELS) {
+				if (config[ch].function == AD74413R_DIGITAL_INPUT ||
+				    config[ch].function == AD74413R_DIGITAL_INPUT_LOOP) {
+					ret = ad74413r_reg_read_raw(desc, AD74413R_DIN_COMP_OUT,
+								    &buff[buffer_idx]);
+					digital_val = no_os_field_get(AD74413R_DIN_COMP_CH(ch),
+								      buff[buffer_idx + 2]);
+					buff[buffer_idx + 1] = 0x0;
+					buff[buffer_idx + 2] = !!digital_val;
+				} else {
+					ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
+								    &buff[buffer_idx]);
+				}
 			} else {
-				ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
+				diag_ch_idx = ch - AD74413R_N_DIAG_CHANNELS;
+				ret = ad74413r_reg_read_raw(desc,
+							    AD74413R_DIAG_RESULT(diag_ch_idx),
 							    &buff[buffer_idx]);
 			}
 
@@ -1191,6 +1560,8 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 
 	memcpy(&descriptor->channel_configs, &init_param->channel_configs,
 	       sizeof(descriptor->channel_configs));
+	memcpy(&descriptor->diag_channel_configs, &init_param->diag_channel_configs,
+	       sizeof(descriptor->diag_channel_configs));
 
 	ret = ad74413r_iio_setup_channels(descriptor);
 	if (ret)
