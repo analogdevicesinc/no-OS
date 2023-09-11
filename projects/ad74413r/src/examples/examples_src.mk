@@ -24,10 +24,8 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
 
-ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))
 SRCS += $(NO-OS)/iio/iio_trigger.c
 INCS += $(NO-OS)/iio/iio_trigger.h
-endif
 
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
