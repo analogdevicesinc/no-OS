@@ -45,6 +45,7 @@
 #include "no_os_gpio.h"
 
 #define AD74413R_N_CHANNELS             4
+#define AD74413R_N_DIAG_CHANNELS	4
 
 #define AD74413R_CH_A                   0
 #define AD74413R_CH_B                   1
