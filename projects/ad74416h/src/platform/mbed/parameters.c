@@ -62,26 +62,27 @@ extern struct mbed_spi_init_param ad74416h_spi_extra = {
 	.use_sw_csb = false
 };
 
-struct no_os_gpio_init_param trigger_gpio_param = {
+/* ADC_RDY GPIO parameters*/
+struct no_os_gpio_init_param adc_rdy_gpio_param = {
 	.port = 0,
 	.pull = NO_OS_PULL_NONE,
-	.number = ARDUINO_UNO_D9,
+	.number = ARDUINO_UNO_D2,
 	.platform_ops = &mbed_gpio_ops,
-	.extra = &mbed_trigger_gpio_extra_init_params
+	.extra = &mbed_adc_rdy_gpio_extra_init_params
 };
 
-struct mbed_gpio_init_param mbed_trigger_gpio_extra_init_params = {
+struct mbed_gpio_init_param mbed_adc_rdy_gpio_extra_init_params = {
 	.pin_mode = 0 //NA
 };
 
-/* Trigger GPIO IRQ parameters */
-struct no_os_irq_init_param trigger_gpio_irq_params = {
+/* ADC_RDY GPIO IRQ parameters */
+struct no_os_irq_init_param adc_rdy_gpio_irq_params = {
 	.irq_ctrl_id = 0,
 	.platform_ops = &mbed_gpio_irq_ops,
-	.extra = &mbed_trigger_gpio_irq_init_params
+	.extra = &mbed_adc_rdy_gpio_irq_init_params
 };
 
-/*GPIO interrupt Mbed platform specific parameters */
-struct mbed_gpio_irq_init_param mbed_trigger_gpio_irq_init_params = {
-	.gpio_irq_pin = ARDUINO_UNO_D9,
+/*ADC_RDY interrupt Mbed platform specific parameters */
+struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_init_params = {
+	.gpio_irq_pin = ARDUINO_UNO_D2,
 };

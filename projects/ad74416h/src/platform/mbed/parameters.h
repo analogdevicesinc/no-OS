@@ -81,9 +81,9 @@
 extern struct mbed_uart_init_param ad74416h_uart_extra_ip;
 extern struct mbed_i2c_init_param ad74416h_i2c_extra;
 extern struct mbed_spi_init_param ad74416h_spi_extra;
-extern struct no_os_gpio_init_param trigger_gpio_param;
-extern struct no_os_irq_init_param trigger_gpio_irq_params;
-extern struct mbed_gpio_init_param mbed_trigger_gpio_extra_init_params;
-extern struct mbed_gpio_irq_init_param mbed_trigger_gpio_irq_init_params;
+extern struct no_os_gpio_init_param adc_rdy_gpio_param;
+extern struct no_os_irq_init_param adc_rdy_gpio_irq_params;
+extern struct mbed_gpio_init_param mbed_adc_rdy_gpio_extra_init_params;
+extern struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_init_params;
 
 #endif /* __PARAMETERS_H__ */

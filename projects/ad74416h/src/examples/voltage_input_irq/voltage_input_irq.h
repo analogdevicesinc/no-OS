@@ -47,7 +47,7 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int voltage_input_irq_example_main();
-int gpio_trigger_init();
+int gpio_adc_rdy_init();
 void adc_rdy_event_handler();
 
 #endif /* __VOLTAGE_INPUT_IRQ_EXAMPLE_H__ */

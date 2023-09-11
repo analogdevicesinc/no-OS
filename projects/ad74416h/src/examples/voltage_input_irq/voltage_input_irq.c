@@ -52,8 +52,8 @@ static struct no_os_callback_desc ext_int_callback_desc = {
 	.callback = adc_rdy_event_handler,
 };
 
-struct no_os_gpio_desc *trigger_gpio_desc;
-struct no_os_irq_ctrl_desc *trigger_irq_desc;
+struct no_os_gpio_desc *adc_rdy_gpio_desc;
+struct no_os_irq_ctrl_desc *adc_rdy_irq_desc;
 
 struct ad74416h_desc *ad74416h_desc;
 
@@ -75,10 +75,10 @@ int voltage_input_irq_example_main()
 	int ret;
 
 	/**
-	  * @brief Initialize the trigger GPIO and associated IRQ event
+	  * @brief Initialize the ADC_RDY GPIO and associated IRQ event
 	  * @return 0 if success, negative error code otherwise
 	  */
-	ret = gpio_trigger_init();
+	ret = gpio_adc_rdy_init();
 	if (ret)
 		goto error;
 	
@@ -138,18 +138,18 @@ error:
 	return 0;
 }
 
-int gpio_trigger_init()
+int gpio_adc_rdy_init()
 {
     int ret;
-    /*Configure GPIO as input */
-    ret = no_os_gpio_get(&trigger_gpio_desc, &trigger_gpio_param);
+    /*Configure ADC_RDY GPIO as input */
+    ret = no_os_gpio_get(&adc_rdy_gpio_desc, &adc_rdy_gpio_param);
     if (ret)
     {
 	    pr_info("Error in gpio_get\r\n");
             return ret;
     }
 
-    ret = no_os_gpio_direction_input(trigger_gpio_desc);
+    ret = no_os_gpio_direction_input(adc_rdy_gpio_desc);
     if (ret)
     {
 	    pr_info("Error in direction_input\r\n");
@@ -157,7 +157,7 @@ int gpio_trigger_init()
     }
 
     /*Init interrup controller for external interrupt*/
-    ret = no_os_irq_ctrl_init(&trigger_irq_desc, &trigger_gpio_irq_params);
+    ret = no_os_irq_ctrl_init(&adc_rdy_irq_desc, &adc_rdy_gpio_irq_params);
     if (ret)
     {
 	    pr_info("Error in irq init\r\n");
@@ -165,14 +165,14 @@ int gpio_trigger_init()
     }
 
     /*Register a callback function for external interrupt */
-    ret = no_os_irq_register_callback(trigger_irq_desc, GPIO_IRQ_ID1, &ext_int_callback_desc);
+    ret = no_os_irq_register_callback(adc_rdy_irq_desc, GPIO_IRQ_ID1, &ext_int_callback_desc);
     if (ret)
     {
 	    pr_info("error in register callback\r\n");
 	    return ret;
     }
 
-    ret = no_os_irq_trigger_level_set(trigger_irq_desc, GPIO_IRQ_ID1, NO_OS_IRQ_EDGE_FALLING);
+    ret = no_os_irq_trigger_level_set(adc_rdy_irq_desc, GPIO_IRQ_ID1, NO_OS_IRQ_EDGE_FALLING);
     if (ret)
     {
 	    pr_info("Error in level set\r\n");
@@ -180,7 +180,7 @@ int gpio_trigger_init()
     }
 
     /*Enable external interrupt*/
-    ret = no_os_irq_enable(trigger_irq_desc, GPIO_IRQ_ID1);
+    ret = no_os_irq_enable(adc_rdy_irq_desc, GPIO_IRQ_ID1);
     if (ret)
     {
 	    pr_info("error in enable irq\r\n");
