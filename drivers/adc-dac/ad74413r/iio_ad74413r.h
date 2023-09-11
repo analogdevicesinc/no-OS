@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include "iio.h"
 #include "ad74413r.h"
+#include "iio_trigger.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -57,6 +58,8 @@ struct ad74413r_iio_desc {
 	uint32_t active_channels;
 	uint8_t no_of_active_channels;
 	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS];
+	struct iio_hw_trig *trigger;
+	enum ad74413r_conv_seq conv_state;
 };
 
 /**
@@ -65,6 +68,7 @@ struct ad74413r_iio_desc {
 struct ad74413r_iio_desc_init_param {
 	struct ad74413r_init_param *ad74413r_init_param;
 	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS];
+	struct iio_hw_trig *trigger;
 };
 
 /**
