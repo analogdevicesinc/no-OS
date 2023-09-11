@@ -19,6 +19,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/frequency/ad9528/ad9528.c \
 	$(DRIVERS)/adc/ad9680/ad9680.c \
@@ -63,6 +64,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
 	$(DRIVERS)/frequency/ad9528/ad9528.h \
 	$(DRIVERS)/adc/ad9680/ad9680.h \
