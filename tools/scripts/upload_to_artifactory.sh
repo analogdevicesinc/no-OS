@@ -52,6 +52,7 @@ ART_TOKEN="${3:-$(ARTIFACTORY_TOKEN)}"
 BRANCH="${4:-$(Build.SourceBranchName)}"
 BINARY_ALIAS="noos_projects_binaries"
 SRC_ALIAS="_no-os_sources"
+PYSCRIPT_PATH="tools/scripts/upload_to_artifactory.py"
 
 # Timestamp Variable
 timestamp=$(date +%Y_%m_%d-%H_%M)
@@ -66,7 +67,7 @@ cd ${WORKING_DIRECTORY}/${BINARY_ALIAS}
 
 # Upload artifacts to Artifactory for each platform
 for platform in "${platform_list[@]}"; do
-	python3 ${WORKING_DIRECTORY}/${SRC_ALIAS}/tools/scripts/upload_to_artifactory.py \
+	python3 ${WORKING_DIRECTORY}/${SRC_ALIAS}/${PYSCRIPT_PATH} \
 	--base_path ${ART_PATH} --server_path no-OS/${BRANCH}/${timestamp}/${platform} \
 	--local_path noos_exports_${platform} --token ${ART_TOKEN} --props_level 1 \
 	--properties "git_sha=${short_hash}" --log_file upload_to_artifactory_log.txt --no_rel_path
