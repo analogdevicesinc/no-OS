@@ -52,7 +52,7 @@ ART_TOKEN="${3:-$(ARTIFACTORY_TOKEN)}"
 BRANCH="${4:-$(Build.SourceBranchName)}"
 BINARY_ALIAS="noos_projects_binaries"
 SRC_ALIAS="_no-os_sources"
-PYSCRIPT_PATH="tools/scripts/upload_to_artifactory.py"
+PYSCRIPT_PATH="ci/release/upload_to_artifactory.py"
 
 # Timestamp Variable
 timestamp=$(date +%Y_%m_%d-%H_%M)
