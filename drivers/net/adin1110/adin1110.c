@@ -865,57 +865,70 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-	ret = no_os_spi_init(&descriptor->comm_desc, &param->comm_param);
+	ret = no_os_gpio_get_optional(&descriptor->reset_gpio, &param->reset_param);
 	if (ret)
 		goto free_desc;
+
+	if (descriptor->reset_gpio) {
+		ret = no_os_gpio_direction_output(descriptor->reset_gpio, NO_OS_GPIO_LOW);
+		if (ret)
+			goto free_rst_gpio;
+
+		/*
+		 * Minimum required time for the reset GPIO to be in the low state
+		 * in order to reset the ADIN1110.
+		 */
+		no_os_mdelay(10);
+
+		ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto free_rst_gpio;
+
+		/* Wait for the MAC and PHY digital interface to intialize after reset */
+		no_os_mdelay(90);
+	}
+
+	ret = no_os_spi_init(&descriptor->comm_desc, &param->comm_param);
+	if (ret)
+		goto free_rst_gpio;
 
 	no_os_crc8_populate_msb(_crc_table, ADIN1110_CRC_POLYNOMIAL);
 	strncpy((char *)descriptor->mac_address, (char *)param->mac_address,
 		ADIN1110_MAC_LEN);
 
-	ret = no_os_gpio_get(&descriptor->reset_gpio, &param->reset_param);
-	if (ret)
-		goto free_spi;
-
-	ret = no_os_gpio_direction_output(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
-	if (ret)
-		goto free_rst_gpio;
-
 	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
 	descriptor->chip_type = param->chip_type;
 	descriptor->append_crc = param->append_crc;
 
-	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
-	if (ret)
-		goto free_rst_gpio;
+	if (!descriptor->reset_gpio) {
+		ret = adin1110_sw_reset(descriptor);
+		if (ret)
+			goto free_spi;
 
-	ret = adin1110_sw_reset(descriptor);
-	if (ret)
-		goto free_rst_gpio;
-
-	/* Wait for the MAC and PHY digital interface to intialize */
-	no_os_mdelay(90);
+		/* Wait for the MAC and PHY digital interface to intialize */
+		no_os_mdelay(90);
+	}
 
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
-		goto free_rst_gpio;
+		goto free_spi;
 
 	ret = adin1110_setup_phy(descriptor);
 	if (ret)
-		goto free_rst_gpio;
+		goto free_spi;
 
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
-		goto free_rst_gpio;
+		goto free_spi;
 
 	*desc = descriptor;
 
 	return 0;
 
-free_rst_gpio:
-	no_os_gpio_remove(descriptor->reset_gpio);
 free_spi:
 	no_os_spi_remove(descriptor->comm_desc);
+free_rst_gpio:
+	no_os_gpio_remove(descriptor->reset_gpio);
 free_desc:
 	free(descriptor);
 
@@ -938,9 +951,11 @@ int adin1110_remove(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	ret = no_os_gpio_remove(desc->reset_gpio);
-	if (ret)
-		return ret;
+	if (desc->reset_gpio) {
+		ret = no_os_gpio_remove(desc->reset_gpio);
+		if (ret)
+			return ret;
+	}
 
 	free(desc);
 
