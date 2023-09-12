@@ -67,7 +67,7 @@ static const unsigned int ad74413r_debounce_map[AD74413R_DIN_DEBOUNCE_LEN] = {
 };
 
 /** The time required for an ADC conversion by rejection (us) */
-static const uint32_t conv_times_ad74413r[] = { 208, 833, 50000, 100000 };
+static const uint32_t conv_times_ad74413r[] = { 50000, 208, 100000, 833 };
 static const uint32_t conv_times_ad74412r[] = { 50000, 208};
 
 /******************************************************************************/
