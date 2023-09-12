@@ -85,5 +85,9 @@ extern struct no_os_gpio_init_param adc_rdy_gpio_param;
 extern struct no_os_irq_init_param adc_rdy_gpio_irq_params;
 extern struct mbed_gpio_init_param mbed_adc_rdy_gpio_extra_init_params;
 extern struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_init_params;
+extern struct no_os_gpio_init_param alert_pin_gpio_param;
+extern struct no_os_irq_init_param alert_pin_gpio_irq_params;
+extern struct mbed_gpio_init_param mbed_alert_pin_gpio_extra_init_params;
+extern struct mbed_gpio_irq_init_param mbed_alert_pin_gpio_irq_init_params;
 
 #endif /* __PARAMETERS_H__ */

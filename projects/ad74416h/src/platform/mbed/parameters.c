@@ -86,3 +86,28 @@ struct no_os_irq_init_param adc_rdy_gpio_irq_params = {
 struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_init_params = {
 	.gpio_irq_pin = ARDUINO_UNO_D2,
 };
+
+/* FAULT GPIO parameters */
+struct no_os_gpio_init_param alert_pin_gpio_param = {
+	.port = 0,
+	.pull = NO_OS_PULL_NONE,
+	.number = ARDUINO_UNO_D7,
+	.platform_ops = &mbed_gpio_ops,
+	.extra = &mbed_alert_pin_gpio_extra_init_params
+};
+
+struct mbed_gpio_init_param mbed_alert_pin_gpio_extra_init_params = {
+	.pin_mode = 0 //NA
+};
+
+/*FAULT pin GPIO IRQ Parameters */
+struct no_os_irq_init_param alert_pin_gpio_irq_params = {
+	.irq_ctrl_id = 1,
+	.platform_ops = &mbed_gpio_irq_ops,
+	.extra = &mbed_alert_pin_gpio_irq_init_params
+};
+
+/*FAULT Pin interrupt Mbed platform specific parameters*/
+struct mbed_gpio_irq_init_param mbed_alert_pin_gpio_irq_init_params = {
+	.gpio_irq_pin = ARDUINO_UNO_D7,
+};
