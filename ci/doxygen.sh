@@ -45,6 +45,15 @@ build_doc(){
 
         echo_green "Documentation was generated successfully!"
 }
+
+build_sphinx() {
+        pushd ${TOP_DIR}/doc/sphinx
+
+        sphinx-build ./source/ ./build
+
+        popd
+}
+
 ############################################################################
 # If the current build is not a pull request and it is on master the 
 # documentation will be pushed to the gh-pages branch
@@ -79,6 +88,14 @@ update_gh_pages() {
 
                 rm -rf ${TOP_DIR}/doc/doxygen
 
+                # Remove root content except the doxygen folder
+                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! -name "doxygen" -exec rm -r {} \;
+
+                # Add sphinx generated doc to root folder
+                cp -R ${TOP_DIR}/doc/sphinx/build/* ${TOP_DIR}
+
+                rm -rf ${TOP_DIR}/doc/sphinx
+
                 CURRENT_COMMIT=$(git log -1 --pretty=%B)
                 if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
                 then
@@ -100,5 +117,7 @@ update_gh_pages() {
 }
 
 build_doc
+
+build_sphinx
 
 update_gh_pages
