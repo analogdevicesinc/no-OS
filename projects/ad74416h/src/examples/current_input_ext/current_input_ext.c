@@ -45,6 +45,7 @@
 #include "ad74416h.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "math.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -62,6 +63,7 @@ int current_input_ext_example_main()
 
 	union ad74416h_live_status status;
 	uint32_t adc_value = 0;
+	double calculated_current = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -120,6 +122,8 @@ int current_input_ext_example_main()
 				goto error_ad74416h;
 			}
 			pr_info("The ADC input value is %0x\r\n", adc_value);
+			calculated_current = (adc_value/pow(2,24)) * 0.3125 / 12;
+			pr_info("Calculated current = %.6f mA\r\n", calculated_current*1000);
 		}
 	}
 

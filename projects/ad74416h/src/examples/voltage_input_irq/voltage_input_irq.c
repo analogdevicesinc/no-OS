@@ -47,6 +47,7 @@
 #include "no_os_print_log.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
+#include <math.h>
 
 static struct no_os_callback_desc ext_int_callback_desc = {
 	.callback = adc_rdy_event_handler,
@@ -73,6 +74,8 @@ int voltage_input_irq_example_main()
 {
 	//struct ad74416h_desc *ad74416h_desc;
 	int ret;
+
+	double calculated_voltage = 0.0;
 
 	/**
 	  * @brief Initialize the ADC_RDY GPIO and associated IRQ event
@@ -126,6 +129,8 @@ int voltage_input_irq_example_main()
 		if(sendResultToUart == 1)
 		{
 		        pr_info("ADC Input value = %0x\r\n", adc_value);
+			calculated_voltage = (double)(adc_value / pow(2,24)) * 12;
+			pr_info("Calculated voltage = %.6f\r\n", calculated_voltage);
 			sendResultToUart = 0;
 		}
 	}
