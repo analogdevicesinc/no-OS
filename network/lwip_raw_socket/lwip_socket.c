@@ -419,15 +419,14 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 	if (!sock->pcb)
 		return 0;
 
-	tcp_recv(sock->pcb, NULL);
-	tcp_err(sock->pcb, NULL);
-
 	if (sock->p) {
 		tcp_recved(sock->pcb, sock->p->tot_len);
 		pbuf_free(sock->p);
 	}
 
 	tcp_close(sock->pcb);
+	tcp_recv(sock->pcb, NULL);
+	tcp_err(sock->pcb, NULL);
 
 	sock->p_idx = 0;
 	sock->pcb = NULL;
