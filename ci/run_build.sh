@@ -57,7 +57,7 @@ build_drivers() {
 }
 
 build_doxygen() {
-    sudo apt-get install -y graphviz
+    sudo apt-get install -y graphviz python3-sphinx
     # Install a recent version of doxygen
 	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.17/doxygen-1.8.17.src.tar.gz/"
 	mkdir -p "${DEPS_DIR}"
