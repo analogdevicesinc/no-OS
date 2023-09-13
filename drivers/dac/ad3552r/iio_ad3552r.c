@@ -90,8 +90,8 @@ struct iio_ad3552r_desc {
 /************************* Functions Definitions *****************************/
 /*****************************************************************************/
 
-static ssize_t iio_ad3552r_attr_get(void *device, char *buf, size_t len,
-				    const struct iio_ch_info *channel, intptr_t priv)
+static int iio_ad3552r_attr_get(void *device, char *buf, size_t len,
+				const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct iio_ad3552r_desc *iio_dac = device;
 	int32_t vals[2], err;
@@ -140,8 +140,8 @@ static ssize_t iio_ad3552r_attr_get(void *device, char *buf, size_t len,
 	}
 }
 
-static ssize_t iio_ad3552r_attr_set(void *device, char *buf, size_t len,
-				    const struct iio_ch_info *channel, intptr_t priv)
+static int iio_ad3552r_attr_set(void *device, char *buf, size_t len,
+				const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct iio_ad3552r_desc *iio_dac = device;
 	uint32_t val;
