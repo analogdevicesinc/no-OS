@@ -285,7 +285,6 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t dhcp_timeout = 20000;
 	int ret;
 	int i;
 
@@ -309,10 +308,15 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	lwip_init();
 
+#ifdef NO_OS_STATIC_IP
+	IP4_ADDR(&ipaddr, 169, 254, 97, 40);
+	IP4_ADDR(&netmask, 255, 255, 0, 0);
+	IP4_ADDR(&gw, 0, 0, 0, 0);
+#else
 	ip4_addr_set_zero(&ipaddr);
 	ip4_addr_set_zero(&netmask);
 	ip4_addr_set_zero(&gw);
-
+#endif
 	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, descriptor, lwip_netif_init,
 		  ethernet_input);
 	descriptor->lwip_netif = netif_descriptor;
@@ -327,6 +331,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	netif_set_up(netif_descriptor);
 
 	netif_set_link_up(netif_descriptor);
+
+#ifndef NO_OS_STATIC_IP
+	uint32_t dhcp_timeout = 20000;
 	ret = dhcp_start(netif_descriptor);
 	if (ret)
 		goto platform_remove;
@@ -347,6 +354,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 		printf("LWIP configuration timed out\n");
 		goto platform_remove;
 	}
+#endif
 
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);
 	if (ret)
