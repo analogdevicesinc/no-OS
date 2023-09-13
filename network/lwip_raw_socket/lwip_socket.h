@@ -51,6 +51,10 @@
 #define NO_OS_DOMAIN_NAME	"analog"
 #define NO_OS_MAX_SOCKETS	10
 
+#ifndef NO_OS_LWIP_INIT_ONETIME
+#define NO_OS_LWIP_INIT_ONETIME		0
+#endif
+
 struct lwip_network_desc;
 
 struct lwip_socket_desc {
