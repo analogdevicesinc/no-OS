@@ -166,13 +166,22 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 				  struct iio_init_param *iio_init_param)
 {
 	static struct tcp_socket_init_param socket_param;
+	static struct lwip_network_desc lwip_desc;
+	static bool is_initialized = false;
 	int ret;
 
-	ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
-	if (ret)
-		return ret;
+	if (NO_OS_LWIP_INIT_ONETIME && is_initialized) {
+		socket_param.net = &lwip_desc.no_os_net;
+	} else {
+		ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
+		if (ret)
+			return ret;
 
-	socket_param.net = &app->lwip_desc->no_os_net;
+		socket_param.net = &app->lwip_desc->no_os_net;
+		memcpy(&lwip_desc, app->lwip_desc, sizeof(lwip_desc));
+	}
+
+	is_initialized = true;
 	socket_param.max_buff_size = 0;
 
 	iio_init_param->phy_type = USE_NETWORK;
