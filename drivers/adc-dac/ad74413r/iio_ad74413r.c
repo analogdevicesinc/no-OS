@@ -287,6 +287,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 {
 	int32_t val;
 	enum ad74413r_adc_range range;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
 	switch (channel->type) {
 	case IIO_VOLTAGE:
@@ -296,7 +297,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 		if (channel->ch_out) {
 			val = 0;
 		} else {
-			ad74413r_get_adc_range(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
+			ad74413r_get_adc_range(iio_desc->ad74413r_desc,
 					       channel->address, &range);
 
 			switch (range) {
@@ -336,11 +337,12 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	uint16_t val;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
 	if (channel->ch_out)
 		return -EINVAL;
 
-	ret = ad74413r_get_adc_single(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
+	ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
 				      channel->address, &val);
 	if (ret)
 		return ret;
@@ -361,6 +363,7 @@ static int ad74413r_iio_write_raw(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
 	switch (channel->type) {
 	case IIO_VOLTAGE:
@@ -369,8 +372,8 @@ static int ad74413r_iio_write_raw(void *dev, char *buf, uint32_t len,
 
 		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
-		return ad74413r_set_channel_dac_code(((struct ad74413r_iio_desc *)
-						      dev)->ad74413r_desc, channel->address, val);
+		return ad74413r_set_channel_dac_code(iio_desc->ad74413r_desc,
+						     channel->address, val);
 
 	default:
 		return -EINVAL;
@@ -391,8 +394,9 @@ static int ad74413r_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	enum ad74413r_adc_sample val;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
-	ret = ad74413r_get_adc_rate(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
+	ret = ad74413r_get_adc_rate(iio_desc->ad74413r_desc,
 				    channel->address, &val);
 	if (ret)
 		return ret;
@@ -413,11 +417,11 @@ static int ad74413r_iio_write_sampling_freq(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	uint32_t val;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
 	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&val, NULL);
 
-	return ad74413r_set_adc_rate(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
-				     channel->address, val);
+	return ad74413r_set_adc_rate(iio_desc->ad74413r_desc, channel->address, val);
 }
 
 /**
@@ -433,7 +437,9 @@ static int ad74413r_iio_read_sampling_freq_avail(void *dev, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
-	if (((struct ad74413r_iio_desc *)dev)->ad74413r_desc->chip_id == AD74412R)
+	struct ad74413r_iio_desc *iio_desc = dev;
+
+	if (iio_desc->ad74413r_desc->chip_id == AD74412R)
 		iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 2, ad74412r_sample_rate_avail);
 	else
 		iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_sample_rate_avail);
@@ -497,10 +503,11 @@ static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 	int ret;
 	int32_t val;
 	struct ad74413r_decimal decimal_val;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
 	switch (channel->type) {
 	case IIO_RESISTANCE:
-		ret = ad74413r_adc_get_value(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
+		ret = ad74413r_adc_get_value(iio_desc->ad74413r_desc,
 					     channel->address,
 					     &decimal_val);
 		if (ret)
@@ -604,8 +611,9 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
  */
 static int ad74413r_iio_buffer_disable(void *dev)
 {
-	return ad74413r_set_adc_conv_seq(((struct ad74413r_iio_desc *)
-					  dev)->ad74413r_desc,
+	struct ad74413r_iio_desc *iio_desc = dev;
+
+	return ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc,
 					 AD74413R_STOP_PWR_DOWN);
 }
 
@@ -622,11 +630,12 @@ static int ad74413r_iio_read_samples(void *dev, uint32_t *buf, uint32_t samples)
 	uint32_t j = 0;
 	uint32_t val;
 	uint32_t i, chan_i;
+	struct ad74413r_iio_desc *iio_desc = dev;
 
 	for (i = 0; i < samples; i++) {
 		for (chan_i = 0; chan_i < AD74413R_N_CHANNELS; chan_i++) {
-			if (((struct ad74413r_iio_desc *)dev)->active_channels & NO_OS_BIT(chan_i)) {
-				ret = ad74413r_reg_read_raw(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
+			if (iio_desc->active_channels & NO_OS_BIT(chan_i)) {
+				ret = ad74413r_reg_read_raw(iio_desc->ad74413r_desc,
 							    AD74413R_ADC_RESULT(chan_i),
 							    (uint8_t *)&val);
 				if (ret)
