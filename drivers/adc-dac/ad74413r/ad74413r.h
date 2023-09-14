@@ -139,7 +139,7 @@
 #define AD74413R_CH_EN_MASK(x)                  NO_OS_BIT(x)
 
 /** DIAG_ASSIGN register */
-#define AD74413R_DIAG_ASSIGN_MASK(x)		(NO_OS_GENMASK(3, 0) << (x))
+#define AD74413R_DIAG_ASSIGN_MASK(x)		(NO_OS_GENMASK(3, 0) << (x * 4))
 
 /** The maximum voltage output of the DAC is 11V */
 #define AD74413R_DAC_RANGE			11000
