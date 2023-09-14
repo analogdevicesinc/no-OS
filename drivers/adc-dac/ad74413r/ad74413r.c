@@ -630,6 +630,55 @@ int ad74413r_set_adc_rate(struct ad74413r_desc *desc, uint32_t ch,
 }
 
 /**
+ * @brief Get the ADC sample rate for the diagnostics channels.
+ * @param desc - The device structure.
+ * @param ch - The diagnostics channel index.
+ * @param val - The ADC sample rate value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad74413r_get_adc_diag_rate(struct ad74413r_desc *desc, uint32_t ch,
+			       enum ad74413r_adc_sample *val)
+{
+	uint16_t reg_val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONV_CTRL, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val = no_os_field_get(AD74413R_EN_REJ_DIAG_MASK, reg_val);
+
+	return ad74413r_rejection_to_rate(reg_val, val);
+}
+
+/**
+ * @brief Set the ADC sample rate for the diagnostics channels.
+ * @param desc - The device structure.
+ * @param ch - The diagnostics channel index.
+ * @param val - The ADC sample rate value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad74413r_set_adc_diag_rate(struct ad74413r_desc *desc, uint32_t ch,
+			       enum ad74413r_adc_sample val)
+{
+	uint16_t reg_val;
+
+	switch (val) {
+	case AD74413R_ADC_SAMPLE_20HZ:
+		reg_val = no_os_field_prep(AD74413R_EN_REJ_DIAG_MASK, 1);
+		break;
+	case AD74413R_ADC_SAMPLE_4800HZ:
+		reg_val = no_os_field_prep(AD74413R_EN_REJ_DIAG_MASK, 0);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return ad74413r_reg_update(desc, AD74413R_ADC_CONV_CTRL,
+				   AD74413R_EN_REJ_DIAG_MASK, reg_val);
+}
+
+/**
  * @brief Start or stop ADC conversions.
  * @param desc - The device structure.
  * @param status - The ADC conversion sequence.

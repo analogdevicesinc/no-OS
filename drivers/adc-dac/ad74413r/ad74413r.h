@@ -433,6 +433,14 @@ int ad74413r_get_adc_rate(struct ad74413r_desc *, uint32_t,
 int ad74413r_set_adc_rate(struct ad74413r_desc *, uint32_t,
 			  enum ad74413r_adc_sample);
 
+/** Get the ADC sample rate for the diagnostics channels. */
+int ad74413r_get_adc_diag_rate(struct ad74413r_desc *, uint32_t,
+			       enum ad74413r_adc_sample *);
+
+/** Set the ADC sample rate for the diagnostics channels. */
+int ad74413r_set_adc_diag_rate(struct ad74413r_desc *, uint32_t,
+			       enum ad74413r_adc_sample);
+
 /** Start or stop ADC conversions */
 int ad74413r_set_adc_conv_seq(struct ad74413r_desc *, enum ad74413r_conv_seq);
 
