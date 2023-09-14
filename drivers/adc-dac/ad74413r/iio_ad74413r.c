@@ -257,7 +257,16 @@ static struct iio_device ad74413r_iio_dev = {
 static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 				 uint32_t *readval)
 {
-	return ad74413r_reg_read(dev->ad74413r_desc, reg, (uint16_t *)readval);
+	uint16_t reg_val;
+	int ret;
+
+	ret = ad74413r_reg_read(dev->ad74413r_desc, reg, &reg_val);
+	if (ret)
+		return ret;
+
+	*readval = reg_val;
+
+	return 0;
 }
 
 /**
@@ -270,7 +279,7 @@ static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 static int ad74413r_iio_write_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
 				  uint32_t writeval)
 {
-	return ad74413r_reg_write(dev->ad74413r_desc, reg, (uint16_t)writeval);
+	return ad74413r_reg_write(dev->ad74413r_desc, reg, writeval);
 }
 
 /**
@@ -286,6 +295,7 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val;
+	uint16_t reg_val;
 	enum ad74413r_adc_range range;
 	struct ad74413r_iio_desc *iio_desc = dev;
 
@@ -298,8 +308,9 @@ static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 			val = 0;
 		} else {
 			ad74413r_get_adc_range(iio_desc->ad74413r_desc,
-					       channel->address, &range);
+					       channel->address, &reg_val);
 
+			range = reg_val;
 			switch (range) {
 			case AD74413R_ADC_RANGE_10V:
 			case AD74413R_ADC_RANGE_2P5V_EXT_POW:
@@ -336,18 +347,21 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint16_t val;
 	struct ad74413r_iio_desc *iio_desc = dev;
+	uint16_t reg_val;
+	int32_t val;
 
 	if (channel->ch_out)
 		return -EINVAL;
 
 	ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
-				      channel->address, &val);
+				      channel->address, &reg_val);
 	if (ret)
 		return ret;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+	val = reg_val;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
 
 /**
@@ -393,15 +407,18 @@ static int ad74413r_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	enum ad74413r_adc_sample val;
+	int32_t val;
 	struct ad74413r_iio_desc *iio_desc = dev;
+	enum ad74413r_adc_sample sampling_frequency;
 
 	ret = ad74413r_get_adc_rate(iio_desc->ad74413r_desc,
-				    channel->address, &val);
+				    channel->address, &sampling_frequency);
 	if (ret)
 		return ret;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+	val = sampling_frequency;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
 
 /**
