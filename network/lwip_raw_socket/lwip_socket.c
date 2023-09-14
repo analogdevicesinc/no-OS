@@ -468,8 +468,7 @@ static err_t lwip_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 		sock->p = p;
 		sock->p_idx = 0;
 	} else {
-		if (p != sock->p)
-			pbuf_chain(sock->p, p);
+		pbuf_cat(sock->p, p);
 	}
 
 	return ERR_OK;
