@@ -80,21 +80,17 @@ update_gh_pages() {
 
                 git checkout gh-pages
 
-                # Clear previous content in the doxygen folder
-                rm -rf ${TOP_DIR}/doxygen
+                # Clear previous content in the root folder except the doc path which holds new builds
+                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! -name "doc" -exec rm -r {} \;
 
+                # Create doxygen folder holding new build content
                 mkdir -p ${TOP_DIR}/doxygen
                 cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}/doxygen/
 
-                rm -rf ${TOP_DIR}/doc/doxygen
-
-                # Remove root content except the doxygen folder
-                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! -name "doxygen" -exec rm -r {} \;
-
-                # Add sphinx generated doc to root folder
+                # Add sphinx build content to root folder
                 cp -R ${TOP_DIR}/doc/sphinx/build/* ${TOP_DIR}
 
-                rm -rf ${TOP_DIR}/doc/sphinx
+                rm -rf ${TOP_DIR}/doc
 
                 CURRENT_COMMIT=$(git log -1 --pretty=%B)
                 if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
