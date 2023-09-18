@@ -307,6 +307,7 @@ int32_t axi_pwm_init(struct no_os_pwm_desc **desc,
 	pwm_desc->duty_cycle_ns = param->duty_cycle_ns;
 	pwm_desc->period_ns = param->period_ns;
 	pwm_desc->polarity = param->polarity;
+	pwm_desc->phase_ns = param->phase_ns;
 
 	ret = no_os_axi_io_read(axi_desc->base_addr,
 				AXI_PWMGEN_REG_NPWM,
