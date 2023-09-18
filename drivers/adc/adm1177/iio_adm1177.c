@@ -229,7 +229,7 @@ int adm1177_iio_init(struct adm1177_iio_dev **iio_dev,
 
 	desc = (struct adm1177_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
-		return desc;
+		return -ENOMEM;
 
 	desc->iio_dev = &adm1177_iio_dev;
 
