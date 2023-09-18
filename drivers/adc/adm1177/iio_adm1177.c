@@ -122,7 +122,6 @@ static int adm1177_iio_read_scale(void *device, char *buf, uint32_t len,
 static int adm1177_iio_update_channels(void *device, uint32_t mask)
 {
 	struct adm1177_iio_dev *iio_adm1177;
-	uint8_t counter = 0;
 
 	if (!device)
 		return -EINVAL;
