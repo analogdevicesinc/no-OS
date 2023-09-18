@@ -485,7 +485,7 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 					AD74413R_DAC_CODE(channel->address), &reg_val);
 	else
 		ret = ad74413r_get_adc_single(iio_desc->ad74413r_desc,
-					      channel->address, &reg_val);
+					      channel->address, &reg_val, false);
 
 	ad74413_iio_trig_enable(dev, true);
 	if (ret)

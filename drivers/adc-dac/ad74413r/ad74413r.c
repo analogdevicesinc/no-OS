@@ -325,7 +325,7 @@ int ad74413r_nb_active_channels(struct ad74413r_desc *desc,
 	if (ret)
 		return ret;
 
-	reg_val = no_os_field_get(NO_OS_GENMASK(3, 0), reg_val);
+	reg_val = no_os_field_get(NO_OS_GENMASK(7, 0), reg_val);
 	*nb_channels = no_os_hweight8((uint8_t)reg_val);
 
 	return 0;
@@ -551,6 +551,31 @@ int ad74413r_get_adc_rejection(struct ad74413r_desc *desc, uint32_t ch,
 }
 
 /**
+ * @brief Get the rejection setting for a specific channel.
+ * @param desc - The device structure.
+ * @param val - The ADC rejection setting.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad74413r_get_adc_diag_rejection(struct ad74413r_desc *desc,
+				    enum ad74413r_rejection *val)
+{
+	int ret;
+	uint16_t reg_val;
+
+	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONV_CTRL, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val = no_os_field_get(AD74413R_EN_REJ_DIAG_MASK, reg_val);
+	if (reg_val)
+		*val = AD74413R_REJECTION_50_60;
+	else
+		*val = AD74413R_REJECTION_NONE;
+
+	return 0;
+}
+
+/**
  * @brief Set the rejection setting for a specific channel.
  * @param desc - The device structure.
  * @param ch - The channel index.
@@ -633,17 +658,21 @@ int ad74413r_set_adc_conv_seq(struct ad74413r_desc *desc,
  * @param desc - The device structure.
  * @param ch - The channel index.
  * @param val - The ADC raw result.
+ * @param is_diag - Select which channel type does the index refer to (I/O or diagnostics).
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
-			    uint16_t *val)
+			    uint16_t *val, bool is_diag)
 {
 	int ret;
 	uint32_t delay;
 	uint8_t nb_active_channels;
 	enum ad74413r_rejection rejection;
 
-	ret = ad74413r_set_adc_channel_enable(desc, ch, true);
+	if (is_diag)
+		ret = ad74413r_set_diag_channel_enable(desc, ch, true);
+	else
+		ret = ad74413r_set_adc_channel_enable(desc, ch, true);
 	if (ret)
 		return ret;
 
@@ -655,7 +684,10 @@ int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	ret = ad74413r_get_adc_rejection(desc, ch, &rejection);
+	if (is_diag)
+		ret = ad74413r_get_adc_diag_rejection(desc, &rejection);
+	else
+		ret = ad74413r_get_adc_rejection(desc, ch, &rejection);
 	if (ret)
 		return ret;
 
@@ -670,13 +702,19 @@ int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
 	else
 		no_os_mdelay((delay * nb_active_channels) / 1000);
 
-	ret = ad74413r_get_raw_adc_result(desc, ch, val);
+	if (is_diag)
+		ret = ad74413r_get_diag(desc, ch, val);
+	else
+		ret = ad74413r_get_raw_adc_result(desc, ch, val);
 	if (ret)
 		return ret;
 
 	ret = ad74413r_set_adc_conv_seq(desc, AD74413R_STOP_PWR_DOWN);
 	if (ret)
 		return ret;
+
+	if (is_diag)
+		return ad74413r_set_diag_channel_enable(desc, ch, false);
 
 	return ad74413r_set_adc_channel_enable(desc, ch, false);
 }
@@ -695,7 +733,7 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 	int ret;
 	uint16_t adc_code;
 
-	ret = ad74413r_get_adc_single(desc, ch, &adc_code);
+	ret = ad74413r_get_adc_single(desc, ch, &adc_code, false);
 	if (ret)
 		return ret;
 
