@@ -81,7 +81,7 @@ update_gh_pages() {
                 git checkout gh-pages
 
                 # Clear previous content in the root folder except the doc path which holds new builds
-                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! -name "doc" -exec rm -r {} \;
+                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! \( -name "doc" -o -name ".git" \) -exec rm -r {} \;
 
                 # Create doxygen folder holding new build content
                 mkdir -p ${TOP_DIR}/doxygen
