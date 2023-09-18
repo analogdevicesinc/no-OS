@@ -138,6 +138,7 @@
 #define AD74413R_DIN_COMP_CH(x)			NO_OS_BIT(x)
 
 /** ADC_CONV_CTRL register */
+#define AD74413R_EN_REJ_DIAG_MASK		NO_OS_BIT(10)
 #define AD74413R_CONV_SEQ_MASK                  NO_OS_GENMASK(9, 8)
 #define AD74413R_DIAG_EN_MASK(x)		(NO_OS_BIT(x) << 4)
 #define AD74413R_CH_EN_MASK(x)                  NO_OS_BIT(x)
@@ -416,6 +417,10 @@ int ad74413r_get_adc_range(struct ad74413r_desc *, uint32_t, uint16_t *);
 int ad74413r_get_adc_rejection(struct ad74413r_desc *, uint32_t,
 			       enum ad74413r_rejection *);
 
+/** Get the rejection setting for any diagnostics channel */
+int ad74413r_get_adc_diag_rejection(struct ad74413r_desc *,
+				    enum ad74413r_rejection *);
+
 /** Set the rejection setting for a specific channel */
 int ad74413r_set_adc_rejection(struct ad74413r_desc *, uint32_t,
 			       enum ad74413r_rejection);
@@ -432,7 +437,7 @@ int ad74413r_set_adc_rate(struct ad74413r_desc *, uint32_t,
 int ad74413r_set_adc_conv_seq(struct ad74413r_desc *, enum ad74413r_conv_seq);
 
 /** Get a single ADC raw value for a specific channel, then power down the ADC */
-int ad74413r_get_adc_single(struct ad74413r_desc *, uint32_t, uint16_t *);
+int ad74413r_get_adc_single(struct ad74413r_desc *, uint32_t, uint16_t *, bool);
 
 /** Get the ADC real value, according to the operation mode */
 int ad74413r_adc_get_value(struct ad74413r_desc *, uint32_t,
