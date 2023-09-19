@@ -32,6 +32,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_mutex.h      \
 		$(INCLUDE)/no_os_crc8.h      \
 		$(INCLUDE)/no_os_uart.h      \
+		$(INCLUDE)/no_os_mutex.h      \
 		$(INCLUDE)/no_os_i2c.h      \
 		$(INCLUDE)/no_os_mdio.h      \
 		$(INCLUDE)/no_os_timer.h      \
@@ -51,6 +52,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_crc8.c \
 		$(NO-OS)/util/no_os_util.c \
+		$(NO-OS)/util/no_os_mutex.c \
 		$(NO-OS)/util/no_os_alloc.c
 
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
