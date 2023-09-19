@@ -1,7 +1,8 @@
 /***************************************************************************//**
- *   @file   swiot.h
- *   @brief  Header file for the swiot IIO device.
+ *   @file   max149x6-base.h
+ *   @brief  Header file of MAX149X6 Base Driver.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
  *
@@ -36,79 +37,51 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_SWIOT_H
-#define IIO_SWIOT_H
+#ifndef _MAX149X6_H
+#define _MAX149X6_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include "no_os_gpio.h"
-#include "ad74413r.h"
-#include "iio_ad74413r.h"
-#include "max14906.h"
-#include "iio_max14906.h"
-#include "adin1110.h"
+#include "no_os_spi.h"
+#include "no_os_util.h"
 
-#define SWIOT_CHANNELS	4
+/* Common Frame Size */
+#define MAX149X6_FRAME_SIZE		2
 
-static const char *const ad74413r_function_available[] = {
-	[AD74413R_HIGH_Z] = "high_z",
-	[AD74413R_VOLTAGE_OUT] = "voltage_out",
-	[AD74413R_CURRENT_OUT] = "current_out",
-	[AD74413R_VOLTAGE_IN] = "voltage_in",
-	[AD74413R_CURRENT_IN_EXT] = "current_in_ext",
-	[AD74413R_CURRENT_IN_LOOP] = "current_in_loop",
-	[AD74413R_RESISTANCE] = "resistance",
-	[AD74413R_DIGITAL_INPUT] = "digital_input",
-	[AD74413R_DIGITAL_INPUT_LOOP] = "digital_input_loop",
-	[AD74413R_CURRENT_IN_EXT_HART] = "current_in_ext_hart",
-	[AD74413R_CURRENT_IN_LOOP_HART] = "current_in_loop_hart"
+/* Common Registers */
+#define MAX149X6_CHIP_ADDR_MASK		NO_OS_GENMASK(7, 6)
+#define MAX149X6_ADDR_MASK		NO_OS_GENMASK(4, 1)
+#define MAX149X6_RW_MASK		NO_OS_BIT(0)
+
+/**
+ * @brief Initialization parameter for the MAX149X6 device.
+ */
+struct max14906_init_param {
+	uint32_t chip_address;
+	struct no_os_spi_init_param *comm_param;
+	struct no_os_gpio_init_param *en_gpio_param;
+	bool crc_en;
 };
 
-enum swiot_device {
-	SWIOT_AD74413R,
-	SWIOT_MAX14906,
-	SWIOT_DEV_CNT,
+/**
+ * @brief Device descriptor for MAX149X6.
+ */
+struct max14906_desc {
+	uint32_t chip_address;
+	struct no_os_spi_desc *comm_desc;
+	struct no_os_gpio_desc *en_gpio;
+	uint8_t buff[MAX149X6_FRAME_SIZE + 1];
+	bool crc_en;
 };
 
-enum swiot_mode {
-	SWIOT_CONFIG,
-	SWIOT_RUNTIME,
-};
+/** Write the value of a device register */
+int max149x6_reg_write(struct max14906_desc *, uint32_t, uint32_t);
 
-struct swiot_config_state {
-	bool enabled;
-	enum swiot_device device;
-	uint32_t function;
-};
+/** Read the value of a device register */
+int max149x6_reg_read(struct max14906_desc *, uint32_t, uint32_t *);
 
-struct swiot_iio_desc {
-	struct ad74413r_iio_desc *ad74413r;
-	struct max149x6_iio_desc *max14906;
-	struct adin1110_desc *adin1110;
-	struct iio_device *iio_dev;
-	uint32_t active_channels;
-	uint8_t no_of_active_channels;
-
-	enum swiot_mode mode;
-	bool mode_change;
-	struct no_os_gpio_desc *psu_gpio;
-	struct no_os_gpio_desc *identify_gpio;
-
-	struct max14906_ch_config max14906_configs[MAX14906_CHANNELS];
-	struct ad74413r_channel_config ad74413r_configs[AD74413R_N_CHANNELS];
-	struct ad74413r_diag_channel_config
-		ad74413r_diag_configs[AD74413R_N_DIAG_CHANNELS];
-};
-
-struct swiot_iio_desc_init_param {
-	struct ad74413r_iio_desc *ad74413r;
-	struct max149x6_iio_desc *max14906;
-	struct no_os_gpio_init_param psu_gpio_param;
-	struct no_os_gpio_init_param identify_gpio_param;
-	enum swiot_mode mode;
-};
-
-int swiot_iio_init(struct swiot_iio_desc **,
-		   struct swiot_iio_desc_init_param *);
-int swiot_iio_remove(struct swiot_iio_desc *);
+/** Update the value of a device register */
+int max149x6_reg_update(struct max14906_desc *, uint32_t, uint32_t, uint32_t);
 
 #endif

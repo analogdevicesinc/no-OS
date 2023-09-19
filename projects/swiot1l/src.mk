@@ -58,8 +58,10 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 
-INCS += $(DRIVERS)/digital-io/max14906/max14906.h
-SRCS += $(DRIVERS)/digital-io/max14906/max14906.c
+INCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.h	\
+	$(DRIVERS)/digital-io/max14906/max14906.h
+SRCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.c	\
+	$(DRIVERS)/digital-io/max14906/max14906.c
 
 INCS += $(DRIVERS)/temperature/adt75/adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/adt75.c
