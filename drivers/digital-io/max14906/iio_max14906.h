@@ -47,6 +47,14 @@
 #define MAX14906_FUNCTION_CNT	3
 
 /**
+ * @brief Configuration structure for a MAX14906 channel.
+ */
+struct max14906_ch_config {
+	bool enabled;
+	enum max14906_function function;
+};
+
+/**
  * @brief Available functions for each channel of the device.
  */
 static const char *const max14906_function_avail[MAX14906_FUNCTION_CNT] = {
