@@ -120,7 +120,7 @@ int swiot_firmware()
 	struct no_os_gpio_desc *swiot_led2_gpio;
 
 	struct iio_app_desc *app;
-	struct iio_app_device iio_devices[4];
+	struct iio_app_device iio_devices[4] = {0};
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8,
