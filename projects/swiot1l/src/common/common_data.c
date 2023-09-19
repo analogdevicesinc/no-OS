@@ -275,7 +275,7 @@ struct swiot_iio_desc_init_param swiot_ip = {
 	.mode = SWIOT_CONFIG,
 };
 
-struct max14906_init_param max14906_ip = {
+struct max149x6_init_param max14906_ip = {
 	.chip_address = 0,
 	.comm_param = &max14906_spi_ip,
 	.crc_en = true,

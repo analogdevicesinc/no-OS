@@ -55,7 +55,7 @@ extern const struct no_os_spi_init_param adin1110_spi_ip;
 extern const struct no_os_spi_init_param ad74413r_spi_ip;
 extern struct no_os_spi_init_param max14906_spi_ip;
 extern struct swiot_iio_desc_init_param swiot_ip;
-extern struct max14906_init_param max14906_ip;
+extern struct max149x6_init_param max14906_ip;
 extern struct ad74413r_init_param ad74413r_ip;
 extern struct adt75_init_param adt75_ip;
 extern const struct no_os_gpio_init_param adin1110_int_gpio_ip;

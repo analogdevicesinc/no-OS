@@ -41,11 +41,11 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "max149x6-base.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
 
-#define MAX14906_FRAME_SIZE		2
 #define MAX14906_CHANNELS		4
 
 #define MAX14906_SETOUT_REG		0x0
@@ -68,10 +68,6 @@
 
 /* SetOUT register */
 #define MAX14906_HIGHO_MASK(x)		NO_OS_BIT(x)
-
-#define MAX14906_CHIP_ADDR_MASK		NO_OS_GENMASK(7, 6)
-#define MAX14906_ADDR_MASK		NO_OS_GENMASK(4, 1)
-#define MAX14906_RW_MASK		NO_OS_BIT(0)
 
 #define MAX14906_DO_MASK(x)		(NO_OS_GENMASK(1, 0) << (2 * (x)))
 #define MAX14906_CH_DIR_MASK(x)		NO_OS_BIT((x) + 4)
@@ -116,36 +112,6 @@ enum max14906_climit {
 	MAX14906_CL_300,
 	MAX14906_CL_1200,
 };
-
-/**
- * @brief Initialization parameter for the MAX14906 device.
- */
-struct max14906_init_param {
-	uint32_t chip_address;
-	struct no_os_spi_init_param *comm_param;
-	struct no_os_gpio_init_param *en_gpio_param;
-	bool crc_en;
-};
-
-/**
- * @brief Device descriptor for MAX14906.
- */
-struct max14906_desc {
-	uint32_t chip_address;
-	struct no_os_spi_desc *comm_desc;
-	struct no_os_gpio_desc *en_gpio;
-	uint8_t buff[MAX14906_FRAME_SIZE + 1];
-	bool crc_en;
-};
-
-/** Write the value of a device register */
-int max14906_reg_write(struct max14906_desc *, uint32_t, uint32_t);
-
-/** Read the value of a device register */
-int max14906_reg_read(struct max14906_desc *, uint32_t, uint32_t *);
-
-/** Update the value of a device register */
-int max14906_reg_update(struct max14906_desc *, uint32_t, uint32_t, uint32_t);
 
 /** Read the state of a channel */
 int max14906_ch_get(struct max14906_desc *, uint32_t, uint32_t *);
