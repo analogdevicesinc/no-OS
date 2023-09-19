@@ -44,6 +44,7 @@
 #include "ad74413r.h"
 #include "iio_ad74413r.h"
 #include "max14906.h"
+#include "iio_max14906.h"
 #include "adin1110.h"
 
 #define SWIOT_CHANNELS	4

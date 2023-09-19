@@ -118,21 +118,12 @@ enum max14906_climit {
 };
 
 /**
- * @brief Configuration structure for a MAX14906 channel.
- */
-struct max14906_ch_config {
-	bool enabled;
-	enum max14906_function function;
-};
-
-/**
  * @brief Initialization parameter for the MAX14906 device.
  */
 struct max14906_init_param {
 	uint32_t chip_address;
 	struct no_os_spi_init_param *comm_param;
 	struct no_os_gpio_init_param *en_gpio_param;
-	struct max14906_ch_config ch_config[MAX14906_CHANNELS];
 	bool crc_en;
 };
 
