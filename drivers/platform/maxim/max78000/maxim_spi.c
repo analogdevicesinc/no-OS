@@ -293,9 +293,14 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 			 struct no_os_spi_msg *msgs,
 			 uint32_t len)
 {
+	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
 	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
-	mxc_spi_req_t req;
+	uint32_t tx_cnt = 0;
+	uint32_t rx_cnt = 0;
+	bool rx_done = true;
+	bool tx_done = true;
 	uint32_t slave_id;
+	size_t i = 0;
 	int32_t ret;
 
 	if (!desc || !msgs)
@@ -310,23 +315,68 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		last_slave_id[desc->device_id] = slave_id;
 	}
 
-	req.spi = MXC_SPI_GET_SPI(desc->device_id);
-	req.ssIdx = desc->chip_select;
-	for (uint32_t i = 0; i < len; i++) {
-		req.txData = msgs[i].tx_buff;
-		req.rxData = msgs[i].rx_buff;
-		req.txCnt = 0;
-		req.rxCnt = 0;
-		req.ssDeassert = msgs[i].cs_change;
-		req.txLen = req.txData ? msgs[i].bytes_number : 0;
-		req.rxLen = req.rxData ? msgs[i].bytes_number : 0;
+	/* Assert CS desc->chip_select when the SPI transaction is started */
+	spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_ACTIVE;
+	spi->ctrl0 |= no_os_field_prep(MXC_F_SPI_CTRL0_SS_ACTIVE,
+				       NO_OS_BIT(desc->chip_select));
+
+	for (i = 0; i < len; i++) {
+		/* Flush the RX and TX FIFOs */
+		spi->dma |= MXC_F_SPI_DMA_RX_FLUSH | MXC_F_SPI_DMA_TX_FLUSH;
+		/* Enable SPI */
+		spi->intfl |= MXC_F_SPI_INTFL_MST_DONE;
+		spi->ctrl1 = 0;
+
+		if (msgs[i].cs_change)
+			spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_CTRL;
+		else
+			spi->ctrl0 |= MXC_F_SPI_CTRL0_SS_CTRL;
 
 		_max_delay_config(desc, &msgs[i]);
-		ret = MXC_SPI_MasterTransaction(&req);
-		if (ret == E_BAD_PARAM)
-			return -EINVAL;
-		if (ret == E_BAD_STATE)
-			return -EBUSY;
+
+		if (msgs[i].tx_buff) {
+			/* Set the transfer size in the TX direction */
+			spi->ctrl1 = msgs->bytes_number;
+			tx_done = false;
+			/* Enable the TX FIFO */
+			spi->dma |= MXC_F_SPI_DMA_TX_FIFO_EN;
+			tx_cnt += MXC_SPI_WriteTXFIFO(spi, &msgs[i].tx_buff[tx_cnt],
+						      msgs[i].bytes_number - tx_cnt);
+			tx_done = (tx_cnt == msgs[i].bytes_number) ? true : false;
+		}
+		if (msgs[i].rx_buff) {
+			/* Set the transfer size in the RX direction */
+			spi->ctrl1 |= no_os_field_prep(MXC_F_SPI_CTRL1_RX_NUM_CHAR,
+						       msgs->bytes_number);
+			/* Enable the RX FIFO */
+			spi->dma |= MXC_F_SPI_DMA_RX_FIFO_EN;
+			rx_done = false;
+		}
+
+		/* Start the transaction */
+		spi->ctrl0 |= MXC_F_SPI_CTRL0_START;
+
+		while (!(rx_done && tx_done)) {
+			if (msgs[i].tx_buff && tx_cnt < msgs[i].bytes_number) {
+				tx_cnt += MXC_SPI_WriteTXFIFO(spi, &msgs[i].tx_buff[tx_cnt],
+							      msgs[i].bytes_number - tx_cnt);
+				tx_done = (tx_cnt == msgs[i].bytes_number) ? true : false;
+			}
+			if (msgs[i].rx_buff && rx_cnt < msgs[i].bytes_number) {
+				rx_cnt += MXC_SPI_ReadRXFIFO(spi, &msgs[i].rx_buff[rx_cnt],
+							     msgs[i].bytes_number - rx_cnt);
+				rx_done = (rx_cnt == msgs[i].bytes_number) ? true : false;
+			}
+		}
+
+		/* Wait for the RX and TX FIFOs to empty */
+		while (!(spi->intfl & MXC_F_SPI_INTFL_MST_DONE));
+
+		/* End the transaction */
+		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_START;
+
+		/* Disable the RX and TX FIFOs */
+		spi->dma &= ~(MXC_F_SPI_DMA_TX_FIFO_EN | MXC_F_SPI_DMA_RX_FIFO_EN);
 
 		no_os_udelay(msgs[i].cs_change_delay);
 	}
