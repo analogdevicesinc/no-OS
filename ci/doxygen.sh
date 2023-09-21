@@ -92,6 +92,9 @@ update_gh_pages() {
 
                 rm -rf ${TOP_DIR}/doc
 
+                # Create .nojekyll file
+                touch ${TOP_DIR}/.nojekyll
+
                 CURRENT_COMMIT=$(git log -1 --pretty=%B)
                 if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
                 then
