@@ -51,6 +51,7 @@
 #include "no_os_axi_io.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "jesd204_clk.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -907,6 +908,10 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 		ret = -ENOMEM;
 		goto err_1;
 	}
+
+	struct jesd204_clk *clk1 = init->lane_clk.dev_desc;
+	clk1->jesd_tx = jesd;
+	clk1->jesd_rx = NULL;
 
 	ret = no_os_clk_init(&clk_desc, &init->lane_clk);
 	if (ret)

@@ -48,6 +48,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/jesd204/jesd204-core.c \
@@ -129,7 +130,8 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
-	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h
 ifeq (xilinx,$(strip $(PLATFORM)))
 INCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
