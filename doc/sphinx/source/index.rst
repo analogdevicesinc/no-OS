@@ -24,3 +24,8 @@ Contents
 
    drivers_guide
    contributing
+
+Doxygen
+~~~~~~~
+
+For code documentation automatically generated please check our `No-OS Doxygen Documentation <https://analogdevicesinc.github.io/no-OS/doxygen>`_.
