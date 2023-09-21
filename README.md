@@ -13,7 +13,7 @@ The majority of ADI's products are peripherals to a non-ADI digital engine (FPGA
 
 For more information about no-OS drivers, please visit our [wiki](https://wiki.analog.com/resources/no-os) page.
 
-Code documentation is automatically generated using Doxygen tool, available at [no-OS Github Pages](http://analogdevicesinc.github.io/no-OS/).
+Code documentation is automatically generated using Doxygen tool, available at [no-OS Github Pages](http://analogdevicesinc.github.io/no-OS/doxygen/).
 
 ## Build
 
