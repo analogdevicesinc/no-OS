@@ -124,7 +124,7 @@
 #define AD9528_PLL1_CHARGE_PUMP_CURRENT_nA(x)		(((x) / 500) & 0x7F)
 
 /* AD9528_PLL1_CTRL */
-#define AD9528_PLL1_OSC_CTRL_FAIL_VCC_BY2_EN	(1 << 18)
+#define AD9528_PLL1_OSC_CTRL_FAIL_VCC_BY2_EN	(1 << 19)
 #define AD9528_PLL1_REF_MODE(x)			((x) << 16)
 #define AD9528_PLL1_FEEDBACK_BYPASS_EN		(1 << 13)
 #define AD9528_PLL1_REFB_BYPASS_EN		(1 << 12)
@@ -183,12 +183,14 @@
 #define AD9528_CLK_DIST_DIV_MIN	1
 #define AD9528_CLK_DIST_DIV_MAX 256
 #define AD9528_CLK_DIST_DIV(x)			((((x) - 1) & 0xFF) << 16)
+#define AD9528_CLK_DIST_DIV_MASK		(0xFF << 16)
 #define AD9528_CLK_DIST_DIV_REV(x)		((((x) >> 16) & 0xFF) + 1)
 #define AD9528_CLK_DIST_DRIVER_MODE(x)		(((x) & 0x3) << 14)
 #define AD9528_CLK_DIST_DRIVER_MODE_REV(x)	(((x) >> 14) & 0x3)
 #define AD9528_CLK_DIST_DIV_PHASE(x)		(((x) & 0x3F) << 8)
 #define AD9528_CLK_DIST_DIV_PHASE_REV(x)	(((x) >> 8) & 0x3F)
 #define AD9528_CLK_DIST_CTRL(x)			(((x) & 0x7) << 5)
+#define AD9528_CLK_DIST_CTRL_MASK		(0x7 << 5)
 #define AD9528_CLK_DIST_CTRL_REV(x)		(((x) >> 5) & 0x7)
 
 #if 0
@@ -205,7 +207,7 @@
 
 /* AD9528_SYSREF_K_DIVIDER */
 #define AD9528_SYSREF_K_DIV(x)			(((x) & 0xFFFF) << 0)
-#define AD9528_SYSREF_K_DIV_MIN                 (0u)
+#define AD9528_SYSREF_K_DIV_MIN                 (1u)
 #define AD9528_SYSREF_K_DIV_MAX                 (65535u)
 
 /* AD9528_SYSREF_CTRL */
@@ -221,11 +223,11 @@
 #define AD9528_SYSREF_RESET			(1 << 0)
 
 /* AD9528_PD_EN */
-#define AD9528_PD_BIAS			(1 << 4)
-#define AD9528_PD_PLL2			(1 << 3)
-#define AD9528_PD_PLL1			(1 << 2)
-#define AD9528_PD_OUT_CLOCKS		(1 << 1)
-#define AD9528_PD_CHIP			(1 << 0)
+#define AD9528_PD_BIAS			NO_OS_BIT(4)
+#define AD9528_PD_PLL2			NO_OS_BIT(3)
+#define AD9528_PD_PLL1			NO_OS_BIT(2)
+#define AD9528_PD_OUT_CLOCKS		NO_OS_BIT(1)
+#define AD9528_PD_CHIP			NO_OS_BIT(0)
 
 /* AD9528_CHANNEL_PD_EN */
 #define AD9528_CHANNEL_PD_MASK(x)	(((x) & 0x3FFF) << 0)
@@ -414,6 +416,9 @@ struct ad9528_platform_data {
 	/** SYSREF request pin mode enable (default SPI mode) */
 	bool	 sysref_req_en;
 
+	uint32_t jdev_max_sysref_freq;
+	uint32_t jdev_desired_sysref_freq;
+
 	/* PLL2 Setting */
 	/**  Magnitude of PLL2 charge pump current (nA). */
 	uint32_t pll2_charge_pump_current_nA;
@@ -475,6 +480,7 @@ enum {
 
 struct ad9528_state {
 	uint32_t vco_out_freq[AD9528_NUM_CLK_SRC];
+	uint32_t sysref_src_pll2;
 };
 
 struct ad9528_dev {
@@ -482,9 +488,16 @@ struct ad9528_dev {
 	struct no_os_spi_desc *spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc *gpio_resetb;
+	struct no_os_gpio_desc *sysref_req_gpio;
 	/* Device Settings */
 	struct ad9528_state ad9528_st;
 	struct ad9528_platform_data *pdata;
+	/* CLK descriptors */
+	struct no_os_clk_desc  **clk_desc;
+
+	struct jesd204_dev     *jdev;
+	uint32_t               jdev_lmfc_lemc_rate;
+	uint32_t               jdev_lmfc_lemc_gcd;
 };
 
 struct ad9528_init_param {
@@ -494,6 +507,7 @@ struct ad9528_init_param {
 	struct no_os_gpio_init_param *gpio_resetb;
 	/* Device Settings */
 	struct ad9528_platform_data *pdata;
+	bool export_no_os_clk;
 };
 
 /* Helpers to avoid excess line breaks */
