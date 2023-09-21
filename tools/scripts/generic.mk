@@ -76,7 +76,7 @@ PROJECT_NAME	= $(notdir $(PROJECT))
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY_FILE_NAME ?= $(PROJECT_NAME)
-BINARY			?=  $(BUILD_DIR)/$(PROJECT_NAME).elf
+BINARY			?=  $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
 
 # New line variable
