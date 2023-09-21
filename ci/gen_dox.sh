@@ -33,7 +33,7 @@
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #List of excluded driver folders for the documentation generation.
-EXCLUDE_DRV="talise navassa ad9083_api ad5940"
+EXCLUDE_DRV="talise navassa ad9083_api ad5940 madura"
 
 #Generate drivers_page.dox and projects_page.dox
 
