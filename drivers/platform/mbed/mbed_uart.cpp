@@ -118,7 +118,7 @@ public :
 	}
 
 	void change_terminal_connection(bool connect_status);
-	bool data_received(uint32_t rx_size);
+	bool data_received(void);
 	bool data_transmited(void);
 };
 
@@ -144,14 +144,13 @@ void platform_usbcdc::change_terminal_connection(bool connect_status)
 
 /**
  * @brief	Check if new USB data is received/available
- * @param	bytes[in] - Number of expected bytes to be received
- * @return	true if expected number of bytes received, else false
+ * @return	true if new USB data is received/available, else false
  */
-bool platform_usbcdc::data_received(uint32_t bytes)
+bool platform_usbcdc::data_received(void)
 {
 	volatile static uint32_t *rx_size = &_rx_size;
 
-	if (*rx_size >= bytes)
+	if (*rx_size)
 		return true;
 	else
 		return false;
@@ -202,7 +201,8 @@ static int32_t mbed_virtual_com_read(struct no_os_uart_desc *desc,
 				     uint32_t bytes_number)
 {
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
-	uint32_t size_rd;
+	uint32_t d_sz;
+	uint32_t indx = 0;
 
 	if (!desc || !desc->extra || !data)
 		return -EINVAL;
@@ -213,15 +213,26 @@ static int32_t mbed_virtual_com_read(struct no_os_uart_desc *desc,
 	usb_cdc_dev = (platform_usbcdc *)((struct mbed_uart_desc *)(
 			desc->extra))->uart_port;
 
-	while (!usb_cdc_dev->data_received(bytes_number)) {
-		/* Wait until new data is available */
+	while (bytes_number) {
+		while (!usb_cdc_dev->data_received()) {
+			/* Wait until new data is available */
+		}
+
+		/* Make sure packet size is less than max CDC packet size */
+		d_sz = (bytes_number > (USB_CDC_MAX_PACKET_SIZE - 1)) ?
+		       (USB_CDC_MAX_PACKET_SIZE - 1) :
+		       bytes_number;
+
+		/* Change terminal connection status manually */
+		usb_cdc_dev->change_terminal_connection(true);
+
+		usb_cdc_dev->receive_nb((uint8_t *)&data[indx], d_sz, &d_sz);
+
+		bytes_number -= d_sz;
+		indx += d_sz;
 	}
 
-	/* Change terminal connection status manually */
-	usb_cdc_dev->change_terminal_connection(true);
-
-	usb_cdc_dev->receive_nb(data, bytes_number, &size_rd);
-	return bytes_number;
+	return indx;
 }
 
 /**
