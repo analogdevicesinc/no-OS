@@ -40,6 +40,7 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
@@ -56,6 +57,7 @@ INCS += $(DRIVERS)/frequency/hmc7044/hmc7044.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
