@@ -10,3 +10,10 @@ ACCELEROMETERS
    :maxdepth: 1
 
    drivers/adxl355
+
+ANALOG TO DIGITAL CONVERTERS
+============================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adm1177
