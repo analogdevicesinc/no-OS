@@ -1,0 +1,25 @@
+{
+    "maxim": {
+        "basic_example_max78000_ad7091r8": {
+            "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max78000 AD7091R8=y"
+        },
+        "iio_example_max78000_ad7091r2": {
+            "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max78000 AD7091R2=y"
+        },
+        "iio_example_max78000_ad7091r8": {
+            "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max78000 AD7091R4=y"
+        },
+        "iio_example_max78000_ad7091r8": {
+            "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max78000 AD7091R8=y"
+        },
+        "iio_timer_trigger_example_max78000_ad7091r2": {
+            "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y TARGET=max78000 AD7091R2=y"
+        },
+        "iio_timer_trigger_example_max78000_ad7091r8": {
+            "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y TARGET=max78000 AD7091R4=y"
+        },
+        "iio_timer_trigger_example_max78000_ad7091r8": {
+            "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y TARGET=max78000 AD7091R8=y"
+        }
+    }
+}

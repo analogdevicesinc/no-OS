@@ -4,6 +4,13 @@ no-OS projects list
 
 The following sections contain code documentation for ADI no-OS projects.
 
+ANALOG TO DIGITAL CONVERTERS
+============================
+.. toctree::
+   :maxdepth: 1
+
+   projects/ad7091r8-sdz
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
