@@ -1,0 +1,10 @@
+{
+	"maxim": {
+	  "swiot1l_dhcp": {
+	    "flags" : "RELEASE=y NO_OS_STATIC_IP=n"
+	  },
+	  "swiot1l_static_ip": {
+	    "flags" : "RELEASE=y NO_OS_STATIC_IP=y"
+	  }
+	}
+}
