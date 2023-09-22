@@ -176,7 +176,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		bool done = false;
 		mxc_adc_chsel_t ch;
 		const uint8_t attn_reverse[] = {0, 2, 1, 3};
-		const uint8_t attn_fine_reverse[] = {0, 6, 2, 5, 1, 5, 3};
+		const uint8_t attn_fine_reverse[] = {0, 4, 2, 6, 1, 5, 3};
 #if (TARGET_NUM==32650)
 		ch = MXC_ADC_CH_1;
 #elif (TARGET_NUM==78000)
