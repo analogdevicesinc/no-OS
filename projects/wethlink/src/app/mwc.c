@@ -114,18 +114,12 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 	if (mwc->tx_autotuning) {
 		int attn, prev_attn;
-		int match_count = 0;
 		int iter_count = 0;
 		uint16_t reading;
 		uint32_t mV;
-		bool done = false;
-		mxc_adc_chsel_t ch;
-#if (TARGET_NUM==32650)
-		ch = MXC_ADC_CH_0;
-#elif (TARGET_NUM==78000)
-		ch = MXC_ADC_CH_3;
-#endif
-		while(!done) {
+		mxc_adc_chsel_t ch = MXC_ADC_CH_0;
+
+		while(true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
 				.scale = MXC_ADC_SCALE_1,
@@ -134,6 +128,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			reading = req.rawADCValue;
 
 			mV = (uint64_t)reading * 1220000000 / 1024 / 1000000;
+			no_os_pid_hysteresis(mwc->tx_pid, mwc->tx_tolerance);
 			ret = no_os_pid_control(mwc->tx_pid, mwc->tx_target, mV, &attn);
 			if (ret)
 				break;
@@ -141,21 +136,17 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			if (ret)
 				break;
 
-			if (attn == prev_attn)
-				match_count++;
-			else
-				match_count = 0;
-
 			prev_attn = attn;
 
-			if (match_count == 10 || iter_count == 20) {
-				done = true;
+			if (iter_count == 10) {
 				led_tx_det_green(false);
 				led_tx_det_red(false);
 				if (abs((int)mV - (int)mwc->tx_target) <= mwc->tx_tolerance)
 					led_tx_det_green(true);
 				else
 					led_tx_det_red(true);
+
+				break;
 			}
 
 			iter_count++;
@@ -169,20 +160,14 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 	if (mwc->rx_autotuning) {
 		int attn, prev_attn;
 		uint8_t attn_temp, attn1, attn2, attni_fine;
-		int match_count = 0;
 		int iter_count = 0;
 		uint16_t reading;
 		uint32_t mV;
-		bool done = false;
-		mxc_adc_chsel_t ch;
+		mxc_adc_chsel_t ch = MXC_ADC_CH_1;
 		const uint8_t attn_reverse[] = {0, 2, 1, 3};
 		const uint8_t attn_fine_reverse[] = {0, 4, 2, 6, 1, 5, 3};
-#if (TARGET_NUM==32650)
-		ch = MXC_ADC_CH_1;
-#elif (TARGET_NUM==78000)
-		ch = MXC_ADC_CH_4;
-#endif
-		while(!done) {
+
+		while(true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
 				.scale = MXC_ADC_SCALE_2,
@@ -191,6 +176,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			reading = req.rawADCValue;
 
 			mV = (uint64_t)reading * 2 * 1220000000 / 1024 / 1000000;
+			no_os_pid_hysteresis(mwc->rx_pid, mwc->rx_tolerance);
 			ret = no_os_pid_control(mwc->rx_pid, mwc->rx_target, mV, &attn);
 			if (ret)
 				break;
@@ -205,21 +191,17 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			if (ret)
 				break;
 
-			if (attn == prev_attn)
-				match_count++;
-			else
-				match_count = 0;
-
 			prev_attn = attn;
 
-			if (match_count == 10 || iter_count == 20) {
-				done = true;
+			if (iter_count == 10) {
 				led_rx_det_green(false);
 				led_rx_det_red(false);
 				if (abs((int)mV - (int)mwc->rx_target) <= mwc->rx_tolerance)
 					led_rx_det_green(true);
 				else
 					led_rx_det_red(true);
+
+				break;
 			}
 
 			iter_count++;
@@ -649,15 +631,11 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 		goto end_1;
 
 	struct no_os_pid_config pid_config = {
-		.Kp = 15000,
-		.Ki = 5000,
+		.Kp = 20000,
+		.Ki = 500,
 		.Kd = 0,
 		.initial = 31,
-		.hysteresis = 20,
-		.i_clip = {
-			.high = 100,
-			.low = -100
-		},
+		.hysteresis = 50,
 		.output_clip = {
 			.high = 31,
 			.low = 0
