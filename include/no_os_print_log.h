@@ -52,7 +52,7 @@
 #define NO_OS_LOG_DEBUG	0x7
 
 #ifndef NO_OS_LOG_LEVEL
-#define NO_OS_LOG_LEVEL NO_OS_LOG_INFO
+#define NO_OS_LOG_LEVEL NO_OS_LOG_DEBUG
 #endif
 
 #if defined(PRINT_TIME)
