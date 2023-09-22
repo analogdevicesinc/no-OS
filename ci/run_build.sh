@@ -56,7 +56,7 @@ build_drivers() {
     make -C ./drivers -f Makefile -j
 }
 
-build_doxygen() {
+build_documentation() {
     sudo apt-get install -y graphviz python3-sphinx
     # Install a recent version of doxygen
 	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.17/doxygen-1.8.17.src.tar.gz/"
@@ -84,7 +84,8 @@ build_doxygen() {
     cmake ..
     cd ../../..
 
-    . ./ci/doxygen.sh
+    # Run build and upload documentation script
+    . ./ci/documentation.sh
 }
 
 build_${BUILD_TYPE}

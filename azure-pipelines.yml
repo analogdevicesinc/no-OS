@@ -29,9 +29,9 @@ jobs:
       drivers:
         imageName: 'ubuntu-latest'
         BUILD_TYPE: drivers
-      doxygen:
+      documentation:
         imageName: 'ubuntu-latest'
-        BUILD_TYPE: doxygen
+        BUILD_TYPE: documentation
         UPDATE_GH_DOCS: 0
   pool:
     vmImage: $(imageName)

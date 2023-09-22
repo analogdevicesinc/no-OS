@@ -35,7 +35,7 @@
 ############################################################################
 # Check if the documentation will be generated w/o warnings or errors
 ############################################################################
-build_doc(){
+build_doxygen() {
         pushd ${TOP_DIR}/doc/doxygen
         (cd build && ! make doc 2>&1 | grep -E "warning:|error:") || {
                 echo_red "Documentation incomplete or errors in the generation of it have occured!"
@@ -115,7 +115,7 @@ update_gh_pages() {
         fi
 }
 
-build_doc
+build_doxygen
 
 build_sphinx
 
