@@ -30,12 +30,15 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/net/iio_adin1300.c \
 	$(DRIVERS)/net/max24287.c \
 	$(DRIVERS)/net/iio_max24287.c \
+	$(DRIVERS)/adc/adm1177/adm1177.c \
+	$(DRIVERS)/adc/adm1177/iio_adm1177.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/no_os_crc8.c \
 	$(NO-OS)/util/no_os_pid.c \
+	$(NO-OS)/util/no_os_mutex.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
 
 INCS += $(INCLUDE)/no_os_gpio.h \
@@ -60,6 +63,8 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(DRIVERS)/net/iio_adin1300.h \
 	$(DRIVERS)/net/max24287.h \
 	$(DRIVERS)/net/iio_max24287.h \
+	$(DRIVERS)/adc/adm1177/adm1177.h \
+	$(DRIVERS)/adc/adm1177/iio_adm1177.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_alloc.h \
@@ -70,6 +75,7 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h \
-	$(INCLUDE)/no_os_lf256fifo.h
+	$(INCLUDE)/no_os_lf256fifo.h \
+	$(INCLUDE)/no_os_mutex.h
 
 

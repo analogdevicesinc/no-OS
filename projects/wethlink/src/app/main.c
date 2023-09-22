@@ -5,6 +5,8 @@
 #include "no_os_rtc.h"
 #include "no_os_crc8.h"
 #include "parameters.h"
+#include "adm1177.h"
+#include "iio_adm1177.h"
 #include "hmc630x.h"
 #include "iio_hmc630x.h"
 #include "mwc.h"
@@ -107,6 +109,8 @@ int main(void)
 	struct nvmp *nvmp;
 	struct adin1300_iio_desc *iio_adin1300;
 	struct max24287_iio_desc *iio_max24287;
+	struct adm1177_iio_dev *iio_adm1177;
+
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
 	
 	no_os_crc8_populate_msb(crc8, 0x7);
@@ -211,6 +215,23 @@ post_eeprom:
 	ret = net_init(&iio_adin1300, &iio_max24287, speed);
 	if (ret)
 		goto end;
+
+	struct adm1177_iio_init_param iio_adm1177_config = {
+		.adm1177_initial = &(struct adm1177_init_param) {
+			.i2c_init = {
+				.device_id = 0,
+				.slave_address = ADM1177_ADDRESS,
+				.extra = &(struct max_i2c_init_param) {
+					.vssel = MXC_GPIO_VSSEL_VDDIOH,
+				},
+				.platform_ops = &max_i2c_ops,
+				.max_speed_hz = 100000,
+			},
+		},
+	};
+	ret = adm1177_iio_init(&iio_adm1177, &iio_adm1177_config);
+	if (ret)
+		return ret;
 
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
@@ -330,7 +351,12 @@ post_eeprom:
 			.name = "max24287",
 			.dev = iio_max24287,
 			.dev_descriptor = iio_max24287->iio_dev,
-		}
+		},
+		{
+			.name = "adm1177",
+			.dev = iio_adm1177,
+			.dev_descriptor = iio_adm1177->iio_dev,
+		},
 	};
 
 	struct iio_ctx_attr iio_ctx_attrs[] = {
