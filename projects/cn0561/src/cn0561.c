@@ -330,6 +330,13 @@ int main()
 		}
 	}
 
+#ifdef CN0561_REG_DUMP
+	ret = ad713x_spi_reg_dump(cn0561_dev);
+	if (ret != 0)
+		return ret;
+
+#endif /* AD4134 DEVICE REG DUMP */
+
 	ad713x_remove(cn0561_dev);
 	print("Bye\n\r");
 

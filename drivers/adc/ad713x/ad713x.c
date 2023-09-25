@@ -629,3 +629,43 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 
 	return 0;
 }
+
+/**
+ * @brief Print all registers values for the AD4134 device.
+ *    	  Register map has gaps, reg dump function specific for AD4134 dev.
+ * @param [in] dev - AD713X device handler.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev)
+{
+	int32_t ret;
+	uint8_t reg_data;
+	uint8_t reg_addr;
+
+	for (reg_addr = 0x0; reg_addr <= 0x7; reg_addr++) {
+		ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			printf("REG%x: error read\n", reg_addr);
+			return -1;
+		} else
+			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+	}
+	for (reg_addr = 0xA; reg_addr <= 0x42; reg_addr++) {
+		ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			printf("REG%x: error read\n", reg_addr);
+			return -1;
+		} else
+			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+	}
+	for (reg_addr = 0x47; reg_addr <= 0x48; reg_addr++) {
+		ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			printf("REG%x: error read\n", reg_addr);
+			return -1;
+		} else
+			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+	}
+
+	return 0;
+}
