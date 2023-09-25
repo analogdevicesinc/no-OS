@@ -88,6 +88,7 @@ int main()
 	struct ad713x_dev *cn0561_dev;
 	struct ad713x_init_param cn0561_init_param;
 	uint32_t i = 0, j;
+	uint32_t adc_channel;
 	int32_t ret;
 	const float lsb = 4.096 / (pow(2, 23));
 	float data;
@@ -214,6 +215,12 @@ int main()
 	ret = ad713x_init(&cn0561_dev, &cn0561_init_param);
 	if (ret != 0)
 		return -1;
+
+	for (adc_channel = CH0; adc_channel <= CH3; adc_channel++) {
+		ret = ad713x_dig_filter_sel_ch(cn0561_dev, SINC3, adc_channel);
+		if (ret != 0)
+			return -1;
+	} /* Select SINC3 filtering, enable higher data convertion rates */
 
 	no_os_mdelay(1000);
 
