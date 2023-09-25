@@ -799,4 +799,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 /** Free the resources allocated by ad713x_init(). */
 int32_t ad713x_remove(struct ad713x_dev *dev);
 
+/** Print reg dump for the specific reg map of AD4134 dev*/
+int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev);
+
 #endif /* SRC_AD713X_H_ */
