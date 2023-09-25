@@ -92,6 +92,7 @@ int main()
 	const float lsb = 4.096 / (pow(2, 23));
 	float data;
 	uint32_t spi_eng_dma_flg = DMA_LAST | DMA_PARTIAL_REPORTING_EN;
+	uint32_t max_speed_hz = CORA_Z7S_DATA_CLK_FREQ_HZ;
 	struct spi_engine_offload_init_param spi_engine_offload_init_param;
 	struct spi_engine_offload_message spi_engine_offload_message;
 	uint32_t spi_eng_msg_cmds[1];
@@ -115,6 +116,7 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
+	max_speed_hz = ZED_DATA_CLK_FREQ_HZ;
 #endif
 	struct no_os_spi_desc *spi_eng_desc;
 	struct spi_engine_init_param spi_eng_init_param  = {
@@ -126,25 +128,36 @@ int main()
 	};
 	const struct no_os_spi_init_param spi_eng_init_prm  = {
 		.chip_select = CN0561_SPI_CS,
-		.max_speed_hz = 24000000,
+		.max_speed_hz = max_speed_hz,
 		.mode = NO_OS_SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 	};
 
 	struct no_os_pwm_desc *axi_pwm;
-	struct axi_pwm_init_param axi_zed_pwm_init = {
+	struct axi_pwm_init_param axi_zed_pwm_init_trigger = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
-		.ref_clock_Hz = 100000000,
+		.ref_clock_Hz = 96000000,
 		.channel = 0
 	};
-
-	struct no_os_pwm_init_param axi_pwm_init = {
-		.period_ns = 3400,
-		.duty_cycle_ns = 600,
+	struct axi_pwm_init_param axi_zed_pwm_init_odr = {
+		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
+		.ref_clock_Hz = 96000000,
+		.channel = 1
+	};
+	struct no_os_pwm_init_param axi_pwm_init_trigger = {
+		.period_ns = 1000,
+		.duty_cycle_ns = 1,
+		.phase_ns = 30,
+		.platform_ops = &axi_pwm_ops,
+		.extra = &axi_zed_pwm_init_trigger
+	};
+	struct no_os_pwm_init_param axi_pwm_init_odr = {
+		.period_ns = 1000,
+		.duty_cycle_ns = 130,
 		.phase_ns = 0,
 		.platform_ops = &axi_pwm_ops,
-		.extra = &axi_zed_pwm_init
+		.extra = &axi_zed_pwm_init_odr
 	};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
@@ -190,7 +203,11 @@ int main()
 	if (ret != 0)
 		return -1;
 
-	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_trigger);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_odr);
 	if (ret != 0)
 		return ret;
 
