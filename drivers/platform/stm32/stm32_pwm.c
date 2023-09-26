@@ -384,7 +384,7 @@ int32_t stm32_pwm_remove(struct no_os_pwm_desc *desc)
 		if (ret)
 			return ret;
 
-		ret = no_os_irq_disable(extra->nvic_tim);
+		ret = no_os_irq_disable(extra->nvic_tim, desc->irq_id);
 		if (ret)
 			return ret;
 
