@@ -8,6 +8,7 @@ import multiprocessing
 import sys
 import filecmp
 import requests
+import re
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -40,7 +41,9 @@ def parse_input():
 	parser.add_argument('-hardware', help="Name of hardware to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	parser.add_argument('-builds_dir', default=(os.getcwd() +'/builds'), help="Directory where to build projects")
-	parser.add_argument('-hdl_branch', default='master', help="Name of hdl_branch from which to downlaod hardware")
+	parser.add_argument('-hdl_branch', default='master', help="Name of hdl_branch from which to downlaod hardware or \
+					 we can also specify a timestamp folder from the specific branch but needs to have a specific format, \
+					 of 'branch_name/YYYY_mm_dd-HH_MM_SS' example: master/2023_09_20-06_52_29")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
@@ -146,6 +149,13 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 			environment_path_files = lines[1].rstrip()
 	except OSError:
 		print("Configuration file needed")
+
+	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
+	timestamp_match = re.search(pattern, hdl_branch)
+	if timestamp_match:
+		hdl_branch = re.split('\/', hdl_branch)[0]
+		timestamp_folder = timestamp_match.group()
+
 	if hdl_branch == "master":
 		hdl_branch_path = hdl_branch + '/hdl_output'
 	else:
@@ -155,6 +165,13 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output'
 		else:
 			print("Error related to hdl branch name: " + hdl_branch)
+			exit()
+
+	if timestamp_match:
+		if requests.get(server_base_path + hdl_branch_path + '/' + timestamp_folder, stream=True).status_code == 200:
+			hdl_branch_path += '/' + timestamp_folder
+		else:
+			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
 			exit()
 
 	builds_dir = _builds_dir + '_' + hdl_branch
