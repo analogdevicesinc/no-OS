@@ -139,6 +139,8 @@ int state_machine()
 	int32_t i_val = 0, v1_val = 0, v2_val = 0;
 	// Pointer to the state machine structure
 	struct stout *stout;
+	// Pointer to the adt75_desc structure
+	struct adt75_desc *adt75_desc;
 	int ret = -22;
 /**************************************************************************/
 /**********************End of variables declaration************************/
@@ -158,7 +160,6 @@ int state_machine()
 		return -ENOMEM;
 
 	/* Initialize I2C adt75*/
-	struct adt75_desc *adt75_desc;
 	ret = adt75_init(&adt75_desc, &adt75_ip);
 	if (ret)
 		return ret;
