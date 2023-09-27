@@ -192,7 +192,6 @@ int supply_init(struct ade9113_dev **device)
 
 error:
 	ade9113_remove(device);
-	device = NULL;
 ade9113_init_err:
 	no_os_irq_ctrl_remove(ade9113_gpio_irq_desc);
 	ade9113_gpio_irq_desc = NULL;

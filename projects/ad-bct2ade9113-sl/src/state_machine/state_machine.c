@@ -161,11 +161,19 @@ int state_machine()
 
 	/* Initialize I2C adt75*/
 	ret = adt75_init(&adt75_desc, &adt75_ip);
-	if (ret)
+	if (ret) {
+		no_os_free(stout);
 		return ret;
+	}
 
 	/* Initialize LEDs and buttons */
 	ret = interface_init(&stout->gpio_led[0]);
+	if (ret)
+	{
+		no_os_free(stout);
+		adt75_remove(adt75_desc);
+		return ret;
+	}
 
 	/* Initialize power supply monitoring */
 	ret = supply_init(&stout->ade9113);
