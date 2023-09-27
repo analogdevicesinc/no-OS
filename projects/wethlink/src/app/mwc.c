@@ -78,6 +78,7 @@ void mwc_temp_correlation(uint8_t (*correlation)[5], uint8_t temp, uint8_t *tx_i
 int mwc_algorithms(struct mwc_iio_dev *mwc)
 {
 	int ret;
+	static uint8_t prev_bb_attn, prev_rf_attn;
 	uint8_t temp;
 	struct hmc630x_dev *tx = mwc->tx_iiodev->dev;
 	struct hmc630x_dev *rx = mwc->rx_iiodev->dev;
@@ -113,7 +114,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 	}
 
 	if (mwc->tx_autotuning) {
-		int attn, prev_attn;
+		int attn;
 		int iter_count = 0;
 		uint16_t reading;
 		uint32_t mV;
@@ -132,13 +133,15 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			ret = no_os_pid_control(mwc->tx_pid, mwc->tx_target, mV, &attn);
 			if (ret)
 				break;
-			ret = hmc6300_set_rf_attn(tx, attn);
-			if (ret)
-				break;
+			if (prev_rf_attn != attn) {
+				ret = hmc6300_set_rf_attn(tx, attn);
+				if (ret)
+					break;
 
-			prev_attn = attn;
+				prev_rf_attn = attn;
+			}
 
-			if (iter_count == 10) {
+			if (iter_count == 8) {
 				led_tx_det_green(false);
 				led_tx_det_red(false);
 				if (abs((int)mV - (int)mwc->tx_target) <= mwc->tx_tolerance)
@@ -158,7 +161,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 	}
 
 	if (mwc->rx_autotuning) {
-		int attn, prev_attn;
+		int attn;
 		uint8_t attn_temp, attn1, attn2, attni_fine;
 		int iter_count = 0;
 		uint16_t reading;
@@ -180,20 +183,22 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			ret = no_os_pid_control(mwc->rx_pid, mwc->rx_target, mV, &attn);
 			if (ret)
 				break;
-			attni_fine = attn % 6;
-			attn_temp = (attn - attni_fine) / 6;
-			attn1 = no_os_min(3, attn_temp);
-			attn2 = attn_temp - attn1;
-			ret = hmc6301_set_bb_attn(rx, attn_reverse[attn1], attn_reverse[attn2]);
-			if (ret)
-				break;
-			ret = hmc6301_set_bb_attn_fine(rx, attn_fine_reverse[attni_fine], 0);
-			if (ret)
-				break;
+			if (prev_bb_attn != attn) {
+				attni_fine = attn % 6;
+				attn_temp = (attn - attni_fine) / 6;
+				attn1 = no_os_min(3, attn_temp);
+				attn2 = attn_temp - attn1;
+				ret = hmc6301_set_bb_attn(rx, attn_reverse[attn1], attn_reverse[attn2]);
+				if (ret)
+					break;
+				ret = hmc6301_set_bb_attn_fine(rx, attn_fine_reverse[attni_fine], 0);
+				if (ret)
+					break;
 
-			prev_attn = attn;
+				prev_bb_attn = attn;
+			}
 
-			if (iter_count == 10) {
+			if (iter_count == 8) {
 				led_rx_det_green(false);
 				led_rx_det_red(false);
 				if (abs((int)mV - (int)mwc->rx_target) <= mwc->rx_tolerance)
