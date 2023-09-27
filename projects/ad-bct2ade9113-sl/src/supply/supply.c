@@ -132,7 +132,7 @@ int supply_init(struct ade9113_dev **device)
 
 	ret = ade9113_init(device, ade9113_ip);
 	if (ret)
-		return ret;
+		goto ade9113_init_err;
 
 	switch ((*device)->ver_product) {
 	case ADE9113_3_CHANNEL_ADE9113:
@@ -151,20 +151,20 @@ int supply_init(struct ade9113_dev **device)
 
 	ret = ade9113_set_normal_mode((*device));
 	if (ret)
-		return ret;
+		goto error;
 
 	ret = ade9113_select_zero_crossing_channel((*device), ADE9113_ZX_V1_SEL);
 	if (ret)
-		return ret;
+		goto error;
 
 	ret = ade9113_select_zero_crossing_edge((*device),
 						ADE9113_ZX_INPUT_SIGNAL_SIGN);
 	if (ret)
-		return ret;
+		goto error;
 
 	ret = ade9113_set_crc_en_state((*device), 0);
 	if (ret)
-		return ret;
+		goto error;
 
 	/* Set digital signal processing configuration. */
 	ret =  ade9113_set_dsp_config((*device),
@@ -173,22 +173,31 @@ int supply_init(struct ade9113_dev **device)
 	ret = no_os_irq_register_callback((*device)->irq_ctrl, GPIO_ZC_PIN,
 					  &zx_zero_cross_cb);
 	if (ret)
-		return ret;
+		goto error;
 
 	ret = no_os_irq_trigger_level_set((*device)->irq_ctrl,
 					  GPIO_ZC_PIN, NO_OS_IRQ_EDGE_FALLING);
 	if (ret)
-		return ret;
+		goto error;
 
 	ret = no_os_irq_set_priority((*device)->irq_ctrl, GPIO_ZC_PIN, 4);
 	if (ret)
-		return ret;
+		goto error;
 
 	ret = no_os_irq_enable((*device)->irq_ctrl, GPIO_ZC_PIN);
 	if (ret)
-		return ret;
+		goto error;
 
 	return 0;
+
+error:
+	ade9113_remove(device);
+	device = NULL;
+ade9113_init_err:
+	no_os_irq_ctrl_remove(ade9113_gpio_irq_desc);
+	ade9113_gpio_irq_desc = NULL;
+
+	return ret;
 }
 
 /**
