@@ -444,7 +444,6 @@ int ade9113_remove(struct ade9113_dev *dev)
 		return ret;
 
 	no_os_free(dev);
-	dev = NULL;
 
 	return 0;
 }
