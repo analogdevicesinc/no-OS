@@ -248,8 +248,11 @@ int state_machine()
 
 	// Disable the zero corssing interrupt
 	ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_ZC_PIN);
-	if (ret)
-		return ret;
+	if (ret) {
+		stout->current_state = STATE_FAULT;
+		stout->err_status = ret;
+		goto error;
+	}
 
 	// Set CP signal at DC level at startup
 	pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
