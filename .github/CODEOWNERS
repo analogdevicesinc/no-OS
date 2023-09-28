@@ -10,6 +10,6 @@
 ##### Global code owners (for whole files from repo) #####
 *	darius.berghe@analog.com ciprian.regus@analog.com dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com george.mois@analog.com
 /ci/    dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
-/tools/scripts/ dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
+/tools/scripts/ dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com ciprian.regus@analog.com darius.berghe@analog.com
 azure-pipelines.yml  dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
 build_projects.yml   dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
