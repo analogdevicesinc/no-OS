@@ -69,17 +69,7 @@ static const char * const output_unit[] = {
 	"m/s^2",
 	"m/s^2",
 	"m/s^2",
-	"°C"
-};
-
-static const float output_scale[] = {
-	1.0/RAD_TO_DEGREE(10 << 16),
-	1.0/RAD_TO_DEGREE(10 << 16),
-	1.0/RAD_TO_DEGREE(10 << 16),
-	1.0/ 5346250,
-	1.0/ 5346250,
-	1.0/ 5346250,
-	1.0/10,
+	"milli °C"
 };
 
 /******************************************************************************/
@@ -97,12 +87,37 @@ int dummy_example_main()
 	struct adis_dev *adis1657x_desc;
 	int ret;
 	int32_t val[7];
+	struct adis_scale_fractional accl_scale;
+	struct adis_scale_fractional anglvel_scale;
+	struct adis_scale_fractional temp_scale;
 
 	adis1657x_chip_info.ip = &adis1657x_ip;
 
 	ret = adis_init(&adis1657x_desc, &adis1657x_chip_info);
 	if (ret)
 		goto error;
+
+	ret = adis_get_accl_scale(adis1657x_desc, &accl_scale);
+	if (ret)
+		goto error_remove;
+
+	ret = adis_get_anglvel_scale(adis1657x_desc, &anglvel_scale);
+	if (ret)
+		goto error_remove;
+
+	ret = adis_get_temp_scale(adis1657x_desc, &temp_scale);
+	if (ret)
+		goto error_remove;
+
+	float output_scale[] = {
+		(float)anglvel_scale.dividend / anglvel_scale.divisor,
+		(float)anglvel_scale.dividend / anglvel_scale.divisor,
+		(float)anglvel_scale.dividend / anglvel_scale.divisor,
+		(float)accl_scale.dividend / accl_scale.divisor,
+		(float)accl_scale.dividend / accl_scale.divisor,
+		(float)accl_scale.dividend / accl_scale.divisor,
+		(float)temp_scale.dividend / temp_scale.divisor,
+	};
 
 	while(1) {
 		pr_info ("while loop \n");
@@ -130,7 +145,7 @@ int dummy_example_main()
 			goto error_remove;
 
 		for (uint8_t i = 0; i < 7; i++)
-			pr_info("%s %.5f %s \n", output_data[i], val[i]* output_scale[i],
+			pr_info("%s %.5f %s \n", output_data[i], val[i] * output_scale[i],
 				output_unit[i]);
 	}
 error_remove:
