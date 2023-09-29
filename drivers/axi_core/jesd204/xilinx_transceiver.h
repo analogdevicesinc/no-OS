@@ -241,8 +241,8 @@ struct clk_ops {
 	unsigned long (*recalc_rate)(struct adxcvr *xcvr,
 				     unsigned long parent_rate);
 	long (*round_rate)(struct adxcvr *xcvr,
-			   unsigned long parent_rate,
-			   unsigned long *prate);
+			   unsigned long rate,
+			   unsigned long parent_rate);
 	int (*set_rate)(struct adxcvr *xcvr,
 			unsigned long rate,
 			unsigned long parent_rate);
