@@ -95,6 +95,8 @@ struct adxcvr {
 	uint32_t out_clk_sel;
 	/** Structure holding the configuration of the Xilinx Transceiver. */
 	struct xilinx_xcvr xlx_xcvr;
+	/** Exported no-OS output clock */
+	struct no_os_clk_desc *clk_out;
 };
 
 /**
@@ -121,7 +123,14 @@ struct adxcvr_init {
 	uint32_t lane_rate_khz;
 	/** Reference Clock rate */
 	uint32_t ref_rate_khz;
+	/** Export no-OS output clock */
+	bool export_no_os_clk;
 };
+
+/**
+ * @brief adxcvr clock ops
+ */
+extern const struct no_os_clk_platform_ops adxcvr_clk_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
