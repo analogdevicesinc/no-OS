@@ -51,7 +51,6 @@
 #include "no_os_axi_io.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
-#include "jesd204_clk.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -578,7 +577,7 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	pr_debug("%s: Link%u set lane rate %lu kHz\n",
 		 __func__, lnk->link_id, lane_rate);
 
-	ret = no_os_clk_set_rate(jesd->lane_clk->clk_desc, lane_rate);
+	ret = no_os_clk_set_rate(jesd->lane_clk, lane_rate);
 	if (ret) {
 		pr_err("%s: Link%u set lane rate %lu kHz failed (%d)\n",
 		       __func__, lnk->link_id, lane_rate, ret);
@@ -623,7 +622,7 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 		return ret;
 	}
 
-	ret = no_os_clk_enable(jesd->lane_clk->clk_desc);
+	ret = no_os_clk_enable(jesd->lane_clk);
 	if (ret) {
 		pr_err("%s: Link%u enable lane clock failed (%d)\n",
 		       __func__, lnk->link_id, ret);
@@ -827,8 +826,6 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 				     const struct jesd204_tx_init *init)
 {
 	struct axi_jesd204_tx_jesd204_priv *priv;
-	struct no_os_clk_desc *clk_desc;
-	struct no_os_clk *lane_clock;
 	struct axi_jesd204_tx *jesd;
 	uint32_t synth_1;
 	uint32_t magic;
@@ -894,39 +891,11 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 	jesd->config.control_bits_per_sample = init->control_bits_per_sample;
 	jesd->config.subclass_version = init->subclass;
 
-	lane_clock = (struct no_os_clk *)no_os_calloc(1, sizeof(*lane_clock));
-	if (!lane_clock) {
-		ret = -ENOMEM;
-		goto err;
-	}
-
-	lane_clock->hw_ch_num = init->lane_clk.hw_ch_num;
-	lane_clock->name = init->lane_clk.name;
-
-	clk_desc = (struct no_os_clk_desc *)no_os_calloc(1, sizeof(*clk_desc));
-	if (!clk_desc) {
-		ret = -ENOMEM;
-		goto err_1;
-	}
-
-	struct jesd204_clk *clk1 = init->lane_clk.dev_desc;
-	clk1->jesd_tx = jesd;
-	clk1->jesd_rx = NULL;
-
-	ret = no_os_clk_init(&clk_desc, &init->lane_clk);
-	if (ret)
-		goto err_2;
-
-	lane_clock->clk_desc = clk_desc;
-	jesd->lane_clk = lane_clock;
-
-	ret = no_os_clk_disable(jesd->lane_clk->clk_desc);
-	if (ret)
-		goto err_2;
+	jesd->lane_clk = init->lane_clk;
 
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_tx_init);
 	if (ret)
-		goto err_2;
+		goto err;
 
 	priv = jesd204_dev_priv(jesd->jdev);
 	priv->jesd = jesd;
@@ -935,10 +904,6 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 
 	return 0;
 
-err_2:
-	no_os_free(clk_desc);
-err_1:
-	no_os_free(lane_clock);
 err:
 	no_os_free(jesd);
 

@@ -117,6 +117,7 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		.lpm_enable = 0,
 		.lane_rate_khz = tx_lane_clk_khz,
 		.ref_rate_khz = reference_clk_khz,
+		.export_no_os_clk = true
 	};
 #endif
 
@@ -129,6 +130,7 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		.lpm_enable = 1,
 		.lane_rate_khz = rx_lane_clk_khz,
 		.ref_rate_khz = reference_clk_khz,
+		.export_no_os_clk = true
 	};
 #endif
 
@@ -162,27 +164,21 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	clk[1].name = "jesd_tx";
 	clk[1].hw = &jesd_tx_hw;
 
-	rx_jesd_init.lane_clk.dev_desc = &rx_jesd_clk;
-	rx_jesd_init.lane_clk.hw_ch_num = 0;
-	rx_jesd_init.lane_clk.name = "jesd_rx";
-	rx_jesd_init.lane_clk.platform_ops = &jesd204_clk_ops;
+	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 
-	tx_jesd_init.lane_clk.dev_desc = &tx_jesd_clk;
-	tx_jesd_init.lane_clk.hw_ch_num = 0;
-	tx_jesd_init.lane_clk.name = "jesd_tx";
-	tx_jesd_init.lane_clk.platform_ops = &jesd204_clk_ops;
+	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 
 	ret = axi_jesd204_tx_init_jesd_fsm(&tx_jesd, &tx_jesd_init);
 	if (ret)
 		return ret;
 
-	clk[1].clk_desc = tx_jesd->lane_clk->clk_desc;
+	clk[1].clk_desc = tx_jesd->lane_clk;
 
 	ret = axi_jesd204_rx_init_jesd_fsm(&rx_jesd, &rx_jesd_init);
 	if (ret)
 		return ret;
 
-	clk[0].clk_desc = tx_jesd->lane_clk->clk_desc;
+	clk[0].clk_desc = rx_jesd->lane_clk;
 
 	return 0;
 }

@@ -384,6 +384,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.lpm_enable = 1,
 		.ref_rate_khz = 500000,
 		.lane_rate_khz = 10000000,
+		.export_no_os_clk = true
 	};
 	dev_init->ad9680_xcvr_param = (struct adxcvr_init) {
 		.name = "ad9680_xcvr",
@@ -392,7 +393,8 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.ref_rate_khz = 500000,
-		.lane_rate_khz = 10000000
+		.lane_rate_khz = 10000000,
+		.export_no_os_clk = true
 	};
 #else
 	dev_init->ad9144_xcvr_param = (struct adxcvr_init) {
@@ -556,10 +558,7 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 #ifdef JESD_FSM_ON
 	tx_jesd_clk.xcvr = dev->ad9680_xcvr;
 
-	dev_init->ad9144_jesd_param.lane_clk.dev_desc = &tx_jesd_clk.xcvr;
-	dev_init->ad9144_jesd_param.lane_clk.hw_ch_num = 1;
-	dev_init->ad9144_jesd_param.lane_clk.name = dev->ad9144_xcvr->name;
-	dev_init->ad9144_jesd_param.lane_clk.platform_ops = &jesd204_clk_ops;
+	dev_init->ad9144_jesd_param.lane_clk = dev->ad9144_xcvr->clk_out;
 
 	status = axi_jesd204_tx_init_jesd_fsm(&dev->ad9144_jesd,
 					      &dev_init->ad9144_jesd_param);
@@ -601,10 +600,7 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 
 	rx_jesd_clk.xcvr = dev->ad9680_xcvr;
 
-	dev_init->ad9680_jesd_param.lane_clk.dev_desc = &rx_jesd_clk.xcvr;
-	dev_init->ad9680_jesd_param.lane_clk.hw_ch_num = 1;
-	dev_init->ad9680_jesd_param.lane_clk.name = dev->ad9680_xcvr->name;
-	dev_init->ad9680_jesd_param.lane_clk.platform_ops = &jesd204_clk_ops;
+	dev_init->ad9680_jesd_param.lane_clk = dev->ad9680_xcvr->clk_out;
 
 	status = axi_jesd204_rx_init_jesd_fsm(&dev->ad9680_jesd,
 					      &dev_init->ad9680_jesd_param);
