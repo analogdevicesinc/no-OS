@@ -114,25 +114,25 @@ enum max14906_climit {
 };
 
 /** Read the state of a channel */
-int max14906_ch_get(struct max14906_desc *, uint32_t, uint32_t *);
+int max14906_ch_get(struct max149x6_desc *, uint32_t, uint32_t *);
 
 /** Set the state of a channel */
-int max14906_ch_set(struct max14906_desc *, uint32_t, uint32_t);
+int max14906_ch_set(struct max149x6_desc *, uint32_t, uint32_t);
 
 /** Configure a channel's function */
-int max14906_ch_func(struct max14906_desc *, uint32_t, enum max14906_function);
+int max14906_ch_func(struct max149x6_desc *, uint32_t, enum max14906_function);
 
 /** Configure the current limit for output channels */
-int max14906_climit_set(struct max14906_desc *, uint32_t, enum max14906_climit);
+int max14906_climit_set(struct max149x6_desc *, uint32_t, enum max14906_climit);
 
 /** Read an output channel's current limit */
-int max14906_climit_get(struct max14906_desc *, uint32_t,
+int max14906_climit_get(struct max149x6_desc *, uint32_t,
 			enum max14906_climit *);
 
 /** Initialize and configure the MAX14906 device */
-int max14906_init(struct max14906_desc **, struct max14906_init_param *);
+int max14906_init(struct max149x6_desc **, struct max149x6_init_param *);
 
 /** Free the resources allocated during init and place all the channels in high-z. */
-int max14906_remove(struct max14906_desc *);
+int max14906_remove(struct max149x6_desc *);
 
 #endif

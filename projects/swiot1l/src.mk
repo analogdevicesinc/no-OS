@@ -59,9 +59,9 @@ INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 
 INCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.h	\
-	$(DRIVERS)/digital-io/max14906/max14906.h
+	$(DRIVERS)/digital-io/max149x6/max14906.h
 SRCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.c	\
-	$(DRIVERS)/digital-io/max14906/max14906.c
+	$(DRIVERS)/digital-io/max149x6/max14906.c
 
 INCS += $(DRIVERS)/temperature/adt75/adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/adt75.c
@@ -69,8 +69,8 @@ SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
 
-INCS += $(DRIVERS)/digital-io/max14906/iio_max14906.h
-SRCS += $(DRIVERS)/digital-io/max14906/iio_max14906.c
+INCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.h
+SRCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.c
 
 INCS += $(DRIVERS)/temperature/adt75/iio_adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/iio_adt75.c

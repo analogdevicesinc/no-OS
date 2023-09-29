@@ -57,7 +57,7 @@
 /**
  * @brief Initialization parameter for the MAX149X6 device.
  */
-struct max14906_init_param {
+struct max149x6_init_param {
 	uint32_t chip_address;
 	struct no_os_spi_init_param *comm_param;
 	struct no_os_gpio_init_param *en_gpio_param;
@@ -67,7 +67,7 @@ struct max14906_init_param {
 /**
  * @brief Device descriptor for MAX149X6.
  */
-struct max14906_desc {
+struct max149x6_desc {
 	uint32_t chip_address;
 	struct no_os_spi_desc *comm_desc;
 	struct no_os_gpio_desc *en_gpio;
@@ -76,12 +76,12 @@ struct max14906_desc {
 };
 
 /** Write the value of a device register */
-int max149x6_reg_write(struct max14906_desc *, uint32_t, uint32_t);
+int max149x6_reg_write(struct max149x6_desc *, uint32_t, uint32_t);
 
 /** Read the value of a device register */
-int max149x6_reg_read(struct max14906_desc *, uint32_t, uint32_t *);
+int max149x6_reg_read(struct max149x6_desc *, uint32_t, uint32_t *);
 
 /** Update the value of a device register */
-int max149x6_reg_update(struct max14906_desc *, uint32_t, uint32_t, uint32_t);
+int max149x6_reg_update(struct max149x6_desc *, uint32_t, uint32_t, uint32_t);
 
 #endif

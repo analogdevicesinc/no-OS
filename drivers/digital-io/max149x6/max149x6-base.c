@@ -101,7 +101,7 @@ static uint8_t max149x6_crc(uint8_t *data, bool encode)
  * @param val - value of the register
  * @return 0 in case of success, negative error code otherwise
  */
-int max149x6_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
+int max149x6_reg_write(struct max149x6_desc *desc, uint32_t addr, uint32_t val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
@@ -129,7 +129,7 @@ int max149x6_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
  * @param val - value of the register
  * @return 0 in case of success, negative error code otherwise
  */
-int max149x6_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
+int max149x6_reg_read(struct max149x6_desc *desc, uint32_t addr, uint32_t *val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
@@ -175,7 +175,7 @@ int max149x6_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
  * 		 no_os_field_prep(mask, val)
  * @return 0 in case of success, negative error code otherwise
  */
-int max149x6_reg_update(struct max14906_desc *desc, uint32_t addr,
+int max149x6_reg_update(struct max149x6_desc *desc, uint32_t addr,
 			uint32_t mask, uint32_t val)
 {
 	int ret;
