@@ -93,8 +93,8 @@ struct axi_jesd204_tx {
 	/** Selected Encoder */
 	enum jesd204_encoder encoder;
 	/** Lane Clock */
-	struct no_os_clk *lane_clk;
-
+	struct no_os_clk_desc *lane_clk;
+	/** JESD204 FSM device */
 	struct jesd204_dev *jdev;
 };
 
@@ -127,9 +127,8 @@ struct jesd204_tx_init {
 	uint32_t device_clk_khz;
 	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
-
 	/** Lane Clock */
-	struct no_os_clk_init_param lane_clk;
+	struct no_os_clk_desc *lane_clk;
 };
 
 /******************************************************************************/
