@@ -78,6 +78,7 @@ PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY_FILE_NAME ?= $(PROJECT_NAME)
 BINARY			?=  $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
+VSCODE_CFG_DIR	= $(PROJECT)/.vscode
 
 # New line variable
 define ENDL
@@ -234,6 +235,11 @@ OBJS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-objs.txt
 CFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags.txt
 CPPFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags.txt
 ASFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags.txt
+
+# Prepare for VS Code Debug Intellisense applied at target $(PROJECT_TARGET)_configure - depends on a complete CFLAGS
+include ../../tools/scripts/vsc_intellisense.mk
+# Prepare for VS Code Debug config applied at target $(PROJECT_TARGET)_configure
+include ../../tools/scripts/vsc_openocd_debug.mk
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
