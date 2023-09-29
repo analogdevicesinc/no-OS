@@ -301,24 +301,6 @@ static const struct clk_ops clkout_ops = {
 	.set_rate = adxcvr_clk_set_rate,
 };
 
-static unsigned long adxcvr_qpll_recalc_rate(struct adxcvr *xcvr,
-		unsigned long parent_rate)
-{
-	struct xilinx_xcvr_qpll_config qpll_conf;
-
-	pr_debug("%s: Parent Rate %lu Hz", __func__, parent_rate);
-
-	xilinx_xcvr_qpll_read_config(&xcvr->xlx_xcvr,
-				     ADXCVR_DRP_PORT_COMMON(0), xcvr->sys_clk_sel, &qpll_conf);
-
-	return xilinx_xcvr_qpll_calc_lane_rate(&xcvr->xlx_xcvr,
-					       parent_rate, &qpll_conf, 1);
-}
-
-static const struct clk_ops qpll_ops = {
-	.recalc_rate = adxcvr_qpll_recalc_rate,
-};
-
 /**
  * @brief AXI ADXCVR Clock Set Rate
  * @param xcvr - The device structure.
