@@ -272,23 +272,23 @@ static unsigned long adxcvr_clk_recalc_rate(struct adxcvr *xcvr,
 
 static long adxcvr_clk_round_rate(struct adxcvr *xcvr,
 				  unsigned long rate,
-				  unsigned long *prate)
+				  unsigned long parent_rate)
 {
 	int ret;
 
 	if (xcvr->ref_rate_khz % 40 == 0)
-		*prate = rate * (1000 / 40);
+		parent_rate = rate * (1000 / 40);
 
 	pr_debug("%s: Rate %lu kHz Parent Rate %lu Hz",
 		 __func__, rate, *prate);
 
 	/* Just check if we can support the requested rate */
 	if (xcvr->cpll_enable)
-		ret = xilinx_xcvr_calc_cpll_config(&xcvr->xlx_xcvr, *prate, rate,
+		ret = xilinx_xcvr_calc_cpll_config(&xcvr->xlx_xcvr, parent_rate, rate,
 						   NULL, NULL);
 	else
 		ret = xilinx_xcvr_calc_qpll_config(&xcvr->xlx_xcvr,
-						   xcvr->sys_clk_sel, *prate, rate,	NULL, NULL);
+						   xcvr->sys_clk_sel, parent_rate, rate,	NULL, NULL);
 
 	return ret < 0 ? ret : rate;
 }
