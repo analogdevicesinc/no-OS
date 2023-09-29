@@ -22,6 +22,7 @@ COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-
 # Locate openocd location under STM32CubeIDE plugins directory
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
 OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
+OPENOCD_SVD = $(word 1,$(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *.svd))))
 
 # stm32 specific build directory tree (project goes under app, but user .c/.h sources must go under app/Core)
 PROJECT_BUILDROOT = $(BUILD_DIR)/app
@@ -53,6 +54,7 @@ TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9]x.)"/>$$|\1|p' $(PRO
 CFLAGS += -D$(TARGET)
 CHIPNAME = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9][A-Z][A-Z][A-Z]x+)" .*$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 TARGETCFG = $(shell sed -rn "s|^.*(STM32[A-Z][0-9]).*$$|target/\L\1x.cfg|p" $(PROJECT_BUILDROOT)/.cproject | head -n 1)
+TARGETSVD = $(shell sed -rn "s|^.*(STM32[A-Z][0-9][0-9A-Z][0-9]).*$$|\1|p" $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 endif
 
 # Get the path of the linker script
@@ -64,6 +66,7 @@ CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 $(PROJECT_TARGET):
 	$(call print,Creating IDE project)
 	$(call mk_dir, $(BUILD_DIR))
+	$(call mk_dir, $(VSCODE_CFG_DIR))
 	@echo config load $(HARDWARE) > $(BINARY).cubemx
 	@echo project name app >> $(BINARY).cubemx
 	@echo project toolchain STM32CubeIDE >> $(BINARY).cubemx
@@ -96,6 +99,11 @@ $(PROJECT_TARGET)_configure:
 	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
 	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
+	$(file > $(CPP_PROP_JSON),$(CPP_FINAL_CONTENT))
+	$(file > $(SETTINGSJSON),$(VSC_SET_CONTENT))
+	$(file > $(LAUNCHJSON),$(VSC_LAUNCH_CONTENT))
+	$(MAKE) $(BINARY).openocd-cmsis
+	$(MAKE) $(BINARY).openocd
 
 $(PLATFORM)_sdkopen:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) &
@@ -128,8 +136,17 @@ AR = arm-none-eabi-ar
 AS = arm-none-eabi-gcc
 CC = arm-none-eabi-gcc
 GDB = arm-none-eabi-gdb
+GDB_PORT = 50000
 OC = arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
+
+.PHONY: $(BINARY).openocd-cmsis
+$(BINARY).openocd-cmsis:
+	@echo source [find interface/cmsis-dap.cfg] > $(BINARY).openocd-cmsis
+	@echo transport select swd >> $(BINARY).openocd-cmsis
+	@echo gdb_port $(GDB_PORT) >> $(BINARY).openocd-cmsis
+	@echo reset_config srst_only >> $(BINARY).openocd-cmsis
+	@echo source [find $(TARGETCFG)] >> $(BINARY).openocd-cmsis
 
 .PHONY: $(BINARY).openocd
 $(BINARY).openocd:
@@ -144,12 +161,12 @@ $(BINARY).openocd:
 	@echo set CONNECT_UNDER_RESET 1 >> $(BINARY).openocd
 	@echo set CORE_RESET 0 >> $(BINARY).openocd
 	@echo set AP_NUM 0 >> $(BINARY).openocd
-	@echo set GDB_PORT 3333 >> $(BINARY).openocd
+	@echo gdb_port $(GDB_PORT) >> $(BINARY).openocd
 	@echo source [find $(TARGETCFG)] >> $(BINARY).openocd
 
 .PHONY: $(BINARY).gdb
 $(BINARY).gdb:
-	@echo target remote localhost:3333 > $(BINARY).gdb
+	@echo target remote localhost:$(GDB_PORT) > $(BINARY).gdb
 	@echo load $(BINARY) >> $(BINARY).gdb
 	@echo file $(BINARY) >> $(BINARY).gdb
 	@echo monitor reset halt >> $(BINARY).gdb

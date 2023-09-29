@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": VSCODE_ELF_FILE,
+            "name": "OpenOCD(stlink-dap)",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "svdFile": VSCODE_SVD_FILE,
+            "configFiles": [
+                VSCODE_STLINKCFG_FILE
+            ],
+            "searchDir": [ VSCODE_SEARCH_DIR ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none"
+        },
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": VSCODE_ELF_FILE,
+            "name": "OpenOCD(cmsis-dap)",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "svdFile": VSCODE_SVD_FILE,
+            "configFiles": [
+                VSCODE_CMSISCFG_FILE
+            ],
+            "searchDir": [ VSCODE_SEARCH_DIR ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none"
+        }
+    ]
+}

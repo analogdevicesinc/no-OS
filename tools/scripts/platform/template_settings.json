@@ -1,0 +1,4 @@
+{
+    "cortex-debug.gdbPath": VSCODE_GDB_PATH,
+    "cortex-debug.openocdPath": VSCODE_OPENOCD_PATH
+}
