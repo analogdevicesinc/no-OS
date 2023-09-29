@@ -69,10 +69,12 @@ DESTINATION_DIRECTORY="$BINARY_PATH/${ARTIFACT}"
 
 #Update Release Tag in preparation for new release
 update_release_tag() {
-	# delete last_commit tag locally
-	git tag -d $RELEASE_TAG
-	# delete last_commit tag remotely
-	git push origin :refs/tags/$RELEASE_TAG
+	if [[ $(git show-ref --tags | grep "$RELEASE_TAG") ]]; then
+		# delete last_commit tag locally
+		git tag -d $RELEASE_TAG
+		# delete last_commit tag remotely
+		git push origin :refs/tags/$RELEASE_TAG
+	fi
 	# add last_commit tag locally
 	git tag -f $RELEASE_TAG HEAD
 	# add last_commit tag remotely
