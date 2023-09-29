@@ -1647,76 +1647,6 @@ int32_t hmc7044_remove(struct hmc7044_dev *device)
 }
 
 /**
- * @brief Initialize the CLK structure.
- *
- * @param desc - The CLK descriptor.
- * @param init_param - The structure holding the device initial parameters.
- *
- * @return 0 in case of success, negative error code otherwise.
- */
-static int hmc7044_clk_init(struct no_os_clk_desc **desc,
-			    const struct no_os_clk_init_param *init_param)
-{
-	struct hmc7044_dev *hmc7044_d;
-
-	/* Exit if we have no init_params */
-	if (!init_param) {
-		return -EINVAL;
-	}
-
-	*desc = no_os_calloc(1, sizeof(**desc));
-	/* Exit if memory cannot be allocated */
-	if(!*desc) {
-		free(*desc);
-		return -ENOMEM;
-	}
-
-	hmc7044_d = init_param->dev_desc;
-	/* Exit if no hardware device specified in init_param */
-	if(!hmc7044_d) {
-		free(*desc);
-		return -ENOMEM;
-	}
-
-	(*desc)->name = init_param->name;
-	(*desc)->hw_ch_num = init_param->hw_ch_num;
-
-	(*desc)->dev_desc = (void *)no_os_calloc(1, sizeof(struct hmc7044_dev));
-
-	(*desc)->dev_desc = init_param->dev_desc;
-
-	return 0;
-}
-
-/**
- * @brief Remove the CLK structure.
- *
- * @param desc - The CLK descriptor.
- *
- * @return 0 in case of success, negative error code otherwise.
- */
-static int hmc7044_clk_remove(struct no_os_clk_desc *desc)
-{
-	struct hmc7044_dev *hmc7044_dev;
-	int ret;
-
-	hmc7044_dev = desc->dev_desc;
-
-	if(!hmc7044_dev)
-		return -ENODEV;
-
-	free(desc);
-
-	ret = hmc7044_remove(desc->dev_desc);
-	if (ret) {
-		free(desc->dev_desc);
-		return ret;
-	}
-
-	return 0;
-}
-
-/**
  * @brief Recalculate the clock rate.
  *
  * @param desc - The CLK descriptor.
@@ -1765,9 +1695,7 @@ int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
  * @brief hmc7044 clock ops
  */
 const struct no_os_clk_platform_ops hmc7044_clk_ops = {
-	.init = &hmc7044_clk_init,
 	.clk_recalc_rate =&hmc7044_recalc_rate,
 	.clk_round_rate = &hmc7044_round_rate,
 	.clk_set_rate = &hmc7044_set_rate,
-	.remove = &hmc7044_clk_remove
 };

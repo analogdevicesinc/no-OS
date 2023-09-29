@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_clk.h"
 
@@ -55,21 +56,35 @@
 int32_t no_os_clk_init(struct no_os_clk_desc **desc,
 		       const struct no_os_clk_init_param *param)
 {
+	struct no_os_clk_desc *clk;
 	int ret;
 
 	if (!desc || !param || !param->platform_ops)
 		return -EINVAL;
 
-	if (!param->platform_ops->init)
-		return -ENOSYS;
+	clk = (struct no_os_clk_desc *)no_os_calloc(1, sizeof(*clk));
+	if (!clk)
+		return -ENOMEM;
 
-	ret = param->platform_ops->init(desc, param);
-	if (ret)
-		return -EINVAL;
+	clk->name = param->name;
+	clk->hw_ch_num = param->hw_ch_num;
+	clk->dev_desc = param->dev_desc;
+	clk->platform_ops = param->platform_ops;
 
-	(*desc)->platform_ops = param->platform_ops;
+	if (param->platform_ops->init) {
+		ret = param->platform_ops->init(desc, param);
+		if (ret)
+			goto error;
+	}
+
+	*desc = clk;
 
 	return 0;
+
+error:
+	no_os_free(clk);
+
+	return ret;
 }
 
 /**
@@ -79,13 +94,20 @@ int32_t no_os_clk_init(struct no_os_clk_desc **desc,
  */
 int32_t no_os_clk_remove(struct no_os_clk_desc *desc)
 {
+	int ret;
+
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
-	if (!desc->platform_ops->remove)
-		return -ENOSYS;
+	if (desc->platform_ops->remove) {
+		ret = desc->platform_ops->remove(desc);
+		if (ret)
+			return ret;
+	}
 
-	return desc->platform_ops->remove(desc);
+	no_os_free(desc);
+
+	return 0;
 }
 
 /**
