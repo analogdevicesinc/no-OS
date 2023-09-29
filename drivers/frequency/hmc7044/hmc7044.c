@@ -1688,7 +1688,6 @@ static int hmc7044_clk_init(struct no_os_clk_desc **desc,
 	return 0;
 }
 
-
 /**
  * @brief Remove the CLK structure.
  *
@@ -1718,10 +1717,10 @@ static int hmc7044_clk_remove(struct no_os_clk_desc *desc)
 }
 
 /**
- * @brief Start the clock.
+ * @brief Recalculate the clock rate.
  *
  * @param desc - The CLK descriptor.
- * @param rate - The desiered rate.
+ * @param rate - The desired rate.
  *
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -1732,10 +1731,43 @@ static int hmc7044_recalc_rate(struct no_os_clk_desc *desc, uint64_t *rate)
 }
 
 /**
- * @brief ad9523 platform specific CLK platform ops structure
+ * @brief Round the desired rate.
+ *
+ * @param desc - The CLK descriptor.
+ * @param rate - The desired rate.
+ * @param rounded_rate - The rounded rate.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int hmc7044_round_rate(struct no_os_clk_desc *desc,
+			      uint64_t rate, uint64_t *rounded_rate)
+{
+	return hmc7044_clk_round_rate(desc->dev_desc, rate,
+				      rounded_rate);
+}
+
+/**
+ * @brief Set the clock rate.
+ *
+ * @param desc - The CLK descriptor.
+ * @param rate - The desired rate.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
+			 uint64_t rate)
+{
+	return hmc7044_clk_set_rate(desc->dev_desc, desc->hw_ch_num,
+				    rate);
+}
+
+/**
+ * @brief hmc7044 clock ops
  */
 const struct no_os_clk_platform_ops hmc7044_clk_ops = {
 	.init = &hmc7044_clk_init,
 	.clk_recalc_rate =&hmc7044_recalc_rate,
+	.clk_round_rate = &hmc7044_round_rate,
+	.clk_set_rate = &hmc7044_set_rate,
 	.remove = &hmc7044_clk_remove
 };
