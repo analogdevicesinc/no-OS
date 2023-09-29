@@ -232,6 +232,18 @@ enum ad469x_pin_pairing {
 };
 
 /**
+ * @enum ad469x_ref_set
+ * @brief Reference input range control
+ */
+enum ad469x_ref_set {
+	AD469x_2P4_2P75,
+	AD469x_2P75_3P25,
+	AD469x_3P25_3P75,
+	AD469x_3P75_4P5,
+	AD469x_4P5_5P1,
+};
+
+/**
  * @struct ad469x_init_param
  * @brief  Structure containing the init parameters needed by the ad469x device
  */
@@ -412,6 +424,14 @@ int32_t ad469x_reset_dev(struct ad469x_dev *dev);
 /* Configures the AD469x device */
 int32_t ad469x_config(struct ad469x_dev *dev,
 		      struct ad469x_init_param *config_desc);
+
+/* Get Reference */
+int32_t ad469x_get_reference(struct ad469x_dev *device,
+			     enum ad469x_ref_set *ref_set);
+
+/* Set reference */
+int32_t ad469x_set_reference(struct ad469x_dev *device,
+			     enum ad469x_ref_set ref_set);
 
 /* Initialize the device. */
 int32_t ad469x_init(struct ad469x_dev **device,
