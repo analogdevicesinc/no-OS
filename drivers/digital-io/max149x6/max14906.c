@@ -50,7 +50,7 @@
  * @param val - binary value representing a channel's voltage level (0 or 1).
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_ch_get(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
+int max14906_ch_get(struct max149x6_desc *desc, uint32_t ch, uint32_t *val)
 {
 	int ret;
 
@@ -73,7 +73,7 @@ int max14906_ch_get(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
  * @param val - binary value representing a channel's voltage level (0 or 1).
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_ch_set(struct max14906_desc *desc, uint32_t ch, uint32_t val)
+int max14906_ch_set(struct max149x6_desc *desc, uint32_t ch, uint32_t val)
 {
 	if (ch >= MAX14906_CHANNELS)
 		return -EINVAL;
@@ -90,7 +90,7 @@ int max14906_ch_set(struct max14906_desc *desc, uint32_t ch, uint32_t val)
  * @param function - channel configuration (input, output or high-z).
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
+int max14906_ch_func(struct max149x6_desc *desc, uint32_t ch,
 		     enum max14906_function function)
 {
 	uint8_t setout_reg_val;
@@ -133,7 +133,7 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
  * @param climit - current limit value.
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_climit_set(struct max14906_desc *desc, uint32_t ch,
+int max14906_climit_set(struct max149x6_desc *desc, uint32_t ch,
 			enum max14906_climit climit)
 {
 	return max149x6_reg_update(desc, MAX14906_CONFIG_CURR_LIM, MAX14906_CL_MASK(ch),
@@ -147,7 +147,7 @@ int max14906_climit_set(struct max14906_desc *desc, uint32_t ch,
  * @param climit - current limit value.
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_climit_get(struct max14906_desc *desc, uint32_t ch,
+int max14906_climit_get(struct max149x6_desc *desc, uint32_t ch,
 			enum max14906_climit *climit)
 {
 	uint32_t reg_val;
@@ -171,10 +171,10 @@ int max14906_climit_get(struct max14906_desc *desc, uint32_t ch,
  * @param param - initialization parameter for the device.
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_init(struct max14906_desc **desc,
-		  struct max14906_init_param *param)
+int max14906_init(struct max149x6_desc **desc,
+		  struct max149x6_init_param *param)
 {
-	struct max14906_desc *descriptor;
+	struct max149x6_desc *descriptor;
 	uint32_t reg_val;
 	int ret;
 	int i;
@@ -241,7 +241,7 @@ err:
  * @param desc - device descriptor for the MAX14906 that will be initialized.
  * @return 0 in case of success, negative error code otherwise
  */
-int max14906_remove(struct max14906_desc *desc)
+int max14906_remove(struct max149x6_desc *desc)
 {
 	int ret;
 	int i;

@@ -85,7 +85,7 @@ static const char *const max14906_iec_avail[2] = {
  * @brief MAX14906 specific IIO descriptor.
  */
 struct max14906_iio_desc {
-	struct max14906_desc *max14906_desc;
+	struct max149x6_desc *max14906_desc;
 	struct iio_device *iio_dev;
 	uint32_t active_channels;
 	uint32_t no_active_channels;
@@ -96,7 +96,7 @@ struct max14906_iio_desc {
  * @brief Initialization parameter for the MAX14906 IIO descriptor.
  */
 struct max14906_iio_desc_init_param {
-	struct max14906_init_param *max14906_init_param;
+	struct max149x6_init_param *max14906_init_param;
 	struct max14906_ch_config channel_configs[MAX14906_CHANNELS];
 };
 

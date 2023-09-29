@@ -255,11 +255,11 @@ static int max14906_iio_read_do_mode(void *dev, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct max14906_iio_desc *iio_desc = dev;
-	struct max14906_desc *desc = iio_desc->max14906_desc;
+	struct max149x6_desc *desc = iio_desc->max14906_desc;
 	uint32_t val;
 	int ret;
 
-	ret = max14906_reg_read(desc, MAX14906_CONFIG_DO_REG, &val);
+	ret = max149x6_reg_read(desc, MAX14906_CONFIG_DO_REG, &val);
 	if (ret)
 		return ret;
 
@@ -303,7 +303,7 @@ static int max14906_iio_write_do_mode(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct max14906_iio_desc *iio_desc = dev;
-	struct max14906_desc *desc = iio_desc->max14906_desc;
+	struct max149x6_desc *desc = iio_desc->max14906_desc;
 	uint32_t i;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_do_mode_avail); i++)
@@ -315,7 +315,7 @@ static int max14906_iio_write_do_mode(void *dev, char *buf, uint32_t len,
 
 	i = no_os_field_prep(MAX14906_DO_MASK(channel->address), i);
 
-	return max14906_reg_update(desc, MAX14906_CONFIG_DO_REG,
+	return max149x6_reg_update(desc, MAX14906_CONFIG_DO_REG,
 				   MAX14906_DO_MASK(channel->address), i);
 }
 
@@ -332,11 +332,11 @@ static int max14906_iio_read_climit(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct max14906_iio_desc *iio_desc = dev;
-	struct max14906_desc *desc = iio_desc->max14906_desc;
+	struct max149x6_desc *desc = iio_desc->max14906_desc;
 	uint32_t current_limit;
 	int ret;
 
-	ret = max14906_reg_read(desc, MAX14906_CONFIG_CURR_LIM, &current_limit);
+	ret = max149x6_reg_read(desc, MAX14906_CONFIG_CURR_LIM, &current_limit);
 	if (ret)
 		return ret;
 
@@ -360,7 +360,7 @@ static int max14906_iio_write_climit(void *dev, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct max14906_iio_desc *iio_desc = dev;
-	struct max14906_desc *desc = iio_desc->max14906_desc;
+	struct max149x6_desc *desc = iio_desc->max14906_desc;
 	uint32_t val;
 	uint32_t i;
 
@@ -374,7 +374,7 @@ static int max14906_iio_write_climit(void *dev, char *buf, uint32_t len,
 			return -EINVAL;
 	}
 
-	return max14906_reg_update(desc, MAX14906_CONFIG_CURR_LIM,
+	return max149x6_reg_update(desc, MAX14906_CONFIG_CURR_LIM,
 				   MAX14906_CL_MASK(channel->ch_num),
 				   no_os_field_prep(MAX14906_CL_MASK(channel->ch_num), i));
 }
@@ -415,12 +415,12 @@ static int max14906_iio_read_config_iec(void *dev, char *buf, uint32_t len,
 {
 	struct max14906_iio_desc *iio_desc = dev;
 	enum max14906_iec_type iec_type;
-	struct max14906_desc *desc;
+	struct max149x6_desc *desc;
 	uint32_t val;
 	int ret;
 
 	desc = iio_desc->max14906_desc;
-	ret = max14906_reg_read(desc, MAX14906_CONFIG_DI_REG, &val);
+	ret = max149x6_reg_read(desc, MAX14906_CONFIG_DI_REG, &val);
 	if (ret)
 		return ret;
 
@@ -444,7 +444,7 @@ static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
 {
 	struct max14906_iio_desc *iio_desc = dev;
 	enum max14906_iec_type iec_type;
-	struct max14906_desc *desc;
+	struct max149x6_desc *desc;
 	uint8_t val;
 	size_t i;
 
@@ -461,7 +461,7 @@ static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
 
 	val = no_os_field_prep(MAX14906_IEC_TYPE_MASK, iec_type);
 
-	return max14906_reg_update(desc, MAX14906_CONFIG_DI_REG,
+	return max149x6_reg_update(desc, MAX14906_CONFIG_DI_REG,
 				   MAX14906_IEC_TYPE_MASK, val);
 }
 
@@ -560,7 +560,7 @@ free_channels:
 static int max14906_iio_reg_read(struct max14906_iio_desc *dev, uint32_t reg,
 				 uint32_t *readval)
 {
-	return max14906_reg_read(dev->max14906_desc, reg, readval);
+	return max149x6_reg_read(dev->max14906_desc, reg, readval);
 }
 
 /**
@@ -573,7 +573,7 @@ static int max14906_iio_reg_read(struct max14906_iio_desc *dev, uint32_t reg,
 static int max14906_iio_reg_write(struct max14906_iio_desc *dev, uint32_t reg,
 				  uint32_t writeval)
 {
-	return max14906_reg_write(dev->max14906_desc, reg, writeval);
+	return max149x6_reg_write(dev->max14906_desc, reg, writeval);
 }
 
 /**
