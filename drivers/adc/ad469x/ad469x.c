@@ -838,6 +838,45 @@ int32_t ad469x_reset_dev(struct ad469x_dev *dev)
 }
 
 /**
+ * @brief Get the value of reference
+ * @param device AD469x Device instance.
+ * @param ref_set Value of VREF_SET
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad469x_get_reference(struct ad469x_dev *device,
+			     enum ad469x_ref_set *ref_set)
+{
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!device)
+		return -EINVAL;
+
+	ret = ad469x_spi_reg_read(device, AD469x_REG_REF_CTRL, &reg_data);
+	if (ret)
+		return ret;
+
+	*ref_set = no_os_field_get(AD469x_REG_REF_VREF_SET_MASK, reg_data);
+
+	return 0;
+}
+
+/**
+ * @brief Set the value of reference
+ * @param device AD469x Device instance.
+ * @param ref_set Value of VREF_SET
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad469x_set_reference(struct ad469x_dev *device,
+			     enum ad469x_ref_set ref_set)
+{
+	return ad469x_spi_write_mask(device,
+				     AD469x_REG_REF_CTRL,
+				     AD469x_REG_REF_VREF_SET_MASK,
+				     no_os_field_prep(AD469x_REG_REF_VREF_SET_MASK, ref_set));
+}
+
+/**
  * Configure the device with initial parameters.
  * @param [in, out] dev - The device structure.
  * @param [in] config_desc - Pointer to structure containing configuration
