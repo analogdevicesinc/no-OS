@@ -271,16 +271,22 @@ int ad74416h_get_raw_adc_result(struct ad74416h_desc *desc, uint32_t ch,
 	uint32_t val_msb, val_lsb;
 	int ret;
 
-	ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT_UPR(ch), &val_msb);
-	if (ret)
-		return ret;
+	if (desc->id == ID_AD74416H) {
+		ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT_UPR(ch),
+					&val_msb);
+		if (ret)
+			return ret;
+	}
 
 	ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT(ch), &val_lsb);
 	if (ret)
 		return ret;
 
-	*val = (no_os_field_get(AD74416H_CONV_RES_UPR_MSK, val_msb) << 16) |
-	       no_os_field_get(AD74416H_CONV_RESULT_MSK, val_lsb);
+	if (desc->id == ID_AD74416H)
+		*val = (no_os_field_get(AD74416H_CONV_RES_UPR_MSK, val_msb) << 16) |
+		       no_os_field_get(AD74416H_CONV_RESULT_MSK, val_lsb);
+	else
+		*val = no_os_field_get(AD74416H_CONV_RESULT_MSK, val_lsb);
 
 	return 0;
 }
@@ -352,6 +358,18 @@ int ad74416h_get_adc_range(struct ad74416h_desc *desc, uint32_t ch,
 int ad74416h_set_adc_range(struct ad74416h_desc *desc, uint32_t ch,
 			   enum ad74416h_adc_range val)
 {
+	if (desc->id == ID_AD74414H) {
+		switch(val) {
+		case AD74416H_RNG_NEG12_12_V:
+		case AD74416H_RNG_0_0P625V:
+		case AD74416H_RNG_NEG104_104MV:
+		case AD74416H_RNG_NEG2P5_2P5V:
+			return -EINVAL;
+		default:
+			break;
+		}
+	}
+
 	return ad74416h_reg_update(desc, AD74416H_ADC_CONFIG(ch),
 				   AD74416H_ADC_CONV_RANGE_MSK, val);
 }
@@ -422,6 +440,16 @@ int ad74416h_get_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
 int ad74416h_set_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
 			      enum ad74416h_adc_conv_mux val)
 {
+	if (desc->id == ID_AD74414H) {
+		switch(val) {
+		case AD74416H_MUX_VSENSEN_TO_AGND:
+		case AD74416H_MUX_LF_TO_VSENSEN:
+			return -EINVAL;
+		default:
+			break;
+		}
+	}
+
 	return ad74416h_reg_update(desc, AD74416H_ADC_CONFIG(ch),
 				   AD74416H_CONV_MUX_MSK, val);
 }
@@ -531,6 +559,17 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 	int ret;
 	uint16_t dac_code;
 
+	if (desc->id == ID_AD74414H) {
+		switch(ch_func) {
+		case AD74416H_VOLTAGE_OUT:
+		case AD74416H_VOLTAGE_IN:
+		case AD74416H_RESISTANCE:
+			return -EINVAL;
+		default:
+			break;
+		}
+	}
+
 	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
 				  AD74416H_CH_FUNC_SETUP_MSK, AD74416H_HIGH_Z);
 	if (ret)
@@ -628,6 +667,16 @@ int ad74416h_set_channel_dac_code(struct ad74416h_desc *desc, uint32_t ch,
 int ad74416h_set_diag(struct ad74416h_desc *desc, uint32_t ch,
 		      enum ad74416h_diag_mode diag_code)
 {
+	if (desc->id == ID_AD74414H) {
+		switch(diag_code) {
+		case AD74416H_DIAG_LVIN:
+		case AD74416H_VSENSEN_C:
+			return -EINVAL;
+		default:
+			break;
+		}
+	}
+
 	return ad74416h_reg_update(desc, AD74416H_DIAG_ASSIGN,
 				   AD74416H_DIAG_ASSIGN_MSK(ch), diag_code);
 }
@@ -923,6 +972,7 @@ int ad74416h_init(struct ad74416h_desc **desc,
 	if (ret)
 		goto err;
 
+	descriptor->id = init_param->id;
 	descriptor->dev_addr = init_param->dev_addr;
 
 	no_os_crc8_populate_msb(_crc_table, AD74416H_CRC_POLYNOMIAL);
