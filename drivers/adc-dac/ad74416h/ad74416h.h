@@ -432,6 +432,14 @@
 /******************************************************************************/
 
 /**
+ * @brief Supported device ids.
+*/
+enum ad74416h_dev_id {
+	ID_AD74416H,
+	ID_AD74414H,
+};
+
+/**
  * @brief Operation modes of the device.
  */
 enum ad74416h_op_mode {
@@ -603,6 +611,7 @@ union ad74416h_live_status {
 };
 
 struct ad74416h_init_param {
+	enum ad74416h_dev_id id;
 	uint8_t dev_addr;
 	struct no_os_spi_init_param spi_ip;
 	struct no_os_gpio_init_param *reset_gpio_param;
@@ -623,6 +632,7 @@ struct ad74416h_channel_config {
  * @brief AD74416h device descriptor.
  */
 struct ad74416h_desc {
+	enum ad74416h_dev_id id;
 	uint8_t dev_addr;
 	struct no_os_spi_desc *spi_desc;
 	uint8_t comm_buff[AD74416H_FRAME_SIZE];
