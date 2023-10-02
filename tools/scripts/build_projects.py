@@ -103,28 +103,6 @@ def run_cmd(cmd):
 
 	return err
 
-
-def run_cmd_stm(cmd):
-	global ERR
-	tmp = cmd.split(' ')
-	if tmp[0] == 'make':
-		log('make ' + tmp[-1])
-	else:
-		log(cmd)
-	sys.stdout.flush()
-	err = os.system('echo %s >> %s' % (cmd, log_file))
-	if err != 0:
-		ERR = 1
-		return err
-	err = os.system(cmd + ' >> %s 2>&1' % log_file)
-	if err != 0 and tmp[0] != 'cp':
-		log_err("ERROR")
-		log("See log %s " \
-		    "-- Use cat (linux) or type (windows) to see colored output"
-		    % log_file)
-		ERR = 1
-
-	return err
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
@@ -267,7 +245,7 @@ class BuildConfig:
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
-			err = run_cmd_stm("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() / 2))
+			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() / 2))
 			if err != 0:
 				if err == 124:
 					log("Build not finished, stopped by timeout")
@@ -352,14 +330,7 @@ def main():
 							exit()
 						continue
 					else:
-						if platform == 'stm32':
-							err = run_cmd_stm("cp %s %s" %
-							(new_build.export_file, project_export))
-							if err:
-								binary_created = False
-							else:
-								binary_created = True
-						elif platform == 'xilinx':
+						if platform == 'xilinx':
 							project_export_dir = os.path.join(project_export, new_build.boot_dir)
 							run_cmd(create_dir_cmd.format(project_export_dir))
 							run_cmd("cp %s %s" %
