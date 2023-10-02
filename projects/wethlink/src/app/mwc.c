@@ -58,6 +58,34 @@ const struct nvmp factory_defaults_template = {
 	.hmc6301_bb_attnq_fine = HMC6301_BB_ATTN_FINE_0dB,
 };
 
+static int32_t mwc_read(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t *readval)
+{
+	if (reg >= 20)
+		return -EINVAL;
+
+	uint8_t	col = reg % 5;
+	uint8_t row = reg / 5;
+	uint8_t attn;
+
+	attn = mwc->temp_correlation[row][col];
+	*readval = attn;
+
+	return 0;
+}
+
+static int32_t mwc_write(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t writeval)
+{
+	if (reg >= 20)
+		return -EINVAL;
+
+	uint8_t	col = reg % 5;
+	uint8_t row = reg / 5;
+
+	mwc->temp_correlation[row][col] = writeval;
+
+	return 0;
+}
+
 void mwc_temp_correlation(uint8_t (*correlation)[5], uint8_t temp, uint8_t *tx_if, uint8_t *rx_if, uint8_t *rx_rflna)
 {
 	uint8_t e;
@@ -585,6 +613,8 @@ static struct iio_device mwc_iio_device_template = {
 	.attributes = mwc_iio_attrs,
 	.num_ch = NO_OS_ARRAY_SIZE(mwc_channels),
 	.channels = mwc_channels,
+	.debug_reg_read = (int32_t (*)())mwc_read,
+	.debug_reg_write = (int32_t (*)())mwc_write,
 };
 
 int mwc_iio_init(struct mwc_iio_dev **iiodev,
