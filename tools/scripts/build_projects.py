@@ -219,10 +219,13 @@ class BuildConfig:
 		self.binary = os.path.join(self.build_dir, self._binary)
 		self.export_file = os.path.join(self.build_dir, self.binary)
 		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
+			self.export_elf_file = self.export_file
 			self.export_file = self.export_file.replace('.elf', '.hex')
 		if (platform == 'pico'):
+			self.export_elf_file = self.export_file
 			self.export_file = self.export_file.replace('.elf', '.uf2')
 		if (platform == 'mbed'):
+			self.export_elf_file = self.export_file
 			self.export_file = self.export_file.replace('.elf', '.bin')
 		if (platform == 'xilinx'):
 			self.export_boot_bin = os.path.join(self.build_dir, "output_boot_bin/BOOT.BIN")
@@ -360,6 +363,8 @@ def main():
 						else:
 							run_cmd("cp %s %s" %
 								(new_build.export_file, project_export))
+							run_cmd("cp %s %s" %
+								(new_build.export_elf_file, project_export))
 							binary_created = True
 			
 		fp.close()
