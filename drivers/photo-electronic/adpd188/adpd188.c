@@ -69,7 +69,7 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	if(!dev)
 		return -1;
 	dev->device = init_param->device;
-	if (dev->device == APDP1080)
+	if (dev->device == ADPD1080)
 		dev->phy_opt = ADPD188_I2C;
 	else if (dev->device == ADPD1081)
 		dev->phy_opt = ADPD188_SPI;
@@ -92,7 +92,7 @@ int32_t adpd188_init(struct adpd188_dev **device,
 		goto error_phy;
 	if((dev->device == ADPD188BI) && (reg_data != ADPD188_DEVICE_ID))
 		goto error_phy;
-	else if(((dev->device == APDP1080) || (dev->device == ADPD1081)) &&
+	else if(((dev->device == ADPD1080) || (dev->device == ADPD1081)) &&
 		(reg_data != ADPD108X_DEVICE_ID))
 		goto error_phy;
 

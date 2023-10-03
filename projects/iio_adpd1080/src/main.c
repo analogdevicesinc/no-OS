@@ -235,7 +235,7 @@ int main(void)
 
 	struct adpd188_iio_desc *adpd1080_iio_device;
 	struct adpd188_iio_init_param adpd1080_iio_inital = {
-		.drv_init_param.device = APDP1080,
+		.drv_init_param.device = ADPD1080,
 		.drv_init_param.phy_opt = ADPD188_I2C,
 		.drv_init_param.phy_init.i2c_phy =
 		{

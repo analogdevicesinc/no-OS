@@ -48,10 +48,10 @@
 #include "iio.h"
 
 #define ADPD1080_CHANNEL_NO		8
-#define APDP1080_WORD_BIT_SIZE		16
+#define ADPD1080_WORD_BIT_SIZE		16
 #define ADPD1080_BITS_PER_SAMPLE	32
 #define ADPD1080_WORDS_PER_SAMPLE	\
-	(ADPD1080_BITS_PER_SAMPLE / APDP1080_WORD_BIT_SIZE)
+	(ADPD1080_BITS_PER_SAMPLE / ADPD1080_WORD_BIT_SIZE)
 
 struct adpd188_iio_init_param {
 	struct adpd188_init_param drv_init_param;
