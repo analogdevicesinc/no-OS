@@ -506,7 +506,7 @@
  */
 enum adpd_supported_devices {
 	ADPD188BI,
-	APDP1080,
+	ADPD1080,
 	ADPD1081
 };
 
