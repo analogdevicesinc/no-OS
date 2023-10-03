@@ -21,6 +21,7 @@ extern "C" {
 
 extern taliseDevice_t talDevice;
 extern taliseInit_t talInit;
+extern taliseAgcCfg_t rxAgcCtrl;
 
 #ifdef __cplusplus
 }

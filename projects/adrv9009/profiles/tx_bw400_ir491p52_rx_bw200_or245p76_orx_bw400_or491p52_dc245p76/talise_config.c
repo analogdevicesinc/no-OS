@@ -17,9 +17,9 @@
  */
 
 #include "talise_types.h"
+#include "talise_agc.h"
 #include "talise_config.h"
 #include "talise_error.h"
-#include "talise_agc.h"
 #ifdef ADI_ZYNQ_PLATFORM
 #include "zynq_platform.h"
 #endif
@@ -318,13 +318,13 @@ taliseInit_t talInit = {
 };
 
 //Only needs to be called if user wants to setup AGC parameters
-static taliseAgcCfg_t rxAgcCtrl = {
+taliseAgcCfg_t rxAgcCtrl = {
 	4,
 	255,
 	195,
 	255,
 	195,
-	30720,  /* AGC gain update time in us (125us-250us - based on IQ data rate - set for 125us @ 245.76 Mhz) */
+	250,  /* AGC gain update time in us (125us-250us - based on IQ data rate - set for 125us @ 245.76 Mhz) */
 	10,
 	10,
 	16,
@@ -384,6 +384,6 @@ static taliseAgcCfg_t rxAgcCtrl = {
 		4,          /*!<AGC decimator output attack gain step. Default = 2dB step - based on gain table step size, 5-bit register value, where max = 0x1F, min = 0x00 */
 		1,
 		0,
-		0
+		3
 	}
 };
