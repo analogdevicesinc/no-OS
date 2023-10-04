@@ -120,6 +120,52 @@ int ad2s1210_reg_read(struct ad2s1210_dev *dev, uint8_t addr, uint8_t *val)
 }
 
 /*******************************************************************************
+* @brief Gets the the hysteresis enable value.
+*
+* @param dev - Device descriptor.
+*
+* @return Returns 1 in case of enabled 0 if disabled or negative error code
+*******************************************************************************/
+int ad2s1210_hysteresis_is_enabled(struct ad2s1210_dev *dev)
+{
+	int ret;
+	uint8_t control;
+
+	ret = ad2s1210_reg_read(dev,  AD2S1210_REG_CONTROL, &control);
+	if (ret)
+		return ret;
+
+	if (control & AD2S1210_ENABLE_HYSTERESIS)
+		return 1;
+
+	return 0;
+}
+
+/*******************************************************************************
+* @brief Sets the hysteresis enable value
+*
+* @param dev - Device descriptor.
+* @param fexcit - pointer to store the excitation frequency
+*
+* @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+int ad2s1210_set_hysteresis(struct ad2s1210_dev *dev, bool enable)
+{
+	int ret;
+	uint8_t control;
+
+	ret = ad2s1210_reg_read(dev,  AD2S1210_REG_CONTROL, &control);
+	if (ret)
+		return ret;
+
+	control &= ~AD2S1210_ENABLE_HYSTERESIS;
+	if (enable)
+		control |= AD2S1210_ENABLE_HYSTERESIS;
+
+	return ad2s1210_reg_write(dev,  AD2S1210_REG_CONTROL, control);
+}
+
+/*******************************************************************************
 * @brief Read a device register
 *
 * @param dev - Device descriptor.
