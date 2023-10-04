@@ -600,6 +600,11 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
 
+	if (desc->open_alliance) {
+		/* Dequeue frames from the RX queue, instead of reading them from the device */
+		// memcpy(eth_buff->mac_dest, );
+	}
+
 	if (!port) {
 		fifo_reg = ADIN1110_RX_REG;
 		fifo_fsize_reg = ADIN1110_RX_FSIZE_REG;
@@ -853,6 +858,7 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 		return ret;
 
 	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ;
+	// reg_val = ADIN1110_RX_RDY_IRQ;
 	if (desc->chip_type == ADIN2111)
 		reg_val |= ADIN2111_RX_RDY_IRQ;
 
@@ -863,23 +869,76 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	return adin1110_set_mac_addr(desc, desc->mac_address);
 }
 
+static int adin1110_enable_tx_rdy_irq(struct adin1110_desc *desc, bool enable)
+{
+	int ret;
+
+	return adin1110_reg_update(desc, ADIN1110_IMASK1_REG, ADIN1110_TX_RDY_IRQ,
+				  (enable) ? 0 : no_os_field_prep(ADIN1110_TX_RDY_IRQ,
+				  					ADIN1110_TX_RDY_IRQ));
+}
+
 int adin1110_clear_irq(struct adin1110_desc *desc)
 {
-	return adin1110_reg_write(desc, ADIN1110_STATUS0_REG, 0xFFFFFFFF);
+	int ret;
+
+	ret = adin1110_reg_write(desc, ADIN1110_STATUS0_REG, 0xFFFFFFFF);
+	if (ret)
+		return ret;
+
+	return adin1110_reg_write(desc, ADIN1110_STATUS1_REG, 0xFFFFFFFF);
 }
 
 static void oa_irq_rx_tx(void *data)
 {
 	struct adin1110_desc *adin1110 = data;
+	uint32_t queue_len;
+	uint32_t rx_chunks;
+	uint32_t tx_credit;
+	uint32_t tx_written;
+	uint32_t frame_len;
 	uint32_t reg_val;
 	uint8_t int_val;
 	int ret;
 
+	struct no_os_spi_msg xfer = {
+		.rx_buff = adin1110->data,
+		.tx_buff = adin1110->data,
+		.cs_change = 1,
+	};
+
+	ret = adin1110_reg_read(adin1110, ADIN1110_STATUS0_REG, &reg_val);
+	ret = adin1110_reg_read(adin1110, ADIN1110_STATUS1_REG, &reg_val);
+	ret = adin1110_reg_read(adin1110, ADIN1110_IMASK1_REG, &reg_val);
+	ret = adin1110_reg_read(adin1110, 0xC, &reg_val);
+
 	ret = adin1110_reg_read(adin1110, 0xB, &reg_val);
 	if (ret)
-		return ret;
+		return;
 
-	return adin1110_clear_irq(adin1110);
+	rx_chunks = no_os_field_get(NO_OS_GENMASK(7, 0), reg_val);
+	tx_credit = no_os_field_get(NO_OS_GENMASK(15, 8), reg_val);
+
+	if (!rx_chunks)
+		return;
+
+	memset(adin1110->data, 0x0, sizeof(adin1110->data));
+	oa_tx_frame_to_chunks(adin1110, adin1110->data, tx_credit, rx_chunks, &tx_written);
+	xfer.bytes_number = tx_written;
+	ret = no_os_spi_transfer(adin1110->comm_desc, &xfer, 1);
+
+	ret = oa_rx_chunk_to_frame(adin1110, adin1110->data, rx_chunks);
+	if (ret)
+		return;
+
+	frame_len = oa_queue_first_len(adin1110, adin1110->rx_queue);
+	/* If the TX FIFO is empty, the tx ready interrupt may be masked */
+	if (!frame_len)
+		adin1110_enable_tx_rdy_irq(adin1110, false);
+
+	ret = adin1110_clear_irq(adin1110);
+	if (ret)
+		return;
 }
 
 /**
@@ -1002,6 +1061,9 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_set_promisc(descriptor, 0, true);
 
 	adin1110_clear_irq(descriptor);
+	adin1110_clear_irq(descriptor);
+	adin1110_clear_irq(descriptor);
+	no_os_mdelay(100);
 	// adin1110_reg_write(descriptor, 0x9, 0xFFFFFFFF);
 
 	ret = oa_irq_start(descriptor);

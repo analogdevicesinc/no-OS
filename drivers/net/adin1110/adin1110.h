@@ -216,6 +216,9 @@ struct adin1110_desc {
 	struct no_os_irq_ctrl_desc *nvic_irq;
 	struct no_os_irq_ctrl_desc *gpio_irq;
 	struct no_os_callback_desc *irq_callback;
+
+	struct oa_list_element *rx_queue;
+	struct oa_list_element *tx_queue;
 };
 
 /**
