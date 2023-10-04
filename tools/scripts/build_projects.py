@@ -212,7 +212,7 @@ class BuildConfig:
 			self.export_file = self.export_file.replace('.elf', '.bin')
 		if (platform == 'xilinx'):
 			self.export_boot_bin = os.path.join(self.build_dir, "output_boot_bin/BOOT.BIN")
-			self.export_archive = os.path.join(self.build_dir, "bootgen_sysfiles.zip")
+			self.export_archive = os.path.join(self.build_dir, "bootgen_sysfiles.tar.gz")
 
 	def build(self):
 		global log_file

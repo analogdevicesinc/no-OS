@@ -247,17 +247,16 @@ ifeq ($(findstring cortexr5,$(strip $(ARCH))),cortexr5)
 	$(MUTE) $(call create_bif_file,[bootloader$(comma)destination_cpu = r5-0],[destination_device = pl],[destinatio_cpu = r5-0]) $(HIDE)
 	$(MUTE) bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
 endif
-	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BOOT_BIN_DIR)) $(HIDE)
+	$(MUTE) $(call copy_file,$(TEMP_DIR)/*.bit,$(BOOT_BIN_DIR)) $(HIDE)
 	$(MUTE) $(call copy_file,$(FSBL_PATH),$(BOOT_BIN_DIR)) $(HIDE)
 	$(MUTE) $(call copy_file,$(BINARY),$(BOOT_BIN_DIR)) $(HIDE)
-	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BOOT_BIN_DIR)/* -x '*BOOT.BIN'
-else
+	$(MUTE) tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --transform 's/^\(\.\/\|\.\)//' --force-local --exclude 'BOOT.BIN' -C $(BOOT_BIN_DIR) . $(HIDE)
 	$(call print,Creating archive with files)
 	$(MUTE) $(call remove_dir,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(MUTE) $(call mk_dir,$(BUILD_DIR)/boot_files) $(HIDE)
-	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(MUTE) $(call copy_file,$(TEMP_DIR)/*.bit,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(MUTE) $(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
-	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BUILD_DIR)/boot_files/*
+	$(MUTE) tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --transform 's/^\(\.\/\|\.\)//' --force-local -C $(BUILD_DIR)/boot_files . $(HIDE)
 endif
 
 reset: xilinx_clean_all
