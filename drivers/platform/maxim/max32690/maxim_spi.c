@@ -413,6 +413,9 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 				       NO_OS_BIT(desc->chip_select));
 
 	for (i = 0; i < len; i++) {
+		if (!msgs[i].bytes_number)
+			continue;
+
 		/* Flush the RX and TX FIFOs */
 		spi->dma |= MXC_F_SPI_DMA_RX_FLUSH | MXC_F_SPI_DMA_TX_FLUSH;
 		/* Enable SPI */
