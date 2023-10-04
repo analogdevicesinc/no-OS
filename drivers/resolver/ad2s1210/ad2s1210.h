@@ -66,6 +66,14 @@
 
 #define AD2S1210_REG_MIN		AD2S1210_REG_POSITION
 
+#define AD2S1210_MIN_CLKIN	6144000
+#define AD2S1210_MAX_CLKIN	10240000
+#define AD2S1210_MIN_EXCIT	2000
+#define AD2S1210_MAX_EXCIT	20000
+#define AD2S1210_STEP_EXCIT	250
+#define AD2S1210_MIN_FCW	0x4
+#define AD2S1210_MAX_FCW	0x50
+
 enum ad2s1210_mode {
 	MODE_POS,
 	MODE_RESERVED,
@@ -93,6 +101,7 @@ struct ad2s1210_init_param {
 	struct no_os_gpio_init_param gpio_res1;
 	struct no_os_gpio_init_param gpio_sample;
 	int8_t resolution;
+	uint32_t clkin_hz;
 };
 
 struct ad2s1210_dev {
@@ -107,6 +116,7 @@ struct ad2s1210_dev {
 	struct no_os_gpio_desc *gpio_res0;
 	struct no_os_gpio_desc *gpio_res1;
 	struct no_os_gpio_desc *gpio_sample;
+	uint32_t clkin_hz;
 };
 
 int ad2s1210_init(struct ad2s1210_dev **dev,
@@ -120,4 +130,8 @@ int ad2s1210_spi_single_conversion(struct ad2s1210_dev *dev,
 				   enum ad2s1210_channel chn, uint16_t *data);
 int ad2s1210_hysteresis_is_enabled(struct ad2s1210_dev *dev);
 int ad2s1210_set_hysteresis(struct ad2s1210_dev *dev, bool enable);
+int ad2s1210_reinit_excitation_frequency(struct ad2s1210_dev *dev,
+		uint16_t fexcit);
+int ad2s1210_get_excitation_frequency(struct ad2s1210_dev *dev,
+				      uint16_t *fexcit);
 #endif
