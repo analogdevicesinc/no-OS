@@ -266,14 +266,14 @@ endif
 	$(call copy_file,$(TEMP_DIR)/*.bit,$(BOOT_BIN_DIR)) $(HIDE)
 	$(call copy_file,$(FSBL_PATH),$(BOOT_BIN_DIR)) $(HIDE)
 	$(call copy_file,$(BINARY),$(BOOT_BIN_DIR)) $(HIDE)
-	tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --force-local --exclude 'BOOT.BIN' -C $(BOOT_BIN_DIR) . $(HIDE)
+	tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --transform 's/^\(\.\/\|\.\)//' --force-local --exclude 'BOOT.BIN' -C $(BOOT_BIN_DIR) . $(HIDE)
 else
 	$(call print,Creating archive with files)
 	$(call remove_dir,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(call mk_dir,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(call copy_file,$(TEMP_DIR)/*.bit,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
-	tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --force-local -C $(BUILD_DIR)/boot_files . $(HIDE)
+	tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --transform 's/^\(\.\/\|\.\)//' --force-local -C $(BUILD_DIR)/boot_files . $(HIDE)
 endif
 endif
 
