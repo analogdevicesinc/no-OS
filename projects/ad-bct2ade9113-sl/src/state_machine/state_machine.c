@@ -71,9 +71,9 @@ uint8_t is_charging;
  */
 int state_machine()
 {
-/**************************************************************************/
-/****************************Variables declaration*************************/
-/**************************************************************************/
+	/**************************************************************************/
+	/****************************Variables declaration*************************/
+	/**************************************************************************/
 	// Input voltage maximum value over one periode
 	int32_t v1_max = 0;
 	// Relay voltage maximum value over one periode
@@ -118,7 +118,7 @@ int state_machine()
 	uint32_t recalc_time_us = current_time.us;
 	// Time passed from last values update
 	uint32_t us_elapsed_since_recalc = 0;
-	// Variable indicating multiple of 20ms used to compute the ADE9113 values on multiple periods 
+	// Variable indicating multiple of 20ms used to compute the ADE9113 values on multiple periods
 	uint8_t multiple_20ms = 0;
 	// Variable indicating a multiple of the periodes used to compute ADE9113 values.
 	// Used to compute the Vrelay value
@@ -135,25 +135,25 @@ int state_machine()
 	uint8_t cnt_disp = 0;
 	// Variables used to read and compute the temperature from ADT75
 	int32_t adt75_value = 0;
-	// Variable used for the values read continuously from ADE9113 
+	// Variable used for the values read continuously from ADE9113
 	int32_t i_val = 0, v1_val = 0, v2_val = 0;
 	// Pointer to the state machine structure
 	struct stout *stout;
 	// Pointer to the adt75_desc structure
 	struct adt75_desc *adt75_desc;
 	int ret = -22;
-/**************************************************************************/
-/**********************End of variables declaration************************/
-/**************************************************************************/
+	/**************************************************************************/
+	/**********************End of variables declaration************************/
+	/**************************************************************************/
 
-/**************************************************************************/
-/****************INITALIZATION FOR THE STATE MACHINE***********************/
-/**************************************************************************/
+	/**************************************************************************/
+	/****************INITALIZATION FOR THE STATE MACHINE***********************/
+	/**************************************************************************/
 	/* Clear the screen. */
 	printf("%c%c%c%c", 27, '[', '2', 'J');
 	no_os_mdelay(5);
 	pr_debug("\nSTOUT app FIRMWARE VERSION: %s \n\n",FIRMWARE_VERSION);
-	
+
 	/* Allocate mempory for application structure */
 	stout = (struct stout *)no_os_calloc(1, sizeof(*stout));
 	if (!stout)
@@ -168,8 +168,7 @@ int state_machine()
 
 	/* Initialize LEDs and buttons */
 	ret = interface_init(&stout->gpio_led[0]);
-	if (ret)
-	{
+	if (ret) {
 		no_os_free(stout);
 		adt75_remove(adt75_desc);
 		return ret;
@@ -210,22 +209,22 @@ int state_machine()
 	if (ret)
 		goto error;
 
-	// Current limit not charging 
+	// Current limit not charging
 	stout->i_limit_not_ch = I_LIMIT_NOT_CHG;
-/**************************************************************************/
-/****************END OF INITALIZATION FOR THE STATE MACHINE****************/
-/**************************************************************************/
+	/**************************************************************************/
+	/****************END OF INITALIZATION FOR THE STATE MACHINE****************/
+	/**************************************************************************/
 
-/**************************************************************************/
-/****************************Start-up Test*********************************/
-/**************************************************************************/
+	/**************************************************************************/
+	/****************************Start-up Test*********************************/
+	/**************************************************************************/
 	/* Run startup test */
 	ret = self_test_startup(stout);
 
 	if (ret == INTF_INPUT_V_ERR) {
 		interface_disp(stout);
 		event = S_M_UNDERVOLTAGE;
-		if (VIN_LOW_LIMIT > v1_max) 
+		if (VIN_LOW_LIMIT > v1_max)
 			ret = INTF_INPUT_V_ERR_U;
 		else if (VIN_HIGH_LIMIT < v1_max) {
 			ret = INTF_INPUT_V_ERR_O;
@@ -313,7 +312,8 @@ int state_machine()
 			// Compute time elapsed since last print values
 			s_elapsed_since_print_charging_state = current_time.s - print_charging_s;
 			// If time elapsed larger than PRINT_VALUES_TIME seconds, reenable print
-			if ((PRINT_CHARGING_TIME < s_elapsed_since_print_charging_state) && (0 == print_charging))
+			if ((PRINT_CHARGING_TIME < s_elapsed_since_print_charging_state)
+			    && (0 == print_charging))
 				print_charging = 1;
 
 			reset_pwm_low_flag_state();
@@ -336,14 +336,15 @@ int state_machine()
 			multiple_20ms++;
 			multiple_20ms_adt75++;
 			// Compute the values Vin and Iout each 20*COMPUTE_VALUES_INTERVAL
-			if ((COMPUTE_VALUES_INTERVAL <= multiple_20ms) && (COMPUTE_VRELAY_INTERVAL > multiple_20ms_2)){
+			if ((COMPUTE_VALUES_INTERVAL <= multiple_20ms)
+			    && (COMPUTE_VRELAY_INTERVAL > multiple_20ms_2)) {
 				// Update V1 and V2 maximum values
 				stout->v1_max = v1_max;
 				stout->i_val = i_max;
-				if (1 == print_values){
+				if (1 == print_values) {
 					pr_debug("Iout: %d mA, Vin: %d mV\n", stout->i_val, stout->v1_max);
 					print_values_s = current_time.s;
-					print_values = 0; 
+					print_values = 0;
 				}
 				// The state machine runs every COMPUTE_VALUES_INTERVAL * 20ms
 				event = state_machine_det_event_supply(stout, event);
@@ -356,7 +357,7 @@ int state_machine()
 				// Reset V1, V2 and I maximum values
 				v1_max = 0;
 				i_max = 0;
-				v2_max = 0; 
+				v2_max = 0;
 				// Reset the 20ms variable
 				multiple_20ms = 0;
 				// Increment the counter for Vrelay compute time interval
@@ -365,13 +366,13 @@ int state_machine()
 				// Compute Vrelay average value
 				if (v2_read >= 1) {
 					// The relay stuck detection state is active (a reading of Vrelay is needed)
-					// Compute the average Vrelay value over the COMPUTE_VRELAY_INTERVAL 
+					// Compute the average Vrelay value over the COMPUTE_VRELAY_INTERVAL
 					stout->v2_max = v2_sum/(multiple_20ms_2-1);
-					// reset the 20 ms counter to start with new values			
+					// reset the 20 ms counter to start with new values
 					multiple_20ms = 0;
 					// Indicates that the Vrealy value is available for the state machine
 					v2_ready = 1;
-				} 
+				}
 				// Reset flag for computing Vrelay
 				multiple_20ms_2 = 0;
 				// Reset Vrelay max value
@@ -385,8 +386,8 @@ int state_machine()
 
 		//----------------------- END UPDATE VALUES COMPUTED FROM ADE913------------------------
 
-		// ----------------------------- READ TEMPERATURE----------------------------------------		
-		if (TEMPERATURE_READ_RATE <= multiple_20ms_adt75){
+		// ----------------------------- READ TEMPERATURE----------------------------------------
+		if (TEMPERATURE_READ_RATE <= multiple_20ms_adt75) {
 			ret = adt75_reg_read(adt75_desc, 0, &adt75_value);
 			if (ret)
 				goto error;
@@ -425,11 +426,11 @@ int state_machine()
 		if ((TAKE_S_M_ACTION == get_action())) {
 			// Reset flag for running state machine
 			reset_action_flag();
-			
+
 			switch (stout->current_state) {
-			//------------THE STATE FOR OPENING THE RELAY CONTACTS------------------------	
+			//------------THE STATE FOR OPENING THE RELAY CONTACTS------------------------
 			case STATE_RELAY_OPEN:
-				// Debug message 
+				// Debug message
 				if (stout->current_state != stout->previous_state) {
 					pr_debug("STATE RELAY OPEN\n");
 				}
@@ -446,7 +447,7 @@ int state_machine()
 			case STATE_CHECK_RELAY:
 				if (0 == v2_read) {
 					// Reset the values for computing Vrelay
-					v2_read = 1; 
+					v2_read = 1;
 					multiple_20ms_2 = 0;
 					v2_sum = 0;
 					v2_max = 0;
@@ -507,7 +508,8 @@ int state_machine()
 							skip_test = 1;
 							// Increment the RCD state counter
 							count_rcd_state++;
-						} else if ((SAMPLE_PINS_STEP_2 * 20 <= get_count_ms()) && (2 == count_rcd_state)) {
+						} else if ((SAMPLE_PINS_STEP_2 * 20 <= get_count_ms())
+							   && (2 == count_rcd_state)) {
 							// Should wait additional 700ms
 							// Run the third step of the RCD test if the previouse steps passed and the timing is right
 							ret = self_test_rcd_running(stout, SAMPLE_PINS_STEP_2, &event);
@@ -518,7 +520,8 @@ int state_machine()
 							}
 							// Increment the RCD state counter (go to nex step if step passed)
 							count_rcd_state++;
-						} else if ((SAMPLE_PINS_STEP_1 * 20 <= get_count_ms()) && (1 == count_rcd_state)) {
+						} else if ((SAMPLE_PINS_STEP_1 * 20 <= get_count_ms())
+							   && (1 == count_rcd_state)) {
 							// Should wait additional 700ms
 							// Run the second step of the RCD test if the previouse steps passed and the timing is right
 							ret = self_test_rcd_running(stout, SAMPLE_PINS_STEP_1, &event);
@@ -529,7 +532,8 @@ int state_machine()
 							}
 							// Increment the RCD state counter (go to nex step if step passed)
 							count_rcd_state++;
-						} else if ((RESTORE_TEST_PIN_STEP * 20 <= get_count_ms()) && (0 == count_rcd_state)) {
+						} else if ((RESTORE_TEST_PIN_STEP * 20 <= get_count_ms())
+							   && (0 == count_rcd_state)) {
 							// Should wait 60ms
 							// Run the first step of the RCD test if the the timing is right
 							ret = self_test_rcd_running(stout, RESTORE_TEST_PIN_STEP, &event);
@@ -596,7 +600,7 @@ int state_machine()
 				}
 				break;
 			//---------------------------------END STATE B---------------------------------
-			
+
 			//-----------------------------------STATE C-----------------------------------
 			// In this state the EVSE is ready, the EV is connected and a charging session was initiated by the EV
 			case STATE_C:
@@ -646,9 +650,10 @@ int state_machine()
 						print_charging = 0;
 					}
 					cnt_disp = 0;
-				} else if ((S_M_OVER_TEMPERATURE_1 == event) && (LED_BLINKING_10A <= cnt_disp)) {
+				} else if ((S_M_OVER_TEMPERATURE_1 == event)
+					   && (LED_BLINKING_10A <= cnt_disp)) {
 					interface_disp(stout);
-					if (1 == print_charging){
+					if (1 == print_charging) {
 						pr_debug("State C LIMIT CURRENT 10A\n");
 						print_charging_s = current_time.s;
 						print_charging = 0;
@@ -661,10 +666,10 @@ int state_machine()
 			//---------------------------------END STATE C---------------------------------
 
 			//-----------------------------------STATE D-----------------------------------
-			// In this state the EVSE is ready, the EV is connected and a charging session with ventilation required 
+			// In this state the EVSE is ready, the EV is connected and a charging session with ventilation required
 			// was initiated by the EV
 			case STATE_D:
-				// Set the CP PWM duty cycle based on the Iout limit		
+				// Set the CP PWM duty cycle based on the Iout limit
 				current_set = current_value_limit;
 				pilot_pwm_timer_set_duty_cycle(stout, current_set);
 				// Check the diode before charging
@@ -692,7 +697,7 @@ int state_machine()
 					cnt_disp = 0;
 				} else if ((S_M_CHARGING_D == event) && (LED_BLINKING_10A <= cnt_disp)) {
 					interface_disp(stout);
-					if (1 == print_charging){
+					if (1 == print_charging) {
 						pr_debug("State D charging with 10A \n");
 						print_charging_s = current_time.s;
 						print_charging = 0;
@@ -803,7 +808,7 @@ int state_machine()
 					goto error;
 					break;
 				//----------------------RCD error end--------------------
-				
+
 				//------------------Overtemperature error----------------
 				// Latching error (if this point is reached the temperature exceeded the high temperature limit)
 				case INTF_TEMPERATURE_ERR:
@@ -824,7 +829,7 @@ int state_machine()
 					break;
 				}
 				break;
-			//---------------------------------STATE FAULT END---------------------------------
+				//---------------------------------STATE FAULT END---------------------------------
 			}
 		}
 		// ------------------------------- END STATE MACHINE -------------------------------------
@@ -834,15 +839,15 @@ int state_machine()
 	/*******************************************************************************************************/
 
 	/*****************************************ERROR latching and display****************************************/
-	error:
-		pr_debug("Error. Returned %d.\n", ret);
-		while (1) {
-			ret = interface_disp(stout);
-			if (ret)
-				return ret;
-			no_os_mdelay(50);
-		}
-		return ret;
+error:
+	pr_debug("Error. Returned %d.\n", ret);
+	while (1) {
+		ret = interface_disp(stout);
+		if (ret)
+			return ret;
+		no_os_mdelay(50);
+	}
+	return ret;
 	/*****************************************ERROR latching and display END****************************************/
 }
 /*******************************************************************************************************************/
@@ -863,10 +868,11 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 {
 	enum state_machine_events_e event = event_in;
 
-	if ((CP_H_LOW_LIMIT > stout->pwm_high_val) && (S_M_INITIAL_CHECK_DONE != event)) {
-	// CP error
-	// The value of the CP high side is compared with its low limit
-	// If just after startupt skip this step
+	if ((CP_H_LOW_LIMIT > stout->pwm_high_val)
+	    && (S_M_INITIAL_CHECK_DONE != event)) {
+		// CP error
+		// The value of the CP high side is compared with its low limit
+		// If just after startupt skip this step
 		event = S_M_CP_ERROR;
 		stout->previous_state = stout->current_state;
 		// The next step is to interpret the error
@@ -878,24 +884,27 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 		if (event != event_in) {
 			pr_debug("CP error detected\n");
 		}
-	} else if (((CP_DIODE_ERROR_LIMIT < stout->pwm_low_val) && (S_M_DIODE_ERR_CHECK != event)
-	    && (!stout->ac_dc)) && ((S_M_CHARGING == event) || (S_M_CHARGING_D == event))) {
-	// CP diode error check
-	// The low side value of CP is compared with its high limit
-	// If during diode error check skip this step or if in another state than charging
-	// The CP must be PWM to detect the diode 
+	} else if (((CP_DIODE_ERROR_LIMIT < stout->pwm_low_val)
+		    && (S_M_DIODE_ERR_CHECK != event)
+		    && (!stout->ac_dc)) && ((S_M_CHARGING == event) || (S_M_CHARGING_D == event))) {
+		// CP diode error check
+		// The low side value of CP is compared with its high limit
+		// If during diode error check skip this step or if in another state than charging
+		// The CP must be PWM to detect the diode
 		event = S_M_DIODE_ERR;
 		stout->previous_state = stout->current_state;
 		// The next step is to interpret the error
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_DIODE_ERR;
 		reset_count_ms();
-		pr_debug("Diode error detected CP_H: %d mV CP_L: %d mV\n", stout->pwm_high_val, stout->pwm_low_val);
-	} 
-	
+		pr_debug("Diode error detected CP_H: %d mV CP_L: %d mV\n", stout->pwm_high_val,
+			 stout->pwm_low_val);
+	}
+
 	//---------------------------------- CP value for state A -------------------------------------
-	else if ((CPH_A_LIMIT_LOW < stout->pwm_high_val) && (stout->pwm_high_val < CPH_A_LIMIT_HIGH)) {
-	// CP high side value indicates state A
+	else if ((CPH_A_LIMIT_LOW < stout->pwm_high_val)
+		 && (stout->pwm_high_val < CPH_A_LIMIT_HIGH)) {
+		// CP high side value indicates state A
 		if ((S_M_INITIAL_CHECK_DONE == event) || (S_M_VIN_RECOVER == event)) {
 			// If after startup or recovery put in IDLE
 			event = S_M_WAIT;
@@ -903,8 +912,8 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			// next step is IDLE
 			stout->current_state = STATE_A;
 			stout->err_status = INTF_NO_ERR;
-			if (event != event_in){
-			pr_debug("EV disconnected and system powered on\n");
+			if (event != event_in) {
+				pr_debug("EV disconnected and system powered on\n");
 			}
 		} else if ((S_M_WAIT != event) && (S_M_DISCONNECTED != event)
 			   && (S_M_CHARGING != event) && (S_M_CHARGING_D != event)
@@ -915,19 +924,19 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			// The next step is IDLE
 			stout->current_state = STATE_A;
 			stout->err_status = INTF_NO_ERR;
-			if (event != event_in){
-			pr_debug("EV disconnected\n");
+			if (event != event_in) {
+				pr_debug("EV disconnected\n");
 			}
 		} else if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event)) {
-			// If state A is reached from a charging state then the cable was unplugged 
+			// If state A is reached from a charging state then the cable was unplugged
 			//while a charging session was in progress
 			event = S_M_STOP_CHARGING;
 			stout->previous_state = stout->current_state;
 			// The next step is to open the relay
 			stout->current_state = STATE_RELAY_OPEN;
 			stout->err_status = INTF_NO_ERR;
-			if (event != event_in){
-			pr_debug("Cable unplugged while charging\n");
+			if (event != event_in) {
+				pr_debug("Cable unplugged while charging\n");
 			}
 		} else {
 			// The A state IDLE
@@ -937,17 +946,19 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			stout->current_state = STATE_A;
 			stout->err_status = INTF_NO_ERR;
 			reset_count_ms();
-			if (event != event_in){
-			pr_debug("EV disconnected and system waiting\n");
+			if (event != event_in) {
+				pr_debug("EV disconnected and system waiting\n");
 			}
 		}
-	} 
+	}
 	//---------------------------------- END CP value for state A -------------------------------------
 
 	//---------------------------------- CP value for state B -----------------------------------------
-	else if ((CPH_B_LIMIT_LOW < stout->pwm_high_val) && (stout->pwm_high_val < CPH_B_LIMIT_HIGH)) {
+	else if ((CPH_B_LIMIT_LOW < stout->pwm_high_val)
+		 && (stout->pwm_high_val < CPH_B_LIMIT_HIGH)) {
 		// CP high side value indicates state B
-		if (((S_M_WAIT == event) || (S_M_INITIAL_CHECK_DONE == event)  || (S_M_VIN_RECOVER == event)) && (1000 > get_count_ms())) {
+		if (((S_M_WAIT == event) || (S_M_INITIAL_CHECK_DONE == event)
+		     || (S_M_VIN_RECOVER == event)) && (1000 > get_count_ms())) {
 			// If cable pluged in the EV this step should be reached in maximum 2s
 			event = S_M_EV_CONNECTED;
 			stout->previous_state = stout->current_state;
@@ -1011,10 +1022,11 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			stout->current_state = STATE_FAULT;
 			stout->err_status = INTF_DIODE_ERR;
 		}
-	//---------------------------------- END CP value for state B -------------------------------------
+		//---------------------------------- END CP value for state B -------------------------------------
 
-	//---------------------------------- CP value for state C -----------------------------------------
-	} else if ((CPH_C_LIMIT_LOW < stout->pwm_high_val) && (stout->pwm_high_val < CPH_C_LIMIT_HIGH)) {
+		//---------------------------------- CP value for state C -----------------------------------------
+	} else if ((CPH_C_LIMIT_LOW < stout->pwm_high_val)
+		   && (stout->pwm_high_val < CPH_C_LIMIT_HIGH)) {
 		// CP high side value indicates state C
 		if (S_M_WAIT_B == event) {
 			// Charging session initiated by EV
@@ -1044,7 +1056,7 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			stout->err_status = INTF_NO_ERR;
 			if (event != event_in) {
 				pr_debug("EV charging can start, no ventilation\n");
-			}	
+			}
 		} else if ((S_M_CHARGING_START == event)) {
 			// Charging started
 			event = S_M_CHARGING;
@@ -1061,10 +1073,11 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			stout->current_state = STATE_FAULT;
 			stout->err_status = INTF_DIODE_ERR;
 		}
-	//---------------------------------- END CP value for state C -------------------------------------
+		//---------------------------------- END CP value for state C -------------------------------------
 
-	//---------------------------------- CP value for state D -----------------------------------------
-	} else if ((CPH_D_LIMIT_LOW < stout->pwm_high_val) && (stout->pwm_high_val < CPH_D_LIMIT_HIGH)) {
+		//---------------------------------- CP value for state D -----------------------------------------
+	} else if ((CPH_D_LIMIT_LOW < stout->pwm_high_val)
+		   && (stout->pwm_high_val < CPH_D_LIMIT_HIGH)) {
 		// CP high side value indicates state D
 		if (S_M_WAIT_B == event) {
 			// Charging session with ventilation requested by EV
@@ -1095,8 +1108,8 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			stout->err_status = INTF_NO_ERR;
 			if (event != event_in) {
 				pr_debug("EV charging start, ventilation\n");
-			}	
-		} else if ((S_M_CHARGING_START == event)){ 
+			}
+		} else if ((S_M_CHARGING_START == event)) {
 			// Charging with ventilation in progress
 			event = S_M_CHARGING_D;
 			stout->previous_state = stout->current_state;
@@ -1128,11 +1141,12 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
  * @param event - previous event
  * @return event that took place
  */
-enum state_machine_events_e state_machine_det_event_temperature(struct stout *stout,
-		enum state_machine_events_e event_in)
+enum state_machine_events_e state_machine_det_event_temperature(
+	struct stout *stout,
+	enum state_machine_events_e event_in)
 {
 	enum state_machine_events_e event = event_in;
-	
+
 	if (TEMPERATURE_LIMIT_2 < stout->temperature) {
 		// If second temperature limit exceeded go to fault state
 		event = S_M_OVER_TEMPERATURE_2;
@@ -1140,16 +1154,19 @@ enum state_machine_events_e state_machine_det_event_temperature(struct stout *st
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_TEMPERATURE_ERR;
 		if (event != event_in) {
-			pr_debug("Temperature limit exceeded Temperature = %d deg C/n", stout->temperature);
+			pr_debug("Temperature limit exceeded Temperature = %d deg C/n",
+				 stout->temperature);
 		}
 	} else if (TEMPERATURE_LIMIT_1 < stout->temperature) {
 		// If first temperature limit exceeded derate output power (if charging with 16A reduce current to 10A)
-		if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event) || (S_M_OVER_TEMPERATURE_1 == event)) {
+		if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event)
+		    || (S_M_OVER_TEMPERATURE_1 == event)) {
 			event = S_M_OVER_TEMPERATURE_1;
 			stout->previous_state = stout->current_state;
 			stout->err_status = INTF_NO_ERR;
 			if (event != event_in) {
-				pr_debug("Temperature high, limit power if in state C; Temperature = %d deg C/n", stout->temperature);
+				pr_debug("Temperature high, limit power if in state C; Temperature = %d deg C/n",
+					 stout->temperature);
 			}
 		}
 	}
@@ -1179,19 +1196,22 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_O;
-	} else if ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE != event) && (S_M_CHECK_STUCK_RELAY != event)) {
+	} else if ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE != event)
+		   && (S_M_CHECK_STUCK_RELAY != event)) {
 		// If undervoltage go to fault state
 		event = S_M_UNDERVOLTAGE;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_U;
-	} else if ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE == event) && (S_M_CHECK_STUCK_RELAY != event)) {
+	} else if ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE == event)
+		   && (S_M_CHECK_STUCK_RELAY != event)) {
 		// If undervoltage detected wait until Vin is in range
 		event = S_M_UNDERVOLTAGE_WAIT;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_U;
-	} else if ((VIN_LOW_LIMIT < stout->v1_max) && ((S_M_UNDERVOLTAGE == event) || (S_M_UNDERVOLTAGE_WAIT == event))) {
+	} else if ((VIN_LOW_LIMIT < stout->v1_max) && ((S_M_UNDERVOLTAGE == event)
+			|| (S_M_UNDERVOLTAGE_WAIT == event))) {
 		// If voltage in range recover
 		event = S_M_VIN_RECOVER;
 		stout->err_status = INTF_NO_ERR;
@@ -1199,8 +1219,9 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 	}
 	//###################### IMPLEMENT OVERVOLTAGE ################################
 
-	if ((S_M_CHARGING == event)||(S_M_CHARGING_D == event)||(S_M_OVERCURRENT_WAIT == event)
-			||(S_M_CHARGING_STOPPED == event)||(S_M_STOP_CHARGING == event)) {
+	if ((S_M_CHARGING == event)||(S_M_CHARGING_D == event)
+	    ||(S_M_OVERCURRENT_WAIT == event)
+	    ||(S_M_CHARGING_STOPPED == event)||(S_M_STOP_CHARGING == event)) {
 		if ((stout->i_val > stout->i_limit) && (S_M_OVERCURRENT_WAIT != event)) {
 			event = S_M_OVERCURRENT_WAIT;
 			reset_count_ms();
@@ -1217,13 +1238,14 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 				stout->err_status = INTF_NO_ERR;
 			}
 		}
-	} else if (((stout-> i_val > stout->i_limit_not_ch))&&((S_M_CHECK_STUCK_RELAY != event)&&(S_M_CP_ERROR != event))) {
+	} else if (((stout-> i_val > stout->i_limit_not_ch))
+		   &&((S_M_CHECK_STUCK_RELAY != event)&&(S_M_CP_ERROR != event))) {
 		event = S_M_OVERCURRENT;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_OVERCURRENT_ERR;
 	}
-		
+
 	return event;
 }
 
