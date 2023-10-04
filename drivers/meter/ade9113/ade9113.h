@@ -343,6 +343,9 @@ struct ade9113_init_param {
 	struct no_os_gpio_init_param  	*gpio_reset;
 	/** IRQ device descriptor used to handle interrupt routine for GPIO RDY */
 	struct no_os_irq_ctrl_desc 	*irq_ctrl;
+	/** External callback used to handle interrupt routine for GPIO RDY */
+	/** Set to NULL if callback defined in driver used */
+	void (*drdy_callback)(void *context);
 };
 
 /**

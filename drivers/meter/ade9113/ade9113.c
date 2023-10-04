@@ -50,8 +50,6 @@
 #include "no_os_crc8.h"
 #include "no_os_crc16.h"
 #include "no_os_print_log.h"
-#include "maxim_spi.h"
-#include "spi.h"
 
 NO_OS_DECLARE_CRC8_TABLE(ade9113_crc8);
 NO_OS_DECLARE_CRC16_TABLE(ade9113_crc16);
@@ -169,44 +167,6 @@ int ade9113_read(struct ade9113_dev *dev, uint8_t reg_addr, uint8_t *reg_data,
 }
 
 /**
- * @brief Read waveforms.
- * @param dev- The device structure.
- * @return 0 in case of success, negative error code otherwise.
- */
-static int ade9113_read_wavs(struct ade9113_dev *dev)
-{
-	// int ret;
-	/* buffer for data read */
-	/* set read bit and set long operation bit
-	 * buff[12] = 0xC0;
-	 * set address to read from
-	 * buff[13] = 0x00;
-	 * add CRC to command is 0xD8
-	 * buff[15] = 0xD8; */
-	uint8_t buff[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xC0, 0, 0, 0xD8 };
-	uint8_t rx_buff[16] = {0};
-	mxc_spi_req_t req;
-
-	req.spi = MXC_SPI0;
-	req.ssIdx = 0;
-	req.txData = buff;
-	req.rxData = rx_buff;
-	req.txCnt = 0;
-	req.rxCnt = 0;
-	req.ssDeassert = 1;
-	req.txLen = 16;
-	req.rxLen = 16;
-
-	MXC_SPI_MasterTransaction(&req);
-
-	dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[1]), 23);
-	dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[5]), 23);
-	dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[9]), 23);
-
-	return 0;
-}
-
-/**
  * @brief Write device register.
  * @param dev- The device structure.
  * @param reg_addr - The register address.
@@ -263,7 +223,7 @@ static int ade9113_update_bits(struct ade9113_dev *dev, uint8_t reg_addr,
 static void ade9113_irq_handler(void *dev)
 {
 	struct ade9113_dev *desc = dev;
-	// uint8_t reg_val;
+	uint8_t reg_val;
 	int ret;
 
 	if (!dev)
@@ -275,7 +235,9 @@ static void ade9113_irq_handler(void *dev)
 		return;
 
 	/* READ the data and place it in device structure */
-	ade9113_read_wavs(dev);
+	ret = ade9113_read(dev, ADE9113_REG_CONFIG0, &reg_val, ADE9113_L_OP);
+	if (ret)
+		return;
 
 	/* Reenable interrupt */
 	ret = no_os_irq_enable(desc->irq_ctrl,
@@ -312,6 +274,9 @@ int ade9113_init(struct ade9113_dev **device,
 		.event = NO_OS_EVT_GPIO,
 		.peripheral = NO_OS_GPIO_IRQ
 	};
+
+	if (init_param.drdy_callback)
+		irq_cb.callback = init_param.drdy_callback;
 
 	/* SPI Initialization */
 	ret = no_os_spi_init(&dev->spi_desc, init_param.spi_init);
