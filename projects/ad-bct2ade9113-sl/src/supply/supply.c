@@ -42,7 +42,9 @@
 /******************************************************************************/
 #include "no_os_print_log.h"
 #include "common_data.h"
+#include "maxim_spi.h"
 #include "supply.h"
+#include "spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -88,6 +90,71 @@ void reset_zero_cross_flag_state(void)
 }
 
 /**
+ * @brief Read waveforms.
+ * @param dev- The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int supply_read_wavs(struct ade9113_dev *dev)
+{
+	// int ret;
+	/* buffer for data read */
+	/* set read bit and set long operation bit
+	 * buff[12] = 0xC0;
+	 * set address to read from
+	 * buff[13] = 0x00;
+	 * add CRC to command is 0xD8
+	 * buff[15] = 0xD8; */
+	uint8_t buff[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xC0, 0, 0, 0xD8 };
+	uint8_t rx_buff[16] = {0};
+	mxc_spi_req_t req;
+
+	req.spi = MXC_SPI0;
+	req.ssIdx = 0;
+	req.txData = buff;
+	req.rxData = rx_buff;
+	req.txCnt = 0;
+	req.rxCnt = 0;
+	req.ssDeassert = 1;
+	req.txLen = 16;
+	req.rxLen = 16;
+
+	MXC_SPI_MasterTransaction(&req);
+
+	dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[1]), 23);
+	dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[5]), 23);
+	dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[9]), 23);
+
+	return 0;
+}
+
+/**
+ * @brief GPIO interrupt handler for data ready.
+ * @param dev - The device structure.
+ */
+static void supply_irq_handler(void *dev)
+{
+	struct ade9113_dev *desc = dev;
+	int ret;
+
+	if (!dev)
+		return;
+
+	/* Disable interrupt while reading data. */
+	ret = no_os_irq_disable(desc->irq_ctrl, desc->gpio_rdy->number);
+	if (ret)
+		return;
+
+	/* READ the data and place it in device structure */
+	supply_read_wavs(desc);
+
+	/* Reenable interrupt */
+	ret = no_os_irq_enable(desc->irq_ctrl,
+			       desc->gpio_rdy->number);
+
+	return;
+}
+
+/**
  * @brief Initialize pilot phase
  * @param desc - NVIC IRQ controller description
  * @return 0 in case of success, error code otherwise
@@ -129,6 +196,7 @@ int supply_init(struct ade9113_dev **device)
 		return ret;
 
 	ade9113_ip.irq_ctrl = ade9113_gpio_irq_desc;
+	ade9113_ip.drdy_callback = supply_irq_handler;
 
 	ret = ade9113_init(device, ade9113_ip);
 	if (ret)
