@@ -120,6 +120,57 @@ int ad2s1210_reg_read(struct ad2s1210_dev *dev, uint8_t addr, uint8_t *val)
 }
 
 /*******************************************************************************
+* @brief Sets the excitation frequency and performs software reset.
+*
+* @param dev - Device descriptor.
+* @param fexcit - excitation frequency
+*
+* @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+int ad2s1210_reinit_excitation_frequency(struct ad2s1210_dev *dev,
+		uint16_t fexcit)
+{
+	int ret;
+	int8_t fcw;
+
+	fcw = fexcit * (1 << 15) / dev->clkin_hz;
+	if (fcw < AD2S1210_MIN_FCW || fcw > AD2S1210_MAX_FCW)
+		return -ERANGE;
+
+	ret = ad2s1210_reg_write(dev, AD2S1210_REG_EXCIT_FREQ, fcw);
+	if (ret)
+		return ret;
+
+	/*
+	 * Software reset reinitializes the excitation frequency output.
+	 * It does not reset any of the configuration registers.
+	 */
+	return ad2s1210_reg_write(dev, AD2S1210_REG_SOFT_RESET, 0);
+}
+
+/*******************************************************************************
+* @brief Gets the excitation frequency.
+*
+* @param dev - Device descriptor.
+* @param fexcit - pointer to store the excitation frequency
+*
+* @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+int ad2s1210_get_excitation_frequency(struct ad2s1210_dev *dev,
+				      uint16_t *fexcit)
+{
+	uint8_t val;
+	int ret;
+
+	ret = ad2s1210_reg_read(dev, AD2S1210_REG_EXCIT_FREQ, &val);
+	if (ret)
+		return ret;
+
+	*fexcit = val * dev->clkin_hz / (1 << 15);
+	return 0;
+}
+
+/*******************************************************************************
 * @brief Gets the the hysteresis enable value.
 *
 * @param dev - Device descriptor.
@@ -261,6 +312,13 @@ int ad2s1210_init(struct ad2s1210_dev **dev,
 	struct ad2s1210_dev *d;
 	int32_t ret;
 
+	if (init_param->clkin_hz < AD2S1210_MIN_CLKIN
+	    || init_param->clkin_hz > AD2S1210_MAX_CLKIN) {
+		pr_err("Clock frequency out of range: %lu\n",
+		       init_param->clkin_hz);
+		return -EINVAL;
+	}
+
 	d = (struct ad2s1210_dev *)no_os_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
@@ -268,6 +326,7 @@ int ad2s1210_init(struct ad2s1210_dev **dev,
 	d->name = "AD2S1210";
 	d->mode = MODE_CONFIG;
 	d->resolution = init_param->resolution;
+	d->clkin_hz = init_param->clkin_hz;
 
 	ret = no_os_gpio_get(&d->gpio_sample, &init_param->gpio_sample);
 	if (ret)
