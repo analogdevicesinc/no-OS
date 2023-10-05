@@ -847,15 +847,16 @@ int ad7124_set_polarity(struct ad7124_dev* device,
 			uint8_t setup_id)
 {
 	int ret;
+	uint32_t reg_data;
 
 	if (bipolar)
-		bipolar = AD7124_CFG_REG_BIPOLAR;
+		reg_data = AD7124_CFG_REG_BIPOLAR;
 	else
-		bipolar = 0x0U;
+		reg_data = 0x0U;
 
 	ret = ad7124_reg_write_msk(device,
 				   AD7124_CFG0_REG+setup_id,
-				   bipolar,
+				   reg_data,
 				   AD7124_CFG_REG_BIPOLAR);
 	if (ret)
 		return ret;
