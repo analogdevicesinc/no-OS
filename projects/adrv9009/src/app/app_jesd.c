@@ -48,6 +48,7 @@
 #include "no_os_util.h"
 
 // jesd
+#include "axi_adxcvr.h"
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 
@@ -62,6 +63,10 @@ struct axi_jesd204_rx *rx_jesd = NULL;
 struct axi_jesd204_tx *tx_jesd = NULL;
 struct axi_jesd204_rx *rx_os_jesd = NULL;
 
+extern struct adxcvr *rx_adxcvr;
+extern struct adxcvr *tx_adxcvr;
+extern struct adxcvr *rx_os_adxcvr;
+
 adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		      uint32_t tx_div40_rate_hz,
 		      uint32_t rx_os_div40_rate_hz)
@@ -69,55 +74,58 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 	int32_t status;
 	uint32_t rx_lane_rate_khz = rx_div40_rate_hz / 1000 * 40;
 	struct jesd204_rx_init rx_jesd_init = {
-		"rx_jesd",
-		RX_JESD_BASEADDR,
-		4,
-		32,
-		1,
-		rx_div40_rate_hz / 1000,
-		rx_lane_rate_khz
+		.name = "rx_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = 4,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = rx_div40_rate_hz / 1000,
+		.lane_clk_khz = rx_lane_rate_khz,
+		.lane_clk = rx_adxcvr->clk_out
 	};
 	uint32_t tx_lane_rate_khz = tx_div40_rate_hz / 1000 * 40;
 	struct jesd204_tx_init tx_jesd_init = {
-		"tx_jesd",
-		TX_JESD_BASEADDR,
-		2,
-		32,
-		4,
-		14,
-		16,
-		true,
-		2,
-		1,
-		tx_div40_rate_hz / 1000,
-		tx_lane_rate_khz
+		.name = "tx_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = 2,
+		.frames_per_multiframe = 32,
+		.converters_per_device = 4,
+		.converter_resolution = 14,
+		.bits_per_sample = 16,
+		.high_density = true,
+		.control_bits_per_sample = 2,
+		.subclass = 1,
+		.device_clk_khz = tx_div40_rate_hz / 1000,
+		.lane_clk_khz = tx_lane_rate_khz,
+		.lane_clk = tx_adxcvr->clk_out
 	};
 	uint32_t rx_os_lane_rate_khz = rx_os_div40_rate_hz / 1000 * 40;
 	struct jesd204_rx_init rx_os_jesd_init = {
-		"rx_os_jesd",
-		RX_OS_JESD_BASEADDR,
-		2,
-		32,
-		1,
-		rx_os_div40_rate_hz / 1000,
-		rx_os_lane_rate_khz,
+		.name = "rx_os_jesd",
+		.base = RX_OS_JESD_BASEADDR,
+		.octets_per_frame = 2,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = rx_os_div40_rate_hz / 1000,
+		.lane_clk_khz = rx_os_lane_rate_khz,
+		.lane_clk = rx_os_adxcvr->clk_out
 	};
 
 	/* Initialize JESD */
 #ifndef ADRV9008_2
-	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	status = axi_jesd204_rx_init_jesd_fsm(&rx_jesd, &rx_jesd_init);
 	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_5;
 	}
 #endif
 #ifndef ADRV9008_1
-	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	status = axi_jesd204_tx_init_jesd_fsm(&tx_jesd, &tx_jesd_init);
 	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_init() failed\n", tx_jesd_init.name);
 		goto error_6;
 	}
-	status = axi_jesd204_rx_init(&rx_os_jesd, &rx_os_jesd_init);
+	status = axi_jesd204_rx_init_jesd_fsm(&rx_os_jesd, &rx_os_jesd_init);
 	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_os_jesd_init.name);
 		goto error_7;

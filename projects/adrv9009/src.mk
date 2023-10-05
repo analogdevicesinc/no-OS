@@ -26,10 +26,10 @@ SRCS += $(PROJECT)/src/app/headless.c \
 	$(PROJECT)/src/app/app_clocking.c \
 	$(PROJECT)/src/app/app_jesd.c \
 	$(PROJECT)/src/app/app_transceiver.c \
-	$(PROJECT)/src/app/app_talise.c \
 	$(DRIVERS)/frequency/ad9528/ad9528.c \
 	$(PROJECT)/src/devices/adi_hal/no_os_hal.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c \
+	$(DRIVERS)/rf-transceiver/talise/adrv9009.c \
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.c \
 	$(DRIVERS)/rf-transceiver/talise/api/talise_arm.c \
 	$(DRIVERS)/rf-transceiver/talise/api/talise.c \
@@ -48,7 +48,6 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
-	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/jesd204/jesd204-core.c \
@@ -92,12 +91,12 @@ INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/app/app_clocking.h \
 	$(PROJECT)/src/app/app_jesd.h \
 	$(PROJECT)/src/app/app_transceiver.h \
-	$(PROJECT)/src/app/app_talise.h \
 	$(DRIVERS)/frequency/ad9528/ad9528.h \
 	$(PROJECT)/src/devices/adi_hal/adi_hal.h \
 	$(PROJECT)/src/devices/adi_hal/common.h \
 	$(PROJECT)/src/devices/adi_hal/parameters.h \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.h \
+	$(DRIVERS)/rf-transceiver/talise/adrv9009.h \
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.h \
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc_types.h \
 	$(DRIVERS)/rf-transceiver/talise/api/talise_arm.h \
@@ -130,8 +129,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
-	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
-	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h
 ifeq (xilinx,$(strip $(PLATFORM)))
 INCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \

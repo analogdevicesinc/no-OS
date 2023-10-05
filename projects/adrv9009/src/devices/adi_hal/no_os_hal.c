@@ -66,71 +66,12 @@ adiHalErr_t ADIHAL_setTimeout(void *devHalInfo, uint32_t halTimeout_ms)
 
 adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 {
-	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
-	struct no_os_spi_init_param spi_param;
-	struct no_os_gpio_init_param gpio_adrv_resetb_param;
-	struct no_os_gpio_init_param gpio_adrv_sysref_req_param;
-	int32_t status = 0;
-
-	gpio_adrv_resetb_param.number = dev_hal_data->gpio_adrv_resetb_num;
-#ifndef ALTERA_PLATFORM
-	gpio_adrv_resetb_param.platform_ops = &xil_gpio_ops;
-#else
-	gpio_adrv_resetb_param.platform_ops = &altera_gpio_ops;
-#endif
-	gpio_adrv_sysref_req_param.number = SYSREF_REQ_GPIO;
-#ifndef ALTERA_PLATFORM
-	gpio_adrv_sysref_req_param.platform_ops = &xil_gpio_ops;
-#else
-	gpio_adrv_sysref_req_param.platform_ops = &altera_gpio_ops;
-#endif
-
-	if (dev_hal_data->extra_gpio) {
-		gpio_adrv_resetb_param.extra = dev_hal_data->extra_gpio;
-		gpio_adrv_sysref_req_param.extra = dev_hal_data->extra_gpio;
-	}
-
-	status = no_os_gpio_get(&dev_hal_data->gpio_adrv_resetb,
-				&gpio_adrv_resetb_param);
-
-	spi_param.device_id = 0;
-	spi_param.max_speed_hz = 25000000;
-	spi_param.mode = NO_OS_SPI_MODE_0;
-	spi_param.chip_select = dev_hal_data->spi_adrv_csn;
-#ifndef ALTERA_PLATFORM
-	spi_param.platform_ops = &xil_spi_ops;
-#else
-	spi_param.platform_ops = &altera_spi_ops;
-#endif
-	if (dev_hal_data->extra_spi)
-		spi_param.extra = dev_hal_data->extra_spi;
-
-	status |= no_os_spi_init(&dev_hal_data->spi_adrv_desc, &spi_param);
-
-	status |= no_os_gpio_get(&dev_hal_data->gpio_adrv_sysref_req,
-				 &gpio_adrv_sysref_req_param);
-
-	if (status != 0)
-		return ADIHAL_ERR;
-	else
-		return ADIHAL_OK;
+	return ADIHAL_OK;
 }
 
 adiHalErr_t ADIHAL_closeHw(void *devHalInfo)
 {
-	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
-	int32_t status;
-
-	status = no_os_gpio_remove(dev_hal_data->gpio_adrv_resetb);
-
-	status |= no_os_gpio_remove(dev_hal_data->gpio_adrv_sysref_req);
-
-	status |= no_os_spi_remove(dev_hal_data->spi_adrv_desc);
-
-	if (status != 0)
-		return ADIHAL_ERR;
-	else
-		return ADIHAL_OK;
+	return ADIHAL_OK;
 }
 
 adiHalErr_t ADIHAL_resetHw(void *devHalInfo)

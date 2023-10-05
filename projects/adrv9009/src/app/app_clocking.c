@@ -75,9 +75,6 @@
 #include "parameters.h"
 #include "adi_hal.h"
 
-// devices
-#include "app_talise.h"
-
 // header
 #include "app_clocking.h"
 
@@ -97,6 +94,17 @@ struct axi_clkgen *rx_clkgen;
 struct axi_clkgen *tx_clkgen;
 struct axi_clkgen *rx_os_clkgen;
 #endif
+
+bool adrv9009_check_sysref_rate(uint32_t lmfc, uint32_t sysref)
+{
+	uint32_t div, mod;
+
+	div = lmfc / sysref;
+	mod = lmfc % sysref;
+
+	/* Ignore minor deviations that can be introduced by rounding. */
+	return mod <= div || mod >= sysref - div;
+}
 
 adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			  uint32_t tx_div40_rate_hz,
@@ -127,6 +135,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = true,
 		.pulse_gen_mode = 0x0,
+		.export_no_os_clk = true
 	};
 
 	struct hmc7044_chan_spec chan_spec[10] = {
@@ -267,6 +276,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	ad9528_param.pdata = &ad9528_pdata;
 	ad9528_param.pdata->num_channels = 14;
 	ad9528_param.pdata->channels = &ad9528_channels[0];
+	ad9528_param.export_no_os_clk = true;
 
 	status = ad9528_init(&ad9528_param);
 	if(status) {
@@ -323,8 +333,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
 	ad9528_param.pdata->pll2_bypass_en = false;
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
-	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_CONTINUOUS;
-	ad9528_param.pdata->sysref_req_en = true;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_NSHOT;
+	ad9528_param.pdata->sysref_req_en = false;
 	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
 	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
 	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;

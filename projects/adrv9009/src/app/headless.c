@@ -28,14 +28,32 @@
 #include "altera_spi.h"
 #include "altera_gpio.h"
 #endif
+#include "adrv9009.h"
 #include "talise.h"
 #include "talise_config.h"
+#include "talise_arm_binary.h"
+#include "talise_stream_binary.h"
 #include "app_config.h"
 #include "app_clocking.h"
 #include "app_jesd.h"
 #include "app_transceiver.h"
-#include "app_talise.h"
 #include "ad9528.h"
+#include "hmc7044.h"
+#include "jesd204.h"
+#include "axi_jesd204_rx.h"
+#include "axi_jesd204_tx.h"
+
+enum taliseDeviceId {
+	TALISE_A = 0u,
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+	TALISE_B,
+#endif
+	TALISE_DEVICE_ID_MAX
+};
+
+#define TALISE_NUM_SUBCHANNELS		2 /* I - in-phase and Q - quadrature channels */
+#define TALISE_NUM_CHAIN_CHANNELS	2 /* channels per RX/TX chain */
+#define TALISE_NUM_CHANNELS		(TALISE_DEVICE_ID_MAX * TALISE_NUM_CHAIN_CHANNELS * TALISE_NUM_SUBCHANNELS)
 
 #ifdef IIO_SUPPORT
 
@@ -157,6 +175,13 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 
 #endif // IIO_SUPPORT
 
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+extern struct hmc7044_dev* clkchip_device;
+extern struct hmc7044_dev * car_clkchip_device;
+#else
+extern struct ad9528_dev* clkchip_device;
+#endif
+
 /**********************************************************/
 /**********************************************************/
 /********** Talise Data Structure Initializations ********/
@@ -261,22 +286,6 @@ int main(void)
 		.device_id = 0,
 		.base_address = GPIO_BASEADDR
 	};
-
-	hal.extra_gpio = &hal_gpio_param;
-#endif
-	int t;
-	struct adi_hal hal[TALISE_DEVICE_ID_MAX];
-	taliseDevice_t tal[TALISE_DEVICE_ID_MAX];
-	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		hal[t].extra_gpio= &hal_gpio_param;
-		hal[t].extra_spi = &hal_spi_param;
-		tal[t].devHalInfo = (void *) &hal[t];
-	}
-	hal[TALISE_A].gpio_adrv_resetb_num = TRX_A_RESETB_GPIO;
-	hal[TALISE_A].spi_adrv_csn = ADRV_CS;
-#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-	hal[TALISE_B].gpio_adrv_resetb_num = TRX_B_RESETB_GPIO;
-	hal[TALISE_B].spi_adrv_csn = ADRV_B_CS;
 #endif
 
 #ifndef ALTERA_PLATFORM
@@ -302,12 +311,6 @@ int main(void)
 	if (err != ADIHAL_OK)
 		goto error_0;
 
-	err = jesd_init(rx_div40_rate_hz,
-			tx_div40_rate_hz,
-			rx_os_div40_rate_hz);
-	if (err != ADIHAL_OK)
-		goto error_1;
-
 	err = fpga_xcvr_init(rx_lane_rate_khz,
 			     tx_lane_rate_khz,
 			     rx_os_lane_rate_khz,
@@ -315,22 +318,183 @@ int main(void)
 	if (err != ADIHAL_OK)
 		goto error_2;
 
-	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		err = talise_setup(&tal[t], &talInit);
-		if (err != ADIHAL_OK)
-			goto error_3;
-	}
-#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-	printf("Performing multi-chip synchronization...\n");
-	for(int i=0; i < 12; i++) {
-		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-			err = talise_multi_chip_sync(&tal[t], i);
-			if (err != ADIHAL_OK)
-				goto error_3;
-		}
-	}
+	err = jesd_init(rx_div40_rate_hz,
+			tx_div40_rate_hz,
+			rx_os_div40_rate_hz);
+	if (err != ADIHAL_OK)
+		goto error_1;
+
+	struct no_os_spi_init_param phy_spi_init_param = {
+		.device_id = 0,
+		.max_speed_hz = 25000000,
+		.mode = NO_OS_SPI_MODE_0,
+		.chip_select = ADRV_CS,
+#ifndef ALTERA_PLATFORM
+		.platform_ops = &xil_spi_ops,
+#else
+		.platform_ops = &altera_spi_ops,
 #endif
-	ADIHAL_sysrefReq(tal[TALISE_A].devHalInfo, SYSREF_CONT_ON);
+		.extra = &hal_spi_param
+	};
+
+	struct no_os_gpio_init_param gpio_adrv_resetb = {
+		.number = TRX_A_RESETB_GPIO,
+#ifndef ALTERA_PLATFORM
+		.platform_ops = &xil_gpio_ops,
+#else
+		.platform_ops = &altera_gpio_ops,
+#endif
+		.extra = &hal_gpio_param
+	};
+
+	struct no_os_gpio_init_param gpio_adrv_sysref_req = {
+		.number = SYSREF_REQ_GPIO,
+#ifndef ALTERA_PLATFORM
+		.platform_ops = &xil_gpio_ops,
+#else
+		.platform_ops = &altera_gpio_ops,
+#endif
+		.extra = &hal_gpio_param
+	};
+
+	struct adrv9009_init_param phy_param = {
+		.spi_device_id = ID_ADRV9009,
+		.spi_init = &phy_spi_init_param,
+		.gpio_adrv_resetb_init = &gpio_adrv_resetb,
+		.gpio_adrv_sysref_req_init = &gpio_adrv_sysref_req,
+		.stream = &streamBinary[0],
+		.fw = &armBinary[0],
+		.fw_size = sizeof(armBinary),
+		.talInit = &talInit,
+
+		.rxAgcCtrl = &rxAgcCtrl,
+
+		.tx1_atten_ctrl_pin_step_size = 0,
+		.tx1_atten_ctrl_pin_tx_atten_inc_pin = 4,
+		.tx1_atten_ctrl_pin_tx_atten_dec_pin = 5,
+		.tx1_atten_ctrl_pin_enable = 0,
+
+		.tx2_atten_ctrl_pin_step_size = 0,
+		.tx2_atten_ctrl_pin_tx_atten_inc_pin = 6,
+		.tx2_atten_ctrl_pin_tx_atten_dec_pin = 7,
+		.tx2_atten_ctrl_pin_enable = 0,
+
+		.tx_pa_protection_avg_duration = 3,
+		.tx_pa_protection_tx_atten_step = 2,
+		.tx_pa_protection_tx1_power_threshold = 4096,
+		.tx_pa_protection_tx2_power_threshold = 4096,
+		.tx_pa_protection_peak_count = 4,
+		.tx_pa_protection_tx1_peak_threshold = 128,
+		.tx_pa_protection_tx2_peak_threshold = 128,
+
+		.aux_dac_enables = 0,
+		.aux_dac_vref0 = 3,
+		.aux_dac_resolution0 = 0,
+		.aux_dac_values0 = 0,
+		.aux_dac_vref1 = 3,
+		.aux_dac_resolution1 = 0,
+		.aux_dac_values1 = 0,
+		.aux_dac_vref2 = 3,
+		.aux_dac_resolution2 = 0,
+		.aux_dac_values2 = 0,
+		.aux_dac_vref3 = 3,
+		.aux_dac_resolution3 = 0,
+		.aux_dac_values3 = 0,
+		.aux_dac_vref4 = 3,
+		.aux_dac_resolution4 = 0,
+		.aux_dac_values4 = 0,
+		.aux_dac_vref5 = 3,
+		.aux_dac_resolution5 = 0,
+		.aux_dac_values5 = 0,
+		.aux_dac_vref6 = 3,
+		.aux_dac_resolution6 = 0,
+		.aux_dac_values6 = 0,
+		.aux_dac_vref7 = 3,
+		.aux_dac_resolution7 = 0,
+		.aux_dac_values7 = 0,
+		.aux_dac_vref8 = 3,
+		.aux_dac_resolution8 = 0,
+		.aux_dac_values8 = 0,
+		.aux_dac_vref9 = 3,
+		.aux_dac_resolution9 = 0,
+		.aux_dac_values9 = 0,
+		.aux_dac_values10 = 0,
+		.aux_dac_values11 = 0,
+
+		.gpio3v3_source_control = 0,
+		.gpio3v3_output_level_mask = 0,
+		.gpio3v3_output_enable_mask = 0,
+
+		.dev_clk = clkchip_device->clk_desc[0],
+
+		.trx_pll_lo_frequency_hz = 2000000000,
+	};
+	struct adrv9009_rf_phy* phy[TALISE_DEVICE_ID_MAX];
+
+	phy_spi_init_param.chip_select = ADRV_CS;
+	gpio_adrv_resetb.number = TRX_A_RESETB_GPIO;
+	status = adrv9009_init(&phy[TALISE_A], &phy_param);
+	if (status != 0)
+		printf("adrv9009_init() error: %d\n", status);
+
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+	phy_spi_init_param.chip_select = ADRV_B_CS;
+	gpio_adrv_resetb.number = TRX_B_RESETB_GPIO;
+	phy_param.gpio_adrv_sysref_req_init = NULL;
+	status = adrv9009_init(&phy[TALISE_B], &phy_param);
+	if (status != 0)
+		printf("adrv9009_init() error: %d\n", status);
+#endif
+
+	struct jesd204_topology *topology;
+	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = clkchip_device->jdev,
+			.link_ids = {DEFRAMER_LINK_TX,FRAMER_LINK_RX, FRAMER_LINK_ORX},
+			.links_number = 3,
+			.is_sysref_provider = true,
+		},
+#ifdef ZU11EG
+		{
+			.jdev = car_clkchip_device->jdev,
+			.link_ids = {DEFRAMER_LINK_TX,FRAMER_LINK_RX, FRAMER_LINK_ORX},
+			.links_number = 3,
+		},
+#endif
+		{
+			.jdev = rx_jesd->jdev,
+			.link_ids = {FRAMER_LINK_RX},
+			.links_number = 1,
+		},
+		{
+			.jdev = tx_jesd->jdev,
+			.link_ids = {DEFRAMER_LINK_TX},
+			.links_number = 1,
+		},
+		{
+			.jdev = rx_os_jesd->jdev,
+			.link_ids = {FRAMER_LINK_ORX},
+			.links_number = 1,
+		},
+#ifdef ZU11EG
+		{
+			.jdev = phy[TALISE_B]->jdev,
+			.link_ids = {DEFRAMER_LINK_TX,FRAMER_LINK_RX, FRAMER_LINK_ORX},
+			.links_number = 3,
+		},
+#endif
+		{
+			.jdev = phy[TALISE_A]->jdev,
+			.link_ids = {DEFRAMER_LINK_TX,FRAMER_LINK_RX, FRAMER_LINK_ORX},
+			.links_number = 3,
+			.is_top_device = true,
+		},
+	};
+
+	jesd204_topology_init(&topology, devs,
+				  sizeof(devs)/sizeof(*devs));
+
+	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
 	jesd_rx_watchdog();
 
@@ -449,9 +613,8 @@ int main(void)
 		printf("Tinyiiod error: %d\n", status);
 #endif // IIO_SUPPORT
 
-	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		talise_shutdown(&tal[t]);
-	}
+	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
+
 error_3:
 	fpga_xcvr_deinit();
 error_2:

@@ -61,9 +61,9 @@
 // header
 #include "app_jesd.h"
 
-static struct adxcvr *rx_adxcvr;
-static struct adxcvr *tx_adxcvr;
-static struct adxcvr *rx_os_adxcvr;
+struct adxcvr *rx_adxcvr;
+struct adxcvr *tx_adxcvr;
+struct adxcvr *rx_os_adxcvr;
 
 adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 			   uint32_t tx_lane_rate_khz,
@@ -107,6 +107,7 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		.lpm_enable = 1,
 		.lane_rate_khz = rx_lane_rate_khz,
 		.ref_rate_khz = device_clock,
+		.export_no_os_clk = true
 	};
 	struct adxcvr_init tx_adxcvr_init = {
 		.name = "tx_adxcvr",
@@ -116,6 +117,7 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		.lpm_enable = 0,
 		.lane_rate_khz = tx_lane_rate_khz,
 		.ref_rate_khz = device_clock,
+		.export_no_os_clk = true
 	};
 	struct adxcvr_init rx_os_adxcvr_init = {
 		.name = "rx_os_adxcvr",
@@ -125,6 +127,7 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		.lpm_enable = 1,
 		.lane_rate_khz = rx_os_lane_rate_khz,
 		.ref_rate_khz = device_clock,
+		.export_no_os_clk = true
 	};
 #endif
 
@@ -148,36 +151,9 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		goto error_9;
 	}
 #endif
-#ifndef ALTERA_PLATFORM
-#ifndef ADRV9008_2
-	status = adxcvr_clk_enable(rx_adxcvr);
-	if (status != 0) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
-		goto error_10;
-	}
-#endif
-#ifndef ADRV9008_1
-	status = adxcvr_clk_enable(tx_adxcvr);
-	if (status != 0) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
-		goto error_10;
-	}
-	status = adxcvr_clk_enable(rx_os_adxcvr);
-	if (status != 0) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", rx_os_adxcvr->name);
-		goto error_10;
-	}
-#endif
-#endif
 
 	return ADIHAL_OK;
 
-#ifndef ALTERA_PLATFORM
-error_10:
-#ifndef ADRV9008_1
-	adxcvr_remove(rx_os_adxcvr);
-#endif
-#endif
 error_9:
 #ifndef ADRV9008_1
 	adxcvr_remove(tx_adxcvr);
