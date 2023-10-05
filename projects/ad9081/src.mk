@@ -26,7 +26,6 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
-	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
@@ -86,7 +85,6 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
-	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \

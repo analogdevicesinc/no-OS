@@ -44,7 +44,6 @@
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 #include "axi_adxcvr.h"
-#include "jesd204_clk.h"
 #include "no_os_error.h"
 #include "parameters.h"
 #include "app_jesd.h"
@@ -58,12 +57,6 @@ struct axi_jesd204_tx *tx_jesd;
 
 struct adxcvr *rx_adxcvr;
 struct adxcvr *tx_adxcvr;
-
-struct jesd204_clk rx_jesd_clk;
-struct jesd204_clk tx_jesd_clk;
-
-struct no_os_clk_hw jesd_rx_hw;
-struct no_os_clk_hw jesd_tx_hw;
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -144,25 +137,6 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	if (ret)
 		return ret;
 #endif
-
-#ifdef RX_XCVR_BASEADDR
-	rx_jesd_clk.xcvr = rx_adxcvr;
-#endif
-	rx_jesd_clk.jesd_rx = rx_jesd;
-#ifdef TX_XCVR_BASEADDR
-	tx_jesd_clk.xcvr = tx_adxcvr;
-#endif
-	tx_jesd_clk.jesd_tx = tx_jesd;
-
-	jesd_rx_hw.dev = &rx_jesd_clk;
-
-	jesd_tx_hw.dev = &tx_jesd_clk;
-
-	clk[0].name = "jesd_rx";
-	clk[0].hw = &jesd_rx_hw;
-
-	clk[1].name = "jesd_tx";
-	clk[1].hw = &jesd_tx_hw;
 
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 
