@@ -199,6 +199,40 @@ int max14906_init(struct max149x6_desc **desc,
 			goto gpio_err;
 	}
 
+	ret = no_os_gpio_get_optional(&descriptor->fault_gpio,
+				      param->fault_gpio_param);
+	if (ret)
+		goto spi_err;
+
+	if (descriptor->fault_gpio) {
+		ret = no_os_gpio_direction_input(descriptor->fault_gpio);
+		if (ret)
+			goto gpio_err;
+	}
+
+	ret = no_os_gpio_get_optional(&descriptor->ready_gpio,
+				      param->ready_gpio_param);
+	if (ret)
+		goto spi_err;
+
+	if (descriptor->ready_gpio) {
+		ret = no_os_gpio_direction_input(descriptor->ready_gpio);
+		if (ret)
+			goto gpio_err;
+	}
+
+	ret = no_os_gpio_get_optional(&descriptor->synch_gpio,
+				      param->synch_gpio_param);
+	if (ret)
+		goto spi_err;
+
+	if (descriptor->synch_gpio) {
+		ret = no_os_gpio_direction_output(descriptor->synch_gpio,
+						  NO_OS_GPIO_HIGH);
+		if (ret)
+			goto gpio_err;
+	}
+
 	/* Clear the latched faults generated at power up */
 	ret = max149x6_reg_read(descriptor, MAX14906_OVR_LD_REG, &reg_val);
 	if (ret)
