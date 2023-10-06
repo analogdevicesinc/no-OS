@@ -17,3 +17,10 @@ ANALOG TO DIGITAL CONVERTERS
    :maxdepth: 1
 
    drivers/adm1177
+
+INERTIAL MEASUREMENT UNITS
+==========================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adis
