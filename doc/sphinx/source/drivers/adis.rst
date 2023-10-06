@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/imu/README.rst
