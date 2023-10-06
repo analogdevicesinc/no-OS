@@ -61,6 +61,9 @@ struct max149x6_init_param {
 	uint32_t chip_address;
 	struct no_os_spi_init_param *comm_param;
 	struct no_os_gpio_init_param *en_gpio_param;
+	struct no_os_gpio_init_param *fault_gpio_param;
+	struct no_os_gpio_init_param *ready_gpio_param;
+	struct no_os_gpio_init_param *synch_gpio_param;
 	bool crc_en;
 };
 
@@ -71,6 +74,9 @@ struct max149x6_desc {
 	uint32_t chip_address;
 	struct no_os_spi_desc *comm_desc;
 	struct no_os_gpio_desc *en_gpio;
+	struct no_os_gpio_desc *fault_gpio;
+	struct no_os_gpio_desc *ready_gpio;
+	struct no_os_gpio_desc *synch_gpio;
 	uint8_t buff[MAX149X6_FRAME_SIZE + 1];
 	bool crc_en;
 };
