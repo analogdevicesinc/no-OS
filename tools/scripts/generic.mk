@@ -277,7 +277,7 @@ $(OBJECTS_DIR)%/.:
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	$(call print,[CC] $(notdir $<))
-	$(CC) -c @$(CFLAGS_FILE) $< -o $@
+	$(CC) -c @$(CFLAGS_FILE) $< -o $@ 
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).cpp | $$(@D)/.
 	$(call print,[CPP] $(notdir $<))
@@ -326,7 +326,7 @@ pre_build:
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	$(call print,[LD] $(notdir $(OBJS)))
 	$(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
-			 $(ASM_OBJS) $(LIB_FLAGS)
+			 $(ASM_OBJS) $(LIB_FLAGS) ${LIB_AD9430} ${MATH_LIB}
 	$(MAKE) --no-print-directory post_build
 
 PHONY += $(BINARY).id
