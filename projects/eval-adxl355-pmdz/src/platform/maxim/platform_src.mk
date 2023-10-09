@@ -1,3 +1,5 @@
+CFLAGS+=-DDEBUG
+
 INCS += $(PLATFORM_DRIVERS)/maxim_gpio.h      \
         $(PLATFORM_DRIVERS)/maxim_spi.h       \
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.h  \

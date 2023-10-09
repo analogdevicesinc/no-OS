@@ -87,6 +87,25 @@ struct no_os_spi_init_param adxl355_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+const struct no_os_spi_init_param ad7799_spi_ip = {
+	.device_id = 4,
+	.max_speed_hz = 1000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = 0,
+	.extra = SPI_EXTRA,
+};
+
+const struct ad7799_init_param ad7799_ip = {
+	.spi_init = ad7799_spi_ip,
+	.chip_type = ID_AD7793,
+	.polarity = 1,
+	.vref_mv = 1050,
+	.gain = 1,
+	.precision = AD7799_PRECISION_MV
+};
+
 struct adxl355_init_param adxl355_ip = {
 	.comm_type = ADXL355_SPI_COMM,
 #ifdef ADXL359_DEV

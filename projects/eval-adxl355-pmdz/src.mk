@@ -53,3 +53,8 @@ SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 SRCS += $(DRIVERS)/net/spi_open_alliance.c
 SRCS += $(NO-OS)/util/no_os_crc8.c
 endif
+
+INCS += $(DRIVERS)/adc/ad7799/ad7799.h
+INCS += $(DRIVERS)/adc/ad7799/iio_ad7799.h
+SRCS += $(DRIVERS)/adc/ad7799/ad7799.c
+SRCS += $(DRIVERS)/adc/ad7799/iio_ad7799.c

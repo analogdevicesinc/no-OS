@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "adxl355.h"
+#include "ad7799.h"
 #ifdef IIO_SUPPORT
 #include "iio_adxl355.h"
 #ifdef IIO_TRIGGER_EXAMPLE
@@ -60,6 +61,8 @@
 /******************************************************************************/
 extern struct no_os_uart_init_param adxl355_uart_ip;
 extern struct no_os_spi_init_param adxl355_spi_ip;
+extern const struct no_os_spi_init_param ad7799_spi_ip;
+extern const struct ad7799_init_param ad7799_ip;
 extern struct adxl355_init_param adxl355_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE

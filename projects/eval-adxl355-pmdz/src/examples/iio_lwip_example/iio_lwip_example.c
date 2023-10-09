@@ -71,6 +71,8 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
 
 int iio_lwip_example_main()
 {
+	int32_t adc_data;
+	uint32_t reg_data;
 	int ret;
 	struct adxl355_iio_dev *adxl355_iio_desc;
 	struct adxl355_iio_dev_init_param adxl355_iio_ip;
@@ -81,7 +83,28 @@ int iio_lwip_example_main()
 	};
 	struct iio_app_init_param app_init_param = { 0 };
 
-	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
+	struct ad7799_dev *ad7799;
+	ret = ad7799_init(&ad7799, &ad7799_ip);
+	if (ret)
+		return ret;
+
+	ret = ad7799_read(ad7799, AD7799_REG_CONF, &reg_data);
+
+	/* Enable excitation current */
+	ret = ad7799_read(ad7799, AD7799_REG_IO, &reg_data);
+	reg_data |= NO_OS_BIT(2) | NO_OS_BIT(1);
+	ret = ad7799_write(ad7799, AD7799_REG_IO, reg_data);
+
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+	ret = ad7799_read_channel(ad7799, 0, &adc_data);
+
+	// adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
 	// ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
 	// if (ret)
 	// 	return ret;

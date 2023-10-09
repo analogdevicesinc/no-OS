@@ -259,7 +259,7 @@ int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
 
 	if (device->polarity) { // AD7799_UNIPOLAR
 		temp = (1 << (device->reg_size[AD7799_REG_DATA] * 8));
-		data = data * vref_scaled / temp;
+		data = (uint64_t)data * vref_scaled / temp;
 	} else { // AD7799_BIPOLAR
 		temp = 1 << ((device->reg_size[AD7799_REG_DATA] * 8) - 1);
 
@@ -416,6 +416,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 	case ID_AD7798:
 		dev->reg_size = ad7798_reg_size;
 		break;
+	case ID_AD7793:
 	case ID_AD7799:
 		dev->reg_size = ad7799_reg_size;
 		break;
@@ -440,6 +441,12 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		return -1;
 
 	switch(dev->chip_type) {
+	case ID_AD7793:
+	if ((chip_id & AD7799_ID_MASK) != ID_AD7793) {
+		printf("Invalid AD7793 Chip ID");
+		return -1;
+	}
+	break;
 	case ID_AD7798:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7798) {
 			printf("Invalid AD7798 Chip ID");
