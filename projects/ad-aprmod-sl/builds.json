@@ -1,0 +1,10 @@
+{
+  "maxim": {
+    "iio_uart":  {
+      "flags" : "TINYIIOD=y"
+    },
+    "iio_t1l":  {
+      "flags" : "TINYIIOD=y NETWORKING=y"
+    }
+  }
+}
