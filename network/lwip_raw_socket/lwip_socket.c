@@ -356,9 +356,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	}
 #endif
 
-	ret = _lwip_start_mdns(descriptor, netif_descriptor);
-	if (ret)
-		goto platform_remove;
+	// ret = _lwip_start_mdns(descriptor, netif_descriptor);
+	// if (ret)
+	// 	goto platform_remove;
 
 	lwip_config_if(descriptor);
 
