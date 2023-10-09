@@ -63,13 +63,13 @@ VSCODE_CMSISCFG_FILE="interface/cmsis-dap.cfg","target/$(TARGET).cfg"
 LDFLAGS = -mcpu=cortex-m4 	\
 	-Wl,--gc-sections 	\
 	--specs=nosys.specs	\
-	-mfloat-abi=hard 	\
+	-mfloat-abi=soft 	\
 	-mfpu=fpv4-sp-d16 	\
 	--entry=Reset_Handler		
 	
 CFLAGS += -mthumb                                                                 \
         -mcpu=cortex-m4                                                         \
-        -mfloat-abi=hard                                                        \
+        -mfloat-abi=soft                                                       \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
         -fsingle-precision-constant                                             \
@@ -110,7 +110,9 @@ SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/system_$(TA
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Include/*.h)
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/*.h)
 
-ifeq ($(TARGET_LCASE), max32650)
+MATH_LIB = ${MAXIM_LIBRARIES}/CMSIS/5.9.0/DSP/Lib/libarm_cortexM4l_math.a
+
+ifeq ($(TARGET), max32650)
 INCS := $(filter-out $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/mxc_device.h, $(INCS))
 endif
 
