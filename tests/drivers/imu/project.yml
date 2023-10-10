@@ -93,6 +93,9 @@
   :test: []
   :release: []
 
+:junit_tests_report:
+  :artifact_filename: report_junit.xml
+
 :plugins:
   :load_paths:
     - "#{Ceedling.load_path}"
@@ -101,4 +104,6 @@
     - module_generator
     - raw_output_report
     - gcov
+    - xml_tests_report
+    - junit_tests_report
 ...
