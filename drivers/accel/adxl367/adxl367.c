@@ -204,8 +204,8 @@ int adxl367_self_test(struct adxl367_dev *dev)
 		return ret;
 	x_axis_2 += read_val >> 2;
 	// extend sign to 16 bits
-	if (x_axis_1 & NO_OS_BIT(13))
-		x_axis_1 |= NO_OS_GENMASK(15, 14);
+	if (x_axis_2 & NO_OS_BIT(13))
+		x_axis_2 |= NO_OS_GENMASK(15, 14);
 
 	ret = adxl367_set_power_mode(dev, ADXL367_OP_STANDBY);
 	if (ret)
