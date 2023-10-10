@@ -1,0 +1,7 @@
+{
+  "maxim": {
+    "stout_application": {
+      "flags" : "TARGET=max32655"
+    }
+  }
+}
