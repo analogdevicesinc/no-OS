@@ -177,9 +177,15 @@ static void _max_delay_config(struct no_os_spi_desc *desc,
 	mxc_spi_regs_t *spi;
 	uint32_t clk_rate;
 	uint32_t ticks_ns;
+	uint32_t delay_first_ns;
+	uint32_t delay_last_ns;
 
-	if (msg->cs_delay_first == st->cs_delay_first &&
-	    msg->cs_delay_last == st->cs_delay_last)
+	delay_first_ns = msg->cs_delay_first * 1000 +
+			 desc->platform_delays.cs_delay_first;
+	delay_last_ns = msg->cs_delay_last * 1000 + desc->platform_delays.cs_delay_last;
+
+	if (delay_first_ns == st->cs_delay_first &&
+	    delay_last_ns == st->cs_delay_last)
 		return;
 
 	spi = MXC_SPI_GET_SPI(desc->device_id);
@@ -187,15 +193,15 @@ static void _max_delay_config(struct no_os_spi_desc *desc,
 	clk_rate = MXC_SPI_GetPeripheralClock(spi);
 	ticks_ns = NO_OS_DIV_ROUND_CLOSEST(NANO, clk_rate);
 
-	if (msg->cs_delay_first != st->cs_delay_first) {
+	if (delay_first_ns != st->cs_delay_first) {
 		/**
 		 * The minimum number of delay ticks is 1. If 0 is written to the
 		 * sstime register, there would be a delay of 256 ticks.
 		 */
-		if (msg->cs_delay_first == 0)
+		if (delay_first_ns == 0)
 			ticks_delay = 1;
 		else
-			ticks_delay = msg->cs_delay_first * NS_PER_US / ticks_ns;
+			ticks_delay = delay_first_ns / ticks_ns;
 
 		if (ticks_delay > MAX_DELAY_SCLK) {
 			pr_warning("cs_delay_first value is too high\n");
@@ -205,15 +211,15 @@ static void _max_delay_config(struct no_os_spi_desc *desc,
 		spi->sstime &= ~MXC_F_SPI_SSTIME_PRE;
 		spi->sstime |= no_os_field_prep(MXC_F_SPI_SSTIME_PRE, ticks_delay);
 	}
-	if (msg->cs_delay_last != st->cs_delay_last) {
+	if (delay_last_ns != st->cs_delay_last) {
 		/**
 		 * The minimum number of delay ticks is 1. If 0 is written to the
 		 * sstime register, there would be a delay of 256 ticks.
 		 */
-		if (msg->cs_delay_first == 0)
+		if (delay_last_ns == 0)
 			ticks_delay = 1;
 		else
-			ticks_delay = msg->cs_delay_last * NS_PER_US / ticks_ns;
+			ticks_delay = delay_last_ns / ticks_ns;
 
 		if (ticks_delay > MAX_DELAY_SCLK) {
 			pr_warning("cs_delay_last value is too high\n");
@@ -224,8 +230,8 @@ static void _max_delay_config(struct no_os_spi_desc *desc,
 		spi->sstime |= no_os_field_prep(MXC_F_SPI_SSTIME_POST, ticks_delay);
 	}
 
-	st->cs_delay_first = msg->cs_delay_first;
-	st->cs_delay_last = msg->cs_delay_last;
+	st->cs_delay_first = delay_first_ns;
+	st->cs_delay_last = delay_last_ns;
 
 	return;
 
