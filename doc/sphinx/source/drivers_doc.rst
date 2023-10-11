@@ -24,6 +24,7 @@ DIGITAL INPUT/OUTPUT
    :maxdepth: 1
 
    drivers/max149x6
+   drivers/max22190
 
 INERTIAL MEASUREMENT UNITS
 ==========================
