@@ -207,3 +207,24 @@ jobs:
       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
       artifact: 'logs_ADuCM3029_$(System.JobId)'
       publishLocation: 'pipeline'
+
+- job: Unit_tests
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: |
+      sudo apt install ruby-full
+      sudo gem install ceedling
+      pip install gcovr==4.1
+      cd tests/drivers/imu/
+      ceedling test:all
+    displayName: 'Run unit tests'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'tests/drivers/imu/build/artifacts/test/*.xml'
