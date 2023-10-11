@@ -81,6 +81,7 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 	(*desc)->bus->slave_number++;
 	(*desc)->platform_ops = param->platform_ops;
 	(*desc)->parent = param->parent;
+	(*desc)->platform_delays = param->platform_delays;
 
 	return 0;
 }

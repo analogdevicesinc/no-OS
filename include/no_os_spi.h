@@ -109,6 +109,15 @@ struct no_os_spi_msg {
 };
 
 /**
+ * @struct no_os_platform_spi_delays
+ * @brief Delays resulted from components in the SPI signal path. The values is ns.
+ */
+struct no_os_platform_spi_delays {
+	uint32_t cs_delay_first;
+	uint32_t cs_delay_last;
+};
+
+/**
  * @struct no_os_spi_platform_ops
  * @brief Structure holding SPI function pointers that point to the platform
  * specific function
@@ -131,6 +140,7 @@ struct no_os_spi_init_param {
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
 	const struct no_os_spi_platform_ops *platform_ops;
+	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
 	/** Parent of the device */
@@ -178,6 +188,7 @@ struct no_os_spi_desc {
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
 	const struct no_os_spi_platform_ops *platform_ops;
+	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
 	/** Parent of the device */
