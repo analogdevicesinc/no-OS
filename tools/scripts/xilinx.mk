@@ -263,7 +263,7 @@ ifeq ($(findstring cortexr5,$(strip $(ARCH))),cortexr5)
 	$(call create_bif_file,[bootloader$(comma)destination_cpu = r5-0],[destination_device = pl],[destinatio_cpu = r5-0]) $(HIDE)
 	bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
 endif
-	$(call copy_file,$(TEMP_DIR)/*.bit,$(BOOT_BIN_DIR)) $(HIDE)
+	$(call copy_file,$(HARDWARE),$(BOOT_BIN_DIR)) $(HIDE)
 	$(call copy_file,$(FSBL_PATH),$(BOOT_BIN_DIR)) $(HIDE)
 	$(call copy_file,$(BINARY),$(BOOT_BIN_DIR)) $(HIDE)
 	tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --transform 's/^\(\.\/\|\.\)//' --force-local --exclude 'BOOT.BIN' -C $(BOOT_BIN_DIR) . $(HIDE)
@@ -271,7 +271,7 @@ else
 	$(call print,Creating archive with files)
 	$(call remove_dir,$(BUILD_DIR)/boot_files) $(HIDE)
 	$(call mk_dir,$(BUILD_DIR)/boot_files) $(HIDE)
-	$(call copy_file,$(TEMP_DIR)/*.bit,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(call copy_file,$(HARDWARE),$(BUILD_DIR)/boot_files) $(HIDE)
 	$(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
 	tar -czvf $(BUILD_DIR)/bootgen_sysfiles.tar.gz --transform 's/^\(\.\/\|\.\)//' --force-local -C $(BUILD_DIR)/boot_files . $(HIDE)
 endif
