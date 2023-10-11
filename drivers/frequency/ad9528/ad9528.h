@@ -364,27 +364,27 @@ struct ad9528_platform_data {
 	uint8_t	 spi3wire;
 
 	/** REFA input enable. */
-	uint8_t	refa_en;
+	uint8_t	 refa_en;
 	/** REFB input enable. */
-	uint8_t	refb_en;
+	uint8_t	 refb_en;
 
 	/** REFA differential/single-ended input selection. */
-	uint8_t	refa_diff_rcv_en;
+	uint8_t	 refa_diff_rcv_en;
 	/** REFB differential/single-ended input selection. */
-	uint8_t	refb_diff_rcv_en;
+	uint8_t	 refb_diff_rcv_en;
 	/** OSC differential/ single-ended input selection. */
-	uint8_t	osc_in_diff_en;
+	uint8_t	 osc_in_diff_en;
 
 	/*
 	 * Valid if differential input disabled
 	 * if false defaults to pos input
 	 */
 	/** REFA single-ended neg./pos. input enable. */
-	uint8_t	refa_cmos_neg_inp_en;
+	uint8_t	 refa_cmos_neg_inp_en;
 	/** REFB single-ended neg./pos. input enable. */
-	uint8_t	refb_cmos_neg_inp_en;
+	uint8_t	 refb_cmos_neg_inp_en;
 	/** OSC single-ended neg./pos. input enable. */
-	uint8_t	osc_in_cmos_neg_inp_en;
+	uint8_t	 osc_in_cmos_neg_inp_en;
 
 	/* PLL1 Setting */
 	/** PLL1 10-bit REFA R divider. */
@@ -435,21 +435,21 @@ struct ad9528_platform_data {
 	/**  VCO1 divider, range 3..5. */
 	uint8_t	 pll2_vco_div_m1;
 	/** Bypass PLL2 */
-	bool pll2_bypass_en;
+	bool     pll2_bypass_en;
 
 	/* Loop Filter PLL2 */
 	/** PLL2 loop filter Rpole resistor value. */
-	uint8_t	rpole2;
+	uint8_t	 rpole2;
 	/** PLL2 loop filter Rzero resistor value. */
-	uint8_t	rzero;
+	uint8_t	 rzero;
 	/** PLL2 loop filter Cpole capacitor value. */
-	uint8_t	cpole1;
+	uint8_t	 cpole1;
 	/** PLL2 loop filter Rzero bypass enable. */
-	uint8_t	rzero_bypass_en;
+	uint8_t	 rzero_bypass_en;
 
 	/* Output Channel Configuration */
 	/** Array size of struct ad9528_channel_spec. */
-	uint32_t			   num_channels;
+	uint32_t num_channels;
 	/** Pointer to channel array. */
 	struct ad9528_channel_spec *channels;
 
@@ -485,29 +485,29 @@ struct ad9528_state {
 
 struct ad9528_dev {
 	/* SPI */
-	struct no_os_spi_desc *spi_desc;
+	struct no_os_spi_desc       *spi_desc;
 	/* GPIO */
-	struct no_os_gpio_desc *gpio_resetb;
-	struct no_os_gpio_desc *sysref_req_gpio;
+	struct no_os_gpio_desc      *gpio_resetb;
+	struct no_os_gpio_desc      *sysref_req_gpio;
 	/* Device Settings */
-	struct ad9528_state ad9528_st;
+	struct ad9528_state         ad9528_st;
 	struct ad9528_platform_data *pdata;
 	/* CLK descriptors */
-	struct no_os_clk_desc  **clk_desc;
+	struct no_os_clk_desc       **clk_desc;
 
-	struct jesd204_dev     *jdev;
-	uint32_t               jdev_lmfc_lemc_rate;
-	uint32_t               jdev_lmfc_lemc_gcd;
+	struct jesd204_dev          *jdev;
+	uint32_t                    jdev_lmfc_lemc_rate;
+	uint32_t                    jdev_lmfc_lemc_gcd;
 };
 
 struct ad9528_init_param {
 	/* SPI */
-	struct no_os_spi_init_param spi_init;
+	struct no_os_spi_init_param  spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param *gpio_resetb;
 	/* Device Settings */
-	struct ad9528_platform_data *pdata;
-	bool export_no_os_clk;
+	struct ad9528_platform_data  *pdata;
+	bool                         export_no_os_clk;
 };
 
 /* Helpers to avoid excess line breaks */
