@@ -231,6 +231,11 @@ struct adin1110_init_param adin1110_ip = {
 	.append_crc = false,
 };
 
+const struct no_os_platform_spi_delays ad74413r_spi_delays = {
+	.cs_delay_first = 150,
+	.cs_delay_last = 0,
+};
+
 const struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = 3,
 	.max_speed_hz = 15000000,
@@ -238,6 +243,7 @@ const struct no_os_spi_init_param ad74413r_spi_ip = {
 	.mode = NO_OS_SPI_MODE_2,
 	.platform_ops = &max_spi_ops,
 	.chip_select = 3,
+	.platform_delays = ad74413r_spi_delays,
 	.extra = SPI_EXTRA,
 };
 
