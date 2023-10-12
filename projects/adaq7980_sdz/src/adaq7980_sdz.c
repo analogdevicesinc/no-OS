@@ -48,6 +48,8 @@
 #include <xil_cache.h>
 #include "parameters.h"
 #include "adaq7980.h"
+#include "spi_engine.h"
+#include "clk_axi_clkgen.h"
 #include "no_os_pwm.h"
 #include "axi_pwm_extra.h"
 #include "no_os_gpio.h"
@@ -68,23 +70,30 @@ int main()
 	};
 
 	struct spi_engine_init_param spi_eng_init_param  = {
-		.ref_clk_hz = 100000000,
+		.ref_clk_hz = 160000000,
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = ADAQ7980_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
 		.data_width = 16,
 	};
 
+	struct axi_clkgen_init clkgen_init = {
+			.name = "rx_clkgen",
+			.base = ADAQ7980_RX_CLKGEN_BASEADDR ,
+			.parent_rate = 100000000,
+		};
+
 	struct axi_pwm_init_param axi_pwm_init = {
 		.base_addr = AXI_PWMGEN_BASEADDR,
-		.ref_clock_Hz = 100000000,
+		.ref_clock_Hz = 160000000,
 		.channel = 0,
 	};
 
 	struct no_os_pwm_init_param trigger_pwm_init = {
-		.period_ns = 10000,		/* 100Khz */
+		.period_ns = 1000,		/* 1Mhz */
 		.duty_cycle_ns = 10,
 		.polarity = NO_OS_PWM_POLARITY_HIGH,
+		.platform_ops = &axi_pwm_ops,
 		.extra = &axi_pwm_init,
 	};
 
@@ -111,7 +120,8 @@ int main()
 
 	struct no_os_spi_init_param spi_init = {
 		.chip_select = SPI_ADAQ7980_CS,
-		.max_speed_hz = 10000000,
+		//.max_speed_hz = 10000000,
+		.max_speed_hz = 83000000,
 		.mode = NO_OS_SPI_MODE_2,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
@@ -121,6 +131,8 @@ int main()
 		.spi_init = &spi_init,
 		.offload_init_param = &spi_engine_offload_init_param,
 		.trigger_pwm_init = &trigger_pwm_init,
+		.clkgen_init = &clkgen_init,
+		.axi_clkgen_rate = 160000000,
 		.gpio_pd_ldo = &adaq7980_pd_ldo,
 	};
 
@@ -131,14 +143,15 @@ int main()
 	if (ret < 0)
 		return -1;
 
-	while(1) {
+//	while(1) {
 		ret = ad7980_read_data(dev, buf, ADAQ7980_EVB_SAMPLE_NO);
 		if (ret < 0)
 			return -1;
 
 		for (i = 0; i < ADAQ7980_EVB_SAMPLE_NO; i++)
-			printf("ADC sample %"PRIu32" %"PRIu16" \n", i, buf[i]);
-	}
+			//printf("ADC sample %"PRIu32" %"PRIu16" \n", i, buf[i]);
+	     	printf("%"PRIu16" \n", buf[i]);
+//	}
 
 	printf("Success\n\r");
 

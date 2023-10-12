@@ -40,11 +40,16 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <string.h>
 #include "stdio.h"
 #include "stdlib.h"
 #include "adaq7980.h"
+#if !defined(USE_STANDARD_SPI)
+#include "spi_engine.h"
+#endif
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "no_os_util.h"
 #include "no_os_alloc.h"
 
 /**
@@ -97,6 +102,22 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 	if (!dev)
 		return -1;
 
+#if !defined(USE_STANDARD_SPI)
+	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
+	if (ret != 0) {
+		printf("error: %s: axi_clkgen_init() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_dev;
+	}
+
+	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
+	if (ret != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_clkgen;
+	}
+#endif
+
 	ret = no_os_gpio_get_optional(&dev->gpio_pd_ldo, init_param->gpio_pd_ldo);
 	if (ret != 0)
 		goto error_dev;
@@ -133,6 +154,10 @@ error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	no_os_free(dev);
+	error_clkgen:
+#if !defined(USE_STANDARD_SPI)
+		axi_clkgen_remove(dev->clkgen);
+#endif
 
 	return -1;
 }

@@ -875,7 +875,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			.dest_addr = (uintptr_t)msg.rx_addr
 		};
 		axi_dmac_transfer_start(eng_desc->offload_rx_dma, &rx_transfer);
-		axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
+		axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 1000);
 	}
 
 	usleep(1000);

@@ -42,8 +42,13 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#include "clk_axi_clkgen.h"
 #include "no_os_pwm.h"
+#else
+#include "no_os_pwm.h"
+#endif
 #include "no_os_gpio.h"
 
 /******************************************************************************/
@@ -60,6 +65,10 @@ struct adaq7980_init_param {
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* PWM generator init structure */
 	struct no_os_pwm_init_param	*trigger_pwm_init;
+	/* Clock gen for hdl design init structure */
+	struct axi_clkgen_init	*clkgen_init;
+	/* Clock generator rate */
+	uint32_t		        axi_clkgen_rate;
 	/** Power down GPIO initialization structure. */
 	struct no_os_gpio_init_param	*gpio_pd_ldo;
 };
@@ -73,6 +82,8 @@ struct adaq7980_dev {
 	struct no_os_spi_desc		*spi_desc;
 	/* Trigger conversion PWM generator descriptor */
 	struct no_os_pwm_desc		*trigger_pwm_desc;
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen	*clkgen;
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Power down GPIO handler. */
