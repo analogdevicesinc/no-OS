@@ -84,6 +84,25 @@ def shell_source(script):
 
 	os.environ.update(env)
 
+def re_run_stm32(cmd):
+	global ERR
+	log("Project first failed, rebuild to check if the error persists")
+	log("make reset")
+	cmd_reset = cmd.replace("all", "reset")
+	err = os.system(cmd_reset + ' >> %s 2>&1' % log_file)
+	if err != 0:
+		ERR = 1
+		log_err("ERROR")
+		return err
+
+	log("make all")
+	err = os.system(cmd + ' >> %s 2>&1' % log_file)
+	if err != 0:
+		log("Error persits, not a random fail, please check!")
+	else:
+		log("First fail was possibly a random one")
+	return err
+
 def run_cmd(cmd):
 	global ERR
 	tmp = cmd.split(' ')
@@ -101,6 +120,11 @@ def run_cmd(cmd):
 		return err
 	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if err != 0:
+		if 'timeout' in cmd:
+			err = re_run_stm32(cmd)
+			if err == 0:
+				return err
+
 		log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
