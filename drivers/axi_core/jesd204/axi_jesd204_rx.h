@@ -128,8 +128,8 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd);
 int32_t axi_jesd204_rx_init_legacy(struct axi_jesd204_rx **jesd204,
 				   const struct jesd204_rx_init *init);
 /** Device initialization, JESD FSM ON */
-int32_t axi_jesd204_rx_init_jesd_fsm(struct axi_jesd204_rx **jesd204,
-				     const struct jesd204_rx_init *init);
+int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
+			    const struct jesd204_rx_init *init);
 /** Resources Deallocation */
 int32_t axi_jesd204_rx_remove(struct axi_jesd204_rx *jesd);
 #endif

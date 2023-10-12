@@ -551,10 +551,10 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 
 	dev_init->ad9144_jesd_param.lane_clk = dev->ad9144_xcvr->clk_out;
 
-	status = axi_jesd204_tx_init_jesd_fsm(&dev->ad9144_jesd,
-					      &dev_init->ad9144_jesd_param);
+	status = axi_jesd204_tx_init(&dev->ad9144_jesd,
+				     &dev_init->ad9144_jesd_param);
 	if (status) {
-		printf("error: %s: axi_jesd204_tx_init_jesd_fsm() failed\n",
+		printf("error: %s: axi_jesd204_tx_init() failed\n",
 		       dev_init->ad9144_jesd_param.name);
 		return status;
 	}
@@ -577,10 +577,10 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 
 	dev_init->ad9680_jesd_param.lane_clk = dev->ad9680_xcvr->clk_out;
 
-	status = axi_jesd204_rx_init_jesd_fsm(&dev->ad9680_jesd,
-					      &dev_init->ad9680_jesd_param);
+	status = axi_jesd204_rx_init(&dev->ad9680_jesd,
+				     &dev_init->ad9680_jesd_param);
 	if (status) {
-		printf("error: %s: axi_jesd204_rx_init_jesd_fsm() failed\n",
+		printf("error: %s: axi_jesd204_rx_init() failed\n",
 		       dev_init->ad9680_jesd_param.name);
 		return status;
 	}
