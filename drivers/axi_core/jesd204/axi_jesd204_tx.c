@@ -822,8 +822,8 @@ err:
  * @param init - The structure containing the device initial parameters.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
-				     const struct jesd204_tx_init *init)
+int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
+			    const struct jesd204_tx_init *init)
 {
 	struct axi_jesd204_tx_jesd204_priv *priv;
 	struct axi_jesd204_tx *jesd;
