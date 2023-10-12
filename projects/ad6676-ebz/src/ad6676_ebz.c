@@ -390,9 +390,9 @@ int main(void)
 	}
 
 	// setup JESD core
-	ret = axi_jesd204_rx_init(&ad6676_jesd, &ad6676_jesd_param);
+	ret = axi_jesd204_rx_init_legacy(&ad6676_jesd, &ad6676_jesd_param);
 	if (ret != 0) {
-		pr_err("error: %s: axi_jesd204_rx_init() failed\n", ad6676_jesd->name);
+		pr_err("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad6676_jesd->name);
 	}
 
 	ret = axi_jesd204_rx_lane_clk_enable(ad6676_jesd);

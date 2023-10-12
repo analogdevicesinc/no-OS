@@ -838,8 +838,8 @@ static const struct jesd204_dev_data jesd204_axi_jesd204_rx_init = {
  * @param init - The structure containing the device initial parameters.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
-			    const struct jesd204_rx_init *init)
+int32_t axi_jesd204_rx_init_legacy(struct axi_jesd204_rx **jesd204,
+				   const struct jesd204_rx_init *init)
 {
 	struct axi_jesd204_rx *jesd;
 	uint32_t synth_1;

@@ -512,9 +512,9 @@ int main(void)
 	if (status != 0) {
 		printf("error: ad9680_setup() failed\n");
 	}
-	status = axi_jesd204_tx_init(&ad9152_jesd, &ad9152_jesd_param);
+	status = axi_jesd204_tx_init_legacy(&ad9152_jesd, &ad9152_jesd_param);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9152_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad9152_jesd->name);
 	}
 	status = axi_jesd204_tx_lane_clk_enable(ad9152_jesd);
 	if (status != 0) {
@@ -541,9 +541,9 @@ int main(void)
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
 	}
 #endif
-	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
+	status = axi_jesd204_rx_init_legacy(&ad9680_jesd, &ad9680_jesd_param);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad9680_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
 	if (status != 0) {

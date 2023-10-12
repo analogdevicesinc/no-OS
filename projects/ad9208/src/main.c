@@ -505,9 +505,9 @@ int main(void)
 		goto error_2;
 	}
 
-	status = axi_jesd204_rx_init(&rx_0_jesd, &rx_0_jesd_init);
+	status = axi_jesd204_rx_init_legacy(&rx_0_jesd, &rx_0_jesd_init);
 	if (status != 0) {
-		xil_printf("error: %s: axi_jesd204_rx_init() failed\n",
+		xil_printf("error: %s: axi_jesd204_rx_init_legacy() failed\n",
 			   rx_0_jesd_init.name);
 		goto error_3;
 	}
@@ -547,9 +547,9 @@ int main(void)
 		goto error_7;
 	}
 
-	status = axi_jesd204_rx_init(&rx_1_jesd, &rx_1_jesd_init);
+	status = axi_jesd204_rx_init_legacy(&rx_1_jesd, &rx_1_jesd_init);
 	if (status != 0) {
-		xil_printf("error: %s: axi_jesd204_rx_init() failed\n",
+		xil_printf("error: %s: axi_jesd204_rx_init_legacy() failed\n",
 			   rx_1_jesd_init.name);
 		goto error_8;
 	}

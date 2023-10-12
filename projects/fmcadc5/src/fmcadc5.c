@@ -278,9 +278,9 @@ int main(void)
 	struct s_i5g *i5g_core;
 
 	// setup JESD core
-	status = axi_jesd204_rx_init(&ad9625_0_jesd, &ad9625_0_jesd_param);
+	status = axi_jesd204_rx_init_legacy(&ad9625_0_jesd, &ad9625_0_jesd_param);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9625_0_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad9625_0_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9625_0_jesd);
 	if (status != 0) {
@@ -288,9 +288,9 @@ int main(void)
 		       ad9625_0_jesd->name);
 	}
 
-	status = axi_jesd204_rx_init(&ad9625_1_jesd, &ad9625_1_jesd_param);
+	status = axi_jesd204_rx_init_legacy(&ad9625_1_jesd, &ad9625_1_jesd_param);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9625_1_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad9625_1_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9625_1_jesd);
 	if (status != 0) {
