@@ -487,9 +487,9 @@ int main(void)
 	}
 
 	// setup JESD core
-	status = axi_jesd204_rx_init(&ad9250_jesd, &ad9250_jesd_param);
+	status = axi_jesd204_rx_init_legacy(&ad9250_jesd, &ad9250_jesd_param);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9250_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad9250_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9250_jesd);
 	if (status != 0) {

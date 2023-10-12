@@ -214,8 +214,8 @@ int main(void)
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9656_xcvr->name);
 	}
 
-	if (axi_jesd204_rx_init(&ad9656_jesd, &ad9656_jesd_param) != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9656_jesd->name);
+	if (axi_jesd204_rx_init_legacy(&ad9656_jesd, &ad9656_jesd_param) != 0) {
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", ad9656_jesd->name);
 	}
 
 	if (axi_jesd204_rx_lane_clk_enable(ad9656_jesd) != 0) {

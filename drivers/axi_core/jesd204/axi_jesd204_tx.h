@@ -141,8 +141,8 @@ int32_t axi_jesd204_tx_lane_clk_disable(struct axi_jesd204_tx *jesd);
 /** JESD204 TX Status Read */
 uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd);
 /** Device initialization */
-int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
-			    const struct jesd204_tx_init *init);
+int32_t axi_jesd204_tx_init_legacy(struct axi_jesd204_tx **jesd204,
+				   const struct jesd204_tx_init *init);
 /** Device initialization, JED FSM ON */
 int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 				     const struct jesd204_tx_init *init);

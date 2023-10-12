@@ -437,19 +437,19 @@ int main(void)
 #endif
 
 	/* Initialize JESDs */
-	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	status = axi_jesd204_rx_init_legacy(&rx_jesd, &rx_jesd_init);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", rx_jesd_init.name);
 		goto error_4;
 	}
-	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	status = axi_jesd204_tx_init_legacy(&tx_jesd, &tx_jesd_init);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_tx_init() failed\n", tx_jesd_init.name);
+		printf("error: %s: axi_jesd204_tx_init_legacy() failed\n", tx_jesd_init.name);
 		goto error_5;
 	}
-	status = axi_jesd204_rx_init(&rx_os_jesd, &rx_os_jesd_init);
+	status = axi_jesd204_rx_init_legacy(&rx_os_jesd, &rx_os_jesd_init);
 	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
+		printf("error: %s: axi_jesd204_rx_init_legacy() failed\n", rx_jesd_init.name);
 		goto error_6;
 	}
 

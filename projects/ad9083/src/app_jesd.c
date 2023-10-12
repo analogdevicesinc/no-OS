@@ -97,9 +97,9 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 		.ref_rate_khz = clk_hz[1] / 1000,		/* FPGA_CLK ref */
 	};
 
-	status = axi_jesd204_rx_init(&app_jesd->rx_jesd, &rx_jesd_init);
+	status = axi_jesd204_rx_init_legacy(&app_jesd->rx_jesd, &rx_jesd_init);
 	if (status != 0) {
-		pr_err("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
+		pr_err("error: %s: axi_jesd204_rx_init_legacy() failed\n", rx_jesd_init.name);
 		goto error_0;
 	}
 
