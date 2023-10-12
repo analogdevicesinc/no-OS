@@ -79,12 +79,11 @@
 #include "xilinx_uart.h"
 #endif
 
-#ifdef JESD_FSM_ON
 #include "no_os_print_log.h"
 #include "no_os_alloc.h"
 #include "jesd204.h"
 #include "jesd204_clk.h"
-#endif
+
 struct fmcdaq2_dev {
 	struct ad9523_dev *ad9523_device;
 	struct ad9144_dev *ad9144_device;
@@ -111,7 +110,6 @@ struct fmcdaq2_dev {
 	struct axi_dmac *ad9680_dmac;
 } fmcdaq2;
 
-#ifdef JESD_FSM_ON
 struct link_init_param {
 	uint32_t	link_id;
 	uint32_t	device_id;
@@ -137,8 +135,6 @@ struct link_init_param {
 struct jesd204_clk rx_jesd_clk = {0};
 struct jesd204_clk tx_jesd_clk = {0};
 
-#endif
-
 struct fmcdaq2_init_param {
 	struct ad9523_init_param ad9523_param;
 	struct ad9144_init_param ad9144_param;
@@ -157,10 +153,8 @@ struct fmcdaq2_init_param {
 	struct axi_dmac_init ad9144_dmac_param;
 	struct axi_dmac_init ad9680_dmac_param;
 
-#ifdef JESD_FSM_ON
 	struct link_init_param	jrx_link_tx;
 	struct link_init_param	jtx_link_rx;
-#endif
 } fmcdaq2_init;
 
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
@@ -443,7 +437,6 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.lane_clk_khz = 10000000
 	};
 
-#ifdef JESD_FSM_ON
 	struct link_init_param jrx_link_tx = {
 		.link_id = 1,
 		.device_id = 0,
@@ -479,7 +472,6 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 
 	fmcdaq2_init.jtx_link_rx = jtx_link_rx;
 	fmcdaq2_init.jrx_link_tx = jrx_link_tx;
-#endif
 
 	return 0;
 }
@@ -555,7 +547,6 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 	}
 #endif
 
-#ifdef JESD_FSM_ON
 	tx_jesd_clk.xcvr = dev->ad9680_xcvr;
 
 	dev_init->ad9144_jesd_param.lane_clk = dev->ad9144_xcvr->clk_out;
@@ -567,21 +558,6 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 		       dev_init->ad9144_jesd_param.name);
 		return status;
 	}
-#else
-	status = axi_jesd204_tx_init(&dev->ad9144_jesd, &dev_init->ad9144_jesd_param);
-	if (status != 0) {
-		printf("error: %s: axi_jesd204_tx_init() failed\n",
-		       dev_init->ad9144_jesd_param.name);
-		return status;
-	}
-
-	status = axi_jesd204_tx_lane_clk_enable(dev->ad9144_jesd);
-	if (status != 0) {
-		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
-		       dev->ad9144_jesd->name);
-		return status;
-	}
-#endif
 
 	status = adxcvr_init(&dev->ad9680_xcvr, &dev_init->ad9680_xcvr_param);
 	if (status != 0) {
@@ -596,7 +572,6 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 		return status;
 	}
 #endif
-#ifdef JESD_FSM_ON
 
 	rx_jesd_clk.xcvr = dev->ad9680_xcvr;
 
@@ -609,21 +584,6 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 		       dev_init->ad9680_jesd_param.name);
 		return status;
 	}
-#else
-	status = axi_jesd204_rx_init(&dev->ad9680_jesd, &dev_init->ad9680_jesd_param);
-	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n",
-		       dev_init->ad9680_jesd_param.name);
-		return status;
-	}
-
-	status = axi_jesd204_rx_lane_clk_enable(dev->ad9680_jesd);
-	if (status != 0) {
-		printf("error: %s: axi_jesd204_rx_lane_clk_enable() failed\n",
-		       dev->ad9680_jesd->name);
-		return status;
-	}
-#endif
 
 	return status;
 }
@@ -1080,11 +1040,9 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	dev_init->ad9680_param.sysref_mode = 1; // From devicetree
 	dev_init->ad9144_param.lane_rate_kbps = 10000000;
 	dev_init->ad9144_param.spi3wire = 1;
-#ifdef JESD_FSM_ON
 	dev_init->ad9144_param.num_converters =
 		fmcdaq2_init.jtx_link_rx.converters_per_device;
 	dev_init->ad9144_param.num_lanes = fmcdaq2_init.jtx_link_rx.lanes_per_device;
-#endif
 	dev_init->ad9144_param.interpolation = 1;
 	dev_init->ad9144_param.fcenter_shift = 0;
 	dev_init->ad9144_param.pll_enable = 0;
@@ -1134,21 +1092,12 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	if (status != 0)
 		return status;
 
-#ifdef JESD_FSM_ON
 	status = ad9680_setup_jesd_fsm(&dev->ad9680_device, &dev_init->ad9680_param);
 	if (status) {
 		printf("error: ad9680_setup_jesd_fsm() failed\n");
 		return status;
 	}
-#else
-	status = ad9680_setup(&dev->ad9680_device, &dev_init->ad9680_param);
-	if (status != 0) {
-		printf("error: ad9680_setup() failed\n");
-		return status;
-	}
-#endif
 
-#ifdef JESD_FSM_ON
 	dev->ad9680_device->jesd204_link.is_transmit = false;
 	dev->ad9680_device->jesd204_link.link_id = fmcdaq2_init.jrx_link_tx.link_id;
 	dev->ad9680_device->jesd204_link.bank_id = 0;
@@ -1178,27 +1127,17 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 		fmcdaq2_init.jrx_link_tx.version;
 
 	dev->ad9680_device->jesd204_link.sysref.lmfc_offset = 0; //devicetree
-#endif
 
 	status = fmcdaq2_trasnceiver_setup(&fmcdaq2, &fmcdaq2_init);
 	if (status != 0)
 		return status;
 
-#ifdef JESD_FSM_ON
 	status = ad9144_setup_jesd_fsm(&dev->ad9144_device, &dev_init->ad9144_param);
 	if (status) {
 		printf("error: ad9144_setup_jesd_fsm() failed\n");
 		return status;
 	}
-#else
-	status = ad9144_setup_legacy(&dev->ad9144_device, &dev_init->ad9144_param);
-	if (status != 0) {
-		printf("error: ad9144_setup_legacy() failed\n");
-		return status;
-	}
-#endif
 
-#ifdef JESD_FSM_ON
 	dev->ad9144_device->link_config.is_transmit = true;
 	dev->ad9144_device->link_config.link_id = fmcdaq2_init.jtx_link_rx.link_id;
 	dev->ad9144_device->link_config.bank_id = 0;
@@ -1237,7 +1176,6 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 
 	for (int lane = 0; lane < dev->ad9144_device->link_config.num_lanes; lane++)
 		dev->ad9144_device->link_config.lane_ids[lane] = lane;
-#endif
 
 	status = axi_adc_init(&dev->ad9680_core,  &dev_init->ad9680_core_param);
 	if (status != 0) {
@@ -1262,9 +1200,6 @@ int main(void)
 	status = fmcdaq2_setup(&fmcdaq2, &fmcdaq2_init);
 	if (status < 0)
 		return status;
-
-#ifdef JESD_FSM_ON
-	pr_info("Using JESD FSM.\n");
 
 	struct jesd204_topology *topology, *topology_tx;
 	struct jesd204_topology_dev devs[] = {
@@ -1303,7 +1238,6 @@ int main(void)
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 	jesd204_fsm_start(topology_tx, JESD204_LINKS_ALL);
-#endif
 
 	fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
 
