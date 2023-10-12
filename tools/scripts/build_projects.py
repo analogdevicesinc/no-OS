@@ -87,7 +87,10 @@ def run_cmd(cmd):
 	if tmp[0] == 'make':
 		log('make ' + tmp[-1])
 	else:
-		log(cmd)
+		if tmp[2] == 'make':
+			log('make ' + tmp[-1])
+		else:
+			log(cmd)
 	sys.stdout.flush()
 	err = os.system('echo %s >> %s' % (cmd, log_file))
 	if err != 0:
