@@ -138,23 +138,23 @@ static const struct adis_clk_freq_limit adis1650x_sampling_clk_limits = {
 
 /* Values from datasheet for 32-bit data */
 static const struct adis_scale_fractional adis1650x_anglvel_scale[] = {
-	[ADIS16500]   = {1, RAD_TO_DEGREE(655360)},
-	[ADIS16505_1] = {1, RAD_TO_DEGREE(10485760)},
-	[ADIS16505_2] = {1, RAD_TO_DEGREE(2621440)},
-	[ADIS16505_3] = {1, RAD_TO_DEGREE(655360)},
-	[ADIS16507_1] = {1, RAD_TO_DEGREE(10485760)},
-	[ADIS16507_2] = {1, RAD_TO_DEGREE(2621440)},
-	[ADIS16507_3] = {1, RAD_TO_DEGREE(655360)},
+	[ADIS16500]   = {1, RAD_TO_DEGREE(10 << 16)},
+	[ADIS16505_1] = {1, RAD_TO_DEGREE(160 << 16)},
+	[ADIS16505_2] = {1, RAD_TO_DEGREE(40 << 16)},
+	[ADIS16505_3] = {1, RAD_TO_DEGREE(10 << 16)},
+	[ADIS16507_1] = {1, RAD_TO_DEGREE(160 << 16)},
+	[ADIS16507_2] = {1, RAD_TO_DEGREE(40 << 16)},
+	[ADIS16507_3] = {1, RAD_TO_DEGREE(10 << 16)},
 };
 
 static const struct adis_scale_fractional adis1650x_accl_scale[] = {
-	[ADIS16500]   = {1, 5349877},
-	[ADIS16505_1] = {1, 26783550},
-	[ADIS16505_2] = {1, 26783550},
-	[ADIS16505_3] = {1, 26783550},
-	[ADIS16507_1] = {1, 5349877},
-	[ADIS16507_2] = {1, 5349877},
-	[ADIS16507_3] = {1, 5349877},
+	[ADIS16500]   = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS16505_1] = {78, 32000 << 16},
+	[ADIS16505_2] = {78, 32000 << 16},
+	[ADIS16505_3] = {78, 32000 << 16},
+	[ADIS16507_1] = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS16507_2] = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS16507_3] = {1, M_S_2_TO_G(800 << 16)},
 };
 
 static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
