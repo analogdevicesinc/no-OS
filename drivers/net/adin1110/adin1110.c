@@ -999,16 +999,16 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto free_spi;
 
-	ret = adin1110_set_promisc(descriptor, 0, true);
+	// ret = adin1110_set_promisc(descriptor, 0, true);
 
-	adin1110_clear_irq(descriptor);
-	// adin1110_reg_write(descriptor, 0x9, 0xFFFFFFFF);
+	// adin1110_clear_irq(descriptor);
+	// // adin1110_reg_write(descriptor, 0x9, 0xFFFFFFFF);
 
-	ret = oa_irq_start(descriptor);
-	if (ret)
-		return ret;
+	// ret = oa_irq_start(descriptor);
+	// if (ret)
+	// 	return ret;
 
-	while(1);
+	// while(1);
 
 	*desc = descriptor;
 

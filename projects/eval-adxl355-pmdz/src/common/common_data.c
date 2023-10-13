@@ -100,7 +100,7 @@ const struct no_os_spi_init_param ad7799_spi_ip = {
 const struct ad7799_init_param ad7799_ip = {
 	.spi_init = ad7799_spi_ip,
 	.chip_type = ID_AD7793,
-	.polarity = 1,
+	.polarity = 0,
 	.vref_mv = 1050,
 	.gain = 1,
 	.precision = AD7799_PRECISION_MV
@@ -152,6 +152,6 @@ struct adin1110_init_param adin1110_ip = {
 	.reset_param = adin1110_reset_ip,
 	.int_param = adin1110_int_ip,
 	.append_crc = false,
-	.open_alliance = true,
+	.open_alliance = false,
 };
 #endif

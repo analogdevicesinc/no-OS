@@ -176,6 +176,7 @@ int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 	if (ret)
 		return -1;
 
+	no_os_mdelay(10);
 	ret = ad7799_dev_ready(device);
 	if (ret)
 		return -1;
@@ -215,10 +216,13 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 			   uint32_t *reg_data)
 {
 	int32_t ret;
+	uint32_t read_done;
 
 	ret = ad7799_set_channel(device, ch);
 	if (ret)
 		return -1;
+
+	ret = ad7799_read(device, AD7799_REG_STAT, &read_done);
 
 	ret = ad7799_set_mode(device, AD7799_MODE_SINGLE);
 	if (ret)
@@ -231,6 +235,13 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 	ret = ad7799_read(device, AD7799_REG_DATA, reg_data);
 	if (ret)
 		return -1;
+
+	ret = ad7799_read(device, AD7799_REG_STAT, &read_done);
+	if (ret)
+		return -1;
+
+	if (!(read_done & AD7799_STAT_RDY))
+		return -EBUSY;
 
 	return 0;
 }
@@ -264,9 +275,9 @@ int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
 		temp = 1 << ((device->reg_size[AD7799_REG_DATA] * 8) - 1);
 
 		if(data >= temp)
-			data = ((data - temp) * vref_scaled) / (temp - 1);
+			data = ((uint64_t)(data - temp) * vref_scaled) / (temp - 1);
 		else
-			data = -(((temp - data) * vref_scaled) / (temp - 1));
+			data = -(((uint64_t)(temp - data) * vref_scaled) / (temp - 1));
 	}
 
 	*data_scaled = data;
@@ -382,6 +393,7 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
 			return 0;
 
 		timeout--;
+		no_os_mdelay(1);
 	}
 
 	return -1;

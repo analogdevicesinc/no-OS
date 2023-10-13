@@ -55,6 +55,6 @@ SRCS += $(NO-OS)/util/no_os_crc8.c
 endif
 
 INCS += $(DRIVERS)/adc/ad7799/ad7799.h
-INCS += $(DRIVERS)/adc/ad7799/iio_ad7799.h
+INCS += $(DRIVERS)/adc/ad7793/iio_ad7793.h
 SRCS += $(DRIVERS)/adc/ad7799/ad7799.c
-SRCS += $(DRIVERS)/adc/ad7799/iio_ad7799.c
+SRCS += $(DRIVERS)/adc/ad7793/iio_ad7793.c
