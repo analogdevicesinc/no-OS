@@ -68,7 +68,6 @@ enum adis_chan_type {
 	ADIS_DELTA_VEL_X,
 	ADIS_DELTA_VEL_Y,
 	ADIS_DELTA_VEL_Z,
-	ADIS_DATA_COUNTER,
 	ADIS_NUM_CHAN,
 };
 
@@ -253,14 +252,6 @@ struct adis_iio_dev {
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_temp_scan_type,  \
         .attributes = adis_iio_temp_attrs,  \
-}
-
-#define ADIS_DATA_COUNTER_CHAN(idx, adis_nb) { \
-	.ch_type = IIO_COUNT, \
-	.channel = idx, \
-	.scan_index = idx, \
-	.scan_type = &adis##adis_nb##_iio_data_counter_scan_type,  \
-        .attributes = NULL,  \
 }
 
 /******************************************************************************/
