@@ -207,4 +207,5 @@ struct adis_chip_info adis1650x_chip_info = {
 	.int_clk		= 2000,
 	.sync_clk_freq_limits	= adis1650x_sync_clk_freq_limits,
 	.sampling_clk_limits	= adis1650x_sampling_clk_limits,
+	.flags			= ADIS_HAS_BURST32 | ADIS_HAS_BURST_DELTA_DATA,
 };
