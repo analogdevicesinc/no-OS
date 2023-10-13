@@ -1184,9 +1184,11 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 
 	if (dev->dev_descriptor->pre_enable) {
 		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
-		if (NO_OS_IS_ERR_VALUE(ret) && dev->buffer.allocated) {
-			no_os_free(dev->buffer.cb.buff);
-			dev->buffer.allocated = 0;
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (dev->buffer.allocated) {
+				no_os_free(dev->buffer.cb.buff);
+				dev->buffer.allocated = 0;
+			}
 			return ret;
 		}
 	}
