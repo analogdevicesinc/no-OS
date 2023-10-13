@@ -1208,10 +1208,6 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 					}
 				}
 				break;
-			case ADIS_DATA_COUNTER:
-				iio_adis->data[i++] = 0;
-				iio_adis->data[i++] = buff[data_cntr_offset];
-				break;
 			default:
 				break;
 			}
