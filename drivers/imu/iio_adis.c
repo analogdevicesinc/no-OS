@@ -53,6 +53,9 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define ADIS_BURST_DATA_SEL_0_CHN_MASK	NO_OS_GENMASK(5, 0)
+#define ADIS_BURST_DATA_SEL_1_CHN_MASK	NO_OS_GENMASK(12, 7)
+
 static const uint32_t adis_3db_freqs[] = {
 	720, /* Filter disabled, full BW (~720Hz) */
 	360,
@@ -1038,15 +1041,31 @@ int adis_iio_pre_enable(void* dev, uint32_t mask)
 
 	adis = iio_adis->adis_dev;
 
+	if (adis->info->flags & ADIS_HAS_BURST_DELTA_DATA) {
+		/* Check mask */
+		if ((mask & ADIS_BURST_DATA_SEL_0_CHN_MASK)
+		    && (mask & ADIS_BURST_DATA_SEL_1_CHN_MASK))
+			return -EINVAL;
+
+		if (mask & ADIS_BURST_DATA_SEL_1_CHN_MASK)
+			iio_adis->burst_sel = 1;
+		else
+			iio_adis->burst_sel = 0;
+		ret  = adis_write_burst_sel(adis, iio_adis->burst_sel);
+		if (ret)
+			return ret;
+	}
+
+	if (adis->info->flags & ADIS_HAS_BURST32) {
+		ret = adis_read_burst32(adis, &iio_adis->burst_size);
+		if (ret)
+			return ret;
+	} else {
+		iio_adis->burst_size = 0;
+	}
+
 	iio_adis->samples_lost = 0;
 	iio_adis->data_cntr = 0;
-	ret  = adis_read_burst_sel(adis, &iio_adis->burst_sel);
-	if (ret)
-		return ret;
-
-	ret = adis_read_burst32(adis, &iio_adis->burst_size);
-	if (ret)
-		return ret;
 
 	if (iio_adis->has_fifo) {
 		/* Set FIFO overflow behavior to overwrite old data when FIFO is full. */
@@ -1117,7 +1136,8 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 
 	adis = iio_adis->adis_dev;
 
-	ret = adis_read_burst_data(adis, sizeof(buff), buff, iio_adis->burst_size, pop,
+	ret = adis_read_burst_data(adis, sizeof(buff), buff, iio_adis->burst_size,
+				   iio_adis->burst_sel, pop,
 				   burst_request);
 
 	/* If ret ==  EAGAIN then no data is available to read (will happen

@@ -65,6 +65,10 @@
 #define ADIS_SYNC_SCALED	2
 #define ADIS_SYNC_OUTPUT	3
 
+#define ADIS_HAS_BURST32		NO_OS_BIT(0)
+#define ADIS_HAS_BURST_DELTA_DATA	NO_OS_BIT(1)
+#define ADIS_HAS_FIFO			NO_OS_BIT(2)
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -245,6 +249,10 @@ struct adis_dev {
 	uint32_t 			ext_clk;
 	/** Set to true if device fifo is enabled. */
 	bool				fifo_enabled;
+	/** Set to true if device burst32 is enabled. */
+	bool				burst32;
+	/** Burst data selection: 0 for accel/gyro data; 1 for delta angle/ delta velocity data. */
+	uint8_t				burst_sel;
 };
 
 /** @struct adis_init_param
@@ -494,6 +502,8 @@ struct adis_chip_info {
 	const struct adis_scale_fractional_log2 *deltavelocity_scale;
 	/** Temperature fractional scale. */
 	const struct adis_scale_fractional *temp_scale;
+	/** Chip specific flags. */
+	const uint32_t flags;
 	/** Chip specific read delay for SPI transactions. */
 	uint32_t 				read_delay;
 	/** Chip specific write delay for SPI transactions. */
@@ -504,9 +514,6 @@ struct adis_chip_info {
 	 *  supports paging.
 	 */
 	bool 					has_paging;
-	/** Chip specific flag to specify wether the device offers FIFO support.
-	 */
-	bool					has_fifo;
 	/** Chip specific filter size variable B field maximum allowed value. */
 	uint16_t 				filt_size_var_b_max;
 	/** Chip specific decimation rate field maximum allowed	value. */
@@ -885,8 +892,8 @@ int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3);
 int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr);
 
 /*! Read burst data */
-int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
-			 uint16_t *burst_data, uint8_t burst_size_selection,
+int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
+			 uint16_t *buff, bool burst32, uint8_t burst_sel,
 			 bool fifo_pop, bool burst_request);
 
 /*! Update external clock frequency. */

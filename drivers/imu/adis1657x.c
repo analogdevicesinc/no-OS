@@ -221,11 +221,11 @@ struct adis_chip_info adis1657x_chip_info = {
 	.read_delay 		= 5,
 	.write_delay 		= 0,
 	.cs_change_delay 	= 5,
-	.has_fifo		= true,
 	.filt_size_var_b_max 	= 6,
 	.dec_rate_max 		= 1999,
 	.sync_mode_max 		= ADIS_SYNC_OUTPUT,
 	.fls_mem_wr_cntr_max 	= 100000,
 	.int_clk		= 2000,
 	.bias_corr_tbc_max	= 12,
+	.flags			= ADIS_HAS_BURST32 | ADIS_HAS_BURST_DELTA_DATA | ADIS_HAS_FIFO,
 };

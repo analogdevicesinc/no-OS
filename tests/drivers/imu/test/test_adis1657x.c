@@ -549,7 +549,8 @@ void test_adis1657x_write_linear_accl_comp(void)
 
 void test_adis1657x_read_burst_sel(void)
 {
-	test_adis_read_burst_sel();
+	test_adis_read_burst_sel_1();
+	test_adis_read_burst_sel_2();
 }
 
 void test_adis1657x_write_burst_sel(void)
@@ -560,7 +561,8 @@ void test_adis1657x_write_burst_sel(void)
 
 void test_adis1657x_read_burst32(void)
 {
-	test_adis_read_burst32();
+	test_adis_read_burst32_1();
+	test_adis_read_burst32_2();
 }
 
 void test_adis1657x_write_burst32(void)
@@ -801,6 +803,8 @@ void test_adis1657x_read_burst_data(void)
 	test_adis_read_burst_data_3();
 	test_adis_read_burst_data_4();
 	test_adis_read_burst_data_5();
+	test_adis_read_burst_data_6();
+	test_adis_read_burst_data_7();
 }
 
 void test_adis1657x_update_ext_clk_freq(void)
