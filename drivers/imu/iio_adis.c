@@ -239,9 +239,8 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 		ret = adis_get_temp_scale(adis, &scale_frac);
 		if (ret)
 			return ret;
-		vals[0] = scale_frac.dividend;
-		vals[1] = scale_frac.divisor;
-		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
+		vals[0] = scale_frac.dividend / scale_frac.divisor;
+		return iio_format_value(buf, len, IIO_VAL_INT, 2, (int32_t*)vals);
 	default:
 		return -EINVAL;
 	}
