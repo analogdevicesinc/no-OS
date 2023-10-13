@@ -248,6 +248,8 @@ struct adis_iio_dev {
 
 #define ADIS_TEMP_CHAN(idx, adis_nb) { \
 	.ch_type = IIO_TEMP, \
+	.channel = 0, \
+	.indexed = true, \
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_temp_scan_type,  \
