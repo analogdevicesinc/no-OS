@@ -236,6 +236,14 @@ struct adis_iio_dev {
         .attributes = adis_iio_delta_angl_attrs,  \
 }
 
+#define ADIS_DELTA_ANGL_CHAN_NO_SCAN(mod, idx) { \
+	.ch_type = IIO_DELTA_ANGL, \
+	.modified = true, \
+	.channel2 = IIO_MOD_##mod, \
+	.address = idx, \
+        .attributes = adis_iio_delta_angl_attrs,  \
+}
+
 #define ADIS_DELTA_VEL_CHAN(mod, idx, adis_nb) { \
 	.ch_type = IIO_DELTA_VELOCITY, \
 	.modified = true, \
@@ -243,6 +251,14 @@ struct adis_iio_dev {
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_delta_vel_scan_type,  \
+        .attributes = adis_iio_delta_vel_attrs,  \
+}
+
+#define ADIS_DELTA_VEL_CHAN_NO_SCAN(mod, idx) { \
+	.ch_type = IIO_DELTA_VELOCITY, \
+	.modified = true, \
+	.channel2 = IIO_MOD_##mod, \
+	.address = idx, \
         .attributes = adis_iio_delta_vel_attrs,  \
 }
 
