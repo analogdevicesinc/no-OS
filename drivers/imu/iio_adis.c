@@ -127,7 +127,7 @@ static int adis_iio_read_raw(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	switch(channel->ch_num) {
+	switch(channel->address) {
 	case ADIS_GYRO_X:
 		ret = adis_read_x_gyro(adis, &res);
 		break;
