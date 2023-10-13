@@ -74,6 +74,9 @@
 #define AD2S1210_MIN_FCW	0x4
 #define AD2S1210_MAX_FCW	0x50
 
+#define AD2S1210_POS_MASK	NO_OS_BIT(0)
+#define AD2S1210_VEL_MASK	NO_OS_BIT(1)
+
 enum ad2s1210_mode {
 	MODE_POS,
 	MODE_RESERVED,
@@ -127,7 +130,8 @@ int ad2s1210_reg_write(struct ad2s1210_dev *dev, uint8_t addr,
 int ad2s1210_reg_read(struct ad2s1210_dev *dev, uint8_t addr,
 		      uint8_t *val);
 int ad2s1210_spi_single_conversion(struct ad2s1210_dev *dev,
-				   enum ad2s1210_channel chn, uint16_t *data);
+				   uint32_t active_mask,
+				   void *data, uint32_t size);
 int ad2s1210_hysteresis_is_enabled(struct ad2s1210_dev *dev);
 int ad2s1210_set_hysteresis(struct ad2s1210_dev *dev, bool enable);
 int ad2s1210_reinit_excitation_frequency(struct ad2s1210_dev *dev,

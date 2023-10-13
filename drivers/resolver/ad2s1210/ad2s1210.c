@@ -405,29 +405,21 @@ err_sample:
 }
 
 /***************************************************************************//**
- * @brief Returns the result of a single conversion.
+ * @brief Returns the result of a single channel.
  *
  * @param dev - The device structure.
- * @param chn - Channel to use angle = 0, velocity = 1
+ * @param chn - Channel to get data.
  * @param data - Buffer to store sampled register data
  *
  * @return 0 in case of success or negative error code.
 *******************************************************************************/
-int ad2s1210_spi_single_conversion(struct ad2s1210_dev *dev,
-				   enum ad2s1210_channel chn,
-				   uint16_t *data)
+static int ad2s1210_get_channel_data(struct ad2s1210_dev *dev,
+				     enum ad2s1210_channel chn,
+				     uint16_t *data)
 {
 	int32_t ret;
 	uint8_t addr = AD2S1210_REG_POSITION;
 	enum ad2s1210_mode mode = MODE_POS;
-
-	ret = no_os_gpio_set_value(dev->gpio_sample, NO_OS_GPIO_LOW);
-	if (ret)
-		return ret;
-
-	ret = no_os_gpio_set_value(dev->gpio_sample, NO_OS_GPIO_HIGH);
-	if (ret)
-		return ret;
 
 	if (dev->have_mode_pins) {
 		if (chn == AD2S1210_VEL)
@@ -448,6 +440,53 @@ int ad2s1210_spi_single_conversion(struct ad2s1210_dev *dev,
 		return ret;
 
 	return ad2s1210_reg_read(dev, addr + 1, (uint8_t *)data + 1);
+}
+
+/***************************************************************************//**
+ * @brief Returns the result of a conversion.
+ *
+ * @param dev - The device structure.
+ * @param active_mask - mask of active channels angle = bit 0, velocity = bit 1
+ * @param data - Buffer to store sampled register data.
+ * @param size - size in bytes of the data buffer
+ *
+ * @return 0 in case of success or negative error code.
+*******************************************************************************/
+int ad2s1210_spi_single_conversion(struct ad2s1210_dev *dev,
+				   uint32_t active_mask,
+				   void *data, uint32_t size)
+{
+	int32_t ret;
+	uint16_t *data_p = (uint16_t *)data;
+
+	if (size < 2)
+		return -EINVAL;
+
+	if ((size < 4) && (active_mask & AD2S1210_POS_MASK)
+	    && (active_mask & AD2S1210_POS_MASK))
+		return -EINVAL;
+
+	ret = no_os_gpio_set_value(dev->gpio_sample, NO_OS_GPIO_LOW);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_set_value(dev->gpio_sample, NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+
+	if (active_mask & AD2S1210_POS_MASK) {
+		ret = ad2s1210_get_channel_data(dev, AD2S1210_POS, data_p++);
+		if (ret)
+			return ret;
+	}
+
+	if (active_mask & AD2S1210_VEL_MASK) {
+		ret = ad2s1210_get_channel_data(dev, AD2S1210_VEL, data_p);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
 }
 
 /***************************************************************************//**
