@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include "adxl367.h"
 #include "no_os_delay.h"
+#include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_print_log.h"
@@ -166,6 +167,25 @@ int adxl367_self_test(struct adxl367_dev *dev)
 	int ret;
 	int16_t x_axis_1, x_axis_2, dif, min, max;
 	uint8_t read_val;
+	uint32_t st_delay_ms;
+
+	// 4 / ODR value in ms
+	switch (dev->odr) {
+	case ADXL367_ODR_12P5HZ:
+		st_delay_ms = 320;
+	case ADXL367_ODR_25HZ:
+		st_delay_ms = 160;
+	case ADXL367_ODR_50HZ:
+		st_delay_ms = 80;
+	case ADXL367_ODR_100HZ:
+		st_delay_ms = 40;
+	case ADXL367_ODR_200HZ:
+		st_delay_ms = 20;
+	case ADXL367_ODR_400HZ:
+		st_delay_ms = 10;
+	default:
+		return -EINVAL;
+	}
 
 	ret = adxl367_set_power_mode(dev, ADXL367_OP_MEASURE);
 	if (ret)
@@ -175,8 +195,8 @@ int adxl367_self_test(struct adxl367_dev *dev)
 				    ADXL367_SELF_TEST_ST);
 	if (ret)
 		return ret;
-	// 4 / lowest ODR = 80ms
-	no_os_mdelay(80);
+	// 4 / ODR delay
+	no_os_mdelay(st_delay_ms);
 	ret = adxl367_get_register_value(dev, &read_val, ADXL367_REG_XDATA_H, 1);
 	if (ret)
 		return ret;
@@ -193,8 +213,8 @@ int adxl367_self_test(struct adxl367_dev *dev)
 				    ADXL367_SELF_TEST_ST_FORCE, ADXL367_SELF_TEST_ST_FORCE);
 	if (ret)
 		return ret;
-	// 4 / lowest ODR = 80ms
-	no_os_mdelay(80);
+	// 4 / ODR delay
+	no_os_mdelay(st_delay_ms);
 	ret = adxl367_get_register_value(dev, &read_val, ADXL367_REG_XDATA_H, 1);
 	if (ret)
 		return ret;
