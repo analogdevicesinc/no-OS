@@ -86,6 +86,6 @@
 #define G_TO_M_S_2(g) ((g) * 980665ULL / 100000ULL)
 
 /* Returns the given value converted from meter / second**2 to g */
-#define IIO_M_S_2_TO_G(ms2) (((ms2) * 100000ULL + 980665ULL / 2) / 980665ULL)
+#define M_S_2_TO_G(ms2) (((ms2) * 100000ULL + 980665ULL / 2) / 980665ULL)
 
 #endif // _NO_OS_UNITS_H_
