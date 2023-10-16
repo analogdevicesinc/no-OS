@@ -52,6 +52,7 @@
 #include "maxim_gpio_irq.h"
 #include "maxim_timer.h"
 #include "parameters.h"
+#include "iio_adpd1080pmb.h"
 
 static uint8_t in_buff[1024];
 
@@ -199,109 +200,9 @@ timer_finish:
 	return status;
 }
 
-int get_fifo_data(struct adpd188_dev *desc, int32_t *buff)
+int app_step(void *arg)
 {
-	uint8_t byte_no;
-	uint32_t s;
-	uint16_t data_buff[16];
-	int32_t ret;
-
-	ret = adpd188_fifo_status_get(desc, &byte_no);
-	if (NO_OS_IS_ERR_VALUE(ret))
-		return ret;
-	
-	if (byte_no < 16)
-		return -EAGAIN; // nothing to do (yet)
-
-	for (s = 0; s < 16; s++) {
-		ret = adpd188_reg_read(desc, ADPD188_REG_FIFO_ACCESS,
-					&data_buff[s]);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
-		
-		if (s & 0x1)
-			buff[s/2] = ((uint16_t)data_buff[s] << 16) | data_buff[s - 1];
-	}
-
-	return 0;
-}
-
-enum gesture {
-	click,
-	up,
-	down,
-	left,
-	right
-};
-
-char *gestures[6] = {
-	"click",
-	"up",
-	"down",
-	"left",
-	"right"
-};
-
-int gesture_detection(void *arg)
-{
-	struct adpd188_dev *desc = arg;
-	int32_t buff[8];
-	static bool event = false;
-	int intensityThreshold = 1200000;
-	double clickThreshold = 0.06;
-	int x, y, L, i;
-	int m;
-	double d;
-	static int gestureStartX, gestureStartY;
-	int gestureStopX, gestureStopY;
-	enum gesture gesture;
-
-	while(get_fifo_data(desc, buff) == -EAGAIN)
-		; // blocking wait
-	
-	// This algorithm is provided in the adpd2140 datasheet
-	x = (buff[1] - buff[0]) * 1000 / (buff[1] + buff[0]);
-	y = (buff[3] - buff[2]) * 1000 / (buff[3] + buff[2]);
-	L = (buff[0] + buff[1] + buff[2] + buff[3]) * 1000;
-
-	if (!event && L > intensityThreshold)
-	{
-		i = 0;
-		event = true;
-		gestureStartX = x;
-		gestureStartY = y;
-	}
-
-	if (event) {
-		i += 1;
-		if (i >= 5 && L < intensityThreshold) {
-			event = false;
-			gestureStopX = x;
-			gestureStopY = y;
-			m = (gestureStartY - gestureStopY) * 1000 / (gestureStartX - gestureStopX);
-			d = sqrt(pow((gestureStartX - gestureStopX), 2) + pow((gestureStartY - gestureStopY), 2)) / 1000;
-		}
-		if (d < clickThreshold)
-			gesture = click;
-		else {
-			if (abs(m) > 1000) {
-				if (gestureStartY > gestureStopY)
-					gesture = up;
-				else
-					gesture = down;
-			}
-			else {
-				if (gestureStartX > gestureStopX)
-					gesture = left;
-				else
-					gesture = right;
-			}
-		}
-		if (!event)
-			printf("%s\n", gestures[gesture]);
-	}
-
-	return 0;
+	return adpd1080pmb_gesture_detection(arg);
 }
 
 int main(void)
@@ -521,7 +422,7 @@ int main(void)
 	
 	int ch;
 	int32_t raw[8];
-	while(get_fifo_data(adpd1080_iio_device->drv_dev, raw) == -EAGAIN)
+	while(adpd1080pmb_get_fifo_data(adpd1080_iio_device->drv_dev, raw) == -EAGAIN)
 		; // blocking wait
 	for (ch = 0; ch < 8; ch++) {
 		uint16_t offset;
@@ -535,27 +436,39 @@ int main(void)
 		if (status != 0)
 			return status;
 	}
-
+	
 	status = adpd188_mode_set(adpd1080_iio_device->drv_dev, ADPD188_NORMAL);
+	if (status != 0)
+		return status;
+
+	struct adpd1080pmb_iio_desc *adpd1080pmb;
+	struct adpd1080pmb_iio_init_param adpd1080pmb_config = {
+		.dev = adpd1080_iio_device->drv_dev,
+		.th_intensity = 1200000,
+		.th_click = 0.06,
+	};
+	status = adpd1080pmb_iio_init(&adpd1080pmb, &adpd1080pmb_config);
 	if (status != 0)
 		return status;
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
-			       &iio_adpd1080_read_buff, NULL, NULL)
+			       &iio_adpd1080_read_buff, NULL, NULL),
+		IIO_APP_DEVICE("adpd1080pmb", adpd1080pmb, &iio_adpd1080pmb_device,
+			       NULL, NULL, NULL)
 	};
 
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = adpd1080_uart_ip;
-	app_init_param.post_step_callback = gesture_detection;
-	app_init_param.arg = adpd1080_iio_device->drv_dev;
+	app_init_param.post_step_callback = app_step;
+	app_init_param.arg = adpd1080pmb;
 
 	status = iio_app_init(&app, app_init_param);
 	if (status)
 		return status;
 	
-	no_os_uart_stdio(app->uart_desc);
+	//no_os_uart_stdio(app->uart_desc);
 
 	return iio_app_run(app);
 }
