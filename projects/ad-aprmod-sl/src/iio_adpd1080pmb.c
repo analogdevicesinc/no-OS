@@ -93,17 +93,29 @@ char *gestures[6] = {
 	"right"
 };
 
+int isqrt(int x) {
+	int q = 1, r = 0;
+	while (q <= x) {
+		q <<= 2;
+	}
+	while (q > 1) {
+		int t;
+		q >>= 2;
+		t = x - r - q;
+		r >>= 1;
+		if (t >= 0) {
+			x = t;
+			r += q;
+		}
+	}
+	return r;
+}
+
 int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 {
 	struct adpd188_dev *desc = iiodev->dev;
 	int32_t buff[8];
-	static bool event = false;
-	int intensityThreshold = 1200000;
-	double clickThreshold = 0.06;
-	int x, y, dx, dy, L, i;
-	int m;
-	double d;
-	static int gestureStartX, gestureStartY;
+	int x, y, dx, dy, L, m, d;
 	int gestureStopX, gestureStopY;
 	enum gesture gesture;
 
@@ -117,42 +129,42 @@ int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 	y = (buff[3] - buff[2]) * 1000 / (buff[3] + buff[2]);
 	L = (buff[0] + buff[1] + buff[2] + buff[3]) * 1000;
 
-	if (!event && L > intensityThreshold)
+	if (!iiodev->event && L > iiodev->th_intensity)
 	{
-		i = 0;
-		event = true;
-		gestureStartX = x;
-		gestureStartY = y;
+		iiodev->evc = 0;
+		iiodev->event = true;
+		iiodev->gestureStartX = x;
+		iiodev->gestureStartY = y;
 	}
 
-	if (event) {
-		i += 1;
-		if (i >= 5 && L < intensityThreshold) {
-			event = false;
+	if (iiodev->event) {
+		iiodev->evc += 1;
+		if (iiodev->evc >= 5 && L < iiodev->th_intensity) {
+			iiodev->event = false;
 			gestureStopX = x;
 			gestureStopY = y;
-			dx = gestureStartX - gestureStopX;
-			dy = gestureStartY - gestureStopY;
+			dx = iiodev->gestureStartX - gestureStopX;
+			dy = iiodev->gestureStartY - gestureStopY;
 			m = dy * 1000 / dx;
-			d = sqrt(dx * dx + dy * dy) / 1000;
+			d = isqrt(dx * dx + dy * dy);
 		}
-		if (d < clickThreshold)
+		if (d < iiodev->th_click)
 			gesture = click;
 		else {
 			if (abs(m) > 1000) {
-				if (gestureStartY > gestureStopY)
+				if (iiodev->gestureStartY > gestureStopY)
 					gesture = up;
 				else
 					gesture = down;
 			}
 			else {
-				if (gestureStartX > gestureStopX)
+				if (iiodev->gestureStartX > gestureStopX)
 					gesture = left;
 				else
 					gesture = right;
 			}
 		}
-		if (!event)
+		if (!iiodev->event)
 			iiodev->gestures |= NO_OS_BIT(gesture);
 	}
 
@@ -168,6 +180,8 @@ int32_t adpd1080pmb_iio_init(struct adpd1080pmb_iio_desc **iiodev,
 		return -ENOMEM;
 
 	d->dev = iiodevconfig->dev;
+	d->event = false;
+	d->evc = 0;
 	d->th_click = iiodevconfig->th_click;
 	d->th_intensity = iiodevconfig->th_intensity;
 

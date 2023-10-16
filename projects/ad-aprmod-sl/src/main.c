@@ -221,8 +221,8 @@ int main(void)
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
 		.extra = &(struct max_uart_init_param) {
-			UART_FLOW_DIS,
-			MXC_GPIO_VSSEL_VDDIOH,
+			.flow = UART_FLOW_DIS,
+			.vssel = MXC_GPIO_VSSEL_VDDIOH,
 		},
 		.platform_ops = &max_uart_ops,
 	};
@@ -445,7 +445,7 @@ int main(void)
 	struct adpd1080pmb_iio_init_param adpd1080pmb_config = {
 		.dev = adpd1080_iio_device->drv_dev,
 		.th_intensity = 1200000,
-		.th_click = 0.06,
+		.th_click = 60,
 	};
 	status = adpd1080pmb_iio_init(&adpd1080pmb, &adpd1080pmb_config);
 	if (status != 0)
@@ -467,8 +467,6 @@ int main(void)
 	status = iio_app_init(&app, app_init_param);
 	if (status)
 		return status;
-	
-	//no_os_uart_stdio(app->uart_desc);
 
 	return iio_app_run(app);
 }

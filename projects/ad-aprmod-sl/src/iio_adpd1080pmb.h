@@ -51,8 +51,12 @@ struct adpd1080pmb_iio_init_param {
 struct adpd1080pmb_iio_desc {
 	struct adpd188_dev *dev;
 	int th_intensity;
-	double th_click;
+	int th_click;
 	uint8_t gestures;
+	int gestureStartX;
+	int gestureStartY;
+	bool event;
+	int evc;
 };
 
 extern struct iio_device iio_adpd1080pmb_device;
