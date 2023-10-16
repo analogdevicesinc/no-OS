@@ -18,6 +18,13 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/adm1177
 
+DIGITAL INPUT/OUTPUT
+==========================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/max149x6
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
