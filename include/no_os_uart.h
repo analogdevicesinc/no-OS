@@ -136,6 +136,7 @@ struct no_os_uart_desc {
 	void            *mutex;
 	/** UART Device ID */
 	uint8_t 	device_id;
+	bool asynchronous_rx;
 	/** UART Interrupt ID */
 	uint32_t	irq_id;
 	/** Software FIFO. */
