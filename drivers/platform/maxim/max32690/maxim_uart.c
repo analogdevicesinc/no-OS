@@ -280,6 +280,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 
 	descriptor->device_id = param->device_id;
 	descriptor->baud_rate = param->baud_rate;
+	descriptor->asynchronous_rx = param->asynchronous_rx;
 
 	switch(param->parity) {
 	case NO_OS_UART_PAR_NO:
@@ -437,6 +438,10 @@ error:
  */
 static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 {
+	struct max_uart_desc *max_uart = desc->extra;
+	struct no_os_callback_desc callback_discard;
+	int ret;
+
 	if (!desc)
 		return -EINVAL;
 
@@ -448,6 +453,26 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
 	uart_irq_state[id].callback = _discard_callback;
 	MXC_UART_AbortAsync(MXC_UART_GET_UART(id));
+
+	if (desc->asynchronous_rx) {
+		callback_discard = (struct no_os_callback_desc) {
+			.callback = uart_rx_callback,
+			.event = NO_OS_EVT_UART_RX_COMPLETE,
+			.peripheral = NO_OS_UART_IRQ,
+			.handle = MXC_UART_GET_UART(desc->device_id)
+		};
+
+		ret = no_os_irq_disable(max_uart->nvic, MXC_UART_GET_IRQ(desc->device_id));
+		if (ret)
+			return ret;
+		ret = no_os_irq_register_callback(max_uart->nvic,
+						  MXC_UART_GET_IRQ(desc->device_id),
+						  &callback_discard);
+
+		ret = no_os_irq_ctrl_remove(max_uart->nvic);
+		if (ret)
+			return ret;
+	}
 
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
 	no_os_free(desc);
