@@ -93,22 +93,15 @@ char *gestures[6] = {
 	"right"
 };
 
-int isqrt(int x) {
-	int q = 1, r = 0;
-	while (q <= x) {
-		q <<= 2;
-	}
-	while (q > 1) {
-		int t;
-		q >>= 2;
-		t = x - r - q;
-		r >>= 1;
-		if (t >= 0) {
-			x = t;
-			r += q;
-		}
-	}
-	return r;
+static unsigned isqrt(unsigned long val) {
+    unsigned long temp, g=0, b = 0x8000, bshft = 15;
+    do {
+        if (val >= (temp = (((g << 1) + b)<<bshft--))) {
+           g += b;
+           val -= temp;
+        }
+    } while (b >>= 1);
+    return g;
 }
 
 int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
@@ -146,7 +139,7 @@ int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 			dx = iiodev->gestureStartX - gestureStopX;
 			dy = iiodev->gestureStartY - gestureStopY;
 			m = dy * 1000 / dx;
-			d = isqrt(dx * dx + dy * dy);
+			d = sqrt(dx * dx + dy * dy);
 		}
 		if (d < iiodev->th_click)
 			gesture = click;

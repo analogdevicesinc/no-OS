@@ -202,7 +202,15 @@ timer_finish:
 
 int app_step(void *arg)
 {
-	return adpd1080pmb_gesture_detection(arg);
+	static int cnt1 = 0;
+
+	cnt1++;
+	if (cnt1 == 100) {
+		cnt1 = 0;
+		//adpd1080pmb_gesture_detection(arg);
+	}
+
+	return 0;
 }
 
 int main(void)
@@ -461,7 +469,7 @@ int main(void)
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = adpd1080_uart_ip;
-	app_init_param.post_step_callback = app_step;
+	//app_init_param.post_step_callback = app_step;
 	app_init_param.arg = adpd1080pmb;
 
 	status = iio_app_init(&app, app_init_param);

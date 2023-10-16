@@ -275,6 +275,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		ret = -ENOMEM;
 		goto error;
 	}
+	descriptor->extra = max_uart;
 	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
 

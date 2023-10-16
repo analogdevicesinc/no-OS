@@ -267,7 +267,7 @@ int32_t max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		return -EINVAL;
 
 	for (uint32_t i = 0; i < NO_OS_ARRAY_SIZE(_events); i++) {
-		while (0 == no_os_list_read_first(_events[i].actions, &discard))
+		while (0 == no_os_list_get_first(_events[i].actions, &discard))
 			free(discard);
 		no_os_list_remove(_events[i].actions);
 	}
