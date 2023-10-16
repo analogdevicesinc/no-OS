@@ -7,6 +7,11 @@ ADIS no-OS driver
 Supported Devices
 -----------------
 
+* `ADIS16465 <https://www.analog.com/ADIS16465>`_
+* `ADIS16467 <https://www.analog.com/ADIS16467>`_
+* `ADIS16470 <https://www.analog.com/ADIS16470>`_
+* `ADIS16475 <https://www.analog.com/ADIS16475>`_
+* `ADIS16477 <https://www.analog.com/ADIS16477>`_
 * `ADIS16500 <https://www.analog.com/ADIS16500>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
@@ -50,15 +55,48 @@ The source code for ADIS generic driver can be found here:
 The generic ADIS driver has to be used together with the chip-specific ADIS driver.
 The source code for the supported chips is listed below:
 
+ADIS1646X Driver Source Code:
+
+* `Header file of ADIS1646X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1646x.h>`_
+* `Implementation of ADIS1646X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1646x.c>`_
+
+Supported devices with ADIS1646X files:
+
+* `ADIS16465 <https://www.analog.com/ADIS16465>`_
+* `ADIS16467 <https://www.analog.com/ADIS16467>`_
+* `ADIS16470 <https://www.analog.com/ADIS16470>`_
+* `ADIS16475 <https://www.analog.com/ADIS16475>`_
+
+ADIS1647X Driver Source Code:
+
+* `Header file of ADIS1647X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1647x.h>`_
+* `Implementation of ADIS1647X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1647x.c>`_
+
+Supported devices with ADIS1647X files:
+
+* `ADIS16477 <https://www.analog.com/ADIS16477>`_
+
 ADIS1650X Driver Source Code:
 
 * `Header file of ADIS1650X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1650x.h>`_
 * `Implementation of ADIS1650X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1650x.c>`_
 
+Supported devices with ADIS1650X files:
+
+* `ADIS16500 <https://www.analog.com/ADIS16500>`_
+* `ADIS16505 <https://www.analog.com/ADIS16505>`_
+* `ADIS16507 <https://www.analog.com/ADIS16507>`_
+
 ADIS1657X Driver Source Code:
 
 * `Header file of ADIS1657X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1657x.h>`_
 * `Implementation of ADIS1657X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1657x.c>`_
+
+Supported devices with ADIS1657X files:
+
+* `ADIS16575 <https://www.analog.com/ADIS16575>`_
+* `ADIS16576 <https://www.analog.com/ADIS16576>`_
+* `ADIS16577 <https://www.analog.com/ADIS16577>`_
 
 ADIS Driver Usage Outside of No-OS
 -----------------------------------
@@ -194,6 +232,84 @@ The converted value in millidegrees Celsius is obtained by the following formula
 
 	result [milli °C] = raw data * scale.dividend / scale.divisor
 
+ADIS Device Measurements - Burst Readings
+--------------------------------------------
+
+The burst read function provides a way to read a batch of output data registers.
+If you want to perform a burst read, you may use **adis_read_burst_data** API.
+
+You will have to provide the following parameters:
+
+* adis descriptor pointer
+* buffer - the buffer to be filled with the read data. Sufficient memory has to be allocated, as described with buffer size.
+* buffer size - the size of the provided buffer, in bytes. The size of the provided buffer has to be at least 18 bytes if burst32 is false and at least 30 bytes if burst32 is true.
+* burst32 - true if 32-bit data is requested for accel and gyro or delta angle and delta velocity measurements, false if 16-bit data is requested. It is supported only by adis1647x, adis1650x and adis1657x devices.
+* burst_sel - 0 if accel and gyro data is requested, 1 if delta angle and delta velocity is requested. It is supported only by adis1647x, adis1650x and adis1657x devices.
+* fifo_pop - in case FIFO is supported, will send a fifo pop request if parameter value is true. If FIFO is not supported, this parameter is ignored. It is supported only by adis1657x devices.
+* burst_request - in case FIFO is supported, will send a burst request and -EAGAIN will be returned if the request has been sent successfully. With this request, no burst data is returned. This burst request is needed if the previous command sent to the device was not a burst read. If FIFO is not supported, this parameter is ignored. It is supported only by adis1657x devices.
+
+The buffer will contain the following data based on burst32 and burst_sel:
+
+burst32 = false burst_sel = 0:
+
+* bytes 0-1:   diagnosis register
+* bytes 2-3:   anglvel_x
+* bytes 4-5:   anglvel_y
+* bytes 6-7:   anglvel_z
+* bytes 8-9:   accel_x
+* bytes 10-11: accel_y
+* bytes 12-13: accel_z
+* bytes 14-15: temp0
+* bytes 16-17: data_cntr/timestamp
+
+burst32 = false burst_sel = 1:
+
+* bytes 0-1:   diagnosis register
+* bytes 2-3:   deltaangl_x
+* bytes 4-5:   deltaangl_y
+* bytes 6-7:   deltaangl_z
+* bytes 8-9:   deltavelocity_x
+* bytes 10-11: deltavelocity_y
+* bytes 12-13: deltavelocity_z
+* bytes 14-15: temp0
+* bytes 16-17: data_cntr/timestamp
+
+burst32 = true burst_sel = 0:
+
+* bytes 0-1:   diagnosis register
+* bytes 2-3:   anglvel_x lsb
+* bytes 4-5:   anglvel_x msb
+* bytes 6-7:   anglvel_y lsb
+* bytes 8-9:   anglvel_y msb
+* bytes 10-11: anglvel_z lsb
+* bytes 12-13: anglvel_z msb
+* bytes 14-15: accel_x lsb
+* bytes 16-17: accel_x msb
+* bytes 18-19: accel_y lsb
+* bytes 20-21: accel_y msb
+* bytes 22-23: accel_z lsb
+* bytes 24-25: accel_z msb
+* bytes 26-27: temp0
+* bytes 28-29: data_cntr/timestamp
+
+burst32 = true burst_sel = 0:
+
+* bytes 0-1:   diagnosis register
+* bytes 2-3:   deltaangl_x lsb
+* bytes 4-5:   deltaangl_x msb
+* bytes 6-7:   deltaangl_y lsb
+* bytes 8-9:   deltaangl_y msb
+* bytes 10-11: deltaangl_z lsb
+* bytes 12-13: deltaangl_z msb
+* bytes 14-15: deltavelocity_x lsb
+* bytes 16-17: deltavelocity_x msb
+* bytes 18-19: deltavelocity_y lsb
+* bytes 20-21: deltavelocity_y msb
+* bytes 22-23: deltavelocity_z lsb
+* bytes 24-25: deltavelocity_z msb
+* bytes 26-27: temp0
+* bytes 28-29: data_cntr/timestamp
+
 ADIS Diagnosis Data
 -------------------
 
@@ -214,6 +330,16 @@ Common
 * **adis_read_diag_checksum_err** - to obtain the checksum error flag value from a previous burst read
 * **adis_read_diag_fls_mem_wr_cnt_exceed** - to obtain the flash memory write counts exceeded flag value (set to true if the flash memory write counter exceeds the endurance value
 * **adis_read_diag_stat** - to obtain all error flags
+
+ADIS1646X
+^^^^^^^^^
+
+There are no other specific diagnosis flags for this chip version.
+
+ADIS1647X
+^^^^^^^^^
+
+There are no other specific diagnosis flags for this chip version.
 
 ADIS1650X
 ^^^^^^^^^
@@ -293,6 +419,27 @@ Some devices offer continuous bias estimation configuration capabilities.
 See the information below to view the configuration APIs for the devices which
 offer continuous bias estimation capabilities.
 
+**ADIS1646X**
+
+  * **adis_write_bias_corr_tbc**, **adis_read_bias_corr_tbc** - to write/read the time base control value
+  * **adis_write_bias_corr_en_xg**, **adis_read_bias_corr_en_xg** - to write/read the X-axis gyroscope bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_yg**, **adis_read_bias_corr_en_yg** - to write/read the Y-axis gyroscope bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_zg**, **adis_read_bias_corr_en_zg** - to write/read the Z-axis gyroscope bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_xa**, **adis_read_bias_corr_en_xa** - to write/read the X-axis accelerometer bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_ya**, **adis_read_bias_corr_en_ya** - to write/read the Y-axis accelerometer bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_za**, **adis_read_bias_corr_en_za** - to write/read the Z-axis accelerometer bias correction enable bit (0 - disabled, 1 - enabled)
+
+**ADIS1647X**
+
+  * **adis_write_bias_corr_tbc**, **adis_read_bias_corr_tbc** - to write/read the time base control value
+  * **adis_write_bias_corr_en_xg**, **adis_read_bias_corr_en_xg** - to write/read the X-axis gyroscope bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_yg**, **adis_read_bias_corr_en_yg** - to write/read the Y-axis gyroscope bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_zg**, **adis_read_bias_corr_en_zg** - to write/read the Z-axis gyroscope bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_xa**, **adis_read_bias_corr_en_xa** - to write/read the X-axis accelerometer bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_ya**, **adis_read_bias_corr_en_ya** - to write/read the Y-axis accelerometer bias correction enable bit (0 - disabled, 1 - enabled)
+  * **adis_write_bias_corr_en_za**, **adis_read_bias_corr_en_za** - to write/read the Z-axis accelerometer bias correction enable bit (0 - disabled, 1 - enabled)
+
+
 **ADIS1650X**
 
 	This device does not offer continuous bias estimation capabilities.
@@ -313,6 +460,14 @@ FIFO Configuration
 Some devices offer a hardware FIFO and offer configuration capabilities for
 the FIFO. See the information below to view the FIFO configuration APIs for the
 devices which have a hardware FIFO.
+
+**ADIS1646X**
+
+	This device does not offer a hardware FIFO.
+
+**ADIS1647X**
+
+	This device does not offer a hardware FIFO.
 
 **ADIS1650X**
 
@@ -335,18 +490,31 @@ Miscellaneous configuration
   * **adis_write_dr_polarity**, **adis_read_dr_polarity** - data ready polarity encoded value write/read APIs
   * **adis_write_sync_polarity**, **adis_read_sync_polarity** - sync polarity encoded value write/read APIs
   * **adis_write_sync_mode**, **adis_read_sync_mode** - synchronization mode encoded value write/read APIs
-  * **adis_write_sens_bw**, **adis_read_sens_bw** - sensor bandwidth encoded value write/read APIs
   * **adis_write_pt_of_perc_algnmt**, **adis_read_pt_of_perc_algnmt** - write/read APIs for point of percussion alignment enable bit (1 -enabled, 0 - disabled)
   * **adis_write_linear_accl_comp**, **adis_read_linear_accl_comp** - write/read APIs for linear acceleration compensation enable bit (1 -enabled, 0 - disabled)
-  * **adis_write_burst_sel**, **adis_read_burst_sel** - write/read APIs for burst selection encoded value (0 - acceleration and angular velocity, 1 - delta velocity and delta angle)
-  * **adis_write_burst32**, **adis_read_burst32** - write/read APIs for burst32 enable bit (0 - for 16-bit burst data, 1 - for 32-bit burst data)
 
-**ADIS1650X**
+**ADIS1646X**
 
 	There are no other specific APIs for miscellaneous configuration for this chip version.
 
+**ADIS1647X**
+
+  * **adis_write_burst_sel**, **adis_read_burst_sel** - write/read APIs for burst selection encoded value (0 - acceleration and angular velocity, 1 - delta velocity and delta angle)
+  * **adis_write_burst32**, **adis_read_burst32** - write/read APIs for burst32 enable bit (0 - for 16-bit burst data, 1 - for 32-bit burst data)
+
+
+**ADIS1650X**
+
+  * **adis_write_sens_bw**, **adis_read_sens_bw** - sensor bandwidth encoded value write/read APIs
+  * **adis_write_burst_sel**, **adis_read_burst_sel** - write/read APIs for burst selection encoded value (0 - acceleration and angular velocity, 1 - delta velocity and delta angle)
+  * **adis_write_burst32**, **adis_read_burst32** - write/read APIs for burst32 enable bit (0 - for 16-bit burst data, 1 - for 32-bit burst data)
+
+
 **ADIS1657X**
 
+  * **adis_write_sens_bw**, **adis_read_sens_bw** - sensor bandwidth encoded value write/read APIs
+  * **adis_write_burst_sel**, **adis_read_burst_sel** - write/read APIs for burst selection encoded value (0 - acceleration and angular velocity, 1 - delta velocity and delta angle)
+  * **adis_write_burst32**, **adis_read_burst32** - write/read APIs for burst32 enable bit (0 - for 16-bit burst data, 1 - for 32-bit burst data)
   * **adis_write_timestamp32**, **adis_read_timestamp32** - write/read APIs for timestamp32 enable bit (0 - for 16-bit timestamp, 1 - for 32-bit timestamp)
   * **adis_write_sync_4khz**, **adis_read_sync_4khz** - write/read APIs for 4KHz internal sync enable bit (0 - for 2KHz internal sync, 1 - for 4KHz internal sync)
 
@@ -360,6 +528,14 @@ ADIS Commands
   * **adis_cmd_fls_mem_update** - to perform flash memory update command
   * **adis_cmd_fls_mem_test** - to perform flash memory test command
   * **adis_cmd_sw_res** - to perform software reset command
+
+**ADIS1646X**
+
+  * **adis_cmd_bias_corr_update** - to perform bias correction update command
+
+**ADIS1647X**
+
+  * **adis_cmd_bias_corr_update** - to perform bias correction update command
 
 **ADIS1650X**
 
@@ -398,6 +574,138 @@ the following APIs:
 
 ADIS Driver Initialization Example
 ----------------------------------
+
+ADIS1646X
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis1646x_spi_ip = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = SPI_BAUDRATE,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = SPI_OPS,
+		.chip_select = SPI_CS,
+		.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis1646x_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis1646x_ip = {
+		.gpio_reset = &adis1646x_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_OUTPUT,
+		.dev_id = ADIS16465_1,
+	};
+
+	struct adis_dev *adis1646x_desc;
+	int ret;
+	int val[7];
+
+	adis1646x_chip_info.ip = &adis1646x_ip;
+	ret = adis_init(&adis1646x_desc, &adis1646x_chip_info);
+	if (ret)
+		goto error;
+
+	ret = adis_read_x_gyro(adis1646x_desc, &val[0]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_y_gyro(adis1646x_desc, &val[1]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_z_gyro(adis1646x_desc, &val[2]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_x_accl(adis1646x_desc, &val[3]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_y_accl(adis1646x_desc, &val[4]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_z_accl(adis1646x_desc, &val[5]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_temp_out(adis1646x_desc, &val[6]);
+	if (ret)
+		goto error_remove;
+
+	error_remove:
+		adis_remove(adis1646x_desc);
+	error:
+		pr_info("Error!\n");
+	...
+
+ADIS1647X
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis1647x_spi_ip = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = SPI_BAUDRATE,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = SPI_OPS,
+		.chip_select = SPI_CS,
+		.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis1647x_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis1647x_ip = {
+		.gpio_reset = &adis1647x_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_OUTPUT,
+		.dev_id = ADIS16477_1,
+	};
+
+	struct adis_dev *adis1647x_desc;
+	int ret;
+	int val[7];
+
+	adis1647x_chip_info.ip = &adis1647x_ip;
+	ret = adis_init(&adis1647x_desc, &adis1647x_chip_info);
+	if (ret)
+		goto error;
+
+	ret = adis_read_x_gyro(adis1647x_desc, &val[0]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_y_gyro(adis1647x_desc, &val[1]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_z_gyro(adis1647x_desc, &val[2]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_x_accl(adis1647x_desc, &val[3]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_y_accl(adis1647x_desc, &val[4]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_z_accl(adis1647x_desc, &val[5]);
+	if (ret)
+		goto error_remove;
+	ret = adis_read_temp_out(adis1647x_desc, &val[6]);
+	if (ret)
+		goto error_remove;
+
+	error_remove:
+		adis_remove(adis1647x_desc);
+	error:
+		pr_info("Error!\n");
+	...
 
 ADIS1650X
 ^^^^^^^^^
@@ -545,15 +853,49 @@ The source code for ADIS generic driver can be found here:
 The generic ADIS driver has to be used together with the chip-specific ADIS driver.
 The source code for the supported chips is listed below:
 
+ADIS1646X IIO Driver Source Code:
+
+* `Header file of ADIS1646X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1646x.h>`_
+* `Implementation of ADIS1646X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1646x.c>`_
+
+Supported devices with IIO ADIS1646X files:
+
+* `ADIS16465 <https://www.analog.com/ADIS16465>`_
+* `ADIS16467 <https://www.analog.com/ADIS16467>`_
+* `ADIS16470 <https://www.analog.com/ADIS16470>`_
+* `ADIS16475 <https://www.analog.com/ADIS16475>`_
+
+ADIS1647X IIO Driver Source Code:
+
+* `Header file of ADIS1647X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1647x.h>`_
+* `Implementation of ADIS1647X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1647x.c>`_
+
+Supported devices with IIO ADIS1646X files:
+
+* `ADIS16477 <https://www.analog.com/ADIS16477>`_
+
 ADIS1650X IIO Driver Source Code:
 
 * `Header file of ADIS1650X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1650x.h>`_
 * `Implementation of ADIS1650X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1650x.c>`_
 
+Supported devices with IIO ADIS1650X files:
+
+* `ADIS16500 <https://www.analog.com/ADIS16500>`_
+* `ADIS16505 <https://www.analog.com/ADIS16505>`_
+* `ADIS16507 <https://www.analog.com/ADIS16507>`_
+
+
 ADIS1657X IIO Driver Source Code:
 
 * `Header file of ADIS1657X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1657x.h>`_
 * `Implementation of ADIS1657X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1657x.c>`_
+
+Supported devices with ADIS1657X files:
+
+* `ADIS16575 <https://www.analog.com/ADIS16575>`_
+* `ADIS16576 <https://www.analog.com/ADIS16576>`_
+* `ADIS16577 <https://www.analog.com/ADIS16577>`_
 
 IIO ADIS Device Configuration
 -----------------------------
@@ -638,14 +980,6 @@ The generic IIO ADIS device has 0 output channels and 14 input channels:
 	* **raw** - the raw delta velocity value read from the device
 	* **scale** - the scale that has to be applied to the raw value in order to obtain the converted real value in m/s, it has a constant value which is chip-specific
 
-**Count Channel**
-
-	The count channel is:
-
-	* Channel 13: **count**
-
-	The count channel does not have any attributes. It is used only in buffer mode to add the data counter value for each sample set obtained in burst mode.
-
 Device Debug Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -690,17 +1024,9 @@ The following list of debug attributes is available:
 +----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | sync_polarity                                | Read/Write  | Sync Pin Polarity Encoded Value                                    | 0 - active low, 1 - active high                                                                                                             |
 +----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
-| sync_mode_select                             | Read/Write  | Sync Mode Select Encoded Value                                     | 0 - internal sync, 1 - direct input sync, 2 - scaled sync, 3 - output sync                                                                  |
-+----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
-| internal_sensor_bandwidth                    | Read/Write  | Internal Sensor Bandwidth Encoded Value                            | 0 - wide bandwidth, 1 - 370 Hz                                                                                                              |
-+----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | point_of_percussion_alignment                | Read/Write  | Point Of Percussion Alignment Enable Bit                           | 0 - disabled, 1 - enabled                                                                                                                   |
 +----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | linear_acceleration_compensation             | Read/Write  | Linear Acceleration Compensation Enable Bit                        | 0 - disabled, 1 - enabled                                                                                                                   |
-+----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
-| burst_data_selection                         | Read/Write  | Burst Data Selection Encoded Bit                                   | 0 - burst data contains acceleration and angular velocity measurements, 1 - burst data contains delta-angle and delta-velocity measurements |
-+----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
-| burst_size_selection                         | Read/Write  | Burst Size Selection Encoded Bit                                   | 0 - burst data contains 16-bit values, 1 - burst data contains 32-bit values                                                                |
 +----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | sync_signal_scale                            | Read/Write  | Sync Input Frequency Multiplier Register Value                     | 0 - 65535                                                                                                                                   |
 +----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
@@ -731,87 +1057,493 @@ The following list of debug attributes is available:
 | flash_counter                                | Read-only   | The number of the flash writes performed on the device             | 0 - 65535                                                                                                                                   |
 +----------------------------------------------+-------------+--------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
+**ADIS1646X**
+
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| Debug Attribute Name                        | Access Type | Debug Attribute Description                           | Debug Attribute Valid Values                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| bias_correction_time_base_control           | Read/Write  | Bias Correction Time Base Control Value               | 0 - 12                                                                                     |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| x_axis_gyroscope_bias_correction_enable     | Read/Write  | X Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                            |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| y_axis_gyroscope_bias_correction_enable     | Read/Write  | Y Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                            |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| z_axis_gyroscope_bias_correction_enable     | Read/Write  | Z Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                            |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| x_axis_accelerometer_bias_correction_enable | Read/Write  | X Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                            |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| y_axis_accelerometer_bias_correction_enable | Read/Write  | Y Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                            |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| z_axis_accelerometer_bias_correction_enable | Read/Write  | Z Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                            |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| bias_correction_update                      | Write-only  | Trigger a bias correction update command              | Any written value will trigger a bias correction update command on the device              |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| decimation_filter                           | Read/Write  | Decimation Filter Register Value                      | 0 - 1999                                                                                   |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+| sync_mode_select                            | Read/Write  | Sync Mode Select Encoded Value                        | 0 - internal sync, 1 - direct input sync, 2 - scaled sync, 3 - output sync, 5 - pulse sync |
++---------------------------------------------+-------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+
+
+**ADIS1647X**
+
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Debug Attribute Name                        | Access Type | Debug Attribute Description                           | Debug Attribute Valid Values                                                                                                                |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| bias_correction_time_base_control           | Read/Write  | Bias Correction Time Base Control Value               | 0 - 12                                                                                                                                      |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| x_axis_gyroscope_bias_correction_enable     | Read/Write  | X Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| y_axis_gyroscope_bias_correction_enable     | Read/Write  | Y Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| z_axis_gyroscope_bias_correction_enable     | Read/Write  | Z Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| x_axis_accelerometer_bias_correction_enable | Read/Write  | X Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| y_axis_accelerometer_bias_correction_enable | Read/Write  | Y Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| z_axis_accelerometer_bias_correction_enable | Read/Write  | Z Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| bias_correction_update                      | Write-only  | Trigger a bias correction update command              | Any written value will trigger a bias correction update command on the device                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| decimation_filter                           | Read/Write  | Decimation Filter Register Value                      | 0 - 1999                                                                                                                                    |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| burst_data_selection                        | Read/Write  | Burst Data Selection Encoded Bit                      | 0 - burst data contains acceleration and angular velocity measurements, 1 - burst data contains delta-angle and delta-velocity measurements |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| burst_size_selection                        | Read/Write  | Burst Size Selection Encoded Bit                      | 0 - burst data contains 16-bit values, 1 - burst data contains 32-bit values                                                                |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| sync_mode_select                            | Read/Write  | Sync Mode Select Encoded Value                        | 0 - internal sync, 1 - direct input sync, 2 - scaled sync, 3 - output sync, 5 - pulse sync                                                  |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+
 **ADIS1650X**
 
-+-----------------------------------+-------------+------------------------------------+-----------------------------------------------+
-| Debug Attribute Name              | Access Type | Debug Attribute Description        | Debug Attribute Valid Values                  |
-+-----------------------------------+-------------+------------------------------------+-----------------------------------------------+
-| diag_gyroscope1_self_test_error   | Read-only   | Gyroscope 1 Self Test Error Fla    | 0 - error did not occur or 1 - error occurred |
-+-----------------------------------+-------------+------------------------------------+-----------------------------------------------+
-| diag_gyroscope1_self_test_error   | Read-only   | Gyroscope 1 Self Test Error Fla    | 0 - error did not occur or 1 - error occurred |
-+-----------------------------------+-------------+------------------------------------+-----------------------------------------------+
-| diag_acceleration_self_test_error | Read-only   | Accelerometer Self Test Error Flag | 0 - error did not occur or 1 - error occurred |
-+-----------------------------------+-------------+------------------------------------+-----------------------------------------------+
-| decimation_filter                 | Read/Write  | Decimation Filter Register Value   | 0 - 1999                                      |
-+-----------------------------------+-------------+------------------------------------+-----------------------------------------------+
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Debug Attribute Name              | Access Type | Debug Attribute Description             | Debug Attribute Valid Values                                                                                                                |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_gyroscope1_self_test_error   | Read-only   | Gyroscope 1 Self Test Error Fla         | 0 - error did not occur or 1 - error occurred                                                                                               |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_gyroscope1_self_test_error   | Read-only   | Gyroscope 1 Self Test Error Fla         | 0 - error did not occur or 1 - error occurred                                                                                               |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_acceleration_self_test_error | Read-only   | Accelerometer Self Test Error Flag      | 0 - error did not occur or 1 - error occurred                                                                                               |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| decimation_filter                 | Read/Write  | Decimation Filter Register Value        | 0 - 1999                                                                                                                                    |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| burst_data_selection              | Read/Write  | Burst Data Selection Encoded Bit        | 0 - burst data contains acceleration and angular velocity measurements, 1 - burst data contains delta-angle and delta-velocity measurements |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| burst_size_selection              | Read/Write  | Burst Size Selection Encoded Bit        | 0 - burst data contains 16-bit values, 1 - burst data contains 32-bit values                                                                |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| sync_mode_select                  | Read/Write  | Sync Mode Select Encoded Value          | 0 - internal sync, 1 - direct input sync, 2 - scaled sync, 3 - output sync                                                                  |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| internal_sensor_bandwidth         | Read/Write  | Internal Sensor Bandwidth Encoded Value | 0 - wide bandwidth, 1 - 370 Hz                                                                                                              |
++-----------------------------------+-------------+-----------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
 **ADIS1657X**
 
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| Debug Attribute Name                        | Access Type | Debug Attribute Description                           | Debug Attribute Valid Values                                                  |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_sensor_initialization_failure          | Read-only   | Sensor Initialization Failure Flag                    | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_x_axis_gyroscope_failure               | Read-only   | X Axis Gyroscope Failure Flag                         | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_y_axis_gyroscope_failure               | Read-only   | Y Axis Gyroscope Failure Flag                         | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_z_axis_gyroscope_failure               | Read-only   | Z Axis Gyroscope Failure Flag                         | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_x_axis_accelerometer_failure           | Read-only   | X Axis Accelerometer Failure Flag                     | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_y_axis_accelerometer_failure           | Read-only   | Y Axis Accelerometer Failure Flag                     | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_z_axis_accelerometer_failure           | Read-only   | Z Axis Accelerometer Failure Flag                     | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| diag_aduc_mcu_fault                         | Read-only   | Internal Mcu Fault Flag                               | 0 - error did not occur or 1 - error occurred                                 |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_sample_count                           | Read-only   | The FIFO_CNT register value                           | 0 - 511                                                                       |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| spi_checksum                                | Read-only   | The SPI_CHKSUM register value                         | 0 - 65535                                                                     |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_enable                                 | Read/Write  | IFO Enable Bit Value                                  | 0 - FIFO disabled, 1 - FIFO enabled                                           |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_overflow_behavior                      | Read/Write  | FIFO Overflow Behavior Encoded Value                  | 0 - stop enqueuing samples, 1 - overwrite the oldest sample                   |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_watermark_interrupt_enable             | Read/Write  | FIFO Watermark Interrupt Enable Bit Value             | 0 - watermark interrupt disabled, 1 - watermark interrupt enabled             |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_watermark_interrupt_polarity           | Read/Write  | FIFO Watermark Interrupt Polarity Encoded Value       | 0 - active low, 1 - active high                                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_watermark_threshold_level              | Read/Write  | FIFO Watermark Threshold Level                        | 0 - 511                                                                       |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| time_stamp_size                             | Read/Write  | Timestamp Size Encoded Bit                            | 0 - timestamp is in 16-bit format, 1 - timestamp is in 32-bit format          |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| internal_sync_enable_4khz                   | Read/Write  | 4KHz Internal Sync Enable bit                         | 0 - 2KHz Internal Sync, 1 - 4KHz Internal Sync                                |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| bias_correction_time_base_control           | Read/Write  | Bias Correction Time Base Control Value               | 0 - 12                                                                        |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| x_axis_gyroscope_bias_correction_enable     | Read/Write  | X Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| y_axis_gyroscope_bias_correction_enable     | Read/Write  | Y Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| z_axis_gyroscope_bias_correction_enable     | Read/Write  | Z Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| x_axis_accelerometer_bias_correction_enable | Read/Write  | X Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| y_axis_accelerometer_bias_correction_enable | Read/Write  | Y Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| z_axis_accelerometer_bias_correction_enable | Read/Write  | Z Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                               |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| bias_correction_update                      | Write-only  | Trigger a bias correction update command              | Any written value will trigger a bias correction update command on the device |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| fifo_flush                                  | Write-only  | Triggers a FIFO flush command                         | Any written value will trigger a FIFO flush command on the device             |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
-| decimation_filter                           | Read/Write  | Decimation Filter Register Value                      | 0 - 3999                                                                      |
-+---------------------------------------------+-------------+-------------------------------------------------------+-------------------------------------------------------------------------------+
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Debug Attribute Name                        | Access Type | Debug Attribute Description                           | Debug Attribute Valid Values                                                                                                                |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_sensor_initialization_failure          | Read-only   | Sensor Initialization Failure Flag                    | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_x_axis_gyroscope_failure               | Read-only   | X Axis Gyroscope Failure Flag                         | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_y_axis_gyroscope_failure               | Read-only   | Y Axis Gyroscope Failure Flag                         | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_z_axis_gyroscope_failure               | Read-only   | Z Axis Gyroscope Failure Flag                         | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_x_axis_accelerometer_failure           | Read-only   | X Axis Accelerometer Failure Flag                     | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_y_axis_accelerometer_failure           | Read-only   | Y Axis Accelerometer Failure Flag                     | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_z_axis_accelerometer_failure           | Read-only   | Z Axis Accelerometer Failure Flag                     | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| diag_aduc_mcu_fault                         | Read-only   | Internal Mcu Fault Flag                               | 0 - error did not occur or 1 - error occurred                                                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_sample_count                           | Read-only   | The FIFO_CNT register value                           | 0 - 511                                                                                                                                     |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| spi_checksum                                | Read-only   | The SPI_CHKSUM register value                         | 0 - 65535                                                                                                                                   |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_enable                                 | Read/Write  | IFO Enable Bit Value                                  | 0 - FIFO disabled, 1 - FIFO enabled                                                                                                         |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_overflow_behavior                      | Read/Write  | FIFO Overflow Behavior Encoded Value                  | 0 - stop enqueuing samples, 1 - overwrite the oldest sample                                                                                 |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_watermark_interrupt_enable             | Read/Write  | FIFO Watermark Interrupt Enable Bit Value             | 0 - watermark interrupt disabled, 1 - watermark interrupt enabled                                                                           |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_watermark_interrupt_polarity           | Read/Write  | FIFO Watermark Interrupt Polarity Encoded Value       | 0 - active low, 1 - active high                                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_watermark_threshold_level              | Read/Write  | FIFO Watermark Threshold Level                        | 0 - 511                                                                                                                                     |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| time_stamp_size                             | Read/Write  | Timestamp Size Encoded Bit                            | 0 - timestamp is in 16-bit format, 1 - timestamp is in 32-bit format                                                                        |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| internal_sync_enable_4khz                   | Read/Write  | 4KHz Internal Sync Enable bit                         | 0 - 2KHz Internal Sync, 1 - 4KHz Internal Sync                                                                                              |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| bias_correction_time_base_control           | Read/Write  | Bias Correction Time Base Control Value               | 0 - 12                                                                                                                                      |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| x_axis_gyroscope_bias_correction_enable     | Read/Write  | X Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| y_axis_gyroscope_bias_correction_enable     | Read/Write  | Y Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| z_axis_gyroscope_bias_correction_enable     | Read/Write  | Z Axis Gyroscope Bias Correction Enable Bit Value     | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| x_axis_accelerometer_bias_correction_enable | Read/Write  | X Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| y_axis_accelerometer_bias_correction_enable | Read/Write  | Y Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| z_axis_accelerometer_bias_correction_enable | Read/Write  | Z Axis Accelerometer Bias Correction Enable Bit Value | 0 - correction disabled, 1 - correction enabled                                                                                             |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| bias_correction_update                      | Write-only  | Trigger a bias correction update command              | Any written value will trigger a bias correction update command on the device                                                               |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| fifo_flush                                  | Write-only  | Triggers a FIFO flush command                         | Any written value will trigger a FIFO flush command on the device                                                                           |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| decimation_filter                           | Read/Write  | Decimation Filter Register Value                      | 0 - 3999                                                                                                                                    |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| burst_data_selection                        | Read/Write  | Burst Data Selection Encoded Bit                      | 0 - burst data contains acceleration and angular velocity measurements, 1 - burst data contains delta-angle and delta-velocity measurements |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| burst_size_selection                        | Read/Write  | Burst Size Selection Encoded Bit                      | 0 - burst data contains 16-bit values, 1 - burst data contains 32-bit values                                                                |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| sync_mode_select                            | Read/Write  | Sync Mode Select Encoded Value                        | 0 - internal sync, 1 - direct input sync, 2 - scaled sync, 3 - output sync                                                                  |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| internal_sensor_bandwidth                   | Read/Write  | Internal Sensor Bandwidth Encoded Value               | 0 - wide bandwidth, 1 - 370 Hz                                                                                                              |
++---------------------------------------------+-------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
 Device Buffers
 ^^^^^^^^^^^^^^
 
 The IIO AIDS device driver supports the usage of a data buffer for samples reading purposes.
+The following channels are available for buffer readings, based on the chip used:
+
+**ADIS1646X**:
+
+* anglvel_x
+* anglvel_y
+* anglvel_z
+* accel_x
+* accel_y
+* accel_z
+* temp0
+
+**ADIS1647X**:
+
+Burst data selection = 0:
+
+  * anglvel_x
+  * anglvel_y
+  * anglvel_z
+  * accel_x
+  * accel_y
+  * accel_z
+  * temp0
+
+Burst data selection = 1:
+
+  * deltaangl_x
+  * deltaangl_y
+  * deltaangl_z
+  * deltavelocity_x
+  * deltavelocity_y
+  * deltavelocity_z
+  * temp0
+
+**ADIS1650X**:
+
+Burst data selection = 0:
+
+  * anglvel_x
+  * anglvel_y
+  * anglvel_z
+  * accel_x
+  * accel_y
+  * accel_z
+  * temp0
+
+Burst data selection = 1:
+
+  * deltaangl_x
+  * deltaangl_y
+  * deltaangl_z
+  * deltavelocity_x
+  * deltavelocity_y
+  * deltavelocity_z
+  * temp0
+
+**ADIS1657X**:
+
+Burst data selection = 0:
+
+  * anglvel_x
+  * anglvel_y
+  * anglvel_z
+  * accel_x
+  * accel_y
+  * accel_z
+  * temp0
+
+Burst data selection = 1:
+
+  * deltaangl_x
+  * deltaangl_y
+  * deltaangl_z
+  * deltavelocity_x
+  * deltavelocity_y
+  * deltavelocity_z
+  * temp0
+
 
 IIO ADIS Driver Initialization Example
 --------------------------------------
+
+ADIS1646X
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis1646x_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis1646x_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis1646x_ip = {
+		.gpio_reset = &adis1646x_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_OUTPUT,
+		.dev_id = ADIS16465_1,
+	};
+
+	struct no_os_irq_init_param adis1646x_gpio_irq_ip = {
+		.irq_ctrl_id = GPIO_IRQ_ID,
+		.platform_ops = GPIO_IRQ_OPS,
+		.extra = GPIO_IRQ_EXTRA,
+	};
+
+	const struct iio_hw_trig_cb_info gpio_cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADIS1646X_GPIO_CB_HANDLE,
+	};
+
+	struct iio_hw_trig_init_param adis1646x_gpio_trig_ip = {
+		.irq_id = ADIS1646X_GPIO_TRIG_IRQ_ID,
+		.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+		.cb_info = gpio_cb_info,
+		.name = ADIS1646X_GPIO_TRIG_NAME,
+	};
+
+	#define DATA_BUFFER_SIZE 400
+	uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 7 * sizeof(int)];
+	struct adis_iio_dev *adis1646x_iio_desc;
+
+	struct iio_data_buffer data_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * 7 * sizeof(int)
+	};
+
+	struct iio_hw_trig *adis1646x_trig_desc;
+	struct no_os_irq_ctrl_desc *adis1646x_irq_desc;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	ret = adis1646x_iio_init(&adis1646x_iio_desc, &adis1646x_ip);
+	if (ret)
+		return ret;
+
+	/* Initialize interrupt controller */
+	ret = no_os_irq_ctrl_init(&adis1646x_irq_desc, &adis1646x_gpio_irq_ip);
+	if (ret)
+		goto err_irq_init;
+
+	ret = no_os_irq_set_priority(adis1646x_irq_desc, adis1646x_gpio_trig_ip.irq_id, 1);
+	if (ret)
+		goto err_irq_set_prio;
+
+	adis1646x_gpio_trig_ip.irq_ctrl = adis1646x_irq_desc;
+
+	/* Initialize hardware trigger */
+	ret = iio_hw_trig_init(&adis1646x_trig_desc, &adis1646x_gpio_trig_ip);
+	if (ret)
+		goto err_irq_set_prio;
+
+	/* List of devices */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adis16465-1",
+			.dev = adis1646x_iio_desc,
+			.dev_descriptor = adis1646x_iio_desc->iio_dev,
+			.read_buff = &data_buff,
+		}
+	};
+
+	/* List of triggers */
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(ADIS1646X_GPIO_TRIG_NAME, adis1646x_trig_desc, &adis_iio_trig_desc)
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adis1646x_uart_ip;
+	app_init_param.trigs = trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+	app_init_param.irq_desc = adis1646x_irq_desc;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto err_iio_app_init;
+
+	/* Update the reference to iio_desc */
+	adis1646x_trig_desc->iio_desc = app->iio_desc;
+
+	ret = iio_app_run(app);
+	if (ret)
+		goto iio_app_err;
+
+	return 0;
+
+	iio_app_err:
+		iio_app_remove(app);
+	err_iio_app_init:
+		iio_hw_trig_remove(adis1646x_trig_desc);
+	err_irq_set_prio:
+		no_os_irq_ctrl_remove(adis1646x_irq_desc);
+	err_irq_init:
+		adis1646x_iio_remove(adis1646x_iio_desc);
+		pr_info("Error!\n");
+		return ret;
+
+ADIS1647X
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis1647x_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis1647x_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis1647x_ip = {
+		.gpio_reset = &adis1647x_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_OUTPUT,
+		.dev_id = ADIS16477_1,
+	};
+
+	struct no_os_irq_init_param adis1647x_gpio_irq_ip = {
+		.irq_ctrl_id = GPIO_IRQ_ID,
+		.platform_ops = GPIO_IRQ_OPS,
+		.extra = GPIO_IRQ_EXTRA,
+	};
+
+	const struct iio_hw_trig_cb_info gpio_cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADIS1647X_GPIO_CB_HANDLE,
+	};
+
+	struct iio_hw_trig_init_param adis1647x_gpio_trig_ip = {
+		.irq_id = ADIS1647X_GPIO_TRIG_IRQ_ID,
+		.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+		.cb_info = gpio_cb_info,
+		.name = ADIS1647X_GPIO_TRIG_NAME,
+	};
+
+	#define DATA_BUFFER_SIZE 400
+	uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
+	struct adis_iio_dev *adis1647x_iio_desc;
+
+	struct iio_data_buffer data_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * 13 * sizeof(int)
+	};
+
+	struct iio_hw_trig *adis1647x_trig_desc;
+	struct no_os_irq_ctrl_desc *adis1647x_irq_desc;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	ret = adis1647x_iio_init(&adis1647x_iio_desc, &adis1647x_ip);
+	if (ret)
+		return ret;
+
+	/* Initialize interrupt controller */
+	ret = no_os_irq_ctrl_init(&adis1647x_irq_desc, &adis1647x_gpio_irq_ip);
+	if (ret)
+		goto err_irq_init;
+
+	ret = no_os_irq_set_priority(adis1647x_irq_desc, adis1647x_gpio_trig_ip.irq_id, 1);
+	if (ret)
+		goto err_irq_set_prio;
+
+	adis1647x_gpio_trig_ip.irq_ctrl = adis1647x_irq_desc;
+
+	/* Initialize hardware trigger */
+	ret = iio_hw_trig_init(&adis1647x_trig_desc, &adis1647x_gpio_trig_ip);
+	if (ret)
+		goto err_irq_set_prio;
+
+	/* List of devices */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adis16477-1",
+			.dev = adis1647x_iio_desc,
+			.dev_descriptor = adis1647x_iio_desc->iio_dev,
+			.read_buff = &data_buff,
+		}
+	};
+
+	/* List of triggers */
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(ADIS1647X_GPIO_TRIG_NAME, adis1647x_trig_desc, &adis_iio_trig_desc)
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adis1647x_uart_ip;
+	app_init_param.trigs = trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+	app_init_param.irq_desc = adis1647x_irq_desc;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto err_iio_app_init;
+
+	/* Update the reference to iio_desc */
+	adis1647x_trig_desc->iio_desc = app->iio_desc;
+
+	ret = iio_app_run(app);
+	if (ret)
+		goto iio_app_err;
+
+	return 0;
+
+	iio_app_err:
+		iio_app_remove(app);
+	err_iio_app_init:
+		iio_hw_trig_remove(adis1647x_trig_desc);
+	err_irq_set_prio:
+		no_os_irq_ctrl_remove(adis1647x_irq_desc);
+	err_irq_init:
+		adis1647x_iio_remove(adis1647x_iio_desc);
+		pr_info("Error!\n");
+		return ret;
 
 ADIS1650X
 ^^^^^^^^^
@@ -862,12 +1594,12 @@ ADIS1650X
 	};
 
 	#define DATA_BUFFER_SIZE 400
-	uint8_t iio_data_buffer[DATA_BUFFER_SIZE*14*sizeof(int)];
+	uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
 	struct adis_iio_dev *adis1650x_iio_desc;
 
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*14*sizeof(int)
+		.size = DATA_BUFFER_SIZE * 13 * sizeof(int)
 	};
 
 	struct iio_hw_trig *adis1650x_trig_desc;
@@ -990,12 +1722,12 @@ ADIS1657X
 	};
 
 	#define DATA_BUFFER_SIZE 400
-	uint8_t iio_data_buffer[DATA_BUFFER_SIZE*14*sizeof(int)];
+	uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
 	struct adis_iio_dev *adis1657x_iio_desc;
 
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*14*sizeof(int)
+		.size = DATA_BUFFER_SIZE * 13 * sizeof(int)
 	};
 
 	struct iio_hw_trig *adis1657x_trig_desc;
