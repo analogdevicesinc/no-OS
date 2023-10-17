@@ -639,16 +639,14 @@ int ad74413r_set_adc_rate(struct ad74413r_desc *desc, uint32_t ch,
 int ad74413r_get_adc_diag_rate(struct ad74413r_desc *desc, uint32_t ch,
 			       enum ad74413r_adc_sample *val)
 {
-	uint16_t reg_val;
+	enum ad74413r_rejection rejection;
 	int ret;
 
-	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONV_CTRL, &reg_val);
+	ret = ad74413r_get_adc_diag_rejection(desc, &rejection);
 	if (ret)
 		return ret;
 
-	reg_val = no_os_field_get(AD74413R_EN_REJ_DIAG_MASK, reg_val);
-
-	return ad74413r_rejection_to_rate(reg_val, val);
+	return ad74413r_rejection_to_rate(rejection, val);
 }
 
 /**
@@ -665,10 +663,10 @@ int ad74413r_set_adc_diag_rate(struct ad74413r_desc *desc, uint32_t ch,
 
 	switch (val) {
 	case AD74413R_ADC_SAMPLE_20HZ:
-		reg_val = no_os_field_prep(AD74413R_EN_REJ_DIAG_MASK, 1);
+		reg_val = 1;
 		break;
 	case AD74413R_ADC_SAMPLE_4800HZ:
-		reg_val = no_os_field_prep(AD74413R_EN_REJ_DIAG_MASK, 0);
+		reg_val = 0;
 		break;
 	default:
 		return -EINVAL;
