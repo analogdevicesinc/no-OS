@@ -49,7 +49,7 @@ build_doxygen() {
 build_sphinx() {
         pushd ${TOP_DIR}/doc/sphinx
 
-        sphinx-build ./source/ ./build
+        sphinx-build -W ./source/ ./build
 
         popd
 }
