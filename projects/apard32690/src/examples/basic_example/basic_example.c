@@ -40,6 +40,97 @@
 #include <stdio.h>
 #include "common_data.h"
 
+#include "hpb.h"
+#include "spixf.h"
+#include "Ext_Flash.h"
+
+#define EXT_FLASH_BAUD 4000000
+
+static bool flash_test = false;
+static bool ram1_test = false;
+static bool ram2_test = false;
+
+extern uint8_t __load_start_hpb_cs0;
+extern uint8_t __load_length_hpb_cs0;
+extern uint8_t __load_start_hpb_cs1;
+extern uint8_t __load_length_hpb_cs1;
+extern uint8_t __hpb_cs0_start;
+extern uint8_t __hpb_cs1_start;
+extern uint8_t __load_start_xip;
+extern uint8_t __load_length_xip;
+
+void spixf_cfg_setup()
+{
+	// Disable the SPIXFC before setting the SPIXF
+	MXC_SPIXF_Disable();
+	MXC_SPIXF_SetSPIFrequency(EXT_FLASH_BAUD);
+	MXC_SPIXF_SetMode(MXC_SPIXF_MODE_0);
+	MXC_SPIXF_SetSSPolActiveLow();
+	MXC_SPIXF_SetSSActiveTime(MXC_SPIXF_SYS_CLOCKS_2);
+	MXC_SPIXF_SetSSActiveTime(MXC_SPIXF_SYS_CLOCKS_3);
+
+	MXC_SPIXF_SetCmdValue(EXT_FLASH_CMD_QREAD);
+	MXC_SPIXF_SetCmdWidth(MXC_SPIXF_SINGLE_SDIO);
+	MXC_SPIXF_SetAddrWidth(MXC_SPIXF_QUAD_SDIO);
+	MXC_SPIXF_SetDataWidth(MXC_SPIXF_WIDTH_4);
+	MXC_SPIXF_SetModeClk(EXT_FLASH_QREAD_DUMMY);
+
+	MXC_SPIXF_Set3ByteAddr();
+	MXC_SPIXF_SCKFeedbackEnable();
+	MXC_SPIXF_SetSCKNonInverted();
+}
+
+static int ext_flash_board_init(void)
+{
+	return MXC_SPIXF_Init(0, EXT_FLASH_BAUD);
+}
+
+/******************************************************************************/
+static int ext_flash_board_read(uint8_t* read, unsigned len, unsigned deassert,
+				Ext_Flash_DataLine_t width)
+{
+	mxc_spixf_req_t req = {deassert, 0, NULL, read, (mxc_spixf_width_t)width, len, 0, 0, NULL};
+
+	if (MXC_SPIXF_Transaction(&req) != len) {
+		return E_COMM_ERR;
+	}
+	return E_NO_ERROR;
+}
+
+/******************************************************************************/
+static int ext_flash_board_write(const uint8_t* write, unsigned len,
+				 unsigned deassert,
+				 Ext_Flash_DataLine_t width)
+{
+	mxc_spixf_req_t req = {deassert, 0, write, NULL, (mxc_spixf_width_t)width, len, 0, 0, NULL};
+
+	if (MXC_SPIXF_Transaction(&req) != len) {
+		return E_COMM_ERR;
+	}
+	return E_NO_ERROR;
+}
+
+
+static int ext_flash_clock(unsigned len, unsigned deassert)
+{
+	return MXC_SPIXF_Clocks(len, deassert);
+}
+
+__attribute__((section(".hpb_cs0_section"))) void test_func1(void)
+{
+	ram1_test = true;
+}
+
+__attribute__((section(".hpb_cs1_section"))) void test_func2(void)
+{
+	ram2_test = true;
+}
+
+__attribute__((section(".xip_section"))) void flash_test_func(void)
+{
+	flash_test = true;
+}
+
 /***************************************************************************//**
  * @brief Basic example main execution.
  *
@@ -50,6 +141,10 @@ int basic_example_main()
 	struct no_os_uart_desc *uart_desc;
 	int ret;
 
+	mxc_hpb_mem_config_t mem;
+	mxc_hpb_mem_config_t mem2;
+	mxc_hpb_cfg_reg_val_t cfg_reg[1];
+
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
 		return ret;
@@ -57,6 +152,77 @@ int basic_example_main()
 	no_os_uart_stdio(uart_desc);
 
 	printf("Hello world");
+
+	cfg_reg[0].addr = 0x01000;
+	cfg_reg[0].val  = 0x801f;
+	mem.base_addr = (unsigned int)&__hpb_cs0_start;
+	mem.device_type     = MXC_HPB_DEV_HYPER_RAM;
+	mem.cfg_reg_val     = cfg_reg;
+	mem.cfg_reg_val_len = 1;
+	mem.read_cs_high    = MXC_HPB_CS_HIGH_10_5;
+	mem.write_cs_high   = MXC_HPB_CS_HIGH_10_5;
+	mem.read_cs_setup   = MXC_HPB_CS_SETUP_HOLD_16;
+	mem.write_cs_setup  = MXC_HPB_CS_SETUP_HOLD_14;
+	mem.read_cs_hold    = MXC_HPB_CS_SETUP_HOLD_5;
+	mem.write_cs_hold   = MXC_HPB_CS_SETUP_HOLD_12;
+	mem.latency_cycle   = MXC_V_HPB_MEMTIM_LAT_6CLK;
+	mem.fixed_latency   = 0;
+
+	mem2.base_addr = (unsigned int)&__hpb_cs1_start;
+	mem2.device_type     = MXC_HPB_DEV_HYPER_RAM;
+	mem2.cfg_reg_val     = cfg_reg;
+	mem2.cfg_reg_val_len = 1;
+	mem2.read_cs_high    = MXC_HPB_CS_HIGH_10_5;
+	mem2.write_cs_high   = MXC_HPB_CS_HIGH_10_5;
+	mem2.read_cs_setup   = MXC_HPB_CS_SETUP_HOLD_16;
+	mem2.write_cs_setup  = MXC_HPB_CS_SETUP_HOLD_14;
+	mem2.read_cs_hold    = MXC_HPB_CS_SETUP_HOLD_5;
+	mem2.write_cs_hold   = MXC_HPB_CS_SETUP_HOLD_12;
+	mem2.latency_cycle   = MXC_V_HPB_MEMTIM_LAT_6CLK;
+	mem2.fixed_latency   = 0;
+
+	ret = MXC_HPB_Init(&mem, &mem2);
+	memcpy(&__hpb_cs0_start, &__load_start_hpb_cs0,
+	       (uint32_t)&__load_length_hpb_cs0);
+	memcpy(&__hpb_cs1_start, &__load_start_hpb_cs1,
+	       (uint32_t)&__load_length_hpb_cs1);
+	void (*func_ram1)(void);
+	void (*func_ram2)(void);
+
+	func_ram1 = (void(*)(void))((uint32_t)&__hpb_cs0_start | 1);
+	func_ram2 = (void(*)(void))((uint32_t)&__hpb_cs1_start | 1);
+	func_ram1();
+	func_ram2();
+
+	Ext_Flash_Config_t exf_cfg = {.init  = ext_flash_board_init,
+				      .read  = ext_flash_board_read,
+				      .write = ext_flash_board_write,
+				      .clock = ext_flash_clock
+				     };
+
+	ret = Ext_Flash_Configure(&exf_cfg);
+	if (ret)
+		return ret;
+
+	Ext_Flash_Init();
+	MXC_GPIO_Init(MXC_GPIO_PORT_0);
+	MXC_GPIO_Config(&gpio_cfg_spixf);
+	MXC_SPIXF_Enable();
+
+	Ext_Flash_Reset();
+	uint32_t flash_id = Ext_Flash_ID();
+	Ext_Flash_Erase(0x00000, Ext_Flash_Erase_64K);
+	ret = Ext_Flash_Quad(1);
+	if (ret)
+		return ret;
+
+	ret = Ext_Flash_Program_Page(0x0, &__load_start_xip,
+				(uint32_t)(&__load_length_xip), Ext_Flash_DataLine_Single);
+
+	spixf_cfg_setup();
+
+	func_ram1 = (void(*)(void))((uint32_t)&__load_start_xip | 1);
+	func_ram1();
 
 	return 0;
 }
