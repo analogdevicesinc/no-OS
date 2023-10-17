@@ -139,7 +139,7 @@ int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 			dx = iiodev->gestureStartX - gestureStopX;
 			dy = iiodev->gestureStartY - gestureStopY;
 			m = dy * 1000 / dx;
-			d = sqrt(dx * dx + dy * dy);
+			d = isqrt(dx * dx + dy * dy);
 		}
 		if (d < iiodev->th_click)
 			gesture = click;
@@ -213,10 +213,9 @@ static int adpd1080pmb_attr_read(void *device, char *buf, uint32_t len,
 		valcount = 1;
 		break;
 	case ADPD1080PMB_DEV_ATTR_TH_CLICK:
-		vals[0] = 0;
-		vals[1] = iiodev->th_click * 1000000;
-		type = IIO_VAL_INT_PLUS_MICRO;
-		valcount = 2;
+		vals[0] = iiodev->th_click;
+		type = IIO_VAL_INT;
+		valcount = 1;
 		break;
 	default:
 		return -EINVAL;
@@ -232,6 +231,25 @@ static int adpd1080pmb_attr_write(void *device, char *buf,
 	int ret;
 	int32_t val;
 	struct adpd1080pmb_iio_desc *iiodev = (struct adpd1080pmb_iio_desc *)device;
+
+	ret = iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+	if (ret < 0)
+		return ret;
+
+	switch (priv) {
+	case ADPD1080PMB_DEV_ATTR_TH_INTENSITY:
+		if (val > 2000000)
+			return -EINVAL;
+		iiodev->th_intensity = val;
+		break;
+	case ADPD1080PMB_DEV_ATTR_TH_CLICK:
+		if (val > 1000)
+			return -EINVAL;
+		iiodev->th_click = val;
+		break;
+	default:
+		return -EINVAL;
+	};
 
 	return 0;
 }
