@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_adpd1080/src/main.c
+ *   @file   main.c
  *   @brief  Implementation of Main Function.
- *   @author Drimbarean Andrei (andrei.drimbarean@analog.com)
+ *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -47,12 +47,48 @@
 #include "no_os_timer.h"
 #include "maxim_irq.h"
 #include "maxim_i2c.h"
+#include "maxim_spi.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 #include "maxim_gpio_irq.h"
 #include "maxim_timer.h"
 #include "parameters.h"
+#include "adin1110.h"
+#include "lwip_adin1110.h"
 #include "iio_adpd1080pmb.h"
+
+uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
+
+const struct no_os_gpio_init_param adin1110_reset_ip = {
+	.port = 0,
+	.number = 15,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = &max_gpio_ops,
+	.extra = &(struct max_gpio_init_param) {
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	},
+};
+
+const struct no_os_spi_init_param adin1110_spi_ip = {
+	.device_id = 3,
+	.max_speed_hz = 25000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = &max_spi_ops,
+	.chip_select = 0,
+	.extra = &(struct max_spi_init_param) {
+		.num_slaves = 1,
+		.polarity = SPI_SS_POL_LOW,
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	},
+};
+
+struct adin1110_init_param adin1110_ip = {
+	.chip_type = ADIN1110,
+	.comm_param = adin1110_spi_ip,
+	.reset_param = adin1110_reset_ip,
+	.append_crc = false,
+};
 
 static uint8_t in_buff[1024];
 
@@ -207,7 +243,7 @@ int app_step(void *arg)
 	cnt1++;
 	if (cnt1 == 100) {
 		cnt1 = 0;
-		//adpd1080pmb_gesture_detection(arg);
+		adpd1080pmb_gesture_detection(arg);
 	}
 
 	return 0;
@@ -271,6 +307,8 @@ int main(void)
 		.buff = in_buff,
 		.size = NO_OS_ARRAY_SIZE(in_buff),
 	};
+
+	no_os_init();
 
 	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
 	if (status < 0)
@@ -444,11 +482,11 @@ int main(void)
 		if (status != 0)
 			return status;
 	}
-	
+
 	status = adpd188_mode_set(adpd1080_iio_device->drv_dev, ADPD188_NORMAL);
 	if (status != 0)
 		return status;
-
+	
 	struct adpd1080pmb_iio_desc *adpd1080pmb;
 	struct adpd1080pmb_iio_init_param adpd1080pmb_config = {
 		.dev = adpd1080_iio_device->drv_dev,
@@ -456,25 +494,31 @@ int main(void)
 		.th_click = 60,
 	};
 	status = adpd1080pmb_iio_init(&adpd1080pmb, &adpd1080pmb_config);
-	if (status != 0)
-		return status;
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
 			       &iio_adpd1080_read_buff, NULL, NULL),
 		IIO_APP_DEVICE("adpd1080pmb", adpd1080pmb, &iio_adpd1080pmb_device,
-			       NULL, NULL, NULL)
+				NULL, NULL, NULL)
 	};
 
+	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = adpd1080_uart_ip;
-	//app_init_param.post_step_callback = app_step;
+	app_init_param.post_step_callback = app_step;
 	app_init_param.arg = adpd1080pmb;
+	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
+	app_init_param.lwip_param.mac_param = &adin1110_ip;
+	app_init_param.lwip_param.extra = NULL;
+	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
+	       NETIF_MAX_HWADDR_LEN);
 
 	status = iio_app_init(&app, app_init_param);
 	if (status)
 		return status;
+	
+	//no_os_uart_stdio(app->uart_desc);
 
 	return iio_app_run(app);
 }
