@@ -115,8 +115,8 @@ update_gh_pages() {
         fi
 }
 
-build_doxygen
-
 build_sphinx
+
+build_doxygen
 
 update_gh_pages
