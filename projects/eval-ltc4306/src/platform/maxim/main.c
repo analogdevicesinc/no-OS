@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "common_data.h"
-#include "no_os_init.h"
 #include "basic_example.h"
 
 /***************************************************************************//**
@@ -56,8 +55,6 @@ int main()
 
 	ltc4306_user_init.i2c_init = iip;
 	max538x_user_init.i2c_init = iip;
-
-	no_os_init();
 
 	struct no_os_uart_desc *uart;
 
