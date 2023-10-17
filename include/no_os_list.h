@@ -177,7 +177,7 @@ typedef int32_t (*f_edit)(struct no_os_list_desc *list_desc, void *new_data);
  * @note If the content of an element can be 0 then the result must be checked
  * to see if the functions has succeded
  */
-typedef int32_t (*f_read)(struct no_os_list_desc *list_desc, void **data);
+typedef int32_t (*no_os_f_read)(struct no_os_list_desc *list_desc, void **data);
 
 /**
  * @brief Read and remove an element from the list.
@@ -237,9 +237,9 @@ struct no_os_list_desc {
 	/** Refer to \ref no_os_adapter_type */
 	f_get	pop;
 	/** Refer to \ref no_os_adapter_type */
-	f_read	top_next;
+	no_os_f_read	top_next;
 	/** Refer to \ref no_os_adapter_type */
-	f_read	back;
+	no_os_f_read	back;
 	/** Refer to \ref no_os_adapter_type */
 	f_edit	swap;
 	/** Structure storing the list internal parameters */
