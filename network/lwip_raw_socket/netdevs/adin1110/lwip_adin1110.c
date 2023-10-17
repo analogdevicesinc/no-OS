@@ -177,17 +177,19 @@ static int32_t adin1110_lwip_init(void **desc, void *param)
 	if (ret)
 		return ret;
 
-	ret = adin1110_set_mac_addr(adin1110, adin1110->mac_address);
-	if (ret)
-		goto free_descriptor;
+	ret = adin1110_set_promisc(adin1110, 0, true);
 
-	ret = adin1110_broadcast_filter(adin1110, true);
-	if (ret)
-		goto free_descriptor;
+	// ret = adin1110_set_mac_addr(adin1110, adin1110->mac_address);
+	// if (ret)
+	// 	goto free_descriptor;
 
-	ret = adin1110_set_mac_addr(adin1110, mdns_mcast_addr);
-	if (ret)
-		goto free_descriptor;
+	// ret = adin1110_broadcast_filter(adin1110, true);
+	// if (ret)
+	// 	goto free_descriptor;
+
+	// ret = adin1110_set_mac_addr(adin1110, mdns_mcast_addr);
+	// if (ret)
+	// 	goto free_descriptor;
 
 	*desc = adin1110;
 

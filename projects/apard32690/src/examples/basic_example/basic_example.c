@@ -40,6 +40,18 @@
 #include <stdio.h>
 #include "common_data.h"
 
+#include "hpb.h"
+#include "spixf.h"
+#include "Ext_Flash.h"
+
+#include "lwip_socket.h"
+#include "tcp_socket.h"
+#include "no_os_error.h"
+#include "adin1110.h"
+#include "network_interface.h"
+#include "maxim_timer.h"
+#include "no_os_timer.h"
+
 /***************************************************************************//**
  * @brief Basic example main execution.
  *
@@ -50,13 +62,62 @@ int basic_example_main()
 	struct no_os_uart_desc *uart_desc;
 	int ret;
 
+	uint8_t read_buff[1000];
+	uint8_t send_buff[1000];
+	struct lwip_network_desc *lwip_desc;
+	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
+
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
 
-	printf("Hello world");
+	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+
+	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	if (ret)
+		return ret;
+
+	uint32_t i = 0;
+	struct tcp_socket_desc *tcp_socket;
+	struct connection *client_socket;
+	bool connected = false;
+	struct tcp_socket_init_param tcp_ip = {
+		.net = &lwip_desc->no_os_net,
+		.max_buff_size = 0
+	};
+
+	ret = socket_init(&tcp_socket, &tcp_ip);
+	if (ret)
+		return ret;
+
+	ret = socket_bind(tcp_socket, 10000);
+	if (ret)
+		return ret;
+
+	ret = socket_listen(tcp_socket, MAX_BACKLOG);
+	if (ret)
+		return ret;
+
+	while(1) {
+		ret = socket_accept(tcp_socket, &client_socket);
+		if (ret && ret != -EAGAIN)
+			return ret;
+
+		if (client_socket) {
+			connected = true;
+		}
+
+		no_os_lwip_step(tcp_socket->net->net, NULL);
+
+		if (connected) {
+			ret = socket_recv(client_socket, read_buff, 1);
+			if (ret > 0)
+				socket_send(client_socket, read_buff, ret);
+		}
+	}
 
 	return 0;
 }

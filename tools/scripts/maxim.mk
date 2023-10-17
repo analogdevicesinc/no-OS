@@ -100,6 +100,11 @@ SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/system_$(TA
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Include/*.h)
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/*.h)
 
+CFLAGS += -DEXT_FLASH_MX25
+INCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/Ext_Flash.h
+INCS += $(MAXIM_LIBRARIES)/Boards/MAX32690/EvKit_V1/Include/board.h
+SRCS += $(MAXIM_LIBRARIES)/MiscDrivers/ExtMemory/mx25.c
+
 ifeq ($(TARGET), max32650)
 INCS := $(filter-out $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/mxc_device.h, $(INCS))
 endif

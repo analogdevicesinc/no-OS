@@ -234,6 +234,7 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 	char mdns_name_buff[256];
 	uint32_t len;
 	int ret;
+	int i = 0;
 
 	mdns_resp_init();
 	mdns_resp_register_name_result_cb(mdns_name_result);
@@ -253,8 +254,11 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 		if (ret)
 			return ret;
 
-		while (!mdns_result)
+		while (!mdns_result && i < 3000) {
 			no_os_lwip_step(desc, desc);
+			no_os_mdelay(1);
+			i++;
+		}
 
 		if (mdns_is_conflict)
 			mdns_resp_remove_netif(netif);
@@ -356,9 +360,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	}
 #endif
 
-	ret = _lwip_start_mdns(descriptor, netif_descriptor);
-	if (ret)
-		goto platform_remove;
+	// ret = _lwip_start_mdns(descriptor, netif_descriptor);
+	// if (ret)
+	// 	goto platform_remove;
 
 	lwip_config_if(descriptor);
 
@@ -790,6 +794,8 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 	return -ENOSYS;
 }
 
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err);
+
 /**
  * @brief Not implemented.
  * @param net - Not used.
@@ -800,7 +806,27 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 				   struct socket_address *addr)
 {
-	return -ENOSYS;
+	struct lwip_network_desc *desc = net;
+	struct lwip_socket_desc *socket;
+
+	ip4_addr_t ip4;
+	IP_ADDR4(&ip4, 169, 254, 97, 30);
+	const ip_addr_t ipaddr = IPADDR4_INIT(ip4.addr);
+
+	struct tcp_pcb *pcb;
+	err_t ret;
+
+	socket = _get_sock(desc, sock_id);
+	if (!socket)
+		return -ENOMEM;
+
+	pcb = socket->pcb;
+
+	ret = tcp_connect(pcb, &ipaddr, 1883, lwip_connect_callback);
+	if (ret)
+		return ret;
+
+	return 0;
 }
 
 /**
@@ -811,7 +837,19 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
  */
 static int32_t lwip_socket_disconnect(void *net, uint32_t sock_id)
 {
-	return -ENOSYS;
+	return lwip_socket_close(net, sock_id);
+}
+
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
+{
+	struct lwip_socket_desc *sock = arg;
+
+	if (err != ERR_OK)
+		return err;
+
+	sock->state = SOCKET_CONNECTED;
+
+	return ERR_OK;
 }
 
 /**
