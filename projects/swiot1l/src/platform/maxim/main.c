@@ -39,7 +39,6 @@
 #include "platform_includes.h"
 #include "common_data.h"
 #include "no_os_error.h"
-#include "no_os_init.h"
 
 #include "swiot_fw.h"
 
@@ -52,10 +51,6 @@ int main()
 {
 	struct no_os_uart_desc *uart_desc;
 	int ret;
-
-	ret = no_os_init();
-	if (ret)
-		return ret;
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)

@@ -43,7 +43,6 @@
 #include <errno.h>
 #include "platform_includes.h"
 #include "common_data.h"
-#include "no_os_init.h"
 
 #ifdef IIO_EXAMPLE
 #include "iio_example.h"
@@ -63,10 +62,6 @@ int main()
 	int ret = -EINVAL;
 
 	adxl313_user_init.comm_init.spi_init = sip;
-
-	ret = no_os_init();
-	if (ret)
-		goto error;
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main();

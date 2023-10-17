@@ -47,3 +47,8 @@ __weak int no_os_init(void)
 	/* This has o be performed so the en state of SysTick is saved. */
 	return MXC_Delay(1);
 }
+
+int Board_Init(void)
+{
+	return no_os_init();
+}

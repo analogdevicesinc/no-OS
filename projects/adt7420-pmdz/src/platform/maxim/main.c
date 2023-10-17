@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "common_data.h"
-#include "no_os_init.h"
 
 #ifdef IIO_EXAMPLE
 #include "iio_example.h"
@@ -60,8 +59,6 @@
 int main()
 {
 	int ret;
-
-	no_os_init();
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main();
