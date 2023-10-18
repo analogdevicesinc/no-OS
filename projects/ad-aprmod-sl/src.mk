@@ -11,6 +11,9 @@ SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE) \
 		$(DRIVERS)/api \
 		$(PLATFORM_DRIVERS)
+SRC_DIRS += $(NO-OS)/src/Fonts
+SRC_DIRS += $(NO-OS)/src/LCD
+SRC_DIRS += $(NO-OS)/src/Lib
 
 TINYIIOD=y
 

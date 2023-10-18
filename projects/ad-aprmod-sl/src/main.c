@@ -56,6 +56,9 @@
 #include "adin1110.h"
 #include "lwip_adin1110.h"
 #include "iio_adpd1080pmb.h"
+#include "LCD_Driver.h"
+#include "LCD_GUI.h"
+#include "fonts.h"
 
 uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
 
@@ -97,6 +100,39 @@ static void adpd1080_sync_gpio_cb(void *ctx)
 	int32_t *cnt = ctx;
 
 	*cnt += 1;
+}
+
+const font_width = 17;
+const font_height = 17;
+
+void print_gesture(uint8_t g)
+{
+	const xstart = font_width * 11;
+	LCD_SetArealColor(xstart, 0, xstart + font_width * 5, font_height + 4, WHITE);
+	GUI_DisString_EN(xstart, 0, gestures[no_os_find_first_set_bit(g)], &Font24, WHITE, BLACK);
+}
+
+void clear_gesture()
+{
+	const xstart = font_width * 11;
+	LCD_SetArealColor(xstart, 0, xstart + font_width * 5, font_height + 4, WHITE);
+}
+
+void display(struct adpd1080pmb_iio_desc *iiodev)
+{
+	static int64_t no_gestures = 0;
+	if (iiodev->d_gestures) {
+		print_gesture(iiodev->d_gestures);
+		iiodev->d_gestures = 0;
+		no_gestures = 50;
+	} else if (no_gestures > 0)
+		no_gestures--;
+	
+	if (no_gestures == 0) {
+		clear_gesture();
+		no_gestures--;
+	}
+		
 }
 
 static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
@@ -239,11 +275,18 @@ timer_finish:
 int app_step(void *arg)
 {
 	static int cnt1 = 0;
+	static int cnt2 = 0;
 
 	cnt1++;
 	if (cnt1 == 100) {
 		cnt1 = 0;
 		adpd1080pmb_gesture_detection(arg);
+	}
+
+	cnt2++;
+	if (cnt2 == 1000) {
+		cnt2 = 0;
+		display(arg);
 	}
 
 	return 0;
@@ -309,6 +352,10 @@ int main(void)
 	};
 
 	no_os_init();
+
+	LCD_Init(D2U_L2R, 800);
+	LCD_Clear(WHITE);
+	GUI_DisString_EN(0, 0, "Gesture  :", &Font24, WHITE, BLACK);
 
 	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
 	if (status < 0)

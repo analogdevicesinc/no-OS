@@ -42,6 +42,16 @@
 #include "adpd188.h"
 #include "iio.h"
 
+enum gesture {
+	click,
+	up,
+	down,
+	left,
+	right
+};
+
+extern char *gestures[6];
+
 struct adpd1080pmb_iio_init_param {
 	struct adpd188_dev *dev;
 	int th_intensity;
@@ -53,6 +63,7 @@ struct adpd1080pmb_iio_desc {
 	int th_intensity;
 	int th_click;
 	uint8_t gestures;
+	uint8_t d_gestures;
 	int gestureStartX;
 	int gestureStartY;
 	bool event;
