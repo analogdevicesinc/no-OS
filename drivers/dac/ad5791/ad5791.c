@@ -409,7 +409,7 @@ int ad5791_set_lin_comp(struct ad5791_dev *dev,
 	}
 
 	if (!v_span)
-		v_span |= NO_OS_BIT(4);
+		v_span |= NO_OS_BIT(3);
 
 	return ad5791_spi_write_mask(dev,
 				     AD5791_REG_CTRL,
