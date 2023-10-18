@@ -391,8 +391,22 @@ int ad5791_spi_write_mask(struct ad5791_dev *dev,
 int ad5791_set_lin_comp(struct ad5791_dev *dev,
 			enum ad5791_lin_comp_select v_span)
 {
-	if(!dev || (dev->act_device != ID_AD5781 && dev->act_device != ID_AD5791))
+	if(!dev)
 		return -EINVAL;
+
+	switch(dev->act_device) {
+	case ID_AD5781:
+		if (v_span != AD5781_SPAN_UPTO_10V &&
+		    v_span != AD5781_SPAN_10V_TO_20V)
+			return -EINVAL;
+		break;
+	case ID_AD5791:
+		if (v_span == AD5781_SPAN_10V_TO_20V)
+			return -EINVAL;
+		break;
+	default:
+		return -EINVAL;
+	}
 
 	if (!v_span)
 		v_span |= NO_OS_BIT(4);
