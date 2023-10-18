@@ -44,6 +44,14 @@
 #include "iio.h"
 #include "iio_adpd1080pmb.h"
 
+char *gestures[6] = {
+	"click",
+	"up",
+	"down",
+	"left",
+	"right",
+};
+
 enum adpd1080pmb_dev_attrs {
 	ADPD1080PMB_DEV_ATTR_GESTURES,
 	ADPD1080PMB_DEV_ATTR_TH_INTENSITY,
@@ -76,22 +84,6 @@ int adpd1080pmb_get_fifo_data(struct adpd188_dev *desc, int32_t *buff)
 
 	return 0;
 }
-
-enum gesture {
-	click,
-	up,
-	down,
-	left,
-	right
-};
-
-char *gestures[6] = {
-	"click",
-	"up",
-	"down",
-	"left",
-	"right"
-};
 
 static unsigned isqrt(unsigned long val) {
     unsigned long temp, g=0, b = 0x8000, bshft = 15;
@@ -152,13 +144,15 @@ int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 			}
 			else {
 				if (iiodev->gestureStartX > gestureStopX)
-					gesture = left;
-				else
 					gesture = right;
+				else
+					gesture = left;
 			}
 		}
-		if (!iiodev->event)
+		if (!iiodev->event) {
 			iiodev->gestures |= NO_OS_BIT(gesture);
+			iiodev->d_gestures |= NO_OS_BIT(gesture);
+		}
 	}
 
 	return 0;
