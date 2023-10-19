@@ -136,9 +136,9 @@ static int admv1013_update_mixer_vgate(struct admv1013_dev *dev)
 {
 	unsigned int mixer_vgate;
 
-	if (dev->vcm_uv < 1800000)
+	if (dev->vcm_uv <= 1800000)
 		mixer_vgate = MIXER_GATE_0_to_1_8_V(dev->vcm_uv);
-	else if (dev->vcm_uv > 1800000 && dev->vcm_uv < 2600000)
+	else if (dev->vcm_uv > 1800000 && dev->vcm_uv <= 2600000)
 		mixer_vgate = MIXER_GATE_1_8_to_2_6_V(dev->vcm_uv);
 	else
 		return -EINVAL;
