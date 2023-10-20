@@ -434,6 +434,7 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 		return -EINVAL;
 
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
+	no_os_free(desc->extra);
 	no_os_free(desc);
 
 	return 0;
