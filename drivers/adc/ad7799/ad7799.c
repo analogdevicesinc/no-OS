@@ -46,6 +46,7 @@
 #include "no_os_error.h"
 #include "ad7799.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
@@ -176,10 +177,9 @@ int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 	if (ret)
 		return -1;
 
-	no_os_mdelay(10);
-	ret = ad7799_dev_ready(device);
-	if (ret)
-		return -1;
+	// ret = ad7799_dev_ready(device);
+	// if (ret)
+	// 	return -1;
 
 	return 0;
 }
@@ -216,32 +216,23 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 			   uint32_t *reg_data)
 {
 	int32_t ret;
-	uint32_t read_done;
+	uint32_t reg_val;
 
 	ret = ad7799_set_channel(device, ch);
 	if (ret)
 		return -1;
 
-	ret = ad7799_read(device, AD7799_REG_STAT, &read_done);
-
-	ret = ad7799_set_mode(device, AD7799_MODE_SINGLE);
+	ret = ad7799_set_mode(device, AD7799_MODE_CONT);
 	if (ret)
 		return -1;
 
-	ret = ad7799_dev_ready(device);
-	if (ret)
-		return -1;
+	// ret = ad7799_dev_ready(device);
+	// if (ret)
+	// 	return -1;
 
 	ret = ad7799_read(device, AD7799_REG_DATA, reg_data);
 	if (ret)
 		return -1;
-
-	ret = ad7799_read(device, AD7799_REG_STAT, &read_done);
-	if (ret)
-		return -1;
-
-	if (!(read_done & AD7799_STAT_RDY))
-		return -EBUSY;
 
 	return 0;
 }

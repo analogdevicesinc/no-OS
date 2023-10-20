@@ -486,6 +486,8 @@ int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
 		.tx_buff = data,
 		.bytes_number = bytes_number,
 		.cs_change = 1,
+		.cs_delay_first = 3,
+		.cs_delay_last = 3,
 	};
 
 	return max_spi_transfer(desc, &xfer, 1);

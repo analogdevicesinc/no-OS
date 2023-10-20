@@ -98,53 +98,17 @@ int iio_lwip_example_main()
 	ret = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_IO, &reg_data);
 	reg_data |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
 	ret = ad7799_write(ad7793_desc->ad7793_desc, AD7799_REG_IO, reg_data);
+	ret = ad7799_set_mode(ad7793_desc->ad7793_desc, 0x3);
 
 	ret = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_MODE, &reg_data);
-	reg_data &= ~NO_OS_GENMASK(3, 0);
-	reg_data |= 1;
+	reg_data |= NO_OS_GENMASK(3, 0);
 	ret = ad7799_write(ad7793_desc->ad7793_desc, AD7799_REG_MODE, reg_data);
-
-	// struct ad7799_dev *ad7799;
-	// ret = ad7799_init(&ad7799, &ad7799_ip);
-	// if (ret)
-	// 	return ret;
-
-	// ret = ad7799_read(ad7799, AD7799_REG_CONF, &reg_data);
-
-	// /* Enable excitation current */
-	// ret = ad7799_read(ad7799, AD7799_REG_IO, &reg_data);
-	// reg_data |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
-	// ret = ad7799_write(ad7799, AD7799_REG_IO, reg_data);
-
-	// ret = ad7799_read(ad7799, AD7799_REG_MODE, &reg_data);
-	// reg_data |= NO_OS_GENMASK(3, 0);
-	// ret = ad7799_write(ad7799, AD7799_REG_MODE, reg_data);
-
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-	// ret = ad7799_read_channel(ad7799, 0, &adc_data);
-
-	// adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
-	// ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
-	// if (ret)
-	// 	return ret;
 
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "ad7793",
 			.dev = ad7793_desc,
 			.dev_descriptor = ad7793_desc->iio_dev,
-			// .read_buff = &accel_buff,
 		}
 	};
 

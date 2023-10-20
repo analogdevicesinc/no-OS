@@ -88,7 +88,7 @@ static int ad7793_iio_read_scale(void *dev, char *buf, uint32_t len,
 	else
 		val[0] = ad7793->vref_mv * 1000;
 
-	val[1] = 24;
+	val[1] = 23;
 
 	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 1, val);
 }
