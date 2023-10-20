@@ -154,8 +154,8 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 		return -EINVAL;
 	}
 
-	spi_pins.vssel = st->init_param->vssel;
-	cs.vssel = st->init_param->vssel;
+	spi_pins.vssel = st->init_param.vssel;
+	cs.vssel = st->init_param.vssel;
 	MXC_GPIO_Config(&spi_pins);
 	MXC_GPIO_Config(&cs);
 
@@ -240,7 +240,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 	int32_t ret;
 
 	st = desc->extra;
-	eparam = st->init_param;
+	eparam = &st->init_param;
 
 	mxc_spi_pins_t spi_pins_config = {
 		.ss0 = (desc->chip_select == 0) ? true : false,
@@ -320,7 +320,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	descriptor->mode = param->mode;
 	descriptor->bit_order = param->bit_order;
 
-	st->init_param = eparam;
+	st->init_param = *eparam;
 	descriptor->extra = st;
 
 	if (descriptor->device_id >= MXC_SPI_INSTANCES) {

@@ -60,7 +60,7 @@ struct max_spi_init_param {
 };
 
 struct max_spi_state {
-	struct max_spi_init_param *init_param;
+	struct max_spi_init_param init_param;
 	uint32_t cs_delay_first;
 	uint32_t cs_delay_last;
 };
