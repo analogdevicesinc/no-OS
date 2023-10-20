@@ -436,8 +436,28 @@ error_desc:
  */
 static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 {
+	struct max_uart_desc *extra;
+	struct no_os_callback_desc discard = {
+		.peripheral = NO_OS_UART_IRQ,
+		.event = NO_OS_EVT_UART_RX_COMPLETE,
+		.handle = MXC_UART_GET_UART(desc->device_id)
+	};
+	int ret;
+
 	if (!desc)
 		return -EINVAL;
+
+	extra = desc->extra;
+
+	if (desc->rx_fifo) {
+		no_os_irq_disable(extra->nvic, MXC_UART_GET_IRQ(desc->device_id));
+		no_os_irq_unregister_callback(extra->nvic,
+					      MXC_UART_GET_IRQ(desc->device_id),
+					      &discard);
+		no_os_irq_ctrl_remove(extra->nvic);
+		lf256fifo_remove(desc->rx_fifo);
+		no_os_free(desc->rx_fifo);
+	}
 
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
 	no_os_free(desc->extra);
