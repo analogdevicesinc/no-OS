@@ -30,7 +30,9 @@ ifeq (y,$(strip $(IIO_LWIP_EXAMPLE)))
 TINYIIOD = y
 CFLAGS += -DIIO_LWIP_EXAMPLE=1
 CFLAGS += -DNO_OS_LWIP_NETWORKING
+CFLAGS += -DMXQ_ON_NO_OS
 LIBRARIES += lwip
+LIBRARIES += maxq1065_lib
 SRCS += $(PROJECT)/src/examples/iio_lwip_example/iio_lwip_example.c
 INCS += $(PROJECT)/src/examples/iio_lwip_example/iio_lwip_example.h
 endif

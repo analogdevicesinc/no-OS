@@ -121,6 +121,11 @@ INCS += $(NO-OS)/libraries/lwip/configs/lwipcfg.h
 INCS += $(NO-OS)/libraries/lwip/configs/lwipopts.h
 endif
 
+ifneq ($(if $(findstring maxq1065_lib, $(LIBRARIES)), 1),)
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os/maxq1065_api.a
+EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
+endif
+
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
