@@ -50,7 +50,7 @@
 #include "maxim_irq.h"
 #include "no_os_alloc.h"
 
-static struct no_os_list_desc *actions;
+static struct no_os_list_desc *actions[MXC_CFG_GPIO_INSTANCES];
 
 /**
  * @brief GPIO callback function that sets the event and further calls
@@ -61,10 +61,12 @@ static void gpio_irq_callback(void *cbdata)
 {
 	int ret;
 	struct irq_action *action;
-	struct irq_action key;
+	struct irq_action *key = cbdata;
 
-	key.irq_id = ((struct irq_action *)cbdata)->irq_id;
-	ret = no_os_list_read_find(actions, (void **)&action, &key);
+	/* key->handle is the address of the GPIO port */
+	uint32_t id = MXC_GPIO_GET_IDX(key->handle);
+
+	ret = no_os_list_read_find(actions[id], (void **)&action, key);
 	if (ret)
 		return;
 
@@ -127,16 +129,18 @@ static int max_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
 	descriptor->extra = param->extra;
 
-	ret = no_os_list_init(&actions, NO_OS_LIST_PRIORITY_LIST, irq_action_cmp);
-	if (ret)
-		goto error;
+	if (!actions[param->irq_ctrl_id]) {
+		ret = no_os_list_init(&actions[param->irq_ctrl_id],
+				      NO_OS_LIST_PRIORITY_LIST, irq_action_cmp);
+		if (ret)
+			goto error;
+	}
 
 	*desc = descriptor;
 
 	return 0;
 
 error:
-	no_os_list_remove(actions);
 	no_os_free(descriptor);
 
 	return ret;
@@ -154,10 +158,10 @@ static int max_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	while (0 == no_os_list_get_first(actions, (void **)&discard))
+	while (0 == no_os_list_get_first(actions[desc->irq_ctrl_id], (void **)&discard))
 		no_os_free(discard);
 
-	no_os_list_remove(actions);
+	no_os_list_remove(actions[desc->irq_ctrl_id]);
 	no_os_free(desc);
 
 	return 0;
@@ -183,7 +187,8 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || !callback_desc)
 		return -EINVAL;
 
-	ret = no_os_list_read_find(actions, (void **)&action, &action_key);
+	ret = no_os_list_read_find(actions[desc->irq_ctrl_id], (void **)&action,
+				   &action_key);
 	/*
 	* If no action was found, insert a new one, otherwise update it
 	*/
@@ -197,7 +202,7 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		action->ctx = callback_desc->ctx;
 		action->callback = callback_desc->callback;
 
-		ret = no_os_list_add_last(actions, action);
+		ret = no_os_list_add_last(actions[desc->irq_ctrl_id], action);
 		if (ret)
 			goto free_action;
 	} else {
@@ -239,7 +244,8 @@ static int max_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || !callback_desc || irq_id >= MXC_CFG_GPIO_PINS_PORT)
 		return -EINVAL;
 
-	ret = no_os_list_read_find(actions, (void **)&discard_action, &action_key);
+	ret = no_os_list_read_find(actions[desc->irq_ctrl_id], (void **)&discard_action,
+				   &action_key);
 	if (ret)
 		return -ENODEV;
 
