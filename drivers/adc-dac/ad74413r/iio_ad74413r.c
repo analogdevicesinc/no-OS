@@ -378,7 +378,7 @@ static struct iio_channel ad74413r_resistance_input_channels[] = {
 };
 
 static struct iio_channel ad74413r_digital_input_channels[] = {
-	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs)
+	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_digital_attrs)
 };
 
 static struct iio_channel ad74413r_digital_input_loop_channels[] = {
