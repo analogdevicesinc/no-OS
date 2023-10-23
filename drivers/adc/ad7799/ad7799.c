@@ -46,6 +46,7 @@
 #include "no_os_error.h"
 #include "ad7799.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
@@ -176,9 +177,9 @@ int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 	if (ret)
 		return -1;
 
-	ret = ad7799_dev_ready(device);
-	if (ret)
-		return -1;
+	// ret = ad7799_dev_ready(device);
+	// if (ret)
+	// 	return -1;
 
 	return 0;
 }
@@ -215,18 +216,19 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 			   uint32_t *reg_data)
 {
 	int32_t ret;
+	uint32_t reg_val;
 
 	ret = ad7799_set_channel(device, ch);
 	if (ret)
 		return -1;
 
-	ret = ad7799_set_mode(device, AD7799_MODE_SINGLE);
+	ret = ad7799_set_mode(device, AD7799_MODE_CONT);
 	if (ret)
 		return -1;
 
-	ret = ad7799_dev_ready(device);
-	if (ret)
-		return -1;
+	// ret = ad7799_dev_ready(device);
+	// if (ret)
+	// 	return -1;
 
 	ret = ad7799_read(device, AD7799_REG_DATA, reg_data);
 	if (ret)
@@ -259,14 +261,14 @@ int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
 
 	if (device->polarity) { // AD7799_UNIPOLAR
 		temp = (1 << (device->reg_size[AD7799_REG_DATA] * 8));
-		data = data * vref_scaled / temp;
+		data = (uint64_t)data * vref_scaled / temp;
 	} else { // AD7799_BIPOLAR
 		temp = 1 << ((device->reg_size[AD7799_REG_DATA] * 8) - 1);
 
 		if(data >= temp)
-			data = ((data - temp) * vref_scaled) / (temp - 1);
+			data = ((uint64_t)(data - temp) * vref_scaled) / (temp - 1);
 		else
-			data = -(((temp - data) * vref_scaled) / (temp - 1));
+			data = -(((uint64_t)(temp - data) * vref_scaled) / (temp - 1));
 	}
 
 	*data_scaled = data;
@@ -382,6 +384,7 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
 			return 0;
 
 		timeout--;
+		no_os_mdelay(1);
 	}
 
 	return -1;
@@ -416,6 +419,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 	case ID_AD7798:
 		dev->reg_size = ad7798_reg_size;
 		break;
+	case ID_AD7793:
 	case ID_AD7799:
 		dev->reg_size = ad7799_reg_size;
 		break;
@@ -440,6 +444,12 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		return -1;
 
 	switch(dev->chip_type) {
+	case ID_AD7793:
+	if ((chip_id & AD7799_ID_MASK) != ID_AD7793) {
+		printf("Invalid AD7793 Chip ID");
+		return -1;
+	}
+	break;
 	case ID_AD7798:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7798) {
 			printf("Invalid AD7798 Chip ID");

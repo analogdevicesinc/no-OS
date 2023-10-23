@@ -150,6 +150,7 @@
  * @brief Device type (AD7798/AD7799)
  */
 enum ad7799_type {
+	ID_AD7793 = 0xB,
 	/** AD7798 device*/
 	ID_AD7798 = 0x8,
 	/** AD7799 device */
