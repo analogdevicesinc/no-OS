@@ -115,6 +115,15 @@ static struct iio_attribute ad7799_iio_channel_attributes[] = {
 		.show = ad7799_iio_channel_read,
 		.store = NULL
 	},
+	{
+		.name = "raw",
+	},
+	{
+		.name = "scale",
+	},
+	{
+		.name = "offset",
+	},
 	END_ATTRIBUTES_ARRAY,
 };
 
