@@ -174,6 +174,7 @@ int32_t sps_iio_init(struct sps_iio_desc **iiodev,
 	d->evc = 0;
 	d->th_click = iiodevconfig->th_click;
 	d->th_intensity = iiodevconfig->th_intensity;
+	d->pHdev = iiodevconfig->pHdev;
 
 	*iiodev = d;
 
