@@ -103,36 +103,62 @@ static void adpd1080_sync_gpio_cb(void *ctx)
 }
 
 const font_width = 17;
-const font_height = 17;
+const font_height = 24;
 
-void print_gesture(uint8_t g)
+void print_line(unsigned int line, unsigned int xcharoffset, unsigned int xcharclear, char *str)
 {
-	const xstart = font_width * 11;
-	LCD_SetArealColor(xstart, 0, xstart + font_width * 5, font_height + 4, WHITE);
-	GUI_DisString_EN(xstart, 0, gestures[no_os_find_first_set_bit(g)], &Font24, WHITE, BLACK);
+	const int xstart = font_width * xcharoffset;
+	const int ystart = font_height * line;
+	
+	LCD_SetArealColor(xstart, ystart, xstart + font_width * xcharclear, ystart + font_height, WHITE);
+	GUI_DisString_EN(xstart, ystart, str, &Font24, WHITE, BLACK);
 }
 
-void clear_gesture()
+void print_io1(char *io1)
 {
-	const xstart = font_width * 11;
-	LCD_SetArealColor(xstart, 0, xstart + font_width * 5, font_height + 4, WHITE);
+	static char prev[20];
+	if (!strncmp(io1, prev, sizeof(prev)))
+		return;
+	print_line(1, 11, sizeof(prev), io1);
+	strncpy(prev, io1, sizeof(prev));
+}
+
+void print_io2(char *io2)
+{
+	static char prev[20];
+	if (!strncmp(io2, prev, sizeof(prev)))
+		return;
+	print_line(2, 11, sizeof(prev), io2);
+	strncpy(prev, io2, sizeof(prev));
+}
+
+void print_io3(char *io3)
+{
+	static char prev[20];
+	if (!strncmp(io3, prev, sizeof(prev)))
+		return;
+	print_line(3, 11, sizeof(prev), io3);
+	strncpy(prev, io3, sizeof(prev));
 }
 
 void display(struct adpd1080pmb_iio_desc *iiodev)
 {
 	static int64_t no_gestures = 0;
 	if (iiodev->d_gestures) {
-		print_gesture(iiodev->d_gestures);
+		print_line(0, 11, 5, gestures[no_os_find_first_set_bit(iiodev->d_gestures)]);
 		iiodev->d_gestures = 0;
 		no_gestures = 50;
 	} else if (no_gestures > 0)
 		no_gestures--;
 	
 	if (no_gestures == 0) {
-		clear_gesture();
+		print_line(0, 11, 5, "     ");
 		no_gestures--;
 	}
-		
+
+	print_io1(iiodev->io1);
+	print_io2(iiodev->io2);
+	print_io3(iiodev->io3);
 }
 
 static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
@@ -355,7 +381,10 @@ int main(void)
 
 	LCD_Init(D2U_L2R, 800);
 	LCD_Clear(WHITE);
-	GUI_DisString_EN(0, 0, "Gesture  :", &Font24, WHITE, BLACK);
+	print_line(0, 0, 10, "Gesture  :");
+	print_line(1, 0, 10, "IO1  (mA):");
+	print_line(2, 0, 10, "IO2      :");
+	print_line(3, 0, 10, "IO3   (V):");
 
 	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
 	if (status < 0)

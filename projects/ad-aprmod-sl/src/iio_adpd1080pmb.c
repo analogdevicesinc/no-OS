@@ -56,6 +56,9 @@ enum adpd1080pmb_dev_attrs {
 	ADPD1080PMB_DEV_ATTR_GESTURES,
 	ADPD1080PMB_DEV_ATTR_TH_INTENSITY,
 	ADPD1080PMB_DEV_ATTR_TH_CLICK,
+	ADPD1080PMB_DEV_ATTR_IO1,
+	ADPD1080PMB_DEV_ATTR_IO2,
+	ADPD1080PMB_DEV_ATTR_IO3,
 };
 
 int adpd1080pmb_get_fifo_data(struct adpd188_dev *desc, int32_t *buff)
@@ -223,23 +226,34 @@ static int adpd1080pmb_attr_write(void *device, char *buf,
 				  intptr_t priv)
 {
 	int ret;
-	int32_t val;
+	int32_t vals[2];
 	struct adpd1080pmb_iio_desc *iiodev = (struct adpd1080pmb_iio_desc *)device;
-
-	ret = iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	if (ret < 0)
-		return ret;
 
 	switch (priv) {
 	case ADPD1080PMB_DEV_ATTR_TH_INTENSITY:
-		if (val > 2000000)
+		ret = iio_parse_value(buf, IIO_VAL_INT, vals, NULL);
+		if (ret < 0)
+			return ret;
+		if (vals[0] > 2000000)
 			return -EINVAL;
-		iiodev->th_intensity = val;
+		iiodev->th_intensity = vals[0];
 		break;
 	case ADPD1080PMB_DEV_ATTR_TH_CLICK:
-		if (val > 1000)
+		ret = iio_parse_value(buf, IIO_VAL_INT, vals, NULL);
+		if (ret < 0)
+			return ret;
+		if (vals[0] > 1000)
 			return -EINVAL;
-		iiodev->th_click = val;
+		iiodev->th_click = vals[0];
+		break;
+	case ADPD1080PMB_DEV_ATTR_IO1:
+		strncpy(iiodev->io1, buf, 16);
+		break;
+	case ADPD1080PMB_DEV_ATTR_IO2:
+		strncpy(iiodev->io2, buf, 16);
+		break;
+	case ADPD1080PMB_DEV_ATTR_IO3:
+		strncpy(iiodev->io3, buf, 16);
 		break;
 	default:
 		return -EINVAL;
@@ -264,6 +278,21 @@ static struct iio_attribute adpd1080pmb_device_attributes[] = {
 		.name = "th_click",
 		.priv = ADPD1080PMB_DEV_ATTR_TH_CLICK,
 		.show = adpd1080pmb_attr_read,
+		.store = adpd1080pmb_attr_write,
+	},
+	{
+		.name = "io1",
+		.priv = ADPD1080PMB_DEV_ATTR_IO1,
+		.store = adpd1080pmb_attr_write,
+	},
+	{
+		.name = "io2",
+		.priv = ADPD1080PMB_DEV_ATTR_IO2,
+		.store = adpd1080pmb_attr_write,
+	},
+	{
+		.name = "io3",
+		.priv = ADPD1080PMB_DEV_ATTR_IO3,
 		.store = adpd1080pmb_attr_write,
 	},
 	END_ATTRIBUTES_ARRAY
