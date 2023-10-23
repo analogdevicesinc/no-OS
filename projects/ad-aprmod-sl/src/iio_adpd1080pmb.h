@@ -68,6 +68,9 @@ struct adpd1080pmb_iio_desc {
 	int gestureStartY;
 	bool event;
 	int evc;
+	char io1[16];
+	char io2[16];
+	char io3[16];
 };
 
 extern struct iio_device iio_adpd1080pmb_device;
