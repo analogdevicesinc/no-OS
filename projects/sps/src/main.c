@@ -150,7 +150,12 @@ void print_pH(int si_val)
 	char str[5];
 	if (prev == si_val)
 		return;
-	sprintf(str, "%.2f", 7.0 - ((si_val - 20) / 59.71));
+	float pH = 7.0 - ((si_val - 20) / 59.71);
+	if (pH > 14)
+		pH = 14;
+	if (pH < 0)
+		pH = 0;
+	sprintf(str, "%.2f", pH);
 	print_line(4, 11, 4, str);
 	prev = si_val;
 }
