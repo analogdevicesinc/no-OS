@@ -31,3 +31,10 @@ INERTIAL MEASUREMENT UNITS
    :maxdepth: 1
 
    drivers/adis
+
+RF TRANSCEIVER
+==============
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adrv9025
