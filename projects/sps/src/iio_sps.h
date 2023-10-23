@@ -1,6 +1,6 @@
 /***************************************************************************//**
-*   @file   iio_adpd1080pmb.h
-*   @brief  Header of the ADPD188 IIO driver.
+*   @file   iio_sps.h
+*   @brief  SPS Demo
 *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
 * Copyright 2020(c) Analog Devices, Inc.
@@ -36,8 +36,8 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADPD1080PMB_H
-#define IIO_ADPD1080PMB_H
+#ifndef IIO_SPS_H
+#define IIO_SPS_H
 
 #include "adpd188.h"
 #include "iio.h"
@@ -52,13 +52,13 @@ enum gesture {
 
 extern char *gestures[6];
 
-struct adpd1080pmb_iio_init_param {
+struct sps_iio_init_param {
 	struct adpd188_dev *dev;
 	int th_intensity;
 	double th_click;
 };
 
-struct adpd1080pmb_iio_desc {
+struct sps_iio_desc {
 	struct adpd188_dev *dev;
 	int th_intensity;
 	int th_click;
@@ -73,14 +73,14 @@ struct adpd1080pmb_iio_desc {
 	char io3[16];
 };
 
-extern struct iio_device iio_adpd1080pmb_device;
+extern struct iio_device iio_sps_device;
 
-int32_t adpd1080pmb_iio_init(struct adpd1080pmb_iio_desc **dev,
-			 struct adpd1080pmb_iio_init_param *init_param);
-int32_t adpd1080pmb_iio_remove(struct adpd1080pmb_iio_desc *dev);
+int32_t sps_iio_init(struct sps_iio_desc **dev,
+			 struct sps_iio_init_param *init_param);
+int32_t sps_iio_remove(struct sps_iio_desc *dev);
 
-int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev);
-int adpd1080pmb_get_fifo_data(struct adpd188_dev *desc, int32_t *buff);
+int sps_gesture_detection(struct sps_iio_desc *iiodev);
+int sps_get_fifo_data(struct adpd188_dev *desc, int32_t *buff);
 
-#endif /* IIO_ADPD1080PMB_H */
+#endif /* IIO_SPS_H */
 

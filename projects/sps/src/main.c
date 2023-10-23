@@ -55,7 +55,7 @@
 #include "parameters.h"
 #include "adin1110.h"
 #include "lwip_adin1110.h"
-#include "iio_adpd1080pmb.h"
+#include "iio_sps.h"
 #include "LCD_Driver.h"
 #include "LCD_GUI.h"
 #include "fonts.h"
@@ -141,7 +141,7 @@ void print_io3(char *io3)
 	strncpy(prev, io3, sizeof(prev));
 }
 
-void display(struct adpd1080pmb_iio_desc *iiodev)
+void display(struct sps_iio_desc *iiodev)
 {
 	static int64_t no_gestures = 0;
 	if (iiodev->d_gestures) {
@@ -306,7 +306,7 @@ int app_step(void *arg)
 	cnt1++;
 	if (cnt1 == 100) {
 		cnt1 = 0;
-		adpd1080pmb_gesture_detection(arg);
+		sps_gesture_detection(arg);
 	}
 
 	cnt2++;
@@ -544,7 +544,7 @@ int main(void)
 	
 	int ch;
 	int32_t raw[8];
-	while(adpd1080pmb_get_fifo_data(adpd1080_iio_device->drv_dev, raw) == -EAGAIN)
+	while(sps_get_fifo_data(adpd1080_iio_device->drv_dev, raw) == -EAGAIN)
 		; // blocking wait
 	for (ch = 0; ch < 8; ch++) {
 		uint16_t offset;
@@ -563,18 +563,18 @@ int main(void)
 	if (status != 0)
 		return status;
 	
-	struct adpd1080pmb_iio_desc *adpd1080pmb;
-	struct adpd1080pmb_iio_init_param adpd1080pmb_config = {
+	struct sps_iio_desc *sps;
+	struct sps_iio_init_param sps_config = {
 		.dev = adpd1080_iio_device->drv_dev,
 		.th_intensity = 1200000,
 		.th_click = 60,
 	};
-	status = adpd1080pmb_iio_init(&adpd1080pmb, &adpd1080pmb_config);
+	status = sps_iio_init(&sps, &sps_config);
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
 			       &iio_adpd1080_read_buff, NULL, NULL),
-		IIO_APP_DEVICE("adpd1080pmb", adpd1080pmb, &iio_adpd1080pmb_device,
+		IIO_APP_DEVICE("sps", sps, &iio_sps_device,
 				NULL, NULL, NULL)
 	};
 
@@ -583,7 +583,7 @@ int main(void)
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = adpd1080_uart_ip;
 	app_init_param.post_step_callback = app_step;
-	app_init_param.arg = adpd1080pmb;
+	app_init_param.arg = sps;
 	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
 	app_init_param.lwip_param.mac_param = &adin1110_ip;
 	app_init_param.lwip_param.extra = NULL;

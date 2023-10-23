@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adpd1080pmb.c
- *   @brief  Implementation of the ADPD1080 IIO driver.
+ *   @file   iio_sps.c
+ *   @brief  SPS Demo
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -42,7 +42,7 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "iio.h"
-#include "iio_adpd1080pmb.h"
+#include "iio_sps.h"
 
 char *gestures[6] = {
 	"click",
@@ -52,16 +52,16 @@ char *gestures[6] = {
 	"right",
 };
 
-enum adpd1080pmb_dev_attrs {
-	ADPD1080PMB_DEV_ATTR_GESTURES,
-	ADPD1080PMB_DEV_ATTR_TH_INTENSITY,
-	ADPD1080PMB_DEV_ATTR_TH_CLICK,
-	ADPD1080PMB_DEV_ATTR_IO1,
-	ADPD1080PMB_DEV_ATTR_IO2,
-	ADPD1080PMB_DEV_ATTR_IO3,
+enum sps_dev_attrs {
+	SPS_DEV_ATTR_GESTURES,
+	SPS_DEV_ATTR_TH_INTENSITY,
+	SPS_DEV_ATTR_TH_CLICK,
+	SPS_DEV_ATTR_IO1,
+	SPS_DEV_ATTR_IO2,
+	SPS_DEV_ATTR_IO3,
 };
 
-int adpd1080pmb_get_fifo_data(struct adpd188_dev *desc, int32_t *buff)
+int sps_get_fifo_data(struct adpd188_dev *desc, int32_t *buff)
 {
 	uint8_t byte_no;
 	uint32_t s;
@@ -99,7 +99,7 @@ static unsigned isqrt(unsigned long val) {
     return g;
 }
 
-int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
+int sps_gesture_detection(struct sps_iio_desc *iiodev)
 {
 	struct adpd188_dev *desc = iiodev->dev;
 	int32_t buff[8];
@@ -107,7 +107,7 @@ int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 	int gestureStopX, gestureStopY;
 	enum gesture gesture;
 
-	if (adpd1080pmb_get_fifo_data(desc, buff) == -EAGAIN) {
+	if (sps_get_fifo_data(desc, buff) == -EAGAIN) {
 		// no data, no problem, let iiod run
 		return 0;
 	}
@@ -161,11 +161,11 @@ int adpd1080pmb_gesture_detection(struct adpd1080pmb_iio_desc *iiodev)
 	return 0;
 }
 
-int32_t adpd1080pmb_iio_init(struct adpd1080pmb_iio_desc **iiodev,
-			 struct adpd1080pmb_iio_init_param *iiodevconfig)
+int32_t sps_iio_init(struct sps_iio_desc **iiodev,
+			 struct sps_iio_init_param *iiodevconfig)
 {
 	int ret;
-	struct adpd1080pmb_iio_desc *d = (struct adpd1080pmb_iio_desc *)no_os_calloc(1, sizeof(*d));
+	struct sps_iio_desc *d = (struct sps_iio_desc *)no_os_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
@@ -180,36 +180,36 @@ int32_t adpd1080pmb_iio_init(struct adpd1080pmb_iio_desc **iiodev,
 	return 0;
 }
 
-int32_t adpd1080pmb_iio_remove(struct adpd1080pmb_iio_desc *iiodev)
+int32_t sps_iio_remove(struct sps_iio_desc *iiodev)
 {
 	no_os_free(iiodev);
 	return 0;
 }
 
-static int adpd1080pmb_attr_read(void *device, char *buf, uint32_t len,
+static int sps_attr_read(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
 	int ret;
-	struct adpd1080pmb_iio_desc *iiodev = (struct adpd1080pmb_iio_desc *)device;
+	struct sps_iio_desc *iiodev = (struct sps_iio_desc *)device;
 	int32_t vals[2];
 	int type;
 	int valcount;
 
 
 	switch (priv) {
-	case ADPD1080PMB_DEV_ATTR_GESTURES:
+	case SPS_DEV_ATTR_GESTURES:
 		vals[0] = iiodev->gestures;
 		iiodev->gestures = 0; // clear on read
 		type = IIO_VAL_INT;
 		valcount = 1;
 		break;
-	case ADPD1080PMB_DEV_ATTR_TH_INTENSITY:
+	case SPS_DEV_ATTR_TH_INTENSITY:
 		vals[0] = iiodev->th_intensity;
 		type = IIO_VAL_INT;
 		valcount = 1;
 		break;
-	case ADPD1080PMB_DEV_ATTR_TH_CLICK:
+	case SPS_DEV_ATTR_TH_CLICK:
 		vals[0] = iiodev->th_click;
 		type = IIO_VAL_INT;
 		valcount = 1;
@@ -221,16 +221,16 @@ static int adpd1080pmb_attr_read(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, type, valcount, vals);
 }
 
-static int adpd1080pmb_attr_write(void *device, char *buf,
+static int sps_attr_write(void *device, char *buf,
 				  uint32_t len, const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
 	int ret;
 	int32_t vals[2];
-	struct adpd1080pmb_iio_desc *iiodev = (struct adpd1080pmb_iio_desc *)device;
+	struct sps_iio_desc *iiodev = (struct sps_iio_desc *)device;
 
 	switch (priv) {
-	case ADPD1080PMB_DEV_ATTR_TH_INTENSITY:
+	case SPS_DEV_ATTR_TH_INTENSITY:
 		ret = iio_parse_value(buf, IIO_VAL_INT, vals, NULL);
 		if (ret < 0)
 			return ret;
@@ -238,7 +238,7 @@ static int adpd1080pmb_attr_write(void *device, char *buf,
 			return -EINVAL;
 		iiodev->th_intensity = vals[0];
 		break;
-	case ADPD1080PMB_DEV_ATTR_TH_CLICK:
+	case SPS_DEV_ATTR_TH_CLICK:
 		ret = iio_parse_value(buf, IIO_VAL_INT, vals, NULL);
 		if (ret < 0)
 			return ret;
@@ -246,13 +246,13 @@ static int adpd1080pmb_attr_write(void *device, char *buf,
 			return -EINVAL;
 		iiodev->th_click = vals[0];
 		break;
-	case ADPD1080PMB_DEV_ATTR_IO1:
+	case SPS_DEV_ATTR_IO1:
 		strncpy(iiodev->io1, buf, 16);
 		break;
-	case ADPD1080PMB_DEV_ATTR_IO2:
+	case SPS_DEV_ATTR_IO2:
 		strncpy(iiodev->io2, buf, 16);
 		break;
-	case ADPD1080PMB_DEV_ATTR_IO3:
+	case SPS_DEV_ATTR_IO3:
 		strncpy(iiodev->io3, buf, 16);
 		break;
 	default:
@@ -262,43 +262,43 @@ static int adpd1080pmb_attr_write(void *device, char *buf,
 	return 0;
 }
 
-static struct iio_attribute adpd1080pmb_device_attributes[] = {
+static struct iio_attribute sps_device_attributes[] = {
 	{
 		.name = "gestures",
-		.priv = ADPD1080PMB_DEV_ATTR_GESTURES,
-		.show = adpd1080pmb_attr_read,
+		.priv = SPS_DEV_ATTR_GESTURES,
+		.show = sps_attr_read,
 	},
 	{
 		.name = "th_intensity",
-		.priv = ADPD1080PMB_DEV_ATTR_TH_INTENSITY,
-		.show = adpd1080pmb_attr_read,
-		.store = adpd1080pmb_attr_write,
+		.priv = SPS_DEV_ATTR_TH_INTENSITY,
+		.show = sps_attr_read,
+		.store = sps_attr_write,
 	},
 	{
 		.name = "th_click",
-		.priv = ADPD1080PMB_DEV_ATTR_TH_CLICK,
-		.show = adpd1080pmb_attr_read,
-		.store = adpd1080pmb_attr_write,
+		.priv = SPS_DEV_ATTR_TH_CLICK,
+		.show = sps_attr_read,
+		.store = sps_attr_write,
 	},
 	{
 		.name = "io1",
-		.priv = ADPD1080PMB_DEV_ATTR_IO1,
-		.store = adpd1080pmb_attr_write,
+		.priv = SPS_DEV_ATTR_IO1,
+		.store = sps_attr_write,
 	},
 	{
 		.name = "io2",
-		.priv = ADPD1080PMB_DEV_ATTR_IO2,
-		.store = adpd1080pmb_attr_write,
+		.priv = SPS_DEV_ATTR_IO2,
+		.store = sps_attr_write,
 	},
 	{
 		.name = "io3",
-		.priv = ADPD1080PMB_DEV_ATTR_IO3,
-		.store = adpd1080pmb_attr_write,
+		.priv = SPS_DEV_ATTR_IO3,
+		.store = sps_attr_write,
 	},
 	END_ATTRIBUTES_ARRAY
 };
 
-struct iio_device iio_adpd1080pmb_device = {
-	.attributes = adpd1080pmb_device_attributes,
+struct iio_device iio_sps_device = {
+	.attributes = sps_device_attributes,
 };
 
