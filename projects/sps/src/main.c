@@ -571,9 +571,40 @@ int main(void)
 	};
 	status = sps_iio_init(&sps, &sps_config);
 
+	struct ad7793_iio_desc *ad7793_desc;
+	struct ad7793_iio_param iio_param = {
+		.ad7793_ip = ad7799_ip,
+	};
+
+	status = ad7793_iio_init(&ad7793_desc, &iio_param);
+	if (status)
+		return status;
+
+	status = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_CONF, &reg_data);
+
+	/* Enable excitation current */
+	status = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_IO, &reg_data);
+	reg_data |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
+	status = ad7799_write(ad7793_desc->ad7793_desc, AD7799_REG_IO, reg_data);
+	status = ad7799_set_mode(ad7793_desc->ad7793_desc, 0x3);
+
+	status = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_MODE, &reg_data);
+	reg_data |= NO_OS_GENMASK(3, 0);
+	status = ad7799_write(ad7793_desc->ad7793_desc, AD7799_REG_MODE, reg_data);
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "ad7793",
+			.dev = ad7793_desc,
+			.dev_descriptor = ad7793_desc->iio_dev,
+		}
+	};
+
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
 			       &iio_adpd1080_read_buff, NULL, NULL),
+		IIO_APP_DEVICE("ad7793", ad7793_desc, &iio_sps_device,
+				NULL, NULL, NULL)
 		IIO_APP_DEVICE("sps", sps, &iio_sps_device,
 				NULL, NULL, NULL)
 	};
