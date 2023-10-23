@@ -59,6 +59,9 @@
 #include "LCD_Driver.h"
 #include "LCD_GUI.h"
 #include "fonts.h"
+#include "ad7799.h"
+#include "iio_ad7793.h"
+#include "iio_ad7799.h"
 
 uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
 
@@ -116,7 +119,7 @@ void print_line(unsigned int line, unsigned int xcharoffset, unsigned int xcharc
 
 void print_io1(char *io1)
 {
-	static char prev[20];
+	static char prev[16];
 	if (!strncmp(io1, prev, sizeof(prev)))
 		return;
 	print_line(1, 11, sizeof(prev), io1);
@@ -125,7 +128,7 @@ void print_io1(char *io1)
 
 void print_io2(char *io2)
 {
-	static char prev[20];
+	static char prev[16];
 	if (!strncmp(io2, prev, sizeof(prev)))
 		return;
 	print_line(2, 11, sizeof(prev), io2);
@@ -134,16 +137,28 @@ void print_io2(char *io2)
 
 void print_io3(char *io3)
 {
-	static char prev[20];
+	static char prev[16];
 	if (!strncmp(io3, prev, sizeof(prev)))
 		return;
 	print_line(3, 11, sizeof(prev), io3);
 	strncpy(prev, io3, sizeof(prev));
 }
 
+void print_pH(int si_val)
+{
+	static int prev;
+	char str[5];
+	if (prev == si_val)
+		return;
+	sprintf(str, "%.2f", 7.0 - ((si_val - 20) / 59.71));
+	print_line(4, 11, 4, str);
+	prev = si_val;
+}
+
 void display(struct sps_iio_desc *iiodev)
 {
 	static int64_t no_gestures = 0;
+	int si_val;
 	if (iiodev->d_gestures) {
 		print_line(0, 11, 5, gestures[no_os_find_first_set_bit(iiodev->d_gestures)]);
 		iiodev->d_gestures = 0;
@@ -159,6 +174,9 @@ void display(struct sps_iio_desc *iiodev)
 	print_io1(iiodev->io1);
 	print_io2(iiodev->io2);
 	print_io3(iiodev->io3);
+
+	ad7799_read_channel(iiodev->pHdev, 0, &si_val);
+	print_pH(si_val);
 }
 
 static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
@@ -327,8 +345,8 @@ int main(void)
 
 	struct no_os_uart_init_param adpd1080_uart_ip = {
 		.device_id = UART_DEVICE_ID,
-		.irq_id = UART_IRQ_ID,
-		.asynchronous_rx = true,
+		.irq_id = UART_IRQ_ID, // unused in this demo
+		.asynchronous_rx = false,
 		.baud_rate = UART_BAUDRATE,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
@@ -379,12 +397,50 @@ int main(void)
 
 	no_os_init();
 
-	LCD_Init(D2U_L2R, 800);
-	LCD_Clear(WHITE);
-	print_line(0, 0, 10, "Gesture  :");
-	print_line(1, 0, 10, "IO1  (mA):");
-	print_line(2, 0, 10, "IO2      :");
-	print_line(3, 0, 10, "IO3   (V):");
+struct max_spi_init_param ad7799_spi_extra_ip  = {
+		.num_slaves = 1,
+		.polarity = SPI_SS_POL_LOW,
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	};
+
+	const struct no_os_spi_init_param ad7799_spi_ip = {
+		.device_id = 4,
+		.max_speed_hz = 1000000,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = &max_spi_ops,
+		.chip_select = 0,
+		.extra = &ad7799_spi_extra_ip,
+	};
+
+	const struct ad7799_init_param ad7799_ip = {
+		.spi_init = ad7799_spi_ip,
+		.chip_type = ID_AD7793,
+		.polarity = 0,
+		.vref_mv = 1050,
+		.gain = 1,
+		.precision = AD7799_PRECISION_MV
+	};
+	struct ad7793_iio_desc *ad7793_iiodev;
+	struct ad7793_iio_param ad7793_param = {
+		.ad7793_ip = ad7799_ip,
+	};
+
+	status = ad7793_iio_init(&ad7793_iiodev, &ad7793_param);
+	if (status)
+		return status;
+
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_data);
+
+	/* Enable excitation current */
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, &reg_data);
+	reg_data |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
+	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, reg_data);
+	status = ad7799_set_mode(ad7793_iiodev->ad7793_desc, 0x3);
+
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, &reg_data);
+	reg_data |= NO_OS_GENMASK(3, 0);
+	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, reg_data);
 
 	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
 	if (status < 0)
@@ -568,43 +624,15 @@ int main(void)
 		.dev = adpd1080_iio_device->drv_dev,
 		.th_intensity = 1200000,
 		.th_click = 60,
+		.pHdev = ad7793_iiodev->ad7793_desc,
 	};
 	status = sps_iio_init(&sps, &sps_config);
-
-	struct ad7793_iio_desc *ad7793_desc;
-	struct ad7793_iio_param iio_param = {
-		.ad7793_ip = ad7799_ip,
-	};
-
-	status = ad7793_iio_init(&ad7793_desc, &iio_param);
-	if (status)
-		return status;
-
-	status = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_CONF, &reg_data);
-
-	/* Enable excitation current */
-	status = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_IO, &reg_data);
-	reg_data |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
-	status = ad7799_write(ad7793_desc->ad7793_desc, AD7799_REG_IO, reg_data);
-	status = ad7799_set_mode(ad7793_desc->ad7793_desc, 0x3);
-
-	status = ad7799_read(ad7793_desc->ad7793_desc, AD7799_REG_MODE, &reg_data);
-	reg_data |= NO_OS_GENMASK(3, 0);
-	status = ad7799_write(ad7793_desc->ad7793_desc, AD7799_REG_MODE, reg_data);
-
-	struct iio_app_device iio_devices[] = {
-		{
-			.name = "ad7793",
-			.dev = ad7793_desc,
-			.dev_descriptor = ad7793_desc->iio_dev,
-		}
-	};
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
 			       &iio_adpd1080_read_buff, NULL, NULL),
-		IIO_APP_DEVICE("ad7793", ad7793_desc, &iio_sps_device,
-				NULL, NULL, NULL)
+		IIO_APP_DEVICE("ad7793", ad7793_iiodev, &ad7799_iio_descriptor,
+				NULL, NULL, NULL),
 		IIO_APP_DEVICE("sps", sps, &iio_sps_device,
 				NULL, NULL, NULL)
 	};
@@ -625,7 +653,13 @@ int main(void)
 	if (status)
 		return status;
 	
-	//no_os_uart_stdio(app->uart_desc);
+	LCD_Init(D2U_L2R, 800);
+	LCD_Clear(WHITE);
+	print_line(0, 0, 10, "Gesture  :");
+	print_line(1, 0, 10, "IO1  (mA):");
+	print_line(2, 0, 10, "IO2      :");
+	print_line(3, 0, 10, "IO3   (V):");
+	print_line(4, 0, 10, "pH       :");
 
 	return iio_app_run(app);
 }

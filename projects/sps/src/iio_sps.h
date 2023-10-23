@@ -56,6 +56,7 @@ struct sps_iio_init_param {
 	struct adpd188_dev *dev;
 	int th_intensity;
 	double th_click;
+	void * pHdev;
 };
 
 struct sps_iio_desc {
@@ -71,6 +72,7 @@ struct sps_iio_desc {
 	char io1[16];
 	char io2[16];
 	char io3[16];
+	void *pHdev;
 };
 
 extern struct iio_device iio_sps_device;
