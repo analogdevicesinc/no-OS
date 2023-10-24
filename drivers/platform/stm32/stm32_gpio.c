@@ -112,6 +112,24 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 		extra->port = GPIOH;
 	}
 #endif
+#ifdef GPIOI
+	else if (param->port == 8) {
+		__HAL_RCC_GPIOI_CLK_ENABLE();
+		extra->port = GPIOI;
+	}
+#endif
+#ifdef GPIOJ
+	else if (param->port == 9) {
+		__HAL_RCC_GPIOJ_CLK_ENABLE();
+		extra->port = GPIOJ;
+	}
+#endif
+#ifdef GPIOK
+	else if (param->port == 10) {
+		__HAL_RCC_GPIOK_CLK_ENABLE();
+		extra->port = GPIOK;
+	}
+#endif
 	else
 		return -EINVAL;
 
