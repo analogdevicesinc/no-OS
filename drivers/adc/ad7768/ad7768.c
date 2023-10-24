@@ -44,6 +44,8 @@
 #include <stdlib.h>
 #include "ad7768.h"
 #include "no_os_alloc.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 const uint8_t standard_pin_ctrl_mode_sel[3][4] = {
 //		MCLK/1,	MCLK/2,	MCLK/4,	MCLK/8
@@ -626,20 +628,86 @@ int32_t ad7768_setup(ad7768_dev **device,
 	ad7768_dev *dev;
 	int32_t ret;
 
-	dev = (ad7768_dev *)no_os_malloc(sizeof(*dev));
+	ret = ad7768_setup_begin(&dev, init_param);
+	if (ret)
+		return ret;
+
+	ret = ad7768_setup_finish(dev, init_param);
+	if (ret)
+		goto error;
+
+	*device = dev;
+
+	return 0;
+error:
+	no_os_spi_remove(dev->spi_desc);
+	no_os_gpio_remove(dev->gpio_reset);
+	no_os_free(dev);
+
+	return ret;
+}
+
+/**
+ * Begin initializing the device.
+ * @param device - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 					   parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7768_setup_begin(ad7768_dev **device,
+			   ad7768_init_param init_param)
+{
+	ad7768_dev *dev;
+	int32_t ret;
+
+	dev = (ad7768_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if (ret)
+		goto error;
 
 	dev->pin_spi_input_value = init_param.pin_spi_input_value;
 
 	dev->pin_spi_ctrl = dev->pin_spi_input_value ?
 			    AD7768_SPI_CTRL : AD7768_PIN_CTRL;
 
-	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	ret = no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	if (ret)
+		goto error_1;
 	dev->gpio_reset_value = init_param.gpio_reset_value;
+
+	ret = no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
+	if (ret)
+		goto error_1;
+
+	dev->mclk = init_param.mclk;
+	dev->datalines = init_param.datalines;
+
+	*device = dev;
+
+	return 0;
+error_1:
+	no_os_spi_remove(dev->spi_desc);
+error:
+	no_os_free(dev);
+
+	return ret;
+}
+
+/**
+ * Finish initializing the device.
+ * @param dev - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 					   parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7768_setup_finish(ad7768_dev *dev,
+			    ad7768_init_param init_param)
+{
+	int32_t ret = 0;
 
 	ret |= no_os_gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
 	ret |= no_os_gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
@@ -674,10 +742,194 @@ int32_t ad7768_setup(ad7768_dev **device,
 	ad7768_set_dclk_div(dev, dev->dclk_div);
 	ad7768_set_conv_op(dev, dev->conv_op);
 
-	*device = dev;
-
-	if (!ret)
+	if (ret) {
+		no_os_gpio_remove(dev->gpio_mode0);
+		no_os_gpio_remove(dev->gpio_mode1);
+		no_os_gpio_remove(dev->gpio_mode2);
+		no_os_gpio_remove(dev->gpio_mode3);
+	} else
 		printf("AD7768 successfully initialized\n");
 
 	return ret;
+}
+
+/**
+ * Set clock divisors.
+ * @param dev - The device structure.
+ * @param freq - The required frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad7768_set_clk_divs(ad7768_dev *dev,
+			       unsigned int freq)
+{
+	unsigned int mclk, dclk, dclk_div, i;
+	struct ad7768_freq_config f_cfg;
+	unsigned int chan_per_doutx;
+	int ret;
+
+	mclk = dev->mclk;
+
+	chan_per_doutx = AD7768_NUM_CHANNELS / dev->datalines;
+
+	for (i = 0; i < dev->avail_freq[dev->power_mode_raw].n_freqs; i++) {
+		f_cfg = dev->avail_freq[dev->power_mode_raw].freq_cfg[i];
+		if (freq == f_cfg.freq)
+			break;
+	}
+	if (i == dev->avail_freq[dev->power_mode_raw].n_freqs)
+		return -EINVAL;
+
+	dclk = f_cfg.freq * AD7768_SAMPLE_SIZE * chan_per_doutx;
+	if (dclk > mclk)
+		return -EINVAL;
+
+	/* Set dclk_div to the nearest power of 2 less than the original value */
+	dclk_div = NO_OS_DIV_ROUND_CLOSEST_ULL(mclk, dclk);
+	if (dclk_div > AD7768_MAX_DCLK_DIV)
+		dclk_div = AD7768_MAX_DCLK_DIV;
+	else if (no_os_hweight32(dclk_div) != 1)
+		dclk_div = 1 << (no_os_find_last_set_bit(dclk_div) - 1);
+
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_INTERFACE_CFG,
+				    AD7768_INTERFACE_CFG_DCLK_DIV_MSK,
+				    AD7768_INTERFACE_CFG_DCLK_DIV_MODE(dclk_div));
+	if (ret)
+		return ret;
+
+	return ad7768_spi_write_mask(dev, AD7768_REG_CH_MODE_A,
+				     AD7768_CH_MODE_DEC_RATE_MSK,
+				     AD7768_CH_MODE_DEC_RATE(f_cfg.dec_rate));
+}
+
+/**
+ * Set sampling frequency.
+ * @param dev - The device structure.
+ * @param freq - The required sampling frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad7768_set_sampling_freq(ad7768_dev *dev,
+				    unsigned int freq)
+{
+	int ret;
+
+	if (!freq)
+		return -EINVAL;
+
+	ret = ad7768_set_clk_divs(dev, freq);
+	if (ret)
+		return ret;
+
+	dev->sampling_freq = freq;
+
+	return 0;
+}
+
+/**
+ * Sync.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad7768_sync(ad7768_dev *dev)
+{
+	int ret;
+
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_DATA_CTRL,
+				    AD7768_DATA_CONTROL_SPI_SYNC_MSK,
+				    AD7768_DATA_CONTROL_SPI_SYNC_CLEAR);
+	if (ret)
+		return ret;
+
+	return ad7768_spi_write_mask(dev, AD7768_REG_DATA_CTRL,
+				     AD7768_DATA_CONTROL_SPI_SYNC_MSK,
+				     AD7768_DATA_CONTROL_SPI_SYNC);
+}
+
+/**
+ * Set available sampling frequency.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+void ad7768_set_available_sampl_freq(ad7768_dev *dev)
+{
+	unsigned int mode;
+	unsigned int dec;
+	unsigned int mclk = dev->mclk;
+	struct ad7768_avail_freq *avail_freq;
+
+	for (mode = 0; mode < AD7768_NUM_POWER_MODES; mode++) {
+		avail_freq = &dev->avail_freq[mode];
+		for (dec = NO_OS_ARRAY_SIZE(ad7768_dec_rate_vals); dec > 0; dec--) {
+			struct ad7768_freq_config freq_cfg;
+
+			freq_cfg.dec_rate = dec - 1;
+			freq_cfg.freq = mclk / (ad7768_dec_rate_vals[dec - 1] *
+						ad7768_mclk_div_vals[mode]);
+
+			avail_freq->freq_cfg[avail_freq->n_freqs++] = freq_cfg;
+		}
+	}
+
+	/* The max frequency is not supported in one data line configuration */
+	if (dev->datalines == 1)
+		dev->avail_freq[AD7768_FAST_MODE].n_freqs--;
+}
+
+/**
+ * Set power mode and sampling frequency.
+ * @param dev - The device structure.
+ * @param mode - The required power mode (raw value).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad7768_set_power_mode_and_sampling_freq(ad7768_dev *dev,
+		enum ad7768_power_modes_raw mode)
+{
+	struct ad7768_avail_freq avail_freq;
+	int max_mode_freq;
+	uint8_t regval;
+	int ret;
+
+	dev->power_mode_raw = mode;
+
+	regval = ad7768_map_power_mode_to_regval(mode);
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_PWR_MODE,
+				    AD7768_PWR_MODE_POWER_MODE_MSK,
+				    AD7768_PWR_MODE_POWER_MODE(regval));
+	if (ret)
+		return ret;
+
+	/* The values for the powermode correspond for mclk div */
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_PWR_MODE,
+				    AD7768_PWR_MODE_MCLK_DIV_MSK,
+				    AD7768_PWR_MODE_MCLK_DIV(regval));
+	if (ret)
+		return ret;
+
+	/* Set the max freq of the selected power mode */
+	avail_freq = dev->avail_freq[mode];
+	max_mode_freq = avail_freq.freq_cfg[avail_freq.n_freqs - 1].freq;
+	ret = ad7768_set_sampling_freq(dev, max_mode_freq);
+	if (ret)
+		return ret;
+
+	return ad7768_sync(dev);
+}
+
+/**
+ * Free the resources allocated by ad7768_setup().
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad7768_remove(ad7768_dev *dev)
+{
+	no_os_spi_remove(dev->spi_desc);
+
+	no_os_gpio_remove(dev->gpio_reset);
+	no_os_gpio_remove(dev->gpio_mode0);
+	no_os_gpio_remove(dev->gpio_mode1);
+	no_os_gpio_remove(dev->gpio_mode2);
+	no_os_gpio_remove(dev->gpio_mode3);
+
+	no_os_free(dev);
+
+	return 0;
 }
