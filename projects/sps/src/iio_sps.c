@@ -141,15 +141,15 @@ int sps_gesture_detection(struct sps_iio_desc *iiodev)
 		else {
 			if (abs(m) > 1000) {
 				if (iiodev->gestureStartY > gestureStopY)
-					gesture = up;
-				else
 					gesture = down;
+				else
+					gesture = up;
 			}
 			else {
 				if (iiodev->gestureStartX > gestureStopX)
-					gesture = right;
-				else
 					gesture = left;
+				else
+					gesture = right;
 			}
 		}
 		if (!iiodev->event) {
