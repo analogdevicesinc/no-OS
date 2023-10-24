@@ -12,8 +12,12 @@
 SRCS += $(PROJECT)/src/ad738x_fmc.c
 SRCS += $(DRIVERS)/adc/ad738x/ad738x.c \
 	$(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_pwm.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
+	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm.c \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_mutex.c
@@ -25,7 +29,9 @@ INCS += $(PROJECT)/src/app_config.h \
 	$(DRIVERS)/adc/ad738x/ad738x.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
-	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
+	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h					
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
@@ -34,4 +40,5 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_alloc.h \
-	$(INCLUDE)/no_os_mutex.h 
+	$(INCLUDE)/no_os_mutex.h \
+	$(INCLUDE)/no_os_pwm.h

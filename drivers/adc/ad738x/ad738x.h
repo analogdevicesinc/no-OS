@@ -44,9 +44,16 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdbool.h>
+
 #include "no_os_util.h"
-#if defined(USE_STANDARD_SPI)
+#if !defined(USE_STANDARD_SPI)
+#include "spi_engine.h"
+#include "clk_axi_clkgen.h"
+#include "no_os_pwm.h"
+#else
 #include "no_os_spi.h"
+#include "no_os_pwm.h"
 #endif
 
 /******************************************************************************/
@@ -158,6 +165,10 @@ struct ad738x_dev {
 #if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen	*clkgen;
+	/* Trigger conversion PWM generator descriptor */
+	struct no_os_pwm_desc		*trigger_pwm_desc;
 #endif
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
@@ -173,6 +184,13 @@ struct ad738x_init_param {
 #if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* PWM generator init structure */
+	struct no_os_pwm_init_param	*trigger_pwm_init;
+	/* Clock gen for hdl design init structure */
+	struct axi_clkgen_init	*clkgen_init;
+	/* Clock generator rate */
+	uint32_t		        axi_clkgen_rate;
+
 #endif
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;

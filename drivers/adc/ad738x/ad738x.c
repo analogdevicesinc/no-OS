@@ -41,16 +41,19 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+
 #include "stdio.h"
+#include <string.h>
 #include "stdlib.h"
 #include "stdbool.h"
+#include "ad738x.h"
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
-#include "ad738x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -346,6 +349,26 @@ int32_t ad738x_init(struct ad738x_dev **device,
 		return -1;
 
 #if !defined(USE_STANDARD_SPI)
+	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
+	if (ret != 0) {
+		printf("error: %s: axi_clkgen_init() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_dev;
+	}
+
+	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
+	if (ret != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_clkgen;
+	}
+#endif
+
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+		if (ret != 0)
+			goto error_spi;
+
+#if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 #endif
@@ -368,7 +391,20 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	no_os_mdelay(1000);
 
 	return ret;
+
+	error_spi:
+		no_os_spi_remove(dev->spi_desc);
+	error_dev:
+		no_os_free(dev);
+
+	error_clkgen:
+#if !defined(USE_STANDARD_SPI)
+		axi_clkgen_remove(dev->clkgen);
+#endif
 }
+
+
+
 /**
  * @brief Free the resources allocated by ad738x_init().
  * @param dev - The device structure.

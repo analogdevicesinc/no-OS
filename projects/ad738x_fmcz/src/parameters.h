@@ -41,10 +41,17 @@
 #define PARAMETERS_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <xparameters.h>
+
+/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD738X_DMA_BASEADDR             XPAR_AXI_AD738X_DMA_BASEADDR
-#define AD738X_SPI_ENGINE_BASEADDR      XPAR_SPI_AXI_BASEADDR
+#define AD738X_SPI_ENGINE_BASEADDR      XPAR_SPI_AD738X_ADC_SPI_AD738X_ADC_AXI_REGMAP_BASEADDR
+#define AD738x_RX_CLKGEN_BASEADDR       XPAR_SPI_CLKGEN_BASEADDR
+#define AXI_PWMGEN_BASEADDR             XPAR_SPI_TRIGGER_GEN_BASEADDR
 #define AD738X_SPI_CS                   0
 
 #endif /* PARAMETERS_H_ */
