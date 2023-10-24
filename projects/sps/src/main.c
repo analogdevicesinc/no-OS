@@ -658,7 +658,7 @@ struct max_spi_init_param ad7799_spi_extra_ip  = {
 	if (status)
 		return status;
 	
-	LCD_Init(D2U_L2R, 800);
+	LCD_Init(U2D_R2L, 800);
 	LCD_Clear(WHITE);
 	print_line(0, 0, 10, "Gesture  :");
 	print_line(1, 0, 10, "IO1  (mA):");
