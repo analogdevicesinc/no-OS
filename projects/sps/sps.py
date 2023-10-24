@@ -10,7 +10,7 @@ down = 4
 left = 8
 right = 16
 
-contexturi = "ip:10.48.65.193"
+contexturi = "ip:192.168.20.120"
 
 # apard32690_ctx = iio.Context("ip:192.168.20.112")
 
@@ -67,7 +67,7 @@ ad74413r.find_channel("voltage2", False).attrs["threshold"].value = str(5000)
 ch3_offset = int(ad74413r.find_channel("voltage3", False).attrs["offset"].value)
 ch3_scale= float(ad74413r.find_channel("voltage3", False).attrs["scale"].value)
 
-ctx = iio.Context("ip:192.168.20.111")
+ctx = iio.Context("ip:192.168.20.112")
 sps = ctx.find_device("sps")
 
 pos = 0
@@ -79,8 +79,8 @@ while True:
 	elif g & right:
 		pos += 750
 	
-	if (pos < 1310):
-		pos = 1310
+	if (pos < 1510):
+		pos = 1510
 	
 	if (pos > 6552):
 		pos = 6552
