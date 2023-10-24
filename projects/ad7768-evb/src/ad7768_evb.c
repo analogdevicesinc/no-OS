@@ -48,6 +48,7 @@
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
 #include "no_os_error.h"
+#include "no_os_delay.h"
 #include "axi_adc_core.h"
 #include <xil_io.h>
 #include <stdio.h>
@@ -58,87 +59,6 @@
 #include "iio_axi_adc.h"
 #include "xilinx_uart.h"
 #endif
-
-/***************************************************************************//**
-* @brief ad7768evb_clear_status
-*******************************************************************************/
-void ad7768_evb_clear_status(struct xil_gpio_init_param *brd_gpio_init)
-{
-	uint8_t i;
-	struct no_os_gpio_init_param temp_init = {
-		.number = 0,
-		.platform_ops = &xil_gpio_ops,
-		.extra = brd_gpio_init
-	};
-	struct no_os_gpio_desc *temp_desc;
-	int32_t ret;
-
-	for (i = 0; i < 32; i ++) {
-		temp_init.number = UP_STATUS_OFFSET + i;
-		ret = no_os_gpio_get(&temp_desc, &temp_init);
-		if (ret != 0)
-			return;
-		no_os_gpio_direction_output(temp_desc, NO_OS_GPIO_HIGH);
-		ret = no_os_gpio_remove(temp_desc);
-		if (ret != 0)
-			return;
-	}
-}
-
-/***************************************************************************//**
-* @brief ad7768evb_verify_status
-*******************************************************************************/
-uint8_t ad7768_evb_verify_status(struct xil_gpio_init_param *brd_gpio_init)
-{
-	uint8_t i;
-	uint8_t value;
-	uint8_t status = 0;
-	struct no_os_gpio_init_param temp_init = {
-		.number = 0,
-		.platform_ops = &xil_gpio_ops,
-		.extra = brd_gpio_init
-	};
-	struct no_os_gpio_desc *temp_desc;
-	int32_t ret;
-
-	for (i = 0; i < 32; i ++) {
-		temp_init.number = UP_STATUS_OFFSET + i;
-		ret = no_os_gpio_get(&temp_desc, &temp_init);
-		if (ret != 0)
-			return -1;
-		no_os_gpio_direction_input(temp_desc);
-		no_os_gpio_get_value(temp_desc, &value);
-		ret = no_os_gpio_remove(temp_desc);
-		if (ret != 0)
-			return -1;
-		status += value;
-	}
-
-	return status;
-}
-
-static int32_t ad7768_if_gpio_setup(uint32_t gpio_no, uint8_t gpio_val)
-{
-	struct xil_gpio_init_param ps_gpio_init = {
-		.device_id = GPIO_DEVICE_ID,
-		.type = GPIO_PS
-	};
-	struct no_os_gpio_init_param temp_init = {
-		.number = gpio_no,
-		.platform_ops = &xil_gpio_ops,
-		.extra = &ps_gpio_init
-	};
-	struct no_os_gpio_desc *temp_desc;
-	int32_t ret;
-
-	ret = no_os_gpio_get(&temp_desc, &temp_init);
-	if (ret != 0)
-		return -1;
-	ret = no_os_gpio_direction_output(temp_desc, gpio_val);
-	if (ret != 0)
-		return -1;
-	return no_os_gpio_remove(temp_desc);
-}
 
 /***************************************************************************//**
 * @brief main
@@ -185,32 +105,12 @@ int main(void)
 			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
-		.gpio_mode0 = {
-			.number = GPIO_MODE_0_GPIO_0,
-			.platform_ops = &xil_gpio_ops,
-			.extra = &xil_gpio_initial
-		},
-		.gpio_mode1 = {
-			.number = GPIO_MODE_1_GPIO_1,
-			.platform_ops = &xil_gpio_ops,
-			.extra = &xil_gpio_initial
-		},
-		.gpio_mode2 = {
-			.number = GPIO_MODE_2_GPIO_2,
-			.platform_ops = &xil_gpio_ops,
-			.extra = &xil_gpio_initial
-		},
-		.gpio_mode3 = {
-			.number = GPIO_MODE_3_GPIO_3,
-			.platform_ops = &xil_gpio_ops,
-			.extra = &xil_gpio_initial
-		},
 		.gpio_reset_value = NO_OS_GPIO_HIGH,
 		/* Configuration */
 		.pin_spi_input_value = AD7768_SPI_CTRL,
 		.sleep_mode = AD7768_ACTIVE,
 		.power_mode = AD7768_FAST,
-		.mclk_div = AD7768_MCLK_DIV_4,
+//		.mclk_div = AD7768_MCLK_DIV_4,
 		.dclk_div = AD7768_DCLK_DIV_1,
 		.conv_op = AD7768_STANDARD_CONV,
 		.crc_sel = AD7768_CRC_16
@@ -228,46 +128,28 @@ int main(void)
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
 
-	ret = ad7768_if_gpio_setup(GPIO_UP_SSHOT, NO_OS_GPIO_LOW);
-	if (ret != 0)
-		return ret;
-
-	/* Configure HDL */
-	ret = ad7768_if_gpio_setup(GPIO_UP_FORMAT_1, NO_OS_GPIO_LOW);
-	if (ret != 0)
-		return ret;
-
-	ret = ad7768_if_gpio_setup(GPIO_UP_FORMAT_0, NO_OS_GPIO_LOW);
-	if (ret != 0)
-		return ret;
-
-	ret = ad7768_if_gpio_setup(GPIO_UP_CRC_ENABLE,
-				   default_init_param.crc_sel ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
-	if (ret != 0)
-		return ret;
-
-	ret = ad7768_if_gpio_setup(GPIO_UP_CRC_4_OR_16_N,
-				   (default_init_param.crc_sel == AD7768_CRC_4) ? NO_OS_GPIO_HIGH :
-				   NO_OS_GPIO_LOW);
-	if (ret != 0)
-		return ret;
-
 	ad7768_setup(&dev, default_init_param);
 
-	ret = axi_adc_init(&axi_adc_core_desc, &axi_adc_initial);
+	ret = axi_adc_init_begin(&axi_adc_core_desc, &axi_adc_initial);
 	if (ret != 0)
 		return -1;
 
-#ifdef XPAR_AD7768_GPIO_DEVICE_ID
-	axi_gpio_init.type = GPIO_PL;
-	axi_gpio_init.device_id = XPAR_AD7768_GPIO_DEVICE_ID;
+	// Reset Rx ADC
+	axi_adc_write(axi_adc_core_desc, AXI_ADC_REG_RSTN, 0);
+	axi_adc_write(axi_adc_core_desc, AXI_ADC_REG_RSTN,
+	              AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 
-	ad7768_evb_clear_status(&axi_gpio_init);
-	if (ad7768_evb_verify_status(&axi_gpio_init))
-		printf("Interface errors\n");
-	else
-		printf("Interface OK\n");
-#endif
+	for (uint8_t ch = 0; ch < AD7768_CH_NO; ch++)
+		axi_adc_write(axi_adc_core_desc, AXI_ADC_REG_CHAN_CNTRL(ch),
+				  AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
+				  AXI_ADC_ENABLE);
+
+	no_os_mdelay(100);
+
+	axi_adc_write(axi_adc_core_desc, AXI_ADC_REG_CNTRL_3, AXI_ADC_CRC_EN);
+	axi_adc_write(axi_adc_core_desc, AXI_ADC_REG_CNTRL, (((AD7768_CH_NO) & 0x1F) << 8));
+
+	axi_adc_init_finish(axi_adc_core_desc);
 
 	ret = axi_dmac_init(&dma_desc, &dma_initial);
 	if (ret != 0)
@@ -292,18 +174,11 @@ int main(void)
 	ret = axi_dmac_transfer_start(dma_desc, &read_transfer);
 	if (ret != 0)
 		return -1;
-	ret = axi_dmac_transfer_wait_completion(dma_desc, 500);
+	ret = axi_dmac_transfer_wait_completion(dma_desc, 3000);
 	if (ret)
 		return ret;
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,data_size);
 	printf("Capture done\n");
-
-#ifdef XPAR_AD7768_GPIO_DEVICE_ID
-	if (ad7768_evb_verify_status(&axi_gpio_init))
-		printf("Interface errors\n");
-	else
-		printf("Interface OK\n");
-#endif
 
 	printf("   CH0      CH1      CH2      CH3      CH4      CH5      CH6      CH7   ");
 	for (i = 0; i < (sample_no * chan_no); i++) {

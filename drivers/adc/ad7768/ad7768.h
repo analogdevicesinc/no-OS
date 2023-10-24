@@ -91,23 +91,39 @@
 
 /* AD7768_REG_CH_MODE_SEL */
 #define AD7768_CH_MODE(x)					(1 << (x))
+#define AD7768_CH_MODE_DEC_RATE_MSK		NO_OS_GENMASK(2, 0)
+#define AD7768_CH_MODE_DEC_RATE_MODE(x)		(((x) & 0x7) << 0)
 
 /* AD7768_REG_PWR_MODE */
-#define AD7768_PWR_MODE_SLEEP_MODE			(1 << 7)
-#define AD7768_PWR_MODE_POWER_MODE(x)		(((x) & 0x3) << 4)
-#define AD7768_PWR_MODE_LVDS_ENABLE			(1 << 3)
-#define AD7768_PWR_MODE_MCLK_DIV(x)			(((x) & 0x3) << 0)
+#define AD7768_POWER_MODE_POWER_MODE_MSK	NO_OS_GENMASK(5, 4)
+#define AD7768_POWER_MODE_POWER_MODE(x)		(((x) & 0x3) << 4)
+#define AD7768_POWER_MODE_GET_POWER_MODE(x)	(((x) >> 4) & 0x3)
+#define AD7768_POWER_MODE_MCLK_DIV_MSK		NO_OS_GENMASK(1, 0)
+#define AD7768_POWER_MODE_MCLK_DIV_MODE(x)	(((x) & 0x3) << 0)
+#define ad7768_map_power_mode_to_regval(x)	((x) ? ((x) + 1) : 0)
+#define ad7768_map_regval_to_power_mode(x)	((x) ? ((x) - 1) : 0)
+
+#define ad7768_map_power_mode_to_regval(x)	((x) ? ((x) + 1) : 0)
 
 /* AD7768_REG_DATA_CTRL */
 #define AD7768_DATA_CTRL_SPI_SYNC			(1 << 7)
 #define AD7768_DATA_CTRL_SINGLE_SHOT_EN		(1 << 4)
 #define AD7768_DATA_CTRL_SPI_RESET(x)		(((x) & 0x3) << 0)
+#define AD7768_DATA_CONTROL_SPI_SYNC_MSK	NO_OS_BIT(7)
+#define AD7768_DATA_CONTROL_SPI_SYNC		NO_OS_BIT(7)
+#define AD7768_DATA_CONTROL_SPI_SYNC_CLEAR	0
 
 /* AD7768_REG_INTERFACE_CFG */
 #define AD7768_INTERFACE_CFG_CRC_SEL(x)		(((x) & 0x3) << 2)
 #define AD7768_INTERFACE_CFG_DCLK_DIV(x)	(((x) & 0x3) << 0)
 
+#define AD7768_INTERFACE_CFG_DCLK_DIV_MSK	NO_OS_GENMASK(1, 0)
+#define AD7768_INTERFACE_CFG_DCLK_DIV_MODE(x)	(4 - no_os_find_first_set_bit(x))
+#define AD7768_MAX_DCLK_DIV			8
+
 #define AD7768_RESOLUTION					24
+#define SAMPLE_SIZE				32
+#define MAX_FREQ_PER_MODE			6
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -118,16 +134,17 @@ typedef enum {
 } ad7768_sleep_mode;
 
 typedef enum {
-	AD7768_ECO = 0,
-	AD7768_MEDIAN = 2,
-	AD7768_FAST = 3,
+	AD7768_ECO,
+	AD7768_MEDIAN,
+	AD7768_FAST,
+	AD7768_NUM_POWER_MODES
 } ad7768_power_mode;
 
-typedef enum {
-	AD7768_MCLK_DIV_32 = 0,
-	AD7768_MCLK_DIV_8 = 2,
-	AD7768_MCLK_DIV_4 = 3,
-} ad7768_mclk_div;
+//typedef enum {
+//	AD7768_MCLK_DIV_32 = 0,
+//	AD7768_MCLK_DIV_8 = 2,
+//	AD7768_MCLK_DIV_4 = 3,
+//} ad7768_mclk_div;
 
 typedef enum {
 	AD7768_DCLK_DIV_8,
@@ -180,16 +197,34 @@ typedef enum {
 	AD7768_FILTER_SINC,
 } ad7768_filt_type;
 
-typedef enum {
-	AD7768_DEC_X32,
-	AD7768_DEC_X64,
-	AD7768_DEC_X128,
-	AD7768_DEC_X256,
-	AD7768_DEC_X512,
-	AD7768_DEC_X1024,
-	AD7768_DEC_X1024_2ND,
-	AD7768_DEC_X1024_3RD,
-} ad7768_dec_rate;
+//typedef enum {
+//	AD7768_DEC_X32,
+//	AD7768_DEC_X64,
+//	AD7768_DEC_X128,
+//	AD7768_DEC_X256,
+//	AD7768_DEC_X512,
+//	AD7768_DEC_X1024,
+//	AD7768_DEC_X1024_2ND,
+//	AD7768_DEC_X1024_3RD,
+//} ad7768_dec_rate;
+
+static const int ad7768_dec_rate[6] = {
+	32, 64, 128, 256, 512, 1024
+};
+
+static const int ad7768_mclk_div[3] = {
+	32, 8, 4
+};
+
+struct ad7768_freq_config {
+	unsigned int freq;
+	unsigned int dec_rate;
+};
+
+struct ad7768_avail_freq {
+	unsigned int n_freqs;
+	struct ad7768_freq_config freq_cfg[MAX_FREQ_PER_MODE];
+};
 
 typedef struct {
 	struct no_os_spi_desc			*spi_desc;
@@ -203,14 +238,17 @@ typedef struct {
 	ad7768_pin_spi_ctrl	pin_spi_ctrl;
 	ad7768_sleep_mode	sleep_mode;
 	ad7768_power_mode	power_mode;
-	ad7768_mclk_div		mclk_div;
+//	ad7768_mclk_div		mclk_div;
 	ad7768_dclk_div		dclk_div;
 	ad7768_conv_op		conv_op;
 	ad7768_crc_sel		crc_sel;
 	ad7768_ch_state		ch_state[8];
 	ad7768_ch_mode		ch_mode[8];
 	ad7768_filt_type	filt_type[2];
-	ad7768_dec_rate		dec_rate[2];
+//	ad7768_dec_rate		dec_rate[2];
+	unsigned int		datalines;
+	unsigned int		sampling_freq;
+	struct ad7768_avail_freq avail_freq[AD7768_NUM_POWER_MODES];
 } ad7768_dev;
 
 typedef struct {
@@ -227,7 +265,7 @@ typedef struct {
 	uint8_t				pin_spi_input_value;
 	ad7768_sleep_mode	sleep_mode;
 	ad7768_power_mode	power_mode;
-	ad7768_mclk_div		mclk_div;
+//	ad7768_mclk_div		mclk_div;
 	ad7768_dclk_div		dclk_div;
 	ad7768_conv_op		conv_op;
 	ad7768_crc_sel		crc_sel;
@@ -266,12 +304,12 @@ int32_t ad7768_set_power_mode(ad7768_dev *dev,
 /* Get the device power mode. */
 int32_t ad7768_get_power_mode(ad7768_dev *dev,
 			      ad7768_power_mode *mode);
-/* Set the MCLK divider. */
-int32_t ad7768_set_mclk_div(ad7768_dev *dev,
-			    ad7768_mclk_div clk_div);
-/* Get the MCLK divider. */
-int32_t ad7768_get_mclk_div(ad7768_dev *dev,
-			    ad7768_mclk_div *clk_div);
+///* Set the MCLK divider. */
+//int32_t ad7768_set_mclk_div(ad7768_dev *dev,
+//			    ad7768_mclk_div clk_div);
+///* Get the MCLK divider. */
+//int32_t ad7768_get_mclk_div(ad7768_dev *dev,
+//			    ad7768_mclk_div *clk_div);
 /* Set the DCLK divider. */
 int32_t ad7768_set_dclk_div(ad7768_dev *dev,
 			    ad7768_dclk_div clk_div);
@@ -298,16 +336,16 @@ int32_t ad7768_set_ch_state(ad7768_dev *dev,
 int32_t ad7768_get_ch_state(ad7768_dev *dev,
 			    ad7768_ch ch,
 			    ad7768_ch_state *state);
-/* Set the mode configuration. */
-int32_t ad7768_set_mode_config(ad7768_dev *dev,
-			       ad7768_ch_mode mode,
-			       ad7768_filt_type filt_type,
-			       ad7768_dec_rate dec_rate);
-/* Get the mode configuration. */
-int32_t ad7768_get_mode_config(ad7768_dev *dev,
-			       ad7768_ch_mode mode,
-			       ad7768_filt_type *filt_type,
-			       ad7768_dec_rate *dec_rate);
+///* Set the mode configuration. */
+//int32_t ad7768_set_mode_config(ad7768_dev *dev,
+//			       ad7768_ch_mode mode,
+//			       ad7768_filt_type filt_type,
+//			       ad7768_dec_rate dec_rate);
+///* Get the mode configuration. */
+//int32_t ad7768_get_mode_config(ad7768_dev *dev,
+//			       ad7768_ch_mode mode,
+//			       ad7768_filt_type *filt_type,
+//			       ad7768_dec_rate *dec_rate);
 /* Set the channel mode. */
 int32_t ad7768_set_ch_mode(ad7768_dev *dev,
 			   ad7768_ch ch,

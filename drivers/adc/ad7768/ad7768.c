@@ -43,7 +43,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad7768.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 
 const uint8_t standard_pin_ctrl_mode_sel[3][4] = {
 //		MCLK/1,	MCLK/2,	MCLK/4,	MCLK/8
@@ -152,25 +155,25 @@ int32_t ad7768_spi_write_mask(ad7768_dev *dev,
 	return ret;
 }
 
-/**
- * Set the device sleep mode.
- * @param dev - The device structure.
- * @param mode - The device sleep mode.
- * 				 Accepted values: AD7768_ACTIVE
- * 								  AD7768_SLEEP
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad7768_set_sleep_mode(ad7768_dev *dev,
-			      ad7768_sleep_mode mode)
-{
-	ad7768_spi_write_mask(dev,
-			      AD7768_REG_PWR_MODE,
-			      AD7768_PWR_MODE_SLEEP_MODE,
-			      (mode ? AD7768_PWR_MODE_SLEEP_MODE : 0));
-	dev->sleep_mode = mode;
-
-	return 0;
-}
+///**
+// * Set the device sleep mode.
+// * @param dev - The device structure.
+// * @param mode - The device sleep mode.
+// * 				 Accepted values: AD7768_ACTIVE
+// * 								  AD7768_SLEEP
+// * @return 0 in case of success, negative error code otherwise.
+// */
+//int32_t ad7768_set_sleep_mode(ad7768_dev *dev,
+//			      ad7768_sleep_mode mode)
+//{
+//	ad7768_spi_write_mask(dev,
+//			      AD7768_REG_PWR_MODE,
+//			      AD7768_PWR_MODE_SLEEP_MODE,
+//			      (mode ? AD7768_PWR_MODE_SLEEP_MODE : 0));
+//	dev->sleep_mode = mode;
+//
+//	return 0;
+//}
 
 /**
  * Get the device sleep mode.
@@ -215,6 +218,86 @@ int32_t ad7768_set_mode_pins(ad7768_dev *dev,
 	return ret;
 }
 
+static int ad7768_set_clk_divs(ad7768_dev *dev,
+			       unsigned int freq)
+{
+	unsigned int mclk, dclk, dclk_div, i;
+	struct ad7768_freq_config f_cfg;
+	unsigned int chan_per_doutx;
+	int ret = 0;
+
+	mclk = 32768000;
+
+	//chan_per_doutx = st->chip_info->num_channels / st->datalines;
+	chan_per_doutx = 1;
+
+	for (i = 0; i < dev->avail_freq[dev->power_mode].n_freqs; i++) {
+		f_cfg = dev->avail_freq[dev->power_mode].freq_cfg[i];
+		if (freq == f_cfg.freq)
+			break;
+	}
+	if (i == dev->avail_freq[dev->power_mode].n_freqs)
+		return -EINVAL;
+
+	dclk = f_cfg.freq * SAMPLE_SIZE * chan_per_doutx;
+	if (dclk > mclk)
+		return -EINVAL;
+
+	/* Set dclk_div to the nearest power of 2 less than the original value */
+	dclk_div = NO_OS_DIV_ROUND_CLOSEST_ULL(mclk, dclk);
+	if (dclk_div > AD7768_MAX_DCLK_DIV)
+		dclk_div = AD7768_MAX_DCLK_DIV;
+	else if (no_os_hweight32(dclk_div) != 1)
+		dclk_div = 1 << (no_os_find_last_set_bit(dclk_div) - 1);
+
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_INTERFACE_CFG,
+			AD7768_INTERFACE_CFG_DCLK_DIV_MSK,
+			AD7768_INTERFACE_CFG_DCLK_DIV_MODE(dclk_div));
+	if (ret < 0)
+		return ret;
+
+	return ad7768_spi_write_mask(dev, AD7768_REG_CH_MODE_A,
+				     AD7768_CH_MODE_DEC_RATE_MSK,
+				     AD7768_CH_MODE_DEC_RATE_MODE(f_cfg.dec_rate));
+}
+
+static int ad7768_set_sampling_freq(ad7768_dev *dev,
+				    unsigned int freq)
+{
+	int ret = 0;
+
+	if (!freq)
+		return -EINVAL;
+
+	//mutex_lock(&st->lock);
+
+	ret = ad7768_set_clk_divs(dev, freq);
+	if (ret)
+		goto freq_err;
+
+	dev->sampling_freq = freq;
+
+freq_err:
+	//mutex_unlock(&st->lock);
+
+	return ret;
+}
+
+static int ad7768_sync(ad7768_dev *dev)
+{
+	int ret;
+
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_DATA_CTRL,
+				    AD7768_DATA_CONTROL_SPI_SYNC_MSK,
+				    AD7768_DATA_CONTROL_SPI_SYNC_CLEAR);
+	if (ret < 0)
+		return ret;
+
+	return ad7768_spi_write_mask(dev,  AD7768_REG_DATA_CTRL,
+				    AD7768_DATA_CONTROL_SPI_SYNC_MSK,
+				    AD7768_DATA_CONTROL_SPI_SYNC);
+}
+
 /**
  * Set the device power mode.
  * @param dev - The device structure.
@@ -227,32 +310,39 @@ int32_t ad7768_set_mode_pins(ad7768_dev *dev,
 int32_t ad7768_set_power_mode(ad7768_dev *dev,
 			      ad7768_power_mode mode)
 {
-	uint8_t mode_pins_state;
+	struct ad7768_avail_freq avail_freq;
+	int max_mode_freq;
+	unsigned int regval;
+	int ret;
 
-	if (dev->pin_spi_ctrl == AD7768_SPI_CTRL) {
-		ad7768_spi_write_mask(dev,
-				      AD7768_REG_PWR_MODE,
-				      AD7768_PWR_MODE_POWER_MODE(0x3),
-				      AD7768_PWR_MODE_POWER_MODE(mode));
-		dev->power_mode = mode;
-	} else {
-		if (dev->conv_op == AD7768_STANDARD_CONV)
-			mode_pins_state =
-				standard_pin_ctrl_mode_sel[mode][dev->dclk_div];
-		else
-			mode_pins_state =
-				one_shot_pin_ctrl_mode_sel[mode][dev->dclk_div];
-		if (mode_pins_state != 0xFF) {
-			dev->power_mode = mode;
-			ad7768_set_mode_pins(dev, mode_pins_state);
-		} else {
-			printf("Invalid Power Mode for the current configuration.");
+	dev->power_mode = mode;
 
-			return -1;
-		}
-	}
+	regval = ad7768_map_power_mode_to_regval(mode);
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_PWR_MODE,
+				    AD7768_POWER_MODE_POWER_MODE_MSK,
+				    AD7768_POWER_MODE_POWER_MODE(regval));
+	if (ret < 0)
+		return ret;
 
-	return 0;
+	/* The values for the powermode correspond for mclk div */
+	ret = ad7768_spi_write_mask(dev, AD7768_REG_PWR_MODE,
+				    AD7768_POWER_MODE_MCLK_DIV_MSK,
+				    AD7768_POWER_MODE_MCLK_DIV_MODE(regval));
+	if (ret < 0)
+		return ret;
+
+	/* Set the max freq of the selected power mode */
+	avail_freq = dev->avail_freq[mode];
+	max_mode_freq = avail_freq.freq_cfg[avail_freq.n_freqs - 1].freq;
+	ret = ad7768_set_sampling_freq(dev, max_mode_freq);
+	if (ret < 0)
+		return ret;
+
+	ret = ad7768_sync(dev);
+	if (ret < 0)
+		return ret;
+
+	return ret;
 }
 
 /**
@@ -269,40 +359,40 @@ int32_t ad7768_get_power_mode(ad7768_dev *dev,
 	return 0;
 }
 
-/**
- * Set the MCLK divider.
- * @param dev - The device structure.
- * @param clk_div - The MCLK divider.
- * 					Accepted values: AD7768_MCLK_DIV_32
- *									 AD7768_MCLK_DIV_8
- *									 AD7768_MCLK_DIV_4
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad7768_set_mclk_div(ad7768_dev *dev,
-			    ad7768_mclk_div clk_div)
-{
-	ad7768_spi_write_mask(dev,
-			      AD7768_REG_PWR_MODE,
-			      AD7768_PWR_MODE_MCLK_DIV(0x3),
-			      AD7768_PWR_MODE_MCLK_DIV(clk_div));
-	dev->mclk_div = clk_div;
+///**
+// * Set the MCLK divider.
+// * @param dev - The device structure.
+// * @param clk_div - The MCLK divider.
+// * 					Accepted values: AD7768_MCLK_DIV_32
+// *									 AD7768_MCLK_DIV_8
+// *									 AD7768_MCLK_DIV_4
+// * @return 0 in case of success, negative error code otherwise.
+// */
+//int32_t ad7768_set_mclk_div(ad7768_dev *dev,
+//			    ad7768_mclk_div clk_div)
+//{
+//	ad7768_spi_write_mask(dev,
+//			      AD7768_REG_PWR_MODE,
+//			      AD7768_PWR_MODE_MCLK_DIV(0x3),
+//			      AD7768_PWR_MODE_MCLK_DIV(clk_div));
+//	dev->mclk_div = clk_div;
+//
+//	return 0;
+//}
 
-	return 0;
-}
-
-/**
- * Get the MCLK divider.
- * @param dev - The device structure.
- * @param clk_div - The MCLK divider.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad7768_get_mclk_div(ad7768_dev *dev,
-			    ad7768_mclk_div *clk_div)
-{
-	*clk_div = dev->mclk_div;
-
-	return 0;
-}
+///**
+// * Get the MCLK divider.
+// * @param dev - The device structure.
+// * @param clk_div - The MCLK divider.
+// * @return 0 in case of success, negative error code otherwise.
+// */
+//int32_t ad7768_get_mclk_div(ad7768_dev *dev,
+//			    ad7768_mclk_div *clk_div)
+//{
+//	*clk_div = dev->mclk_div;
+//
+//	return 0;
+//}
 
 /**
  * Set the DCLK divider.
@@ -317,7 +407,7 @@ int32_t ad7768_get_mclk_div(ad7768_dev *dev,
 int32_t ad7768_set_dclk_div(ad7768_dev *dev,
 			    ad7768_dclk_div clk_div)
 {
-	uint8_t mode_pins_state;
+//	uint8_t mode_pins_state;
 
 	if (dev->pin_spi_ctrl == AD7768_SPI_CTRL) {
 		ad7768_spi_write_mask(dev,
@@ -326,20 +416,20 @@ int32_t ad7768_set_dclk_div(ad7768_dev *dev,
 				      AD7768_INTERFACE_CFG_DCLK_DIV(clk_div));
 		dev->dclk_div = clk_div;
 	} else {
-		if (dev->conv_op == AD7768_STANDARD_CONV)
-			mode_pins_state =
-				standard_pin_ctrl_mode_sel[dev->power_mode][clk_div];
-		else
-			mode_pins_state =
-				one_shot_pin_ctrl_mode_sel[dev->power_mode][clk_div];
-		if (mode_pins_state != 0xFF) {
-			dev->dclk_div = clk_div;
-			ad7768_set_mode_pins(dev, mode_pins_state);
-		} else {
+//		if (dev->conv_op == AD7768_STANDARD_CONV)
+//			mode_pins_state =
+//				standard_pin_ctrl_mode_sel[dev->power_mode][clk_div];
+//		else
+//			mode_pins_state =
+//				one_shot_pin_ctrl_mode_sel[dev->power_mode][clk_div];
+//		if (mode_pins_state != 0xFF) {
+//			dev->dclk_div = clk_div;
+//			ad7768_set_mode_pins(dev, mode_pins_state);
+//		} else {
 			printf("Invalid DCLK_DIV for the current configuration.");
 
 			return -1;
-		}
+//		}
 	}
 
 	return 0;
@@ -371,7 +461,7 @@ int32_t ad7768_get_dclk_div(ad7768_dev *dev,
 int32_t ad7768_set_conv_op(ad7768_dev *dev,
 			   ad7768_conv_op conv_op)
 {
-	uint8_t mode_pins_state;
+//	uint8_t mode_pins_state;
 
 	if (dev->pin_spi_ctrl == AD7768_SPI_CTRL) {
 		ad7768_spi_write_mask(dev,
@@ -380,20 +470,20 @@ int32_t ad7768_set_conv_op(ad7768_dev *dev,
 				      conv_op ? AD7768_DATA_CTRL_SINGLE_SHOT_EN : 0);
 		dev->conv_op = conv_op;
 	} else {
-		if (conv_op == AD7768_STANDARD_CONV)
-			mode_pins_state =
-				standard_pin_ctrl_mode_sel[dev->power_mode][dev->dclk_div];
-		else
-			mode_pins_state =
-				one_shot_pin_ctrl_mode_sel[dev->power_mode][dev->dclk_div];
-		if (mode_pins_state != 0xFF) {
-			dev->conv_op = conv_op;
-			ad7768_set_mode_pins(dev, mode_pins_state);
-		} else {
+//		if (conv_op == AD7768_STANDARD_CONV)
+//			mode_pins_state =
+//				standard_pin_ctrl_mode_sel[dev->power_mode][dev->dclk_div];
+//		else
+//			mode_pins_state =
+//				one_shot_pin_ctrl_mode_sel[dev->power_mode][dev->dclk_div];
+//		if (mode_pins_state != 0xFF) {
+//			dev->conv_op = conv_op;
+//			ad7768_set_mode_pins(dev, mode_pins_state);
+//		} else {
 			printf("Invalid Conversion Operation for the current configuration.");
 
 			return -1;
-		}
+//		}
 	}
 
 	return 0;
@@ -502,62 +592,62 @@ int32_t ad7768_get_ch_state(ad7768_dev *dev,
 	return 0;
 }
 
-/**
- * Set the mode configuration.
- * @param dev - The device structure.
- * @param mode - The channel mode.
- * 				 Accepted values: AD7768_MODE_A
- * 								  AD7768_MODE_B
- * @param filt_type - The filter type.
- * 					  Accepted values: AD7768_FILTER_WIDEBAND
- * 					  				   AD7768_FILTER_SINC,
- * @param dec_rate - The decimation rate.
- * 					 Accepted values: AD7768_DEC_X32
- * 					 				  AD7768_DEC_X64
- * 					 				  AD7768_DEC_X128
- * 					 				  AD7768_DEC_X256
- * 					 				  AD7768_DEC_X512
- * 					 				  AD7768_DEC_X1024
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad7768_set_mode_config(ad7768_dev *dev,
-			       ad7768_ch_mode mode,
-			       ad7768_filt_type filt_type,
-			       ad7768_dec_rate dec_rate)
-{
-	uint8_t reg_val;
-
-	reg_val = ((filt_type == AD7768_FILTER_SINC) ? AD7768_CH_MODE_FILTER_TYPE : 0) |
-		  AD7768_CH_MODE_DEC_RATE(dec_rate);
-	if (mode == AD7768_MODE_A) {
-		ad7768_spi_write(dev, AD7768_REG_CH_MODE_A, reg_val);
-	} else {
-		ad7768_spi_write(dev, AD7768_REG_CH_MODE_B, reg_val);
-	}
-	dev->filt_type[mode] = filt_type;
-	dev->dec_rate[mode] = dec_rate;
-
-	return 0;
-}
-
-/**
- * Get the mode configuration.
- * @param dev - The device structure.
- * @param mode - The channel mode.
- * @param filt_type - The filter type.
- * @param dec_rate - The decimation rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad7768_get_mode_config(ad7768_dev *dev,
-			       ad7768_ch_mode mode,
-			       ad7768_filt_type *filt_type,
-			       ad7768_dec_rate *dec_rate)
-{
-	*filt_type = dev->filt_type[mode];
-	*dec_rate = dev->dec_rate[mode];
-
-	return 0;
-}
+///**
+// * Set the mode configuration.
+// * @param dev - The device structure.
+// * @param mode - The channel mode.
+// * 				 Accepted values: AD7768_MODE_A
+// * 								  AD7768_MODE_B
+// * @param filt_type - The filter type.
+// * 					  Accepted values: AD7768_FILTER_WIDEBAND
+// * 					  				   AD7768_FILTER_SINC,
+// * @param dec_rate - The decimation rate.
+// * 					 Accepted values: AD7768_DEC_X32
+// * 					 				  AD7768_DEC_X64
+// * 					 				  AD7768_DEC_X128
+// * 					 				  AD7768_DEC_X256
+// * 					 				  AD7768_DEC_X512
+// * 					 				  AD7768_DEC_X1024
+// * @return 0 in case of success, negative error code otherwise.
+// */
+//int32_t ad7768_set_mode_config(ad7768_dev *dev,
+//			       ad7768_ch_mode mode,
+//			       ad7768_filt_type filt_type,
+//			       ad7768_dec_rate dec_rate)
+//{
+//	uint8_t reg_val;
+//
+//	reg_val = ((filt_type == AD7768_FILTER_SINC) ? AD7768_CH_MODE_FILTER_TYPE : 0) |
+//		  AD7768_CH_MODE_DEC_RATE(dec_rate);
+//	if (mode == AD7768_MODE_A) {
+//		ad7768_spi_write(dev, AD7768_REG_CH_MODE_A, reg_val);
+//	} else {
+//		ad7768_spi_write(dev, AD7768_REG_CH_MODE_B, reg_val);
+//	}
+//	dev->filt_type[mode] = filt_type;
+//	dev->dec_rate[mode] = dec_rate;
+//
+//	return 0;
+//}
+//
+///**
+// * Get the mode configuration.
+// * @param dev - The device structure.
+// * @param mode - The channel mode.
+// * @param filt_type - The filter type.
+// * @param dec_rate - The decimation rate.
+// * @return 0 in case of success, negative error code otherwise.
+// */
+//int32_t ad7768_get_mode_config(ad7768_dev *dev,
+//			       ad7768_ch_mode mode,
+//			       ad7768_filt_type *filt_type,
+//			       ad7768_dec_rate *dec_rate)
+//{
+//	*filt_type = dev->filt_type[mode];
+//	*dec_rate = dev->dec_rate[mode];
+//
+//	return 0;
+//}
 
 /**
  * Set the channel mode.
@@ -613,6 +703,31 @@ int32_t ad7768_get_ch_mode(ad7768_dev *dev,
 	return 0;
 }
 
+static void ad7768_set_available_sampl_freq(ad7768_dev *dev)
+{
+	unsigned int mode;
+	unsigned int dec;
+	unsigned int mclk = 32768000;
+	struct ad7768_avail_freq *avail_freq;
+
+	for (mode = 0; mode < AD7768_NUM_POWER_MODES; mode++) {
+		avail_freq = &dev->avail_freq[mode];
+		for (dec = NO_OS_ARRAY_SIZE(ad7768_dec_rate); dec > 0; dec--) {
+			struct ad7768_freq_config freq_cfg;
+
+			freq_cfg.dec_rate = dec - 1;
+			freq_cfg.freq = mclk / (ad7768_dec_rate[dec - 1] *
+					ad7768_mclk_div[mode]);
+
+			avail_freq->freq_cfg[avail_freq->n_freqs++] = freq_cfg;
+		}
+	}
+
+	/* The max frequency is not supported in one data line configuration */
+	if (dev->datalines == 1)
+		dev->avail_freq[AD7768_FAST].n_freqs--;
+}
+
 /**
  * Initialize the device.
  * @param device - The device structure.
@@ -626,58 +741,58 @@ int32_t ad7768_setup(ad7768_dev **device,
 	ad7768_dev *dev;
 	int32_t ret;
 
-	dev = (ad7768_dev *)no_os_malloc(sizeof(*dev));
+	dev = (ad7768_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if (ret)
+		goto error;
 
 	dev->pin_spi_input_value = init_param.pin_spi_input_value;
 
 	dev->pin_spi_ctrl = dev->pin_spi_input_value ?
 			    AD7768_SPI_CTRL : AD7768_PIN_CTRL;
 
-	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	/* get out of reset state */
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, &init_param.gpio_reset);
+	if (ret)
+		goto error;
+
 	dev->gpio_reset_value = init_param.gpio_reset_value;
 
-	ret |= no_os_gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
-	ret |= no_os_gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
-	ret |= no_os_gpio_get(&dev->gpio_mode2, &init_param.gpio_mode2);
-	ret |= no_os_gpio_get(&dev->gpio_mode3, &init_param.gpio_mode3);
-
-	if (dev->gpio_reset)
-		ret |= no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
-
-	if (dev->gpio_mode0)
-		ret |= no_os_gpio_direction_output(dev->gpio_mode0, NO_OS_GPIO_LOW);
-	if (dev->gpio_mode1)
-		ret |= no_os_gpio_direction_output(dev->gpio_mode1, NO_OS_GPIO_LOW);
-	if (dev->gpio_mode2)
-		ret |= no_os_gpio_direction_output(dev->gpio_mode2, NO_OS_GPIO_LOW);
-	if (dev->gpio_mode3)
-		ret |= no_os_gpio_direction_output(dev->gpio_mode3, NO_OS_GPIO_LOW);
-
-	dev->sleep_mode = init_param.sleep_mode;
-	dev->mclk_div = init_param.mclk_div;
-	dev->crc_sel = init_param.crc_sel;
-	if (dev->pin_spi_ctrl == AD7768_SPI_CTRL) {
-		ad7768_set_sleep_mode(dev, dev->sleep_mode);
-		ad7768_set_mclk_div(dev, dev->mclk_div);
-		ad7768_set_crc_sel(dev, dev->crc_sel);
+	if (dev->gpio_reset) {
+		ret = no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
+		if (ret)
+			goto error;
 	}
 
-	dev->power_mode = init_param.power_mode;
-	dev->dclk_div = init_param.dclk_div;
-	dev->conv_op = init_param.conv_op;
-	ad7768_set_power_mode(dev, dev->power_mode);
-	ad7768_set_dclk_div(dev, dev->dclk_div);
-	ad7768_set_conv_op(dev, dev->conv_op);
+	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_LOW);
+	if (ret)
+		goto error;
+	no_os_udelay(1660);
+	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
+	if (ret)
+		goto error;
+
+	dev->datalines = 8;
+
+	ad7768_set_available_sampl_freq(dev);
+
+	ret = ad7768_set_power_mode(dev, AD7768_FAST);
+	if (ret)
+		goto error;
 
 	*device = dev;
 
 	if (!ret)
 		printf("AD7768 successfully initialized\n");
+
+	return ret;
+
+error:
+	no_os_free(dev);
 
 	return ret;
 }
