@@ -57,6 +57,9 @@
 #define AXI_ADC_DDR_EDGESEL		NO_OS_BIT(1)
 #define AXI_ADC_PIN_MODE		NO_OS_BIT(0)
 
+#define AXI_ADC_REG_CNTRL_3		0x004C
+#define AXI_ADC_CRC_EN			NO_OS_BIT(8)
+
 #define AXI_ADC_REG_CLK_FREQ		0x0054
 #define AXI_ADC_CLK_FREQ(x)		(((x) & 0xFFFFFFFF) << 0)
 #define AXI_ADC_TO_CLK_FREQ(x)		(((x) >> 0) & 0xFFFFFFFF)
