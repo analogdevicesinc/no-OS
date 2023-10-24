@@ -110,7 +110,6 @@ int main(void)
 		.pin_spi_input_value = AD7768_SPI_CTRL,
 		.sleep_mode = AD7768_ACTIVE,
 		.power_mode = AD7768_FAST,
-//		.mclk_div = AD7768_MCLK_DIV_4,
 		.dclk_div = AD7768_DCLK_DIV_1,
 		.conv_op = AD7768_STANDARD_CONV,
 		.crc_sel = AD7768_CRC_16

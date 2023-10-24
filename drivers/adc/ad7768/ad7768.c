@@ -155,26 +155,6 @@ int32_t ad7768_spi_write_mask(ad7768_dev *dev,
 	return ret;
 }
 
-///**
-// * Set the device sleep mode.
-// * @param dev - The device structure.
-// * @param mode - The device sleep mode.
-// * 				 Accepted values: AD7768_ACTIVE
-// * 								  AD7768_SLEEP
-// * @return 0 in case of success, negative error code otherwise.
-// */
-//int32_t ad7768_set_sleep_mode(ad7768_dev *dev,
-//			      ad7768_sleep_mode mode)
-//{
-//	ad7768_spi_write_mask(dev,
-//			      AD7768_REG_PWR_MODE,
-//			      AD7768_PWR_MODE_SLEEP_MODE,
-//			      (mode ? AD7768_PWR_MODE_SLEEP_MODE : 0));
-//	dev->sleep_mode = mode;
-//
-//	return 0;
-//}
-
 /**
  * Get the device sleep mode.
  * @param dev - The device structure.
@@ -359,41 +339,6 @@ int32_t ad7768_get_power_mode(ad7768_dev *dev,
 	return 0;
 }
 
-///**
-// * Set the MCLK divider.
-// * @param dev - The device structure.
-// * @param clk_div - The MCLK divider.
-// * 					Accepted values: AD7768_MCLK_DIV_32
-// *									 AD7768_MCLK_DIV_8
-// *									 AD7768_MCLK_DIV_4
-// * @return 0 in case of success, negative error code otherwise.
-// */
-//int32_t ad7768_set_mclk_div(ad7768_dev *dev,
-//			    ad7768_mclk_div clk_div)
-//{
-//	ad7768_spi_write_mask(dev,
-//			      AD7768_REG_PWR_MODE,
-//			      AD7768_PWR_MODE_MCLK_DIV(0x3),
-//			      AD7768_PWR_MODE_MCLK_DIV(clk_div));
-//	dev->mclk_div = clk_div;
-//
-//	return 0;
-//}
-
-///**
-// * Get the MCLK divider.
-// * @param dev - The device structure.
-// * @param clk_div - The MCLK divider.
-// * @return 0 in case of success, negative error code otherwise.
-// */
-//int32_t ad7768_get_mclk_div(ad7768_dev *dev,
-//			    ad7768_mclk_div *clk_div)
-//{
-//	*clk_div = dev->mclk_div;
-//
-//	return 0;
-//}
-
 /**
  * Set the DCLK divider.
  * @param dev - The device structure.
@@ -416,20 +361,9 @@ int32_t ad7768_set_dclk_div(ad7768_dev *dev,
 				      AD7768_INTERFACE_CFG_DCLK_DIV(clk_div));
 		dev->dclk_div = clk_div;
 	} else {
-//		if (dev->conv_op == AD7768_STANDARD_CONV)
-//			mode_pins_state =
-//				standard_pin_ctrl_mode_sel[dev->power_mode][clk_div];
-//		else
-//			mode_pins_state =
-//				one_shot_pin_ctrl_mode_sel[dev->power_mode][clk_div];
-//		if (mode_pins_state != 0xFF) {
-//			dev->dclk_div = clk_div;
-//			ad7768_set_mode_pins(dev, mode_pins_state);
-//		} else {
 			printf("Invalid DCLK_DIV for the current configuration.");
 
 			return -1;
-//		}
 	}
 
 	return 0;
@@ -470,20 +404,9 @@ int32_t ad7768_set_conv_op(ad7768_dev *dev,
 				      conv_op ? AD7768_DATA_CTRL_SINGLE_SHOT_EN : 0);
 		dev->conv_op = conv_op;
 	} else {
-//		if (conv_op == AD7768_STANDARD_CONV)
-//			mode_pins_state =
-//				standard_pin_ctrl_mode_sel[dev->power_mode][dev->dclk_div];
-//		else
-//			mode_pins_state =
-//				one_shot_pin_ctrl_mode_sel[dev->power_mode][dev->dclk_div];
-//		if (mode_pins_state != 0xFF) {
-//			dev->conv_op = conv_op;
-//			ad7768_set_mode_pins(dev, mode_pins_state);
-//		} else {
 			printf("Invalid Conversion Operation for the current configuration.");
 
 			return -1;
-//		}
 	}
 
 	return 0;
@@ -591,63 +514,6 @@ int32_t ad7768_get_ch_state(ad7768_dev *dev,
 
 	return 0;
 }
-
-///**
-// * Set the mode configuration.
-// * @param dev - The device structure.
-// * @param mode - The channel mode.
-// * 				 Accepted values: AD7768_MODE_A
-// * 								  AD7768_MODE_B
-// * @param filt_type - The filter type.
-// * 					  Accepted values: AD7768_FILTER_WIDEBAND
-// * 					  				   AD7768_FILTER_SINC,
-// * @param dec_rate - The decimation rate.
-// * 					 Accepted values: AD7768_DEC_X32
-// * 					 				  AD7768_DEC_X64
-// * 					 				  AD7768_DEC_X128
-// * 					 				  AD7768_DEC_X256
-// * 					 				  AD7768_DEC_X512
-// * 					 				  AD7768_DEC_X1024
-// * @return 0 in case of success, negative error code otherwise.
-// */
-//int32_t ad7768_set_mode_config(ad7768_dev *dev,
-//			       ad7768_ch_mode mode,
-//			       ad7768_filt_type filt_type,
-//			       ad7768_dec_rate dec_rate)
-//{
-//	uint8_t reg_val;
-//
-//	reg_val = ((filt_type == AD7768_FILTER_SINC) ? AD7768_CH_MODE_FILTER_TYPE : 0) |
-//		  AD7768_CH_MODE_DEC_RATE(dec_rate);
-//	if (mode == AD7768_MODE_A) {
-//		ad7768_spi_write(dev, AD7768_REG_CH_MODE_A, reg_val);
-//	} else {
-//		ad7768_spi_write(dev, AD7768_REG_CH_MODE_B, reg_val);
-//	}
-//	dev->filt_type[mode] = filt_type;
-//	dev->dec_rate[mode] = dec_rate;
-//
-//	return 0;
-//}
-//
-///**
-// * Get the mode configuration.
-// * @param dev - The device structure.
-// * @param mode - The channel mode.
-// * @param filt_type - The filter type.
-// * @param dec_rate - The decimation rate.
-// * @return 0 in case of success, negative error code otherwise.
-// */
-//int32_t ad7768_get_mode_config(ad7768_dev *dev,
-//			       ad7768_ch_mode mode,
-//			       ad7768_filt_type *filt_type,
-//			       ad7768_dec_rate *dec_rate)
-//{
-//	*filt_type = dev->filt_type[mode];
-//	*dec_rate = dev->dec_rate[mode];
-//
-//	return 0;
-//}
 
 /**
  * Set the channel mode.

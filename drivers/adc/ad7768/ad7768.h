@@ -140,12 +140,6 @@ typedef enum {
 	AD7768_NUM_POWER_MODES
 } ad7768_power_mode;
 
-//typedef enum {
-//	AD7768_MCLK_DIV_32 = 0,
-//	AD7768_MCLK_DIV_8 = 2,
-//	AD7768_MCLK_DIV_4 = 3,
-//} ad7768_mclk_div;
-
 typedef enum {
 	AD7768_DCLK_DIV_8,
 	AD7768_DCLK_DIV_4,
@@ -197,17 +191,6 @@ typedef enum {
 	AD7768_FILTER_SINC,
 } ad7768_filt_type;
 
-//typedef enum {
-//	AD7768_DEC_X32,
-//	AD7768_DEC_X64,
-//	AD7768_DEC_X128,
-//	AD7768_DEC_X256,
-//	AD7768_DEC_X512,
-//	AD7768_DEC_X1024,
-//	AD7768_DEC_X1024_2ND,
-//	AD7768_DEC_X1024_3RD,
-//} ad7768_dec_rate;
-
 static const int ad7768_dec_rate[6] = {
 	32, 64, 128, 256, 512, 1024
 };
@@ -238,14 +221,12 @@ typedef struct {
 	ad7768_pin_spi_ctrl	pin_spi_ctrl;
 	ad7768_sleep_mode	sleep_mode;
 	ad7768_power_mode	power_mode;
-//	ad7768_mclk_div		mclk_div;
 	ad7768_dclk_div		dclk_div;
 	ad7768_conv_op		conv_op;
 	ad7768_crc_sel		crc_sel;
 	ad7768_ch_state		ch_state[8];
 	ad7768_ch_mode		ch_mode[8];
 	ad7768_filt_type	filt_type[2];
-//	ad7768_dec_rate		dec_rate[2];
 	unsigned int		datalines;
 	unsigned int		sampling_freq;
 	struct ad7768_avail_freq avail_freq[AD7768_NUM_POWER_MODES];
@@ -265,7 +246,6 @@ typedef struct {
 	uint8_t				pin_spi_input_value;
 	ad7768_sleep_mode	sleep_mode;
 	ad7768_power_mode	power_mode;
-//	ad7768_mclk_div		mclk_div;
 	ad7768_dclk_div		dclk_div;
 	ad7768_conv_op		conv_op;
 	ad7768_crc_sel		crc_sel;
