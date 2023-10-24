@@ -87,27 +87,40 @@
 
 /* AD7768_REG_CH_MODE_x */
 #define AD7768_CH_MODE_FILTER_TYPE			(1 << 3)
+#define AD7768_CH_MODE_DEC_RATE_MSK			NO_OS_GENMASK(2, 0)
 #define AD7768_CH_MODE_DEC_RATE(x)			(((x) & 0x7) << 0)
 
 /* AD7768_REG_CH_MODE_SEL */
 #define AD7768_CH_MODE(x)				(1 << (x))
 
 /* AD7768_REG_PWR_MODE */
+#define AD7768_PWR_MODE_POWER_MODE_MSK			NO_OS_GENMASK(5, 4)
 #define AD7768_PWR_MODE_SLEEP_MODE			(1 << 7)
 #define AD7768_PWR_MODE_POWER_MODE(x)			(((x) & 0x3) << 4)
 #define AD7768_PWR_MODE_LVDS_ENABLE			(1 << 3)
+#define AD7768_PWR_MODE_MCLK_DIV_MSK			NO_OS_GENMASK(1, 0)
 #define AD7768_PWR_MODE_MCLK_DIV(x)			(((x) & 0x3) << 0)
+#define ad7768_map_power_mode_to_regval(x)		((x) ? ((x) + 1) : 0)
 
 /* AD7768_REG_DATA_CTRL */
 #define AD7768_DATA_CTRL_SPI_SYNC			(1 << 7)
 #define AD7768_DATA_CTRL_SINGLE_SHOT_EN			(1 << 4)
 #define AD7768_DATA_CTRL_SPI_RESET(x)			(((x) & 0x3) << 0)
+#define AD7768_DATA_CONTROL_SPI_SYNC_MSK		NO_OS_BIT(7)
+#define AD7768_DATA_CONTROL_SPI_SYNC			NO_OS_BIT(7)
+#define AD7768_DATA_CONTROL_SPI_SYNC_CLEAR		0
 
 /* AD7768_REG_INTERFACE_CFG */
 #define AD7768_INTERFACE_CFG_CRC_SEL(x)			(((x) & 0x3) << 2)
 #define AD7768_INTERFACE_CFG_DCLK_DIV(x)		(((x) & 0x3) << 0)
+#define AD7768_INTERFACE_CFG_DCLK_DIV_MSK		NO_OS_GENMASK(1, 0)
+#define AD7768_INTERFACE_CFG_DCLK_DIV_MODE(x)		(4 - no_os_find_first_set_bit(x))
+#define AD7768_MAX_DCLK_DIV				8
 
 #define AD7768_RESOLUTION				24
+#define AD7768_SAMPLE_SIZE				32
+#define AD7768_MAX_FREQ_PER_MODE			6
+#define AD7768_NUM_CHANNELS				8
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -122,6 +135,13 @@ typedef enum {
 	AD7768_MEDIAN = 2,
 	AD7768_FAST = 3,
 } ad7768_power_mode;
+
+enum ad7768_power_modes_raw {
+	AD7768_LOW_POWER_MODE,
+	AD7768_MEDIAN_MODE,
+	AD7768_FAST_MODE,
+	AD7768_NUM_POWER_MODES
+};
 
 typedef enum {
 	AD7768_MCLK_DIV_32 = 0,
@@ -191,6 +211,24 @@ typedef enum {
 	AD7768_DEC_X1024_3RD,
 } ad7768_dec_rate;
 
+static const int ad7768_dec_rate_vals[6] = {
+	32, 64, 128, 256, 512, 1024
+};
+
+static const int ad7768_mclk_div_vals[3] = {
+	32, 8, 4
+};
+
+struct ad7768_freq_config {
+	unsigned int freq;
+	unsigned int dec_rate;
+};
+
+struct ad7768_avail_freq {
+	unsigned int n_freqs;
+	struct ad7768_freq_config freq_cfg[AD7768_MAX_FREQ_PER_MODE];
+};
+
 typedef struct {
 	struct no_os_spi_desc		*spi_desc;
 	struct no_os_gpio_desc		*gpio_reset;
@@ -203,6 +241,7 @@ typedef struct {
 	ad7768_pin_spi_ctrl		pin_spi_ctrl;
 	ad7768_sleep_mode		sleep_mode;
 	ad7768_power_mode		power_mode;
+	enum ad7768_power_modes_raw	power_mode_raw;
 	ad7768_mclk_div			mclk_div;
 	ad7768_dclk_div			dclk_div;
 	ad7768_conv_op			conv_op;
@@ -211,6 +250,10 @@ typedef struct {
 	ad7768_ch_mode			ch_mode[8];
 	ad7768_filt_type		filt_type[2];
 	ad7768_dec_rate			dec_rate[2];
+	unsigned int			mclk;
+	unsigned int			datalines;
+	unsigned int			sampling_freq;
+	struct ad7768_avail_freq	avail_freq[AD7768_NUM_POWER_MODES];
 } ad7768_dev;
 
 typedef struct {
@@ -231,6 +274,8 @@ typedef struct {
 	ad7768_dclk_div				dclk_div;
 	ad7768_conv_op				conv_op;
 	ad7768_crc_sel				crc_sel;
+	unsigned int				mclk;
+	unsigned int				datalines;
 } ad7768_init_param;
 
 /******************************************************************************/
@@ -319,5 +364,17 @@ int32_t ad7768_get_ch_mode(ad7768_dev *dev,
 /* Initialize the device. */
 int32_t ad7768_setup(ad7768_dev **device,
 		     ad7768_init_param init_param);
-
+/* Free the resources allocated by ad7768_setup(). */
+int ad7768_remove(ad7768_dev *dev);
+/* Begin initializing the device. */
+int32_t ad7768_setup_begin(ad7768_dev **device,
+			   ad7768_init_param init_param);
+/* Finish initializing the device. */
+int32_t ad7768_setup_finish(ad7768_dev *dev,
+			    ad7768_init_param init_param);
+/* Set available sampling frequency. */
+void ad7768_set_available_sampl_freq(ad7768_dev *dev);
+/* Set power mode and sampling frequency. */
+int ad7768_set_power_mode_and_sampling_freq(ad7768_dev *dev,
+		enum ad7768_power_modes_raw mode);
 #endif // AD7768_H_
