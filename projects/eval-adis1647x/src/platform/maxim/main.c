@@ -77,8 +77,7 @@ int main()
 
 	no_os_uart_stdio(uart_desc);
 	ret = basic_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
+	no_os_uart_remove(uart_desc);
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
@@ -95,24 +94,22 @@ int main()
 
 	ret = no_os_gpio_direction_input(adis_gpio_desc);
 	if (ret)
-		goto error_gpio;
+		goto remove_gpio;
 
 	/* Initialize GPIO IRQ controller */
 	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
 	if (ret)
-		goto error_gpio;
+		goto remove_gpio;
 
 	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
 	if (ret)
-		goto error_irq;
+		goto remove_irq_ctrl;
 
 	ret = iio_trigger_example_main();
-	if (ret)
-		goto error_irq;
 
-error_irq:
+remove_irq_ctrl:
 	no_os_irq_ctrl_remove(nvic_desc);
-error_gpio:
+remove_gpio:
 	no_os_gpio_remove(adis_gpio_desc);
 #endif
 

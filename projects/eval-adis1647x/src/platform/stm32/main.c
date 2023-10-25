@@ -83,8 +83,7 @@ int main()
 
 	no_os_uart_stdio(uart_desc);
 	ret = basic_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
+	no_os_uart_remove(uart_desc);
 #endif
 
 #if (BASIC_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)

@@ -95,19 +95,19 @@ int basic_example_main()
 
 	ret = adis_init(&adis1647x_desc, &adis1647x_chip_info);
 	if (ret)
-		goto error;
+		goto exit;
 
 	ret = adis_get_accl_scale(adis1647x_desc, &accl_scale);
 	if (ret)
-		goto error_remove;
+		goto remove_adis1647x;
 
 	ret = adis_get_anglvel_scale(adis1647x_desc, &anglvel_scale);
 	if (ret)
-		goto error_remove;
+		goto remove_adis1647x;
 
 	ret = adis_get_temp_scale(adis1647x_desc, &temp_scale);
 	if (ret)
-		goto error_remove;
+		goto remove_adis1647x;
 
 	float output_scale[] = {
 		(float)anglvel_scale.dividend / anglvel_scale.divisor,
@@ -124,33 +124,34 @@ int basic_example_main()
 		no_os_mdelay(1000);
 		ret = adis_read_x_gyro(adis1647x_desc, &val[0]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 		ret = adis_read_y_gyro(adis1647x_desc, &val[1]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 		ret = adis_read_z_gyro(adis1647x_desc, &val[2]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 		ret = adis_read_x_accl(adis1647x_desc, &val[3]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 		ret = adis_read_y_accl(adis1647x_desc, &val[4]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 		ret = adis_read_z_accl(adis1647x_desc, &val[5]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 		ret = adis_read_temp_out(adis1647x_desc, &val[6]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1647x;
 
 		for (uint8_t i = 0; i < 7; i++)
 			pr_info("%s %.5f %s \n", output_data[i], val[i] * output_scale[i],
 				output_unit[i]);
 	}
-error_remove:
+remove_adis1647x:
 	adis_remove(adis1647x_desc);
-error:
-	pr_info("Error!\n");
-	return 0;
+exit:
+	if (ret)
+		pr_info("Error!\n");
+	return ret;
 }
