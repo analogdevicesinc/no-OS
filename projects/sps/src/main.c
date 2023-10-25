@@ -494,10 +494,10 @@ struct max_spi_init_param ad7799_spi_extra_ip  = {
 	if(status != 0)
 		return -1;
 	reg_data &= ~ADPD188_ILED1_COARSE_ILED1_COARSE_MASK;
-	reg_data |= (0x6 << ADPD188_ILED1_COARSE_ILED1_COARSE_POS) &
+	reg_data |= (0xf << ADPD188_ILED1_COARSE_ILED1_COARSE_POS) &
 		    ADPD188_ILED1_COARSE_ILED1_COARSE_MASK;
 	reg_data &= ~ADPD188_ILED1_COARSE_ILED1_SLEW_MASK;
-	reg_data |= (0x3 << ADPD188_ILED1_COARSE_ILED1_SLEW_POS) &
+	reg_data |= (0x5 << ADPD188_ILED1_COARSE_ILED1_SLEW_POS) &
 		    ADPD188_ILED1_COARSE_ILED1_SLEW_MASK;
 	reg_data |= ADPD188_ILED1_COARSE_ILED1_SCALE_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev,
@@ -628,7 +628,7 @@ struct max_spi_init_param ad7799_spi_extra_ip  = {
 	struct sps_iio_desc *sps;
 	struct sps_iio_init_param sps_config = {
 		.dev = adpd1080_iio_device->drv_dev,
-		.th_intensity = 1200000,
+		.th_intensity = 1000000,
 		.th_click = 60,
 		.pHdev = ad7793_iiodev->ad7793_desc,
 	};
