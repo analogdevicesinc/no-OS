@@ -272,9 +272,8 @@ static int max_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 	mxc_gpio_cfg_t cfg;
 
 	const int32_t trig_level[5] = {
-		/** This is intentional, the levels are inverted in the SDK */
-		[NO_OS_IRQ_LEVEL_LOW] = MXC_GPIO_INT_HIGH,
-		[NO_OS_IRQ_LEVEL_HIGH] = MXC_GPIO_INT_LOW,
+		[NO_OS_IRQ_LEVEL_LOW] = MXC_GPIO_INT_LOW,
+		[NO_OS_IRQ_LEVEL_HIGH] = MXC_GPIO_INT_HIGH,
 		[NO_OS_IRQ_EDGE_RISING] = MXC_GPIO_INT_RISING,
 		[NO_OS_IRQ_EDGE_FALLING] = MXC_GPIO_INT_FALLING,
 		[NO_OS_IRQ_EDGE_BOTH] = MXC_GPIO_INT_BOTH
