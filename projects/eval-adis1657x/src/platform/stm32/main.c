@@ -49,8 +49,8 @@
 #include "iio_trigger_example.h"
 #endif
 
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
 #endif
 
 /******************************************************************************/
@@ -74,7 +74,7 @@ int main()
 	ret = iio_trigger_example_main();
 #endif
 
-#ifdef DUMMY_EXAMPLE
+#ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
 
 	ret = no_os_uart_init(&uart_desc, &adis1657x_uart_ip);
@@ -82,14 +82,13 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
+	ret = basic_example_main();
+	no_os_uart_remove(uart_desc);
 #endif
 
-#if (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#if (BASIC_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#elif (BASIC_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
