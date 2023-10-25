@@ -96,7 +96,7 @@ build_astyle() {
 		wget --no-check-certificate "https://sourceforge.net/projects/astyle/files/astyle/astyle 3.1/astyle_3.1_linux.tar.gz"
 		tar -xzf astyle_3.1_linux.tar.gz
 		pushd ./astyle/build/gcc
-		make -j3
+		make -j${NUM_JOBS}
 		popd
 		popd
 	fi
@@ -106,7 +106,7 @@ run_astyle() {
 	git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
 		if is_source_file "$file" && is_valid_file "$file"
 		then
-			./build/astyle/build/gcc/bin/astyle --options="$(get_script_path astyle_config)" "$file"
+			./build/astyle/build/gcc/bin/astyle -j${NUM_JOBS} --options="$(get_script_path astyle_config)" "$file"
 		fi
 	done;
 
