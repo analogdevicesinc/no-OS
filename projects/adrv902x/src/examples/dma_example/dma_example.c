@@ -444,7 +444,9 @@ error_3:
 error_2:
 	adxcvr_remove(tx_adxcvr);
 error_1:
-	status = ad9528_remove(ad9528_device);
+	ad9528_remove(ad9528_device);
+
+	/* If we are here and status non-zero, diplay status */
 	if (status)
 		goto error;
 

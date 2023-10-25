@@ -481,14 +481,9 @@ int iio_example_main(void)
 	return iio_app_run(app);
 
 error_12:
-	status = iio_axi_dac_remove(iio_axi_dac_desc);
-	if (status)
-		goto error;
+	iio_axi_dac_remove(iio_axi_dac_desc);
 error_11:
-	status = iio_axi_adc_remove(iio_axi_adc_desc);
-	if (status)
-		goto error;
-
+	iio_axi_adc_remove(iio_axi_adc_desc);
 error_10:
 	axi_dmac_remove(rx_dmac);
 error_9:
@@ -509,7 +504,9 @@ error_3:
 error_2:
 	adxcvr_remove(tx_adxcvr);
 error_1:
-	status = ad9528_remove(ad9528_device);
+	ad9528_remove(ad9528_device);
+
+	/* If we are here and status non-zero, diplay status */
 	if (status)
 		goto error;
 
