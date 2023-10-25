@@ -39,6 +39,7 @@ sudo apt-get update
 
 TOP_DIR="$(pwd)"
 DEPS_DIR="${TOP_DIR}/deps"
+NUM_JOBS=$(nproc)
 
 . ./ci/lib.sh
 
@@ -53,7 +54,7 @@ build_cppcheck() {
 build_drivers() {
     sudo apt-get install gcc-arm-none-eabi libnewlib-arm-none-eabi
     git submodule update --init libraries/iio/libtinyiiod
-    make -C ./drivers -f Makefile -j
+    make -j${NUM_JOBS} -C ./drivers -f Makefile
 }
 
 build_documentation() {

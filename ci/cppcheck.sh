@@ -54,7 +54,7 @@ parse_cppcheck_options() {
 }
 
 run_cppcheck() {
-	cppcheck --quiet --force --error-exitcode=1 $CPPCHECK_OPTIONS .
+	cppcheck -j${NUM_JOBS} --quiet --force --error-exitcode=1 $CPPCHECK_OPTIONS .
 }
 
 build_cppheck
