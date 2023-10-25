@@ -139,6 +139,7 @@ void LCD_WriteData(uint16_t Data)
 	no_os_gpio_set_value(cs, NO_OS_GPIO_LOW);
  	no_os_spi_write_and_read(lcd, data, 2);
 	no_os_gpio_set_value(cs, NO_OS_GPIO_HIGH);
+	no_os_gpio_set_value(dc, NO_OS_GPIO_LOW);
 }
 
 /*******************************************************************************

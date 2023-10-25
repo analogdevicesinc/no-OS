@@ -62,6 +62,7 @@
 #include "ad7799.h"
 #include "iio_ad7793.h"
 #include "iio_ad7799.h"
+#include "Show_Lib.h"
 
 uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
 
@@ -665,6 +666,13 @@ struct max_spi_init_param ad7799_spi_extra_ip  = {
 	print_line(2, 0, 10, "IO2      :");
 	print_line(3, 0, 10, "IO3   (V):");
 	print_line(4, 0, 10, "pH       :");
+
+	int i, j;
+        for (i = 0; i < 97; i++) {
+		LCD_SetWindow(120, 220 + i, 120 + 240, 220 + i);
+		for (j = 0; j < 240; j++)
+                	LCD_WriteData(adi_logo[i * 240 + j]);
+	}
 
 	return iio_app_run(app);
 }
