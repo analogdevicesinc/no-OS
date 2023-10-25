@@ -108,7 +108,7 @@ The initialization data used in the examples is taken out from:
 The macros used in Common Data are defined in platform specific files found in:
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1647x/src/platform>`_
 
-Dummy example
+Basic example
 ^^^^^^^^^^^^^
 
 This is a simple example which initializes the adis1647x selected device and
@@ -121,7 +121,7 @@ In order to build the IIO project make sure you have the following configuration
 .. code-block:: bash
 
         # Select the example you want to enable by choosing y for enabling and n for disabling
-        DUMMY_EXAMPLE = y
+        BASIC_EXAMPLE = y
         IIO_TRIGGER_EXAMPLE = n
 
 IIO example
@@ -160,7 +160,7 @@ In order to build the IIO project make sure you have the following configuration
 .. code-block:: bash
 
         # Select the example you want to enable by choosing y for enabling and n for disabling
-        DUMMY_EXAMPLE = n
+        BASIC_EXAMPLE = n
         IIO_TRIGGER_EXAMPLE = y
 
 No-OS Supported Platforms
