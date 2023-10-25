@@ -75,14 +75,12 @@ int main()
 		return ret;
 
 	ret = basic_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
+	no_os_uart_remove(uart_desc);
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
 	ret = iio_trigger_example_main();
 #endif
-
 
 #if (BASIC_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
