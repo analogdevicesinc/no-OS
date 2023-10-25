@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   dummy_example.h
- *   @brief  DUMMY example header for eval-adis1650x project
+ *   @file   basic_example.h
+ *   @brief  BASIC example header for eval-adis1650x project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,13 +37,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __DUMMY_EXAMPLE_H__
-#define __DUMMY_EXAMPLE_H__
+#ifndef __BASIC_EXAMPLE_H__
+#define __BASIC_EXAMPLE_H__
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int dummy_example_main();
+int basic_example_main();
 
-#endif /* __DUMMY_EXAMPLE_H__ */
+#endif /* __BASIC_EXAMPLE_H__ */
