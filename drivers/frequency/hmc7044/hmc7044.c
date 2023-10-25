@@ -1476,7 +1476,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	struct hmc7044_dev *dev;
 	int32_t ret;
 	unsigned int i;
-	struct no_os_clk_desc **clocks;
+	struct no_os_clk_desc **clocks = NULL;
 	struct no_os_clk_init_param clk_init;
 	const char *names[HMC7044_NUM_CHAN] = {
 		"clock_0", "clock_1", "clock_2", "clock_3", "clock_4",
