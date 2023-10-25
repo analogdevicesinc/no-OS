@@ -454,7 +454,7 @@ struct iio_attribute adis1657x_debug_attrs[] = {
 		.priv = ADIS_USR_SCR_3,
 	},
 	{
-		.name = "flash_counter",
+		.name = "flash_count",
 		.show = adis_iio_read_debug_attrs,
 		.priv = ADIS_FLS_MEM_WR_CNTR,
 	},
