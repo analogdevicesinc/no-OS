@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   dummy_example.c
- *   @brief  DUMMY example header for eval-adis1650x project
+ *   @file   basic_example.c
+ *   @brief  BASIC example header for eval-adis1650x project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "dummy_example.h"
+#include "basic_example.h"
 #include "common_data.h"
 #include "adis1650x.h"
 #include "no_os_delay.h"
@@ -82,7 +82,7 @@ static const char * const output_unit[] = {
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
  */
-int dummy_example_main()
+int basic_example_main()
 {
 	struct adis_dev *adis1650x_desc;
 	int ret;
@@ -95,19 +95,19 @@ int dummy_example_main()
 
 	ret = adis_init(&adis1650x_desc, &adis1650x_chip_info);
 	if (ret)
-		goto error;
+		goto exit;
 
 	ret = adis_get_accl_scale(adis1650x_desc, &accl_scale);
 	if (ret)
-		goto error_remove;
+		goto remove_adis1650x;
 
 	ret = adis_get_anglvel_scale(adis1650x_desc, &anglvel_scale);
 	if (ret)
-		goto error_remove;
+		goto remove_adis1650x;
 
 	ret = adis_get_temp_scale(adis1650x_desc, &temp_scale);
 	if (ret)
-		goto error_remove;
+		goto remove_adis1650x;
 
 	float output_scale[] = {
 		(float)anglvel_scale.dividend / anglvel_scale.divisor,
@@ -124,33 +124,34 @@ int dummy_example_main()
 		no_os_mdelay(1000);
 		ret = adis_read_x_gyro(adis1650x_desc, &val[0]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 		ret = adis_read_y_gyro(adis1650x_desc, &val[1]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 		ret = adis_read_z_gyro(adis1650x_desc, &val[2]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 		ret = adis_read_x_accl(adis1650x_desc, &val[3]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 		ret = adis_read_y_accl(adis1650x_desc, &val[4]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 		ret = adis_read_z_accl(adis1650x_desc, &val[5]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 		ret = adis_read_temp_out(adis1650x_desc, &val[6]);
 		if (ret)
-			goto error_remove;
+			goto remove_adis1650x;
 
 		for (uint8_t i = 0; i < 7; i++)
 			pr_info("%s %.5f %s \n", output_data[i], val[i] * output_scale[i],
 				output_unit[i]);
 	}
-error_remove:
+remove_adis1650x:
 	adis_remove(adis1650x_desc);
-error:
-	pr_info("Error!\n");
-	return 0;
+exit:
+	if (ret)
+		pr_info("Error!\n");
+	return ret;
 }

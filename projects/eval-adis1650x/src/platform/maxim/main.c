@@ -49,8 +49,8 @@
 #include "iio_trigger_example.h"
 #endif
 
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
 #endif
 
 /******************************************************************************/
@@ -58,7 +58,7 @@
 /******************************************************************************/
 
 /**
- * @brief Main function execution for STM32 platform.
+ * @brief Main function execution for Maxim platform.
  *
  * @return ret - Result of the enabled examples execution.
  */
@@ -68,7 +68,7 @@ int main()
 
 	adis1650x_ip.spi_init = &adis1650x_spi_ip;
 
-#ifdef DUMMY_EXAMPLE
+#ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
 
 	ret = no_os_uart_init(&uart_desc, &adis1650x_uart_ip);
@@ -76,9 +76,8 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
+	ret = basic_example_main();
+	no_os_uart_remove(uart_desc);
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
@@ -95,30 +94,28 @@ int main()
 
 	ret = no_os_gpio_direction_input(adis_gpio_desc);
 	if (ret)
-		goto error_gpio;
+		goto remove_gpio;
 
 	/* Initialize GPIO IRQ controller */
 	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
 	if (ret)
-		goto error_gpio;
+		goto remove_gpio;
 
 	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
 	if (ret)
-		goto error_irq;
+		goto remove_irq_ctrl;
 
 	ret = iio_trigger_example_main();
-	if (ret)
-		goto error_irq;
 
-error_irq:
+remove_irq_ctrl:
 	no_os_irq_ctrl_remove(nvic_desc);
-error_gpio:
+remove_gpio:
 	no_os_gpio_remove(adis_gpio_desc);
 #endif
 
-#if (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#if (BASIC_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#elif (BASIC_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif

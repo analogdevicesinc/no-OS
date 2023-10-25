@@ -1,26 +1,26 @@
 {
   "pico": {
-    "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n RELEASE=y"
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n RELEASE=y"
     },
     "iio_trigger_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y RELEASE=y"
+      "flags" : "BASIC_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y RELEASE=y"
     }
   },
   "maxim": {
-    "dummy_example_max78000": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000 RELEASE=y"
+    "basic_example_max78000": {
+      "flags" : "BASIC_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000 RELEASE=y"
     },
     "iio_trigger_example_max78000": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max78000 RELEASE=y"
+      "flags" : "BASIC_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max78000 RELEASE=y"
     }
   },
   "stm32": {
-    "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n RELEASE=y"
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n RELEASE=y"
     },
     "iio_trigger_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y RELEASE=y"
+      "flags" : "BASIC_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y RELEASE=y"
     }
   }
 }
