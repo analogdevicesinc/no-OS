@@ -106,6 +106,13 @@ void GPIO2_IRQHandler()
 }
 #endif
 
+#ifdef MXC_GPIO3
+void GPIO3_IRQHandler()
+{
+	MXC_GPIO_Handler(3);
+}
+#endif
+
 /**
  * @brief Initialize the GPIO interrupt controller
  * @param desc - Pointer where the configured instance is stored
