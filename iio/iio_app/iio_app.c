@@ -246,7 +246,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
 #if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM)
 		.irq_id = uart_init_par->irq_id,
-		.asynchronous_rx = true,
+		.asynchronous_rx = false,
 #endif
 		.baud_rate = UART_BAUDRATE_DEFAULT,
 		.size = NO_OS_UART_CS_8,
