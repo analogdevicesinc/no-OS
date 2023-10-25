@@ -80,10 +80,12 @@ struct no_os_time no_os_get_time(void)
 {
 	struct no_os_time t;
 
+	NVIC_DisableIRQ(SysTick_IRQn);
 	t.s = _system_ticks / 1000;
 
 	t.us = (_system_ticks - t.s * 1000) * 1000 + SysTick->VAL /
 	       (SystemCoreClock / 1000000);
+	NVIC_EnableIRQ(SysTick_IRQn);
 
 	return t;
 }
