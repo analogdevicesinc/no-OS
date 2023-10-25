@@ -298,8 +298,8 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 {
 	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
 	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
-	uint32_t tx_cnt = 0;
-	uint32_t rx_cnt = 0;
+	uint32_t tx_cnt;
+	uint32_t rx_cnt;
 	bool rx_done = true;
 	bool tx_done = true;
 	uint32_t slave_id;
@@ -329,6 +329,9 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		/* Enable SPI */
 		spi->intfl |= MXC_F_SPI_INTFL_MST_DONE;
 		spi->ctrl1 = 0;
+
+		rx_cnt = 0;
+		tx_cnt = 0;
 
 		if (msgs[i].cs_change)
 			spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_CTRL;
