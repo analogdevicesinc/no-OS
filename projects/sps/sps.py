@@ -10,7 +10,7 @@ down = 4
 left = 8
 right = 16
 
-contexturi = "ip:192.168.20.120"
+contexturi = "ip:192.168.20.111"
 
 # apard32690_ctx = iio.Context("ip:192.168.20.112")
 
