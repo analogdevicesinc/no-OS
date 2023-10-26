@@ -127,7 +127,7 @@ int sps_gesture_detection(struct sps_iio_desc *iiodev)
 
 	if (iiodev->event) {
 		iiodev->evc += 1;
-		if (iiodev->evc >= 5 && L < iiodev->th_intensity) {
+		if (iiodev->evc >= 6 && L < iiodev->th_intensity) {
 			iiodev->event = false;
 			gestureStopX = x;
 			gestureStopY = y;
@@ -152,7 +152,7 @@ int sps_gesture_detection(struct sps_iio_desc *iiodev)
 					gesture = right;
 			}
 		}
-		if (!iiodev->event) {
+		if (iiodev->evc && !iiodev->event) {
 			iiodev->gestures |= NO_OS_BIT(gesture);
 			iiodev->d_gestures |= NO_OS_BIT(gesture);
 		}
