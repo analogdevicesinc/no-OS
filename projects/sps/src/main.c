@@ -403,7 +403,7 @@ int main(void)
 
 	no_os_init();
 
-struct max_spi_init_param ad7799_spi_extra_ip  = {
+	struct max_spi_init_param ad7799_spi_extra_ip  = {
 		.num_slaves = 1,
 		.polarity = SPI_SS_POL_LOW,
 		.vssel = MXC_GPIO_VSSEL_VDDIOH,
@@ -637,7 +637,7 @@ struct max_spi_init_param ad7799_spi_extra_ip  = {
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
 			       &iio_adpd1080_read_buff, NULL, NULL),
-		IIO_APP_DEVICE("ad7793", ad7793_iiodev, &ad7799_iio_descriptor,
+		IIO_APP_DEVICE("ad7793", ad7793_iiodev->ad7793_desc, &ad7799_iio_descriptor,
 				NULL, NULL, NULL),
 		IIO_APP_DEVICE("sps", sps, &iio_sps_device,
 				NULL, NULL, NULL)
