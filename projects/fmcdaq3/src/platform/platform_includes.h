@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   projects/fmcdaq3/src/app/app_config.h
- *   @brief  Config file for DAQ3 project.
- *   @author DBogdan (dragos.bogdan@analog.com)
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   platform_includes.h
+ *   @brief  Includes for used platforms used by ADF4382 project.
+ *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,14 +36,18 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PLATFORM_INCLUDES_H__
+#define __PLATFORM_INCLUDES_H__
 
-#ifndef APP_CONFIG_H_
-#define APP_CONFIG_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#ifdef XILINX_PLATFORM
+#include "xilinx/parameters.h"
+#endif
 
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#endif
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-
-//#define IIO_SUPPORT
-
-#endif /* APP_CONFIG_H_ */
+#endif /* __PLATFORM_INCLUDES_H__ */

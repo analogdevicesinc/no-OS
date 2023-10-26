@@ -1,0 +1,14 @@
+Tue Oct 24 12:09:39 2023: Server was asked to start on port: '40463'
+Tue Oct 24 12:09:39 2023: Server is using token UUID: 'a12e1964-4bb1-4bfb-960e-8d7465341f98'
+Tue Oct 24 12:09:39 2023: Attempting to start server on port '40463'
+Tue Oct 24 12:09:39 2023: XRC main fifo: created main fifo '/tmp/xrcmaina12e1964-4bb1-4bfb-960e-8d7465341f98', fd read = 11
+Tue Oct 24 12:09:39 2023: Running Rule Check Server
+Tue Oct 24 12:09:39 2023: Version 1.6.1
+Tue Oct 24 12:09:40 2023: Rule Check Server: Accepted socket connection from client
+Tue Oct 24 12:09:40 2023: EXCHANGE_TOKEN received, server token: a12e1964-4bb1-4bfb-960e-8d7465341f98, passed token: a12e1964-4bb1-4bfb-960e-8d7465341f98
+Tue Oct 24 16:49:20 2023: STOP_SERVER received, server token: a12e1964-4bb1-4bfb-960e-8d7465341f98, passed token: a12e1964-4bb1-4bfb-960e-8d7465341f98
+Tue Oct 24 16:49:20 2023: Socket received request to stop server.
+Tue Oct 24 16:49:20 2023: SERVER: destructor for server bound to port 40463
+Tue Oct 24 16:49:20 2023: XRC main fifo: Good unlink of /tmp/xrcmaina12e1964-4bb1-4bfb-960e-8d7465341f98
+Tue Oct 24 16:49:20 2023: Server exiting with status 0.
+Tue Oct 24 16:49:20 2023: Closing log file.

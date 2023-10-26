@@ -1,9 +1,10 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Platform dependent parameters.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @brief  Definitions specific to xilinx platform used by iio_demo
+ *           project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,19 +37,27 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#include <xparameters.h>
+#include <xil_cache.h>
+#include <xilinx_spi.h>
+#include <xilinx_uart.h>
+#include <xilinx_gpio.h>
+#include <xil_printf.h>
+#include "axi_adxcvr.h"
 
-#include "app_config.h"
-#ifdef ALTERA_PLATFORM
-#include "system.h"
-#else
-#include "xparameters.h"
+
+#ifdef IIO_SUPPORT
+#include "iio_ad9680.h"
+#include "iio_ad9152.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
+#include "xilinx_uart.h"
 #endif
 
 #define UART_BAUDRATE                           115200
-#ifndef ALTERA_PLATFORM
 #ifdef PLATFORM_MB
 #define SPI_DEVICE_ID				XPAR_SPI_0_DEVICE_ID
 #define GPIO_DEVICE_ID				XPAR_GPIO_0_DEVICE_ID
@@ -91,54 +100,26 @@
 
 #define RX_XCVR_BASEADDR			XPAR_AXI_AD9680_XCVR_BASEADDR
 #define TX_XCVR_BASEADDR			XPAR_AXI_AD9152_XCVR_BASEADDR
-#else
-#define SPI_DEVICE_ID				0
-#define GPIO_DEVICE_ID				0
 
-#define GPIO_OFFSET				0
+#define GPIO_CLKD_STATUS_0      		(GPIO_OFFSET + 32)
+#define GPIO_CLKD_STATUS_1      		(GPIO_OFFSET + 33)
+#define GPIO_DAC_IRQ           			(GPIO_OFFSET + 34)
+#define GPIO_ADC_FDA            		(GPIO_OFFSET + 35)
+#define GPIO_ADC_FDB            		(GPIO_OFFSET + 36)
+#define GPIO_DAC_TXEN           		(GPIO_OFFSET + 37)
+#define GPIO_ADC_PD             		(GPIO_OFFSET + 38)
+#define GPIO_TRIG               		(GPIO_OFFSET + 39)
 
-#define SPI_BASEADDR				SYS_SPI_BASE
-#define GPIO_BASEADDR				SYS_GPIO_OUT_BASE
+extern struct xil_uart_init_param platform_uart_init_par;
+extern struct xil_spi_init_param xil_spi_param;
+extern struct xil_gpio_init_param xil_gpio_param ;
 
-#define ADC_DDR_BASEADDR			(SYS_DDR3_CNTRL_ARCH_BASE + 0x800000)
-#define DAC_DDR_BASEADDR			(SYS_DDR3_CNTRL_ARCH_BASE + 0x900000)
-
-#define RX_CORE_BASEADDR			AXI_AD9680_CORE_BASE
-#define TX_CORE_BASEADDR			AXI_AD9152_CORE_BASE
-
-#define RX_DMA_BASEADDR				AXI_AD9680_DMA_BASE
-#define TX_DMA_BASEADDR				AXI_AD9152_DMA_BASE
-
-#define RX_JESD_BASEADDR			AD9680_JESD204_LINK_RECONFIG_BASE
-#define TX_JESD_BASEADDR			AD9152_JESD204_LINK_RECONFIG_BASE
-
-#define RX_XCVR_BASEADDR			AD9680_JESD204_LINK_MANAGEMENT_BASE
-#define TX_XCVR_BASEADDR			AD9152_JESD204_LINK_MANAGEMENT_BASE
-
-#define RX_A10_FPLL_BASEADDR			AD9680_JESD204_LINK_PLL_RECONFIG_BASE
-#define TX_A10_FPLL_BASEADDR			AD9152_JESD204_LINK_PLL_RECONFIG_BASE
-
-#define TX_PLL_BASEADDR				AD9152_JESD204_LANE_PLL_RECONFIG_BASE
-#define RX_PLL_BASEADDR				AD9680_JESD204_LINK_PLL_RECONFIG_BASE
-
-#define RX_ADXCFG_0_BASEADDR			AVL_ADXCFG_0_RCFG_S1_BASE
-#define RX_ADXCFG_1_BASEADDR			AVL_ADXCFG_1_RCFG_S1_BASE
-#define RX_ADXCFG_2_BASEADDR			AVL_ADXCFG_2_RCFG_S1_BASE
-#define RX_ADXCFG_3_BASEADDR			AVL_ADXCFG_3_RCFG_S1_BASE
-#define TX_ADXCFG_0_BASEADDR			AVL_ADXCFG_0_RCFG_S0_BASE
-#define TX_ADXCFG_1_BASEADDR			AVL_ADXCFG_1_RCFG_S0_BASE
-#define TX_ADXCFG_2_BASEADDR			AVL_ADXCFG_2_RCFG_S0_BASE
-#define TX_ADXCFG_3_BASEADDR			AVL_ADXCFG_3_RCFG_S0_BASE
-#endif
-
-#define GPIO_CLKD_STATUS_0      (GPIO_OFFSET + 32)
-#define GPIO_CLKD_STATUS_1      (GPIO_OFFSET + 33)
-#define GPIO_DAC_IRQ           	(GPIO_OFFSET + 34)
-#define GPIO_ADC_FDA            (GPIO_OFFSET + 35)
-#define GPIO_ADC_FDB            (GPIO_OFFSET + 36)
-#define GPIO_DAC_TXEN           (GPIO_OFFSET + 37)
-#define GPIO_ADC_PD             (GPIO_OFFSET + 38)
-#define GPIO_TRIG               (GPIO_OFFSET + 39)
+#define SPI_OPS					&xil_spi_ops
+#define SPI_EXTRA				&xil_spi_param
+#define UART_OPS				&xil_uart_ops
+#define UART_EXTRA				&platform_uart_init_par
+#define GPIO_OPS				&xil_gpio_ops
+#define GPIO_EXTRA				&xil_gpio_param
 
 enum ad9523_channels {
 	DAC_DEVICE_CLK,
@@ -151,4 +132,7 @@ enum ad9523_channels {
 	ADC_FPGA_SYSREF,
 };
 
-#endif /* _PARAMETERS_H_ */
+extern struct adxcvr_init ad9152_xcvr_param;
+extern struct adxcvr_init ad9680_xcvr_param;
+
+#endif /* __PARAMETERS_H__ */
