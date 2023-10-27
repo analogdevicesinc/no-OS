@@ -53,13 +53,13 @@
 #define AD7768_REG_CH_MODE_A				0x01
 #define AD7768_REG_CH_MODE_B				0x02
 #define AD7768_REG_CH_MODE_SEL				0x03
-#define AD7768_REG_PWR_MODE					0x04
+#define AD7768_REG_PWR_MODE				0x04
 #define AD7768_REG_GENERAL_CFG				0x05
 #define AD7768_REG_DATA_CTRL				0x06
 #define AD7768_REG_INTERFACE_CFG			0x07
 #define AD7768_REG_BIST_CTRL				0x08
 #define AD7768_REG_DEV_STATUS				0x09
-#define AD7768_REG_REV_ID					0x0A
+#define AD7768_REG_REV_ID				0x0A
 #define AD7768_REG_DEV_ID_MSB				0x0B
 #define AD7768_REG_DEV_ID_LSB				0x0C
 #define AD7768_REG_SW_REV_ID				0x0D
@@ -76,10 +76,10 @@
 #define AD7768_REG_CH_GAIN_1(ch)			(0x36 + (ch) * 3)
 #define AD7768_REG_CH_GAIN_2(ch)			(0x37 + (ch) * 3)
 #define AD7768_REG_CH_GAIN_3(ch)			(0x38 + (ch) * 3)
-#define AD7768_REG_CH_SYNC_OFFSET(ch)		(0x4E + (ch) * 3)
+#define AD7768_REG_CH_SYNC_OFFSET(ch)			(0x4E + (ch) * 3)
 #define AD7768_REG_DIAG_METER_RX			0x56
 #define AD7768_REG_DIAG_CTRL				0x57
-#define AD7768_REG_DIAG_MOD_DELAY_CTRL		0x58
+#define AD7768_REG_DIAG_MOD_DELAY_CTRL			0x58
 #define AD7768_REG_DIAG_CHOP_CTRL			0x59
 
 /* AD7768_REG_CH_STANDBY */
@@ -90,24 +90,24 @@
 #define AD7768_CH_MODE_DEC_RATE(x)			(((x) & 0x7) << 0)
 
 /* AD7768_REG_CH_MODE_SEL */
-#define AD7768_CH_MODE(x)					(1 << (x))
+#define AD7768_CH_MODE(x)				(1 << (x))
 
 /* AD7768_REG_PWR_MODE */
 #define AD7768_PWR_MODE_SLEEP_MODE			(1 << 7)
-#define AD7768_PWR_MODE_POWER_MODE(x)		(((x) & 0x3) << 4)
+#define AD7768_PWR_MODE_POWER_MODE(x)			(((x) & 0x3) << 4)
 #define AD7768_PWR_MODE_LVDS_ENABLE			(1 << 3)
 #define AD7768_PWR_MODE_MCLK_DIV(x)			(((x) & 0x3) << 0)
 
 /* AD7768_REG_DATA_CTRL */
 #define AD7768_DATA_CTRL_SPI_SYNC			(1 << 7)
-#define AD7768_DATA_CTRL_SINGLE_SHOT_EN		(1 << 4)
-#define AD7768_DATA_CTRL_SPI_RESET(x)		(((x) & 0x3) << 0)
+#define AD7768_DATA_CTRL_SINGLE_SHOT_EN			(1 << 4)
+#define AD7768_DATA_CTRL_SPI_RESET(x)			(((x) & 0x3) << 0)
 
 /* AD7768_REG_INTERFACE_CFG */
-#define AD7768_INTERFACE_CFG_CRC_SEL(x)		(((x) & 0x3) << 2)
-#define AD7768_INTERFACE_CFG_DCLK_DIV(x)	(((x) & 0x3) << 0)
+#define AD7768_INTERFACE_CFG_CRC_SEL(x)			(((x) & 0x3) << 2)
+#define AD7768_INTERFACE_CFG_DCLK_DIV(x)		(((x) & 0x3) << 0)
 
-#define AD7768_RESOLUTION					24
+#define AD7768_RESOLUTION				24
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -192,45 +192,45 @@ typedef enum {
 } ad7768_dec_rate;
 
 typedef struct {
-	struct no_os_spi_desc			*spi_desc;
-	struct no_os_gpio_desc	*gpio_reset;
-	uint8_t			gpio_reset_value;
-	struct no_os_gpio_desc	*gpio_mode0;
-	struct no_os_gpio_desc	*gpio_mode1;
-	struct no_os_gpio_desc	*gpio_mode2;
-	struct no_os_gpio_desc	*gpio_mode3;
-	uint8_t			pin_spi_input_value;
-	ad7768_pin_spi_ctrl	pin_spi_ctrl;
-	ad7768_sleep_mode	sleep_mode;
-	ad7768_power_mode	power_mode;
-	ad7768_mclk_div		mclk_div;
-	ad7768_dclk_div		dclk_div;
-	ad7768_conv_op		conv_op;
-	ad7768_crc_sel		crc_sel;
-	ad7768_ch_state		ch_state[8];
-	ad7768_ch_mode		ch_mode[8];
-	ad7768_filt_type	filt_type[2];
-	ad7768_dec_rate		dec_rate[2];
+	struct no_os_spi_desc		*spi_desc;
+	struct no_os_gpio_desc		*gpio_reset;
+	uint8_t				gpio_reset_value;
+	struct no_os_gpio_desc		*gpio_mode0;
+	struct no_os_gpio_desc		*gpio_mode1;
+	struct no_os_gpio_desc		*gpio_mode2;
+	struct no_os_gpio_desc		*gpio_mode3;
+	uint8_t				pin_spi_input_value;
+	ad7768_pin_spi_ctrl		pin_spi_ctrl;
+	ad7768_sleep_mode		sleep_mode;
+	ad7768_power_mode		power_mode;
+	ad7768_mclk_div			mclk_div;
+	ad7768_dclk_div			dclk_div;
+	ad7768_conv_op			conv_op;
+	ad7768_crc_sel			crc_sel;
+	ad7768_ch_state			ch_state[8];
+	ad7768_ch_mode			ch_mode[8];
+	ad7768_filt_type		filt_type[2];
+	ad7768_dec_rate			dec_rate[2];
 } ad7768_dev;
 
 typedef struct {
 	/* SPI */
-	struct no_os_spi_init_param			spi_init;
+	struct no_os_spi_init_param		spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param		gpio_reset;
-	uint8_t				gpio_reset_value;
+	uint8_t					gpio_reset_value;
 	struct no_os_gpio_init_param		gpio_mode0;
 	struct no_os_gpio_init_param		gpio_mode1;
 	struct no_os_gpio_init_param		gpio_mode2;
 	struct no_os_gpio_init_param		gpio_mode3;
 	/* Configuration */
-	uint8_t				pin_spi_input_value;
-	ad7768_sleep_mode	sleep_mode;
-	ad7768_power_mode	power_mode;
-	ad7768_mclk_div		mclk_div;
-	ad7768_dclk_div		dclk_div;
-	ad7768_conv_op		conv_op;
-	ad7768_crc_sel		crc_sel;
+	uint8_t					pin_spi_input_value;
+	ad7768_sleep_mode			sleep_mode;
+	ad7768_power_mode			power_mode;
+	ad7768_mclk_div				mclk_div;
+	ad7768_dclk_div				dclk_div;
+	ad7768_conv_op				conv_op;
+	ad7768_crc_sel				crc_sel;
 } ad7768_init_param;
 
 /******************************************************************************/
