@@ -247,11 +247,19 @@ int main(void)
 
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
 	struct iio_device *dev_desc;
+	struct scan_type init_scan_type = {
+		.sign = 's',
+		.realbits = 24,
+		.storagebits = 32,
+		.shift = 0,
+		.is_big_endian = false
+	};
 	struct iio_axi_adc_init_param iio_axi_adc_init_par = {
 		.rx_adc = axi_adc_core_desc,
 		.rx_dmac = dma_desc,
 		.dcache_invalidate_range = (void (*)(uint32_t,
-						     uint32_t))Xil_DCacheInvalidateRange
+						     uint32_t))Xil_DCacheInvalidateRange,
+		.init_scan_type = &init_scan_type,
 	};
 
 	ret = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
