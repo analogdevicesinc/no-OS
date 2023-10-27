@@ -72,6 +72,8 @@ struct iio_axi_adc_desc {
 	struct iio_device dev_descriptor;
 	/** Channel names */
 	char (*ch_names)[20];
+	/** Custom data format */
+	struct scan_type *scan_type_common;
 };
 
 /**
@@ -88,6 +90,8 @@ struct iio_axi_adc_init_param {
 	/** Custom sampling frequency getter */
 	int (*get_sampling_frequency)(struct axi_adc *dev, uint32_t chan,
 				      uint64_t *sampling_freq_hz);
+	/** Custom data format (unpopulated if not used, set to default) */
+	struct scan_type *init_scan_type;
 };
 
 /******************************************************************************/

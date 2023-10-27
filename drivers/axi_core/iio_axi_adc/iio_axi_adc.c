@@ -356,7 +356,8 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 		return -1;
 
 	iio_adc = (struct iio_axi_adc_desc *)dev;
-	bytes = nb_samples * no_os_hweight32(iio_adc->mask) * (STORAGE_BITS / 8);
+	bytes = nb_samples * no_os_hweight32(iio_adc->mask) *
+		(iio_adc->scan_type_common->storagebits / 8);
 
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to writen/read
@@ -414,23 +415,16 @@ static int iio_axi_adc_delete_device_descriptor(
 static int32_t iio_axi_adc_create_device_descriptor(
 	struct iio_axi_adc_desc *desc, struct iio_device *iio_device)
 {
-	static struct scan_type scan_type = {
-		.sign = 's',
-		.realbits = STORAGE_BITS,
-		.storagebits = STORAGE_BITS,
-		.shift = 0,
-		.is_big_endian = false
-	};
-
 	static struct iio_channel default_channel = {
 		.ch_type = IIO_VOLTAGE,
-		.scan_type =  &scan_type,
 		.attributes = iio_voltage_attributes,
 		.ch_out = false,
 		.indexed = true,
 	};
 	int32_t i;
 	int32_t ret;
+
+	default_channel.scan_type = desc->scan_type_common;
 
 	if (!desc->dmac)
 		default_channel.scan_type = NULL;
@@ -489,8 +483,15 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 			 struct iio_axi_adc_init_param *init)
 {
 	struct iio_axi_adc_desc *iio_axi_adc_inst;
-
 	int32_t status;
+
+	static struct scan_type scan_type = {
+		.sign = 's',
+		.realbits = STORAGE_BITS,
+		.storagebits = STORAGE_BITS,
+		.shift = 0,
+		.is_big_endian = false
+	};
 
 	if (!init)
 		return -1;
@@ -509,6 +510,11 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 		iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
 	}
 	iio_axi_adc_inst->get_sampling_frequency = init->get_sampling_frequency;
+
+	if (init->init_scan_type)
+		iio_axi_adc_inst->scan_type_common = init->init_scan_type;
+	else
+		iio_axi_adc_inst->scan_type_common = &scan_type;
 
 	status = iio_axi_adc_create_device_descriptor(iio_axi_adc_inst,
 			&iio_axi_adc_inst->dev_descriptor);
