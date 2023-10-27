@@ -49,6 +49,7 @@
 #include "tcp_socket.h"
 #include "no_os_error.h"
 #include "adin1110.h"
+#include "network_interface.h"
 
 #define EXT_FLASH_BAUD 4000000
 
@@ -162,11 +163,11 @@ int basic_example_main()
 
 	printf("UART test: PASSED\n");
 
-	ret = maxq1065_init(&maxq1065, &maxq1065_ip);
-	if (ret)
-		return ret;
+	// ret = maxq1065_init(&maxq1065, &maxq1065_ip);
+	// if (ret)
+	// 	return ret;
 
-	printf("MAXQ1065 ping: PASSED\n");
+	// printf("MAXQ1065 ping: PASSED\n");
 
 	cfg_reg[0].addr = 0x01000;
 	cfg_reg[0].val  = 0x801f;
@@ -277,32 +278,41 @@ int basic_example_main()
 	if (ret)
 		return ret;
 
-	ret = socket_bind(tcp_socket, 10000);
+	struct socket_address ip_addr = {
+		.addr = "169.254.97.35",
+		.port = 20000
+	};
+
+	ret = socket_connect(tcp_socket, &ip_addr);
 	if (ret)
 		return ret;
 
-	ret = socket_listen(tcp_socket, MAX_BACKLOG);
-	if (ret)
-		return ret;
+	// ret = socket_bind(tcp_socket, 10000);
+	// if (ret)
+	// 	return ret;
+
+	// ret = socket_listen(tcp_socket, MAX_BACKLOG);
+	// if (ret)
+	// 	return ret;
 
 	uint8_t read_buff[100] = {0};
 
 	while(1) {
-		ret = socket_accept(tcp_socket, &client_socket);
-		if (ret && ret != -EAGAIN)
-			return ret;
+		// ret = socket_accept(tcp_socket, &client_socket);
+		// if (ret && ret != -EAGAIN)
+		// 	return ret;
 
-		if (client_socket) {
-			connected = true;
-		}
+		// if (client_socket) {
+		// 	connected = true;
+		// }
 
 		no_os_lwip_step(tcp_socket->net->net, NULL);
 
-		if (connected) {
-			ret = socket_recv(client_socket, read_buff, 1);
-			if (ret > 0)
-				socket_send(client_socket, read_buff, ret);
-		}
+		// if (connected) {
+		// 	ret = socket_recv(client_socket, read_buff, 1);
+		// 	if (ret > 0)
+		// 		socket_send(client_socket, read_buff, ret);
+		// }
 	}
 
 	return 0;

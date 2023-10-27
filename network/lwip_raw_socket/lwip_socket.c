@@ -234,7 +234,7 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 	char mdns_name_buff[256];
 	uint32_t len;
 	int ret;
-	int i;
+	int i = 0;
 
 	mdns_resp_init();
 	mdns_resp_register_name_result_cb(mdns_name_result);
@@ -257,6 +257,7 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 		while (!mdns_result && i < 3000) {
 			no_os_lwip_step(desc, desc);
 			no_os_mdelay(1);
+			i++;
 		}
 
 		if (mdns_is_conflict)
@@ -793,6 +794,8 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 	return -ENOSYS;
 }
 
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err);
+
 /**
  * @brief Not implemented.
  * @param net - Not used.
@@ -803,7 +806,27 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 				   struct socket_address *addr)
 {
-	return -ENOSYS;
+	struct lwip_network_desc *desc = net;
+	struct lwip_socket_desc *socket;
+
+	ip4_addr_t ip4;
+	IP_ADDR4(&ip4, 169, 254, 97, 30);
+	const ip_addr_t ipaddr = IPADDR4_INIT(ip4.addr);
+
+	struct tcp_pcb *pcb;
+	err_t ret;
+
+	socket = _get_sock(desc, sock_id);
+	if (!socket)
+		return -ENOMEM;
+
+	pcb = socket->pcb;
+
+	ret = tcp_connect(pcb, &ipaddr, 20001, lwip_connect_callback);
+	if (ret)
+		return ret;
+
+	return 0;
 }
 
 /**
@@ -814,7 +837,14 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
  */
 static int32_t lwip_socket_disconnect(void *net, uint32_t sock_id)
 {
-	return -ENOSYS;
+	return lwip_socket_close(net, sock_id);
+}
+
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
+{
+	sock->state = SOCKET_CONNECTED;
+
+	return 0;
 }
 
 /**
