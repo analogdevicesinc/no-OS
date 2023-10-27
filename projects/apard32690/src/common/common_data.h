@@ -41,10 +41,21 @@
 
 #include "no_os_uart.h"
 #include "no_os_util.h"
+#include "maxq1065.h"
+#include "lwip_socket.h"
+#include "lwip_adin1110.h"
 
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
+#include "maxim_gpio.h"
+#include "maxim_spi.h"
 
 extern struct no_os_uart_init_param uart_ip;
+extern const struct max_spi_init_param maxq1065_spi_extra;
+extern const struct no_os_spi_init_param maxq1065_spi_ip;
+extern const struct no_os_gpio_init_param maxq1065_reset_ip;
+extern const struct maxq1065_init_param maxq1065_ip;
+extern struct lwip_network_param lwip_ip;
+extern struct adin1110_init_param adin1110_ip;
 
 #endif /* __COMMON_DATA_H__ */

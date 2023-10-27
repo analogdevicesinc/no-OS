@@ -44,6 +44,12 @@
 #include "spixf.h"
 #include "Ext_Flash.h"
 
+#include "maxq1065.h"
+#include "lwip_socket.h"
+#include "tcp_socket.h"
+#include "no_os_error.h"
+#include "adin1110.h"
+
 #define EXT_FLASH_BAUD 4000000
 
 static bool flash_test = false;
@@ -144,6 +150,9 @@ int basic_example_main()
 	mxc_hpb_mem_config_t mem;
 	mxc_hpb_mem_config_t mem2;
 	mxc_hpb_cfg_reg_val_t cfg_reg[1];
+	struct maxq1065_desc *maxq1065;
+	struct lwip_network_desc *lwip_desc;
+	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
@@ -151,7 +160,13 @@ int basic_example_main()
 
 	no_os_uart_stdio(uart_desc);
 
-	printf("Hello world");
+	printf("UART test: PASSED\n");
+
+	ret = maxq1065_init(&maxq1065, &maxq1065_ip);
+	if (ret)
+		return ret;
+
+	printf("MAXQ1065 ping: PASSED\n");
 
 	cfg_reg[0].addr = 0x01000;
 	cfg_reg[0].val  = 0x801f;
@@ -223,6 +238,72 @@ int basic_example_main()
 
 	func_ram1 = (void(*)(void))((uint32_t)&__load_start_xip | 1);
 	func_ram1();
+
+	printf("RAM chip 1: ");
+	if (ram1_test)
+		printf("PASSED \n");
+	else
+		printf("FAILED \n");
+
+	printf("RAM chip 2: ");
+	if (ram2_test)
+		printf("PASSED \n");
+	else
+		printf("FAILED \n");
+
+	printf("Flash chip: ");
+	if (flash_test)
+		printf("PASSED \n");
+	else
+		printf("FAILED \n");
+
+	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+
+	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	if (ret)
+		return ret;
+
+	uint32_t i = 0;
+	struct tcp_socket_desc *tcp_socket;
+	struct connection *client_socket;
+	bool connected = false;
+	struct tcp_socket_init_param tcp_ip = {
+		.net = &lwip_desc->no_os_net,
+		.max_buff_size = 0
+	};
+
+	ret = socket_init(&tcp_socket, &tcp_ip);
+	if (ret)
+		return ret;
+
+	ret = socket_bind(tcp_socket, 10000);
+	if (ret)
+		return ret;
+
+	ret = socket_listen(tcp_socket, MAX_BACKLOG);
+	if (ret)
+		return ret;
+
+	uint8_t read_buff[100] = {0};
+
+	while(1) {
+		ret = socket_accept(tcp_socket, &client_socket);
+		if (ret && ret != -EAGAIN)
+			return ret;
+
+		if (client_socket) {
+			connected = true;
+		}
+
+		no_os_lwip_step(tcp_socket->net->net, NULL);
+
+		if (connected) {
+			ret = socket_recv(client_socket, read_buff, 1);
+			if (ret > 0)
+				socket_send(client_socket, read_buff, ret);
+		}
+	}
 
 	return 0;
 }

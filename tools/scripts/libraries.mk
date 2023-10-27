@@ -122,7 +122,7 @@ INCS += $(NO-OS)/libraries/lwip/configs/lwipopts.h
 endif
 
 ifneq ($(if $(findstring maxq1065_lib, $(LIBRARIES)), 1),)
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os/maxq1065_api.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os/libmaxq1065_api.a
 EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
 endif
 
