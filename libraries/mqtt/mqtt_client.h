@@ -134,7 +134,7 @@ enum mqtt_qos {
 
 /**
  * @enum mqtt_version
- * @brief Version of protocol to be used
+ * @brief Version of protocol top be used
  */
 enum mqtt_version {
 	/** Version 3.1 */

@@ -54,7 +54,7 @@
 /******************************************************************************/
 
 /* Timer reference used by the functions */
-static struct no_os_timer_desc	*timer;
+struct no_os_timer_desc	*timer;
 
 /* Number of timer references */
 static uint32_t			nb_references;
@@ -145,12 +145,20 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 {
 	uint32_t	sent;
 	int32_t		rc;
+	uint32_t i;
 
 	if (!len)
 		return 0;
 
 	sent = 0;
 	do {
+		i = 0;
+
+		while(i < 50){
+			no_os_lwip_step(net->sock->net->net, NULL);
+			no_os_mdelay(1);
+			i++;
+		}
 		rc = socket_recv(net->sock, (void *)(buff + sent),
 				 (uint32_t)(len - sent));
 		if (rc != -EAGAIN) { //If data available or error

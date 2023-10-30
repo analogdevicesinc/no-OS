@@ -50,6 +50,10 @@
 #include "no_os_error.h"
 #include "adin1110.h"
 #include "network_interface.h"
+#include "mqtt_client.h"
+#include "mqtt_noos_support.h"
+#include "maxim_timer.h"
+#include "no_os_timer.h"
 
 #define EXT_FLASH_BAUD 4000000
 
@@ -138,6 +142,22 @@ __attribute__((section(".xip_section"))) void flash_test_func(void)
 	flash_test = true;
 }
 
+void message_handler(struct mqtt_message_data *msg)
+{
+	msg->message.payload[msg->message.len] = 0;
+	printf("Topic:%s -- Payload: %s\n", msg->topic, msg->message.payload);
+}
+
+struct no_os_timer_init_param adc_demo_tip = {
+	.id = 0,
+	.freq_hz = 32000,
+	.ticks_count = 0,
+	.platform_ops = &max_timer_ops,
+	.extra = NULL,
+};
+
+extern struct no_os_timer_desc *timer;
+
 /***************************************************************************//**
  * @brief Basic example main execution.
  *
@@ -154,6 +174,7 @@ int basic_example_main()
 	struct maxq1065_desc *maxq1065;
 	struct lwip_network_desc *lwip_desc;
 	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
+	uint32_t connect_timeout = 2000;
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
@@ -261,6 +282,9 @@ int basic_example_main()
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
+	uint8_t send_buff[1000] = {0};
+ 	uint8_t read_buff[1000] = {0};
+
 	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
 	if (ret)
 		return ret;
@@ -283,9 +307,42 @@ int basic_example_main()
 		.port = 20000
 	};
 
+	struct mqtt_desc *mqtt;
+  	struct mqtt_init_param	mqtt_init_param = {
+  		.timer_init_param = &adc_demo_tip,
+		.sock = tcp_socket,
+  		.command_timeout_ms = 20000,
+  		.send_buff = send_buff,
+  		.read_buff = read_buff,
+  		.send_buff_size = 700,
+  		.read_buff_size = 700,
+  		.message_handler = message_handler
+  	};
+
+	ret = mqtt_init(&mqtt, &mqtt_init_param);
+
+ 	struct mqtt_connect_config conn_config = {
+  		.version = MQTT_VERSION_3_1_1,
+  		.keep_alive_ms = 72000,
+  		.client_name = (int8_t *)"maxim-client",
+  		.username = NULL,
+  		.password = NULL
+  	};
+
 	ret = socket_connect(tcp_socket, &ip_addr);
 	if (ret)
 		return ret;
+
+	while (connect_timeout--) {
+		no_os_lwip_step(tcp_socket->net->net, NULL);
+		no_os_mdelay(1);
+	}
+
+  	ret = mqtt_connect(mqtt, &conn_config, NULL);
+	if (ret) {
+		socket_disconnect(tcp_socket);
+		return 0;
+	}
 
 	// ret = socket_bind(tcp_socket, 10000);
 	// if (ret)
@@ -294,8 +351,6 @@ int basic_example_main()
 	// ret = socket_listen(tcp_socket, MAX_BACKLOG);
 	// if (ret)
 	// 	return ret;
-
-	uint8_t read_buff[100] = {0};
 
 	while(1) {
 		// ret = socket_accept(tcp_socket, &client_socket);

@@ -360,9 +360,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	}
 #endif
 
-	ret = _lwip_start_mdns(descriptor, netif_descriptor);
-	if (ret)
-		goto platform_remove;
+	// ret = _lwip_start_mdns(descriptor, netif_descriptor);
+	// if (ret)
+	// 	goto platform_remove;
 
 	lwip_config_if(descriptor);
 
@@ -822,7 +822,7 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 
 	pcb = socket->pcb;
 
-	ret = tcp_connect(pcb, &ipaddr, 20001, lwip_connect_callback);
+	ret = tcp_connect(pcb, &ipaddr, 20002, lwip_connect_callback);
 	if (ret)
 		return ret;
 
@@ -842,9 +842,14 @@ static int32_t lwip_socket_disconnect(void *net, uint32_t sock_id)
 
 static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
 {
+	struct lwip_socket_desc *sock = arg;
+
+	if (err != ERR_OK)
+		return err;
+
 	sock->state = SOCKET_CONNECTED;
 
-	return 0;
+	return ERR_OK;
 }
 
 /**
