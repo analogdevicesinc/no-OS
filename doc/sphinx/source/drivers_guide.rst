@@ -215,6 +215,8 @@ It frees the resources allocated by the initialization function.
 		return ret;
 	}
 
+Please note that the remove() function cannot and does not set the provided pointer to NULL after deallocation of resources.
+
 Documenting the Code
 --------------------
 
