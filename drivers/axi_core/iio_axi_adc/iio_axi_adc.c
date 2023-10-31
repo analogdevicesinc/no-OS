@@ -511,8 +511,8 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	}
 	iio_axi_adc_inst->get_sampling_frequency = init->get_sampling_frequency;
 
-	if (init->init_scan_type)
-		iio_axi_adc_inst->scan_type_common = init->init_scan_type;
+	if (init->scan_type_common)
+		iio_axi_adc_inst->scan_type_common = init->scan_type_common;
 	else
 		iio_axi_adc_inst->scan_type_common = &scan_type;
 
