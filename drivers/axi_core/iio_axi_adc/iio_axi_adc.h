@@ -90,8 +90,9 @@ struct iio_axi_adc_init_param {
 	/** Custom sampling frequency getter */
 	int (*get_sampling_frequency)(struct axi_adc *dev, uint32_t chan,
 				      uint64_t *sampling_freq_hz);
-	/** Custom data format (unpopulated if not used, set to default) */
-	struct scan_type *init_scan_type;
+	/** Custom data format (unpopulated if not used, set to default)
+	    Common to all channels */
+	struct scan_type *scan_type_common;
 };
 
 /******************************************************************************/

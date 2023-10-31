@@ -259,7 +259,7 @@ int main(void)
 		.rx_dmac = dma_desc,
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange,
-		.init_scan_type = &init_scan_type,
+		.scan_type_common = &init_scan_type,
 	};
 
 	ret = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
