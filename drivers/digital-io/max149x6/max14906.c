@@ -202,64 +202,70 @@ int max14906_init(struct max149x6_desc **desc,
 	ret = no_os_gpio_get_optional(&descriptor->fault_gpio,
 				      param->fault_gpio_param);
 	if (ret)
-		goto spi_err;
+		goto gpio_err;
 
 	if (descriptor->fault_gpio) {
 		ret = no_os_gpio_direction_input(descriptor->fault_gpio);
 		if (ret)
-			goto gpio_err;
+			goto fault_gpio_err;
 	}
 
 	ret = no_os_gpio_get_optional(&descriptor->ready_gpio,
 				      param->ready_gpio_param);
 	if (ret)
-		goto spi_err;
+		goto fault_gpio_err;
 
 	if (descriptor->ready_gpio) {
 		ret = no_os_gpio_direction_input(descriptor->ready_gpio);
 		if (ret)
-			goto gpio_err;
+			goto ready_gpio_err;
 	}
 
 	ret = no_os_gpio_get_optional(&descriptor->synch_gpio,
 				      param->synch_gpio_param);
 	if (ret)
-		goto spi_err;
+		goto ready_gpio_err;
 
 	if (descriptor->synch_gpio) {
 		ret = no_os_gpio_direction_output(descriptor->synch_gpio,
 						  NO_OS_GPIO_HIGH);
 		if (ret)
-			goto gpio_err;
+			goto synch_gpio_err;
 	}
 
 	/* Clear the latched faults generated at power up */
 	ret = max149x6_reg_read(descriptor, MAX14906_OVR_LD_REG, &reg_val);
 	if (ret)
-		goto gpio_err;
+		goto synch_gpio_err;
 
 	ret = max149x6_reg_read(descriptor, MAX14906_OPN_WIR_FLT_REG, &reg_val);
 	if (ret)
-		goto gpio_err;
+		goto synch_gpio_err;
 
 	ret = max149x6_reg_read(descriptor, MAX14906_SHD_VDD_FLT_REG, &reg_val);
 	if (ret)
-		goto gpio_err;
+		goto synch_gpio_err;
 
 	ret = max149x6_reg_read(descriptor, MAX14906_GLOBAL_FLT_REG, &reg_val);
 	if (ret)
-		goto gpio_err;
+		goto synch_gpio_err;
 
 	for (i = 0; i < MAX14906_CHANNELS; i++) {
 		ret = max14906_ch_func(descriptor, i, MAX14906_HIGH_Z);
 		if (ret)
-			goto gpio_err;
+			goto synch_gpio_err;
 	}
 
 	*desc = descriptor;
 
 	return 0;
 
+synch_gpio_err:
+	no_os_gpio_remove(descriptor->synch_gpio);
+ready_gpio_err:
+	no_os_gpio_remove(descriptor->ready_gpio);
+fault_gpio_err:
+	no_os_gpio_remove(descriptor->fault_gpio);
 gpio_err:
 	no_os_gpio_remove(descriptor->en_gpio);
 spi_err:
@@ -290,9 +296,10 @@ int max14906_remove(struct max149x6_desc *desc)
 	}
 
 	no_os_spi_remove(desc->comm_desc);
-
-	if (desc->en_gpio)
-		no_os_gpio_remove(desc->en_gpio);
+	no_os_gpio_remove(desc->en_gpio);
+	no_os_gpio_remove(desc->fault_gpio);
+	no_os_gpio_remove(desc->ready_gpio);
+	no_os_gpio_remove(desc->synch_gpio);
 
 	no_os_free(desc);
 
