@@ -165,6 +165,15 @@ enum ad5754r_ctrl_current_clamp_en {
 };
 
 /**
+ * @enum ad5754r_ctrl_tsd_en
+ * @brief TSD EN/DIS Modes
+ */
+enum ad5754r_ctrl_tsd_en {
+	AD5754R_CTRL_TSD_DIS,
+	AD5754R_CTRL_TSD_EN
+};
+
+/**
  * @enum ad5754r_ctrl_clear_sel
  * @brief Clear Mode Options
  */
@@ -242,6 +251,8 @@ struct ad5754r_init_param {
 	enum ad5754r_dac_ch_range dac_ch_range[AD5754R_NUM_CHANNELS];
 	/* Current Clamp Enable */
 	enum ad5754r_ctrl_current_clamp_en clamp_en;
+	/* TSD Enable */
+	enum ad5754r_ctrl_tsd_en tsd_en;
 	/* Clear Setting */
 	enum ad5754r_ctrl_clear_sel clear_sel;
 	/* SDO Disable */
@@ -271,6 +282,8 @@ struct ad5754r_dev {
 	enum ad5754r_dac_ch_range dac_ch_range[AD5754R_NUM_CHANNELS];
 	/* Current Clamp Enable */
 	enum ad5754r_ctrl_current_clamp_en clamp_en;
+	/* TSD Enable */
+	enum ad5754r_ctrl_tsd_en tsd_en;
 	/* Clear Setting */
 	enum ad5754r_ctrl_clear_sel clear_sel;
 	/* SDO Disable */
@@ -319,6 +332,9 @@ int ad5754r_update_dac_ch_register(struct ad5754r_dev *dev, uint8_t chn,
 int ad5754r_update_dac_all_ch_registers(struct ad5754r_dev *dev,
 					uint16_t value);
 
+/** Clear DAC output for all channels.  */
+int ad5754r_clear_async(struct ad5754r_dev *dev);
+
 /** Read DAC register value for specific channel. */
 int ad5754r_read_dac_ch_register(struct ad5754r_dev *dev, uint8_t chn,
 				 uint16_t *value);
@@ -343,6 +359,10 @@ int ad5754r_set_ch_pwrup(struct ad5754r_dev *dev, uint8_t chn,
 /** Apply current clamp setting for device. */
 int ad5754r_set_current_clamp_en(struct ad5754r_dev *dev,
 				 enum ad5754r_ctrl_current_clamp_en clamp_en);
+
+/** Apply tsd setting for device. */
+int ad5754r_set_tsd_en(struct ad5754r_dev *dev,
+		       enum ad5754r_ctrl_tsd_en tsd_en);
 
 /** Set clear mode setting for device. */
 int ad5754r_set_clear_mode(struct ad5754r_dev *dev,
