@@ -153,6 +153,8 @@ ADIS Driver Usage with No-OS
 If you wish to use No-OS for evaluating ADIS devices, you may use the already
 existing example projects:
 
+* `ADIS1646X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x>`_
+* `ADIS1647X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1647x>`_
 * `ADIS1650X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1650x>`_
 * `ADIS1657X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1657x>`_
 
