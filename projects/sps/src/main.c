@@ -38,8 +38,10 @@
 *******************************************************************************/
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_spi.h"
 #include "iio_adpd188.h"
 #include "iio_app.h"
 #include "maxim_gpio.h"
@@ -111,8 +113,8 @@ const font_height = 24;
 
 void print_line(unsigned int line, unsigned int xcharoffset, unsigned int xcharclear, char *str)
 {
-	const int xstart = font_width * xcharoffset;
-	const int ystart = font_height * line;
+	const int xstart = font_width * xcharoffset + 260 - (font_width * 8);
+	const int ystart = font_height * line + 20;
 	
 	LCD_SetArealColor(xstart, ystart, xstart + font_width * xcharclear, ystart + font_height, WHITE);
 	GUI_DisString_EN(xstart, ystart, str, &Font24, WHITE, BLACK);
@@ -149,22 +151,42 @@ void print_pH(int si_val)
 {
 	static int prev;
 	char str[5];
-	if (prev == si_val)
+	if (prev == si_val / 1000)
 		return;
-	float pH = 7.0 - ((si_val - 20) / 59.71);
+	float pH = 7.0 - ((si_val / 1000 - 20) / 59.71);
 	if (pH > 14)
 		pH = 14;
 	if (pH < 0)
 		pH = 0;
 	sprintf(str, "%.2f", pH);
 	print_line(4, 11, 4, str);
-	prev = si_val;
+	prev = si_val / 1000;
+}
+
+void print_temp(int si_val)
+{
+	static int prev;
+	char str[5];
+
+	/* Only update the display when the difference is half a degree or larger */
+	if (prev == si_val / 400)
+		return;
+	float temperature = ((float)si_val / 1000 - 220) / 0.819;
+
+	sprintf(str, "%.1f", temperature);
+	print_line(5, 11, 4, str);
+	prev = si_val / 400;
 }
 
 void display(struct sps_iio_desc *iiodev)
 {
 	static int64_t no_gestures = 0;
 	int si_val;
+	static bool ad7793_conv_started = false;
+	static uint32_t ad7793_conv_ch = 0;
+	uint32_t ad7793_conv_rdy;
+	uint32_t raw_data;
+
 	if (iiodev->d_gestures) {
 		print_line(0, 11, 5, gestures[no_os_find_first_set_bit(iiodev->d_gestures)]);
 		iiodev->d_gestures = 0;
@@ -181,8 +203,34 @@ void display(struct sps_iio_desc *iiodev)
 	print_io2(iiodev->io2);
 	print_io3(iiodev->io3);
 
-	ad7799_read_channel(iiodev->pHdev, 0, &si_val);
-	print_pH(si_val);
+	if (!ad7793_conv_started) {
+		ad7793_conv_started = true;
+		ad7799_set_channel(iiodev->pHdev, ad7793_conv_ch);
+		ad7799_set_mode(iiodev->pHdev, AD7799_MODE_SINGLE);
+	}
+
+	ad7799_read(iiodev->pHdev, AD7799_REG_STAT, &ad7793_conv_rdy);
+	
+	/* If the AD7799_STAT_RDY bit is set, the conversion is NOT finished */
+	if (ad7793_conv_rdy & AD7799_STAT_RDY)
+		return;
+
+	ad7799_read(iiodev->pHdev, AD7799_REG_DATA, &raw_data);
+	ad7799_conv_value(iiodev->pHdev, raw_data, &si_val);
+
+	if (!ad7793_conv_ch) {
+		print_pH(si_val);
+		ad7793_conv_ch = 1;
+	} else {
+		print_temp(si_val);
+		ad7793_conv_ch = 0;
+	}
+
+	ad7799_set_channel(iiodev->pHdev, ad7793_conv_ch);
+	ad7799_set_mode(iiodev->pHdev, AD7799_MODE_SINGLE);
+	
+	/* Wait for the AD7793's oscillator to power up */
+	no_os_mdelay(1);
 }
 
 static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
@@ -342,111 +390,132 @@ int app_step(void *arg)
 	return 0;
 }
 
+struct no_os_uart_init_param adpd1080_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID, // unused in this demo
+	.asynchronous_rx = false,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = &(struct max_uart_init_param) {
+		.flow = UART_FLOW_DIS,
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	},
+	.platform_ops = &max_uart_ops,
+};
+
+struct adpd188_iio_desc *adpd1080_iio_device;
+struct adpd188_iio_init_param adpd1080_iio_inital = {
+	.drv_init_param.device = ADPD1080,
+	.drv_init_param.phy_opt = ADPD188_I2C,
+	.drv_init_param.phy_init.i2c_phy =
+	{
+		.slave_address = 0x64,
+		.max_speed_hz = 400000,
+		.platform_ops = &max_i2c_ops,
+		.extra = &(struct max_i2c_init_param) {
+			.vssel = MXC_GPIO_VSSEL_VDDIOH,
+		},
+	},
+	.drv_init_param.gpio0_init =
+	{
+		.port = GPIO0_PORT,
+		.number = GPIO0_PIN,
+		.platform_ops = &max_gpio_ops,
+		.extra = &(struct max_gpio_init_param) {
+			.vssel = MXC_GPIO_VSSEL_VDDIOH,
+		},
+	},
+	.drv_init_param.gpio1_init =
+	{
+		.port = GPIO1_PORT,
+		.number = GPIO1_PIN,
+		.platform_ops = &max_gpio_ops,
+		.extra = &(struct max_gpio_init_param) {
+			.vssel = MXC_GPIO_VSSEL_VDDIOH,
+		},
+	}
+};
+struct iio_data_buffer iio_adpd1080_read_buff = {
+	.buff = in_buff,
+	.size = NO_OS_ARRAY_SIZE(in_buff),
+};
+
+struct max_spi_init_param ad7799_spi_extra_ip  = {
+	.num_slaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+const struct no_os_spi_init_param ad7799_spi_ip = {
+	.device_id = 4,
+	.max_speed_hz = 1000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = &max_spi_ops,
+	.chip_select = 0,
+	.extra = &ad7799_spi_extra_ip,
+};
+
+const struct ad7799_init_param ad7799_ip = {
+	.spi_init = ad7799_spi_ip,
+	.chip_type = ID_AD7793,
+	.polarity = 0,
+	.vref_mv = 1050,
+	.gain = 0,
+	.precision = AD7799_PRECISION_UV
+};
+struct ad7793_iio_desc *ad7793_iiodev;
+struct ad7793_iio_param ad7793_param = {
+	.ad7793_ip = ad7799_ip,
+};
+
 int main(void)
 {
 	int32_t status;
 	uint16_t reg_data;
+	uint32_t reg_val;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
-
-	struct no_os_uart_init_param adpd1080_uart_ip = {
-		.device_id = UART_DEVICE_ID,
-		.irq_id = UART_IRQ_ID, // unused in this demo
-		.asynchronous_rx = false,
-		.baud_rate = UART_BAUDRATE,
-		.size = NO_OS_UART_CS_8,
-		.parity = NO_OS_UART_PAR_NO,
-		.stop = NO_OS_UART_STOP_1_BIT,
-		.extra = &(struct max_uart_init_param) {
-			.flow = UART_FLOW_DIS,
-			.vssel = MXC_GPIO_VSSEL_VDDIOH,
-		},
-		.platform_ops = &max_uart_ops,
-	};
-
-	struct adpd188_iio_desc *adpd1080_iio_device;
-	struct adpd188_iio_init_param adpd1080_iio_inital = {
-		.drv_init_param.device = ADPD1080,
-		.drv_init_param.phy_opt = ADPD188_I2C,
-		.drv_init_param.phy_init.i2c_phy =
-		{
-			.slave_address = 0x64,
-			.max_speed_hz = 400000,
-			.platform_ops = &max_i2c_ops,
-			.extra = &(struct max_i2c_init_param) {
-				.vssel = MXC_GPIO_VSSEL_VDDIOH,
-			},
-		},
-		.drv_init_param.gpio0_init =
-		{
-			.port = GPIO0_PORT,
-			.number = GPIO0_PIN,
-			.platform_ops = &max_gpio_ops,
-			.extra = &(struct max_gpio_init_param) {
-				.vssel = MXC_GPIO_VSSEL_VDDIOH,
-			},
-		},
-		.drv_init_param.gpio1_init =
-		{
-			.port = GPIO1_PORT,
-			.number = GPIO1_PIN,
-			.platform_ops = &max_gpio_ops,
-			.extra = &(struct max_gpio_init_param) {
-				.vssel = MXC_GPIO_VSSEL_VDDIOH,
-			},
-		}
-	};
-	struct iio_data_buffer iio_adpd1080_read_buff = {
-		.buff = in_buff,
-		.size = NO_OS_ARRAY_SIZE(in_buff),
-	};
-
-	no_os_init();
-
-	struct max_spi_init_param ad7799_spi_extra_ip  = {
-		.num_slaves = 1,
-		.polarity = SPI_SS_POL_LOW,
-		.vssel = MXC_GPIO_VSSEL_VDDIOH,
-	};
-
-	const struct no_os_spi_init_param ad7799_spi_ip = {
-		.device_id = 4,
-		.max_speed_hz = 1000000,
-		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-		.mode = NO_OS_SPI_MODE_3,
-		.platform_ops = &max_spi_ops,
-		.chip_select = 0,
-		.extra = &ad7799_spi_extra_ip,
-	};
-
-	const struct ad7799_init_param ad7799_ip = {
-		.spi_init = ad7799_spi_ip,
-		.chip_type = ID_AD7793,
-		.polarity = 0,
-		.vref_mv = 1050,
-		.gain = 1,
-		.precision = AD7799_PRECISION_MV
-	};
-	struct ad7793_iio_desc *ad7793_iiodev;
-	struct ad7793_iio_param ad7793_param = {
-		.ad7793_ip = ad7799_ip,
-	};
 
 	status = ad7793_iio_init(&ad7793_iiodev, &ad7793_param);
 	if (status)
 		return status;
 
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_data);
+	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_ZERO);
+	no_os_mdelay(30);
+	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_FULL);
+	no_os_mdelay(30);
+
+	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);
 
 	/* Enable excitation current */
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, &reg_data);
-	reg_data |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
-	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, reg_data);
-	status = ad7799_set_mode(ad7793_iiodev->ad7793_desc, 0x3);
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, &reg_val);
+	reg_val &= ~NO_OS_GENMASK(3, 0);
+	reg_val |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
+	// reg_data &= ~NO_OS_GENMASK(3, 0);
+	// reg_data |= NO_OS_BIT(1);
+	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, reg_val);
+	// status = ad7799_set_mode(ad7793_iiodev->ad7793_desc, 0x3);
 
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, &reg_data);
-	reg_data |= NO_OS_GENMASK(3, 0);
-	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, reg_data);
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);
+	// reg_data |= NO_OS_BIT(4);
+	// status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, reg_data);
+
+	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, &reg_val);
+	reg_val &= ~NO_OS_GENMASK(3, 0);
+	reg_val |= 0xF;
+	// reg_data |= NO_OS_GENMASK(3, 0);
+	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, reg_val);
+
+	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
+	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
+	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
+	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
+	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
+	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
 
 	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
 	if (status < 0)
@@ -666,6 +735,7 @@ int main(void)
 	print_line(2, 0, 10, "IO2      :");
 	print_line(3, 0, 10, "IO3   (V):");
 	print_line(4, 0, 10, "pH       :");
+	print_line(5, 0, 10, "Temp  (C):");
 
 	int i, j;
         for (i = 0; i < 97; i++) {

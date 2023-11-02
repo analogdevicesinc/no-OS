@@ -339,10 +339,10 @@ int iio_app_init(struct iio_app_desc **app,
 	if (status < 0)
 		goto error_uart;
 
-	status = print_uart_hello_message(&uart_desc,
-					  &app_init_param.uart_init_params);
-	if (status < 0)
-		goto error;
+	// status = print_uart_hello_message(&uart_desc,
+	// 				  &app_init_param.uart_init_params);
+	// if (status < 0)
+	// 	goto error;
 
 	application->uart_desc = uart_desc;
 	no_os_uart_stdio(uart_desc);
