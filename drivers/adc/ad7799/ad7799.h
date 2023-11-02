@@ -227,6 +227,9 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
 			    int32_t *data_scaled);
 
+
+int32_t ad7799_conv_value(struct ad7799_dev *, uint32_t, int32_t *);
+
 /* Set the ADC gain. */
 int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain);
 
