@@ -97,6 +97,7 @@
 #define AD469x_REG_THRESHOLD_UB(x)  ((x << 1) | 0x40)
 #define AD469x_REG_THRESHOLD_LB(x)  ((x << 1) | 0x60)
 #define AD469x_REG_HYST_IN(x)		((x << 1) | 0x80)
+#define AD469x_REG_OFFSET_IN(x)		((x << 1) | 0xA0)
 #define AD469x_REG_GAIN_IN(x)       ((x << 1) | 0x0C0)
 #define AD469x_REG_AS_SLOT(x)		((x & 0x7F) | 0x100)
 
