@@ -122,9 +122,18 @@ void print_line(unsigned int line, unsigned int xcharoffset, unsigned int xcharc
 
 void print_io1(char *io1)
 {
-	static char prev[16];
-	if (!strncmp(io1, prev, sizeof(prev)))
+	static char prev[16] = {'0'};
+	double prev_double;
+	double current;
+
+	sscanf(prev, "%lf", &prev_double);
+	sscanf(io1, "%lf", &current);
+
+	if (fabs(prev_double - current) < 0.2)
 		return;
+
+	// if (!strncmp(io1, prev, sizeof(prev)))
+		// return;
 	print_line(1, 11, sizeof(prev), io1);
 	strncpy(prev, io1, sizeof(prev));
 }
@@ -141,6 +150,7 @@ void print_io2(char *io2)
 void print_io3(char *io3)
 {
 	static char prev[16];
+
 	if (!strncmp(io3, prev, sizeof(prev)))
 		return;
 	print_line(3, 11, sizeof(prev), io3);
