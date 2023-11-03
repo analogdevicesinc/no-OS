@@ -169,9 +169,9 @@ void print_temp(int si_val)
 	char str[5];
 
 	/* Only update the display when the difference is half a degree or larger */
-	if (prev > si_val - 400 && prev < si_val + 400)
+	if (prev > si_val - 100 && prev < si_val + 100)
 		return;
-	float temperature = ((float)si_val / 1000 - 220) / 0.819;
+	float temperature = ((float)si_val / 1000 - 215) / 0.819;
 
 	snprintf(str, 5, "%.1f", temperature);
 	print_line(5, 11, 4, str);
@@ -401,7 +401,7 @@ int app_step(void *arg)
 	}
 
 	cnt3++;
-	if (cnt3 == 25000) {
+	if (cnt3 == 15000) {
 		cnt3 = 0;
 		print_ph_sensor(arg);
 	}
