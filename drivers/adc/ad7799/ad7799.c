@@ -41,7 +41,6 @@
 #include "ad7799.h"
 #include "no_os_alloc.h"
 #include "no_os_util.h"
-#include "no_os_spi.h"
 #include "no_os_delay.h"
 
 /*****************************************************************************/
@@ -85,7 +84,7 @@ int32_t ad7799_read(struct ad7799_dev *device, uint8_t reg_addr,
 {
 	int32_t ret;
 	uint8_t i;
-	uint8_t buff[4];
+	uint8_t buff[5];
 	uint8_t buff_size;
 
 	*reg_data = 0;
@@ -173,10 +172,6 @@ int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 	if (ret)
 		return -1;
 
-	// ret = ad7799_dev_ready(device);
-	// if (ret)
-	// 	return -1;
-
 	return 0;
 }
 
@@ -221,8 +216,6 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 	ret = ad7799_set_mode(device, AD7799_MODE_SINGLE);
 	if (ret)
 		return -1;
-
-	no_os_mdelay(2);
 
 	ret = ad7799_dev_ready(device);
 	if (ret)
@@ -410,7 +403,6 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
 			return 0;
 
 		timeout--;
-		no_os_udelay(100);
 	}
 
 	return -1;

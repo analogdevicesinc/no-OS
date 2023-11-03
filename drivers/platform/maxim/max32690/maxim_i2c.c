@@ -242,7 +242,8 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	if (stop_bit == 0) {
 		max_i2c_desc->prologue_size = bytes_number;
 		if (max_i2c_desc->prologue_data) {
-			ptr = realloc(max_i2c_desc->prologue_data, bytes_number);
+			no_os_free(max_i2c_desc->prologue_data);
+			ptr = malloc(bytes_number);
 			max_i2c_desc->prologue_data = ptr;
 		} else {
 			max_i2c_desc->prologue_data = malloc(bytes_number);
