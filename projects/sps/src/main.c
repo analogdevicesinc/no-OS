@@ -151,16 +151,17 @@ void print_pH(int si_val)
 {
 	static int prev;
 	char str[5];
-	if (prev == si_val / 1000)
+	if (prev < si_val + 597 && prev > si_val - 597)
 		return;
-	float pH = 7.0 - ((si_val / 1000 - 20) / 59.71);
+
+	float pH = 7.0 - ((si_val / 1000 - 70) / 59.71);
 	if (pH > 14)
 		pH = 14;
 	if (pH < 0)
 		pH = 0;
 	snprintf(str, 5, "%.2f", pH);
 	print_line(4, 11, 4, str);
-	prev = si_val / 1000;
+	prev = si_val;
 }
 
 void print_temp(int si_val)
