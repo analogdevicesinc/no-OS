@@ -163,7 +163,7 @@ relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1)
 include $(NO-OS)/tools/scripts/libraries.mk
 
 ifeq (y,$(strip $(RELEASE)))
-CFLAGS += -O2
+CFLAGS += -Os
 endif
 
 ifeq (y,$(strip $(NETWORKING)))

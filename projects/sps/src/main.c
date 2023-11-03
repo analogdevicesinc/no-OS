@@ -202,36 +202,48 @@ void display(struct sps_iio_desc *iiodev)
 	print_io1(iiodev->io1);
 	print_io2(iiodev->io2);
 	print_io3(iiodev->io3);
+}
 
-	if (!ad7793_conv_started) {
-		ad7793_conv_started = true;
-		ad7799_set_channel(iiodev->pHdev, ad7793_conv_ch);
-		ad7799_set_mode(iiodev->pHdev, AD7799_MODE_SINGLE);
-	}
-
-	ad7799_read(iiodev->pHdev, AD7799_REG_STAT, &ad7793_conv_rdy);
-	
-	/* If the AD7799_STAT_RDY bit is set, the conversion is NOT finished */
-	if (ad7793_conv_rdy & AD7799_STAT_RDY)
-		return;
+int print_ph_sensor(struct sps_iio_desc *iiodev)
+{
+	int si_val;
+	static bool ad7793_conv_started = false;
+	static uint32_t ad7793_conv_ch = 0;
+	uint32_t ad7793_conv_rdy;
+	uint32_t raw_data;
 
 	ad7799_read(iiodev->pHdev, AD7799_REG_DATA, &raw_data);
 	ad7799_conv_value(iiodev->pHdev, raw_data, &si_val);
 
 	if (!ad7793_conv_ch) {
 		print_pH(si_val);
-		ad7793_conv_ch = 1;
+		// ad7793_conv_ch = 0;
 	} else {
 		print_temp(si_val);
-		ad7793_conv_ch = 0;
+		// ad7793_conv_ch = 1;
 	}
+
+	ad7793_conv_ch = !ad7793_conv_ch;
+
+	// if (!ad7793_conv_started) {
+	// 	ad7793_conv_started = true;
+	// 	ad7799_set_channel(iiodev->pHdev, ad7793_conv_ch);
+	// 	ad7799_set_mode(iiodev->pHdev, AD7799_MODE_SINGLE);
+	// }
+
+	// ad7799_read(iiodev->pHdev, AD7799_REG_STAT, &ad7793_conv_rdy);
+	
+	/* If the AD7799_STAT_RDY bit is set, the conversion is NOT finished */
+	// if (ad7793_conv_rdy & AD7799_STAT_RDY)
+		// return;
 
 	ad7799_set_channel(iiodev->pHdev, ad7793_conv_ch);
 	ad7799_set_mode(iiodev->pHdev, AD7799_MODE_SINGLE);
 	
 	/* Wait for the AD7793's oscillator to power up */
-	no_os_mdelay(1);
+	// no_os_mdelay(1);
 }
+
 
 static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 {
@@ -374,6 +386,7 @@ int app_step(void *arg)
 {
 	static int cnt1 = 0;
 	static int cnt2 = 0;
+	static int cnt3 = 0;
 
 	cnt1++;
 	if (cnt1 == 100) {
@@ -385,6 +398,12 @@ int app_step(void *arg)
 	if (cnt2 == 1000) {
 		cnt2 = 0;
 		display(arg);
+	}
+
+	cnt3++;
+	if (cnt3 == 25000) {
+		cnt3 = 0;
+		print_ph_sensor(arg);
 	}
 
 	return 0;
@@ -483,10 +502,21 @@ int main(void)
 	if (status)
 		return status;
 
+	// ad7799_set_channel(ad7793_iiodev->ad7793_desc, 0);
+	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_ZERO);
+	// ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
+	// ad7799_set_channel(ad7793_iiodev->ad7793_desc, 0);
+	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_FULL);
+	// ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
+	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
+
+	ad7799_set_channel(ad7793_iiodev->ad7793_desc, 1);
 	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_ZERO);
-	no_os_mdelay(30);
+	ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
+	ad7799_set_channel(ad7793_iiodev->ad7793_desc, 1);
 	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_FULL);
-	no_os_mdelay(30);
+	ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
+	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
 
 	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
 	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);

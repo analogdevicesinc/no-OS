@@ -1,3 +1,6 @@
+HEAP_SIZE=0x80000
+STACK_SIZE=0x40000
+
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk
