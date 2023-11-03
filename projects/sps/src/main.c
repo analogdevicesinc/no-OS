@@ -158,7 +158,7 @@ void print_pH(int si_val)
 		pH = 14;
 	if (pH < 0)
 		pH = 0;
-	sprintf(str, "%.2f", pH);
+	snprintf(str, 5, "%.2f", pH);
 	print_line(4, 11, 4, str);
 	prev = si_val / 1000;
 }
@@ -169,13 +169,13 @@ void print_temp(int si_val)
 	char str[5];
 
 	/* Only update the display when the difference is half a degree or larger */
-	if (prev == si_val / 400)
+	if (prev > si_val - 400 && prev < si_val + 400)
 		return;
 	float temperature = ((float)si_val / 1000 - 220) / 0.819;
 
-	sprintf(str, "%.1f", temperature);
+	snprintf(str, 5, "%.1f", temperature);
 	print_line(5, 11, 4, str);
-	prev = si_val / 400;
+	prev = si_val;
 }
 
 void display(struct sps_iio_desc *iiodev)
