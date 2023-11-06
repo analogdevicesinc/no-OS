@@ -193,9 +193,9 @@ int swiot1l_mqtt()
 		ad74413r_adc_get_value(ad74413r, 0, &val);
 		memset(val_buff, 0, sizeof(val_buff));
 		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld.%d", val.integer, abs(val.decimal));
+			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld mV", val.integer, abs(val.decimal));
 		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld.%d", val.integer, val.decimal);
+			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld mV", val.integer, abs(val.decimal));
 		test_msg.len = msg_len;
 		ret = mqtt_publish(mqtt, "ad74413r/channel0", &test_msg);
 		if (ret)
@@ -204,18 +204,18 @@ int swiot1l_mqtt()
 		ad74413r_adc_get_value(ad74413r, 1, &val);
 		memset(val_buff, 0, sizeof(val_buff));
 		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld.%d", val.integer, abs(val.decimal));
+			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld mV", val.integer / 1000, abs(val.decimal));
 		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld.%d", val.integer, val.decimal);
+			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld mV", val.integer, abs(val.decimal));
 		test_msg.len = msg_len;
 		ret = mqtt_publish(mqtt, "ad74413r/channel1", &test_msg);
 
 		ad74413r_adc_get_value(ad74413r, 2, &val);
 		memset(val_buff, 0, sizeof(val_buff));
 		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld.%d", val.integer, abs(val.decimal));
+			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld", val.integer / 1000, abs(val.decimal));
 		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld.%d", val.integer, val.decimal);
+			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld Ω", val.integer / 1000, abs(val.decimal));
 		test_msg.len = msg_len;
 		ret = mqtt_publish(mqtt, "ad74413r/channel2", &test_msg);
 
@@ -223,16 +223,13 @@ int swiot1l_mqtt()
 		memset(val_buff, 0, sizeof(val_buff));
 
 		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld.%d", val.integer, abs(val.decimal));
+			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld"".%02lu mA", val.integer, abs(val.decimal / 1000000));
 		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld.%d", val.integer, val.decimal);
+			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld"".%02lu mA", val.integer, abs(val.decimal / 1000000));
 		test_msg.len = msg_len;
 		ret = mqtt_publish(mqtt, "ad74413r/channel3", &test_msg);
 
 		no_os_mdelay(1000);
-		// mqtt_publish(mqtt, "ad74413r/channel1", &test_msg);
-		// mqtt_publish(mqtt, "ad74413r/channel2", &test_msg);
-		// mqtt_publish(mqtt, "ad74413r/channel3", &test_msg);
 	}
 	
 
