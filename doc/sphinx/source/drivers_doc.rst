@@ -37,4 +37,4 @@ RF TRANSCEIVER
 .. toctree::
    :maxdepth: 1
 
-   drivers/adrv9025
+   drivers/madura
