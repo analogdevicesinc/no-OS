@@ -324,8 +324,8 @@ int basic_example_main()
  	struct mqtt_connect_config conn_config = {
   		.version = MQTT_VERSION_3_1_1,
   		.keep_alive_ms = 72000,
-  		.client_name = (int8_t *)"maxim-client",
-  		.username = NULL,
+  		.client_name = (int8_t *)"maxim",
+  		.username = "testuser",
   		.password = NULL
   	};
 
@@ -341,8 +341,20 @@ int basic_example_main()
   	ret = mqtt_connect(mqtt, &conn_config, NULL);
 	if (ret) {
 		socket_disconnect(tcp_socket);
-		return 0;
+		// return 0;
 	}
+
+	struct mqtt_message test_msg = {
+		.qos = 0,
+		.len = 4,
+		.payload = "abcd",
+		.retained = false
+	};
+
+	mqtt_publish(mqtt, "test", &test_msg);
+	mqtt_publish(mqtt, "test", &test_msg);
+	mqtt_publish(mqtt, "test", &test_msg);
+
 
 	// ret = socket_bind(tcp_socket, 10000);
 	// if (ret)

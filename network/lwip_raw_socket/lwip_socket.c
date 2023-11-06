@@ -822,7 +822,7 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 
 	pcb = socket->pcb;
 
-	ret = tcp_connect(pcb, &ipaddr, 20002, lwip_connect_callback);
+	ret = tcp_connect(pcb, &ipaddr, 1883, lwip_connect_callback);
 	if (ret)
 		return ret;
 
