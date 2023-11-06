@@ -82,6 +82,12 @@ SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c
 SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 SRCS += $(NO-OS)/util/no_os_crc8.c
 
+ifeq (y,$(strip $(MQTT_EXAMPLE)))
+CFLAGS += -DMQTT_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
+INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h
+endif
+
 SRCS += $(PROJECT)/src/swiot_fw.c
 INCS += $(PROJECT)/src/swiot_fw.h
 

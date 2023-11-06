@@ -1,5 +1,9 @@
+MQTT_EXAMPLE = y
+
 PLATFORM = maxim
 TARGET = max32650
+
+LIBRARIES += mqtt
 
 include ../../tools/scripts/generic_variables.mk
 

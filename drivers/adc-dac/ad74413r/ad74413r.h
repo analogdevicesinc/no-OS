@@ -310,7 +310,7 @@ struct ad74413r_init_param {
  */
 struct ad74413r_decimal {
 	int64_t integer;
-	uint32_t decimal;
+	int32_t decimal;
 };
 
 /**

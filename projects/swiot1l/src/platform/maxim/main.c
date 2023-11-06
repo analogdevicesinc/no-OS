@@ -57,5 +57,9 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+
+#if (MQTT_EXAMPLE == 1)
+	return swiot1l_mqtt();
+#endif
 	return swiot_firmware();
 }

@@ -808,9 +808,13 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 {
 	struct lwip_network_desc *desc = net;
 	struct lwip_socket_desc *socket;
+	uint8_t ip_addr[4];
+
+	sscanf(addr->addr, "%d.%d.%d.%d", &ip_addr[0], &ip_addr[1],
+	       &ip_addr[2], &ip_addr[3]);
 
 	ip4_addr_t ip4;
-	IP_ADDR4(&ip4, 169, 254, 97, 30);
+	IP_ADDR4(&ip4, ip_addr[0], ip_addr[1], ip_addr[2], ip_addr[3]);
 	const ip_addr_t ipaddr = IPADDR4_INIT(ip4.addr);
 
 	struct tcp_pcb *pcb;
@@ -822,7 +826,7 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 
 	pcb = socket->pcb;
 
-	ret = tcp_connect(pcb, &ipaddr, 1883, lwip_connect_callback);
+	ret = tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
 	if (ret)
 		return ret;
 

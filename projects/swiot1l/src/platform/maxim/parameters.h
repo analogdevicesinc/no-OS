@@ -43,6 +43,7 @@
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
 #include "maxim_i2c.h"
+#include "maxim_timer.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 
