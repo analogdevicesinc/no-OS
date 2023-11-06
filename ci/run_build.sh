@@ -39,7 +39,6 @@ sudo apt-get update
 
 TOP_DIR="$(pwd)"
 DEPS_DIR="${TOP_DIR}/deps"
-NUM_JOBS=$(nproc)
 
 . ./ci/lib.sh
 
