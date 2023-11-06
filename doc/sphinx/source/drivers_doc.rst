@@ -30,7 +30,7 @@ INERTIAL MEASUREMENT UNITS
 .. toctree::
    :maxdepth: 1
 
-   drivers/adis
+   drivers/imu
 
 RF TRANSCEIVER
 ==============
