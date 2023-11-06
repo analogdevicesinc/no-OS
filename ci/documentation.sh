@@ -32,6 +32,67 @@
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+. ./ci/lib.sh
+
+COMMIT_RANGE="$1"
+
+#################################################################
+# Check if the sphinx documentation is properly linked to the ToC
+#################################################################
+check_sphinx_doc() {
+        if [ -z "$COMMIT_RANGE" ]
+	then
+		COMMIT_RANGE="${COMMIT_RANGE}"
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
+	then
+		git fetch --depth=50 origin $TARGET_BRANCH
+		git branch $TARGET_BRANCH origin/$TARGET_BRANCH
+		COMMIT_RANGE="${TARGET_BRANCH}.."
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		echo_green "Using only latest commit, since there is no Pull Request"
+		COMMIT_RANGE=HEAD~1
+	fi
+
+        if ! git rev-parse $COMMIT_RANGE ; then
+		echo_red "Failed to parse commit range '$COMMIT_RANGE'"
+		echo_green "Using only latest commit"
+		COMMIT_RANGE=HEAD~1
+	fi
+
+        git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file
+        do
+                if [ $(basename "$file") = "README.rst" ]
+                then
+                        errors_found=0
+                        local fn_dir=$(basename "$(dirname "$file")")
+                        local sphinx_path="doc/sphinx/source"
+                        local top_dir=$(echo "$file" | cut -d'/' -f1)
+
+                        if ! [ -f "$sphinx_path/$top_dir/$fn_dir.rst" ];
+                        then
+                                echo_red "Missing $fn_dir.rst file at $sphinx_path/$top_dir"
+                                erros_found=1
+                        fi
+
+                        if ! grep -q "$top_dir/$fn_dir" "$sphinx_path/${top_dir}_doc.rst"
+                        then
+                                echo_red "Missing $top_dir/$fn_dir link inside $sphinx_path/${top_dir}_doc.rst"
+                                erros_found=1
+                        fi
+
+                        if [ $erros_found -eq 1 ]
+                        then
+                                exit 1
+                        fi
+                fi
+        done
+}
+
 ############################################################################
 # Check if the documentation will be generated w/o warnings or errors
 ############################################################################
@@ -114,6 +175,8 @@ update_gh_pages() {
                 echo_green "Documentation will be updated when this commit gets on master!"
         fi
 }
+
+check_sphinx_doc
 
 build_sphinx
 
