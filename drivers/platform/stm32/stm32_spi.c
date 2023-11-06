@@ -49,46 +49,42 @@
 static int stm32_spi_config(struct no_os_spi_desc *desc)
 {
 	int ret;
-
-	const uint32_t prescaler_default = SPI_BAUDRATEPRESCALER_64;
-	const uint32_t prescaler_min = SPI_BAUDRATEPRESCALER_2;
-	const uint32_t prescaler_max = SPI_BAUDRATEPRESCALER_256;
-	uint32_t prescaler_reg = 0u;
+	uint32_t prescaler = 0u;
 	SPI_TypeDef *base = NULL;
 	struct stm32_spi_desc *sdesc = desc->extra;
 
 	/* automatically select prescaler based on max_speed_hz */
 	if (desc->max_speed_hz != 0u) {
 		uint32_t div = sdesc->input_clock / desc->max_speed_hz;
-		uint32_t rem = sdesc->input_clock % desc->max_speed_hz;
-		uint32_t po2 = !(div & (div - 1)) && !rem;
 
-		// find the power of two just higher than div and
-		// store the exponent in prescaler_reg
-		while(div) {
-			prescaler_reg += 1;
-			div >>= 1u;
+		switch (div) {
+		case 0 ... 2:
+			prescaler = SPI_BAUDRATEPRESCALER_2;
+			break;
+		case 3 ... 4:
+			prescaler = SPI_BAUDRATEPRESCALER_4;
+			break;
+		case 5 ... 8:
+			prescaler = SPI_BAUDRATEPRESCALER_8;
+			break;
+		case 9 ... 16:
+			prescaler = SPI_BAUDRATEPRESCALER_16;
+			break;
+		case 17 ... 32:
+			prescaler = SPI_BAUDRATEPRESCALER_32;
+			break;
+		case 33 ... 64:
+			prescaler = SPI_BAUDRATEPRESCALER_64;
+			break;
+		case 65 ... 128:
+			prescaler = SPI_BAUDRATEPRESCALER_128;
+			break;
+		default:
+			prescaler = SPI_BAUDRATEPRESCALER_256;
+			break;
 		}
-
-		// this exponent - 1 is needed because of the way
-		// stm32 stores it into registers:
-		// reg = 0 eq. div = 2^1
-		// reg = 1 eq. div = 2^2 etc.
-		if (prescaler_reg)
-			prescaler_reg -= 1;
-
-		// this exponent - 1 is needed when initial div was
-		// precisely a power of two
-		if (prescaler_reg && po2)
-			prescaler_reg -= 1;
-
-		if (prescaler_reg < prescaler_min)
-			prescaler_reg = prescaler_min;
-
-		if (prescaler_reg > prescaler_max)
-			prescaler_reg = prescaler_max;
 	} else
-		prescaler_reg = prescaler_default;
+		prescaler = SPI_BAUDRATEPRESCALER_64;
 
 	switch (desc->device_id) {
 #if defined(SPI1)
@@ -136,7 +132,7 @@ static int stm32_spi_config(struct no_os_spi_desc *desc)
 	sdesc->hspi.Init.CLKPhase = desc->mode & NO_OS_SPI_CPHA ? SPI_PHASE_2EDGE :
 				    SPI_PHASE_1EDGE;
 	sdesc->hspi.Init.NSS = SPI_NSS_SOFT;
-	sdesc->hspi.Init.BaudRatePrescaler = prescaler_reg << SPI_CR1_BR_Pos;
+	sdesc->hspi.Init.BaudRatePrescaler = prescaler;
 	sdesc->hspi.Init.FirstBit = desc->bit_order ? SPI_FIRSTBIT_LSB :
 				    SPI_FIRSTBIT_MSB;
 	sdesc->hspi.Init.TIMode = SPI_TIMODE_DISABLE;
@@ -256,19 +252,21 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 {
 	struct stm32_spi_desc *sdesc;
 	struct stm32_gpio_desc *gdesc;
-	SPI_TypeDef * SPIx;
 	uint64_t slave_id;
 	static uint64_t last_slave_id;
-	int ret;
-	uint32_t tx_cnt = 0;
-	uint32_t rx_cnt = 0;
+	int ret = 0;
 
 	if (!desc || !desc->extra || !msgs)
 		return -EINVAL;
 
 	sdesc = desc->extra;
 	gdesc = sdesc->chip_select->extra;
-	SPIx = sdesc->hspi.Instance;
+#ifdef SPI_SR_TXE
+	uint32_t tx_cnt = 0;
+	uint32_t rx_cnt = 0;
+	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
+#endif
+
 
 	// Compute a slave ID based on SPI instance and chip select.
 	// If it did not change since last call to stm32_spi_write_and_read,
@@ -283,8 +281,9 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	for (uint32_t i = 0; i < len; i++) {
-		rx_cnt = 0;
-		tx_cnt = 0;
+
+		if (!msgs[i].tx_buff && !msgs[i].rx_buff)
+			return -EINVAL;
 
 		/* Assert CS */
 		gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
@@ -292,6 +291,32 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 		if(msgs[i].cs_delay_first)
 			no_os_udelay(msgs[i].cs_delay_first);
 
+#ifndef SPI_SR_TXE
+		/* Some STM32 families have different naming for
+		   SPI_SR_TXE, SPI_SR_RXNE and SPIx->DR. In that case, simply
+		   use the HAL API for SPI transmission, which is generic
+		   for all STM32 families. */
+
+		if (msgs[i].tx_buff && msgs[i].rx_buff)
+			ret = HAL_SPI_TransmitReceive(&sdesc->hspi, msgs[i].tx_buff, msgs[i].rx_buff,
+						      msgs[i].bytes_number, HAL_MAX_DELAY);
+
+		else if (msgs[i].tx_buff)
+			ret = HAL_SPI_Transmit(&sdesc->hspi, msgs[i].tx_buff, msgs[i].bytes_number,
+					       HAL_MAX_DELAY);
+		else
+			ret = HAL_SPI_Receive(&sdesc->hspi, msgs[i].rx_buff, msgs[i].bytes_number,
+					      HAL_MAX_DELAY);
+
+		if (ret != HAL_OK) {
+			if (ret == HAL_TIMEOUT)
+				ret = -ETIMEDOUT;
+			else
+				ret = -EIO;
+		}
+#else
+		rx_cnt = 0;
+		tx_cnt = 0;
 		__HAL_SPI_ENABLE(&sdesc->hspi);
 
 		while ((msgs[i].rx_buff && rx_cnt < msgs[i].bytes_number) ||
@@ -312,6 +337,7 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 		}
 
 		__HAL_SPI_DISABLE(&sdesc->hspi);
+#endif
 
 		if(msgs[i].cs_delay_last)
 			no_os_udelay(msgs[i].cs_delay_last);
@@ -322,6 +348,9 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 
 		if(msgs[i].cs_change_delay)
 			no_os_udelay(msgs[i].cs_change_delay);
+
+		if (ret)
+			return ret;
 	}
 
 	return 0;
