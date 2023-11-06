@@ -34,6 +34,7 @@
 #List of excluded driver folders for the documentation generation.
 
 COMMON_SCRIPTS="astyle.sh astyle_config cppcheck.sh"
+NUM_JOBS=$(nproc)
 
 get_script_path() {
 	local script="$1"
