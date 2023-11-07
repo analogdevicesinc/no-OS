@@ -149,14 +149,14 @@ static const struct adis_scale_fractional adis1650x_anglvel_scale[] = {
 };
 
 static const struct adis_scale_fractional adis1650x_accl_scale[] = {
-	[ADIS16500]   = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS16500]   = {392, 32000 << 16},
 	[ADIS16501]   = {1, M_S_2_TO_G(800 << 16)},
 	[ADIS16505_1] = {78, 32000 << 16},
 	[ADIS16505_2] = {78, 32000 << 16},
 	[ADIS16505_3] = {78, 32000 << 16},
-	[ADIS16507_1] = {1, M_S_2_TO_G(800 << 16)},
-	[ADIS16507_2] = {1, M_S_2_TO_G(800 << 16)},
-	[ADIS16507_3] = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS16507_1] = {392, 32000 << 16},
+	[ADIS16507_2] = {392, 32000 << 16},
+	[ADIS16507_3] = {392, 32000 << 16},
 };
 
 static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
