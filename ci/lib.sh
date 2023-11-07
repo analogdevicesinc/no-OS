@@ -93,5 +93,3 @@ download_common_scripts() {
 			-O build/$script
 	done
 }
-
-download_common_scripts
