@@ -139,6 +139,7 @@ static const struct adis_clk_freq_limit adis1650x_sampling_clk_limits = {
 /* Values from datasheet for 32-bit data */
 static const struct adis_scale_fractional adis1650x_anglvel_scale[] = {
 	[ADIS16500]   = {1, RAD_TO_DEGREE(10 << 16)},
+	[ADIS16501]   = {1, RAD_TO_DEGREE(40 << 16)},
 	[ADIS16505_1] = {1, RAD_TO_DEGREE(160 << 16)},
 	[ADIS16505_2] = {1, RAD_TO_DEGREE(40 << 16)},
 	[ADIS16505_3] = {1, RAD_TO_DEGREE(10 << 16)},
@@ -149,6 +150,7 @@ static const struct adis_scale_fractional adis1650x_anglvel_scale[] = {
 
 static const struct adis_scale_fractional adis1650x_accl_scale[] = {
 	[ADIS16500]   = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS16501]   = {1, M_S_2_TO_G(800 << 16)},
 	[ADIS16505_1] = {78, 32000 << 16},
 	[ADIS16505_2] = {78, 32000 << 16},
 	[ADIS16505_3] = {78, 32000 << 16},
@@ -159,6 +161,7 @@ static const struct adis_scale_fractional adis1650x_accl_scale[] = {
 
 static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
 	[ADIS16500]   = {DEGREE_TO_RAD(2160), 31},
+	[ADIS16501]   = {DEGREE_TO_RAD(720), 31},
 	[ADIS16505_1] = {DEGREE_TO_RAD(360), 31},
 	[ADIS16505_2] = {DEGREE_TO_RAD(720), 31},
 	[ADIS16505_3] = {DEGREE_TO_RAD(2160), 31},
@@ -170,6 +173,7 @@ static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
 static const struct adis_scale_fractional_log2 adis1650x_deltavelocity_scale[]
 	= {
 	[ADIS16500]   = {400, 31},
+	[ADIS16501]   = {125, 31},
 	[ADIS16505_1] = {100, 31},
 	[ADIS16505_2] = {100, 31},
 	[ADIS16505_3] = {100, 31},
@@ -181,6 +185,7 @@ static const struct adis_scale_fractional_log2 adis1650x_deltavelocity_scale[]
 /* Milli-degrees Celsius for temperature */
 static const struct adis_scale_fractional adis1650x_temp_scale[] = {
 	[ADIS16500]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16501]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 	[ADIS16505_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
