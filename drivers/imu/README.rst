@@ -13,6 +13,7 @@ Supported Devices
 * `ADIS16475 <https://www.analog.com/ADIS16475>`_
 * `ADIS16477 <https://www.analog.com/ADIS16477>`_
 * `ADIS16500 <https://www.analog.com/ADIS16500>`_
+* `ADIS16501 <https://www.analog.com/ADIS16501>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
 * `ADIS16575 <https://www.analog.com/ADIS16575>`_
@@ -84,6 +85,7 @@ ADIS1650X Driver Source Code:
 Supported devices with ADIS1650X files:
 
 * `ADIS16500 <https://www.analog.com/ADIS16500>`_
+* `ADIS16501 <https://www.analog.com/ADIS16501>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
 
@@ -884,6 +886,7 @@ ADIS1650X IIO Driver Source Code:
 Supported devices with IIO ADIS1650X files:
 
 * `ADIS16500 <https://www.analog.com/ADIS16500>`_
+* `ADIS16501 <https://www.analog.com/ADIS16501>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
 

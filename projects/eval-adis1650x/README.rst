@@ -12,6 +12,7 @@ Supported Evaluation Boards
 ---------------------------
 
 * `ADIS16500 <https://www.analog.com/ADIS16500>`_
+* `ADIS16501 <https://www.analog.com/ADIS16501>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
 
@@ -174,6 +175,7 @@ STM32 Platform
 **Used hardware**:
 
 * `EVAL-ADIS16500 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16500.html>`_ or
+* `EVAL-ADIS16501 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16501.html>`_ or
 * `EVAL-ADIS16505 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16505.html>`_ or
 * `EVAL-ADIS16507 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16507.html>`_ with
 * `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_ and
@@ -220,6 +222,7 @@ Maxim Platform
 **Used hardware**:
 
 * `EVAL-ADIS16500 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16500.html>`_ or
+* `EVAL-ADIS16501 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16501.html>`_ or
 * `EVAL-ADIS16505 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16505.html>`_ or
 * `EVAL-ADIS16507 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16507.html>`_ with
 * `MAX78000 <https://www.analog.com/en/products/max78000.html>`_
@@ -265,6 +268,7 @@ Pico Platform
 **Used hardware**:
 
 * `EVAL-ADIS16500 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16500.html>`_ or
+* `EVAL-ADIS16501 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16501.html>`_ or
 * `EVAL-ADIS16505 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16505.html>`_ or
 * `EVAL-ADIS16507 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16507.html>`_ with
 * Raspberry Pi Pico with

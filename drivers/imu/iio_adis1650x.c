@@ -51,6 +51,7 @@
 
 static const char * const adis1650x_rang_mdl_txt[] = {
 	[ADIS16500]   = "+/-2000_degrees_per_sec",
+	[ADIS16501]   = "+/-500_degrees_per_sec",
 	[ADIS16505_1] = "+/-125_degrees_per_sec",
 	[ADIS16505_2] = "+/-500_degrees_per_sec",
 	[ADIS16505_3] = "+/-2000_degrees_per_sec",
