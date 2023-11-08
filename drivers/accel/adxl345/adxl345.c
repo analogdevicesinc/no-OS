@@ -470,7 +470,7 @@ void adxl345_set_inactivity_detection(struct adxl345_dev *dev,
 	uint8_t new_int_enable = 0;
 
 	old_act_inact_ctl = adxl345_get_register_value(dev,
-			    ADXL345_INT_ENABLE);
+			    ADXL345_ACT_INACT_CTL);
 	new_act_inact_ctl = old_act_inact_ctl & ~(ADXL345_INACT_ACDC |
 			    ADXL345_INACT_X_EN |
 			    ADXL345_INACT_Y_EN |
