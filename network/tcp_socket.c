@@ -49,8 +49,9 @@
 #include "no_os_alloc.h"
 
 #ifndef DISABLE_SECURE_SOCKET
-#include "noos_mbedtls_config.h"
+// #include "noos_mbedtls_config.h"
 #include "no_os_trng.h"
+#include <mbedtls/net.h>
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
@@ -65,6 +66,7 @@
 
 #else
 
+#define NON_BLOCK_CONT	(MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE)
 #ifdef MAX_CONTENT_LEN
 #define DEFAULT_CONNECTION_BUFFER_SIZE MAX_CONTENT_LEN
 #else
@@ -145,6 +147,8 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	struct secure_socket_desc	*ldesc;
 	int32_t				ret;
 
+	static const int tls_cipher_suites[2] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM, 0};
+
 	if (!desc || !param)
 		return -1;
 
@@ -158,6 +162,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	mbedtls_x509_crt_init(&ldesc->clicert);
 	mbedtls_pk_init(&ldesc->pkey);
 	mbedtls_ssl_init(&ldesc->ssl);
+  	// mbedtls_ssl_conf_ciphersuites(&ldesc->ssl, tls_cipher_suites);
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
@@ -346,16 +351,50 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
+// #ifndef DISABLE_SECURE_SOCKET
+// 	if (desc->secure) {
+// 		do {
+// #ifdef NO_OS_LWIP_NETWORKING
+// 			no_os_lwip_step(desc->net->net, NULL);
+// #endif
+// 			ret = mbedtls_ssl_handshake(&desc->secure->ssl);
+// 		} while (ret == MBEDTLS_ERR_SSL_WANT_READ);
+// 		if (NO_OS_IS_ERR_VALUE(ret))
+// 			return ret;
+// 	}
+// #endif /* DISABLE_SECURE_SOCKET */
+
+	return 0;
+}
+
+int32_t secure_socket_connect(struct tcp_socket_desc *desc,
+		      	      struct socket_address *addr)
+{
+	int ret;
+	uint32_t timeout;
+	uint32_t non_block_cont;
+
 #ifndef DISABLE_SECURE_SOCKET
+
 	if (desc->secure) {
 		do {
+#ifdef NO_OS_LWIP_NETWORKING
+			timeout = 1000;
+			while (timeout--){
+				no_os_lwip_step(desc->net->net, NULL);
+				no_os_mdelay(1);
+			}
+#endif
 			ret = mbedtls_ssl_handshake(&desc->secure->ssl);
 		} while (ret == MBEDTLS_ERR_SSL_WANT_READ);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
 	}
-#endif /* DISABLE_SECURE_SOCKET */
+	if (NO_OS_IS_ERR_VALUE(ret)) {
+		mbedtls_ssl_session_reset(&desc->secure->ssl);
+		socket_disconnect(desc);
+		return ret;
+	}
 
+#endif
 	return 0;
 }
 

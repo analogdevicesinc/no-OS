@@ -150,6 +150,9 @@ int32_t socket_remove(struct tcp_socket_desc *desc);
 int32_t socket_connect(struct tcp_socket_desc *desc,
 		       struct socket_address *addr);
 
+int32_t secure_socket_connect(struct tcp_socket_desc *desc,
+			      struct socket_address *addr);
+
 /* Socket disconnect */
 int32_t socket_disconnect(struct tcp_socket_desc *desc);
 

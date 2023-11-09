@@ -18,14 +18,14 @@ mxq_err_t maxq1065_reset(void)
 	return MXQ_OK;
 }
 
-void MXQ_PRINTBUFFER(const unsigned char * buffer,unsigned int len)
-{
-	unsigned int i;
+// void MXQ_PRINTBUFFER(const unsigned char * buffer,unsigned int len)
+// {
+// 	unsigned int i;
 
-	for(i=0;i<len;i++){
-		printf("%02x ",buffer[i]);
-	}
-}
+// 	for(i=0;i<len;i++){
+// 		printf("%02x ",buffer[i]);
+// 	}
+// }
 
 void HardFault_Handler(void) {
 	int a = 3;
@@ -83,7 +83,7 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 	if (ret)
 		return ret;
 
-	// MXQ_TLS_Enable();
+	MXQ_TLS_Enable();
 
 	r = MXQ_Ping(1);
 	if (r != MXQ_OK)

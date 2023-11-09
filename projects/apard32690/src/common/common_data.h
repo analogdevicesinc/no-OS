@@ -49,6 +49,7 @@
 #include "maxim_uart_stdio.h"
 #include "maxim_gpio.h"
 #include "maxim_spi.h"
+#include "maxim_trng.h"
 
 extern struct no_os_uart_init_param uart_ip;
 extern const struct max_spi_init_param maxq1065_spi_extra;

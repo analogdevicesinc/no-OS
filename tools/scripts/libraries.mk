@@ -51,8 +51,7 @@ $(MBEDTLS_LIB_DIR)/libmbedtls.a: $(MBEDTLS_LIB_DIR)/libmbedx509.a
 CFLAGS 		+= -I$(MBEDTLS_DIR)/include
 CFLAGS 		+= -I$(dir $(MBED_TLS_CONFIG_FILE)) \
 			-DMBEDTLS_CONFIG_FILE=\"$(notdir $(MBED_TLS_CONFIG_FILE))\"
-else
-DISABLE_SECURE_SOCKET ?= y
+# DISABLE_SECURE_SOCKET ?= y
 endif
 
 #	FATFS
@@ -124,6 +123,26 @@ endif
 ifneq ($(if $(findstring maxq1065_lib, $(LIBRARIES)), 1),)
 EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os/libmaxq1065_api.a
 EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
+endif
+
+ifneq ($(if $(findstring tls_maxq1065, $(LIBRARIES)), 1),)
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmaxq1065_api.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmbedcrypto.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmbedtls.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmbedx509.a
+EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library
+EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os-maxq1065/library
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmaxq1065_api.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedcrypto.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedtls.a
+EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedx509.a
+
+EXTRA_INC_PATHS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/maxq10xx_api
+CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/
+
+CFLAGS += -DENABLE_PEM_CERT
+else
+DISABLE_SECURE_SOCKET ?= y
 endif
 
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)

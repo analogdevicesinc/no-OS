@@ -80,10 +80,12 @@ struct no_os_time no_os_get_time(void)
 {
 	struct no_os_time t;
 
+	__disable_irq();
 	t.s = _system_ticks / 1000;
 
 	t.us = (_system_ticks - t.s * 1000) * 1000 + SysTick->VAL /
 	       (SystemCoreClock / 1000000);
+	__enable_irq();
 
 	return t;
 }

@@ -1,9 +1,10 @@
 PLATFORM=maxim
 TARGET=max32690
 
-LIBRARIES += maxq1065_lib
+# LIBRARIES += maxq1065_lib
 LIBRARIES += lwip
 LIBRARIES += mqtt
+LIBRARIES += tls_maxq1065
 
 include ../../tools/scripts/generic_variables.mk
 

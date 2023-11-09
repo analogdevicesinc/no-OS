@@ -54,6 +54,8 @@
 #include "mqtt_noos_support.h"
 #include "maxim_timer.h"
 #include "no_os_timer.h"
+#include "no_os_trng.h"
+#include "maxim_trng.h"
 
 #define EXT_FLASH_BAUD 4000000
 
@@ -158,6 +160,78 @@ struct no_os_timer_init_param adc_demo_tip = {
 
 extern struct no_os_timer_desc *timer;
 
+#define CA_CERT                                                            \
+    "-----BEGIN CERTIFICATE-----\r\n"                                      \
+	"MIIDHzCCAgegAwIBAgIUCFbk7jeOFFqrrLVQjCoLQDCvNp0wDQYJKoZIhvcNAQEL\r\n"	\
+	"BQAwHzEdMBsGA1UEAwwUQW5hbG9nIERldmljZXMsIEluYy4wHhcNMjMwMjI3MTAw\r\n"	\
+	"NjQwWhcNMzIxMTI2MTAwNjQwWjAfMR0wGwYDVQQDDBRBbmFsb2cgRGV2aWNlcywg\r\n"	\
+	"SW5jLjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAPLUgsHWu4SCB11U\r\n"	\
+	"GxlmqJ3pIzP4YWdH/cww2K+OjCS4KWy5Fb//KlZMxXjZeJ6iAd5pcOvcsE4w5CQM\r\n"	\
+	"kRVxdqzLmLcVsh9hMW+dB+Aeeura8pav7TtlO3BOZxsQN/PWi8AX5g8rjO5xC9hs\r\n"	\
+	"9kxR5MAXlUOlq9WJ2T8xdtxZSQHT5pnrHEVnjd72rZlC2rAS8vYTrMxQLWm2GK+2\r\n"	\
+	"7jYhQ9jSKuvy/g5XSYI0OHlWFrzo1fDuR/Ma5aJZBzBRKOKAXl2uFweiEYVH1sZe\r\n"	\
+	"iztZlhxtxHAfJHVhnEL/wf7GnaAClCoMd4amxBuiESxrP+DU/lwwNerBbB+wMxqr\r\n"	\
+	"n+/Hb2MCAwEAAaNTMFEwHQYDVR0OBBYEFIfN1T+xxFvPuxcT8ROronOnTQDhMB8G\r\n"	\
+	"A1UdIwQYMBaAFIfN1T+xxFvPuxcT8ROronOnTQDhMA8GA1UdEwEB/wQFMAMBAf8w\r\n"	\
+	"DQYJKoZIhvcNAQELBQADggEBADpA6t61wwEqQ4yBXWk9sX5dW3NQpj/FigpWIUnf\r\n"	\
+	"geQedXfrn/zZFOC7iA05uHdjRpP+Fp4ebJNxHOMbL7TCMPOG+SBYgbMv9ZgRDAYj\r\n"	\
+	"Ca3Osm53EqeMi+26ka6xkBEHYZ+vVt1bwZOjwxzX56J6lNiKLvgQgn9EgeKpQker\r\n"	\
+	"lV12T04/NgeIm38mfRqxueYG22YrLuo+dzijwzY2wwBGntwFviXWLGDYMGiBMPSp\r\n"	\
+	"VtB5eptX+YUdO84E+86irjOIrsgqO1G7MYu8beuonIrjgmtApOtT7xPPDS39YO1J\r\n"	\
+	"mQoyLhuU7nr8QZbiLTi+dSBlytJFvPkgjrgqR7WWkLPEj0w=\r\n"	\
+    "-----END CERTIFICATE-----\r\n"
+
+/* Populate here your device certificate content */
+#define DEVICE_CERT                                                        \
+    "-----BEGIN CERTIFICATE-----\n"                                        \
+	"MIICyDCCAbACFFJnmg1mTQALnBB/w4LUQTQ+hckpMA0GCSqGSIb3DQEBCwUAMB8x\r\n" 	\
+	"HTAbBgNVBAMMFEFuYWxvZyBEZXZpY2VzLCBJbmMuMB4XDTIzMDIyNzEwMTM1NloX\r\n"	\
+	"DTIzMDMyOTEwMTM1NlowIjEgMB4GA1UEAwwXRW5lcmd5TW9uaXRvcmluZ0Rldmlj\r\n"	\
+	"ZTEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDHjhmvEevCFkVm8g7D\r\n"	\
+	"+9DJQHwt/pmWOg11EwmsmuaCt3V+j6KfujJRoqCUqlc0/vvqiaUKxlqKRq9Rdjnq\r\n"	\
+	"YKcYvWOHT+pXpRlNPxbL/u9gL1t2PTb67UWYKQRYUaP+lH9UFJamKcVd6rDpJDbD\r\n"	\
+	"lruzQUr542G5zlzeIsT8Bw9p2Qtk54bdenMK8bcGKcJTUSlLP++30lj1E5dg57XD\r\n"	\
+	"uMiwz/dP3TC01/807K59vR3IwSCQUIbes1h3n4xTbgJrl1jx/G1FzGi/Oo5OBIQB\r\n"	\
+	"3JFIs8nMMAElGutOAdznyLTzK0IzzvJylJeOJtlbafv2KB1CehNFkXVgkqnugZSX\r\n"	\
+	"Vf4ZAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAAkI4/Bfo9bUUWmbzsfPRAACa1yr\r\n"	\
+	"ZYhPm7gjB3UO2TNI1+kZq1mbptm4AQlRKHZOc4RwOKw2+gEc++FwK9v8Ai1EcVgW\r\n"	\
+	"bCgmL1fWzxwmPCAatjWAIXIwtao4g3xPFOSw8Afg54upUNLzpLHyxyuByLOIs+TQ\r\n"	\
+	"qCpjNXMsBblrU+7XOjo0Z5qxyWGxzFkI+/MfW9F5+q0dt77f6GxBmEAj42HIou32\r\n"	\
+	"B8CohaPoJ8qJAWd9X+zKGzzstXEmmnlSX0T1H3jaL+ENRNzWpMT6ASt3u+Mq+WpY\r\n"	\
+	"che9sgKqK4yPsqewrBSacSORc0aY+Htp1MwVWjnhKI/X+7eEV6CQ3Y7FYoc=\r\n"	\
+    "-----END CERTIFICATE-----\r\n";
+
+/* Populate here your device private key content */
+#define DEVICE_PRIVATE_KEY                                                 \
+    "-----BEGIN PRIVATE KEY-----\n"                                        \
+	"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDHjhmvEevCFkVm\r\n"	\
+	"8g7D+9DJQHwt/pmWOg11EwmsmuaCt3V+j6KfujJRoqCUqlc0/vvqiaUKxlqKRq9R\r\n"	\
+	"djnqYKcYvWOHT+pXpRlNPxbL/u9gL1t2PTb67UWYKQRYUaP+lH9UFJamKcVd6rDp\r\n"	\
+	"JDbDlruzQUr542G5zlzeIsT8Bw9p2Qtk54bdenMK8bcGKcJTUSlLP++30lj1E5dg\r\n"	\
+	"57XDuMiwz/dP3TC01/807K59vR3IwSCQUIbes1h3n4xTbgJrl1jx/G1FzGi/Oo5O\r\n"	\
+	"BIQB3JFIs8nMMAElGutOAdznyLTzK0IzzvJylJeOJtlbafv2KB1CehNFkXVgkqnu\r\n"	\
+	"gZSXVf4ZAgMBAAECggEAb6Um5XXHSw0ewxvF+wwVoaL8VtdMomnUQZ3nGbSIJrXx\r\n"	\
+	"fF9sAqUvpdCwurwakkHeOzfLKJ4U5avqRk8409JDamn7Fyc02tg5sagMXxFAZ7XX\r\n"	\
+	"G+3fpr+84gaAsdDrSXFXU3k5V7mi/Ipjc+yY3xCj7wQmqGv4rvWvq3AUeVSR4Qta\r\n"	\
+	"aq/yELOc6zkCuXoPVht6E5xsqhYE428MUVq3T8VJ8fIm410ymDRcroAeobhxzflO\r\n"	\
+	"MOX84byL7kLt6QboOHoxUV/BBH8UQWQvZv8aP1gXvPp84jj+pAcf1MdF1sLR4yGa\r\n"	\
+	"Mh5KkmcHi95SjvDS0B4Z3D2WgiN7IjeQ2tt0+TF+KQKBgQDqa9FmDEczE6aiJXCq\r\n"	\
+	"XnP2J4e4V1WCHpNN2YUcogEWHtEN97XE3Sc7iqoYSCZW7cuR3nG8fqsiIcqf2hn7\r\n"	\
+	"bfopUDqmNeV0xLCoDCXeuDnEkRrBBQXTPDoyekFH8KtqLvAFJApPBnX0TbU7bkzO\r\n"	\
+	"gEqXLNJlK4MJRCSAWV2V+v8BiwKBgQDZ7KfypeaByTLwOB4WtmlwFZWq8EFN6Wwx\r\n"	\
+	"5i3Eo8l5vhtkWws+DyJpBPpX+TAIpnYQ4PSMPNxsft2YFygIR5eBEoIEBtbDfiUv\r\n"	\
+	"svlEH6+f+71wabu0ePkMTdEf8pl36YEspFq+0Iz+o53EiqGHb+kLTDc81CAQVBl2\r\n"	\
+	"xaKQgDorawKBgQDlYLCZ2QPGL8FKQbZXjmqLfyynLRWnZ8GdWG2OkdrcSTUoJK1A\r\n"	\
+	"v2FHOqyra9XQE4iw5+eEmLFdiZEaDzCDPJ6e1Dk/L9ehBWESXiikIMGt3IpAOmjz\r\n"	\
+	"w6fygnvkJ9Oi5+DGNvi7UMgUUAE48PnIyfGysRICGqxyYbIRwN/5BIuHdwKBgCcI\r\n"	\
+	"3/BzzP00Z95lfuY8mFhOVXe//0KQbCPoAgy19dHLvqZUNIhSN6yuCpWVeggioQVW\r\n"	\
+	"9hbkk+sPMmwawb3x7O5evVExVGjCALExkrqkHlY+xmkLV2b1QE725V2em+TBu7Se\r\n"	\
+	"X+7L9mVqM0lQN6zF2+19ImvP50pldgYzUnIltcWvAoGAcolYRYjTo3gjxwD9xhAq\r\n"	\
+	"TLmCEugNmiYkCHgdOWmkHk+5AOJkctkwCGGu9+Bz1yJ46Afvv6uRO540QJKdaHBS\r\n"	\
+	"np2l72ukSASAVaM1S+HyPrz9s1bCTIpB82kHKHuxx4SSSrLuxUkRLz7rZkRvsEai\r\n"	\
+	"mKmY/gyPLJZRq4Lr1lOwoCM=\r\n"	\
+    "-----END PRIVATE KEY-----\r\n";
+
 /***************************************************************************//**
  * @brief Basic example main execution.
  *
@@ -174,7 +248,25 @@ int basic_example_main()
 	struct maxq1065_desc *maxq1065;
 	struct lwip_network_desc *lwip_desc;
 	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
-	uint32_t connect_timeout = 2000;
+	uint32_t connect_timeout = 3000;
+
+	char my_ca_cert[] = CA_CERT;
+	char my_cli_cert[] = DEVICE_CERT;
+	char my_cli_pk[] = DEVICE_PRIVATE_KEY;
+	struct no_os_trng_init_param trng_ip = {
+		.platform_ops = &max_trng_ops
+	};
+
+	struct secure_init_param sip = {
+		.trng_init_param = &trng_ip,
+		// .ca_cert = my_ca_cert,
+		// .ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
+		// .cli_cert = my_cli_cert,
+		// .cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
+		// .cli_pk = my_cli_pk,
+		// .cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk),
+		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE
+	};
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
@@ -184,9 +276,9 @@ int basic_example_main()
 
 	printf("UART test: PASSED\n");
 
-	// ret = maxq1065_init(&maxq1065, &maxq1065_ip);
-	// if (ret)
-	// 	return ret;
+	ret = maxq1065_init(&maxq1065, &maxq1065_ip);
+	if (ret)
+		return ret;
 
 	// printf("MAXQ1065 ping: PASSED\n");
 
@@ -295,7 +387,8 @@ int basic_example_main()
 	bool connected = false;
 	struct tcp_socket_init_param tcp_ip = {
 		.net = &lwip_desc->no_os_net,
-		.max_buff_size = 0
+		.max_buff_size = 0,
+		.secure_init_param = &sip,
 	};
 
 	ret = socket_init(&tcp_socket, &tcp_ip);
@@ -303,8 +396,8 @@ int basic_example_main()
 		return ret;
 
 	struct socket_address ip_addr = {
-		.addr = "169.254.97.35",
-		.port = 20000
+		.addr = "169.254.97.30",
+		.port = 4443
 	};
 
 	struct mqtt_desc *mqtt;
@@ -330,13 +423,31 @@ int basic_example_main()
   	};
 
 	ret = socket_connect(tcp_socket, &ip_addr);
-	if (ret)
-		return ret;
+	// if (ret)
+	// 	return ret;
+
+	// while (1) {
+	// 	ret = socket_connect(tcp_socket, &ip_addr);
+	// 	no_os_lwip_step(tcp_socket->net->net, NULL);
+	// }
 
 	while (connect_timeout--) {
 		no_os_lwip_step(tcp_socket->net->net, NULL);
 		no_os_mdelay(1);
 	}
+
+	ret = secure_socket_connect(tcp_socket, &ip_addr);
+	// if (ret)
+	// 	return ret;
+
+	while (connect_timeout--) {
+		no_os_lwip_step(tcp_socket->net->net, NULL);
+		no_os_mdelay(1);
+	}
+
+	socket_send(tcp_socket, "test message", 12);
+
+	while(1);
 
   	ret = mqtt_connect(mqtt, &conn_config, NULL);
 	if (ret) {
