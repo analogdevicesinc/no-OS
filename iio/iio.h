@@ -128,8 +128,7 @@ struct iio_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Set communication ops and read/write ops that will be called from
- * "libtinyiiod". */
+/* Set communication ops and read/write ops. */
 int iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
 /* Free the resources allocated by iio_init(). */
 int iio_remove(struct iio_desc *desc);

@@ -30,7 +30,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/linux_delay.c
 else
 SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
 endif
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 
 ifeq (linux,$(strip $(PLATFORM)))
@@ -78,7 +78,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_mutex.h
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 
 ifeq (linux,$(strip $(PLATFORM)))
 INCS += $(NO-OS)/network/tcp_socket.h \

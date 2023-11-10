@@ -8,7 +8,7 @@
                   ]
             },
             "iio": {
-                  "flags": "TINYIIOD=y",
+                  "flags": "IIOD=y",
                   "hardware": [
                         "daq3_zc706",
                         "daq3_zcu102"

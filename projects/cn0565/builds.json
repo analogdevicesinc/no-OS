@@ -4,7 +4,7 @@
       "flags": ""
     },
     "fw_eit_ad5940_iio": {
-      "flags": "TINYIIOD=y"
+      "flags": "IIOD=y"
     }
   },
   "stm32": {
@@ -12,7 +12,7 @@
       "flags": ""
     },
     "fw_eit_ad5940_iio": {
-      "flags": "TINYIIOD=y"
+      "flags": "IIOD=y"
     }
   }
 }

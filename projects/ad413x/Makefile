@@ -1,6 +1,6 @@
 # Uncomment to use the desired platform
 #PLATFORM = xilinx
-TINYIIOD ?= n
+IIOD ?= n
 
 include ../../tools/scripts/generic_variables.mk
 

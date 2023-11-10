@@ -55,7 +55,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_timer.c \
         $(DRIVERS)/api/no_os_spi.c
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 

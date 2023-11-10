@@ -27,7 +27,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_axi_io.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
@@ -58,7 +58,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_mutex.h
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_list.h
 endif

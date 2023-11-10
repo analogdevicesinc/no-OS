@@ -43,7 +43,7 @@ SRCS += $(PROJECT)/src/app.c \
 ifeq (y,$(strip $(QUAD_MXFE)))
 SRCS += $(DRIVERS)/frequency/adf4371/adf4371.c
 endif
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/iio/iio_app/iio_app.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
@@ -106,7 +106,7 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 ifeq (y,$(strip $(QUAD_MXFE)))
 INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
 endif
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 INCS += $(NO-OS)/iio/iio_app/iio_app.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \

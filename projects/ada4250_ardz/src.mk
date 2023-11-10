@@ -40,4 +40,4 @@ INCS += $(INCLUDE)/no_os_spi.h \
 IGNORED_FILES += $(PLATFORM_DRIVERS)/aducm3029_uart_stdio.c
 IGNORED_FILES += $(PLATFORM_DRIVERS)/aducm3029_uart_stdio.h
 
-TINYIIOD=y
+IIOD=y

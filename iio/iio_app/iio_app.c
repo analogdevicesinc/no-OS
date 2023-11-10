@@ -123,7 +123,7 @@ static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 	const char *uart_stop[] = { "1", "2" };
 	char message[512];
 	uint32_t msglen = sprintf(message,
-				  "Running TinyIIOD server...\n"
+				  "Running IIOD server...\n"
 				  "If successful, you may connect an IIO client application by:\n"
 				  "1. Disconnecting the serial terminal you use to view this message.\n"
 				  "2. Connecting the IIO client application using the serial backend configured as shown:\n"
@@ -148,7 +148,7 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 {
 	char message[512];
 	uint32_t msglen = sprintf(message,
-				  "TinyIIOD server failed with code %d.\n",
+				  "IIOD server failed with code %d.\n",
 				  (int)status);
 #if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 	(void)msglen;
@@ -221,7 +221,7 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 
 	char buff[100];
 	wifi_get_ip(wifi, buff, 100);
-	printf("Tinyiiod ip is: %s\n", buff);
+	printf("iiod ip is: %s\n", buff);
 
 	wifi_get_network_interface(wifi, &socket_param.net);
 #endif

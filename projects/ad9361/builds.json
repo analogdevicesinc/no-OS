@@ -13,7 +13,7 @@
                   ]
             },
             "iio": {
-                  "flags": "TINYIIOD=y",
+                  "flags": "IIOD=y",
                   "hardware": [
                         "fmcomms2_kc705",
                         "fmcomms2_kcu105",
@@ -57,7 +57,7 @@
                   ]
             },
             "iio_fmcomms5": {
-                  "flags": "TINYIIOD=y NEW_CFLAGS=-DFMCOMMS5",
+                  "flags": "IIOD=y NEW_CFLAGS=-DFMCOMMS5",
                   "hardware": [
                         "fmcomms5_zc702",
                         "fmcomms5_zc706",

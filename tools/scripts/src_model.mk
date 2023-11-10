@@ -28,7 +28,7 @@ IGNORED_FILES += $(PLATFORM_DRIVERS)/irq.c
 # LIBRARIES += mbedtls
 
 # If the variable is set iio support will be enabled
-TINYIIOD = y
+IIOD = y
 
 # If the variable is set to y then iio network backend will be enabled
 NETWORKING = y

@@ -45,7 +45,7 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_mutex.h
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(DRIVERS)/afe/ad413x/iio_ad413x.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \

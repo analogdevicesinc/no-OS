@@ -8,7 +8,7 @@ SRC_DIRS += $(PROJECT)/srcs			\
 SRCS += $(NO-OS)/drivers/dac/ad3552r/ad3552r.c
 INCS += $(NO-OS)/drivers/dac/ad3552r/ad3552r.h
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/drivers/dac/ad3552r/iio_ad3552r.c
 INCS += $(NO-OS)/drivers/dac/ad3552r/iio_ad3552r.h

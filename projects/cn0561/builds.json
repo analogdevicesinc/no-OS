@@ -1,7 +1,7 @@
 {
   "xilinx": {
     "iio_zed": {
-      "flags" : "TINYIIOD=y NEW_CFLAGS=-DCN0561_ZED_CARRIER",
+      "flags" : "IIOD=y NEW_CFLAGS=-DCN0561_ZED_CARRIER",
       "hardware" : ["cn0561_zed"]
     },
     "uart_zed": {
@@ -9,7 +9,7 @@
       "hardware" : ["cn0561_zed"]
     },
     "iio_cora": {
-      "flags" : "TINYIIOD=y NEW_CFLAGS=-DCN0561_CORAZ7S_CARRIER",
+      "flags" : "IIOD=y NEW_CFLAGS=-DCN0561_CORAZ7S_CARRIER",
       "hardware" : ["cn0561_coraz7s"]
     },
     "uart_cora": {

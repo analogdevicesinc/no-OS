@@ -23,5 +23,5 @@ INCS += $(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_i2c.h
 
 SRCS += $(DRIVERS)/api/no_os_spi.c
 
-TINYIIOD=y
+IIOD=y
 

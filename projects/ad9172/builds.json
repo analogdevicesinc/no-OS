@@ -8,7 +8,7 @@
                   ]
             },
             "iio": {
-                  "flags": "TINYIIOD=y",
+                  "flags": "IIOD=y",
                   "hardware": [
                         "dac_fmc_ebz_zc706",
                         "dac_fmc_ebz_zcu102"

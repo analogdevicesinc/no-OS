@@ -446,7 +446,7 @@ int main(void)
 #ifdef IIO_SUPPORT
 	status = start_iiod(rx_dmac, tx_dmac, rx_adc, tx_dac);
 	if (status)
-		printf("Tinyiiod error: %d\n", status);
+		printf("iiod error: %d\n", status);
 #endif // IIO_SUPPORT
 
 	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {

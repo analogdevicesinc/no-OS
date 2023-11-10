@@ -12,7 +12,7 @@
 # Uncomment to select the profile
 
 SRCS += $(PROJECT)/src/ad6676_ebz.c
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
@@ -36,7 +36,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c \
@@ -73,7 +73,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_mutex.h \
 	$(INCLUDE)/jesd204.h \
 	$(NO-OS)/jesd204/jesd204-priv.h
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \

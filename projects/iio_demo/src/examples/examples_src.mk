@@ -29,7 +29,7 @@ SRCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo_trig.c
 SRCS += $(DRIVERS)/dac/dac_demo/iio_dac_demo_trig.c
 endif
 
-TINYIIOD=y
+IIOD=y
 
 SRC_DIRS += $(NO-OS)/iio/iio_app
 

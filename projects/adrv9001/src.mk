@@ -61,7 +61,7 @@ INCS +=	$(INCLUDE)/no_os_spi.h \
 SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa
 
 # IIO
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \

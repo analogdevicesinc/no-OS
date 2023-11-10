@@ -4,7 +4,7 @@ SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 endif
 
-TINYIIOD=y
+IIOD=y
 
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
