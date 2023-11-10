@@ -1,5 +1,5 @@
 ifeq (y,$(strip $(IIO_EXAMPLE)))
-TINYIIOD=y
+IIOD=y
 CFLAGS += -DIIO_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
@@ -11,7 +11,7 @@ SRCS += $(PROJECT)/src/examples/basic/basic_example.c
 INCS += $(PROJECT)/src/examples/basic/basic_example.h
 endif
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 INCS += $(DRIVERS)/temperature/max31855/iio_max31855.h
 SRCS += $(DRIVERS)/temperature/max31855/iio_max31855.c 

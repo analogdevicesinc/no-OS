@@ -82,7 +82,7 @@ INCS +=	$(INCLUDE)/no_os_delay.h \
 	$(PLATFORM_DRIVERS)/platform_init.h
 endif
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(DRIVERS)/afe/ad5940/iio_ad5940.c \

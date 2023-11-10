@@ -18,5 +18,5 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.h
 
-TINYIIOD=y
+IIOD=y
 

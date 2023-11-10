@@ -1,7 +1,6 @@
 /***************************************************************************//**
  *   @file   iiod.c
- *   @brief  Nonblockin implementation of libtinyiiod.
- *           Based on https://github.com/analogdevicesinc/libtinyiiod
+ *   @brief  Nonblockin implementation of iiod.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.

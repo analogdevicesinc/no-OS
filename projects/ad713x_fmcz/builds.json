@@ -1,7 +1,7 @@
 {
   "xilinx": {
     "iio": {
-      "flags" : "TINYIIOD=y",
+      "flags" : "IIOD=y",
       "hardware" : ["ad7134_fmc_zed"]
     },
     "uart": {

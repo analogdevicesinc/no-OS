@@ -1,8 +1,6 @@
 /***************************************************************************//**
  *   @file   iio.c
  *   @brief  Implementation of iio.
- *   This module implements read/write ops, required by libtinyiiod and further
- *   calls show/store functions, corresponding to device/channel/attribute.
  *   @author Cristian Pop (cristian.pop@analog.com)
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -1299,8 +1297,6 @@ static int iio_refill_buffer(struct iiod_ctx *ctx, const char *device)
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
  * "iio_transfer_dev_to_mem()" first.
- * This function is probably called multiple times by libtinyiiod after a
- * "iio_transfer_dev_to_mem" call, since we can only read "bytes_count" bytes.
  * @param device - String containing device name.
  * @param pbuf - Buffer where value is stored.
  * @param offset - Offset to the remaining data after reading n chunks.
@@ -1344,9 +1340,6 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 
 /**
  * @brief Write chunk of data into RAM.
- * This function is probably called multiple times by libtinyiiod before a
- * "iio_transfer_mem_to_dev" call, since we can only write "bytes_count" bytes
- * at a time.
  * @param device - String containing device name.
  * @param buf - Values to write.
  * @param offset - Offset in memory after the nth chunk of data.
@@ -1841,8 +1834,7 @@ static int32_t iio_init_trigs(struct iio_desc *desc,
 }
 
 /**
- * @brief Set communication ops and read/write ops that will be called
- * from "libtinyiiod".
+ * @brief Set communication ops and read/write ops
  * @param desc - iio descriptor.
  * @param init_param - appropriate init param.
  * @return 0 in case of success or negative value otherwise.

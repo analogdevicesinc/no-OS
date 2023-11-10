@@ -44,5 +44,5 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-TINYIIOD=y
+IIOD=y
 

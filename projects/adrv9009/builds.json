@@ -29,7 +29,7 @@
                   ]
             },
             "iio": {
-                  "flags": "TINYIIOD=y",
+                  "flags": "IIOD=y",
                   "hardware": [
                         "adrv9009_zc706",
                         "adrv9009_zcu102"

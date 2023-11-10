@@ -19,7 +19,7 @@
                   ]
             },
             "iio": {
-                  "flags": "TINYIIOD=y",
+                  "flags": "IIOD=y",
                   "hardware": [
                         "daq2_kc705",
                         "daq2_kcu105",

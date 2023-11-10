@@ -1,5 +1,5 @@
 LIBRARIES += lwip
-TINYIIOD=y
+IIOD=y
 
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
 

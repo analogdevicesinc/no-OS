@@ -43,7 +43,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(DRIVERS)/cdc/ad7746/ad7746.h \
 	$(PROJECT)/src/app/parameters.h
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(DRIVERS)/cdc/ad7746/iio_ad7746.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \

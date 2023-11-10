@@ -4,7 +4,7 @@
       "flags" : ""
     },
     "iio_capacitive_length_demo": {
-	"flags" : "TINYIIOD=y"
+	"flags" : "IIOD=y"
       }
   }
 }

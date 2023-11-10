@@ -8,7 +8,7 @@
                   ]
             },
             "iio": {
-                  "flags": "TINYIIOD=y",
+                  "flags": "IIOD=y",
                   "hardware": [
                         "ad9081_fmca_ebz_vcu118",
                         "ad9081_fmca_ebz_zcu102"

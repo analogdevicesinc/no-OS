@@ -54,7 +54,6 @@ build_cppcheck() {
 
 build_drivers() {
     sudo apt-get install gcc-arm-none-eabi libnewlib-arm-none-eabi
-    git submodule update --init libraries/iio/libtinyiiod
     make -j${NUM_JOBS} -C ./drivers -f Makefile
 }
 

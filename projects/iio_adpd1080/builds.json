@@ -1,10 +1,10 @@
 {
   "aducm3029": {
     "iio_uart":  {
-      "flags" : "TINYIIOD=y"
+      "flags" : "IIOD=y"
     },
     "iio_wifi":  {
-      "flags" : "TINYIIOD=y NETWORKING=y"
+      "flags" : "IIOD=y NETWORKING=y"
     }
   }
 }

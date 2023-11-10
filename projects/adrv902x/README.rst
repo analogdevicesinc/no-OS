@@ -220,15 +220,15 @@ The data in the .csv files generated can be visualised using the `plot.py <https
 IIO Example
 -----------
 
-IIO demo is a standard example, provided in most `no-OS projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects>`_, that launches a TINYIIOD server on the board so that the user may connect to it via an IIO client. Using iio-oscilloscope, the user can configure the DAC and view the ADC data on a plot.
+IIO demo is a standard example, provided in most `no-OS projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects>`_, that launches a IIOD server on the board so that the user may connect to it via an IIO client. Using iio-oscilloscope, the user can configure the DAC and view the ADC data on a plot.
 
-To build the TINYIIOD demo, add the following flags when invoking make which will build the TINYIIOD server and the IIO section of the driver:
+To build the IIOD demo, add the following flags when invoking make which will build the IIOD server and the IIO section of the driver:
 
 .. code-block:: bash
 
     make BASIC_EXAMPLE=n DMA_EXAMPLE=n IIO_EXAMPLE=y
 
-To run the TINYIIOD demo, first connect to the board via UART to see the runtime output messages with the following settings: 
+To run the IIOD demo, first connect to the board via UART to see the runtime output messages with the following settings: 
 
 .. code-block:: bash
 
@@ -244,7 +244,7 @@ With a serial terminal correctly configured and listening to incoming messages, 
 
 .. code-block:: bash
 
-    Running TinyIIOD server...
+    Running IIOD server...
     If successful, you may connect an IIO client application by:
     1. Disconnecting the serial terminal you use to view this message.
     2. Connecting the IIO client application using the serial backend configured as shown:
@@ -254,4 +254,4 @@ With a serial terminal correctly configured and listening to incoming messages, 
         Stop bits: 1
         Flow control: none
 
-This message implies a TINYIIOD server is being run and you may connect to it using a serial-backend enabled `iio-oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope>`_ and with the settings indicated at the serial terminal.
+This message implies a IIOD server is being run and you may connect to it using a serial-backend enabled `iio-oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope>`_ and with the settings indicated at the serial terminal.

@@ -53,7 +53,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/jesd204/jesd204-core.c \
 	$(NO-OS)/jesd204/jesd204-fsm.c
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/no_os_fifo.c \
@@ -157,7 +157,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_clk.h \
 	$(INCLUDE)/jesd204.h \
 	$(NO-OS)/jesd204/jesd204-priv.h
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 INCS +=	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \

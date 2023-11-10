@@ -36,7 +36,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/util/no_os_fifo.c \
@@ -53,7 +53,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/devices/adi_hal/parameters.h
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 INCS +=	$(DRIVERS)/adc/ad9680/iio_ad9680.h \
 	$(DRIVERS)/dac/ad9152/iio_ad9152.h
 endif
@@ -83,7 +83,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/jesd204.h \
 	$(NO-OS)/jesd204/jesd204-priv.h
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \

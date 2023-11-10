@@ -5,7 +5,7 @@
               "hardware" : ["ad9265_fmc_zc706"]
         },
         "iio": {
-              "flags" : "TINYIIOD=y",
+              "flags" : "IIOD=y",
               "hardware" : ["ad9265_fmc_zc706"]
         }
       }

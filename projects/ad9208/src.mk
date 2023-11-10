@@ -15,7 +15,7 @@ SRC_DIRS += $(PROJECT)/src \
 		$(DRIVERS)/axi_core/axi_dmac \
 		$(DRIVERS)/axi_core/clk_axi_clkgen
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc \
 	    $(DRIVERS)/api/no_os_irq.c \
 		$(NO-OS)/iio/iio_app

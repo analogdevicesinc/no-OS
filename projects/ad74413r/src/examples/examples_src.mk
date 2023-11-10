@@ -5,20 +5,20 @@ INCS += $(PROJECT)/src/examples/dummy/dummy_example.h
 endif
 
 ifeq (y,$(strip $(IIO_EXAMPLE)))
-TINYIIOD=y
+IIOD=y
 CFLAGS += -DIIO_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 endif
 
 ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))
-TINYIIOD=y
+IIOD=y
 CFLAGS += -DIIO_TRIGGER_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.h
 endif
 
-ifeq (y,$(strip $(TINYIIOD)))
+ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h

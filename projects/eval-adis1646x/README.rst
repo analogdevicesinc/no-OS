@@ -130,8 +130,8 @@ In order to build the IIO project make sure you have the following configuration
 IIO example
 ^^^^^^^^^^^
 
-This project is actually a TINYIIOD demo for EVAL-ADIS1646X device series.
-The project launches a TINYIIOD server on the board so that the user may connect
+This project is actually a IIOD demo for EVAL-ADIS1646X device series.
+The project launches a IIOD server on the board so that the user may connect
 to it via an IIO client.
 Using IIO-Oscilloscope, the user can configure the IMU and view the measured data on a plot.
 
