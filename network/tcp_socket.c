@@ -52,6 +52,7 @@
 // #include "noos_mbedtls_config.h"
 #include "no_os_trng.h"
 #include <mbedtls/net.h>
+#include "lwip_socket.h"
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
@@ -62,15 +63,14 @@
 
 #warning "TCP socket communication is not secured"
 
-#define DEFAULT_CONNECTION_BUFFER_SIZE 256
+#define DEFAULT_CONNECTION_BUFFER_SIZE 16384
 
 #else
 
-#define NON_BLOCK_CONT	(MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE)
 #ifdef MAX_CONTENT_LEN
 #define DEFAULT_CONNECTION_BUFFER_SIZE MAX_CONTENT_LEN
 #else
-#define DEFAULT_CONNECTION_BUFFER_SIZE 16384
+#define DEFAULT_CONNECTION_BUFFER_SIZE 8000
 #endif /* MAX_CONTENT_LEN */
 
 #endif /* DISABLE_SECURE_SOCKET */
@@ -111,6 +111,14 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 			size_t len)
 {
 	int32_t ret;
+	int timeout = 200;
+
+#ifdef NO_OS_LWIP_NETWORKING
+	while (timeout--) {
+		no_os_lwip_step(sock->net->net, NULL);
+		no_os_mdelay(1);
+	}
+#endif
 
 	ret = sock->net->socket_recv(sock->net->net, sock->id, buff, len);
 	if (ret == -EAGAIN)
@@ -388,9 +396,14 @@ int32_t secure_socket_connect(struct tcp_socket_desc *desc,
 			ret = mbedtls_ssl_handshake(&desc->secure->ssl);
 		} while (ret == MBEDTLS_ERR_SSL_WANT_READ);
 	}
+
+	printf("Handshake state: %d\n", desc->secure->ssl.state);
+	return ret;
+
+	// ret = mbedtls_ssl_get_verify_result(&desc->secure->ssl);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
-		mbedtls_ssl_session_reset(&desc->secure->ssl);
-		socket_disconnect(desc);
+		// mbedtls_ssl_session_reset(&desc->secure->ssl);
+		// socket_disconnect(desc);
 		return ret;
 	}
 

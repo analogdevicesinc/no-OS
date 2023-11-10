@@ -28,6 +28,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_spi.h       \
 		$(INCLUDE)/no_os_irq.h      \
 		$(INCLUDE)/no_os_init.h      \
+		$(INCLUDE)/no_os_trng.h      \
 		$(INCLUDE)/no_os_list.h      \
 		$(INCLUDE)/no_os_mutex.h      \
 		$(INCLUDE)/no_os_crc8.h      \
@@ -48,6 +49,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_uart.c \
 		$(DRIVERS)/api/no_os_i2c.c \
 		$(DRIVERS)/api/no_os_timer.c \
+		$(DRIVERS)/api/no_os_trng.c  \
 		$(DRIVERS)/api/no_os_mdio.c \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_crc8.c \
@@ -87,6 +89,16 @@ CFLAGS += -DMQTT_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
 INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h
 endif
+
+ifeq (y,$(strip $(TLS_EXAMPLE)))
+CFLAGS += -DTLS_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/swiot1l-tls-client/swiot1l_tls_client.c
+INCS += $(PROJECT)/src/examples/swiot1l-tls-client/swiot1l_tls_client.h
+INCS += $(DRIVERS)/crypto/maxq1065/maxq1065.h
+SRCS += $(DRIVERS)/crypto/maxq1065/maxq1065.c
+SRC_DIRS += $(DRIVERS)/crypto/maxq1065/maxq1065_include
+endif
+
 
 SRCS += $(PROJECT)/src/swiot_fw.c
 INCS += $(PROJECT)/src/swiot_fw.h

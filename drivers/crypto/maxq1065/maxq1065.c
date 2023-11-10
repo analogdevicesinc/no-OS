@@ -182,7 +182,7 @@ mxq_err_t maxq1065_receive_bytes_spi(mxq_u1* dest, mxq_length len)
 	};
 	int ret;
 
-	memset(maxq1065_local_desc->rx_buff, 0, 512);
+	memset(maxq1065_local_desc->rx_buff, 0xCC, 512);
 	memset(maxq1065_local_desc->tx_buff, 0, 512);
 	ret = no_os_spi_transfer(maxq1065_local_desc->comm_desc, &xfer, 1);
 	if (ret)
@@ -210,6 +210,8 @@ mxq_err_t maxq1065_first_bytes_spi(mxq_u1* dest, mxq_length len)
 	uint8_t rdy = 0;
 	int ret;
 
+	memset(maxq1065_local_desc->tx_buff, 0xCC, 512);
+	memset(maxq1065_local_desc->rx_buff, 0, 512);
 	while (maxq1065_local_desc->rx_buff[0] != 0x55 && timeout) {
 		no_os_spi_transfer(maxq1065_local_desc->comm_desc, &xfer, 1);
 		timeout--;

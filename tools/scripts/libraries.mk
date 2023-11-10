@@ -137,10 +137,11 @@ EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/librar
 EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedtls.a
 EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedx509.a
 
-EXTRA_INC_PATHS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/maxq10xx_api
+EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
+CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/maxq10xx_api/
 CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/
 
-CFLAGS += -DENABLE_PEM_CERT
+# CFLAGS += -DENABLE_PEM_CERT
 else
 DISABLE_SECURE_SOCKET ?= y
 endif

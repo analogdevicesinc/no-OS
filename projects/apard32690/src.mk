@@ -19,9 +19,9 @@ SRCS += $(NO-OS)/util/no_os_crc8.c
 SRCS += $(DRIVERS)/api/no_os_uart.c     \
 	$(DRIVERS)/api/no_os_irq.c     	\
 	$(DRIVERS)/api/no_os_spi.c     	\
-	$(DRIVERS)/api/no_os_gpio.c     	\
-	$(DRIVERS)/api/no_os_trng.c     	\
-	$(DRIVERS)/api/no_os_timer.c     	\
+	$(DRIVERS)/api/no_os_gpio.c     \
+	$(DRIVERS)/api/no_os_trng.c     \
+	$(DRIVERS)/api/no_os_timer.c    \
         $(NO-OS)/util/no_os_fifo.c      \
         $(NO-OS)/util/no_os_list.c      \
         $(NO-OS)/util/no_os_lf256fifo.c \

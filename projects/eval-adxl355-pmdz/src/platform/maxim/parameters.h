@@ -76,8 +76,8 @@
 #define SPI_DEVICE_ID   1
 #define SPI_CS          0
 #elif (TARGET_NUM == 32690)
-#define SPI_DEVICE_ID   0
-#define SPI_CS          1
+#define SPI_DEVICE_ID   3
+#define SPI_CS          0
 #else
 #define SPI_DEVICE_ID   0
 #define SPI_CS          0

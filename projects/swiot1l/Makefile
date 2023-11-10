@@ -1,9 +1,12 @@
-MQTT_EXAMPLE = y
+MQTT_EXAMPLE = n
+TLS_EXAMPLE = y
 
 PLATFORM = maxim
 TARGET = max32650
 
 LIBRARIES += mqtt
+LIBRARIES += tls_maxq1065
+CFLAGS += -DMXQ_ON_NO_OS
 
 include ../../tools/scripts/generic_variables.mk
 

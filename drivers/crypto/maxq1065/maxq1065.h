@@ -1,5 +1,5 @@
-#ifndef _MAXQ1065_H
-#define _MAXQ1065_H
+#ifndef __MAXQ1065_H
+#define __MAXQ1065_H
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -29,4 +29,4 @@ struct maxq1065_desc {
 
 extern const struct maxq1065_no_os_ops maxq1065_ops;
 
-#endif // _MAXQ1065_H
+#endif // __MAXQ1065_H

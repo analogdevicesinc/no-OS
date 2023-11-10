@@ -61,5 +61,8 @@ int main()
 #if (MQTT_EXAMPLE == 1)
 	return swiot1l_mqtt();
 #endif
+#if (TLS_EXAMPLE == 1)
+	return swiot1l_tls();
+#endif
 	return swiot_firmware();
 }
