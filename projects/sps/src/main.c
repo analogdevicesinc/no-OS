@@ -65,6 +65,7 @@
 #include "iio_ad7793.h"
 #include "iio_ad7799.h"
 #include "Show_Lib.h"
+#include "wdt.h"
 
 uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
 
@@ -399,6 +400,8 @@ int app_step(void *arg)
 	static int cnt2 = 0;
 	static int cnt3 = 0;
 
+	MXC_WDT_ResetTimer(MXC_WDT0);
+
 	cnt1++;
 	if (cnt1 == 100) {
 		cnt1 = 0;
@@ -508,6 +511,15 @@ int main(void)
 	uint32_t reg_val;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
+
+	mxc_wdt_cfg_t wdt_cfg = {
+		.mode = MXC_WDT_REVB_COMPATIBILITY,
+	};
+
+	MXC_WDT_Init(MXC_WDT0, &wdt_cfg);
+	MXC_WDT_Disable(MXC_WDT0);
+	MXC_WDT_SetResetPeriod(MXC_WDT0, MXC_S_WDT_CTRL_INT_LATE_VAL_WDT2POW27);
+	MXC_WDT_EnableReset(MXC_WDT0);
 
 	status = ad7793_iio_init(&ad7793_iiodev, &ad7793_param);
 	if (status)
@@ -784,6 +796,8 @@ int main(void)
 		for (j = 0; j < 240; j++)
                 	LCD_WriteData(adi_logo[i * 240 + j]);
 	}
+
+	MXC_WDT_Enable(MXC_WDT0);
 
 	return iio_app_run(app);
 }
