@@ -245,6 +245,15 @@ enum ad469x_ref_set {
 };
 
 /**
+ * @enum ad469x_ain_high_z
+ * @brief Analog input high impedance mode
+ */
+enum ad469x_ain_high_z {
+	AD469x_AIN_HIGH_Z_DISABLE,
+	AD469x_AIN_HIGH_Z_ENABLE,
+};
+
+/**
  * @struct ad469x_init_param
  * @brief  Structure containing the init parameters needed by the ad469x device
  */
@@ -433,6 +442,16 @@ int32_t ad469x_get_reference(struct ad469x_dev *device,
 /* Set reference */
 int32_t ad469x_set_reference(struct ad469x_dev *device,
 			     enum ad469x_ref_set ref_set);
+
+/* Configure analog input high Z mode */
+int32_t ad469x_configure_ain_high_z(struct ad469x_dev *dev,
+				    uint8_t ch,
+				    enum ad469x_ain_high_z status);
+
+/* Get the status of analog input high Z mode */
+int32_t ad469x_get_ain_high_z_status(struct ad469x_dev *dev,
+				     uint8_t ch,
+				     enum ad469x_ain_high_z *status);
 
 /* Initialize the device. */
 int32_t ad469x_init(struct ad469x_dev **device,

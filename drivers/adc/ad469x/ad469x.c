@@ -912,6 +912,47 @@ int32_t ad469x_config(struct ad469x_dev *dev, struct
 }
 
 /**
+ * @brief Configure analog input high Z mode
+ * @param dev The device structure
+ * @param ch Channel ID
+ * @param status Status of analog input high Z bit
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad469x_configure_ain_high_z(struct ad469x_dev *dev, uint8_t ch,
+				    enum ad469x_ain_high_z status)
+{
+	return ad469x_spi_write_mask(dev,
+				     AD469x_REG_CONFIG_IN(dev->ch_sequence == AD469x_standard_seq ? 0 : ch),
+				     AD469x_REG_CONFIG_IN_HIZ_EN_MASK,
+				     AD469x_REG_CONFIG_IN_HIZ_EN(status));
+}
+
+/**
+ * @brief Get the status of analog input high Z mode
+ * @param dev The device structure
+ * @param ch Channel ID
+ * @param status Status of analog input high Z bit
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad469x_get_ain_high_z_status(struct ad469x_dev *dev,
+				     uint8_t ch,
+				     enum ad469x_ain_high_z *status)
+{
+	uint8_t reg_data;
+	int32_t ret;
+
+	ret = ad469x_spi_reg_read(dev,
+				  AD469x_REG_CONFIG_IN(dev->ch_sequence == AD469x_standard_seq ? 0 : ch),
+				  &reg_data);
+	if (ret)
+		return ret;
+
+	*status = no_os_field_get(AD469x_REG_CONFIG_IN_HIZ_EN_MASK, reg_data);
+
+	return 0;
+}
+
+/**
  * Initialize the device.
  * @param [out] device - The device structure.
  * @param [in] init_param - The structure that contains the device initial
