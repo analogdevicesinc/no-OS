@@ -358,7 +358,7 @@ int max22196_fault_mask_get(struct max22196_desc *desc,
 
 	switch (fault_mask) {
 	case MAX22196_GLOBAL_REFDISHTCFG:
-		ret = max22190_reg_read(desc, MAX22196_GLOBALCFG_REG, &reg_val);
+		ret = max22196_reg_read(desc, MAX22196_GLOBALCFG_REG, &reg_val);
 		if (ret)
 			return ret;
 		*enabled = no_os_field_get(desc, MAX22196_FAULT_MASK(fault_mask));
