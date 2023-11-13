@@ -141,7 +141,7 @@ EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
 CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/maxq10xx_api/
 CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/
 
-# CFLAGS += -DENABLE_PEM_CERT
+CFLAGS += -DENABLE_PEM_CERT
 else
 DISABLE_SECURE_SOCKET ?= y
 endif

@@ -186,58 +186,65 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto exit;
 
-	if (param->ca_cert) {
-#ifdef ENABLE_PEM_CERT
-		ret = mbedtls_x509_crt_parse( &ldesc->cacert,
-#else
-		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->cacert,
-#endif /* ENABLE_PEM_CERT */
-					      (const unsigned char *)param->ca_cert,
-					      (size_t)param->ca_cert_len);
-		if (ret < 0)
-			goto exit;
+// 	if (param->ca_cert) {
+// #ifdef ENABLE_PEM_CERT
+// 		ret = mbedtls_x509_crt_parse( &ldesc->cacert,
+// #else
+// 		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->cacert,
+// #endif /* ENABLE_PEM_CERT */
+// 					      (const unsigned char *)param->ca_cert,
+// 					      (size_t)param->ca_cert_len);
+// 		if (ret < 0)
+// 			goto exit;
 
-		mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->cacert, NULL );
-		/* Verify server identity */
-		mbedtls_ssl_conf_authmode(&ldesc->conf,
-					  param->cert_verify_mode);
-	} else {
-		/* Do not verify server identity */
-		mbedtls_ssl_conf_authmode(&ldesc->conf,
-					  MBEDTLS_SSL_VERIFY_NONE);
-	}
+// 		mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->cacert, NULL );
+// 		/* Verify server identity */
+// 		mbedtls_ssl_conf_authmode(&ldesc->conf,
+// 					  param->cert_verify_mode);
+// 	} else {
+// 		/* Do not verify server identity */
+// 		mbedtls_ssl_conf_authmode(&ldesc->conf,
+// 					  MBEDTLS_SSL_VERIFY_NONE);
+// 	}
 
-	if (param->cli_cert) {
-		if (!param->cli_pk) {
-			ret = -EINVAL;
-			goto exit;
-		}
-#ifdef ENABLE_PEM_CERT
-		ret = mbedtls_x509_crt_parse( &ldesc->clicert,
-#else
-		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->clicert,
-#endif /* ENABLE_PEM_CERT */
-					      (const unsigned char *)param->cli_cert,
-					      (size_t)param->cli_cert_len);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			goto exit;
-		ret = mbedtls_pk_parse_key(&ldesc->pkey,
-					   (const unsigned char *)param->cli_pk,
-					   param->cli_pk_len, NULL, 0 );
-		if (NO_OS_IS_ERR_VALUE(ret))
-			goto exit;
+// 	if (param->cli_cert) {
+// 		if (!param->cli_pk) {
+// 			ret = -EINVAL;
+// 			goto exit;
+// 		}
+// #ifdef ENABLE_PEM_CERT
+// 		ret = mbedtls_x509_crt_parse( &ldesc->clicert,
+// #else
+// 		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->clicert,
+// #endif /* ENABLE_PEM_CERT */
+// 					      (const unsigned char *)param->cli_cert,
+// 					      (size_t)param->cli_cert_len);
+// 		if (NO_OS_IS_ERR_VALUE(ret))
+// 			goto exit;
+// 		ret = mbedtls_pk_parse_key(&ldesc->pkey,
+// 					   (const unsigned char *)param->cli_pk,
+// 					   param->cli_pk_len, NULL, 0 );
+// 		if (NO_OS_IS_ERR_VALUE(ret))
+// 			goto exit;
 
-		ret = mbedtls_ssl_conf_own_cert(&ldesc->conf, &ldesc->clicert,
-						&ldesc->pkey);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			goto exit;
-	}
+// 		ret = mbedtls_ssl_conf_own_cert(&ldesc->conf, &ldesc->clicert,
+// 						&ldesc->pkey);
+// 		if (NO_OS_IS_ERR_VALUE(ret))
+// 			goto exit;
+// 	}
 
 	/* Config Random number generator */
 	mbedtls_ssl_conf_rng(&ldesc->conf,
 			     (int (*)(void *, unsigned char *, size_t))
 			     no_os_trng_fill_buffer,
 			     (void *)ldesc->trng);
+
+	if (param->psk) {
+		ret = mbedtls_ssl_conf_psk(&ldesc->conf, param->psk, param->psk_len,
+					   "Client_identity", 15);
+		if (ret)
+			return ret;
+	}
 
 	/* Set the resulting protocol configuration */
 	ret = mbedtls_ssl_setup(&ldesc->ssl, &ldesc->conf);

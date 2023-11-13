@@ -109,6 +109,8 @@ struct secure_init_param {
 	uint8_t			*cli_pk;
 	/** cli_pk length */
 	uint32_t		cli_pk_len;
+	uint8_t			psk;
+	uint32_t		psk_len;
 };
 
 #endif /* DISABLE_SECURE_SOCKET */
