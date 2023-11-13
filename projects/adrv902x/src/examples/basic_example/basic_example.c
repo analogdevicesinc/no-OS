@@ -160,7 +160,7 @@ int basic_example_main(void)
 	ad9528_param.pdata->refb_diff_rcv_en = 0;
 	ad9528_param.pdata->osc_in_diff_en = 0;
 	/* JESD */
-	ad9528_param.pdata->jdev_desired_sysref_freq = 0; // ToDo
+	ad9528_param.pdata->jdev_desired_sysref_freq = 7680000 / 2;
 	/* PLL1 config */
 	ad9528_param.pdata->pll1_feedback_div = 4;
 	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
