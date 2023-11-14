@@ -75,8 +75,6 @@ ensure_command_exists() {
 	return 1
 }
 
-ensure_command_exists sudo
-
 echo_red() { printf "\033[1;31m$*\033[m\n"; }
 echo_green() { printf "\033[1;32m$*\033[m\n"; }
 
