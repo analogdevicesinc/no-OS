@@ -42,6 +42,8 @@ DEPS_DIR="${TOP_DIR}/deps"
 
 . ./ci/lib.sh
 
+ensure_command_exists sudo
+
 build_astyle() {
     . ./ci/astyle.sh
 }
