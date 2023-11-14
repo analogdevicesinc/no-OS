@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   iiod.c
- *   @brief  Nonblockin implementation of iiod.
+ *   @brief  Nonblocking implementation of iiod.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
