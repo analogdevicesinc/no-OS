@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   projects/fmcdaq3/src/app/app_config.h
- *   @brief  Config file for DAQ3 project.
- *   @author DBogdan (dragos.bogdan@analog.com)
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of xilinx platform data used by iio_demo project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -38,16 +37,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef APP_CONFIG_H_
-#define APP_CONFIG_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "parameters.h"
 
+#ifdef IIO_SUPPORT
+struct xil_uart_init_param platform_uart_init_par = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+	.type = UART_PL,
+#else
+	.type = UART_PS,
+	.irq_id = UART_IRQ_ID
+#endif
+};
+#endif
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
+struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+	.type = SPI_PL,
+#else
+	.type = SPI_PS,
+#endif
+};
 
- #define DMA_EXAMPLE
-//#define IIO_SUPPORT
+struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+	.type = GPIO_PL,
+#else
+	.type = GPIO_PS,
+#endif
+	.device_id = GPIO_DEVICE_ID
+};
 
-#define JESD_FSM_ON
+struct adxcvr_init ad9152_xcvr_init_param = {
+	.name = "ad9152_xcvr",
+	.base = XPAR_AXI_AD9152_XCVR_BASEADDR,
+	.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+	.out_clk_sel = ADXCVR_REFCLK_DIV2,
+	.lpm_enable = 1,
+	.ref_rate_khz = 616500,
+	.lane_rate_khz = 12330000,
+};
 
-#endif /* APP_CONFIG_H_ */
+struct adxcvr_init ad9680_xcvr_init_param = {
+	.name = "ad9680_xcvr",
+	.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
+	.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
+	.out_clk_sel = ADXCVR_REFCLK_DIV2,
+	.lpm_enable = 1,
+	.ref_rate_khz = 616500,
+	.lane_rate_khz = 12330000
+};

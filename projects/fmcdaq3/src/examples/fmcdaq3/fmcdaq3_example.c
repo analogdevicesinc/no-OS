@@ -1,10 +1,11 @@
 /***************************************************************************//**
- *   @file   projects/fmcdaq3/src/app/fmcdaq3.c
- *   @brief  Implementation of Main Function.
+ *   @file   projects/fmcdaq3/src/examples/fmcdaq3/fmcdaq3_example.c
+ *   @brief  Main example for fmcdaq3 project
  *   @author DBogdan (dragos.bogdan@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
- *******************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ *   @author EBalas (eliza.balas@analog.com)
+********************************************************************************
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,80 +37,11 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+*******************************************************************************/
+#include "fmcdaq3_example.h"
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
-#include <stdio.h>
-#include <inttypes.h>
-#include "app_config.h"
-#include "parameters.h"
-#ifndef ALTERA_PLATFORM
-#include <xparameters.h>
-#include <xil_printf.h>
-#include <xil_cache.h>
-#include "axi_adxcvr.h"
-#else
-#include "clk_altera_a10_fpll.h"
-#include "altera_adxcvr.h"
-#endif
-#include "no_os_spi.h"
-#include "no_os_gpio.h"
-#include "xilinx_spi.h"
-#include "xilinx_gpio.h"
-#include "no_os_delay.h"
-#include "no_os_error.h"
-#include "ad9152.h"
-#include "ad9528.h"
-#include "ad9680.h"
-#include "axi_adc_core.h"
-#include "axi_dac_core.h"
-#include "axi_dmac.h"
-#include "axi_jesd204_tx.h"
-#include "axi_jesd204_rx.h"
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#include "iio_ad9680.h"
-#include "iio_ad9152.h"
-#include "iio_axi_adc.h"
-#include "iio_axi_dac.h"
-#ifndef ALTERA_PLATFORM
-#include "xilinx_uart.h"
-#endif
-#endif
-
-#ifdef JESD_FSM_ON
-#include "no_os_print_log.h"
-#include "no_os_alloc.h"
-#include "jesd204.h"
-#include "jesd204_clk.h"
-#endif
-struct fmcdaq3_dev {
-	struct ad9528_dev *ad9528_device;
-	struct ad9152_dev *ad9152_device;
-	struct ad9680_dev *ad9680_device;
-
-	struct ad9528_channel_spec ad9528_channels[8];
-
-	struct no_os_gpio_desc *gpio_dac_txen;
-	struct no_os_gpio_desc *gpio_adc_pd;
-
-	struct adxcvr *ad9152_xcvr;
-	struct adxcvr *ad9680_xcvr;
-
-	struct axi_jesd204_tx *ad9152_jesd;
-	struct axi_jesd204_rx *ad9680_jesd;
-
-	struct axi_adc	*ad9680_core;
-	struct axi_dac	*ad9152_core;
-	struct axi_dac_channel  ad9152_channels[2];
-
-	struct axi_dmac *ad9152_dmac;
-	struct axi_dmac *ad9680_dmac;
-} fmcdaq3;
+struct fmcdaq3_init_param fmcdaq3_init;
+struct fmcdaq3_dev fmcdaq3;
 
 #ifdef JESD_FSM_ON
 struct link_init_param {
@@ -138,30 +70,6 @@ struct jesd204_clk rx_jesd_clk = {0};
 struct jesd204_clk tx_jesd_clk = {0};
 
 #endif
-
-struct fmcdaq3_init_param {
-	struct ad9528_init_param ad9528_param;
-	struct ad9152_init_param ad9152_param;
-	struct ad9680_init_param ad9680_param;
-
-	struct adxcvr_init ad9152_xcvr_param;
-	struct adxcvr_init ad9680_xcvr_param;
-
-	struct jesd204_tx_init ad9152_jesd_param;
-	struct jesd204_rx_init ad9680_jesd_param;
-
-	struct axi_adc_init ad9680_core_param;
-
-	struct axi_dac_init ad9152_core_param;
-
-	struct axi_dmac_init ad9152_dmac_param;
-	struct axi_dmac_init ad9680_dmac_param;
-
-#ifdef JESD_FSM_ON
-	struct link_init_param	jrx_link_tx;
-	struct link_init_param	jtx_link_rx;
-#endif
-} fmcdaq3_init;
 
 static int fmcdaq3_gpio_init(struct fmcdaq3_dev *dev)
 {
@@ -1100,7 +1008,7 @@ static int fmcdaq3_setup(struct fmcdaq3_dev *dev,
 	return status;
 }
 
-int main(void)
+int fmcdaq3_example_main()
 {
 	unsigned int *data = (unsigned int *)ADC_DDR_BASEADDR;
 	int status;
@@ -1240,3 +1148,4 @@ int main(void)
 	printf("\n Done main...\r\n");
 	return 0;
 }
+
