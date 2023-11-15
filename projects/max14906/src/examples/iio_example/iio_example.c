@@ -77,7 +77,7 @@ int iio_example_main()
 	struct iio_app_init_param app_init_param = { 0 };
 
 	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip);
-	if(ret)
+	if (ret)
 		goto exit;
 
 	/** Declaring iio_devices structure */
@@ -96,7 +96,7 @@ int iio_example_main()
 
 	/** Initializing IIO app. */
 	ret = iio_app_init(&app, app_init_param);
-	if(ret)
+	if (ret)
 		goto iio_max14906_remove;
 
 	/** Running the IIO app (use iio_info or osc in terminal). */
