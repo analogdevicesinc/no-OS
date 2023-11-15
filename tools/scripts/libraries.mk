@@ -140,6 +140,8 @@ EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/librar
 EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
 CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/maxq10xx_api/
 CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/
+CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/maxq10xx-perso/include/
+CFLAGS += -DMBEDTLS_CONFIG_FILE="config-client-no_os-maxq1065.h"
 
 CFLAGS += -DENABLE_PEM_CERT
 else

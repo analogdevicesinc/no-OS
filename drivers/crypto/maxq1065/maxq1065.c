@@ -5,7 +5,9 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "maxq1065.h"
+#include "maxq_perso.h"
 
+extern mxq_u1 KeyPairAdmin[];
 static struct maxq1065_desc *maxq1065_local_desc;
 
 mxq_err_t maxq1065_reset(void)
@@ -30,6 +32,90 @@ mxq_err_t maxq1065_reset(void)
 void HardFault_Handler(void) {
 	int a = 3;
 	a++;
+}
+
+mxq_err_t maxq_authAdmin(uint16_t key_id, unsigned char * keypair)
+{
+	mxq_err_t err;
+
+	mxq_u1 prng[16];
+	static mxq_u1 signature[256];
+
+	printf("[MAXQ10xx Perso] Admin Authentication ....\n");
+
+	err = MXQ_Get_Challenge(prng, sizeof(prng));
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n",__FILE__, __LINE__);
+		return err;
+	}
+
+	/* Locally sign the random number with the admin private key */
+	err = signData(signature, keypair, prng, (mxq_length)sizeof(prng));
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n", __FILE__, __LINE__);
+		return err;
+	}
+
+	/* Do the authentication */
+	err = MXQ_AdminAuth(key_id, ALGO_ECDSA_SHA_256, signature, 32 * 2);
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n",__FILE__, __LINE__);
+		return err;
+	}
+
+	return MXQ_OK;
+}
+
+mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
+
+	mxq_err_t err;
+	static mxq_u1 keydata[290];
+	mxq_length keydatalen;
+
+	mxq_u1 signature[64];
+	mxq_length signlen = 32*2;
+
+	err = maxq_authAdmin(PUBKEYADMINID, KeyPairAdmin);
+	if(err != MXQ_OK) {
+    	printf("Error %s:%d\n", __FILE__, __LINE__);
+        return -1;
+    }
+
+	printf("Creating PSK in MAXQ...\n");
+	MXQ_DeleteObject(objectid);
+
+    err = MXQ_CreateObject(objectid, 96, MXQ_OBJTYPE_SECRETKEY, OBJPROP_PERSISTENT, "a=d,x=wx");
+    if(err != MXQ_OK) {
+    	printf("Error %s:%d\n", __FILE__, __LINE__);
+        return -1;
+    }
+
+    keydatalen = sizeof(keydata);
+
+	err = MXQ_BuildKey(keydata, &keydatalen,
+			MXQ_KEYTYPE_PSK, MXQ_UNKNOWN_CURVE,
+			psk_length, psk_length,
+			MXQ_KEYUSE_TLSAUTH, ALGO_CIPHER_AES_any,
+			(mxq_keyuse_t)0, ALGO_NONE,
+			psk);
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n", __FILE__, __LINE__);
+		return -1;
+	}
+
+	err = signData(signature, KeyPairImport, keydata, keydatalen);
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n", __FILE__, __LINE__);
+		return -1;
+	}
+
+	err = MXQ_ImportKey(objectid, ALGO_ECDSA_SHA_256, PUBKEYIMPORTOBJID, keydata, keydatalen, signature, signlen);
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n", __FILE__, __LINE__);
+		return -1;
+	}
+
+	return MXQ_OK;
 }
 
 int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param)
@@ -246,6 +332,34 @@ mxq_err_t maxq1065_sleep(mxq_u4 us)
 
 	return MXQ_OK;
 }
+
+// int maxq1065_admin_auth()
+// {
+// 	mxq_u1 prng[16];
+// 	mxq_u1 signature[64];
+
+// 	/**
+// 	 *  Get a Random Number from the MAXQ106x to perform the challenge response authentication
+// 	 */
+// 	ASSERTSUCCESS(MXQ_Get_Challenge(prng, sizeof(prng)));
+
+// 	/**
+// 	 *  Locally sign the random number with a valid administrator private key.
+// 	 *  Here we use the default Maxim Import key 'KeyPairAdmin' with the public part already loaded in the MAXQ106x
+// 	 * and fully available in the source file "host_keys.c"
+// 	 */
+// 	ASSERTSUCCESS(ECDSA_sign_secp256r1_sha256(signature, KeyPairAdmin, prng, sizeof(prng)));
+
+// 	/**
+// 	 * Finally to perform the authentication by the sending back the random number along with the signature
+// 	 */
+// 	ASSERTSUCCESS(MXQ_AdminAuth(PUBKEYADMINID, ALGO_ECDSA_SHA_256, signature, KEYCOMPLEN * 2));
+
+// 	/**
+// 	 * We are now authenticated as an Administrator
+// 	 */
+// 	return 0;
+// }
 
 const struct maxq1065_no_os_ops maxq1065_ops = {
 	.init_spi = maxq1065_init_spi,
