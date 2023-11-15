@@ -71,8 +71,6 @@ int basic_example_main()
 	enum max14906_climit climit = MAX14906_CL_300;
 	enum max14906_climit climit2 = MAX14906_CL_600;
 
-	struct no_os_gpio_desc *gpio_desc;
-
 	/** MAX14906 Initialization */
 	ret = max14906_init(&max14906_desc, &max14906_ip);
 	if (ret)
@@ -82,23 +80,15 @@ int basic_example_main()
 	struct no_os_irq_ctrl_desc *global_desc;
 	struct no_os_irq_init_param global_desc_param = {
 		.irq_ctrl_id = GPIO_IRQ_ID,
-		.platform_ops = &max_irq_ops,
-		.extra = NULL
+		.platform_ops = GPIO_IRQ_OPS,
+		.extra = GPIO_IRQ_EXTRA
 	};
 
 	ret = no_os_irq_ctrl_init(&global_desc, &global_desc_param);
 	if (ret)
 		goto max14906_remove;
 
-	/** GPIO Interrupt Controller */
-	struct no_os_irq_ctrl_desc *gpio_irq_desc;
-	struct no_os_irq_init_param gpio_irq_desc_param = {
-		.irq_ctrl_id = GPIO_IRQ_ID,
-		.platform_ops = GPIO_IRQ_OPS,
-		.extra = NULL
-	};
-
-	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_desc_param);
+	ret = no_os_irq_set_priority(global_desc, GPIO_IRQ_ID, 1);
 	if (ret)
 		goto remove_gpio_irq_ctrl;
 
@@ -111,25 +101,17 @@ int basic_example_main()
 		.handle = NULL
 	};
 
-	ret = no_os_irq_register_callback(gpio_irq_desc, GPIO_FAULT_PIN_NUM,
+	ret = no_os_irq_register_callback(global_desc, GPIO_IRQ_ID,
 					  &gpio_cb);
 	if (ret)
-		goto gpio_irq_remove;
+		goto remove_gpio_irq_ctrl;
 
-	ret = no_os_irq_trigger_level_set(gpio_irq_desc, GPIO_FAULT_PIN_NUM,
-					  NO_OS_IRQ_EDGE_BOTH);
+	ret = no_os_irq_trigger_level_set(global_desc, GPIO_IRQ_ID,
+					  NO_OS_IRQ_EDGE_FALLING);
 	if (ret)
 		goto gpio_irq_unregister_callback;
 
-	ret = no_os_irq_set_priority(gpio_irq_desc, GPIO_FAULT_PIN_NUM, 1);
-	if (ret)
-		goto gpio_irq_unregister_callback;
-
-	ret = no_os_irq_enable(gpio_irq_desc, GPIO_FAULT_PIN_NUM);
-	if (ret)
-		goto gpio_irq_unregister_callback;
-
-	ret = no_os_irq_enable(global_desc, GPIO0_IRQn);
+	ret = no_os_irq_enable(global_desc, GPIO_IRQ_ID);
 	if (ret)
 		goto gpio_irq_unregister_callback;
 
@@ -177,12 +159,14 @@ int basic_example_main()
 			goto gpio_irq_unregister_callback;
 
 		ret = max14906_ch_get(max14906_desc, 0, &val);
+		if (ret)
+			goto gpio_irq_unregister_callback;
 	}
 
+	while (1);
+
 gpio_irq_unregister_callback:
-	no_os_irq_unregister_callback(gpio_irq_desc, GPIO_FAULT_PIN_NUM, &gpio_cb);
-gpio_irq_remove:
-	no_os_irq_ctrl_remove(gpio_irq_desc);
+	no_os_irq_unregister_callback(global_desc, GPIO_FAULT_PIN_NUM, &gpio_cb);
 remove_gpio_irq_ctrl:
 	no_os_irq_ctrl_remove(global_desc);
 max14906_remove:

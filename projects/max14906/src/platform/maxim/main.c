@@ -58,16 +58,34 @@ int main()
 
 #ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
+	struct no_os_irq_ctrl_desc *gpio_irq_desc;
+	struct no_os_irq_init_param gpio_irq_desc_param = {
+		.irq_ctrl_id = GPIO_IRQ_ID,
+		.platform_ops = GPIO_IRQ_OPS,
+		.extra = NULL
+	};
 
 	ret = no_os_uart_init(&uart_desc, &max14906_uart_ip);
 	if (ret)
 		return ret;
 
+	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_desc_param);
+	if (ret)
+		goto max14906_uart_remove;
+
+	ret = no_os_irq_enable(gpio_irq_desc, GPIO0_IRQn);
+	if (ret)
+		goto max14906_irq_ctrl_remove;
+
 	no_os_uart_stdio(uart_desc);
 
 	ret = basic_example_main();
 
+max14906_irq_ctrl_remove:
+	no_os_irq_ctrl_remove(gpio_irq_desc);
+max14906_uart_remove:
 	no_os_uart_remove(uart_desc);
+
 #endif
 
 #if (BASIC_EXAMPLE + IIO_EXAMPLE == 0)
