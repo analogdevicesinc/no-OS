@@ -146,7 +146,7 @@ int basic_example_main()
 	/** Read current limit for all channels. */
 	for (i = 0; i < MAX14906_CHANNELS; i++) {
 		ret = max14906_climit_get(max14906_desc, i, &climit2);
-		if(ret)
+		if (ret)
 			goto gpio_irq_unregister_callback;
 		pr_info("Current limit for channel %d is %s\n", i,
 			climit_name[climit2]);
@@ -155,7 +155,7 @@ int basic_example_main()
 	/** Setting the on state for channel 0, and then verifying it. */
 	if (max14906_desc->en_gpio) {
 		ret = max14906_ch_set(max14906_desc, 0, 1);
-		if(ret)
+		if (ret)
 			goto gpio_irq_unregister_callback;
 
 		ret = max14906_ch_get(max14906_desc, 0, &val);
