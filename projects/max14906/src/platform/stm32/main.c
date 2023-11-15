@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   max14906/src/common/common_data.c
- *   @brief  Defines common data to be used by max14906 examples.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of max14906 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -36,53 +36,51 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include "no_os_error.h"
+#include "platform_includes.h"
 #include "common_data.h"
 
-struct no_os_uart_init_param max14906_uart_ip = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.platform_ops = UART_OPS,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = UART_EXTRA,
-};
-
-struct no_os_spi_init_param max14906_spi_ip = {
-	.device_id = SPI_DEVICE_ID,
-	.extra = SPI_EXTRA,
-	.max_speed_hz = SPI_BAUDRATE,
-	.platform_ops = SPI_OPS,
-	.chip_select = SPI_CS,
-};
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#endif
 
 #ifdef BASIC_EXAMPLE
-
-struct no_os_gpio_init_param max14906_fault_gpio_param = {
-	.port = GPIO_FAULT_PORT_NUM,
-	.pull = NO_OS_PULL_NONE,
-	.number = GPIO_FAULT_PIN_NUM,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA,
-};
-
-struct max149x6_init_param max14906_ip = {
-	.chip_address = 0,
-	.comm_param = &max14906_spi_ip,
-	.fault_gpio_param = &max14906_fault_gpio_param,
-	.crc_en = true,
-};
-
+#include "basic_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
+/*******************************************************************************
+ * @brief Main function execution for STM32 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -EINVAL;
 
-struct max149x6_init_param max14906_ip = {
-	.chip_address = 0,
-	.comm_param = &max14906_spi_ip,
-	.crc_en = true,
-};
+	max14906_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
+	stm32_init();
 
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
 #endif
+
+#ifdef BASIC_EXAMPLE
+	struct no_os_uart_desc *uart;
+
+	ret = no_os_uart_init(&uart, &max14906_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart);
+	ret = basic_example_main();
+
+	no_os_uart_remove(uart);
+#endif
+
+#if (IIO_EXAMPLE + BASIC_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}

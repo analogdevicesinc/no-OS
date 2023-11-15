@@ -12,5 +12,13 @@
 		"iio_example_max32690" : {
 			"flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32690"
 		}
+	},
+	"stm32": {
+		"basic_example": {
+			"flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n HARDWARE=nucleo-f401re.ioc"
+		},
+		"iio_example": {
+			"flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y HARDWARE=nucleo-f401re.ioc"
+		}
 	}
 }
