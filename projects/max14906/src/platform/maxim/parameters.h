@@ -42,6 +42,7 @@
 #include "maxim_irq.h"
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
+#include "maxim_gpio_irq.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 
@@ -80,6 +81,7 @@ extern struct max_spi_init_param max14906_spi_extra;
 #define GPIO_OPS	&max_gpio_ops
 #define GPIO_EXTRA	&max14906_gpio_extra_ip
 #define GPIO_IRQ_OPS	&max_gpio_irq_ops
+#define GPIO_IRQ_EXTRA	NULL
 extern struct max_gpio_init_param max14906_gpio_extra_ip;
 #if (TARGET_NUM == 32665)
 #define GPIO_FAULT_PORT_NUM	0
