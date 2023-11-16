@@ -167,9 +167,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 					break;
 
 				prev_rf_attn = attn;
-			}
-
-			if (iter_count == 8) {
+			} else if (iter_count >= 8) {
 				led_tx_det_green(false);
 				led_tx_det_red(false);
 				if (abs((int)mV - (int)mwc->tx_target) <= mwc->tx_tolerance)
@@ -224,9 +222,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 					break;
 
 				prev_bb_attn = attn;
-			}
-
-			if (iter_count == 8) {
+			} else if (iter_count >= 8) {
 				led_rx_det_green(false);
 				led_rx_det_red(false);
 				if (abs((int)mV - (int)mwc->rx_target) <= mwc->rx_tolerance)
