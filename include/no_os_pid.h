@@ -79,6 +79,7 @@ struct no_os_pid;
 int no_os_pid_init(struct no_os_pid **pid, struct no_os_pid_config config);
 int no_os_pid_control(struct no_os_pid *pid, int SP, int PV, int *output);
 int no_os_pid_hysteresis(struct no_os_pid *pid, unsigned int hyst);
+int no_os_pid_reset(struct no_os_pid *pid);
 int no_os_pid_remove(struct no_os_pid *pid);
 
 #endif
