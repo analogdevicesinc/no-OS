@@ -193,7 +193,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		int iter_count = 0;
 		uint16_t reading;
 		uint32_t mV;
-		mxc_adc_chsel_t ch = MXC_ADC_CH_1;
+		mxc_adc_chsel_t ch = MXC_ADC_CH_1_DIV_5;
 		const uint8_t attn_reverse[] = {0, 2, 1, 3};
 		const uint8_t attn_fine_reverse[] = {0, 4, 2, 6, 1, 5, 3};
 
@@ -202,12 +202,12 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		while(true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
-				.scale = MXC_ADC_SCALE_2,
+				.scale = MXC_ADC_SCALE_2X,
 			};
 			MXC_ADC_Convert(&req);
 			reading = req.rawADCValue;
 
-			mV = (uint64_t)reading * 2 * 1220000000 / 1024 / 1000000;
+			mV = (uint64_t)reading * 5 / 2 * 1220000000 / 1024 / 1000000;
 			ret = no_os_pid_control(mwc->rx_pid, mwc->rx_target, mV, &attn);
 			if (ret)
 				break;
@@ -457,28 +457,19 @@ static int mwc_iio_read_raw(void *device, char *buf, uint32_t len,
 	switch (channel->type) {
 	case IIO_VOLTAGE:
 		switch (channel->ch_num) {
-#if (TARGET_NUM==32650)
 		case 0:
 			adcch = MXC_ADC_CH_0;
 			break;
 		case 1:
-			adcch = MXC_ADC_CH_1;
+			adcch = MXC_ADC_CH_1_DIV_5;
 			break;
-#elif (TARGET_NUM==78000)
-		case 0:
-			adcch = MXC_ADC_CH_3;
-			break;
-		case 1:
-			adcch = MXC_ADC_CH_4;
-			break;
-#endif
 		default:
 			return -EINVAL;
 		};
 
 		mxc_adc_conversion_req_t req = {
 			.channel = adcch,
-			.scale = channel->ch_num == 0 ? MXC_ADC_SCALE_1 : MXC_ADC_SCALE_2,
+			.scale = channel->ch_num == MXC_ADC_CH_0 ? MXC_ADC_SCALE_1 : MXC_ADC_SCALE_2X,
 		};
 		MXC_ADC_Convert(&req);
 		v = req.rawADCValue;
@@ -502,7 +493,7 @@ static int mwc_iio_read_scale(void *device, char *buf, uint32_t len,
 	switch (channel->type) {
 	case IIO_VOLTAGE:
 		/* 1220 mV or 2440 mV / 2^10 */
-		vals[0] = channel->ch_num == 0 ? 1220 : 2440;
+		vals[0] = channel->ch_num == 0 ? 1220 : 3050;
 		vals[1] = 10;
 		valt = IIO_VAL_FRACTIONAL_LOG2;
 		break;
