@@ -31,15 +31,15 @@ const struct nvmp factory_defaults_template = {
 	.temp_correlation = {
 		{ // lbtx
 			{1, 3, 7, 15, 31}, // temperature
-			{15, 15, 15, 10, 5}, // tx if_attn
-			{6, 6, 6, 6, 6}, // rx if_attn
-			{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_0dB} // rx lna_attn
+			{15, 15, 15, 15, 10}, // tx if_attn
+			{6, 6, 6, 6, 3}, // rx if_attn
+			{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB} // rx lna_attn
 		},
 		{ // hbtx
 			{1, 3, 7, 15, 31},
 			{15, 15, 15, 10, 0},
-			{6, 6, 6, 6, 6},
-			{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_0dB}
+			{12, 12, 12, 12, 9},
+			{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB}
 		}
 	},
 	
