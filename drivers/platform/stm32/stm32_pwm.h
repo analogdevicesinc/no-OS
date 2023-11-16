@@ -69,7 +69,7 @@ enum TimOCMode {
  * @brief Structure holding the STM32 PWM parameters.
  */
 struct stm32_pwm_init_param {
-	/** Timer prescaler */
+	/** Timer prescaler (0 to 0xFFFF) */
 	uint32_t prescaler;
 	/** Timer autoreload enable */
 	bool timer_autoreload;

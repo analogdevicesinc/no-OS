@@ -107,7 +107,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	if (sparam->get_timer_clock) {
 		timer_frequency_hz = sparam->get_timer_clock();
 		timer_frequency_hz *= sparam->clock_divider;
-		timer_frequency_hz /= NO_OS_BIT(sparam->prescaler);
+		timer_frequency_hz /= sparam->prescaler;
 		period = _compute_period_ticks(desc, timer_frequency_hz, param->period_ns);
 	} else {
 		period = PWM_DEFAULT_PERIOD - 1;
