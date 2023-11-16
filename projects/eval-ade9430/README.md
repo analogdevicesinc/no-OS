@@ -23,28 +23,28 @@ Default configuration: simple, non-encrypted connection.
 
 **Build Configuration Examples:** 
 
-1. `make TARGET=max32650`
+1. `make PLATFORM=maxim TARGET=max32650`
 
  - Default usage of the project consisting of simple, non-encrypted connection
    to a MQTT broker.
 
-2. `make TARGET=max32650 NEW_CFLAGS=-DRTC_SET_DEFAULT`
+2. `make PLATFORM=maxim TARGET=max32650 NEW_CFLAGS=-DRTC_SET_DEFAULT`
 
  - Default usage of the project consisting of simple, non-encrypted connection
    to a MQTT broker, including the RTC default date and time set required for
    obtaining relevant timestamp values.
 
-3. `make TARGET=max32650 AZURE_IOT_HUB=y`
+3. `make PLATFORM=maxim TARGET=max32650 AZURE_IOT_HUB=y`
 
  - Encrypted connection and telemetry data publishing into the Azure IoT Hub.
 
-4. `make TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS`
+4. `make PLATFORM=maxim TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS`
 
  - Encrypted connection to the Azure Device Provisioning Service for the device
    registering in the cloud, followed by encrypted connection and telemetry
    data publishing into the Azure IoT Hub.
 
-5. `make TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS NEW_CFLAGS=-DRTC_SET_DEFAULT`
+5. `make PLATFORM=maxim TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS NEW_CFLAGS=-DRTC_SET_DEFAULT`
 
  - Encrypted connection to the Azure Device Provisioning Service for the device
    registering in the cloud, followed by encrypted connection and telemetry
