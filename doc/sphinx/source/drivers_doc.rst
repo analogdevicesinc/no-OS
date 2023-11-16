@@ -25,6 +25,7 @@ DIGITAL INPUT/OUTPUT
 
    drivers/max149x6
    drivers/max22190
+   drivers/max22196
 
 INERTIAL MEASUREMENT UNITS
 ==========================
