@@ -57,7 +57,11 @@ else
 ifneq '' '$(findstring pinmux_config.c,$(HARDWARE))'
 PLATFORM = aducm3029
 else
+ifneq '' '$(findstring max,$(TARGET))'
+PLATFORM = maxim
+else
 $(error No HARDWARE found)
+endif
 endif
 endif
 endif
