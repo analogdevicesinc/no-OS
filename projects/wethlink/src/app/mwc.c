@@ -148,6 +148,8 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		uint32_t mV;
 		mxc_adc_chsel_t ch = MXC_ADC_CH_0;
 
+		no_os_pid_reset(mwc->tx_pid);
+		no_os_pid_hysteresis(mwc->tx_pid, mwc->tx_tolerance);
 		while(true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
@@ -157,7 +159,6 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			reading = req.rawADCValue;
 
 			mV = (uint64_t)reading * 1220000000 / 1024 / 1000000;
-			no_os_pid_hysteresis(mwc->tx_pid, mwc->tx_tolerance);
 			ret = no_os_pid_control(mwc->tx_pid, mwc->tx_target, mV, &attn);
 			if (ret)
 				break;
@@ -196,6 +197,8 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		const uint8_t attn_reverse[] = {0, 2, 1, 3};
 		const uint8_t attn_fine_reverse[] = {0, 4, 2, 6, 1, 5, 3};
 
+		no_os_pid_reset(mwc->rx_pid);
+		no_os_pid_hysteresis(mwc->rx_pid, mwc->rx_tolerance);
 		while(true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
@@ -205,7 +208,6 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			reading = req.rawADCValue;
 
 			mV = (uint64_t)reading * 2 * 1220000000 / 1024 / 1000000;
-			no_os_pid_hysteresis(mwc->rx_pid, mwc->rx_tolerance);
 			ret = no_os_pid_control(mwc->rx_pid, mwc->rx_target, mV, &attn);
 			if (ret)
 				break;
