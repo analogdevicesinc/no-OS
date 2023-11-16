@@ -173,27 +173,27 @@ int pcf85263_set_date(struct pcf85263_dev *dev, struct pcf85263_date date)
 	if (ret)
 		return ret;
 
-	ret = pcf85263_write(dev, PCF85263_REG_SECONDS, date.sec);
+	ret = pcf85263_write(dev, PCF85263_REG_SECONDS, no_os_bin2bcd(date.sec));
 	if (ret)
 		return ret;
 
-	ret = pcf85263_write(dev, PCF85263_REG_MINUTES, date.min);
+	ret = pcf85263_write(dev, PCF85263_REG_MINUTES, no_os_bin2bcd(date.min));
 	if (ret)
 		return ret;
 
-	ret = pcf85263_write(dev, PCF85263_REG_HOURS, date.hr);
+	ret = pcf85263_write(dev, PCF85263_REG_HOURS, no_os_bin2bcd(date.hr));
 	if (ret)
 		return ret;
 
-	ret = pcf85263_write(dev, PCF85263_REG_DAYS, date.day);
+	ret = pcf85263_write(dev, PCF85263_REG_DAYS, no_os_bin2bcd(date.day));
 	if (ret)
 		return ret;
 
-	ret = pcf85263_write(dev, PCF85263_REG_MONTHS, date.mon);
+	ret = pcf85263_write(dev, PCF85263_REG_MONTHS, no_os_bin2bcd(date.mon));
 	if (ret)
 		return ret;
 
-	ret = pcf85263_write(dev, PCF85263_REG_YEARS, date.year);
+	ret = pcf85263_write(dev, PCF85263_REG_YEARS, no_os_bin2bcd(date.year));
 	if (ret)
 		return ret;
 
@@ -214,23 +214,39 @@ int pcf85263_read_ts(struct pcf85263_dev *dev, struct pcf85263_date *ts)
 	if (ret)
 		return ret;
 
+	ts->sec = no_os_bcd2bin(ts->sec & 0x7f);
+
 	ret = pcf85263_read(dev, PCF85263_REG_MINUTES, &ts->min);
 	if (ret)
 		return ret;
+
+	ts->min = no_os_bcd2bin(ts->min & 0x7f);
 
 	ret = pcf85263_read(dev, PCF85263_REG_HOURS, &ts->hr);
 	if (ret)
 		return ret;
 
+	ts->hr = no_os_bcd2bin((ts->hr) & 0x3f);
+
 	ret = pcf85263_read(dev, PCF85263_REG_DAYS, &ts->day);
 	if (ret)
 		return ret;
+
+	ts->day = no_os_bcd2bin((ts->day) & 0x3f);
 
 	ret = pcf85263_read(dev, PCF85263_REG_MONTHS, &ts->mon);
 	if (ret)
 		return ret;
 
-	return pcf85263_read(dev, PCF85263_REG_YEARS, &ts->year);
+	ts->mon = no_os_bcd2bin((ts->mon) & 0x1f);
+
+	ret = pcf85263_read(dev, PCF85263_REG_YEARS, &ts->year);
+	if (ret)
+		return ret;
+
+	ts->year = no_os_bcd2bin(ts->year);
+
+	return 0;
 }
 
 /**
