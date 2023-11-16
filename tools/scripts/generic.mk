@@ -237,9 +237,9 @@ CPPFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags.txt
 ASFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags.txt
 
 # Prepare for VS Code Debug Intellisense applied at target $(PROJECT_TARGET)_configure - depends on a complete CFLAGS
-include ../../tools/scripts/vsc_intellisense.mk
+include $(NO-OS)/tools/scripts/vsc_intellisense.mk
 # Prepare for VS Code Debug config applied at target $(PROJECT_TARGET)_configure
-include ../../tools/scripts/vsc_openocd_debug.mk
+include $(NO-OS)/tools/scripts/vsc_openocd_debug.mk
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
