@@ -456,7 +456,7 @@ int main()
 	}
 
 	/* Allow the wifi module to bring up after reset */
-	no_os_mdelay(2000);
+	no_os_mdelay(3000);
 
 	ret = ade9430_init(&ade9430_device, ade9430_ip);
 	if (ret) {
