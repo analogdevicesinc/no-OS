@@ -388,6 +388,24 @@ int main()
 	};
 	struct no_os_gpio_desc *wifi_rst_gpio;
 
+	struct no_os_gpio_init_param green_gpio_led_ip = {
+		.port = 1,
+		.number = 18,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip
+	};
+	struct no_os_gpio_desc *green_led_gpio;
+
+	struct no_os_gpio_init_param red_gpio_led_ip = {
+		.port = 1,
+		.number = 14,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip
+	};
+	struct no_os_gpio_desc *red_led_gpio;
+
 	/* Display Initialization parameters */
 	struct nhd_c12832a1z_init_param nhd_c12832a1z_ip = {
 		.spi_ip = &spi_lcd_ip,
@@ -420,10 +438,23 @@ int main()
 	};
 	struct no_os_uart_desc *uart_desc;
 
+	/* Configure Red Led */
+	ret = no_os_gpio_get(&red_led_gpio, &red_gpio_led_ip);
+	if (ret) {
+		pr_err("Error getting red LED gpio!\n");
+		return ret;
+	}
+
+	ret = no_os_gpio_direction_output(red_led_gpio, NO_OS_GPIO_LOW);
+	if (ret) {
+		pr_err("Error setting red LED gpio low!\n");
+		goto error_red_gpio_led;
+	}
+
 	ret = pcf85263_init(&pcf85263_device, pcf85263_ip);
 	if (ret) {
 		pr_err("Error RTC initialization!\n");
-		goto error_pcf;
+		goto error_red_gpio_led;
 	}
 
 #ifdef RTC_SET_DEFAULT
@@ -434,11 +465,24 @@ int main()
 	}
 #endif
 
+	/* Configure Green Led */
+	ret = no_os_gpio_get(&green_led_gpio, &green_gpio_led_ip);
+	if (ret) {
+		pr_err("Error getting LED gpio!\n");
+		goto error_pcf;
+	}
+
+	ret = no_os_gpio_direction_output(green_led_gpio, NO_OS_GPIO_HIGH);
+	if (ret) {
+		pr_err("Error setting LED gpio low!\n");
+		goto error_green_gpio_led;
+	}
+
 	/* Hardware Reset for the Wifi Module */
 	ret = no_os_gpio_get(&wifi_rst_gpio, &gpio_wifi_rst_ip);
 	if (ret) {
 		pr_err("Error getting wifi reset gpio!\n");
-		goto error_pcf;
+		goto error_green_gpio_led;
 	}
 
 	ret = no_os_gpio_direction_output(wifi_rst_gpio, NO_OS_GPIO_LOW);
@@ -772,7 +816,19 @@ int main()
 	pr_info("Subscribed to topic: %s\n", MQTT_SUBSCRIBE_TOPIC);
 #endif
 
+	ret = no_os_gpio_set_value(red_led_gpio, NO_OS_GPIO_HIGH);
+	if (ret) {
+		pr_err("Error setting red LED gpio high!\n");
+		goto error_mqtt;
+	}
+
 	while (true) {
+		ret = no_os_gpio_set_value(green_led_gpio, NO_OS_GPIO_LOW);
+		if (ret) {
+			pr_err("Error setting green LED gpio high!\n");
+			goto error_mqtt;
+		}
+
 		ret = read_and_send(mqtt, ade9430_device, nhd_c12832a1z_device,
 				    pcf85263_device);
 		if (ret) {
@@ -780,7 +836,15 @@ int main()
 			goto error_mqtt;
 		}
 
+		ret = no_os_gpio_set_value(green_led_gpio, NO_OS_GPIO_HIGH);
+		if (ret) {
+			pr_err("Error setting green LED gpio high!\n");
+			goto error_mqtt;
+		}
+
 		pr_info("Data sent to broker\n");
+
+		no_os_mdelay(1000);
 
 		/* Dispatch new mqtt mesages if any during SCAN_SENSOR_TIME */
 		ret = mqtt_yield(mqtt, SCAN_SENSOR_TIME);
@@ -808,8 +872,31 @@ error_ade9430:
 	ade9430_remove(ade9430_device);
 error_gpio_rst:
 	no_os_gpio_remove(wifi_rst_gpio);
+error_green_gpio_led:
+	no_os_gpio_remove(green_led_gpio);
 error_pcf:
 	pcf85263_remove(pcf85263_device);
+
+	while (true) {
+		ret = no_os_gpio_set_value(red_led_gpio, NO_OS_GPIO_HIGH);
+		if (ret) {
+			pr_err("Error setting LED gpio high!\n");
+			goto error_red_gpio_led;
+		}
+
+		no_os_mdelay(500);
+
+		ret = no_os_gpio_set_value(red_led_gpio, NO_OS_GPIO_LOW);
+		if (ret) {
+			pr_err("Error setting LED gpio low!\n");
+			goto error_red_gpio_led;
+		}
+
+		no_os_mdelay(500);
+	}
+
+error_red_gpio_led:
+	no_os_gpio_remove(green_led_gpio);
 
 	return ret;
 }
