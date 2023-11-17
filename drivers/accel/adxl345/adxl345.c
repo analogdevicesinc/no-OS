@@ -45,6 +45,14 @@
 #include "no_os_alloc.h"
 
 /******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+static const uint8_t adxl345_part_id[] = {
+	[ID_ADXL345] = ADXL345_ID,
+	[ID_ADXL346] = ADXL346_ID,
+};
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -145,7 +153,8 @@ int32_t adxl345_init(struct adxl345_dev **device,
 	else
 		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
-	if (adxl345_get_register_value(dev, ADXL345_DEVID) != ADXL345_ID)
+	if (adxl345_get_register_value(dev,
+				       ADXL345_DEVID) != adxl345_part_id[init_param.dev_type])
 		status = -1;
 
 	dev->selected_range = 2; // Measurement Range: +/- 2g (reset default).
@@ -547,6 +556,66 @@ void adxl345_set_free_fall_detection(struct adxl345_dev *dev,
 			 ADXL345_INT_ENABLE);
 	new_int_enable = old_int_enable & ~ADXL345_FREE_FALL;
 	new_int_enable = new_int_enable | (ADXL345_FREE_FALL * ff_on_off);
+	adxl345_set_register_value(dev,
+				   ADXL345_INT_ENABLE,
+				   new_int_enable);
+}
+
+/***************************************************************************//**
+ * @brief Enables/disables the orientation detection (only for adxl346).
+ *
+ * @param dev           - The device structure.
+ * @param orient_int    - Interrupts pin.
+ *                        Example: 0x0 - orientation interrupts on INT1 pin.
+ *                                 ADXL345_ORIENTATION - orientation interrupts
+ *                                                       on INT2 pin.
+ * @param orient_on_off - Enables/disables the orientation detection.
+ *                        Example: 0x0 - disables the orientation detection.
+ *                                 0x1 - enables the orientation detection.
+ * @param int_3d        - Enables/disables the 3d orientation detection.
+ *                        Example: 0x0 - disables the 3d orientation detection
+                                         (enables 2d orientation detection).
+ *                                 0x1 - enables the 3d orientation detection
+                                         (disables 2d orientation detection).
+ * @param dead_zone     - Dead zone angle encoding.
+ * @param divisor       - Bandwidth divisor encoding.
+ *
+ * @return None.
+*******************************************************************************/
+void adxl345_set_orientation_detection(struct adxl345_dev *dev,
+				       uint8_t orient_int,
+				       uint8_t orient_on_off,
+				       uint8_t int_3d,
+				       enum adxl345_dead_zone_angle dead_zone,
+				       enum adxl345_divisor_bandwidth divisor)
+{
+	uint8_t old_int_map = 0;
+	uint8_t new_int_map = 0;
+	uint8_t old_int_enable = 0;
+	uint8_t new_int_enable = 0;
+
+	if (dev->dev_type != ID_ADXL346)
+		return;
+
+	adxl345_set_register_value(dev,
+				   ADXL345_ORIENT_CONF,
+				   ADXL345_INT_ORIENT(orient_on_off) |
+				   ADXL345_INT_3D(int_3d) |
+				   ADXL345_DEAD_ZONE(dead_zone) |
+				   ADXL345_DIVISOR(divisor));
+
+	old_int_map = adxl345_get_register_value(dev,
+			ADXL345_INT_MAP);
+	new_int_map = old_int_map & ~(ADXL345_ORIENTATION);
+	new_int_map = new_int_map | orient_int;
+	adxl345_set_register_value(dev,
+				   ADXL345_INT_MAP,
+				   new_int_map);
+
+	old_int_enable = adxl345_get_register_value(dev,
+			 ADXL345_INT_ENABLE);
+	new_int_enable = old_int_enable & ~ADXL345_ORIENTATION;
+	new_int_enable = new_int_enable | (ADXL345_ORIENTATION * orient_on_off);
 	adxl345_set_register_value(dev,
 				   ADXL345_INT_ENABLE,
 				   new_int_enable);
