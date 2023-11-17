@@ -8,6 +8,7 @@
 # PLATFORM = altera
 # PLATFORM = aducm3029
 # PLATFORM = stm32
+# PLATFORM = maxim
 
 ifeq '$(LOCAL_BUILD)' 'y'
 
