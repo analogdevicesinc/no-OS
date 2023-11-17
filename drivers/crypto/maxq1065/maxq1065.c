@@ -6,9 +6,43 @@
 #include "no_os_util.h"
 #include "maxq1065.h"
 #include "maxq_perso.h"
+#include "maxim_trng.h"
+#include "no_os_trng.h"
 
-extern mxq_u1 KeyPairAdmin[];
+mxq_u1 KeyPairAdmin[]=
+		{0xd0,0x97,0x31,0xc7,0x63,0xc0,0x9e,0xe3,0x9a,0xb4,0xd0,0xce,0xa7,0x89,
+		0xab,0x52,0xc8,0x80,0x3a,0x91,0x77,0x29,0xc3,0xa0,0x79,0x2e,0xe6,0x61,0x8b,
+		0x2d,0x53,0x70,0xcc,0xa4,0x62,0xd5,0x4a,0x47,0x74,0xea,0x22,0xfa,0xa9,0xd4,
+		0x95,0x4e,0xca,0x32,0x70,0x88,0xd6,0xeb,0x58,0x24,0xa3,0xc5,0xbf,0x29,0xdc,
+		0xfd,0xe5,0xde,0x8f,0x48,
+
+		0x19,0xe8,0xc6,0x4f,0xf2,0x46,0x10,0xe2,0x58,0xb9,0xb6,0x72,0x5e,0x88,0xaf,
+		0xc2,0xee,0x8b,0x6f,0xe5,0x36,0xe3,0x60,0x7c,0xf8,0x2c,0xea,0x3a,0x4f,0xe3,
+		0x6d,0x73};
+
+
+mxq_u1 KeyPairImport[]=
+		{0xd0,0x97,0x31,0xc7,0x63,0xc0,0x9e,0xe3,0x9a,0xb4,0xd0,0xce,0xa7,0x89,
+		0xab,0x52,0xc8,0x80,0x3a,0x91,0x77,0x29,0xc3,0xa0,0x79,0x2e,0xe6,0x61,0x8b,
+		0x2d,0x53,0x70,0xcc,0xa4,0x62,0xd5,0x4a,0x47,0x74,0xea,0x22,0xfa,0xa9,0xd4,
+		0x95,0x4e,0xca,0x32,0x70,0x88,0xd6,0xeb,0x58,0x24,0xa3,0xc5,0xbf,0x29,0xdc,
+		0xfd,0xe5,0xde,0x8f,0x48,
+
+		0x19,0xe8,0xc6,0x4f,0xf2,0x46,0x10,0xe2,0x58,0xb9,0xb6,0x72,0x5e,0x88,0xaf,
+		0xc2,0xee,0x8b,0x6f,0xe5,0x36,0xe3,0x60,0x7c,0xf8,0x2c,0xea,0x3a,0x4f,0xe3,
+		0x6d,0x73};
+
+extern int is_module_init;
+static struct no_os_trng_init_param trng_param = {
+	.dev_id = 0,
+	.extra = NULL,
+	.platform_ops = &max_trng_ops,
+};
+
+static struct no_os_trng_desc *trng_desc;
 static struct maxq1065_desc *maxq1065_local_desc;
+
+uint8_t psk_key[] = {0x31, 0x32};
 
 mxq_err_t maxq1065_reset(void)
 {
@@ -32,6 +66,33 @@ mxq_err_t maxq1065_reset(void)
 void HardFault_Handler(void) {
 	int a = 3;
 	a++;
+}
+
+static int rnd_std_rand(void *rng_state, unsigned char *output, size_t len)
+{
+	return no_os_trng_fill_buffer(trng_desc, output, len);
+}
+
+mxq_err_t signData(mxq_u1* dest, mxq_u1* key, mxq_u1* data, mxq_length data_length)
+{
+    mbedtls_ecp_group grp;
+    mbedtls_mpi d, r, s;
+    unsigned char hash[32];
+
+    mbedtls_ecp_group_init(&grp);
+ 	mbedtls_ecp_group_load(&grp, MBEDTLS_ECP_DP_SECP256R1);
+	mbedtls_mpi_init(&d);
+	mbedtls_mpi_init(&r);
+	mbedtls_mpi_init(&s);
+
+
+	mbedtls_mpi_read_binary(&d, key + 64,32);
+	mbedtls_sha256(data, data_length, hash, 0);
+	mbedtls_ecdsa_sign(&grp, &r, &s, &d, hash, 32, rnd_std_rand, 0);
+	mbedtls_mpi_write_binary(&r, dest, 32);
+	mbedtls_mpi_write_binary(&s, dest + 32, 32);
+
+	return MXQ_OK;
 }
 
 mxq_err_t maxq_authAdmin(uint16_t key_id, unsigned char * keypair)
@@ -69,7 +130,7 @@ mxq_err_t maxq_authAdmin(uint16_t key_id, unsigned char * keypair)
 mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
 
 	mxq_err_t err;
-	static mxq_u1 keydata[290];
+	uint8_t key_data[64] = {0};
 	mxq_length keydatalen;
 
 	mxq_u1 signature[64];
@@ -77,22 +138,22 @@ mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
 
 	err = maxq_authAdmin(PUBKEYADMINID, KeyPairAdmin);
 	if(err != MXQ_OK) {
-    	printf("Error %s:%d\n", __FILE__, __LINE__);
-        return -1;
-    }
+    		printf("Error %s:%d\n", __FILE__, __LINE__);
+        	return -1;
+    	}
 
 	printf("Creating PSK in MAXQ...\n");
 	MXQ_DeleteObject(objectid);
 
-    err = MXQ_CreateObject(objectid, 96, MXQ_OBJTYPE_SECRETKEY, OBJPROP_PERSISTENT, "a=d,x=wx");
-    if(err != MXQ_OK) {
-    	printf("Error %s:%d\n", __FILE__, __LINE__);
-        return -1;
-    }
+	err = MXQ_CreateObject(objectid, 96, MXQ_OBJTYPE_SECRETKEY, OBJPROP_PERSISTENT, "a=d,x=wx");
+	if(err != MXQ_OK) {
+		printf("Error %s:%d\n", __FILE__, __LINE__);
+        	return -1;
+	}
 
-    keydatalen = sizeof(keydata);
+	keydatalen = sizeof(key_data);
 
-	err = MXQ_BuildKey(keydata, &keydatalen,
+	err = MXQ_BuildKey(key_data, &keydatalen,
 			MXQ_KEYTYPE_PSK, MXQ_UNKNOWN_CURVE,
 			psk_length, psk_length,
 			MXQ_KEYUSE_TLSAUTH, ALGO_CIPHER_AES_any,
@@ -103,13 +164,13 @@ mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
 		return -1;
 	}
 
-	err = signData(signature, KeyPairImport, keydata, keydatalen);
+	err = signData(signature, KeyPairImport, key_data, keydatalen);
 	if(err != MXQ_OK) {
 		printf("Error %s:%d\n", __FILE__, __LINE__);
 		return -1;
 	}
 
-	err = MXQ_ImportKey(objectid, ALGO_ECDSA_SHA_256, PUBKEYIMPORTOBJID, keydata, keydatalen, signature, signlen);
+	err = MXQ_ImportKey(objectid, ALGO_ECDSA_SHA_256, PUBKEYIMPORTOBJID, key_data, keydatalen, signature, 64);
 	if(err != MXQ_OK) {
 		printf("Error %s:%d\n", __FILE__, __LINE__);
 		return -1;
@@ -121,6 +182,9 @@ mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
 int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param)
 {
 	struct maxq1065_desc *descriptor;
+	uint8_t maxq1065_objects[200] = {0};
+	mxq_status_t maxq_status;
+	uint32_t max_len = 200;
 	uint8_t rdy_val;
 	mxq_status_t s;
 	mxq_err_t r;
@@ -183,6 +247,21 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 	// MXQ_DisplayConfig(&s);
 
 	*desc = descriptor;
+
+	// is_module_init = 1;
+
+	// ret = MXQ_GetStatus(&maxq_status);
+	// if (ret)
+	// 	return ret;
+
+	// MXQ_DisplayStatus(&maxq_status);
+
+	// ret = MXQ_ListObject(0, 0x84, maxq1065_objects, &max_len);
+
+	// no_os_trng_init(&trng_desc, &trng_param);
+	// ret = maxq_import_psk(0x84, psk_key, sizeof(psk_key));
+	// if (ret)
+	// 	return ret;
 
 	return 0;
 
@@ -337,29 +416,55 @@ mxq_err_t maxq1065_sleep(mxq_u4 us)
 // {
 // 	mxq_u1 prng[16];
 // 	mxq_u1 signature[64];
+// 	int ret;
 
 // 	/**
 // 	 *  Get a Random Number from the MAXQ106x to perform the challenge response authentication
 // 	 */
-// 	ASSERTSUCCESS(MXQ_Get_Challenge(prng, sizeof(prng)));
+// 	ret = MXQ_Get_Challenge(prng, sizeof(prng));
+// 	if (ret)
+// 		return ret;
 
 // 	/**
 // 	 *  Locally sign the random number with a valid administrator private key.
 // 	 *  Here we use the default Maxim Import key 'KeyPairAdmin' with the public part already loaded in the MAXQ106x
 // 	 * and fully available in the source file "host_keys.c"
 // 	 */
-// 	ASSERTSUCCESS(ECDSA_sign_secp256r1_sha256(signature, KeyPairAdmin, prng, sizeof(prng)));
+// 	ret = ECDSA_sign_secp256r1_sha256(signature, KeyPairAdmin, prng, sizeof(prng));
+// 	if (ret)
+// 		return ret;
 
 // 	/**
 // 	 * Finally to perform the authentication by the sending back the random number along with the signature
 // 	 */
-// 	ASSERTSUCCESS(MXQ_AdminAuth(PUBKEYADMINID, ALGO_ECDSA_SHA_256, signature, KEYCOMPLEN * 2));
+// 	ret = MXQ_AdminAuth(PUBKEYADMINID, ALGO_ECDSA_SHA_256, signature, 32 * 2);
+// 	if (ret)
+// 		return ret;
 
 // 	/**
 // 	 * We are now authenticated as an Administrator
 // 	 */
 // 	return 0;
 // }
+
+static int maxq1065_trng_init(struct no_os_trng_desc **desc,
+			      const struct no_os_trng_init_param *param)
+{
+	*desc = no_os_calloc(1, sizeof(**desc));
+	if (*desc)
+		return -ENOMEM;
+
+	return 0;
+}
+
+static int maxq1065_trng_remove(struct no_os_trng_desc *)
+{
+	
+}
+
+const struct no_os_trng_platform_ops maxq1065_trng_ops {
+	.init
+};
 
 const struct maxq1065_no_os_ops maxq1065_ops = {
 	.init_spi = maxq1065_init_spi,

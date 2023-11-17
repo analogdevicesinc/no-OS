@@ -126,22 +126,23 @@ EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
 endif
 
 ifneq ($(if $(findstring tls_maxq1065, $(LIBRARIES)), 1),)
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmaxq1065_api.a
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmbedcrypto.a
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmbedtls.a
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library/libmbedx509.a
-EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/client-no_os-maxq1065/library
-EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os-maxq1065/library
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmaxq1065_api.a
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedcrypto.a
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedtls.a
-EXTRA_LIBS += /home/xvr/Downloads/maxq10xx-sdk/mbedtls/build/server-no_os/library/libmbedx509.a
+MXQ1065_SDK_PATH := /home/xvr/Downloads/maxq10xx-sdk-latest/maxq10xx-sdk
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/client-no_os-maxq1065/library/libmaxq1065_api.a
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/client-no_os-maxq1065/library/libmbedcrypto.a
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/client-no_os-maxq1065/library/libmbedtls.a
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/client-no_os-maxq1065/library/libmbedx509.a
+EXTRA_LIBS_PATHS += $(MXQ1065_SDK_PATH)/mbedtls/build/client-no_os-maxq1065/library
+EXTRA_LIBS_PATHS += $(MXQ1065_SDK_PATH)/mbedtls/build/server-no_os-maxq1065/library
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/server-no_os/library/libmaxq1065_api.a
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/server-no_os/library/libmbedcrypto.a
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/server-no_os/library/libmbedtls.a
+EXTRA_LIBS += $(MXQ1065_SDK_PATH)/mbedtls/build/server-no_os/library/libmbedx509.a
 
-EXTRA_LIBS_PATHS += /home/xvr/Downloads/maxq10xx-sdk/maxq10xx-api/bin/no_os
-CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/maxq10xx_api/
-CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/mbedtls/include/
-CFLAGS += -I/home/xvr/Downloads/maxq10xx-sdk/maxq10xx-perso/include/
-CFLAGS += -DMBEDTLS_CONFIG_FILE="config-client-no_os-maxq1065.h"
+EXTRA_LIBS_PATHS += $(MXQ1065_SDK_PATH)/maxq10xx-api/bin/no_os
+CFLAGS += -I$(MXQ1065_SDK_PATH)/mbedtls/include/maxq10xx_api/
+CFLAGS += -I$(MXQ1065_SDK_PATH)/mbedtls/include/
+CFLAGS += -I$(MXQ1065_SDK_PATH)/maxq10xx-perso/include/
+# CFLAGS += -DMBEDTLS_CONFIG_FILE="mbedtls/config-client-no_os-maxq1065.h"
 
 CFLAGS += -DENABLE_PEM_CERT
 else

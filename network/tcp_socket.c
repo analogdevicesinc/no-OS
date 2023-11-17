@@ -47,11 +47,11 @@
 #include "tcp_socket.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "mbedtls/debug.h"
 
 #ifndef DISABLE_SECURE_SOCKET
 // #include "noos_mbedtls_config.h"
 #include "no_os_trng.h"
-#include <mbedtls/net.h>
 #include "lwip_socket.h"
 #endif /* DISABLE_SECURE_SOCKET */
 
@@ -105,13 +105,29 @@ struct secure_socket_desc {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+static void my_debug(void *ctx, int level, const char *file, int line,
+			const char *str)
+{
+	const char *p, *basename;
+	(void) ctx;
+
+	/* Extract basename from file */
+	for(p = basename = file; *p != '\0'; p++) {
+		if(*p == '/' || *p == '\\') {
+			basename = p + 1;
+		}
+	}
+
+	printf("%s:%04d: |%d| %s", basename, line, level, str);
+}
+
 #ifndef DISABLE_SECURE_SOCKET
 /* Wrapper over socket_recv */
 static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 			size_t len)
 {
 	int32_t ret;
-	int timeout = 200;
+	int timeout = 1000;
 
 #ifdef NO_OS_LWIP_NETWORKING
 	while (timeout--) {
@@ -155,8 +171,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	struct secure_socket_desc	*ldesc;
 	int32_t				ret;
 
-	static const int tls_cipher_suites[2] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM, 0};
-
 	if (!desc || !param)
 		return -1;
 
@@ -165,12 +179,14 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		return -1;
 
 	/* Initialize structures */
-	mbedtls_ssl_config_init(&ldesc->conf);
 	mbedtls_x509_crt_init(&ldesc->cacert);
 	mbedtls_x509_crt_init(&ldesc->clicert);
 	mbedtls_pk_init(&ldesc->pkey);
 	mbedtls_ssl_init(&ldesc->ssl);
-  	// mbedtls_ssl_conf_ciphersuites(&ldesc->ssl, tls_cipher_suites);
+	mbedtls_ssl_config_init(&ldesc->conf);
+
+	mbedtls_debug_set_threshold(5);
+	mbedtls_ssl_conf_dbg(&ldesc->conf, my_debug, NULL);
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
@@ -232,6 +248,9 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 // 		if (NO_OS_IS_ERR_VALUE(ret))
 // 			goto exit;
 // 	}
+
+	mbedtls_ssl_conf_authmode(&ldesc->conf,
+				  MBEDTLS_SSL_VERIFY_NONE);
 
 	/* Config Random number generator */
 	mbedtls_ssl_conf_rng(&ldesc->conf,
@@ -394,7 +413,7 @@ int32_t secure_socket_connect(struct tcp_socket_desc *desc,
 	if (desc->secure) {
 		do {
 #ifdef NO_OS_LWIP_NETWORKING
-			timeout = 1000;
+			timeout = 100;
 			while (timeout--){
 				no_os_lwip_step(desc->net->net, NULL);
 				no_os_mdelay(1);
@@ -404,10 +423,7 @@ int32_t secure_socket_connect(struct tcp_socket_desc *desc,
 		} while (ret == MBEDTLS_ERR_SSL_WANT_READ);
 	}
 
-	printf("Handshake state: %d\n", desc->secure->ssl.state);
-	return ret;
-
-	// ret = mbedtls_ssl_get_verify_result(&desc->secure->ssl);
+	ret = mbedtls_ssl_get_verify_result(&desc->secure->ssl);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		// mbedtls_ssl_session_reset(&desc->secure->ssl);
 		// socket_disconnect(desc);
