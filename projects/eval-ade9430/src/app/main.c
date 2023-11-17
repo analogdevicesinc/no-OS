@@ -229,7 +229,7 @@ int read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev,
 		return ret;
 	}
 	len = sprintf(buff,
-		      "Temp: %d;AIRMS: %d;AVRMS: %d;AWATT: %d;timestamp:20%02x-%02x-%02xT%02x:%02x:%02x+02:00",
+		      "Temp: %d;AIRMS: %d;AVRMS: %d;AWATT: %d;timestamp:20%02d-%02d-%02dT%02d:%02d:%02d+02:00",
 		      ade9430_dev->temp_deg,
 		      ade9430_dev->irms_val,
 		      ade9430_dev->vrms_val,
