@@ -104,16 +104,17 @@ int main(void)
 	struct no_os_gpio_desc *brd_select;
 	struct no_os_gpio_desc *factory_defaults_gpio;
 	struct no_os_eeprom_desc *eeprom;
-	const uint16_t nvmpsz = sizeof(struct nvmp);
+	const uint16_t nvmpsz = sizeof(union nvmp255);
 	uint8_t eebuf[nvmpsz + 1];
-	struct nvmp *nvmp;
+	union nvmp255 *nvmp;
 	struct adin1300_iio_desc *iio_adin1300;
 	struct max24287_iio_desc *iio_max24287;
 	struct adm1177_iio_dev *iio_adm1177;
 
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
-	
 	no_os_crc8_populate_msb(crc8, 0x7);
+
+
 
 	// Greeting
 	ret = no_os_uart_init(&console, &uart_console_ip);
@@ -160,14 +161,14 @@ int main(void)
 apply_factory_defaults:
 	{
 		printf("EEPROM: loading factory defaults...\n");
-		ret = no_os_eeprom_read(eeprom, 2048, eebuf, nvmpsz+1);
+		ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(15), eebuf, nvmpsz+1);
 		if (ret)
 			return ret;
 		
 		crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
 		if (crc == eebuf[nvmpsz])
 		{
-			ret = no_os_eeprom_write(eeprom, 0, eebuf, nvmpsz+1);
+			ret = no_os_eeprom_write(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz+1);
 			if (ret)
 				return ret;
 			printf("EEPROM: loaded factory defaults.\n");
@@ -185,7 +186,7 @@ apply_factory_defaults:
 	}
 	
 	printf("EEPROM: loading non-volatile parameters...\n");
-	ret = no_os_eeprom_read(eeprom, 0, eebuf, nvmpsz+1);
+	ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz+1);
 	if (ret)
 		return ret;
 	
@@ -197,7 +198,7 @@ apply_factory_defaults:
 	}
 	printf("EEPROM: loaded non-volatile parameters.\n");
 post_eeprom:
-	nvmp = (struct nvmp *)eebuf;
+	nvmp = (union nvmp255 *)eebuf;
 
 	switch(id) {
 	case ID_ADMV96X1:
@@ -236,15 +237,15 @@ post_eeprom:
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
 		.reset_gpio_ip = &xcvr_reset_gpio_ip,
-		.tx_autotuning = nvmp->tx_autotuning,
-		.tx_target = nvmp->tx_target,
-		.tx_tolerance = nvmp->tx_tolerance,
-		.rx_autotuning = nvmp->rx_autotuning,
-		.rx_target = nvmp->rx_target,
-		.rx_tolerance = nvmp->rx_tolerance,
-		.tx_auto_ifvga = nvmp->tx_auto_ifvga,
-		.rx_auto_ifvga_rflna = nvmp->rx_auto_ifvga_rflna,
-		.temp_correlation = &nvmp->temp_correlation[hbtx],
+		.tx_autotuning = nvmp->data.tx_autotuning,
+		.tx_target = nvmp->data.tx_target,
+		.tx_tolerance = nvmp->data.tx_tolerance,
+		.rx_autotuning = nvmp->data.rx_autotuning,
+		.rx_target = nvmp->data.rx_target,
+		.rx_tolerance = nvmp->data.rx_tolerance,
+		.tx_auto_ifvga = nvmp->data.tx_auto_ifvga,
+		.rx_auto_ifvga_rflna = nvmp->data.rx_auto_ifvga_rflna,
+		.temp_correlation = &nvmp->data.temp_correlation[hbtx],
 		.id = id,
 		.hbtx = hbtx,
 		.crc8 = crc8,
@@ -268,11 +269,11 @@ post_eeprom:
 	txip.clk = xcvr_clk_gpio_ip;
 	txip.data = xcvr_data_gpio_ip;
 	txip.scanout = xcvr_scanout_tx_gpio_ip;
-	txip.vco = nvmp->hmc6300_vco[hbtx];
-	txip.enabled = nvmp->hmc6300_enabled;
+	txip.vco = nvmp->data.hmc6300_vco[hbtx];
+	txip.enabled = nvmp->data.hmc6300_enabled;
 	txip.temp_en = true;
-	txip.if_attn = nvmp->hmc6300_if_attn;
-	txip.tx.rf_attn = nvmp->hmc6300_rf_attn;
+	txip.if_attn = nvmp->data.hmc6300_if_attn;
+	txip.tx.rf_attn = nvmp->data.hmc6300_rf_attn;
 	struct hmc630x_iio_init_param iio_txip = {
 		.ip = &txip,
 	};
@@ -300,15 +301,15 @@ post_eeprom:
 	rxip.clk = xcvr_clk_gpio_ip;
 	rxip.data = xcvr_data_gpio_ip;
 	rxip.scanout = xcvr_scanout_rx_gpio_ip;
-	rxip.vco = nvmp->hmc6301_vco[hbtx];
-	rxip.enabled = nvmp->hmc6301_enabled;
+	rxip.vco = nvmp->data.hmc6301_vco[hbtx];
+	rxip.enabled = nvmp->data.hmc6301_enabled;
 	rxip.temp_en = true;
-	rxip.if_attn = nvmp->hmc6301_if_attn;
-	rxip.rx.bb_attn1 = nvmp->hmc6301_bb_attn1;
-	rxip.rx.bb_attn2 = nvmp->hmc6301_bb_attn2;
-	rxip.rx.bb_attni_fine = nvmp->hmc6301_bb_attni_fine;
-	rxip.rx.bb_attnq_fine = nvmp->hmc6301_bb_attnq_fine;
-	rxip.rx.lna_attn = nvmp->hmc6301_lna_attn;
+	rxip.if_attn = nvmp->data.hmc6301_if_attn;
+	rxip.rx.bb_attn1 = nvmp->data.hmc6301_bb_attn1;
+	rxip.rx.bb_attn2 = nvmp->data.hmc6301_bb_attn2;
+	rxip.rx.bb_attni_fine = nvmp->data.hmc6301_bb_attni_fine;
+	rxip.rx.bb_attnq_fine = nvmp->data.hmc6301_bb_attnq_fine;
+	rxip.rx.lna_attn = nvmp->data.hmc6301_lna_attn;
 	rxip.rx.bb_lpc = HMC6301_BB_LPC_1400MHz;
 	rxip.rx.bb_hpc = HMC6301_BB_HPC_45kHz;
 	struct hmc630x_iio_init_param iio_rxip = {
@@ -366,23 +367,23 @@ post_eeprom:
 		},
 		{
 			.name = "hw_version",
-			.value = nvmp->hw_version
+			.value = nvmp->data.hw_version
 		},
 		{
 			.name = "hw_serial",
-			.value = nvmp->hw_serial
+			.value = nvmp->data.hw_serial
 		},
 		{
 			.name = "carrier_model",
-			.value = nvmp->carrier_model
+			.value = nvmp->data.carrier_model
 		},
 		{
 			.name = "carrier_version",
-			.value = nvmp->carrier_version
+			.value = nvmp->data.carrier_version
 		},
 		{
 			.name = "carrier_serial",
-			.value = nvmp->carrier_serial
+			.value = nvmp->data.carrier_serial
 		},
 	};
 
