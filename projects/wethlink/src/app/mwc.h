@@ -1,6 +1,7 @@
 #ifndef MWC_H
 #define MWC_H
 
+#include <assert.h>
 #include "no_os_gpio.h"
 #include "no_os_eeprom.h"
 #include "iio.h"
@@ -75,7 +76,7 @@ enum mwc_iio_attr_id {
 	MWC_IIO_ATTR_SAVE,
 };
 
-struct nvmp {
+struct __attribute__((packed)) nvmp {
 	char hw_version[2];
 	char hw_serial[15];
 	char carrier_model[20];
@@ -106,7 +107,17 @@ struct nvmp {
 	enum hmc6301_bb_attn_fine hmc6301_bb_attnq_fine;
 };
 
-extern const struct nvmp factory_defaults_template;
+union nvmp255 {
+	struct nvmp data;
+	char _size[255];
+};
+static_assert(sizeof(union nvmp255) == 255, "Non-volatile memory parameters exceed the maximum allowed size.");
+
+// The EEPROM has 4096 bytes available that we split into 16 areas
+// the last one of which holds the factory defaults.
+#define NVMP_AREA_ADDRESS(n)	(256 * (n))
+
+extern const union nvmp255 factory_defaults_template;
 
 int mwc_iio_init(struct mwc_iio_dev **iio_dev,
 			struct mwc_iio_init_param *init_param);

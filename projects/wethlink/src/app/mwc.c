@@ -13,49 +13,51 @@
 #include "mxc_sys.h"
 #include "led.h"
 
-const struct nvmp factory_defaults_template = {
-	.hw_version =  "-",
-	.carrier_version = "-",
-	.hw_serial = "-",
-	.carrier_model = "-",
-	.carrier_serial = "-",
+const union nvmp255 factory_defaults_template = {
+	.data = {
+		.hw_version =  "-",
+		.carrier_version = "-",
+		.hw_serial = "-",
+		.carrier_model = "-",
+		.carrier_serial = "-",
 
-	.tx_autotuning = true,
-	.tx_target = 350,
-	.tx_tolerance = 50,
-	.rx_autotuning = true,
-	.rx_target = 1950,
-	.rx_tolerance = 50,
-	.tx_auto_ifvga = true,
-	.rx_auto_ifvga_rflna = true,
-	.temp_correlation = {
-		{ // lbtx
-			{1, 3, 7, 15, 31}, // temperature
-			{15, 15, 15, 15, 10}, // tx if_attn
-			{6, 6, 6, 6, 3}, // rx if_attn
-			{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB} // rx lna_attn
+		.tx_autotuning = true,
+		.tx_target = 350,
+		.tx_tolerance = 50,
+		.rx_autotuning = true,
+		.rx_target = 1950,
+		.rx_tolerance = 50,
+		.tx_auto_ifvga = true,
+		.rx_auto_ifvga_rflna = true,
+		.temp_correlation = {
+			{ // lbtx
+				{1, 3, 7, 15, 31}, // temperature
+				{15, 15, 15, 15, 10}, // tx if_attn
+				{6, 6, 6, 6, 3}, // rx if_attn
+				{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB} // rx lna_attn
+			},
+			{ // hbtx
+				{1, 3, 7, 15, 31},
+				{15, 15, 15, 10, 0},
+				{12, 12, 12, 12, 9},
+				{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB}
+			}
 		},
-		{ // hbtx
-			{1, 3, 7, 15, 31},
-			{15, 15, 15, 10, 0},
-			{12, 12, 12, 12, 9},
-			{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB}
-		}
-	},
-	
-	.hmc6300_enabled = true,
-	.hmc6300_vco = {59850000000, 63262500000},
-	.hmc6300_if_attn = 13,
-	.hmc6300_rf_attn = 15,
+		
+		.hmc6300_enabled = true,
+		.hmc6300_vco = {59850000000, 63262500000},
+		.hmc6300_if_attn = 13,
+		.hmc6300_rf_attn = 15,
 
-	.hmc6301_enabled = true,
-	.hmc6301_vco = {63262500000, 59850000000},
-	.hmc6301_if_attn = 11,
-	.hmc6301_lna_attn = HMC6301_LNA_ATTN_12dB,
-	.hmc6301_bb_attn1 = HMC6301_BB_ATTN_18dB,
-	.hmc6301_bb_attn2 = HMC6301_BB_ATTN_18dB,
-	.hmc6301_bb_attni_fine = HMC6301_BB_ATTN_FINE_3dB,
-	.hmc6301_bb_attnq_fine = HMC6301_BB_ATTN_FINE_0dB,
+		.hmc6301_enabled = true,
+		.hmc6301_vco = {63262500000, 59850000000},
+		.hmc6301_if_attn = 11,
+		.hmc6301_lna_attn = HMC6301_LNA_ATTN_12dB,
+		.hmc6301_bb_attn1 = HMC6301_BB_ATTN_18dB,
+		.hmc6301_bb_attn2 = HMC6301_BB_ATTN_18dB,
+		.hmc6301_bb_attni_fine = HMC6301_BB_ATTN_FINE_3dB,
+		.hmc6301_bb_attnq_fine = HMC6301_BB_ATTN_FINE_0dB,
+	}
 };
 
 static int32_t mwc_read(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t *readval)
@@ -263,20 +265,20 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 	uint8_t attn, attn2;
 
 	struct hmc630x_dev *dev;
-	const uint16_t nvmpsz = sizeof(struct nvmp);
+	const uint16_t nvmpsz = sizeof(union nvmp255);
 	uint8_t eebuf[nvmpsz + 1];
-	static struct nvmp nvmp = factory_defaults_template;
+	union nvmp255 nvmp = factory_defaults_template;
 
 	// firmware specific parameters
-	nvmp.tx_autotuning = mwc->tx_autotuning;
-	nvmp.tx_target = mwc->tx_target;
-	nvmp.tx_tolerance = mwc->tx_tolerance;
-	nvmp.rx_autotuning = mwc->rx_autotuning;
-	nvmp.rx_target = mwc->rx_target;
-	nvmp.rx_tolerance = mwc->rx_tolerance;
-	nvmp.tx_auto_ifvga = mwc->tx_auto_ifvga;
-	nvmp.rx_auto_ifvga_rflna = mwc->rx_auto_ifvga_rflna;
-	memcpy(&nvmp.temp_correlation[mwc->hbtx], mwc->temp_correlation, sizeof(nvmp.temp_correlation[mwc->hbtx]));
+	nvmp.data.tx_autotuning = mwc->tx_autotuning;
+	nvmp.data.tx_target = mwc->tx_target;
+	nvmp.data.tx_tolerance = mwc->tx_tolerance;
+	nvmp.data.rx_autotuning = mwc->rx_autotuning;
+	nvmp.data.rx_target = mwc->rx_target;
+	nvmp.data.rx_tolerance = mwc->rx_tolerance;
+	nvmp.data.tx_auto_ifvga = mwc->tx_auto_ifvga;
+	nvmp.data.rx_auto_ifvga_rflna = mwc->rx_auto_ifvga_rflna;
+	memcpy(&nvmp.data.temp_correlation[mwc->hbtx], mwc->temp_correlation, sizeof(nvmp.data.temp_correlation[mwc->hbtx]));
 
 	// hmc6300 parameters
 	dev = mwc->tx_iiodev->dev;
@@ -284,27 +286,27 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 	ret = hmc630x_get_enable(dev, &enabled);
 	if (ret)
 		return ret;
-	nvmp.hmc6300_enabled = enabled;
+	nvmp.data.hmc6300_enabled = enabled;
 	
 	if (enabled) {
 		ret = hmc630x_get_vco(dev, &freq);
 		if (ret)
 			return ret;
-		nvmp.hmc6300_vco[mwc->hbtx] = freq;
+		nvmp.data.hmc6300_vco[mwc->hbtx] = freq;
 	}
 
 	if (!mwc->tx_auto_ifvga) {
 		ret = hmc630x_get_if_attn(dev, &attn);
 		if (ret)
 			return ret;
-		nvmp.hmc6300_if_attn = attn;
+		nvmp.data.hmc6300_if_attn = attn;
 	}
 
 	if (!mwc->tx_autotuning) {
 		ret = hmc6300_get_rf_attn(dev, &attn);
 		if (ret)
 			return ret;
-		nvmp.hmc6300_rf_attn = attn;
+		nvmp.data.hmc6300_rf_attn = attn;
 	}
 
 	// hmc6301 parameters
@@ -313,39 +315,39 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 	ret = hmc630x_get_enable(dev, &enabled);
 	if (ret)
 		return ret;
-	nvmp.hmc6301_enabled = enabled;
+	nvmp.data.hmc6301_enabled = enabled;
 
 	if (enabled) {	
 		ret = hmc630x_get_vco(dev, &freq);
 		if (ret)
 			return ret;
-		nvmp.hmc6301_vco[mwc->hbtx] = freq;
+		nvmp.data.hmc6301_vco[mwc->hbtx] = freq;
 	}
 
 	if (!mwc->rx_auto_ifvga_rflna) {
 		ret = hmc630x_get_if_attn(dev, &attn);
 		if (ret)
 			return ret;
-		nvmp.hmc6301_if_attn = attn;
+		nvmp.data.hmc6301_if_attn = attn;
 
 		ret = hmc6301_get_lna_gain(dev, &attn);
 		if (ret)
 			return ret;
-		nvmp.hmc6301_lna_attn = attn;
+		nvmp.data.hmc6301_lna_attn = attn;
 	}
 
 	if (!mwc->rx_autotuning) {
 		ret = hmc6301_get_bb_attn(dev, &attn, &attn2);
 		if (ret)
 			return ret;
-		nvmp.hmc6301_bb_attn1 = attn;
-		nvmp.hmc6301_bb_attn2 = attn2;
+		nvmp.data.hmc6301_bb_attn1 = attn;
+		nvmp.data.hmc6301_bb_attn2 = attn2;
 
 		ret = hmc6301_get_bb_attn_fine(dev, &attn, &attn2);
 		if (ret)
 			return ret;
-		nvmp.hmc6301_bb_attni_fine = attn;
-		nvmp.hmc6301_bb_attnq_fine = attn2;
+		nvmp.data.hmc6301_bb_attni_fine = attn;
+		nvmp.data.hmc6301_bb_attnq_fine = attn2;
 	}
 
 	memcpy(eebuf, &nvmp, nvmpsz);
@@ -437,7 +439,7 @@ static int mwc_iio_write_attr(void *device, char *buf,
 		ret = mwc_tx_rx_reset(iiodev);
 		break;
 	case MWC_IIO_ATTR_SAVE:
-		ret = mwc_save_to_eeprom(iiodev, 0);
+		ret = mwc_save_to_eeprom(iiodev, NVMP_AREA_ADDRESS(0));
 		break;
 	default:
 		ret = -EINVAL;
