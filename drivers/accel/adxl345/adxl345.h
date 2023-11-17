@@ -94,6 +94,9 @@
 #define ADXL345_DATAZ1          0x37 // R   Z-Axis Data 1.
 #define ADXL345_FIFO_CTL        0x38 // R/W FIFO control.
 #define ADXL345_FIFO_STATUS     0x39 // R   FIFO status.
+#define ADXL345_TAP_SIGN        0x3A // R   Sign and source for single tap/double tap.
+#define ADXL345_ORIENT_CONF     0x3B // R/W Orientation configuration.
+#define ADXL345_ORIENT          0x3C // R   Orientation status.
 
 /* ADXL345_ACT_INACT_CTL definition */
 #define ADXL345_ACT_ACDC        (1 << 7)
@@ -140,6 +143,7 @@
 #define ADXL345_FREE_FALL       (1 << 2)
 #define ADXL345_WATERMARK       (1 << 1)
 #define ADXL345_OVERRUN         (1 << 0)
+#define ADXL345_ORIENTATION     (1 << 0)
 
 /* ADXL345_DATA_FORMAT definition */
 #define ADXL345_SELF_TEST       (1 << 7)
@@ -170,8 +174,16 @@
 #define ADXL345_FIFO_TRIG       (1 << 7)
 #define ADXL345_ENTRIES(x)      ((x) & 0x3F)
 
+/* ADXL345_ORIENT_CONF definition */
+#define ADXL345_INT_ORIENT(x)   (((x) & 0x1) << 7)
+#define ADXL345_DEAD_ZONE(x)    (((x) & 0x7) << 4)
+#define ADXL345_INT_3D(x)       (((x) & 0x1) << 3)
+#define ADXL345_DIVISOR(x)      ((x) & 7)
+
 /* ADXL345 ID */
 #define ADXL345_ID              0xE5
+/* ADXL346 ID */
+#define ADXL346_ID              0xE6
 
 /* ADXL345 Full Resolution Scale Factor */
 #define ADXL345_SCALE_FACTOR    0.0039
@@ -179,6 +191,45 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * @enum adxl345_type
+ * @brief ADXL345 Supported devices.
+ */
+enum adxl345_type {
+	ID_ADXL345,
+	ID_ADXL346,
+};
+
+/**
+ * @enum adxl345_dead_zone_angle
+ * @brief ADXL346 Dead zone angle encoding.
+ */
+enum adxl345_dead_zone_angle {
+	DEGREES_5_1,
+	DEGREES_10_2,
+	DEGREES_15_2,
+	DEGREES_20_4,
+	DEGREES_25_5,
+	DEGREES_30_8,
+	DEGREES_36_1,
+	DEGREES_41_4,
+};
+
+/**
+ * @enum adxl345_divisor_bandwidth
+ * @brief ADXL346 Divisor bandwidth encoding.
+ */
+enum adxl345_divisor_bandwidth {
+	ODR_DIV_9,
+	ODR_DIV_22,
+	ODR_DIV_50,
+	ODR_DIV_100,
+	ODR_DIV_200,
+	ODR_DIV_400,
+	ODR_DIV_800,
+	ODR_DIV_1600
+};
 
 /**
  * @struct adxl345_dev
@@ -189,6 +240,8 @@ struct adxl345_dev {
 	struct no_os_i2c_desc	*i2c_desc;
 	/** SPI Descriptor */
 	struct no_os_spi_desc	*spi_desc;
+	/** Device type ADXL345 or 346 */
+	enum adxl345_type	dev_type;
 	/** Device Communication type: ADXL345_SPI_COMM, ADXL345_I2C_COMM */
 	uint8_t		communication_type;
 	/** Measurement range */
@@ -206,6 +259,8 @@ struct adxl345_init_param {
 	struct no_os_i2c_init_param	i2c_init;
 	/** SPI Initialization structure. */
 	struct no_os_spi_init_param	spi_init;
+	/** Device type ADXL345 or 346 */
+	enum adxl345_type		dev_type;
 	/** Device Communication type: ADXL345_SPI_COMM, ADXL345_I2C_COMM */
 	uint8_t		communication_type;
 	/** Measurement range */
@@ -283,6 +338,14 @@ void adxl345_set_free_fall_detection(struct adxl345_dev *dev,
 				     uint8_t ff_thresh,
 				     uint8_t ff_time,
 				     uint8_t ff_int);
+
+/*! Enables/disables the orientation detection. */
+void adxl345_set_orientation_detection(struct adxl345_dev *dev,
+				       uint8_t orient_int,
+				       uint8_t orient_on_off,
+				       uint8_t int_3d,
+				       enum adxl345_dead_zone_angle dead_zone,
+				       enum adxl345_divisor_bandwidth divisor);
 
 /*! Sets an offset value for each axis (Offset Calibration). */
 void adxl345_set_offset(struct adxl345_dev *dev,
