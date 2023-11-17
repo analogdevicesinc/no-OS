@@ -114,10 +114,10 @@ int main(void)
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
 	no_os_crc8_populate_msb(crc8, 0x7);
 
-
-
 	// Greeting
-	ret = no_os_uart_init(&console, &uart_console_ip);
+	struct no_os_uart_init_param uart_greeting_ip = uart_console_ip;
+	uart_greeting_ip.baud_rate = 115200;
+	ret = no_os_uart_init(&console, &uart_greeting_ip);
 	if (ret)
 		return ret;
 	no_os_uart_stdio(console);
