@@ -58,12 +58,12 @@
 
 #ifdef RTC_SET_DEFAULT
 /* RTC BCD Format (example 26.01.2023-13:15:00) */
-#define RTC_SEC_DEFAULT		0x0
-#define RTC_MIN_DEFAULT		0x15
-#define RTC_HR_DEFAULT		0x13
-#define RTC_DAY_DEFAULT		0x26
-#define RTC_MON_DEFAULT		0x1
-#define RTC_YEAR_DEFAULT	0x23
+#define RTC_SEC_DEFAULT		0
+#define RTC_MIN_DEFAULT		15
+#define RTC_HR_DEFAULT		13
+#define RTC_DAY_DEFAULT		26
+#define RTC_MON_DEFAULT		1
+#define RTC_YEAR_DEFAULT	23
 #endif
 
 /* 1 sec acuumulation */
