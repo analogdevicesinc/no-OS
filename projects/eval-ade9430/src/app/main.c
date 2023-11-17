@@ -211,7 +211,7 @@ int read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev,
 	}
 
 	/* Serialize data */
-	len = sprintf(buff, "Temp: %d\nAIRMS: %d\nAVRMS: %d\nAWATT: %d",
+	len = sprintf(buff, "Temp: %d; AIRMS: %d; AVRMS: %d; AWATT: %d",
 		      ade9430_dev->temp_deg,
 		      ade9430_dev->irms_val,
 		      ade9430_dev->vrms_val,
