@@ -158,7 +158,9 @@ int32_t eeprom_24xx32a_write(struct no_os_eeprom_desc *desc, uint32_t address,
 {
 	int32_t ret;
 	uint16_t indx;
-	uint8_t buff[3];
+	uint8_t buff[34];
+	uint8_t page;
+	uint8_t pagecount = bytes / 32 + (bytes % 32 ? 1 : 0);
 	uint32_t curr_address = address;
 	struct eeprom_24xx32a_dev *eeprom_dev;
 
@@ -167,19 +169,35 @@ int32_t eeprom_24xx32a_write(struct no_os_eeprom_desc *desc, uint32_t address,
 
 	eeprom_dev = desc->extra;
 
-	/* Perform byte by byte write */
-	for (indx = 0; indx < bytes; indx++) {
-		no_os_put_unaligned_be16(curr_address, buff);
-		buff[2] = data[indx];
+	if (address % 32 == 0) {
+		/* Perform page write */
+		for (page = 0; page < pagecount; page++) {
+			no_os_put_unaligned_be16(address + page * 32, buff);
+			memcpy(&buff[2], &data[page * 32], 32);
 
-		ret = no_os_i2c_write(eeprom_dev->i2c_desc, buff, sizeof(buff), 1);
-		if (ret)
-			return ret;
+			ret = no_os_i2c_write(eeprom_dev->i2c_desc, buff, sizeof(buff), 1);
+			if (ret)
+				return ret;
 
-		/* Write cycle time (typ 5msec as per datasheet) */
-		no_os_mdelay(5);
+			/* Write cycle time (typ 5msec as per datasheet) */
+			no_os_mdelay(5);
+		}
+	}
+	else {
+		/* Perform byte by byte write */
+		for (indx = 0; indx < bytes; indx++) {
+			no_os_put_unaligned_be16(curr_address, buff);
+			buff[2] = data[indx];
 
-		curr_address++;
+			ret = no_os_i2c_write(eeprom_dev->i2c_desc, buff, 3, 1);
+			if (ret)
+				return ret;
+
+			/* Write cycle time (typ 5msec as per datasheet) */
+			no_os_mdelay(5);
+
+			curr_address++;
+		}
 	}
 
 	return 0;
