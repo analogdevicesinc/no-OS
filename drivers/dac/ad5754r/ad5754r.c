@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "ad5754r.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 
 /******************************************************************************/
 /******************** Variables and User Defined Data Types *******************/
@@ -214,6 +215,33 @@ int ad5754r_update_dac_all_ch_registers(struct ad5754r_dev *dev,
 		return ret;
 
 	return no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_HIGH);
+}
+
+/**
+ * @brief Trigger LDAC.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad5754r_ldac_trigger(struct ad5754r_dev *dev)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->gpio_ldac) {
+		ret = no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_LOW);
+		if (ret)
+			return ret;
+
+		/* Delay must be greater than 20ns, per the datasheet. */
+		no_os_udelay(1);
+
+		return no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_HIGH);
+	}
+
+	/* If no gpio is assigned use SW LOAD */
+	return ad5754r_write(dev, AD5754R_INSTR_LOAD, 0x0000);
 }
 
 /**

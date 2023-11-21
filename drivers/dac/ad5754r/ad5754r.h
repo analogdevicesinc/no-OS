@@ -332,7 +332,10 @@ int ad5754r_update_dac_ch_register(struct ad5754r_dev *dev, uint8_t chn,
 int ad5754r_update_dac_all_ch_registers(struct ad5754r_dev *dev,
 					uint16_t value);
 
-/** Clear DAC output for all channels.  */
+/** @brief Trigger LDAC. */
+int ad5754r_ldac_trigger(struct ad5754r_dev *dev);
+
+/** Clear DAC output for all channels. */
 int ad5754r_clear_async(struct ad5754r_dev *dev);
 
 /** Read DAC register value for specific channel. */
