@@ -281,7 +281,7 @@ static long adxcvr_clk_round_rate(struct adxcvr *xcvr,
 		parent_rate = rate * (1000 / 40);
 
 	pr_debug("%s: Rate %lu kHz Parent Rate %lu Hz",
-		 __func__, rate, *prate);
+		 __func__, rate, parent_rate);
 
 	/* Just check if we can support the requested rate */
 	if (xcvr->cpll_enable)
