@@ -461,9 +461,11 @@ int iio_app_remove(struct iio_app_desc *app)
 		return ret;
 #endif
 
-	ret = no_os_uart_remove(app->uart_desc);
-	if (ret)
-		return ret;
+	if (app->uart_desc) {
+		ret = no_os_uart_remove(app->uart_desc);
+		if (ret)
+			return ret;
+	}
 
 	ret = iio_remove(app->iio_desc);
 	if (ret)
