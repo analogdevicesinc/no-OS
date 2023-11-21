@@ -9,6 +9,12 @@
 #include "maxim_trng.h"
 #include "no_os_trng.h"
 
+static unsigned char local_psk[] = {
+	0x7c, 0xc8, 0x4d, 0xf1, 0xf2, 0x68, 0x6b, 0x43, 0x5d, 0x8d, 0xec, 0xee,
+	0xf0, 0xcc, 0xf5, 0x92, 0x09, 0xc2, 0x59, 0xe8, 0xd1, 0x18, 0x4c, 0xb7,
+	0x05, 0xbc, 0xb5, 0xd9, 0x1b, 0x85, 0x66, 0x00
+};
+
 mxq_u1 KeyPairAdmin[]=
 		{0xd0,0x97,0x31,0xc7,0x63,0xc0,0x9e,0xe3,0x9a,0xb4,0xd0,0xce,0xa7,0x89,
 		0xab,0x52,0xc8,0x80,0x3a,0x91,0x77,0x29,0xc3,0xa0,0x79,0x2e,0xe6,0x61,0x8b,
@@ -145,7 +151,7 @@ mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
 	printf("Creating PSK in MAXQ...\n");
 	MXQ_DeleteObject(objectid);
 
-	err = MXQ_CreateObject(objectid, 96, MXQ_OBJTYPE_SECRETKEY, OBJPROP_PERSISTENT, "a=d,x=wx");
+	err = MXQ_CreateObject(objectid, 96, MXQ_OBJTYPE_SECRETKEY, OBJPROP_PERSISTENT, "ahs=wdx:ahs=wdx:ahs=wdx");
 	if(err != MXQ_OK) {
 		printf("Error %s:%d\n", __FILE__, __LINE__);
         	return -1;
@@ -158,7 +164,7 @@ mxq_err_t maxq_import_psk(uint16_t objectid, uint8_t * psk, size_t psk_length ){
 			psk_length, psk_length,
 			MXQ_KEYUSE_TLSAUTH, ALGO_CIPHER_AES_any,
 			(mxq_keyuse_t)0, ALGO_NONE,
-			psk);
+			local_psk);
 	if(err != MXQ_OK) {
 		printf("Error %s:%d\n", __FILE__, __LINE__);
 		return -1;
@@ -256,12 +262,12 @@ int maxq1065_init(struct maxq1065_desc **desc, struct maxq1065_init_param *param
 
 	// MXQ_DisplayStatus(&maxq_status);
 
-	// ret = MXQ_ListObject(0, 0x84, maxq1065_objects, &max_len);
+	ret = MXQ_ListObject(0, 0x3000, maxq1065_objects, &max_len);
 
-	// no_os_trng_init(&trng_desc, &trng_param);
-	// ret = maxq_import_psk(0x84, psk_key, sizeof(psk_key));
-	// if (ret)
-	// 	return ret;
+	no_os_trng_init(&trng_desc, &trng_param);
+	ret = maxq_import_psk(0x3000, local_psk, sizeof(local_psk));
+	if (ret)
+		return ret;
 
 	return 0;
 
@@ -451,19 +457,28 @@ static int maxq1065_trng_init(struct no_os_trng_desc **desc,
 			      const struct no_os_trng_init_param *param)
 {
 	*desc = no_os_calloc(1, sizeof(**desc));
-	if (*desc)
+	if (!*desc)
 		return -ENOMEM;
 
 	return 0;
 }
 
-static int maxq1065_trng_remove(struct no_os_trng_desc *)
+static int maxq1065_trng_remove(struct no_os_trng_desc *desc)
 {
-	
+	no_os_free(desc);
+
+	return 0;
 }
 
-const struct no_os_trng_platform_ops maxq1065_trng_ops {
-	.init
+static int maxq1065_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff, uint32_t len)
+{
+	return MXQ_Get_Random(buff, len);
+}
+
+const struct no_os_trng_platform_ops maxq1065_trng_ops = {
+	.init = maxq1065_trng_init,
+	.fill_buffer = maxq1065_trng_fill_buffer,
+	.remove = maxq1065_trng_remove,
 };
 
 const struct maxq1065_no_os_ops maxq1065_ops = {

@@ -128,15 +128,21 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 {
 	int32_t ret;
 	int timeout = 1000;
+	uint32_t read_cnt = 0;
 
-#ifdef NO_OS_LWIP_NETWORKING
-	while (timeout--) {
+// #ifdef NO_OS_LWIP_NETWORKING
+// 	while (timeout--) {
+// 		no_os_lwip_step(sock->net->net, NULL);
+// 		no_os_mdelay(1);
+// 	}
+// #endif
+
+	while (read_cnt < len) {
 		no_os_lwip_step(sock->net->net, NULL);
-		no_os_mdelay(1);
+		ret = sock->net->socket_recv(sock->net->net, sock->id, buff + read_cnt, len - read_cnt);
+		if (ret >= 0)
+			read_cnt += ret;
 	}
-#endif
-
-	ret = sock->net->socket_recv(sock->net->net, sock->id, buff, len);
 	if (ret == -EAGAIN)
 		return MBEDTLS_ERR_SSL_WANT_READ;
 
@@ -260,7 +266,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 
 	if (param->psk) {
 		ret = mbedtls_ssl_conf_psk(&ldesc->conf, param->psk, param->psk_len,
-					   "Client_identity", 15);
+					   "3000", 4);
 		if (ret)
 			return ret;
 	}
@@ -425,8 +431,8 @@ int32_t secure_socket_connect(struct tcp_socket_desc *desc,
 
 	ret = mbedtls_ssl_get_verify_result(&desc->secure->ssl);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
-		// mbedtls_ssl_session_reset(&desc->secure->ssl);
-		// socket_disconnect(desc);
+		mbedtls_ssl_session_reset(&desc->secure->ssl);
+		socket_disconnect(desc);
 		return ret;
 	}
 

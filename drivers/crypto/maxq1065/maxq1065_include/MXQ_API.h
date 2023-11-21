@@ -1679,7 +1679,8 @@ mxq_err_t MXQ_client_key_exchange_psk(
          // out. format 0x04 X Y
         mxq_u1* client_ecdhe_key, // out. format 0x04 X Y
         mxq_u1 client_random[SIZE_RND_BYTES], // out
-        mxq_keyparam_id_t curve_id,
+        mxq_keyparam_id_t curve_id,de .
+	
         int PSK_ID, 
         mxq_u1 aeskey[32] //out
         );
