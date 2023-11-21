@@ -14,6 +14,13 @@ INERTIAL MEASUREMENT UNITS
    projects/eval-adis1650x
    projects/eval-adis1657x
 
+METER
+=====
+.. toctree::
+   :maxdepth: 1
+
+   projects/eval-ade9430
+
 RF TRANSCEIVER
 ==============
 .. toctree::
