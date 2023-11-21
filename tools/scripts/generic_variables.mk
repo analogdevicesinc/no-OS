@@ -61,7 +61,7 @@ else
 ifneq '' '$(findstring max,$(TARGET))'
 PLATFORM = maxim
 else
-$(error No HARDWARE found)
+$(error No HARDWARE or TARGET found. Please specify one of them.)
 endif
 endif
 endif
