@@ -120,7 +120,7 @@
 #define RELAY_CHECK_STEP                (3u)
 // Steps required for RCD testing
 #define MEASURE_RCDAC_RCDDC_STEP        (108u)
-#define RESTORE_TEST_PIN_STEP           (2u)
+#define RESTORE_TEST_PIN_STEP           (3u)
 #define SAMPLE_PINS_STEP_1              (37u)
 #define SAMPLE_PINS_STEP_2              (72u)
 #define SAMPLE_PINS_STEP_3              (108u)

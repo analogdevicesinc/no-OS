@@ -224,7 +224,7 @@ int self_test_rcd(struct stout *stout)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(40);
+	no_os_mdelay(60);
 
 	ret = no_os_gpio_set_value(stout->gpio_rcm_test, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -313,7 +313,7 @@ int self_test_rcd_running(struct stout *stout, uint16_t step,
 			return ret;
 	}
 
-	// Set RCD test pin back to 1 after 40 ms
+	// Set RCD test pin back to 1 after 60 ms
 	if (RESTORE_TEST_PIN_STEP == step) {
 		pr_debug("RCD test step 2 - restore test pin H\n");
 		ret = no_os_gpio_set_value(stout->gpio_rcm_test, NO_OS_GPIO_HIGH);
