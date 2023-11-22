@@ -84,6 +84,10 @@ extern struct no_os_gpio_init_param ade7913_gpio_led4_ip;
 #define VIN_LOW_LIMIT           (195000l)
 #define VIN_HIGH_LIMIT          (264000l)
 
+// Vin min and max; Current values +15%/-15% from nominal value 120V
+#define VIN_LOW_LIMIT_2         (102000l)
+#define VIN_HIGH_LIMIT_2        (138000l)
+
 // For the relay stuck detection values see the documentation (dependent on the cable attached)
 // V relay_stuch min and max
 #define VR_OPEN_LOW_LIMIT       (2000l)

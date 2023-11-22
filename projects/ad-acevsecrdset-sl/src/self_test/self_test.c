@@ -108,7 +108,18 @@ int self_test_supply(struct stout *stout)
 	}
 	cnt = 0;
 	pr_debug("TEST SUPPLY: Vin %d mV\n", v1_max);
-	if ((VIN_LOW_LIMIT > v1_max) || (VIN_HIGH_LIMIT < v1_max))
+	if (INTF_INPUT_V_ERR_U != stout->err_status) {
+		if ((VIN_LOW_LIMIT < v1_max) && (VIN_HIGH_LIMIT > v1_max))
+			// If grid voltage is 230 than variable grid = 0;
+			stout->grid = 0;
+		else if ((VIN_LOW_LIMIT_2 < v1_max) || (VIN_HIGH_LIMIT_2 > v1_max))
+			// If grid voltage is 120 than variable grid = 1;
+			stout->grid = 1;
+	}
+	if (stout->grid >= 1) {
+		if ((VIN_LOW_LIMIT_2 > v1_max) || (VIN_HIGH_LIMIT_2 < v1_max))
+			goto error;
+	} else if ((VIN_LOW_LIMIT > v1_max) || (VIN_HIGH_LIMIT < v1_max))
 		goto error;
 	// Test relay close value
 	pr_debug("TEST SUPPLY: Relay open \n");
