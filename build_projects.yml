@@ -2,11 +2,13 @@ trigger:
 - main
 - master
 - next_stable
+- 20*
 
 pr:
 - main
 - master
 - next_stable
+- 20*
 
 variables:
 - group: noos_releases_group_variables
@@ -14,6 +16,8 @@ variables:
   value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
 - name: isNextStable
   value:  $[eq(variables['Build.SourceBranch'], 'refs/heads/next_stable')]
+- name: isRelease
+  value: $[contains(variables['Build.SourceBranch'], 'refs/heads/20')]
 
 jobs:
 - job: Xilinx
@@ -36,7 +40,7 @@ jobs:
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
-    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true))
+    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)_Xilinx'
@@ -68,7 +72,7 @@ jobs:
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
-    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true))
+    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)_STM32'
@@ -100,7 +104,7 @@ jobs:
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
-    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true))
+    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)_Maxim'
@@ -132,7 +136,7 @@ jobs:
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
-    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true))
+    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)_Mbed'
@@ -164,7 +168,7 @@ jobs:
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
-    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true))
+    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)_Pico'
@@ -196,7 +200,7 @@ jobs:
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
-    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true))
+    condition: or(eq(variables.isMaster, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)_ADuCM3029'
