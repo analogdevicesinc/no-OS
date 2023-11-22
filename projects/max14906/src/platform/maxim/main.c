@@ -58,22 +58,22 @@ int main()
 
 #ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
-	struct no_os_irq_ctrl_desc *gpio_irq_desc;
-	struct no_os_irq_init_param gpio_irq_desc_param = {
-		.irq_ctrl_id = GPIO_IRQ_ID,
-		.platform_ops = GPIO_IRQ_OPS,
-		.extra = NULL
+
+	/* NVIC Interrupt Controller specific for Maxim platform. */
+	struct no_os_irq_ctrl_desc *nvic_desc;
+	struct no_os_irq_init_param nvic_desc_param = {
+		.platform_ops = &max_irq_ops,
 	};
 
 	ret = no_os_uart_init(&uart_desc, &max14906_uart_ip);
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_desc_param);
+	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_desc_param);
 	if (ret)
 		goto max14906_uart_remove;
 
-	ret = no_os_irq_enable(gpio_irq_desc, GPIO0_IRQn);
+	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
 	if (ret)
 		goto max14906_irq_ctrl_remove;
 
@@ -82,7 +82,7 @@ int main()
 	ret = basic_example_main();
 
 max14906_irq_ctrl_remove:
-	no_os_irq_ctrl_remove(gpio_irq_desc);
+	no_os_irq_ctrl_remove(nvic_desc);
 max14906_uart_remove:
 	no_os_uart_remove(uart_desc);
 

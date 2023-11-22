@@ -82,15 +82,18 @@ extern struct max_spi_init_param max14906_spi_extra;
 #define GPIO_EXTRA	&max14906_gpio_extra_ip
 #define GPIO_IRQ_OPS	&max_gpio_irq_ops
 #define GPIO_IRQ_EXTRA	NULL
+
 extern struct max_gpio_init_param max14906_gpio_extra_ip;
 #if (TARGET_NUM == 32665)
 #define GPIO_FAULT_PORT_NUM	0
 #define GPIO_FAULT_PIN_NUM	5
 #define GPIO_IRQ_ID		0
+#define NVIC_GPIO_IRQ		GPIO0_IRQn
 #elif (TARGET_NUM == 32690)
 #define GPIO_FAULT_PORT_NUM	2
 #define GPIO_FAULT_PIN_NUM	21
 #define GPIO_IRQ_ID		2
+#define NVIC_GPIO_IRQ		GPIO2_IRQn
 #endif
 #endif
 
