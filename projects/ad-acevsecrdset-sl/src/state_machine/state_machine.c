@@ -779,7 +779,7 @@ int state_machine()
 				// Latching fault
 				case INTF_OVERCURRENT_ERR:
 					if (S_M_OVERCURRENT_WAIT != event) {
-						pr_debug("Current error! or PE missing Iout = %d\n", stout->i_val);
+						pr_debug("Current error! or PE missing Iout = %d mA\n", stout->i_val);
 						// CP value set to DC indicating EVSE not ready
 						pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 						// Open relay
@@ -824,6 +824,20 @@ int state_machine()
 					goto error;
 					break;
 				//------------------Overtemperature error end-------------
+				//------------------PE error----------------
+				case INTF_PE_ERROR:
+					pr_debug("PE ERROR!\n");
+					// CP value set to DC indicating EVSE not ready
+					pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
+					// Open relay
+					relay_open(stout->relay);
+					reset_relay_status();
+					stop_charging();
+					// Stop the CP signal
+					pilot_pwm_timer_set_duty_cycle(stout, PWM_OFF);
+					goto error;
+					break;
+				//------------------PE error end-------------
 				default:
 					// Insert code for an error state other than the above treated ones
 					break;
@@ -917,7 +931,9 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			}
 		} else if ((S_M_WAIT != event) && (S_M_DISCONNECTED != event)
 			   && (S_M_CHARGING != event) && (S_M_CHARGING_D != event)
-			   && (S_M_WAIT_B != event) && (S_M_EVSE_READY != event)) {
+			   && (S_M_WAIT_B != event) && (S_M_EVSE_READY != event)
+			   && (S_M_STOP_CHARGING != event) && (S_M_CHECK_RELAY_PASSED != event)
+			   && (S_M_PE_ERROR != event)) {
 			// EV disconnected from other state than charging or B
 			event = S_M_DISCONNECTED;
 			stout->previous_state = stout->current_state;
@@ -925,18 +941,29 @@ enum state_machine_events_e state_machine_det_event_cp(struct stout *stout,
 			stout->current_state = STATE_A;
 			stout->err_status = INTF_NO_ERR;
 			if (event != event_in) {
-				pr_debug("EV disconnected\n");
+				pr_debug("EV disconnected (IDLE)\n");
 			}
 		} else if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event)) {
 			// If state A is reached from a charging state then the cable was unplugged
 			//while a charging session was in progress
-			event = S_M_STOP_CHARGING;
+			event = S_M_STOP_CHARGING_2;
 			stout->previous_state = stout->current_state;
 			// The next step is to open the relay
 			stout->current_state = STATE_RELAY_OPEN;
 			stout->err_status = INTF_NO_ERR;
 			if (event != event_in) {
-				pr_debug("Cable unplugged while charging\n");
+				pr_debug("Cable unplugged while charging/PE ERROR\n");
+			}
+		} else if (S_M_STOP_CHARGING == event) {
+			// If state A is reached from a charging state then the cable was unplugged
+			//while a charging session was in progress
+			event = S_M_PE_ERROR;
+			stout->previous_state = stout->current_state;
+			// The next step is to open the relay
+			stout->current_state = STATE_FAULT;
+			stout->err_status = INTF_PE_ERROR;
+			if (event != event_in) {
+				pr_debug("Cable unplugged while charging/PE ERROR\n");
 			}
 		} else {
 			// The A state IDLE
