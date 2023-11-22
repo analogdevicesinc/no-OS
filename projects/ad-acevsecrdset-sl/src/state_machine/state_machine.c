@@ -224,7 +224,18 @@ int state_machine()
 	if (ret == INTF_INPUT_V_ERR) {
 		interface_disp(stout);
 		event = S_M_UNDERVOLTAGE;
-		if (VIN_LOW_LIMIT > v1_max)
+		if (stout->grid >= 1 ) {
+			if (VIN_LOW_LIMIT_2 > v1_max)
+				ret = INTF_INPUT_V_ERR_U;
+			else if (VIN_HIGH_LIMIT_2 < v1_max) {
+				ret = INTF_INPUT_V_ERR_O;
+				stout->current_state = STATE_FAULT;
+				stout->err_status = ret;
+				// Stop the CP PWM signal
+				pilot_pwm_timer_set_duty_cycle(stout, PWM_OFF);
+				goto error;
+			}
+		} else if (VIN_LOW_LIMIT > v1_max)
 			ret = INTF_INPUT_V_ERR_U;
 		else if (VIN_HIGH_LIMIT < v1_max) {
 			ret = INTF_INPUT_V_ERR_O;
@@ -234,6 +245,7 @@ int state_machine()
 			pilot_pwm_timer_set_duty_cycle(stout, PWM_OFF);
 			goto error;
 		}
+		stout->err_status = ret;
 		// Wait until no undervoltage
 		do {
 			ret = self_test_supply(stout);
@@ -265,6 +277,7 @@ int state_machine()
 	pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 
 	// Start from POWER ON state
+	reset_rcd_flag_state();
 	stout->previous_state = STATE_RCD_SELF_TEST;
 	stout->current_state = STATE_POWER_ON;
 	stout->err_status = INTF_NO_ERR;
@@ -684,8 +697,7 @@ int state_machine()
 							pr_debug("Diode OK \n");
 						}
 					}
-				}
-				if ( S_M_CHARGING_START == event) {
+				} else if ( S_M_CHARGING_START == event) {
 					pr_debug("CLOSE THE RELAY STATE D\n");
 					// Close the relay
 					ret = relay_close(stout->relay);
@@ -1218,27 +1230,36 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 {
 	enum state_machine_events_e event = event_in;
 
-	if ((VIN_HIGH_LIMIT < stout->v1_max)&& (S_M_CHECK_STUCK_RELAY != event)) {
+	if (((VIN_HIGH_LIMIT_2 < stout->v1_max) && (1 <= stout->grid)
+	     && (S_M_CHECK_STUCK_RELAY != event))
+	    || ((VIN_HIGH_LIMIT < stout->v1_max) && (0 == stout->grid)
+		&& (S_M_CHECK_STUCK_RELAY != event))) {
 		event = S_M_OVERVOLTAGE;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_O;
-	} else if ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE != event)
-		   && (S_M_CHECK_STUCK_RELAY != event)) {
+	} else if (((VIN_LOW_LIMIT_2 > stout->v1_max) && (S_M_UNDERVOLTAGE != event)
+		    && (S_M_CHECK_STUCK_RELAY != event) && (1 <= stout->grid))
+		   || ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE != event)
+		       && (S_M_CHECK_STUCK_RELAY != event) && (0 == stout->grid))) {
 		// If undervoltage go to fault state
 		event = S_M_UNDERVOLTAGE;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_U;
-	} else if ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE == event)
-		   && (S_M_CHECK_STUCK_RELAY != event)) {
+	} else if (((VIN_LOW_LIMIT_2 > stout->v1_max) && (S_M_UNDERVOLTAGE == event)
+		    && (S_M_CHECK_STUCK_RELAY != event) && (1 <= stout->grid))
+		   || ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE == event)
+		       && (S_M_CHECK_STUCK_RELAY != event) && (0 == stout->grid))) {
 		// If undervoltage detected wait until Vin is in range
 		event = S_M_UNDERVOLTAGE_WAIT;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_U;
-	} else if ((VIN_LOW_LIMIT < stout->v1_max) && ((S_M_UNDERVOLTAGE == event)
-			|| (S_M_UNDERVOLTAGE_WAIT == event))) {
+	} else if (((VIN_LOW_LIMIT_2 < stout->v1_max) && ((S_M_UNDERVOLTAGE == event)
+			|| (S_M_UNDERVOLTAGE_WAIT == event)) && (1 <= stout->grid))
+		   || ((VIN_LOW_LIMIT < stout->v1_max) && ((S_M_UNDERVOLTAGE == event)
+				   || (S_M_UNDERVOLTAGE_WAIT == event)) && (0 == stout->grid))) {
 		// If voltage in range recover
 		event = S_M_VIN_RECOVER;
 		stout->err_status = INTF_NO_ERR;

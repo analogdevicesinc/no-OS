@@ -209,6 +209,8 @@ struct stout {
 	int32_t temperature;
 	/* Pilot AC/DC */
 	uint8_t ac_dc;
+	/* grid type 0 - 230V, 1 - 120V*/
+	uint8_t grid;
 	/* Maximum current */
 	uint16_t i_limit;
 	/* Maximum current not charging*/
