@@ -1246,9 +1246,9 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 	}
 	//###################### IMPLEMENT OVERVOLTAGE ################################
 
-	if ((S_M_CHARGING == event)||(S_M_CHARGING_D == event)
-	    ||(S_M_OVERCURRENT_WAIT == event)
-	    ||(S_M_CHARGING_STOPPED == event)||(S_M_STOP_CHARGING == event)) {
+	if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event)
+	    || (S_M_OVERCURRENT_WAIT == event)
+	    || (S_M_CHARGING_STOPPED == event) || (S_M_STOP_CHARGING == event)) {
 		if ((stout->i_val > stout->i_limit) && (S_M_OVERCURRENT_WAIT != event)) {
 			event = S_M_OVERCURRENT_WAIT;
 			reset_count_ms();
@@ -1266,7 +1266,7 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 			}
 		}
 	} else if (((stout-> i_val > stout->i_limit_not_ch))
-		   &&((S_M_CHECK_STUCK_RELAY != event)&&(S_M_CP_ERROR != event))) {
+		   && ((S_M_CHECK_STUCK_RELAY != event) && (S_M_CP_ERROR != event))) {
 		event = S_M_OVERCURRENT;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
