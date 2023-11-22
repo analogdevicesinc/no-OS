@@ -421,11 +421,11 @@ static int self_test_pilot(struct stout *stout)
 	// test only the high portion of the CP
 	if (((PWM_HIGH_TEST_VAL) > (pilot_convert_to_mv(get_pwm_high_val()))) &&
 	    ((PWM_HIGH_TEST_VAL_EV_CONNECTED) < pilot_convert_to_mv(get_pwm_high_val()))) {
-		// If the CP value coresponds to state A or state B value than no error
+		// If the CP value coresponds to state A or state B value then no error
+		pr_debug("TEST PILOT: Passed\n");
 		return INTF_NO_ERR;
 	} else
 		return INTF_PILOT_ERROR;
-	pr_debug("TEST PILOT: Passed\n");
 
 	return 0;
 }
