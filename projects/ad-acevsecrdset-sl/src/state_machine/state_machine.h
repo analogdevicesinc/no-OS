@@ -96,7 +96,9 @@ enum interface_err_status_e {
 	/* Overcurrent */
 	INTF_OVERCURRENT_ERR,
 	/* Overtemperature fault*/
-	INTF_TEMPERATURE_ERR
+	INTF_TEMPERATURE_ERR,
+	/*PE fault*/
+	INTF_PE_ERROR
 };
 
 /**
@@ -148,6 +150,8 @@ enum state_machine_events_e {
 	S_M_CHARGING_START,
 	/* Stop charging*/
 	S_M_STOP_CHARGING,
+	/* Stop charging when cable unplugged while charging*/
+	S_M_STOP_CHARGING_2,
 	/*Check relay*/
 	S_M_CHECK_STUCK_RELAY,
 	/*Relay check passed*/
@@ -167,7 +171,9 @@ enum state_machine_events_e {
 	/*Overtemperature 2 stop*/
 	S_M_OVER_TEMPERATURE_2,
 	/*Overvoltage*/
-	S_M_OVERVOLTAGE
+	S_M_OVERVOLTAGE,
+	/*PE error*/
+	S_M_PE_ERROR
 
 };
 
