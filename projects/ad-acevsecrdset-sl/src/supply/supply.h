@@ -57,7 +57,7 @@ int get_zero_cross_flag_state(void);
 void reset_zero_cross_flag_state(void);
 
 /*! Power supply phase init */
-int supply_init(struct ade7913_dev **device);
+int supply_init(struct ade9113_dev **device);
 
 /*! Scale V1 value */
 int32_t supply_scale_v1(int32_t val);
@@ -65,7 +65,7 @@ int32_t supply_scale_v1(int32_t val);
 /*! Scale V2 value */
 int32_t supply_scale_v2(int32_t val);
 
-/*! Convert values measured by the ADE7913 device to mV (mA val for I) */
+/*! Convert values measured by the ADE9113 device to mV (mA val for I) */
 int supply_conv_vals_to_mv(struct stout *stout, int32_t *i_val, int32_t *v1_val,
 			   int32_t *v2_val);
 

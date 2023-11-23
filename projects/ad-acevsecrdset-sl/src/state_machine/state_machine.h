@@ -56,7 +56,7 @@
 /******************************************************************************/
 /**
  * @enum charger_state_e
- * @brief ADE7913 waveorm data.
+ * @brief ADE9113 waveorm data.
  */
 enum charger_state_e {
 	STATE_POWER_ON = 0,
@@ -186,7 +186,7 @@ enum state_machine_events_e {
  */
 struct stout {
 	/* AD9113 device structure */
-	struct ade7913_dev *ade7913;
+	struct ade9113_dev *ade9113;
 	/* Relay descriptor */
 	struct no_os_gpio_desc *relay;
 	/* LED descriptors */

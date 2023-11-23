@@ -66,7 +66,7 @@ int relay_init(struct no_os_gpio_desc **relay)
 {
 	int ret;
 
-	ret = no_os_gpio_get_optional(relay, &ade7913_gpio_relay_ip);
+	ret = no_os_gpio_get_optional(relay, &ade9113_gpio_relay_ip);
 	if (ret)
 		return ret;
 

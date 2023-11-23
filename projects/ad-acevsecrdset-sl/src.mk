@@ -96,7 +96,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 INCS += $(DRIVERS)/temperature/adt75/adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 
-# ADE7913 driver files
-INCS += $(DRIVERS)/meter/ade7913/ade7913.h
-SRCS += $(DRIVERS)/meter/ade7913/ade7913.c
+# ADE9113 driver files
+INCS += $(DRIVERS)/meter/ade9113/ade9113.h
+SRCS += $(DRIVERS)/meter/ade9113/ade9113.c
 

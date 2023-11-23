@@ -59,10 +59,10 @@ int interface_init(struct no_os_gpio_desc **gpio_led_desc)
 {
 	int ret = 0;
 	struct no_os_gpio_init_param params[LED_NO] = {
-		ade7913_gpio_led1_ip,
-		ade7913_gpio_led2_ip,
-		ade7913_gpio_led3_ip,
-		ade7913_gpio_led4_ip
+		ade9113_gpio_led1_ip,
+		ade9113_gpio_led2_ip,
+		ade9113_gpio_led3_ip,
+		ade9113_gpio_led4_ip
 	};
 
 	for (unsigned int i = 0; i < LED_NO; i++) {

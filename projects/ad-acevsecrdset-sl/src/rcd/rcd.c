@@ -115,7 +115,7 @@ int rcd_init(struct no_os_irq_ctrl_desc *irq_desc,
 	};
 
 	/* RCM test PIN */
-	ret = no_os_gpio_get_optional(rcm_test, &ade7913_gpio_rcm_test_ip);
+	ret = no_os_gpio_get_optional(rcm_test, &ade9113_gpio_rcm_test_ip);
 	if (ret)
 		return ret;
 
@@ -126,7 +126,7 @@ int rcd_init(struct no_os_irq_ctrl_desc *irq_desc,
 	}
 
 	/* RCDAC pin */
-	ret = no_os_gpio_get_optional(rcdac, &ade7913_gpio_rcdac_ip);
+	ret = no_os_gpio_get_optional(rcdac, &ade9113_gpio_rcdac_ip);
 	if (ret)
 		return ret;
 
@@ -155,7 +155,7 @@ int rcd_init(struct no_os_irq_ctrl_desc *irq_desc,
 		return ret;
 
 	/* RCDDC pin */
-	ret = no_os_gpio_get_optional(rcddc, &ade7913_gpio_rcddc_ip);
+	ret = no_os_gpio_get_optional(rcddc, &ade9113_gpio_rcddc_ip);
 	if (ret)
 		return ret;
 
