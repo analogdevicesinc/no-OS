@@ -57,7 +57,7 @@
 
 #define UART_DEVICE_ID                  0
 #define UART_BAUDRATE                   57600
-#define UART_EXTRA                      &ade7913_uart_extra_ip
+#define UART_EXTRA                      &ade9113_uart_extra_ip
 #define UART_OPS                        &max_uart_ops
 
 #define I2C_DEVICE_ID                   1
@@ -78,17 +78,17 @@
 
 #define SPI_BAUDRATE                    1000000
 #define SPI_OPS                         &max_spi_ops
-#define SPI_EXTRA                       &ade7913_spi_extra_ip
+#define SPI_EXTRA                       &ade9113_spi_extra_ip
 
 // GPIO parameters
 #define GPIO_OPS                        &max_gpio_ops
-#define GPIO_EXTRA                      &ade7913_gpio_extra_ip
+#define GPIO_EXTRA                      &ade9113_gpio_extra_ip
 #define GPIO_RDY_PIN_NUM                15
 #define GPIO_RDY_PORT_NUM               0
 
 #define GPIO_IRQ_OPS                    &max_gpio_irq_ops
 #define GPIO_CTRL_IRQ_ID                0
-#define GPIO_IRQ_EXTRA                  &ade7913_gpio_extra_ip
+#define GPIO_IRQ_EXTRA                  &ade9113_gpio_extra_ip
 #define NVIC_GPIO_IRQ                   GPIO0_IRQn
 
 #define GPIO_RESET_PIN_NUM              19
@@ -183,9 +183,9 @@
 
 
 // Extra components
-extern struct max_gpio_init_param ade7913_gpio_extra_ip;
-extern struct max_uart_init_param ade7913_uart_extra_ip;
-extern struct max_spi_init_param ade7913_spi_extra_ip;
+extern struct max_gpio_init_param ade9113_gpio_extra_ip;
+extern struct max_uart_init_param ade9113_uart_extra_ip;
+extern struct max_spi_init_param ade9113_spi_extra_ip;
 extern struct max_i2c_init_param adt75_i2c_extra;
 
 

@@ -48,7 +48,7 @@
 #include "no_os_error.h"
 #include "self_test.h"
 #include "interface.h"
-#include "ade7913.h"
+#include "ade9113.h"
 #include "supply.h"
 #include "pilot.h"
 #include "relay.h"
@@ -118,9 +118,9 @@ int state_machine()
 	uint32_t recalc_time_us = current_time.us;
 	// Time passed from last values update
 	uint32_t us_elapsed_since_recalc = 0;
-	// Variable indicating multiple of 20ms used to compute the ADE7913 values on multiple periods
+	// Variable indicating multiple of 20ms used to compute the ADE9113 values on multiple periods
 	uint8_t multiple_20ms = 0;
-	// Variable indicating a multiple of the periodes used to compute ADE7913 values.
+	// Variable indicating a multiple of the periodes used to compute ADE9113 values.
 	// Used to compute the Vrelay value
 	uint8_t multiple_20ms_2 = 0;
 	// Variable used for reading the ADT75 at an inteval multiple of 20ms
@@ -130,12 +130,12 @@ int state_machine()
 	// Variable used to indicate that the relay stuck needs to be tested and the Vrelay needs to be computed
 	uint8_t v2_read = 0;
 	// Flag for updating supply vaues
-	uint8_t update_ade7913_values = 0;
+	uint8_t update_ade9113_values = 0;
 	// Used for led blinking during charging
 	uint8_t cnt_disp = 0;
 	// Variables used to read and compute the temperature from ADT75
 	int32_t adt75_value = 0;
-	// Variable used for the values read continuously from ADE7913
+	// Variable used for the values read continuously from ADE9113
 	int32_t i_val = 0, v1_val = 0, v2_val = 0;
 	// Pointer to the state machine structure
 	struct stout *stout;
@@ -175,7 +175,7 @@ int state_machine()
 	}
 
 	/* Initialize power supply monitoring */
-	ret = supply_init(&stout->ade7913);
+	ret = supply_init(&stout->ade9113);
 	if (ret)
 		goto error;
 
@@ -185,7 +185,7 @@ int state_machine()
 		goto error;
 
 	/* Initialize RCD monitoring */
-	ret = rcd_init(stout->ade7913->irq_ctrl, &stout->gpio_rcm_test,
+	ret = rcd_init(stout->ade9113->irq_ctrl, &stout->gpio_rcm_test,
 		       &stout->gpio_rcddc, &stout->gpio_rcdac);
 	if (ret)
 		goto error;
@@ -205,7 +205,7 @@ int state_machine()
 	reset_zero_cross_flag_state();
 
 	/* Enable data ready interrupt */
-	ret = ade7913_drdy_int_enable(stout->ade7913);
+	ret = ade9113_drdy_int_enable(stout->ade9113);
 	if (ret)
 		goto error;
 
@@ -266,7 +266,7 @@ int state_machine()
 	reset_zero_cross_flag_state();
 
 	// Disable the zero corssing interrupt
-	ret = no_os_irq_disable(stout->ade7913->irq_ctrl, GPIO_ZC_PIN);
+	ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_ZC_PIN);
 	if (ret) {
 		stout->current_state = STATE_FAULT;
 		stout->err_status = ret;
@@ -310,7 +310,7 @@ int state_machine()
 				}
 				// Flag for synchronizing state machine
 				set_action_flag();
-				update_ade7913_values = 1;
+				update_ade9113_values = 1;
 			}
 			// Compute time elapsed since last RCD test
 			s_elapsed_since_rcd_test = current_time.s - rcd_test_s;
@@ -332,7 +332,7 @@ int state_machine()
 			reset_pwm_low_flag_state();
 		}
 
-		// --------------------- COMPUTE ADE7913 VALUEAS AND EXTRACT MAXIMUM VALUES --------------
+		// --------------------- COMPUTE ADE9113 VALUEAS AND EXTRACT MAXIMUM VALUES --------------
 		ret = supply_conv_vals_to_mv(stout, &i_val, &v1_val, &v2_val);
 		if (ret)
 			goto error;
@@ -344,8 +344,8 @@ int state_machine()
 		i_max = no_os_max_t(int32_t, i_val, i_max);
 		// ----------------------------- END COMPUTE MAX -----------------------------------------
 
-		//-----UPDATE THE VALUES OF THE STOUT STRUCTURE WITH THE VALUES COMPUTED FROM ADE7913-----
-		if (update_ade7913_values == 1) {
+		//-----UPDATE THE VALUES OF THE STOUT STRUCTURE WITH THE VALUES COMPUTED FROM ADE9113-----
+		if (update_ade9113_values == 1) {
 			multiple_20ms++;
 			multiple_20ms_adt75++;
 			// Compute the values Vin and Iout each 20*COMPUTE_VALUES_INTERVAL
@@ -394,7 +394,7 @@ int state_machine()
 				i_max = 0;
 			}
 			// Reset flag for updating values
-			update_ade7913_values = 0;
+			update_ade9113_values = 0;
 		}
 
 		//----------------------- END UPDATE VALUES COMPUTED FROM ADE913------------------------

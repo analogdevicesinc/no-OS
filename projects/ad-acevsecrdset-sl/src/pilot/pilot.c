@@ -43,7 +43,7 @@
 #include "no_os_print_log.h"
 #include "interface.h"
 #include "adc_reva.h"
-#include "ade7913.h"
+#include "ade9113.h"
 #include "pilot.h"
 #include "gpio.h"
 #include "tmr.h"
@@ -81,7 +81,7 @@ extern struct no_os_irq_ctrl_desc *stout_nvic_desc;
  */
 void TMR0_IRQHandler_CP()
 {
-	// Disable ADE7913 irq (all GPIO interrupts)
+	// Disable ADE9113 irq (all GPIO interrupts)
 	NVIC_DisableIRQ(NVIC_GPIO_IRQ);
 
 	// Store PWM LOW value
@@ -93,7 +93,7 @@ void TMR0_IRQHandler_CP()
 	// Clear TMR0 flags
 	MXC_TMR_ClearFlags(PWM_TIMER);
 
-	// Enable ADE7913 irq (all GPIO interrupts)
+	// Enable ADE9113 irq (all GPIO interrupts)
 	NVIC_EnableIRQ(NVIC_GPIO_IRQ);
 }
 
@@ -104,7 +104,7 @@ void TMR0_IRQHandler_CP()
  */
 void TMR1_IRQHandler_CP()
 {
-	// Disable ADE7913 irq (all GPIO interrupts)
+	// Disable ADE9113 irq (all GPIO interrupts)
 	NVIC_DisableIRQ(NVIC_GPIO_IRQ);
 
 	// Store PWM LOW value
@@ -120,7 +120,7 @@ void TMR1_IRQHandler_CP()
 	flag_pwm_low++;
 	count_ms++;
 
-	// Enable ADE7913 irq (all GPIO interrupts)
+	// Enable ADE9113 irq (all GPIO interrupts)
 	NVIC_EnableIRQ(NVIC_GPIO_IRQ);
 }
 

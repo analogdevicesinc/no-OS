@@ -58,23 +58,23 @@ struct no_os_irq_ctrl_desc *stout_nvic_desc;
 int main()
 {
 	int ret = -EINVAL;
-	// ADE7913 dev SPI init params
-	ade7913_ip.spi_init = &ade7913_spi_ip;
-	// ADE7913 dev DATA_RDY init params
-	ade7913_ip.gpio_rdy = &ade7913_gpio_rdy_ip;
-	// ADE7913 dev RESET init params
-	ade7913_ip.gpio_reset = &ade7913_gpio_reset_ip;
+	// ADE9113 dev SPI init params
+	ade9113_ip.spi_init = &ade9113_spi_ip;
+	// ADE9113 dev DATA_RDY init params
+	ade9113_ip.gpio_rdy = &ade9113_gpio_rdy_ip;
+	// ADE9113 dev RESET init params
+	ade9113_ip.gpio_reset = &ade9113_gpio_reset_ip;
 
 	ret = no_os_init();
 	if (ret)
 		return ret;
 
 	/* Initialize NVIC IRQ controller in order to be able to enable GPIO IRQ interrupt */
-	struct no_os_irq_init_param ade7913_nvic_ip = {
+	struct no_os_irq_init_param ade9113_nvic_ip = {
 		.platform_ops = &max_irq_ops,
 	};
 
-	ret = no_os_irq_ctrl_init(&stout_nvic_desc, &ade7913_nvic_ip);
+	ret = no_os_irq_ctrl_init(&stout_nvic_desc, &ade9113_nvic_ip);
 	if (ret)
 		return ret;
 
@@ -89,7 +89,7 @@ int main()
 	/* Initialize UART */
 	struct no_os_uart_desc *uart_desc;
 
-	ret = no_os_uart_init(&uart_desc, &ade7913_uart_ip);
+	ret = no_os_uart_init(&uart_desc, &ade9113_uart_ip);
 	if (ret)
 		return ret;
 

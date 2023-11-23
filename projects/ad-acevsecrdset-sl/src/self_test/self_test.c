@@ -90,13 +90,13 @@ int self_test_supply(struct stout *stout)
 	// Calculate maximum amplitude over a number of periodes defined by SELF_TEST_SKIP_PERIODES_NO
 	while (SELF_TEST_SKIP_PERIODES_NO >= cnt) {
 		while (!get_zero_cross_flag_state()) {
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_I_WAV, &i_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, &i_val);
 			if (ret)
 				return ret;
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V1_WAV, &v1_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, &v1_val);
 			if (ret)
 				return ret;
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V2_WAV, &v2_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, &v2_val);
 			if (ret)
 				return ret;
 			v1 = supply_scale_v1(v1_val);
@@ -138,13 +138,13 @@ int self_test_supply(struct stout *stout)
 	// Calculate maximum amplitude over a number of periodes
 	while (SELF_TEST_SKIP_PERIODES_NO >= cnt) {
 		while (!get_zero_cross_flag_state()) {
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_I_WAV, &i_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, &i_val);
 			if (ret)
 				return ret;
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V1_WAV, &v1_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, &v1_val);
 			if (ret)
 				return ret;
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V2_WAV, &v2_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, &v2_val);
 			if (ret)
 				return ret;
 			v1 = supply_scale_v1(v1_val);
@@ -171,13 +171,13 @@ int self_test_supply(struct stout *stout)
 	// Calculate maximum amplitude over a number of periodes
 	while (SELF_TEST_SKIP_PERIODES_NO >= cnt) {
 		while (!get_zero_cross_flag_state()) {
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_I_WAV, &i_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, &i_val);
 			if (ret)
 				return ret;
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V1_WAV, &v1_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, &v1_val);
 			if (ret)
 				return ret;
-			ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V2_WAV, &v2_val);
+			ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, &v2_val);
 			if (ret)
 				return ret;
 
@@ -223,10 +223,10 @@ int self_test_rcd(struct stout *stout)
 	int ret;
 
 	// Disable RCD interrupts
-	ret = no_os_irq_disable(stout->ade7913->irq_ctrl, GPIO_RCDAC_PIN);
+	ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_RCDAC_PIN);
 	if (ret)
 		return ret;
-	ret = no_os_irq_disable(stout->ade7913->irq_ctrl, GPIO_RCDDC_PIN);
+	ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_RCDDC_PIN);
 	if (ret)
 		return ret;
 
@@ -278,10 +278,10 @@ int self_test_rcd(struct stout *stout)
 		goto error;
 
 	// Enable RCD interrupts
-	ret = no_os_irq_enable(stout->ade7913->irq_ctrl, GPIO_RCDAC_PIN);
+	ret = no_os_irq_enable(stout->ade9113->irq_ctrl, GPIO_RCDAC_PIN);
 	if (ret)
 		return ret;
-	ret = no_os_irq_enable(stout->ade7913->irq_ctrl, GPIO_RCDDC_PIN);
+	ret = no_os_irq_enable(stout->ade9113->irq_ctrl, GPIO_RCDDC_PIN);
 	if (ret)
 		return ret;
 
@@ -311,10 +311,10 @@ int self_test_rcd_running(struct stout *stout, uint16_t step,
 	if (0 == step) {
 		pr_debug("RCD test step 1 - RCM pin low\n");
 		// Disable RCD interrupts
-		ret = no_os_irq_disable(stout->ade7913->irq_ctrl, GPIO_RCDAC_PIN);
+		ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_RCDAC_PIN);
 		if (ret)
 			return ret;
-		ret = no_os_irq_disable(stout->ade7913->irq_ctrl, GPIO_RCDDC_PIN);
+		ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_RCDDC_PIN);
 		if (ret)
 			return ret;
 
@@ -374,10 +374,10 @@ int self_test_rcd_running(struct stout *stout, uint16_t step,
 			goto error;
 
 		// Enable RCD interrupts
-		ret = no_os_irq_enable(stout->ade7913->irq_ctrl, GPIO_RCDAC_PIN);
+		ret = no_os_irq_enable(stout->ade9113->irq_ctrl, GPIO_RCDAC_PIN);
 		if (ret)
 			return ret;
-		ret = no_os_irq_enable(stout->ade7913->irq_ctrl, GPIO_RCDDC_PIN);
+		ret = no_os_irq_enable(stout->ade9113->irq_ctrl, GPIO_RCDDC_PIN);
 		if (ret)
 			return ret;
 

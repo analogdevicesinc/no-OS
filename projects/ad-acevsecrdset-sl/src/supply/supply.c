@@ -94,7 +94,7 @@ void reset_zero_cross_flag_state(void)
  * @param dev- The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int supply_read_wavs(struct ade7913_dev *dev)
+static int supply_read_wavs(struct ade9113_dev *dev)
 {
 	// int ret;
 	/* buffer for data read */
@@ -133,7 +133,7 @@ static int supply_read_wavs(struct ade7913_dev *dev)
  */
 static void supply_irq_handler(void *dev)
 {
-	struct ade7913_dev *desc = dev;
+	struct ade9113_dev *desc = dev;
 	int ret;
 
 	if (!dev)
@@ -159,9 +159,9 @@ static void supply_irq_handler(void *dev)
  * @param device - ADE9713 device descriptor
  * @return 0 in case of success, error code otherwise
  */
-int supply_init(struct ade7913_dev **device)
+int supply_init(struct ade9113_dev **device)
 {
-	struct no_os_irq_ctrl_desc *ade7913_gpio_irq_desc;
+	struct no_os_irq_ctrl_desc *ade9113_gpio_irq_desc;
 	struct no_os_gpio_desc	*zx_zero_cross;
 	int ret;
 
@@ -180,7 +180,7 @@ int supply_init(struct ade7913_dev **device)
 	};
 
 	/* Set GPIO for zero crossing */
-	ret = no_os_gpio_get_optional(&zx_zero_cross, &ade7913_gpio_ZX_ip);
+	ret = no_os_gpio_get_optional(&zx_zero_cross, &ade9113_gpio_ZX_ip);
 	if (ret)
 		return ret;
 
@@ -191,52 +191,52 @@ int supply_init(struct ade7913_dev **device)
 	}
 
 	/* Initialize GPIO IRQ controller */
-	ret = no_os_irq_ctrl_init(&ade7913_gpio_irq_desc, &ade7913_gpio_irq_ip);
+	ret = no_os_irq_ctrl_init(&ade9113_gpio_irq_desc, &ade9113_gpio_irq_ip);
 	if (ret)
 		return ret;
 
-	ade7913_ip.irq_ctrl = ade7913_gpio_irq_desc;
-	ade7913_ip.drdy_callback = supply_irq_handler;
+	ade9113_ip.irq_ctrl = ade9113_gpio_irq_desc;
+	ade9113_ip.drdy_callback = supply_irq_handler;
 
-	ret = ade7913_init(device, ade7913_ip);
+	ret = ade9113_init(device, ade9113_ip);
 	if (ret)
-		goto ade7913_init_err;
+		goto ade9113_init_err;
 
 	switch ((*device)->ver_product) {
-	case ADE7913_3_CHANNEL_ADE7913:
-		pr_debug("3 channel ADE7913 successfully initialized.\n");
+	case ADE9113_3_CHANNEL_ADE9113:
+		pr_debug("3 channel ADE9113 successfully initialized.\n");
 		break;
-	case ADE7913_2_CHANNEL_ADE9112:
-		pr_debug("2 channel ADE7913 successfully initialized.\n");
+	case ADE9113_2_CHANNEL_ADE9112:
+		pr_debug("2 channel ADE9113 successfully initialized.\n");
 		break;
-	case ADE7913_NONISOLATED_ADE9103:
-		pr_debug("Non Isolated ADE7913 successfully initialized.\n");
+	case ADE9113_NONISOLATED_ADE9103:
+		pr_debug("Non Isolated ADE9113 successfully initialized.\n");
 		break;
 	default:
 		pr_debug("Device not supported.\n");
 		break;
 	}
 
-	ret = ade7913_set_normal_mode((*device));
+	ret = ade9113_set_normal_mode((*device));
 	if (ret)
 		goto error;
 
-	ret = ade7913_select_zero_crossing_channel((*device), ADE7913_ZX_V1_SEL);
+	ret = ade9113_select_zero_crossing_channel((*device), ADE9113_ZX_V1_SEL);
 	if (ret)
 		goto error;
 
-	ret = ade7913_select_zero_crossing_edge((*device),
-						ADE7913_ZX_INPUT_SIGNAL_SIGN);
+	ret = ade9113_select_zero_crossing_edge((*device),
+						ADE9113_ZX_INPUT_SIGNAL_SIGN);
 	if (ret)
 		goto error;
 
-	ret = ade7913_set_crc_en_state((*device), 0);
+	ret = ade9113_set_crc_en_state((*device), 0);
 	if (ret)
 		goto error;
 
 	/* Set digital signal processing configuration. */
-	ret =  ade7913_set_dsp_config((*device),
-				      ADE7913_SINC3_LPF_EN_4_KHZ_SAMPLING);
+	ret =  ade9113_set_dsp_config((*device),
+				      ADE9113_SINC3_LPF_EN_4_KHZ_SAMPLING);
 
 	ret = no_os_irq_register_callback((*device)->irq_ctrl, GPIO_ZC_PIN,
 					  &zx_zero_cross_cb);
@@ -259,10 +259,10 @@ int supply_init(struct ade7913_dev **device)
 	return 0;
 
 error:
-	ade7913_remove(device);
-ade7913_init_err:
-	no_os_irq_ctrl_remove(ade7913_gpio_irq_desc);
-	ade7913_gpio_irq_desc = NULL;
+	ade9113_remove(device);
+ade9113_init_err:
+	no_os_irq_ctrl_remove(ade9113_gpio_irq_desc);
+	ade9113_gpio_irq_desc = NULL;
 
 	return ret;
 }
@@ -298,7 +298,7 @@ int32_t supply_scale_v2(int32_t val)
 }
 
 /**
- * @brief Convert values measured by the ADE7913 device to mV (mA val for I)
+ * @brief Convert values measured by the ADE9113 device to mV (mA val for I)
  * @param stout - state  machine descriptor
  * @param i_val - value of I waveform (in mA)
  * @param v1_val - value of V1 waveform in mV
@@ -310,11 +310,11 @@ int supply_conv_vals_to_mv(struct stout *stout, int32_t *i_val, int32_t *v1_val,
 {
 	int ret;
 
-	ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_I_WAV, i_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, i_val);
 	if (ret)
 		return ret;
-	ret = ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V1_WAV, v1_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, v1_val);
 	if (ret)
 		return ret;
-	return ade7913_convert_to_millivolts(stout->ade7913, ADE7913_V2_WAV, v2_val);
+	return ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, v2_val);
 }

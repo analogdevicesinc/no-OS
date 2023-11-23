@@ -43,42 +43,42 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "parameters.h"
-#include "ade7913.h"
+#include "ade9113.h"
 #include "adt75.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 // UART init params
-extern struct no_os_uart_init_param ade7913_uart_ip;
+extern struct no_os_uart_init_param ade9113_uart_ip;
 // ADT75 I2C params
 extern struct adt75_init_param adt75_ip;
 // SPI init params
-extern struct no_os_spi_init_param ade7913_spi_ip;
+extern struct no_os_spi_init_param ade9113_spi_ip;
 // GPIO RDY init params
-extern struct no_os_gpio_init_param ade7913_gpio_rdy_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_rdy_ip;
 // GPIO RESET init params
-extern struct no_os_gpio_init_param ade7913_gpio_reset_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_reset_ip;
 // GPIO zero cross detection
-extern struct no_os_gpio_init_param ade7913_gpio_ZX_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_ZX_ip;
 // GPIO RCM TEST
-extern struct no_os_gpio_init_param ade7913_gpio_rcm_test_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_rcm_test_ip;
 // GPIO RCDAC
-extern struct no_os_gpio_init_param ade7913_gpio_rcdac_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_rcdac_ip;
 // GPIO RCDDC
-extern struct no_os_gpio_init_param ade7913_gpio_rcddc_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_rcddc_ip;
 // GPIO relay control
-extern struct no_os_gpio_init_param ade7913_gpio_relay_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_relay_ip;
 // GPIO IRQ init params
-extern struct no_os_irq_init_param ade7913_gpio_irq_ip;
-// ADE7913 device init params
-extern struct ade7913_init_param ade7913_ip;
+extern struct no_os_irq_init_param ade9113_gpio_irq_ip;
+// ADE9113 device init params
+extern struct ade9113_init_param ade9113_ip;
 
 // LEDs
-extern struct no_os_gpio_init_param ade7913_gpio_led2_ip;
-extern struct no_os_gpio_init_param ade7913_gpio_led1_ip;
-extern struct no_os_gpio_init_param ade7913_gpio_led3_ip;
-extern struct no_os_gpio_init_param ade7913_gpio_led4_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_led2_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_led1_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_led3_ip;
+extern struct no_os_gpio_init_param ade9113_gpio_led4_ip;
 
 // Vin min and max; Current values +15%/-15% from nominal value 230V
 #define VIN_LOW_LIMIT           (195000l)
