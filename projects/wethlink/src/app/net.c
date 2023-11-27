@@ -5,6 +5,7 @@
 #include "no_os_irq.h"
 #include "mdio_bitbang.h"
 #include "net.h"
+#include "led.h"
 #include "parameters.h"
 #include "adin1300.h"
 #include "iio_adin1300.h"
@@ -34,6 +35,7 @@ void adin1300_int(void *context)
 		spd = adin1300_resolved_speed(ctx->adin1300);
 
 		if (spd <= 5) {
+			led_rj45((enum rj45_led)spd / 2);
 			max24287_config_parallel(ctx->max24287, MAX24287_RGMII, spd);
 			max24287_config_serial(ctx->max24287, MAX24287_SGMII, spd);
 
@@ -46,6 +48,7 @@ void adin1300_int(void *context)
 		}
 		else {
 			// cable disconnected, advertise all speeds
+			led_rj45(rj45_led_off);
 			max24287_config_serial(ctx->max24287, MAX24287_SGMII, 5);
 			adin1300_config_speed(ctx->adin1300, 5);
 		}
