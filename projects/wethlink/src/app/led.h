@@ -8,3 +8,4 @@ void led_tx_det_green(bool on);
 void led_tx_det_red(bool on);
 void led_rx_det_green(bool on);
 void led_rx_det_red(bool on);
+void led_blink_all(unsigned int times, unsigned int duration);
