@@ -206,6 +206,13 @@ int main(void)
 	};
 	struct axi_adc *rx_adc;
 
+	struct axi_adc_init rx_os_adc_init = {
+		"rx_os_adc",
+		RX_OS_CORE_BASEADDR,
+		TALISE_NUM_CHANNELS / 2
+	};
+	struct axi_adc *rx_os_adc;
+
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
@@ -221,6 +228,13 @@ int main(void)
 		IRQ_DISABLED
 	};
 	struct axi_dmac *rx_dmac;
+
+	struct axi_dmac_init rx_os_dmac_init = {
+		"rx_os_dmac",
+		RX_OS_DMA_BASEADDR,
+		IRQ_DISABLED
+	};
+	struct axi_dmac *rx_os_dmac;
 
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
@@ -355,6 +369,13 @@ int main(void)
 	}
 
 #endif
+
+	status = axi_adc_init(&rx_os_adc, &rx_os_adc_init);
+	if (status) {
+		printf("OBS axi_adc_init() failed with status %d\n", status);
+		goto error_3;
+	}
+
 #ifndef ADRV9008_1
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
@@ -371,6 +392,12 @@ int main(void)
 	}
 #endif
 
+	status = axi_dmac_init(&rx_os_dmac, &rx_os_dmac_init);
+	if (status) {
+		printf("OBS axi_dmac_init() rx init error: %d\n", status);
+		goto error_3;
+	}
+
 #ifdef DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
 #ifndef ALTERA_PLATFORM
@@ -384,7 +411,7 @@ int main(void)
 		printf("no_os_gpio_get() failed with status %d", status);
 		goto error_3;
 	}
-	no_os_gpio_direction_output(gpio_plddrbypass, 0);
+	no_os_gpio_direction_output(gpio_plddrbypass, 1);
 
 #ifndef ADRV9008_1
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
@@ -417,7 +444,6 @@ int main(void)
 #endif
 
 	/* Transfer 16384 samples from ADC to MEM */
-#ifndef ADRV9008_2
 	struct axi_dma_transfer transfer_rx = {
 		// Number of bytes to write/read
 		.size = 16384 * TALISE_NUM_CHANNELS *
@@ -431,8 +457,21 @@ int main(void)
 		// Address of data destination
 		.dest_addr = (uintptr_t)(DDR_MEM_BASEADDR + 0x800000)
 	};
-	axi_dmac_transfer_start(rx_dmac, &transfer_rx);
+#ifndef ADRV9008_2
+	status = axi_dmac_transfer_start(rx_dmac, &transfer_rx);
+	if(status)
+		return status;
+	printf("Rx ");
 	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	uint8_t num_chans = rx_adc_init.num_channels;
+#else
+	status = axi_dmac_transfer_start(rx_os_dmac, &transfer_rx);
+	if(status)
+		return status;
+	printf("Rx obs ");
+	status = axi_dmac_transfer_wait_completion(rx_os_dmac, 500);
+	uint8_t num_chans = rx_os_adc_init.num_channels;
+#endif
 	if(status)
 		return status;
 #ifndef ALTERA_PLATFORM
@@ -440,7 +479,11 @@ int main(void)
 				  16384 * TALISE_NUM_CHANNELS *
 				  NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
 #endif
-#endif
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%u\n",
+	       transfer_rx.dest_addr, transfer_rx.size / NO_OS_DIV_ROUND_UP(
+		       talInit.jesd204Settings.framerA.Np, 8),
+	       num_chans,
+	       8 * NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
 #endif
 
 #ifdef IIO_SUPPORT
