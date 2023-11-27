@@ -172,6 +172,8 @@ apply_factory_defaults:
 			if (ret)
 				return ret;
 			printf("EEPROM: loaded factory defaults.\n");
+
+			led_blink_all(10, 3000);
 		}
 		else
 		{

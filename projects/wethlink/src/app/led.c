@@ -90,4 +90,21 @@ void led_rx_det_red(bool on)
 	no_os_gpio_set_value(rx_det_red, on ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
 }
 
+void led_blink_all(unsigned int times, unsigned int duration_ms)
+{
+	int i;
+	for (i = 0; i < times; i++) {
+		led_tx_lock(true);
+		led_rx_lock(true);
+		led_tx_det_green(true);
+		led_rx_det_green(true);
+		no_os_mdelay(duration_ms / times / 2);
+		led_tx_lock(false);
+		led_rx_lock(false);
+		led_tx_det_green(false);
+		led_rx_det_green(false);
+		no_os_mdelay(duration_ms / times / 2);
+	}
+}
+
 #endif
