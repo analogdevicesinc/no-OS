@@ -10,6 +10,8 @@ struct no_os_gpio_desc *tx_lock;
 struct no_os_gpio_desc *rx_lock;
 struct no_os_gpio_desc *rx_det_green;
 struct no_os_gpio_desc *rx_det_red;
+struct no_os_gpio_desc *rj45s11;
+struct no_os_gpio_desc *rj45s12;
 
 int led_init(void)
 {
@@ -39,6 +41,14 @@ int led_init(void)
 	if (ret)
 		return ret;
 
+	ret = no_os_gpio_get(&rj45s11, &led_rj45s11_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_get(&rj45s12, &led_rj45s12_ip);
+	if (ret)
+		return ret;
+
 	// Turn LED's off
 	no_os_gpio_direction_output(tx_lock, NO_OS_GPIO_LOW);
 	no_os_gpio_direction_output(rx_lock, NO_OS_GPIO_LOW);
@@ -50,6 +60,8 @@ int led_init(void)
 #else
 	no_os_gpio_direction_output(rx_det_green, NO_OS_GPIO_LOW);
 #endif
+	no_os_gpio_direction_output(rj45s11, NO_OS_GPIO_LOW);
+	no_os_gpio_direction_output(rj45s12, NO_OS_GPIO_LOW);
 
 	return 0;
 }
@@ -88,6 +100,12 @@ void led_rx_det_red(bool on)
 	on = !on;
 #endif
 	no_os_gpio_set_value(rx_det_red, on ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
+}
+
+void led_rj45(enum rj45_led state)
+{
+	no_os_gpio_set_value(rj45s11, state & rj45_led_green ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
+	no_os_gpio_set_value(rj45s12, state & rj45_led_yellow ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
 }
 
 void led_blink_all(unsigned int times, unsigned int duration_ms)

@@ -180,6 +180,20 @@ struct no_os_gpio_init_param led_rx_det_green_gpio_ip = {
 	.extra = &xgpio,
 };
 
+struct no_os_gpio_init_param led_rj45s11_ip = {
+	.port = LED_RJ45S11_PORT,
+	.number = LED_RJ45S11_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
+struct no_os_gpio_init_param led_rj45s12_ip = {
+	.port = LED_RJ45S12_PORT,
+	.number = LED_RJ45S12_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
 struct no_os_i2c_init_param eeprom_i2c_ip = {
 	.device_id = 0,
 	.max_speed_hz = 400000,

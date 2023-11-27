@@ -93,6 +93,10 @@
 #define LED_RX_DET_GREEN_PORT	0
 #define LED_RX_DET_GREEN_PIN	9
 #endif
+#define LED_RJ45S11_PORT	1
+#define LED_RJ45S11_PIN		1
+#define LED_RJ45S12_PORT	1
+#define LED_RJ45S12_PIN		10
 
 
 extern struct no_os_uart_init_param uart_console_ip;
@@ -118,6 +122,8 @@ extern struct no_os_gpio_init_param led_rx_det_red_gpio_ip;
 extern struct no_os_gpio_init_param led_rx_det_green_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_lock_gpio_ip;
 extern struct no_os_gpio_init_param led_rx_lock_gpio_ip;
+extern struct no_os_gpio_init_param led_rj45s11_ip;
+extern struct no_os_gpio_init_param led_rj45s12_ip;
 extern struct no_os_eeprom_init_param eeprom_ip;
 
 #endif /* __PARAMETERS_H__ */
