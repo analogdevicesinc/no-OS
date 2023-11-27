@@ -120,8 +120,9 @@ int main(void)
 	ret = no_os_uart_init(&console, &uart_greeting_ip);
 	if (ret)
 		return ret;
+
 	no_os_uart_stdio(console);
-	printf("\nwethlink-firmware %s for revision %c\n", NO_OS_TOSTRING(NO_OS_VERSION), 'A' + HW_VERSION);
+	printf("\n%s for revision %c\n", NO_OS_TOSTRING(NO_OS_VERSION), 'A' + HW_VERSION);
 
 	// Detect board type switch state
 	ret = no_os_gpio_get(&brd_select, &brd_select_gpio_ip);
