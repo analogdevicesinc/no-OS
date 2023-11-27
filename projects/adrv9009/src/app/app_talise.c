@@ -477,7 +477,11 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		goto error_11;
 	}
 
+#ifndef ADRV9008_2
 	talAction = TALISE_setRxTxEnable(pd, TAL_RX1RX2_EN, TAL_TX1TX2);
+#else
+	talAction = TALISE_setRxTxEnable(pd, TAL_ORX1_EN, TAL_TX1TX2);
+#endif
 	if (talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 		printf("error: TALISE_setRxTxEnable() failed\n");
