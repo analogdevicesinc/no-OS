@@ -49,6 +49,7 @@
 #include "common_data.h"
 #include "no_os_util.h"
 #include "no_os_gpio.h"
+#include "no_os_print_log.h"
 
 #include "lwip_adin1110.h"
 
@@ -76,6 +77,21 @@ int step_callback(void *arg)
 	}
 
 	return 0;
+}
+
+void maxim_gcr_reset()
+{
+	/* Zeroize the RAM content */
+	MXC_GCR->mem_zero = 0xFFFFFFFF;
+	/* Wait for the previous operation to finish */
+	while(MXC_GCR->mem_zero != 0);
+	/* Reset the MCU */
+	MXC_GCR->rst0 = NO_OS_BIT(31);
+}
+
+void HardFault_Handler()
+{
+	maxim_gcr_reset();
 }
 
 /***************************************************************************//**
@@ -209,11 +225,11 @@ int swiot_firmware()
 
 		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
 		if (ret) {
-			/* 
+			/*
 			 * We either ran out of memory or provided an invalid init parameter.
 			 * These errors are not recoverable, so we'll just exit.
 			 */
-			pr_err("swiot IIO device init error: %d (%s)\n", ret, strerr(-ret));
+			pr_err("swiot IIO device init error: %d (%s)\n", ret, strerror(-ret));
 			return ret;
 		}
 
@@ -233,7 +249,7 @@ int swiot_firmware()
 
 		ret = iio_app_init(&app, app_init_param);
 		if (ret) {
-			pr_err("Config mode IIO app init error: %d (%s)\n", ret, strerr(-ret));
+			pr_err("Config mode IIO app init error: %d (%s)\n", ret, strerror(-ret));
 			goto free_swiot;
 		}
 
@@ -243,11 +259,11 @@ int swiot_firmware()
 		app->arg = &step_p;
 
 		ret = iio_app_run(app);
-		if (ret != -ENOTCONN) {
-			pr_err("Config mode IIO app runtime error: %d (%s)\n", ret, strerr(-ret));
-			goto out;
-		}
 		iio_app_remove(app);
+		if (ret != -ENOTCONN) {
+			pr_err("Config mode IIO app runtime error: %d (%s)\n", ret, strerror(-ret));
+			goto free_swiot;
+		}
 
 		memcpy(&max14906_iio_ip.channel_configs, &swiot_iio_desc->max14906_configs,
 		       sizeof(max14906_iio_ip.channel_configs));
@@ -259,21 +275,21 @@ int swiot_firmware()
 
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip);
 		if (ret) {
-			pr_err("MAX14906 device init error: %d (%s)\n", ret, strerr(-ret));
-			goto out;			
+			pr_err("MAX14906 device init error: %d (%s)\n", ret, strerror(-ret));
+			goto free_swiot;
 		}
 
 		ret = adt75_iio_init(&adt75_iio_desc, &adt75_iio_ip);
 		if (ret) {
-			pr_err("ADT75 device init error: %d (%s)\n", ret, strerr(-ret));
-			goto out;
+			pr_err("ADT75 device init error: %d (%s)\n", ret, strerror(-ret));
+			goto free_max14906;
 		}
 
 		ad74413r_iio_ip.trigger = ad74413r_trig_desc;
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip);
 		if (ret) {
-			pr_err("AD74413R device init error: %d (%s)\n", ret, strerr(-ret));
-			goto out;
+			pr_err("AD74413R device init error: %d (%s)\n", ret, strerror(-ret));
+			goto free_adt75;
 		}
 
 		iio_devices[1].name = "max14906";
@@ -293,9 +309,9 @@ int swiot_firmware()
 			ret = ad74413r_set_adc_rate(ad74413r_iio_desc->ad74413r_desc,
 						    i, AD74413R_ADC_SAMPLE_4800HZ);
 			if (ret) {
-				pr_err("SPI transfer error while setting the sample rate
-				       for the ADC channels of the AD74413R: %d (%s)\n", ret, strerr(-ret));
-				goto out;
+				pr_err("SPI transfer error while setting the sample rate"
+				       "for the ADC channels of the AD74413R: %d (%s)\n", ret, strerror(-ret));
+				goto free_ad74413r;
 			}
 		}
 
@@ -303,9 +319,9 @@ int swiot_firmware()
 			ret = ad74413r_set_adc_diag_rate(ad74413r_iio_desc->ad74413r_desc,
 							 i, AD74413R_ADC_SAMPLE_4800HZ);
 			if (ret) {
-				pr_err("SPI transfer error while setting the sample rate
-				       for the diagnostics channels of the AD74413R: %d (%s)\n", ret, strerr(-ret));
-				goto out;
+				pr_err("SPI transfer error while setting the sample rate"
+				       "for the diagnostics channels of the AD74413R: %d (%s)\n", ret, strerror(-ret));
+				goto free_ad74413r;
 			}
 		}
 
@@ -335,6 +351,7 @@ int swiot_firmware()
 
 		no_os_gpio_set_value(max14906_en_gpio, 1);
 		ret = iio_app_run(app);
+		iio_app_remove(app);
 		if (ret != -ENOTCONN)
 			pr_err("IIO app runtime error: %d\n", ret);
 
@@ -344,9 +361,6 @@ free_max14906:
 		max14906_iio_remove(max14906_iio_desc);
 free_adt75:
 		adt75_iio_remove(adt75_iio_desc);
-free_iio_app:
-		no_os_gpio_set_value(max14906_en_gpio, 0);
-		iio_app_remove(app);
 free_swiot:
 		swiot_iio_remove(swiot_iio_desc);
 	}

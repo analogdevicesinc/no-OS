@@ -57,5 +57,6 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-	return swiot_firmware();
+	swiot_firmware();
+	maxim_gcr_reset();
 }

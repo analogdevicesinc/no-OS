@@ -45,6 +45,7 @@
 #include "maxim_i2c.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
+#include "gcr_regs.h"
 
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID  0

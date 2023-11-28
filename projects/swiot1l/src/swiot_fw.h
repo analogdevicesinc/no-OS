@@ -40,5 +40,6 @@
 #define __SWIOT_FW_H__
 
 int swiot_firmware();
+void maxim_gcr_reset();
 
 #endif /* __SWIOT_FW_H__ */
