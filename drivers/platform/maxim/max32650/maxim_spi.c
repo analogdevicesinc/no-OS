@@ -260,10 +260,10 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 	/* For Maxim Platforms SPI Mode 1 and 2 are reversed */
 	switch (desc->mode) {
 	case NO_OS_SPI_MODE_1:
-		mode = SPI_MODE_2;
+		mode = SPI_MODE_1;
 		break;
 	case NO_OS_SPI_MODE_2:
-		mode = SPI_MODE_1;
+		mode = SPI_MODE_2;
 		break;
 	case NO_OS_SPI_MODE_0:
 	/* fallthrough */
@@ -492,6 +492,7 @@ int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
 		.tx_buff = data,
 		.bytes_number = bytes_number,
 		.cs_change = 1,
+		.cs_delay_first = 1,
 	};
 
 	return max_spi_transfer(desc, &xfer, 1);

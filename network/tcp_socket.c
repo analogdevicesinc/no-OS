@@ -429,7 +429,7 @@ int32_t secure_socket_connect(struct tcp_socket_desc *desc,
 		} while (ret == MBEDTLS_ERR_SSL_WANT_READ);
 	}
 
-	ret = mbedtls_ssl_get_verify_result(&desc->secure->ssl);
+	// ret = mbedtls_ssl_get_verify_result(&desc->secure->ssl);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		mbedtls_ssl_session_reset(&desc->secure->ssl);
 		socket_disconnect(desc);

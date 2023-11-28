@@ -397,7 +397,7 @@ int basic_example_main()
 
 	struct socket_address ip_addr = {
 		.addr = "169.254.97.30",
-		.port = 4443
+		.port = 4433
 	};
 
 	struct mqtt_desc *mqtt;
