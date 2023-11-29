@@ -68,6 +68,7 @@ ensure_command_exists() {
 }
 
 ensure_command_exists sudo
+ensure_command_exists wget
 
 build_astyle() {
     . ./ci/astyle.sh
