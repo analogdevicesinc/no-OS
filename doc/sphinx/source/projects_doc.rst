@@ -27,3 +27,10 @@ RF TRANSCEIVER
    :maxdepth: 1
 
    projects/adrv902x
+
+EVAL BOARDS
+==============
+.. toctree::
+   :maxdepth: 1
+
+   projects/apard32690
