@@ -161,6 +161,11 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 	if (ret)
 		return ret;
 	
+	// See datasheet section "Back to Back Mode in 10BASE-T" to understand this.
+	ret = adin1300_write(adin1300, ADIN1300_GE_B10_REGEN_PRE, ADIN1300_GE_B10_REGEN_PRE_MSK);
+	if (ret)
+		return ret;
+
 	ret = adin1300_iio_init(adin1300_iio,
 		&(struct adin1300_iio_init_param){.dev = adin1300});
 	if (ret)

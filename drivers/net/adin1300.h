@@ -107,6 +107,9 @@
 #define ADIN1300_GE_RGMII_TX_ID_EN_MASK		NO_OS_BIT(1)
 #define ADIN1300_GE_RGMII_EN_MASK		NO_OS_BIT(0)
 
+#define ADIN1300_GE_B10_REGEN_PRE		NO_OS_MDIO_C45_ADDR(0x1e, 0xff38)
+#define ADIN1300_GE_B10_REGEN_PRE_MSK		NO_OS_BIT(0)
+
 enum adin1300_speed {
 	ADIN1300_10_BASE_T_HALFDUPLEX,
 	ADIN1300_10_BASE_T_FULLDUPLEX,
@@ -137,6 +140,7 @@ struct adin1300_rgmii_config {
 	enum adin1300_rgmii_idelay tx_idelay;
 	bool rx_idelay_en;
 	enum adin1300_rgmii_idelay rx_idelay;
+
 };
 
 struct adin1300_init_param {
