@@ -1,7 +1,10 @@
 {
   "maxim": {
     "basic_example": {
-      "flags": ""
+      "flags": "RELEASE=y APARD32690_BASIC_EXAMPLE=y APARD32690_ECHO_SERVER_EXAMPLE=n"
+    },
+    "tcp_echo_example": {
+      "flags": "RELEASE=y APARD32690_BASIC_EXAMPLE=n APARD32690_ECHO_SERVER_EXAMPLE=y"
     }
   }
 }
