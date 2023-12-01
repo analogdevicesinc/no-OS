@@ -65,6 +65,7 @@ int temperature_2wire_rtd_example_main()
 	union ad74416h_live_status status;
 	uint32_t adc_value = 0;
 	float Rrtd = 0.0;
+	uint32_t adc_config_value = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -79,11 +80,17 @@ int temperature_2wire_rtd_example_main()
 		goto error_ad74416h;
 	}
 
+	//Select SENSELF to AGND in the ADC input multiplexer
+	ret = ad74416h_set_adc_conv_mux(ad74416h_desc, 0,AD74416H_MUX_LF_TO_AGND);
+
 	//Configure the RTD mode to 2-wire RTD, External RTD reference of 1V, RTD current 500uA
 	ret = ad74416h_reg_write(ad74416h_desc, AD74416H_RTD_CONFIG(0), 0xC);
 
 	//Configure the ADC range to 0 to 12V
 	ret = ad74416h_set_adc_range(ad74416h_desc, 0, AD74416H_RNG_0_12_V);
+
+	//Configure the ADC conversion rate
+	ad74416h_get_adc_rate(ad74416h_desc, 0, AD74416H_20SPS_50_60HZ_REJECTION);
 
 	//Enable ADC A
 	ret = ad74416h_set_adc_channel_enable(ad74416h_desc, 0, 1);
@@ -99,7 +106,7 @@ int temperature_2wire_rtd_example_main()
 		pr_info("Error enabling continuous conversions in ADC A\r\n");
 		goto error_ad74416h;
 	}
-	
+
 	//The following functions needs to be in the appropriate place for the application (while loop, interrupt handler, etc.)
 	while(1)
 	{
