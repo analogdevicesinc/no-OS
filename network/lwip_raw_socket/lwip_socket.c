@@ -379,7 +379,6 @@ platform_remove:
 	param->platform_ops->remove(descriptor->mac_desc);
 free_netif:
 	netif_remove(netif_descriptor);
-free_descriptor:
 	free(descriptor);
 free_netif_descriptor:
 	free(netif_descriptor);

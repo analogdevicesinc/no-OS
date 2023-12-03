@@ -322,7 +322,7 @@ static inline int32_t check_conn_id(struct at_desc *desc, struct at_buff *msg,
 /* Check if an asynchronous messages was sent by the module and update desc */
 static bool is_async_messages(struct at_desc *desc, uint8_t ch)
 {
-	const static struct at_buff async_msgs[NB_ASYNC_MESSAGES] = {
+	static const struct at_buff async_msgs[NB_ASYNC_MESSAGES] = {
 		{PUI8("CLOSED\r\n"), 8},
 		{PUI8("WIFI DISCONNECT\r\n"), 17},
 		{PUI8("WIFI GOT IP\r\n"), 13}
@@ -480,7 +480,7 @@ static void at_callback_error(struct at_desc *desc)
 /* Wait the response for the last command for MODULE_TIMEOUT milliseconds */
 static int32_t wait_for_response(struct at_desc *desc)
 {
-	const static struct at_buff responses[NB_RESPONSE_MESSAGES] = {
+	static const struct at_buff responses[NB_RESPONSE_MESSAGES] = {
 		{PUI8("\r\nERROR\r\n"), 9},
 		{PUI8("\r\nFAIL\r\n"), 8},
 		{PUI8("\r\nOK\r\n"), 6},

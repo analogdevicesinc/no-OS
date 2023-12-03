@@ -143,7 +143,7 @@ char TimerIsExpired(Timer* t)
 /* Implementation of mqtt_noos_read used by MQTTClient.c */
 int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 {
-	uint32_t	sent;
+	int	sent;
 	int32_t		rc;
 
 	if (!len)

@@ -42,7 +42,7 @@
 
 #include "ad717x.h"
 
-ad717x_st_reg ad4111_regs[] = {
+struct ad717x_st_reg ad4111_regs[] = {
 	{ AD717X_STATUS_REG, 0x00, 1 },
 	{
 		AD717X_ADCMODE_REG,

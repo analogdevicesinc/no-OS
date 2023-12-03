@@ -91,7 +91,7 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	return ms;
 }
 
-#if !defined(LINUX_PLATFORM) && !defined(NO_OS_NETWORKING)
+#if !defined(LINUX_PLATFORM) && !defined(NO_OS_NETWORKING) && !defined(NO_OS_LWIP_NETWORKING)
 static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 		struct no_os_uart_init_param *user_uart_params,
 		char *message, int32_t msglen)
@@ -261,7 +261,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 	return no_os_uart_init(uart_desc, &luart_par);
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
+#if defined (ADUCM_PLATFORM) || defined (STM32_PLATFORM)
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
@@ -308,7 +308,9 @@ int iio_app_init(struct iio_app_desc **app,
 	struct iio_data_buffer *buff;
 	unsigned int i;
 	int status;
+#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 	void *irq_desc = app_init_param.irq_desc;
+#endif
 
 	application = (struct iio_app_desc *)no_os_calloc(1, sizeof(*application));
 	if (!application)

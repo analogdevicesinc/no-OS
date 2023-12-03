@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Maxim platform data used by eval-adxl355-pmdz project.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @file   maxim_trng.c
+ *   @brief  MAX32650 implementation of true random number generator
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ *   @copyright
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,44 +41,84 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "parameters.h"
+#include "trng.h"
+#include "maxim_trng.h"
+#include "no_os_util.h"
+#include "no_os_alloc.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Definitions *******************************/
 /******************************************************************************/
-struct max_uart_init_param adxl355_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
-};
 
-#ifdef IIO_TRIGGER_EXAMPLE
-/* Initialization for Sync pin GPIO. */
-struct no_os_gpio_init_param adxl355_gpio_drdy_ip = {
-	.port = GPIO_DRDY_PORT_NUM,
-	.number = GPIO_DRDY_PIN_NUM,
-	.pull = NO_OS_PULL_NONE,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA
-};
+/**
+ * @brief Initialize the device.
+ * @param desc - The device structure.
+ * @param param - The structure that contains the device initial
+ * 		       parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max_trng_init(struct no_os_trng_desc **desc,
+		  struct no_os_trng_init_param *param)
+{
+	int ret;
+	struct no_os_trng_desc *descriptor;
 
-struct max_gpio_init_param adxl355_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-#endif
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	if (!descriptor)
+		return -ENOMEM;
 
-#ifdef IIO_LWIP_EXAMPLE
-struct max_gpio_init_param adin1110_reset_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
+	NO_OS_UNUSED_PARAM(param);
 
-struct max_spi_init_param adin1110_spi_extra_ip  = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-#endif
+	ret = MXC_TRNG_Init();
+	if (ret)
+		goto error;
 
-struct max_spi_init_param adxl355_spi_extra_ip  = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	*desc = descriptor;
+
+	return 0;
+
+error:
+	no_os_free(desc);
+
+	return ret;
+}
+
+/**
+ * @brief Remove the device and release resources.
+ * @param desc - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max_trng_remove(struct no_os_trng_desc *desc)
+{
+	if (!desc)
+		return -EINVAL;
+
+	no_os_free(desc);
+
+	return MXC_TRNG_Shutdown();
+}
+
+/**
+ * @brief Fill buffer with random numbers.
+ * @param desc - The device structure.
+ * @param buff - Buffer to be filled.
+ * @param len - Length of the buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+			 uint32_t len)
+{
+	NO_OS_UNUSED_PARAM(desc);
+
+	return MXC_TRNG_Random(buff, len);
+}
+
+/**
+ * @brief MAX32650 platform specific TRNG platform ops structure
+ */
+const struct no_os_trng_platform_ops max_trng_ops = {
+	.init = &max_trng_init,
+	.fill_buffer = &max_trng_fill_buffer,
+	.remove = &max_trng_remove
 };

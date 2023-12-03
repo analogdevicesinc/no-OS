@@ -245,18 +245,18 @@ struct ad717x_channel_map {
 	union ad717x_analog_inputs analog_inputs;
 };
 
-typedef enum {
+enum ad717x_crc_mode {
 	AD717X_DISABLE,
 	AD717X_USE_CRC,
 	AD717X_USE_XOR,
-} ad717x_crc_mode;
+};
 
 /*! AD717X register info */
-typedef struct {
+struct ad717x_st_reg {
 	int32_t addr;
 	int32_t value;
 	int32_t size;
-} ad717x_st_reg;
+};
 
 /*
  * The structure describes the device and is used with the ad717x driver.
@@ -266,13 +266,13 @@ typedef struct {
  * @num_regs: The length of the register list.
  * @userCRC: Error check type to use on SPI transfers.
  */
-typedef struct {
+struct ad717x_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
 	/* Device Settings */
-	ad717x_st_reg		*regs;
+	struct ad717x_st_reg		*regs;
 	uint8_t			num_regs;
-	ad717x_crc_mode		useCRC;
+	enum ad717x_crc_mode		useCRC;
 	/* Active Device */
 	enum ad717x_device_type active_device;
 	/* Reference enable */
@@ -289,13 +289,13 @@ typedef struct {
 	struct ad717x_filtcon filter_configuration[AD717x_MAX_SETUPS];
 	/* ADC Mode */
 	enum ad717x_mode mode;
-} ad717x_dev;
+} ;
 
-typedef struct {
+struct ad717x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		spi_init;
 	/* Device Settings */
-	ad717x_st_reg		*regs;
+	struct ad717x_st_reg		*regs;
 	uint8_t			num_regs;
 	/* Active Device */
 	enum ad717x_device_type active_device;
@@ -315,7 +315,7 @@ typedef struct {
 	struct ad717x_filtcon filter_configuration[AD717x_MAX_SETUPS];
 	/* ADC Mode */
 	enum ad717x_mode mode;
-} ad717x_init_param;
+};
 
 /*****************************************************************************/
 /***************** AD717X Register Definitions *******************************/
@@ -519,7 +519,7 @@ typedef struct {
 /*****************************************************************************/
 #define AD717X_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
 /* Timeout for ADC Conversion */
-#define AD717X_CONV_TIMEOUT			10000
+#define AD717X_CONV_TIMEOUT			100000
 
 #define AD717x_CHANNEL_INPUT_MASK			NO_OS_GENMASK(9,0)
 #define AD717X_CHMAP_REG_SETUP_SEL_MSK  	NO_OS_GENMASK(14,12)
@@ -534,82 +534,82 @@ typedef struct {
 /*****************************************************************************/
 
 /*! Retrieves a pointer to the register that matches the given address */
-ad717x_st_reg *AD717X_GetReg(ad717x_dev *device,
+struct ad717x_st_reg *ad717x_get_reg(struct ad717x_dev *device,
 			     uint8_t reg_address);
 
 /*! Reads the value of the specified register. */
-int32_t AD717X_ReadRegister(ad717x_dev *device,
+int32_t ad717x_read_register(struct ad717x_dev *device,
 			    uint8_t addr);
 
 /*! Writes the value of the specified register. */
-int32_t AD717X_WriteRegister(ad717x_dev *device,
+int32_t ad717x_write_register(struct ad717x_dev *device,
 			     uint8_t);
 
 /*! Resets the device. */
-int32_t AD717X_Reset(ad717x_dev *device);
+int32_t ad717x_reset(struct ad717x_dev *device);
 
 /*! Waits until a new conversion result is available. */
-int32_t AD717X_WaitForReady(ad717x_dev *device,
+int32_t ad717x_wait_for_ready(struct ad717x_dev *device,
 			    uint32_t timeout);
 
 /*! Reads the conversion result from the device. */
-int32_t AD717X_ReadData(ad717x_dev *device,
+int32_t ad717x_read_data(struct ad717x_dev *device,
 			int32_t* pData);
 
 /*! Computes data register read size to account for bit number and status
  *  read. */
-int32_t AD717X_ComputeDataregSize(ad717x_dev *device);
+int32_t ad717x_compute_datareg_size(struct ad717x_dev *device);
 
 /*! Computes the CRC checksum for a data buffer. */
-uint8_t AD717X_ComputeCRC8(uint8_t* pBuf,
+uint8_t ad717x_compute_crc8(uint8_t* pBuf,
 			   uint8_t bufSize);
 
 /*! Computes the XOR checksum for a data buffer. */
-uint8_t AD717X_ComputeXOR8(uint8_t * pBuf,
+uint8_t ad717x_compute_xor8(uint8_t * pBuf,
 			   uint8_t bufSize);
 
 /*! Updates the CRC settings. */
-int32_t AD717X_UpdateCRCSetting(ad717x_dev *device);
+int32_t ad717x_update_crc_setting(struct ad717x_dev *device);
 
 /*! Initializes the AD717X. */
-int32_t AD717X_Init(ad717x_dev **device,
-		    ad717x_init_param init_param);
+int32_t ad717x_init(struct ad717x_dev **device,
+		    struct ad717x_init_param init_param);
 
-/*! Free the resources allocated by AD717X_Init(). */
-int32_t AD717X_remove(ad717x_dev *dev);
+/*! Free the resources allocated by ad717x_init(). */
+int32_t ad717x_remove(struct ad717x_dev *dev);
 
 /* Enable/Disable Channels */
-int ad717x_set_channel_status(ad717x_dev *device, uint8_t channel_id,
+int ad717x_set_channel_status(struct ad717x_dev *device, uint8_t channel_id,
 			      bool channel_status);
 /* Set ADC Mode */
-int ad717x_set_adc_mode(ad717x_dev *device, enum ad717x_mode mode);
+int ad717x_set_adc_mode(struct ad717x_dev *device, enum ad717x_mode mode);
 
 /* Configure Analog inputs to channel */
-int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
+int ad717x_connect_analog_input(struct ad717x_dev *device, uint8_t channel_id,
 				union ad717x_analog_inputs analog_input);
 
 /* Assign setup to channel */
-int ad717x_assign_setup(ad717x_dev *device, uint8_t channel_id,
+int ad717x_assign_setup(struct ad717x_dev *device, uint8_t channel_id,
 			uint8_t setup);
 
 /* Assign polarity to setup*/
-int ad717x_set_polarity(ad717x_dev* device, bool bipolar,
+int ad717x_set_polarity(struct ad717x_dev* device, bool bipolar,
 			uint8_t setup_id);
 
 /* Assign reference source to setup */
-int ad717x_set_reference_source(ad717x_dev* device,
+int ad717x_set_reference_source(struct ad717x_dev* device,
 				enum ad717x_reference_source ref_source, uint8_t setup_id);
 
 /* Enable/Disable input and reference buffers to setup */
-int ad717x_enable_buffers(ad717x_dev* device, bool inbuf_en,
+int ad717x_enable_buffers(struct ad717x_dev* device, bool inbuf_en,
 			  bool refbuf_en, uint8_t setup_id);
 
 /* Perform single conversion and read sample */
-int ad717x_single_read(ad717x_dev* device, uint8_t id,
+int ad717x_single_read(struct ad717x_dev* device, uint8_t id,
 		       int32_t *adc_raw_data);
 
 /* Configure device ODR */
-int32_t ad717x_configure_device_odr(ad717x_dev *dev, uint8_t filtcon_id,
+int32_t ad717x_configure_device_odr(struct ad717x_dev *dev, uint8_t filtcon_id,
 				    uint8_t odr_sel);
 
 #endif /* __AD717X_H__ */

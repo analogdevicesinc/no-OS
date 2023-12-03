@@ -128,7 +128,7 @@ static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 				void *data, uint32_t size);
 static int32_t wifi_socket_sendto(struct wifi_desc *desc, uint32_t sock_id,
 				  const void *data, uint32_t size,
-				  struct socket_address to);
+				  struct socket_address *to);
 static int32_t wifi_socket_recvfrom(struct wifi_desc *desc, uint32_t sock_id,
 				    void *data, uint32_t size,
 				    struct socket_address *from);
@@ -170,7 +170,7 @@ static inline uint32_t _wifi_get_unused_conn(struct wifi_desc *desc,
 	uint32_t i;
 
 	for (i = 0; i < NB_CLI_SOCKETS; i++)
-		if (desc->conn_id_to_sock_id[i] == INVALID_ID) {
+		if (desc->conn_id_to_sock_id[i] == (int32_t)INVALID_ID) {
 			desc->conn_id_to_sock_id[i] = sock_id;
 			desc->sockets[sock_id].conn_id = i;
 
@@ -268,11 +268,11 @@ static void _wifi_connection_callback(void *ctx, enum at_event event,
 
 	sock_id = desc->conn_id_to_sock_id[conn_id];
 	if (event == AT_NEW_CONNECTION) {
-		if (sock_id != INVALID_ID) {
+		if (sock_id != (int32_t)INVALID_ID) {
 			*cb = desc->sockets[sock_id].cb;
 		} else {
 			sock_id = _get_initialized_client_id(desc);
-			if (sock_id == INVALID_ID) {
+			if (sock_id == (int32_t)INVALID_ID) {
 				*cb = NULL;
 			} else {
 				sock = &desc->sockets[sock_id];
@@ -285,7 +285,7 @@ static void _wifi_connection_callback(void *ctx, enum at_event event,
 
 		}
 	} else if (event == AT_CLOSED_CONNECTION) {
-		if (sock_id != INVALID_ID) {
+		if (sock_id != (int32_t)INVALID_ID) {
 			desc->sockets[sock_id].state = SOCKET_DISCONNECTED;
 			_wifi_release_conn(desc, sock_id);
 		}
@@ -494,7 +494,7 @@ static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 
 static inline bool _is_server_socket(struct wifi_desc *desc, uint32_t sock_id)
 {
-	int32_t i;
+	uint32_t i;
 
 	for (i = 0; i < desc->server.back_log_clients; i++)
 		if (desc->server.client_ids[i] == sock_id)
@@ -696,7 +696,7 @@ static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 /** @brief See \ref network_interface.socket_sendto */
 static int32_t wifi_socket_sendto(struct wifi_desc *desc, uint32_t sock_id,
 				  const void *data, uint32_t size,
-				  const struct socket_address to)
+				  struct socket_address *to)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(sock_id);

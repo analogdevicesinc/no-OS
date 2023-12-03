@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Maxim platform data used by eval-adxl355-pmdz project.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @file   maxim_trng.h
+ *   @brief  MAX32650 specific header for TRNG driver
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,47 +37,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef MAXIM_TRNG_H
+#define MAXIM_TRNG_H
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "parameters.h"
+#include "no_os_trng.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
-struct max_uart_init_param adxl355_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
-};
 
-#ifdef IIO_TRIGGER_EXAMPLE
-/* Initialization for Sync pin GPIO. */
-struct no_os_gpio_init_param adxl355_gpio_drdy_ip = {
-	.port = GPIO_DRDY_PORT_NUM,
-	.number = GPIO_DRDY_PIN_NUM,
-	.pull = NO_OS_PULL_NONE,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA
-};
+/**
+ * @brief Max32650 specific TRNG platform ops structure
+ */
+extern const struct no_os_trng_platform_ops max_trng_ops;
 
-struct max_gpio_init_param adxl355_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-#endif
-
-#ifdef IIO_LWIP_EXAMPLE
-struct max_gpio_init_param adin1110_reset_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
-struct max_spi_init_param adin1110_spi_extra_ip  = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-#endif
-
-struct max_spi_init_param adxl355_spi_extra_ip  = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
+#endif // MAXIM_TRNG_H

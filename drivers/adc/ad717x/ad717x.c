@@ -62,17 +62,17 @@
  *			    	and False in case of Disable
  * @return Returns 0 for success or negative error code in case of failure.
 *******************************************************************************/
-int ad717x_set_channel_status(ad717x_dev *device, uint8_t channel_id,
+int ad717x_set_channel_status(struct ad717x_dev *device, uint8_t channel_id,
 			      bool channel_status)
 {
-	ad717x_st_reg *chn_register;
+	struct ad717x_st_reg *chn_register;
 	int ret;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Point to the Channel register */
-	chn_register = AD717X_GetReg(device, AD717X_CHMAP0_REG + channel_id);
+	chn_register = ad717x_get_reg(device, AD717X_CHMAP0_REG + channel_id);
 	if (!chn_register)
 		return -EINVAL;
 
@@ -82,7 +82,7 @@ int ad717x_set_channel_status(ad717x_dev *device, uint8_t channel_id,
 	else
 		chn_register->value &= ~(AD717X_CHMAP_REG_CH_EN);
 
-	ret = AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id);
+	ret = ad717x_write_register(device, AD717X_CHMAP0_REG + channel_id);
 	if (ret < 0)
 		return ret;
 	device->chan_map[channel_id].channel_enable = channel_status;
@@ -96,15 +96,15 @@ int ad717x_set_channel_status(ad717x_dev *device, uint8_t channel_id,
  * @param adc_mode - ADC Mode to be configured
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_set_adc_mode(ad717x_dev *device, enum ad717x_mode adc_mode)
+int ad717x_set_adc_mode(struct ad717x_dev *device, enum ad717x_mode adc_mode)
 {
-	ad717x_st_reg *adc_mode_reg;
+	struct ad717x_st_reg *adc_mode_reg;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Retrieve the ADC Mode reigster */
-	adc_mode_reg = AD717X_GetReg(device, AD717X_ADCMODE_REG);
+	adc_mode_reg = ad717x_get_reg(device, AD717X_ADCMODE_REG);
 	if (!adc_mode_reg)
 		return -EINVAL;
 
@@ -113,7 +113,7 @@ int ad717x_set_adc_mode(ad717x_dev *device, enum ad717x_mode adc_mode)
 
 	/* Set the required conversion mode, write to register */
 	adc_mode_reg->value |= AD717X_ADCMODE_REG_MODE(adc_mode);
-	if (AD717X_WriteRegister(device, AD717X_ADCMODE_REG) < 0)
+	if (ad717x_write_register(device, AD717X_ADCMODE_REG) < 0)
 		return -EINVAL;
 	device->mode = adc_mode;
 
@@ -127,16 +127,16 @@ int ad717x_set_adc_mode(ad717x_dev *device, enum ad717x_mode adc_mode)
  * @param analog_input - Analog Inputs to the Channel
  * @return Returns 0 for success or negative error code in case of failure.
 *****************************************************************************/
-int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
+int ad717x_connect_analog_input(struct ad717x_dev *device, uint8_t channel_id,
 				union ad717x_analog_inputs analog_input)
 {
-	ad717x_st_reg *channel_reg;
+	struct ad717x_st_reg *channel_reg;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Retrieve the channel register */
-	channel_reg = AD717X_GetReg(device, AD717X_CHMAP0_REG + channel_id);
+	channel_reg = ad717x_get_reg(device, AD717X_CHMAP0_REG + channel_id);
 	if (!channel_reg)
 		return -EINVAL;
 
@@ -149,7 +149,7 @@ int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
 		/* Clear and Set the required analog input pair to channel */
 		channel_reg->value  &= ~AD717x_CHANNEL_INPUT_MASK;
 		channel_reg->value |= AD4111_CHMAP_REG_INPUT(analog_input.analog_input_pairs);
-		if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
+		if (ad717x_write_register(device, AD717X_CHMAP0_REG + channel_id) < 0)
 			return -EINVAL;
 
 		device->chan_map[channel_id].analog_inputs.analog_input_pairs =
@@ -172,7 +172,7 @@ int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
 		channel_reg->value &= ~AD717X_CHMAP_REG_AINNEG_MSK;
 		channel_reg->value |= AD717X_CHMAP_REG_AINNEG(
 					      analog_input.ainp.neg_analog_input);
-		if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
+		if (ad717x_write_register(device, AD717X_CHMAP0_REG + channel_id) < 0)
 			return -EINVAL;
 
 		device->chan_map[channel_id].analog_inputs.ainp.pos_analog_input =
@@ -195,15 +195,15 @@ int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
  * @param setup - Setup ID (number)
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_assign_setup(ad717x_dev *device, uint8_t channel_id, uint8_t setup)
+int ad717x_assign_setup(struct ad717x_dev *device, uint8_t channel_id, uint8_t setup)
 {
-	ad717x_st_reg *p_register;
+	struct ad717x_st_reg *p_register;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Retrieve the Channel Register */
-	p_register = AD717X_GetReg(device, AD717X_CHMAP0_REG + channel_id);
+	p_register = ad717x_get_reg(device, AD717X_CHMAP0_REG + channel_id);
 	if (!p_register)
 		return -EINVAL;
 
@@ -211,7 +211,7 @@ int ad717x_assign_setup(ad717x_dev *device, uint8_t channel_id, uint8_t setup)
 	p_register->value &= ~AD717X_CHMAP_REG_SETUP_SEL_MSK;
 	p_register->value |= AD717X_CHMAP_REG_SETUP_SEL(setup);
 
-	if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
+	if (ad717x_write_register(device, AD717X_CHMAP0_REG + channel_id) < 0)
 		return -EINVAL;
 	device->chan_map[channel_id].setup_sel = setup;
 
@@ -225,15 +225,15 @@ int ad717x_assign_setup(ad717x_dev *device, uint8_t channel_id, uint8_t setup)
  * @param setup_id - Setup ID (number)
  * @return Returns 0 for success or negative error code in case of failure.
 *****************************************************************************/
-int ad717x_set_polarity(ad717x_dev* device, bool bipolar, uint8_t setup_id)
+int ad717x_set_polarity(struct ad717x_dev* device, bool bipolar, uint8_t setup_id)
 {
-	ad717x_st_reg* setup_reg;
+	struct ad717x_st_reg* setup_reg;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Retrieve the SETUPCON Register */
-	setup_reg = AD717X_GetReg(device, AD717X_SETUPCON0_REG + setup_id);
+	setup_reg = ad717x_get_reg(device, AD717X_SETUPCON0_REG + setup_id);
 	if (!setup_reg)
 		return -EINVAL;
 
@@ -243,7 +243,7 @@ int ad717x_set_polarity(ad717x_dev* device, bool bipolar, uint8_t setup_id)
 	else
 		setup_reg->value &= ~(AD717X_SETUP_CONF_REG_BI_UNIPOLAR);
 
-	if (AD717X_WriteRegister(device,
+	if (ad717x_write_register(device,
 				 AD717X_SETUPCON0_REG + setup_id) < 0)
 		return -EINVAL;
 	device->setups[setup_id].bi_unipolar = bipolar;
@@ -258,17 +258,17 @@ int ad717x_set_polarity(ad717x_dev* device, bool bipolar, uint8_t setup_id)
  * @param setup_id - Setup ID (Number)
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_set_reference_source(ad717x_dev* device,
+int ad717x_set_reference_source(struct ad717x_dev* device,
 				enum ad717x_reference_source ref_source, uint8_t setup_id)
 {
-	ad717x_st_reg* setup_reg;
-	ad717x_st_reg *adc_mode_reg;
+	struct ad717x_st_reg* setup_reg;
+	struct ad717x_st_reg *adc_mode_reg;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Retrieve the SETUPCON Register */
-	setup_reg = AD717X_GetReg(device, AD717X_SETUPCON0_REG + setup_id);
+	setup_reg = ad717x_get_reg(device, AD717X_SETUPCON0_REG + setup_id);
 	if (!setup_reg)
 		return -EINVAL;
 
@@ -276,7 +276,7 @@ int ad717x_set_reference_source(ad717x_dev* device,
 	setup_reg->value &= ~AD717X_SETUP_CONF_REG_REF_SEL_MSK;
 	setup_reg->value |= (AD717X_SETUP_CONF_REG_REF_SEL(ref_source));
 
-	if (AD717X_WriteRegister(device,
+	if (ad717x_write_register(device,
 				 AD717X_SETUPCON0_REG + setup_id) < 0)
 		return -EINVAL;
 	device->setups[setup_id].ref_source = ref_source;
@@ -284,13 +284,13 @@ int ad717x_set_reference_source(ad717x_dev* device,
 	/* Enable the REF_EN Bit in case of Internal reference */
 	if (ref_source == INTERNAL_REF) {
 		/* Retrieve the ADC Mode reigster */
-		adc_mode_reg = AD717X_GetReg(device, AD717X_ADCMODE_REG);
+		adc_mode_reg = ad717x_get_reg(device, AD717X_ADCMODE_REG);
 		if (!adc_mode_reg)
 			return -EINVAL;
 
 		/* Set the REF_EN Bit */
 		adc_mode_reg->value |= AD717X_ADCMODE_REG_REF_EN;
-		if (AD717X_WriteRegister(device, AD717X_ADCMODE_REG) < 0)
+		if (ad717x_write_register(device, AD717X_ADCMODE_REG) < 0)
 			return -EINVAL;
 		device->ref_en = true;
 	}
@@ -306,16 +306,16 @@ int ad717x_set_reference_source(ad717x_dev* device,
  * @param setup_id - Setup ID (Number)
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_enable_input_buffer(ad717x_dev* device,
+int ad717x_enable_input_buffer(struct ad717x_dev* device,
 			       bool inbuf_en, bool refbuf_en, uint8_t setup_id)
 {
-	ad717x_st_reg* setup_reg;
+	struct ad717x_st_reg* setup_reg;
 
 	if (!device)
 		return -EINVAL;
 
 	/* Retrieve the SETUPCON Register */
-	setup_reg = AD717X_GetReg(device, AD717X_SETUPCON0_REG + setup_id);
+	setup_reg = ad717x_get_reg(device, AD717X_SETUPCON0_REG + setup_id);
 	if (!setup_reg)
 		return -EINVAL;
 
@@ -334,7 +334,7 @@ int ad717x_enable_input_buffer(ad717x_dev* device,
 		setup_reg->value &= (~(AD717X_SETUP_CONF_REG_REFBUF_P |
 				       AD717X_SETUP_CONF_REG_REFBUF_N));
 
-	if (AD717X_WriteRegister(device,
+	if (ad717x_write_register(device,
 				 AD717X_SETUPCON0_REG + setup_id) < 0)
 		return -EINVAL;
 	device->setups[setup_id].input_buff = inbuf_en;
@@ -350,7 +350,7 @@ int ad717x_enable_input_buffer(ad717x_dev* device,
  * @param adc_raw_data ADC Raw Value
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_single_read(ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
+int ad717x_single_read(struct ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
 {
 	int ret;
 
@@ -365,12 +365,12 @@ int ad717x_single_read(ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
 		return ret;
 
 	/* Wait for Conversion completion */
-	ret = AD717X_WaitForReady(device, AD717X_CONV_TIMEOUT);
+	ret = ad717x_wait_for_ready(device, AD717X_CONV_TIMEOUT);
 	if (ret < 0)
 		return ret;
 
 	/* Read the data register */
-	ret = AD717X_ReadData(device, adc_raw_data);
+	ret = ad717x_read_data(device, adc_raw_data);
 	if (ret < 0)
 		return ret;
 
@@ -387,11 +387,11 @@ int ad717x_single_read(ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
 *
 * @return A pointer to the register if found or 0.
 *******************************************************************************/
-ad717x_st_reg *AD717X_GetReg(ad717x_dev *device,
+struct ad717x_st_reg *ad717x_get_reg(struct ad717x_dev *device,
 			     uint8_t reg_address)
 {
 	uint8_t i;
-	ad717x_st_reg *reg = 0;
+	struct ad717x_st_reg *reg = 0;
 
 	if (!device || !device->regs)
 		return 0;
@@ -415,7 +415,7 @@ ad717x_st_reg *AD717X_GetReg(ad717x_dev *device,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_ReadRegister(ad717x_dev *device,
+int32_t ad717x_read_register(struct ad717x_dev *device,
 			    uint8_t addr)
 {
 	int32_t ret       = 0;
@@ -423,12 +423,12 @@ int32_t AD717X_ReadRegister(ad717x_dev *device,
 	uint8_t i         = 0;
 	uint8_t check8    = 0;
 	uint8_t msgBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	ad717x_st_reg *pReg;
+	struct ad717x_st_reg *pReg;
 
 	if(!device)
 		return INVALID_VAL;
 
-	pReg = AD717X_GetReg(device, addr);
+	pReg = ad717x_get_reg(device, addr);
 	if (!pReg)
 		return INVALID_VAL;
 
@@ -451,7 +451,7 @@ int32_t AD717X_ReadRegister(ad717x_dev *device,
 		for(i = 1; i < pReg->size + 2; ++i) {
 			msgBuf[i] = buffer[i];
 		}
-		check8 = AD717X_ComputeCRC8(msgBuf, pReg->size + 2);
+		check8 = ad717x_compute_crc8(msgBuf, pReg->size + 2);
 	}
 	if(device->useCRC == AD717X_USE_XOR) {
 		msgBuf[0] = AD717X_COMM_REG_WEN | AD717X_COMM_REG_RD |
@@ -459,7 +459,7 @@ int32_t AD717X_ReadRegister(ad717x_dev *device,
 		for(i = 1; i < pReg->size + 2; ++i) {
 			msgBuf[i] = buffer[i];
 		}
-		check8 = AD717X_ComputeXOR8(msgBuf, pReg->size + 2);
+		check8 = ad717x_compute_xor8(msgBuf, pReg->size + 2);
 	}
 
 	if(check8 != 0) {
@@ -487,7 +487,7 @@ int32_t AD717X_ReadRegister(ad717x_dev *device,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_WriteRegister(ad717x_dev *device,
+int32_t ad717x_write_register(struct ad717x_dev *device,
 			     uint8_t addr)
 {
 	int32_t ret      = 0;
@@ -495,12 +495,12 @@ int32_t AD717X_WriteRegister(ad717x_dev *device,
 	uint8_t wrBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	uint8_t i        = 0;
 	uint8_t crc8     = 0;
-	ad717x_st_reg *preg;
+	struct ad717x_st_reg *preg;
 
 	if(!device)
 		return INVALID_VAL;
 
-	preg = AD717X_GetReg(device, addr);
+	preg = ad717x_get_reg(device, addr);
 	if (!preg)
 		return INVALID_VAL;
 
@@ -517,7 +517,7 @@ int32_t AD717X_WriteRegister(ad717x_dev *device,
 
 	/* Compute the CRC */
 	if(device->useCRC != AD717X_DISABLE) {
-		crc8 = AD717X_ComputeCRC8(wrBuf, preg->size + 1);
+		crc8 = ad717x_compute_crc8(wrBuf, preg->size + 1);
 		wrBuf[preg->size + 1] = crc8;
 	}
 
@@ -537,7 +537,7 @@ int32_t AD717X_WriteRegister(ad717x_dev *device,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_Reset(ad717x_dev *device)
+int32_t ad717x_reset(struct ad717x_dev *device)
 {
 	int32_t ret = 0;
 	uint8_t wrBuf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -561,23 +561,23 @@ int32_t AD717X_Reset(ad717x_dev *device)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_WaitForReady(ad717x_dev *device,
+int32_t ad717x_wait_for_ready(struct ad717x_dev *device,
 			    uint32_t timeout)
 {
-	ad717x_st_reg *statusReg;
+	struct ad717x_st_reg *statusReg;
 	int32_t ret;
 	int8_t ready = 0;
 
 	if(!device || !device->regs)
 		return INVALID_VAL;
 
-	statusReg = AD717X_GetReg(device, AD717X_STATUS_REG);
+	statusReg = ad717x_get_reg(device, AD717X_STATUS_REG);
 	if (!statusReg)
 		return INVALID_VAL;
 
 	while(!ready && --timeout) {
 		/* Read the value of the Status Register */
-		ret = AD717X_ReadRegister(device, AD717X_STATUS_REG);
+		ret = ad717x_read_register(device, AD717X_STATUS_REG);
 		if(ret < 0)
 			return ret;
 
@@ -596,24 +596,24 @@ int32_t AD717X_WaitForReady(ad717x_dev *device,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_ReadData(ad717x_dev *device,
+int32_t ad717x_read_data(struct ad717x_dev *device,
 			int32_t* pData)
 {
-	ad717x_st_reg *dataReg;
+	struct ad717x_st_reg *dataReg;
 	int32_t ret;
 
 	if(!device || !device->regs)
 		return INVALID_VAL;
 
-	dataReg = AD717X_GetReg(device, AD717X_DATA_REG);
+	dataReg = ad717x_get_reg(device, AD717X_DATA_REG);
 	if (!dataReg)
 		return INVALID_VAL;
 
 	/* Update the data register length with respect to device and options */
-	ret = AD717X_ComputeDataregSize(device);
+	ret = ad717x_compute_datareg_size(device);
 
 	/* Read the value of the Status Register */
-	ret |= AD717X_ReadRegister(device, AD717X_DATA_REG);
+	ret |= ad717x_read_register(device, AD717X_DATA_REG);
 
 	/* Get the read result */
 	*pData = dataReg->value;
@@ -629,16 +629,16 @@ int32_t AD717X_ReadData(ad717x_dev *device,
 *
 * @return 0in case of success or negative code in case of failure.
 *******************************************************************************/
-int32_t AD717X_ComputeDataregSize(ad717x_dev *device)
+int32_t ad717x_compute_datareg_size(struct ad717x_dev *device)
 {
-	ad717x_st_reg *reg_ptr;
-	ad717x_st_reg *datareg_ptr;
+	struct ad717x_st_reg *reg_ptr;
+	struct ad717x_st_reg *datareg_ptr;
 	uint16_t case_var;
 
 	/* Get interface mode register pointer */
-	reg_ptr = AD717X_GetReg(device, AD717X_IFMODE_REG);
+	reg_ptr = ad717x_get_reg(device, AD717X_IFMODE_REG);
 	/* Get data register pointer */
-	datareg_ptr = AD717X_GetReg(device, AD717X_DATA_REG);
+	datareg_ptr = ad717x_get_reg(device, AD717X_DATA_REG);
 	case_var = reg_ptr->value & (AD717X_IFMODE_REG_DATA_STAT |
 				     AD717X_IFMODE_REG_DATA_WL16);
 
@@ -650,7 +650,7 @@ int32_t AD717X_ComputeDataregSize(ad717x_dev *device)
 		datareg_ptr->size++;
 
 	/* Get ID register pointer */
-	reg_ptr = AD717X_GetReg(device, AD717X_ID_REG);
+	reg_ptr = ad717x_get_reg(device, AD717X_ID_REG);
 
 	/* If the part is 32/24 bit wide add a byte to the read */
 	if((reg_ptr->value & AD717X_ID_REG_MASK) == AD7177_2_ID_REG_VALUE)
@@ -667,7 +667,7 @@ int32_t AD717X_ComputeDataregSize(ad717x_dev *device)
 *
 * @return Returns the computed CRC checksum.
 *******************************************************************************/
-uint8_t AD717X_ComputeCRC8(uint8_t * pBuf,
+uint8_t ad717x_compute_crc8(uint8_t * pBuf,
 			   uint8_t bufSize)
 {
 	uint8_t i   = 0;
@@ -697,7 +697,7 @@ uint8_t AD717X_ComputeCRC8(uint8_t * pBuf,
 *
 * @return Returns the computed XOR checksum.
 *******************************************************************************/
-uint8_t AD717X_ComputeXOR8(uint8_t * pBuf,
+uint8_t ad717x_compute_xor8(uint8_t * pBuf,
 			   uint8_t bufSize)
 {
 	uint8_t xor = 0;
@@ -717,14 +717,14 @@ uint8_t AD717X_ComputeXOR8(uint8_t * pBuf,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_UpdateCRCSetting(ad717x_dev *device)
+int32_t ad717x_update_crc_setting(struct ad717x_dev *device)
 {
-	ad717x_st_reg *interfaceReg;
+	struct ad717x_st_reg *interfaceReg;
 
 	if(!device || !device->regs)
 		return INVALID_VAL;
 
-	interfaceReg = AD717X_GetReg(device, AD717X_IFMODE_REG);
+	interfaceReg = ad717x_get_reg(device, AD717X_IFMODE_REG);
 	if (!interfaceReg)
 		return INVALID_VAL;
 
@@ -747,15 +747,15 @@ int32_t AD717X_UpdateCRCSetting(ad717x_dev *device)
  * @param odr_sel - ODR[4:0] bitfield value as a decimal
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t ad717x_configure_device_odr(ad717x_dev *dev,
+int32_t ad717x_configure_device_odr(struct ad717x_dev *dev,
 				    uint8_t filtcon_id,
 				    uint8_t odr_sel)
 {
-	ad717x_st_reg *filtcon_reg;
+	struct ad717x_st_reg *filtcon_reg;
 	int32_t ret;
 
 	/* Retrieve the FILTCON register */
-	filtcon_reg = AD717X_GetReg(dev,
+	filtcon_reg = ad717x_get_reg(dev,
 				    AD717X_FILTCON0_REG + filtcon_id);
 	if (!filtcon_reg) {
 		return -EINVAL;
@@ -765,7 +765,7 @@ int32_t ad717x_configure_device_odr(ad717x_dev *dev,
 	filtcon_reg->value &= ~(AD717x_ODR_MSK);
 	filtcon_reg->value |= AD717X_FILT_CONF_REG_ODR(odr_sel);
 
-	ret = AD717X_WriteRegister(dev, AD717X_FILTCON0_REG + filtcon_id);
+	ret = ad717x_write_register(dev, AD717X_FILTCON0_REG + filtcon_id);
 	if (ret) {
 		return ret;
 	}
@@ -782,16 +782,16 @@ int32_t ad717x_configure_device_odr(ad717x_dev *dev,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_Init(ad717x_dev **device,
-		    ad717x_init_param init_param)
+int32_t ad717x_init(struct ad717x_dev **device,
+		    struct ad717x_init_param init_param)
 {
-	ad717x_dev *dev;
+	struct ad717x_dev *dev;
 	int32_t ret;
-	ad717x_st_reg *preg;
+	struct ad717x_st_reg *preg;
 	uint8_t setup_index;
 	uint8_t ch_index;
 
-	dev = (ad717x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad717x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -804,27 +804,27 @@ int32_t AD717X_Init(ad717x_dev **device,
 		return ret;
 
 	/*  Reset the device interface.*/
-	ret = AD717X_Reset(dev);
+	ret = ad717x_reset(dev);
 	if (ret < 0)
 		return ret;
 
 	/* Initialize ADC mode register. */
-	ret = AD717X_WriteRegister(dev, AD717X_ADCMODE_REG);
+	ret = ad717x_write_register(dev, AD717X_ADCMODE_REG);
 	if(ret < 0)
 		return ret;
 
 	/* Initialize Interface mode register. */
-	ret = AD717X_WriteRegister(dev, AD717X_IFMODE_REG);
+	ret = ad717x_write_register(dev, AD717X_IFMODE_REG);
 	if(ret < 0)
 		return ret;
 
 	/* Get CRC State */
-	ret = AD717X_UpdateCRCSetting(dev);
+	ret = ad717x_update_crc_setting(dev);
 	if(ret < 0)
 		return ret;
 
 	/* Initialize registers AD717X_GPIOCON_REG through AD717X_OFFSET0_REG */
-	preg = AD717X_GetReg(dev, AD717X_GPIOCON_REG);
+	preg = ad717x_get_reg(dev, AD717X_GPIOCON_REG);
 	if (!preg)
 		return INVALID_VAL;
 
@@ -834,14 +834,14 @@ int32_t AD717X_Init(ad717x_dev **device,
 			continue;
 		}
 
-		ret = AD717X_WriteRegister(dev, preg->addr);
+		ret = ad717x_write_register(dev, preg->addr);
 		if (ret < 0)
 			break;
 		preg ++;
 	}
 
 	/* Read ID register to identify the part */
-	ret = AD717X_ReadRegister(dev, AD717X_ID_REG);
+	ret = ad717x_read_register(dev, AD717X_ID_REG);
 	if(ret < 0)
 		return ret;
 	dev->active_device = init_param.active_device;
@@ -902,11 +902,11 @@ int32_t AD717X_Init(ad717x_dev **device,
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD717X_Init().
+ * @brief Free the resources allocated by ad717x_init().
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD717X_remove(ad717x_dev *dev)
+int32_t ad717x_remove(struct ad717x_dev *dev)
 {
 	int32_t ret;
 
