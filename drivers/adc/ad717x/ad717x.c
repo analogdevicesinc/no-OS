@@ -782,7 +782,7 @@ int32_t ad717x_configure_device_odr(ad717x_dev *dev,
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD717X_Init(ad717x_dev **device,
+int32_t ad717x_init(ad717x_dev **device,
 		    ad717x_init_param init_param)
 {
 	ad717x_dev *dev;
@@ -902,11 +902,11 @@ int32_t AD717X_Init(ad717x_dev **device,
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD717X_Init().
+ * @brief Free the resources allocated by ad717x_init().
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD717X_remove(ad717x_dev *dev)
+int32_t ad717x_remove(ad717x_dev *dev)
 {
 	int32_t ret;
 

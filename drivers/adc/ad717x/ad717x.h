@@ -572,11 +572,11 @@ uint8_t AD717X_ComputeXOR8(uint8_t * pBuf,
 int32_t AD717X_UpdateCRCSetting(ad717x_dev *device);
 
 /*! Initializes the AD717X. */
-int32_t AD717X_Init(ad717x_dev **device,
+int32_t ad717x_init(ad717x_dev **device,
 		    ad717x_init_param init_param);
 
-/*! Free the resources allocated by AD717X_Init(). */
-int32_t AD717X_remove(ad717x_dev *dev);
+/*! Free the resources allocated by ad717x_init(). */
+int32_t ad717x_remove(ad717x_dev *dev);
 
 /* Enable/Disable Channels */
 int ad717x_set_channel_status(ad717x_dev *device, uint8_t channel_id,
