@@ -6,7 +6,7 @@ SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c
 	
 ifeq (y,$(strip $(IIOD)))
-SRCS += $(PLATFORM_DRIVERS)/$xilinx_uart.c
+SRCS += $(PLATFORM_DRIVERS)/xilinx_uart.c
 endif
 	
 INCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
