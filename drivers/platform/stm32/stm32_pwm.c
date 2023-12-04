@@ -107,7 +107,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	if (sparam->get_timer_clock) {
 		timer_frequency_hz = sparam->get_timer_clock();
 		timer_frequency_hz *= sparam->clock_divider;
-		timer_frequency_hz /= sparam->prescaler;
+		timer_frequency_hz /= (sparam->prescaler + 1);
 		period = _compute_period_ticks(desc, timer_frequency_hz, param->period_ns);
 	} else {
 		period = PWM_DEFAULT_PERIOD - 1;
@@ -274,7 +274,7 @@ static int32_t stm32_init_pwm(struct stm32_pwm_desc *desc,
 
 	/* Calculate the percentage duty cycle */
 	duty_cycle_percentage = ((float)param->duty_cycle_ns / param->period_ns) * 100;
-	pwm_pulse_width = (uint32_t)((period + 1) * duty_cycle_percentage) / (100 - 1);
+	pwm_pulse_width = (uint32_t)((period + 1) * duty_cycle_percentage) / (100);
 
 	sConfigOC.OCMode = ocmode;
 	sConfigOC.Pulse = pwm_pulse_width;
@@ -480,6 +480,8 @@ int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 	param.duty_cycle_ns = desc->duty_cycle_ns;
 	param.period_ns = period_ns;
 	param.phase_ns = desc->phase_ns;
+	param.pwm_callback = desc->pwm_callback;
+	param.irq_id = desc->irq_id;
 	sparam.clock_divider = ((struct stm32_pwm_desc *)desc->extra)->clock_divider;
 	sparam.prescaler = ((struct stm32_pwm_desc *)desc->extra)->prescaler;
 	sparam.timer_autoreload = ((struct stm32_pwm_desc *)
@@ -487,6 +489,7 @@ int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 	sparam.get_timer_clock = ((struct stm32_pwm_desc *)
 				  desc->extra)->get_timer_clock;
 	sparam.timer_chn = ((struct stm32_pwm_desc *)desc->extra)->timer_chn;
+	sparam.timer_callback = ((struct stm32_pwm_desc*)desc->extra)->timer_callback;
 	param.extra = &sparam;
 
 	if (!desc || !desc->extra)
@@ -517,7 +520,7 @@ int32_t stm32_pwm_get_period(struct no_os_pwm_desc *desc,
 
 	struct stm32_pwm_desc *sparam = desc->extra;
 	timer_hz = sparam->get_timer_clock() * sparam->clock_divider;
-	timer_hz /= NO_OS_BIT(sparam->prescaler);
+	timer_hz /= (sparam->prescaler + 1);
 
 	*period_ns = (uint32_t)((sparam->htimer.Init.Period + 1) *
 				(FREQUENCY_HZ_TO_TIME_NS_FACTOR / timer_hz));
@@ -546,6 +549,8 @@ int32_t stm32_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	param.phase_ns = desc->phase_ns;
 	sparam.mode = ((struct stm32_pwm_desc *)desc->extra)->mode;
 	sparam.timer_chn = ((struct stm32_pwm_desc *)desc->extra)->timer_chn;
+	sparam.complementary_channel = ((struct stm32_pwm_desc*)
+					desc->extra)->complementary_channel;
 	param.extra = &sparam;
 
 	ret = stm32_init_pwm(desc->extra, &param);
