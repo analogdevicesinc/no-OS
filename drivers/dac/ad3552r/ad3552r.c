@@ -431,6 +431,7 @@ int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 	msgs[0].tx_buff = &instr;
 	msgs[0].bytes_number = 1;
 	msgs[1].bytes_number = data->len;
+	msgs[1].cs_change = true;
 	if (data->is_read)
 		msgs[1].rx_buff = data->data;
 	else
