@@ -145,6 +145,36 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		base = TIM6;
 		break;
 #endif
+#if defined(TIM7)
+	case 7:
+		base = TIM7;
+		break;
+#endif
+#if defined(TIM8)
+	case 8:
+		base = TIM8;
+		break;
+#endif
+#if defined(TIM9)
+	case 9:
+		base = TIM9;
+		break;
+#endif
+#if defined(TIM10)
+	case 10:
+		base = TIM10;
+		break;
+#endif
+#if defined(TIM11)
+	case 11:
+		base = TIM11;
+		break;
+#endif
+#if defined(TIM12)
+	case 12:
+		base = TIM12;
+		break;
+#endif
 	default:
 		ret = -EINVAL;
 		goto error;
