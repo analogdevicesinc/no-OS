@@ -1,0 +1,10 @@
+{
+  "stm32": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n AD4055=y HARDWARE=nucleo-h503rb.ioc"
+    },
+    "iio_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y AD4055=y HARDWARE=nucleo-h503rb.ioc"
+    }
+  }
+}
