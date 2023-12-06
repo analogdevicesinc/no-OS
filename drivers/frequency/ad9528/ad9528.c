@@ -388,6 +388,8 @@ int32_t ad9528_clk_recalc_rate(struct no_os_clk_desc *desc,
 		val /= AD9528_CLK_DIST_DIV_REV(reg_val);
 	}
 
+	*rate = val;
+
 	return 0;
 }
 
