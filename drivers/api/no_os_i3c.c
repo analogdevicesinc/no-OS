@@ -44,6 +44,80 @@
 #include "no_os_mutex.h"
 #include "no_os_alloc.h"
 
+static enum i3c_addr_slot_status
+no_os_i3c_addr_get_status(struct no_os_i3c_master_desc *desc, uint8_t addr)
+{
+	int status, bitpos = addr * 2;
+
+	if (addr > I2C_MAX_ADDR)
+		return I3C_ADDR_SLOT_RSVD;
+
+	status = desc->addrslots[bitpos / NO_OS_BITS_PER_LONG];
+	status >>= bitpos % NO_OS_BITS_PER_LONG;
+
+	return status & I3C_ADDR_SLOT_STATUS_MASK;
+}
+
+void no_os_i3c_addr_set_status(struct no_os_i3c_master_desc *desc,
+		       uint8_t addr, enum i3c_addr_slot_status status)
+{
+	int bitpos = addr * 2;
+	uint32_t *ptr;
+
+	if (addr > I2C_MAX_ADDR)
+		return;
+
+	ptr = desc->addrslots + (bitpos / NO_OS_BITS_PER_LONG);
+	*ptr &= ~((unsigned long)I3C_ADDR_SLOT_STATUS_MASK <<
+						(bitpos % NO_OS_BITS_PER_LONG));
+	*ptr |= (unsigned long)status << (bitpos % NO_OS_BITS_PER_LONG);
+}
+
+// TODO Are we even going to check for addr collision?
+static bool no_os_i3c_addr_is_avail(struct no_os_i3c_master_desc *desc,
+		       uint8_t addr)
+{
+	enum i3c_addr_slot_status status;
+
+	status = no_os_i3c_addr_get_status(desc, addr);
+
+	return status == I3C_ADDR_SLOT_FREE;
+}
+
+int32_t no_os_i3c_addr_get_free(struct no_os_i3c_master_desc *desc,
+		       uint8_t start_addr)
+{
+	enum i3c_addr_slot_status status;
+	uint8_t addr;
+
+	for (addr = start_addr; addr < I3C_MAX_ADDR; addr++) {
+		status = no_os_i3c_addr_get_status(desc, addr);
+		if (status == I3C_ADDR_SLOT_FREE)
+			return addr;
+	}
+
+	return -ENOMEM;
+}
+
+static void no_os_i3c_addr_init(struct no_os_i3c_master_desc *desc)
+{
+	int i;
+
+	/* Addresses 0 to 7 are reserved. */
+	for (i = 0; i < 8; i++)
+		no_os_i3c_addr_set_status(desc, i, I3C_ADDR_SLOT_RSVD);
+
+	/*
+	 * Reserve broadcast address and all addresses that might collide
+	 * with the broadcast address when facing a single bit error.
+	 */
+	no_os_i3c_addr_set_status(desc, I3C_BROADCAST_ADDR,
+				     I3C_ADDR_SLOT_RSVD);
+	for (i = 0; i < 7; i++)
+		no_os_i3c_addr_set_status(desc, I3C_BROADCAST_ADDR ^ NO_OS_BIT(i),
+					     I3C_ADDR_SLOT_RSVD);
+}
+
 /**
  * @brief Initialize the I3C communication peripheral.
  * @param desc - The I3C descriptor.
@@ -71,6 +145,26 @@ int32_t no_os_i3c_init(struct no_os_i3c_master_desc **desc,
 	if (ret)
 		goto err_init;
 
+	no_os_i3c_addr_init(*desc);
+
+	/*
+	 * Attach all devices with static address, and set status for addr.
+	 */
+	struct no_os_i3c_slave_desc **it = i3c_devs_desc;
+	for (; it < i3c_devs_stop_addr; it++) {
+		// TODO Nullyfy i3c_devs_desc first
+		if (!*it)
+			continue;
+
+		if ((*it)->device_id == device_id) {
+			(*it)->is_attached = 1;
+			if ((*it)->is_i3c) {
+				if ((*it)->is_static)
+					no_os_i3c_addr_set_status(*desc, (*it)->addr, I3C_ADDR_SLOT_I3C_DEV);
+			} else
+				no_os_i3c_addr_set_status(*desc, (*it)->addr, I3C_ADDR_SLOT_I2C_DEV);
+		}
+	}
 	return 0;
 
 
@@ -120,21 +214,6 @@ int32_t no_os_i3c_do_daa(struct no_os_i3c_master_desc *desc)
 
 	if (!desc->platform_ops->i3c_ops_do_daa)
 		return -ENOSYS;
-
-	/*
-	 * Attach all devices with static address.
-	 */
-	struct no_os_i3c_slave_desc **it = i3c_devs_desc;
-	for (; it < i3c_devs_stop_addr; it++) {
-		// TODO Nullyfy i3c_devs_desc first
-		if (!*it)
-			continue;
-
-		if ((*it)->device_id == desc->device_id && (*it)->is_static &&
-			(*it)->is_i3c && !(*it)->is_attached) {
-			(*it)->is_attached = 1;
-		}
-	}
 
 	/*
 	 * Reset all dynamic address that may have been assigned before

@@ -79,6 +79,7 @@
   */
 void HAL_I3C_TgtReqDynamicAddrCallback(I3C_HandleTypeDef *hi3c, uint64_t targetPayload)
 {
+	uint8_t addr;
 	struct stm32_i3c_desc *sdesc;
 	// Search for peripheral with pid
 	struct no_os_i3c_slave_desc **it = i3c_devs_desc;
@@ -86,22 +87,24 @@ void HAL_I3C_TgtReqDynamicAddrCallback(I3C_HandleTypeDef *hi3c, uint64_t targetP
 		if (!*it)
 			continue;
 		sdesc = (*it)->controller->extra;
-		if (&sdesc->hi3c == hi3c &&
-			targetPayload >> 16 ==(*it)->pid && (*it)->is_i3c) {
+		if (&sdesc->hi3c == hi3c && targetPayload >> 16 == (*it)->pid)
 			break;
-		}
 	}
 	// If slave is unknown, assign other dynamic address.
 	if (it == i3c_devs_stop_addr) {
-		// TODO HAL_I3C_Ctrl_SetDynAddr(hi3c, get_other_dynamic_addr());
+		addr = no_os_i3c_addr_get_free((*--it)->controller, 8);
+		no_os_i3c_addr_set_status((*it)->controller, addr, I3C_ADDR_SLOT_I3C_DEV);
+		HAL_I3C_Ctrl_SetDynAddr(hi3c, addr);
 		return;
 	}
 
 	/* Store BCR and DCR */
 	(*it)->bcr_dcr = targetPayload;
 	/* Send associated dynamic address */
-	HAL_I3C_Ctrl_SetDynAddr(hi3c, (*it)->addr);
+	addr = (*it)->addr;
 	(*it)->is_attached = 1;
+	no_os_i3c_addr_set_status((*it)->controller, addr, I3C_ADDR_SLOT_I3C_DEV);
+	HAL_I3C_Ctrl_SetDynAddr(hi3c, addr);
 }
 
 /**

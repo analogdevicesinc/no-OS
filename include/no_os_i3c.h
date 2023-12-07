@@ -45,12 +45,40 @@
 /******************************************************************************/
 
 #include <stdint.h>
+#include "no_os_util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
 #define I3C_MAX_BUS_NUMBER 4
+#define I2C_MAX_ADDR NO_OS_GENMASK(6, 0)
+// TODO or if non constant GENMASK implementation
+//#define I2C_MAX_ADDR 0x7f
+#define I3C_MAX_ADDR I2C_MAX_ADDR
+#define I3C_BROADCAST_ADDR		0x7e
+
+/**
+ * enum i3c_addr_slot_status - I3C address slot status
+ * @I3C_ADDR_SLOT_FREE: address is free
+ * @I3C_ADDR_SLOT_RSVD: address is reserved
+ * @I3C_ADDR_SLOT_I2C_DEV: address is assigned to an I2C device
+ * @I3C_ADDR_SLOT_I3C_DEV: address is assigned to an I3C device
+ * @I3C_ADDR_SLOT_STATUS_MASK: address slot mask
+ *
+ * On an I3C bus, addresses are assigned dynamically, and we need to know which
+ * addresses are free to use and which ones are already assigned.
+ *
+ * Addresses marked as reserved are those reserved by the I3C protocol
+ * (broadcast address, ...).
+ */
+enum i3c_addr_slot_status {
+	I3C_ADDR_SLOT_FREE,
+	I3C_ADDR_SLOT_RSVD,
+	I3C_ADDR_SLOT_I2C_DEV,
+	I3C_ADDR_SLOT_I3C_DEV,
+	I3C_ADDR_SLOT_STATUS_MASK = 3,
+};
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -83,6 +111,9 @@ extern struct no_os_i3c_slave_desc **i3c_devs_stop_addr;
 
 /**
  * @struct no_os_i3c_master_desc
+ * @addrslots: a bitmap with 2-bits per-slot to encode the address status and
+ *	       ease the DAA (Dynamic Address Assignment) procedure (see
+ *	       &enum i3c_addr_slot_status)
  * @brief Structure holding I3C master descriptor
  */
 struct no_os_i3c_master_desc {
@@ -96,12 +127,13 @@ struct no_os_i3c_master_desc {
 	//uint32_t	pid;
 	/** Dynamic or static address */
 	//uint8_t		address;
+	/** Encoded devices address status */
+	uint32_t addrslots[((I2C_MAX_ADDR + 1) * 2) / NO_OS_BITS_PER_LONG*8];
 	/** I3C platform specific functions */
 	const struct no_os_i3c_platform_ops *platform_ops;
 	/** I3C master extra parameters (device specific parameters, same pointer to all peripherals and controller in the same bus) */
 	void		*extra;
 };
-
 
 /**
  * @struct no_os_i3c_init_param
@@ -210,4 +242,27 @@ int32_t no_os_i3c_priv_read(struct no_os_i3c_slave_desc *desc,
 		       uint8_t *data,
 		       uint8_t bytes_number);
 
+/* Get status from address. */
+//static enum i3c_addr_slot_status
+//no_os_i3c_addr_get_status(struct no_os_i3c_master_desc *desc,
+//		       uint8_t addr);
+
+/* Set status of a address. */
+void no_os_i3c_addr_set_status(struct no_os_i3c_master_desc *desc,
+		       uint8_t addr, enum i3c_addr_slot_status status);
+
+/* Check if address is available. */
+//static bool no_os_i3c_addr_is_avail(struct no_os_i3c_master_desc *desc,
+//		       uint8_t addr);
+
+/* Get a free address. */
+int32_t no_os_i3c_addr_get_free(struct no_os_i3c_master_desc *desc,
+		       uint8_t start_addr);
+
+/* Init the address slots. */
+//static void no_os_i3c_addr_init(struct no_os_i3c_master_desc *desc);
+
+///* . */
+//int32_t no_os_i3c_(struct no_os_i3c_master_desc *desc,
+//		       uint16_t addr);
 #endif // _NO_OS_I3C_H_
