@@ -425,6 +425,7 @@
 #define AD74416H_DAC_RANGE			12000
 #define AD74416H_DAC_CURRENT_RANGE		25000
 #define AD74416H_DAC_RESOLUTION			16
+#define AD74414H_DAC_RESOLUTION			14
 #define AD74116H_CONV_TIME_US			1000000
 
 /******************************************************************************/
@@ -639,7 +640,7 @@ int ad74416h_dac_voltage_to_code(struct ad74416h_desc *, int32_t,
 				 uint16_t *, uint32_t);
 
 /** Converts a microamp value in the corresponding DAC 16 bit code */
-int ad74416h_dac_current_to_code(uint32_t, uint16_t *);
+int ad74416h_dac_current_to_code(struct ad74416h_desc *, uint32_t, uint16_t *);
 
 /** Write a register's value */
 int ad74416h_reg_write(struct ad74416h_desc *, uint32_t, uint16_t);
