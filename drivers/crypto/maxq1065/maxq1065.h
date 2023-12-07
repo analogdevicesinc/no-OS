@@ -24,8 +24,8 @@ struct maxq1065_desc {
 	struct no_os_spi_desc *comm_desc;
 	struct no_os_gpio_desc *reset_gpio;
 	struct no_os_gpio_desc *rdy_gpio;
-	uint8_t tx_buff[512];
-	uint8_t rx_buff[512];
+	uint8_t tx_buff[3000];
+	uint8_t rx_buff[3000];
 };
 
 extern const struct no_os_trng_platform_ops maxq1065_trng_ops;
