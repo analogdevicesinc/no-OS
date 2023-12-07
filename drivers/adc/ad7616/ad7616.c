@@ -597,7 +597,12 @@ int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
 		ret |= no_os_gpio_set_value(dev->gpio_os2, ((osr & 0x04) >> 2));
 	}
 
-	return ret;
+	if (ret != 0)
+		return ret;
+
+	dev->osr = osr;
+
+	return 0;
 }
 
 #ifdef PLATFORM_ZYNQMP
@@ -1023,8 +1028,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	if (ret != 0)
 		return ret;
 
-	dev->osr = init_param->osr;
-	ret = ad7616_set_oversampling_ratio(dev, dev->osr);
+	ret = ad7616_set_oversampling_ratio(dev, init_param->osr);
 	if (ret != 0)
 		return ret;
 
