@@ -317,12 +317,10 @@ int32_t ad7616_read_channel_source(struct ad7616_dev *dev, enum ad7616_ch *ch_a,
 
 	return 0;
 }
-=======
 #include "no_os_pwm.h"
 #if (HDL_AD7616_PARALLEL == 0)
 #include "spi_engine.h"
 #endif
->>>>>>> a0d2e4a8f (ad7616: Remove spi engine from the ad7616 IP core)
 
 /**
  * Read from device.
@@ -1124,7 +1122,6 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 
 	dev->layers_nb = 1;
 
-<<<<<<< HEAD
 	if (init_param->crc) {
 		ret = ad7616_enable_crc(dev);
 		if (ret != 0)
@@ -1134,7 +1131,6 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	}
 
 	return ad7616_self_test(dev);
-=======
 	return ret;
 
 error_spi:
@@ -1169,5 +1165,4 @@ int32_t ad7616_remove(struct ad7616_dev *dev)
 	free(dev);
 
 	return ret;
->>>>>>> a0d2e4a8f (ad7616: Remove spi engine from the ad7616 IP core)
 }
