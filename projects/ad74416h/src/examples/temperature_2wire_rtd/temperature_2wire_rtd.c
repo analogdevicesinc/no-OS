@@ -64,7 +64,7 @@ int temperature_2wire_rtd_example_main()
 
 	union ad74416h_live_status status;
 	uint32_t adc_value = 0;
-	float Rrtd = 0.0;
+	double Rrtd = 0.0;
 	uint32_t adc_config_value = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
@@ -126,11 +126,13 @@ int temperature_2wire_rtd_example_main()
 				pr_info("Error getting raw adc result in ADC A\r\n");
 				goto error_ad74416h;
 			}
-			pr_info("ADC Input value = %0x\r\n", adc_value);
+			pr_info("ADC Input value = 0x%0x\r\n", adc_value);
 			//Interpret ADC Data
 			//RTD = ADC_CODE * R_ref / (2^24 * ADC_gain)
 			//For ADC range 0-12V --> ADC_gain = 1/4.8
-			Rrtd = adc_value * 2012 / (pow(2, 24) / 4.8);
+			//This calculation is done in two steps to avoid a variable overflow
+			Rrtd = (double)(adc_value) / pow(2,24);
+			Rrtd = Rrtd * 2012 * 4.8;
 			pr_info("Rrtd value = %f\r\n", Rrtd);
 		}
 	}
