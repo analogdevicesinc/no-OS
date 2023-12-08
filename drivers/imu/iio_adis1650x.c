@@ -94,8 +94,8 @@ static struct scan_type adis1650x_iio_delta_angl_scan_type = {
 
 static struct scan_type adis1650x_iio_temp_scan_type = {
 	.sign 		= 's',
-	.realbits 	= 32,
-	.storagebits 	= 32,
+	.realbits 	= 16,
+	.storagebits 	= 16,
 	.shift 		= 0,
 	.is_big_endian 	= true
 };

@@ -80,8 +80,8 @@ static struct scan_type adis1646x_iio_anglvel_scan_type = {
 
 static struct scan_type adis1646x_iio_temp_scan_type = {
 	.sign 		= 's',
-	.realbits 	= 32,
-	.storagebits 	= 32,
+	.realbits 	= 16,
+	.storagebits 	= 16,
 	.shift 		= 0,
 	.is_big_endian 	= true
 };
