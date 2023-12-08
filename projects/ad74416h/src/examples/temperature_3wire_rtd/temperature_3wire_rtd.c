@@ -65,6 +65,7 @@ int temperature_3wire_rtd_example_main()
 	union ad74416h_live_status status;
 	uint32_t adc_value = 0;
 	float Rrtd = 0.0;
+	uint32_t reg_value = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -79,7 +80,7 @@ int temperature_3wire_rtd_example_main()
 		goto error_ad74416h;
 	}
 
-	//Configure the RTD mode to 2-wire RTD, External RTD reference of 1V, RTD current 500uA
+	//Configure the RTD mode to 3-wire RTD, External RTD reference of 1V, RTD current 500uA
 	ret = ad74416h_reg_write(ad74416h_desc, AD74416H_RTD_CONFIG(0), 0x8);
 
 	//Configure the ADC range to 0 to 12V
@@ -123,7 +124,9 @@ int temperature_3wire_rtd_example_main()
 			//Interpret ADC Data
 			//RTD = ADC_CODE * R_ref / (2^24 * ADC_gain)
 			//For ADC range 0-12V --> ADC_gain = 1/4.8
-			Rrtd = adc_value * 2012 / (pow(2, 24) / 4.8);
+			//This calculation is done in two steps to avoid a variable overflow
+			Rrtd = adc_value / (pow(2,24) / 4.8);
+			Rrtd = Rrtd * 2012;
 			pr_info("Rrtd value = %f\r\n", Rrtd);
 		}
 	}
