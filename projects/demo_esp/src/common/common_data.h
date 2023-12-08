@@ -65,7 +65,7 @@
 #elif SERVER_TO_USE==MQTT_ECLIPSE
 #define SERVER_ADDR		"mqtt.eclipse.org"
 #else //local
-#define SERVER_ADDR		"10.76.84.237"
+#define SERVER_ADDR		"10.10.10.10"
 #endif
 
 #define SERVER_PORT		1883
@@ -74,16 +74,16 @@
 #define BUFF_LEN		200
 
 /* Wifi network parameters */
-#define WIFI_SSID		"WifiSSID"
-#define WIFI_PASS		"Password"
+#define WIFI_SSID		"workshop"
+#define WIFI_PASS		"analog2023"
 
 /* Mqtt configuration */
-#define MQTT_PUBLISH_TOPIC	"adxl"
-#define MQTT_SUBSCRIBE_TOPIC	"aducm3029_messages"
+#define MQTT_PUBLISH_TOPIC	"sensor"
+#define MQTT_SUBSCRIBE_TOPIC	"esp_messages"
 #define MQTT_CONFIG_CMD_TIMEOUT	20000
 #define MQTT_CONFIG_VERSION	MQTT_VERSION_3_1
 #define MQTT_CONFIG_KEEP_ALIVE	7200
-#define MQTT_CONFIG_CLIENT_NAME	"aducm3029-client"
+#define MQTT_CONFIG_CLIENT_NAME	"esp-client"
 #define MQTT_CONFIG_CLI_USER	NULL
 #define MQTT_CONFIG_CLI_PASS	NULL
 #define MQTT_PAYLOAD_BUFF_LEN	100

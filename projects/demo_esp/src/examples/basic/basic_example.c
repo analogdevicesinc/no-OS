@@ -61,7 +61,6 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 	static struct no_os_irq_ctrl_desc	*irq_ctrl;
 	static struct no_os_uart_desc		*udesc;
 	struct no_os_gpio_desc			*wifi_rst_gpio;
-
 	struct wifi_init_param			wifi_param;
 	int32_t				ret;
 
@@ -87,7 +86,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		}
 
 		/* Allow the wifi module to bring up after reset */
-		no_os_mdelay(2500);
+		no_os_mdelay(5000);
 	}
 
 	ret = no_os_irq_ctrl_init(&irq_ctrl, &irq_ip);
