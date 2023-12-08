@@ -83,12 +83,10 @@
 
 #define NO_OS_BITS_PER_LONG 32
 
-#define NO_OS_GENMASK(h, l) ({ 					\
-		uint32_t t = (uint32_t)(~0UL);			\
-		t = t << (NO_OS_BITS_PER_LONG - (h - l + 1));		\
-		t = t >> (NO_OS_BITS_PER_LONG - (h + 1));		\
-		t;						\
-})
+#define NO_OS_GENMASK(h, l) (					\
+	(((uint32_t)(~0UL) << (l))) &				\
+	(((uint32_t)(~0UL) >> (NO_OS_BITS_PER_LONG - (h + 1))))	\
+)
 
 #define no_os_bswap_constant_32(x) \
 	((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) | \
