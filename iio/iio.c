@@ -1097,16 +1097,29 @@ int iio_process_trigger_type(struct iio_desc *desc, char *trigger_name)
 
 static uint32_t bytes_per_scan(struct iio_channel *channels, uint32_t mask)
 {
-	uint32_t cnt, i;
+	uint32_t cnt, i, length, largest = 1;
 
 	cnt = 0;
 	i = 0;
 	while (mask) {
-		if ((mask & 1))
-			cnt += channels[i].scan_type->storagebits / 8;
+		if ((mask & 1)) {
+			length = channels[i].scan_type->storagebits / 8;
+
+			if (length > largest)
+				largest = length;
+
+			if (cnt % length)
+				cnt += 2 * length - (cnt % length);
+			else
+				cnt += length;
+		}
+
 		mask >>= 1;
 		++i;
 	}
+
+	if (cnt % largest)
+		cnt += largest - (cnt % largest);
 
 	return cnt;
 }
