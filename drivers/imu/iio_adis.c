@@ -1185,8 +1185,18 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 		if (mask & (1 << chan)) {
 			switch(chan) {
 			case ADIS_TEMP:
-				iio_adis->data[i++] = 0;
 				iio_adis->data[i++] = buff[temp_offset];
+
+				/*
+				 * The temperature channel has 16-bit storage size.
+				 * We need to perform the padding to have the buffer
+				 * elements naturally aligned in case there are any
+				 * 32-bit storage size channels enabled which have a
+				 * scan index higher than the temperature channel scan
+				 * index.
+				 */
+				if (mask & NO_OS_GENMASK(ADIS_DELTA_VEL_Z, ADIS_DELTA_ANGL_X))
+					iio_adis->data[i++] = 0;
 				break;
 			case ADIS_GYRO_X ... ADIS_ACCEL_Z:
 				/*
