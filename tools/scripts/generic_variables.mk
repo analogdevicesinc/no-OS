@@ -42,6 +42,9 @@ LINK_SRCS ?= y
 
 HARDWARE ?= $(wildcard *.xsa) $(wildcard *.hdf) $(wildcard *.sopcinfo) $(wildcard *.ioc) $(wildcard pinmux_config.c)
 #If platform not set get it from HARDWARE file
+ifneq '' '$(findstring max,$(TARGET))'
+PLATFORM = maxim
+else
 ifeq '' '$(PLATFORM)'
 ifneq '' '$(findstring .xsa,$(HARDWARE))'
 PLATFORM = xilinx
@@ -57,9 +60,6 @@ PLATFORM = stm32
 else
 ifneq '' '$(findstring pinmux_config.c,$(HARDWARE))'
 PLATFORM = aducm3029
-else
-ifneq '' '$(findstring max,$(TARGET))'
-PLATFORM = maxim
 else
 $(error No HARDWARE or TARGET found. Please specify one of them.)
 endif
