@@ -61,7 +61,6 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 	static struct no_os_irq_ctrl_desc	*irq_ctrl;
 	static struct no_os_uart_desc		*udesc;
 	struct no_os_gpio_desc			*wifi_rst_gpio;
-
 	struct wifi_init_param			wifi_param;
 	int32_t				ret;
 
@@ -250,7 +249,7 @@ error_sock:
 	return ret;
 }
 
-int32_t read_and_send(struct mqtt_desc *mqtt)
+int32_t send(struct mqtt_desc *mqtt)
 {
 	struct mqtt_message	msg;
 	uint8_t			buff[100];
@@ -295,9 +294,9 @@ int basic_example_main()
 	}
 
 	while (true) {
-		ret = read_and_send(mqtt);
+		ret = send(mqtt);
 		if (ret) {
-			pr_info("Error read_and_send\n");
+			pr_info("Error send\n");
 			goto error;
 		}
 
