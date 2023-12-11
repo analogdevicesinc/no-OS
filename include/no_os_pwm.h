@@ -46,6 +46,12 @@
 #include <stdbool.h>
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define PWM_MAX_NUMBER 4
+
+/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 /**
@@ -74,6 +80,14 @@ struct no_os_pwm_init_param {
 	uint32_t phase_ns;
 	/** PWM generator polarity */
 	enum no_os_pwm_polarity polarity;
+	/** PWM gpio pin init param*/
+	struct no_os_gpio_init_param *pwm_gpio;
+	/* IRQ ID */
+	uint32_t irq_id;
+	/** PWM callback **/
+	void (*pwm_callback)(void *arg);
+	/** PWM platform specific functions */
+	const struct no_os_pwm_platform_ops *platform_ops;
 	/** PWM extra parameters (device specific) */
 	void *extra;
 };
@@ -83,6 +97,8 @@ struct no_os_pwm_init_param {
  * @brief  Structure representing an PWM generator device
  */
 struct no_os_pwm_desc {
+	/** PWM mutex*/
+	void *mutex;
 	/** Pwm id */
 	uint32_t id;
 	/** PWM generator period */
@@ -95,8 +111,51 @@ struct no_os_pwm_desc {
 	enum no_os_pwm_polarity polarity;
 	/** PWM generator enabled */
 	bool enabled;
+	/** PWM gpio pin instance */
+	struct no_os_gpio_desc *pwm_gpio;
+	/* IRQ ID */
+	uint32_t irq_id;
+	/** PWM callback **/
+	void (*pwm_callback)(void* arg);
+	/** PWM platform specific functions */
+	const struct no_os_pwm_platform_ops *platform_ops;
 	/** PWM extra parameters (device specific) */
 	void *extra;
+};
+
+/**
+ * @struct no_os_pwm_platform_ops
+ * @brief Structure holding PWM function pointers that point to the platform
+ * specific function
+ */
+struct no_os_pwm_platform_ops {
+	/** pwm initialization function pointer */
+	int32_t (*pwm_ops_init)(struct no_os_pwm_desc **,
+				const struct no_os_pwm_init_param *);
+	/** pwm enable function pointer */
+	int32_t (*pwm_ops_enable)(struct no_os_pwm_desc *);
+	/** pwm disable function pointer */
+	int32_t (*pwm_ops_disable)(struct no_os_pwm_desc *);
+	/** pwm set period function pointer */
+	int32_t (*pwm_ops_set_period)(struct no_os_pwm_desc *, uint32_t);
+	/** pwm get period function pointer */
+	int32_t (*pwm_ops_get_period)(struct no_os_pwm_desc *, uint32_t *);
+	/** pwm set duty cycle function pointer */
+	int32_t (*pwm_ops_set_duty_cycle)(struct no_os_pwm_desc *, uint32_t);
+	/** pwm get duty cycle function pointer */
+	int32_t (*pwm_ops_get_duty_cycle)(struct no_os_pwm_desc *, uint32_t *);
+	/** pwm set phase function pointer */
+	int32_t (*pwm_ops_set_phase)(struct no_os_pwm_desc *, uint32_t);
+	/** pwm get phase function pointer */
+	int32_t (*pwm_ops_get_phase)(struct no_os_pwm_desc *, uint32_t *);
+	/** pwm set polarity function pointer */
+	int32_t (*pwm_ops_set_polarity)(struct no_os_pwm_desc *,
+					enum no_os_pwm_polarity);
+	/** pwm get polarity function pointer */
+	int32_t (*pwm_ops_get_polarity)(struct no_os_pwm_desc *,
+					enum no_os_pwm_polarity *);
+	/** pwm remove function pointer */
+	int32_t(*pwm_ops_remove)(struct no_os_pwm_desc *);
 };
 
 /******************************************************************************/

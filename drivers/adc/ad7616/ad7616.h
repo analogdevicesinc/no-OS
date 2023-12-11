@@ -41,6 +41,9 @@
 #define AD7616_H_
 
 #include "no_os_gpio.h"
+#include "no_os_pwm.h"
+#include "clk_axi_clkgen.h"
+
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -89,6 +92,9 @@
 #define AD7616_STATUS_A(x)				(((x) & 0xF) << 12)
 #define AD7616_STATUS_B(x)				(((x) & 0xF) << 8)
 #define AD7616_STATUS_CRC(x)			(((x) & 0xFF) << 0)
+
+/* AD7616_REG_PWM */
+#define AD7616_TRIGGER_PULSE_WIDTH_NS	        50
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -143,6 +149,10 @@ struct ad7616_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen	*clkgen;
+	/* Trigger conversion PWM generator descriptor */
+	struct no_os_pwm_desc		*trigger_pwm_desc;
 	uint32_t reg_access_speed;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_hw_rngsel0;
@@ -166,6 +176,12 @@ struct ad7616_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		*spi_param;
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* PWM generator init structure */
+	struct no_os_pwm_init_param	*trigger_pwm_init;
+	/* Clock gen for hdl design init structure */
+	struct axi_clkgen_init	*clkgen_init;
+	/* Clock generator rate */
+	uint32_t axi_clkgen_rate;
 	uint32_t reg_access_speed;
 	/* GPIO */
 	struct no_os_gpio_init_param		*gpio_hw_rngsel0_param;
