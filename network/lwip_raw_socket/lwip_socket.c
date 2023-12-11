@@ -285,6 +285,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
+	uint8_t raw_netmask[4] = {0};
+	uint8_t raw_gateway[4] = {0};
+	uint8_t raw_ip[4] = {0};
 	int ret;
 	int i;
 
@@ -308,10 +311,24 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	lwip_init();
 
-#ifdef NO_OS_STATIC_IP
-	IP4_ADDR(&ipaddr, 169, 254, 97, 40);
-	IP4_ADDR(&netmask, 255, 255, 0, 0);
-	IP4_ADDR(&gw, 0, 0, 0, 0);
+#ifdef NO_OS_IP
+#ifndef NO_OS_NETMASK
+#error NO_OS_NETMASK not defined
+#endif
+#ifndef NO_OS_GATEWAY
+#error NO_OS_GATEWAY not defined
+#endif
+	sscanf(NO_OS_IP, "%hhu.%hhu.%hhu.%hhu", raw_ip[0], raw_ip[1], raw_ip[2],
+	       raw_ip[3]);
+	sscanf(NO_OS_NETMASK, "%hhu.%hhu.%hhu.%hhu", raw_netmask[0], raw_netmask[1],
+	       raw_netmask[2], raw_netmask[3]);
+	sscanf(NO_OS_GATEWAY, "%hhu.%hhu.%hhu.%hhu", raw_gateway[0], raw_gateway[1],
+	       raw_gateway[2], raw_gateway[3]);
+
+	IP4_ADDR(&ipaddr, raw_ip[0], raw_ip[1], raw_ip[2], raw_ip[3]);
+	IP4_ADDR(&netmask, raw_netmask[0], raw_netmask[1], raw_netmask[2],
+		 raw_netmask[3]);
+	IP4_ADDR(&gw, raw_gateway[0], raw_gateway[1], raw_gateway[2], raw_gateway[3]);
 #else
 	ip4_addr_set_zero(&ipaddr);
 	ip4_addr_set_zero(&netmask);
