@@ -68,6 +68,7 @@
 #include "lwip_socket.h"
 
 #include "no_os_delay.h"
+#include "no_os_print_log.h"
 #include "tcp_socket.h"
 
 #include "adin1110.h"
@@ -232,6 +233,7 @@ static void srv_txt(struct mdns_service *service, void *txt_userdata)
 static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 {
 	char mdns_name_buff[256];
+	uint32_t timeout;
 	uint32_t len;
 	int ret;
 
@@ -244,6 +246,7 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 	 * (up to a few seconds) depending on the number of conflicts.
 	 */
 	do {
+		timeout = 3000;
 		mdns_is_conflict = false;
 		len = sprintf(mdns_name_buff, "%s", NO_OS_DOMAIN_NAME);
 		if (mdns_conflict_id)
@@ -253,8 +256,13 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 		if (ret)
 			return ret;
 
-		while (!mdns_result)
+		while (!mdns_result && timeout--) {
 			no_os_lwip_step(desc, desc);
+			no_os_mdelay(1);
+		}
+
+		if (!timeout)
+			return -ETIMEDOUT;
 
 		if (mdns_is_conflict)
 			mdns_resp_remove_netif(netif);
@@ -374,7 +382,9 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 #endif
 
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);
-	if (ret)
+	if (ret == -ETIMEDOUT)
+		pr_warning("MDNS name query timed out");
+	else if (ret)
 		goto platform_remove;
 
 	lwip_config_if(descriptor);
