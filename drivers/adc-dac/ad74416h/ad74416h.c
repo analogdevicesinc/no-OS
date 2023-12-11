@@ -89,8 +89,10 @@ int ad74416h_dac_voltage_to_code(struct ad74416h_desc *desc, int32_t mvolts,
 	switch(desc->id) {
 	case ID_AD74414H:
 		res = AD74414H_DAC_RESOLUTION;
+		break;
 	case ID_AD74416H:
 		res = AD74416H_DAC_RESOLUTION;
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -132,8 +134,10 @@ int ad74416h_dac_current_to_code(struct ad74416h_desc *desc, uint32_t uamps,
 	switch(desc->id) {
 	case ID_AD74414H:
 		res = AD74414H_DAC_RESOLUTION;
+		break;
 	case ID_AD74416H:
 		res = AD74416H_DAC_RESOLUTION;
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -942,6 +946,7 @@ int ad74416h_init(struct ad74416h_desc **desc,
 	if (ret)
 		goto err;
 
+	descriptor->id = init_param->id;
 	descriptor->dev_addr = init_param->dev_addr;
 
 	no_os_crc8_populate_msb(_crc_table, AD74416H_CRC_POLYNOMIAL);
