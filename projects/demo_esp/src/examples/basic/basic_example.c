@@ -86,7 +86,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		}
 
 		/* Allow the wifi module to bring up after reset */
-		no_os_mdelay(2500);
+		no_os_mdelay(3000);
 	}
 
 	ret = no_os_irq_ctrl_init(&irq_ctrl, &irq_ip);
