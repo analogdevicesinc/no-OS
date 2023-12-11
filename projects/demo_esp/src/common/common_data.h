@@ -78,12 +78,12 @@
 #define WIFI_PASS		"Password"
 
 /* Mqtt configuration */
-#define MQTT_PUBLISH_TOPIC	"adxl"
-#define MQTT_SUBSCRIBE_TOPIC	"aducm3029_messages"
+#define MQTT_PUBLISH_TOPIC	"sensor"
+#define MQTT_SUBSCRIBE_TOPIC	"esp_messages"
 #define MQTT_CONFIG_CMD_TIMEOUT	20000
 #define MQTT_CONFIG_VERSION	MQTT_VERSION_3_1
 #define MQTT_CONFIG_KEEP_ALIVE	7200
-#define MQTT_CONFIG_CLIENT_NAME	"aducm3029-client"
+#define MQTT_CONFIG_CLIENT_NAME	"esp-client"
 #define MQTT_CONFIG_CLI_USER	NULL
 #define MQTT_CONFIG_CLI_PASS	NULL
 #define MQTT_PAYLOAD_BUFF_LEN	100
