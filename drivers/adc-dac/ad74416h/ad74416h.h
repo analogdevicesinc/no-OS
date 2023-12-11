@@ -425,6 +425,7 @@
 #define AD74416H_DAC_RANGE			12000
 #define AD74416H_DAC_CURRENT_RANGE		25000
 #define AD74416H_DAC_RESOLUTION			16
+#define AD74414H_DAC_RESOLUTION			14
 #define AD74116H_CONV_TIME_US			1000000
 
 /******************************************************************************/
@@ -435,19 +436,18 @@
  * @brief Operation modes of the device.
  */
 enum ad74416h_op_mode {
-	AD74416H_HIGH_Z,
-	AD74416H_VOLTAGE_OUT,
-	AD74416H_CURRENT_OUT,
-	AD74416H_VOLTAGE_IN,
-	AD74416H_CURRENT_IN_EXT,
-	AD74416H_CURRENT_IN_LOOP,
-	RESERVED,
-	AD74416H_RESISTANCE,
-	AD74416H_DIGITAL_INPUT,
-	AD74416H_DIGITAL_INPUT_LOOP,
-	AD74416H_CURRENT_OUT_HART,
-	AD74416H_CURRENT_IN_EXT_HART,
-	AD74416H_CURRENT_IN_LOOP_HART,
+	AD74416H_HIGH_Z = 0x0,
+	AD74416H_VOLTAGE_OUT = 0x1,
+	AD74416H_CURRENT_OUT = 0x2,
+	AD74416H_VOLTAGE_IN = 0x3,
+	AD74416H_CURRENT_IN_EXT = 0x4,
+	AD74416H_CURRENT_IN_LOOP = 0x5,
+	AD74416H_RESISTANCE = 0x7,
+	AD74416H_DIGITAL_INPUT = 0x8,
+	AD74416H_DIGITAL_INPUT_LOOP = 0x9,
+	AD74416H_CURRENT_OUT_HART = 0x10,
+	AD74416H_CURRENT_IN_EXT_HART = 0x11,
+	AD74416H_CURRENT_IN_LOOP_HART = 0x12,
 };
 
 /**
@@ -640,7 +640,7 @@ int ad74416h_dac_voltage_to_code(struct ad74416h_desc *, int32_t,
 				 uint16_t *, uint32_t);
 
 /** Converts a microamp value in the corresponding DAC 16 bit code */
-int ad74416h_dac_current_to_code(uint32_t, uint16_t *);
+int ad74416h_dac_current_to_code(struct ad74416h_desc *, uint32_t, uint16_t *);
 
 /** Write a register's value */
 int ad74416h_reg_write(struct ad74416h_desc *, uint32_t, uint16_t);
