@@ -50,6 +50,8 @@
 #include "no_os_alloc.h"
 #include "axi_dmac.h"
 
+#include "no_os_print_log.h"
+
 /*******************************************************************************
  * @brief ISR for dev to mem DMA transfer. It computes the next transfer params,
  *			if any, and sets the transfer structure fields accordingly.
@@ -441,6 +443,8 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 		case DMA_DEV_TO_MEM:
 			dmac->init_addr = dmac->next_dest_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
+			// xil_printf(dmac->next_dest_addr);
+			pr_info ("%lu \n", dmac->next_dest_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
 			break;
 		case DMA_MEM_TO_DEV:

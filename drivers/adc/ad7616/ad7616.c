@@ -393,9 +393,13 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
 		CS_LOW,
-		READ(2),
+		READ(1),
 		CS_HIGH,
 	};
+
+	ret = no_os_pwm_enable(dev->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
 
 	dev->spi_desc->mode = NO_OS_SPI_MODE_3;
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -419,7 +423,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 
 	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
 
 	return ret;
 }
@@ -526,6 +530,24 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		return -1;
 	}
 
+	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
+		if (ret != 0) {
+			printf("error: %s: axi_clkgen_init() failed\n",
+			       init_param->clkgen_init->name);
+			goto error_dev;
+		}
+
+	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
+	    if (ret != 0) {
+			printf("error: %s: axi_clkgen_set_rate() failed\n",
+			       init_param->clkgen_init->name);
+			goto error_clkgen;
+		}
+
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+		if (ret != 0)
+			goto error_spi;
+
 	dev->core_baseaddr = init_param->core_baseaddr;
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->reg_access_speed = init_param->reg_access_speed;
@@ -599,4 +621,40 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		printf("AD7616 successfully initialized\n");
 
 	return ret;
+
+	error_spi:
+		no_os_spi_remove(dev->spi_desc);
+
+	error_dev:
+		free(dev);
+
+	error_clkgen:
+	    axi_clkgen_remove(dev->clkgen);
+
+		return -1;
+	}
+
+	/**
+	 * @brief Free the memory allocated by ad7616_setup().
+	 * @param [in] dev - Pointer to the device handler.
+	 * @return 0 in case of success, -1 otherwise
+	 */
+	int32_t ad7616_remove(struct ad7616_dev *dev)
+	{
+		int32_t ret;
+
+		if (!dev)
+			return -1;
+
+		ret = no_os_pwm_remove(dev->trigger_pwm_desc);
+		if (ret != 0)
+			return ret;
+
+		ret = no_os_spi_remove(dev->spi_desc);
+		if (ret != 0)
+			return ret;
+
+		free(dev);
+
+		return ret;
 }
