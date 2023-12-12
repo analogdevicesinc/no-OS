@@ -61,8 +61,7 @@ int digital_input_logic_example_main()
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
 
-	uint16_t reg_value = 0xAAAA;
-	uint32_t dac_code = 0;
+	uint8_t dig_input = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -83,6 +82,17 @@ int digital_input_logic_example_main()
 	if(ret){
 		pr_info("Error configuring the DI type\r\n");
 		goto error_ad74416h;
+	}
+
+	while(1)
+	{
+		no_os_mdelay(1000);
+		ret = ad74416h_gpio_get(ad74416h_desc, 0, &dig_input);
+		if (ret) {
+                	pr_info("Error getting DIN value\r\n");
+                	goto error_ad74416h;                      
+	        }  
+		pr_info("DIN Value = %d\r\n", dig_input);
 	}
 
 
