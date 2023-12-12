@@ -249,6 +249,51 @@ static int iio_ad7616_attr_set(void *device, char *buf, uint32_t len,
 	}
 }
 
+/*
+ * @brief Setup AD7616's sequencer to ask the channel found in the iio buffer active_mask
+ * @param dev - The ad7616 device structure
+ * @param active_mask - IIO buffer active_mask
+ * @return Result of call to ad7616_setup_sequencer
+ */
+static int32_t setup_sequencer_layers_from_active_mask(struct ad7616_dev *dev,
+		uint32_t active_mask)
+{
+	uint32_t i;
+	uint32_t index_a, index_b;
+	uint8_t active_mask_a = active_mask & 0xFF;
+	uint8_t active_mask_b = (active_mask >> 8) & 0xFF;
+	uint32_t nb_layers = no_os_max(no_os_hweight8(active_mask_a),
+				       no_os_hweight8(active_mask_b));
+	enum ad7616_ch ch_a, ch_b;
+	struct ad7616_sequencer_layer layers[nb_layers];
+
+	for (i = 0; i < nb_layers; i++) {
+		index_a = no_os_find_first_set_bit(active_mask_a);
+		if (index_a == 32) {
+			// No more A channel requested, default to self test channel
+			ch_a = AD7616_VA_SELF_TEST;
+		} else {
+			active_mask_a = active_mask_a & ~NO_OS_BIT(index_a);
+			ch_a = AD7616_VA0 + index_a;
+		}
+
+		index_b = no_os_find_first_set_bit(active_mask_b);
+		if (index_b == 32) {
+			// No more B channel requested, default to self test channel
+			ch_b = AD7616_VB_SELF_TEST;
+		} else {
+			active_mask_b = active_mask_b & ~NO_OS_BIT(index_b);
+			ch_b = AD7616_VB0 + index_b;
+		}
+
+		layers[i] = (struct ad7616_sequencer_layer) {
+			ch_a, ch_b
+		};
+	}
+
+	return ad7616_setup_sequencer(dev, layers, nb_layers, 1);
+}
+
 /**
  * @brief	Read buffer data corresponding to AD7616 IIO device
  * @param	iio_dev_data - Pointer to IIO device data structure
@@ -256,39 +301,61 @@ static int iio_ad7616_attr_set(void *device, char *buf, uint32_t len,
  */
 static int32_t iio_ad7616_submit_buffer(struct iio_device_data *iio_dev_data)
 {
-	struct ad7616_conversion_result results[RESULTS_NUMBER];
 	struct ad7616_iio_dev *iio_dev = iio_dev_data->dev;
 	struct ad7616_dev *dev = iio_dev->ad7616_dev;
+	struct ad7616_conversion_result *results;
 	uint16_t data[iio_dev_data->buffer->bytes_per_scan / 2];
-	uint32_t active_mask;
-	uint32_t index;
+	uint8_t active_mask_a;
+	uint8_t active_mask_b;
+	uint32_t index_a;
+	uint32_t index_b;
 	int32_t ret;
 	uint32_t i;
 	uint32_t j;
+	uint32_t k;
+
+	results = no_os_calloc(dev->layers_nb * iio_dev_data->buffer->samples, sizeof(
+				       *results));
+	if (!results)
+		return -ENOMEM;
+
+	// Setup AD7616's sequencer to ask the channel found in the iio buffer active_mask
+	ret = setup_sequencer_layers_from_active_mask(dev,
+			iio_dev_data->buffer->active_mask);
+	if (ret)
+		goto cleanup;
+
+	ret = ad7616_read_data_serial(dev, results, iio_dev_data->buffer->samples);
+	if (ret)
+		goto cleanup;
 
 	for (i = 0; i < iio_dev_data->buffer->samples; i++) {
-		ret = ad7616_read_data_serial(dev, results, 1);
-		if (ret)
-			return ret;
+		active_mask_a = iio_dev_data->buffer->active_mask & 0xFF;
+		active_mask_b = (iio_dev_data->buffer->active_mask >> 8) & 0xFF;
+		k = 0;
 
-		active_mask = iio_dev_data->buffer->active_mask;
+		for (j = 0; active_mask_a; j++) {
+			index_a = no_os_find_first_set_bit(active_mask_a);
+			active_mask_a = active_mask_a & ~NO_OS_BIT(index_a);
+			data[k++] = results[i * dev->layers_nb + j].channel_a;
+		}
 
-		for (j = 0; j < NO_OS_ARRAY_SIZE(data); j++) {
-			index = no_os_find_first_set_bit(active_mask);
-			active_mask = active_mask & ~NO_OS_BIT(index);
-
-			if (is_channel_a(index))
-				data[j] = results[index].channel_a;
-			else
-				data[j] = results[index - CHANNEL_SOURCES_NUMBER].channel_b;
+		for (j = 0; active_mask_b; j++) {
+			index_b = no_os_find_first_set_bit(active_mask_b);
+			active_mask_b = active_mask_b & ~NO_OS_BIT(index_b);
+			data[k++] = results[i * dev->layers_nb + j].channel_b;
 		}
 
 		ret = iio_buffer_push_scan(iio_dev_data->buffer, &data);
 		if (ret)
-			return ret;
+			goto cleanup;
 	}
 
 	return 0;
+
+cleanup:
+	no_os_free(results);
+	return ret;
 }
 
 static struct scan_type ad7616_iio_scan_type = {
