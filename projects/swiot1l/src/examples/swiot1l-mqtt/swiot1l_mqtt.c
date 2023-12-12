@@ -143,7 +143,7 @@ int swiot1l_mqtt()
 		return ret;
 
 	struct socket_address ip_addr = {
-		.addr = "192.168.10.20",
+		.addr = "192.168.100.2",
 		.port = 1883
 	};
 
@@ -234,7 +234,6 @@ int swiot1l_mqtt()
 
 		no_os_mdelay(1000);
 	}
-	
 
 	while(1) {
 		no_os_lwip_step(tcp_socket->net->net, NULL);

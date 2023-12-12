@@ -326,12 +326,12 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 #ifndef NO_OS_GATEWAY
 #error NO_OS_GATEWAY not defined
 #endif
-	sscanf(NO_OS_IP, "%hhu.%hhu.%hhu.%hhu", raw_ip[0], raw_ip[1], raw_ip[2],
-	       raw_ip[3]);
-	sscanf(NO_OS_NETMASK, "%hhu.%hhu.%hhu.%hhu", raw_netmask[0], raw_netmask[1],
-	       raw_netmask[2], raw_netmask[3]);
-	sscanf(NO_OS_GATEWAY, "%hhu.%hhu.%hhu.%hhu", raw_gateway[0], raw_gateway[1],
-	       raw_gateway[2], raw_gateway[3]);
+	sscanf(NO_OS_IP, "%d.%d.%d.%d", &raw_ip[0], &raw_ip[1], &raw_ip[2],
+	       &raw_ip[3]);
+	sscanf(NO_OS_NETMASK, "%d.%d.%d.%d", &raw_netmask[0], &raw_netmask[1],
+	       &raw_netmask[2], &raw_netmask[3]);
+	sscanf(NO_OS_GATEWAY, "%d.%d.%d.%d", &raw_gateway[0], &raw_gateway[1],
+	       &raw_gateway[2], &raw_gateway[3]);
 
 	IP4_ADDR(&ipaddr, raw_ip[0], raw_ip[1], raw_ip[2], raw_ip[3]);
 	IP4_ADDR(&netmask, raw_netmask[0], raw_netmask[1], raw_netmask[2],
@@ -817,6 +817,8 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 	return -ENOSYS;
 }
 
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err);
+
 /**
  * @brief Not implemented.
  * @param net - Not used.
@@ -827,7 +829,31 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 				   struct socket_address *addr)
 {
-	return -ENOSYS;
+	struct lwip_network_desc *desc = net;
+	struct lwip_socket_desc *socket;
+	uint8_t ip_addr[4];
+
+	sscanf(addr->addr, "%d.%d.%d.%d", &ip_addr[0], &ip_addr[1],
+	       &ip_addr[2], &ip_addr[3]);
+
+	ip4_addr_t ip4;
+	IP_ADDR4(&ip4, ip_addr[0], ip_addr[1], ip_addr[2], ip_addr[3]);
+	const ip_addr_t ipaddr = IPADDR4_INIT(ip4.addr);
+
+	struct tcp_pcb *pcb;
+	err_t ret;
+
+	socket = _get_sock(desc, sock_id);
+	if (!socket)
+		return -ENOMEM;
+
+	pcb = socket->pcb;
+
+	ret = tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
+	if (ret)
+		return ret;
+
+	return 0;
 }
 
 /**
@@ -838,8 +864,21 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
  */
 static int32_t lwip_socket_disconnect(void *net, uint32_t sock_id)
 {
-	return -ENOSYS;
+	return lwip_socket_close(net, sock_id);
 }
+
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
+{
+	struct lwip_socket_desc *sock = arg;
+
+	if (err != ERR_OK)
+		return err;
+
+	sock->state = SOCKET_CONNECTED;
+
+	return ERR_OK;
+}
+
 
 /**
  * @brief Get the time from system power-up (ms resolution).
