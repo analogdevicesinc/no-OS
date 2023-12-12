@@ -68,18 +68,22 @@ struct no_os_spi_init_param ad74416h_spi_ip = {
 };
 
 struct ad74416h_init_param ad74416h_ip = {
+	.id = ID_AD74416H,
 	.dev_addr = 0,
 };
 
 struct ad74416h_init_param ad74416h_ad1_ip = {
+	.id = ID_AD74416H,
 	.dev_addr = 1,
 };
 
 struct ad74416h_init_param ad74416h_ad2_ip = {
+	.id = ID_AD74416H,
 	.dev_addr = 2,
 };
 
 struct ad74416h_init_param ad74416h_ad3_ip = {
+	.id = ID_AD74416H,
 	.dev_addr = 3,
 };
 
