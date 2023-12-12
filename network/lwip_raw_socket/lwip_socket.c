@@ -357,7 +357,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	netif_set_link_up(netif_descriptor);
 
-#ifndef NO_OS_STATIC_IP
+#ifndef NO_OS_IP
 	uint32_t dhcp_timeout = 20000;
 	ret = dhcp_start(netif_descriptor);
 	if (ret)

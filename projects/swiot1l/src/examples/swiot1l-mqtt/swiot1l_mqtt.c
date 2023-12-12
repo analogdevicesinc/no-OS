@@ -53,6 +53,7 @@ int swiot1l_mqtt()
 
 	struct no_os_gpio_desc *ad74413r_ldac_gpio;
 	struct no_os_gpio_desc *ad74413r_irq_gpio;
+	struct no_os_gpio_desc *ad74413r_reset_gpio;
 	struct no_os_gpio_desc *max14906_en_gpio;
 	struct no_os_gpio_desc *max14906_d1_gpio;
 	struct no_os_gpio_desc *max14906_d2_gpio;
@@ -84,12 +85,14 @@ int swiot1l_mqtt()
 	no_os_gpio_get(&ad74413r_ldac_gpio, &ad74413r_ldac_ip);
 	no_os_gpio_get(&ad74413r_irq_gpio, &ad74413r_irq_ip);
 	no_os_gpio_get(&max14906_synch_gpio, &max14906_synch_ip);
+	no_os_gpio_get(&ad74413r_reset_gpio, &ad74413r_reset_ip);
 	no_os_gpio_get(&adin1110_swpd_gpio, &adin1110_swpd_ip);
 	no_os_gpio_get(&adin1110_tx2p4_gpio, &adin1110_tx2p4_ip);
 	no_os_gpio_get(&adin1110_mssel_gpio, &adin1110_mssel_ip);
 	no_os_gpio_get(&adin1110_cfg1_gpio, &adin1110_cfg1_ip);
 	no_os_gpio_get(&adin1110_int_gpio, &adin1110_int_ip);
 	no_os_gpio_direction_output(ad74413r_ldac_gpio, 0);
+	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
 	no_os_gpio_direction_output(max14906_synch_gpio, 1);
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
 	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 0);
