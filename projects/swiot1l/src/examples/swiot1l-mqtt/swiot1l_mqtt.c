@@ -113,18 +113,17 @@ int swiot1l_mqtt()
 	if (ret)
 		return ret;
 
-	ad74413r_set_channel_function(ad74413r, 0, AD74413R_VOLTAGE_IN);
+	ad74413r_set_channel_function(ad74413r, 0, AD74413R_CURRENT_OUT);
 	ad74413r_set_channel_function(ad74413r, 1, AD74413R_CURRENT_OUT);
-	ad74413r_set_channel_function(ad74413r, 2, AD74413R_RESISTANCE);
-	ad74413r_set_channel_function(ad74413r, 3, AD74413R_VOLTAGE_OUT);
+	ad74413r_set_channel_function(ad74413r, 2, AD74413R_CURRENT_OUT);
+	ad74413r_set_channel_function(ad74413r, 3, AD74413R_RESISTANCE);
 
 	ad74413r_set_adc_rejection(ad74413r, 0, AD74413R_REJECTION_NONE);
 	ad74413r_set_adc_rejection(ad74413r, 1, AD74413R_REJECTION_NONE);
 	ad74413r_set_adc_rejection(ad74413r, 2, AD74413R_REJECTION_NONE);
 	ad74413r_set_adc_rejection(ad74413r, 3, AD74413R_REJECTION_NONE);
 
-	ad74413r_set_channel_dac_code(ad74413r, 1, 1000);
-	ad74413r_set_channel_dac_code(ad74413r, 3, 3000);
+	ad74413r_set_channel_dac_code(ad74413r, 0, 4000);
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
@@ -184,6 +183,10 @@ int swiot1l_mqtt()
 		return 0;
 	}
 
+	/* Set the LED color to green */
+	ad74413r_set_channel_dac_code(ad74413r, 0, 0);
+	ad74413r_set_channel_dac_code(ad74413r, 1, 4000);
+
 	struct mqtt_message test_msg = {
 		.qos = 0,
 		.payload = val_buff,
@@ -193,44 +196,14 @@ int swiot1l_mqtt()
 	while (1) {
 		no_os_lwip_step(tcp_socket->net->net, NULL);
 
-		ad74413r_adc_get_value(ad74413r, 0, &val);
-		memset(val_buff, 0, sizeof(val_buff));
-		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld mV", val.integer, abs(val.decimal));
-		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld mV", val.integer, abs(val.decimal));
-		test_msg.len = msg_len;
-		ret = mqtt_publish(mqtt, "ad74413r/channel0", &test_msg);
-		if (ret)
-			return ret;
-
-		ad74413r_adc_get_value(ad74413r, 1, &val);
-		memset(val_buff, 0, sizeof(val_buff));
-		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld mV", val.integer / 1000, abs(val.decimal));
-		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld mV", val.integer, abs(val.decimal));
-		test_msg.len = msg_len;
-		ret = mqtt_publish(mqtt, "ad74413r/channel1", &test_msg);
-
-		ad74413r_adc_get_value(ad74413r, 2, &val);
+		ad74413r_adc_get_value(ad74413r, 3, &val);
 		memset(val_buff, 0, sizeof(val_buff));
 		if (val.integer == 0 && val.decimal < 0)
 			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld", val.integer / 1000, abs(val.decimal));
 		else
 			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld Ω", val.integer / 1000, abs(val.decimal));
 		test_msg.len = msg_len;
-		ret = mqtt_publish(mqtt, "ad74413r/channel2", &test_msg);
-
-		ad74413r_adc_get_value(ad74413r, 3, &val);
-		memset(val_buff, 0, sizeof(val_buff));
-
-		if (val.integer == 0 && val.decimal < 0)
-			msg_len = snprintf(val_buff, sizeof(val_buff), "-%lld"".%02lu mA", val.integer, abs(val.decimal / 1000000));
-		else
-			msg_len = snprintf(val_buff, sizeof(val_buff), "%lld"".%02lu mA", val.integer, abs(val.decimal / 1000000));
-		test_msg.len = msg_len;
-		ret = mqtt_publish(mqtt, "ad74413r/channel3", &test_msg);
+		ret = mqtt_publish(mqtt, "ad74413r/resistance", &test_msg);
 
 		no_os_mdelay(1000);
 	}
