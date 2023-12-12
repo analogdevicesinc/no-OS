@@ -57,6 +57,13 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+
+#if defined(SWIOT1L_MQTT)
+	swiot1l_mqtt();
+#elif defined(SWIOT1L_FIRMWARE)
 	swiot_firmware();
 	maxim_gcr_reset();
+#endif
+
+	return 0;
 }

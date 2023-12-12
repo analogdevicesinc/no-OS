@@ -2,6 +2,7 @@ LIBRARIES += lwip
 IIOD=y
 
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
+include $(PROJECT)/src/examples/examples.mk
 
 INCS += $(NO-OS)/network/tcp_socket.h
 INCS += $(NO-OS)/network/noos_mbedtls_config.h

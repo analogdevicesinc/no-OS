@@ -5,6 +5,9 @@ NO_OS_IP=192.168.100.200
 NO_OS_NETMASK=255.255.255.0
 NO_OS_GATEWAY=0.0.0.0
 
+SWIOT1L_FIRMWARE=n
+SWIOT1L_MQTT=y
+
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk
