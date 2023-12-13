@@ -84,5 +84,6 @@ extern UART_HandleTypeDef huart5;
 
 extern struct stm32_uart_init_param ad7616_uart_extra_ip;
 extern struct stm32_spi_init_param ad7616_spi_extra_ip;
+extern struct stm32_gpio_init_param ad7616_gpio_convst_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

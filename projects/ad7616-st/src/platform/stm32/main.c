@@ -61,6 +61,8 @@ int main()
 	ad7616_ip.spi_param = &ad7616_spi_ip;
 	ad7616_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK2Freq;
 
+	ad7616_ip.gpio_convst_param->extra = &ad7616_gpio_convst_extra_ip;
+
 	stm32_init();
 
 #ifdef IIO_EXAMPLE
