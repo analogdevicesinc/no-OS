@@ -1,6 +1,9 @@
 /***************************************************************************//**
  *   @file   digital_input_loop.c
  *   @brief  Digital Input Loop Powered example code for ad74416h-pmdz project
+ *	     This example configures Channel A as a Digital Input.
+ *	     It prints in terminal the DIN value in Channel A
+ *	     GPIO_A LED is used as a representation of the DIN value in channel A
  *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -61,9 +64,10 @@ int digital_input_loop_example_main()
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
 
-	uint16_t reg_value = 0xAAAA;
-	uint32_t dac_code = 0;
+	//uint16_t reg_value = 0xAAAA;
+	//uint32_t dac_code = 0;
 	uint16_t current_code = 0;
+	uint8_t dig_input = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -79,7 +83,7 @@ int digital_input_loop_example_main()
 	}
 
 	//Configure the current output limit
-        ret = ad74416h_dac_current_to_code(22000, &current_code);
+        ret = ad74416h_dac_current_to_code(ad74416h_desc, 9000, &current_code);
         if (ret)
         {
                 pr_info("Error calculating DAC code for desired current\r\n");
@@ -92,6 +96,13 @@ int digital_input_loop_example_main()
                 goto error_ad74416h;
         }
 
+	//Link GPIO_A to DIN0
+	ret = ad74416h_set_gpio_config(ad74416h_desc, 0, AD74416H_GPIO_CONFIG_COMP);
+	if(ret)
+	{
+		pr_info("Error configuring GPIO_A as the output of the DIN comparator\r\n");
+		goto error_ad74416h;
+	}
 
 	//Uncomment the desired function depending on which type of DI is desired
 	ret = configure_di_type1_3(ad74416h_desc, 0);
@@ -99,6 +110,19 @@ int digital_input_loop_example_main()
 	if(ret){
 		pr_info("Error configuring the DI type\r\n");
 		goto error_ad74416h;
+	}
+
+
+	while(1)
+	{
+		no_os_mdelay(1000);
+		ret = ad74416h_gpio_get(ad74416h_desc, 0, &dig_input);
+		if (ret)
+		{
+			pr_info("Error getting DIN value\r\n");
+			goto error_ad74416h;
+		}
+		pr_info("DIN Value = %d\r\n", dig_input);
 	}
 
 

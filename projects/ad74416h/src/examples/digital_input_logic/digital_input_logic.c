@@ -1,6 +1,9 @@
 /***************************************************************************//**
  *   @file   digital_input_logic.c
  *   @brief  Digital Input Logic example code for ad74416h-pmdz project
+ *           This example configures Channel A as a Digital Input.
+ *           It prints in terminal the DIN value in Channel A
+ *           GPIO_A LED is used as a representation of the DIN value in channel A     
  *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -73,6 +76,14 @@ int digital_input_logic_example_main()
 	ret = ad74416h_set_channel_function(ad74416h_desc, 0, AD74416H_DIGITAL_INPUT);
 	if (ret) {
 		pr_info("Error setting Channel 0 as digital input logic mode\r\n");
+		goto error_ad74416h;
+	}
+
+	//Link GPIO_A to DIN0
+	ret = ad74416h_set_gpio_config(ad74416h_desc, 0, AD74416H_GPIO_CONFIG_COMP);
+	if (ret)
+	{
+		pr_info("Error configuring GPIO_A as the output of the DIN comparator\r\n");
 		goto error_ad74416h;
 	}
 
