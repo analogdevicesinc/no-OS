@@ -781,6 +781,18 @@ int ad74416h_set_threshold(struct ad74416h_desc *desc, uint32_t ch,
 }
 
 /**
+ * @brief Set the DO value of a channel
+ * @param desc - The device structure
+ * @param ch - The channel index
+ * @param val - the output logic state. 0-low 1-high
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad74416h_do_set(struct ad74416h_desc *desc, uint32_t ch, uint8_t val)
+{
+	return ad74416h_reg_update(desc, AD74416H_DO_EXT_CONFIG(ch), AD74416H_DO_DATA_MSK, val);
+}
+
+/**
  * @brief Set the logic value of a GPO pin
  * @param desc - The device structure.
  * @param ch - The channel index.

@@ -765,6 +765,9 @@ int ad74416h_set_gpio_config(struct ad74416h_desc *, uint32_t,
  */
 int ad74416h_set_threshold(struct ad74416h_desc *, uint32_t, uint32_t);
 
+/** Set the DO value of a channel */
+int ad74416h_do_set(struct ad74416h_desc *, uint32_t, uint8_t);
+
 /** Set the logic value of a GPO pin */
 int ad74416h_gpio_set(struct ad74416h_desc *, uint32_t, uint8_t);
 
