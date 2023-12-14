@@ -55,6 +55,7 @@
 #define LTC2672_16_DONT_CARE 	0xFFF0
 #define LTC2672_MUX_DONT_CARE 	0xFFFE0
 #define LTC2672_DUMMY		 	0xFFFF
+#define LTC2672_FAULT_REG_MASK	0xFF0000
 
 /* LTC2672 Constants */
 #define LTC2672_BASE_CURRENT 			3.125 // base current in mA
@@ -66,6 +67,10 @@
 #define LTC2672_TOTAL_CHANNELS 			5
 #define LTC2672_MAX_CONFIG_MASK  		15
 #define LTC2672_MAX_TOGGLE_MASK  		31
+#define LTC2672_BIT_SHIFT_12BIT			4
+#define LTC2672_NUM_MUX_SELCETS			22
+#define LTC2672_NUM_CURRENT_SPANS		10
+#define LTC2672_NUM_FAULTS				7
 
 enum ltc2672_commands {
 	LTC2672_CODE_TO_CHANNEL_X,
@@ -209,9 +214,20 @@ int ltc2672_remove(struct ltc2672_dev *);
 /** Configure LTC2672 and get response */
 int ltc2672_transaction(struct ltc2672_dev *device, uint32_t, bool);
 
+/** Convert current into dac code */
+uint32_t ltc2672_current_to_code(struct ltc2672_dev *device, float,
+				 enum ltc2672_dac_ch);
+
+/** Set the dac code for a selected DAC channel */
+int ltc2672_set_code_channel(struct ltc2672_dev *device, uint16_t code,
+			     enum ltc2672_dac_ch out_ch);
+
 /** Set the current for a selected DAC channel */
 int ltc2672_set_current_channel(struct ltc2672_dev *, float,
 				enum ltc2672_dac_ch);
+
+/** Set the dac code for all DAC channels */
+int ltc2672_set_code_all_channels(struct ltc2672_dev *device, uint16_t code);
 
 /** Set the current for all DAC channels */
 int ltc2672_set_current_all_channels(struct ltc2672_dev *, float);
