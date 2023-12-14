@@ -49,21 +49,21 @@
 /******************************************************************************/
 /* AD7616 CORE */
 #define AD7616_REG_PCORE_VERSION		0x400
-#define AD7616_REG_ID					0x404
+#define AD7616_REG_ID				0x404
 #define AD7616_REG_UP_SCRATCH			0x408
 #define AD7616_REG_UP_IF_TYPE			0x40C
-#define AD7616_REG_UP_CTRL				0x440
+#define AD7616_REG_UP_CTRL			0x440
 #define AD7616_REG_UP_CONV_RATE			0x444
 #define AD7616_REG_UP_BURST_LENGTH		0x448
 #define AD7616_REG_UP_READ_DATA			0x44C
 #define AD7616_REG_UP_WRITE_DATA		0x450
 
 /* AD7616_REG_UP_CTRL */
-#define AD7616_CTRL_RESETN				(1 << 0)
+#define AD7616_CTRL_RESETN			(1 << 0)
 #define AD7616_CTRL_CNVST_EN			(1 << 1)
 
-#define AD7616_REG_CONFIG				0x02
-#define AD7616_REG_CHANNEL				0x03
+#define AD7616_REG_CONFIG			0x02
+#define AD7616_REG_CHANNEL			0x03
 #define AD7616_REG_INPUT_RANGE_A1		0x04
 #define AD7616_REG_INPUT_RANGE_A2		0x05
 #define AD7616_REG_INPUT_RANGE_B1		0x06

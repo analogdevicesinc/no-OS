@@ -58,7 +58,7 @@
 #include "no_os_alloc.h"
 #include "no_os_util.h"
 
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP || PLATFORM_ZYNQ
 #include "spi_engine.h"
 #include "axi_dmac.h"
 #include "no_os_axi_io.h"
@@ -753,7 +753,8 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 
 	memset(results, 0, sizeof(*results) * samples);
 
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP  || PLATFORM_ZYNQ
+
 	return ad7616_read_data_serial_zynqmp(dev, (void *)results, samples)
 #endif
 
@@ -788,7 +789,8 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 int32_t ad7616_par_read(struct ad7616_dev *dev, uint8_t reg_addr,
 			uint16_t *reg_data)
 {
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP  || PLATFORM_ZYNQ
+
 	uint32_t read;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
@@ -814,7 +816,8 @@ int32_t ad7616_par_read(struct ad7616_dev *dev, uint8_t reg_addr,
 int32_t ad7616_par_write(struct ad7616_dev *dev, uint8_t reg_addr,
 			 uint16_t reg_data)
 {
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP || PLATFORM_ZYNQ
+
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
 			   0x8000 | ((reg_addr & 0x3F) << 9) |
 			   (reg_data & 0xFF));
@@ -838,7 +841,8 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 				  uint32_t *buf,
 				  uint32_t samples)
 {
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP || PLATFORM_ZYNQ
+
 	int32_t ret;
 	struct axi_dmac			*dmac;
 	struct axi_dmac_init	dmac_init;
@@ -884,7 +888,8 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 	return -ENOSYS;
 }
 
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP || PLATFORM_ZYNQ
+
 /**
  * Initialize the AXI_AD7616 IP core device.
  * @param dev - The device structure.
@@ -1032,7 +1037,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		return -1;
 	}
 
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP || PLATFORM_ZYNQ
 	dev->core_baseaddr = init_param->core_baseaddr;
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->reg_access_speed = init_param->reg_access_speed;
@@ -1051,7 +1056,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		return ret;
 	}
 
-#ifdef PLATFORM_ZYNQMP
+#ifdef PLATFORM_ZYNQMP || PLATFORM_ZYNQ
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 #endif
 
