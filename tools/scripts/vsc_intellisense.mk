@@ -1,6 +1,7 @@
 #
 #	Makefile to create project dependent configs files to enable VS Code IntelliSense
 #
+ifeq 'yes' '$(VSCODE_SUPPORT)'
 
 # Definitions
 CPP_PROP_TEMPLATE		= $(NO-OS)/tools/scripts/platform/template_c_cpp_properties.json
@@ -33,4 +34,6 @@ INCLUDEPATH_INTELLI		:= $(subst ${INCLUDE_NOOS_PATTERN},$(INCLUDE_NOOS_CORRECTED
 CPP_FINAL_CONTENT		:= $(file < $(CPP_PROP_TEMPLATE))
 CPP_FINAL_CONTENT		:= $(subst VSCODE_INCLUDEPATH_INTELLI,$(INCLUDEPATH_INTELLI),$(CPP_FINAL_CONTENT))
 CPP_FINAL_CONTENT 		:= $(subst VSCODE_DEFINES_INTELLI,$(DEFINES_INTELLI),$(CPP_FINAL_CONTENT))
+
+endif
 

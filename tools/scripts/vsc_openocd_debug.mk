@@ -1,6 +1,7 @@
 #
 #	Makefile to create project dependent configs files for debugging with openocd
 #
+ifeq 'yes' '$(VSCODE_SUPPORT)'
 
 # Definitions
 SETTINGS_TEMPLATE	:= $(NO-OS)/tools/scripts/platform/template_settings.json
@@ -23,4 +24,6 @@ VSC_LAUNCH_CONTENT	:= $(subst VSCODE_SEARCH_DIR,"$(OPENOCD_SCRIPTS)",$(VSC_LAUNC
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_CMSISCFG_FILE,"$(BINARY).openocd-cmsis",$(VSC_LAUNCH_CONTENT))
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_STLINKCFG_FILE,"$(BINARY).openocd",$(VSC_LAUNCH_CONTENT))
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_SVD_FILE,"$(OPENOCD_SVD)/$(TARGETSVD).svd",$(VSC_LAUNCH_CONTENT))
+
+endif
 
