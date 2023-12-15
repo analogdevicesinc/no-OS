@@ -79,6 +79,7 @@ BINARY_FILE_NAME ?= $(PROJECT_NAME)
 BINARY			?=  $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
 VSCODE_CFG_DIR	= $(PROJECT)/.vscode
+VSCODE_SUPPORT	?= no
 
 # New line variable
 define ENDL

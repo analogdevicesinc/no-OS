@@ -1,3 +1,5 @@
+VSCODE_SUPPORT = yes
+
 IDE = stm32cubeide
 STM32CUBEIDE ?= $(wildcard /opt/stm32cubeide)
 ifeq ($(STM32CUBEIDE),)
