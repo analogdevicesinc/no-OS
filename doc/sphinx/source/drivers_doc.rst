@@ -18,6 +18,13 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/adm1177
 
+AXI CORES
+=========
+.. toctree::
+   :maxdepth: 1
+
+   drivers/axi_sysid
+
 DIGITAL INPUT/OUTPUT
 ==========================
 .. toctree::
