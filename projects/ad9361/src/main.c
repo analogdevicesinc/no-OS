@@ -53,6 +53,7 @@
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
 #include "no_os_irq.h"
+#include "axi_sysid.h"
 #ifdef ALTERA_PLATFORM
 #include "altera_spi.h"
 #include "altera_gpio.h"
@@ -90,7 +91,7 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #endif // IIO_SUPPORT
 
-#ifdef DMA_EXAMPLE
+#if defined(DMA_EXAMPLE) || defined(SYSID_BASEADDR)
 #include <string.h>
 #endif
 
@@ -816,6 +817,13 @@ int main(void)
 #endif
 
 #ifdef IIO_SUPPORT
+#ifdef SYSID_BASEADDR
+	struct axi_sysid *sysid_core;
+	char *name = NULL;
+	struct axi_sysid_init_param sysid_init = {
+		.base = SYSID_BASEADDR,
+	};
+#endif
 
 	/**
 	 * iio application configurations.
@@ -839,6 +847,20 @@ int main(void)
 		.extra = &platform_uart_init_par,
 		.platform_ops = &xil_uart_ops
 	};
+
+#ifdef SYSID_BASEADDR
+	status = axi_sysid_init(&sysid_core, &sysid_init);
+	if (status)
+		return status;;
+
+	name = axi_sysid_get_fpga_board(sysid_core);
+	if (!strcmp("zed", name))
+		iio_uart_ip.baud_rate = 115200;
+
+	status = axi_sysid_remove(sysid_core);
+	if (status)
+		return status;
+#endif
 
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
