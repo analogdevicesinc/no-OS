@@ -17,6 +17,7 @@ SRCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361_api.c \
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
+	$(DRIVERS)/axi_core/axi_sysid/axi_sysid.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_util.c \
@@ -62,7 +63,8 @@ INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h \
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(INCLUDE)/no_os_irq.h \
-	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
+	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
+	$(DRIVERS)/axi_core/axi_sysid/axi_sysid.h
 ifeq (linux,$(strip $(PLATFORM)))
 CFLAGS += -DPLATFORM_MB
 INCS +=	$(PLATFORM_DRIVERS)/linux_spi.h \
@@ -77,7 +79,8 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_alloc.h \
-	$(INCLUDE)/no_os_mutex.h
+	$(INCLUDE)/no_os_mutex.h \
+	$(INCLUDE)/no_os_print_log.h
 ifeq (y,$(strip $(IIOD)))
 
 ifeq (linux,$(strip $(PLATFORM)))

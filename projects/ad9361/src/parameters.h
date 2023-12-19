@@ -50,6 +50,7 @@
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
 #define UART_BAUDRATE 921600
+#define SYSID_BASEADDR			XPAR_AXI_SYSID_0_BASEADDR
 #else
 #define UART_BAUDRATE 115200
 #endif
