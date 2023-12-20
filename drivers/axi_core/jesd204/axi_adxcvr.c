@@ -634,7 +634,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		goto err;
 	}
 
-	xcvr->xlx_xcvr.encoding = ENC_8B10B;
+	xcvr->xlx_xcvr.encoding = ENC_66B64B;
 	xcvr->xlx_xcvr.refclk_ppm = PM_200; /* TODO use clock accuracy */
 
 	adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
