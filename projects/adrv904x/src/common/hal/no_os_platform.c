@@ -5,20 +5,18 @@
 * see the "LICENSE.txt" file in this zip file.
 */
 
-#include "stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h"
-#include "ActiveUtilInit_profile.h"
-#include "ActiveUseCase_profile.h"
-#include "ADRV9025_TxAttenTable.h"
-#include "ADRV9025_RxGainTable.h"
-#include "ADRV9025_DPDCORE_FW.h"
+#include "ADRV9040_RxGainTable.h"
+#include "ADRV9040_DFE_CALS_FW.h"
+#include "DeviceProfileTest.h"
 #include "adi_common_error.h"
 #include "no_os_print_log.h"
 #include "no_os_platform.h"
+#include "stream_image.h"
 #include "adi_platform.h"
+#include "ADRV9040_FW.h"
 #include "no_os_mutex.h"
 #include "no_os_delay.h"
 #include "common_data.h"
-#include "ADRV9025_FW.h"
 #include "no_os_alloc.h"
 #include "parameters.h"
 #include "no_os_gpio.h"
@@ -78,7 +76,8 @@ adi_hal_Err_e no_os_LogFileClose(void *devHalCfg)
 /**
  * ToDo
  */
-adi_hal_Err_e no_os_LogStatusGet (void* const devHalCfg, adi_hal_LogStatusGet_t* const logStatus)
+adi_hal_Err_e no_os_LogStatusGet(void* const devHalCfg,
+				 adi_hal_LogStatusGet_t* const logStatus)
 {
 	return ADI_HAL_ERR_OK;
 }
@@ -86,7 +85,8 @@ adi_hal_Err_e no_os_LogStatusGet (void* const devHalCfg, adi_hal_LogStatusGet_t*
 /**
  * ToDo
  */
-adi_hal_Err_e no_os_LogConsoleSet (void* const devHalCfg, const adi_hal_LogConsole_e logConsoleFlag)
+adi_hal_Err_e no_os_LogConsoleSet(void* const devHalCfg,
+				  const adi_hal_LogConsole_e logConsoleFlag)
 {
 	return ADI_HAL_ERR_OK;
 }
@@ -103,18 +103,17 @@ adi_hal_Err_e no_os_LogConsoleSet (void* const devHalCfg, const adi_hal_LogConso
  */
 adi_hal_Err_e no_os_LogLevelSet(void *devHalCfg, const uint32_t logMask)
 {
-	struct adrv9025_hal_cfg *halCfg = NULL;
+	struct adrv904x_hal_cfg *halCfg = NULL;
 
 	if (devHalCfg == NULL) {
 		return ADI_COMMON_ERR_ACT_CHECK_PARAM;
 	}
 
-	halCfg = (struct adrv9025_hal_cfg *)devHalCfg;
+	halCfg = (struct adrv904x_hal_cfg *)devHalCfg;
 
 	halCfg->logLevel = (logMask & (int32_t)ADI_HAL_LOG_ALL);
 
-	//return ADI_COMMON_ACT_NO_ACTION;
-	return 0;
+	return ADI_HAL_ERR_OK;
 }
 
 /**
@@ -130,14 +129,14 @@ adi_hal_Err_e no_os_LogLevelSet(void *devHalCfg, const uint32_t logMask)
 adi_hal_Err_e no_os_LogLevelGet(void* const devHalCfg, uint32_t *logLevel)
 {
 	int32_t halError = (int32_t)ADI_HAL_ERR_OK;
-	struct adrv9025_hal_cfg *halCfg = NULL;
+	struct adrv904x_hal_cfg *halCfg = NULL;
 
 	if (devHalCfg == NULL) {
 		halError = (int32_t)ADI_HAL_ERR_NULL_PTR;
 		return halError;
 	}
 
-	halCfg = (struct adrv9025_hal_cfg *)devHalCfg;
+	halCfg = (struct adrv904x_hal_cfg *)devHalCfg;
 
 	*logLevel = halCfg->logLevel;
 
@@ -161,15 +160,15 @@ adi_hal_Err_e no_os_LogLevelGet(void* const devHalCfg, uint32_t *logLevel)
  * \retval ADI_HAL_LOGGING_FAIL If the function failed to flush to write
  */
 
-adi_hal_Err_e no_os_LogWrite(   void* const                 devHalCfg,
-        const adi_hal_LogLevel_e    logLevel,
-        const uint8_t               indent,
-        const char* const           comment,
-        va_list                     argp)
+adi_hal_Err_e no_os_LogWrite(void* const                 devHalCfg,
+			     const adi_hal_LogLevel_e    logLevel,
+			     const uint8_t               indent,
+			     const char* const           comment,
+			     va_list                     argp)
 {
 	int32_t halError = (int32_t)ADI_HAL_ERR_OK;
 	int32_t result = 0;
-	struct adrv9025_hal_cfg *halCfg = NULL;
+	struct adrv904x_hal_cfg *halCfg = NULL;
 	char logMessage[ADI_HAL_MAX_LOG_LINE] = { 0 };
 	const char *logLevelChar = NULL;
 	logMessage[0] = 0;
@@ -179,7 +178,7 @@ adi_hal_Err_e no_os_LogWrite(   void* const                 devHalCfg,
 		return halError;
 	}
 
-	halCfg = (struct adrv9025_hal_cfg *)devHalCfg;
+	halCfg = (struct adrv904x_hal_cfg *)devHalCfg;
 
 	if (halCfg->logLevel == (int32_t)ADI_HAL_LOG_NONE) {
 		/* If logging disabled, exit gracefully */
@@ -239,20 +238,20 @@ adi_hal_Err_e no_os_LogWrite(   void* const                 devHalCfg,
 	case ADI_HAL_LOG_NONE:
 		break;
 	case ADI_HAL_LOG_WARN:
-		pr_warning("%s", logMessage);
+		pr_warning("%s\n", logMessage);
 		break;
 	case ADI_HAL_LOG_ERR:
-		pr_err("%s", logMessage);
+		pr_err("%s\n", logMessage);
 		break;
 	case ADI_HAL_LOG_SPI:
-		pr_debug("%s", logMessage);
+		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_HAL_LOG_API:
 	case ADI_HAL_LOG_API_PRIV:
 	case ADI_HAL_LOG_BF:
 	case ADI_HAL_LOG_HAL:
 	case ADI_HAL_LOG_MSG:
-		pr_debug("%s", logMessage);
+		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_HAL_LOG_ALL:
 		pr_info(logMessage);
@@ -328,10 +327,10 @@ adi_hal_Err_e no_os_SpiInit(void *devHalCfg)
  * \retval ADI_HAL_SPI_FAIL the data was not written successfully
  */
 adi_hal_Err_e no_os_SpiWrite(void *devHalCfg, const uint8_t txData[],
-		       uint32_t numTxBytes)
+			     uint32_t numTxBytes)
 {
 	int32_t halError = (int32_t)ADI_HAL_ERR_OK;
-	struct adrv9025_hal_cfg *halCfg = NULL;
+	struct adrv904x_hal_cfg *halCfg = NULL;
 	static const uint32_t MAX_SIZE = 4096;
 	int32_t remaining = numTxBytes;
 	uint32_t toWrite = 0;
@@ -342,7 +341,7 @@ adi_hal_Err_e no_os_SpiWrite(void *devHalCfg, const uint8_t txData[],
 		return halError;
 	}
 
-	halCfg = (struct adrv9025_hal_cfg *)devHalCfg;
+	halCfg = (struct adrv904x_hal_cfg *)devHalCfg;
 
 	do {
 		toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
@@ -378,11 +377,12 @@ adi_hal_Err_e no_os_SpiWrite(void *devHalCfg, const uint8_t txData[],
  * \retval ADI_HAL_ERR_NULL_PTR the function has been called with a null pointer
  * \retval ADI_HAL_SPI_FAIL the data was not read successfully
  */
-adi_hal_Err_e no_os_SpiRead(void *devHalCfg, const uint8_t txData[], uint8_t rxData[],
-		      uint32_t numTxRxBytes)
+adi_hal_Err_e no_os_SpiRead(void *devHalCfg, const uint8_t txData[],
+			    uint8_t rxData[],
+			    uint32_t numTxRxBytes)
 {
 	int32_t halError = (int32_t)ADI_HAL_ERR_OK;
-	struct adrv9025_hal_cfg *halCfg = NULL;
+	struct adrv904x_hal_cfg *halCfg = NULL;
 	static const uint32_t MAX_SIZE = 4096;
 	int32_t remaining = numTxRxBytes;
 	uint32_t toWrite = 0;
@@ -395,7 +395,7 @@ adi_hal_Err_e no_os_SpiRead(void *devHalCfg, const uint8_t txData[], uint8_t rxD
 
 	memcpy(rxData, txData, numTxRxBytes);
 
-	halCfg = (struct adrv9025_hal_cfg *)devHalCfg;
+	halCfg = (struct adrv904x_hal_cfg *)devHalCfg;
 
 	do {
 		toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
@@ -414,7 +414,8 @@ adi_hal_Err_e no_os_SpiRead(void *devHalCfg, const uint8_t txData[], uint8_t rxD
 /**
  * ToDo
  */
-adi_hal_Err_e no_os_RegisterWrite(void* const devHalCfg, const uint32_t addr, const uint32_t data)
+adi_hal_Err_e no_os_RegisterWrite(void* const devHalCfg, const uint32_t addr,
+				  const uint32_t data)
 {
 	return (int32_t)ADI_HAL_ERR_OK;
 }
@@ -422,7 +423,8 @@ adi_hal_Err_e no_os_RegisterWrite(void* const devHalCfg, const uint32_t addr, co
 /**
  * ToDo
  */
-adi_hal_Err_e no_os_RegisterRead(void* const devHalCfg, const uint32_t addr, uint32_t* const data)
+adi_hal_Err_e no_os_RegisterRead(void* const devHalCfg, const uint32_t addr,
+				 uint32_t* const data)
 {
 	return (int32_t)ADI_HAL_ERR_OK;
 }
@@ -510,7 +512,7 @@ adi_hal_Err_e no_os_TimerWait_us(void *devHalCfg, uint32_t time_us)
  */
 adi_hal_Err_e no_os_mutex_init_wrapper(adi_hal_mutex_t* const mutex)
 {
-	no_os_mutex_init(mutex);
+//	no_os_mutex_init(mutex);
 
 	return ADI_HAL_ERR_OK;
 }
@@ -520,7 +522,7 @@ adi_hal_Err_e no_os_mutex_init_wrapper(adi_hal_mutex_t* const mutex)
  */
 adi_hal_Err_e no_os_mutex_lock_wrapper(adi_hal_mutex_t* const mutex)
 {
-	no_os_mutex_lock(*mutex);
+//	no_os_mutex_lock(*mutex);
 
 	return ADI_HAL_ERR_OK;
 }
@@ -530,7 +532,7 @@ adi_hal_Err_e no_os_mutex_lock_wrapper(adi_hal_mutex_t* const mutex)
  */
 adi_hal_Err_e no_os_mutex_unlock_wrapper(adi_hal_mutex_t* const mutex)
 {
-	no_os_mutex_unlock(*mutex);
+//	no_os_mutex_unlock(*mutex);
 
 	return ADI_HAL_ERR_OK;
 }
@@ -540,7 +542,7 @@ adi_hal_Err_e no_os_mutex_unlock_wrapper(adi_hal_mutex_t* const mutex)
  */
 adi_hal_Err_e no_os_mutex_remove_wrapper(adi_hal_mutex_t* const mutex)
 {
-	no_os_mutex_remove(mutex);
+//	no_os_mutex_remove(mutex);
 
 	return ADI_HAL_ERR_OK;
 }
@@ -557,12 +559,12 @@ adi_hal_Err_e no_os_mutex_remove_wrapper(adi_hal_mutex_t* const mutex)
 adi_hal_Err_e no_os_HwOpen(void *devHalCfg)
 {
 	int32_t ret;
-	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
+	struct adrv904x_hal_cfg *phal = (struct adrv904x_hal_cfg *)devHalCfg;
 	struct no_os_gpio_init_param gip_gpio_reset_n = { 0 };
 	struct no_os_spi_init_param sip = { 0 };
 
 	/* sysref req GPIO configuration */
-	gip_gpio_reset_n.number = ADRV9025_RESET_B;
+	gip_gpio_reset_n.number = ADRV9040_RESET_B;
 	gip_gpio_reset_n.extra = clkchip_gpio_init_param.extra;
 	gip_gpio_reset_n.platform_ops = clkchip_gpio_init_param.platform_ops;
 	ret = no_os_gpio_get(&phal->gpio_reset_n, &gip_gpio_reset_n);
@@ -574,9 +576,9 @@ adi_hal_Err_e no_os_HwOpen(void *devHalCfg)
 		return ret;
 
 	sip.device_id = SPI_DEVICE_ID;
-	sip.max_speed_hz = 10000000u;
+	sip.max_speed_hz = 5000000u;
 	sip.mode = NO_OS_SPI_MODE_0;
-	sip.chip_select = ADRV9025_CS;
+	sip.chip_select = ADRV9040_CS;
 	sip.platform_ops = ad9528_spi_param.platform_ops;
 	sip.extra = ad9528_spi_param.extra;
 
@@ -603,7 +605,7 @@ adi_hal_Err_e no_os_HwOpen(void *devHalCfg)
 adi_hal_Err_e no_os_HwClose(void *devHalCfg)
 {
 	int32_t ret;
-	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
+	struct adrv904x_hal_cfg *phal = (struct adrv904x_hal_cfg *)devHalCfg;
 	ret = no_os_gpio_remove(phal->gpio_reset_n);
 	if (ret)
 		return ret;
@@ -630,7 +632,7 @@ adi_hal_Err_e no_os_HwClose(void *devHalCfg)
  */
 adi_hal_Err_e no_os_HwReset(void *devHalCfg, const uint8_t pinLevel)
 {
-	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
+	struct adrv904x_hal_cfg *phal = (struct adrv904x_hal_cfg *)devHalCfg;
 
 	if (devHalCfg == NULL) {
 		return ADI_HAL_ERR_NULL_PTR;
@@ -641,73 +643,6 @@ adi_hal_Err_e no_os_HwReset(void *devHalCfg, const uint8_t pinLevel)
 	return ADI_HAL_ERR_OK;
 }
 
-int32_t no_os_image_page_get(void *devHalCfg, const char *ImagePath,
-			     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff)
-{
-	unsigned char *bin;
-	if (!strcmp(ImagePath, "ADRV9025_FW.bin")) {
-		if ((pageIndex * pageSize) > sizeof(ADRV9025_FW_bin))
-			return -EINVAL;
-
-		bin = ADRV9025_FW_bin;
-	} else if (!strcmp(ImagePath, "ADRV9025_DPDCORE_FW.bin")) {
-		if ((pageIndex * pageSize) > sizeof(ADRV9025_DPDCORE_FW_bin))
-			return -EINVAL;
-		bin = ADRV9025_DPDCORE_FW_bin;
-	} else if (!strcmp(ImagePath,
-			   ADRV9025_STREAM_IMAGE_FILE)) {
-		if ((pageIndex * pageSize) > sizeof(
-			    stream_image_bin))
-			return -EINVAL;
-		bin = stream_image_bin;
-	} else
-		//return ADI_COMMON_ERR_INV_PARAM;
-		return 1;
-
-	memcpy(rdBuff, &bin[pageIndex * pageSize], pageSize);
-
-	return ADI_HAL_ERR_OK;
-}
-
-int32_t no_os_rx_gain_table_entry_get(void *devHalCfg,
-				      const char *rxGainTablePath,
-				      uint16_t lineCount, uint8_t *gainIndex, uint8_t *rxFeGain,
-				      uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
-				      uint16_t *phaseOffset, int16_t *digGain)
-{
-	if (!strcmp(rxGainTablePath, "ADRV9025_RxGainTable.csv")) {
-		if (lineCount > sizeof(ADRV9025_RxGainTable) / sizeof(struct
-				ADRV9025_RxGainTableEntry))
-			return -EINVAL;
-
-		*gainIndex = ADRV9025_RxGainTable[lineCount].gainIndex;
-		*rxFeGain = ADRV9025_RxGainTable[lineCount].rxFeGain;
-		*tiaControl = ADRV9025_RxGainTable[lineCount].tiaControl;
-		*adcControl = ADRV9025_RxGainTable[lineCount].adcControl;
-		*extControl = ADRV9025_RxGainTable[lineCount].extControl;
-		*phaseOffset = ADRV9025_RxGainTable[lineCount].phaseOffset;
-		*digGain = ADRV9025_RxGainTable[lineCount].digGain;
-	} else
-		return -EINVAL;
-
-	return 7; /* return the number of filled elements (emulate sscanf return value) */
-}
-
-int32_t no_os_tx_atten_table_entry_get(void *devHalCfg,
-				       const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
-				       uint8_t *txAttenHp, uint16_t *txAttenMult)
-{
-	if (lineCount > sizeof(ADRV9025_TxAttenTable) / sizeof(struct
-			ADRV9025_TxAttenTableEntry))
-		return -EINVAL;
-
-	*attenIndex = ADRV9025_TxAttenTable[lineCount].attenIndex;
-	*txAttenHp = ADRV9025_TxAttenTable[lineCount].txAttenHp;
-	*txAttenMult = ADRV9025_TxAttenTable[lineCount].txAttenMult;
-
-	return 3; /* return the number of filled elements (emulate sscanf return value) */
-}
-
 /*
  * Function pointer assignment for default configuration
  */
@@ -715,7 +650,8 @@ int32_t no_os_tx_atten_table_entry_get(void *devHalCfg,
 /* Initialization interface to open, init, close drivers and pointers to resources */
 adi_hal_Err_e (*adi_hal_HwOpen)(void *devHalCfg) = no_os_HwOpen;
 adi_hal_Err_e (*adi_hal_HwClose)(void *devHalCfg) = no_os_HwClose;
-adi_hal_Err_e (*adi_hal_HwReset)(void *devHalCfg, const uint8_t pinLevel) = no_os_HwReset;
+adi_hal_Err_e (*adi_hal_HwReset)(void *devHalCfg,
+				 const uint8_t pinLevel) = no_os_HwReset;
 adi_hal_Err_e (*adi_hal_SpiInit)(void *devHalCfg) =
 	no_os_SpiInit; /* TODO: remove?  called by HwOpen() */
 void *(*adi_hal_DevHalCfgCreate)(uint32_t interfaceMask, uint8_t spiChipSelect,
@@ -724,24 +660,26 @@ adi_hal_Err_e (*adi_hal_DevHalCfgFree)(void *devHalCfg) = NULL;
 
 /* SPI Interface */
 adi_hal_Err_e (*adi_hal_SpiWrite)(void *devHalCfg, const uint8_t txData[],
-				 uint32_t numTxBytes) = no_os_SpiWrite;
+				  uint32_t numTxBytes) = no_os_SpiWrite;
 
 adi_hal_Err_e (*adi_hal_SpiRead)(void *devHalCfg, const uint8_t txData[],
-				uint8_t rxData[], uint32_t numRxBytes) = no_os_SpiRead;
+				 uint8_t rxData[], uint32_t numRxBytes) = no_os_SpiRead;
 
-adi_hal_Err_e (*adi_hal_BbicRegisterWrite)(void* const devHalCfg, const uint32_t addr, const uint32_t data) = no_os_RegisterWrite;
+adi_hal_Err_e (*adi_hal_BbicRegisterWrite)(void* const devHalCfg,
+		const uint32_t addr, const uint32_t data) = no_os_RegisterWrite;
 
-adi_hal_Err_e (*adi_hal_BbicRegisterRead)(void* const devHalCfg, const uint32_t addr, uint32_t* const data) = no_os_RegisterRead;
+adi_hal_Err_e (*adi_hal_BbicRegisterRead)(void* const devHalCfg,
+		const uint32_t addr, uint32_t* const data) = no_os_RegisterRead;
 
 adi_hal_Err_e (*adi_hal_BbicRegistersRead)(  void* const     devHalCfg,
-                                                        const uint32_t  addr,
-                                                        uint32_t        data[],
-                                                        const uint32_t  numDataWords) = NULL; //ToDo
+		const uint32_t  addr,
+		uint32_t        data[],
+		const uint32_t  numDataWords) = NULL; //ToDo
 
 adi_hal_Err_e (*adi_hal_BbicRegistersWrite)( void* const     devHalCfg,
-                                                        const uint32_t  addr,
-                                                        const uint32_t  data[],
-                                                        const uint32_t  numDataWords) = NULL; //ToDo
+		const uint32_t  addr,
+		const uint32_t  data[],
+		const uint32_t  numDataWords) = NULL; //ToDo
 
 /* Custom SPI streaming interface*/
 int32_t (*adi_hal_CustomSpiStreamWrite)(void *devHalCfg, const uint16_t address,
@@ -757,64 +695,71 @@ int32_t (*adi_hal_CustomSpiStreamRead)(void *devHalCfg, const uint16_t address,
 
 /* Logging interface */
 adi_hal_Err_e (*adi_hal_LogFileOpen)(void *devHalCfg,
-			       const char *filename) = no_os_LogFileOpen;
+				     const char *filename) = no_os_LogFileOpen;
 
 adi_hal_Err_e (*adi_hal_LogLevelSet)(void *devHalCfg,
-		const uint32_t logMask) = no_os_LogLevelSet;
+				     const uint32_t logMask) = no_os_LogLevelSet;
 
 adi_hal_Err_e (*adi_hal_LogLevelGet)(void* const devHalCfg,
-		uint32_t* logMask) = no_os_LogLevelGet;
+				     uint32_t* logMask) = no_os_LogLevelGet;
 
 adi_hal_Err_e (*adi_hal_LogWrite)(void* const                 devHalCfg,
-        const adi_hal_LogLevel_e    logLevel,
-        const uint8_t               indent,
-        const char* const           comment,
-        va_list                     argp) = no_os_LogWrite;
+				  const adi_hal_LogLevel_e    logLevel,
+				  const uint8_t               indent,
+				  const char* const           comment,
+				  va_list                     argp) = no_os_LogWrite;
 
 adi_hal_Err_e (*adi_hal_LogFileClose)(void *devHalCfg) = no_os_LogFileClose;
 
-adi_hal_Err_e (*adi_hal_LogStatusGet)(void* const devHalCfg, adi_hal_LogStatusGet_t* const logStatus) = no_os_LogStatusGet;
+adi_hal_Err_e (*adi_hal_LogStatusGet)(void* const devHalCfg,
+				      adi_hal_LogStatusGet_t* const logStatus) = no_os_LogStatusGet;
 
-adi_hal_Err_e (*adi_hal_LogConsoleSet)(void* const devHalCfg, const adi_hal_LogConsole_e logConsoleFlag) = no_os_LogConsoleSet; // ToDo
+adi_hal_Err_e (*adi_hal_LogConsoleSet)(void* const devHalCfg,
+				       const adi_hal_LogConsole_e logConsoleFlag) = no_os_LogConsoleSet; // ToDo
 
 /* Timer interface */
 adi_hal_Err_e (*adi_hal_Wait_ms)(void *devHalCfg,
-			   uint32_t time_ms) = no_os_TimerWait_ms;
+				 uint32_t time_ms) = no_os_TimerWait_ms;
 
 adi_hal_Err_e (*adi_hal_Wait_us)(void *devHalCfg,
-			   uint32_t time_us) = no_os_TimerWait_us;
+				 uint32_t time_us) = no_os_TimerWait_us;
 
 
 /* Threads */
 //ToDo
 adi_hal_thread_t (*adi_hal_ThreadSelf)(void) = NULL;
-void* (*adi_hal_TlsGet)(const adi_hal_TlsType_e tlsType) = NULL;
-adi_hal_Err_e (*adi_hal_TlsSet)(const adi_hal_TlsType_e tlsType, void* const value) = NULL;
+
+void* no_os_hal_TlsGet(const adi_hal_TlsType_e tlsType)
+{
+	return NULL;
+}
+
+void* (*adi_hal_TlsGet)(const adi_hal_TlsType_e tlsType) = no_os_hal_TlsGet;
+
+adi_hal_Err_e no_os_hal_TlsSet(const adi_hal_TlsType_e tlsType,
+			       void* const value)
+{
+	return ADI_HAL_ERR_OK;
+}
+
+adi_hal_Err_e (*adi_hal_TlsSet)(const adi_hal_TlsType_e tlsType,
+				void* const value) = no_os_hal_TlsSet;
 
 /* Mutexes */
-adi_hal_Err_e (*adi_hal_MutexInit)(adi_hal_mutex_t* const mutex) = no_os_mutex_init_wrapper;
+adi_hal_Err_e (*adi_hal_MutexInit)(adi_hal_mutex_t* const mutex) =
+	no_os_mutex_init_wrapper;
 
-adi_hal_Err_e(*adi_hal_MutexLock)(adi_hal_mutex_t* const mutex) = no_os_mutex_lock_wrapper;
-adi_hal_Err_e(*adi_hal_MutexUnlock)(adi_hal_mutex_t* const mutex) = no_os_mutex_unlock_wrapper;
-adi_hal_Err_e(*adi_hal_MutexDestroy)(adi_hal_mutex_t* const mutex) = no_os_mutex_remove_wrapper;
+adi_hal_Err_e(*adi_hal_MutexLock)(adi_hal_mutex_t* const mutex) =
+	no_os_mutex_lock_wrapper;
+adi_hal_Err_e(*adi_hal_MutexUnlock)(adi_hal_mutex_t* const mutex) =
+	no_os_mutex_unlock_wrapper;
+adi_hal_Err_e(*adi_hal_MutexDestroy)(adi_hal_mutex_t* const mutex) =
+	no_os_mutex_remove_wrapper;
 
 /*
  * FileIO abstraction
  *
  */
-int32_t (*adi_hal_ArmImagePageGet)(void *devHalCfg, const char *ImagePath,
-				   uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
-int32_t (*adi_hal_StreamImagePageGet)(void *devHalCfg, const char *ImagePath,
-				      uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
-int32_t (*adi_hal_RxGainTableEntryGet)(void *devHalCfg,
-				       const char *rxGainTablePath, uint16_t lineCount, uint8_t *gainIndex,
-				       uint8_t *rxFeGain,
-				       uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
-				       uint16_t *phaseOffset, int16_t *digGain) = no_os_rx_gain_table_entry_get;
-int32_t (*adi_hal_TxAttenTableEntryGet)(void *devHalCfg,
-					const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
-					uint8_t *txAttenHp,
-					uint16_t *txAttenMult) = no_os_tx_atten_table_entry_get;
 
 long int ftell (FILE *stream)
 {
@@ -827,53 +772,38 @@ FILE* __fopen(const char * filename, const char *mode)
 	unsigned int length;
 	char *temp;
 
-	if (!strcmp(filename, "ActiveUseCase.profile")) {
-		temp = (char *)no_os_malloc((strlen(json_profile_active_use_case)+1)*sizeof(
-						    char));
-		strcpy(temp, json_profile_active_use_case);
+	if (!strcmp(filename, "DeviceProfileTest.bin")) {
+		length = sizeof(DeviceProfileTest_bin);
+		temp = (char *)no_os_calloc(length, sizeof(char));
+		memcpy(temp, DeviceProfileTest_bin, length);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
-		profile.end = profile.start + strlen(profile.data);
-	} else if (!strcmp(filename, "ActiveUtilInit.profile")) {
-		temp = (char *)no_os_malloc((strlen(json_profile_active_util_init)+1)*sizeof(
-						    char));
-		strcpy(temp, json_profile_active_util_init);
-		profile.data = temp;
-		profile.start = profile.ptr = profile.data;
-		profile.end = profile.start + strlen(profile.data);
-	} else if (!strcmp(filename,
-			   ADRV9025_STREAM_IMAGE_FILE)) {
+		profile.end = profile.start + length;
+	} else if (!strcmp(filename, "stream_image.bin")) {
 		length = sizeof(stream_image_bin);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
+		temp = (char *)no_os_calloc(length, sizeof(char));
 		memcpy(temp, stream_image_bin, length);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + length;
-	} else if (!strcmp(filename, "ADRV9025_FW.bin")) {
-		length = sizeof(ADRV9025_FW_bin);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
-		memcpy(temp, ADRV9025_FW_bin, sizeof(ADRV9025_FW_bin));
+	} else if (!strcmp(filename, "ADRV9040_FW.bin")) {
+		length = sizeof(ADRV9040_FW_bin);
+		temp = (char *)no_os_calloc(length, sizeof(char));
+		memcpy(temp, ADRV9040_FW_bin, sizeof(ADRV9040_FW_bin));
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + length;
-	} else if (!strcmp(filename, "ADRV9025_DPDCORE_FW.bin")) {
-		length = sizeof(ADRV9025_DPDCORE_FW_bin);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
-		memcpy(temp, ADRV9025_DPDCORE_FW_bin, sizeof(ADRV9025_DPDCORE_FW_bin));
+	} else if (!strcmp(filename, "ADRV9040_DFE_CALS_FW.bin")) {
+		length = sizeof(ADRV9040_DFE_CALS_FW_bin);
+		temp = (char *)no_os_calloc(length, sizeof(char));
+		memcpy(temp, ADRV9040_DFE_CALS_FW_bin, sizeof(ADRV9040_DFE_CALS_FW_bin));
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + length;
-	} else if (!strcmp(filename, "ADRV9025_RxGainTable.h")) {
-		length = strlen(ADRV9025_RxGainTable_text);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
-		strcpy(temp, ADRV9025_RxGainTable_text);
-		profile.data = temp;
-		profile.start = profile.ptr = profile.data;
-		profile.end = profile.start + strlen(profile.data);
-	} else if (!strcmp(filename, "ADRV9025_TxAttenTable.h")) {
-		length = strlen(ADRV9025_TxAttenTable_text);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
-		strcpy(temp, ADRV9025_TxAttenTable_text);
+	} else if (!strcmp(filename, "RxGainTable.csv")) {
+		length = strlen(ADRV9040_RxGainTable_text);
+		temp = (char *)no_os_calloc(length, sizeof(char));
+		strcpy(temp, ADRV9040_RxGainTable_text);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
@@ -912,6 +842,7 @@ int fseekx(FILE * stream, long int offset, int origin)
 
 int __fclose(FILE *stream)
 {
+
 	if (stream == NULL)
 		return -ENODEV;
 

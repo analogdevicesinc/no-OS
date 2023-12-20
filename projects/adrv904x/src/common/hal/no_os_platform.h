@@ -41,7 +41,7 @@
 
 #define CONFIG_CF_AXI_ADC
 
-struct adrv9025_hal_cfg {
+struct adrv904x_hal_cfg {
 	struct no_os_spi_desc *spi;
 	struct no_os_gpio_desc *gpio_reset_n;
 	int32_t logLevel;         /*!< valid 0 - 0xFF */
