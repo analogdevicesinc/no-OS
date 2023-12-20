@@ -50,7 +50,7 @@
 /* Initialize the SPI structure */
 const struct no_os_spi_init_param ad9528_spi_param = {
 	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = 10000000u,
+	.max_speed_hz = 5000000u,
 	.chip_select = AD9528_CS,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = &xil_spi_ops,
