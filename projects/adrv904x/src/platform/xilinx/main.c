@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "adi_adrv904x_types.h"
 #include "platform_includes.h"
 #include "common_data.h"
 #include "no_os_error.h"
@@ -57,24 +58,38 @@
 #include "iio_example.h"
 #endif
 
-// /* SPI settings */
-// static adi_adrv9025_SpiSettings_t spiSettings = {
-// 	.msbFirst = 1,
-// 	.enSpiStreaming = 0,
-// 	.autoIncAddrUp = 1,
-// 	.fourWireMode = 1,
-// 	.cmosPadDrvStrength = ADI_ADRV9025_CMOSPAD_DRV_STRONG,
-// };
+static adi_adrv904x_SpiConfigSettings_t spiSettings = {
+	.msbFirst = 1,
+	.fourWireMode = 1,
+	.cmosPadDrvStrength = ADI_ADRV904X_CMOSPAD_DRV_STRONG,
+};
+
+static adi_adrv904x_SpiOptions_t spiOptions = {
+	.allowSpiStreaming = 0,
+	.allowAhbAutoIncrement = 1,
+	.allowAhbSpiFifoMode = 0,
+};
 
 /***************************************************************************//**
  * @brief Function for obtaining SPI settings.
  *
  * @return SPI settings
 *******************************************************************************/
-// adi_adrv9025_SpiSettings_t *adrv9025_spi_settings_get(void)
-// {
-// 	return &spiSettings;
-// }
+adi_adrv904x_SpiConfigSettings_t *adrv904x_spi_settings_get(void)
+{
+	return &spiSettings;
+}
+
+/***************************************************************************//**
+ * @brief Function for obtaining SPI options.
+ *
+ * @return SPI settings
+*******************************************************************************/
+adi_adrv904x_SpiOptions_t *adrv904x_spi_options_get(void)
+{
+	return &spiOptions;
+}
+
 
 /***************************************************************************//**
  * @brief Main function execution for XILINX platform.
