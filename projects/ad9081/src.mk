@@ -20,6 +20,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_jesd.c \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_sync.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c \
+	$(DRIVERS)/template/clk_template/clk_template.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
@@ -79,6 +80,7 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(DRIVERS)/adc/ad9081/api/adi_cms_api_common.h \
 	$(DRIVERS)/adc/ad9081/api/adi_cms_api_config.h \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.h \
+	$(DRIVERS)/template/clk_template/clk_template.h \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \

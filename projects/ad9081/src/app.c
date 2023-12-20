@@ -83,7 +83,7 @@ int main(void)
 	struct no_os_clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
 	struct no_os_clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
-#ifdef PLATFORM_MB
+#if (defined(PLATFORM_MB) || defined(versal))
 		.type = GPIO_PL,
 #else
 		.type = GPIO_PS,
@@ -261,8 +261,9 @@ int main(void)
 	if (status != 0)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
-	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
+	status = app_jesd_init(jesd_clk, ADXCVR_REF_CLK_KHZ,
+				ADXCVR_RX_DEV_CLK_KHZ, ADXCVR_TX_DEV_CLK_KHZ,
+				ADXCVR_RX_LANE_CLK_KHZ, ADXCVR_TX_LANE_CLK_KHZ);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 

@@ -44,6 +44,7 @@
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 #include "axi_adxcvr.h"
+#include "clk_template.h"
 #include "no_os_error.h"
 #include "parameters.h"
 #include "app_jesd.h"
@@ -57,6 +58,9 @@ struct axi_jesd204_tx *tx_jesd;
 
 struct adxcvr *rx_adxcvr;
 struct adxcvr *tx_adxcvr;
+
+struct clk_template *rx_lane_clk;
+struct clk_template *tx_lane_clk;
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -138,9 +142,22 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		return ret;
 #endif
 
+#ifndef versal
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
-
 	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
+#else
+	struct clk_template_init rx_lane_init;
+	struct clk_template_init tx_lane_init;
+
+	rx_lane_init.name = "rx_lane";
+	tx_lane_init.name = "tx_lane";
+
+	clk_template_init(&rx_lane_clk, &rx_lane_init);
+	clk_template_init(&tx_lane_clk, &tx_lane_init);
+
+	rx_jesd_init.lane_clk = rx_lane_clk->clk_out;
+	tx_jesd_init.lane_clk = tx_lane_clk->clk_out;
+#endif
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret)
