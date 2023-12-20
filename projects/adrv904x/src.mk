@@ -15,16 +15,16 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/app_config.h \
-	$(PROJECT)/src/common/ADRV9025_RxGainTable.h \
-	$(PROJECT)/src/common/ADRV9025_TxAttenTable.h \
+	$(PROJECT)/src/common/initdata.h \
+	$(PROJECT)/src/common/ADRV9040_RxGainTable.h \
 	$(PROJECT)/src/common/hal/no_os_platform.h \
-	$(PROJECT)/src/common/firmware/ADRV9025_DPDCORE_FW.h \
-	$(PROJECT)/src/common/firmware/ADRV9025_FW.h \
-	$(PROJECT)/src/common/firmware/stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h \
-	$(PROJECT)/src/common/firmware/ActiveUseCase_profile.h \
-	$(PROJECT)/src/common/firmware/ActiveUtilInit_profile.h
+	$(PROJECT)/src/common/firmware/ADRV9040_DFE_CALS_FW.h \
+	$(PROJECT)/src/common/firmware/ADRV9040_FW.h \
+	$(PROJECT)/src/common/firmware/stream_image.h \
+	$(PROJECT)/src/common/firmware/DeviceProfileTest.h
 
 SRCS += $(PROJECT)/src/common/common_data.c \
+	$(PROJECT)/src/common/initdata.c \
 	$(PROJECT)/src/common/hal/no_os_platform.c
 
 INCS += $(PROJECT)/src/platform/platform_includes.h \
