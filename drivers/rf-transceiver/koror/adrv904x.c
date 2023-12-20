@@ -7,6 +7,12 @@
  * Licensed under the GPL-2.
  */
 
+#include "adrv904x_cpu_device_profile_types.h"
+#include "adi_common_error_types.h"
+#include "adi_adrv904x_all_types.h"
+#include "adi_adrv904x_dfe_cpu.h"
+#include "adi_common_error.h"
+
 #include "xilinx_transceiver.h"
 #include "no_os_print_log.h"
 #include "no_os_error.h"
@@ -14,577 +20,387 @@
 #include "no_os_util.h"
 #include "no_os_spi.h"
 #include "adrv904x.h"
+#include "initdata.h"
 #include "jesd204.h"
 #include <stdbool.h>
 #include <string.h>
 
-int adrv904x_hello(void)
-{
-	pr_info("hello\n");
+/* ADRV904X Initialization Configuration Data */
+adrv904x_DeviceProfile_t adrv904xProfile;
+
+typedef struct example_program_Ad9528Cfg {
+	uint32_t RefA_kHz;          /*!< AD9528 Input Clock */
+	uint32_t Vcxo_kHz;          /*!< Vcxo frequency */
+	uint32_t Adrvgen6_Clk_kHz;  /*!< ADRV904X Device Clock */
+	uint32_t Fpgagen6_Clk_kHz;  /*!< FPGAGEN6 Device Clock */
+} example_program_Ad9528Cfg_t;
+
+typedef struct example_program_Support {
+	example_program_Ad9528Cfg_t
+	clkCfg;                     /*!< AD9528 Clock Settings */
+
+	adi_adrv904x_TrxFileInfo_t
+	fileInfo;                    /*!< Pre MCS Init File Paths */
+} example_program_Support_t;
+
+example_program_Support_t programSupport;
+
+#define ADI_EXAMPLE_STRNCPY(dest, src)                                              \
+{                                                                                   \
+    (void) ADI_LIBRARY_STRNCPY((char*) dest, src, ADI_ADRV904X_MAX_FILE_LENGTH);    \
+    dest[ADI_ADRV904X_MAX_FILE_LENGTH - 1] = '\0';                                  \
 }
 
-// static int __adrv9025_dev_err(struct adrv9025_rf_phy *phy, const char *function,
-// 			      const int line)
-// {
-// 	int ret;
-
-// 	pr_err("%s, %d: failed with %s (%d)\n", function, line,
-// 	       phy->madDevice->common.error.errormessage ?
-// 	       phy->madDevice->common.error.errormessage :
-// 	       "",
-// 	       phy->madDevice->common.error.errCode);
-
-// 	switch (phy->madDevice->common.error.errCode) {
-// 	case ADI_COMMON_ERR_INV_PARAM:
-// 	case ADI_COMMON_ERR_NULL_PARAM:
-// 		ret = -EINVAL;
-// 		break;
-// 	case ADI_COMMON_ERR_API_FAIL:
-// 		ret = -EFAULT;
-// 		break;
-// 	case ADI_COMMON_ERR_SPI_FAIL:
-// 		ret = -EIO;
-// 		break;
-// 	case ADI_COMMON_ERR_OK:
-// 		ret = 0;
-// 		break;
-// 	default:
-// 		ret = -EFAULT;
-// 	}
-
-// 	adrv9025_ErrorClear(&phy->madDevice->common);
-
-// 	return ret;
-// }
-
-// #define adrv9025_dev_err(phy) __adrv9025_dev_err(phy, __func__, __LINE__)
-
-// int adrv9025_spi_read(struct no_os_spi_desc *spi, unsigned int reg)
-// {
-// 	uint8_t buf[3];
-// 	int ret;
-
-// 	buf[0] = 0x80 | (reg >> 8);
-// 	buf[1] = reg & 0xFF;
-// 	ret = no_os_spi_write_and_read(spi, &buf[0], 2);
-
-// 	pr_debug("%s: REG: 0x%X VAL: 0x%X (%d)\n", __func__, reg,
-// 		 buf[0], ret);
-
-// 	if (ret < 0) {
-// 		pr_err("%s: failed (%d)\n", __func__, ret);
-// 		return ret;
-// 	}
-
-// 	return buf[2];
-// }
-
-// int adrv9025_spi_write(struct no_os_spi_desc *spi, unsigned int reg,
-// 		       unsigned int val)
-// {
-// 	unsigned char buf[3];
-// 	int ret;
-
-// 	buf[0] = reg >> 8;
-// 	buf[1] = reg & 0xFF;
-// 	buf[2] = val;
-
-// 	ret = no_os_spi_write_and_read(spi, buf, 3);
-// 	if (ret < 0) {
-// 		pr_err("%s: failed (%d)\n", __func__, ret);
-// 		return ret;
-// 	}
-
-// 	pr_debug("%s: REG: 0x%X VAL: 0x%X (%d)\n", __func__, reg, val,
-// 		 ret);
-
-// 	return 0;
-// }
-
-// int adrv9025_RxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
-// 				    adi_adrv9025_Init_t *adrv9025Init,
-// 				    adi_adrv9025_FramerSel_e framerSel,
-// 				    uint32_t *iqRate_kHz)
-// {
-// 	int recoveryAction = ADI_COMMON_ACT_NO_ACTION;
-// 	adi_adrv9025_AdcSampleXbarSel_e conv = ADI_ADRV9025_ADC_RX1_Q;
-// 	uint32_t framerIndex = 0;
-
-// 	/* Check device pointer is not null */
-// 	ADI_NULL_DEVICE_PTR_RETURN(device);
-// 	ADI_NULL_PTR_RETURN(&device->common, iqRate_kHz);
-
-// 	ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
-
-// 	switch (framerSel) {
-// 	case ADI_ADRV9025_FRAMER_0:
-// 		framerIndex = 0;
-// 		break;
-// 	case ADI_ADRV9025_FRAMER_1:
-// 		framerIndex = 1;
-// 		break;
-// 	case ADI_ADRV9025_FRAMER_2:
-// 		framerIndex = 2;
-// 		break;
-// 	default:
-// 		ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API,
-// 				 ADI_COMMON_ERR_INV_PARAM,
-// 				 ADI_COMMON_ACT_ERR_CHECK_PARAM, framerSel,
-// 				 "Only one framer can be selected at a time.");
-// 		ADI_ERROR_RETURN(device->common.error.newAction);
-// 		break;
-// 	}
-
-// 	if (adrv9025Init->dataInterface.framer[framerIndex].jesd204M < 1) {
-// 		*iqRate_kHz = 0;
-// 		return recoveryAction;
-// 	}
-
-// 	conv = adrv9025Init->dataInterface.framer[framerIndex]
-// 	       .adcCrossbar.conv0;
-
-// 	switch (conv) {
-// 	case ADI_ADRV9025_ADC_RX1_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_RX1_Q: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX1_BAND_B_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX1_BAND_B_Q: /* fall through */
-// 		*iqRate_kHz = adrv9025Init->rx.rxChannelCfg[0]
-// 			      .profile.rxOutputRate_kHz;
-// 		break;
-// 	case ADI_ADRV9025_ADC_RX2_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_RX2_Q: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX2_BAND_B_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX2_BAND_B_Q: /* fall through */
-// 		*iqRate_kHz = adrv9025Init->rx.rxChannelCfg[1]
-// 			      .profile.rxOutputRate_kHz;
-// 		break;
-// 	case ADI_ADRV9025_ADC_RX3_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_RX3_Q: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX3_BAND_B_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX3_BAND_B_Q: /* fall through */
-// 		*iqRate_kHz = adrv9025Init->rx.rxChannelCfg[2]
-// 			      .profile.rxOutputRate_kHz;
-// 		break;
-// 	case ADI_ADRV9025_ADC_RX4_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_RX4_Q: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX4_BAND_B_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_DUALBAND_RX4_BAND_B_Q: /* fall through */
-// 		*iqRate_kHz = adrv9025Init->rx.rxChannelCfg[3]
-// 			      .profile.rxOutputRate_kHz;
-// 		break;
-// 	// NOTE: ORx2/4 profiles never referenced, ORx2IQ enum below refers to digital channel not RF input
-// 	// RF ORx1/2 share digital ORX1, and RF ORX3/4 share digital ORX2
-// 	case ADI_ADRV9025_ADC_ORX1_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_ORX1_Q: /* fall through */
-// 		*iqRate_kHz = adrv9025Init->rx.rxChannelCfg[4]
-// 			      .profile.rxOutputRate_kHz;
-// 		break;
-// 	// NOTE: ORx2/4 profiles never referenced, ORx2IQ enum below refers to digital channel not RF input
-// 	// RF ORx1/2 share digital ORX1, and RF ORX3/4 share digital ORX2
-// 	case ADI_ADRV9025_ADC_ORX2_I: /* fall through */
-// 	case ADI_ADRV9025_ADC_ORX2_Q: /* fall through */
-// 		*iqRate_kHz = adrv9025Init->rx.rxChannelCfg[6]
-// 			      .profile.rxOutputRate_kHz;
-// 		break;
-// 	default:
-// 		*iqRate_kHz = 0;
-// 		ADI_ERROR_REPORT(
-// 			&device->common, ADI_COMMON_ERRSRC_API,
-// 			ADI_COMMON_ERR_INV_PARAM,
-// 			ADI_COMMON_ACT_ERR_CHECK_PARAM, adcCrossbar.conv0,
-// 			"Invalid ADC crossbar used to read iqRate_kHz");
-// 		ADI_ERROR_RETURN(device->common.error.newAction);
-// 	}
-
-// 	return recoveryAction;
-// }
-
-// int adrv9025_TxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
-// 				    adi_adrv9025_Init_t *adrv9025Init,
-// 				    adi_adrv9025_DeframerSel_e deframerSel,
-// 				    uint32_t *iqRate_kHz)
-// {
-// 	int recoveryAction = ADI_COMMON_ACT_NO_ACTION;
-// 	uint32_t deframerIndex = 0;
-
-// 	/* Check device pointer is not null */
-// 	ADI_NULL_DEVICE_PTR_RETURN(device);
-// 	ADI_NULL_PTR_RETURN(&device->common, iqRate_kHz);
-
-// 	ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
-
-// 	switch (deframerSel) {
-// 	case ADI_ADRV9025_DEFRAMER_0:
-// 		deframerIndex = 0;
-// 		break;
-// 	case ADI_ADRV9025_DEFRAMER_1:
-// 		deframerIndex = 1;
-// 		break;
-// 	default:
-// 		ADI_ERROR_REPORT(
-// 			&device->common, ADI_COMMON_ERRSRC_API,
-// 			ADI_COMMON_ERR_INV_PARAM,
-// 			ADI_COMMON_ACT_ERR_CHECK_PARAM, deframerSel,
-// 			"Only one deframer can be selected at a time.");
-// 		ADI_ERROR_RETURN(device->common.error.newAction);
-// 		break;
-// 	}
-
-// 	if (adrv9025Init->dataInterface.deframer[deframerIndex].jesd204M < 1) {
-// 		*iqRate_kHz = 0;
-// 		return recoveryAction;
-// 	}
-
-// 	//Use samplerate of DAC set to use deframer output 0.
-// 	if ((adrv9025Init->dataInterface.deframer[deframerIndex]
-// 	     .dacCrossbar.tx1DacChanI == ADI_ADRV9025_DEFRAMER_OUT0) ||
-// 	    (adrv9025Init->dataInterface.deframer[deframerIndex]
-// 	     .dacCrossbar.tx1DacChanQ == ADI_ADRV9025_DEFRAMER_OUT0)) {
-// 		*iqRate_kHz = adrv9025Init->tx.txChannelCfg[0]
-// 			      .profile.txInputRate_kHz;
-// 	} else if ((adrv9025Init->dataInterface.deframer[deframerIndex]
-// 		    .dacCrossbar.tx2DacChanI ==
-// 		    ADI_ADRV9025_DEFRAMER_OUT0) ||
-// 		   (adrv9025Init->dataInterface.deframer[deframerIndex]
-// 		    .dacCrossbar.tx2DacChanQ ==
-// 		    ADI_ADRV9025_DEFRAMER_OUT0)) {
-// 		*iqRate_kHz = adrv9025Init->tx.txChannelCfg[1]
-// 			      .profile.txInputRate_kHz;
-// 	} else if ((adrv9025Init->dataInterface.deframer[deframerIndex]
-// 		    .dacCrossbar.tx3DacChanI ==
-// 		    ADI_ADRV9025_DEFRAMER_OUT0) ||
-// 		   (adrv9025Init->dataInterface.deframer[deframerIndex]
-// 		    .dacCrossbar.tx3DacChanQ ==
-// 		    ADI_ADRV9025_DEFRAMER_OUT0)) {
-// 		*iqRate_kHz = adrv9025Init->tx.txChannelCfg[2]
-// 			      .profile.txInputRate_kHz;
-// 	} else if ((adrv9025Init->dataInterface.deframer[deframerIndex]
-// 		    .dacCrossbar.tx4DacChanI ==
-// 		    ADI_ADRV9025_DEFRAMER_OUT0) ||
-// 		   (adrv9025Init->dataInterface.deframer[deframerIndex]
-// 		    .dacCrossbar.tx4DacChanQ ==
-// 		    ADI_ADRV9025_DEFRAMER_OUT0)) {
-// 		*iqRate_kHz = adrv9025Init->tx.txChannelCfg[3]
-// 			      .profile.txInputRate_kHz;
-// 	}
-
-// 	return recoveryAction;
-// }
-
-// static void adrv9025_shutdown(struct adrv9025_rf_phy *phy)
-// {
-// 	/***********************************************
-// 	 * Shutdown Procedure *
-// 	 * **********************************************/
-// 	/* Function to turn radio on, Disables transmitters and receivers */
-
-// 	adi_adrv9025_Shutdown(phy->madDevice);
-// 	adi_adrv9025_HwClose(phy->madDevice);
-
-// 	memset(&phy->adi_adrv9025_device.devStateInfo, 0,
-// 	       sizeof(phy->adi_adrv9025_device.devStateInfo));
-// }
-
-// #define ADRV9025_MAX_CLK_NAME 79
-
-// static void adrv9025_info(struct adrv9025_rf_phy *phy)
-// {
-// 	adi_adrv9025_ApiVersion_t apiVersion;
-// 	adi_adrv9025_ArmVersion_t armVersion;
-// 	adi_adrv9025_StreamVersion_t streamVersion;
-
-// 	adi_adrv9025_ApiVersionGet(phy->madDevice, &apiVersion);
-// 	adi_adrv9025_ArmVersionGet(phy->madDevice, &armVersion);
-// 	adi_adrv9025_StreamVersionGet(phy->madDevice, &streamVersion);
-
-// 	pr_info(
-// 		"adrv9025-phy Rev %d, Firmware %u.%u.%u.%u API version: %u.%u.%u.%u Stream version: %u.%u.%u.%u successfully initialized%s",
-// 		phy->madDevice->devStateInfo.deviceSiRev, armVersion.majorVer,
-// 		armVersion.minorVer, armVersion.maintVer, armVersion.rcVer,
-// 		apiVersion.majorVer, apiVersion.minorVer,
-// 		apiVersion.maintenanceVer, apiVersion.buildVer,
-// 		streamVersion.majorVer, streamVersion.minorVer,
-// 		streamVersion.mainVer, streamVersion.buildVer,
-// 		phy->jdev ? " via jesd204-fsm\n" : "\n");
-// }
-
-// struct adrv9025_jesd204_link {
-// 	unsigned int source_id;
-// 	bool is_framer;
-// };
-
-// struct adrv9025_jesd204_priv {
-// 	struct adrv9025_rf_phy *phy;
-// 	struct adrv9025_jesd204_link link[5];
-// };
-
-// int adrv9025_jesd204_link_pre_setup(struct jesd204_dev *jdev,
-// 				    enum jesd204_state_op_reason reason)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	uint64_t dev_clk;
-// 	int ret;
-
-// 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-// 		 jesd204_state_op_reason_str(reason));
-
-// 	switch (reason) {
-// 	case JESD204_STATE_OP_REASON_INIT:
-// 		break;
-// 	default:
-// 		return JESD204_STATE_CHANGE_DONE;
-// 	}
-
-// 	ret = no_os_clk_round_rate(phy->dev_clk,
-// 				   phy->deviceInitStruct.clocks.deviceClock_kHz * 1000, &dev_clk);
-// 	if (ret)
-// 		return JESD204_STATE_CHANGE_ERROR;
-
-// 	if (dev_clk > 0 && ((dev_clk / 1000) ==
-// 			    phy->deviceInitStruct.clocks.deviceClock_kHz)) {
-// 		no_os_clk_set_rate(phy->dev_clk, dev_clk);
-// 	} else {
-// 		pr_err("Requesting device clock %u failed got %ld",
-// 		       phy->deviceInitStruct.clocks.deviceClock_kHz * 1000, dev_clk);
-// 		return -EINVAL;
-// 	}
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-// static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
-// 				      enum jesd204_state_op_reason reason,
-// 				      struct jesd204_link *lnk)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	adi_adrv9025_FrmCfg_t *framer = NULL;
-// 	adi_adrv9025_DfrmCfg_t *deframer = NULL;
-// 	uint32_t rate;
-// 	int ret;
-
-// 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
-// 		 lnk->link_id, jesd204_state_op_reason_str(reason));
-
-// 	switch (reason) {
-// 	case JESD204_STATE_OP_REASON_INIT:
-// 		break;
-// 	default:
-// 		return JESD204_STATE_CHANGE_DONE;
-// 	}
-
-// 	switch (lnk->link_id) {
-// 	case DEFRAMER0_LINK_TX:
-// 		deframer = &phy->deviceInitStruct.dataInterface.deframer[0];
-// 		priv->link[lnk->link_id].source_id = ADI_ADRV9025_DEFRAMER_0;
-// 		ret = adrv9025_TxLinkSamplingRateFind(phy->madDevice, &phy->deviceInitStruct,
-// 						      ADI_ADRV9025_DEFRAMER_0,
-// 						      &rate);
-// 		phy->tx_iqRate_kHz  = rate;
-// 		break;
-// 	case DEFRAMER1_LINK_TX:
-// 		deframer = &phy->deviceInitStruct.dataInterface.deframer[1];
-// 		priv->link[lnk->link_id].source_id = ADI_ADRV9025_DEFRAMER_1;
-// 		ret = adrv9025_TxLinkSamplingRateFind(phy->madDevice, &phy->deviceInitStruct,
-// 						      ADI_ADRV9025_DEFRAMER_1,
-// 						      &rate);
-// 		break;
-// 	case FRAMER0_LINK_RX:
-// 		framer = &phy->deviceInitStruct.dataInterface.framer[0];
-// 		priv->link[lnk->link_id].source_id = ADI_ADRV9025_FRAMER_0;
-// 		priv->link[lnk->link_id].is_framer = true;
-// 		ret = adrv9025_RxLinkSamplingRateFind(phy->madDevice, &phy->deviceInitStruct,
-// 						      ADI_ADRV9025_FRAMER_0,
-// 						      &rate);
-// 		phy->rx_iqRate_kHz = rate;
-// 		break;
-// 	case FRAMER1_LINK_RX:
-// 		framer = &phy->deviceInitStruct.dataInterface.framer[1];
-// 		priv->link[lnk->link_id].source_id = ADI_ADRV9025_FRAMER_1;
-// 		priv->link[lnk->link_id].is_framer = true;
-// 		ret = adrv9025_RxLinkSamplingRateFind(phy->madDevice, &phy->deviceInitStruct,
-// 						      ADI_ADRV9025_FRAMER_1,
-// 						      &rate);
-// 		break;
-// 	case FRAMER2_LINK_RX:
-// 		framer = &phy->deviceInitStruct.dataInterface.framer[2];
-// 		priv->link[lnk->link_id].source_id = ADI_ADRV9025_FRAMER_2;
-// 		priv->link[lnk->link_id].is_framer = true;
-// 		ret = adrv9025_RxLinkSamplingRateFind(phy->madDevice, &phy->deviceInitStruct,
-// 						      ADI_ADRV9025_FRAMER_2,
-// 						      &rate);
-// 		break;
-// 	default:
-// 		return -EINVAL;
-// 	}
-
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	lnk->sample_rate = rate * 1000;
-
-// 	if (framer) {
-// 		lnk->num_converters = framer->jesd204M;
-// 		lnk->num_lanes = no_os_hweight8(framer->serializerLanesEnabled);
-// 		lnk->octets_per_frame = framer->jesd204F;
-// 		lnk->frames_per_multiframe = framer->jesd204K;
-// 		lnk->device_id = framer->deviceId;
-// 		lnk->bank_id = framer->bankId;
-// 		lnk->scrambling = framer->scramble;
-// 		lnk->bits_per_sample = framer->jesd204Np;
-// 		lnk->converter_resolution = framer->jesd204Np;
-// 		lnk->ctrl_bits_per_sample = 0;
-// 		lnk->jesd_version = framer->enableJesd204C ? JESD204_VERSION_C :
-// 				    JESD204_VERSION_B;
-// 		lnk->subclass = JESD204_SUBCLASS_1;
-// 		lnk->is_transmit = false;
-// 	} else if (deframer) {
-// 		lnk->num_converters = deframer->jesd204M;
-// 		lnk->num_lanes = no_os_hweight8(deframer->deserializerLanesEnabled);
-// 		lnk->octets_per_frame = deframer->jesd204F;
-// 		lnk->frames_per_multiframe = deframer->jesd204K;
-// 		lnk->device_id = deframer->deviceId;
-// 		lnk->bank_id = deframer->bankId;
-// 		lnk->scrambling = deframer->scramble;
-// 		lnk->bits_per_sample = deframer->jesd204Np;
-// 		lnk->converter_resolution = deframer->jesd204Np;
-// 		lnk->ctrl_bits_per_sample = 0;
-// 		lnk->jesd_version = deframer->enableJesd204C ? JESD204_VERSION_C :
-// 				    JESD204_VERSION_B;
-// 		lnk->subclass = JESD204_SUBCLASS_1;
-// 		lnk->is_transmit = true;
-// 	};
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-// int adrv9025_jesd204_link_setup(struct jesd204_dev *jdev,
-// 				enum jesd204_state_op_reason reason)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret;
-
-// 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-// 		 jesd204_state_op_reason_str(reason));
-
-
-// 	if (reason == JESD204_STATE_OP_REASON_UNINIT) {
-// 		phy->is_initialized = 0;
-
-// 		adi_adrv9025_Shutdown(phy->madDevice);
-// 		adi_adrv9025_HwClose(phy->madDevice);
-
-// 		memset(&phy->adi_adrv9025_device.devStateInfo, 0,
-// 		       sizeof(phy->adi_adrv9025_device.devStateInfo));
-
-// 		return JESD204_STATE_CHANGE_DONE;
-// 	}
-
-// 	memset(&phy->adi_adrv9025_device.devStateInfo, 0,
-// 	       sizeof(phy->adi_adrv9025_device.devStateInfo));
-
-// 	ret = adi_adrv9025_HwOpen(phy->madDevice, &phy->spiSettings);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	adi_common_LogLevelSet(&phy->madDevice->common,
-// 			       ADI_HAL_LOG_ERR | ADI_HAL_LOG_WARN);
-
-// 	/* Pre MCS - Broadcastable */
-// 	ret = adi_adrv9025_PreMcsInit_v2(phy->madDevice, &phy->deviceInitStruct,
-// 					 phy->platformFiles.armImageFile,
-// 					 phy->platformFiles.streamImageFile,
-// 					 phy->platformFiles.rxGainTableFileArr,
-// 					 phy->platformFiles.rxGainTableFileArrSize,
-// 					 phy->platformFiles.txAttenTableFileArr,
-// 					 phy->platformFiles.txAttenTableFileArrSize);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	/* Pre MCS - Non-Broadcastable */
-// 	ret = adi_adrv9025_PreMcsInit_NonBroadCast(phy->madDevice,
-// 			&phy->deviceInitStruct);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	/* MCS start sequence*/
-// 	ret = adi_adrv9025_MultichipSyncSet(phy->madDevice, ADI_ENABLE);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-// static int adrv9025_jesd204_setup_stage1(struct jesd204_dev *jdev,
-// 		enum jesd204_state_op_reason reason)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret, i;
-// 	uint32_t mcsStatus;
-
-// 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-// 		 jesd204_state_op_reason_str(reason));
-
-// 	if (reason != JESD204_STATE_OP_REASON_INIT)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	/* This loop will send SysRef pulses up to 255 times unless MCS status achieved before. */
-// 	for (i = 0; i < 255; i++) {
-// 		ret = adi_adrv9025_MultichipSyncStatusGet(phy->madDevice,
-// 				&mcsStatus);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 		if ((mcsStatus & 0x17) == 0x17)
-// 			break;
-
-// 		jesd204_sysref_async_force(phy->jdev);
-// 	}
-
-// 	if (mcsStatus != 0x17) {
-// 		pr_err("%s:%d Unexpected MCS sync status (0x%X)",
-// 		       __func__, __LINE__, mcsStatus);
-
-// 		return adrv9025_dev_err(phy);
-// 	}
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-// static int adrv9025_jesd204_setup_stage2(struct jesd204_dev *jdev,
-// 		enum jesd204_state_op_reason reason)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret;
-
-// 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-// 		 jesd204_state_op_reason_str(reason));
-
-// 	if (reason != JESD204_STATE_OP_REASON_INIT)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	/* MCS end sequence*/
-// 	ret = adi_adrv9025_MultichipSyncSet(phy->madDevice, ADI_DISABLE);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	/* Post MCS */
-// 	ret = adi_adrv9025_PostMcsInit(phy->madDevice,
-// 				       &phy->adrv9025PostMcsInitInst);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	ret = adi_adrv9025_SerializerReset(
-// 		      phy->madDevice, phy->deviceInitStruct.clocks.serdesPllVcoFreq_kHz);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
+uint32_t appApiCount;
+
+/*
+* \brief    Macro to perform the following:
+*                       1) Check Return Code from Function Call
+*                       2) Write Error Data to Standard Output if Non Zero
+*                       3) Return NOK Application Return Code
+*/
+#define ADI_APP_API_CALL_RETURN(returnCode, funcName, ...)                                              \
+{                                                                                                       \
+    ++appApiCount;                                                                                      \
+    returnCode = funcName( __VA_ARGS__);                                                                \
+    --appApiCount;                                                                                      \
+    if (returnCode)                                                                                     \
+    {                                                                                                   \
+        ADI_APP_ERROR_REPORT(ADI_COMMON_ERRSRC_API, returnCode, ADI_NO_VARIABLE, ADI_NO_ERROR_MESSAGE); \
+                                                                                                        \
+        adi_common_Device_t commonDev;                                                                  \
+                                                                                                        \
+        ADI_LIBRARY_MEMSET(&commonDev, 0, sizeof(adi_common_Device_t));                                 \
+                                                                                                        \
+        commonDev.errPtr = (adi_common_ErrData_t*) adi_hal_TlsGet(HAL_TLS_ERR);                         \
+                                                                                                        \
+        if (appApiCount == 0U)                                                                          \
+        {                                                                                               \
+            ADI_APP_ERROR_OUTPUT(commonDev.errPtr);                                                     \
+        }                                                                                               \
+                                                                                                        \
+        return ADI_APP_API_NOK;                                                                         \
+    }                                                                                                   \
+}
+
+/*
+*  \brief ADI Example Application Return Error Codes
+*/
+typedef enum {
+	ADI_APP_API_OK  = 0U,
+	ADI_APP_API_NOK
+} adi_app_ReturnType_e;
+
+/*
+*  \brief   Example App File Abstractions
+*/
+typedef enum {
+	ADI_EXAMPLE_FILE_MAIN     = 0x1000U,
+	ADI_EXAMPLE_FILE_CALS,
+	ADI_EXAMPLE_FILE_GPIO,
+	ADI_EXAMPLE_FILE_TX,
+	ADI_EXAMPLE_FILE_RX,
+	ADI_EXAMPLE_FILE_RADIOCTRL,
+	ADI_EXAMPLE_FILE_SYSMON,
+	ADI_EXAMPLE_FILE_DATA_INTERFACE,
+	ADI_EXAMPLE_FILE_PROGRAM,
+	ADI_EXAMPLE_FILE_BBIC,
+
+
+	ADI_EXAMPLE_FILE_CARRIER_RECONFIGURE,
+	ADI_EXAMPLE_FILE_DFE_APP,
+} adi_example_File_e;
+
+static void adrv904x_shutdown(struct adrv904x_rf_phy *phy)
+{
+	/***********************************************
+	 * Shutdown Procedure *
+	 * **********************************************/
+	/* Function to turn radio on, Disables transmitters and receivers */
+
+	adi_adrv904x_Shutdown(phy->kororDevice);
+	adi_hal_HwClose(phy->kororDevice->common.devHalInfo);
+
+	memset(&phy->adi_adrv904x_device.devStateInfo, 0,
+	       sizeof(phy->adi_adrv904x_device.devStateInfo));
+}
+
+struct adrv904x_jesd204_link {
+	unsigned int source_id;
+	bool is_framer;
+};
+
+struct adrv904x_jesd204_priv {
+	struct adrv904x_rf_phy *phy;
+	struct adrv904x_jesd204_link link[5];
+};
+
+ int adrv904x_jesd204_link_pre_setup(struct jesd204_dev *jdev,
+ 				    enum jesd204_state_op_reason reason)
+ {
+ 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+ 	struct adrv904x_rf_phy *phy = priv->phy;
+ 	uint32_t deviceClockScaled_kHz = 0;
+ 	uint64_t dev_clk;
+ 	int ret;
+
+ 	deviceClockScaled_kHz = phy->kororDevice->initExtract.clocks.deviceClockScaled_kHz;
+
+ 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+ 		 jesd204_state_op_reason_str(reason));
+
+ 	switch (reason) {
+ 	case JESD204_STATE_OP_REASON_INIT:
+ 		break;
+ 	default:
+ 		return JESD204_STATE_CHANGE_DONE;
+ 	}
+
+ 	ret = no_os_clk_round_rate(phy->dev_clk,
+ 			deviceClockScaled_kHz * 1000, &dev_clk);
+ 	if (ret)
+ 		return JESD204_STATE_CHANGE_ERROR;
+
+ 	if (dev_clk > 0 && ((dev_clk / 1000) ==
+ 			deviceClockScaled_kHz)) {
+ 		no_os_clk_set_rate(phy->dev_clk, dev_clk);
+ 		pr_debug("Device clock %u sucessfully set (%ld)\n",
+ 		 				deviceClockScaled_kHz * 1000, dev_clk);
+ 	} else {
+ 		pr_err("Requesting device clock %u failed got %ld",
+ 				deviceClockScaled_kHz * 1000, dev_clk);
+ 		return -EINVAL;
+ 	}
+
+ 	uint64_t r = 0;
+ 	no_os_clk_recalc_rate(phy->dev_clk, &r);
+
+ 	return JESD204_STATE_CHANGE_DONE;
+ }
+
+ static int adrv904x_jesd204_link_init(struct jesd204_dev *jdev,
+ 				      enum jesd204_state_op_reason reason,
+ 				      struct jesd204_link *lnk)
+{
+	 struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	 struct adrv904x_rf_phy *phy = priv->phy;
+	 uint32_t rate;
+
+ 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+ 		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+ 	switch (reason) {
+ 	case JESD204_STATE_OP_REASON_INIT:
+ 		break;
+ 	default:
+ 		return JESD204_STATE_CHANGE_DONE;
+ 	}
+
+ 	switch (lnk->link_id) {
+ 	case DEFRAMER0_LINK_TX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_DEFRAMER_0;
+		phy->tx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].deserialLaneEnabled);
+		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].jesdM;
+		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].jesdNp;
+ 		break;
+ 	case DEFRAMER1_LINK_TX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_DEFRAMER_1;
+		phy->tx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].deserialLaneEnabled);
+		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].jesdM;
+		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].jesdNp;
+		break;
+ 	case FRAMER0_LINK_RX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_FRAMER_0;
+		priv->link[lnk->link_id].is_framer = true;
+		phy->rx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.framerSetting[0].serialLaneEnabled);
+		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].jesdM;
+		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].jesdNp;
+ 		break;
+ 	case FRAMER1_LINK_RX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_FRAMER_1;
+		priv->link[lnk->link_id].is_framer = true;
+		phy->rx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.framerSetting[1].serialLaneEnabled);
+		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].jesdM;
+		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].jesdNp;
+ 		break;
+ 	case FRAMER2_LINK_RX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_FRAMER_2;
+		priv->link[lnk->link_id].is_framer = true;
+		phy->rx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.framerSetting[2].serialLaneEnabled);
+		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].jesdM;
+		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].jesdNp;
+		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+
+ 	lnk->sample_rate = rate * 1000;
+
+ 	if (phy->tx_iqRate_kHz && (lnk->link_id == DEFRAMER0_LINK_TX)) {
+ 		lnk->octets_per_frame = 4;
+ 		lnk->frames_per_multiframe = 64;
+ 		lnk->device_id = 0;
+ 		lnk->bank_id = 0;
+ 		lnk->scrambling = 1;
+ 		lnk->converter_resolution = 16;
+ 		lnk->ctrl_bits_per_sample = 0;
+ 		lnk->jesd_version = JESD204_VERSION_C;
+ 		lnk->subclass = JESD204_SUBCLASS_1;
+ 		lnk->is_transmit = false;
+ 		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
+ 	} else if (phy->rx_iqRate_kHz && (lnk->link_id == FRAMER0_LINK_RX)) {
+ 		lnk->octets_per_frame = 4;
+ 		lnk->frames_per_multiframe = 64;
+ 		lnk->device_id = 0;
+ 		lnk->bank_id = 0;
+ 		lnk->scrambling = 1;
+ 		lnk->converter_resolution = 16;
+ 		lnk->ctrl_bits_per_sample = 0;
+ 		lnk->jesd_version = JESD204_VERSION_C;
+ 		lnk->subclass = JESD204_SUBCLASS_1;
+ 		lnk->is_transmit = true;
+ 		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
+ 	};
+
+ 	return JESD204_STATE_CHANGE_DONE;
+ }
+
+int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
+			enum jesd204_state_op_reason reason)
+{
+	adi_adrv904x_ErrAction_e recAction = ADI_ADRV904X_ERR_ACT_NONE;
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+			jesd204_state_op_reason_str(reason));
+
+
+	if (reason == JESD204_STATE_OP_REASON_UNINIT) {
+		phy->is_initialized = 0;
+
+		adi_adrv904x_HwClose(phy->kororDevice);
+
+		memset(&phy->adi_adrv904x_device.devStateInfo, 0,
+				sizeof(phy->adi_adrv904x_device.devStateInfo));
+
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+ static int adrv904x_jesd204_setup_stage1(struct jesd204_dev *jdev,
+ 		enum jesd204_state_op_reason reason)
+{
+	 adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
+	 struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	 struct adrv904x_rf_phy *phy = priv->phy;
+	 uint32_t mcsStatus;
+	 int i;
+
+	 pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+			 jesd204_state_op_reason_str(reason));
+
+	 if (reason != JESD204_STATE_OP_REASON_INIT)
+		 return JESD204_STATE_CHANGE_DONE;
+
+	memset(&phy->adi_adrv904x_device.devStateInfo, 0,
+	sizeof(phy->adi_adrv904x_device.devStateInfo));
+
+	recoveryAction = adi_adrv904x_HwOpen(phy->kororDevice, &phy->spiSettings);
+	if (recoveryAction)
+		return -1;
+
+	adi_common_LogLevelSet(&phy->kororDevice->common,
+	ADI_HAL_LOG_ERR | ADI_HAL_LOG_WARN);
+
+	recoveryAction = adi_adrv904x_PreMcsInit(phy->kororDevice, &deviceInitStruct, &phy->trxBinaryInfoPtr);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		printf("ERROR adi_adrv904x_PreMcsInit failed in %s at line %d.\n", __func__, __LINE__);
+		return -1;
+	}
+
+	recoveryAction = adi_adrv904x_PreMcsInit_NonBroadcast(phy->kororDevice, &deviceInitStruct);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		printf("ERROR adi_adrv904x_PreMcsInit_NonBroadcast failed in %s at line %d.\n", __func__, __LINE__);
+		return -1;
+	}
+
+	/* MCS start sequence*/
+	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		printf("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n", __func__, __LINE__);
+		return recoveryAction;
+	}
+
+	/* This loop will send SysRef pulses up to 255 times unless MCS status achieved before. */
+	for (i = 0; i < 255; i++) {
+		recoveryAction = adi_adrv904x_MultichipSyncStatusGet(phy->kororDevice, &mcsStatus);
+		if (recoveryAction) {
+			ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction, "Issue during getting multi-chip sync status");
+			return recoveryAction;
+		}
+
+		if ((mcsStatus & 0x01) == 0x01)
+			break;
+
+		jesd204_sysref_async_force(phy->jdev);
+	}
+
+	if (mcsStatus != 0x01) {
+		pr_err("%s:%d Unexpected MCS sync status (0x%X)", __func__, __LINE__, mcsStatus);
+
+		return -1;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+ static int adrv904x_jesd204_setup_stage2(struct jesd204_dev *jdev,
+ 		enum jesd204_state_op_reason reason)
+ {
+	 adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
+ 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+ 	struct adrv904x_rf_phy *phy = priv->phy;
+
+ 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+ 		 jesd204_state_op_reason_str(reason));
+
+ 	if (reason != JESD204_STATE_OP_REASON_INIT)
+ 		return JESD204_STATE_CHANGE_DONE;
+
+ 	/* MCS end sequence*/
+ 	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_DISABLE);
+ 	if (recoveryAction) {
+ 		return recoveryAction;
+ 	}
+
+ 	/* Post MCS */
+ 	recoveryAction = adi_adrv904x_PostMcsInit(phy->kororDevice,
+ 				       &utilityInit);
+ 	if (recoveryAction)
+ 		return recoveryAction;
+
+ 	recoveryAction = adi_adrv904x_SerializerReset(phy->kororDevice);
+ 	if (recoveryAction)
+ 		return recoveryAction;
+
+ 	return JESD204_STATE_CHANGE_DONE;
+ }
 
 // static int adrv9025_jesd204_clks_enable(struct jesd204_dev *jdev,
 // 					enum jesd204_state_op_reason reason,
@@ -846,261 +662,389 @@ int adrv904x_hello(void)
 // 	return JESD204_STATE_CHANGE_DONE;
 // }
 
-// static const struct jesd204_dev_data jesd204_adrv9025_init = {
-// 	.state_ops = {
-// 		[JESD204_OP_LINK_INIT] = {
-// 			.per_link = adrv9025_jesd204_link_init,
-// 		},
-// 		[JESD204_OP_LINK_PRE_SETUP] = {
-// 			.per_device = adrv9025_jesd204_link_pre_setup,
-// 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-// 		},
-// 		[JESD204_OP_OPT_SETUP_STAGE1] = {
-// 			.per_device = adrv9025_jesd204_setup_stage1,
-// 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-// 			.post_state_sysref = true,
-// 		},
-// 		[JESD204_OP_OPT_SETUP_STAGE2] = {
-// 			.per_device = adrv9025_jesd204_setup_stage2,
-// 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-// 			.post_state_sysref = true,
-// 		},
-// 		[JESD204_OP_CLOCKS_ENABLE] = {
-// 			.per_link = adrv9025_jesd204_clks_enable,
-// 		},
-// 		[JESD204_OP_LINK_SETUP] = {
-// 			.per_device = adrv9025_jesd204_link_setup,
-// 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-// 			.post_state_sysref = true,
-// 		},
-// 		[JESD204_OP_LINK_ENABLE] = {
-// 			.per_link = adrv9025_jesd204_link_enable,
-// 			.post_state_sysref = true,
-// 		},
-// 		[JESD204_OP_LINK_RUNNING] = {
-// 			.per_link = adrv9025_jesd204_link_running,
-// 		},
-// 		[JESD204_OP_OPT_POST_RUNNING_STAGE] = {
-// 			.per_device = adrv9025_jesd204_post_running_stage,
-// 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-// 		},
-// 	},
+static const struct jesd204_dev_data jesd204_adrv904x_init = {
+	.state_ops = {
+		[JESD204_OP_LINK_INIT] = {
+			.per_link = adrv904x_jesd204_link_init,
+		},
+		[JESD204_OP_LINK_PRE_SETUP] = {
+			.per_device = adrv904x_jesd204_link_pre_setup,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE1] = {
+			.per_device = adrv904x_jesd204_setup_stage1,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+			.post_state_sysref = true,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE2] = {
+			.per_device = adrv904x_jesd204_setup_stage2,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+			.post_state_sysref = true,
+		},
+//		[JESD204_OP_CLOCKS_ENABLadrv9040_jesd204_privE] = {
+//			.per_link = adrv9025_jesd204_clks_enable,
+//		},
+//		[JESD204_OP_LINK_SETUP] = {
+//			.per_device = adrv904x_jesd204_link_setup,
+//			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+//			.post_state_sysref = true,
+//		},
+//		[JESD204_OP_LINK_ENABLE] = {
+//			.per_link = adrv9025_jesd204_link_enable,
+//			.post_state_sysref = true,
+//		},
+//		[JESD204_OP_LINK_RUNNING] = {
+//			.per_link = adrv9025_jesd204_link_running,
+//		},
+//		[JESD204_OP_OPT_POST_RUNNING_STAGE] = {
+//			.per_device = adrv9025_jesd204_post_running_stage,
+//			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+//		},
+	},
 
-// 	.max_num_links = 5,
-// 	.sizeof_priv = sizeof(struct adrv9025_jesd204_priv),
-// };
+	.max_num_links = 5,
+	.sizeof_priv = sizeof(struct adrv904x_jesd204_priv),
+};
 
-// /**
-//  * Initialize the device.
-//  * @param dev - The device structure.
-//  * @param init_param - The structure that contains the device initial
-//  * 		       parameters.
-//  * @return 0 in case of success, negative error code otherwise.
-//  */
-// int32_t adrv9025_init(struct adrv9025_rf_phy **dev,
-// 		      const struct adrv9025_init_param *init_param)
-// {
-// 	adi_adrv9025_SpiSettings_t *spi_settings;
-// 	struct adrv9025_jesd204_priv *priv;
-// 	struct adrv9025_rf_phy *phy;
-// 	int ret;
+/* Helper function to populate trxBinaryInfoPtr structure used for PreMcs
+ *
+ * Returns 0 on success.
+ */
+static int populateTrxFileInfo(adi_adrv904x_TrxFileInfo_t * const
+			       trxBinaryInfoPtr,
+			       const char * const cpuBin,
+			       const char * const configBin,
+			       const char * const streamBin,
+			       const char * const gainTable,
+			       const char * const dfeBin,
+			       const char * const radSeqBin)
 
-// 	phy = (struct adrv9025_rf_phy *)no_os_calloc(1, sizeof(*phy));
-// 	if (!phy)
-// 		goto error;
+{
+	if(trxBinaryInfoPtr == NULL || cpuBin == NULL || streamBin == NULL
+	    || gainTable == NULL) {
+		pr_err("Invalid parameters for input\n");
+		return -1;
+	}
 
-// 	phy->madDevice = init_param->adrv9025_device;
-// 	phy->spi_device_id = 0;
-// 	phy->device_id = 0;
-// 	phy->dev_clk = init_param->dev_clk;
+	pr_info("Firmware file: %s\n", cpuBin);
+	pr_info("Gain Table file: %s\n", gainTable);
+	pr_info("Streams file: %s\n", streamBin);
+	pr_info("Device Profile file: %s\n", configBin);
+	pr_info("DFE file: %s\n", dfeBin);
+	pr_info("Radio Sequencer file: %s\n", radSeqBin);
+	strncpy((char *)trxBinaryInfoPtr->dfeCpu.filePath, dfeBin,
+		ADI_ADRV904X_MAX_FILE_LENGTH);
+	trxBinaryInfoPtr->dfeCpu.filePath[ADI_ADRV904X_MAX_FILE_LENGTH - 1] = '\0';
+	strncpy((char *)trxBinaryInfoPtr->radioSequencer.filePath, radSeqBin,
+		ADI_ADRV904X_MAX_FILE_LENGTH);
+	trxBinaryInfoPtr->radioSequencer.filePath[ADI_ADRV904X_MAX_FILE_LENGTH - 1] =
+		'\0';
 
-// 	spi_settings = adrv9025_spi_settings_get();
-// 	phy->spiSettings.msbFirst = spi_settings->msbFirst;
-// 	phy->spiSettings.enSpiStreaming = spi_settings->enSpiStreaming;
-// 	phy->spiSettings.autoIncAddrUp = spi_settings->autoIncAddrUp;
-// 	phy->spiSettings.fourWireMode = spi_settings->fourWireMode;
-// 	phy->spiSettings.cmosPadDrvStrength = spi_settings->cmosPadDrvStrength;
+	fflush(stdout);
 
-// 	strncpy(phy->platformFiles.streamImageFile, init_param->streamImageFile,
-// 		sizeof(phy->platformFiles.streamImageFile));
+	strncpy((char *)trxBinaryInfoPtr->stream.filePath, streamBin,
+		ADI_ADRV904X_MAX_FILE_LENGTH);
+	trxBinaryInfoPtr->stream.filePath[ADI_ADRV904X_MAX_FILE_LENGTH - 1] = '\0';
+	strncpy((char *)trxBinaryInfoPtr->cpu.filePath, cpuBin,
+		ADI_ADRV904X_MAX_FILE_LENGTH);
+	trxBinaryInfoPtr->cpu.filePath[ADI_ADRV904X_MAX_FILE_LENGTH - 1] = '\0';
+	strncpy((char *)trxBinaryInfoPtr->cpuProfile.filePath, configBin,
+		ADI_ADRV904X_MAX_FILE_LENGTH);
+	trxBinaryInfoPtr->cpuProfile.filePath[ADI_ADRV904X_MAX_FILE_LENGTH - 1] = '\0';
 
-// 	ret = adrv9025_setup(phy);
-// 	if (ret < 0) {
-// 		pr_err("%s: adrv9025_setup failed (%d)\n", __func__, ret);
-// 		goto error_setup;
-// 	}
+	for (unsigned i = 0; i < ADI_ADRV904X_RX_GAIN_TABLE_ARR_MAX; i++) {
+		trxBinaryInfoPtr->rxGainTable[i].channelMask = 1 << i;
+		strncpy((char *)trxBinaryInfoPtr->rxGainTable[i].filePath, gainTable,
+			ADI_ADRV904X_MAX_FILE_LENGTH);
+		trxBinaryInfoPtr->rxGainTable[i].filePath[ADI_ADRV904X_MAX_FILE_LENGTH - 1] =
+			'\0';
+	}
 
-// 	ret = jesd204_dev_register(&phy->jdev, &jesd204_adrv9025_init);
-// 	if (ret)
-// 		goto error_setup;
+	return 0;
+}
 
-// 	priv = jesd204_dev_priv(phy->jdev);
-// 	priv->phy = phy;
+/**
+* Initialize the device.
+* @param dev - The device structure.
+* @param init_param - The structure that contains the device initial
+* 		       parameters.
+* @return 0 in case of success, negative error code otherwise.
+*/
+int32_t adrv904x_init(struct adrv904x_rf_phy **dev,
+		      const struct adrv904x_init_param *init_param)
+{
+	const char dfeBin[ADI_ADRV904X_MAX_FILE_LENGTH] = "ADRV9040_DFE_CALS_FW.bin";
+	const char configBin[ADI_ADRV904X_MAX_FILE_LENGTH] = "DeviceProfileTest.bin";
+	const char streamBin[ADI_ADRV904X_MAX_FILE_LENGTH] = "stream_image.bin";
+	const char gainTable[ADI_ADRV904X_MAX_FILE_LENGTH] = "RxGainTable.csv";
+	const char cpuBin[ADI_ADRV904X_MAX_FILE_LENGTH] = "ADRV9040_FW.bin";
+	const char radSeqBin[ADI_ADRV904X_MAX_FILE_LENGTH] = "";
+	adi_adrv904x_SpiConfigSettings_t *spi_settings;
+	adi_adrv904x_SpiOptions_t *spi_options;
+	struct adrv904x_jesd204_priv *priv;
+	struct adrv904x_rf_phy *phy;
+	int ret;
 
-// 	*dev = phy;
+	phy = (struct adrv904x_rf_phy *)no_os_calloc(1, sizeof(*phy));
+	if (!phy)
+		goto error;
 
-// 	return 0;
-// error_setup:
-// 	no_os_free(phy);
-// error:
-// 	return ret;
-// }
+	phy->kororDevice = init_param->adrv904x_device;
+	phy->spi_device_id = 0;
+	phy->device_id = 0;
+	phy->dev_clk = init_param->dev_clk;
 
-// static int32_t adrv9025_bb_recalc_rate(struct no_os_clk_desc *desc,
-// 				       uint64_t *rate)
-// {
-// 	struct adrv9025_rf_phy *adrv9025_dev;
-// 	uint64_t read_rate = 0;
-// 	int ret;
+	spi_settings = adrv904x_spi_settings_get();
+	spi_options = adrv904x_spi_options_get();
+	phy->spiSettings.msbFirst = spi_settings->msbFirst;
+	phy->spiOptions.allowSpiStreaming = spi_options->allowSpiStreaming;
+	phy->spiOptions.allowAhbAutoIncrement = spi_options->allowAhbAutoIncrement;
+	phy->spiOptions.allowAhbSpiFifoMode = spi_options->allowAhbSpiFifoMode;
+	phy->spiSettings.fourWireMode = spi_settings->fourWireMode;
+	phy->spiSettings.cmosPadDrvStrength = spi_settings->cmosPadDrvStrength;
 
-// 	adrv9025_dev = desc->dev_desc;
+	/* Load structure for PreMcsInit */
+	ret = populateTrxFileInfo(&phy->trxBinaryInfoPtr, &cpuBin[0], &configBin[0],
+				  &streamBin[0],
+				  &gainTable[0], &dfeBin[0], &radSeqBin[0]);
+	if (ret) {
+		pr_err("ERROR populateTrxFileInfo failed in %s at line %d.\n", __func__,
+		       __LINE__);
+		return -1;
+	}
 
-// 	ret = no_os_clk_recalc_rate(adrv9025_dev->dev_clk, &read_rate);
-// 	if (!ret)
-// 		*rate = read_rate;
+	ret = adrv904x_setup(phy);
+	if (ret < 0) {
+		pr_err("%s: adrv9025_setup failed (%d)\n", __func__, ret);
+		goto error_setup;
+	}
 
-// 	return ret;
-// }
+	ret = jesd204_dev_register(&phy->jdev, &jesd204_adrv904x_init);
+	if (ret)
+		goto error_setup;
 
-// static int32_t adrv9025_bb_set_rate(struct no_os_clk_desc *desc,
-// 				    uint64_t rate)
-// {
-// 	struct adrv9025_rf_phy *adrv9025_dev;
-// 	adrv9025_dev = desc->dev_desc;
+	priv = jesd204_dev_priv(phy->jdev);
+	priv->phy = phy;
 
-// 	return no_os_clk_set_rate(adrv9025_dev->dev_clk, rate);
-// }
+	*dev = phy;
 
-// static int32_t adrv9025_bb_round_rate(struct no_os_clk_desc *desc,
-// 				      uint64_t rate,
-// 				      uint64_t *rounded_rate)
-// {
-// 	pr_debug("%s: Rate %lu Hz", __func__, rate);
+	return 0;
+error_setup:
+	no_os_free(phy);
+error:
+	return ret;
+}
 
-// 	*rounded_rate = rate;
+static int32_t adrv9040_bb_recalc_rate(struct no_os_clk_desc *desc,
+				       uint64_t *rate)
+{
+	struct adrv904x_rf_phy *adrv9040_dev;
+	uint64_t read_rate = 0;
+	int ret;
 
-// 	return 0;
-// }
+	adrv9040_dev = desc->dev_desc;
 
-// static const struct no_os_clk_platform_ops adrv9025_bb_clk_ops = {
-// 	.clk_round_rate = &adrv9025_bb_round_rate,
-// 	.clk_set_rate = &adrv9025_bb_set_rate,
-// 	.clk_recalc_rate = &adrv9025_bb_recalc_rate,
-// };
+	ret = no_os_clk_recalc_rate(adrv9040_dev->dev_clk, &read_rate);
+	if (!ret)
+		*rate = read_rate;
 
-// int adrv9025_setup(struct adrv9025_rf_phy *phy)
-// {
-// 	const char *names[NUM_ADRV9025_CLKS] = {
-// 		"-rx_sampl_clk", "-tx_sampl_clk"
-// 	};
-// 	struct no_os_clk_desc *rx_sample_clk = NULL;
-// 	struct no_os_clk_desc *tx_sample_clk = NULL;
-// 	struct no_os_clk_init_param clk_init;
-// 	adi_adrv9025_ApiVersion_t apiVersion;
-// 	int ret, i;
+	return ret;
+}
 
-// 	phy->madDevice = &phy->adi_adrv9025_device;
-// 	phy->madDevice->common.devHalInfo = &phy->hal;
+static int32_t adrv9040_bb_set_rate(struct no_os_clk_desc *desc,
+				    uint64_t rate)
+{
+	struct adrv904x_rf_phy *adrv9040_dev;
+	adrv9040_dev = desc->dev_desc;
 
-// 	adrv9025_ErrorClear(&phy->madDevice->common);
+	return no_os_clk_set_rate(adrv9040_dev->dev_clk, rate);
+}
 
-// 	strncpy(phy->platformFiles.armImageFile,
-// 		"ADRV9025_FW.bin;ADRV9025_DPDCORE_FW.bin",
-// 		sizeof(phy->platformFiles.armImageFile));
+static int32_t adrv9040_bb_round_rate(struct no_os_clk_desc *desc,
+				      uint64_t rate,
+				      uint64_t *rounded_rate)
+{
+	pr_debug("%s: Rate %lu Hz", __func__, rate);
 
-// 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->platformFiles.rxGainTableFileArr); i++) {
-// 		strncpy(phy->platformFiles.rxGainTableFileArr[i].rxGainTableCsvFileName,
-// 			"ADRV9025_RxGainTable.h",
-// 			sizeof(phy->platformFiles.rxGainTableFileArr[0].rxGainTableCsvFileName));
-// 		phy->platformFiles.rxGainTableFileArr[i].rxChannelMask = 0xFF;
-// 		phy->platformFiles.rxGainTableFileArrSize++;
-// 	}
+	*rounded_rate = rate;
 
-// 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->platformFiles.txAttenTableFileArr); i++) {
-// 		strncpy(phy->platformFiles.txAttenTableFileArr[i].txAttenTableCsvFileName,
-// 			"ADRV9025_TxAttenTable.h",
-// 			sizeof(phy->platformFiles.txAttenTableFileArr[0].txAttenTableCsvFileName));
-// 		phy->platformFiles.txAttenTableFileArr[i].txChannelMask = 0x0F;
-// 		phy->platformFiles.txAttenTableFileArrSize++;
-// 	}
+	return 0;
+}
 
-// 	ret = no_os_clk_enable(phy->dev_clk);
-// 	if (ret)
-// 		return ret;
+static const struct no_os_clk_platform_ops adrv9040_bb_clk_ops = {
+	.clk_round_rate = &adrv9040_bb_round_rate,
+	.clk_set_rate = &adrv9040_bb_set_rate,
+	.clk_recalc_rate = &adrv9040_bb_recalc_rate,
+};
 
-// 	adi_common_LogLevelSet(&phy->madDevice->common,
-// 			       ADI_HAL_LOG_ALL);
+int adrv904x_setup(struct adrv904x_rf_phy *phy)
+{
+	adi_adrv904x_ExtractInitDataOutput_e checkExtractInitData =
+		ADI_ADRV904X_EXTRACT_INIT_DATA_NOT_POPULATED;
+	const char *names[NUM_ADRV904X_CLKS] = {
+		"-rx_sampl_clk", "-tx_sampl_clk", "-orx_sampl_clk"
+	};
+	int recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
+	struct no_os_clk_desc *orx_sample_clk = NULL;
+	struct no_os_clk_desc *rx_sample_clk = NULL;
+	struct no_os_clk_desc *tx_sample_clk = NULL;
+	struct no_os_clk_init_param clk_init;
+	adi_adrv904x_Version_t apiVersion;
+	adi_common_ErrData_t errData;
+	adi_common_ErrData_t* errPtr;
+	uint8_t siRevision = 0xbb;
+	int ret;
 
-// 	ret = adi_adrv9025_HwOpen(phy->madDevice, adrv9025_spi_settings_get());
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
+	phy->kororDevice = &phy->adi_adrv904x_device;
+	phy->kororDevice->common.devHalInfo = &phy->hal;
 
-// 	ret = adi_adrv9025_ConfigFileLoad(phy->madDevice, "ActiveUseCase.profile",
-// 					  &phy->deviceInitStruct);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
+	ADI_APP_MESSAGE("\nadrv904x_setup()\n");
 
-// 	ret = adi_adrv9025_UtilityInitFileLoad(phy->madDevice, "ActiveUtilInit.profile",
-// 					       &phy->adrv9025PostMcsInitInst);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
+	(void) ADI_LIBRARY_MEMSET(&errData, 0, sizeof(adi_common_ErrData_t));
 
-// 	rx_sample_clk = no_os_calloc(1, sizeof(rx_sample_clk));
-// 	if (!rx_sample_clk)
-// 		goto rx_out_clk_error;
+	/* Configure Example Application for No Buffering to Standard Output */
+	ADI_LIBRARY_SETVBUF(stdout, NULL, _IONBF, 0);
 
-// 	/* Initialize clk component */
-// 	clk_init.name = names[ADRV9025_RX_SAMPL_CLK];
-// 	clk_init.hw_ch_num = 1;
-// 	clk_init.platform_ops = &adrv9025_bb_clk_ops;
-// 	clk_init.dev_desc = phy;
+	ret = no_os_clk_enable(phy->dev_clk);
+	if (ret)
+		return ret;
 
-// 	ret = no_os_clk_init(&rx_sample_clk, &clk_init);
-// 	if (ret)
-// 		goto rx_out_clk_init_error;
+	errPtr = (adi_common_ErrData_t *)no_os_calloc(1, sizeof(adi_common_ErrData_t));
+	if (!errPtr)
+		return -ENOMEM;
 
-// 	phy->clks[ADRV9025_RX_SAMPL_CLK] = rx_sample_clk;
+	phy->kororDevice->common.errPtr = errPtr;
 
-// 	tx_sample_clk = no_os_calloc(1, sizeof(tx_sample_clk));
-// 	if (!tx_sample_clk)
-// 		goto rx_out_clk_init_error;
+	ret = adi_adrv904x_HwOpen(phy->kororDevice, adrv904x_spi_settings_get());
+	if (ret)
+		return ret;
 
-// 	/* Initialize clk component */
-// 	clk_init.name = names[ADRV9025_TX_SAMPL_CLK];
-// 	clk_init.hw_ch_num = 1;
-// 	clk_init.platform_ops = &adrv9025_bb_clk_ops;
-// 	clk_init.dev_desc = phy;
+	rx_sample_clk = no_os_calloc(1, sizeof(rx_sample_clk));
+	if (!rx_sample_clk)
+		goto rx_out_clk_error;
 
-// 	ret = no_os_clk_init(&tx_sample_clk, &clk_init);
-// 	if (ret)
-// 		goto tx_out_clk_init_error;
+	/* Initialize clk component */
+	clk_init.name = names[ADRV904X_RX_SAMPL_CLK];
+	clk_init.hw_ch_num = 1;
+	clk_init.platform_ops = &adrv9040_bb_clk_ops;
+	clk_init.dev_desc = phy;
 
-// 	phy->clks[ADRV9025_TX_SAMPL_CLK] = tx_sample_clk;
+	ret = no_os_clk_init(&rx_sample_clk, &clk_init);
+	if (ret)
+		goto rx_out_clk_init_error;
 
-// 	adi_adrv9025_ApiVersionGet(phy->madDevice, &apiVersion);
-// 	adi_adrv9025_Shutdown(phy->madDevice);
-// 	adi_adrv9025_HwClose(phy->madDevice);
+	phy->clks[ADRV904X_RX_SAMPL_CLK] = rx_sample_clk;
 
-// 	pr_info("adrv9025-phy Rev %d, API version: %u.%u.%u.%u found\n",
-// 		phy->madDevice->devStateInfo.deviceSiRev,
-// 		apiVersion.majorVer, apiVersion.minorVer,
-// 		apiVersion.maintenanceVer, apiVersion.buildVer);
+	tx_sample_clk = no_os_calloc(1, sizeof(tx_sample_clk));
+	if (!tx_sample_clk)
+		goto rx_out_clk_init_error;
 
-// 	return 0;
+	/* Initialize clk component */
+	clk_init.name = names[ADRV904X_TX_SAMPL_CLK];
+	clk_init.hw_ch_num = 1;
+	clk_init.platform_ops = &adrv9040_bb_clk_ops;
+	clk_init.dev_desc = phy;
 
-// tx_out_clk_init_error:
-// 	no_os_free(tx_sample_clk);
-// rx_out_clk_init_error:
-// 	no_os_free(rx_sample_clk);
-// rx_out_clk_error:
-// 	return ret;
-// }
+	ret = no_os_clk_init(&tx_sample_clk, &clk_init);
+	if (ret)
+		goto tx_out_clk_init_error;
 
-// int adrv9025_remove(struct adrv9025_rf_phy *phy)
-// {
-// 	no_os_clk_disable(phy->dev_clk);
+	phy->clks[ADRV904X_TX_SAMPL_CLK] = tx_sample_clk;
 
-// 	adrv9025_shutdown(phy);
+	orx_sample_clk = no_os_calloc(1, sizeof(orx_sample_clk));
+	if (!orx_sample_clk)
+		goto tx_out_clk_init_error;
 
-// 	return 0;
-// }
+	/* Initialize clk component */
+	clk_init.name = names[ADRV904X_ORX_SAMPL_CLK];
+	clk_init.hw_ch_num = 1;
+	clk_init.platform_ops = &adrv9040_bb_clk_ops;
+	clk_init.dev_desc = phy;
+
+	ret = no_os_clk_init(&orx_sample_clk, &clk_init);
+	if (ret)
+		goto orx_out_clk_init_error;
+
+	phy->clks[ADRV904X_ORX_SAMPL_CLK] = orx_sample_clk;
+
+	ret = adi_adrv904x_SpiVerify(phy->kororDevice);
+	if (ret)
+		goto orx_out_clk_init_error;
+
+	ret = adi_adrv904x_ApiVersionGet(phy->kororDevice, &apiVersion);
+	if (ret)
+		goto orx_out_clk_init_error;
+
+	ret = adi_adrv904x_DeviceRevGet(phy->kororDevice, &siRevision);
+	if (ret)
+		goto orx_out_clk_init_error;
+
+	pr_info("adrv904x-phy Rev %d, API version: %u.%u.%u.%u found\n",
+		phy->kororDevice->devStateInfo.deviceSiRev,
+		apiVersion.majorVer, apiVersion.minorVer,
+		apiVersion.maintenanceVer, apiVersion.buildVer);
+
+	pr_info("adrv904x-device revision: %#x\n", siRevision);
+
+	if (apiVersion.majorVer > 1U) {
+		ADI_APP_API_CALL_RETURN(recoveryAction, adi_adrv904x_InitDataExtract,
+					phy->kororDevice,
+					&phy->trxBinaryInfoPtr.cpuProfile,
+					&initStructApiVersion,
+					&initStructArmVersion,
+					&initStructStreamVersion,
+					&deviceInitStruct,
+					&utilityInit,
+					&checkExtractInitData);
+
+		switch (checkExtractInitData) {
+		case ADI_ADRV904X_EXTRACT_INIT_DATA_LEGACY_PROFILE_BIN:
+			ADI_APP_MESSAGE("\n\tUsing the Default Init and PostMcsInit Structures\n");
+			break;
+
+		case ADI_ADRV904X_EXTRACT_INIT_DATA_POPULATED:
+			ADI_APP_MESSAGE("\n\tUsing the Profile Init and PostMcsInit Structures\n");
+			break;
+
+		case ADI_ADRV904X_EXTRACT_INIT_DATA_NOT_POPULATED:
+		/* Fall Through */
+
+		default:
+			ADI_APP_ERROR_REPORT(ADI_COMMON_ERRCODE_INVALID_PARAM,
+						recoveryAction,
+						&deviceInitStruct,
+						"PreMcsInit and/or PostMcsInit Data Structures Not Populated");
+			return ADI_APP_API_NOK;
+			break;
+		}
+	}
+
+ 	/* Extract Info from CPU Profile Binary */
+	/* Required for Link init */
+	recoveryAction = adi_adrv904x_DeviceInfoExtract(phy->kororDevice, &phy->trxBinaryInfoPtr.cpuProfile);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction, "Issue during CPU Profile Binary Image Extract");
+		return -1;
+	}
+
+	return 0;
+
+orx_out_clk_init_error:
+	no_os_free(orx_sample_clk);
+tx_out_clk_init_error:
+	no_os_free(tx_sample_clk);
+rx_out_clk_init_error:
+	no_os_free(rx_sample_clk);
+rx_out_clk_error:
+	return ret;
+}
+
+int adrv904x_remove(struct adrv904x_rf_phy *phy)
+{
+	no_os_clk_disable(phy->dev_clk);
+
+	adrv904x_shutdown(phy);
+
+	return 0;
+}

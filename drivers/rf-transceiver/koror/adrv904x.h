@@ -10,6 +10,8 @@
 #ifndef IIO_TRX_ADRV9025_H_
 #define IIO_TRX_ADRV9025_H_
 
+#include "adi_adrv904x_types.h"
+#include "adi_adrv904x_core.h"
 // #include "adi_adrv9025_agc.h"
 // #include "adi_adrv9025_arm.h"
 // #include "adi_adrv9025_cals.h"
@@ -26,26 +28,26 @@
 // #include "adi_adrv9025_data_interface.h"
 // #include "adi_platform.h"
 
-// #include "no_os_platform.h"
-// #include "no_os_mutex.h"
-// #include "no_os_clk.h"
-// #include <stdbool.h>
-// #include <stdint.h>
+#include "no_os_platform.h"
+#include "no_os_mutex.h"
+#include "no_os_clk.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 // #define MIN_GAIN_mdB		0
 // #define MAX_RX_GAIN_mdB		30000
 // #define MAX_OBS_RX_GAIN_mdB	30000
 // #define RX_GAIN_STEP_mdB	500
 
-// /*
-//  * JESD204-FSM defines
-//  */
+ /*
+  * JESD204-FSM defines
+  */
 
-// #define DEFRAMER0_LINK_TX	0
-// #define DEFRAMER1_LINK_TX	1
-// #define FRAMER0_LINK_RX		2
-// #define FRAMER1_LINK_RX		3
-// #define FRAMER2_LINK_RX		4
+ #define DEFRAMER0_LINK_TX	0
+ #define DEFRAMER1_LINK_TX	1
+ #define FRAMER0_LINK_RX		2
+ #define FRAMER1_LINK_RX		3
+ #define FRAMER2_LINK_RX		4
 
 // enum adrv9025_rx_ext_info {
 // 	ADRV9025_RSSI,
@@ -67,66 +69,66 @@
 // 	ADRV9025_ID_ADRV9029,
 // };
 
-// enum adrv9025_clocks {
-// 	ADRV9025_RX_SAMPL_CLK,
-// 	ADRV9025_TX_SAMPL_CLK,
-// 	NUM_ADRV9025_CLKS,
-// };
+enum adrv904x_clocks {
+	ADRV904X_RX_SAMPL_CLK,
+	ADRV904X_TX_SAMPL_CLK,
+	ADRV904X_ORX_SAMPL_CLK,
+	NUM_ADRV904X_CLKS,
+};
 
 // #define ADRV9025_MAX_NUM_GAIN_TABLES 10
 
-// struct adrv9025_rf_phy {
-// 	struct no_os_spi_desc		*spi_desc;
-// 	adi_adrv9025_Device_t		adi_adrv9025_device;
-// 	adi_adrv9025_Device_t		*madDevice;
-// 	adi_adrv9025_SpiSettings_t	spiSettings;
-// 	adi_adrv9025_Init_t		deviceInitStruct;
-// 	adi_adrv9025_PlatformFiles_t	platformFiles;
-// 	adi_adrv9025_PostMcsInit_t	adrv9025PostMcsInitInst;
-// 	struct adrv9025_hal_cfg		hal;
+struct adrv904x_rf_phy {
+	struct no_os_spi_desc			*spi_desc;
+	adi_adrv904x_Device_t			adi_adrv904x_device;
+	adi_adrv904x_Device_t			*kororDevice;
+	adi_adrv904x_SpiConfigSettings_t	spiSettings;
+	adi_adrv904x_SpiOptions_t 		spiOptions;
+	adi_adrv904x_Init_t			deviceInitStruct;
+	adi_adrv904x_TrxFileInfo_t 		trxBinaryInfoPtr;
+	adi_adrv904x_PostMcsInit_t		adrv904xPostMcsInitInst;
+	struct adrv904x_hal_cfg			hal;
 
-// 	struct jesd204_dev		*jdev;
-// 	/* protect against device accesses */
-// 	void				*lock;
-// 	uint32_t			tx_iqRate_kHz;
-// 	uint32_t			rx_iqRate_kHz;
+	struct jesd204_dev			*jdev;
+ 	/* protect against device accesses */
+ 	void					*lock;
+ 	uint32_t				tx_iqRate_kHz;
+ 	uint32_t				rx_iqRate_kHz;
 
-// 	struct no_os_clk_desc		*dev_clk;
+	struct no_os_clk_desc			*dev_clk;
 
-// 	struct clk			*clk_ext_lo_rx;
-// 	struct clk			*clk_ext_lo_tx;
-// 	struct no_os_clk_desc		*clks[NUM_ADRV9025_CLKS];
+// 	struct clk				*clk_ext_lo_rx;
+// 	struct clk				*clk_ext_lo_tx;
+	struct no_os_clk_desc			*clks[NUM_ADRV904X_CLKS];
 
-// 	uint8_t				device_id;
-// 	bool				is_initialized;
-// 	int				spi_device_id;
+	uint8_t					device_id;
+	bool					is_initialized;
+	int					spi_device_id;
 
-// 	struct axi_adc			*rx_adc;
-// 	struct axi_dac			*tx_dac;
-// };
+ 	struct axi_adc				*rx_adc;
+ 	struct axi_dac				*tx_dac;
+};
 
-// struct adrv9025_init_param {
-// 	struct no_os_spi_init_param	*spi_init;
-// 	struct no_os_clk_desc		*dev_clk;
-// 	struct adi_adrv9025_Device	*adrv9025_device;
-// 	char				*streamImageFile;
-// };
+struct adrv904x_init_param {
+	struct no_os_spi_init_param	*spi_init;
+	struct no_os_clk_desc		*dev_clk;
+	struct adi_adrv904x_Device	*adrv904x_device;
+};
 
 // /* Initialize the device. */
-// int32_t adrv9025_init(struct adrv9025_rf_phy **device,
-// 		      const struct adrv9025_init_param *init_param);
+int32_t adrv904x_init(struct adrv904x_rf_phy **device,
+		      const struct adrv904x_init_param *init_param);
 // int adrv9025_hdl_loopback(struct adrv9025_rf_phy *phy, bool enable);
 // int adrv9025_register_axi_converter(struct adrv9025_rf_phy *phy);
 // int adrv9025_spi_read(struct no_os_spi_desc *spi, uint32_t reg);
 // int adrv9025_spi_write(struct no_os_spi_desc *spi, uint32_t reg, uint32_t val);
 
-// int adrv9025_setup(struct adrv9025_rf_phy *phy);
-// int adrv9025_remove(struct adrv9025_rf_phy *phy);
+int adrv904x_setup(struct adrv904x_rf_phy *phy);
+int adrv904x_remove(struct adrv904x_rf_phy *phy);
 
-// adi_adrv9025_SpiSettings_t *adrv9025_spi_settings_get(void);
+adi_adrv904x_SpiConfigSettings_t *adrv904x_spi_settings_get(void);
+adi_adrv904x_SpiOptions_t *adrv904x_spi_options_get(void);
 
-// int adrv9025_post_setup(struct adrv9025_rf_phy *phy);
-
-int adrv904x_hello(void);
+int adrv904x_post_setup(struct adrv904x_rf_phy *phy);
 
 #endif
