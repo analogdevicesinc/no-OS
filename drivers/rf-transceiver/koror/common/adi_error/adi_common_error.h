@@ -24,6 +24,9 @@
 #include "adi_common_error_types.h"
 #include "adi_common_log.h"
 
+#ifndef ADI_FILE
+#define ADI_FILE 1
+#endif
 
 /*
 * *******************************
