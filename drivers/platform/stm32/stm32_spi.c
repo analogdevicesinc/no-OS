@@ -143,6 +143,7 @@ static int stm32_spi_config(struct no_os_spi_desc *desc)
 		ret = -EIO;
 		goto error;
 	}
+	__HAL_SPI_ENABLE(&sdesc->hspi);
 
 	return 0;
 error:
@@ -232,6 +233,7 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 		return -EINVAL;
 
 	sdesc = desc->extra;
+	__HAL_SPI_DISABLE(&sdesc->hspi);
 	HAL_SPI_DeInit(&sdesc->hspi);
 	no_os_gpio_remove(sdesc->chip_select);
 	no_os_free(desc->extra);
@@ -317,7 +319,6 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 #else
 		rx_cnt = 0;
 		tx_cnt = 0;
-		__HAL_SPI_ENABLE(&sdesc->hspi);
 
 		while ((msgs[i].rx_buff && rx_cnt < msgs[i].bytes_number) ||
 		       (msgs[i].tx_buff && tx_cnt < msgs[i].bytes_number)) {
@@ -336,7 +337,6 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 				(void)*(volatile uint8_t *)&SPIx->DR;
 		}
 
-		__HAL_SPI_DISABLE(&sdesc->hspi);
 #endif
 
 		if(msgs[i].cs_delay_last)
