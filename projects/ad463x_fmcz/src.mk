@@ -22,7 +22,14 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
-	$(NO-OS)/util/no_os_mutex.c
+	$(NO-OS)/util/no_os_mutex.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
+	$(NO-OS)/util/no_os_fifo.c \
+	$(NO-OS)/util/no_os_list.c \
+	$(DRIVERS)/api/no_os_irq.c 
+
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
@@ -30,13 +37,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
-SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
-	$(NO-OS)/util/no_os_lf256fifo.c \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/api/no_os_irq.c \
-	$(DRIVERS)/adc/ad463x/iio_ad463x.c \
-	$(NO-OS)/util/no_os_fifo.c \
-	$(NO-OS)/util/no_os_list.c
+SRCS += $(DRIVERS)/adc/ad463x/iio_ad463x.c 
 endif
 INCS += $(PROJECT)/src/parameters.h
 INCS += $(DRIVERS)/adc/ad463x/ad463x.h \
@@ -59,11 +60,19 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_alloc.h \
+	$(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_list.h \
 	$(INCLUDE)/no_os_mutex.h
 ifeq (y,$(strip $(IIOD)))
-INCS += $(DRIVERS)/adc/ad463x/iio_ad463x.h \
-	$(INCLUDE)/no_os_fifo.h \
-	$(INCLUDE)/no_os_list.h
+INCS += $(DRIVERS)/adc/ad463x/iio_ad463x.h
+endif
+ifeq (2,$(strip $(AD463X_ID)))
+CFLAGS += -DADAQ4224_DEV=1
+else ifeq (1,$(strip $(AD463X_ID)))
+CFLAGS += -DAD4030_DEV=1
+else
+CFLAGS += -DAD463X_DEV=1
 endif

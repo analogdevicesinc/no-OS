@@ -45,6 +45,8 @@
 #include <xil_cache.h>
 #include "spi_engine.h"
 #include "no_os_pwm.h"
+#include "no_os_uart.h"
+#include "no_os_units.h"
 #include "axi_pwm_extra.h"
 #include "ad463x.h"
 #include "no_os_error.h"
@@ -53,27 +55,25 @@
 #include "xilinx_gpio.h"
 #include "parameters.h"
 #include "no_os_print_log.h"
+#include "xilinx_uart.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #include "iio_ad463x.h"
-#include "xilinx_uart.h"
 #endif
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#define AD463x_BUF_SIZE			3000
 #define AD463x_EVB_SAMPLE_NO		1000
-
 /* Main function */
 int main()
 {
-	uint32_t buf[AD463x_EVB_SAMPLE_NO] __attribute__ ((aligned));
+	uint32_t buf[AD463x_BUF_SIZE] __attribute__ ((aligned));
 	struct ad463x_dev *dev;
 	int32_t ret;
 	uint32_t i;
-#ifdef IIO_SUPPORT
-	struct iio_app_desc *app;
-	struct iio_app_init_param app_init_param = { 0 };
+
 	struct xil_uart_init_param platform_uart_init_par = {
 		.type = UART_PS,
 		.irq_id = UART_IRQ_ID
@@ -89,7 +89,13 @@ int main()
 		.extra = &platform_uart_init_par,
 		.platform_ops = &xil_uart_ops
 	};
+
+#if IIO_SUPPORT
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 #endif
+	struct no_os_uart_desc *uart_desc;
+
 	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 		.offload_config = OFFLOAD_RX_EN,
 		.rx_dma_baseaddr = AD463x_DMA_BASEADDR,
@@ -100,7 +106,7 @@ int main()
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = AD463x_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
-		.data_width = 24,
+		.data_width = 32,
 	};
 
 	struct axi_clkgen_init clkgen_init = {
@@ -112,6 +118,7 @@ int main()
 	struct axi_pwm_init_param axi_pwm_init = {
 		.base_addr = AXI_PWMGEN_BASEADDR,
 		.ref_clock_Hz = 100000000,
+		.channel = 0
 	};
 
 	struct no_os_pwm_init_param trigger_pwm_init = {
@@ -132,6 +139,19 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
+#if ADAQ4224_DEV
+	/* PGIA gain control inputs */
+	struct no_os_gpio_init_param ad463x_pgia_a0 = {
+		.number = GPIO_PGIA_0,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+	struct no_os_gpio_init_param ad463x_pgia_a1 = {
+		.number = GPIO_PGIA_1,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+#endif
 
 	struct no_os_spi_init_param spi_init = {
 		.chip_select = AD463x_SPI_CS,
@@ -151,13 +171,33 @@ int main()
 		.reg_access_speed = 20000000,
 		.reg_data_width = 8,
 		.output_mode = AD463X_32_PATTERN,
-		.lane_mode = AD463X_TWO_LANES_PER_CH,
+		.lane_mode = AD463X_ONE_LANE_PER_CH,
 		.clock_mode = AD463X_SPI_COMPATIBLE_MODE,
 		.data_rate = AD463X_SDR_MODE,
+#if ADAQ4224_DEV
+		.vref = 4096 * MILLI,
+		.device_id = ID_ADAQ4224, /* dev_id */
+		.gpio_pgia_a0 = &ad463x_pgia_a0,
+		.gpio_pgia_a1 = &ad463x_pgia_a1,
+#elif AD4030_DEV
+		.vref = 5000 * MILLI,
+		.device_id = ID_AD4030, /* dev_id */
+#else
+		.vref = 5000 * MILLI,
 		.device_id = ID_AD4630_24, /* dev_id */
+#endif
 		.dcache_invalidate_range =
 		(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
+
+#ifndef IIO_SUPPORT
+	/** Initialize UART when IIO is not enabled */
+	ret = no_os_uart_init(&uart_desc, &iio_uart_ip);
+	if (ret < 0)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+#endif
 
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
@@ -166,29 +206,30 @@ int main()
 
 	ret = ad463x_init(&dev, &ad463x_init_param);
 	if (ret != 0) {
-		pr_err("AD463x Initialization failed!");
+		pr_err("AD463x Initialization failed!\n");
 		return ret;
 	}
 
-	pr_info("AD463x Successfully initialized!");
+	pr_info("AD463x Successfully initialized!\n");
 
 	/* Exit register configuration mode */
 	ret = ad463x_exit_reg_cfg_mode(dev);
 	if (ret != 0)
 		return ret;
 
-	/* Test Pattern Mode, 32-bit output data, 2 lanes per channel */
+	/* Test Pattern Mode, 32-bit output data, 1 lane per channel */
 	ret = ad463x_read_data(dev, buf, AD463x_EVB_SAMPLE_NO);
 	if (ret != 0)
 		return ret;
 
-	for (i = 0; i < (AD463x_EVB_SAMPLE_NO / 2); i++)
+	for (i = 0; i < (AD463x_EVB_SAMPLE_NO); i += 2) {
 		if (buf[i] != AD463X_OUT_DATA_PAT) {
-			pr_err("AD463x Test Pattern Data read failed!");
+			pr_err("AD463x Test Pattern Data read failed! :%d/n",i);
 			return -1;
 		}
+	}
 
-	pr_info("AD463x Test Pattern Data successfully read!");
+	pr_info("AD463x Test Pattern Data successfully read!/n");
 
 	ad463x_remove(dev);
 
@@ -197,6 +238,21 @@ int main()
 	ret = ad463x_init(&dev, &ad463x_init_param);
 	if (ret != 0)
 		return ret;
+
+#if ADAQ4224_DEV
+	/* Estimating a gain of 1/3, calculate the closest accepted pgia gain value */
+	int32_t gain_int = 0;
+	int32_t gain_fract = 1464843;
+	enum ad463x_pgia_gain pgia_gain_idx;
+	ret = ad463x_calc_pgia_gain(gain_int, gain_fract, dev->vref,
+				    dev->real_bits_precision, &pgia_gain_idx);
+	if (ret != 0)
+		return ret;
+	/** set pgia gain */
+	ret = ad463x_set_pgia_gain(dev, pgia_gain_idx);
+	if (ret != 0)
+		return ret;
+#endif
 
 	/* Exit register configuration mode */
 	ret = ad463x_exit_reg_cfg_mode(dev);
@@ -212,7 +268,7 @@ int main()
 		for (i = 0; i < AD463x_EVB_SAMPLE_NO; i+=2)
 			pr_info("ADC sample ch1: %lu : %lu \n", i, buf[i]);
 		for (i = 1; i < AD463x_EVB_SAMPLE_NO; i+=2)
-			pr_info("ADC sample ch2: %lu : %lu \n", i-1, buf[i]);
+			pr_info("ADC sample ch2: %lu : %lu \n", i, buf[i]);
 	}
 #else
 	struct iio_ad463x *iio_ad463x;
