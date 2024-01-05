@@ -59,6 +59,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_mutex.h
@@ -66,4 +67,11 @@ ifeq (y,$(strip $(IIOD)))
 INCS += $(DRIVERS)/adc/ad463x/iio_ad463x.h \
 	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_list.h
+endif
+ifeq (y,$(strip $(ADAQ4224)))
+CFLAGS += -DADAQ4224_DEV=1
+else ifeq (y,$(strip $(AD4030)))
+CFLAGS += -DAD4030_DEV=1
+else
+CFLAGS += -DAD463X_DEV=1
 endif

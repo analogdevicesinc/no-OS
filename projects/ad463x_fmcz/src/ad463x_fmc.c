@@ -132,6 +132,19 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
+#if ADAQ4224_DEV
+	/* PGIA gain control inputs */
+	struct no_os_gpio_init_param ad463x_pgia_a0 = {
+		.number = 12,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+	struct no_os_gpio_init_param ad463x_pgia_a1 = {
+		.number = 13,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+#endif
 
 	struct no_os_spi_init_param spi_init = {
 		.chip_select = AD463x_SPI_CS,
@@ -154,7 +167,15 @@ int main()
 		.lane_mode = AD463X_TWO_LANES_PER_CH,
 		.clock_mode = AD463X_SPI_COMPATIBLE_MODE,
 		.data_rate = AD463X_SDR_MODE,
+#if ADAQ4224_DEV
+		.device_id = ID_ADAQ4224, /* dev_id */
+		.gpio_pgia_a0 = &ad463x_pgia_a0,
+		.gpio_pgia_a1 = &ad463x_pgia_a1,
+#elif AD4030_DEV
+		.device_id = ID_AD4030, /* dev_id */
+#else
 		.device_id = ID_AD4630_24, /* dev_id */
+#endif
 		.dcache_invalidate_range =
 		(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
@@ -202,6 +223,20 @@ int main()
 	ret = ad463x_exit_reg_cfg_mode(dev);
 	if (ret != 0)
 		return ret;
+
+#if ADAQ4224_DEV
+	/* Estimating a gain of 2500, calculate the closest accepted pgia gain value */
+	int32_t gain_int = 2;
+	int32_t gain_fract = 500;
+	int32_t vref = 5000;
+	int32_t precision = 1;
+	int32_t pgia_gain_idx = ad463x_calc_pgia_gain (gain_int, gain_fract, vref,
+				precision);
+	/** set pgia gain */
+	ret = ad463x_set_pgia_gain(dev, pgia_gain_idx);
+	if (ret != 0)
+		return ret;
+#endif
 
 #ifndef IIO_SUPPORT
 	/* Read data */
