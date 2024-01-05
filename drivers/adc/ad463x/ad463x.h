@@ -150,7 +150,7 @@
 
 /**
  * @enum ad463x_id
- * @brief Device type
+ * @brief Device type.
  */
 enum ad463x_id {
 	/** AD4630-24 device */
@@ -171,6 +171,25 @@ enum ad463x_id {
 	ID_AD4632_20,
 	/** AD4632-16 device */
 	ID_AD4632_16,
+	/** AD4030 device */
+	ID_AD4030,
+	/** ADAQ4224 device */
+	ID_ADAQ4224,
+};
+
+/**
+ * @enum ad463x_pgia_gain
+ * @brief Available pgia gains.
+ */
+enum ad463x_pgia_gain {
+	/** Vout/Vin = 0.33  */
+	AD463X_GAIN_0_33 = 0,
+	/** Vout/Vin = 0.56  */
+	AD463X_GAIN_0_56 = 1,
+	/** Vout/Vin = 2.22  */
+	AD463X_GAIN_2_22 = 2,
+	/** Vout/Vin = 6.67  */
+	AD463X_GAIN_6_67 = 3,
 };
 
 /**
@@ -182,6 +201,8 @@ struct ad463x_init_param {
 	struct no_os_spi_init_param *spi_init;
 	/** GPIO */
 	struct no_os_gpio_init_param *gpio_resetn;
+	struct no_os_gpio_init_param *gpio_pgia_a0;
+	struct no_os_gpio_init_param *gpio_pgia_a1;
 	/** PWM */
 	struct no_os_pwm_init_param *trigger_pwm_init;
 	/** SPI module offload init */
@@ -217,6 +238,8 @@ struct ad463x_dev {
 	struct no_os_spi_desc *spi_desc;
 	/** GPIO */
 	struct no_os_gpio_desc *gpio_resetn;
+	struct no_os_gpio_desc *gpio_pgia_a0;
+	struct no_os_gpio_desc *gpio_pgia_a1;
 	/** PWM */
 	struct no_os_pwm_desc *trigger_pwm_desc;
 	/** SPI module offload init */
@@ -241,6 +264,8 @@ struct ad463x_dev {
 	uint8_t data_rate;
 	/** Output Mode */
 	uint8_t output_mode;
+	/** pgia availability */
+	bool has_pgia;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -298,6 +323,15 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 /** Device initialization */
 int32_t ad463x_init(struct ad463x_dev **device,
 		    struct ad463x_init_param *init_param);
+
+/** Calculate PGIA gain */
+int32_t ad463x_calc_pgia_gain(int32_t gain_int, int32_t gain_fract,
+			      int32_t vref,
+			      int32_t precision);
+
+/** Control PGIA gain */
+int32_t ad463x_set_pgia_gain(struct ad463x_dev *dev,
+			     int32_t gain_idx);
 
 /** Free resources */
 int32_t ad463x_remove(struct ad463x_dev *dev);

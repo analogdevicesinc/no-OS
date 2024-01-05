@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "no_os_units.h"
 #include "ad463x.h"
 #include "no_os_print_log.h"
 #include "no_os_alloc.h"
@@ -52,6 +53,15 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD463x_TEST_DATA 0xAA
+
+#define ADAQ4224_GAIN_MAX_NANO 6670000000ULL
+
+/*
+ * Gains computed as fractions of 1000 so they can be expressed by integers.
+ */
+static const int32_t ad4630_gains[4] = {
+	330, 560, 2220, 6670
+};
 
 /******************************************************************************/
 /************************* Functions Definitions ******************************/
@@ -161,7 +171,7 @@ int32_t ad463x_spi_reg_write_masked(struct ad463x_dev *dev,
 int32_t ad463x_set_pwr_mode(struct ad463x_dev *dev, uint8_t mode)
 {
 	if ((mode != AD463X_NORMAL_MODE) && (mode != AD463X_LOW_POWER_MODE))
-		return -1;
+		return -EINVAL;
 
 	return ad463x_spi_reg_write(dev, AD463X_REG_DEVICE_CONFIG, mode);
 }
@@ -187,7 +197,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
 					   AD463X_REG_AVG,
 					   AD463X_AVG_FILTER_RESET);
 	} else {
-		if(mode < 1 || mode > 16)
+		if (mode < 1 || mode > 16)
 			return -EINVAL;
 		ret = ad463x_spi_reg_write_masked(dev,
 						  AD463X_REG_MODES,
@@ -211,7 +221,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
  */
 int32_t ad463x_set_drive_strength(struct ad463x_dev *dev, uint8_t mode)
 {
-	if((mode != AD463X_NORMAL_OUTPUT_STRENGTH)
+	if ((mode != AD463X_NORMAL_OUTPUT_STRENGTH)
 	    && (mode != AD463X_DOUBLE_OUTPUT_STRENGTH))
 		return -EINVAL;
 
@@ -306,42 +316,72 @@ int32_t ad463x_set_ch_offset(struct ad463x_dev *dev, uint8_t ch_idx,
 /**
  * @brief Initialize GPIO driver handlers for the GPIOs in the system.
  *        ad463x_init() helper function.
- * @param [out] dev - ad463x_dev device handler.
- * @param [in] init_param - Pointer to the initialization structure.
- * @return 0 in case of success, -1 otherwise.
+ * @param dev - ad463x_dev device handler.
+ * @param init_param - Pointer to the initialization structure.
+ * @return 0 in case of success, negative number otherwise.
  */
 static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 				struct ad463x_init_param *init_param)
 {
 	int32_t ret;
-
+	/* configure reset pin */
 	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
 	if (ret != 0)
-		return ret;
+		goto error_gpio_reset;
 
 	/** Reset to configure pins */
 	if (dev->gpio_resetn) {
 		ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
 		if (ret != 0)
-			return ret;
+			goto error_gpio_reset;
 
 		no_os_mdelay(100);
 		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 		if (ret != 0)
-			return ret;
+			goto error_gpio_reset;
 
 		no_os_mdelay(100);
 	}
 
+	/** Configure PGIA pins, if available */
+	if (dev->has_pgia) {
+		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a0,init_param->gpio_pgia_a0);
+		if (ret != 0)
+			goto error_gpio_pgia;
+		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a1, init_param->gpio_pgia_a1);
+		if (ret != 0)
+			goto error_gpio_pgia;
+		/* set default values */
+		if (dev->gpio_pgia_a0) {
+			ret = no_os_gpio_direction_output(dev->gpio_pgia_a0, NO_OS_GPIO_LOW);
+			if (ret != 0)
+				goto error_gpio_pgia;
+		}
+		if (dev->gpio_pgia_a1) {
+			ret = no_os_gpio_direction_output(dev->gpio_pgia_a1, NO_OS_GPIO_LOW);
+			if (ret != 0)
+				goto error_gpio_pgia;
+		}
+	}
+
 	return 0;
+
+error_gpio_pgia:
+	no_os_gpio_remove(dev->gpio_pgia_a0);
+	no_os_gpio_remove(dev->gpio_pgia_a1);
+
+error_gpio_reset:
+	no_os_gpio_remove(dev->gpio_resetn);
+
+	return ret;
 }
 
 /**
  * @brief Read from device.
  *        Enter register mode to read/write registers
- * @param [in] dev - ad469x_dev device handler.
- * @param [out] buf - data buffer.
- * @param [in] samples - sample number.
+ * @param dev - ad469x_dev device handler.
+ * @param buf - data buffer.
+ * @param samples - sample number.
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad463x_read_data(struct ad463x_dev *dev,
@@ -382,8 +422,8 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 
 /**
  * @brief Initialize the device.
- * @param [out] device - The device structure.
- * @param [in] init_param - The structure that contains the device initial
+ * @param device - The device structure.
+ * @param init_param - The structure that contains the device initial
  * 		parameters.
  * @return 0 in case of success, -1 otherwise.
  */
@@ -396,19 +436,19 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	uint8_t sample_width;
 
 	if (!init_param || !device)
-		return -1;
+		return -EINVAL;
 
 	if (init_param->clock_mode == AD463X_SPI_COMPATIBLE_MODE &&
 	    init_param->data_rate == AD463X_DDR_MODE) {
 		pr_err("DDR_MODE not available when clock mode is SPI_COMPATIBLE\n");
-		return -1;
+		return -EINVAL;
 	}
 
 	dev = (struct ad463x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
-	/** Perform Hardware Reset */
+	/** Perform Hardware Reset and configure pins */
 	ret = ad463x_init_gpio(dev, init_param);
 	if (ret != 0)
 		goto error_dev;
@@ -440,6 +480,11 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	dev->data_rate = init_param->data_rate;
 	dev->device_id = init_param->device_id;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+
+	if (dev->device_id == ID_ADAQ4224)
+		dev->has_pgia = true;
+	else
+		dev->has_pgia = false;
 
 	if (dev->output_mode > AD463X_16_DIFF_8_COM)
 		sample_width = 32;
@@ -529,15 +574,97 @@ error_clkgen:
 	axi_clkgen_remove(dev->clkgen);
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
+	no_os_gpio_remove(dev->gpio_pgia_a0);
+	no_os_gpio_remove(dev->gpio_pgia_a1);
 error_dev:
 	no_os_free(dev);
 
-	return -1;
+	return -EINVAL;
+}
+
+/**
+ * @brief Find closest value of an array of intergers.
+ * @param target - Target/reference value.
+ * @param array - Input Array.
+ * @param size - array size.
+ * @return Gain control index, in case of success, negative number otherwise
+ */
+static int32_t find_closest(int32_t target, const int32_t array[], size_t size)
+{
+	if (size == 0) {
+		// Handle the case where the array is empty
+		return -EINVAL; // or any other appropriate value
+	}
+
+	int32_t closest_index = 0;
+	int32_t closest_diff = abs((int32_t)(target - array[0]));
+
+	for (size_t i = 1; i < size; ++i) {
+		uint64_t current_diff = abs((int32_t)(target - array[i]));
+
+		if (current_diff < closest_diff) {
+			closest_index = (int32_t)i;
+			closest_diff = current_diff;
+		}
+	}
+
+	return closest_index;
+}
+
+/**
+ * @brief Calculate the PGIA gain.
+ * @param gain_int - Interger part of the gain.
+ * @param gain_fract - Fractional part of the gain.
+ * @param vref - Reference Voltage.
+ * @param precision - Precision  value shifter.
+ * @return Gain control index, in case of success, -1 otherwise
+ */
+int32_t ad463x_calc_pgia_gain(int32_t gain_int, int32_t gain_fract,
+			      int32_t vref,
+			      int32_t precision)
+{
+	int32_t gain_idx;
+	uint64_t gain_nano, tmp;
+
+	gain_nano = (uint64_t)gain_int * NANO + gain_fract;
+	if (gain_nano < 0 || gain_nano > ADAQ4224_GAIN_MAX_NANO)
+		return -EINVAL;
+	tmp = gain_nano << precision;
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, NANO);
+	gain_nano = NO_OS_DIV_ROUND_CLOSEST_ULL(vref * 2, tmp);
+	gain_idx = find_closest(gain_nano, ad4630_gains,
+				NO_OS_ARRAY_SIZE(ad4630_gains));
+
+	return gain_idx;
+}
+
+/**
+ * @brief Set the PGIA gain.
+ * @param dev - Pointer to the device handler.
+ * @param gain_idx - Gain control index, consult values in ad463x_pgia_gain.
+ * @return 0 in case of success, -1 otherwise
+ */
+int32_t ad463x_set_pgia_gain(struct ad463x_dev *dev,
+			     int32_t gain_idx)
+{
+	int32_t ret;
+	/** Check if gain available in the ADC */
+	if (!dev->has_pgia)
+		return -EINVAL;
+	/** Check if gain gain_idx is in the valid range */
+	if (gain_idx < 0 || gain_idx > 3)
+		return -EINVAL;
+	/** Set A0 and A1 pins acoording to gain index value */
+	ret = no_os_gpio_set_value(dev->gpio_pgia_a0, gain_idx & NO_OS_BIT(0));
+	if (ret != 0)
+		return ret;
+	ret = no_os_gpio_set_value(dev->gpio_pgia_a1, (gain_idx>>1) & NO_OS_BIT(0));
+	return ret;
 }
 
 /**
  * @brief Free the memory allocated by ad463x_init().
- * @param [in] dev - Pointer to the device handler.
+ * @param dev - Pointer to the device handler.
  * @return 0 in case of success, -1 otherwise
  */
 int32_t ad463x_remove(struct ad463x_dev *dev)
@@ -545,7 +672,7 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 	int32_t ret;
 
 	if (!dev)
-		return -1;
+		return -EINVAL;
 
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
 	if (ret != 0)
@@ -556,6 +683,14 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio_resetn);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_gpio_remove(dev->gpio_pgia_a0);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_gpio_remove(dev->gpio_pgia_a1);
 	if (ret != 0)
 		return ret;
 
