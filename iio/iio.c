@@ -1992,10 +1992,20 @@ free_desc:
  */
 int iio_remove(struct iio_desc *desc)
 {
+	struct iiod_conn_data data;
+	int ret;
+
 	if (!desc)
 		return -EINVAL;
 
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
+	for (int i = 0; i < IIOD_MAX_CONNECTIONS; i++) {
+		ret = iiod_conn_remove(desc->iiod, i, &data);
+		if (!ret) {
+			no_os_free(data.buf);
+			socket_remove(data.conn);
+		}
+	}
 	socket_remove(desc->server);
 #endif
 	no_os_cb_remove(desc->conns);
