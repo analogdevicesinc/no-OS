@@ -80,6 +80,10 @@ The following sections contain code documentation for ADI no-OS drivers.
 		if [[ "${drv_type}" == *"sd-card"* ]]
 		then
 			append_to_dox "- \link_to_subdir{/drivers/sd-card \"SD Card\"}" drivers_page.dox
+		#imu folder does not contain any subfolder, therefore, the linking is different from other drivers
+		elif [[ "${drv_type}" == *"imu"* ]]
+		then
+			append_to_dox "- \link_to_subdir{/drivers/imu \"ADIS\"}" drivers_page.dox
 		else
 			#iterate drivers per type
 			for part in ${drv_type}/*
