@@ -147,7 +147,7 @@ void no_os_i2cbus_remove(uint32_t bus_number)
 
 		if (bus != NULL) {
 			no_os_free(bus);
-			bus = NULL;
+			i2c_table[bus_number] = NULL;
 		}
 	}
 }
