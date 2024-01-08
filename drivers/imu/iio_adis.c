@@ -634,7 +634,7 @@ static int adis_iio_read_firm_date(struct adis_dev* adis, char *buf,
 	if (ret)
 		return ret;
 
-	return snprintf(buf, size, "%.2lx-%.2lx-%.4lx", firm_d, firm_m, firm_y);
+	return snprintf(buf, size, "%.2lx-%.2lx-%.4lx", firm_m, firm_d, firm_y);
 }
 
 /**
@@ -656,6 +656,27 @@ static int adis_iio_read_firm_rev(struct adis_dev* adis, char *buf,
 		return ret;
 
 	return snprintf(buf, size, "%ld.%ld", firm_rev >> 8, firm_rev & 0xff);
+}
+
+/**
+ * @brief Reads the serial number and returns it in char format.
+ * @param adis - The adis device.
+ * @param buf  - The read serial number in char format.
+ * @param size - The size of buf.
+ * @return the size of the written data in buf in case of success, error code
+ *         otherwise.
+ */
+static int adis_iio_read_serial_num(struct adis_dev* adis, char *buf,
+				    uint8_t size)
+{
+	uint32_t serial_num;
+	int ret;
+
+	ret = adis_read_serial_num(adis, &serial_num);
+	if (ret)
+		return ret;
+
+	return snprintf(buf, size, "0x%.4lx", serial_num);
 }
 
 /**
@@ -858,8 +879,7 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		ret = adis_read_prod_id(adis, &res);
 		break;
 	case ADIS_SERIAL_NUM:
-		ret = adis_read_serial_num(adis, &res);
-		break;
+		return adis_iio_read_serial_num(adis, buf, 7);
 	case ADIS_USR_SCR_1:
 		ret = adis_read_usr_scr_1(adis, &res);
 		break;
