@@ -1444,8 +1444,9 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 	struct tcp_socket_desc *sock;
 	struct iiod_conn_data data;
 	int32_t ret;
+	uint32_t id;
+
 	do {
-		uint32_t id;
 		ret = socket_accept(desc->server, &sock);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
@@ -1454,16 +1455,30 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
+		if (!data.buf) {
+			ret = -ENOMEM;
+			goto close_socket;
+		}
+
 		ret = iiod_conn_add(desc->iiod, &data, &id);
 		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
+			goto free_buf;
 
 		ret = _push_conn(desc, id);
 		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
+			goto remove_conn;
 	} while (true);
 
 	return 0;
+
+remove_conn:
+	iiod_conn_remove(desc->iiod, id, &data);
+free_buf:
+	no_os_free(data.buf);
+close_socket:
+	socket_remove(sock);
+
+	return ret;
 }
 #endif
 
