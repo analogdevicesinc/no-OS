@@ -614,7 +614,8 @@ static int adis_iio_write_sampling_freq(void *dev, char *buf,
  * @return the size of the written data in buf in case of success, error code
  *         otherwise.
  */
-static int adis_read_fw_date(struct adis_dev* adis, char *buf, uint8_t size)
+static int adis_iio_read_firm_date(struct adis_dev* adis, char *buf,
+				   uint8_t size)
 {
 	uint32_t firm_d;
 	uint32_t firm_m;
@@ -644,7 +645,8 @@ static int adis_read_fw_date(struct adis_dev* adis, char *buf, uint8_t size)
  * @return the size of the written data in buf in case of success, error code
  *         otherwise.
  */
-static int adis_read_fw_rev(struct adis_dev* adis, char *buf, uint8_t size)
+static int adis_iio_read_firm_rev(struct adis_dev* adis, char *buf,
+				  uint8_t size)
 {
 	uint32_t firm_rev;
 	int ret;
@@ -663,7 +665,7 @@ static int adis_read_fw_rev(struct adis_dev* adis, char *buf, uint8_t size)
  * @return the size of the written data in buf in case of success, error code
  *         otherwise.
  */
-int iio_adis_read_gyro_meas_range(struct adis_iio_dev* iio_adis, char *buf)
+int adis_iio_read_gyro_meas_range(struct adis_iio_dev* iio_adis, char *buf)
 {
 	return snprintf(buf, 50, "%s", iio_adis->rang_mdl_txt);
 }
@@ -790,7 +792,7 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		ret = adis_read_filt_size_var_b(adis, &res);
 		break;
 	case ADIS_GYRO_MEAS_RANGE:
-		return iio_adis_read_gyro_meas_range(iio_adis, buf);
+		return adis_iio_read_gyro_meas_range(iio_adis, buf);
 	case ADIS_DR_POLARITY:
 		ret = adis_read_dr_polarity(adis, &res);
 		break;
@@ -849,9 +851,9 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		ret = adis_read_bias_corr_en_za(adis, &res);
 		break;
 	case ADIS_FIRM_REV:
-		return adis_read_fw_rev(adis, buf, 7);
+		return adis_iio_read_firm_rev(adis, buf, 7);
 	case ADIS_FIRM_DATE:
-		return adis_read_fw_date(adis, buf, 12);
+		return adis_iio_read_firm_date(adis, buf, 12);
 	case ADIS_PROD_ID:
 		ret = adis_read_prod_id(adis, &res);
 		break;
