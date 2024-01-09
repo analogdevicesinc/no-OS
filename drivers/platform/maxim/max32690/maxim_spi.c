@@ -431,7 +431,7 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 
 		if (msgs[i].tx_buff) {
 			/* Set the transfer size in the TX direction */
-			spi->ctrl1 = msgs->bytes_number;
+			spi->ctrl1 = msgs[i].bytes_number;
 			tx_done = false;
 			/* Enable the TX FIFO */
 			spi->dma |= MXC_F_SPI_DMA_TX_FIFO_EN;
@@ -442,7 +442,7 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		if (msgs[i].rx_buff) {
 			/* Set the transfer size in the RX direction */
 			spi->ctrl1 |= no_os_field_prep(MXC_F_SPI_CTRL1_RX_NUM_CHAR,
-						       msgs->bytes_number);
+						       msgs[i].bytes_number);
 			/* Enable the RX FIFO */
 			spi->dma |= MXC_F_SPI_DMA_RX_FIFO_EN;
 			rx_done = false;
