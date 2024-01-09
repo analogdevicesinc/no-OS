@@ -35,6 +35,12 @@
 #List of excluded driver folders for the documentation generation.
 EXCLUDE_DRV="talise navassa ad9083_api ad5940 madura"
 
+#List of folders that are handled differently due to their uncommon structure
+uncommon_drv_list=("sd-card" "imu" "api")
+
+# Create a pattern that matches any substring in the list
+uncommon_drv_pattern=$(IFS=\|; echo "${uncommon_drv_list[*]}")
+
 #Generate drivers_page.dox and projects_page.dox
 
 #Append string to specific *.dox file
@@ -76,14 +82,10 @@ The following sections contain code documentation for ADI no-OS drivers.
 			append_to_dox "\section $(basename -- ${drv_type}) $(basename -- ${drv_type^^})" drivers_page.dox
 			append_to_dox "" drivers_page.dox
 		fi
-		#sd-card folder does not contain any subfolder, therefore, the linking is different from other drivers
-		if [[ "${drv_type}" == *"sd-card"* ]]
+		#check if the driver type is in the uncommon drivers list
+		if echo "${drv_type}" | grep -Eq "${uncommon_drv_pattern}"
 		then
-			append_to_dox "- \link_to_subdir{/drivers/sd-card \"SD Card\"}" drivers_page.dox
-		#imu folder does not contain any subfolder, therefore, the linking is different from other drivers
-		elif [[ "${drv_type}" == *"imu"* ]]
-		then
-			append_to_dox "- \link_to_subdir{/drivers/imu \"ADIS\"}" drivers_page.dox
+			append_to_dox "- \link_to_subdir{/drivers/$(basename -- ${drv_type}) \"$(basename -- ${drv_type^^})\"}" drivers_page.dox
 		else
 			#iterate drivers per type
 			for part in ${drv_type}/*
