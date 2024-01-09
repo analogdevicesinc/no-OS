@@ -275,7 +275,7 @@ static int adis_iio_read_calibbias(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	switch (channel->ch_num) {
+	switch (channel->address) {
 	case ADIS_GYRO_X:
 		ret = adis_read_xg_bias(adis, &res);
 		break;
@@ -335,7 +335,7 @@ static int adis_iio_write_calibbias(void *dev, char *buf, uint32_t len,
 	if (ret)
 		return ret;
 
-	switch (channel->ch_num) {
+	switch (channel->address) {
 	case ADIS_GYRO_X:
 		return adis_write_xg_bias(adis, calibbias);
 	case ADIS_GYRO_Y:
