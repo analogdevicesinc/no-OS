@@ -289,6 +289,8 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev);
 /* Initialize the device. */
 int32_t ad7616_setup(struct ad7616_dev **device,
 		     struct ad7616_init_param *init_param);
+/* Remove the device. */
+int ad7616_remove(struct ad7616_dev *device);
 /* Read conversion results. */
 int32_t ad7616_read_channel_source(struct ad7616_dev *dev, enum ad7616_ch *ch_a,
 				   enum ad7616_ch *ch_b);
