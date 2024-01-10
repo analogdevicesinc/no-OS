@@ -18,9 +18,6 @@ $(error $(ENDL)$(ENDL)STM32CUBEMX not defined or not found at default path /opt/
 		Ex: export STM32CUBEMX=/opt/stm32cubemx$(ENDL)$(ENDL))
 endif # STM32CUBEMX check
 
-# Locate the compiler path under STM32CubeIDE plugins directory
-COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
-
 # Locate openocd location under STM32CubeIDE plugins directory
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
 OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
@@ -142,7 +139,13 @@ CC = arm-none-eabi-gcc
 GDB = arm-none-eabi-gdb
 GDB_PORT = 50000
 OC = arm-none-eabi-objcopy
-SIZE=arm-none-eabi-size
+SIZE = arm-none-eabi-size
+
+COMPILER_BIN = $(realpath $(dir $(shell which $(CC) 2>/dev/null)))
+ifeq (,$(COMPILER_BIN))
+COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
+endif
+export PATH := $(COMPILER_BIN):$(PATH)
 
 .PHONY: $(BINARY).openocd-cmsis
 $(BINARY).openocd-cmsis:
