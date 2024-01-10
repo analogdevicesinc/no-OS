@@ -296,7 +296,6 @@ const struct no_os_irq_init_param ad74413r_nvic_ip = {
 struct ad74413r_init_param ad74413r_ip = {
 	.chip_id = AD74413R,
 	.comm_param = ad74413r_spi_ip,
-	.reset_gpio_param = &ad74413r_reset_ip,
 };
 
 /* GPIO trigger */
