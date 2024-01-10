@@ -1,18 +1,15 @@
 trigger:
 - main
-- master
 - staging/*
 - next_stable
 - 20*
 
 pr:
 - main
-- master
 - next_stable
 - 20*
 
 variables:
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   runCondition: true
   targetBranch: $[ variables['System.PullRequest.TargetBranchName'] ]
 
