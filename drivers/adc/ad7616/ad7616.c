@@ -1046,3 +1046,25 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 
 	return ad7616_self_test(dev);
 }
+
+int ad7616_remove(struct ad7616_dev *dev)
+{
+	if (!dev)
+		return -ENODEV;
+
+	if (dev->interface == AD7616_SERIAL)
+		no_os_spi_remove(dev->spi_desc);
+
+	no_os_gpio_remove(dev->gpio_hw_rngsel0);
+	no_os_gpio_remove(dev->gpio_hw_rngsel1);
+	no_os_gpio_remove(dev->gpio_reset);
+	no_os_gpio_remove(dev->gpio_os0);
+	no_os_gpio_remove(dev->gpio_os1);
+	no_os_gpio_remove(dev->gpio_os2);
+	no_os_gpio_remove(dev->gpio_convst);
+	no_os_gpio_remove(dev->gpio_busy);
+
+	no_os_free(dev);
+
+	return 0;
+}
