@@ -78,6 +78,7 @@
 /* REG6 Bit Definitions */
 #define ADF4355_REG6_OUTPUTB_PWR(x)		        (((x) & 0x3) << 7)
 #define ADF4355_REG6_RF_OUTB_EN(x)		        ((x) << 9)
+#define ADF4356_REG6_RF_OUTB_SEL(x)                ((x) << 25)
 #define ADF5355_REG6_OUTPUT_PWR(x)		        (((x) & 0x3) << 4)
 #define ADF5355_REG6_RF_OUT_EN(x)		        ((x) << 6)
 #define ADF5355_REG6_RF_OUTB_EN(x)		        ((x) << 10)
@@ -139,6 +140,9 @@
 #define ADF5355_MAX_OUTB_FREQ		            (ADF5355_MAX_VCO_FREQ * 2) /* Hz */
 #define ADF5355_MIN_OUTB_FREQ		            (ADF5355_MIN_VCO_FREQ * 2) /* Hz */
 
+#define ADF4356_MIN_VCO_FREQ                        ADF5355_MIN_VCO_FREQ /* Hz */
+#define ADF4356_MAX_VCO_FREQ                        ADF5355_MAX_VCO_FREQ /* Hz */
+
 #define ADF4355_MIN_VCO_FREQ		            3400000000ULL /* Hz */
 #define ADF4355_MAX_VCO_FREQ		            6800000000ULL /* Hz */
 #define ADF4355_MAX_OUT_FREQ		            ADF4355_MAX_VCO_FREQ /* Hz */
@@ -186,6 +190,7 @@ enum adf5355_device_id {
 	ADF4355,
 	ADF4355_2,
 	ADF4355_3,
+	ADF4356,
 	ADF5356,
 };
 
@@ -236,6 +241,7 @@ struct adf5355_dev {
 	uint8_t                     phase_detector_polarity_neg;
 	bool                        ref_diff_en;
 	bool                        mux_out_3v3_en;
+	bool                        outb_sel_fund;
 	uint8_t		                ref_doubler_en;
 	uint8_t		                ref_div2_en;
 	uint8_t                     rf_div_sel;
@@ -269,6 +275,7 @@ struct adf5355_init_param {
 	uint8_t		                ref_doubler_en;
 	uint8_t		                ref_div2_en;
 	enum adf5355_mux_out_sel    mux_out_sel;
+	bool                        outb_sel_fund;
 };
 
 /******************************************************************************/
