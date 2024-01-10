@@ -69,6 +69,8 @@ $(PROJECT_TARGET):
 	$(call print,Creating IDE project)
 	$(call mk_dir, $(BUILD_DIR))
 	$(call mk_dir, $(VSCODE_CFG_DIR))
+	@sed -i 's|TargetToolchain=.*|TargetToolchain=STM32CubeIDE|g' $(HARDWARE) $(HIDE)
+	@sed -i 's|UnderRoot=false|UnderRoot=true|g' $(HARDWARE) $(HIDE)
 	@echo config load $(HARDWARE) > $(BINARY).cubemx
 	@echo project name app >> $(BINARY).cubemx
 	@echo project toolchain STM32CubeIDE >> $(BINARY).cubemx
