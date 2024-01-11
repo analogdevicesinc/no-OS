@@ -807,8 +807,11 @@ FILE* __fopen(const char * filename, const char *mode)
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
+	} else if (!strcmp(filename, "dump.bin")) {
+		;
 	} else {
 		no_os_free(stream);
+		stream = NULL;
 	}
 
 	return stream;
@@ -890,7 +893,7 @@ size_t fread(void *ptr, size_t size, size_t count, FILE *stream)
 
 size_t fwrite(const void * ptr, size_t size, size_t count, FILE *stream)
 {
-	return 0;
+	return count;
 }
 
 /*
