@@ -162,6 +162,7 @@ struct ad738x_dev {
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
+	uint32_t		ref_voltage_mv;
 	enum ad738x_resolution 	resolution;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
@@ -177,6 +178,7 @@ struct ad738x_init_param {
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
+	uint32_t		ref_voltage_mv;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
