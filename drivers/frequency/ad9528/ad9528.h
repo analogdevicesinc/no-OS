@@ -350,7 +350,7 @@ struct ad9528_channel_spec {
 	/**  10-bit channel divider. */
 	uint16_t channel_divider;
 	/**  Optional descriptive channel name. */
-	int8_t   extended_name[16];
+	uint8_t   extended_name[16];
 };
 
 /**
