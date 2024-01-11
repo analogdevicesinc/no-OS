@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X radio control related private function prototypes for
  *        adrv904x_radioctrl.c which helps adi_adrv904x_radioctrl.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_RADIOCTRL_H_

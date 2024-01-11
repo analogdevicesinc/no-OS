@@ -8,7 +8,7 @@
  * \file
  * \brief This file contains DFE memory definitions
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_CPU_DFE_PROFILE_INIT_MEMORY_H__

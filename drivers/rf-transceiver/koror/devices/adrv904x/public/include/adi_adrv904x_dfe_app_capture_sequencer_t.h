@@ -10,7 +10,7 @@
  *
  * \brief   Contains ADRV904X Capture sequencer types
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_APP_CAPTURE_SEQUENCER_T_H__

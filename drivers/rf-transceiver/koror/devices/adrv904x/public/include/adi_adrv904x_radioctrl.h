@@ -9,7 +9,7 @@
 * \brief Contains ADRV904X function prototypes for
 *    adi_adrv904x_radioctrl.c
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 
@@ -386,6 +386,30 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_LoFrequencySet(adi_adrv904x_Device
 */
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_LoFrequencyGet(adi_adrv904x_Device_t* const            device,
                                                              adi_adrv904x_LoConfigReadback_t* const  loConfig);
+
+/**
+* \brief API to assign Tx and Rx Channels to PLL's during runtime. 
+*  This API is called to configure PLL assigments for Tx and Rx channels.  
+*  
+* \pre This API function can be called after the CPU has been initialized and MCS done. 
+* \post After the API function is called, strictly need to re-program the PLL's.   
+* 
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+* \param[in] rf0MuxTx0_3  If set to 1 East Tx channels (Tx0-3) are connected to PLL0 (East PLL). If set to 0 Tx0-3 are connected to PLL1 (West PLL). 
+* \param[in] rf0MuxTx4_7  If set to 1 West Tx channels (Tx4-7) are connected to PLL0 (East PLL). If set to 0 Tx4-7 are connected to PLL1 (West PLL). 
+* \param[in] rf0MuxRx0_3  If set to 1 East Rx channels (Rx0-3) are connected to PLL0 (East PLL). If set to 0 Rx0-3 are connected to PLL1 (West PLL). 
+* \param[in] rf0MuxRx4_7  If set to 1 West Rx channels (Rx4-7) are connected to PLL0 (East PLL). If set to 0 Rx4-7 are connected to PLL1 (West PLL). 
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CfgPllToChanCtrl(adi_adrv904x_Device_t* const device,
+	                                                           uint8_t rf0MuxTx0_3, 
+	                                                           uint8_t rf0MuxTx4_7, 
+	                                                           uint8_t rf0MuxRx0_3, 
+	                                                           uint8_t rf0MuxRx4_7);
 
 /**
 * \brief Sets the RF LO Loop filter parameters for the desired LO.

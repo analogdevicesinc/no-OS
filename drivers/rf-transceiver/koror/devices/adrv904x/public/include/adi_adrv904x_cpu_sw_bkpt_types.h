@@ -12,7 +12,7 @@
  *
  * \details Contains the definitions for Software Breakpoints
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_CPU_SW_BKPT_TYPES_H__

@@ -3,7 +3,7 @@
  *
  * \brief   Contains ADRV904X Device Profile type definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 /**
@@ -315,7 +315,7 @@ typedef struct adrv904x_CarrierChannelConfig
     uint8_t  oddTaps;                                                           /*!< odd number of taps */
     uint8_t  loopbackPoint;                                                     /*!< filter loopback to support higher bandwidths */
     uint32_t carrierGain;                                                       /*!< Gain value for normalization of carrier power in/out of aggregation */
-	uint8_t  carrierGainEnable;                                                 /*!< Enable field for carrier gain adjustments */
+    uint8_t  carrierGainEnable;                                                 /*!< Enable field for carrier gain adjustments */
 
     uint8_t  reserved[2];                                                       /*!< Reserve */
 } adrv904x_CarrierChannelConfig_t;
@@ -389,13 +389,13 @@ ADI_ADRV904X_PACK_START
 /*!< adrv904x_TxDfeCfrCorrectionPulse:  structure of Tx Dfe Cfr Correction pulse configuration parameters */
 typedef struct adrv904x_TxDfeCfrCorrectionPulse
 {
-	int16_t coeffRealHalfPulse[ADRV904X_MAX_CFR_CORRECTION_PULSE_LEN];         /*!< An array consisting of the first half of the Real part of the complex CFR correction pulse coefficients */
-	int16_t coeffImagHalfPulse[ADRV904X_MAX_CFR_CORRECTION_PULSE_LEN];         /*!< An array consisting of the first half of the Imag part of the complex CFR correction pulse coefficients */
-	uint16_t numCoeffs;                                                        /*!< No. of coefficients contained in coeffReal and coeffImaginary arrays */
-	uint8_t pulseSelectMask;                                                   /*!< This field selects which pulses to write. adi_adrv904x_CfrPulseSel_e should be used to create this mask.
+    int16_t coeffRealHalfPulse[ADRV904X_MAX_CFR_CORRECTION_PULSE_LEN];         /*!< An array consisting of the first half of the Real part of the complex CFR correction pulse coefficients */
+    int16_t coeffImagHalfPulse[ADRV904X_MAX_CFR_CORRECTION_PULSE_LEN];         /*!< An array consisting of the first half of the Imag part of the complex CFR correction pulse coefficients */
+    uint16_t numCoeffs;                                                        /*!< No. of coefficients contained in coeffReal and coeffImaginary arrays */
+    uint8_t pulseSelectMask;                                                   /*!< This field selects which pulses to write. adi_adrv904x_CfrPulseSel_e should be used to create this mask.
                                                                                     User can select multiple pulses */
-	uint8_t ramSelectMask;                                                     /*!< Selects the RAM's to write the pulse data. adi_adrv904x_CfrPulseRamSel_e should be used to create this mask.
-																			        Please check adi_adrv904x_CfrPulseRamSel_e for detailed info */
+    uint8_t ramSelectMask;                                                     /*!< Selects the RAM's to write the pulse data. adi_adrv904x_CfrPulseRamSel_e should be used to create this mask.
+                                                                                    Please check adi_adrv904x_CfrPulseRamSel_e for detailed info */
 }adrv904x_TxDfeCfrCorrectionPulse_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -413,22 +413,22 @@ typedef struct adrv904x_TxDfeCfrConfig
     uint16_t                           cfr0HalfPulseLength;                              /*!< number of samples stored in pulse RAM */
     uint16_t                           cfr0DelayValue[ADRV904X_NUM_CFR_ENGINES];         /*!< number of samples in delay FIFO */
     double                             cfr0EvmWeight[ADRV904X_NUM_TX_CARRIERS];          /*!< EVM weighting (no bitfield) */
-	uint8_t                            cfr0NoCareSampleCount[ADRV904X_NUM_CFR_ENGINES];  /*!< maximum number of forgiven samples for cfr engine X */
-	uint8_t                            cfr0PeakDuration[ADRV904X_NUM_CFR_ENGINES];       /*!< maximum number of samples that can be a part of a peak group */
+    uint8_t                            cfr0NoCareSampleCount[ADRV904X_NUM_CFR_ENGINES];  /*!< maximum number of forgiven samples for cfr engine X */
+    uint8_t                            cfr0PeakDuration[ADRV904X_NUM_CFR_ENGINES];       /*!< maximum number of samples that can be a part of a peak group */
     uint8_t                            cfr1Enable[ADRV904X_NUM_CFR_ENGINES];             /*!< enable engine (doesn't change delay) */
     uint8_t                            cfr1Bypass[ADRV904X_NUM_CFR_ENGINES];             /*!< bypass filter (including delay) */
     uint8_t                            cfr1Interpolation;                                /*!< log2 interpolation (shared by all engines) */
     uint16_t                           cfr1HalfPulseLength;                              /*!< number of samples stored in pulse RAM */
     uint16_t                           cfr1DelayValue[ADRV904X_NUM_CFR_ENGINES];         /*!< number of samples in delay FIFO */
     double                             cfr1EvmWeight[ADRV904X_NUM_TX_CARRIERS];          /*!< EVM weighting (no bitfield) */
-	uint8_t                            cfr1NoCareSampleCount[ADRV904X_NUM_CFR_ENGINES];  /*!< maximum number of forgiven samples for cfr engine X */
-	uint8_t                            cfr1PeakDuration[ADRV904X_NUM_CFR_ENGINES];       /*!< maximum number of samples that can be a part of a peak group */
+    uint8_t                            cfr1NoCareSampleCount[ADRV904X_NUM_CFR_ENGINES];  /*!< maximum number of forgiven samples for cfr engine X */
+    uint8_t                            cfr1PeakDuration[ADRV904X_NUM_CFR_ENGINES];       /*!< maximum number of samples that can be a part of a peak group */
     uint8_t                            inputRateOver500MHz;                              /*!< input rate > 500 MHz */
     uint8_t                            clk1Div;                                          /*!< clock divide for Pulse RAMs and Processing */
     uint8_t                            clk2Div;                                          /*!< clock divide for Input / Output / Delay RAM */
     uint8_t                            peakDetectClkDiv;                                 /*!< clock divide for Peak Detector */
-	adrv904x_TxDfeCfrCorrectionPulse_t cfr0PulseData;                                    /*!< cfr0 pulse data */
-	adrv904x_TxDfeCfrCorrectionPulse_t cfr1PulseData;                                    /*!< cfr1 pulse data */
+    adrv904x_TxDfeCfrCorrectionPulse_t cfr0PulseData;                                    /*!< cfr0 pulse data */
+    adrv904x_TxDfeCfrCorrectionPulse_t cfr1PulseData;                                    /*!< cfr1 pulse data */
 
     uint8_t                            reserved[2];                                      /*!< Reserve */
 } adrv904x_TxDfeCfrConfig_t;
@@ -475,6 +475,8 @@ typedef struct adrv904x_DfeTxConfig
     adrv904x_CarrierDucConfig_t  cduc;                                           /*!<   carrier digital up-convert */
     adrv904x_TxDfeCfrConfig_t    cfr;                                            /*!<   crest factor reduction */
     adrv904x_TxDfeDpdConfig_t    dpd;                                            /*!<   digital pre-distortion actuator */
+    uint16_t                     bandDucLatency[ADRV904X_DUC_NUM_BAND];          /*!< Band DUC latency (in units of hsdigclk cycle count) per Band */
+    uint8_t                      reserved[3];                                    /*!< Reserve */
     uint16_t                     cfrOutToPreDpdDelayNormFs4x;                    /*!<   delay from cfr out to capture point (HB1 or HB2) adjusted to hsdig */
     uint16_t                     capPointToPostDpdOutDelayNormFs4x;              /*!<   delay from capture point (HB1 or HB2) to post dpd hb decimator adjusted to hsdig */
     uint16_t                     cfrOutToPostDpdOutDelayNormFs4x;                /*!<   delay from cfr out to post dpd hb decimator adjusted to hsdig */
@@ -482,6 +484,7 @@ typedef struct adrv904x_DfeTxConfig
     uint8_t                      ctcPreDpdInputSelect;                           /*!<   Ctc Pre DPD mux select. 1:Hb1 ouput , 0:Hb2 output */
 } adrv904x_DfeTxConfig_t;
 ADI_ADRV904X_PACK_FINISH
+
 /****************************************************************************
 * DFE (digital front-end) Rx configuration structure.
 ****************************************************************************/
@@ -490,7 +493,7 @@ ADI_ADRV904X_PACK_FINISH
 typedef struct adrv904x_DfeRxConfig
 {
     adrv904x_CarrierDdcConfig_t cddc;                                           /*!<  carrier digital down-convert */
-
+    uint16_t                    bandDdcLatency[ADRV904X_DDC_NUM_BAND];          /*!< Band DDC latency (in units of hsdigclk cycle count) per Band */
     uint8_t                     reserved[4];                                    /*!< Reserve */
 } adrv904x_DfeRxConfig_t;
 ADI_ADRV904X_PACK_FINISH
@@ -522,7 +525,7 @@ typedef struct adrv904x_DfeRadioSequencerConfig
     uint8_t  sampleClkDiv;                                                          /*!< Radio sequencer sampling clock. Power of 2 encoding */
     uint8_t  ssbSyncMode;                                                           /*!< Radio sequencer SSB frame sync mode */
     uint32_t ssbSyncPeriod;                                                         /*!< Radio sequencer SSB sync duration */
-    uint32_t numerology;                                                            /*!< Radio sequencer numerology */	
+    uint32_t numerology;                                                            /*!< Radio sequencer numerology */  
     uint16_t symWidth;                                                              /*!< Radio sequencer nominal symbol duration */
     uint16_t extSymWidth;                                                           /*!< Radio sequencer extended symbol duration */
     uint16_t extSymSpacing;                                                         /*!< Radio sequencer spacing between consecutive extended symbols */
@@ -749,9 +752,9 @@ typedef struct adrv904x_DfeProfile
     adrv904x_DfeTxConfig_t                  txConfig[ADRV904X_NUM_TX_PROFILES];          /*!<   Transmitter profile for 0-3 */
     adrv904x_DfeJesdSettings_t              jesdProfile;                                 /*!<   Jesd configuration  */
     adrv904x_DfeRadioSequencerConfig_t      radioSeqProfile;                             /*!<   Radio Sequencer configuration */
-    uint8_t                                 radioDivDuplexMode[ADRV904X_NUM_TXRX_CHAN];  /*!<   This is used to reference a channel's operating mode (TDD or FDD) */	
-	uint32_t                                dfeMappingControl;                           /*!<  This variable selects how Tx/Rx/Orx En signals and TxToOrx mapping is controlled. For detailed info please check the adrv904x_DfeMappingControl_e enum documentation */
-	
+    uint8_t                                 radioDivDuplexMode[ADRV904X_NUM_TXRX_CHAN];  /*!<   This is used to reference a channel's operating mode (TDD or FDD) */    
+    uint32_t                                dfeMappingControl;                           /*!<  This variable selects how Tx/Rx/Orx En signals and TxToOrx mapping is controlled. For detailed info please check the adrv904x_DfeMappingControl_e enum documentation */
+    
 } adrv904x_DfeProfile_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -763,7 +766,7 @@ typedef struct adrv904x_DeviceProfile
 {
     adrv904x_RadioProfile_t radioProfile;                              /*!< Radio configuration parameters */
     adrv904x_DfeProfile_t dfeProfile;                                  /*!< DFE configuration parameters */
-	uint32_t              profileChecksum;                             /*!< Checksum of the entire profile using the CRC32 algorithm  */
+    uint32_t              profileChecksum;                             /*!< Checksum of the entire profile using the CRC32 algorithm  */
 } adrv904x_DeviceProfile_t;
 ADI_ADRV904X_PACK_FINISH
 

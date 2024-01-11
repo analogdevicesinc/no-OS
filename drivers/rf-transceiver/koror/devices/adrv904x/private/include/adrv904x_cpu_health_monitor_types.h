@@ -10,7 +10,7 @@
  * 
  * \brief   Contains ADRV904X Private CPU Health Monitor data types
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_CPU_HEALTH_MONITOR_TYPES_H__

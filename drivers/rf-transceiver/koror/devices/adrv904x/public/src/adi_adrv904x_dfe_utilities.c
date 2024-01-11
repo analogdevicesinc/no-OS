@@ -10,7 +10,7 @@
 *        Analog Devices maintains and provides updates to this code layer.
 *        The end user should not modify this file or any code in this directory.
 *        
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_adrv904x_dfe_utilities.h"

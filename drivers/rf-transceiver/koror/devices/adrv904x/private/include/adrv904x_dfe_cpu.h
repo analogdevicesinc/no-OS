@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X DFE CPU related private function prototypes for
  *        adrv904x_dfe_cpu.c.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_DFE_CPU_H_

@@ -8,7 +8,7 @@
  * \file adrv904x_carrier_reconfigure.h
  * \brief Contains ADRV904x Carrier Reconfigure function declarations
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */ 
 
 #ifndef _ADRV904X_CARRIER_RECONFIGURE_H_
@@ -29,17 +29,17 @@
 * \dep{device->common.devHalInfo}
 * \dep_end
 *
-* \param[in] device Pointer to the ADRV904X device data structure
+* \param[in, out] device Pointer to the ADRV904X device data structure
 * \param[in] carrierConfigs carrier input config
-* \param[in] carrierConfigsOut holds the calculated values during reconfiguration
 * \param[in] carrierChannelFilter channel filter configuration
+* \param[in] carrierConfigsOut holds the calculated values during reconfiguration
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducDelayCalculate(   adi_adrv904x_Device_t* const device,
-                                                                const adi_adrv904x_CarrierRadioCfg_t* const carrierConfigs,
-                                                                adrv904x_CarrierDynamicReconfigProfileCfg_t* const carrierConfigsOut,
-                                                                const adi_adrv904x_ChannelFilterOutputCfg_t* const carrierChannelFilter);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducDelayConfigurationCalculate(  adi_adrv904x_Device_t* const                        device, 
+                                                                            const adi_adrv904x_CarrierRadioCfg_t* const         carrierConfigs,
+                                                                            const adi_adrv904x_ChannelFilterOutputCfg_t* const  carrierChannelFilter,
+                                                                            adi_adrv904x_CarrierReconfigProfileCfgOut_t* const  carrierConfigsOut);
 /**
 * \brief Entry point for cddc carrier delay configuration
 *
@@ -49,18 +49,19 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CducDelayCalculate(   adi_adrv904x_Dev
 *
 * \param[in] device Pointer to the ADRV904X device data structure
 * \param[in] carrierConfigs carrier input config
-* \param[in] carrierConfigsOut holds the calculated values during reconfiguration
 * \param[in] carrierChannelFilter channel filter configuration
+* \param[in, out] carrierConfigsOut holds the calculated values during reconfiguration
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayCalculate(   adi_adrv904x_Device_t* const device,
-                                                                const adi_adrv904x_CarrierRadioCfg_t* const carrierConfigs,
-                                                                adrv904x_CarrierDynamicReconfigProfileCfg_t* const carrierConfigsOut,
-                                                                const adi_adrv904x_ChannelFilterOutputCfg_t* const carrierChannelFilter);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayConfigurationCalculate(  adi_adrv904x_Device_t* const                        device, 
+                                                                            const adi_adrv904x_CarrierRadioCfg_t* const         carrierConfigs,
+                                                                            const adi_adrv904x_ChannelFilterOutputCfg_t* const  carrierChannelFilter,                                                         
+                                                                            adi_adrv904x_CarrierReconfigProfileCfgOut_t* const  carrierConfigsOut);
+
 
 /**
-* \brief Called before reconfiguring. Initializes the internal struct to default values
+* \brief Called before reconfiguring. Initializes the top level Solution struct to default values
 *
 * \dep_begin
 * \dep{device->common.devHalInfo}
@@ -69,12 +70,18 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayCalculate(   adi_adrv904x_Dev
 * \pre None
 *
 * \param[in] device Pointer to the ADRV904X device data structure
-* \param[in,out] carrierConfigsOut holds the calculated values during reconfiguration
+* \param[in] inJesdCfg User input of jesd config. To be copied to soln struct
+* \param[in] inProfileCfgs User input of carrier radio input configs (array size = inNumProfiles). To be copied to soln struct
+* \param[in] inNumProfiles Number of carrier radio profiles contained in inProfileCfgs
+* \param[in,out] soln holds the calculated values during reconfiguration.
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_InternalReconfigStructInit(   adi_adrv904x_Device_t* const device,
-                                                                        adrv904x_CarrierDynamicReconfigInternalCfg_t* const carrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_ReconfigSolutionInit( adi_adrv904x_Device_t* const                device,
+                                                                const adi_adrv904x_CarrierJesdCfg_t* const  inJesdCfg,
+                                                                const adi_adrv904x_CarrierRadioCfg_t        inProfileCfgs[],
+                                                                uint32_t                                    inNumProfiles,
+                                                                adi_adrv904x_CarrierReconfigSoln_t* const   soln);
 
 /**
 * \brief Performs JESD calculations
@@ -97,8 +104,9 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_InternalReconfigStructInit(   adi_adrv
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierJesdParametersCalculate(   adi_adrv904x_Device_t* const                            device,
+                                                                            const adrv904x_CarrierInitialCfg_t* const               initialCfg,
                                                                             const adi_adrv904x_CarrierRadioCfg_t* const             carrierConfigs,
-                                                                            adrv904x_CarrierDynamicReconfigProfileCfg_t* const      carrierConfigsOut,
+                                                                            adi_adrv904x_CarrierReconfigProfileCfgOut_t* const      carrierConfigsOut,
                                                                             const uint8_t                                           rxFlag);
 
 /**
@@ -115,13 +123,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierJesdParametersCalculate(   adi_
 *
 * \param[in] device Pointer to the ADRV904X device data structure
 * \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
-* \param[in,out] carrierConfigsOut holds the calculated values during reconfiguration
+* \param[in,out] soln - Solution structure that holds the calculated values during reconfiguration
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateRxSampleXbarSlotConfig(  adi_adrv904x_Device_t* const                            device,
-                                                                            const adi_adrv904x_CarrierJesdCfg_t* const   jesdCfg,
-                                                                            adrv904x_CarrierDynamicReconfigInternalCfg_t* const     carrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateRxSampleXbarSlotConfig(  adi_adrv904x_Device_t* const                    device,
+                                                                            const adi_adrv904x_CarrierJesdCfg_t* const      inJesdCfg,
+                                                                            adi_adrv904x_CarrierReconfigOutput_t* const     out);
 
 /**
 * \brief Performs Rx Sample XBar JESD calculations
@@ -137,13 +145,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateRxSampleXbarSlotConfig(  adi_
 *
 * \param[in] device Pointer to the ADRV904X device data structure
 * \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
-* \param[in,out] carrierConfigsOut holds the calculated values during reconfiguration
+* \param[in,out] soln - Solution structure that holds the calculated values during reconfiguration
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateTxSampleXbarSlotConfig(   adi_adrv904x_Device_t* const                          device,
-                                                                            const adi_adrv904x_CarrierJesdCfg_t* const   jesdCfg,
-                                                                            adrv904x_CarrierDynamicReconfigInternalCfg_t* const     carrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateTxSampleXbarSlotConfig(   adi_adrv904x_Device_t* const                   device,
+                                                                            const adi_adrv904x_CarrierJesdCfg_t* const      inJesdCfg,
+                                                                            adi_adrv904x_CarrierReconfigOutput_t* const     out);
 
 /**
 * \brief Performs Rx Carrier Band Sorting for Dynamic Reconfiguration
@@ -163,9 +171,10 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateTxSampleXbarSlotConfig(   adi
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierBandSorting( adi_adrv904x_Device_t* const device,
-                                                                const adi_adrv904x_CarrierRadioCfg_t* const rxCarrierConfigs,
-                                                                adrv904x_CarrierDynamicReconfigProfileCfg_t* const rxCarrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierBandSorting( adi_adrv904x_Device_t* const                        device,
+                                                                const adrv904x_CarrierInitialCfg_t* const           rxInitialCfg,
+                                                                const adi_adrv904x_CarrierRadioCfg_t* const         rxCarrierConfigs,
+                                                                adi_adrv904x_CarrierReconfigProfileCfgOut_t* const  rxCarrierConfigsOut);
 /**
 * \brief Performs Tx Carrier Band Sorting for Dynamic Reconfiguration
 * 
@@ -184,9 +193,11 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierBandSorting( adi_adrv904x_Dev
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierBandSorting( adi_adrv904x_Device_t* const device,
-                                                                const adi_adrv904x_CarrierRadioCfg_t* const txCarrierConfigs,
-                                                                adrv904x_CarrierDynamicReconfigProfileCfg_t* const        rxCarrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierBandSorting( adi_adrv904x_Device_t* const                        device,
+                                                                const adrv904x_CarrierInitialCfg_t* const           txInitialCfg,
+                                                                const adi_adrv904x_CarrierRadioCfg_t* const         txCarrierConfigs,
+                                                                adi_adrv904x_CarrierReconfigProfileCfgOut_t* const  txCarrierConfigsOut);
+                                                                
 
 
 /**
@@ -208,9 +219,10 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierBandSorting( adi_adrv904x_Dev
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierNcoReconfig( adi_adrv904x_Device_t* const device,
-                                                                const adi_adrv904x_CarrierRadioCfg_t* const rxCarrierConfigs,
-                                                                adrv904x_CarrierDynamicReconfigProfileCfg_t* const rxCarrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierNcoReconfig( adi_adrv904x_Device_t* const                        device,
+                                                                const adrv904x_CarrierInitialCfg_t* const           rxInitialCfg,
+                                                                const adi_adrv904x_CarrierRadioCfg_t* const         rxCarrierConfigs,
+                                                                adi_adrv904x_CarrierReconfigProfileCfgOut_t* const  rxCarrierConfigsOut);
 
 
 /**
@@ -232,9 +244,10 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierNcoReconfig( adi_adrv904x_Dev
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierNcoReconfig( adi_adrv904x_Device_t* const device,
-                                                                const adi_adrv904x_CarrierRadioCfg_t* const txCarrierConfigs,
-                                                                adrv904x_CarrierDynamicReconfigProfileCfg_t* const txCarrierConfigsOut);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierNcoReconfig( adi_adrv904x_Device_t* const                        device,
+                                                                const adrv904x_CarrierInitialCfg_t* const           txInitialCfg,
+                                                                const adi_adrv904x_CarrierRadioCfg_t* const         txCarrierConfigs,
+                                                                adi_adrv904x_CarrierReconfigProfileCfgOut_t* const  txCarrierConfigsOut);
 
 
 
@@ -258,7 +271,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierNcoReconfig( adi_adrv904x_Dev
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierBandAttenConfig( adi_adrv904x_Device_t* const device,
                                                                     const adi_adrv904x_CarrierRadioCfg_t* const txCarrierConfigs,
-                                                                    adrv904x_CarrierDynamicReconfigProfileCfg_t* const txCarrierConfigsOut);
+                                                                    adi_adrv904x_CarrierReconfigProfileCfgOut_t* const txCarrierConfigsOut);
 
 /**
 * \brief Writes the reconfigured rx carrier settings for the specified channel
@@ -271,14 +284,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierBandAttenConfig( adi_adrv904x
 *
 * \param[in] device Pointer to the ADRV904X device data structure
 * \param[in] chanSelect is the channel parameter
-* \param[in] rxDelayParams holds the reconfiguration settings to be written to the device
+* \param[in] rxHwDelayBufferConfig holds the reconfiguration settings to be written to the device
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierDelaySet(   adi_adrv904x_Device_t* const device,
+ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierDelaySet(    adi_adrv904x_Device_t* const device,
                                                                 const uint8_t chanSelect,
-                                                                const adrv904x_CarrierReconfigDelayParams_t* const rxDelayParams);
-
+                                                                const adi_adrv904x_CarrierHwDelayBufferConfig_t* const rxHwDelayBufferConfig);
 /**
 * \brief Writes the reconfigured rx carrier delay settings for the specified channel
 *
@@ -296,7 +308,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierDelaySet(   adi_adrv904x_Devi
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierConfigSet(   adi_adrv904x_Device_t* const device,
                                                                 const uint8_t chanSelect,
-                                                                const adrv904x_CarrierDynamicReconfigProfileCfg_t* const rxCarrierConfigs);
+                                                                const adi_adrv904x_CarrierReconfigProfileCfgOut_t* const rxCarrierConfigs);
 
 /**
 * \brief Writes the reconfigured tx carrier settings for the specified channel
@@ -316,7 +328,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxCarrierConfigSet(   adi_adrv904x_Dev
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierConfigSet(   adi_adrv904x_Device_t* const device,
                                                                 const uint8_t chanSelect,
-                                                                const adrv904x_CarrierDynamicReconfigProfileCfg_t* const txCarrierConfigs);
+                                                                const adi_adrv904x_CarrierReconfigProfileCfgOut_t* const txCarrierConfigs);
 
 /**
 * \brief Writes the reconfigured tx carrier settings for the specified channel
@@ -329,13 +341,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierConfigSet(   adi_adrv904x_Dev
 *
 * \param[in] device Pointer to the ADRV904X device data structure
 * \param[in] chanSelect is the channel parameter
-* \param[in] txDelayParams holds the reconfiguration settings to be written to the device
+* \param[in] txHwDelayBufferConfig holds the reconfiguration settings to be written to the device
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierDelaySet(   adi_adrv904x_Device_t* const device,
                                                                 const uint8_t chanSelect,
-                                                                const adrv904x_CarrierReconfigDelayParams_t* const txDelayParams);
+                                                                const adi_adrv904x_CarrierHwDelayBufferConfig_t* const txHwDelayBufferConfig);
 
 /**
 * \brief Writes the reconfigured JESD link settings
@@ -352,7 +364,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCarrierDelaySet(   adi_adrv904x_Devi
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_RxJesdConfigSet(  adi_adrv904x_Device_t* const device,
-                                                            const adrv904x_CarrierDynamicReconfigInternalCfg_t* const carrierJesdConfig);
+                                                            const adi_adrv904x_CarrierReconfigOutput_t* const reconfigOut);
 
 /**
 * \brief Writes the reconfigured channelized JESD settings
@@ -371,7 +383,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxJesdConfigSet(  adi_adrv904x_Device_
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierRxJesdConfigSet(   adi_adrv904x_Device_t* const device,
                                                                     const uint32_t rxChannelMask,
-                                                                    const adrv904x_CarrierDynamicReconfigProfileCfg_t* const carrierJesdConfig);
+                                                                    const adi_adrv904x_CarrierReconfigProfileCfgOut_t* const carrierJesdConfig);
 
 
 /**
@@ -389,7 +401,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierRxJesdConfigSet(   adi_adrv904x
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxJesdConfigSet(  adi_adrv904x_Device_t* const device,
-                                                            const adrv904x_CarrierDynamicReconfigInternalCfg_t* const carrierJesdConfig);
+                                                            const adi_adrv904x_CarrierReconfigOutput_t* const reconfigOut);
 
 /**
 * \brief Writes the reconfigured JESD settings
@@ -408,7 +420,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxJesdConfigSet(  adi_adrv904x_Device_
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierTxJesdConfigSet(   adi_adrv904x_Device_t* const device,
                                                                     const uint32_t txChannelMask,
-                                                                    const adrv904x_CarrierDynamicReconfigProfileCfg_t* const carrierJesdConfig);
+                                                                    const adi_adrv904x_CarrierReconfigProfileCfgOut_t* const carrierJesdConfig);
 
 
 /**
@@ -439,6 +451,31 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ChannelFilterCoefsGet(    adi_adrv904x
                                                                     uint32_t* const numberOfFilterTaps,
                                                                     uint8_t* const assymetricFilterTaps,
                                                                     const uint8_t rxFlag);
+
+/**
+* \brief    Performs Slot Shuffling algorithm that targets carrier delayMismatch to below desired threshold
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in] device Pointer to the ADRV904X device data structure
+* \param[in] carrierConfigs holds the new carrier radio settings for a reconfig
+* \param[out] carrierConfigsOut holds the reconfiguration settings for a single profile to be written to the device
+* \param[in] carrierChannelFilter hold the Channel Filter configuration
+* \param[in] rxFlag if 1, select rx cddc tables, tx cduc otherwise
+*
+* \param[in] carrierCfg carrier settings for the current carrier
+
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+                                                                        
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv904x_Device_t* const                            device,
+                                                                        const adi_adrv904x_CarrierRadioCfg_t* const             carrierConfigs,
+                                                                        const adi_adrv904x_ChannelFilterOutputCfg_t* const      carrierChannelFilter,
+                                                                        adi_adrv904x_CarrierReconfigProfileCfgOut_t* const      carrierConfigsOut,
+                                                                        const uint8_t                                           rxFlag);
 
 #endif //CLIENT_IGNORE
 #endif

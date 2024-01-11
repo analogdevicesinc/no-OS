@@ -10,7 +10,7 @@
 *        Analog Devices maintains and provides updates to this code layer.
 *        The end user should not modify this file or any code in this directory.
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_adrv904x_utilities.h"
@@ -32,6 +32,9 @@
 #include "../../private/include/adrv904x_cpu_cmd_fast_attack.h"
 #include "../../private/include/adrv904x_binloader.h"
 #include "../../private/bf/adrv904x_bf_tx_dig.h"
+#include "../../public/include/adi_adrv904x_version.h"
+#include "../../public/include/adi_adrv904x_core.h"
+#include "../../private/bf/adrv904x_bf_core.h"
 
 
 #include "../../private/include/adrv904x_dfe_svc_bbic_bridge_t.h"
@@ -56,6 +59,26 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuLoadUtil(adi_adrv904x_Device_t* cons
                                                      const adi_adrv904x_cpuBinaryInfo_t* const cpuBinaryInfo,
                                                      FILE*                                     cpuImageFilePtr,
                                                      const adi_adrv904x_CpuType_e              cpuType);
+static uint32_t adrv904x_insert64Bits(  uint8_t*            array,
+                                        uint64_t            storeVariable);
+static uint32_t adrv904x_insert32Bits(  uint8_t*            array,
+                                        uint32_t            storeVariable);
+static uint32_t adrv904x_insert16Bits(  uint8_t*            array,
+                                        uint16_t            storeVariable);
+static uint32_t adrv904x_insert8Bits(   uint8_t*            array,
+                                        uint8_t             storeVariable);
+
+static adi_adrv904x_ErrAction_e adrv904x_dumpMemoryRegion(  adi_adrv904x_Device_t* const device, 
+                                                            FILE **ofp,
+                                                            uint32_t startAddr, 
+                                                            uint32_t endAddr, 
+                                                            uint32_t* const dumpSize,
+                                                            uint32_t *recordCrc);
+
+static adi_adrv904x_ErrAction_e adrv904x_dumpTraceCpuData(  adi_adrv904x_Device_t* const device, 
+                                                            FILE **ofp,
+                                                            uint32_t baseAddr, 
+                                                            uint32_t *recordCrc);
 
 static void adrv904x_EndiannessCheckAndConvert(void* const buffer, const size_t elementSize, const size_t elementCount);
 
@@ -1656,6 +1679,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeviceInfoExtract(adi_adrv904x_Dev
         }
         VARIABLE_ASSIGNMENT(device->initExtract.dfeCduc.cducOutputRate_kHz[idx], carrierDucConfig.carriers[0].inputRate_kHz);
         VARIABLE_ASSIGNMENT(carriersEnabled, carrierDucConfig.carriersEnabled);
+        
+        VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].bandRatio[0], carrierDucConfig.bandRatio[0]);
+        VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].bandRatio[1], carrierDucConfig.bandRatio[1]);
         VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].maxSlot, carrierDucConfig.maxSlot);
         
         for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
@@ -1667,13 +1693,14 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeviceInfoExtract(adi_adrv904x_Dev
                 VARIABLE_ASSIGNMENT(bandSelect, carrierDucConfig.carriers[carrierIdx].bandSelect);
                 VARIABLE_ASSIGNMENT(ncoFreq_kHz, carrierDucConfig.carriers[carrierIdx].ncoFreq_kHz);
                                 
-                device->initExtract.txCarrierConfigs[idx].carriers[carrierIdx].enable = 1U;
+                device->initExtract.txCarrierConfigs[idx].carriers[carrierIdx].enable = ADI_ENABLE;
                 VARIABLE_ASSIGNMENT(device->initExtract.txCarrierConfigs[idx].carriers[carrierIdx].sampleRate_kHz, carrierDucConfig.carriers[carrierIdx].inputRate_kHz);
                 device->initExtract.txCarrierConfigs[idx].carriers[carrierIdx].centerFrequency_kHz = 
                     device->initExtract.tx.txChannelCfg[idx].bandSettings[bandSelect].rfCenterFreq_kHz + 
                     ncoFreq_kHz;
                 VARIABLE_ASSIGNMENT(device->initExtract.txCarrierConfigs[idx].carriers[carrierIdx].ibw_kHz, carrierDucConfig.carriers[carrierIdx].ibw_kHz);
                 
+                VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].carrierRuntimeSettings.carrierEnable[carrierIdx], 1U);
                 VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].carrierRuntimeSettings.bandSelect[carrierIdx], carrierDucConfig.carriers[carrierIdx].bandSelect);
                 VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].carrierRuntimeSettings.mixerEnable[carrierIdx], carrierDucConfig.carriers[carrierIdx].mixerEnable);
                 VARIABLE_ASSIGNMENT(device->initExtract.tx.txChannelCfg[idx].carrierRuntimeSettings.decimationRatio[carrierIdx], carrierDucConfig.carriers[carrierIdx].decimationRatio);
@@ -1713,6 +1740,47 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeviceInfoExtract(adi_adrv904x_Dev
             goto cleanup;
         }
         VARIABLE_ASSIGNMENT(device->initExtract.dfeCduc.dpdOutputRate_kHz[idx], dpdConfig.actRate_kHz);
+        
+        for (bandIdx = 0U; bandIdx < (uint32_t)ADI_ADRV904X_DUC_NUM_BAND; bandIdx++)
+        {
+            uint32_t bandLatencyOffset = 0U;
+            switch (bandIdx)
+            {
+                case 0U:
+                    bandLatencyOffset = ADI_LIBRARY_OFFSETOF(adrv904x_DfeTxConfig_t, bandDucLatency[0U]);
+                    break;
+                case 1U:
+                    bandLatencyOffset = ADI_LIBRARY_OFFSETOF(adrv904x_DfeTxConfig_t, bandDucLatency[1U]);    
+                    break;
+                default:
+                    recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Error Invalid bandIdx - tx duc");
+                    goto cleanup;
+                    break;
+            }
+            
+            offset = ADI_LIBRARY_OFFSETOF(adrv904x_DeviceProfile_t, dfeProfile) +
+                     txConfigOffset +
+                     bandLatencyOffset;
+                
+            if (ADI_LIBRARY_FSEEK(cpuProfileFilePtr, offset, SEEK_SET) < 0)
+            {
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cpuProfileFilePtr, "Unable to Rewind File Pointer for CPU Binary - tx band duc latency");
+                goto cleanup;
+            }
+            
+            uint16_t tmpBandLatency = 0U;
+            if ((ADI_LIBRARY_FREAD(&tmpBandLatency, sizeof(tmpBandLatency), 1, cpuProfileFilePtr)) <= 0)
+            {
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Error Reading Block of Data from CPU Binary File - carrier");
+                goto cleanup;
+            }
+            
+            VARIABLE_ASSIGNMENT(device->initExtract.txBandLatency[idx].duc_cc[bandIdx], tmpBandLatency);
+        }
+        
     }
 
     for (idx = 0U; idx < ADRV904X_NUM_TXRX_CHAN; idx++)
@@ -1778,6 +1846,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeviceInfoExtract(adi_adrv904x_Dev
                 device->initExtract.rxCarrierConfigs[idx].carriers[carrierIdx].centerFrequency_kHz = device->initExtract.rx.rxChannelCfg[idx].bandSettings[carrierDdcConfig.carriers[carrierIdx].bandSelect].rfCenterFreq_kHz + carrierDdcConfig.carriers[carrierIdx].ncoFreq_kHz;   //<<< TODO BOM TMP VARS
                 VARIABLE_ASSIGNMENT(device->initExtract.rxCarrierConfigs[idx].carriers[carrierIdx].ibw_kHz, carrierDdcConfig.carriers[carrierIdx].ibw_kHz);
                 
+                VARIABLE_ASSIGNMENT(device->initExtract.rx.rxChannelCfg[idx].carrierRuntimeSettings.carrierEnable[carrierIdx], 1U);
                 VARIABLE_ASSIGNMENT(device->initExtract.rx.rxChannelCfg[idx].carrierRuntimeSettings.bandSelect[carrierIdx], carrierDdcConfig.carriers[carrierIdx].bandSelect);
                 VARIABLE_ASSIGNMENT(device->initExtract.rx.rxChannelCfg[idx].carrierRuntimeSettings.mixerEnable[carrierIdx], carrierDdcConfig.carriers[carrierIdx].mixerEnable);
                 VARIABLE_ASSIGNMENT(device->initExtract.rx.rxChannelCfg[idx].carrierRuntimeSettings.decimationRatio[carrierIdx], carrierDdcConfig.carriers[carrierIdx].decimationRatio);
@@ -1787,6 +1856,47 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeviceInfoExtract(adi_adrv904x_Dev
                 VARIABLE_ASSIGNMENT(device->initExtract.rx.rxChannelCfg[idx].carrierRuntimeSettings.outputRate_kHz[carrierIdx], carrierDdcConfig.carriers[carrierIdx].outputRate_kHz);
             }
         }
+        
+        for (bandIdx = 0U; bandIdx < (uint32_t)ADI_ADRV904X_DDC_NUM_BAND; bandIdx++)
+        {
+            uint32_t bandLatencyOffset = 0U;
+            switch (bandIdx)
+            {
+                case 0U:
+                    bandLatencyOffset = ADI_LIBRARY_OFFSETOF(adrv904x_DfeRxConfig_t, bandDdcLatency[0U]);
+                    break;
+                case 1U:
+                    bandLatencyOffset = ADI_LIBRARY_OFFSETOF(adrv904x_DfeRxConfig_t, bandDdcLatency[1U]);    
+                    break;
+                default:
+                    recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Error Invalid bandIdx - rx ddc");
+                    goto cleanup;
+                    break;
+            }
+            
+            offset = ADI_LIBRARY_OFFSETOF(adrv904x_DeviceProfile_t, dfeProfile) +
+                     rxConfigOffset +
+                     bandLatencyOffset;
+                
+            if (ADI_LIBRARY_FSEEK(cpuProfileFilePtr, offset, SEEK_SET) < 0)
+            {
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cpuProfileFilePtr, "Unable to Rewind File Pointer for CPU Binary - rx band ddc latency");
+                goto cleanup;
+            }
+            
+            uint16_t tmpBandLatency = 0U;
+            if ((ADI_LIBRARY_FREAD(&tmpBandLatency, sizeof(tmpBandLatency), 1, cpuProfileFilePtr)) <= 0)
+            {
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Error Reading Block of Data from CPU Binary File - rx band ddc latency");
+                goto cleanup;
+            }
+            
+            VARIABLE_ASSIGNMENT(device->initExtract.rxBandLatency[idx].ddc_cc[bandIdx], tmpBandLatency);
+        }
+        
     }
 
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
@@ -2155,7 +2265,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_PostMcsInit(adi_adrv904x_Device_t*
     const uint32_t INIT_CALS_TIMEOUT_MS = 60000U;   /* 60 Seconds Timeout */
     adi_adrv904x_InitCalErrData_t initCalErrData;
     uint8_t idx = 0U;
-
+    adi_adrv904x_RadioCtrlTxRxEnCfg_t allDisabledTxRxEnCfg;
+    
 
     uint8_t i = 0U;
     uint32_t chanMask = 0U;
@@ -2168,6 +2279,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_PostMcsInit(adi_adrv904x_Device_t*
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, utilityInit, cleanup);
 
     ADI_LIBRARY_MEMSET(&initCalErrData, 0, sizeof(adi_adrv904x_InitCalErrData_t));
+    ADI_LIBRARY_MEMSET(&allDisabledTxRxEnCfg, 0, sizeof(allDisabledTxRxEnCfg));
 
 
     /* Initializing Radio Sequence configuration */
@@ -2195,6 +2307,16 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_PostMcsInit(adi_adrv904x_Device_t*
     /* Sets up Radio Ctrl TxRx Enable Config for Pin mode (Config will be ignore in SPI mode) */
     if ((utilityInit->radioCtrlTxRxEnCfgSel != 0U) || (utilityInit->radioCtrlTxRxEnPinSel != 0U))
     {
+        recoveryAction = adi_adrv904x_RadioCtrlTxRxEnCfgSet(device,
+                                                            &allDisabledTxRxEnCfg,
+                                                            ADI_ADRV904X_TXRXEN_PINALL,
+                                                            ADI_ADRV904X_TXRXEN_TX_ENABLE_MAP | ADI_ADRV904X_TXRXEN_RX_ENABLE_MAP);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Radio Control TxRxEnCfg set to default failed");
+            goto cleanup;
+        }
+        
         recoveryAction = adi_adrv904x_RadioCtrlTxRxEnCfgSet(device,
                                                             &utilityInit->radioCtrlGpioCfg,
                                                             utilityInit->radioCtrlTxRxEnPinSel,
@@ -2359,45 +2481,105 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMemDumpBinWrite(adi_adrv904x_Device_
     adi_adrv904x_ErrAction_e    recoveryAction                                    = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     FILE*                       ofp                                               = NULL;
     uint32_t                    byteCount                                         = 0U;
-    uint32_t                    offset                                            = 0U;
     uint32_t                    cpuIdx                                            = 0U;
     uint32_t                    exceptionValue                                    = 0U;
     uint8_t                     binaryRead[ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE + 10] = { 0U };
     uint32_t                    tableIdx                                          = 0U;
     uint32_t                    i                                                 = 0U;
-    uint32_t                    read32                                            = 0U;
     uint32_t                    startAddr                                         = 0U;
     uint32_t                    endAddr                                           = 0U;
     uint32_t                    timeout_us                                        = 0U;
     uint32_t                    waitInterval_us                                   = 0U;
     uint32_t                    eventCheck                                        = 0U;
     uint32_t                    numEventChecks                                    = 0U;
-    uint32_t                    sizeFlag                                          = 0U;
     uint32_t                    cpuTableSize                                      = 0U;
     uint8_t                     txChanId                                          = 0U;
     uint8_t                     sliceClkEn                                        = 0x01U;
-    const uint32_t              SPI_ONLY_REGS_ADDR                                = 0x47000000U;
-    const uint32_t              DIRECT_SPI_REGION_LEN                             = 0x4000U;
-    const uint32_t              HARDWARE_SEMAPHORE_ADDR                           = 0x46500000U;
-    const uint32_t              HARDWARE_SEMAPHORE_LEN                            = 0x200000;
-    uint32_t                    TABLE_INDEX                                       = 0U;
+    const uint32_t              STREAM_CPU_RAM_ADDR                               = 0x46A00000U;
     adrv904x_BfTxDigChanAddr_e  txDigBaseAddr[ADI_ADRV904X_MAX_TXCHANNELS] = { ADRV904X_BF_SLICE_TX_0__TX_DIG, ADRV904X_BF_SLICE_TX_1__TX_DIG, ADRV904X_BF_SLICE_TX_2__TX_DIG, ADRV904X_BF_SLICE_TX_3__TX_DIG, ADRV904X_BF_SLICE_TX_4__TX_DIG, ADRV904X_BF_SLICE_TX_5__TX_DIG, ADRV904X_BF_SLICE_TX_6__TX_DIG, ADRV904X_BF_SLICE_TX_7__TX_DIG };
 
-    const uint32_t cpuCrashAddr[] = { 0U }; /* Skip these addresses that causes CPU crash  */
-    uint8_t skipRead = ADI_FALSE;
+    uint32_t recordCrc      = 0U;
+    uint8_t  recordPadding  = 0U;
 
 
-    uint32_t          cpuCrc                       = 0U;
-    uint32_t          cpuFinalCrc                  = ADI_FALSE;
+    uint32_t          offset                       = 0U;
+    uint32_t          sizeFlag                     = 0U;
+    const uint32_t    cpuCrashAddr[]               = { 0U }; /* Skip these addresses that causes CPU crash  */
+    uint8_t           skipRead                     = ADI_FALSE;
     uint32_t          dfeTableSize                 = 0U;
-    uint32_t          address                      = 0U;
-    uint32_t          dfeCrc                       = 0U;
-    uint32_t          dfeFinalCrc                  = ADI_FALSE;
     uint32_t          dfeExceptionFlag             = ADRV904X_DFE_PLATFORM_NO_EXCEPTION;
     uint32_t          count                        = 0U;
     uint8_t           bootStatus                   = 0U;
     const uint32_t    DFE_EXCEPTION_DONE_MAX_COUNT = 500U;
     const uint32_t    DFE_EXCEPTION_DONE_WAIT_US   = 1000U;
+    const uint32_t    SPI_ONLY_REGS_ADDR           = 0x47000000U;
+    const uint32_t    DIRECT_SPI_REGION_LEN        = 0x4000U;
+
+    /* File header variables */
+    uint16_t   fileFormatVersion    = 0U;
+    uint16_t   productId            = 0U;
+    uint16_t   productRevision      = 0U;
+    time_t     rawtime;
+    struct tm *tmPtr;
+
+    /* Generic record header varibales */
+    uint32_t recordType;
+    uint32_t recordLength;
+    uint8_t  endianness = 0U;
+
+    /* Device Driver record variables */
+    uint16_t driverId;
+    uint16_t instanceId;
+    uint32_t driverStateLength;
+    uint16_t driverVersionMajor;
+    uint16_t driverVersionMinor;
+    uint16_t driverVersionPatch;
+    uint8_t  driverVersionPrerel[ADI_ADRV904X_VERSION_PREREL_SIZE] = {0U};
+    uint32_t driverVersionBuild;
+    uint16_t tmYear     = 0U;
+    uint8_t  tmMonth    = 0U;
+    uint8_t  tmDay      = 0U;
+    uint8_t  tmHour     = 0U;
+    uint8_t  tmMin      = 0U;
+    uint8_t  tmSec      = 0U;
+    uint8_t* driverPtr;
+
+    /* CPU RAM Record Variables */
+    uint64_t startAddress;
+    uint32_t memLength;
+    uint16_t ramId;
+    uint16_t cpuType;
+
+    /* Telemetry Buffer Record Variables */
+    uint32_t bufferLength;
+    uint16_t bufferId;
+    uint16_t formatVersion = 0x1U;
+
+    /* Register Record Variables */
+    uint32_t length;
+    uint8_t registerWidth;
+
+
+    /* ETM Trace Record Variables */
+    uint32_t traceBufferLength = 0U;
+    uint16_t traceFormat;
+    uint8_t  numCpus = 0U;
+    uint16_t cpuArch;
+    uint16_t etmType;
+    uint16_t cpuFormat;
+    uint8_t  configLength;
+    uint32_t traceDataLength;
+    uint32_t etmOn[ADRV904X_ETM_MAX] = {0U};
+    uint32_t read32 = 0U;
+
+    /* Firmware Version Records */
+    uint16_t firmwareSemverMajor;
+    uint16_t firmwareSemverMinor;
+    uint16_t firmwareSemverPatch;
+    uint8_t  firmwareVersionPrerel[ADI_ADRV904X_VERSION_PREREL_SIZE] = {0U};
+    uint32_t firmwareSemverBuild;
+    uint32_t firmwareId;
+
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
     ADI_ADRV904X_API_ENTRY(&device->common);
@@ -2425,6 +2607,30 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMemDumpBinWrite(adi_adrv904x_Device_
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, ofp, "Unable to open binary image file. Please check if the path is correct");
         goto cleanup;
+    }
+
+
+    /* Check ETM Values before exceptions */
+    for(i = 0; i < ADRV904X_ETM_MAX; i++)
+    {
+        recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                        NULL,
+                                                        adrv904x_DfeEtmMemDumpTable[i].baseAddr + ADRV904X_ETM_TRCPRGCTLR_OFFSET,
+                                                        &read32,                    /* trace enabled for ETM*/
+                                                        0xFFFFFFFF);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, ofp, "Unable to Read trace memory");
+            goto cleanup;
+        }
+
+        if(read32 != 0U)
+        {
+            etmOn[i] = 1U;
+            numCpus++;
+            configLength = adrv904x_DfeEtmMemDumpTable[i].configSize * adrv904x_DfeEtmMemDumpTable[i].dataSize;
+            traceBufferLength += ADI_ADRV904X_ETM_RECORD_SIZE + configLength + ((configLength % 8) ? 8 - (configLength % 8) : 0);
+        }
     }
     
     if (forceException == ADI_TRUE)
@@ -2541,116 +2747,680 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMemDumpBinWrite(adi_adrv904x_Device_
     
     *dumpSize = 0U;
 
-    /* Loop through the radio cpu memory dump table a write memory to file */
-    cpuTableSize = sizeof(adrv904x_CpuMemDumpTable) / sizeof(adrv904x_CpuMemDump_t);
-    if (ramOnlyFlag == 1)
+    /* Generate Header for dump file*/
+    fileFormatVersion  = 0x1U;
+    productRevision     = device->devStateInfo.deviceSiRev;
+    /* Determine product ID */
+    adrv904x_Core_EfuseProductId_BfGet(device, NULL, ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS, (uint8_t*) &productId);
+    productId = ADI_ADRV904X_PRODUCT_ID_MASK | productId;
+    /* Find dump time */
+    ADI_LIBRARY_TIME(&rawtime);
+    tmPtr = ADI_LIBRARY_GMTIME(&rawtime);
+
+    /* Generate header record*/
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount = 0U;
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], fileFormatVersion);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], productId);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], productRevision);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], tmPtr->tm_year);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmPtr->tm_mon);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmPtr->tm_mday);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmPtr->tm_hour);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmPtr->tm_min);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmPtr->tm_sec);
+    byteCount += 3U;                                                                /* Padding to align to 64-bit boundary */
+    /* calculate CRC*/
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordCrc);
+    byteCount += 4U;                                                                /* Padding to align to 64-bit boundary */
+
+    /* Insert file header */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
     {
-        TABLE_INDEX = 4U;
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
     }
-    else
+
+    /* Generate Device Driver Record */
+    recordCrc = 0U;
+    byteCount = 0U;
+    recordType = ADI_ADRV904X_MEMDUMP_DEV_DRVR_STATE_RECORD;
+    recordLength = ADI_ADRV904X_MEMDUMP_DEVICE_DRIVER_HEADER_SIZE + sizeof(*device);
+    /* Generate basic header */
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+    /* Insert record header */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
     {
-        TABLE_INDEX = cpuTableSize;
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
     }
+    byteCount = 0U;
+
+    /* Get driver record values */
+    driverId = 0U; /* TBD */
+    instanceId = device->common.id;
+    driverStateLength = sizeof(*device);
+    driverVersionMajor = ADI_ADRV904X_CURRENT_MAJOR_VERSION;
+    driverVersionMinor = ADI_ADRV904X_CURRENT_MINOR_VERSION;
+    driverVersionPatch = ADI_ADRV904X_CURRENT_MAINTENANCE_VERSION;
+    driverVersionBuild = ADI_ADRV904X_CURRENT_BUILD_VERSION;
+
+    /* Only Koror enables init time */
+    tmPtr = ADI_LIBRARY_GMTIME(&(device->devStateInfo.initGlobalTime));
+    tmYear  =  tmPtr->tm_year;
+    tmMonth =  tmPtr->tm_mon;
+    tmDay   =  tmPtr->tm_mday;
+    tmHour  =  tmPtr->tm_hour;
+    tmMin   =  tmPtr->tm_min;
+    tmSec   =  tmPtr->tm_sec;
+
+    /* Compile driver record header */
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], driverId);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], instanceId);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], driverStateLength);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], driverVersionMajor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], driverVersionMinor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], driverVersionPatch);
+    for(i = 0U; i < ADI_ADRV904X_VERSION_PREREL_SIZE; i++)
+    {
+        byteCount += adrv904x_insert8Bits(&binaryRead[byteCount], driverVersionPrerel[i]);
+    }
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], driverVersionBuild);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], endianness);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], tmYear);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmMonth);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmDay);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmHour);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmMin);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], tmSec);
+
+    /* Publish driver header to file */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+
+    /* Begin publishing Device Handle */
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount = 0U;
+    driverPtr = (uint8_t*) device;
+    for(i = 0U; i < driverStateLength; i++)
+    {
+        if(byteCount >= ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE) 
+        {
+            /* If at maximum length for buffer, flush */
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
+            recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+            byteCount = 0U;
+        }
+        /* Set buffer to data and increment ptr */
+        byteCount += adrv904x_insert8Bits(&binaryRead[byteCount], *(driverPtr++));
+    }
+    /* Flush remaining data, even if smaller than chunk size */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    /* Calculate final crc */
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
+    
+    /* Append CRC32 and padding*/
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+    adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+    byteCount = 8U + recordPadding;
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+
+    /* Begin Radio FW Record */
+    recordCrc = 0U;
+    byteCount = 0U;
+    recordType = ADI_ADRV904X_MEMDUMP_FIRMWARE_VER_RECORD;
+    recordLength = ADI_ADRV904X_MEMDUMP_FIRMWARE_VERSION_HEADER_SIZE;
+
+    /* Generate basic header */
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+    /* Insert record header */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    byteCount = 0U;
+
+    /* Get driver record values */
+    firmwareSemverMajor = ADI_ADRV904X_CURRENT_MAJOR_VERSION;
+    firmwareSemverMinor = ADI_ADRV904X_CURRENT_MINOR_VERSION;
+    firmwareSemverPatch = ADI_ADRV904X_CURRENT_MAINTENANCE_VERSION;
+    firmwareSemverBuild = ADI_ADRV904X_CURRENT_BUILD_VERSION;
+    firmwareId = ADI_ADRV904X_MEMDUMP_RADIO_FW << ADI_ADRV904X_FIRMWARE_TYPE_ID_SHIFT;
+
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverMajor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverMinor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverPatch);
+    for(i = 0U; i < ADI_ADRV904X_VERSION_PREREL_SIZE; i++)
+    {
+        byteCount += adrv904x_insert8Bits(&binaryRead[byteCount], firmwareVersionPrerel[i]);
+    }
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], firmwareSemverBuild);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], firmwareId);
+
+    /* Publish firmware record to file */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
+
+    /* Append CRC32 and padding*/
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+    adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+    byteCount = 8U + recordPadding;
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+
+
+    /* Begin DFE FW Record */
+    recordCrc = 0U;
+    byteCount = 0U;
+    recordType = ADI_ADRV904X_MEMDUMP_FIRMWARE_VER_RECORD;
+    recordLength = ADI_ADRV904X_MEMDUMP_FIRMWARE_VERSION_HEADER_SIZE;
+
+    /* Generate basic header */
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+    /* Insert record header */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    byteCount = 0U;
+
+    /* Get driver record values */
+    firmwareSemverMajor = device->devStateInfo.cpu.fwVersion.majorVer;
+    firmwareSemverMinor = device->devStateInfo.cpu.fwVersion.minorVer;
+    firmwareSemverPatch = device->devStateInfo.cpu.fwVersion.maintenanceVer;
+    firmwareSemverBuild = device->devStateInfo.cpu.fwVersion.buildVer;
+    firmwareId = ADI_ADRV904X_MEMDUMP_DFE_FW << ADI_ADRV904X_FIRMWARE_TYPE_ID_SHIFT;
+
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverMajor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverMinor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverPatch);
+    for(i = 0U; i < ADI_ADRV904X_VERSION_PREREL_SIZE; i++)
+    {
+        byteCount += adrv904x_insert8Bits(&binaryRead[byteCount], firmwareVersionPrerel[i]);
+    }
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], firmwareSemverBuild);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], firmwareId);
+
+    /* Publish firmware record to file */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
+
+    /* Append CRC32 and padding*/
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+    adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+    byteCount = 8U + recordPadding;
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+
+    /* Begin Stream FW Record */
+    recordCrc = 0U;
+    byteCount = 0U;
+    recordType = ADI_ADRV904X_MEMDUMP_FIRMWARE_VER_RECORD;
+    recordLength = ADI_ADRV904X_MEMDUMP_FIRMWARE_VERSION_HEADER_SIZE;
+
+    /* Generate basic header */
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+    /* Insert record header */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    byteCount = 0U;
+
+    /* Get driver record values */
+    firmwareSemverMajor = device->devStateInfo.cpu.devProfileVersion.majorVer;
+    firmwareSemverMinor = device->devStateInfo.cpu.devProfileVersion.minorVer;
+    firmwareSemverPatch = device->devStateInfo.cpu.devProfileVersion.maintenanceVer;
+    firmwareSemverBuild = device->devStateInfo.cpu.devProfileVersion.buildVer;
+    firmwareId = ADI_ADRV904X_MEMDUMP_STREAM_FW << ADI_ADRV904X_FIRMWARE_TYPE_ID_SHIFT;
+
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverMajor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverMinor);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], firmwareSemverPatch);
+    for(i = 0U; i < ADI_ADRV904X_VERSION_PREREL_SIZE; i++)
+    {
+        byteCount += adrv904x_insert8Bits(&binaryRead[byteCount], firmwareVersionPrerel[i]);
+    }
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], firmwareSemverBuild);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], firmwareId);
+
+    /* Publish firmware record to file */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
+
+    /* Append CRC32 and padding*/
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+    adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+    byteCount = 8U + recordPadding;
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+
+
+    /* Begin trace record */
+    recordCrc = 0U;
+    byteCount = 0U;
+
+    /* Find Trace ETF buffer size */
+    recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                    NULL,
+                                                    ADRV904X_A55_TRACE_FIFO_ADDR_BASE + ADRV904X_ETF_RSZ_OFFSET,
+                                                    &read32,                    /* ETF Buffer Size / 4 */
+                                                    0xFFFFFFFFU);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+        goto cleanup;
+    }
+    traceDataLength = (read32 << ADI_ADRV904X_ETF_RAM_SIZE_OFFSET);
+
+    /* Generate basic header */
+    recordType = ADI_ADRV904X_MEMDUMP_ETM_TRACE_RECORD;
+    recordLength = ADI_ADRV904X_MEMDUMP_TRACE_BUFFER_HEADER_SIZE + traceBufferLength + traceDataLength;
+
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+
+    /* Insert record header */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    byteCount = 0U;
+
+    /* Get remaining trace record values */
+    traceFormat = ADI_ADRV904X_TRACE_FORMAT_CORESIGHT;
+    endianness  = 0U;
+
+    /* Compile trace record header */
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], traceBufferLength);
+    byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], traceFormat);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], numCpus);
+    byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], endianness);
+    /* Flush data */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+    byteCount = 0U;
+
+    /* Begin loop through all relevant trace-generating devices */
+    for(i = 0U; i < ADRV904X_ETM_MAX; i++)
+    {
+        if(etmOn[i] == ADI_TRUE)
+        {
+            cpuArch = ADI_ADRV904X_MEMDUMP_ARM_V8;
+            
+            recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                            NULL,
+                                                            adrv904x_DfeEtmMemDumpTable[i].baseAddr + ADRV904X_ETM_TRCIDR1_OFFSET,
+                                                            &read32,
+                                                            ADI_ADRV904X_TRCIDR1_ARCH_MASK);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+                goto cleanup;
+            }
+            etmType = read32 >> ADI_ADRV904X_TRCIDR1_ARCH_SHIFT;
+            cpuFormat = adrv904x_DfeEtmMemDumpTable[i].format;
+            configLength = adrv904x_DfeEtmMemDumpTable[i].configSize * adrv904x_DfeEtmMemDumpTable[i].dataSize;
+            endianness  = 0U;
+
+            byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], cpuArch);
+            byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], etmType);
+            byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], cpuFormat);
+            byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], configLength);
+            byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], endianness);
+
+            /* Flush data */
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
+            recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+
+            adrv904x_dumpTraceCpuData(  device, 
+                                        &ofp,
+                                        adrv904x_DfeEtmMemDumpTable[i].baseAddr, 
+                                        &recordCrc);
+            
+            byteCount = 0U;
+        }
+    }
+
+    /* Insert trace data size */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], traceDataLength);
+    /* Flush data */
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+    byteCount = 0U;
+
+    /* Insert trace data */
+    traceDataLength = traceDataLength >> ADI_ADRV904X_ETF_RAM_SIZE_OFFSET;
+    for(i = 0U; i < (traceDataLength); i++)
+    {
+        /* Read data in 4B incements*/
+        recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                        NULL,
+                                                        ADRV904X_A55_TRACE_FIFO_ADDR_BASE + ADRV904X_ETF_RRD_OFFSET,
+                                                        &read32,
+                                                        0xFFFFFFFFU);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+            goto cleanup;
+        }
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], read32);
+        
+        /* Flush data if next read would exceed chunk size */
+        if((byteCount + sizeof(uint32_t)) > ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE)
+        {
+            /* Flush data */
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
+            recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                                  /* Set binary to 0's */
+            byteCount = 0U;
+        }
+    }
+    /* Push remaining data */
+    if(byteCount != 0U)
+    {
+        /* Flush data */
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
+        {
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
+        }
+    }
+    recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
+
+    /* Append CRC32 and padding*/
+    ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                                          /* Set binary to 0's */
+    recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+    adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+    byteCount = 8U + recordPadding;
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        goto cleanup;
+    }
+
+    /* Loop through the radio CPU RAM dump table a write memory to file */
+    cpuTableSize = sizeof(adrv904x_CpuRamMemDumpTable) / sizeof(adrv904x_CpuRamMemDump_t);
+    if(ramOnlyFlag == 1U && cpuTableSize > ADI_ADRV904X_VRAM_ONLY_SIZE)
+    {
+        cpuTableSize = ADI_ADRV904X_VRAM_ONLY_SIZE;
+    }
+
     for (tableIdx = 0U; tableIdx < cpuTableSize; tableIdx++)
     {
 
-        startAddr = adrv904x_CpuMemDumpTable[tableIdx].cpuMemAddr;
-        endAddr = adrv904x_CpuMemDumpTable[tableIdx].cpuMemAddr + adrv904x_CpuMemDumpTable[tableIdx].cpuMemSize - 1;
+        startAddr = adrv904x_CpuRamMemDumpTable[tableIdx].cpuMemAddr;
+        endAddr = adrv904x_CpuRamMemDumpTable[tableIdx].cpuMemAddr + adrv904x_CpuRamMemDumpTable[tableIdx].cpuMemSize - 1;
 
-        if (startAddr == 0)
+        /* Generate CPU RAM Record */
+        recordCrc = 0U;
+        byteCount = 0U;
+        ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+
+        /* Insert basic record header */
+        recordType = ADI_ADRV904X_MEMDUMP_CPU_RAM_RECORD;
+        recordLength = ADI_ADRV904X_MEMDUMP_CPU_RAM_HEADER_SIZE + adrv904x_CpuRamMemDumpTable[tableIdx].cpuMemSize;
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
         {
-            break; /* last entry */
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
         }
 
-        /* if the cpuMemSize = 1, set the sizeFlag as 1 to ensure enter the below loop  */
-        if (startAddr == endAddr)
+        /* Reset values for CPU record header */
+        byteCount = 0U;
+        ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+
+        /* Construct CPU RAM record header */
+        startAddress    = startAddr;
+        memLength       = adrv904x_CpuRamMemDumpTable[tableIdx].cpuMemSize;
+        ramId           = adrv904x_CpuRamMemDumpTable[tableIdx].ramId;
+        endianness      = adrv904x_CpuRamMemDumpTable[tableIdx].cpuMemEndianness;
+        if(startAddr >= STREAM_CPU_RAM_ADDR)
         {
-            sizeFlag = 1;
+            cpuType = ADI_ADRV904X_MEMDUMP_STREAM_CPU;
+        }
+        else
+        {
+            cpuType = ADI_ADRV904X_MEMDUMP_ARM_V7;
+        }
+        byteCount += adrv904x_insert64Bits(&binaryRead[byteCount], startAddress);
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], memLength);
+        byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], ramId);
+        byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], cpuType);
+        byteCount += adrv904x_insert8Bits (&binaryRead[byteCount], endianness);
+        byteCount += 7U; /* Padding */
+
+        /* Insert CPU RAM record header */
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
+        {
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
+        }
+        recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+        byteCount = 0U;
+
+        recoveryAction = adrv904x_dumpMemoryRegion(  device, 
+                                    &ofp,
+                                    startAddr, 
+                                    endAddr, 
+                                    dumpSize,
+                                    &recordCrc);
+
+        if(recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write CRC to a binary file.");
+            goto cleanup;
         }
 
-        for (offset = startAddr; ((offset < endAddr) || (1 == sizeFlag)); offset += ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE)
+        /* Append CRC32 and padding*/
+        ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+        recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+        adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+        byteCount = 8U + recordPadding;
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
         {
-            /* Clean the flag for waiting for next cpuMemSize = 1 */
-            sizeFlag = 0;
-            if (offset < (endAddr - ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE))
-            {
-                byteCount = ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE;
-            }
-            else
-            {
-                byteCount = endAddr + 1 - offset;
-            }
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
+        }
 
-            *dumpSize += byteCount;
+    }
+    byteCount = 0U;
+    recordCrc = 0U;
 
+    /* Loop through the radio cpu telemetry dump table a write memory to file */
+    cpuTableSize = sizeof(adrv904x_TelemetryMemDumpTable) / sizeof(adrv904x_CpuMemDump_t);
+    if(ramOnlyFlag == 0U)
+    {
+        for (tableIdx = 0U; tableIdx < cpuTableSize; tableIdx++)
+        {
 
-            skipRead = ADI_FALSE;
-            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));
+            startAddr = adrv904x_TelemetryMemDumpTable[tableIdx].cpuMemAddr;
+            endAddr = adrv904x_TelemetryMemDumpTable[tableIdx].cpuMemAddr + adrv904x_TelemetryMemDumpTable[tableIdx].cpuMemSize - 1;
 
-            for (i = 0; i < sizeof(cpuCrashAddr) / sizeof(uint32_t); i++)
-            {
-                if (offset == cpuCrashAddr[i])
-                {
-                    skipRead = ADI_TRUE;
-                    break;
-                }
-            }
-            
-            if (skipRead == ADI_FALSE)
-            {
+            /* Generate Telemetry Buffer Record */
+            recordCrc = 0U;
+            byteCount = 0U;
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
 
-                /* DIRECT READ Byte */
-                if ((offset >= SPI_ONLY_REGS_ADDR) &&
-                    (offset < (SPI_ONLY_REGS_ADDR + DIRECT_SPI_REGION_LEN)))
-                {
-                    for (i = 0; i < byteCount; i++)
-                    {
-                        if (tableIdx < TABLE_INDEX)
-                        {
-                            recoveryAction = adi_adrv904x_Register32Read(device, NULL, offset + i, &read32, 0xFF);
-                            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                            {
-                                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset + i, "Unable to Read Cpu memory");
-                                goto cleanup;
-                            }
-                            binaryRead[i] = (uint8_t)read32;
-                        }
-                    }
-                }
-                else
-                {
-                    if (tableIdx < TABLE_INDEX)
-                    {
-                        recoveryAction = adi_adrv904x_Registers32Read(device, NULL, offset, (uint32_t *)binaryRead, NULL, (byteCount + 3) / 4);
-                        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                        {
-                            ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Unable to Read Cpu memory");
-                            goto cleanup;
-                        }
-                        /*
-                         * Hardware semaphore register check and reset operation:
-                         * Hardware semaphore register will be set to 0x00 on read,
-                         * The value will be set to all 1s on read if current value is all 0s,
-                         * So need to retrieve the value after reading it in the CpuMemDump
-                         */
-                        if (((offset + byteCount) < (HARDWARE_SEMAPHORE_ADDR + HARDWARE_SEMAPHORE_LEN)) && 
-                           (offset >= HARDWARE_SEMAPHORE_ADDR))
-                        {
-                            recoveryAction = adi_adrv904x_Registers32Write(device, NULL, &offset, (uint32_t *)binaryRead, NULL, (byteCount + 3) / 4);
-                            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                            {
-                                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Unable to re-write the hardware semaphore");
-                                goto cleanup;
-                            }
-                        }
-                    }
-                }
-            } 
-            /* Fill in the rest of the mem dump with 0's*/
-            if (tableIdx >= TABLE_INDEX)
-            {
-                ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));
-            }
+            /* Insert basic record header */
+            recordType = ADI_ADRV904X_MEMDUMP_TELEM_RECORD;
+            recordLength = ADI_ADRV904X_MEMDUMP_TELEM_BUFFER_HEADER_SIZE + adrv904x_TelemetryMemDumpTable[tableIdx].cpuMemSize;
+            byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+            byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
             if (ADI_LIBRARY_FWRITE(binaryRead,
                 1,
                 byteCount,
@@ -2661,27 +3431,157 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMemDumpBinWrite(adi_adrv904x_Device_
                 goto cleanup;
             }
 
-                        /* Add the CRC value at the end of Radio side memory dump */
-            if ((tableIdx == cpuTableSize - 1) &&
-                (offset >= endAddr - ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE))
+            /* Reset values for telemetry buffer record header */
+            byteCount = 0U;
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+
+            /* Construct Telemetry record header*/
+            bufferLength    = adrv904x_TelemetryMemDumpTable[tableIdx].cpuMemSize;
+            bufferId        = ADI_ADRV904X_PRODUCT_ID_MASK;
+            endianness      = adrv904x_TelemetryMemDumpTable[tableIdx].cpuMemEndianness;
+
+            byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], bufferLength);
+            byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], bufferId);
+            byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], formatVersion);
+            byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], endianness);
+            byteCount += 7U; /* Padding */
+
+            /* Insert telemetry buffer record header */
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
             {
-                cpuFinalCrc = ADI_TRUE;
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
             }
-            cpuCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, cpuCrc, cpuFinalCrc);
+            recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+            byteCount = 0U;
+
+            recoveryAction = adrv904x_dumpMemoryRegion(  device, 
+                                        &ofp,
+                                        startAddr, 
+                                        endAddr, 
+                                        dumpSize,
+                                        &recordCrc);
+
+            if(recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write CRC to a binary file.");
+                goto cleanup;
+            }
+            /* Append CRC32 and padding*/
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+            recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+            adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+            byteCount = 8U + recordPadding;
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
         }
     }
+    byteCount = 0U;
+    recordCrc = 0U;
 
-
-    *dumpSize += sizeof(cpuCrc);
-    if (ADI_LIBRARY_FWRITE((uint8_t *)&cpuCrc,
-        1,
-        sizeof(cpuCrc),
-        ofp) != sizeof(cpuCrc))
+    /* Loop through the radio cpu memory dump table a write memory to file */
+    cpuTableSize = sizeof(adrv904x_CpuMemDumpTable) / sizeof(adrv904x_CpuMemDump_t);
+    if(ramOnlyFlag == 0U)
     {
-        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write CRC to a binary file.");
-        goto cleanup;
+        for (tableIdx = 0U; tableIdx < cpuTableSize; tableIdx++)
+        {
+
+            startAddr = adrv904x_CpuMemDumpTable[tableIdx].cpuMemAddr;
+            endAddr = adrv904x_CpuMemDumpTable[tableIdx].cpuMemAddr + adrv904x_CpuMemDumpTable[tableIdx].cpuMemSize - 1;
+
+            /* Generate Register Record */
+            recordCrc = 0U;
+            byteCount = 0U;
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+
+            /* Insert basic record header */
+            recordType   = ADI_ADRV904X_MEMDUMP_REG_RECORD;
+            recordLength = ADI_ADRV904X_MEMDUMP_REGISTER_HEADER_SIZE + adrv904x_CpuMemDumpTable[tableIdx].cpuMemSize;
+            byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+            byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
+
+            /* Reset values for register record header */
+            byteCount = 0U;
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+            
+
+            /* Construct Register record header*/
+            startAddress    = adrv904x_CpuMemDumpTable[tableIdx].cpuMemAddr;
+            length          = adrv904x_CpuMemDumpTable[tableIdx].cpuMemSize;
+            registerWidth   = adrv904x_CpuMemDumpTable[tableIdx].cpuMemWidth;
+            endianness      = adrv904x_CpuMemDumpTable[tableIdx].cpuMemEndianness;
+
+            byteCount += adrv904x_insert64Bits(&binaryRead[byteCount], startAddress);
+            byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], length);
+            byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], registerWidth);
+            byteCount += adrv904x_insert8Bits( &binaryRead[byteCount], endianness);
+            byteCount += 2U; /* Padding */
+
+            /* Insert register buffer record header */
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
+            recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+            byteCount = 0U;
+
+            recoveryAction = adrv904x_dumpMemoryRegion(  device, 
+                                        &ofp,
+                                        startAddr, 
+                                        endAddr, 
+                                        dumpSize,
+                                        &recordCrc);
+
+            if(recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write CRC to a binary file.");
+                goto cleanup;
+            }
+
+            /* Append CRC32 and padding*/
+            ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+            recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+            adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+            byteCount = 8U + recordPadding;
+            if (ADI_LIBRARY_FWRITE(binaryRead,
+                1,
+                byteCount,
+                ofp) != byteCount)
+            {
+                recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+                goto cleanup;
+            }
+        }
     }
+    byteCount = 0U;
+
+
     while ((forceException == 1U) && (count < DFE_EXCEPTION_DONE_MAX_COUNT))
     {
         /* Get the CPU boot status */
@@ -2711,11 +3611,60 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMemDumpBinWrite(adi_adrv904x_Device_
         }
     }
     /* Loop through the dfe memory dump table a write dfe memory to file */
-    dfeTableSize = sizeof(adrv904x_DfeMemDumpTable) / sizeof(adrv904x_CpuMemDump_t);
+    dfeTableSize = sizeof(adrv904x_DfeMemDumpTable) / sizeof(adrv904x_CpuRamMemDump_t);
     for (tableIdx = 0U; tableIdx < dfeTableSize; tableIdx++)
     {
         startAddr = adrv904x_DfeMemDumpTable[tableIdx].cpuMemAddr;
         endAddr = adrv904x_DfeMemDumpTable[tableIdx].cpuMemAddr + adrv904x_DfeMemDumpTable[tableIdx].cpuMemSize - 1;
+        /* Generate CPU RAM Record */
+        recordCrc = 0U;
+        byteCount = 0U;
+        ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+
+        /* Insert basic record header */
+        recordType = ADI_ADRV904X_MEMDUMP_CPU_RAM_RECORD;
+        recordLength = ADI_ADRV904X_MEMDUMP_CPU_RAM_HEADER_SIZE + adrv904x_DfeMemDumpTable[tableIdx].cpuMemSize;
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordType);
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], recordLength);
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
+        {
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
+        }
+
+        /* Reset values for DFE RAM record header */
+        byteCount = 0U;
+        ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));                          /* Set binary to 0's */
+
+        /* Construct DFE RAM record header */
+        startAddress    = startAddr;
+        memLength       = adrv904x_DfeMemDumpTable[tableIdx].cpuMemSize;
+        ramId           = adrv904x_DfeMemDumpTable[tableIdx].ramId;
+        cpuType         = ADI_ADRV904X_MEMDUMP_ARM_V8;
+        endianness      = adrv904x_DfeMemDumpTable[tableIdx].cpuMemEndianness;
+        byteCount += adrv904x_insert64Bits(&binaryRead[byteCount], startAddress);
+        byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], memLength);
+        byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], ramId);
+        byteCount += adrv904x_insert16Bits(&binaryRead[byteCount], cpuType);
+        byteCount += adrv904x_insert8Bits (&binaryRead[byteCount], endianness);
+        byteCount += 7U; /* Padding */
+
+        /* Insert DFE RAM record header */
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
+        {
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
+        }
+        recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+        byteCount = 0U;
 
         if (startAddr == 0)
         {
@@ -2795,45 +3744,29 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMemDumpBinWrite(adi_adrv904x_Device_
                 goto cleanup;
             }
 
-            if ((tableIdx == dfeTableSize - 1) &&
-                (offset >= endAddr - ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE))
+            if (offset >= endAddr - ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE)
             {
-                dfeFinalCrc = ADI_TRUE;
+                recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_TRUE);
             }
-
-            dfeCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, dfeCrc, dfeFinalCrc);
+            else
+            {
+                recordCrc = adrv904x_Crc32ForChunk(binaryRead, byteCount, recordCrc, ADI_FALSE);
+            }
         }
-    }
-
-    /* Read back the address of sdk data and store it into the end of DFE memory region  */
-    recoveryAction = adrv904x_DfeSdkDataAddrGet(device, &address);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue during reading sdk data address");
-        goto cleanup;
-    }
-    *dumpSize += sizeof(address);
-    if (ADI_LIBRARY_FWRITE((uint8_t *)&address,
-        1,
-        sizeof(address),
-        ofp) != sizeof(address))
-    {
-        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write sdk data address to a binary file.");
-        goto cleanup;
-    }
-
-    /* Calculate the crc value of all the memory region and data, meanwhile store it at the end of the binary */
-    dfeCrc = adrv904x_Crc32ForChunk((uint8_t *)(&address), sizeof(address), dfeCrc, ADI_FALSE);
-    *dumpSize += sizeof(dfeCrc);
-    if (ADI_LIBRARY_FWRITE((uint8_t *)&dfeCrc,
-        1,
-        sizeof(dfeCrc),
-        ofp) != sizeof(dfeCrc))
-    {
-        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write CRC to a binary file.");
-        goto cleanup;
+        /* Append CRC32 and padding*/
+        ADI_LIBRARY_MEMSET(binaryRead, 0U, sizeof(binaryRead));                          /* Set binary to 0's */
+        recordPadding = (recordLength % 8U) ? 8U - (recordLength % 8U) : 0U; 
+        adrv904x_insert32Bits(&binaryRead[recordPadding], recordCrc);
+        byteCount = 8U + recordPadding;
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            ofp) != byteCount)
+        {
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            goto cleanup;
+        }
     }
 
 cleanup:
@@ -2858,6 +3791,307 @@ cleanup:
     }
 
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+static uint32_t adrv904x_insert64Bits(  uint8_t*            array,
+                                        uint64_t            storeVariable)
+{
+    if(array == NULL)
+    {
+        return 0U;                                          /* Return number of Bytes stored */
+    }
+    *(array++) = storeVariable & 0xFFU;
+    *(array++) = (storeVariable >> 8)  & 0xFFU;
+    *(array++) = (storeVariable >> 16) & 0xFFU;
+    *(array++) = (storeVariable >> 24) & 0xFFU;
+    *(array++) = (storeVariable >> 32) & 0xFFU;
+    *(array++) = (storeVariable >> 40) & 0xFFU;
+    *(array++) = (storeVariable >> 48) & 0xFFU;
+    *(array)   = (storeVariable >> 56) & 0xFFU;
+    return 8U;                                              /* Return number of Bytes stored */
+} 
+static uint32_t adrv904x_insert32Bits(  uint8_t*            array,
+                                        uint32_t            storeVariable)
+{
+    if(array == NULL)
+    {
+        return 0U;                                          /* Return number of Bytes stored */
+    }
+    *(array++) = storeVariable & 0xFFU;
+    *(array++) = (storeVariable >> 8)  & 0xFFU;
+    *(array++) = (storeVariable >> 16) & 0xFFU;
+    *(array)   = (storeVariable >> 24) & 0xFFU;
+    return 4U;
+}
+static uint32_t adrv904x_insert16Bits(  uint8_t*            array,
+                                        uint16_t            storeVariable)
+{
+    if(array == NULL)
+    {
+        return 0U;                                          /* Return number of Bytes stored */
+    }
+    *(array++) = storeVariable & 0xFFU;
+    *(array)   = (storeVariable >> 8)  & 0xFFU;
+    return 2U;                                              /* Return number of Bytes stored */
+}
+static uint32_t adrv904x_insert8Bits(   uint8_t*            array,
+                                        uint8_t            storeVariable)
+{
+    if(array == NULL)
+    {
+        return 0U;                                          /* Return number of Bytes stored */
+    }
+    *(array) = storeVariable & 0xFFU;
+    return 1U;                                              /* Return number of Bytes stored */
+}
+
+static adi_adrv904x_ErrAction_e adrv904x_dumpMemoryRegion(  adi_adrv904x_Device_t* const device, 
+                                                            FILE **ofp,
+                                                            uint32_t startAddr, 
+                                                            uint32_t endAddr, 
+                                                            uint32_t* const dumpSize,
+                                                            uint32_t *recordCrc)
+{
+    adi_adrv904x_ErrAction_e  recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t sizeFlag  = 0U;
+    uint32_t offset    = 0U;
+    uint32_t byteCount = 0U;
+    uint32_t read32    = 0U;
+    uint32_t i         = 0U;
+    uint8_t  skipRead  = ADI_FALSE;
+    uint8_t  binaryRead[ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE + 10] = { 0U };
+    const uint32_t cpuCrashAddr[] = { 0U }; /* Skip these addresses that causes CPU crash  */
+    const uint32_t              SPI_ONLY_REGS_ADDR                                = 0x47000000U;
+    const uint32_t              DIRECT_SPI_REGION_LEN                             = 0x4000U;
+    const uint32_t              HARDWARE_SEMAPHORE_ADDR                           = 0x46500000U;
+    const uint32_t              HARDWARE_SEMAPHORE_LEN                            = 0x200000U;
+
+    if (startAddr == 0)
+    {
+        return ADI_ADRV904X_ERR_ACT_NONE; /* last entry */
+    }
+
+    /* if the cpuMemSize = 1, set the sizeFlag as 1 to ensure enter the below loop  */
+    if (startAddr == endAddr)
+    {
+        sizeFlag = 1U;
+    }
+
+    for (offset = startAddr; ((offset < endAddr) || (1 == sizeFlag)); offset += ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE)
+    {
+        /* Clean the flag for waiting for next cpuMemSize = 1 */
+        sizeFlag = 0U;
+        if (offset < (endAddr - ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE))
+        {
+            byteCount = ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE;
+        }
+        else
+        {
+            byteCount = endAddr + 1 - offset;
+        }
+
+        *dumpSize += byteCount;
+
+
+        skipRead = ADI_FALSE;
+        ADI_LIBRARY_MEMSET(binaryRead, 0, sizeof(binaryRead));
+
+        for (i = 0U; i < sizeof(cpuCrashAddr) / sizeof(uint32_t); i++)
+        {
+            if (offset == cpuCrashAddr[i])
+            {
+                skipRead = ADI_TRUE;
+                break;
+            }
+        }
+        
+        if (skipRead == ADI_FALSE)
+        {
+
+            /* DIRECT READ Byte */
+            if ((offset >= SPI_ONLY_REGS_ADDR) &&
+                (offset < (SPI_ONLY_REGS_ADDR + DIRECT_SPI_REGION_LEN)))
+            {
+                for (i = 0; i < byteCount; i++)
+                {
+                    recoveryAction = adi_adrv904x_Register32Read(device, NULL, offset + i, &read32, 0xFF);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset + i, "Unable to Read Cpu memory");
+                        return recoveryAction;
+                    }
+                    binaryRead[i] = (uint8_t)read32;
+                }
+            }
+            else
+            {
+                recoveryAction = adi_adrv904x_Registers32Read(device, NULL, offset, (uint32_t *)binaryRead, NULL, (byteCount + 3) / 4);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Unable to Read Cpu memory");
+                    return recoveryAction;
+                }
+                /*
+                    * Hardware semaphore register check and reset operation:
+                    * Hardware semaphore register will be set to 0x00 on read,
+                    * The value will be set to all 1s on read if current value is all 0s,
+                    * So need to retrieve the value after reading it in the CpuMemDump
+                    */
+                if (((offset + byteCount) < (HARDWARE_SEMAPHORE_ADDR + HARDWARE_SEMAPHORE_LEN)) && 
+                    (offset >= HARDWARE_SEMAPHORE_ADDR))
+                {
+                    recoveryAction = adi_adrv904x_Registers32Write(device, NULL, &offset, (uint32_t *)binaryRead, NULL, (byteCount + 3) / 4);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, offset, "Unable to re-write the hardware semaphore");
+                        return recoveryAction;
+                    }
+                }
+            }
+        } 
+        
+        if (ADI_LIBRARY_FWRITE(binaryRead,
+            1,
+            byteCount,
+            *ofp) != byteCount)
+        {
+            recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+            return recoveryAction;
+        }
+        /* Add the CRC value at the end of Radio side memory dump */
+        if  (offset >= endAddr - ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE)
+        {
+            *recordCrc  = adrv904x_Crc32ForChunk(binaryRead, byteCount, *recordCrc, ADI_TRUE);
+        } 
+        else 
+        {
+            *recordCrc  = adrv904x_Crc32ForChunk(binaryRead, byteCount, *recordCrc, ADI_FALSE);
+        }
+    }
+    return ADI_ADRV904X_ERR_ACT_NONE;
+}
+
+
+static adi_adrv904x_ErrAction_e adrv904x_dumpTraceCpuData(  adi_adrv904x_Device_t* const device, 
+                                                            FILE **ofp,
+                                                            uint32_t baseAddr, 
+                                                            uint32_t *recordCrc)
+{
+    adi_adrv904x_ErrAction_e    recoveryAction  = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    if (ofp == NULL || *ofp == NULL)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, *ofp, "Unable to open binary image file. Please check if the path is correct");
+        return recoveryAction;
+    }
+
+    uint32_t                    byteCount       = 0x0U;
+    uint32_t                    padding         = 0x0U;
+    uint8_t  binaryRead[ADI_ADRV904X_MEM_DUMP_CHUNK_SIZE + 10] = { 0U };
+
+    /* TODO: This should be ETM type specific? */
+    uint32_t trcconfigr;
+    uint32_t trctraceidr;
+    uint32_t trcauthstatus;
+    uint32_t trcidr0;
+    uint32_t trcidr1;
+    uint32_t trcidr2;
+    uint32_t trcidr8;
+    uint32_t trcidr9;
+    uint32_t trcidr10;
+    uint32_t trcidr11;
+    uint32_t trcidr12;
+    uint32_t trcidr13;
+
+    /* Set config values */
+    recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                    NULL,
+                                                    baseAddr + ADRV904X_ETM_TRCCONFIGR_OFFSET,
+                                                    &trcconfigr,
+                                                    0xFFFFFFFFU);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+        return recoveryAction;
+    }
+    recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                    NULL,
+                                                    baseAddr + ADRV904X_ETM_TRCTRACEIDR_OFFSET,
+                                                    &trctraceidr,
+                                                    0xFFFFFFFFU);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+        return recoveryAction;
+    }
+    trcauthstatus = 0x0U;
+    recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                    NULL,
+                                                    baseAddr + ADRV904X_ETM_TRCIDR0_OFFSET,
+                                                    &trcidr0,
+                                                    0xFFFFFFFFU);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+        return recoveryAction;
+    }
+    recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                    NULL,
+                                                    baseAddr + ADRV904X_ETM_TRCIDR1_OFFSET,
+                                                    &trcidr1,
+                                                    0xFFFFFFFFU);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+        return recoveryAction;
+    }
+    recoveryAction = adi_adrv904x_Register32Read(   device,
+                                                    NULL,
+                                                    baseAddr + ADRV904X_ETM_TRCIDR2_OFFSET,
+                                                    &trcidr2,
+                                                    0xFFFFFFFFU);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Unable to Read ETM memory");
+        return recoveryAction;
+    }
+    trcidr8     = 0x0U;
+    trcidr9     = 0x0U;
+    trcidr10    = 0x0U;
+    trcidr11    = 0x0U;
+    trcidr12    = 0x0U;
+    trcidr13    = 0x0U;
+
+    /* Push config values */
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcconfigr);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trctraceidr);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcauthstatus);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr0);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr1);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr2);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr8);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr9);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr10);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr11);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr12);
+    byteCount += adrv904x_insert32Bits(&binaryRead[byteCount], trcidr13);
+
+    padding = ((byteCount % 8U) ? 8U - (byteCount % 8U) : 0U);
+    byteCount += padding;
+
+    if (ADI_LIBRARY_FWRITE(binaryRead,
+        1,
+        byteCount,
+        *ofp) != byteCount)
+    {
+        recoveryAction      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Fatal error while trying to write a binary file.");
+        return recoveryAction;
+    }
+    *recordCrc  = adrv904x_Crc32ForChunk(binaryRead, byteCount, *recordCrc, ADI_FALSE);
+
+    return ADI_ADRV904X_ERR_ACT_NONE;
 }
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CpuMemDump(adi_adrv904x_Device_t* const                       device,

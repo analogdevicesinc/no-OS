@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X shared resource related private data prototypes for
  *        adrv904x_shared_resource_manager.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_SHARED_RESOURCE_MANAGER_TYPES_H_

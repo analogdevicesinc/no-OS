@@ -9,7 +9,7 @@
 * \brief Contains ADRV904X CFR function prototypes for
 *    adi_adrv904x_dfe_cfr.c
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #ifndef _ADI_ADRV904X_DFE_CFR_H_
@@ -46,7 +46,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CfrThresholdSet(adi_adrv904x_Devic
                                                               const adi_adrv904x_CfrThrConfig_t* const  cfrThrConfig,
                                                               const uint32_t                            cfrTxChannelMask,
                                                               const uint32_t                            configSelectMask);
-
 
 /**
 * \brief Read Cfr thresholds from device structure

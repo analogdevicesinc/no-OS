@@ -10,7 +10,7 @@
  *
  * \brief   Contains ADRV904X stream process macros and enums.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_STREAM_PROC_TYPES_H__
@@ -56,6 +56,8 @@ typedef enum
     ADRV904X_STREAM_TX_WRITE_DTX_MODE_CONFIG            = ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG,            /*!< Custom stream: Write DTX Mode Config */
     ADRV904X_STREAM_TX_WRITE_DTX_MODE_CONFIG_CLRSTATUS  = ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG_CLRSTATUS,  /*!< Custom stream: Write DTX Mode Config And Set Clear-Status bits */
     ADRV904X_STREAM_TX_PA_PROT_RECOVERY                 = ADRV904X_STREAM_ID__TX__PA_PROT_RECOVERY,                 /*!< Custom stream: PA Protection Recovery */
+    ADRV904X_STREAM_TX_SET_INIT_CAL_RUNNING_BIT         = ADRV904X_STREAM_ID__TX__TX_SET_INIT_CAL_RUNNING_BIT,      /*!< Custom stream: Set Init Cal Running Bit */
+    ADRV904X_STREAM_TX_CLR_INIT_CAL_RUNNING_BIT         = ADRV904X_STREAM_ID__TX__TX_CLR_INIT_CAL_RUNNING_BIT,      /*!< Custom stream: Clear Init Cal Running Bit */
 
     ADRV904X_STREAM_TX_SET_IMMEDIATE_CAPTURE_ENABLE_BIT = ADRV904X_STREAM_ID__TX__SET_IMMEDIATE_CAPTURE_ENABLE_BIT, /*!< Custom stream: Set immediate capture enable bit */
     ADRV904X_STREAM_TX_SET_CAPTURE_PENDING_BIT          = ADRV904X_STREAM_ID__TX__SET_CAPTURE_PENDING_BIT,          /*!< Custom stream: Set capture pending bit */
@@ -104,7 +106,9 @@ typedef enum
     ADRV904X_STREAM_FB_SW_01                                = ADRV904X_STREAM_ID__CORE__RADIO_SEQ_RISE_EVENT_01,                               /*!< Custom stream: Clear FB SW  */
     ADRV904X_STREAM_DFE_CLGC_POWER_METERS_RESTART_ORX0      = ADRV904X_STREAM_ID__CORE__CLGC_POWER_METERS_RESTART_ORX0,                        /*!< Custom stream: Reset CLGC power meters in RCI mode */
     ADRV904X_STREAM_DFE_CLGC_POWER_METERS_RESTART_ORX1      = ADRV904X_STREAM_ID__CORE__CLGC_POWER_METERS_RESTART_ORX1,                        /*!< Custom stream: Reset CLGC power meters in RCI mode */
-    ADRV904X_STREAM_ANT_CAL_UPDATE_SLICE_SCRATCHPAD_REG     = ADRV904X_STREAM_ID__CORE__UPDATE_SLICE_SCRATCHPAD_REG                            /*!< Custom stream: Update Rx/Tx slice scratchpad registers */
+    ADRV904X_STREAM_ANT_CAL_UPDATE_SLICE_SCRATCHPAD_REG     = ADRV904X_STREAM_ID__CORE__UPDATE_SLICE_SCRATCHPAD_REG,                           /*!< Custom stream: Update Rx/Tx slice scratchpad registers */
+    ADRV904X_STREAM_DFE_SBET_CLEAR_CAP_REQUEST_FOR_BUF0     = ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF0,                       /*!< Custom stream: Clear SBET Capture Request for Buffer0 */
+    ADRV904X_STREAM_DFE_SBET_CLEAR_CAP_REQUEST_FOR_BUF1     = ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF1,                       /*!< Custom stream: Clear SBET Capture Request for Buffer1 */
 } adrv904x_StreamMainCustomStreams_e;
 
 #endif /* __ADRV904X_STREAM_PROC_TYPES_H__ */

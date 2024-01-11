@@ -12,7 +12,7 @@
  *
  * \details Contains CPU Error code definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_CPU_ERROR_CODES_TYPES_H__
@@ -1426,7 +1426,7 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @recovtext:
                                                                                                                     */
 
-    ADRV904X_CPU_SERDES_CAL_SEM_CREATE_FAILED          = (ADRV904X_CPU_SERDES_CODE_ERROR_START + 19u),               /*!<@errcode: 0x0C13
+    ADRV904X_CPU_SERDES_CAL_SEM_CREATE_FAILED          = (ADRV904X_CPU_SERDES_CODE_ERROR_START + 20u),               /*!<@errcode: 0x0C14
                                                                                                                         @desc: SERDES: Semaphore Create Failed
                                                                                                                         @maincause: SERDES Internal OS Error failing to create the SERDES semaphore
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
@@ -1477,6 +1477,12 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @maincause: Unknown data capture error
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                         @mainrecovtext: Re-run Calibration
+                                                                                                                    */
+    ADRV904X_CPU_TXRX_PHASE_WRONG_LO_COMBINATION   = (ADRV904X_CPU_TXRX_PHASE_CAL_CODE_ERROR_START + 3u),           /*!<@errcode: 0x1103
+                                                                                                                        @desc: Tx/Rx Phase Calibration: All the channels of the same CPU must either use the internal UHB LO or the external LO 
+                                                                                                                        @maincause: Follow guidelines for selecting the LO source
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                        @mainrecovtext: Use the same LO source (internal or external) for all the channels 
                                                                                                                     */
     /*!< ----- Object ID = ADRV904X_CPU_OBJID_TC_RXQEC Section Base Error Code = 0x3000 ----                            @errcode: 0x3000
                                                                                                                         @desc: Rx QEC Tracking Calibration
@@ -2563,7 +2569,7 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @mainrecovtext: Reprogram the Device using a Valid Package and try again. Contact ADI if the problem persists.
                                                                                                                       */
     
-    ADRV904X_CPU_DDCC_DRV_CM_ERR             = (ADRV904X_CPU_DDCC_DRV_ERROR_CODE_START + 2u),                      /*!<@errcode: 0xF102
+    ADRV904X_CPU_DDCC_DRV_CM_ERR             = (ADRV904X_CPU_DDCC_DRV_ERROR_CODE_START + 3u),                      /*!<@errcode: 0xF103
                                                                                                                         @desc: DDCC: CAL Filter CM in unexpected state
                                                                                                                         @maincause: DDCC HW CAL Filter CM error
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
@@ -3029,12 +3035,6 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                         @mainrecovtext: If the Problem Persists, Acquire a Memory Dump and Contact ADI
                                                                                                                     */
-    ADRV904X_CPU_SYSTEM_EFUSE_READ_TIMEOUT              = (ADRV904X_CPU_SYSTEM_ERROR_CODE_START + 117u),            /*!<@errcode: 0xFF75
-                                                                                                                        @desc: System: Unable to read EFUSE
-                                                                                                                        @maincause: The EFUSE read did not occur.
-                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
-                                                                                                                        @mainrecovtext: Reset Device and try again. If the problem persists contact ADI
-                                                                                                                    */
     ADRV904X_CPU_SYSTEM_EFUSE_UNSUPPORTED_CPU           = (ADRV904X_CPU_SYSTEM_ERROR_CODE_START + 118u),            /*!<@errcode: 0xFF76
                                                                                                                         @desc: System: Only primary CPU supports EFUSE commands
                                                                                                                         @maincause: Sent EFUSE Command to secondary CPU.
@@ -3052,6 +3052,12 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @maincause: This could happen because the system Failed in giving the semaphore.
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
                                                                                                                         @mainrecovtext: If the Problem Persists, Acquire a Memory Dump and Contact ADI
+                                                                                                                    */
+    ADRV904X_CPU_SYSTEM_EFUSE_READ_TIMEOUT              = (ADRV904X_CPU_SYSTEM_ERROR_CODE_START + 121u),            /*!<@errcode: 0xFF79
+                                                                                                                        @desc: System: Unable to read EFUSE
+                                                                                                                        @maincause: The EFUSE read did not occur.
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
+                                                                                                                        @mainrecovtext: Reset Device and try again. If the problem persists contact ADI
                                                                                                                     */
 
 #ifndef ADI_ADRV904X_FW

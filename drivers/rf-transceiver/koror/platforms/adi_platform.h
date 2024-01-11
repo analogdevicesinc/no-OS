@@ -9,7 +9,7 @@
 * 
 *   \brief  Declarations for Generic ADI Platform
 *
-*   ADRV904X API Version: 2.9.0.4
+*   ADRV904X API Version: 2.10.0.4
 *
 *   \note   Implementation required to guarantee ADI Device functionality
 *
@@ -527,8 +527,6 @@ ADI_API_EX adi_hal_Err_e adi_hal_PlatformSetup(const adi_hal_Platforms_e platfor
  * \retval adi_hal_Err_e - ADI_HAL_ERR_OK if successful
  */
 ADI_API_EX adi_hal_Err_e(*adi_hal_BoardIdentify)(char** boardNames, int32_t* numBoards);
-
-long int_20db_to_mag(long a, int mdB);
 
 #endif /* __ADI_PLATFORM_H__ */
 

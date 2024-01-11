@@ -12,7 +12,7 @@
  *
  * \details
  *
- * ADRV904X API Version: 2.9.0.4 
+ * ADRV904X API Version: 2.10.0.4 
  */
 
 #ifndef _ADI_ADRV904X_ERROR_TYPES_H_
@@ -321,8 +321,8 @@ if (ptr == NULL)                                \
 #define ADI_ADRV904X_ERRCODE_DFE_CPU_RAM_LOCK               1409UL     /* DFE CPU Lock/Unlock Error Code */
 #define ADI_ADRV904X_ERRCODE_DFE_CPU_RAM_ACCESS_STOP        1410UL     /* DFE CPU RAM Access Stop Error */
 #define ADI_ADRV904X_ERRCODE_DFE_CPU_PING                   1411UL     /* DFE CPU Ping Error */
-#define ADI_ADRV904X_ERRCODE_DFE_CPU_BOOT_TIMEOUT		    1412UL	   /* DFE CPU Boot timeout */
-#define ADI_ADRV904X_ERRCODE_DFE_CPU_BOOT_ERROR 			1413UL	   /* DFE CPU Boot Error */
+#define ADI_ADRV904X_ERRCODE_DFE_CPU_BOOT_TIMEOUT           1412UL     /* DFE CPU Boot timeout */
+#define ADI_ADRV904X_ERRCODE_DFE_CPU_BOOT_ERROR             1413UL     /* DFE CPU Boot Error */
 
 /*
 *  \brief   ADRV904X File Abstractions
@@ -357,6 +357,7 @@ typedef enum adi_adrv904x_File
     ADI_ADRV904X_FILE_PRIVATE_DFE_CPU,
     ADI_ADRV904X_FILE_PUBLIC_DFE_CFR,
     ADI_ADRV904X_FILE_PRIVATE_DFE_CFR,
+    ADI_ADRV904X_FILE_PUBLIC_DFE_SBET,
     ADI_ADRV904X_FILE_PUBLIC_DFE_CLGC,
     ADI_ADRV904X_FILE_PUBLIC_DFE_DPD,
     ADI_ADRV904X_FILE_PUBLIC_DFE_EXT_DFE,

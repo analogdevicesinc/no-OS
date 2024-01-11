@@ -12,7 +12,7 @@
  *
  * \details Contains CPU scratch register definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_CPU_SCRATCH_REGISTERS_H__
@@ -318,6 +318,48 @@
 /* Scratch register that holds if channels affect are from Rx or Tx */
 #define ADRV904X_TRIGGER_SLICE_TR_OR_RX_CHANNELS      216
 
+/* Scratch register that holds the last state of TX0. TX0 high = 0x04, TX0 low = 0x00 */
+#define ADRV904X_TX0_STATE                            217
+
+/* Scratch register that holds the Current Value of 'Symbol Ignore Count' for BUF0 */
+#define ADRV904X_SBET_CUR_SYMBOL_IGNORE_COUNT_BUF0    218
+
+/* Scratch register that holds the Requested Value of 'Symbol Ignore Count' for BUF0 */
+#define ADRV904X_SBET_REQ_SYMBOL_IGNORE_COUNT_BUF0    219
+
+/* Scratch register that holds the Current Value of 'Symbol Ignore Count' for BUF1 */
+#define ADRV904X_SBET_CUR_SYMBOL_IGNORE_COUNT_BUF1    220
+
+/* Scratch register that holds the Requested Value of 'Symbol Ignore Count' for BUF1 */
+#define ADRV904X_SBET_REQ_SYMBOL_IGNORE_COUNT_BUF1    221
+
+/* Note: The registers 225-233 are currently used as SBET debug counters. They can be re-purposed if needed.
+ *       All the code in core SP starting with tag $ENABLE_SBET_DBG$ needs to be removed
+ */
+/* Scratch register that holds counter registering how many times SBET_CHECK_DPD_MODEL_IDX_MATCHES_TARGET was called */
+#define ADRV904X_DBG_SBET_CHECK_DPD_MODEL_IDX_MATCHES_TARGET_INVOKE_CNT    225
+
+/* Scratch register that holds counter registering how many times SBET_CAP_CHECK_AND_UPDATE_IGNORE_COUNT was called */
+#define ADRV904X_DBG_SBET_CAP_CHECK_AND_UPDATE_IGNORE_COUNT_INVOKE_CNT     226
+
+/* Scratch register that holds counter registering how many times SBET_CAPTURE_BUF0_SW_TRIGGER_TOGGLE was called */
+#define ADRV904X_DBG_SBET_CAPTURE_BUF0_SW_TRIGGER_TOGGLE_INVOKE_CNT        227
+
+/* Scratch register that holds counter registering how many times SBET_CAPTURE_BUF1_SW_TRIGGER_TOGGLE was called */
+#define ADRV904X_DBG_SBET_CAPTURE_BUF1_SW_TRIGGER_TOGGLE_INVOKE_CNT        228
+
+/* Scratch register that holds counter registering how many times SBET_CLEAR_CAP_REQUEST_FOR_BUF0 was called */
+#define ADRV904X_DBG_SBET_CLEAR_CAP_REQUEST_FOR_BUF0_INVOKE_CNT            230
+
+/* Scratch register that holds counter registering how many times SBET_CLEAR_CAP_REQUEST_FOR_BUF1 was called */
+#define ADRV904X_DBG_SBET_CLEAR_CAP_REQUEST_FOR_BUF1_INVOKE_CNT            231
+
+/* Scratch register that holds counter registering how many times CAPTURE_BUF0_SW_TRIGGER_TOGGLE was called */
+#define ADRV904X_DBG_CAPTURE_BUF0_SW_TRIGGER_TOGGLE_INVOKE_CNT             232
+
+/* Scratch register that holds counter registering how many times CAPTURE_BUF1_SW_TRIGGER_TOGGLE was called */
+#define ADRV904X_DBG_CAPTURE_BUF1_SW_TRIGGER_TOGGLE_INVOKE_CNT             233
+
 
 /* Scratch register 256 contains DFE CPU0 boot status */
 #define ADRV904X_DFE_BOOT_STATUS_SCRATCH_REG_ID        256
@@ -434,16 +476,23 @@
 
 /* Rename to ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_0 once OCP group added to alarms) */
 /* Scratch registers to store info about which OC_FUSE_EN outputs are currently affected by an active alarm */
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_0                331
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_1                332
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_2                333
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_3                334
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_4                335
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_5                336
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_6                337
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_7                338
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_8                339
-#define ADRV904X_EA_CURR_AFCTD_OC_FUSE_EN_TBL_ALARM_9                340
+/* Currently not used for OC_FUSE_EN feature */
+
+#define ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_0                   331
+#define ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_1                   332
+#define ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_2                   333
+#define ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_3                   334
+#define ADRV904X_SBET_INTERNAL_USE_0                                 335
+#define ADRV904X_SBET_INTERNAL_USE_1                                 336
+#define ADRV904X_SBET_INTERNAL_USE_2                                 337
+#define ADRV904X_SBET_INTERNAL_USE_3                                 338
+
+/*
+ * Bit 0-1: Target DPD Model Index, Bit 2: SBET Capture Request Active, Bit 3: SBET Capture Delay Set Flag,
+ * Bit 4: SBET Capture Delay Type, Bit 5-7: TX Channel
+ */
+#define ADRV904X_SBET_CAP_REQ_FOR_BUF0                               339
+#define ADRV904X_SBET_CAP_REQ_FOR_BUF1                               340
 
 /* DTX fanout to PA_EN table */
 #define ADRV904X_DTX_FANOUT_TO_PA_EN_TBL_TX0                         341
@@ -458,28 +507,33 @@
 /* Bitmap of flags indicating a non-zero DTX to PA_EN DTX fanout for all TXes */
 #define ADRV904X_NONZERO_DTX_FANOUT_TO_PA_EN_FOR_TX_BM               349  /* 0 - zero fanout, 1 - non-zero fanout */
 
-/* Currently unused scratch registers */
-#define ADRV904X_UNUSED_9                                            350
-#define ADRV904X_UNUSED_10                                           351
-#define ADRV904X_UNUSED_11                                           352
-#define ADRV904X_UNUSED_12                                           353
-#define ADRV904X_UNUSED_13                                           354
-#define ADRV904X_UNUSED_14                                           355
-#define ADRV904X_UNUSED_15                                           356
-#define ADRV904X_UNUSED_16                                           357
-#define ADRV904X_UNUSED_17                                           358
-#define ADRV904X_UNUSED_18                                           359
-#define ADRV904X_UNUSED_19                                           360
-#define ADRV904X_UNUSED_20                                           361
-#define ADRV904X_UNUSED_21                                           362
-#define ADRV904X_UNUSED_22                                           363
-#define ADRV904X_UNUSED_23                                           364
-#define ADRV904X_UNUSED_24                                           365
-#define ADRV904X_UNUSED_25                                           366
-#define ADRV904X_UNUSED_26                                           367
-#define ADRV904X_UNUSED_27                                           368
-#define ADRV904X_UNUSED_28                                           369
-#define ADRV904X_UNUSED_29                                           370
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY0_TX3_TX0                 350
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY0_TX7_TX4                 351
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY1_TX3_TX0                 352
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY1_TX7_TX4                 353
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY2_TX3_TX0                 354
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY2_TX7_TX4                 355
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY3_TX3_TX0                 356
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY3_TX7_TX4                 357
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY4_TX3_TX0                 358
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY4_TX7_TX4                 359
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY5_TX3_TX0                 360
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY5_TX7_TX4                 361
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY6_TX3_TX0                 362
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY6_TX7_TX4                 363
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY7_TX3_TX0                 364
+#define ADRV904X_SBET_CIRCULAR_BUFFER_ENTRY7_TX7_TX4                 365
+#define ADRV904X_SBET_CIRCULAR_BUFFER_INDEX                          366
+
+/* SBET CAP flags: 'Target DPD Model Index' (bit0..1), 'Capture Requested Flag' (bit 2), 'Delay Set Flag' (bit 3), 'Delay Type' (bit 4) for BUF0 */
+#define ADRV904X_SBET_TEMP_CAP_REQ_FOR_BUF0                          367
+
+/* SBET CAP flags: 'Target DPD Model Index' (bit0..1), 'Capture Requested Flag' (bit 2), 'Delay Set Flag' (bit 3), 'Delay Type' (bit 4) for BUF1 */
+#define ADRV904X_SBET_TEMP_CAP_REQ_FOR_BUF1                          368
+
+/* SBET DPD Model Index for for all TXes */
+#define ADRV904X_SBET_DPD_MODEL_IDX_LSB                              369     /* TX3 TX2 TX1 TX0 */
+#define ADRV904X_SBET_DPD_MODEL_IDX_MSB                              370     /* TX7 TX6 TX5 TX4 */
 
 /* Scratch register to store info about which outputs have the 'LNA_EN Always ON' feature activated */
 #define ADRV904X_EA_LNA_EN_ALWAYS_ON                                 371

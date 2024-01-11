@@ -8,7 +8,7 @@
  * \file adrv904x_dfe_cpu.c
  * \brief Contains ADRV904X DFE CPU related private function implementations
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 #include "adi_library_types.h"
 #include "adi_adrv904x_cpu_sys_types.h"

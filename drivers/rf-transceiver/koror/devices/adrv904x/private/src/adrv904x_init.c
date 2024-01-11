@@ -7,7 +7,7 @@
 /**
 * \file adrv904x_init.c
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "../../private/include/adrv904x_init.h"

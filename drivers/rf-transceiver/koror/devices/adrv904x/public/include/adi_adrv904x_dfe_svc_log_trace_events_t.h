@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_log_trace_events_t.h
  * \brief Contains data types for SDK Log Service
  *
- * SDK API Version: 2.9.0.4
+ * SDK API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_LOG_TRACE_EVENTS_T_H_

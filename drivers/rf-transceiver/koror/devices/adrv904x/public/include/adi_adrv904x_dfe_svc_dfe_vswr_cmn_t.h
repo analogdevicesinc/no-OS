@@ -8,7 +8,7 @@
  * \file
  * \brief DFE capture service module definitions and types
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef ADI_ADRV904X_DFE_SVC_DFE_VSWR_CMN_T_H_

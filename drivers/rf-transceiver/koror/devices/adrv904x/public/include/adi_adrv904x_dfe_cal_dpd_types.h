@@ -9,7 +9,7 @@
  *
  * \brief Contains ADRV904X data types for on board dfe dpd feature
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 
@@ -32,12 +32,17 @@
 /**
  * \brief Maxinum number of features supported in a DPD model
  */
-#define ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES             (255u)
+#define ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES             (510u)
 
 /**
  * \brief Number of DPD GMP power models
  */
 #define ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS             (4u)
+
+/**
+ * \brief Number of CTC2 power models
+ */
+#define ADI_ADRV904X_DFE_APP_CAL_DPD_CTC2_MODELS                  (1u)
 
 /**
  * \brief Maximum number of DPD capture samples
@@ -63,17 +68,24 @@
 /**
  * \brief Maximum number of captures
  */
+#define  EDPD_MAX_NUM_CAP_BATCHES               (8u)
 
-#define  EDPD_MAX_NUM_CAP_BATCHES    (8u)
+/**
+ * \brief Maximum number of partial group for models
+ */
+#define  ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_PARTIAL_GRP    (2u)
 
 /**
  * \brief DPD update modes
  */
 typedef enum adi_adrv904x_DfeAppCalDpdUpdateMode
 {
-    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_SU,       /*!< Simple Update */
-    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_SUMO,     /*!< Simple Update Max Only */
-    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT,      /*!< Current Max Table Update - Model Switching between M and C Table on power */
+    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_SU,          /*!< Simple Update */
+    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_SUMO,        /*!< Simple Update Max Only */
+    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT,         /*!< Current Max Table Update - Model Switching between M and C Table on power */
+    ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT_3_MODEL, /*!< Model Switching between M, C and R Table on power, with handling of uncertainty region.
+                                              * In this mode, the 3 dynamic models must have the same feature configuration.
+                                              */
 } adi_adrv904x_DfeAppCalDpdUpdateMode_e;
 
 /**
@@ -88,7 +100,6 @@ typedef enum adi_adrv904x_DfeAppCalDpdType
 {
     ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_DPD = 0u,        /*!< Regular DPD */
     ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_1,           /*!< CTC-Mode 1 (Enhanced DPD) */
-    ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_2,           /*!< Charge trap correction - Not supported currently*/
 } adi_adrv904x_DfeAppCalDpdType_e;
 
 /**
@@ -298,9 +309,9 @@ ADI_ADRV904X_PACK_FINISH
     ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_DfeAppCalDpdPartial
 {
-    adi_adrv904x_DfeAppCalDpdType_t partial;         /*!< DPD, CTC1, or CTC2 (note: no DPD+CTC1 combo) */
-    uint8_t              updateOrder;     /*!< Update order (note: same order for (E)DPD High/Low power) */
-    uint8_t              modelIndex;      /*!< 0/1/2: (E)DPD M/C/R models; 3 to 7: CTC models(Not supported currently) */
+    adi_adrv904x_DfeAppCalDpdType_t partial;         /*!< DPD or CTC1 */
+    uint8_t              updateOrder;     /*!< Deprecated, not being used */
+    uint8_t              modelIndex;      /*!< One of the GMP power models */
 } adi_adrv904x_DfeAppCalDpdPartial_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -351,7 +362,7 @@ ADI_ADRV904X_PACK_FINISH
     ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_DfeAppCalDpdModelDesc
 {
-    uint8_t                         features;                                     /*!< number of features defined in a model */
+    uint16_t                        features;                                     /*!< number of features defined in a model */
     adi_adrv904x_DfeAppCalDpdPartial_t         dpdPartial;                                   /*!< DPD partial */
     adi_adrv904x_DfeSvcDfeActuatorGmpDdrMode_t mode;                                         /*!< GMP+DDR mode */
     adi_adrv904x_DfeAppCalDpdActDepth_t        actDepth;                                     /*!< depth of LUT 0: 64 deep 1: 32 deep 2: 16 deep */
@@ -370,11 +381,11 @@ ADI_ADRV904X_PACK_FINISH
     ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_DfeAppCalCtcModelDesc
 {
-    uint8_t                       features;                                     /*!< number of features defined in a model */
-    adi_adrv904x_DfeAppCalDpdPartial_t       ctcPartial;                                   /*!< CTC partial */
-    float                         kLutAddrScale;                                /*!< kLut address scale */
-    float                         fLutAddrScale;                                /*!< fLut address scale */
-    adi_adrv904x_DfeAppCalCtcAdpFeatureRow_t feature[ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES];    /*!< CTC model description */
+    uint8_t                       features;      /*!< number of features defined in a model */
+    adi_adrv904x_DfeAppCalDpdPartial_t       ctcPartial;    /*!< CTC partial */
+    float                         kLutAddrScale; /*!< kLut address scale */
+    float                         fLutAddrScale; /*!< fLut address scale */
+    adi_adrv904x_DfeAppCalCtcAdpFeatureRow_t feature[255];  /*!< CTC model description */
 } adi_adrv904x_DfeAppCalCtcModelDesc_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -434,7 +445,7 @@ typedef struct adi_adrv904x_DfeAppCalDpdTrackCfg
     adi_adrv904x_DfeAppCalDpdAdpCfg_t     adapt;                                                          /*!< Adapt: adaptation engine configuration */
     uint8_t                    runClgc;                                                        /*!< Run (if 1) CLGC or not (if 0) before DPD */
     int16_t                    filterCoef[ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_COEFFICIENTS];               /*!< Adapt: feature filter coefficient buffer (symmetric upto 32 complex pairs) */
-    adi_adrv904x_DfeAppCalDpdUpdateMode_t updateMode;                                                     /*!< Dynamics: 0: SU, 1: SUMO, 2: CMT update mode*/
+    adi_adrv904x_DfeAppCalDpdUpdateMode_t updateMode;                                                     /*!< Dynamics: 0: SU, 1: SUMO, 2: CMT 2 model update mode, 3: CMT 3 model update mode*/
     int32_t                    mThresholdDB;                                                   /*!< Dynamics: SUMO/CMT M table threshold in dBFs * 100 (default -2100) */
     uint8_t                    forceDirect;                                                    /*!< Learning mode: force to use direct learning */
     uint8_t                    indirectRegValue[ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS];             /*!< Learning mode: Tikhonov regularization value added to diagonal of correlation matrix for indriect learning (M/C0/C1) */
@@ -456,6 +467,10 @@ typedef struct adi_adrv904x_DfeAppCalDpdTrackCfg
     uint16_t                   estSizeOfCoefBias;                                              /*!< To estimate the bias of the delta coefficient of a DPD feature in direct learning mode */
     uint8_t                    useLegacyGainPhaseComp;                                         /*!< Fall back to legacy gain and phase compensation if it's 1 */
     adi_adrv904x_DfeAppCalDpdBwDetCfg_t   bwDetCfg;                                                       /*!< BW detctor configuration */
+    int32_t                    cThresholdDB;                                                   /*!< Dynamics: SUMO/CMT C table threshold, the unit is dBFs * 100. Only used for ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT_3_MODEL. */
+    uint16_t                   thresholdOverlapDB;                                             /*!< Dynamics: CMT: When power is within this value of a threshold, the adjacent model will be updated with same coefficients
+                                                                                                * (if it has not been adapted before), the unit is dBFs * 100. Only used for ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT_3_MODEL.
+                                                                                                */
 } adi_adrv904x_DfeAppCalDpdTrackCfg_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -522,10 +537,10 @@ typedef struct adi_adrv904x_DfeAppCalDpdStatus
     adi_adrv904x_CalStatus_t    hdr;                                                 /*!< cal status header */
     adi_adrv904x_DfeAppCalDpdPathDlyStatus_t   dpdPathDlyStatus;                                    /*!< pathdelay status */
     adi_adrv904x_DfeSvcDfeActuatorSaturation_t dfeActSatStatus;                                     /*!< actuator satuaration status */
-    uint32_t                        powerM;                                              /*!< SUMO/CMT M table power */
-    uint32_t                        txPower;                                             /*!< SUMO/CMT 10ms Tx power */
+    uint32_t                        powerM[ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_PARTIAL_GRP];         /*!< SUMO/CMT M table power */
+    uint32_t                        txPower;                                             /*!< SUMO/CMT Capture Tx power */
     uint32_t                        activeModel;                                         /*!< the active model table */
-    uint32_t                        updatedModel;                                        /*!< the latest updated model */
+    uint32_t                        updatedModel;                                        /*!< the latest updated GMP model */
     uint32_t                        powerR;                                              /*!< Stability R table power */
     float                           stability[ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_LEN];            /*!< stats for stability improvement/enhancement */
     uint16_t                        errStatWord[ADI_ADRV904X_DFE_APP_CAL_DPD_ERR_WORD_LEN];           /*!< Error status word for DPD recovery action(s) */
@@ -545,8 +560,9 @@ typedef struct adi_adrv904x_DfeAppCalDpdStatus
     uint32_t                        capAbortErrorCount;                                  /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_ABORTED_CAPTURE */
     uint32_t                        pathDelayErrorCount;                                 /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_PATHDELAY_LAG_RANGE_ERROR */
     uint32_t                        capInvalidErrorCount;                                /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_BAD_CAPTURE_DATA and ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_INCOMPLETE_CAPTURE */
-    uint64_t                        lutSaturationMask[ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS]; /*!< bit mask for saturated luts. index[0]: DPD_MODEL_TYPE_DPD_0, index[1]: DPD_MODEL_TYPE_DPD_1, index[2]: DPD_MODEL_TYPE_DPD_2/reserved for future expansion, index[3]: DPD_MODEL_TYPE_DPD_3 */
+    uint64_t                        lutSaturationMask[ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS]; /*!< bit mask for saturated luts. index[0]: DPD_MODEL_TYPE_DPD_0, index[1]: DPD_MODEL_TYPE_DPD_1, index[2]: DPD_MODEL_TYPE_DPD_2, index[3]: DPD_MODEL_TYPE_DPD_3 */
     uint32_t                        noLutUpdateCount;                                    /*!< count for when no LUT update happens (because TX is too low, or below powerM in update mode 1) */
+    uint32_t                        noFlutUpdateCount;                                   /*!< count for when CTC2 model isn't updated due to an error during adaptation */
     uint32_t                        capStartErrorCount;                                  /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_CAPTURE_BUF_NO_INSTANCE_ERROR */
     uint32_t                        periodEndedErrorCount;                               /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_CAPTURE_PERIOD_ENDED_BEFORE_CAPTURES */
     uint32_t                        lutUpdDmaNotTrigCount;                               /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_TDD_LUT_COPY_SDK_DMA_NOT_TRIGGERED */
@@ -556,6 +572,8 @@ typedef struct adi_adrv904x_DfeAppCalDpdStatus
     uint64_t                        ctc1MinPeakVal;                                      /*!< Minimum Peak Value after capturing signal statistics */
     adi_adrv904x_DfeAppCalDpdBwDetStatus_t     bwDetStatus;                                         /*!< BW detector state and stats */
     uint8_t                         learningModeCurr;                                    /*!< 0: indirect learning update, 1: direct learning update */
+    uint32_t                        powerC[ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_PARTIAL_GRP];         /*!< SUMO/CMT C table power. Only used for ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT_3_MODEL. */
+    uint8_t                         copiedModelMask;                                     /*!< Mask of models that were copied if Tx power was near M or C threshold. Only used for ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT_3_MODEL. */
 } adi_adrv904x_DfeAppCalDpdStatus_t;
 ADI_ADRV904X_PACK_FINISH
 

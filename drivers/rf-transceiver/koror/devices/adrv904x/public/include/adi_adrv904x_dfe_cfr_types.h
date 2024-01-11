@@ -9,7 +9,7 @@
 *
 * \brief Contains ADRV904X data types for on board dfe cfr feature
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 
@@ -108,9 +108,6 @@ typedef struct adi_adrv904x_CfrConfig
     uint32_t cfrEngineEnable[ADI_ADRV904X_NUM_OF_CFR_ENGINES]; /*!< Engine enable selection array for 3 engines. 1:Enable, 0:Disable */
     uint32_t cfrEngineBypass[ADI_ADRV904X_NUM_OF_CFR_ENGINES]; /*!< Engine bypass selection array for 3 engines. 1:Enable, 0:Disable */
 } adi_adrv904x_CfrConfig_t;
-
-
-
 
 /**
  * \brief Cfr Statistics. For details please check adi_adrv904x_CfrStatisticsGet function

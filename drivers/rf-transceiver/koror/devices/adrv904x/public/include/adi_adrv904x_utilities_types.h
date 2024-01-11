@@ -8,7 +8,7 @@
 * \file adi_adrv904x_utilities_types.h
 * \brief Contains ADRV904X API Utilities data types
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #ifndef _ADI_ADRV904X_UTILITIES_TYPES_H_
@@ -24,6 +24,7 @@
 #include "adi_adrv904x_dfe_cpu_types.h"
 
     #define ADI_ADRV904X_MAX_NUM_CPUS           3U                                  /* Max Number of ADRV904X CPU's */
+    #define ADI_ADRV904X_PRODUCT_ID_MASK        0x0200U                             /* Product ID, used in Memdump Tools*/
 
 #define ADI_ADRV904X_MAX_NUM_LO                 2U                                  /* Max Number of ADRV904X LO's */
 
@@ -31,7 +32,25 @@
 
 #define ADI_ADRV904X_LOAD_ALL_RXGAIN_TABLES     ADI_ADRV904X_RX_GAIN_TABLE_ARR_MAX  /* Load All Rx Gain Tables */
 #define ADI_ADRV904X_MAX_FILE_LENGTH 256U                                           /* Max file length for all API files */
+#define ADI_ADRV904X_VRAM_ONLY_SIZE 4U                                              /* vram only table size */
 
+#define ADI_ADRV904X_VERSION_PREREL_SIZE 30U                                        /* Size of Prerel string for driver/firmware version */
+
+#define ADI_ADRV904X_FIRMWARE_TYPE_ID_SHIFT             24U                         /* Type shift for FW ID*/
+
+#define ADI_ADRV904X_ETM_RECORD_SIZE                    8U                          /* Record size per-core for ETM Trace record */
+#define ADI_ADRV904X_MAX_DFE_ETM                        4U                          /* Max number of ADRV904X DFE ETM's */
+#define ADI_ADRV904X_ETF_RAM_SIZE_OFFSET                2U                          /* Amount to shift (<<) ETF RSZ value */
+#define ADI_ADRV904X_TRCIDR1_ARCH_SHIFT                 4U                          /* Amount to shift (>>) TRCIDR1 to get ETM Architecture */
+#define ADI_ADRV904X_TRCIDR1_ARCH_MASK                  0x00000FF0U                 /* Mask for TRCIDR1 ETM Architecture positions */
+#define ADI_ADRV904X_TRACE_FORMAT_CORESIGHT             0x1U                        /* Coresight format for trace data */
+
+#define ADI_ADRV904X_MEMDUMP_DEVICE_DRIVER_HEADER_SIZE          56U                 /* size of memdump device driver header */
+#define ADI_ADRV904X_MEMDUMP_FIRMWARE_VERSION_HEADER_SIZE       44U                 /* size of memdump firmware header */
+#define ADI_ADRV904X_MEMDUMP_CPU_RAM_HEADER_SIZE                24U                 /* size of memdump CPU RAM header */
+#define ADI_ADRV904X_MEMDUMP_REGISTER_HEADER_SIZE               16U                 /* size of memdump register header */
+#define ADI_ADRV904X_MEMDUMP_TELEM_BUFFER_HEADER_SIZE           16U                 /* size of memdump basic telemetry header */
+#define ADI_ADRV904X_MEMDUMP_TRACE_BUFFER_HEADER_SIZE           12U                 /* size of memdump basic trace header */
 
 /**
 * \brief Macro to restore wrOnly bit

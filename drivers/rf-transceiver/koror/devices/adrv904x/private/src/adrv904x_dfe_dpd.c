@@ -9,7 +9,7 @@
 *
 * \brief Contains ADRV904X DFE DPD related private function implementations
 * 
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_adrv904x_dfe_cal_dpd_types.h"
 #include "../../private/include/adrv904x_dfe_dpd.h"
@@ -48,17 +48,17 @@ adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_De
         return recoveryAction;
     }
     
-    if (modelDesc->features == 0u)
+    if ((modelDesc->features == 0u) || (modelDesc->features > ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, 
                                recoveryAction,
                                modelDesc->features,
-                               "modelDesc->features should be 1 ~ 255.");
+                               "modelDesc->features should be 1 ~ 510.");
         return recoveryAction;
     }
-    
-    if (modelDesc->dpdPartial.partial > ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_2)
+      
+    if (modelDesc->dpdPartial.partial > ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_1)
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, 
@@ -88,7 +88,7 @@ adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_De
         return recoveryAction;
     }
     
-    for (uint8_t i = 0; i < modelDesc->features; i++)
+    for (uint16_t i = 0; i < modelDesc->features; i++)
     {
         if (modelDesc->feature[i].poly != ADI_ADRV904X_DFE_APP_CAL_DPD_ACT_POLY_GMP0 &&
             modelDesc->feature[i].poly != ADI_ADRV904X_DFE_APP_CAL_DPD_ACT_POLY_GMP1 &&
@@ -151,7 +151,7 @@ adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigCtcSetRangeCheck(adi_adrv904x_De
         return recoveryAction;
     }
 
-    if (modelDesc->ctcPartial.partial > ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_2)
+    if (modelDesc->ctcPartial.partial > ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_1)
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, 
@@ -325,13 +325,13 @@ adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_De
         return recoveryAction;
     }
 
-    if (dpdTrackCfg->updateMode > ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT)
+    if (dpdTrackCfg->updateMode > ADI_ADRV904X_DFE_APP_CAL_DPD_UPDATE_MODE_CMT_3_MODEL)
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common,
                                recoveryAction,
                                dpdTrackCfg->updateMode,
-                               "Invalid dpdTrackCfg updateMode is selected. updateMode should be 0/1/2");
+                               "Invalid dpdTrackCfg updateMode is selected. updateMode should be 0/1/2/3");
         return recoveryAction;
     }
 
@@ -398,6 +398,15 @@ adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_De
         return recoveryAction;
     }
 
+    if (dpdTrackCfg->cThresholdDB > 0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->cThresholdDB,
+                               "Invalid cThresholdDB is selected. Valid value is negative number.");
+        return recoveryAction;
+    }
 
     for(uint8_t i=0; i<ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; i++)
     {

@@ -8,7 +8,7 @@
  * \file adrv904x_dfe_svc_log_trace_t.h
  * \brief Contains data types for DFE SDK data information
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_DFE_SVC_LOG_TRACE_T_H__

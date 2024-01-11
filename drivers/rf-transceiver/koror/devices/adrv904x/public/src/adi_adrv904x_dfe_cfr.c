@@ -8,7 +8,7 @@
 * \file adi_adrv904x_dfe_cfr.c
 * \brief Contains CFR features related function implementations
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_adrv904x_dfe_cfr.h"
 #include "adi_adrv904x_tx.h"
@@ -20,6 +20,10 @@
 #include "../../private/include/adrv904x_reg_addr_macros.h"
 #include "../../private/include/adrv904x_stream_proc_types.h"
 #include "../../private/bf/adrv904x_bf_streamproc_channel_types.h"
+#include "../../private/include/adrv904x_dfe_cfr.h"
+#include "../../private/include/adrv904x_cpu_scratch_registers.h"
+
+#include "../../private/bf/adrv904x_bf_core.h"
 
 #define ADI_FILE    ADI_ADRV904X_FILE_PUBLIC_DFE_CFR
 

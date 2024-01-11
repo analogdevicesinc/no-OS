@@ -8,7 +8,7 @@
  * \file adrv904x_cpu_macros.h
  * \brief Contains ADRV904X API miscellaneous macro definitions for CPU
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_CPU_MACROS_H_

@@ -12,7 +12,7 @@
  *
  * \details Contains DFE App error code definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 #ifndef __ADI_ADRV904X_DFE_APP_ERROR_CODES_T_H__
 #define __ADI_ADRV904X_DFE_APP_ERROR_CODES_T_H__
@@ -630,6 +630,22 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @maincause: Forward path delay determined by cross correlation of accumulated capture has changed too much
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
                                                                                                                   * @mainrecovtext: Check playback signal, number of accumulation iterations, and forward path attenuation
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_VSWR_MINOR_ALARM                            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 75u),  /*!< @errcode: 0xE04B
+                                                                                                                  * @desc: APP Error: VSWR return loss values triggered minor alarm
+                                                                                                                  * @maincause: Return loss values have passed thresholds configured for VSWR minor alarm
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
+                                                                                                                  * @mainrecovtext: Check external path conditions and/or VSWR alarm configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_VSWR_MAJOR_ALARM                            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 76u),  /*!< @errcode: 0xE04C
+                                                                                                                  * @desc: APP Error: VSWR return loss values triggered major alarm
+                                                                                                                  * @maincause: Return loss values have passed thresholds configured for VSWR major alarm
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
+                                                                                                                  * @mainrecovtext: Check external path conditions and/or VSWR alarm configuration.
                                                                                                                   * @severity:
                                                                                                                   */
 
@@ -1350,7 +1366,7 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   */
 
     ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_NOT_SUPPORTED_LUT64_MODE2               = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 347u), /*!< @errcode: 0xE15B
-                                                                                                                  * @desc: APP Error: DPD update mode 2 not supported with LUT depth 64
+                                                                                                                  * @desc: APP Error: DPD update mode 2 or 3 not supported with LUT depth 64
                                                                                                                   * @maincause: Invalid DPD configuration requested
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
                                                                                                                   * @mainrecovtext: Check DPD configuration
@@ -1374,7 +1390,7 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   */
 
     ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_NOT_SUPPORTED_LUT32_FDD_MODE2           = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 350u), /*!< @errcode: 0xE15E
-                                                                                                                  * @desc: APP Error: DPD Update mode 2 not supported in FDD mode with LUT depth 32
+                                                                                                                  * @desc: APP Error: DPD Update mode 2/3 not supported in FDD mode with LUT depth 32
                                                                                                                   * @maincause: Invalid DPD configuration requested
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
                                                                                                                   * @mainrecovtext: Check DPD configuration
@@ -1540,6 +1556,7 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @mainrecovtext: Contact ADI with memdump
                                                                                                                   * @severity:
                                                                                                                   */
+
     ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_ACT_FBOX_SCALE_SET_FAILED            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 371u), /*!< @errcode: 0xE173
                                                                                                                   * @desc: APP Error: CTC Act Fbox scaler set failed
                                                                                                                   * @maincause: Fbox scaler is smaller than model config requires
@@ -1556,13 +1573,76 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @severity:
                                                                                                                   */
 
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_FEATCOMPUTE_BAD_CALTYPE                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 373u), /*!< @errcode: 0xE175
+                                                                                                                  * @desc: APP Error: calType to request feature compute
+                                                                                                                  * @maincause: Invalid Calibration Type Provided to Function
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Check Feature Compute calType Parameter is Valid
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_FEATCOMPUTE_UNEXPECTED_EVENT            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 374u), /*!< @errcode: 0xE176
+                                                                                                                  * @desc: APP Error: Unexpected Feature Compute Event
+                                                                                                                  * @maincause: Unexpected Error
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump if the Problem Persists
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_FEATCOMPUTE_INVALID_ENTRY               = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 375u), /*!< @errcode: 0xE177
+                                                                                                                  * @desc: APP Error: Invalid Feature Compute Entries
+                                                                                                                  * @maincause: Unexpected Error
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump if the Problem Persists
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_NOT_SUPPORTED_UPDATE_MODE3              = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 376u), /*!< @errcode: 0xE178
+                                                                                                                  * @desc: APP Error: DPD Update mode 3 only supported with LUT depth 16, when model 2 is not being used for recovery
+                                                                                                                  * @maincause: Invalid DPD configuration requested
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Check DPD configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_MAX_PARTITIONS_REACHED_ERROR            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 377u), /*!< @errcode: 0xE179
+                                                                                                                  * @desc: APP Error: DPD partial update failed because the partial times over maximum times
+                                                                                                                  * @maincause: Too many DPD coefficients to handle
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
+                                                                                                                  * @mainrecovtext: Check DPD configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_OUT_OF_RANGE_BLOCK_ID_DECOMP            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 378u), /*!< @errcode: 0xE180
+                                                                                                                  * @desc: APP Error: Out of range block id during decomposition
+                                                                                                                  * @maincause: Unexpected Error
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump if the Problem Persists
+                                                                                                                  * @severity:CRITICAL
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_NO_AVAILABLE_ITERATION_TYPE             = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 379U), /*!< @errcode: 0xE181
+                                                                                                                  * @desc: APP Error: DPD couldn't find an available iteration type(GMP or CTC2) to run
+                                                                                                                  * @maincause: No GMP and/or CTC2 models configured
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Configure a GMP model before enabling DPD cal
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_INDIRECT_LEARNING_SET_FOR_PARTIAL       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 380U), /*!< @errcode: 0xE182
+                                                                                                                  * @desc: APP Error: indirect learning is set for partial update
+                                                                                                                  * @maincause: customer configured indirect learning
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Configure direct learning if using partial update
+                                                                                                                  * @severity:
+                                                                                                                  */
 
 #ifndef ADI_ADRV904X_DFE_SVC_CMN_FW
     /* Pseudo error code */
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR = (int32_t) 0x80000000                                       /* Remove UL for API to avoid ISO C error. set to large number to force enum to be uint32_t */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR                 = (int32_t) 0x80000000                       /* Remove UL for API to avoid ISO C error. set to large number to force enum to be uint32_t */
 #else
     /* Pseudo error code */
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR = 0x80000000UL                                               /* Add UL for FW to force it to be unsigned int. set to large number to force enum to be uint32_t */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR                 = 0x80000000UL                               /* Add UL for FW to force it to be unsigned int. set to large number to force enum to be uint32_t */
 #endif
 } adi_adrv904x_DfeAppErrCode_e;
 

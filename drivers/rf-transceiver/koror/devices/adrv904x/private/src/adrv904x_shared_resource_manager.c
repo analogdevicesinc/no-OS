@@ -8,7 +8,7 @@
  * \file adrv904x_shared_resource_manager.c
  * \brief Contains ADRV904X shared resource related private function implementations
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #include "../../private/include/adrv904x_shared_resource_manager.h"

@@ -8,7 +8,7 @@
 * \file adi_adrv904x_dfe_dpd.c
 * \brief Contains DPD features related function implementations
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_common_hal.h"
 #include "adi_library_types.h"
@@ -64,6 +64,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet(adi_adrv904x_
         pTmpModelDesc->feature[i].a.real = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.real);
         pTmpModelDesc->feature[i].a.imag = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.imag);
     }
+    pTmpModelDesc->features = ADRV904X_HTOCS(pTmpModelDesc->features);
 
     for (i = 0U; i < ADI_ADRV904X_MAX_TXCHANNELS; ++i)
     {
@@ -135,6 +136,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdGet(adi_adrv904x_
 
     if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
     {
+        modelDesc->features = ADRV904X_CTOHS(modelDesc->features);
         modelDesc->dpdPartial.partial = ADRV904X_CTOHL(modelDesc->dpdPartial.partial);
         modelDesc->mode = ADRV904X_CTOHL(modelDesc->mode);
         modelDesc->actDepth = ADRV904X_CTOHL(modelDesc->actDepth);
@@ -567,6 +569,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet(adi_adrv904x_
         tmpDpdTrackCfg.filterCoef[i] = ADRV904X_HTOCS(tmpDpdTrackCfg.filterCoef[i]);
     }
     tmpDpdTrackCfg.mThresholdDB         = ADRV904X_HTOCL(tmpDpdTrackCfg.mThresholdDB);
+    tmpDpdTrackCfg.cThresholdDB         = ADRV904X_HTOCL(tmpDpdTrackCfg.cThresholdDB);
+    tmpDpdTrackCfg.thresholdOverlapDB   = ADRV904X_HTOCS(tmpDpdTrackCfg.thresholdOverlapDB);
     tmpDpdTrackCfg.numberOfMultiFrames  = ADRV904X_HTOCL(tmpDpdTrackCfg.numberOfMultiFrames);
     tmpDpdTrackCfg.estSizeOfCoefBias    = ADRV904X_HTOCS(tmpDpdTrackCfg.estSizeOfCoefBias);
     tmpDpdTrackCfg.ctc1StatsSampleNum   = ADRV904X_HTOCL(tmpDpdTrackCfg.ctc1StatsSampleNum);
@@ -640,8 +644,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet(adi_adrv904x_
         }
 
         dpdTrackCfg->mThresholdDB         = ADRV904X_CTOHL(dpdTrackCfg->mThresholdDB);
+        dpdTrackCfg->cThresholdDB         = ADRV904X_CTOHL(dpdTrackCfg->cThresholdDB);
         dpdTrackCfg->numberOfMultiFrames  = ADRV904X_CTOHL(dpdTrackCfg->numberOfMultiFrames);
         dpdTrackCfg->estSizeOfCoefBias    = ADRV904X_CTOHS(dpdTrackCfg->estSizeOfCoefBias);
+        dpdTrackCfg->thresholdOverlapDB   = ADRV904X_CTOHS(dpdTrackCfg->thresholdOverlapDB);
     }
 
 
@@ -1239,10 +1245,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet(adi_adr
     calDpdSpecStatus->dfeActSatStatus.magnitudeGainSat = ADRV904X_CTOHL(specificCalStatus.dfeActSatStatus.magnitudeGainSat);
 
     calDpdSpecStatus->activeModel = ADRV904X_CTOHL(specificCalStatus.activeModel);
-    calDpdSpecStatus->updatedModel = ADRV904X_CTOHL(specificCalStatus.updatedModel);
-    calDpdSpecStatus->powerM = ADRV904X_CTOHL(specificCalStatus.powerM);
+    calDpdSpecStatus->updatedModel = ADRV904X_CTOHL(specificCalStatus.updatedModel);    
     calDpdSpecStatus->powerR = ADRV904X_CTOHL(specificCalStatus.powerR);
     calDpdSpecStatus->txPower = ADRV904X_CTOHL(specificCalStatus.txPower);
+    calDpdSpecStatus->copiedModelMask = specificCalStatus.copiedModelMask;
+	for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_PARTIAL_GRP; i++)
+	{
+		calDpdSpecStatus->powerM[i] = ADRV904X_CTOHL(specificCalStatus.powerM[i]);
+		calDpdSpecStatus->powerC[i] = ADRV904X_CTOHL(specificCalStatus.powerC[i]);
+	}
 
     for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_LEN; i++)
     {
@@ -1272,6 +1283,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet(adi_adr
     calDpdSpecStatus->pathDelayErrorCount   = ADRV904X_CTOHL(specificCalStatus.pathDelayErrorCount);
     calDpdSpecStatus->capInvalidErrorCount  = ADRV904X_CTOHL(specificCalStatus.capInvalidErrorCount);
     calDpdSpecStatus->noLutUpdateCount      = ADRV904X_CTOHL(specificCalStatus.noLutUpdateCount);
+    calDpdSpecStatus->noFlutUpdateCount     = ADRV904X_CTOHL(specificCalStatus.noFlutUpdateCount);
     
     calDpdSpecStatus->capStartErrorCount    = ADRV904X_CTOHL(specificCalStatus.capStartErrorCount);
     calDpdSpecStatus->periodEndedErrorCount = ADRV904X_CTOHL(specificCalStatus.periodEndedErrorCount);

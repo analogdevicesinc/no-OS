@@ -8,7 +8,7 @@
  * \file adi_adrv904x_gpio_types.h
  * \brief Contains functions to allow control of the General Purpose IO functions on the ADRV904X device
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_GPIO_TYPES_H_

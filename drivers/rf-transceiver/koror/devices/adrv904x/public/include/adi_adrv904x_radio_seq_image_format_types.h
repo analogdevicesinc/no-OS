@@ -10,7 +10,7 @@
  *
  * \brief   Contains ADRV904X Radio Sequencer Download File data structures.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_RADIO_SEQ_IMAGE_FORMAT_TYPES_H__

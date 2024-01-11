@@ -10,7 +10,7 @@
  *
  * \brief type definitions for ADI_ADRV904X_DFE_SVC_CMD_ID_FORCE_EXCEPTION
  *
- * DFE SDK Version: 2.9.0.4
+ * DFE SDK Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_CMD_FORCE_EXCEPTION_H__

@@ -50,8 +50,8 @@ ADI_API adi_hal_Err_e adi_LogFileOpen(void* const devHalCfg, const char* const f
                 {
                     /* Time Stamp Log File */
                     ADI_LIBRARY_MEMSET(&timeStampRec, 0, sizeof(timeStampRec));
-//                    (void) ADI_LIBRARY_TIME(&seconds);
-//                    timeStamp = ADI_LIBRARY_LOCALTIME_R(&seconds, &timeStampRec); /* Returned value points to a shared internal statically allocated object */
+                    (void) ADI_LIBRARY_TIME(&seconds);
+                    timeStamp = ADI_LIBRARY_LOCALTIME_R(&seconds, &timeStampRec); /* Returned value points to a shared internal statically allocated object */
                     if (EOF != ADI_LIBRARY_FPRINTF( halCfg->logCfg.logfd,
                                                     "ADI Log File: %s \nCreated: %04d-%02d-%02d %02d:%02d:%02d \nLog Mask: 0x%" PRIX32 "\n\n\n",
                                                     halCfg->logCfg.logFileName,
@@ -190,8 +190,8 @@ ADI_API adi_hal_Err_e adi_LogLevelSet(void* const devHalCfg, const uint32_t logM
             {
                 /* Time Stamp Log File with Log Mask */
                 ADI_LIBRARY_MEMSET(&timeStampRec, 0, sizeof(timeStampRec));
-//                (void) ADI_LIBRARY_TIME(&seconds);
-//                timeStamp = ADI_LIBRARY_LOCALTIME_R(&seconds, &timeStampRec); /* Returned value points to a shared internal statically allocated object */
+                (void) ADI_LIBRARY_TIME(&seconds);
+                timeStamp = ADI_LIBRARY_LOCALTIME_R(&seconds, &timeStampRec); /* Returned value points to a shared internal statically allocated object */
                 if (EOF != ADI_LIBRARY_FPRINTF(halCfg->logCfg.logfd,
                                                "%04d-%02d-%02d %02d:%02d:%02d: Log Mask: 0x%" PRIX32 "\n",
                                                timeStamp->tm_year + 1900,
@@ -402,8 +402,8 @@ ADI_API adi_hal_Err_e adi_LogWrite( void* const                 devHalCfg,
                 /* Input Parameters OK at this Point; Logging Level Enabled */
                 halError = ADI_HAL_ERR_LOG;
                 ADI_LIBRARY_MEMSET(&timeStampRec, 0, sizeof(timeStampRec));
-//                (void) ADI_LIBRARY_TIME(&seconds);
-//                timeStamp = ADI_LIBRARY_LOCALTIME_R(&seconds, &timeStampRec); /* Returned value points to a shared internal statically allocated object */
+                (void) ADI_LIBRARY_TIME(&seconds);
+                timeStamp = ADI_LIBRARY_LOCALTIME_R(&seconds, &timeStampRec); /* Returned value points to a shared internal statically allocated object */
                 if (-1 < ADI_LIBRARY_SNPRINTF(  logMsg,
                                                 ADI_HAL_MAX_LOG_LINE,
                                                 "%04d-%02d-%02d %02d:%02d:%02d: %s",

@@ -6,7 +6,7 @@
 /**
 * \file adi_library.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #ifndef _ADI_LIBRARY_H_
 #define _ADI_LIBRARY_H_

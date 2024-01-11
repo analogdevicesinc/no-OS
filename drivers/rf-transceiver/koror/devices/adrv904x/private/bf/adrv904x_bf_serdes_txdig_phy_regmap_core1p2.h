@@ -48,10 +48,10 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfGe
                                                                                   const adrv904x_BfSerdesTxdigPhyRegmapCore1p2ChanAddr_e baseAddr,
                                                                                   uint8_t* const bfValue);
 
-ADI_API adi_adrv904x_ErrAction_e adrv904x_SerdesTxdigPhyRegmapCore1p2_SerEnRc_BfSet(adi_adrv904x_Device_t* const device,
+ADI_API adi_adrv904x_ErrAction_e adrv904x_SerdesTxdigPhyRegmapCore1p2_SerEnRc_BfGet(adi_adrv904x_Device_t* const device,
                                                                                     adi_adrv904x_SpiCache_t* const spiCache,
                                                                                     const adrv904x_BfSerdesTxdigPhyRegmapCore1p2ChanAddr_e baseAddr,
-                                                                                    const uint8_t bfValue);
+                                                                                    uint8_t* const bfValue);
 
 #endif // _ADRV904X_BF_SERDES_TXDIG_PHY_REGMAP_CORE1P2_H_
 

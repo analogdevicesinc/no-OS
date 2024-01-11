@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X GPIO related function prototypes for
  *        adi_adrv904x_gpio.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_GPIO_H_

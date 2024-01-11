@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X data interface related private function prototypes for
  *        adrv904x_datainterface.c which helps adi_adrv904x_datainterface.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_DATAINTERFACE_H_
@@ -301,5 +301,23 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_StatusRegisterPoll(adi_adrv904x_Device
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_JrxRepairScreenTestChecker(adi_adrv904x_Device_t* const   device,
                                                                      uint8_t* const                 screenID);
+
+/**
+* \brief Determine if a JESD Tx lane is powered down.
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device    Pointer to the ADRV904X data structure
+* \param[in] bitfieldAddr  Indicates the JESD Tx lane
+* \param[out] phyLanePd    Is set to 1 if lane is powered down, 0 otherwise
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adrv904x_GetJtxLanePoweredDown(adi_adrv904x_Device_t* const   device,
+                                                                adrv904x_BfSerdesTxdigPhyRegmapCore1p2ChanAddr_e const laneSerdesPhyBitfieldAddr,
+                                                                uint8_t* const phyLanePd);
+            
 
 #endif  /* _ADRV904X_DATAINTERFACE_H_ */

@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_dfe_pwr_mtr_t.h
  * \brief DFE power meter service module definitions and types
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_DFE_PWR_MTR_T_H_

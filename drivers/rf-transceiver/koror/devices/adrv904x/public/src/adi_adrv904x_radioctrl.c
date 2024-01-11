@@ -9,8 +9,10 @@
 * \brief Contains CPU features related function implementation defined in
 * adi_adrv904x_radioctrl.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
+
+#include <math.h>
 
 #include "adi_adrv904x_radioctrl.h"
 #include "adi_adrv904x_cals.h"
@@ -36,6 +38,7 @@
 
 #include "../../private/bf/adrv904x_bf_sequencer.h"
 #include "adi_adrv904x_dfe_svc_radio_ctrl_sequencer_t.h"
+#include "../../private/include/adrv904x_dfe_cfr.h"
 #include "../../private/include/adrv904x_dfe_cpu.h"
 #include "../../private/include/adrv904x_dfe_svc_radio_ctrl_sequencer_t.h"
 #include "../../private/include/adrv904x_dfe_svc_bbic_bridge_t.h"
@@ -43,8 +46,6 @@
 #include "../../private/include/adrv904x_cpu_memory.h"
 #include "../../private/bf/adrv904x_bf_streamproc_channel.h"
 #include "../../private/include/adrv904x_stream_id_types.h"
-
-#include "adi_platform.h"
 
 #define ADI_FILE    ADI_ADRV904X_FILE_PUBLIC_RADIOCTRL
 
@@ -170,6 +171,7 @@ static adi_adrv904x_GpioPinSel_e  adrv904x_StreamGleanGpioNumberGet(uint32_t gpi
         case ADRV904X_STREAM_GPIO_VSWR_DIR_ORX0:
         case ADRV904X_STREAM_GPIO_VSWR_DIR_ORX1:
         case ADRV904X_STREAM_GPIO_VSWR_DIR_ORX_CMN:
+        case ADRV904X_STREAM_GPIO_SBET_LATCH_DPD_MODEL_INDEX:
         case ADRV904X_STREAM_GPIO_DFE_TX_TO_ORX0_MAP_BIT0:
         case ADRV904X_STREAM_GPIO_DFE_TX_TO_ORX0_MAP_BIT1:
         case ADRV904X_STREAM_GPIO_DFE_TX_TO_ORX0_MAP_BIT2:
@@ -581,6 +583,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StreamImageWrite(adi_adrv904x_Devi
                 case (ADRV904X_STREAM_GPIO_MODEL_SWITCH_INPUT_TX5):     /* Fallthrough */
                 case (ADRV904X_STREAM_GPIO_MODEL_SWITCH_INPUT_TX6):     /* Fallthrough */
                 case (ADRV904X_STREAM_GPIO_MODEL_SWITCH_INPUT_TX7):     /* Fallthrough */
+                case (ADRV904X_STREAM_GPIO_SBET_LATCH_DPD_MODEL_INDEX): /* Fallthrough */
                     device->devStateInfo.streamGpioMapping.streamGpInput[gpioIdx] = (adi_adrv904x_GpioPinSel_e)gpioIdx;
                     break;
 
@@ -842,6 +845,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StreamImageWrite(adi_adrv904x_Devi
         /* Update GPIO TDD SW to either Digital or Analog */
         device->devStateInfo.digGpioTddSw = adrv904x_StreamGleanGpioNumberGet(gpioAssignments, ADRV904X_STREAM_GPIO_TDD_SW);
         device->devStateInfo.anaGpioTddSw = adrv904x_StreamGleanAnaGpioNumberGet(anaGpioAssignments, ADRV904X_STREAM_ANALOG_GPIO_TDD_SW);
+
+        /* Update device handle SBET Latch Power index input config */
+        device->devStateInfo.sbetLatchModelIndex = adrv904x_StreamGleanGpioNumberGet(gpioAssignments, ADRV904X_STREAM_GPIO_SBET_LATCH_DPD_MODEL_INDEX);
         
         /* Update GPIO Predrive to either Digital or Analog */
         device->devStateInfo.digGpioPredrive = adrv904x_StreamGleanGpioNumberGet(gpioAssignments, ADRV904X_STREAM_GPIO_PREDRIVE_EN);
@@ -1786,6 +1792,50 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_LoFrequencyGet(adi_adrv904x_Device
 
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CfgPllToChanCtrl(adi_adrv904x_Device_t* const device, 
+	                                                            uint8_t rf0MuxTx0_3,
+	                                                            uint8_t rf0MuxTx4_7, 
+	                                                            uint8_t rf0MuxRx0_3,
+	                                                            uint8_t rf0MuxRx4_7)
+{
+		adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+	adrv904x_CpuCmd_ChanCtrlToPlls_t ChanCtrlToPllsPayload; 
+	adrv904x_CpuCmd_ChanCtrlToPllsResp_t cmdRsp; 
+	adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
+	adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
+
+	/* check Device pointer is not null */	
+	ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+	ADI_ADRV904X_API_ENTRY(&device->common);
+	
+	ADI_LIBRARY_MEMSET(&ChanCtrlToPllsPayload, 0, sizeof(adrv904x_CpuCmd_ChanCtrlToPlls_t));
+	ADI_LIBRARY_MEMSET(&cmdRsp, 0, sizeof(adrv904x_CpuCmd_ChanCtrlToPllsResp_t));
+
+	/* Prepare the command Payload */
+	ChanCtrlToPllsPayload.rf0MuxTx0_3 = (uint8_t) rf0MuxTx0_3;
+	ChanCtrlToPllsPayload.rf0MuxTx4_7 = (uint8_t) rf0MuxTx4_7;
+	ChanCtrlToPllsPayload.rf0MuxRx0_3 = (uint8_t) rf0MuxRx0_3;
+	ChanCtrlToPllsPayload.rf0MuxRx4_7 = (uint8_t) rf0MuxRx4_7;
+
+	/* Send Command and Receive Response */
+	recoveryAction = adrv904x_CpuCmdSend(device, 
+		                                 ADI_ADRV904X_CPU_TYPE_0, 
+		                                 ADRV904X_LINK_ID_0, 
+		                                 ADRV904X_CPU_CMD_ID_SET_CHAN_TO_PLLS, 
+		                                 (void*)&ChanCtrlToPllsPayload, 
+		                                 sizeof(ChanCtrlToPllsPayload),
+		                                 (void*)&cmdRsp,
+		                                 sizeof(cmdRsp),
+		                                 &cmdStatus);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO(cmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
+	}
+
+cleanup:
+	ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);		
 }
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_LoLoopFilterSet(adi_adrv904x_Device_t* const device,
@@ -4101,6 +4151,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalConfigSet(adi_adrv9
     uint32_t chanSel = 0U;
     adrv904x_BfTxFuncsChanAddr_e txBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_FUNCS;
 
+    adrv904x_BfTxCfrRegChanAddr_e txCfrBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_DFE_TX_CFR_TX_CFR_REG;
+
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
@@ -4165,6 +4217,14 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalConfigSet(adi_adrv9
             goto cleanup;
         }
 
+
+        recoveryAction = adrv904x_CfrRegsBitfieldAddressGet(device, (adi_adrv904x_TxChannels_e)(chanSel), &txCfrBaseAddr);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, chanSel, "Invalid Tx Channel used to determine CFR base address");
+            goto cleanup;
+        }
+
         /* Conversion from the requested atten level (milli-dB) to equivalent
          * TxAttenTable index is always done based on a step size of 0.05.
          * Other step sizes are not supported. */
@@ -4177,6 +4237,18 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalConfigSet(adi_adrv9
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Input Select");
+            goto cleanup;
+        }
+
+
+        /* storing Tx attenuation for AC. This value is only used when SBET is enabled */
+         recoveryAction = adrv904x_TxCfrReg_Cfr1Spare_BfSet(device,
+                                                                NULL,
+                                                                txCfrBaseAddr,
+                                                                (uint32_t)attenRegVal);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Cfr1 Spare register");
             goto cleanup;
         }
 
@@ -8652,7 +8724,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierCfgGet(adi_a
         {
             /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
             //carrierGain = (int32_t)(1000U * 20U * (double)log10((double)carrierGainReg / DIG_GAIN_MULT));
-        	carrierGain = 0;
+        	carrierGain = (int32_t)(20 * log10((100000UL * (double)carrierGainReg) / DIG_GAIN_MULT) - 100);
         }
 
         antCalCarrierCfg->rxCarrierGainForAntCal[i] = carrierGain;
@@ -8676,8 +8748,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierCfgGet(adi_a
         if (carrierGainReg != 0)
         {
             /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
-            //carrierGain = (int32_t)(1000U * 20U * (double)log10((double)carrierGainReg / DIG_GAIN_MULT));
-        	carrierGain = 12;
+            carrierGain = (int32_t)(1000U * 20U * (double)log10((double)carrierGainReg / DIG_GAIN_MULT));
         }
 
         antCalCarrierCfg->txCarrierGainForAntCal[i] = carrierGain;

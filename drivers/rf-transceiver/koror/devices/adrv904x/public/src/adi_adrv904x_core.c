@@ -9,7 +9,7 @@
 * \brief Contains ADRV904X features related function implementation defined in
 * adi_adrv904x_core.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_adrv904x_core.h"
@@ -334,6 +334,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Initialize(adi_adrv904x_Device_t* 
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "HAL Wait(ms) Failed");
         goto cleanup;
     }
+    
+    /* Populate initialization time for device */
+    ADI_LIBRARY_TIME(&(device->devStateInfo.initGlobalTime));
 
     recoveryAction = adrv904x_Core_MbiasBgCtat_BfSet(device,
                                                     NULL,

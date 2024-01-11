@@ -8,7 +8,7 @@
 * \file adi_adrv904x_dfe_clgc.c
 * \brief Contains CLGC features related function implementations
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_library_types.h"
 #include "adi_adrv904x_dfe_clgc.h"
@@ -51,6 +51,16 @@ static adi_adrv904x_ErrAction_e adrv904x_ClgcCaptureConfigSetRangeCheck(adi_adrv
                                recoveryAction,
                                clgcCaptureCfg->capMode,
                                "Invalid capMode is selected");
+        return recoveryAction;
+    }
+
+    if (clgcCaptureCfg->numCapBatches < 1)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               clgcCaptureCfg->numCapBatches,
+                               "Invalid numCapBatches is selected. It must be greater than 0");
         return recoveryAction;
     }
 
@@ -128,6 +138,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_ClgcCaptureConfigSet(adi_adrv904x_
 
     ADI_LIBRARY_MEMCPY((void *)&tmpClgcCaptureCfg, clgcCaptureCfg, sizeof(adi_adrv904x_DfeAppCalClgcCaptureCfg_t));
 
+    tmpClgcCaptureCfg.numCapBatches = ADRV904X_HTOCL(tmpClgcCaptureCfg.numCapBatches);
     tmpClgcCaptureCfg.capDurationUs = ADRV904X_HTOCL(tmpClgcCaptureCfg.capDurationUs);
     tmpClgcCaptureCfg.capMode = ADRV904X_HTOCL(tmpClgcCaptureCfg.capMode);
     tmpClgcCaptureCfg.capPeriodUs = ADRV904X_HTOCL(tmpClgcCaptureCfg.capPeriodUs);
@@ -197,6 +208,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_ClgcCaptureConfigGet(adi_adrv904x_
         goto cleanup;
     }
 
+    clgcCaptureCfg->numCapBatches = ADRV904X_CTOHL(clgcCaptureCfg->numCapBatches);
     clgcCaptureCfg->capDurationUs = ADRV904X_CTOHL(clgcCaptureCfg->capDurationUs);
     clgcCaptureCfg->capMode = ADRV904X_CTOHL(clgcCaptureCfg->capMode);
     clgcCaptureCfg->capPeriodUs = ADRV904X_CTOHL(clgcCaptureCfg->capPeriodUs);
@@ -510,6 +522,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeClgcStatusGet(adi_adrv904x_Devi
     clgcStatus->orxPwr = ADRV904X_CTOHL(clgcCalStatus.orxPwr);
     clgcStatus->txAttenAdjdB = ADRV904X_CTOHL(clgcCalStatus.txAttenAdjdB);
     clgcStatus->txPwr = ADRV904X_CTOHL(clgcCalStatus.txPwr);
+	clgcStatus->numCapBatchesRun = ADRV904X_CTOHL(clgcCalStatus.numCapBatchesRun);
+	clgcStatus->actCapDurationUs = ADRV904X_CTOHL(clgcCalStatus.actCapDurationUs);
 	clgcStatus->capStartRetryCount = ADRV904X_CTOHL(clgcCalStatus.capStartRetryCount);
 	clgcStatus->capAbortRetryCount = ADRV904X_CTOHL(clgcCalStatus.capAbortRetryCount);
 	clgcStatus->capInvalidRetryCount = ADRV904X_CTOHL(clgcCalStatus.capInvalidRetryCount);

@@ -5,7 +5,7 @@
  *
  * \details Contains device-specific command definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 /**
@@ -44,7 +44,7 @@
 #include "adrv904x_cpu_cmd_gpio.h"
 #include "adrv904x_cpu_cmd_t.h"
 #include "adrv904x_cpu_cmd_efuse.h"
-#include "adi_adrv904x_carrier_reconfigure_types.h"
+#include "adi_adrv904x_carrier_reconfigure_common_types.h"
 #include "adi_adrv904x_cpu_radio_cmd.h"
 
 /**
@@ -173,10 +173,12 @@ typedef enum adrv904x_CpuCmdId
 
     ADRV904X_CPU_CMD_ID_SET_ENABLE_ECC_SCRUB = 0x3Au,                /*!< SET_ENABLE_ECC; set enable for ECC scrubbing */
     ADRV904X_CPU_CMD_ID_GET_ENABLE_ECC_SCRUB = 0x3Bu,                /*!< GET_ENABLE_ECC; get enable state for ECC scrubbing */
-
     /* Get SERDES Metrics */
     ADRV904X_CPU_CMD_ID_GET_SERDES_FG_METRICS = 0x3Cu,         /*!< GET_SERDES_FG_METRICS: Fetch SERDES-in init cal state for debug purposes */
     ADRV904X_CPU_CMD_ID_GET_SERDES_BG_METRICS = 0x3Du,         /*!< GET_SERDES_BG_METRICS: Fetch SERDES-in tracking cal state for debug purposes */
+    ADRV904X_CPU_CMD_ID_SET_CHAN_TO_PLLS = 0x3Eu,              /*!< SET_CHAN_TO_PLLS: Set LO assignemnts during runtime >  */
+    
+    ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER = 0x3Fu,                /*!< Power up or down Serdes lanes */
 
 
     /* CDUC/CDDC NCO commands (Koror only) */
@@ -215,6 +217,7 @@ typedef union adrgven6_CpuCmdPayloadMaxSize
     adrv904x_CpuCmd_GetSysStatus_t            getSysStatusCmd;
     adrv904x_CpuCmd_SetLoFreq_t               setLoFreqCmd;
     adrv904x_CpuCmd_GetLoFreq_t               getLoFreqCmd;
+    adrv904x_CpuCmd_ChanCtrlToPlls_t          setchanCtrlToPllsCmd;
     adrv904x_CpuCmd_SetLoopfilter_t           setLooopfilterCmd;
     adrv904x_CpuCmd_GetLoopfilter_t           getLooopfilterCmd;
     adi_adrv904x_CpuCmd_SetDcOffset_t         setDcOffsetCmd;
@@ -264,6 +267,7 @@ typedef union adrgven6_CpuCmdRespPayloadMaxSize
     adrv904x_CpuCmd_RunInitGetDetailedStatusResp_t   runInitGetDetailedStatusCmdResp;
     adrv904x_CpuCmd_SetLoFreqResp_t                  setLoFreqCmdResp;
     adrv904x_CpuCmd_GetLoFreqResp_t                  getLoFreqCmdResp;
+    adrv904x_CpuCmd_ChanCtrlToPllsResp_t             setChanCtrlToPllsResp;
     adrv904x_CpuCmd_GetRxTxLoFreqResp_t              getRxTxLoCmdResp;
     adrv904x_CpuCmd_SetLoopfilter_t                  setLoopfilterCmdResp;
     adrv904x_CpuCmd_GetLoopfilter_t                  getLoopfilterCmdResp;

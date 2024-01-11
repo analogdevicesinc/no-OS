@@ -8,7 +8,7 @@
 * \file adi_library.c
 * \brief Contains implementations of standard library functions
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_library.h"
 

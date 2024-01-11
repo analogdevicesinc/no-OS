@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_radio_ctrl_sequencer_t.h
  * \brief Contains data types for DFE SDK Radio Sequencer Service
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_RADIO_CTRL_SEQUENCER_T_H__

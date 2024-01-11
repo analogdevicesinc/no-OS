@@ -9,7 +9,7 @@
 * \brief Contains CPU features related function implementation defined in
 * adi_adrv904x_dfe_cpu.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 
@@ -2607,7 +2607,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCpuPintSw1DetailedInfoGet(adi_a
     
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     uint8_t readScratch = 0U;
-    
+    uint32_t address = 0U;
+    uint32_t vswrAlarm = 0U;
+
     /* Check inputs */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
@@ -2630,7 +2632,27 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCpuPintSw1DetailedInfoGet(adi_a
             }
             *pInfo = (uint32_t)(readScratch);
             break;
-            
+
+        case (ADI_ADRV904X_DFE_CPU_PINTSW1_STATUS_INT_1_VSWR_ALARM):
+            /* Get VSWR alarm status address */
+            recoveryAction = adrv904x_DfeSdkDataAddrGet(device, &address);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue reading SDK data address");
+                goto cleanup;
+            }
+            address += ADI_LIBRARY_OFFSETOF(adrv904x_DfeSvcBbicBridgeSdkData_t, vswrAlarm);
+        
+            /* Read the VSWR alarm data */
+            recoveryAction = adi_adrv904x_Register32Read(device, NULL, address, &vswrAlarm, 0xFFFFFFFF);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue reading VSWR alarm status");
+                goto cleanup;
+            }
+            *pInfo = adrv904x_CpuIntFromBytesGet((uint8_t*)&vswrAlarm, 4U);
+            break;
+
         case (ADI_ADRV904X_DFE_CPU_PINTSW1_STATUS_INT_NONE): /* Fallthrough */
         default:
             /* Allow the user to call this function with no error selected and it be a no-op */

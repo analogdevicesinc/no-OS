@@ -147,11 +147,22 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCfrReg_Cfr1PulInterp_BfGet(adi_adrv9
                                                                        const adrv904x_BfTxCfrRegChanAddr_e baseAddr,
                                                                        uint8_t* const bfValue);
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCfrReg_Cfr1Spare_BfSet(adi_adrv904x_Device_t* const device,
+                                                                   adi_adrv904x_SpiCache_t* const spiCache,
+                                                                   const adrv904x_BfTxCfrRegChanAddr_e baseAddr,
+                                                                   const uint16_t bfValue);
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCfrReg_Cfr1ThrCor_BfSet(adi_adrv904x_Device_t* const device,
                                                                     adi_adrv904x_SpiCache_t* const spiCache,
                                                                     const adrv904x_BfTxCfrRegChanAddr_e baseAddr,
                                                                     uint8_t channelId, 
                                                                     const uint32_t bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCfrReg_Cfr1ThrCor_BfGet(adi_adrv904x_Device_t* const device,
+                                                                    adi_adrv904x_SpiCache_t* const spiCache,
+                                                                    const adrv904x_BfTxCfrRegChanAddr_e baseAddr,
+                                                                    uint8_t channelId, 
+                                                                    uint32_t* const bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxCfrReg_Cfr1ThrSq_BfSet(adi_adrv904x_Device_t* const device,
                                                                    adi_adrv904x_SpiCache_t* const spiCache,

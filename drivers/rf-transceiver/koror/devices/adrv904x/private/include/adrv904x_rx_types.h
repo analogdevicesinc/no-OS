@@ -9,7 +9,7 @@
 *
 * \brief Contains ADRV904X data types for on board cpus feature
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #ifndef _ADRV904X_RX_TYPES_H_

@@ -5,7 +5,7 @@
  *
  * \details Command definition for ADRV904X_CPU_CMD_ID_SET_TXATTEN_PHASE,
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 /**

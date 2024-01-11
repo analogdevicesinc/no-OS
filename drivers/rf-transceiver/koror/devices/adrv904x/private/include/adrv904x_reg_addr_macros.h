@@ -16,6 +16,18 @@
 #define ADRV904X_BF_UPDATE(result, value, mask, shift)  (result = ((result) & ~(mask)) | ( ((value) << (shift)) & (mask)))
 #define ADRV904X_BF_EQUAL(value, mask) ((mask) == ((value) & (mask)))
 
+
+/* ETM Offset registers */
+#define ADRV904X_ETM_MAX                           0x4U
+#define ADRV904X_ETM_TRCCONFIGR_OFFSET             0x10U
+#define ADRV904X_ETM_TRCTRACEIDR_OFFSET            0x40U
+#define ADRV904X_ETM_TRCPRGCTLR_OFFSET             0x4U
+#define ADRV904X_ETM_TRCIDR0_OFFSET                0x1E0U
+#define ADRV904X_ETM_TRCIDR1_OFFSET                0x1E4U
+#define ADRV904X_ETM_TRCIDR2_OFFSET                0x1E8U
+#define ADRV904X_ETF_RSZ_OFFSET                    0x4U
+#define ADRV904X_ETF_RRD_OFFSET                    0x10U
+
 /* Bit positions */
 #define ADRV904X_CPU_MASK_CTL1_M3_RUN              0x01
 #define ADRV904X_STREAM_RESET_BIT                  0
@@ -526,8 +538,29 @@ typedef struct adrv904x_CpuMemDump
 {
     uint32_t cpuMemAddr;
     uint32_t cpuMemSize;
+    uint8_t  cpuMemWidth;
+    uint8_t  cpuMemEndianness;
 } adrv904x_CpuMemDump_t;
+typedef struct adrv904x_CpuRamMemDump
+{
+    uint32_t cpuMemAddr;
+    uint32_t cpuMemSize;
+    uint16_t ramId;
+    uint8_t  cpuMemEndianness;
+} adrv904x_CpuRamMemDump_t;
 
-extern const adrv904x_CpuMemDump_t adrv904x_CpuMemDumpTable[2740];
-extern const adrv904x_CpuMemDump_t adrv904x_DfeMemDumpTable[5];
+extern const adrv904x_CpuRamMemDump_t adrv904x_CpuRamMemDumpTable[24];
+extern const adrv904x_CpuMemDump_t adrv904x_TelemetryMemDumpTable[1];
+extern const adrv904x_CpuMemDump_t adrv904x_CpuMemDumpTable[2855];
+extern const adrv904x_CpuRamMemDump_t adrv904x_DfeMemDumpTable[5];
+
+typedef struct adrv904x_EtmDumpValues
+{
+    uint16_t format;
+    uint32_t baseAddr;
+    uint8_t  dataSize;
+    uint8_t  configSize;
+} adrv904x_EtmDumpValues_t;
+
+extern const adrv904x_EtmDumpValues_t adrv904x_DfeEtmMemDumpTable[4];
 #endif

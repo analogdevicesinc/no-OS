@@ -7,7 +7,7 @@
 /**
 * \file adi_library_types.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #ifndef _ADI_LIBRARY_TYPES_H_
 #define _ADI_LIBRARY_TYPES_H_
@@ -35,7 +35,7 @@
 #define ADI_LIBRARY_VPRINTF                             vprintf
 #define ADI_LIBRARY_VSNPRINTF                           vsnprintf
 #define ADI_LIBRARY_FFLUSH                              fflush
-#define ADI_LIBRARY_FSEEK                               fseekx
+#define ADI_LIBRARY_FSEEK                               fseek
 #define ADI_LIBRARY_FREAD                               fread
 #define ADI_LIBRARY_FWRITE                              fwrite
 #define ADI_LIBRARY_FOPEN                               fopen
@@ -50,6 +50,7 @@
 #define ADI_LIBRARY_FREE                                free
 #define ADI_LIBRARY_RAND                                rand
 #define ADI_LIBRARY_EXIT                                exit
+#define ADI_LIBRARY_ABS                                 abs
 
 /* stdarg.h */
 #define ADI_LIBRARY_VA_START                            va_start
@@ -93,6 +94,9 @@
 #define ADI_LIBRARY_MKTIME                              mktime
 #define ADI_LIBRARY_CTIME                               ctime
 #define ADI_LIBRARY_NANOSLEEP                           nanosleep
+#define ADI_LIBRARY_CLOCK                               clock
+#define ADI_LIBRARY_CLOCKS_PER_SEC                      CLOCKS_PER_SEC
+#define ADI_LIBRARY_GMTIME                              gmtime
 
 /* ctype.h */
 #define ADI_LIBRARY_TOUPPER                             toupper

@@ -5,7 +5,7 @@
  *
  * \details Command definition for ADRV904X_CPU_CMD_ID_RUN_SERDES_EYE_SWEEP
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 /**
@@ -143,6 +143,16 @@ typedef struct adrv904x_CpuCmd_RunPerCompEyeSweep
  * \brief RUN_SERDES_VERT_EYE_SWEEP command response structure
  */
 ADI_ADRV904X_PACKED(
+typedef struct adrv904x_CpuCmd_JtxLanePower
+{
+    uint8_t jtxLaneMask;    /*!< Bitfield indicating the lanes to affected by the cmd. If bitN is not set then lane N power status is not changed. */
+    uint8_t jtxLanePower; /*!< If corresponding bit in laneMask is set then if bitN is set/unset lane N is to be powered up/down. Bit 0 is the least-significant bit.*/
+} adrv904x_CpuCmd_JtxLanePower_t;)
+
+/**
+ * \brief RUN_SERDES_VERT_EYE_SWEEP command response structure
+ */
+ADI_ADRV904X_PACKED(
 typedef struct adrv904x_CpuCmd_PerCompEyeSweepResp
 {
     adrv904x_CpuErrorCode_e status;    /*!< CPU error status code */
@@ -158,7 +168,6 @@ typedef struct adrv904x_CpuCmd_SerdesCalStatusGet
 {
     uint8_t        lane;                            /*!< Serdes lane id */
 } adrv904x_CpuCmd_SerdesCalStatusGet_t;)
-
 ADI_ADRV904X_PACKED(
 typedef struct adrv904x_SerdesInitCalStatusCmdResp
 {

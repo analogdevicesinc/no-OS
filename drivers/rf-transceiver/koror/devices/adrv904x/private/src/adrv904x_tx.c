@@ -7,7 +7,7 @@
 /**
 * \file adrv904x_tx.c
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "../../private/include/adrv904x_tx.h"
 #include "../../private/bf/adrv904x_bf_pll_mem_map.h"

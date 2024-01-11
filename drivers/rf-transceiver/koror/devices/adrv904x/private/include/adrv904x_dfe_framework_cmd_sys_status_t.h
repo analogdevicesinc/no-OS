@@ -10,7 +10,7 @@
  *
  * \brief type definitions for ADI_ADRV904X_DFE_FRAMEWORK_CMD_ID_GET_SYS_STATUS
  *
- * DFE SDK Version: 2.9.0.4
+ * DFE SDK Version: 2.10.0.4
  */
 
 #ifndef __FRAMEWORK_CMD_SYS_STATUS_T_H__

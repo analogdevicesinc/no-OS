@@ -10,7 +10,7 @@
  * \brief Contains DFE Application type definitions for CLGC, visible to BBIC API
  *        and customers.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 
@@ -57,10 +57,11 @@ ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_DfeAppCalClgcCaptureCfg
 {
     adi_adrv904x_DfeAppCalClgcCaptureMode_e capMode;         /*!< CLGC capture mode: TSSI or peak detection */
-    uint32_t                     capDurationUs;   /*!< actual TSSI measurement time (usec) in TSSI mode */
-    uint32_t                     capPeriodUs;     /*!< timeout (usec) for TSSI timer, or window length in peak det mode */
-    float                        minTxPowThres;   /*!< minimum Tx power threshold needed to run CLGC tracking */
-    float                        minOrxPowThres;  /*!< minimum ORx power threshold needed to run CLGC tracking */
+    uint32_t                     numCapBatches;   /*!< number of TSSI measurement batches in TSSI mode */
+    uint32_t                     capDurationUs;   /*!< TSSI measurement time (usec) of one batch in TSSI mode */
+    uint32_t                     capPeriodUs;     /*!< timeout (usec) for TSSI timer of one batch, or window length in peak det mode */
+    float                        minTxPowThres;   /*!< minimum Tx power threshold needed to run CLGC tracking for each of batches */
+    float                        minOrxPowThres;  /*!< minimum ORx power threshold needed to run CLGC tracking for each of batches */
 } adi_adrv904x_DfeAppCalClgcCaptureCfg_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -90,6 +91,8 @@ typedef struct adi_adrv904x_DfeAppCalClgcStatus
     float                        orxPwr;                /*!< ORx power measured */
     float                        loopPowGain;           /*!< current loop gain */
     float                        txAttenAdjdB;          /*!< current Tx atten adjustment */
+    uint32_t                     numCapBatchesRun;      /*!< number of measurement batches actually run */
+    uint32_t                     actCapDurationUs;      /*!< actual measurement duration time in us */
     uint32_t                     capStartRetryCount;    /*!< capture retries due to start error */
     uint32_t                     capAbortRetryCount;    /*!< capture retries due to abort (e.g. mapping changes) */
     uint32_t                     capInvalidRetryCount;  /*!< capture retries due to invalid/incomplete capture */

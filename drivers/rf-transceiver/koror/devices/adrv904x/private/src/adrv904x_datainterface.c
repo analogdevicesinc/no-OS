@@ -7,7 +7,7 @@
 /**
  * \file adrv904x_data_interface.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #include "../../private/include/adrv904x_datainterface.h"
@@ -1364,3 +1364,50 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_JrxRepairScreenTestChecker(adi_adrv904
 
     return recoveryAction;
 }
+ADI_API adi_adrv904x_ErrAction_e adrv904x_GetJtxLanePoweredDown(adi_adrv904x_Device_t*                           const device,
+                                                                adrv904x_BfSerdesTxdigPhyRegmapCore1p2ChanAddr_e const laneSerdesPhyBitfieldAddr,
+                                                                uint8_t*                                         const phyLanePd)
+{
+        adi_adrv904x_ErrAction_e  recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
+
+    uint8_t pdSer   = 0U;
+    uint8_t serEnRc = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, phyLanePd);
+
+    recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfGet(device,
+                                                                      NULL,
+                                                                      laneSerdesPhyBitfieldAddr,
+                                                                      &pdSer);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to read phy lane pd");
+        return recoveryAction;
+    }
+
+    if (pdSer == 1U)
+    {
+        /* Lane is in h/w power-down; No need to fetch SerEnRc */
+        *phyLanePd = 1U;
+        return recoveryAction;
+    }
+    
+    recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_SerEnRc_BfGet(device,
+                                                                        NULL,
+                                                                        laneSerdesPhyBitfieldAddr,
+                                                                        &serEnRc);
+    
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to read phy lane s/w power up");
+        return recoveryAction;
+    }
+
+    /* serEnRc bitfield indicates lane powered up. Return value must indicate power *down* */
+    *phyLanePd = (uint8_t) !serEnRc;
+    
+    return recoveryAction;
+}
+    

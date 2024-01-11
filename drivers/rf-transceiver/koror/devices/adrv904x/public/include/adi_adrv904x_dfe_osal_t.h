@@ -11,7 +11,7 @@
  * \brief Contains shared types used for OSAL CPU load logging.
  * \details Contains typedef which are shared between the BBIC and DFE and used for logging OSAL CPU load information.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_OSAL_T_H__

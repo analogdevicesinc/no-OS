@@ -11,7 +11,7 @@
  *
  * \details Contains CPU error code definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_CPU_ERROR_CODES_TYPES_H__

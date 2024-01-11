@@ -12,7 +12,7 @@
  *
  * \details Contains CPU memory tables and a few configuration constants.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_CPU_MEMORY_H__

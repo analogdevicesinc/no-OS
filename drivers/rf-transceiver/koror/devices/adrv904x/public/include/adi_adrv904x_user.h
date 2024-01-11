@@ -8,7 +8,7 @@
  * \file adi_adrv904x_user.h
  * \brief Contains ADRV904X API macro definitions for user to override
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_USER_H_

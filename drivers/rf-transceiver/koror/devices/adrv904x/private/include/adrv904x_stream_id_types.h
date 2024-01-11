@@ -10,7 +10,7 @@
  *
  * \brief   Contains ADRV904X stream id definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_STREAM_ID_H__
@@ -18,6 +18,10 @@
 
 #define ADRV904X_STREAM_ID__CORE__RADIO_SEQ_RISE_EVENT_00                                    (128U)
 #define ADRV904X_STREAM_ID__CORE__RADIO_SEQ_RISE_EVENT_01                                    (129U)
+#define ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF0                            (136U)   /* Use what was RADIO_SEQ_RISE_EVENT_08.This stream need to be always defined because it's used by SDK */
+#define ADRV904X_STREAM_ID__CORE__UNUSED0                                                    (138U)   /* When SBET Enabled: Use what was RADIO_SEQ_RISE_EVENT_10. Currently unused */
+#define ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF1                            (168U)   /* Use what was RADIO_SEQ_FALL_EVENT_08.This stream need to be always defined because it's used by SDK */
+#define ADRV904X_STREAM_ID__CORE__UNUSED2                                                    (170U)   /* When SBET Enabled: Use what was RADIO_SEQ_FALL_EVENT_10. Currently unused */
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_SECONDARY_PATH_NORMAL_OPERATION    (172U)   /* Use what was RADIO_SEQ_FALL_EVENT_12 */
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_SECONDARY_PATH_UL_CAL              (173U)   /* Use what was RADIO_SEQ_FALL_EVENT_13 */
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_SECONDARY_PATH_DL_CAL              (174U)   /* Use what was RADIO_SEQ_FALL_EVENT_14 */
@@ -36,9 +40,10 @@
 #define ADRV904X_STREAM_ID__CORE__EA_UPDATE_ALARM_OUTPUTS_STRM                               (153U)
 #define ADRV904X_STREAM_ID__CORE__TRIGGER_TX_STREAM_USED_BY_DFE                              (156U)
 #define ADRV904X_STREAM_ID__CORE__TRIGGER_RX_STREAM_USED_BY_DFE                              (157U)
+#define ADRV904X_STREAM_ID__CORE__SBET_UPDATE_POWER_INDEX_FROM_CIRCULAR_BUF                  (159U) /* When SBET Enabled */
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_CFG_GPIO_ALL_OFF_PIN_STATE_FOR_ORX0      (180U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_CFG_GPIO_ALL_OFF_PIN_STATE_FOR_ORX1      (181U)
-#define ADRV904X_STREAM_ID__CORE__UNUSED3                                                    (188U)
+#define ADRV904X_STREAM_ID__CORE__SBET_UPDATE_DPD_INDEX                                      (188U)  /* When SBET Enabled */
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_ORX_ATT_TABLE_UPDATE                     (202U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_ORX_NCO_FREQ_TABLE_UPDATE                (203U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_ONLY_LOL_NCO_FREQ_TABLE_UPDATE           (204U)
@@ -51,11 +56,13 @@
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_MAIN_PATH_NORMAL_OPERATION         (243U)
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_MAIN_PATH_UL_CAL                   (244U)
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_MAIN_PATH_DL_CAL                   (245U)
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_0                                   (7U)    /* Use what was TX__RADIO_SEQ_RISE_3 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_1                                   (8U)    /* Use what was TX__RADIO_SEQ_RISE_4 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_2                                   (9U)    /* Use what was TX__RADIO_SEQ_RISE_5 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_3                                   (10U)   /* Use what was TX__RADIO_SEQ_RISE_6 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_4                                   (11U)   /* Use what was TX__RADIO_SEQ_RISE_7 */
+#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_0                                   (8U)   /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_4 */
+#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_1                                   (9U)   /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_5 */
+#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_2                                   (10U)  /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_6 */
+#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_3                                   (11U)  /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_7 */
+#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_4                                   (12U)  /* When SBET Disabled: Use what was TX__RADIO_SEQ_FALL_0 */
+#define ADRV904X_STREAM_ID__TX__TX_SET_INIT_CAL_RUNNING_BIT                                  (17U)  /* Use what was TX__RADIO_SEQ_FALL_5 */
+#define ADRV904X_STREAM_ID__TX__TX_CLR_INIT_CAL_RUNNING_BIT                                  (18U)  /* Use what was TX__RADIO_SEQ_FALL_6 */
 #define ADRV904X_STREAM_ID__TX__DTX_MANUAL_ACTIVATE                                          (36U)
 #define ADRV904X_STREAM_ID__TX__DTX_MANUAL_DEACTIVATE                                        (37U)
 #define ADRV904X_STREAM_ID__TX__TX_LOOPBACK1_ENABLE_REQUEST                                  (41U)

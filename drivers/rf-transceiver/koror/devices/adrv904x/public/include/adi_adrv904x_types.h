@@ -8,7 +8,7 @@
 * \file adi_adrv904x_types.h
 * \brief Contains ADRV904X API configuration and run-time type definitions
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #ifndef _ADI_ADRV904X_TYPES_H_
@@ -290,6 +290,44 @@ typedef struct adi_adrv904x_UartSettings
 } adi_adrv904x_UartSettings_t;
 
 /**
+* \brief Memdump enum to represent record type 
+*/
+typedef enum adi_adrv904x_MemdumpRecordType
+{
+    ADI_ADRV904X_MEMDUMP_FIRMWARE_VER_RECORD    = 1U,               /* Firmware Version Record */
+    ADI_ADRV904X_MEMDUMP_TELEM_RECORD           = 2U,               /* Relemetry Record */
+    ADI_ADRV904X_MEMDUMP_ETM_TRACE_RECORD       = 3U,               /* ETM/Trace Record */
+    ADI_ADRV904X_MEMDUMP_DEV_DRVR_STATE_RECORD  = 4U,               /* Device Driver State Record */
+    ADI_ADRV904X_MEMDUMP_CPU_RAM_RECORD         = 5U,               /* CPU RAM Record */
+    ADI_ADRV904X_MEMDUMP_REG_RECORD             = 6U,               /* Register Record */
+} adi_adrv904x_MemdumpRecordType_e;
+
+/**
+* \brief Memdump enum to represent CPU Type 
+*/
+typedef enum adi_adrv904x_MemdumpCpuType
+{
+    ADI_ADRV904X_MEMDUMP_STREAM_CPU             = 0x1U,             /* Custom CPU RAM */
+
+    /* All arm CPU's added below */
+    ADI_ADRV904X_MEMDUMP_ARM_V7                 = 0x2U,             /* 32 bit arm v7 */
+    ADI_ADRV904X_MEMDUMP_ARM_V8                 = 0x3U,             /* aarch64, arm v8 */
+
+    /* All risc-v CPU's added below */
+    ADI_ADRV904X_MEMDUMP_RISC_V_1               = 0x8000U,          /* risc-v */
+} adi_adrv904x_MemdumpCpuType_e;
+
+/**
+* \brief Memdump enum to represent FW Type
+*/
+typedef enum adi_adrv904x_MemdumpFirmwareType
+{
+    ADI_ADRV904X_MEMDUMP_STREAM_FW              = 0x1U,             /* Stream FW */
+    ADI_ADRV904X_MEMDUMP_RADIO_FW               = 0x2U,             /* Radio FW  */
+    ADI_ADRV904X_MEMDUMP_DFE_FW                 = 0x3U,             /* DFE FW    */
+} adi_adrv904x_MemdumpFirmwareType_e;
+
+/**
  *  \brief Data structure to hold DFE UART settings
  */
 typedef struct adi_adrv904x_DfeUartSettings
@@ -397,20 +435,26 @@ typedef struct adi_adrv904x_Info
     uint8_t                             dfeSwTest;                                               /*!< DFE Software test signal */
     uint8_t                             rsStarted;                                               /*!< Radio Sequencer started */
     uint8_t                             rsRadioRunning;                                          /*!< Radio Sequencer Radio Running */
+    time_t                              initGlobalTime;                                          /*!< Initialization time of the system */
     adi_adrv904x_RsSpecialSequencer_t   specialSequencerPatternInfo;                             /*!< Customer special frame timing pattern config for each radio sequencer */
     adi_adrv904x_RadioCtrlAlarmGpioConfig_t alarmGpioConfig;                                     /*!< GPIO pin configuration used by alarms */
     adi_adrv904x_DfeCtrlTxToOrxMappingConfig_t dfeCtrlTxToOrxMappingConfig;                      /*!< Internal use only: DFE Control Mode Tx to Orx Mapping Configuration */
     adi_adrv904x_DtxInputPinCfg_t       dtxInputMapping;                                         /*!< Internal use only: DTX input mapping */
     adi_adrv904x_ModelSwitchInputPinCfg_t modelSwitchInputMapping;                               /*!< Internal use only: Model Switch input mapping */
     adi_adrv904x_GpioPinSel_e           digGpioTddSw;                                            /*!< Digital GPIO TDD SW */
+    adi_adrv904x_GpioPinSel_e           sbetLatchModelIndex;                                     /*!< Sbet latch dpd power index GPIO */
     adi_adrv904x_GpioAnaPinSel_e        anaGpioTddSw;                                            /*!< Analog GPIO TDD SW */
     adi_adrv904x_GpioPinSel_e           digGpioPredrive;                                         /*!< Digital GPIO Predrive */
     adi_adrv904x_GpioAnaPinSel_e        anaGpioPredrive;                                         /*!< Analog GPIO Predrive */
-    adi_adrv904x_StreamGpioAntCalOutCfg_t       streamGpioAntCalOutCfg;                             /*!< Stream GPIO Antenna Cal Output Pin Assignments */
-    adi_adrv904x_CarrierReconfigLatencyCfg_t    txCarrierLatencyCfg[ADI_ADRV904X_MAX_TXCHANNELS];   /*!< Internal use only: Tx carrier reconfig latency settings */
-    adi_adrv904x_CarrierReconfigLatencyCfg_t    rxCarrierLatencyCfg[ADI_ADRV904X_MAX_RX_ONLY];      /*!< Internal use only: Rx carrier reconfig latency settings */
-
-    uint8_t vswrWaveformLoaded[ADI_ADRV904X_MAX_TXCHANNELS];                                        /*!< Internal use only: Shows if VSWR waveform is loaded by user */
+    adi_adrv904x_StreamGpioAntCalOutCfg_t       streamGpioAntCalOutCfg;                          /*!< Stream GPIO Antenna Cal Output Pin Assignments */
+    adi_adrv904x_CarrierReconfigSoln_t          txCarrierReconfigSoln;                           /*!< Internal use only: Tx carrier reconfig solution from last run Solve. To be used at next Apply */
+    adi_adrv904x_CarrierReconfigSoln_t          rxCarrierReconfigSoln;                           /*!< Internal use only: Rx carrier reconfig solution from last run Solve. To be used at next Apply */
+    adi_adrv904x_CarrierReconfigLatencyCfgTop_t txCarrierLatencySolved;                          /*!< Internal use only: Tx carrier reconfig latency settings from last solve. May not yet be applied */
+    adi_adrv904x_CarrierReconfigLatencyCfgTop_t rxCarrierLatencySolved;                          /*!< Internal use only: Rx carrier reconfig latency settings from last solve. May not yet be applied */
+    adi_adrv904x_CarrierReconfigLatencyCfgTop_t txCarrierLatencyApplied;                         /*!< Internal use only: Tx carrier reconfig latency settings for currently applied config */
+    adi_adrv904x_CarrierReconfigLatencyCfgTop_t rxCarrierLatencyApplied;                         /*!< Internal use only: Rx carrier reconfig latency settings for currently applied config */
+    uint16_t                                    carrierLfsrValue;                                /*!< Internal use only: LFSR value used in Carrier Reconfig random table generation */
+    uint8_t vswrWaveformLoaded[ADI_ADRV904X_MAX_TXCHANNELS];                                     /*!< Internal use only: Shows if VSWR waveform is loaded by user */
 } adi_adrv904x_Info_t;
 
 /**
@@ -435,11 +479,10 @@ typedef struct adi_adrv904x_TxChannelCfgExtract
     uint32_t                        digChanMask;                                /*!< Tx digital channel mask indicates which DUCs to initialize */
     uint32_t                        txLbAdcSampleRate_kHz;                      /*!< TX LB ADC Sample rate */
     adi_adrv904x_BandCfgExtract_t   bandSettings[ADI_ADRV904X_DUC_NUM_BAND];    /*!< Tx DUC settings */
-    
-    uint32_t                            pfirRate_kHz;                           /*!< Tx PFIR rate */
-    adi_adrv904x_CarrierRuntime_t       carrierRuntimeSettings;                 /*!< Tx carrier runtime settings */
-    uint8_t maxSlot;                                                            /*!< Holds the max slot value for this channel's config */
-    
+    uint32_t                        pfirRate_kHz;                               /*!< Tx PFIR rate */
+    adi_adrv904x_CarrierRuntime_t   carrierRuntimeSettings;                     /*!< Tx carrier runtime settings */
+    uint8_t                         bandRatio[ADI_ADRV904X_DUC_NUM_BAND];       /*!< Cduc to band ratio */
+    uint8_t                         maxSlot;                                    /*!< Holds the max slot value for this channel's config */
 } adi_adrv904x_TxChannelCfgExtract_t;
 
 /**
@@ -456,16 +499,15 @@ typedef struct adi_adrv904x_TxSettingsExtract
  */
 typedef struct adi_adrv904x_RxChannelCfgExtract
 {
-    uint32_t                            rfBandwidth_kHz;                                    /*!< Rx RF passband bandwidth for the profile */
-    uint32_t                            rxDdc0OutputRate_kHz;                               /*!< Rx output sample rate per Rx channel Band 0 */
-    uint32_t                            rxDdc1OutputRate_kHz;                               /*!< Rx output sample rate per Rx channel Band 1 */
-    uint32_t                            digChanMask;                                        /*!< Rx digital channel mask indicates which DDCs to initialize */
-    uint32_t                            rxAdcSampleRate_kHz;                                /*!< Rx ADC sample rate */
-    adi_adrv904x_BandCfgExtract_t       bandSettings[ADI_ADRV904X_DDC_NUM_BAND];            /*!< Rx DDC settings for this channel's profile */
-    
-    adi_adrv904x_CarrierRuntime_t       carrierRuntimeSettings;                           /*!< Rx carrier runtime settings */
-    uint8_t                             bandRatio[ADI_ADRV904X_DDC_NUM_BAND];               /*!< Cddc to band ratio */
-    uint8_t maxSlot;                                                                        /*!< Holds the max slot value for this channel's config */
+    uint32_t                        rfBandwidth_kHz;                            /*!< Rx RF passband bandwidth for the profile */
+    uint32_t                        rxDdc0OutputRate_kHz;                       /*!< Rx output sample rate per Rx channel Band 0 */
+    uint32_t                        rxDdc1OutputRate_kHz;                       /*!< Rx output sample rate per Rx channel Band 1 */
+    uint32_t                        digChanMask;                                /*!< Rx digital channel mask indicates which DDCs to initialize */
+    uint32_t                        rxAdcSampleRate_kHz;                        /*!< Rx ADC sample rate */
+    adi_adrv904x_BandCfgExtract_t   bandSettings[ADI_ADRV904X_DDC_NUM_BAND];    /*!< Rx DDC settings for this channel's profile */
+    adi_adrv904x_CarrierRuntime_t   carrierRuntimeSettings;                     /*!< Rx carrier runtime settings */
+    uint8_t                         bandRatio[ADI_ADRV904X_DDC_NUM_BAND];       /*!< Cddc to band ratio */
+    uint8_t                         maxSlot;                                    /*!< Holds the max slot value for this channel's config */
 } adi_adrv904x_RxChannelCfgExtract_t;
 
 /**
@@ -561,6 +603,16 @@ typedef struct adi_adrv904x_DfeCducConfigExtract
     uint32_t dpdOutputRate_kHz[ADI_ADRV904X_MAX_CHANNELS];   /*!< DPD  output rate */
 } adi_adrv904x_DfeCducConfigExtract_t;
 
+typedef struct adi_adrv904x_TxBandLatency
+{
+    uint16_t duc_cc[ADI_ADRV904X_DUC_NUM_BAND];
+} adi_adrv904x_TxBandLatency_t;
+
+typedef struct adi_adrv904x_RxBandLatency
+{
+    uint16_t ddc_cc[ADI_ADRV904X_DDC_NUM_BAND];
+} adi_adrv904x_RxBandLatency_t;
+
 /**
  * \brief Data structure to hold ADRV904X device instance initialization settings
  */
@@ -586,6 +638,8 @@ typedef struct adi_adrv904x_InitExtract
     adi_adrv904x_CarrierJesdCfg_t               rxCarrierJesdCfg;                                               /*!< Holds Framer Carrier XBar values */
     uint8_t                                     framerInterleaveMode[ADI_ADRV904X_MAX_FRAMERS];                 /*!< Framer settings */
     uint8_t                                     deframerInterleaveMode[ADI_ADRV904X_MAX_DEFRAMERS];             /*!< Deframer setting */
+    adi_adrv904x_TxBandLatency_t                txBandLatency[ADI_ADRV904X_MAX_CHANNELS];                       /*!< Tx Band Latency values needed for API Reconfig carrier-to-carrier delay calculations */
+    adi_adrv904x_RxBandLatency_t                rxBandLatency[ADI_ADRV904X_MAX_CHANNELS];                       /*!< Rx Band Latency values needed for API Reconfig carrier-to-carrier delay calculations */
 } adi_adrv904x_InitExtract_t;
 
 

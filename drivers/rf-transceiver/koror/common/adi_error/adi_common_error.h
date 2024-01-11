@@ -24,15 +24,16 @@
 #include "adi_common_error_types.h"
 #include "adi_common_log.h"
 
-#ifndef ADI_FILE
-#define ADI_FILE 1
-#endif
 
 /*
 * *******************************
 * ADI Common error macros
 * *******************************
 */
+
+#ifndef ADI_FILE
+#define ADI_FILE 1
+#endif
 
 /*
 * \brief    Macro to check for Null Device & Error Pointer

@@ -12,7 +12,7 @@
  *
  * \details
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_DFE_SVC_ERROR_TABLES_H_

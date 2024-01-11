@@ -8,7 +8,7 @@
 * \file adrv904x_dfe_vswr.c
 * \brief Contains VSWR feature related function implementations
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_adrv904x_hal.h"

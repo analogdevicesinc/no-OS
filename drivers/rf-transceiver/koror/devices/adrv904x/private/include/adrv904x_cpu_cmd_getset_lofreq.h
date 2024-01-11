@@ -9,7 +9,7 @@
  *          ADRV904X_CPU_CMD_ID_SET_LOFREQ, ADRV904X_CPU_CMD_ID_GET_LOOPFILTER,
  *          ADRV904X_CPU_CMD_ID_SET_LOOPFILTER and ADRV904X_CPU_CMD_ID_GET_RXTXLOFREQ
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 /**
@@ -127,6 +127,27 @@ typedef struct adrv904x_CpuCmd_GetRxTxLoFreqResp
     adi_adrv904x_LoName_t   txLoName[ADRV904X_TX_CHAN_LEN];  /*!< PLL number of Tx Channels */    
     uint32_t                txFreq[ADRV904X_TX_CHAN_LEN];    /*!< Freq of Tx Channels */  
 } adrv904x_CpuCmd_GetRxTxLoFreqResp_t;)
+	
+/**
+ * \brief Data structure to hold the Channel Controls to the PLL's.
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adrv904x_CpuCmd_ChanCtrlToPlls
+{
+	uint8_t rf0MuxTx0_3;       /* If set to 1 East Tx channels (Tx0-3) are connected to PLL0 (East PLL). If set to 0 Tx0-3 are connected to PLL1 (West PLL). */
+	uint8_t rf0MuxTx4_7;       /* If set to 1 West Tx channels (Tx4-7) are connected to PLL0 (East PLL). If set to 0 Tx4-7 are connected to PLL1 (West PLL). */
+	uint8_t rf0MuxRx0_3;       /* If set to 1 East Rx channels (Rx0-3) are connected to PLL0 (East PLL). If set to 0 Rx0-3 are connected to PLL1 (West PLL). */
+	uint8_t rf0MuxRx4_7;       /* If set to 1 West Rx channels (Rx4-7) are connected to PLL0 (East PLL). If set to 0 Rx4-7 are connected to PLL1 (West PLL). */  
+} adrv904x_CpuCmd_ChanCtrlToPlls_t;)
+	
+/**
+ * \brief Data structure to hold the Channel Controls to the PLL's.
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adrv904x_CpuCmd_ChanCtrlToPllsResp
+{
+	adrv904x_CpuErrorCode_e     status; /*!< CPU error status code */
+} adrv904x_CpuCmd_ChanCtrlToPllsResp_t;)
 
 /**
  * \brief Reprogram PLL command structure
@@ -147,4 +168,5 @@ typedef struct adrv904x_CpuCmd_ReprogramPllResp
 } adrv904x_CpuCmd_ReprogramPllResp_t;)
 
 #endif /* __ADRV904X_CPU_CMD_GETSET_LOFREQ_H__ */
+
 

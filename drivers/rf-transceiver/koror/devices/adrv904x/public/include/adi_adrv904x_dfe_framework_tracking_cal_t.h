@@ -10,7 +10,7 @@
  *
  * \brief   Contains ADRV904X Tracking Cal Types Download File data structures.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_FRAMEWORK_TRACKING_CAL_T_H__

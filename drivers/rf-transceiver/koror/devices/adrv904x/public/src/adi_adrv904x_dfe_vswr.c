@@ -8,7 +8,7 @@
 * \file adi_adrv904x_dfe_vswr.c
 * \brief Contains VSWR feature related function implementations
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_adrv904x_dfe_vswr.h"
 #include "adi_adrv904x_tx.h"
@@ -252,6 +252,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_VswrTrackingConfigSet(adi_adrv904x
 {
         const uint16_t VSWR_CTRL_TRACK_CONFIG_SET = (uint16_t)(ADI_ADRV904X_DFE_APP_CAL_VSWR_CTRL_CONFIG | ADI_ADRV904X_DFE_APP_CAL_VSWR_CTRL_SET_FLAG);
     const uint32_t VSWR_MAX_ACCUM_ITERATIONS = 0x3FFFFFU;
+    const uint8_t VSWR_MAX_ALARM_ITER_WINDOW = 64U;
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     adi_adrv904x_DfeAppCalVswrCfg_t vswrConfig;
     uint32_t lengthResp = 0;
@@ -278,9 +279,52 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_VswrTrackingConfigSet(adi_adrv904x
         goto cleanup;
     }
 
+    /* Check minor alarm configuration */
+    if (cfg->minorAlarm.iterWindow > VSWR_MAX_ALARM_ITER_WINDOW)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cfg->minorAlarm.iterWindow, "Minor alarm iteration window cannot be larger than 64U");
+        goto cleanup;
+    }
+    if (cfg->minorAlarm.iterThresholdCount > cfg->minorAlarm.iterWindow)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cfg->minorAlarm.iterThresholdCount, "Minor alarm threshold iter count cannot be larger than iter window size");
+        goto cleanup;
+    }
+    if ((cfg->minorAlarm.iterWindow > 0) && (cfg->minorAlarm.thresholdmdB > cfg->returnLossThreshmdB))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cfg->minorAlarm.thresholdmdB, "Minor alarm threshold cannot be larger than returnLossThreshmdB");
+        goto cleanup;
+    }
+
+    /* Check major alarm configuration */
+    if (cfg->majorAlarm.iterWindow > VSWR_MAX_ALARM_ITER_WINDOW)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cfg->majorAlarm.iterWindow, "Major alarm iteration window cannot be larger than 64U");
+        goto cleanup;
+    }
+    if (cfg->majorAlarm.iterThresholdCount > cfg->majorAlarm.iterWindow)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cfg->majorAlarm.iterThresholdCount, "Major alarm threshold iter count cannot be larger than iter window size");
+        goto cleanup;
+    }
+    if ((cfg->majorAlarm.iterWindow > 0) && (cfg->majorAlarm.thresholdmdB > cfg->returnLossThreshmdB))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cfg->majorAlarm.thresholdmdB, "Major alarm threshold cannot be larger than returnLossThreshmdB");
+        goto cleanup;
+    }
+
     ADI_LIBRARY_MEMCPY((void *)&vswrConfig, cfg, sizeof(adi_adrv904x_DfeAppCalVswrCfg_t));
     vswrConfig.accumNumIter = ADRV904X_HTOCL(vswrConfig.accumNumIter);
     vswrConfig.returnLossThreshmdB = ADRV904X_HTOCL(vswrConfig.returnLossThreshmdB);
+    vswrConfig.reversePathOffsetmdB = ADRV904X_HTOCL(vswrConfig.reversePathOffsetmdB);
+    vswrConfig.minorAlarm.thresholdmdB = ADRV904X_HTOCL(vswrConfig.minorAlarm.thresholdmdB);
+    vswrConfig.majorAlarm.thresholdmdB = ADRV904X_HTOCL(vswrConfig.majorAlarm.thresholdmdB);
 
     for (i = 0; i < ADI_ADRV904X_MAX_TXCHANNELS; i++)
     {
@@ -343,6 +387,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_VswrTrackingConfigGet(adi_adrv904x
     {
         cfg->accumNumIter = ADRV904X_CTOHL(cfg->accumNumIter);
         cfg->returnLossThreshmdB = ADRV904X_CTOHL(cfg->returnLossThreshmdB);
+        cfg->reversePathOffsetmdB = ADRV904X_CTOHL(cfg->reversePathOffsetmdB);
+        cfg->minorAlarm.thresholdmdB = ADRV904X_CTOHL(cfg->minorAlarm.thresholdmdB);
+        cfg->majorAlarm.thresholdmdB = ADRV904X_CTOHL(cfg->majorAlarm.thresholdmdB);
     }
 
     cleanup:
@@ -413,7 +460,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_VswrStatusGet(adi_adrv904x_Device_
     vswrStatus->capStartErrorCount = ADRV904X_CTOHL(vswrStatus->capStartErrorCount);
     vswrStatus->periodEndedErrorCount = ADRV904X_CTOHL(vswrStatus->periodEndedErrorCount);
     vswrStatus->txAttenChangeCount = ADRV904X_CTOHL(vswrStatus->txAttenChangeCount);
+
     vswrStatus->fwdPathUnstableCount = ADRV904X_CTOHL(vswrStatus->fwdPathUnstableCount);
+    vswrStatus->minorAlarmCount = ADRV904X_CTOHL(vswrStatus->minorAlarmCount);
+    vswrStatus->majorAlarmCount = ADRV904X_CTOHL(vswrStatus->majorAlarmCount);
 
     vswrStatus->calExitRequestCount = ADRV904X_CTOHL(vswrStatus->calExitRequestCount);
 

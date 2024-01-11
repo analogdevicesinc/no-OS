@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X RADIOCTRL related private data prototypes for
  *        adrv904x_radioctrl.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADRV904X_RADIOCTRL_TYPES_H_
@@ -64,6 +64,7 @@ typedef enum adrv904x_StreamGpioFeatureSelection
     ADRV904X_STREAM_GPIO_OC_FUSE_EN_OUT_5                   = 51U,
     ADRV904X_STREAM_GPIO_OC_FUSE_EN_OUT_6                   = 52U,
     ADRV904X_STREAM_GPIO_OC_FUSE_EN_OUT_7                   = 53U,
+    ADRV904X_STREAM_GPIO_SBET_LATCH_DPD_MODEL_INDEX         = 59U,
     ADRV904X_STREAM_GPIO_DFE_TX_TO_ORX0_MAP_BIT0            = 60U,
     ADRV904X_STREAM_GPIO_DFE_TX_TO_ORX0_MAP_BIT1            = 61U,
     ADRV904X_STREAM_GPIO_DFE_TX_TO_ORX0_MAP_BIT2            = 62U,

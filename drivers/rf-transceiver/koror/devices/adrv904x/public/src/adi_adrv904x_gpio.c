@@ -9,7 +9,7 @@
 * \brief Contains GPIO feature related function implementation defined in
 * adi_adrv904x_gpio.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 #include "adi_adrv904x_gpio.h"
 

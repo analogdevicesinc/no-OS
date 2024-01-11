@@ -8,7 +8,7 @@
 * \file adi_adrv904x_datainterface.c
 * \brief Contains function implementation defined in adi_adrv904x_datainterface.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_adrv904x_datainterface.h"
@@ -3437,10 +3437,14 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
     uint8_t phyLanePdMask = 0U;
     uint8_t phyLaneIdx = 0U;
     adrv904x_BfSerdesTxdigPhyRegmapCore1p2ChanAddr_e laneSerdesPhyBitfieldAddr = ADRV904X_BF_DIGITAL_CORE_JESD_SERIALIZER_SER_PHY_0_;
-
+    adrv904x_CpuCmd_JtxLanePower_t jtxPwrCmd;
+    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
+        
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    
+    ADI_LIBRARY_MEMSET(&jtxPwrCmd, 0, sizeof(jtxPwrCmd));
 
     /* Get the framer link type: 204B or 204C - Check link0 type only */
     recoveryAction = adrv904x_JtxLink_JtxLinkType_BfGet(device,
@@ -3453,12 +3457,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
         goto cleanup;
     }
 
-    /* Determine the reset sequence based on the 204c/204b mode  */
+    /* The reset sequence differs for 204c/204b mode */
     if (framerLinkType == 0U)
     {
-        /* 204B case */
-        /* Set the clock offset to 4 */
-        for (phyLaneIdx = 0U; phyLaneIdx < ADI_ADRV904X_MAX_SERDES_LANES; phyLaneIdx++)
+        /* 204B case: 
+         * 1. Set the clock offset to 4 for powered-up lanes
+         * 2. Then send CPU_CMD_ID_JESD_SER_RESET */
+        
+        /* Iterate over each jtx lane. If lane is powered-up set the clock offset to 4. */
+        for(phyLaneIdx = 0U ; phyLaneIdx < ADI_ADRV904X_MAX_SERDES_LANES ; phyLaneIdx++)
         {
             recoveryAction = (adi_adrv904x_ErrAction_e) adrv904x_FramerLaneSerdesPhyBitfieldAddressGet(device,
                                                                                                     phyLaneIdx,
@@ -3469,20 +3476,19 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
                 goto cleanup;
             }
 
-            recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfGet( device,
-                                                                            NULL,
-                                                                            laneSerdesPhyBitfieldAddr,
-                                                                            &phyLanePd);
+            recoveryAction = adrv904x_GetJtxLanePoweredDown(device,
+                                                            laneSerdesPhyBitfieldAddr,
+                                                            &phyLanePd);
+            
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
             {
-                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to read phy lane pd");
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading Jtx lane power-up status");
                 goto cleanup;
             }
 
-            /* Only do this for active lanes */
             if (phyLanePd == 0U)
             {
-                /* set Clockoffset to 4 */
+                /* Jtx lane is powered-up; set Clockoffset to 4 */
                 recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_ClkoffsetSerRc_BfSet( device,
                                                                                             NULL,
                                                                                             laneSerdesPhyBitfieldAddr,
@@ -3522,8 +3528,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
     } /* End 204b case */
     else
     {
-        /* 204C case */
-        /* Power cycle Active Serializer PHYs */
+        /* 204C case:
+         * 1. Power down currenty powered up lanes and set their FIFO addrs and clk offsets.
+         * 2. Power up ALL lanes.
+         * 3. Power down the originally powered down lanes. */
         for (phyLaneIdx = 0U; phyLaneIdx < ADI_ADRV904X_MAX_SERDES_LANES; phyLaneIdx++)
         {
             recoveryAction = (adi_adrv904x_ErrAction_e) adrv904x_FramerLaneSerdesPhyBitfieldAddressGet(device,
@@ -3535,43 +3543,43 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
                 goto cleanup;
             }
 
-            recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfGet( device,
-                                                                            NULL,
-                                                                            laneSerdesPhyBitfieldAddr,
-                                                                            &phyLanePd);
+            recoveryAction = adrv904x_GetJtxLanePoweredDown(device,
+                                                            laneSerdesPhyBitfieldAddr,
+                                                            &phyLanePd);
+            
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
             {
-                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to read phy lane pd");
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading Jtx lane power-up status");
                 goto cleanup;
             }
 
-            /* Keep track of enabled lanes */
-            phyLanePdMask |= phyLanePd<<phyLaneIdx;
+            /* Keep track of powered-down lanes */
+            phyLanePdMask |= phyLanePd << phyLaneIdx;
 
-            /* Only do this for active lanes */
             if (phyLanePd == 0U)
             {
-                /* Power down the PHY */
-                recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_SerEnRc_BfSet( device,
-                                                                                    NULL,
-                                                                                    laneSerdesPhyBitfieldAddr,
-                                                                                    0U);
+                /* Lane is powered up; power it down */
+                /* Prepare the command payload to power-down the lane. uint8_t fields don't require HTOC conversion. */
+                jtxPwrCmd.jtxLaneMask = 1U << phyLaneIdx;
+                jtxPwrCmd.jtxLanePower = 0x00;
+    
+                /* Send command. There is no cmd-specific response expected.
+                 * This command is always sent to CPU0 regardless of lane-CPU assignment. */
+                recoveryAction = adrv904x_CpuCmdSend(device,
+                                                     ADI_ADRV904X_CPU_TYPE_0,
+                                                     ADRV904X_LINK_ID_0,
+                                                     ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER,
+                                                     (void*)&jtxPwrCmd,
+                                                     sizeof(jtxPwrCmd),
+                                                     NULL,
+                                                     0U,
+                                                     &cmdStatus);
                 if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                 {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to write phy lane en");
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to call CPU cmd ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER");
                     goto cleanup;
                 }
-
-                recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfSet( device,
-                                                                                    NULL,
-                                                                                    laneSerdesPhyBitfieldAddr,
-                                                                                    1U);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to write phy lane pd");
-                    goto cleanup;
-                }
-
+                
                 /* set FIFO Start Addr to 1 */
                 recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_FifoStartAddr_BfSet( device,
                                                                                             NULL,
@@ -3595,59 +3603,50 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
                 }
             }
         } /* end for loop per lane to set clk offset and fifo */
-
-        recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_SerEnRc_BfSet(device,
-                                                                            NULL,
-                                                                            ADRV904X_BF_DIGITAL_CORE_JESD_SERIALIZER_SER_PHY_ALL,
-                                                                            1U);
+        
+        /* Power up all lanes */
+        /* uint8_t fields don't require HTOC conversion. */        
+        jtxPwrCmd.jtxLaneMask = 0xFF;
+        jtxPwrCmd.jtxLanePower = 0xFF;
+    
+        /* Send command. There is no cmd-specific response expected.
+         * This command is always sent to CPU0 regardless of lane-CPU assignment. */
+        recoveryAction = adrv904x_CpuCmdSend(device,
+                                                ADI_ADRV904X_CPU_TYPE_0,
+                                                ADRV904X_LINK_ID_0,
+                                                ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER,
+                                                (void*)&jtxPwrCmd,
+                                                sizeof(jtxPwrCmd),
+                                                NULL,
+                                                0U,
+                                                &cmdStatus);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to write phy lane en");
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to call CPU cmd ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER");
             goto cleanup;
         }
-
-        recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfSet(device,
-                                                                        NULL,
-                                                                        ADRV904X_BF_DIGITAL_CORE_JESD_SERIALIZER_SER_PHY_ALL,
-                                                                        0U);
+        
+        /* Now put the lanes that were powered down before this fn was called back into power-down. */
+        jtxPwrCmd.jtxLaneMask = phyLanePdMask;
+        jtxPwrCmd.jtxLanePower = 0x00;
+    
+        /* Send command. There is no cmd-specific response expected.
+         * This command is always sent to CPU0 regardless of lane-CPU assignment. */
+        recoveryAction = adrv904x_CpuCmdSend(device,
+                                                ADI_ADRV904X_CPU_TYPE_0,
+                                                ADRV904X_LINK_ID_0,
+                                                ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER,
+                                                (void*)&jtxPwrCmd,
+                                                sizeof(jtxPwrCmd),
+                                                NULL,
+                                                0U,
+                                                &cmdStatus);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to write phy lane pd");
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to re-powerdown disabled lanes.");
             goto cleanup;
         }
-
-        /* Shutdown unused lanes after broadcast */
-        for (phyLaneIdx = 0U; phyLaneIdx < ADI_ADRV904X_MAX_SERDES_LANES; phyLaneIdx++)
-        {
-            if ( (1U<<phyLaneIdx) & phyLanePdMask )
-            {
-                /* Lane was powered down - set it back to that state */
-                recoveryAction = (adi_adrv904x_ErrAction_e) adrv904x_FramerLaneSerdesPhyBitfieldAddressGet(device,
-                                                                                                        phyLaneIdx,
-                                                                                                        &laneSerdesPhyBitfieldAddr);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lane serdes PHY address.");
-                    goto cleanup;
-                }
-
-                /* Power down the PHY */
-                recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_SerEnRc_BfSet( device,
-                                                                                    NULL,
-                                                                                    laneSerdesPhyBitfieldAddr,
-                                                                                    0U);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to write phy lane en");
-                    goto cleanup;
-                }
-
-                recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfSet( device,
-                                                                                    NULL,
-                                                                                    laneSerdesPhyBitfieldAddr,
-                                                                                    1U);
-            }
-        } /* End for loop to power down unused phys */
+        
     } /* End 204c if */
 
 cleanup :
@@ -8291,6 +8290,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset_v2(adi_adrv904x_De
     adrv904x_CpuCmd_SerReset_t serReset;
     adrv904x_CpuCmd_SerResetResp_t serResetResp;
     uint8_t presetClockOffsets = 0U;
+    adrv904x_CpuCmd_JtxLanePower_t jtxPwrCmd;            
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
@@ -8300,6 +8300,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset_v2(adi_adrv904x_De
 
     ADI_LIBRARY_MEMSET(&serReset, 0, sizeof(adrv904x_CpuCmd_SerReset_t));
     ADI_LIBRARY_MEMSET(&serResetResp, 0, sizeof(adrv904x_CpuCmd_SerResetResp_t));
+    ADI_LIBRARY_MEMSET(&jtxPwrCmd, 0, sizeof(jtxPwrCmd));
 
     /* copy parameter */
     serReset.serResetParm = ADRV904X_HTOCL(pSerResetParms->serResetParm);
@@ -8329,20 +8330,19 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset_v2(adi_adrv904x_De
                 goto cleanup;
             }
 
-            recoveryAction = adrv904x_SerdesTxdigPhyRegmapCore1p2_PdSer_BfGet( device,
-                                                                                NULL,
-                                                                                laneSerdesPhyBitfieldAddr,
-                                                                                &phyLanePd);
+            recoveryAction = adrv904x_GetJtxLanePoweredDown(device,
+                                                            laneSerdesPhyBitfieldAddr,
+                                                            &phyLanePd);
+            
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
             {
-                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to read phy lane pd");
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading Jtx lane power-up status");
                 goto cleanup;
             }
-
-            /* Only do this for active lanes */
+            
             if (phyLanePd == 0U)
             {
-                /* Determine the reset sequence based on the 204c/204b mode  */
+                /* Lane is powered up; Determine the reset sequence based on the 204c/204b mode */
                 if (framerLinkType == 0U)
                 {
                     /* 204b case set Clockoffset to 4 */

@@ -10,7 +10,7 @@
  * 
  * \brief   Contains ADRV904X JESD Serializer lane data structures.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_CPU_CMD_JESD_SER_LANE_GETSET_CFG_H__

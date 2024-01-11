@@ -9,7 +9,7 @@
 * \brief Contains Rx features related function implementation defined in
 * adi_adrv904x_rx.h
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_adrv904x_rx.h"
@@ -3962,8 +3962,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierRssiPowerRead(adi_adrv904
     }
 
     /* The bfValue is in 0.36 bit format. Convert it to mdb */
-    //*gain_mdB = 10 * log10(bfValue / pow(2,36)) * 1000;
-    *gain_mdB = 10000;
+    *gain_mdB = 10 * log10(bfValue / pow(2,36)) * 1000;
     
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -4020,8 +4019,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierGainAdjustSet(adi_adrv904
     }
 
     /* Convert from mdB to 7.16. (reg value = 10**(value in mdB/1000/20)) * 2^16) */
-    //bfValue = (uint32_t)((double)pow(10, (double)gain_mdB / 1000U / 20U) * DIG_GAIN_MULT);
-    bfValue = 100;
+    bfValue = (uint32_t)((double)pow(10, (double)gain_mdB / 1000U / 20U) * DIG_GAIN_MULT);
 
     /* Write out the enable */
     for (rxIdx = 0U; rxIdx < ADI_ADRV904X_MAX_RX_ONLY; rxIdx++)
@@ -4240,112 +4238,29 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierGainAdjustGet(adi_adrv904
     {
         /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
         //*gain_mdB = (int32_t)(1000U * 20U * log10((double)bfValue / DIG_GAIN_MULT));
-        *gain_mdB = 12;
+        *gain_mdB = (int32_t)(20 * log10((100000UL * (double)bfValue) / DIG_GAIN_MULT) - 100);
     }
 
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigureWithFilterSelect(  adi_adrv904x_Device_t* const                                device,
-                                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
-                                                                                            adi_adrv904x_CarrierRadioCfg_t                              rxCarrierConfigs[],
-                                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     rxCarrierChannelFilterApplicationSel[],
-                                                                                            const uint32_t                                              numCarrierProfiles)
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv904x_Device_t* const                                device,
+                                                                        adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+                                                                        adi_adrv904x_CarrierRadioCfg_t                              rxCarrierConfigs[],
+                                                                        const adi_adrv904x_CarrierChannelFilterApplicationSel_t     rxCarrierChannelFilterApplicationSel[],
+                                                                        adi_adrv904x_ChannelFilterCfg_t                             rxCarrierChannelFilter[],
+                                                                        const uint32_t                                              numCarrierProfiles,
+                                                                        const uint8_t                                               useCustomFilters)
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adi_adrv904x_ChannelFilterCfg_t rxCarrierChannelFilter[ADI_ADRV904X_MAX_NUM_PROFILES];
-    uint32_t carrierIdx = 0U;
-    uint32_t profileIdx = 0U;
-    uint32_t coeffIdx = 0U;
-    int32_t coeffTableIdx = 0U;
-    const int16_t *coeffTable = NULL;
-    int16_t coeffTableSize = 0;
-    uint32_t numberOfFilterTaps = 0U;
-    uint8_t asymmetricFilterTaps = 0U;
-
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierConfigs, cleanup);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierChannelFilterApplicationSel, cleanup);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
-    
-    ADI_LIBRARY_MEMSET(&rxCarrierChannelFilter, 0, sizeof(rxCarrierChannelFilter));
- 
-    if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numCarrierProfiles, "Up to four profiles allowed.");
-        goto cleanup;
-    }
-    
-    for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
-    {
-        /* Reset coefficient index for each profile */
-        coeffIdx = 0U;
-        
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            if (rxCarrierConfigs[profileIdx].carriers[carrierIdx].enable == 1U)
-            {
-                recoveryAction = adrv904x_ChannelFilterCoefsGet( device,
-                                                                rxCarrierChannelFilterApplicationSel[profileIdx].channelFilterApplicationSel[carrierIdx],
-                                                                &rxCarrierConfigs[profileIdx].carriers[carrierIdx],
-                                                                &coeffTable,
-                                                                &coeffTableSize,
-                                                                &numberOfFilterTaps,
-                                                                &asymmetricFilterTaps,
-                                                                ADI_TRUE);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting carrier chanel filter");
-                    goto cleanup;
-                }
-        
-                for (coeffTableIdx = 0U; coeffTableIdx < coeffTableSize; coeffTableIdx++)
-                {
-                    rxCarrierChannelFilter[profileIdx].coeffs[coeffIdx] = coeffTable[coeffTableIdx];
-                    coeffIdx++;
-                    if (coeffIdx >= ADI_ADRV904X_NUM_CF_COEFFICIENTS)
-                    {
-                        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-                        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, coeffIdx, "Carrier coefficients did not fit in the space provided");
-                        goto cleanup;
-                    }
-                }
-                rxCarrierChannelFilter[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx] = numberOfFilterTaps;
-                rxCarrierChannelFilter[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx] = asymmetricFilterTaps; 
-            }
-        }
-    }
-    
-    recoveryAction = adi_adrv904x_RxDynamicCarrierReconfigure(  device,
-                                                                jesdCfg,
-                                                                &rxCarrierConfigs[0],
-                                                                &rxCarrierChannelFilter[0],
-                                                                numCarrierProfiles);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring carriers");
-        goto cleanup;
-    }
-
-cleanup:
-
-    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
-}
-
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_adrv904x_Device_t* const            device,
-                                                                            adi_adrv904x_CarrierJesdCfg_t* const    jesdCfg,
-                                                                            adi_adrv904x_CarrierRadioCfg_t          rxCarrierConfigs[],
-                                                                            adi_adrv904x_ChannelFilterCfg_t         rxCarrierChannelFilter[],
-                                                                            const uint32_t                          numCarrierProfiles)
-{
-        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    adi_adrv904x_ChannelFilterCfg_t localFilterCfg[ADI_ADRV904X_MAX_NUM_PROFILES];
     char coeffLoadBuf[sizeof(adi_adrv904x_ChannelFilterLoadMaxSize_t)];
     adi_adrv904x_ChannelFilterLoad_t* const channelFilterLoad = (adi_adrv904x_ChannelFilterLoad_t*)&coeffLoadBuf;
-    adrv904x_CarrierDynamicReconfigInternalCfg_t rxCarrierInternalCfg;
+    adi_adrv904x_CarrierReconfigSoln_t soln;
+    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
     adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
+    adi_adrv904x_ChannelFilterOutputCfg_t chFilterOutput;
     adi_adrv904x_ChannelFilterLoadResp_t chFilterLoadCmdRsp;
     uint32_t rxIdx = 0U;
     uint32_t rxSel = 0U;
@@ -4355,24 +4270,34 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
     uint32_t profileIdx = 0U;
     uint32_t coeffAddressOffset = 0U;
     uint32_t coeffIdx = 0U;
+    int32_t coeffTableIdx = 0U;
+    const int16_t *coeffTable = NULL;
+    int16_t coeffTableSize = 0;
+    uint32_t numberOfFilterTaps = 0U;
+    uint8_t asymmetricFilterTaps = 0U;
+    
     adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
     adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
     adi_adrv904x_RxTxLoFreqReadback_t rxTxLoReadback;
     adi_adrv904x_RxNcoConfigReadbackResp_t rxRbConfig;
     uint32_t currentBandCenter_kHz = 0U;
-    adrv904x_CarrierDynamicReconfigProfileCfg_t* pProfileCfg = NULL;
+    adi_adrv904x_CarrierReconfigProfileCfgOut_t* pProfileCfgOut = NULL;
+    adrv904x_CarrierInitialCfg_t lclInitialCfg[ADI_ADRV904X_MAX_NUM_PROFILES];
     adrv904x_CarrierInitialCfg_t* pInitialCfg = NULL;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierConfigs, cleanup);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierChannelFilter, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierConfigs, cleanup);
 
     ADI_LIBRARY_MEMSET(&chFilterLoadCmdRsp, 0, sizeof(chFilterLoadCmdRsp));
-    ADI_LIBRARY_MEMSET(&rxCarrierInternalCfg, 0, sizeof(rxCarrierInternalCfg));
+    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
+    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
+    ADI_LIBRARY_MEMSET(&chFilterOutput, 0, sizeof(chFilterOutput));
+    ADI_LIBRARY_MEMSET(&soln, 0, sizeof(soln));
     ADI_LIBRARY_MEMSET(&rxTxLoReadback, 0, sizeof(rxTxLoReadback));
     ADI_LIBRARY_MEMSET(&rxRbConfig, 0, sizeof(rxRbConfig));
+    ADI_LIBRARY_MEMSET(&lclInitialCfg, 0, sizeof(lclInitialCfg));
  
     if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
     {
@@ -4381,15 +4306,80 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
         goto cleanup;
     }
     
-    /* Reset the internal structures for each profile */
-    recoveryAction = adrv904x_InternalReconfigStructInit(   device,
-                                                            &rxCarrierInternalCfg);
+    /* If caller is not using custom filters, they must select filter application enum */
+    if (useCustomFilters == 0U)
+    {
+        /* For this option, verify that application sel array pointer is valid */
+        ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierChannelFilterApplicationSel, cleanup);
+        
+        /* Populate local filter data with preset */
+        for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
+        {
+            /* Clear localFilterCfg before populating */
+            ADI_LIBRARY_MEMSET(&localFilterCfg[profileIdx], 0, sizeof(adi_adrv904x_ChannelFilterCfg_t));
+            
+            /* Reset coefficient index for each profile */
+            coeffIdx = 0U;
+        
+            for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
+            {
+                if (rxCarrierConfigs[profileIdx].carriers[carrierIdx].enable == 1U)
+                {
+                    recoveryAction = adrv904x_ChannelFilterCoefsGet(
+                        device,
+                        rxCarrierChannelFilterApplicationSel[profileIdx].channelFilterApplicationSel[carrierIdx],
+                        &rxCarrierConfigs[profileIdx].carriers[carrierIdx],
+                        &coeffTable,
+                        &coeffTableSize,
+                        &numberOfFilterTaps,
+                        &asymmetricFilterTaps,
+                        ADI_FALSE);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting carrier channel filter");
+                        goto cleanup;
+                    }
+        
+                    for (coeffTableIdx = 0U; coeffTableIdx < coeffTableSize; coeffTableIdx++)
+                    {
+                        localFilterCfg[profileIdx].coeffs[coeffIdx] = coeffTable[coeffTableIdx];
+                        coeffIdx++;
+                        if (coeffIdx >= ADI_ADRV904X_NUM_CF_COEFFICIENTS)
+                        {
+                            ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, coeffIdx, "Carrier coefficients did not fit in the space provided");
+                            goto cleanup;
+                        }
+                    }
+                    localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx] = numberOfFilterTaps;
+                    localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx] = asymmetricFilterTaps; 
+                }
+            }
+        }
+    }
+    /* Else, caller will provide their own filter configs */
+    else
+    {
+        /* For this option, verify that channel filter array pointer is valid */
+        ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierChannelFilter, cleanup);
+        for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
+        {
+            /* Copy filter cfg into local array */
+            ADI_LIBRARY_MEMCPY(&localFilterCfg[profileIdx], &rxCarrierChannelFilter[profileIdx], sizeof(adi_adrv904x_ChannelFilterCfg_t));
+        }
+    }
+    
+    /* Initialize lcl solution structure */
+    recoveryAction = adrv904x_ReconfigSolutionInit(device, jesdCfg, rxCarrierConfigs, numCarrierProfiles, &soln);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Could not initialize struct");
         goto cleanup;
     }
     
+    /* Readback key values from current HW conditions , store in the pInitialCfg for each Profile (4 max)
+     *  - adi_adrv904x_RxTxLoFreqGet()  - Rx/Tx LO Frequencies
+     *  - adi_adrv904x_RxNcoShifterGet()    - Rx Band NCO and Center Freq
+     */
     recoveryAction = adi_adrv904x_RxTxLoFreqGet(device,
                                                 &rxTxLoReadback);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
@@ -4399,9 +4389,12 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
     }
 
     for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
-    {
-        pProfileCfg = &rxCarrierInternalCfg.profileCfgs[profileIdx];
-        pInitialCfg = &(pProfileCfg->initialCfg);
+    {   
+        /* Set convenience pointer to output profile */
+        pProfileCfgOut = &soln.outputs.profileCfgs[profileIdx];
+        
+        /* Set convenience pointer to lcl var profile of lclInitialCfg */
+        pInitialCfg = &lclInitialCfg[profileIdx];
         
         /* rxChannelMask should larger than 0 and less than 0x100 */
         if ((rxCarrierConfigs[profileIdx].channelMask == 0U) ||
@@ -4441,7 +4434,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
                         recoveryAction = adi_adrv904x_RxNcoShifterGet(  device, &rxRbConfig);
                         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                         {
-                            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "adi_adrv904x_RxTxLoFreqGet failed");
+                            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "adi_adrv904x_RxNcoShifterGet failed");
                             goto cleanup;
                         }
                     
@@ -4467,18 +4460,23 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
             }
         }
         
+        /* Sort carriers for this profile into Bands 0 vs. Band 1 based on frequencies */
+        /* Will throw an error if a carrier's bw falls outside both Band's bw */
         recoveryAction = adrv904x_RxCarrierBandSorting( device,
+                                                        pInitialCfg,
                                                         &rxCarrierConfigs[profileIdx],
-                                                        pProfileCfg);
+                                                        pProfileCfgOut);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid band selection");
             goto cleanup;
         }
         
+        /* Determine new Carrier NCOs based on the new carrier center frequencies vs. the Band Center frequencies */
         recoveryAction = adrv904x_RxCarrierNcoReconfig( device,
+                                                        pInitialCfg,
                                                         &rxCarrierConfigs[profileIdx],
-                                                        pProfileCfg);
+                                                        pProfileCfgOut);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid NCO settings");
@@ -4486,23 +4484,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
         } 
         
         recoveryAction = adrv904x_CarrierJesdParametersCalculate(   device,
+                                                                    pInitialCfg,
                                                                     &rxCarrierConfigs[profileIdx],
-                                                                    pProfileCfg,
+                                                                    pProfileCfgOut,
                                                                     ADI_TRUE);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid JESD settings");
             goto cleanup;
         }
-        
-		recoveryAction = adrv904x_CarrierRxJesdConfigSet(   device,
-															rxCarrierConfigs[profileIdx].channelMask,
-															pProfileCfg);
-		if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-		{
-			ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring carriers");
-			goto cleanup;
-		}
         
         /* Reset the buffer each profile. channelFilterLoad maps to this buffer */
         ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
@@ -4512,7 +4502,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
         for (coeffIdx = 0U; coeffIdx < ADI_ADRV904X_NUM_CF_COEFFICIENTS; coeffIdx++)
         {
             coeffAddressOffset = coeffLoadIdx * sizeof(int16_t);
-            ADI_LIBRARY_MEMCPY((void*)((uint8_t*)channelFilterLoad + sizeof(adi_adrv904x_ChannelFilterLoad_t) + coeffAddressOffset), (void*)(&rxCarrierChannelFilter[profileIdx].coeffs[coeffIdx]), sizeof(int16_t));
+            ADI_LIBRARY_MEMCPY((void*)((uint8_t*)channelFilterLoad + sizeof(adi_adrv904x_ChannelFilterLoad_t) + coeffAddressOffset), (void*)(&localFilterCfg[profileIdx].coeffs[coeffIdx]), sizeof(int16_t));
             coeffLoadIdx++;
         
             /* Once we fill up enough coefficients or we're on the last coefficient send to fw and clear out the buffer */
@@ -4546,16 +4536,16 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
         /* Perform endianness correction and load channel filter configs */
         for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
         {
-            rxCarrierChannelFilter[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx] = (uint32_t)ADRV904X_HTOCL(rxCarrierChannelFilter[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx]);
-            rxCarrierChannelFilter[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx] = rxCarrierChannelFilter[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx];
+            localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx] = (uint32_t)ADRV904X_HTOCL(localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx]);
+            localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx] = localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx];
         }
     
         recoveryAction = adrv904x_CpuCmdSend(   device,
                                                 ADI_ADRV904X_CPU_TYPE_0,
                                                 ADRV904X_LINK_ID_0,
                                                 ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_CFG,
-                                                (void*)&(rxCarrierChannelFilter[profileIdx].carrierFilterCfg),
-                                                sizeof(rxCarrierChannelFilter[profileIdx].carrierFilterCfg),
+                                                (void*)&(localFilterCfg[profileIdx].carrierFilterCfg),
+                                                sizeof(localFilterCfg[profileIdx].carrierFilterCfg),
                                                 (void*)&chFilterLoadCmdRsp,
                                                 sizeof(chFilterLoadCmdRsp),
                                                 &cmdStatus);
@@ -4564,16 +4554,17 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
             ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
         }
         
-        /* Endianness correction */
-        rxCarrierConfigs[profileIdx].channelMask = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].channelMask);
+        /* Create local cmd data with Endianness correction */
+        chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].channelMask);
     
         for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
         {
-            rxCarrierConfigs[profileIdx].carriers[carrierIdx].enable = rxCarrierConfigs[profileIdx].carriers[carrierIdx].enable;
-            rxCarrierConfigs[profileIdx].carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].sampleRate_kHz);
-            rxCarrierConfigs[profileIdx].carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].ibw_kHz);
-            rxCarrierConfigs[profileIdx].carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].centerFrequency_kHz);
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = rxCarrierConfigs[profileIdx].carriers[carrierIdx].enable;
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].sampleRate_kHz);
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].ibw_kHz);
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].centerFrequency_kHz);
         }
+        chFilterCmd.apply = 0u;
         
         /* Reset for each profile */
         ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
@@ -4583,8 +4574,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
                                                 ADI_ADRV904X_CPU_TYPE_0,
                                                 ADRV904X_LINK_ID_0,
                                                 ADRV904X_CPU_CMD_ID_RX_CARRIER_RECONFIGURE,
-                                                (void*)&rxCarrierConfigs[profileIdx],
-                                                sizeof(adi_adrv904x_CarrierRadioCfg_t),
+                                                (void*)&chFilterCmd,
+                                                sizeof(chFilterCmd),
                                                 (void*)&chFilterCmdRsp,
                                                 sizeof(chFilterCmdRsp),
                                                 &cmdStatus);
@@ -4593,24 +4584,119 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
             ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
         }
         
-        recoveryAction = adrv904x_CddcDelayCalculate(   device,
-                                                        &rxCarrierConfigs[profileIdx],
-                                                        pProfileCfg,
-                                                        &chFilterCmdRsp.carrierFilterOutCfg);
+        /* Pull out necessary results from response with Endianness correction */
+        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
+        {
+            chFilterOutput.numberOfFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.numberOfFilterTaps[carrierIdx]);
+            chFilterOutput.dataPipeStop[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.dataPipeStop[carrierIdx]);
+            chFilterOutput.bypassFilter[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.bypassFilter[carrierIdx]);
+            chFilterOutput.oddFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.oddFilterTaps[carrierIdx]);
+        }
+        
+        /* Calculate CDDC delays */
+        recoveryAction = adrv904x_CddcDelayConfigurationCalculate(  device,
+                                                                    &rxCarrierConfigs[profileIdx],
+                                                                    &chFilterOutput,
+                                                                    pProfileCfgOut);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue with delay calculation");
             goto cleanup;
         }
         
+        
+    } /* End of profile forloop */
+    
+
+    /* Store Rx solution structure to device handle. To be used in next call to Apply() stage */
+    ADI_LIBRARY_MEMCPY(&device->devStateInfo.rxCarrierReconfigSoln, &soln, sizeof(adi_adrv904x_CarrierReconfigSoln_t));
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierWrite(adi_adrv904x_Device_t* const device)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
+    adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
+    adi_adrv904x_ChannelFilterOutputCfg_t chFilterOutput;
+    uint32_t rxIdx = 0U;
+    uint32_t rxSel = 0U;
+    uint32_t carrierIdx = 0U;
+    uint32_t profileIdx = 0U;
+    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
+    adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
+    adi_adrv904x_CarrierReconfigSoln_t* soln = NULL;
+    adi_adrv904x_CarrierRadioCfg_t* pProfileCfgIn = NULL;
+    adi_adrv904x_CarrierReconfigProfileCfgOut_t* pProfileCfgOut = NULL;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+
+    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
+    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
+    ADI_LIBRARY_MEMSET(&chFilterOutput, 0, sizeof(chFilterOutput));
+
+    recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
+    
+    /* Convenience pointer to soln from last Solve() call */
+    soln = &device->devStateInfo.rxCarrierReconfigSoln;
+    
+    for (profileIdx = 0U; profileIdx < soln->inputs.numProfiles; profileIdx++)
+    {
+        pProfileCfgIn = &soln->inputs.profileCfgs[profileIdx];
+        pProfileCfgOut = &soln->outputs.profileCfgs[profileIdx];
+        
+        /* Create local cmd data with Endianness correction */
+        chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->channelMask);
+    
+        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
+        {
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = pProfileCfgIn->carriers[carrierIdx].enable;
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].sampleRate_kHz);
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].ibw_kHz);
+            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].centerFrequency_kHz);
+        }
+        chFilterCmd.apply = 1u;
+        
+        /* Reset for each profile */
+        ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
+        
+        /* Send command and receive response */
+        recoveryAction = adrv904x_CpuCmdSend(   device,
+                                                ADI_ADRV904X_CPU_TYPE_0,
+                                                ADRV904X_LINK_ID_0,
+                                                ADRV904X_CPU_CMD_ID_RX_CARRIER_RECONFIGURE,
+                                                (void*)&chFilterCmd,
+                                                sizeof(chFilterCmd),
+                                                (void*)&chFilterCmdRsp,
+                                                sizeof(chFilterCmdRsp),
+                                                &cmdStatus);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
+        }
+        
+        
+        /* Program Carrier Rx JESD Config */
+        recoveryAction = adrv904x_CarrierRxJesdConfigSet(   device,
+                                                            pProfileCfgIn->channelMask,
+                                                            pProfileCfgOut);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring carriers");
+            goto cleanup;
+        }
+        
         for (rxIdx = 0U; rxIdx < ADI_ADRV904X_MAX_RX_ONLY; rxIdx++)
         {
             rxSel = 1U << rxIdx;
-            if ((rxCarrierConfigs[profileIdx].channelMask & rxSel) > 0U)
+            if ((pProfileCfgIn->channelMask & rxSel) > 0U)
             {
                 recoveryAction = adrv904x_RxCarrierConfigSet(   device,
                                                                 rxIdx,
-                                                                pProfileCfg);
+                                                                pProfileCfgOut);
                 if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                 {
                     ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring carriers");
@@ -4619,46 +4705,133 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_
             
                 /* TPGSWE-7944: Skip following write due to BfSet bugs */
 
-                /* Note: The following API TxCarrierDelaySet() is reported not working.
+                /* Note: The following API RxCarrierDelaySet() is reported not working. 
                 recoveryAction = adrv904x_RxCarrierDelaySet(   device,
                                                                 rxIdx,
-                                                                &rxCarrierInternalCfg.delayCfg);
-                                                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                                                    {
-                                                        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring delay params");
-                                                        goto cleanup;
-                                            }
-                                            */
+                                                                &pProfileCfgOut->delayCfg.bufferCfg);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring delay params");
+                    goto cleanup;
+                }
+                */
             
-                    
-                ADI_LIBRARY_MEMCPY(&device->initExtract.rxCarrierConfigs[rxIdx], &rxCarrierConfigs[profileIdx], sizeof(adi_adrv904x_CarrierRadioCfg_t));
-                ADI_LIBRARY_MEMCPY(&device->initExtract.rx.rxChannelCfg[rxIdx].carrierRuntimeSettings, &pProfileCfg->carrierCfgs, sizeof(adi_adrv904x_CarrierRuntime_t));
+                /* Update stored carrier settings */
+                ADI_LIBRARY_MEMCPY(&device->initExtract.rxCarrierConfigs[rxIdx], pProfileCfgIn, sizeof(adi_adrv904x_CarrierRadioCfg_t));
+                ADI_LIBRARY_MEMCPY(&device->initExtract.rx.rxChannelCfg[rxIdx].carrierRuntimeSettings, &(pProfileCfgOut->carrierCfgs), sizeof(adi_adrv904x_CarrierRuntime_t));
             }
         }
     }
     
-    recoveryAction = adrv904x_CalculateRxSampleXbarSlotConfig(device, jesdCfg, &rxCarrierInternalCfg);
+    recoveryAction = adrv904x_CalculateRxSampleXbarSlotConfig(device, &soln->inputs.jesdCfg, &soln->outputs);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, ADI_NO_ERROR_MESSAGE);
         return recoveryAction;
     }
-	
-	recoveryAction = adrv904x_RxJesdConfigSet( device,
-											   &rxCarrierInternalCfg);
-	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-	{
-		ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring carriers");
-		goto cleanup;
-	}
-		
-	/* Update stored JESD settings */
-	ADI_LIBRARY_MEMCPY(&device->initExtract.rxCarrierJesdCfg, jesdCfg, sizeof(adi_adrv904x_CarrierJesdCfg_t));
-
+    
+    recoveryAction = adrv904x_RxJesdConfigSet(  device,
+                                                &soln->outputs);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reconfiguring carriers");
+        goto cleanup;
+    }
+    
+    /* Update stored JESD settings */
+    ADI_LIBRARY_MEMCPY(&device->initExtract.rxCarrierJesdCfg, &soln->inputs.jesdCfg, sizeof(adi_adrv904x_CarrierJesdCfg_t));
+    
+    /* Updated stored "applied" latency results */
+    ADI_LIBRARY_MEMCPY(
+        &(device->devStateInfo.rxCarrierLatencyApplied),
+        &(device->devStateInfo.rxCarrierLatencySolved),
+        sizeof(adi_adrv904x_CarrierReconfigLatencyCfgTop_t));
+    
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigureWithFilterSelect(  adi_adrv904x_Device_t* const                                device,
+                                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+                                                                                            adi_adrv904x_CarrierRadioCfg_t                              rxCarrierConfigs[],
+                                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     rxCarrierChannelFilterApplicationSel[],
+                                                                                            const uint32_t                                              numCarrierProfiles)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierChannelFilterApplicationSel, cleanup);
+    
+    if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numCarrierProfiles, "Up to four profiles allowed.");
+        goto cleanup;
+    }
+    
+    /* Solve */
+    recoveryAction = adi_adrv904x_RxDynamicCarrierCalculate(device, jesdCfg, rxCarrierConfigs, rxCarrierChannelFilterApplicationSel, NULL, numCarrierProfiles, ADI_FALSE);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while calculating RxDynamicCarrier");
+        goto cleanup;
+    }
+    
+    /* Apply */
+    recoveryAction = adi_adrv904x_RxDynamicCarrierWrite(device);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while applying RxDynamicCarrier to HW");
+        goto cleanup;
+    }
+    
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierReconfigure(  adi_adrv904x_Device_t* const            device,
+                                                                            adi_adrv904x_CarrierJesdCfg_t* const    jesdCfg,
+                                                                            adi_adrv904x_CarrierRadioCfg_t          rxCarrierConfigs[],
+                                                                            adi_adrv904x_ChannelFilterCfg_t         rxCarrierChannelFilter[],
+                                                                            const uint32_t                          numCarrierProfiles)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierChannelFilter, cleanup);
+    
+    if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numCarrierProfiles, "Up to four profiles allowed.");
+        goto cleanup;
+    }
+    
+    /* Solve */
+    recoveryAction = adi_adrv904x_RxDynamicCarrierCalculate(device, jesdCfg, rxCarrierConfigs, NULL, rxCarrierChannelFilter, numCarrierProfiles, ADI_TRUE);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while calculating RxDynamicCarrier");
+        goto cleanup;
+    }
+    
+    /* Apply */
+    recoveryAction = adi_adrv904x_RxDynamicCarrierWrite(device);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while applying RxDynamicCarrier to HW");
+        goto cleanup;
+    }
+    
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierSettingsGet( adi_adrv904x_Device_t* const    device,
                                                                     const uint32_t rxChannel,
@@ -4726,9 +4899,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierLatencyGet(  adi_adrv904x
     }
 
 
-    ADI_LIBRARY_MEMCPY((adi_adrv904x_CarrierReconfigLatencyCfg_t*)rxCarrierLatencyCfg,
-                       (adi_adrv904x_CarrierReconfigLatencyCfg_t*)&(device->devStateInfo.rxCarrierLatencyCfg[adrv904x_RxChannelsToId(rxChannel)]),
-                       sizeof(adi_adrv904x_CarrierReconfigLatencyCfg_t));
+    ADI_LIBRARY_MEMCPY(
+        rxCarrierLatencyCfg,
+        &(device->devStateInfo.rxCarrierLatencyApplied.channel[adrv904x_RxChannelsToId(rxChannel)]),
+        sizeof(adi_adrv904x_CarrierReconfigLatencyCfg_t));
 
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
 
@@ -5184,8 +5358,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiReadBack(adi_adrv904x_Device
     }
 
     *pPwrMeasDb     = (float)respStruct.pwrMeasDb / 4.0f;
-    //*pPwrMeasLinear = 10 * log10(respStruct.pwrMeasLinear / pow(2,36));
-    *pPwrMeasLinear = 10;
+    *pPwrMeasLinear = 10 * log10(respStruct.pwrMeasLinear / pow(2,36));
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }

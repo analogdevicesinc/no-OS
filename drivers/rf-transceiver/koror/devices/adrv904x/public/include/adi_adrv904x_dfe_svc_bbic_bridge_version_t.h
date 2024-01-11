@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_bbic_bridge_version_t.h
  * \brief Contains data types for DFE SDK version handling service
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_BBIC_BRIDGE_VERSION_T_H__

@@ -9,7 +9,7 @@
  * \brief Contains ADRV904X receive related function prototypes for
  *        adi_adrv904x_rx.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_RX_H_
@@ -1032,6 +1032,44 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierGainAdjustSet(adi_adrv904
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierGainAdjustGet(adi_adrv904x_Device_t * const              device,
                                                                      const adi_adrv904x_RxCarrierMask_t * const rxCarrierMask,
                                                                      int32_t * const                            gain_mdB);
+
+/** 
+* \brief Reconfigure Rx carriers dynamically without reinitialization - Solving without applying solution to HW
+* 
+* \dep_begin 
+* \dep{device->common.devHalInfo} 
+* \dep_end 
+* 
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+* \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
+* \param[in] rxCarrierConfigs - Rx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] rxCarrierChannelFilterApplicationSel - Rx Carrier Channel Filter application select for each carrier in each profile. The carriers here are applied to the corresponding channelMask in rxCarrierConfigs.
+* \param[in] rxCarrierChannelFilter - Rx Carrier Channel Filter Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
+* \param[in] useCustomFilters Select option to use custom filters or ADI presets: 0: Use rxCarrierChannelFilterApplicationSel, 1: Use rxCarrierChannelFilter
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
+*/ 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv904x_Device_t* const                                device,
+                                                                        adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+                                                                        adi_adrv904x_CarrierRadioCfg_t                              rxCarrierConfigs[],
+                                                                        const adi_adrv904x_CarrierChannelFilterApplicationSel_t     rxCarrierChannelFilterApplicationSel[],
+                                                                        adi_adrv904x_ChannelFilterCfg_t                             rxCarrierChannelFilter[],
+                                                                        const uint32_t                                              numCarrierProfiles,
+                                                                        const uint8_t                                               useCustomFilters);
+
+/** 
+* \brief Reconfigure Rx carriers dynamically without reinitialization - Apply previously solved configuration
+* 
+* \dep_begin 
+* \dep{device->common.devHalInfo} 
+* \dep_end 
+* 
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
+*/ 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierWrite(adi_adrv904x_Device_t* const device);
 
 /** 
 * \brief Reconfigure Rx carriers dynamically without reinitialization. Wrapper for adi_adrv904x_RxDynamicCarrierReconfigure to select channel filter coefficients

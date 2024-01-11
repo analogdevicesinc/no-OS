@@ -9,7 +9,7 @@
 *
 * \brief Definitions for ADI Specific Platforms
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #include "adi_platform.h"
@@ -80,11 +80,13 @@
 //adi_hal_Err_e (*adi_hal_LogConsoleSet)( void* const devHalCfg,
 //                                        const adi_hal_LogConsole_e  logConsoleFlag) = NULL;
 //
+//
+//
 //adi_hal_Err_e (*adi_hal_LogWrite)(  void* const                 devHalCfg,
 //                                    const adi_hal_LogLevel_e    logLevel,
 //                                    const uint8_t               indent,
 //                                    const char* const           comment,
-//                                    va_adi_hal_DevHalCfgFreelist                     argp)   = NULL;
+//                                    va_list                     argp)   = NULL;
 //
 //adi_hal_Err_e (*adi_hal_LogFileClose)(void* const devHalCfg) = NULL;
 //
@@ -116,7 +118,7 @@
 //
 //adi_hal_Err_e (*adi_hal_TlsSet)(const adi_hal_TlsType_e tlsType, void* const value) = NULL;
 //
-//void* (*adi_hal_TlsGet)(const adi_hal_TlsType_e tlsType) = NULL;
+//void* (*adi_hal_TlsGet)(const adi_hal_carrierGainRegTlsType_e tlsType) = NULL;
 //
 ///* Mutex Interface */
 //adi_hal_Err_e(*adi_hal_MutexInit)(adi_hal_mutex_t* const mutex) = NULL;

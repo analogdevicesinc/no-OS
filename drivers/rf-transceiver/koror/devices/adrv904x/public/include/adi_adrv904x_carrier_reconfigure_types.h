@@ -1,6 +1,6 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
+ * Copyright 2019 - 2023 Analog Devices Inc.
  * Released under the ADRV904X API license, for more information
  * see the "LICENSE.PDF" file in this zip file.
  */
@@ -10,255 +10,178 @@
  *
  * \brief   Contains ADRV904X Carrier Reconfigure data structures.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_CARRIER_RECONFIGURE_TYPES_H__
 #define __ADI_ADRV904X_CARRIER_RECONFIGURE_TYPES_H__
 
-#include "adi_adrv904x_platform_pack.h"
-#include "adi_adrv904x_version_types.h"
-#include "adi_adrv904x_cpu_error_codes_types.h"
-
-/**
- *  \brief Total number of allowable links that can accommodate carrier data
- */
-#define ADI_ADRV904X_MAX_CARRIER_LINKS             (2U)
-
-/**
- *  \brief Total number of slots available for each link
- */
-#define ADI_ADRV904X_MAX_CARRIER_SLOTS             (192U)
-
-/**
- *  \brief Total number of allowable filter coefficients for all carriers
- */
-#define ADI_ADRV904X_NUM_CF_COEFFICIENTS           (648U)
-
-/**
- *  \brief Max number of coefficients loaded per firmware transaction
- */
-#define ADI_ADRV904X_CHAN_FILTER_COEFF_LOAD_LEN    (256U)
-
-/**
- *  \brief Total number of allowable carriers per channel
- */
-#define ADI_ADRV904X_MAX_CARRIERS                  (8U)
+#include "adi_adrv904x_tx_types.h"
+#include "adi_adrv904x_carrier_reconfigure_common_types.h"
 
 /**
  *  \brief Max number of carrier configurations allowed
  */
-#define ADI_ADRV904X_MAX_NUM_PROFILES              (4U)
-
+#define ADI_ADRV904X_MAX_NUM_PROFILES                           (4U)
+#define ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS                 (16U)
+#define ADI_ADRV904X_MIN_NO_OF_JESD_IFACE_SLOTS                 (8U)
+#define ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS                   (64U)
+#define ADI_ADRV904X_NO_OF_CARRIER_DELAY_FIFOS                  (8U)
+#define ADI_ADRV904X_NO_OF_CHAN_FILTER_DATA_PIPE_TIERS          (3U)
+#define ADI_ADRV904X_NO_OF_BANDS                                (2U)
+    
 /**
- *  \brief Enum of Channel Filter applications
+ * \brief Crossbar mux to route sample through component carrier chain. Only first M values are valid and used
  */
-typedef enum adi_adrv904x_CarrierFilterApplicationType
+typedef struct adi_adrv904x_JesdComponentCarrierXbarOutput
 {
-    ADI_ADRV904X_CARRIER_FILTER_5G,
-    ADI_ADRV904X_CARRIER_FILTER_LTE,
-    ADI_ADRV904X_CARRIER_FILTER_HIGH_BW_5G,
-    ADI_ADRV904X_CARRIER_FILTER_LTE_IOT
-} adi_adrv904x_CarrierFilterApplicationType_e;
+    uint8_t                                 channelSelect;          /*!< Rx/Tx slice selection */
+    adi_adrv904x_JesdComponentCarrierXbar_e carrierSelect;          /*!< Carrier select*/
+    adi_adrv904x_JesdComponentCarrierXbar_e slotSelect;             /*!< Carrier slot selection */
+} adi_adrv904x_JesdComponentCarrierXbarOutput_t;
+
 
 /**
- * \brief Enum to hold values when configuring adi_adrv904x_CarrierXbarCfg_t struct
+ * \brief Struct to hold calculated output carrier jesd link settings
  */
-typedef enum adi_adrv904x_JesdComponentCarrierXbar
+typedef struct adi_adrv904x_LinkCfgOut
 {
-    ADI_ADRV904X_CARRIER_0_DATA_I       = 0,
-    ADI_ADRV904X_CARRIER_0_DATA_Q       = 1,
-    ADI_ADRV904X_CARRIER_1_DATA_I       = 2,
-    ADI_ADRV904X_CARRIER_1_DATA_Q       = 3,
-    ADI_ADRV904X_CARRIER_2_DATA_I       = 4,
-    ADI_ADRV904X_CARRIER_2_DATA_Q       = 5,
-    ADI_ADRV904X_CARRIER_3_DATA_I       = 6,
-    ADI_ADRV904X_CARRIER_3_DATA_Q       = 7,
-    ADI_ADRV904X_CARRIER_4_DATA_I       = 8,
-    ADI_ADRV904X_CARRIER_4_DATA_Q       = 9,
-    ADI_ADRV904X_CARRIER_5_DATA_I       = 10,
-    ADI_ADRV904X_CARRIER_5_DATA_Q       = 11,
-    ADI_ADRV904X_CARRIER_6_DATA_I       = 12,
-    ADI_ADRV904X_CARRIER_6_DATA_Q       = 13,
-    ADI_ADRV904X_CARRIER_7_DATA_I       = 14,
-    ADI_ADRV904X_CARRIER_7_DATA_Q       = 15,
-    ADI_ADRV904X_DUPLICATE              = 16,
-    ADI_ADRV904X_CARRIER_UNUSED_CC_XBAR = 128
-} adi_adrv904x_JesdComponentCarrierXbar_e;
+    adi_adrv904x_JesdComponentCarrierXbarOutput_t   jesdCfg[ADI_ADRV904X_MAX_CARRIER_SLOTS];
+} adi_adrv904x_LinkCfgOut_t;
+    
+/**
+ * \brief Struct to hold calculated output carrier jesd settings
+ */
+typedef struct adi_adrv904x_CarrierReconfigJesdOut
+{    
+    adi_adrv904x_LinkCfgOut_t           linkCfg[ADI_ADRV904X_MAX_CARRIER_LINKS];
+} adi_adrv904x_CarrierReconfigJesdOut_t;
+
 
 /**
- * \brief Data structure to hold Carrier Channel Filter Applications
- *        2-D array where first index maps to the profile and the second index is the carrier
- *        Each enabled carrier in each valid profile should have a valid application select
+ * \brief Holds jesd values used only for calculation
  */
-ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_CarrierChannelFilterApplicationSel
+typedef struct adi_adrv904x_CarrierJesdInternalCfg
 {
-    adi_adrv904x_CarrierFilterApplicationType_e channelFilterApplicationSel[ADI_ADRV904X_MAX_CARRIERS]; /*!< Application select for each carrier in each profile */
-} adi_adrv904x_CarrierChannelFilterApplicationSel_t;
-ADI_ADRV904X_PACK_FINISH
+    uint32_t frequencyKhz;                                              /*!< JESD interface frequency */
+    uint16_t divide;                                                    /*!< JESD interface divide value */
+    uint16_t numSlots;                                                  /*!< JESD carrier slot table number of carrier slots. Support up to 64 */
+    uint16_t initSlot;                                                  /*!< JESD interface initial slot to use in carrier slot table. With Koror HW, initslot is always 0 */
+    uint16_t maxSlot;                                                   /*!< JESD interface max slot to use in carrier slot table: maxSlot = initSlot + numSlots. With Koror HW, initslot is always 0, so maxSlot = numSlots */
+    uint16_t ifaceMaxSlot;                                              /*!< JESD interface max slot. Supprts only 8 or 16. */
+    uint16_t slotTable[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];          /*!< JESD carrier slot table. Size 64 */
+    uint16_t ifaceSlotTable[ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS];   /*!< JESD interface slot table. Size 16 */
+    uint64_t slotValid;                                                 /*!< JESD slot valid. 64bit value. Each bit associated with a carrier slot 0-63 */
+    uint32_t jesdSampleRate_kHz[ADI_ADRV904X_MAX_CARRIERS];             /*!< JESD interface sample rate */
+    uint32_t dummyIfaceSlotsRemoved[ADI_ADRV904X_MAX_CARRIERS];         /*!< Counter used during shuffling to temporarily remove dummy slots during the process */
+} adi_adrv904x_CarrierJesdInternalCfg_t;
 
-/**
- * \brief Data structure to hold Carrier reconfigure settings
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_CarrierCfg
+typedef struct adi_adrv904x_CarrierFilterDelay
 {
-    uint8_t  enable;                    /*!< Set to 1 to enable; 0 to disable, this carrier */
-    uint32_t sampleRate_kHz;            /*!< Sample frequency in KHz for this carrier */
-    uint32_t ibw_kHz;                   /*!< IBW frequency in KHz for this carrier */
-    uint32_t centerFrequency_kHz;       /*!< Center frequency in KHz for this carrier */
-} adi_adrv904x_CarrierCfg_t;
-ADI_ADRV904X_PACK_FINISH
+    uint32_t tap;                                                       /*!< Filter Tap Delay */
+    uint32_t pipe;                                                      /*!< Filter Pipe Delay */
+} adi_adrv904x_CarrierFilterDelay_t;
 
-/**
- * \brief Data structure to hold settings needed for runtime carrier operation
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_CarrierRuntime
+typedef struct adi_adrv904x_CarrierGroupDelayComp
 {
-    uint8_t  bandSelect[ADI_ADRV904X_MAX_CARRIERS];                /*!<   Band select */
-    uint8_t  mixerEnable[ADI_ADRV904X_MAX_CARRIERS];               /*!<   Mixer enable flag */
-    uint32_t decimationRatio[ADI_ADRV904X_MAX_CARRIERS];           /*!<   JESD interface decimation ratio */
-    uint32_t interpolationRatio[ADI_ADRV904X_MAX_CARRIERS];        /*!<   JESD interface interpolation ratio */
-    uint32_t ncoFreq_kHz[ADI_ADRV904X_MAX_CARRIERS];               /*!<   NCO frequency */
-    uint32_t carrierRateRatio[ADI_ADRV904X_MAX_CARRIERS];          /*!<   JESD carrier rate ratio */
-    uint32_t outputRate_kHz[ADI_ADRV904X_MAX_CARRIERS];            /*!<   Carrier output rate in relation to band */
-} adi_adrv904x_CarrierRuntime_t;
-ADI_ADRV904X_PACK_FINISH
+    adi_adrv904x_CarrierFilterDelay_t cfilt;                            /*!< Channel Filter Delay values */
+    adi_adrv904x_CarrierFilterDelay_t halfBand;                         /*!< Half-band Filter Delay values */
+    uint32_t deinterleaver;                                             /*!< Inherent delay in Slot Table Deinterleaver position */
+    uint32_t gainResrc;                                                 /*!< Shared Resource Delay */
+    uint32_t matchEnabled;                                              /*!< Delay due to enabling on-chip Delay matching HW (Delay Buffer FIFOs) */
+    uint32_t bandAlignDelay;                                            /*!< Delay due to band clk alignment */
+} adi_adrv904x_CarrierGroupDelayComp_t;
 
-/**
- * \brief Data structure to hold carrier xbar entry settings
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_CarrierXbarCfg
+typedef struct adi_adrv904x_CarrierHwDelayBufferConfig
 {
-    uint8_t                                 channelSelect;      /*!< Channel select: 0 -> Channel 0, 1 -> Channel 1, etc */
-    adi_adrv904x_JesdComponentCarrierXbar_e carrierSelect;      /*!< Carrier select */
-    uint16_t                                sampleSelect;       /*!< Sample index. Number of samples per frame = Link rate / carrier sample rate */
-} adi_adrv904x_CarrierXbarCfg_t;
-ADI_ADRV904X_PACK_FINISH
+    uint16_t carrierSelect[ADI_ADRV904X_NO_OF_CARRIER_DELAY_FIFOS];     /*!< HW Carrier select for each Delay FIFO in HW */
+    uint16_t delayValue[ADI_ADRV904X_NO_OF_CARRIER_DELAY_FIFOS];        /*!< HW Delay buffers counts per carrier (offset_carr_samples) translated to Delay FIFO values in HW*/
+    uint16_t cmpEn;                                                     /*!< HW cmpEn HW setting */
+    uint16_t memEn;                                                     /*!< HW memEn HW setting */
+    uint16_t daisyEn;                                                   /*!< HW daisyEn HW setting */
+} adi_adrv904x_CarrierHwDelayBufferConfig_t;
 
-/**
- * \brief Data structure to hold carrier link settings
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_LinkCfg
+/* These are the parameters that are used to calculate delays within the CDUC or CDDC, add to Band delay, and to determine the Delay Buffer Values to apply */
+typedef struct adi_adrv904x_CarrierDelayParameters
 {
-    adi_adrv904x_CarrierXbarCfg_t carrierXbarCfg[ADI_ADRV904X_MAX_CARRIER_SLOTS];
-} adi_adrv904x_LinkCfg_t;
-ADI_ADRV904X_PACK_FINISH
+    uint16_t noOfCarriers;
+    uint32_t jesdFrequency_kHz;
+    uint16_t clkToJesdRatioLog2;
+    uint16_t carrSamplePeriod_cc[ADI_ADRV904X_MAX_CARRIERS];                            /*!< Carrier sample period in units of hsdig cc's */
+    adi_adrv904x_CarrierGroupDelayComp_t carrierComponents[ADI_ADRV904X_MAX_CARRIERS];  /*!< Used to track CDUC/CDDC internal component delays. Not all fields applicable to both */
+    uint16_t groupDelayBand_cc[ADI_ADRV904X_MAX_CARRIERS];                              /*!< Inherent group delay per carrier in its assigned Band DUC/DDC alone */
+    uint16_t groupDelayCarr_cc[ADI_ADRV904X_MAX_CARRIERS];                              /*!< Inherent group delay per carrier in the CDUC or CDDC alone */
+    uint16_t groupDelayComb_cc[ADI_ADRV904X_MAX_CARRIERS];                              /*!< Combined group delay per carrier: groupDelayBand_cc + groupDelayCarr_cc*/
+    uint16_t targetDelay_cc[ADI_ADRV904X_MAX_CARRIERS];                                 /*!< Target delay per carrier */
+    uint16_t uncompOffset_cc[ADI_ADRV904X_MAX_CARRIERS];                                /*!< Initial/uncompensated offset (e.g. w/0 integer sample delay buffers) to add to combined group delay to match target: offset_ideal_cc[i] = targetDelay_cc[i] - groupDelayComb_cc[i]  */
+    uint16_t compIntSamples[ADI_ADRV904X_MAX_CARRIERS];                                 /*!< Integer number of Carrier Sample Periods to use in Delay Compensation per carrier */
+    uint16_t comp_cc[ADI_ADRV904X_MAX_CARRIERS];                                        /*!< Delay compensation provided by compIntSamples buffers in units of hsdig cc's: compIntSamples[i] * carrSamplePeriod_cc[i] */
+    uint16_t finalDelayTotal_cc[ADI_ADRV904X_MAX_CARRIERS];                             /*!< Final Overall Delays that sum Band DUC/DDC + CDUC/CDDC grp delay + delay elements. groupDelayComb_cc + offset_actual_cc  */
+    uint16_t finalDelayCarr_cc[ADI_ADRV904X_MAX_CARRIERS];                              /*!< Final delay through the CDUC/CDDC alone, including delay elements: finalDelayTotal_cc - groupDelayBand_cc */
+    uint32_t finalDelayTotal_ns[ADI_ADRV904X_MAX_CARRIERS];                             /*!< Final Overall Delays that sum Band DUC/DDC + CDUC/CDDC grp delay + delay elements. finalDelayTotal_cc[i] * T_hsdigclk_ns */
+    uint32_t finalDelayCarr_ns[ADI_ADRV904X_MAX_CARRIERS];                              /*!< Final delay through the CDUC/CDDC alone, including delay elements: finalDelayCarr_cc[i] * T_hsdigclk_ns */
+    int16_t  delayDiffPerCarrier_cc[ADI_ADRV904X_MAX_CARRIERS];                         /*!< Delta between target delay and final delay per carrier: targetDelay_cc - finalDelayTotal_cc (Check order/sign) */
+    int16_t  delayMismatch_cc;                                                          /*!< Largest error between any 2 carriers: max(delayDiffPerCarrier_cc[]) - min(delayDiffPerCarrier_cc[]) */
+    adi_adrv904x_CarrierHwDelayBufferConfig_t bufferCfg;                                /*!< HW configuration to apply to Delay Buffers */
+} adi_adrv904x_CarrierDelayParameters_t;
 
 /**
- * \brief Data structure to hold carrier JESD settings
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_CarrierJesdCfg
+*  \brief Struct used to hold profile specific output data for both Tx & Rx
+*/
+typedef struct adi_adrv904x_CarrierReconfigProfileCfgOut
 {
-    adi_adrv904x_LinkCfg_t linkCfg[ADI_ADRV904X_MAX_CARRIER_LINKS];     /*!< Holds JESD settings if required based on reconfig settings */
-} adi_adrv904x_CarrierJesdCfg_t;
-ADI_ADRV904X_PACK_FINISH
-
+    adi_adrv904x_CarrierJesdInternalCfg_t       internalJesdCfg;                /*!< Internal JESD settings for carrier reconfig */
+    adi_adrv904x_CarrierRuntime_t               carrierCfgs;                    /*!< Array of settings for all possible carriers */
+    adi_adrv904x_CarrierDelayParameters_t       delayCfg;                       /*!< Holds internal delay settings written to part */
+    uint16_t                                    band0Atten;                     /*!< Band0 attenuation value. Only used for Tx */
+    uint16_t                                    band1Atten;                     /*!< Band1 attenuation value. Only used for Tx */
+    uint32_t                                    carriersEnabled;                /*!< Bitmask for all enabled carriers */
+} adi_adrv904x_CarrierReconfigProfileCfgOut_t;
+    
 /**
- * \brief Data structure to hold Carrier data for dynamic reconfiguration
+ *  \brief Holds stored Input values from a ReconfigSolve() so that they can be used on next ReconfigApply()
  */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_CarrierRadioCfg
+typedef struct adi_adrv904x_CarrierReconfigInput
 {
-    uint32_t                  channelMask;                              /*!< Channel Mask selection */
-    adi_adrv904x_CarrierCfg_t carriers[ADI_ADRV904X_MAX_CARRIERS];      /*!< Array of settings for all possible carriers */
-} adi_adrv904x_CarrierRadioCfg_t;
-ADI_ADRV904X_PACK_FINISH
+    adi_adrv904x_CarrierJesdCfg_t               jesdCfg;                                    /*!< Copy of input to Solve() function */
+    uint32_t                                    numProfiles;                                /*!< Copy of input to Solve() function. Number of profiles that are used. Only first N=numCarrierProfiles are populated */
+    adi_adrv904x_CarrierRadioCfg_t              profileCfgs[ADI_ADRV904X_MAX_NUM_PROFILES]; /*!< Copy of input to Solve() function, but enough memory for all 4 profiles */
+} adi_adrv904x_CarrierReconfigInput_t;
+
 
 /**
- * \brief Data structure to hold Carrier data for dynamic reconfiguration
+ *  \brief Holds calculated latency values for a single Tx or Rx Channel
  */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_ChannelFilterCarrierCfg
-{
-    uint16_t numberOfFilterTaps[ADI_ADRV904X_MAX_CARRIERS];      /*!< Number of filter taps per carrier */
-    uint8_t  asymmetricFilterTaps[ADI_ADRV904X_MAX_CARRIERS];    /*!< Asymmetric flag for each carrier */
-} adi_adrv904x_ChannelFilterCarrierCfg_t;
-ADI_ADRV904X_PACK_FINISH
-
-/**
- * \brief Data structure to hold Carrier data for dynamic reconfiguration
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_ChannelFilterOutputCfg
-{
-    uint16_t numberOfFilterTaps[ADI_ADRV904X_MAX_CARRIERS];      /*!< Number of filter taps per carrier */
-} adi_adrv904x_ChannelFilterOutputCfg_t;
-ADI_ADRV904X_PACK_FINISH
-
-/**
- * \brief Data structure to hold Carrier data for dynamic reconfiguration
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_ChannelFilterCfg
-{
-    int16_t                                coeffs[ADI_ADRV904X_NUM_CF_COEFFICIENTS];    /*!< Coefficient table for carriers. Zero-pad as necessary */
-    adi_adrv904x_ChannelFilterCarrierCfg_t carrierFilterCfg;                            /*!< Holds channel filter config for each carrier */
-} adi_adrv904x_ChannelFilterCfg_t;
-ADI_ADRV904X_PACK_FINISH
-
-/**
- * \brief Channel Filter load
- */
-ADI_ADRV904X_PACKED(
-    typedef struct adi_adrv904x_ChannelFilterLoad
-{
-    uint16_t coeffIdx;               /*!< Starting index where to place the coefficients */
-    uint16_t coeffNum;               /*!< Number of coefficients in payload */
-
-    /* Debug data payload follows command header.
-     * This can't be declared here due to the API's use of the -Wpedantic compiler option.
-     * int16_t coeffs[];
-     */
-} adi_adrv904x_ChannelFilterLoad_t; )
-
-/**
- * \brief Channel Filter load
- *        Used to determine the maximum debug payload size.
- * \note Not instantiated. Only for size calculations.
- */
-typedef struct adi_adrv904x_ChannelFilterLoadMaxSize
-{
-    adi_adrv904x_ChannelFilterLoad_t channelFilterLoad;
-    int16_t                          coeffs[ADI_ADRV904X_CHAN_FILTER_COEFF_LOAD_LEN];    /*!< Debug data */
-} adi_adrv904x_ChannelFilterLoadMaxSize_t;
-
-/**
- * \brief Carrier channel filter load response used to check for FW errors
- */
-ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_ChannelFilterLoadResp
-{
-    adi_adrv904x_CpuErrorCode_t status;              /*!< CPU error status code */
-} adi_adrv904x_ChannelFilterLoadResp_t;
-ADI_ADRV904X_PACK_FINISH
-
-/**
- * \brief Carrier channel filter load response used to check for FW errors
- */
-    ADI_ADRV904X_PACK_START
-typedef struct adi_adrv904x_ChannelFilterResp
-{
-    adi_adrv904x_CpuErrorCode_t           status;              /*!< CPU error status code */
-    adi_adrv904x_ChannelFilterOutputCfg_t carrierFilterOutCfg; /*!< Output of carrier filter calculation */
-} adi_adrv904x_ChannelFilterResp_t;
-ADI_ADRV904X_PACK_FINISH
-
-/**
- *  \brief Holds calculated delay parameters that get written to device after reconfig
- */
-    ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_CarrierReconfigLatencyCfg
 {
-    uint32_t groupDelay[ADI_ADRV904X_MAX_CARRIERS];     /*!< Group delay */
-    uint32_t clkCddcCducInkHz;                          /*!< CDDC/CDUC clock in kHz */
+    uint32_t groupDelay[ADI_ADRV904X_MAX_CARRIERS];                             /*!< Group delay */
+    uint32_t clkCddcCducInkHz;                                                  /*!< CDDC/CDUC clock in kHz */
 } adi_adrv904x_CarrierReconfigLatencyCfg_t;
-ADI_ADRV904X_PACK_FINISH
+
+/**
+ *  \brief Holds calculated latency values per Channel
+ */
+typedef struct adi_adrv904x_CarrierReconfigLatencyCfgTop
+{
+    adi_adrv904x_CarrierReconfigLatencyCfg_t    channel[ADI_ADRV904X_MAX_TXCHANNELS]; /*!< Internal use only: Latency Cfg Array for all Channels */
+} adi_adrv904x_CarrierReconfigLatencyCfgTop_t;
+    
+/**
+ *  \brief Holds stored Output values from a ReconfigSolve() so that they can be used on next ReconfigApply()
+ */
+typedef struct adi_adrv904x_CarrierReconfigOutput
+{
+    adi_adrv904x_CarrierReconfigProfileCfgOut_t profileCfgs[ADI_ADRV904X_MAX_NUM_PROFILES];
+    adi_adrv904x_CarrierReconfigJesdOut_t       jesdCfg;
+} adi_adrv904x_CarrierReconfigOutput_t;
+
+/**
+ *  \brief Holds stored Solution (both Input and Output values) from a ReconfigSolve() so that they can be used on next ReconfigApply()
+ */
+typedef struct adi_adrv904x_CarrierReconfigSoln
+{
+    adi_adrv904x_CarrierReconfigInput_t     inputs;
+    adi_adrv904x_CarrierReconfigOutput_t    outputs;
+} adi_adrv904x_CarrierReconfigSoln_t;
+
 #endif /* __ADI_ADRV904X_CARRIER_RECONFIGURE_TYPES_H__ */
-
-

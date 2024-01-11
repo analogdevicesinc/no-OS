@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_watchdog_t.h
  * \brief Contains DFE SDK data types.
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 #ifndef ADRV904X_DFE_SVC_WATCHDOG_T_H_
 #define ADRV904X_DFE_SVC_WATCHDOG_T_H_

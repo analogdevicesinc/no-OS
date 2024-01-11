@@ -8,7 +8,7 @@
  * \file
  * \brief Radio Control SDK Service API types
  *
- * SDK API Version: 2.9.0.4
+ * SDK API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_RADIOCTRL_T_H_

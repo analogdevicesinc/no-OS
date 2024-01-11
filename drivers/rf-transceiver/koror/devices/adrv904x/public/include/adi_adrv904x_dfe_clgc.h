@@ -10,7 +10,7 @@
 * \brief Contains ADRV904X CLGC function prototypes for
 *    adi_adrv904x_dfe_clgc.c
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 

@@ -11,7 +11,7 @@
  * \brief Contains shared types used for OSAL data logging.
  * \details Contains enums and typedefs which are shared between the BBIC and DFE and used for logging OSAL information.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_DFE_OSAL_UTIL_T_H__

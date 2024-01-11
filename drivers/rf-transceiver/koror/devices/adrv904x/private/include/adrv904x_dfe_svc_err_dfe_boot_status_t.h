@@ -11,7 +11,7 @@
  *
  * \details Contains DFE CPU boot status error code definitions
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef __ADRV904X_DFE_SVC_ERR_DFE_BOOT_STATUS_T_H__

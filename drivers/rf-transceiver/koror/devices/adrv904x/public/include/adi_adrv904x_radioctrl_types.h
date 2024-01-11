@@ -8,7 +8,7 @@
 * \file adi_adrv904x_radioctrl_types.h
 * \brief Contains ADRV904X data types for radio ctrl features
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #ifndef _ADI_ADRV904X_RADIOCTRL_TYPES_H_
@@ -181,6 +181,17 @@ typedef struct adi_adrv904x_LoConfig
     uint64_t                             loFrequency_Hz ;        /*!< Desired RF LO frequency in Hz */
     adi_adrv904x_LoOption_e              loConfigSel ;           /*!< Select for LO config */
     } adi_adrv904x_LoConfig_t ;
+
+/**
+* \brief Data structure to indicate to which PLL Tx and Rx Channels are connected. 
+*/
+typedef struct adi_adrv904x_ChanCtrlToPlls
+{
+	uint8_t                 rf0MuxTx0_3;    /*!<   If set to 1 East Tx channels (Tx0-3) are connected to PLL0 (East PLL). If set to 0 Tx0-3 are connected to PLL1 (West PLL) */
+	uint8_t                 rf0MuxTx4_7;    /*!<   If set to 1 West Tx channels (Tx4-7) are connected to PLL0 (East PLL). If set to 0 Tx4-7 are connected to PLL1 (West PLL) */
+	uint8_t                 rf0MuxRx0_3;    /*!<   If set to 1 East Rx channels (Rx0-3) are connected to PLL0 (East PLL). If set to 0 Rx0-3 are connected to PLL1 (West PLL) */
+	uint8_t                 rf0MuxRx4_7;    /*!<   If set to 1 West Rx channels (Rx4-7) are connected to PLL0 (East PLL). If set to 0 Rx4-7 are connected to PLL1 (West PLL) */
+}adi_adrv904x_ChanCtrlToPlls_t ;
 
 /**
 * \brief Data structure to hold the LO configuration read back values.

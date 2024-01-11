@@ -8,7 +8,7 @@
  * \file adrv904x_rx.c
  * \brief Contains ADRV904X Rx related private function implementations
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #include "../../private/include/adrv904x_rx.h"

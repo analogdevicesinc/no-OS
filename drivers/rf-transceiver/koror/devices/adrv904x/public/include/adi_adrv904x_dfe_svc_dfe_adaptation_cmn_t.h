@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_dfe_adaptation_cmn_t.h
  * \brief DFE adaptation service module definitions and types
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_DFE_ADAPTATION_CMN_T_H_

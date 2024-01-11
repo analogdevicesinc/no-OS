@@ -9,7 +9,7 @@
  * \brief Contains prototypes and macro definitions for ADI HAL wrapper
  *        functions implemented in adi_adrv904x_hal.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_HAL_TYPES_H_

@@ -10,7 +10,7 @@
  * 
  * \brief   Contains ADRV904X Tx NCO data structures.
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_TX_NCO_H__

@@ -12,7 +12,7 @@
  *
  * \details Contains DFE Object ID definitions
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_ERR_OBJID_T_H__

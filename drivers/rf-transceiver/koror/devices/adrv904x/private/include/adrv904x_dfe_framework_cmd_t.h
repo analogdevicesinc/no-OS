@@ -9,7 +9,7 @@
  * \brief Contains DFE Application type definitions for the ADI Command
  *        Handler Service.
  *
- * DFE APP Version: 2.9.0.4
+ * DFE APP Version: 2.10.0.4
  */
 
 #ifndef _FRAMEWORK_CMD_T_H

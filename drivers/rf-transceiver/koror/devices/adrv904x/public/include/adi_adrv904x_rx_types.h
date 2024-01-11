@@ -8,7 +8,7 @@
  * \file adi_adrv904x_rx_types.h
  * \brief Contains ADRV904X API Rx datapath data types
  *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_RX_TYPES_H_

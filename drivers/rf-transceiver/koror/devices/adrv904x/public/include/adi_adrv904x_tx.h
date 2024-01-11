@@ -9,7 +9,7 @@
  * \brief Contains top level ADRV904X related function prototypes for
  *        adi_adrv904x_tx.c
  *
- * ADRV904X API Version: 2.9.0.4
+ * ADRV904X API Version: 2.10.0.4
  */
 
 #ifndef _ADI_ADRV904X_TX_H_
@@ -205,7 +205,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenS0S1Get(adi_adrv904x_Device
  * Return Value :
  * adi_common_ErrAction_e
  */
-ADI_API	adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenUpdateCfgSet(adi_adrv904x_Device_t* const device,
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenUpdateCfgSet(adi_adrv904x_Device_t* const device,
                                                                   const uint32_t chanMask,
                                                                   const adi_adrv904x_TxAttenUpdateCfg_t* const cfg);
 
@@ -219,7 +219,7 @@ ADI_API	adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenUpdateCfgSet(adi_adrv904x_D
  * Return Value :
  * adi_common_ErrAction_e
  */
-ADI_API	adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenUpdateCfgGet(adi_adrv904x_Device_t* const device,
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenUpdateCfgGet(adi_adrv904x_Device_t* const device,
                                                                   const adi_adrv904x_TxChannels_e txChannel,
                                                                   adi_adrv904x_TxAttenUpdateCfg_t* const cfg);
 
@@ -822,11 +822,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenPhaseGet(adi_adrv904x_Devic
 * \brief Configures Discontinuous Transmit (DTX) features 
 *
 * DTX provides the ability to shut down the clock to save power through three different mode: Automatic mode, SPI controlled mode, or Pin Control mode.
-* dtx_mode_enable	Operation	          Notes
-* 2'b00	            DTx mode disable	
-* 2'b01	            Automatic mode.	      Triggers the power down stream on observing a specified number of zero samples (dtx_zero_counter) on Tx input data. Power up stream is triggered as soon as a non zero sample is seen. The number of samples defined is at the slower of the 2 DUC in clock rates.
-* 2'b10	            SPI controlled mode	  In this mode, power down is triggered on setting the dtx_force bitfield. Clearing that bit triggers the power up stream.
-* 2'b11	            Pin controlled mode	  In this mode, a GPIO pin specified by the dtx_force_gpio_select controls Power up/down. Rising edge on the pin triggers the power down stream and a falling edge triggers a power up stream
+* dtx_mode_enable   Operation             Notes
+* 2'b00             DTx mode disable    
+* 2'b01             Automatic mode.       Triggers the power down stream on observing a specified number of zero samples (dtx_zero_counter) on Tx input data. Power up stream is triggered as soon as a non zero sample is seen. The number of samples defined is at the slower of the 2 DUC in clock rates.
+* 2'b10             SPI controlled mode   In this mode, power down is triggered on setting the dtx_force bitfield. Clearing that bit triggers the power up stream.
+* 2'b11             Pin controlled mode   In this mode, a GPIO pin specified by the dtx_force_gpio_select controls Power up/down. Rising edge on the pin triggers the power down stream and a falling edge triggers a power up stream
 *
 * Configure the DTX registers. Set the DTX Mode, DTX zero counter for the Tx channels
 *
@@ -1615,6 +1615,43 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackStop(adi_adrv904x_Device
                                                              const adi_adrv904x_TxChannels_e txChannelSel,
                                                              const uint8_t  bandSelect);
 
+/** 
+* \brief Reconfigure Tx carriers dynamically without reinitialization - Solving without applying solution to HW
+* 
+* \dep_begin 
+* \dep{device->common.devHalInfo} 
+* \dep_end 
+* 
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+* \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
+* \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] txCarrierChannelFilterApplicationSel - Tx Carrier Channel Filter application select for each carrier in each profile. The carriers here are applied to the corresponding channelMask in txCarrierConfigs.
+* \param[in] txCarrierChannelFilter - Tx Carrier Channel Filter Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
+* \param[in] useCustomFilters Select option to use custom filters or ADI presets: 0: Use txCarrierChannelFilterApplicationSel, 1: Use txCarrierChannelFilter
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
+*/ 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_adrv904x_Device_t* const                                device,
+                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+                                                                            adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+                                                                            adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
+                                                                            const uint32_t                                              numCarrierProfiles,
+                                                                            const uint8_t                                               useCustomFilters);
+
+/** 
+* \brief Reconfigure Tx carriers dynamically without reinitialization - Apply previously solved configuration
+* 
+* \dep_begin 
+* \dep{device->common.devHalInfo} 
+* \dep_end 
+* 
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
+*/ 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierWrite(adi_adrv904x_Device_t* const device);
 
 /** 
 * \brief Reconfigure Tx carriers dynamically without reinitialization. Wrapper for adi_adrv904x_TxDynamicCarrierReconfigure to select channel filter coefficients

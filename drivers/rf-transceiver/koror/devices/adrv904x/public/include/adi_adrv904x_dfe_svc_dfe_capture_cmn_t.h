@@ -8,7 +8,7 @@
  * \file adi_adrv904x_dfe_svc_dfe_capture_cmn_t.h
  * \brief DFE capture service module definitions and types
  *
- * DFE SDK API Version: 2.9.0.4
+ * DFE SDK API Version: 2.10.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_DFE_CAPTURE_CMN_T_H_
@@ -110,9 +110,42 @@ typedef enum
 } adi_adrv904x_DfeSvcDfeCapturePowerMeasDir_e;
 
 /**
- * \brief Data structure to hold configuration parameters of the stop-on-pass capture
+ * \brief Enumerated list of capture target DPD model indexes.
+ */
+typedef enum
+{
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_TARGET_DPD_MODEL_INDEX_ANY,   /*!< Capture target DPD model index any */
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_TARGET_DPD_MODEL_INDEX_0,     /*!< Capture target DPD model index 0 */
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_TARGET_DPD_MODEL_INDEX_1,     /*!< Capture target DPD model index 1 */
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_TARGET_DPD_MODEL_INDEX_2,     /*!< Capture target DPD model index 2 */
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_TARGET_DPD_MODEL_INDEX_3,     /*!< Capture target DPD model index 3 */
+} adi_adrv904x_DfeSvcDfeCaptureTargetDpdModelIndex_e;
+
+/**
+ * \brief Enumerated list of SBET capture ingore count work type.
+ */
+typedef enum
+{
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_IGNORE_WITHOUT_CHECKING_MATCH_MODEL,     /*!< Ignore count without checking the match model */
+    ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_IGNORE_CHECKING_MATCH_MODEL,             /*!< Ignore count with checking the match model */
+}adi_adrv904x_DfeSvcDfeCaptureIgnCntMode_e;
+
+/**
+ * \brief Data structure to hold sbet parameter.
  */
 ADI_ADRV904X_PACK_START
+typedef struct
+{
+    adi_adrv904x_DfeSvcDfeCaptureTargetDpdModelIndex_e targetDpdModelIndex;      /*!< sbet target model */
+    adi_adrv904x_DfeSvcDfeCaptureIgnCntMode_e          ignCntMode;               /*!< sbet ignore count mode: 0- without checking model 1- checking model */
+    uint8_t                                 ignCnt;                   /*!< sbet ignore count 0 ~ 255 */
+} adi_adrv904x_DfeSvcDfeCaptureSbetParameter_t;
+ADI_ADRV904X_PACK_FINISH
+
+/**
+ * \brief Data structure to hold configuration parameters of the stop-on-pass capture
+ */
+    ADI_ADRV904X_PACK_START
 typedef struct
 {
     uint16_t peakPowerThreshHigh;                    /*!< peak power high threshold */

@@ -9,7 +9,7 @@
 *
 * \brief Device Specific Abstractions for Common Error Declarations
 *
-* ADRV904X API Version: 2.9.0.4
+* ADRV904X API Version: 2.10.0.4
 */
 
 #ifndef _ADI_ADRV904X_ERROR_H_

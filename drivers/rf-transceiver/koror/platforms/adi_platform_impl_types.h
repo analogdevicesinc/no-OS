@@ -8,7 +8,7 @@
 #define __ADI_PLATFORM_IMPL_TYPES_H__
 
 #include <pthread.h>
-typedef void* adi_hal_mutex_t;
+typedef pthread_mutex_t adi_hal_mutex_t;
 typedef pthread_t adi_hal_thread_t;
 /**
  *  \brief  Default filepath for logfiles if none provided
