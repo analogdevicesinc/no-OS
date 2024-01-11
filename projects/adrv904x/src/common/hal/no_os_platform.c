@@ -948,3 +948,11 @@ long int_20db_to_mag(long a, int mdB)
 
 	return a;
 }
+
+int _gettimeofday( struct timeval *tv, void *tzvp )
+{
+    uint64_t t = 0;  // get uptime in nanoseconds
+    tv->tv_sec = t / 1000000000;  // convert to seconds
+    tv->tv_usec = ( t % 1000000000 ) / 1000;  // get remaining microseconds
+    return 0;  // return non-zero for error
+} // end _gettimeofday()
