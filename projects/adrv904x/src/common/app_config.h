@@ -46,7 +46,7 @@
 
 #define UART_BAUDRATE                                   115200
 
-#define ADRV9025_DEVICE_CLK_KHZ                         245760
+#define ADRV9025_DEVICE_CLK_KHZ                         122880
 #define ADRV9025_LANE_RATE_KHZ				16220160
 
 #define ADRV9025_TX_JESD_OCTETS_PER_FRAME		4
