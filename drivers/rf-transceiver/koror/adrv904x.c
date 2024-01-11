@@ -8,6 +8,7 @@
  */
 
 #include "adrv904x_cpu_device_profile_types.h"
+#include "adi_adrv904x_utilities_types.h"
 #include "adi_common_error_types.h"
 #include "adi_adrv904x_all_types.h"
 #include "adi_adrv904x_dfe_cpu.h"
@@ -24,6 +25,8 @@
 #include "jesd204.h"
 #include <stdbool.h>
 #include <string.h>
+
+#include "adi_adrv904x_cpu.h"
 
 /* ADRV904X Initialization Configuration Data */
 adrv904x_DeviceProfile_t adrv904xProfile;
@@ -278,7 +281,7 @@ struct adrv904x_jesd204_priv {
 int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 			enum jesd204_state_op_reason reason)
 {
-	adi_adrv904x_ErrAction_e recAction = ADI_ADRV904X_ERR_ACT_NONE;
+//	adi_adrv904x_ErrAction_e recAction = ADI_ADRV904X_ERR_ACT_NONE;
 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct adrv904x_rf_phy *phy = priv->phy;
 
@@ -303,17 +306,17 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
  static int adrv904x_jesd204_setup_stage1(struct jesd204_dev *jdev,
  		enum jesd204_state_op_reason reason)
 {
-	 adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
-	 struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
-	 struct adrv904x_rf_phy *phy = priv->phy;
-	 uint32_t mcsStatus;
-	 int i;
+	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+	uint32_t mcsStatus;
+	int i;
 
-	 pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-			 jesd204_state_op_reason_str(reason));
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+			jesd204_state_op_reason_str(reason));
 
-	 if (reason != JESD204_STATE_OP_REASON_INIT)
-		 return JESD204_STATE_CHANGE_DONE;
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
 
 	memset(&phy->adi_adrv904x_device.devStateInfo, 0,
 	sizeof(phy->adi_adrv904x_device.devStateInfo));
@@ -325,47 +328,98 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 	adi_common_LogLevelSet(&phy->kororDevice->common,
 	ADI_HAL_LOG_ERR | ADI_HAL_LOG_WARN);
 
+	recoveryAction = adi_adrv904x_HwReset(phy->kororDevice);
+
 	recoveryAction = adi_adrv904x_PreMcsInit(phy->kororDevice, &deviceInitStruct, &phy->trxBinaryInfoPtr);
 	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
 	{
 		printf("ERROR adi_adrv904x_PreMcsInit failed in %s at line %d.\n", __func__, __LINE__);
 		return -1;
 	}
+	
+	adi_adrv904x_CpuFwVersion_t cpuFwVersion = {0};
+	recoveryAction = adi_adrv904x_CpuFwVersionGet(phy->kororDevice, &cpuFwVersion);
+	
+	adi_adrv904x_HealthMonitorCpuStatus_t healthMonitorStatus = {0};
+	recoveryAction = adi_adrv904x_HealthMonitorCpuStatusGet(phy->kororDevice, &healthMonitorStatus);
+
+	uint32_t isException;
+	recoveryAction = adi_adrv904x_CpuCheckException(phy->kororDevice, &isException);
+
+	uint32_t dumpSize = 0;
+
+	adi_adrv904x_CpuMemDumpBinaryInfo_t cpuMemDumpBinaryInfo = { 0 };
+	strcpy(cpuMemDumpBinaryInfo.filePath, "dump.bin");
+
+
+//	recoveryAction = adi_adrv904x_CpuMemDump_vRamOnly(phy->kororDevice,
+//                        &cpuMemDumpBinaryInfo,
+//                        0,
+//                        &dumpSize);
+//
+//	printf("\n\nDump size RAMonly is %d bytes.\n\n", dumpSize);
+
+//
+//	uint32_t pllLockStatus = 0x00;
+//	recoveryAction = adi_adrv904x_PllStatusGet(phy->kororDevice, &pllLockStatus);
+//
+//	printf("\nLock status %#x\n", pllLockStatus);
+
+//	uint8_t prod = 0x00;
+//	recoveryAction =  adi_adrv904x_ProductIdGet(phy->kororDevice, &prod);
+//	printf("\nProduct ID %#x\n", prod);
+//
+//	recoveryAction = adi_adrv904x_DeviceRevGet(phy->kororDevice, &prod);
+//	printf("\nRevision %#x\n", prod);
+//
+//	uint32_t readData = 0;
+//	recoveryAction = adrv904x_CpuPing(phy->kororDevice, ADI_ADRV904X_CPU_TYPE_0, 0xba, &readData);
+//	printf("\nPing data %#x\n", readData);
+//	adi_adrv904x_CpuFwVersionGet
+//	adi_adrv904x_HealthMonitorCpuStatusGet
+//	adrv904x_CpuCmdWrite
+//	adrv904x_CpuCmdRespRead
+//	adrv904x_HealthMonitorPrivateCpuStatusGet
+//	adrv904x_CpuErrorDebugCheck
 
 	recoveryAction = adi_adrv904x_PreMcsInit_NonBroadcast(phy->kororDevice, &deviceInitStruct);
 	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
 	{
+		uint32_t booterror = 0x00;
+		recoveryAction = adi_adrv904x_DfeBootErrorGet(phy->kororDevice, &booterror);
+		printf("\n Boot error %#x\n", booterror);
+
 		printf("ERROR adi_adrv904x_PreMcsInit_NonBroadcast failed in %s at line %d.\n", __func__, __LINE__);
 		return -1;
 	}
-
-	/* MCS start sequence*/
-	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
-	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-	{
-		printf("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n", __func__, __LINE__);
-		return recoveryAction;
-	}
-
-	/* This loop will send SysRef pulses up to 255 times unless MCS status achieved before. */
-	for (i = 0; i < 255; i++) {
-		recoveryAction = adi_adrv904x_MultichipSyncStatusGet(phy->kororDevice, &mcsStatus);
-		if (recoveryAction) {
-			ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction, "Issue during getting multi-chip sync status");
-			return recoveryAction;
-		}
-
-		if ((mcsStatus & 0x01) == 0x01)
-			break;
-
-		jesd204_sysref_async_force(phy->jdev);
-	}
-
-	if (mcsStatus != 0x01) {
-		pr_err("%s:%d Unexpected MCS sync status (0x%X)", __func__, __LINE__, mcsStatus);
-
-		return -1;
-	}
+//
+//	/* MCS start sequence*/
+//	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
+//	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+//	{
+//		printf("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n", __func__, __LINE__);
+//		return recoveryAction;
+//	}
+//
+//	/* This loop will send SysRef pulses up to 255 times unless MCS status achieved before. */
+//	for (i = 0; i < 255; i++) {
+//		recoveryAction = adi_adrv904x_MultichipSyncStatusGet(phy->kororDevice, &mcsStatus);
+//		if (recoveryAction) {
+//			ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction, "Issue during getting multi-chip sync status");
+//			return recoveryAction;
+//		}
+//
+//		if ((mcsStatus & 0x01) == 0x01)
+//			break;
+//
+//		jesd204_sysref_async_force(phy->jdev);
+//	}
+//
+//	if (mcsStatus != 0x01) {
+//		pr_err("%s:%d Unexpected MCS sync status (0x%X)", __func__, __LINE__, mcsStatus);
+//
+//		return -1;
+//	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -373,7 +427,7 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
  static int adrv904x_jesd204_setup_stage2(struct jesd204_dev *jdev,
  		enum jesd204_state_op_reason reason)
  {
-	 adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
+	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
  	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
  	struct adrv904x_rf_phy *phy = priv->phy;
 
@@ -383,21 +437,34 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
  	if (reason != JESD204_STATE_OP_REASON_INIT)
  		return JESD204_STATE_CHANGE_DONE;
 
- 	/* MCS end sequence*/
- 	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_DISABLE);
- 	if (recoveryAction) {
- 		return recoveryAction;
- 	}
+// 	/* MCS end sequence*/
+// 	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_DISABLE);
+// 	if (recoveryAction) {
+// 		return recoveryAction;
+// 	}
+//
+// 	/* Post MCS */
+// 	recoveryAction = adi_adrv904x_PostMcsInit(phy->kororDevice,
+// 				       &utilityInit);
+// 	if (recoveryAction)
+// 		return recoveryAction;
+//
+// 	recoveryAction = adi_adrv904x_SerializerReset(phy->kororDevice);
+// 	if (recoveryAction)
+// 		return recoveryAction;
+//
+// 	recoveryAction = adi_adrv904x_HwReset(phy->kororDevice);
 
- 	/* Post MCS */
- 	recoveryAction = adi_adrv904x_PostMcsInit(phy->kororDevice,
- 				       &utilityInit);
- 	if (recoveryAction)
- 		return recoveryAction;
+//	recoveryAction = adi_adrv904x_PreMcsInit(phy->kororDevice, &deviceInitStruct, &phy->trxBinaryInfoPtr);
+//	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+//	{
+//		printf("ERROR adi_adrv904x_PreMcsInit failed in %s at line %d.\n", __func__, __LINE__);
+//		return -1;
+//	}
 
- 	recoveryAction = adi_adrv904x_SerializerReset(phy->kororDevice);
- 	if (recoveryAction)
- 		return recoveryAction;
+	uint32_t pllLockStatus = 0xFF;
+	recoveryAction = adi_adrv904x_PllStatusGet(phy->kororDevice, &pllLockStatus);
+	printf("\nLock status %#x\n", pllLockStatus);
 
  	return JESD204_STATE_CHANGE_DONE;
  }
