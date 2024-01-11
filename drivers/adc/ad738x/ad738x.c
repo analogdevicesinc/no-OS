@@ -351,6 +351,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 #endif
 	dev->conv_mode = init_param->conv_mode;
 	dev->ref_sel = init_param->ref_sel;
+	dev->ref_voltage_mv = init_param->ref_voltage_mv;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
