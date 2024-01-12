@@ -1,0 +1,2370 @@
+<?xml version='1.0' encoding= 'utf-8'?>
+<lattice:systemEnv xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014" xmlns:lattice="http://www.latticesemi.com/lattice">
+   <lattice:sysid>0</lattice:sysid>
+   <lattice:system>
+      <lattice:general>
+         <lattice:version>2022.1</lattice:version>
+         <lattice:vendor>lattice</lattice:vendor>
+         <lattice:name>tmc5130_cn0506_ctpnxe</lattice:name>
+         <lattice:library>Propel</lattice:library>
+         <lattice:deviceFamily>LFCPNX</lattice:deviceFamily>
+         <lattice:bspLocation>bsp</lattice:bspLocation>
+         <lattice:yamlLocation>cpu0.yaml</lattice:yamlLocation>
+         <lattice:svdLocation>soc_svd/tmc5130_cn0506_ctpnxe.svd</lattice:svdLocation>
+         <lattice:projectType>C</lattice:projectType>
+         <lattice:templateName>*</lattice:templateName>
+      </lattice:general>
+      <lattice:ipInstances>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="riscv_mc" vendor="latticesemi.com" version="2.4.0">cpu0_inst</lattice:instanceName>
+            <ipxact:addressSpaces>
+               <ipxact:addressSpace>
+                  <ipxact:name>riscv_ahbl_m_data_Address_Space</ipxact:name>
+                  <ipxact:range>4294967296</ipxact:range>
+                  <ipxact:width>32</ipxact:width>
+                  <ipxact:segments>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_dma_fifo_inst_FIFO_DMA_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/dma_fifo_inst/FIFO_DMA_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x100000</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_ether_control_inst_Ethercon_IP_mem_map_S0</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/ether_control_inst/Ethercon_IP_mem_map_S0</ipxact:displayName>
+                        <ipxact:addressOffset>0x108000</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_gpio0_inst_gpio_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/gpio0_inst/gpio_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186c00</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_gpio1_inst_gpio_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/gpio1_inst/gpio_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x187000</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_i2c0_inst_i2c_master_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/i2c0_inst/i2c_master_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186000</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_isr_ram0_inst_ahbl_slv0_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/isr_ram0_inst/ahbl_slv0_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x0</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_spi0_inst_spi_master_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/spi0_inst/spi_master_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186800</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_sysmem0_inst_ahbl_slv0_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/sysmem0_inst/ahbl_slv0_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0xc0000</ipxact:addressOffset>
+                        <ipxact:range>0x20000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_sysmem0_inst_ahbl_slv1_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/sysmem0_inst/ahbl_slv1_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0xe0000</ipxact:addressOffset>
+                        <ipxact:range>0x20000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_uart0_inst_uart_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/uart0_inst/uart_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186400</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                  </ipxact:segments>
+                  <ipxact:localMemoryMap>
+                     <ipxact:name>pic_timer_mem_map</ipxact:name>
+                     <ipxact:description>AHB-Lite PIC and Timer memory map</ipxact:description>
+                     <ipxact:addressBlock>
+                        <ipxact:name>pic_timer_registers</ipxact:name>
+                        <ipxact:displayName>PIC_Timer_Registers</ipxact:displayName>
+                        <ipxact:description>PIC Timer Registers</ipxact:description>
+                        <ipxact:baseAddress>0xffff0000</ipxact:baseAddress>
+                        <ipxact:range>0x800</ipxact:range>
+                        <ipxact:width>32</ipxact:width>
+                     </ipxact:addressBlock>
+                  </ipxact:localMemoryMap>
+               </ipxact:addressSpace>
+               <ipxact:addressSpace>
+                  <ipxact:name>riscv_ahbl_m_instr_Address_Space</ipxact:name>
+                  <ipxact:range>4294967296</ipxact:range>
+                  <ipxact:width>32</ipxact:width>
+                  <ipxact:segments>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_dma_fifo_inst_FIFO_DMA_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/dma_fifo_inst/FIFO_DMA_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x100000</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_ether_control_inst_Ethercon_IP_mem_map_S0</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/ether_control_inst/Ethercon_IP_mem_map_S0</ipxact:displayName>
+                        <ipxact:addressOffset>0x108000</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_gpio0_inst_gpio_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/gpio0_inst/gpio_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186c00</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_gpio1_inst_gpio_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/gpio1_inst/gpio_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x187000</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_i2c0_inst_i2c_master_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/i2c0_inst/i2c_master_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186000</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_isr_ram0_inst_ahbl_slv0_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/isr_ram0_inst/ahbl_slv0_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x0</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_spi0_inst_spi_master_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/spi0_inst/spi_master_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186800</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_sysmem0_inst_ahbl_slv0_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/sysmem0_inst/ahbl_slv0_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0xc0000</ipxact:addressOffset>
+                        <ipxact:range>0x20000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_sysmem0_inst_ahbl_slv1_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/sysmem0_inst/ahbl_slv1_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0xe0000</ipxact:addressOffset>
+                        <ipxact:range>0x20000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_uart0_inst_uart_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/uart0_inst/uart_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186400</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                  </ipxact:segments>
+               </ipxact:addressSpace>
+            </ipxact:addressSpaces>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SIMULATION</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DEBUG_ENABLE</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SOFT_JTAG</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">HW_WATCHPOINT</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">CACHE_ENABLE</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">CACHE_ENV</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ICACHE_ENABLE</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DCACHE_ENABLE</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ICACHE_RANGE_LOW</lattice:name>
+                  <lattice:value>0xFFFFFFFF</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ICACHE_RANGE_HIGH</lattice:name>
+                  <lattice:value>0x00000000</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DCACHE_RANGE_LOW</lattice:name>
+                  <lattice:value>0xFFFFFFFF</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DCACHE_RANGE_HIGH</lattice:name>
+                  <lattice:value>0x00000000</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">C_STANDALONE</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">M_STANDALONE</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">C_EXT</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">M_EXT</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PIC_ENABLE</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">TIMER_ENABLE</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PICTIMER_START_ADDR</lattice:name>
+                  <lattice:value>0xFFFF0000</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">IRQ_NUM</lattice:name>
+                  <lattice:value>6</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DEVICE</lattice:name>
+                  <lattice:value>LFCPNX</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">JTAG_CHANNEL</lattice:name>
+                  <lattice:value>14</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="fifo_dma" vendor="latticesemi.com" version="2.0.0">dma_fifo_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>FIFO_DMA_mem_map</ipxact:name>
+                  <ipxact:description>FIFO_DMA memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>FIFO_DMA_IP_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x100000</ipxact:baseAddress>
+                     <ipxact:range>0x8000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>FIFO_DMA_mem_map</ipxact:name>
+                  <ipxact:description>FIFO_DMA memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>FIFO_DMA_IP_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x100000</ipxact:baseAddress>
+                     <ipxact:range>0x8000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <ipxact:addressSpaces>
+               <ipxact:addressSpace>
+                  <ipxact:name>fifo_dma_Address_Space</ipxact:name>
+                  <ipxact:range>524288</ipxact:range>
+                  <ipxact:width>32</ipxact:width>
+                  <ipxact:segments>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_dma_fifo_inst_FIFO_DMA_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/dma_fifo_inst/FIFO_DMA_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x100000</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_ether_control_inst_Ethercon_IP_mem_map_S0</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/ether_control_inst/Ethercon_IP_mem_map_S0</ipxact:displayName>
+                        <ipxact:addressOffset>0x108000</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_gpio0_inst_gpio_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/gpio0_inst/gpio_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186c00</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_gpio1_inst_gpio_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/gpio1_inst/gpio_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x187000</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_i2c0_inst_i2c_master_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/i2c0_inst/i2c_master_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186000</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_isr_ram0_inst_ahbl_slv0_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/isr_ram0_inst/ahbl_slv0_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x0</ipxact:addressOffset>
+                        <ipxact:range>0x8000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_spi0_inst_spi_master_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/spi0_inst/spi_master_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186800</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_sysmem0_inst_ahbl_slv0_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/sysmem0_inst/ahbl_slv0_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0xc0000</ipxact:addressOffset>
+                        <ipxact:range>0x20000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_sysmem0_inst_ahbl_slv1_model_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/sysmem0_inst/ahbl_slv1_model_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0xe0000</ipxact:addressOffset>
+                        <ipxact:range>0x20000</ipxact:range>
+                     </ipxact:segment>
+                     <ipxact:segment>
+                        <ipxact:name>tmc5130_cn0506_ctpnxe_uart0_inst_uart_mem_map</ipxact:name>
+                        <ipxact:displayName>tmc5130_cn0506_ctpnxe/uart0_inst/uart_mem_map</ipxact:displayName>
+                        <ipxact:addressOffset>0x186400</ipxact:addressOffset>
+                        <ipxact:range>0x400</ipxact:range>
+                     </ipxact:segment>
+                  </ipxact:segments>
+               </ipxact:addressSpace>
+            </ipxact:addressSpaces>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">HADDR_WIDTH</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">HDATA_WIDTH</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">BASE_ADDR</lattice:name>
+                  <lattice:value>0x00100000</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SIM</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">TX_FIFO_EN</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RX_FIFO_EN</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="Etherconnect" vendor="latticesemi.com" version="2.3.0">ether_control_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>Ethercon_IP_mem_map_S0</ipxact:name>
+                  <ipxact:description>ETHERCONNECT memory map slave0</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>Ethercon_IP_Registers0</ipxact:name>
+                     <ipxact:baseAddress>0x108000</ipxact:baseAddress>
+                     <ipxact:range>0x8000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>Ethercon_IP_mem_map_S0</ipxact:name>
+                  <ipxact:description>ETHERCONNECT memory map slave0</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>Ethercon_IP_Registers0</ipxact:name>
+                     <ipxact:baseAddress>0x108000</ipxact:baseAddress>
+                     <ipxact:range>0x8000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">HADDR_WIDTH</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">H0_DATA_WIDTH</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">H1_DATA_WIDTH</lattice:name>
+                  <lattice:value>64</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">BASE_ADDR</lattice:name>
+                  <lattice:value>0x00108000</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SYSTEM_TYPE</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PCIE_ENABLE</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">REG_NUM</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PORT_1_MII_INTRF</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PORT_2_MII_INTRF</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PORT_1_PHY_INTRF</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PORT_2_PHY_INTRF</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">CHANNEL_2_EN</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SIM</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">USE_EXT_PLL_SGMII</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">USE_CDR_REFCLK_IN_SGMII</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PULSE_TIMER</lattice:name>
+                  <lattice:value>0x4A817C80</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+            <lattice:interruptPort>IRQ_S5</lattice:interruptPort>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="gpio" vendor="latticesemi.com" version="1.6.1">gpio0_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>gpio_mem_map</ipxact:name>
+                  <ipxact:description>GPIO memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>GPIO_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186c00</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>gpio_mem_map</ipxact:name>
+                  <ipxact:description>GPIO memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>GPIO_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186c00</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="1">LINES_NUM</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="2">GPIO_DIRS</lattice:name>
+                  <lattice:value>0x00FFFFFF</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+            <lattice:structName>gpio_instance</lattice:structName>
+            <lattice:initName>gpio_init</lattice:initName>
+            <lattice:headerFile>gpio.h</lattice:headerFile>
+            <lattice:interruptPort>IRQ_S1</lattice:interruptPort>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="gpio" vendor="latticesemi.com" version="1.6.1">gpio1_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>gpio_mem_map</ipxact:name>
+                  <ipxact:description>GPIO memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>GPIO_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x187000</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>gpio_mem_map</ipxact:name>
+                  <ipxact:description>GPIO memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>GPIO_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x187000</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="1">LINES_NUM</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="2">GPIO_DIRS</lattice:name>
+                  <lattice:value>0x00000000</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+            <lattice:structName>gpio_instance</lattice:structName>
+            <lattice:initName>gpio_init</lattice:initName>
+            <lattice:headerFile>gpio.h</lattice:headerFile>
+            <lattice:interruptPort>IRQ_S4</lattice:interruptPort>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="i2c_master" vendor="latticesemi.com" version="1.5.0">i2c0_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>i2c_master_mem_map</ipxact:name>
+                  <ipxact:description>I2C_Master memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>I2C_Master_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186000</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>i2c_master_mem_map</ipxact:name>
+                  <ipxact:description>I2C_Master memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>I2C_Master_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186000</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">APB_ENABLE</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FAMILY</lattice:name>
+                  <lattice:value>LFCPNX</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_WIDTH</lattice:name>
+                  <lattice:value>8</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_DEPTH</lattice:name>
+                  <lattice:value>16</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_IMPL</lattice:name>
+                  <lattice:value>LUT</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">TX_FIFO_AE_FLAG</lattice:name>
+                  <lattice:value>2</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RX_FIFO_AF_FLAG</lattice:name>
+                  <lattice:value>14</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SYS_CLOCK_FREQ</lattice:name>
+                  <lattice:value>75</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DESIRED_CLOCK_FREQ</lattice:name>
+                  <lattice:value>100.0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PRESCALER_INPUT</lattice:name>
+                  <lattice:value>372</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PRESCALER</lattice:name>
+                  <lattice:value>372</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ACTUAL_CLOCK_FREQ</lattice:name>
+                  <lattice:value>100.13351134846462</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+            <lattice:interruptPort>IRQ_S3</lattice:interruptPort>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="system_memory" vendor="latticesemi.com" version="1.1.2">isr_ram0_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>ahbl_slv0_model_mem_map</ipxact:name>
+                  <ipxact:description>AHB-Lite Slave Model memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>memory</ipxact:name>
+                     <ipxact:displayName>memory</ipxact:displayName>
+                     <ipxact:description>Memory Block</ipxact:description>
+                     <ipxact:baseAddress>0x0</ipxact:baseAddress>
+                     <ipxact:range>0x8000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                     <ipxact:usage>memory</ipxact:usage>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>ahbl_slv0_model_mem_map</ipxact:name>
+                  <ipxact:description>AHB-Lite Slave Model memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>memory</ipxact:name>
+                     <ipxact:displayName>memory</ipxact:displayName>
+                     <ipxact:description>Memory Block</ipxact:description>
+                     <ipxact:baseAddress>0x0</ipxact:baseAddress>
+                     <ipxact:range>0x8000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                     <ipxact:usage>memory</ipxact:usage>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FAMILY</lattice:name>
+                  <lattice:value>LFCPNX</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">TT_FAMILY</lattice:name>
+                  <lattice:value>LIFCL</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">use_ecp5</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ecp5_family</lattice:name>
+                  <lattice:value>ECP5U</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_DEPTH</lattice:name>
+                  <lattice:value>8192</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">MEM_ID</lattice:name>
+                  <lattice:value>isr_ram0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">MEM_SIZE</lattice:name>
+                  <lattice:value>32,8192</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_WIDTH</lattice:name>
+                  <lattice:value>13</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DATA_WIDTH</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">MEMORY_TYPE</lattice:name>
+                  <lattice:value>EBR</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PORT_COUNT</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ECC_ENABLE</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ARBITER_EN</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_STREAMER_EN</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_CLK_BYPASS</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_START_ADDR</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_MEM</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_CHK</lattice:name>
+                  <lattice:value>hex</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_FILE_FORMAT</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_FILE</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">load_file</lattice:name>
+                  <lattice:value>EBR</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_00</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_01</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_02</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_03</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_04</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_05</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_06</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_07</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_08</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_09</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_10</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_11</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_12</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_13</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_14</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_15</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_16</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_17</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_18</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_19</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_20</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_21</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_22</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_23</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_24</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_25</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_26</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_27</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_28</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_29</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_30</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_31</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_32</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_33</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_34</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_35</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_36</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_37</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_38</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_39</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_40</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_41</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_42</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_43</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_44</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_45</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_46</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_47</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_48</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_49</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_50</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_51</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_52</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_53</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_54</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_55</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_56</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_57</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_58</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_59</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_60</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_61</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_62</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_63</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_64</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_65</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_66</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_67</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_68</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_69</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_70</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_71</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_72</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_73</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_74</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_75</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_76</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_77</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_78</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_79</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">REGMODE_S0</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RESET_MODE_S0</lattice:name>
+                  <lattice:value>sync</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">BYTE_ENABLE_S0</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">UNALIGNED_ACCESS_EN_S0</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SHIFT_DIRECTION_S0</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">EDIT_ADDRESS_S0</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s0_start</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S0_START_ADDR</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s0_end</lattice:name>
+                  <lattice:value>7FFF</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S0_END_ADDR</lattice:name>
+                  <lattice:value>32767</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ACCESS_TYPE_S0</lattice:name>
+                  <lattice:value>R/W</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_SPACE_S0</lattice:name>
+                  <lattice:value>32768</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">REGMODE_S1</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RESET_MODE_S1</lattice:name>
+                  <lattice:value>sync</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">BYTE_ENABLE_S1</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">UNALIGNED_ACCESS_EN_S1</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SHIFT_DIRECTION_S1</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">EDIT_ADDRESS_S1</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s1_start</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S1_START_ADDR</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s1_end</lattice:name>
+                  <lattice:value>7FFF</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S1_END_ADDR</lattice:name>
+                  <lattice:value>32767</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ACCESS_TYPE_S1</lattice:name>
+                  <lattice:value>DISABLED</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">u_access_type</lattice:name>
+                  <lattice:value>R/W</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_SPACE_S1</lattice:name>
+                  <lattice:value>32768</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="spi_master" vendor="latticesemi.com" version="1.4.1">spi0_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>spi_master_mem_map</ipxact:name>
+                  <ipxact:description>SPI_Master memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>SPI_MASTER_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186800</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>spi_master_mem_map</ipxact:name>
+                  <ipxact:description>SPI_Master memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>SPI_MASTER_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186800</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INTERFACE</lattice:name>
+                  <lattice:value>AHBL</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SLAVE_COUNT</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FAMILY</lattice:name>
+                  <lattice:value>LFCPNX</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">LSB_FIRST</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ONLY_WRITE</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DATA_WIDTH</lattice:name>
+                  <lattice:value>8</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DATA_WIDTH_RESET</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SSNP</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">CPOL</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">CPHA</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">slv_sel_pol</lattice:name>
+                  <lattice:value>00</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SSPOL</lattice:name>
+                  <lattice:value>0x00000000</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SPI_EN</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_WIDTH</lattice:name>
+                  <lattice:value>8</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_DEPTH</lattice:name>
+                  <lattice:value>256</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_IMPL</lattice:name>
+                  <lattice:value>EBR</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">TX_FIFO_AE_FLAG</lattice:name>
+                  <lattice:value>3</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RX_FIFO_AF_FLAG</lattice:name>
+                  <lattice:value>12</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SYS_CLOCK_FREQ</lattice:name>
+                  <lattice:value>75.0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DESIRED_CLOCK_FREQ</lattice:name>
+                  <lattice:value>0.1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PRESCALER_INPUT</lattice:name>
+                  <lattice:value>375</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PRESCALER</lattice:name>
+                  <lattice:value>375</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ACTUAL_CLOCK_FREQ</lattice:name>
+                  <lattice:value>0.1</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+            <lattice:interruptPort>IRQ_S2</lattice:interruptPort>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="system_memory" vendor="latticesemi.com" version="1.1.2">sysmem0_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>ahbl_slv0_model_mem_map</ipxact:name>
+                  <ipxact:description>AHB-Lite Slave Model memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>memory</ipxact:name>
+                     <ipxact:displayName>memory</ipxact:displayName>
+                     <ipxact:description>Memory Block</ipxact:description>
+                     <ipxact:baseAddress>0xc0000</ipxact:baseAddress>
+                     <ipxact:range>0x20000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                     <ipxact:usage>memory</ipxact:usage>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>ahbl_slv0_model_mem_map</ipxact:name>
+                  <ipxact:description>AHB-Lite Slave Model memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>memory</ipxact:name>
+                     <ipxact:displayName>memory</ipxact:displayName>
+                     <ipxact:description>Memory Block</ipxact:description>
+                     <ipxact:baseAddress>0xc0000</ipxact:baseAddress>
+                     <ipxact:range>0x20000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                     <ipxact:usage>memory</ipxact:usage>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>ahbl_slv1_model_mem_map</ipxact:name>
+                  <ipxact:description>AHB-Lite Slave Model memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>memory</ipxact:name>
+                     <ipxact:displayName>memory</ipxact:displayName>
+                     <ipxact:description>Memory Block</ipxact:description>
+                     <ipxact:baseAddress>0xe0000</ipxact:baseAddress>
+                     <ipxact:range>0x20000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                     <ipxact:usage>memory</ipxact:usage>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>ahbl_slv1_model_mem_map</ipxact:name>
+                  <ipxact:description>AHB-Lite Slave Model memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>memory</ipxact:name>
+                     <ipxact:displayName>memory</ipxact:displayName>
+                     <ipxact:description>Memory Block</ipxact:description>
+                     <ipxact:baseAddress>0xe0000</ipxact:baseAddress>
+                     <ipxact:range>0x20000</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                     <ipxact:usage>memory</ipxact:usage>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FAMILY</lattice:name>
+                  <lattice:value>LFCPNX</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">TT_FAMILY</lattice:name>
+                  <lattice:value>LIFCL</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">use_ecp5</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ecp5_family</lattice:name>
+                  <lattice:value>ECP5U</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_DEPTH</lattice:name>
+                  <lattice:value>32768</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">MEM_ID</lattice:name>
+                  <lattice:value>sysmem0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">MEM_SIZE</lattice:name>
+                  <lattice:value>32,32768</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_WIDTH</lattice:name>
+                  <lattice:value>15</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">DATA_WIDTH</lattice:name>
+                  <lattice:value>32</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">MEMORY_TYPE</lattice:name>
+                  <lattice:value>LRAM</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">PORT_COUNT</lattice:name>
+                  <lattice:value>2</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ECC_ENABLE</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ARBITER_EN</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_STREAMER_EN</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_CLK_BYPASS</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">FIFO_START_ADDR</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_MEM</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_CHK</lattice:name>
+                  <lattice:value>hex</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_FILE_FORMAT</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_FILE</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">load_file</lattice:name>
+                  <lattice:value>LRAM</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_00</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_01</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_02</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_03</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_04</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_05</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_06</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_07</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_08</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_09</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_0F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_10</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_11</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_12</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_13</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_14</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_15</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_16</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_17</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_18</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_19</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_1F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_20</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_21</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_22</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_23</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_24</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_25</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_26</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_27</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_28</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_29</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_2F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_30</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_31</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_32</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_33</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_34</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_35</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_36</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_37</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_38</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_39</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_3F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_40</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_41</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_42</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_43</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_44</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_45</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_46</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_47</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_48</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_49</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_4F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_50</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_51</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_52</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_53</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_54</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_55</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_56</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_57</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_58</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_59</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_5F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_60</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_61</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_62</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_63</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_64</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_65</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_66</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_67</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_68</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_69</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_6F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_70</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_71</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_72</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_73</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_74</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_75</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_76</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_77</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_78</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_79</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7A</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7B</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7C</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7D</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7E</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">INIT_VALUE_7F</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">REGMODE_S0</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RESET_MODE_S0</lattice:name>
+                  <lattice:value>sync</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">BYTE_ENABLE_S0</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">UNALIGNED_ACCESS_EN_S0</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SHIFT_DIRECTION_S0</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">EDIT_ADDRESS_S0</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s0_start</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S0_START_ADDR</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s0_end</lattice:name>
+                  <lattice:value>1FFFF</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S0_END_ADDR</lattice:name>
+                  <lattice:value>131071</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ACCESS_TYPE_S0</lattice:name>
+                  <lattice:value>R/W</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_SPACE_S0</lattice:name>
+                  <lattice:value>131072</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">REGMODE_S1</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">RESET_MODE_S1</lattice:name>
+                  <lattice:value>sync</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">BYTE_ENABLE_S1</lattice:name>
+                  <lattice:value>True</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">UNALIGNED_ACCESS_EN_S1</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">SHIFT_DIRECTION_S1</lattice:name>
+                  <lattice:value>none</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">EDIT_ADDRESS_S1</lattice:name>
+                  <lattice:value>False</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s1_start</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S1_START_ADDR</lattice:name>
+                  <lattice:value>0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">s1_end</lattice:name>
+                  <lattice:value>1FFFF</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">S1_END_ADDR</lattice:name>
+                  <lattice:value>131071</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ACCESS_TYPE_S1</lattice:name>
+                  <lattice:value>R/W</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">u_access_type</lattice:name>
+                  <lattice:value>R/W</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="0">ADDR_SPACE_S1</lattice:name>
+                  <lattice:value>131072</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+         </lattice:ipInstance>
+         <lattice:ipInstance>
+            <lattice:instanceName library="ip" name="uart" vendor="latticesemi.com" version="1.3.0">uart0_inst</lattice:instanceName>
+            <ipxact:memoryMaps>
+               <ipxact:memoryMap>
+                  <ipxact:name>uart_mem_map</ipxact:name>
+                  <ipxact:description>UART memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>UART_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186400</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+               <ipxact:memoryMap>
+                  <ipxact:name>uart_mem_map</ipxact:name>
+                  <ipxact:description>UART memory map</ipxact:description>
+                  <ipxact:addressBlock>
+                     <ipxact:name>UART_Registers</ipxact:name>
+                     <ipxact:baseAddress>0x186400</ipxact:baseAddress>
+                     <ipxact:range>0x400</ipxact:range>
+                     <ipxact:width>32</ipxact:width>
+                  </ipxact:addressBlock>
+               </ipxact:memoryMap>
+            </ipxact:memoryMaps>
+            <lattice:configurableParameters>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="1">SYS_CLK</lattice:name>
+                  <lattice:value>75.0</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="4">DATA_WIDTH</lattice:name>
+                  <lattice:value>8</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="3">STOP_BITS</lattice:name>
+                  <lattice:value>1</lattice:value>
+               </lattice:configurableParameter>
+               <lattice:configurableParameter>
+                  <lattice:name sequence_id="2">BAUD_RATE</lattice:name>
+                  <lattice:value>115200</lattice:value>
+               </lattice:configurableParameter>
+            </lattice:configurableParameters>
+            <lattice:structName>uart_instance</lattice:structName>
+            <lattice:initName>uart_init</lattice:initName>
+            <lattice:headerFile>uart.h</lattice:headerFile>
+            <lattice:interruptPort>IRQ_S0</lattice:interruptPort>
+         </lattice:ipInstance>
+      </lattice:ipInstances>
+      <lattice:memoryRegions>
+         <lattice:memoryRegion>
+            <lattice:name>isr_ram0_inst_AHBL_S0</lattice:name>
+            <lattice:instanceName>isr_ram0_inst</lattice:instanceName>
+            <lattice:editAddress>False</lattice:editAddress>
+            <lattice:startAddress>0</lattice:startAddress>
+            <lattice:addressSpace>32768</lattice:addressSpace>
+            <lattice:accessType>R/W</lattice:accessType>
+            <lattice:masterPorts>
+               <lattice:masterPort>
+                  <lattice:name>cpu0_inst_AHBL_M0_INSTR</lattice:name>
+                  <lattice:baseAddress>0x0</lattice:baseAddress>
+                  <lattice:range>0x8000</lattice:range>
+               </lattice:masterPort>
+            </lattice:masterPorts>
+         </lattice:memoryRegion>
+         <lattice:memoryRegion>
+            <lattice:name>isr_ram0_inst_AHBL_S0</lattice:name>
+            <lattice:instanceName>isr_ram0_inst</lattice:instanceName>
+            <lattice:editAddress>False</lattice:editAddress>
+            <lattice:startAddress>0</lattice:startAddress>
+            <lattice:addressSpace>32768</lattice:addressSpace>
+            <lattice:accessType>R/W</lattice:accessType>
+            <lattice:masterPorts>
+               <lattice:masterPort>
+                  <lattice:name>cpu0_inst_AHBL_M0_INSTR</lattice:name>
+                  <lattice:baseAddress>0x0</lattice:baseAddress>
+                  <lattice:range>0x8000</lattice:range>
+               </lattice:masterPort>
+            </lattice:masterPorts>
+         </lattice:memoryRegion>
+         <lattice:memoryRegion>
+            <lattice:name>sysmem0_inst_AHBL_S0</lattice:name>
+            <lattice:instanceName>sysmem0_inst</lattice:instanceName>
+            <lattice:editAddress>False</lattice:editAddress>
+            <lattice:startAddress>0</lattice:startAddress>
+            <lattice:addressSpace>131072</lattice:addressSpace>
+            <lattice:accessType>R/W</lattice:accessType>
+            <lattice:masterPorts>
+               <lattice:masterPort>
+                  <lattice:name>cpu0_inst_AHBL_M0_INSTR</lattice:name>
+                  <lattice:baseAddress>0xc0000</lattice:baseAddress>
+                  <lattice:range>0x20000</lattice:range>
+               </lattice:masterPort>
+            </lattice:masterPorts>
+         </lattice:memoryRegion>
+         <lattice:memoryRegion>
+            <lattice:name>sysmem0_inst_AHBL_S0</lattice:name>
+            <lattice:instanceName>sysmem0_inst</lattice:instanceName>
+            <lattice:editAddress>False</lattice:editAddress>
+            <lattice:startAddress>0</lattice:startAddress>
+            <lattice:addressSpace>131072</lattice:addressSpace>
+            <lattice:accessType>R/W</lattice:accessType>
+            <lattice:masterPorts>
+               <lattice:masterPort>
+                  <lattice:name>cpu0_inst_AHBL_M0_INSTR</lattice:name>
+                  <lattice:baseAddress>0xc0000</lattice:baseAddress>
+                  <lattice:range>0x20000</lattice:range>
+               </lattice:masterPort>
+            </lattice:masterPorts>
+         </lattice:memoryRegion>
+         <lattice:memoryRegion>
+            <lattice:name>sysmem0_inst_AHBL_S1</lattice:name>
+            <lattice:instanceName>sysmem0_inst</lattice:instanceName>
+            <lattice:editAddress>False</lattice:editAddress>
+            <lattice:startAddress>0</lattice:startAddress>
+            <lattice:addressSpace>131072</lattice:addressSpace>
+            <lattice:accessType>R/W</lattice:accessType>
+            <lattice:masterPorts>
+               <lattice:masterPort>
+                  <lattice:name>cpu0_inst_AHBL_M0_INSTR</lattice:name>
+                  <lattice:baseAddress>0xe0000</lattice:baseAddress>
+                  <lattice:range>0x20000</lattice:range>
+               </lattice:masterPort>
+            </lattice:masterPorts>
+         </lattice:memoryRegion>
+         <lattice:memoryRegion>
+            <lattice:name>sysmem0_inst_AHBL_S1</lattice:name>
+            <lattice:instanceName>sysmem0_inst</lattice:instanceName>
+            <lattice:editAddress>False</lattice:editAddress>
+            <lattice:startAddress>0</lattice:startAddress>
+            <lattice:addressSpace>131072</lattice:addressSpace>
+            <lattice:accessType>R/W</lattice:accessType>
+            <lattice:masterPorts>
+               <lattice:masterPort>
+                  <lattice:name>cpu0_inst_AHBL_M0_INSTR</lattice:name>
+                  <lattice:baseAddress>0xe0000</lattice:baseAddress>
+                  <lattice:range>0x20000</lattice:range>
+               </lattice:masterPort>
+            </lattice:masterPorts>
+         </lattice:memoryRegion>
+      </lattice:memoryRegions>
+   </lattice:system>
+</lattice:systemEnv>
