@@ -405,8 +405,8 @@ int ad4080_set_cnv_spi_lvds_lanes(struct ad4080_dev *dev,
 		return -EINVAL;
 
 	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_A,
-				 AD4080_DATA_LANE_CNT_MSK,
-				 no_os_field_prep(AD4080_DATA_LANE_CNT_MSK, cnv_spi_lvds_lanes));
+				 AD4080_SPI_LVDS_LANES_MSK,
+				 no_os_field_prep(AD4080_SPI_LVDS_LANES_MSK, cnv_spi_lvds_lanes));
 	if (ret)
 		return ret;
 
@@ -434,7 +434,7 @@ int ad4080_get_cnv_spi_lvds_lanes(struct ad4080_dev *dev,
 	if (ret)
 		return ret;
 
-	*cnv_spi_lvds_lanes = no_os_field_get(AD4080_DATA_LANE_CNT_MSK, reg_val);
+	*cnv_spi_lvds_lanes = no_os_field_get(AD4080_SPI_LVDS_LANES_MSK, reg_val);
 
 	return 0;
 }
@@ -454,8 +454,8 @@ int ad4080_set_conv_data_spi_lvds(struct ad4080_dev *dev,
 		return -EINVAL;
 
 	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_A,
-				 AD4080_DATA_INTF_SEL_MSK,
-				 no_os_field_prep(AD4080_DATA_INTF_SEL_MSK, conv_data_spi_lvds));
+				 AD4080_DATA_INTF_MODE_MSK,
+				 no_os_field_prep(AD4080_DATA_INTF_MODE_MSK, conv_data_spi_lvds));
 	if (ret)
 		return ret;
 
@@ -483,7 +483,7 @@ int ad4080_get_conv_data_spi_lvds(struct ad4080_dev *dev,
 	if (ret)
 		return ret;
 
-	*conv_data_spi_lvds = no_os_field_get(AD4080_DATA_INTF_SEL_MSK, reg_val);
+	*conv_data_spi_lvds = no_os_field_get(AD4080_DATA_INTF_MODE_MSK, reg_val);
 
 	return 0;
 }
@@ -495,7 +495,7 @@ int ad4080_get_conv_data_spi_lvds(struct ad4080_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad4080_set_lvds_cnv_clk_cnt(struct ad4080_dev *dev,
-				enum ad4080_lvds_cnv_clk_cnt lvds_cnv_clk_cnt)
+				uint8_t lvds_cnv_clk_cnt)
 {
 	int ret;
 
@@ -504,7 +504,7 @@ int ad4080_set_lvds_cnv_clk_cnt(struct ad4080_dev *dev,
 
 	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_B,
 				 AD4080_LVDS_CNV_CLK_CNT_MSK,
-				 no_os_field_prep( AD4080_LVDS_CNV_CLK_CNT_MSK, lvds_cnv_clk_cnt));
+				 no_os_field_prep(AD4080_LVDS_CNV_CLK_CNT_MSK, lvds_cnv_clk_cnt));
 	if (ret)
 		return ret;
 
@@ -520,7 +520,7 @@ int ad4080_set_lvds_cnv_clk_cnt(struct ad4080_dev *dev,
  * @return Interface clock periods from CNV rising edge value
  */
 int ad4080_get_lvds_cnv_clk_cnt(struct ad4080_dev *dev,
-				enum ad4080_lvds_cnv_clk_cnt *lvds_cnv_clk_cnt)
+				uint8_t *lvds_cnv_clk_cnt)
 {
 	int ret;
 	uint8_t reg_val;
@@ -552,8 +552,8 @@ int ad4080_set_lvds_self_clk_mode(struct ad4080_dev *dev,
 		return -EINVAL;
 
 	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_B,
-				 AD4080_LVDS_SELF_CLK_EN_MSK,
-				 no_os_field_prep(AD4080_LVDS_SELF_CLK_EN_MSK, lvds_self_clk_mode));
+				 AD4080_LVDS_SELF_CLK_MODE_MSK,
+				 no_os_field_prep(AD4080_LVDS_SELF_CLK_MODE_MSK, lvds_self_clk_mode));
 	if (ret)
 		return ret;
 
@@ -581,7 +581,7 @@ int ad4080_get_lvds_self_clk_mode(struct ad4080_dev *dev,
 	if (ret)
 		return ret;
 
-	*lvds_self_clk_mode = no_os_field_get(AD4080_LVDS_SELF_CLK_EN_MSK, reg_val);
+	*lvds_self_clk_mode = no_os_field_get(AD4080_LVDS_SELF_CLK_MODE_MSK, reg_val);
 
 	return 0;
 }
@@ -679,55 +679,6 @@ int ad4080_get_lvds_vod(struct ad4080_dev *dev, enum ad4080_lvds_vod *lvds_vod)
 		return ret;
 
 	*lvds_vod = no_os_field_get(AD4080_LVDS_VOD_MSK, reg_val);
-
-	return 0;
-}
-
-/**
- * @brief Set AD4080 MSPI SDO Output Current
- * @param dev - The device structure.
- * @param mspi_drv - The MSPI SDO Output Current value.
- * @return 0 in case of success, negative error code otherwise.
- */
-int ad4080_set_mspi_drv(struct ad4080_dev *dev,
-			enum ad4080_mspi_drv mspi_drv)
-{
-	int ret;
-
-	if (!dev)
-		return -EINVAL;
-
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_C,
-				 AD4080_MSPI_DRV_MSK,
-				 no_os_field_prep(AD4080_MSPI_DRV_MSK, mspi_drv));
-	if (ret)
-		return ret;
-
-	dev->mspi_drv = mspi_drv;
-
-	return 0;
-}
-
-/**
- * @brief Get AD4080 MSPI SDO Output Current
- * @param dev - The device structure.
- * @param mspi_drv - The MSPI SDO Output Current value.
- * @return MSPI SDO Output Current value
- */
-int ad4080_get_mspi_drv(struct ad4080_dev *dev,
-			enum ad4080_mspi_drv *mspi_drv)
-{
-	int ret;
-	uint8_t reg_val;
-
-	if (!dev)
-		return -EINVAL;
-
-	ret = ad4080_read(dev, AD4080_REG_DATA_INTF_CONFIG_C, &reg_val);
-	if (ret)
-		return ret;
-
-	*mspi_drv = no_os_field_get(AD4080_MSPI_DRV_MSK, reg_val);
 
 	return 0;
 }
@@ -844,7 +795,7 @@ int ad4080_set_fifo_mode(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_FIFO_CONFIG,
+	ret = ad4080_update_bits(dev, AD4080_REG_GENERAL_CONFIG,
 				 AD4080_FIFO_MODE_MSK,
 				 no_os_field_prep(AD4080_FIFO_MODE_MSK, fifo_mode));
 	if (ret)
@@ -870,7 +821,7 @@ int ad4080_get_fifo_mode(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_read(dev, AD4080_REG_FIFO_CONFIG, &reg_val);
+	ret = ad4080_read(dev, AD4080_REG_GENERAL_CONFIG, &reg_val);
 	if (ret)
 		return ret;
 
@@ -1006,11 +957,6 @@ int ad4080_init(struct ad4080_dev **device,
 
 	/* Data Interface Initialization */
 	ret = ad4080_data_intf_init(dev, init_param);
-	if (ret)
-		goto error_spi;
-
-	/* Set SDO Output Drive Current Strength */
-	ret = ad4080_set_mspi_drv(dev, init_param.mspi_drv) ;
 	if (ret)
 		goto error_spi;
 
