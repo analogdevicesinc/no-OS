@@ -1423,18 +1423,16 @@ int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
 	if (!buffer)
 		return -EINVAL;
 
-	if(!buffer->cyclic_info.is_cyclic)
-		return no_os_cb_read(buffer->buf, data, buffer->bytes_per_scan);
+	int ret;
 
-	memcpy(data,
-	       &buffer->buf->buff[buffer->cyclic_info.buff_index],
-	       buffer->bytes_per_scan);
+	ret = no_os_cb_read(buffer->buf, data, buffer->bytes_per_scan);
 
-	buffer->cyclic_info.buff_index += buffer->bytes_per_scan;
-	if (buffer->size == buffer->cyclic_info.buff_index)
-		buffer->cyclic_info.buff_index = 0;
+	if (buffer->cyclic_info.is_cyclic) {
+		if (buffer->buf->read.idx == buffer->buf->write.idx)
+			buffer->buf->read.idx = 0;
+	}
 
-	return 0;
+	return ret;
 }
 
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
