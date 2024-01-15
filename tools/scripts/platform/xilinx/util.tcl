@@ -242,7 +242,11 @@ proc upload {} {
 	set cpu [_get_processor]
 
 	# Connect to the fpga
-	connect
+  if { [info exists ::env(XSCT_REMOTE_HOST)] && [info exists ::env(XSCT_REMOTE_PORT)] } {
+    connect -host "$::env(XSCT_REMOTE_HOST)" -port "$::env(XSCT_REMOTE_PORT)"
+  } else {
+    connect
+  }
 
 	# Reset and stop the ARM CPU before we re-program the FPGA if we are on a ZYNQ.
 	# Otherwise undefined behavior can occur.
