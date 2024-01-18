@@ -66,8 +66,9 @@
 #include "no_os_spi.h"
 #endif
 
-#define AD7616_GET_BIT(v, b) ((v >> b) & 1)
-#define AD7616_TOGGLE_TIMEOUT_DELAY (8192 * 1024)
+#define AD7616_GET_BIT(v, b)		((v >> b) & 1)
+#define AD7616_TOGGLE_TIMEOUT_DELAY	(8192 * 1024)
+#define SPI_ENGINE_WORDS_PER_READ	1
 
 /**
  * @brief Compute the CRC for one channel. See CRC chapter in the datasheet
@@ -623,9 +624,13 @@ static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
 		CS_LOW,
-		READ(2),
+		READ(SPI_ENGINE_WORDS_PER_READ),
 		CS_HIGH,
 	};
+
+	ret = no_os_pwm_enable(dev->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
 
 	dev->spi_desc->mode = NO_OS_SPI_MODE_3;
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -649,7 +654,7 @@ static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 
 	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
 
 	return ret;
 }
@@ -952,6 +957,18 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	}
 
 #ifdef XILINX_PLATFORM
+	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
+	if (ret != 0)
+		goto cleanup;
+
+	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
+	if (ret != 0)
+		goto cleanup;
+
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+	if (ret != 0)
+		goto cleanup;
+
 	dev->core_baseaddr = init_param->core_baseaddr;
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->reg_access_speed = init_param->reg_access_speed;
@@ -962,62 +979,59 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	dev->interface = AD7616_SERIAL;
 #endif
 
-	if (dev->interface == AD7616_SERIAL)
+	if (dev->interface == AD7616_SERIAL) {
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
-
-	if (ret != 0) {
-		no_os_free(dev);
-		return ret;
-	}
-
+		if (ret != 0)
+			goto cleanup;
 #ifdef XILINX_PLATFORM
-	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+		spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 #endif
+	}
 
 	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel0,
 				      init_param->gpio_hw_rngsel0_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel1,
 				      init_param->gpio_hw_rngsel1_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_convst,
 				      init_param->gpio_convst_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_busy,
 				      init_param->gpio_busy_param);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	if (dev->gpio_reset) {
 		ret = no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_HIGH);
 		if (ret != 0)
-			return ret;
+			goto cleanup;
 
 		ret = ad7616_reset(dev);
 		if (ret != 0)
-			return ret;
+			goto cleanup;
 	}
 
 	for (i = 0; i <= AD7616_VA7; i++) {
@@ -1026,11 +1040,11 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	}
 	ret = ad7616_set_mode(dev, init_param->mode);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	ret = ad7616_set_oversampling_ratio(dev, init_param->osr);
 	if (ret != 0)
-		return ret;
+		goto cleanup;
 
 	*device = dev;
 
@@ -1039,18 +1053,30 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	if (init_param->crc) {
 		ret = ad7616_enable_crc(dev);
 		if (ret != 0)
-			return ret;
+			goto cleanup;
 	} else {
 		dev->crc = 0;
 	}
 
 	return ad7616_self_test(dev);
+
+cleanup:
+	ad7616_remove(dev);
+
+	return ret;
 }
 
-int ad7616_remove(struct ad7616_dev *dev)
+void ad7616_remove(struct ad7616_dev *dev)
 {
 	if (!dev)
-		return -ENODEV;
+		return;
+
+#ifdef XILINX_PLATFORM
+	if (dev->clkgen)
+		axi_clkgen_remove(dev->clkgen);
+
+	no_os_pwm_remove(dev->trigger_pwm_desc);
+#endif
 
 	if (dev->interface == AD7616_SERIAL)
 		no_os_spi_remove(dev->spi_desc);
@@ -1065,6 +1091,4 @@ int ad7616_remove(struct ad7616_dev *dev)
 	no_os_gpio_remove(dev->gpio_busy);
 
 	no_os_free(dev);
-
-	return 0;
 }

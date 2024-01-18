@@ -41,7 +41,13 @@
 #define AD7616_H_
 
 #include "no_os_gpio.h"
+
 #include <stdint.h>
+
+#ifdef XILINX_PLATFORM
+#include "no_os_pwm.h"
+#include "clk_axi_clkgen.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -104,6 +110,9 @@
 /* AD7616 conversion results */
 #define AD7616_CHANNEL_A_SELF_TEST_VALUE 0xAAAA
 #define AD7616_CHANNEL_B_SELF_TEST_VALUE 0x5555
+
+/* AD7616_REG_PWM */
+#define AD7616_TRIGGER_PULSE_WIDTH_NS	        50
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -168,6 +177,10 @@ struct ad7616_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen	*clkgen;
+	/* Trigger conversion PWM generator descriptor */
+	struct no_os_pwm_desc		*trigger_pwm_desc;
 	uint32_t reg_access_speed;
 	uint8_t crc;
 	/* GPIO */
@@ -196,6 +209,12 @@ struct ad7616_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		*spi_param;
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* PWM generator init structure */
+	struct no_os_pwm_init_param	*trigger_pwm_init;
+	/* Clock gen for hdl design init structure */
+	struct axi_clkgen_init	*clkgen_init;
+	/* Clock generator rate */
+	uint32_t axi_clkgen_rate;
 	uint32_t reg_access_speed;
 	uint8_t crc;
 	/* GPIO */
@@ -290,7 +309,7 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev);
 int32_t ad7616_setup(struct ad7616_dev **device,
 		     struct ad7616_init_param *init_param);
 /* Remove the device. */
-int ad7616_remove(struct ad7616_dev *device);
+void ad7616_remove(struct ad7616_dev *device);
 /* Read conversion results. */
 int32_t ad7616_read_channel_source(struct ad7616_dev *dev, enum ad7616_ch *ch_a,
 				   enum ad7616_ch *ch_b);

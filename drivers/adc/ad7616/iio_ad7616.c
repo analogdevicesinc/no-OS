@@ -383,18 +383,14 @@ error_setup:
 
 int ad7616_iio_remove(struct ad7616_iio_dev *dev)
 {
-	int ret;
-
 	if (!dev)
 		return -ENODEV;
 
-	ret = ad7616_remove(dev->ad7616_dev);
-	if (ret)
-		return ret;
+	ad7616_remove(dev->ad7616_dev);
 
 	no_os_free(dev);
 
-	return ret;
+	return 0;
 }
 
 #endif
