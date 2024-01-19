@@ -22,6 +22,7 @@
             "name": "OpenOCD(cmsis-dap)",
             "request": "launch",
             "type": "cortex-debug",
+            "device": "cmsis-dap",
             "servertype": "openocd",
             "svdFile": VSCODE_SVD_FILE,
             "configFiles": [

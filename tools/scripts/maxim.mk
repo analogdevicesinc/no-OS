@@ -1,3 +1,5 @@
+VSCODE_SUPPORT = yes
+
 ifndef MAXIM_LIBRARIES
 $(error MAXIM_LIBRARIES not defined.$(ENDL))
 endif
@@ -6,6 +8,7 @@ CC=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
 AS=arm-none-eabi-gcc
 GDB=arm-none-eabi-gdb
+GDB_PORT = 50000
 OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
@@ -16,7 +19,7 @@ ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GN
 ifeq ($(ARM_COMPILER_PATH),)
 ARM_COMPILER_PATH = $(realpath $(dir $(shell which $(CC))))
 endif
-
+export COMPILER_BIN = $(ARM_COMPILER_PATH)/$(CC)
 export PATH := $(PATH):$(ARM_COMPILER_PATH)
 
 CREATED_DIRECTORIES += Maxim
@@ -49,6 +52,10 @@ TARGETCFG=$(TARGET_LCASE).cfg
 
 OPENOCD_SCRIPTS=$(MAXIM_LIBRARIES)/../Tools/OpenOCD/scripts
 OPENOCD_BIN=$(MAXIM_LIBRARIES)/../Tools/OpenOCD
+GDB_PATH=$(ARM_COMPILER_PATH)
+OPENOCD_SVD=$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include
+TARGETSVD=$(TARGET)
+VSCODE_CMSISCFG_FILE="interface/cmsis-dap.cfg","target/$(TARGET).cfg"
 
 LDFLAGS = -mcpu=cortex-m4 	\
 	-Wl,--gc-sections 	\
@@ -108,8 +115,17 @@ $(PLATFORM)_project:
 	$(call print, Building for target $(TARGET_LCASE))
 	$(call print,Creating IDE project)
 	$(call mk_dir,$(BUILD_DIR))
+	$(call mk_dir,$(VSCODE_CFG_DIR))
+	$(call set_one_time_rule,$@)
+	$(MAKE) --no-print-directory $(PROJECT_TARGET)_configure
+
+$(PROJECT_TARGET)_configure:
+	$(file > $(CPP_PROP_JSON),$(CPP_FINAL_CONTENT))
+	$(file > $(SETTINGSJSON),$(VSC_SET_CONTENT))
+	$(file > $(LAUNCHJSON),$(VSC_LAUNCH_CONTENT))
 
 $(PLATFORM)_sdkopen:
+	$(info Shouldn't be here $(TARGET))
 	$(shell $(PYTHON) $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
 	code $(PROJECT)
 
@@ -119,7 +135,7 @@ $(PLATFORM)_sdkbuild: build
 
 .PHONY: $(BINARY).gdb
 $(BINARY).gdb:
-	@echo target remote localhost:3333 > $(BINARY).gdb	
+	@echo target remote localhost:$(GDB_PORT) > $(BINARY).gdb	
 	@echo load $(BINARY) >> $(BINARY).gdb	
 	@echo file $(BINARY) >> $(BINARY).gdb
 	@echo b main >> $(BINARY).gdb	
