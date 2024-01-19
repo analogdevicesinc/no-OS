@@ -10,7 +10,7 @@ SETTINGSJSON 		:= $(VSCODE_CFG_DIR)/settings.json
 LAUNCHJSON 			:= $(VSCODE_CFG_DIR)/launch.json
 
 # Determine arm-none-eabi-gdb path
-GDB_PATH			:= $(realpath $(dir $(shell which $(GDB))))
+GDB_PATH			?= $(realpath $(dir $(shell which $(GDB))))
 
 # Read content of settings template into variable and subst keywords
 VSC_SET_CONTENT		:= $(file < $(SETTINGS_TEMPLATE))
@@ -21,7 +21,7 @@ VSC_SET_CONTENT		:= $(subst VSCODE_OPENOCD_PATH,"$(OPENOCD_BIN)/openocd",$(VSC_S
 VSC_LAUNCH_CONTENT	:= $(file < $(LAUNCH_TEMPLATE))
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_ELF_FILE,"$(BINARY)",$(VSC_LAUNCH_CONTENT))
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_SEARCH_DIR,"$(OPENOCD_SCRIPTS)",$(VSC_LAUNCH_CONTENT))
-VSC_LAUNCH_CONTENT	:= $(subst VSCODE_CMSISCFG_FILE,"$(BINARY).openocd-cmsis",$(VSC_LAUNCH_CONTENT))
+VSC_LAUNCH_CONTENT	:= $(subst VSCODE_CMSISCFG_FILE,$(VSCODE_CMSISCFG_FILE),$(VSC_LAUNCH_CONTENT))
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_STLINKCFG_FILE,"$(BINARY).openocd",$(VSC_LAUNCH_CONTENT))
 VSC_LAUNCH_CONTENT	:= $(subst VSCODE_SVD_FILE,"$(OPENOCD_SVD)/$(TARGETSVD).svd",$(VSC_LAUNCH_CONTENT))
 

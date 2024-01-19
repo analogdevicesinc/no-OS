@@ -18,10 +18,14 @@ $(error $(ENDL)$(ENDL)STM32CUBEMX not defined or not found at default path /opt/
 		Ex: export STM32CUBEMX=/opt/stm32cubemx$(ENDL)$(ENDL))
 endif # STM32CUBEMX check
 
+# Locate the compiler path under STM32CubeIDE plugins directory
+COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
+
 # Locate openocd location under STM32CubeIDE plugins directory
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
 OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
 OPENOCD_SVD = $(word 1,$(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *.svd))))
+VSCODE_CMSISCFG_FILE = "$(BINARY).openocd-cmsis"
 
 # stm32 specific build directory tree (project goes under app, but user .c/.h sources must go under app/Core)
 PROJECT_BUILDROOT = $(BUILD_DIR)/app
@@ -66,8 +70,6 @@ $(PLATFORM)_project:
 	$(call print,Creating IDE project)
 	$(call mk_dir, $(BUILD_DIR))
 	$(call mk_dir, $(VSCODE_CFG_DIR))
-	@sed -i 's|TargetToolchain=.*|TargetToolchain=STM32CubeIDE|g' $(HARDWARE) $(HIDE)
-	@sed -i 's|UnderRoot=false|UnderRoot=true|g' $(HARDWARE) $(HIDE)
 	@echo config load $(HARDWARE) > $(BINARY).cubemx
 	@echo project name app >> $(BINARY).cubemx
 	@echo project toolchain STM32CubeIDE >> $(BINARY).cubemx
@@ -140,7 +142,6 @@ GDB_PORT = 50000
 OC = arm-none-eabi-objcopy
 SIZE = arm-none-eabi-size
 
-COMPILER_BIN = $(realpath $(dir $(shell which $(CC) 2>/dev/null)))
 ifeq (,$(COMPILER_BIN))
 COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
 endif
