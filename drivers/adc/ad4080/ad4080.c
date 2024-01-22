@@ -293,6 +293,55 @@ int ad4080_get_short_instr(struct ad4080_dev *dev,
 }
 
 /**
+ * @brief Set Operation Mode
+ * @param dev - The device structure.
+ * @param op_mode - The operation mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad4080_set_op_mode(struct ad4080_dev *dev,
+		       enum ad4080_op_mode op_mode)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad4080_update_bits(dev, AD4080_REG_DEVICE_CONFIG,
+				 AD4080_OP_MODE_MSK,
+				 no_os_field_prep(AD4080_OP_MODE_MSK, op_mode));
+	if (ret)
+		return ret;
+
+	dev->op_mode = op_mode;
+
+	return 0;
+}
+
+/**
+ * @brief Get Operation Mode
+ * @param dev - The device structure.
+ * @param op_mode - The Operation Mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad4080_get_op_mode(struct ad4080_dev *dev,
+		       enum ad4080_op_mode *op_mode)
+{
+	int ret;
+	uint8_t reg_val;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad4080_read(dev, AD4080_REG_DEVICE_CONFIG, &reg_val);
+	if (ret)
+		return ret;
+
+	*op_mode = no_os_field_get(AD4080_OP_MODE_MSK, reg_val);
+
+	return 0;
+}
+
+/**
  * @brief Set Strict Register Access
  * @param dev - The device structure.
  * @param strict_reg - The strict reg mode.
@@ -949,6 +998,9 @@ int ad4080_init(struct ad4080_dev **device,
 				 no_os_field_prep(AD4080_ADDR_ASC_MSK, dev->addr_asc));
 	if (ret)
 		goto error_spi;
+
+	/* Set Operation mode */
+	ret = ad4080_set_op_mode(dev, init_param.op_mode);
 
 	/* Configuration SPI Interface Initialization */
 	ret = ad4080_configuration_intf_init(dev, init_param);
