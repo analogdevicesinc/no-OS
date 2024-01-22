@@ -96,6 +96,9 @@
 #define AD4080_SINGLE_INST_MSK			NO_OS_BIT(7)
 #define AD4080_SHORT_INST_MSK			NO_OS_BIT(3)
 
+/** AD4080_REG_DEVICE_CONFIG Bit Definition */
+#define AD4080_OP_MODE_MSK			NO_OS_GENMASK(1, 0)
+
 /** AD4080_REG_TRANSFER_CONFIG Bit Definition */
 #define AD4080_KEEP_STREAM_LEN_VAL_MSK		NO_OS_BIT(2)
 
@@ -149,6 +152,13 @@ enum ad4080_single_instr {
 enum ad4080_short_instr {
 	AD4080_15_BIT_ADDR,
 	AD4080_7_BIT_ADDR,
+};
+
+/** AD4080 Operation Mode */
+enum ad4080_op_mode {
+	AD4080_OP_NORMAL,
+	AD4080_OP_STANDBY,
+	AD4080_OP_LOW_POWER,
 };
 
 /** AD4080 Strict Register Access */
@@ -229,6 +239,8 @@ struct ad4080_dev {
 	enum ad4080_single_instr single_instr;
 	/** Short Instruction */
 	enum ad4080_short_instr	short_instr;
+	/** Operation Mode */
+	enum ad4080_op_mode op_mode;
 	/** Strict Register Access */
 	enum ad4080_strict_reg_access strict_reg;
 	/** AD4080 Output Pattern */
@@ -268,6 +280,8 @@ struct ad4080_init_param {
 	enum ad4080_single_instr single_instr;
 	/** Short Instruction */
 	enum ad4080_short_instr	short_instr;
+	/** Operation Mode */
+	enum ad4080_op_mode op_mode;
 	/** Strict Register Access */
 	enum ad4080_strict_reg_access strict_reg;
 	/** AD4080 Output Pattern */
@@ -325,6 +339,14 @@ int ad4080_set_short_instr(struct ad4080_dev *dev,
 /** Get Short Instruction */
 int ad4080_get_short_instr(struct ad4080_dev *dev,
 			   enum ad4080_short_instr *short_instr);
+
+/** Set Operation Mode */
+int ad4080_set_op_mode(struct ad4080_dev *dev,
+		       enum ad4080_op_mode op_mode);
+
+/** Get Operation Mode */
+int ad4080_get_op_mode(struct ad4080_dev *dev,
+		       enum ad4080_op_mode *op_mode);
 
 /** Set Strict Register Access */
 int ad4080_set_strict_reg_access(struct ad4080_dev *dev,
