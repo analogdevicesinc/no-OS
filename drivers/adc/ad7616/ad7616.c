@@ -946,7 +946,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	uint8_t i;
 	int32_t ret = 0;
 
-	dev = (struct ad7616_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad7616_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
