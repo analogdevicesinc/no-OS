@@ -42,3 +42,10 @@ DIGITAL-IO
 
    projects/max14914
    projects/max14919
+
+ADC
+===
+.. toctree::
+   :maxdepth: 1
+
+   projects/ad7616-st
