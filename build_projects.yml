@@ -34,7 +34,7 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
                -platform xilinx
-               -hdl_branch $(HDL_BRANCH)'
+               -hdl_branch main'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -66,7 +66,7 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
                -platform stm32
-               -hdl_branch $(HDL_BRANCH)'
+               -hdl_branch main'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -98,7 +98,7 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
                -platform maxim
-               -hdl_branch $(HDL_BRANCH)'
+               -hdl_branch main'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -130,7 +130,7 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
                -platform mbed
-               -hdl_branch $(HDL_BRANCH)'
+               -hdl_branch main'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -162,7 +162,7 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
                -platform pico
-               -hdl_branch $(HDL_BRANCH)'
+               -hdl_branch main'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -194,7 +194,7 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
                -platform aducm3029
-               -hdl_branch $(HDL_BRANCH)'
+               -hdl_branch main'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
