@@ -118,11 +118,11 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
  */
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
-	// Remove I2C bus
-	no_os_i2cbus_remove(desc->bus->device_id);
-
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (desc->bus)
+		no_os_i2cbus_remove(desc->bus->device_id);
 
 	if (!desc->platform_ops->i2c_ops_remove)
 		return -ENOSYS;
