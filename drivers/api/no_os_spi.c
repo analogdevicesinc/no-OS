@@ -121,11 +121,11 @@ int32_t no_os_spibus_init(const struct no_os_spi_init_param *param)
  */
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
-	// Remove SPI bus
-	no_os_spibus_remove(desc->bus->device_id);
-
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (desc->bus)
+		no_os_spibus_remove(desc->bus->device_id);
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
