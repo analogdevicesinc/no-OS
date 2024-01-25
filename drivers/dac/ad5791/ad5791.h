@@ -211,4 +211,10 @@ int ad5791_spi_write_mask(struct ad5791_dev *dev,
 int ad5791_set_lin_comp(struct ad5791_dev *dev,
 			enum ad5791_lin_comp_select v_span);
 
+/*! Trigger LDAC. */
+int ad5791_ldac_trigger(struct ad5791_dev *dev);
+
+/*! Clear DAC channel output with the clearcode. */
+int ad5791_clear_async(struct ad5791_dev *dev);
+
 #endif /* __AD5791_H__ */

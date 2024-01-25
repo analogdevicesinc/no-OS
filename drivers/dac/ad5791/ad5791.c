@@ -416,3 +416,59 @@ int ad5791_set_lin_comp(struct ad5791_dev *dev,
 				     AD5791_CTRL_LINCOMP_MASK,
 				     AD5791_CTRL_LINCOMP(v_span));
 }
+
+/***************************************************************************//**
+ * @brief	Trigger LDAC
+ *
+ * @param	dev - The device structure.
+ * @return	0 in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad5791_ldac_trigger(struct ad5791_dev *dev)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->gpio_ldac) {
+		ret = no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_LOW);
+		if (ret)
+			return ret;
+
+		/* Delay must be greater than 14ns, per the datasheet. */
+		no_os_udelay(1);
+
+		return no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_HIGH);
+	}
+
+	/* If no gpio is assigned use SW LDAC */
+	return ad5791_soft_instruction(dev, AD5791_SOFT_CTRL_LDAC);
+}
+
+/***************************************************************************//**
+ * @brief	Clear DAC channel output with the clearcode.
+ *
+ * @param	dev - The device structure.
+ * @return	0 in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad5791_clear_async(struct ad5791_dev *dev)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->gpio_clr) {
+		ret = no_os_gpio_set_value(dev->gpio_clr, NO_OS_GPIO_LOW);
+		if (ret)
+			return ret;
+
+		/* Delay must be greater than 50ns, per the datasheet. */
+		no_os_udelay(1);
+
+		return no_os_gpio_set_value(dev->gpio_clr, NO_OS_GPIO_HIGH);
+	}
+
+	/* If no gpio is assigned use SW CLR */
+	return ad5791_soft_instruction(dev, AD5791_SOFT_CTRL_CLR);
+}
