@@ -270,6 +270,7 @@ int32_t max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		while (0 == no_os_list_get_first(_events[i].actions, &discard))
 			free(discard);
 		no_os_list_remove(_events[i].actions);
+		_events[i].actions = NULL;
 	}
 	free(desc);
 
