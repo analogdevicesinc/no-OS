@@ -126,6 +126,8 @@ struct no_os_irq_ctrl_desc {
 	uint32_t	irq_ctrl_id;
 	/** Platform specific IRQ platform ops structure. */
 	const struct no_os_irq_platform_ops *platform_ops;
+	/* Reference counter */
+	uint32_t ref;
 	/**
 	 * This is intended to store irq controller specific configurations,
 	 * it should not be a reference to any peripheral descriptor.

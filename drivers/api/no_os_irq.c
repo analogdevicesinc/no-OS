@@ -63,6 +63,7 @@ int32_t no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if (ret)
 		return ret;
 
+	(*desc)->ref++;
 	(*desc)->platform_ops = param->platform_ops;
 
 	return 0;
@@ -80,6 +81,9 @@ int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 
 	if (!desc->platform_ops->remove)
 		return -ENOSYS;
+
+	if (--desc->ref)
+		return 0;
 
 	return desc->platform_ops->remove(desc);
 }
