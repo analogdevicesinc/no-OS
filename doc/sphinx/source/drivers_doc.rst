@@ -30,6 +30,7 @@ DIGITAL INPUT/OUTPUT
 .. toctree::
    :maxdepth: 1
 
+   drivers/max14914
    drivers/max149x6
    drivers/max22190
    drivers/max22196
