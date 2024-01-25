@@ -50,3 +50,10 @@ RF TRANSCEIVER
    :maxdepth: 1
 
    drivers/madura
+
+POWER MANAGEMENT
+================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adp1050
