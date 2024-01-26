@@ -10,8 +10,10 @@ IIO_EXAMPLE = y
 IIO_SW_TRIGGER_EXAMPLE = n
 IIO_TIMER_TRIGGER_EXAMPLE = n
 
-
 include ../../tools/scripts/generic_variables.mk
+
+EXTRA_LIBS = libtinyiiod.a
+EXTRA_LIBS_PATHS = /home/dari/Work/libiio/build/tinyiiod
 
 include src.mk
 
