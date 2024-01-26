@@ -1,8 +1,8 @@
 # File where libraries are handled
 
 # Used by the build utils
-export EXTRA_LIBS_NAMES
 export EXTRA_LIBS_PATHS
+export EXTRA_LIBS
 
 #	IIO
 ifeq (y,$(strip $(IIOD)))
