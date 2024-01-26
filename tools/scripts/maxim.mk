@@ -125,8 +125,6 @@ $(PROJECT_TARGET)_configure:
 	$(file > $(LAUNCHJSON),$(VSC_LAUNCH_CONTENT))
 
 $(PLATFORM)_sdkopen:
-	$(info Shouldn't be here $(TARGET))
-	$(shell $(PYTHON) $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
 	code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
