@@ -53,14 +53,10 @@ OPENOCD_BIN=$(MAXIM_LIBRARIES)/../Tools/OpenOCD
 LDFLAGS = -mcpu=cortex-m4 	\
 	-Wl,--gc-sections 	\
 	--specs=nosys.specs	\
-	-mfloat-abi=hard 	\
-	-mfpu=fpv4-sp-d16 	\
 	--entry=Reset_Handler		
 	
 CFLAGS += -mthumb                                                                 \
         -mcpu=cortex-m4                                                         \
-        -mfloat-abi=hard                                                        \
-        -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
         -fsingle-precision-constant                                             \
         -ffunction-sections                                                     \
