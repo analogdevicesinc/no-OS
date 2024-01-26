@@ -228,7 +228,7 @@ EXTRA_INC_PATHS := $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
 EXTRA_INC_PATHS := $(filter-out $(call relative_to_project,$(NO-OS)/include/),$(EXTRA_INC_PATHS))
 EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
 
-CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
+CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS) $(addprefix -I,$(USER_INCLUDES))
 CPPFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 # Text files containing build pre-requisite names.
