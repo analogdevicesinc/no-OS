@@ -42,6 +42,7 @@
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 #include "max22196.h"
 #include "iio_max22196.h"
