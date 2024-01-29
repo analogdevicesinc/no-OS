@@ -17,7 +17,7 @@ ifeq ($(ARM_COMPILER_PATH),)
 ARM_COMPILER_PATH = $(realpath $(dir $(shell which $(CC))))
 endif
 
-export PATH := $(PATH):$(ARM_COMPILER_PATH)
+export PATH := $(ARM_COMPILER_PATH):$(PATH)
 
 CREATED_DIRECTORIES += Maxim
 PROJECT_BUILD = $(BUILD_DIR)/app
