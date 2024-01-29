@@ -361,7 +361,7 @@ int max22196_fault_mask_get(struct max22196_desc *desc,
 		ret = max22196_reg_read(desc, MAX22196_GLOBALCFG_REG, &reg_val);
 		if (ret)
 			return ret;
-		*enabled = no_os_field_get(desc, MAX22196_FAULT_MASK(fault_mask));
+		*enabled = no_os_field_get(MAX22196_FAULT_MASK(fault_mask), reg_val);
 
 		break;
 	case MAX22196_FAULT1_VMLOW ... MAX22196_FAULT1_FAULT2:
@@ -502,7 +502,7 @@ int max22196_init(struct max22196_desc **desc,
 		  struct max22196_init_param *param)
 {
 	struct max22196_desc *descriptor;
-	uint8_t reg_val;
+	uint32_t reg_val;
 	int ret;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
