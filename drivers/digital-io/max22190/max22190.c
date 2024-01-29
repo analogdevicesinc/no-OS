@@ -280,8 +280,7 @@ int max22190_fault_enable_set(struct max22190_desc *desc,
 			      enum max22190_fault_enable fault_enable,
 			      bool enabled)
 {
-	int ret, i;
-	uint32_t reg_val;
+	int ret;
 
 	switch(fault_enable) {
 	case MAX22190_FAULT1_WBGE ... MAX22190_FAULT1_FAULT2E:
@@ -435,7 +434,7 @@ int max22190_init(struct max22190_desc **desc,
 		  struct max22190_init_param *param)
 {
 	struct max22190_desc *descriptor;
-	int ret, i;
+	int ret;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
