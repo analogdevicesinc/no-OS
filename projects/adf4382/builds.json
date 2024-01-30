@@ -1,0 +1,18 @@
+{
+  "mbed": {
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+    },
+    "iio": {
+      "flags": "IIO_EXAMPLE=y BASIC_EXAMPLE=n"
+    }
+  },
+  "stm32": {
+    "basic_example": {
+       "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n HARDWARE=sdp-ck1z.ioc"
+    },
+    "iio": {
+      "flags": "IIO_EXAMPLE=y BASIC_EXAMPLE=n HARDWARE=sdp-ck1z.ioc"
+    }
+  }
+}
