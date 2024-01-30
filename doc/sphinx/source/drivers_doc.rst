@@ -44,6 +44,13 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/max2201x
 
+FREQUENCY GENERATORS
+====================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adf4382
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
