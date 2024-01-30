@@ -41,9 +41,9 @@ def parse_input():
 	parser.add_argument('-hardware', help="Name of hardware to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	parser.add_argument('-builds_dir', default=(os.getcwd() +'/builds'), help="Directory where to build projects")
-	parser.add_argument('-hdl_branch', default='master', help="Name of hdl_branch from which to downlaod hardware or \
+	parser.add_argument('-hdl_branch', default='main', help="Name of hdl_branch from which to downlaod hardware or \
 					 we can also specify a timestamp folder from the specific branch but needs to have a specific format, \
-					 of 'branch_name/YYYY_mm_dd-HH_MM_SS' example: master/2023_09_20-06_52_29")
+					 of 'branch_name/YYYY_mm_dd-HH_MM_SS' example: main/2023_09_20-06_52_29")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
@@ -161,7 +161,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		hdl_branch = re.split('\/', hdl_branch)[0]
 		timestamp_folder = timestamp_match.group()
 
-	if hdl_branch == "master":
+	if hdl_branch == "main":
 		hdl_branch_path = hdl_branch + '/hdl_output'
 	else:
 		if requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
