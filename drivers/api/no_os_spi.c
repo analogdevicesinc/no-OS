@@ -219,3 +219,50 @@ out:
 	no_os_mutex_unlock(desc->bus->mutex);
 	return ret;
 }
+
+/**
+ * @brief Transfer a list of messages using DMA and busy wait for the completion
+ * @param desc - The SPI descriptor.
+ * @param msgs - Array of messages.
+ * @param len - Number of messages in the array.
+ * @return 0 in case of success, negativ error code otherwise.
+ */
+int32_t no_os_spi_transfer_dma_sync(struct no_os_spi_desc *desc,
+				    struct no_os_spi_msg *msgs,
+				    uint32_t len)
+{
+	if (!desc || !desc->platform_ops || !msgs || !len)
+		return -EINVAL;
+
+	if (desc->platform_ops->dma_transfer_sync)
+		return desc->platform_ops->dma_transfer_sync(desc, msgs, len);
+
+	return -ENOSYS;
+}
+
+/**
+ * @brief Transfer a list of messages using DMA. The function will return after the
+ * 	  first transfer is started. Once all the transfers are complete, a callback
+ * 	  will be called.
+ * @param desc - The SPI descriptor.
+ * @param msgs - Array of messages.
+ * @param len - Number of messages in the array.
+ * @param callback - A function which will be called after all the transfers are done.
+ * @param ctx - User specific data which should be passed to the callback function.
+ * @return 0 in case of success, negativ error code otherwise.
+ */
+int32_t no_os_spi_transfer_dma_async(struct no_os_spi_desc *desc,
+				     struct no_os_spi_msg *msgs,
+				     uint32_t len,
+				     void (*callback)(void *),
+				     void *ctx)
+{
+	if (!desc || !desc->platform_ops || !msgs || !len)
+		return -EINVAL;
+
+	if (desc->platform_ops->dma_transfer_async)
+		return desc->platform_ops->dma_transfer_async(desc, msgs, len,
+				callback, ctx);
+
+	return -ENOSYS;
+}

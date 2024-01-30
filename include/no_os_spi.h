@@ -207,6 +207,17 @@ struct no_os_spi_platform_ops {
 	int32_t (*write_and_read)(struct no_os_spi_desc *, uint8_t *, uint16_t);
 	/** Iterate over the spi_msg array and send all messages at once */
 	int32_t (*transfer)(struct no_os_spi_desc *, struct no_os_spi_msg *, uint32_t);
+	/** Iterate over the spi_msg array and send all messages using DMA.
+	 * Blocks until the transfer is completed.
+	 */
+	int32_t (*dma_transfer_sync)(struct no_os_spi_desc *, struct no_os_spi_msg *,
+				     uint32_t);
+	/** Iterate over the spi_msg array and send all messages using DMA.
+	 * Returns immediately after the transfer is started and invokes a
+	 * callback once all the messages have been transfered.
+	 */
+	int32_t (*dma_transfer_async)(struct no_os_spi_desc *, struct no_os_spi_msg *,
+				      uint32_t, void (*)(void *), void *);
 	/** SPI remove function pointer */
 	int32_t (*remove)(struct no_os_spi_desc *);
 };
@@ -231,6 +242,20 @@ int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
 int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 			   struct no_os_spi_msg *msgs,
 			   uint32_t len);
+
+/* Transfer a list of messages using DMA. Wait until all transfers are done */
+int32_t no_os_spi_transfer_dma_sync(struct no_os_spi_desc *desc,
+				    struct no_os_spi_msg *msgs,
+				    uint32_t len);
+/*
+ * Transfer a list of messages using DMA. Return once the first one started and
+ * invoke a callback when they are done.
+ */
+int32_t no_os_spi_transfer_dma_async(struct no_os_spi_desc *desc,
+				     struct no_os_spi_msg *msgs,
+				     uint32_t len,
+				     void (*callback)(void *),
+				     void *ctx);
 
 /* Initialize SPI bus descriptor*/
 int32_t no_os_spibus_init(const struct no_os_spi_init_param *param);
