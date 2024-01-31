@@ -3,6 +3,7 @@ import json
 import os
 import requests
 import re
+import ast
 from bs4 import BeautifulSoup
 from artifactory import ArtifactoryPath
 
@@ -10,6 +11,9 @@ from artifactory import ArtifactoryPath
 NOOS_PATH = sys.argv[1]
 BUILD_PATH = sys.argv[2]
 HDL_SERVER_BASE_PATH = sys.argv[3]
+blacklist = ast.literal_eval(sys.argv[4])
+
+
 NEW_HW_DIR_NAME = 'new_hardware'
 FOLDERS_NR = 30 #number of folders to check for missing hardware file
 
@@ -28,6 +32,9 @@ for dir in os.listdir(NOOS_PATH + '/projects'):
 new_harware_dir= os.path.join(BUILD_PATH, NEW_HW_DIR_NAME)
 os.system("rm -rf %s/*" % (new_harware_dir))
 unique_hardware_list = set(list_hardware)
+for item in blacklist:
+    if item in unique_hardware_list:
+        unique_hardware_list.remove(item)
 pattern= '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 timestamp_match = re.search(pattern, HDL_SERVER_BASE_PATH)
 
