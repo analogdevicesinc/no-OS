@@ -237,6 +237,8 @@ ASFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags.txt
 include $(NO-OS)/tools/scripts/vsc_intellisense.mk
 # Prepare for VS Code Debug config applied at target "project"
 include $(NO-OS)/tools/scripts/vsc_openocd_debug.mk
+# Prepare for VS Code Tasks config applied at target $(PROJECT_TARGET)_configure
+include $(NO-OS)/tools/scripts/vsc_tasks.mk
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         

@@ -8,7 +8,7 @@
             "defines": [
                 VSCODE_DEFINES_INTELLI
             ],
-            "compilerPath": COMPILER_BIN,
+            "compilerPath": COMPILER_INTELLISENSE_PATH,
             "cStandard": "gnu11",
             "cppStandard": "gnu++11",
             "intelliSenseMode": "linux-gcc-arm"
