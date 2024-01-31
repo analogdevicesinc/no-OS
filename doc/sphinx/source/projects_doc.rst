@@ -41,3 +41,4 @@ DIGITAL-IO
    :maxdepth: 1
 
    projects/max14914
+   projects/max14919
