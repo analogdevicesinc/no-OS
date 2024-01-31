@@ -54,6 +54,10 @@
 #include "xilinx_gpio.h"
 #include "ad7616.h"
 #include "parameters.h"
+#include "no_os_pwm.h"
+#include "axi_pwm_extra.h"
+#include "clk_axi_clkgen.h"
+#include "xil_io.h"
 
 #include "no_os_print_log.h"
 
@@ -70,9 +74,28 @@ struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = 100000000,
 	.type = SPI_ENGINE,
-	.spi_engine_baseaddr = AD7616_CORE_BASEADDR,
+	.spi_engine_baseaddr = AD7616_SPI_ENGINE_BASEADDR,
 	.cs_delay = 1,
-	.data_width = 8,
+	.data_width = 16,
+};
+
+struct axi_clkgen_init clkgen_init = {
+	.name = "rx_clkgen",
+	.base = AD7616_RX_CLKGEN_BASEADDR,
+	.parent_rate = 100000000,
+};
+
+struct axi_pwm_init_param axi_pwm_init_params = {
+	.base_addr = AXI_PWMGEN_BASEADDR,
+	.ref_clock_Hz = 100000000,
+};
+
+struct no_os_pwm_init_param trigger_pwm_init = {
+	.period_ns = 1000,	/* 1MHz */
+	.duty_cycle_ns = AD7616_TRIGGER_PULSE_WIDTH_NS,  /* pulse_width = 50 */
+	.polarity = NO_OS_PWM_POLARITY_HIGH,
+	.extra = &axi_pwm_init_params,
+	.platform_ops = &axi_pwm_ops,
 };
 
 struct no_os_spi_init_param ad7616_spi_init = {
@@ -97,6 +120,9 @@ struct ad7616_init_param init_param = {
 	/* SPI */
 	.spi_param = &ad7616_spi_init,
 	.offload_init_param = &spi_engine_offload_init_param,
+	.trigger_pwm_init = &trigger_pwm_init,
+	.clkgen_init = &clkgen_init,
+	.axi_clkgen_rate = 100000000,
 	.reg_access_speed = 1000000,
 	/* GPIO */
 	.gpio_hw_rngsel0_param = NULL,
@@ -106,7 +132,7 @@ struct ad7616_init_param init_param = {
 	.gpio_os2_param = NULL,
 	.gpio_reset_param = &ad7616_gpio_reset,
 	/* AXI Core */
-	.core_baseaddr = AD7616_CORE_BASEADDR,
+	.core_baseaddr = AD7616_SPI_ENGINE_BASEADDR,
 	/* Device Settings */
 	.mode = AD7616_SW,
 	.va = {
@@ -128,7 +154,8 @@ struct ad7616_init_param init_param = {
 int main(void)
 {
 	struct ad7616_dev	*dev;
-	uint32_t buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((aligned));
+	struct ad7616_conversion_result buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((
+				aligned));
 	uint32_t i;
 
 	Xil_ICacheEnable();
@@ -141,11 +168,10 @@ int main(void)
 	if(dev->interface == AD7616_PARALLEL)
 		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
 	else
-		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO);
+		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO * 2);
 
 	for (i = 0; i < AD7616_SDZ_SAMPLE_NO; i++) {
-		pr_info("ADC sample %lu : %lu \n", i * 2, buf[i] >> 16);
-		pr_info("ADC sample %lu : %lu \n", (i * 2) + 1, buf[i] & 0xFFFF);
+		pr_info("%u\t%u\n", buf[i].channel_a, buf[i].channel_b);
 	}
 
 	pr_info("Capture done. \n");
