@@ -51,6 +51,10 @@ def parse_input():
 
 ERR = 0
 LOG_START = " -> "
+USER = os.environ.get('USER')
+TOKEN = os.environ.get('TOKEN')
+BRANCH = os.environ.get('BRANCH')
+blacklist_url = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
 
 def log(msg):
 	print(TGREEN + LOG_START + TWHITE + msg)
@@ -146,6 +150,20 @@ else:
 HW_DIR_NAME = 'hardware'
 NEW_HW_DIR_NAME = 'new_hardware'
 
+def process_blacklist():
+	blacklist = []
+	err = os.system('wget --http-user={} --http-password={} --auth-no-challenge \'{}\' -O blacklist.txt >> {} 2>&1'
+				.format(USER, TOKEN, blacklist_url, log_file))
+	if err != 0 or (not os.path.isfile('blacklist.txt')):
+		log_err('Can not download blacklist file')
+		return blacklist
+	file = open('blacklist.txt', 'r')
+	for line in file.readlines():
+		project = line.split('#')[0].rstrip().replace('.', '_')
+		if project != '':
+			blacklist.append(project)
+	return blacklist
+
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	try:
 		with open(os.path.expanduser('~') + '/configure_hdl_new.txt') as configure_file:
@@ -156,6 +174,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		print("Configuration file needed")
 
 	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
+	blacklist = []
 	timestamp_match = re.search(pattern, hdl_branch)
 	if timestamp_match:
 		hdl_branch = re.split('\/', hdl_branch)[0]
@@ -187,13 +206,14 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	run_cmd(create_dir_cmd.format(hardwares))
 	server_full_path = server_base_path + hdl_branch_path
 	if (_platform is None or _platform == 'xilinx'):
+		blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 		run_cmd(create_dir_cmd.format(new_hardwares))
-		err = os.system("python " + noos + "/tools/scripts/download_files.py " + noos + \
-		  " " + builds_dir + " " + server_full_path)
+		err = os.system("python {}/tools/scripts/download_files.py {} {} {} \"{}\""
+				  .format(noos, noos, builds_dir, server_full_path, blacklist))
 		if err != 0:
 			return
-	return (environment_path_files, builds_dir)
+	return (environment_path_files, builds_dir, blacklist)
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
@@ -323,7 +343,7 @@ def main():
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
-	(environment_path_files, builds_dir) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
+	(environment_path_files, builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		binary_created = False
 		if _project is not None:
@@ -357,6 +377,8 @@ def main():
 					if _hw is not None:
 						if _hw != hardware:
 							continue
+					if hardware in blacklist:
+						continue
 					env = dict(os.environ)
 					shell_source(environment_path_files + platform + "_environment.sh")
 
