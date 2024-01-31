@@ -8,6 +8,7 @@
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",
+            "preLaunchTask": PLATFORM_VAR,
             "svdFile": VSCODE_SVD_FILE,
             "configFiles": [
                 VSCODE_STLINKCFG_FILE
@@ -19,11 +20,12 @@
         {
             "cwd": "${workspaceFolder}",
             "executable": VSCODE_ELF_FILE,
-            "name": "OpenOCD(cmsis-dap)",
+            "name": "OpenOCD(CMSIS-dap)",
             "request": "launch",
             "type": "cortex-debug",
             "device": "cmsis-dap",
             "servertype": "openocd",
+            "preLaunchTask": PLATFORM_VAR,
             "svdFile": VSCODE_SVD_FILE,
             "configFiles": [
                 VSCODE_CMSISCFG_FILE

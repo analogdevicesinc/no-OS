@@ -20,12 +20,14 @@ endif # STM32CUBEMX check
 
 # Locate the compiler path under STM32CubeIDE plugins directory
 COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
+COMPILER_INTELLISENSE_PATH = $(COMPILER_BIN)/arm-none-eabi-gcc
 
 # Locate openocd location under STM32CubeIDE plugins directory
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
 OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
 OPENOCD_SVD = $(word 1,$(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *.svd))))
 VSCODE_CMSISCFG_FILE = "$(BINARY).openocd-cmsis"
+TARGET_HARDWARE=HARDWARE=$(HARDWARE)
 
 # stm32 specific build directory tree (project goes under app, but user .c/.h sources must go under app/Core)
 PROJECT_BUILDROOT = $(BUILD_DIR)/app
@@ -104,6 +106,7 @@ $(PROJECT)_configure:
 	$(file > $(CPP_PROP_JSON),$(CPP_FINAL_CONTENT))
 	$(file > $(SETTINGSJSON),$(VSC_SET_CONTENT))
 	$(file > $(LAUNCHJSON),$(VSC_LAUNCH_CONTENT))
+	$(file > $(TASKSJSON),$(VSC_TASKS_CONTENT))
 	$(MAKE) $(BINARY).openocd-cmsis
 	$(MAKE) $(BINARY).openocd
 

@@ -4,6 +4,8 @@ ifndef MAXIM_LIBRARIES
 $(error MAXIM_LIBRARIES not defined.$(ENDL))
 endif
 
+export INCLUDE_OTHER_PATTERN	= $(PROJECT_BUILD)/root/MaximSDK/Libraries
+export INCLUDE_OTHER_CORRECTED	= $(MAXIM_LIBRARIES)
 CC=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
 AS=arm-none-eabi-gcc
@@ -19,7 +21,7 @@ ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GN
 ifeq ($(ARM_COMPILER_PATH),)
 ARM_COMPILER_PATH = $(realpath $(dir $(shell which $(CC))))
 endif
-export COMPILER_BIN = $(ARM_COMPILER_PATH)/$(CC)
+export COMPILER_INTELLISENSE_PATH = $(ARM_COMPILER_PATH)/$(CC)
 export PATH := $(PATH):$(ARM_COMPILER_PATH)
 
 CREATED_DIRECTORIES += Maxim
@@ -37,6 +39,7 @@ TARGET?=max32660
 TARGET_NUMBER:=$(word 2,$(subst x, ,$(TARGET)))
 TARGET_UCASE=$(addprefix MAX,$(TARGET_NUMBER))
 TARGET_LCASE=$(addprefix max,$(TARGET_NUMBER))
+TARGET_HARDWARE=TARGET=$(TARGET)
 
 PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET)
 
@@ -123,6 +126,7 @@ $(PROJECT_TARGET)_configure:
 	$(file > $(CPP_PROP_JSON),$(CPP_FINAL_CONTENT))
 	$(file > $(SETTINGSJSON),$(VSC_SET_CONTENT))
 	$(file > $(LAUNCHJSON),$(VSC_LAUNCH_CONTENT))
+	$(file > $(TASKSJSON),$(VSC_TASKS_CONTENT))
 
 $(PLATFORM)_sdkopen:
 	code $(PROJECT)

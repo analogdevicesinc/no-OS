@@ -1,0 +1,14 @@
+{
+    "tasks": [
+        {
+            "label": "PLATFORM_VAR Run",
+            "type": "shell",
+            "command": "make run -C ${workspaceFolder} PLATFORM=PLATFORM_VAR TARGET_HARDWARE"
+        },
+        {
+            "label": "PLATFORM_VAR Build",
+            "type": "shell",
+            "command": "make -C ${workspaceFolder} PLATFORM=PLATFORM_VAR TARGET_HARDWARE"
+        }        
+    ]
+}
