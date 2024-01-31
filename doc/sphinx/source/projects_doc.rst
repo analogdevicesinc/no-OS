@@ -34,3 +34,10 @@ EVAL BOARDS
    :maxdepth: 1
 
    projects/apard32690
+
+DIGITAL-IO
+==========
+.. toctree::
+   :maxdepth: 1
+
+   projects/max14914
