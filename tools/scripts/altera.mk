@@ -82,10 +82,9 @@ altera_run: all
 	$(WSL) nios2-download -r -g $(BINARY)
 	nios2-terminal
 
-$(PROJECT_TARGET):
+$(PLATFORM)_project:
 	$(WSL) nios2-bsp hal "$(BUILD_DIR)/bsp" $(HARDWARE) --cpu-name sys_cpu
 	$(WSL) $(MAKE) CFLAGS= -C $(call adjust_path, $(BUILD_DIR)/bsp)
-	$(call set_one_time_rule,$@)
 
 post_build:
 	$(WSL) nios2-elf-insert $(BINARY) $(STAMP)

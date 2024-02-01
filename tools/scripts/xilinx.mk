@@ -233,13 +233,12 @@ $(PLATFORM)_sdkclean:
 	$(call print,[Delete] SDK artefacts from $(BUILD_DIR))
 	$(call tcl_util, clean_build) $(HIDE)
 
-$(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
+$(PLATFORM)_project: $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
 	$(call tcl_util, create_project)  $(HIDE)
 ifeq (y,$(strip $(NETWORKING)))
 	$(call remove_file,$(BUILD_DIR)/app/src/main.c $(BUILD_DIR)/app/src/echo.c) $(HIDE)
 endif
-	$(call set_one_time_rule,$@)
 	$(call print,Creating fsbl.elf)
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
 	xsct -nodisp $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)

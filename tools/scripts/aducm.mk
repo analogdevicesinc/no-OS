@@ -232,7 +232,7 @@ INCLUDE_FLAGS = $(addprefix -append-switch compiler -I='$${ProjDirPath}/,$(addsu
 endif
 
 #Create new project with platform driver and utils source folders linked
-$(PROJECT_TARGET):
+$(PLATFORM)_project:
 	$(call print,Creating IDE project)
 	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-command projectcreate \
@@ -267,7 +267,6 @@ $(PROJECT_TARGET):
 	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
 #Remove default files from projectsrc
 	$(call remove_dir_action,$(PROJECT_BUILD)/src) $(HIDE)
-	$(call set_one_time_rule,$@)
 
 copy_pinmux:
 	$(call copy_file,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)

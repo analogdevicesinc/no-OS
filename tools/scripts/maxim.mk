@@ -104,11 +104,10 @@ ifeq ($(TARGET), max32650)
 INCS := $(filter-out $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/mxc_device.h, $(INCS))
 endif
 
-$(PROJECT_TARGET):
+$(PLATFORM)_project:
 	$(call print, Building for target $(TARGET_LCASE))
 	$(call print,Creating IDE project)
 	$(call mk_dir,$(BUILD_DIR))
-	$(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
 	$(shell $(PYTHON) $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
