@@ -49,3 +49,10 @@ ADC
    :maxdepth: 1
 
    projects/ad7616-st
+
+POWER MANAGEMENT
+================
+.. toctree::
+   :maxdepth: 1
+
+   projects/adp1050
