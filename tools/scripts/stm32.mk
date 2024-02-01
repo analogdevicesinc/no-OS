@@ -62,7 +62,7 @@ LSCRIPT=$(wildcard $(PROJECT_BUILDROOT)/*FLASH.ld)
 # Get the extra flags that need to be added into the .cproject file
 CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
-$(PROJECT_TARGET):
+$(PLATFORM)_project:
 	$(call print,Creating IDE project)
 	$(call mk_dir, $(BUILD_DIR))
 	$(call mk_dir, $(VSCODE_CFG_DIR))
@@ -78,10 +78,9 @@ $(PROJECT_TARGET):
 	@echo exit >> $(BINARY).cubemx
 	java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	$(call remove_file,$(BINARY).cubemx) $(HIDE)
-	$(MAKE) --no-print-directory $(PROJECT_TARGET)_configure
-	$(call set_one_time_rule,$@)
+	$(MAKE) --no-print-directory $(PROJECT)_configure
 
-$(PROJECT_TARGET)_configure:
+$(PROJECT)_configure:
 	$(call print,Configuring project)
 	sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)

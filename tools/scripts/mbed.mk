@@ -76,12 +76,11 @@ echo $(1) >> $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
 endef
 
 # Rule for building Mbed-OS
-$(PROJECT_TARGET): MBED-OS-build
+$(PLATFORM)_project: MBED-OS-build
 	-$(call mk_dir,$(BUILD_DIR)) $(HIDE)
 	$(call print, putting mbed-os object files names to text file)
 	echo -n > $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
 	$(call process_items_in_chunks,$(sort $(UPDATE_MBED_GENERATED_ARCHIVE_FILE)),10,generate_obj_func)
-	$(call set_one_time_rule,$@)
 
 $(MBED_OS_LIBRARY):
 	$(MAKE) --no-print-directory MBED-OS-build $(HIDE)

@@ -414,11 +414,10 @@ LDFLAGS += -Wl,--wrap=puts
 LDFLAGS += -Wl,--wrap=putchar
 LDFLAGS += -Wl,--wrap=getchar
 
-$(PROJECT_TARGET):
+$(PLATFORM)_project:
 	$(call print, Buildingfortarget $(TARGET))
 	$(call print, CreatingIDEproject)
 	$(call mk_dir, $(BUILD_DIR)) $(HIDE)
-	$(call set_one_time_rule, $@)
 
 $(PLATFORM)_sdkopen:
 	$(shell python $(PLATFORM_TOOLS)/run_config.py $(BINARY) $(PROJECT) $(PICO_SDK_PATH) $(TARGET) $(JLINK_SERVER_PATH))

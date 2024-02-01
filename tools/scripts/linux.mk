@@ -8,9 +8,8 @@ PROJECT_BUILD = $(BUILD_DIR)/app
 CFLAGS +=  -g3 \
 		-DLINUX_PLATFORM \
 
-$(PROJECT_TARGET):
+$(PLATFORM)_project:
 	$(call mk_dir, $(BUILD_DIR)) $(HIDE)
-	$(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
 	$(call mk_dir, $(PROJECT_BUILD)) $(HIDE)

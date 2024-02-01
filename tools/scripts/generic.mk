@@ -30,9 +30,6 @@ make_link = ln -sf $1 $2
 # Recursive wildcard
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
-# Creates file with the specified name
-set_one_time_rule = echo Target file. Do not delete > $1
-
 # Convert full path to relative path
 # $(PROJECT)/something <-> srcs/something
 # $(NO-OS)/something <-> noos/something
@@ -77,7 +74,7 @@ OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY_FILE_NAME ?= $(PROJECT_NAME)
 BINARY			?=  $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
-PROJECT_TARGET		= $(BUILD_DIR)/.project.target
+BUILD_LOCK = $(BUILD_DIR)/.project.target
 VSCODE_CFG_DIR	= $(PROJECT)/.vscode
 VSCODE_SUPPORT	?= no
 
@@ -237,9 +234,9 @@ CFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags.txt
 CPPFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags.txt
 ASFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags.txt
 
-# Prepare for VS Code Debug Intellisense applied at target $(PROJECT_TARGET)_configure - depends on a complete CFLAGS
+# Prepare for VS Code Debug Intellisense applied at "project" - depends on a complete CFLAGS
 include $(NO-OS)/tools/scripts/vsc_intellisense.mk
-# Prepare for VS Code Debug config applied at target $(PROJECT_TARGET)_configure
+# Prepare for VS Code Debug config applied at target "project"
 include $(NO-OS)/tools/scripts/vsc_openocd_debug.mk
 
 #------------------------------------------------------------------------------
@@ -248,9 +245,7 @@ include $(NO-OS)/tools/scripts/vsc_openocd_debug.mk
 
 .DEFAULT_GOAL := all
 PHONY += all
-# If the build dir was created just build the binary.
-# else the project will be build first. This will allow to run make with -j .
-ifneq ($(wildcard $(PROJECT_TARGET)),)
+ifneq ($(wildcard $(BUILD_LOCK)),)
 all:
 	$(call print_build_type,$(PLATFORM))
 	$(MAKE) --no-print-directory build
@@ -261,7 +256,7 @@ endif
 else
 all:
 	$(call print_build_type,$(PLATFORM))
-# Remove -j flag for running project target. (It doesn't work on xilinx on this target)
+	$(MAKE) --no-print-directory project
 	$(MAKE) --no-print-directory update
 	$(MAKE) --no-print-directory build
 ifeq 'xilinx' '$(PLATFORM)'
@@ -350,9 +345,8 @@ PHONY += run
 run: $(PLATFORM)_run
 	$(call print,$(notdir $(BINARY)) uploaded to board)
 
-project: $(PROJECT_TARGET)
-
-$(PROJECT_TARGET): $(LIB_TARGETS)
+project: $(LIB_TARGETS) $(PLATFORM)_project
+	@echo "Build lock." > $(BUILD_LOCK)
 
 # Platform specific post build dependencies can be added to this rule.
 post_build:
@@ -377,7 +371,7 @@ $(call update_file,$(1),$(call relative_to_project,$(1)))
 endef
 
 PHONY += update
-update: $(PROJECT_TARGET)
+update:
 	$(call print,$(ACTION) srcs to created project)
 	$(call remove_dir,$(DIRS_TO_REMOVE))
 	$(call mk_dir,$(DIRS_TO_CREATE))
