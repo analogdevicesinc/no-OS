@@ -188,7 +188,7 @@ $(HEX): $(BINARY)
 	$(OC) -O ihex $(BINARY) $(HEX)
 	$(call print,$(notdir $@) is ready)
 
-post_build: $(HEX)
+$(PLATFORM)_post_build: $(HEX)
 
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:

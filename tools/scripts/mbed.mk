@@ -101,4 +101,4 @@ $(PROJECT_BIN_FILE):$(BINARY)
 	$(OC) -O binary $< $@
 	$(call print,Done $(PROJECT_BIN_FILE))
 
-post_build: $(PROJECT_BIN_FILE)
+$(PLATFORM)_post_build: $(PROJECT_BIN_FILE)

@@ -249,9 +249,6 @@ ifneq ($(wildcard $(BUILD_LOCK)),)
 all:
 	$(call print_build_type,$(PLATFORM))
 	$(MAKE) --no-print-directory build
-ifeq 'xilinx' '$(PLATFORM)'
-	$(MAKE) --no-print-directory create_boot_bin
-endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all:
@@ -259,9 +256,6 @@ all:
 	$(MAKE) --no-print-directory project
 	$(MAKE) --no-print-directory update
 	$(MAKE) --no-print-directory build
-ifeq 'xilinx' '$(PLATFORM)'
-	$(MAKE) --no-print-directory create_boot_bin
-endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
 
@@ -349,7 +343,7 @@ project: $(LIB_TARGETS) $(PLATFORM)_project
 	@echo "Build lock." > $(BUILD_LOCK)
 
 # Platform specific post build dependencies can be added to this rule.
-post_build:
+post_build: $(PLATFORM)_post_build
 	$(SIZE) --format=Berkley $(BINARY) $(HEX)
 
 # Function to process a list in chunks

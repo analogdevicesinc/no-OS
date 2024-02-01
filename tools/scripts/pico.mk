@@ -476,7 +476,7 @@ link_srcs:
 	$(foreach file,$(sort $(PLATFORM_INCLUDE_FILES)),\
 		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE);) echo . $(HIDE)
 
-post_build: $(HEX) $(UF2) link_srcs
+$(PLATFORM)_post_build: $(HEX) $(UF2) link_srcs
 
 clean_hex:
 	@$(call print, [Delete] $(HEX))
