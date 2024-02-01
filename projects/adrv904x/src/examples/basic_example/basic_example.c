@@ -199,7 +199,8 @@ int basic_example_main(void)
 	ad9528_param.pdata->pll1_bypass_en = false;
 	ad9528_param.pdata->pll2_bypass_en = false;
 	ad9528_param.pdata->stat0_pin_func_sel = 1; /* PLL1 & PLL2 Locked */
-	ad9528_param.pdata->stat1_pin_func_sel = 7; /* REFA Correct */
+	ad9528_param.pdata->stat1_pin_func_sel =
+		3; /* 7 - REFA Correct; 3 - PLL2 Locked */
 
 	status = ad9528_setup(&ad9528_device, ad9528_param);
 	if (status != 0) {
@@ -220,76 +221,76 @@ int basic_example_main(void)
 		.num_channels = 16
 	};
 
-	 struct jesd204_tx_init tx_jesd_init = {
-	 	.name = "tx_jesd",
-	 	.base = TX_JESD_BASEADDR,
-	 	.octets_per_frame = ADRV9025_TX_JESD_OCTETS_PER_FRAME,
-	 	.frames_per_multiframe = ADRV9025_TX_JESD_FRAMES_PER_MULTIFRAME,
-	 	.converters_per_device = ADRV9025_TX_JESD_CONVS_PER_DEVICE,
-	 	.converter_resolution = ADRV9025_TX_JESD_CONV_RESOLUTION,
-	 	.bits_per_sample = ADRV9025_TX_JESD_BITS_PER_SAMPLE,
-	 	.high_density = ADRV9025_TX_JESD_HIGH_DENSITY,
-	 	.control_bits_per_sample = ADRV9025_TX_JESD_CTRL_BITS_PER_SAMPLE,// optional
-	 	.subclass = ADRV9025_TX_JESD_SUBCLASS,
-	 	.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
-	 	.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
-	 };
+	struct jesd204_tx_init tx_jesd_init = {
+		.name = "tx_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = ADRV9025_TX_JESD_OCTETS_PER_FRAME,
+		.frames_per_multiframe = ADRV9025_TX_JESD_FRAMES_PER_MULTIFRAME,
+		.converters_per_device = ADRV9025_TX_JESD_CONVS_PER_DEVICE,
+		.converter_resolution = ADRV9025_TX_JESD_CONV_RESOLUTION,
+		.bits_per_sample = ADRV9025_TX_JESD_BITS_PER_SAMPLE,
+		.high_density = ADRV9025_TX_JESD_HIGH_DENSITY,
+		.control_bits_per_sample = ADRV9025_TX_JESD_CTRL_BITS_PER_SAMPLE,// optional
+		.subclass = ADRV9025_TX_JESD_SUBCLASS,
+		.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
+	};
 
-	 struct jesd204_rx_init rx_jesd_init = {
-	 	.name = "rx_jesd",
-	 	.base = RX_JESD_BASEADDR,
-	 	.octets_per_frame = ADRV9025_RX_JESD_OCTETS_PER_FRAME,
-	 	.frames_per_multiframe = ADRV9025_RX_JESD_FRAMES_PER_MULTIFRAME,
-	 	.subclass = ADRV9025_RX_JESD_SUBCLASS,
-	 	.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
-	 	.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
-	 };
+	struct jesd204_rx_init rx_jesd_init = {
+		.name = "rx_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = ADRV9025_RX_JESD_OCTETS_PER_FRAME,
+		.frames_per_multiframe = ADRV9025_RX_JESD_FRAMES_PER_MULTIFRAME,
+		.subclass = ADRV9025_RX_JESD_SUBCLASS,
+		.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
+	};
 
-	 struct adxcvr_init tx_adxcvr_init = {
-	 	.name = "tx_adxcvr",
-	 	.base = TX_XCVR_BASEADDR,
-	 	.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
-	 	.out_clk_sel = ADXCVR_REFCLK,
-	 	.lpm_enable = 0,
-	 	.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-	 	.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
-	 	.export_no_os_clk = true
-	 };
-	 struct adxcvr *tx_adxcvr;
+	struct adxcvr_init tx_adxcvr_init = {
+		.name = "tx_adxcvr",
+		.base = TX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 0,
+		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
+		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.export_no_os_clk = true
+	};
+	struct adxcvr *tx_adxcvr;
 
-	 struct adxcvr_init rx_adxcvr_init = {
-	 	.name = "rx_adxcvr",
-	 	.base = RX_XCVR_BASEADDR,
-	 	.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
-	 	.out_clk_sel = ADXCVR_REFCLK,
-	 	.lpm_enable = 1,
-	 	.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-	 	.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
-	 	.export_no_os_clk = true
-	 };
-	 struct adxcvr *rx_adxcvr;
+	struct adxcvr_init rx_adxcvr_init = {
+		.name = "rx_adxcvr",
+		.base = RX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 1,
+		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
+		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.export_no_os_clk = true
+	};
+	struct adxcvr *rx_adxcvr;
 
-	 status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-	 if (status)
-	 	goto error_1;
+	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
+	if (status)
+		goto error_1;
 
-	 status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
-	 if (status)
-	 	goto error_2;
+	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
+	if (status)
+		goto error_2;
 
-	 struct axi_jesd204_rx *rx_jesd;
-	 struct axi_jesd204_tx *tx_jesd;
+	struct axi_jesd204_rx *rx_jesd;
+	struct axi_jesd204_tx *tx_jesd;
 
-	 rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
-	 tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
+	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
+	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 
-	 status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	 if (status)
-	 	goto error_3;
+	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	if (status)
+		goto error_3;
 
-	 status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	 if (status)
-	 	goto error_4;
+	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	if (status)
+		goto error_4;
 
 	adrv904x_init_par.adrv904x_device = &adrv904x_device;
 	adrv904x_init_par.dev_clk = ad9528_device->clk_desc[1];
@@ -380,12 +381,12 @@ error_6:
 	adrv904x_remove(phy);
 error_5:
 	axi_jesd204_rx_remove(rx_jesd);
- error_4:
- 	axi_jesd204_tx_remove(tx_jesd);
- error_3:
- 	adxcvr_remove(rx_adxcvr);
- error_2:
- 	adxcvr_remove(tx_adxcvr);
+error_4:
+	axi_jesd204_tx_remove(tx_jesd);
+error_3:
+	adxcvr_remove(rx_adxcvr);
+error_2:
+	adxcvr_remove(tx_adxcvr);
 error_1:
 	ad9528_remove(ad9528_device);
 
