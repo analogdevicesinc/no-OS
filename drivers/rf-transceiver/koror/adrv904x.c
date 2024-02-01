@@ -138,155 +138,176 @@ struct adrv904x_jesd204_priv {
 	struct adrv904x_jesd204_link link[5];
 };
 
- int adrv904x_jesd204_link_pre_setup(struct jesd204_dev *jdev,
- 				    enum jesd204_state_op_reason reason)
- {
- 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
- 	struct adrv904x_rf_phy *phy = priv->phy;
- 	uint32_t deviceClockScaled_kHz = 0;
- 	uint64_t dev_clk;
- 	int ret;
-
- 	deviceClockScaled_kHz = phy->kororDevice->initExtract.clocks.deviceClockScaled_kHz;
-
- 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
- 		 jesd204_state_op_reason_str(reason));
-
- 	switch (reason) {
- 	case JESD204_STATE_OP_REASON_INIT:
- 		break;
- 	default:
- 		return JESD204_STATE_CHANGE_DONE;
- 	}
-
- 	ret = no_os_clk_round_rate(phy->dev_clk,
- 			deviceClockScaled_kHz * 1000, &dev_clk);
- 	if (ret)
- 		return JESD204_STATE_CHANGE_ERROR;
-
- 	if (dev_clk > 0 && ((dev_clk / 1000) ==
- 			deviceClockScaled_kHz)) {
- 		no_os_clk_set_rate(phy->dev_clk, dev_clk);
- 		pr_debug("Device clock %u sucessfully set (%ld)\n",
- 		 				deviceClockScaled_kHz * 1000, dev_clk);
- 	} else {
- 		pr_err("Requesting device clock %u failed got %ld",
- 				deviceClockScaled_kHz * 1000, dev_clk);
- 		return -EINVAL;
- 	}
-
- 	uint64_t r = 0;
- 	no_os_clk_recalc_rate(phy->dev_clk, &r);
-
- 	return JESD204_STATE_CHANGE_DONE;
- }
-
- static int adrv904x_jesd204_link_init(struct jesd204_dev *jdev,
- 				      enum jesd204_state_op_reason reason,
- 				      struct jesd204_link *lnk)
+int adrv904x_jesd204_link_pre_setup(struct jesd204_dev *jdev,
+				    enum jesd204_state_op_reason reason)
 {
-	 struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
-	 struct adrv904x_rf_phy *phy = priv->phy;
-	 uint32_t rate;
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+	uint32_t deviceClockScaled_kHz = 0;
+	uint64_t dev_clk;
+	int ret;
 
- 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
- 		 lnk->link_id, jesd204_state_op_reason_str(reason));
+	deviceClockScaled_kHz =
+		phy->kororDevice->initExtract.clocks.deviceClockScaled_kHz;
 
- 	switch (reason) {
- 	case JESD204_STATE_OP_REASON_INIT:
- 		break;
- 	default:
- 		return JESD204_STATE_CHANGE_DONE;
- 	}
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
 
- 	switch (lnk->link_id) {
- 	case DEFRAMER0_LINK_TX:
-		priv->link[lnk->link_id].source_id = ADI_ADRV904X_DEFRAMER_0;
-		phy->tx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
-		rate = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
-		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].deserialLaneEnabled);
-		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].jesdM;
-		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].jesdNp;
- 		break;
- 	case DEFRAMER1_LINK_TX:
-		priv->link[lnk->link_id].source_id = ADI_ADRV904X_DEFRAMER_1;
-		phy->tx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
-		rate = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].iqRate_kHz;
-		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].deserialLaneEnabled);
-		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].jesdM;
-		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].jesdNp;
+	switch (reason) {
+	case JESD204_STATE_OP_REASON_INIT:
 		break;
- 	case FRAMER0_LINK_RX:
+	default:
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	ret = no_os_clk_round_rate(phy->dev_clk,
+				   deviceClockScaled_kHz * 1000, &dev_clk);
+	if (ret)
+		return JESD204_STATE_CHANGE_ERROR;
+
+	if (dev_clk > 0 && ((dev_clk / 1000) ==
+			    deviceClockScaled_kHz)) {
+		no_os_clk_set_rate(phy->dev_clk, dev_clk);
+		pr_debug("Device clock %u sucessfully set (%ld)\n",
+			 deviceClockScaled_kHz * 1000, dev_clk);
+	} else {
+		pr_err("Requesting device clock %u failed got %ld",
+		       deviceClockScaled_kHz * 1000, dev_clk);
+		return -EINVAL;
+	}
+
+	uint64_t r = 0;
+	no_os_clk_recalc_rate(phy->dev_clk, &r);
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int adrv904x_jesd204_link_init(struct jesd204_dev *jdev,
+				      enum jesd204_state_op_reason reason,
+				      struct jesd204_link *lnk)
+{
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+	uint32_t rate;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	switch (reason) {
+	case JESD204_STATE_OP_REASON_INIT:
+		break;
+	default:
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	switch (lnk->link_id) {
+	case DEFRAMER0_LINK_TX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_DEFRAMER_0;
+		phy->tx_iqRate_kHz  =
+			phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(
+					 phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].deserialLaneEnabled);
+		lnk->num_converters =
+			phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].jesdM;
+		lnk->bits_per_sample =
+			phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].jesdNp;
+		break;
+	case DEFRAMER1_LINK_TX:
+		priv->link[lnk->link_id].source_id = ADI_ADRV904X_DEFRAMER_1;
+		phy->tx_iqRate_kHz  =
+			phy->kororDevice->initExtract.jesdSetting.deframerSetting[0].iqRate_kHz;
+		rate = phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].iqRate_kHz;
+		lnk->num_lanes = no_os_hweight8(
+					 phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].deserialLaneEnabled);
+		lnk->num_converters =
+			phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].jesdM;
+		lnk->bits_per_sample =
+			phy->kororDevice->initExtract.jesdSetting.deframerSetting[1].jesdNp;
+		break;
+	case FRAMER0_LINK_RX:
 		priv->link[lnk->link_id].source_id = ADI_ADRV904X_FRAMER_0;
 		priv->link[lnk->link_id].is_framer = true;
-		phy->rx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].iqRate_kHz;
+		phy->rx_iqRate_kHz  =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[0].iqRate_kHz;
 		rate = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].iqRate_kHz;
-		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.framerSetting[0].serialLaneEnabled);
-		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].jesdM;
-		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.framerSetting[0].jesdNp;
- 		break;
- 	case FRAMER1_LINK_RX:
+		lnk->num_lanes = no_os_hweight8(
+					 phy->kororDevice->initExtract.jesdSetting.framerSetting[0].serialLaneEnabled);
+		lnk->num_converters =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[0].jesdM;
+		lnk->bits_per_sample =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[0].jesdNp;
+		break;
+	case FRAMER1_LINK_RX:
 		priv->link[lnk->link_id].source_id = ADI_ADRV904X_FRAMER_1;
 		priv->link[lnk->link_id].is_framer = true;
-		phy->rx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].iqRate_kHz;
+		phy->rx_iqRate_kHz  =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[1].iqRate_kHz;
 		rate = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].iqRate_kHz;
-		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.framerSetting[1].serialLaneEnabled);
-		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].jesdM;
-		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.framerSetting[1].jesdNp;
- 		break;
- 	case FRAMER2_LINK_RX:
+		lnk->num_lanes = no_os_hweight8(
+					 phy->kororDevice->initExtract.jesdSetting.framerSetting[1].serialLaneEnabled);
+		lnk->num_converters =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[1].jesdM;
+		lnk->bits_per_sample =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[1].jesdNp;
+		break;
+	case FRAMER2_LINK_RX:
 		priv->link[lnk->link_id].source_id = ADI_ADRV904X_FRAMER_2;
 		priv->link[lnk->link_id].is_framer = true;
-		phy->rx_iqRate_kHz  = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].iqRate_kHz;
+		phy->rx_iqRate_kHz  =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[2].iqRate_kHz;
 		rate = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].iqRate_kHz;
-		lnk->num_lanes = no_os_hweight8(phy->kororDevice->initExtract.jesdSetting.framerSetting[2].serialLaneEnabled);
-		lnk->num_converters = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].jesdM;
-		lnk->bits_per_sample = phy->kororDevice->initExtract.jesdSetting.framerSetting[2].jesdNp;
+		lnk->num_lanes = no_os_hweight8(
+					 phy->kororDevice->initExtract.jesdSetting.framerSetting[2].serialLaneEnabled);
+		lnk->num_converters =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[2].jesdM;
+		lnk->bits_per_sample =
+			phy->kororDevice->initExtract.jesdSetting.framerSetting[2].jesdNp;
 		break;
- 	default:
- 		return -EINVAL;
- 	}
+	default:
+		return -EINVAL;
+	}
 
- 	lnk->sample_rate = rate * 1000;
+	lnk->sample_rate = rate * 1000;
 
- 	if (phy->tx_iqRate_kHz && (lnk->link_id == DEFRAMER0_LINK_TX)) {
- 		lnk->octets_per_frame = 4;
- 		lnk->frames_per_multiframe = 64;
- 		lnk->device_id = 0;
- 		lnk->bank_id = 0;
- 		lnk->scrambling = 1;
- 		lnk->converter_resolution = 16;
- 		lnk->ctrl_bits_per_sample = 0;
- 		lnk->jesd_version = JESD204_VERSION_C;
- 		lnk->subclass = JESD204_SUBCLASS_1;
- 		lnk->is_transmit = false;
- 		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
- 	} else if (phy->rx_iqRate_kHz && (lnk->link_id == FRAMER0_LINK_RX)) {
- 		lnk->octets_per_frame = 4;
- 		lnk->frames_per_multiframe = 64;
- 		lnk->device_id = 0;
- 		lnk->bank_id = 0;
- 		lnk->scrambling = 1;
- 		lnk->converter_resolution = 16;
- 		lnk->ctrl_bits_per_sample = 0;
- 		lnk->jesd_version = JESD204_VERSION_C;
- 		lnk->subclass = JESD204_SUBCLASS_1;
- 		lnk->is_transmit = true;
- 		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
- 	};
+	if (phy->tx_iqRate_kHz && (lnk->link_id == DEFRAMER0_LINK_TX)) {
+		lnk->octets_per_frame = 4;
+		lnk->frames_per_multiframe = 64;
+		lnk->device_id = 0;
+		lnk->bank_id = 0;
+		lnk->scrambling = 1;
+		lnk->converter_resolution = 16;
+		lnk->ctrl_bits_per_sample = 0;
+		lnk->jesd_version = JESD204_VERSION_C;
+		lnk->subclass = JESD204_SUBCLASS_1;
+		lnk->is_transmit = false;
+		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
+	} else if (phy->rx_iqRate_kHz && (lnk->link_id == FRAMER0_LINK_RX)) {
+		lnk->octets_per_frame = 4;
+		lnk->frames_per_multiframe = 64;
+		lnk->device_id = 0;
+		lnk->bank_id = 0;
+		lnk->scrambling = 1;
+		lnk->converter_resolution = 16;
+		lnk->ctrl_bits_per_sample = 0;
+		lnk->jesd_version = JESD204_VERSION_C;
+		lnk->subclass = JESD204_SUBCLASS_1;
+		lnk->is_transmit = true;
+		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
+	};
 
- 	return JESD204_STATE_CHANGE_DONE;
- }
+	return JESD204_STATE_CHANGE_DONE;
+}
 
 int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
-			enum jesd204_state_op_reason reason)
+				enum jesd204_state_op_reason reason)
 {
-//	adi_adrv904x_ErrAction_e recAction = ADI_ADRV904X_ERR_ACT_NONE;
+	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct adrv904x_rf_phy *phy = priv->phy;
 
 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-			jesd204_state_op_reason_str(reason));
+		 jesd204_state_op_reason_str(reason));
 
 
 	if (reason == JESD204_STATE_OP_REASON_UNINIT) {
@@ -295,16 +316,54 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 		adi_adrv904x_HwClose(phy->kororDevice);
 
 		memset(&phy->adi_adrv904x_device.devStateInfo, 0,
-				sizeof(phy->adi_adrv904x_device.devStateInfo));
+		       sizeof(phy->adi_adrv904x_device.devStateInfo));
 
 		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	memset(&phy->adi_adrv904x_device.devStateInfo, 0,
+	       sizeof(phy->adi_adrv904x_device.devStateInfo));
+
+	recoveryAction = adi_adrv904x_HwOpen(phy->kororDevice, &phy->spiSettings);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+		pr_err("ERROR adi_ad9528_HwOpen failed in %s at line %d.\n", __func__,
+		       __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	adi_common_LogLevelSet(&phy->kororDevice->common,
+			       ADI_HAL_LOG_ERR | ADI_HAL_LOG_WARN);
+
+	recoveryAction = adi_adrv904x_HwReset(phy->kororDevice);
+
+	recoveryAction = adi_adrv904x_PreMcsInit(phy->kororDevice, &deviceInitStruct,
+			 &phy->trxBinaryInfoPtr);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+		pr_err("ERROR adi_adrv904x_PreMcsInit failed in %s at line %d.\n", __func__,
+		       __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	recoveryAction = adi_adrv904x_PreMcsInit_NonBroadcast(phy->kororDevice,
+			 &deviceInitStruct);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+		pr_err("ERROR adi_adrv904x_PreMcsInit_NonBroadcast failed in %s at line %d.\n",
+		       __func__, __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+		pr_err("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n",
+		       __func__, __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
 
- static int adrv904x_jesd204_setup_stage1(struct jesd204_dev *jdev,
- 		enum jesd204_state_op_reason reason)
+static int adrv904x_jesd204_setup_stage1(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
 {
 	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
@@ -313,421 +372,381 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 	int i;
 
 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-			jesd204_state_op_reason_str(reason));
+		 jesd204_state_op_reason_str(reason));
 
 	if (reason != JESD204_STATE_OP_REASON_INIT)
 		return JESD204_STATE_CHANGE_DONE;
 
-	memset(&phy->adi_adrv904x_device.devStateInfo, 0,
-	sizeof(phy->adi_adrv904x_device.devStateInfo));
+	/* This loop will send SysRef pulses up to 255 times unless MCS status achieved before. */
+	for (i = 0; i < 255; i++) {
+		recoveryAction = adi_adrv904x_MultichipSyncStatusGet(phy->kororDevice,
+				 &mcsStatus);
+		if (recoveryAction) {
+			ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction,
+					     "Issue during getting multi-chip sync status");
+			return JESD204_STATE_CHANGE_ERROR;
+		}
 
-	recoveryAction = adi_adrv904x_HwOpen(phy->kororDevice, &phy->spiSettings);
-	if (recoveryAction)
-		return -1;
+		if ((mcsStatus & 0x01) == 0x01)
+			break;
 
-	adi_common_LogLevelSet(&phy->kororDevice->common,
-	ADI_HAL_LOG_ERR | ADI_HAL_LOG_WARN);
-
-	recoveryAction = adi_adrv904x_HwReset(phy->kororDevice);
-
-	recoveryAction = adi_adrv904x_PreMcsInit(phy->kororDevice, &deviceInitStruct, &phy->trxBinaryInfoPtr);
-	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-	{
-		printf("ERROR adi_adrv904x_PreMcsInit failed in %s at line %d.\n", __func__, __LINE__);
-		return -1;
+		jesd204_sysref_async_force(phy->jdev);
 	}
-	
-	adi_adrv904x_CpuFwVersion_t cpuFwVersion = {0};
-	recoveryAction = adi_adrv904x_CpuFwVersionGet(phy->kororDevice, &cpuFwVersion);
-	
-	adi_adrv904x_HealthMonitorCpuStatus_t healthMonitorStatus = {0};
-	recoveryAction = adi_adrv904x_HealthMonitorCpuStatusGet(phy->kororDevice, &healthMonitorStatus);
 
-	uint32_t isException;
-	recoveryAction = adi_adrv904x_CpuCheckException(phy->kororDevice, &isException);
+	if (mcsStatus != 0x01) {
+		pr_err("%s:%d Unexpected MCS sync status (0x%X)", __func__, __LINE__,
+		       mcsStatus);
 
-	uint32_t dumpSize = 0;
-
-	adi_adrv904x_CpuMemDumpBinaryInfo_t cpuMemDumpBinaryInfo = { 0 };
-	strcpy(cpuMemDumpBinaryInfo.filePath, "dump.bin");
-
-
-//	recoveryAction = adi_adrv904x_CpuMemDump_vRamOnly(phy->kororDevice,
-//                        &cpuMemDumpBinaryInfo,
-//                        0,
-//                        &dumpSize);
-//
-//	printf("\n\nDump size RAMonly is %d bytes.\n\n", dumpSize);
-
-//
-//	uint32_t pllLockStatus = 0x00;
-//	recoveryAction = adi_adrv904x_PllStatusGet(phy->kororDevice, &pllLockStatus);
-//
-//	printf("\nLock status %#x\n", pllLockStatus);
-
-//	uint8_t prod = 0x00;
-//	recoveryAction =  adi_adrv904x_ProductIdGet(phy->kororDevice, &prod);
-//	printf("\nProduct ID %#x\n", prod);
-//
-//	recoveryAction = adi_adrv904x_DeviceRevGet(phy->kororDevice, &prod);
-//	printf("\nRevision %#x\n", prod);
-//
-//	uint32_t readData = 0;
-//	recoveryAction = adrv904x_CpuPing(phy->kororDevice, ADI_ADRV904X_CPU_TYPE_0, 0xba, &readData);
-//	printf("\nPing data %#x\n", readData);
-//	adi_adrv904x_CpuFwVersionGet
-//	adi_adrv904x_HealthMonitorCpuStatusGet
-//	adrv904x_CpuCmdWrite
-//	adrv904x_CpuCmdRespRead
-//	adrv904x_HealthMonitorPrivateCpuStatusGet
-//	adrv904x_CpuErrorDebugCheck
-
-	recoveryAction = adi_adrv904x_PreMcsInit_NonBroadcast(phy->kororDevice, &deviceInitStruct);
-	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-	{
-		uint32_t booterror = 0x00;
-		recoveryAction = adi_adrv904x_DfeBootErrorGet(phy->kororDevice, &booterror);
-		printf("\n Boot error %#x\n", booterror);
-
-		printf("ERROR adi_adrv904x_PreMcsInit_NonBroadcast failed in %s at line %d.\n", __func__, __LINE__);
-		return -1;
+		return JESD204_STATE_CHANGE_ERROR;
 	}
-//
-//	/* MCS start sequence*/
-//	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
-//	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-//	{
-//		printf("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n", __func__, __LINE__);
-//		return recoveryAction;
-//	}
-//
-//	/* This loop will send SysRef pulses up to 255 times unless MCS status achieved before. */
-//	for (i = 0; i < 255; i++) {
-//		recoveryAction = adi_adrv904x_MultichipSyncStatusGet(phy->kororDevice, &mcsStatus);
-//		if (recoveryAction) {
-//			ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction, "Issue during getting multi-chip sync status");
-//			return recoveryAction;
-//		}
-//
-//		if ((mcsStatus & 0x01) == 0x01)
-//			break;
-//
-//		jesd204_sysref_async_force(phy->jdev);
-//	}
-//
-//	if (mcsStatus != 0x01) {
-//		pr_err("%s:%d Unexpected MCS sync status (0x%X)", __func__, __LINE__, mcsStatus);
-//
-//		return -1;
-//	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
 
- static int adrv904x_jesd204_setup_stage2(struct jesd204_dev *jdev,
- 		enum jesd204_state_op_reason reason)
- {
+static int adrv904x_jesd204_setup_stage2(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
+{
 	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_DEVICE;
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	/* MCS end sequence*/
+	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_DISABLE);
+	if (recoveryAction) {
+		pr_err("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n",
+		       __func__, __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	/* Post MCS */
+	recoveryAction = adi_adrv904x_PostMcsInit(phy->kororDevice,
+			 &utilityInit);
+	if (recoveryAction) {
+		pr_err("ERROR adi_adrv904x_PostMcsInit failed in %s at line %d.\n", __func__,
+		       __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+ 	recoveryAction = adi_adrv904x_SerializerReset(phy->kororDevice);
+ 	if (recoveryAction) {
+ 		pr_err();
+ 		return recoveryAction;
+ 	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
+					enum jesd204_state_op_reason reason,
+					struct jesd204_link *lnk)
+{
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	if (!lnk->num_converters)
+		return JESD204_STATE_CHANGE_DONE;
+
+	if (priv->link[lnk->link_id].is_framer) {
+		if (phy->kororDevice->devStateInfo.linkSharingEnabled == 1) {
+			ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
+							       ADI_ADRV904X_FRAMER_1, ADI_DISABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
+							      ADI_ADRV904X_FRAMER_1, ADI_DISABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv904x_SerializerReset(phy->kororDevice);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_SerializerReset failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
+							       ADI_ADRV904X_FRAMER_1, ADI_ENABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
+							      ADI_ADRV904X_FRAMER_1, ADI_ENABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			pr_debug("%s:%d Link %d Framer enabled\n", __func__, __LINE__,
+				 ADI_ADRV904X_FRAMER_1);
+
+			jesd204_sysref_async_force(phy->jdev);
+
+			ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
+							      ADI_ADRV904X_FRAMER_1, ADI_DISABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
+							       ADI_ADRV904X_FRAMER_1, ADI_DISABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
+				       __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+		}
+
+		ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
+						       priv->link[lnk->link_id].source_id, ADI_DISABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
+			       __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+		ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
+						      priv->link[lnk->link_id].source_id, ADI_DISABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
+			       __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+
+		ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
+						      priv->link[lnk->link_id].source_id, ADI_ENABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
+			       __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+
+		pr_debug("%s:%d Link %d Framer enabled\n", __func__, __LINE__,
+			 priv->link[lnk->link_id].source_id);
+
+		ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
+						       priv->link[lnk->link_id].source_id, ADI_DISABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
+			       __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+	} else {
+		ret = adi_adrv904x_DeframerSysrefCtrlSet(phy->kororDevice,
+				priv->link[lnk->link_id].source_id, ADI_DISABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_DeframerSysrefCtrlSet failed in %s at line %d.\n",
+			       __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+
+		ret = adi_adrv904x_DeframerLinkStateSet(phy->kororDevice,
+							priv->link[lnk->link_id].source_id, ADI_DISABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_DeframerLinkStateSet failed in %s at line %d.\n",
+			       __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+	};
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
+					enum jesd204_state_op_reason reason,
+					struct jesd204_link *lnk)
+{
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adrv904x_rf_phy *phy = priv->phy;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	if (!lnk->num_converters)
+		return JESD204_STATE_CHANGE_DONE;
+
+	if (!priv->link[lnk->link_id].is_framer) { /* DEFRAMER */
+		adi_adrv904x_InitCals_t serdesCal = {
+			.calMask = ADI_ADRV904X_IC_SERDES,
+			.orxChannelMask = 0x00U,
+			.rxChannelMask = 0x00U,
+			.txChannelMask = 0xFFU, /* CAL_ALL_CHANNELS */
+			.warmBoot = 0,
+		};
+
+		ret = adi_adrv904x_DeframerLinkStateSet(phy->kororDevice,
+						    priv->link[lnk->link_id].source_id, ADI_ENABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_DeframerLinkStateSet failed in %s at line %d.\n",
+				   __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+		/* Notify ARM to run SERDES Calbriation if necessary */
+		ret = adi_adrv904x_InitCalsRun(phy->kororDevice, &serdesCal);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_InitCalsRun failed in %s at line %d.\n",
+				   __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+		/* Wait up to 60 seconds for ARM */
+		ret = adi_adrv904x_InitCalsWait(phy->kororDevice, 60000);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_InitCalsWait failed in %s at line %d.\n", __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+		adi_adrv904x_InitCalStatus_t status = {0};
+		adi_adrv904x_InitCalsDetailedStatusGet(phy->kororDevice, &status);
+
+		/***************************************************/
+		/**** Enable SYSREF to Koror JESD204C Deframer ***/
+		/***************************************************/
+		ret = adi_adrv904x_DeframerSysrefCtrlSet(phy->kororDevice,
+				priv->link[lnk->link_id].source_id, ADI_ENABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_DeframerSysrefCtrlSet failed in %s at line %d.\n",
+				   __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+	};
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+ static int adrv904x_jesd204_link_running(struct jesd204_dev *jdev,
+ 		enum jesd204_state_op_reason reason,
+ 		struct jesd204_link *lnk)
+ {
  	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
  	struct adrv904x_rf_phy *phy = priv->phy;
+ 	int ret;
 
- 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
- 		 jesd204_state_op_reason_str(reason));
+ 	adi_adrv904x_FramerStatus_t framerStatus;
+ 	adi_adrv904x_DeframerStatus_t deframerStatus;
+ 	uint8_t deframerLinkCondition = 0;
+
+ 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+ 		 lnk->link_id, jesd204_state_op_reason_str(reason));
 
  	if (reason != JESD204_STATE_OP_REASON_INIT)
  		return JESD204_STATE_CHANGE_DONE;
 
-// 	/* MCS end sequence*/
-// 	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_DISABLE);
-// 	if (recoveryAction) {
-// 		return recoveryAction;
-// 	}
-//
-// 	/* Post MCS */
-// 	recoveryAction = adi_adrv904x_PostMcsInit(phy->kororDevice,
-// 				       &utilityInit);
-// 	if (recoveryAction)
-// 		return recoveryAction;
-//
-// 	recoveryAction = adi_adrv904x_SerializerReset(phy->kororDevice);
-// 	if (recoveryAction)
-// 		return recoveryAction;
-//
-// 	recoveryAction = adi_adrv904x_HwReset(phy->kororDevice);
+ 	if (!lnk->num_converters)
+ 		return JESD204_STATE_CHANGE_DONE;
 
-//	recoveryAction = adi_adrv904x_PreMcsInit(phy->kororDevice, &deviceInitStruct, &phy->trxBinaryInfoPtr);
-//	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-//	{
-//		printf("ERROR adi_adrv904x_PreMcsInit failed in %s at line %d.\n", __func__, __LINE__);
-//		return -1;
-//	}
+ 	if (priv->link[lnk->link_id].is_framer) {
+ 		ret = adi_adrv904x_FramerStatusGet(phy->kororDevice,
+ 						   priv->link[lnk->link_id].source_id, &framerStatus);
+ 		if (ret)
+ 			return -1;
 
-	uint32_t pllLockStatus = 0xFF;
-	recoveryAction = adi_adrv904x_PllStatusGet(phy->kororDevice, &pllLockStatus);
-	printf("\nLock status %#x\n", pllLockStatus);
+
+ 		if ((framerStatus.status & 0x0F) != 0x0A)
+ 			pr_warning("Link%u framerStatus 0x%X\n",
+ 				   lnk->link_id, framerStatus.status);
+ 	} else {
+ 		ret = adi_adrv904x_DeframerStatusGet(phy->kororDevice,
+ 						     priv->link[lnk->link_id].source_id, &deframerStatus);
+ 		if (ret)
+ 			return -1;
+
+ 		ret  = adi_adrv904x_DfrmLinkConditionGet(
+ 			       phy->kororDevice,
+ 			       priv->link[lnk->link_id].source_id,
+ 			       &deframerLinkCondition);
+
+ 		if ((deframerStatus.status & 0x7F) != 0x7) /* Ignore Valid ILAS checksum */
+ 			pr_warning("Link%u deframerStatus 0x%X\n",
+ 				   lnk->link_id, deframerStatus.status);
+
+ 		/* Kick off SERDES tracking cal if lanes are up */
+ 		ret = adi_adrv904x_TrackingCalsEnableSet(
+ 			      phy->kororDevice, ADI_ADRV904X_TC_TX_SERDES_MASK,
+				  0xFFU, // all channels
+ 			      ADI_ADRV904X_TRACKING_CAL_ENABLE);
+ 		if (ret)
+ 			return -1;
+ 	};
 
  	return JESD204_STATE_CHANGE_DONE;
  }
 
-// static int adrv9025_jesd204_clks_enable(struct jesd204_dev *jdev,
-// 					enum jesd204_state_op_reason reason,
-// 					struct jesd204_link *lnk)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret;
 
-// 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
-// 		 lnk->link_id, jesd204_state_op_reason_str(reason));
+ static int adrv904x_jesd204_post_running_stage(struct jesd204_dev *jdev,
+ 		enum jesd204_state_op_reason reason)
+ {
+ 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+ 	struct adrv904x_rf_phy *phy = priv->phy;
+ 	int ret;
 
-// 	if (reason != JESD204_STATE_OP_REASON_INIT)
-// 		return JESD204_STATE_CHANGE_DONE;
+ 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+ 		 jesd204_state_op_reason_str(reason));
 
-// 	if (!lnk->num_converters)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	if (priv->link[lnk->link_id].is_framer) {
-
-// 		if (phy->madDevice->devStateInfo.linkSharingEnabled == 1) {
-// 			ret = adi_adrv9025_FramerSysrefCtrlSet(phy->madDevice,
-// 							       ADI_ADRV9025_FRAMER_1, 0);
-// 			if (ret)
-// 				return adrv9025_dev_err(phy);
-
-// 			ret = adi_adrv9025_FramerLinkStateSet(phy->madDevice,
-// 							      ADI_ADRV9025_FRAMER_1, 0);
-// 			if (ret)
-// 				return adrv9025_dev_err(phy);
-
-// 			ret = adi_adrv9025_FramerLinkStateSet(phy->madDevice,
-// 							      ADI_ADRV9025_FRAMER_1, 1);
-// 			if (ret)
-// 				return adrv9025_dev_err(phy);
-
-// 			pr_debug("%s:%d Link %d Framer enabled", __func__, __LINE__,
-// 				 ADI_ADRV9025_FRAMER_1);
-
-// 			/*************************************************/
-// 			/**** Enable SYSREF to Talise JESD204B Framer ***/
-// 			/*************************************************/
-// 			/*** < User: Make sure SYSREF is stopped/disabled > ***/
-// 			ret = adi_adrv9025_FramerSysrefCtrlSet(phy->madDevice,
-// 							       ADI_ADRV9025_FRAMER_1, 1);
-// 			if (ret)
-// 				return adrv9025_dev_err(phy);
-
-// 			jesd204_sysref_async_force(phy->jdev);
-
-// 			ret = adi_adrv9025_FramerLinkStateSet(phy->madDevice,
-// 							      ADI_ADRV9025_FRAMER_1, 0);
-// 			if (ret)
-// 				return adrv9025_dev_err(phy);
-
-// 			ret = adi_adrv9025_FramerSysrefCtrlSet(phy->madDevice,
-// 							       ADI_ADRV9025_FRAMER_1, 0);
-// 			if (ret)
-// 				return adrv9025_dev_err(phy);
-
-// 		}
-
-// 		ret = adi_adrv9025_FramerSysrefCtrlSet(phy->madDevice,
-// 						       priv->link[lnk->link_id].source_id, 0);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 		ret = adi_adrv9025_FramerLinkStateSet(phy->madDevice,
-// 						      priv->link[lnk->link_id].source_id, 0);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-
-// 		ret = adi_adrv9025_FramerLinkStateSet(phy->madDevice,
-// 						      priv->link[lnk->link_id].source_id, 1);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-
-// 		pr_debug("%s:%d Link %d Framer enabled", __func__, __LINE__,
-// 			 priv->link[lnk->link_id].source_id);
-
-// 		/*************************************************/
-// 		/**** Enable SYSREF to Talise JESD204B Framer ***/
-// 		/*************************************************/
-// 		/*** < User: Make sure SYSREF is stopped/disabled > ***/
-// 		ret = adi_adrv9025_FramerSysrefCtrlSet(phy->madDevice,
-// 						       priv->link[lnk->link_id].source_id, 1);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 	} else {
-// 		ret = adi_adrv9025_DeframerSysrefCtrlSet(phy->madDevice,
-// 				priv->link[lnk->link_id].source_id, 0);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-
-// 		ret = adi_adrv9025_DfrmLinkStateSet(phy->madDevice,
-// 						    priv->link[lnk->link_id].source_id, 0);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 	};
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-// static int adrv9025_jesd204_link_enable(struct jesd204_dev *jdev,
-// 					enum jesd204_state_op_reason reason,
-// 					struct jesd204_link *lnk)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret;
-
-// 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
-// 		 lnk->link_id, jesd204_state_op_reason_str(reason));
-
-// 	if (reason != JESD204_STATE_OP_REASON_INIT)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	if (!lnk->num_converters)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	if (!priv->link[lnk->link_id].is_framer) { /* DEFRAMER */
-// 		uint8_t errFlags = 0;
-// 		adi_adrv9025_InitCals_t serdesCal = {
-// 			.calMask = ADI_ADRV9025_SERDES_INIT,
-// 			.channelMask = 0xF, /* CAL_ALL_CHANNELS */
-// 			.warmBoot = 0,
-// 		};
-
-// 		ret = adi_adrv9025_DfrmLinkStateSet(phy->madDevice,
-// 						    priv->link[lnk->link_id].source_id, 1);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 		/* Notify ARM to run SERDES Calbriation if necessary */
-// 		ret = adi_adrv9025_InitCalsRun(phy->madDevice, &serdesCal);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 		/* Wait up to 60 seconds for ARM */
-// 		ret = adi_adrv9025_InitCalsWait(phy->madDevice, 60000, &errFlags);
-// 		if (ret) {
-// 			pr_err("Error: InitCalsWait 0x%X\n", errFlags);
-// 			return adrv9025_dev_err(phy);
-// 		}
-
-// 		/***************************************************/
-// 		/**** Enable SYSREF to Talise JESD204B Deframer ***/
-// 		/***************************************************/
-// 		ret = adi_adrv9025_DeframerSysrefCtrlSet(phy->madDevice,
-// 				priv->link[lnk->link_id].source_id, 1);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 	};
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-// static int adrv9025_jesd204_link_running(struct jesd204_dev *jdev,
-// 		enum jesd204_state_op_reason reason,
-// 		struct jesd204_link *lnk)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret;
-
-// 	adi_adrv9025_FramerStatus_t framerStatus;
-// 	adi_adrv9025_DeframerStatus_t deframerStatus;
-// 	uint8_t deframerLinkCondition = 0;
-
-// 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
-// 		 lnk->link_id, jesd204_state_op_reason_str(reason));
-
-// 	if (reason != JESD204_STATE_OP_REASON_INIT)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	if (!lnk->num_converters)
-// 		return JESD204_STATE_CHANGE_DONE;
-
-// 	if (priv->link[lnk->link_id].is_framer) {
-// 		ret = adi_adrv9025_FramerStatusGet(phy->madDevice,
-// 						   priv->link[lnk->link_id].source_id, &framerStatus);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-
-// 		if ((framerStatus.status & 0x0F) != 0x0A)
-// 			pr_warning("Link%u framerStatus 0x%X\n",
-// 				   lnk->link_id, framerStatus.status);
-// 	} else {
-// 		ret = adi_adrv9025_DeframerStatusGet(phy->madDevice,
-// 						     priv->link[lnk->link_id].source_id, &deframerStatus);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-
-// 		ret  = adi_adrv9025_DfrmLinkConditionGet(
-// 			       phy->madDevice,
-// 			       priv->link[lnk->link_id].source_id,
-// 			       &deframerLinkCondition);
-
-// 		if ((deframerStatus.status & 0x7F) != 0x7) /* Ignore Valid ILAS checksum */
-// 			pr_warning("Link%u deframerStatus 0x%X\n",
-// 				   lnk->link_id, deframerStatus.status);
-
-// 		/* Kick off SERDES tracking cal if lanes are up */
-// 		ret = adi_adrv9025_TrackingCalsEnableSet(
-// 			      phy->madDevice, ADI_ADRV9025_TRACK_DESERIALIZER,
-// 			      ADI_ADRV9025_TRACKING_CAL_ENABLE);
-// 		if (ret)
-// 			return adrv9025_dev_err(phy);
-// 	};
-
-
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
-
-
-// static int adrv9025_jesd204_post_running_stage(struct jesd204_dev *jdev,
-// 		enum jesd204_state_op_reason reason)
-// {
-// 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
-// 	struct adrv9025_rf_phy *phy = priv->phy;
-// 	int ret;
-
-// 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
-// 		 jesd204_state_op_reason_str(reason));
-
-// 	if (reason != JESD204_STATE_OP_REASON_INIT) {
-// 		phy->is_initialized = 0;
-// 		return JESD204_STATE_CHANGE_DONE;
-// 	}
+ 	if (reason != JESD204_STATE_OP_REASON_INIT) {
+ 		phy->is_initialized = 0;
+ 		return JESD204_STATE_CHANGE_DONE;
+ 	}
 
 // 	/* Initialize Tx Ramp down functionality */
-// 	ret = adi_adrv9025_TxRampDownInit(phy->madDevice, &phy->deviceInitStruct);
+// 	ret = 	(phy->madDevice, &phy->deviceInitStruct);
 // 	if (ret)
 // 		return adrv9025_dev_err(phy);
-
+//
 // 	/* Setup GP Interrupts from init structure */
-// 	ret = adi_adrv9025_GpIntInit(phy->madDevice,
+// 	ret = adi_adrv904x_GpIntInit(phy->madDevice,
 // 				     &phy->deviceInitStruct.gpInterrupts);
 // 	if (ret)
 // 		return adrv9025_dev_err(phy);
 
-// 	no_os_clk_set_rate(phy->clks[ADRV9025_RX_SAMPL_CLK], phy->rx_iqRate_kHz * 1000);
-// 	no_os_clk_set_rate(phy->clks[ADRV9025_TX_SAMPL_CLK], phy->tx_iqRate_kHz * 1000);
+ 	no_os_clk_set_rate(phy->clks[ADRV904X_RX_SAMPL_CLK], phy->rx_iqRate_kHz * 1000);
+ 	no_os_clk_set_rate(phy->clks[ADRV904X_TX_SAMPL_CLK], phy->tx_iqRate_kHz * 1000);
 
-// 	ret = adi_adrv9025_RxTxEnableSet(phy->madDevice, 0xF, ADI_ADRV9025_TXALL);
-// 	if (ret)
-// 		return adrv9025_dev_err(phy);
+ 	ret = adi_adrv904x_RxTxEnableSet(phy->kororDevice, 0x00, 0x00, ADI_ADRV904X_RX_MASK_ALL, ADI_ADRV904X_RX_MASK_ALL, ADI_ADRV904X_TXALL, ADI_ADRV904X_TXALL);
+ 	if (ret)
+ 		return -1;
 
-// 	phy->is_initialized = 1;
+ 	phy->is_initialized = 1;
 // 	adrv9025_info(phy);
 
-// 	return JESD204_STATE_CHANGE_DONE;
-// }
+ 	return JESD204_STATE_CHANGE_DONE;
+ }
 
 static const struct jesd204_dev_data jesd204_adrv904x_init = {
 	.state_ops = {
@@ -737,6 +756,11 @@ static const struct jesd204_dev_data jesd204_adrv904x_init = {
 		[JESD204_OP_LINK_PRE_SETUP] = {
 			.per_device = adrv904x_jesd204_link_pre_setup,
 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_LINK_SETUP] = {
+			.per_device = adrv904x_jesd204_link_setup,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+			.post_state_sysref = true,
 		},
 		[JESD204_OP_OPT_SETUP_STAGE1] = {
 			.per_device = adrv904x_jesd204_setup_stage1,
@@ -748,28 +772,23 @@ static const struct jesd204_dev_data jesd204_adrv904x_init = {
 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
 			.post_state_sysref = true,
 		},
-//		[JESD204_OP_CLOCKS_ENABLadrv9040_jesd204_privE] = {
-//			.per_link = adrv9025_jesd204_clks_enable,
-//		},
-//		[JESD204_OP_LINK_SETUP] = {
-//			.per_device = adrv904x_jesd204_link_setup,
-//			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-//			.post_state_sysref = true,
-//		},
-//		[JESD204_OP_LINK_ENABLE] = {
-//			.per_link = adrv9025_jesd204_link_enable,
-//			.post_state_sysref = true,
-//		},
-//		[JESD204_OP_LINK_RUNNING] = {
-//			.per_link = adrv9025_jesd204_link_running,
-//		},
-//		[JESD204_OP_OPT_POST_RUNNING_STAGE] = {
-//			.per_device = adrv9025_jesd204_post_running_stage,
-//			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-//		},
+		[JESD204_OP_CLOCKS_ENABLE] = {
+			.per_link = adrv904x_jesd204_clks_enable,
+		},
+		[JESD204_OP_LINK_ENABLE] = {
+			.per_link = adrv904x_jesd204_link_enable,
+			.post_state_sysref = true,
+		},
+		[JESD204_OP_LINK_RUNNING] = {
+			.per_link = adrv904x_jesd204_link_running,
+		},
+		[JESD204_OP_OPT_POST_RUNNING_STAGE] = {
+			.per_device = adrv904x_jesd204_post_running_stage,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
 	},
 
-	.max_num_links = 5,
+	.max_num_links = 10,
 	.sizeof_priv = sizeof(struct adrv904x_jesd204_priv),
 };
 
@@ -1078,20 +1097,21 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 
 		default:
 			ADI_APP_ERROR_REPORT(ADI_COMMON_ERRCODE_INVALID_PARAM,
-						recoveryAction,
-						&deviceInitStruct,
-						"PreMcsInit and/or PostMcsInit Data Structures Not Populated");
+					     recoveryAction,
+					     &deviceInitStruct,
+					     "PreMcsInit and/or PostMcsInit Data Structures Not Populated");
 			return ADI_APP_API_NOK;
 			break;
 		}
 	}
 
- 	/* Extract Info from CPU Profile Binary */
+	/* Extract Info from CPU Profile Binary */
 	/* Required for Link init */
-	recoveryAction = adi_adrv904x_DeviceInfoExtract(phy->kororDevice, &phy->trxBinaryInfoPtr.cpuProfile);
-	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-	{
-		ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction, "Issue during CPU Profile Binary Image Extract");
+	recoveryAction = adi_adrv904x_DeviceInfoExtract(phy->kororDevice,
+			 &phy->trxBinaryInfoPtr.cpuProfile);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+		ADI_API_ERROR_REPORT(&phy->kororDevice->common, recoveryAction,
+				     "Issue during CPU Profile Binary Image Extract");
 		return -1;
 	}
 

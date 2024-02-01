@@ -39,15 +39,15 @@
 // #define MAX_OBS_RX_GAIN_mdB	30000
 // #define RX_GAIN_STEP_mdB	500
 
- /*
-  * JESD204-FSM defines
-  */
+/*
+ * JESD204-FSM defines
+ */
 
- #define DEFRAMER0_LINK_TX	0
- #define DEFRAMER1_LINK_TX	1
- #define FRAMER0_LINK_RX		2
- #define FRAMER1_LINK_RX		3
- #define FRAMER2_LINK_RX		4
+#define DEFRAMER0_LINK_TX	0
+#define DEFRAMER1_LINK_TX	1
+#define FRAMER0_LINK_RX		2
+#define FRAMER1_LINK_RX		3
+#define FRAMER2_LINK_RX		4
 
 // enum adrv9025_rx_ext_info {
 // 	ADRV9025_RSSI,
@@ -90,10 +90,10 @@ struct adrv904x_rf_phy {
 	struct adrv904x_hal_cfg			hal;
 
 	struct jesd204_dev			*jdev;
- 	/* protect against device accesses */
- 	void					*lock;
- 	uint32_t				tx_iqRate_kHz;
- 	uint32_t				rx_iqRate_kHz;
+	/* protect against device accesses */
+	void					*lock;
+	uint32_t				tx_iqRate_kHz;
+	uint32_t				rx_iqRate_kHz;
 
 	struct no_os_clk_desc			*dev_clk;
 
@@ -105,8 +105,8 @@ struct adrv904x_rf_phy {
 	bool					is_initialized;
 	int					spi_device_id;
 
- 	struct axi_adc				*rx_adc;
- 	struct axi_dac				*tx_dac;
+	struct axi_adc				*rx_adc;
+	struct axi_dac				*tx_dac;
 };
 
 struct adrv904x_init_param {
