@@ -174,7 +174,7 @@ int basic_example_main(void)
 	ad9528_param.pdata->refb_diff_rcv_en = 0;
 	ad9528_param.pdata->osc_in_diff_en = 0;
 	/* JESD */
-	ad9528_param.pdata->jdev_desired_sysref_freq = 7680000;
+	ad9528_param.pdata->jdev_desired_sysref_freq = 7680000 / 2;
 	/* PLL1 config */
 	ad9528_param.pdata->pll1_feedback_div = 4;
 	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
@@ -368,7 +368,6 @@ int basic_example_main(void)
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
-
 
 	axi_dmac_remove(rx_dmac);
 error_9:
