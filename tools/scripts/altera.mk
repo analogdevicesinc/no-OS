@@ -77,7 +77,7 @@ CFLAGS += -I"$(BUILD_DIR)/bsp/HAL/inc/sys"			\
 
 
 PHONY += altera_run
-altera_run: all
+$(PLATFORM)_run: all
 	$(WSL) nios2-configure-sof *.sof
 	$(WSL) nios2-download -r -g $(BINARY)
 	nios2-terminal
@@ -86,7 +86,7 @@ $(PLATFORM)_project:
 	$(WSL) nios2-bsp hal "$(BUILD_DIR)/bsp" $(HARDWARE) --cpu-name sys_cpu
 	$(WSL) $(MAKE) CFLAGS= -C $(call adjust_path, $(BUILD_DIR)/bsp)
 
-post_build:
+$(PLATFORM)_post_build:
 	$(WSL) nios2-elf-insert $(BINARY) $(STAMP)
 	-$(call copy_file,sw.map,$(TEMP_DIR))
 	$(call remove_file, sw.map)

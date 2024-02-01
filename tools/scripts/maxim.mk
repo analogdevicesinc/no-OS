@@ -136,7 +136,7 @@ $(HEX): $(BINARY)
 
 .NOTINTERMEDIATE: $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).s
 
-post_build: $(HEX)
+$(PLATFORM)_post_build: $(HEX)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))

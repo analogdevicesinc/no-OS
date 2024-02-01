@@ -127,7 +127,7 @@ HEX = $(basename $(BINARY)).hex
 #                                 RULES                              
 #------------------------------------------------------------------------------
 
-post_build: $(HEX)
+$(PLATFORM)_post_build: $(HEX)
 
 $(HEX): $(BINARY)
 	$(call print,[HEX] $(notdir $@))
