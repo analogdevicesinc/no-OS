@@ -17,6 +17,13 @@ variables:
 - name: isRelease
   value: $[contains(variables['Build.SourceBranch'], 'refs/heads/20')]
 
+- ${{ if eq(variables['Build.Reason'], 'PullRequest')}}:
+  - name: branch
+    value: $(System.PullRequest.TargetBranchName)
+- ${{ else }}:
+  - name: branch
+    value: $(Build.SourceBranchName)
+
 jobs:
 - job: Xilinx
   pool:
@@ -29,12 +36,14 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py . 
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform xilinx
-               -hdl_branch $(HDL_BRANCH)'
+  - script: |
+      export BRANCH=$(branch)
+      python3 ./tools/scripts/build_projects.py . \
+        -export_dir $(RELEASE_DIR) \
+        -log_dir $(LOG_DIR) \
+        -builds_dir /no-OS_builds/builds \
+        -platform xilinx \
+        -hdl_branch $(HDL_BRANCH)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
