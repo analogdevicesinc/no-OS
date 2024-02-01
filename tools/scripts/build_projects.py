@@ -51,9 +51,10 @@ def parse_input():
 
 ERR = 0
 LOG_START = " -> "
-BLACKLIST_URL = os.environ.get('BLACKLIST')
+BLACKLIST_URL = os.environ.get('BLACKLIST_URL')
 USER = os.environ.get('USER')
 TOKEN = os.environ.get('TOKEN')
+BUILD_SOURCEBRANCHNAME = os.environ.get('BUILD_SOURCEBRANCHNAME')
 
 def log(msg):
 	print(TGREEN + LOG_START + TWHITE + msg)
@@ -151,7 +152,9 @@ NEW_HW_DIR_NAME = 'new_hardware'
 
 def process_blacklist():
 	blacklist = []
-	run_cmd('wget --http-user={} --http-password={} --auth-no-challenge \'{}\' -O blacklist.txt'.format(USER,TOKEN,BLACKLIST_URL))
+	print(BUILD_SOURCEBRANCHNAME)
+	blacklist_url_branch = BLACKLIST_URL.format(BUILD_SOURCEBRANCHNAME)
+	run_cmd('wget --http-user={} --http-password={} --auth-no-challenge \'{}\' -O blacklist.txt'.format(USER,TOKEN,blacklist_url_branch))
 	if not os.path.isfile('blacklist.txt'):
 		return 1
 	file = open('blacklist.txt', 'r')
