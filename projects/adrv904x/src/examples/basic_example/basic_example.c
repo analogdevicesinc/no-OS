@@ -369,6 +369,8 @@ int basic_example_main(void)
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
+	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
+
 	axi_dmac_remove(rx_dmac);
 error_9:
 	axi_dmac_remove(tx_dmac);
