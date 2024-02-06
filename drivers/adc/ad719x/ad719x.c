@@ -159,9 +159,11 @@ int ad719x_init(struct ad719x_dev **device,
 	if (ret != 0)
 		goto error_sync;
 
-	ret = ad719x_set_bridge_switch(dev, init_param.bpdsw_mode);
-	if (ret != 0)
-		goto error_sync;
+	if (dev->chip_id != AD7194) {
+		ret = ad719x_set_bridge_switch(dev, init_param.bpdsw_mode);
+		if (ret != 0)
+			goto error_sync;
+	}
 
 	ret = ad719x_set_operating_mode(dev, init_param.operating_mode);
 	if (ret != 0)
@@ -412,6 +414,11 @@ int ad719x_channels_select(struct ad719x_dev *dev,
 			return -EINVAL;
 		}
 	}
+
+	if (dev->chip_id == AD7194)
+		return ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
+							AD719X_CONF_CHAN(0x1FF), AD719X_CONF_CHAN(chn_mask),
+							3);
 
 	return ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
 						AD719X_CONF_CHAN(0x3FF), AD719X_CONF_CHAN(chn_mask),
