@@ -47,11 +47,13 @@
 #include "mxc_errors.h"
 #include "mxc_pins.h"
 #include "maxim_spi.h"
+#include "maxim_dma.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_units.h"
+#include "no_os_dma.h"
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0
@@ -62,6 +64,90 @@
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+struct max_dma_spi_xfer_data {
+	struct no_os_spi_desc *spi;
+	struct no_os_dma_ch *tx_ch;
+	struct no_os_dma_ch *rx_ch;
+
+	/* Used in order to free the memory allocated for the DMA transfer structs */
+	struct no_os_dma_xfer_desc *first_xfer_tx;
+	struct no_os_dma_xfer_desc *first_xfer_rx;
+
+	/* The callback provided as a parameter in the async transfer case. */
+	void (*cb)(void *);
+	void *ctx;
+};
+
+/**
+ * @brief Configure the SPI peripheral for the next DMA transfer.
+ * @param old_xfer - The last completed transfer.
+ * @param next_xfer - The next transfer in the SG list.
+ * @param ctx - .
+ */
+static void max_dma_xfer_cycle(struct no_os_dma_xfer_desc *old_xfer,
+			       struct no_os_dma_xfer_desc *next_xfer,
+			       void *ctx)
+{
+	struct max_dma_spi_xfer_data *data = ctx;
+	struct max_spi_state *max_spi_state = data->spi->extra;
+	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(data->spi->device_id);
+
+	/*
+	 * Since this callback is shared, waait for both the RX and TX
+	 * channels to finish the current transfer.
+	 */
+	while (no_os_dma_in_progress(max_spi_state->dma, data->rx_ch) &&
+	       no_os_dma_in_progress(max_spi_state->dma, data->tx_ch));
+
+	/* Wait for the SPI transfer to finish. */
+	while(spi->stat & 1);
+
+	if (!next_xfer) {
+		if (data->cb)
+			data->cb(data->ctx);
+
+		no_os_dma_chan_unlock(data->tx_ch);
+		no_os_dma_chan_unlock(data->rx_ch);
+		no_os_free(data->first_xfer_tx);
+		no_os_free(data->first_xfer_rx);
+		no_os_free(data);
+
+		return;
+	}
+
+	spi->ctrl1 |= next_xfer->length;
+	spi->ctrl1 |= no_os_field_prep(MXC_F_SPI_CTRL1_RX_NUM_CHAR,
+				       next_xfer->length);
+
+	spi->ctrl0 |= MXC_F_SPI_CTRL0_START;
+}
+
+/**
+ * @brief Set the reqsel field of the cfg (DMA channel specific) register
+ * @param desc - SPI descriptor
+ * @return void
+ */
+static void _max_dma_set_req(struct no_os_spi_desc *desc)
+{
+	struct max_spi_state *st = desc->extra;
+
+	switch (desc->device_id) {
+	case 0:
+		st->dma_req_tx = MXC_V_DMA_CFG_REQSEL_SPI0TX;
+		st->dma_req_rx = MXC_V_DMA_CFG_REQSEL_SPI0RX;
+		break;
+	case 1:
+		st->dma_req_tx = MXC_V_DMA_CFG_REQSEL_SPI1TX;
+		st->dma_req_rx = MXC_V_DMA_CFG_REQSEL_SPI1RX;
+		break;
+	case 2:
+		st->dma_req_tx = MXC_V_DMA_CFG_REQSEL_SPI2TX;
+		st->dma_req_rx = MXC_V_DMA_CFG_REQSEL_SPI2RX;
+		break;
+	default:
+		return;
+	}
+}
 
 /**
  * @brief Configure the VDDIO level for a SPI interface
@@ -324,13 +410,30 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 
 	ret = _max_spi_config(descriptor);
 	if (ret)
-		goto err_init;
+		goto err;
+
+	if (eparam->dma_param) {
+		/*
+		 * The RX complete interrupt needs to have higher priority,
+		 * otherwise there is race condition, since for short transfers, the TX
+		 * channel will start a transfer which will finish before the RX has chance
+		 * to start.
+		 */
+		if (eparam->dma_rx_priority >= eparam->dma_tx_priority) {
+			ret = -EINVAL;
+			goto err;
+		}
+
+		ret = no_os_dma_init(&st->dma, eparam->dma_param);
+		if (ret)
+			goto err;
+
+		_max_dma_set_req(descriptor);
+	}
 
 	*desc = descriptor;
 
 	return 0;
-err_init:
-	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 err:
 	no_os_free(st);
 	no_os_free(descriptor);
@@ -353,6 +456,206 @@ int32_t max_spi_remove(struct no_os_spi_desc *desc)
 	no_os_free(desc);
 
 	return 0;
+}
+
+/**
+ * @brief Configure and start a series of transfers using DMA.
+ * @param desc - The SPI descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @param callback - Function to be invoked once the transfers are done.
+ * @param ctx - User defined parameter for the callback function.
+ * @param is_async - Whether or not the function should wait for the completion.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+static int32_t max_config_dma_and_start(struct no_os_spi_desc *desc,
+					struct no_os_spi_msg *msgs,
+					uint32_t len,
+					void (*callback)(void *),
+					void *ctx, bool is_async)
+{
+	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
+	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
+	struct max_dma_spi_xfer_data *sync_xfer_data;
+	struct max_spi_state *max_spi = desc->extra;
+	struct no_os_dma_xfer_desc *rx_ch_xfer;
+	struct no_os_dma_xfer_desc *tx_ch_xfer;
+	struct no_os_dma_ch *tx_ch;
+	struct no_os_dma_ch *rx_ch;
+	uint32_t slave_id;
+	size_t i = 0;
+	int32_t ret;
+
+	slave_id = desc->chip_select;
+	if (slave_id != last_slave_id[desc->device_id]) {
+		ret = _max_spi_config(desc);
+		if (ret)
+			return ret;
+
+		last_slave_id[desc->device_id] = slave_id;
+	}
+
+	/* Assert CS desc->chip_select when the SPI transaction is started */
+	spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS;
+	spi->ctrl0 |= no_os_field_prep(MXC_F_SPI_CTRL0_SS,
+				       NO_OS_BIT(desc->chip_select));
+
+	rx_ch_xfer = no_os_calloc(len, sizeof(*rx_ch_xfer));
+	if (!rx_ch_xfer)
+		return -ENOMEM;
+
+	tx_ch_xfer = no_os_calloc(len, sizeof(*tx_ch_xfer));
+	if (!tx_ch_xfer) {
+		ret = -ENOMEM;
+		goto free_rx_ch_xfer;
+	}
+
+	sync_xfer_data = no_os_calloc(1, sizeof(*sync_xfer_data));
+	if (!sync_xfer_data) {
+		ret = -ENOMEM;
+		goto free_tx_ch_xfer;
+	}
+
+	/* Flush the RX and TX FIFOs */
+	spi->dma |= MXC_F_SPI_DMA_RX_FIFO_CLEAR | MXC_F_SPI_DMA_TX_FIFO_CLEAR;
+	/* Enable SPI */
+	spi->int_fl |= MXC_F_SPI_INT_FL_M_DONE;
+
+	if (msgs[0].cs_change)
+		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_CTRL;
+	else
+		spi->ctrl0 |= MXC_F_SPI_CTRL0_SS_CTRL;
+
+	spi->ctrl1 = msgs[0].bytes_number;
+	/* Enable the TX FIFO */
+	spi->dma |= MXC_F_SPI_DMA_TX_FIFO_EN;
+	spi->ctrl1 |= no_os_field_prep(MXC_F_SPI_CTRL1_RX_NUM_CHAR,
+				       msgs[0].bytes_number);
+	/* Enable the RX FIFO */
+	spi->dma |= MXC_F_SPI_DMA_RX_FIFO_EN;
+
+	/* Allow DMA transfers for RX and TX SPI FIFOs */
+	spi->dma |= MXC_F_SPI_DMA_RX_DMA_EN | MXC_F_SPI_DMA_TX_DMA_EN;
+
+	ret = no_os_dma_acquire_channel(max_spi->dma, &tx_ch);
+	if (ret)
+		goto free_sync_xfer_data;
+
+	ret = no_os_dma_acquire_channel(max_spi->dma, &rx_ch);
+	if (ret)
+		goto release_tx_ch;
+
+	sync_xfer_data->spi = desc;
+	sync_xfer_data->rx_ch = rx_ch;
+	sync_xfer_data->tx_ch = tx_ch;
+	sync_xfer_data->first_xfer_tx = tx_ch_xfer;
+	sync_xfer_data->first_xfer_rx = rx_ch_xfer;
+
+	if (is_async) {
+		sync_xfer_data->cb = callback;
+		sync_xfer_data->ctx = ctx;
+	}
+
+	for (i = 0; i < len; i++) {
+		tx_ch_xfer[i].src = msgs[i].tx_buff;
+		tx_ch_xfer[i].dst = (uint8_t *)max_spi->dma_req_tx;
+		tx_ch_xfer[i].length = msgs[i].bytes_number;
+		tx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
+		tx_ch_xfer[i].xfer_complete_cb = max_dma_xfer_cycle;
+		tx_ch_xfer[i].xfer_complete_ctx = sync_xfer_data;
+		tx_ch_xfer[i].xfer_type = MEM_TO_DEV;
+		tx_ch_xfer[i].irq_priority = max_spi->init_param->dma_tx_priority;
+
+		rx_ch_xfer[i].dst = msgs[i].rx_buff;
+		rx_ch_xfer[i].src = (uint8_t *)max_spi->dma_req_rx;
+		rx_ch_xfer[i].length = msgs[i].bytes_number;
+		rx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
+		rx_ch_xfer[i].xfer_type = DEV_TO_MEM;
+		rx_ch_xfer[i].irq_priority = max_spi->init_param->dma_rx_priority;
+	}
+
+	ret = no_os_dma_config_xfer(max_spi->dma, tx_ch_xfer, len, tx_ch);
+	if (ret)
+		goto release_rx_ch;
+
+	ret = no_os_dma_config_xfer(max_spi->dma, rx_ch_xfer, len, rx_ch);
+	if (ret)
+		goto abort_rx_tx;
+
+	/* Start the transaction */
+	spi->ctrl0 |= MXC_F_SPI_CTRL0_START;
+
+	ret = no_os_dma_xfer_start(max_spi->dma, rx_ch);
+	if (ret)
+		goto abort_rx_tx;
+
+	ret = no_os_dma_xfer_start(max_spi->dma, tx_ch);
+	if (ret)
+		goto abort_rx_tx;
+
+	if (!is_async) {
+		while(!no_os_dma_is_completed(max_spi->dma, rx_ch) ||
+		      !no_os_dma_is_completed(max_spi->dma, tx_ch));
+
+		while(spi->stat & 1);
+		/* End the transaction */
+		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_START;
+		/* Disable the RX and TX FIFOs */
+		spi->dma &= ~(MXC_F_SPI_DMA_TX_FIFO_EN | MXC_F_SPI_DMA_RX_FIFO_EN);
+	}
+
+	return 0;
+
+abort_rx_tx:
+	no_os_dma_xfer_abort(max_spi->dma, tx_ch);
+	no_os_dma_xfer_abort(max_spi->dma, rx_ch);
+release_rx_ch:
+	no_os_dma_release_channel(max_spi->dma, rx_ch);
+release_tx_ch:
+	no_os_dma_release_channel(max_spi->dma, tx_ch);
+free_sync_xfer_data:
+	no_os_free(sync_xfer_data);
+free_tx_ch_xfer:
+	no_os_free(tx_ch_xfer);
+free_rx_ch_xfer:
+	no_os_free(rx_ch_xfer);
+
+	return ret;
+}
+
+
+/**
+ * @brief Configure and start a series of transfers using DMA. Wait for the
+ * 	  completion before returning.
+ * @param desc - The SPI descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+static int32_t max_spi_dma_transfer_sync(struct no_os_spi_desc *desc,
+		struct no_os_spi_msg *msgs,
+		uint32_t len)
+{
+	return max_config_dma_and_start(desc, msgs, len, NULL, NULL, false);
+}
+
+/**
+ * @brief Configure and start a series of transfers using DMA.
+ * 	  Return immediately, and invoke a callback once they're completed.
+ * @param desc - The SPI descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @param callback - Function to be invoked once the transfers are done.
+ * @param ctx - User defined parameter for the callback function.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+static int32_t max_spi_dma_transfer_async(struct no_os_spi_desc *desc,
+		struct no_os_spi_msg *msgs,
+		uint32_t len,
+		void (*callback)(void *),
+		void *ctx)
+{
+	return max_config_dma_and_start(desc, msgs, len, callback, ctx, true);
 }
 
 /**
@@ -488,5 +791,7 @@ const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
 	.transfer = &max_spi_transfer,
+	.dma_transfer_sync = &max_spi_dma_transfer_sync,
+	.dma_transfer_async = &max_spi_dma_transfer_async,
 	.remove = &max_spi_remove
 };

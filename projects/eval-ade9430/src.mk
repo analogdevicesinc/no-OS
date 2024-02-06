@@ -9,6 +9,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_spi.h       \
 	$(INCLUDE)/no_os_irq.h      \
+	$(INCLUDE)/no_os_dma.h      \
 	$(INCLUDE)/no_os_list.h      \
 	$(INCLUDE)/no_os_timer.h      \
 	$(INCLUDE)/no_os_uart.h      \
@@ -28,6 +29,7 @@ INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h     \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.h       \
+        $(PLATFORM_DRIVERS)/$(PLATFORM)_dma.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.h  \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h       \
@@ -43,6 +45,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_gpio.c  \
 	$(DRIVERS)/api/no_os_irq.c  \
 	$(DRIVERS)/api/no_os_spi.c  \
+	$(DRIVERS)/api/no_os_dma.c  \
 	$(DRIVERS)/api/no_os_uart.c  \
 	$(DRIVERS)/api/no_os_timer.c  \
 	$(DRIVERS)/api/no_os_trng.c  \
@@ -56,6 +59,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c     \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c       \
+        $(PLATFORM_DRIVERS)/$(PLATFORM)_dma.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.c       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.c  \
