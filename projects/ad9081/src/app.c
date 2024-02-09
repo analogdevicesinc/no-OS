@@ -154,6 +154,8 @@ int main(void)
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
 		.sysref_cmos_input_enable = 0,
+		.sysref_cmos_single_end_term_pos = 1,
+		.sysref_cmos_single_end_term_neg = 15,
 		.config_sync_0a_cmos_enable = 0,
 		.multidevice_instance_count = 1,
 #ifdef QUAD_MXFE
@@ -174,6 +176,8 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_maindp_dac_1x_non1x_crossbar_select = AD9081_TX_DAC_1X_NON1X_CROSSBAR,
+		.tx_full_scale_current_ua = AD9081_TX_FSC,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
@@ -187,12 +191,18 @@ int main(void)
 		.rx_main_nco_frequency_shift_hz = AD9081_RX_MAIN_NCO_SHIFT,
 		.rx_main_decimation = AD9081_RX_MAIN_DECIMATION,
 		.rx_main_complex_to_real_enable = {0, 0, 0, 0},
+		.rx_main_digital_gain_6db_enable = {0, 0, 0, 0},
 		.rx_main_enable = AD9081_RX_MAIN_ENABLE,
 		/* The 8 ADC Channelizers */
 		.rx_channel_nco_frequency_shift_hz = AD9081_RX_CHAN_NCO_SHIFT,
 		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
+		.rx_channel_nco_mixer_mode = {AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
+		.rx_cddc_nco_channel_select_mode = AD9081_RX_CDDC_NCO_CHANNEL_SELECT_MODE,
+		.rx_ffh_gpio_mux_selection = {0, 0, 0, 0, 0, 0},
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
 	};

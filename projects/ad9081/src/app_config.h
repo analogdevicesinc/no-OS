@@ -47,6 +47,12 @@
 #define MULTIDEVICE_INSTANCE_COUNT	1
 #endif
 
+#define AD9081_TX_DAC_1X_NON1X_CROSSBAR	{0x1, 0x0, 0x0, 0x0}
+
+#define AD9081_TX_FSC	{0, 0, 0, 0}
+
+#define AD9081_RX_CDDC_NCO_CHANNEL_SELECT_MODE	{0, 0, 0, 0}
+
 #ifndef versal
 
 #define ADXCVR_REF_CLK_KHZ		500000
