@@ -11,6 +11,13 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/ad7091r8-sdz
 
+FREQUENCY GENERATORS
+====================
+.. toctree::
+   :maxdepth: 1
+
+   projects/adf4382
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
