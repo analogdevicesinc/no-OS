@@ -5,6 +5,7 @@ Supported Devices
 -----------------
 
 `MAX22196 <https://www.analog.com/MAX22196>`
+`MAX22194 <https://www.analog.com/MAX22194>`
 
 Overview
 --------
@@ -20,6 +21,9 @@ power dissipation while ensuring compliance with the IEC 61131-2 standard.
 With a single current-setting resistor, the inputs are individually 
 configurable for Type 1/3, Type 2, TTL or HTL (high-impedance 24V levels). 
 The current sinks or sources can be individually disabled.
+
+If using MAX22194 channels 5 to 8 won't be available so any API call with one of these
+channels will result in a -EINVAL errno code being returned.
 
 Applications
 ------------
@@ -80,6 +84,7 @@ MAX22196 Driver Initialization Example
 		.chip_select = 0,
 	};
 	struct max22196_init_param max22196_ip = {
+		.chip_id = ID_MAX22196,
 		.chip_address = 0,
 		.comm_desc = &spi_ip,
 	};
@@ -121,7 +126,7 @@ MAX22196 has 7 global attributes that can be configured as enabled/disabled :
 * refdi_sht_cfg - REFDI pin short detection.
 * clrf_filtr - Fix all input glitch filters to mid-scale value.
 * fspi_clr - Configures how the bits in the FAULT1 register are cleared.
-* led9 - LED9 control.
+* led9 - LED9 control. (attribute does not apply to MAX22194).
 * led_int - LED matrix user control of autonomous control selection.
 * gpo - Configure LO1 - LO6 outputs to be LED matrix or GPO drivers.
 
