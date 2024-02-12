@@ -195,7 +195,7 @@ int max22196_reg_update(struct max22196_desc *desc, uint32_t reg, uint32_t mask,
 int max22196_set_mode(struct max22196_desc *desc, uint32_t ch,
 		      enum max22196_mode mode)
 {
-	if (ch > MAX22196_CHANNELS - 1)
+	if (ch > desc->max_chn_nb - 1)
 		return -EINVAL;
 
 	return max22196_reg_update(desc, MAX22196_CFG_REG(ch),
@@ -214,7 +214,7 @@ int max22196_set_mode(struct max22196_desc *desc, uint32_t ch,
 int max22196_chan_cfg(struct max22196_desc *desc, uint32_t ch, uint32_t hi_thr,
 		      enum max22196_curr curr)
 {
-	if (ch > MAX22196_CHANNELS - 1)
+	if (ch > desc->max_chn_nb - 1)
 		return -EINVAL;
 
 	return max22196_reg_update(desc, MAX22196_CFG_REG(ch),
@@ -239,7 +239,7 @@ int max22196_filter_set(struct max22196_desc *desc, uint32_t ch,
 {
 	int ret;
 
-	if (ch > MAX22196_CHANNELS - 1)
+	if (ch > desc->max_chn_nb - 1)
 		return -EINVAL;
 
 	ret =  max22196_reg_update(desc, MAX22196_CFG_REG(ch),
@@ -272,7 +272,7 @@ int max22196_filter_get(struct max22196_desc *desc, uint32_t ch,
 	int ret;
 	uint32_t del_val;
 
-	if (ch > MAX22196_CHANNELS - 1)
+	if (ch > desc->max_chn_nb - 1)
 		return -EINVAL;
 
 	ret = max22196_reg_read(desc, MAX22196_CFG_REG(ch), &del_val);
@@ -422,7 +422,10 @@ int max22196_set_chan_cnt(struct max22196_desc *desc, uint32_t ch,
 	int ret;
 	uint8_t msb_byte, lsb_byte;
 
-	if (ch > MAX22196_CHANNELS - 1)
+	if (desc->chip_id == ID_MAX22194)
+		return -EINVAL;
+
+	if (ch > desc->max_chn_nb - 1)
 		return -EINVAL;
 
 	ret = max22196_reg_update(desc, MAX22196_START_STOP_REG,
@@ -466,7 +469,10 @@ int max22196_get_chan_cnt(struct max22196_desc *desc, uint32_t ch,
 	int ret;
 	uint32_t reg_val;
 
-	if (ch > MAX22196_CHANNELS - 1)
+	if (desc->chip_id == ID_MAX22194)
+		return -EINVAL;
+
+	if (ch > desc->max_chn_nb - 1)
 		return -EINVAL;
 
 	ret = max22196_reg_update(desc, MAX22196_START_STOP_REG,
@@ -508,6 +514,8 @@ int max22196_init(struct max22196_desc **desc,
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
+
+
 	ret = no_os_spi_init(&descriptor->comm_desc, param->comm_param);
 	if (ret)
 		goto error;
@@ -524,6 +532,9 @@ int max22196_init(struct max22196_desc **desc,
 
 		descriptor->crc_en = true;
 	}
+
+	descriptor->chip_id = param->chip_id;
+	descriptor->max_chn_nb = param->chip_id ? MAX22196_CHANNELS : MAX22194_CHANNELS;
 
 	/* Clear the latched faults generated at power-up of MAX22196. */
 	ret = max22196_reg_read(descriptor, MAX22196_FAULT1_REG, &reg_val);
@@ -560,10 +571,12 @@ int max22196_remove(struct max22196_desc *desc)
 	if (!desc)
 		return -ENODEV;
 
-	for (i = 0; i < MAX22196_CHANNELS; i++) {
-		ret = max22196_set_chan_cnt(desc, i, MAX22196_CHN_CNT_RESET);
-		if (ret)
-			return ret;
+	if (desc->comm_desc) {
+		for (i = 0; i < desc->max_chn_nb; i++) {
+			ret = max22196_set_chan_cnt(desc, i, MAX22196_CHN_CNT_RESET);
+			if (ret)
+				return ret;
+		}
 	}
 
 	no_os_spi_remove(desc->comm_desc);
