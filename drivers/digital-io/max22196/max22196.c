@@ -523,12 +523,12 @@ int max22196_init(struct max22196_desc **desc,
 	if (param->crc_en) {
 		ret = no_os_gpio_get(&descriptor->crc_desc, param->crc_param);
 		if (ret)
-			goto spi_error;
+			goto error;
 
 		ret = no_os_gpio_direction_output(descriptor->crc_desc,
 						  NO_OS_GPIO_HIGH);
 		if (ret)
-			goto gpio_error;
+			goto error;
 
 		descriptor->crc_en = true;
 	}
@@ -539,22 +539,18 @@ int max22196_init(struct max22196_desc **desc,
 	/* Clear the latched faults generated at power-up of MAX22196. */
 	ret = max22196_reg_read(descriptor, MAX22196_FAULT1_REG, &reg_val);
 	if (ret)
-		goto gpio_error;
+		goto error;
 
 	ret = max22196_reg_read(descriptor, MAX22196_FAULT2_REG, &reg_val);
 	if (ret)
-		goto gpio_error;
+		goto error;
 
 	*desc = descriptor;
 
 	return 0;
-gpio_error:
-	if (param->crc_en)
-		no_os_gpio_remove(descriptor->crc_desc);
-spi_error:
-	no_os_spi_remove(descriptor->comm_desc);
+
 error:
-	no_os_free(descriptor);
+	max22196_remove(descriptor);
 
 	return ret;
 }

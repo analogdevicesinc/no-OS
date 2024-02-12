@@ -844,7 +844,7 @@ int max22196_iio_init(struct max22196_iio_desc **iio_desc,
 	ret = max22196_init(&descriptor->max22196_desc,
 			    init_param->max22196_init_param);
 	if (ret)
-		goto free_desc;
+		goto free_dev;
 
 	descriptor->iio_dev = &max22196_iio_dev;
 
@@ -857,9 +857,7 @@ int max22196_iio_init(struct max22196_iio_desc **iio_desc,
 	return 0;
 
 free_dev:
-	max22196_remove(descriptor->max22196_desc);
-free_desc:
-	no_os_free(descriptor);
+	max22196_iio_remove(descriptor);
 	return ret;
 }
 
