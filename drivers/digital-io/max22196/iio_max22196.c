@@ -301,20 +301,7 @@ static struct iio_attribute max22196_debug_attrs[] = {
 		.attributes = max22196_attrs	\
 	}
 
-static struct iio_channel max22196_channels[] = {
-	MAX22196_CHANNEL(0),
-	MAX22196_CHANNEL(1),
-	MAX22196_CHANNEL(2),
-	MAX22196_CHANNEL(3),
-	MAX22196_CHANNEL(4),
-	MAX22196_CHANNEL(5),
-	MAX22196_CHANNEL(6),
-	MAX22196_CHANNEL(7)
-};
-
 static struct iio_device max22196_iio_dev = {
-	.num_ch = NO_OS_ARRAY_SIZE(max22196_channels),
-	.channels = max22196_channels,
 	.debug_reg_read = (int32_t (*)())max22196_iio_reg_read,
 	.debug_reg_write = (int32_t (*)())max22196_iio_reg_write,
 	.debug_attributes = max22196_debug_attrs
@@ -784,6 +771,32 @@ static int max22196_iio_write_global_cfg(void *dev, char *buf, uint32_t len,
 }
 
 /**
+ * @brief Configure a set if IIO channels based on the chip id
+ * physical channels.
+ * @param desc - The iio device descriptor.
+ * @return 0 in case of success, an error code otherwise.
+ */
+int max22196_iio_setup_channels(struct max22196_iio_desc *desc)
+{
+	struct iio_channel *max22196_iio_channels;
+	int i;
+
+	max22196_iio_channels = no_os_calloc(desc->max22196_desc->max_chn_nb,
+					     sizeof(*max22196_iio_channels));
+
+	if (!max22196_iio_channels)
+		return -ENOMEM;
+
+	for (i = 0; i < desc->max22196_desc->max_chn_nb; i++)
+		max22196_iio_channels[i] = (struct iio_channel)MAX22196_CHANNEL(i);
+
+	desc->iio_dev->channels = max22196_iio_channels;
+	desc->iio_dev->num_ch = desc->max22196_desc->max_chn_nb;
+
+	return 0;
+}
+
+/**
  * @brief Register read wrapper
  * @param dev - The iio device structure.
  * @param reg - The register's address.
@@ -835,10 +848,16 @@ int max22196_iio_init(struct max22196_iio_desc **iio_desc,
 
 	descriptor->iio_dev = &max22196_iio_dev;
 
+	ret = max22196_iio_setup_channels(descriptor);
+	if (ret)
+		goto free_dev;
+
 	*iio_desc = descriptor;
 
 	return 0;
 
+free_dev:
+	max22196_remove(descriptor->max22196_desc);
 free_desc:
 	no_os_free(descriptor);
 	return ret;
@@ -855,6 +874,7 @@ int max22196_iio_remove(struct max22196_iio_desc *iio_desc)
 		return -ENODEV;
 
 	max22196_remove(iio_desc->max22196_desc);
+	no_os_free(iio_desc->iio_dev->channels);
 	no_os_free(iio_desc);
 
 	return 0;

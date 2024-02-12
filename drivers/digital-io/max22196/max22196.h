@@ -48,6 +48,7 @@
 #define MAX22196_FRAME_SIZE		2
 
 #define MAX22196_CHANNELS		8
+#define MAX22194_CHANNELS		4
 
 #define MAX22196_CHN_CNT_RESET		0
 
@@ -84,6 +85,11 @@
 #define MAX22196_FAULT2_MASK		NO_OS_GENMASK(4, 0)
 
 #define MAX22196_FILTER_CLRFLT_MASK	NO_OS_BIT(3)
+
+enum max22196_chip_id {
+	ID_MAX22194,
+	ID_MAX22196
+};
 
 enum max22196_fault_mask {
 	MAX22196_GLOBAL_REFDISHTCFG,
@@ -134,6 +140,7 @@ struct max22196_init_param {
 	struct no_os_spi_init_param *comm_param;
 	struct no_os_gpio_init_param *crc_param;
 	bool crc_en;
+	enum max22196_chip_id chip_id;
 };
 
 struct max22196_desc {
@@ -143,6 +150,8 @@ struct max22196_desc {
 	uint8_t buff[MAX22196_FRAME_SIZE + 1];
 	uint8_t fault2en;
 	bool crc_en;
+	enum max22196_chip_id chip_id;
+	uint8_t max_chn_nb;
 };
 
 /** Register write function for MAX22196. */
