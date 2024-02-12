@@ -17,6 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
+repository = 'no-OS'
 project = 'no-OS'
 copyright = '2023, Analog Devices, Inc.'
 author = 'Analog Devices, Inc.'
