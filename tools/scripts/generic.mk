@@ -153,8 +153,7 @@ CFLAGS += -Wall								\
 	 -Wno-unused-parameter						\
 	 -MMD 								\
 	 -MP								\
-	 -lm						
-	#-Werror
+	 -lm
 
 #------------------------------------------------------------------------------
 #                          COMMON INITIALIZATION
