@@ -50,16 +50,16 @@ ADIS Driver Source Code
 
 The source code for ADIS generic driver can be found here:
 
-* `Header file of ADIS Generic Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis.h>`_
-* `Implementation of ADIS Generic Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis.c>`_
+* `Header file of ADIS Generic Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis.h>`_
+* `Implementation of ADIS Generic Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis.c>`_
 
 The generic ADIS driver has to be used together with the chip-specific ADIS driver.
 The source code for the supported chips is listed below:
 
 ADIS1646X Driver Source Code:
 
-* `Header file of ADIS1646X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1646x.h>`_
-* `Implementation of ADIS1646X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1646x.c>`_
+* `Header file of ADIS1646X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1646x.h>`_
+* `Implementation of ADIS1646X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1646x.c>`_
 
 Supported devices with ADIS1646X files:
 
@@ -70,8 +70,8 @@ Supported devices with ADIS1646X files:
 
 ADIS1647X Driver Source Code:
 
-* `Header file of ADIS1647X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1647x.h>`_
-* `Implementation of ADIS1647X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1647x.c>`_
+* `Header file of ADIS1647X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1647x.h>`_
+* `Implementation of ADIS1647X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1647x.c>`_
 
 Supported devices with ADIS1647X files:
 
@@ -79,8 +79,8 @@ Supported devices with ADIS1647X files:
 
 ADIS1650X Driver Source Code:
 
-* `Header file of ADIS1650X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1650x.h>`_
-* `Implementation of ADIS1650X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1650x.c>`_
+* `Header file of ADIS1650X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1650x.h>`_
+* `Implementation of ADIS1650X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1650x.c>`_
 
 Supported devices with ADIS1650X files:
 
@@ -91,8 +91,8 @@ Supported devices with ADIS1650X files:
 
 ADIS1657X Driver Source Code:
 
-* `Header file of ADIS1657X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1657x.h>`_
-* `Implementation of ADIS1657X Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/adis1657x.c>`_
+* `Header file of ADIS1657X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1657x.h>`_
+* `Implementation of ADIS1657X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1657x.c>`_
 
 Supported devices with ADIS1657X files:
 
@@ -123,7 +123,7 @@ An example of a header file containing the prototypes of the functions which hav
 to be implemented, along with some generic data types they are using can be found
 below:
 
-* `Generic header file for SPI Communication APIs <https://github.com/analogdevicesinc/no-OS/blob/master/include/no_os_spi.h>`_
+* `Generic header file for SPI Communication APIs <https://github.com/analogdevicesinc/no-OS/blob/main/include/no_os_spi.h>`_
 
 You will also have to provide specific APIs for GPIO handling. There are five
 functions which are called by the ADIS driver and have to be implemented:
@@ -141,13 +141,13 @@ And there are two data types that have to be defined:
 An example of a header file containing the prototypes of the functions which have
 to be implemented, along with some generic data types they are using can be found below:
 
-* `Generic header file for GPIO APIs <https://github.com/analogdevicesinc/no-OS/blob/master/include/no_os_gpio.h>`_
+* `Generic header file for GPIO APIs <https://github.com/analogdevicesinc/no-OS/blob/main/include/no_os_gpio.h>`_
 
 The driver also uses the ADI util library, so make sure you also add the necessary
 files in your project. The source code for the util library can be found here:
 
-* `Header file of ADI util library <https://github.com/analogdevicesinc/no-OS/blob/master/include/no_os_util.h>`_
-* `Implementation file of ADI util library <https://github.com/analogdevicesinc/no-OS/blob/master/util/no_os_util.c>`_
+* `Header file of ADI util library <https://github.com/analogdevicesinc/no-OS/blob/main/include/no_os_util.h>`_
+* `Implementation file of ADI util library <https://github.com/analogdevicesinc/no-OS/blob/main/util/no_os_util.c>`_
 
 ADIS Driver Usage with No-OS
 ----------------------------
@@ -155,10 +155,10 @@ ADIS Driver Usage with No-OS
 If you wish to use No-OS for evaluating ADIS devices, you may use the already
 existing example projects:
 
-* `ADIS1646X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x>`_
-* `ADIS1647X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1647x>`_
-* `ADIS1650X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1650x>`_
-* `ADIS1657X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1657x>`_
+* `ADIS1646X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x>`_
+* `ADIS1647X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1647x>`_
+* `ADIS1650X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1650x>`_
+* `ADIS1657X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1657x>`_
 
 ADIS Device Initialization
 --------------------------
@@ -851,16 +851,16 @@ IIO clients through IIO lib.
 
 The source code for ADIS generic driver can be found here:
 
-* `Header file of ADIS Generic IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis.h>`_
-* `Implementation of ADIS Generic IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis.c>`_
+* `Header file of ADIS Generic IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis.h>`_
+* `Implementation of ADIS Generic IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis.c>`_
 
 The generic ADIS driver has to be used together with the chip-specific ADIS driver.
 The source code for the supported chips is listed below:
 
 ADIS1646X IIO Driver Source Code:
 
-* `Header file of ADIS1646X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1646x.h>`_
-* `Implementation of ADIS1646X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1646x.c>`_
+* `Header file of ADIS1646X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1646x.h>`_
+* `Implementation of ADIS1646X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1646x.c>`_
 
 Supported devices with IIO ADIS1646X files:
 
@@ -871,8 +871,8 @@ Supported devices with IIO ADIS1646X files:
 
 ADIS1647X IIO Driver Source Code:
 
-* `Header file of ADIS1647X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1647x.h>`_
-* `Implementation of ADIS1647X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1647x.c>`_
+* `Header file of ADIS1647X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1647x.h>`_
+* `Implementation of ADIS1647X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1647x.c>`_
 
 Supported devices with IIO ADIS1646X files:
 
@@ -880,8 +880,8 @@ Supported devices with IIO ADIS1646X files:
 
 ADIS1650X IIO Driver Source Code:
 
-* `Header file of ADIS1650X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1650x.h>`_
-* `Implementation of ADIS1650X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1650x.c>`_
+* `Header file of ADIS1650X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1650x.h>`_
+* `Implementation of ADIS1650X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1650x.c>`_
 
 Supported devices with IIO ADIS1650X files:
 
@@ -893,8 +893,8 @@ Supported devices with IIO ADIS1650X files:
 
 ADIS1657X IIO Driver Source Code:
 
-* `Header file of ADIS1657X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1657x.h>`_
-* `Implementation of ADIS1657X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/master/drivers/imu/iio_adis1657x.c>`_
+* `Header file of ADIS1657X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1657x.h>`_
+* `Implementation of ADIS1657X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1657x.c>`_
 
 Supported devices with ADIS1657X files:
 
