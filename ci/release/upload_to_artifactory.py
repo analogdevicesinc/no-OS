@@ -26,11 +26,11 @@ parser = argparse.ArgumentParser(
    description='This script is uploading files or folders to artifactory server.Parameter order doesn\'t matter.', \
    formatter_class=argparse.RawDescriptionHelpFormatter,
    epilog='Examples: '\
-                + '\n-> "./upload_to_artifactory.py --server_path="hdl/master/2020_12_12/pluto" --local_path="../projects/pluto/log_file.txt"'\
+                + '\n-> "./upload_to_artifactory.py --server_path="hdl/main/2020_12_12/pluto" --local_path="../projects/pluto/log_file.txt"'\
                 + ' --properties="git_sha=928ggraf;git_commmit_date=2020_12_12" --no_rel_path" will upload file "log_file.txt" to '\
-                + ' <UPLOAD_BASE_PATH>/hdl/master/2020_12_12/pluto/log_file.txt and add properties git_sha=928ggraf and git_commit_date=2010_12_12 on it.'\
-                + '\n-> "./upload_to_artifactory.py --server_path="linux" --local_path="master/2020_11_25/arm/zynq_zed_adv7511.dtb"" will upload dtb'\
-                + ' file to <UPLOAD_BASE_PATH>/linux/master/2020_11_25/arm/zynq_zed_adv7511.dtb')
+                + ' <UPLOAD_BASE_PATH>/hdl/main/2020_12_12/pluto/log_file.txt and add properties git_sha=928ggraf and git_commit_date=2010_12_12 on it.'\
+                + '\n-> "./upload_to_artifactory.py --server_path="linux" --local_path="main/2020_11_25/arm/zynq_zed_adv7511.dtb"" will upload dtb'\
+                + ' file to <UPLOAD_BASE_PATH>/linux/main/2020_11_25/arm/zynq_zed_adv7511.dtb')
 parser.add_argument("--base_path",   help="Artifactory Base Path - Internal ADI Artifactory server and development folder")
 parser.add_argument("--server_path", help="Artifactory folder where the files/folders will be saved, for example 'hdl' or 'linux'.")
 parser.add_argument("--local_path",  help="Local path to file/folder to upload. It can be relative or absolute.")
