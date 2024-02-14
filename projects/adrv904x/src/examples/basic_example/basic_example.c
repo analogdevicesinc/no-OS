@@ -67,6 +67,8 @@
 #include "adrv904x.h"
 #include "ad9528.h"
 
+#include "adi_adrv904x_datainterface.h"
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -116,7 +118,7 @@ int basic_example_main(void)
 	strcpy(ad9528_channels[0].extended_name, "DEV_SYSREF");
 	ad9528_channels[0].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[0].divider_phase = 0;
-	ad9528_channels[0].channel_divider = 5;
+	ad9528_channels[0].channel_divider = 4;
 	ad9528_channels[0].signal_source = SOURCE_SYSREF_VCO;
 	ad9528_channels[0].output_dis = 0;
 
@@ -125,7 +127,7 @@ int basic_example_main(void)
 	strcpy(ad9528_channels[1].extended_name, "DEV_CLK");
 	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[1].divider_phase = 0;
-	ad9528_channels[1].channel_divider = 5;
+	ad9528_channels[1].channel_divider = 4;
 	ad9528_channels[1].signal_source = SOURCE_VCO;
 	ad9528_channels[1].output_dis = 0;
 
@@ -134,7 +136,7 @@ int basic_example_main(void)
 	strcpy(ad9528_channels[3].extended_name, "CORE_CLK");
 	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[3].divider_phase = 0;
-	ad9528_channels[3].channel_divider = 5;
+	ad9528_channels[3].channel_divider = 4;
 	ad9528_channels[3].signal_source = SOURCE_VCO;
 	ad9528_channels[3].output_dis = 0;
 
@@ -143,7 +145,7 @@ int basic_example_main(void)
 	strcpy(ad9528_channels[11].extended_name, "REF_CLK1");
 	ad9528_channels[11].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[11].divider_phase = 0;
-	ad9528_channels[11].channel_divider = 5;
+	ad9528_channels[11].channel_divider = 2;
 	ad9528_channels[11].signal_source = SOURCE_VCO;
 	ad9528_channels[11].output_dis = 0;
 
@@ -152,7 +154,7 @@ int basic_example_main(void)
 	strcpy(ad9528_channels[12].extended_name, "FPGA_SYSREF");
 	ad9528_channels[12].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[12].divider_phase = 0;
-	ad9528_channels[12].channel_divider = 5;
+	ad9528_channels[12].channel_divider = 4;
 	ad9528_channels[12].signal_source = SOURCE_SYSREF_VCO;
 	ad9528_channels[12].output_dis = 0;
 
@@ -161,7 +163,7 @@ int basic_example_main(void)
 	strcpy(ad9528_channels[13].extended_name, "REF_CLK0");
 	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[13].divider_phase = 0;
-	ad9528_channels[13].channel_divider = 5;
+	ad9528_channels[13].channel_divider = 2;
 	ad9528_channels[13].signal_source = SOURCE_VCO;
 	ad9528_channels[13].output_dis = 0;
 
@@ -180,12 +182,13 @@ int basic_example_main(void)
 	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
 	ad9528_param.pdata->ref_mode = REF_MODE_EXT_REF;
 	/* PLL2 config */
-	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
-	ad9528_param.pdata->pll2_vco_div_m1 = 3;
+	ad9528_param.pdata->pll2_charge_pump_current_nA = 815000;
+	ad9528_param.pdata->pll2_vco_div_m1 = 4;
 	ad9528_param.pdata->pll2_r1_div = 1;
 	ad9528_param.pdata->pll2_ndiv_a_cnt = 3;
 	ad9528_param.pdata->pll2_ndiv_b_cnt = 27;
-	ad9528_param.pdata->pll2_n2_div = 10;
+	ad9528_param.pdata->pll2_n2_div = 4;
+	ad9528_param.pdata->pll2_freq_doubler_en = 1;
 	/* SYSREF config */
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
 	ad9528_param.pdata->sysref_k_div = 512;
@@ -198,7 +201,7 @@ int basic_example_main(void)
 	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
 	ad9528_param.pdata->pll1_bypass_en = false;
 	ad9528_param.pdata->pll2_bypass_en = false;
-	ad9528_param.pdata->stat0_pin_func_sel = 1; /* PLL1 & PLL2 Locked */
+	ad9528_param.pdata->stat0_pin_func_sel = 0x9; /* PLL1 in holdover */
 	ad9528_param.pdata->stat1_pin_func_sel =
 		3; /* 7 - REFA Correct; 3 - PLL2 Locked */
 
@@ -263,7 +266,7 @@ int basic_example_main(void)
 		.base = RX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = ADXCVR_REFCLK,
-		.lpm_enable = 1,
+		.lpm_enable = 0,
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
 		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
 		.export_no_os_clk = true
@@ -324,6 +327,12 @@ int basic_example_main(void)
 		goto error_8;
 	}
 
+	status = axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	if (status) {
+		pr_err("error: axi_dac_set_datasel() failed\n");
+		goto error_8;
+	}
+	
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init tx init error: %d\n", status);
@@ -334,6 +343,12 @@ int basic_example_main(void)
 		printf("axi_dmac_init rx init error: %d\n", status);
 		goto error_9;
 	}
+
+//	adi_adrv904x_FrmTestDataCfg_t frmTestDataCfg = {
+//			.framerSelMask = ADI_ADRV904X_FRAMER_0,
+//			.injectPoint = ADI_ADRV904X_FTD_POST_LANEMAP,
+//			.testDataSource = ADI_ADRV904X_FTD_PRBS31
+//	};
 
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
@@ -368,6 +383,16 @@ int basic_example_main(void)
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+
+//	status = adi_adrv904x_FramerTestDataSet(phy->kororDevice, &frmTestDataCfg);
+//	if (status)
+//		pr_info("				status %d\n", status);
+//	else
+//		pr_info("				test data SET\n");
+//
+//	axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+//
+//	while(1);
 
 	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
 
