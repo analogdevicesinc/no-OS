@@ -238,7 +238,7 @@ Since the driver's _init() function is allocating memory on heap and the _remove
 Beautifying code
 ================
 
-Once a new driver or an update is ready to be merged on the master branch, tools that check the coding style compliance can be used. Some examples are given below.
+Once a new driver or an update is ready to be merged on the main branch, tools that check the coding style compliance can be used. Some examples are given below.
 
 Artistic Style
 --------------
