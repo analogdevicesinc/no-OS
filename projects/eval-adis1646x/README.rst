@@ -106,10 +106,10 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x/src/platform>`_
 
 Basic example
 ^^^^^^^^^^^^^
@@ -119,7 +119,7 @@ performs angular velocity, acceleration and temperature readings in a while loop
 with a period of 1s. The data is printed on the serial interface.
 
 In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x/Makefile>`_
 
 .. code-block:: bash
 
@@ -145,7 +145,7 @@ The No-OS IIO Application together with the No-OS IIO ADIS driver take care of
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Trigger Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x/src/examples/iio_trigger_example>`_
+`IIO Trigger Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x/src/examples/iio_trigger_example>`_
 
 The read buffer is used for storing the burst data which shall be retrieved periodically by any LibIIO client.
 The measured data is sampled using a hardware trigger (e.g. interrupts).
@@ -158,7 +158,7 @@ If the flag is set to true, the data will be read immediately, in the interrupt 
 If the flag is set to false, the data will be read from application context. In this case some samples might be missed.
 
 In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/eval-adis1646x/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x/Makefile>`_
 
 .. code-block:: bash
 
