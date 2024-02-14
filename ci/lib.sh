@@ -61,7 +61,7 @@ download_common_scripts() {
 		[ ! -f "ci/$script" ] || continue
 		[ ! -f "build/$script" ] || continue
 		mkdir -p build
-		wget https://raw.githubusercontent.com/analogdevicesinc/no-OS/master/ci/$script \
+		wget https://raw.githubusercontent.com/analogdevicesinc/no-OS/main/ci/$script \
 			-O build/$script
 	done
 }
