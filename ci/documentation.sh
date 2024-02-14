@@ -116,13 +116,13 @@ build_sphinx() {
 }
 
 ############################################################################
-# If the current build is not a pull request and it is on master the 
+# If the current build is not a pull request and it is on main the 
 # documentation will be pushed to the gh-pages branch
 ############################################################################
 update_gh_pages() {
         REPO_SLUG="${REPO_SLUG:-analogdevicesinc/no-OS}"
 
-        if [[ -z "${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}" && "${BUILD_SOURCEBRANCH}" == *"master"* ]] ; then
+        if [[ -z "${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}" && "${BUILD_SOURCEBRANCH}" == *"main"* ]] ; then
                 UPDATE_GH_DOCS=1
         fi
 
@@ -131,9 +131,9 @@ update_gh_pages() {
                 git config --global user.email "cse-ci-notifications@analog.com"
                 git config --global user.name "CSE-CI"
 
-                MASTER_COMMIT=$(git rev-parse --short HEAD)
+                MAIN_COMMIT=$(git rev-parse --short HEAD)
 
-                echo_green "Running Github docs update on commit '$MASTER_COMMIT'"
+                echo_green "Running Github docs update on commit '$MAIN_COMMIT'"
 
                 git fetch --depth 1 origin +refs/heads/gh-pages:gh-pages
 
@@ -157,10 +157,10 @@ update_gh_pages() {
                 touch ${TOP_DIR}/.nojekyll
 
                 CURRENT_COMMIT=$(git log -1 --pretty=%B)
-                if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
+                if [[ ${CURRENT_COMMIT:(-7)} != ${MAIN_COMMIT:0:7} ]]
                 then
                         git add --all .
-                        git commit --allow-empty --amend -m "Update documentation to ${MASTER_COMMIT:0:7}"
+                        git commit --allow-empty --amend -m "Update documentation to ${MAIN_COMMIT:0:7}"
                         if [ -n "$GITHUB_DOC_TOKEN" ] ; then
                                 git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages -f
                         else
@@ -172,7 +172,7 @@ update_gh_pages() {
                         echo_green "Documentation already up to date!"
                 fi
         else
-                echo_green "Documentation will be updated when this commit gets on master!"
+                echo_green "Documentation will be updated when this commit gets on main!"
         fi
 }
 
