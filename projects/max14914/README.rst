@@ -82,10 +82,10 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/max14914/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14914/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/max14914/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14914/src/platform>`_
 
 Basic example
 ^^^^^^^^^^^^^
@@ -94,7 +94,7 @@ This is a simple example which initializes the max14914 and sets the state of
 the device to a DIGITAL INPUT IEC TYPE 2.
 
 In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/max14914/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14914/Makefile>`_
 
 .. code-block:: bash
 

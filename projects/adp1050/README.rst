@@ -112,10 +112,10 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adp1050/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adp1050/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/src/platform>`_
 
 Basic example
 ^^^^^^^^^^^^^
@@ -129,7 +129,7 @@ channel with a 49KHz frequency, then the DUTY_CYCLE data is read as well as all
 the statuses.
 
 In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adp1050/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/Makefile>`_
 
 .. code-block:: bash
 
@@ -155,10 +155,10 @@ The No-OS IIO Application together with the No-OS IIO ADP1050 driver take care o
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adp1050/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/src/examples/iio_example>`_
 
 In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adp1050/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/Makefile>`_
 
 .. code-block:: bash
 

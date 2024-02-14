@@ -98,7 +98,7 @@ This is how the `adrv902x no-OS project <https://github.com/analogdevicesinc/no-
 
 Note the presence of the system_top.xsa. In order to build this `no-OS <https://wiki.analog.com/resources/no-os>`_ project, you need such an .xsa file present in the project directory, as shown above. In case you don't have one, either obtain a pre-built file or build it yourself by following the `Building HDL guide <https://wiki.analog.com/resources/fpga/docs/build>`_.
 
-And this is how the corresponding `drivers section <https://github.com/analogdevicesinc/no-OS/tree/master/drivers/rf-transceiver/madura>`_ looks like as a file tree (the Madura API can be found under common and devices directories):
+And this is how the corresponding `drivers section <https://github.com/analogdevicesinc/no-OS/tree/main/drivers/rf-transceiver/madura>`_ looks like as a file tree (the Madura API can be found under common and devices directories):
 
 | no-OS/drivers/rf-transceiver/madura/
 | ├── adrv9025.c
@@ -211,7 +211,7 @@ At this point you may use a Tcl script to retrieve data from memory and store it
 
 You can find more information about  the data `here <https://wiki.analog.com/resources/no-os/dac_dma_example>`_.
 
-The data in the .csv files generated can be visualised using the `plot.py <https://github.com/analogdevicesinc/no-OS/blob/master/tools/scripts/platform/xilinx/plot.py>`_ script in the `no-OS repository <https://github.com/analogdevicesinc/no-OS/tree/master>`_. The following command will display the data on all 8 channels:
+The data in the .csv files generated can be visualised using the `plot.py <https://github.com/analogdevicesinc/no-OS/blob/main/tools/scripts/platform/xilinx/plot.py>`_ script in the `no-OS repository <https://github.com/analogdevicesinc/no-OS/tree/master>`_. The following command will display the data on all 8 channels:
 
 .. code-block:: bash
 
@@ -220,7 +220,7 @@ The data in the .csv files generated can be visualised using the `plot.py <https
 IIO Example
 -----------
 
-IIO demo is a standard example, provided in most `no-OS projects <https://github.com/analogdevicesinc/no-OS/tree/master/projects>`_, that launches a IIOD server on the board so that the user may connect to it via an IIO client. Using iio-oscilloscope, the user can configure the DAC and view the ADC data on a plot.
+IIO demo is a standard example, provided in most `no-OS projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects>`_, that launches a IIOD server on the board so that the user may connect to it via an IIO client. Using iio-oscilloscope, the user can configure the DAC and view the ADC data on a plot.
 
 To build the IIOD demo, add the following flags when invoking make which will build the IIOD server and the IIO section of the driver:
 
