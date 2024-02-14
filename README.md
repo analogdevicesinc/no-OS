@@ -1,6 +1,6 @@
 
 # no-OS
-[![Build Status](https://dev.azure.com/AnalogDevices/no-OS/_apis/build/status%2Fanalogdevicesinc.no-OS?branchName=master)](https://dev.azure.com/AnalogDevices/no-OS/_build/latest?definitionId=48&branchName=master)
+[![Build Status](https://dev.azure.com/AnalogDevices/no-OS/_apis/build/status%2Fanalogdevicesinc.no-OS?branchName=main)](https://dev.azure.com/AnalogDevices/no-OS/_build/latest?definitionId=48&branchName=main)
 
 [Analog Devices Inc.](http://www.analog.com/en/index.html) Software drivers for systems without OS.
 
@@ -27,7 +27,7 @@ When writing code, please follow the [style guidelines](https://github.com/analo
 
   * If you want to use the most stable code base, always use the [latest release branch]( https://github.com/analogdevicesinc/no-OS/branches/all?utf8=%E2%9C%93&query=201).
 
-  * If you want to use the greatest and latest, check out the master branch.
+  * If you want to use the greatest and latest, check out the main branch.
 
 
 ## Support
