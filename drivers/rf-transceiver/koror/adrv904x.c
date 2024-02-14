@@ -155,8 +155,7 @@ static void adrv904x_info(struct adrv904x_rf_phy *phy)
 }
 
 static int adrv904x_jesd204_device_init(struct jesd204_dev *jdev,
-				      enum jesd204_state_op_reason reason,
-				      struct jesd204_link *lnk)
+				      enum jesd204_state_op_reason reason)
 {
 	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
@@ -386,6 +385,13 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 		return JESD204_STATE_CHANGE_DONE;
 	}
 
+//	recoveryAction = adi_adrv904x_HwClose(phy->kororDevice);
+//	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+//		pr_err("ERROR adi_adrv904x_HwClose failed in %s at line %d.\n", __func__,
+//			   __LINE__);
+//		return JESD204_STATE_CHANGE_ERROR;
+//	}
+//
 //	memset(&phy->adi_adrv904x_device.devStateInfo, 0,
 //	       sizeof(phy->adi_adrv904x_device.devStateInfo));
 //
@@ -408,7 +414,7 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 //		       __LINE__);
 //		return JESD204_STATE_CHANGE_ERROR;
 //	}
-
+//
 //	recoveryAction = adi_adrv904x_PreMcsInit_NonBroadcast(phy->kororDevice,
 //			 &deviceInitStruct);
 //	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
@@ -416,13 +422,13 @@ int adrv904x_jesd204_link_setup(struct jesd204_dev *jdev,
 //		       __func__, __LINE__);
 //		return JESD204_STATE_CHANGE_ERROR;
 //	}
-
-	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
-	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
-		pr_err("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n",
-		       __func__, __LINE__);
-		return JESD204_STATE_CHANGE_ERROR;
-	}
+//
+//	recoveryAction = adi_adrv904x_MultichipSyncSet(phy->kororDevice, ADI_ENABLE);
+//	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) {
+//		pr_err("ERROR adi_adrv904x_MultichipSyncSet failed in %s at line %d.\n",
+//		       __func__, __LINE__);
+//		return JESD204_STATE_CHANGE_ERROR;
+//	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -498,12 +504,6 @@ static int adrv904x_jesd204_setup_stage2(struct jesd204_dev *jdev,
 		return JESD204_STATE_CHANGE_ERROR;
 	}
 
- 	recoveryAction = adi_adrv904x_SerializerReset(phy->kororDevice);
- 	if (recoveryAction) {
- 		pr_err();
- 		return recoveryAction;
- 	}
-
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -542,13 +542,6 @@ static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
 				return JESD204_STATE_CHANGE_ERROR;
 			}
 
-			ret = adi_adrv904x_SerializerReset(phy->kororDevice);
-			if (ret) {
-				pr_err("ERROR adi_adrv904x_SerializerReset failed in %s at line %d.\n",
-				       __func__, __LINE__);
-				return JESD204_STATE_CHANGE_ERROR;
-			}
-
 			ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
 							       ADI_ADRV904X_FRAMER_1, ADI_ENABLE);
 			if (ret) {
@@ -568,6 +561,15 @@ static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
 			pr_debug("%s:%d Link %d Framer enabled\n", __func__, __LINE__,
 				 ADI_ADRV904X_FRAMER_1);
 
+
+			ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
+								   ADI_ADRV904X_FRAMER_1, ADI_DISABLE);
+			if (ret) {
+				pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
+					   __func__, __LINE__);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
 			jesd204_sysref_async_force(phy->jdev);
 
 			ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
@@ -577,19 +579,10 @@ static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
 				       __func__, __LINE__);
 				return JESD204_STATE_CHANGE_ERROR;
 			}
-
-			ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
-							       ADI_ADRV904X_FRAMER_1, ADI_DISABLE);
-			if (ret) {
-				pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
-				       __func__, __LINE__);
-				return JESD204_STATE_CHANGE_ERROR;
-			}
-
 		}
 
 		ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
-						       priv->link[lnk->link_id].source_id, ADI_DISABLE);
+				priv->link[lnk->link_id].source_id, ADI_DISABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
 			       __func__, __LINE__);
@@ -597,45 +590,54 @@ static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
 		}
 
 		ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
-						      priv->link[lnk->link_id].source_id, ADI_DISABLE);
+				priv->link[lnk->link_id].source_id, ADI_DISABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
 			       __func__, __LINE__);
 			return JESD204_STATE_CHANGE_ERROR;
 		}
-
 
 		ret = adi_adrv904x_FramerLinkStateSet(phy->kororDevice,
-						      priv->link[lnk->link_id].source_id, ADI_ENABLE);
+							  priv->link[lnk->link_id].source_id, ADI_ENABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_FramerLinkStateSet failed in %s at line %d.\n",
-			       __func__, __LINE__);
+				   __func__, __LINE__);
 			return JESD204_STATE_CHANGE_ERROR;
 		}
-
 
 		pr_debug("%s:%d Link %d Framer enabled\n", __func__, __LINE__,
-			 priv->link[lnk->link_id].source_id);
+					 priv->link[lnk->link_id].source_id);
 
+		/*************************************************/
+		/**** Enable SYSREF to Koror JESD204B Framer ***/
+		/*************************************************/
 		ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
-						       priv->link[lnk->link_id].source_id, ADI_DISABLE);
+							   priv->link[lnk->link_id].source_id, ADI_ENABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
-			       __func__, __LINE__);
+				   __func__, __LINE__);
 			return JESD204_STATE_CHANGE_ERROR;
+
 		}
+
+	 	ret = adi_adrv904x_SerializerReset(phy->kororDevice);
+	 	if (ret) {
+	 		pr_err("adi_adrv904x_SerializerReset failedin %s at line %d.\n",
+				       __func__, __LINE__);
+	 		return JESD204_STATE_CHANGE_ERROR;
+	 	}
+
 	} else {
 		ret = adi_adrv904x_DeframerSysrefCtrlSet(phy->kororDevice,
-				priv->link[lnk->link_id].source_id, ADI_DISABLE);
+				(uint8_t) ADI_ADRV904X_ALL_DEFRAMER, ADI_DISABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_DeframerSysrefCtrlSet failed in %s at line %d.\n",
 			       __func__, __LINE__);
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-
 		ret = adi_adrv904x_DeframerLinkStateSet(phy->kororDevice,
-							priv->link[lnk->link_id].source_id, ADI_DISABLE);
+				(uint8_t) ADI_ADRV904X_ALL_DEFRAMER, ADI_DISABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_DeframerLinkStateSet failed in %s at line %d.\n",
 			       __func__, __LINE__);
@@ -667,18 +669,28 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 		adi_adrv904x_InitCals_t serdesCal = {
 			.calMask = ADI_ADRV904X_IC_SERDES,
 			.orxChannelMask = 0x00U,
-			.rxChannelMask = 0x00U,
-			.txChannelMask = 0xFFU, /* CAL_ALL_CHANNELS */
+			.rxChannelMask = 0xFFU,
+			.txChannelMask = 0x00U, /* CAL_ALL_CHANNELS */
 			.warmBoot = 0,
 		};
 
 		ret = adi_adrv904x_DeframerLinkStateSet(phy->kororDevice,
-						    priv->link[lnk->link_id].source_id, ADI_ENABLE);
+				priv->link[lnk->link_id].source_id, ADI_ENABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_DeframerLinkStateSet failed in %s at line %d.\n",
 				   __func__, __LINE__);
 			return JESD204_STATE_CHANGE_ERROR;
 		}
+
+		adi_adrv904x_DeframerCfg_t deframerCfg = { 0 };
+		uint8_t desLaneMask = 0;
+
+		for (int j = 0U; j < ADI_ADRV904X_MAX_DEFRAMERS; ++j)
+			{
+				ret = adi_adrv904x_DeframerCfgGet(phy->kororDevice, (adi_adrv904x_DeframerSel_e) (1U << j), &deframerCfg);
+
+				desLaneMask |= deframerCfg.deserializerLanesEnabled;
+			}
 
 		/* Notify ARM to run SERDES Calbriation if necessary */
 		ret = adi_adrv904x_InitCalsRun(phy->kororDevice, &serdesCal);
@@ -695,12 +707,25 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		adi_adrv904x_InitCalStatus_t status = {0};
-		adi_adrv904x_InitCalsDetailedStatusGet(phy->kororDevice, &status);
-
 		/***************************************************/
 		/**** Enable SYSREF to Koror JESD204C Deframer ***/
 		/***************************************************/
+		ret = adi_adrv904x_DeframerLinkStateSet(phy->kororDevice,
+				priv->link[lnk->link_id].source_id, ADI_DISABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_DeframerLinkStateSet failed in %s at line %d.\n",
+				   __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+		ret = adi_adrv904x_DeframerLinkStateSet(phy->kororDevice,
+				priv->link[lnk->link_id].source_id, ADI_ENABLE);
+		if (ret) {
+			pr_err("ERROR adi_adrv904x_DeframerLinkStateSet failed in %s at line %d.\n",
+				   __func__, __LINE__);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
 		ret = adi_adrv904x_DeframerSysrefCtrlSet(phy->kororDevice,
 				priv->link[lnk->link_id].source_id, ADI_ENABLE);
 		if (ret) {
@@ -708,8 +733,7 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 				   __func__, __LINE__);
 			return JESD204_STATE_CHANGE_ERROR;
 		}
-
-	};
+	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -723,7 +747,7 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
  	int ret;
 
  	adi_adrv904x_FramerStatus_t framerStatus;
- 	adi_adrv904x_DeframerStatus_t deframerStatus;
+ 	adi_adrv904x_DeframerStatus_v2_t deframerStatus;
  	uint8_t deframerLinkCondition = 0;
 
  	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
@@ -744,11 +768,23 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		if (framerStatus.status & 0x1F)
+		uint8_t syncbStatus = 0;
+		uint8_t err_cnt = 0;
+		uint8_t framerLinkState = 0;
+
+		ret = adi_adrv904x_FramerSyncbStatusGet(phy->kororDevice, ADI_ADRV904X_FRAMER_0, &syncbStatus);
+		ret = adi_adrv904x_FramerSyncbErrCntGet(phy->kororDevice,ADI_ADRV904X_FRAMER_0, &err_cnt);
+		ret = adi_adrv904x_FramerLinkStateGet(phy->kororDevice, &framerLinkState);
+
+		printf("sync status %X\n", syncbStatus);
+		printf("err counter %X\n", err_cnt);
+		printf("framer link state %X\n", framerLinkState);
+
+		if (framerStatus.status & ~0x82)
  			pr_warning("Link%u framerStatus 0x%X\n",
  				   lnk->link_id, framerStatus.status);
  	} else {
- 		ret = adi_adrv904x_DeframerStatusGet(phy->kororDevice,
+ 		ret = adi_adrv904x_DeframerStatusGet_v2(phy->kororDevice,
  						     priv->link[lnk->link_id].source_id, &deframerStatus);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_DeframerStatusGet failed in %s at line %d.\n",
@@ -756,18 +792,37 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
+		adi_adrv904x_Dfrm204cErrCounterStatus_t errCounterStatus = {0};
+
+
+
  		ret  = adi_adrv904x_DfrmLinkConditionGet(
  			       phy->kororDevice,
  			       priv->link[lnk->link_id].source_id,
  			       &deframerLinkCondition);
 
- 		if ((deframerStatus.status & 0x0F) != 0x6) /* Ignore Valid ILAS checksum */
- 			pr_warning("Link%u deframerStatus 0x%X\n",
- 				   lnk->link_id, deframerStatus.status);
+ 		pr_info("Link%u deframerStatus linkState 0x%X\n",
+ 				lnk->link_id, deframerStatus.linkState);
+
+ 		for(int i = 0; i < 8; i++) {
+ 			pr_warning("Link%u deframerStatus %d laneStatus 0x%X\n",
+  				   lnk->link_id, i,  deframerStatus.laneStatus[i]);
+
+ 			ret = adi_adrv904x_Dfrm204cErrCounterStatusGet(phy->kororDevice, ADI_ADRV904X_DEFRAMER_0, i, &errCounterStatus);
+
+ 			pr_warning("Lane %d status 0x%X 0x%X 0x%X 0x%X\n",
+ 			  				   i,  errCounterStatus.crcCntValue, errCounterStatus.embCntValue, errCounterStatus.mbCntValue,
+							   errCounterStatus.shCntValue);
+
+ 		}
+
+		pr_warning("Link%u deframerStatus phyLaneMask 0x%X\n",
+			   lnk->link_id, deframerStatus.phyLaneMask);
 
  		/* Kick off SERDES tracking cal if lanes are up */
  		ret = adi_adrv904x_TrackingCalsEnableSet(
- 			      phy->kororDevice, ADI_ADRV904X_TC_TX_SERDES_MASK,
+ 			      phy->kororDevice,
+				  ADI_ADRV904X_TC_TX_SERDES_MASK,
 				  0xFFU, // all channels
  			      ADI_ADRV904X_TRACKING_CAL_ENABLE);
 		if (ret) {
@@ -980,7 +1035,7 @@ int32_t adrv904x_init(struct adrv904x_rf_phy **dev,
 
 	ret = adrv904x_setup(phy);
 	if (ret < 0) {
-		pr_err("%s: adrv9025_setup failed (%d)\n", __func__, ret);
+		pr_err("%s: adrv904x_setup failed (%d)\n", __func__, ret);
 		goto error_setup;
 	}
 
@@ -990,6 +1045,8 @@ int32_t adrv904x_init(struct adrv904x_rf_phy **dev,
 
 	priv = jesd204_dev_priv(phy->jdev);
 	priv->phy = phy;
+
+	phy->kororDevice->common.errPtr->errDataInfo.errDeviceInfo.id = 1;
 
 	*dev = phy;
 
@@ -1055,7 +1112,6 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 	struct no_os_clk_desc *tx_sample_clk = NULL;
 	struct no_os_clk_init_param clk_init;
 	adi_adrv904x_Version_t apiVersion;
-	adi_common_ErrData_t errData;
 	adi_common_ErrData_t* errPtr;
 	uint8_t siRevision = 0xbb;
 	int ret;
@@ -1064,8 +1120,6 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 	phy->kororDevice->common.devHalInfo = &phy->hal;
 
 	ADI_APP_MESSAGE("\nadrv904x_setup()\n");
-
-	(void) ADI_LIBRARY_MEMSET(&errData, 0, sizeof(adi_common_ErrData_t));
 
 	/* Configure Example Application for No Buffering to Standard Output */
 	ADI_LIBRARY_SETVBUF(stdout, NULL, _IONBF, 0);
