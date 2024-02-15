@@ -108,9 +108,9 @@ build_doxygen() {
 }
 
 build_sphinx() {
-        pushd ${TOP_DIR}/doc/sphinx
+        pushd ${TOP_DIR}/doc/sphinx/source
 
-        sphinx-build -j${NUM_JOBS} -W ./source/ ./build
+        make -j${NUM_JOBS} SPHINXOPTS='-W' html
 
         popd
 }
@@ -149,7 +149,7 @@ update_gh_pages() {
                 cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}/doxygen/
 
                 # Add sphinx build content to root folder
-                cp -R ${TOP_DIR}/doc/sphinx/build/* ${TOP_DIR}
+                cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}
 
                 rm -rf ${TOP_DIR}/doc
 
