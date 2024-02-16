@@ -83,6 +83,18 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 #if !defined(USE_STANDARD_SPI)
 	// register access runs at a lower clock rate (~2MHz)
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#else
+	/*
+	 * CNV pin should toggle and be low before register access
+	 * no need to add an explicit delay as the required pulse
+	 * width is only 10ns
+	 */
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 1);
+	if (ret)
+		return ret;
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 0);
+	if (ret)
+		return ret;
 #endif
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
@@ -110,6 +122,18 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 #if !defined(USE_STANDARD_SPI)
 	// register access runs at a lower clock rate (~2MHz)
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#else
+	/*
+	 * CNV pin should toggle and be low before register access
+	 * no need to add an explicit delay as the required pulse
+	 * width is only 10ns
+	 */
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 1);
+	if (ret)
+		return ret;
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 0);
+	if (ret)
+		return ret;
 #endif
 
 	buf[0] = AD400X_WRITE_COMMAND;
@@ -136,6 +160,20 @@ int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 	uint32_t buf = 0;
 	int32_t ret;
 
+#if defined(USE_STANDARD_SPI)
+	/*
+	 * Trigger a conversion
+	 * No need to explicitly add a delay as the meassuered
+	 * lattency to toggle the gpio and spi clk is arround 3usec
+	 */
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 1);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 0);
+	if (ret)
+		return ret;
+#endif
 	ret = no_os_spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
 
 	*adc_data = buf & 0xFFFFF;
@@ -170,6 +208,15 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!dev)
 		return -1;
 
+#if defined(USE_STANDARD_SPI)
+	ret = no_os_gpio_get(&dev->gpio_cnv, init_param->gpio_cnv);
+	if (ret)
+		goto error;
+
+	ret = no_os_gpio_direction_output(dev->gpio_cnv, NO_OS_GPIO_LOW);
+	if (ret)
+		goto error;
+#endif
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		goto error;
@@ -213,6 +260,11 @@ int32_t ad400x_remove(struct ad400x_dev *dev)
 {
 	int32_t ret;
 
+#if defined(USE_STANDARD_SPI)
+	ret = no_os_gpio_remove(dev->gpio_cnv);
+	if (ret)
+		return ret;
+#endif
 	ret = no_os_spi_remove(dev->spi_desc);
 
 	no_os_free(dev);
