@@ -136,8 +136,20 @@ int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 	uint32_t buf = 0;
 	int32_t ret;
 
+#if defined(USE_STANDARD_SPI)
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 1);
+	if (ret)
+		return ret;
+#endif
 	ret = no_os_spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
+	if (ret)
+		return ret;
 
+#if defined(USE_STANDARD_SPI)
+	ret = no_os_gpio_set_value(dev->gpio_cnv, 0);
+	if (ret)
+		return ret;
+#endif
 	*adc_data = buf & 0xFFFFF;
 
 	return ret;
@@ -170,6 +182,15 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!dev)
 		return -1;
 
+#if defined(USE_STANDARD_SPI)
+	ret = no_os_gpio_get(&dev->gpio_cnv, &init_param->gpio_cnv);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_direction_output(dev->gpio_cnv, NO_OS_GPIO_LOW);
+	if (ret)
+		return ret;
+#endif
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		goto error;

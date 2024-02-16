@@ -47,7 +47,7 @@
 #else
 #include "no_os_spi.h"
 #endif
-
+#include "no_os_gpio.h"
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -73,6 +73,8 @@ extern const uint16_t ad400x_device_resol[];
 struct ad400x_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
+	/** Conversion Start GPIO descriptor. */
+	struct no_os_gpio_desc *gpio_cnv;
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
@@ -82,6 +84,8 @@ struct ad400x_dev {
 struct ad400x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param spi_init;
+	/** Conversion Start GPIO configuration. */
+	struct no_os_gpio_init_param gpio_cnv;
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
