@@ -202,8 +202,7 @@ int basic_example_main(void)
 	ad9528_param.pdata->pll1_bypass_en = false;
 	ad9528_param.pdata->pll2_bypass_en = false;
 	ad9528_param.pdata->stat0_pin_func_sel = 0x9; /* PLL1 in holdover */
-	ad9528_param.pdata->stat1_pin_func_sel =
-		3; /* 7 - REFA Correct; 3 - PLL2 Locked */
+	ad9528_param.pdata->stat1_pin_func_sel = 3; /* 7 - REFA Correct; 3 - PLL2 Locked */
 
 	status = ad9528_setup(&ad9528_device, ad9528_param);
 	if (status != 0) {
@@ -256,7 +255,7 @@ int basic_example_main(void)
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 0,
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.ref_rate_khz = 491520,
 		.export_no_os_clk = true
 	};
 	struct adxcvr *tx_adxcvr;
@@ -268,7 +267,7 @@ int basic_example_main(void)
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 0,
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.ref_rate_khz = 491520,
 		.export_no_os_clk = true
 	};
 	struct adxcvr *rx_adxcvr;
@@ -392,7 +391,7 @@ int basic_example_main(void)
 //
 //	axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 //
-//	while(1);
+	while(1);
 
 	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
 

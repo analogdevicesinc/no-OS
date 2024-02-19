@@ -582,7 +582,7 @@ static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
 		}
 
 		ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
-				priv->link[lnk->link_id].source_id, ADI_DISABLE);
+				priv->link[lnk->link_id].source_id, ADI_ENABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
 			       __func__, __LINE__);
@@ -612,7 +612,7 @@ static int adrv904x_jesd204_clks_enable(struct jesd204_dev *jdev,
 		/**** Enable SYSREF to Koror JESD204B Framer ***/
 		/*************************************************/
 		ret = adi_adrv904x_FramerSysrefCtrlSet(phy->kororDevice,
-							   priv->link[lnk->link_id].source_id, ADI_ENABLE);
+							   priv->link[lnk->link_id].source_id, ADI_DISABLE);
 		if (ret) {
 			pr_err("ERROR adi_adrv904x_FramerSysrefCtrlSet failed in %s at line %d.\n",
 				   __func__, __LINE__);
@@ -780,7 +780,7 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 		printf("err counter %X\n", err_cnt);
 		printf("framer link state %X\n", framerLinkState);
 
-		if (framerStatus.status & ~0x82)
+		if (framerStatus.status != 0x82)
  			pr_warning("Link%u framerStatus 0x%X\n",
  				   lnk->link_id, framerStatus.status);
  	} else {
