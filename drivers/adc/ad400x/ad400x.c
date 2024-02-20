@@ -54,7 +54,13 @@
  * @brief Device resolution
  */
 const uint16_t ad400x_device_resol[] = {
+	[ID_AD4000] = 16,
+	[ID_AD4001] = 16,
+	[ID_AD4002] = 18,
 	[ID_AD4003] = 18,
+	[ID_AD4004] = 16,
+	[ID_AD4005] = 16,
+	[ID_AD4006] = 18,
 	[ID_AD4007] = 18,
 	[ID_AD4011] = 18,
 	[ID_AD4020] = 20,
