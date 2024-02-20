@@ -261,6 +261,7 @@ int adis_read_reg(struct adis_dev *adis,  uint32_t reg, uint32_t *val,
 			.cs_delay_last = adis->info->read_delay,
 		},
 		{
+			.tx_buff = adis->tx,
 			.rx_buff = adis->rx + 2,
 			.bytes_number = 2,
 			.cs_change = 1,
