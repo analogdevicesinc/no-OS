@@ -182,6 +182,8 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!dev)
 		return -1;
 
+	dev->ref_voltage_mv = init_param->ref_voltage_mv;
+
 #if defined(USE_STANDARD_SPI)
 	ret = no_os_gpio_get(&dev->gpio_cnv, &init_param->gpio_cnv);
 	if (ret)

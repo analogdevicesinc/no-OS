@@ -104,7 +104,7 @@ static int get_scale(void *device, char *buf, uint32_t len,
 	struct ad400x_dev *dev = iio_dev->ad400x_dev;
 	int32_t vals[2];
 
-	vals[0] = 5000;
+	vals[0] = dev->ref_voltage_mv;
 	vals[1] = ad400x_iio_scan_types[dev->dev_id].realbits;
 
 	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, vals);

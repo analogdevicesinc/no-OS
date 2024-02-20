@@ -73,5 +73,6 @@ struct ad400x_init_param ad400x_ip = {
 		.number = GPIO_CNV,
 		.platform_ops = GPIO_OPS,
 	},
+	.ref_voltage_mv = AD400X_ADC_REF_VOLTAGE,
 	.dev_id = DEVICE_ID,
 };

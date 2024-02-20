@@ -80,6 +80,7 @@ extern UART_HandleTypeDef huart5;
 
 #define GPIO_PORT_A		0
 
+#define AD400X_ADC_REF_VOLTAGE 5000
 extern struct stm32_uart_init_param ad400x_uart_extra_ip;
 extern struct stm32_spi_init_param ad400x_spi_extra_ip;
 

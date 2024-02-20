@@ -85,6 +85,8 @@ struct ad400x_dev {
 	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
+	/* Voltage reference */
+	uint32_t ref_voltage_mv;
 };
 
 struct ad400x_init_param {
@@ -96,6 +98,8 @@ struct ad400x_init_param {
 	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
+	/* Voltage reference */
+	uint32_t ref_voltage_mv;
 	bool turbo_mode;
 	bool high_z_mode;
 	bool span_compression;
