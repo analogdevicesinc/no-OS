@@ -134,7 +134,7 @@ struct no_os_spi_init_param {
 	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
 	/** SPI chip select */
-	uint8_t		chip_select;
+	int32_t		chip_select;
 	/** SPI mode */
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */

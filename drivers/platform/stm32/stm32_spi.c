@@ -191,13 +191,15 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	csip.pull = NO_OS_PULL_NONE;
 	csip.extra = &csip_extra;
 	csip.platform_ops = &stm32_gpio_ops;
-	ret = no_os_gpio_get(&sdesc->chip_select, &csip);
+	ret = no_os_gpio_get_optional(&sdesc->chip_select, &csip);
 	if (ret)
 		goto error;
 
-	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
-	if (ret)
-		goto error;
+	if (sdesc->chip_select) {
+		ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto error;
+	}
 
 	/* copy settings to device descriptor */
 	spi_desc->device_id = param->device_id;
@@ -238,7 +240,8 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 	__HAL_SPI_DISABLE(&sdesc->hspi);
 #endif
 	HAL_SPI_DeInit(&sdesc->hspi);
-	no_os_gpio_remove(sdesc->chip_select);
+	if (sdesc->chip_select)
+		no_os_gpio_remove(sdesc->chip_select);
 	no_os_free(desc->extra);
 	no_os_free(desc);
 	return 0;
@@ -256,8 +259,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 			   uint32_t len)
 {
 	struct stm32_spi_desc *sdesc;
-	struct stm32_gpio_desc *gdesc;
-	uint64_t slave_id;
+	struct stm32_gpio_desc *gdesc = NULL;
+	uint64_t slave_id = 0;
 	static uint64_t last_slave_id;
 	int ret = 0;
 
@@ -265,7 +268,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 		return -EINVAL;
 
 	sdesc = desc->extra;
-	gdesc = sdesc->chip_select->extra;
+	if (sdesc->chip_select)
+		gdesc = sdesc->chip_select->extra;
 #ifdef SPI_SR_TXE
 	uint32_t tx_cnt = 0;
 	uint32_t rx_cnt = 0;
@@ -276,8 +280,13 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	// Compute a slave ID based on SPI instance and chip select.
 	// If it did not change since last call to stm32_spi_write_and_read,
 	// no need to reconfigure SPI. Otherwise, reconfigure it.
-	slave_id = ((uint64_t)(uintptr_t)sdesc->hspi.Instance << 32) |
-		   sdesc->chip_select->number;
+	if (sdesc->chip_select) {
+		slave_id = ((uint64_t)(uintptr_t)sdesc->hspi.Instance << 32) |
+			   sdesc->chip_select->number;
+	} else {
+		slave_id = ((uint64_t)(uintptr_t)sdesc->hspi.Instance << 32);
+	}
+
 	if (slave_id != last_slave_id) {
 		last_slave_id = slave_id;
 		ret = stm32_spi_config(desc);
@@ -291,7 +300,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 			return -EINVAL;
 
 		/* Assert CS */
-		gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
+		if (gdesc)
+			gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
 
 		if(msgs[i].cs_delay_first)
 			no_os_udelay(msgs[i].cs_delay_first);
@@ -345,7 +355,7 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 		if(msgs[i].cs_delay_last)
 			no_os_udelay(msgs[i].cs_delay_last);
 
-		if (msgs[i].cs_change)
+		if (gdesc && msgs[i].cs_change)
 			/* De-assert CS */
 			gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
 
