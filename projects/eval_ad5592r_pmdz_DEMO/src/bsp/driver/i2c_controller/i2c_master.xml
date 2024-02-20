@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipxact:component xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014">
+    <ipxact:vendor>latticesemi.com</ipxact:vendor>
+    <ipxact:library>module</ipxact:library>
+    <ipxact:name>i2c_master</ipxact:name>
+    <ipxact:version>1.0.0</ipxact:version>
+    <ipxact:model>
+        <ipxact:moduleParameters>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="ADDR_MODE" resolve="generated" type="int">
+                <ipxact:name>ADDR_MODE</ipxact:name>
+                <ipxact:matchname sequence_id="0">ADDR_MODE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>7</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="APB_ENABLE" resolve="generated" type="bool">
+                <ipxact:name>APB_ENABLE</ipxact:name>
+                <ipxact:matchname sequence_id="0">APB_ENABLE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>True</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="STRETCHING" resolve="generated" type="bool">
+                <ipxact:name>STRETCHING</ipxact:name>
+                <ipxact:matchname sequence_id="0">STRETCHING</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="SYS_CLOCK_FREQ" resolve="generated" type="float">
+                <ipxact:name>SYS_CLOCK_FREQ</ipxact:name>
+                <ipxact:matchname sequence_id="0">SYS_CLOCK_FREQ</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>50</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="DESIRED_CLOCK_FREQ" resolve="generated" type="float">
+                <ipxact:name>DESIRED_CLOCK_FREQ</ipxact:name>
+                <ipxact:matchname sequence_id="0">DESIRED_CLOCK_FREQ</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>100</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="PRESCALER_INPUT" resolve="generated" type="int">
+                <ipxact:name>PRESCALER_INPUT</ipxact:name>
+                <ipxact:matchname sequence_id="0">PRESCALER_INPUT</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>None</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="PRESCALER" resolve="generated" type="int">
+                <ipxact:name>PRESCALER</ipxact:name>
+                <ipxact:matchname sequence_id="0">PRESCALER</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>None</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="ACTUAL_CLOCK_FREQ" resolve="generated" type="float">
+                <ipxact:name>ACTUAL_CLOCK_FREQ</ipxact:name>
+                <ipxact:matchname sequence_id="0">ACTUAL_CLOCK_FREQ</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>None</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="TBA_IE" resolve="generated" type="bool">
+                <ipxact:name>TBA_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">TBA_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="RBR_IE" resolve="generated" type="bool">
+                <ipxact:name>RBR_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">RBR_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="BC_IE" resolve="generated" type="bool">
+                <ipxact:name>BC_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">BC_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="TC_IE" resolve="generated" type="bool">
+                <ipxact:name>TC_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">TC_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="TX_DONE_IE" resolve="generated" type="bool">
+                <ipxact:name>TX_DONE_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">TX_DONE_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="RX_DONE_IE" resolve="generated" type="bool">
+                <ipxact:name>RX_DONE_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">RX_DONE_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="TX_ERROR_IE" resolve="generated" type="bool">
+                <ipxact:name>TX_ERROR_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">TX_ERROR_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="RX_ERROR_IE" resolve="generated" type="bool">
+                <ipxact:name>RX_ERROR_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">RX_ERROR_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="ABOR_ACK_IE" resolve="generated" type="bool">
+                <ipxact:name>ABOR_ACK_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">ABOR_ACK_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="ARBTR_LOST_IE" resolve="generated" type="bool">
+                <ipxact:name>ARBTR_LOST_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">ARBTR_LOST_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+            <ipxact:moduleParameter configGroups="SystemBuilder" parameterId="SCL_TIMEOUT_IE" resolve="generated" type="bool">
+                <ipxact:name>SCL_TIMEOUT_IE</ipxact:name>
+                <ipxact:matchname sequence_id="0">SCL_TIMEOUT_IE</ipxact:matchname>
+                <ipxact:description/>
+                <ipxact:value>False</ipxact:value>
+            </ipxact:moduleParameter>
+        </ipxact:moduleParameters>
+    </ipxact:model>
+</ipxact:component>

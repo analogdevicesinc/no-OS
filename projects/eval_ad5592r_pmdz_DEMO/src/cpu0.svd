@@ -1,0 +1,1857 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+    <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD.xsd" >
+      <vendor>Latticsemi.com</vendor>                                       <!-- device vendor name -->
+      <vendorID>Latticesemi</vendorID>                                        <!-- device vendor short name -->
+      <name>LFCPNX_100</name>                                        <!-- name of part-->
+      <series>LFCPNX</series>                                         <!-- device series the device belongs to -->
+      <version>1.0</version>                                          <!-- version of this description, adding CMSIS-SVD 1.1 tags -->
+      <description>template_ctpnxe</description>
+
+      <addressUnitBits>8</addressUnitBits>
+      <width>32</width>
+      <size>32</size>
+      <access>read-write</access>
+      <resetValue>0x00000000</resetValue>
+      <resetMask>0xFFFFFFFF</resetMask>
+
+      <peripherals>
+          <peripheral>
+          <name>cpu0_inst</name>
+          <version>2.3.0</version>
+          <baseAddress>0xF2000000</baseAddress>
+          <groupName>riscv_rtos</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00100000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+          
+          </registers>
+    </peripheral>
+    <peripheral>
+          <name>gpio0_inst</name>
+          <version>1.6.2</version>
+          <baseAddress>0x10003000</baseAddress>
+          <groupName>gpio</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00001000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+                <!-- RD_DATA_REG: Read Data Register -->
+            <register>
+              <name>RD_DATA_REG</name>
+              <description>Read Data Register</description>
+              <addressOffset>0x0000</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rd_data: Read actual values of GPIO's -->
+                <field>
+                  <name>rd_data</name>
+                  <description>Read actual values of GPIO's</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- WR_DATA_REG: Write Data Register -->
+            <register>
+              <name>WR_DATA_REG</name>
+              <description>Write Data Register</description>
+              <addressOffset>0x0004</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- wr_data: Write GPIO output register -->
+                <field>
+                  <name>wr_data</name>
+                  <description>Write GPIO output register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- SET_DATA_REG: Set Data Register -->
+            <register>
+              <name>SET_DATA_REG</name>
+              <description>Set Data Register</description>
+              <addressOffset>0x0008</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- set_data: Set GPIO output register -->
+                <field>
+                  <name>set_data</name>
+                  <description>Set GPIO output register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CLEAR_DATA_REG: Clear Data Register -->
+            <register>
+              <name>CLEAR_DATA_REG</name>
+              <description>Clear Data Register</description>
+              <addressOffset>0x000C</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- clear_data: Clear GPIO output register -->
+                <field>
+                  <name>clear_data</name>
+                  <description>Clear GPIO output register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- DIRECTION_REG: Direction Register -->
+            <register>
+              <name>DIRECTION_REG</name>
+              <description>Direction Register</description>
+              <addressOffset>0x0010</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- direction_reg: GPIO Direction register -->
+                <field>
+                  <name>direction_reg</name>
+                  <description>GPIO Direction register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_TYPE_REG: Interrupt Type Register -->
+            <register>
+              <name>INT_TYPE_REG</name>
+              <description>Interrupt Type Register</description>
+              <addressOffset>0x0014</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_type: Interrupt Type Cofiguration Register, 1-Edge, 0-Level -->
+                <field>
+                  <name>int_type</name>
+                  <description>Interrupt Type Cofiguration Register, 1-Edge, 0-Level</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_METHOD_REG: Interrupt Method Register -->
+            <register>
+              <name>INT_METHOD_REG</name>
+              <description>Interrupt Method Register</description>
+              <addressOffset>0x0018</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_method: Interrupt Method Register, if Interrupt Type is Edge` 1-Rising edge 0-faling edge, if Interrupt Type is Level` 1-High level, 0-Low level -->
+                <field>
+                  <name>int_method</name>
+                  <description>Interrupt Method Register, if Interrupt Type is Edge` 1-Rising edge 0-faling edge, if Interrupt Type is Level` 1-High level, 0-Low level</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_STATUS_REG: Interrupt Status Register -->
+            <register>
+              <name>INT_STATUS_REG</name>
+              <description>Interrupt Status Register</description>
+              <addressOffset>0x001C</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_status: Interrupt Status Register, indicates interrupt status -->
+                <field>
+                  <name>int_status</name>
+                  <description>Interrupt Status Register, indicates interrupt status</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_ENABLE_REG: Interrupt Enable Register -->
+            <register>
+              <name>INT_ENABLE_REG</name>
+              <description>Interrupt Enable Register</description>
+              <addressOffset>0x0020</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- Int_enable: Interrupt Enable Register, enables appropriate channel interrupt -->
+                <field>
+                  <name>Int_enable</name>
+                  <description>Interrupt Enable Register, enables appropriate channel interrupt</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_SET_REG: Interrupt Set Register -->
+            <register>
+              <name>INT_SET_REG</name>
+              <description>Interrupt Set Register</description>
+              <addressOffset>0x0024</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_set: Interrupt Set Register, user can generate interrupt by writing '1' to the corresponding bit of this register -->
+                <field>
+                  <name>int_set</name>
+                  <description>Interrupt Set Register, user can generate interrupt by writing '1' to the corresponding bit of this register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+
+          </registers>
+    </peripheral>
+    <peripheral>
+          <name>gpio1_inst</name>
+          <version>1.6.2</version>
+          <baseAddress>0x10004000</baseAddress>
+          <groupName>gpio</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00001000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+                <!-- RD_DATA_REG: Read Data Register -->
+            <register>
+              <name>RD_DATA_REG</name>
+              <description>Read Data Register</description>
+              <addressOffset>0x0000</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rd_data: Read actual values of GPIO's -->
+                <field>
+                  <name>rd_data</name>
+                  <description>Read actual values of GPIO's</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- WR_DATA_REG: Write Data Register -->
+            <register>
+              <name>WR_DATA_REG</name>
+              <description>Write Data Register</description>
+              <addressOffset>0x0004</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- wr_data: Write GPIO output register -->
+                <field>
+                  <name>wr_data</name>
+                  <description>Write GPIO output register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- SET_DATA_REG: Set Data Register -->
+            <register>
+              <name>SET_DATA_REG</name>
+              <description>Set Data Register</description>
+              <addressOffset>0x0008</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- set_data: Set GPIO output register -->
+                <field>
+                  <name>set_data</name>
+                  <description>Set GPIO output register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CLEAR_DATA_REG: Clear Data Register -->
+            <register>
+              <name>CLEAR_DATA_REG</name>
+              <description>Clear Data Register</description>
+              <addressOffset>0x000C</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- clear_data: Clear GPIO output register -->
+                <field>
+                  <name>clear_data</name>
+                  <description>Clear GPIO output register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- DIRECTION_REG: Direction Register -->
+            <register>
+              <name>DIRECTION_REG</name>
+              <description>Direction Register</description>
+              <addressOffset>0x0010</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- direction_reg: GPIO Direction register -->
+                <field>
+                  <name>direction_reg</name>
+                  <description>GPIO Direction register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_TYPE_REG: Interrupt Type Register -->
+            <register>
+              <name>INT_TYPE_REG</name>
+              <description>Interrupt Type Register</description>
+              <addressOffset>0x0014</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_type: Interrupt Type Cofiguration Register, 1-Edge, 0-Level -->
+                <field>
+                  <name>int_type</name>
+                  <description>Interrupt Type Cofiguration Register, 1-Edge, 0-Level</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_METHOD_REG: Interrupt Method Register -->
+            <register>
+              <name>INT_METHOD_REG</name>
+              <description>Interrupt Method Register</description>
+              <addressOffset>0x0018</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_method: Interrupt Method Register, if Interrupt Type is Edge` 1-Rising edge 0-faling edge, if Interrupt Type is Level` 1-High level, 0-Low level -->
+                <field>
+                  <name>int_method</name>
+                  <description>Interrupt Method Register, if Interrupt Type is Edge` 1-Rising edge 0-faling edge, if Interrupt Type is Level` 1-High level, 0-Low level</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_STATUS_REG: Interrupt Status Register -->
+            <register>
+              <name>INT_STATUS_REG</name>
+              <description>Interrupt Status Register</description>
+              <addressOffset>0x001C</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_status: Interrupt Status Register, indicates interrupt status -->
+                <field>
+                  <name>int_status</name>
+                  <description>Interrupt Status Register, indicates interrupt status</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_ENABLE_REG: Interrupt Enable Register -->
+            <register>
+              <name>INT_ENABLE_REG</name>
+              <description>Interrupt Enable Register</description>
+              <addressOffset>0x0020</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- Int_enable: Interrupt Enable Register, enables appropriate channel interrupt -->
+                <field>
+                  <name>Int_enable</name>
+                  <description>Interrupt Enable Register, enables appropriate channel interrupt</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_SET_REG: Interrupt Set Register -->
+            <register>
+              <name>INT_SET_REG</name>
+              <description>Interrupt Set Register</description>
+              <addressOffset>0x0024</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- int_set: Interrupt Set Register, user can generate interrupt by writing '1' to the corresponding bit of this register -->
+                <field>
+                  <name>int_set</name>
+                  <description>Interrupt Set Register, user can generate interrupt by writing '1' to the corresponding bit of this register</description>
+                  <bitRange>[31:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+
+          </registers>
+    </peripheral>
+    <peripheral>
+          <name>i2c0_inst</name>
+          <version>2.0.0</version>
+          <baseAddress>0x10002000</baseAddress>
+          <groupName>i2c_controller</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00001000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+                <!-- WR_DATA_REG: Write Data Register -->
+            <register>
+              <name>WR_DATA_REG</name>
+              <description>Write Data Register</description>
+              <addressOffset>0x0000</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- tx_fifo: Write access to this field pushes data to Transmit FIFO -->
+                <field>
+                  <name>tx_fifo</name>
+                  <description>Write access to this field pushes data to Transmit FIFO</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- RD_DATA_REG: Read Data Register -->
+            <register>
+              <name>RD_DATA_REG</name>
+              <description>Read Data Register</description>
+              <addressOffset>0x0000</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo: Read access to this field pops data from Receive FIFO -->
+                <field>
+                  <name>rx_fifo</name>
+                  <description>Read access to this field pops data from Receive FIFO</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- TARGET_ADDRL_REG: Lower 7-bit target address -->
+            <register>
+              <name>TARGET_ADDRL_REG</name>
+              <description>Lower 7-bit target address</description>
+              <addressOffset>0x0004</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- target_addr_l_reg: Lower 7-bit target address -->
+                <field>
+                  <name>target_addr_l_reg</name>
+                  <description>Lower 7-bit target address</description>
+                  <bitRange>[6:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- TARGET_ADDRH_REG: Upper 3-bit target address -->
+            <register>
+              <name>TARGET_ADDRH_REG</name>
+              <description>Upper 3-bit target address</description>
+              <addressOffset>0x0008</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- target_addr_h_reg: For 10-bit address mode only. Lower 3-bit target address -->
+                <field>
+                  <name>target_addr_h_reg</name>
+                  <description>For 10-bit address mode only. Lower 3-bit target address</description>
+                  <bitRange>[2:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CONTROL_REG: Control Register -->
+            <register>
+              <name>CONTROL_REG</name>
+              <description>Control Register</description>
+              <addressOffset>0x000C</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- start: Starts the I2C transaction. This is asserted after the MPU has finished writing to all configuration registers -->
+                <field>
+                  <name>start</name>
+                  <description>Starts the I2C transaction. This is asserted after the MPU has finished writing to all configuration registers</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- abort: Stops an I2C transaction currently in progress -->
+                <field>
+                  <name>abort</name>
+                  <description>Stops an I2C transaction currently in progress</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- reset: Set this bit to 1 to reset this I2C Controller -->
+                <field>
+                  <name>reset</name>
+                  <description>Set this bit to 1 to reset this I2C Controller</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- repeated_start: Causes I2C controller to omit the generation of a stop condition following the completion of a transaction. Subsequent transaction will be a repeated start. -->
+                <field>
+                  <name>repeated_start</name>
+                  <description>Causes I2C controller to omit the generation of a stop condition following the completion of a transaction. Subsequent transaction will be a repeated start.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- TGT_BYTE_CNT_REG: Target Byte Count Register -->
+            <register>
+              <name>TGT_BYTE_CNT_REG</name>
+              <description>Target Byte Count Register</description>
+              <addressOffset>0x0010</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- byte_cnt: Number of data bytes for the current transaction -->
+                <field>
+                  <name>byte_cnt</name>
+                  <description>Number of data bytes for the current transaction</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- MODE_REG: Mode Register -->
+            <register>
+              <name>MODE_REG</name>
+              <description>Mode Register</description>
+              <addressOffset>0x0014</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- clk_presc_high: The upper three bits of the clock prescaler -->
+                <field>
+                  <name>clk_presc_high</name>
+                  <description>The upper three bits of the clock prescaler</description>
+                  <bitRange>[2:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- trx_mode: Sets the read or write operation on the I2C bus -->
+                <field>
+                  <name>trx_mode</name>
+                  <description>Sets the read or write operation on the I2C bus</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- addr_mode: Selects the addressing mode either 7 or 10 bits -->
+                <field>
+                  <name>addr_mode</name>
+                  <description>Selects the addressing mode either 7 or 10 bits</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- bus_speed_mode: Selects setup time for Repeated START Condition and setup time for STOP Condition -->
+                <field>
+                  <name>bus_speed_mode</name>
+                  <description>Selects setup time for Repeated START Condition and setup time for STOP Condition</description>
+                  <bitRange>[7:6]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CLK_PRESCL_REG: Clock Prescaler Register Low Bits -->
+            <register>
+              <name>CLK_PRESCL_REG</name>
+              <description>Clock Prescaler Register Low Bits</description>
+              <addressOffset>0x0018</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- clk_presc_low: Lower 8-bit value of divisor in clock prescaler register -->
+                <field>
+                  <name>clk_presc_low</name>
+                  <description>Lower 8-bit value of divisor in clock prescaler register</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_STATUS1_REG: Interrupt Status 1st Register -->
+            <register>
+              <name>INT_STATUS1_REG</name>
+              <description>Interrupt Status 1st Register</description>
+              <addressOffset>0x001C</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_ready_int: This interrupt status bit asserts when Receive FIFO is empty and receives a data word from SPI interface. -->
+                <field>
+                  <name>rx_fifo_ready_int</name>
+                  <description>This interrupt status bit asserts when Receive FIFO is empty and receives a data word from SPI interface.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access></access>
+                </field>
+            <!-- rx_fifo_afull_int: This interrupt status bit asserts when the amount of data words in Receive FIFO changes from 'RX FIFO Almost Full Flag' - 1 to 'RX FIFO Almost Full Flag'. -->
+                <field>
+                  <name>rx_fifo_afull_int</name>
+                  <description>This interrupt status bit asserts when the amount of data words in Receive FIFO changes from 'RX FIFO Almost Full Flag' - 1 to 'RX FIFO Almost Full Flag'.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access></access>
+                </field>
+            <!-- rx_fifo_full_int: This interrupt status bit asserts when RX FIFO full status changes from not full to full state. -->
+                <field>
+                  <name>rx_fifo_full_int</name>
+                  <description>This interrupt status bit asserts when RX FIFO full status changes from not full to full state.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tx_fifo_empty_int: This interrupt status bit asserts when the last data in Transmit FIFO is popped-out, causing the FIFO to become empty. -->
+                <field>
+                  <name>tx_fifo_empty_int</name>
+                  <description>This interrupt status bit asserts when the last data in Transmit FIFO is popped-out, causing the FIFO to become empty.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tx_fifo_aempty_int: This interrupt status bit asserts when the amount of data words in Transmit FIFO changes from 'TX FIFO Almost Empty Flag' + 1 to 'TX FIFO Almost Empty Flag'. -->
+                <field>
+                  <name>tx_fifo_aempty_int</name>
+                  <description>This interrupt status bit asserts when the amount of data words in Transmit FIFO changes from 'TX FIFO Almost Empty Flag' + 1 to 'TX FIFO Almost Empty Flag'.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tx_fifo_full_int: This interrupt status bit asserts when Transmit FIFO changes from not full state to full state. -->
+                <field>
+                  <name>tx_fifo_full_int</name>
+                  <description>This interrupt status bit asserts when Transmit FIFO changes from not full state to full state.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tr_cmp_int: This interrupt status bit asserts when the number of transmitted words via SPI interface reaches the TGT_WORD_CNT_REG.target_word_cnt setting value. -->
+                <field>
+                  <name>tr_cmp_int</name>
+                  <description>This interrupt status bit asserts when the number of transmitted words via SPI interface reaches the TGT_WORD_CNT_REG.target_word_cnt setting value.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access></access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_ENABLE1_REG: Interrupt Enable 1st Register -->
+            <register>
+              <name>INT_ENABLE1_REG</name>
+              <description>Interrupt Enable 1st Register</description>
+              <addressOffset>0x0020</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_ready_en: Interrupt enabled bit corresponded to Receive FIFO Ready Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_ready_en</name>
+                  <description>Interrupt enabled bit corresponded to Receive FIFO Ready Interrupt Status.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- rx_fifo_afull_en: Interrupt enabled bit corresponded to Receive FIFO Almost Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_afull_en</name>
+                  <description>Interrupt enabled bit corresponded to Receive FIFO Almost Full Interrupt Status.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- rx_fifo_full_en: Interrupt enabled bit corresponded to Receive FIFO Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_full_en</name>
+                  <description>Interrupt enabled bit corresponded to Receive FIFO Full Interrupt Status.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tx_fifo_empty_en: Interrupt enabled bit corresponded to Transmit FIFO Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_empty_en</name>
+                  <description>Interrupt enabled bit corresponded to Transmit FIFO Empty Interrupt Status.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tx_fifo_aempty_en: Interrupt enabled bit corresponded to Transmit FIFO Almost Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_aempty_en</name>
+                  <description>Interrupt enabled bit corresponded to Transmit FIFO Almost Empty Interrupt Status.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tx_fifo_full_en: Interrupt enabled bit corresponded to Transmit FIFO Full Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_full_en</name>
+                  <description>Interrupt enabled bit corresponded to Transmit FIFO Full Interrupt Status.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tr_cmp_en: Interrupt enabled bit corresponded to Transfer Complete Interrupt Status. -->
+                <field>
+                  <name>tr_cmp_en</name>
+                  <description>Interrupt enabled bit corresponded to Transfer Complete Interrupt Status.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_SET1_REG: Interrupt Set 1st Register -->
+            <register>
+              <name>INT_SET1_REG</name>
+              <description>Interrupt Set 1st Register</description>
+              <addressOffset>0x0024</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_ready_set: Interrupt set bit corresponded to Receive FIFO Ready Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_ready_set</name>
+                  <description>Interrupt set bit corresponded to Receive FIFO Ready Interrupt Status.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- rx_fifo_afull_set: Interrupt set bit corresponded to Receive FIFO Almost Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_afull_set</name>
+                  <description>Interrupt set bit corresponded to Receive FIFO Almost Full Interrupt Status.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- rx_fifo_full_set: Interrupt set bit corresponded to Receive FIFO Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_full_set</name>
+                  <description>Interrupt set bit corresponded to Receive FIFO Full Interrupt Status.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_empty_set: Interrupt set bit corresponded to Transmit FIFO Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_empty_set</name>
+                  <description>Interrupt set bit corresponded to Transmit FIFO Empty Interrupt Status.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_aempty_set: Interrupt set bit corresponded to Transmit FIFO Almost Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_aempty_set</name>
+                  <description>Interrupt set bit corresponded to Transmit FIFO Almost Empty Interrupt Status.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_full_set: Interrupt set bit corresponded to Transmit FIFO Full Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_full_set</name>
+                  <description>Interrupt set bit corresponded to Transmit FIFO Full Interrupt Status.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tr_cmp_set: Interrupt set bit corresponded to Transfer Complete Interrupt Status. -->
+                <field>
+                  <name>tr_cmp_set</name>
+                  <description>Interrupt set bit corresponded to Transfer Complete Interrupt Status.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_STATUS2_REG: Interrupt Status 2nd Register -->
+            <register>
+              <name>INT_STATUS2_REG</name>
+              <description>Interrupt Status 2nd Register</description>
+              <addressOffset>0x0028</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- timeout_int: This interrupt status of bit asserts when scl_io is hold for SCL_TIMEOUT_REG.timeout_val times the programmed SCL low period. -->
+                <field>
+                  <name>timeout_int</name>
+                  <description>This interrupt status of bit asserts when scl_io is hold for SCL_TIMEOUT_REG.timeout_val times the programmed SCL low period.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access></access>
+                </field>
+            <!-- arb_lost_int: This interrupt status bit asserts when I2C Controller IP Core loses arbitration. -->
+                <field>
+                  <name>arb_lost_int</name>
+                  <description>This interrupt status bit asserts when I2C Controller IP Core loses arbitration.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access></access>
+                </field>
+            <!-- abort_ack_int: This interrupt status bit asserts when an I2C Controller IP Core aborts an ongoing transaction because the host writes 1'b1 to CONTROL_REG.abort. -->
+                <field>
+                  <name>abort_ack_int</name>
+                  <description>This interrupt status bit asserts when an I2C Controller IP Core aborts an ongoing transaction because the host writes 1'b1 to CONTROL_REG.abort.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access></access>
+                </field>
+            <!-- nack_error_int: This interrupt status bit asserts when NACK is received when expecting an ACK during data phase and address phase. -->
+                <field>
+                  <name>nack_error_int</name>
+                  <description>This interrupt status bit asserts when NACK is received when expecting an ACK during data phase and address phase.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access></access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_ENABLE2_REG: Interrupt Enable 2nd Register -->
+            <register>
+              <name>INT_ENABLE2_REG</name>
+              <description>Interrupt Enable 2nd Register</description>
+              <addressOffset>0x002C</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- timeout_en: Defines the Interrupt enable of bit corresponding to SCL Timeout Interrupt. -->
+                <field>
+                  <name>timeout_en</name>
+                  <description>Defines the Interrupt enable of bit corresponding to SCL Timeout Interrupt.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- arb_lost_en: Defines the interrupt enable bit corresponding to Arbitration Lost Interrupt. -->
+                <field>
+                  <name>arb_lost_en</name>
+                  <description>Defines the interrupt enable bit corresponding to Arbitration Lost Interrupt.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- abort_ack_en: Defines the interrupt enable bit corresponding to Transaction Abort Acknowledgement Interrupt. -->
+                <field>
+                  <name>abort_ack_en</name>
+                  <description>Defines the interrupt enable bit corresponding to Transaction Abort Acknowledgement Interrupt.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- nack_error_en: Defines the interrupt enable bit corresponding to NACK Error Interrupt. -->
+                <field>
+                  <name>nack_error_en</name>
+                  <description>Defines the interrupt enable bit corresponding to NACK Error Interrupt.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_SET2_REG: Interrupt Set 2nd Register -->
+            <register>
+              <name>INT_SET2_REG</name>
+              <description>Interrupt Set 2nd Register</description>
+              <addressOffset>0x0030</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- timeout_set: Defines the Interrupt set of bit corresponding to SCL Timeout Interrupt. -->
+                <field>
+                  <name>timeout_set</name>
+                  <description>Defines the Interrupt set of bit corresponding to SCL Timeout Interrupt.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- arb_lost_set: Defines the interrupt set bit corresponding to Arbitration Lost Interrupt. -->
+                <field>
+                  <name>arb_lost_set</name>
+                  <description>Defines the interrupt set bit corresponding to Arbitration Lost Interrupt.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- abort_ack_set: Defines the interrupt set bit corresponding to Transaction Abort Acknowledgement Interrupt. -->
+                <field>
+                  <name>abort_ack_set</name>
+                  <description>Defines the interrupt set bit corresponding to Transaction Abort Acknowledgement Interrupt.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- nack_error_set: Defines the interrupt set bit corresponding to NACK Error Interrupt. -->
+                <field>
+                  <name>nack_error_set</name>
+                  <description>Defines the interrupt set bit corresponding to NACK Error Interrupt.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- FIFO_STATUS_REG: FIFO Status Register -->
+            <register>
+              <name>FIFO_STATUS_REG</name>
+              <description>FIFO Status Register</description>
+              <addressOffset>0x0034</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_empty: This bit reflects the empty condition of Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_empty</name>
+                  <description>This bit reflects the empty condition of Receive FIFO.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- rx_fifo_afull: This bit reflects the almost full condition of Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_afull</name>
+                  <description>This bit reflects the almost full condition of Receive FIFO.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- rx_fifo_full: This bit reflects the full condition of Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_full</name>
+                  <description>This bit reflects the full condition of Receive FIFO.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- tx_fifo_empty: This bit reflects the empty condition of Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_empty</name>
+                  <description>This bit reflects the empty condition of Transmit FIFO.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- tx_fifo_aempty: This bit reflects the almost empty condition of Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_aempty</name>
+                  <description>This bit reflects the almost empty condition of Transmit FIFO.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- tx_fifo_full: This bit reflects the full condition of Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_full</name>
+                  <description>This bit reflects the full condition of Transmit FIFO.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- SCL_TIMEOUT_REG: SLC Timeout Register specifies the timeout value for SCL Timeout. -->
+            <register>
+              <name>SCL_TIMEOUT_REG</name>
+              <description>SLC Timeout Register specifies the timeout value for SCL Timeout.</description>
+              <addressOffset>0x0038</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- timeout_val: Specifies the timeout value for SCL timeout -->
+                <field>
+                  <name>timeout_val</name>
+                  <description>Specifies the timeout value for SCL timeout</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+
+          </registers>
+    </peripheral>
+    <peripheral>
+          <name>spi0_inst</name>
+          <version>1.4.1</version>
+          <baseAddress>0x10000000</baseAddress>
+          <groupName>spi_master</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00001000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+                <!-- WR_DATA_REG: Write Data Register -->
+            <register>
+              <name>WR_DATA_REG</name>
+              <description>Write Data Register</description>
+              <addressOffset>0x0000</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- tx_fifo: Write access to this field pushes data to Write FIFO -->
+                <field>
+                  <name>tx_fifo</name>
+                  <description>Write access to this field pushes data to Write FIFO</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- RD_DATA_REG: Read Data Register -->
+            <register>
+              <name>RD_DATA_REG</name>
+              <description>Read Data Register</description>
+              <addressOffset>0x0000</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo: Read access to this field pops data from Write FIFO -->
+                <field>
+                  <name>rx_fifo</name>
+                  <description>Read access to this field pops data from Write FIFO</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- SLV_SEL_REG: Slave Select Register -->
+            <register>
+              <name>SLV_SEL_REG</name>
+              <description>Slave Select Register</description>
+              <addressOffset>0x0004</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- ss1: Corresponds to the slave select:  0-> Slave 1 is not selected.  1-> Slave 1 is selected. -->
+                <field>
+                  <name>ss1</name>
+                  <description>Corresponds to the slave select:  0-> Slave 1 is not selected.  1-> Slave 1 is selected.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss2: Corresponds to the slave select:  0->  2 is not selected.  1-> Slave 2 is selected. -->
+                <field>
+                  <name>ss2</name>
+                  <description>Corresponds to the slave select:  0->  2 is not selected.  1-> Slave 2 is selected.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss3: Corresponds to the slave select:  0-> Slave 3 is not selected.  1-> Slave 3 is selected. -->
+                <field>
+                  <name>ss3</name>
+                  <description>Corresponds to the slave select:  0-> Slave 3 is not selected.  1-> Slave 3 is selected.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss4: Corresponds to the slave select:  0-> Slave 4 is not selected.  1-> Slave 4 is selected. -->
+                <field>
+                  <name>ss4</name>
+                  <description>Corresponds to the slave select:  0-> Slave 4 is not selected.  1-> Slave 4 is selected.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss5: Corresponds to the slave select:  0-> Slave 5 is not selected.  1-> Slave 5 is selected. -->
+                <field>
+                  <name>ss5</name>
+                  <description>Corresponds to the slave select:  0-> Slave 5 is not selected.  1-> Slave 5 is selected.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss6: Corresponds to the slave select:  0-> Slave 6 is not selected.  1-> Slave 6 is selected. -->
+                <field>
+                  <name>ss6</name>
+                  <description>Corresponds to the slave select:  0-> Slave 6 is not selected.  1-> Slave 6 is selected.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss7: Corresponds to the slave select:  0-> Slave 7 is not selected.  1-> Slave 7 is selected. -->
+                <field>
+                  <name>ss7</name>
+                  <description>Corresponds to the slave select:  0-> Slave 7 is not selected.  1-> Slave 7 is selected.</description>
+                  <bitRange>[6:6]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ss8: Corresponds to the slave select:  0-> Slave 8 is not selected.  1-> Slave 8 is selected. -->
+                <field>
+                  <name>ss8</name>
+                  <description>Corresponds to the slave select:  0-> Slave 8 is not selected.  1-> Slave 8 is selected.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CFG_REG: Configuration Register -->
+            <register>
+              <name>CFG_REG</name>
+              <description>Configuration Register</description>
+              <addressOffset>0x0008</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- cpha: Defines Clock phase. 0->The first clock transition is the first data capture edge. 1->The second clock transition is the first data capture edge. -->
+                <field>
+                  <name>cpha</name>
+                  <description>Defines Clock phase. 0->The first clock transition is the first data capture edge. 1->The second clock transition is the first data capture edge.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- cpol: Defines Clock Polarity. 0->SCK to zero when idle. 1->SCK to one when idle. -->
+                <field>
+                  <name>cpol</name>
+                  <description>Defines Clock Polarity. 0->SCK to zero when idle. 1->SCK to one when idle.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssnp: Controls SSN pulse management. 0->No SSN pulse. 1->SSN pulse generated. -->
+                <field>
+                  <name>ssnp</name>
+                  <description>Controls SSN pulse management. 0->No SSN pulse. 1->SSN pulse generated.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ds: Data Width attribute defines the value of DS fields. 00-> 8-bits. 01-> 16-bits. 10-> 24-bits. 11-> 32-bits. -->
+                <field>
+                  <name>ds</name>
+                  <description>Data Width attribute defines the value of DS fields. 00-> 8-bits. 01-> 16-bits. 10-> 24-bits. 11-> 32-bits.</description>
+                  <bitRange>[4:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- only_write: Determines whether SPI Master receives data from Slave or not. 0-> Write/Read. 1->Write Only. -->
+                <field>
+                  <name>only_write</name>
+                  <description>Determines whether SPI Master receives data from Slave or not. 0-> Write/Read. 1->Write Only.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- lsb_first: LSB_FIRST, determines whether SPI Master begins receiving/transmitting data from LSB or MSB. -->
+                <field>
+                  <name>lsb_first</name>
+                  <description>LSB_FIRST, determines whether SPI Master begins receiving/transmitting data from LSB or MSB.</description>
+                  <bitRange>[6:6]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- spi_en: Enables the SPI_ENABLE_REG for slave select line control. -->
+                <field>
+                  <name>spi_en</name>
+                  <description>Enables the SPI_ENABLE_REG for slave select line control.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CLK_PRESCL_REG: Clock Prescaler Lower Register -->
+            <register>
+              <name>CLK_PRESCL_REG</name>
+              <description>Clock Prescaler Lower Register</description>
+              <addressOffset>0x000C</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- clk_presc_low: Clock Prescaler Lower Register Bits -->
+                <field>
+                  <name>clk_presc_low</name>
+                  <description>Clock Prescaler Lower Register Bits</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- CLK_PRESCH_REG: Clock Prescaler higher Register -->
+            <register>
+              <name>CLK_PRESCH_REG</name>
+              <description>Clock Prescaler higher Register</description>
+              <addressOffset>0x0010</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- clk_presc_high: Clock Prescaler Higher Register Bits -->
+                <field>
+                  <name>clk_presc_high</name>
+                  <description>Clock Prescaler Higher Register Bits</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_STATUS_REG: Interrupt Status Register -->
+            <register>
+              <name>INT_STATUS_REG</name>
+              <description>Interrupt Status Register</description>
+              <addressOffset>0x0014</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_ready_int: This interrupt status bit asserts when Receive FIFO is empty and receives a data word from SPI interface. -->
+                <field>
+                  <name>rx_fifo_ready_int</name>
+                  <description>This interrupt status bit asserts when Receive FIFO is empty and receives a data word from SPI interface.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access></access>
+                </field>
+            <!-- rx_fifo_afull_int: This interrupt status bit asserts when the amount of data words in Receive FIFO changes from 'RX FIFO Almost Full Flag' - 1 to 'RX FIFO Almost Full Flag'. -->
+                <field>
+                  <name>rx_fifo_afull_int</name>
+                  <description>This interrupt status bit asserts when the amount of data words in Receive FIFO changes from 'RX FIFO Almost Full Flag' - 1 to 'RX FIFO Almost Full Flag'.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access></access>
+                </field>
+            <!-- rx_fifo_full_int: This interrupt status bit asserts when RX FIFO full status changes from not full to full state. -->
+                <field>
+                  <name>rx_fifo_full_int</name>
+                  <description>This interrupt status bit asserts when RX FIFO full status changes from not full to full state.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tx_fifo_empty_int: This interrupt status bit asserts when the last data in Transmit FIFO is popped-out, causing the FIFO to become empty. -->
+                <field>
+                  <name>tx_fifo_empty_int</name>
+                  <description>This interrupt status bit asserts when the last data in Transmit FIFO is popped-out, causing the FIFO to become empty.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tx_fifo_aempty_int: This interrupt status bit asserts when the amount of data words in Transmit FIFO changes from 'TX FIFO Almost Empty Flag' - 1 to 'TX FIFO Almost Empty Flag'. -->
+                <field>
+                  <name>tx_fifo_aempty_int</name>
+                  <description>This interrupt status bit asserts when the amount of data words in Transmit FIFO changes from 'TX FIFO Almost Empty Flag' - 1 to 'TX FIFO Almost Empty Flag'.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tx_fifo_full_int: This interrupt status bit asserts when Transmit FIFO changes from not full state to full state. -->
+                <field>
+                  <name>tx_fifo_full_int</name>
+                  <description>This interrupt status bit asserts when Transmit FIFO changes from not full state to full state.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access></access>
+                </field>
+            <!-- tr_cmp_int: This interrupt status bit asserts when the number of transmitted words via SPI interface reaches the TGT_WORD_CNT_REG.target_word_cnt setting value. -->
+                <field>
+                  <name>tr_cmp_int</name>
+                  <description>This interrupt status bit asserts when the number of transmitted words via SPI interface reaches the TGT_WORD_CNT_REG.target_word_cnt setting value.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access></access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_ENABLE_REG: Interrupt Enable Register -->
+            <register>
+              <name>INT_ENABLE_REG</name>
+              <description>Interrupt Enable Register</description>
+              <addressOffset>0x0018</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_ready_en: Interrupt enabled bit corresponded to Receive FIFO Ready Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_ready_en</name>
+                  <description>Interrupt enabled bit corresponded to Receive FIFO Ready Interrupt Status.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- rx_fifo_afull_en: Interrupt enabled bit corresponded to Receive FIFO Almost Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_afull_en</name>
+                  <description>Interrupt enabled bit corresponded to Receive FIFO Almost Full Interrupt Status.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- rx_fifo_full_en: Interrupt enabled bit corresponded to Receive FIFO Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_full_en</name>
+                  <description>Interrupt enabled bit corresponded to Receive FIFO Full Interrupt Status.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tx_fifo_empty_en: Interrupt enabled bit corresponded to Transmit FIFO Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_empty_en</name>
+                  <description>Interrupt enabled bit corresponded to Transmit FIFO Empty Interrupt Status.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tx_fifo_aempty_en: Interrupt enabled bit corresponded to Transmit FIFO Almost Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_aempty_en</name>
+                  <description>Interrupt enabled bit corresponded to Transmit FIFO Almost Empty Interrupt Status.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tx_fifo_full_en: Interrupt enabled bit corresponded to Transmit FIFO Full Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_full_en</name>
+                  <description>Interrupt enabled bit corresponded to Transmit FIFO Full Interrupt Status.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- tr_cmp_en: Interrupt enabled bit corresponded to Transfer Complete Interrupt Status. -->
+                <field>
+                  <name>tr_cmp_en</name>
+                  <description>Interrupt enabled bit corresponded to Transfer Complete Interrupt Status.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- INT_SET_REG: Interrupt Set Register -->
+            <register>
+              <name>INT_SET_REG</name>
+              <description>Interrupt Set Register</description>
+              <addressOffset>0x001C</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_ready_set: Interrupt set bit corresponded to Receive FIFO Ready Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_ready_set</name>
+                  <description>Interrupt set bit corresponded to Receive FIFO Ready Interrupt Status.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- rx_fifo_afull_set: Interrupt set bit corresponded to Receive FIFO Almost Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_afull_set</name>
+                  <description>Interrupt set bit corresponded to Receive FIFO Almost Full Interrupt Status.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- rx_fifo_full_set: Interrupt set bit corresponded to Receive FIFO Full Interrupt Status. -->
+                <field>
+                  <name>rx_fifo_full_set</name>
+                  <description>Interrupt set bit corresponded to Receive FIFO Full Interrupt Status.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_empty_set: Interrupt set bit corresponded to Transmit FIFO Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_empty_set</name>
+                  <description>Interrupt set bit corresponded to Transmit FIFO Empty Interrupt Status.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_aempty_set: Interrupt set bit corresponded to Transmit FIFO Almost Empty Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_aempty_set</name>
+                  <description>Interrupt set bit corresponded to Transmit FIFO Almost Empty Interrupt Status.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_full_set: Interrupt set bit corresponded to Transmit FIFO Full Interrupt Status. -->
+                <field>
+                  <name>tx_fifo_full_set</name>
+                  <description>Interrupt set bit corresponded to Transmit FIFO Full Interrupt Status.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tr_cmp_set: Interrupt set bit corresponded to Transfer Complete Interrupt Status. -->
+                <field>
+                  <name>tr_cmp_set</name>
+                  <description>Interrupt set bit corresponded to Transfer Complete Interrupt Status.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- WORD_CNT_REG: Word Count Register -->
+            <register>
+              <name>WORD_CNT_REG</name>
+              <description>Word Count Register</description>
+              <addressOffset>0x0020</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- word_cnt: The number of words sent from Master to Slave is written in the Word Count Register. -->
+                <field>
+                  <name>word_cnt</name>
+                  <description>The number of words sent from Master to Slave is written in the Word Count Register.</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- WORD_CNT_RST_REG: Word Count Reset Register -->
+            <register>
+              <name>WORD_CNT_RST_REG</name>
+              <description>Word Count Reset Register</description>
+              <addressOffset>0x0024</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- word_cnt_rst: The Word Count Reset Register is used for Word Count Register reset by writing '1' to all bits. -->
+                <field>
+                  <name>word_cnt_rst</name>
+                  <description>The Word Count Reset Register is used for Word Count Register reset by writing '1' to all bits.</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- TGT_WORD_CNT_REG: Target Word Count Register -->
+            <register>
+              <name>TGT_WORD_CNT_REG</name>
+              <description>Target Word Count Register</description>
+              <addressOffset>0x0028</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- target_word_cnt: The Target Word Count Register is used for interrupt generation when the target word count is achieved. -->
+                <field>
+                  <name>target_word_cnt</name>
+                  <description>The Target Word Count Register is used for interrupt generation when the target word count is achieved.</description>
+                  <bitRange>[7:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- FIFO_RST_REG: FIFO Reset Register -->
+            <register>
+              <name>FIFO_RST_REG</name>
+              <description>FIFO Reset Register</description>
+              <addressOffset>0x002C</addressOffset>
+              <size>32</size>
+              <access>write-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_rst: Write '1' to this bit to crear the Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_rst</name>
+                  <description>Write '1' to this bit to crear the Receive FIFO.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>write-only</access>
+                </field>
+            <!-- tx_fifo_rst: Write '1' to this bit to crear the Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_rst</name>
+                  <description>Write '1' to this bit to crear the Transmit FIFO.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>write-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- SLV_SEL_POL_REG: Slave Select Polarity Register -->
+            <register>
+              <name>SLV_SEL_POL_REG</name>
+              <description>Slave Select Polarity Register</description>
+              <addressOffset>0x0030</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- ssp1: Defines the polarity of Slave Select 1. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp1</name>
+                  <description>Defines the polarity of Slave Select 1. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp2: Defines the polarity of Slave Select 2. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp2</name>
+                  <description>Defines the polarity of Slave Select 2. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp3: Defines the polarity of Slave Select 3. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp3</name>
+                  <description>Defines the polarity of Slave Select 3. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp4: Defines the polarity of Slave Select 4. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp4</name>
+                  <description>Defines the polarity of Slave Select 4. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp5: Defines the polarity of Slave Select 5. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp5</name>
+                  <description>Defines the polarity of Slave Select 5. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp6: Defines the polarity of Slave Select 6. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp6</name>
+                  <description>Defines the polarity of Slave Select 6. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp7: Defines the polarity of Slave Select 7. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp7</name>
+                  <description>Defines the polarity of Slave Select 7. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[6:6]</bitRange>
+                  <access>read-write</access>
+                </field>
+            <!-- ssp8: Defines the polarity of Slave Select 8. 0 -> active Low. 1 -> active High. -->
+                <field>
+                  <name>ssp8</name>
+                  <description>Defines the polarity of Slave Select 8. 0 -> active Low. 1 -> active High.</description>
+                  <bitRange>[7:7]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- FIFO_STATUS_REG: FIFO Status Register -->
+            <register>
+              <name>FIFO_STATUS_REG</name>
+              <description>FIFO Status Register</description>
+              <addressOffset>0x0034</addressOffset>
+              <size>32</size>
+              <access>read-only</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- rx_fifo_empty: This bit reflects the empty condition of Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_empty</name>
+                  <description>This bit reflects the empty condition of Receive FIFO.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- rx_fifo_afull: This bit reflects the almost full condition of Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_afull</name>
+                  <description>This bit reflects the almost full condition of Receive FIFO.</description>
+                  <bitRange>[1:1]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- rx_fifo_full: This bit reflects the full condition of Receive FIFO. -->
+                <field>
+                  <name>rx_fifo_full</name>
+                  <description>This bit reflects the full condition of Receive FIFO.</description>
+                  <bitRange>[2:2]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- tx_fifo_empty: This bit reflects the empty condition of Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_empty</name>
+                  <description>This bit reflects the empty condition of Transmit FIFO.</description>
+                  <bitRange>[3:3]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- tx_fifo_aempty: This bit reflects the almost empty condition of Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_aempty</name>
+                  <description>This bit reflects the almost empty condition of Transmit FIFO.</description>
+                  <bitRange>[4:4]</bitRange>
+                  <access>read-only</access>
+                </field>
+            <!-- tx_fifo_full: This bit reflects the full condition of Transmit FIFO. -->
+                <field>
+                  <name>tx_fifo_full</name>
+                  <description>This bit reflects the full condition of Transmit FIFO.</description>
+                  <bitRange>[5:5]</bitRange>
+                  <access>read-only</access>
+                </field>
+
+              </fields>
+           </register>
+
+      <!-- SPI_ENABLE_REG: SPI Enable Register -->
+            <register>
+              <name>SPI_ENABLE_REG</name>
+              <description>SPI Enable Register</description>
+              <addressOffset>0x0038</addressOffset>
+              <size>32</size>
+              <access>read-write</access>
+              <resetValue>0x00000000</resetValue>
+              <resetMask>0xFFFFFFFF</resetMask>
+
+              <fields>
+                          <!-- spi_en_reg: This bit controls the slave select line when CFG_REG.spi_en is set to 1. -->
+                <field>
+                  <name>spi_en_reg</name>
+                  <description>This bit controls the slave select line when CFG_REG.spi_en is set to 1.</description>
+                  <bitRange>[0:0]</bitRange>
+                  <access>read-write</access>
+                </field>
+
+              </fields>
+           </register>
+
+
+          </registers>
+    </peripheral>
+    <peripheral>
+          <name>sysmem0_inst</name>
+          <version>2.1.0</version>
+          <baseAddress>0x00200000</baseAddress>
+          <groupName>system_memory</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00008000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+          
+          </registers>
+    </peripheral>
+    <peripheral>
+          <name>tcm0_inst</name>
+          <version>1.3.9</version>
+          <baseAddress>0x00000000</baseAddress>
+          <groupName>localbus_tcm</groupName>
+          <description></description>
+
+          <addressBlock>
+            <offset>0x0</offset>
+            <size>0x00010000</size>
+            <usage>registers</usage>
+          </addressBlock>
+
+          <registers>
+          
+          </registers>
+    </peripheral>
+
+      </peripherals>
+    </device>
