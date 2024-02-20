@@ -61,7 +61,13 @@
 #define AD400X_EN_STATUS_BITS(x)	(((x) & 0x1) << 4)
 
 enum ad400x_supported_dev_ids {
+	ID_AD4000,
+	ID_AD4001,
+	ID_AD4002,
 	ID_AD4003,
+	ID_AD4004,
+	ID_AD4005,
+	ID_AD4006,
 	ID_AD4007,
 	ID_AD4011,
 	ID_AD4020,
