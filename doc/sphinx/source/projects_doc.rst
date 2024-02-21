@@ -65,6 +65,7 @@ ADC
 
    projects/ad7616-st
    projects/ad796x_fmcz
+   projects/ad400x-fmcz
 
 POWER MANAGEMENT
 ================
