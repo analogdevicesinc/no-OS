@@ -55,6 +55,7 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 	int32_t ret;
 	struct no_os_i2c_desc *descriptor;
 	struct stm32_i2c_desc *xdesc;
+	struct stm32_i2c_init_param *i2cinit;
 	I2C_TypeDef *base = NULL;
 
 	if (!desc || !param)
@@ -71,6 +72,7 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 		goto error_1;
 	}
 
+	i2cinit = param->extra;
 	descriptor->extra = xdesc;
 
 	switch (param->device_id) {
@@ -95,8 +97,12 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 	};
 
 	xdesc->hi2c.Instance = base;
+#if defined (STM32F4) || defined (STM32F1) || defined (STM32F2) || defined (STM32L1)
 	xdesc->hi2c.Init.ClockSpeed = param->max_speed_hz;
 	xdesc->hi2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
+#else
+	xdesc->hi2c.Init.Timing = i2cinit->i2c_timing;
+#endif
 	xdesc->hi2c.Init.OwnAddress1 = 0;
 	xdesc->hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 	xdesc->hi2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;

@@ -53,6 +53,16 @@ struct stm32_i2c_desc {
 };
 
 /**
+ * @struct stm32_i2c_init_param
+ * @brief Structure holding the initialization parameters for stm32 platform
+ * specific I2C parameters.
+ */
+struct stm32_i2c_init_param {
+	/** I2C Timing */
+	uint32_t i2c_timing;
+};
+
+/**
  * @brief stm32 specific I2C platform ops structure
  */
 extern const struct no_os_i2c_platform_ops stm32_i2c_ops;
