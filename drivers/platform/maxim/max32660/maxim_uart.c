@@ -436,7 +436,6 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 		.event = NO_OS_EVT_UART_RX_COMPLETE,
 		.handle = MXC_UART_GET_UART(desc->device_id)
 	};
-	int ret;
 
 	if (!desc)
 		return -EINVAL;
