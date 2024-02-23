@@ -174,9 +174,9 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret < 0)
 		goto error;
 
+	dev->dev_id = init_param->dev_id;
 #if !defined(USE_STANDARD_SPI)
 	dev->reg_access_speed = init_param->reg_access_speed;
-	dev->dev_id = init_param->dev_id;
 
 	spi_engine_set_transfer_width(dev->spi_desc, 16);
 #endif
