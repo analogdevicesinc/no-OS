@@ -43,12 +43,14 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#include "string.h"
 #include "ad400x.h"
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 
 /**
  * @brief Device resolution
@@ -65,6 +67,23 @@ const uint16_t ad400x_device_resol[] = {
 	[ID_AD4011] = 18,
 	[ID_AD4020] = 20,
 	[ID_ADAQ4003] = 18
+};
+
+/**
+ * @brief Device sign
+ */
+const char ad400x_device_sign[] = {
+	[ID_AD4000] = 'u',
+	[ID_AD4001] = 's',
+	[ID_AD4002] = 'u',
+	[ID_AD4003] = 's',
+	[ID_AD4004] = 'u',
+	[ID_AD4005] = 's',
+	[ID_AD4006] = 'u',
+	[ID_AD4007] = 's',
+	[ID_AD4011] = 's',
+	[ID_AD4020] = 's',
+	[ID_ADAQ4003] = 's',
 };
 
 /******************************************************************************/
@@ -161,10 +180,16 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *adc_data)
+				     uint32_t *data)
 {
-	uint32_t buf = 0;
 	int32_t ret;
+	uint8_t data_read[4] = { 0xFF, 0xFF, 0xFF, 0xFF }; /* SDI must remain high */
+	uint16_t bytes_number = 2;
+
+	if (!dev)
+		return -EINVAL;
+	if (ad400x_device_resol[dev->dev_id ] > 16)
+		bytes_number = 3;
 
 #if defined(USE_STANDARD_SPI)
 	/*
@@ -180,11 +205,15 @@ int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 	if (ret)
 		return ret;
 #endif
-	ret = no_os_spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data_read, bytes_number);
+	if (ret)
+		return ret;
 
-	*adc_data = buf & 0xFFFFF;
+	*data = no_os_get_unaligned_be32(data_read);
+	*data >>= 32 - ad400x_device_resol[dev->dev_id ];
+	*data = *data & NO_OS_GENMASK(ad400x_device_resol[dev->dev_id ], 0);
 
-	return ret;
+	return 0;
 }
 
 /**

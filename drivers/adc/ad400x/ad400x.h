@@ -76,6 +76,7 @@ enum ad400x_supported_dev_ids {
 };
 
 extern const uint16_t ad400x_device_resol[];
+extern const char ad400x_device_sign[];
 
 struct ad400x_dev {
 	/* SPI */
@@ -112,6 +113,6 @@ int32_t ad400x_init(struct ad400x_dev **device,
 int32_t ad400x_remove(struct ad400x_dev *dev);
 /* Execute a single conversion */
 int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *adc_data);
+				     uint32_t *data);
 
 #endif /* SRC_AD400X_H_ */
