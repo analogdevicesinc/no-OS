@@ -25,6 +25,23 @@
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	1
 #endif
 
+/**
+ * Print data on the right format.
+ * @param adc_data - the data to print.
+ * @param res the resolution of the device.
+ * @param sign - signed or unsigned.
+ * @return - None.
+ */
+static void print_output_data(uint32_t adc_data, uint16_t res, char sign)
+{
+	uint32_t data = adc_data;
+
+	if (sign == 's')
+		xil_printf("ADC: %d\n\r", no_os_sign_extend32(data, res - 1));
+	else
+		xil_printf("ADC: %d\n\r", data);
+}
+
 int main()
 {
 	struct ad400x_dev *dev;
@@ -36,14 +53,17 @@ int main()
 	};
 	struct spi_engine_offload_message msg;
 	uint32_t commands_data[2] = {0xFF, 0xFF};
-	int32_t ret, data, i;
+	int32_t ret, i;
 	enum ad400x_supported_dev_ids dev_id = ID_AD4020;
+
+	uint16_t res = ad400x_device_resol[dev_id];
+
 	struct spi_engine_init_param spi_eng_init_param  = {
 		.ref_clk_hz = AD400x_SPI_ENG_REF_CLK_FREQ_HZ,
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = AD400X_SPI_ENGINE_BASEADDR,
 		.cs_delay = 2,
-		.data_width = ad400x_device_resol[dev_id],
+		.data_width = res,
 	};
 
 	struct ad400x_init_param ad400x_init_param = {
@@ -82,7 +102,7 @@ int main()
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
 		while(1) {
 			ad400x_spi_single_conversion(dev, &adc_data);
-			xil_printf("ADC: %d\n\r", adc_data);
+			print_output_data(adc_data, res, ad400x_device_sign[dev_id]);
 		}
 	}
 	/* Offload example */
@@ -106,10 +126,7 @@ int main()
 		offload_data = (uint32_t *)msg.rx_addr;
 
 		for(i = 0; i < AD400x_EVB_SAMPLE_NO; i++) {
-			data = *offload_data & NO_OS_GENMASK(ad400x_device_resol[dev_id], 0);
-			if (data > 524287)
-				data = data - 1048576;
-			printf("ADC%"PRIi32": %"PRIi32" \n", i, data);
+			print_output_data(*offload_data, res, ad400x_device_sign[dev_id]);
 			offload_data += 1;
 		}
 	}
