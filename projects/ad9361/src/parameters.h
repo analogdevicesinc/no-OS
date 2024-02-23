@@ -92,8 +92,19 @@
 
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_DEVICE_ID				XPAR_PSU_GPIO_0_DEVICE_ID
+#ifdef FMCOMMS5
+#define GPIO_RESET_PIN				130
+#define GPIO_SYNC_PIN				129
+#define GPIO_RESET_PIN_2			143
+#define GPIO_CAL_SW1_PIN			137
+#define GPIO_CAL_SW2_PIN			138
+#else
 #define GPIO_RESET_PIN				124
 #define GPIO_SYNC_PIN				123
+#define GPIO_RESET_PIN_2			113
+#define GPIO_CAL_SW1_PIN			107
+#define GPIO_CAL_SW2_PIN			108
+#endif
 #define GPIO_ENABLE_PIN				125
 #define GPIO_TXNRX_PIN        		126
 #define SPI_DEVICE_ID				XPAR_PSU_SPI_0_DEVICE_ID
@@ -102,6 +113,9 @@
 #define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
 #define GPIO_RESET_PIN				100
 #define GPIO_SYNC_PIN				99
+#define GPIO_RESET_PIN_2			113
+#define GPIO_CAL_SW1_PIN			107
+#define GPIO_CAL_SW2_PIN			108
 #define GPIO_ENABLE_PIN				101
 #define GPIO_TXNRX_PIN        		102
 #define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
@@ -110,9 +124,6 @@
 #define GPIO_RESET_PIN_ZC702		84
 #define GPIO_RESET_PIN_ZC706		83
 #define GPIO_RESET_PIN_ZED			100
-#define GPIO_RESET_PIN_2			113
-#define GPIO_CAL_SW1_PIN			107
-#define GPIO_CAL_SW2_PIN			108
 #define GPIO_CTL0_PIN				94
 #define GPIO_CTL1_PIN				95
 #define GPIO_CTL2_PIN				96
