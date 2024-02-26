@@ -42,7 +42,7 @@
  	unsigned tmp, num_chan;
  	int i;
 
- 	num_chan = 8;
+	num_chan = 16;
 
  	axi_adc_write(phy->rx_adc, AXI_ADC_REG_CNTRL, 0);
  	axi_adc_read(phy->rx_adc, 0x4048, &tmp);
