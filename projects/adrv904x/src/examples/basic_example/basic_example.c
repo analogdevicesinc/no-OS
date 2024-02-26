@@ -69,6 +69,18 @@
 
 #include "adi_adrv904x_datainterface.h"
 
+#include "adi_adrv904x_tx.h"
+#include "adi_adrv904x_rx.h"
+
+#define DAC_BUFFER_SAMPLES              8192
+#define ADC_BUFFER_SAMPLES              32768
+#define ADC_CHANNELS                    8
+
+uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
+                       aligned));
+
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -87,6 +99,9 @@ int basic_example_main(void)
 	struct ad9528_dev* ad9528_device;
 	struct adrv904x_rf_phy *phy;
 	int status;
+
+	Xil_ICacheEnable();
+	Xil_DCacheEnable();
 
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
@@ -380,6 +395,39 @@ int basic_example_main(void)
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
+	adi_adrv904x_TxTestNcoConfig_t txNcoConfig = {ADI_ADRV904X_TX1 | ADI_ADRV904X_TX0,                       /* chanSelect */
+												  0U,                                     /* bandSelect */
+												  1U,                                     /* enable */
+												  ADI_ADRV904X_TX_TEST_NCO_0,             /* ncoSelect */
+												  0U,                                     /* phase */
+												  10000,                                  /* frequencyKhz */
+												  ADI_ADRV904X_TX_TEST_NCO_ATTEN_6DB     /* attenCtrl */
+   };
+
+   status = adi_adrv904x_TxTestToneSet(phy->kororDevice, &txNcoConfig);
+   if (status)
+		   printf("ERR\n");
+
+   adi_adrv904x_RxGain_t rxGain =  { ADI_ADRV904X_RX0, 250U };
+   status = adi_adrv904x_RxMgcGainGet(phy->kororDevice,
+		   ADI_ADRV904X_RX0,
+           &rxGain);
+
+   printf("gain for channel 0 %d\n", rxGain.gainIndex);
+
+   rxGain.rxChannelMask = ADI_ADRV904X_RX0;
+   rxGain.gainIndex = 240;
+
+	status = adi_adrv904x_RxGainSet(phy->kororDevice, &rxGain, 1U);
+
+	rxGain.gainIndex = 0;
+
+	status = adi_adrv904x_RxMgcGainGet(phy->kororDevice,
+			   ADI_ADRV904X_RX0,
+	           &rxGain);
+
+	   printf("gain for channel 0 %d\n", rxGain.gainIndex);
+
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
@@ -391,10 +439,40 @@ int basic_example_main(void)
 //
 //	axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 //
+
+	 struct axi_dma_transfer read_transfer = {
+			 // Number of bytes to write/read
+			 .size = sizeof(adc_buffer_dma),
+			 // Transfer done flag
+			 .transfer_done = 0,
+			 // Signal transfer mode
+			 .cyclic = NO,
+			 // Address of data source
+			 .src_addr = 0,
+			 // Address of data destination
+			 .dest_addr = (uintptr_t)adc_buffer_dma
+	 };
+
+	 /* Read the data from the ADC DMA. */
+	 axi_dmac_transfer_start(rx_dmac, &read_transfer);
+
+	 /* Wait until transfer finishes */
+	 status = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
+	 if(status)
+			 goto error_10;
+
+	 Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, sizeof(adc_buffer_dma));
+	 pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+			 (uintptr_t)adc_buffer_dma, NO_OS_ARRAY_SIZE(adc_buffer_dma),
+			 rx_adc_init.num_channels,
+			 8 * sizeof(adc_buffer_dma[0]));
+
+
 	while(1);
 
 	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
 
+error_10:
 	axi_dmac_remove(rx_dmac);
 error_9:
 	axi_dmac_remove(tx_dmac);
