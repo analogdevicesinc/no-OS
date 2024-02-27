@@ -63,7 +63,7 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	struct latt_spi_init_param *l_init_par;
 	struct latt_spi_desc 	*l_spi_desc;
 	const uint16_t			prescaler_default = 64;
-	const uint16_t			prescaler_min = 13;
+	const uint16_t			prescaler_min = 16;
 	const uint16_t			prescaler_max = 1024;
 
 	uint32_t				base_addr = 0;
@@ -86,6 +86,7 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 
 	slave_count = l_init_par->slave_count;
 	input_clock = l_init_par->input_clock;
+	spi_enable_mode = l_init_par->spi_enable_mode;
 
 	if(!l_init_par->base_addr){
 		base_addr = param->device_id;
@@ -98,9 +99,13 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 
 	if(clk_prescaler > prescaler_max){
 		clk_prescaler = prescaler_max;
+		printf("WARNING clk_prescaler > prescaler_max\n\r");
+		printf("WARNING desc->max_speed_hz will be set to: %u\n\r",input_clock/(clk_prescaler<<1));
 	}
 	if(clk_prescaler < prescaler_min){
 		clk_prescaler = prescaler_min;
+		printf("WARNING clk_prescaler < prescaler_min\n\r");
+		printf("WARNING desc->max_speed_hz will be set to: %u\n\r",input_clock/(clk_prescaler<<1));
 	}
 
 	l_spi_inst = (struct spim_instance*) no_os_malloc(sizeof(struct spim_instance));

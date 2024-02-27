@@ -121,7 +121,8 @@ int main(void)
 		.input_clock = 100000000,
 		.slave_count = 1,
 		.base_addr = SPI0_INST_BASE_ADDR,
-		.type = SPI_PL
+		.type = SPI_PL,
+		.spi_enable_mode = 0
 	};
 
 	struct no_os_spi_init_param init_spi = {

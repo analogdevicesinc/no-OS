@@ -85,6 +85,12 @@ struct latt_spi_init_param {
 
 	/** Base address of the SPI IP */
 	uint32_t base_addr;
+
+	/** Sets chip select to low before first byte,
+	 *  sets it high after the last byte using SPI_ENABLE if set to 1.
+	 *  Otherwise if set to 0 should work the same but automatically, which
+	 *  in some cases with some prescaler values should not work*/
+	uint8_t spi_enable_mode;
 };
 
 /**
