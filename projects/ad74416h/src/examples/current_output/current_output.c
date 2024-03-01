@@ -75,7 +75,7 @@ int current_output_example_main()
 	}
 
 	//Calculate the code for the DAC
-	ret = ad74416h_dac_current_to_code(10000, &dac_code);
+	ret = ad74416h_dac_current_to_code(ad74416h_desc, 10000, &dac_code);
 	if (ret) {
 		pr_info("Error calculating the code for the DAC\r\n");
 		goto error_ad74416h;
