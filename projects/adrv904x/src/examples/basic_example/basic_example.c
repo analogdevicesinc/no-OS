@@ -71,6 +71,8 @@
 
 #include "adi_adrv904x_tx.h"
 #include "adi_adrv904x_rx.h"
+#include "no_os_axi_io.h"
+#include "adi_adrv904x_radioctrl.h"
 
 #define DAC_BUFFER_SAMPLES              8192
 #define ADC_BUFFER_SAMPLES              32768
@@ -358,11 +360,46 @@ int basic_example_main(void)
 		goto error_9;
 	}
 
-//	adi_adrv904x_FrmTestDataCfg_t frmTestDataCfg = {
-//			.framerSelMask = ADI_ADRV904X_FRAMER_0,
-//			.injectPoint = ADI_ADRV904X_FTD_POST_LANEMAP,
-//			.testDataSource = ADI_ADRV904X_FTD_PRBS31
-//	};
+//	extern const uint32_t sine_lut_iq[1024];
+//	axi_dac_load_custom_data(phy->tx_dac, sine_lut_iq,
+//					 NO_OS_ARRAY_SIZE(sine_lut_iq),
+//					 (uintptr_t)dac_buffer_dma);
+
+//	uint32_t data;
+//	no_os_axi_io_read(0x9C450000, 0x0010, &data);
+//	printf("	Rx data offload SYNTHESIS_CONFIG %#x\n", data);
+//
+//	no_os_axi_io_read(0x9C440000, 0x0010, &data);
+//	printf("	Tx data offload SYNTHESIS_CONFIG %#x\n", data);
+//
+//	// bypass Rx data offload
+//	no_os_axi_io_read(0x9C450000, 0x0088, &data);
+//	printf("	Rx data offload bypass %#x\n", data);
+//	data |= 0x01;
+//	no_os_axi_io_write(0x9C450000, 0x0088, data);
+//	no_os_axi_io_read(0x9C450000, 0x0088, &data);
+//	printf("	Rx data offload bypass %#x\n", data);
+//
+//	// bypass Tx data offload
+//	no_os_axi_io_read(0x9C440000, 0x0088, &data);
+//	printf("	Tx data offload bypass %#x\n", data);
+//	data |= 0x01;
+//	no_os_axi_io_write(0x9C440000, 0x0088, data);
+//	no_os_axi_io_read(0x9C440000, 0x0088, &data);
+//	printf("	Tx data offload bypass %#x\n", data);
+
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)dac_buffer_dma,
+		// Address of data destination
+		.dest_addr = 0
+	};
 
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
@@ -394,8 +431,53 @@ int basic_example_main(void)
 			      sizeof(devs)/sizeof(*devs));
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+	
+	adi_adrv904x_AdcSampleXbarCfg_t adcXbar = { 0 };
+	status = adi_adrv904x_AdcSampleXbarGet(phy->kororDevice, ADI_ADRV904X_FRAMER_0, &adcXbar);
+	if (status) {
+		pr_err("error: adi_adrv904x_AdcSampleXbarGet() failed\n");
+		goto error_10;
+	}
 
-	adi_adrv904x_TxTestNcoConfig_t txNcoConfig = {ADI_ADRV904X_TX1 | ADI_ADRV904X_TX0,                       /* chanSelect */
+	adcXbar.AdcSampleXbar[0] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX4_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[1] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX4_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[2] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX5_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[3] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX5_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[4] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX6_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[5] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX6_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[6] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX7_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[7] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX7_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[8] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX0_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[9] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX0_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[10] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX1_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[11] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX1_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[12] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX2_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[13] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX2_BAND_0_DATA_Q;
+	adcXbar.AdcSampleXbar[14] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX3_BAND_0_DATA_I;
+	adcXbar.AdcSampleXbar[15] = ADI_ADRV904X_JESD_FRM_SPLXBAR_RX3_BAND_0_DATA_Q;
+
+	status = adi_adrv904x_AdcSampleXbarSet(phy->kororDevice, ADI_ADRV904X_FRAMER_0, &adcXbar);
+	if (status) {
+		pr_err("error: adi_adrv904x_AdcSampleXbarSet() failed\n");
+		goto error_10;
+	}
+
+	adi_adrv904x_TxAtten_t txAttenuation = { 0 };
+
+	for (uint8_t chan = 0; chan < 8; chan++) {
+		status = adi_adrv904x_TxAttenGet(phy->kororDevice, ADI_ADRV904X_TX0 << chan, &txAttenuation);
+		if (status) {
+			pr_err("error: adi_adrv904x_TxAttenGet() failed\n");
+			goto error_10;
+		}
+
+		if (ADI_ADRV904X_TX0 << chan == txAttenuation.txChannelMask)
+			printf("gain for Tx channel %d %d\n", chan, txAttenuation.txAttenuation_mdB);
+		else
+			printf("ERROR\n");
+	}
+
+	adi_adrv904x_TxTestNcoConfig_t txNcoConfig = {ADI_ADRV904X_TX7,                       /* chanSelect */
 												  0U,                                     /* bandSelect */
 												  1U,                                     /* enable */
 												  ADI_ADRV904X_TX_TEST_NCO_0,             /* ncoSelect */
@@ -408,37 +490,56 @@ int basic_example_main(void)
    if (status)
 		   printf("ERR\n");
 
-   adi_adrv904x_RxGain_t rxGain =  { ADI_ADRV904X_RX0, 250U };
-   status = adi_adrv904x_RxMgcGainGet(phy->kororDevice,
-		   ADI_ADRV904X_RX0,
-           &rxGain);
+   uint32_t orxChannelMask;
+   uint32_t rxChannelMask;
+   uint32_t txChannelMask;
+   adi_adrv904x_ChannelEnableGet(phy->kororDevice, &orxChannelMask, &rxChannelMask, &txChannelMask);
+   printf("orx rx tx state %x %x %x\n", orxChannelMask, rxChannelMask, txChannelMask);
 
-   printf("gain for channel 0 %d\n", rxGain.gainIndex);
+//   adi_adrv904x_FramerLoopbackSet(phy->kororDevice, ADI_ADRV904X_FRAMER_0);
+//   adi_adrv904x_DeframerLoopbackSet(phy->kororDevice);
 
-   rxGain.rxChannelMask = ADI_ADRV904X_RX0;
-   rxGain.gainIndex = 240;
+   adi_adrv904x_RxGain_t rxGain =  { ADI_ADRV904X_RX7, 250U };
 
-	status = adi_adrv904x_RxGainSet(phy->kororDevice, &rxGain, 1U);
+   for (uint8_t chan = 0; chan < 8; chan++) {
+		status = adi_adrv904x_RxMgcGainGet(phy->kororDevice,
+				ADI_ADRV904X_RX0 << chan,
+				&rxGain);
+		if (ADI_ADRV904X_TX0 << chan == rxGain.rxChannelMask)
+			printf("Initial gain for channel %d %d\n", chan, rxGain.gainIndex);
+		else
+			printf("ERROR\n");
 
-	rxGain.gainIndex = 0;
+		rxGain.rxChannelMask = ADI_ADRV904X_TX0 << chan;
+		rxGain.gainIndex = 240;
 
-	status = adi_adrv904x_RxMgcGainGet(phy->kororDevice,
-			   ADI_ADRV904X_RX0,
-	           &rxGain);
+		status = adi_adrv904x_RxGainSet(phy->kororDevice, &rxGain, 1U);
 
-	   printf("gain for channel 0 %d\n", rxGain.gainIndex);
+		rxGain.gainIndex = 0;
+
+		status = adi_adrv904x_RxMgcGainGet(phy->kororDevice,
+				ADI_ADRV904X_TX0 << chan,
+			   &rxGain);
+
+		if (ADI_ADRV904X_TX0 << chan == rxGain.rxChannelMask)
+			printf("gain for channel %d %d\n", chan, rxGain.gainIndex);
+		else
+			printf("ERROR\n");
+   }
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
-//	status = adi_adrv904x_FramerTestDataSet(phy->kororDevice, &frmTestDataCfg);
-//	if (status)
-//		pr_info("				status %d\n", status);
-//	else
-//		pr_info("				test data SET\n");
+//	/* Transfer the data. */
+//	axi_dmac_transfer_start(tx_dmac, &transfer);
 //
-//	axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+//	/* Flush cache data. */
+//	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma, sizeof(sine_lut_iq));
 //
+//	no_os_mdelay(1000);
+
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
 
 	 struct axi_dma_transfer read_transfer = {
 			 // Number of bytes to write/read
