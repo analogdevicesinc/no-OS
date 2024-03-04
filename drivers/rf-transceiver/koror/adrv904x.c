@@ -840,6 +840,7 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
  		enum jesd204_state_op_reason reason)
  {
  	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+ 	adi_adrv904x_TxAtten_t txAttenuation[1];
  	struct adrv904x_rf_phy *phy = priv->phy;
  	int ret;
 
@@ -865,11 +866,22 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
  	no_os_clk_set_rate(phy->clks[ADRV904X_RX_SAMPL_CLK], phy->rx_iqRate_kHz * 1000);
  	no_os_clk_set_rate(phy->clks[ADRV904X_TX_SAMPL_CLK], phy->tx_iqRate_kHz * 1000);
 
- 	ret = adi_adrv904x_RxTxEnableSet(phy->kororDevice, 0x00, 0x00, ADI_ADRV904X_RX_MASK_ALL, ADI_ADRV904X_RX_MASK_ALL, ADI_ADRV904X_TXALL, ADI_ADRV904X_TXALL);
+ 	ret = adi_adrv904x_RxTxEnableSet(phy->kororDevice, 0x00, 0x00, ADI_ADRV904X_RX_MASK_ALL, ADI_ADRV904X_RX_MASK_ALL, ADI_ADRV904X_TX0 | ADI_ADRV904X_TX7, ADI_ADRV904X_TX0 | ADI_ADRV904X_TX7);
 	if (ret) {
 		pr_err("ERROR adi_adrv904x_RxTxEnableSet failed in %s at line %d.\n",
 			   __func__, __LINE__);
 		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	for (uint8_t chan = 0; chan < 8; chan++) {
+		txAttenuation[0].txChannelMask = ADI_ADRV904X_TX0 << chan;
+		txAttenuation[0].txAttenuation_mdB = 6000;
+		ret = adi_adrv904x_TxAttenSet(phy->kororDevice, txAttenuation, 1);
+		if (ret != ADI_ADRV904X_ERR_ACT_NONE)
+		{
+			pr_err("ERROR adi_adrv904x_TxAttenSet failed in %s at line %d.\n", __func__, __LINE__);
+			return -1;
+		}
 	}
 
  	phy->is_initialized = 1;
