@@ -42,7 +42,7 @@ LINK_SRCS ?= y
 
 HARDWARE ?= $(wildcard *.xsa) $(wildcard *.hdf) $(wildcard *.sopcinfo) $(wildcard *.ioc) $(wildcard pinmux_config.c)
 #If platform not set get it from HARDWARE file
-ifneq '' '$(findstring max,$(TARGET))'
+ifneq '' '$(or $(findstring max,$(TARGET)), $(findstring MAX,$(TARGET)))'
 PLATFORM = maxim
 else
 ifeq '' '$(PLATFORM)'

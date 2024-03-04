@@ -31,14 +31,14 @@ CFLAGS+=-D_STACK_SIZE=$(STACK_SIZE)
 endif
 
 TARGET?=max32660
-TARGET_NUMBER:=$(word 2,$(subst x, ,$(TARGET)))
+TARGET_NUMBER:=$(word 2,$(subst x, ,$(subst X, ,$(TARGET))))
 TARGET_UCASE=$(addprefix MAX,$(TARGET_NUMBER))
 TARGET_LCASE=$(addprefix max,$(TARGET_NUMBER))
 
-PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET)
+PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET_LCASE)
 
-ifeq ($(TARGET), $(filter $(TARGET),max32655 max32690))
-include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET)_memory.mk
+ifeq ($(TARGET_LCASE), $(filter $(TARGET_LCASE),max32655 max32690))
+include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_memory.mk
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
@@ -76,7 +76,7 @@ ASFLAGS += -x assembler-with-cpp
 
 ASFLAGS += $(PROJ_AFLAGS)
 CFLAGS += -DTARGET_REV=$(TARGET_REV) \
-	-DTARGET=$(TARGET)		\
+	-DTARGET=$(TARGET_LCASE)		\
 	-DMAXIM_PLATFORM		\
 	-DTARGET_NUM=$(TARGET_NUMBER)
 
@@ -100,7 +100,7 @@ SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/system_$(TA
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Include/*.h)
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/*.h)
 
-ifeq ($(TARGET), max32650)
+ifeq ($(TARGET_LCASE), max32650)
 INCS := $(filter-out $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/mxc_device.h, $(INCS))
 endif
 
