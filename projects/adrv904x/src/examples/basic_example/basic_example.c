@@ -243,26 +243,26 @@ int basic_example_main(void)
 	struct jesd204_tx_init tx_jesd_init = {
 		.name = "tx_jesd",
 		.base = TX_JESD_BASEADDR,
-		.octets_per_frame = ADRV9025_TX_JESD_OCTETS_PER_FRAME,
-		.frames_per_multiframe = ADRV9025_TX_JESD_FRAMES_PER_MULTIFRAME,
-		.converters_per_device = ADRV9025_TX_JESD_CONVS_PER_DEVICE,
-		.converter_resolution = ADRV9025_TX_JESD_CONV_RESOLUTION,
-		.bits_per_sample = ADRV9025_TX_JESD_BITS_PER_SAMPLE,
-		.high_density = ADRV9025_TX_JESD_HIGH_DENSITY,
-		.control_bits_per_sample = ADRV9025_TX_JESD_CTRL_BITS_PER_SAMPLE,// optional
-		.subclass = ADRV9025_TX_JESD_SUBCLASS,
-		.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
-		.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
+		.octets_per_frame = ADRV904X_TX_JESD_OCTETS_PER_FRAME,
+		.frames_per_multiframe = ADRV904X_TX_JESD_FRAMES_PER_MULTIFRAME,
+		.converters_per_device = ADRV904X_TX_JESD_CONVS_PER_DEVICE,
+		.converter_resolution = ADRV904X_TX_JESD_CONV_RESOLUTION,
+		.bits_per_sample = ADRV904X_TX_JESD_BITS_PER_SAMPLE,
+		.high_density = ADRV904X_TX_JESD_HIGH_DENSITY,
+		.control_bits_per_sample = ADRV904X_TX_JESD_CTRL_BITS_PER_SAMPLE,// optional
+		.subclass = ADRV904X_TX_JESD_SUBCLASS,
+		.device_clk_khz = ADRV904X_DEVICE_CLK_KHZ,
+		.lane_clk_khz = ADRV904X_LANE_RATE_KHZ
 	};
 
 	struct jesd204_rx_init rx_jesd_init = {
 		.name = "rx_jesd",
 		.base = RX_JESD_BASEADDR,
-		.octets_per_frame = ADRV9025_RX_JESD_OCTETS_PER_FRAME,
-		.frames_per_multiframe = ADRV9025_RX_JESD_FRAMES_PER_MULTIFRAME,
-		.subclass = ADRV9025_RX_JESD_SUBCLASS,
-		.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
-		.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
+		.octets_per_frame = ADRV904X_RX_JESD_OCTETS_PER_FRAME,
+		.frames_per_multiframe = ADRV904X_RX_JESD_FRAMES_PER_MULTIFRAME,
+		.subclass = ADRV904X_RX_JESD_SUBCLASS,
+		.device_clk_khz = ADRV904X_DEVICE_CLK_KHZ,
+		.lane_clk_khz = ADRV904X_LANE_RATE_KHZ
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -271,7 +271,7 @@ int basic_example_main(void)
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 0,
-		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
+		.lane_rate_khz = ADRV904X_LANE_RATE_KHZ,
 		.ref_rate_khz = 491520,
 		.export_no_os_clk = true
 	};
@@ -283,7 +283,7 @@ int basic_example_main(void)
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 0,
-		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
+		.lane_rate_khz = ADRV904X_LANE_RATE_KHZ,
 		.ref_rate_khz = 491520,
 		.export_no_os_clk = true
 	};
