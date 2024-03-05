@@ -51,10 +51,10 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/** @struct adis_chan_type
- *  @brief ADIS channels enumeration
+/** @struct adis_iio_chan_type
+ *  @brief ADIS IIO channels enumeration
  */
-enum adis_chan_type {
+enum adis_iio_chan_type {
 	ADIS_GYRO_X,
 	ADIS_GYRO_Y,
 	ADIS_GYRO_Z,
@@ -71,10 +71,10 @@ enum adis_chan_type {
 	ADIS_NUM_CHAN,
 };
 
-/** @struct adis_debug_attrs
- *  @brief ADIS debug attributes enumeration
+/** @struct adis_iio_debug_attrs
+ *  @brief ADIS IIO debug attributes enumeration
  */
-enum adis_debug_attrs {
+enum adis_iio_debug_attrs {
 	ADIS_DIAG_SNSR_INIT_FAILURE,
 	ADIS_DIAG_DATA_PATH_OVERRUN,
 	ADIS_DIAG_FLS_MEM_UPDATE_FAILURE,
