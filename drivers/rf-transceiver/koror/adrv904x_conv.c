@@ -45,11 +45,6 @@
 	num_chan = 16;
 
  	axi_adc_write(phy->rx_adc, AXI_ADC_REG_CNTRL, 0);
- 	axi_adc_read(phy->rx_adc, 0x4048, &tmp);
-
- 	tmp &= ~NO_OS_BIT(5);
- 	axi_adc_write(phy->rx_adc, 0x4048, tmp);
- 	axi_adc_write(phy->rx_adc, 0x404c, 3); /* RATE */
 
  	for (i = 0; i < num_chan; i++) {
  		axi_adc_write(phy->rx_adc, AXI_ADC_REG_CHAN_CNTRL_1(i),

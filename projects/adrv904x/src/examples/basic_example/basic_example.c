@@ -320,17 +320,12 @@ int basic_example_main(void)
 		goto error_5;
 	}
 
-	status = axi_dac_init_begin(&phy->tx_dac, &tx_dac_init);
+	status = axi_dac_init(&phy->tx_dac, &tx_dac_init);
 	if (status)
 		goto error_6;
 	status = axi_adc_init_begin(&phy->rx_adc, &rx_adc_init);
 	if (status)
 		goto error_7;
-
-	// Reset Tx DAC
-	axi_adc_write(phy->rx_adc, 0x4040, 0);
-	axi_adc_write(phy->rx_adc, 0x4040,
-		      NO_OS_BIT(1) | NO_OS_BIT(0));
 
 	// Reset Rx ADC
 	axi_adc_write(phy->rx_adc, AXI_ADC_REG_RSTN, 0);
