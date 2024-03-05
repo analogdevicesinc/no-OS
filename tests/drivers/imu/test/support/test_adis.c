@@ -65,6 +65,7 @@ static int retval;
  *    PUBLIC DATA
  ******************************************************************************/
 
+extern enum adis_device_id adis_dev_id;
 extern struct adis_chip_info *adis_chip_info;
 
 /*******************************************************************************
@@ -4191,6 +4192,7 @@ void test_adis_get_anglvel_scale_4(void)
 {
 	struct adis_scale_fractional scale;
 	device_alloc.info = adis_chip_info;
+	device_alloc.dev_id = adis_dev_id;
 	retval = adis_get_anglvel_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
@@ -4231,6 +4233,7 @@ void test_adis_get_accl_scale_4(void)
 {
 	struct adis_scale_fractional scale;
 	device_alloc.info = adis_chip_info;
+	device_alloc.dev_id = adis_dev_id;
 	retval = adis_get_accl_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
@@ -4271,6 +4274,7 @@ void test_adis_get_deltaangl_scale_4(void)
 {
 	struct adis_scale_fractional_log2 scale;
 	device_alloc.info = adis_chip_info;
+	device_alloc.dev_id = adis_dev_id;
 	retval = adis_get_deltaangl_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
@@ -4311,6 +4315,7 @@ void test_adis_get_deltavelocity_scale_4(void)
 {
 	struct adis_scale_fractional_log2 scale;
 	device_alloc.info = adis_chip_info;
+	device_alloc.dev_id = adis_dev_id;
 	retval = adis_get_deltavelocity_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
@@ -4351,6 +4356,7 @@ void test_adis_get_temp_scale_4(void)
 {
 	struct adis_scale_fractional scale;
 	device_alloc.info = adis_chip_info;
+	device_alloc.dev_id = adis_dev_id;
 	retval = adis_get_temp_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }

@@ -46,6 +46,12 @@
 #include "no_os_units.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define ADIS1650X_ID_NO_OFFSET(x) ((x) - ADIS16500)
+
+/******************************************************************************/
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
@@ -137,62 +143,98 @@ static const struct adis_clk_freq_limit adis1650x_sampling_clk_limits = {
 };
 
 /* Values from datasheet for 32-bit data */
-static const struct adis_scale_fractional adis1650x_anglvel_scale[] = {
-	[ADIS16500]   = {1, RAD_TO_DEGREE(10 << 16)},
-	[ADIS16501]   = {1, RAD_TO_DEGREE(40 << 16)},
-	[ADIS16505_1] = {1, RAD_TO_DEGREE(160 << 16)},
-	[ADIS16505_2] = {1, RAD_TO_DEGREE(40 << 16)},
-	[ADIS16505_3] = {1, RAD_TO_DEGREE(10 << 16)},
-	[ADIS16507_1] = {1, RAD_TO_DEGREE(160 << 16)},
-	[ADIS16507_2] = {1, RAD_TO_DEGREE(40 << 16)},
-	[ADIS16507_3] = {1, RAD_TO_DEGREE(10 << 16)},
+static const struct adis_scale_members adis1650x_anglvel_scale[] = {
+	[ADIS1650X_ID_NO_OFFSET(ADIS16500)]   = {1, RAD_TO_DEGREE(10 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16501)]   = {1, RAD_TO_DEGREE(40 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_1)] = {1, RAD_TO_DEGREE(160 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_2)] = {1, RAD_TO_DEGREE(40 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_3)] = {1, RAD_TO_DEGREE(10 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_1)] = {1, RAD_TO_DEGREE(160 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_2)] = {1, RAD_TO_DEGREE(40 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_3)] = {1, RAD_TO_DEGREE(10 << 16)},
 };
 
-static const struct adis_scale_fractional adis1650x_accl_scale[] = {
-	[ADIS16500]   = {392, 32000 << 16},
-	[ADIS16501]   = {1, M_S_2_TO_G(800 << 16)},
-	[ADIS16505_1] = {78, 32000 << 16},
-	[ADIS16505_2] = {78, 32000 << 16},
-	[ADIS16505_3] = {78, 32000 << 16},
-	[ADIS16507_1] = {392, 32000 << 16},
-	[ADIS16507_2] = {392, 32000 << 16},
-	[ADIS16507_3] = {392, 32000 << 16},
+static const struct adis_scale_members adis1650x_accl_scale[] = {
+	[ADIS1650X_ID_NO_OFFSET(ADIS16500)]   = {392, 32000 << 16},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16501)]   = {1, M_S_2_TO_G(800 << 16)},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_1)] = {78, 32000 << 16},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_2)] = {78, 32000 << 16},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_3)] = {78, 32000 << 16},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_1)] = {392, 32000 << 16},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_2)] = {392, 32000 << 16},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_3)] = {392, 32000 << 16},
 };
 
-static const struct adis_scale_fractional_log2 adis1650x_deltaangl_scale[] = {
-	[ADIS16500]   = {DEGREE_TO_RAD(2160), 31},
-	[ADIS16501]   = {DEGREE_TO_RAD(720), 31},
-	[ADIS16505_1] = {DEGREE_TO_RAD(360), 31},
-	[ADIS16505_2] = {DEGREE_TO_RAD(720), 31},
-	[ADIS16505_3] = {DEGREE_TO_RAD(2160), 31},
-	[ADIS16507_1] = {DEGREE_TO_RAD(360), 31},
-	[ADIS16507_2] = {DEGREE_TO_RAD(720), 31},
-	[ADIS16507_3] = {DEGREE_TO_RAD(2160), 31},
+static const struct adis_scale_members adis1650x_deltaangl_scale[] = {
+	[ADIS1650X_ID_NO_OFFSET(ADIS16500)]   = {DEGREE_TO_RAD(2160), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16501)]   = {DEGREE_TO_RAD(720), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_1)] = {DEGREE_TO_RAD(360), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_2)] = {DEGREE_TO_RAD(720), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_3)] = {DEGREE_TO_RAD(2160), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_1)] = {DEGREE_TO_RAD(360), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_2)] = {DEGREE_TO_RAD(720), 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_3)] = {DEGREE_TO_RAD(2160), 31},
 };
 
-static const struct adis_scale_fractional_log2 adis1650x_deltavelocity_scale[]
+static const struct adis_scale_members adis1650x_deltavelocity_scale[]
 	= {
-	[ADIS16500]   = {400, 31},
-	[ADIS16501]   = {125, 31},
-	[ADIS16505_1] = {100, 31},
-	[ADIS16505_2] = {100, 31},
-	[ADIS16505_3] = {100, 31},
-	[ADIS16507_1] = {400, 31},
-	[ADIS16507_2] = {400, 31},
-	[ADIS16507_3] = {400, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16500)]   = {400, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16501)]   = {125, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_1)] = {100, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_2)] = {100, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_3)] = {100, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_1)] = {400, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_2)] = {400, 31},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_3)] = {400, 31},
 };
 
 /* Milli-degrees Celsius for temperature */
-static const struct adis_scale_fractional adis1650x_temp_scale[] = {
-	[ADIS16500]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16501]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16505_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16505_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16505_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16507_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16507_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
-	[ADIS16507_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+static const struct adis_scale_members adis1650x_temp_scale[] = {
+	[ADIS1650X_ID_NO_OFFSET(ADIS16500)]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16501)]   = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_1)] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_2)] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16505_3)] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_1)] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_2)] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS1650X_ID_NO_OFFSET(ADIS16507_3)] = {1 * MILLIDEGREE_PER_DEGREE, 10},
 };
+
+static int adis1650x_get_scale(struct adis_dev *adis,
+			       uint32_t *scale_m1, uint32_t *scale_m2,
+			       enum adis_chan_type chan_type)
+{
+	switch(chan_type) {
+	case ADIS_ACCL_CHAN:
+		*scale_m1 = adis1650x_accl_scale[ADIS1650X_ID_NO_OFFSET(adis->dev_id)].scale_m1;
+		*scale_m2 = adis1650x_accl_scale[ADIS1650X_ID_NO_OFFSET(adis->dev_id)].scale_m2;
+		return 0;
+	case ADIS_GYRO_CHAN:
+		*scale_m1 = adis1650x_anglvel_scale[ADIS1650X_ID_NO_OFFSET(
+				adis->dev_id)].scale_m1;
+		*scale_m2 = adis1650x_anglvel_scale[ADIS1650X_ID_NO_OFFSET(
+				adis->dev_id)].scale_m2;
+		return 0;
+	case ADIS_TEMP_CHAN:
+		*scale_m1 = adis1650x_temp_scale[ADIS1650X_ID_NO_OFFSET(adis->dev_id)].scale_m1;
+		*scale_m2 = adis1650x_temp_scale[ADIS1650X_ID_NO_OFFSET(adis->dev_id)].scale_m2;
+		return 0;
+	case ADIS_DELTAANGL_CHAN:
+		*scale_m1 = adis1650x_deltaangl_scale[ADIS1650X_ID_NO_OFFSET(
+				adis->dev_id)].scale_m1;
+		*scale_m2 = adis1650x_deltaangl_scale[ADIS1650X_ID_NO_OFFSET(
+				adis->dev_id)].scale_m2;
+		return 0;
+	case ADIS_DELTAVEL_CHAN:
+		*scale_m1 = adis1650x_deltavelocity_scale[ADIS1650X_ID_NO_OFFSET(
+					adis->dev_id)].scale_m1;
+		*scale_m2 = adis1650x_deltavelocity_scale[ADIS1650X_ID_NO_OFFSET(
+					adis->dev_id)].scale_m2;
+		return 0;
+	default:
+		return -EINVAL;
+	}
+}
 
 struct adis_chip_info adis1650x_chip_info = {
 	.cs_change_delay 	= 16,
@@ -200,11 +242,6 @@ struct adis_chip_info adis1650x_chip_info = {
 	.write_delay 		= 0,
 	.timeouts 		= &adis1650x_timeouts,
 	.field_map 		= &adis1650x_def,
-	.anglvel_scale		= adis1650x_anglvel_scale,
-	.accl_scale		= adis1650x_accl_scale,
-	.deltaangl_scale	= adis1650x_deltaangl_scale,
-	.deltavelocity_scale	= adis1650x_deltavelocity_scale,
-	.temp_scale		= adis1650x_temp_scale,
 	.filt_size_var_b_max 	= 6,
 	.dec_rate_max 		= 1999,
 	.sync_mode_max 		= ADIS_SYNC_OUTPUT,
@@ -213,4 +250,5 @@ struct adis_chip_info adis1650x_chip_info = {
 	.sync_clk_freq_limits	= adis1650x_sync_clk_freq_limits,
 	.sampling_clk_limits	= adis1650x_sampling_clk_limits,
 	.flags			= ADIS_HAS_BURST32 | ADIS_HAS_BURST_DELTA_DATA,
+	.get_scale		= adis1650x_get_scale,
 };
