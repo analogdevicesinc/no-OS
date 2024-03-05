@@ -159,12 +159,6 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 	if (ret)
 		goto error;
 
-	dev->anglvel_scale = info->anglvel_scale[dev->dev_id];
-	dev->accl_scale = info->accl_scale[dev->dev_id];
-	dev->deltaangl_scale = info->deltaangl_scale[dev->dev_id];
-	dev->deltavelocity_scale = info->deltavelocity_scale[dev->dev_id];
-	dev->temp_scale = info->temp_scale[dev->dev_id];
-
 	*adis = dev;
 
 	return ret;
@@ -2649,9 +2643,8 @@ int adis_get_anglvel_scale(struct adis_dev *adis,
 	if (!adis || !anglvel_scale)
 		return -EINVAL;
 
-	*anglvel_scale = adis->anglvel_scale;
-
-	return 0;
+	return adis->info->get_scale(adis, &anglvel_scale->dividend,
+				     &anglvel_scale->divisor, ADIS_GYRO_CHAN);
 }
 
 /**
@@ -2666,9 +2659,8 @@ int adis_get_accl_scale(struct adis_dev *adis,
 	if (!adis || !accl_scale)
 		return -EINVAL;
 
-	*accl_scale = adis->accl_scale;
-
-	return 0;
+	return adis->info->get_scale(adis, &accl_scale->dividend, &accl_scale->divisor,
+				     ADIS_ACCL_CHAN);
 }
 
 /**
@@ -2683,9 +2675,8 @@ int adis_get_deltaangl_scale(struct adis_dev *adis,
 	if (!adis || !deltaangl_scale)
 		return -EINVAL;
 
-	*deltaangl_scale = adis->deltaangl_scale;
-
-	return 0;
+	return adis->info->get_scale(adis, &deltaangl_scale->dividend,
+				     &deltaangl_scale->power, ADIS_DELTAANGL_CHAN);
 }
 
 /**
@@ -2700,9 +2691,8 @@ int adis_get_deltavelocity_scale(struct adis_dev *adis,
 	if (!adis || !deltavelocity_scale)
 		return -EINVAL;
 
-	*deltavelocity_scale = adis->deltavelocity_scale;
-
-	return 0;
+	return adis->info->get_scale(adis, &deltavelocity_scale->dividend,
+				     &deltavelocity_scale->power, ADIS_DELTAVEL_CHAN);
 }
 
 /**
@@ -2717,7 +2707,6 @@ int adis_get_temp_scale(struct adis_dev *adis,
 	if (!adis || !temp_scale)
 		return -EINVAL;
 
-	*temp_scale = adis->temp_scale;
-
-	return 0;
+	return adis->info->get_scale(adis, &temp_scale->dividend, &temp_scale->divisor,
+				     ADIS_TEMP_CHAN);
 }

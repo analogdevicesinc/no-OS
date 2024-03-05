@@ -107,6 +107,17 @@ enum adis_device_id {
 	ADIS16577_3,
 };
 
+/**
+ * @brief Supported channels
+ */
+enum adis_chan_type {
+	ADIS_ACCL_CHAN,
+	ADIS_GYRO_CHAN,
+	ADIS_TEMP_CHAN,
+	ADIS_DELTAANGL_CHAN,
+	ADIS_DELTAVEL_CHAN,
+};
+
 /** @struct adis_diag_flags
  *  @brief Bitfield struct which maps on the diagnosis register
  */
@@ -208,6 +219,14 @@ struct adis_clk_freq_limit {
 	uint32_t max_freq;
 };
 
+/** @struct adis_scale_members
+ *  @brief ADIS generic scale members structure.
+ */
+struct adis_scale_members {
+	uint32_t scale_m1;
+	uint32_t scale_m2;
+};
+
 /** @struct adis_scale_fractional
  *  @brief ADIS fractional scale format structure; scale = dividend/divisor
  */
@@ -240,16 +259,6 @@ struct adis_dev {
 	const struct adis_chip_info  	*info;
 	/** Current diagnosis flags values. */
 	struct adis_diag_flags 		diag_flags;
-	/** Gyroscope fractional scale. */
-	struct adis_scale_fractional anglvel_scale;
-	/** Accelerometer fractional scale. */
-	struct adis_scale_fractional accl_scale;
-	/** Delta angle fractional log2 scale. */
-	struct adis_scale_fractional_log2 deltaangl_scale;
-	/** Delta velocity fractional log2 scale. */
-	struct adis_scale_fractional_log2 deltavelocity_scale;
-	/** Temperature fractional scale. */
-	struct adis_scale_fractional temp_scale;
 	/** Current device id, specified by the user */
 	enum adis_device_id		dev_id;
 	/** Current page to be accessed in register map. */
@@ -507,16 +516,6 @@ struct adis_chip_info {
 	const struct adis_clk_freq_limit	sampling_clk_limits;
 	/** Chip specific timeouts. */
 	const struct adis_timeout 		*timeouts;
-	/** Gyroscope fractional scale. */
-	const struct adis_scale_fractional *anglvel_scale;
-	/** Accelerometer fractional scale. */
-	const struct adis_scale_fractional *accl_scale;
-	/** Delta angle fractional log2 scale. */
-	const struct adis_scale_fractional_log2 *deltaangl_scale;
-	/** Delta velocity fractional log2 scale. */
-	const struct adis_scale_fractional_log2 *deltavelocity_scale;
-	/** Temperature fractional scale. */
-	const struct adis_scale_fractional *temp_scale;
 	/** Chip specific flags. */
 	const uint32_t flags;
 	/** Chip specific read delay for SPI transactions. */
@@ -543,6 +542,10 @@ struct adis_chip_info {
 	uint8_t 				bias_corr_tbc_max;
 	/** Chip specific internal clock frequency in Hertz. */
 	uint32_t 				int_clk;
+	/** Chip specific implementation to obtain the channel scale members. */
+	int (*get_scale)(struct adis_dev *adis,
+			 uint32_t *scale_m1, uint32_t *scale_m2,
+			 enum adis_chan_type chan_type);
 };
 
 /******************************************************************************/
