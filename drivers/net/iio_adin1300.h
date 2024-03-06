@@ -20,7 +20,7 @@ enum adin1300_iio_attr_id {
 };
 
 int32_t adin1300_iio_init(struct adin1300_iio_desc **iio_dev,
-			 struct adin1300_iio_init_param *init_param);
+			  struct adin1300_iio_init_param *init_param);
 int32_t adin1300_iio_remove(struct adin1300_iio_desc *desc);
 
 #endif /** IIO_ADIN1300_H */

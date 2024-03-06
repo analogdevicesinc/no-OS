@@ -26,7 +26,7 @@ static int mwc_step(void *arg)
 	lock = 0;
 	hmc630x_read(mwc->tx_iiodev->dev, HMC630X_LOCKDET, &lock);
 	led_tx_lock(lock);
-	
+
 	lock = 0;
 	hmc630x_read(mwc->rx_iiodev->dev, HMC630X_LOCKDET, &lock);
 	led_rx_lock(lock);
@@ -122,7 +122,8 @@ int main(void)
 		return ret;
 
 	no_os_uart_stdio(console);
-	printf("\n%s for revision %c\n", NO_OS_TOSTRING(NO_OS_VERSION), 'A' + HW_VERSION);
+	printf("\n%s for revision %c\n", NO_OS_TOSTRING(NO_OS_VERSION),
+	       'A' + HW_VERSION);
 
 	// Detect board type switch state
 	ret = no_os_gpio_get(&brd_select, &brd_select_gpio_ip);
@@ -142,7 +143,7 @@ int main(void)
 	ret = led_init();
 	if (ret)
 		goto end;
-	
+
 	ret = no_os_eeprom_init(&eeprom, &eeprom_ip);
 	if (ret)
 		goto end;
@@ -159,40 +160,36 @@ int main(void)
 		goto end;
 
 	if (!pin && HW_VERSION >= 1)
-apply_factory_defaults:
-	{
+apply_factory_defaults: {
 		printf("EEPROM: loading factory defaults...\n");
 		ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(15), eebuf, nvmpsz+1);
 		if (ret)
 			return ret;
-		
+
 		crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
-		if (crc == eebuf[nvmpsz])
-		{
+		if (crc == eebuf[nvmpsz]) {
 			ret = no_os_eeprom_write(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz+1);
 			if (ret)
 				return ret;
 			printf("EEPROM: loaded factory defaults.\n");
 
 			led_blink_all(10, 3000);
-		}
-		else
-		{
+		} else {
 			printf("EEPROM: CRC mismatch, read 0x%x, computed 0x%x\n", eebuf[nvmpsz], crc);
 			printf("EEPROM: cannot load bad factory defaults.\n");
-			
+
 			memcpy(eebuf, &factory_defaults_template, nvmpsz);
 			printf("EEPROM: loaded hardcoded parameters instead.\n");
 
 			goto post_eeprom;
 		}
 	}
-	
+
 	printf("EEPROM: loading non-volatile parameters...\n");
 	ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz+1);
 	if (ret)
 		return ret;
-	
+
 	crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
 	if (crc != eebuf[nvmpsz]) {
 		printf("EEPROM: CRC mismatch, read 0x%x, computed 0x%x\n", eebuf[nvmpsz], crc);
@@ -221,11 +218,13 @@ post_eeprom:
 		goto end;
 
 	struct adm1177_iio_init_param iio_adm1177_config = {
-		.adm1177_initial = &(struct adm1177_init_param) {
+		.adm1177_initial = &(struct adm1177_init_param)
+		{
 			.i2c_init = {
 				.device_id = 0,
 				.slave_address = ADM1177_ADDRESS,
-				.extra = &(struct max_i2c_init_param) {
+				.extra = &(struct max_i2c_init_param)
+				{
 					.vssel = MXC_GPIO_VSSEL_VDDIOH,
 				},
 				.platform_ops = &max_i2c_ops,
@@ -411,6 +410,6 @@ end:
 	iio_app_remove(app);
 	hmc630x_iio_remove(iio_tx);
 	hmc630x_iio_remove(iio_rx);
-	
+
 	return 0;
 }

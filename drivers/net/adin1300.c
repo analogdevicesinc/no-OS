@@ -30,13 +30,12 @@ int adin1300_init(struct adin1300_desc **dev, struct adin1300_init_param *param)
 		if (ret)
 			goto free_d;
 		ret = adin1300_hard_reset(d);
-	}
-	else {
+	} else {
 		ret = adin1300_soft_reset(d);
 	}
 	if (ret)
 		goto free_reset;
-	
+
 	// MDIO sanity check after a reset
 	ret = adin1300_read(d, ADIN1300_PHY_ID_1, &val);
 	if (val != 0x283) {
@@ -60,7 +59,7 @@ int adin1300_init(struct adin1300_desc **dev, struct adin1300_init_param *param)
 	ret = adin1300_config_clk25_ref(d, param->clk25_ref);
 	if (ret)
 		goto free_mdio;
-	
+
 	ret = adin1300_config_speed(d, param->speed_cap);
 	if (ret)
 		goto free_mdio;
@@ -68,7 +67,7 @@ int adin1300_init(struct adin1300_desc **dev, struct adin1300_init_param *param)
 	ret = adin1300_autoneg(d, param->autoneg);
 	if (ret)
 		goto free_mdio;
-	
+
 	*dev = d;
 
 	return 0;
@@ -118,17 +117,20 @@ int adin1300_remove(struct adin1300_desc *dev)
 	return 0;
 }
 
-inline int adin1300_write(struct adin1300_desc *dev, uint32_t addr, uint16_t val)
+inline int adin1300_write(struct adin1300_desc *dev, uint32_t addr,
+			  uint16_t val)
 {
 	return no_os_mdio_write(dev->mdio, addr, val);
 }
 
-inline int adin1300_read(struct adin1300_desc *dev, uint32_t addr, uint16_t *val)
+inline int adin1300_read(struct adin1300_desc *dev, uint32_t addr,
+			 uint16_t *val)
 {
 	return no_os_mdio_read(dev->mdio, addr, val);
 }
 
-int adin1300_write_bits(struct adin1300_desc *dev, uint32_t addr, uint16_t val, uint16_t bitmask)
+int adin1300_write_bits(struct adin1300_desc *dev, uint32_t addr, uint16_t val,
+			uint16_t bitmask)
 {
 	int ret;
 	uint16_t rval;
@@ -136,33 +138,35 @@ int adin1300_write_bits(struct adin1300_desc *dev, uint32_t addr, uint16_t val, 
 	ret = no_os_mdio_read(dev->mdio, addr, &rval);
 	if (ret)
 		return ret;
-	
+
 	rval &= ~bitmask;
 	rval |= (val & bitmask);
 
 	return no_os_mdio_write(dev->mdio, addr, rval);
 }
 
-int adin1300_config_rgmii(struct adin1300_desc *dev, struct adin1300_rgmii_config rgmii)
+int adin1300_config_rgmii(struct adin1300_desc *dev,
+			  struct adin1300_rgmii_config rgmii)
 {
 	uint16_t reg;
 
 	reg = no_os_field_prep(ADIN1300_GE_RGMII_EN_MASK, 1) |
-		no_os_field_prep(ADIN1300_GE_RGMII_10_LOW_LTNCY_EN_MSK, 1) |
-		no_os_field_prep(ADIN1300_GE_RGMII_100_LOW_LTNCY_EN_MSK, 1);
-	
+	      no_os_field_prep(ADIN1300_GE_RGMII_10_LOW_LTNCY_EN_MSK, 1) |
+	      no_os_field_prep(ADIN1300_GE_RGMII_100_LOW_LTNCY_EN_MSK, 1);
+
 	if (rgmii.tx_idelay_en)
 		reg |= no_os_field_prep(ADIN1300_GE_RGMII_TX_ID_EN_MASK, 1) |
-			no_os_field_prep(ADIN1300_GE_RGMII_GTX_SEL_MASK, rgmii.tx_idelay);
+		       no_os_field_prep(ADIN1300_GE_RGMII_GTX_SEL_MASK, rgmii.tx_idelay);
 
 	if (rgmii.rx_idelay_en)
 		reg |= no_os_field_prep(ADIN1300_GE_RGMII_RX_ID_EN_MASK, 1) |
-			no_os_field_prep(ADIN1300_GE_RGMII_RX_SEL_MASK, rgmii.rx_idelay);
-	
+		       no_os_field_prep(ADIN1300_GE_RGMII_RX_SEL_MASK, rgmii.rx_idelay);
+
 	return adin1300_write(dev, ADIN1300_GE_RGMII_CFG, reg);
 }
 
-int adin1300_config_gp_clk(struct adin1300_desc *dev, bool on, enum adin1300_gp_clk_source source)
+int adin1300_config_gp_clk(struct adin1300_desc *dev, bool on,
+			   enum adin1300_gp_clk_source source)
 {
 	int ret;
 	uint16_t mask = ADIN1300_GE_CLK_RCVR_125_EN_MASK |
@@ -175,27 +179,30 @@ int adin1300_config_gp_clk(struct adin1300_desc *dev, bool on, enum adin1300_gp_
 	if (ret)
 		return ret;
 	if (on)
-		return adin1300_write_bits(dev, ADIN1300_GE_CLK_CFG, NO_OS_BIT(source), NO_OS_BIT(source));
-	
+		return adin1300_write_bits(dev, ADIN1300_GE_CLK_CFG, NO_OS_BIT(source),
+					   NO_OS_BIT(source));
+
 	return 0;
 }
 
 int adin1300_config_clk25_ref(struct adin1300_desc *dev, bool on)
 {
-	return adin1300_write_bits(dev, ADIN1300_GE_CLK_CFG, on ? ADIN1300_GE_REF_CLK_EN_MASK : 0, ADIN1300_GE_REF_CLK_EN_MASK);
+	return adin1300_write_bits(dev, ADIN1300_GE_CLK_CFG,
+				   on ? ADIN1300_GE_REF_CLK_EN_MASK : 0, ADIN1300_GE_REF_CLK_EN_MASK);
 }
 
-int adin1300_config_speed(struct adin1300_desc *dev, enum adin1300_speed speed_cap)
+int adin1300_config_speed(struct adin1300_desc *dev,
+			  enum adin1300_speed speed_cap)
 {
 	int ret;
-	uint16_t affected = ADIN1300_SELECTOR_ADV_MASK | 
-				ADIN1300_HD_10_ADV_MASK |
-				ADIN1300_FD_10_ADV_MASK |
-				ADIN1300_HD_100_ADV_MASK |
-				ADIN1300_FD_100_ADV_MASK;
+	uint16_t affected = ADIN1300_SELECTOR_ADV_MASK |
+			    ADIN1300_HD_10_ADV_MASK |
+			    ADIN1300_FD_10_ADV_MASK |
+			    ADIN1300_HD_100_ADV_MASK |
+			    ADIN1300_FD_100_ADV_MASK;
 	uint16_t bits = no_os_field_prep(ADIN1300_SELECTOR_ADV_MASK, 1);
 
-	
+
 	bits |= no_os_field_prep(ADIN1300_HD_10_ADV_MASK, 1);
 	if (speed_cap >= ADIN1300_10_BASE_T_FULLDUPLEX)
 		bits |= no_os_field_prep(ADIN1300_FD_10_ADV_MASK, 1);
@@ -208,7 +215,8 @@ int adin1300_config_speed(struct adin1300_desc *dev, enum adin1300_speed speed_c
 		return ret;
 
 	affected = ADIN1300_HD_1000_ADV_MASK | ADIN1300_FD_1000_ADV_MASK;
-	bits = no_os_field_prep(ADIN1300_HD_1000_ADV_MASK, 0); // 1000 half-duplex is not supported
+	bits = no_os_field_prep(ADIN1300_HD_1000_ADV_MASK,
+				0); // 1000 half-duplex is not supported
 	if (speed_cap >= ADIN1300_1000_BASE_T_FULLDUPLEX)
 		bits |= no_os_field_prep(ADIN1300_FD_1000_ADV_MASK, 1);
 
@@ -216,7 +224,8 @@ int adin1300_config_speed(struct adin1300_desc *dev, enum adin1300_speed speed_c
 	if (ret)
 		return ret;
 
-	affected = ADIN1300_DPLX_MODE_MASK | ADIN1300_SPEED_SEL_LSB_MASK | ADIN1300_SPEED_SEL_MSB_MASK;
+	affected = ADIN1300_DPLX_MODE_MASK | ADIN1300_SPEED_SEL_LSB_MASK |
+		   ADIN1300_SPEED_SEL_MSB_MASK;
 	if (speed_cap & 0x1)
 		bits |= no_os_field_prep(ADIN1300_DPLX_MODE_MASK, 1);
 	if (speed_cap & 0x2)
@@ -242,7 +251,7 @@ bool adin1300_link_is_up(struct adin1300_desc *dev)
 	ret = adin1300_read(dev, ADIN1300_PHY_STATUS_1, &val);
 	if (!ret && no_os_field_get(ADIN1300_LINK_STAT_MASK, val))
 		return true;
-	
+
 	return false;
 }
 

@@ -199,11 +199,17 @@ struct no_os_i2c_init_param eeprom_i2c_ip = {
 	.max_speed_hz = 400000,
 	.platform_ops = &max_i2c_ops,
 	.slave_address = 0x54,
-	.extra = &(struct max_i2c_init_param) { .vssel = MXC_GPIO_VSSEL_VDDIOH }
+	.extra = &(struct max_i2c_init_param)
+	{
+		.vssel = MXC_GPIO_VSSEL_VDDIOH
+	}
 };
 
 struct no_os_eeprom_init_param eeprom_ip = {
 	.device_id = 0x54,
 	.platform_ops = &eeprom_24xx32a_ops,
-	.extra = &(struct eeprom_24xx32a_init_param) { .i2c_init = &eeprom_i2c_ip }
+	.extra = &(struct eeprom_24xx32a_init_param)
+	{
+		.i2c_init = &eeprom_i2c_ip
+	}
 };

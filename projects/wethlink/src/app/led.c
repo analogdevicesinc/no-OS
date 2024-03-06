@@ -36,7 +36,7 @@ int led_init(void)
 	ret = no_os_gpio_get(&rx_det_red, &led_rx_det_red_gpio_ip);
 	if (ret)
 		return ret;
-	
+
 	ret = no_os_gpio_get(&rx_det_green, &led_rx_det_green_gpio_ip);
 	if (ret)
 		return ret;
@@ -104,8 +104,10 @@ void led_rx_det_red(bool on)
 
 void led_rj45(enum rj45_led state)
 {
-	no_os_gpio_set_value(rj45s11, state & rj45_led_green ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
-	no_os_gpio_set_value(rj45s12, state & rj45_led_yellow ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
+	no_os_gpio_set_value(rj45s11,
+			     state & rj45_led_green ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
+	no_os_gpio_set_value(rj45s12,
+			     state & rj45_led_yellow ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
 }
 
 void led_blink_all(unsigned int times, unsigned int duration_ms)

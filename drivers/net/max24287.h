@@ -111,17 +111,23 @@ struct max24287_desc {
 	struct no_os_mdio_desc *mdio;
 };
 
-int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param);
+int max24287_init(struct max24287_desc **dev,
+		  struct max24287_init_param *param);
 int max24287_remove(struct max24287_desc *dev);
 int max24287_write(struct max24287_desc *dev, uint8_t addr, uint16_t val);
 int max24287_read(struct max24287_desc *dev, uint8_t addr, uint16_t *val);
-int max24287_write_bits(struct max24287_desc *dev, uint8_t addr, uint16_t val, uint16_t bitmask);
+int max24287_write_bits(struct max24287_desc *dev, uint8_t addr, uint16_t val,
+			uint16_t bitmask);
 int max24287_hard_reset(struct max24287_desc *dev);
 int max24287_soft_reset(struct max24287_desc *dev);
-int max24287_config_parallel(struct max24287_desc *dev, enum max24287_parallel par, enum max24287_speed speed);
-int max24287_get_config_parallel(struct max24287_desc *dev, enum max24287_parallel *par, enum max24287_speed *speed);
-int max24287_config_serial(struct max24287_desc *dev, enum max24287_serial ser, enum max24287_speed speed);
-int max24287_get_config_serial(struct max24287_desc *dev, enum max24287_serial *ser, enum max24287_speed *speed);
+int max24287_config_parallel(struct max24287_desc *dev,
+			     enum max24287_parallel par, enum max24287_speed speed);
+int max24287_get_config_parallel(struct max24287_desc *dev,
+				 enum max24287_parallel *par, enum max24287_speed *speed);
+int max24287_config_serial(struct max24287_desc *dev, enum max24287_serial ser,
+			   enum max24287_speed speed);
+int max24287_get_config_serial(struct max24287_desc *dev,
+			       enum max24287_serial *ser, enum max24287_speed *speed);
 int max24287_config_link(struct max24287_desc *dev, bool up);
 bool max24287_link_is_up(struct max24287_desc *dev);
 void max24287_regmap(struct max24287_desc *dev);

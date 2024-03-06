@@ -10,12 +10,12 @@
 #include "iio.h"
 
 static int32_t _adin1300_read2(struct adin1300_iio_desc *iiodev,
-				       uint32_t reg,
-				       uint32_t *readval)
+			       uint32_t reg,
+			       uint32_t *readval)
 {
 	int ret;
 	uint16_t val;
-	
+
 	if (reg > 0x1f)
 		return -EINVAL;
 
@@ -28,8 +28,8 @@ static int32_t _adin1300_read2(struct adin1300_iio_desc *iiodev,
 }
 
 static int32_t _adin1300_write2(struct adin1300_iio_desc *iiodev,
-					uint32_t reg,
-					uint32_t writeval)
+				uint32_t reg,
+				uint32_t writeval)
 {
 	if (reg > 0x1f)
 		return -EINVAL;
@@ -38,8 +38,8 @@ static int32_t _adin1300_write2(struct adin1300_iio_desc *iiodev,
 }
 
 static int adin1300_iio_read_attr(void *device, char *buf,
-				 uint32_t len, const struct iio_ch_info *channel,
-				 intptr_t priv)
+				  uint32_t len, const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	int ret;
 	struct adin1300_iio_desc *iiodev = (struct adin1300_iio_desc *)device;
@@ -62,7 +62,7 @@ static int adin1300_iio_read_attr(void *device, char *buf,
 		ret = adin1300_read(d, ADIN1300_MII_CONTROL, &mii_control);
 		if (ret)
 			return ret;
-		
+
 		val = no_os_field_get(ADIN1300_AUTONEG_EN_MASK, mii_control);
 		break;
 	default:
@@ -73,8 +73,8 @@ static int adin1300_iio_read_attr(void *device, char *buf,
 }
 
 static int adin1300_iio_write_attr(void *device, char *buf,
-				  uint32_t len, const struct iio_ch_info *channel,
-				  intptr_t priv)
+				   uint32_t len, const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	int ret = 0;
 	int32_t val;
@@ -92,7 +92,8 @@ static int adin1300_iio_write_attr(void *device, char *buf,
 			return ret;
 
 		if (val)
-			ret = adin1300_write_bits(d, ADIN1300_PHY_CTRL_3, ADIN1300_LINK_EN_MASK, ADIN1300_LINK_EN_MASK);
+			ret = adin1300_write_bits(d, ADIN1300_PHY_CTRL_3, ADIN1300_LINK_EN_MASK,
+						  ADIN1300_LINK_EN_MASK);
 		break;
 	case ADIN1300_IIO_ATTR_SPEED:
 		if (val > ADIN1300_1000_BASE_T_FULLDUPLEX)
@@ -142,7 +143,7 @@ static struct iio_device adin1300_iio_descice_template = {
 };
 
 int32_t adin1300_iio_init(struct adin1300_iio_desc **iiodev,
-			 struct adin1300_iio_init_param *init_param)
+			  struct adin1300_iio_init_param *init_param)
 {
 	int ret;
 	struct adin1300_iio_desc *d;
@@ -176,7 +177,7 @@ int32_t adin1300_iio_remove(struct adin1300_iio_desc *iiodev)
 {
 	if (iiodev)
 		no_os_free(iiodev->iio_dev);
-	
+
 	no_os_free(iiodev);
 
 	return 0;

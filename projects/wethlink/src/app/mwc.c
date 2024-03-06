@@ -30,20 +30,22 @@ const union nvmp255 factory_defaults_template = {
 		.tx_auto_ifvga = true,
 		.rx_auto_ifvga_rflna = true,
 		.temp_correlation = {
-			{ // lbtx
+			{
+				// lbtx
 				{1, 3, 7, 15, 31}, // temperature
 				{15, 15, 15, 15, 10}, // tx if_attn
 				{6, 6, 6, 6, 3}, // rx if_attn
 				{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB} // rx lna_attn
 			},
-			{ // hbtx
+			{
+				// hbtx
 				{1, 3, 7, 15, 31},
 				{15, 15, 15, 10, 0},
 				{12, 12, 12, 12, 9},
 				{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_6dB}
 			}
 		},
-		
+
 		.hmc6300_enabled = true,
 		.hmc6300_vco = {59850000000, 63262500000},
 		.hmc6300_if_attn = 13,
@@ -60,7 +62,8 @@ const union nvmp255 factory_defaults_template = {
 	}
 };
 
-static int32_t mwc_read(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t *readval)
+static int32_t mwc_read(struct mwc_iio_dev *mwc, uint32_t reg,
+			uint32_t *readval)
 {
 	if (reg >= 20)
 		return -EINVAL;
@@ -75,7 +78,8 @@ static int32_t mwc_read(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t *readval
 	return 0;
 }
 
-static int32_t mwc_write(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t writeval)
+static int32_t mwc_write(struct mwc_iio_dev *mwc, uint32_t reg,
+			 uint32_t writeval)
 {
 	if (reg >= 20)
 		return -EINVAL;
@@ -88,7 +92,8 @@ static int32_t mwc_write(struct mwc_iio_dev *mwc, uint32_t reg, uint32_t writeva
 	return 0;
 }
 
-void mwc_temp_correlation(uint8_t (*correlation)[5], uint8_t temp, uint8_t *tx_if, uint8_t *rx_if, uint8_t *rx_rflna)
+void mwc_temp_correlation(uint8_t (*correlation)[5], uint8_t temp,
+			  uint8_t *tx_if, uint8_t *rx_if, uint8_t *rx_rflna)
 {
 	uint8_t e;
 
@@ -120,7 +125,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			return ret;
 
 		mwc_temp_correlation(mwc->temp_correlation,
-					temp, &if_attn, NULL, NULL);
+				     temp, &if_attn, NULL, NULL);
 
 		ret = hmc630x_set_if_attn(tx, if_attn);
 		if (ret)
@@ -134,7 +139,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			return ret;
 
 		mwc_temp_correlation(mwc->temp_correlation,
-			temp, NULL, &if_attn, &lna_attn);
+				     temp, NULL, &if_attn, &lna_attn);
 
 		ret = hmc630x_set_if_attn(rx, if_attn);
 		if (ret)
@@ -183,8 +188,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 			iter_count++;
 		}
-	}
-	else {
+	} else {
 		led_tx_det_green(false);
 		led_tx_det_red(false);
 	}
@@ -278,7 +282,8 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 	nvmp.data.rx_tolerance = mwc->rx_tolerance;
 	nvmp.data.tx_auto_ifvga = mwc->tx_auto_ifvga;
 	nvmp.data.rx_auto_ifvga_rflna = mwc->rx_auto_ifvga_rflna;
-	memcpy(&nvmp.data.temp_correlation[mwc->hbtx], mwc->temp_correlation, sizeof(nvmp.data.temp_correlation[mwc->hbtx]));
+	memcpy(&nvmp.data.temp_correlation[mwc->hbtx], mwc->temp_correlation,
+	       sizeof(nvmp.data.temp_correlation[mwc->hbtx]));
 
 	// hmc6300 parameters
 	dev = mwc->tx_iiodev->dev;
@@ -287,7 +292,7 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 	if (ret)
 		return ret;
 	nvmp.data.hmc6300_enabled = enabled;
-	
+
 	if (enabled) {
 		ret = hmc630x_get_vco(dev, &freq);
 		if (ret)
@@ -317,7 +322,7 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 		return ret;
 	nvmp.data.hmc6301_enabled = enabled;
 
-	if (enabled) {	
+	if (enabled) {
 		ret = hmc630x_get_vco(dev, &freq);
 		if (ret)
 			return ret;

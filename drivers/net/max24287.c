@@ -30,13 +30,12 @@ int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param)
 		if (ret)
 			goto free_d;
 		ret = max24287_hard_reset(d);
-	}
-	else {
+	} else {
 		ret = max24287_soft_reset(d);
 	}
 	if (ret)
 		goto free_reset;
-	
+
 	// MDIO sanity check after a reset
 	ret = max24287_read(d, MAX24287_ID, &val);
 	if (val != 0x1ee0 && val != 0x1edf) {
@@ -46,7 +45,8 @@ int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param)
 
 	if (val == 0x1ee0) {
 		// Rev B sequence
-		max24287_write(d, MAX24287_PTPCR1, MAX24287_PTPCR1_W_MASK | MAX24287_RX_PWDN_MASK);
+		max24287_write(d, MAX24287_PTPCR1,
+			       MAX24287_PTPCR1_W_MASK | MAX24287_RX_PWDN_MASK);
 		no_os_mdelay(1);
 		max24287_write(d, MAX24287_PTPCR1, MAX24287_PTPCR1_W_MASK);
 		max24287_write(d, MAX24287_BMCR, MAX24287_DP_RST_MASK);
@@ -58,7 +58,7 @@ int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param)
 	ret = max24287_config_parallel(d, param->parallel, param->parspeed);
 	if (ret)
 		goto free_mdio;
-	
+
 	ret = max24287_config_serial(d, param->serial, param->serspeed);
 	if (ret)
 		goto free_mdio;
@@ -82,7 +82,8 @@ int max24287_soft_reset(struct max24287_desc *dev)
 {
 	int ret;
 
-	ret = max24287_write_bits(dev, MAX24287_GPIOCR1, MAX24287_RST_MASK, MAX24287_RST_MASK);
+	ret = max24287_write_bits(dev, MAX24287_GPIOCR1, MAX24287_RST_MASK,
+				  MAX24287_RST_MASK);
 	if (ret < 0)
 		return ret;
 
@@ -102,7 +103,7 @@ int max24287_hard_reset(struct max24287_desc *dev)
 	ret = no_os_gpio_direction_output(dev->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
-	
+
 	no_os_mdelay(1);
 
 	return 0;
@@ -121,7 +122,7 @@ int max24287_write(struct max24287_desc *dev, uint8_t addr, uint16_t val)
 
 	if (page)
 		ret = no_os_mdio_write(dev->mdio, MAX24287_PAGESEL, 0x10);
-	
+
 	return ret;
 }
 
@@ -138,11 +139,12 @@ int max24287_read(struct max24287_desc *dev, uint8_t addr, uint16_t *val)
 
 	if (page)
 		ret = no_os_mdio_write(dev->mdio, MAX24287_PAGESEL, 0x10);
-	
+
 	return ret;
 }
 
-int max24287_write_bits(struct max24287_desc *dev, uint8_t addr, uint16_t val, uint16_t bitmask)
+int max24287_write_bits(struct max24287_desc *dev, uint8_t addr, uint16_t val,
+			uint16_t bitmask)
 {
 	int ret;
 	uint16_t rval;
@@ -150,14 +152,15 @@ int max24287_write_bits(struct max24287_desc *dev, uint8_t addr, uint16_t val, u
 	ret = max24287_read(dev, addr, &rval);
 	if (ret)
 		return ret;
-	
+
 	rval &= ~bitmask;
 	rval |= (val & bitmask);
 
 	return max24287_write(dev, addr, rval);
 }
 
-int max24287_config_parallel(struct max24287_desc *dev, enum max24287_parallel par, enum max24287_speed speed)
+int max24287_config_parallel(struct max24287_desc *dev,
+			     enum max24287_parallel par, enum max24287_speed speed)
 {
 	uint16_t val;
 	uint16_t spd = speed >> 1;
@@ -177,7 +180,8 @@ int max24287_config_parallel(struct max24287_desc *dev, enum max24287_parallel p
 	};
 }
 
-int max24287_get_config_parallel(struct max24287_desc *dev, enum max24287_parallel *par, enum max24287_speed *speed)
+int max24287_get_config_parallel(struct max24287_desc *dev,
+				 enum max24287_parallel *par, enum max24287_speed *speed)
 {
 	int ret;
 	uint16_t val;
@@ -193,7 +197,8 @@ int max24287_get_config_parallel(struct max24287_desc *dev, enum max24287_parall
 	return 0;
 }
 
-int max24287_config_serial(struct max24287_desc *dev, enum max24287_serial ser, enum max24287_speed speed)
+int max24287_config_serial(struct max24287_desc *dev, enum max24287_serial ser,
+			   enum max24287_speed speed)
 {
 	int ret;
 	uint16_t val;
@@ -208,7 +213,7 @@ int max24287_config_serial(struct max24287_desc *dev, enum max24287_serial ser, 
 		ret = max24287_write_bits(dev, MAX24287_PCSCR, 0, MAX24287_BASEX_MASK);
 		if (ret)
 			return ret;
-		
+
 		val = no_os_field_prep(MAX24287_AN_ADV_W_MASK, 1);
 		val |= no_os_field_prep(MAX24287_DPLX_MASK, fullduplex);
 		val |= no_os_field_prep(MAX24287_SPD_MASK, spd);
@@ -218,7 +223,8 @@ int max24287_config_serial(struct max24287_desc *dev, enum max24287_serial ser, 
 	};
 }
 
-int max24287_get_config_serial(struct max24287_desc *dev, enum max24287_serial *ser, enum max24287_speed *speed)
+int max24287_get_config_serial(struct max24287_desc *dev,
+			       enum max24287_serial *ser, enum max24287_speed *speed)
 {
 	int ret;
 	uint16_t val;
@@ -243,8 +249,9 @@ int max24287_get_config_serial(struct max24287_desc *dev, enum max24287_serial *
 int max24287_config_link(struct max24287_desc *dev, bool up)
 {
 	uint16_t val = no_os_field_prep(MAX24287_AN_ADV_W_MASK, 1) |
-			no_os_field_prep(MAX24287_LK_MASK, up);
-	return max24287_write_bits(dev, MAX24287_AN_ADV, val, MAX24287_AN_ADV_W_MASK | MAX24287_LK_MASK);
+		       no_os_field_prep(MAX24287_LK_MASK, up);
+	return max24287_write_bits(dev, MAX24287_AN_ADV, val,
+				   MAX24287_AN_ADV_W_MASK | MAX24287_LK_MASK);
 
 }
 
@@ -257,7 +264,7 @@ bool max24287_link_is_up(struct max24287_desc *dev)
 	ret = max24287_read(dev, MAX24287_BMSR, &val);
 	if (!ret && no_os_field_get(MAX24287_LINK_ST_MASK, val))
 		return true;
-	
+
 	return false;
 }
 
@@ -307,6 +314,7 @@ void max24287_regmap(struct max24287_desc *dev)
 	printf("----- MAX24287 -----\n");
 	for (i = 0; i < NO_OS_ARRAY_SIZE(addrs); i++) {
 		max24287_read(dev, addrs[i], &val);
-		printf("%u.%u %s 0x%x\n", MAX24287_PAGE(addrs[i]), MAX24287_ADDR(addrs[i]), names[i], val);
+		printf("%u.%u %s 0x%x\n", MAX24287_PAGE(addrs[i]), MAX24287_ADDR(addrs[i]),
+		       names[i], val);
 	}
 }
