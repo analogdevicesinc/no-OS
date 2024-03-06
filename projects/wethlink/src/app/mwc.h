@@ -111,7 +111,8 @@ union nvmp255 {
 	struct nvmp data;
 	char _size[255];
 };
-static_assert(sizeof(union nvmp255) == 255, "Non-volatile memory parameters exceed the maximum allowed size.");
+static_assert(sizeof(union nvmp255) == 255,
+	      "Non-volatile memory parameters exceed the maximum allowed size.");
 
 // The EEPROM has 4096 bytes available that we split into 16 areas
 // the last one of which holds the factory defaults.
@@ -120,7 +121,7 @@ static_assert(sizeof(union nvmp255) == 255, "Non-volatile memory parameters exce
 extern const union nvmp255 factory_defaults_template;
 
 int mwc_iio_init(struct mwc_iio_dev **iio_dev,
-			struct mwc_iio_init_param *init_param);
+		 struct mwc_iio_init_param *init_param);
 int mwc_iio_remove(struct mwc_iio_dev *desc);
 int mwc_tx_rx_reset(struct mwc_iio_dev *mwc);
 

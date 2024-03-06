@@ -20,7 +20,7 @@ enum max24287_iio_attr_id {
 };
 
 int32_t max24287_iio_init(struct max24287_iio_desc **iio_dev,
-			 struct max24287_iio_init_param *init_param);
+			  struct max24287_iio_init_param *init_param);
 int32_t max24287_iio_remove(struct max24287_iio_desc *desc);
 
 #endif /** IIO_MAX24287_H */

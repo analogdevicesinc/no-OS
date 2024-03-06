@@ -10,8 +10,8 @@
 #include "iio.h"
 
 static int32_t _max24287_read2(struct max24287_iio_desc *iiodev,
-				       uint32_t reg,
-				       uint32_t *readval)
+			       uint32_t reg,
+			       uint32_t *readval)
 {
 	int ret;
 	uint16_t val;
@@ -25,15 +25,15 @@ static int32_t _max24287_read2(struct max24287_iio_desc *iiodev,
 }
 
 static int32_t _max24287_write2(struct max24287_iio_desc *iiodev,
-					uint32_t reg,
-					uint32_t writeval)
+				uint32_t reg,
+				uint32_t writeval)
 {
 	return max24287_write(iiodev->dev, reg, (uint16_t)writeval);
 }
 
 static int max24287_iio_read_attr(void *device, char *buf,
-				 uint32_t len, const struct iio_ch_info *channel,
-				 intptr_t priv)
+				  uint32_t len, const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	int ret;
 	struct max24287_iio_desc *iiodev = (struct max24287_iio_desc *)device;
@@ -68,8 +68,8 @@ static int max24287_iio_read_attr(void *device, char *buf,
 }
 
 static int max24287_iio_write_attr(void *device, char *buf,
-				  uint32_t len, const struct iio_ch_info *channel,
-				  intptr_t priv)
+				   uint32_t len, const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	int ret = 0;
 	int32_t val;
@@ -129,7 +129,7 @@ static struct iio_device max24287_iio_template = {
 };
 
 int32_t max24287_iio_init(struct max24287_iio_desc **iiodev,
-			 struct max24287_iio_init_param *init_param)
+			  struct max24287_iio_init_param *init_param)
 {
 	int ret = -ENOMEM;
 	struct max24287_iio_desc *d;
@@ -163,7 +163,7 @@ int32_t max24287_iio_remove(struct max24287_iio_desc *iiodev)
 {
 	if (iiodev)
 		no_os_free(iiodev->iio_dev);
-	
+
 	no_os_free(iiodev);
 
 	return 0;

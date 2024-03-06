@@ -182,8 +182,7 @@ int32_t eeprom_24xx32a_write(struct no_os_eeprom_desc *desc, uint32_t address,
 			/* Write cycle time (typ 5msec as per datasheet) */
 			no_os_mdelay(5);
 		}
-	}
-	else {
+	} else {
 		/* Perform byte by byte write */
 		for (indx = 0; indx < bytes; indx++) {
 			no_os_put_unaligned_be16(curr_address, buff);

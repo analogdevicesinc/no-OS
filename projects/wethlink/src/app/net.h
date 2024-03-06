@@ -3,5 +3,5 @@
 #include "mwc.h"
 
 int net_init(struct adin1300_iio_desc **adin1300_iio,
-		struct max24287_iio_desc **max24287_iio,
-		unsigned int speed);
+	     struct max24287_iio_desc **max24287_iio,
+	     unsigned int speed);

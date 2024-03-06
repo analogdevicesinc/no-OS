@@ -159,18 +159,23 @@ struct adin1300_desc {
 	struct no_os_mdio_desc *mdio;
 };
 
-int adin1300_init(struct adin1300_desc **dev, struct adin1300_init_param *param);
+int adin1300_init(struct adin1300_desc **dev,
+		  struct adin1300_init_param *param);
 int adin1300_remove(struct adin1300_desc *dev);
 int adin1300_write(struct adin1300_desc *dev, uint32_t addr, uint16_t val);
 int adin1300_read(struct adin1300_desc *dev, uint32_t addr, uint16_t *val);
-int adin1300_write_bits(struct adin1300_desc *dev, uint32_t addr, uint16_t val, uint16_t bitmask);
+int adin1300_write_bits(struct adin1300_desc *dev, uint32_t addr, uint16_t val,
+			uint16_t bitmask);
 int adin1300_soft_reset(struct adin1300_desc *dev);
 int adin1300_hard_reset(struct adin1300_desc *dev);
-int adin1300_config_rgmii(struct adin1300_desc *dev, struct adin1300_rgmii_config rgmii);
-int adin1300_config_gp_clk(struct adin1300_desc *dev, bool on, enum adin1300_gp_clk_source source);
+int adin1300_config_rgmii(struct adin1300_desc *dev,
+			  struct adin1300_rgmii_config rgmii);
+int adin1300_config_gp_clk(struct adin1300_desc *dev, bool on,
+			   enum adin1300_gp_clk_source source);
 int adin1300_config_clk25_ref(struct adin1300_desc *dev, bool on);
 int adin1300_autoneg(struct adin1300_desc *dev, bool on);
-int adin1300_config_speed(struct adin1300_desc *dev, enum adin1300_speed speed_cap);
+int adin1300_config_speed(struct adin1300_desc *dev,
+			  enum adin1300_speed speed_cap);
 enum adin1300_speed adin1300_resolved_speed(struct adin1300_desc *dev);
 bool adin1300_link_is_up(struct adin1300_desc *dev);
 

@@ -30,7 +30,7 @@ void adin1300_int(void *context)
 
 	// this also clears the flags
 	adin1300_read(ctx->adin1300, ADIN1300_IRQ_STATUS, &status);
-	
+
 	if (status & ADIN1300_LNK_STAT_CHNG_IRQ_MASK) {
 		spd = adin1300_resolved_speed(ctx->adin1300);
 
@@ -39,14 +39,14 @@ void adin1300_int(void *context)
 			max24287_config_parallel(ctx->max24287, MAX24287_RGMII, spd);
 			max24287_config_serial(ctx->max24287, MAX24287_SGMII, spd);
 
-			
+
 			if (selfchange)
 				selfchange = false;
 			else
-				max24287_write_bits(ctx->max24287, MAX24287_BMCR, MAX24287_AN_EN_MASK | MAX24287_AN_START_MASK,
-								MAX24287_AN_EN_MASK | MAX24287_AN_START_MASK);
-		}
-		else {
+				max24287_write_bits(ctx->max24287, MAX24287_BMCR,
+						    MAX24287_AN_EN_MASK | MAX24287_AN_START_MASK,
+						    MAX24287_AN_EN_MASK | MAX24287_AN_START_MASK);
+		} else {
 			// cable disconnected, advertise all speeds
 			led_rj45(rj45_led_off);
 			max24287_config_serial(ctx->max24287, MAX24287_SGMII, 5);
@@ -71,7 +71,7 @@ void max24287_int(void *context)
 	if (reg & MAX24287_AN_RX_PAGE) {
 		max24287_read(ctx->max24287, MAX24287_AN_RX, &reg);
 		remote_speed = (no_os_field_get(MAX24287_SPD_MASK, reg) << 1) |
-			no_os_field_get(MAX24287_DPLX_MASK, reg);
+			       no_os_field_get(MAX24287_DPLX_MASK, reg);
 		max24287_read(ctx->max24287, MAX24287_AN_ADV, &reg);
 		local_speed = adin1300_resolved_speed(ctx->adin1300);
 
@@ -88,8 +88,8 @@ void max24287_int(void *context)
 }
 
 int net_init(struct adin1300_iio_desc **adin1300_iio,
-		struct max24287_iio_desc **max24287_iio,
-		unsigned int speed)
+	     struct max24287_iio_desc **max24287_iio,
+	     unsigned int speed)
 {
 	int ret;
 	static struct net_context ctx;
@@ -142,7 +142,8 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 			.c45 = true,
 			.addr = 0,
 			.ops = &mdio_bitbang_ops,
-			.extra = &(struct mdio_bitbang_init_param){
+			.extra = &(struct mdio_bitbang_init_param)
+			{
 				.mdc = adin1300_mdc_gpio_ip,
 				.mdio = adin1300_mdio_gpio_ip,
 			},
@@ -160,14 +161,17 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 	ret = adin1300_init(&adin1300, &adin1300_ip);
 	if (ret)
 		return ret;
-	
+
 	// See datasheet section "Back to Back Mode in 10BASE-T" to understand this.
-	ret = adin1300_write(adin1300, ADIN1300_GE_B10_REGEN_PRE, ADIN1300_GE_B10_REGEN_PRE_MSK);
+	ret = adin1300_write(adin1300, ADIN1300_GE_B10_REGEN_PRE,
+			     ADIN1300_GE_B10_REGEN_PRE_MSK);
 	if (ret)
 		return ret;
 
 	ret = adin1300_iio_init(adin1300_iio,
-		&(struct adin1300_iio_init_param){.dev = adin1300});
+	&(struct adin1300_iio_init_param) {
+		.dev = adin1300
+	});
 	if (ret)
 		return ret;
 
@@ -177,7 +181,8 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 		.mdio_param = {
 			.addr = 0x7,
 			.ops = &mdio_bitbang_ops,
-			.extra = &(struct mdio_bitbang_init_param){
+			.extra = &(struct mdio_bitbang_init_param)
+			{
 				.mdc = max24287_mdc_gpio_ip,
 				.mdio = max24287_mdio_gpio_ip,
 			},
@@ -190,13 +195,15 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 	ret = max24287_init(&max24287, &serdes_ip);
 	if (ret)
 		return ret;
-	
+
 	// select GPIO1, GPIO2 & GPIO3 functions
 	// 0xE5: GPIO1 interrupt, GPIO2 125 MHz TX PLL, GPIO3 25MHz or 125MHz from receive clock recovery PLL
 	max24287_write(max24287, MAX24287_GPIOCR1, 0xE5);
 
 	ret = max24287_iio_init(max24287_iio,
-		&(struct max24287_iio_init_param){.dev = max24287});
+	&(struct max24287_iio_init_param) {
+		.dev = max24287
+	});
 	if (ret)
 		return ret;
 
@@ -204,13 +211,14 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 	ret = no_os_gpio_get(&int_gpio, &adin1300_int_gpio_ip);
 	if (ret)
 		return ret;
-	
+
 	ret = no_os_gpio_direction_input(int_gpio);
 	if (ret)
 		return ret;
 
 	adin1300_read(adin1300, ADIN1300_IRQ_STATUS, NULL);
-	adin1300_write(adin1300, ADIN1300_IRQ_MASK, ADIN1300_HW_IRQ_EN_MASK | ADIN1300_LNK_STAT_CHNG_IRQ_MASK);
+	adin1300_write(adin1300, ADIN1300_IRQ_MASK,
+		       ADIN1300_HW_IRQ_EN_MASK | ADIN1300_LNK_STAT_CHNG_IRQ_MASK);
 
 	ret = no_os_irq_ctrl_init(&nvic, &nvic_ip);
 	if (ret)
@@ -228,7 +236,8 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 	ctx.max24287 = max24287;
 	ctx.nvic = nvic;
 	adin1300_int_cb.ctx = &ctx;
-	ret = no_os_irq_register_callback(gpio2intc, ADIN1300_INT_PIN, &adin1300_int_cb);
+	ret = no_os_irq_register_callback(gpio2intc, ADIN1300_INT_PIN,
+					  &adin1300_int_cb);
 	if (ret)
 		return ret;
 
@@ -249,7 +258,7 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 	ret = no_os_gpio_get(&int2_gpio, &max24287_int_gpio_ip);
 	if (ret)
 		return ret;
-	
+
 	ret = no_os_gpio_direction_input(int2_gpio);
 	if (ret)
 		return ret;
@@ -266,7 +275,8 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 		return ret;
 
 	max24287_int_cb.ctx = &ctx;
-	ret = no_os_irq_register_callback(gpio1intc, MAX24287_INT_PIN, &max24287_int_cb);
+	ret = no_os_irq_register_callback(gpio1intc, MAX24287_INT_PIN,
+					  &max24287_int_cb);
 	if (ret)
 		return ret;
 
