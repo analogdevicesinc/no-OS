@@ -232,6 +232,10 @@ int adis_initial_startup(struct adis_dev *adis)
 int adis_read_reg(struct adis_dev *adis,  uint32_t reg, uint32_t *val,
 		  uint32_t size)
 {
+	/* If custom implementation is available, use it. */
+	if (adis->info->read_reg)
+		return adis->info->read_reg(adis, reg, val, size);
+
 	int ret;
 	uint32_t page = reg / ADIS_PAGE_SIZE;
 	struct no_os_spi_msg msgs[] = {
@@ -322,6 +326,10 @@ int adis_read_reg(struct adis_dev *adis,  uint32_t reg, uint32_t *val,
 int adis_write_reg(struct adis_dev *adis, uint32_t reg, uint32_t val,
 		   uint32_t size)
 {
+	/* If custom implementation is available, use it. */
+	if (adis->info->write_reg)
+		return adis->info->write_reg(adis, reg, val, size);
+
 	int ret;
 	uint32_t page = reg / ADIS_PAGE_SIZE, i;
 	struct no_os_spi_msg msgs[] = {

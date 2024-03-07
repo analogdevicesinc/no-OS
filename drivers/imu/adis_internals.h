@@ -353,6 +353,12 @@ struct adis_chip_info {
 	int (*get_scale)(struct adis_dev *adis,
 			 uint32_t *scale_m1, uint32_t *scale_m2,
 			 enum adis_chan_type chan_type);
+	/** Chip specific implementation for reading a register.  */
+	int (*read_reg)(struct adis_dev *adis,  uint32_t reg, uint32_t *val,
+			uint32_t size);
+	/** Chip specific implementation for writing a register.  */
+	int (*write_reg)(struct adis_dev *adis,  uint32_t reg, uint32_t val,
+			 uint32_t size);
 };
 
 #endif
