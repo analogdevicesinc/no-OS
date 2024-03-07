@@ -267,13 +267,19 @@ int ad4858_set_config_interface_mode(struct ad4858_dev *dev)
  */
 int ad4858_set_data_interface_mode(struct ad4858_dev *dev)
 {
-	struct ad4858_conv_data conv_data;
+	int ret;
 
 	if (!dev)
 		return -EINVAL;
 
-	/* Read dummy conversion results to enter into data conversion mode */
-	return ad4858_spi_data_read(dev, &conv_data);
+	/* Set SPI data mode to single instruction mode*/
+	ret = ad4858_set_spi_data_mode(dev, AD4858_SINGLE_INSTRUCTION_MODE);
+	if (ret)
+		return ret;
+
+	/* Disable SDO line to get 3-wire SPI config interface mode */
+	return ad4858_reg_mask(dev, AD4858_REG_INTERFACE_CONFIG_A,
+			       AD4858_SDO_ENABLE_MSK, 0);
 }
 
 /**
@@ -644,9 +650,9 @@ int ad4858_spi_data_read(struct ad4858_dev *dev, struct ad4858_conv_data *data)
 		/* 20-bit conversion result + 1-bit OR/UR + 3-bit channel ID */
 		for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
 			indx = chn * 3;
-			data->raw[chn] = ((uint32_t)buff[indx] << 16) |
-					 ((uint32_t)buff[indx + 1] << 8) |
-					 (buff[indx + 2] >> 4);
+			data->raw[chn] = (((uint32_t)buff[indx] << 16) |
+					  ((uint32_t)buff[indx + 1] << 8) |
+					  (buff[indx + 2])) >> 4;
 			data->or_ur_status[chn] = (buff[indx + 2] >> 3) & 0x1;
 			data->chn_id[chn] = buff[indx + 2] & 0x7;
 		}
@@ -908,8 +914,8 @@ int ad4858_init(struct ad4858_dev **device,
 {
 	struct ad4858_dev *dev;
 	int32_t ret;
-	uint32_t product_id_l;
-	uint32_t product_id_h;
+	uint32_t product_id_l = 0;
+	uint32_t product_id_h = 0;
 
 	if (!device || !init_param)
 		return -EINVAL;
