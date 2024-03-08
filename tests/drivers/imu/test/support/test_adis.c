@@ -66,7 +66,7 @@ static int retval;
  ******************************************************************************/
 
 extern enum adis_device_id adis_dev_id;
-extern struct adis_chip_info *adis_chip_info;
+extern const struct adis_chip_info *adis_chip_info;
 
 /*******************************************************************************
  *    TESTS
@@ -78,9 +78,10 @@ extern struct adis_chip_info *adis_chip_info;
 void test_adis_init_1(void)
 {
 	struct adis_dev *device;
+	ip.info = adis_chip_info;
 
 	no_os_calloc_IgnoreAndReturn(NULL);
-	retval = adis_init(&device, adis_chip_info);
+	retval = adis_init(&device, &ip);
 	TEST_ASSERT_EQUAL_INT(-ENOMEM, retval);
 }
 
@@ -91,11 +92,11 @@ void test_adis_init_2(void)
 {
 	struct adis_dev *device;
 	device_alloc.spi_desc = &spi_desc;
-	adis_chip_info->ip = &ip;
+	ip.info = adis_chip_info;
 	no_os_calloc_IgnoreAndReturn(&device_alloc);
 	no_os_spi_init_IgnoreAndReturn(-1);
 	no_os_free_Ignore();
-	retval = adis_init(&device, adis_chip_info);
+	retval = adis_init(&device, &ip);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
@@ -106,9 +107,8 @@ void test_adis_init_3(void)
 {
 	struct adis_dev *device;
 	device_alloc.spi_desc = &spi_desc;
-	adis_chip_info->ip = &ip;
 	device_alloc.gpio_reset = &gpio_reset_desc;
-	adis_chip_info->has_paging = true;
+	ip.info = adis_chip_info;
 
 	no_os_calloc_IgnoreAndReturn(&device_alloc);
 	no_os_spi_init_IgnoreAndReturn(0);
@@ -117,7 +117,7 @@ void test_adis_init_3(void)
 	no_os_gpio_remove_IgnoreAndReturn(0);
 	no_os_spi_remove_IgnoreAndReturn(0);
 	no_os_free_Ignore();
-	retval = adis_init(&device, adis_chip_info);
+	retval = adis_init(&device, &ip);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
@@ -129,16 +129,17 @@ void test_adis_init_4(void)
 {
 	struct adis_dev *device;
 	device_alloc.spi_desc = &spi_desc;
-	adis_chip_info->ip = &ip;
 	device_alloc.gpio_reset = &gpio_reset_desc;
-	adis_chip_info->has_paging = false;
+	ip.info = adis_chip_info;
 
 	no_os_calloc_IgnoreAndReturn(&device_alloc);
 	no_os_spi_init_IgnoreAndReturn(0);
 	no_os_gpio_get_optional_IgnoreAndReturn(0);
 	no_os_gpio_direction_output_IgnoreAndReturn(0);
 	no_os_gpio_set_value_IgnoreAndReturn(-1);
-	retval = adis_init(&device, adis_chip_info);
+	no_os_gpio_remove_IgnoreAndReturn(0);
+	no_os_spi_remove_IgnoreAndReturn(0);
+	retval = adis_init(&device, &ip);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
@@ -151,7 +152,7 @@ void test_adis_init_5(void)
 	device_alloc.spi_desc = &spi_desc;
 	device_alloc.gpio_reset = NULL;
 	ip.sync_mode = 0;
-	adis_chip_info->ip = &ip;
+	ip.info = adis_chip_info;
 
 	no_os_calloc_IgnoreAndReturn(&device_alloc);
 	no_os_spi_init_IgnoreAndReturn(0);
@@ -165,7 +166,7 @@ void test_adis_init_5(void)
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
-	retval = adis_init(&device, adis_chip_info);
+	retval = adis_init(&device, &ip);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
 
@@ -177,8 +178,8 @@ void test_adis_init_6(void)
 	struct adis_dev *device;
 	device_alloc.spi_desc = &spi_desc;
 	ip.sync_mode = 5;
-	adis_chip_info->ip = &ip;
 	device_alloc.gpio_reset = &gpio_reset_desc;
+	ip.info = adis_chip_info;
 
 	no_os_calloc_IgnoreAndReturn(&device_alloc);
 	no_os_spi_init_IgnoreAndReturn(0);
@@ -191,7 +192,7 @@ void test_adis_init_6(void)
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_spi_transfer_IgnoreAndReturn(-1);
-	retval = adis_init(&device, adis_chip_info);
+	retval = adis_init(&device, &ip);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 

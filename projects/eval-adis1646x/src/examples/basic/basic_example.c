@@ -91,8 +91,7 @@ int basic_example_main()
 	struct adis_scale_fractional anglvel_scale;
 	struct adis_scale_fractional temp_scale;
 
-	adis1646x_chip_info.ip = &adis1646x_ip;
-	ret = adis_init(&adis1646x_desc, &adis1646x_chip_info);
+	ret = adis_init(&adis1646x_desc, &adis1646x_ip);
 	if (ret)
 		goto exit;
 

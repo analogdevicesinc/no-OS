@@ -113,29 +113,32 @@ STATIC const uint8_t burst_size_bytes[2][2] = {
 /**
  * @brief Initialize adis device.
  * @param adis - The adis device.
- * @param info - Initialization data.
+ * @param ip   - User specific initialization.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
+int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 {
 	struct adis_dev *dev;
 	int ret;
+
+	if (!ip || !ip->info)
+		return -EINVAL;
 
 	dev = (struct adis_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
-	ret = no_os_spi_init(&dev->spi_desc, info->ip->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, ip->spi_init);
 	if (ret)
 		goto error_spi;
 
-	if(info->has_paging)
+	if(ip->info->has_paging)
 		dev->current_page = -1;
 	else
 		dev->current_page = 0;
 
-	dev->dev_id = info->ip->dev_id;
-	ret = no_os_gpio_get_optional(&dev->gpio_reset, info->ip->gpio_reset);
+	dev->dev_id = ip->dev_id;
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, ip->gpio_reset);
 	if (ret) {
 		pr_warning("No reset pin found \n");
 	}
@@ -147,15 +150,14 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 			goto error;
 	}
 
-	dev->info = info;
-	dev->int_clk = info->int_clk;
+	dev->info = ip->info;
+	dev->int_clk = ip->info->int_clk;
 
 	ret = adis_initial_startup(dev);
 	if (ret)
 		goto error;
 
-	ret = adis_write_sync_mode(dev, info->ip->sync_mode,
-				   info->ip->ext_clk);
+	ret = adis_write_sync_mode(dev, ip->sync_mode, ip->ext_clk);
 	if (ret)
 		goto error;
 

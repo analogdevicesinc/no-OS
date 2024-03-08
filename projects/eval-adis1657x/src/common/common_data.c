@@ -80,6 +80,7 @@ struct no_os_gpio_init_param adis1657x_gpio_reset_ip = {
 };
 
 struct adis_init_param adis1657x_ip = {
+	.info = &adis1657x_chip_info,
 	.gpio_reset = &adis1657x_gpio_reset_ip,
 	.sync_mode = ADIS_SYNC_OUTPUT,
 	.dev_id = ADIS16577_3,

@@ -251,7 +251,7 @@ static int adis1657x_get_scale(struct adis_dev *adis,
 	}
 }
 
-struct adis_chip_info adis1657x_chip_info = {
+const struct adis_chip_info adis1657x_chip_info = {
 	.field_map		= &adis1657x_def,
 	.sync_clk_freq_limits	= adis1657x_sync_clk_freq_limits,
 	.sampling_clk_limits	= adis1657x_sampling_clk_limits,

@@ -236,7 +236,7 @@ static int adis1650x_get_scale(struct adis_dev *adis,
 	}
 }
 
-struct adis_chip_info adis1650x_chip_info = {
+const struct adis_chip_info adis1650x_chip_info = {
 	.cs_change_delay 	= 16,
 	.read_delay 		= 8,
 	.write_delay 		= 0,

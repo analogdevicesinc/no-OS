@@ -503,14 +503,12 @@ int adis1657x_iio_init(struct adis_iio_dev **iio_dev,
 
 	desc->iio_dev = &adis1657x_iio_dev;
 
-	adis1657x_chip_info.ip = init_param;
-
 	/* Update data based on the device id */
 	desc->rang_mdl_txt = adis1657x_rang_mdl_txt[init_param->dev_id];
 	desc->has_fifo = true;
 	desc->hw_trig_desc = adis1657x_trig_desc;
 
-	ret = adis_init(&desc->adis_dev, &adis1657x_chip_info);
+	ret = adis_init(&desc->adis_dev, init_param);
 	if (ret)
 		goto error_adis1657x_init;
 
