@@ -67,15 +67,8 @@
 #define ADIS_FIFO_PRESENT		1
 #define ADIS_MSG_SIZE_16_BIT_BURST 	20 /* in bytes */
 #define ADIS_MSG_SIZE_32_BIT_BURST 	32 /* in bytes */
-#define ADIS_MSG_SIZE_16_BIT_BURST_FIFO	20 /* in bytes */
-#define ADIS_MSG_SIZE_32_BIT_BURST_FIFO	34 /* in bytes */
 #define ADIS_CHECKSUM_SIZE		2  /* in bytes */
 #define ADIS_CHECKSUM_BUF_IDX		0
-#define ADIS_CHECKSUM_BUF_IDX_FIFO	2
-#define ADIS_READ_BURST_DATA_CMD_SIZE	2  /* in bytes */
-#define ADIS_READ_BURST_DATA_NO_POP	0x00
-#define ADIS_READ_BURST_DATA_CMD_MSB	0x68
-#define ADIS_READ_BURST_DATA_CMD_LSB	0x00
 #define ADIS_SIGN_BIT_POS		15
 #define ADIS_DIAG_IDX_16_BIT_BURST	0
 #define ADIS_XGYRO_IDX_16_BIT_BURST	2
@@ -95,17 +88,6 @@
 #define ADIS_ZACCL_IDX_32_BIT_BURST	22
 #define ADIS_TEMP_IDX_32_BIT_BURST	26
 #define ADIS_CNT_IDX_32_BIT_BURST	28
-
-/******************************************************************************/
-/************************** Variable Definitions ******************************/
-/******************************************************************************/
-
-STATIC const uint8_t burst_size_bytes[2][2] = {
-	[ADIS_16_BIT_BURST_SIZE][ADIS_FIFO_NOT_PRESENT] = ADIS_MSG_SIZE_16_BIT_BURST,
-	[ADIS_32_BIT_BURST_SIZE][ADIS_FIFO_NOT_PRESENT] = ADIS_MSG_SIZE_32_BIT_BURST,
-	[ADIS_16_BIT_BURST_SIZE][ADIS_FIFO_PRESENT] = ADIS_MSG_SIZE_16_BIT_BURST_FIFO,
-	[ADIS_32_BIT_BURST_SIZE][ADIS_FIFO_PRESENT] = ADIS_MSG_SIZE_32_BIT_BURST_FIFO,
-};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -503,7 +485,7 @@ int adis_update_bits_base(struct adis_dev *adis, uint32_t reg,
  * @param idx    - The start index in the buffer to check the checksum.
  * @return 0 in case of success, error code otherwise.
  */
-STATIC bool adis_validate_checksum(uint8_t *buffer, uint8_t size, uint8_t idx)
+bool adis_validate_checksum(uint8_t *buffer, uint8_t size, uint8_t idx)
 {
 	uint8_t i;
 	uint16_t checksum = no_os_get_unaligned_be16(&buffer[size-ADIS_CHECKSUM_SIZE]);
@@ -519,7 +501,7 @@ STATIC bool adis_validate_checksum(uint8_t *buffer, uint8_t size, uint8_t idx)
  * @param adis      - The adis device.
  * @param diag_stat - Diagnosis flags.
  */
-STATIC void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
+void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
 {
 	const struct adis_data_field_map_def *field_map = adis->info->field_map;
 
@@ -2473,32 +2455,30 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
 
 /**
  * @brief Read burst data.
- * @param adis                 - The adis device.
- * @param buff_size            - Size of buff, if burst32 is true size must be
- * 				 higher or equal to 30, if burst32 is false size
- * 				 must be higher or equal to 18
- * @param buff                 - Array filled with read data.
- * @param burst32	       - True if 32-bit data is requested for accel
- * 				 and gyro (or delta angle and delta velocity)
- * 				 measurements, false if 16-bit data is requested.
- * @param burst_sel	       - 0 if accel and gyro data is requested, 1
- * 				 if delta angle and delta velocity is requested.
- * @param fifo_pop             - In case FIFO is present, will pop the fifo if
- * 				 true. Unused if FIFO is not present.
- * @param burst_request        - In case FIFO is present, will send a burst
- * 				 request and -EAGAIN will be returned. This
- * 				 burst request is needed if the previous command
- * 				 sent to the device was not a burst read. Unused
- * 				 if FIFO is not present.
+ * @param adis      - The adis device.
+ * @param buff_size - Size of buff, if burst32 is true size must be
+ *		      higher or equal to 30, if burst32 is false size
+ *		      must be higher or equal to 18
+ * @param buff      - Array filled with read data.
+ * @param burst32   - True if 32-bit data is requested for accel
+ *		      and gyro (or delta angle and delta velocity)
+ *		      measurements, false if 16-bit data is requested.
+ * @param burst_sel - 0 if accel and gyro data is requested, 1
+ *		      if delta angle and delta velocity is requested.
+ * @param fifo_pop  - In case FIFO is present, will pop the fifo if
+ * 		      true. Unused if FIFO is not present.
  * @return 0 in case of success, error code otherwise.
  */
 int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
 			 uint16_t *buff, bool burst32, uint8_t burst_sel,
-			 bool fifo_pop, bool burst_request)
+			 bool fifo_pop)
 {
+	/* If custom implementation is available, use it. */
+	if (adis->info->read_burst_data)
+		return adis->info->read_burst_data(adis, buff_size, buff, burst32, burst_sel,
+						   fifo_pop);
 	int ret;
-	uint8_t msg_size;
-	uint8_t idx = ADIS_CHECKSUM_BUF_IDX;
+	uint8_t msg_size, idx;
 
 	/* Device does not support delta data readings with burst method */
 	if (!(adis->info->flags & ADIS_HAS_BURST_DELTA_DATA) && burst_sel)
@@ -2529,18 +2509,14 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
 			if (ret)
 				return ret;
 		}
-		msg_size = burst_size_bytes[burst32][!!(adis->info->flags & ADIS_HAS_FIFO)];
+		msg_size = ADIS_MSG_SIZE_16_BIT_BURST;
 	} else {
-		msg_size = burst_size_bytes[ADIS_16_BIT_BURST_SIZE][0];
+		msg_size = ADIS_MSG_SIZE_32_BIT_BURST;
 	}
 
 	uint8_t buffer[msg_size + ADIS_READ_BURST_DATA_CMD_SIZE];
 
-	if ((adis->info->flags & ADIS_HAS_FIFO) && !fifo_pop)
-		buffer[0] = ADIS_READ_BURST_DATA_NO_POP;
-	else
-		buffer[0] = ADIS_READ_BURST_DATA_CMD_MSB;
-
+	buffer[0] = ADIS_READ_BURST_DATA_CMD_MSB;
 	buffer[1] = ADIS_READ_BURST_DATA_CMD_LSB;
 
 	ret = no_os_spi_write_and_read(adis->spi_desc, buffer,
@@ -2548,15 +2524,8 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
 	if (ret)
 		return ret;
 
-	if ((adis->info->flags & ADIS_HAS_FIFO) && burst_request)
-		return -EAGAIN;
-
-	if (adis->info->flags & ADIS_HAS_FIFO)
-		/* Diag data not calculated in the checksum for the devices which have FIFO. */
-		idx = ADIS_CHECKSUM_BUF_IDX_FIFO;
-
 	if (!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
-				    idx)) {
+				    ADIS_CHECKSUM_BUF_IDX)) {
 		adis->diag_flags.checksum_err = true;
 		return -EINVAL;
 	}

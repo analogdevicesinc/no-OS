@@ -45,6 +45,10 @@
 #define ADIS_HAS_BURST_DELTA_DATA	NO_OS_BIT(1)
 #define ADIS_HAS_FIFO			NO_OS_BIT(2)
 
+#define ADIS_READ_BURST_DATA_CMD_MSB   0x68
+#define ADIS_READ_BURST_DATA_CMD_LSB   0x00
+#define ADIS_READ_BURST_DATA_CMD_SIZE  2  /* in bytes */
+
 /** @struct adis_timeout
  *  @brief ADIS chip timeouts
  */
@@ -359,6 +363,15 @@ struct adis_chip_info {
 	/** Chip specific implementation for writing a register.  */
 	int (*write_reg)(struct adis_dev *adis,  uint32_t reg, uint32_t val,
 			 uint32_t size);
+	/** Chip specifc implementation for reading burst data. */
+	int (*read_burst_data)(struct adis_dev *adis, uint8_t buff_size,
+			       uint16_t *buff, bool burst32, uint8_t burst_sel,
+			       bool fifo_pop);
 };
+
+/*! Check if the checksum for burst data is correct. */
+bool adis_validate_checksum(uint8_t *buffer, uint8_t size, uint8_t idx);
+/*! Update device diagnosis flags according to the received parameter. */
+void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat);
 
 #endif

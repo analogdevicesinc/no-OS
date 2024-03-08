@@ -45,12 +45,17 @@
 #include "adis_internals.h"
 #include "adis1657x.h"
 #include "no_os_units.h"
+#include <string.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define ADIS1657X_ID_NO_OFFSET(x) ((x) - ADIS16575_2)
+#define ADIS1657X_ID_NO_OFFSET(x)		((x) - ADIS16575_2)
+#define ADIS1657X_MSG_SIZE_16_BIT_BURST_FIFO	20 /* in bytes */
+#define ADIS1657X_MSG_SIZE_32_BIT_BURST_FIFO	34 /* in bytes */
+#define ADIS1657X_READ_BURST_DATA_NO_POP	0x00
+#define ADIS1657X_CHECKSUM_BUF_IDX_FIFO		2
 
 /******************************************************************************/
 /************************** Variable Definitions ******************************/
@@ -252,6 +257,94 @@ static int adis1657x_get_scale(struct adis_dev *adis,
 	}
 }
 
+/**
+ * @brief Read burst data.
+ * @param adis      - The adis device.
+ * @param buff_size - Size of buff, if burst32 is true size must be
+ *		      higher or equal to 30, if burst32 is false size
+ *		      must be higher or equal to 18
+ * @param buff      - Array filled with read data.
+ * @param burst32   - True if 32-bit data is requested for accel
+ *		      and gyro (or delta angle and delta velocity)
+ *		      measurements, false if 16-bit data is requested.
+ * @param burst_sel - 0 if accel and gyro data is requested, 1
+ *		      if delta angle and delta velocity is requested.
+ * @param fifo_pop  - Will pop the fifo if true.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis1657x_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
+			      uint16_t *buff, bool burst32, uint8_t burst_sel,
+			      bool fifo_pop)
+{
+	int ret;
+	uint8_t msg_size;
+	uint8_t idx;
+
+	/* Make sure enough size is allocated if burst32 is true */
+	/* burst 32 data:  1 * 2 (diag) + 6 * 4 + 1 * 2 (temp) + 1 * 2 (counter) = 30 */
+	if (burst32 && buff_size < 30)
+		return -EINVAL;
+
+	/* Make sure enough size is allocated if burst32 is false */
+	/* burst 32 data:  1 * 2 (diag) + 6 * 2 + 1 * 2 (temp) + 1 * 2 (counter) = 18 */
+	if (!burst32 && buff_size < 18)
+		return -EINVAL;
+
+	if (adis->burst32 != burst32) {
+		ret = adis_write_burst32(adis, burst32);
+		if (ret)
+			return ret;
+	}
+	if (adis->burst_sel != burst_sel) {
+		ret = adis_write_burst_sel(adis, burst_sel);
+		if (ret)
+			return ret;
+	}
+
+	if (burst32)
+		msg_size = ADIS1657X_MSG_SIZE_32_BIT_BURST_FIFO;
+	else
+		msg_size = ADIS1657X_MSG_SIZE_16_BIT_BURST_FIFO;
+
+
+	uint8_t buffer[msg_size + ADIS_READ_BURST_DATA_CMD_SIZE];
+
+	if (!fifo_pop)
+		buffer[0] = ADIS1657X_READ_BURST_DATA_NO_POP;
+	else
+		buffer[0] = ADIS_READ_BURST_DATA_CMD_MSB;
+
+	buffer[1] = ADIS_READ_BURST_DATA_CMD_LSB;
+
+	ret = no_os_spi_write_and_read(adis->spi_desc, buffer,
+				       msg_size + ADIS_READ_BURST_DATA_CMD_SIZE);
+	if (ret)
+		return ret;
+
+	for (idx = ADIS_READ_BURST_DATA_CMD_SIZE; idx < msg_size; idx++)
+		if (buffer[idx] != 0)
+			break;
+
+	if (idx == msg_size)
+		return -EAGAIN;
+
+	/* Diag data not calculated in the checksum for this device. */
+	if (!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
+				    ADIS1657X_CHECKSUM_BUF_IDX_FIFO)) {
+		adis->diag_flags.checksum_err = true;
+		return -EINVAL;
+	}
+
+	adis->diag_flags.checksum_err = false;
+
+	memcpy(buff, &buffer[ADIS_READ_BURST_DATA_CMD_SIZE], buff_size);
+
+	/* Update diagnosis flags at each reading */
+	adis_update_diag_flags(adis, buffer[ADIS_READ_BURST_DATA_CMD_SIZE]);
+
+	return 0;
+}
+
 const struct adis_chip_info adis1657x_chip_info = {
 	.field_map		= &adis1657x_def,
 	.sync_clk_freq_limits	= adis1657x_sync_clk_freq_limits,
@@ -268,4 +361,5 @@ const struct adis_chip_info adis1657x_chip_info = {
 	.bias_corr_tbc_max	= 12,
 	.flags			= ADIS_HAS_BURST32 | ADIS_HAS_BURST_DELTA_DATA | ADIS_HAS_FIFO,
 	.get_scale		= &adis1657x_get_scale,
+	.read_burst_data	= &adis1657x_read_burst_data,
 };
