@@ -43,6 +43,7 @@
 
 #include "adis.h"
 #include "adis1650x.h"
+#include "adis_internals.h"
 #include "no_os_units.h"
 
 /******************************************************************************/

@@ -40,6 +40,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_mutex.c
 
 INCS += $(DRIVERS)/imu/adis.h \
+	$(DRIVERS)/imu/adis_internals.h \
 	$(DRIVERS)/imu/adis1647x.h
 SRCS += $(DRIVERS)/imu/adis.c \
 	$(DRIVERS)/imu/adis1647x.c

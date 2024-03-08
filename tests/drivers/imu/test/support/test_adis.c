@@ -43,6 +43,7 @@
 
 #include "unity.h"
 #include "adis.h"
+#include "adis_internals.h"
 #include "mock_no_os_delay.h"
 #include "mock_no_os_util.h"
 #include "mock_no_os_i2c.h"
