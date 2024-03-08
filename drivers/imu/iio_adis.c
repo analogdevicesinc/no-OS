@@ -1142,7 +1142,7 @@ int adis_iio_post_disable(void* dev, uint32_t mask)
  * @return 0 in case of success, error code otherwise.
  */
 static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
-		uint32_t mask, struct iio_buffer *buffer, bool pop, bool burst_request)
+		uint32_t mask, struct iio_buffer *buffer, bool pop)
 {
 	struct adis_dev *adis;
 	int ret;
@@ -1159,8 +1159,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 	adis = iio_adis->adis_dev;
 
 	ret = adis_read_burst_data(adis, sizeof(buff), buff, iio_adis->burst_size,
-				   iio_adis->burst_sel, pop,
-				   burst_request);
+				   iio_adis->burst_sel, pop);
 
 	/* If ret ==  EAGAIN then no data is available to read (will happen
 	for a burst request) */
@@ -1287,7 +1286,7 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
 		return -EINVAL;
 
 	return adis_iio_trigger_push_single_sample(iio_adis,
-			dev_data->buffer->active_mask, dev_data->buffer, false, false);
+			dev_data->buffer->active_mask, dev_data->buffer, false);
 }
 
 /**
@@ -1328,7 +1327,7 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 	if (fifo_cnt > 2) {
 		/* Burst request */
 		ret = adis_iio_trigger_push_single_sample(iio_adis,
-				dev_data->buffer->active_mask, dev_data->buffer, true, true);
+				dev_data->buffer->active_mask, dev_data->buffer, true);
 		if (ret)
 			goto trig_enable;
 
@@ -1337,7 +1336,7 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 
 		for (j = 0; j < fifo_cnt - 1; j++) {
 			ret = adis_iio_trigger_push_single_sample(iio_adis,
-					dev_data->buffer->active_mask, dev_data->buffer, true, false);
+					dev_data->buffer->active_mask, dev_data->buffer, true);
 			if (ret)
 				goto trig_enable;
 
@@ -1345,7 +1344,7 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 			no_os_udelay(10);
 		}
 		ret = adis_iio_trigger_push_single_sample(iio_adis,
-				dev_data->buffer->active_mask, dev_data->buffer, false, false);
+				dev_data->buffer->active_mask, dev_data->buffer, false);
 		/* From data-sheet, minimum time between reads */
 		no_os_udelay(10);
 	}

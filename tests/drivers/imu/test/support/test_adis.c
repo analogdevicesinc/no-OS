@@ -3865,7 +3865,7 @@ void test_adis_read_burst_data_1(void)
 
 	no_os_spi_write_and_read_IgnoreAndReturn(-1);
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, false, false);
+				      device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
@@ -3882,7 +3882,7 @@ void test_adis_read_burst_data_2(void)
 	device_alloc.burst_sel = 0;
 
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, false, false);
+				      device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-22, retval);
 }
 
@@ -3899,7 +3899,7 @@ void test_adis_read_burst_data_3(void)
 	device_alloc.burst_sel = 0;
 
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, false, false);
+				      device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-22, retval);
 }
 
@@ -3917,7 +3917,7 @@ void test_adis_read_burst_data_4(void)
 	no_os_field_get_IgnoreAndReturn(!device_alloc.burst32);
 	no_os_spi_transfer_IgnoreAndReturn(-1);
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      !device_alloc.burst32, device_alloc.burst_sel, false, false);
+				      !device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
@@ -3935,7 +3935,7 @@ void test_adis_read_burst_data_5(void)
 	no_os_field_get_IgnoreAndReturn(!device_alloc.burst_sel);
 	no_os_spi_transfer_IgnoreAndReturn(-1);
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, !device_alloc.burst_sel, false, false);
+				      device_alloc.burst32, !device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
 
@@ -3952,7 +3952,7 @@ void test_adis_read_burst_data_6(void)
 
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, true, true);
+				      device_alloc.burst32, device_alloc.burst_sel, true);
 	TEST_ASSERT_EQUAL_INT(-EAGAIN, retval);
 }
 
@@ -3971,7 +3971,7 @@ void test_adis_read_burst_data_7(void)
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, false, false);
+				      device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 	TEST_ASSERT_EQUAL_INT(true, device_alloc.diag_flags.checksum_err);
 }
@@ -3990,7 +3990,7 @@ void test_adis_read_burst_data_8(void)
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, true, false);
+				      device_alloc.burst32, device_alloc.burst_sel, true);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
