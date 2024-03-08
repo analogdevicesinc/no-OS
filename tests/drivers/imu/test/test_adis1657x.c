@@ -57,7 +57,7 @@
  *    PUBLIC DATA
  ******************************************************************************/
 
-struct adis_chip_info *adis_chip_info;
+const struct adis_chip_info *adis_chip_info = &adis1657x_chip_info;;
 enum adis_device_id adis_dev_id = ADIS16577_2;
 
 /*******************************************************************************
@@ -66,7 +66,6 @@ enum adis_device_id adis_dev_id = ADIS16577_2;
 
 void setUp(void)
 {
-	adis_chip_info = &adis1657x_chip_info;
 }
 
 void tearDown(void)
@@ -81,7 +80,6 @@ void test_adis1657x_init(void)
 {
 	test_adis_init_1();
 	test_adis_init_2();
-	test_adis_init_3();
 	test_adis_init_4();
 	test_adis_init_5();
 	test_adis_init_6();

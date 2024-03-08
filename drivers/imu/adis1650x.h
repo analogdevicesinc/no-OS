@@ -50,6 +50,6 @@
 /************************ Variables Declarations ******************************/
 /******************************************************************************/
 
-extern struct adis_chip_info adis1650x_chip_info;
+extern const struct adis_chip_info adis1650x_chip_info;
 
 #endif

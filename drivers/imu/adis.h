@@ -283,6 +283,8 @@ struct adis_dev {
  *  @brief ADIS device initialization parameters
  */
 struct adis_init_param {
+	/* Chip specific information. */
+	const struct adis_chip_info *info;
 	/** SPI initialization parameters. */
 	struct no_os_spi_init_param 	*spi_init;
 	/** GPIO initialization parameter for reset pin. */
@@ -506,8 +508,6 @@ struct adis_data_field_map_def {
  *  @brief ADIS specific chip information structure
  */
 struct adis_chip_info {
-	/** Chip specific initialization parameters. */
-	const struct adis_init_param 		*ip;
 	/** Chip specific field map configuration. */
 	const struct adis_data_field_map_def 	*field_map;
 	/** Chip specific synchronization clock frequency limits. */
@@ -553,7 +553,7 @@ struct adis_chip_info {
 /******************************************************************************/
 
 /*! Initialize adis device. */
-int adis_init(struct adis_dev **adis, const struct adis_chip_info *info);
+int adis_init(struct adis_dev **adis, const struct adis_init_param *ip);
 /*! Remove adis device. */
 void adis_remove(struct adis_dev *adis);
 /*! Device initial setup. */
