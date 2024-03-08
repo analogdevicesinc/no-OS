@@ -47,6 +47,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "adis.h"
+#include "adis_internals.h"
 #include "iio_trigger.h"
 
 /******************************************************************************/

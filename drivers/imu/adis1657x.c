@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "adis.h"
+#include "adis_internals.h"
 #include "adis1657x.h"
 #include "no_os_units.h"
 

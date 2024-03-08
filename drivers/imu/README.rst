@@ -52,6 +52,7 @@ The source code for ADIS generic driver can be found here:
 
 * `Header file of ADIS Generic Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis.h>`_
 * `Implementation of ADIS Generic Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis.c>`_
+* `Header file of ADIS Internals <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis_internals.h>`_
 
 The generic ADIS driver has to be used together with the chip-specific ADIS driver.
 The source code for the supported chips is listed below:
