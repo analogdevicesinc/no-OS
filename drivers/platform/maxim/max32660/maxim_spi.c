@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "spi.h"
+#include "spimss.h"
 #include "mxc_errors.h"
 #include "mxc_pins.h"
 #include "maxim_spi.h"
@@ -228,14 +229,21 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 	int32_t ret;
 	struct max_spi_state *st;
 	struct max_spi_init_param *eparam;
-	mxc_gpio_cfg_t spi_pins = gpio_cfg_spi0;
+	mxc_gpio_cfg_t spi_pins = gpio_cfg_spi1a;
 
 	st = desc->extra;
 	eparam = st->init_param;
 
-	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
-			   SPI_SINGLE_MODE,
-			   eparam->num_slaves, eparam->polarity, desc->max_speed_hz);
+	if (desc->device_id) {
+		ret = MXC_SPIMSS_Init(MXC_SPIMSS, 0, desc->max_speed_hz, MAP_A);
+		spi_pins.vssel = eparam->vssel;
+		MXC_GPIO_Config(&spi_pins);
+		return ret;
+	} else {
+		ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
+				   SPI_SINGLE_MODE,
+				   eparam->num_slaves, eparam->polarity, desc->max_speed_hz);
+	}
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
@@ -307,7 +315,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	st->init_param = eparam;
 	descriptor->extra = st;
 
-	if (descriptor->device_id >= MXC_SPI_INSTANCES) {
+	if (descriptor->device_id > MXC_SPI_INSTANCES) {
 		ret = -EINVAL;
 		goto err;
 	}
@@ -678,14 +686,14 @@ int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
 			       uint8_t *data,
 			       uint16_t bytes_number)
 {
-	struct no_os_spi_msg xfer = {
-		.rx_buff = data,
-		.tx_buff = data,
-		.bytes_number = bytes_number,
-		.cs_change = 1,
+	mxc_spimss_req_t req = {
+		.tx_data = data,
+		.rx_data = data,
+		.len = bytes_number,
+		.bits = 8,
 	};
 
-	return max_spi_transfer(desc, &xfer, 1);
+	return MXC_SPIMSS_MasterTrans(MXC_SPIMSS, &req);
 }
 
 /**
