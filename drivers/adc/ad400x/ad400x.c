@@ -41,14 +41,20 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "stdio.h"
+#include <string.h>
 #include "stdlib.h"
 #include "stdbool.h"
 #include "ad400x.h"
+#include "clk_axi_clkgen.h"
+#include "no_os_pwm.h"
+#include "axi_pwm_extra.h"
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
+#include "no_os_util.h"
 
 /**
  * @brief Device resolution
@@ -157,20 +163,40 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	int32_t ret;
 	uint8_t data = 0;
 
+	dev = (struct ad400x_dev *)no_os_malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
 #if !defined(USE_STANDARD_SPI)
 	struct spi_engine_init_param *spi_eng_init_param;
 
 	if (!init_param)
 		return -1;
 
-	spi_eng_init_param = init_param->spi_init.extra;
+	spi_eng_init_param = init_param->spi_param->extra;
 #endif
 
-	dev = (struct ad400x_dev *)no_os_malloc(sizeof(*dev));
-	if (!dev)
-		return -1;
+#if !defined(USE_STANDARD_SPI)
+	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
+	if (ret != 0) {
+		printf("error: %s: axi_clkgen_init() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_dev;
+	}
 
-	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
+	if (ret != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_clkgen;
+	}
+#endif
+
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+		if (ret != 0)
+			goto error_spi;
+
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 	if (ret < 0)
 		goto error;
 
@@ -202,6 +228,16 @@ int32_t ad400x_init(struct ad400x_dev **device,
 error:
 	ad400x_remove(dev);
 	return ret;
+
+	error_spi:
+		no_os_spi_remove(dev->spi_desc);
+	error_dev:
+		no_os_free(dev);
+
+	error_clkgen:
+#if !defined(USE_STANDARD_SPI)
+		axi_clkgen_remove(dev->clkgen);
+#endif
 }
 
 /***************************************************************************//**

@@ -44,8 +44,11 @@
 
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#include "clk_axi_clkgen.h"
+#include "no_os_pwm.h"
 #else
 #include "no_os_spi.h"
+#include "no_os_pwm.h"
 #endif
 
 /******************************************************************************/
@@ -73,6 +76,16 @@ extern const uint16_t ad400x_device_resol[];
 struct ad400x_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
+
+#if !defined(USE_STANDARD_SPI)
+	/** SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen	*clkgen;
+	/* Trigger conversion PWM generator descriptor */
+	struct no_os_pwm_desc		*trigger_pwm_desc;
+#endif
+
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
@@ -81,7 +94,20 @@ struct ad400x_dev {
 
 struct ad400x_init_param {
 	/* SPI */
-	struct no_os_spi_init_param spi_init;
+	struct no_os_spi_init_param *spi_param; //spi_init;
+
+#if !defined(USE_STANDARD_SPI)
+	/** SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/* PWM generator init structure */
+	struct no_os_pwm_init_param	*trigger_pwm_init;
+	/* Clock gen for hdl design init structure */
+	struct axi_clkgen_init	*clkgen_init;
+	/* Clock generator rate */
+	uint32_t		        axi_clkgen_rate;
+
+#endif
+
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
