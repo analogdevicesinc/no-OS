@@ -81,7 +81,7 @@ static int32_t _max_uart_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 		uart_pins = gpio_cfg_uart0;
 		break;
 	case 1:
-		uart_pins = gpio_cfg_uart1a;
+		uart_pins = gpio_cfg_uart1c;
 		break;
 	default:
 		return -EINVAL;
@@ -340,7 +340,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_A);
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_C);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
