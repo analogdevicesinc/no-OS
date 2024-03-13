@@ -815,34 +815,75 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 							   errCounterStatus.shCntValue);
 
  		}
-
-		pr_warning("Link%u deframerStatus phyLaneMask 0x%X\n",
-			   lnk->link_id, deframerStatus.phyLaneMask);
-
- 		/* Kick off SERDES tracking cal if lanes are up */
- 		ret = adi_adrv904x_TrackingCalsEnableSet(
- 			      phy->kororDevice,
-				  ADI_ADRV904X_TC_TX_SERDES_MASK,
-				  0xFFU, // all channels
- 			      ADI_ADRV904X_TRACKING_CAL_ENABLE);
-		if (ret) {
-			pr_err("ERROR adi_adrv904x_TrackingCalsEnableSet failed in %s at line %d.\n",
-				   __func__, __LINE__);
-			return JESD204_STATE_CHANGE_ERROR;
-		}
- 	};
+ 	}
 
  	return JESD204_STATE_CHANGE_DONE;
  }
 
-
- static int adrv904x_jesd204_post_running_stage(struct jesd204_dev *jdev,
- 		enum jesd204_state_op_reason reason)
+/* Helper function to convert between tracking cals to init cals
+ *
+ * Returns init cal.
+ */
+ ADI_API adi_adrv904x_InitCalibrations_e example_cals_TrackingCalConvert(const adi_adrv904x_TrackingCalibrationMask_e trackingCal)
  {
- 	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
- 	adi_adrv904x_TxAtten_t txAttenuation[1];
- 	struct adrv904x_rf_phy *phy = priv->phy;
+     adi_adrv904x_InitCalibrations_e initCal = (adi_adrv904x_InitCalibrations_e) 0U;
+
+     switch (trackingCal)
+     {
+         case ADI_ADRV904X_TC_TX_LOL_MASK:
+             initCal = ADI_ADRV904X_IC_TXLOL;
+             break;
+
+         case ADI_ADRV904X_TC_TX_QEC_MASK:
+             initCal = ADI_ADRV904X_IC_TXQEC;
+             break;
+
+         case ADI_ADRV904X_TC_TX_SERDES_MASK:
+             initCal = ADI_ADRV904X_IC_SERDES;
+             break;
+
+         case ADI_ADRV904X_TC_RX_ADC_MASK:
+             initCal = ADI_ADRV904X_IC_ADC_RX;
+             break;
+
+         case ADI_ADRV904X_TC_TX_LB_ADC_MASK:
+             initCal = ADI_ADRV904X_IC_ADC_TXLB;
+             break;
+
+         case ADI_ADRV904X_TC_ORX_ADC_MASK:
+             initCal = ADI_ADRV904X_IC_ADC_ORX;
+             break;
+
+         case ADI_ADRV904X_TC_RX_QEC_MASK:
+             /* Fall Through */
+
+         default:
+             initCal = (adi_adrv904x_InitCalibrations_e) 0U;
+             break;
+     }
+
+     return initCal;
+ }
+
+static int adrv904x_jesd204_post_running_stage(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
+{
+	adi_adrv904x_TrackingCalibrationMask_e trackingCal = (adi_adrv904x_TrackingCalibrationMask_e) 0U;
+	adi_adrv904x_InitCalibrations_e currentInitCalMask = (adi_adrv904x_InitCalibrations_e) 0U;
+	struct adrv904x_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	adi_adrv904x_InitCalStatus_t initCalStatus;
+	const uint32_t ALL_CHANNELS_MASK = 0xFFU;
+	adi_adrv904x_TxAtten_t txAttenuation[1];
+	struct adrv904x_rf_phy *phy = priv->phy;
+	const uint32_t NUM_TRACKING_CALS = 7U;
+	uint32_t i = 0U;
+	uint32_t j = 0U;
  	int ret;
+
+	const uint32_t trackingCalMask = (uint32_t)(ADI_ADRV904X_TC_RX_ADC_MASK     |
+												ADI_ADRV904X_TC_ORX_ADC_MASK    |
+												ADI_ADRV904X_TC_TX_LB_ADC_MASK  |
+												ADI_ADRV904X_TC_TX_SERDES_MASK);
 
  	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
  		 jesd204_state_op_reason_str(reason));
@@ -881,6 +922,49 @@ static int adrv904x_jesd204_link_enable(struct jesd204_dev *jdev,
 		{
 			pr_err("ERROR adi_adrv904x_TxAttenSet failed in %s at line %d.\n", __func__, __LINE__);
 			return -1;
+		}
+	}
+
+	memset(&initCalStatus, 0, sizeof(adi_adrv904x_InitCalStatus_t));
+
+	ADI_APP_MESSAGE("\nPhase10EnableTrackingCals()\n");
+
+	ret = adi_adrv904x_InitCalsDetailedStatusGet(phy->kororDevice, &initCalStatus);
+	if (ret) {
+		pr_err("ERROR adi_adrv904x_InitCalsDetailedStatusGet failed in %s at line %d.\n",
+				__func__, __LINE__);
+		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	for (i = 0U; i < NUM_TRACKING_CALS; ++i)
+	{
+		trackingCal = (adi_adrv904x_TrackingCalibrationMask_e) (1U << i);
+
+		if (((uint32_t)trackingCal & trackingCalMask) == 0U)
+		{
+			/* Tracking Cal not configured to run */
+			continue;
+		}
+
+		/* Check if the Current Tracking Cal was initially run */
+		currentInitCalMask = example_cals_TrackingCalConvert(trackingCal);
+
+		for (j = 0U; j < ADI_ADRV904X_MAX_CHANNELS; ++j)
+		{
+			if ((initCalStatus.calsSincePowerUp[j] & currentInitCalMask) == 0U)
+			{
+				/* Tracking Cal was already run */
+				continue;
+			}
+		}
+
+		ret = adi_adrv904x_TrackingCalsEnableSet(phy->kororDevice,
+								trackingCal,
+								ALL_CHANNELS_MASK,
+								ADI_ADRV904X_TRACKING_CAL_ENABLE);
+		if (ret) {
+			pr_err("\n\n ERR tracking call set \n\n");
+			return JESD204_STATE_CHANGE_ERROR;
 		}
 	}
 
