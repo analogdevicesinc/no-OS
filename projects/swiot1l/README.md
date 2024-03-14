@@ -367,12 +367,12 @@ This configuration creates 2 IIO channels:
 	| sampling_frequency 	| The number of samples the ADC will convert in 1 second. This is divided by the number of enabled channels. 	| Read/Write 	| - 	|
 	| sampling_frequency_available 	| 4800, 1200 (filtering disabled) 20, 10 (filtering enabled) 	| Read 	| Shared by all channels |
 ---
- - *Output current*:
+ - *Output voltage*:
 
 	| Attribute name 	| Description 	| Access type 	| Shared 	|
 	|---	|---	|---	|---	|
-	| raw 	| value between 0 - 8191, corresponding to the  DAC code. Iout = (raw + offset) * scale (mA) 	| Read/Write 	| - 	|
-	| scale 	| milliamperes/LSB. Constant value of 0.003051 	| Read 	| - 	|
+	| raw 	| value between 0 - 8191, corresponding to the DAC code. Vout = (raw + offset) * scale (mV) 	| Read/Write 	| - 	|
+	| scale 	| millivolts/LSB. Constant value of 1.22070 	| Read 	| - 	|
 	| offset 	| offset to be applied to the raw value. Constant value of 0. 	| Read 	| - 	|
 	| slew_en 	| enable slew rate control. If this is set to 1, the DAC will configure it's output slew rate using the values of the slew_rate and slew_step attributes. 	| Read/Write 	| - 	|
 	| slew_rate 	| configures the DAC's output slew rate 	| Read/Write 	| - 	|
