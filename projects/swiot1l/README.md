@@ -47,8 +47,8 @@ In order to configure and sample data from the SWIOT1L board, you'll have to con
 
 1. Using a T1L -> Ethernet media converter:
 - Direct connection to PC:
-Build the firmware with the `NO_OS_STATIC_IP=y` flag, will result in using `169.254.97.40` as an IP address. This is the fastest way of testing the platform, since it doesn't require the DHCP configuration or DHCP timeout (in case of AutoIP).
-Alternatively, you may omit `NO_OS_STATIC_IP=y` (or set it to `n`), in which case, the board will send a DHCP request and try to get an IP that way. If you don't have a DHCP server listening on the PC's network interface (to which SWIOT1L is connected), a link local address (in the 169.254.x.x\16 range) will be used. This may take a while (~10s) the first time you power the board, since there have to be 2 failed DHCP requests.
+Build the firmware with the `SWIOT1L_STATIC_IP=y` flag, will result in using `169.254.97.40` as an IP address. This is the fastest way of testing the platform, since it doesn't require the DHCP configuration or DHCP timeout (in case of AutoIP).
+Alternatively, you may omit `SWIOT1L_STATIC_IP=y` (or set it to `n`), in which case, the board will send a DHCP request and try to get an IP that way. If you don't have a DHCP server listening on the PC's network interface (to which SWIOT1L is connected), a link local address (in the 169.254.x.x\16 range) will be used. This may take a while (~10s) the first time you power the board, since there have to be 2 failed DHCP requests.
 
 	In case a link local address is used, the user may need to add a static route if the PC has multiple network interfaces up. If using Linux, this can be done by running the following in a terminal:
 	
@@ -76,7 +76,7 @@ B -- USB --> D[PC]
 ```
 
 After the hardware connections are made, you'll have to power cycle the board.
-In all these cases, once the TCP/IP software stack is fully configured and the board has an IP assigned to it (this will take ~10s if there is no DHCP server and the `NO_OS_STATIC_IP` flag is not set to `y`), the IP, network mask and gateway will be output to the serial interface (baudrate 115200 8N1).
+In all these cases, once the TCP/IP software stack is fully configured and the board has an IP assigned to it (this will take ~10s if there is no DHCP server and the `SWIOT1L_STATIC_IP` flag is not set to `y`), the IP, network mask and gateway will be output to the serial interface (baudrate 115200 8N1).
 
 Next, just to make sure that you can communicate with the board, you can try to ping the it using the IP address previously mentioned (either from command line or terminal).
 In case the the ping resulted in a "destination unreachable" error, it may be the case that the PC's network interface is not correctly configure to route packets to the board's IP.
