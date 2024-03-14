@@ -45,6 +45,7 @@
 /******************************************************************************/
 #include "maxim_irq.h"
 #include "maxim_uart.h"
+#include "maxim_usb_uart.h"
 #include "maxim_uart_stdio.h"
 #include "maxim_timer.h"
 #include "common_data.h"
@@ -64,7 +65,7 @@
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	57600
 #define UART_EXTRA      &iio_demo_uart_extra_ip
-#define UART_OPS        &max_uart_ops
+#define UART_OPS        &max_usb_uart_ops
 
 extern struct max_uart_init_param iio_demo_uart_extra_ip;
 

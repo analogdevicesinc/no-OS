@@ -29,6 +29,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
         $(INCLUDE)/no_os_uart.h      \
         $(INCLUDE)/no_os_util.h      \
         $(INCLUDE)/no_os_alloc.h     \
+        $(INCLUDE)/no_os_delay.h     \
         $(INCLUDE)/no_os_mutex.h
 
 INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \

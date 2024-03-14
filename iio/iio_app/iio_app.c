@@ -116,7 +116,7 @@ static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 					struct no_os_uart_init_param *user_uart_params)
 {
-#if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
+#if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_USB_SERIAL)
 	return 0;
 #else
 	const char *uart_data_size[] = { "5", "6", "7", "8", "9" };

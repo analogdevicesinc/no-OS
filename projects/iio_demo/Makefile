@@ -10,6 +10,7 @@ IIO_EXAMPLE = y
 IIO_SW_TRIGGER_EXAMPLE = n
 IIO_TIMER_TRIGGER_EXAMPLE = n
 
+CFLAGS += -DNO_OS_USB_SERIAL
 
 include ../../tools/scripts/generic_variables.mk
 
