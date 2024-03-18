@@ -47,6 +47,7 @@
 #include <stdbool.h>
 #include "no_os_spi.h"
 #include "no_os_error.h"
+#include "no_os_units.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -186,8 +187,8 @@ struct ltc2672_dev {
 	enum ltc2672_device_id id;
 	/* DAC Channel Spans */
 	enum ltc2672_out_range out_spans[LTC2672_TOTAL_CHANNELS];
-	/* Maximum Current Per Channel */
-	float max_currents[LTC2672_TOTAL_CHANNELS];
+	/* Maximum Current Per Channel in uA */
+	uint32_t max_currents[LTC2672_TOTAL_CHANNELS];
 	/* Previous command tracker */
 	uint32_t prev_command;
 	/* Global toggle bit flag */
@@ -215,7 +216,7 @@ int ltc2672_remove(struct ltc2672_dev *);
 int ltc2672_transaction(struct ltc2672_dev *device, uint32_t, bool);
 
 /** Convert current into dac code */
-uint32_t ltc2672_current_to_code(struct ltc2672_dev *device, float,
+uint32_t ltc2672_current_to_code(struct ltc2672_dev *device, uint32_t,
 				 enum ltc2672_dac_ch);
 
 /** Set the dac code for a selected DAC channel */
@@ -223,14 +224,14 @@ int ltc2672_set_code_channel(struct ltc2672_dev *device, uint16_t code,
 			     enum ltc2672_dac_ch out_ch);
 
 /** Set the current for a selected DAC channel */
-int ltc2672_set_current_channel(struct ltc2672_dev *, float,
+int ltc2672_set_current_channel(struct ltc2672_dev *, uint32_t,
 				enum ltc2672_dac_ch);
 
 /** Set the dac code for all DAC channels */
 int ltc2672_set_code_all_channels(struct ltc2672_dev *device, uint16_t code);
 
 /** Set the current for all DAC channels */
-int ltc2672_set_current_all_channels(struct ltc2672_dev *, float);
+int ltc2672_set_current_all_channels(struct ltc2672_dev *, uint32_t);
 
 /** Set the output span for a selected DAC channel */
 int ltc2672_set_span_channel(struct ltc2672_dev *, enum ltc2672_out_range,
@@ -253,7 +254,7 @@ int ltc2672_monitor_mux(struct ltc2672_dev *, enum ltc2672_mux_commands);
 
 /** Setup selected channel's reg A and B */
 int ltc2672_setup_toggle_channel(struct ltc2672_dev *, enum ltc2672_dac_ch,
-				 float, float);
+				 uint32_t, uint32_t);
 
 /** Enable channel/s to toggle */
 int ltc2672_enable_toggle_channel(struct ltc2672_dev *, uint32_t);
