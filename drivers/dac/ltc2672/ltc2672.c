@@ -141,22 +141,22 @@ int ltc2672_transaction(struct ltc2672_dev *device, uint32_t comm, bool is_32)
 /**
  * @brief get dac code value from current of a selected DAC channel
  * @param device - ltc2672 descriptor
- * @param dac_current - current in mA
+ * @param dac_current - current in uA
  * @param out_ch - DAC channel
  * @return code value
  */
-uint32_t ltc2672_current_to_code(struct ltc2672_dev *device, float dac_current,
+uint32_t ltc2672_current_to_code(struct ltc2672_dev *device,
+				 uint32_t dac_current,
 				 enum ltc2672_dac_ch out_ch)
 {
-	float current;
 	uint32_t current_code;
 
-	current = dac_current / device->max_currents[out_ch];
-
 	if (device->id == LTC2672_12)
-		current_code = (uint32_t)(current * LTC2672_12BIT_RESO);
+		current_code = ((dac_current * LTC2672_12BIT_RESO) /
+				device->max_currents[out_ch]);
 	else
-		current_code = (uint32_t)(current * LTC2672_16BIT_RESO);
+		current_code = ((dac_current * LTC2672_16BIT_RESO) /
+				device->max_currents[out_ch]);
 
 	return current_code;
 }
@@ -195,12 +195,12 @@ int ltc2672_set_code_channel(struct ltc2672_dev *device, uint16_t code,
 /**
  * @brief set the current for a selected DAC channel
  * @param device - ltc2672 descriptor
- * @param current - current to set in mA
+ * @param current - current to set in uA
  * @param out_ch - channel to set the current
  * @return 0 in case of success, negative error code otherwise
  */
 int ltc2672_set_current_channel(struct ltc2672_dev *device,
-				float current,
+				uint32_t current,
 				enum ltc2672_dac_ch out_ch)
 {
 	uint32_t current_code;
@@ -245,10 +245,11 @@ int ltc2672_set_code_all_channels(struct ltc2672_dev *device, uint16_t code)
 /**
  * @brief sets the same current for all channels
  * @param device - ltc2672 descriptor
- * @param current - current to set in mA
+ * @param current - current to set in uA
  * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_set_current_all_channels(struct ltc2672_dev *device, float current)
+int ltc2672_set_current_all_channels(struct ltc2672_dev *device,
+				     uint32_t current)
 {
 	int i;
 	uint32_t current_code;
@@ -301,17 +302,19 @@ int ltc2672_set_span_channel(struct ltc2672_dev *device,
 	switch (ch_span)
 	{
 	case LTC2672_VMINUS_VREF:
-		device->max_currents[out_ch] = LTC2672_VMINUS_FIXED_CURRENT;
+		device->max_currents[out_ch] = LTC2672_VMINUS_FIXED_CURRENT *
+		MICROAMPER_PER_MILLIAMPER;
 		break;
 	case LTC2672_4800VREF:
-		device->max_currents[out_ch] = LTC2672_300MA_CURRENT;
+		device->max_currents[out_ch] = LTC2672_300MA_CURRENT *
+		MICROAMPER_PER_MILLIAMPER;
 		break;
 	case LTC2672_OFF:
-		device->max_currents[out_ch] = LTC2672_OFF_CURRENT;
+		device->max_currents[out_ch] = LTC2672_OFF_CURRENT * MICROAMPER_PER_MILLIAMPER;
 		break;
 	default:
-		device->max_currents[out_ch] = (float)(NO_OS_BIT(ch_span - 1) *
-						       LTC2672_BASE_CURRENT);
+		device->max_currents[out_ch] = NO_OS_BIT(ch_span - 1) *
+		LTC2672_BASE_CURRENT * MICROAMPER_PER_MILLIAMPER;
 		break;
 	}
 
@@ -349,20 +352,21 @@ int ltc2672_set_span_all_channels(struct ltc2672_dev *device,
 	switch (ch_span) {
 	case LTC2672_VMINUS_VREF:
 		for (i = 0; i < LTC2672_TOTAL_CHANNELS; i++)
-			device->max_currents[i] = LTC2672_VMINUS_FIXED_CURRENT;
+			device->max_currents[i] = LTC2672_VMINUS_FIXED_CURRENT *
+						  MICROAMPER_PER_MILLIAMPER;
 		break;
 	case LTC2672_4800VREF:
 		for (i = 0; i < LTC2672_TOTAL_CHANNELS; i++)
-			device->max_currents[i] = LTC2672_300MA_CURRENT;
+			device->max_currents[i] = LTC2672_300MA_CURRENT * MICROAMPER_PER_MILLIAMPER;
 		break;
 	case LTC2672_OFF:
 		for (i = 0; i < LTC2672_TOTAL_CHANNELS; i++)
-			device->max_currents[i] = LTC2672_OFF_CURRENT;
+			device->max_currents[i] = LTC2672_OFF_CURRENT * MICROAMPER_PER_MILLIAMPER;
 		break;
 	default:
 		for (i = 0; i < LTC2672_TOTAL_CHANNELS; i++)
-			device->max_currents[i] = (float)(NO_OS_BIT(ch_span - 1) *
-							  LTC2672_BASE_CURRENT);
+			device->max_currents[i] = NO_OS_BIT(ch_span - 1) *
+						  LTC2672_BASE_CURRENT * MICROAMPER_PER_MILLIAMPER;
 		break;
 	}
 
@@ -459,9 +463,9 @@ int ltc2672_monitor_mux(struct ltc2672_dev *device,
  */
 int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
 				 enum ltc2672_dac_ch out_ch
-				 ,float current_reg_a, float current_reg_b) {
+				 ,uint32_t current_reg_a, uint32_t current_reg_b) {
 	int ret;
-	float current_code;
+	uint32_t current_code;
 	uint32_t command;
 
 	if (device->out_spans[out_ch] == LTC2672_VMINUS_VREF || device->out_spans[out_ch] == LTC2672_OFF)
@@ -477,14 +481,12 @@ int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
 		return -EINVAL;
 
 	/* Write code to Register A of out_ch */
-	current_code = (float)(current_reg_a / device->max_currents[out_ch]);
+	current_code = ltc2672_current_to_code(device, current_reg_a, out_ch);
 
 	if (device->id == LTC2672_12)
-		current_code = (uint32_t)(current_code * (float)(LTC2672_12BIT_RESO)) << 4;
-	else
-		current_code *= LTC2672_16BIT_RESO;
+		current_code <<= LTC2672_BIT_SHIFT_12BIT;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,(uint32_t)current_code);
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch, current_code);
 
 	ret = ltc2672_transaction(device, command, false);
 	if (ret)
@@ -498,15 +500,13 @@ int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
 		return ret;
 
 	/* Write code to Register B of out_ch */
-	current_code = (float)(current_reg_b / device->max_currents[out_ch]);
+	current_code = ltc2672_current_to_code(device, current_reg_b, out_ch);
 
 	if (device->id == LTC2672_12)
-		current_code = (uint32_t)(current_code * (float)(LTC2672_12BIT_RESO)) << 4;
-	else
-		current_code *= LTC2672_16BIT_RESO;
+		current_code <<= LTC2672_BIT_SHIFT_12BIT;
 
 	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,
-					     (uint32_t)current_code);
+					     current_code);
 
 	ret = ltc2672_transaction(device, command, false);
 	if (ret)
