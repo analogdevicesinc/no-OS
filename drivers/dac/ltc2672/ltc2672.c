@@ -131,7 +131,7 @@ int ltc2672_transaction(struct ltc2672_dev *device, uint32_t comm, bool is_32)
 		return ret;
 
 	for (i = bytes; i > 0; i --)
-		read_back |= (uint8_t)(raw_array[i - 1] << (8 * (bytes - i)));
+		read_back |= raw_array[i - 1] << (8 * (bytes - i));
 
 	device->prev_command = read_back;
 
