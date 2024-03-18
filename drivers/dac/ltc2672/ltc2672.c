@@ -173,6 +173,11 @@ int ltc2672_set_code_channel(struct ltc2672_dev *device, uint16_t code,
 {
 	uint32_t command;
 
+	if ((device->id == LTC2672_12 && code > LTC2672_12BIT_RESO)
+	    || (device->id == LTC2672_16 && code > LTC2672_16BIT_RESO)
+	    || out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
+
 	/* Switching to V- results in constant -80mA output */
 	if (device->out_spans[out_ch] == LTC2672_VMINUS_VREF) {
 		command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_X,
@@ -223,6 +228,10 @@ int ltc2672_set_current_channel(struct ltc2672_dev *device,
 int ltc2672_set_code_all_channels(struct ltc2672_dev *device, uint16_t code)
 {
 	uint32_t command;
+
+	if ((device->id == LTC2672_12 && code > LTC2672_12BIT_RESO)
+	    || (device->id == LTC2672_16 && code > LTC2672_16BIT_RESO))
+		return -EINVAL;
 
 	if (device->out_spans[0] == LTC2672_VMINUS_VREF) {
 		command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_ALL,
