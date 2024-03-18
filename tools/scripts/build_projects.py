@@ -183,10 +183,10 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	if hdl_branch == "main":
 		hdl_branch_path = hdl_branch + '/hdl_output'
 	else:
-		if requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
-			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output'
-		elif requests.get(server_base_path + 'releases/' + hdl_branch, stream=True).status_code == 200:
+		if requests.get(server_base_path + 'releases/' + hdl_branch, stream=True).status_code == 200:
 			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output'
+		elif requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
+			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output'
 		else:
 			print("Error related to hdl branch name: " + hdl_branch)
 			exit()
