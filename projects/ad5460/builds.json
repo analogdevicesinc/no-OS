@@ -1,0 +1,12 @@
+{
+  "stm32": {
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y"
+    }
+  },
+  "mbed": {
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y"
+    }
+  }
+}
