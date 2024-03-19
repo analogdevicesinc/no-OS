@@ -525,7 +525,7 @@ enum ad74416h_conv_seq {
 	AD74416H_STOP_PWR_DOWN,
 };
 
-/**74416h_get_live
+/**
  * @brief Possible values to be loaded in the DIAG_RESULT register
  */
 enum ad74416h_diag_mode {
