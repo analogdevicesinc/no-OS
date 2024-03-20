@@ -58,7 +58,7 @@
 /***************************** Variable definition ****************************/
 /******************************************************************************/
 
-static const int ad713x_output_data_frame[3][9][2] = {
+static const int ad713x_output_data_frame[4][9][2] = {
 	{
 		{ADC_16_BIT_DATA, CRC_6},
 		{ADC_24_BIT_DATA, CRC_6},
