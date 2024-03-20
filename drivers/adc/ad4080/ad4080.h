@@ -122,6 +122,11 @@
 #define AD4080_ANA_DIG_LDO_PD_MSK		NO_OS_BIT(1)
 #define AD4080_INTF_LDO_PD_MSK			NO_OS_BIT(0)
 
+/** AD4080_GPIO_CONFIG Bit Defintion  */
+#define AD4080_GPIO_EN_MSK(x)			NO_OS_BIT(x)
+#define AD4080_GPIO_SEL_MSK(x)			(NO_OS_GENMASK(3, 0) << (4 * ((x)%2)))
+#define AD4080_GPIO_DATA_MSK(x)			(NO_OS_BIT(x) << 4)
+
 /** AD4080_REG_GENERAL_CONFIG Bit Definition */
 #define AD4080_FIFO_MODE_MSK			NO_OS_GENMASK(1, 0)
 
@@ -131,6 +136,7 @@
 #define BYTE_ADDR_H				NO_OS_GENMASK(15, 8)
 #define BYTE_ADDR_L				NO_OS_GENMASK(7, 0)
 #define AD4080_CHIP_ID				NO_OS_GENMASK(2, 0)
+#define AD4080_FIFO_SIZE		  NO_OS_BIT(14)
 
 /******************************************************************************/
 /************************ Types Declarations **********************************/
@@ -216,6 +222,36 @@ enum ad4080_intf_ldo_pd {
 	AD4080_INTF_LDO_DISABLE,
 };
 
+/* AD4080 GPIOs */
+enum ad4080_gpio {
+	AD4080_GPIO_0,
+	AD4080_GPIO_1,
+	AD4080_GPIO_2,
+	AD4080_GPIO_3,
+	NUM_AD4080_GPIO
+};
+
+/* AD4080 GPIO Output Enable Selection */
+enum ad4080_gpio_op_enable {
+	AD4080_GPIO_INPUT,
+	AD4080_GPIO_OUTPUT
+};
+
+/** AD4080 GPIO Function Select */
+enum ad4080_gpio_op_func_sel {
+	AD4080_GPIO_ADI_NSPI_SDO_DATA,
+	AD4080_GPIO_FIFO_FULL,
+	AD4080_GPIO_FIFO_READ_DONE,
+	AD4080_GPIO_FILTER_RESULT_READY,
+	AD4080_GPIO_HT_DETECT,
+	AD4080_GPIO_LT_DETECT,
+	AD4080_GPIO_STATUS_ALERT,
+	AD4080_GPIO_GPO_DATA,
+	AD4080_GPIO_FILTER_SYNC_INPUT,
+	AD4080_GPIO_EXT_EVENT_TRIGGER_FIFO,
+	AD4080_GPIO_CNV_INHIBIT_INPUT
+};
+
 /** AD4080 Conversion Data FIFO Mode */
 enum ad4080_fifo_mode {
 	AD4080_FIFO_DISABLE,
@@ -263,6 +299,10 @@ struct ad4080_dev {
 	enum ad4080_intf_ldo_pd intf_ldo_pd;
 	/** AD4080 Conversion Data FIFO Mode */
 	enum ad4080_fifo_mode fifo_mode;
+	/** AD4080 GPIO Output Enable state */
+	enum ad4080_gpio_op_enable gpio_op_enable[NUM_AD4080_GPIO];
+	/** AD4080 GPIO Output Function Selection */
+	enum ad4080_gpio_op_func_sel gpio_op_func_sel[NUM_AD4080_GPIO];
 };
 
 /**
@@ -304,6 +344,10 @@ struct ad4080_init_param {
 	enum ad4080_intf_ldo_pd intf_ldo_pd;
 	/** AD4080 Conversion Data FIFO Mode */
 	enum ad4080_fifo_mode fifo_mode;
+	/** AD4080 GPIO Output Enable state */
+	enum ad4080_gpio_op_enable gpio_op_enable[NUM_AD4080_GPIO];
+	/** AD4080 GPIO Output Function Selection */
+	enum ad4080_gpio_op_func_sel gpio_op_func_sel[NUM_AD4080_GPIO];
 };
 /** Writes data into a register.  */
 int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val);
@@ -435,6 +479,34 @@ int ad4080_set_fifo_mode(struct ad4080_dev *dev,
 /** Get AD4080 Conversion Data FIFO Mode */
 int ad4080_get_fifo_mode(struct ad4080_dev *dev,
 			 enum ad4080_fifo_mode *fifo_mode);
+
+/** Set AD4080 FIFO Watermark */
+int ad4080_set_fifo_watermark(struct ad4080_dev *dev,
+			      uint16_t fifo_watermark);
+
+/** Get AD4080 FIFO Watermark */
+int ad4080_get_fifo_watermark(struct ad4080_dev *dev,
+			      uint16_t *fifo_watermark);
+
+/** Configure GPIO as input or output */
+int ad4080_set_gpio_output_enable(struct ad4080_dev *dev,
+				  enum ad4080_gpio gpio,
+				  enum ad4080_gpio_op_enable gpio_op_enable);
+
+/** Configure the GPIO for a specific function */
+int ad4080_set_gpio_output_func(struct ad4080_dev *dev,
+				enum ad4080_gpio gpio,
+				enum ad4080_gpio_op_func_sel gpio_func);
+
+/** Set the GPIO data */
+int ad4080_gpio_write_data(struct ad4080_dev *dev,
+			   enum ad4080_gpio gpio,
+			   bool data);
+
+/** Read the GPIO data */
+int ad4080_gpio_read_data(struct ad4080_dev *dev,
+			  enum ad4080_gpio gpio,
+			  bool *data);
 
 /** Configure the config SPI interface during initialization */
 int ad4080_configuration_intf_init(struct ad4080_dev *device,

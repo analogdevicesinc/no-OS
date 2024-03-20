@@ -880,6 +880,192 @@ int ad4080_get_fifo_mode(struct ad4080_dev *dev,
 }
 
 /**
+ * @brief Set AD4080 FIFO Watermark
+ * @param dev - The device structure.
+ * @param fifo_watermark - The FIFO Watermark.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad4080_set_fifo_watermark(struct ad4080_dev *dev,
+			      uint16_t fifo_watermark)
+{
+	int ret;
+
+	if (!dev || fifo_watermark > AD4080_FIFO_SIZE)
+		return -EINVAL;
+
+	ret = ad4080_write(dev,
+			   AD4080_REG_FIFO_WATERMARK,
+			   no_os_field_get(BYTE_ADDR_L, fifo_watermark));
+	if (ret)
+		return ret;
+
+	return ad4080_write(dev,
+			    AD4080_REG_FIFO_WATERMARK + 1,
+			    no_os_field_get(BYTE_ADDR_H, fifo_watermark));
+}
+
+/**
+ * @brief Get AD4080 FIFO Watermark
+ * @param dev - The device structure.
+ * @param fifo_watermark - The FIFO Watermark.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad4080_get_fifo_watermark(struct ad4080_dev *dev,
+			      uint16_t *fifo_watermark)
+{
+	int ret;
+	uint8_t val;
+
+	if (!dev || !fifo_watermark)
+		return -EINVAL;
+
+	ret = ad4080_read(dev, AD4080_REG_FIFO_WATERMARK, &val);
+	if (ret)
+		return ret;
+
+	*fifo_watermark = val;
+
+	ret = ad4080_read(dev,
+			  AD4080_REG_FIFO_WATERMARK + 1,
+			  &val);
+	if (ret)
+		return ret;
+
+	*fifo_watermark |= no_os_field_prep(BYTE_ADDR_H, val);
+
+	return 0;
+}
+
+/**
+ * @brief Configure GPIO as input or output
+ * @param dev - The device structure.
+ * @param gpio - The GPIO pin to be configured.
+ * @param gpio_op_enable - The GPIO Output Enable bit selection
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad4080_set_gpio_output_enable(struct ad4080_dev *dev,
+				  enum ad4080_gpio gpio,
+				  enum ad4080_gpio_op_enable gpio_op_enable)
+{
+	int ret;
+	if (!dev || (gpio >= NUM_AD4080_GPIO)
+	    || (gpio_op_enable > AD4080_GPIO_OUTPUT))
+		return -EINVAL;
+
+	ret = ad4080_update_bits(dev,
+				 AD4080_REG_GPIO_CONFIG_A,
+				 AD4080_GPIO_EN_MSK(gpio),
+				 no_os_field_prep(AD4080_GPIO_EN_MSK(gpio), gpio_op_enable));
+	if (ret)
+		return ret;
+
+	dev->gpio_op_enable[gpio] = gpio_op_enable;
+
+	return 0;
+}
+
+/**
+ * @brief Configure the GPIO output for a specific function
+ * @param dev - The device structure.
+ * @param gpio - The GPIO pin to be configured.
+ * @param gpio_func - The function to be selected for the GPIO.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad4080_set_gpio_output_func(struct ad4080_dev *dev, enum ad4080_gpio gpio,
+				enum ad4080_gpio_op_func_sel gpio_func)
+{
+	int ret;
+	uint16_t gpio_config_register = AD4080_REG_GPIO_CONFIG_B;
+
+	if (!dev || (gpio >= NUM_AD4080_GPIO)
+	    || (gpio_func > AD4080_GPIO_CNV_INHIBIT_INPUT))
+		return -EINVAL;
+
+	if (gpio >= AD4080_GPIO_2)
+		gpio_config_register = AD4080_REG_GPIO_CONFIG_C;
+
+	ret = ad4080_update_bits(dev,
+				 gpio_config_register,
+				 AD4080_GPIO_SEL_MSK(gpio),
+				 no_os_field_prep(AD4080_GPIO_SEL_MSK(gpio), gpio_func));
+	if (ret)
+		return ret;
+
+	dev->gpio_op_func_sel[gpio] = gpio_func;
+
+	return 0;
+}
+
+/**
+ * @brief Set the GPIO data
+ * @param dev - The device structure.
+ * @param gpio - The GPIO pin to be configured.
+ * @param data - The data (0 or 1) to be written.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad4080_gpio_write_data(struct ad4080_dev *dev,
+			   enum ad4080_gpio gpio,
+			   bool data)
+{
+	int ret;
+	uint8_t val;
+
+	if (!dev || gpio >= NUM_AD4080_GPIO)
+		return -EINVAL;
+
+	ret = ad4080_read(dev, AD4080_REG_GPIO_CONFIG_A, &val);
+	if (ret)
+		return ret;
+
+	/* If GPIO is configured as input, data is read-only */
+	if (!no_os_field_get(AD4080_GPIO_EN_MSK(gpio), val))
+		return -EINVAL;
+
+	return ad4080_update_bits(dev,
+				  AD4080_REG_GPIO_CONFIG_A,
+				  AD4080_GPIO_DATA_MSK(gpio),
+				  no_os_field_prep(AD4080_GPIO_DATA_MSK(gpio), data));
+}
+
+/**
+ * @brief Read the GPIO data
+ * @param dev - The device structure.
+ * @param gpio - The GPIO pin to be configured.
+ * @param data - Pointer to the data (0 or 1) read back.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ad4080_gpio_read_data(struct ad4080_dev *dev,
+			  enum ad4080_gpio gpio,
+			  bool *data)
+{
+	int ret;
+	uint8_t val;
+	uint16_t config_register = AD4080_REG_GPIO_CONFIG_B;
+
+	if (!dev || !data || gpio >= NUM_AD4080_GPIO)
+		return -EINVAL;
+
+	ret = ad4080_read(dev, AD4080_REG_GPIO_CONFIG_A, &val);
+	if (ret)
+		return ret;
+
+	/* If GPIO is configured as output, data is write-only */
+	if (no_os_field_get(AD4080_GPIO_EN_MSK(gpio), val))
+		return -EINVAL;
+
+	if (gpio >= AD4080_GPIO_2)
+		config_register = AD4080_REG_GPIO_CONFIG_C;
+
+	ret =  ad4080_read(dev,	config_register, &val);
+	if (ret)
+		return ret;
+
+	*data = no_os_field_get(AD4080_GPIO_DATA_MSK(gpio), val);
+
+	return 0;
+}
+
+/**
  * @brief Configure the config SPI interface during initialization
  * @param dev - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -948,7 +1134,7 @@ int ad4080_data_intf_init(struct ad4080_dev *dev,
 	if (ret)
 		return ret;
 
-	return 0;
+	return ad4080_set_fifo_mode(dev, init_param.fifo_mode);
 }
 
 /**
@@ -963,6 +1149,7 @@ int ad4080_init(struct ad4080_dev **device,
 {
 	struct ad4080_dev *dev;
 	uint8_t data;
+	enum ad4080_gpio gpio;
 	int ret;
 
 	dev = (struct ad4080_dev *)calloc(1, sizeof(*dev));
@@ -1001,11 +1188,26 @@ int ad4080_init(struct ad4080_dev **device,
 
 	/* Set Operation mode */
 	ret = ad4080_set_op_mode(dev, init_param.op_mode);
+	if (ret)
+		goto error_spi;
 
 	/* Configuration SPI Interface Initialization */
 	ret = ad4080_configuration_intf_init(dev, init_param);
 	if (ret)
 		goto error_spi;
+
+	/* GPIO Initialization */
+	for (gpio = AD4080_GPIO_0; gpio < NUM_AD4080_GPIO; gpio++) {
+		/* Apply GPIO Output Enable state */
+		ret = ad4080_set_gpio_output_enable(dev, gpio, init_param.gpio_op_enable[gpio]);
+		if (ret)
+			goto error_spi;
+
+		/* Apply GPIO Output Function selection */
+		ret = ad4080_set_gpio_output_func(dev, gpio, init_param.gpio_op_func_sel[gpio]);
+		if (ret)
+			goto error_spi;
+	}
 
 	/* Data Interface Initialization */
 	ret = ad4080_data_intf_init(dev, init_param);
