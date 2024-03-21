@@ -33,7 +33,7 @@ int main()
 {
 	struct ad400x_dev *dev;
 	uint32_t *offload_data;
-	uint32_t adc_data;
+	uint32_t adc_data_single_conv[1];
 
 	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 		.offload_config = OFFLOAD_RX_EN,
@@ -88,8 +88,9 @@ int main()
 			.clkgen_init = &clkgen_init,
 			.axi_clkgen_rate = 160000000,
 			.reg_access_speed = 1000000,
+			.offload_switch = SPI_ENGINE_OFFLOAD_EXAMPLE,
 			dev_id, /* dev_id */
-			1,0,0,0,
+			1,0,0,
 	};
 
 	print("Test\n\r");
@@ -108,10 +109,12 @@ int main()
 		return ret;
 
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
-		while(1) {
-			ad400x_spi_single_conversion(dev, &adc_data);
-			xil_printf("ADC: %d\n\r", adc_data);
-		}
+		//while(1) {
+		  for (int i = 0; i < 1000; i++){
+			ad400x_spi_single_conversion(dev, adc_data_single_conv);
+			xil_printf("%d\n\r", adc_data_single_conv[0]);
+		  }
+		//}
 	}
 	/* Offload example */
 	else {

@@ -112,6 +112,7 @@ struct ad400x_init_param {
 	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
+	bool offload_switch;
 	bool turbo_mode;
 	bool high_z_mode;
 	bool span_compression;

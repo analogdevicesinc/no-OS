@@ -137,14 +137,18 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *adc_data)
+				     uint32_t *adc_data_single_conv)
 {
-	uint32_t buf = 0;
 	int32_t ret;
+	uint8_t buf[3];
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
+	buf[0] = 0x00;
+	buf[1] = 0x00;
+	buf[2] = 0x00;
 
-	*adc_data = buf & 0xFFFFF;
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
+
+	adc_data_single_conv[0] =  ((buf[0] << 16) | (buf[1] << 8) | buf[2]) >> 4;
 
 	return ret;
 }
@@ -162,6 +166,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	struct ad400x_dev *dev;
 	int32_t ret;
 	uint8_t data = 0;
+	bool offload_sw;
 
 	dev = (struct ad400x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
@@ -217,9 +222,16 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret < 0)
 		goto error;
 
-#if !defined(USE_STANDARD_SPI)
-	spi_engine_set_transfer_width(dev->spi_desc, spi_eng_init_param->data_width);
-#endif
+	offload_sw = init_param->offload_switch;
+if (offload_sw == 0){
+	#if !defined(USE_STANDARD_SPI)
+		spi_engine_set_transfer_width(dev->spi_desc, spi_eng_init_param->data_width + 4);
+	#endif
+} else{
+	#if !defined(USE_STANDARD_SPI)
+		spi_engine_set_transfer_width(dev->spi_desc, spi_eng_init_param->data_width);
+	#endif
+}
 
 	*device = dev;
 
