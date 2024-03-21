@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "iio_adis.h"
+#include "iio_adis_internals.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
 #include <stdio.h>

@@ -852,7 +852,7 @@ IIO clients through IIO lib.
 
 The source code for ADIS generic driver can be found here:
 
-* `Header file of ADIS Generic IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis.h>`_
+* `Header file of ADIS IIO Driver Internals <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis_internals.h>`_
 * `Implementation of ADIS Generic IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis.c>`_
 
 The generic ADIS driver has to be used together with the chip-specific ADIS driver.

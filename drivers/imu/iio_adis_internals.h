@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   iio_adis.h
- *   @brief  Implementation of iio_adis.h
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   iio_adis_internals.h
+ *   @brief  Internal include file used for specific chip IIO driver definitions
+ *           which are not useful for the user.
+ *   @author RBolboac (ramona.gradinariu@analog.com)
  *******************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-#ifndef IIO_ADIS_H
-#define IIO_ADIS_H
+#ifndef IIO_ADIS_INTERNALS_H
+#define IIO_ADIS_INTERNALS_H
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
