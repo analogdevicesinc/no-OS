@@ -48,7 +48,6 @@
 #include "adis1647x.h"
 #ifdef IIO_SUPPORT
 #include "iio_adis1647x.h"
-#include "iio_adis.h"
 #ifdef IIO_TRIGGER_EXAMPLE
 #include "iio_trigger.h"
 #endif
