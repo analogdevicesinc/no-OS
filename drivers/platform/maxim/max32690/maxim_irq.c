@@ -290,88 +290,55 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				  struct no_os_callback_desc *callback_desc)
 {
 	int ret;
+	void *discard;
+	bool new_action = false;
 	struct irq_action *action;
 	struct irq_action action_key = {.irq_id = irq_id};
 
 	if(is_gpio_irq_id(irq_id))
 		return -ENOSYS;
 
-	if (!desc || !callback_desc)
+	if (!desc || !callback_desc
+	    || callback_desc->event >= NO_OS_ARRAY_SIZE(_events))
 		return -EINVAL;
+
+	if (_events[callback_desc->event].actions == NULL) {
+		ret = no_os_list_init(&_events[callback_desc->event].actions,
+				      NO_OS_LIST_PRIORITY_LIST,
+				      irq_action_cmp);
+		if (ret)
+			return ret;
+	}
+
+	ret = no_os_list_read_find(_events[callback_desc->event].actions,
+				   (void **)&action,
+				   &action_key);
+	/*
+	 * If an action with the same irq_id as the function parameter does not exists, insert a new one,
+	 * otherwise update
+	 */
+	if (ret) {
+		action = no_os_calloc(1, sizeof(*action));
+		if (!action)
+			return -ENOMEM;
+
+		action->irq_id = irq_id;
+		action->handle = callback_desc->handle;
+		action->callback = callback_desc->callback;
+		action->ctx = callback_desc->ctx;
+
+		ret = no_os_list_add_last(_events[callback_desc->event].actions, action);
+		if (ret)
+			goto free_action;
+
+		new_action = true;
+	}
 
 	switch (callback_desc->peripheral) {
 	case NO_OS_UART_IRQ:
-		if (_events[callback_desc->event].actions == NULL) {
-			ret = no_os_list_init(&_events[callback_desc->event].actions,
-					      NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret)
-				return ret;
-		}
-
-		ret = no_os_list_read_find(_events[callback_desc->event].actions,
-					   (void **)&action,
-					   &action_key);
-		/*
-		 * If an action with the same irq_id as the function parameter does not exists, insert a new one,
-		 * otherwise update
-		 */
-		if (ret) {
-			action = no_os_calloc(1, sizeof(*action));
-			if (!action)
-				return -ENOMEM;
-
-			action->irq_id = irq_id;
-			action->handle = callback_desc->handle;
-			action->callback = callback_desc->callback;
-			action->ctx = callback_desc->ctx;
-
-			ret = no_os_list_add_last(_events[callback_desc->event].actions, action);
-			if (ret)
-				goto free_action;
-		} else {
-			action->irq_id = irq_id;
-			action->handle = callback_desc->handle;
-			action->callback = callback_desc->callback;
-			action->ctx = callback_desc->ctx;
-		}
-
 		break;
 
 	case NO_OS_RTC_IRQ:
-		if (_events[NO_OS_EVT_RTC].actions == NULL) {
-			ret = no_os_list_init(&_events[NO_OS_EVT_RTC].actions, NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret)
-				return ret;
-		}
-
-		/*
-		 * This is a special case for RTC on Maxim platform. Since there is only 1 RTC peripheral, there should
-		 * be only 1 registered callback at a time.
-		 */
-		ret = no_os_list_read_first(_events[NO_OS_EVT_RTC].actions, (void **)&action);
-		if (ret) {
-			action = no_os_calloc(1, sizeof(*action));
-			if (!action)
-				return -ENOMEM;
-
-			action->irq_id = irq_id;
-			action->handle = callback_desc->handle;
-			action->callback = callback_desc->callback;
-			action->ctx = callback_desc->ctx;
-
-			ret = no_os_list_add_first(_events[NO_OS_EVT_RTC].actions, action);
-			if (ret)
-				goto free_action;
-
-		} else {
-			action->irq_id = irq_id;
-			action->handle = callback_desc->handle;
-			action->callback = callback_desc->callback;
-			action->ctx = callback_desc->ctx;
-		}
-
 		ret = MXC_RTC_EnableInt(MXC_RTC_INT_EN_LONG);
 		if (ret)
 			return -EBUSY;
@@ -379,51 +346,29 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		break;
 
 	case NO_OS_TIM_IRQ:
-		if (_events[NO_OS_EVT_TIM_ELAPSED].actions == NULL) {
-			ret = no_os_list_init(&_events[NO_OS_EVT_TIM_ELAPSED].actions,
-					      NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret)
-				return ret;
-		}
-
-		ret = no_os_list_read_find(_events[callback_desc->event].actions,
-					   (void **)&action,
-					   &action_key);
-		/*
-		 * If an action with the same irq_id as the function parameter does not exists, insert a new one,
-		 * otherwise update
-		 */
-		if (ret) {
-			action = no_os_calloc(1, sizeof(*action));
-			if (!action)
-				return -ENOMEM;
-
-			action->irq_id = irq_id;
-			action->handle = callback_desc->handle;
-			action->callback = callback_desc->callback;
-			action->ctx = callback_desc->ctx;
-
-			ret = no_os_list_add_last(_events[callback_desc->event].actions, action);
-			if (ret)
-				goto free_action;
-
-		} else {
-			action->irq_id = irq_id;
-			action->handle = callback_desc->handle;
-			action->callback = callback_desc->callback;
-			action->ctx = callback_desc->ctx;
-		}
 		MXC_TMR_EnableInt(callback_desc->handle);
-
 		break;
 
 	default:
+		if (new_action) {
+			ret = -EINVAL;
+			goto remove_new_action;
+		}
+
 		return -EINVAL;
+	}
+
+	if (!new_action) {
+		action->irq_id = irq_id;
+		action->handle = callback_desc->handle;
+		action->callback = callback_desc->callback;
+		action->ctx = callback_desc->ctx;
 	}
 
 	return 0;
 
+remove_new_action:
+	no_os_list_get_last(_events[callback_desc->event].actions, &discard);
 free_action:
 	free(action);
 	return ret;
