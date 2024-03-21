@@ -14,7 +14,7 @@ endif
 ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-INCS += $(DRIVERS)/imu/iio_adis.h \
+INCS += $(DRIVERS)/imu/iio_adis_internals.h \
 	$(DRIVERS)/imu/iio_adis1657x.h
 SRCS += $(DRIVERS)/imu/iio_adis.c \
 	$(DRIVERS)/imu/iio_adis1657x.c
