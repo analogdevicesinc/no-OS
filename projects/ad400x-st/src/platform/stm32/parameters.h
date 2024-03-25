@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   ad400x.h
- *   @brief  Header file for ad400x Driver.
- *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by eval-ad400x
+ *           project.
+ *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,81 +37,56 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#ifndef SRC_AD400X_H_
-#define SRC_AD400X_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
+#include "stm32_spi.h"
+#include "stm32_gpio.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
-#include <stdbool.h>
-
-#if !defined(USE_STANDARD_SPI)
-#include "spi_engine.h"
-#else
-#include "no_os_spi.h"
-#endif
-#include "no_os_gpio.h"
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD400X_READ_COMMAND	0x54
-#define AD400X_WRITE_COMMAND	0x14
-#define AD400X_RESERVED_MSK	0xE0
+extern UART_HandleTypeDef huart5;
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID 0
+#endif
 
-#define AD400X_TURBO_MODE(x)		(((x) & 0x1) << 1)
-#define AD400X_HIGH_Z_MODE(x)		(((x) & 0x1) << 2)
-#define AD400X_SPAN_COMPRESSION(x)	(((x) & 0x1) << 3)
-#define AD400X_EN_STATUS_BITS(x)	(((x) & 0x1) << 4)
+#define DEVICE_ID		ID_AD4020
+#define UART_IRQ_ID		UART5_IRQn
 
-enum ad400x_supported_dev_ids {
-	ID_AD4000,
-	ID_AD4001,
-	ID_AD4002,
-	ID_AD4003,
-	ID_AD4004,
-	ID_AD4005,
-	ID_AD4006,
-	ID_AD4007,
-	ID_AD4011,
-	ID_AD4020,
-	ID_ADAQ4003,
-};
+#define UART_DEVICE_ID		5
+#define UART_BAUDRATE		230400
+#define UART_EXTRA		&ad400x_uart_extra_ip
+#define UART_OPS		&stm32_uart_ops
 
-extern const uint16_t ad400x_device_resol[];
+/*
+ * spi cs is not used, but current no-os mandates
+ * a cs to be specifed. So we need to add some
+ * dummy gpio value
+ */
+#define SPI_DEVICE_ID		1
+#define SPI_BAUDRATE		20000000
+#define SPI_CS			14
+#define SPI_CS_PORT		GPIO_PORT_A
+#define SPI_OPS			&stm32_spi_ops
+#define SPI_EXTRA		&ad400x_spi_extra_ip
 
-struct ad400x_dev {
-	/* SPI */
-	struct no_os_spi_desc *spi_desc;
-	/** Conversion Start GPIO descriptor. */
-	struct no_os_gpio_desc *gpio_cnv;
-	/* Register access speed */
-	uint32_t reg_access_speed;
-	/* Device Settings */
-	enum ad400x_supported_dev_ids dev_id;
-};
+#define GPIO_CNV		15
+#define GPIO_OPS		&stm32_gpio_ops
+#define GPIO_CNV_PORT		GPIO_PORT_A
 
-struct ad400x_init_param {
-	/* SPI */
-	struct no_os_spi_init_param spi_init;
-	/** Conversion Start GPIO configuration. */
-	struct no_os_gpio_init_param gpio_cnv;
-	/* Register access speed */
-	uint32_t reg_access_speed;
-	/* Device Settings */
-	enum ad400x_supported_dev_ids dev_id;
-	bool turbo_mode;
-	bool high_z_mode;
-	bool span_compression;
-	bool en_status_bits;
-};
+#define GPIO_PORT_A		0
 
-int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
-			    uint8_t *reg_data);
-int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
-			     uint8_t reg_data);
-int32_t ad400x_init(struct ad400x_dev **device,
-		    struct ad400x_init_param *init_param);
-int32_t ad400x_remove(struct ad400x_dev *dev);
-/* Execute a single conversion */
-int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *adc_data);
+#define AD400X_ADC_REF_VOLTAGE 5000
+extern struct stm32_uart_init_param ad400x_uart_extra_ip;
+extern struct stm32_spi_init_param ad400x_spi_extra_ip;
 
-#endif /* SRC_AD400X_H_ */
+#endif /* __PARAMETERS_H__ */

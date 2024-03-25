@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   ad400x.h
- *   @brief  Header file for ad400x Driver.
- *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @file   common_data.h
+ *   @brief  Defines common data to be used by eval-ad400x examples.
+ *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,81 +36,22 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
-#ifndef SRC_AD400X_H_
-#define SRC_AD400X_H_
-
-#include <stdbool.h>
-
-#if !defined(USE_STANDARD_SPI)
-#include "spi_engine.h"
-#else
-#include "no_os_spi.h"
-#endif
-#include "no_os_gpio.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "platform_includes.h"
+#include "ad400x.h"
+#include "iio_ad400x.h"
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD400X_READ_COMMAND	0x54
-#define AD400X_WRITE_COMMAND	0x14
-#define AD400X_RESERVED_MSK	0xE0
+extern struct no_os_uart_init_param ad400x_uart_ip;
+extern struct no_os_spi_init_param ad400x_spi_ip;
+extern struct no_os_gpio_init_param ad400x_gpio_param;
+extern struct ad400x_iio_init_param ad400x_iio_ip;
+extern struct no_os_uart_desc *uart_desc;
 
-#define AD400X_TURBO_MODE(x)		(((x) & 0x1) << 1)
-#define AD400X_HIGH_Z_MODE(x)		(((x) & 0x1) << 2)
-#define AD400X_SPAN_COMPRESSION(x)	(((x) & 0x1) << 3)
-#define AD400X_EN_STATUS_BITS(x)	(((x) & 0x1) << 4)
-
-enum ad400x_supported_dev_ids {
-	ID_AD4000,
-	ID_AD4001,
-	ID_AD4002,
-	ID_AD4003,
-	ID_AD4004,
-	ID_AD4005,
-	ID_AD4006,
-	ID_AD4007,
-	ID_AD4011,
-	ID_AD4020,
-	ID_ADAQ4003,
-};
-
-extern const uint16_t ad400x_device_resol[];
-
-struct ad400x_dev {
-	/* SPI */
-	struct no_os_spi_desc *spi_desc;
-	/** Conversion Start GPIO descriptor. */
-	struct no_os_gpio_desc *gpio_cnv;
-	/* Register access speed */
-	uint32_t reg_access_speed;
-	/* Device Settings */
-	enum ad400x_supported_dev_ids dev_id;
-};
-
-struct ad400x_init_param {
-	/* SPI */
-	struct no_os_spi_init_param spi_init;
-	/** Conversion Start GPIO configuration. */
-	struct no_os_gpio_init_param gpio_cnv;
-	/* Register access speed */
-	uint32_t reg_access_speed;
-	/* Device Settings */
-	enum ad400x_supported_dev_ids dev_id;
-	bool turbo_mode;
-	bool high_z_mode;
-	bool span_compression;
-	bool en_status_bits;
-};
-
-int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
-			    uint8_t *reg_data);
-int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
-			     uint8_t reg_data);
-int32_t ad400x_init(struct ad400x_dev **device,
-		    struct ad400x_init_param *init_param);
-int32_t ad400x_remove(struct ad400x_dev *dev);
-/* Execute a single conversion */
-int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *adc_data);
-
-#endif /* SRC_AD400X_H_ */
+#endif /* __COMMON_DATA_H__ */
