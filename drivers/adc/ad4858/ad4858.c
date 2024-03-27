@@ -383,6 +383,67 @@ int ad4858_enable_test_pattern(struct ad4858_dev *dev, bool test_pattern)
 
 	return 0;
 }
+/**
+ * @brief Enable/Disable channel sleep.
+ * @param dev - Pointer to the device structure.
+ * @param chn - Input channel.
+ * @param sleep_status - Sleep status.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad4858_enable_ch_sleep(struct ad4858_dev* dev, uint8_t chn,
+			   enum ad4858_ch_sleep_value sleep_status)
+{
+	int ret;
+	uint32_t mask;
+	uint32_t val;
+	uint32_t data;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad4858_reg_read(dev, AD4858_REG_CH_SLEEP, &data);
+	if (ret)
+		return ret;
+
+	dev->chn_sleep_value[chn] = sleep_status;
+	val = sleep_status << chn;
+	mask = 1 << chn;
+	data &= ~mask;
+	data |= val;
+
+	return ad4858_reg_write(dev, AD4858_REG_CH_SLEEP, data);
+}
+
+/**
+ * @brief Enable/Disable seamless HDR.
+ * @param dev - Pointer to the device structure.
+ * @param chn - Input channel.
+ * @param seamless_hdr_status - seamless HDR status.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad4858_enable_ch_seamless_hdr(struct ad4858_dev* dev, uint8_t chn,
+				  enum ad4858_ch_seamless_HDR seamless_hdr_status)
+{
+	int ret;
+	uint32_t val;
+	uint32_t mask;
+	uint32_t data;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad4858_reg_read(dev, AD4858_REG_SEAMLESS_HDR, &data);
+	if (ret)
+		return ret;
+
+	dev->chn_seamless_HDR[chn] = seamless_hdr_status;
+	val = seamless_hdr_status << chn;
+	mask = 1 << chn;
+	data &= ~mask;
+	data |= val;
+
+	return ad4858_reg_write(dev, AD4858_REG_SEAMLESS_HDR, data);
+}
 
 /**
  * @brief Set channel softspan.
@@ -808,6 +869,24 @@ static int ad4858_config(struct ad4858_dev *dev,
 			temp = init_param->chn_ur[chn_cnt];
 
 		ret = ad4858_set_chn_ur_limit(dev, chn_cnt, temp);
+		if (ret)
+			return ret;
+
+		if (init_param->use_default_chn_configs)
+			temp = AD4858_SLEEP_DISABLE;
+		else
+			temp = init_param->chn_sleep_value[chn_cnt];
+
+		ret = ad4858_enable_ch_sleep(dev, chn_cnt, temp);
+		if (ret)
+			return ret;
+
+		if (init_param->use_default_chn_configs)
+			temp = AD4858_SEAMLESS_HDR_ENABLE;
+		else
+			temp = init_param->chn_seamless_HDR[chn_cnt];
+
+		ret = ad4858_enable_ch_seamless_hdr(dev, chn_cnt, temp);
 		if (ret)
 			return ret;
 	}
