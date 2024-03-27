@@ -151,6 +151,24 @@ enum ad4858_operating_mode {
 };
 
 /**
+ * @enum ad4858_ch_sleep_value
+ * @brief Enable/diable sleep
+ */
+enum ad4858_ch_sleep_value {
+	AD4858_SLEEP_DISABLE,
+	AD4858_SLEEP_ENABLE
+};
+
+/**
+ * @enum ad4858_ch_seamless_hdr
+ * @brief Enable/diable seamless high dynamic range
+ */
+enum ad4858_ch_seamless_hdr {
+	AD4858_SEAMLESS_HDR_DISABLE,
+	AD4858_SEAMLESS_HDR_ENABLE
+};
+
+/**
  * @enum ad4858_interface_mode
  * @brief Interface modes
  */
@@ -285,6 +303,10 @@ struct ad4858_init_param {
 	uint16_t chn_or[AD4858_NUM_CHANNELS];
 	/** Channel underrange limit value */
 	uint16_t chn_ur[AD4858_NUM_CHANNELS];
+	/** Channel sleep value */
+	enum ad4858_ch_sleep_value chn_sleep_value[AD4858_NUM_CHANNELS];
+	/** Channel seamless HDR value */
+	enum ad4858_ch_seamless_hdr chn_seamless_hdr[AD4858_NUM_CHANNELS];
 };
 
 /**
@@ -330,6 +352,10 @@ struct ad4858_dev {
 	uint16_t chn_ur[AD4858_NUM_CHANNELS];
 	/** Big endianess status flag */
 	bool big_endian;
+	/** Channel sleep value */
+	enum ad4858_ch_sleep_value chn_sleep_value[AD4858_NUM_CHANNELS];
+	/** Channel seamless HDR value */
+	enum ad4858_ch_seamless_hdr chn_seamless_hdr[AD4858_NUM_CHANNELS];
 };
 
 /* Initialize the device */
@@ -418,5 +444,13 @@ int ad4858_spi_data_read(struct ad4858_dev *dev, struct ad4858_conv_data *data);
 
 /* Perform conversion and read ADC data (for all channels). */
 int ad4858_read_data(struct ad4858_dev *dev, struct ad4858_conv_data *data);
+
+/* Enable/Disable channel sleep */
+int ad4858_enable_ch_sleep(struct ad4858_dev* dev, uint8_t chn,
+			   enum ad4858_ch_sleep_value sleep_status);
+
+/* Enable/Disable seamless HDR */
+int ad4858_enable_ch_seamless_hdr(struct ad4858_dev* dev, uint8_t chn,
+				  enum ad4858_ch_seamless_hdr seamless_hdr_status);
 
 #endif	// AD4858_H_
