@@ -37,6 +37,13 @@ DIGITAL INPUT/OUTPUT
    drivers/max22196
    drivers/max22200
 
+DIGITAL TO ANALOG CONVERTERS
+============================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/max2201x
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
