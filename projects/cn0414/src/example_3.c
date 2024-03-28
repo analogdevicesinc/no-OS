@@ -49,7 +49,7 @@ int main(void)
 		.chip_select = 0,
 		.extra = &cn0414_spi_extra,
 	};
-	ad717x_init_param ad4111_init = {
+	struct ad717x_init_param ad4111_init = {
 		.spi_init = cn0414_spi_init,
 		.regs = ad4111_regs,
 		.num_regs = NO_OS_ARRAY_SIZE(ad4111_regs),
@@ -74,12 +74,12 @@ int main(void)
 		},
 		.filter_configuration = {
 			{
-				.odr = 0
+				.odr = 22
 			},
 		},
 		.mode =  CONTINUOUS,
 	};
-	ad717x_dev *ad4111;
+	struct ad717x_dev *ad4111;
 	int ret;
 
 	ret = no_os_init();
@@ -89,7 +89,7 @@ int main(void)
 	ret = no_os_uart_init(&uart, &uart_init);
 	if (ret < 0)
 		return ret;
-	
+
 	no_os_uart_stdio(uart);
 
 	printf("Hello\n\r");
