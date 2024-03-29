@@ -44,5 +44,7 @@ struct max_uart_init_param xuip = {
 };
 
 struct max_i2c_init_param adt7420_i2c_extra = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH
+	// .vssel = MXC_GPIO_VSSEL_VDDIOH,
+	.sda_pinctrl = MAX_GPIO_PINCTRL(0, 30, 1, NO_OS_PULL_NONE, MXC_GPIO_VSSEL_VDDIOH),
+	.scl_pinctrl = MAX_GPIO_PINCTRL(0, 31, 1, NO_OS_PULL_NONE, MXC_GPIO_VSSEL_VDDIOH),
 };
