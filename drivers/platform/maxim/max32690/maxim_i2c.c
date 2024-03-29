@@ -48,7 +48,12 @@
 #include "mxc_errors.h"
 #include "no_os_alloc.h"
 
+#define MSDK_NO_GPIO_CLK_INIT
 #define I2C_MASTER_MODE	1
+
+#define MAX_I2C_CLK(id) ((id == 0) ? MXC_SYS_PERIPH_CLOCK_I2C0 :	\
+			 (id == 1) ? MXC_SYS_PERIPH_CLOCK_I2C1:		\
+			 (id == 2) ? MXC_SYS_PERIPH_CLOCK_I2C2: 0)
 
 /** Used to know how many instances are created */
 static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
@@ -84,11 +89,20 @@ void I2C2_IRQHandler(void)
  * @param vssel - the VDDIO level.
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
+static int32_t _max_i2c_pins_config(struct no_os_i2c_init_param *param,
+				    mxc_gpio_vssel_t vssel)
 {
+	struct max_i2c_init_param *max_param = param->extra;
 	mxc_gpio_cfg_t i2c_pins;
 
-	switch (device_id) {
+	if (max_param->sda_pinctrl.port && max_param->scl_pinctrl.port) {
+		MXC_GPIO_Config(&max_param->sda_pinctrl);
+		MXC_GPIO_Config(&max_param->scl_pinctrl);
+
+		return 0;
+	}
+
+	switch (param->device_id) {
 	case 0:
 		i2c_pins = gpio_cfg_i2c0;
 		break;
@@ -164,6 +178,7 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 
 	if (nb_created_desc[param->device_id] == 0) {
 		MXC_I2C_Shutdown(max_i2c->handler);
+		MXC_SYS_ClockEnable(MAX_I2C_CLK(param->device_id));
 		/** The last parameter (slave address) is ignored in master mode */
 		if((MXC_I2C_Init(i2c_regs, I2C_MASTER_MODE, 0)) != E_NO_ERROR) {
 			ret = -1;
@@ -171,7 +186,7 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 		}
 	}
 
-	ret = _max_i2c_pins_config((*desc)->device_id, eparam->vssel);
+	ret = _max_i2c_pins_config(param, eparam->vssel);
 	if (ret)
 		return ret;
 
