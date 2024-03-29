@@ -43,6 +43,7 @@
 #include <string.h>
 
 #include "i2c.h"
+#include "i2c_reva.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
@@ -51,6 +52,9 @@
 #include "max32655.h"
 
 #define I2C_MASTER_MODE	1
+#define MAX_I2C_CLK(id) ((id == 0) ? MXC_SYS_PERIPH_CLOCK_I2C0 :	\
+			 (id == 1) ? MXC_SYS_PERIPH_CLOCK_I2C1:		\
+			 (id == 2) ? MXC_SYS_PERIPH_CLOCK_I2C2: 0)
 
 /** Used to know how many instances are created */
 static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
@@ -81,16 +85,23 @@ void I2C2_IRQHandler(void)
 #endif
 
 /**
- * @brief Configure the VDDIO level for a I2C interface
- * @param device_id - the interface number.
- * @param vssel - the VDDIO level.
+ * @brief Configure the I2C signal pins
+ * @param param - Parameter used to configure the I2C device.
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
+static int32_t _max_i2c_pins_config(const struct no_os_i2c_init_param *param)
 {
+	struct max_i2c_init_param *max_param = param->extra;
 	mxc_gpio_cfg_t i2c_pins;
 
-	switch (device_id) {
+	if (max_param->sda_pinctrl.port && max_param->scl_pinctrl.port) {
+		MXC_GPIO_Config(&max_param->sda_pinctrl);
+		MXC_GPIO_Config(&max_param->scl_pinctrl);
+
+		return 0;
+	}
+
+	switch (param->device_id) {
 	case 0:
 		i2c_pins = gpio_cfg_i2c0;
 		break;
@@ -104,11 +115,12 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 		return -EINVAL;
 	}
 
-	i2c_pins.vssel = vssel;
+	i2c_pins.vssel = max_param->vssel;
 	MXC_GPIO_Config(&i2c_pins);
 
 	return 0;
 }
+
 
 /**
  * @brief Initialize the I2C communication peripheral.
@@ -124,7 +136,6 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 			    const struct no_os_i2c_init_param *param)
 {
-	struct max_i2c_init_param *eparam;
 	int32_t ret;
 	struct max_i2c_extra *max_i2c;
 	mxc_i2c_regs_t *i2c_regs;
@@ -145,7 +156,6 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 		goto error_desc;
 	}
 
-	eparam = param->extra;
 	i2c_regs = MXC_I2C_GET_I2C(param->device_id);
 	max_i2c->handler = i2c_regs;
 	(*desc)->device_id = param->device_id;
@@ -165,17 +175,17 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 	(*desc)->extra = max_i2c;
 
 	if (nb_created_desc[param->device_id] == 0) {
-		MXC_I2C_Shutdown(max_i2c->handler);
-		/** The last parameter (slave address) is ignored in master mode */
-		if((MXC_I2C_Init(i2c_regs, I2C_MASTER_MODE, 0)) != E_NO_ERROR) {
-			ret = -1;
+		ret = _max_i2c_pins_config(param);
+		if (ret)
 			goto error_extra;
-		}
-	}
 
-	ret = _max_i2c_pins_config((*desc)->device_id, eparam->vssel);
-	if (ret)
-		return ret;
+		MXC_I2C_Shutdown(max_i2c->handler);
+		MXC_SYS_ClockEnable(MAX_I2C_CLK(param->device_id));
+		/** The last parameter (slave address) is ignored in master mode */
+		ret = MXC_I2C_RevA_Init((mxc_i2c_reva_regs_t *)i2c_regs, I2C_MASTER_MODE, 0);
+		if (ret)
+			goto error_extra;
+	}
 
 	freq = MXC_I2C_GetFrequency(i2c_regs);
 	freq = no_os_min(freq, (*desc)->max_speed_hz);

@@ -47,6 +47,9 @@
 #include "gpio.h"
 #include "no_os_i2c.h"
 
+#define MAX_GPIO_PINCTRL(port, pin, func, pad, vssel) \
+	{MXC_GPIO##port, MXC_GPIO_PIN_##pin, MXC_GPIO_FUNC_ALT##func, pad, vssel, MXC_GPIO_DRVSTR_0}
+
 /**
  * @struct max_i2c_extra
  * @brief MAXIM specific I2C handler structure
@@ -64,6 +67,8 @@ struct max_i2c_extra {
 
 struct max_i2c_init_param {
 	mxc_gpio_vssel_t vssel;
+	mxc_gpio_cfg_t sda_pinctrl;
+	mxc_gpio_cfg_t scl_pinctrl;
 };
 
 /**
