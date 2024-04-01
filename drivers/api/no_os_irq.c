@@ -231,3 +231,21 @@ int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 
 	return desc->platform_ops->set_priority(desc, irq_id, priority_level);
 }
+
+/**
+ * @brief Clear the pending interrupt.
+ * @param desc - The IRQ controller descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @return 0 in case of success, negative errno error codes.
+ */
+int32_t no_os_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
+				uint32_t irq_id)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->clear_pending)
+		return -ENOSYS;
+
+	return desc->platform_ops->clear_pending(desc, irq_id);
+}
