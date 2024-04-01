@@ -449,6 +449,24 @@ static int32_t stm32_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 	return 0;
 }
 
+/*
+ * @brief Clear the pending interrupt for the current GPIO pin.
+ * @param desc           - GPIO interrupt controller descriptor.
+ * @param irq_id         - Not used, pin id is already present in desc.
+ * @return 0
+ */
+static int32_t stm32_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
+				       uint32_t irq_id)
+{
+	if (!desc || !desc->extra || !IS_EXTI_GPIO_PIN(desc->irq_ctrl_id))
+		return -EINVAL;
+
+	if (__HAL_GPIO_EXTI_GET_IT(1 << (desc->irq_ctrl_id)))
+		__HAL_GPIO_EXTI_CLEAR_IT(1 << (desc->irq_ctrl_id));
+
+	return 0;
+}
+
 /**
  * @brief stm32 specific IRQ platform ops structure
  */
@@ -462,5 +480,6 @@ const struct no_os_irq_platform_ops stm32_gpio_irq_ops = {
 	.enable = &stm32_gpio_irq_enable,
 	.disable = &stm32_gpio_irq_disable,
 	.set_priority = &stm32_gpio_irq_set_priority,
-	.remove = &stm32_gpio_irq_ctrl_remove
+	.remove = &stm32_gpio_irq_ctrl_remove,
+	.clear_pending = &stm32_irq_clear_pending
 };

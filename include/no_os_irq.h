@@ -190,6 +190,8 @@ struct no_os_irq_platform_ops {
 				uint32_t priority_level);
 	/** IRQ remove function pointer */
 	int32_t (*remove)(struct no_os_irq_ctrl_desc *desc);
+	/** Clear pending interrupt */
+	int32_t(*clear_pending)(struct no_os_irq_ctrl_desc* desc, uint32_t irq_id);
 };
 
 /******************************************************************************/
@@ -234,4 +236,8 @@ int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 			       uint32_t irq_id,
 			       uint32_t priority_level);
+
+/* Clear the pending interrupts */
+int32_t no_os_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
+				uint32_t irq_id);
 #endif // _NO_OS_IRQ_H_
