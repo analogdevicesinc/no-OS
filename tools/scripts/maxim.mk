@@ -114,6 +114,20 @@ ifeq ($(TARGET_LCASE), max32650)
 INCS := $(filter-out $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/mxc_device.h, $(INCS))
 endif
 
+ifeq ($(NO_OS_USB_UART),y)
+SRCS +=	$(MAXIM_LIBRARIES)/MAXUSB/src/core/usb_event.c
+INCS += $(MAXIM_LIBRARIES)/MAXUSB/include/core/usb.h \
+	$(MAXIM_LIBRARIES)/MAXUSB/include/core/usb_protocol.h \
+	$(MAXIM_LIBRARIES)/MAXUSB/include/core/usb_event.h \
+	$(PLATFORM_DRIVERS)/maxim_usb_uart_descriptors.h
+SRC_DIRS += $(MAXIM_LIBRARIES)/MAXUSB/src/core/musbhsfc \
+	$(MAXIM_LIBRARIES)/MAXUSB/src/enumerate \
+	$(MAXIM_LIBRARIES)/MAXUSB/src/devclass \
+	$(MAXIM_LIBRARIES)/MAXUSB/include/core/musbhsfc \
+	$(MAXIM_LIBRARIES)/MAXUSB/include/enumerate \
+	$(MAXIM_LIBRARIES)/MAXUSB/include/devclass
+endif
+
 $(PLATFORM)_project:
 	$(call print, Building for target $(TARGET_LCASE))
 	$(call print,Creating IDE project)
