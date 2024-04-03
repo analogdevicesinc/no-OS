@@ -75,6 +75,8 @@ struct axi_pwm_desc {
 	uint32_t channel;
 	/** Used to store the period when the channel is disabled */
 	uint32_t ch_period;
+	/** Hardware version necessary for checking for the right register offsets  */
+	uint32_t hw_major_ver;
 };
 
 /**
