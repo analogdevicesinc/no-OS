@@ -57,20 +57,22 @@
 #define AXI_PWMGEN_REG_CORE_MAGIC	0x0C
 #define AXI_PWMGEN_REG_CONFIG		0x10
 #define AXI_PWMGEN_REG_NPWM		0x14
-#define AXI_PWMGEN_CH_PERIOD_BASE	0x40
-#define AXI_PWMGEN_CH_DUTY_BASE		0x44
-#define AXI_PWMGEN_CH_PHASE_BASE	0x48
-
-#define AXI_PWMGEN_CHX_PERIOD(ch)	(AXI_PWMGEN_CH_PERIOD_BASE + (12 * (ch)))
-#define AXI_PWMGEN_CHX_DUTY(ch)		(AXI_PWMGEN_CH_DUTY_BASE + (12 * (ch)))
-#define AXI_PWMGEN_CHX_PHASE(ch)	(AXI_PWMGEN_CH_PHASE_BASE + (12 * (ch)))
+#define AXI_PWMGEN_CHX_PERIOD(p, ch) \
+    (((p)->hw_major_ver == 1) ? (0x40 + 12 * (ch)) : (0x40 + 4 * (ch)))
+#define AXI_PWMGEN_CHX_DUTY(p, ch) \
+    (((p)->hw_major_ver == 1) ? (0x44 + 12 * (ch)) : (0x80 + 4 * (ch)))
+#define AXI_PWMGEN_CHX_PHASE(p, ch) \
+    (((p)->hw_major_ver == 1) ? (0x48 + 12 * (ch)) : (0xC0 + 4 * (ch)))
 #define AXI_PWMGEN_TEST_DATA		0x5A0F0081
 #define AXI_PWMGEN_LOAD_CONIG		NO_OS_BIT(1)
 #define AXI_PWMGEN_RESET		NO_OS_BIT(0)
 #define AXI_PWMGEN_CHANNEL_DISABLE	0
-#define AXI_PWMGEN_MAX_CHANNELS		4
+#define AXI_PWMGEN_MAX_CHANNELS(p)	(((p)->hw_major_ver == 1) ? 4 : 16)
 #define NSEC_PER_USEC			1000L
 #define USEC_PER_SEC			1000000L
+#define AXI_PWMGEN_VERSION_MAJOR(x)	(((x) >> 16) & 0xff)
+#define AXI_PWMGEN_VERSION_MINOR(x)	(((x) >> 8) & 0xff)
+#define AXI_PWMGEN_VERSION_PATCH(x)	((x) & 0xff)
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -111,7 +113,7 @@ int32_t axi_pwm_enable(struct no_os_pwm_desc *desc)
 	int ret;
 
 	ret = no_os_axi_io_write(axi_desc->base_addr,
-				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
+				 AXI_PWMGEN_CHX_PERIOD(axi_desc, axi_desc->channel),
 				 axi_desc->ch_period);
 	if (ret != 0)
 		return ret;
@@ -132,7 +134,7 @@ int32_t axi_pwm_disable(struct no_os_pwm_desc *desc)
 	int ret;
 
 	ret = no_os_axi_io_write(axi_desc->base_addr,
-				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
+				 AXI_PWMGEN_CHX_PERIOD(axi_desc, axi_desc->channel),
 				 AXI_PWMGEN_CHANNEL_DISABLE);
 	if (ret != 0)
 		return ret;
@@ -159,7 +161,7 @@ int32_t axi_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
 	period_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	axi_desc->ch_period = period_cnt;
 	ret = no_os_axi_io_write(axi_desc->base_addr,
-				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
+				 AXI_PWMGEN_CHX_PERIOD(axi_desc, axi_desc->channel),
 				 desc->enabled ? period_cnt : 0);
 	if (ret != 0)
 		return ret;
@@ -205,7 +207,7 @@ int32_t axi_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * duty_cycle_ns;
 	duty_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	ret = no_os_axi_io_write(axi_desc->base_addr,
-				 AXI_PWMGEN_CHX_DUTY(axi_desc->channel),
+				 AXI_PWMGEN_CHX_DUTY(axi_desc, axi_desc->channel),
 				 duty_cnt);
 	if (ret != 0)
 		return ret;
@@ -247,7 +249,7 @@ int32_t axi_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * phase_ns;
 	phase_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	ret = no_os_axi_io_write(axi_desc->base_addr,
-				 AXI_PWMGEN_CHX_PHASE(axi_desc->channel),
+				 AXI_PWMGEN_CHX_PHASE(axi_desc, axi_desc->channel),
 				 phase_cnt);
 	if (ret != 0)
 		return ret;
@@ -327,6 +329,19 @@ int32_t axi_pwm_init(struct no_os_pwm_desc **desc,
 	ret = no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_SCRATCHPAD,
 				 AXI_PWMGEN_TEST_DATA);
 	if (ret != 0)
+		goto error_xdesc;
+
+	/* Get Hardware version */
+	ret = no_os_axi_io_read(axi_desc->base_addr,
+				AXI_PWMGEN_REG_CORE_VERSION,
+				&data);
+	if (ret != 0)
+		goto error_xdesc;
+
+	axi_desc->hw_major_ver = AXI_PWMGEN_VERSION_MAJOR(data);
+
+	/** Check if channel is out of hw available range */
+	if (axi_desc->channel >= AXI_PWMGEN_MAX_CHANNELS(axi_desc))
 		goto error_xdesc;
 
 	ret = no_os_axi_io_read(axi_desc->base_addr,
