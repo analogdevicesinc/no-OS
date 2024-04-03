@@ -76,6 +76,7 @@ enum no_os_irq_event {
 	NO_OS_EVT_DMA_RX_COMPLETE,
 	NO_OS_EVT_DMA_RX_HALF_COMPLETE,
 	NO_OS_EVT_DMA_TX_COMPLETE,
+	NO_OS_EVT_USB,
 };
 
 enum no_os_irq_trig_level {
@@ -95,6 +96,7 @@ enum no_os_irq_peripheral {
 	NO_OS_TIM_DMA_IRQ,
 	NO_OS_SPI_DMA_IRQ,
 	NO_OS_DMA_IRQ,
+	NO_OS_USB_IRQ,
 };
 
 /**
