@@ -64,6 +64,7 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED},
 	[NO_OS_EVT_DMA_RX_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_COMPLETE},
 	[NO_OS_EVT_DMA_TX_COMPLETE] = {.event = NO_OS_EVT_DMA_TX_COMPLETE},
+	[NO_OS_EVT_USB] = {.event = NO_OS_EVT_USB},
 };
 
 extern mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
@@ -318,6 +319,21 @@ void RTC_IRQHandler()
 	}
 }
 
+void USB_IRQHandler(void)
+{
+	int ret;
+	struct irq_action key = {.irq_id = USB_IRQn};
+	struct irq_action *action;
+	struct event_list *evt_list = &_events[NO_OS_EVT_USB];
+
+	ret = no_os_list_read_find(evt_list->actions, (void **)&action, &key);
+	if (ret)
+		return;
+
+	if (action->callback)
+		action->callback(action->ctx);
+}
+
 /**
  * @brief UART callback function that sets the event and further calls
  * the user registered callback
@@ -463,6 +479,7 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	case NO_OS_DMA_IRQ:
 	case NO_OS_UART_IRQ:
 	case NO_OS_TIM_IRQ:
+	case NO_OS_USB_IRQ:
 		break;
 
 	case NO_OS_RTC_IRQ:
