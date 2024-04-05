@@ -945,25 +945,24 @@ static int32_t adrv9025_bb_recalc_rate(struct no_os_clk_desc *desc,
 				       uint64_t *rate)
 {
 	struct adrv9025_rf_phy *adrv9025_dev;
-	uint64_t read_rate = 0;
-	int ret;
 
 	adrv9025_dev = desc->dev_desc;
 
-	ret = no_os_clk_recalc_rate(adrv9025_dev->dev_clk, &read_rate);
-	if (!ret)
-		*rate = read_rate;
+	if (!strcmp(desc->name, "-rx_sampl_clk"))
+		*rate = adrv9025_dev->rx_iqRate_kHz * 1000;
+	else if (!strcmp(desc->name, "-tx_sampl_clk"))
+		*rate = adrv9025_dev->tx_iqRate_kHz * 1000;
+	else
+		return -EINVAL;
 
-	return ret;
+	return 0;
 }
 
 static int32_t adrv9025_bb_set_rate(struct no_os_clk_desc *desc,
 				    uint64_t rate)
 {
-	struct adrv9025_rf_phy *adrv9025_dev;
-	adrv9025_dev = desc->dev_desc;
-
-	return no_os_clk_set_rate(adrv9025_dev->dev_clk, rate);
+	// Do nothing
+	return 0;
 }
 
 static int32_t adrv9025_bb_round_rate(struct no_os_clk_desc *desc,
