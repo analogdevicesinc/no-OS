@@ -753,15 +753,16 @@ int ad7124_set_channel_status(struct ad7124_dev *device,
 			      bool channel_status)
 {
 	int ret;
+	uint16_t status;
 
 	if (channel_status)
-		channel_status = AD7124_CH_MAP_REG_CH_ENABLE;
+		status = AD7124_CH_MAP_REG_CH_ENABLE;
 	else
-		channel_status = 0x0U;
+		status = 0x0U;
 
 	ret = ad7124_reg_write_msk(device,
 				   AD7124_CH0_MAP_REG+chn_num,
-				   channel_status,
+				   status,
 				   AD7124_CH_MAP_REG_CH_ENABLE);
 	if (ret)
 		return ret;
@@ -879,6 +880,7 @@ int ad7124_set_reference_source(struct ad7124_dev* device,
 				bool ref_en)
 {
 	int ret;
+	uint16_t status;
 
 	if (!device || ref_source >= MAX_REF_SOURCES)
 		return -EINVAL;
@@ -893,15 +895,15 @@ int ad7124_set_reference_source(struct ad7124_dev* device,
 	device->setups[setup_id].ref_source = ref_source;
 
 	if (ref_en)
-		ref_en = AD7124_ADC_CTRL_REG_REF_EN;
+		status = AD7124_ADC_CTRL_REG_REF_EN;
 	else
-		ref_en = 0x0U;
+		status = 0x0U;
 
 	/* Enable the REF_EN Bit in case of Internal reference */
 	if (ref_source == INTERNAL_REF) {
 		ret = ad7124_reg_write_msk(device,
 					   AD7124_ADC_CTRL_REG,
-					   ref_en,
+					   status,
 					   AD7124_ADC_CTRL_REG_REF_EN);
 		if (ret)
 			return ret;
@@ -963,6 +965,29 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 }
 
 /***************************************************************************//**
+ * @brief Select the Power Mode.
+ * @param device - AD7124 Device Descriptor.
+ * @param mode - ADC Power Mode.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int ad7124_set_power_mode(struct ad7124_dev *device,
+			  enum ad7124_power_mode mode)
+{
+	int ret;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_ADC_CTRL_REG,
+				   no_os_field_prep(AD7124_POWER_MODE_MSK, mode),
+				   AD7124_POWER_MODE_MSK);
+	if (ret)
+		return ret;
+
+	device->power_mode = mode;
+
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief Initializes the AD7124.
  * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -1007,7 +1032,6 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	ad7124_update_dev_spi_settings(dev);
 
 	dev->active_device = init_param->active_device;
-	dev->power_mode = init_param->power_mode;
 
 	/* Read ID register to identify the part. */
 	ret = ad7124_read_register(dev, &dev->regs[AD7124_ID_REG]);
@@ -1044,6 +1068,11 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	}
 
 	ret = ad7124_set_adc_mode(dev, init_param->mode);
+	if (ret)
+		goto error_spi;
+
+	ret = ad7124_set_power_mode(dev,
+				    init_param->power_mode);
 	if (ret)
 		goto error_spi;
 
