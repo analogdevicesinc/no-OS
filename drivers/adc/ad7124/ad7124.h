@@ -60,7 +60,9 @@
 #define AD7124_MAX_SETUPS	8
 /* Maximum number of channels */
 #define AD7124_MAX_CHANNELS	16
-/* Device IDs */
+/* Device IDs
+ * The Device IDs for REV-B of boards need to be updated as 0x07 for ad7124-4
+ * and 0x17 for ad7124-8 */
 #define AD7124_4_ID         0x14
 #define AD7124_8_ID	        0x16
 
@@ -275,6 +277,7 @@
 #define AD7124_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(4,3)
 #define AD7124_REF_BUF_MSK                  NO_OS_GENMASK(8,7)
 #define AD7124_AIN_BUF_MSK                  NO_OS_GENMASK(6,5)
+#define AD7124_POWER_MODE_MSK			    NO_OS_GENMASK(7,6)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -636,6 +639,10 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 			  bool ain_buff,
 			  bool ref_buff,
 			  uint8_t setup_id);
+
+/* Select the power mode */
+int ad7124_set_power_mode(struct ad7124_dev *device,
+			  enum ad7124_power_mode mode);
 
 /* Initializes the AD7124 */
 int32_t ad7124_setup(struct ad7124_dev **device,
