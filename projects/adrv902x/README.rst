@@ -52,7 +52,7 @@ Fore more details about the available make rules, check out `this page <https://
 Project Layout and HDL Generation
 =================================
 
-This is how the `adrv902x no-OS project <https://github.com/analogdevicesinc/no-OS/tree/madura_proj/projects/adrv902x>`_ looks like as a file tree:
+This is how the `adrv902x no-OS project <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x>`_ looks like as a file tree:
 
 | no-OS/projects/adrv902x/
 | ├── Makefile
