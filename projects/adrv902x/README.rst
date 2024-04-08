@@ -119,6 +119,39 @@ And this is how the corresponding `drivers section <https://github.com/analogdev
 |     ├── adi_platform.h
 |     └── adi_platform_types.h
 
+Switching Between Use Cases
+===========================
+
+When the implementation of a different use case than the one in the project folder is desired, the following steps have to be followed:
+
+1. From the Madura TES GUI, generate the resources folder that contains the files listed below:
+
+* Firmware files (ADRV9025_FW.bin and ADRV9025_DPDCORE_FW.bin),
+
+* Stream binary (e.g., stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.bin),
+
+* ActiveUseCase.profile and ActiveUtilInit.profile.
+
+2. Since no-OS does not have mechanisms for manipulating files, create a hex dump for each .bin file. As can be seen in the project structure, these are added as header files to the project.
+
+* Use the following command for storing the hex dump in a file::
+
+	xxd -i ADRV9025_FW.bin > ADRV9025_FW.h
+
+* Copy the generated unsigned char array to the correspoding header file in the `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`_ (ADRV9025_FW.bin, ADRV9025_DPDCORE_FW.bin or stream_image_x.bin).
+
+3. Profile files also have to be transformed for being included in the project:
+
+* Generate string literals from the json files using the `json2cstring <https://github.com/analogdevicesinc/no-OS/blob/main/tools/scripts/platform/xilinx/json2cstring>`_ script in the `no-OS repository <https://github.com/analogdevicesinc/no-OS>`_::
+
+	json2cstring ActiveUseCase.profile
+
+* Copy the contents of the generated files to the correspoding header files in the `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`_ (ActiveUseCase_profile.h and ActiveUtilInit_profile.h).
+
+4. Modify the code in the project so that the new settings are correctly used (e.g., `app_config.h <https://github.com/analogdevicesinc/no-OS/blob/main/projects/adrv902x/src/common/app_config.h>`_).
+
+5. Build the project.
+
 Demo Applications
 =================
 
