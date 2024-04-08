@@ -40,10 +40,10 @@ A successful build should end with the following terminal output:
 
 .. code-block:: bash
 
-      text	   data	    bss	    dec	    hex	filename
-   1213464	 368588	1239624	2821676	 2b0e2c	/home/george/max_workspace/no-OS/projects/adrv902x/build/adrv902x.elf
-   [12:05:21] CreatinMake sure to connect your adrv9002 evaluation board to the correct FMC connector or the carrier you use: g BOOT.BIN and archive with files
-   [12:03:56] Done (build/adrv902x.elf)
+	[23:38:48] Creating BOOT.BIN and archive with files
+	text	   data	    bss	    dec	    hex	filename
+	1213864	 368588	1239608	2822060	 2b0fac	/home/george/max_workspace/no-OS/projects/adrv902x/build/adrv902x.elf
+	[23:36:50] Done (build/adrv902x.elf)
 
 Make sure to connect your adrv902x evaluation board to the correct FMC connector or the carrier you use before programming it.
 
