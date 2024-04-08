@@ -16,8 +16,8 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD400x_EVB_SAMPLE_NO			10000
-#define AD400X_DMA_BASEADDR             XPAR_AXI_AD40XX_DMA_BASEADDR
-#define AD400X_SPI_ENGINE_BASEADDR      XPAR_SPI_AD40XX_AXI_REGMAP_BASEADDR
+#define AD400X_DMA_BASEADDR             XPAR_AXI_PULSAR_ADC_DMA_BASEADDR
+#define AD400X_SPI_ENGINE_BASEADDR      XPAR_SPI_PULSAR_ADC_SPI_PULSAR_ADC_AXI_REGMAP_BASEADDR
 #define AD400x_SPI_CS                   0
 #define AD400x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
 
