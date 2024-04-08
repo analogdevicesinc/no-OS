@@ -70,6 +70,11 @@ int main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
+	/* data must be byte alligned when offload is disabled */
+	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0)
+		spi_eng_init_param.data_width =
+			NO_OS_DIV_ROUND_UP(spi_eng_init_param.data_width, 8) * 8;
+
 	ret = ad400x_init(&dev, &ad400x_init_param);
 	if (ret < 0)
 		return ret;

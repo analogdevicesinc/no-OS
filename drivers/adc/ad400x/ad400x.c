@@ -201,18 +201,19 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	int32_t ret;
 	uint8_t data = 0;
 
-#if !defined(USE_STANDARD_SPI)
-	struct spi_engine_init_param *spi_eng_init_param;
-
 	if (!init_param)
 		return -1;
-
-	spi_eng_init_param = init_param->spi_init.extra;
-#endif
 
 	dev = (struct ad400x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
+
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
+	if (ret < 0)
+		goto error;
+
+	dev->dev_id = init_param->dev_id;
+	dev->reg_access_speed = init_param->reg_access_speed;
 
 #if defined(USE_STANDARD_SPI)
 	ret = no_os_gpio_get(&dev->gpio_cnv, init_param->gpio_cnv);
@@ -222,16 +223,10 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	ret = no_os_gpio_direction_output(dev->gpio_cnv, NO_OS_GPIO_LOW);
 	if (ret)
 		goto error;
-#endif
-	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret < 0)
-		goto error;
+#else
+	struct spi_engine_init_param *spi_eng_ip = init_param->spi_init.extra;
 
-	dev->dev_id = init_param->dev_id;
-#if !defined(USE_STANDARD_SPI)
-	dev->reg_access_speed = init_param->reg_access_speed;
-
-	spi_engine_set_transfer_width(dev->spi_desc, 16);
+	spi_engine_set_transfer_width(dev->spi_desc, spi_eng_ip->data_width);
 #endif
 
 	ad400x_spi_reg_read(dev, &data);
@@ -243,10 +238,6 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	ret = ad400x_spi_reg_write(dev, data);
 	if (ret < 0)
 		goto error;
-
-#if !defined(USE_STANDARD_SPI)
-	spi_engine_set_transfer_width(dev->spi_desc, spi_eng_init_param->data_width);
-#endif
 
 	*device = dev;
 
