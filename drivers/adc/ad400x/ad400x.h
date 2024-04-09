@@ -44,6 +44,8 @@
 
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#include "clk_axi_clkgen.h"
+#include "no_os_pwm.h"
 #else
 #include "no_os_spi.h"
 #endif
@@ -81,6 +83,10 @@ extern const char ad400x_device_sign[];
 struct ad400x_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen *clkgen;
+	/* Trigger conversion PWM generator descriptor */
+	struct no_os_pwm_desc *trigger_pwm_desc;
 	/** Conversion Start GPIO descriptor. */
 	struct no_os_gpio_desc *gpio_cnv;
 	/* Register access speed */
@@ -92,6 +98,12 @@ struct ad400x_dev {
 struct ad400x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param spi_init;
+	/* PWM generator init structure */
+	struct no_os_pwm_init_param *trigger_pwm_init;
+	/* Clock gen for hdl design init structure */
+	struct axi_clkgen_init *clkgen_init;
+	/* Clock generator rate */
+	uint32_t axi_clkgen_rate;
 	/** Conversion Start GPIO configuration. */
 	struct no_os_gpio_init_param *gpio_cnv;
 	/* Register access speed */
