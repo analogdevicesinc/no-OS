@@ -142,9 +142,9 @@ When the implementation of a different use case than the one in the project fold
 
 3. Profile files also have to be transformed for being included in the project:
 
-* Generate string literals from the json files using the `json2cstring <https://github.com/analogdevicesinc/no-OS/blob/main/tools/scripts/platform/xilinx/json2cstring>`_ script in the `no-OS repository <https://github.com/analogdevicesinc/no-OS>`_::
+* Generate string literals from the json files using the `json2cstring.sh <https://github.com/analogdevicesinc/no-OS/blob/main/projects/adrv902x/json2cstring.sh>`_ script in the `no-OS project <https://github.com/analogdevicesinc/no-OS/blob/main/projects/adrv902x>`_::
 
-	json2cstring ActiveUseCase.profile
+	./json2cstring path/ActiveUseCase.profile
 
 * Copy the contents of the generated files to the correspoding header files in the `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`_ (ActiveUseCase_profile.h and ActiveUtilInit_profile.h).
 
