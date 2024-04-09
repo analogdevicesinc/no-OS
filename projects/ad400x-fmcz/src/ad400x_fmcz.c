@@ -10,6 +10,8 @@
 #include "spi_engine.h"
 #include "ad400x.h"
 #include "no_os_error.h"
+#include "axi_pwm_extra.h"
+#include "no_os_pwm.h"
 #include "no_os_delay.h"
 
 /******************************************************************************/
@@ -20,6 +22,8 @@
 #define AD400X_SPI_ENGINE_BASEADDR      XPAR_SPI_PULSAR_ADC_SPI_PULSAR_ADC_AXI_REGMAP_BASEADDR
 #define AD400x_SPI_CS                   0
 #define AD400x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
+#define AD400x_RX_CLKGEN_BASEADDR       XPAR_SPI_CLKGEN_BASEADDR
+#define AXI_PWMGEN_BASEADDR             XPAR_PULSAR_ADC_TRIGGER_GEN_BASEADDR
 
 #ifndef SPI_ENGINE_OFFLOAD_EXAMPLE
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	1
@@ -55,28 +59,53 @@ int main()
 	uint32_t commands_data[2] = {0xFF, 0xFF};
 	int32_t ret, i;
 	enum ad400x_supported_dev_ids dev_id = ID_AD4020;
-
 	uint16_t res = ad400x_device_resol[dev_id];
 
 	struct spi_engine_init_param spi_eng_init_param  = {
-		.ref_clk_hz = AD400x_SPI_ENG_REF_CLK_FREQ_HZ,
+		.ref_clk_hz = 160000000,
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = AD400X_SPI_ENGINE_BASEADDR,
-		.cs_delay = 2,
+		.cs_delay = 1,
 		.data_width = res,
+	};
+
+	struct axi_clkgen_init clkgen_init = {
+		.name = "rx_clkgen",
+		.base = AD400x_RX_CLKGEN_BASEADDR,
+		.parent_rate = 100000000,
+	};
+
+	struct axi_pwm_init_param axi_pwm_init = {
+		.base_addr = AXI_PWMGEN_BASEADDR,
+		.ref_clock_Hz = 160000000,
+		.channel = 0,
+	};
+
+	struct no_os_pwm_init_param trigger_pwm_init = {
+		.period_ns = 555,
+		.duty_cycle_ns = 10,
+		.polarity = NO_OS_PWM_POLARITY_HIGH,
+		.platform_ops = &axi_pwm_ops,
+		.extra = &axi_pwm_init,
 	};
 
 	struct ad400x_init_param ad400x_init_param = {
 		.spi_init = {
 			.chip_select = AD400x_SPI_CS,
-			.max_speed_hz = 83333333,
+			.max_speed_hz = 80000000,
 			.mode = NO_OS_SPI_MODE_0,
 			.platform_ops = &spi_eng_platform_ops,
 			.extra = (void*)&spi_eng_init_param,
 		},
+		.trigger_pwm_init = &trigger_pwm_init,
+		.clkgen_init = &clkgen_init,
+		.axi_clkgen_rate = 160000000,
 		.reg_access_speed = 1000000,
-		dev_id, /* dev_id */
-		1,0,0,0,
+		.dev_id = dev_id,
+		.turbo_mode = 1,
+		.high_z_mode = 0,
+		.span_compression = 0,
+		.en_status_bits = 0,
 	};
 
 	print("Test\n\r");
@@ -117,7 +146,7 @@ int main()
 		msg.tx_addr = 0xA000000;
 		msg.commands_data = commands_data;
 
-		ret = spi_engine_offload_transfer(dev->spi_desc, msg, AD400x_EVB_SAMPLE_NO);
+		ret = spi_engine_offload_transfer(dev->spi_desc, msg, AD400x_EVB_SAMPLE_NO * 2);
 		if (ret != 0)
 			return ret;
 
