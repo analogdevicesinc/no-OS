@@ -244,7 +244,7 @@ At this point you may use a Tcl script to retrieve data from memory and store it
 
 You can find more information about  the data `here <https://wiki.analog.com/resources/no-os/dac_dma_example>`_.
 
-The data in the .csv files generated can be visualised using the `plot.py <https://github.com/analogdevicesinc/no-OS/blob/main/tools/scripts/platform/xilinx/plot.py>`_ script in the `no-OS repository <https://github.com/analogdevicesinc/no-OS/tree/master>`_. The following command will display the data on all 8 channels:
+The data in the .csv files generated can be visualised using the `plot.py <https://github.com/analogdevicesinc/no-OS/blob/main/tools/scripts/platform/xilinx/plot.py>`_ script in the `no-OS repo <https://github.com/analogdevicesinc/no-OS>`_. The following command will display the data on all 8 channels:
 
 .. code-block:: bash
 
