@@ -97,7 +97,7 @@ struct ad400x_dev {
 
 struct ad400x_init_param {
 	/* SPI */
-	struct no_os_spi_init_param spi_init;
+	struct no_os_spi_init_param *spi_init;
 	/* PWM generator init structure */
 	struct no_os_pwm_init_param *trigger_pwm_init;
 	/* Clock gen for hdl design init structure */
