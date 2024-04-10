@@ -237,7 +237,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!dev)
 		return -1;
 
-	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		goto error;
 
@@ -253,7 +253,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret)
 		goto error;
 #else
-	struct spi_engine_init_param *spi_eng_ip = init_param->spi_init.extra;
+	struct spi_engine_init_param *spi_eng_ip = init_param->spi_init->extra;
 
 	spi_engine_set_transfer_width(dev->spi_desc, spi_eng_ip->data_width);
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);

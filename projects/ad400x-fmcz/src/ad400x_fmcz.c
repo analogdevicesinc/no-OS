@@ -69,6 +69,14 @@ int main()
 		.data_width = res,
 	};
 
+	struct no_os_spi_init_param ad400x_spi_init = {
+		.chip_select = AD400x_SPI_CS,
+		.max_speed_hz = 80000000,
+		.mode = NO_OS_SPI_MODE_0,
+		.platform_ops = &spi_eng_platform_ops,
+		.extra = (void*)&spi_eng_init_param,
+	};
+
 	struct axi_clkgen_init clkgen_init = {
 		.name = "rx_clkgen",
 		.base = AD400x_RX_CLKGEN_BASEADDR,
@@ -90,13 +98,7 @@ int main()
 	};
 
 	struct ad400x_init_param ad400x_init_param = {
-		.spi_init = {
-			.chip_select = AD400x_SPI_CS,
-			.max_speed_hz = 80000000,
-			.mode = NO_OS_SPI_MODE_0,
-			.platform_ops = &spi_eng_platform_ops,
-			.extra = (void*)&spi_eng_init_param,
-		},
+		.spi_init = &ad400x_spi_init,
 		.trigger_pwm_init = &trigger_pwm_init,
 		.clkgen_init = &clkgen_init,
 		.axi_clkgen_rate = 160000000,
