@@ -310,6 +310,9 @@ int basic_example_main(void)
 		goto error_8;
 	}
 
+	// Set DDS data
+	axi_dac_data_setup(phy->tx_dac);
+
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init tx init error: %d\n", status);
