@@ -114,7 +114,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	struct hmc7044_init_param hmc7044_param = {
 		.spi_init = NULL,
-		.clkin_freq = {122880000, 122880000, 0, 0},
+		.clkin_freq = {30720000, 30720000, 0, 0},
 		.vcxo_freq = 122880000,
 		.pll2_freq = 2949120000,
 		.pll1_loop_bw = 200,
@@ -244,7 +244,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 
 	struct hmc7044_init_param hmc7044_car_param = {
 		.spi_init = NULL,
-		.clkin_freq = {122880000, 122880000, 0, 19200000},
+		.clkin_freq = {122880000, 30720000, 0, 38400000},
 		.vcxo_freq = 122880000,
 		.pll2_freq = 2949120000,
 		.pll1_loop_bw = 200,
