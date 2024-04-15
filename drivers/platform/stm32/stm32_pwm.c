@@ -308,7 +308,17 @@ static int32_t stm32_init_pwm(struct stm32_pwm_desc *desc,
 
 	sConfigOC.OCMode = ocmode;
 	sConfigOC.Pulse = pwm_pulse_width;
-	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	switch (param->polarity) {
+	case NO_OS_PWM_POLARITY_HIGH:
+		sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+		break;
+	case NO_OS_PWM_POLARITY_LOW:
+		sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
+		break;
+	default:
+		return -EINVAL;
+	};
+
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
 	sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
