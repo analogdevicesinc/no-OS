@@ -414,6 +414,7 @@ int main(void)
 	no_os_gpio_direction_output(gpio_plddrbypass, 1);
 
 #ifndef ADRV9008_1
+	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 DAC_DDR_BASEADDR);
