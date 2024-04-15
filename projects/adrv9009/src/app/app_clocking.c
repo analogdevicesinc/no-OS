@@ -242,6 +242,10 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		}
 	};
 
+#if defined(ZU11EG)
+	car_chan_spec[0].divider = 0x60;
+#endif
+
 	struct hmc7044_init_param hmc7044_car_param = {
 		.spi_init = NULL,
 		.clkin_freq = {122880000, 30720000, 0, 38400000},
