@@ -65,7 +65,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD463x_BUF_SIZE			3000
-#define AD463x_EVB_SAMPLE_NO		1000
+#define AD463x_EVB_SAMPLE_NO		500
 /* Main function */
 int main()
 {
@@ -179,12 +179,15 @@ int main()
 		.device_id = ID_ADAQ4224, /* dev_id */
 		.gpio_pgia_a0 = &ad463x_pgia_a0,
 		.gpio_pgia_a1 = &ad463x_pgia_a1,
+		.num_chn = 1,
 #elif AD4030_DEV
 		.vref = 5000 * MILLI,
 		.device_id = ID_AD4030, /* dev_id */
+		.num_chn = 1,
 #else
 		.vref = 5000 * MILLI,
 		.device_id = ID_AD4630_24, /* dev_id */
+		.num_chn = 2,
 #endif
 		.dcache_invalidate_range =
 		(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
@@ -222,7 +225,7 @@ int main()
 	if (ret != 0)
 		return ret;
 
-	for (i = 0; i < (AD463x_EVB_SAMPLE_NO); i += 2) {
+	for (i = 0; i < (AD463x_EVB_SAMPLE_NO * 2); i += 2) {
 		if (buf[i] != AD463X_OUT_DATA_PAT) {
 			pr_err("AD463x Test Pattern Data read failed! :%d/n",i);
 			return -1;
@@ -265,10 +268,11 @@ int main()
 		ret = ad463x_read_data(dev, buf, AD463x_EVB_SAMPLE_NO);
 		if (ret != 0)
 			return ret;
-		for (i = 0; i < AD463x_EVB_SAMPLE_NO; i+=2)
-			pr_info("ADC sample ch1: %lu : %lu \n", i, buf[i]);
-		for (i = 1; i < AD463x_EVB_SAMPLE_NO; i+=2)
-			pr_info("ADC sample ch2: %lu : %lu \n", i, buf[i]);
+		for (i = 0; i < (AD463x_EVB_SAMPLE_NO * 2); i += 2)
+			pr_info("ADC sample ch1: %lu : %lu \n", i / 2, buf[i]);
+		if (dev->num_chn == 2)
+			for (i = 1; i < (AD463x_EVB_SAMPLE_NO * 2); i += 2)
+				pr_info("ADC sample ch2: %lu : %lu \n", (i - 1) / 2, buf[i]);
 	}
 #else
 	struct iio_ad463x *iio_ad463x;
