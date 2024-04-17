@@ -227,6 +227,8 @@ struct ad463x_init_param {
 	int32_t vref;
 	/** Output Mode */
 	uint8_t output_mode;
+	/** num channels */
+	uint8_t num_chn;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -276,6 +278,8 @@ struct ad463x_dev {
 	uint8_t real_bits_precision;
 	/** pgia availability */
 	bool has_pgia;
+	/** num channels */
+	uint8_t num_chn;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
