@@ -50,9 +50,9 @@
 /******************************************************************************/
 
 static const char * const adis1647x_rang_mdl_txt[] = {
-	[ADIS16477_1] = "+/-125_degrees_per_sec",
-	[ADIS16477_2] = "+/-500_degrees_per_sec",
-	[ADIS16477_3] = "+/-2000_degrees_per_sec",
+	[ADIS1647X_ID_NO_OFFSET(ADIS16477_1)] = "+/-125_degrees_per_sec",
+	[ADIS1647X_ID_NO_OFFSET(ADIS16477_2)] = "+/-500_degrees_per_sec",
+	[ADIS1647X_ID_NO_OFFSET(ADIS16477_3)] = "+/-2000_degrees_per_sec",
 };
 
 static struct scan_type adis1647x_iio_accel_scan_type = {
@@ -397,7 +397,8 @@ int adis1647x_iio_init(struct adis_iio_dev **iio_dev,
 	desc->iio_dev = &adis1647x_iio_dev;
 
 	/* Update data based on the device id */
-	desc->rang_mdl_txt = adis1647x_rang_mdl_txt[init_param->dev_id];
+	desc->rang_mdl_txt = adis1647x_rang_mdl_txt[ADIS1647X_ID_NO_OFFSET(
+				     init_param->dev_id)];
 
 	ret = adis_init(&desc->adis_dev, init_param);
 	if (ret)
