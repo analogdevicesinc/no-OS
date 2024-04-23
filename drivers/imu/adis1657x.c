@@ -51,7 +51,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define ADIS1657X_ID_NO_OFFSET(x)		((x) - ADIS16575_2)
 #define ADIS1657X_MSG_SIZE_16_BIT_BURST_FIFO	20 /* in bytes */
 #define ADIS1657X_MSG_SIZE_32_BIT_BURST_FIFO	34 /* in bytes */
 #define ADIS1657X_READ_BURST_DATA_NO_POP	0x00
