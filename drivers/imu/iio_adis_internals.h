@@ -185,7 +185,7 @@ struct adis_iio_dev {
 	/** Number of lost samples for the current buffer reading. */
 	uint16_t samples_lost;
 	/** Current data counter for the current buffer reading.*/
-	uint16_t data_cntr;
+	uint32_t data_cntr;
 	/** ADIS sampling frequency. */
 	uint32_t sampling_frequency;
 	/** Current setting for adis burst size. */

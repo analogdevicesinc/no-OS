@@ -2456,10 +2456,7 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
 /**
  * @brief Read burst data.
  * @param adis      - The adis device.
- * @param buff_size - Size of buff, if burst32 is true size must be
- *		      higher or equal to 30, if burst32 is false size
- *		      must be higher or equal to 18
- * @param buff      - Array filled with read data.
+ * @param data      - The burst read data structure to be populated.
  * @param burst32   - True if 32-bit data is requested for accel
  *		      and gyro (or delta angle and delta velocity)
  *		      measurements, false if 16-bit data is requested.
@@ -2468,18 +2465,12 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
  * @param fifo_pop  - In case FIFO is present, will pop the fifo if
  * 		      true. Unused if FIFO is not present.
  * @return 0 in case of success, error code otherwise.
+ * -EAGAIN in case the request has to be sent again due to data being unavailable
+ * at the time of the request.
  */
-int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
-			 uint16_t *buff, bool burst32, uint8_t burst_sel,
-			 bool fifo_pop)
+int adis_read_burst_data(struct adis_dev *adis, struct adis_burst_data *data,
+			 bool burst32, uint8_t burst_sel, bool fifo_pop)
 {
-	/* If custom implementation is available, use it. */
-	if (adis->info->read_burst_data)
-		return adis->info->read_burst_data(adis, buff_size, buff, burst32, burst_sel,
-						   fifo_pop);
-	int ret;
-	uint8_t msg_size, idx;
-
 	/* Device does not support delta data readings with burst method */
 	if (!(adis->info->flags & ADIS_HAS_BURST_DELTA_DATA) && burst_sel)
 		return -EINVAL;
@@ -2488,31 +2479,36 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
 	if (!(adis->info->flags & ADIS_HAS_BURST32) && burst32)
 		return -EINVAL;
 
-	/* Make sure enough size is allocated if burst32 is true */
-	/* burst 32 data:  1 * 2 (diag) + 6 * 4 + 1 * 2 (temp) + 1 * 2 (counter) = 30 */
-	if (burst32 && buff_size < 30)
-		return -EINVAL;
+	/* If custom implementation is available, use it. */
+	if (adis->info->read_burst_data)
+		return adis->info->read_burst_data(adis, data, burst32, burst_sel, fifo_pop);
 
-	/* Make sure enough size is allocated if burst32 is false */
-	/* burst 32 data:  1 * 2 (diag) + 6 * 2 + 1 * 2 (temp) + 1 * 2 (counter) = 18 */
-	if (!burst32 && buff_size < 18)
-		return -EINVAL;
+	int ret = 0;
+	uint8_t msg_size = ADIS_MSG_SIZE_16_BIT_BURST;
 
 	if (adis->info->flags & ADIS_HAS_BURST32) {
 		if (adis->burst32 != burst32) {
 			ret = adis_write_burst32(adis, burst32);
 			if (ret)
 				return ret;
+			ret = -EAGAIN;
 		}
 		if (adis->burst_sel != burst_sel) {
 			ret = adis_write_burst_sel(adis, burst_sel);
 			if (ret)
 				return ret;
+			ret = -EAGAIN;
 		}
-		msg_size = ADIS_MSG_SIZE_16_BIT_BURST;
-	} else {
-		msg_size = ADIS_MSG_SIZE_32_BIT_BURST;
 	}
+
+	/* If burst32 or burst select has changed, wait for the next reading
+	   request to actually read the data, because the according data will be available
+	   only after the next data ready impulse. */
+	if (ret == -EAGAIN)
+		return ret;
+
+	if (burst32)
+		msg_size = ADIS_MSG_SIZE_32_BIT_BURST;
 
 	uint8_t buffer[msg_size + ADIS_READ_BURST_DATA_CMD_SIZE];
 
@@ -2532,28 +2528,48 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
 
 	adis->diag_flags.checksum_err = false;
 
-	if (burst32 && !(adis->info->flags & ADIS_HAS_BURST32)) {
-		/* burst32 requested, but device does not support burst32 readings,
-		thus reading directly from registers */
-		uint32_t reg_val;
-		/* Diag data */
-		buff[0] = buffer[ADIS_READ_BURST_DATA_CMD_SIZE];
+	uint8_t axis_data_size = 12;
+	if (burst32)
+		axis_data_size = 24;
 
-		for (idx = 0; idx < 6; idx++) {
-			buff[idx * 2] = buffer[idx + ADIS_READ_BURST_DATA_CMD_SIZE + 1];
-			ret = adis_read_reg(adis, adis->info->field_map->x_gyro.reg_addr + idx * 4,
-					    &reg_val, 2);
-			if (ret)
-				return ret;
-			buff[idx * 2 + 1] = reg_val;
-		}
-		/* Temp data */
-		buff[13] = buffer[7];
-		/* Counter data */
-		buff[14] = buffer[8];
+	uint8_t axis_data_offset = ADIS_READ_BURST_DATA_CMD_SIZE + 2;
+	uint8_t temp_offset = axis_data_offset + axis_data_size;
+	uint8_t data_cntr_offset = temp_offset + 2;
+
+	if (burst32) {
+		memcpy(&data->x_gyro_lsb, &buffer[axis_data_offset], 2);
+		memcpy(&data->x_gyro_msb, &buffer[axis_data_offset + 2], 2);
+		memcpy(&data->y_gyro_lsb, &buffer[axis_data_offset + 4], 2);
+		memcpy(&data->y_gyro_msb, &buffer[axis_data_offset + 6], 2);
+		memcpy(&data->z_gyro_lsb, &buffer[axis_data_offset + 8], 2);
+		memcpy(&data->z_gyro_msb, &buffer[axis_data_offset + 10], 2);
+		memcpy(&data->x_accel_lsb, &buffer[axis_data_offset + 12], 2);
+		memcpy(&data->x_accel_msb, &buffer[axis_data_offset + 14], 2);
+		memcpy(&data->y_accel_lsb, &buffer[axis_data_offset + 16], 2);
+		memcpy(&data->y_accel_msb, &buffer[axis_data_offset + 18], 2);
+		memcpy(&data->z_accel_lsb, &buffer[axis_data_offset + 20], 2);
+		memcpy(&data->z_accel_msb, &buffer[axis_data_offset + 22], 2);
 	} else {
-		memcpy(buff, &buffer[ADIS_READ_BURST_DATA_CMD_SIZE], buff_size);
+		data->x_gyro_lsb = 0;
+		memcpy(&data->x_gyro_msb, &buffer[axis_data_offset], 2);
+		data->y_gyro_lsb = 0;
+		memcpy(&data->y_gyro_msb, &buffer[axis_data_offset + 2], 2);
+		data->z_gyro_lsb = 0;
+		memcpy(&data->z_gyro_msb, &buffer[axis_data_offset + 4], 2);
+		data->x_accel_lsb = 0;
+		memcpy(&data->x_accel_msb, &buffer[axis_data_offset + 6], 2);
+		data->y_accel_lsb = 0;
+		memcpy(&data->y_accel_msb, &buffer[axis_data_offset + 8], 2);
+		data->z_accel_lsb = 0;
+		memcpy(&data->z_accel_msb, &buffer[axis_data_offset + 10], 2);
 	}
+
+	data->temp_msb = 0;
+	/* Temp data */
+	memcpy(&data->temp_lsb, &buffer[temp_offset], 2);
+	/* Counter data - aligned */
+	data->data_cntr_lsb = no_os_get_unaligned_be16(&buffer[data_cntr_offset]);
+	data->data_cntr_msb = 0;
 
 	/* Update diagnosis flags at each reading */
 	adis_update_diag_flags(adis, buffer[ADIS_READ_BURST_DATA_CMD_SIZE]);

@@ -1073,18 +1073,12 @@ int adis_iio_pre_enable(void* dev, uint32_t mask)
 			iio_adis->burst_sel = 1;
 		else
 			iio_adis->burst_sel = 0;
-		ret  = adis_write_burst_sel(adis, iio_adis->burst_sel);
-		if (ret)
-			return ret;
 	}
 
-	if (adis->info->flags & ADIS_HAS_BURST32) {
-		ret = adis_read_burst32(adis, &iio_adis->burst_size);
-		if (ret)
-			return ret;
-	} else {
+	if (adis->info->flags & ADIS_HAS_BURST32)
+		iio_adis->burst_size = 1;
+	else
 		iio_adis->burst_size = 0;
-	}
 
 	iio_adis->samples_lost = 0;
 	iio_adis->data_cntr = 0;
@@ -1146,33 +1140,26 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 {
 	struct adis_dev *adis;
 	int ret;
-	uint16_t buff[15];
+	struct adis_burst_data data;
 	uint8_t i = 0;
-	uint8_t buff_idx;
-	uint8_t temp_offset;
-	uint8_t data_cntr_offset;
-	uint16_t current_data_cntr;
 	uint32_t res1;
 	uint32_t res2;
 	uint8_t chan;
 
 	adis = iio_adis->adis_dev;
 
-	ret = adis_read_burst_data(adis, sizeof(buff), buff, iio_adis->burst_size,
+	ret = adis_read_burst_data(adis, &data, iio_adis->burst_size,
 				   iio_adis->burst_sel, pop);
 
 	/* If ret ==  EAGAIN then no data is available to read (will happen
-	for a burst request) */
+	for a burst request or in case burst32 or burst select has been changed) */
 	if (ret == -EAGAIN)
 		return 0;
 
 	if (ret)
 		return ret;
 
-	temp_offset = iio_adis->burst_size ? 13 : 7;
-	data_cntr_offset = iio_adis->burst_size ? 14 : 8;
-
-	current_data_cntr = no_os_bswap_constant_16(buff[data_cntr_offset]);
+	uint32_t current_data_cntr = data.data_cntr_lsb | data.data_cntr_msb << 16;
 
 	if (iio_adis->data_cntr) {
 		if(current_data_cntr > iio_adis->data_cntr) {
@@ -1207,8 +1194,11 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 		if (mask & (1 << chan)) {
 			switch(chan) {
 			case ADIS_TEMP:
-				iio_adis->data[i++] = buff[temp_offset];
 
+				if (iio_adis->iio_dev->channels[chan].scan_type->storagebits == 32)
+					iio_adis->data[i++] = data.temp_msb;
+
+				iio_adis->data[i++] = data.temp_lsb;
 				/*
 				 * The temperature channel has 16-bit storage size.
 				 * We need to perform the padding to have the buffer
@@ -1217,46 +1207,140 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				 * scan index higher than the temperature channel scan
 				 * index.
 				 */
-				if (mask & NO_OS_GENMASK(ADIS_DELTA_VEL_Z, ADIS_DELTA_ANGL_X))
+				if (mask & NO_OS_GENMASK(ADIS_DELTA_VEL_Z, ADIS_DELTA_ANGL_X)
+				    && iio_adis->iio_dev->channels[chan].scan_type->storagebits == 16)
 					iio_adis->data[i++] = 0;
 				break;
-			case ADIS_GYRO_X ... ADIS_ACCEL_Z:
-				/*
-				* The first 2 bytes on the received data are the
-				* DIAG_STAT reg, hence the +1 offset here...
-				*/
+			case ADIS_GYRO_X:
 				if(iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
-					if (iio_adis->burst_size) {
-						/* upper 16 */
-						iio_adis->data[i++] = buff[chan * 2 + 2];
-						/* lower 16 */
-						iio_adis->data[i++] = buff[chan * 2 + 1];
-					} else {
-						iio_adis->data[i++] = buff[chan + 1];
-						/* lower not used */
-						iio_adis->data[i++] = 0;
-					}
+					/* upper 16 */
+					iio_adis->data[i++] = data.x_gyro_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.x_gyro_lsb;
 				}
 				break;
-			case ADIS_DELTA_ANGL_X ... ADIS_DELTA_VEL_Z:
+			case ADIS_GYRO_Y:
+				if(iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.y_gyro_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.y_gyro_lsb;
+				}
+				break;
+			case ADIS_GYRO_Z:
+				if(iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.z_gyro_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.z_gyro_lsb;
+				}
+				break;
+			case ADIS_ACCEL_X:
+				if(iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.x_accel_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.x_accel_lsb;
+				}
+				break;
+			case ADIS_ACCEL_Y:
+				if(iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.y_accel_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.y_accel_lsb;
+				}
+				break;
+			case ADIS_ACCEL_Z:
+				if(iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.z_accel_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.z_accel_lsb;
+				}
+				break;
+			case ADIS_DELTA_ANGL_X:
 				if(!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
-					buff_idx = chan - ADIS_DELTA_ANGL_X;
-					if (iio_adis->burst_size) {
-						/* upper 16 */
-						iio_adis->data[i++] = buff[buff_idx * 2 + 2];
-						/* lower 16 */
-						iio_adis->data[i++] = buff[buff_idx * 2 + 1];
-					} else {
-						iio_adis->data[i++] = buff[buff_idx + 1];
-						/* lower not used */
-						iio_adis->data[i++] = 0;
-					}
+					/* upper 16 */
+					iio_adis->data[i++] = data.x_gyro_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.x_gyro_lsb;
+				}
+				break;
+			case ADIS_DELTA_ANGL_Y:
+				if(!iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.y_gyro_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.y_gyro_lsb;
+				}
+				break;
+			case ADIS_DELTA_ANGL_Z:
+				if(!iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.z_gyro_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.z_gyro_lsb;
+				}
+				break;
+			case ADIS_DELTA_VEL_X:
+				if(!iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.x_accel_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.x_accel_lsb;
+				}
+				break;
+			case ADIS_DELTA_VEL_Y:
+				if(!iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.y_accel_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.y_accel_lsb;
+				}
+				break;
+			case ADIS_DELTA_VEL_Z:
+				if(!iio_adis->burst_sel) {
+					iio_adis->data[i++] = 0;
+					iio_adis->data[i++] = 0;
+				} else {
+					/* upper 16 */
+					iio_adis->data[i++] = data.z_accel_msb;
+					/* lower 16 */
+					iio_adis->data[i++] =  data.z_accel_lsb;
 				}
 				break;
 			default:

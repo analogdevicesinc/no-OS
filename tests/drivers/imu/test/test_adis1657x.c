@@ -801,8 +801,7 @@ void test_adis1657x_read_burst_data(void)
 	test_adis_read_burst_data_2();
 	test_adis_read_burst_data_3();
 	test_adis_read_burst_data_4();
-	test_adis_read_burst_data_5();
-	test_adis_read_burst_data_7();
+	test_adis_read_burst_data_6();
 }
 
 void test_adis1657x_update_ext_clk_freq(void)

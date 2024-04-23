@@ -364,9 +364,8 @@ struct adis_chip_info {
 	int (*write_reg)(struct adis_dev *adis,  uint32_t reg, uint32_t val,
 			 uint32_t size);
 	/** Chip specifc implementation for reading burst data. */
-	int (*read_burst_data)(struct adis_dev *adis, uint8_t buff_size,
-			       uint16_t *buff, bool burst32, uint8_t burst_sel,
-			       bool fifo_pop);
+	int (*read_burst_data)(struct adis_dev *adis,struct adis_burst_data *data,
+			       bool burst32, uint8_t burst_sel, bool fifo_pop);
 };
 
 /*! Check if the checksum for burst data is correct. */
