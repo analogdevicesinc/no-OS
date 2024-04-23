@@ -3858,65 +3858,31 @@ void test_adis_read_fls_mem_wr_cntr_3(void)
 void test_adis_read_burst_data_1(void)
 {
 	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[9] = {0};
+	struct adis_burst_data data;
 
 	device_alloc.burst32 = 0;
 	device_alloc.burst_sel = 0;
 
 	no_os_spi_write_and_read_IgnoreAndReturn(-1);
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
+	retval = adis_read_burst_data(&device_alloc, &data,
 				      device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
-}
-
-/**
- * @brief Test adis_read_burst_data with invalid buffer size with burst32 = 1
- * and burst_sel = 0 .
- */
-void test_adis_read_burst_data_2(void)
-{
-	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[9] = {0};
-
-	device_alloc.burst32 = 1;
-	device_alloc.burst_sel = 0;
-
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, false);
-	TEST_ASSERT_EQUAL_INT(-22, retval);
-}
-
-/**
- * @brief Test adis_read_burst_data with invalid buffer size with burst32 = 0
- * and burst_sel = 0 .
- */
-void test_adis_read_burst_data_3(void)
-{
-	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[8] = {0};
-
-	device_alloc.burst32 = 0;
-	device_alloc.burst_sel = 0;
-
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
-				      device_alloc.burst32, device_alloc.burst_sel, false);
-	TEST_ASSERT_EQUAL_INT(-22, retval);
 }
 
 /**
  * @brief Test adis_read_burst_data with burst32 update request and invalid spi
  * transfer.
  */
-void test_adis_read_burst_data_4(void)
+void test_adis_read_burst_data_2(void)
 {
 	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[15] = {0};
+	struct adis_burst_data data;
 
 	device_alloc.burst32 = 0;
 	device_alloc.burst_sel = 0;
 	no_os_field_get_IgnoreAndReturn(!device_alloc.burst32);
 	no_os_spi_transfer_IgnoreAndReturn(-1);
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
+	retval = adis_read_burst_data(&device_alloc, &data,
 				      !device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
@@ -3925,16 +3891,16 @@ void test_adis_read_burst_data_4(void)
  * @brief Test adis_read_burst_data with burst_sel update request and invalid spi
  * transfer.
  */
-void test_adis_read_burst_data_5(void)
+void test_adis_read_burst_data_3(void)
 {
 	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[15] = {0};
+	struct adis_burst_data data;
 
 	device_alloc.burst32 = 0;
 	device_alloc.burst_sel = 0;
 	no_os_field_get_IgnoreAndReturn(!device_alloc.burst_sel);
 	no_os_spi_transfer_IgnoreAndReturn(-1);
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
+	retval = adis_read_burst_data(&device_alloc, &data,
 				      device_alloc.burst32, !device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
 }
@@ -3942,27 +3908,28 @@ void test_adis_read_burst_data_5(void)
 /**
  * @brief Test adis_read_burst_data with burst request requested with fifo
  */
-void test_adis_read_burst_data_6(void)
+void test_adis_read_burst_data_4(void)
 {
 	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[9] = {0};
+	struct adis_burst_data data;
 
 	device_alloc.burst32 = 0;
 	device_alloc.burst_sel = 0;
 
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
+	retval = adis_read_burst_data(&device_alloc, &data,
 				      device_alloc.burst32, device_alloc.burst_sel, true);
-	TEST_ASSERT_EQUAL_INT(-EAGAIN, retval);
+	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }
 
 /**
  * @brief Test adis_read_burst_data with checksum error.
  */
-void test_adis_read_burst_data_7(void)
+void test_adis_read_burst_data_5(void)
 {
 	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[9] = {0};
+	struct adis_burst_data data;
 
 	device_alloc.burst32 = 0;
 	device_alloc.burst_sel = 0;
@@ -3970,7 +3937,7 @@ void test_adis_read_burst_data_7(void)
 	device_alloc.info = adis_chip_info;
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
+	retval = adis_read_burst_data(&device_alloc, &data,
 				      device_alloc.burst32, device_alloc.burst_sel, false);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 	TEST_ASSERT_EQUAL_INT(true, device_alloc.diag_flags.checksum_err);
@@ -3979,17 +3946,17 @@ void test_adis_read_burst_data_7(void)
 /**
  * @brief Test adis_read_burst_data with burst request requested without fifo
  */
-void test_adis_read_burst_data_8(void)
+void test_adis_read_burst_data_6(void)
 {
 	device_alloc.info = adis_chip_info;
-	uint16_t burst_data[9] = {0};
+	struct adis_burst_data data;
 
 	device_alloc.burst32 = 0;
 	device_alloc.burst_sel = 0;
 
 	no_os_spi_write_and_read_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
-	retval = adis_read_burst_data(&device_alloc, sizeof(burst_data), burst_data,
+	retval = adis_read_burst_data(&device_alloc, &data,
 				      device_alloc.burst32, device_alloc.burst_sel, true);
 	TEST_ASSERT_EQUAL_INT(-EINVAL, retval);
 }

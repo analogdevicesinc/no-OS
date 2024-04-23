@@ -180,6 +180,29 @@ struct adis_scale_fractional_log2 {
 	uint32_t power;
 };
 
+
+/** @struct adis_burst_data
+ *  @brief ADIS burst data structure
+ */
+struct adis_burst_data {
+	uint16_t temp_lsb;
+	uint16_t temp_msb;
+	uint16_t data_cntr_lsb;
+	uint16_t data_cntr_msb;
+	uint16_t x_gyro_lsb;
+	uint16_t x_gyro_msb;
+	uint16_t y_gyro_lsb;
+	uint16_t y_gyro_msb;
+	uint16_t z_gyro_lsb;
+	uint16_t z_gyro_msb;
+	uint16_t x_accel_lsb;
+	uint16_t x_accel_msb;
+	uint16_t y_accel_lsb;
+	uint16_t y_accel_msb;
+	uint16_t z_accel_lsb;
+	uint16_t z_accel_msb;
+};
+
 /** @struct adis_dev
  *  @brief ADIS device descriptor structure
  */
@@ -596,9 +619,8 @@ int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3);
 int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr);
 
 /*! Read burst data */
-int adis_read_burst_data(struct adis_dev *adis, uint8_t buff_size,
-			 uint16_t *buff, bool burst32, uint8_t burst_sel,
-			 bool fifo_pop);
+int adis_read_burst_data(struct adis_dev *adis,struct adis_burst_data *data,
+			 bool burst32, uint8_t burst_sel, bool fifo_pop);
 
 /*! Update external clock frequency. */
 int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq);
