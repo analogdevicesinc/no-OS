@@ -68,6 +68,11 @@ LSCRIPT=$(wildcard $(PROJECT_BUILDROOT)/*FLASH.ld)
 # Get the extra flags that need to be added into the .cproject file
 CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
+ifeq ($(NO_OS_USB_UART),y)
+SRC_DIRS += $(BUILD_DIR)/app/USB_DEVICE \
+	    $(BUILD_DIR)/app/Middlewares/ST/STM32_USB_Device_Library
+endif
+
 $(PLATFORM)_project:
 	$(call print,Creating IDE project)
 	$(call mk_dir, $(BUILD_DIR))
