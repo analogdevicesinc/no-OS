@@ -49,17 +49,15 @@ static void print_output_data(uint32_t adc_data, uint16_t res, char sign)
 int main()
 {
 	struct ad400x_dev *dev;
-	uint32_t *offload_data;
-	uint32_t adc_data;
+	uint32_t *adc_data = 0x800000;
+	int32_t ret, i;
+	enum ad400x_supported_dev_ids dev_id = ID_AD4020;
+	uint16_t res = ad400x_device_resol[dev_id];
+
 	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 		.offload_config = OFFLOAD_RX_EN,
 		.rx_dma_baseaddr = AD400X_DMA_BASEADDR,
 	};
-	struct spi_engine_offload_message msg;
-	uint32_t commands_data[2] = {0xFF, 0xFF};
-	int32_t ret, i;
-	enum ad400x_supported_dev_ids dev_id = ID_AD4020;
-	uint16_t res = ad400x_device_resol[dev_id];
 
 	struct spi_engine_init_param spi_eng_init_param  = {
 		.ref_clk_hz = 160000000,
@@ -104,6 +102,13 @@ int main()
 		.axi_clkgen_rate = 160000000,
 		.reg_access_speed = 1000000,
 		.dev_id = dev_id,
+		.offload_init_param = &spi_engine_offload_init_param,
+		.dcache_invalidate_range = Xil_DCacheInvalidateRange,
+#if (SPI_ENGINE_OFFLOAD_EXAMPLE == 1)
+		.offload_enable = 1,
+#else
+		.offload_enable = 0,
+#endif
 		.turbo_mode = 1,
 		.high_z_mode = 0,
 		.span_compression = 0,
@@ -112,55 +117,19 @@ int main()
 
 	print("Test\n\r");
 
-	uint32_t spi_eng_msg_cmds[3] = {
-		CS_LOW,
-		READ(2),
-		CS_HIGH
-	};
-
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-
-	/* data must be byte alligned when offload is disabled */
-	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0)
-		spi_eng_init_param.data_width =
-			NO_OS_DIV_ROUND_UP(spi_eng_init_param.data_width, 8) * 8;
 
 	ret = ad400x_init(&dev, &ad400x_init_param);
 	if (ret < 0)
 		return ret;
 
-	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
-		while(1) {
-			ad400x_spi_single_conversion(dev, &adc_data);
-			print_output_data(adc_data, res, ad400x_device_sign[dev_id]);
-		}
-	}
-	/* Offload example */
-	else {
-		ret = spi_engine_offload_init(dev->spi_desc, &spi_engine_offload_init_param);
-		if (ret != 0)
-			return -1;
+	ret = ad400x_read_data(dev, adc_data, AD400x_EVB_SAMPLE_NO);
+	if (ret)
+		return ret;
 
-		msg.commands = spi_eng_msg_cmds;
-		msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
-		msg.rx_addr = 0x800000;
-		msg.tx_addr = 0xA000000;
-		msg.commands_data = commands_data;
-
-		ret = spi_engine_offload_transfer(dev->spi_desc, msg, AD400x_EVB_SAMPLE_NO * 2);
-		if (ret != 0)
-			return ret;
-
-		no_os_mdelay(2000);
-		Xil_DCacheInvalidateRange(0x800000, AD400x_EVB_SAMPLE_NO * 4);
-		offload_data = (uint32_t *)msg.rx_addr;
-
-		for(i = 0; i < AD400x_EVB_SAMPLE_NO; i++) {
-			print_output_data(*offload_data, res, ad400x_device_sign[dev_id]);
-			offload_data += 1;
-		}
-	}
+	for(i = 0, adc_data = 0x800000; i < AD400x_EVB_SAMPLE_NO; i++, adc_data++)
+		print_output_data(*adc_data, res, ad400x_device_sign[dev_id]);
 
 	print("Success\n\r");
 
