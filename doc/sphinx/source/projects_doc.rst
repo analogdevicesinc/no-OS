@@ -63,6 +63,7 @@ POWER MANAGEMENT
    :maxdepth: 1
 
    projects/adp1050
+   projects/ltc4296
 
 DAC
 ===
