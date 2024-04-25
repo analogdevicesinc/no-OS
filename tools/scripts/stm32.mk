@@ -71,6 +71,8 @@ CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 ifeq ($(NO_OS_USB_UART),y)
 SRC_DIRS += $(BUILD_DIR)/app/USB_DEVICE \
 	    $(BUILD_DIR)/app/Middlewares/ST/STM32_USB_Device_Library
+SRCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.c
+INCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.h
 endif
 
 $(PLATFORM)_project:
