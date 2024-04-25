@@ -173,14 +173,55 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 	return ret;
 }
 
+#if !defined(USE_STANDARD_SPI)
 /**
- * Read conversion result from device.
+ * Read samples using spi offload engine
+ * @param dev - The device structure.
+ * @param buf - Buffer to hold the conversion results data
+ * @param samples - number of samples to read
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad400x_read_data_offload(struct ad400x_dev *dev,
+					uint32_t *buf,
+					uint16_t samples)
+{
+	struct spi_engine_offload_message msg;
+	uint32_t commands_data[2] = {0xFF, 0xFF};
+	int ret;
+	uint32_t spi_eng_msg_cmds[3] = {
+		CS_LOW,
+		READ(2),
+		CS_HIGH
+	};
+
+	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
+	if (ret)
+		return ret;
+
+	msg.commands = spi_eng_msg_cmds;
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.rx_addr = buf;
+	msg.commands_data = commands_data;
+
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples * 4);
+	if (ret)
+		return ret;
+
+	if (dev->dcache_invalidate_range)
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
+
+	return ret;
+}
+#endif
+
+/**
+ * Read single conversion result from device.
  * @param dev - The device structure.
  * @param adc_data - The conversion result data
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *data)
+static int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
+		uint32_t *data)
 {
 	int32_t ret;
 	uint8_t data_read[4] = { 0xFF, 0xFF, 0xFF, 0xFF }; /* SDI must remain high */
@@ -217,6 +258,32 @@ int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 }
 
 /**
+ * Read conversion results from device.
+ * @param dev - The device structure.
+ * @param buf - Buffer to hold the conversion results data
+ * @param samples - number of samples to read
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad400x_read_data(struct ad400x_dev *dev,
+			 uint32_t *buf,
+			 uint16_t samples)
+{
+	int i, ret;
+	uint32_t *p;
+
+#if !defined(USE_STANDARD_SPI)
+	if (dev->offload_enable)
+		return ad400x_read_data_offload(dev, buf, samples);
+#endif
+	for (i = 0, p = buf; i < samples; i++, p++) {
+		ret = ad400x_spi_single_conversion(dev, p);
+		if (ret)
+			return ret;
+	}
+	return ret;
+}
+
+/**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -229,6 +296,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	struct ad400x_dev *dev;
 	int32_t ret;
 	uint8_t data = 0;
+	uint16_t transfer_width;
 
 	if (!init_param)
 		return -1;
@@ -243,6 +311,9 @@ int32_t ad400x_init(struct ad400x_dev **device,
 
 	dev->dev_id = init_param->dev_id;
 	dev->reg_access_speed = init_param->reg_access_speed;
+	dev->offload_init_param = init_param->offload_init_param;
+	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+	dev->offload_enable =  init_param->offload_enable;
 
 #if defined(USE_STANDARD_SPI)
 	ret = no_os_gpio_get(&dev->gpio_cnv, init_param->gpio_cnv);
@@ -253,9 +324,13 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret)
 		goto error;
 #else
-	struct spi_engine_init_param *spi_eng_ip = init_param->spi_init->extra;
+	transfer_width = ad400x_device_resol[init_param->dev_id];
 
-	spi_engine_set_transfer_width(dev->spi_desc, spi_eng_ip->data_width);
+	/* without offload xfer width has to be byte alligned */
+	if (!dev->offload_enable)
+		transfer_width = NO_OS_DIV_ROUND_UP(transfer_width, 8) * 8;
+
+	spi_engine_set_transfer_width(dev->spi_desc, transfer_width);
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret)
 		goto error;

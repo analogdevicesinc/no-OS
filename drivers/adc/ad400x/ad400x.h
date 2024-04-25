@@ -93,6 +93,12 @@ struct ad400x_dev {
 	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
+	/** SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/* enable offload */
+	bool offload_enable;
 };
 
 struct ad400x_init_param {
@@ -110,6 +116,15 @@ struct ad400x_init_param {
 	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
+	/** SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/* buffer to store data samples */
+	uint32_t *buffer;
+	/* buffer size */
+	uint32_t buffer_size;
+	bool offload_enable;
 	bool turbo_mode;
 	bool high_z_mode;
 	bool span_compression;
@@ -123,8 +138,7 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 int32_t ad400x_init(struct ad400x_dev **device,
 		    struct ad400x_init_param *init_param);
 int32_t ad400x_remove(struct ad400x_dev *dev);
-/* Execute a single conversion */
-int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
-				     uint32_t *data);
-
+/* read data samples */
+int32_t ad400x_read_data(struct ad400x_dev *dev, uint32_t *buf,
+			 uint16_t samples);
 #endif /* SRC_AD400X_H_ */
