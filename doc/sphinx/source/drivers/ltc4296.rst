@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/power/ltc4296/README.rst

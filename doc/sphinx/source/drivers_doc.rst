@@ -64,3 +64,4 @@ POWER MANAGEMENT
    :maxdepth: 1
 
    drivers/adp1050
+   drivers/ltc4296
