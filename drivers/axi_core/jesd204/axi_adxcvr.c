@@ -72,6 +72,9 @@
 #define ADXCVR_OUTCLK_SEL(x)	(((x) & 0x7) << 0)
 
 #define ADXCVR_REG_SYNTH		0x24
+#define ADXCVR_LINK_MODE(x)		(((x) >> 12) & NO_OS_GENMASK(1, 0))
+#define ADXCVR_204B			0x01
+#define ADXCVR_204C			0x02
 
 #define ADXCVR_REG_DRP_SEL(x)		(0x0040 + (x))
 
@@ -634,7 +637,10 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		goto err;
 	}
 
-	xcvr->xlx_xcvr.encoding = ENC_8B10B;
+	if (ADXCVR_LINK_MODE(synth_conf) == ADXCVR_204C)
+		xcvr->xlx_xcvr.encoding = ENC_66B64B;
+	else
+		xcvr->xlx_xcvr.encoding = ENC_8B10B;
 	xcvr->xlx_xcvr.refclk_ppm = PM_200; /* TODO use clock accuracy */
 
 	adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
