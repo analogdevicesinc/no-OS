@@ -57,7 +57,7 @@ struct stm32_usb_uart_init_param {
  * @brief stm32 platform specific UART over USB descriptor.
  */
 struct stm32_usb_uart_desc {
-
+	struct lf256_fifo *fifo;
 };
 
 /**
