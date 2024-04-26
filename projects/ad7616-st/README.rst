@@ -1,10 +1,7 @@
 Evaluating AD7616 on SDP-K1
 ===========================
 
-Contents
---------
-
-.. contents:: Table of Contents
+.. contents::
     :depth: 3
 
 Supported Evaluation Boards

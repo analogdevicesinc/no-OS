@@ -1,11 +1,7 @@
 Evaluating the ADP1050
 ======================
 
-
-Contents
---------
-
-.. contents:: Table of Contents
+.. contents::
 	:depth: 3
 
 Supported Evaluation Boards
