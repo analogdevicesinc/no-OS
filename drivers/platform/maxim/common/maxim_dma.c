@@ -135,9 +135,7 @@ static int maxim_dma_remove(struct no_os_dma_desc *desc)
 	MAX_DMA->cn &= MAX_DMA_IRQ_EN_ALL_CH;
 	no_os_irq_ctrl_remove(desc->irq_ctrl);
 
-	for (i = 0; i < desc->num_ch; i++)
-		no_os_free(&desc->channels[i]);
-
+	no_os_free(desc->channels);
 	no_os_free(desc);
 	dma_descriptor = NULL;
 
