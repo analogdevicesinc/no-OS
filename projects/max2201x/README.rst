@@ -1,11 +1,7 @@
 Evaluating the MAX2201X
 =======================
 
-
-Contents
---------
-
-.. contents:: Table of Contents
+.. contents::
 	:depth: 3
 
 Supported Evaluation Boards

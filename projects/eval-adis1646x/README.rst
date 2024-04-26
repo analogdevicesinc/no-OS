@@ -1,11 +1,7 @@
 Evaluating the ADIS1646X Family
 ===============================
 
-
-Contents
---------
-
-.. contents:: Table of Contents
+.. contents::
     :depth: 3
 
 Supported Evaluation Boards

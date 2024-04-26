@@ -1,11 +1,7 @@
 Evaluating AD7091R-2/-4/-8 Devices
 ==================================
 
-
-Contents
---------
-
-.. contents:: Table of Contents
+.. contents::
     :depth: 3
 
 Supported Devices
