@@ -18,6 +18,7 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/adm1177
    drivers/ad405x
+   drivers/ad796x
 
 AXI CORES
 =========
