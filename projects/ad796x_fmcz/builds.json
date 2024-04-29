@@ -1,0 +1,10 @@
+{
+  "xilinx": {
+    "iio": {
+      "flags": "IIO_EXAMPLE=y BASIC_EXAMPLE=n",
+      "hardware": [
+        "pulsar_lvds_adc_zed"
+      ]
+    }
+  }
+}
