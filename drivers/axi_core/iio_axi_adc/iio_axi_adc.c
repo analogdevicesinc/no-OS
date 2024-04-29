@@ -43,9 +43,9 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <inttypes.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "iio.h"
