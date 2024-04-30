@@ -5,7 +5,8 @@ INCS += $(PLATFORM_DRIVERS)/stm32_delay.h     \
 	$(PLATFORM_DRIVERS)/stm32_irq.h       \
 	$(PLATFORM_DRIVERS)/stm32_gpio_irq.h  \
 	$(PLATFORM_DRIVERS)/stm32_uart.h      \
-	$(PLATFORM_DRIVERS)/stm32_uart_stdio.h
+	$(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
+	$(PLATFORM_DRIVERS)/stm32_dma.h
 
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c     \
 	$(PLATFORM_DRIVERS)/stm32_gpio.c      \
@@ -13,4 +14,5 @@ SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c     \
 	$(PLATFORM_DRIVERS)/stm32_irq.c       \
 	$(PLATFORM_DRIVERS)/stm32_gpio_irq.c  \
 	$(PLATFORM_DRIVERS)/stm32_uart.c      \
-	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
+	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c \
+	$(PLATFORM_DRIVERS)/stm32_dma.c

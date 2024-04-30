@@ -41,7 +41,11 @@
 
 #include <stdint.h>
 #include "no_os_spi.h"
+#include "no_os_dma.h"
 #include "stm32_hal.h"
+#ifdef HAL_TIM_MODULE_ENABLED
+#include "stm32_pwm.h"
+#endif
 
 /**
  * @struct stm32_spi_init_param
@@ -53,6 +57,16 @@ struct stm32_spi_init_param {
 	uint32_t chip_select_port;
 	/** Get perihperal source clock function */
 	uint32_t (*get_input_clock)(void);
+	/** DMA Initialization Parameters */
+	struct no_os_dma_init_param* dma_init;
+	/** RX DMA Channel Descriptor */
+	struct no_os_dma_ch* rxdma_ch;
+	/** TX DMA Channel Descriptor */
+	struct no_os_dma_ch* txdma_ch;
+#ifdef HAL_TIM_MODULE_ENABLED
+	/** CS PWM Initialization Parameters */
+	const struct no_os_pwm_init *pwm_init;
+#endif
 };
 
 /**
@@ -66,6 +80,16 @@ struct stm32_spi_desc {
 	uint32_t input_clock;
 	/** Chip select gpio descriptor */
 	struct no_os_gpio_desc *chip_select;
+	/** DMA Descriptor */
+	struct no_os_dma_desc* dma_desc;
+	/** RX DMA Channel Descriptor */
+	struct no_os_dma_ch* rxdma_ch;
+	/** TX DMA Channel Descriptor */
+	struct no_os_dma_ch* txdma_ch;
+#ifdef HAL_TIM_MODULE_ENABLED
+	/** CS PWM descriptor */
+	struct no_os_pwm_desc* pwm_desc;
+#endif
 };
 
 /**
