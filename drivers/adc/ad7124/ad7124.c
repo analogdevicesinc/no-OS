@@ -1038,10 +1038,10 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	if (ret)
 		goto error_spi;
 	if (dev->active_device == ID_AD7124_4) {
-		if (!(dev->regs[AD7124_ID_REG].value = AD7124_4_ID))
+		if (dev->regs[AD7124_ID_REG].value != AD7124_4_ID)
 			goto error_spi;
 	} else if (dev->active_device == ID_AD7124_8) {
-		if (!(dev->regs[AD7124_ID_REG].value = AD7124_8_ID))
+		if (dev->regs[AD7124_ID_REG].value != AD7124_8_ID)
 			goto error_spi;
 	}
 
