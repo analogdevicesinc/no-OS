@@ -75,7 +75,8 @@ static struct event_list _events[] = {
 #endif
 #ifdef HAL_DMA_MODULE_ENABLED
 	[NO_OS_EVT_DMA_RX_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_COMPLETE, .hal_event = HAL_DMA_XFER_CPLT_CB_ID},
-	[NO_OS_EVT_DMA_RX_HALF_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_HALF_COMPLETE, .hal_event = HAL_DMA_XFER_HALFCPLT_CB_ID}
+	[NO_OS_EVT_DMA_RX_HALF_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_HALF_COMPLETE, .hal_event = HAL_DMA_XFER_HALFCPLT_CB_ID},
+	[NO_OS_EVT_DMA_TX_COMPLETE] = {.event = NO_OS_EVT_DMA_TX_COMPLETE, .hal_event = HAL_DMA_XFER_CPLT_CB_ID},
 #endif
 };
 
@@ -151,9 +152,9 @@ static inline void _common_sai_dma_callback(SAI_HandleTypeDef *hsai,
 }
 #endif
 
-#ifdef HAL_DMA_MODULE_ENABLED
-static inline void _common_tim_dma_callback(DMA_HandleTypeDef *hdma,
-		uint32_t no_os_event)
+#if defined (HAL_DMA_MODULE_ENABLED)
+static inline void _common_dma_callback(DMA_HandleTypeDef *hdma,
+					uint32_t no_os_event)
 {
 	struct event_list *ue = &_events[no_os_event];
 	struct irq_action *a;
@@ -192,15 +193,20 @@ void _SAI_RxHalfCpltCallback(SAI_HandleTypeDef *hsai)
 }
 #endif
 
-#ifdef HAL_TIM_MODULE_ENABLED && HAL_DMA_MODULE_ENABLED
-void _TIM_DMA_CpltCallback(DMA_HandleTypeDef *hdma)
+#if defined (HAL_DMA_MODULE_ENABLED)
+void _DMA_RX_CpltCallback(DMA_HandleTypeDef* hdma)
 {
-	_common_tim_dma_callback(hdma, NO_OS_EVT_DMA_RX_COMPLETE);
+	_common_dma_callback(hdma, NO_OS_EVT_DMA_RX_COMPLETE);
 }
 
-void _TIM_DMA_HalfCpltCallback(DMA_HandleTypeDef *hdma)
+void _DMA_TX_CpltCallback(DMA_HandleTypeDef* hdma)
 {
-	_common_tim_dma_callback(hdma, NO_OS_EVT_DMA_RX_HALF_COMPLETE);
+	_common_dma_callback(hdma, NO_OS_EVT_DMA_TX_COMPLETE);
+}
+
+void _DMA_HalfCpltCallback(DMA_HandleTypeDef *hdma)
+{
+	_common_dma_callback(hdma, NO_OS_EVT_DMA_RX_HALF_COMPLETE);
 }
 #endif
 
@@ -289,10 +295,10 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 #endif
 #ifdef HAL_TIM_MODULE_ENABLED
 	pTIM_CallbackTypeDef pTimCallback;
+#endif
 	struct irq_action action_key = {.handle = cb->handle};
 #ifdef HAL_DMA_MODULE_ENABLED
 	DMA_HandleTypeDef pDmaCallback;
-#endif
 #endif
 	struct irq_action *li;
 	uint32_t hal_event = _events[cb->event].hal_event;
@@ -450,7 +456,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	case NO_OS_TIM_DMA_IRQ:
 		switch(hal_event) {
 		case HAL_DMA_XFER_CPLT_CB_ID:
-			pDmaCallback.XferCpltCallback = _TIM_DMA_CpltCallback;
+			pDmaCallback.XferCpltCallback = _DMA_RX_CpltCallback;
 			ret = HAL_DMA_RegisterCallback(cb->handle, hal_event,
 						       pDmaCallback.XferCpltCallback);
 			if (ret != HAL_OK) {
@@ -459,7 +465,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			}
 			break;
 		case HAL_DMA_XFER_HALFCPLT_CB_ID:
-			pDmaCallback.XferHalfCpltCallback = _TIM_DMA_HalfCpltCallback;
+			pDmaCallback.XferHalfCpltCallback = _DMA_HalfCpltCallback;
 			ret = HAL_DMA_RegisterCallback(cb->handle, hal_event,
 						       pDmaCallback.XferCpltCallback);
 			if (ret != HAL_OK) {
@@ -480,6 +486,48 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 		li = no_os_calloc(1, sizeof(struct irq_action));
 		if(!li)
+			return -ENOMEM;
+
+		li->handle = cb->handle;
+		li->callback = cb->callback;
+		li->ctx = cb->ctx;
+		ret = no_os_list_add_last(_events[cb->event].actions, li);
+		if (ret < 0) {
+			no_os_free(li);
+			return ret;
+		}
+		break;
+#endif
+#if defined (HAL_DMA_MODULE_ENABLED)
+	case NO_OS_DMA_IRQ:
+		switch (hal_event) {
+		case HAL_DMA_XFER_CPLT_CB_ID:
+			if (cb->event == NO_OS_EVT_DMA_RX_COMPLETE)
+				pDmaCallback.XferCpltCallback = _DMA_RX_CpltCallback;
+
+			else
+				pDmaCallback.XferCpltCallback = _DMA_TX_CpltCallback;
+			ret = HAL_DMA_RegisterCallback((DMA_HandleTypeDef *)cb->handle, hal_event,
+						       pDmaCallback.XferCpltCallback);
+			if (ret != HAL_OK) {
+				ret = -EFAULT;
+				break;
+			}
+			break;
+
+		default:
+			return -EINVAL;
+		};
+
+		if (_events[cb->event].actions == NULL) {
+			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
+					      irq_action_cmp);
+			if (ret < 0)
+				return ret;
+		}
+
+		li = no_os_calloc(1, sizeof(struct irq_action));
+		if (!li)
 			return -ENOMEM;
 
 		li->handle = cb->handle;
