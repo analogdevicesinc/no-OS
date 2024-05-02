@@ -63,6 +63,7 @@
 //   CDC_Receive_FS,
 //   CDC_TransmitCplt_FS
 // };
+volatile int tx_pending = 0;
 
 struct lf256fifo *gfifo;
 
@@ -130,13 +131,15 @@ static int32_t stm32_usb_uart_write(struct no_os_uart_desc *desc,
 				uint32_t bytes_number)
 {
 	unsigned int len = no_os_min(bytes_number, 2048);
+	while(tx_pending)
+		;
 	memcpy(txbuf, data, len);
-	CDC_Transmit_FS(txbuf, len);
-	if (len == 1) {
-		len = 2;
-		txbuf[1] = txbuf[0];
+	tx_pending = 1;
+	int ret = CDC_Transmit_FS(txbuf, len);
+	if (ret) {
+		tx_pending = 0;
+		return -EFAULT;
 	}
-
 	return len;
 }
 
