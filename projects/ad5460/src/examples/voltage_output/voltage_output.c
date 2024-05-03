@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ad5460 project.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   Voltage Output.c
+ *   @brief  Basic example header for eval-ad5460 project
+ *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -40,57 +40,47 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
+#include "voltage_output.h"
 #include "common_data.h"
+#include "ad5460.h"
+#include "no_os_delay.h"
+#include "no_os_gpio.h"
+#include "no_os_print_log.h"
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 /***************************************************************************//**
- * @brief Main function for Mbed platform.
+ * @brief Basic example main execution.
  *
- * @return ret - Result of the enabled examples.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-
-int main()
+int voltage_output_main()
 {
+	struct ad5460_desc *ad5460_desc;
 	int ret;
-	ad5460_ip.spi_ip = ad5460_spi_ip;
 
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &ad5460_uart_ip);
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
+	ret = ad5460_init(&ad5460_desc, &ad5460_ip);
+	if (ret)
+		goto error;
+
+	pr_info("ad5460 successfully initialized!\r\n");
+
+	//Configure voltage range to -12 V to 12 V
+	ret = ad5460_set_channel_vout_range(ad5460_desc, 0, AD5460_VOUT_RANGE_NEG12_12V);
+	if(ret)
+	{
+		pr_info("Error setting channel range to '-12 to 12 V\r\n");
+		goto error;
 	}
-	no_os_uart_stdio(uart);
-	ret = basic_example_main();
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
-	}
-#endif
+	ret = ad5460_set_channel_function(ad5460_desc, 0, AD5460_VOLTAGE_OUT); 
 
-#ifdef VOLTAGE_OUTPUT
-        struct no_os_uart_desc* uart;
-        ret = no_os_uart_init(&uart, &ad5460_uart_ip);
-        if (ret) {
-                no_os_uart_remove(uart);
-                return ret;
-        }
-        no_os_uart_stdio(uart);
-        ret = voltage_output_main();
-        if (ret) {
-                no_os_uart_remove(uart);
-                return ret;
-        }
-#endif
-
-#if (IIO_EXAMPLE+BASIC_EXAMPLE+VOLTAGE_OUTPUT != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
 	return 0;
+
+error_ad5460:
+	ad5460_remove(ad5460_desc);
+error:
+	pr_info("AD5460 Error!\r\n");
+	return ret;
 }
