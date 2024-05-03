@@ -2,6 +2,9 @@ ifeq (y,$(strip $(APARD32690_ECHO_SERVER_EXAMPLE)))
 CFLAGS += -DAPARD32690_ECHO_SERVER_EXAMPLE=1
 LIBRARIES += lwip
 CFLAGS += -DNO_OS_STATIC_IP
+CFLAGS += -DNO_OS_IP=${NO_OS_IP}
+CFLAGS += -DNO_OS_NETMASK=${NO_OS_NETMASK}
+CFLAGS += -DNO_OS_GATEWAY=${NO_OS_GATEWAY}
 CFLAGS += -DNO_OS_LWIP_NETWORKING
 INCS += $(INCLUDE)/no_os_crc8.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
@@ -22,7 +25,7 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c	\
 	$(PLATFORM_DRIVERS)/maxim_irq.c		\
 	$(PLATFORM_DRIVERS)/maxim_gpio.c	\
 	$(PLATFORM_DRIVERS)/maxim_spi.c		\
-	$(PLATFORM_DRIVERS)/../common/maxim_dma.c		\
+	$(PLATFORM_DRIVERS)/maxim_dma.c		\
 	$(PLATFORM_DRIVERS)/maxim_timer.c	\
 	$(PLATFORM_DRIVERS)/maxim_init.c	\
 	$(PLATFORM_DRIVERS)/maxim_uart.c	\
@@ -31,7 +34,7 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c	\
 INCS += $(PLATFORM_DRIVERS)/maxim_irq.h		\
 	$(PLATFORM_DRIVERS)/maxim_uart.h	\
 	$(PLATFORM_DRIVERS)/maxim_timer.h	\
-	$(PLATFORM_DRIVERS)/../common/maxim_dma.h	\
+	$(PLATFORM_DRIVERS)/maxim_dma.h	\
 	$(PLATFORM_DRIVERS)/maxim_gpio.h	\
 	$(PLATFORM_DRIVERS)/maxim_spi.h		\
 	$(PLATFORM_DRIVERS)/maxim_uart_stdio.h
