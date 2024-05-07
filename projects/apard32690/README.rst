@@ -17,8 +17,8 @@ The project includes 2 different examples:
 This example is meant to print "Hello world" over UART0. Make sure to have jumpers in the position 2-3 on headers P50 and P55.
 
 2. tcp_echo_server (selected by default) - may be selected by setting the APARD32690_ECHO_SERVER_EXAMPLE = y (and all the other examples to n) in the main Makefile.
-This will start a TCP server using the interface ADIN1110 is connected to (IP: 169.254.97.40 port: 10000). It will reply back to the connected client with the
-characters it receives.
+This will start a TCP server using the interface ADIN1110 is connected to (the default settings are IP: 169.254.97.40 port: 10000). It will reply back to the connected client with the
+characters it receives. The actual IP address, netmask, and gateway used at runtime are printed on the serial port connected through the debug adapter.
 
 The host running the client may require network settings in order to communicate with a device using the 169.254.97.40 IP. These usually include adding a static route
 for the said IP address.
