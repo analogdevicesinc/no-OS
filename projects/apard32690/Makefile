@@ -4,12 +4,6 @@ APARD32690_ECHO_SERVER_EXAMPLE = y
 PLATFORM=maxim
 TARGET=max32690
 
-include ../../tools/scripts/generic_variables.mk
-
-include src.mk
-
-include ../../tools/scripts/generic.mk
-
 ifndef APARD32690_STATIC_IP
 APARD32690_STATIC_IP = n
 endif
@@ -19,3 +13,9 @@ NO_OS_IP=169.254.97.40
 NO_OS_NETMASK=255.255.255.0
 NO_OS_GATEWAY=0.0.0.0
 endif
+
+include ../../tools/scripts/generic_variables.mk
+
+include src.mk
+
+include ../../tools/scripts/generic.mk
