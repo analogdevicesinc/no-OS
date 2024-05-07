@@ -302,7 +302,7 @@ int32_t xilinx_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
  * @return 0 in case of success, -1 otherwise
  */
 int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
-			  struct no_os_timer_init_param *param)
+			  const struct no_os_timer_init_param *param)
 {
 	int32_t ret;
 	struct no_os_timer_desc *dev;

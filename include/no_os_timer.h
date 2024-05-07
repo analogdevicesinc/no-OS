@@ -133,7 +133,7 @@ struct no_os_timer_platform_ops {
 
 /* Initialize hardware timer and the handler structure associated with it. */
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
-			 struct no_os_timer_init_param *param);
+			 const struct no_os_timer_init_param *param);
 
 /* Free the memory allocated by timer_setup(). */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc);

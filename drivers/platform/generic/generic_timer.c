@@ -57,7 +57,7 @@
  * @return 0 in case of success, negative error code otherwise
  */
 int32_t generic_timer_init(struct no_os_timer_desc **desc,
-			   struct no_os_timer_init_param *param)
+			   const struct no_os_timer_init_param *param)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(param);

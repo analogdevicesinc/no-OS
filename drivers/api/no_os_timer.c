@@ -61,7 +61,7 @@ static void *timer_mutex_table[TIMER_MAX_TABLE + 1];
  * @return 0 in case of success, negative error code otherwise
  */
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
-			 struct no_os_timer_init_param *param)
+			 const struct no_os_timer_init_param *param)
 {
 	int32_t ret;
 
