@@ -73,7 +73,7 @@ struct linux_timer_desc {
  * @return 0 in case of success, negative errno error codes otherwise.
  */
 int linux_timer_init(struct no_os_timer_desc **desc,
-		     struct no_os_timer_init_param *param)
+		     const struct no_os_timer_init_param *param)
 {
 	struct no_os_timer_desc *descriptor;
 	struct linux_timer_desc *linux_desc;

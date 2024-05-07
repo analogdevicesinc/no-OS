@@ -108,7 +108,7 @@ static void aducm3029_tmr_callback(void *param, uint32_t tmr_event, void *arg)
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
-			     struct no_os_timer_init_param *param)
+			     const struct no_os_timer_init_param *param)
 {
 	struct no_os_timer_desc *ldesc;
 	struct aducm_timer_desc *aducm_desc;
