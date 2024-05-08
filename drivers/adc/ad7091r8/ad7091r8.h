@@ -181,6 +181,8 @@ struct ad7091r8_dev {
 	struct no_os_gpio_desc	*gpio_alert;
 	/* AD7091R specific device identifier */
 	enum ad7091r8_device_id device_id;
+	/* AD7091R device sleep mode */
+	enum ad7091r8_sleep_mode sleep_mode;
 };
 
 struct ad7091r8_init_param {
@@ -196,6 +198,8 @@ struct ad7091r8_init_param {
 	struct no_os_gpio_init_param *gpio_alert;
 	/* AD7091R specific device identifier */
 	enum ad7091r8_device_id device_id;
+	/* AD7091R device sleep mode */
+	enum ad7091r8_sleep_mode sleep_mode;
 };
 
 /******************************************************************************/
@@ -261,6 +265,12 @@ int ad7091r8_spi_reg_read(struct ad7091r8_dev *dev,
 int ad7091r8_spi_reg_write(struct ad7091r8_dev *dev,
 			   uint8_t reg_addr,
 			   uint16_t reg_data);
+
+/* SPI write to device using a mask. */
+int ad7091r8_spi_write_mask(struct ad7091r8_dev* dev,
+			    uint8_t reg_addr,
+			    uint16_t mask,
+			    uint16_t data);
 
 int ad7091r8_pulse_convst(struct ad7091r8_dev *dev);
 

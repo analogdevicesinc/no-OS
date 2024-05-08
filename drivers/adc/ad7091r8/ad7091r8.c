@@ -180,8 +180,19 @@ int ad7091r8_spi_write_mask(struct ad7091r8_dev *dev,
 int ad7091r8_set_sleep_mode(struct ad7091r8_dev *dev,
 			    enum ad7091r8_sleep_mode mode)
 {
-	return ad7091r8_spi_write_mask(dev, AD7091R8_REG_CONF,
-				       REG_CONF_SLEEP_MODE_MASK, mode);
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad7091r8_spi_write_mask(dev, AD7091R8_REG_CONF,
+				      REG_CONF_SLEEP_MODE_MASK, mode);
+	if (ret)
+		return ret;
+
+	dev->sleep_mode = mode;
+
+	return 0;
 }
 
 /**
@@ -411,6 +422,11 @@ int ad7091r8_init(struct ad7091r8_dev **device,
 	if (ret)
 		goto err_release_reset;
 
+	/* Set device sleep-mode */
+	ret = ad7091r8_set_sleep_mode(dev, init_param->sleep_mode);
+	if (ret)
+		goto err_release_reset;
+
 	/* Use external vref or enable internal vref */
 	dev->vref_mv = init_param->vref_mv;
 	if (!dev->vref_mv) {
@@ -420,7 +436,6 @@ int ad7091r8_init(struct ad7091r8_dev **device,
 			goto err_release_reset;
 	}
 
-	/* Device powers-up in normal mode */
 	*device = dev;
 
 	return 0;
