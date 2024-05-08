@@ -20,8 +20,7 @@ This example is meant to print "Hello world" over UART0. Make sure to have jumpe
 This will start a TCP server using the interface ADIN1110 is connected to (the default settings are IP: 192.168.97.40 port: 10000). It will reply back to the connected client with the
 characters it receives. The actual IP address, netmask, and gateway used at runtime are printed on the serial port connected through the debug adapter.
 
-The host running the client may require network settings in order to communicate with a device using the 192.168.97.40 IP. These usually include adding a static route
-for the said IP address.
+The host running the client may require network settings in order to communicate with a device using the 192.168.97.40 IP. These usually include manually adding a static IP for the host's network interface. You may go though the following guide on how to do this: https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602 (choose an IP in the 192.168.97.x/24 range that's different from the board's address).
 
 The project may be tested by using netcat on the host:
 
