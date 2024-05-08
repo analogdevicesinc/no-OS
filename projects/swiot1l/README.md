@@ -50,10 +50,7 @@ In order to configure and sample data from the SWIOT1L board, you'll have to con
 Build the firmware with the `SWIOT1L_STATIC_IP=y` flag, will result in using `192.168.97.40` as an IP address. This is the fastest way of testing the platform, since it doesn't require the DHCP configuration or DHCP timeout (in case of AutoIP).
 Alternatively, you may omit `SWIOT1L_STATIC_IP=y` (or set it to `n`), in which case, the board will send a DHCP request and try to get an IP that way. If you don't have a DHCP server listening on the PC's network interface (to which SWIOT1L is connected), a link local address (in the 169.254.x.x\16 range) will be used. This may take a while (~10s) the first time you power the board, since there have to be 2 failed DHCP requests.
 
-	In case a link local or static IP address is used, the user may need to add a static route if the PC has multiple network interfaces up. If using Linux, this can be done by running the following in a terminal:
-	
-	`sudo ip route add 169.254.97.40/32 dev if_name`
-	`if_name` should be replaced with the name of the network interface the SWIOT1L board is connected on.
+	In case a link local or static IP address is used for the AD-SWIOT1L-SL, the user may need to manually add a static IP for their PC's network interface which connects to the board. You may do this by going through the following guide https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602 (and choosing an IP in the same subnet as the AD-SWIOT1L-SL board: e.g 192.168.97.1/24).
 
 ```mermaid
 graph LR
