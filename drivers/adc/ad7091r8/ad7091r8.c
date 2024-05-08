@@ -200,11 +200,11 @@ int ad7091r8_set_port(struct ad7091r8_dev *dev, enum ad7091r8_port port,
 	switch (port) {
 	case AD7091R8_GPO0:
 		mask = REG_CONF_GPO0_MASK;
-		val = no_os_field_get(REG_CONF_GPO0_MASK, value);
+		val = no_os_field_prep(REG_CONF_GPO0_MASK, value);
 		break;
 	case AD7091R8_GPO1:
 		mask = REG_CONF_GPO1_MASK;
-		val = no_os_field_get(REG_CONF_GPO1_MASK, value);
+		val = no_os_field_prep(REG_CONF_GPO1_MASK, value);
 		break;
 	default:
 		return -EINVAL;
