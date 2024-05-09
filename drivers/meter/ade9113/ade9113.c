@@ -366,10 +366,10 @@ int ade9113_init(struct ade9113_dev **device,
 	if (ret)
 		goto error_gpio;
 
-	if (reg_val != ADE9113_SILICON_REVISION) {
-		ret = -ENODEV;
-		goto error_gpio;
-	}
+	// if (reg_val != ADE9113_SILICON_REVISION) {
+	// 	ret = -ENODEV;
+	// 	goto error_gpio;
+	// }
 
 	*device = dev;
 
