@@ -100,7 +100,7 @@ int self_test_supply(struct stout *stout)
 			if (ret)
 				return ret;
 			v1 = supply_scale_v1(v1_val);
-			v2 = supply_scale_v2(v2_val);
+			v2 = supply_scale_v1(v2_val);
 			v1_max = no_os_max_t(int32_t, v1, v1_max);
 			v2_max = no_os_max_t(int32_t, v2, v2_max);
 		}
@@ -148,7 +148,7 @@ int self_test_supply(struct stout *stout)
 			if (ret)
 				return ret;
 			v1 = supply_scale_v1(v1_val);
-			v2 = supply_scale_v2(v2_val);
+			v2 = supply_scale_v1(v2_val);
 			v1_max = no_os_max_t(int32_t, v1, v1_max);
 			v2_max = no_os_max_t(int32_t, v2, v2_max);
 		}
@@ -182,7 +182,7 @@ int self_test_supply(struct stout *stout)
 				return ret;
 
 			v1 = supply_scale_v1(v1_val);
-			v2 = supply_scale_v2(v2_val);
+			v2 = supply_scale_v1(v2_val);
 			v1_max = no_os_max_t(int32_t, v1, v1_max);
 			v2_max = no_os_max_t(int32_t, v2, v2_max);
 		}
@@ -195,7 +195,7 @@ int self_test_supply(struct stout *stout)
 	if (ret)
 		goto error1;
 	if (!r_state) {
-		if ((VR_OPEN_LOW_LIMIT > v2_max) || (VR_OPEN_HIGH_LIMIT < v2_max)) {
+		if  (VR_OPEN_LOW_LIMIT < v2_max) {
 			pr_debug("Relay Soldered\n");
 			goto error1;
 		}
@@ -408,9 +408,12 @@ int self_test_relay_closed(struct stout *stout, int32_t v2)
 	ret = relay_state(stout->relay, &r_state);
 	if (ret)
 		return ret;
-
+	
 	if (r_state) {
-		if (V2_CLOSED_LIMIT < v2)
+		if (stout->grid >= 1){
+			if ((VIN_LOW_LIMIT_2 > v2) || (VIN_HIGH_LIMIT_2 < v2))
+			return INTF_RELAY_ERR;
+		} else if ((VIN_LOW_LIMIT > v2) || (VIN_HIGH_LIMIT < v2))
 			return INTF_RELAY_ERR;
 	}
 	pr_debug("PASSED \n");

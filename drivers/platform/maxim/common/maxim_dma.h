@@ -102,7 +102,7 @@ static inline uint32_t max_dma_get_irq(uint32_t id, uint32_t ch)
 
 	return MXC_DMA1_CH_GET_IRQ(ch);
 #else
-	return MXC_DMA_CH_GET_IRQ(ch);
+	return 0;//MXC_DMA_CH_GET_IRQ(ch);
 #endif
 }
 
