@@ -620,7 +620,7 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr);
 
 /*! Read burst data */
 int adis_read_burst_data(struct adis_dev *adis,struct adis_burst_data *data,
-			 bool burst32, uint8_t burst_sel, bool fifo_pop);
+			 bool burst32, uint8_t burst_sel, bool fifo_pop, bool crc_check);
 
 /*! Update external clock frequency. */
 int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq);

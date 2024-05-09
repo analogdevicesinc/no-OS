@@ -267,13 +267,14 @@ static int adis1657x_get_scale(struct adis_dev *adis,
  *		      if delta angle and delta velocity is requested.
  * @param fifo_pop  - In case FIFO is present, will pop the fifo if
  * 		      true. Unused if FIFO is not present.
+ * @param crc_check - If true CRC will be checked, if false check will be skipped.
  * @return 0 in case of success, error code otherwise.
  * -EAGAIN in case the request has to be sent again due to data being unavailable
  * at the time of the request.
  */
 int adis1657x_read_burst_data(struct adis_dev *adis,
 			      struct adis_burst_data *data,
-			      bool burst32, uint8_t burst_sel, bool fifo_pop)
+			      bool burst32, uint8_t burst_sel, bool fifo_pop, bool crc_check)
 {
 	int ret = 0;
 	uint8_t msg_size = ADIS1657X_MSG_SIZE_16_BIT_BURST_FIFO;
@@ -324,11 +325,13 @@ int adis1657x_read_burst_data(struct adis_dev *adis,
 	if (idx == msg_size)
 		return -EAGAIN;
 
-	/* Diag data not calculated in the checksum for this device. */
-	if (!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
-				    ADIS1657X_CHECKSUM_BUF_IDX_FIFO)) {
-		adis->diag_flags.checksum_err = true;
-		return -EINVAL;
+	if (crc_check) {
+		/* Diag data not calculated in the checksum for this device. */
+		if (!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
+					    ADIS1657X_CHECKSUM_BUF_IDX_FIFO)) {
+			adis->diag_flags.checksum_err = true;
+			return -EINVAL;
+		}
 	}
 
 	adis->diag_flags.checksum_err = false;

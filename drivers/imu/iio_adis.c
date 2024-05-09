@@ -1149,7 +1149,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 	adis = iio_adis->adis_dev;
 
 	ret = adis_read_burst_data(adis, &data, iio_adis->burst_size,
-				   iio_adis->burst_sel, pop);
+				   iio_adis->burst_sel, pop, false);
 
 	/* If ret ==  EAGAIN then no data is available to read (will happen
 	for a burst request or in case burst32 or burst select has been changed) */
