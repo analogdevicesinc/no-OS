@@ -2466,12 +2466,13 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
  *		      if delta angle and delta velocity is requested.
  * @param fifo_pop  - In case FIFO is present, will pop the fifo if
  * 		      true. Unused if FIFO is not present.
+ * @param crc_check - If true CRC will be checked, if false check will be skipped.
  * @return 0 in case of success, error code otherwise.
  * -EAGAIN in case the request has to be sent again due to data being unavailable
  * at the time of the request.
  */
 int adis_read_burst_data(struct adis_dev *adis, struct adis_burst_data *data,
-			 bool burst32, uint8_t burst_sel, bool fifo_pop)
+			 bool burst32, uint8_t burst_sel, bool fifo_pop, bool crc_check)
 {
 	/* Device does not support delta data readings with burst method */
 	if (!(adis->info->flags & ADIS_HAS_BURST_DELTA_DATA) && burst_sel)
@@ -2483,7 +2484,8 @@ int adis_read_burst_data(struct adis_dev *adis, struct adis_burst_data *data,
 
 	/* If custom implementation is available, use it. */
 	if (adis->info->read_burst_data)
-		return adis->info->read_burst_data(adis, data, burst32, burst_sel, fifo_pop);
+		return adis->info->read_burst_data(adis, data, burst32, burst_sel, fifo_pop,
+						   crc_check);
 
 	int ret = 0;
 	uint8_t msg_size = ADIS_MSG_SIZE_16_BIT_BURST;
@@ -2522,10 +2524,12 @@ int adis_read_burst_data(struct adis_dev *adis, struct adis_burst_data *data,
 	if (ret)
 		return ret;
 
-	if (!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
-				    ADIS_CHECKSUM_BUF_IDX)) {
-		adis->diag_flags.checksum_err = true;
-		return -EINVAL;
+	if (crc_check) {
+		if (!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size,
+					    ADIS_CHECKSUM_BUF_IDX)) {
+			adis->diag_flags.checksum_err = true;
+			return -EINVAL;
+		}
 	}
 
 	adis->diag_flags.checksum_err = false;
