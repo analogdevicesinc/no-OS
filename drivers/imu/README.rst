@@ -15,6 +15,7 @@ Supported Devices
 * `ADIS16500 <https://www.analog.com/ADIS16500>`_
 * `ADIS16501 <https://www.analog.com/ADIS16501>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
+* `ADIS16550 <https://www.analog.com/ADIS16550>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
 * `ADIS16575 <https://www.analog.com/ADIS16575>`_
 * `ADIS16576 <https://www.analog.com/ADIS16576>`_
@@ -89,6 +90,15 @@ Supported devices with ADIS1650X files:
 * `ADIS16501 <https://www.analog.com/ADIS16501>`_
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
+
+ADIS1655X Driver Source Code:
+
+* `Header file of ADIS1655X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1655x.h>`_
+* `Implementation of ADIS1655X Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis1655x.c>`_
+
+Supported devices with ADIS1655X files:
+
+* `ADIS16550 <https://www.analog.com/ADIS16550>`_
 
 ADIS1657X Driver Source Code:
 
@@ -772,6 +782,71 @@ ADIS1650X
 
 	error:
 		adis_remove(adis1650x_desc);
+		pr_info("Error!\n");
+	...
+
+ADIS1655X
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis1655x_spi_ip = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = SPI_BAUDRATE,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = SPI_OPS,
+		.chip_select = SPI_CS,
+		.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis1655x_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis1655x_ip = {
+		.gpio_reset = &adis1655x_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_DEFAULT,
+		.dev_id = ADIS16550,
+	};
+
+	struct adis_dev *adis1655x_desc;
+	int ret;
+	int val[7];
+
+	adis1655x_chip_info.ip = &adis1655x_ip;
+	ret = adis_init(&adis1655x_desc, &adis1655x_chip_info);
+	if (ret)
+		goto error;
+
+	ret = adis_read_x_gyro(adis1655x_desc, &val[0]);
+	if (ret)
+		goto error;
+	ret = adis_read_y_gyro(adis1655x_desc, &val[1]);
+	if (ret)
+		goto error;
+	ret = adis_read_z_gyro(adis1655x_desc, &val[2]);
+	if (ret)
+		goto error;
+	ret = adis_read_x_accl(adis1655x_desc, &val[3]);
+	if (ret)
+		goto error;
+	ret = adis_read_y_accl(adis1655x_desc, &val[4]);
+	if (ret)
+		goto error;
+	ret = adis_read_z_accl(adis1655x_desc, &val[5]);
+	if (ret)
+		goto error;
+	ret = adis_read_temp_out(adis1655x_desc, &val[6]);
+	if (ret)
+		goto error;
+
+	error:
+		adis_remove(adis1655x_desc);
 		pr_info("Error!\n");
 	...
 

@@ -82,7 +82,6 @@ void test_adis1657x_init(void)
 	test_adis_init_2();
 	test_adis_init_4();
 	test_adis_init_5();
-	test_adis_init_6();
 }
 
 void test_adis1657x_remove(void)

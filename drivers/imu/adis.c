@@ -54,13 +54,8 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define ADIS_PAGE_SIZE			0x80
-#define ADIS_REG_PAGE_ID		0x00
 #define ADIS_WRITE_REG(reg)		((NO_OS_BIT(7) | (reg)))
 #define ADIS_READ_REG(reg)		((reg) & NO_OS_GENMASK(6,0))
-#define ADIS_4_BYTES_SIZE		4
-#define ADIS_2_BYTES_SIZE		2
-#define ADIS_1_BYTE_SIZE		1
 #define ADIS_16_BIT_BURST_SIZE		0
 #define ADIS_32_BIT_BURST_SIZE		1
 #define ADIS_FIFO_NOT_PRESENT		0
@@ -131,10 +126,12 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 						  NO_OS_GPIO_LOW);
 		if (ret)
 			goto error;
+		no_os_mdelay(dev->info->timeouts->reset_ms);
 	}
 
 	dev->info = ip->info;
 	dev->int_clk = ip->info->int_clk;
+	dev->is_locked = false;
 
 	ret = adis_initial_startup(dev);
 	if (ret)
@@ -195,10 +192,6 @@ int adis_initial_startup(struct adis_dev *adis)
 	}
 
 	ret = adis_cmd_snsr_self_test(adis);
-	if (ret)
-		return ret;
-
-	ret = adis_cmd_fls_mem_test(adis);
 	if (ret)
 		return ret;
 
@@ -315,6 +308,11 @@ int adis_write_reg(struct adis_dev *adis, uint32_t reg, uint32_t val,
 		return adis->info->write_reg(adis, reg, val, size);
 
 	int ret;
+
+	/* If device is locked, no writes are allowed, except for software reset. */
+	if (adis->is_locked && reg != adis->info->field_map->sw_res.reg_addr)
+		return -EPERM;
+
 	uint32_t page = reg / ADIS_PAGE_SIZE, i;
 	struct no_os_spi_msg msgs[] = {
 		{
@@ -401,8 +399,8 @@ int adis_write_reg(struct adis_dev *adis, uint32_t reg, uint32_t val,
  * @param field_val - The read field value.
  * @return 0 in case of success, error code otherwise.
  */
-STATIC int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
-			       uint32_t *field_val)
+int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
+			uint32_t *field_val)
 {
 	int ret;
 	uint32_t reg_val;
@@ -422,8 +420,8 @@ STATIC int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
  * @param field_val - The read field value.
  * @return 0 in case of success, error code otherwise.
  */
-STATIC int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
-			       int32_t *field_val)
+int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
+			int32_t *field_val)
 {
 	int ret;
 	uint32_t reg_val;
@@ -446,8 +444,8 @@ STATIC int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
  * @param field_val - The field value to be written.
  * @return 0 in case of success, error code otherwise.
  */
-STATIC int adis_write_field_u32(struct adis_dev *adis, struct adis_field field,
-				uint32_t field_val)
+int adis_write_field_u32(struct adis_dev *adis, struct adis_field field,
+			 uint32_t field_val)
 {
 	if (field_val > no_os_field_get(field.field_mask, field.field_mask))
 		return -EINVAL;
@@ -503,46 +501,68 @@ bool adis_validate_checksum(uint8_t *buffer, uint8_t size, uint8_t idx)
  * @param adis      - The adis device.
  * @param diag_stat - Diagnosis flags.
  */
-void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
+void adis_update_diag_flags(struct adis_dev *adis, uint32_t diag_stat)
 {
 	const struct adis_data_field_map_def *field_map = adis->info->field_map;
 
-	adis->diag_flags.snsr_init_failure = diag_stat &
-					     field_map->diag_snsr_init_failure_mask ? 1 : 0;
-	adis->diag_flags.data_path_overrun = diag_stat &
-					     field_map->diag_data_path_overrun_mask ? 1 : 0;
-	adis->diag_flags.spi_comm_err = diag_stat &
-					field_map->diag_spi_comm_err_mask ? 1 : 0;
-	adis->diag_flags.standby_mode = diag_stat &
-					field_map->diag_standby_mode_mask ? 1 : 0;
-	adis->diag_flags.clk_err = diag_stat &
-				   field_map->diag_clk_err_mask ? 1 : 0;
-	adis->diag_flags.fls_mem_update_failure = diag_stat &
-			field_map->diag_fls_mem_update_failure_mask ? 1 : 0;
-	adis->diag_flags.mem_failure = diag_stat &
-				       field_map->diag_mem_failure_mask ? 1 : 0;
-	adis->diag_flags.snsr_failure = diag_stat &
-					field_map->diag_snsr_failure_mask ? 1 : 0;
-	adis->diag_flags.gyro1_failure = diag_stat &
-					 field_map->diag_gyro1_failure_mask ? 1 : 0;
-	adis->diag_flags.gyro2_failure = diag_stat &
-					 field_map->diag_gyro2_failure_mask ? 1 : 0;
-	adis->diag_flags.accl_failure = diag_stat &
-					field_map->diag_accl_failure_mask ? 1 : 0;
-	adis->diag_flags.x_axis_gyro_failure = diag_stat &
-					       field_map->diag_x_axis_gyro_failure_mask ? 1 : 0;
-	adis->diag_flags.y_axis_gyro_failure = diag_stat &
-					       field_map->diag_y_axis_gyro_failure_mask ? 1 : 0;
-	adis->diag_flags.z_axis_gyro_failure = diag_stat &
-					       field_map->diag_z_axis_gyro_failure_mask ? 1 : 0;
-	adis->diag_flags.x_axis_accl_failure = diag_stat &
-					       field_map->diag_x_axis_accl_failure_mask ? 1 : 0;
-	adis->diag_flags.y_axis_accl_failure = diag_stat &
-					       field_map->diag_y_axis_accl_failure_mask ? 1 : 0;
-	adis->diag_flags.z_axis_accl_failure = diag_stat &
-					       field_map->diag_z_axis_accl_failure_mask ? 1 : 0;
-	adis->diag_flags.aduc_mcu_fault = diag_stat &
-					  field_map->diag_aduc_mcu_fault_mask ? 1 : 0;
+	adis->diag_flags.snsr_init_failure = no_os_field_get(
+			field_map->diag_snsr_init_failure_mask, diag_stat);
+	adis->diag_flags.data_path_overrun = no_os_field_get(
+			field_map->diag_data_path_overrun_mask, diag_stat);
+	adis->diag_flags.spi_comm_err = no_os_field_get(
+						field_map->diag_spi_comm_err_mask, diag_stat);
+	adis->diag_flags.standby_mode = no_os_field_get(
+						field_map->diag_standby_mode_mask, diag_stat);
+	adis->diag_flags.clk_err =no_os_field_get(field_map->diag_clk_err_mask,
+				  diag_stat);
+	adis->diag_flags.fls_mem_update_failure = no_os_field_get(
+				field_map->diag_fls_mem_update_failure_mask, diag_stat);
+	adis->diag_flags.mem_failure = no_os_field_get(field_map->diag_mem_failure_mask,
+				       diag_stat);
+	adis->diag_flags.snsr_failure = no_os_field_get(
+						field_map->diag_snsr_failure_mask, diag_stat);
+	adis->diag_flags.gyro1_failure = no_os_field_get(
+			field_map->diag_gyro1_failure_mask, diag_stat);
+	adis->diag_flags.gyro2_failure = no_os_field_get(
+			field_map->diag_gyro2_failure_mask, diag_stat);
+	adis->diag_flags.accl_failure = no_os_field_get(
+						field_map->diag_accl_failure_mask, diag_stat);
+	adis->diag_flags.x_axis_gyro_failure = no_os_field_get(
+			field_map->diag_x_axis_gyro_failure_mask, diag_stat);
+	adis->diag_flags.y_axis_gyro_failure = no_os_field_get(
+			field_map->diag_y_axis_gyro_failure_mask, diag_stat);
+	adis->diag_flags.z_axis_gyro_failure = no_os_field_get(
+			field_map->diag_z_axis_gyro_failure_mask, diag_stat);
+	adis->diag_flags.x_axis_accl_failure = no_os_field_get(
+			field_map->diag_x_axis_accl_failure_mask, diag_stat);
+	adis->diag_flags.y_axis_accl_failure = no_os_field_get(
+			field_map->diag_y_axis_accl_failure_mask, diag_stat);
+	adis->diag_flags.z_axis_accl_failure = no_os_field_get(
+			field_map->diag_z_axis_accl_failure_mask, diag_stat);
+	adis->diag_flags.aduc_mcu_fault = no_os_field_get(
+			field_map->diag_aduc_mcu_fault_mask, diag_stat);
+	adis->diag_flags.config_calib_crc_error = no_os_field_get(
+				field_map->diag_config_calib_crc_error_mask, diag_stat);
+	adis->diag_flags.overrange = no_os_field_get(field_map->diag_overrange_mask,
+				     diag_stat);
+	adis->diag_flags.temp_err = no_os_field_get(field_map->diag_temp_err_mask,
+				    diag_stat);
+	adis->diag_flags.power_supply_failure = no_os_field_get(
+			field_map->diag_power_supply_failure_mask, diag_stat);
+	adis->diag_flags.boot_memory_failure = no_os_field_get(
+			field_map->diag_boot_memory_failure_mask, diag_stat);
+	adis->diag_flags.reg_nvm_err = no_os_field_get(field_map->diag_reg_nvm_err_mask,
+				       diag_stat);
+	adis->diag_flags.wdg_timer_flag = no_os_field_get(
+			field_map->diag_wdg_timer_flag_mask, diag_stat);
+	adis->diag_flags.int_proc_supply_err = no_os_field_get(
+			field_map->diag_int_proc_supply_err_mask, diag_stat);
+	adis->diag_flags.ext_5v_supply_err = no_os_field_get(
+			field_map->diag_ext_5v_supply_err_mask, diag_stat);
+	adis->diag_flags.int_snsr_supply_err = no_os_field_get(
+			field_map->diag_int_snsr_supply_err_mask, diag_stat);
+	adis->diag_flags.int_reg_err = no_os_field_get(field_map->diag_int_reg_err_mask,
+				       diag_stat);
 }
 
 /**
@@ -566,6 +586,57 @@ int adis_read_diag_stat(struct adis_dev *adis,
 	*diag_flags = adis->diag_flags;
 
 	return 0;
+}
+
+/**
+ * @brief Read temperature flags. Currently this implementation is valid only for
+ * adis16550. If further other devices support this feature, it should be checked
+ * wether the register structure remains the same. If not, a similar approach to
+ * diagnosis flags should be implemented.
+ * @param adis       - The adis device.
+ * @param temp_flags - The read temperature flags flags.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_temp_flags(struct adis_dev *adis,
+			 struct adis_temp_flags *temp_flags)
+{
+	struct adis_field field = adis->info->field_map->temp_flags;
+	uint32_t field_val;
+	int ret;
+
+	ret = adis_read_reg(adis, field.reg_addr, &field_val, field.reg_size);
+	if (ret)
+		return ret;
+
+	temp_flags->gyro1_temp_x = !!(field_val & NO_OS_BIT(0));
+	temp_flags->gyro2_temp_x = !!(field_val & NO_OS_BIT(1));
+	temp_flags->gyro1_temp_y = !!(field_val & NO_OS_BIT(2));
+	temp_flags->gyro2_temp_y = !!(field_val & NO_OS_BIT(3));
+	temp_flags->gyro1_temp_z = !!(field_val & NO_OS_BIT(4));
+	temp_flags->gyro2_temp_z = !!(field_val & NO_OS_BIT(5));
+	temp_flags->accl_temp_x_y = !!(field_val & NO_OS_BIT(6));
+	temp_flags->accl_temp_y_z = !!(field_val & NO_OS_BIT(7));
+	temp_flags->accl_temp_z_x = !!(field_val & NO_OS_BIT(8));
+
+	return 0;
+}
+
+/**
+ * @brief Update device temperature flags according to the received parameter.
+ * @param adis     - The adis device.
+ * @param temp_reg - Temperature flags register value.
+ */
+void adis_update_temp_flags(struct adis_dev *adis, uint16_t temp_reg)
+{
+	adis->temp_flags.gyro1_temp_x = !!(temp_reg & NO_OS_BIT(0));
+	adis->temp_flags.gyro2_temp_x = !!(temp_reg & NO_OS_BIT(1));
+	adis->temp_flags.gyro1_temp_y = !!(temp_reg & NO_OS_BIT(2));
+	adis->temp_flags.gyro2_temp_y = !!(temp_reg & NO_OS_BIT(3));
+	adis->temp_flags.gyro1_temp_z = !!(temp_reg & NO_OS_BIT(4));
+	adis->temp_flags.gyro2_temp_z = !!(temp_reg & NO_OS_BIT(5));
+	adis->temp_flags.accl_temp_x_y = !!(temp_reg & NO_OS_BIT(6));
+	adis->temp_flags.accl_temp_y_z = !!(temp_reg & NO_OS_BIT(7));
+	adis->temp_flags.accl_temp_z_x = !!(temp_reg & NO_OS_BIT(8));
 }
 
 /**
@@ -935,6 +1006,237 @@ int adis_read_diag_aduc_mcu_fault(struct adis_dev *adis,
 		return ret;
 
 	*aduc_mcu_fault = diag_flags.aduc_mcu_fault;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read configuration and/or calibration CRC error flag value.
+ * @param adis                   - The adis device.
+ * @param config_calib_crc_error - Configuration and/or calibration CRC error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_config_calib_crc_error(struct adis_dev *adis,
+		uint32_t *config_calib_crc_error)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*config_calib_crc_error = diag_flags.config_calib_crc_error;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read overrange for inertial sensors flag value.
+ * @param adis      - The adis device.
+ * @param overrange - Overrange for inertial sensors flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_overrange(struct adis_dev *adis,
+			     uint32_t *overrange)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*overrange = diag_flags.overrange;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read temperature error flag value.
+ * @param adis     - The adis device.
+ * @param temp_err - Temperature error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_temp_err(struct adis_dev *adis,
+			    uint32_t *temp_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*temp_err = diag_flags.temp_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read power supply error flag value.
+ * @param adis                 - The adis device.
+ * @param power_supply_failure - Power supply error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_power_supply_failure(struct adis_dev *adis,
+					uint32_t *power_supply_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*power_supply_failure = diag_flags.power_supply_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read boot memory failure error flag value.
+ * @param adis                - The adis device.
+ * @param boot_memory_failure - Boot memory failure error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_boot_memory_failure(struct adis_dev *adis,
+				       uint32_t *boot_memory_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*boot_memory_failure = diag_flags.boot_memory_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read register NVM error flag value.
+ * @param adis        - The adis device.
+ * @param reg_nvm_err - Register NVM error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_reg_nvm_err(struct adis_dev *adis,
+			       uint32_t *reg_nvm_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*reg_nvm_err = diag_flags.reg_nvm_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read watchdog timer flag value.
+ * @param adis           - The adis device.
+ * @param wdg_timer_flag - Watchdog timer flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_wdg_timer_flag(struct adis_dev *adis,
+				  uint32_t *wdg_timer_flag)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*wdg_timer_flag = diag_flags.wdg_timer_flag;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read internal processor supply error flag value.
+ * @param adis                - The adis device.
+ * @param int_proc_supply_err - Internal processor supply error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_int_proc_supply_err(struct adis_dev *adis,
+				       uint32_t *int_proc_supply_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*int_proc_supply_err = diag_flags.int_proc_supply_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read external 5V supply error flag value.
+ * @param adis              - The adis device.
+ * @param ext_5v_supply_err - External 5V supply error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_ext_5v_supply_err(struct adis_dev *adis,
+				     uint32_t *ext_5v_supply_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*ext_5v_supply_err = diag_flags.ext_5v_supply_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read internal sensor supply error flag value.
+ * @param adis                - The adis device.
+ * @param int_snsr_supply_err - Internal sensor supply error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_int_snsr_supply_err(struct adis_dev *adis,
+				       uint32_t *int_snsr_supply_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*int_snsr_supply_err = diag_flags.int_snsr_supply_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read internal regulator error flag value.
+ * @param adis        - The adis device.
+ * @param int_reg_err - Internal regulator error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_int_reg_err(struct adis_dev *adis,
+			       uint32_t *int_reg_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*int_reg_err = diag_flags.int_reg_err;
 
 	return 0;
 }
@@ -1384,6 +1686,144 @@ int adis_write_za_bias(struct adis_dev *adis, int32_t za_bias)
 	return adis_write_field_u32(adis, adis->info->field_map->za_bias, za_bias);
 }
 
+/**
+ * @brief Read raw gyroscope scale adjustment on x axis.
+ * @param adis     - The adis device.
+ * @param xg_scale - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_xg_scale(struct adis_dev *adis, int32_t *xg_scale)
+{
+	return adis_read_field_s32(adis, adis->info->field_map->xg_scale, xg_scale);
+}
+
+/**
+ * @brief Write raw gyroscope scale adjustment on x axis.
+ * @param adis     - The adis device.
+ * @param xg_scale - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_xg_scale(struct adis_dev *adis, int32_t xg_scale)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->xg_scale,
+				    (uint16_t)xg_scale);
+}
+
+/**
+ * @brief Read raw gyroscope scale adjustment on y axis.
+ * @param adis     - The adis device.
+ * @param yg_scale - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_yg_scale(struct adis_dev *adis, int32_t *yg_scale)
+{
+	return adis_read_field_s32(adis, adis->info->field_map->yg_scale, yg_scale);
+}
+
+/**
+ * @brief Write raw gyroscope scale adjustment on y axis.
+ * @param adis     - The adis device.
+ * @param yg_scale - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_yg_scale(struct adis_dev *adis, int32_t yg_scale)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->yg_scale,
+				    (uint16_t)yg_scale);
+}
+
+/**
+ * @brief Read raw gyroscope scale adjustment on z axis.
+ * @param adis     - The adis device.
+ * @param zg_scale - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_zg_scale(struct adis_dev *adis, int32_t *zg_scale)
+{
+	return adis_read_field_s32(adis, adis->info->field_map->zg_scale, zg_scale);
+}
+
+/**
+ * @brief Write raw gyroscope scale adjustment on z axis.
+ * @param adis     - The adis device.
+ * @param zg_scale - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_zg_scale(struct adis_dev *adis, int32_t zg_scale)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->zg_scale,
+				    (uint16_t)zg_scale);
+}
+
+/**
+ * @brief Read raw acceleration scale adjustment on x axis.
+ * @param adis     - The adis device.
+ * @param xa_scale - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_xa_scale(struct adis_dev *adis, int32_t *xa_scale)
+{
+	return adis_read_field_s32(adis, adis->info->field_map->xa_scale, xa_scale);
+}
+
+/**
+ * @brief Write raw acceleration scale adjustment on x axis.
+ * @param adis     - The adis device.
+ * @param xa_scale - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_xa_scale(struct adis_dev *adis, int32_t xa_scale)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->xa_scale,
+				    (uint16_t)xa_scale);
+}
+
+/**
+ * @brief Read raw acceleration scale adjustment on y axis.
+ * @param adis     - The adis device.
+ * @param ya_scale - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_ya_scale(struct adis_dev *adis, int32_t *ya_scale)
+{
+	return adis_read_field_s32(adis, adis->info->field_map->ya_scale, ya_scale);
+}
+
+/**
+ * @brief Write raw acceleration scale adjustment on y axis.
+ * @param adis     - The adis device.
+ * @param ya_scale - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_ya_scale(struct adis_dev *adis, int32_t ya_scale)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->ya_scale,
+				    (uint16_t)ya_scale);
+}
+
+/**
+ * @brief Read raw acceleration scale adjustment on z axis.
+ * @param adis     - The adis device.
+ * @param za_scale - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_za_scale(struct adis_dev *adis, int32_t *za_scale)
+{
+	return adis_read_field_s32(adis, adis->info->field_map->za_scale, za_scale);
+}
+
+/**
+ * @brief Write raw acceleration scale adjustment on z axis.
+ * @param adis     - The adis device.
+ * @param za_scale - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_za_scale(struct adis_dev *adis, int32_t za_scale)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->za_scale,
+				    (uint16_t)za_scale);
+}
+
 /*
  * @brief Read FIFO enable bit value.
  * @param adis    - The adis device.
@@ -1635,6 +2075,9 @@ int adis_write_sync_polarity(struct adis_dev *adis, uint32_t sync_polarity)
  */
 int adis_read_sync_mode(struct adis_dev *adis, uint32_t *sync_mode)
 {
+	if (adis->info->read_sync_mode)
+		return adis->info->read_sync_mode(adis, sync_mode);
+
 	return adis_read_field_u32(adis, adis->info->field_map->sync_mode, sync_mode);
 }
 
@@ -1653,6 +2096,9 @@ int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
 
 	if(sync_mode > adis->info->sync_mode_max)
 		return -EINVAL;
+
+	if (adis->info->write_sync_mode)
+		return adis->info->write_sync_mode(adis, sync_mode, ext_clk);
 
 	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT) {
 		/* Sync pulse is external */
@@ -1708,6 +2154,54 @@ int adis_write_sens_bw(struct adis_dev *adis, uint32_t sens_bw)
 	no_os_mdelay(adis->info->timeouts->sens_bw_update_ms);
 
 	return 0;
+}
+
+/**
+ * @brief Read accelerometer FIR filter control bit value.
+ * @param adis            - The adis device.
+ * @param accl_fir_enable - The accelerometer FIR filter control bit value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_accl_fir_enable(struct adis_dev *adis, uint32_t *accl_fir_enable)
+{
+	return adis_read_field_u32(adis, adis->info->field_map->accl_fir_enable,
+				   accl_fir_enable);
+}
+
+/**
+ * @brief Write accelerometer FIR filter control bit value.
+ * @param adis            - The adis device.
+ * @param accl_fir_enable - The accelerometer FIR filter control bit value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_accl_fir_enable(struct adis_dev *adis, uint32_t accl_fir_enable)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->accl_fir_enable,
+				    accl_fir_enable);
+}
+
+/**
+ * @brief Read gyroscope FIR filter control bit value.
+ * @param adis            - The adis device.
+ * @param gyro_fir_enable - The gyroscope FIR filter control bit value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_gyro_fir_enable(struct adis_dev *adis, uint32_t *gyro_fir_enable)
+{
+	return adis_read_field_u32(adis, adis->info->field_map->gyro_fir_enable,
+				   gyro_fir_enable);
+}
+
+/**
+ * @brief Write gyroscope FIR filter control bit value.
+ * @param adis            - The adis device.
+ * @param gyro_fir_enable - The gyroscope FIR filter control bit value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_gyro_fir_enable(struct adis_dev *adis, uint32_t gyro_fir_enable)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->gyro_fir_enable,
+				    gyro_fir_enable);
 }
 
 /**
@@ -2299,7 +2793,40 @@ int adis_cmd_sw_res(struct adis_dev *adis)
 
 	no_os_mdelay(adis->info->timeouts->sw_reset_ms);
 
+	adis->is_locked = false;
+
 	return 0;
+}
+
+/**
+ * @brief Command: write lock
+ * @param adis - The adis device.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_cmd_write_lock(struct adis_dev *adis)
+{
+	int ret;
+	struct adis_field field = adis->info->field_map->write_lock;
+
+	ret = adis_write_reg(adis, field.reg_addr, field.field_mask,
+			     field.reg_size);
+	if (ret)
+		return ret;
+
+	adis->is_locked = true;
+
+	return 0;
+}
+
+/**
+ * @brief Read processor revision value.
+ * @param adis     - The adis device.
+ * @param proc_rev - The processor revision value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_proc_rev(struct adis_dev *adis, uint32_t *proc_rev)
+{
+	return adis_read_field_u32(adis, adis->info->field_map->proc_rev, proc_rev);
 }
 
 /**
@@ -2369,6 +2896,17 @@ int adis_read_serial_num(struct adis_dev *adis, uint32_t *serial_num)
 }
 
 /**
+ * @brief Read lot specific number value.
+ * @param adis    - The adis device.
+ * @param lot_num - The lot specific number value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_lot_num(struct adis_dev *adis, uint32_t *lot_num)
+{
+	return adis_read_field_u32(adis, adis->info->field_map->lot_num, lot_num);
+}
+
+/**
  * @brief Read user scratch register 1 value.
  * @param adis      - The adis device.
  * @param usr_scr_1 - The user scratch register 1 value.
@@ -2435,6 +2973,28 @@ int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3)
 }
 
 /**
+ * @brief Read user scratch register 4 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_4 - The user scratch register 4 value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_usr_scr_4(struct adis_dev *adis, uint32_t *usr_scr_4)
+{
+	return adis_read_field_u32(adis, adis->info->field_map->usr_scr_4, usr_scr_4);
+}
+
+/**
+ * @brief Write user scratch register 4 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_4 - The user scratch register 4 value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_usr_scr_4(struct adis_dev *adis, uint32_t usr_scr_4)
+{
+	return adis_write_field_u32(adis, adis->info->field_map->usr_scr_4, usr_scr_4);
+}
+
+/**
  * @brief Read flash memory write cycle counter value.
  * @param adis    - The adis device.
  * @param fls_mem_wr_cntr - The flash memory write cycle counter value.
@@ -2453,6 +3013,40 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
 		adis->diag_flags.fls_mem_wr_cnt_exceed = true;
 
 	return 0;
+}
+
+/**
+ * @brief Read FIR Filter Coefficient C_coef_idx value.
+ * @param adis      - The adis device.
+ * @param coef_idx  - The coefficient id.
+ * @param coef      - The coffiecient value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t *coef)
+{
+	if (coef_idx > adis->info->fir_coef_idx_max)
+		return -EINVAL;
+
+	return adis_read_reg(adis, adis->info->field_map->coeff_c0.reg_addr + coef_idx,
+			     coef, ADIS_2_BYTES_SIZE);
+}
+
+/**
+ * @brief Write FIR Filter Coefficient C_coef_idx value.
+ * @param adis      - The adis device.
+ * @param coef_idx  - The coefficient id.
+ * @param coef      - The coffiecient value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t coef)
+{
+	if (coef_idx > adis->info->fir_coef_idx_max)
+		return -EINVAL;
+
+	return adis_update_bits_base(adis,
+				     adis->info->field_map->coeff_c0.reg_addr + coef_idx,
+				     adis->info->field_map->coeff_c0.field_mask,
+				     coef, adis->info->field_map->coeff_c0.reg_size);
 }
 
 /**
@@ -2711,4 +3305,18 @@ int adis_get_temp_scale(struct adis_dev *adis,
 
 	return adis->info->get_scale(adis, &temp_scale->dividend, &temp_scale->divisor,
 				     ADIS_TEMP_CHAN);
+}
+
+/**
+ * @brief Read adis device temperature offset in integer.
+ * @param adis        - The adis device.
+ * @param temp_offset - The temperature offset.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_get_temp_offset(struct adis_dev *adis, int *temp_offset)
+{
+	if (!adis || !temp_offset || !adis->info->get_offset)
+		return -EINVAL;
+
+	return adis->info->get_offset(adis, temp_offset, ADIS_TEMP_CHAN);
 }

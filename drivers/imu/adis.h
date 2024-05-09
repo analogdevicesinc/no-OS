@@ -60,6 +60,10 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define ADIS_4_BYTES_SIZE	4
+#define ADIS_2_BYTES_SIZE	2
+#define ADIS_1_BYTE_SIZE	1
+
 #define ADIS_SYNC_DEFAULT	0
 #define ADIS_SYNC_DIRECT	1
 #define ADIS_SYNC_SCALED	2
@@ -95,6 +99,7 @@ enum adis_device_id {
 	ADIS16507_1,
 	ADIS16507_2,
 	ADIS16507_3,
+	ADIS16550,
 	ADIS16575_2,
 	ADIS16575_3,
 	ADIS16576_2,
@@ -141,23 +146,69 @@ struct adis_diag_flags {
 	/** Accelerometer failure. */
 	uint8_t accl_failure		:1;
 	/** X-Axis gyroscope failure. */
-	uint8_t x_axis_gyro_failure	:1;
+	uint8_t x_axis_gyro_failure	:2;
 	/** Y-Axis gyroscope failure. */
-	uint8_t y_axis_gyro_failure	:1;
+	uint8_t y_axis_gyro_failure	:2;
 	/** Z-Axis gyroscope failure. */
-	uint8_t z_axis_gyro_failure	:1;
+	uint8_t z_axis_gyro_failure	:2;
 	/** X-Axis accelerometer failure. */
-	uint8_t x_axis_accl_failure	:1;
+	uint8_t x_axis_accl_failure	:2;
 	/** Y-Axis accelerometer failure. */
-	uint8_t y_axis_accl_failure	:1;
+	uint8_t y_axis_accl_failure	:2;
 	/** Z-Axis accelerometer failure. */
-	uint8_t z_axis_accl_failure	:1;
+	uint8_t z_axis_accl_failure	:2;
 	/** ADuC microcontroller fault. */
 	uint8_t aduc_mcu_fault		:1;
+	/** Configuration and/or calibration CRC error. */
+	uint8_t config_calib_crc_error	:1;
+	/** Overrange event occurred. */
+	uint8_t overrange		:1;
+	/** Temperature error. */
+	uint8_t temp_err		:1;
+	/** Power supply failure. */
+	uint8_t power_supply_failure	:1;
+	/** Power supply failure. */
+	uint8_t boot_memory_failure	:1;
+	/** Register NVM error. */
+	uint8_t reg_nvm_err		:1;
+	/** Watchdog timer flag. */
+	uint8_t wdg_timer_flag		:1;
+	/** Internal processor supply error. */
+	uint8_t int_proc_supply_err	:1;
+	/** External 5V supply error. */
+	uint8_t ext_5v_supply_err	:1;
+	/** Internal sensor supply error. */
+	uint8_t int_snsr_supply_err	:1;
+	/** Internal regulator error. */
+	uint8_t int_reg_err		:1;
 	/** Checksum error.  */
 	uint8_t checksum_err		:1;
 	/** Flash memory write count exceeded. */
 	uint8_t fls_mem_wr_cnt_exceed	:1;
+};
+
+/** @struct adis_temp_flags
+ *  @brief Bitfield struct which maps on the temperature fags from the temperature register
+ */
+struct adis_temp_flags {
+	/** Accelerometer temperature flag for z-axis and x-axis. */
+	uint8_t accl_temp_z_x	:1;
+	/** Accelerometer temperature flag for y-axis and z-axis. */
+	uint8_t accl_temp_y_z	:1;
+	/** Accelerometer temperature flag for x-axis and y-axis. */
+	uint8_t accl_temp_x_y	:1;
+	/** Gyroscope2 temperature flag for z-axis. */
+	uint8_t	gyro2_temp_z	:1;
+	/** Gyroscope1 temperature flag for z-axis. */
+	uint8_t gyro1_temp_z	:1;
+	/** Gyroscope2 temperature flag for y-axis. */
+	uint8_t	gyro2_temp_y	:1;
+	/** Gyroscope1 temperature flag for y-axis. */
+	uint8_t gyro1_temp_y	:1;
+	/** Gyroscope2 temperature flag for x-axis. */
+	uint8_t	gyro2_temp_x	:1;
+	/** Gyroscope1 temperature flag for x-axis. */
+	uint8_t gyro1_temp_x	:1;
 };
 
 /** @struct adis_scale_fractional
@@ -215,14 +266,16 @@ struct adis_dev {
 	const struct adis_chip_info  	*info;
 	/** Current diagnosis flags values. */
 	struct adis_diag_flags 		diag_flags;
+	/** Current temperature flags values. */
+	struct adis_temp_flags 		temp_flags;
 	/** Current device id, specified by the user */
 	enum adis_device_id		dev_id;
 	/** Current page to be accessed in register map. */
 	uint32_t			current_page;
 	/** Transmit buffer used in SPI transactions. */
-	uint8_t				tx[10];
+	uint8_t				tx[12];
 	/** Receive buffer used in SPI transactions. */
-	uint8_t				rx[4];
+	uint8_t				rx[8];
 	/** Internal clock frequency in Hertz. */
 	uint32_t 			int_clk;
 	/** External clock frequency in Hertz. */
@@ -233,6 +286,8 @@ struct adis_dev {
 	bool				burst32;
 	/** Burst data selection: 0 for accel/gyro data; 1 for delta angle/ delta velocity data. */
 	uint8_t				burst_sel;
+	/** Device is locked, only data readings are allowed, no configuration allowed. */
+	bool				is_locked;
 };
 
 /** @struct adis_init_param
@@ -281,6 +336,10 @@ int adis_update_bits_base(struct adis_dev *adis, uint32_t reg,
 /*! Read diag status register and update device diag flags. */
 int adis_read_diag_stat(struct adis_dev *adis,
 			struct adis_diag_flags *diag_flags);
+
+/*! Read temperature register and update temperature flags. */
+int adis_read_temp_flags(struct adis_dev *adis,
+			 struct adis_temp_flags *temp_flags);
 
 /*! Diagnosis: read sensor initialization failure flag value. */
 int adis_read_diag_snsr_init_failure(struct adis_dev *adis,
@@ -331,6 +390,39 @@ int adis_read_diag_z_axis_accl_failure(struct adis_dev *adis,
 /*! Diagnosis: read ADuC microcontroller fault flag value. */
 int adis_read_diag_aduc_mcu_fault(struct adis_dev *adis,
 				  uint32_t *aduc_mcu_fault);
+/*! Diagnosis: read configuration and/or calibration CRC error flag value. */
+int adis_read_diag_config_calib_crc_error(struct adis_dev *adis,
+		uint32_t *config_calib_crc_error);
+/*! Diagnosis: read overrange for inertial sensors flag value. */
+int adis_read_diag_overrange(struct adis_dev *adis,
+			     uint32_t *overrange);
+/*! Diagnosis: read temperature error flag value. */
+int adis_read_diag_temp_err(struct adis_dev *adis,
+			    uint32_t *temp_err);
+/*! Diagnosis: read power supply error flag value. */
+int adis_read_diag_power_supply_failure(struct adis_dev *adis,
+					uint32_t *power_supply_failure);
+/*! Diagnosis: read boot memory failure error flag value. */
+int adis_read_diag_boot_memory_failure(struct adis_dev *adis,
+				       uint32_t *boot_memory_failure);
+/*! Diagnosis: read register NVM error flag value. */
+int adis_read_diag_reg_nvm_err(struct adis_dev *adis,
+			       uint32_t *reg_nvm_err);
+/*! Diagnosis: read watchdog timer flag value. */
+int adis_read_diag_wdg_timer_flag(struct adis_dev *adis,
+				  uint32_t *wdg_timer_flag);
+/*! Diagnosis: read internal processor supply error flag value. */
+int adis_read_diag_int_proc_supply_err(struct adis_dev *adis,
+				       uint32_t *int_proc_supply_err);
+/*! Diagnosis: read external 5V supply error flag value. */
+int adis_read_diag_ext_5v_supply_err(struct adis_dev *adis,
+				     uint32_t *ext_5v_supply_err);
+/*!  Diagnosis: read internal sensor supply error flag value. */
+int adis_read_diag_int_snsr_supply_err(struct adis_dev *adis,
+				       uint32_t *int_snsr_supply_err);
+/*! Diagnosis: read internal regulator error flag value. */
+int adis_read_diag_int_reg_err(struct adis_dev *adis,
+			       uint32_t *int_reg_err);
 /*! Diagnosis: read checksum error flag value. */
 void adis_read_diag_checksum_err(struct adis_dev *adis, uint32_t *checksum_err);
 /*! Diagnosis: read flash memory write counts exceeded flag value. */
@@ -428,6 +520,55 @@ int adis_read_za_bias(struct adis_dev *adis, int32_t *za_bias);
  */
 int adis_write_za_bias(struct adis_dev *adis, int32_t za_bias);
 
+/*! Gyroscope scale adjustment: read raw gyroscope scale correction on
+ *  x axis.
+ */
+int adis_read_xg_scale(struct adis_dev *adis, int32_t *xg_scale);
+/*! Gyroscope scale adjustment: write raw gyroscope scale correction on
+ *  x axis.
+ */
+int adis_write_xg_scale(struct adis_dev *adis, int32_t xg_scale);
+/*! Gyroscope scale adjustment: read raw gyroscope scale correction on
+ *  y axis.
+ */
+int adis_read_yg_scale(struct adis_dev *adis, int32_t *yg_scale);
+/*! Gyroscope scale adjustment: write raw gyroscope scale correction on
+ *  y axis.
+ */
+int adis_write_yg_scale(struct adis_dev *adis, int32_t yg_scale);
+/*! Gyroscope scale adjustment: read raw gyroscope scale correction on
+ *  z axis.
+ */
+int adis_read_zg_scale(struct adis_dev *adis, int32_t *zg_scale);
+/*! Gyroscope scale adjustment: write raw gyroscope scale correction on
+ *  z axis.
+ */
+int adis_write_zg_scale(struct adis_dev *adis, int32_t zg_scale);
+/*! Acceleration scale adjustment: read raw acceleration scale correction on
+ *  x axis.
+ */
+int adis_read_xa_scale(struct adis_dev *adis, int32_t *xa_scale);
+/*! Acceleration scale adjustment: write raw acceleration scale correction on
+ *  x axis.
+ */
+int adis_write_xa_scale(struct adis_dev *adis, int32_t xa_scale);
+/*! Acceleration scale adjustment: read raw acceleration scale correction on
+ *  y axis.
+ */
+int adis_read_ya_scale(struct adis_dev *adis, int32_t *ya_scale);
+/*! Acceleration scale adjustment: write raw acceleration scale correction on
+ *  y axis.
+ */
+int adis_write_ya_scale(struct adis_dev *adis, int32_t ya_scale);
+/*! Acceleration scale adjustment: read raw acceleration scale correction on
+ *  z axis.
+ */
+int adis_read_za_scale(struct adis_dev *adis, int32_t *za_scale);
+/*! Acceleration scale adjustment: write raw acceleration scale correction on
+ *  z axis.
+ */
+int adis_write_za_scale(struct adis_dev *adis, int32_t za_scale);
+
 /*! FIFO control: read FIFO enable bit value. */
 int adis_read_fifo_en(struct adis_dev *adis, uint32_t *fifo_en);
 /*! FIFO control: write FIFO enable bit value. */
@@ -474,6 +615,14 @@ int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
 int adis_read_sens_bw(struct adis_dev *adis, uint32_t *sens_bw);
 /*! Miscellaneous control: write internal sensor bandwidth encoded value. */
 int adis_write_sens_bw(struct adis_dev *adis, uint32_t sens_bw);
+/*! Miscellaneous control: read accelerometer FIR filter control bit value. */
+int adis_read_accl_fir_enable(struct adis_dev *adis, uint32_t *accl_fir_enable);
+/*! Miscellaneous control: write accelerometer FIR filter control bit value. */
+int adis_write_accl_fir_enable(struct adis_dev *adis, uint32_t accl_fir_enable);
+/*! Miscellaneous control: read gyroscope FIR filter control bit value. */
+int adis_read_gyro_fir_enable(struct adis_dev *adis, uint32_t *gyro_fir_enable);
+/*! Miscellaneous control: write gyroscope FIR filter control bit value. */
+int adis_write_gyro_fir_enable(struct adis_dev *adis, uint32_t gyro_fir_enable);
 /*! Miscellaneous control: read point of percussion alignment enable bit
  *  value.
  */
@@ -588,7 +737,11 @@ int adis_cmd_fls_mem_test(struct adis_dev *adis);
 int adis_cmd_fifo_flush(struct adis_dev *adis);
 /*! Global commands: perform software reset command. */
 int adis_cmd_sw_res(struct adis_dev *adis);
+/*! Global commands: perform write lock command. */
+int adis_cmd_write_lock(struct adis_dev *adis);
 
+/*! Device identification data: read processor revision. */
+int adis_read_proc_rev(struct adis_dev *adis, uint32_t *proc_rev);
 /*! Device identification data: read firmware revision. */
 int adis_read_firm_rev(struct adis_dev *adis, uint32_t *firm_rev);
 /*! Device identification data: read firmware revision day. */
@@ -601,6 +754,8 @@ int adis_read_firm_y(struct adis_dev *adis, uint32_t *firm_y);
 int adis_read_prod_id(struct adis_dev *adis, uint32_t *prod_id);
 /*! Device identification data: read serial number. */
 int adis_read_serial_num(struct adis_dev *adis, uint32_t *serial_num);
+/*! Device identification data: read lot specific number. */
+int adis_read_lot_num(struct adis_dev *adis, uint32_t *lot_num);
 
 /*! Scratch pad registers: read scratch register 1. */
 int adis_read_usr_scr_1(struct adis_dev *adis, uint32_t *usr_scr_1);
@@ -614,9 +769,18 @@ int adis_write_usr_scr_2(struct adis_dev *adis, uint32_t usr_scr_2);
 int adis_read_usr_scr_3(struct adis_dev *adis, uint32_t *usr_scr_3);
 /*! Scratch pad registers: write scratch register 3. */
 int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3);
+/*! Scratch pad registers: read scratch register 4. */
+int adis_read_usr_scr_4(struct adis_dev *adis, uint32_t *usr_scr_4);
+/*! Scratch pad registers: write scratch register 4. */
+int adis_write_usr_scr_4(struct adis_dev *adis, uint32_t usr_scr_4);
 
 /*! Flash counter: read flash memory write cycle counter value. */
 int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr);
+
+/*! FIR Coefficients: read FIR Filter Coefficient C_coef_idx value. */
+int adis_read_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t *coef);
+/*! FIR Coefficients: write FIR Filter Coefficient C_coef_idx value. */
+int adis_write_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t coef);
 
 /*! Read burst data */
 int adis_read_burst_data(struct adis_dev *adis,struct adis_burst_data *data,
@@ -647,4 +811,7 @@ int adis_get_deltavelocity_scale(struct adis_dev *adis,
 /*! Read adis device temperature scale in fractional form. */
 int adis_get_temp_scale(struct adis_dev *adis,
 			struct adis_scale_fractional *temp_scale);
+
+/*! Read adis device temperature offset in integer form. */
+int adis_get_temp_offset(struct adis_dev *adis, int *temp_offset);
 #endif
