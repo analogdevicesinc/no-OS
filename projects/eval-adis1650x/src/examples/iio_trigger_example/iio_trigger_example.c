@@ -85,19 +85,19 @@ int iio_trigger_example_main()
 	/* Initialize interrupt controller */
 	ret = no_os_irq_ctrl_init(&adis1650x_irq_desc, &adis1650x_gpio_irq_ip);
 	if (ret)
-		goto remove_iio_adis1650x;
+		goto exit;
 
 	ret = no_os_irq_set_priority(adis1650x_irq_desc, adis1650x_gpio_trig_ip.irq_id,
 				     1);
 	if (ret)
-		goto remove_irq_ctrl;
+		goto exit;
 
 	adis1650x_gpio_trig_ip.irq_ctrl = adis1650x_irq_desc;
 
 	/* Initialize hardware trigger */
 	ret = iio_hw_trig_init(&adis1650x_trig_desc, &adis1650x_gpio_trig_ip);
 	if (ret)
-		goto remove_irq_ctrl;
+		goto exit;
 
 	/* List of devices */
 	struct iio_app_device iio_devices[] = {
@@ -124,7 +124,7 @@ int iio_trigger_example_main()
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
-		goto remove_trig;
+		goto exit;
 
 	/* Update the reference to iio_desc */
 	adis1650x_trig_desc->iio_desc = app->iio_desc;
@@ -133,13 +133,10 @@ int iio_trigger_example_main()
 
 	iio_app_remove(app);
 
-remove_trig:
-	iio_hw_trig_remove(adis1650x_trig_desc);
-remove_irq_ctrl:
-	no_os_irq_ctrl_remove(adis1650x_irq_desc);
-remove_iio_adis1650x:
-	adis1650x_iio_remove(adis1650x_iio_desc);
 exit:
+	iio_hw_trig_remove(adis1650x_trig_desc);
+	no_os_irq_ctrl_remove(adis1650x_irq_desc);
+	adis1650x_iio_remove(adis1650x_iio_desc);
 	if (ret)
 		pr_info("Error!\n");
 	return ret;
