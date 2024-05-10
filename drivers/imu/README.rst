@@ -620,29 +620,28 @@ ADIS1646X
 
 	ret = adis_read_x_gyro(adis1646x_desc, &val[0]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_gyro(adis1646x_desc, &val[1]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_gyro(adis1646x_desc, &val[2]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_x_accl(adis1646x_desc, &val[3]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_accl(adis1646x_desc, &val[4]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_accl(adis1646x_desc, &val[5]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_temp_out(adis1646x_desc, &val[6]);
 	if (ret)
-		goto error_remove;
+		goto error;
 
-	error_remove:
-		adis_remove(adis1646x_desc);
 	error:
+		adis_remove(adis1646x_desc);
 		pr_info("Error!\n");
 	...
 
@@ -686,29 +685,28 @@ ADIS1647X
 
 	ret = adis_read_x_gyro(adis1647x_desc, &val[0]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_gyro(adis1647x_desc, &val[1]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_gyro(adis1647x_desc, &val[2]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_x_accl(adis1647x_desc, &val[3]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_accl(adis1647x_desc, &val[4]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_accl(adis1647x_desc, &val[5]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_temp_out(adis1647x_desc, &val[6]);
 	if (ret)
-		goto error_remove;
+		goto error;
 
-	error_remove:
-		adis_remove(adis1647x_desc);
 	error:
+		adis_remove(adis1647x_desc);
 		pr_info("Error!\n");
 	...
 
@@ -752,29 +750,28 @@ ADIS1650X
 
 	ret = adis_read_x_gyro(adis1650x_desc, &val[0]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_gyro(adis1650x_desc, &val[1]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_gyro(adis1650x_desc, &val[2]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_x_accl(adis1650x_desc, &val[3]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_accl(adis1650x_desc, &val[4]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_accl(adis1650x_desc, &val[5]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_temp_out(adis1650x_desc, &val[6]);
 	if (ret)
-		goto error_remove;
+		goto error;
 
-	error_remove:
-		adis_remove(adis1650x_desc);
 	error:
+		adis_remove(adis1650x_desc);
 		pr_info("Error!\n");
 	...
 
@@ -818,29 +815,28 @@ ADIS1657X
 
 	ret = adis_read_x_gyro(adis1657x_desc, &val[0]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_gyro(adis1657x_desc, &val[1]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_gyro(adis1657x_desc, &val[2]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_x_accl(adis1657x_desc, &val[3]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_y_accl(adis1657x_desc, &val[4]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_z_accl(adis1657x_desc, &val[5]);
 	if (ret)
-		goto error_remove;
+		goto error;
 	ret = adis_read_temp_out(adis1657x_desc, &val[6]);
 	if (ret)
-		goto error_remove;
+		goto error;
 
-	error_remove:
-		adis_remove(adis1657x_desc);
 	error:
+		adis_remove(adis1657x_desc);
 		pr_info("Error!\n");
 	...
 
