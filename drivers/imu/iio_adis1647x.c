@@ -419,6 +419,8 @@ error_adis1647x_init:
  */
 void adis1647x_iio_remove(struct adis_iio_dev *desc)
 {
+	if (!desc)
+		return;
 	adis_remove(desc->adis_dev);
 	no_os_free(desc);
 }
