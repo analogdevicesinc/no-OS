@@ -162,6 +162,8 @@ error_spi:
  */
 void adis_remove(struct adis_dev *adis)
 {
+	if (!adis)
+		return;
 	if (adis->gpio_reset)
 		no_os_gpio_remove(adis->gpio_reset);
 	if (adis->spi_desc)
