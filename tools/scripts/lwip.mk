@@ -29,3 +29,7 @@ endif
 ifdef NO_OS_GATEWAY
 CFLAGS += -DNO_OS_GATEWAY=\"$(NO_OS_GATEWAY)\"
 endif
+
+ifdef NO_OS_DOMAIN_NAME
+CFLAGS += -DNO_OS_DOMAIN_NAME=\"$(NO_OS_DOMAIN_NAME)\"
+endif
