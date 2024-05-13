@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for xilinx platform of ad400x-fmcz project.
+ *   @file   iio_example.c
+ *   @brief  IIO example header for eval-ad400x project
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -40,36 +40,72 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
+#include <stdio.h>
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#elif defined(IIO_EXAMPLE)
 #include "iio_example.h"
-#endif
+#include "common_data.h"
+#include "iio.h"
+#include "ad400x.h"
+#include "iio_ad400x.h"
+#include "no_os_util.h"
+#include "no_os_gpio.h"
+#include "no_os_print_log.h"
+#include "iio_app.h"
 
-/***************************************************************************//**
- * @brief Main function execution for xilinx platform.
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+/**
+ * @brief IIO example main execution.
  *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
+ */
+int iio_example_main()
 {
-	int ret = -EINVAL;
+	struct ad400x_iio_dev *dev;
+	struct iio_app_init_param app_init_param = {0};
+	struct iio_app_desc *app;
+	int ret;
 
-	/* Enable the instruction cache. */
-	Xil_ICacheEnable();
-	/* Enable the data cache. */
-	Xil_DCacheEnable();
+	struct iio_data_buffer adc_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR,
+	};
 
-#ifdef BASIC_EXAMPLE
-	ret = basic_example_main();
-#elif defined(IIO_EXAMPLE)
-	ret = iio_example_main();
-#else
-#error At least one example has to be selected using y value in Makefile.
-#endif
+	struct ad400x_iio_init_param ad400x_iio_ip = {
+		.init_param = &ad400x_init_param,
+		.ref_voltage_mv = AD400X_ADC_REF_VOLTAGE,
+	};
+
+	ret = ad400x_iio_init(&dev, &ad400x_iio_ip);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		IIO_APP_DEVICE( "ad400x", dev,
+				dev->iio_dev, &adc_buff, NULL, NULL)
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = ad400x_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret) {
+		pr_info("Error: iio_app_init: %d\n", ret);
+		ad400x_iio_remove(dev);
+		return ret;
+	}
+
+	ret = iio_app_run(app);
+	if (ret)
+		pr_info("Error: iio_app_run: %d\n", ret);
+
+	iio_app_remove(app);
+
+	ad400x_iio_remove(dev);
+
 	return ret;
 }

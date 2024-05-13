@@ -9,6 +9,21 @@ ifeq (xilinx,$(PLATFORM))
 CFLAGS += -DSPI_ENGINE_OFFLOAD_EXAMPLE
 endif
 
+ifeq (y,$(strip $(IIO_EXAMPLE)))
+CFLAGS += -DIIO_EXAMPLE=1
+
+SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
+INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
+
+INCS += $(DRIVERS)/adc/ad400x/iio_ad400x.h
+SRCS += $(DRIVERS)/adc/ad400x/iio_ad400x.c
+
+IIOD=y
+
+SRC_DIRS += $(NO-OS)/iio/iio_app
+
+endif
+
 INCS += $(DRIVERS)/adc/ad400x/ad400x.h
 SRCS += $(DRIVERS)/adc/ad400x/ad400x.c
 
