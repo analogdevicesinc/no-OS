@@ -8,6 +8,9 @@ endif
 ifeq (xilinx,$(PLATFORM))
 CFLAGS += -DSPI_ENGINE_OFFLOAD_EXAMPLE
 endif
+ifeq (stm32,$(PLATFORM))
+CFLAGS += -DUSE_STANDARD_SPI
+endif
 
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 CFLAGS += -DIIO_EXAMPLE=1

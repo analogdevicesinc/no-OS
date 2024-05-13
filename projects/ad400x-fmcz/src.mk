@@ -10,6 +10,7 @@ INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/platform/$(PLATFORM)/parameters.h
 
 SRCS += $(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_dma.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/api/no_os_pwm.c \
@@ -30,6 +31,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_dma.h \
 	$(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_delay.h \

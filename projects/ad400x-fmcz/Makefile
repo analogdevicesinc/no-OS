@@ -1,5 +1,6 @@
 # Uncomment to use the desired platform
 # PLATFORM = xilinx
+# PLATFORM = stm32
 
 # Select the example you want to enable by choosing y for enabling and n for disabling
 BASIC_EXAMPLE = n
