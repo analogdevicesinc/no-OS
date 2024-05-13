@@ -48,6 +48,11 @@
 #include "no_os_init.h"
 #include "no_os_i2c.h"
 
+#ifdef BT_ENABLED
+#include "cordio_uart.h"
+#include "cordio_init.h"
+#endif
+
 struct no_os_irq_ctrl_desc *stout_nvic_desc;
 
 /***************************************************************************//**
@@ -74,6 +79,18 @@ int main()
 		.platform_ops = &max_irq_ops,
 	};
 
+#ifdef BT_ENABLED
+	cordio_init();
+	while (1) {
+		/* Run the WSF OS */
+		wsfOsDispatcher();
+
+		if (!WsfOsActive()) {
+			/* No WSF tasks are active, optionally sleep */
+		}
+	}
+#endif
+
 	ret = no_os_irq_ctrl_init(&stout_nvic_desc, &ade9113_nvic_ip);
 	if (ret)
 		return ret;
@@ -89,9 +106,13 @@ int main()
 	/* Initialize UART */
 	struct no_os_uart_desc *uart_desc;
 
+#ifdef BT_ENABLED
+	pal_get_terminal_uart(&uart_desc);
+#else
 	ret = no_os_uart_init(&uart_desc, &ade9113_uart_ip);
 	if (ret)
 		return ret;
+#endif
 
 	no_os_uart_stdio(uart_desc);
 
@@ -103,4 +124,3 @@ int main()
 
 	return ret;
 }
-

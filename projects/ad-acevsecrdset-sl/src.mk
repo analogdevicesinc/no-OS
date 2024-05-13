@@ -104,3 +104,68 @@ SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 INCS += $(DRIVERS)/meter/ade9113/ade9113.h
 SRCS += $(DRIVERS)/meter/ade9113/ade9113.c
 
+ifdef BT_ENABLED
+
+INIT_PERIPHERAL = 1
+INIT_CENTRAL = 0
+TRACE = 1
+
+CORDIO_ROOT := $(MAXIM_LIBRARIES)/Cordio
+CFLAGS += -DBT_ENABLED
+CFLAGS += -DCHCI_TR_UART=1
+CFLAGS += -fomit-frame-pointer
+
+SRC_DIRS += $(PROJECT)/src/cordio_pal
+SRC_DIRS += $(CORDIO_ROOT)/host/sources
+SRC_DIRS += $(CORDIO_ROOT)/ble-profiles/sources
+SRC_DIRS += $(CORDIO_ROOT)/controller/sources/ble
+SRC_DIRS += $(CORDIO_ROOT)/controller/sources/common
+SRC_DIRS += $(CORDIO_ROOT)/controller/sources/ble/bb
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/hci/exactle
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/hci/common
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/att
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/dm
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/hci
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/smp
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/l2c
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/cfg
+SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/sec/common
+SRC_DIRS += $(CORDIO_ROOT)/wsf/sources/targets/baremetal
+SRC_DIRS += $(CORDIO_ROOT)/wsf/sources/util
+SRC_DIRS += $(CORDIO_ROOT)/thirdparty/uecc
+SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_crypto.c
+SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_timer.c
+SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_cfg.c
+ALL_IGNORED_FILES += $(CORDIO_ROOT)/ble-host/sources/sec/common/sec_ecc_debug.c
+
+SRC_DIRS += $(PROJECT)/src/cordio_app
+SRC_DIRS += $(PROJECT)/src/cordio_pal
+INCS += $(PROJECT)/src/cordio_app/cordio_init.h
+INCS += $(PROJECT)/src/cordio_app/periph_api.h
+INCS += $(PROJECT)/src/cordio_pal/cordio_uart.h
+
+CFLAGS += -I$(CORDIO_ROOT)/wsf/include
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/include
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/sources/stack/cfg
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/sources/stack/hci
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/sources/stack/l2c
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/sources/stack/dm
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/sources/stack/smp
+CFLAGS += -I$(CORDIO_ROOT)/ble-host/sec/common
+CFLAGS += -I$(CORDIO_ROOT)/controller/include/ble
+CFLAGS += -I$(CORDIO_ROOT)/controller/include/common
+CFLAGS += -I$(CORDIO_ROOT)/platform/include
+CFLAGS += -I$(CORDIO_ROOT)/ble-profiles/include
+CFLAGS += -I$(CORDIO_ROOT)/ble-profiles/sources/profiles
+CFLAGS += -I$(CORDIO_ROOT)/thirdparty/uecc
+
+CFLAGS += -DHCI_TR_EXACTLE=1
+CFLAGS += -DBT_VER=11
+CFLAGS += -DuECC_ASM=2
+CFLAGS += -DPAL_TMR_IDX=4
+CFLAGS += -DPAL_SLEEP_TMR_IDX=5
+
+EXTRA_LIBS_PATHS += $(MAXIM_LIBRARIES)/BlePhy/MAX32655
+EXTRA_LIBS += libphy_hard.a
+
+endif
