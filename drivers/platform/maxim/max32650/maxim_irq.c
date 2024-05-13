@@ -56,6 +56,10 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 
+#define MAX_UART_ERROR_FLAGS (MXC_F_UART_INT_FL_FRAME | \
+			      MXC_F_UART_INT_FL_PARITY | \
+			      MXC_F_UART_INT_FL_RX_OVR)
+
 static struct event_list _events[] = {
 	[NO_OS_EVT_GPIO] = {.event = NO_OS_EVT_GPIO},
 	[NO_OS_EVT_UART_TX_COMPLETE] = {.event = NO_OS_EVT_UART_TX_COMPLETE},
@@ -344,14 +348,17 @@ void max_uart_callback(mxc_uart_req_t *req, int result)
 	struct irq_action key = {.irq_id = MXC_UART_GET_IRQ(uart_id)};
 	int ret;
 
-	if (result)
+	if (result) {
 		ee = &_events[NO_OS_EVT_UART_ERROR];
-	else if (req->txLen == req->txCnt && req->txLen != 0)
+		MXC_UART_ClearFlags(MXC_UART_GET_UART(uart_id),
+				    MAX_UART_ERROR_FLAGS);
+	} else if (req->txLen == req->txCnt && req->txLen != 0) {
 		ee = &_events[NO_OS_EVT_UART_TX_COMPLETE];
-	else if (req->rxLen == req->rxCnt && req->rxLen != 0)
+	} else if (req->rxLen == req->rxCnt && req->rxLen != 0) {
 		ee = &_events[NO_OS_EVT_UART_RX_COMPLETE];
-	else
+	} else {
 		return;
+	}
 
 	ret = no_os_list_read_find(ee->actions, (void **)&a, &key);
 	if (ret)
