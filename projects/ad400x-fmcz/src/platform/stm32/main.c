@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by ad400x-fmcz project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of ad400x-fmcz project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -36,20 +36,44 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef XILINX_PLATFORM
-#include "xilinx/parameters.h"
-#elif defined STM32_PLATFORM
-#include "stm32/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
+
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
+#elif defined(IIO_EXAMPLE)
+#include "iio_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+/***************************************************************************//**
+ * @brief Main function execution for STM32 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -EINVAL;
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+	stm32_init();
+#ifdef BASIC_EXAMPLE
+	struct no_os_uart_desc *uart;
+
+	ret = no_os_uart_init(&uart, &ad400x_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart);
+
+	ret = basic_example_main();
+#elif defined(IIO_EXAMPLE)
+	ret = iio_example_main();
+#else
+#error At least one example has to be selected using y value in Makefile.
+#endif
+	return ret;
+}
