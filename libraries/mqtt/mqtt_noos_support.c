@@ -49,6 +49,10 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 
+#ifdef NO_OS_LWIP_NETWORKING
+#include "lwip_socket.h"
+#endif
+
 /******************************************************************************/
 /**************************** Global Variables ********************************/
 /******************************************************************************/
@@ -151,6 +155,13 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 
 	sent = 0;
 	do {
+#ifdef NO_OS_LWIP_NETWORKING
+		/*
+		 * Currently, the LWIP networking layer doesn't implement packet RX
+		 * using interrupts, so we have to poll.
+		 */
+		no_os_lwip_step(net->sock->net->net, NULL);
+#endif
 		rc = socket_recv(net->sock, (void *)(buff + sent),
 				 (uint32_t)(len - sent));
 		if (rc != -EAGAIN) { //If data available or error
