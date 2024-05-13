@@ -48,8 +48,11 @@
 
 #define NO_OS_LWIP_BUFF_SIZE	1530
 #define NO_OS_MTU_SIZE		1500
-#define NO_OS_DOMAIN_NAME	"analog"
 #define NO_OS_MAX_SOCKETS	10
+
+#ifndef NO_OS_DOMAIN_NAME
+#define NO_OS_DOMAIN_NAME	"analog"
+#endif
 
 #ifndef NO_OS_LWIP_INIT_ONETIME
 #define NO_OS_LWIP_INIT_ONETIME		0
