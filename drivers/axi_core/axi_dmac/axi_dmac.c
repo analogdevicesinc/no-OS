@@ -342,13 +342,17 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	dmac->base = init->base;
 	dmac->irq_option = init->irq_option;
 
+	int32_t status = axi_dmac_detect_caps(dmac);
+	if (status < 0)
+		goto free;
+
 	*dmac_core = dmac;
 
-	int32_t status = axi_dmac_detect_caps(*dmac_core);
-	if (status < 0)
-		return -1;
-
 	return 0;
+
+free:
+	no_os_free(dmac);
+	return -1;
 }
 
 /*******************************************************************************
