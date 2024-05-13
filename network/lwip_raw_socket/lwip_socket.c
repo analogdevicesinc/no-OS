@@ -808,27 +808,68 @@ static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
 }
 
 /**
- * @brief Not implemented.
- * @param net - Not used.
- * @param sock_id - Not used.
- * @param addr - Not used.
+ * @brief Called once a connect() completes.
+ * @param net - lwip sockets layer specific descriptor.
+ * @param pcb - unused.
+ * @param err - connection result.
+ * @return -ENOSYS
+ */
+static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
+{
+	struct lwip_socket_desc *sock = arg;
+
+	if (err != ERR_OK)
+		return err;
+
+	if (!arg)
+		return -EINVAL;
+
+	sock->state = SOCKET_CONNECTED;
+
+	return ERR_OK;
+}
+
+/**
+ * @brief Connect to a remote listening socket.
+ * @param net - lwip sockets layer specific descriptor.
+ * @param sock_id - index of the local socket.
+ * @param addr - IP/port of the remote socket.
  * @return -ENOSYS
  */
 static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 				   struct socket_address *addr)
 {
-	return -ENOSYS;
+	struct lwip_network_desc *desc = net;
+	struct lwip_socket_desc *socket;
+	struct tcp_pcb *pcb;
+	uint8_t ip_addr[4];
+	err_t ret;
+
+	sscanf(addr->addr, "%d.%d.%d.%d", &ip_addr[0], &ip_addr[1],
+	       &ip_addr[2], &ip_addr[3]);
+
+	ip4_addr_t ip4;
+	IP_ADDR4(&ip4, ip_addr[0], ip_addr[1], ip_addr[2], ip_addr[3]);
+	const ip_addr_t ipaddr = IPADDR4_INIT(ip4.addr);
+
+	socket = _get_sock(desc, sock_id);
+	if (!socket)
+		return -ENOMEM;
+
+	pcb = socket->pcb;
+
+	return tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
 }
 
 /**
- * @brief Not implemented.
- * @param net - Not used.
- * @param sock_id - Not used.
- * @return -ENOSYS
+ * @brief Close a connection from the client side.
+ * @param net - lwip sockets layer specific descriptor.
+ * @param sock_id - index of the remote socket to be closed.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t lwip_socket_disconnect(void *net, uint32_t sock_id)
 {
-	return -ENOSYS;
+	return lwip_socket_close(net, sock_id);
 }
 
 /**
