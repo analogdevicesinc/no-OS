@@ -190,13 +190,13 @@ int self_test_supply(struct stout *stout)
 	}
 	cnt = 0;
 	// Test V relay value within limits
-	pr_debug("TEST SUPPLY: Relay close->open \n");
+	pr_debug("TEST SUPPLY: Relay close->open %d \n", v2_max);
 	ret = relay_state(stout->relay, &r_state);
 	if (ret)
 		goto error1;
 	if (!r_state) {
-		if  (VR_OPEN_LOW_LIMIT < v2_max) {
-			pr_debug("Relay Soldered\n");
+		if  (VR_OPEN_LOW_LIMIT > v2_max) {
+			pr_debug("Relay Soldered %d, %d \n",v2_max,v1_max);
 			goto error1;
 		}
 	} else
@@ -284,7 +284,6 @@ int self_test_rcd(struct stout *stout)
 	ret = no_os_irq_enable(stout->ade9113->irq_ctrl, GPIO_RCDDC_PIN);
 	if (ret)
 		return ret;
-
 	pr_debug("TEST RCD: Passed\n");
 	return 0;
 error:
@@ -404,19 +403,16 @@ int self_test_relay_closed(struct stout *stout, int32_t v2)
 	int ret;
 
 	// Test V relay value within limits
-	pr_debug("TEST SUPPLY: Relay open->close\n");
+	pr_debug("TEST SUPPLY: Relay open->close %d \n", v2);
 	ret = relay_state(stout->relay, &r_state);
 	if (ret)
 		return ret;
 	
 	if (r_state) {
-		if (stout->grid >= 1){
-			if ((VIN_LOW_LIMIT_2 > v2) || (VIN_HIGH_LIMIT_2 < v2))
-			return INTF_RELAY_ERR;
-		} else if ((VIN_LOW_LIMIT > v2) || (VIN_HIGH_LIMIT < v2))
+				if ((VR_OPEN_LOW_LIMIT < v2))
 			return INTF_RELAY_ERR;
 	}
-	pr_debug("PASSED \n");
+	pr_debug("PASSED %d \n",v2);
 
 	return INTF_NO_ERR;
 }
@@ -491,9 +487,9 @@ int self_test_relay_stuck(struct stout *stout)
 		goto error;
 
 	if (!r_state) {
-		if ((stout->v2_max < VR_OPEN_LOW_LIMIT)
-		    || (VR_OPEN_HIGH_LIMIT < stout->v2_max)) {
-			pr_debug("Error: Relay contacts soldered\n");
+		if ((stout->v2_max < VR_OPEN_LOW_LIMIT))
+ 		{
+			pr_debug("Error: Relay contacts soldered %d \n", stout->v2_max);
 			goto error;
 		}
 	} else
