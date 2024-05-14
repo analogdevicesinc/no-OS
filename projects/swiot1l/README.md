@@ -3,12 +3,18 @@ Prior to building the project, a couple steps are necessary in order to get the 
 
 The MaximSDK provides distributions of `arm-none-eabi-` GCC compiler + utilities and `OpenOCD`, so you don't have to install these separately.
 
-# Building the project
+# Overview
+
+Currently, this project offers 2 firmware examples meant to run on the AD-SWIOT1L-SL board:
+	- The first one is based on the IIO framework. It may be used in combination with Scopy (+ the SWIOT1L plugin) or any other IIO client (such as pyadi-iio). This will be referred to as "SWIOT1L default firmware".
+	- The other one showcases how you may send data over MQTT to a remote broker connected over the 10Base-T1L port. This will be referred to as "SWIOT1L MQTT firmware".
+
+# Building the SWIOT1L default firmware
 
 This is only intended to be run on the MAX32650 target.
 
-1. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used).
-2.  Type `make RELEASE=y -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
+1. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used). Please remember that switching between the firmware examples requires you to clean the previous build artifacts. You may do this by running `make reset`.
+2.  Type `make RELEASE=y SWIOT1L_STATIC_IP=y -j`, in order to build the project. You may leave out the `SWIOT1L_STATIC_IP=y` flag if you want the IP to be assigned using DHCP. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
 
 A successful build should end with the following terminal output:
 ```
@@ -17,6 +23,21 @@ A successful build should end with the following terminal output:
 rm /home/xvr/MaximSDK_new/Libraries/CMSIS/Device/Maxim/MAX32650/Source/GCC/startup_max32650.s
 [11:11:21] Done (build/swiot1l.elf)
 ```
+# Building the SWIOT1L MQTT firmware
+
+This is only intended to be run on the MAX32650 target.
+
+1. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used). Please remember that switching between the firmware examples requires you to clean the previous build artifacts. You may do this by running `make reset`.
+2.  Type `make RELEASE=y SWIOT1L_STATIC_IP=y SWIOT1L_MQTT_EXAMPLE=y SWIOT1L_DEFAULT_FW=n -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
+
+A successful build should end with the following terminal output:
+```
+[11:11:27] [HEX] swiot1l.hex
+[11:11:27] swiot1l.hex is ready
+rm /home/xvr/MaximSDK_new/Libraries/CMSIS/Device/Maxim/MAX32650/Source/GCC/startup_max32650.s
+[11:11:21] Done (build/swiot1l.elf)
+```
+
 The binary and executable files are now available in the `build` directory (`swiot1l.hex` and `swiot1l.elf` files).
 # Programming the MCU
 Before the MCU can be programmed a few steps are necessary:
@@ -31,7 +52,7 @@ Before the MCU can be programmed a few steps are necessary:
 
 The microcontroller may be programmed in 2 ways:
 1. Drag-and-drop the binary (.hex) file in the `DAPLINK` directory. The drive should be unmounted and mounted again, once the programming is done.
-2. While in the project's root directory, type `make RELEASE=y run`. This method uses OpenOCD in order to load the binary file. If the programming is successful, you should see the following terminal output:
+2. While in the project's root directory, type `make RELEASE=y run` (you should keep the flags used to build the project). This method uses OpenOCD in order to load the binary file. If the programming is successful, you should see the following terminal output:
 ```
 ** Programming Started **
 ** Programming Finished **
@@ -41,7 +62,7 @@ The microcontroller may be programmed in 2 ways:
 shutdown command invoked
 [11:27:42] swiot1l.elf uploaded to board
 ```
-# Network connection
+# Network connection for the SWIOT1L default firmware
 
 In order to configure and sample data from the SWIOT1L board, you'll have to connect it to a PC through the single pair Ethernet connector. There are a couple ways to do it:
 
@@ -77,6 +98,21 @@ In all these cases, once the TCP/IP software stack is fully configured and the b
 
 Next, just to make sure that you can communicate with the board, you can try to ping the it using the IP address previously mentioned (either from command line or terminal).
 In case the the ping resulted in a "destination unreachable" error, it may be the case that the PC's network interface is not correctly configure to route packets to the board's IP.
+
+# Network connection for the SWIOT1L MQTT firmware
+
+Directly connect the AD-SWIOT1L-SL board to your PC using a SPE -> Ethernet/USB media converter.
+
+By default, the firmware will try to connect to the 192.168.97.1 IP, port 1883. So, you'll need to have an MQTT broker running on the host PC. The broker should listen for connections on an interface which has the 192.168.97.1 IP configured. The IP and port settings may be changed by setting different value to the `SWIOT1L_MQTT_SERVER_IP` and `SWIOT1L_MQTT_SERVER_PORT` make variables when compiling.
+
+The MQTT protocol version used by the AD-SWIOT1L-SL is V3.1.1. The connection is not using TLS and the client does not use an username or password.
+
+After the connection is established, the client will publish data on the following topics:
+	- ad74413r/channel0: voltage values measured by the AD74413R's ADC on channel 0.
+	- ad74413r/channel1: voltage values measured by the AD74413R's ADC on channel 1, while trying to output a maximum of 3.05 mA.
+	- ad74413r/channel2: the value of a resistor connected to the AD74413R's channel 2.
+	- ad74413r/channel3: current values measured by the AD74413R's ADC on channel 3, while trying to output a maximum of 4.028 V.
+
 ## Using the IIO interface
 The firmware is based on a no-OS implementation of the IIO framework from the Linux kernel, which offers similar functionalities. Thus, the board may be configured through the use of pyadi-iio API.
 

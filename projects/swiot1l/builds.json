@@ -1,10 +1,13 @@
 {
 	"maxim": {
 	  "swiot1l_dhcp": {
-	    "flags" : "RELEASE=y SWIOT1L_STATIC_IP=n"
+	    "flags" : "RELEASE=y SWIOT1L_STATIC_IP=n SWIOT1L_MQTT_EXAMPLE=n SWIOT1L_DEFAULT_FW=y"
 	  },
 	  "swiot1l_static_ip": {
-	    "flags" : "RELEASE=y SWIOT1L_STATIC_IP=y"
+	    "flags" : "RELEASE=y SWIOT1L_STATIC_IP=y SWIOT1L_MQTT_EXAMPLE=n SWIOT1L_DEFAULT_FW=y"
+	  },
+	  "swiot1l_static_ip_mqtt": {
+		"flags" : "RELEASE=y SWIOT1L_STATIC_IP=y SWIOT1L_MQTT_EXAMPLE=y SWIOT1L_DEFAULT_FW=n"
 	  }
 	}
 }

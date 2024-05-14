@@ -40,7 +40,15 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
+#ifdef SWIOT1L_MQTT_EXAMPLE
+
+#include "swiot1l_mqtt.h"
+
+#elif SWIOT1L_DEFAULT_FW
+
 #include "swiot_fw.h"
+
+#endif
 
 /***************************************************************************//**
  * @brief Main function
@@ -57,5 +65,12 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+
+#ifdef SWIOT1L_MQTT_EXAMPLE
+	return swiot1l_mqtt();
+#elif SWIOT1L_DEFAULT_FW
 	return swiot_firmware();
+#elif SWIOT1L_DEFAULT_FW + SWIOT1L_MQTT_EXAMPLE != 1
+#error Invalid example selection. Only one example may be selected.
+#endif
 }

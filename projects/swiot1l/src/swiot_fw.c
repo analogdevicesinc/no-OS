@@ -44,6 +44,7 @@
 #include "swiot_fw.h"
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
+#include "iio_app.h"
 #include "iio_adt75.h"
 #include "swiot.h"
 #include "common_data.h"

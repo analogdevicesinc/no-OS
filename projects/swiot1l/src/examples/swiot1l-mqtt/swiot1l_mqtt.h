@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes used by the swiot1l project.
+ *   @file   swiot1l_mqtt.h
+ *   @brief  Defines the main function for the mqtt example.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,9 +36,10 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
-#include "maxim/parameters.h"
+#ifndef __SWIOT1L_MQTT_H__
+#define __SWIOT1L_MQTT_H__
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+int swiot1l_mqtt();
+
+#endif // __SWIOT1L_MQTT_H__

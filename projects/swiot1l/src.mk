@@ -1,5 +1,4 @@
 LIBRARIES += lwip
-IIOD=y
 
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
 
@@ -13,8 +12,6 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 INCS += $(PROJECT)/src/common/common_data.h
 SRCS += $(PROJECT)/src/common/common_data.c
-INCS += $(PROJECT)/src/common/swiot.h
-SRCS += $(PROJECT)/src/common/swiot.c
 
 INCS += $(PROJECT)/src/platform/platform_includes.h
 
@@ -68,15 +65,6 @@ SRCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.c	\
 INCS += $(DRIVERS)/temperature/adt75/adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 
-INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
-SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
-
-INCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.h
-SRCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.c
-
-INCS += $(DRIVERS)/temperature/adt75/iio_adt75.h
-SRCS += $(DRIVERS)/temperature/adt75/iio_adt75.c
-
 INCS += $(INCLUDE)/no_os_crc8.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
 INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h
@@ -84,10 +72,43 @@ SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c
 SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 SRCS += $(NO-OS)/util/no_os_crc8.c
 
+ifeq (y,$(strip $(SWIOT1L_DEFAULT_FW)))
+
+IIOD=y
+CFLAGS += -DSWIOT1L_DEFAULT_FW=1
+
 SRCS += $(PROJECT)/src/swiot_fw.c
 INCS += $(PROJECT)/src/swiot_fw.h
-
+INCS += $(PROJECT)/src/common/swiot.h
+SRCS += $(PROJECT)/src/common/swiot.c
 SRC_DIRS += $(NO-OS)/iio/iio_app
-
 SRCS += $(NO-OS)/iio/iio_trigger.c
 INCS += $(NO-OS)/iio/iio_trigger.h
+
+INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
+SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
+INCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.h
+SRCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.c
+INCS += $(DRIVERS)/temperature/adt75/iio_adt75.h
+SRCS += $(DRIVERS)/temperature/adt75/iio_adt75.c
+
+endif
+
+ifeq (y,$(strip $(SWIOT1L_MQTT_EXAMPLE)))
+
+ifndef SWIOT1L_MQTT_SERVER_IP
+SWIOT1L_MQTT_SERVER_IP=192.168.97.1
+endif
+
+ifndef SWIOT1L_MQTT_SERVER_PORT
+SWIOT1L_MQTT_SERVER_PORT=1883
+endif
+
+CFLAGS += -DSWIOT1L_MQTT_SERVER_IP=\"$(SWIOT1L_MQTT_SERVER_IP)\"
+CFLAGS += -DSWIOT1L_MQTT_SERVER_PORT=$(SWIOT1L_MQTT_SERVER_PORT)
+
+CFLAGS += -DSWIOT1L_MQTT_EXAMPLE=1
+LIBRARIES += mqtt
+SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
+INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h
+endif
