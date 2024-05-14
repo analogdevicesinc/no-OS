@@ -103,10 +103,19 @@ $(PROJECT)_configure:
 	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
 	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
-	$(file > $(CPP_PROP_JSON),$(CPP_FINAL_CONTENT))
-	$(file > $(SETTINGSJSON),$(VSC_SET_CONTENT))
-	$(file > $(LAUNCHJSON),$(VSC_LAUNCH_CONTENT))
-	$(file > $(TASKSJSON),$(VSC_TASKS_CONTENT))
+
+	$(file > $(CPP_PROP_JSON).default,$(CPP_FINAL_CONTENT))
+	$(file > $(SETTINGSJSON).default,$(VSC_SET_CONTENT))
+	$(file > $(LAUNCHJSON).default,$(VSC_LAUNCH_CONTENT))
+	$(file > $(TASKSJSON).default,$(VSC_TASKS_CONTENT))
+
+	[ -s $(CPP_PROP_JSON) ]	&& echo '.vscode/c_cpp_properties.json already exists, not overwriting'	|| cp $(CPP_PROP_JSON).default $(CPP_PROP_JSON)
+	[ -s $(SETTINGSJSON) ] 	&& echo '.vscode/settings.json already exists, not overwriting'			|| cp $(SETTINGSJSON).default $(SETTINGSJSON)
+	[ -s $(LAUNCHJSON) ] 	&& echo '.vscode/launch.json already exists, not overwriting'			|| cp $(LAUNCHJSON).default $(LAUNCHJSON)
+	[ -s $(TASKSJSON) ] 	&& echo '.vscode/tasks.json already exists, not overwriting'			|| cp $(TASKSJSON).default $(TASKSJSON)
+
+	rm $(CPP_PROP_JSON).default $(SETTINGSJSON).default $(LAUNCHJSON).default $(TASKSJSON).default
+
 	$(MAKE) $(BINARY).openocd-cmsis
 	$(MAKE) $(BINARY).openocd
 
