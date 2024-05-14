@@ -788,7 +788,7 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 	case AD74413R_HIGH_Z:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RANGE_10V_SCALE,
 						 AD74413R_RANGE_10V_SCALE_DIV,
-						 &val->decimal);
+						 (uint32_t *)&val->decimal);
 		break;
 	case AD74413R_VOLTAGE_OUT:
 		/**
@@ -797,13 +797,13 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 		val->integer = no_os_div_s64_rem((adc_code + AD74413R_RANGE_5V_OFFSET) *
 						 AD74413R_RANGE_5V_SCALE,
 						 AD74413R_RSENSE * AD74413R_RANGE_5V_SCALE_DIV,
-						 (int32_t *)&val->decimal);
+						 &val->decimal);
 		break;
 	case AD74413R_CURRENT_OUT:
 	case AD74413R_VOLTAGE_IN:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RANGE_10V_SCALE,
 						 AD74413R_RANGE_10V_SCALE_DIV,
-						 &val->decimal);
+						 (uint32_t *)&val->decimal);
 		break;
 	case AD74413R_CURRENT_IN_EXT_HART:
 		if (desc->chip_id == AD74412R)
@@ -817,18 +817,18 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 	case AD74413R_CURRENT_IN_LOOP:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RANGE_2V5_SCALE,
 						 AD74413R_RANGE_2V5_SCALE_DIV * AD74413R_RSENSE,
-						 &val->decimal);
+						 (uint32_t *)&val->decimal);
 		break;
 	case AD74413R_RESISTANCE:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RTD_PULL_UP,
 						 AD74413R_ADC_MAX_VALUE - adc_code,
-						 &val->decimal);
+						 (uint32_t *)&val->decimal);
 		break;
 	case AD74413R_DIGITAL_INPUT:
 	case AD74413R_DIGITAL_INPUT_LOOP:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RANGE_10V_SCALE,
 						 AD74413R_RANGE_10V_SCALE_DIV,
-						 &val->decimal);
+						 (uint32_t *)&val->decimal);
 		break;
 	default:
 		return -EINVAL;
