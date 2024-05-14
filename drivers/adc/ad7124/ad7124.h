@@ -60,11 +60,20 @@
 #define AD7124_MAX_SETUPS	8
 /* Maximum number of channels */
 #define AD7124_MAX_CHANNELS	16
-/* Device IDs
- * The Device IDs for REV-B of boards need to be updated as 0x07 for ad7124-4
- * and 0x17 for ad7124-8 */
-#define AD7124_4_ID         0x14
-#define AD7124_8_ID	        0x16
+
+/* AD7124-4 Standard Device ID */
+#define AD7124_4_STD_ID  0x04
+/* AD7124-4 B Grade Device ID */
+#define AD7124_4_B_GRADE_ID  0x06
+/* Device ID for the re-designed die in the AD7124-4 standard part and B-grade */
+#define AD7124_4_NEW_ID  0x07
+
+/* AD7124-8 Standard Device ID */
+#define AD7124_8_STD_ID  0x14
+/* AD7124-8 B and W Grade Device ID */
+#define AD7124_8_B_W_GRADE_ID  0x16
+/* Device ID for the re-designed die in the AD7124-8 standard part, B-grade and W-grade */
+#define AD7124_8_NEW_ID  0x17
 
 /* AD7124 Register Map */
 #define AD7124_COMM_REG      0x00

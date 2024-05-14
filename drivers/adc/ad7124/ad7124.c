@@ -1037,12 +1037,29 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	ret = ad7124_read_register(dev, &dev->regs[AD7124_ID_REG]);
 	if (ret)
 		goto error_spi;
+
 	if (dev->active_device == ID_AD7124_4) {
-		if (dev->regs[AD7124_ID_REG].value != AD7124_4_ID)
+		switch (dev->regs[AD7124_ID_REG].value) {
+		case AD7124_4_STD_ID:
+		case AD7124_4_B_GRADE_ID:
+		case AD7124_4_NEW_ID:
+			break;
+
+		default:
 			goto error_spi;
-	} else if (dev->active_device == ID_AD7124_8) {
-		if (dev->regs[AD7124_ID_REG].value != AD7124_8_ID)
+		}
+	}
+
+	else if (dev->active_device == ID_AD7124_8) {
+		switch (dev->regs[AD7124_ID_REG].value) {
+		case AD7124_8_STD_ID:
+		case AD7124_8_B_W_GRADE_ID:
+		case AD7124_8_NEW_ID:
+			break;
+
+		default:
 			goto error_spi;
+		}
 	}
 
 	for (setup_index = 0; setup_index < AD7124_MAX_SETUPS; setup_index++) {
