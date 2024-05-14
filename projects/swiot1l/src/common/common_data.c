@@ -232,13 +232,13 @@ struct adin1110_init_param adin1110_ip = {
 };
 
 const struct no_os_platform_spi_delays ad74413r_spi_delays = {
-	.cs_delay_first = 150,
+	.cs_delay_first = 1000,
 	.cs_delay_last = 0,
 };
 
 const struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = 3,
-	.max_speed_hz = 15000000,
+	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_2,
 	.platform_ops = &max_spi_ops,
@@ -275,12 +275,6 @@ const struct no_os_gpio_init_param psu_gpio_ip = {
 	.extra = GPIO_EXTRA
 };
 
-struct swiot_iio_desc_init_param swiot_ip = {
-	.psu_gpio_param = psu_gpio_ip,
-	.identify_gpio_param = swiot_led2_ip,
-	.mode = SWIOT_CONFIG,
-};
-
 struct max149x6_init_param max14906_ip = {
 	.chip_address = 0,
 	.comm_param = &max14906_spi_ip,
@@ -298,6 +292,7 @@ struct ad74413r_init_param ad74413r_ip = {
 	.comm_param = ad74413r_spi_ip,
 };
 
+#ifdef SWIOT1L_DEFAULT_FW
 /* GPIO trigger */
 struct no_os_irq_init_param ad74413r_gpio_irq_ip = {
 	.irq_ctrl_id = GPIO_IRQ_ID,
@@ -309,6 +304,12 @@ const struct iio_hw_trig_cb_info gpio_cb_info = {
 	.event = NO_OS_EVT_GPIO,
 	.peripheral = NO_OS_GPIO_IRQ,
 	.handle = AD74413R_GPIO_CB_HANDLE,
+};
+
+struct swiot_iio_desc_init_param swiot_ip = {
+	.psu_gpio_param = psu_gpio_ip,
+	.identify_gpio_param = swiot_led2_ip,
+	.mode = SWIOT_CONFIG,
 };
 
 struct iio_hw_trig_init_param ad74413r_gpio_trig_ip = {
@@ -323,3 +324,4 @@ struct iio_trigger ad74413r_iio_trig_desc = {
 	.enable = iio_trig_enable,
 	.disable = iio_trig_disable
 };
+#endif
