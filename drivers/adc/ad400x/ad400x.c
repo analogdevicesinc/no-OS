@@ -52,38 +52,19 @@
 #include "no_os_alloc.h"
 #include "no_os_util.h"
 
-/**
- * @brief Device resolution
- */
-const uint16_t ad400x_device_resol[] = {
-	[ID_AD4000] = 16,
-	[ID_AD4001] = 16,
-	[ID_AD4002] = 18,
-	[ID_AD4003] = 18,
-	[ID_AD4004] = 16,
-	[ID_AD4005] = 16,
-	[ID_AD4006] = 18,
-	[ID_AD4007] = 18,
-	[ID_AD4011] = 18,
-	[ID_AD4020] = 20,
-	[ID_ADAQ4003] = 18
-};
 
-/**
- * @brief Device sign
- */
-const char ad400x_device_sign[] = {
-	[ID_AD4000] = 'u',
-	[ID_AD4001] = 's',
-	[ID_AD4002] = 'u',
-	[ID_AD4003] = 's',
-	[ID_AD4004] = 'u',
-	[ID_AD4005] = 's',
-	[ID_AD4006] = 'u',
-	[ID_AD4007] = 's',
-	[ID_AD4011] = 's',
-	[ID_AD4020] = 's',
-	[ID_ADAQ4003] = 's',
+const struct ad400x_dev_info ad400x_devices[] = {
+	[ID_AD4000] = {.resolution = 16, .sign = 'u'},
+	[ID_AD4001] = {.resolution = 16, .sign = 's'},
+	[ID_AD4002] = {.resolution = 18, .sign = 'u'},
+	[ID_AD4003] = {.resolution = 18, .sign = 's'},
+	[ID_AD4004] = {.resolution = 16, .sign = 'u'},
+	[ID_AD4005] = {.resolution = 16, .sign = 's'},
+	[ID_AD4006] = {.resolution = 18, .sign = 'u'},
+	[ID_AD4007] = {.resolution = 18, .sign = 's'},
+	[ID_AD4011] = {.resolution = 18, .sign = 's'},
+	[ID_AD4020] = {.resolution = 20, .sign = 's'},
+	[ID_ADAQ4003] = {.resolution = 18, .sign = 's'}
 };
 
 /******************************************************************************/
@@ -229,7 +210,7 @@ static int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 
 	if (!dev)
 		return -EINVAL;
-	if (ad400x_device_resol[dev->dev_id ] > 16)
+	if (dev->dev_info->resolution > 16)
 		bytes_number = 3;
 
 #if defined(USE_STANDARD_SPI)
@@ -251,8 +232,8 @@ static int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 		return ret;
 
 	*data = no_os_get_unaligned_be32(data_read);
-	*data >>= 32 - ad400x_device_resol[dev->dev_id ];
-	*data = *data & NO_OS_GENMASK(ad400x_device_resol[dev->dev_id ], 0);
+	*data >>= 32 - dev->dev_info->resolution;
+	*data = *data & NO_OS_GENMASK(dev->dev_info->resolution, 0);
 
 	return 0;
 }
@@ -310,6 +291,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 		goto error;
 
 	dev->dev_id = init_param->dev_id;
+	dev->dev_info = &ad400x_devices[init_param->dev_id];
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
@@ -324,7 +306,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret)
 		goto error;
 #else
-	transfer_width = ad400x_device_resol[init_param->dev_id];
+	transfer_width = dev->dev_info->resolution;
 
 	/* without offload xfer width has to be byte alligned */
 	if (!dev->offload_enable)

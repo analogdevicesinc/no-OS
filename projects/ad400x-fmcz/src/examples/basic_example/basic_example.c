@@ -62,12 +62,15 @@ int basic_example_main()
 	struct ad400x_dev *dev;
 	uint32_t *data = ADC_DDR_BASEADDR;
 	int32_t ret, i;
-	uint16_t resolution = ad400x_device_resol[ad400x_init_param.dev_id];
-	char sign = ad400x_device_sign[ad400x_init_param.dev_id];
+	uint16_t resolution;
+	char sign;
 
 	ret = ad400x_init(&dev, &ad400x_init_param);
 	if (ret)
 		return ret;
+
+	sign = dev->dev_info->sign;
+	resolution = dev->dev_info->resolution;
 
 	ret = ad400x_read_data(dev, data, SAMPLES_PER_CHANNEL);
 	if (ret) {

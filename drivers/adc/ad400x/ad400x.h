@@ -77,8 +77,10 @@ enum ad400x_supported_dev_ids {
 	ID_ADAQ4003,
 };
 
-extern const uint16_t ad400x_device_resol[];
-extern const char ad400x_device_sign[];
+struct ad400x_dev_info {
+	uint16_t resolution;
+	char sign;
+};
 
 struct ad400x_dev {
 	/* SPI */
@@ -95,6 +97,8 @@ struct ad400x_dev {
 	enum ad400x_supported_dev_ids dev_id;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+	/** device info */
+	const struct ad400x_dev_info *dev_info;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/* enable offload */

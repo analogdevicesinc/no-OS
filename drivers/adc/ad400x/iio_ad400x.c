@@ -185,7 +185,6 @@ int ad400x_iio_init(struct ad400x_iio_dev **dev,
 		    struct ad400x_iio_init_param *iio_init_param)
 {
 	struct ad400x_iio_dev *desc;
-	enum ad400x_supported_dev_ids dev_id;
 	int ret;
 
 	desc = no_os_calloc(1, sizeof(*desc));
@@ -194,21 +193,18 @@ int ad400x_iio_init(struct ad400x_iio_dev **dev,
 
 	desc->iio_dev = &ad400x_iio_device_template;
 	desc->ref_voltage_mv = iio_init_param->ref_voltage_mv;
-
-	dev_id = iio_init_param->init_param->dev_id;
-
-	/* fill scan_type based on device id */
-	desc->scan_type.sign = ad400x_device_sign[dev_id];
-	desc->scan_type.realbits = ad400x_device_resol[dev_id];
-	desc->scan_type.storagebits = 32;
-	desc->scan_type.is_big_endian = false;
-	desc->scan_type.shift = 0;
-
 	desc->iio_dev->channels[0].scan_type = &desc->scan_type;
 
 	ret = ad400x_init(&desc->ad400x_dev, iio_init_param->init_param);
 	if (ret)
 		goto error_setup;
+
+	/* fill scan_type based on device id */
+	desc->scan_type.sign = desc->ad400x_dev->dev_info->sign;
+	desc->scan_type.realbits = desc->ad400x_dev->dev_info->resolution;
+	desc->scan_type.storagebits = 32;
+	desc->scan_type.is_big_endian = false;
+	desc->scan_type.shift = 0;
 
 	*dev = desc;
 
