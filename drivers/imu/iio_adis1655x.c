@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adis1650x.c
- *   @brief  Implementation of iio_adis1650x.c
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   iio_adis1655x.c
+ *   @brief  Implementation of iio_adis1655x.c
+ *   @author RBolboac (ramona.gradinariu@analog.com)
  *******************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "iio_adis1650x.h"
+#include "iio_adis1655x.h"
 #include "no_os_alloc.h"
 #include "no_os_units.h"
 
@@ -49,18 +49,11 @@
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
-static const char * const adis1650x_rang_mdl_txt[] = {
-	[ADIS1650X_ID_NO_OFFSET(ADIS16500)]   = "+/-2000_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16501)]   = "+/-500_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16505_1)] = "+/-125_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16505_2)] = "+/-500_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16505_3)] = "+/-2000_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16507_1)] = "+/-125_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16507_2)] = "+/-500_degrees_per_sec",
-	[ADIS1650X_ID_NO_OFFSET(ADIS16507_3)] = "+/-2000_degrees_per_sec",
+static const char * const adis1655x_rang_mdl_txt[] = {
+	[ADIS16550]   = "+/-300_degrees_per_sec",
 };
 
-static struct scan_type adis1650x_iio_accel_scan_type = {
+static struct scan_type adis1655x_iio_accel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -68,7 +61,7 @@ static struct scan_type adis1650x_iio_accel_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis1650x_iio_anglvel_scan_type = {
+static struct scan_type adis1655x_iio_anglvel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -76,7 +69,7 @@ static struct scan_type adis1650x_iio_anglvel_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis1650x_iio_delta_vel_scan_type = {
+static struct scan_type adis1655x_iio_delta_vel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -84,7 +77,7 @@ static struct scan_type adis1650x_iio_delta_vel_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis1650x_iio_delta_angl_scan_type = {
+static struct scan_type adis1655x_iio_delta_angl_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
 	.storagebits 	= 32,
@@ -92,7 +85,7 @@ static struct scan_type adis1650x_iio_delta_angl_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct scan_type adis1650x_iio_temp_scan_type = {
+static struct scan_type adis1655x_iio_temp_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 16,
 	.storagebits 	= 16,
@@ -100,28 +93,104 @@ static struct scan_type adis1650x_iio_temp_scan_type = {
 	.is_big_endian 	= true
 };
 
-static struct iio_channel adis1650x_channels[] = {
-	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		1650x, adis_iio_anglvel_attrs),
-	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		1650x, adis_iio_anglvel_attrs),
-	ADIS_GYRO_CHAN		(Z, 	ADIS_GYRO_Z, 		1650x, adis_iio_anglvel_attrs),
-	ADIS_ACCEL_CHAN		(X,	ADIS_ACCEL_X, 		1650x, adis_iio_accel_attrs),
-	ADIS_ACCEL_CHAN		(Y,	ADIS_ACCEL_Y, 		1650x, adis_iio_accel_attrs),
-	ADIS_ACCEL_CHAN		(Z,	ADIS_ACCEL_Z, 		1650x, adis_iio_accel_attrs),
-	ADIS_TEMP_CHAN		(ADIS_TEMP, 			1650x, adis_iio_temp_attrs),
-	ADIS_DELTA_ANGL_CHAN	(X, 	ADIS_DELTA_ANGL_X, 	1650x, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_ANGL_CHAN	(Y, 	ADIS_DELTA_ANGL_Y, 	1650x, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_ANGL_CHAN	(Z, 	ADIS_DELTA_ANGL_Z, 	1650x, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_VEL_CHAN	(X, 	ADIS_DELTA_VEL_X, 	1650x, adis_iio_delta_vel_attrs),
-	ADIS_DELTA_VEL_CHAN	(Y, 	ADIS_DELTA_VEL_Y, 	1650x, adis_iio_delta_vel_attrs),
-	ADIS_DELTA_VEL_CHAN	(Z, 	ADIS_DELTA_VEL_Z, 	1650x, adis_iio_delta_vel_attrs),
+struct iio_attribute adis1655x_iio_anglvel_attrs[] = {
+	{
+		.name  = "calibbias",
+		.show  = adis_iio_read_calibbias,
+		.store = adis_iio_write_calibbias,
+	},
+	{
+		.name  = "calibscale",
+		.show  = adis_iio_read_calibscale,
+		.store = adis_iio_write_calibscale,
+	},
+	{
+		.name = "raw",
+		.show = adis_iio_read_raw,
+	},
+	{
+		.name   = "scale",
+		.shared = IIO_SHARED_BY_TYPE,
+		.show   = adis_iio_read_scale,
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute adis1650x_debug_attrs[] = {
-
+struct iio_attribute adis1655x_iio_accel_attrs[] = {
 	{
-		.name = "diag_data_path_overrun",
+		.name  = "calibbias",
+		.show  = adis_iio_read_calibbias,
+		.store = adis_iio_write_calibbias,
+	},
+	{
+		.name  = "calibscale",
+		.show  = adis_iio_read_calibscale,
+		.store = adis_iio_write_calibscale,
+	},
+	{
+		.name = "raw",
+		.show = adis_iio_read_raw,
+	},
+	{
+		.name   = "scale",
+		.shared = IIO_SHARED_BY_TYPE,
+		.show   = adis_iio_read_scale,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+struct iio_attribute adis1655x_iio_temp_attrs[] = {
+	{
+		.name = "raw",
+		.show = adis_iio_read_raw,
+	},
+	{
+		.name = "scale",
+		.show = adis_iio_read_scale,
+	},
+	{
+		.name = "offset",
+		.show = adis_iio_read_offset,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+struct iio_attribute adis1655x_dev_attrs[] = {
+	{
+		.name   = "sampling_frequency",
+		.shared = IIO_SHARED_BY_ALL,
+		.show   = adis_iio_read_sampling_freq,
+		.store  = adis_iio_write_sampling_freq,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_channel adis1655x_channels[] = {
+	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		1655x, adis1655x_iio_anglvel_attrs),
+	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		1655x, adis1655x_iio_anglvel_attrs),
+	ADIS_GYRO_CHAN		(Z, 	ADIS_GYRO_Z, 		1655x, adis1655x_iio_anglvel_attrs),
+	ADIS_ACCEL_CHAN		(X,	ADIS_ACCEL_X, 		1655x, adis1655x_iio_accel_attrs),
+	ADIS_ACCEL_CHAN		(Y,	ADIS_ACCEL_Y, 		1655x, adis1655x_iio_accel_attrs),
+	ADIS_ACCEL_CHAN		(Z,	ADIS_ACCEL_Z, 		1655x, adis1655x_iio_accel_attrs),
+	ADIS_TEMP_CHAN		(ADIS_TEMP, 			1655x, adis1655x_iio_temp_attrs),
+	ADIS_DELTA_ANGL_CHAN	(X, 	ADIS_DELTA_ANGL_X, 	1655x, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_ANGL_CHAN	(Y, 	ADIS_DELTA_ANGL_Y, 	1655x, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_ANGL_CHAN	(Z, 	ADIS_DELTA_ANGL_Z, 	1655x, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_VEL_CHAN	(X, 	ADIS_DELTA_VEL_X, 	1655x, adis_iio_delta_vel_attrs),
+	ADIS_DELTA_VEL_CHAN	(Y, 	ADIS_DELTA_VEL_Y, 	1655x, adis_iio_delta_vel_attrs),
+	ADIS_DELTA_VEL_CHAN	(Z, 	ADIS_DELTA_VEL_Z, 	1655x, adis_iio_delta_vel_attrs),
+};
+
+static struct iio_attribute adis1655x_debug_attrs[] = {
+	{
+		.name = "diag_flash_memory_test_error",
 		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_DATA_PATH_OVERRUN,
+		.priv = ADIS_DIAG_MEM_FAILURE,
+	},
+	{
+		.name = "diag_config_calib_crc_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_CONFIG_CALIB_CRC_ERR,
 	},
 	{
 		.name = "diag_flash_memory_update_error",
@@ -129,14 +198,9 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_DIAG_FLS_MEM_UPDATE_FAILURE,
 	},
 	{
-		.name = "diag_spi_communication_error",
+		.name = "diag_overrange",
 		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_SPI_COMM_ERR,
-	},
-	{
-		.name = "diag_standby_mode",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_STANDBY_MODE,
+		.priv = ADIS_DIAG_OVERRANGE,
 	},
 	{
 		.name = "diag_sensor_self_test_error",
@@ -144,9 +208,29 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_DIAG_SNSR_FAILURE,
 	},
 	{
-		.name = "diag_flash_memory_test_error",
+		.name = "diag_temperature_error",
 		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_MEM_FAILURE,
+		.priv = ADIS_DIAG_TEMP_ERR,
+	},
+	{
+		.name = "diag_spi_communication_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_SPI_COMM_ERR,
+	},
+	{
+		.name = "diag_data_path_overrun",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_DATA_PATH_OVERRUN,
+	},
+	{
+		.name = "diag_power_supply_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_POWER_SUPPLY_FAILURE,
+	},
+	{
+		.name = "diag_boot_memory_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_BOOT_MEMORY_FAILURE,
 	},
 	{
 		.name = "diag_clock_error",
@@ -154,19 +238,64 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_DIAG_CLK_ERR,
 	},
 	{
-		.name = "diag_gyroscope1_self_test_error",
+		.name = "diag_register_nvm_error",
 		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_GYRO1_FAILURE,
+		.priv = ADIS_DIAG_REG_NVM_ERR,
 	},
 	{
-		.name = "diag_gyroscope2_self_test_error",
+		.name = "diag_watchdog_timer_flag",
 		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_GYRO2_FAILURE,
+		.priv = ADIS_DIAG_WDG_TIMER_FLAG,
 	},
 	{
-		.name = "diag_acceleration_self_test_error",
+		.name = "diag_x_axis_gyroscope_failure",
 		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_ACCL_FAILURE,
+		.priv = ADIS_DIAG_X_AXIS_GYRO_FAILURE,
+	},
+	{
+		.name = "diag_y_axis_gyroscope_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_Y_AXIS_GYRO_FAILURE,
+	},
+	{
+		.name = "diag_z_axis_gyroscope_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_Z_AXIS_GYRO_FAILURE,
+	},
+	{
+		.name = "diag_x_axis_accelerometer_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_X_AXIS_ACCL_FAILURE,
+	},
+	{
+		.name = "diag_y_axis_accelerometer_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_Y_AXIS_ACCL_FAILURE,
+	},
+	{
+		.name = "diag_z_axis_accelerometer_failure",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_Z_AXIS_ACCL_FAILURE,
+	},
+	{
+		.name = "diag_internal_processor_supply_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_INT_PROC_SUPPLY_ERR,
+	},
+	{
+		.name = "diag_extenral_5v_supply_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_EXT_5V_SUPPLY_ERR,
+	},
+	{
+		.name = "diag_internal_sensor_supply_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_INT_SNSR_SUPPLY_ERR,
+	},
+	{
+		.name = "diag_internal_regulator_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_INT_REG_ERR,
 	},
 	{
 		.name = "diag_checksum_error_flag",
@@ -194,40 +323,10 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_DATA_CNTR,
 	},
 	{
-		.name = "filter_size",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_FILT_SIZE_VAR_B,
-	},
-	{
 		.name = "gyroscope_measurement_range",
 		.show = adis_iio_read_debug_attrs,
 		.store = adis_iio_write_debug_attrs,
 		.priv = ADIS_GYRO_MEAS_RANGE,
-	},
-	{
-		.name = "data_ready_polarity",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_DR_POLARITY,
-	},
-	{
-		.name = "sync_polarity",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_SYNC_POLARITY,
-	},
-	{
-		.name = "sync_mode_select",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_SYNC_MODE,
-	},
-	{
-		.name = "internal_sensor_bandwidth",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_SENS_BW,
 	},
 	{
 		.name = "point_of_percussion_alignment",
@@ -236,22 +335,22 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_PT_OF_PERC_ALGNMT,
 	},
 	{
-		.name = "linear_acceleration_compensation",
+		.name = "gyroscope_fir_filter_enable",
 		.show = adis_iio_read_debug_attrs,
 		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_LINEAR_ACCL_COMP,
+		.priv = ADIS_GYRO_FIR_ENABLE,
 	},
 	{
-		.name = "burst_data_selection",
+		.name = "acceleroemeter_fir_filter_enable",
 		.show = adis_iio_read_debug_attrs,
 		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_BURST_SEL,
+		.priv = ADIS_ACCL_FIR_ENABLE,
 	},
 	{
-		.name = "burst_size_selection",
+		.name = "sync_mode_select",
 		.show = adis_iio_read_debug_attrs,
 		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_BURST32,
+		.priv = ADIS_SYNC_MODE,
 	},
 	{
 		.name = "sync_signal_scale",
@@ -281,14 +380,19 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_CMD_FLS_MEM_UPDATE,
 	},
 	{
-		.name = "flash_memory_test",
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_CMD_FLS_MEM_TEST,
-	},
-	{
 		.name = "software_reset",
 		.store = adis_iio_write_debug_attrs,
 		.priv = ADIS_CMD_SW_RES,
+	},
+	{
+		.name = "write_lock",
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_CMD_WRITE_LOCK,
+	},
+	{
+		.name = "processor_revision",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_PROC_REV,
 	},
 	{
 		.name = "firmware_revision",
@@ -311,6 +415,11 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_SERIAL_NUM,
 	},
 	{
+		.name = "lot_number",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_LOT_NUM,
+	},
+	{
 		.name = "scratch_pad_register1",
 		.show = adis_iio_read_debug_attrs,
 		.store = adis_iio_write_debug_attrs,
@@ -329,6 +438,12 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 		.priv = ADIS_USR_SCR_3,
 	},
 	{
+		.name = "scratch_pad_register4",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_USR_SCR_4,
+	},
+	{
 		.name = "flash_count",
 		.show = adis_iio_read_debug_attrs,
 		.priv = ADIS_FLS_MEM_WR_CNTR,
@@ -342,11 +457,11 @@ static struct iio_attribute adis1650x_debug_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_device adis1650x_iio_dev = {
-	.num_ch 		= NO_OS_ARRAY_SIZE(adis1650x_channels),
-	.channels 		= adis1650x_channels,
-	.debug_attributes 	= adis1650x_debug_attrs,
-	.attributes		= adis_dev_attrs,
+static struct iio_device adis1655x_iio_dev = {
+	.num_ch 		= NO_OS_ARRAY_SIZE(adis1655x_channels),
+	.channels 		= adis1655x_channels,
+	.debug_attributes 	= adis1655x_debug_attrs,
+	.attributes		= adis1655x_dev_attrs,
 	.pre_enable 		= (int32_t (*)())adis_iio_pre_enable,
 	.trigger_handler 	= (int32_t (*)())adis_iio_trigger_handler,
 	.debug_reg_read 	= (int32_t (*)())adis_iio_read_reg,
@@ -358,12 +473,12 @@ static struct iio_device adis1650x_iio_dev = {
 /******************************************************************************/
 
 /**
- * @brief Initialize adis1650x iio device.
- * @param iio_dev    - The adis1650x iio device.
+ * @brief Initialize adis1655x iio device.
+ * @param iio_dev    - The adis1655x iio device.
  * @param init_param - The structure that contains the device initial parameters.
  * @return 0 in case of success, error code otherwise.
  */
-int adis1650x_iio_init(struct adis_iio_dev **iio_dev,
+int adis1655x_iio_init(struct adis_iio_dev **iio_dev,
 		       struct adis_init_param *init_param)
 {
 	int ret;
@@ -373,30 +488,29 @@ int adis1650x_iio_init(struct adis_iio_dev **iio_dev,
 	if (!desc)
 		return -ENOMEM;
 
-	desc->iio_dev = &adis1650x_iio_dev;
+	desc->iio_dev = &adis1655x_iio_dev;
 
 	/* Update data based on the device id */
-	desc->rang_mdl_txt = adis1650x_rang_mdl_txt[ADIS1650X_ID_NO_OFFSET(
-				     init_param->dev_id)];
+	desc->rang_mdl_txt = adis1655x_rang_mdl_txt[init_param->dev_id];
 
 	ret = adis_init(&desc->adis_dev, init_param);
 	if (ret)
-		goto error_adis1650x_init;
+		goto error_adis1655x_init;
 
 	*iio_dev = desc;
 
 	return 0;
 
-error_adis1650x_init:
+error_adis1655x_init:
 	no_os_free(desc);
 	return ret;
 }
 
 /**
- * @brief Remove adis1650x iio device.
- * @param desc - The adis1650x iio device.
+ * @brief Remove adis1655x iio device.
+ * @param desc - The adis1655x iio device.
  */
-void adis1650x_iio_remove(struct adis_iio_dev *desc)
+void adis1655x_iio_remove(struct adis_iio_dev *desc)
 {
 	if (!desc)
 		return;
