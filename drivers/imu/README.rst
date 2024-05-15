@@ -169,6 +169,7 @@ existing example projects:
 * `ADIS1646X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1646x>`_
 * `ADIS1647X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1647x>`_
 * `ADIS1650X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1650x>`_
+* `ADIS1655X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1655x>`_
 * `ADIS1657X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1657x>`_
 
 ADIS Device Initialization
