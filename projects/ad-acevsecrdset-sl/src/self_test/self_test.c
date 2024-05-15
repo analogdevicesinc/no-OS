@@ -195,7 +195,7 @@ int self_test_supply(struct stout *stout)
 	if (ret)
 		goto error1;
 	if (!r_state) {
-		if  (VR_OPEN_LOW_LIMIT > v2_max) {
+		if  (VR_OPEN_LOW_LIMIT < v2_max) {
 			pr_debug("Relay Soldered %d, %d \n",v2_max,v1_max);
 			goto error1;
 		}
@@ -410,8 +410,11 @@ int self_test_relay_closed(struct stout *stout, int32_t v2)
 		return ret;
 	
 	if (r_state) {
-				if ((VR_OPEN_LOW_LIMIT < v2))
-			return INTF_RELAY_ERR;
+		if (stout->grid >= 1) {
+			if ((VIN_LOW_LIMIT_2 > v2) || (VIN_HIGH_LIMIT_2 < v2))
+				return INTF_RELAY_ERR;
+			} else if ((VIN_LOW_LIMIT > v2) || (VIN_HIGH_LIMIT < v2))
+				return INTF_RELAY_ERR;
 	}
 	pr_debug("PASSED %d \n",v2);
 
@@ -488,14 +491,14 @@ int self_test_relay_stuck(struct stout *stout)
 		goto error;
 
 	if (!r_state) {
-		if ((stout->v2_max < VR_OPEN_LOW_LIMIT))
+		if ((stout->v2_max > VR_OPEN_LOW_LIMIT))
  		{
 			pr_debug("Error: Relay contacts soldered %d \n", stout->v2_max);
 			goto error;
 		}
 	} else
 		goto error;
-
+	pr_debug("Vrelay %d \n", stout->v2_max);
 	return 0;
 error:
 	ret = INTF_RELAY_ERR;
