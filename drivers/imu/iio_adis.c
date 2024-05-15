@@ -110,8 +110,8 @@ int adis_iio_write_reg(struct adis_iio_dev *device, uint32_t reg,
  * @param priv    - Command attribute id.
  * @return the size of the read data in case of success, error code otherwise.
  */
-static int adis_iio_read_raw(void *dev, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_read_raw(void *dev, char *buf, uint32_t len,
+		      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -187,8 +187,8 @@ static int adis_iio_read_raw(void *dev, char *buf, uint32_t len,
  * @param priv    - Command attribute id.
  * @return the size of the read data in case of success, error code otherwise.
  */
-static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
-			       const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
+			const struct iio_ch_info *channel, intptr_t priv)
 {
 	uint32_t vals[2];
 	struct adis_iio_dev *iio_adis;
@@ -250,6 +250,48 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 }
 
 /**
+ * @brief Handles the read request for offset attribute.
+ * @param dev     - The iio device structure.
+ * @param buf	  - Command buffer to be filled with requested data.
+ * @param len     - Length of the received command buffer in bytes.
+ * @param channel - Command channel info.
+ * @param priv    - Command attribute id.
+ * @return the size of the read data in case of success, error code otherwise.
+ */
+int adis_iio_read_offset(void *dev, char *buf, uint32_t len,
+			 const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct adis_iio_dev *iio_adis;
+	struct adis_dev *adis;
+	int temp_offset;
+	int32_t vals;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
+
+	adis = iio_adis->adis_dev;
+
+	switch (channel->type) {
+	case IIO_TEMP:
+		ret = adis_get_temp_offset(adis, &temp_offset);
+		if (ret)
+			return ret;
+		vals = temp_offset;
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, &vals);
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Handles the read request for calibbias attribute.
  * @param dev     - The iio device structure.
  * @param buf	  - Command buffer to be filled with requested data.
@@ -258,8 +300,8 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
  * @param priv    - Command attribute id.
  * @return the size of the read data in case of success, error code otherwise.
  */
-static int adis_iio_read_calibbias(void *dev, char *buf, uint32_t len,
-				   const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_read_calibbias(void *dev, char *buf, uint32_t len,
+			    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -314,8 +356,8 @@ static int adis_iio_read_calibbias(void *dev, char *buf, uint32_t len,
  * @param priv    - Command attribute id.
  * @return the result of the writing procedure.
  */
-static int adis_iio_write_calibbias(void *dev, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_write_calibbias(void *dev, char *buf, uint32_t len,
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -349,6 +391,111 @@ static int adis_iio_write_calibbias(void *dev, char *buf, uint32_t len,
 		return adis_write_ya_bias(adis, calibbias);
 	case ADIS_ACCEL_Z:
 		return adis_write_za_bias(adis, calibbias);
+	default:
+		return -EINVAL;
+	}
+}
+
+/**
+ * @brief Handles the read request for calibscale attribute.
+ * @param dev     - The iio device structure.
+ * @param buf	  - Command buffer to be filled with requested data.
+ * @param len     - Length of the received command buffer in bytes.
+ * @param channel - Command channel info.
+ * @param priv    - Command attribute id.
+ * @return the size of the read data in case of success, error code otherwise.
+ */
+int adis_iio_read_calibscale(void *dev, char *buf, uint32_t len,
+			     const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct adis_iio_dev *iio_adis;
+	struct adis_dev *adis;
+	int ret;
+	int32_t res;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
+
+	adis = iio_adis->adis_dev;
+
+	switch (channel->address) {
+	case ADIS_GYRO_X:
+		ret = adis_read_xg_scale(adis, &res);
+		break;
+	case ADIS_GYRO_Y:
+		ret = adis_read_yg_scale(adis, &res);
+		break;
+	case ADIS_GYRO_Z:
+		ret = adis_read_zg_scale(adis, &res);
+		break;
+	case ADIS_ACCEL_X:
+		ret = adis_read_xa_scale(adis, &res);
+		break;
+	case ADIS_ACCEL_Y:
+		ret = adis_read_ya_scale(adis, &res);
+		break;
+	case ADIS_ACCEL_Z:
+		ret = adis_read_za_scale(adis, &res);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	if (ret)
+		return ret;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &res);
+}
+
+/**
+ * @brief Handles the write request for calibscale attribute.
+ * @param dev     - The iio device structure.
+ * @param buf	  - Command buffer to be filled with the data to be written.
+ * @param len     - Length of the received command buffer in bytes.
+ * @param channel - Command channel info.
+ * @param priv    - Command attribute id.
+ * @return the result of the writing procedure.
+ */
+int adis_iio_write_calibscale(void *dev, char *buf, uint32_t len,
+			      const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct adis_iio_dev *iio_adis;
+	struct adis_dev *adis;
+	int32_t calibscale;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
+
+	adis = iio_adis->adis_dev;
+
+	ret = iio_parse_value(buf, IIO_VAL_INT, &calibscale, NULL);
+	if (ret)
+		return ret;
+
+	switch (channel->address) {
+	case ADIS_GYRO_X:
+		return adis_write_xg_scale(adis, calibscale);
+	case ADIS_GYRO_Y:
+		return adis_write_yg_scale(adis, calibscale);
+	case ADIS_GYRO_Z:
+		return adis_write_zg_scale(adis, calibscale);
+	case ADIS_ACCEL_X:
+		return adis_write_xa_scale(adis, calibscale);
+	case ADIS_ACCEL_Y:
+		return adis_write_ya_scale(adis, calibscale);
+	case ADIS_ACCEL_Z:
+		return adis_write_za_scale(adis, calibscale);
 	default:
 		return -EINVAL;
 	}
@@ -481,8 +628,8 @@ static int adis_iio_get_freq(struct adis_dev* adis, uint32_t *freq)
  * @param priv    - Command attribute id.
  * @return the size of the read data in case of success, error code otherwise.
  */
-static int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
+				const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -577,8 +724,8 @@ static int adis_iio_set_freq(struct adis_dev* adis, uint32_t freq)
  * @param priv    - Command attribute id.
  * @return the result of the writing procedure.
  */
-static int adis_iio_write_sampling_freq(void *dev, char *buf,
-					uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_write_sampling_freq(void *dev, char *buf,
+				 uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -774,6 +921,39 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	case ADIS_DIAG_ADUC_MCU_FAULT:
 		ret = adis_read_diag_aduc_mcu_fault(adis, &res);
 		break;
+	case ADIS_DIAG_CONFIG_CALIB_CRC_ERR:
+		ret = adis_read_diag_config_calib_crc_error(adis, &res);
+		break;
+	case ADIS_DIAG_OVERRANGE:
+		ret = adis_read_diag_overrange(adis, &res);
+		break;
+	case ADIS_DIAG_TEMP_ERR:
+		ret = adis_read_diag_temp_err(adis, &res);
+		break;
+	case ADIS_DIAG_POWER_SUPPLY_FAILURE:
+		ret = adis_read_diag_power_supply_failure(adis, &res);
+		break;
+	case ADIS_DIAG_BOOT_MEMORY_FAILURE:
+		ret = adis_read_diag_boot_memory_failure(adis, &res);
+		break;
+	case ADIS_DIAG_REG_NVM_ERR:
+		ret = adis_read_diag_reg_nvm_err(adis, &res);
+		break;
+	case ADIS_DIAG_WDG_TIMER_FLAG:
+		ret = adis_read_diag_wdg_timer_flag(adis, &res);
+		break;
+	case ADIS_DIAG_INT_PROC_SUPPLY_ERR:
+		ret = adis_read_diag_int_proc_supply_err(adis, &res);
+		break;
+	case ADIS_DIAG_EXT_5V_SUPPLY_ERR:
+		ret = adis_read_diag_ext_5v_supply_err(adis, &res);
+		break;
+	case ADIS_DIAG_INT_SNSR_SUPPLY_ERR:
+		ret = adis_read_diag_int_snsr_supply_err(adis, &res);
+		break;
+	case ADIS_DIAG_INT_REG_ERR:
+		ret = adis_read_diag_int_snsr_supply_err(adis, &res);
+		break;
 	case ADIS_DIAG_CHECKSUM_ERR:
 		adis_read_diag_checksum_err(adis, &res);
 		break;
@@ -845,6 +1025,12 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	case ADIS_SYNC_4KHZ:
 		ret = adis_read_sync_4khz(adis, &res);
 		break;
+	case ADIS_GYRO_FIR_ENABLE:
+		ret = adis_read_gyro_fir_enable(adis, &res);
+		break;
+	case ADIS_ACCL_FIR_ENABLE:
+		ret = adis_read_accl_fir_enable(adis, &res);
+		break;
 	case ADIS_UP_SCALE:
 		ret = adis_read_up_scale(adis, &res);
 		break;
@@ -872,6 +1058,9 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	case ADIS_BIAS_CORR_EN_ZA:
 		ret = adis_read_bias_corr_en_za(adis, &res);
 		break;
+	case ADIS_PROC_REV:
+		ret = adis_read_proc_rev(adis, &res);
+		break;
 	case ADIS_FIRM_REV:
 		return adis_iio_read_firm_rev(adis, buf, 7);
 	case ADIS_FIRM_DATE:
@@ -881,6 +1070,9 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		break;
 	case ADIS_SERIAL_NUM:
 		return adis_iio_read_serial_num(adis, buf, 7);
+	case ADIS_LOT_NUM:
+		ret = adis_read_lot_num(adis, &res);
+		break;
 	case ADIS_USR_SCR_1:
 		ret = adis_read_usr_scr_1(adis, &res);
 		break;
@@ -889,6 +1081,9 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		break;
 	case ADIS_USR_SCR_3:
 		ret = adis_read_usr_scr_3(adis, &res);
+		break;
+	case ADIS_USR_SCR_4:
+		ret = adis_read_usr_scr_4(adis, &res);
 		break;
 	case ADIS_FLS_MEM_WR_CNTR:
 		ret = adis_read_fls_mem_wr_cntr(adis, &res);
@@ -976,6 +1171,10 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 		return adis_write_timestamp32(adis, val);
 	case ADIS_SYNC_4KHZ:
 		return adis_write_sync_4khz(adis, val);
+	case ADIS_GYRO_FIR_ENABLE:
+		return adis_write_gyro_fir_enable(adis, val);
+	case ADIS_ACCL_FIR_ENABLE:
+		return adis_write_accl_fir_enable(adis, val);
 	case ADIS_UP_SCALE:
 		ret = adis_write_up_scale(adis, val);
 		if (ret)
@@ -1028,12 +1227,16 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 
 		/* Update sampling frequency */
 		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
+	case ADIS_CMD_WRITE_LOCK:
+		return adis_cmd_write_lock(adis);
 	case ADIS_USR_SCR_1:
 		return adis_write_usr_scr_1(adis, val);
 	case ADIS_USR_SCR_2:
 		return adis_write_usr_scr_2(adis, val);
 	case ADIS_USR_SCR_3:
 		return adis_write_usr_scr_3(adis, val);
+	case ADIS_USR_SCR_4:
+		return adis_write_usr_scr_4(adis, val);
 	case ADIS_EXT_CLK_FREQ:
 		return adis_update_ext_clk_freq(adis, val);
 	default:

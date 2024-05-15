@@ -94,6 +94,17 @@ enum adis_iio_debug_attrs {
 	ADIS_DIAG_Y_AXIS_ACCL_FAILURE,
 	ADIS_DIAG_Z_AXIS_ACCL_FAILURE,
 	ADIS_DIAG_ADUC_MCU_FAULT,
+	ADIS_DIAG_CONFIG_CALIB_CRC_ERR,
+	ADIS_DIAG_OVERRANGE,
+	ADIS_DIAG_TEMP_ERR,
+	ADIS_DIAG_POWER_SUPPLY_FAILURE,
+	ADIS_DIAG_BOOT_MEMORY_FAILURE,
+	ADIS_DIAG_REG_NVM_ERR,
+	ADIS_DIAG_WDG_TIMER_FLAG,
+	ADIS_DIAG_INT_PROC_SUPPLY_ERR,
+	ADIS_DIAG_EXT_5V_SUPPLY_ERR,
+	ADIS_DIAG_INT_SNSR_SUPPLY_ERR,
+	ADIS_DIAG_INT_REG_ERR,
 	ADIS_DIAG_CHECKSUM_ERR,
 	ADIS_DIAG_FLS_MEM_WR_CNT_EXCEED,
 	ADIS_DIAG_LOST_SAMPLES_COUNT,
@@ -123,6 +134,8 @@ enum adis_iio_debug_attrs {
 	ADIS_BURST32,
 	ADIS_TIMESTAMP32,
 	ADIS_SYNC_4KHZ,
+	ADIS_GYRO_FIR_ENABLE,
+	ADIS_ACCL_FIR_ENABLE,
 
 	ADIS_UP_SCALE,
 	ADIS_DEC_RATE,
@@ -142,14 +155,18 @@ enum adis_iio_debug_attrs {
 	ADIS_CMD_FLS_MEM_TEST,
 	ADIS_CMD_FIFO_FLUSH,
 	ADIS_CMD_SW_RES,
+	ADIS_CMD_WRITE_LOCK,
 
+	ADIS_PROC_REV,
 	ADIS_FIRM_REV,
 	ADIS_FIRM_DATE,
 	ADIS_PROD_ID,
 	ADIS_SERIAL_NUM,
+	ADIS_LOT_NUM,
 	ADIS_USR_SCR_1,
 	ADIS_USR_SCR_2,
 	ADIS_USR_SCR_3,
+	ADIS_USR_SCR_4,
 	ADIS_FLS_MEM_WR_CNTR,
 	ADIS_EXT_CLK_FREQ,
 };
@@ -207,70 +224,70 @@ struct adis_iio_dev {
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define ADIS_ACCEL_CHAN(mod, idx, adis_nb) { \
+#define ADIS_ACCEL_CHAN(mod, idx, adis_nb, attr) { \
 	.ch_type = IIO_ACCEL, \
 	.modified = true, \
 	.channel2 = IIO_MOD_##mod, \
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_accel_scan_type,  \
-        .attributes = adis_iio_accel_attrs,  \
+        .attributes = attr,  \
 }
 
-#define ADIS_GYRO_CHAN(mod, idx, adis_nb) { \
+#define ADIS_GYRO_CHAN(mod, idx, adis_nb, attr) { \
 	.ch_type = IIO_ANGL_VEL, \
 	.modified = true, \
 	.channel2 = IIO_MOD_##mod, \
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_anglvel_scan_type,  \
-        .attributes = adis_iio_anglvel_attrs,  \
+        .attributes = attr,  \
 }
 
-#define ADIS_DELTA_ANGL_CHAN(mod, idx, adis_nb) { \
+#define ADIS_DELTA_ANGL_CHAN(mod, idx, adis_nb, attr) { \
 	.ch_type = IIO_DELTA_ANGL, \
 	.modified = true, \
 	.channel2 = IIO_MOD_##mod, \
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_delta_angl_scan_type,  \
-        .attributes = adis_iio_delta_angl_attrs,  \
+        .attributes = attr,  \
 }
 
-#define ADIS_DELTA_ANGL_CHAN_NO_SCAN(mod, idx) { \
+#define ADIS_DELTA_ANGL_CHAN_NO_SCAN(mod, idx, attr) { \
 	.ch_type = IIO_DELTA_ANGL, \
 	.modified = true, \
 	.channel2 = IIO_MOD_##mod, \
 	.address = idx, \
-        .attributes = adis_iio_delta_angl_attrs,  \
+        .attributes = attr,  \
 }
 
-#define ADIS_DELTA_VEL_CHAN(mod, idx, adis_nb) { \
+#define ADIS_DELTA_VEL_CHAN(mod, idx, adis_nb, attr) { \
 	.ch_type = IIO_DELTA_VELOCITY, \
 	.modified = true, \
 	.channel2 = IIO_MOD_##mod, \
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_delta_vel_scan_type,  \
-        .attributes = adis_iio_delta_vel_attrs,  \
+        .attributes = attr,  \
 }
 
-#define ADIS_DELTA_VEL_CHAN_NO_SCAN(mod, idx) { \
+#define ADIS_DELTA_VEL_CHAN_NO_SCAN(mod, idx, attr) { \
 	.ch_type = IIO_DELTA_VELOCITY, \
 	.modified = true, \
 	.channel2 = IIO_MOD_##mod, \
 	.address = idx, \
-        .attributes = adis_iio_delta_vel_attrs,  \
+        .attributes = attr,  \
 }
 
-#define ADIS_TEMP_CHAN(idx, adis_nb) { \
+#define ADIS_TEMP_CHAN(idx, adis_nb, attr) { \
 	.ch_type = IIO_TEMP, \
 	.channel = 0, \
 	.indexed = true, \
 	.address = idx, \
 	.scan_index = idx, \
 	.scan_type = &adis##adis_nb##_iio_temp_scan_type,  \
-        .attributes = adis_iio_temp_attrs,  \
+        .attributes = attr,  \
 }
 
 /******************************************************************************/
@@ -312,4 +329,32 @@ int adis_iio_read_reg(struct adis_iio_dev *device, uint32_t reg,
 /*! Wrapper for writing adis register. */
 int adis_iio_write_reg(struct adis_iio_dev *device, uint32_t reg,
 		       uint32_t writeval);
+
+/*! Handles the read request for raw attribute. */
+int adis_iio_read_raw(void *dev, char *buf, uint32_t len,
+		      const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the read request for scale attribute. */
+int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
+			const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the read request for offset attribute. */
+int adis_iio_read_offset(void *dev, char *buf, uint32_t len,
+			 const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the read request for calibbias attribute. */
+int adis_iio_read_calibbias(void *dev, char *buf, uint32_t len,
+			    const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the write request for calibbias attribute. */
+int adis_iio_write_calibbias(void *dev, char *buf, uint32_t len,
+			     const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the read request for calibscale attribute. */
+int adis_iio_read_calibscale(void *dev, char *buf, uint32_t len,
+			     const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the write request for calibscale attribute. */
+int adis_iio_write_calibscale(void *dev, char *buf, uint32_t len,
+			      const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the write request for sampling frequency attribute. */
+int adis_iio_write_sampling_freq(void *dev, char *buf,
+				 uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the read request for sampling frequency attribute. */
+int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
+				const struct iio_ch_info *channel, intptr_t priv);
 #endif
