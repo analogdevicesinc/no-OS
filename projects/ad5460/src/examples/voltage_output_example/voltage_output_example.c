@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ad5460 project.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   voltage_output_example.c
+ *   @brief  implementation of channel output configuration for eval-ad5460 project
+ *   @author Akila Marimuthu (akila.marimuthu@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -40,90 +40,55 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef CHANNEL_OUTPUT_EXAMPLE
-#include "channel_output_example.h"
-#endif
-
-#ifdef VOLTAGE_OUTPUT_EXAMPLE
 #include "voltage_output_example.h"
-#endif
+#include "common_data.h"
+#include "ad5460.h"
+#include "no_os_delay.h"
+#include "no_os_gpio.h"
+#include "no_os_print_log.h"
 
-#ifdef CURRENT_OUTPUT_EXAMPLE
-#include "current_output_example.h"
-#endif
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 /***************************************************************************//**
- * @brief Main function for Mbed platform.
+ * @brief Voltage output example main execution.
  *
- * @return ret - Result of the enabled examples.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-
-int main()
+int voltage_output_example_main()
 {
+	struct ad5460_desc *AD5460_desc;
 	int ret;
-	ad5460_ip.spi_ip = ad5460_spi_ip;
+	uint16_t Dac_code0;
+        uint16_t output_in_mvolts_ch0 = 6.0;
 
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &ad5460_uart_ip);
+	ret = ad5460_init(&AD5460_desc, &ad5460_ip);
 	if (ret)
-		return ret;
+		goto error;
 
-	no_os_uart_stdio(uart);
-	ret = basic_example_main();
-	no_os_uart_remove(uart);
+	pr_info("ad5460 successfully initialized!\r\n");
+
+    
+    //Set channel function
+    ad5460_set_channel_function(AD5460_desc, 0, AD5460_VOLTAGE_OUT);
+    
+    //set output range
+    ad5460_set_channel_vout_range(AD5460_desc, 0, AD5460_VOUT_RANGE_0_12V);
+    
+    //Set channel 0 output
+        ad5460_dac_voltage_to_code(AD5460_desc, output_in_mvolts_ch0, &Dac_code0, 0);
+        ret = ad5460_set_channel_dac_code(AD5460_desc, 0, Dac_code0);
 	if (ret)
-		return ret;
-#endif
+		goto error_ad5460;
+		
+        pr_info("For channel 0, expected output = &f mV \n DAC code = %d \n", output_in_mvolts_ch0, Dac_code0);
 
-#ifdef VOLTAGE_OUTPUT_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &ad5460_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart);
-	ret = voltage_output_example_main();
-	no_os_uart_remove(uart);
-	if (ret)
-		return ret;
-#endif
-
-#ifdef CURRENT_OUTPUT_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &ad5460_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart);
-	ret = current_output_example_main();
-	no_os_uart_remove(uart);
-	if (ret)
-		return ret;
-#endif
-
-#ifdef CHANNEL_OUTPUT_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &ad5460_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart);
-	ret = channel_output_example_main();
-	no_os_uart_remove(uart);
-	if (ret)
-		return ret;
-#endif
-
-#if (IIO_EXAMPLE+BASIC_EXAMPLE+VOLTAGE_OUTPUT_EXAMPLE+CURRENT_OUTPUT_EXAMPLE+CHANNEL_OUTPUT_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
 	return 0;
+
+error_ad5460:
+	ad5460_remove(AD5460_desc);
+error:
+	pr_info("AD5460 Error!\r\n");
+	return ret;
 }
