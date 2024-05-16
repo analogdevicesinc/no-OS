@@ -83,6 +83,9 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 	int32_t ret;
 	uint8_t buf[2];
 
+	if (!dev)
+		return -EINVAL;
+
 	buf[0] = AD400X_READ_COMMAND;
 	buf[1] = 0xFF;
 
@@ -124,6 +127,9 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 {
 	int32_t ret;
 	uint8_t buf[2];
+
+	if (!dev)
+		return -EINVAL;
 
 #if !defined(USE_STANDARD_SPI)
 	// register access runs at a lower clock rate (~2MHz)
@@ -175,6 +181,9 @@ static int32_t ad400x_read_data_offload(struct ad400x_dev *dev,
 		CS_HIGH
 	};
 
+	if (!dev)
+		return -EINVAL;
+
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
 	if (ret)
 		return ret;
@@ -210,6 +219,7 @@ static int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 
 	if (!dev)
 		return -EINVAL;
+
 	if (dev->dev_info->resolution > 16)
 		bytes_number = 3;
 
@@ -251,6 +261,9 @@ int32_t ad400x_read_data(struct ad400x_dev *dev,
 {
 	int i, ret;
 	uint32_t *p;
+
+	if (!dev)
+		return -EINVAL;
 
 #if !defined(USE_STANDARD_SPI)
 	if (dev->offload_enable)
@@ -357,6 +370,9 @@ error:
 int32_t ad400x_remove(struct ad400x_dev *dev)
 {
 	int32_t ret;
+
+	if (!dev)
+		return -EINVAL;
 
 #if defined(USE_STANDARD_SPI)
 	ret = no_os_gpio_remove(dev->gpio_cnv);
