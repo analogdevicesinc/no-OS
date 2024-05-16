@@ -137,16 +137,17 @@ uint32_t no_os_greatest_common_divisor(uint32_t a,
 				       uint32_t b)
 {
 	uint32_t div;
-	uint32_t common_div = 1;
 
 	if ((a == 0) || (b == 0))
 		return no_os_max(a, b);
 
-	for (div = 1; (div <= a) && (div <= b); div++)
-		if (!(a % div) && !(b % div))
-			common_div = div;
+	while (b != 0) {
+		div = a % b;
+		a = b;
+		b = div;
+	}
 
-	return common_div;
+	return a;
 }
 /**
  * Find lowest common multiple of the given two numbers.
