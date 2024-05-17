@@ -79,6 +79,7 @@ enum ad3552r_spi_attributes {
 #define AD3552R_MAX_REG_SIZE				3
 #define AD3552R_READ_BIT				(1 << 7)
 #define AD3552R_ADDR_MASK				(~AD3552R_READ_BIT)
+#define AD3552R_REG_MASK                NO_OS_GENMASK(7, 0)
 #define AD3552R_CRC_ENABLE_VALUE			(NO_OS_BIT(6) | NO_OS_BIT(1))
 #define AD3552R_CRC_DISABLE_VALUE			(NO_OS_BIT(1) | NO_OS_BIT(0))
 #define AD3552R_EXTERNAL_VREF_MASK			NO_OS_BIT(1)
@@ -227,17 +228,17 @@ uint8_t ad3552r_reg_len(uint8_t addr)
 	case AD3552R_REG_ADDR_HW_LDAC_24B:
 	case AD3552R_REG_ADDR_CH_SELECT_24B:
 	case AD3552R_REG_ADDR_SW_LDAC_24B:
-		return 1;
+		return 2;
 	default:
 		break;
 	}
 
 	if (addr > AD3552R_REG_ADDR_HW_LDAC_24B)
-		return 3;
+		return 4;
 	if (addr > AD3552R_REG_ADDR_HW_LDAC_16B)
-		return 2;
+		return 3;
 
-	return 1;
+	return 2;
 }
 
 static inline int32_t _ad3552r_get_reg_attr(struct ad3552r_desc *desc,
@@ -413,8 +414,16 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 			 struct ad3552_transfer_data *data)
 {
-	struct no_os_spi_msg msgs[2] = { 0 };
 	uint8_t instr;
+	uint32_t value_to_send;
+	int32_t err;
+
+	struct no_os_spi_msg xfer = {
+			.tx_buff = desc->buff,
+			.rx_buff = desc->buff,
+			.bytes_number = data->len,
+			.cs_change = 1,
+		};
 
 	if (!desc || !data)
 		return -EINVAL;
@@ -422,22 +431,23 @@ int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 	if (data->spi_cfg)
 		_update_spi_cfg(desc, data->spi_cfg);
 
-	instr = data->addr & AD3552R_ADDR_MASK;
-	instr |= data->is_read ? AD3552R_READ_BIT : 0;
+	desc->buff[0] = (data->addr & AD3552R_ADDR_MASK) | (data->is_read << 7);
+	desc->buff[1] = data->data[0];
+	desc->buff[2] = data->data[1];
+    desc->buff[3] = data->data[2];
+    desc->buff[4] = data->data[4];
+	desc->buff[5] = data->data[5];
+    desc->buff[6] = data->data[3];
 
-	if (desc->crc_en)
-		return _ad3552r_transfer_with_crc(desc, data, instr);
+//	if (desc->crc_en)
+//		return _ad3552r_transfer_with_crc(desc, data, instr);
 
-	msgs[0].tx_buff = &instr;
-	msgs[0].bytes_number = 1;
-	msgs[1].bytes_number = data->len;
-	msgs[1].cs_change = true;
+	err = no_os_spi_transfer(desc->spi , &xfer, 1);
+
 	if (data->is_read)
-		msgs[1].rx_buff = data->data;
-	else
-		msgs[1].tx_buff = data->data;
+		*data->data = desc->buff[1];
 
-	return no_os_spi_transfer(desc->spi, msgs, NO_OS_ARRAY_SIZE(msgs));
+	return err;
 }
 
 int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
@@ -459,7 +469,7 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 	msg.addr = addr;
 	msg.data = buf;
 	msg.len = reg_len;
-	if (reg_len == 1)
+	if (reg_len == 2)
 		buf[0] = val & 0xFF;
 	else
 		/* reg_len can be 2 or 3, but 3rd bytes needs to be set to 0 */
@@ -491,7 +501,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
-	if (reg_len == 1)
+	if (reg_len == 2)
 		*val = buf[0];
 	else
 		*val = no_os_get_unaligned_be16(buf);
@@ -1283,7 +1293,7 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 
 	is_fast = desc->ch_data[0].fast_en;
 	no_os_put_unaligned_be16(data[0], buff);
-	len = 2;
+	len = 3;
 	if (!is_fast)
 		++len;
 	no_os_put_unaligned_be16(data[1], buff + len);

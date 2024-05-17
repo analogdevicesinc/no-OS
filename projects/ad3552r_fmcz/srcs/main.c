@@ -83,7 +83,7 @@ int32_t init_gpios_to_defaults()
 		[GPIO_LDAC_N] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_SPI_QPI] = {NO_OS_GPIO_OUT, NO_OS_GPIO_LOW},
 		[GPIO_ALERT_N] = {NO_OS_GPIO_IN, 0},
-		[GPIO_SYNC_EVENTS] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_9] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_RED] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_GREEN] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_BLUE] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
@@ -181,7 +181,7 @@ int main()
 	};
 
 	struct ad3552r_init_param default_ad3552r_param = {
-		.chip_id = AD3542R_ID,
+		.chip_id = AD3552R_ID,
 		.spi_param = {
 			.device_id = SPI_DEVICE_ID,
 			.chip_select = 0,

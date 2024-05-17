@@ -134,6 +134,7 @@
 #define   AD3552R_MASK_CH_GAIN_SCALING_P		(NO_OS_BIT(4) | NO_OS_BIT(3))
 #define   AD3552R_MASK_CH_OFFSET_POLARITY		NO_OS_BIT(2)
 #define   AD3552R_MASK_CH_OFFSET_BIT_8			NO_OS_BIT(0)
+#define   AD3552R_FRAME_SIZE		            7
 
 /*
  * Secondary region
@@ -402,6 +403,7 @@ struct ad3552r_desc {
 	struct no_os_gpio_desc *reset;
 	struct ad3552r_ch_data ch_data[AD3552R_MAX_NUM_CH];
 	uint8_t crc_table[NO_OS_CRC8_TABLE_SIZE];
+	uint8_t buff[AD3552R_FRAME_SIZE];
 	uint8_t chip_id;
 	uint8_t crc_en : 1;
 	uint8_t is_simultaneous : 1;
