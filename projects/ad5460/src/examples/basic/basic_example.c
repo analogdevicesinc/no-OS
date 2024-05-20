@@ -60,7 +60,6 @@ int basic_example_main()
 {
 	struct ad5460_desc *ad5460_desc;
 	int ret;
-
 	ret = ad5460_init(&ad5460_desc, &ad5460_ip);
 	if (ret)
 		goto error;

@@ -60,10 +60,10 @@ int channel_output_example_main()
 {
 	struct ad5460_desc *AD5460_desc;
 	union ad5460_live_status *Live_Status;
-	int ret;
-	uint16_t Dac_code0, GPI_0;
-        uint16_t output_in_uamps_ch0 = 6.0;
-        uint16_t output_in_mvolts_ch0 = 6.0;
+	int ret, status;
+	uint16_t Dac_code0, GPI_0, val;
+        int32_t output_in_uamps_ch0 = 10000.0;
+        int32_t output_in_mvolts_ch0 = 6000.0;
 
 	ret = ad5460_init(&AD5460_desc, &ad5460_ip);
 	if (ret)
@@ -100,7 +100,7 @@ int channel_output_example_main()
         ret = ad5460_set_channel_dac_code(AD5460_desc, 0, Dac_code0);
         if (ret)
 		goto error_ad5460;
-        pr_info("For channel 0, expected output = &f mV \n DAC code = %d \n", output_in_mvolts_ch0, Dac_code0);
+        pr_info("For channel 0, expected output = %d mV \n DAC code = %d \n", output_in_mvolts_ch0, Dac_code0);
     }
         else if(AD5460_desc->channel_configs[0].function == (AD5460_CURRENT_OUT| AD5460_CURRENT_OUT_HART))
     {
@@ -108,12 +108,16 @@ int channel_output_example_main()
         ret = ad5460_set_channel_dac_code(AD5460_desc, 0, Dac_code0);
          if (ret)
 		goto error_ad5460;
-        pr_info("For channel 0, expected output = &f mA \n DAC code = %d \n", output_in_uamps_ch0, Dac_code0);
+        pr_info("For channel 0, expected output = %d uA \n DAC code = %d \n", output_in_uamps_ch0, Dac_code0);
     }
+        ret = ad5460_reg_read(AD5460_desc, AD5460_DAC_ACTIVE(0), &val);
+	if (ret)
+		goto error;
+		
+	pr_info("DAC ACTIVE CODE of channel 0 = %d \n", val);
     	//Get live status
-	ret = ad5460_get_live(AD5460_desc, Live_Status);
-	  if (ret)
-		goto error_ad5460;
+	status = ad5460_get_live(AD5460_desc, Live_Status->value);
+
 	return 0;
 
 error_ad5460:

@@ -60,8 +60,8 @@ int current_output_example_main()
 {
 	struct ad5460_desc *AD5460_desc;
 	int ret;
-	uint16_t Dac_code0;
-        uint16_t output_in_uamps_ch0 = 6.0;
+	uint16_t Dac_code0, val;
+        int32_t output_in_uamps_ch0 = 10000.0;
 
 	ret = ad5460_init(&AD5460_desc, &ad5460_ip);
 	if (ret)
@@ -82,8 +82,12 @@ int current_output_example_main()
 	if (ret)
 		goto error_ad5460;
 		
-        pr_info("For channel 0, expected output = &f mA \n DAC code = %d \n", output_in_uamps_ch0, Dac_code0);
-
+        pr_info("For channel 0, expected output = %d uA \n DAC code = %d \n", output_in_uamps_ch0, Dac_code0);
+	ret = ad5460_reg_read(AD5460_desc, AD5460_DAC_ACTIVE(0), &val);
+	if (ret)
+		goto error;
+		
+	pr_info("DAC ACTIVE CODE of channel 0 = %d \n", val);
 	return 0;
 
 error_ad5460:

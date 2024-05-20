@@ -46,6 +46,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_print_log.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -610,14 +611,11 @@ static int ad5460_scratch_test(struct ad5460_desc *desc)
 	ret = ad5460_reg_write(desc, AD5460_SCRATCH(0), test_val);
 	if (ret)
 		return ret;
-
 	ret = ad5460_reg_read(desc, AD5460_SCRATCH(0), &val);
 	if (ret)
 		return ret;
-
 	if (val != test_val)
 		return -EINVAL;
-
 	return 0;
 }
 
@@ -635,15 +633,12 @@ int ad5460_init(struct ad5460_desc **desc,
 
 	if (!init_param)
 		return -EINVAL;
-
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
-		return -ENOMEM;
-
+		return -ENODEV;
 	ret = no_os_spi_init(&descriptor->spi_desc, &init_param->spi_ip);
 	if (ret)
 		goto err;
-
 	descriptor->dev_addr = init_param->dev_addr;
 
 	no_os_crc8_populate_msb(_crc_table, AD5460_CRC_POLYNOMIAL);
@@ -652,15 +647,12 @@ int ad5460_init(struct ad5460_desc **desc,
 				      init_param->reset_gpio_param);
 	if (ret)
 		goto err;
-
 	ret = ad5460_reset(descriptor);
 	if (ret)
 		goto err;
-
 	ret = ad5460_scratch_test(descriptor);
 	if (ret)
 		goto err;
-
 	*desc = descriptor;
 
 	return 0;
