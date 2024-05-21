@@ -16,5 +16,11 @@ SRCS += $(PROJECT)/src/examples/voltage_output_example/voltage_output_example.c
 INCS += $(PROJECT)/src/examples/voltage_output_example/voltage_output_example.h
 endif
 
+ifeq (y,$(strip $(CURRENT_OUTPUT_EXAMPLE)))
+CFLAGS += -DCURRENT_OUTPUT_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/current_output_example/current_output_example.c
+INCS += $(PROJECT)/src/examples/current_output_example/current_output_example.h
+endif
+
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h

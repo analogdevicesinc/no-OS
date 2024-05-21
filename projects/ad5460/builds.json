@@ -8,6 +8,9 @@
     },
     "voltage_output_example": {
       "flags" : "RELEASE=y BASIC_EXAMPLE=n VOLTAGE_OUTPUT_EXAMPLE=y"
+    },
+    "current_output_example": {
+      "flags" : "RELEASE=y BASIC_EXAMPLE=n CURRENT_OUTPUT_EXAMPLE=y"
     }
   }
 }
