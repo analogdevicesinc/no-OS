@@ -5,6 +5,9 @@
     },
     "channel_output_example": {
       "flags" : "RELEASE=y BASIC_EXAMPLE=n CHANNEL_OUTPUT_EXAMPLE=y"
+    },
+    "voltage_output_example": {
+      "flags" : "RELEASE=y BASIC_EXAMPLE=n VOLTAGE_OUTPUT_EXAMPLE=y"
     }
   }
 }
