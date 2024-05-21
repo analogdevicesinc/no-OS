@@ -209,6 +209,7 @@ enum ad469x_supported_dev_ids {
 	ID_AD4695,
 	ID_AD4696,
 	ID_AD4697,
+	ID_AD4698,
 };
 
 /**
