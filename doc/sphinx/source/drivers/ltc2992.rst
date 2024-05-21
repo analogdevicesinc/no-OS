@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/power/ltc2992/README.rst
