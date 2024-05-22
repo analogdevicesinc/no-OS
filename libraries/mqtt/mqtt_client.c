@@ -74,10 +74,10 @@ static void mqtt_default_message_handler(MessageData *msg)
 	struct mqtt_message_data	data;
 	MQTTLenString			*topic;
 
-	data.message.len = (uint32_t)msg->message->payloadlen;
-	data.message.payload = (uint8_t *)msg->message->payload;
+	data.message.len = msg->message->payloadlen;
+	data.message.payload = msg->message->payload;
 	data.message.qos = (enum mqtt_qos)msg->message->qos;
-	data.message.retained = (bool)msg->message->retained;
+	data.message.retained = msg->message->retained;
 
 	topic = &msg->topicName->lenstring;
 	data.topic = (uint8_t *)malloc(topic->len + 1);
@@ -214,7 +214,7 @@ int32_t mqtt_disconnect(struct mqtt_desc *desc)
  *  - 0 : On success
  *  - -1 : Otherwise
  */
-int32_t mqtt_publish(struct mqtt_desc *desc, const int8_t* topic,
+int32_t mqtt_publish(struct mqtt_desc *desc, const char *topic,
 		     const struct mqtt_message* msg)
 {
 	if (!desc || !msg)
@@ -223,11 +223,11 @@ int32_t mqtt_publish(struct mqtt_desc *desc, const int8_t* topic,
 	MQTTMessage message = { 0 };
 
 	message.payload = (void *)msg->payload;
-	message.payloadlen = (size_t)msg->len;
+	message.payloadlen = msg->len;
 	message.qos = (enum QoS)msg->qos;
-	message.retained = (unsigned char)msg->retained;
+	message.retained = msg->retained;
 
-	return MQTTPublish(desc->mqtt_client, (char *)topic, &message);
+	return MQTTPublish(desc->mqtt_client, topic, &message);
 }
 
 /**
@@ -241,7 +241,7 @@ int32_t mqtt_publish(struct mqtt_desc *desc, const int8_t* topic,
  *  - 0 : On success
  *  - -1 : Otherwise
  */
-int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
+int32_t mqtt_subscribe(struct mqtt_desc *desc, const char *topic,
 		       enum mqtt_qos qos, enum mqtt_qos *granted_qos_optional)
 {
 	MQTTSubackData	result;
@@ -250,7 +250,7 @@ int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
 	if (!desc)
 		return -1;
 
-	ret = MQTTSubscribeWithResults(desc->mqtt_client, (char *)topic,
+	ret = MQTTSubscribeWithResults(desc->mqtt_client, topic,
 				       (enum QoS)qos,
 				       mqtt_default_message_handler,
 				       &result);
@@ -268,12 +268,12 @@ int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
  *  - 0 : On success
  *  - -1 : Otherwise
  */
-int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const int8_t* topic)
+int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const char *topic)
 {
 	if (!desc)
 		return -1;
 
-	return MQTTUnsubscribe(desc->mqtt_client, (char *)topic);
+	return MQTTUnsubscribe(desc->mqtt_client, topic);
 }
 
 /**
