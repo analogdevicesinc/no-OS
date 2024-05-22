@@ -20,10 +20,13 @@
   },
   "stm32": {
     "iio": {
-      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n HARDWARE=sdp-ck1z.ioc"
+    },
+    "iio_usb_cdc_acm": {
+      "flags": "IIO_EXAMPLE=y NO_OS_USB_UART=y HARDWARE=nucleo-f413zh-usb-cdc-acm.ioc RELEASE=y"
     },
     "iio_timer_trigger": {
-      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y"
+      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y HARDWARE=sdp-ck1z.ioc"
     }
   },
   "maxim": {

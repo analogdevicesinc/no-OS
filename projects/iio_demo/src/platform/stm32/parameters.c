@@ -42,9 +42,12 @@
 /******************************************************************************/
 #include "parameters.h"
 
+#if defined(STM32F469xx)
 struct stm32_uart_init_param iio_demo_uart_extra_ip = {
 	.huart = &huart5,
 };
+#else
+#endif
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 extern TIM_HandleTypeDef htim13;
