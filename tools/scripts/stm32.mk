@@ -71,6 +71,8 @@ CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 ifeq ($(NO_OS_USB_UART),y)
 SRC_DIRS += $(BUILD_DIR)/app/USB_DEVICE \
 	    $(BUILD_DIR)/app/Middlewares/ST/STM32_USB_Device_Library
+SRCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.c
+INCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.h
 endif
 
 $(PLATFORM)_project:
@@ -96,6 +98,9 @@ $(PROJECT)_configure:
 	sed -i 's/USE_HAL_TIM_REGISTER_CALLBACKS\s*0U/USE_HAL_TIM_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
 	sed -i 's/USE_HAL_UART_REGISTER_CALLBACKS\s*0U/USE_HAL_UART_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
 	sed -i 's/USE_HAL_SAI_REGISTER_CALLBACKS\s*0U/USE_HAL_SAI_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
+ifeq ($(NO_OS_USB_UART),y)
+	sed -i 's/USBD_Interface_fops_FS/_unused_USBD_Interface_fops_FS/g'  $(BUILD_DIR)/app/USB_DEVICE/App/usbd_cdc_if.c $(HIDE)
+endif
 	$(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 	$(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
 
