@@ -156,11 +156,11 @@ struct mqtt_connect_config {
 	 */
 	uint16_t		keep_alive_ms;
 	/** Name the client will have */
-	int8_t			*client_name;
+	char			*client_name;
 	/** Username  */
-	int8_t			*username;
+	char			*username;
 	/** Password */
-	int8_t			*password;
+	char			*password;
 };
 
 /**
@@ -185,9 +185,9 @@ struct mqtt_message {
 	/** Quality of services */
 	enum mqtt_qos	qos;
 	/** Payload */
-	uint8_t		*payload;
+	char		*payload;
 	/** Length */
-	uint32_t	len;
+	size_t		len;
 	/** If set, a retained message will be sent. See MQTT documentation */
 	bool		retained;
 };
@@ -256,13 +256,13 @@ int32_t mqtt_connect(struct mqtt_desc *desc,
 int32_t mqtt_disconnect(struct mqtt_desc *desc);
 
 /* Send publish to MQTT broker */
-int32_t mqtt_publish(struct mqtt_desc *desc, const int8_t* topic,
+int32_t mqtt_publish(struct mqtt_desc *desc, const char *topic,
 		     const struct mqtt_message* msg);
 /* Send subscribe to MQTT broker */
-int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
+int32_t mqtt_subscribe(struct mqtt_desc *desc, const char *topic,
 		       enum mqtt_qos qos, enum mqtt_qos *granted_qos_optional);
 /* Send unsubscribe to MQTT broker */
-int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const int8_t* topic);
+int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const char *topic);
 /* Allow messages to be received */
 int32_t mqtt_yield(struct mqtt_desc *desc, uint32_t timeout_ms);
 
