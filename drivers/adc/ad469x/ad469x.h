@@ -382,7 +382,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 /* Read from device when converter has the channel sequencer activated */
 int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
 			     uint32_t *buf,
-			     uint16_t samples);
+			     uint32_t samples);
 
 /* Set channel sequence */
 int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,

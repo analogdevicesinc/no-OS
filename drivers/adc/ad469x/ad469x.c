@@ -695,7 +695,7 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
  * @return 0 in case of success, -1 otherwise.
  */
 static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
-		uint16_t cur_sample, uint32_t *sample)
+		uint32_t cur_sample, uint32_t *sample)
 {
 	uint8_t cur_slot, cur_ch;
 
@@ -725,10 +725,10 @@ static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
  */
 int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
 			     uint32_t *buf,
-			     uint16_t samples)
+			     uint32_t samples)
 {
 	int32_t ret;
-	uint16_t i;
+	uint32_t i;
 	uint32_t total_samples;
 
 	total_samples = samples * (dev->num_slots + dev->temp_enabled);
