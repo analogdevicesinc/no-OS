@@ -179,7 +179,7 @@ $(PLATFORM)_post_build: $(HEX)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	-$(call remove_fun,$(HEX))
+	-$(call remove_file,$(HEX))
 
 clean: clean_hex
 
