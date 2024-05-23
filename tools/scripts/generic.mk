@@ -179,6 +179,8 @@ SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 # Get all .c, .cpp and .h files from SRC_DIRS
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.cpp))
+ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.S))
+ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.s))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
@@ -188,9 +190,10 @@ ALL_IGNORED_FILES += $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*
 # Remove ignored files
 SRCS     := $(filter-out $(ALL_IGNORED_FILES),$(SRCS))
 INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
+ASM_SRCS := $(filter-out $(ALL_IGNORED_FILES),$(ASM_SRCS))
 
 # Get all src files that are not in SRC_DRIS
-FILES_OUT_OF_DIRS := $(filter-out $(foreach source_directory_name,$(sort $(SRC_DIRS)),$(wildcard $(source_directory_name)/*)),$(SRCS) $(INCS))
+FILES_OUT_OF_DIRS := $(filter-out $(foreach source_directory_name,$(sort $(SRC_DIRS)),$(wildcard $(source_directory_name)/*)),$(SRCS) $(INCS) $(ASM_SRCS))
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
 OBJS = $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(REL_SRCS)))
@@ -210,6 +213,7 @@ FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
 # Remove duplicates
 SRCS := $(sort $(SRCS))
+ASM_SRCS := $(sort $(ASM_SRCS))
 INCS := $(sort $(INCS))
 
 CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
@@ -370,7 +374,7 @@ update:
 	$(call print,$(ACTION) srcs to created project)
 	$(call remove_dir,$(DIRS_TO_REMOVE))
 	$(call mk_dir,$(DIRS_TO_CREATE))
-	$(call process_items_in_chunks,$(sort $(SRCS) $(INCS)),10,update_file_func)
+	$(call process_items_in_chunks,$(sort $(SRCS) $(INCS) $(ASM_SRCS)),10,update_file_func)
 	$(MAKE) --no-print-directory pre_build
 
 standalone:
@@ -402,7 +406,7 @@ reset: clean_libs
 
 PHONY += list
 list:
-	$(call print_lines, $(sort $(SRCS) $(INCS)))
+	$(call print_lines, $(sort $(SRCS) $(INCS) $(ASM_SRCS)))
 
 .PHONY: $(PHONY)
 
