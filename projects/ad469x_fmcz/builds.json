@@ -1,19 +1,19 @@
 {
       "xilinx": {
-        "uart_print": {
-              "flags" : "",
+        "basic": {
+              "flags" : "IIO_EXAMPLE=n BASIC_EXAMPLE=y",
               "hardware" : ["ad469x_fmc_zed"]
         },
         "iio": {
-              "flags" : "IIOD=y",
+              "flags" : "IIO_EXAMPLE=y BASIC_EXAMPLE=n",
               "hardware" : ["ad469x_fmc_zed"]
         },
         "standard_seq": {
-              "flags" : "NEW_CFLAGS=-DSTANDARD_SEQ",
+              "flags" : "IIO_EXAMPLE=n BASIC_EXAMPLE=y AD469X_SEQ=standard",
               "hardware" : ["ad469x_fmc_zed"]
         },
         "advance_seq": {
-              "flags" : "NEW_CFLAGS=-DADVANCED_SEQ",
+              "flags" : "IIO_EXAMPLE=n BASIC_EXAMPLE=y AD469X_SEQ=advanced",
               "hardware" : ["ad469x_fmc_zed"]
         }
       }

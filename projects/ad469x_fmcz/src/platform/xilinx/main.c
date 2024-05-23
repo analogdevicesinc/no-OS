@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Parameters Definitions.
- *   @author Cristian Pop (cristian.pop@analog.com)
+ *   @file   main.c
+ *   @brief  Main file for xilinx platform of ad469x_fmcz project.
+ *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,33 +36,38 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#elif defined(BASIC_EXAMPLE)
+#include "basic_example.h"
+#endif
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
+/***************************************************************************//**
+ * @brief Main function execution for xilinx platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -EINVAL;
 
-#define AD469x_DMA_BASEADDR             XPAR_AXI_AD469X_DMA_BASEADDR
-#define AD469x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD469X_SPI_AD469X_AXI_REGMAP_BASEADDR
-#define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
-#define AXI_PWMGEN_BASEADDR		XPAR_AD469X_TRIGGER_GEN_BASEADDR
-#define AD469x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
-#define AD469x_SPI_CS                   0
-#define GPIO_OFFSET			54
-#define GPIO_RESETN_1			GPIO_OFFSET + 32
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
-#define UART_BAUDRATE                   115200
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
-#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
-/* Maximum data to be read or write in a capture over iio */
-#define MAX_SIZE_BASE_ADDR		0x100000 //1MB
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
 
-#endif /* __PARAMETERS_H__ */
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+#elif defined (BASIC_EXAMPLE)
+	ret = basic_example_main();
+#else
+#error At least one example has to be selected using y value in Makefile.
+#endif
+
+	return ret;
+}
