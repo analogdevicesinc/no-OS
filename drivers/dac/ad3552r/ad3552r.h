@@ -405,6 +405,7 @@ struct ad3552r_desc {
 	uint8_t chip_id;
 	uint8_t crc_en : 1;
 	uint8_t is_simultaneous : 1;
+	uint8_t single_transfer : 1;
 };
 
 struct ad3552r_custom_output_range_cfg {
@@ -449,6 +450,7 @@ struct ad3552r_init_param {
 	/* Set to enable CRC */
 	bool crc_en;
 	bool is_simultaneous;
+	bool single_transfer;
 };
 
 /*****************************************************************************/

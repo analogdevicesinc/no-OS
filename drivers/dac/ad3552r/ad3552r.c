@@ -409,6 +409,59 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 	return 0;
 }
 
+/*
+ * The xilinx_spi (PS) driver does not handle cs_change, that should be off
+ * between address (msg 0) and data (msg 1),
+ * so, converting data transfer in a single spi message.
+ */
+static inline void ad3552r_convert_to_single_msg(uint8_t *data, int len)
+{
+	int i;
+
+	for (i = len; i; i--)
+		data[i] = data[i - 1];
+}
+
+int32_t ad3552r_single_transfer(struct ad3552r_desc *desc,
+				struct ad3552_transfer_data *data)
+{
+	struct no_os_spi_msg msgs[2] = { 0 };
+	uint8_t instr;
+	int err;
+
+	if (!desc || !data)
+		return -EINVAL;
+
+	if (data->spi_cfg)
+		_update_spi_cfg(desc, data->spi_cfg);
+
+	instr = data->addr & AD3552R_ADDR_MASK;
+	instr |= data->is_read ? AD3552R_READ_BIT : 0;
+
+	if (desc->crc_en)
+		return _ad3552r_transfer_with_crc(desc, data, instr);
+
+	/*
+	 * Xilinx PS spi controller driver is actually not supporting the
+	 * cs_change between messages.
+	 * Also, Xilinx spi controller driver pretend same buffer for
+	 * out and in.
+	 */
+	ad3552r_convert_to_single_msg(data->data,  data->len);
+
+	data->data[0] = instr;
+	msgs[0].bytes_number = data->len + 1;
+	msgs[0].rx_buff = data->data;
+	msgs[0].tx_buff = data->data;
+
+	err= no_os_spi_transfer(desc->spi, &msgs[0], 1);
+
+	if (data->is_read)
+		data->data[0] = data->data[1];
+
+	return err;
+}
+
 /* SPI transfer to device */
 int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 			 struct ad3552_transfer_data *data)
@@ -446,6 +499,7 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 	struct ad3552_transfer_data msg = { 0 };
 	uint8_t buf[AD3552R_MAX_REG_SIZE] = { 0 };
 	uint8_t reg_len;
+	int32_t err;
 
 	if (!desc)
 		return -ENODEV;
@@ -465,7 +519,12 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 		/* reg_len can be 2 or 3, but 3rd bytes needs to be set to 0 */
 		no_os_put_unaligned_be16(val, buf);
 
-	return ad3552r_transfer(desc, &msg);
+	if (desc->single_transfer)
+		err = ad3552r_single_transfer(desc, &msg);
+	else
+		err = ad3552r_transfer(desc, &msg);
+
+	return err;
 }
 
 int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
@@ -487,7 +546,11 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 	msg.addr = addr;
 	msg.data = buf;
 	msg.len = reg_len;
-	err = ad3552r_transfer(desc, &msg);
+	if (desc->single_transfer)
+		err = ad3552r_single_transfer(desc, &msg);
+	else
+		err = ad3552r_transfer(desc, &msg);
+
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
@@ -1128,6 +1191,8 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	if (NO_OS_IS_ERR_VALUE(err))
 		goto err_spi;
 
+	ldesc->single_transfer = param->single_transfer;
+
 	if (ldesc->reset) {
 		err = no_os_gpio_direction_output(ldesc->reset, NO_OS_GPIO_HIGH);
 		if (NO_OS_IS_ERR_VALUE(err))
@@ -1299,7 +1364,11 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 	msg.len = len;
 	msg.data = buff;
 
-	err = ad3552r_transfer(desc, &msg);
+	if (desc->single_transfer)
+		err = ad3552r_single_transfer(desc, &msg);
+	else
+		err = ad3552r_transfer(desc, &msg);
+
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
