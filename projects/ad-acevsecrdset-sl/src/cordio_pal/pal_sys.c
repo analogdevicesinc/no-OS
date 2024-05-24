@@ -38,18 +38,36 @@
 *******************************************************************************/
 #include "pal_sys.h"
 #include "max32655.h"
+#include "gpio.h"
+
+static uint32_t palSysBusyCount;
 
 void LED_On()
 {
+	MXC_GPIO_OutPut(MXC_GPIO0, 1 << 26, 1 << 26);
+}
 
+void LED_Off()
+{
+	MXC_GPIO_OutPut(MXC_GPIO0, 1 << 26, 0);
 }
 
 void PalLedOn()
 {
-
+	MXC_GPIO_OutPut(MXC_GPIO0, 1 << 26, 1 << 26);
 }
 
 void PalLedOff()
+{
+	MXC_GPIO_OutPut(MXC_GPIO0, 1 << 26, 0);
+}
+
+void PalLedDeInit(void)
+{
+
+}
+
+void PalBtnInit(void)
 {
 
 }
@@ -72,4 +90,19 @@ void PalExitCs()
 void PalSysInit()
 {
 	return;
+}
+
+bool_t PalSysIsBusy(void)
+{
+	return 0;
+}
+
+void PalSysSetBusy(void)
+{
+
+}
+
+void PalSysSleep(void)
+{
+
 }

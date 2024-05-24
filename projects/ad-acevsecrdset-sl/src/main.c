@@ -79,16 +79,22 @@ int main()
 		.platform_ops = &max_irq_ops,
 	};
 
-#ifdef BT_ENABLED
-	cordio_init();
-	while (1) {
-		/* Run the WSF OS */
-		wsfOsDispatcher();
+	const mxc_gpio_cfg_t led_gpio_cfg = { MXC_GPIO0, MXC_GPIO_PIN_26, MXC_GPIO_FUNC_OUT,
+                                         MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIOH, MXC_GPIO_DRVSTR_0 };
 
-		if (!WsfOsActive()) {
-			/* No WSF tasks are active, optionally sleep */
-		}
-	}
+	MXC_GPIO_Config(&led_gpio_cfg);
+
+#ifdef BT_ENABLED
+	mcs_start();
+	// cordio_init();
+	// while (1) {
+	// 	/* Run the WSF OS */
+	// 	wsfOsDispatcher();
+
+	// 	if (!WsfOsActive()) {
+	// 		/* No WSF tasks are active, optionally sleep */
+	// 	}
+	// }
 #endif
 
 	ret = no_os_irq_ctrl_init(&stout_nvic_desc, &ade9113_nvic_ip);

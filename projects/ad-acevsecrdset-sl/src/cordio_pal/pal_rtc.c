@@ -38,12 +38,12 @@
 *******************************************************************************/
 #include "pal_rtc.h"
 
-void PalRtcInit(void)
-{
+// void PalRtcInit(void)
+// {
 
-}
+// }
 
-uint32_t PalRtcCounterGet(void)
-{
-	return 0;
-}
+// uint32_t PalRtcCounterGet(void)
+// {
+// 	return 0;
+// }

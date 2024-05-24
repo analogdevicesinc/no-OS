@@ -71,7 +71,7 @@ static const struct no_os_uart_init_param terminal_uart_ip = {
 	.device_id = 0,
 	.irq_id = UART0_IRQn,
 	.asynchronous_rx = true,
-	.baud_rate = 9600,
+	.baud_rate = 115200,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
@@ -151,7 +151,6 @@ void PalUartInit(PalUartId_t id, const PalUartConfig_t *pCfg)
 	default:
 		return;
 	}
-
 }
 
 static uint8_t palUartGetNum(PalUartId_t uartId)

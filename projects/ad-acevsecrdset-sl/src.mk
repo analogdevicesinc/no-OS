@@ -106,9 +106,11 @@ SRCS += $(DRIVERS)/meter/ade9113/ade9113.c
 
 ifdef BT_ENABLED
 
-INIT_PERIPHERAL = 1
-INIT_CENTRAL = 0
-TRACE = 1
+CFLAGS += -DINIT_PERIPHERAL=1
+CFLAGS += -DINIT_CENTRAL=0
+CFLAGS += -DINIT_BROADCASTER=0
+CFLAGS += -DINIT_OBSERVER=0
+# TRACE = 1
 
 CORDIO_ROOT := $(MAXIM_LIBRARIES)/Cordio
 CFLAGS += -DBT_ENABLED
@@ -118,9 +120,11 @@ CFLAGS += -fomit-frame-pointer
 SRC_DIRS += $(PROJECT)/src/cordio_pal
 SRC_DIRS += $(CORDIO_ROOT)/host/sources
 SRC_DIRS += $(CORDIO_ROOT)/ble-profiles/sources
+SRC_DIRS += $(CORDIO_ROOT)/ble-profiles/sources/af/common
 SRC_DIRS += $(CORDIO_ROOT)/controller/sources/ble
 SRC_DIRS += $(CORDIO_ROOT)/controller/sources/common
 SRC_DIRS += $(CORDIO_ROOT)/controller/sources/ble/bb
+SRC_DIRS += $(CORDIO_ROOT)/controller/sources/common/chci
 SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/hci/exactle
 SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/hci/common
 SRC_DIRS += $(CORDIO_ROOT)/ble-host/sources/stack/att
@@ -135,6 +139,8 @@ SRC_DIRS += $(CORDIO_ROOT)/wsf/sources/util
 SRC_DIRS += $(CORDIO_ROOT)/thirdparty/uecc
 SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_crypto.c
 SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_timer.c
+SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_flash.c
+SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_rtc.c
 SRCS += $(CORDIO_ROOT)/platform/targets/maxim/max32655/sources/pal_cfg.c
 ALL_IGNORED_FILES += $(CORDIO_ROOT)/ble-host/sources/sec/common/sec_ecc_debug.c
 
@@ -160,10 +166,14 @@ CFLAGS += -I$(CORDIO_ROOT)/ble-profiles/sources/profiles
 CFLAGS += -I$(CORDIO_ROOT)/thirdparty/uecc
 
 CFLAGS += -DHCI_TR_EXACTLE=1
-CFLAGS += -DBT_VER=11
+# CFLAGS += -DBT_VER=11
 CFLAGS += -DuECC_ASM=2
 CFLAGS += -DPAL_TMR_IDX=4
 CFLAGS += -DPAL_SLEEP_TMR_IDX=5
+CFLAGS += -DWSF_TRACE_ENABLED_VERBOSE
+# CFLAGS += -DTRACE=1
+CFLAGS += -DWSF_TRACE_ENABLED=TRUE
+CFLAGS += -DMODULE_ID=123
 
 EXTRA_LIBS_PATHS += $(MAXIM_LIBRARIES)/BlePhy/MAX32655
 EXTRA_LIBS += libphy_hard.a
