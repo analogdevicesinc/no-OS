@@ -407,6 +407,27 @@ free_network_descriptor:
 }
 
 /**
+ * @brief Configure lwip and the lower layer network device.
+ * @param desc - lwip sockets layer specific descriptor.
+ * @return 0
+ */
+int32_t no_os_lwip_remove(struct lwip_network_desc *desc)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
+
+	desc->platform_ops->remove(desc->mac_desc);
+	netif_remove(desc->lwip_netif);
+	no_os_free(desc->lwip_netif);
+	no_os_free(desc);
+
+	return 0;
+}
+
+/**
  * @brief Called in case of a lwip error. The pcb may have already been freed.
  * @param arg - lwip sockets layer specific descriptor.
  * @param err - error code.
