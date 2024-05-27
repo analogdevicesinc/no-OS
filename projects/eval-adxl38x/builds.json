@@ -1,0 +1,12 @@
+{
+  "stm32": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y ADXL382=y HARDWARE=Dr38x_F767ZI.ioc"
+    }
+  },
+  "maxim": {
+    "dummy_example_max78000_adxl38x": {
+      "flags" : "DUMMY_EXAMPLE=y  TARGET=max78000 ADXL380=y"
+    }
+  }
+}
