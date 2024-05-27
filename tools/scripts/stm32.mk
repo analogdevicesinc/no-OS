@@ -214,6 +214,7 @@ $(PLATFORM)_sdkclean:
 	$(call remove_dir,$(DEBUG_DIR)) $(HIDE)
 	$(call print,[Delete] SDK artefacts from $(RELEASE_DIR))
 	$(call remove_dir,$(RELEASE_DIR)) $(HIDE)
+	$(call remove_dir,$(VSCODE_CFG_DIR))
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
