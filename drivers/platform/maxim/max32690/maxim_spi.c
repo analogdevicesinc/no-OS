@@ -57,6 +57,18 @@
 #define MAX_DELAY_SCLK	255
 #define NS_PER_US	1000
 
+#define MAX_SPI_RESET_IDX(id) ((id) == 0 ? MXC_SYS_RESET0_SPI0 : \
+			       ((id) == 1) ? MXC_SYS_RESET0_SPI1 : \
+			       ((id) == 2) ? MXC_SYS_RESET0_SPI2 : \
+			       ((id) == 3) ? MXC_SYS_RESET1_SPI3 : \
+			       ((id) == 4) ? MXC_SYS_RESET1_SPI4 : 0)
+
+#define MAX_SPI_CLOCK_IDX(id) ((id) == 0 ? MXC_SYS_PERIPH_CLOCK_SPI0 : \
+			       ((id) == 1) ? MXC_SYS_PERIPH_CLOCK_SPI1 : \
+			       ((id) == 2) ? MXC_SYS_PERIPH_CLOCK_SPI2 : \
+			       ((id) == 3) ? MXC_SYS_PERIPH_CLOCK_SPI3 : \
+			       ((id) == 3) ? MXC_SYS_PERIPH_CLOCK_SPI4 : 0)
+
 struct max_dma_spi_xfer_data {
 	struct no_os_spi_desc *spi;
 	struct no_os_dma_ch *tx_ch;
@@ -336,6 +348,7 @@ error:
 
 static int _max_spi_config(struct no_os_spi_desc *desc)
 {
+	mxc_spi_reva_regs_t *spi_regs = (mxc_spi_reva_regs_t *)MXC_SPI_GET_SPI(desc->device_id);
 	struct max_spi_init_param *eparam;
 	struct max_spi_state *st;
 	int32_t ret;
@@ -343,23 +356,15 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 	st = desc->extra;
 	eparam = st->init_param;
 
-	mxc_spi_pins_t spi_pins_config = {
-		.ss0 = (desc->chip_select == 0) ? true : false,
-		.ss1 = (desc->chip_select == 1) ? true : false,
-		.ss2 = (desc->chip_select == 2) ? true : false,
-	};
-
-	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
-			   SPI_SINGLE_MODE,
-			   eparam->num_slaves, eparam->polarity, desc->max_speed_hz, spi_pins_config);
-	if (ret) {
-		ret = -EINVAL;
-		goto err_init;
-	}
+	MXC_SYS_Reset_Periph(MAX_SPI_RESET_IDX(desc->device_id));
+	MXC_SYS_ClockEnable(MAX_SPI_CLOCK_IDX(desc->device_id));
 
 	ret = _max_spi_config_pins(desc);
 	if (ret)
 		return ret;
+
+	MXC_SPI_RevA1_Init(spi_regs, SPI_MASTER_MODE, SPI_SINGLE_MODE, 1,
+			   eparam->polarity, desc->max_speed_hz);
 
 	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
 			      (mxc_spi_mode_t)desc->mode);

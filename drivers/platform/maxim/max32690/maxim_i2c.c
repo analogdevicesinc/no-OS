@@ -94,11 +94,10 @@ static int32_t _max_i2c_pins_config(struct no_os_i2c_init_param *param,
 	struct max_i2c_init_param *max_param = param->extra;
 	mxc_gpio_cfg_t i2c_pins;
 
-	if (max_param->sda_pinctrl.port && max_param->scl_pinctrl.port) {
-		MXC_GPIO_Config(&max_param->sda_pinctrl);
-		MXC_GPIO_Config(&max_param->scl_pinctrl);
-
-		return 0;
+	for (int i = 0; i < MAX_I2C_PINS; i++) {
+		if (max_param->pinctrl[i].port) {
+			MXC_GPIO_Config(&max_param->pinctrl[i]);
+		}
 	}
 
 	switch (param->device_id) {
