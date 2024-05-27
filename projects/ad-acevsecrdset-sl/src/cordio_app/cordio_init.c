@@ -206,14 +206,17 @@ int cordio_init(void)
 {
 	mainWsfInit();
 
+	return 0;
+}
+
+void cordio_step()
+{
 	while (1) {
-		/* Run the WSF OS */
 		wsfOsDispatcher();
 
 		if (!WsfOsActive()) {
 			/* No WSF tasks are active, optionally sleep */
+			return;
 		}
 	}
-
-	return 0;
 }

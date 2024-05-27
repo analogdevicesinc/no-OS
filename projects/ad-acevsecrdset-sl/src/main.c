@@ -85,8 +85,10 @@ int main()
 	MXC_GPIO_Config(&led_gpio_cfg);
 
 #ifdef BT_ENABLED
-	mcs_start();
+	// mcs_start();
 	// cordio_init();
+	// while (1)
+	// 	cordio_step();
 	// while (1) {
 	// 	/* Run the WSF OS */
 	// 	wsfOsDispatcher();
@@ -112,13 +114,13 @@ int main()
 	/* Initialize UART */
 	struct no_os_uart_desc *uart_desc;
 
-#ifdef BT_ENABLED
-	pal_get_terminal_uart(&uart_desc);
-#else
+// #ifdef BT_ENABLED
+// 	pal_get_terminal_uart(&uart_desc);
+// #else
 	ret = no_os_uart_init(&uart_desc, &ade9113_uart_ip);
 	if (ret)
 		return ret;
-#endif
+// #endif
 
 	no_os_uart_stdio(uart_desc);
 

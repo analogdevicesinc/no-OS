@@ -12,7 +12,8 @@
 #include "wsf_timer.h"
 #include "wsf_os.h"
 
-// int cordio_init(void);
+int cordio_init(void);
+void cordio_step();
 int mcs_start(void);
 
 #endif // __CORDIO_INIT_

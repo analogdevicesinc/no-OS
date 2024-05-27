@@ -55,6 +55,10 @@
 #include "gpio.h"
 #include "rcd.h"
 
+#ifdef BT_ENABLED
+#include "cordio_init.h"
+#endif
+
 // Flag used for synchronizing state machine
 uint16_t zcross_cnt;
 // Charging state
@@ -153,6 +157,10 @@ int state_machine()
 	printf("%c%c%c%c", 27, '[', '2', 'J');
 	no_os_mdelay(5);
 	pr_debug("\nSTOUT app FIRMWARE VERSION: %s \n\n",FIRMWARE_VERSION);
+
+#if BT_ENABLED
+	cordio_init();
+#endif
 
 	/* Allocate mempory for application structure */
 	stout = (struct stout *)no_os_calloc(1, sizeof(*stout));
@@ -286,6 +294,9 @@ int state_machine()
 	/************The main loop of the State Machine (runs continuously if no error detected)****************/
 	/*******************************************************************************************************/
 	while(1) {
+#ifdef BT_ENABLED
+		cordio_step();
+#endif
 		// Update PWM LOW and PWM HIGH values each time a new conversion takes place
 		if (get_pwm_low_flag_state()) {
 			// Update values for computing PWM LOW and PWM HIGH averages
