@@ -67,6 +67,18 @@ const uint8_t ad469x_device_resol[] = {
 	[AD469x_OSR_64] = 19
 };
 
+struct ad469x_device_info {
+	uint8_t max_data_ch;
+	uint32_t max_rate_ksps;
+};
+
+struct ad469x_device_info dev_info[] = {
+	[ID_AD4695] = {.max_data_ch = 16, .max_rate_ksps = 500},
+	[ID_AD4696] = {.max_data_ch = 16, .max_rate_ksps = 1000},
+	[ID_AD4697] = {.max_data_ch = 8, .max_rate_ksps = 500},
+	[ID_AD4698] = {.max_data_ch = 8, .max_rate_ksps = 1000},
+};
+
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -257,6 +269,33 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 	return 0;
 }
 
+int32_t ad469x_get_num_channels(struct ad469x_dev *dev,
+				uint8_t *num_channels)
+{
+	if (!dev)
+		return -EINVAL;
+
+	*num_channels = dev->num_data_ch;
+	if (dev->temp_enabled)
+		*num_channels = dev->num_data_ch + 1;
+
+	return 0;
+}
+
+bool ad469x_is_temp_channel(struct ad469x_dev *dev,
+			    uint8_t channel)
+{
+	if (!dev) {
+		printf("Error: %s: null dev structure\n", __func__);
+		return false;
+	}
+
+	if ((dev->temp_enabled) && (channel == dev->num_data_ch))
+		return true;
+
+	return false;
+}
+
 /**
  * @brief Configure over sampling ratio in advanced sequencer mode
  * @param [in] dev - ad469x_dev device handler.
@@ -273,7 +312,7 @@ int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
 	    dev->ch_sequence == AD469x_two_cycle)
 		return -1;
 
-	if (ch >= AD469x_CHANNEL_NO)
+	if (ch >= dev->num_data_ch)
 		return -1;
 
 	ret = ad469x_spi_write_mask(dev,
@@ -300,7 +339,7 @@ static int32_t ad469x_seq_osr_clear(struct ad469x_dev *dev)
 	int32_t ret;
 	uint8_t i = 0;
 
-	for (i = 0; i < AD469x_CHANNEL_NO; i++) {
+	for (i = 0; i < dev->num_data_ch; i++) {
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_CONFIG_IN(i),
 					    AD469x_REG_CONFIG_IN_OSR_MASK,
@@ -772,9 +811,9 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 		WRITE_READ(1),
 		CS_HIGH
 	};
-	if (channel < AD469x_CHANNEL_NO)
+	if (channel < dev->num_data_ch)
 		commands_data[0] = AD469x_CMD_CONFIG_CH_SEL(channel) << 8;
-	else if (channel == AD469x_CHANNEL_TEMP)
+	else if (channel == dev->num_data_ch)
 		commands_data[0] = AD469x_CMD_SEL_TEMP_SNSOR_CH << 8;
 	else
 		return -1;
@@ -965,6 +1004,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	struct ad469x_dev *dev;
 	int32_t ret;
 	uint8_t data = 0;
+	uint8_t max_data_ch;
 
 	dev = (struct ad469x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
@@ -1001,6 +1041,19 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	dev->capture_data_width = init_param->capture_data_width;
 #endif
 	dev->dev_id = init_param->dev_id;
+
+	max_data_ch = dev_info[dev->dev_id].max_data_ch;
+	if (init_param->num_data_ch > max_data_ch) {
+		printf("Error: too many channels(%d). Max (%d)\n",
+		       init_param->num_data_ch, max_data_ch);
+		ret = -EINVAL;
+		goto error_spi;
+	} else if(init_param->num_data_ch == 0) {
+		dev->num_data_ch = max_data_ch;
+	} else {
+		dev->num_data_ch = init_param->num_data_ch;
+	}
+
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 	dev->std_seq_osr = init_param->std_seq_osr;
 	dev->std_seq_pin_pairing = init_param->std_seq_pin_pairing;

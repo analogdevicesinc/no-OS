@@ -161,7 +161,6 @@
 #define AD469x_CHANNEL(x)			(NO_OS_BIT(x) & 0xFFFF)
 #define AD469x_CHANNEL_NO			16
 #define AD469x_SLOTS_NO				0x80
-#define AD469x_CHANNEL_TEMP			16
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -297,6 +296,8 @@ struct ad469x_init_param {
 	enum ad469x_osr_ratios adv_seq_osr_resol[AD469x_CHANNEL_NO];
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/** Number of data channels to enable */
+	uint8_t num_data_ch;
 };
 
 /**
@@ -346,6 +347,8 @@ struct ad469x_dev {
 	bool temp_enabled;
 	/** Number of active channel slots, for advanced sequencer */
 	uint8_t num_slots;
+	/** Number of data channels to enable */
+	uint8_t num_data_ch;
 };
 
 /******************************************************************************/
@@ -453,6 +456,14 @@ int32_t ad469x_configure_ain_high_z(struct ad469x_dev *dev,
 int32_t ad469x_get_ain_high_z_status(struct ad469x_dev *dev,
 				     uint8_t ch,
 				     enum ad469x_ain_high_z *status);
+
+/* Get the number of channels that are enabled */
+int32_t ad469x_get_num_channels(struct ad469x_dev *dev,
+				uint8_t *num_channels);
+
+/* check if channel is a temperature channel */
+bool ad469x_is_temp_channel(struct ad469x_dev *dev,
+			    uint8_t channel);
 
 /* Initialize the device. */
 int32_t ad469x_init(struct ad469x_dev **device,
