@@ -298,6 +298,10 @@ struct ad469x_init_param {
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/** Number of data channels to enable */
 	uint8_t num_data_ch;
+	/** Temperature enabled for standard and advanced sequencer if set. */
+	bool temp_enabled;
+	/** enable extended init */
+	bool enable_extended_init;
 };
 
 /**
