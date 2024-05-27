@@ -400,7 +400,7 @@ clean:
 
 # Remove the whole build directory
 PHONY += reset
-reset: clean_libs
+reset: clean_libs sdkclean
 	$(call print,[Delete] $(BUILD_DIR))
 	$(call remove_dir,$(BUILD_DIR))
 
