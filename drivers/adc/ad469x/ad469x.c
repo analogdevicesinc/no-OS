@@ -943,11 +943,81 @@ int32_t ad469x_config(struct ad469x_dev *dev, struct
 	if (ret != 0)
 		return ret;
 
+	if (config_desc->temp_enabled) {
+		ret = ad469x_sequence_enable_temp(dev);
+		if (ret != 0)
+			return ret;
+	}
+
 	ret = ad469x_set_channel_sequence(dev, config_desc->ch_sequence);
 	if (ret != 0)
 		return ret;
 
 	return 0;
+}
+
+/**
+ * Configure the device with default parameters and enter conversion mode
+ * this adds default ch/slot assigments based on sequece mode.
+ * @param [in, out] dev - The device structure.
+ * @param [in] config_desc - Pointer to structure containing configuration
+ *                           parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad469x_config_extended(struct ad469x_dev *dev, struct
+			       ad469x_init_param *config_desc)
+{
+	int32_t ret, i;
+	uint32_t ch_mask = NO_OS_GENMASK(config_desc->num_data_ch - 1, 0);
+
+	ret = ad469x_set_reg_access_mode(dev, AD469x_BYTE_ACCESS);
+	if (ret != 0)
+		return ret;
+
+	ret = ad469x_set_busy(dev, AD469x_busy_gp0);
+	if (ret != 0)
+		return ret;
+
+	if (config_desc->ch_sequence == AD469x_advanced_seq) {
+		ret = ad469x_adv_sequence_set_num_slots(dev, dev->num_data_ch);
+		if (ret)
+			return ret;
+
+		for (i = 0; i < config_desc->num_data_ch; i++) {
+			ret = ad469x_adv_sequence_set_slot(dev, i, i);
+			if (ret)
+				return ret;
+
+			ret = ad469x_adv_seq_osr(dev, i, config_desc->adv_seq_osr_resol[i]);
+			if (ret)
+				return ret;
+
+		}
+	} else if(config_desc->ch_sequence == AD469x_standard_seq)  {
+		ret = ad469x_std_sequence_ch(dev, ch_mask);
+		if (ret)
+			return ret;
+
+		ret = ad469x_std_seq_osr(dev, config_desc->std_seq_osr);
+		if (ret != 0)
+			return ret;
+	}
+
+	ret = ad469x_std_pin_pairing(dev, config_desc->std_seq_pin_pairing);
+	if (ret != 0)
+		return ret;
+
+	if (config_desc->temp_enabled) {
+		ret = ad469x_sequence_enable_temp(dev);
+		if (ret != 0)
+			return ret;
+	}
+
+	ret = ad469x_set_channel_sequence(dev, config_desc->ch_sequence);
+	if (ret != 0)
+		return ret;
+
+	return ad469x_enter_conversion_mode(dev);
 }
 
 /**
@@ -1078,9 +1148,15 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (data != AD469x_TEST_DATA)
 		goto error_spi;
 
-	ret = ad469x_config(dev, init_param);
-	if (ret != 0)
-		goto error_spi;
+	if (init_param->enable_extended_init) {
+		ret = ad469x_config_extended(dev, init_param);
+		if (ret != 0)
+			goto error_spi;
+	} else {
+		ret = ad469x_config(dev, init_param);
+		if (ret != 0)
+			goto error_spi;
+	}
 
 #if !defined(USE_STANDARD_SPI)
 	sample_frequncy_ksps = NO_OS_DIV_ROUND_UP(1000000,
