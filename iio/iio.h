@@ -55,7 +55,7 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-enum pysical_link_type {
+enum physical_link_type {
 	USE_UART,
 	USE_LOCAL_BACKEND,
 	USE_NETWORK
@@ -108,7 +108,7 @@ struct iio_local_backend {
 };
 
 struct iio_init_param {
-	enum pysical_link_type	phy_type;
+	enum physical_link_type	phy_type;
 	union {
 		struct no_os_uart_desc *uart_desc;
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)

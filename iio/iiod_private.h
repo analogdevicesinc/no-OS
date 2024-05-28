@@ -175,6 +175,8 @@ struct iiod_desc {
 	char *xml;
 	/* XML length in bytes */
 	uint32_t xml_len;
+	/* Backend used by IIOD */
+	enum physical_link_type phy_type;
 };
 
 #endif //IIOD_PRIVATE_H
