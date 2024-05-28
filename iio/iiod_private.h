@@ -40,6 +40,8 @@
 #ifndef IIOD_PRIVATE_H
 #define IIOD_PRIVATE_H
 
+#include "iio.h"
+
 #define IIOD_WR				0x1
 #define IIOD_ENDL			0x2
 #define IIOD_RD				0x4

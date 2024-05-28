@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "iio.h"
+
 /* Maximum nomber of iiod connections to allocate simultaneously */
 #define IIOD_MAX_CONNECTIONS	10
 #define IIOD_VERSION		"1.1.0000000"

@@ -1915,6 +1915,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	iiod_param.ops = ops;
 	iiod_param.xml = ldesc->xml_desc;
 	iiod_param.xml_len = ldesc->xml_size;
+	iiod_param.phy_type = init_param->phy_type;
 
 	ret = iiod_init(&ldesc->iiod, &iiod_param);
 	if (NO_OS_IS_ERR_VALUE(ret))

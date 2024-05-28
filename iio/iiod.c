@@ -372,6 +372,7 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 	ldesc->xml = param->xml;
 	ldesc->xml_len = param->xml_len;
 	ldesc->app_instance = param->instance;
+	ldesc->phy_type = param->phy_type;
 
 	*desc = ldesc;
 
@@ -506,11 +507,49 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 	return 0;
 }
 
-static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
+static int32_t do_read_buff_delayed(struct iiod_desc *desc,
+				    struct iiod_conn_priv *conn)
 {
 	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
+	uint32_t max_to_read;
 	int32_t ret, len;
 
+	conn->nb_buf.buf = conn->payload_buf;
+	len = no_os_min(conn->payload_buf_len, conn->cmd_data.bytes_count);
+	max_to_read = len - conn->nb_buf.len;
+	ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
+				    conn->nb_buf.buf + conn->nb_buf.len, max_to_read);
+	if (ret < 0)
+		return ret;
+
+	conn->nb_buf.len += ret;
+
+	if (conn->nb_buf.len < conn->cmd_data.bytes_count)
+		return -EAGAIN;
+
+	ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
+	if (ret < 0)
+		return ret;
+
+	conn->nb_buf.len = 0;
+	conn->nb_buf.idx = 0;
+
+	return 0;
+}
+
+static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
+{
+	struct iiod_ctx ctx;
+	int32_t ret, len;
+
+	/*
+	 * When using the network backend wait for a whole buffer to be filled
+	 * before sending in order to reduce the ammount of network traffic.
+	 */
+	if (desc->phy_type == USE_NETWORK)
+		return do_read_buff_delayed(desc, conn);
+
+	ctx = (struct iiod_ctx)IIOD_CTX(desc, conn);
 	if (conn->nb_buf.len == 0) {
 		conn->nb_buf.buf = conn->payload_buf;
 		len = no_os_min(conn->payload_buf_len,
