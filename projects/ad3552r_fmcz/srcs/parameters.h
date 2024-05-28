@@ -52,6 +52,7 @@
 /******************************************************************************/
 
 /* GPIO Indexes */
+#ifndef XILINX_PLATFORM
 #define GPIO_RESET_N				0
 #define GPIO_LDAC_N				1
 #define GPIO_SPI_QPI				2
@@ -61,6 +62,17 @@
 #define GPIO_GREEN				6 //GPIO_7
 #define GPIO_BLUE				7 //GPIO_8
 #define TOTAL_GPIOS				8
+#else
+#define GPIO_LDAC_N		0
+#define GPIO_ALERT_N		1
+#define GPIO_RED		2 /* GPIO_6 */
+#define GPIO_GREEN		3 /* GPIO_7 */
+#define GPIO_BLUE		4 /* GPIO_8 */
+#define GPIO_9			5
+#define GPIO_RESET_N		6
+#define GPIO_SPI_QPI		7
+#define TOTAL_GPIOS		8
+#endif /* XILINX_PLATFORM */
 
 #define GPIO_BANK_0_PINS	32
 #define GPIO_BANK_1_PINS	22

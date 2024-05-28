@@ -83,7 +83,7 @@ int32_t init_gpios_to_defaults()
 		[GPIO_LDAC_N] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_SPI_QPI] = {NO_OS_GPIO_OUT, NO_OS_GPIO_LOW},
 		[GPIO_ALERT_N] = {NO_OS_GPIO_IN, 0},
-		[GPIO_SYNC_EVENTS] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_9] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_RED] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_GREEN] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 		[GPIO_BLUE] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
@@ -134,6 +134,9 @@ int32_t run_example(struct ad3552r_desc *dac)
 	int32_t err;
 
 	nb_samples = NO_OS_ARRAY_SIZE(no_os_sine_lut_16);
+
+	pr_debug("sending syn wave, %ld samples per period\n", nb_samples * 2);
+
 	i = 0;
 	do {
 		samples[0] = no_os_sine_lut_16[i];
@@ -181,11 +184,12 @@ int main()
 	};
 
 	struct ad3552r_init_param default_ad3552r_param = {
-		.chip_id = AD3542R_ID,
+		.chip_id = AD3552R_ID,
 		.spi_param = {
 			.device_id = SPI_DEVICE_ID,
 			.chip_select = 0,
 			.mode = NO_OS_SPI_MODE_0,
+			.max_speed_hz = 20000000,
 			.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 #ifdef XPAR_XSPI_NUM_INSTANCES
 			.platform_ops = &xil_spi_pl_ops,
@@ -205,7 +209,15 @@ int main()
 				.en = 1,
 				.range = AD3542R_CH_OUTPUT_RANGE_0__2P5V
 			}
-		}
+		},
+		.crc_en = 0,
+#ifdef XILINX_PLATFORM
+		/*
+		 * Zed board requires this option, spi instruction/addr + data
+		 * must be sent in a single transfer.
+		 */
+		.single_transfer = 1,
+#endif
 	};
 
 	/* Enable the instruction cache. */
