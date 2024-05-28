@@ -330,7 +330,83 @@ static int32_t _update_spi_cfg(struct ad3552r_desc *desc,
 	return err;
 }
 
-/* Transfer data using CRC */
+static int32_t _ad3552r_single_transfer_with_crc(struct ad3552r_desc *desc,
+		struct ad3552_transfer_data *data,
+		uint8_t instr)
+{
+	struct no_os_spi_msg msg;
+	uint32_t i;
+	int32_t inc, err;
+	uint8_t out[AD3552R_MAX_REG_SIZE + 4];
+	uint8_t addr, reg_len, crc_init, crc = 0;
+	uint8_t *pbuf;
+	int8_t sign;
+
+	msg.rx_buff = out;
+	msg.tx_buff = out;
+	sign = desc->spi_cfg.addr_asc ? 1 : -1;
+
+	inc = 0;
+	i = 0;
+	do {
+		/* Get next address to for which CRC value will be calculated */
+		if (desc->spi_cfg.stream_mode_length) {
+			addr = data->addr
+			       + (inc % desc->spi_cfg.stream_mode_length);
+		} else
+			addr = data->addr + inc;
+
+		addr %= (AD3552R_REG_ADDR_MAX + 1);
+		reg_len = ad3552r_reg_len(addr);
+		addr |= (instr & AD3552R_READ_BIT);
+
+		/* Prepare CRC to send */
+		msg.bytes_number = reg_len + 1;
+		crc_init = no_os_crc8(desc->crc_table, &addr, 1,
+				      AD3552R_CRC_SEED);
+
+		if (data->is_read && i > 0) {
+			/* CRC is not needed for continuous read transaction */
+			memset(out, 0xFF, reg_len + 1);
+		} else {
+			pbuf = out;
+			/* Take in consideration instruction for CRC */
+			pbuf[0] = addr;
+			++pbuf;
+			++msg.bytes_number;
+
+			memcpy(pbuf, data->data + i, reg_len);
+			crc = no_os_crc8(desc->crc_table, pbuf,
+					 reg_len, crc_init);
+			pbuf[reg_len] = crc;
+		}
+
+		err = no_os_spi_transfer(desc->spi, &msg, 1);
+		if (NO_OS_IS_ERR_VALUE(err))
+			return err;
+
+		/* Check received CRC */
+		if (data->is_read) {
+			pbuf = out;
+			if (i == 0)
+				pbuf++;
+			/* Save received data */
+			memcpy(data->data + i, pbuf, reg_len);
+			if (pbuf[reg_len] !=
+			    no_os_crc8(desc->crc_table,
+				       pbuf, reg_len, crc_init))
+				return -EBADMSG;
+		} else {
+			if (crc != out[reg_len + 1])
+				return -EBADMSG;
+		}
+		inc += sign * reg_len;
+		i += reg_len;
+	} while (i < data->len);
+
+	return 0;
+}
+
 static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 		struct ad3552_transfer_data *data,
 		uint8_t instr)
@@ -438,9 +514,14 @@ int32_t ad3552r_single_transfer(struct ad3552r_desc *desc,
 	instr = data->addr & AD3552R_ADDR_MASK;
 	instr |= data->is_read ? AD3552R_READ_BIT : 0;
 
-	if (desc->crc_en)
-		return _ad3552r_transfer_with_crc(desc, data, instr);
-
+	if (desc->crc_en) {
+		if (desc->single_transfer) {
+			return _ad3552r_single_transfer_with_crc(desc,
+					data, instr);
+		} else {
+			return _ad3552r_transfer_with_crc(desc, data, instr);
+		}
+	}
 	/*
 	 * Xilinx PS spi controller driver is actually not supporting the
 	 * cs_change between messages.
