@@ -1005,6 +1005,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	int32_t ret;
 	uint8_t data = 0;
 	uint8_t max_data_ch;
+	uint32_t sample_frequncy_ksps;
 
 	dev = (struct ad469x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
@@ -1082,6 +1083,14 @@ int32_t ad469x_init(struct ad469x_dev **device,
 		goto error_spi;
 
 #if !defined(USE_STANDARD_SPI)
+	sample_frequncy_ksps = NO_OS_DIV_ROUND_UP(1000000,
+			       init_param->trigger_pwm_init->period_ns);
+	if (sample_frequncy_ksps > dev_info[dev->dev_id].max_rate_ksps) {
+		printf("Error: Sample frequency too high (%ld)\n", sample_frequncy_ksps);
+		ret = -EINVAL;
+		goto error_spi;
+	}
+
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != 0)
 		goto error_spi;
