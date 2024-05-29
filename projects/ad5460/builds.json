@@ -1,7 +1,7 @@
 {
   "mbed": {
     "basic_example": {
-      "flags" : "BASIC_EXAMPLE=y"
+      "flags" : "RELEASE=y BASIC_EXAMPLE=y"
     }
   }
 }
