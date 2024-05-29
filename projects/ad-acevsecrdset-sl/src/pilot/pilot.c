@@ -209,7 +209,7 @@ void pilot_pwm_timer_setup(unsigned int duty_cycle)
 	// measuring input PWM Low voltage value
 	// period and initial duty cycle of output PWM
 	unsigned int periodTicks = PeripheralClock / FREQ;
-	unsigned int dutyTicks = periodTicks * duty_cycle / 100;
+	unsigned int dutyTicks = periodTicks * duty_cycle / 1000;
 
 	/* Output PWM settings */
 	/*
