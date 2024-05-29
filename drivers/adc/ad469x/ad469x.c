@@ -994,10 +994,6 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != 0)
 		goto error_gpio;
 
-	ret = ad469x_reset_dev(dev);
-	if (ret != 0)
-		goto error_spi;
-
 #if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->reg_access_speed = init_param->reg_access_speed;
@@ -1012,6 +1008,10 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	dev->num_slots = 0;
 	dev->temp_enabled = false;
 	memset(dev->ch_slots, 0, sizeof(dev->ch_slots));
+
+	ret = ad469x_reset_dev(dev);
+	if (ret != 0)
+		goto error_spi;
 
 	ret = ad469x_spi_reg_write(dev, AD469x_REG_SCRATCH_PAD, AD469x_TEST_DATA);
 	if (ret != 0)
