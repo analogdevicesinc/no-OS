@@ -318,6 +318,8 @@ int pilot_setup_adc(void)
 
 	MXC_GPIO_Config(&gpio_cfg_adc_ain0);
 
+	MXC_ADC_StartConversion(ADC_CHANNEL);
+
 	return 0;
 }
 
@@ -328,7 +330,13 @@ int pilot_setup_adc(void)
  */
 unsigned int pilot_read_val(void)
 {
-	return MXC_ADC_StartConversion(ADC_CHANNEL);
+	//clear ADC done interrupt flag
+	MXC_ADC_RevA_ClearFlags(MXC_ADC, MXC_F_ADC_REVA_INTR_DONE_IF);
+
+	//set start bit
+	MXC_ADC->ctrl |= MXC_F_ADC_REVA_CTRL_START;
+
+	return E_NO_ERROR;
 }
 
 /**
