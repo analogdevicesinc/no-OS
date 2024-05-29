@@ -589,9 +589,9 @@ int state_machine()
 				if (stout->current_state != stout->previous_state) {
 					// Debug message
 					pr_debug("STATE A\n");
+					// The CP is set to DC
+					pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 				}
-				// The CP is set to DC
-				pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 				// Cable disconnected while charging
 				if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event)) {
 					// Open the relay
