@@ -164,7 +164,7 @@ static int32_t _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
 static int ad463x_iio_read_raw(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv)
 {
-	uint32_t temp[2];
+	uint32_t temp[4];
 	int ret;
 	int32_t temp2;
 	struct iio_ad463x *iio_desc = dev;
@@ -174,17 +174,12 @@ static int ad463x_iio_read_raw(void *dev, char *buf, uint32_t len,
 	if (ret != 0)
 		return ret;
 
-	ret = ad463x_read_data(iio_desc->ad463x_desc, temp, 2);
+	ret = ad463x_read_data(iio_desc->ad463x_desc, temp, 1);
 	if (ret != 0)
 		return ret;
-	/** Get sample in the middle according to the channel */
-	if(channel->ch_num == 0)
-		temp2 = temp[0];
-	else
-		temp2 = temp[1];
+	/** Get sample according to the channel */
+	temp2 = temp[channel->ch_num];
 	temp2 = no_os_sign_extend32(temp2, REAL_BITS - 1);
-
-	ad463x_enter_config_mode(iio_desc->ad463x_desc);
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &temp2);
 }
@@ -217,7 +212,7 @@ static int ad463x_iio_read_scale(void *dev, char *buf, uint32_t len,
 	}
 
 	vals[0] = (ad463x_dev->vref * 2) / 1000;
-	vals[1] = ad463x_dev->capture_data_width;
+	vals[1] = ad463x_dev->real_bits_precision;
 	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, vals);
 }
 
@@ -285,7 +280,7 @@ static int ad463x_iio_read_scale_avail(void *dev, char *buf,
 	}
 
 	vals[0] = (ad463x_dev->vref * 2) / 1000;
-	vals[1] = ad463x_dev->capture_data_width;
+	vals[1] = ad463x_dev->real_bits_precision;
 	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, vals);
 }
 
@@ -308,7 +303,7 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 	if (!desc)
 		return -EINVAL;
 
-	data = (uint32_t *)no_os_calloc(total_samples * 2, sizeof(*data));
+	data = (uint32_t *)no_os_calloc(total_samples, sizeof(*data));
 	if (!data)
 		return -ENOMEM;
 
@@ -318,7 +313,7 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 		goto error_comm;
 
 	/** Read samples */
-	ret = ad463x_read_data(desc->ad463x_desc, data, total_samples * 2);
+	ret = ad463x_read_data(desc->ad463x_desc, data, nb_samples);
 	if (ret != 0)
 		goto error_comm;
 
@@ -328,7 +323,6 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 			buff[j++] = data[i];
 		}
 
-	ad463x_enter_config_mode(desc->ad463x_desc);
 	free(data);
 	return nb_samples;
 
