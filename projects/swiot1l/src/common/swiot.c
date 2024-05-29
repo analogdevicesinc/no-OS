@@ -707,11 +707,8 @@ int swiot_iio_remove(struct swiot_iio_desc *swiot_desc)
 	no_os_gpio_remove(swiot_desc->psu_gpio);
 	no_os_gpio_remove(swiot_desc->identify_gpio);
 
-	for (i = 0; i < SWIOT_CHANNELS; i++) {
-		swiot_config[i].device = SWIOT_AD74413R;
-		swiot_config[i].function = AD74413R_HIGH_Z;
+	for (i = 0; i < SWIOT_CHANNELS; i++)
 		swiot_config[i].enabled = false;
-	}
 
 	free(swiot_desc);
 
