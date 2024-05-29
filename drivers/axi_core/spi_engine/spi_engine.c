@@ -56,6 +56,7 @@ significant delays */
 #include "no_os_axi_io.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 #include "spi_engine.h"
 
 /**
@@ -172,7 +173,7 @@ static uint8_t spi_get_words_number(struct spi_engine_desc *desc,
 	uint8_t xfer_word_len;
 	uint8_t words_number;
 
-	xfer_word_len = desc->data_width / 8;
+	xfer_word_len = NO_OS_DIV_ROUND_UP(desc->data_width, 8);
 	words_number = bytes_number / xfer_word_len;
 
 	if ((bytes_number % xfer_word_len) != 0)
@@ -191,7 +192,7 @@ static uint8_t spi_get_word_lenght(struct spi_engine_desc *desc)
 {
 	uint8_t word_lenght;
 
-	word_lenght = desc->data_width / 8;
+	word_lenght = NO_OS_DIV_ROUND_UP(desc->data_width, 8);
 
 	return word_lenght;
 }
