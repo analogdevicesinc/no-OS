@@ -474,13 +474,21 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 
 	for (i = 0; i < len; i++) {
 		tx_ch_xfer[i].src = msgs[i].tx_buff;
+#ifndef SPI_SR_TXE
+		tx_ch_xfer[i].dst = &(SPIx->TXDR);
+#else
 		tx_ch_xfer[i].dst = &(SPIx->DR);
+#endif
 		tx_ch_xfer[i].xfer_type = MEM_TO_DEV;
 		tx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
 		tx_ch_xfer[i].length = msgs[i].bytes_number;
 
 		rx_ch_xfer[i].dst = msgs[i].rx_buff;
+#ifndef SPI_SR_RXNE
+		rx_ch_xfer[i].src = &(SPIx->RXDR);
+#else
 		rx_ch_xfer[i].src = &(SPIx->DR);
+#endif
 		rx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
 		rx_ch_xfer[i].xfer_type = DEV_TO_MEM;
 		rx_ch_xfer[i].length = msgs[i].bytes_number;
@@ -512,10 +520,18 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 		goto abort_transfer;
 
 	if (tx_ch)
+#if defined (STM32H5)
+		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
+#else
 		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
+#endif
 
 	if (rx_ch)
+#if defined (STM32H5)
+		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
+#else
 		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
+#endif
 
 #ifdef HAL_TIM_MODULE_ENABLED
 	if (sdesc->pwm_desc) {
