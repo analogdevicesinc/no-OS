@@ -2297,6 +2297,7 @@ int ade9113_get_wav(struct ade9113_dev *dev, enum ade9113_wav_e selection,
  */
 int ade9113_drdy_int_enable(struct ade9113_dev *dev)
 {
+	no_os_irq_set_priority(dev->irq_ctrl, dev->gpio_rdy->number, 5);
 	return no_os_irq_enable(dev->irq_ctrl, dev->gpio_rdy->number);
 }
 

@@ -158,10 +158,6 @@ int state_machine()
 	no_os_mdelay(5);
 	pr_debug("\nSTOUT app FIRMWARE VERSION: %s \n\n",FIRMWARE_VERSION);
 
-#if BT_ENABLED
-	cordio_init();
-#endif
-
 	/* Allocate mempory for application structure */
 	stout = (struct stout *)no_os_calloc(1, sizeof(*stout));
 	if (!stout)
@@ -290,12 +286,19 @@ int state_machine()
 	stout->current_state = STATE_POWER_ON;
 	stout->err_status = INTF_NO_ERR;
 	event = S_M_INITIAL_CHECK_DONE;
+
+	ade9113_drdy_int_disable(stout->ade9113);
+	cordio_init();
+	ade9113_drdy_int_enable(stout->ade9113);
+
 	/*******************************************************************************************************/
 	/************The main loop of the State Machine (runs continuously if no error detected)****************/
 	/*******************************************************************************************************/
 	while(1) {
 #ifdef BT_ENABLED
+		ade9113_drdy_int_disable(stout->ade9113);
 		cordio_step();
+		ade9113_drdy_int_enable(stout->ade9113);
 #endif
 		// Update PWM LOW and PWM HIGH values each time a new conversion takes place
 		if (get_pwm_low_flag_state()) {
