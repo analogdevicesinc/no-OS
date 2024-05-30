@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Parameters Definitions.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   main.c
+ *   @brief  Main file for xilinx platform of ad463x_fmcz project.
+ *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,31 +36,40 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define AD463x_DMA_BASEADDR             XPAR_AXI_AD463X_DMA_BASEADDR
-#define AD463x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD463X_SPI_AD463X_AXI_REGMAP_BASEADDR
-#define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
-#define AXI_PWMGEN_BASEADDR		XPAR_CNV_GENERATOR_BASEADDR
-#define AD463x_SPI_CS                   0
-#define GPIO_OFFSET			54
-#define GPIO_RESETN_1			GPIO_OFFSET + 32
-#define GPIO_PGIA_0			GPIO_OFFSET + 33
-#define GPIO_PGIA_1			GPIO_OFFSET + 34
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
+#elif defined(IIO_EXAMPLE)
+#include "iio_example.h"
+#endif
 
-#define UART_BAUDRATE			115200
-#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				XPAR_XUARTPS_1_INTR
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
+/***************************************************************************//**
+ * @brief Main function execution for xilinx platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -EINVAL;
 
-#endif /* SRC_PARAMETERS_H_ */
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
+#ifdef BASIC_EXAMPLE
+	ret = basic_example_main();
+#elif defined(IIO_EXAMPLE)
+	ret = iio_example_main();
+#else
+#error At least one example has to be selected using y value in Makefile.
+#endif
+	return ret;
+}
