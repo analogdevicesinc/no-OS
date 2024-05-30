@@ -48,7 +48,37 @@
 #include "no_os_init.h"
 #include "no_os_i2c.h"
 
+#define PIN_NO	(25u)
+#define INTERRUPT_PORT (0u)
+
 struct no_os_irq_ctrl_desc *stout_nvic_desc;
+
+/**
+ * @brief callback function
+ * @param context - context variable
+ * @return none
+ */
+static void cb_fn(void *context)
+{
+	printf("Test\n");
+}
+
+struct no_os_gpio_init_param gpio_ip = {
+	.port = INTERRUPT_PORT,
+	.number = PIN_NO,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
+
+struct no_os_gpio_init_param led_ip = {
+	.port = 0,
+	.number = 31,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
+
 
 /***************************************************************************//**
  * @brief Main function execution for Maxim platform.
@@ -78,11 +108,19 @@ int main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(stout_nvic_desc, NVIC_GPIO_IRQ, 1);
+	ret = no_os_irq_set_priority(stout_nvic_desc, GPIO2_IRQn, 1);
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_enable(stout_nvic_desc, NVIC_GPIO_IRQ);
+	ret = no_os_irq_enable(stout_nvic_desc, GPIO2_IRQn);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(stout_nvic_desc, GPIO0_IRQn, 1);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(stout_nvic_desc, GPIO0_IRQn);
 	if (ret)
 		return ret;
 
@@ -95,10 +133,98 @@ int main()
 
 	no_os_uart_stdio(uart_desc);
 
-	// Launch basic example
-	ret = state_machine();
+	// // Launch basic example
+	// ret = state_machine();
+	// if (ret) {
+	// 	no_os_uart_remove(uart_desc);
+	// }
+
+	printf("Testing\n");
+
+	struct no_os_callback_desc p2_cb = {
+		/** Callback to be called when the event occurs. */
+		.callback = cb_fn,
+		/** Parameter to be passed when the callback is called */
+		.ctx = NULL,
+		/** Event that triggers the calling of the callback. */
+		.event = NO_OS_EVT_GPIO,
+		/** Interrupt source peripheral specifier. */
+		.peripheral = NO_OS_GPIO_IRQ,
+		/** Not used in the case of a GPIO IRQ controller */
+		.handle = NULL
+	};
+
+	struct no_os_gpio_desc *pin;
+	struct no_os_gpio_desc *led;
+	struct no_os_irq_ctrl_desc *irq_desc1;
+
+	/* Port 2 pin */
+	ret = no_os_gpio_get(&pin, &gpio_ip);
 	if (ret) {
-		no_os_uart_remove(uart_desc);
+		printf("ERROR\n");
+		return ret;
+	}
+
+		/* Port 2 pin */
+	ret = no_os_gpio_get(&led, &led_ip);
+	if (ret) {
+		printf("ERROR\n");
+		return ret;
+	}
+
+	ret = no_os_gpio_direction_input(pin);
+	if (ret) {
+		printf("ERROR\n");
+		return ret;
+	}
+
+	ret = no_os_gpio_direction_output(led, NO_OS_GPIO_HIGH);
+	if (ret) {
+		printf("ERROR\n");
+		return ret;
+	}
+
+	no_os_mdelay(1000);
+	no_os_gpio_set_value(led, 0);
+	no_os_mdelay(1000);
+	no_os_gpio_set_value(led, 1);
+
+	/* Initialize GPIO IRQ controller in order to be able to enable GPIO IRQ interrupt */
+	struct no_os_irq_init_param irq_gpio_ip = {
+		.irq_ctrl_id = INTERRUPT_PORT,
+		.platform_ops = &max_gpio_irq_ops,
+	};
+
+	ret = no_os_irq_ctrl_init(&irq_desc1, &irq_gpio_ip);
+	if (ret)
+		return ret;
+
+	/* RCDAC interrupt */
+	ret = no_os_irq_register_callback(irq_desc1, PIN_NO,  &p2_cb);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_trigger_level_set(irq_desc1, PIN_NO,
+					  NO_OS_IRQ_EDGE_FALLING);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(irq_desc1, PIN_NO, 1);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(irq_desc1, PIN_NO);
+	if (ret)
+		return ret;
+
+	uint8_t value = 0;
+
+	while(1) {
+		no_os_gpio_get_value(pin, &value);
+		if (value)
+			no_os_gpio_set_value(led, 0);
+		else
+			no_os_gpio_set_value(led, 1);
 	}
 
 	return ret;
