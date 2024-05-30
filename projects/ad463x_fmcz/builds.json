@@ -1,12 +1,16 @@
 {
-      "xilinx": {
-        "uart": {
-              "flags" : "",
-              "hardware" : ["ad4630_fmc_zed"]
-        },
-        "iio": {
-            "flags" : "IIOD=y",
-            "hardware" : ["ad4630_fmc_zed"]
-          }
-      }
+  "xilinx": {
+    "basic": {
+      "flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n",
+      "hardware": [
+        "ad4630_fmc_zed"
+      ]
+    },
+    "iio": {
+      "flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y",
+      "hardware": [
+        "ad4630_fmc_zed"
+      ]
+    }
+  }
 }
