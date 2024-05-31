@@ -562,6 +562,13 @@ int main(void)
 		tx_dac_init.rate = 1;
 		rx_adc_init.num_channels = 2;
 		rx_adc_init.num_slave_channels = 0;
+	} else {
+		if (!default_init_param.two_rx_two_tx_mode_enable) {
+			tx_dac_init.num_channels = 2;
+			tx_dac_init.rate = 1;
+			rx_adc_init.num_channels = 2;
+			rx_adc_init.num_slave_channels = 0;
+		}
 	}
 	if (AD9363A_DEVICE)
 		default_init_param.dev_sel = ID_AD9363A;
