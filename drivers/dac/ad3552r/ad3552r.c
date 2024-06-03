@@ -1418,6 +1418,18 @@ int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask,
 	return 0;
 }
 
+int32_t ad3552r_set_asynchronous(struct ad3552r_desc *desc, uint8_t enable)
+{
+	int err;
+
+	err = no_os_gpio_set_value(desc->ldac,
+				   enable ? NO_OS_GPIO_LOW : NO_OS_GPIO_HIGH);
+	if (NO_OS_IS_ERR_VALUE(err))
+		return err;
+
+	return 0;
+}
+
 static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 		uint16_t *data,
 		enum ad3552r_write_mode mode)
