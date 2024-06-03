@@ -508,6 +508,8 @@ int32_t ad3552r_get_offset(struct ad3552r_desc *desc, uint8_t ch,
 int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask,
 			     uint8_t is_fast);
 
+int32_t ad3552r_set_asynchronous(struct ad3552r_desc *desc, uint8_t enable);
+
 /* Send one sample at a time, one after an other or at a LDAC_period interval.
  * If LDAC pin set, send LDAC signal. Otherwise software LDAC is used. */
 int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
