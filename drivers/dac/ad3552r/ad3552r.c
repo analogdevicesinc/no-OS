@@ -1470,7 +1470,7 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 {
 	uint32_t i;
 	int32_t err;
-	uint8_t addr, is_input, ch;
+	uint8_t addr, is_dac, ch;
 
 	if (ch_mask == AD3552R_MASK_ALL_CH &&
 	    desc->ch_data[0].fast_en != desc->ch_data[1].fast_en)
@@ -1488,8 +1488,8 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 	}
 
 	ch = no_os_find_first_set_bit(ch_mask);
-	is_input = (mode == AD3552R_WRITE_DAC_REGS);
-	addr = ad3552r_get_code_reg_addr(ch, is_input, desc->ch_data[ch].fast_en);
+	is_dac = (mode == AD3552R_WRITE_DAC_REGS);
+	addr = ad3552r_get_code_reg_addr(ch, is_dac, desc->ch_data[ch].fast_en);
 	for (i = 0; i < samples; ++i) {
 		err = ad3552r_write_reg(desc, addr, data[i]);
 		if (NO_OS_IS_ERR_VALUE(err))
