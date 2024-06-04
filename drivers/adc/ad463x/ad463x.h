@@ -43,8 +43,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include "spi_engine.h"
 #include "no_os_util.h"
+#include "spi_engine.h"
 #include "clk_axi_clkgen.h"
 #include "no_os_pwm.h"
 #include "no_os_gpio.h"
@@ -201,6 +201,7 @@ struct ad463x_init_param {
 	struct no_os_spi_init_param *spi_init;
 	/** GPIO */
 	struct no_os_gpio_init_param *gpio_resetn;
+	struct no_os_gpio_init_param *gpio_cnv;
 	struct no_os_gpio_init_param *gpio_pgia_a0;
 	struct no_os_gpio_init_param *gpio_pgia_a1;
 	/** PWM */
@@ -227,6 +228,10 @@ struct ad463x_init_param {
 	int32_t vref;
 	/** Output Mode */
 	uint8_t output_mode;
+	/** enable spi dma */
+	bool spi_dma_enable;
+	/** enable spi engine offload */
+	bool offload_enable;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -240,6 +245,7 @@ struct ad463x_dev {
 	struct no_os_spi_desc *spi_desc;
 	/** GPIO */
 	struct no_os_gpio_desc *gpio_resetn;
+	struct no_os_gpio_desc *gpio_cnv;
 	struct no_os_gpio_desc *gpio_pgia_a0;
 	struct no_os_gpio_desc *gpio_pgia_a1;
 	/** PWM */
@@ -276,6 +282,10 @@ struct ad463x_dev {
 	uint8_t real_bits_precision;
 	/** pgia availability */
 	bool has_pgia;
+	/** enable spi dma */
+	bool spi_dma_enable;
+	/** enable spi engine offload */
+	bool offload_enable;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
