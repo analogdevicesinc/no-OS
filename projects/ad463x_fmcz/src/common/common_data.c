@@ -51,6 +51,7 @@
 struct no_os_uart_init_param ad463x_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
 	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
@@ -59,6 +60,15 @@ struct no_os_uart_init_param ad463x_uart_ip = {
 	.platform_ops = UART_OPS
 };
 
+#if defined(USE_STANDARD_SPI)
+struct no_os_gpio_init_param ad463x_cnv = {
+	.number = GPIO_CNV,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.port = GPIO_CNV_PORT,
+};
+
+#else
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 	.offload_config = OFFLOAD_RX_EN,
 	.rx_dma_baseaddr = DMA_BASEADDR,
@@ -77,11 +87,13 @@ struct no_os_pwm_init_param trigger_pwm_init = {
 	.platform_ops = PWM_OPS,
 	.extra = PWM_EXTRA,
 };
+#endif
 
 struct no_os_gpio_init_param ad463x_resetn = {
 	.number = GPIO_RESETN_1,
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA,
+	.port = GPIO_RESETN_PORT,
 };
 
 #if ADAQ4224_DEV
@@ -97,10 +109,10 @@ struct no_os_gpio_init_param ad463x_pgia_a1 = {
 	.extra = GPIO_EXTRA
 };
 #endif
-
 struct no_os_spi_init_param spi_init = {
+	.device_id = SPI_DEVICE_ID,
 	.chip_select = SPI_CS,
-	.max_speed_hz = 80000000,
+	.max_speed_hz = SPI_BAUDRATE,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
 	.extra = (void*)SPI_EXTRA,
@@ -108,15 +120,20 @@ struct no_os_spi_init_param spi_init = {
 
 struct ad463x_init_param ad463x_init_param = {
 	.spi_init = &spi_init,
+#if defined(USE_STANDARD_SPI)
+	.gpio_cnv = &ad463x_cnv,
+	.lane_mode = AD463X_SHARED_TWO_CH,
+#else
 	.offload_init_param = &spi_engine_offload_init_param,
 	.trigger_pwm_init = &trigger_pwm_init,
-	.gpio_resetn = &ad463x_resetn,
-	.clkgen_init = &clkgen_init,
 	.axi_clkgen_rate = 160000000,
+	.clkgen_init = &clkgen_init,
+	.lane_mode = AD463X_ONE_LANE_PER_CH,
+#endif
+	.gpio_resetn = &ad463x_resetn,
 	.reg_access_speed = 20000000,
 	.reg_data_width = 8,
 	.output_mode = AD463X_24_DIFF,
-	.lane_mode = AD463X_ONE_LANE_PER_CH,
 	.clock_mode = AD463X_SPI_COMPATIBLE_MODE,
 	.data_rate = AD463X_SDR_MODE,
 #if ADAQ4224_DEV
