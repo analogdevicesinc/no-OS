@@ -279,7 +279,7 @@ endif
 $(PLATFORM)_post_build:
 	$(MAKE) --no-print-directory create_boot_bin
 
-reset: xilinx_clean_all
+$(PLATFORM)_reset: xilinx_clean_all
 
 xilinx_clean_all:
 	$(call remove_dir,.Xil) $(HIDE)

@@ -464,6 +464,8 @@ $(PLATFORM)_run:all
 	openocd -f interface/jlink.cfg -c "transport select swd" -c "adapter_khz 6000" \
 	-f target/rp2040.cfg -c "program $(BINARY) reset exit"
 
+$(PLATFORM)_reset:
+
 .PHONY:debug
 debug: all $(BINARY).gdb start_openocd
 	$(GDB) --command=$(BINARY).gdb
