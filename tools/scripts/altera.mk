@@ -90,3 +90,5 @@ $(PLATFORM)_post_build:
 	$(WSL) nios2-elf-insert $(BINARY) $(STAMP)
 	-$(call copy_file,sw.map,$(TEMP_DIR))
 	$(call remove_file, sw.map)
+
+$(PLATFORM)_reset:

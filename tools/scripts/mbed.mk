@@ -102,3 +102,5 @@ $(PROJECT_BIN_FILE):$(BINARY)
 	$(call print,Done $(PROJECT_BIN_FILE))
 
 $(PLATFORM)_post_build: $(PROJECT_BIN_FILE)
+
+$(PLATFORM)_reset:
