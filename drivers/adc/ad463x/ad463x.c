@@ -271,14 +271,14 @@ int32_t ad463x_exit_reg_cfg_mode(struct ad463x_dev *dev)
 				   AD463X_EXIT_CFG_MODE);
 	if (ret != 0)
 		return ret;
-
+#if !defined(USE_STANDARD_SPI)
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
 	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
-
+#endif
 	return ret;
 }
 
@@ -370,11 +370,19 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 
 	no_os_mdelay(100);
 
+	ret = no_os_gpio_get_optional(&dev->gpio_cnv, init_param->gpio_cnv);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_gpio_direction_output(dev->gpio_cnv, NO_OS_GPIO_LOW);
+	if (ret != 0)
+		goto error_gpio_reset;
+
 	/** Configure PGIA pins, if available */
 	if (dev->has_pgia) {
 		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a0,init_param->gpio_pgia_a0);
 		if (ret != 0)
-			goto error_gpio_reset;
+			goto error_gpio_cnv;
 		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a1, init_param->gpio_pgia_a1);
 		if (ret != 0)
 			goto error_gpio_pgia0;
@@ -393,6 +401,8 @@ error_gpio_pgia1:
 	no_os_gpio_remove(dev->gpio_pgia_a1);
 error_gpio_pgia0:
 	no_os_gpio_remove(dev->gpio_pgia_a0);
+error_gpio_cnv:
+	no_os_gpio_remove(dev->gpio_cnv);
 error_gpio_reset:
 	no_os_gpio_remove(dev->gpio_resetn);
 
@@ -407,6 +417,7 @@ error_gpio_reset:
  * @param [in] samples - sample number.
  * @return 0 in case of success, -1 otherwise.
  */
+#if !defined(USE_STANDARD_SPI)
 int32_t ad463x_read_data(struct ad463x_dev *dev,
 			 uint32_t *buf,
 			 uint16_t samples)
@@ -446,7 +457,120 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 
 	return ret;
 }
+#else
+/**
+ * @brief Parallel Bits Extract
+ * @param in0 - fist byte of interleaved data
+ * @param in1 - second byte of interleaved data
+ * @param out0 - unscrambled byte 0
+ * @param out1 - unscrambled byte 1
+ * @return none
+ */
+static void ad463x_pext(unsigned char in0, unsigned char in1,
+			unsigned char *out0, unsigned char *out1)
+{
+	uint8_t high0, high1, low0, low1;
 
+	high0 = in0;
+	low1 = in1;
+	high1 = high0 << 1;
+	low0 = low1 >> 1;
+
+	high0 &= 0xAA;
+	high1 &= 0xAA;
+	low0 &= 0x55;
+	low1 &= 0x55;
+
+	high0 = (high0 | high0 << 001) & 0xCC;
+	high0 = (high0 | high0 << 002) & 0xF0;
+
+	high1 = (high1 | high1 << 001) & 0xCC;
+	high1 = (high1 | high1 << 002) & 0xF0;
+
+	low0 = (low0 | low0 >> 001) & 0x33;
+	low0 = (low0 | low0 >> 002) & 0x0F;
+
+	low1 = (low1 | low1 >> 001) & 0x33;
+	low1 = (low1 | low1 >> 002) & 0x0F;
+
+	*out0 = high0 | low0;
+	*out1 = high1 | low1;
+}
+
+/**
+ * @brief read a single sample of data
+ * @param dev - ad469x_dev device handler.
+ * @param ch0_out - pointer to store channel 0 data
+ * @param ch1_out - pointer to store channel 1 data
+ * @return 0 in case of success, negative value otherwise.
+ */
+static int32_t ad463x_read_single_sample(struct ad463x_dev *dev,
+		uint32_t *ch0_out,  uint32_t *ch1_out)
+{
+	uint8_t data[8] = {0};
+	uint8_t ch0[4];
+	uint8_t ch1[4];
+	int ret;
+	int shift;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = no_os_gpio_set_value(dev->gpio_cnv, NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_set_value(dev->gpio_cnv, NO_OS_GPIO_LOW);
+	if (ret)
+		return ret;
+
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, dev->read_bytes_no);
+	if (ret)
+		return ret;
+
+	ad463x_pext(data[0], data[1], &ch0[0], &ch1[0]);
+	ad463x_pext(data[2], data[3], &ch0[1], &ch1[1]);
+	ad463x_pext(data[4], data[5], &ch0[2], &ch1[2]);
+	ad463x_pext(data[6], data[7], &ch0[3], &ch1[3]);
+
+	*ch0_out = ch0[3] | ch0[2] << 8 | ch0[1] << 16 | ch0[0] << 24;
+	*ch1_out = ch1[3] | ch1[2] << 8 | ch1[1] << 16 | ch1[0] << 24;
+
+	shift = 32 - dev->real_bits_precision;
+	if (shift) {
+		*ch1_out >>= shift;
+		*ch0_out >>= shift;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Read from device.
+ *        Enter register mode to read/write registers
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [out] buf - data buffer.
+ * @param [in] samples - sample number.
+ * @return 0 in case of success, negative otherwise.
+ */
+int32_t ad463x_read_data(struct ad463x_dev *dev,
+			 uint32_t *buf,
+			 uint16_t samples)
+{
+	uint32_t *p_buf;
+	int ret, i;
+
+	if (!dev)
+		return -EINVAL;
+
+	for (i = 0, p_buf = buf; i < samples; i++, p_buf+=2) {
+		ret = ad463x_read_single_sample(dev, p_buf, p_buf +1);
+		if (ret)
+			return ret;
+	}
+	return 0;
+}
+#endif
 /**
  * @brief Fill Scales table based on the available PGIA gains.
  * @param dev - Pointer to the device handler.
@@ -507,7 +631,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	ret = ad463x_init_gpio(dev, init_param);
 	if (ret != 0)
 		goto error_dev;
-
+#if !defined(USE_STANDARD_SPI)
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret != 0) {
 		pr_err("error: %s: axi_clkgen_init() failed\n",
@@ -521,14 +645,16 @@ int32_t ad463x_init(struct ad463x_dev **device,
 		       init_param->clkgen_init->name);
 		goto error_clkgen;
 	}
-
+#endif
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != 0)
 		goto error_clkgen;
 
 	dev->vref = init_param->vref;
 	dev->pgia_idx = 0;
+#if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
+#endif
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->reg_data_width = init_param->reg_data_width;
 	dev->output_mode = init_param->output_mode;
@@ -598,11 +724,14 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	} else {
 		dev->has_pgia = false;
 	}
+
+#if !defined(USE_STANDARD_SPI)
 	ret = spi_engine_set_transfer_width(dev->spi_desc, dev->reg_data_width);
 	if (ret != 0)
 		goto error_spi;
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#endif
 	ret = ad463x_spi_reg_read(dev, AD463X_CONFIG_TIMING, &data);
 	if (ret != 0)
 		goto error_spi;
@@ -639,9 +768,11 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	if (ret != 0)
 		return ret;
 
+#if !defined(USE_STANDARD_SPI)
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != 0)
 		goto error_spi;
+#endif
 
 	*device = dev;
 
@@ -650,9 +781,12 @@ int32_t ad463x_init(struct ad463x_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_clkgen:
+#if !defined(USE_STANDARD_SPI)
 	axi_clkgen_remove(dev->clkgen);
+#endif
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
+	no_os_gpio_remove(dev->gpio_cnv);
 	no_os_gpio_remove(dev->gpio_pgia_a0);
 	no_os_gpio_remove(dev->gpio_pgia_a1);
 error_dev:
@@ -734,16 +868,20 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 
 	if (!dev)
 		return -1;
-
+#if !defined(USE_STANDARD_SPI)
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
 	if (ret != 0)
 		return ret;
-
+#endif
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio_resetn);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_gpio_remove(dev->gpio_cnv);
 	if (ret != 0)
 		return ret;
 
@@ -754,11 +892,11 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 	ret = no_os_gpio_remove(dev->gpio_pgia_a1);
 	if (ret != 0)
 		return ret;
-
+#if !defined(USE_STANDARD_SPI)
 	ret = axi_clkgen_remove(dev->clkgen);
 	if (ret != 0)
 		return ret;
-
+#endif
 	no_os_free(dev);
 
 	return ret;
