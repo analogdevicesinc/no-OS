@@ -244,3 +244,4 @@ debug: all $(BINARY).openocd $(BINARY).gdb
 	$(GDB) --command=$(BINARY).gdb
 
 $(PLATFORM)_reset:
+	$(call remove_dir,$(VSCODE_CFG_DIR))
