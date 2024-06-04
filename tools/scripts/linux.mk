@@ -21,5 +21,3 @@ linux_run: $(BINARY)
 	$(BINARY)
 
 $(PLATFORM)_reset:
-
-$(PLATFORM)_post_build:

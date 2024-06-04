@@ -157,6 +157,8 @@ $(PLATFORM)_sdkclean: clean
 $(PLATFORM)_reset:
 	$(call remove_dir,$(VSCODE_CFG_DIR))
 
+$(PLATFORM)_reset:
+
 $(PLATFORM)_sdkbuild: build
 
 .PHONY: $(BINARY).gdb
