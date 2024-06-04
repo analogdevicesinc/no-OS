@@ -153,9 +153,9 @@ $(PLATFORM)_sdkopen:
 	code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
-	$(call remove_dir,$(VSCODE_CFG_DIR))
 
 $(PLATFORM)_reset:
+	$(call remove_dir,$(VSCODE_CFG_DIR))
 
 $(PLATFORM)_sdkbuild: build
 
