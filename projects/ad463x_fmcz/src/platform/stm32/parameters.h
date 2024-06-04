@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by ad463x_fmcz project.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by ad463x_fmcz
+ *           project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -37,20 +37,59 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef XILINX_PLATFORM
-#include "xilinx/parameters.h"
-#elif defined STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
+#include "stm32_spi.h"
+#include "stm32_gpio.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+extern UART_HandleTypeDef huart5;
+#define SAMPLES_PER_CHANNEL_PLATFORM 2000
+#define MAX_SIZE_BASE_ADDR     (SAMPLES_PER_CHANNEL_PLATFORM * 2 * sizeof(uint32_t))
 
 #ifdef IIO_SUPPORT
-#include "iio_app.h"
+#define INTC_DEVICE_ID 0
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define UART_IRQ_ID		UART5_IRQn
+
+#define UART_DEVICE_ID		5
+#define UART_BAUDRATE		115200
+#define UART_EXTRA		&ad463x_uart_extra_ip
+#define UART_OPS		&stm32_uart_ops
+
+#define SPI_DEVICE_ID		1
+#define SPI_BAUDRATE		10000000
+#define SPI_CS			15
+#define SPI_CS_PORT		GPIO_PORT_A
+#define SPI_OPS			&stm32_spi_ops
+#define SPI_EXTRA		&ad463x_spi_extra_ip
+
+#define GPIO_OPS		&stm32_gpio_ops
+#define GPIO_EXTRA		NULL
+
+#define GPIO_RESETN_1		11
+#define GPIO_RESETN_PORT	GPIO_PORT_A
+
+#define GPIO_PORT_G		6
+#define GPIO_CNV		10
+#define GPIO_CNV_PORT		GPIO_PORT_A
+
+#define DCACHE_INVALIDATE	NULL
+#define GPIO_PORT_A		0
+
+extern struct stm32_uart_init_param ad463x_uart_extra_ip;
+extern struct stm32_spi_init_param ad463x_spi_extra_ip;
+
+#endif /* __PARAMETERS_H__ */
