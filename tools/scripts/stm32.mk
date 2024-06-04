@@ -244,3 +244,4 @@ debug: all $(BINARY).openocd $(BINARY).gdb
 		-c "init" &);
 	$(GDB) --command=$(BINARY).gdb
 
+$(PLATFORM)_reset:

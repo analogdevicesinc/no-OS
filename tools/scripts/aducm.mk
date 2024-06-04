@@ -273,6 +273,8 @@ copy_pinmux:
 
 update: copy_pinmux
 
+$(PLATFORM)_reset:
+
 PHONY += clean_project
 clean_project:
 	$(call remove_dir,$(PROJECT_BUILD)/Release) $(HIDE)

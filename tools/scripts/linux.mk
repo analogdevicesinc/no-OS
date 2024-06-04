@@ -19,3 +19,5 @@ $(PLATFORM)_sdkopen:
 
 linux_run: $(BINARY)
 	$(BINARY)
+
+$(PLATFORM)_reset:
