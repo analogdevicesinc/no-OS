@@ -620,6 +620,9 @@ int state_machine()
 				// Debug message
 				if (stout->current_state != stout->previous_state) {
 					pr_debug("STATE C\n");
+					current_set = current_value_limit;
+					// Set the PWM value based on Iout value
+					pilot_pwm_timer_set_duty_cycle(stout, current_set);
 				}
 				// If overtemperature detected limit the current to 10A else the current is 16A
 				if (S_M_OVER_TEMPERATURE_1 == event) {
@@ -629,9 +632,7 @@ int state_machine()
 					current_value_limit = PWM_DUTY_16A;
 					//pr_debug("State C 16A\n");
 				}
-				current_set = current_value_limit;
-				// Set the PWM value based on Iout value
-				pilot_pwm_timer_set_duty_cycle(stout, current_set);
+
 				// Check the diode before charging
 				if (S_M_DIODE_ERR_CHECK == event) {
 					// Wait for 20 ms
@@ -682,9 +683,11 @@ int state_machine()
 			// In this state the EVSE is ready, the EV is connected and a charging session with ventilation required
 			// was initiated by the EV
 			case STATE_D:
-				// Set the CP PWM duty cycle based on the Iout limit
-				current_set = current_value_limit;
-				pilot_pwm_timer_set_duty_cycle(stout, current_set);
+				if (stout->current_state != stout->previous_state) {
+					// Set the CP PWM duty cycle based on the Iout limit
+					current_set = current_value_limit;
+					pilot_pwm_timer_set_duty_cycle(stout, current_set);
+				}
 				// Check the diode before charging
 				if (S_M_DIODE_ERR_CHECK == event) {
 					// Wait for 20 ms
