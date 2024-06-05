@@ -212,9 +212,6 @@
 #define ADE9113_2_CHANNEL_ADE9112		1U
 #define ADE9113_NONISOLATED_ADE9103		3U
 
-/* Revision Value of ISO and NONISO Silicon */
-#define ADE9113_SILICON_REVISION		0x12
-
 /* Nominal reference voltage */
 #define ADE9113_VREF				(883883)
 
