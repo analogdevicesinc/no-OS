@@ -106,14 +106,10 @@ int state_machine()
 	uint32_t rcd_test_s = current_time.s;
 	// The time interval in which the print values is disabled
 	uint32_t print_values_s = current_time.s;
-	// The time interval in which the print charging is disabled
-	uint32_t print_charging_s = current_time.s;
 	// The time passed since the last RCD test
 	uint32_t s_elapsed_since_rcd_test = 0;
 	// The time passed since the last print values
 	uint32_t s_elapsed_since_print_values = 0;
-	// The time passed since the last print charging
-	uint32_t s_elapsed_since_print_charging_state = 0;
 	// Time when values were interpreted
 	uint32_t recalc_time_us = current_time.us;
 	// Time passed from last values update
@@ -328,12 +324,6 @@ int state_machine()
 			// If time elapsed larger than PRINT_VALUES_TIME seconds, reenable print
 			if ((PRINT_VALUES_TIME < s_elapsed_since_print_values) && (0 == print_values))
 				print_values = 1;
-			// Compute time elapsed since last print values
-			s_elapsed_since_print_charging_state = current_time.s - print_charging_s;
-			// If time elapsed larger than PRINT_VALUES_TIME seconds, reenable print
-			if ((PRINT_CHARGING_TIME < s_elapsed_since_print_charging_state)
-			    && (0 == print_charging))
-				print_charging = 1;
 
 			reset_pwm_low_flag_state();
 		}
@@ -625,18 +615,28 @@ int state_machine()
 			case STATE_C:
 				// Debug message
 				if (stout->current_state != stout->previous_state) {
-					pr_debug("STATE C\n");
 					current_set = current_value_limit;
 					// Set the PWM value based on Iout value
 					pilot_pwm_timer_set_duty_cycle(stout, current_set);
+					print_charging = 1;
 				}
 				// If overtemperature detected limit the current to 10A else the current is 16A
 				if (S_M_OVER_TEMPERATURE_1 == event) {
 					current_value_limit = PWM_DUTY_10A;
-					//pr_debug("State C LIMIT CURRENT 10A\n");
+					if (1 == print_charging || current_set != current_value_limit) {
+						pilot_pwm_timer_set_duty_cycle(stout, current_value_limit);
+						current_set = current_value_limit;
+						pr_debug("STATE C LIMIT CURRENT 10A\n");
+						print_charging = 0;
+					}
 				} else {
 					current_value_limit = PWM_DUTY_16A;
-					//pr_debug("State C 16A\n");
+					if (1 == print_charging || current_set != current_value_limit) {
+						pilot_pwm_timer_set_duty_cycle(stout, current_value_limit);
+						current_set = current_value_limit;
+						pr_debug("STATE C 16A\n");
+						print_charging = 0;
+					}
 				}
 
 				// Check the diode before charging
@@ -664,20 +664,10 @@ int state_machine()
 				} else if ((S_M_CHARGING == event) && (LED_BLINKING_16A <= cnt_disp)) {
 					// The LED will blink with a higher frequency if Iout is 16A and with a lower one if Iout is 10A
 					interface_disp(stout);
-					if (1 == print_charging) {
-						pr_debug("State C 16A\n");
-						print_charging_s = current_time.s;
-						print_charging = 0;
-					}
 					cnt_disp = 0;
 				} else if ((S_M_OVER_TEMPERATURE_1 == event)
 					   && (LED_BLINKING_10A <= cnt_disp)) {
 					interface_disp(stout);
-					if (1 == print_charging) {
-						pr_debug("State C LIMIT CURRENT 10A\n");
-						print_charging_s = current_time.s;
-						print_charging = 0;
-					}
 					cnt_disp = 0;
 				}
 				// Increment the counter used for LED blinking
@@ -690,6 +680,7 @@ int state_machine()
 			// was initiated by the EV
 			case STATE_D:
 				if (stout->current_state != stout->previous_state) {
+					pr_debug("State D 10A \n");
 					// Set the CP PWM duty cycle based on the Iout limit
 					current_set = current_value_limit;
 					pilot_pwm_timer_set_duty_cycle(stout, current_set);
@@ -718,11 +709,6 @@ int state_machine()
 					cnt_disp = 0;
 				} else if ((S_M_CHARGING_D == event) && (LED_BLINKING_10A <= cnt_disp)) {
 					interface_disp(stout);
-					if (1 == print_charging) {
-						pr_debug("State D charging with 10A \n");
-						print_charging_s = current_time.s;
-						print_charging = 0;
-					}
 					cnt_disp = 0;
 				}
 				// Increment the counter used for LED blinking
