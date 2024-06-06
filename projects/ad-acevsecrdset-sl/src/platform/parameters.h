@@ -142,8 +142,6 @@
 #define RCD_TIME_REPEAT_INTERVAL        (10u)
 // Print values disable interval in seconds
 #define PRINT_VALUES_TIME               (4u)
-// Print charging disable interval in seconds
-#define PRINT_CHARGING_TIME             (3u)
 // The time rate used to compute Vin and Iout (multiple of 20ms)
 #define COMPUTE_VALUES_INTERVAL         (5u)
 // The time rate used to compute Vrelay (multiple of COMPUTE_VALUES_INTERVAL)
