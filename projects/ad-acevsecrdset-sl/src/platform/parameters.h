@@ -178,7 +178,13 @@
 #define CP_DC_PWM_DELAY                 (2000u)
 // Adjust to new PWM duty time delay
 #define ADJUST_TIME                     (5000l)
-
+#if defined(REV_D)
+//Upstream PE error detection pin
+#define INT_PORT			            (2u)
+#define INT_PIN			                (3u)
+#define INT_PIN_OPTO1                   (5u)
+#define INT_PIN_OPTO2                   (7u)
+#endif
 
 // Extra components
 extern struct max_gpio_init_param ade9113_gpio_extra_ip;

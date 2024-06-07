@@ -97,6 +97,10 @@ enum interface_err_status_e {
 	INTF_OVERCURRENT_ERR,
 	/* Overtemperature fault*/
 	INTF_TEMPERATURE_ERR,
+#if defined(REV_D)
+	/*PE upstream error*/
+	INTF_PE_UPSTREAM_ERR,
+#endif
 	/*PE fault*/
 	INTF_PE_ERROR
 };

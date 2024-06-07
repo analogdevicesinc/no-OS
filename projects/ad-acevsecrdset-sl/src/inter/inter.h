@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for the stout project. This includes general
- * 	     initialization routines for the uC.
+ *   @file   inter.h
+ *   @brief  GPIO interrupt phase interface file.
  *   @author GMois (george.mois@analog.com), REtz (radu.etz@analog.com)
 ********************************************************************************
- * Copyright (c) 2022, 2023 Analog Devices, Inc.
+ * Copyright (c) 2024 Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,82 +36,39 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __INTER_H__
+#define __INTER_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "state_machine.h"
-#include "common_data.h"
-#include "no_os_error.h"
 #include "parameters.h"
-#include "no_os_init.h"
-#include "no_os_i2c.h"
+#include "no_os_irq.h"
 
-struct no_os_irq_ctrl_desc *stout_nvic_desc;
+/******************************************************************************/
+/************************* Functions Declarations *****************************/
+/******************************************************************************/
 
-/***************************************************************************//**
- * @brief Main function execution for Maxim platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret = -EINVAL;
-	// ADE9113 dev SPI init params
-	ade9113_ip.spi_init = &ade9113_spi_ip;
-	// ADE9113 dev DATA_RDY init params
-	ade9113_ip.gpio_rdy = &ade9113_gpio_rdy_ip;
-	// ADE9113 dev RESET init params
-	ade9113_ip.gpio_reset = &ade9113_gpio_reset_ip;
+/*! Get GPIO flag value. */
+int get_gpio_flag_state(void);
 
-	ret = no_os_init();
-	if (ret)
-		return ret;
+/*! Reset GPIO flag value. */
+void reset_gpio_low_flag_state(void);
 
-	/* Initialize NVIC IRQ controller in order to be able to enable GPIO IRQ interrupt */
-	struct no_os_irq_init_param ade9113_nvic_ip = {
-		.platform_ops = &max_irq_ops,
-	};
+/*! Get GPIO opto1 flag value. */
+int get_gpio_opto1_flag_state(void);
 
-	ret = no_os_irq_ctrl_init(&stout_nvic_desc, &ade9113_nvic_ip);
-	if (ret)
-		return ret;
+/*! Reset GPIO opto1 flag value. */
+void reset_gpio_opto1_flag_state(void);
 
-	ret = no_os_irq_set_priority(stout_nvic_desc, NVIC_GPIO_IRQ, 1);
-	if (ret)
-		return ret;
+/*! Get GPIO opto2 flag value. */
+int get_gpio_opto2_flag_state(void);
 
-#if defined(REV_D)
-	ret = no_os_irq_set_priority(stout_nvic_desc, GPIO2_IRQn, 1);
-	if (ret)
-		return ret;
-#endif
+/*! Reset GPIO opto2 flag value. */
+void reset_gpio_opto2_flag_state(void);
 
-	ret = no_os_irq_enable(stout_nvic_desc, NVIC_GPIO_IRQ);
-	if (ret)
-		return ret;
+/*! Initialize interrupt phase */
+int inter_init(struct stout *stout);
 
-#if defined(REV_D)
-	ret = no_os_irq_enable(stout_nvic_desc, GPIO2_IRQn);
-	if (ret)
-		return ret;
-#endif
-
-	/* Initialize UART */
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &ade9113_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	// Launch basic example
-	ret = state_machine();
-	if (ret) {
-		no_os_uart_remove(uart_desc);
-	}
-
-	return ret;
-}
-
+#endif /* __INTER__H__ */

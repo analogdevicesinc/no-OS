@@ -47,6 +47,9 @@
 #include "no_os_util.h"
 #include "self_test.h"
 #include "interface.h"
+#if defined(REV_D)
+#include "inter.h"
+#endif
 #include "supply.h"
 #include "pilot.h"
 #include "relay.h"
@@ -468,6 +471,26 @@ static int self_test_pilot(struct stout *stout)
 	return 0;
 }
 
+#if defined(REV_D)
+/**
+ * @brief Startup test for PE upstream presence
+ * @param stout - state  machine descriptor
+ * @return 0 in case of success, error code otherwise
+ */
+int self_test_pe_upstream(struct stout *stout)
+{
+	pr_debug("TEST upstream PE. opto1 = %d, opto2 = %d \n",
+		 get_gpio_opto_out1_flag_state(), get_gpio_opto_out2_flag_state());
+
+	if (!(get_gpio_opto_out1_flag_state() ^ get_gpio_opto_out2_flag_state()))
+		return INTF_PE_UPSTREAM_ERR;
+
+	pr_debug("PE upstream presence: Passed\n");
+
+	return INTF_NO_ERR;
+}
+#endif
+
 /**
  * @brief Startup test
  * @param stout - state  machine descriptor
@@ -481,6 +504,12 @@ int self_test_startup(struct stout *stout)
 	ret = self_test_supply(stout);
 	if (ret)
 		goto error;
+#if defined(REV_D)
+	//Self test the PE upstream
+	ret = self_test_pe_upstream(stout);
+	if (ret)
+		goto error;
+#endif
 	// Start the CP signal, so we can test it
 	// Test only the high portion of the CP
 	pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);

@@ -155,6 +155,16 @@ struct no_os_gpio_init_param ade9113_gpio_led4_ip = {	//led 4
 	.extra = GPIO_EXTRA,
 };
 
+#if defined(REV_D)
+struct no_os_gpio_init_param gpio_ip = {
+	.port = INT_PORT,
+	.number = INT_PIN,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
+#endif
+
 struct no_os_irq_init_param ade9113_gpio_irq_ip = {
 	.platform_ops = GPIO_IRQ_OPS,
 	.irq_ctrl_id = GPIO_CTRL_IRQ_ID,
