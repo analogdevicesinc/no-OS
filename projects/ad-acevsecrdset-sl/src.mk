@@ -28,6 +28,10 @@ INCS += $(PROJECT)/src/state_machine/state_machine.h
 SRCS += $(PROJECT)/src/pilot/pilot.c
 INCS += $(PROJECT)/src/pilot/pilot.h
 
+# Interrupt phase
+SRCS += $(PROJECT)/src/inter/inter.c
+INCS += $(PROJECT)/src/inter/inter.h
+
 # User interface files
 SRCS += $(PROJECT)/src/interface/interface.c
 INCS += $(PROJECT)/src/interface/interface.h

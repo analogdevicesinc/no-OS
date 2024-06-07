@@ -79,6 +79,7 @@ extern struct no_os_gpio_init_param ade9113_gpio_led2_ip;
 extern struct no_os_gpio_init_param ade9113_gpio_led1_ip;
 extern struct no_os_gpio_init_param ade9113_gpio_led3_ip;
 extern struct no_os_gpio_init_param ade9113_gpio_led4_ip;
+extern struct no_os_gpio_init_param gpio_ip;
 
 // Vin min and max; Current values +15%/-15% from nominal value 230V
 #define VIN_LOW_LIMIT           (195000l)

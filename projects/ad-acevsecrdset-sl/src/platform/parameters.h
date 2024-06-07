@@ -181,6 +181,8 @@
 // Adjust to new PWM duty time delay
 #define ADJUST_TIME                     (5000l)
 
+#define INT_PORT			(2u)
+#define INT_PIN			(5u)
 
 // Extra components
 extern struct max_gpio_init_param ade9113_gpio_extra_ip;

@@ -51,6 +51,7 @@
 #include "ade9113.h"
 #include "supply.h"
 #include "pilot.h"
+#include "inter.h"
 #include "relay.h"
 #include "gpio.h"
 #include "rcd.h"
@@ -192,6 +193,11 @@ int state_machine()
 
 	/* Initialize pilot functions */
 	ret = pilot_init(stout);
+	if (ret)
+		goto error;
+
+	/* Initialize GPIO2_5 interrupt */
+	ret = inter_init(stout);
 	if (ret)
 		goto error;
 
