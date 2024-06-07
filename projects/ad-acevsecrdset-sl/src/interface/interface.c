@@ -166,6 +166,13 @@ int interface_disp(struct stout *stout)
 			interface_toggle_led(stout->gpio_led[1]);
 			interface_led_off(stout->gpio_led[2]);
 			interface_led_off(stout->gpio_led[3]);
+#if defined(REV_D)
+		} else if (stout->err_status == INTF_PE_UPSTREAM_ERR) {
+			interface_led_off(stout->gpio_led[0]);
+			interface_toggle_led(stout->gpio_led[1]);
+			interface_led_off(stout->gpio_led[2]);
+			interface_led_on(stout->gpio_led[3]);
+#endif
 		} else {
 			interface_led_on(stout->gpio_led[0]);
 			interface_led_off(stout->gpio_led[1]);

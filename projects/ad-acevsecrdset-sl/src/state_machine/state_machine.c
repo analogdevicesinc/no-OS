@@ -51,6 +51,9 @@
 #include "ade9113.h"
 #include "supply.h"
 #include "pilot.h"
+#if defined(REV_D)
+#include "inter.h"
+#endif
 #include "relay.h"
 #include "gpio.h"
 #include "rcd.h"
@@ -199,6 +202,13 @@ int state_machine()
 	ret = pilot_init(stout);
 	if (ret)
 		goto error;
+
+#if defined(REV_D)
+	/* Initialize GPIO2_3 interrupt */
+	ret = inter_init(stout);
+	if (ret)
+		goto error;
+#endif
 
 	/* Open relay */
 	ret = relay_open(stout->relay);
@@ -420,6 +430,18 @@ int state_machine()
 			multiple_20ms_adt75 = 0;
 		}
 		// ----------------------------- END READ TEMPERATURE----------------------------------------
+
+#if defined(REV_D)
+		// ------------------------------ PE UPSTREAM ERROR -----------------------------------------
+		// If PE interrupt triggere device has to be UNPLUGGED
+		if (1 <= get_gpio_flag_state()) {
+			// If PE fault go to error
+			stout->previous_state = stout->current_state;
+			stout->current_state = STATE_FAULT;
+			stout->err_status = INTF_PE_UPSTREAM_ERR;
+		}
+		// -------------------------------- END RCD ACTIOM ---------------------------------------
+#endif
 
 		// -------------------------------- RCD ACTIOM ------------------------------------------
 		// If RCD interrupt triggered, and it is not after RELAY OPEN, then device
@@ -862,7 +884,24 @@ int state_machine()
 					pilot_pwm_timer_set_duty_cycle(stout, PWM_OFF);
 					goto error;
 					break;
-				//------------------PE error end-------------
+					//------------------PE error end-------------
+#if defined(REV_D)
+				//------------------PE upstream error--------
+				case INTF_PE_UPSTREAM_ERR:
+					pr_debug("PE UPSTREAM ERROR!\n");
+					// CP value set to DC indicating EVSE not ready
+					pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
+					// Open relay
+					relay_open(stout->relay);
+					reset_relay_status();
+					stop_charging();
+					// Stop the CP signal
+					pilot_pwm_timer_set_duty_cycle(stout, PWM_OFF);
+					goto error;
+					break;
+					//-------------PE upstream error end---------
+#endif
+
 				default:
 					// Insert code for an error state other than the above treated ones
 					break;
