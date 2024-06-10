@@ -164,7 +164,7 @@ static int32_t _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
 static int ad463x_iio_read_raw(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv)
 {
-	uint32_t temp[4];
+	uint32_t temp[2];
 	int ret;
 	int32_t temp2;
 	struct iio_ad463x *iio_desc = dev;
