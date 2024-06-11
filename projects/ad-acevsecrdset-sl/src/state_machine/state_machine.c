@@ -148,9 +148,15 @@ int state_machine()
 	/* Clear the screen. */
 	printf("%c%c%c%c", 27, '[', '2', 'J');
 	no_os_mdelay(5);
-	pr_debug("\nSTOUT app FIRMWARE VERSION: %s \n\n",FIRMWARE_VERSION);
+	pr_debug("\nSTOUT app FIRMWARE VERSION: %s\n",FIRMWARE_VERSION);
+	/*Board revision*/
+#if defined(REV_A)
+	pr_debug("STOUT app BOARD REVISION A\n\n");
+#elif defined(REV_D)
+	pr_debug("STOUT app BOARD REVISION D\n\n");
+#endif
 
-	/* Allocate mempory for application structure */
+	/* Allocate memory for application structure */
 	stout = (struct stout *)no_os_calloc(1, sizeof(*stout));
 	if (!stout)
 		return -ENOMEM;
