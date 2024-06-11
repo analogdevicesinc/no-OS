@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-adis1650x project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @brief  Definition of Maxim platform data used by eval-adis1654x project.
+ *   @author RBolboac (ramona.gradinariu@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -47,22 +47,31 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-struct stm32_uart_init_param adis1650x_uart_extra_ip = {
-	.huart = &huart5,
+struct max_uart_init_param adis1654x_uart_extra_ip = {
+	.flow = UART_FLOW_DIS
 };
 
-
-struct stm32_spi_init_param adis1650x_spi_extra_ip  = {
-	.chip_select_port = SPI_CS_PORT,
+struct max_gpio_init_param adis1654x_gpio_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-struct stm32_gpio_init_param adis1650x_gpio_reset_extra_ip = {
-	.mode = GPIO_MODE_OUTPUT_OD,
-	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
+struct max_spi_init_param adis1654x_spi_extra_ip  = {
+	.num_slaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
 #ifdef IIO_TRIGGER_EXAMPLE
-struct stm32_gpio_irq_init_param adis1650x_gpio_irq_extra_ip = {
-	.port_nb = 0, /* Port A */
+/* Initialization for Sync pin GPIO. */
+struct no_os_gpio_init_param adis_gpio_drdy_ip = {
+	.port = GPIO_DRDY_PORT_NUM,
+	.number = GPIO_DRDY_PIN_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};
+
+struct max_gpio_init_param adis_gpio_drdy_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 #endif

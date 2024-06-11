@@ -26,6 +26,7 @@ INERTIAL MEASUREMENT UNITS
    projects/eval-adis1646x
    projects/eval-adis1647x
    projects/eval-adis1650x
+   projects/eval-adis1654x
    projects/eval-adis1655x
    projects/eval-adis1657x
 
