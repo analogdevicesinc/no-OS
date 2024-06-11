@@ -84,6 +84,16 @@
 #define ADIS_TEMP_IDX_32_BIT_BURST	26
 #define ADIS_CNT_IDX_32_BIT_BURST	28
 
+static const uint32_t adis_3db_freqs[] = {
+	720, /* Filter disabled, full BW (~720Hz) */
+	360,
+	164,
+	80,
+	40,
+	20,
+	10,
+};
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -1983,6 +1993,66 @@ int adis_write_filt_size_var_b(struct adis_dev *adis, uint32_t filt_size_var_b)
 	no_os_udelay(adis->info->timeouts->filt_size_var_b_update_us);
 
 	return 0;
+}
+
+
+/**
+ * @brief Read configured filter frequency.
+ * @param adis - The adis device.
+ * @param chan - The adis channel.
+ * @param axis - Tha adis channel axis.
+ * @param freq - The filter frequency, in Hz.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_lpf(struct adis_dev *adis, enum adis_chan_type chan,
+		  enum adis_axis_type axis, uint32_t *freq)
+{
+	int ret;
+	uint32_t filt_size_var_b;
+
+	if (adis->info->read_lpf)
+		return adis->info->read_lpf(adis, chan, axis, freq);
+
+	/* Ignore chan and axis, setting is for imu filter and it applies to
+	 * all measurements.
+	 */
+	ret = adis_read_filt_size_var_b(adis, &filt_size_var_b);
+	if (ret)
+		return ret;
+
+	if (filt_size_var_b > NO_OS_ARRAY_SIZE(adis_3db_freqs))
+		return -EINVAL;
+
+	*freq = adis_3db_freqs[filt_size_var_b];
+
+	return 0;
+}
+
+/**
+ * @brief Configure filter for the given filter frequency.
+ * @param adis - The adis device.
+ * @param chan - The adis channel.
+ * @param axis - Tha adis channel axis.
+ * @param freq - The filter frequency, in Hz.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_lpf(struct adis_dev *adis, enum adis_chan_type chan,
+		   enum adis_axis_type axis, uint32_t freq)
+{
+	if (adis->info->write_lpf)
+		return adis->info->write_lpf(adis, chan, axis, freq);
+
+	/* Ignore chan and axis, setting is for imu filter and it applies to
+	 * all measurements.
+	 */
+	uint32_t filt_idx = NO_OS_ARRAY_SIZE(adis_3db_freqs);
+
+	while (--filt_idx) {
+		if (adis_3db_freqs[filt_idx] >= freq)
+			break;
+	}
+
+	return adis_write_filt_size_var_b(adis, filt_idx);
 }
 
 /**

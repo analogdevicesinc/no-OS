@@ -119,6 +119,16 @@ enum adis_chan_type {
 	ADIS_DELTAVEL_CHAN,
 };
 
+/**
+ * @brief Supported axes
+ */
+enum adis_axis_type {
+	ADIS_X_AXIS,
+	ADIS_Y_AXIS,
+	ADIS_Z_AXIS,
+};
+
+
 /** @struct adis_diag_flags
  *  @brief Bitfield struct which maps on the diagnosis register
  */
@@ -594,7 +604,12 @@ int adis_write_fifo_wm_lvl(struct adis_dev *adis, uint32_t fifo_wm_lvl);
 int adis_read_filt_size_var_b(struct adis_dev *adis, uint32_t *filt_size_var_b);
 /*! Filter control: write filter size variable B value. */
 int adis_write_filt_size_var_b(struct adis_dev *adis, uint32_t filt_size_var_b);
-
+/*! Filter control: read configured filter frequency. */
+int adis_read_lpf(struct adis_dev *adis, enum adis_chan_type chan,
+		  enum adis_axis_type axis, uint32_t *freq);
+/*! Filter control: configure filter for the given filter frequency. */
+int adis_write_lpf(struct adis_dev *adis, enum adis_chan_type chan,
+		   enum adis_axis_type axis, uint32_t freq);
 /*! Range identifier: read gyroscope measurement range value. */
 int adis_read_gyro_meas_range(struct adis_dev *adis, uint32_t *gyro_meas_range);
 

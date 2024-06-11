@@ -437,6 +437,12 @@ struct adis_chip_info {
 	/** Chip specific implementation for writing sync_mode. */
 	int (*write_sync_mode)(struct adis_dev *adis, uint32_t sync_mode,
 			       uint32_t ext_clk);
+	/** Chip specific implementation for writing the low pass filter frequency. */
+	int (*write_lpf)(struct adis_dev *adis, enum adis_chan_type chan,
+			 enum adis_axis_type axis, uint32_t freq);
+	/** Chip specific implementation for reading the low pass filter frequency. */
+	int (*read_lpf)(struct adis_dev *adis, enum adis_chan_type chan,
+			enum adis_axis_type axis, uint32_t *freq);
 };
 
 /*! Check if the checksum for burst data is correct. */

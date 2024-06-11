@@ -57,16 +57,6 @@
 #define ADIS_BURST_DATA_SEL_0_CHN_MASK	NO_OS_GENMASK(5, 0)
 #define ADIS_BURST_DATA_SEL_1_CHN_MASK	NO_OS_GENMASK(12, 7)
 
-static const uint32_t adis_3db_freqs[] = {
-	720, /* Filter disabled, full BW (~720Hz) */
-	360,
-	164,
-	80,
-	40,
-	20,
-	10,
-};
-
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -515,7 +505,7 @@ static int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
-	uint32_t filt_size_var_b;
+	uint32_t freq;
 	int ret;
 	int32_t res;
 
@@ -529,11 +519,38 @@ static int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	ret = adis_read_filt_size_var_b(adis, &filt_size_var_b);
+	switch(channel->address) {
+	case ADIS_GYRO_X:
+		ret = adis_read_lpf(adis, ADIS_GYRO_CHAN, ADIS_X_AXIS, &freq);
+		break;
+	case ADIS_GYRO_Y:
+		ret = adis_read_lpf(adis, ADIS_GYRO_CHAN, ADIS_Y_AXIS, &freq);
+		break;
+	case ADIS_GYRO_Z:
+		ret = adis_read_lpf(adis, ADIS_GYRO_CHAN, ADIS_Z_AXIS, &freq);
+		break;
+	case ADIS_ACCEL_X:
+		ret = adis_read_lpf(adis, ADIS_ACCL_CHAN, ADIS_X_AXIS, &freq);
+		break;
+	case ADIS_ACCEL_Y:
+		ret = adis_read_lpf(adis, ADIS_ACCL_CHAN, ADIS_Y_AXIS, &freq);
+		break;
+	case ADIS_ACCEL_Z:
+		ret = adis_read_lpf(adis, ADIS_ACCL_CHAN, ADIS_Z_AXIS, &freq);
+		break;
+	default:
+		/*
+		 * Add default case for devices which do not have a filter per
+		 * channel. The logic for retrieving the filter frequency is
+		 * implemented in the lower level driver.
+		 */
+		ret = adis_read_lpf(adis, ADIS_GYRO_CHAN, ADIS_X_AXIS, &freq);
+	}
+
 	if (ret)
 		return ret;
 
-	res = adis_3db_freqs[filt_size_var_b];
+	res = freq;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &res);
 }
@@ -552,8 +569,7 @@ static int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
-	uint32_t filt_size_var_b;
-	int i = NO_OS_ARRAY_SIZE(adis_3db_freqs);
+	uint32_t freq;
 	int ret;
 
 	if (!dev)
@@ -566,16 +582,31 @@ static int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	ret = iio_parse_value(buf, IIO_VAL_INT, (int32_t*)&filt_size_var_b, NULL);
+	ret = iio_parse_value(buf, IIO_VAL_INT, (int32_t*)&freq, NULL);
 	if (ret)
 		return ret;
 
-	while (--i) {
-		if (adis_3db_freqs[i] >= filt_size_var_b)
-			break;
+	switch(channel->address) {
+	case ADIS_GYRO_X:
+		return adis_write_lpf(adis, ADIS_GYRO_CHAN, ADIS_X_AXIS, freq);
+	case ADIS_GYRO_Y:
+		return adis_write_lpf(adis, ADIS_GYRO_CHAN, ADIS_Y_AXIS, freq);
+	case ADIS_GYRO_Z:
+		return adis_write_lpf(adis, ADIS_GYRO_CHAN, ADIS_Z_AXIS, freq);
+	case ADIS_ACCEL_X:
+		return adis_write_lpf(adis, ADIS_ACCL_CHAN, ADIS_X_AXIS, freq);
+	case ADIS_ACCEL_Y:
+		return adis_write_lpf(adis, ADIS_ACCL_CHAN, ADIS_Y_AXIS, freq);
+	case ADIS_ACCEL_Z:
+		return adis_write_lpf(adis, ADIS_ACCL_CHAN, ADIS_Z_AXIS, freq);
+	default:
+		/*
+		 * Add default case for devices which do not have a filter per
+		 * channel. The logic for setting the filter frequency is
+		 * implemented in the lower level driver.
+		 */
+		return adis_write_lpf(adis, ADIS_GYRO_CHAN, ADIS_X_AXIS, freq);
 	}
-
-	return adis_write_filt_size_var_b(adis, i);
 }
 
 /**
