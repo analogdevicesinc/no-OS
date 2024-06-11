@@ -1037,6 +1037,16 @@ Supported devices with IIO ADIS1650X files:
 * `ADIS16505 <https://www.analog.com/ADIS16505>`_
 * `ADIS16507 <https://www.analog.com/ADIS16507>`_
 
+ADIS1654X IIO Driver Source Code:
+
+* `Header file of ADIS1654X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1654x.h>`_
+* `Implementation of ADIS1654X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1654x.c>`_
+
+Supported devices with IIO ADIS1654X files:
+
+* `ADIS16545 <https://www.analog.com/ADIS16545>`_
+* `ADIS16547 <https://www.analog.com/ADIS16547>`_
+
 ADIS1655X IIO Driver Source Code:
 
 * `Header file of ADIS1655X IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis1655x.h>`_
@@ -1814,6 +1824,129 @@ ADIS1650X
 		iio_hw_trig_remove(adis1650x_trig_desc);
 		no_os_irq_ctrl_remove(adis1650x_irq_desc);
 		adis1650x_iio_remove(adis1650x_iio_desc);
+		if (ret)
+			pr_info("Error!\n");
+		return ret;
+
+ADIS1654X
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis1654x_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis1654x_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis1654x_ip = {
+		.gpio_reset = &adis1654x_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_DEFAULT,
+		.dev_id = ADIS16545_3,
+	};
+
+	struct no_os_irq_init_param adis1654x_gpio_irq_ip = {
+		.irq_ctrl_id = GPIO_IRQ_ID,
+		.platform_ops = GPIO_IRQ_OPS,
+		.extra = GPIO_IRQ_EXTRA,
+	};
+
+	const struct iio_hw_trig_cb_info gpio_cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADIS1654X_GPIO_CB_HANDLE,
+	};
+
+	struct iio_hw_trig_init_param adis1654x_gpio_trig_ip = {
+		.irq_id = ADIS1654X_GPIO_TRIG_IRQ_ID,
+		.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+		.cb_info = gpio_cb_info,
+		.name = ADIS1654X_GPIO_TRIG_NAME,
+	};
+
+	#define DATA_BUFFER_SIZE 400
+	uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
+	struct adis_iio_dev *adis1654x_iio_desc;
+
+	struct iio_data_buffer data_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * 13 * sizeof(int)
+	};
+
+	struct iio_hw_trig *adis1654x_trig_desc;
+	struct no_os_irq_ctrl_desc *adis1654x_irq_desc;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	ret = adis1654x_iio_init(&adis1654x_iio_desc, &adis1654x_ip);
+	if (ret)
+		goto exit;
+
+	/* Initialize interrupt controller */
+	ret = no_os_irq_ctrl_init(&adis1654x_irq_desc, &adis1654x_gpio_irq_ip);
+	if (ret)
+		goto exit;
+
+	ret = no_os_irq_set_priority(adis1654x_irq_desc, adis1654x_gpio_trig_ip.irq_id, 1);
+	if (ret)
+		goto exit;
+
+	adis1654x_gpio_trig_ip.irq_ctrl = adis1654x_irq_desc;
+
+	/* Initialize hardware trigger */
+	ret = iio_hw_trig_init(&adis1654x_trig_desc, &adis1654x_gpio_trig_ip);
+	if (ret)
+		goto exit;
+
+	/* List of devices */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adis16545-3",
+			.dev = adis1654x_iio_desc,
+			.dev_descriptor = adis1654x_iio_desc->iio_dev,
+			.read_buff = &data_buff,
+		}
+	};
+
+	/* List of triggers */
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(ADIS1654X_GPIO_TRIG_NAME, adis1654x_trig_desc, &adis_iio_trig_desc)
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adis1654x_uart_ip;
+	app_init_param.trigs = trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+	app_init_param.irq_desc = adis1654x_irq_desc;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto exit;
+
+	/* Update the reference to iio_desc */
+	adis1654x_trig_desc->iio_desc = app->iio_desc;
+
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+
+	exit:
+		iio_hw_trig_remove(adis1654x_trig_desc);
+		no_os_irq_ctrl_remove(adis1654x_irq_desc);
+		adis1654x_iio_remove(adis1654x_iio_desc);
 		if (ret)
 			pr_info("Error!\n");
 		return ret;
