@@ -230,8 +230,9 @@ int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 		ret = adis_get_temp_scale(adis, &scale_frac);
 		if (ret)
 			return ret;
-		vals[0] = scale_frac.dividend / scale_frac.divisor;
-		return iio_format_value(buf, len, IIO_VAL_INT, 2, (int32_t*)vals);
+		vals[0] = scale_frac.dividend;
+		vals[1] = scale_frac.divisor;
+		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	default:
 		return -EINVAL;
 	}
@@ -1026,14 +1027,56 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		break;
 	case ADIS_GYRO_MEAS_RANGE:
 		return adis_iio_read_gyro_meas_range(iio_adis, buf);
+	case ADIS_DR_ENABLE:
+		ret = adis_read_dr_enable(adis, &res);
+		break;
 	case ADIS_DR_POLARITY:
 		ret = adis_read_dr_polarity(adis, &res);
+		break;
+	case ADIS_DR_LINE_SEL:
+		ret = adis_read_dr_selection(adis, &res);
 		break;
 	case ADIS_SYNC_POLARITY:
 		ret = adis_read_sync_polarity(adis, &res);
 		break;
+	case ADIS_SYNC_LINE_SEL:
+		ret = adis_read_sync_selection(adis, &res);
+		break;
 	case ADIS_SYNC_MODE:
 		ret = adis_read_sync_mode(adis, &res);
+		break;
+	case ADIS_ALARM_IND_ENABLE:
+		ret = adis_read_alarm_enable(adis, &res);
+		break;
+	case ADIS_ALARM_IND_POLARITY:
+		ret = adis_read_alarm_polarity(adis, &res);
+		break;
+	case ADIS_ALARM_IND_LINE_SEL:
+		ret = adis_read_alarm_selection(adis, &res);
+		break;
+	case ADIS_DIO_1_DIR:
+		ret = adis_read_gpio_dir(adis, 0, &res);
+		break;
+	case ADIS_DIO_1_LVL:
+		ret = adis_read_gpio_lvl(adis, 0, &res);
+		break;
+	case ADIS_DIO_2_DIR:
+		ret = adis_read_gpio_dir(adis, 1, &res);
+		break;
+	case ADIS_DIO_2_LVL:
+		ret = adis_read_gpio_lvl(adis, 1, &res);
+		break;
+	case ADIS_DIO_3_DIR:
+		ret = adis_read_gpio_dir(adis, 2, &res);
+		break;
+	case ADIS_DIO_3_LVL:
+		ret = adis_read_gpio_lvl(adis, 2, &res);
+		break;
+	case ADIS_DIO_4_DIR:
+		ret = adis_read_gpio_dir(adis, 3, &res);
+		break;
+	case ADIS_DIO_4_LVL:
+		ret = adis_read_gpio_lvl(adis, 3, &res);
 		break;
 	case ADIS_SENS_BW:
 		ret = adis_read_sens_bw(adis, &res);
@@ -1061,6 +1104,42 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		break;
 	case ADIS_ACCL_FIR_ENABLE:
 		ret = adis_read_accl_fir_enable(adis, &res);
+		break;
+	case ADIS_FIR_EN_XG:
+		ret = adis_read_fir_en_xg(adis, &res);
+		break;
+	case ADIS_FIR_EN_YG:
+		ret = adis_read_fir_en_yg(adis, &res);
+		break;
+	case ADIS_FIR_EN_ZG:
+		ret = adis_read_fir_en_zg(adis, &res);
+		break;
+	case ADIS_FIR_EN_XA:
+		ret = adis_read_fir_en_xa(adis, &res);
+		break;
+	case ADIS_FIR_EN_YA:
+		ret = adis_read_fir_en_ya(adis, &res);
+		break;
+	case ADIS_FIR_EN_ZA:
+		ret = adis_read_fir_en_za(adis, &res);
+		break;
+	case ADIS_FIR_BANK_SEL_XG:
+		ret = adis_read_fir_bank_sel_xg(adis, &res);
+		break;
+	case ADIS_FIR_BANK_SEL_YG:
+		ret = adis_read_fir_bank_sel_yg(adis, &res);
+		break;
+	case ADIS_FIR_BANK_SEL_ZG:
+		ret = adis_read_fir_bank_sel_zg(adis, &res);
+		break;
+	case ADIS_FIR_BANK_SEL_XA:
+		ret = adis_read_fir_bank_sel_xa(adis, &res);
+		break;
+	case ADIS_FIR_BANK_SEL_YA:
+		ret = adis_read_fir_bank_sel_ya(adis, &res);
+		break;
+	case ADIS_FIR_BANK_SEL_ZA:
+		ret = adis_read_fir_bank_sel_za(adis, &res);
 		break;
 	case ADIS_UP_SCALE:
 		ret = adis_read_up_scale(adis, &res);
@@ -1091,6 +1170,9 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		break;
 	case ADIS_PROC_REV:
 		ret = adis_read_proc_rev(adis, &res);
+		break;
+	case ADIS_BOOT_REV:
+		ret = adis_read_boot_rev(adis, &res);
 		break;
 	case ADIS_FIRM_REV:
 		return adis_iio_read_firm_rev(adis, buf, 7);
@@ -1177,10 +1259,16 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 		return adis_write_fifo_wm_lvl(adis, val);
 	case ADIS_FILT_SIZE_VAR_B:
 		return adis_write_filt_size_var_b(adis, val);
+	case ADIS_DR_ENABLE:
+		return adis_write_dr_enable(adis, val);
 	case ADIS_DR_POLARITY:
 		return adis_write_dr_polarity(adis, val);
+	case ADIS_DR_LINE_SEL:
+		return adis_write_dr_selection(adis, val);
 	case ADIS_SYNC_POLARITY:
 		return adis_write_sync_polarity(adis, val);
+	case ADIS_SYNC_LINE_SEL:
+		return adis_write_sync_selection(adis, val);
 	case ADIS_SYNC_MODE:
 		ret = adis_write_sync_mode(adis, val, adis->ext_clk);
 		if (ret)
@@ -1188,6 +1276,28 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 
 		/* Update sampling frequency */
 		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
+	case ADIS_ALARM_IND_ENABLE:
+		return adis_write_alarm_enable(adis, val);
+	case ADIS_ALARM_IND_POLARITY:
+		return adis_write_alarm_polarity(adis, val);
+	case ADIS_ALARM_IND_LINE_SEL:
+		return adis_write_alarm_selection(adis, val);
+	case ADIS_DIO_1_DIR:
+		return adis_write_gpio_dir(adis, 0, val);
+	case ADIS_DIO_2_DIR:
+		return adis_write_gpio_dir(adis, 1, val);
+	case ADIS_DIO_3_DIR:
+		return adis_write_gpio_dir(adis, 2, val);
+	case ADIS_DIO_4_DIR:
+		return adis_write_gpio_dir(adis, 3, val);
+	case ADIS_DIO_1_LVL:
+		return adis_write_gpio_lvl(adis, 0, val);
+	case ADIS_DIO_2_LVL:
+		return adis_write_gpio_lvl(adis, 1, val);
+	case ADIS_DIO_3_LVL:
+		return adis_write_gpio_lvl(adis, 2, val);
+	case ADIS_DIO_4_LVL:
+		return adis_write_gpio_lvl(adis, 3, val);
 	case ADIS_SENS_BW:
 		return adis_write_sens_bw(adis, val);
 	case ADIS_PT_OF_PERC_ALGNMT:
@@ -1206,6 +1316,30 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 		return adis_write_gyro_fir_enable(adis, val);
 	case ADIS_ACCL_FIR_ENABLE:
 		return adis_write_accl_fir_enable(adis, val);
+	case ADIS_FIR_EN_XG:
+		return adis_write_fir_en_xg(adis, val);
+	case ADIS_FIR_EN_YG:
+		return adis_write_fir_en_yg(adis, val);
+	case ADIS_FIR_EN_ZG:
+		return adis_write_fir_en_zg(adis, val);
+	case ADIS_FIR_EN_XA:
+		return adis_write_fir_en_xa(adis, val);
+	case ADIS_FIR_EN_YA:
+		return adis_write_fir_en_ya(adis, val);
+	case ADIS_FIR_EN_ZA:
+		return adis_write_fir_en_za(adis, val);
+	case ADIS_FIR_BANK_SEL_XG:
+		return adis_write_fir_bank_sel_xg(adis, val);
+	case ADIS_FIR_BANK_SEL_YG:
+		return adis_write_fir_bank_sel_yg(adis, val);
+	case ADIS_FIR_BANK_SEL_ZG:
+		return adis_write_fir_bank_sel_zg(adis, val);
+	case ADIS_FIR_BANK_SEL_XA:
+		return adis_write_fir_bank_sel_xa(adis, val);
+	case ADIS_FIR_BANK_SEL_YA:
+		return adis_write_fir_bank_sel_ya(adis, val);
+	case ADIS_FIR_BANK_SEL_ZA:
+		return adis_write_fir_bank_sel_za(adis, val);
 	case ADIS_UP_SCALE:
 		ret = adis_write_up_scale(adis, val);
 		if (ret)
