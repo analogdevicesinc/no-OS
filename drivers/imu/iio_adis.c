@@ -500,8 +500,8 @@ int adis_iio_write_calibscale(void *dev, char *buf, uint32_t len,
  * @param priv    - Command attribute id.
  * @return the size of the read data in case of success, error code otherwise.
  */
-static int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
+		      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -564,8 +564,8 @@ static int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
  * @param priv    - Command attribute id.
  * @return the result of the writing procedure.
  */
-static int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
+		       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;

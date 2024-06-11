@@ -827,6 +827,70 @@ static int adis1655x_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
 	return adis_write_field_u32(adis, adis->info->field_map->sync_mode, sync_mode);
 }
 
+/**
+ * @brief Read configured filter frequency.
+ * @param adis - The adis device.
+ * @param chan - The adis channel.
+ * @param axis - Tha adis channel axis.
+ * @param freq - The filter frequency, in Hz.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int adis1655x_read_lpf(struct adis_dev *adis, enum adis_chan_type chan,
+			      enum adis_axis_type axis, uint32_t *freq)
+{
+	int ret;
+	uint32_t fir_en;
+
+	*freq = 0;
+
+	/* Axis is ignored, because filter is only available per accel/gyro device. */
+	switch(chan) {
+	case ADIS_ACCL_CHAN:
+		ret = adis_read_accl_fir_enable(adis, &fir_en);
+		break;
+	case ADIS_GYRO_CHAN:
+		ret = adis_read_gyro_fir_enable(adis, &fir_en);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	if (ret)
+		return ret;
+
+	if (fir_en)
+		*freq = 100;
+
+	return 0;
+}
+
+/**
+ * @brief Configure filter for the given filter frequency.
+ * @param adis - The adis device.
+ * @param chan - The adis channel.
+ * @param axis - Tha adis channel axis.
+ * @param freq - The filter frequency, in Hz.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int adis1655x_write_lpf(struct adis_dev *adis, enum adis_chan_type chan,
+			       enum adis_axis_type axis, uint32_t freq)
+{
+	uint32_t fir_en = 0;
+
+	if (freq > 0)
+		fir_en = 1;
+
+	/* Axis is ignored, because filter is only available per accel/gyro device. */
+	switch(chan) {
+	case ADIS_ACCL_CHAN:
+		return adis_write_accl_fir_enable(adis, fir_en);
+	case ADIS_GYRO_CHAN:
+		return adis_write_gyro_fir_enable(adis, fir_en);
+	default:
+		return -EINVAL;
+	}
+}
+
 const struct adis_chip_info adis1655x_chip_info = {
 	.cs_change_delay 	= 5, /* stall period between data */
 	.read_delay 		= 0,
@@ -850,4 +914,6 @@ const struct adis_chip_info adis1655x_chip_info = {
 	.get_offset		= &adis1655x_get_offset,
 	.read_sync_mode		= &adis1655x_read_sync_mode,
 	.write_sync_mode	= &adis1655x_write_sync_mode,
+	.read_lpf		= &adis1655x_read_lpf,
+	.write_lpf		= &adis1655x_write_lpf,
 };
