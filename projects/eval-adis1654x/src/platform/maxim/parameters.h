@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-adis1650x project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Maxim platform used by eval-adis1654x
+ *           project.
+ *   @author RBolboac (ramona.gradinariu@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,32 +38,67 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "parameters.h"
+#include "maxim_irq.h"
+#include "maxim_spi.h"
+#include "maxim_gpio.h"
+#include "maxim_uart.h"
+#include "maxim_uart_stdio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-struct stm32_uart_init_param adis1650x_uart_extra_ip = {
-	.huart = &huart5,
-};
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#endif
+
+#define UART_DEVICE_ID  0
+#define UART_BAUDRATE   57600
+#define UART_EXTRA      &adis1654x_uart_extra_ip
+#define UART_OPS        &max_uart_ops
+#define UART_IRQ_ID     UART0_IRQn
 
 
-struct stm32_spi_init_param adis1650x_spi_extra_ip  = {
-	.chip_select_port = SPI_CS_PORT,
-};
+#define SPI_DEVICE_ID   1
+#define SPI_CS          1
 
-struct stm32_gpio_init_param adis1650x_gpio_reset_extra_ip = {
-	.mode = GPIO_MODE_OUTPUT_OD,
-	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
-};
+#define SPI_BAUDRATE    15000000
+#define SPI_OPS         &max_spi_ops
+#define SPI_EXTRA       &adis1654x_spi_extra_ip
+
+#define GPIO_OPS            &max_gpio_ops
+#define GPIO_EXTRA          &adis1654x_gpio_extra_ip
+
+extern struct max_uart_init_param adis1654x_uart_extra_ip;
+extern struct max_spi_init_param adis1654x_spi_extra_ip;
+extern struct max_gpio_init_param adis1654x_gpio_extra_ip;
+
+#define GPIO_RESET_PIN_NUM   19
+#define GPIO_RESET_PORT_NUM  0
+
 
 #ifdef IIO_TRIGGER_EXAMPLE
-struct stm32_gpio_irq_init_param adis1650x_gpio_irq_extra_ip = {
-	.port_nb = 0, /* Port A */
-};
+#define GPIO_DRDY_PIN_NUM   6
+#define GPIO_DRDY_PORT_NUM  1
+
+#define NVIC_GPIO_IRQ   GPIO1_IRQn
+
+#define ADIS1654X_GPIO_TRIG_IRQ_ID    GPIO_DRDY_PIN_NUM
+#define ADIS1654X_GPIO_CB_HANDLE      MXC_GPIO_GET_GPIO(GPIO_DRDY_PORT_NUM)
+
+#define GPIO_IRQ_ID             GPIO_DRDY_PORT_NUM
+#define GPIO_IRQ_OPS            &max_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          &adis_gpio_drdy_extra_ip
+
+extern struct no_os_gpio_init_param adis_gpio_drdy_ip;
+extern struct max_gpio_init_param adis_gpio_drdy_extra_ip;
 #endif
+
+#endif /* __PARAMETERS_H__ */

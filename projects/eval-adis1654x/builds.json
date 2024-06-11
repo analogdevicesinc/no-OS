@@ -1,0 +1,26 @@
+{
+  "pico": {
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n RELEASE=y"
+    },
+    "iio_trigger_example": {
+      "flags" : "BASIC_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y RELEASE=y"
+    }
+  },
+  "maxim": {
+    "basic_example_max78000": {
+      "flags" : "BASIC_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000 RELEASE=y"
+    },
+    "iio_trigger_example_max78000": {
+      "flags" : "BASIC_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max78000 RELEASE=y"
+    }
+  },
+  "stm32": {
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n RELEASE=y"
+    },
+    "iio_trigger_example": {
+      "flags" : "BASIC_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y RELEASE=y"
+    }
+  }
+}
