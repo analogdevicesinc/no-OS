@@ -113,6 +113,12 @@ struct iio_attribute adis1655x_iio_anglvel_attrs[] = {
 		.shared = IIO_SHARED_BY_TYPE,
 		.show   = adis_iio_read_scale,
 	},
+	{
+		.name   = "filter_low_pass_3db_frequency",
+		.shared = IIO_SHARED_BY_TYPE,
+		.show   = adis_iio_read_lpf,
+		.store  = adis_iio_write_lpf,
+	},
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -135,6 +141,12 @@ struct iio_attribute adis1655x_iio_accel_attrs[] = {
 		.name   = "scale",
 		.shared = IIO_SHARED_BY_TYPE,
 		.show   = adis_iio_read_scale,
+	},
+	{
+		.name   = "filter_low_pass_3db_frequency",
+		.shared = IIO_SHARED_BY_TYPE,
+		.show   = adis_iio_read_lpf,
+		.store  = adis_iio_write_lpf,
 	},
 	END_ATTRIBUTES_ARRAY
 };

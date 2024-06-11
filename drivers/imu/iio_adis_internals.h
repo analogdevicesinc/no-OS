@@ -357,4 +357,10 @@ int adis_iio_write_sampling_freq(void *dev, char *buf,
 /*! Handles the read request for sampling frequency attribute. */
 int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the read request for lpf attribute. */
+int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
+		      const struct iio_ch_info *channel, intptr_t priv);
+/*! Handles the write request for lpf attribute. */
+int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
+		       const struct iio_ch_info *channel, intptr_t priv);
 #endif
