@@ -3089,7 +3089,7 @@ int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
  * @brief Read FIR Filter Coefficient C_coef_idx value.
  * @param adis      - The adis device.
  * @param coef_idx  - The coefficient id.
- * @param coef      - The coffiecient value.
+ * @param coef      - The coefficient value.
  * @return 0 in case of success, error code otherwise.
  */
 int adis_read_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t *coef)
@@ -3105,7 +3105,7 @@ int adis_read_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t *coef)
  * @brief Write FIR Filter Coefficient C_coef_idx value.
  * @param adis      - The adis device.
  * @param coef_idx  - The coefficient id.
- * @param coef      - The coffiecient value.
+ * @param coef      - The coefficient value.
  * @return 0 in case of success, error code otherwise.
  */
 int adis_write_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t coef)
