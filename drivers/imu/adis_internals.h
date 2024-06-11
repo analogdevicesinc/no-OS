@@ -52,6 +52,9 @@
 #define ADIS_PAGE_SIZE			0x80
 #define ADIS_REG_PAGE_ID		0x00
 
+#define ADIS_WRITE_REG(reg)		((NO_OS_BIT(7) | (reg)))
+#define ADIS_READ_REG(reg)		((reg) & NO_OS_GENMASK(6,0))
+
 /** @struct adis_timeout
  *  @brief ADIS chip timeouts
  */
@@ -120,7 +123,7 @@ struct adis_scale_members {
  */
 struct adis_field {
 	/** Address of the register in which the field is found. */
-	uint8_t 	reg_addr;
+	uint16_t 	reg_addr;
 	/** Size of te register in which the field is found. */
 	uint8_t 	reg_size;
 	/** The mask of the field in a register. */
@@ -276,12 +279,26 @@ struct adis_data_field_map_def {
 	/** Gyroscope measurement range. */
 	struct adis_field gyro_meas_range;
 
+	/** Data ready line selection. */
+	struct adis_field dr_selection;
 	/** Data ready polarity. */
 	struct adis_field dr_polarity;
+	/** Data ready enable. */
+	struct adis_field dr_enable;
+	/** SYNC signal input line selection. */
+	struct adis_field sync_selection;
 	/** SYNC signal polarity. */
 	struct adis_field sync_polarity;
 	/** SYNC mode select. */
 	struct adis_field sync_mode;
+	/** Alarm indicator select. */
+	struct adis_field alarm_selection;
+	/** Alarm indicator polarity. */
+	struct adis_field alarm_polarity;
+	/** Alarm indicator enable. */
+	struct adis_field alarm_enable;
+	/** General-purpose input and output control. */
+	struct adis_field gpio_ctrl;
 	/** Internal sensor bandwidth. */
 	struct adis_field sens_bw;
 	/** Point of percussion alignment enable bit. */
@@ -348,6 +365,8 @@ struct adis_data_field_map_def {
 	struct adis_field firm_m;
 	/** Factory configuration year. */
 	struct adis_field firm_y;
+	/** Boot loader revision. */
+	struct adis_field boot_rev;
 	/** Product identification. */
 	struct adis_field prod_id;
 	/** Serial number. */
@@ -369,6 +388,38 @@ struct adis_data_field_map_def {
 
 	/* FIR Filter Coefficient C0 */
 	struct adis_field coeff_c0;
+	/** X-axis gyroscope filter enable. */
+	struct adis_field fir_en_xg;
+	/** Y-axis gyroscope filter enable. */
+	struct adis_field fir_en_yg;
+	/** Z-axis gyroscope filter enable. */
+	struct adis_field fir_en_zg;
+	/** X-axis accelerometer filter enable. */
+	struct adis_field fir_en_xa;
+	/** Y-axis accelerometer filter enable. */
+	struct adis_field fir_en_ya;
+	/** Z-axis accelerometer filter enable. */
+	struct adis_field fir_en_za;
+	/** X-axis gyroscope filter bank selection. */
+	struct adis_field fir_bank_sel_xg;
+	/** Y-axis gyroscope filter bank selection. */
+	struct adis_field fir_bank_sel_yg;
+	/** Z-axis gyroscope filter bank selection. */
+	struct adis_field fir_bank_sel_zg;
+	/** X-axis accelerometer filter bank selection. */
+	struct adis_field fir_bank_sel_xa;
+	/** Y-axis accelerometer filter bank selection. */
+	struct adis_field fir_bank_sel_ya;
+	/** Z-axis accelerometer filter bank selection. */
+	struct adis_field fir_bank_sel_za;
+	/* FIR Filter Coefficient Bank A */
+	struct adis_field coeff_bank_a;
+	/* FIR Filter Coefficient Bank B */
+	struct adis_field coeff_bank_b;
+	/* FIR Filter Coefficient Bank C */
+	struct adis_field coeff_bank_c;
+	/* FIR Filter Coefficient Bank D */
+	struct adis_field coeff_bank_d;
 };
 
 /** @struct adis_chip_info

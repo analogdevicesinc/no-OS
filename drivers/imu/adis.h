@@ -99,6 +99,12 @@ enum adis_device_id {
 	ADIS16507_1,
 	ADIS16507_2,
 	ADIS16507_3,
+	ADIS16545_1,
+	ADIS16545_2,
+	ADIS16545_3,
+	ADIS16547_1,
+	ADIS16547_2,
+	ADIS16547_3,
 	ADIS16550,
 	ADIS16575_2,
 	ADIS16575_3,
@@ -613,10 +619,95 @@ int adis_write_lpf(struct adis_dev *adis, enum adis_chan_type chan,
 /*! Range identifier: read gyroscope measurement range value. */
 int adis_read_gyro_meas_range(struct adis_dev *adis, uint32_t *gyro_meas_range);
 
+/*! Filter control: Read x axis gyroscope filter enable bit value. */
+int adis_read_fir_en_xg(struct adis_dev *adis, uint32_t *fir_en_xg);
+/*! Filter control: Write x axis gyroscope filter enable bit value. */
+int adis_write_fir_en_xg(struct adis_dev *adis, uint32_t fir_en_xg);
+/*! Filter control: Read y axis gyroscope filter enable bit value. */
+int adis_read_fir_en_yg(struct adis_dev *adis, uint32_t *fir_en_yg);
+/*! Filter control: Write y axis gyroscope filter enable bit value. */
+int adis_write_fir_en_yg(struct adis_dev *adis, uint32_t fir_en_yg);
+/*! Filter control: Read z axis gyroscope filter enable bit value. */
+int adis_read_fir_en_zg(struct adis_dev *adis, uint32_t *fir_en_zg);
+/*! Filter control: Write z axis gyroscope filter enable bit value. */
+int adis_write_fir_en_zg(struct adis_dev *adis, uint32_t fir_en_zg);
+/*! Filter control: Read x axis accelerometer filter enable bit value. */
+int adis_read_fir_en_xa(struct adis_dev *adis, uint32_t *fir_en_xa);
+/*! Filter control: Write x axis accelerometer filter enable bit value. */
+int adis_write_fir_en_xa(struct adis_dev *adis, uint32_t fir_en_xa);
+/*! Filter control: Read y axis accelerometer filter enable bit value. */
+int adis_read_fir_en_ya(struct adis_dev *adis, uint32_t *fir_en_ya);
+/*! Filter control: Write y axis accelerometer filter enable bit value. */
+int adis_write_fir_en_ya(struct adis_dev *adis, uint32_t fir_en_ya);
+/*! Filter control: Read z axis accelerometer filter enable bit value. */
+int adis_read_fir_en_za(struct adis_dev *adis, uint32_t *fir_en_za);
+/*! Filter control: Write z axis accelerometer filter enable bit value. */
+int adis_write_fir_en_za(struct adis_dev *adis, uint32_t fir_en_za);
+/*! Filter control: read x axis gyroscope filter bank selection encoded value. */
+int adis_read_fir_bank_sel_xg(struct adis_dev *adis, uint32_t *fir_bank_sel_xg);
+/*! Filter control: write x axis gyroscope filter bank selection encoded value. */
+int adis_write_fir_bank_sel_xg(struct adis_dev *adis, uint32_t fir_bank_sel_xg);
+/*! Filter control: read y axis gyroscope filter bank selection encoded value. */
+int adis_read_fir_bank_sel_yg(struct adis_dev *adis, uint32_t *fir_bank_sel_yg);
+/*! Filter control: write y axis gyroscope filter bank selection encoded value. */
+int adis_write_fir_bank_sel_yg(struct adis_dev *adis, uint32_t fir_bank_sel_yg);
+/*! Filter control: read z axis gyroscope filter bank selection encoded value. */
+int adis_read_fir_bank_sel_zg(struct adis_dev *adis, uint32_t *fir_bank_sel_zg);
+/*! Filter control: write z axis gyroscope filter bank selection encoded value. */
+int adis_write_fir_bank_sel_zg(struct adis_dev *adis, uint32_t fir_bank_sel_zg);
+/*! Filter control: read x axis accelerometer filter bank selection encoded value. */
+int adis_read_fir_bank_sel_xa(struct adis_dev *adis, uint32_t *fir_bank_sel_xa);
+/*! Filter control: write x axis accelerometer filter bank selection encoded value. */
+int adis_write_fir_bank_sel_xa(struct adis_dev *adis, uint32_t fir_bank_sel_xa);
+/*! Filter control: read y axis accelerometer filter bank selection encoded value. */
+int adis_read_fir_bank_sel_ya(struct adis_dev *adis, uint32_t *fir_bank_sel_ya);
+/*! Filter control: write y axis accelerometer filter bank selection encoded value. */
+int adis_write_fir_bank_sel_ya(struct adis_dev *adis, uint32_t fir_bank_sel_ya);
+/*! Filter control: read z axis accelerometer filter bank selection encoded value. */
+int adis_read_fir_bank_sel_za(struct adis_dev *adis, uint32_t *fir_bank_sel_za);
+/*! Filter control: write z axis accelerometer filter bank selection encoded value. */
+int adis_write_fir_bank_sel_za(struct adis_dev *adis, uint32_t fir_bank_sel_za);
+/*! Filter control: read FIR Filter Coefficient Bank A idx value. */
+int adis_read_fir_coef_bank_a(struct adis_dev *adis, uint8_t coef_idx,
+			      uint32_t *coef);
+/*! Filter control: write FIR Filter Coefficient Bank A idx value. */
+int adis_write_fir_coef_bank_a(struct adis_dev *adis, uint8_t coef_idx,
+			       uint32_t coef);
+/*! Filter control: read FIR Filter Coefficient Bank B idx value. */
+int adis_read_fir_coef_bank_b(struct adis_dev *adis, uint8_t coef_idx,
+			      uint32_t *coef);
+/*! Filter control: write FIR Filter Coefficient Bank B idx value. */
+int adis_write_fir_coef_bank_b(struct adis_dev *adis, uint8_t coef_idx,
+			       uint32_t coef);
+/*! Filter control: read FIR Filter Coefficient Bank C idx value. */
+int adis_read_fir_coef_bank_c(struct adis_dev *adis, uint8_t coef_idx,
+			      uint32_t *coef);
+/*! Filter control: write FIR Filter Coefficient Bank C idx value. */
+int adis_write_fir_coef_bank_c(struct adis_dev *adis, uint8_t coef_idx,
+			       uint32_t coef);
+/*! Filter control: read FIR Filter Coefficient Bank D idx value. */
+int adis_read_fir_coef_bank_d(struct adis_dev *adis, uint8_t coef_idx,
+			      uint32_t *coef);
+/*! Filter control: write FIR Filter Coefficient Bank D idx value. */
+int adis_write_fir_coef_bank_d(struct adis_dev *adis, uint8_t coef_idx,
+			       uint32_t coef);
+
+/*! Miscellaneous control: read data ready selection encoded value. */
+int adis_read_dr_selection(struct adis_dev *adis, uint32_t *dr_selection);
+/*! Miscellaneous control: write data ready selection encoded value. */
+int adis_write_dr_selection(struct adis_dev *adis, uint32_t dr_selection);
 /*! Miscellaneous control: read data ready polarity encoded value. */
 int adis_read_dr_polarity(struct adis_dev *adis, uint32_t *dr_polarity);
 /*! Miscellaneous control: write data ready polarity encoded value. */
 int adis_write_dr_polarity(struct adis_dev *adis, uint32_t dr_polarity);
+/*! Miscellaneous control: read data ready enable encoded value. */
+int adis_read_dr_enable(struct adis_dev *adis, uint32_t *dr_enable);
+/*! Miscellaneous control: write data ready enable encoded value. */
+int adis_write_dr_enable(struct adis_dev *adis, uint32_t dr_enable);
+/*! Miscellaneous control: read sync selection encoded value. */
+int adis_read_sync_selection(struct adis_dev *adis, uint32_t *sync_selection);
+/*! Miscellaneous control: write sync selection encoded value. */
+int adis_write_sync_selection(struct adis_dev *adis, uint32_t sync_selection);
 /*! Miscellaneous control: read sync polarity encoded value. */
 int adis_read_sync_polarity(struct adis_dev *adis, uint32_t *sync_polarity);
 /*! Miscellaneous control: write sync polarity encoded value. */
@@ -626,6 +717,26 @@ int adis_read_sync_mode(struct adis_dev *adis, uint32_t *sync_mode);
 /*! Miscellaneous control: write synchronization mode encoded value. */
 int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
 			 uint32_t ext_clk);
+/*! Miscellaneous control: read alarm selection encoded value. */
+int adis_read_alarm_selection(struct adis_dev *adis, uint32_t *alarm_selection);
+/*! Miscellaneous control: write alarm selection encoded value. */
+int adis_write_alarm_selection(struct adis_dev *adis, uint32_t alarm_selection);
+/*! Miscellaneous control: read alarm polarity encoded value. */
+int adis_read_alarm_polarity(struct adis_dev *adis, uint32_t *alarm_polarity);
+/*! Miscellaneous control: write alarm polarity encoded value. */
+int adis_write_alarm_polarity(struct adis_dev *adis, uint32_t alarm_polarity);
+/*! Miscellaneous control: read alarm enable encoded value. */
+int adis_read_alarm_enable(struct adis_dev *adis, uint32_t *alarm_enable);
+/*! Miscellaneous control: write alarm enable encoded value. */
+int adis_write_alarm_enable(struct adis_dev *adis, uint32_t alarm_enable);
+/*! Miscellaneous control: read gpio configured direction. */
+int adis_read_gpio_dir(struct adis_dev *adis, uint8_t dio_nb, uint32_t *dir);
+/*! Miscellaneous control: write gpio direction configuration. */
+int adis_write_gpio_dir(struct adis_dev *adis, uint8_t dio_nb, uint32_t dir);
+/*! Miscellaneous control: read gpio configured data level. */
+int adis_read_gpio_lvl(struct adis_dev *adis, uint8_t dio_nb, uint32_t *level);
+/*! Miscellaneous control: write gpio level configuration. */
+int adis_write_gpio_lvl(struct adis_dev *adis, uint8_t dio_nb, uint32_t level);
 /*! Miscellaneous control: read internal sensor bandwidth encoded value. */
 int adis_read_sens_bw(struct adis_dev *adis, uint32_t *sens_bw);
 /*! Miscellaneous control: write internal sensor bandwidth encoded value. */
@@ -765,6 +876,8 @@ int adis_read_firm_d(struct adis_dev *adis, uint32_t *firm_d);
 int adis_read_firm_m(struct adis_dev *adis, uint32_t *firm_m);
 /*! Device identification data: read firmware revision year. */
 int adis_read_firm_y(struct adis_dev *adis, uint32_t *firm_y);
+/*! Device identification data: read boot loader revision. */
+int adis_read_boot_rev(struct adis_dev *adis, uint32_t *boot_rev);
 /*! Device identification data: read product identification. */
 int adis_read_prod_id(struct adis_dev *adis, uint32_t *prod_id);
 /*! Device identification data: read serial number. */
