@@ -133,6 +133,9 @@ int state_machine()
 	int32_t adt75_value = 0;
 	// Variable used for the values read continuously from ADE9113
 	int32_t i_val = 0, v1_val = 0, v2_val = 0;
+	// Variables used to read the RCD status
+	uint8_t val_rcddc = 0;
+	uint8_t val_rcdac = 0;
 	// Pointer to the state machine structure
 	struct stout *stout;
 	// Pointer to the adt75_desc structure
@@ -423,9 +426,20 @@ int state_machine()
 				reset_rcd_flag_state();
 				stout->err_status = INTF_NO_ERR;
 			} else {
-				stout->previous_state = stout->current_state;
-				stout->current_state = STATE_FAULT;
-				stout->err_status = INTF_RCD_ERROR;
+				ret = no_os_gpio_get_value(stout->gpio_rcdac, &val_rcdac);
+				if (ret)
+					return ret;
+				ret = no_os_gpio_get_value(stout->gpio_rcddc, &val_rcddc);
+				if (ret)
+					return ret;
+				if ((val_rcddc == NO_OS_GPIO_HIGH) || (val_rcdac == NO_OS_GPIO_HIGH)) {
+					stout->previous_state = stout->current_state;
+					stout->current_state = STATE_FAULT;
+					stout->err_status = INTF_RCD_ERROR;
+				} else {
+					reset_rcd_flag_state();
+					stout->err_status = INTF_NO_ERR;
+				}
 			}
 			stout->previous_state = stout->current_state;
 		}
