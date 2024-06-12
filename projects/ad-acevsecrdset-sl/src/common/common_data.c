@@ -92,8 +92,8 @@ struct no_os_gpio_init_param ade9113_gpio_led2_ip = { //led 2
 };
 
 struct no_os_gpio_init_param ade9113_gpio_relay_ip = {  //relay control pin
-	.port = 0,
-	.number = 10,
+	.port = RELAY_CTRL_PORT,
+	.number = RELAY_CTRL_PIN,
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA,

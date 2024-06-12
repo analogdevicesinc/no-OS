@@ -101,4 +101,13 @@ extern struct no_os_gpio_init_param ade9113_gpio_led4_ip;
 #define TEMPERATURE_LIMIT_2     (50000l)
 #define MILLIDEGREE_PER_DEGREE	(1000UL)
 
+//Relay control pin
+#if defined(REV_A)
+#define RELAY_CTRL_PORT     (0)
+#define RELAY_CTRL_PIN      (10)
+#elif defined(REV_D)
+#define RELAY_CTRL_PORT     (1)
+#define RELAY_CTRL_PIN      (4)
+#endif
+
 #endif /* __COMMON_DATA_H__ */
