@@ -382,6 +382,7 @@ int self_test_rcd_running(struct stout *stout, uint16_t step,
 			return ret;
 
 		*event = S_M_RCD_TEST_COMPLETED;
+		reset_rcd_flag_state();
 		pr_debug("TEST RCD: Passed\n");
 	}
 
