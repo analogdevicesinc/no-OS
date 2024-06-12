@@ -145,7 +145,7 @@
 // The time rate used to compute Vin and Iout (multiple of 20ms)
 #define COMPUTE_VALUES_INTERVAL         (5u)
 // The time rate used to compute Vrelay (multiple of COMPUTE_VALUES_INTERVAL)
-#define COMPUTE_VRELAY_INTERVAL         (10u)
+#define COMPUTE_VRELAY_INTERVAL         (25u)
 // The rate at which the temperature is read (multiple of 20ms)
 #define TEMPERATURE_READ_RATE           (250u)
 // Delay for diode error check
