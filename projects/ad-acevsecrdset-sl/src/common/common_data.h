@@ -90,7 +90,11 @@ extern struct no_os_gpio_init_param ade9113_gpio_led4_ip;
 
 // For the relay stuck detection values see the documentation (dependent on the cable attached)
 // V relay_stuch min and max
+#if defined(REV_A)
 #define VR_OPEN_LOW_LIMIT       (2000l)
+#elif defined(REV_D)
+#define VR_OPEN_LOW_LIMIT       (50000l)
+#endif
 #define VR_OPEN_HIGH_LIMIT      (264000l)
 
 // V2 relay closed maximum value
