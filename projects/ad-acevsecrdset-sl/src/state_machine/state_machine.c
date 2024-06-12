@@ -337,7 +337,11 @@ int state_machine()
 			goto error;
 
 		v1 = supply_scale_v1(v1_val);
+#if defined(REV_A)
 		v2 = supply_scale_v2(v2_val);
+#elif defined(REV_D)
+		v2 = supply_scale_v1(v2_val);
+#endif
 		v1_max = no_os_max_t(int32_t, v1, v1_max);
 		v2_max = no_os_max_t(int32_t, v2, v2_max);
 		i_max = no_os_max_t(int32_t, i_val, i_max);
