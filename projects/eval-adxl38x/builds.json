@@ -1,0 +1,18 @@
+{
+  "stm32": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y SLF_TST_EXAMPLE=n ADXL382=y ADXL380=n HARDWARE=Dr38x_F767ZI.ioc"
+    },
+    "st_example": {
+      "flags" : "DUMMY_EXAMPLE=n SLF_TST_EXAMPLE=y ADXL382=y ADXL380=n HARDWARE=Dr38x_F767ZI.ioc"
+    }
+  },
+  "maxim": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y SLF_TST_EXAMPLE=n TARGET=max78000 ADXL380=y"
+    },
+    "st_example": {
+      "flags" : "DUMMY_EXAMPLE=n SLF_TST_EXAMPLE=y TARGET=max78000 ADXL380=y"
+    }
+  }
+}
