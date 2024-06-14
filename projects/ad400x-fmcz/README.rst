@@ -106,17 +106,9 @@ STM32 Platform
 
 **Used hardware:**
 
-* Arduinio-FMC interposer
 * `EVAL-AD400x <https://www.analog.com/eval-ad400x-fmcz.html>`_
 * `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 * ST debugger
-
-**Interposer jumper settings:**
-
-* SPI_MOSI = 02P
-* SPI_MOSO = 01P
-* SPI_CLK = 00P
-* SPI_CS = 00N
 
 **Prerequisites**
 
