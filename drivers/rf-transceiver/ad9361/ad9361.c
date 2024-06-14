@@ -5154,9 +5154,11 @@ static int32_t ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 
 		/* Workaround: Exiting Fastlock Mode */
 		ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 1);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs, FORCE_VCO_TUNE, 1);
+		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
+				  FORCE_VCO_TUNE_ENABLE, 1);
 		ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 0);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs, FORCE_VCO_TUNE, 0);
+		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
+				  FORCE_VCO_TUNE_ENABLE, 0);
 
 		ad9361_trx_vco_cal_control(phy, tx, true);
 		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2, ready_mask, 0);
