@@ -10,6 +10,10 @@ ANALOG TO DIGITAL CONVERTERS
    :maxdepth: 1
 
    projects/ad7091r8-sdz
+   projects/ad7616-st
+   projects/ad796x_fmcz
+   projects/ad400x-fmcz
+   projects/ad469x_fmcz
 
 FREQUENCY GENERATORS
 ====================
@@ -57,16 +61,6 @@ DIGITAL-IO
 
    projects/max14914
    projects/max14919
-
-ADC
-===
-.. toctree::
-   :maxdepth: 1
-
-   projects/ad7616-st
-   projects/ad796x_fmcz
-   projects/ad400x-fmcz
-   projects/ad469x_fmcz
 
 POWER MANAGEMENT
 ================
