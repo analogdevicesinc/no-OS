@@ -65,7 +65,7 @@ struct stm32_spi_init_param {
 	struct no_os_dma_ch* txdma_ch;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS PWM Initialization Parameters */
-	const struct no_os_pwm_init *pwm_init;
+	const struct no_os_pwm_init_param *pwm_init;
 #endif
 };
 
