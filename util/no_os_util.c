@@ -123,6 +123,20 @@ uint32_t no_os_field_get(uint32_t mask, uint32_t word)
 }
 
 /**
+ * Produce the maximum value representable by a field
+ */
+uint32_t no_os_field_max(uint32_t mask)
+{
+	// Find the first set bit to determine the shift position
+	uint32_t first_set_bit = no_os_find_first_set_bit(mask);
+
+	// Shift the mask to the right by the position of the first set bit
+	uint32_t shifted_mask = mask >> first_set_bit;
+
+	return shifted_mask;
+}
+
+/**
  * Log base 2 of the given number.
  */
 int32_t no_os_log_base_2(uint32_t x)
