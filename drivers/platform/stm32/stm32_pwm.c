@@ -394,6 +394,8 @@ static int32_t stm32_init_pwm(struct stm32_pwm_desc *desc,
 	desc->mode = sparam->mode;
 	desc->timer_chn = sparam->timer_chn;
 	desc->complementary_channel = sparam->complementary_channel;
+	desc->dma_enable = sparam->dma_enable;
+	desc->repetitions = sparam->repetitions;
 
 	return 0;
 }
@@ -515,6 +517,12 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	int32_t ret;
 	uint32_t chn_num;
 	struct stm32_pwm_desc *sparam;
+	uint32_t map[] = {
+		[1] = TIM_DMA_CC1,
+		[2] = TIM_DMA_CC2,
+		[3] = TIM_DMA_CC3,
+		[4] = TIM_DMA_CC4,
+	};
 
 	if (!desc)
 		return -EINVAL;
@@ -524,6 +532,13 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 
 	/* set counter to 0 to start from known state */
 	__HAL_TIM_SET_COUNTER(&sparam->htimer, 0);
+
+	if (sparam->dma_enable) {
+		/*sw trigger to reload repetition counter from repetitition register */
+		sparam->htimer.Instance->RCR = sparam->repetitions;
+		sparam->htimer.Instance->EGR |= (1 << 0);
+		__HAL_TIM_ENABLE_DMA(&sparam->htimer, map[sparam->timer_chn]);
+	}
 
 	if (desc->irq_id) {
 		if (sparam->complementary_channel) {
@@ -554,12 +569,21 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 	int32_t ret;
 	uint32_t chn_num;
 	struct stm32_pwm_desc *sparam;
+	uint32_t map[] = {
+		[1] = TIM_DMA_CC1,
+		[2] = TIM_DMA_CC2,
+		[3] = TIM_DMA_CC3,
+		[4] = TIM_DMA_CC4,
+	};
 
 	if (!desc)
 		return -EINVAL;
 
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
+
+	if (sparam->dma_enable)
+		__HAL_TIM_DISABLE_DMA(&sparam->htimer,  map[sparam->timer_chn]);
 
 	if (sparam->complementary_channel)
 		ret = HAL_TIMEx_PWMN_Stop(&sparam->htimer, chn_num);
