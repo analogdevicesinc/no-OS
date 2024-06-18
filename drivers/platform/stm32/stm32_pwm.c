@@ -456,6 +456,9 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
 
+	/* set counter to 0 to start from known state */
+	__HAL_TIM_SET_COUNTER(&sparam->htimer, 0);
+
 	if (desc->irq_id) {
 		if (sparam->complementary_channel) {
 			ret = HAL_TIMEx_PWMN_Start_IT(&sparam->htimer, chn_num);
