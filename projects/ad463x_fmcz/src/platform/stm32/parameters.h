@@ -73,7 +73,7 @@ extern uint8_t in_buff[];
 #define UART_OPS		&stm32_uart_ops
 
 #define SPI_DEVICE_ID		1
-#define SPI_BAUDRATE		10000000
+#define SPI_BAUDRATE		20000000
 #define SPI_CS			15
 #define SPI_CS_PORT		GPIO_PORT_A
 #define SPI_OPS			&stm32_spi_ops
@@ -94,5 +94,15 @@ extern uint8_t in_buff[];
 
 extern struct stm32_uart_init_param ad463x_uart_extra_ip;
 extern struct stm32_spi_init_param ad463x_spi_extra_ip;
+
+extern struct stm32_pwm_init_param cnv_pwm_extra_init_params;
+extern struct stm32_gpio_init_param cnv_pwm_gpio_extra_init_params;
+#define TRIGGER_PERIOD_NS 	3250
+#define TRIGGER_DUTY_NS		100
+#define PWM_OPS			&stm32_pwm_ops
+#define PWM_EXTRA		&cnv_pwm_extra_init_params
+#define PWM_GPIO_EXTRA		&cnv_pwm_gpio_extra_init_params
+#define NO_OS_PWM_ID		1
+
 
 #endif /* __PARAMETERS_H__ */

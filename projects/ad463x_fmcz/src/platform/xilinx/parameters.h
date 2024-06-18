@@ -116,10 +116,11 @@
 #define SPI_CS				0
 #define SPI_BAUDRATE			80000000
 
+#define NO_OS_PWM_ID			0
 #define PWM_OPS				&axi_pwm_ops
 #define PWM_EXTRA			&ad4630_axi_pwm_init
-#define PWM_PERIOD			555
-#define PWM_DUTY			10
+#define TRIGGER_PERIOD_NS		500
+#define TRIGGER_DUTY_NS			10
 
 #define AD400X_ADC_REF_VOLTAGE		5000
 

@@ -13,6 +13,7 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_dma.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_uart.c \
+	$(DRIVERS)/api/no_os_timer.c \
 	$(DRIVERS)/api/no_os_pwm.c \
 	$(DRIVERS)/api/no_os_irq.c
 
@@ -43,6 +44,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_mutex.h \
 	$(INCLUDE)/no_os_pwm.h \
+	$(INCLUDE)/no_os_timer.h \
 	$(INCLUDE)/no_os_circular_buffer.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_list.h \
