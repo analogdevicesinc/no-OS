@@ -103,6 +103,8 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	TIM_TypeDef *base = NULL;
 	uint32_t timer_frequency_hz;
 	struct stm32_pwm_init_param *sparam = param->extra;
+	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+	TIM_SlaveConfigTypeDef sSlaveConfig = {0};
 
 	if (sparam->get_timer_clock) {
 		timer_frequency_hz = sparam->get_timer_clock();
@@ -192,8 +194,35 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	if (HAL_TIM_Base_Init(&desc->htimer) != HAL_OK)
 		return -EIO;
 
+	if (!sparam->trigger_enable) {
+		sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+		if (HAL_TIM_ConfigClockSource(&desc->htimer, &sClockSourceConfig) != HAL_OK)
+			return -EIO;
+	}
 	if (HAL_TIM_PWM_Init(&desc->htimer) != HAL_OK)
 		return -EIO;
+	if (sparam->trigger_enable) {
+		switch (sparam->trigger_source) {
+		case PWM_TS_ITR0:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+			break;
+		case PWM_TS_ITR1:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR1;
+			break;
+		case PWM_TS_ITR2:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR2;
+			break;
+		case PWM_TS_ITR3:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR3;
+			break;
+		default:
+			return -EINVAL;
+		}
+		sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
+
+		if (HAL_TIM_SlaveConfigSynchro(&desc->htimer, &sSlaveConfig) != HAL_OK)
+			return -EIO;
+	}
 
 	/* Store the timer specific configuration for later use.*/
 	desc->prescaler = sparam->prescaler;
