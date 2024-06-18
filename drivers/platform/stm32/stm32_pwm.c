@@ -190,7 +190,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	desc->htimer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	desc->htimer.Init.AutoReloadPreload = sparam->timer_autoreload ?
 					      TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
-	desc->htimer.Init.RepetitionCounter = 0;
+	desc->htimer.Init.RepetitionCounter = sparam->repetitions;
 	desc->htimer.State = HAL_TIM_STATE_RESET;
 	if (HAL_TIM_Base_Init(&desc->htimer) != HAL_OK)
 		return -EIO;
