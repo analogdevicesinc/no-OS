@@ -42,14 +42,120 @@
 /******************************************************************************/
 #include "parameters.h"
 
+#include "stm32_dma.h"
+#include "no_os_pwm.h"
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+extern DMA_HandleTypeDef hdma_tim8_ch1;
+extern DMA_HandleTypeDef hdma_spi1_rx;
+
 struct stm32_uart_init_param ad463x_uart_extra_ip = {
 	.huart = &huart5,
+};
+
+struct no_os_dma_init_param dma_init = {
+	.id = 0,
+	.num_ch = 2,
+	.platform_ops = &stm32_dma_ops,
+};
+
+struct stm32_dma_channel txdma_channel = {
+	.hdma = &hdma_tim8_ch1,
+	.ch_num = DMA_CHANNEL_7,
+	.mem_increment = false,
+	.mem_data_alignment = DATA_ALIGN_BYTE,
+	.per_data_alignment = DATA_ALIGN_BYTE,
+	.dma_mode = DMA_CIRCULAR_MODE
+};
+
+struct stm32_dma_channel rxdma_channel = {
+	.hdma = &hdma_spi1_rx,
+	.ch_num = DMA_CHANNEL_3,
+	.mem_increment = true,
+	.mem_data_alignment = DATA_ALIGN_BYTE,
+	.per_data_alignment = DATA_ALIGN_BYTE,
+	.dma_mode = DMA_NORMAL_MODE,
+};
+
+/* CNV PWM */
+struct stm32_gpio_init_param cnv_pwm_gpio_extra_init_params = {
+	.mode = GPIO_MODE_AF_PP,
+	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
+	.alternate = GPIO_AF1_TIM1
+};
+
+struct stm32_pwm_init_param cnv_pwm_extra_init_params = {
+	.prescaler = 1,
+	.timer_autoreload = true,
+	.mode = TIM_OC_PWM1,
+	.timer_chn = 3,
+	.complementary_channel = false,
+	.get_timer_clock = HAL_RCC_GetPCLK2Freq,
+	.clock_divider = 2,
+	.trigger_output = PWM_TRGO_UPDATE,
+};
+
+/* CS PWM */
+struct stm32_pwm_init_param cs_pwm_extra_init_params = {
+	.prescaler = 1,
+	.timer_autoreload = true,
+	.mode = TIM_OC_PWM1,
+	.timer_chn = 1,
+	.complementary_channel = false,
+	.get_timer_clock = HAL_RCC_GetPCLK1Freq,
+	.clock_divider = 2,
+	.onepulse_enable = true,
+	.trigger_enable = true,
+	.trigger_source = PWM_TS_ITR0,
+	.trigger_output = PWM_TRGO_ENABLE,
+};
+
+struct no_os_pwm_init_param cs_pwm_init = {
+	.id = 2,
+	/* time to xfer bytes */
+	.period_ns = CS_PWM_PERIOD_NS,
+	.duty_cycle_ns = CS_PWM_DUTY_NS,
+	.polarity = NO_OS_PWM_POLARITY_HIGH,
+	.platform_ops = &stm32_pwm_ops,
+	.extra = &cs_pwm_extra_init_params
+};
+
+/* TX PWM */
+struct stm32_pwm_init_param tx_pwm_extra_init_params = {
+	.prescaler = 1,
+	.timer_autoreload = true,
+	.mode = TIM_OC_PWM1,
+	.timer_chn = 1,
+	.complementary_channel = false,
+	.get_timer_clock = HAL_RCC_GetPCLK2Freq,
+	.clock_divider = 2,
+	.onepulse_enable = true,
+	.trigger_enable = true,
+	.trigger_source = PWM_TS_ITR0,
+	.dma_enable = true,
+	.repetitions = TX_PWM_REPS,
+};
+
+struct no_os_pwm_init_param tx_pwm_init = {
+	.id = 8,
+	/* time to xfer 8 bits */
+	.period_ns = TX_PWM_PERIOD_NS,
+	.duty_cycle_ns = TX_PWM_DUTY_NS,
+	.polarity = NO_OS_PWM_POLARITY_HIGH,
+	.platform_ops = &stm32_pwm_ops,
+	.extra = &tx_pwm_extra_init_params
 };
 
 struct stm32_spi_init_param ad463x_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,
 	.get_input_clock = HAL_RCC_GetPCLK2Freq,
+	.dma_init = &dma_init,
+	.txdma_ch = &txdma_channel,
+	.rxdma_ch = &rxdma_channel,
+	.irq_num = DMA2_Stream0_IRQn,
+	.pwm_init = &cs_pwm_init,
+	.tx_pwm_init = &tx_pwm_init,
+	.alternate = GPIO_AF1_TIM1,
+
 };
