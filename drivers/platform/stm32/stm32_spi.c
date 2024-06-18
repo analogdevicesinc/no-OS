@@ -592,6 +592,7 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 			    void *ctx)
 {
 	struct no_os_spi_desc* desc = ctx;
+	struct stm32_pwm_desc* spwm_desc;
 	struct stm32_spi_desc* sdesc = desc->extra;
 	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
 
@@ -633,7 +634,7 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 }
 
 /**
- * @brief Configure and start a series of transfers using DMA. Wait for the
+ * @brief Configure and start a series of transfers using DMA. Don't Wait for the
  * 	  completion before returning.
  * @param desc - The SPI descriptor.
  * @param msgs - The messages array.
@@ -657,6 +658,37 @@ int32_t stm32_spi_dma_transfer_async(struct no_os_spi_desc* desc,
 }
 
 /**
+ * @brief Configure and start a series of transfers using DMA. Wait for the
+ * 	  completion before returning.
+ * @param desc - The SPI descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t stm32_spi_dma_transfer_sync(struct no_os_spi_desc* desc,
+				    struct no_os_spi_msg* msgs,
+				    uint32_t len)
+{
+	uint32_t timeout;
+	struct stm32_spi_desc* sdesc = desc->extra;
+
+	sdesc->stm32_spi_dma_done = false;
+	stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback, desc, true);
+	timeout = msgs->bytes_number;
+	while(timeout--) {
+		no_os_mdelay(1);
+		if (sdesc->stm32_spi_dma_done)
+			break;
+	};
+
+	/* need some cleanup here? */
+	if (timeout == 0)
+		return -ETIME;
+
+	return 0;
+}
+
+/**
  * @brief stm32 platform specific SPI platform ops structure
  */
 const struct no_os_spi_platform_ops stm32_spi_ops = {
@@ -664,5 +696,6 @@ const struct no_os_spi_platform_ops stm32_spi_ops = {
 	.write_and_read = &stm32_spi_write_and_read,
 	.remove = &stm32_spi_remove,
 	.transfer = &stm32_spi_transfer,
-	.dma_transfer_async = &stm32_spi_dma_transfer_async
+	.dma_transfer_async = &stm32_spi_dma_transfer_async,
+	.dma_transfer_sync = &stm32_spi_dma_transfer_sync
 };
