@@ -104,6 +104,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	uint32_t timer_frequency_hz;
 	struct stm32_pwm_init_param *sparam = param->extra;
 	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+	TIM_MasterConfigTypeDef sMasterConfig = {0};
 	TIM_SlaveConfigTypeDef sSlaveConfig = {0};
 
 	if (sparam->get_timer_clock) {
@@ -223,6 +224,39 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		if (HAL_TIM_SlaveConfigSynchro(&desc->htimer, &sSlaveConfig) != HAL_OK)
 			return -EIO;
 	}
+
+	switch (sparam->trigger_output) {
+	case PWM_TRGO_RESET:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+		break;
+	case PWM_TRGO_ENABLE:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE;
+		break;
+	case PWM_TRGO_UPDATE:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+		break;
+	case PWM_TRGO_OC1:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1;
+		break;
+	case PWM_TRGO_OC1REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1REF;
+		break;
+	case PWM_TRGO_OC2REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC2REF;
+		break;
+	case PWM_TRGO_OC3REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC3REF;
+		break;
+	case PWM_TRGO_OC4REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC4REF;
+		break;
+	default:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	}
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if (HAL_TIMEx_MasterConfigSynchronization(&desc->htimer,
+			&sMasterConfig) != HAL_OK)
+		return -EIO;
 
 	/* Store the timer specific configuration for later use.*/
 	desc->prescaler = sparam->prescaler;
