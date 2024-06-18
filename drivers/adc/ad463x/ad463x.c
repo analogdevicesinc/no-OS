@@ -42,12 +42,14 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
 #include "ad463x.h"
 #include "no_os_print_log.h"
 #include "no_os_alloc.h"
+#include "no_os_spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -500,6 +502,40 @@ static void ad463x_pext(unsigned char in0, unsigned char in1,
 }
 
 /**
+ * @brief Parallel Bits Extract for sample
+ * @param buf - buffer of interleaved data
+ * @param size - number of bytes in the buffer
+ * @param ch0_out - unscrambled byte 0
+ * @param ch1_out - unscrambled byte 1
+ * @return none
+ */
+static void ad463x_pext_sample(struct ad463x_dev *dev,
+			       uint8_t *buf, int size,
+			       uint32_t *ch0_out,
+			       uint32_t *ch1_out)
+{
+	uint8_t data[8] = {0};
+	uint8_t ch0[4];
+	uint8_t ch1[4];
+	int shift;
+
+	memcpy(data, buf, size);
+	ad463x_pext(data[0], data[1], &ch0[0], &ch1[0]);
+	ad463x_pext(data[2], data[3], &ch0[1], &ch1[1]);
+	ad463x_pext(data[4], data[5], &ch0[2], &ch1[2]);
+	ad463x_pext(data[6], data[7], &ch0[3], &ch1[3]);
+
+	*ch0_out = ch0[3] | ch0[2] << 8 | ch0[1] << 16 | ch0[0] << 24;
+	*ch1_out = ch1[3] | ch1[2] << 8 | ch1[1] << 16 | ch1[0] << 24;
+
+	shift = 32 - dev->real_bits_precision;
+	if (shift) {
+		*ch1_out >>= shift;
+		*ch0_out >>= shift;
+	}
+}
+
+/**
  * @brief read a single sample of data
  * @param dev - ad469x_dev device handler.
  * @param ch0_out - pointer to store channel 0 data
@@ -510,10 +546,7 @@ static int32_t ad463x_read_single_sample(struct ad463x_dev *dev,
 		uint32_t *ch0_out,  uint32_t *ch1_out)
 {
 	uint8_t data[8] = {0};
-	uint8_t ch0[4];
-	uint8_t ch1[4];
 	int ret;
-	int shift;
 
 	if (!dev)
 		return -EINVAL;
@@ -530,29 +563,68 @@ static int32_t ad463x_read_single_sample(struct ad463x_dev *dev,
 	if (ret)
 		return ret;
 
-	ad463x_pext(data[0], data[1], &ch0[0], &ch1[0]);
-	ad463x_pext(data[2], data[3], &ch0[1], &ch1[1]);
-	ad463x_pext(data[4], data[5], &ch0[2], &ch1[2]);
-	ad463x_pext(data[6], data[7], &ch0[3], &ch1[3]);
-
-	*ch0_out = ch0[3] | ch0[2] << 8 | ch0[1] << 16 | ch0[0] << 24;
-	*ch1_out = ch1[3] | ch1[2] << 8 | ch1[1] << 16 | ch1[0] << 24;
-
-	shift = 32 - dev->real_bits_precision;
-	if (shift) {
-		*ch1_out >>= shift;
-		*ch0_out >>= shift;
-	}
+	ad463x_pext_sample(dev, data, dev->read_bytes_no, ch0_out, ch1_out);
 
 	return 0;
 }
 
 /**
+ * @brief Read from device using dma
+ * @param dev - ad469x_dev device handler.
+ * @param buf - data buffer
+ * @param samples - sample number.
+ * @return 0 in case of success, negative otherwise.
+ */
+static int32_t ad463x_read_data_dma(struct ad463x_dev *dev,
+				    uint32_t *buf,
+				    uint16_t samples)
+{
+	struct no_os_spi_msg spi_msg;
+	uint32_t *p_buf = buf;
+	uint8_t tx_buf = 0;
+	uint8_t *rx_buf, *rx_sample;
+	int ret, i;
+
+	if (!dev)
+		return -EINVAL;
+
+	rx_buf = no_os_calloc(1, samples * dev->read_bytes_no);
+	if (!rx_buf)
+		return -ENOMEM;
+
+	spi_msg.tx_buff = &tx_buf,
+	spi_msg.bytes_number = samples * dev->read_bytes_no,
+	spi_msg.rx_buff = rx_buf,
+
+	ret = no_os_pwm_enable(dev->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_spi_transfer_dma_sync(dev->spi_desc, &spi_msg, 1);
+	if (ret)
+		goto out;
+
+	ret = no_os_pwm_disable(dev->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
+
+	rx_sample = rx_buf;
+	for (i = 0; i < samples; i++) {
+		ad463x_pext_sample(dev, rx_sample, 6, p_buf, p_buf +1);
+		rx_sample += dev->read_bytes_no;
+		p_buf += 2;
+	}
+out:
+	no_os_free(rx_buf);
+	return ret;
+}
+
+/**
  * @brief Read from device.
  *        Enter register mode to read/write registers
- * @param [in] dev - ad469x_dev device handler.
- * @param [out] buf - data buffer.
- * @param [in] samples - sample number.
+ * @param dev - ad469x_dev device handler.
+ * @param buf - data buffer.
+ * @param samples - sample number.
  * @return 0 in case of success, negative otherwise.
  */
 int32_t ad463x_read_data(struct ad463x_dev *dev,
@@ -564,6 +636,9 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 
 	if (!dev)
 		return -EINVAL;
+
+	if (dev->spi_dma_enable)
+		return ad463x_read_data_dma(dev, buf, samples);
 
 	for (i = 0, p_buf = buf; i < samples; i++, p_buf+=2) {
 		ret = ad463x_read_single_sample(dev, p_buf, p_buf +1);
@@ -625,7 +700,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 		return -1;
 	}
 
-	dev = (struct ad463x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad463x_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -658,6 +733,8 @@ int32_t ad463x_init(struct ad463x_dev **device,
 #if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
 #endif
+	dev->spi_dma_enable = init_param->spi_dma_enable;
+	dev->offload_enable = init_param->offload_enable;
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->reg_data_width = init_param->reg_data_width;
 	dev->output_mode = init_param->output_mode;
@@ -771,11 +848,12 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	if (ret != 0)
 		return ret;
 
-#if !defined(USE_STANDARD_SPI)
-	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
-	if (ret != 0)
-		goto error_spi;
-#endif
+	if (dev->spi_dma_enable || dev->offload_enable) {
+		ret = no_os_pwm_init(&dev->trigger_pwm_desc,
+				     init_param->trigger_pwm_init);
+		if (ret != 0)
+			goto error_spi;
+	}
 
 	*device = dev;
 
@@ -871,11 +949,11 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 
 	if (!dev)
 		return -1;
-#if !defined(USE_STANDARD_SPI)
+
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
 	if (ret != 0)
 		return ret;
-#endif
+
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != 0)
 		return ret;

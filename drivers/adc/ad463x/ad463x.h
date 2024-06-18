@@ -47,8 +47,8 @@
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #include "clk_axi_clkgen.h"
-#include "no_os_pwm.h"
 #endif
+#include "no_os_pwm.h"
 #include "no_os_gpio.h"
 
 /******************************************************************************/
@@ -206,9 +206,9 @@ struct ad463x_init_param {
 	struct no_os_gpio_init_param *gpio_cnv;
 	struct no_os_gpio_init_param *gpio_pgia_a0;
 	struct no_os_gpio_init_param *gpio_pgia_a1;
-#if !defined(USE_STANDARD_SPI)
 	/** PWM */
 	struct no_os_pwm_init_param *trigger_pwm_init;
+#if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Clock gen for hdl design init structure */
@@ -234,6 +234,10 @@ struct ad463x_init_param {
 	uint8_t output_mode;
 	/** num channels */
 	uint8_t num_chn;
+	/** enable spi dma */
+	bool spi_dma_enable;
+	/** enable spi engine offload */
+	bool offload_enable;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -250,9 +254,9 @@ struct ad463x_dev {
 	struct no_os_gpio_desc *gpio_cnv;
 	struct no_os_gpio_desc *gpio_pgia_a0;
 	struct no_os_gpio_desc *gpio_pgia_a1;
-#if !defined(USE_STANDARD_SPI)
 	/** PWM */
 	struct no_os_pwm_desc *trigger_pwm_desc;
+#if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Clock gen for hdl design structure */
@@ -288,6 +292,10 @@ struct ad463x_dev {
 	bool has_pgia;
 	/** num channels */
 	uint8_t num_chn;
+	/** enable spi dma */
+	bool spi_dma_enable;
+	/** enable spi engine offload */
+	bool offload_enable;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
