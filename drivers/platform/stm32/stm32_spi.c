@@ -204,29 +204,28 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		if (ret)
 			goto error;
 
-		if (sinit->rxdma_ch)
-			sdesc->rxdma_ch = sinit->rxdma_ch;
-
-		if (sinit->txdma_ch)
-			sdesc->txdma_ch = sinit->txdma_ch;
-
-		sdesc->dma_desc->sg_handler = sinit->dma_init->sg_handler;
+		if (sinit->rxdma_ch) {
+			sdesc->rxdma_ch = &sdesc->dma_desc->channels[0];
+			sdesc->rxdma_ch->id = sinit->rxdma_ch->hdma;
+			sdesc->rxdma_ch->extra = sinit->rxdma_ch;
+			sdesc->rxdma_ch->irq_num = sinit->irq_num;
+		}
+		if (sinit->txdma_ch) {
+			sdesc->txdma_ch = &sdesc->dma_desc->channels[1];
+			sdesc->txdma_ch->id = sinit->txdma_ch->hdma;
+			sdesc->txdma_ch->extra = sinit->txdma_ch;
+		}
 	}
 
 #ifdef HAL_TIM_MODULE_ENABLED
 	if (sinit->pwm_init) {
-		struct stm32_pwm_desc* spwm_desc;
-		/* Initialize CS PWM */
 		ret = no_os_pwm_init(&sdesc->pwm_desc, sinit->pwm_init);
 		if (ret)
 			goto error;
 
-		spwm_desc = sdesc->pwm_desc->extra;
 		ret = no_os_pwm_disable(sdesc->pwm_desc);
 		if (ret)
 			goto error_pwm;
-
-		spwm_desc->htimer.Instance->CNT = 0;
 	}
 #endif
 	sdesc->csip_extra.mode = GPIO_MODE_OUTPUT_PP;
@@ -477,16 +476,15 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 				   struct no_os_spi_msg* msgs,
 				   uint32_t len,
-				   void (*callback)(void*),
+				   void (*callback)(
+						   struct no_os_dma_xfer_desc *old_xfer,
+						   struct no_os_dma_xfer_desc *next_xfer,
+						   void *ctx),
 				   void* ctx, bool is_async)
 {
 	struct stm32_spi_desc* sdesc = desc->extra;
 	struct no_os_dma_xfer_desc* rx_ch_xfer;
 	struct no_os_dma_xfer_desc* tx_ch_xfer;
-	struct no_os_dma_ch* tx_ch = sdesc->txdma_ch;
-	struct no_os_dma_ch* rx_ch = sdesc->rxdma_ch;
-	struct stm32_dma_channel* sdma_rx = rx_ch->extra;
-	struct stm32_dma_channel* sdma_tx = tx_ch->extra;
 	SPI_TypeDef* SPIx = sdesc->hspi.Instance;
 	int ret;
 	uint8_t i;
@@ -524,40 +522,41 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 		rx_ch_xfer[i].xfer_type = DEV_TO_MEM;
 		rx_ch_xfer[i].length = msgs[i].bytes_number;
 		if (callback) {
-			sdesc->dma_desc->sg_handler = callback;
+			rx_ch_xfer[i].xfer_complete_cb = callback;
+			rx_ch_xfer[i].xfer_complete_ctx = ctx;
+
+			tx_ch_xfer[i].xfer_complete_cb = NULL;
+			tx_ch_xfer[i].xfer_complete_ctx = NULL;
 		}
 	}
 
-	rx_ch->id = sdma_rx->hdma;
-	rx_ch->sg_list = NULL;
+	sdesc->tx_ch_xfer = tx_ch_xfer;
+	sdesc->rx_ch_xfer = rx_ch_xfer;
 
-	ret = no_os_dma_config_xfer(sdesc->dma_desc, rx_ch_xfer, len, rx_ch);
+	ret = no_os_dma_config_xfer(sdesc->dma_desc, rx_ch_xfer, len, sdesc->rxdma_ch);
 	if (ret)
 		goto remove_dma;
 
-	tx_ch->id = sdma_tx->hdma;
-	tx_ch->sg_list = NULL;
-
-	ret = no_os_dma_config_xfer(sdesc->dma_desc, tx_ch_xfer, len, tx_ch);
+	ret = no_os_dma_config_xfer(sdesc->dma_desc, tx_ch_xfer, len, sdesc->txdma_ch);
 	if (ret)
 		goto remove_dma;
 
-	ret = no_os_dma_xfer_start(sdesc->dma_desc, tx_ch);
+	ret = no_os_dma_xfer_start(sdesc->dma_desc, sdesc->txdma_ch);
 	if (ret)
 		goto abort_transfer;
 
-	ret = no_os_dma_xfer_start(sdesc->dma_desc, rx_ch);
+	ret = no_os_dma_xfer_start(sdesc->dma_desc, sdesc->rxdma_ch);
 	if (ret)
 		goto abort_transfer;
 
-	if (tx_ch)
+	if (sdesc->txdma_ch)
 #if defined (STM32H5)
 		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
 #else
 		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
 #endif
 
-	if (rx_ch)
+	if (sdesc->rxdma_ch)
 #if defined (STM32H5)
 		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
 #else
@@ -576,8 +575,8 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	return 0;
 
 abort_transfer:
-	no_os_dma_xfer_abort(sdesc->dma_desc, tx_ch);
-	no_os_dma_xfer_abort(sdesc->dma_desc, rx_ch);
+	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->txdma_ch);
+	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->rxdma_ch);
 remove_dma:
 	no_os_dma_remove(sdesc->dma_desc);
 free_tx_ch_xfer:
@@ -586,6 +585,51 @@ free_rx_ch_xfer:
 	no_os_free(rx_ch_xfer);
 
 	return ret;
+}
+
+void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
+			    struct no_os_dma_xfer_desc *next_xfer,
+			    void *ctx)
+{
+	struct no_os_spi_desc* desc = ctx;
+	struct stm32_spi_desc* sdesc = desc->extra;
+	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
+
+	/* if more xfers pending dont do anything */
+	if (next_xfer)
+		return;
+
+	if (sdesc->pwm_desc)
+		no_os_pwm_disable(sdesc->pwm_desc);
+
+#if defined (STM32H5)
+	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
+#else
+	CLEAR_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
+#endif
+
+#if defined (STM32H5)
+	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
+#else
+	CLEAR_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
+#endif
+
+	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->txdma_ch);
+
+	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->rxdma_ch);
+
+	no_os_free(sdesc->tx_ch_xfer);
+	no_os_free(sdesc->rx_ch_xfer);
+
+	/* put CS pin back into gpio mode */
+	stm32_spi_altrnate_cs_enable(desc, false);
+
+	sdesc->stm32_spi_dma_done = true;
+
+	/* Dummy read to clear any pending read on SPI */
+	*(volatile uint8_t *)&SPIx->DR;
+	if (sdesc->stm32_spi_dma_user_cb)
+		sdesc->stm32_spi_dma_user_cb(sdesc->stm32_spi_dma_user_ctx);
 }
 
 /**
@@ -604,7 +648,12 @@ int32_t stm32_spi_dma_transfer_async(struct no_os_spi_desc* desc,
 				     void (*callback)(void*),
 				     void* ctx)
 {
-	return stm32_config_dma_and_start(desc, msgs, len, callback, ctx, true);
+	struct stm32_spi_desc* sdesc = desc->extra;
+
+	sdesc->stm32_spi_dma_user_cb = callback;
+	sdesc->stm32_spi_dma_user_ctx = ctx;
+	return stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback, desc,
+					  true);
 }
 
 /**

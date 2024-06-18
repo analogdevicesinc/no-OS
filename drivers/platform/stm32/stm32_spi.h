@@ -64,9 +64,10 @@ struct stm32_spi_init_param {
 	/** DMA Initialization Parameters */
 	struct no_os_dma_init_param* dma_init;
 	/** RX DMA Channel Descriptor */
-	struct no_os_dma_ch* rxdma_ch;
+	struct stm32_dma_channel* rxdma_ch;
 	/** TX DMA Channel Descriptor */
-	struct no_os_dma_ch* txdma_ch;
+	struct stm32_dma_channel* txdma_ch;
+	uint32_t irq_num;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS PWM Initialization Parameters */
 	const struct no_os_pwm_init_param *pwm_init;
@@ -94,6 +95,11 @@ struct stm32_spi_desc {
 	struct no_os_dma_ch* txdma_ch;
 	struct stm32_gpio_init_param csip_extra;
 	struct no_os_gpio_init_param csip;
+	bool stm32_spi_dma_done;
+	void (*stm32_spi_dma_user_cb)(void *ctx);
+	void *stm32_spi_dma_user_ctx;
+	struct stm32_dma_channel* rx_ch_xfer;
+	struct stm32_dma_channel* tx_ch_xfer;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS PWM descriptor */
 	struct no_os_pwm_desc* pwm_desc;
