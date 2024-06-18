@@ -253,7 +253,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 
 error_pwm:
 #ifdef HAL_TIM_MODULE_ENABLED
-	no_os_free(sdesc->pwm_desc);
+	no_os_pwm_remove(sdesc->pwm_desc);
 #endif
 error:
 	no_os_dma_remove(sdesc->dma_desc);
