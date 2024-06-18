@@ -71,6 +71,7 @@ struct stm32_spi_init_param {
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS PWM Initialization Parameters */
 	const struct no_os_pwm_init_param *pwm_init;
+	const struct no_os_pwm_init_param *tx_pwm_init;
 #endif
 };
 
@@ -103,6 +104,7 @@ struct stm32_spi_desc {
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS PWM descriptor */
 	struct no_os_pwm_desc* pwm_desc;
+	struct no_os_pwm_desc* tx_pwm_desc;
 #endif
 };
 
