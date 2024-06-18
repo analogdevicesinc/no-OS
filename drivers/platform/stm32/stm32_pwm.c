@@ -202,6 +202,9 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	}
 	if (HAL_TIM_PWM_Init(&desc->htimer) != HAL_OK)
 		return -EIO;
+	if (sparam->onepulse_enable)
+		if (HAL_TIM_OnePulse_Init(&desc->htimer, TIM_OPMODE_SINGLE) != HAL_OK)
+			return -EIO;
 	if (sparam->trigger_enable) {
 		switch (sparam->trigger_source) {
 		case PWM_TS_ITR0:

@@ -106,6 +106,8 @@ struct stm32_pwm_init_param {
 	enum stm32_pwm_trigger trigger_source;
 	/** Trigger out selection */
 	enum stm32_pwm_trigger_out trigger_output;
+	/* Enable one pulse */
+	bool onepulse_enable;
 	/** Timer callback */
 	struct no_os_callback_desc timer_callback;
 };
