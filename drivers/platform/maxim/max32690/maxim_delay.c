@@ -79,11 +79,18 @@ void no_os_mdelay(uint32_t msecs)
 struct no_os_time no_os_get_time(void)
 {
 	struct no_os_time t;
+	uint64_t sub_ms;
+	uint32_t systick_val;
+	uint64_t ticks;
 
-	t.s = _system_ticks / 1000;
+	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
+	systick_val = SysTick->VAL;
+	ticks = _system_ticks;
+	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
 
-	t.us = (_system_ticks - t.s * 1000) * 1000 + SysTick->VAL /
-	       (SystemCoreClock / 1000000);
+	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
+	t.s = ticks / 1000;
+	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
 
 	return t;
 }
