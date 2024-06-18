@@ -227,6 +227,15 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		if (ret)
 			goto error_pwm;
 	}
+	if (sinit->tx_pwm_init) {
+		ret = no_os_pwm_init(&sdesc->tx_pwm_desc, sinit->tx_pwm_init);
+		if (ret)
+			goto error;
+
+		ret = no_os_pwm_disable(sdesc->tx_pwm_desc);
+		if (ret)
+			goto error_pwm;
+	}
 #endif
 	sdesc->csip_extra.mode = GPIO_MODE_OUTPUT_PP;
 	sdesc->csip_extra.speed = GPIO_SPEED_FREQ_LOW;
@@ -250,6 +259,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 error_pwm:
 #ifdef HAL_TIM_MODULE_ENABLED
 	no_os_pwm_remove(sdesc->pwm_desc);
+	no_os_pwm_remove(sdesc->tx_pwm_desc);
 #endif
 error:
 	no_os_dma_remove(sdesc->dma_desc);
@@ -273,6 +283,7 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 	sdesc = desc->extra;
 #ifdef HAL_TIM_MODULE_ENABLED
 	no_os_pwm_remove(sdesc->pwm_desc);
+	no_os_pwm_remove(sdesc->tx_pwm_desc);
 #endif
 
 	no_os_dma_remove(sdesc->dma_desc);
@@ -510,7 +521,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 #endif
 		tx_ch_xfer[i].xfer_type = MEM_TO_DEV;
 		tx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
-		tx_ch_xfer[i].length = msgs[i].bytes_number;
+		tx_ch_xfer[i].length = 1;
 
 		rx_ch_xfer[i].dst = msgs[i].rx_buff;
 #ifndef SPI_SR_RXNE
@@ -570,6 +581,11 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 		if (ret)
 			goto abort_transfer;
 	}
+	if (sdesc->tx_pwm_desc) {
+		ret = no_os_pwm_enable(sdesc->tx_pwm_desc);
+		if (ret)
+			goto abort_transfer;
+	}
 #endif
 
 	return 0;
@@ -592,7 +608,6 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 			    void *ctx)
 {
 	struct no_os_spi_desc* desc = ctx;
-	struct stm32_pwm_desc* spwm_desc;
 	struct stm32_spi_desc* sdesc = desc->extra;
 	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
 
@@ -600,8 +615,13 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 	if (next_xfer)
 		return;
 
+#ifdef HAL_TIM_MODULE_ENABLED
 	if (sdesc->pwm_desc)
 		no_os_pwm_disable(sdesc->pwm_desc);
+
+	if (sdesc->tx_pwm_desc)
+		no_os_pwm_disable(sdesc->tx_pwm_desc);
+#endif
 
 #if defined (STM32H5)
 	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
