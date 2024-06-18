@@ -110,6 +110,8 @@ struct stm32_pwm_init_param {
 	bool onepulse_enable;
 	/* Number of pulse repetitions */
 	uint32_t repetitions;
+	/* Enable dma */
+	bool dma_enable;
 	/** Timer callback */
 	struct no_os_callback_desc timer_callback;
 };
@@ -141,6 +143,10 @@ struct stm32_pwm_desc {
 	struct no_os_irq_ctrl_desc *nvic_tim;
 	/** Timer callback */
 	struct no_os_callback_desc timer_callback;
+	/* Number of pulse repetitions */
+	uint32_t repetitions;
+	/* Enable dma */
+	bool dma_enable;
 };
 
 /**
