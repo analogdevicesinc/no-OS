@@ -71,6 +71,12 @@ struct no_os_gpio_init_param ad463x_cnv = {
 	.port = GPIO_CNV_PORT,
 };
 
+struct no_os_gpio_init_param cnv_pwm_gpio_params = {
+	.port = GPIO_CNV_PORT,
+	.number = GPIO_CNV,
+	.platform_ops = GPIO_OPS,
+	.extra = PWM_GPIO_EXTRA,
+};
 #else
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 	.offload_config = OFFLOAD_RX_EN,
@@ -83,14 +89,19 @@ struct axi_clkgen_init clkgen_init = {
 	.parent_rate = 100000000,
 };
 
+#endif
+
 struct no_os_pwm_init_param trigger_pwm_init = {
-	.period_ns = 500,	/* 2Mhz */
-	.duty_cycle_ns = AD463X_TRIGGER_PULSE_WIDTH_NS,
+	.id = NO_OS_PWM_ID,
+	.period_ns = TRIGGER_PERIOD_NS,
+	.duty_cycle_ns = TRIGGER_DUTY_NS,
 	.polarity = NO_OS_PWM_POLARITY_HIGH,
+#if defined(USE_STANDARD_SPI)
+	.pwm_gpio = &cnv_pwm_gpio_params,
+#endif
 	.platform_ops = PWM_OPS,
 	.extra = PWM_EXTRA,
 };
-#endif
 
 struct no_os_gpio_init_param ad463x_resetn = {
 	.number = GPIO_RESETN_1,
@@ -126,13 +137,15 @@ struct ad463x_init_param ad463x_init_param = {
 #if defined(USE_STANDARD_SPI)
 	.gpio_cnv = &ad463x_cnv,
 	.lane_mode = AD463X_SHARED_TWO_CH,
+	.spi_dma_enable = true,
 #else
 	.offload_init_param = &spi_engine_offload_init_param,
-	.trigger_pwm_init = &trigger_pwm_init,
 	.axi_clkgen_rate = 160000000,
 	.clkgen_init = &clkgen_init,
 	.lane_mode = AD463X_ONE_LANE_PER_CH,
+	.offload_enable = true,
 #endif
+	.trigger_pwm_init = &trigger_pwm_init,
 	.gpio_resetn = &ad463x_resetn,
 	.reg_access_speed = 20000000,
 	.reg_data_width = 8,
