@@ -176,8 +176,6 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 
 	struct stm32_spi_desc *sdesc;
 	struct stm32_spi_init_param *sinit;
-	struct no_os_gpio_init_param csip;
-	struct stm32_gpio_init_param csip_extra;
 
 	sdesc = (struct stm32_spi_desc*)no_os_calloc(1,sizeof(struct stm32_spi_desc));
 	if (!sdesc) {
@@ -187,21 +185,6 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 
 	spi_desc->extra = sdesc;
 	sinit = param->extra;
-
-	csip_extra.mode = GPIO_MODE_OUTPUT_PP;
-	csip_extra.speed = GPIO_SPEED_FREQ_LOW;
-	csip.port = sinit->chip_select_port;
-	csip.number = param->chip_select;
-	csip.pull = NO_OS_PULL_NONE;
-	csip.extra = &csip_extra;
-	csip.platform_ops = &stm32_gpio_ops;
-	ret = no_os_gpio_get(&sdesc->chip_select, &csip);
-	if (ret)
-		goto error;
-
-	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
-	if (ret)
-		goto error;
 
 	/* copy settings to device descriptor */
 	spi_desc->device_id = param->device_id;
@@ -246,7 +229,21 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		spwm_desc->htimer.Instance->CNT = 0;
 	}
 #endif
+	sdesc->csip_extra.mode = GPIO_MODE_OUTPUT_PP;
+	sdesc->csip_extra.speed = GPIO_SPEED_FREQ_LOW;
+	sdesc->csip.port = sinit->chip_select_port;
+	sdesc->csip.number = param->chip_select;
+	sdesc->csip.pull = NO_OS_PULL_NONE;
+	sdesc->csip.extra = &sdesc->csip_extra;
+	sdesc->csip.platform_ops = &stm32_gpio_ops;
+	sdesc->alternate =  sinit->alternate;
+	ret = no_os_gpio_get(&sdesc->chip_select, &sdesc->csip);
+	if (ret)
+		goto error;
 
+	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
+	if (ret)
+		goto error;
 	*desc = spi_desc;
 
 	return 0;
@@ -288,6 +285,40 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 	no_os_gpio_remove(sdesc->chip_select);
 	no_os_free(desc->extra);
 	no_os_free(desc);
+	return 0;
+}
+
+/**
+ * @brief enable CS gpio alternate function
+ * @param desc - The SPI descriptor
+ * @param enable - enable = alternate function active, disable = gpio mode
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t stm32_spi_altrnate_cs_enable(struct no_os_spi_desc *desc, bool enable)
+{
+	struct stm32_spi_desc *sdesc = desc->extra;
+	int ret;
+
+	no_os_gpio_remove(sdesc->chip_select);
+	sdesc->chip_select = NULL;
+
+	if (enable) {
+		sdesc->csip_extra.mode = GPIO_MODE_AF_PP;
+		sdesc->csip_extra.alternate = sdesc->alternate;
+	} else {
+		sdesc->csip_extra.mode = GPIO_MODE_OUTPUT_PP;
+	}
+
+	ret = no_os_gpio_get(&sdesc->chip_select, &sdesc->csip);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
+	if (ret) {
+		no_os_gpio_remove(sdesc->chip_select);
+		return ret;
+	}
+
 	return 0;
 }
 
@@ -535,6 +566,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 
 #ifdef HAL_TIM_MODULE_ENABLED
 	if (sdesc->pwm_desc) {
+		stm32_spi_altrnate_cs_enable(desc, true);
 		ret = no_os_pwm_enable(sdesc->pwm_desc);
 		if (ret)
 			goto abort_transfer;
