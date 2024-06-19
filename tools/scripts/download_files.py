@@ -7,6 +7,11 @@ import ast
 from bs4 import BeautifulSoup
 from artifactory import ArtifactoryPath
 
+TYELLOW = '\033[33m'  # Yellow Text
+TWHITE = '\033[39m' # White text
+
+def log_warn(msg):
+    print(TYELLOW + msg + TWHITE)
 
 NOOS_PATH = sys.argv[1]
 BUILD_PATH = sys.argv[2]
@@ -43,7 +48,7 @@ if timestamp_match:
             os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
             os.system("wget -q -nv -P %s %s" % (str(new_harware_dir) + '/' + hardware, file_path))
         else:
-            print("Missing " + hardware + " from specific timestamp " + timestamp_match.group())
+            log_warn("Missing " + hardware + " from specific timestamp " + timestamp_match.group())
 else:
     soup = BeautifulSoup(requests.get(HDL_SERVER_BASE_PATH).content, 'html.parser')
     latest = str(soup).split("\n")[-3].split(" ")[1].split('/">')[1].split('/')[0]
@@ -57,7 +62,7 @@ else:
             os.system("wget -q -nv -P %s %s" % (str(new_harware_dir) + '/' + hardware, file_path))
             FOUND = True
         else:
-            print("Missing " + hardware + " from latest timestamp " + latest)
+            log_warn("Missing " + hardware + " from latest timestamp " + latest)
             artifactory_lines = str(soup).split("\n")
             for line_number in range(-4, -FOLDERS_NR-4, -1) :
                 line = artifactory_lines[line_number]
@@ -72,13 +77,13 @@ else:
                             timestamp_folder_info = str(ArtifactoryPath(HDL_SERVER_BASE_PATH + "/" + timestamp_folder).properties)
                             folder_git_sha = timestamp_folder_info.split('[')[2].split(']')[0]
                             folder_commit_date = timestamp_folder_info.split('[')[1].split(']')[0]
-                            print("Hardware " + hardware + " found on next timestamp " + timestamp_folder + " with next properties git sha: " + \
+                            log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder + " with next properties git sha: " + \
                                 str(folder_git_sha) + " commit date: " + str(folder_commit_date))
                         else:
-                            print("Hardware " + hardware + " found on next timestamp " + timestamp_folder)
+                            log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder)
                         FOUND = True
                         break
                 else:
                     break
         if FOUND is False:
-            print("Project " + hardware + " was not found on server")
+            log_warn("Project " + hardware + " was not found on server")
