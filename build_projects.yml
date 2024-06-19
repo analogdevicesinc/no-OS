@@ -61,6 +61,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: STM32
+  timeoutInMinutes: 200
   pool:
     name: Default
     demands:
@@ -93,6 +94,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Maxim
+  timeoutInMinutes: 200
   pool:
     name: Default
     demands:
@@ -125,6 +127,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Mbed
+  timeoutInMinutes: 200
   pool:
     name: Default
     demands:
@@ -157,6 +160,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Pico
+  timeoutInMinutes: 200
   pool:
     name: Default
     demands:
@@ -189,6 +193,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: ADuCM3029
+  timeoutInMinutes: 200
   pool:
     name: Default
     demands:
