@@ -14,7 +14,7 @@
     "iio_zed": {
       "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n",
       "hardware": [
-        "ad40xx_fmc_zed"
+        "pulsar_adc_zed"
       ]
     }
   },
