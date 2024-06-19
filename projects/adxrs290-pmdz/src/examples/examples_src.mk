@@ -1,13 +1,13 @@
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 IIOD=y
-CFLAGS += -DIIO_EXAMPLE=1
+CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 endif
 
 ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))
 IIOD=y
-CFLAGS += -DIIO_TRIGGER_EXAMPLE=1
+CFLAGS += -DIIO_TRIGGER_EXAMPLE
 CFLAGS +=-DIIO_IGNORE_BUFF_OVERRUN_ERR
 SRCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.h
@@ -15,7 +15,7 @@ endif
 
 ifeq (y,$(strip $(IIO_TIMER_TRIGGER_EXAMPLE)))
 IIOD=y
-CFLAGS += -DIIO_TIMER_TRIGGER_EXAMPLE=1
+CFLAGS += -DIIO_TIMER_TRIGGER_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.h
 endif

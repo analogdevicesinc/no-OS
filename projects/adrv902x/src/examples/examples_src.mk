@@ -6,13 +6,13 @@ endif
 
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 IIOD=y
-CFLAGS += -DIIO_EXAMPLE=1
+CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 endif
 
 ifeq (y,$(strip $(DMA_EXAMPLE)))
-CFLAGS += -DDMA_EXAMPLE=1
+CFLAGS += -DDMA_EXAMPLE
 SRCS += $(PROJECT)/src/examples/dma_example/dma_example.c
 INCS += $(PROJECT)/src/examples/dma_example/dma_example.h
 endif

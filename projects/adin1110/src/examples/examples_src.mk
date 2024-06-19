@@ -1,5 +1,5 @@
 ifeq (y,$(strip $(FRAME_RX_TX)))
-CFLAGS += -DFRAME_RX_TX=1
+CFLAGS += -DFRAME_RX_TX
 SRCS += $(PROJECT)/src/examples/frame_rx_tx/frame_rx_tx_example.c
 INCS += $(PROJECT)/src/examples/frame_rx_tx/frame_rx_tx_example.h
 endif

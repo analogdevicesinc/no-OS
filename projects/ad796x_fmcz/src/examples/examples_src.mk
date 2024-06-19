@@ -1,5 +1,5 @@
 ifeq (y,$(strip $(IIO_EXAMPLE)))
-CFLAGS += -DIIO_EXAMPLE=1
+CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 
@@ -11,7 +11,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 
 ifeq (y,$(strip $(BASIC_EXAMPLE)))
-CFLAGS += -DBASIC_EXAMPLE=1
+CFLAGS += -DBASIC_EXAMPLE
 SRCS += $(PROJECT)/src/examples/basic_example/basic_example.c
 INCS += $(PROJECT)/src/examples/basic_example/basic_example.h
 endif

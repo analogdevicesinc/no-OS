@@ -1,5 +1,5 @@
 ifeq (y,$(strip $(IIO_EXAMPLE)))
-CFLAGS += -DIIO_EXAMPLE=1 -DIIO_SUPPORT
+CFLAGS += -DIIO_EXAMPLE -DIIO_SUPPORT
 LIBRARIES += iio
 
 SRCS += $(PROJECT)/src/examples/iio/iio_example.c
