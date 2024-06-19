@@ -75,7 +75,7 @@ SRCS += $(NO-OS)/util/no_os_crc8.c
 ifeq (y,$(strip $(SWIOT1L_DEFAULT_FW)))
 
 IIOD=y
-CFLAGS += -DSWIOT1L_DEFAULT_FW=1
+CFLAGS += -DSWIOT1L_DEFAULT_FW
 
 SRCS += $(PROJECT)/src/swiot_fw.c
 INCS += $(PROJECT)/src/swiot_fw.h
@@ -107,7 +107,7 @@ endif
 CFLAGS += -DSWIOT1L_MQTT_SERVER_IP=\"$(SWIOT1L_MQTT_SERVER_IP)\"
 CFLAGS += -DSWIOT1L_MQTT_SERVER_PORT=$(SWIOT1L_MQTT_SERVER_PORT)
 
-CFLAGS += -DSWIOT1L_MQTT_EXAMPLE=1
+CFLAGS += -DSWIOT1L_MQTT_EXAMPLE
 LIBRARIES += mqtt
 SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
 INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h

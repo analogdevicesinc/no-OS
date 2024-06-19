@@ -1,12 +1,12 @@
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 IIOD=y
-CFLAGS += -DIIO_EXAMPLE=1
+CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 endif
 
 ifeq (y,$(strip $(DUMMY_EXAMPLE)))
-CFLAGS += -DDUMMY_EXAMPLE=1
+CFLAGS += -DDUMMY_EXAMPLE
 SRCS += $(PROJECT)/src/examples/dummy/dummy_example.c
 INCS += $(PROJECT)/src/examples/dummy/dummy_example.h
 endif

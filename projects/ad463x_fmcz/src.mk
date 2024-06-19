@@ -70,9 +70,9 @@ ifeq (y,$(strip $(IIOD)))
 INCS += $(DRIVERS)/adc/ad463x/iio_ad463x.h
 endif
 ifeq (2,$(strip $(AD463X_ID)))
-CFLAGS += -DADAQ4224_DEV=1
+CFLAGS += -DADAQ4224_DEV
 else ifeq (1,$(strip $(AD463X_ID)))
-CFLAGS += -DAD4030_DEV=1
+CFLAGS += -DAD4030_DEV
 else
-CFLAGS += -DAD463X_DEV=1
+CFLAGS += -DAD463X_DEV
 endif
