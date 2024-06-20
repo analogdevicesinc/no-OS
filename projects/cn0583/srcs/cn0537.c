@@ -515,6 +515,7 @@ static int32_t cn0537_get_efuse(struct cn0537_dev *dev)
 {
 	int32_t ret;
 	uint16_t reg_data;
+	uint16_t reg_data_current;
 	uint8_t data[14];
 	uint8_t buff[50];
 
@@ -571,6 +572,39 @@ static int32_t cn0537_get_efuse(struct cn0537_dev *dev)
 	led3_gain_coeff = data[2];
 	led1_int_coeff = data[3];
 	led3_int_coeff = data[4];
+
+	/* Calibrate the frequency of the 32 kHz and 32 MHz clocks as described in AN-2033 */
+	if (module_type == 0x21){
+		ret = adpd188_reg_read(dev->adpd188_handler, 0x77, &reg_data);
+		if (ret)
+			return -1;
+
+		ret = adpd188_reg_read(dev->adpd188_handler, 0x4B, &reg_data_current);
+		if (ret)
+			return -1;
+
+		reg_data_current &= ~NO_OS_GENMASK(8, 0);
+		reg_data_current |= reg_data;
+
+		ret = adpd188_reg_write(dev->adpd188_handler, 0x4B, reg_data_current);
+		if (ret)
+			return -1;
+
+		ret = adpd188_reg_read(dev->adpd188_handler, 0x78, &reg_data);
+		if (ret)
+			return -1;
+
+		ret = adpd188_reg_read(dev->adpd188_handler, 0x4D, &reg_data_current);
+		if (ret)
+			return -1;
+
+		reg_data_current &= ~NO_OS_GENMASK(8, 0);
+		reg_data_current |= reg_data;
+
+		ret = adpd188_reg_write(dev->adpd188_handler, 0x4D, reg_data_current);
+		if (ret)
+			return -1;
+	}
 
 	/** Disable eFuse registers */
 	ret = adpd188_reg_write(dev->adpd188_handler, 0x57, 0x0);
