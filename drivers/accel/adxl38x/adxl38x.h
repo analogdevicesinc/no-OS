@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adxl38x.h
- *   @brief  Header file of ADXL38x Driver.
+ *   @brief  Header file of ADXL38X Driver.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -36,137 +36,139 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __ADXL38x_H__
-#define __ADXL38x_H__
+#ifndef __ADXL38X_H__
+#define __ADXL38X_H__
 
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "no_os_i2c.h"
 #include "no_os_spi.h"
 
 /******************************************************************************/
-/******************************** ADXL38x *************************************/
+/******************************** ADXL38X *************************************/
 /******************************************************************************/
 /* Constants and Macros */
 
 /* SPI */
-#define ADXL38x_SPI_READ          0x01
-#define ADXL38x_SPI_WRITE         0x00
+#define ADXL38X_SPI_READ          		0x01
+#define ADXL38X_SPI_WRITE         		0x00
 
-/* Register Map fo ADXL38x (Rev H DS)*/
-#define ADXL38x_DEVID_AD				0x00
-#define ADXL38x_DEVID_MST				0x01
-#define ADXL38x_PART_ID					0x02
-#define ADXL38x_PART_ID_REV_ID			0x03
-#define ADXL38x_SERIAL_NUMBER_0			0x04
-#define ADXL38x_SERIAL_NUMBER_1			0x05
-#define ADXL38x_SERIAL_NUMBER_2			0x06
-#define ADXL38x_SERIAL_NUMBER_3			0x07
-#define ADXL38x_SERIAL_NUMBER_4			0x08
-#define ADXL38x_SERIAL_NUMBER_5			0x09
-#define ADXL38x_SERIAL_NUMBER_6			0x0A
-#define ADXL38x_DEV_DELTA_Q_X			0x0B
-#define ADXL38x_DEV_DELTA_Q_Y			0x0C
-#define ADXL38x_DEV_DELTA_Q_Z			0x0D
-#define ADXL38x_DEV_DELTA_F0_X			0x0E
-#define ADXL38x_DEV_DELTA_F0_Y			0x0F
-#define ADXL38x_DEV_DELTA_F0_Z			0x10
-#define ADXL38x_STATUS0					0x11
-#define ADXL38x_STATUS1					0x12
-#define ADXL38x_STATUS2					0x13
-#define ADXL38x_STATUS3					0x14
-#define ADXL38x_XDATA_H					0x15
-#define ADXL38x_XDATA_L					0x16
-#define ADXL38x_YDATA_H					0x17
-#define ADXL38x_YDATA_L					0x18
-#define ADXL38x_ZDATA_H					0x19
-#define ADXL38x_ZDATA_L					0x1A
-#define ADXL38x_TDATA_H					0x1B
-#define ADXL38x_TDATA_L					0x1C
-#define ADXL38x_FIFO_DATA				0x1D
-#define ADXL38x_FIFO_STATUS0			0x1E
-#define ADXL38x_FIFO_STATUS1			0x1F
-#define ADXL38x_MISC0					0x20
-#define ADXL38x_MISC1					0x21
-#define ADXL38x_SENS_DSM				0x24
-#define ADXL38x_CLK_CTRL				0x25
-#define ADXL38x_OP_MODE					0x26
-#define ADXL38x_DIG_EN					0x27
-#define ADXL38x_SAR_I2C					0x28
-#define ADXL38x_NVM_CTL					0x29
-#define ADXL38x_REG_RESET				0x2A
-#define ADXL38x_INT0_MAP0				0x2B
-#define ADXL38x_INT0_MAP1				0x2C
-#define ADXL38x_INT1_MAP0				0x2D
-#define ADXL38x_INT1_MAP1				0x2E
-#define ADXL38x_TEST_EN					0x2F
-#define ADXL38x_FIFO_CFG0				0x30
-#define ADXL38x_FIFO_CFG1				0x31
-#define ADXL38x_SPT_CFG0				0x32
-#define ADXL38x_SPT_CFG1				0x33
-#define ADXL38x_SPT_CFG2				0x34
-#define ADXL38x_SYNC_CFG				0x35
-#define ADXL38x_PDM_CFG					0x36
-#define ADXL38x_ACT_INACT_CTL			0x37
-#define ADXL38x_SNSR_AXIS_EN			0x38
-#define ADXL38x_THRESH_ACT_H			0x39
-#define ADXL38x_THRESH_ACT_L			0x3A
-#define ADXL38x_TIME_ACT_H				0x3B
-#define ADXL38x_TIME_ACT_M				0x3C
-#define ADXL38x_TIME_ACT_L				0x3D
-#define ADXL38x_THRESH_INACT_H			0x3E
-#define ADXL38x_THRESH_INACT_L			0x3F
-#define ADXL38x_TIME_INACT_H			0x40
-#define ADXL38x_TIME_INACT_M			0x41
-#define ADXL38x_TIME_INACT_L			0x42
-#define ADXL38x_TAP_THRESH				0x43
-#define ADXL38x_TAP_DUR					0x44
-#define ADXL38x_TAP_LATENT				0x45
-#define ADXL38x_TAP_WINDOW				0x46
-#define ADXL38x_TAP_CFG					0x47
-#define ADXL38x_OR_CFG					0x48
-#define ADXL38x_TRIG_CFG				0x49
-#define ADXL38x_X_SAR_OFFSET			0x4A
-#define ADXL38x_Y_SAR_OFFSET			0x4B
-#define ADXL38x_Z_SAR_OFFSET			0x4C
-#define ADXL38x_X_DSM_OFFSET			0x4D
-#define ADXL38x_Y_DSM_OFFSET			0x4E
-#define ADXL38x_Z_DSM_OFFSET			0x4F
-#define ADXL38x_FILTER					0x50
-#define ADXL38x_USER_TEMP_SENS_0		0x55
-#define ADXL38x_USER_TEMP_SENS_1		0x56
-#define ADXL38x_MISO					0x58
-#define ADXL38x_SOUT0					0x59
-#define ADXL38x_MCLK					0x5A
-#define ADXL38x_BCLK					0x5B
-#define ADXL38x_FSYNC					0x5C
-#define ADXL38x_INT0					0x5D
-#define ADXL38x_INT1					0x5E
+/* Register Map fo ADXL38X (Rev H DS)*/
+#define ADXL38X_DEVID_AD				0x00
+#define ADXL38X_DEVID_MST				0x01
+#define ADXL38X_PART_ID					0x02
+#define ADXL38X_PART_ID_REV_ID			0x03
+#define ADXL38X_SERIAL_NUMBER_0			0x04
+#define ADXL38X_SERIAL_NUMBER_1			0x05
+#define ADXL38X_SERIAL_NUMBER_2			0x06
+#define ADXL38X_SERIAL_NUMBER_3			0x07
+#define ADXL38X_SERIAL_NUMBER_4			0x08
+#define ADXL38X_SERIAL_NUMBER_5			0x09
+#define ADXL38X_SERIAL_NUMBER_6			0x0A
+#define ADXL38X_DEV_DELTA_Q_X			0x0B
+#define ADXL38X_DEV_DELTA_Q_Y			0x0C
+#define ADXL38X_DEV_DELTA_Q_Z			0x0D
+#define ADXL38X_DEV_DELTA_F0_X			0x0E
+#define ADXL38X_DEV_DELTA_F0_Y			0x0F
+#define ADXL38X_DEV_DELTA_F0_Z			0x10
+#define ADXL38X_STATUS0					0x11
+#define ADXL38X_STATUS1					0x12
+#define ADXL38X_STATUS2					0x13
+#define ADXL38X_STATUS3					0x14
+#define ADXL38X_XDATA_H					0x15
+#define ADXL38X_XDATA_L					0x16
+#define ADXL38X_YDATA_H					0x17
+#define ADXL38X_YDATA_L					0x18
+#define ADXL38X_ZDATA_H					0x19
+#define ADXL38X_ZDATA_L					0x1A
+#define ADXL38X_TDATA_H					0x1B
+#define ADXL38X_TDATA_L					0x1C
+#define ADXL38X_FIFO_DATA				0x1D
+#define ADXL38X_FIFO_STATUS0			0x1E
+#define ADXL38X_FIFO_STATUS1			0x1F
+#define ADXL38X_MISC0					0x20
+#define ADXL38X_MISC1					0x21
+#define ADXL38X_SENS_DSM				0x24
+#define ADXL38X_CLK_CTRL				0x25
+#define ADXL38X_OP_MODE					0x26
+#define ADXL38X_DIG_EN					0x27
+#define ADXL38X_SAR_I2C					0x28
+#define ADXL38X_NVM_CTL					0x29
+#define ADXL38X_REG_RESET				0x2A
+#define ADXL38X_INT0_MAP0				0x2B
+#define ADXL38X_INT0_MAP1				0x2C
+#define ADXL38X_INT1_MAP0				0x2D
+#define ADXL38X_INT1_MAP1				0x2E
+#define ADXL38X_TEST_EN					0x2F
+#define ADXL38X_FIFO_CFG0				0x30
+#define ADXL38X_FIFO_CFG1				0x31
+#define ADXL38X_SPT_CFG0				0x32
+#define ADXL38X_SPT_CFG1				0x33
+#define ADXL38X_SPT_CFG2				0x34
+#define ADXL38X_SYNC_CFG				0x35
+#define ADXL38X_PDM_CFG					0x36
+#define ADXL38X_ACT_INACT_CTL			0x37
+#define ADXL38X_SNSR_AXIS_EN			0x38
+#define ADXL38X_THRESH_ACT_H			0x39
+#define ADXL38X_THRESH_ACT_L			0x3A
+#define ADXL38X_TIME_ACT_H				0x3B
+#define ADXL38X_TIME_ACT_M				0x3C
+#define ADXL38X_TIME_ACT_L				0x3D
+#define ADXL38X_THRESH_INACT_H			0x3E
+#define ADXL38X_THRESH_INACT_L			0x3F
+#define ADXL38X_TIME_INACT_H			0x40
+#define ADXL38X_TIME_INACT_M			0x41
+#define ADXL38X_TIME_INACT_L			0x42
+#define ADXL38X_TAP_THRESH				0x43
+#define ADXL38X_TAP_DUR					0x44
+#define ADXL38X_TAP_LATENT				0x45
+#define ADXL38X_TAP_WINDOW				0x46
+#define ADXL38X_TAP_CFG					0x47
+#define ADXL38X_OR_CFG					0x48
+#define ADXL38X_TRIG_CFG				0x49
+#define ADXL38X_X_SAR_OFFSET			0x4A
+#define ADXL38X_Y_SAR_OFFSET			0x4B
+#define ADXL38X_Z_SAR_OFFSET			0x4C
+#define ADXL38X_X_DSM_OFFSET			0x4D
+#define ADXL38X_Y_DSM_OFFSET			0x4E
+#define ADXL38X_Z_DSM_OFFSET			0x4F
+#define ADXL38X_FILTER					0x50
+#define ADXL38X_USER_TEMP_SENS_0		0x55
+#define ADXL38X_USER_TEMP_SENS_1		0x56
+#define ADXL38X_MISO					0x58
+#define ADXL38X_SOUT0					0x59
+#define ADXL38X_MCLK					0x5A
+#define ADXL38X_BCLK					0x5B
+#define ADXL38X_FSYNC					0x5C
+#define ADXL38X_INT0					0x5D
+#define ADXL38X_INT1					0x5E
 
-/* Register reset value for ADXL38x */
-#define ADXL38x_RESET_ZERO					0x00
-#define ADXL38x_RESET_DEVID_AD 				0xAD
-#define ADXL38x_RESET_DEVID_MST 			0x1D
-#define ADXL38x_RESET_PART_ID 				0x17
-#define ADXL38x_RESET_PART_ID_REV_ID 		0xC1
-#define ADXL38x_RESET_STATUS0 				0x80
-#define ADXL38x_RESET_STATUS2 				0x04
-#define ADXL38x_RESET_INT0_MAP0 			0x80
-#define ADXL38x_RESET_INT1_MAP1 			0x80
-#define ADXL38x_RESET_SPT_CFG1 				0x08
-#define ADXL38x_RESET_SPT_CFG2 				0x1A
+/* Register reset value for ADXL38X */
+#define ADXL38X_RESET_ZERO				0x00
+#define ADXL38X_RESET_DEVID_AD 			0xAD
+#define ADXL38X_RESET_DEVID_MST 		0x1D
+#define ADXL38X_RESET_PART_ID 			0x17
+#define ADXL38X_RESET_PART_ID_REV_ID 	0xC1
+#define ADXL38X_RESET_STATUS0 			0x80
+#define ADXL38X_RESET_STATUS2 			0x04
+#define ADXL38X_RESET_INT0_MAP0 		0x80
+#define ADXL38X_RESET_INT1_MAP1 		0x80
+#define ADXL38X_RESET_SPT_CFG1 			0x08
+#define ADXL38X_RESET_SPT_CFG2 			0x1A
 
 /* Register masks */
-#define ADXL38x_MASK_RANGE				0xC0
-#define ADXL38x_MASK_OP_MODE			0x0F
-#define ADXL38x_MASK_CHEN_DIG_EN		0xF0
-#define ADXL38x_NEG_ACC_MSK				NO_OS_GENMASK(31, 16)
+#define ADXL38X_MASK_RANGE				0xC0
+#define ADXL38X_MASK_OP_MODE			0x0F
+#define ADXL38X_MASK_CHEN_DIG_EN		0xF0
+#define ADXL38X_NEG_ACC_MSK				NO_OS_GENMASK(31, 16)
 
 /* Pre-defined codes */
-#define ADXL38x_RESET_CODE            0x52
+#define ADXL38X_RESET_CODE            	0x52
+#define ADXL38X_RESET_STATUS			0x80000400
 
 
 /* Scale Factors */
@@ -187,7 +189,7 @@
  */
 #define ADXL382_ACC_SCALE_FACTOR_GEE_MUL  (int64_t) 5000
 /* Common denominator for ADXL380 and ADXL382 */
-#define ADXL38x_ACC_SCALE_FACTOR_GEE_DIV  (int32_t)	10000000
+#define ADXL38X_ACC_SCALE_FACTOR_GEE_DIV  (int32_t)	10000000
 /*
  * ADXL380/382 Temperature NOTE: Rev0 Values. Replace with RevA
  * scale is 168 LSB/C.
@@ -195,8 +197,8 @@
  * offset at 0C = 9630 - (168 * 25) LSB
  * offset at 0C = 5430LSB
  */
-#define ADXL38x_TEMP_OFFSET (int32_t) 5430
-#define ADXL38x_TEMP_SCALE (int32_t) 168
+#define ADXL38X_TEMP_OFFSET (int32_t) 5430
+#define ADXL38X_TEMP_SCALE (int32_t) 168
 
 /* Sensitivity */
 /*
@@ -226,14 +228,14 @@
 #define ADXL382_XY_ST_LIMIT_MAX 42
 #define ADXL382_Z_ST_LIMIT_MAX 34
 
-#define ADXL38x_ST_LIMIT_DENOMINATOR 10
+#define ADXL38X_ST_LIMIT_DENOMINATOR 10
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 /**
  * @struct device_variant
- * @brief ADXL38x Device selection.
+ * @brief ADXL38X Device selection.
  */
 enum adxl38x_device_variant {
 	ID_ADXL380,
@@ -241,13 +243,13 @@ enum adxl38x_device_variant {
 };
 
 enum adxl38x_comm_type {
-	ADXL38x_SPI_COMM,
-	ADXL38x_I2C_COMM
+	ADXL38X_SPI_COMM,
+	ADXL38X_I2C_COMM
 };
 
 /**
  * @struct adxl38x_range
- * @brief ADXL38x Range (OP MODE[7:6]).
+ * @brief ADXL38X Range (OP MODE[7:6]).
  */
 enum adxl38x_range {
 	ADXL380_RANGE_4G = 0,
@@ -259,60 +261,41 @@ enum adxl38x_range {
 };
 
 /**
- * @struct adxl38x_pdm
- * @brief ADXL38x PDM (OP MODE[5]).
- */
-enum adxl38x_pdm {
-	ADXL38x_PDM_OFF = 0,
-	ADXL38x_PDM_ON = 1,
-};
-
-//may or maynot be supported in initial driver
-/**
- * @struct adxl38x_aud_mode
- * @brief ADXL38x Audio mode (OP MODE[4]).
- */
-enum adxl30_aud_mode {
-	ADXL38x_AUD_OFF = 0,
-	ADXL38x_AUD_ON = 1
-};
-
-/**
  * @struct adxl38x_op_mode
- * @brief ADXL38x Operating modes (OP MODE[3:0]).
+ * @brief ADXL38X Operating modes (OP MODE[3:0]).
  */
 enum adxl38x_op_mode {
-	ADXL38x_MODE_STDBY = 0,
-	ADXL38x_MODE_HRT_SND = 1,
-	ADXL38x_MODE_ULP = 2,
-	ADXL38x_MODE_VLP = 3,
-	ADXL38x_MODE_LP = 4,
-	ADXL38x_MODE_LP_SERIAL_ULP_OP = 6,
-	ADXL38x_MODE_LP_SERIAL_VLP_OP = 7,
-	ADXL38x_MODE_RBW = 8,
-	ADXL38x_MODE_RBW_SERIAL_ULP_OP = 10,
-	ADXL38x_MODE_RBW_SERIAL_VLP_OP = 11,
-	ADXL38x_MODE_HP = 12,
-	ADXL38x_MODE_HP_SERIAL_ULP_OP = 14,
-	ADXL38x_MODE_HP_SERIAL_VLP_OP = 15,
+	ADXL38X_MODE_STDBY = 0,
+	ADXL38X_MODE_HRT_SND = 1,
+	ADXL38X_MODE_ULP = 2,
+	ADXL38X_MODE_VLP = 3,
+	ADXL38X_MODE_LP = 4,
+	ADXL38X_MODE_LP_SERIAL_ULP_OP = 6,
+	ADXL38X_MODE_LP_SERIAL_VLP_OP = 7,
+	ADXL38X_MODE_RBW = 8,
+	ADXL38X_MODE_RBW_SERIAL_ULP_OP = 10,
+	ADXL38X_MODE_RBW_SERIAL_VLP_OP = 11,
+	ADXL38X_MODE_HP = 12,
+	ADXL38X_MODE_HP_SERIAL_ULP_OP = 14,
+	ADXL38X_MODE_HP_SERIAL_VLP_OP = 15,
 };
 
 /**
  * @struct adxl38x_channel_slct
- * @brief ADXL38x Channel enable (DIG_EN[7:4] - TZYX).
+ * @brief ADXL38X Channel enable (DIG_EN[7:4] - TZYX).
  */
 enum adxl38x_ch_select {
-	ADXL38x_CH_DSB_ALL = 0,
-	ADXL38x_CH_EN_X = 1,
-	ADXL38x_CH_EN_Y = 2,
-	ADXL38x_CH_EN_XY = 3,
-	ADXL38x_CH_EN_Z = 4,
-	ADXL38x_CH_EN_YZ = 6,
-	ADXL38x_CH_EN_XYZ = 7,
-	ADXL38x_CH_EN_T = 8,
-	ADXL38x_CH_EN_ZT = 12,
-	ADXL38x_CH_EN_YZT = 14,
-	ADXL38x_CH_EN_XYZT = 15
+	ADXL38X_CH_DSB_ALL = 0,
+	ADXL38X_CH_EN_X = 1,
+	ADXL38X_CH_EN_Y = 2,
+	ADXL38X_CH_EN_XY = 3,
+	ADXL38X_CH_EN_Z = 4,
+	ADXL38X_CH_EN_YZ = 6,
+	ADXL38X_CH_EN_XYZ = 7,
+	ADXL38X_CH_EN_T = 8,
+	ADXL38X_CH_EN_ZT = 12,
+	ADXL38X_CH_EN_YZT = 14,
+	ADXL38X_CH_EN_XYZT = 15
 };
 
 /**
@@ -340,7 +323,7 @@ union adxl38x_comm_init_param {
 
 /**
  * @struct adxl38x_dev
- * @brief ADXL38x Device structure.
+ * @brief ADXL38X Device structure.
  */
 struct adxl38x_dev {
 	/** Device type*/
@@ -359,12 +342,12 @@ struct adxl38x_dev {
 
 /**
  * @struct adxl38x_init_param
- * @brief Structure holding the parameters for ADXL38x device initialization.
+ * @brief Structure holding the parameters for ADXL38X device initialization.
  */
 struct adxl38x_init_param {
 	/** Device Communication initialization structure: either SPI or I2C */
 	union adxl38x_comm_init_param comm_init;
-	/** Device Communication type: ADXL38x_SPI_COMM, ADXL38x_I2C_COMM */
+	/** Device Communication type: ADXL38X_SPI_COMM, ADXL38X_I2C_COMM */
 	enum adxl38x_comm_type comm_type;
 	/** Device type: ADXL380 or 382 */
 	enum adxl38x_device_variant dev_type;
@@ -414,17 +397,58 @@ union adxl38x_sts_reg_flags {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+int adxl38x_read_device_data(struct adxl38x_dev *dev, uint8_t base_address,
+			     uint16_t size, uint8_t *read_data);
+int adxl38x_write_device_data(struct adxl38x_dev *dev, uint8_t base_address,
+			      uint16_t size, uint8_t *write_data);
 
 int adxl38x_init(struct adxl38x_dev **device,
 		 struct adxl38x_init_param init_param);
 
 int adxl38x_remove(struct adxl38x_dev *dev);
 
-int  adxl38x_get_register_value (struct adxl38x_dev,
-				 uint8_t register_address);
+int adxl38x_soft_reset(struct adxl38x_dev *dev);
 
-int adxl38x_set_register_value(struct adxl38x_dev *dev,
-			       uint8_t register_address,
-			       uint8_t register_value);
+int adxl38x_get_sts_reg(struct adxl38x_dev *dev,
+			union adxl38x_sts_reg_flags *status_flags);
 
-#endif /* __ADXL38x_H__ */
+int adxl38x_set_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode);
+
+int adxl38x_get_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode *op_mode);
+
+int adxl38x_set_range(struct adxl38x_dev *dev, enum adxl38x_range range_val);
+
+int adxl38x_get_range(struct adxl38x_dev *dev, enum adxl38x_range *range_val);
+
+int adxl38x_get_deviceID(struct adxl38x_dev *dev,
+			 enum adxl38x_device_variant *devID);
+
+int adxl38x_set_self_test_registers(struct adxl38x_dev *dev, bool st_mode,
+				    bool st_force, bool st_dir);
+
+int adxl38x_get_sts_reg(struct adxl38x_dev *dev,
+			union adxl38x_sts_reg_flags *status_flags);
+
+int adxl38x_get_raw_xyz(struct adxl38x_dev *dev, uint32_t *raw_x,
+			uint32_t *raw_y, uint32_t *raw_z);
+
+int adxl38x_get_temp(struct adxl38x_dev *dev,
+		     struct adxl38x_fractional_val *raw_temp);
+
+int adxl38x_get_raw_data(struct adxl38x_dev *dev,
+			 enum adxl38x_ch_select channels,
+			 uint16_t *raw_x, uint16_t *raw_y,
+			 uint16_t *raw_z, uint16_t *raw_temp);
+
+int adxl38x_get_xyz_gees(struct adxl38x_dev *dev,
+			 enum adxl38x_ch_select channels,
+			 struct adxl38x_fractional_val *x, struct adxl38x_fractional_val *y,
+			 struct adxl38x_fractional_val *z);
+
+int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
+		     bool *st_x, bool *st_y, bool *st_z);
+
+int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t numSamples,
+			    bool externalTrigger, uint8_t fifoMode, bool chIDEnable,
+			    bool readReset);
+#endif /* __ADXL38X_H__ */

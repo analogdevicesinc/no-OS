@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adxl38x.c
- *   @brief  Implementation of ADXL38x Driver.
+ *   @brief  Implementation of ADXL38X Driver.
  *   @author Balarupini Rajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -79,18 +79,19 @@ int adxl38x_read_device_data(struct adxl38x_dev *dev, uint8_t base_address,
 {
 	int ret;
 	uint8_t buffer[64] = {0};
+	uint16_t idx;
 
-	if (dev->comm_type == ADXL38x_SPI_COMM) {
-		buffer[0] = (base_address << 1) | ADXL38x_SPI_READ  ;
+	if (dev->comm_type == ADXL38X_SPI_COMM) {
+		buffer[0] = (base_address << 1) | ADXL38X_SPI_READ;
 		ret = no_os_spi_write_and_read(dev->com_desc.spi_desc, buffer,
-					       size+1);
-		for (uint16_t idx = 0; idx < size; idx++)
-			read_data[idx] = buffer[idx+1];
+					       size + 1);
+		if(ret)
+			return ret;
+		for (idx = 0; idx < size; idx++)
+			read_data[idx] = buffer[idx + 1];
 	} else {
 		ret = no_os_i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 0);
-		if (ret)
-			return ret;
-		ret = no_os_i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
+		ret |= no_os_i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
 	}
 
 	return ret;
@@ -112,27 +113,27 @@ int adxl38x_write_device_data(struct adxl38x_dev *dev, uint8_t base_address,
 {
 	int ret;
 	uint8_t buffer[64] = {0};
+	uint16_t idx;
 
-	for (uint16_t idx = 0; idx < size; idx++)
-		buffer[1+idx] = write_data[idx];
+	for (idx = 0; idx < size; idx++)
+		buffer[1 + idx] = write_data[idx];
 
-	if (dev->comm_type == ADXL38x_SPI_COMM) {
-		buffer[0] = ADXL38x_SPI_WRITE | (base_address << 1);
+	if (dev->comm_type == ADXL38X_SPI_COMM) {
+		buffer[0] = ADXL38X_SPI_WRITE | (base_address << 1);
 		ret = no_os_spi_write_and_read(dev->com_desc.spi_desc, buffer,
 					       size + 1);
+		return ret;
 	} else {
 		dev->comm_buff[0] = base_address;
 		ret = no_os_i2c_write(dev->com_desc.i2c_desc, dev->comm_buff, size + 1, 1);
+		return ret;
 	}
-
-	return ret;
 }
-
 
 /***************************************************************************//**
  * @brief Initializes the device and checks for valid peripheral communication
  *
- * @param device          	- The device structure.
+ * @param device        - The device structure.
  * @param init_param 	- Structure containing initialization parameters
  *
  * @return ret         	- Result of the initialization
@@ -144,6 +145,10 @@ int adxl38x_init(struct adxl38x_dev **device,
 	int ret;
 	uint8_t reg_value;
 
+	dev = (struct adxl38x_dev *)no_os_calloc(1, sizeof(*dev));
+	if (!dev)
+		return -ENOMEM;
+
 	switch (init_param.dev_type) {
 	case ID_ADXL380:
 	case ID_ADXL382:
@@ -153,14 +158,8 @@ int adxl38x_init(struct adxl38x_dev **device,
 		return -EINVAL;
 	}
 
-	dev = (struct adxl38x_dev *)no_os_calloc(1, sizeof(*dev));
-
-	if (!dev)
-		return -ENOMEM;
-
 	dev->comm_type = init_param.comm_type;
-
-	if (dev->comm_type == ADXL38x_SPI_COMM) {
+	if (dev->comm_type == ADXL38X_SPI_COMM) {
 		ret = no_os_spi_init(&dev->com_desc.spi_desc, &init_param.comm_init.spi_init);
 		if (ret)
 			goto error_dev;
@@ -170,39 +169,41 @@ int adxl38x_init(struct adxl38x_dev **device,
 			goto error_dev;
 	}
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_DEVID_AD,
+	ret = adxl38x_read_device_data(dev, ADXL38X_DEVID_AD,
 				       1, &reg_value);
-	if (ret || (reg_value != ADXL38x_RESET_DEVID_AD))
+	if (ret || (reg_value != ADXL38X_RESET_DEVID_AD))
 		goto error_com;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_DEVID_MST,
+	ret = adxl38x_read_device_data(dev, ADXL38X_DEVID_MST,
 				       1, &reg_value);
-	if (ret || (reg_value != ADXL38x_RESET_DEVID_MST))
+	if (ret || (reg_value != ADXL38X_RESET_DEVID_MST))
 		goto error_com;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_PART_ID,
+	ret = adxl38x_read_device_data(dev, ADXL38X_PART_ID,
 				       1, &reg_value);
-	if (ret || (reg_value != ADXL38x_RESET_PART_ID))
+	if (ret || (reg_value != ADXL38X_RESET_PART_ID))
 		goto error_com;
 
 	/* Set device type 380/382 */
-	ret = adxl38x_read_device_data(dev, ADXL38x_MISC0,
+	ret = adxl38x_read_device_data(dev, ADXL38X_MISC0,
 				       1, &reg_value);
-	if ((reg_value & 0x80) >> 7 == 0x00) {
+	if (ret)
+		goto error_com;
+	if ((reg_value & NO_OS_BIT(7))) {
 		dev->dev_type = ID_ADXL380;
 	} else {
 		dev->dev_type = ID_ADXL382;
 	}
 
 	/* Set default values to the device structure */
-	dev->range = ((ADXL38x_RESET_ZERO & ADXL38x_MASK_RANGE) >> 6) & 0x0F;
-	dev->op_mode = ADXL38x_RESET_ZERO & ADXL38x_MASK_OP_MODE;
-
+	dev->range = ADXL380_RANGE_4G;
+	dev->op_mode = ADXL38X_MODE_STDBY;
 	*device = dev;
 
-	return ret;
+	return 0;
+
 error_com:
-	if (dev->comm_type == ADXL38x_SPI_COMM)
+	if (dev->comm_type == ADXL38X_SPI_COMM)
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
@@ -213,11 +214,10 @@ error_dev:
 	return ret;
 }
 
-
 /***************************************************************************//**
  * @brief Free the resources allocated by the init function.
  *
- * @param dev - The device structure.
+ * @param dev  - The device structure.
  *
  * @return ret - Result of the remove procedure.
 *******************************************************************************/
@@ -225,19 +225,16 @@ int adxl38x_remove(struct adxl38x_dev *dev)
 {
 	int ret;
 
-	if (dev->comm_type == ADXL38x_SPI_COMM)
+	if (dev->comm_type == ADXL38X_SPI_COMM)
 		ret = no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
-
 	no_os_free(dev);
 
 	return ret;
 }
 
-
 /***************************************************************************//**
- * TODO: Reset time delay not matching datasheet
  * @brief Performs a soft reset of the device.
  *
  * @param dev  - The device structure.
@@ -248,24 +245,24 @@ int adxl38x_soft_reset(struct adxl38x_dev *dev)
 {
 	uint8_t reg_value;
 	int ret;
-	uint8_t data = ADXL38x_RESET_CODE;
+	uint8_t data = ADXL38X_RESET_CODE;
 	union adxl38x_sts_reg_flags flags;
 
 	// Perform soft reset
-	ret = adxl38x_write_device_data(dev, ADXL38x_REG_RESET, 1, &data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_REG_RESET, 1, &data);
 	if (ret)
 		return ret;
 	// Delay is needed between soft reset and initialization
 	no_os_udelay(1000);
-	ret = adxl38x_read_device_data(dev, ADXL38x_DEVID_AD, 1, &reg_value);
+	ret = adxl38x_read_device_data(dev, ADXL38X_DEVID_AD, 1, &reg_value);
 	if (reg_value != 0xAD)
 		return -EAGAIN;
+	ret = adxl38x_get_sts_reg(dev, &flags);
 
-	return ret;
+	return 0;
 }
 
 /***************************************************************************//**
- * TODO: Change this function so that it works for multiple ranges and different modes
  * @brief Places the device into the given operation mode.
  *
  * @param dev     - The device structure.
@@ -281,9 +278,9 @@ int adxl38x_set_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode)
 	ret = adxl38x_set_to_standby(dev);
 	if (ret)
 		return ret;
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &op_mode_reg_val);
-	op_mode_reg_val = (op_mode_reg_val & ~ADXL38x_MASK_OP_MODE) | op_mode;
-	ret |= adxl38x_write_device_data(dev, ADXL38x_OP_MODE,
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &op_mode_reg_val);
+	op_mode_reg_val = (op_mode_reg_val & ~ADXL38X_MASK_OP_MODE) | op_mode;
+	ret |= adxl38x_write_device_data(dev, ADXL38X_OP_MODE,
 					 1, &op_mode_reg_val);
 
 	if (!ret)
@@ -294,7 +291,6 @@ int adxl38x_set_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode)
 	return ret;
 }
 
-
 /***************************************************************************//**
  * @brief Gets the current operation mode of the device
  *
@@ -303,19 +299,18 @@ int adxl38x_set_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode)
  *
  * @return ret    - Result of the reading operation procedure.
 *******************************************************************************/
-int adxl38x_get_op_mode(struct adxl38x_dev *dev,
-			enum adxl38x_op_mode *op_mode)
+int adxl38x_get_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode *op_mode)
 {
 	int ret;
-	uint8_t op_mode_reg_val[1];
+	uint8_t op_mode_reg_val;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &op_mode_reg_val);
-	*op_mode = op_mode_reg_val[0] & ADXL38x_MASK_OP_MODE;
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &op_mode_reg_val);
+	*op_mode = op_mode_reg_val & ADXL38X_MASK_OP_MODE;
 
 	if (!ret)
 		dev->op_mode = *op_mode;
 
-	return ret;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -329,25 +324,25 @@ int adxl38x_get_op_mode(struct adxl38x_dev *dev,
 int adxl38x_set_range(struct adxl38x_dev *dev, enum adxl38x_range range_val)
 {
 	int ret;
-	uint8_t range_reg_val[1];
+	uint8_t range_reg_val;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &range_reg_val);
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &range_reg_val);
 	if (ret)
 		return ret;
 	ret = adxl38x_set_to_standby(dev);
 	if (ret)
 		return ret;
 	// Reset range bits
-	range_reg_val[0] &= ~ADXL38x_MASK_RANGE;
+	range_reg_val &= ~ADXL38X_MASK_RANGE;
 	range_val = range_val << 6;
 	// Set only range bits inside op_mode register
-	range_reg_val[0] |= range_val & ADXL38x_MASK_RANGE;
-	ret = adxl38x_write_device_data(dev, ADXL38x_OP_MODE, 1, &range_reg_val);
+	range_reg_val |= range_val & ADXL38X_MASK_RANGE;
+	ret = adxl38x_write_device_data(dev, ADXL38X_OP_MODE, 1, &range_reg_val);
 
 	if (!ret)
 		dev->range = range_val >> 6;
 
-	return ret;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -356,22 +351,21 @@ int adxl38x_set_range(struct adxl38x_dev *dev, enum adxl38x_range range_val)
  * @param dev       - The device structure.
  * @param range_val - Read range.
  *
- * @return ret    - Result of the reading operation procedure.
+ * @return ret    	- Result of the reading operation procedure.
 *******************************************************************************/
 int adxl38x_get_range(struct adxl38x_dev *dev, enum adxl38x_range *range_val)
 {
 	int ret;
-	uint8_t range_reg_val[1];
+	uint8_t range_reg_val;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &range_reg_val);
-	*range_val = range_reg_val[0] >> 6;
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &range_reg_val);
+	*range_val = range_reg_val >> 6;
 
 	if (!ret)
 		dev->range = *range_val;
 
-	return ret;
+	return 0;
 }
-
 
 /***************************************************************************//**
  * @brief Gets the current device type
@@ -387,7 +381,7 @@ int adxl38x_get_deviceID(struct adxl38x_dev *dev,
 	int ret;
 	uint8_t misc0_reg;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_MISC0,1, &misc0_reg);
+	ret = adxl38x_read_device_data(dev, ADXL38X_MISC0,1, &misc0_reg);
 	if ((misc0_reg & 0x80) >> 7 == 0x00)
 		dev->dev_type = ID_ADXL380;
 	else
@@ -397,18 +391,17 @@ int adxl38x_get_deviceID(struct adxl38x_dev *dev,
 	return ret;
 }
 
-
 /***************************************************************************//**
  * NOTE: It is recommended that the ADXL380 self-test should be performed in mid
  * and high gee ranges and in high power mode.
  * @brief Sets the part to execute self-test routine
  *
- * @param dev  - The device structure.
- * @param st_mode - Enable/disable bit for self test.
- * @param st_force - Enable/disable bit for forced self test.
- * @param st_dir - Direction bit for self test. 0 - Forward, 1 - Reverse.
+ * @param dev  		- The device structure.
+ * @param st_mode 	- Enable/disable bit for self test.
+ * @param st_force 	- Enable/disable bit for forced self test.
+ * @param st_dir 	- Direction bit for self test. 0 - Forward, 1 - Reverse.
  *
- * @return ret - Result of the writing procedure.
+ * @return ret 		- Result of the writing procedure.
 *******************************************************************************/
 int adxl38x_set_self_test_registers(struct adxl38x_dev *dev, bool st_mode,
 				    bool st_force, bool st_dir)
@@ -416,17 +409,16 @@ int adxl38x_set_self_test_registers(struct adxl38x_dev *dev, bool st_mode,
 	int ret;
 	uint8_t data;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &data);
+	ret = adxl38x_read_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &data);
 	if(!ret)
 		return ret;
 	data = data & 0xE0;
 	data = (st_mode << 7) | (st_force << 6) | (st_dir << 5) | data;
 
-	ret = adxl38x_write_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &data);
 
 	return ret;
 }
-
 
 /***************************************************************************//**
  * NOTE: It is recommended that the ADXL380 self-test should be performed in mid
@@ -442,17 +434,16 @@ int adxl38x_clear_self_test_registers(struct adxl38x_dev *dev)
 	int ret;
 	uint8_t data;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &data);
+	ret = adxl38x_read_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &data);
 	if(!ret)
 		return ret;
 	data = data & 0xE0;
-	ret = adxl38x_write_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &data);
 	if(!ret)
 		return ret;
 
 	return ret;
 }
-
 
 /***************************************************************************//**
  * TODO: Update according to datasheet (Currently based on RevH)
@@ -468,18 +459,20 @@ int adxl38x_get_sts_reg(struct adxl38x_dev *dev,
 			union adxl38x_sts_reg_flags *status_flags)
 {
 	int ret;
-	uint32_t status_reset = 0x80000400;
-	//uint32_t status_value;
 	uint8_t status_value[4];
+	uint32_t status_reset = 0x80000400;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_STATUS0, 4, &status_value);
-	if (ret != status_reset)
-		status_flags->value = status_value[0]<<24 | status_value[1]<<16 |
+	ret = adxl38x_read_device_data(dev, ADXL38X_STATUS0, 4, status_value);
+	if(ret)
+		return ret;
+	status_flags->value = status_value[0]<<24 | status_value[1]<<16 |
 				      status_value[2]<<8 | status_value[3];
+	// Status not matching reset value
+	if(status_flags->value != status_reset)
+		return -EINVAL;
 
-	return ret;
+	return 0;
 }
-
 
 /***************************************************************************//**
  * @brief Reads the raw output data using burst read.
@@ -501,89 +494,86 @@ int adxl38x_get_raw_xyz(struct adxl38x_dev *dev, uint32_t *raw_x,
 
 	//Enable accel channels
 	write_data = 0x70;
-	ret = adxl38x_write_device_data(dev, ADXL38x_DIG_EN, 1, &write_data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_DIG_EN, 1, &write_data);
 	if (ret)
 		return ret;
 	//Put part in measurement mode if not placed in it already
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &op_mode);
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &op_mode);
 	if (!ret) {
 		ret = adxl38x_get_op_mode(dev, &op_mode);
 		if(op_mode == 0) {
-			adxl38x_set_op_mode(dev, ADXL38x_MODE_LP);
+			adxl38x_set_op_mode(dev, ADXL38X_MODE_LP);
 		}
 	}
 	//Read accel data channels
-	ret = adxl38x_read_device_data(dev, ADXL38x_XDATA_H, 6, array_raw_data);
+	ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 	if (ret)
 		return ret;
 	*raw_x = adxl38x_accel_array_conv(array_raw_data);
 	*raw_y = adxl38x_accel_array_conv(array_raw_data + 2);
 	*raw_z = adxl38x_accel_array_conv(array_raw_data + 4);
 
-	return ret;
+	return 0;
 }
-
 
 /***************************************************************************//**
  * @brief Reads the raw temperature data using burst read.
  *
- * @param dev   - The device structure.
- * @param raw_temp - Raw temperature data.
+ * @param dev   	- The device structure.
+ * @param raw_temp 	- Raw temperature data.
  *
- * @return ret  - Result of the reading procedure.
+ * @return ret  	- Result of the reading procedure.
 *******************************************************************************/
 int adxl38x_get_temp(struct adxl38x_dev *dev,
-		     struct adxl38x_fractional_val *raw_temp)
+		     struct adxl38x_fractional_val *temp_degC)
 {
-	uint8_t array_raw_data[2] = {0};
 	int ret;
-	int j = 0;
 	uint8_t write_data;
 	uint8_t op_mode;
 	uint8_t dig_en;
+	uint8_t array_raw_data[2] = {0};
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_DIG_EN, 1, &dig_en);
+	ret = adxl38x_read_device_data(dev, ADXL38X_DIG_EN, 1, &dig_en);
 	write_data = dig_en;
-	write_data = write_data & ~ADXL38x_MASK_CHEN_DIG_EN;
-	write_data = write_data | ((ADXL38x_CH_EN_T << 4) & ADXL38x_MASK_CHEN_DIG_EN);
+	write_data = write_data & ~ADXL38X_MASK_CHEN_DIG_EN;
+	write_data = write_data | ((ADXL38X_CH_EN_T << 4) & ADXL38X_MASK_CHEN_DIG_EN);
 
-	ret = adxl38x_write_device_data(dev, ADXL38x_DIG_EN, 1, &write_data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_DIG_EN, 1, &write_data);
 	if (ret)
 		return ret;
 	//Put part in measurement mode if not placed in it already
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &op_mode);
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &op_mode);
 	ret = adxl38x_get_op_mode(dev, &op_mode);
 	if(op_mode == 0) {
-		adxl38x_set_op_mode(dev, ADXL38x_MODE_HP);
+		adxl38x_set_op_mode(dev, ADXL38X_MODE_HP);
 	} else {
 		adxl38x_set_op_mode(dev, op_mode);
 	}
 
-	//Read accel data channels
-	ret = adxl38x_read_device_data(dev, ADXL38x_TDATA_H, 2, array_raw_data);
+	//Read accel temperature channel
+	ret = adxl38x_read_device_data(dev, ADXL38X_TDATA_H, 2, array_raw_data);
 	if (ret)
 		return ret;
-	raw_temp->integer = adxl38x_accel_array_conv(array_raw_data);
+	temp_degC->integer = adxl38x_accel_array_conv(array_raw_data);
 	//LSB to C conversion
-	raw_temp->integer = raw_temp->integer - ADXL38x_TEMP_OFFSET;
-	raw_temp->fractional = raw_temp->integer % ADXL38x_TEMP_SCALE;
-	raw_temp->integer = raw_temp->integer / ADXL38x_TEMP_SCALE;
+	temp_degC->integer = temp_degC->integer - ADXL38X_TEMP_OFFSET;
+	temp_degC->fractional = temp_degC->integer % ADXL38X_TEMP_SCALE;
+	temp_degC->integer = temp_degC->integer / ADXL38X_TEMP_SCALE;
 
 	return ret;
 }
 
-
 /***************************************************************************//**
  * @brief Reads the raw output data using burst read.
  *
- * @param dev   - The device structure.
- * @param channels - Channels to enable.
- * @param raw_x - X-axis's raw output data.
- * @param raw_y - Y-axis's raw output data.
- * @param raw_z - Z-axis's raw output data.
- * @param raw_temp - Raw temp output data.
+ * @param dev   	- The device structure.
+ * @param channels 	- Channels to enable.
+ * @param raw_x 	- X-axis's raw output data.
+ * @param raw_y 	- Y-axis's raw output data.
+ * @param raw_z 	- Z-axis's raw output data.
+ * @param raw_temp 	- Raw temp output data.
  *
- * @return ret  - Result of the reading procedure.
+ * @return ret  	- Result of the reading procedure.
 *******************************************************************************/
 int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 			 enum adxl38x_ch_select channels,
@@ -600,19 +590,19 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 	uint8_t tzyx, start_addr;
 	uint16_t num_bytes = 0;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_DIG_EN, 1, &dig_en);
+	ret = adxl38x_read_device_data(dev, ADXL38X_DIG_EN, 1, &dig_en);
 	write_data = dig_en;
-	write_data = write_data & ~ADXL38x_MASK_CHEN_DIG_EN;
-	write_data = write_data | ((channels << 4) & ADXL38x_MASK_CHEN_DIG_EN);
+	write_data = write_data & ~ADXL38X_MASK_CHEN_DIG_EN;
+	write_data = write_data | ((channels << 4) & ADXL38X_MASK_CHEN_DIG_EN);
 
-	ret = adxl38x_write_device_data(dev, ADXL38x_DIG_EN, 1, &write_data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_DIG_EN, 1, &write_data);
 	if (ret)
 		return ret;
 	//Put part in measurement mode if not placed in it already
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &op_mode);
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &op_mode);
 	ret = adxl38x_get_op_mode(dev, &op_mode);
 	if(op_mode == 0) {
-		adxl38x_set_op_mode(dev, ADXL38x_MODE_HP);
+		adxl38x_set_op_mode(dev, ADXL38X_MODE_HP);
 	} else {
 		adxl38x_set_op_mode(dev, op_mode);
 	}
@@ -620,13 +610,13 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 	//Find the channels and number of bytes to read
 	tzyx = (uint8_t)channels;
 	if(tzyx & 0x01) {
-		start_addr = ADXL38x_XDATA_H;
+		start_addr = ADXL38X_XDATA_H;
 	} else if(tzyx & 0x02) {
-		start_addr = ADXL38x_YDATA_H;
+		start_addr = ADXL38X_YDATA_H;
 	} else if(tzyx & 0x04) {
-		start_addr = ADXL38x_ZDATA_H;
+		start_addr = ADXL38X_ZDATA_H;
 	} else {
-		start_addr = ADXL38x_TDATA_H;
+		start_addr = ADXL38X_TDATA_H;
 	}
 	while(tzyx) {
 		num_bytes += tzyx & 0x01;
@@ -646,8 +636,8 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 			array_rearranged_data[i+1] = array_raw_data[j+1];
 			j += 2;
 		} else {
-			array_rearranged_data[i] = NULL;
-			array_rearranged_data[i+1] = NULL;
+			array_rearranged_data[i] = 0;
+			array_rearranged_data[i+1] = 0;
 		}
 		tzyx >>= 1;
 	}
@@ -659,48 +649,42 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 	return ret;
 }
 
-
 /***************************************************************************//**
  * @brief Reads the raw output data of each axis and converts it to g.
  *
- * @param dev  - The device structure.
- * @param channels - Channels to enable.
- * @param x    - X-axis's output data.
- * @param y    - Y-axis's output data.
- * @param z    - Z-axis's output data.
+ * @param dev  		- The device structure.
+ * @param channels 	- Channels to enable.
+ * @param x    		- X-axis's output data.
+ * @param y    		- Y-axis's output data.
+ * @param z    		- Z-axis's output data.
  *
- * @return ret - Result of the reading procedure.
+ * @return ret 		- Result of the reading procedure.
 *******************************************************************************/
 int adxl38x_get_xyz_gees(struct adxl38x_dev *dev,
 			 enum adxl38x_ch_select channels,
 			 struct adxl38x_fractional_val *x, struct adxl38x_fractional_val *y,
 			 struct adxl38x_fractional_val *z)
 {
+	int ret;
 	uint16_t raw_accel_x;
 	uint16_t raw_accel_y;
 	uint16_t raw_accel_z;
 	uint16_t raw_accel_t;
-	uint16_t dum;
-	int ret;
-
-	int64_t dummy;
 
 	ret = adxl38x_get_raw_data(dev, channels, &raw_accel_x, &raw_accel_y,
 				   &raw_accel_z, &raw_accel_t);
-
 	if (ret)
 		return ret;
 
 	x->integer = no_os_div_s64_rem((int64_t)adxl38x_accel_conv(dev, raw_accel_x),
-				       ADXL38x_ACC_SCALE_FACTOR_GEE_DIV, &(x->fractional));
+				       ADXL38X_ACC_SCALE_FACTOR_GEE_DIV, &(x->fractional));
 	y->integer = no_os_div_s64_rem((int64_t)adxl38x_accel_conv(dev, raw_accel_y),
-				       ADXL38x_ACC_SCALE_FACTOR_GEE_DIV, &(y->fractional));
+				       ADXL38X_ACC_SCALE_FACTOR_GEE_DIV, &(y->fractional));
 	z->integer = no_os_div_s64_rem((int64_t)adxl38x_accel_conv(dev, raw_accel_z),
-				       ADXL38x_ACC_SCALE_FACTOR_GEE_DIV, &(z->fractional));
+				       ADXL38X_ACC_SCALE_FACTOR_GEE_DIV, &(z->fractional));
 
 	return ret;
 }
-
 
 /***************************************************************************//**
  * @brief Converts array of raw acceleration to uint16 data raw acceleration
@@ -731,21 +715,20 @@ static int64_t adxl38x_accel_conv(struct adxl38x_dev *dev,
 	// Raw acceleration is in two's complement
 	// Convert from two's complement to int
 	if ((raw_accel & NO_OS_BIT(15)) == NO_OS_BIT(15))
-		accel_data = raw_accel | ADXL38x_NEG_ACC_MSK;
+		accel_data = raw_accel | ADXL38X_NEG_ACC_MSK;
 	else
 		accel_data = raw_accel;
 
 	// Apply scale factor based on the selected range
 	switch (dev->dev_type) {
 	case ID_ADXL380:
-		//return accel_data;
 		return ((int64_t)(accel_data * ADXL380_ACC_SCALE_FACTOR_GEE_MUL *
 				  adxl38x_scale_mul[dev->range]));
 	case ID_ADXL382:
 		return ((int64_t)(accel_data * ADXL382_ACC_SCALE_FACTOR_GEE_MUL *
 				  adxl38x_scale_mul[dev->range]));
 	default:
-		return 0;
+		return -EINVAL;
 	}
 }
 
@@ -759,12 +742,12 @@ static int64_t adxl38x_accel_conv(struct adxl38x_dev *dev,
 static int adxl38x_set_to_standby(struct adxl38x_dev *dev)
 {
 	int ret;
-	enum adxl38x_op_mode op_mode = ADXL38x_MODE_STDBY;
+	enum adxl38x_op_mode op_mode = ADXL38X_MODE_STDBY;
 	uint8_t op_mode_reg_val;
 
-	ret = adxl38x_read_device_data(dev, ADXL38x_OP_MODE, 1, &op_mode_reg_val);
-	op_mode_reg_val = (op_mode_reg_val & ~ADXL38x_MASK_OP_MODE) | op_mode;
-	ret |= adxl38x_write_device_data(dev, ADXL38x_OP_MODE,
+	ret = adxl38x_read_device_data(dev, ADXL38X_OP_MODE, 1, &op_mode_reg_val);
+	op_mode_reg_val = (op_mode_reg_val & ~ADXL38X_MASK_OP_MODE) | op_mode;
+	ret |= adxl38x_write_device_data(dev, ADXL38X_OP_MODE,
 					 1, &op_mode_reg_val);
 	// 10ms wait in the standby mode
 	no_os_mdelay(10);
@@ -775,18 +758,17 @@ static int adxl38x_set_to_standby(struct adxl38x_dev *dev)
 	return ret;
 }
 
-
 /***************************************************************************//**
  * @brief Executed Selftest on the sensing axes and returns the outcome of
  * the test.
  *
- * @param dev   - The device structure.
+ * @param dev   	- The device structure.
  * @param op_mode  - Operation mode in which self-test is executed
- * @param st_x 	- Result of X-axis self test success/failure
- * @param st_y 	- Result of X-axis self test success/failure
- * @param st_z 	- Result of X-axis self test success/failure
+ * @param st_x 		- Result of X-axis self test success/failure
+ * @param st_y 		- Result of X-axis self test success/failure
+ * @param st_z 		- Result of X-axis self test success/failure
  *
- * @return ret  - Outcome of the selftest.
+ * @return ret  	- Outcome of the selftest.
 *******************************************************************************/
 int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 		     bool *st_x, bool *st_y, bool *st_z)
@@ -808,29 +790,35 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	*st_z = false;
 
 	/* Enter standby mode */
-	ret = adxl38x_set_op_mode(dev, ADXL38x_MODE_STDBY);
+	ret = adxl38x_set_op_mode(dev, ADXL38X_MODE_STDBY);
 
 	/* Enable desired channels (except temperature) */
-	if(op_mode == ADXL38x_MODE_HRT_SND) {
-		write_data = (ADXL38x_CH_EN_X << 4);  //Only one axis
-	} else
-		write_data = (ADXL38x_CH_EN_XYZ << 4);
-	ret = adxl38x_write_device_data(dev, ADXL38x_DIG_EN, 1, &write_data);
+	if(op_mode == ADXL38X_MODE_HRT_SND)
+		write_data = (ADXL38X_CH_EN_X << 4);  //Only one axis
+	else
+		write_data = (ADXL38X_CH_EN_XYZ << 4);
+	ret = adxl38x_write_device_data(dev, ADXL38X_DIG_EN, 1, &write_data);
 	if (ret)
 		return ret;
 
 	/* Enable desired OP mode */
 	ret = adxl38x_set_op_mode(dev, op_mode);
+	if (ret)
+		return ret;
 
 	/* Enable ST mode, force and positive direction */
-	ret = adxl38x_read_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &write_data);
+	ret = adxl38x_read_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &write_data);
+	if (ret)
+		return ret;
 	write_data = (write_data & 0x3F) | 0xC0;
-	ret = adxl38x_write_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &write_data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &write_data);
+	if (ret)
+		return ret;
 
 	/* Measure output on all three axes for at least 25 samples and compute average*/
 	for(int k = 0; k < 25; k++) {
 		no_os_mdelay(10);
-		ret = adxl38x_read_device_data(dev, ADXL38x_XDATA_H, 6, array_raw_data);
+		ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 		int j = 0;
 		for(int i = 0; i <  6; i+=2) {
 			array_rearranged_data[i] = array_raw_data[j];
@@ -849,9 +837,13 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	st_positive_data[2] = (int32_t)no_os_div_s64(z_sum, 25);
 
 	/* Enable ST mode, force and negative direction */
-	ret = adxl38x_read_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &write_data);
+	ret = adxl38x_read_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &write_data);
+	if (ret)
+		return ret;
 	write_data = (write_data & 0x3F) | 0xE0;
-	ret = adxl38x_write_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &write_data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &write_data);
+	if (ret)
+		return ret;
 
 	/* Measure output on all three axes for at lest 25 samples and compute average*/
 	x_sum = 0;
@@ -859,7 +851,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	z_sum = 0;
 	for(int k = 0; k < 25; k++) {
 		no_os_mdelay(10);
-		ret = adxl38x_read_device_data(dev, ADXL38x_XDATA_H, 6, array_raw_data);
+		ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 		int j = 0;
 		for(int i = 0; i <  6; i+=2) {
 			array_rearranged_data[i] = array_raw_data[j];
@@ -882,7 +874,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	// Multiply self test denomitator for the values to be comparable
 	for(int k = 0; k < 3; k++) {
 		st_delta_data[k] = (int32_t) abs(st_positive_data[k] - st_negative_data[k]);
-		st_delta_data[k] = st_delta_data[k] * ADXL38x_ST_LIMIT_DENOMINATOR;
+		st_delta_data[k] = st_delta_data[k] * ADXL38X_ST_LIMIT_DENOMINATOR;
 	}
 
 	/* Compare self-test delta magnitude with Datasheet values */
@@ -918,13 +910,16 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 		*st_z = true;
 
 	/* Reset ST bits */
-	ret = adxl38x_read_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &write_data);
+	ret = adxl38x_read_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &write_data);
+	if (ret)
+		return ret;
 	write_data = (write_data & 0x1F);
-	ret = adxl38x_write_device_data(dev, ADXL38x_SNSR_AXIS_EN, 1, &write_data);
+	ret = adxl38x_write_device_data(dev, ADXL38X_SNSR_AXIS_EN, 1, &write_data);
+	if (ret)
+		return ret;
 
-	return ret;
+	return 0;
 }
-
 
 /***************************************************************************//**
  * @brief Converts raw acceleration value to m/s^2 value.
@@ -947,23 +942,21 @@ static int64_t adxl38x_accel_two_comp_conv_s64(uint16_t raw_accel)
 	return accel_data;
 }
 
-
-
 /***************************************************************************//**
  * @brief Function to set the paramenters for FIFO mode
  *
- * @param dev        - The device structure.
- * @param numSamples - Number of FIFO entries that FIFI_WATERMARK should set.
- * @param externalTrigger - Enable/disable external trigger in FIFO stream mode.
- * @param fifoMode        - FIFO mode setting.
- * @param chIDEnable      - Enable/disable channel ID.
- * @param readReset       - reset read/write point and read state machine.
+ * @param dev        		- The device structure.
+ * @param num_samples 		- Number of FIFO entries that FIFI_WATERMARK should set.
+ * @param external_trigger 	- Enable/disable external trigger in FIFO stream mode.
+ * @param fifo_mode        	- FIFO mode setting.
+ * @param ch_ID_enable      	- Enable/disable channel ID.
+ * @param read_reset       	- reset read/write point and read state machine.
  *
- * @return ret      - Converted data.
+ * @return ret      		- Result of the procedure.
 *******************************************************************************/
-int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t numSamples,
-			    bool externalTrigger, uint8_t fifoMode, bool chIDEnable,
-			    bool readReset)
+int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
+			    bool external_trigger, uint8_t fifo_mode, bool ch_ID_enable,
+			    bool read_reset)
 {
 	int ret;
 	uint8_t write_data = 0;
@@ -971,21 +964,21 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t numSamples,
 	uint8_t fifo_samples_high;
 
 	// set FIFO_CFG1 register
-	fifo_samples_low = (uint8_t) numSamples;
-	ret = adxl38x_write_device_data(dev, ADXL38x_FIFO_CFG1, 1, &fifo_samples_low);
+	fifo_samples_low = (uint8_t) num_samples;
+	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG1, 1, &fifo_samples_low);
 	// building data for FIFO_CFG0 register
-	fifoMode = (fifoMode << 4) & 0x30;
-	fifo_samples_high = (uint8_t) numSamples >> 8;
+	fifo_mode = (fifo_mode << 4) & 0x30;
+	fifo_samples_high = (uint8_t) num_samples >> 8;
 	fifo_samples_high = fifo_samples_high & 0x01;
-	if(readReset)
+	if(read_reset)
 		write_data = 1u << 7;
-	if(chIDEnable)
+	if(ch_ID_enable)
 		write_data |= 1u << 6;
-	write_data |= fifoMode;
-	if(externalTrigger && fifoMode == 3)
+	write_data |= fifo_mode;
+	if(external_trigger && fifo_mode == 3)
 		write_data |= 1u << 3;
 	write_data |= fifo_samples_high;
-	ret |= adxl38x_write_device_data(dev, ADXL38x_FIFO_CFG0, 1, &write_data);
+	ret |= adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG0, 1, &write_data);
 
 	return ret;
 }

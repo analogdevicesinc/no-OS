@@ -3,7 +3,7 @@
  *   @brief  Includes for used platforms used by eval-adxl355-pmdz project.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *

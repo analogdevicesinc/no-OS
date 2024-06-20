@@ -3,7 +3,7 @@
  *   @brief  Definition of STM32 platform data used by eval-adxl38x  project.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -52,20 +52,3 @@ struct stm32_uart_init_param adxl38x_uart_extra_ip = {
 struct stm32_spi_init_param adxl38x_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,
 };
-
-#ifdef IIO_TRIGGER_EXAMPLE
-struct stm32_gpio_irq_init_param adxl38x_gpio_irq_extra_ip = {
-	.port_nb = 0, /* Port A */
-};
-#endif
-
-#ifdef IIO_LWIP_EXAMPLE
-struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip = {
-	.mode = GPIO_MODE_OUTPUT_OD,
-	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
-};
-
-struct stm32_spi_init_param adin1110_spi_extra_ip  = {
-	.chip_select_port = ADIN1110_SPI_CS_PORT,
-};
-#endif

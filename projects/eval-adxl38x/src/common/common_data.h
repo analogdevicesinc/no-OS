@@ -3,7 +3,7 @@
  *   @brief  Defines common data to be used by eval-adxl38x examples.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *

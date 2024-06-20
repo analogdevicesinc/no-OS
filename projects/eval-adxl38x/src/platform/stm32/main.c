@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Main file for STM32 platform of eval-adxl38x-pmdz project.
+ *   @brief  Main file for STM32 platform of eval-adxl38x project.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -43,14 +43,13 @@
 #include "platform_includes.h"
 #include "common_data.h"
 #include "no_os_error.h"
-// #include "example_main.h"
 
-#ifdef DUMMY_EXAMPLE
-#include "example_main.h"
+#ifdef BASIC_EXAMPLE
+#include "basic_example_main.h"
 #endif
 
 #ifdef SLF_TST_EXAMPLE
-#include "st_example_main.h"
+#include "selftest_example_main.h"
 #endif
 
 /***************************************************************************//**
@@ -66,14 +65,6 @@ int main()
 
 	stm32_init();
 
-// #ifdef IIO_LWIP_EXAMPLE
-// 	ret = iio_lwip_example_main();
-// #endif
-
-// #ifdef IIO_EXAMPLE
-// 	ret = iio_example_main();
-// #endif
-
 #ifdef SLF_TST_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
 
@@ -85,7 +76,7 @@ int main()
 	ret = st_example_main();
 #endif
 
-#ifdef DUMMY_EXAMPLE
+#ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
 
 	ret = no_os_uart_init(&uart_desc, &adxl38x_uart_ip);
@@ -93,15 +84,17 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-	ret = example_main();
+	ret = basic_example_main();
 #endif
 
-// #if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE + IIO_LWIP_EXAMPLE == 0)
-// #error At least one example has to be selected using y value in Makefile.
-// #elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE + IIO_LWIP_EXAMPLE > 1)
-// #error Selected example projects cannot be enabled at the same time. \
-// Please enable only one example and re-build the project.
-// #endif
+#if (BASIC_EXAMPLE + SLF_TST_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (BASIC_EXAMPLE + SLF_TST_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
 
+	no_os_uart_remove(uart_desc);
 	return ret;
 }
+

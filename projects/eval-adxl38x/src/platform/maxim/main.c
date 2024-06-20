@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Main file for Maxim platform of eval-adxl38x-pmdz project.
+ *   @brief  Main file for Maxim platform of eval-adxl38x project.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -44,8 +44,8 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef DUMMY_EXAMPLE
-#include "example_main.h"
+#ifdef BASIC_EXAMPLE
+#include "basic_example_main.h"
 #endif
 
 /***************************************************************************//**
@@ -59,12 +59,7 @@ int main()
 
 	adxl38x_ip.comm_init.spi_init = adxl38x_spi_ip;
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-
-#ifdef DUMMY_EXAMPLE
+#ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
 
 	ret = no_os_uart_init(&uart_desc, &adxl38x_uart_ip);
@@ -74,7 +69,7 @@ int main()
 	no_os_uart_stdio(uart_desc);
 	ret = example_main();
 #endif
-
+	no_os_uart_remove(uart_desc);
 	return ret;
 }
 

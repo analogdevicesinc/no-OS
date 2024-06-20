@@ -3,7 +3,7 @@
  *   @brief  Defines common data to be used by eval-adxl38x examples.
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -68,7 +68,7 @@ struct no_os_spi_init_param adxl38x_spi_ip = {
 };
 
 struct adxl38x_init_param adxl38x_ip = {
-	.comm_type = ADXL38x_SPI_COMM,
+	.comm_type = ADXL38X_SPI_COMM,
 #ifdef ADXL382_DEV
 	.dev_type = ID_ADXL382,
 #else
