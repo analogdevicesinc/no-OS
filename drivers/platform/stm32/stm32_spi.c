@@ -560,13 +560,6 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	if (ret)
 		goto abort_transfer;
 
-	if (sdesc->txdma_ch)
-#if defined (STM32H5)
-		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
-#else
-		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
-#endif
-
 	if (sdesc->rxdma_ch)
 #if defined (STM32H5)
 		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
@@ -621,12 +614,6 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 
 	if (sdesc->tx_pwm_desc)
 		no_os_pwm_disable(sdesc->tx_pwm_desc);
-#endif
-
-#if defined (STM32H5)
-	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
-#else
-	CLEAR_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
 #endif
 
 #if defined (STM32H5)
