@@ -78,8 +78,12 @@ int selftest_example_main()
 		goto error;
 
 	ret = adxl38x_get_sts_reg(adxl38x_desc, &device_flags);
-	ret |= adxl38x_set_range(adxl38x_desc, ADXL382_RANGE_60G);
-	ret |= adxl38x_get_range(adxl38x_desc, &device_range);
+	if (ret)
+		goto error;
+	ret = adxl38x_set_range(adxl38x_desc, ADXL382_RANGE_60G);
+	if (ret)
+		goto error;
+	ret = adxl38x_get_range(adxl38x_desc, &device_range);
 	if (ret)
 		goto error;
 
