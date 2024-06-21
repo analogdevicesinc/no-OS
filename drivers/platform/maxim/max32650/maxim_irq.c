@@ -72,6 +72,7 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_USB] = {.event = NO_OS_EVT_USB},
 };
 
+static struct no_os_irq_ctrl_desc *nvic;
 extern mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
 extern bool is_callback;
 
@@ -386,6 +387,11 @@ int32_t max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if (!param)
 		return -EINVAL;
 
+	if (nvic) {
+		descriptor = nvic;
+		return 0;
+	}
+
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
@@ -394,6 +400,7 @@ int32_t max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	descriptor->extra = param->extra;
 
 	*desc = descriptor;
+	nvic = descriptor;
 
 	return 0;
 }
@@ -415,6 +422,7 @@ int32_t max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		no_os_list_remove(_events[i].actions);
 	}
 	no_os_free(desc);
+	nvic = NULL;
 
 	return 0;
 }
