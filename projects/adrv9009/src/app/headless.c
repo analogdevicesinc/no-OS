@@ -81,7 +81,6 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 		.platform_ops = &xil_uart_ops
 	};
 
-#ifndef ADRV9008_2
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
@@ -90,7 +89,7 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 						     uint32_t))Xil_DCacheInvalidateRange
 #endif
 	};
-#endif
+
 #ifndef ADRV9008_1
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
@@ -101,11 +100,9 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 	};
 #endif
 
-#ifndef ADRV9008_2
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if (status < 0)
 		return status;
-#endif
 
 #ifndef ADRV9008_1
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
@@ -113,19 +110,15 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 		return status;
 #endif
 
-#ifndef ADRV9008_2
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
-#endif
 #ifndef ADRV9008_1
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 #endif
 
-#ifndef ADRV9008_2
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
-#endif
 #ifndef ADRV9008_1
 	struct iio_data_buffer write_buff = {
 		.buff = (void *)DAC_DDR_BASEADDR,
@@ -134,10 +127,8 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 #endif
 
 	struct iio_app_device devices[] = {
-#ifndef ADRV9008_2
 		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
 			       &read_buff, NULL, NULL),
-#endif
 #ifndef ADRV9008_1
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
 			       NULL, &write_buff, NULL)
@@ -488,7 +479,11 @@ int main(void)
 #endif
 
 #ifdef IIO_SUPPORT
+#ifdef ADRV9008_2
+	status = start_iiod(rx_os_dmac, tx_dmac, rx_os_adc, tx_dac);
+#else
 	status = start_iiod(rx_dmac, tx_dmac, rx_adc, tx_dac);
+#endif
 	if (status)
 		printf("iiod error: %d\n", status);
 #endif // IIO_SUPPORT
