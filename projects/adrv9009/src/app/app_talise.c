@@ -292,6 +292,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		printf("talise: Calibrations completed successfully\n");
 	}
 
+#ifndef ADRV9008_2
 	/***************************************************/
 	/**** Enable  Talise JESD204B Framer ***/
 	/***************************************************/
@@ -319,6 +320,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 			goto error_11;
 		}
 	}
+#endif
 
 	/***************************************************/
 	/**** Enable  Talise JESD204B Framer ***/
@@ -380,8 +382,10 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_ON);
 
+#ifndef ADRV9008_2
 	if(talInit.rx.rxChannels != TAL_RXOFF)
 		axi_jesd204_rx_lane_clk_enable(rx_jesd);
+#endif
 
 	if(talInit.obsRx.obsRxChannelsEnable != TAL_RXOFF)
 		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
@@ -420,6 +424,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 			printf("warning: TAL_DEFRAMER_A status 0x%X\n", deframerStatus);
 	}
 
+#ifndef ADRV9008_2
 	/************************************/
 	/**** Check Talise Framer Status ***/
 	/************************************/
@@ -435,6 +440,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 			printf("warning: TAL_FRAMER_A status 0x%X\n", framerStatus);
 		}
 	}
+#endif
 
 	/************************************/
 	/**** Check Talise Framer Status ***/
@@ -480,7 +486,8 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 #ifndef ADRV9008_2
 	talAction = TALISE_setRxTxEnable(pd, TAL_RX1RX2_EN, TAL_TX1TX2);
 #else
-	talAction = TALISE_setRxTxEnable(pd, TAL_ORX1_EN, TAL_TX1TX2);
+	talAction = TALISE_setRxTxEnable(pd, talInit.obsRx.obsRxChannelsEnable << 2,
+					 TAL_TX1TX2);
 #endif
 	if (talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
@@ -509,7 +516,9 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
 
 		axi_jesd204_rx_lane_clk_disable(rx_os_jesd);
+#ifndef ADRV9008_2
 		axi_jesd204_rx_lane_clk_disable(rx_jesd);
+#endif
 		axi_jesd204_tx_lane_clk_disable(tx_jesd);
 		break;
 	case 1:
@@ -549,6 +558,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_ON);
 		break;
 	case 8:
+#ifndef ADRV9008_2
 		/***************************************************/
 		/**** Enable Talise JESD204B Framer ***/
 		/***************************************************/
@@ -587,6 +597,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 				break;
 			}
 		}
+#endif
 
 		/***************************************************/
 		/**** Enable Talise JESD204B Framer ***/
@@ -682,7 +693,9 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			break;
 
 		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
+#ifndef ADRV9008_2
 		axi_jesd204_rx_lane_clk_enable(rx_jesd);
+#endif
 
 		break;
 	case 10:
@@ -706,6 +719,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 				printf("TAL_DEFRAMER_A deframerStatus 0x%X\n", deframerStatus);
 		}
 
+#ifndef ADRV9008_2
 		/************************************/
 		/**** Check Talise Framer Status ***/
 		/************************************/
@@ -720,6 +734,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if ((framerStatus & 0x07) != 0x05)
 				printf("TAL_FRAMER_A framerStatus 0x%X\n", framerStatus);
 		}
+#endif
 		/************************************/
 		/**** Check Talise Framer Status ***/
 		/************************************/
