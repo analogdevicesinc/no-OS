@@ -479,6 +479,8 @@ int main(void)
 #endif
 
 #ifdef IIO_SUPPORT
+	// Allow time to display messages correctly
+	no_os_mdelay(100);
 #ifdef ADRV9008_2
 	status = start_iiod(rx_os_dmac, tx_dmac, rx_os_adc, tx_dac);
 #else
