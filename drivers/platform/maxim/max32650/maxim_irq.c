@@ -50,11 +50,14 @@
 #include "tmr.h"
 #include "dma.h"
 #include "maxim_irq.h"
-#include "maxim_dma.h"
 #include "max32650.h"
 #include "no_os_uart.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+
+#ifdef NO_OS_DMA
+#include "maxim_dma.h"
+#endif
 
 #define MAX_UART_ERROR_FLAGS (MXC_F_UART_INT_FL_FRAME | \
 			      MXC_F_UART_INT_FL_PARITY | \
@@ -67,8 +70,12 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR},
 	[NO_OS_EVT_RTC] = {.event = NO_OS_EVT_RTC},
 	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED},
+
+#ifdef NO_OS_DMA
 	[NO_OS_EVT_DMA_RX_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_COMPLETE},
 	[NO_OS_EVT_DMA_TX_COMPLETE] = {.event = NO_OS_EVT_DMA_TX_COMPLETE},
+#endif
+
 	[NO_OS_EVT_USB] = {.event = NO_OS_EVT_USB},
 };
 
@@ -193,6 +200,7 @@ void TMR2_IRQHandler()
 }
 #endif
 
+#ifdef NO_OS_DMA
 /**
  * @brief DMA interupt callback
  * @param ch_num - The DMA channel number for which the interrupt occured
@@ -300,6 +308,7 @@ void DMA15_IRQHandler()
 {
 	max_dma_handler(15);
 }
+#endif /* NO_OS_DMA */
 
 void RTC_IRQHandler()
 {
