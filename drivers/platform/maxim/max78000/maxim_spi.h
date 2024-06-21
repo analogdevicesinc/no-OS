@@ -43,8 +43,11 @@
 #include <stdint.h>
 #include "gpio.h"
 #include "no_os_spi.h"
+
+#ifdef NO_OS_SPI_DMA
 #include "no_os_dma.h"
 #include "maxim_dma.h"
+#endif
 
 /**
  * @brief maxim specific SPI platform ops structure
@@ -60,18 +63,22 @@ struct max_spi_init_param {
 	uint32_t num_slaves;
 	enum spi_ss_polarity polarity;
 	mxc_gpio_vssel_t vssel;
+#ifdef NO_OS_SPI_DMA
 	struct no_os_dma_init_param *dma_param;
 	uint32_t dma_rx_priority;
 	uint32_t dma_tx_priority;
+#endif
 };
 
 struct max_spi_state {
 	struct max_spi_init_param *init_param;
 	uint32_t cs_delay_first;
 	uint32_t cs_delay_last;
+#ifdef NO_OS_SPI_DMA
 	struct no_os_dma_desc *dma;
 	uint32_t dma_req_rx;
 	uint32_t dma_req_tx;
+#endif
 };
 
 #endif
