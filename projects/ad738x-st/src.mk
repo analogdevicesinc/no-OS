@@ -28,7 +28,6 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_crc8.h \
 		$(INCLUDE)/no_os_alloc.h \
 		$(INCLUDE)/no_os_mutex.h \
-		$(INCLUDE)/no_os_dma.h \
 		$(INCLUDE)/no_os_circular_buffer.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
@@ -43,7 +42,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_crc8.c \
 		$(NO-OS)/util/no_os_alloc.c \
 		$(NO-OS)/util/no_os_mutex.c \
-		$(DRIVERS)/api/no_os_dma.c \
 		$(NO-OS)/util/no_os_circular_buffer.c
 
 INCS += $(DRIVERS)/adc/ad738x/ad738x.h

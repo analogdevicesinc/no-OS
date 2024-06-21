@@ -1,7 +1,6 @@
 # Platform drivers
 INCS += $(PLATFORM_DRIVERS)/maxim_gpio.h      \
         $(PLATFORM_DRIVERS)/maxim_spi.h       \
-        $(PLATFORM_DRIVERS)/../common/maxim_dma.h       \
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.h  \
 		$(PLATFORM_DRIVERS)/maxim_hal.h       \
         $(PLATFORM_DRIVERS)/maxim_irq.h       \
@@ -13,7 +12,6 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c     \
         $(PLATFORM_DRIVERS)/maxim_init.c      \
         $(PLATFORM_DRIVERS)/maxim_gpio.c      \
         $(PLATFORM_DRIVERS)/maxim_spi.c       \
-        $(PLATFORM_DRIVERS)/../common/maxim_dma.c       \
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.c  \
         $(PLATFORM_DRIVERS)/maxim_irq.c       \
         $(PLATFORM_DRIVERS)/maxim_uart.c      \
@@ -72,7 +70,6 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_uart.h      \
 		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_util.h \
-		$(INCLUDE)/no_os_dma.h \
 		$(INCLUDE)/no_os_units.h \
 		$(INCLUDE)/no_os_init.h \
 		$(INCLUDE)/no_os_alloc.h \
@@ -88,7 +85,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_timer.c  \
 		$(DRIVERS)/api/no_os_uart.c \
-		$(DRIVERS)/api/no_os_dma.c \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_util.c \
 		$(NO-OS)/util/no_os_alloc.c \
