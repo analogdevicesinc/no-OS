@@ -519,8 +519,8 @@ int adxl38x_get_raw_xyz(struct adxl38x_dev *dev, uint32_t *raw_x,
 /***************************************************************************//**
  * @brief Reads the raw temperature data using burst read.
  *
- * @param dev   	- The device structure.
- * @param raw_temp 	- Raw temperature data.
+ * @param dev   		- The device structure.
+ * @param temp_degC 	- Temperature data in degree Celcius
  *
  * @return ret  	- Result of the reading procedure.
 *******************************************************************************/
@@ -965,7 +965,7 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
 
 	// set FIFO_CFG1 register
 	fifo_samples_low = (uint8_t) num_samples;
-	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG1, 1, &fifo_samples_low);
+	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG1, 1, fifo_samples_low);
 	// building data for FIFO_CFG0 register
 	fifo_mode = (fifo_mode << 4) & 0x30;
 	fifo_samples_high = (uint8_t) num_samples >> 8;
@@ -978,7 +978,7 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
 	if(external_trigger && fifo_mode == 3)
 		write_data |= 1u << 3;
 	write_data |= fifo_samples_high;
-	ret |= adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG0, 1, &write_data);
+	ret |= adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG0, 1, write_data);
 
 	return ret;
 }

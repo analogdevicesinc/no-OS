@@ -1,6 +1,7 @@
 # Select the example you want to enable by choosing y for enabling and n for disabling
-BASIC_EXAMPLE = y
+BASIC_EXAMPLE = n
 SLF_TST_EXAMPLE = n
+FIFO_EXAMPLE = y
 
 # Select the device you want to enable by choosing y for enabling and n for disabling
 ADXL380 = y

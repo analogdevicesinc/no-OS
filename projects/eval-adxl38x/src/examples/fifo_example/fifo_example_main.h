@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   example_main.h
- *   @brief  Main header for example eval-adxl38x project
+ *   @file   fifo_example_main.h
+ *   @brief  Main header for FIFO example eval-adxl38x project
  *   @author BRajendran (balarupini.rajendran@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,16 +36,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __EXAMPLE_MAIN_H__
-#define __EXAMPLE_MAIN_H__
-
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
+#ifndef __FIFO_EXAMPLE_MAIN_H__
+#define __FIFO_EXAMPLE_MAIN_H__
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int example_main();
+int fifo_example_main();
 
-#endif /* __EXAMPLE_MAIN_H__ */
+#endif /* __SELFTEST_EXAMPLE_MAIN_H__ */

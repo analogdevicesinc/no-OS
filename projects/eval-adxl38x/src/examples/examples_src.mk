@@ -15,3 +15,10 @@ CFLAGS += -DSLF_TST_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/selftest_example/selftest_example_main.c
 INCS += $(PROJECT)/src/examples/selftest_example/selftest_example_main.h
 endif
+
+ifeq (y,$(strip $(FIFO_EXAMPLE)))
+CFLAGS += -DFIFO_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/fifo_example/fifo_example_main.c
+INCS += $(PROJECT)/src/examples/fifo_example/fifo_example_main.h
+endif
+

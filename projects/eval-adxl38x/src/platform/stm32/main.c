@@ -52,6 +52,10 @@
 #include "selftest_example_main.h"
 #endif
 
+#ifdef FIFO_EXAMPLE
+#include "fifo_example_main.h"
+#endif
+
 /***************************************************************************//**
  * @brief Main function execution for STM32 platform.
  *
@@ -87,9 +91,20 @@ int main()
 	ret = basic_example_main();
 #endif
 
-#if (BASIC_EXAMPLE + SLF_TST_EXAMPLE == 0)
+#ifdef FIFO_EXAMPLE
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &adxl38x_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+	ret = fifo_example_main();
+#endif
+
+#if (BASIC_EXAMPLE + SLF_TST_EXAMPLE + FIFO_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + SLF_TST_EXAMPLE > 1)
+#elif (BASIC_EXAMPLE + SLF_TST_EXAMPLE  + FIFO_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
