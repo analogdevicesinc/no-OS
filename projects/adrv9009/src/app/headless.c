@@ -361,13 +361,13 @@ int main(void)
 
 #endif
 
+#ifndef ADRV9008_1
 	status = axi_adc_init(&rx_os_adc, &rx_os_adc_init);
 	if (status) {
 		printf("OBS axi_adc_init() failed with status %d\n", status);
 		goto error_3;
 	}
 
-#ifndef ADRV9008_1
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init() tx init error: %d\n", status);
