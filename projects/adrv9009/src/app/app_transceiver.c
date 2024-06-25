@@ -196,7 +196,7 @@ void fpga_xcvr_deinit(void)
 	adxcvr_remove(rx_os_adxcvr);
 	adxcvr_remove(tx_adxcvr);
 #endif
-#ifndef ADRV9008_1
+#ifndef ADRV9008_2
 	adxcvr_remove(rx_adxcvr);
 #endif
 }
