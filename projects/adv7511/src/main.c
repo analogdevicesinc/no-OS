@@ -347,6 +347,7 @@ int main()
 
 	adv7511_extra_i2c_init.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 	adv7511_extra_i2c_init.type = IIC_PL;
+	adv7511_i2c_init.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 	adv7511_i2c_init.max_speed_hz = 400000;
 	adv7511_i2c_init.slave_address = 0x39;
 	adv7511_i2c_init.platform_ops = &xil_i2c_ops;
