@@ -457,7 +457,7 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 				      uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	int ret;
-	void *discard;
+	void *discard  = NULL;
 	struct irq_action key;
 	uint32_t hal_event = _events[cb->event].hal_event;
 
@@ -495,6 +495,7 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 #endif
 #if defined (HAL_TIM_MODULE_ENABLED) && defined(HAL_DMA_MODULE_ENABLED)
 	case NO_OS_TIM_DMA_IRQ:
+	case NO_OS_DMA_IRQ:
 		key.handle = cb->handle;
 		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
 		if (ret < 0)
@@ -509,7 +510,8 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		break;
 	}
 
-	no_os_free(discard);
+	if (discard)
+		no_os_free(discard);
 
 	return ret;
 }
