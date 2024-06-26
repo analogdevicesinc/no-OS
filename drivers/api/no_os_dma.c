@@ -305,6 +305,7 @@ int no_os_dma_config_xfer(struct no_os_dma_desc *desc,
 		no_os_irq_set_priority(desc->irq_ctrl, ch->irq_num, xfer[0].irq_priority);
 	}
 
+	no_os_mutex_unlock(ch->mutex);
 	return 0;
 
 abort_xfer:
