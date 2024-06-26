@@ -255,7 +255,7 @@ int max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		return -EINVAL;
 
 	if (nvic) {
-		descriptor = nvic;
+		*desc = nvic;
 		return 0;
 	}
 
