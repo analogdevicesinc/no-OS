@@ -251,28 +251,13 @@ int no_os_dma_config_xfer(struct no_os_dma_desc *desc,
 {
 	uint32_t i;
 	int ret;
+	void *discard;
 	struct no_os_callback_desc *sg_callback;
-
 
 	if (!desc || !xfer || !len || !ch)
 		return -EINVAL;
 
 	no_os_mutex_lock(ch->mutex);
-	sg_callback = &ch->cb_desc;
-	sg_callback->peripheral = xfer[0].periph;
-
-	switch (xfer[0].xfer_type) {
-	case MEM_TO_DEV:
-	case MEM_TO_MEM:
-		sg_callback->event = NO_OS_EVT_DMA_TX_COMPLETE;
-		break;
-	case DEV_TO_MEM:
-		sg_callback->event = NO_OS_EVT_DMA_RX_COMPLETE;
-		break;
-	default:
-		ret = -EINVAL;
-		goto unlock;
-	}
 
 	/*
 	 * Add the transfers to the channel's SG list. It's safe to do so, since
@@ -282,14 +267,29 @@ int no_os_dma_config_xfer(struct no_os_dma_desc *desc,
 		no_os_list_add_last(ch->sg_list, &xfer[i]);
 
 	if (desc->irq_ctrl) {
-		ch->irq_ctx.desc = desc;
-		ch->irq_ctx.channel = ch;
+		sg_callback = &ch->cb_desc;
 		sg_callback->ctx = &ch->irq_ctx;
 		sg_callback->handle = (void *)ch->id;
+		sg_callback->peripheral = xfer[0].periph;
+		ch->irq_ctx.desc = desc;
+		ch->irq_ctx.channel = ch;
+
+		switch (xfer[0].xfer_type) {
+		case MEM_TO_DEV:
+		case MEM_TO_MEM:
+			sg_callback->event = NO_OS_EVT_DMA_TX_COMPLETE;
+			break;
+		case DEV_TO_MEM:
+			sg_callback->event = NO_OS_EVT_DMA_RX_COMPLETE;
+			break;
+		default:
+			ret = -EINVAL;
+			goto err;
+		}
 
 		ret = desc->platform_ops->dma_config_xfer(ch, xfer);
 		if (ret)
-			goto abort_xfer;
+			goto err;
 
 		if (desc->sg_handler)
 			sg_callback->callback = desc->sg_handler;
@@ -300,17 +300,16 @@ int no_os_dma_config_xfer(struct no_os_dma_desc *desc,
 						  ch->irq_num,
 						  sg_callback);
 		if (ret)
-			goto abort_xfer;
+			goto err;
 
 		no_os_irq_set_priority(desc->irq_ctrl, ch->irq_num, xfer[0].irq_priority);
 	}
 
 	no_os_mutex_unlock(ch->mutex);
 	return 0;
-
-abort_xfer:
-	no_os_dma_xfer_abort(desc, ch);
-unlock:
+err:
+	for (i = 0; i < len; i++)
+		no_os_list_get_first(ch->sg_list, &discard);
 	no_os_mutex_unlock(ch->mutex);
 
 	return ret;
