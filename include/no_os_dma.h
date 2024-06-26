@@ -119,6 +119,8 @@ struct no_os_dma_ch {
 	struct no_os_list_desc *sg_list;
 	/** Channel specific interrupt line number */
 	uint32_t irq_num;
+	/** irq callback */
+	struct no_os_callback_desc cb_desc;
 	/** IRQ parameter for the default inter transfer handler */
 	struct no_os_dma_default_handler_data irq_ctx;
 	void *extra;

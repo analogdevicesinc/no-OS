@@ -163,8 +163,13 @@ int no_os_dma_remove(struct no_os_dma_desc *desc)
 			return ret;
 
 		no_os_mutex_remove(desc->channels[i].mutex);
-	}
+		if (desc->irq_ctrl && desc->channels[i].cb_desc.handle) {
+			no_os_irq_unregister_callback(desc->irq_ctrl,
+						      desc->channels[i].irq_num,
+						      &desc->channels[i].cb_desc);
+		}
 
+	}
 	no_os_mutex_remove(desc->mutex);
 
 	ret = desc->platform_ops->dma_remove(desc);
@@ -246,25 +251,23 @@ int no_os_dma_config_xfer(struct no_os_dma_desc *desc,
 {
 	uint32_t i;
 	int ret;
+	struct no_os_callback_desc *sg_callback;
 
-	struct no_os_callback_desc sg_callback = {
-		.callback = default_sg_callback,
-	};
 
 	if (!desc || !xfer || !len || !ch)
 		return -EINVAL;
 
 	no_os_mutex_lock(ch->mutex);
-
-	sg_callback.peripheral = xfer[0].periph;
+	sg_callback = &ch->cb_desc;
+	sg_callback->peripheral = xfer[0].periph;
 
 	switch (xfer[0].xfer_type) {
 	case MEM_TO_DEV:
 	case MEM_TO_MEM:
-		sg_callback.event = NO_OS_EVT_DMA_TX_COMPLETE;
+		sg_callback->event = NO_OS_EVT_DMA_TX_COMPLETE;
 		break;
 	case DEV_TO_MEM:
-		sg_callback.event = NO_OS_EVT_DMA_RX_COMPLETE;
+		sg_callback->event = NO_OS_EVT_DMA_RX_COMPLETE;
 		break;
 	default:
 		ret = -EINVAL;
@@ -281,21 +284,21 @@ int no_os_dma_config_xfer(struct no_os_dma_desc *desc,
 	if (desc->irq_ctrl) {
 		ch->irq_ctx.desc = desc;
 		ch->irq_ctx.channel = ch;
-		sg_callback.ctx = &ch->irq_ctx;
-		sg_callback.handle = (void *)ch->id;
+		sg_callback->ctx = &ch->irq_ctx;
+		sg_callback->handle = (void *)ch->id;
 
 		ret = desc->platform_ops->dma_config_xfer(ch, xfer);
 		if (ret)
 			goto abort_xfer;
 
 		if (desc->sg_handler)
-			sg_callback.callback = desc->sg_handler;
+			sg_callback->callback = desc->sg_handler;
 		else
-			sg_callback.callback = default_sg_callback;
+			sg_callback->callback = default_sg_callback;
 
 		ret = no_os_irq_register_callback(desc->irq_ctrl,
 						  ch->irq_num,
-						  &sg_callback);
+						  sg_callback);
 		if (ret)
 			goto abort_xfer;
 
