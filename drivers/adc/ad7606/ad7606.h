@@ -284,6 +284,8 @@ struct ad7606_axi_init_param {
 	uint32_t axi_clkgen_rate;
 	/* PWM generator init structure */
 	struct no_os_pwm_init_param *trigger_pwm_init;
+	/* SPI Engine offload parameters */
+	struct spi_engine_offload_init_param *offload_init_param;
 };
 
 /**
