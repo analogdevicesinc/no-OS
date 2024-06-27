@@ -345,8 +345,9 @@ int32_t ad7606_spi_write_mask(struct ad7606_dev *dev,
 			      uint32_t val);
 int32_t ad7606_spi_data_read(struct ad7606_dev *dev,
 			     uint32_t *data);
-int32_t ad7606_read(struct ad7606_dev *dev,
-		    uint32_t *data);
+int32_t ad7606_read_samples(struct ad7606_dev *dev,
+			    uint32_t *data,
+			    uint32_t samples);
 int32_t ad7606_convst(struct ad7606_dev *dev);
 int32_t ad7606_reset(struct ad7606_dev *dev);
 int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
