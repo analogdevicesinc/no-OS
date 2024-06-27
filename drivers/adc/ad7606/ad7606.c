@@ -222,10 +222,21 @@ static const uint16_t tconv_max[] = {
 };
 
 /**
+ * @struct ad7606_axi_dev
+ * @brief Structure for AXI FPGA cores
+ */
+struct ad7606_axi_dev {
+	/* Clock gen for hdl design structure */
+	struct axi_clkgen *clkgen;
+};
+
+/**
  * @struct ad7606_dev
  * @brief Device driver structure
  */
 struct ad7606_dev {
+	/** AXI core device data */
+	struct ad7606_axi_dev axi_dev;
 	/** SPI descriptor*/
 	struct no_os_spi_desc *spi_desc;
 	/** RESET GPIO descriptor */
@@ -1154,6 +1165,44 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 }
 
 /***************************************************************************//**
+ * @brief Initialize AXI FPGA modules, if configured
+ *
+ * The device may function in correlation with AXI SPI Engine, AXI ADC,
+ * AXI PWM and other FPGA elements.
+ * When it's configured (with AXI support) this function will initialize
+ * all the AXI elements (provided via init_param).
+ *
+ * @param device     - Pointer to location of device structure to write.
+ * @param init_param - Pointer to configuration of the driver.
+ *
+ * @return ret - return code.
+ *         Example: -ENOMEM - Memory allocation error.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+static int32_t ad7606_axi_init(struct ad7606_dev *device,
+			       struct ad7606_init_param *init_param)
+{
+	struct ad7606_axi_init_param *axi_init = init_param->axi_init;
+	struct ad7606_axi_dev *axi = &device->axi_dev;
+	int32_t ret;
+
+	if (!axi_init)
+		return 0;
+
+	ret = axi_clkgen_init(&axi->clkgen, axi_init->clkgen_init);
+	if (ret != 0)
+		return ret;
+
+	ret = axi_clkgen_set_rate(axi->clkgen, axi_init->axi_clkgen_rate);
+	if (ret != 0)
+		goto error;
+
+	/* Note: more validation will be added later */
+error:
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Initialize the ad7606 device structure.
  *
  * Performs memory allocation of the device structure.
@@ -1188,6 +1237,10 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	info = &ad7606_chip_info_tbl[dev->device_id];
 	printf("Initializing device %s, num-channels %u SDI lines %u\n",
 	       info->name, info->num_channels, 1 << info->max_dout_lines);
+
+	ret = ad7606_axi_init(dev, init_param);
+	if (ret != 0)
+		goto error;
 
 	dev->num_channels = info->num_channels;
 	dev->max_dout_lines = info->max_dout_lines;
@@ -1306,6 +1359,27 @@ error:
  *         Example: -EIO - SPI communication error.
  *                  0 - No errors encountered.
 *******************************************************************************/
+void ad7606_axi_remove(struct ad7606_dev *dev)
+{
+	struct ad7606_axi_dev *axi;
+
+	if (!dev)
+		return;
+
+	axi = &dev->axi_dev;
+
+	axi_clkgen_remove(axi->clkgen);
+}
+
+/***************************************************************************//**
+ * @brief Free any resource used by the driver.
+ *
+ * @param dev        - The device structure.
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  0 - No errors encountered.
+*******************************************************************************/
 int32_t ad7606_remove(struct ad7606_dev *dev)
 {
 	int32_t ret;
@@ -1321,6 +1395,8 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 	no_os_gpio_remove(dev->gpio_par_ser);
 
 	ret = no_os_spi_remove(dev->spi_desc);
+
+	ad7606_axi_remove(dev);
 
 	no_os_free(dev);
 
