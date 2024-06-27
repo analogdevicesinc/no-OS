@@ -601,7 +601,8 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 }
 
 /***************************************************************************//**
- * @brief Blocking conversion start and data read.
+ * @brief Blocking conversion start and read data (for a single sample from all
+ *        channels).
  *
  * This function performs a conversion start and then proceeds to reading
  * the conversion data.
@@ -615,7 +616,7 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_read(struct ad7606_dev *dev, uint32_t * data)
+static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 {
 	int32_t ret;
 	uint8_t busy;
@@ -647,6 +648,41 @@ int32_t ad7606_read(struct ad7606_dev *dev, uint32_t * data)
 	}
 
 	return ad7606_spi_data_read(dev, data);
+}
+
+/***************************************************************************//**
+ * @brief Read muliple raw samples from device.
+ *
+ * This function performs a series of conversion starts and then proceeds to
+ * reading the conversion data (after each conversion).
+ *
+ * @param dev        - The device structure.
+ * @param data       - Pointer to location of buffer where to store the data.
+ * @param samples    - Number of samples to pull from the ADC.
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  -ETIME - Timeout while waiting for the BUSY signal.
+ *                  -EBADMSG - CRC computation mismatch.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
+			    uint32_t samples)
+{
+	uint32_t nchannels = ad7606_chip_info_tbl[dev->device_id].num_channels;
+	uint32_t i, sample_size;
+	int32_t ret;
+
+	sample_size = nchannels * sizeof(uint32_t);
+
+	for (i = 0; i < samples; i++) {
+		ret = ad7606_read_one_sample(dev, data);
+		if (ret)
+			return ret;
+		data += sample_size;
+	}
+
+	return 0;
 }
 
 /* Internal function to reset device settings to default state after chip reset. */
