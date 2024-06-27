@@ -298,23 +298,91 @@ int32_t supply_scale_v2(int32_t val)
 }
 
 /**
- * @brief Convert values measured by the ADE9113 device to mV (mA val for I)
- * @param stout - state  machine descriptor
- * @param i_val - value of I waveform (in mA)
- * @param v1_val - value of V1 waveform in mV
- * @param v2_val - value of V2 waveform in mV
- * @return 0 in case of success, error code otherwise
+ * @brief Compute v1 rms value
+ * @param sample - v1 sample
+ * @return v1 rms value
  */
-int supply_conv_vals_to_mv(struct stout *stout, int32_t *i_val, int32_t *v1_val,
-			   int32_t *v2_val)
+int64_t rms_filter_v1(int32_t sample)
 {
+	static int32_t rms = INITIAL;
+	static int64_t sum_squares = 1UL * SAMPLES * INITIAL * INITIAL;
+
+	sum_squares -= sum_squares / SAMPLES;
+	sum_squares += (int64_t) sample * sample;
+	if (rms == 0) rms = 1;    /* do not divide by zero */
+	rms = (rms + sum_squares / SAMPLES / rms) / 2;
+	return rms;
+}
+
+/**
+ * @brief Compute v2 rms value
+ * @param sample - v2 sample
+ * @return v2 rms value
+ */
+int64_t rms_filter_v2(int32_t sample)
+{
+	static int32_t rms = INITIAL;
+	static int64_t sum_squares = 1UL * SAMPLES * INITIAL * INITIAL;
+
+	sum_squares -= sum_squares / SAMPLES;
+	sum_squares += (int64_t) sample * sample;
+	if (rms == 0) rms = 1;    /* do not divide by zero */
+	rms = (rms + sum_squares / SAMPLES / rms) / 2;
+	return rms;
+}
+
+/**
+ * @brief Compute i rms value
+ * @param sample - i sample
+ * @return i rms value
+ */
+int64_t rms_filter_i(int32_t sample)
+{
+	static int32_t rms = INITIAL;
+	static int64_t sum_squares = 1UL * SAMPLES * INITIAL * INITIAL;
+
+	sum_squares -= sum_squares / SAMPLES;
+	sum_squares += (int64_t) sample * sample;
+	if (rms == 0) rms = 1;    /* do not divide by zero */
+	rms = (rms + sum_squares / SAMPLES / rms) / 2;
+	return rms;
+}
+
+/**
+ * @brief saves the current and voltage values in rms_adc structure
+ * @param stout - application strucutre
+ * @param rms - structure holding the measurements values
+ * @return 0 in case of success, negative error code otherwise
+ */
+int rms_adc_values_read(struct stout *stout, struct rms_adc_values *rms)
+{
+	int32_t i_val, v1_val, v2_val, v1_rms, v2_rms, i_rms;
 	int ret;
 
-	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, i_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, &i_val);
 	if (ret)
 		return ret;
-	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, v1_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, &v1_val);
 	if (ret)
 		return ret;
-	return ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, v2_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, &v2_val);
+	if (ret)
+		return ret;
+	rms->v1_rms_adc = (int32_t)rms_filter_v1((int32_t)v1_val);
+	rms->v2_rms_adc = (int32_t)rms_filter_v2((int32_t)v2_val);
+	rms->i_rms_adc = (int32_t)rms_filter_i((int32_t)i_val);
+	// Scale is 0,03125 = 3125/100000 = 1/32 = 1/2^5
+	rms->i_rms = (((int64_t)((int32_t)(int64_t)rms->i_rms_adc))*ADE9113_VREF) /
+		     (1 << 28);
+	rms->v1_rms = (((int64_t)((int32_t)(supply_scale_v1((int64_t)rms->v1_rms_adc))))
+		       *ADE9113_VREF) / (1 << 23);
+#if defined(REV_A)
+	rms->v2_rms = (((int64_t)((int32_t)(supply_scale_v2((int64_t)rms->v2_rms_adc))))
+		       *ADE9113_VREF) / (1 << 23);
+#elif defined(REV_D)
+	rms->v2_rms = (((int64_t)((int32_t)(supply_scale_v1((int64_t)rms->v2_rms_adc))))
+		       *ADE9113_VREF) / (1 << 23);
+#endif
+
+	return 0;
 }

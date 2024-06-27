@@ -48,7 +48,8 @@
 /************************* Functions Declarations******************************/
 /******************************************************************************/
 /*! Startup test */
-int self_test_startup(struct stout *stout);
+int self_test_startup(struct stout *stout,
+		      struct rms_adc_values *rms_adc_values);
 
 /*! Relay test */
 int self_test_relay_stuck(struct stout *stout);
@@ -61,7 +62,8 @@ int self_test_rcd_running(struct stout *stout, uint16_t step,
 			  enum state_machine_events_e *event);
 
 /*! Startup test for power supply */
-int self_test_supply(struct stout *stout);
+int self_test_supply(struct stout *stout,
+		     struct rms_adc_values *rms_adc_values);
 
 /*! Running test for relay */
 int self_test_relay_closed(struct stout *stout, int32_t v2);

@@ -132,8 +132,14 @@
 #define I_LIMIT_16A                     (16500u)
 // Curent limit charging low power
 #define I_LIMIT_10A                     (10500u)
-// Number of periodes skipped before Vin self test
-#define SELF_TEST_SKIP_PERIODES_NO      (5u)
+// Number of cycles skipped before Vin self test
+#define SELF_TEST_SKIP_CYCLES_NO        (50u)
+// Number of cycles skipped after self test to update rms values
+#define SKIP_CYCLES_AFTER_SELF_TEST     (100u)
+#if defined REV_A
+// Number of cycles skipped after relay switch to update rms values
+#define SKIP_CYCLES_AFTER_RELAY_SW      (150u)
+#endif
 // Delay used between Vin and Vrelay readings during startup selftest
 #define DELAY_SELF_TEST_READING         (300u)
 // Value indicating the delay between readings (default 20ms)
