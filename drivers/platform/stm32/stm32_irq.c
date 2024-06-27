@@ -320,30 +320,9 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		};
 
 		ret = HAL_UART_RegisterCallback(cb->handle, hal_event, pUartCallback);
-		if (ret != HAL_OK) {
-			ret = -EFAULT;
-			break;
-		}
+		if (ret != HAL_OK)
+			return -EFAULT;
 
-		if (_events[cb->event].actions == NULL) {
-			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret < 0)
-				return ret;
-		}
-
-		li = no_os_calloc(1, sizeof(struct irq_action));
-		if(!li)
-			return -ENOMEM;
-
-		li->handle = cb->handle;
-		li->callback = cb->callback;
-		li->ctx = cb->ctx;
-		ret = no_os_list_add_last(_events[cb->event].actions, li);
-		if (ret < 0) {
-			no_os_free(li);
-			return ret;
-		}
 		break;
 #ifdef HAL_TIM_MODULE_ENABLED
 	case NO_OS_TIM_IRQ:
@@ -359,42 +338,8 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		};
 
 		ret = HAL_TIM_RegisterCallback(cb->handle, hal_event, pTimCallback);
-		if (ret != HAL_OK) {
-			ret = -EFAULT;
-			break;
-		}
-		if (_events[cb->event].actions == NULL) {
-			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret < 0)
-				return ret;
-		}
-
-		ret = no_os_list_read_find(_events[cb->event].actions,
-					   (void**)&li,
-					   &action_key);
-		/*
-		 * If an action with the same handle as the function parameter does not exists, insert a new one,
-		 * otherwise update
-		 */
-		if (ret) {
-			li = no_os_calloc(1, sizeof(struct irq_action));
-			if(!li)
-				return -ENOMEM;
-
-			li->handle = cb->handle;
-			li->callback = cb->callback;
-			li->ctx = cb->ctx;
-			ret = no_os_list_add_last(_events[cb->event].actions, li);
-			if (ret < 0) {
-				no_os_free(li);
-				return ret;
-			}
-		} else {
-			li->handle = cb->handle;
-			li->callback = cb->callback;
-			li->ctx = cb->ctx;
-		}
+		if (ret != HAL_OK)
+			return -EFAULT;
 		break;
 #endif
 #if defined(HAL_DMA_MODULE_ENABLED) && defined(HAL_SAI_MODULE_ENABLED)
@@ -403,51 +348,15 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		case HAL_DMA_XFER_CPLT_CB_ID:
 			pSaiDmaCallback = _SAIRxCpltCallback;
 			ret = HAL_SAI_RegisterCallback(cb->handle, hal_event, pSaiDmaCallback);
-			if (_events[cb->event].actions == NULL) {
-				ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-						      irq_action_cmp);
-				if (ret < 0)
-					return ret;
-			}
+			if (ret != HAL_OK)
+				return -EFAULT;
 
-			li = no_os_calloc(1, sizeof(struct irq_action));
-			if(!li)
-				return -ENOMEM;
-
-			li->handle = cb->handle;
-			li->callback = cb->callback;
-			li->ctx = cb->ctx;
-			ret = no_os_list_add_last(_events[cb->event].actions, li);
-			if (ret < 0) {
-				no_os_free(li);
-				return ret;
-			}
 			break;
 		case HAL_DMA_XFER_HALFCPLT_CB_ID:
 			pSaiDmaCallback = _SAI_RxHalfCpltCallback;
 			ret = HAL_SAI_RegisterCallback(cb->handle, hal_event, pSaiDmaCallback);
-			if (ret != HAL_OK) {
-				ret = -EFAULT;
-				break;
-			}
-			if (_events[cb->event].actions == NULL) {
-				ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-						      irq_action_cmp);
-				if (ret < 0)
-					return ret;
-			}
-			li = no_os_calloc(1, sizeof(struct irq_action));
-			if(!li)
-				return -ENOMEM;
-
-			li->handle = cb->handle;
-			li->callback = cb->callback;
-			li->ctx = cb->ctx;
-			ret = no_os_list_add_last(_events[cb->event].actions, li);
-			if (ret < 0) {
-				no_os_free(li);
-				return ret;
-			}
+			if (ret != HAL_OK)
+				return -EFAULT;
 			break;
 		}
 		break;
@@ -459,43 +368,19 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			pDmaCallback.XferCpltCallback = _DMA_RX_CpltCallback;
 			ret = HAL_DMA_RegisterCallback(cb->handle, hal_event,
 						       pDmaCallback.XferCpltCallback);
-			if (ret != HAL_OK) {
-				ret = -EFAULT;
-				break;
-			}
+			if (ret != HAL_OK)
+				return -EFAULT;
 			break;
 		case HAL_DMA_XFER_HALFCPLT_CB_ID:
 			pDmaCallback.XferHalfCpltCallback = _DMA_HalfCpltCallback;
 			ret = HAL_DMA_RegisterCallback(cb->handle, hal_event,
 						       pDmaCallback.XferCpltCallback);
-			if (ret != HAL_OK) {
-				ret = -EFAULT;
-				break;
-			}
+			if (ret != HAL_OK)
+				return -EFAULT;
 			break;
 		default:
 			return -EINVAL;
 		};
-
-		if (_events[cb->event].actions == NULL) {
-			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret < 0)
-				return ret;
-		}
-
-		li = no_os_calloc(1, sizeof(struct irq_action));
-		if(!li)
-			return -ENOMEM;
-
-		li->handle = cb->handle;
-		li->callback = cb->callback;
-		li->ctx = cb->ctx;
-		ret = no_os_list_add_last(_events[cb->event].actions, li);
-		if (ret < 0) {
-			no_os_free(li);
-			return ret;
-		}
 		break;
 #endif
 #if defined (HAL_DMA_MODULE_ENABLED)
@@ -507,25 +392,39 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 			else
 				pDmaCallback.XferCpltCallback = _DMA_TX_CpltCallback;
+
 			ret = HAL_DMA_RegisterCallback((DMA_HandleTypeDef *)cb->handle, hal_event,
 						       pDmaCallback.XferCpltCallback);
-			if (ret != HAL_OK) {
-				ret = -EFAULT;
-				break;
-			}
+			if (ret != HAL_OK)
+				return -EFAULT;
+
 			break;
 
 		default:
 			return -EINVAL;
 		};
 
-		if (_events[cb->event].actions == NULL) {
-			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp);
-			if (ret < 0)
-				return ret;
-		}
+		break;
+#endif
 
+	default:
+		return -EINVAL;
+	}
+
+	if (_events[cb->event].actions == NULL) {
+		ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
+				      irq_action_cmp);
+		if (ret < 0)
+			return ret;
+	}
+	/*
+	 * If an action with the same handle as the function parameter does not exists, insert a new one,
+	 * otherwise update
+	 */
+	ret = no_os_list_read_find(_events[cb->event].actions,
+				   (void**)&li,
+				   &action_key);
+	if (ret) {
 		li = no_os_calloc(1, sizeof(struct irq_action));
 		if (!li)
 			return -ENOMEM;
@@ -538,15 +437,13 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			no_os_free(li);
 			return ret;
 		}
-		break;
-#endif
-
-	default:
-		ret = -EINVAL;
-		break;
+	} else {
+		li->handle = cb->handle;
+		li->callback = cb->callback;
+		li->ctx = cb->ctx;
 	}
 
-	return ret;
+	return 0;
 }
 
 /**
