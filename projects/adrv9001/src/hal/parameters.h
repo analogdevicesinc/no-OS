@@ -42,7 +42,9 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#ifdef XILINX_PLATFORM
 #include "xparameters.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -59,6 +61,8 @@
 
 #define DAC_BUFFER_SAMPLES 1024
 #define ADC_BUFFER_SAMPLES 16384
+
+#ifdef XILINX_PLATFORM
 
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET			78
@@ -104,5 +108,23 @@
 #define RX2_ADC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x1000)
 #define TX1_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x2000)
 #define TX2_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x4000)
+
+#else
+
+#define SPI_DEVICE_ID			0
+#define SPI_CS				0
+
+#define GPIO_RESET			(2016 + 14)	// /sys/class/gpio/gpiochip2016
+
+#define RX1_DMA_BASEADDR	0	// /dev/uio0
+#define RX2_DMA_BASEADDR	1	// /dev/uio1
+#define TX1_DMA_BASEADDR	2	// /dev/uio2
+#define TX2_DMA_BASEADDR	3	// /dev/uio3
+#define RX1_ADC_BASEADDR	4	// /dev/uio4
+#define TX1_DAC_BASEADDR	5	// /dev/uio5
+#define RX2_ADC_BASEADDR	7	// /dev/uio7
+#define TX2_DAC_BASEADDR	8	// /dev/uio8
+
+#endif
 
 #endif

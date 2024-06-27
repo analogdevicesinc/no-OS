@@ -43,9 +43,7 @@
 #include "adi_platform.h"
 #include "parameters.h"
 #include "no_os_gpio.h"
-#include "xilinx_gpio.h"
 #include "no_os_spi.h"
-#include "xilinx_spi.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "adi_common_error.h"
@@ -58,6 +56,14 @@
 #include "adi_platform.h"
 #include "adi_platform_types.h"
 #include "no_os_platform.h"
+
+#ifdef XILINX_PLATFORM
+#include "xilinx_gpio.h"
+#include "xilinx_spi.h"
+#else
+#include "linux_gpio.h"
+#include "linux_spi.h"
+#endif
 
 /**
  * @brief Opens all neccessary files and device drivers for a specific device
@@ -76,6 +82,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 #if defined(ADRV9002_RX2TX2)
 	struct no_os_gpio_init_param gip_gpio_ssi_sync;
 #endif
+#ifdef XILINX_PLATFORM
 	struct xil_gpio_init_param gip_extra = {
 #ifdef PLATFORM_MB
 		.type = GPIO_PL,
@@ -92,11 +99,16 @@ int32_t no_os_hw_open(void *devHalCfg)
 #endif
 		.flags = 0
 	};
+#endif
 
 	/* Reset GPIO configuration */
 	gip_gpio_reset.number = GPIO_RESET;
+#ifdef XILINX_PLATFORM
 	gip_gpio_reset.extra = &gip_extra;
 	gip_gpio_reset.platform_ops = &xil_gpio_ops;
+#else
+	gip_gpio_reset.platform_ops = &linux_gpio_ops;
+#endif
 	ret = no_os_gpio_get(&phal->gpio_reset_n, &gip_gpio_reset);
 	if (ret)
 		return ret;
@@ -123,8 +135,12 @@ int32_t no_os_hw_open(void *devHalCfg)
 		.max_speed_hz = 20000000,
 		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = SPI_CS,
+#ifdef XILINX_PLATFORM
 		.platform_ops = &xil_spi_ops,
 		.extra = &sip_extra
+#else
+		.platform_ops = &linux_spi_ops,
+#endif
 	};
 	ret = no_os_spi_init(&phal->spi, &sip);
 	if (ret)

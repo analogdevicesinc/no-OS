@@ -28,11 +28,11 @@ INCS += $(PROJECT)/src/hal/parameters.h \
 	$(PROJECT)/src/firmware/Navassa_EvaluationFw.h \
 	$(PROJECT)/src/firmware/Navassa_Stream.h
 # no-OS drivers
-SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_spi.c \
-	$(PLATFORM_DRIVERS)/xilinx_spi.c \
-	$(PLATFORM_DRIVERS)/xilinx_delay.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_mutex.c \
@@ -40,7 +40,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
-	$(PLATFORM_DRIVERS)/xilinx_axi_io.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_axi_io.c
 INCS +=	$(INCLUDE)/no_os_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(INCLUDE)/no_os_gpio.h \
