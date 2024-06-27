@@ -213,7 +213,7 @@
 #define ADE9113_NONISOLATED_ADE9103		3U
 
 /* Nominal reference voltage */
-#define ADE9113_VREF				(883883)
+#define ADE9113_VREF				(1249810)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

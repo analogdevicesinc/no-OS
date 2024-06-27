@@ -204,9 +204,9 @@ struct stout {
 	/* PWM low value measured */
 	uint32_t pwm_high_val;
 	/* V2 max */
-	int32_t v2_max;
+	int32_t v2_val;
 	/* V2 max */
-	int32_t v1_max;
+	int32_t v1_val;
 	/* I val */
 	int32_t i_val;
 	/* Temperature*/
@@ -225,6 +225,22 @@ struct stout {
 	struct no_os_gpio_desc *gpio_rcdac;
 	/* Current error status */
 	enum interface_err_status_e err_status;
+};
+
+struct rms_adc_values {
+
+	/* I rms value */
+	int32_t				i_rms;
+	/* V1 rms value */
+	int32_t				v1_rms;
+	/* V2 rms value */
+	int32_t				v2_rms;
+	/* I ADC value */
+	int32_t				i_rms_adc;
+	/* V1 ADC value */
+	int32_t				v1_rms_adc;
+	/* V2 ADC value */
+	int32_t				v2_rms_adc;
 };
 
 /******************************************************************************/

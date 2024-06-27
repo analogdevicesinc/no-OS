@@ -77,18 +77,8 @@ int state_machine()
 	/**************************************************************************/
 	/****************************Variables declaration*************************/
 	/**************************************************************************/
-	// Input voltage maximum value over one periode
-	int32_t v1_max = 0;
-	// Relay voltage maximum value over one periode
-	int32_t v2_max = 0;
-	// The sume of the relay maximum values over 10 periodes used to compute the mean value
+	// The sume of the relay rms voltage over 10 cycles used to compute the mean value
 	int32_t v2_sum = 0;
-	// The maximum current value over one periode
-	int32_t i_max = 0;
-	// intermediate value of the input voltage used for scaling
-	int64_t v1 = 0;
-	// intermediate value of the relay voltage used for scaling
-	int64_t v2 = 0;
 	// State machine events; default value S_M_NO_EVENT
 	enum state_machine_events_e event = S_M_NO_EVENT;
 	// PWM duty cycle value dependent on the output current set value
@@ -119,7 +109,7 @@ int state_machine()
 	uint32_t us_elapsed_since_recalc = 0;
 	// Variable indicating multiple of 20ms used to compute the ADE9113 values on multiple periods
 	uint8_t multiple_20ms = 0;
-	// Variable indicating a multiple of the periodes used to compute ADE9113 values.
+	// Variable indicating a multiple of the cycles used to compute ADE9113 values.
 	// Used to compute the Vrelay value
 	uint8_t multiple_20ms_2 = 0;
 	// Variable used for reading the ADT75 at an inteval multiple of 20ms
@@ -132,10 +122,10 @@ int state_machine()
 	uint8_t update_ade9113_values = 0;
 	// Used for led blinking during charging
 	uint8_t cnt_disp = 0;
+	// Used for updating the rms values after the self test
+	uint8_t cnt = 0;
 	// Variables used to read and compute the temperature from ADT75
 	int32_t adt75_value = 0;
-	// Variable used for the values read continuously from ADE9113
-	int32_t i_val = 0, v1_val = 0, v2_val = 0;
 	// Variables used to read the RCD status
 	uint8_t val_rcddc = 0;
 	uint8_t val_rcdac = 0;
@@ -143,7 +133,9 @@ int state_machine()
 	struct stout *stout;
 	// Pointer to the adt75_desc structure
 	struct adt75_desc *adt75_desc;
+	struct rms_adc_values *rms_adc_values;
 	int ret = -22;
+
 	/**************************************************************************/
 	/**********************End of variables declaration************************/
 	/**************************************************************************/
@@ -167,10 +159,19 @@ int state_machine()
 	if (!stout)
 		return -ENOMEM;
 
+	/* Allocate memory for rms & adc values structure */
+	rms_adc_values = (struct rms_adc_values *)no_os_calloc(1,
+			 sizeof(*rms_adc_values));
+	if (!rms_adc_values) {
+		no_os_free(stout);
+		return -ENOMEM;
+	}
+
 	/* Initialize I2C adt75*/
 	ret = adt75_init(&adt75_desc, &adt75_ip);
 	if (ret) {
 		no_os_free(stout);
+		no_os_free(rms_adc_values);
 		return ret;
 	}
 
@@ -178,6 +179,7 @@ int state_machine()
 	ret = interface_init(&stout->gpio_led[0]);
 	if (ret) {
 		no_os_free(stout);
+		no_os_free(rms_adc_values);
 		adt75_remove(adt75_desc);
 		return ret;
 	}
@@ -234,15 +236,14 @@ int state_machine()
 	/****************************Start-up Test*********************************/
 	/**************************************************************************/
 	/* Run startup test */
-	ret = self_test_startup(stout);
-
+	ret = self_test_startup(stout, rms_adc_values);
 	if (ret == INTF_INPUT_V_ERR) {
 		interface_disp(stout);
 		event = S_M_UNDERVOLTAGE;
 		if (stout->grid >= 1 ) {
-			if (VIN_LOW_LIMIT_2 > v1_max)
+			if (VIN_LOW_LIMIT_2 > rms_adc_values->v1_rms)
 				ret = INTF_INPUT_V_ERR_U;
-			else if (VIN_HIGH_LIMIT_2 < v1_max) {
+			else if (VIN_HIGH_LIMIT_2 < rms_adc_values->v1_rms) {
 				ret = INTF_INPUT_V_ERR_O;
 				stout->current_state = STATE_FAULT;
 				stout->err_status = ret;
@@ -250,9 +251,9 @@ int state_machine()
 				pilot_pwm_timer_set_duty_cycle(stout, PWM_OFF);
 				goto error;
 			}
-		} else if (VIN_LOW_LIMIT > v1_max)
+		} else if (VIN_LOW_LIMIT > rms_adc_values->v1_rms)
 			ret = INTF_INPUT_V_ERR_U;
-		else if (VIN_HIGH_LIMIT < v1_max) {
+		else if (VIN_HIGH_LIMIT < rms_adc_values->v1_rms) {
 			ret = INTF_INPUT_V_ERR_O;
 			stout->current_state = STATE_FAULT;
 			stout->err_status = ret;
@@ -263,10 +264,10 @@ int state_machine()
 		stout->err_status = ret;
 		// Wait until no undervoltage
 		do {
-			ret = self_test_supply(stout);
+			ret = self_test_supply(stout, rms_adc_values);
 		} while (ret == INTF_INPUT_V_ERR_U);
 		// Run tests again if voltage back to normal
-		ret = self_test_startup(stout);
+		ret = self_test_startup(stout, rms_adc_values);
 	}
 	if (ret) {
 		stout->current_state = STATE_FAULT;
@@ -276,9 +277,15 @@ int state_machine()
 		goto error;
 	}
 
-	// Skip one period
-	while(!get_zero_cross_flag_state());
-	reset_zero_cross_flag_state();
+	//Update the rms values after self test
+	while (SKIP_CYCLES_AFTER_SELF_TEST >= cnt) {
+		while (!get_zero_cross_flag_state()) {
+			ret = rms_adc_values_read(stout, rms_adc_values);
+		}
+		reset_zero_cross_flag_state();
+		cnt++;
+	}
+	cnt = 0;
 
 	// Disable the zero corssing interrupt
 	ret = no_os_irq_disable(stout->ade9113->irq_ctrl, GPIO_ZC_PIN);
@@ -341,21 +348,9 @@ int state_machine()
 			reset_pwm_low_flag_state();
 		}
 
-		// --------------------- COMPUTE ADE9113 VALUEAS AND EXTRACT MAXIMUM VALUES --------------
-		ret = supply_conv_vals_to_mv(stout, &i_val, &v1_val, &v2_val);
-		if (ret)
-			goto error;
-
-		v1 = supply_scale_v1(v1_val);
-#if defined(REV_A)
-		v2 = supply_scale_v2(v2_val);
-#elif defined(REV_D)
-		v2 = supply_scale_v1(v2_val);
-#endif
-		v1_max = no_os_max_t(int32_t, v1, v1_max);
-		v2_max = no_os_max_t(int32_t, v2, v2_max);
-		i_max = no_os_max_t(int32_t, i_val, i_max);
-		// ----------------------------- END COMPUTE MAX -----------------------------------------
+		// ------------------------- COMPUTE ADE9113 & RMS VALUES -----------------------------------
+		ret = rms_adc_values_read(stout, rms_adc_values);
+		// ----------------------------- END COMPUTE VALUES -----------------------------------------
 
 		//-----UPDATE THE VALUES OF THE STOUT STRUCTURE WITH THE VALUES COMPUTED FROM ADE9113-----
 		if (update_ade9113_values == 1) {
@@ -364,26 +359,21 @@ int state_machine()
 			// Compute the values Vin and Iout each 20*COMPUTE_VALUES_INTERVAL
 			if ((COMPUTE_VALUES_INTERVAL <= multiple_20ms)
 			    && (COMPUTE_VRELAY_INTERVAL > multiple_20ms_2)) {
-				// Update V1 and V2 maximum values
-				stout->v1_max = v1_max;
-				stout->i_val = i_max;
+				// Update V1 and V2 values
+				stout->v1_val = rms_adc_values->v1_rms;
+				stout->i_val = rms_adc_values->i_rms;
 				if (1 == print_values) {
-					pr_debug("Iout: %d mA, Vin: %d mV\n", stout->i_val, stout->v1_max);
+					pr_debug("Iout: %d mA, Vin: %d mV\n", stout->i_val, stout->v1_val);
 					print_values_s = current_time.s;
 					print_values = 0;
 				}
 				// The state machine runs every COMPUTE_VALUES_INTERVAL * 20ms
 				event = state_machine_det_event_supply(stout, event);
 				// Relay voltage is summed each 20 ms interval (first value is skipped)
-				// Variable v2_sum will be used to compute the average of the relay maximum amplitude
+				// Variable v2_sum will be used to compute the average of the relay voltage value
 				// over the COMPUTE_VREALY_INTERVAL
-				if ((1 <= v2_read) && (1 <= multiple_20ms_2)) {
-					v2_sum += v2_max;
-				}
-				// Reset V1, V2 and I maximum values
-				v1_max = 0;
-				i_max = 0;
-				v2_max = 0;
+				if ((1 <= v2_read) && (1 <= multiple_20ms_2))
+					v2_sum += rms_adc_values->v2_rms;
 				// Reset the 20ms variable
 				multiple_20ms = 0;
 				// Increment the counter for Vrelay compute time interval
@@ -393,7 +383,7 @@ int state_machine()
 				if (v2_read >= 1) {
 					// The relay stuck detection state is active (a reading of Vrelay is needed)
 					// Compute the average Vrelay value over the COMPUTE_VRELAY_INTERVAL
-					stout->v2_max = v2_sum/(multiple_20ms_2-1);
+					stout->v2_val = v2_sum/(multiple_20ms_2-1);
 					// reset the 20 ms counter to start with new values
 					multiple_20ms = 0;
 					// Indicates that the Vrealy value is available for the state machine
@@ -401,10 +391,6 @@ int state_machine()
 				}
 				// Reset flag for computing Vrelay
 				multiple_20ms_2 = 0;
-				// Reset Vrelay max value
-				v2_max = 0;
-				v1_max = 0;
-				i_max = 0;
 			}
 			// Reset flag for updating values
 			update_ade9113_values = 0;
@@ -499,7 +485,6 @@ int state_machine()
 					v2_read = 1;
 					multiple_20ms_2 = 0;
 					v2_sum = 0;
-					v2_max = 0;
 					// EVSE not ready during the test
 					pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 				}
@@ -799,7 +784,7 @@ int state_machine()
 				// Non latching fault
 				case INTF_INPUT_V_ERR_U:
 					if (S_M_UNDERVOLTAGE == event) {
-						pr_debug("Supply undervoltage error! Vin = %d mV\n", stout->v1_max);
+						pr_debug("Supply undervoltage error! Vin = %d mV\n", stout->v1_val);
 						// CP value set to DC indicating EVSE not ready
 						pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 						// Open relay
@@ -813,7 +798,7 @@ int state_machine()
 				//----------------Input overrvoltage detected-----------------
 				// Non latching fault
 				case INTF_INPUT_V_ERR_O:
-					pr_debug("Supply overvoltage error! Vin = %d mV\n", stout->v1_max);
+					pr_debug("Supply overvoltage error! Vin = %d mV\n", stout->v1_val);
 					// CP value set to DC indicating EVSE not ready
 					pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
 					// Open relay
@@ -1282,42 +1267,41 @@ enum state_machine_events_e state_machine_det_event_supply(struct stout *stout,
 {
 	enum state_machine_events_e event = event_in;
 
-	if (((VIN_HIGH_LIMIT_2 < stout->v1_max) && (1 <= stout->grid)
+	if (((VIN_HIGH_LIMIT_2 < stout->v1_val) && (1 <= stout->grid)
 	     && (S_M_CHECK_STUCK_RELAY != event))
-	    || ((VIN_HIGH_LIMIT < stout->v1_max) && (0 == stout->grid)
+	    || ((VIN_HIGH_LIMIT < stout->v1_val) && (0 == stout->grid)
 		&& (S_M_CHECK_STUCK_RELAY != event))) {
 		event = S_M_OVERVOLTAGE;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_O;
-	} else if (((VIN_LOW_LIMIT_2 > stout->v1_max) && (S_M_UNDERVOLTAGE != event)
+	} else if (((VIN_LOW_LIMIT_2 > stout->v1_val) && (S_M_UNDERVOLTAGE != event)
 		    && (S_M_CHECK_STUCK_RELAY != event) && (1 <= stout->grid))
-		   || ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE != event)
+		   || ((VIN_LOW_LIMIT > stout->v1_val) && (S_M_UNDERVOLTAGE != event)
 		       && (S_M_CHECK_STUCK_RELAY != event) && (0 == stout->grid))) {
 		// If undervoltage go to fault state
 		event = S_M_UNDERVOLTAGE;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_U;
-	} else if (((VIN_LOW_LIMIT_2 > stout->v1_max) && (S_M_UNDERVOLTAGE == event)
+	} else if (((VIN_LOW_LIMIT_2 > stout->v1_val) && (S_M_UNDERVOLTAGE == event)
 		    && (S_M_CHECK_STUCK_RELAY != event) && (1 <= stout->grid))
-		   || ((VIN_LOW_LIMIT > stout->v1_max) && (S_M_UNDERVOLTAGE == event)
+		   || ((VIN_LOW_LIMIT > stout->v1_val) && (S_M_UNDERVOLTAGE == event)
 		       && (S_M_CHECK_STUCK_RELAY != event) && (0 == stout->grid))) {
 		// If undervoltage detected wait until Vin is in range
 		event = S_M_UNDERVOLTAGE_WAIT;
 		stout->previous_state = stout->current_state;
 		stout->current_state = STATE_FAULT;
 		stout->err_status = INTF_INPUT_V_ERR_U;
-	} else if (((VIN_LOW_LIMIT_2 < stout->v1_max) && ((S_M_UNDERVOLTAGE == event)
+	} else if (((VIN_LOW_LIMIT_2 < stout->v1_val) && ((S_M_UNDERVOLTAGE == event)
 			|| (S_M_UNDERVOLTAGE_WAIT == event)) && (1 <= stout->grid))
-		   || ((VIN_LOW_LIMIT < stout->v1_max) && ((S_M_UNDERVOLTAGE == event)
+		   || ((VIN_LOW_LIMIT < stout->v1_val) && ((S_M_UNDERVOLTAGE == event)
 				   || (S_M_UNDERVOLTAGE_WAIT == event)) && (0 == stout->grid))) {
 		// If voltage in range recover
 		event = S_M_VIN_RECOVER;
 		stout->err_status = INTF_NO_ERR;
 		reset_count_ms();
 	}
-	//###################### IMPLEMENT OVERVOLTAGE ################################
 
 	if ((S_M_CHARGING == event) || (S_M_CHARGING_D == event)
 	    || (S_M_OVERCURRENT_WAIT == event)

@@ -494,14 +494,13 @@ int ade9113_convert_to_millivolts(struct ade9113_dev *dev,
 	switch (ch) {
 	case ADE9113_I_WAV:
 		/* times 2, two's complement data */
-		// Scale is 0,03125 = 3125/100000 = 1/32 = 1/2^5
-		value = ((int64_t)ADE9113_VREF * dev->i_wav) / (1 << 28);
+		value = (int64_t)dev->i_wav;
 		break;
 	case ADE9113_V1_WAV:
-		value = ((int64_t)ADE9113_VREF * dev->v1_wav) / (1 << 23);
+		value = (int64_t)dev->v1_wav;
 		break;
 	default:
-		value = ((int64_t)ADE9113_VREF * dev->v2_wav) / (1 << 23);
+		value = (int64_t)dev->v2_wav;
 		break;
 	}
 

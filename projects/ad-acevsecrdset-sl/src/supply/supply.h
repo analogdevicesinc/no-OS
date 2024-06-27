@@ -50,6 +50,10 @@
 #define V1_DIVIDER              (1328233ul)
 #define V2_DIVIDER              (1996007ul)
 
+/*! Initial values for the rms filters */
+#define INITIAL 4096
+#define SAMPLES 4096
+
 /*! Get zero crossing flag value */
 int get_zero_cross_flag_state(void);
 
@@ -65,8 +69,16 @@ int32_t supply_scale_v1(int32_t val);
 /*! Scale V2 value */
 int32_t supply_scale_v2(int32_t val);
 
-/*! Convert values measured by the ADE9113 device to mV (mA val for I) */
-int supply_conv_vals_to_mv(struct stout *stout, int32_t *i_val, int32_t *v1_val,
-			   int32_t *v2_val);
+/*! Calculate v1 rms */
+int64_t rms_filter_v1(int32_t sample);
+
+/*! Calculate v2 rms */
+int64_t rms_filter_v2(int32_t sample);
+
+/*! Calculate i rms */
+int64_t rms_filter_i(int32_t sample);
+
+/*! Update the rms and adc values */
+int rms_adc_values_read(struct stout *stout, struct rms_adc_values *rms);
 
 #endif /* __SUPPLY_H__ */
