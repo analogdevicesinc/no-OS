@@ -50,6 +50,8 @@
 #include "no_os_spi.h"
 #include "no_os_util.h"
 
+#include "clk_axi_clkgen.h"
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -271,12 +273,25 @@ struct ad7606_digital_diag {
 struct ad7606_dev;
 
 /**
- * @struct ad7606_dev
+ * @struct ad7606_axi_init_param
+ * @brief AXI driver(s) initialization parameters
+ */
+struct ad7606_axi_init_param {
+	/* Clock generator init parameters */
+	struct axi_clkgen_init *clkgen_init;
+	/* Clock generator rate */
+	uint32_t axi_clkgen_rate;
+};
+
+/**
+ * @struct ad7606_init_param
  * @brief Device driver initialization parameters
  */
 struct ad7606_init_param {
 	/** SPI initialization parameters */
 	struct no_os_spi_init_param spi_init;
+	/* AXI initialization parameters */
+	struct ad7606_axi_init_param *axi_init;
 	/** RESET GPIO initialization parameters */
 	struct no_os_gpio_init_param *gpio_reset;
 	/** CONVST GPIO initialization parameters */
