@@ -230,6 +230,8 @@ struct ad7606_axi_dev {
 	struct axi_clkgen *clkgen;
 	/* Trigger conversion PWM generator descriptor */
 	struct no_os_pwm_desc *trigger_pwm_desc;
+	/* SPI Engine offload parameters */
+	struct spi_engine_offload_init_param offload_init_param;
 };
 
 /**
@@ -1243,6 +1245,9 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	ret = no_os_pwm_init(&axi->trigger_pwm_desc, axi_init->trigger_pwm_init);
 	if (ret != 0)
 		goto error;
+
+	memcpy(&axi->offload_init_param, axi_init->offload_init_param,
+	       sizeof(axi->offload_init_param));
 
 	/* Note: more validation will be added later */
 error:
