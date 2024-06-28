@@ -212,7 +212,7 @@
 /* Self-test multiplication factor */
 #define ADXL312_SELF_TEST_MULT					2900
 #define ADXL313_SELF_TEST_MULT					976
-#define ADXL314_SELF_TEST_MULT					4883
+#define ADXL314_SELF_TEST_MULT					48830
 #define ADXL313_SELF_TEST_DIV					1000
 
 /* Self-test minimum deviation for ADXL312, mg */
