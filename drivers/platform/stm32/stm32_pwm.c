@@ -103,6 +103,9 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	TIM_TypeDef *base = NULL;
 	uint32_t timer_frequency_hz;
 	struct stm32_pwm_init_param *sparam = param->extra;
+	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+	TIM_MasterConfigTypeDef sMasterConfig = {0};
+	TIM_SlaveConfigTypeDef sSlaveConfig = {0};
 
 	if (sparam->get_timer_clock) {
 		timer_frequency_hz = sparam->get_timer_clock();
@@ -187,12 +190,75 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	desc->htimer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	desc->htimer.Init.AutoReloadPreload = sparam->timer_autoreload ?
 					      TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
-	desc->htimer.Init.RepetitionCounter = 0;
+	desc->htimer.Init.RepetitionCounter = sparam->repetitions;
 	desc->htimer.State = HAL_TIM_STATE_RESET;
 	if (HAL_TIM_Base_Init(&desc->htimer) != HAL_OK)
 		return -EIO;
 
+	if (!sparam->trigger_enable) {
+		sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+		if (HAL_TIM_ConfigClockSource(&desc->htimer, &sClockSourceConfig) != HAL_OK)
+			return -EIO;
+	}
 	if (HAL_TIM_PWM_Init(&desc->htimer) != HAL_OK)
+		return -EIO;
+	if (sparam->onepulse_enable)
+		if (HAL_TIM_OnePulse_Init(&desc->htimer, TIM_OPMODE_SINGLE) != HAL_OK)
+			return -EIO;
+	if (sparam->trigger_enable) {
+		switch (sparam->trigger_source) {
+		case PWM_TS_ITR0:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+			break;
+		case PWM_TS_ITR1:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR1;
+			break;
+		case PWM_TS_ITR2:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR2;
+			break;
+		case PWM_TS_ITR3:
+			sSlaveConfig.InputTrigger = TIM_TS_ITR3;
+			break;
+		default:
+			return -EINVAL;
+		}
+		sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
+
+		if (HAL_TIM_SlaveConfigSynchro(&desc->htimer, &sSlaveConfig) != HAL_OK)
+			return -EIO;
+	}
+
+	switch (sparam->trigger_output) {
+	case PWM_TRGO_RESET:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+		break;
+	case PWM_TRGO_ENABLE:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE;
+		break;
+	case PWM_TRGO_UPDATE:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+		break;
+	case PWM_TRGO_OC1:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1;
+		break;
+	case PWM_TRGO_OC1REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1REF;
+		break;
+	case PWM_TRGO_OC2REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC2REF;
+		break;
+	case PWM_TRGO_OC3REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC3REF;
+		break;
+	case PWM_TRGO_OC4REF:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC4REF;
+		break;
+	default:
+		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	}
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if (HAL_TIMEx_MasterConfigSynchronization(&desc->htimer,
+			&sMasterConfig) != HAL_OK)
 		return -EIO;
 
 	/* Store the timer specific configuration for later use.*/
@@ -328,6 +394,7 @@ static int32_t stm32_init_pwm(struct stm32_pwm_desc *desc,
 	desc->mode = sparam->mode;
 	desc->timer_chn = sparam->timer_chn;
 	desc->complementary_channel = sparam->complementary_channel;
+	desc->dma_enable = sparam->dma_enable;
 
 	return 0;
 }
@@ -449,12 +516,26 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	int32_t ret;
 	uint32_t chn_num;
 	struct stm32_pwm_desc *sparam;
+	uint32_t map[] = {
+		[1] = TIM_DMA_CC1,
+		[2] = TIM_DMA_CC2,
+		[3] = TIM_DMA_CC3,
+		[4] = TIM_DMA_CC4,
+	};
 
 	if (!desc)
 		return -EINVAL;
 
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
+	if (sparam->dma_enable) {
+		/*sw trigger to reload repetition counter from repetitition register */
+		sparam->htimer.Instance->EGR |= (1 << 0);
+		__HAL_TIM_ENABLE_DMA(&sparam->htimer, map[sparam->timer_chn]);
+	}
+
+	/* set counter to 0 to start from known state */
+	__HAL_TIM_SET_COUNTER(&sparam->htimer, 0);
 
 	if (desc->irq_id) {
 		if (sparam->complementary_channel) {
@@ -485,12 +566,21 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 	int32_t ret;
 	uint32_t chn_num;
 	struct stm32_pwm_desc *sparam;
+	uint32_t map[] = {
+		[1] = TIM_DMA_CC1,
+		[2] = TIM_DMA_CC2,
+		[3] = TIM_DMA_CC3,
+		[4] = TIM_DMA_CC4,
+	};
 
 	if (!desc)
 		return -EINVAL;
 
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
+
+	if (sparam->dma_enable)
+		__HAL_TIM_DISABLE_DMA(&sparam->htimer,  map[sparam->timer_chn]);
 
 	if (sparam->complementary_channel)
 		ret = HAL_TIMEx_PWMN_Stop(&sparam->htimer, chn_num);
@@ -499,7 +589,6 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 
 	if (ret != HAL_OK)
 		return -EIO;
-
 	return 0;
 }
 

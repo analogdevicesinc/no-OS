@@ -64,6 +64,23 @@ enum TimOCMode {
 	TIM_OC_PWM2 = 2,
 };
 
+enum stm32_pwm_trigger {
+	PWM_TS_ITR0,
+	PWM_TS_ITR1,
+	PWM_TS_ITR2,
+	PWM_TS_ITR3,
+};
+
+enum stm32_pwm_trigger_out {
+	PWM_TRGO_RESET,
+	PWM_TRGO_ENABLE,
+	PWM_TRGO_UPDATE,
+	PWM_TRGO_OC1,
+	PWM_TRGO_OC1REF,
+	PWM_TRGO_OC2REF,
+	PWM_TRGO_OC3REF,
+	PWM_TRGO_OC4REF,
+};
 /**
  * @struct stm32_pwm_init_param
  * @brief Structure holding the STM32 PWM parameters.
@@ -83,6 +100,18 @@ struct stm32_pwm_init_param {
 	uint32_t (*get_timer_clock)(void);
 	/** Get timer source clock divider */
 	uint32_t clock_divider;
+	/** Enable trigger source */
+	bool trigger_enable;
+	/** Trigger source selection */
+	enum stm32_pwm_trigger trigger_source;
+	/** Trigger out selection */
+	enum stm32_pwm_trigger_out trigger_output;
+	/* Enable one pulse */
+	bool onepulse_enable;
+	/* Number of pulse repetitions */
+	uint32_t repetitions;
+	/* Enable dma */
+	bool dma_enable;
 	/** Timer callback */
 	struct no_os_callback_desc timer_callback;
 };
@@ -114,6 +143,8 @@ struct stm32_pwm_desc {
 	struct no_os_irq_ctrl_desc *nvic_tim;
 	/** Timer callback */
 	struct no_os_callback_desc timer_callback;
+	/* Enable dma */
+	bool dma_enable;
 };
 
 /**
