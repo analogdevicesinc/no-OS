@@ -141,7 +141,7 @@ CFLAGS += -std=gnu11 \
 	-O0 \
 	-ffunction-sections \
 	-fdata-sections \
-	-mfloat-abi=hard \
+	-mfloat-abi=$(CFLAGS_MFLOAT_TYPE) \
 	-mfpu=fpv4-sp-d16 \
 	-mcpu=cortex-m4
 
@@ -150,7 +150,7 @@ LDFLAGS	= -mcpu=cortex-m4 \
 	-static \
 	--specs=nosys.specs \
 	-mfpu=fpv4-sp-d16 \
-	-mfloat-abi=hard \
+	-mfloat-abi=$(CFLAGS_MFLOAT_TYPE) \
 	-mthumb \
 	-Wl,--start-group \
 	-lc \
