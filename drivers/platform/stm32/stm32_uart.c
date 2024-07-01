@@ -142,7 +142,11 @@ static int32_t stm32_uart_init(struct no_os_uart_desc **desc,
 		if (ret < 0)
 			goto error;
 
-		sud->rx_callback.callback = uart_rx_callback;
+		if (param->rx_callback) {
+			sud->rx_callback.callback = param->rx_callback;
+		} else {
+			sud->rx_callback.callback = uart_rx_callback;
+		}
 		sud->rx_callback.ctx = descriptor;
 		sud->rx_callback.event = NO_OS_EVT_UART_RX_COMPLETE;
 		sud->rx_callback.peripheral = NO_OS_UART_IRQ;

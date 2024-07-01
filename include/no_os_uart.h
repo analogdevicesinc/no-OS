@@ -128,6 +128,8 @@ struct no_os_uart_init_param {
 	enum no_os_uart_parity	parity;
 	/** UART number of stop bits */
 	enum no_os_uart_stop		stop;
+	/** Optional user-supplied Rx callback function */
+	void (*rx_callback)(void *);
 	const struct no_os_uart_platform_ops *platform_ops;
 	/** UART extra parameters (device specific) */
 	void		*extra;
