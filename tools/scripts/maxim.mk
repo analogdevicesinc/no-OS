@@ -63,13 +63,13 @@ VSCODE_CMSISCFG_FILE="interface/cmsis-dap.cfg","target/$(TARGET).cfg"
 LDFLAGS = -mcpu=cortex-m4 	\
 	-Wl,--gc-sections 	\
 	--specs=nosys.specs	\
-	-mfloat-abi=hard 	\
+	-mfloat-abi=$(CFLAGS_MFLOAT_TYPE) 	\
 	-mfpu=fpv4-sp-d16 	\
 	--entry=Reset_Handler		
 	
 CFLAGS += -mthumb                                                                 \
         -mcpu=cortex-m4                                                         \
-        -mfloat-abi=hard                                                        \
+        -mfloat-abi=$(CFLAGS_MFLOAT_TYPE)                                       \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
         -fsingle-precision-constant                                             \
