@@ -28,7 +28,6 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_crc8.h \
 		$(INCLUDE)/no_os_alloc.h \
 		$(INCLUDE)/no_os_mutex.h \
-		$(INCLUDE)/no_os_dma.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_i2c.c  \

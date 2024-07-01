@@ -220,6 +220,7 @@ out:
 	return ret;
 }
 
+#ifdef NO_OS_SPI_DMA
 /**
  * @brief Transfer a list of messages using DMA and busy wait for the completion
  * @param desc - The SPI descriptor.
@@ -266,3 +267,4 @@ int32_t no_os_spi_transfer_dma_async(struct no_os_spi_desc *desc,
 
 	return -ENOSYS;
 }
+#endif /* NO_OS_SPI_DMA */

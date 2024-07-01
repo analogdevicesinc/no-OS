@@ -12,7 +12,6 @@ SRC_DIRS += $(NO-OS)/iio/iio_app \
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
 	$(DRIVERS)/api/no_os_spi.c \
-	$(DRIVERS)/api/no_os_dma.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
 	$(PLATFORM_DRIVERS)/../common/$(PLATFORM)_dma.c \
 	$(DRIVERS)/api/no_os_irq.c \
@@ -49,7 +48,6 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/../common/$(PLATFORM)_dma.h \
 	$(INCLUDE)/no_os_irq.h \
-	$(INCLUDE)/no_os_dma.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.h \
 	$(INCLUDE)/no_os_rtc.h \

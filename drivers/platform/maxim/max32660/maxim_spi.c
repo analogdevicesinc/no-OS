@@ -47,13 +47,16 @@
 #include "mxc_errors.h"
 #include "mxc_pins.h"
 #include "maxim_spi.h"
-#include "maxim_dma.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_units.h"
+
+#ifdef NO_OS_SPI_DMA
 #include "no_os_dma.h"
+#include "maxim_dma.h"
+#endif
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0
@@ -64,6 +67,7 @@
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+#ifdef NO_OS_SPI_DMA
 struct max_dma_spi_xfer_data {
 	struct no_os_spi_desc *spi;
 	struct no_os_dma_ch *tx_ch;
@@ -140,6 +144,7 @@ static void _max_dma_set_req(struct no_os_spi_desc *desc)
 		return;
 	}
 }
+#endif /* NO_OS_SPI_DMA */
 
 /**
  * @brief Set the closest first and last SCLK delays to what was requested
@@ -316,6 +321,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (ret)
 		goto err;
 
+#ifdef NO_OS_SPI_DMA
 	if (eparam->dma_param) {
 		/*
 		 * The RX complete interrupt needs to have higher priority,
@@ -334,6 +340,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 
 		_max_dma_set_req(descriptor);
 	}
+#endif
 
 	*desc = descriptor;
 
@@ -362,6 +369,7 @@ int32_t max_spi_remove(struct no_os_spi_desc *desc)
 	return 0;
 }
 
+#ifdef NO_OS_SPI_DMA
 /**
  * @brief Configure and start a series of transfers using DMA.
  * @param desc - The SPI descriptor.
@@ -561,6 +569,7 @@ static int32_t max_spi_dma_transfer_async(struct no_os_spi_desc *desc,
 {
 	return max_config_dma_and_start(desc, msgs, len, callback, ctx, true);
 }
+#endif /* NO_OS_SPI_DMA */
 
 /**
  * @brief Write/read multiple messages to/from SPI.
@@ -695,7 +704,9 @@ const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
 	.transfer = &max_spi_transfer,
+#ifdef NO_OS_SPI_DMA
 	.dma_transfer_sync = &max_spi_dma_transfer_sync,
 	.dma_transfer_async = &max_spi_dma_transfer_async,
+#endif
 	.remove = &max_spi_remove
 };
