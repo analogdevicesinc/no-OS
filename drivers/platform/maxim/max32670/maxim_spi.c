@@ -57,6 +57,38 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+/**
+ * @brief Configure the VDDIO level for a SPI interface
+ * @param desc - the SPI descriptor
+ * @return 0 in case of success, -EINVAL otherwise
+ */
+static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
+{
+	struct max_spi_init_param *eparam;
+	mxc_gpio_cfg_t spi_pins;
+
+	eparam = desc->extra;
+
+	switch(desc->device_id) {
+	case 0:
+		spi_pins = gpio_cfg_spi0;
+		break;
+	case 1:
+		spi_pins = gpio_cfg_spi1;
+		break;
+	case 2:
+		spi_pins = gpio_cfg_spi2;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	spi_pins.vssel = eparam->vssel;
+	MXC_GPIO_Config(&spi_pins);
+
+	return 0;
+}
+
 static int _max_spi_config(struct no_os_spi_desc *desc)
 {
 	int32_t ret;
@@ -71,6 +103,10 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		ret = -EINVAL;
 		goto err_init;
 	}
+
+	ret = _max_spi_config_pins(desc);
+	if (ret)
+		return ret;
 
 	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
 			      (mxc_spi_mode_t)desc->mode);
