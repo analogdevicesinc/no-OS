@@ -6,7 +6,7 @@ INCS += $(PROJECT)/src/examples/basic_example/basic_example.h
 endif
 
 ifeq (xilinx,$(PLATFORM))
-CFLAGS += -DSPI_ENGINE_OFFLOAD_EXAMPLE
+CFLAGS += -DSPI_ENGINE_OFFLOAD_ENABLE
 endif
 ifeq (stm32,$(PLATFORM))
 CFLAGS += -DUSE_STANDARD_SPI
