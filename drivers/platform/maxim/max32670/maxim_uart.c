@@ -222,6 +222,39 @@ void uart_rx_callback(void *context)
 }
 
 /**
+ * @brief Configure the VDDIO for the UART pins.
+ * @param device_id - the interface number.
+ * @param vssel - the voltage level of the interface.
+ * @return 0 in case of success, -EINVAL otherwise.
+ */
+static int32_t _max_uart_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
+{
+	mxc_gpio_cfg_t uart_pins;
+
+	switch (device_id) {
+	case 0:
+		uart_pins = gpio_cfg_uart0;
+		break;
+	case 1:
+		uart_pins = gpio_cfg_uart1;
+		break;
+	case 2:
+		uart_pins = gpio_cfg_uart2;
+		break;
+	case 3:
+		uart_pins = gpio_cfg_uart3;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	uart_pins.vssel = vssel;
+	MXC_GPIO_Config(&uart_pins);
+
+	return 0;
+}
+
+/**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
  * @param param - The structure that contains the UART parameters.
@@ -318,6 +351,10 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		ret = -EINVAL;
 		goto error;
 	}
+
+	ret = _max_uart_pins_config(descriptor->device_id, eparam->vssel);
+	if (ret)
+		goto error;
 
 	ret = MXC_UART_SetDataSize(uart_regs, size);
 	if (ret != E_NO_ERROR) {
