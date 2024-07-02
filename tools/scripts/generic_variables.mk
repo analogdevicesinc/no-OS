@@ -34,6 +34,9 @@ GIT_VERSION := $(subst -0-g,-,$(GIT_VERSION))
 CFLAGS += -DNO_OS_VERSION=$(GIT_VERSION) \
 		-DNO_OS_PROJECT=$(notdir $(PROJECT))
 
+#Variables for compiling flags in generic.mk
+CFLAGS_MFLOAT_TYPE 	?= hard
+
 ifeq '$(NO_OS_USB_UART)' 'y'
 CFLAGS += -DNO_OS_USB_UART
 endif

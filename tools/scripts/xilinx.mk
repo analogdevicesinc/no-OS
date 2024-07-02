@@ -65,11 +65,11 @@ LD := $(CC)
 
 CFLAGS += -mcpu=cortex-a9 						\
 	  -mfpu=vfpv3 							\
-	  -mfloat-abi=hard
+	  -mfloat-abi=$(CFLAGS_MFLOAT_TYPE)
 
 LDFLAGS += -specs=$(BUILD_DIR)/app/src/Xilinx.spec 			\
 	   -mfpu=vfpv3							\
- 	   -mfloat-abi=hard 						\
+ 	   -mfloat-abi=$(CFLAGS_MFLOAT_TYPE)				\
 	   -mcpu=cortex-a9						\
 	   -Wl,-build-id=none
 
@@ -96,11 +96,11 @@ SIZE := armr5-none-eabi-size
 LD := $(CC)
 
 CFLAGS += -mcpu=cortex-r5						\
-	  -mfloat-abi=hard						\
+	  -mfloat-abi=$(CFLAGS_MFLOAT_TYPE)				\
 	  -mfpu=vfpv3-d16
 
 LDFLAGS += -mcpu=cortex-r5						\
-           -mfloat-abi=hard						\
+           -mfloat-abi=$(CFLAGS_MFLOAT_TYPE)				\
 	   -mfpu=vfpv3-d16						\
 	   -DARMR5
 endif
