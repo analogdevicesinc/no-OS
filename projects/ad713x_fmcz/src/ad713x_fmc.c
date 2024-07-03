@@ -77,10 +77,10 @@
 #include "iio_app.h"
 #endif // IIO_SUPPORT
 
-static uint32_t adc_buffer[ADC_BUFFER_SIZE] __attribute__((aligned));
-
 int main()
 {
+	static uint32_t adc_buffer[ADC_BUFFER_SIZE] __attribute__((aligned));
+	
 	struct axi_clkgen *clkgen_7134;
 	struct axi_clkgen_init clkgen_7134_init = {
 		.base = XPAR_AXI_AD7134_CLKGEN_BASEADDR,
@@ -163,26 +163,38 @@ int main()
 	};
 	const struct no_os_spi_init_param spi_eng_init_prm  = {
 		.chip_select = AD7134_1_SPI_CS,
-		.max_speed_hz = 48000000,
+		.max_speed_hz = 50000000,
 		.mode = NO_OS_SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 	};
 
 	struct no_os_pwm_desc *axi_pwm;
-	struct axi_pwm_init_param axi_zed_pwm_init = {
-		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
-		.ref_clock_Hz = 100000000,
-		.channel = 0
-	};
 
-	struct no_os_pwm_init_param axi_pwm_init = {
-		.period_ns = 3333,
-		.duty_cycle_ns = 600,
-		.phase_ns = 0,
-		.platform_ops = &axi_pwm_ops,
-		.extra = &axi_zed_pwm_init
-	};
+	struct axi_pwm_init_param axi_zed_pwm_init_trigger = {
+			.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
+			.ref_clock_Hz = 100000000,
+			.channel = 0
+		};
+		struct axi_pwm_init_param axi_zed_pwm_init_odr = {
+			.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
+			.ref_clock_Hz = 100000000,
+			.channel = 1
+		};
+		struct no_os_pwm_init_param axi_pwm_init_trigger = {
+			.period_ns = 3000,
+			.duty_cycle_ns = 1,
+			.phase_ns = 45,
+			.platform_ops = &axi_pwm_ops,
+			.extra = &axi_zed_pwm_init_trigger
+		};
+		struct no_os_pwm_init_param axi_pwm_init_odr = {
+			.period_ns = 3000,
+			.duty_cycle_ns = 130,
+			.phase_ns = 0,
+			.platform_ops = &axi_pwm_ops,
+			.extra = &axi_zed_pwm_init_odr
+		};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
 	gpio_extra_param.type = GPIO_PS;
@@ -204,7 +216,7 @@ int main()
 	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
 	ad713x_init_param_1.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_1.spi_init_prm.max_speed_hz = 10000000;
-	ad713x_init_param_1.spi_init_prm.mode = NO_OS_SPI_MODE_3;
+	ad713x_init_param_1.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_1.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	ad713x_init_param_1.spi_common_dev = 0;
@@ -226,7 +238,7 @@ int main()
 	ad713x_init_param_2.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
 	ad713x_init_param_2.spi_init_prm.max_speed_hz = 10000000;
-	ad713x_init_param_2.spi_init_prm.mode = NO_OS_SPI_MODE_3;
+	ad713x_init_param_2.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_2.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	ad713x_init_param_2.spi_common_dev = 0;
@@ -244,9 +256,18 @@ int main()
 	if (ret != 0)
 		return -1;
 
-	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
+	/*ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
 	if (ret != 0)
 		return ret;
+	 */
+
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_trigger);
+		if (ret != 0)
+			return ret;
+
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_odr);
+		if (ret != 0)
+			return ret;
 
 	ret = ad713x_init(&ad713x_dev_1, &ad713x_init_param_1);
 	if (ret != 0)
@@ -258,6 +279,14 @@ int main()
 	if (ret != 0)
 		return -1;
 	no_os_mdelay(1000);
+
+	ret = ad713x_channel_sync(ad713x_dev_1);
+	if (ret != 0)
+			return -1;
+
+	uint8_t temp;
+	ad713x_spi_reg_read(ad713x_dev_1, 0x1, &temp);
+	printf("0x%08x\n", temp);
 
 	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
@@ -357,7 +386,7 @@ int main()
 				  AD7134_FMC_SAMPLE_NO * AD7134_FMC_CH_NO *
 				  sizeof(uint32_t));
 
-	for(i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
+	/*for(i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
 		j = 0;
 		printf("%lu: ", i);
 		while(j < 8) {
@@ -372,7 +401,44 @@ int main()
 				printf("\n");
 			j++;
 		}
+	}*/
+	
+	// In SOFT CH2 corresponds to CH4 in HARD
+
+	printf("CH0 in memory: \n\n ");
+	for (int i = 0; i < AD7134_FMC_SAMPLE_NO; i++){
+		adc_buffer[AD7134_FMC_CH_NO*i+14] &= 0xffffff00;
+		adc_buffer[AD7134_FMC_CH_NO*i+14] >>= 8;
+		//printf("%lu \n", adc_buffer[AD7134_FMC_CH_NO*i+14]);
+		//printf("0x%08lx \n ", adc_buffer[AD7134_FMC_CH_NO*i+14]);
+		data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+14];
+		if(data > 4.095)
+				data = data - 8.192;
+		printf("%+1.5f\n", data);
 	}
+    printf("CH4 in memory: \n\n ");
+    for (int i = 0; i < AD7134_FMC_SAMPLE_NO; i++){
+		adc_buffer[AD7134_FMC_CH_NO*i+18] &= 0xffffff00;
+		adc_buffer[AD7134_FMC_CH_NO*i+18] >>= 8;
+		//printf("%lu \n", adc_buffer[AD7134_FMC_CH_NO*i+18]);
+		//printf("0x%08lx \n ", adc_buffer[AD7134_FMC_CH_NO*i+18]);
+		data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+18];
+		if(data > 4.095)
+				data = data - 8.192;
+		printf("%+1.5f\n", data);
+	}
+
+	/*
+	*  READ ADC REGISTER VALUES
+	*/
+		uint8_t reg_data;
+		uint8_t reg_addr;
+		for(reg_addr = 0x0; reg_addr <= 0x7; reg_addr++) {
+			ret = ad713x_spi_reg_read(ad713x_dev_1, reg_addr, &reg_data);
+				if (ret != 0)
+					printf("REG%x: error read\n", reg_addr);
+			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+		}
 
 	ad713x_remove(ad713x_dev_1);
 	ad713x_remove(ad713x_dev_2);

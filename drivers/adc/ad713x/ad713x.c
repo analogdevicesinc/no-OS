@@ -318,6 +318,14 @@ int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
  * 							 CH3
  * @return 0 in case of success, -1 otherwise.
  */
+
+ int32_t ad713x_channel_sync(struct ad713x_dev *dev)
+{
+	return ad713x_spi_write_mask(dev, AD713X_REG_INTERFACE_CONFIG_B,
+						 AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK,
+						 AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK);
+}
+
 int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
 				 enum ad713x_dig_filter_sel filter,
 				 enum ad713x_channels ch)
@@ -553,6 +561,8 @@ int32_t ad713x_init(struct ad713x_dev **device,
 
 	dev->dev_id = init_param->dev_id;
 	dev->mode_master_nslave = init_param->mode_master_nslave;
+
+	//ret = ad713x_spi_reg_read(dev, AD713X_REG_SCTATCH_PAD, &data);
 
 	ret = ad713x_spi_reg_read(dev, AD713X_REG_CHIP_TYPE, &data);
 	if (NO_OS_IS_ERR_VALUE(ret))

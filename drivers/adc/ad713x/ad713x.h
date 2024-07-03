@@ -802,4 +802,7 @@ int32_t ad713x_remove(struct ad713x_dev *dev);
 /** Print reg dump for the specific reg map of AD4134 dev*/
 int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev);
 
+/** Multidevice synchronization */
+int32_t ad713x_channel_sync(struct ad713x_dev *dev);
+
 #endif /* SRC_AD713X_H_ */
