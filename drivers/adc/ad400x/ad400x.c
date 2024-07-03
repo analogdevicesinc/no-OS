@@ -193,7 +193,7 @@ static int32_t ad400x_read_data_offload(struct ad400x_dev *dev,
 	msg.rx_addr = buf;
 	msg.commands_data = commands_data;
 
-	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples * 4);
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
 	if (ret)
 		return ret;
 
