@@ -54,7 +54,9 @@
 #define AXI_DMAC_IRQ_EOT			NO_OS_BIT(1)
 
 #define AXI_DMAC_REG_INTF_DESC		0x010
+#define AXI_DMAC_DMA_BPB_DEST		NO_OS_GENMASK(3,0)
 #define AXI_DMAC_DMA_TYPE_DEST		NO_OS_GENMASK(5,4)
+#define AXI_DMAC_DMA_BPB_SRC		NO_OS_GENMASK(11,8)
 #define AXI_DMAC_DMA_TYPE_SRC		NO_OS_GENMASK(13,12)
 //Define macro for src and dest
 
@@ -118,6 +120,8 @@ struct axi_dmac {
 	enum dma_direction direction;
 	bool hw_cyclic;
 	uint32_t max_length;
+	uint32_t width_dst;
+	uint32_t width_src;
 	volatile struct axi_dma_transfer transfer;
 	//Current sub-transfer properties
 	uint32_t init_addr;

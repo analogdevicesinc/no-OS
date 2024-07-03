@@ -844,12 +844,10 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	/* Start transfer */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0x0001);
-
-	word_length = spi_get_word_lenght(eng_desc);
 	if(eng_desc->offload_config & OFFLOAD_TX_EN) {
 		struct axi_dma_transfer tx_transfer = {
 			// Number of bytes to write/read
-			.size = word_length * eng_desc->offload_tx_len * no_samples,
+			.size = eng_desc->offload_tx_dma->width_src * eng_desc->offload_tx_len * no_samples,
 			// Transfer done flag
 			.transfer_done = 0,
 			// Signal transfer mode
@@ -865,7 +863,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	if(eng_desc->offload_config & OFFLOAD_RX_EN) {
 		struct axi_dma_transfer rx_transfer = {
 			// Number of bytes to write/read
-			.size = word_length * eng_desc->offload_tx_len * no_samples,
+			.size = 4 * eng_desc->offload_tx_len * no_samples,
 			// Transfer done flag
 			.transfer_done = 0,
 			// Signal transfer mode
