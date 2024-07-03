@@ -286,6 +286,10 @@ struct ad7606_axi_init_param {
 	struct no_os_pwm_init_param *trigger_pwm_init;
 	/* SPI Engine offload parameters */
 	struct spi_engine_offload_init_param *offload_init_param;
+	/* AXI Core */
+	uint32_t core_baseaddr;
+	uint32_t reg_access_speed;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /**

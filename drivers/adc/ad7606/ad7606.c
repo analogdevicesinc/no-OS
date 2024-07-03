@@ -52,6 +52,15 @@
 #include "no_os_crc.h"
 #include "no_os_alloc.h"
 
+#include "spi_engine.h"
+#include "no_os_axi_io.h"
+
+#define AD7606_SPI_ENG_DATA_WIDTH			0x0C
+#define AD7606_SPI_ENG_OFFLOAD_ADDR_WIDTH		0x10
+#define AD7606_SPI_ENG_OFFLOAD_FIFO_WIDTH		0x14
+
+#define AD7606_CORE_RESET				0x40
+
 struct ad7606_chip_info {
 	const char *name;
 	uint8_t num_channels;
@@ -226,12 +235,18 @@ static const uint16_t tconv_max[] = {
  * @brief Structure for AXI FPGA cores
  */
 struct ad7606_axi_dev {
+	/* Set to 'true' if the AXI modules have been initialized */
+	bool initialized;
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen *clkgen;
 	/* Trigger conversion PWM generator descriptor */
 	struct no_os_pwm_desc *trigger_pwm_desc;
 	/* SPI Engine offload parameters */
 	struct spi_engine_offload_init_param offload_init_param;
+	/* AXI Core */
+	uint32_t core_baseaddr;
+	uint32_t reg_access_speed;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /**
@@ -596,6 +611,65 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 }
 
 /***************************************************************************//**
+ * @brief Read multiple samples using the AXI SPI engin code
+ *
+ * @param dev        - The device structure.
+ * @param data       - Pointer to location of buffer where to store the data.
+ * @param samples    - Number of samples to read
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  -ETIME - Timeout while waiting for the BUSY signal.
+ *                  -EBADMSG - CRC computation mismatch.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
+		uint32_t *buf, uint32_t samples)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	int32_t ret;
+	uint32_t commands_data[2] = {0x00, 0x00};
+	struct spi_engine_offload_message msg = {};
+	const uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+	uint32_t spi_eng_msg_cmds[3] = {
+		CS_LOW,
+		READ(2),
+		CS_HIGH,
+	};
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
+
+	dev->spi_desc->mode = NO_OS_SPI_MODE_2;
+	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+	spi_engine_set_transfer_width(dev->spi_desc, bits);
+
+	ret = spi_engine_offload_init(dev->spi_desc, &axi->offload_init_param);
+	if (ret != 0)
+		return ret;
+
+	msg.commands_data = commands_data;
+	msg.commands = spi_eng_msg_cmds;
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.rx_addr = (uint32_t)buf;
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x00);
+
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
+	if (ret != 0)
+		return ret;
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+
+	if (axi->dcache_invalidate_range)
+		axi->dcache_invalidate_range(msg.rx_addr, samples * sizeof(uint32_t));
+
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Blocking conversion start and read data (for a single sample from all
  *        channels).
  *
@@ -653,7 +727,7 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
  *
  * @param dev        - The device structure.
  * @param data       - Pointer to location of buffer where to store the data.
- * @param samples    - Number of samples to pull from the ADC.
+ * @param samples    - Number of samples to read
  *
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
@@ -664,11 +738,9 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 			    uint32_t samples)
 {
-	uint32_t nchannels = ad7606_chip_info_tbl[dev->device_id].num_channels;
-	uint32_t i, sample_size;
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	uint32_t nchannels, i, sample_size;
 	int32_t ret;
-
-	sample_size = nchannels * sizeof(uint32_t);
 
 	if (dev->reg_mode) {
 		/* Enter ADC reading mode by writing at address zero. */
@@ -678,6 +750,12 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 
 		dev->reg_mode = false;
 	}
+
+	if (axi->initialized)
+		return ad7606_read_raw_data_spi_engine(dev, data, samples);
+
+	nchannels = ad7606_chip_info_tbl[dev->device_id].num_channels;
+	sample_size = nchannels * sizeof(uint32_t);
 
 	for (i = 0; i < samples; i++) {
 		ret = ad7606_read_one_sample(dev, data);
@@ -1273,6 +1351,8 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	struct ad7606_axi_dev *axi = &device->axi_dev;
 	int32_t ret;
 
+	axi->initialized = false;
+
 	if (!axi_init)
 		return 0;
 
@@ -1290,6 +1370,17 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 
 	memcpy(&axi->offload_init_param, axi_init->offload_init_param,
 	       sizeof(axi->offload_init_param));
+
+	axi->core_baseaddr = axi_init->core_baseaddr;
+	axi->reg_access_speed = axi_init->reg_access_speed;
+	axi->dcache_invalidate_range = axi_init->dcache_invalidate_range;
+
+	/* Write 1 to reset the core, 0 to bring it out of reset */
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x00);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+
+	axi->initialized = true;
 
 	/* Note: more validation will be added later */
 error:
