@@ -1,0 +1,8 @@
+{
+  "xilinx": {
+    "basic_example": {
+      "flags" : "BASIC_EXAMPLE=y",
+      "hardware" : ["ad7606x_fmc_zed"]
+    }
+  }
+}
