@@ -285,9 +285,12 @@ static int32_t axi_dmac_detect_caps(struct axi_dmac *dmac)
 	uint32_t reg_val, initial_reg_val = 0;
 	uint32_t src_mem_mapped = 0;
 	uint32_t dest_mem_mapped = 0;
+	uint32_t intf_desc = 0;
 
 	dmac->max_length = -1;
 	dmac->direction = INVALID_DIR;
+	dmac->width_dst = -1;
+	dmac->width_src = -1;
 
 	/* Check if HW cyclic possible */
 	axi_dmac_read(dmac, AXI_DMAC_REG_FLAGS, &initial_reg_val);
@@ -307,6 +310,11 @@ static int32_t axi_dmac_detect_caps(struct axi_dmac *dmac)
 	axi_dmac_read(dmac, AXI_DMAC_REG_DEST_ADDRESS, &dest_mem_mapped);
 	axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, 0xffffffff);
 	axi_dmac_read(dmac, AXI_DMAC_REG_SRC_ADDRESS, &src_mem_mapped);
+	axi_dmac_read(dmac, AXI_DMAC_REG_INTF_DESC, &intf_desc);
+	dmac->width_dst = no_os_field_get(AXI_DMAC_DMA_BPB_DEST, intf_desc);
+	dmac->width_dst = (1 << dmac->width_dst);
+	dmac->width_src = no_os_field_get(AXI_DMAC_DMA_BPB_SRC, intf_desc);
+	dmac->width_src = (1 << dmac->width_src);
 
 	if (dest_mem_mapped && !src_mem_mapped) {
 		dmac->direction = DMA_DEV_TO_MEM;
