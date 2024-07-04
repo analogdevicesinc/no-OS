@@ -96,8 +96,7 @@ int self_test_supply(struct stout *stout, struct rms_adc_values *rms_adc_values)
 		cnt++;
 	}
 	cnt = 0;
-	pr_debug("TEST SUPPLY: Vin %d mV, v1_rms_adc: %d, V2 %d mV\n",
-		 rms_adc_values->v1_rms, rms_adc_values->v1_rms_adc, rms_adc_values->v2_rms);
+	pr_debug("TEST SUPPLY: Vin %d mV \n", rms_adc_values->v1_rms);
 	if (INTF_INPUT_V_ERR_U != stout->err_status) {
 		if ((VIN_LOW_LIMIT < rms_adc_values->v1_rms)
 		    && (VIN_HIGH_LIMIT > rms_adc_values->v1_rms))
