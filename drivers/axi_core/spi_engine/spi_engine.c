@@ -863,7 +863,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	if(eng_desc->offload_config & OFFLOAD_RX_EN) {
 		struct axi_dma_transfer rx_transfer = {
 			// Number of bytes to write/read
-			.size = 4 * eng_desc->offload_tx_len * no_samples,
+			.size = eng_desc->offload_rx_dma->width_src * eng_desc->offload_tx_len * no_samples,
 			// Transfer done flag
 			.transfer_done = 0,
 			// Signal transfer mode
