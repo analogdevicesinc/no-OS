@@ -291,6 +291,8 @@ struct ad7606_axi_init_param {
  * @brief Device driver initialization parameters
  */
 struct ad7606_init_param {
+	/* REFINOUT voltage for computing the voltages scaled from samples */
+	int32_t refinout;
 	/** SPI initialization parameters */
 	struct no_os_spi_init_param spi_init;
 	/* AXI initialization parameters */
@@ -348,6 +350,9 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev,
 int32_t ad7606_read_samples(struct ad7606_dev *dev,
 			    uint32_t *data,
 			    uint32_t samples);
+int32_t ad7606_scale_sample(struct ad7606_dev *dev,
+			    uint32_t sample,
+			    uint32_t ch);
 int32_t ad7606_convst(struct ad7606_dev *dev);
 int32_t ad7606_reset(struct ad7606_dev *dev);
 int32_t ad7606_set_oversampling(struct ad7606_dev *dev,

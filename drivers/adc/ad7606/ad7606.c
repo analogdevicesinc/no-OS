@@ -239,6 +239,8 @@ struct ad7606_axi_dev {
 struct ad7606_dev {
 	/** AXI core device data */
 	struct ad7606_axi_dev axi_dev;
+	/* REFINOUT voltage for computing the voltages scaled from samples */
+	int32_t refinout;
 	/** SPI descriptor*/
 	struct no_os_spi_desc *spi_desc;
 	/** RESET GPIO descriptor */
@@ -683,6 +685,55 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 	}
 
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Convert the samples into human readable values using the ADC transfer
+ * function defined in the datasheet of the AD7606.
+ *
+ * @param dev        - The device structure.
+ * @param sample     - Raw sample to convert
+ * @param ch         - Pointer to location of buffer where to store the data.
+ *
+ * @return ret - voltage sample scaled in millivolts according to channel config
+*******************************************************************************/
+int32_t ad7606_scale_sample(struct ad7606_dev *dev, uint32_t sample,
+			    uint32_t ch)
+{
+	/* FIXME: this transfer function works fine for most AD7606 chips;
+	 *        some quirks may need fixing
+	*/
+	struct ad7606_range *range = &dev->range_ch[ch];
+	int64_t volt_range;
+	int64_t refinout = dev->refinout;
+	const int64_t voltage_div = 1000;
+	const uint32_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+	int64_t voltage = no_os_sign_extend32(sample, (bits - 1));
+
+	switch (dev->device_id) {
+	case ID_AD7606C_18:
+		volt_range = range->max;
+		voltage = (volt_range *
+			   voltage)
+			  /
+			  (262144 >> 1);
+		break;
+	default:
+		volt_range = range->max;
+		voltage = (voltage *
+			   volt_range * /* volt range value is either 2.5, 5 or 10V */
+			   refinout *   /* REFINOUT is in mV */
+			   10 *         /* 10 is part of 2.5V ==> 25/10 */
+			   1000)        /* return millivolts */
+			  /
+			  (32768 *        /* same as in the docs */
+			   voltage_div *  /* divide 'volt_range' which in in mV */
+			   voltage_div *  /* divide 'refinout' which is in mV */
+			   25); /* 10 is part of 2.5V ==> 25/10 ; we need to divide with 2.5V */
+		break;
+	}
+
+	return voltage;
 }
 
 /* Internal function to reset device settings to default state after chip reset. */
@@ -1280,6 +1331,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	if (ret != 0)
 		goto error;
 
+	dev->refinout = init_param->refinout;
 	dev->num_channels = info->num_channels;
 	dev->max_dout_lines = info->max_dout_lines;
 	if (info->has_registers)
