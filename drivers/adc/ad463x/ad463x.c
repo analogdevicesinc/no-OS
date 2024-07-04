@@ -458,6 +458,11 @@ int32_t ad463x_read_data_offload(struct ad463x_dev *dev,
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 2 * sizeof(buf[0]));
 
+	if (dev->lane_mode == AD463X_SHARED_TWO_CH) {
+		for (int i = 0; i < samples * 2; i++)
+			buf[i] = no_os_get_unaligned_be32(&buf[i]);
+	}
+
 	return ret;
 }
 
