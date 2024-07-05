@@ -829,7 +829,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 	msg.rx_addr = (uint32_t)buf;
 	msg.commands_data = commands_data;
 
-	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples * 2);
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
 	if (ret != 0)
 		return ret;
 
