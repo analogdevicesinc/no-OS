@@ -468,8 +468,7 @@ static int32_t ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
 	if (!desc)
 		return -1;
 
-	bytes = nb_samples * desc->iio_dev->num_ch *
-		(desc->iio_dev->channels[0].scan_type->storagebits / 8);
+	bytes = nb_samples * desc->iio_dev->num_ch * sizeof(buff[0]);
 
 	spi_eng_msg_cmds[0] = READ(4);
 
@@ -482,7 +481,7 @@ static int32_t ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
 	if (desc->dcache_invalidate_range)
 		desc->dcache_invalidate_range(msg.rx_addr, bytes);
 
-	ret = spi_engine_offload_transfer(desc->spi_eng_desc, msg, bytes);
+	ret = spi_engine_offload_transfer(desc->spi_eng_desc, msg, nb_samples);
 	if (ret < 0)
 		return ret;
 
