@@ -52,19 +52,34 @@
 #include "no_os_alloc.h"
 #include "no_os_util.h"
 
-
 const struct ad400x_dev_info ad400x_devices[] = {
-	[ID_AD4000] = {.resolution = 16, .sign = 'u'},
-	[ID_AD4001] = {.resolution = 16, .sign = 's'},
-	[ID_AD4002] = {.resolution = 18, .sign = 'u'},
-	[ID_AD4003] = {.resolution = 18, .sign = 's'},
-	[ID_AD4004] = {.resolution = 16, .sign = 'u'},
-	[ID_AD4005] = {.resolution = 16, .sign = 's'},
-	[ID_AD4006] = {.resolution = 18, .sign = 'u'},
-	[ID_AD4007] = {.resolution = 18, .sign = 's'},
-	[ID_AD4011] = {.resolution = 18, .sign = 's'},
-	[ID_AD4020] = {.resolution = 20, .sign = 's'},
-	[ID_ADAQ4003] = {.resolution = 18, .sign = 's'}
+	[ID_AD4000] = {.resolution = 16, .sign = 'u', .max_rate = 2000},
+	[ID_AD4001] = {.resolution = 16, .sign = 's', .max_rate = 2000},
+	[ID_AD4002] = {.resolution = 18, .sign = 'u', .max_rate = 2000},
+	[ID_AD4003] = {.resolution = 18, .sign = 's', .max_rate = 2000},
+	[ID_AD4004] = {.resolution = 16, .sign = 'u', .max_rate = 1000},
+	[ID_AD4005] = {.resolution = 16, .sign = 's', .max_rate = 1000},
+	[ID_AD4006] = {.resolution = 18, .sign = 'u', .max_rate = 1000},
+	[ID_AD4007] = {.resolution = 18, .sign = 's', .max_rate = 1000},
+	[ID_AD4008] = {.resolution = 16, .sign = 'u', .max_rate = 500},
+	[ID_AD4010] = {.resolution = 18, .sign = 'u', .max_rate = 500},
+	[ID_AD4011] = {.resolution = 18, .sign = 's', .max_rate = 500},
+	[ID_AD4020] = {.resolution = 20, .sign = 's', .max_rate = 1800},
+	[ID_AD4021] = {.resolution = 20, .sign = 's', .max_rate = 1000},
+	[ID_AD4022] = {.resolution = 20, .sign = 's', .max_rate = 500},
+	[ID_ADAQ4003] = {.resolution = 18, .sign = 's',.max_rate = 2000},
+	[ID_AD7690] = {.resolution = 18, .sign = 's', .max_rate = 400},
+	[ID_AD7691] = {.resolution = 18, .sign = 's', .max_rate = 250},
+	[ID_AD7693] = {.resolution = 16, .sign = 's', .max_rate = 500},
+	[ID_AD7942] = {.resolution = 14, .sign = 'u', .max_rate = 250},
+	[ID_AD7944] = {.resolution = 14, .sign = 'u', .max_rate = 2500},
+	[ID_AD7946] = {.resolution = 14, .sign = 's', .max_rate = 500},
+	[ID_AD7980] = {.resolution = 16, .sign = 'u', .max_rate = 1000},
+	[ID_AD7982] = {.resolution = 18, .sign = 's', .max_rate = 1000},
+	[ID_AD7983] = {.resolution = 16, .sign = 'u', .max_rate = 1330},
+	[ID_AD7984] = {.resolution = 18, .sign = 's', .max_rate = 1330},
+	[ID_AD7985] = {.resolution = 16, .sign = 'u', .max_rate = 2500},
+	[ID_AD7986] = {.resolution = 18, .sign = 's', .max_rate = 2000},
 };
 
 /******************************************************************************/
@@ -337,6 +352,13 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
 	if (ret)
 		goto error;
+
+	/* Calculate pwm rate given the part sample rate */
+	if (init_param->trigger_pwm_init->period_ns == 0) {
+		init_param->trigger_pwm_init->period_ns =
+			NO_OS_DIV_ROUND_UP(1000000, ad400x_devices[dev->dev_id].max_rate);
+		init_param->trigger_pwm_init->duty_cycle_ns = 10;
+	}
 
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret)

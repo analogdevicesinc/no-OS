@@ -72,14 +72,31 @@ enum ad400x_supported_dev_ids {
 	ID_AD4005,
 	ID_AD4006,
 	ID_AD4007,
+	ID_AD4008,
+	ID_AD4010,
 	ID_AD4011,
 	ID_AD4020,
+	ID_AD4021,
+	ID_AD4022,
 	ID_ADAQ4003,
+	ID_AD7690,
+	ID_AD7691,
+	ID_AD7693,
+	ID_AD7942,
+	ID_AD7944,
+	ID_AD7946,
+	ID_AD7980,
+	ID_AD7982,
+	ID_AD7983,
+	ID_AD7984,
+	ID_AD7985,
+	ID_AD7986,
 };
 
 struct ad400x_dev_info {
 	uint16_t resolution;
 	char sign;
+	uint16_t max_rate;
 };
 
 struct ad400x_dev {
