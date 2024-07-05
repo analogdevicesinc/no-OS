@@ -83,8 +83,8 @@ struct axi_clkgen_init clkgen_init = {
 };
 
 struct no_os_pwm_init_param trigger_pwm_init = {
-	.period_ns = PWM_PERIOD,
-	.duty_cycle_ns = PWM_DUTY,
+	.period_ns = 0, /* set by driver max sample rate */
+	.duty_cycle_ns = 0,
 	.polarity = NO_OS_PWM_POLARITY_HIGH,
 	.platform_ops = PWM_OPS,
 	.extra = PWM_EXTRA,
