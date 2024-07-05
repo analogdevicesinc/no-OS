@@ -434,15 +434,15 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 	msg.commands_data = commands_data;
 
 	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 2 * sizeof(buf[0]));
 
-	ret = spi_engine_offload_transfer(dev->spi_desc, msg,
-					  (int)(samples*4/dev->read_bytes_no));
+	/* both channels are read with a single transfer */
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
 	if (ret != 0)
 		return ret;
 
 	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 2 * sizeof(buf[0]));
 
 	return ret;
 }

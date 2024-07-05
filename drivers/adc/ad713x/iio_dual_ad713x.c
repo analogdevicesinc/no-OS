@@ -121,10 +121,9 @@ static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
 	if (!desc)
 		return -1;
 
-	bytes = nb_samples * desc->iio_dev_desc.num_ch *
-		(BITS_PER_SAMPLE / 8);
+	bytes = nb_samples * desc->iio_dev_desc.num_ch * sizeof(buff[0]);
 	msg = desc->spi_engine_offload_message;
-	ret = spi_engine_offload_transfer(desc->spi_eng_desc, *msg, bytes);
+	ret = spi_engine_offload_transfer(desc->spi_eng_desc, *msg, nb_samples);
 	if (ret < 0)
 		return ret;
 
