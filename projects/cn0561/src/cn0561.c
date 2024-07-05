@@ -138,18 +138,18 @@ int main()
 	struct no_os_pwm_desc *axi_pwm;
 	struct axi_pwm_init_param axi_zed_pwm_init_trigger = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
-		.ref_clock_Hz = 96000000,
+		.ref_clock_Hz = 100000000,
 		.channel = 0
 	};
 	struct axi_pwm_init_param axi_zed_pwm_init_odr = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
-		.ref_clock_Hz = 96000000,
+		.ref_clock_Hz = 100000000,
 		.channel = 1
 	};
 	struct no_os_pwm_init_param axi_pwm_init_trigger = {
 		.period_ns = 1000,
 		.duty_cycle_ns = 1,
-		.phase_ns = 30,
+		.phase_ns = 45,
 		.platform_ops = &axi_pwm_ops,
 		.extra = &axi_zed_pwm_init_trigger
 	};
@@ -185,7 +185,7 @@ int main()
 	cn0561_init_param.pnd = true;
 	cn0561_init_param.spi_init_prm.chip_select = CN0561_SPI_CS;
 	cn0561_init_param.spi_init_prm.device_id = SPI_DEVICE_ID;
-	cn0561_init_param.spi_init_prm.max_speed_hz = 1000000;
+	cn0561_init_param.spi_init_prm.max_speed_hz = 10000000;
 	cn0561_init_param.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	cn0561_init_param.spi_init_prm.platform_ops = &xil_spi_ops;
 	cn0561_init_param.spi_init_prm.extra = (void *)&spi_engine_init_params;
