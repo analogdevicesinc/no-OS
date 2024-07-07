@@ -666,7 +666,9 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 
 	/* Get current data width */
 	spi_engine_read(eng_desc, SPI_ENGINE_REG_DATA_WIDTH, &data_width);
-	eng_desc->max_data_width = data_width;
+	/* Only the lower 16 bits are relevant for the actual data-width */
+	eng_desc->max_data_width = no_os_field_get(SPI_ENGINE_REG_DATA_WIDTH_MSK,
+				   data_width);
 
 	spi_engine_set_transfer_width(*desc, spi_engine_init->data_width);
 

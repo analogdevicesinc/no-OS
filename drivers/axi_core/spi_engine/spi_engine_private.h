@@ -65,6 +65,10 @@
 #define SPI_ENGINE_REG_SDI_DATA_FIFO		0xE8
 #define SPI_ENGINE_REG_SDI_DATA_FIFO_PEEK	0xEC
 
+/* Bit definitions for SPI_ENGINE_REG_DATA_WIDTH register */
+#define SPI_ENGINE_REG_NUM_OF_SDI_MSK		NO_OS_GENMASK(23, 16)
+#define SPI_ENGINE_REG_DATA_WIDTH_MSK		NO_OS_GENMASK(15, 0)
+
 /******************************************************************************/
 /************************ Spi Engine register parameters **********************/
 /******************************************************************************/
