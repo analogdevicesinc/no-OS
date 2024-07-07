@@ -53,6 +53,7 @@
 #include "no_os_alloc.h"
 
 struct ad7606_chip_info {
+	const char *name;
 	uint8_t num_channels;
 	uint8_t bits;
 	uint8_t max_dout_lines;
@@ -114,6 +115,7 @@ static const struct ad7606_range ad7606c_range_table[] = {
 
 static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 	[ID_AD7605_4] = {
+		.name = "AD7605-4",
 		.num_channels = 4,
 		.bits = 16,
 		.max_dout_lines = AD7606_2_DOUT,
@@ -122,6 +124,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606_4] = {
+		.name = "AD7606-4",
 		.num_channels = 4,
 		.bits = 16,
 		.max_dout_lines = AD7606_2_DOUT,
@@ -130,6 +133,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606_6] = {
+		.name = "AD7606-6",
 		.num_channels = 6,
 		.bits = 16,
 		.max_dout_lines = AD7606_2_DOUT,
@@ -138,6 +142,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606_8] = {
+		.name = "AD7606-8",
 		.num_channels = 8,
 		.bits = 16,
 		.max_dout_lines = AD7606_2_DOUT,
@@ -146,6 +151,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606B] = {
+		.name = "AD7606B",
 		.num_channels = 8,
 		.bits = 16,
 		.max_dout_lines = AD7606_4_DOUT,
@@ -158,6 +164,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.sw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606b_range_table),
 	},
 	[ID_AD7606C_16] = {
+		.name = "AD7606C-16",
 		.num_channels = 8,
 		.bits = 16,
 		.max_dout_lines = AD7606_8_DOUT,
@@ -170,6 +177,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.sw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606c_range_table),
 	},
 	[ID_AD7606C_18] = {
+		.name = "AD7606C-18",
 		.num_channels = 8,
 		.bits = 18,
 		.max_dout_lines = AD7606_8_DOUT,
@@ -182,6 +190,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.sw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606c_range_table),
 	},
 	[ID_AD7608] = {
+		.name = "AD7608",
 		.num_channels = 8,
 		.bits = 18,
 		.max_dout_lines = AD7606_2_DOUT,
@@ -190,6 +199,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7609] = {
+		.name = "AD7609",
 		.num_channels = 8,
 		.bits = 18,
 		.max_dout_lines = AD7606_2_DOUT,
@@ -1110,6 +1120,7 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 int32_t ad7606_init(struct ad7606_dev **device,
 		    struct ad7606_init_param *init_param)
 {
+	const struct ad7606_chip_info *info;
 	struct ad7606_dev *dev;
 	uint8_t reg, id;
 	int32_t i, ret;
@@ -1122,6 +1133,10 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		return -ENOMEM;
 
 	dev->device_id = init_param->device_id;
+	info = &ad7606_chip_info_tbl[dev->device_id];
+	printf("Initializing device %s, num-channels %u SDI lines %u\n",
+	       info->name, info->num_channels, 1 << info->max_dout_lines);
+
 	dev->num_channels = ad7606_chip_info_tbl[dev->device_id].num_channels;
 	dev->max_dout_lines = ad7606_chip_info_tbl[dev->device_id].max_dout_lines;
 	if (ad7606_chip_info_tbl[dev->device_id].has_registers)
