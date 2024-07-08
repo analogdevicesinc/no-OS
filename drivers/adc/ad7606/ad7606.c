@@ -1137,9 +1137,9 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	printf("Initializing device %s, num-channels %u SDI lines %u\n",
 	       info->name, info->num_channels, 1 << info->max_dout_lines);
 
-	dev->num_channels = ad7606_chip_info_tbl[dev->device_id].num_channels;
-	dev->max_dout_lines = ad7606_chip_info_tbl[dev->device_id].max_dout_lines;
-	if (ad7606_chip_info_tbl[dev->device_id].has_registers)
+	dev->num_channels = info->num_channels;
+	dev->max_dout_lines = info->max_dout_lines;
+	if (info->has_registers)
 		dev->sw_mode = init_param->sw_mode;
 
 	ret = ad7606_request_gpios(dev, init_param);
@@ -1176,7 +1176,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		if (ret < 0)
 			goto error;
 
-		id = ad7606_chip_info_tbl[dev->device_id].device_id;
+		id = info->device_id;
 		if (no_os_field_get(AD7606_ID_DEVICE_ID_MSK, reg) != id) {
 			printf("ad7606: device id mismatch, expected 0x%.2x, got 0x%.2x\n",
 			       id,
@@ -1226,7 +1226,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	if (ret < 0)
 		goto error;
 
-	if (ad7606_chip_info_tbl[dev->device_id].has_oversampling)
+	if (info->has_oversampling)
 		ad7606_set_oversampling(dev, init_param->oversampling);
 
 	*device = dev;
