@@ -44,6 +44,15 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "max31875.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max31875_device_table[] = {
+	{.compatible = "adi,max31875"},
+	{}
+};
 
 /******************************************************************************/
 /************************* Functions Definition *******************************/
