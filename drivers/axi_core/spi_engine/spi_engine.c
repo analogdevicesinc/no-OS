@@ -811,7 +811,6 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	struct spi_engine_msg	transfer;
 	struct spi_engine_desc	*eng_desc;
 	uint32_t 		i;
-	uint8_t 		word_length;
 
 	eng_desc = desc->extra;
 
