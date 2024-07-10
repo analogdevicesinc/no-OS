@@ -1,6 +1,6 @@
 /* Auto-generated file - DO NOT MANUALLY EDIT */
 /* Filename: C:\Jenkins\workspace\vice-driver_profile-types_master\ProfileTypes\AnalogDevices.Adrv9001.ProfileTypes.Native\include\adrv9001_Init_t_parser.h */
-/* Created on: 11/18/2022 3:36:53 PM */
+/* Created on: 6/22/2023 3:23:16 PM */
 
 /**
  * Contains auto-generated C macros for loading fields from a JSON file
@@ -9,7 +9,7 @@
  */
 
 /** 
- * Copyright 2022 Analog Devices Inc.
+ * Copyright 2023 Analog Devices Inc.
  */
 
 #include "adi_pmag_macros.h"
@@ -356,6 +356,7 @@ ADI_PROCESS_INT      (tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv900
 ADI_PROCESS_ARRAY_INT(tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tInstance.lnaGainSteps_mdB,                 "lnaGainSteps_mdB"); \
 ADI_PROCESS_INT      (tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tInstance.lnaDigitalGainDelay,              "lnaDigitalGainDelay"); \
 ADI_PROCESS_INT      (tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tInstance.minGainIndex,                     "minGainIndex"); \
+ADI_PROCESS_INT      (tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tInstance.lnaType,                          "lnaType"); \
 
 #define ADI_PROCESS_STRUCT_ADRV9001_RXLNACONFIG_T(tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tInstance, adrv9001_RxLnaConfig_tName) \
 ADI_PROCESS_STRUCT_X(ADRV9001_RXLNACONFIG_T(tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tInstance), tokenArray, tokenIndex, jsonBuffer, parsingBuffer, adrv9001_RxLnaConfig_tName);

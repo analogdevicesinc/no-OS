@@ -580,10 +580,12 @@ int32_t adi_adrv9001_PartNumber_Get(adi_adrv9001_Device_t *device, adi_adrv9001_
     ADRV9001_SPIREADBYTE(device, "EFUSE_SW_CONFIG_1", ADRV9001_ADDR_EFUSE_SW_CONFIG_1, &swConfig[1]);
 
     *partNumber = (adi_adrv9001_PartNumber_e)(((uint16_t)swConfig[1] << 8) | (uint16_t)swConfig[0]);
-    if ((ADI_ADRV9001_PART_NUMBER_ADRV9002 != *partNumber) &&
-        (ADI_ADRV9001_PART_NUMBER_ADRV9003 != *partNumber) &&
-        (ADI_ADRV9001_PART_NUMBER_ADRV9004 != *partNumber))
-    {
+	if ((ADI_ADRV9001_PART_NUMBER_ADRV9002 != *partNumber) &&
+	    (ADI_ADRV9001_PART_NUMBER_ADRV9003 != *partNumber) &&
+	    (ADI_ADRV9001_PART_NUMBER_ADRV9004 != *partNumber) &&
+		(ADI_ADRV9001_PART_NUMBER_ADRV9005 != *partNumber) &&
+		(ADI_ADRV9001_PART_NUMBER_ADRV9006 != *partNumber)) 
+	{
         *partNumber = ADI_ADRV9001_PART_NUMBER_UNKNOWN;
         ADI_ERROR_REPORT(device, 
                          ADI_COMMON_ERRSRC_API, 

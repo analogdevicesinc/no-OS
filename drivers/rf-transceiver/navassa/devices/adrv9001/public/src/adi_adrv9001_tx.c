@@ -2085,3 +2085,22 @@ int32_t adi_adrv9001_Tx_DataPath_Loopback_Set(adi_adrv9001_Device_t *device,
     ADI_EXPECT(adrv9001_NvsRegmapTx_RxToTxDatapathLoopback_Set, device, baseAddr, (uint8_t)loopbackEnable);
     ADI_API_RETURN(device);
 }
+
+int32_t adi_adrv9001_Tx_LolActuatorFilterDcOffset_Status_Get(adi_adrv9001_Device_t *device,
+	                                                         adi_adrv9001_TxlolActuatorFilterDcOffsetStatus_t *status)
+{
+	uint16_t regValue = 0;
+	adrv9001_BfNvsRegmapTx_e baseAddr = ADRV9001_BF_TX1_CORE;
+
+	/* Check device pointer is not null */
+	ADI_NULL_DEVICE_PTR_RETURN(device);
+
+	ADI_EXPECT(adrv9001_NvsRegmapTx_TxTxlolActuatorFilterDcOffsetI_Get, device, baseAddr, &regValue);
+	status->TxlolActuatorFilterDcOffsetI = regValue;
+
+	ADI_EXPECT(adrv9001_NvsRegmapTx_TxTxlolActuatorFilterDcOffsetQ_Get, device, baseAddr, &regValue);
+	status->TxlolActuatorFilterDcOffsetQ = regValue;
+
+	ADI_API_RETURN(device);
+}
+

@@ -13,6 +13,7 @@
 #include "adi_adrv9001_types.h"
 #include "adi_adrv9001_rx_types.h"
 #include "adi_common_error_types.h"
+#include "adi_adrv9001_radio_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -555,7 +556,6 @@ int32_t adi_adrv9001_Rx_Loid_Configure(adi_adrv9001_Device_t *adrv9001,
                                    adi_common_ChannelNumber_e channel,
 		                           adi_adrv9001_RxrfdcLoidCfg_t *loidConfig);
 
-
 /**
  * \brief Inspect LOID settings
  * 
@@ -572,7 +572,42 @@ int32_t adi_adrv9001_Rx_Loid_Configure(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_Rx_Loid_Inspect(adi_adrv9001_Device_t *adrv9001,
                                    adi_common_ChannelNumber_e channel,
 		                           adi_adrv9001_RxrfdcLoidCfg_t *loidConfig);
-	
+
+/**
+ * \brief Manual Rx RSSI Config
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \pre channel state is any of CALIBRATED, PRIMED, RF_ENABLED
+ *
+ * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] channel               RX Channel for which RSSI configuration to be done
+ * \param[in] rssiInterval          Determines how many number of samples are used for each RSSI value. Range [1 to (2^21)-1]
+ * \param[out] manualRssiReadStatus Parameters required for high speed mode RSSI calculation
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Rx_Rssi_Manual_Configure(adi_adrv9001_Device_t* adrv9001, adi_common_ChannelNumber_e channel,
+                                              uint32_t rssiInterval, adi_adrv9001_ManualRssiReadStatus_t* manualRssiReadStatus);
+
+/**
+ * \brief Manual Rx RSSI Read
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \pre Channel state is RF_ENABLED
+ *
+ * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] channel               RX Channel for which RSSI status to be read back
+ * \param[in] manualRssiReadMode    RX Channel RSSI read mode ( high speed/precision mode )
+ * \param[out] manualRssiReadStatus Parameters required for RSSI calculation
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Rx_Rssi_Manual_Status_Get(adi_adrv9001_Device_t* adrv9001, adi_common_ChannelNumber_e channel,
+                                               adi_adrv9001_ManualRssiReadMode_e manualRssiReadMode,
+                                               adi_adrv9001_ManualRssiReadStatus_t* manualRssiReadStatus);
+
 #ifdef __cplusplus
 }
 #endif

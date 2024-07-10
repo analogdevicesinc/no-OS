@@ -14,7 +14,7 @@
 #ifndef _ADI_ADRV9001_GPIO_TYPES_H_
 #define _ADI_ADRV9001_GPIO_TYPES_H_
 
-#include "adi_adrv9001_user.h"
+#include <adi_adrv9001_user.h>
 #include "adi_adrv9001_types.h"
 
 /**
