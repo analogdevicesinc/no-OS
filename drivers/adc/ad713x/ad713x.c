@@ -321,9 +321,19 @@ int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
 
  int32_t ad713x_channel_sync(struct ad713x_dev *dev)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_INTERFACE_CONFIG_B,
+	int ret = 0;
+	ret = no_os_gpio_set_value(dev->gpio_cs_sync, true);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return -1;
+
+	ret = ad713x_spi_write_mask(dev, AD713X_REG_INTERFACE_CONFIG_B,
 						 AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK,
 						 AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK);
+
+	ret = no_os_gpio_set_value(dev->gpio_cs_sync, false);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return -1;
+	return ret;
 }
 
 int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
@@ -415,6 +425,14 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 	ret = no_os_gpio_get_optional(&dev->gpio_pnd, init_param->gpio_pnd);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
+
+	ret = no_os_gpio_get_optional(&dev->gpio_cs_sync, init_param->gpio_cs_sync);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return -1;
+
+	ret = no_os_gpio_direction_output(dev->gpio_cs_sync, false);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return -1;
 
 	/** Tie this pin to IOVDD for master mode operation, tie this pin to
 	 *  IOGND for slave mode operation. */
@@ -562,7 +580,26 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	dev->dev_id = init_param->dev_id;
 	dev->mode_master_nslave = init_param->mode_master_nslave;
 
-	//ret = ad713x_spi_reg_read(dev, AD713X_REG_SCTATCH_PAD, &data);
+	ret = ad713x_spi_reg_read(dev, 0x1, &data);
+	printf("Reg:0x1: %x \n", data);
+	ret = ad713x_spi_reg_write(dev, 0x1, 0x82);
+	ret = ad713x_spi_reg_read(dev, 0x1, &data);
+	printf("Reg:0x1: %x \n", data);
+
+	int fails = 0;
+	int count = 0;
+	while(1){
+		for (int i = 0; i < 255; i++){
+			ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, i);
+			ret = ad713x_spi_reg_read(dev, AD713X_REG_SCTATCH_PAD, &data);
+			count++;
+			if (i != data){
+				fails++;
+				printf("data: %x != i: %x #%d/%d\n", data, i, fails, count);
+			}
+		}
+		printf ("count: %d\n", count);
+	}
 
 	ret = ad713x_spi_reg_read(dev, AD713X_REG_CHIP_TYPE, &data);
 	if (NO_OS_IS_ERR_VALUE(ret))

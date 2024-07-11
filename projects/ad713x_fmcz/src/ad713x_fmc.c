@@ -153,6 +153,18 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
+	struct no_os_gpio_init_param ad7134_cs_sync = {
+		.number = GPIO_CS_SYNC,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+	struct no_os_gpio_init_param ad7134_cs_sync_1 = {
+		.number = GPIO_CS_SYNC_1,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+
+
 	struct no_os_spi_desc *spi_eng_desc;
 	struct spi_engine_init_param spi_eng_init_param  = {
 		.type = SPI_ENGINE,
@@ -209,13 +221,14 @@ int main()
 	ad713x_init_param_1.gpio_mode = &ad7134_1_mode;
 	ad713x_init_param_1.gpio_pnd = &ad7134_1_pnd;
 	ad713x_init_param_1.gpio_resetn = &ad7134_1_resetn;
+	ad713x_init_param_1.gpio_cs_sync = &ad7134_cs_sync;
 	ad713x_init_param_1.mode_master_nslave = false;
 	ad713x_init_param_1.dclkmode_free_ngated = false;
 	ad713x_init_param_1.dclkio_out_nin = false;
 	ad713x_init_param_1.pnd = true;
 	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
 	ad713x_init_param_1.spi_init_prm.device_id = SPI_DEVICE_ID;
-	ad713x_init_param_1.spi_init_prm.max_speed_hz = 10000000;
+	ad713x_init_param_1.spi_init_prm.max_speed_hz = 1000000;
 	ad713x_init_param_1.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_1.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_engine_init_params;
@@ -231,13 +244,14 @@ int main()
 	ad713x_init_param_2.gpio_mode = &ad7134_2_mode;
 	ad713x_init_param_2.gpio_pnd = &ad7134_2_pnd;
 	ad713x_init_param_2.gpio_resetn = &ad7134_2_resetn;
+	ad713x_init_param_2.gpio_cs_sync = &ad7134_cs_sync_1;
 	ad713x_init_param_2.mode_master_nslave = false;
 	ad713x_init_param_2.dclkmode_free_ngated = false;
 	ad713x_init_param_2.dclkio_out_nin = false;
 	ad713x_init_param_2.pnd = true;
 	ad713x_init_param_2.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
-	ad713x_init_param_2.spi_init_prm.max_speed_hz = 10000000;
+	ad713x_init_param_2.spi_init_prm.max_speed_hz = 1000000;
 	ad713x_init_param_2.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_2.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
@@ -255,11 +269,6 @@ int main()
 	ret = axi_clkgen_set_rate(clkgen_7134, AD713x_SPI_ENG_REF_CLK_FREQ_HZ);
 	if (ret != 0)
 		return -1;
-
-	/*ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
-	if (ret != 0)
-		return ret;
-	 */
 
 	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_trigger);
 		if (ret != 0)

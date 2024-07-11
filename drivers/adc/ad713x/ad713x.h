@@ -696,6 +696,8 @@ struct ad713x_dev {
 	struct no_os_gpio_desc		*gpio_resetn;
 	/** PDN GPIO handler. */
 	struct no_os_gpio_desc		*gpio_pnd;
+	/** CS Sync */
+	struct no_os_spi_desc *gpio_cs_sync;
 	/** ID of supported device. */
 	enum ad713x_supported_dev_ids dev_id;
 	/** Length of data in bits. */
@@ -723,6 +725,8 @@ struct ad713x_init_param {
 	struct no_os_gpio_init_param *gpio_resetn;
 	/** PDN GPIO initialization structure. */
 	struct no_os_gpio_init_param *gpio_pnd;
+	/** CS_GPIO */
+	struct no_os_gpio_init_param *gpio_cs_sync;
 	/** MODE GPIO starting value */
 	bool mode_master_nslave;
 	/** DCLKMODE GPIO starting value */
