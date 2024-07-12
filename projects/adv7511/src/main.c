@@ -210,6 +210,7 @@ static int32_t app_set_i2c_mux(struct no_os_i2c_desc *adv7511_i2c)
 	i2c_mux_init.slave_address = mux_addr;
 	i2c_mux_init.platform_ops = &xil_i2c_ops;
 	i2c_mux_init.extra = &i2c_mux_init_extra;
+	i2c_mux_init.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 
 	mem_val = pca9548_setup;
 
