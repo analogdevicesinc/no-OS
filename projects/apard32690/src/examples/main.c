@@ -43,6 +43,8 @@
 #include "tcp_echo_server_example.h"
 #elif defined(APARD32690_BASIC_EXAMPLE)
 #include "basic_example.h"
+#elif defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+#include "adin1110_standalone_example.h"
 #endif
 
 /***************************************************************************//**
@@ -56,6 +58,8 @@ int main()
 	return tcp_echo_server_example_main();
 #elif defined(APARD32690_BASIC_EXAMPLE)
 	return basic_example_main();
+#elif defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+	return adin1110_standalone_example_main();
 #endif
 
 	return 0;

@@ -1,3 +1,13 @@
+ifeq (y,$(strip $(APARD32690_ADIN1110_STANDALONE_EXAMPLE)))
+CFLAGS += -DAPARD32690_ADIN1110_STANDALONE_EXAMPLE
+SRCS += $(DRIVERS)/net/adin1110/adin1110.c
+SRCS += $(NO-OS)/util/no_os_crc8.c
+INCS += $(INCLUDE)/no_os_crc8.h
+INCS += $(DRIVERS)/net/adin1110/adin1110.h
+
+SRC_DIRS += $(PROJECT)/src/examples/adin1110_standalone_example
+endif
+
 ifeq (y,$(strip $(APARD32690_ECHO_SERVER_EXAMPLE)))
 CFLAGS += -DAPARD32690_ECHO_SERVER_EXAMPLE
 LIBRARIES += lwip
