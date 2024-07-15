@@ -495,15 +495,6 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
 {
 	int32_t ret;
 
-	if (dev->reg_mode) {
-		/* Enter ADC reading mode by writing at address zero. */
-		ret = ad7606_spi_reg_write(dev, 0, 0);
-		if (ret < 0)
-			return ret;
-
-		dev->reg_mode = false;
-	}
-
 	ret = no_os_gpio_set_value(dev->gpio_convst, 0);
 	if (ret < 0)
 		return ret;
@@ -676,6 +667,15 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 	int32_t ret;
 
 	sample_size = nchannels * sizeof(uint32_t);
+
+	if (dev->reg_mode) {
+		/* Enter ADC reading mode by writing at address zero. */
+		ret = ad7606_spi_reg_write(dev, 0, 0);
+		if (ret < 0)
+			return ret;
+
+		dev->reg_mode = false;
+	}
 
 	for (i = 0; i < samples; i++) {
 		ret = ad7606_read_one_sample(dev, data);
