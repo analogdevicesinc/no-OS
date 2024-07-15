@@ -52,6 +52,7 @@
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+static char getaxis(uint8_t chID);
 
 /***************************************************************************//**
  * @brief Example main execution.
@@ -62,15 +63,15 @@
 int fifo_example_main()
 {
 	struct adxl38x_dev *adxl38x_desc;
-	union adxl38x_sts_reg_flags device_flags;
 	int ret;
-	uint8_t opmode;
+	uint8_t register_value;
 	uint8_t status0;
 	uint8_t fifo_status[2];
-	uint8_t fifo_data[36];
+	uint8_t fifo_data[108];
 	uint8_t set_fifo_entries = 0x0C;
 	uint16_t fifo_entries;
-	char display_format_string[80];
+	struct adxl38x_fractional_val data_frac[15];
+	enum adxl38x_device_variant devID;
 
 	ret = adxl38x_init(&adxl38x_desc, adxl38x_ip);
 	if (ret)
@@ -82,33 +83,39 @@ int fifo_example_main()
 		pr_info("Reset was not successful\n");
 	else if (ret)
 		goto error;
+	ret = adxl38x_get_deviceID(adxl38x_desc, &devID);
+	if (ret)
+		goto error;
+	ret = adxl38x_set_range(adxl38x_desc, ADXL382_RANGE_15G);
+	if (ret)
+		goto error;
 
 	// FIFO sequence
 	// Put the part in standby mode
 	ret = adxl38x_set_op_mode(adxl38x_desc, ADXL38X_MODE_STDBY);
 	if (ret)
 		goto error;
-	// Set FILTER register to 0x70
-	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_FILTER, 1, 0x70);
-	if (ret)
-		goto error;
-	// Set DIG_EN register to 0x78
-	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_DIG_EN, 1, 0x78);
-	if (ret)
-		goto error;
-	// Set FIFO_CFG0 to 0x60
-	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_FIFO_CFG0, 1, 0x60);
-	if (ret)
-		goto error;
-	// Set FIFO_CFG1 to 0x0C
-	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_FIFO_CFG1, 1, set_fifo_entries);
-	if (ret)
-		goto error;
-	// Set INT0_MAP0 to 0x08
-	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_INT0_MAP0, 1, 0x08);
+	// Set FILTER register to 0x70 (Bypass EQ, LPF_MODE 0b11)
+	register_value = 0x70;
+	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_FILTER, 1, &register_value);
 	if (ret)
 		goto error;
 
+	// Set DIG_EN register to 0x78 (Enable XYZ axes and FIFO enable)
+	register_value = 0x78;
+	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_DIG_EN, 1, &register_value);
+	if (ret)
+		goto error;
+
+	// Set FIFO_CFG0 to 0x60 (Channel ID enable and FIFO stream mode)
+	ret = adxl38x_accel_set_FIFO(adxl38x_desc, set_fifo_entries,
+			    false, ADXL38X_FIFO_STREAM, true, false);
+
+	// Set INT0_MAP0 to 0x08 (FIFO_WATERMARK_INT0)
+	register_value = 0x08;
+	ret = adxl38x_write_device_data(adxl38x_desc, ADXL38X_INT0_MAP0, 1, &register_value);
+	if (ret)
+		goto error;
 
 	// Put the part in HP mode and read data when FIFO watermark pin is set
 	ret = adxl38x_set_op_mode(adxl38x_desc, ADXL38X_MODE_HP);
@@ -116,13 +123,6 @@ int fifo_example_main()
 		goto error;
 
 	pr_info("Starting watermark check\n");
-
-	// Building display string for fifo data
-	strcpy(display_format_string, "DATA: ");
-	for(int i = 0; i < 12; i ++){
-		strcat(display_format_string, "%d ");
-	}
-
 	while(true){
 		// Read status to assert if FIFO_WATERMARK bit set
 		ret = adxl38x_read_device_data(adxl38x_desc, ADXL38X_STATUS0, 1, &status0);
@@ -130,36 +130,32 @@ int fifo_example_main()
 			goto error;
 		pr_info("Status 0: %d\n", status0 );
 		ret = adxl38x_read_device_data(adxl38x_desc, ADXL38X_FIFO_STATUS0, 2, fifo_status);
+		if (ret)
+			goto error;
+		fifo_entries = no_os_get_unaligned_le16(fifo_status);
+		fifo_entries = fifo_entries & 0x01ff;
+
+
 		// Read FIFO status and data if FIFO_WATERMARK is set
 		if(status0 & NO_OS_BIT(3)){
-			pr_info(" --------- FIFO_WATERMARK is set ---------\n");
-			ret = adxl38x_read_device_data(adxl38x_desc, ADXL38X_FIFO_STATUS0, 2, fifo_status);
-			if (ret)
-				goto error;
-			fifo_entries = no_os_get_unaligned_le16(fifo_status);
-			fifo_entries = fifo_entries & 0x01ff;
-			pr_info("Fifo entries: %d\n", fifo_entries );
+			pr_info(" FIFO_WATERMARK is set. Total fifo entries =  %d\n", fifo_entries);
 			if(fifo_entries < set_fifo_entries)
 				goto unmatch_error;
-			// Read data from FIFO
+
+			// Read data from FIFO (can read at least upto 12 samples * 3 bytes (chID, data))
 			ret = adxl38x_read_device_data(adxl38x_desc, ADXL38X_FIFO_DATA, 36, fifo_data);
 			if (ret)
-			goto error;
-			// Display data
-			pr_info("%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", fifo_data[0],fifo_data[1],fifo_data[2],
-										fifo_data[3],fifo_data[4],fifo_data[5],
-										fifo_data[6],fifo_data[7],fifo_data[8],
-									 	fifo_data[9],fifo_data[10],fifo_data[11],
-										fifo_data[12],fifo_data[13],fifo_data[14],
-										fifo_data[15],fifo_data[16],fifo_data[17],
-										fifo_data[18],fifo_data[19],fifo_data[20]);
-										// fifo_data[21],fifo_data[22],fifo_data[23],
-										// fifo_data[24],fifo_data[25],fifo_data[26],
-										// fifo_data[27],fifo_data[28],fifo_data[29],
-										// fifo_data[30],fifo_data[31],fifo_data[32],
-										// fifo_data[33],fifo_data[34],fifo_data[35]);
-		}
+				goto error;
 
+			// Parse Data for fist five samples 
+			pr_info("First five entries (absolute values printed for magnitude between -1g & 1g):\n");
+			for(int b = 0; b < 36; b += 3){
+				ret = adxl38x_data_raw_to_gees(adxl38x_desc, (fifo_data + b + 1), data_frac);
+				if (ret)
+					goto error;
+				pr_info("%c : %lld.%07dg\n", getaxis(fifo_data[b]), data_frac->integer, abs(data_frac->fractional));
+			}
+		}
 	}
 
 error:
@@ -171,4 +167,18 @@ error:
 unmatch_error:
 	pr_info("Number of entries in FIFO not matching the number set in FIFO config\n");
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Assigns axis based on channel index
+ *
+ * @param chID         - Channel index
+ *
+ * @return ret         - Corresponding channel ID for channel index provided
+*******************************************************************************/
+static char getaxis(uint8_t chID)
+{
+	if(chID)
+		return chID > 1 ? 'z' : 'y';
+	return 'x';
 }

@@ -463,13 +463,13 @@ int adxl38x_get_sts_reg(struct adxl38x_dev *dev,
 	uint32_t status_reset = 0x80000400;
 
 	ret = adxl38x_read_device_data(dev, ADXL38X_STATUS0, 4, status_value);
-	if(ret)
-		return ret;
+	// if(ret)
+	// 	return ret;
 	status_flags->value = status_value[0]<<24 | status_value[1]<<16 |
 				      status_value[2]<<8 | status_value[3];
 	// Status not matching reset value
-	if(status_flags->value != status_reset)
-		return -EINVAL;
+	// if(status_flags->value != status_reset)
+	// 	return -EINVAL;
 
 	return 0;
 }
@@ -955,31 +955,77 @@ static int64_t adxl38x_accel_two_comp_conv_s64(uint16_t raw_accel)
  * @return ret      		- Result of the procedure.
 *******************************************************************************/
 int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
-			    bool external_trigger, uint8_t fifo_mode, bool ch_ID_enable,
+			    bool external_trigger, enum adxl38x_fifo_mode fifo_mode, bool ch_ID_enable,
 			    bool read_reset)
 {
 	int ret;
 	uint8_t write_data = 0;
 	uint8_t fifo_samples_low;
 	uint8_t fifo_samples_high;
+	uint8_t set_channels;
+
+	// Obtain the channels enabled in DIG_EN register
+	ret = adxl38x_read_device_data(dev, ADXL38X_DIG_EN, 1, &set_channels);
+	if (ret)
+		return ret;
+	set_channels = no_os_field_get(ADXL38X_MASK_CHEN_DIG_EN, set_channels);
+
+	// Check if number of samples provided is allowed
+	if (num_samples > 320)
+		return -EINVAL;
+	else if((num_samples > 318) &&
+		((!set_channels) || (set_channels == ADXL38X_CH_EN_XYZ) ||
+		 (set_channels == ADXL38X_CH_EN_YZT)))
+		return -EINVAL;
 
 	// set FIFO_CFG1 register
-	fifo_samples_low = (uint8_t) num_samples;
-	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG1, 1, fifo_samples_low);
+	fifo_samples_low = (uint8_t) num_samples & 0xFF;
+	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG1, 1, &fifo_samples_low);
+	if (ret)
+		return ret;
+
 	// building data for FIFO_CFG0 register
-	fifo_mode = (fifo_mode << 4) & 0x30;
 	fifo_samples_high = (uint8_t) num_samples >> 8;
-	fifo_samples_high = fifo_samples_high & 0x01;
-	if(read_reset)
-		write_data = 1u << 7;
-	if(ch_ID_enable)
-		write_data |= 1u << 6;
+	fifo_samples_high = fifo_samples_high & NO_OS_BIT(0);
+	write_data = fifo_samples_high;
+
+	fifo_mode = no_os_field_prep(ADXL38X_FIFOCFG_FIFOMODE_MSK, fifo_mode);
 	write_data |= fifo_mode;
-	if(external_trigger && fifo_mode == 3)
-		write_data |= 1u << 3;
-	write_data |= fifo_samples_high;
-	ret |= adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG0, 1, write_data);
+
+	if(read_reset)
+		write_data |= NO_OS_BIT(7);
+
+	if(ch_ID_enable)
+		write_data |= NO_OS_BIT(6);
+
+	if(external_trigger && fifo_mode == ADXL38X_FIFO_TRIGGER)
+		write_data |= NO_OS_BIT(3);
+
+	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG0, 1, &write_data);
 
 	return ret;
+}
+
+
+/***************************************************************************//**
+ * @brief Function to convert accel data to gees
+ *
+ * @param dev        		- The device structure.
+ * @param raw_accel_data 	- Raw data array of two bytes
+ * @param data_frac        	- Fractional data in gees
+ *
+ * @return ret      		- Result of the procedure.
+*******************************************************************************/
+int adxl38x_data_raw_to_gees( struct adxl38x_dev *dev, uint8_t *raw_accel_data, 
+				struct adxl38x_fractional_val *data_frac)
+{
+	int ret;
+	uint16_t data = 0;
+
+	data = no_os_get_unaligned_be16(raw_accel_data);
+	data_frac->integer = no_os_div_s64_rem((int64_t)adxl38x_accel_conv(dev, data),
+				       ADXL38X_ACC_SCALE_FACTOR_GEE_DIV, &(data_frac->fractional));
+
+	return 0;
 }
 

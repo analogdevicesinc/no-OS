@@ -165,6 +165,7 @@
 #define ADXL38X_MASK_OP_MODE			0x0F
 #define ADXL38X_MASK_CHEN_DIG_EN		0xF0
 #define ADXL38X_NEG_ACC_MSK				NO_OS_GENMASK(31, 16)
+#define ADXL38X_FIFOCFG_FIFOMODE_MSK		0x30
 
 /* Pre-defined codes */
 #define ADXL38X_RESET_CODE            	0x52
@@ -296,6 +297,13 @@ enum adxl38x_ch_select {
 	ADXL38X_CH_EN_ZT = 12,
 	ADXL38X_CH_EN_YZT = 14,
 	ADXL38X_CH_EN_XYZT = 15
+};
+
+enum adxl38x_fifo_mode {
+	ADXL38X_FIFO_DISABLE = 0,
+	ADXL38X_FIFO_NORMAL = 1,
+	ADXL38X_FIFO_STREAM = 2,
+	ADXL38X_FIFO_TRIGGER = 3
 };
 
 /**
@@ -448,7 +456,10 @@ int adxl38x_get_xyz_gees(struct adxl38x_dev *dev,
 int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 		     bool *st_x, bool *st_y, bool *st_z);
 
-int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t numSamples,
-			    bool externalTrigger, uint8_t fifoMode, bool chIDEnable,
-			    bool readReset);
+int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
+			    bool external_trigger, enum adxl38x_fifo_mode fifo_mode, bool ch_ID_enable,
+			    bool read_reset);
+
+int adxl38x_data_raw_to_gees( struct adxl38x_dev *dev, uint8_t *raw_accel_data, 
+				struct adxl38x_fractional_val *data_frac);
 #endif /* __ADXL38X_H__ */
