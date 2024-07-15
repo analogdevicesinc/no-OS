@@ -1164,6 +1164,11 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	if (ret < 0)
 		goto error;
 
+	/* Copy init parameters here, ad7606_reset() will clear these */
+	memcpy(dev->gain_ch, init_param->gain_ch, sizeof(dev->gain_ch));
+	memcpy(dev->phase_ch, init_param->phase_ch, sizeof(dev->phase_ch));
+	memcpy(dev->offset_ch, init_param->offset_ch, sizeof(dev->offset_ch));
+
 	/* wait DEVICE_SETUP time */
 	no_os_udelay(253);
 
