@@ -951,3 +951,25 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
 	return ret;
 }
 
+/***************************************************************************//**
+ * @brief Function to convert accel data to gees
+ *
+ * @param dev        		- The device structure.
+ * @param raw_accel_data 	- Raw data array of two bytes
+ * @param data_frac        	- Fractional data in gees
+ *
+ * @return ret      		- Result of the procedure.
+*******************************************************************************/
+int adxl38x_data_raw_to_gees( struct adxl38x_dev *dev, uint8_t *raw_accel_data,
+			      struct adxl38x_fractional_val *data_frac)
+{
+	int ret;
+	uint16_t data = 0;
+
+	data = no_os_get_unaligned_be16(raw_accel_data);
+	data_frac->integer = no_os_div_s64_rem((int64_t)adxl38x_accel_conv(dev, data),
+					       ADXL38X_ACC_SCALE_FACTOR_GEE_DIV, &(data_frac->fractional));
+
+	return 0;
+}
+

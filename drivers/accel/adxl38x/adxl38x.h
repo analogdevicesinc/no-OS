@@ -191,11 +191,7 @@
 /* Common denominator for ADXL380 and ADXL382 */
 #define ADXL38X_ACC_SCALE_FACTOR_GEE_DIV  (int32_t)	10000000
 /*
- * ADXL380/382 Temperature NOTE: Rev0 Values. Replace with RevA
- * scale is 168 LSB/C.
- * Offset = 9630LSB at 25C
- * offset at 0C = 9630 - (168 * 25) LSB
- * offset at 0C = 5430LSB
+ * ADXL380/382 Temperature
  *
  * scale is 10.2 LSB/C.
  * Offset = 550LSB at 25C
@@ -470,6 +466,9 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t numSamples,
 			    bool externalTrigger, enum adxl38x_fifo_mode fifo_mode,
 			    bool chIDEnable, bool readReset);
+
+int adxl38x_data_raw_to_gees( struct adxl38x_dev *dev, uint8_t *raw_accel_data,
+			      struct adxl38x_fractional_val *data_frac);
 
 #endif /* __ADXL38X_H__ */
 
