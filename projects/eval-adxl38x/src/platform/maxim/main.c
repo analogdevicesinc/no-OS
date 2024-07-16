@@ -52,6 +52,10 @@
 #include "selftest_example_main.h"
 #endif
 
+#ifdef FIFO_EXAMPLE
+#include "fifo_example_main.h"
+#endif
+
 /***************************************************************************//**
  * @brief Main function execution for Maxim platform.
  *
@@ -79,9 +83,13 @@ int main()
 	ret = selftest_example_main();
 #endif
 
-#if (BASIC_EXAMPLE + SELFTEST_EXAMPLE == 0)
+#ifdef FIFO_EXAMPLE
+	ret = fifo_example_main();
+#endif
+
+#if (BASIC_EXAMPLE + SELFTEST_EXAMPLE + FIFO_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + SELFTEST_EXAMPLE > 1)
+#elif (BASIC_EXAMPLE + SELFTEST_EXAMPLE + FIFO_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif

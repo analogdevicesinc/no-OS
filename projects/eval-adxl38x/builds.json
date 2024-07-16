@@ -1,18 +1,24 @@
 {
   "stm32": {
     "basic_example": {
-      "flags" : "BASIC_EXAMPLE=y SELFTEST_EXAMPLE=n ADXL382=y ADXL380=n HARDWARE=dr_adxl38x_F767ZI.ioc"
+      "flags" : "BASIC_EXAMPLE=y SELFTEST_EXAMPLE=n FIFO_EXAMPLE=n ADXL382=y ADXL380=n HARDWARE=dr_adxl38x_F767ZI.ioc"
     },
     "selftest_example": {
-      "flags" : "BASIC_EXAMPLE=n SELFTEST_EXAMPLE=y ADXL382=y ADXL380=n HARDWARE=dr_adxl38x_F767ZI.ioc"
+      "flags" : "BASIC_EXAMPLE=n SELFTEST_EXAMPLE=y FIFO_EXAMPLE=n ADXL382=y ADXL380=n HARDWARE=dr_adxl38x_F767ZI.ioc"
+    },
+    "fifo_example": {
+      "flags" : "BASIC_EXAMPLE=n SELFTEST_EXAMPLE=n FIFO_EXAMPLE=y ADXL382=y ADXL380=n HARDWARE=dr_adxl38x_F767ZI.ioc"
     }
   },
   "maxim": {
     "basic_example": {
-      "flags" : "BASIC_EXAMPLE=y SELFTEST_EXAMPLE=n TARGET=max78000 ADXL380=y"
+      "flags" : "BASIC_EXAMPLE=y SELFTEST_EXAMPLE=n FIFO_EXAMPLE=n TARGET=max78000 ADXL380=y"
     },
     "selftest_example": {
-      "flags" : "BASIC_EXAMPLE=n SELFTEST_EXAMPLE=y TARGET=max78000 ADXL380=y"
+      "flags" : "BASIC_EXAMPLE=n SELFTEST_EXAMPLE=y FIFO_EXAMPLE=n TARGET=max78000 ADXL380=y"
+    },
+    "fifo_example": {
+      "flags" : "BASIC_EXAMPLE=n SELFTEST_EXAMPLE=n FIFO_EXAMPLE=y TARGET=max78000 ADXL380=y"
     }
   }
 }
