@@ -93,7 +93,7 @@ int main(void)
 	int ret;
 	struct no_os_uart_desc *console;
 	char hw_model_str[10];
-	enum admv96xx_id id = ID_ADMV96X5;
+	enum admv96xx_id id = ID_ADMV96X7;
 	int speed;
 	uint8_t hbtx;
 	uint8_t pin;
@@ -200,6 +200,7 @@ post_eeprom:
 		break;
 	default:
 	case ID_ADMV96X5:
+	case ID_ADMV96X7:
 		speed = 1000;
 		break;
 	};

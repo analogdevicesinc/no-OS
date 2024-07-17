@@ -22,7 +22,7 @@
 #define XCVR_RESET_PIN		0
 
 #define XCVR_EN_PORT		2
-#define XCVR_EN_PIN		1
+#define XCVR_EN_PIN		6
 
 #define XCVR_CLK_PORT		2
 #define XCVR_CLK_PIN		3
@@ -68,13 +68,13 @@
 #define FACTORY_DEFAULTS_PORT	3
 #define FACTORY_DEFAULTS_PIN	9
 
-extern struct no_os_uart_init_param uart_console_ip;
-extern struct no_os_gpio_init_param xcvr_reset_gpio_ip;
-extern struct no_os_gpio_init_param xcvr_en_gpio_ip;
-extern struct no_os_gpio_init_param xcvr_clk_gpio_ip;
-extern struct no_os_gpio_init_param xcvr_data_gpio_ip;
-extern struct no_os_gpio_init_param xcvr_scanout_tx_gpio_ip;
-extern struct no_os_gpio_init_param xcvr_scanout_rx_gpio_ip;
+extern struct no_os_uart_init_param uart_console_ip; // ok
+extern struct no_os_gpio_init_param xcvr_reset_gpio_ip; // ok
+extern struct no_os_gpio_init_param xcvr_en_gpio_ip; // ok
+extern struct no_os_gpio_init_param xcvr_clk_gpio_ip; // ok
+extern struct no_os_gpio_init_param xcvr_data_gpio_ip; // ok
+extern struct no_os_gpio_init_param xcvr_scanout_tx_gpio_ip; // ok
+extern struct no_os_gpio_init_param xcvr_scanout_rx_gpio_ip; // ok
 extern struct no_os_gpio_init_param adin1300_reset_gpio_ip;
 extern struct no_os_gpio_init_param max24287_reset_gpio_ip;
 extern struct no_os_gpio_init_param adin1300_mdc_gpio_ip;
@@ -83,7 +83,7 @@ extern struct no_os_gpio_init_param adin1300_int_gpio_ip;
 extern struct no_os_gpio_init_param max24287_mdc_gpio_ip;
 extern struct no_os_gpio_init_param max24287_mdio_gpio_ip;
 extern struct no_os_gpio_init_param max24287_int_gpio_ip;
-extern struct no_os_gpio_init_param brd_select_gpio_ip;
+extern struct no_os_gpio_init_param brd_select_gpio_ip; // ok
 extern struct no_os_gpio_init_param factory_defaults_gpio_ip;
 extern struct no_os_eeprom_init_param eeprom_ip;
 
