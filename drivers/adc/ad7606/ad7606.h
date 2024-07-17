@@ -50,6 +50,7 @@
 #include "no_os_spi.h"
 #include "no_os_util.h"
 
+#include "no_os_pwm.h"
 #include "clk_axi_clkgen.h"
 
 /******************************************************************************/
@@ -281,6 +282,8 @@ struct ad7606_axi_init_param {
 	struct axi_clkgen_init *clkgen_init;
 	/* Clock generator rate */
 	uint32_t axi_clkgen_rate;
+	/* PWM generator init structure */
+	struct no_os_pwm_init_param *trigger_pwm_init;
 };
 
 /**

@@ -228,6 +228,8 @@ static const uint16_t tconv_max[] = {
 struct ad7606_axi_dev {
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen *clkgen;
+	/* Trigger conversion PWM generator descriptor */
+	struct no_os_pwm_desc *trigger_pwm_desc;
 };
 
 /**
@@ -1197,6 +1199,10 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	if (ret != 0)
 		goto error;
 
+	ret = no_os_pwm_init(&axi->trigger_pwm_desc, axi_init->trigger_pwm_init);
+	if (ret != 0)
+		goto error;
+
 	/* Note: more validation will be added later */
 error:
 	return ret;
@@ -1368,6 +1374,7 @@ void ad7606_axi_remove(struct ad7606_dev *dev)
 
 	axi = &dev->axi_dev;
 
+	no_os_pwm_remove(axi->trigger_pwm_desc);
 	axi_clkgen_remove(axi->clkgen);
 }
 
