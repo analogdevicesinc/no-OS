@@ -233,7 +233,7 @@ int main()
 
 	spi_engine_offload_init_param.rx_dma_baseaddr = CN0561_DMA_BASEADDR;
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
-	spi_engine_offload_init_param.dma_flags = &spi_eng_dma_flg;
+	spi_engine_offload_init_param.dma_flags = spi_eng_dma_flg;
 
 	ret = no_os_spi_init(&spi_eng_desc, &spi_eng_init_prm);
 	if (ret != 0)
