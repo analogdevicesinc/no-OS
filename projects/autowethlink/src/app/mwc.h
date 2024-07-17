@@ -13,6 +13,7 @@ enum admv96xx_id {
 	ID_ADMV96X1 = 1,
 	ID_ADMV96X3 = 3,
 	ID_ADMV96X5 = 5,
+	ID_ADMV96X7 = 7,
 };
 
 struct mwc_iio_dev {

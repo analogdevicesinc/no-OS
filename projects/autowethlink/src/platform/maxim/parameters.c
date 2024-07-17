@@ -139,7 +139,7 @@ struct no_os_gpio_init_param factory_defaults_gpio_ip = {
 };
 
 struct no_os_i2c_init_param eeprom_i2c_ip = {
-	.device_id = 0,
+	.device_id = 1,
 	.max_speed_hz = 400000,
 	.platform_ops = &max_i2c_ops,
 	.slave_address = 0x54,
