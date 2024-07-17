@@ -768,10 +768,10 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 
 	eng_desc->offload_config = param->offload_config;
 
-	if(!(param->dma_flags)) {
+	if(!param->dma_flags) {
 		eng_desc->cyclic = CYCLIC;
 	} else {
-		if((*(param->dma_flags)) & DMA_CYCLIC)
+		if(param->dma_flags & DMA_CYCLIC)
 			eng_desc->cyclic = CYCLIC;
 		else
 			eng_desc->cyclic = NO;
