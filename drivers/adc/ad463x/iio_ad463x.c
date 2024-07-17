@@ -292,42 +292,40 @@ static int ad463x_iio_read_scale_avail(void *dev, char *buf,
  * @return ret    - Result of the reading procedure.
  * 					In case of success, the size of the read data is returned.
 */
+
+
 static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 				    uint32_t nb_samples)
 {
 	int ret;
-	uint16_t total_samples = nb_samples * 2;
 	uint32_t *data;
 	uint32_t i, j, ch;
 
 	if (!desc)
 		return -EINVAL;
 
-	data = (uint32_t *)no_os_calloc(total_samples, sizeof(*data));
-	if (!data)
-		return -ENOMEM;
-
 	/* Exit register configuration mode */
 	ret = ad463x_exit_reg_cfg_mode(desc->ad463x_desc);
 	if (ret < 0)
 		goto error_comm;
 
-	/** Read samples */
-	ret = ad463x_read_data(desc->ad463x_desc, data, nb_samples);
+	/** Read samples for both channels */
+	ret = ad463x_read_data(desc->ad463x_desc, buff, nb_samples);
 	if (ret != 0)
 		goto error_comm;
 
-	/** Fill IIO Buffer */
-	for (i = 0, j = 0; i < total_samples; i++)
-		if (desc->mask & NO_OS_BIT(i & 0x01)) {
-			buff[j++] = data[i];
-		}
+	/** Fill IIO Buffer  with singel channel if only one is enabled */
+	if (desc->mask == 0x1)
+		for (i = 0, j = 0; j < nb_samples; i+=2)
+			buff[j++] = buff[i];
 
-	free(data);
+	if (desc->mask == 0x2)
+		for (i = 1, j = 0; j < nb_samples; i+=2)
+			buff[j++] = buff[i];
+
 	return nb_samples;
 
 error_comm:
-	free(data);
 	return ret;
 }
 
