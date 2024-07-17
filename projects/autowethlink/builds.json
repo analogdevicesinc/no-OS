@@ -1,0 +1,10 @@
+{
+  "maxim": {
+    "wethlink_revb": {
+      "flags": "TARGET=max32650 HW_VERSION=1"
+    },
+    "wethlink_reva": {
+      "flags": "TARGET=max32650 HW_VERSION=0"
+    }
+  }
+}
