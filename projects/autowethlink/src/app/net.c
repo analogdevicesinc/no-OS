@@ -1,3 +1,4 @@
+#if 0 // for reference only
 #include <stdio.h>
 #include "no_os_delay.h"
 #include "no_os_mdio.h"
@@ -288,3 +289,4 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 
 	return no_os_irq_enable(gpio1intc, MAX24287_INT_PIN);
 }
+#endif

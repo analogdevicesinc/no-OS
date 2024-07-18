@@ -28,10 +28,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/eeprom/24xx32a/24xx32a.c \
 	$(DRIVERS)/api/no_os_mdio.c \
 	$(DRIVERS)/net/mdio_bitbang.c \
-	$(DRIVERS)/net/adin1300.c \
-	$(DRIVERS)/net/iio_adin1300.c \
-	$(DRIVERS)/net/max24287.c \
-	$(DRIVERS)/net/iio_max24287.c \
 	$(DRIVERS)/adc/adm1177/adm1177.c \
 	$(DRIVERS)/adc/adm1177/iio_adm1177.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
@@ -63,10 +59,6 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(DRIVERS)/eeprom/24xx32a/24xx32a.h \
 	$(INCLUDE)/no_os_mdio.h \
 	$(DRIVERS)/net/mdio_bitbang.h \
-	$(DRIVERS)/net/adin1300.h \
-	$(DRIVERS)/net/iio_adin1300.h \
-	$(DRIVERS)/net/max24287.h \
-	$(DRIVERS)/net/iio_max24287.h \
 	$(DRIVERS)/adc/adm1177/adm1177.h \
 	$(DRIVERS)/adc/adm1177/iio_adm1177.h \
 	$(INCLUDE)/no_os_error.h \
