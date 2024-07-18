@@ -94,7 +94,7 @@ int main()
 	uint32_t i = 0, j;
 	int32_t ret;
 	const float lsb = 4.096 / (pow(2, 23));
-	float data;
+	float data1, data2;
 	uint32_t spi_eng_dma_flg = DMA_LAST | DMA_PARTIAL_REPORTING_EN;
 	struct spi_engine_offload_init_param spi_engine_offload_init_param;
 	struct spi_engine_offload_message spi_engine_offload_message;
@@ -213,7 +213,7 @@ int main()
 
 	ad713x_init_param_1.adc_data_len = ADC_24_BIT_DATA;
 	ad713x_init_param_1.clk_delay_en = false;
-	ad713x_init_param_1.crc_header = CRC_6;
+	ad713x_init_param_1.crc_header = NO_CRC;
 	ad713x_init_param_1.dev_id = ID_AD7134;
 	ad713x_init_param_1.format = QUAD_CH_PO;
 	ad713x_init_param_1.gpio_dclkio = &ad7134_1_dclkio;
@@ -228,7 +228,7 @@ int main()
 	ad713x_init_param_1.pnd = true;
 	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
 	ad713x_init_param_1.spi_init_prm.device_id = SPI_DEVICE_ID;
-	ad713x_init_param_1.spi_init_prm.max_speed_hz = 1000000;
+	ad713x_init_param_1.spi_init_prm.max_speed_hz = 5000000;
 	ad713x_init_param_1.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_1.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_engine_init_params;
@@ -236,7 +236,7 @@ int main()
 
 	ad713x_init_param_2.adc_data_len = ADC_24_BIT_DATA;
 	ad713x_init_param_2.clk_delay_en = false;
-	ad713x_init_param_2.crc_header = CRC_6;
+	ad713x_init_param_2.crc_header = NO_CRC;
 	ad713x_init_param_2.dev_id = ID_AD7134;
 	ad713x_init_param_2.format = QUAD_CH_PO;
 	ad713x_init_param_2.gpio_dclkio = &ad7134_2_dclkio;
@@ -251,7 +251,7 @@ int main()
 	ad713x_init_param_2.pnd = true;
 	ad713x_init_param_2.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
-	ad713x_init_param_2.spi_init_prm.max_speed_hz = 1000000;
+	ad713x_init_param_2.spi_init_prm.max_speed_hz = 5000000;
 	ad713x_init_param_2.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_2.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
@@ -288,14 +288,6 @@ int main()
 	if (ret != 0)
 		return -1;
 	no_os_mdelay(1000);
-
-	ret = ad713x_channel_sync(ad713x_dev_1);
-	if (ret != 0)
-			return -1;
-
-	uint8_t temp;
-	ad713x_spi_reg_read(ad713x_dev_1, 0x1, &temp);
-	printf("0x%08x\n", temp);
 
 	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
@@ -386,6 +378,13 @@ int main()
 
 #endif /* IIO_SUPPORT */
 
+	float pass = 0, fail = 0;
+
+	ret = ad713x_channel_sync(ad713x_dev_1);
+	if (ret != 0)
+			return -1;
+	
+	while (true){
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
 	if (ret != 0)
@@ -395,59 +394,34 @@ int main()
 				  AD7134_FMC_SAMPLE_NO * AD7134_FMC_CH_NO *
 				  sizeof(uint32_t));
 
-	/*for(i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
-		j = 0;
-		printf("%lu: ", i);
-		while(j < 8) {
-			adc_buffer[AD7134_FMC_CH_NO*i+j] &= 0xffffff00;
-			adc_buffer[AD7134_FMC_CH_NO*i+j] >>= 8;
-			data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+j];
-			if(data > 4.095)
-				data = data - 8.192;
-			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
-			       adc_buffer[AD7134_FMC_CH_NO*i+j], data);
-			if(j == 7)
-				printf("\n");
-			j++;
-		}
-	}*/
-	
-	// In SOFT CH2 corresponds to CH4 in HARD
-
-	printf("CH0 in memory: \n\n ");
-	for (int i = 0; i < AD7134_FMC_SAMPLE_NO; i++){
-		adc_buffer[AD7134_FMC_CH_NO*i+14] &= 0xffffff00;
-		adc_buffer[AD7134_FMC_CH_NO*i+14] >>= 8;
-		//printf("%lu \n", adc_buffer[AD7134_FMC_CH_NO*i+14]);
-		//printf("0x%08lx \n ", adc_buffer[AD7134_FMC_CH_NO*i+14]);
-		data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+14];
-		if(data > 4.095)
-				data = data - 8.192;
-		printf("%+1.5f\n", data);
-	}
-    printf("CH4 in memory: \n\n ");
     for (int i = 0; i < AD7134_FMC_SAMPLE_NO; i++){
-		adc_buffer[AD7134_FMC_CH_NO*i+18] &= 0xffffff00;
-		adc_buffer[AD7134_FMC_CH_NO*i+18] >>= 8;
-		//printf("%lu \n", adc_buffer[AD7134_FMC_CH_NO*i+18]);
-		//printf("0x%08lx \n ", adc_buffer[AD7134_FMC_CH_NO*i+18]);
-		data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+18];
-		if(data > 4.095)
-				data = data - 8.192;
-		printf("%+1.5f\n", data);
-	}
+    		adc_buffer[AD7134_FMC_CH_NO*i+14] &= 0xffffff00;
+    		adc_buffer[AD7134_FMC_CH_NO*i+14] >>= 8;
+    		adc_buffer[AD7134_FMC_CH_NO*i+18] &= 0xffffff00;
+    		adc_buffer[AD7134_FMC_CH_NO*i+18] >>= 8;
+    		data1 = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+14];
+    		data2 = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+18];
+    		if (data1/data2 > 0.77 && data1/data2 < 1.3){
+    			pass++;
+    		}
+    				else {
+    			fail++;
+    		}
+    	}
+    printf("Pass: %f \n", pass);
+    printf("Fail: %f \n", fail);
+//    if ((pass - fail) >= AD7134_FMC_SAMPLE_NO - AD7134_FMC_SAMPLE_NO/4  ){
+    float pass_rate = pass/1024;
+    if (pass_rate >= 0.75  ){
+    	printf("Semnalele sunt sincronizate! :%f \n", pass_rate);
+    }
+    else {
+    	printf("Semnalele nu sunt sincronizate! :%f \n", pass_rate);
+    }
 
-	/*
-	*  READ ADC REGISTER VALUES
-	*/
-		uint8_t reg_data;
-		uint8_t reg_addr;
-		for(reg_addr = 0x0; reg_addr <= 0x7; reg_addr++) {
-			ret = ad713x_spi_reg_read(ad713x_dev_1, reg_addr, &reg_data);
-				if (ret != 0)
-					printf("REG%x: error read\n", reg_addr);
-			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
-		}
+    pass = 0;
+    fail = 0;
+}
 
 	ad713x_remove(ad713x_dev_1);
 	ad713x_remove(ad713x_dev_2);

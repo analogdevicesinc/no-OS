@@ -580,7 +580,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	dev->dev_id = init_param->dev_id;
 	dev->mode_master_nslave = init_param->mode_master_nslave;
 
-	ret = ad713x_spi_reg_read(dev, 0x1, &data);
+	/*ret = ad713x_spi_reg_read(dev, 0x1, &data);
 	printf("Reg:0x1: %x \n", data);
 	ret = ad713x_spi_reg_write(dev, 0x1, 0x82);
 	ret = ad713x_spi_reg_read(dev, 0x1, &data);
@@ -600,7 +600,18 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		}
 		printf ("count: %d\n", count);
 	}
+*/
 
+	/*ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x1);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x2);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x3);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0xA);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x82);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x20);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x20);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x82);
+	ret = ad713x_spi_reg_write(dev, AD713X_REG_SCTATCH_PAD, 0x82);
+	*/
 	ret = ad713x_spi_reg_read(dev, AD713X_REG_CHIP_TYPE, &data);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
