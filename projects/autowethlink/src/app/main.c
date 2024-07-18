@@ -11,7 +11,7 @@
 #include "iio_hmc630x.h"
 #include "mwc.h"
 #include "iio_app.h"
-#include "net.h"
+#include "dp83tg.h"
 
 volatile bool heartbeat_pulse = false;
 
@@ -104,8 +104,6 @@ int main(void)
 	const uint16_t nvmpsz = sizeof(union nvmp255);
 	uint8_t eebuf[nvmpsz + 1];
 	union nvmp255 *nvmp;
-	struct adin1300_iio_desc *iio_adin1300;
-	struct max24287_iio_desc *iio_max24287;
 	struct adm1177_iio_dev *iio_adm1177;
 
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
@@ -191,23 +189,7 @@ apply_factory_defaults: {
 post_eeprom:
 	nvmp = (union nvmp255 *)eebuf;
 
-	switch(id) {
-	case ID_ADMV96X1:
-		speed = 100;
-		break;
-	case ID_ADMV96X3:
-		speed = 100;
-		break;
-	default:
-	case ID_ADMV96X5:
-	case ID_ADMV96X7:
-		speed = 1000;
-		break;
-	};
-
-	ret = net_init(&iio_adin1300, &iio_max24287, speed);
-	if (ret)
-		goto end;
+	// net init
 
 	struct adm1177_iio_init_param iio_adm1177_config = {
 		.adm1177_initial = &(struct adm1177_init_param)
@@ -244,8 +226,7 @@ post_eeprom:
 		.hbtx = hbtx,
 		.crc8 = crc8,
 		.eeprom = eeprom,
-		.adin1300 = iio_adin1300->dev,
-		.max24287 = iio_max24287->dev,
+		//.dp83tg = iio_dp83tg->dev,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)
@@ -337,16 +318,11 @@ post_eeprom:
 			.dev = mwc,
 			.dev_descriptor = mwc->iio_dev,
 		},
-		{
-			.name = "adin1300",
-			.dev = iio_adin1300,
-			.dev_descriptor = iio_adin1300->iio_dev,
-		},
-		{
-			.name = "max24287",
-			.dev = iio_max24287,
-			.dev_descriptor = iio_max24287->iio_dev,
-		},
+		/*{
+			.name = "dp83tg",
+			.dev = iio_dp83tg,
+			.dev_descriptor = iio_dp83tg->iio_dev,
+		},*/
 		{
 			.name = "adm1177",
 			.dev = iio_adm1177,
