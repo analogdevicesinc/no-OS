@@ -228,7 +228,7 @@ int main()
 	ad713x_init_param_1.pnd = true;
 	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
 	ad713x_init_param_1.spi_init_prm.device_id = SPI_DEVICE_ID;
-	ad713x_init_param_1.spi_init_prm.max_speed_hz = 5000000;
+	ad713x_init_param_1.spi_init_prm.max_speed_hz = 10000000;
 	ad713x_init_param_1.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_1.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_engine_init_params;
@@ -251,7 +251,7 @@ int main()
 	ad713x_init_param_2.pnd = true;
 	ad713x_init_param_2.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
-	ad713x_init_param_2.spi_init_prm.max_speed_hz = 5000000;
+	ad713x_init_param_2.spi_init_prm.max_speed_hz = 10000000;
 	ad713x_init_param_2.spi_init_prm.mode = NO_OS_SPI_MODE_0;
 	ad713x_init_param_2.spi_init_prm.platform_ops = &xil_spi_ops;
 	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
@@ -379,12 +379,13 @@ int main()
 #endif /* IIO_SUPPORT */
 
 	float pass = 0, fail = 0;
-
-	ret = ad713x_channel_sync(ad713x_dev_1);
-	if (ret != 0)
-			return -1;
 	
 	while (true){
+
+		ret = ad713x_channel_sync(ad713x_dev_1);
+		if (ret != 0)
+				return -1;
+
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
 	if (ret != 0)
@@ -421,6 +422,7 @@ int main()
 
     pass = 0;
     fail = 0;
+    no_os_mdelay(500);
 }
 
 	ad713x_remove(ad713x_dev_1);
