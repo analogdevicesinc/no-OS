@@ -151,13 +151,127 @@ int ade9113_read(struct ade9113_dev *dev, uint8_t reg_addr, uint8_t *reg_data,
 	}
 
 	if (op_mode == ADE9113_L_OP) {
-		dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[1]), 23);
-		dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[5]), 23);
-		dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[9]), 23);
+		*dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[1]), 23);
+		*dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[5]), 23);
+		*dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[9]), 23);
 	}
 
 	/* set read data */
 	*reg_data = buff[position + data_byte_offset];
+
+	return 0;
+}
+
+/**
+ * @brief Read device register in a daisy-chain setup.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The data read from the register.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ade9113_read_dc(struct ade9113_dev *dev, uint8_t reg_addr,
+		    uint8_t *reg_data)
+{
+	int ret;
+	/* CRC computed for sent commands */
+	uint8_t crc8;
+	/* CRC computed for read response messages */
+	uint16_t crc16;
+	/* CRC received with read response messages */
+	uint16_t recv_crc;
+	/* no of read bytes, depends on long/short operation and on CRC enable state */
+	uint8_t no_of_read_bytes = 16 * dev->no_devs;
+	/* offset of data read in the read buffer */
+	uint8_t data_byte_offset = 13;
+	/* buffer for data read (large enough for a long read) */
+	uint8_t buff[64] = { 0 };
+	/* index */
+	uint8_t i;
+
+	if (dev->no_devs < 2 || dev->no_devs > 4)
+		return -EINVAL;
+
+	/* set read bit */
+	buff[12] = ADE9113_SPI_READ | 0x00;
+	/* set long operation bit, required for daisy-chain operation */
+	buff[12] = ADE9113_OP_MODE_LONG | buff[12];
+	/* set address to read from, read same reg for all devices */
+	buff[13] = reg_addr;
+
+	/* compute CRC and add it to command */
+	crc8 = no_os_crc8(ade9113_crc8, &buff[12], 3, 0);
+	crc8 ^= 0x55;
+	buff[15] = crc8;
+
+	/* construct command buffer, multiply command for all devices */
+	for (i = 0; i < 16; i++) {
+		buff[i + 16] = buff[i];
+		buff[i + 32] = buff[i];
+		buff[i + 48] = buff[i];
+	}
+
+	/* send read command */
+	ret = no_os_spi_write_and_read(dev->spi_desc, &buff[0],
+				       no_of_read_bytes);
+	if (ret)
+		return ret;
+
+	/* reset command buffer */
+	for (i = 0; i < 16 * dev->no_devs; i++)
+		buff[i] = 0;
+
+	/* set long operation bit */
+	buff[12] = ADE9113_OP_MODE_LONG | buff[12];
+
+	/* compute CRC and add it to command if CRC enabled */
+	crc8 = no_os_crc8(ade9113_crc8, &buff[12], 3, 0);
+	crc8 ^= 0x55;
+	buff[15] = crc8;
+
+	/* construct command buffer */
+	for (i = 0; i < 16; i++) {
+		buff[i + 16] = buff[i];
+		buff[i + 32] = buff[i];
+		buff[i + 48] = buff[i];
+	}
+
+	/* send read command */
+	ret = no_os_spi_write_and_read(dev->spi_desc, &buff[0],
+				       no_of_read_bytes);
+	if (ret)
+		return ret;
+
+	/* check received CRC, if enabled */
+	if (dev->crc_en) {
+		for (i = 0; i < dev->no_devs; i++) {
+			crc16 = no_os_crc16(ade9113_crc16, &buff[i * 16], 16 - 2,
+					    ADE9113_CRC16_INIT_VAL);
+
+			recv_crc = no_os_get_unaligned_le16(&buff[(i + 1) * 16 - 2]);
+
+			if (recv_crc != crc16) {
+				/* if we read 0s on SPI then there is no communication */
+				if (!recv_crc)
+					return -ENODEV;
+				/* the application should handle this result */
+				return -EPROTO;
+			}
+		}
+	}
+
+	for (i = 0; i < dev->no_devs; i++) {
+		dev->i_wav[i] = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[16 *
+						    (dev->no_devs - i - 1) + 1]), 23);
+		dev->v1_wav[i] = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[16 *
+						     (dev->no_devs - i - 1) + 5]), 23);
+		dev->v2_wav[i] = no_os_sign_extend32(no_os_get_unaligned_le24(&buff[16 *
+						     (dev->no_devs - i - 1) + 9]), 23);
+	}
+
+	/* set read data */
+	for (i = 0; i < dev->no_devs; i++) {
+		reg_data[i] = buff[data_byte_offset + 16 * (dev->no_devs - i - 1)];
+	}
 
 	return 0;
 }
@@ -186,6 +300,44 @@ int ade9113_write(struct ade9113_dev *dev, uint8_t reg_addr, uint8_t reg_data,
 	buff[3] = crc;
 
 	return no_os_spi_write_and_read(dev->spi_desc, buff, 4);
+}
+
+/**
+ * @brief Write device register in a daisy-chain setup.
+ * @param dev- The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The data to be written (array with data for first device on position 0).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ade9113_write_dc(struct ade9113_dev *dev, uint8_t reg_addr,
+		     uint8_t *reg_data)
+{
+	uint8_t crc, i;
+	uint8_t buff[64] = {0};
+
+	buff[12] |= ADE9113_OP_MODE_LONG;
+	buff[13] = reg_addr;
+	buff[14] = reg_data[dev->no_devs - 1];
+
+	crc = no_os_crc8(ade9113_crc8, &buff[12], 3, 0);
+	crc ^= 0x55;
+	buff[15] = crc;
+
+	/* construct command buffer */
+	for (i = 0; i < 16; i++) {
+		buff[i + 16] = buff[i];
+		buff[i + 32] = buff[i];
+		buff[i + 48] = buff[i];
+	}
+
+	for(i = 1; i <  dev->no_devs; i++) {
+		buff[14 + 16 * i] = reg_data[dev->no_devs - i - 1];
+		crc = no_os_crc8(ade9113_crc8, &buff[12 + 16 * i], 3, 0);
+		crc ^= 0x55;
+		buff[15 + 16 * i] = crc;
+	}
+
+	return no_os_spi_write_and_read(dev->spi_desc, buff, 16 * dev->no_devs);
 }
 
 /**
@@ -250,17 +402,49 @@ int ade9113_init(struct ade9113_dev **device,
 		 struct ade9113_init_param init_param)
 {
 	struct ade9113_dev *dev;
-	uint8_t reg_val;
+	uint8_t reg_val, v_product = 0;
+	uint8_t reg_val_dc[4] = { 0 };
 	int ret;
 	int timeout = 0;
+	int32_t *i_wav;
+	int32_t* v1_wav;
+	int32_t *v2_wav;
 
-	if (!init_param.irq_ctrl)
+	/* If init_param.no_devs uninitialized, then no daisy-chain */
+	if (init_param.no_devs == 0)
+		init_param.no_devs = 1;
+
+	if (init_param.no_devs > 4)
 		return -EINVAL;
+
+	/* Use DREADY pin only if no daisy-chain */
+	if (init_param.no_devs == 1)
+		if (!init_param.irq_ctrl)
+			return -EINVAL;
 
 	dev = (struct ade9113_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
+	dev->no_devs = init_param.no_devs;
+
+	i_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(i_wav));
+	if (!i_wav)
+		goto err_alloc_i_wav;
+
+	v1_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(v2_wav));
+	if (!v1_wav)
+		goto err_alloc_v1_wav;
+
+	v2_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(v2_wav));
+	if (!v2_wav)
+		goto err_alloc_v2_wav;
+
+	dev->i_wav = i_wav;
+	dev->v1_wav = v1_wav;
+	dev->v2_wav = v2_wav;
+
+	/* Use DREADY pin interrupt callback only if no daisy-chain */
 	struct no_os_callback_desc irq_cb = {
 		.callback = ade9113_irq_handler,
 		.ctx = dev,
@@ -286,28 +470,31 @@ int ade9113_init(struct ade9113_dev **device,
 			goto error_gpio;
 	}
 
-	ret = no_os_irq_register_callback(init_param.irq_ctrl,
-					  dev->gpio_rdy->number, &irq_cb);
-	if (ret)
-		goto error_gpio;
+	/* Register DREADY pin interrupt callback only if no daisy-chain */
+	if (dev->no_devs == 1) {
+		ret = no_os_irq_register_callback(init_param.irq_ctrl,
+						  dev->gpio_rdy->number, &irq_cb);
+		if (ret)
+			goto error_gpio;
 
-	dev->irq_cb = irq_cb;
+		dev->irq_cb = irq_cb;
 
-	ret = no_os_irq_trigger_level_set(init_param.irq_ctrl,
-					  dev->gpio_rdy->number, NO_OS_IRQ_EDGE_FALLING);
-	if (ret)
-		goto error_irq;
+		ret = no_os_irq_trigger_level_set(init_param.irq_ctrl,
+						  dev->gpio_rdy->number, NO_OS_IRQ_EDGE_FALLING);
+		if (ret)
+			goto error_irq;
 
-	ret = no_os_irq_set_priority(init_param.irq_ctrl, dev->gpio_rdy->number, 3);
-	if (ret)
-		goto error_irq;
+		ret = no_os_irq_set_priority(init_param.irq_ctrl, dev->gpio_rdy->number, 3);
+		if (ret)
+			goto error_irq;
 
-	ret = no_os_irq_disable(init_param.irq_ctrl,
-				dev->gpio_rdy->number);
-	if (ret)
-		goto error_irq;
+		ret = no_os_irq_disable(init_param.irq_ctrl,
+					dev->gpio_rdy->number);
+		if (ret)
+			goto error_irq;
 
-	dev->irq_ctrl = init_param.irq_ctrl;
+		dev->irq_ctrl = init_param.irq_ctrl;
+	}
 
 	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param.gpio_reset);
 	if (ret)
@@ -341,25 +528,73 @@ int ade9113_init(struct ade9113_dev **device,
 
 	no_os_mdelay(50);
 
-	do {
-		ret = ade9113_get_com_up(dev, &reg_val);
+	// Check if device 0 communication is up
+	if(dev->no_devs < 2) {
+		do {
+			ret = ade9113_get_com_up(dev, &reg_val);
+			if (ret)
+				goto error_gpio;
+
+			no_os_mdelay(5);
+			timeout++;
+			if (timeout == 20) {
+				ret = -ENOTCONN;
+				goto error_gpio;
+			}
+		} while (!reg_val);
+	} else {
+		do {
+			ret = ade9113_read_dc(dev, ADE9113_REG_STATUS0, reg_val_dc);
+			if (ret)
+				goto error_gpio;
+
+			no_os_mdelay(5);
+			timeout++;
+			if (timeout == 20) {
+				ret = -ENOTCONN;
+				goto error_gpio;
+			}
+		} while (!(reg_val_dc[0] & ADE9113_COM_UP_MSK));
+	}
+
+	if(dev->no_devs > 1) {
+		/* Start clock output for other devices */
+		uint8_t write_data[4] = {0x01, 0x00, 0x00, 0x00};
+		ret = ade9113_write_dc(dev, ADE9113_REG_CONFIG0, write_data);
 		if (ret)
 			goto error_gpio;
 
-		no_os_mdelay(5);
-		timeout++;
-		if (timeout == 20) {
-			ret = -ENOTCONN;
-			goto error_gpio;
+		/* Wait until all devices can communicate */
+		for (uint8_t i = 1; i < dev->no_devs; i++) {
+			do {
+				ret = ade9113_read_dc(dev, ADE9113_REG_STATUS0, reg_val_dc);
+				if (ret)
+					goto error_gpio;
+
+				no_os_mdelay(5);
+				timeout++;
+				if (timeout == 20) {
+					ret = -ENOTCONN;
+					goto error_gpio;
+				}
+			} while (!(reg_val_dc[i] & ADE9113_COM_UP_MSK));
 		}
-	} while (!reg_val);
 
-	/* Read version product */
-	ret = ade9113_get_version_product(dev, &reg_val);
-	if (ret)
-		goto error_gpio;
+		ret = ade9113_read_dc(dev, ADE9113_REG_VERSION_PRODUCT, reg_val_dc);
+		if (ret)
+			goto error_gpio;
 
-	dev->ver_product = reg_val;
+		v_product = reg_val_dc[0];
+	} else {
+		/* Read version product */
+		ret = ade9113_get_version_product(dev, &reg_val);
+		if (ret)
+			goto error_gpio;
+
+		v_product = reg_val;
+	}
+
+	dev->ver_product = v_product;
 
 	*device = dev;
 
@@ -373,6 +608,12 @@ error_gpio:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
+	no_os_free(v2_wav);
+err_alloc_v2_wav:
+	no_os_free(v1_wav);
+err_alloc_v1_wav:
+	no_os_free(i_wav);
+err_alloc_i_wav:
 	no_os_free(dev);
 
 	return ret;

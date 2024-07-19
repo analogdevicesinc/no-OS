@@ -343,6 +343,8 @@ struct ade9113_init_param {
 	/** External callback used to handle interrupt routine for GPIO RDY */
 	/** Set to NULL if callback defined in driver used */
 	void (*drdy_callback)(void *context);
+	/** number of devices in daisy-chain, if 1, then no daisy-chain */
+	uint8_t no_devs;
 };
 
 /**
@@ -357,11 +359,11 @@ struct ade9113_dev {
 	/* CRC setting */
 	uint8_t				crc_en;
 	/* I_WAV */
-	int32_t				i_wav;
+	int32_t				*i_wav;
 	/* V1_WAV */
-	int32_t				v1_wav;
+	int32_t				*v1_wav;
 	/* V2_WAV */
-	int32_t				v2_wav;
+	int32_t				*v2_wav;
 	/** GPIO RDY descriptor used to signal when ADC data is available */
 	struct no_os_gpio_desc  	*gpio_rdy;
 	/** GPIO RESET descriptor used to reset device (HW reset) */
@@ -370,6 +372,8 @@ struct ade9113_dev {
 	struct no_os_irq_ctrl_desc 	*irq_ctrl;
 	/** IRQ callback used to handle interrupt routine for GPIO RDY */
 	struct no_os_callback_desc	irq_cb;
+	/** number of devices in daisy-chain, if 1, then no daisy-chain */
+	uint8_t no_devs;
 };
 
 /******************************************************************************/
@@ -380,9 +384,17 @@ struct ade9113_dev {
 int ade9113_read(struct ade9113_dev *dev, uint8_t reg_addr,
 		 uint8_t *reg_data, enum ade9113_operation_e op_mode);
 
+/* Read device register in a daisy-chain setup. */
+int ade9113_read_dc(struct ade9113_dev *dev, uint8_t reg_addr,
+		    uint8_t *reg_data);
+
 /* Write device register. */
 int ade9113_write(struct ade9113_dev *dev, uint8_t reg_addr,
 		  uint8_t reg_data, enum ade9113_operation_e op_mode);
+
+/* Write device register in a daisy-chain setup. */
+int ade9113_write_dc(struct ade9113_dev *dev, uint8_t reg_addr,
+		     uint8_t *reg_data);
 
 /* Initialize the device. */
 int ade9113_init(struct ade9113_dev **device,
