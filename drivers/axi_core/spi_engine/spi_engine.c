@@ -777,7 +777,7 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 			eng_desc->cyclic = NO;
 	}
 
-
+	dmac_init.irq_option = IRQ_DISABLED;
 	if(param->offload_config & OFFLOAD_TX_EN) {
 		dmac_init.name = "DAC DMAC";
 		dmac_init.base = param->tx_dma_baseaddr;
