@@ -1078,10 +1078,6 @@ int32_t ad7606_set_config(struct ad7606_dev *dev,
 	if (dev->sw_mode) {
 
 		val |= no_os_field_prep(AD7606_CONFIG_OPERATION_MODE_MSK, config.op_mode);
-		/* This driver currently supports only normal SPI with 1 DOUT line.
-		 * TODO: remove this check when implementing multi-line DOUT. */
-		if ((uint8_t)config.dout_format > AD7606_1_DOUT)
-			return -EINVAL;
 		if ((uint8_t)config.dout_format > (uint8_t)dev->max_dout_lines)
 			return -EINVAL;
 		val |= no_os_field_prep(AD7606_CONFIG_DOUT_FORMAT_MSK, config.dout_format);
