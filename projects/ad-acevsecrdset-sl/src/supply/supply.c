@@ -120,9 +120,9 @@ static int supply_read_wavs(struct ade9113_dev *dev)
 
 	MXC_SPI_MasterTransaction(&req);
 
-	dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[1]), 23);
-	dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[5]), 23);
-	dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[9]), 23);
+	dev->i_wav[0] = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[1]), 23);
+	dev->v1_wav[0] = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[5]), 23);
+	dev->v2_wav[0] = no_os_sign_extend32(no_os_get_unaligned_le24(&rx_buff[9]), 23);
 
 	return 0;
 }
