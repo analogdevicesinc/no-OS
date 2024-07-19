@@ -541,6 +541,7 @@ int32_t axi_dmac_transfer_wait_completion(struct axi_dmac *dmac,
 			}
 			axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 		}
+		axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);
 	}
 
 	return 0;
