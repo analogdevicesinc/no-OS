@@ -174,7 +174,7 @@ int main()
 	};
 	const struct no_os_spi_init_param spi_eng_init_prm  = {
 		.chip_select = AD7134_1_SPI_CS,
-		.max_speed_hz = 48000000,
+		.max_speed_hz = 50000000,
 		.mode = NO_OS_SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
