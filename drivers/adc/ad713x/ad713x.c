@@ -341,7 +341,6 @@ int32_t ad713x_channel_sync(struct ad713x_dev *dev)
  * 							 CH3
  * @return 0 in case of success, -1 otherwise.
  */
-
 int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
 				 enum ad713x_dig_filter_sel filter,
 				 enum ad713x_channels ch)

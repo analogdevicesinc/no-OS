@@ -153,6 +153,17 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
+	struct no_os_gpio_init_param ad7134_cs_sync = {
+		.number = GPIO_CS_SYNC,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+	struct no_os_gpio_init_param ad7134_cs_sync_1 = {
+		.number = GPIO_CS_SYNC_1,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &gpio_extra_param
+	};
+
 	struct no_os_spi_desc *spi_eng_desc;
 	struct spi_engine_init_param spi_eng_init_param  = {
 		.type = SPI_ENGINE,
@@ -197,6 +208,7 @@ int main()
 	ad713x_init_param_1.gpio_mode = &ad7134_1_mode;
 	ad713x_init_param_1.gpio_pnd = &ad7134_1_pnd;
 	ad713x_init_param_1.gpio_resetn = &ad7134_1_resetn;
+	ad713x_init_param_1.gpio_cs_sync = &ad7134_cs_sync;
 	ad713x_init_param_1.mode_master_nslave = false;
 	ad713x_init_param_1.dclkmode_free_ngated = false;
 	ad713x_init_param_1.dclkio_out_nin = false;
@@ -219,6 +231,7 @@ int main()
 	ad713x_init_param_2.gpio_mode = &ad7134_2_mode;
 	ad713x_init_param_2.gpio_pnd = &ad7134_2_pnd;
 	ad713x_init_param_2.gpio_resetn = &ad7134_2_resetn;
+	ad713x_init_param_2.gpio_cs_sync = &ad7134_cs_sync_1;
 	ad713x_init_param_2.mode_master_nslave = false;
 	ad713x_init_param_2.dclkmode_free_ngated = false;
 	ad713x_init_param_2.dclkio_out_nin = false;
@@ -347,6 +360,10 @@ int main()
 	iio_app_run(app);
 
 #endif /* IIO_SUPPORT */
+
+	ret = ad713x_channel_sync(ad713x_dev_1);
+	if (ret != 0)
+		return ret;
 
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
