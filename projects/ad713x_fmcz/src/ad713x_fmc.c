@@ -181,18 +181,29 @@ int main()
 	};
 
 	struct no_os_pwm_desc *axi_pwm;
-	struct axi_pwm_init_param axi_zed_pwm_init = {
+	struct axi_pwm_init_param axi_zed_pwm_init_trigger = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
 		.ref_clock_Hz = 100000000,
 		.channel = 0
 	};
-
-	struct no_os_pwm_init_param axi_pwm_init = {
-		.period_ns = 3333,
-		.duty_cycle_ns = 600,
+	struct axi_pwm_init_param axi_zed_pwm_init_odr = {
+		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
+		.ref_clock_Hz = 100000000,
+		.channel = 1
+	};
+	struct no_os_pwm_init_param axi_pwm_init_trigger = {
+		.period_ns = 3000,
+		.duty_cycle_ns = 1,
+		.phase_ns = 45,
+		.platform_ops = &axi_pwm_ops,
+		.extra = &axi_zed_pwm_init_trigger
+	};
+	struct no_os_pwm_init_param axi_pwm_init_odr = {
+		.period_ns = 3000,
+		.duty_cycle_ns = 130,
 		.phase_ns = 0,
 		.platform_ops = &axi_pwm_ops,
-		.extra = &axi_zed_pwm_init
+		.extra = &axi_zed_pwm_init_odr
 	};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
@@ -257,7 +268,11 @@ int main()
 	if (ret != 0)
 		return -1;
 
-	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_trigger);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init_odr);
 	if (ret != 0)
 		return ret;
 
