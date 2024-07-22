@@ -303,6 +303,29 @@ int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
 }
 
 /**
+ * @brief Multidevice synchronization between channels on different devices.
+ * @param dev - The device structure.
+ * @return 0 in case of success, -1 otherwise.
+ */
+
+int32_t ad713x_channel_sync(struct ad713x_dev *dev)
+{
+	int ret = 0;
+	ret = no_os_gpio_set_value(dev->gpio_cs_sync, true);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return -1;
+
+	ret = ad713x_spi_write_mask(dev, AD713X_REG_INTERFACE_CONFIG_B,
+				    AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK,
+				    AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK);
+
+	ret = no_os_gpio_set_value(dev->gpio_cs_sync, false);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return -1;
+	return ret;
+}
+
+/**
  * @brief Digital filter type selection for each channel
  * @param dev - The device structure.
  * @param filter - Type of filter: Wideband, Sinc6, Sinc3,
@@ -318,6 +341,7 @@ int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
  * 							 CH3
  * @return 0 in case of success, -1 otherwise.
  */
+
 int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
 				 enum ad713x_dig_filter_sel filter,
 				 enum ad713x_channels ch)
@@ -405,6 +429,14 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 		return -1;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_pnd, init_param->gpio_pnd);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return -1;
+
+	ret = no_os_gpio_get_optional(&dev->gpio_cs_sync, init_param->gpio_cs_sync);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return -1;
+
+	ret = no_os_gpio_direction_output(dev->gpio_cs_sync, false);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
