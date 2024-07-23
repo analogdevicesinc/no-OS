@@ -142,6 +142,9 @@ static int stm32_spi_config(struct no_os_spi_desc *desc)
 	sdesc->hspi.Init.TIMode = SPI_TIMODE_DISABLE;
 	sdesc->hspi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
 	sdesc->hspi.Init.CRCPolynomial = 10;
+#ifdef SPI_MASTER_KEEP_IO_STATE_ENABLE
+	sdesc->hspi.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_ENABLE;
+#endif
 	ret = HAL_SPI_Init(&sdesc->hspi);
 	if (ret != HAL_OK) {
 		ret = -EIO;
@@ -520,14 +523,14 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 		goto abort_transfer;
 
 	if (tx_ch)
-#if defined (STM32H5)
+#if defined (STM32H5) || defined (STM32H7)
 		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
 #else
 		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
 #endif
 
 	if (rx_ch)
-#if defined (STM32H5)
+#if defined (STM32H5) || defined (STM32H7)
 		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
 #else
 		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
