@@ -88,7 +88,7 @@ int adxl38x_read_device_data(struct adxl38x_dev *dev, uint8_t base_address,
 		for (idx = 0; idx < size; idx++)
 			read_data[idx] = buffer[idx + 1];
 	} else {
-		ret = no_os_i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 0);
+		ret = no_os_i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 1);
 		if(ret)
 			return ret;
 		ret = no_os_i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
