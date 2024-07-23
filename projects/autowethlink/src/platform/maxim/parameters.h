@@ -36,31 +36,18 @@
 #define XCVR_SCANOUT_RX_PORT	2
 #define XCVR_SCANOUT_RX_PIN 	5
 
-#define ADIN1300_RESET_PORT	1
-#define ADIN1300_RESET_PIN	23
+#define DP83TG_RESET_PORT	1
+#define DP83TG_RESET_PIN	23
 
-#define MAX24287_RESET_PORT	1
-#define MAX24287_RESET_PIN	24
+#define DP83TG_MDIO_PORT	1
+#define DP83TG_MDIO_PIN	25
 
-#define ADIN1300_MDIO_PORT	1
-#define ADIN1300_MDIO_PIN	4
+#define DP83TG_MDC_PORT	1
+#define DP83TG_MDC_PIN	26
 
-#define ADIN1300_MDC_PORT	1
-#define ADIN1300_MDC_PIN	5
-
-#define ADIN1300_INT_PORT	2
-#define ADIN1300_INT_PIN	16
-#define ADIN1300_INT_IRQn	GPIO2_IRQn
-
-#define MAX24287_MDIO_PORT	1
-#define MAX24287_MDIO_PIN	6
-
-#define MAX24287_MDC_PORT	1
-#define MAX24287_MDC_PIN	7
-
-#define MAX24287_INT_PORT	1
-#define MAX24287_INT_PIN	0
-#define MAX24287_INT_IRQn	GPIO1_IRQn
+#define DP83TG_INT_PORT	2
+#define DP83TG_INT_PIN	16
+#define DP83TG_INT_IRQn	GPIO2_IRQn
 
 #define BRD_SELECT_PORT		0
 #define BRD_SELECT_PIN		20
@@ -75,16 +62,12 @@ extern struct no_os_gpio_init_param xcvr_clk_gpio_ip; // ok
 extern struct no_os_gpio_init_param xcvr_data_gpio_ip; // ok
 extern struct no_os_gpio_init_param xcvr_scanout_tx_gpio_ip; // ok
 extern struct no_os_gpio_init_param xcvr_scanout_rx_gpio_ip; // ok
-extern struct no_os_gpio_init_param adin1300_reset_gpio_ip;
-extern struct no_os_gpio_init_param max24287_reset_gpio_ip;
-extern struct no_os_gpio_init_param adin1300_mdc_gpio_ip;
-extern struct no_os_gpio_init_param adin1300_mdio_gpio_ip;
-extern struct no_os_gpio_init_param adin1300_int_gpio_ip;
-extern struct no_os_gpio_init_param max24287_mdc_gpio_ip;
-extern struct no_os_gpio_init_param max24287_mdio_gpio_ip;
-extern struct no_os_gpio_init_param max24287_int_gpio_ip;
+extern struct no_os_gpio_init_param dp83tg_reset_gpio_ip; // ok
+extern struct no_os_gpio_init_param dp83tg_mdc_gpio_ip; // ok
+extern struct no_os_gpio_init_param dp83tg_mdio_gpio_ip; // ok
+extern struct no_os_gpio_init_param dp83tg_int_gpio_ip; // ok
 extern struct no_os_gpio_init_param brd_select_gpio_ip; // ok
 extern struct no_os_gpio_init_param factory_defaults_gpio_ip;
-extern struct no_os_eeprom_init_param eeprom_ip;
+extern struct no_os_eeprom_init_param eeprom_ip; // ok
 
 #endif /* __PARAMETERS_H__ */

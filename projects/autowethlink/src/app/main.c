@@ -4,6 +4,8 @@
 #include "no_os_util.h"
 #include "no_os_rtc.h"
 #include "no_os_crc8.h"
+#include "no_os_mdio.h"
+#include "mdio_bitbang.h"
 #include "parameters.h"
 #include "adm1177.h"
 #include "iio_adm1177.h"
@@ -105,6 +107,7 @@ int main(void)
 	uint8_t eebuf[nvmpsz + 1];
 	union nvmp255 *nvmp;
 	struct adm1177_iio_dev *iio_adm1177;
+	struct dp83tg_desc *dp83tg;
 
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
 	no_os_crc8_populate_msb(crc8, 0x7);
@@ -189,7 +192,23 @@ apply_factory_defaults: {
 post_eeprom:
 	nvmp = (union nvmp255 *)eebuf;
 
-	// net init
+	
+	struct dp83tg_init_param dp83tg_ip = {
+		.reset = &dp83tg_reset_gpio_ip,
+		.mdio = {
+			.c45 = true,
+			.addr = 0,
+			.ops = &mdio_bitbang_ops,
+			.extra = &(struct mdio_bitbang_init_param)
+			{
+				.mdc = dp83tg_mdc_gpio_ip,
+				.mdio = dp83tg_mdio_gpio_ip,
+			},
+		},
+	};
+	ret = dp83tg_init(&dp83tg, &dp83tg_ip);
+	if (ret)
+		return ret;
 
 	struct adm1177_iio_init_param iio_adm1177_config = {
 		.adm1177_initial = &(struct adm1177_init_param)
