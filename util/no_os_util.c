@@ -68,6 +68,23 @@ uint32_t no_os_find_first_set_bit(uint32_t word)
 }
 
 /**
+ * Find first set bit in word.
+ */
+uint64_t no_os_find_first_set_bit_u64(uint64_t word)
+{
+	uint64_t first_set_bit = 0;
+
+	while (word) {
+		if (word & 0x1)
+			return first_set_bit;
+		word >>= 1;
+		first_set_bit ++;
+	}
+
+	return 64;
+}
+
+/**
  * Find last set bit in word.
  */
 uint32_t no_os_find_last_set_bit(uint32_t word)
@@ -135,6 +152,21 @@ uint32_t no_os_field_max(uint32_t mask)
 
 	return shifted_mask;
 }
+
+/**
+ * Produce the maximum value representable by a field
+ */
+uint64_t no_os_field_max_u64(uint64_t mask)
+{
+	// Find the first set bit to determine the shift position
+	uint64_t first_set_bit = no_os_find_first_set_bit_u64(mask);
+
+	// Shift the mask to the right by the position of the first set bit
+	uint64_t shifted_mask = mask >> first_set_bit;
+
+	return shifted_mask;
+}
+
 
 /**
  * Log base 2 of the given number.
@@ -432,6 +464,36 @@ uint64_t no_os_mul_u64_u32_shr(uint64_t a, uint32_t mul, unsigned int shift)
 		ret += no_os_mul_u32_u32(ah, mul) << (32 - shift);
 
 	return ret;
+}
+
+uint64_t mul_u64_u32_div(uint64_t a, uint32_t mul, uint32_t divisor) {
+    int i;
+    uint64_t low, high, temp, rem;
+    uint32_t a_high = a >> 32;
+    uint32_t a_low = a & 0xFFFFFFFF;
+    uint64_t result = 0;
+    uint64_t low_low = no_os_mul_u32_u32(a_low, mul);
+    uint64_t high_low =  no_os_mul_u32_u32(a_high, mul);
+    
+    // Add the lower 32 bits of high_low to the higher 32 bits of low_low
+    low = low_low + ((high_low & 0xFFFFFFFF) << 32);
+    high = (high_low >> 32) + (low_low >> 32);
+    
+    rem = high;
+    // Process the 64 bits from high and low one by one
+    for (i = 0; i < 64; i++) {
+        // Shift remainder left and add the next bit from low
+        rem = (rem << 1) | (low >> 63);
+        low <<= 1;
+
+        // Compare the remainder with the divisor
+        if (rem >= divisor) {
+            rem -= divisor;
+            temp = (uint64_t)1 << (63 - i);
+            result |= temp;
+        }
+    }
+    return result;
 }
 
 /**

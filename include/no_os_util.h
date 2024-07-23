@@ -156,6 +156,7 @@ uint32_t no_os_field_prep(uint32_t mask, uint32_t val);
 uint32_t no_os_field_get(uint32_t mask, uint32_t word);
 /* Produce the maximum value representable by a field */
 uint32_t no_os_field_max(uint32_t mask);
+uint64_t no_os_field_max_u64(uint64_t mask);
 
 /* Log base 2 of the given number. */
 int32_t no_os_log_base_2(uint32_t x);
@@ -213,6 +214,7 @@ int16_t no_os_sign_extend16(uint16_t value, int index);
 int32_t no_os_sign_extend32(uint32_t value, int index);
 uint64_t no_os_mul_u32_u32(uint32_t a, uint32_t b);
 uint64_t no_os_mul_u64_u32_shr(uint64_t a, uint32_t mul, unsigned int shift);
+uint64_t mul_u64_u32_div(uint64_t a, uint32_t mul, uint32_t divisor);
 
 bool no_os_is_big_endian(void);
 void no_os_memswap64(void *buf, uint32_t bytes, uint32_t step);
