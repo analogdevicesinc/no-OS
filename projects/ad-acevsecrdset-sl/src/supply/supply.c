@@ -359,13 +359,13 @@ int rms_adc_values_read(struct stout *stout, struct rms_adc_values *rms)
 	int32_t i_val, v1_val, v2_val, v1_rms, v2_rms, i_rms;
 	int ret;
 
-	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_I_WAV, &i_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, 0, ADE9113_I_WAV, &i_val);
 	if (ret)
 		return ret;
-	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V1_WAV, &v1_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, 0, ADE9113_V1_WAV, &v1_val);
 	if (ret)
 		return ret;
-	ret = ade9113_convert_to_millivolts(stout->ade9113, ADE9113_V2_WAV, &v2_val);
+	ret = ade9113_convert_to_millivolts(stout->ade9113, 0, ADE9113_V2_WAV, &v2_val);
 	if (ret)
 		return ret;
 	rms->v1_rms_adc = (int32_t)rms_filter_v1((int32_t)v1_val);

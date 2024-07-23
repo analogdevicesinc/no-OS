@@ -411,7 +411,7 @@ int ade9113_hw_reset(struct ade9113_dev *dev);
 
 /* Convert a 24-bit raw sample to millivolts. */
 int ade9113_convert_to_millivolts(struct ade9113_dev *dev,
-				  enum ade9113_wav_e ch, int32_t *mv_val);
+				  uint8_t dev_no, enum ade9113_wav_e ch, int32_t *mv_val);
 
 /* Get STREAM_DBG mode. */
 int ade9113_get_stream_dbg_mode(struct ade9113_dev *dev,

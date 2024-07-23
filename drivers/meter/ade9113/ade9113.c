@@ -717,12 +717,13 @@ int ade9113_hw_reset(struct ade9113_dev *dev)
 /**
  * @brief Convert a 24-bit raw sample to millivolts.
  * @param dev - The device structure.
+ * @param dev_no - Device number (0 if in not in daisy-chain setup).
  * @param ch - Device channel.
  * @param mv_val - Value in millivolts.
  * @return 0 in case of success, negative error code otherwise.
  */
 int ade9113_convert_to_millivolts(struct ade9113_dev *dev,
-				  enum ade9113_wav_e ch, int32_t *mv_val)
+				  uint8_t dev_no, enum ade9113_wav_e ch, int32_t *mv_val)
 {
 	int64_t value = 0;
 
@@ -735,13 +736,13 @@ int ade9113_convert_to_millivolts(struct ade9113_dev *dev,
 	switch (ch) {
 	case ADE9113_I_WAV:
 		/* times 2, two's complement data */
-		value = (int64_t)dev->i_wav;
+		value = (int64_t)dev->i_wav[dev_no];
 		break;
 	case ADE9113_V1_WAV:
-		value = (int64_t)dev->v1_wav;
+		value = (int64_t)dev->v1_wav[dev_no];
 		break;
 	default:
-		value = (int64_t)dev->v2_wav;
+		value = (int64_t)dev->v2_wav[dev_no];
 		break;
 	}
 
