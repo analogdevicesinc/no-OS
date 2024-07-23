@@ -44,7 +44,9 @@
 /* In debug mode the printf function used in displaying the messages is causing
 significant delays */
 //#define DEBUG_LEVEL 2
+#include "spi_engine.h"
 
+#ifndef USE_STANDARD_SPI
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -906,3 +908,59 @@ int32_t spi_engine_remove(struct no_os_spi_desc *desc)
 
 	return 0;
 }
+
+#else
+int32_t spi_engine_write(struct spi_engine_desc *desc,
+			 uint32_t reg_addr,
+			 uint32_t reg_data)
+{
+	return 0;
+}
+
+int32_t spi_engine_read(struct spi_engine_desc *desc,
+			uint32_t reg_addr,
+			uint32_t *reg_data)
+{
+	return 0;
+}
+
+int32_t spi_engine_init(struct no_os_spi_desc **desc,
+			const struct no_os_spi_init_param *param)
+{
+	return 0;
+}
+
+int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
+				  uint8_t *data,
+				  uint16_t bytes_number)
+{
+	return 0;
+}
+
+int32_t spi_engine_remove(struct no_os_spi_desc *desc)
+{
+	return 0;
+}
+
+int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
+				const struct spi_engine_offload_init_param *param)
+{
+	return 0;
+}
+
+int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
+				    struct spi_engine_offload_message msg,
+				    uint32_t no_samples)
+{
+	return 0;
+}
+
+int32_t spi_engine_set_transfer_width(struct no_os_spi_desc *desc,
+				      uint8_t data_wdith)
+{
+	return 0;
+}
+
+void spi_engine_set_speed(struct no_os_spi_desc *desc,
+			  uint32_t speed_hz) { }
+#endif
