@@ -70,6 +70,7 @@
 #define SPI_EXTRA	&ad9545_spi_extra_ip
 
 #define I2C_EXTRA	&ad9545_i2c_extra_ip
+#define I2C_OPS		&max_i2c_ops
 
 #define COMM_TYPE       SPI
 

@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   ad7091r8-sdz/src/common/common_data.h
- *   @brief  Defines common data to be used by ad7091r8-sdz examples.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Maxim platform used by eval-ad9545-sdz
+ *           project.
  *   @author Marcelo Schmitt (marcelo.schmitt@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -36,26 +37,32 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "ad9545.h"
+#include <stdbool.h>
+#include <stdint.h>
+#include "linux_spi.h"
+#include "linux_i2c.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern struct no_os_uart_init_param ad9545_uart_ip;
-extern struct ad9545_init_param ad9545_ip;
-extern const struct no_os_clk_platform_ops refb_clk_ops;
-extern const struct no_os_clk_platform_ops refbb_clk_ops;
-extern const struct no_os_clk_platform_ops refm1_clk_ops;
+#define SPI_DEVICE_ID	0
+#define SPI_CS		0
+#define SPI_BAUDRATE	1000000
+#define SPI_OPS		&linux_spi_ops
+#define SPI_EXTRA	NULL
 
-#define REFB_CLK_FREQUENCY 10000000
-#define REFBB_CLK_FREQUENCY 1
-#define REFM1_CLK_FREQUENCY 50000000
+#define I2C_EXTRA	&ad9545_i2c_extra_ip
+#define I2C_OPS		&linux_i2c_ops
 
-#endif /* __COMMON_DATA_H__ */
+#define COMM_TYPE       SPI
+
+// extern struct linux_uart_init_param ad9545_uart_extra_ip;
+extern struct linux_i2c_init_param ad9545_i2c_extra_ip;
+
+#endif /* __PARAMETERS_H__ */

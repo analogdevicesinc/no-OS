@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   ad7091r8-sdz/src/common/common_data.h
- *   @brief  Defines common data to be used by ad7091r8-sdz examples.
+ *   @file   main.c
+ *   @brief  Main file for Maxim platform of ad9545-sdz project.
  *   @author Marcelo Schmitt (marcelo.schmitt@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -36,26 +36,39 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "no_os_delay.h"
+#include "no_os_uart.h"
+#include "no_os_error.h"
+#include "common_data.h"
 #include "platform_includes.h"
-#include "ad9545.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-extern struct no_os_uart_init_param ad9545_uart_ip;
-extern struct ad9545_init_param ad9545_ip;
-extern const struct no_os_clk_platform_ops refb_clk_ops;
-extern const struct no_os_clk_platform_ops refbb_clk_ops;
-extern const struct no_os_clk_platform_ops refm1_clk_ops;
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
+#endif
 
-#define REFB_CLK_FREQUENCY 10000000
-#define REFBB_CLK_FREQUENCY 1
-#define REFM1_CLK_FREQUENCY 50000000
+/***************************************************************************//**
+ * @brief Main function execution for Maxim platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret;
 
-#endif /* __COMMON_DATA_H__ */
+#ifdef BASIC_EXAMPLE
+	ret = basic_example_main();
+#endif
+
+#if (BASIC_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (BASIC_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}

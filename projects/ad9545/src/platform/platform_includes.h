@@ -46,4 +46,8 @@
 #include "maxim/parameters.h"
 #endif
 
+#ifdef LINUX_PLATFORM
+#include "linux/parameters.h"
+#endif
+
 #endif /* __PLATFORM_INCLUDES_H__ */
