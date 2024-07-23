@@ -40,6 +40,8 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "clk_axi_clkgen.h"
+#ifndef USE_STANDARD_SPI
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +50,6 @@
 #include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "clk_axi_clkgen.h"
 #include "no_os_axi_io.h"
 
 /******************************************************************************/
@@ -549,3 +550,22 @@ int32_t axi_clkgen_remove(struct axi_clkgen *clkgen)
 
 	return 0;
 }
+#else
+int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen, uint32_t rate)
+{
+	return 0;
+}
+int32_t axi_clkgen_get_rate(struct axi_clkgen *clkgen, uint32_t *rate)
+{
+	return 0;
+}
+int32_t axi_clkgen_init(struct axi_clkgen **clk,
+			const struct axi_clkgen_init *init)
+{
+	return 0;
+}
+int32_t axi_clkgen_remove(struct axi_clkgen *clkgen)
+{
+	return 0;
+}
+#endif
