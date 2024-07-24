@@ -111,10 +111,14 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 				TAL_LOOPBACK_RX_RX_QEC_INIT | TAL_RX_QEC_INIT |
 				TAL_ORX_QEC_INIT | TAL_TX_DAC  | TAL_ADC_STITCHING;
 #endif
+#ifndef ADRV9008_1
 	uint32_t trackingCalMask =  TAL_TRACK_RX1_QEC |
 				    TAL_TRACK_RX2_QEC |
 				    TAL_TRACK_TX1_QEC |
 				    TAL_TRACK_TX2_QEC;
+#else
+	uint32_t trackingCalMask =  TAL_TRACK_NONE;
+#endif
 
 	uint32_t api_vers[4];
 	uint8_t rev;
@@ -260,7 +264,11 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	no_os_mdelay(200);
 
 	talAction = TALISE_getPllsLockStatus(pd, &pllLockStatus);
+#ifndef ADRV9008_1
 	if ((pllLockStatus & 0x07) != 0x07) {
+#else
+	if ((pllLockStatus & 0x03) != 0x03) {
+#endif
 		/*< user code - ensure lock of all PLLs before proceeding>*/
 		printf("error: RFPLL not locked\n");
 		goto error_11;
@@ -322,6 +330,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	}
 #endif
 
+#ifndef ADRV9008_1
 	/***************************************************/
 	/**** Enable  Talise JESD204B Framer ***/
 	/***************************************************/
@@ -377,6 +386,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 			goto error_11;
 		}
 	}
+#endif //#ifndef ADRV9008_1
 
 	/*** < User Sends SYSREF Here > ***/
 
@@ -412,6 +422,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	/**************************************/
 	/**** Check Talise Deframer Status ***/
 	/**************************************/
+#ifndef ADRV9008_1
 	if (pi->jesd204Settings.deframerA.M) {
 		talAction = TALISE_readDeframerStatus(pd, TAL_DEFRAMER_A, &deframerStatus);
 		if (talAction != TALACT_NO_ACTION) {
@@ -423,6 +434,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		if ((deframerStatus & 0xF7) != 0x86)
 			printf("warning: TAL_DEFRAMER_A status 0x%X\n", deframerStatus);
 	}
+#endif //#ifndef ADRV9008_1
 
 #ifndef ADRV9008_2
 	/************************************/
@@ -442,6 +454,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	}
 #endif
 
+#ifndef ADRV9008_1
 	/************************************/
 	/**** Check Talise Framer Status ***/
 	/************************************/
@@ -457,6 +470,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 			printf("warning: TAL_FRAMER_B status 0x%X\n", framerStatus);
 		}
 	}
+#endif //#ifndef ADRV9008_1
 
 	/*** < User: When links have been verified, proceed > ***/
 

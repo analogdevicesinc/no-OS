@@ -108,6 +108,7 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		.lane_rate_khz = rx_lane_rate_khz,
 		.ref_rate_khz = device_clock,
 	};
+#ifndef ADRV9008_1
 	struct adxcvr_init tx_adxcvr_init = {
 		.name = "tx_adxcvr",
 		.base = TX_XCVR_BASEADDR,
@@ -126,6 +127,7 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		.lane_rate_khz = rx_os_lane_rate_khz,
 		.ref_rate_khz = device_clock,
 	};
+#endif //#ifndef ADRV9008_1
 #endif
 
 	/* Initialize ADXCR */

@@ -77,6 +77,7 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		rx_div40_rate_hz / 1000,
 		rx_lane_rate_khz
 	};
+#ifndef ADRV9008_1
 	uint32_t tx_lane_rate_khz = tx_div40_rate_hz / 1000 * 40;
 	struct jesd204_tx_init tx_jesd_init = {
 		"tx_jesd",
@@ -102,6 +103,7 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		rx_os_div40_rate_hz / 1000,
 		rx_os_lane_rate_khz,
 	};
+#endif //#ifndef ADRV9008_1
 
 	/* Initialize JESD */
 #ifndef ADRV9008_2
