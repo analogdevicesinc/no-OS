@@ -484,10 +484,11 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	}
 
 #ifndef ADRV9008_2
-	talAction = TALISE_setRxTxEnable(pd, TAL_RX1RX2_EN, TAL_TX1TX2);
+	talAction = TALISE_setRxTxEnable(pd, talInit.rx.rxChannels,
+					 talInit.tx.txChannels);
 #else
 	talAction = TALISE_setRxTxEnable(pd, talInit.obsRx.obsRxChannelsEnable << 2,
-					 TAL_TX1TX2);
+					 talInit.tx.txChannels);
 #endif
 	if (talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
