@@ -155,7 +155,7 @@ uint32_t ltc2672_current_to_code(struct ltc2672_dev *device,
 		current_code = ((dac_current * LTC2672_12BIT_RESO) /
 				device->max_currents[out_ch]);
 	else
-		current_code = ((dac_current * LTC2672_16BIT_RESO) /
+		current_code = (((uint64_t)dac_current * LTC2672_16BIT_RESO) /
 				device->max_currents[out_ch]);
 
 	return current_code;
