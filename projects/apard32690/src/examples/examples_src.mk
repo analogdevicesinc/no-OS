@@ -6,6 +6,11 @@ INCS += $(INCLUDE)/no_os_crc8.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
 
 SRC_DIRS += $(PROJECT)/src/examples/adin1110_standalone_example
+
+SRCS += $(DRIVERS)/net/adin1110/iio_adin1110.c
+INCS += $(DRIVERS)/net/adin1110/iio_adin1110.h
+IIOD=y
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 
 ifeq (y,$(strip $(APARD32690_ECHO_SERVER_EXAMPLE)))

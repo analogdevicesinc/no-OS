@@ -42,6 +42,11 @@
 
 #include "no_os_error.h"
 #include "adin1110.h"
+#include "iio_adin1110.h"
+#include "iio_app.h"
+#include "iio.h"
+
+uint8_t iio_data_buffer[32];
 
 /***************************************************************************//**
  * @brief Configure the ADIN1110 and read the device ID.
@@ -50,10 +55,17 @@
 *******************************************************************************/
 int adin1110_standalone_example_main()
 {
+	struct iio_app_desc *app;
+	struct adin1110_iio_desc *adin1110_iio;
 	struct no_os_uart_desc *uart_desc;
 	struct adin1110_desc *adin1110;
 	uint32_t device_id;
 	int ret;
+
+	struct iio_data_buffer buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = 32
+	};
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
@@ -74,6 +86,34 @@ int adin1110_standalone_example_main()
 	}
 
 	printf("Got device id 0x%X\n", device_id);
+
+	struct adin1110_iio_init_param adin1110_iio_ip = {
+		.dev = adin1110
+	};
+
+	ret = adin1110_iio_init(&adin1110_iio, &adin1110_iio_ip);
+	if (ret)
+		goto out;
+
+	struct iio_app_init_param app_init_param = { 0 };
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adin1110",
+			.dev = adin1110_iio,
+			.dev_descriptor = adin1110_iio->iio_dev,
+			.read_buff = &buff
+		},
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto out;
+
+	return iio_app_run(app);
 
 out:
 	adin1110_remove(adin1110);
