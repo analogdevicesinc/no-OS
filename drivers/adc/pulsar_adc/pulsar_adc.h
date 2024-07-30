@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   ad400x.h
- *   @brief  Header file for ad400x Driver.
+ *   @file   pulsar_adc.h
+ *   @brief  Header file for pulsar_adc Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
  * Copyright 2018(c) Analog Devices, Inc.
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SRC_AD400X_H_
-#define SRC_AD400X_H_
+#ifndef SRC_PULSAR_ADC_H_
+#define SRC_PULSAR_ADC_H_
 
 #include <stdbool.h>
 
@@ -54,16 +54,16 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD400X_READ_COMMAND	0x54
-#define AD400X_WRITE_COMMAND	0x14
-#define AD400X_RESERVED_MSK	0xE0
+#define PULSAR_ADC_READ_COMMAND	0x54
+#define PULSAR_ADC_WRITE_COMMAND	0x14
+#define PULSAR_ADC_RESERVED_MSK	0xE0
 
-#define AD400X_TURBO_MODE(x)		(((x) & 0x1) << 1)
-#define AD400X_HIGH_Z_MODE(x)		(((x) & 0x1) << 2)
-#define AD400X_SPAN_COMPRESSION(x)	(((x) & 0x1) << 3)
-#define AD400X_EN_STATUS_BITS(x)	(((x) & 0x1) << 4)
+#define PULSAR_ADC_TURBO_MODE(x)		(((x) & 0x1) << 1)
+#define PULSAR_ADC_HIGH_Z_MODE(x)		(((x) & 0x1) << 2)
+#define PULSAR_ADC_SPAN_COMPRESSION(x)	(((x) & 0x1) << 3)
+#define PULSAR_ADC_EN_STATUS_BITS(x)	(((x) & 0x1) << 4)
 
-enum ad400x_supported_dev_ids {
+enum pulsar_adc_supported_dev_ids {
 	ID_AD4000,
 	ID_AD4001,
 	ID_AD4002,
@@ -93,13 +93,13 @@ enum ad400x_supported_dev_ids {
 	ID_AD7986,
 };
 
-struct ad400x_dev_info {
+struct pulsar_adc_dev_info {
 	uint16_t resolution;
 	char sign;
 	uint16_t max_rate;
 };
 
-struct ad400x_dev {
+struct pulsar_adc_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
 	/* Clock gen for hdl design structure */
@@ -111,18 +111,18 @@ struct ad400x_dev {
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
-	enum ad400x_supported_dev_ids dev_id;
+	enum pulsar_adc_supported_dev_ids dev_id;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** device info */
-	const struct ad400x_dev_info *dev_info;
+	const struct pulsar_adc_dev_info *dev_info;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/* enable offload */
 	bool offload_enable;
 };
 
-struct ad400x_init_param {
+struct pulsar_adc_init_param {
 	/* SPI */
 	struct no_os_spi_init_param *spi_init;
 	/* PWM generator init structure */
@@ -136,7 +136,7 @@ struct ad400x_init_param {
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
-	enum ad400x_supported_dev_ids dev_id;
+	enum pulsar_adc_supported_dev_ids dev_id;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Invalidate the Data cache for the given address range */
@@ -152,14 +152,14 @@ struct ad400x_init_param {
 	bool en_status_bits;
 };
 
-int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
-			    uint8_t *reg_data);
-int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
-			     uint8_t reg_data);
-int32_t ad400x_init(struct ad400x_dev **device,
-		    struct ad400x_init_param *init_param);
-int32_t ad400x_remove(struct ad400x_dev *dev);
+int32_t pulsar_adc_spi_reg_read(struct pulsar_adc_dev *dev,
+				uint8_t *reg_data);
+int32_t pulsar_adc_spi_reg_write(struct pulsar_adc_dev *dev,
+				 uint8_t reg_data);
+int32_t pulsar_adc_init(struct pulsar_adc_dev **device,
+			struct pulsar_adc_init_param *init_param);
+int32_t pulsar_adc_remove(struct pulsar_adc_dev *dev);
 /* read data samples */
-int32_t ad400x_read_data(struct ad400x_dev *dev, uint32_t *buf,
-			 uint16_t samples);
-#endif /* SRC_AD400X_H_ */
+int32_t pulsar_adc_read_data(struct pulsar_adc_dev *dev, uint32_t *buf,
+			     uint16_t samples);
+#endif /* SRC_PULSAR_ADC_H_ */

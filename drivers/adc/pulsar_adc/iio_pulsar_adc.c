@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_ad400x.c
- *   @brief  Implementation of AD400x IIO Driver.
+ *   @file   iio_pulsar_adc.c
+ *   @brief  Implementation of pulsar_adc IIO Driver.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -40,8 +40,8 @@
 #include <math.h>
 #include <string.h>
 
-#include "ad400x.h"
-#include "iio_ad400x.h"
+#include "pulsar_adc.h"
+#include "iio_pulsar_adc.h"
 #include "iio.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
@@ -54,15 +54,15 @@
  * @param val - Pointer to variable to read data into
  * @return 0 in case of success, negative value otherwise
  */
-static int32_t iio_ad400x_debug_reg_read(void *device, uint32_t reg,
+static int32_t iio_pulsar_adc_debug_reg_read(void *device, uint32_t reg,
 		uint32_t *val)
 {
-	struct ad400x_iio_dev *iio_dev = device;
-	struct ad400x_dev *dev = iio_dev->ad400x_dev;
+	struct pulsar_adc_iio_dev *iio_dev = device;
+	struct pulsar_adc_dev *dev = iio_dev->pulsar_adc_dev;
 	int ret;
 	uint8_t val8;
 
-	ret = ad400x_spi_reg_read(dev, &val8);
+	ret = pulsar_adc_spi_reg_read(dev, &val8);
 	if (ret)
 		return ret;
 
@@ -77,20 +77,20 @@ static int32_t iio_ad400x_debug_reg_read(void *device, uint32_t reg,
  * @param val - Pointer to variable to write data into
  * @return 0 in case of success, negative value otherwise
  */
-static int32_t iio_ad400x_debug_reg_write(void *device, uint32_t reg,
+static int32_t iio_pulsar_adc_debug_reg_write(void *device, uint32_t reg,
 		uint32_t val)
 {
-	struct ad400x_iio_dev *iio_dev = device;
-	struct ad400x_dev *dev = iio_dev->ad400x_dev;
+	struct pulsar_adc_iio_dev *iio_dev = device;
+	struct pulsar_adc_dev *dev = iio_dev->pulsar_adc_dev;
 
-	return ad400x_spi_reg_write(dev, (uint8_t)val);
+	return pulsar_adc_spi_reg_write(dev, (uint8_t)val);
 }
 
 static int get_raw(void *device, char *buf, uint32_t len,
 		   const struct iio_ch_info *channel, intptr_t id)
 {
-	struct ad400x_iio_dev *iio_dev = device;
-	struct ad400x_dev *dev = iio_dev->ad400x_dev;
+	struct pulsar_adc_iio_dev *iio_dev = device;
+	struct pulsar_adc_dev *dev = iio_dev->pulsar_adc_dev;
 	struct scan_type *scan_type;
 	uint32_t results;
 	int32_t results_signed;
@@ -98,7 +98,7 @@ static int get_raw(void *device, char *buf, uint32_t len,
 
 	scan_type = iio_dev->iio_dev->channels[channel->ch_num].scan_type;
 
-	ret = ad400x_read_data(dev, &results, 1);
+	ret = pulsar_adc_read_data(dev, &results, 1);
 	if (ret)
 		return ret;
 
@@ -113,7 +113,7 @@ static int get_raw(void *device, char *buf, uint32_t len,
 static int get_scale(void *device, char *buf, uint32_t len,
 		     const struct iio_ch_info *channel, intptr_t id)
 {
-	struct ad400x_iio_dev *iio_dev = device;
+	struct pulsar_adc_iio_dev *iio_dev = device;
 	struct scan_type *scan_type;
 	int32_t vals[2];
 
@@ -128,14 +128,15 @@ static int get_scale(void *device, char *buf, uint32_t len,
 }
 
 /**
- * @brief Read buffer data corresponding to AD400X IIO device
+ * @brief Read buffer data corresponding to PULSAR_ADC IIO device
  * @param iio_dev_data - Pointer to IIO device data structure
  * @return 0 in case of success, negative error code otherwise
  */
-static int32_t iio_ad400x_submit_buffer(struct iio_device_data *iio_dev_data)
+static int32_t iio_pulsar_adc_submit_buffer(struct iio_device_data
+		*iio_dev_data)
 {
-	struct ad400x_iio_dev *iio_dev = iio_dev_data->dev;
-	struct ad400x_dev *dev = iio_dev->ad400x_dev;
+	struct pulsar_adc_iio_dev *iio_dev = iio_dev_data->dev;
+	struct pulsar_adc_dev *dev = iio_dev->pulsar_adc_dev;
 	struct iio_buffer *buffer = iio_dev_data->buffer;
 	void *buff;
 	int ret;
@@ -144,64 +145,64 @@ static int32_t iio_ad400x_submit_buffer(struct iio_device_data *iio_dev_data)
 	if (ret)
 		return ret;
 
-	ret = ad400x_read_data(dev, buff, buffer->samples);
+	ret = pulsar_adc_read_data(dev, buff, buffer->samples);
 	if (ret)
 		return ret;
 
 	return iio_buffer_block_done(buffer);
 }
 
-static struct iio_attribute ad400x_iio_ch_attributes[] = {
+static struct iio_attribute pulsar_adc_iio_ch_attributes[] = {
 	{ .name = "raw", .show = get_raw },
 	{ .name = "scale", .show = get_scale, },
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_channel ad400x_channel = {
+static struct iio_channel pulsar_adc_channel = {
 	.name = "voltage0",
 	.ch_type = IIO_VOLTAGE,
 	.ch_out = IIO_DIRECTION_INPUT,
 	.indexed = true,
 	.channel = 0,
 	.scan_index = 0,
-	.attributes = ad400x_iio_ch_attributes,
+	.attributes = pulsar_adc_iio_ch_attributes,
 };
 
-static struct iio_device ad400x_iio_device_template = {
+static struct iio_device pulsar_adc_iio_device_template = {
 	.num_ch = 1,
-	.channels = &ad400x_channel,
-	.debug_reg_read = iio_ad400x_debug_reg_read,
-	.debug_reg_write= iio_ad400x_debug_reg_write,
-	.submit = iio_ad400x_submit_buffer,
+	.channels = &pulsar_adc_channel,
+	.debug_reg_read = iio_pulsar_adc_debug_reg_read,
+	.debug_reg_write= iio_pulsar_adc_debug_reg_write,
+	.submit = iio_pulsar_adc_submit_buffer,
 };
 
 /**
- * @brief Initialize AD400X for IIO interfacing
+ * @brief Initialize PULSAR_ADC for IIO interfacing
  * @param dev - The device structure.
  * @param iio_init_param - IIO init parameter structure
  * @return 0 on success, an error code otherwise
  */
-int ad400x_iio_init(struct ad400x_iio_dev **dev,
-		    struct ad400x_iio_init_param *iio_init_param)
+int pulsar_adc_iio_init(struct pulsar_adc_iio_dev **dev,
+			struct pulsar_adc_iio_init_param *iio_init_param)
 {
-	struct ad400x_iio_dev *desc;
+	struct pulsar_adc_iio_dev *desc;
 	int ret;
 
 	desc = no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
-	desc->iio_dev = &ad400x_iio_device_template;
+	desc->iio_dev = &pulsar_adc_iio_device_template;
 	desc->ref_voltage_mv = iio_init_param->ref_voltage_mv;
 	desc->iio_dev->channels[0].scan_type = &desc->scan_type;
 
-	ret = ad400x_init(&desc->ad400x_dev, iio_init_param->init_param);
+	ret = pulsar_adc_init(&desc->pulsar_adc_dev, iio_init_param->init_param);
 	if (ret)
 		goto error_setup;
 
 	/* fill scan_type based on device id */
-	desc->scan_type.sign = desc->ad400x_dev->dev_info->sign;
-	desc->scan_type.realbits = desc->ad400x_dev->dev_info->resolution;
+	desc->scan_type.sign = desc->pulsar_adc_dev->dev_info->sign;
+	desc->scan_type.realbits = desc->pulsar_adc_dev->dev_info->resolution;
 	desc->scan_type.storagebits = 32;
 	desc->scan_type.is_big_endian = false;
 	desc->scan_type.shift = 0;
@@ -220,12 +221,12 @@ error_setup:
  * @param iio_dev - iio device.
  * @return 0 in case of success, error otherwise.
  */
-int ad400x_iio_remove(struct ad400x_iio_dev *iio_dev)
+int pulsar_adc_iio_remove(struct pulsar_adc_iio_dev *iio_dev)
 {
 	if (!iio_dev)
 		return -EINVAL;
 
-	ad400x_remove(iio_dev->ad400x_dev);
+	pulsar_adc_remove(iio_dev->pulsar_adc_dev);
 
 	no_os_free(iio_dev);
 	return 0;

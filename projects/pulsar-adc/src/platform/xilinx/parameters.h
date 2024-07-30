@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_example.c
- *   @brief  IIO example header for eval-ad400x project
+ *   @file   parameters.h
+ *   @brief  Definitions specific to xilinx platform used by pulsar-adc
+ *           project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -36,76 +37,73 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdio.h>
+#include <xparameters.h>
+#include <xil_cache.h>
+#include <xilinx_uart.h>
 
-#include "iio_example.h"
-#include "common_data.h"
-#include "iio.h"
-#include "ad400x.h"
-#include "iio_ad400x.h"
-#include "no_os_util.h"
-#include "no_os_gpio.h"
-#include "no_os_print_log.h"
-#include "iio_app.h"
+#include "axi_pwm_extra.h"
+#include "spi_engine.h"
 
 /******************************************************************************/
-/************************ Functions Declarations ******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
+#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 
-/**
- * @brief IIO example main execution.
- *
- * @return ret - Result of the example execution. If working correctly, will
- *               execute continuously the while(1) loop and will not return.
- */
-int iio_example_main()
-{
-	struct ad400x_iio_dev *dev;
-	struct iio_app_init_param app_init_param = {0};
-	struct iio_app_desc *app;
-	int ret;
+#ifdef XPS_BOARD_ZCU102
+#define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
+#else
+#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
+#endif
 
-	struct iio_data_buffer adc_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR,
-	};
+#else // _XPARAMETERS_PS_H_
+#define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
+#define INTC_DEVICE_ID			XPAR_INTC_SINGLE_DEVICE_ID
+#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#endif // _XPARAMETERS_PS_H_
 
-	struct ad400x_iio_init_param ad400x_iio_ip = {
-		.init_param = &ad400x_init_param,
-		.ref_voltage_mv = AD400X_ADC_REF_VOLTAGE,
-	};
+#define UART_EXTRA			&uart_extra_ip
+#define UART_OPS			&xil_uart_ops
 
-	ret = ad400x_iio_init(&dev, &ad400x_iio_ip);
-	if (ret)
-		return ret;
+#define DCACHE_INVALIDATE		Xil_DCacheInvalidateRange
 
-	struct iio_app_device iio_devices[] = {
-		IIO_APP_DEVICE( "ad400x", dev,
-				dev->iio_dev, &adc_buff, NULL, NULL)
-	};
+#define UART_BAUDRATE			115200
 
-	app_init_param.devices = iio_devices;
-	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
-	app_init_param.uart_init_params = ad400x_uart_ip;
+#define DMA_BASEADDR			XPAR_AXI_PULSAR_ADC_DMA_BASEADDR
+#define SPI_ENGINE_BASEADDR		XPAR_SPI_PULSAR_ADC_SPI_PULSAR_ADC_AXI_REGMAP_BASEADDR
+#define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
+#define AXI_PWMGEN_BASEADDR		XPAR_PULSAR_ADC_TRIGGER_GEN_BASEADDR
+#define ADC_DDR_BASEADDR		(XPAR_DDR_MEM_BASEADDR + 0x800000)
 
-	ret = iio_app_init(&app, app_init_param);
-	if (ret) {
-		pr_info("Error: iio_app_init: %d\n", ret);
-		ad400x_iio_remove(dev);
-		return ret;
-	}
+#define SAMPLES_PER_CHANNEL_PLATFORM	2000
+#define MAX_SIZE_BASE_ADDR		(SAMPLES_PER_CHANNEL_PLATFORM * sizeof(uint32_t))
 
-	ret = iio_app_run(app);
-	if (ret)
-		pr_info("Error: iio_app_run: %d\n", ret);
+#define SPI_ENG_REF_CLK_FREQ_HZ		XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
 
-	iio_app_remove(app);
+#define REFCLK_RATE			160000000
 
-	ad400x_iio_remove(dev);
+#define SPI_DEVICE_ID			0
+#define SPI_OPS				&spi_eng_platform_ops
+#define SPI_EXTRA			&spi_eng_init_param
+#define SPI_CS				0
+#define SPI_BAUDRATE			80000000
 
-	return ret;
-}
+#define PWM_OPS				&axi_pwm_ops
+#define PWM_EXTRA			&pulsar_adc_axi_pwm_init
+#define PWM_PERIOD			555
+#define PWM_DUTY			10
+
+#define PULSAR_ADC_ADC_REF_VOLTAGE		5000
+
+extern struct xil_uart_init_param uart_extra_ip;
+extern struct spi_engine_init_param spi_eng_init_param;
+extern struct axi_pwm_init_param pulsar_adc_axi_pwm_init;
+#endif /* __PARAMETERS_H__ */

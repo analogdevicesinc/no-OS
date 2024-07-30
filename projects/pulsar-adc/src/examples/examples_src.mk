@@ -18,8 +18,8 @@ CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 
-INCS += $(DRIVERS)/adc/ad400x/iio_ad400x.h
-SRCS += $(DRIVERS)/adc/ad400x/iio_ad400x.c
+INCS += $(DRIVERS)/adc/pulsar_adc/iio_pulsar_adc.h
+SRCS += $(DRIVERS)/adc/pulsar_adc/iio_pulsar_adc.c
 
 IIOD=y
 
@@ -27,8 +27,8 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 
 endif
 
-INCS += $(DRIVERS)/adc/ad400x/ad400x.h
-SRCS += $(DRIVERS)/adc/ad400x/ad400x.c
+INCS += $(DRIVERS)/adc/pulsar_adc/pulsar_adc.h
+SRCS += $(DRIVERS)/adc/pulsar_adc/pulsar_adc.c
 
 INCS += $(INCLUDE)/no_os_list.h \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
