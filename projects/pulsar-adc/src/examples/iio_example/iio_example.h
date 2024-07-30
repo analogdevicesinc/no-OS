@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-ad400x project.
+ *   @file   iio_example.h
+ *   @brief  IIO example header for eval-pulsar_adc project
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -36,22 +36,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __IIO_EXAMPLE_H__
+#define __IIO_EXAMPLE_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
-#include "parameters.h"
+int iio_example_main();
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
-
-struct stm32_uart_init_param ad400x_uart_extra_ip = {
-	.huart = &huart5,
-};
-
-struct stm32_spi_init_param ad400x_spi_extra_ip  = {
-	.chip_select_port = SPI_CS_PORT,
-	.get_input_clock = HAL_RCC_GetPCLK2Freq,
-};
+#endif /* __IIO_EXAMPLE_H__ */

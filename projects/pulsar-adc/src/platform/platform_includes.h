@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of xilinx platform data used by ad400x-fmcz project.
+ *   @file   platform_includes.h
+ *   @brief  Includes for used platforms used by pulsar-adc project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -36,30 +36,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PLATFORM_INCLUDES_H__
+#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "parameters.h"
-
-struct xil_uart_init_param uart_extra_ip = {
-#ifdef XPAR_XUARTLITE_NUM_INSTANCES
-	.type = UART_PL,
-#else
-	.type = UART_PS,
-	.irq_id = UART_IRQ_ID
+#ifdef XILINX_PLATFORM
+#include "xilinx/parameters.h"
+#elif defined STM32_PLATFORM
+#include "stm32/parameters.h"
 #endif
-};
 
-struct axi_pwm_init_param ad400x_axi_pwm_init = {
-	.base_addr = AXI_PWMGEN_BASEADDR,
-	.ref_clock_Hz = REFCLK_RATE,
-	.channel = 0,
-};
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#endif
 
-struct spi_engine_init_param spi_eng_init_param  = {
-	.ref_clk_hz = SPI_ENG_REF_CLK_FREQ_HZ,
-	.type = SPI_ENGINE,
-	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
-	.cs_delay = 1,
-};
+#endif /* __PLATFORM_INCLUDES_H__ */

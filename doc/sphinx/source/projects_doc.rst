@@ -12,7 +12,7 @@ ANALOG TO DIGITAL CONVERTERS
    projects/ad7091r8-sdz
    projects/ad7616-st
    projects/ad796x_fmcz
-   projects/ad400x-fmcz
+   projects/pulsar-adc
    projects/ad469x_fmcz
 
 FREQUENCY GENERATORS

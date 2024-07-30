@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   basic_example.c
- *   @brief  Implementation of IIO example for basic_demo project.
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by eval-pulsar_adc project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -40,51 +40,18 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "basic_example.h"
-#include "common_data.h"
-#include "no_os_delay.h"
-#include "no_os_util.h"
-#include "no_os_print_log.h"
-#include "ad400x.h"
+#include "parameters.h"
 
 /******************************************************************************/
-/************************ Functions Definitions *******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
 
-/***************************************************************************//**
- * @brief basic example main execution.
- *
- * @return ret - Result of the example execution. If working correctly, will
- *               execute print the sample data.
-*******************************************************************************/
-int basic_example_main()
-{
-	struct ad400x_dev *dev;
-	uint32_t *data = ADC_DDR_BASEADDR;
-	int32_t ret, i;
-	uint16_t resolution;
-	char sign;
+struct stm32_uart_init_param pulsar_adc_uart_extra_ip = {
+	.huart = &huart5,
+};
 
-	ret = ad400x_init(&dev, &ad400x_init_param);
-	if (ret)
-		return ret;
-
-	sign = dev->dev_info->sign;
-	resolution = dev->dev_info->resolution;
-
-	ret = ad400x_read_data(dev, data, SAMPLES_PER_CHANNEL);
-	if (ret) {
-		pr_info("Error: ad400x_read_data: %ld\n", ret);
-		ad400x_remove(dev);
-		return ret;
-	}
-
-	for(i = 0, data = ADC_DDR_BASEADDR; i < SAMPLES_PER_CHANNEL; i++, data++) {
-		if (sign == 's')
-			printf("ADC: %ld\n\r", no_os_sign_extend32(*data, resolution - 1));
-		else
-			printf("ADC: %ld\n\r", *data);
-	}
-
-	return ad400x_remove(dev);
-}
+struct stm32_spi_init_param pulsar_adc_spi_extra_ip  = {
+	.chip_select_port = SPI_CS_PORT,
+	.get_input_clock = HAL_RCC_GetPCLK2Freq,
+};
