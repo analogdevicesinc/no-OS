@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_ad400x.h
- *   @brief  Header file for AD400X IIO interface
+ *   @file   parameters.c
+ *   @brief  Definition of xilinx platform data used by pulsar-adc project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -37,49 +37,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef _AD400X_IIO_H_
-#define _AD400X_IIO_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
+#include "parameters.h"
 
-#include "iio.h"
-#include "iio_types.h"
-#include "ad400x.h"
-
-/******************************************************************************/
-/********************** Public/Extern Declarations ****************************/
-/******************************************************************************/
-/**
- * @struct ad400x_iio_dev
- * @brief AD400x IIO device structure
- */
-struct ad400x_iio_dev {
-	/** AD400x driver handler */
-	struct ad400x_dev *ad400x_dev;
-	/** Generic IIO device handler */
-	struct iio_device *iio_dev;
-	/* Voltage reference */
-	uint32_t ref_voltage_mv;
-	/* scan type */
-	struct scan_type scan_type;
+struct xil_uart_init_param uart_extra_ip = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+	.type = UART_PL,
+#else
+	.type = UART_PS,
+	.irq_id = UART_IRQ_ID
+#endif
 };
 
-/**
- * @struct ad400x_iio_init_param
- * @brief AD400x IIO initialization structure
- */
-struct ad400x_iio_init_param {
-	struct ad400x_init_param *init_param;
-	/* Voltage reference */
-	uint32_t ref_voltage_mv;
+struct axi_pwm_init_param pulsar_adc_axi_pwm_init = {
+	.base_addr = AXI_PWMGEN_BASEADDR,
+	.ref_clock_Hz = REFCLK_RATE,
+	.channel = 0,
 };
 
-/** Allocate memory for AD400x IIO handler. */
-int ad400x_iio_init(struct ad400x_iio_dev **dev,
-		    struct ad400x_iio_init_param *iio_init_param);
-/** Free memory allocated by iio_ad400x_init(). */
-int ad400x_iio_remove(struct ad400x_iio_dev *dev);
-#endif /* __AD400X_IIO_H__ */
+struct spi_engine_init_param spi_eng_init_param  = {
+	.ref_clk_hz = SPI_ENG_REF_CLK_FREQ_HZ,
+	.type = SPI_ENGINE,
+	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
+	.cs_delay = 1,
+};

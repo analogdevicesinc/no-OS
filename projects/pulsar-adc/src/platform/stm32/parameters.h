@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Definitions specific to xilinx platform used by ad400x-fmcz
+ *   @brief  Definitions specific to STM32 platform used by eval-pulsar_adc
  *           project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
@@ -43,67 +43,55 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdio.h>
-#include <xparameters.h>
-#include <xil_cache.h>
-#include <xilinx_uart.h>
-
-#include "axi_pwm_extra.h"
-#include "spi_engine.h"
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
+#include "stm32_spi.h"
+#include "stm32_gpio.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef _XPARAMETERS_PS_H_
-#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
+extern UART_HandleTypeDef huart5;
+#define SAMPLES_PER_CHANNEL_PLATFORM 2000
+#define MAX_SIZE_BASE_ADDR     (SAMPLES_PER_CHANNEL_PLATFORM * sizeof(uint32_t))
+extern uint8_t in_buff[];
 
-#ifdef XPS_BOARD_ZCU102
-#define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
-#else
-#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
+#define ADC_DDR_BASEADDR	in_buff
+
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID 0
 #endif
 
-#else // _XPARAMETERS_PS_H_
-#define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
-#define INTC_DEVICE_ID			XPAR_INTC_SINGLE_DEVICE_ID
-#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
-#endif // _XPARAMETERS_PS_H_
+#define UART_IRQ_ID		UART5_IRQn
 
-#define UART_EXTRA			&uart_extra_ip
-#define UART_OPS			&xil_uart_ops
+#define UART_DEVICE_ID		5
+#define UART_BAUDRATE		230400
+#define UART_EXTRA		&pulsar_adc_uart_extra_ip
+#define UART_OPS		&stm32_uart_ops
 
-#define DCACHE_INVALIDATE		Xil_DCacheInvalidateRange
+/*
+ * spi cs is not used, but current no-os mandates
+ * a cs to be specifed. So we need to add some
+ * dummy gpio value
+ */
+#define SPI_DEVICE_ID		1
+#define SPI_BAUDRATE		20000000
+#define SPI_CS			14
+#define SPI_CS_PORT		GPIO_PORT_A
+#define SPI_OPS			&stm32_spi_ops
+#define SPI_EXTRA		&pulsar_adc_spi_extra_ip
 
-#define UART_BAUDRATE			115200
+#define GPIO_CNV		15
+#define GPIO_OPS		&stm32_gpio_ops
+#define GPIO_CNV_PORT		GPIO_PORT_A
 
-#define DMA_BASEADDR			XPAR_AXI_PULSAR_ADC_DMA_BASEADDR
-#define SPI_ENGINE_BASEADDR		XPAR_SPI_PULSAR_ADC_SPI_PULSAR_ADC_AXI_REGMAP_BASEADDR
-#define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
-#define AXI_PWMGEN_BASEADDR		XPAR_PULSAR_ADC_TRIGGER_GEN_BASEADDR
-#define ADC_DDR_BASEADDR		(XPAR_DDR_MEM_BASEADDR + 0x800000)
+#define GPIO_PORT_A		0
 
-#define SAMPLES_PER_CHANNEL_PLATFORM	2000
-#define MAX_SIZE_BASE_ADDR		(SAMPLES_PER_CHANNEL_PLATFORM * sizeof(uint32_t))
+#define PULSAR_ADC_ADC_REF_VOLTAGE 5000
+extern struct stm32_uart_init_param pulsar_adc_uart_extra_ip;
+extern struct stm32_spi_init_param pulsar_adc_spi_extra_ip;
 
-#define SPI_ENG_REF_CLK_FREQ_HZ		XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
-
-#define REFCLK_RATE			160000000
-
-#define SPI_DEVICE_ID			0
-#define SPI_OPS				&spi_eng_platform_ops
-#define SPI_EXTRA			&spi_eng_init_param
-#define SPI_CS				0
-#define SPI_BAUDRATE			80000000
-
-#define PWM_OPS				&axi_pwm_ops
-#define PWM_EXTRA			&ad400x_axi_pwm_init
-#define PWM_PERIOD			555
-#define PWM_DUTY			10
-
-#define AD400X_ADC_REF_VOLTAGE		5000
-
-extern struct xil_uart_init_param uart_extra_ip;
-extern struct spi_engine_init_param spi_eng_init_param;
-extern struct axi_pwm_init_param ad400x_axi_pwm_init;
 #endif /* __PARAMETERS_H__ */
