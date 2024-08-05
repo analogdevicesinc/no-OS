@@ -9,7 +9,11 @@ $(error $(ENDL)$(ENDL)STM32CUBEIDE not defined or not found at default path /opt
 		Ex: export STM32CUBEIDE=/opt/stm32cubeide$(ENDL)$(ENDL))
 endif # STM32CUBEIDE check
 
+ifeq ($(OS), Windows_NT)
+MX = STM32CubeMX.exe
+else
 MX = STM32CubeMX
+endif
 STM32CUBEMX ?= $(wildcard /opt/stm32cubemx)
 ifeq ($(STM32CUBEMX),)
 $(error $(ENDL)$(ENDL)STM32CUBEMX not defined or not found at default path /opt/stm32cubemx\
@@ -19,7 +23,7 @@ $(error $(ENDL)$(ENDL)STM32CUBEMX not defined or not found at default path /opt/
 endif # STM32CUBEMX check
 
 # Locate the compiler path under STM32CubeIDE plugins directory
-COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
+COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc *arm-none-eabi-gcc.exe)))
 COMPILER_INTELLISENSE_PATH = $(COMPILER_BIN)/arm-none-eabi-gcc
 
 # Locate openocd location under STM32CubeIDE plugins directory
@@ -82,7 +86,7 @@ $(PLATFORM)_project:
 	@echo config load $(HARDWARE) > $(BINARY).cubemx
 	@echo project name app >> $(BINARY).cubemx
 	@echo project toolchain STM32CubeIDE >> $(BINARY).cubemx
-	@echo project path $(BUILD_DIR) >> $(BINARY).cubemx
+	@echo project path "build" >> $(BINARY).cubemx
 	@echo SetCopyLibrary "copy all" >> $(BINARY).cubemx
 	@echo SetStructure Advanced >> $(BINARY).cubemx
 	@echo project generate >> $(BINARY).cubemx
@@ -109,7 +113,7 @@ endif
 	$(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
 	$(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
 	$(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
-		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
+		-import "build/app" -data "build" \
 		$(HIDE)
 	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
@@ -131,7 +135,7 @@ endif
 	$(MAKE) $(BINARY).openocd
 
 $(PLATFORM)_sdkopen:
-	$(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) &
+	$(STM32CUBEIDE)/$(IDE) -nosplash -import "build/app" -data "build" &
 
 CFLAGS += -std=gnu11 \
 	-g3 \
@@ -217,7 +221,7 @@ $(PLATFORM)_post_build: $(HEX)
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
-		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) -build app $(HIDE)
+		-import "build/app" -data "build" -build app $(HIDE)
 
 PHONY += $(PLATFORM)_sdkclean
 $(PLATFORM)_sdkclean:
