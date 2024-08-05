@@ -50,7 +50,7 @@ EXTRA_INCS += $(call rwildcard, $(PROJECT_BUILD)/Inc, *.h)
 PLATFORM_INCS += $(sort $(foreach h,$(EXTRA_INCS), -I$(dir $h)))
 
 # Get the path of the .s script
-ASM_SRCS += $(call rwildcard, $(PROJECT_BUILD)/Startup,*.s)
+STARTUP_FILE += $(call rwildcard, $(PROJECT_BUILD)/Startup,*.s)
 
 # Get the path of the interrupts file
 ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
@@ -116,7 +116,7 @@ endif
 		-import "build/app" -data "build" \
 		$(HIDE)
 	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
-	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
+	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(STARTUP_FILE) $(EXTI_GEN_FILE))
 	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
 
 	$(file > $(CPP_PROP_JSON).default,$(CPP_FINAL_CONTENT))
