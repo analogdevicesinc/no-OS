@@ -77,3 +77,4 @@ POWER MANAGEMENT
    drivers/ltc2992
    drivers/ltc4296
    drivers/lt7182s
+   drivers/lt8722
