@@ -572,7 +572,7 @@ static int32_t debug_reg_write(struct iio_dev_priv *dev, const char *buf,
 }
 
 static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *_fract,
-			       bool scale_db)
+			       int32_t *_fract_scale, bool scale_db)
 {
 	char *p;
 
@@ -594,12 +594,32 @@ static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *_fract,
 
 	*_fract = strtol(p, NULL, 10);
 
+	/* Handle leading zeroes */
+	while (*p++ == '0' && *_fract > 0)
+		*_fract_scale *= 10;
+
+	/* Handle values between -1 and 0 */
+	if (*integer == 0 && buf[0] == '-')
+		*_fract *= -1;
+
 	return 0;
 }
 
 static int32_t _iio_fract_interpret(int32_t fract, int32_t subunits)
 {
-	int32_t temp = fract;
+	int32_t temp;
+	int32_t mult = 1;
+
+	if (fract < 0) {
+		mult = -1;
+		fract = -fract;
+	}
+
+	/* Divide to nearest subunit-scale if fract part is more than subunit */
+	while (fract >= subunits)
+		fract = NO_OS_DIV_ROUND_CLOSEST(fract, 10);
+
+	temp = fract;
 
 	while ((subunits != 0) || (temp != 0)) {
 		temp /= 10;
@@ -610,14 +630,14 @@ static int32_t _iio_fract_interpret(int32_t fract, int32_t subunits)
 			fract /= 10;
 	}
 
-	return fract * subunits;
+	return fract * subunits * mult;
 }
 
 int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 			int32_t *val2)
 {
 	int32_t ret = 0;
-	int32_t integer, _fract = 0;
+	int32_t integer, _fract = 0, _fract_scale = 1;
 	char ch;
 
 	switch (fmt) {
@@ -625,25 +645,30 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 		integer = strtol(buf, NULL, 0);
 		break;
 	case IIO_VAL_INT_PLUS_MICRO_DB:
-		ret = __iio_str_parse(buf, &integer, &_fract, true);
+		ret = __iio_str_parse(buf, &integer, &_fract,
+				      &_fract_scale, true);
 		if (ret < 0)
 			return ret;
-		_fract = _iio_fract_interpret(_fract, 1000000);
+		_fract = _iio_fract_interpret(_fract, 1000000 / _fract_scale);
 		break;
 	case IIO_VAL_INT_PLUS_MICRO:
-		ret = __iio_str_parse(buf, &integer, &_fract, false);
+		ret = __iio_str_parse(buf, &integer, &_fract,
+				      &_fract_scale, false);
 		if (ret < 0)
 			return ret;
-		_fract = _iio_fract_interpret(_fract, 1000000);
+		_fract = _iio_fract_interpret(_fract, 1000000 / _fract_scale);
 		break;
 	case IIO_VAL_INT_PLUS_NANO:
-		ret = __iio_str_parse(buf, &integer, &_fract, false);
+		ret = __iio_str_parse(buf, &integer, &_fract,
+				      &_fract_scale, false);
 		if (ret < 0)
 			return ret;
-		_fract = _iio_fract_interpret(_fract, 1000000000);
+		_fract = _iio_fract_interpret(_fract,
+					      1000000000 / _fract_scale);
 		break;
 	case IIO_VAL_FRACTIONAL:
-		ret = __iio_str_parse(buf, &integer, &_fract, false);
+		ret = __iio_str_parse(buf, &integer, &_fract,
+				      &_fract_scale, false);
 		if (ret < 0)
 			return ret;
 		break;
