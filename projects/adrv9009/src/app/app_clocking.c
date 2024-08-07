@@ -392,6 +392,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		RX_CLKGEN_BASEADDR,
 		device_clock_khz * 1000
 	};
+#ifndef ADRV9008_1
 	struct axi_clkgen_init tx_clkgen_init = {
 		"tx_clkgen",
 		TX_CLKGEN_BASEADDR,
@@ -402,6 +403,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		RX_OS_CLKGEN_BASEADDR,
 		device_clock_khz * 1000
 	};
+#endif //#ifndef ADRV9008_1
 #endif
 #endif
 
