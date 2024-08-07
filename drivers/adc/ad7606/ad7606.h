@@ -284,6 +284,12 @@ struct ad7606_axi_init_param {
 	uint32_t axi_clkgen_rate;
 	/* PWM generator init structure */
 	struct no_os_pwm_init_param *trigger_pwm_init;
+	/* SPI Engine offload parameters */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/* AXI Core */
+	uint32_t core_baseaddr;
+	uint32_t reg_access_speed;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /**
@@ -291,6 +297,8 @@ struct ad7606_axi_init_param {
  * @brief Device driver initialization parameters
  */
 struct ad7606_init_param {
+	/* REFINOUT voltage for computing the voltages scaled from samples */
+	int32_t refinout;
 	/** SPI initialization parameters */
 	struct no_os_spi_init_param spi_init;
 	/* AXI initialization parameters */
@@ -348,6 +356,9 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev,
 int32_t ad7606_read_samples(struct ad7606_dev *dev,
 			    uint32_t *data,
 			    uint32_t samples);
+int32_t ad7606_scale_sample(struct ad7606_dev *dev,
+			    uint32_t sample,
+			    uint32_t ch);
 int32_t ad7606_convst(struct ad7606_dev *dev);
 int32_t ad7606_reset(struct ad7606_dev *dev);
 int32_t ad7606_set_oversampling(struct ad7606_dev *dev,

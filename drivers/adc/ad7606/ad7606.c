@@ -52,6 +52,15 @@
 #include "no_os_crc.h"
 #include "no_os_alloc.h"
 
+#include "spi_engine.h"
+#include "no_os_axi_io.h"
+
+#define AD7606_SPI_ENG_DATA_WIDTH			0x0C
+#define AD7606_SPI_ENG_OFFLOAD_ADDR_WIDTH		0x10
+#define AD7606_SPI_ENG_OFFLOAD_FIFO_WIDTH		0x14
+
+#define AD7606_CORE_RESET				0x40
+
 struct ad7606_chip_info {
 	const char *name;
 	uint8_t num_channels;
@@ -226,10 +235,18 @@ static const uint16_t tconv_max[] = {
  * @brief Structure for AXI FPGA cores
  */
 struct ad7606_axi_dev {
+	/* Set to 'true' if the AXI modules have been initialized */
+	bool initialized;
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen *clkgen;
 	/* Trigger conversion PWM generator descriptor */
 	struct no_os_pwm_desc *trigger_pwm_desc;
+	/* SPI Engine offload parameters */
+	struct spi_engine_offload_init_param offload_init_param;
+	/* AXI Core */
+	uint32_t core_baseaddr;
+	uint32_t reg_access_speed;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /**
@@ -239,6 +256,8 @@ struct ad7606_axi_dev {
 struct ad7606_dev {
 	/** AXI core device data */
 	struct ad7606_axi_dev axi_dev;
+	/* REFINOUT voltage for computing the voltages scaled from samples */
+	int32_t refinout;
 	/** SPI descriptor*/
 	struct no_os_spi_desc *spi_desc;
 	/** RESET GPIO descriptor */
@@ -493,15 +512,6 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
 {
 	int32_t ret;
 
-	if (dev->reg_mode) {
-		/* Enter ADC reading mode by writing at address zero. */
-		ret = ad7606_spi_reg_write(dev, 0, 0);
-		if (ret < 0)
-			return ret;
-
-		dev->reg_mode = false;
-	}
-
 	ret = no_os_gpio_set_value(dev->gpio_convst, 0);
 	if (ret < 0)
 		return ret;
@@ -601,6 +611,65 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 }
 
 /***************************************************************************//**
+ * @brief Read multiple samples using the AXI SPI engin code
+ *
+ * @param dev        - The device structure.
+ * @param data       - Pointer to location of buffer where to store the data.
+ * @param samples    - Number of samples to read
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  -ETIME - Timeout while waiting for the BUSY signal.
+ *                  -EBADMSG - CRC computation mismatch.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
+		uint32_t *buf, uint32_t samples)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	int32_t ret;
+	uint32_t commands_data[2] = {0x00, 0x00};
+	struct spi_engine_offload_message msg = {};
+	const uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+	uint32_t spi_eng_msg_cmds[3] = {
+		CS_LOW,
+		READ(2),
+		CS_HIGH,
+	};
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
+
+	dev->spi_desc->mode = NO_OS_SPI_MODE_2;
+	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+	spi_engine_set_transfer_width(dev->spi_desc, bits);
+
+	ret = spi_engine_offload_init(dev->spi_desc, &axi->offload_init_param);
+	if (ret != 0)
+		return ret;
+
+	msg.commands_data = commands_data;
+	msg.commands = spi_eng_msg_cmds;
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.rx_addr = (uint32_t)buf;
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x00);
+
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
+	if (ret != 0)
+		return ret;
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+
+	if (axi->dcache_invalidate_range)
+		axi->dcache_invalidate_range(msg.rx_addr, samples * sizeof(uint32_t));
+
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Blocking conversion start and read data (for a single sample from all
  *        channels).
  *
@@ -658,7 +727,7 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
  *
  * @param dev        - The device structure.
  * @param data       - Pointer to location of buffer where to store the data.
- * @param samples    - Number of samples to pull from the ADC.
+ * @param samples    - Number of samples to read
  *
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
@@ -669,10 +738,23 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 			    uint32_t samples)
 {
-	uint32_t nchannels = ad7606_chip_info_tbl[dev->device_id].num_channels;
-	uint32_t i, sample_size;
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	uint32_t nchannels, i, sample_size;
 	int32_t ret;
 
+	if (dev->reg_mode) {
+		/* Enter ADC reading mode by writing at address zero. */
+		ret = ad7606_spi_reg_write(dev, 0, 0);
+		if (ret < 0)
+			return ret;
+
+		dev->reg_mode = false;
+	}
+
+	if (axi->initialized)
+		return ad7606_read_raw_data_spi_engine(dev, data, samples);
+
+	nchannels = ad7606_chip_info_tbl[dev->device_id].num_channels;
 	sample_size = nchannels * sizeof(uint32_t);
 
 	for (i = 0; i < samples; i++) {
@@ -683,6 +765,55 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 	}
 
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Convert the samples into human readable values using the ADC transfer
+ * function defined in the datasheet of the AD7606.
+ *
+ * @param dev        - The device structure.
+ * @param sample     - Raw sample to convert
+ * @param ch         - Pointer to location of buffer where to store the data.
+ *
+ * @return ret - voltage sample scaled in millivolts according to channel config
+*******************************************************************************/
+int32_t ad7606_scale_sample(struct ad7606_dev *dev, uint32_t sample,
+			    uint32_t ch)
+{
+	/* FIXME: this transfer function works fine for most AD7606 chips;
+	 *        some quirks may need fixing
+	*/
+	struct ad7606_range *range = &dev->range_ch[ch];
+	int64_t volt_range;
+	int64_t refinout = dev->refinout;
+	const int64_t voltage_div = 1000;
+	const uint32_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+	int64_t voltage = no_os_sign_extend32(sample, (bits - 1));
+
+	switch (dev->device_id) {
+	case ID_AD7606C_18:
+		volt_range = range->max;
+		voltage = (volt_range *
+			   voltage)
+			  /
+			  (262144 >> 1);
+		break;
+	default:
+		volt_range = range->max;
+		voltage = (voltage *
+			   volt_range * /* volt range value is either 2.5, 5 or 10V */
+			   refinout *   /* REFINOUT is in mV */
+			   10 *         /* 10 is part of 2.5V ==> 25/10 */
+			   1000)        /* return millivolts */
+			  /
+			  (32768 *        /* same as in the docs */
+			   voltage_div *  /* divide 'volt_range' which in in mV */
+			   voltage_div *  /* divide 'refinout' which is in mV */
+			   25); /* 10 is part of 2.5V ==> 25/10 ; we need to divide with 2.5V */
+		break;
+	}
+
+	return voltage;
 }
 
 /* Internal function to reset device settings to default state after chip reset. */
@@ -1220,6 +1351,8 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	struct ad7606_axi_dev *axi = &device->axi_dev;
 	int32_t ret;
 
+	axi->initialized = false;
+
 	if (!axi_init)
 		return 0;
 
@@ -1234,6 +1367,20 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	ret = no_os_pwm_init(&axi->trigger_pwm_desc, axi_init->trigger_pwm_init);
 	if (ret != 0)
 		goto error;
+
+	memcpy(&axi->offload_init_param, axi_init->offload_init_param,
+	       sizeof(axi->offload_init_param));
+
+	axi->core_baseaddr = axi_init->core_baseaddr;
+	axi->reg_access_speed = axi_init->reg_access_speed;
+	axi->dcache_invalidate_range = axi_init->dcache_invalidate_range;
+
+	/* Write 1 to reset the core, 0 to bring it out of reset */
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x00);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET, 0x01);
+
+	axi->initialized = true;
 
 	/* Note: more validation will be added later */
 error:
@@ -1280,6 +1427,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	if (ret != 0)
 		goto error;
 
+	dev->refinout = init_param->refinout;
 	dev->num_channels = info->num_channels;
 	dev->max_dout_lines = info->max_dout_lines;
 	if (info->has_registers)
