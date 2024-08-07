@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   ad400x.c
- *   @brief  Implementation of ad400x Driver.
+ *   @file   pulsar_adc.c
+ *   @brief  Implementation of pulsar_adc Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
  * Copyright 2018(c) Analog Devices, Inc.
@@ -44,7 +44,7 @@
 #include "stdlib.h"
 #include "stdbool.h"
 #include "string.h"
-#include "ad400x.h"
+#include "pulsar_adc.h"
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
@@ -52,7 +52,7 @@
 #include "no_os_alloc.h"
 #include "no_os_util.h"
 
-const struct ad400x_dev_info ad400x_devices[] = {
+const struct pulsar_adc_dev_info pulsar_adc_devices[] = {
 	[ID_AD4000] = {.resolution = 16, .sign = 'u', .max_rate = 2000},
 	[ID_AD4001] = {.resolution = 16, .sign = 's', .max_rate = 2000},
 	[ID_AD4002] = {.resolution = 18, .sign = 'u', .max_rate = 2000},
@@ -92,8 +92,8 @@ const struct ad400x_dev_info ad400x_devices[] = {
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
-			    uint8_t *reg_data)
+int32_t pulsar_adc_spi_reg_read(struct pulsar_adc_dev *dev,
+				uint8_t *reg_data)
 {
 	int32_t ret;
 	uint8_t buf[2];
@@ -101,7 +101,7 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	buf[0] = AD400X_READ_COMMAND;
+	buf[0] = PULSAR_ADC_READ_COMMAND;
 	buf[1] = 0xFF;
 
 #if !defined(USE_STANDARD_SPI)
@@ -137,8 +137,8 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
-			     uint8_t reg_data)
+int32_t pulsar_adc_spi_reg_write(struct pulsar_adc_dev *dev,
+				 uint8_t reg_data)
 {
 	int32_t ret;
 	uint8_t buf[2];
@@ -163,8 +163,8 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 		return ret;
 #endif
 
-	buf[0] = AD400X_WRITE_COMMAND;
-	buf[1] = reg_data | AD400X_RESERVED_MSK;
+	buf[0] = PULSAR_ADC_WRITE_COMMAND;
+	buf[1] = reg_data | PULSAR_ADC_RESERVED_MSK;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
@@ -183,9 +183,9 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
  * @param samples - number of samples to read
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad400x_read_data_offload(struct ad400x_dev *dev,
-					uint32_t *buf,
-					uint16_t samples)
+static int32_t pulsar_adc_read_data_offload(struct pulsar_adc_dev *dev,
+		uint32_t *buf,
+		uint16_t samples)
 {
 	struct spi_engine_offload_message msg;
 	uint32_t commands_data[2] = {0xFF, 0xFF};
@@ -225,7 +225,7 @@ static int32_t ad400x_read_data_offload(struct ad400x_dev *dev,
  * @param adc_data - The conversion result data
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
+static int32_t pulsar_adc_spi_single_conversion(struct pulsar_adc_dev *dev,
 		uint32_t *data)
 {
 	int32_t ret;
@@ -270,9 +270,9 @@ static int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
  * @param samples - number of samples to read
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad400x_read_data(struct ad400x_dev *dev,
-			 uint32_t *buf,
-			 uint16_t samples)
+int32_t pulsar_adc_read_data(struct pulsar_adc_dev *dev,
+			     uint32_t *buf,
+			     uint16_t samples)
 {
 	int i, ret;
 	uint32_t *p;
@@ -282,10 +282,10 @@ int32_t ad400x_read_data(struct ad400x_dev *dev,
 
 #if !defined(USE_STANDARD_SPI)
 	if (dev->offload_enable)
-		return ad400x_read_data_offload(dev, buf, samples);
+		return pulsar_adc_read_data_offload(dev, buf, samples);
 #endif
 	for (i = 0, p = buf; i < samples; i++, p++) {
-		ret = ad400x_spi_single_conversion(dev, p);
+		ret = pulsar_adc_spi_single_conversion(dev, p);
 		if (ret)
 			return ret;
 	}
@@ -299,10 +299,10 @@ int32_t ad400x_read_data(struct ad400x_dev *dev,
  *                     parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad400x_init(struct ad400x_dev **device,
-		    struct ad400x_init_param *init_param)
+int32_t pulsar_adc_init(struct pulsar_adc_dev **device,
+			struct pulsar_adc_init_param *init_param)
 {
-	struct ad400x_dev *dev;
+	struct pulsar_adc_dev *dev;
 	int32_t ret;
 	uint8_t data = 0;
 	uint16_t transfer_width;
@@ -310,7 +310,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!init_param)
 		return -1;
 
-	dev = (struct ad400x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct pulsar_adc_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -319,7 +319,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 		goto error;
 
 	dev->dev_id = init_param->dev_id;
-	dev->dev_info = &ad400x_devices[init_param->dev_id];
+	dev->dev_info = &pulsar_adc_devices[init_param->dev_id];
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
@@ -356,7 +356,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	/* Calculate pwm rate given the part sample rate */
 	if (init_param->trigger_pwm_init->period_ns == 0) {
 		init_param->trigger_pwm_init->period_ns =
-			NO_OS_DIV_ROUND_UP(1000000, ad400x_devices[dev->dev_id].max_rate);
+			NO_OS_DIV_ROUND_UP(1000000, pulsar_adc_devices[dev->dev_id].max_rate);
 		init_param->trigger_pwm_init->duty_cycle_ns = 10;
 	}
 
@@ -365,13 +365,13 @@ int32_t ad400x_init(struct ad400x_dev **device,
 		goto error;
 #endif
 
-	ad400x_spi_reg_read(dev, &data);
+	pulsar_adc_spi_reg_read(dev, &data);
 
-	data |= AD400X_TURBO_MODE(init_param->turbo_mode) |
-		AD400X_HIGH_Z_MODE(init_param->high_z_mode) |
-		AD400X_SPAN_COMPRESSION(init_param->span_compression) |
-		AD400X_EN_STATUS_BITS(init_param->en_status_bits);
-	ret = ad400x_spi_reg_write(dev, data);
+	data |= PULSAR_ADC_TURBO_MODE(init_param->turbo_mode) |
+		PULSAR_ADC_HIGH_Z_MODE(init_param->high_z_mode) |
+		PULSAR_ADC_SPAN_COMPRESSION(init_param->span_compression) |
+		PULSAR_ADC_EN_STATUS_BITS(init_param->en_status_bits);
+	ret = pulsar_adc_spi_reg_write(dev, data);
 	if (ret < 0)
 		goto error;
 
@@ -380,16 +380,16 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	return ret;
 
 error:
-	ad400x_remove(dev);
+	pulsar_adc_remove(dev);
 	return ret;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by ad400x_init().
+ * @brief Free the resources allocated by pulsar_adc_init().
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ad400x_remove(struct ad400x_dev *dev)
+int32_t pulsar_adc_remove(struct pulsar_adc_dev *dev)
 {
 	int32_t ret;
 
