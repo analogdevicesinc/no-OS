@@ -70,6 +70,7 @@ POWER MANAGEMENT
 
    projects/adp1050
    projects/ltc4296
+   projects/lt7182s
 
 DAC
 ===
