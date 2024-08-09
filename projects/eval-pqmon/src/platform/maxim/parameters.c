@@ -32,9 +32,10 @@
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ *OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ *DAMAGE.
  *******************************************************************************/
 
 /******************************************************************************/
@@ -51,26 +52,25 @@ struct max_gpio_init_param vddioh_gpio_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-struct max_i2c_init_param vddioh_i2c_extra = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
 struct max_spi_init_param spi_extra_ip = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-struct max_uart_init_param uart_stdio_extra_ip = {.flow = UART_FLOW_DIS};
+struct max_uart_init_param uart_stdio_extra_ip = { .flow = UART_FLOW_DIS };
 
-struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip = {.vid = 0x0B6B,
-	       .pid = 0x003C
-};
+struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip
+		= { .vid = 0x0B6B, .pid = 0x003C };
 
-struct max_gpio_init_param max_reset_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH
-};
+struct max_gpio_init_param max_reset_gpio_extra_ip
+		= { .vssel = MXC_GPIO_VSSEL_VDDIOH };
 
-struct max_gpio_init_param max_intr_gpio_extra_ip = {.vssel =
-		MXC_GPIO_VSSEL_VDDIOH
+struct max_gpio_init_param max_intr_gpio_extra_ip
+		= { .vssel = MXC_GPIO_VSSEL_VDDIOH };
+
+struct max_i2c_init_param i2c_extra = { .vssel = MXC_GPIO_VSSEL_VDDIOH };
+
+struct max_i2c_init_param max_rtc_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };

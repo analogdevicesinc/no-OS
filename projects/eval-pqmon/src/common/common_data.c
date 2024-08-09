@@ -57,12 +57,12 @@ struct no_os_uart_init_param iio_demo_uart_ip = {
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = UART_EXTRA,
-	.platform_ops = &max_usb_uart_ops,
-}; // UART initialization parameter for iio connection
+	.platform_ops = UART_USB_OPS,
+}; /* UART initialization parameter for iio connection */
 
 IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR] = {0};
 
-struct pqm_init_para pqm_ip = {
+struct pqm_init_param pqm_ip = {
 	.ext_buff_len = SAMPLES_PER_CHANNEL_PLATFORM * TOTAL_PQM_CHANNELS,
 	.ext_buff = iio_data_buffer_loc,
 	.dev_global_attr = {
@@ -104,17 +104,7 @@ struct pqm_init_para pqm_ip = {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	}
-}; // pqm init param
-
-struct max_i2c_init_param i2c_extra = {.vssel = MXC_GPIO_VSSEL_VDDIOH}; // I2C
-
-struct no_os_i2c_init_param i2c_ip = {
-	.device_id = 1,
-	.max_speed_hz = 400000,
-	.slave_address = 0x51,
-	.platform_ops = &max_i2c_ops,
-	.extra = &i2c_extra
-}; // I2C Initialization Parameters
+}; /* Pqm init param */
 
 struct no_os_uart_init_param uart_ip_stdio = {
 	.device_id = 0,
@@ -124,8 +114,8 @@ struct no_os_uart_init_param uart_ip_stdio = {
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = UART_STDIO_EXT,
-	.platform_ops = &max_uart_ops
-}; // UART init param
+	.platform_ops = UART_OPS
+}; /* UART init param */
 
 struct no_os_spi_init_param spi_egy_ip = {
 	.device_id = SPI_PQM_DEVICE_ID,
@@ -135,7 +125,7 @@ struct no_os_spi_init_param spi_egy_ip = {
 	.platform_ops = SPI_OPS,
 	.chip_select = 0,
 	.extra = SPI_PQM_EXTRA,
-}; // SPI init param for ade9430
+}; /* SPI init param for ade9430 */
 
 struct no_os_gpio_init_param reset_gpio_ip = {
 	.port = RESET_GPIO_PORT_NUM,
@@ -143,7 +133,7 @@ struct no_os_gpio_init_param reset_gpio_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = RESET_GPIO_EXTRA,
 	.pull = NO_OS_PULL_UP
-}; // Software reset gpio pin
+}; /* Software reset gpio pin */
 
 struct no_os_gpio_init_param intr_gpio_ip = {
 	.port = INTR_GPIO_PORT_NUM,
@@ -151,19 +141,30 @@ struct no_os_gpio_init_param intr_gpio_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = INTR_GPIO_EXTRA,
 	.pull = NO_OS_PULL_NONE,
-}; // ADE9430 interrupt gpio pin
+}; /* ADE9430 interrupt gpio pin */
 
-// Configure IRQ controller
 struct no_os_irq_init_param afe_callback_ctrl_ip = {
 	.platform_ops = INTR_OPS,
 	.irq_ctrl_id = INTR_GPIO_PORT_NUM,
 	.extra = NULL,
-};
+}; /* Configure IRQ controller */
 
-// Configure callback function
 struct no_os_callback_desc afe0_callback_desc = {
 	.event = NO_OS_EVT_GPIO,
 	.peripheral = NO_OS_GPIO_IRQ,
 	.ctx = NULL,
 	.handle = NULL,
-};
+}; /* Configure callback function */
+
+struct no_os_i2c_init_param rtc_i2c_ip = {
+	.device_id = 1,
+	.max_speed_hz = 400000,
+	.slave_address = MAX31343_I2C_ADDRESS,
+	.extra = RTC_I2C_EXTRA_OPS,
+	.platform_ops = I2C_OPS,
+}; /* I2C parameters for RTC */
+
+struct max31343_init_param max31343_rtc_ini_param = {
+	.i2c_init = &rtc_i2c_ip,
+	.battery_en = 0,
+}; /* Max31343 ini parameters */

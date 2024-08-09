@@ -1,6 +1,6 @@
 /*******************************************************************************
- *   @file   basic_example.h
- *   @brief  PQM firmware header file, called by main
+ *   @file   rtc_config.h
+ *   @brief  Header file for pqlib rtc interfacing
  *   @author Robert Budai (robert.budai@analog.com)
  ********************************************************************************
  * Copyright (c) 2024 Analog Devices, Inc.
@@ -37,58 +37,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#ifndef __PQM_FW_H__
-#define __PQM_FW_H__
+#ifndef __RTC_CONFIG__
+#define __RTC_CONFIG__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
+#include <time.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 #include "common_data.h"
-#include "no_os_error.h"
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
+#define SECONDS_TO_MILLISECONDS         1000
 
-/**
- * @brief Initialize pqm descriptor
- *
- * @param desc Object descriptor
- * @param param Initializing paramters
- * @return Return 0 on success, different from 0 otherwise
- */
-int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_param *param);
+struct max31343_dev *rtcDevice;
 
-/**
- * @brief Remove pqm descriptor
- *
- * @param desc Frees up memory space allocated for descriptor
- * @return Return 0 on success, different from 0 otherwise
- */
-int32_t pqm_remove(struct pqm_desc *desc);
+int rtc_init (void);
+int set_rtc_time ();
+int rtc_set_time_in_ms (uint64_t milliSeconds);
+uint64_t read_time_in_ms (void);
+uint64_t convert_time_stamp_to_ms (struct max31343_time_stamp date);
+uint64_t convert_string_to_ms (char timeStamp[]);
+uint64_t RtcGetTimeInMilliSeconds (void);
 
-/**
- * @brief active pqm channels
- * @param dev - descriptor for the pqm
- * @param mask - active channels mask
- * @return 0 in case of success, -1 otherwise.
- */
-int32_t update_pqm_channels(void *dev, uint32_t mask);
-
-/**
- * @brief close all channels
- * @param dev - physical instance of an pqm device
- * @return 0 in case of success.
- */
-int32_t close_pqm_channels(void *dev);
-
-/**
- * @brief PQM example main execution
- *
- * @return If working correctly, will execute continuously function iio_app_run
- * and will not return.
- */
-int basic_pqm_firmware();
-
-#endif /* __PQM_FW_H__ */
+#endif

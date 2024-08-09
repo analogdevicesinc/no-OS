@@ -62,6 +62,7 @@
 #define PQLIB_MAX_HARMONICS 50
 #define PQLIB_MAX_INTER_HARMONICS 50
 #define SIZE_OF_INPUT_RTC 19
+#define TIME_STAMP_FORMAT_LENGTH 17
 
 /**
  * @brief PQLIB Example states
@@ -133,21 +134,28 @@ typedef struct {
 	ADI_PQLIB_PHASE_MAP phaseMap;
 	VCONSEL_CONFIG vconsel;
 
-} EXAMPLE_CONFIG; // pqlib example config
+} EXAMPLE_CONFIG; /* pqlib example config */
 
 typedef struct {
 
 	bool readyToDisplay;
 	bool waitingForSync;
 	bool calibration;
+	bool processData;
+	bool startLog;
 	uint16_t syncCycles;
 	uint32_t processedCycles;
 	uint32_t zeroCrossingCount;
 	uint32_t timeOutCount;
 	uint32_t pqlibStateMemory[ADI_PQLIB_STATE_MEM_NUM_BYTES / 4];
 	uint32_t pqlibTempMemory[ADI_PQLIB_TEMP_MEM_NUM_BYTES / 4];
+	uint64_t logStartTimeMillisec;
+	uint64_t logStopTimeMillisec;
 	float calExpectedRms;
 	char *pChannel;
+	char *systemTimeStr;
+	char *logStartTime;
+	char *logStopTime;
 	ADI_PQLIB_HANDLE hDevice;
 	ADI_PQLIB_CONFIG config;
 	ADI_PQLIB_CYCLE_INPUT inputCycle;
@@ -159,7 +167,7 @@ typedef struct {
 	PQLIB_STATE state;
 	struct no_os_circular_buffer *no_os_cb_desc;
 
-} PQLIB_EXAMPLE; // pqlib example struct
+} PQLIB_EXAMPLE; /* pqlib example struct */
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

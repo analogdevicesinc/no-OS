@@ -57,36 +57,40 @@
 #include "no_os_uart.h"
 #include "parameters.h"
 #include "pqlib_example.h"
+#include "max31343.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define FW_VERSION 2.0
-
-#define IIO_BUFF_TYPE int16_t
-#define SAMPLES_PER_CHANNEL_PLATFORM 256
+#define FW_VERSION                      2.0
+#define IIO_BUFF_TYPE                   int16_t
+#define SAMPLES_PER_CHANNEL_PLATFORM    256
 #define MAX_SIZE_BASE_ADDR (SAMPLES_PER_CHANNEL_PLATFORM * TOTAL_PQM_CHANNELS)
 #define MAX_SIZE_BASE_ADDR_WITH_SIZE                                           \
   (MAX_SIZE_BASE_ADDR * sizeof(IIO_BUFF_TYPE))
 
-#define TOTAL_PQM_CHANNELS 7
-#define VOLTAGE_CH_NUMBER 3
-#define MAX_CH_ATTRS 12
-#define PQM_DEVICE_ATTR_NUMBER 35
-#define WAVEFORM_BUFFER_LENGTH (256 * 7)
+#define TOTAL_PQM_CHANNELS              7
+#define VOLTAGE_CH_NUMBER               3
+#define MAX_CH_ATTRS                    12
+#define PQM_DEVICE_ATTR_NUMBER          38
+#define TIME_STAMP_FORMAT_LENGTH        17
+#define WAVEFORM_BUFFER_LENGTH          (256 * 7)
 
 extern IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR];
 extern struct no_os_uart_init_param iio_demo_uart_ip;
-extern struct pqm_init_para pqm_ip;
+extern struct pqm_init_param pqm_ip;
 extern struct no_os_spi_init_param spi_egy_ip;
-extern struct no_os_i2c_init_param i2c_ip;
 extern struct no_os_uart_init_param uart_ip_stdio;
 extern struct no_os_timer_init_param timer_ip;
 extern struct no_os_gpio_init_param reset_gpio_ip;
 extern struct no_os_gpio_init_param intr_gpio_ip;
 extern struct no_os_irq_init_param afe_callback_ctrl_ip;
 extern struct no_os_callback_desc afe0_callback_desc;
+extern struct max31343_init_param max31343_rtc_ini_param;
+
+/* RTC and logging */
+extern volatile uint64_t rtcIntrpTimeInMilliSeconds;
 
 static const char *const pqm_v_consel_available[] = {
 	[VCONSEL_4W_WYE] = "4W_WYE",
@@ -117,7 +121,7 @@ struct pqm_desc {
 	int16_t *ext_buff;
 };
 
-struct pqm_init_para {
+struct pqm_init_param {
 	float dev_global_attr[PQM_DEVICE_ATTR_NUMBER];
 	uint32_t dev_ch_attr[TOTAL_PQM_CHANNELS][MAX_CH_ATTRS];
 	uint32_t ext_buff_len;

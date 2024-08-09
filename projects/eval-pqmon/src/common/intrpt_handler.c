@@ -68,7 +68,7 @@ int init_interrupt(void)
 	struct no_os_irq_ctrl_desc *afe0_callback_ctrl;
 	afe0_callback_desc.callback = isr_afe0;
 
-	// Setup GPIO input pin for data-ready interrupt
+	/* Setup GPIO input pin for data-ready interrupt */
 	status = no_os_gpio_get(&intr_gpio_desc, &intr_gpio_ip);
 	if (status)
 		return status;

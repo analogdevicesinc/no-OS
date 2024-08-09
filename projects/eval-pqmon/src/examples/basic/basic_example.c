@@ -49,7 +49,7 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
+int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_param *param)
 {
 	struct pqm_desc *d;
 	d = (struct pqm_desc *)no_os_calloc(1, sizeof(*d));
@@ -130,6 +130,12 @@ int basic_pqm_firmware()
 
 	no_os_uart_stdio(uart_desc);
 
+	status = rtc_init();
+	if (status) {
+		printf("RTC init failed \n\r");
+		goto exit;
+	}
+
 	status = afe_init();
 	if (status != SYS_STATUS_SUCCESS) {
 		printf("AFE Init failed \n\r");
@@ -174,6 +180,7 @@ int basic_pqm_firmware()
 
 exit:
 	pqm_remove(pqm_desc);
+	rtc_remove();
 	no_os_uart_remove(uart_desc);
 	return status;
 }

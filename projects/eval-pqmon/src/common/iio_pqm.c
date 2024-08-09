@@ -66,7 +66,7 @@
 /******************************************************************************/
 
 volatile bool configChanged = false;
-volatile bool processData = true;
+volatile uint64_t rtcIntrpTimeInMilliSeconds;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -193,8 +193,18 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 					strcat(buf, " ");
 			}
 			return strlen(buf);
+		case IIO_SYSTEM_TIME:
+			return snprintf (buf, TIME_STAMP_FORMAT_LENGTH, "%s",
+					 pqlibExample.systemTimeStr);
+		case IIO_LOG_START_TIME:
+			return snprintf (buf, TIME_STAMP_FORMAT_LENGTH, "%s",
+					 pqlibExample.logStartTime);
+		case IIO_LOG_STOP_TIME:
+			return snprintf (buf, TIME_STAMP_FORMAT_LENGTH, "%s", pqlibExample.logStopTime);
+		case IIO_START_LOGGING:
+			return snprintf (buf, len, "%s", (pqlibExample.startLog) ? "1" : "0");
 		case PROCESS_DATA:
-			return snprintf(buf, len, "%s", (processData) ? "1" : "0");
+			return snprintf(buf, len, "%s", (pqlibExample.processData) ? "1" : "0");
 		case FW_VERSION_NR:
 			return snprintf (buf, len, "%.1f", FW_VERSION);
 		default:
@@ -227,7 +237,6 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 	desc = device;
 	if (attr_id < PQM_DEVICE_ATTR_NUMBER) {
 		configChanged = true;
-
 		switch (attr_id) {
 		case NOMINAL_VOLTAGE:
 			pqlibExample.exampleConfig.nominalVoltage = value;
@@ -295,12 +304,32 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				}
 			}
 			return -EINVAL;
+		case IIO_SYSTEM_TIME:
+			configChanged = false;
+			strcpy (pqlibExample.systemTimeStr, buf);
+			rtcIntrpTimeInMilliSeconds = convert_string_to_ms(pqlibExample.systemTimeStr);
+			set_rtc_time();
+			break;
+		case IIO_LOG_START_TIME:
+			configChanged = false;
+			strcpy (pqlibExample.logStartTime, buf);
+			pqlibExample.logStartTimeMillisec = convert_string_to_ms(
+					pqlibExample.logStartTime);
+			break;
+		case IIO_LOG_STOP_TIME:
+			configChanged = false;
+			strcpy (pqlibExample.logStopTime, buf);
+			pqlibExample.logStopTimeMillisec = convert_string_to_ms(
+					pqlibExample.logStopTime);
+			break;
+		case IIO_START_LOGGING:
+			configChanged = false;
+			pqlibExample.startLog = (strcmp(buf, "1")) ? false : true;
+			break;
 		case PROCESS_DATA:
 			configChanged = false;
-			if (!strcmp (buf, "1"))
-				processData = true;
-			else
-				processData = false;
+			pqlibExample.processData = (strcmp (buf, "1")) ? false : true;
+			break;
 		default:
 			desc->pqm_global_attr[attr_id] = value;
 		}
@@ -346,19 +375,19 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 							pqlibExample.exampleConfig.voltageScale));
 		case CHAN_ANGLE:
 			switch (channel->ch_num) {
-			case 0: // VA -> always 0
+			case 0: /* VA -> always 0 */
 				return snprintf(buf, len, "%" PRIu16 "", 0);
-			case 1: // VB -> ANGL_VA_VB
+			case 1: /* VB -> ANGL_VA_VB */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_VA_VB));
-			case 2: // VC -> ANGL_VA_VC
+			case 2: /* VC -> ANGL_VA_VC */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_VA_VC));
 			}
 
 		case CHAN_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 100% always
+			/* Adding fundamental waveform, 100% always */
 			sprintf(buffTmp, "%f", 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
@@ -376,7 +405,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_INTER_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 100% always
+			/* Adding fundamental waveform, 100% always */
 			sprintf(buffTmp, "%f", 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
@@ -440,12 +469,12 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_ANGLE:
 			switch (channel->ch_num) {
-			case 0: // IA -> always 0
+			case 0: /* IA -> always 0 */
 				return snprintf(buf, len, "%" PRIu16 "", 0);
-			case 1: // IB -> ANGL_IA_IB
+			case 1: /* IB -> ANGL_IA_IB */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_IA_IB));
-			case 2: // IC -> ANGLE_IA_IC
+			case 2: /* IC -> ANGLE_IA_IC */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_IA_IC));
 			default:
@@ -454,7 +483,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 100% always
+			/* Adding fundamental waveform, 100% always */
 			sprintf(buffTmp, "%f", 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
@@ -472,7 +501,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_INTER_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 100% always
+			/* Adding fundamental waveform, 100% always */
 			sprintf(buffTmp, "%f", 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
@@ -638,7 +667,7 @@ struct iio_attribute voltage_pqm_attributes[] = {
 
 
 	END_ATTRIBUTES_ARRAY,
-}; // voltage channel attributes
+}; /* voltage channel attributes */
 
 struct iio_attribute current_pqm_attributes[] = {
 
@@ -684,7 +713,7 @@ struct iio_attribute current_pqm_attributes[] = {
 	},
 
 	END_ATTRIBUTES_ARRAY,
-}; // current channel attributes
+}; /* current channel attributes */
 
 struct iio_attribute global_pqm_attributes[] = {
 	{
@@ -867,6 +896,30 @@ struct iio_attribute global_pqm_attributes[] = {
 		.priv = NOMINAL_FREQUENCY_AVAILABLE,
 	},
 	{
+		.name = "system_time",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = IIO_SYSTEM_TIME,
+	},
+	{
+		.name = "log_start_time",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = IIO_LOG_START_TIME,
+	},
+	{
+		.name = "log_stop_time",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = IIO_LOG_STOP_TIME,
+	},
+	{
+		.name = "start_logging",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = IIO_START_LOGGING,
+	},
+	{
 		.name = "process_data",
 		.show = read_pqm_attr,
 		.store = write_pqm_attr,
@@ -878,7 +931,7 @@ struct iio_attribute global_pqm_attributes[] = {
 		.priv = FW_VERSION_NR,
 	},
 	END_ATTRIBUTES_ARRAY,
-}; // global attributes for device
+}; /* global attributes for device */
 
 struct scan_type pqm_scan_type = {.sign = 'd',
 	.realbits = 16,
@@ -886,14 +939,14 @@ struct scan_type pqm_scan_type = {.sign = 'd',
 	.shift = 0,
 	.is_big_endian =
 		true
-}; // generic channel definition
+}; /* generic channel definition */
 
 static struct iio_channel iio_pqm_channels[] = {
 	PQM_CURRENT_CHANNEL(0, 1, "ia"), PQM_VOLTAGE_CHANNEL(0, 2, "ua"),
 	PQM_CURRENT_CHANNEL(1, 3, "ib"), PQM_VOLTAGE_CHANNEL(1, 4, "ub"),
 	PQM_CURRENT_CHANNEL(2, 5, "ic"), PQM_VOLTAGE_CHANNEL(2, 6, "uc"),
 	PQM_CURRENT_CHANNEL(3, 7, "in"),
-}; // channel definitions for device
+}; /* channel definitions for device */
 
 struct iio_device pqm_iio_descriptor = {
 	.num_ch = TOTAL_PQM_CHANNELS,
@@ -905,4 +958,4 @@ struct iio_device pqm_iio_descriptor = {
 	.post_disable = close_pqm_channels,
 	.trigger_handler = (int32_t(*)())pqm_trigger_handler,
 	.submit = (int32_t(*)())read_samples,
-}; // pqm iio descriptor
+}; /* pqm iio descriptor */

@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "pqlib_example.h"
+#include "sdcard_utils.h"
 #include "iio_pqm.h"
 
 /******************************************************************************/
@@ -92,6 +93,17 @@ int pqm_start_measurement(bool waitingForSync)
 	pqlibExample.readyToDisplay = false;
 	pqlibExample.waitingForSync = waitingForSync;
 	pqlibExample.syncCycles = 0;
+	pqlibExample.processData = true;
+
+	pqlibExample.systemTimeStr = (char *)malloc(TIME_STAMP_FORMAT_LENGTH * sizeof(
+					     char));
+	pqlibExample.logStartTime = (char *)malloc(TIME_STAMP_FORMAT_LENGTH * sizeof(
+					    char));
+	pqlibExample.logStopTime = (char *)malloc(TIME_STAMP_FORMAT_LENGTH * sizeof(
+					   char));
+	memset(pqlibExample.systemTimeStr, '0', TIME_STAMP_FORMAT_LENGTH);
+	memset(pqlibExample.logStartTime, '0', TIME_STAMP_FORMAT_LENGTH);
+	memset(pqlibExample.logStopTime, '0', TIME_STAMP_FORMAT_LENGTH);
 
 	status = afe_read_version(&afeVersion);
 
@@ -127,6 +139,17 @@ int pqm_one_cycle(void)
 		pqm_start_measurement(false);
 		configChanged = false;
 		pqlibExample.state = PQLIB_STATE_WAITING_FOR_TRIGGER;
+	}
+	if (pqlibExample.startLog && !started_logging) {
+		int ret = init_and_open_logfile ();
+		if (ret) {
+			printf ("ERROR: Could not start logging!\n\r");
+			pqlibExample.startLog = false;
+		} else
+			started_logging = true;
+	} else if (!pqlibExample.startLog && started_logging) {
+		close_and_unmount();
+		started_logging = false;
 	}
 	process_and_prepare_output();
 	return 0;
@@ -226,6 +249,7 @@ int process_and_prepare_output()
 	ADI_PQLIB_OUTPUT_STATUS outputStatus;
 	ADI_PQLIB_HANDLE hDevice = pqlibExample.hDevice;
 	bool done = false;
+	char logMsg[248];
 
 	status = get_afe_input();
 
@@ -268,7 +292,7 @@ int process_and_prepare_output()
 			}
 		}
 
-		if (p1012CyclesInput->isDataProcessed == 0 && processData) {
+		if (p1012CyclesInput->isDataProcessed == 0 && pqlibExample.processData) {
 			ADI_PQLIB_PROFBEG(ADI_PQLIB_PROFILE_ID_1012CYCLES);
 			pqlibStatus =
 				adi_pqlib_Process1012Cycles(hDevice, &pqlibExample.input1012Cycles);
@@ -276,6 +300,37 @@ int process_and_prepare_output()
 			status = process_pqlib_error(&pqlibExample, pqlibStatus);
 			if (status != SYS_STATUS_SUCCESS) {
 				break;
+			}
+			if (pqlibExample.startLog && started_logging) {
+				uint64_t current_time = rtcIntrpTimeInMilliSeconds;
+				if (current_time >= pqlibExample.logStartTimeMillisec
+				    && current_time <= pqlibExample.logStopTimeMillisec) {
+					status = snprintf (
+							 logMsg, 248,
+							 "%" PRIu64 ": VA: %" PRIu32 ", VB: %" PRIu32
+							 ", VC: %" PRIu32 ", IA: %" PRIu32 ", IB: %" PRIu32
+							 ", IC: %" PRIu32 ", "
+							 "IN:%" PRIu32 "\n\r",
+							 current_time,
+							 pqlibExample.output->params1012Cycles.voltageParams[0]
+							 .mag,
+							 pqlibExample.output->params1012Cycles.voltageParams[1]
+							 .mag,
+							 pqlibExample.output->params1012Cycles.voltageParams[2]
+							 .mag,
+							 pqlibExample.output->params1012Cycles.currentParams[0]
+							 .mag,
+							 pqlibExample.output->params1012Cycles.currentParams[1]
+							 .mag,
+							 pqlibExample.output->params1012Cycles.currentParams[2]
+							 .mag,
+							 pqlibExample.output->params1012Cycles.currentParams[3]
+							 .mag);
+					if (status <= 0)
+						break;
+					append_to_logfile(logMsg, strlen (logMsg));
+				} else if (current_time > pqlibExample.logStopTimeMillisec)
+					pqlibExample.startLog = false;
 			}
 		}
 		pqlibStatus = adi_pqlib_GetOutputStatus(hDevice, &outputStatus);
