@@ -66,6 +66,16 @@
 #include "no_os_spi.h"
 #endif
 
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7616_device_table[] = {
+	{.compatible = "adi,ad7616"},
+	{}
+};
+
 #define AD7616_GET_BIT(v, b)		((v >> b) & 1)
 #define AD7616_TOGGLE_TIMEOUT_DELAY	(8192 * 1024)
 #define SPI_ENGINE_WORDS_PER_READ	1

@@ -45,6 +45,15 @@
 #include "ltc2358.h"
 #include "errno.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc2358_device_table[] = {
+	{.compatible = "adi,ltc2358"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

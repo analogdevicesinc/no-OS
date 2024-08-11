@@ -43,6 +43,17 @@
 #include <stdlib.h>
 #include "ad799x.h"    // AD799x definitions.
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad799x_device_table[] = {
+	{.compatible = "adi,ad7991"},
+	{.compatible = "adi,ad7995"},
+	{.compatible = "adi,ad7999"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

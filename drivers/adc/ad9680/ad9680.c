@@ -46,6 +46,15 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9680_device_table[] = {
+	{.compatible = "adi,ad9680"},
+	{}
+};
 
 struct ad9680_jesd204_priv {
 	struct ad9680_dev *dev;

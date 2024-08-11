@@ -48,6 +48,26 @@
 #include "ad717x.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad717x_device_table[] = {
+	{.compatible = "adi,ad4111"},
+	{.compatible = "adi,ad4112"},
+	{.compatible = "adi,ad4114"},
+	{.compatible = "adi,ad4115"},
+	{.compatible = "adi,ad4116"},
+	{.compatible = "adi,ad7172-2"},
+	{.compatible = "adi,ad7172-4"},
+	{.compatible = "adi,ad7173-8"},
+	{.compatible = "adi,ad7175-2"},
+	{.compatible = "adi,ad7175-8"},
+	{.compatible = "adi,ad7176-2"},
+	{.compatible = "adi,ad7177-2"},
+	{}
+};
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */

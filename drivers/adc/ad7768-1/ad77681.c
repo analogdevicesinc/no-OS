@@ -48,6 +48,15 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad77681_device_table[] = {
+	{.compatible = "adi,ad7768-1"},
+	{}
+};
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

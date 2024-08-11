@@ -48,6 +48,15 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adc_demo_device_table[] = {
+	{.compatible = "adi,adc-demo"},
+	{}
+};
 
 /* default sine lookup table to be used if ext_buff is not available */
 const uint16_t sine_lut[128] = {

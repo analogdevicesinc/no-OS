@@ -41,6 +41,23 @@
 #include "ad4858.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad4858_device_table[] = {
+	{.compatible = "adi,ad4858"},
+	{.compatible = "adi,ad4857"},
+	{.compatible = "adi,ad4856"},
+	{.compatible = "adi,ad4855"},
+	{.compatible = "adi,ad4854"},
+	{.compatible = "adi,ad4853"},
+	{.compatible = "adi,ad4852"},
+	{.compatible = "adi,ad4851"},
+	{.compatible = "adi,ad4858i"},
+	{}
+};
 
 /**
  * @brief Write device register.

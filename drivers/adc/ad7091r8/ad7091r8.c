@@ -45,6 +45,17 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7091r8_device_table[] = {
+	{.compatible = "adi,ad7091r-2"},
+	{.compatible = "adi,ad7091r-4"},
+	{.compatible = "adi,ad7091r-8"},
+	{}
+};
 
 /**
  * Pull the CONVST line up then down to signal to the start of a read/write

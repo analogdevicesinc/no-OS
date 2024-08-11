@@ -48,6 +48,15 @@
 #include <inttypes.h>
 #include "api_def.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9208_device_table[] = {
+	{.compatible = "adi,ad9208"},
+	{}
+};
 
 /**
  * Spi write and read compatible with ad9208 API

@@ -53,6 +53,15 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_print_log.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9083_device_table[] = {
+	{.compatible = "adi,ad9083"},
+	{}
+};
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

@@ -46,6 +46,19 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include <string.h>
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad719x_device_table[] = {
+	{.compatible = "adi,ad7190"},
+	{.compatible = "adi,ad7192"},
+	{.compatible = "adi,ad7193"},
+	{.compatible = "adi,ad7194"},
+	{.compatible = "adi,ad7195"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

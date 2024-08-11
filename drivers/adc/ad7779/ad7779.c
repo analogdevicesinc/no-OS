@@ -46,6 +46,17 @@
 #include "no_os_util.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7779_device_table[] = {
+	{.compatible = "adi,ad7770"},
+	{.compatible = "adi,ad7771"},
+	{.compatible = "adi,ad7779"},
+	{}
+};
 
 /******************************************************************************/
 /*************************** Constants Definitions ****************************/

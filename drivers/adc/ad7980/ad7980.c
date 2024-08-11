@@ -43,6 +43,15 @@
 #include <stdlib.h>
 #include "ad7980.h"           // AD7980 definitions.
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7980_device_table[] = {
+	{.compatible = "adi,ad7980"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

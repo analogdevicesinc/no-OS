@@ -45,6 +45,15 @@
 #include <errno.h>
 #include "ad4080.h"
 #include "no_os_delay.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad4080_device_table[] = {
+	{.compatible = "adi,ad4080"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
