@@ -47,6 +47,15 @@
 #include "adas1000.h"
 #include "no_os_crc.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adas1000_device_table[] = {
+	{.compatible = "adi,adas1000"},
+	{}
+};
 
 /*****************************************************************************/
 /************************ Function Definitions *******************************/
