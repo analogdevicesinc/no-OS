@@ -44,6 +44,21 @@
 #include <stdlib.h>
 #include "ad525x.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad525x_device_table[] = {
+	{.compatible = "adi,ad5232"},
+	{.compatible = "adi,ad5235"},
+	{.compatible = "adi,adn2850"},
+	{.compatible = "adi,ad5252"},
+	{.compatible = "adi,ad5251"},
+	{.compatible = "adi,ad5254"},
+	{.compatible = "adi,ad5253"},
+	{}
+};
 
 #define MSB_BYTE_MASK       0xFF00
 #define LSB_BYTE_MASK       0x00FF
