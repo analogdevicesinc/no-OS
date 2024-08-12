@@ -45,6 +45,16 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ada4250_device_table[] = {
+	{.compatible = "adi,ada4230"},
+	{.compatible = "adi,ada4250"},
+	{}
+};
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
