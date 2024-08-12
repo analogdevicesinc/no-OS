@@ -47,6 +47,15 @@
 #include "no_os_gpio.h"
 #include "no_os_alloc.h"
 #include "ad5940.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5940_device_table[] = {
+	{.compatible = "adi,ad5940"},
+	{}
+};
 
 static int AD5940_Initialize(struct ad5940_dev *dev);
 static void AD5940_StructInit(void *pStruct, uint32_t StructSize);
