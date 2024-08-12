@@ -46,6 +46,15 @@
 #include "no_os_spi.h"
 #include "no_os_delay.h"
 #include <string.h>
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ssd_1306_device_table[] = {
+	{.compatible = "ssd1306"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
