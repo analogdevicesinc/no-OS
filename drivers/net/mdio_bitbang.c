@@ -43,6 +43,15 @@
 #include "no_os_gpio.h"
 #include "no_os_mdio.h"
 #include "mdio_bitbang.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device mdio_bitbang_device_table[] = {
+	{.compatible = "adi,mdio-bitbang"},
+	{}
+};
 
 struct mdio_bitbang_extra {
 	struct no_os_gpio_desc *mdc;
