@@ -43,6 +43,15 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max22200_device_table[] = {
+	{.compatible = "adi,max22200"},
+	{}
+};
 
 /**
  * @brief Read data from desired register for MAX22200

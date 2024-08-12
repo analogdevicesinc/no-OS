@@ -42,6 +42,15 @@
 #include "max22196.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max22196_device_table[] = {
+	{.compatible = "adi,max22196"},
+	{}
+};
 
 /**
  * @brief Compute the CRC5 value for an array of bytes when writing to MAX22196

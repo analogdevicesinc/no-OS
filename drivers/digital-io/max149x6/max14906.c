@@ -42,6 +42,15 @@
 #include "max14906.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max14906_device_table[] = {
+	{.compatible = "adi,max14906"},
+	{}
+};
 
 /**
  * @brief Read the (voltage) state of a channel (works for both input or output).
