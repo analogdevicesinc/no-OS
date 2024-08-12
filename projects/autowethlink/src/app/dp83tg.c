@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <errno.h>
 #include "dp83tg.h"
+#include "no_os_mdio.h"
 #include "no_os_alloc.h"
 #include "no_os_gpio.h"
 
@@ -47,6 +48,9 @@ int dp83tg_init(struct dp83tg_desc **dev, struct dp83tg_init_param *param)
 		goto free_mdio;
 	}
 
+	ret = dp83tg_read(d, DP83TG_SGMII_CTRL_1, &val);
+	dp83tg_write(d, DP83TG_SGMII_CTRL_1, 0x7b);
+	ret = dp83tg_read(d, DP83TG_SGMII_CTRL_1, &val);
 	// ret = dp83tg_config_rgmii(d, param->rgmii_config);
 	// if (ret)
 	// 	goto free_mdio;
@@ -118,15 +122,47 @@ int dp83tg_hard_reset(struct dp83tg_desc *dev)
 	return 0;
 }
 
-inline int dp83tg_write(struct dp83tg_desc *dev, uint32_t addr,
+int dp83tg_write(struct dp83tg_desc *dev, uint32_t addr,
 			  uint16_t val)
 {
+	int ret;
+	uint8_t devad = no_os_field_get(NO_OS_MDIO_C45_DEVADDR_MASK, addr);
+	uint16_t regad = no_os_field_get(NO_OS_MDIO_DATA_MASK, addr);
+
+	if (devad) {
+		ret = no_os_mdio_write(dev->mdio, DP83TG_REGCR, devad);
+		if (ret)
+			return ret;
+		ret = no_os_mdio_write(dev->mdio, DP83TG_ADDAR, regad);
+		if (ret)
+			return ret;
+		ret = no_os_mdio_write(dev->mdio, DP83TG_REGCR, devad | 0x4000);
+		if (ret)
+			return ret;
+		addr = DP83TG_ADDAR;
+	}
 	return no_os_mdio_write(dev->mdio, addr, val);
 }
 
-inline int dp83tg_read(struct dp83tg_desc *dev, uint32_t addr,
+int dp83tg_read(struct dp83tg_desc *dev, uint32_t addr,
 			 uint16_t *val)
 {
+	int ret;
+	uint8_t devad = no_os_field_get(NO_OS_MDIO_C45_DEVADDR_MASK, addr);
+	uint16_t regad = no_os_field_get(NO_OS_MDIO_DATA_MASK, addr);
+
+	if (devad) {
+		ret = no_os_mdio_write(dev->mdio, DP83TG_REGCR, devad);
+		if (ret)
+			return ret;
+		ret = no_os_mdio_write(dev->mdio, DP83TG_ADDAR, regad);
+		if (ret)
+			return ret;
+		ret = no_os_mdio_write(dev->mdio, DP83TG_REGCR, devad | 0x4000);
+		if (ret)
+			return ret;
+		addr = DP83TG_ADDAR;
+	}
 	return no_os_mdio_read(dev->mdio, addr, val);
 }
 

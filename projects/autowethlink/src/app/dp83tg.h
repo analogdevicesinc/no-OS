@@ -8,9 +8,15 @@
 #define DP83TG_PHY_ID_1				0x2
 #define DP83TG_PHY_ID_2				0x3
 
+#define DP83TG_REGCR				0xd
+#define DP83TG_ADDAR				0xe
+
 #define DP83TG_MII_REG_1F			0x1f
 #define DP83TG_SW_GLOBAL_RESET_MASK	NO_OS_BIT(15)
 #define DP83TG_DIGITAL_RESET_MASK	NO_OS_BIT(14)
+
+#define DP83TG_SGMII_CTRL_1			NO_OS_MDIO_C45_ADDR(0x1f, 0x608)
+#define DP83TG_SGMII_CTRL_2			NO_OS_MDIO_C45_ADDR(0x1f, 0x60c)
 
 struct dp83tg_init_param {
 	struct no_os_gpio_init_param *reset;

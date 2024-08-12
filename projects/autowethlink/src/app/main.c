@@ -196,7 +196,7 @@ post_eeprom:
 	struct dp83tg_init_param dp83tg_ip = {
 		.reset = &dp83tg_reset_gpio_ip,
 		.mdio = {
-			.c45 = true,
+			.c45 = false, // doesn't directly support clause 45, only indirectly (implemented in device driver)
 			.addr = 0,
 			.ops = &mdio_bitbang_ops,
 			.extra = &(struct mdio_bitbang_init_param)
