@@ -50,6 +50,15 @@
 #include "no_os_crc8.h"
 #include "no_os_crc16.h"
 #include "no_os_print_log.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ade9113_device_table[] = {
+	{.compatible = "adi,ade9113"},
+	{}
+};
 
 NO_OS_DECLARE_CRC8_TABLE(ade9113_crc8);
 NO_OS_DECLARE_CRC16_TABLE(ade9113_crc16);
