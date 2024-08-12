@@ -46,6 +46,15 @@
 #include "no_os_alloc.h"
 #include <stdlib.h>
 #include <string.h>
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device demux_spi_device_table[] = {
+	{.compatible = "adi,demux-spi"},
+	{}
+};
 
 /******************************************************************************/
 /**************************** Types Definitions *******************************/
