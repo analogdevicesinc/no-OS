@@ -45,6 +45,23 @@
 #include "adgs5412.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adgs1408_device_table[] = {
+	{.compatible = "adi,adgs1208"},
+	{.compatible = "adi,adgs1209"},
+	{.compatible = "adi,adgs1212"},
+	{.compatible = "adi,adgs1408"},
+	{.compatible = "adi,adgs1409"},
+	{.compatible = "adi,adgs1412"},
+	{.compatible = "adi,adgs5412"},
+	{.compatible = "adi,adgs1612"},
+	{.compatible = "adi,adgs5414"},
+	{}
+};
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
