@@ -43,6 +43,15 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adf4382_device_table[] = {
+	{.compatible = "adi,adf4382"},
+	{}
+};
 
 /* Charge pump current values expressed in uA */
 static const int adf4382_ci_ua[] = {

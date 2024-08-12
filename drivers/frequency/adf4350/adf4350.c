@@ -45,6 +45,15 @@
 #include <stdio.h>
 #include "adf4350.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adf4350_device_table[] = {
+	{.compatible = "adi,adf4350"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Writes 4 bytes of data to ADF4350.

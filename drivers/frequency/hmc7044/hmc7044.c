@@ -50,6 +50,16 @@
 #include "no_os_clk.h"
 #include "hmc7044.h"
 #include "jesd204.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device hmc7044_device_table[] = {
+	{.compatible = "adi,hmc7043"},
+	{.compatible = "adi,hmc7044"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

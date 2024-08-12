@@ -45,6 +45,15 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include "ad9517.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9517_device_table[] = {
+	{.compatible = "adi,ad9517"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Initializes the AD9517.

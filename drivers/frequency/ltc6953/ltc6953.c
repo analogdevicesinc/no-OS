@@ -50,6 +50,15 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc6953_device_table[] = {
+	{.compatible = "adi,ltc6953"},
+	{}
+};
 
 static const uint8_t LTC6953_LUT[2][LTC6953_NUM_REGADDR] = {
 	{

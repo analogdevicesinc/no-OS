@@ -45,6 +45,15 @@
 #include <stdio.h>
 #include "ad9523.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9523_device_table[] = {
+	{.compatible = "adi,ad9523"},
+	{}
+};
 
 /* Helpers to avoid excess line breaks */
 #define AD_IFE(_pde, _a, _b) ((dev->pdata->_pde) ? _a : _b)
