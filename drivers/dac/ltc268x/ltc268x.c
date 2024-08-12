@@ -47,6 +47,17 @@
 
 #include "ltc268x.h" /* LTC268X definitions. */
 
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc268x_device_table[] = {
+	{.compatible = "adi,ltc2686"},
+	{.compatible = "adi,ltc2688"},
+	{}
+};
+
 static const struct ltc268x_span_tbl ltc268x_span_tbl[] = {
 	[LTC268X_VOLTAGE_RANGE_0V_5V] = {0, 5},
 	[LTC268X_VOLTAGE_RANGE_0V_10V] = {0, 10},

@@ -52,6 +52,18 @@
 #include "no_os_timer.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad3552r_device_table[] = {
+	{.compatible = "adi,ad3541r"},
+	{.compatible = "adi,ad3542r"},
+	{.compatible = "adi,ad3551r"},
+	{.compatible = "adi,ad3552r"},
+	{}
+};
 
 /* Private attributes */
 enum ad3552r_spi_attributes {

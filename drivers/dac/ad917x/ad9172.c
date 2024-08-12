@@ -48,6 +48,20 @@
 #include "ad9172.h"
 #include <inttypes.h>
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9172_device_table[] = {
+	{.compatible = "adi,ad9171"},
+	{.compatible = "adi,ad9172"},
+	{.compatible = "adi,ad9173"},
+	{.compatible = "adi,ad9174"},
+	{.compatible = "adi,ad9175"},
+	{.compatible = "adi,ad9176"},
+	{}
+};
 
 /**
  * Setup the device.

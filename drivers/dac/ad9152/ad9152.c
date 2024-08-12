@@ -44,6 +44,15 @@
 #include <stdio.h>
 #include "ad9152.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9152_device_table[] = {
+	{.compatible = "adi,ad9152"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief ad9152_spi_read

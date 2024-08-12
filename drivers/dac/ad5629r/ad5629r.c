@@ -46,6 +46,19 @@
 #include <stdlib.h>
 #include "ad5629r.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5629r_device_table[] = {
+	{.compatible = "adi,ad5629r"},
+	{.compatible = "adi,ad5669r"},
+	{.compatible = "adi,ad5668"},
+	{.compatible = "adi,ad5648"},
+	{.compatible = "adi,ad5628"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/

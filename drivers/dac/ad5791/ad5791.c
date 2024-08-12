@@ -44,6 +44,19 @@
 #include <stdlib.h>
 #include "ad5791.h"    // AD5791 definitions.
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5791_device_table[] = {
+	{.compatible = "adi,ad5760"},
+	{.compatible = "adi,ad5780"},
+	{.compatible = "adi,ad5781"},
+	{.compatible = "adi,ad5790"},
+	{.compatible = "adi,ad5791"},
+	{}
+};
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/

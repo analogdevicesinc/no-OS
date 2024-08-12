@@ -45,6 +45,21 @@
 #include <stdlib.h>
 #include "ad5449.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5449_device_table[] = {
+	{.compatible = "adi,ad5415"},
+	{.compatible = "adi,ad5426"},
+	{.compatible = "adi,ad5429"},
+	{.compatible = "adi,ad5432"},
+	{.compatible = "adi,ad5439"},
+	{.compatible = "adi,ad5443"},
+	{.compatible = "adi,ad5449"},
+	{}
+};
 
 #define MAX_RESOLUTION  12     /* Maximum resolution of the supported devices */
 #define DATA_MASK       0xFFF  /* Mask for 16 data bits */

@@ -52,6 +52,15 @@
 #include "stdbool.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5758_device_table[] = {
+	{.compatible = "adi,ad5758"},
+	{}
+};
 
 /**
  * Compute CRC8 checksum.

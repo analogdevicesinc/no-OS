@@ -43,6 +43,16 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_crc8.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max2201x_device_table[] = {
+	{.compatible = "adi,max22017"},
+	{.compatible = "adi,max22018"},
+	{}
+};
 
 NO_OS_DECLARE_CRC8_TABLE(table);
 
