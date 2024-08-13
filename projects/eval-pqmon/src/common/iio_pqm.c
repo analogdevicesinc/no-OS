@@ -402,9 +402,10 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		case CHAN_THD:
 			return snprintf (
 				       buf, len, "%f",
-				       convert_pct_type (pqlibExample.output->params1012Cycles
-							 .voltageParams[channel->ch_num]
-							 .thd));
+				       ((float)(pqlibExample.output->params1012Cycles
+						.voltageParams[channel->ch_num]
+						.thd)
+					/ 100.0f));
 
 		case CHAN_VOLTAGE_UNDER_DEV:
 			return snprintf(
@@ -497,9 +498,10 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		case CHAN_THD:
 			return snprintf (
 				       buf, len, "%f",
-				       convert_pct_type (pqlibExample.output->params1012Cycles
-							 .currentParams[channel->ch_num]
-							 .thd));
+				       (float)(pqlibExample.output->params1012Cycles
+					       .currentParams[channel->ch_num]
+					       .thd)
+				       / 100.0f);
 
 		default:
 			return snprintf(
