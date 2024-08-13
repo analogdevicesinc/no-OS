@@ -47,6 +47,15 @@
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc4296_device_table[] = {
+	{.compatible = "adi,ltc4296"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

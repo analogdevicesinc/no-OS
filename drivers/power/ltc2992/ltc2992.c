@@ -51,6 +51,16 @@
 
 #include "ltc2992.h"
 
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc2992_device_table[] = {
+	{.compatible = "adi,ltc2992"},
+	{}
+};
+
 static const uint32_t sense_mv_lsb[2] = {25, 400};
 static const uint32_t dsense_nv_lsb[2] = {12500, 200000};
 static const uint32_t gpio_uv_lsb[2] = {500, 8000};
