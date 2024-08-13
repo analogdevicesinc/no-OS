@@ -39,7 +39,7 @@ jobs:
     persistCredentials: true
   - script: |
       export BRANCH=$(branch)
-      python3 ./tools/scripts/build_projects.py . \
+      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
         -export_dir $(RELEASE_DIR) \
         -log_dir $(LOG_DIR) \
         -builds_dir /no-OS_builds/builds \
@@ -72,7 +72,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py .
+  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
@@ -105,7 +105,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py .
+  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
@@ -138,7 +138,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py .
+  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
@@ -171,7 +171,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py .
+  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds
@@ -204,7 +204,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py .
+  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
                -builds_dir /no-OS_builds/builds

@@ -262,7 +262,10 @@ class BuildConfig:
 				self.project, platform, build_name, hardware)
 			self.boot_dir = "%s_%s_%s_%s" % (
 				self.project, platform, build_name, hardware)
-		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
+		if (platform == 'stm32'):
+			self.build_dir = os.path.join(self.project_dir, 'build')
+		else:
+			self.build_dir = os.path.join(self.builds_dir, short_build_dir)
 		self.binary = os.path.join(self.build_dir, self._binary)
 		self.export_file = os.path.join(self.build_dir, self.binary)
 		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
