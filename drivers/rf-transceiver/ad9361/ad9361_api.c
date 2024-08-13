@@ -51,6 +51,17 @@
 #ifndef AXI_ADC_NOT_PRESENT
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9361_device_table[] = {
+	{.compatible = "adi,ad9361"},
+	{.compatible = "adi,ad9363"},
+	{.compatible = "adi,ad9364"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Constants Definitions *******************************/

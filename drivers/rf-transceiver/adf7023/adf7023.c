@@ -44,6 +44,15 @@
 #include "adf7023_config.h"
 #include "adf7023.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adf7023_device_table[] = {
+	{.compatible = "adi,adf7023"},
+	{}
+};
 
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/

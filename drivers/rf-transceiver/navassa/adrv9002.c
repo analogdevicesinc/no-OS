@@ -81,6 +81,15 @@
 #include "adi_adrv9001_utilities.h"
 #include "adi_adrv9001_version.h"
 #include "adi_common_error_types.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adrv9002_device_table[] = {
+	{.compatible = "adi,adrv9002"},
+	{}
+};
 
 /* gpio0 starts at 1 in the API enum */
 #define ADRV9002_DGPIO_MIN	(ADI_ADRV9001_GPIO_DIGITAL_00 - 1)

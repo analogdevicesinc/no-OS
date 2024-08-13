@@ -17,6 +17,15 @@
 #include "jesd204.h"
 #include <stdbool.h>
 #include <string.h>
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adrv9025_device_table[] = {
+	{.compatible = "adi,adrv9025"},
+	{}
+};
 
 static int __adrv9025_dev_err(struct adrv9025_rf_phy *phy, const char *function,
 			      const int line)
