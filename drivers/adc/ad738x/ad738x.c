@@ -3,6 +3,7 @@
  *   @brief  Implementation of AD738x Driver.
  *   @author SPopa (stefan.popa@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -175,6 +176,13 @@ int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
 int32_t ad738x_set_conversion_mode(struct ad738x_dev *dev,
 				   enum ad738x_conv_mode mode)
 {
+
+	if (FOUR_WIRE_MODE == mode){
+		return ad738x_spi_write_mask(dev,
+						     AD738X_REG_CONFIG2,
+						     AD738X_CONFIG2_SDO4_MSK,
+						     AD738X_CONFIG2_SDO4(mode));
+	}
 	return ad738x_spi_write_mask(dev,
 				     AD738X_REG_CONFIG2,
 				     AD738X_CONFIG2_SDO2_MSK,
@@ -303,21 +311,19 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 		CS_HIGH,
 	};
 
-	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != 0)
-		return ret;
-
 	msg.commands_data = commands_data;
 	msg.commands = spi_eng_msg_cmds;
 	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
+
+	struct spi_engine_desc *spi_local = dev->spi_desc->extra;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
 	if (ret != 0)
 		return ret;
 
 	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+			dev->dcache_invalidate_range(msg.rx_addr, samples * spi_local->offload_rx_dma->width_src);
 #else
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, samples);
 	if (ret)
@@ -326,7 +332,6 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 
 	return 0;
 }
-
 
 /**
  * Initialize the device.
@@ -351,7 +356,6 @@ int32_t ad738x_init(struct ad738x_dev **device,
 #endif
 	dev->conv_mode = init_param->conv_mode;
 	dev->ref_sel = init_param->ref_sel;
-	dev->ref_voltage_mv = init_param->ref_voltage_mv;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
@@ -364,12 +368,17 @@ int32_t ad738x_init(struct ad738x_dev **device,
 
 	*device = dev;
 
+	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
+	if (ret != 0)
+		return ret;
+
 	if (!ret)
 		printf("ad738x successfully initialized\n");
 	no_os_mdelay(1000);
 
 	return ret;
 }
+
 /**
  * @brief Free the resources allocated by ad738x_init().
  * @param dev - The device structure.

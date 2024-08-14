@@ -3,6 +3,7 @@
  *   @brief  Header file for AD738x Driver.
  *   @author SPopa (stefan.popa@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -115,7 +116,8 @@
 /******************************************************************************/
 enum ad738x_conv_mode {
 	TWO_WIRE_MODE,
-	ONE_WIRE_MODE
+	ONE_WIRE_MODE,
+	FOUR_WIRE_MODE
 };
 
 enum ad738x_os_mode {
