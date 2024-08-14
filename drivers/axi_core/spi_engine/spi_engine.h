@@ -45,8 +45,6 @@
 /******************************************************************************/
 
 #include <stdint.h>
-
-#include "xilinx_spi.h"
 #include "spi_engine_private.h"
 #include "axi_dmac.h"
 
@@ -82,6 +80,15 @@ and will be used inside the function call */
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+enum soc_spi_type {
+	/** Programmable Logic */
+	SPI_PL,
+	/** Processing System */
+	SPI_PS,
+	/** SPI Engine */
+	SPI_ENGINE
+};
+
 /**
  * @struct spi_engine_init_param
  * @brief  Structure containing the init parameters needed by the SPI engine
@@ -90,7 +97,7 @@ struct spi_engine_init_param {
 	/** SPI engine reference clock */
 	uint32_t	ref_clk_hz;
 	/** Type of implementation */
-	enum xil_spi_type	type;
+	enum soc_spi_type	type;
 	/** Base address where the HDL core is situated */
 	uint32_t 		spi_engine_baseaddr;
 	/** Delay between the CS toggle and the start of SCLK */
@@ -108,7 +115,7 @@ struct spi_engine_desc {
 	/** SPI engine reference clock */
 	uint32_t	ref_clk_hz;
 	/** Type of implementation */
-	enum xil_spi_type	type;
+	enum soc_spi_type	type;
 	/** Pointer to a DMAC used in transmission */
 	struct axi_dmac		*offload_tx_dma;
 	/** Pointer to a DMAC used in reception */
@@ -180,7 +187,7 @@ struct spi_engine_offload_message {
 /**
  * @brief Spi engine platform specific SPI platform ops structure
  */
-extern const struct no_os_spi_platform_ops xil_spi_ops;
+extern const struct no_os_spi_platform_ops spi_eng_platform_ops;
 
 /* Write SPI Engine's axi registers */
 int32_t spi_engine_write(struct spi_engine_desc *desc,

@@ -51,7 +51,6 @@ significant delays */
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sleep.h>
 #include <inttypes.h>
 
 #include "axi_dmac.h"
@@ -60,6 +59,7 @@ significant delays */
 #include "no_os_alloc.h"
 #include "no_os_util.h"
 #include "spi_engine.h"
+#include "no_os_delay.h"
 
 /**
  * @brief Spi engine platform specific SPI platform ops structure
@@ -663,7 +663,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 
 	/* Perform a reset */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x01);
-	usleep(1000);
+	no_os_udelay(1000);
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x00);
 
 	/* Get current data width */
@@ -880,7 +880,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 		axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
 	}
 
-	usleep(1000);
+	no_os_udelay(1000);
 
 	spi_engine_queue_no_os_free(&transfer.cmds);
 
