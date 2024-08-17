@@ -1,5 +1,5 @@
-Evaluating the AD-PQMON-SL kit
-===============================
+AD-PQMON-SL kit no-OS Example Project
+=====================================
 
 ## Overview
 

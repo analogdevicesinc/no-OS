@@ -1,5 +1,5 @@
-Evaluating the AD469x
-======================
+AD469x no-OS Example Project
+============================
 
 
 Contents

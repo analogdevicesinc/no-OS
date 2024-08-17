@@ -1,5 +1,5 @@
-Evaluating AD7091R-2/-4/-8 Devices
-==================================
+AD7091R-2/-4/-8 no-OS Example Project
+=====================================
 
 .. contents::
     :depth: 3

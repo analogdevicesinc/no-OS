@@ -1,5 +1,5 @@
-Evaluating the AD-APARD32690-SL
-===============================
+AD-APARD32690-SL no-OS Example Project
+======================================
 
 Prerequisites
 -------------

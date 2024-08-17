@@ -1,5 +1,5 @@
-Evaluating the AD796x
-======================
+AD796x no-OS Example Project
+============================
 
 
 Contents

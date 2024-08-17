@@ -1,6 +1,5 @@
-============================
-adrv902x no-OS Sample Poject
-============================
+adrv902x no-OS Example Project
+==============================
 
 Supported Devices
 =================

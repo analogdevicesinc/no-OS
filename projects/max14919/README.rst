@@ -1,5 +1,5 @@
-Evaluating the MAX14919
-=======================
+MAX14919 no-OS Example Project
+==============================
 
 .. contents::
 	:depth: 3

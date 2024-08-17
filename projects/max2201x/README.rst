@@ -1,5 +1,5 @@
-Evaluating the MAX2201X
-=======================
+MAX2201X no-OS Example Project
+==============================
 
 .. contents::
 	:depth: 3
