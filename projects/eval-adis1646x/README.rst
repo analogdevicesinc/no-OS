@@ -1,5 +1,5 @@
-Evaluating the ADIS1646X Family
-===============================
+ADIS1646X Family no-OS Example Project
+======================================
 
 .. contents::
     :depth: 3

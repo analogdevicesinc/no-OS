@@ -1,5 +1,5 @@
-Evaluating the LTC4296
-======================
+LTC4296 no-OS Example Project
+=============================
 
 
 Contents

@@ -1,5 +1,5 @@
-Evaluating AD400x on ZED and SDP-K1
-====================================
+AD400x no-OS Example Project on ZED and SDP-K1
+==============================================
 
 Contents
 --------
