@@ -2,6 +2,7 @@
  *   @file   max42500.c
  *   @brief  Source file of MAX42500 Driver.
  *   @author Mark Sapungan (Mark.Sapungan@analog.com)
+ *   @author Joshua Maniti (Joshua.Maniti@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -44,12 +45,17 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_crc8.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define CRC8_PEC        0x07      /* Implements Polynomial X^8 + X^2 + X^1 +1 */
-#define	ECOMM           9         /* General communication error */
+
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+NO_OS_DECLARE_CRC8_TABLE(max42500_crc8);
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -57,55 +63,19 @@
 /******************************************************************************/
 
 /**
- * @brief 8-bit CRC computation
- * @param data - Data buffer.
- * @param len - Buffer length.
- * @return 8-bit CRC value
- */
-static uint8_t crc8(uint8_t *data, uint8_t len)
-{
-	uint8_t crc = 0;
-	bool msb_set;
-
-	for (uint8_t idx = 0; idx < len; idx++) {
-		crc ^= data[idx];
-
-		for (uint8_t loop=0; loop < 8; loop++) {
-			msb_set = ((crc & 0x80) == 0x80);
-			crc <<= 1;
-
-			/* Divide by PEC if bit 8 was set */
-			if (msb_set)
-				crc ^= CRC8_PEC;
-		}
-	}
-
-	return crc;
-}
-
-/**
- * @brief 8-bit watchdog key computation
- * @param curr_wd_key - Current watchdog key value.
- * @return New 8-bit watchdog key value
- */
-static uint8_t max42500_new_watchdog_key(uint8_t curr_wd_key)
-{
-	return curr_wd_key;
-}
-
-/**
- * @brief Set device state through EN0 and EN1 pins
+ * @brief Set device state through EN0 and EN1 pins.
+ * @param desc - The device structure.
  * @param state - Device state.
- * @return 0 in case of success, error code otherwise
+ * @return 0 in case of success, error code otherwise.
  */
 int max42500_set_state(struct max42500_dev *desc, enum max42500_state state)
 {
-	if (!desc)
-		return -EINVAL;
-
 	int ret;
 	uint8_t en0;
 	uint8_t en1;
+
+	if (!desc)
+		return -EINVAL;
 
 	switch (state) {
 	case MAX42500_STATE_OFF:
@@ -124,29 +94,26 @@ int max42500_set_state(struct max42500_dev *desc, enum max42500_state state)
 		break;
 
 	default:
-		en0 = NO_OS_GPIO_HIGH;
-		en1 = NO_OS_GPIO_HIGH;
-		break;
+		return -EINVAL;
 	}
 
 	ret = no_os_gpio_set_value(desc->en0, en0);
 	if (ret)
 		return ret;
 
-	ret = no_os_gpio_set_value(desc->en1, en1);
-	if (ret)
-		return ret;
-
-	return 0;
+	return no_os_gpio_set_value(desc->en1, en1);
 }
 
 /**
  * @brief Read a raw value from a register.
  * @param desc - The device structure.
- * @param reg - Register structure holding info about the register to read from.
- * @return 0 in case of success, error code otherwise
+ * @param reg_addr - Address of the register to be written.
+ * @param reg_data - Pointer to store the read data.
+ * @return 0 in case of success, error code otherwise.
  */
-int max42500_reg_read(struct max42500_dev *desc, struct max42500_reg_st *reg)
+int max42500_reg_read(struct max42500_dev *desc,
+		      uint8_t reg_addr,
+		      uint8_t *reg_data)
 {
 	int ret;
 	uint8_t i2c_data[MAX42500_I2C_RD_FRAME_SIZE] = {0};
@@ -155,7 +122,7 @@ int max42500_reg_read(struct max42500_dev *desc, struct max42500_reg_st *reg)
 
 	/* PEC is computed over entire I2C frame from the first START condition */
 	i2c_data[0] = (desc->comm_desc->slave_address << 1);
-	i2c_data[1] = reg->addr;
+	i2c_data[1] = reg_addr;
 	i2c_data[2] = (desc->comm_desc->slave_address << 1) | 0x1;
 
 	/* I2C write target address */
@@ -174,14 +141,14 @@ int max42500_reg_read(struct max42500_dev *desc, struct max42500_reg_st *reg)
 
 	if (desc->pece) {
 		/* Compute CRC over entire I2C frame */
-		crc = crc8(i2c_data, (MAX42500_I2C_RD_FRAME_SIZE - 1));
+		crc = no_os_crc8(max42500_crc8, i2c_data,
+				 (MAX42500_I2C_RD_FRAME_SIZE - 1), 0);
 
 		if (i2c_data[4] != crc)
-			return -ECOMM;
+			return -EIO;
 	}
 
-	/* Update register with new read value */
-	reg->value = i2c_data[3];
+	*reg_data = i2c_data[3];
 
 	return 0;
 }
@@ -189,524 +156,376 @@ int max42500_reg_read(struct max42500_dev *desc, struct max42500_reg_st *reg)
 /**
  * @brief Write a raw value to a register.
  * @param desc - The device structure.
- * @param reg - Register structure holding info about the register to be written.
- * @return 0 in case of success, error code otherwise
+ * @param reg_addr - Address of the register to be written.
+ * @param data - Data to write to register.
+ * @return 0 in case of success, negative error code otherwise.
  */
-int max42500_reg_write(struct max42500_dev *desc, struct max42500_reg_st reg)
+int max42500_reg_write(struct max42500_dev *desc,
+		       uint8_t reg_addr,
+		       uint8_t data)
 {
 	uint8_t i2c_data[MAX42500_I2C_WR_FRAME_SIZE] = {0};
 	uint8_t bytes_number;
 
 	bytes_number = (desc->pece) ? (MAX42500_I2C_WR_FRAME_SIZE - 1) : 2;
 	i2c_data[0] = (desc->comm_desc->slave_address << 1);
-	i2c_data[1] = reg.addr;
-	i2c_data[2] = reg.value;
+	i2c_data[1] = reg_addr;
+	i2c_data[2] = (uint8_t)(data & 0xFF);
 
 	if (desc->pece)
-		i2c_data[3] = crc8(i2c_data, bytes_number);
+		i2c_data[3] = no_os_crc8(max42500_crc8, i2c_data,
+					 bytes_number, 0);
 
 	return no_os_i2c_write(desc->comm_desc, &i2c_data[1], bytes_number, 1);
 }
 
 /**
- * @brief Wrap the write register function to give it a modern signature.
- * @param desc - The device structure
- * @param reg - Address of the register to be written.
- * @param writeval - New value for the register.
- * @return 0 in case of success, error code otherwise.
- */
-int max42500_reg_write2(struct max42500_dev *desc,
-			uint32_t reg,
-			uint32_t writeval)
-{
-	desc->regs[reg].value = writeval;
-
-	return max42500_reg_write(desc, desc->regs[reg]);
-}
-
-/**
- * @brief Set Packet Error Checking enable bit
+ * @brief Update a register's value based on a mask.
  * @param desc - The device structure.
- * @param pece - The PECE bit value.
- * @return 0 in case of success, error code otherwise
+ * @param reg_addr - Address of the register to be written.
+ * @param mask - The bits that may be modified.
+ * @param data - Data to write to register
+ * @return 0 in case of success, negative error code otherwise.
  */
-int max42500_set_pece(struct max42500_dev *desc, bool pece)
+int max42500_reg_update(struct max42500_dev *desc,
+			uint8_t reg_addr,
+			uint8_t mask,
+			uint8_t data)
 {
-	if (!desc)
-		return -EINVAL;
-
 	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_CONFIG1];
+	uint8_t reg_data;
 
-	if (pece)
-		reg.value |= MAX42500_CONFIG1_PECE_MASK;
-	else
-		reg.value &= ~MAX42500_CONFIG1_PECE_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
+	ret = max42500_reg_read(desc, reg_addr, &reg_data);
 	if (ret)
 		return ret;
 
-	/* Update register value */
-	desc->regs[MAX42500_CONFIG1].value = reg.value;
+	reg_data &= ~mask;
+	reg_data |= mask & data;
+
+	return max42500_reg_write(desc, reg_addr, reg_data);
+}
+
+/**
+ * @brief Set nominal voltage for VM1 to VM5.
+ * @param desc - The device structure.
+ * @param vm_in - The voltage monitor input.
+ * @param voltage - Nominal voltage to set in volts.
+ *                  Example: 0.5 to 3.6875 for VM1 to VM4
+ *                           0.5 to 5.6 for VM5
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max42500_set_nominal_voltage(struct max42500_dev *desc,
+				 enum max42500_vm_input vm_in,
+				 float voltage)
+{
+	uint8_t reg_val;
+	uint8_t reg_addr;
+
+	switch (vm_in) {
+	case MAX42500_VM1:
+	case MAX42500_VM2:
+	case MAX42500_VM3:
+	case MAX42500_VM4:
+		if ((voltage < MAX42500_MIN_VNOM) ||
+		    (voltage > MAX42500_VNOM_MAX_VM1_VM4))
+			return -EINVAL;
+		reg_val = (uint8_t)((voltage - MAX42500_MIN_VNOM) /
+				    MAX42500_VNOM_STEP_VM1_VM4);
+		reg_addr = MAX42500_REG_VIN1 + vm_in;
+		break;
+	case MAX42500_VM5:
+		if ((voltage < MAX42500_MIN_VNOM) ||
+		    (voltage > MAX42500_VNOM_MAX_VM5))
+			return -EINVAL;
+		reg_val = (uint8_t)((voltage - MAX42500_MIN_VNOM) /
+				    MAX42500_VNOM_STEP_VM5);
+		reg_addr = MAX42500_REG_VIN5;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return max42500_reg_write(desc, reg_addr, reg_val);
+}
+
+/**
+ * @brief Get the status of the voltage monitor input.
+ * @param desc - The device structure.
+ * @param vm_in - The voltage monitor input.
+ * @param comp_stat - Status to read.
+ *                    Example: MAX42500_COMP_STAT_OFF - Comparator off status
+ *                             MAX42500_COMP_STAT_UV - Undervoltage status
+ *                             MAX42500_COMP_STAT_OV - Overvoltage status
+ * @param status - Pointer to store the status.
+ *                 Example: 0 - below OV threshold; above UV, OFF threshold
+ * 			    1 - above OV threshold; below UV, OFF threshold
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max42500_get_comp_status(struct max42500_dev *desc,
+			     enum max42500_vm_input vm_in,
+			     enum max42500_comp_stat comp_stat,
+			     uint8_t *status)
+{
+	int ret;
+	uint8_t reg_addr;
+	uint8_t vm_in_status;
+
+	switch (comp_stat) {
+	case MAX42500_COMP_STAT_OFF:
+		reg_addr = MAX42500_REG_STATOFF;
+		break;
+	case MAX42500_COMP_STAT_UV:
+		reg_addr = MAX42500_REG_STATUV;
+		break;
+	case MAX42500_COMP_STAT_OV:
+		reg_addr = MAX42500_REG_STATOV;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ret = max42500_reg_read(desc, reg_addr, &vm_in_status);
+	if (ret)
+		return ret;
+
+	*status = (uint8_t)no_os_field_get(NO_OS_BIT(vm_in), vm_in_status);
+
+	return 0;
+}
+
+
+/**
+ * @brief Set the overvoltage threshold of VM1 to VM5.
+ * @param desc - The device structure.
+ * @param vm_in - The voltage monitor input.
+ * @param thresh - The overvoltage threshold in percentage (2.5% to 10%).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max42500_set_ov_thresh1(struct max42500_dev *desc,
+			    enum max42500_vm_input vm_in,
+			    float thresh)
+{
+	uint8_t ov_val;
+
+	if ((thresh < MAX42500_MIN_THRESH_VM1_VM5) ||
+	    (thresh > MAX42500_MAX_THRESH_VM1_VM5))
+		return -EINVAL;
+
+	switch (vm_in) {
+	case MAX42500_VM1:
+	case MAX42500_VM2:
+	case MAX42500_VM3:
+	case MAX42500_VM4:
+	case MAX42500_VM5:
+		/* Compute the value of OV to be written in the register*/
+		ov_val = (uint8_t)
+			 NO_OS_DIV_ROUND_CLOSEST(((1 + (thresh / 100)) - 1.025),
+						 0.005);
+		return max42500_reg_update(desc,
+					   MAX42500_REG_OVUV1 + vm_in,
+					   NO_OS_GENMASK(7,4),
+					   no_os_field_prep(NO_OS_GENMASK(7,4),
+							   ov_val));
+	default:
+		return -EINVAL;
+	}
+}
+
+/**
+ * @brief Set the overvoltage threshold of VM6 and VM7.
+ * @param desc - The device structure.
+ * @param vm_in - The voltage monitor input.
+ * @param thresh - The overvoltage threshold in volts (0.5V to 1.775V).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max42500_set_ov_thresh2(struct max42500_dev *desc,
+			    enum max42500_vm_input vm_in,
+			    float thresh)
+{
+	uint8_t reg_addr;
+	uint8_t ov_val;
+
+	if ((thresh < MAX42500_MIN_THRESH_VM6_V7) ||
+	    (thresh > MAX42500_MAX_THRESH_VM6_V7))
+		return -EINVAL;
+
+	switch (vm_in) {
+	case MAX42500_VM6:
+		reg_addr = MAX42500_REG_VINO6;
+		break;
+	case MAX42500_VM7:
+		reg_addr = MAX42500_REG_VINO7;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ov_val = (uint8_t)NO_OS_DIV_ROUND_CLOSEST((thresh - 0.5), 0.005);
+
+	return max42500_reg_write(desc, reg_addr, ov_val);
+}
+
+/**
+ * @brief Set the undervoltage threshold of VM1 to VM5.
+ * @param desc - The device structure.
+ * @param vm_in - The voltage monitor input.
+ * @param thresh - The undervoltage threshold in percentage (2.5% to 10%).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max42500_set_uv_thresh1(struct max42500_dev *desc,
+			    enum max42500_vm_input vm_in,
+			    float thresh)
+{
+	uint8_t uv_val;
+
+	if ((thresh < MAX42500_MIN_THRESH_VM1_VM5) ||
+	    (thresh > MAX42500_MAX_THRESH_VM1_VM5))
+		return -EINVAL;
+
+	switch (vm_in) {
+	case MAX42500_VM1:
+	case MAX42500_VM2:
+	case MAX42500_VM3:
+	case MAX42500_VM4:
+	case MAX42500_VM5:
+		uv_val = (uint8_t)
+			 NO_OS_DIV_ROUND_CLOSEST(((1 - (thresh / 100)) - 0.975),
+						 -0.005);
+		return max42500_reg_update(desc,
+					   MAX42500_REG_OVUV1 + vm_in,
+					   NO_OS_GENMASK(3,0),
+					   uv_val);
+	default:
+		return -EINVAL;
+	}
+}
+
+/**
+ * @brief Set the undervoltage threshold of VM6 and VM7.
+ * @param desc - The device structure.
+ * @param vm_in - The voltage monitor input.
+ * @param thresh - The overvoltage threshold in volts (0.5V to 1.775V).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int max42500_set_uv_thresh2(struct max42500_dev *desc,
+			    enum max42500_vm_input vm_in,
+			    float thresh)
+{
+	uint8_t reg_addr;
+	uint8_t uv_val;
+
+	if ((thresh < MAX42500_MIN_THRESH_VM6_V7) ||
+	    (thresh > MAX42500_MAX_THRESH_VM6_V7))
+		return -EINVAL;
+
+	switch (vm_in) {
+	case MAX42500_VM6:
+		reg_addr = MAX42500_REG_VINU6;
+		break;
+	case MAX42500_VM7:
+		reg_addr = MAX42500_REG_VINU7;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	uv_val = (uint8_t)NO_OS_DIV_ROUND_CLOSEST((thresh - 0.5), 0.005);
+
+	return max42500_reg_write(desc, reg_addr, uv_val);
+}
+
+/**
+ * @brief Get the FPS clock divider value.
+ * @param desc - The device structure.
+ * @param fps_clk_div Pointer to a variable where the FPS clock divider value
+ *                    will be stored.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int max42500_get_fps_clk_div(struct max42500_dev *desc,
+				    uint8_t *fps_clk_div)
+{
+	int ret;
+	uint8_t reg_val;
+
+	ret = max42500_reg_read(desc, MAX42500_REG_FPSCFG1, &reg_val);
+	if (ret)
+		return ret;
+
+	*fps_clk_div = (uint8_t)no_os_field_get(NO_OS_GENMASK(2,0), reg_val);
 
 	return 0;
 }
 
 /**
- * @brief Set built-in self-test mapping bit
+ * @brief Get the power-up timestamp for a specified voltage monitor input.
  * @param desc - The device structure.
- * @param mbst - The MBST bit value.
- * @return 0 in case of success, error code otherwise
+ * @param vm_in - The voltage monitor input for which to get the timestamp.
+ * @param timestamp - The timestamp in microseconds.
+ *                    If the input voltage never rose above the UV threshold,
+ *                    the timestamp will be set to 0.
+ * @return 0 in case of success, negative error code otherwise.
  */
-int max42500_set_mbst(struct max42500_dev *desc, bool mbst)
+int max42500_get_power_up_timestamp(struct max42500_dev *desc,
+				    enum max42500_vm_input vm_in,
+				    uint8_t *timestamp)
 {
-	if (!desc)
-		return -EINVAL;
-
 	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_CONFIG1];
+	uint8_t reg_val;
+	uint8_t fps_clk_div;
 
-	if (mbst)
-		reg.value |= MAX42500_CONFIG1_MBST_MASK;
-	else
-		reg.value &= ~MAX42500_CONFIG1_MBST_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
+	ret = max42500_reg_read(desc, MAX42500_REG_UTIME1 + vm_in, &reg_val);
 	if (ret)
 		return ret;
 
-	/* Update register value */
-	desc->regs[MAX42500_CONFIG1].value = reg.value;
+	// Check if the input voltage rose above the UV threshold
+	if (reg_val == 0) {
+		// Input voltage never rose above UV threshold
+		*timestamp = 0;
+		return 0;
+	}
+
+	ret = max42500_get_fps_clk_div(desc, &fps_clk_div);
+	if (ret)
+		return ret;
+
+	*timestamp = (reg_val - 1) * 25 * (1 << fps_clk_div);
 
 	return 0;
 }
 
 /**
- * @brief Set OTP reload reset configuration bit
+ * @brief Get the power-down timestamp for a specified voltage monitor input.
  * @param desc - The device structure.
- * @param rr - The RR bit value.
- * @return 0 in case of success, error code otherwise
+ * @param vm_in - The voltage monitor input for which to get the timestamp.
+ * @param timestamp - The timestamp in microseconds.
+ *                    If the input voltage never rose above the UV threshold,
+ *                    the timestamp will be set to 0.
+ * @return 0 in case of success, negative error code otherwise.
  */
-int max42500_set_rr(struct max42500_dev *desc, bool rr)
+int max42500_get_power_down_timestamp(struct max42500_dev *desc,
+				      enum max42500_vm_input vm_in,
+				      uint8_t *timestamp)
 {
-	if (!desc)
-		return -EINVAL;
-
 	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_CONFIG1];
+	uint8_t reg_val;
+	uint8_t fps_clk_div;
 
-	if (rr)
-		reg.value |= MAX42500_CONFIG1_RR_MASK;
-	else
-		reg.value &= ~MAX42500_CONFIG1_RR_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
+	ret = max42500_reg_read(desc, MAX42500_REG_DTIME1 + vm_in, &reg_val);
 	if (ret)
 		return ret;
 
-	/* Update register value */
-	desc->regs[MAX42500_CONFIG1].value = reg.value;
+	// Check if the input voltage fell below the the OFF threshold
+	if (reg_val == 0) {
+		// Input voltage never fell below OFF threshold
+		*timestamp = 0;
+		return 0;
+	}
 
-	return 0;
-}
-
-/**
- * @brief Enable voltage monitoring on selected input
- * @param desc - The device structure.
- * @param vmon_en_mask - Mask corresponding to the enabled voltage inputs.
- *                       Bit set means VIN is enabled. Bit cleared is disabled.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_vmon_enable(struct max42500_dev *desc,
-			     uint8_t vmon_en_mask)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_VMON];
-
-	/* Bits set on the mask are enabled voltage inputs */
-	reg.value = vmon_en_mask;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
+	ret = max42500_get_fps_clk_div(desc, &fps_clk_div);
 	if (ret)
 		return ret;
 
-	/* Update register value */
-	desc->regs[MAX42500_VMON].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set voltage monitor power down
- * @param desc - The device structure.
- * @param vmpd_en - Enable/disable power down.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_vmon_pd_en(struct max42500_dev *desc,
-			    bool vmpd_en)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_VMON];
-
-	if (vmpd_en)
-		reg.value |= MAX42500_VMON_VMPD_MASK;
-	else
-		reg.value &= ~MAX42500_VMON_VMPD_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_VMON].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Enable input OV/UV mapping to reset assertion
- * @param desc - The device structure.
- * @param rst_map_mask - Mask corresponding to the mapped voltage inputs.
- *                       Bit set means VIN is mapped. Bit cleared is unmapped.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_rstmap_in(struct max42500_dev *desc,
-			   uint8_t rstmap_mask)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_RSTMAP];
-
-	/* Bits set on the mask are mapped voltage input assertions */
-	reg.value = rstmap_mask;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_RSTMAP].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set parity check failure mapping to reset assertion
- * @param desc - The device structure.
- * @param parm - Enable/disable mapping.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_rstmap_parity(struct max42500_dev *desc,
-			       bool parm_en)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_RSTMAP];
-
-	if (parm_en)
-		reg.value |= MAX42500_RSTMAP_PARM_MASK;
-	else
-		reg.value &= ~MAX42500_RSTMAP_PARM_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_RSTMAP].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set the watchdog mode
- * @param desc - The device structure.
- * @param wd_mode - Challenge/response or simple mode.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_mode(struct max42500_dev *desc,
-			       enum max42500_wd_mode wd_mode)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDCDIV];
-
-	if (wd_mode == MAX42500_WD_MODE_SIMPLE)
-		reg.value |= MAX42500_WDCDIV_SWW_MASK;
-	else
-		reg.value &= ~MAX42500_WDCDIV_SWW_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDCDIV].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set the watchdog clock divider.
- * @param desc - The device structure.
- * @param wd_cdiv - Clock div fine tune value.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_clock_div(struct max42500_dev *desc,
-				    uint8_t wd_cdiv)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDCDIV];
-
-	reg.value &= ~MAX42500_WDCDIV_WDIC_MASK;
-	reg.value |= wd_cdiv;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDCDIV].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set the watchdog open and close windows
- * @param desc - The device structure.
- * @param close_window - Watchdog close window.
- * @param open_window - Watchdog open window.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_window(struct max42500_dev *desc,
-				 uint8_t close_window,
-				 uint8_t open_window)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDCFG1];
-
-	reg.value = ((close_window & 0xF) << 4) | (open_window & 0xF);
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDCFG1].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Enable watchdog
- * @param desc - The device structure.
- * @param wd_enable - Enable/disable MAX42500 watchdog.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_enable(struct max42500_dev *desc, bool wd_enable)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDCFG2];
-
-	if (!desc)
-		return -EINVAL;
-
-	if (wd_enable)
-		reg.value |= MAX42500_WDCFG2_WDEN_MASK;
-	else
-		reg.value &= ~MAX42500_WDCFG2_WDEN_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDCFG2].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set watchdog first update window
- * @param desc - The device structure.
- * @param wd_1ud - First open window length after RESET.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_1ud_window(struct max42500_dev *desc, uint8_t wd_1ud)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDCFG2];
-
-	reg.value &= ~MAX42500_WDCFG2_1UP_MASK;
-	reg.value |= (wd_1ud & MAX42500_WDCFG2_1UP_MASK);
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDCFG2].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Update the watchdog key based on the mode and current value
- * @param desc - The device structure.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_key(struct max42500_dev *desc)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDKEY];
-
-	/* Compute new watchdog key for challenge/response mode */
-	if (desc->wd_mode == MAX42500_WD_MODE_CH_RESP)
-		reg.value = max42500_new_watchdog_key(reg.value);
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDKEY].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set watchdog lock
- * @param desc - The device structure.
- * @param wd_lock - Enable/disable MAX42500 watchdog register access.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_lock(struct max42500_dev *desc, bool wd_lock)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_WDLOCK];
-
-	if (!desc)
-		return -EINVAL;
-
-	if (wd_lock)
-		reg.value |= MAX42500_WDLOCK_LOCK_MASK;
-	else
-		reg.value &= ~MAX42500_WDLOCK_LOCK_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_WDLOCK].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set watchdog violation count before reset assertion
- * @param desc - The device structure.
- * @param mr1 - False - Assert after 1 violation
-                True - Assert after 2 violations
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_mr1(struct max42500_dev *desc, bool mr1)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_RSTCTRL];
-
-	if (!desc)
-		return -EINVAL;
-
-	if (mr1)
-		reg.value |= MAX42500_RSTCTRL_MR1_MASK;
-	else
-		reg.value &= ~MAX42500_RSTCTRL_MR1_MASK;
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_RSTCTRL].value = reg.value;
-
-	return 0;
-}
-
-/**
- * @brief Set watchdog reset hold time
- * @param desc - The device structure.
- * @param wd_1ud - First open window length after RESET.
- * @return 0 in case of success, error code otherwise
- */
-int max42500_set_watchdog_rhld(struct max42500_dev *desc,
-			       enum max42500_wd_rhld rhld)
-{
-	if (!desc)
-		return -EINVAL;
-
-	int ret;
-	struct max42500_reg_st reg = desc->regs[MAX42500_RSTCTRL];
-
-	reg.value &= ~MAX42500_RSTCTRL_RHLD_MASK;
-	reg.value |= (rhld & MAX42500_RSTCTRL_RHLD_MASK);
-
-	/* Write register */
-	ret = max42500_reg_write(desc, reg);
-	if (ret)
-		return ret;
-
-	/* Update register value */
-	desc->regs[MAX42500_RSTCTRL].value = reg.value;
+	*timestamp = (reg_val - 1) * 25 * (1 << fps_clk_div);
 
 	return 0;
 }
@@ -722,13 +541,15 @@ int max42500_init(struct max42500_dev **desc,
 {
 	int ret;
 	struct max42500_dev *descriptor;
+	uint8_t device_id;
+
+	no_os_crc8_populate_msb(max42500_crc8, CRC8_PEC);
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	descriptor->regs = init_param->regs;
-	descriptor->pece = false;
+	descriptor->pece = 0x00;
 
 	/* Initialize GPIOs for device pins */
 	ret = no_os_gpio_get(&descriptor->en0, &init_param->en0_param);
@@ -763,24 +584,20 @@ int max42500_init(struct max42500_dev **desc,
 		goto free_addr;
 
 	/* Check device silicon ID */
-	ret = max42500_reg_read(descriptor, &descriptor->regs[MAX42500_ID]);
+	ret = max42500_reg_read(descriptor, MAX42500_REG_ID, &device_id);
 	if (ret)
 		goto free_i2c;
 
-	if (descriptor->regs[MAX42500_ID].value != MAX42500_SILICON_ID) {
+	if (device_id != MAX42500_SILICON_ID) {
 		ret = -ENODEV;
 		goto free_i2c;
 	}
 
-	/* Initially read all registers */
-	for (int8_t reg_id = MAX42500_CONFIG1; reg_id < MAX42500_REG_NO; reg_id++) {
-		ret = max42500_reg_read(descriptor, &descriptor->regs[reg_id]);
-		if (ret)
-			goto free_i2c;
-	}
-
 	/* Configure PEC */
-	ret = max42500_set_pece(descriptor, init_param->pece);
+	ret = max42500_reg_update(descriptor,
+				  MAX42500_REG_CONFIG1,
+				  NO_OS_BIT(0),
+				  init_param->pece);
 	if (ret)
 		goto free_i2c;
 
@@ -788,74 +605,34 @@ int max42500_init(struct max42500_dev **desc,
 	descriptor->pece = init_param->pece;
 
 	/* Enable voltage monitor inputs */
-	ret = max42500_set_vmon_enable(descriptor, init_param->vmon_en);
+	ret = max42500_reg_update(descriptor,
+				  MAX42500_REG_VMON,
+				  NO_OS_GENMASK(6,0),
+				  init_param->vmon_en);
 	if (ret)
 		goto free_i2c;
 
 	/* Enable voltage monitor power-down */
-	ret = max42500_set_vmon_pd_en(descriptor, init_param->vmon_vmpd);
+	ret = max42500_reg_update(descriptor,
+				  MAX42500_REG_VMON,
+				  NO_OS_BIT(7),
+				  init_param->vmon_vmpd);
 	if (ret)
 		goto free_i2c;
 
 	/* Enable input OV/UV mapping to reset pin */
-	ret = max42500_set_rstmap_in(descriptor, init_param->reset_map);
+	ret = max42500_reg_update(descriptor,
+				  MAX42500_REG_RSTMAP,
+				  NO_OS_GENMASK(6,0),
+				  init_param->reset_map);
 	if (ret)
 		goto free_i2c;
-
-	/* Set watchdog mode */
-	ret = max42500_set_watchdog_mode(descriptor, init_param->wd_mode);
-	if (ret)
-		goto free_i2c;
-
-	/* Set watchdog clock div */
-	ret = max42500_set_watchdog_clock_div(descriptor, init_param->wd_cdiv);
-	if (ret)
-		goto free_i2c;
-
-	/* Set watchdog window */
-	ret = max42500_set_watchdog_window(descriptor,
-					   init_param->wd_close,
-					   init_param->wd_open);
-	if (ret)
-		goto free_i2c;
-
-	/* Set watchdog first update window */
-	ret = max42500_set_watchdog_1ud_window(descriptor, init_param->wd_1ud);
-	if (ret)
-		goto free_i2c;
-
-	/* Set watchdog enable */
-	ret = max42500_set_watchdog_enable(descriptor, init_param->wd_en);
-	if (ret)
-		goto free_i2c;
-
-	/* Initialize timer for watchdog */
-	ret = no_os_timer_init(&descriptor->timer_desc, &init_param->timer_param);
-	if (ret)
-		goto free_i2c;
-
-	/* Initialize IRQ controller */
-	ret = no_os_irq_ctrl_init(&descriptor->irq_desc, &init_param->irq_param);
-	if (ret)
-		goto free_timer;
-
-	/* Update watchdog parameters */
-	descriptor->wd_mode = init_param->wd_mode;
-	descriptor->wd_cdiv = init_param->wd_cdiv;
-	descriptor->wd_close = init_param->wd_close;
-	descriptor->wd_open = init_param->wd_open;
-	descriptor->wd_1ud = init_param->wd_1ud;
-	descriptor->wd_en = init_param->wd_en;
 
 	/* Update descriptor */
 	*desc = descriptor;
 
 	return 0;
 
-free_irq:
-	no_os_irq_ctrl_remove(descriptor->irq_desc);
-free_timer:
-	no_os_timer_remove(descriptor->timer_desc);
 free_i2c:
 	no_os_i2c_remove(descriptor->comm_desc);
 free_addr:
