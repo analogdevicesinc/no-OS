@@ -1,6 +1,7 @@
 {
 	"maxim": {
-		"basic_example": {
-			"flags" : "APARD32690_MAX42500_BASIC_EXAMPLE=y"
+		"basic_example_max32690": {
+			"flags" : "BASIC_EXAMPLE=y TARGET=max32690"
+		}
 	}
 }

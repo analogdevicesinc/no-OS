@@ -51,7 +51,9 @@ int basic_example_main(void)
 	int ret;
 	struct no_os_uart_desc *uart_desc;
 	struct max42500_dev *device;
-	enum max42500_vm_input vmon_in;
+	uint8_t off_stat;
+	uint8_t ov_stat;
+	uint8_t uv_stat;
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
@@ -66,62 +68,44 @@ int basic_example_main(void)
 	if (ret)
 		goto free_max42500;
 
-	/* Configuring VIN1 - VIN5 Nominal Voltage (2V) */
-	max42500_reg_write2(device, MAX42500_VIN1, 0x78);
-	max42500_reg_write2(device, MAX42500_VIN2, 0x78);
-	max42500_reg_write2(device, MAX42500_VIN3, 0x78);
-	max42500_reg_write2(device, MAX42500_VIN4, 0x78);
-	max42500_reg_write2(device, MAX42500_VIN5, 0x4B);
+	ret = max42500_set_nominal_voltage(device, MAX42500_VM1, 2);
+	if (ret)
+		goto free_max42500;
 
-	/* Configuring VIN1 - VIN5 Undervoltage and Overvoltage thresholds (10%) */
-	max42500_reg_write2(device, MAX42500_OVUV1, 0xFF);
-	max42500_reg_write2(device, MAX42500_OVUV2, 0xFF);
-	max42500_reg_write2(device, MAX42500_OVUV3, 0xFF);
-	max42500_reg_write2(device, MAX42500_OVUV4, 0xFF);
-	max42500_reg_write2(device, MAX42500_OVUV5, 0xFF);
+	ret = max42500_set_ov_thresh1(device, MAX42500_VM1, 10);
+	if (ret)
+		goto free_max42500;
 
-	/* Configuring VIN6 Undervoltage and Overvoltage thresholds (0.9V, 1.1V) */
-	max42500_reg_write2(device, MAX42500_VINO6, 0x78);
-	max42500_reg_write2(device, MAX42500_VINU6, 0x50);
-
-	/* Configuring VIN7 Undervoltage and Overvoltage thresholds (0.9V, 1.1V) */
-	max42500_reg_write2(device, MAX42500_VINO7, 0x78);
-	max42500_reg_write2(device, MAX42500_VINU7, 0x50);
-
-	/* Enabling VMON 1 - VMON 7 */
-	max42500_set_vmon_enable(device, max42500_regs[MAX42500_VMON].value |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM1) |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM2) |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM3) |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM4) |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM5) |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM6) |
-				 MAX42500_VMON_IN_MASK(MAX42500_VM7));
+	ret = max42500_set_uv_thresh1(device, MAX42500_VM1, 10);
+	if (ret)
+		goto free_max42500;
 
 	while (1) {
-		max42500_reg_read(device, &max42500_regs[MAX42500_STATUV]);
-		max42500_reg_read(device, &max42500_regs[MAX42500_STATOV]);
-		max42500_reg_read(device, &max42500_regs[MAX42500_STATOFF]);
+		max42500_get_comp_status(device,
+					 MAX42500_VM1, MAX42500_COMP_STAT_OFF,
+					 &off_stat);
+		max42500_get_comp_status(device,
+					 MAX42500_VM1,
+					 MAX42500_COMP_STAT_OV,
+					 &ov_stat);
+		max42500_get_comp_status(device,
+					 MAX42500_VM1,
+					 MAX42500_COMP_STAT_UV,
+					 &uv_stat);
 
-		for (vmon_in = MAX42500_VM1; vmon_in < MAX42500_VM_MAX; vmon_in++) {
-			if ((max42500_regs[MAX42500_STATOFF].value >> vmon_in) & 1) {
-				printf("   IN%d status: Voltage is below OFF threshold\n\r",
-				       vmon_in + 1);
-			} else if ((max42500_regs[MAX42500_STATUV].value >> vmon_in) & 1) {
-				printf("   IN%d status: Undervoltage detected\n\r",
-				       vmon_in + 1);
-			} else if ((max42500_regs[MAX42500_STATOV].value >> vmon_in) & 1) {
-				printf("   IN%d status: Overvoltage detected\n\r",
-				       vmon_in + 1);
-			} else {
-				printf("   IN%d status: Voltage is within acceptable range\n\r",
-				       vmon_in + 1);
-			}
-
-			no_os_mdelay(500);
+		if (off_stat) {
+			printf("   IN%d status: Voltage is below OFF threshold\n\r",
+			       MAX42500_VM1 + 1);
+		} else if (uv_stat) {
+			printf("   IN%d status: Undervoltage detected\n\r",
+			       MAX42500_VM1 + 1);
+		} else if (ov_stat) {
+			printf("   IN%d status: Overvoltage detected\n\r",
+			       MAX42500_VM1 + 1);
+		} else {
+			printf("   IN%d status: Voltage is within acceptable range\n\r",
+			       MAX42500_VM1 + 1);
 		}
-
-		printf("*************************************************\n\r");
 	}
 
 free_max42500:
