@@ -129,6 +129,7 @@ static const char * const iio_chan_type_string[] = {
 	[IIO_COUNT] = "count",
 	[IIO_DELTA_ANGL] = "deltaangl",
 	[IIO_DELTA_VELOCITY] = "deltavelocity",
+	[IIO_WEIGHT] = "weight",
 };
 
 static const char * const iio_modifier_names[] = {
