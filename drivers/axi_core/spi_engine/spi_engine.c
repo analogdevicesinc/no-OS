@@ -519,6 +519,7 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
 {
 	struct spi_engine_desc	*desc_extra;
+	uint8_t cfg_reg;
 
 	desc_extra = desc->extra;
 
@@ -535,14 +536,19 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 					    desc_extra->data_width));
 	/*
 	 * Configure the spi mode :
+	 * 	- sdo_idle_state
 	 *	- 3 wire
 	 *	- CPOL
 	 *	- CPHA
 	 */
+	cfg_reg = desc->mode;
+	if (desc_extra->sdo_idle_state != 0)
+		cfg_reg |= SPI_ENGINE_CONFIG_SDO_IDLE;
+
 	spi_engine_queue_append_cmd(&msg->cmds,
 				    SPI_ENGINE_CMD_CONFIG(
 					    SPI_ENGINE_CMD_REG_CONFIG,
-					    desc->mode));
+					    cfg_reg));
 
 	/* Add a sync command to signal that the transfer has finished */
 	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(_sync_id));
