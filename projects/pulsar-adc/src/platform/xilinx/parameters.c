@@ -62,4 +62,5 @@ struct spi_engine_init_param spi_eng_init_param  = {
 	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
 	.cs_delay = 1,
+	.sdo_idle_state = 1,
 };
