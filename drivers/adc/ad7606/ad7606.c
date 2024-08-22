@@ -295,14 +295,14 @@ struct ad7606_dev {
 	struct ad7606_digital_diag digital_diag_enable;
 	/** Number of input channels of the device */
 	uint8_t num_channels;
+	/** Channel scale computed from channel range setting */
+	double scale_ch[AD7606_MAX_CHANNELS];
 	/** Channel offset calibration */
 	int8_t offset_ch[AD7606_MAX_CHANNELS];
 	/** Channel phase calibration */
 	uint8_t phase_ch[AD7606_MAX_CHANNELS];
 	/** Channel gain calibration */
 	uint8_t gain_ch[AD7606_MAX_CHANNELS];
-	/** Channel operating range */
-	struct ad7606_range range_ch[AD7606_MAX_CHANNELS];
 	/** Data buffer (used internally by the SPI communication functions) */
 	uint8_t data[28];
 };
@@ -794,9 +794,9 @@ static inline void ad7606_reset_settings(struct ad7606_dev *dev)
 
 	for(i = 0; i < dev->num_channels; i++) {
 		if (dev->sw_mode)
-			dev->range_ch[i] = rt[3];
+			ad7606_set_ch_range(dev, i, rt[3]);
 		else
-			dev->range_ch[i] = rt[0];
+			ad7606_set_ch_range(dev, i, rt[0]);
 
 		dev->offset_ch[i] = 0;
 		dev->phase_ch[i] = 0;
@@ -1049,6 +1049,7 @@ static int8_t ad7606_find_range(struct ad7606_dev *dev,
 int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 			    struct ad7606_range range)
 {
+	const struct ad7606_chip_info *info;
 	int value;
 	int32_t ret;
 
@@ -1072,9 +1073,53 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 	if (ret)
 		return ret;
 
-	dev->range_ch[ch] = range;
+	info = &ad7606_chip_info_tbl[dev->device_id];
+
+	dev->scale_ch[ch] = (double)(range.max - range.min) / (double)(1 << info->bits);
 
 	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Get the value of scale for the channel
+ *
+ * @param dev        - The device structure.
+ * @param ch         - The channel number.
+ * @param scale      - Pointer where to store the channel scale.
+ *
+ * @return ret - return code.
+ *         Example: -EINVAL - Invalid input.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_get_ch_scale(struct ad7606_dev *dev, uint8_t ch, double *scale)
+{
+	if (!scale)
+		return -EINVAL;
+
+	if (ch >= dev->num_channels)
+		return -EINVAL;
+
+	*scale = dev->scale_ch[ch];
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Get the resolution bits of this device.
+ *
+ * @param dev        - The device structure.
+ *
+ * @return ret - return code.
+ *         Example: -EINVAL - Invalid input.
+ *                  The number of resolution bits for this device.
+*******************************************************************************/
+int32_t ad7606_get_resolution_bits(struct ad7606_dev *dev)
+{
+	const struct ad7606_chip_info *info;
+
+	info = &ad7606_chip_info_tbl[dev->device_id];
+
+	return info->bits;
 }
 
 /***************************************************************************//**

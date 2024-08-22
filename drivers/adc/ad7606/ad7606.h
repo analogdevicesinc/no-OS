@@ -358,6 +358,9 @@ int32_t ad7606_convst(struct ad7606_dev *dev);
 int32_t ad7606_reset(struct ad7606_dev *dev);
 int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 				struct ad7606_oversampling oversampling);
+int32_t ad7606_get_ch_scale(struct ad7606_dev *dev, uint8_t ch,
+			    double *scale);
+int32_t ad7606_get_resolution_bits(struct ad7606_dev *dev);
 int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 			    struct ad7606_range range);
 int32_t ad7606_set_ch_offset(struct ad7606_dev *dev, uint8_t ch,
