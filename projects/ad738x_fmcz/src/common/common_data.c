@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to STM32 platform used by eval-ad738x
- *           project.
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by eval-ad738x examples.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -38,45 +37,88 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stm32_hal.h"
-#include "stm32_irq.h"
-#include "stm32_gpio_irq.h"
-#include "stm32_spi.h"
-#include "stm32_gpio.h"
-#include "stm32_uart.h"
-#include "stm32_uart_stdio.h"
+#include "common_data.h"
+#include "no_os_spi.h"
+#include "no_os_uart.h"
+#include "spi_engine.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern UART_HandleTypeDef huart5;
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID 0
+uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
+
+struct no_os_uart_init_param ad738x_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
+
+struct no_os_spi_init_param ad738x_spi_init_param = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_1,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+};
+
+#ifndef USE_STANDARD_SPI
+struct spi_engine_init_param spi_eng_init_param  = {
+	.ref_clk_hz = 100000000,
+	.type = SPI_ENGINE,
+	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
+	.cs_delay = 0,
+	.data_width = 32,
+};
+
+struct spi_engine_offload_init_param spi_engine_offload_init_param = {
+	.offload_config = OFFLOAD_RX_EN,
+	.rx_dma_baseaddr = DMA_BASEADDR,
+};
+
+struct axi_clkgen_init clkgen_init = {
+	.name = "rx_clkgen",
+	.base = RX_CLKGEN_BASEADDR,
+	.parent_rate = 100000000,
+};
+
+struct axi_pwm_init_param axi_pwm_init_param = {
+	.base_addr = AXI_PWMGEN_BASEADDR,
+	.ref_clock_Hz = 100000000,
+	.channel = 0
+};
+
+struct no_os_pwm_init_param pwm_init_param = {
+	.id = NO_OS_PWM_ID,
+	.period_ns = PWM_PERIOD_NS,
+	.duty_cycle_ns = PWM_DUTY_NS,
+	.polarity = NO_OS_PWM_POLARITY_HIGH,
+	.platform_ops = PWM_OPS,
+	.extra = &axi_pwm_init_param,
+};
 #endif
 
-#define UART_IRQ_ID		UART5_IRQn
-
-#define UART_DEVICE_ID		5
-#define UART_BAUDRATE		230400
-#define UART_EXTRA		&ad738x_uart_extra_ip
-#define UART_OPS		&stm32_uart_ops
-
-#define SPI_DEVICE_ID		1
-#define SPI_BAUDRATE		20000000
-#define SPI_CS			15
-#define SPI_CS_PORT		GPIO_PORT_A
-#define SPI_OPS			&stm32_spi_ops
-#define SPI_EXTRA		&ad738x_spi_extra_ip
-
-#define GPIO_PORT_A		0
-
-extern struct stm32_uart_init_param ad738x_uart_extra_ip;
-extern struct stm32_spi_init_param ad738x_spi_extra_ip;
-
-#endif /* __PARAMETERS_H__ */
+struct ad738x_init_param ad738x_init_param = {
+	.spi_param = &ad738x_spi_init_param,
+#ifndef USE_STANDARD_SPI
+	.clkgen_init = &clkgen_init,
+	.axi_clkgen_rate = 100000000,
+	.pwm_init = &pwm_init_param,
+	.offload_init_param = &spi_engine_offload_init_param,
+	.dcache_invalidate_range =
+	(void (*)(uint32_t, uint32_t))DCACHE_INVALIDATE,
+#endif
+	.conv_mode = ONE_WIRE_MODE,
+	.ref_sel = INT_REF,
+};

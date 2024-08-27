@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by eval-ad738x examples.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by eval-ad738x
+ *           project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -37,21 +38,49 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "ad738x.h"
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
+#include "stm32_spi.h"
+#include "stm32_gpio.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern struct no_os_uart_init_param ad738x_uart_ip;
-extern struct no_os_spi_init_param ad738x_spi_ip;
-extern struct ad738x_init_param ad738x_ip;
-extern struct no_os_uart_desc *uart_desc;
+extern UART_HandleTypeDef huart5;
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID 0
+#endif
 
-#endif /* __COMMON_DATA_H__ */
+#define UART_IRQ_ID		UART5_IRQn
+
+#define UART_DEVICE_ID		5
+#define UART_BAUDRATE		115200
+#define UART_EXTRA		&ad738x_uart_extra_ip
+#define UART_OPS		&stm32_uart_ops
+
+#define SPI_DEVICE_ID		1
+#define SPI_BAUDRATE		5000000
+#define SPI_CS			15
+#define SPI_CS_PORT		GPIO_PORT_A
+#define SPI_OPS			&stm32_spi_ops
+#define SPI_EXTRA		&ad738x_spi_extra_ip
+
+#define GPIO_PORT_A		0
+
+#define SAMPLES_PER_CHANNEL		1000
+#define BYTES_PER_SAMPLE		2
+#define MAX_SIZE_BASE_ADDR		(SAMPLES_PER_CHANNEL * 2 * BYTES_PER_SAMPLE)
+
+extern struct stm32_uart_init_param ad738x_uart_extra_ip;
+extern struct stm32_spi_init_param ad738x_spi_extra_ip;
+
+#endif /* __PARAMETERS_H__ */
