@@ -5,18 +5,28 @@
 #include "no_os_util.h"
 #include "no_os_mdio.h"
 
-#define DP83TG_PHY_ID_1				0x2
-#define DP83TG_PHY_ID_2				0x3
+#define DP83TG_PHY_ID_1					0x2
+#define DP83TG_PHY_ID_2					0x3
 
-#define DP83TG_REGCR				0xd
-#define DP83TG_ADDAR				0xe
+#define DP83TG_REGCR					0xd
+#define DP83TG_ADDAR					0xe
 
-#define DP83TG_MII_REG_1F			0x1f
-#define DP83TG_SW_GLOBAL_RESET_MASK	NO_OS_BIT(15)
-#define DP83TG_DIGITAL_RESET_MASK	NO_OS_BIT(14)
+#define DP83TG_MII_REG_1F				0x1f
+#define DP83TG_SW_GLOBAL_RESET_MASK		NO_OS_BIT(15)
+#define DP83TG_DIGITAL_RESET_MASK		NO_OS_BIT(14)
 
-#define DP83TG_SGMII_CTRL_1			NO_OS_MDIO_C45_ADDR(0x1f, 0x608)
-#define DP83TG_SGMII_CTRL_2			NO_OS_MDIO_C45_ADDR(0x1f, 0x60c)
+#define DP83TG_SGMII_CTRL_1				NO_OS_MDIO_C45_ADDR(0x1f, 0x608)
+#define DP83TG_CFG_SGMII_EN_MASK		NO_OS_BIT(9)
+#define DP83TG_SGMII_AUTONEG_TIMER_MASK	NO_OS_GENMASK(2, 1)
+#define DP83TG_MR_AN_ENABLE_MASK		NO_OS_BIT(0)
+
+#define DP83TG_SGMII_STATUS				NO_OS_MDIO_C45_ADDR(0x1f, 0x60a)
+#define DP83TG_SGMII_PAGE_RECEIVED_MASK	NO_OS_BIT(12)
+#define DP83TG_LINK_STATUS_1000BX_MASK	NO_OS_BIT(11)
+#define DP83TG_MR_AN_COMPLETE_MASK		NO_OS_BIT(10)
+
+#define DP83TG_SGMII_CTRL_2				NO_OS_MDIO_C45_ADDR(0x1f, 0x60c)
+#define DP83TG_MR_RESTART_AN_MASK		NO_OS_BIT(6)
 
 struct dp83tg_init_param {
 	struct no_os_gpio_init_param *reset;
@@ -41,5 +51,7 @@ int dp83tg_write_bits(struct dp83tg_desc *dev, uint8_t addr, uint16_t val,
 
 int dp83tg_soft_reset(struct dp83tg_desc *dev);
 int dp83tg_hard_reset(struct dp83tg_desc *dev);
+
+int dp83tg_sgmii(struct dp83tg_desc *dev);
 
 #endif

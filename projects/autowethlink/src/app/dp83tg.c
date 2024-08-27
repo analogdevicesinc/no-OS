@@ -47,29 +47,10 @@ int dp83tg_init(struct dp83tg_desc **dev, struct dp83tg_init_param *param)
 		ret = -EFAULT;
 		goto free_mdio;
 	}
-
-	ret = dp83tg_read(d, DP83TG_SGMII_CTRL_1, &val);
-	dp83tg_write(d, DP83TG_SGMII_CTRL_1, 0x7b);
-	ret = dp83tg_read(d, DP83TG_SGMII_CTRL_1, &val);
-	// ret = dp83tg_config_rgmii(d, param->rgmii_config);
-	// if (ret)
-	// 	goto free_mdio;
-
-	// ret = dp83tg_config_gp_clk(d, param->gp_clk, param->gp_clk_source);
-	// if (ret)
-	// 	goto free_mdio;
-
-	// ret = dp83tg_config_clk25_ref(d, param->clk25_ref);
-	// if (ret)
-	// 	goto free_mdio;
-
-	// ret = dp83tg_config_speed(d, param->speed_cap);
-	// if (ret)
-	// 	goto free_mdio;
-
-	// ret = dp83tg_autoneg(d, param->autoneg);
-	// if (ret)
-	// 	goto free_mdio;
+	
+	ret = dp83tg_sgmii(d);
+	if (ret)
+		return ret;
 
 	*dev = d;
 
@@ -180,4 +161,9 @@ int dp83tg_write_bits(struct dp83tg_desc *dev, uint8_t addr, uint16_t val,
 	rval |= (val & bitmask);
 
 	return dp83tg_write(dev, addr, rval);
+}
+
+int dp83tg_sgmii(struct dp83tg_desc *dev)
+{
+	return dp83tg_write_bits(dev, DP83TG_SGMII_CTRL_1, DP83TG_CFG_SGMII_EN_MASK, DP83TG_CFG_SGMII_EN_MASK);
 }
