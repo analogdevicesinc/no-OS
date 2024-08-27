@@ -317,7 +317,7 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 		return ret;
 
 	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
 #else
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, samples);
 	if (ret)
