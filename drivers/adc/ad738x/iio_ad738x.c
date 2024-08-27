@@ -145,8 +145,8 @@ static int32_t iio_ad738x_submit_buffer(struct iio_device_data *iio_dev_data)
 }
 
 static struct scan_type ad738x_iio_scan_type = {
-	.sign = 'u',
-	.realbits = AD738X_CHN_STORAGE_BITS,
+	.sign = 's',
+	.realbits = AD738X_ADC_RESOLUTION,
 	.storagebits = AD738X_CHN_STORAGE_BITS,
 };
 
