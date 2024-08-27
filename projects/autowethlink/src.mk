@@ -18,18 +18,18 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.c \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_timer.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_init.c \
 	$(DRIVERS)/api/no_os_i2c.c \
+	$(DRIVERS)/api/no_os_timer.c \
 	$(DRIVERS)/api/no_os_eeprom.c \
 	$(DRIVERS)/eeprom/24xx32a/24xx32a.c \
 	$(DRIVERS)/api/no_os_mdio.c \
 	$(DRIVERS)/net/mdio_bitbang.c \
-	$(DRIVERS)/adc/adm1177/adm1177.c \
-	$(DRIVERS)/adc/adm1177/iio_adm1177.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
@@ -48,8 +48,8 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_dma.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.h \
-	$(INCLUDE)/no_os_rtc.h \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h \
+	$(INCLUDE)/no_os_timer.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_timer.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.h \
@@ -59,10 +59,9 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(DRIVERS)/eeprom/24xx32a/24xx32a.h \
 	$(INCLUDE)/no_os_mdio.h \
 	$(DRIVERS)/net/mdio_bitbang.h \
-	$(DRIVERS)/adc/adm1177/adm1177.h \
-	$(DRIVERS)/adc/adm1177/iio_adm1177.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_init.h \
 	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_list.h \

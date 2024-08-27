@@ -2,18 +2,18 @@
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
-#include "no_os_rtc.h"
+#include "no_os_timer.h"
+#include "maxim_timer.h"
 #include "no_os_crc8.h"
 #include "no_os_mdio.h"
 #include "mdio_bitbang.h"
 #include "parameters.h"
-#include "adm1177.h"
-#include "iio_adm1177.h"
 #include "hmc630x.h"
 #include "iio_hmc630x.h"
 #include "mwc.h"
 #include "iio_app.h"
 #include "dp83tg.h"
+#include "mxc_sys.h"
 
 volatile bool heartbeat_pulse = false;
 
@@ -39,50 +39,67 @@ static int mwc_step(void *arg)
 void heartbeat(void *context)
 {
 	heartbeat_pulse = true;
-	no_os_rtc_set_cnt(context, 0);
+	uint32_t count;
+	no_os_timer_counter_get(context, &count);
 }
 
 static int heartbeat_prepare(void)
 {
 	int ret;
-	struct no_os_rtc_init_param rtcip = {
-		.id = 0,
+
+	struct no_os_timer_init_param tim_config = {
+		.id = 1,
+		.freq_hz = PeripheralClock / 1024,
+		.ticks_count = PeripheralClock / 1024 / 2,
+		.platform_ops = &max_timer_ops,
 	};
 
-	struct no_os_rtc_desc *rtc;
-	ret = no_os_rtc_init(&rtc, &rtcip);
+	struct no_os_timer_desc *tim;
+	ret = no_os_timer_init(&tim, &tim_config);
 	if (ret)
 		return ret;
-
-	ret = no_os_rtc_set_irq_time(rtc, 1);
-	if (ret)
-		return ret;
-
-	struct no_os_irq_ctrl_desc *nvic;
-	struct no_os_irq_init_param nvic_param = {
-		.irq_ctrl_id = 0,
-		.platform_ops = &max_irq_ops,
+ 
+	/* Timer irq initialization parameter */
+	struct no_os_irq_init_param irq_config = {
+		.irq_ctrl_id = 0, // specific to NVIC IRQ controller
+		.platform_ops = &max_irq_ops, // platform specific
 	};
-	ret = no_os_irq_ctrl_init(&nvic, &nvic_param);
-
-	struct no_os_callback_desc rtc_cb = {
+ 
+	struct no_os_callback_desc irq_cb = {
 		.callback = heartbeat,
-		.event = NO_OS_EVT_RTC,
-		.peripheral = NO_OS_RTC_IRQ,
-		.ctx = rtc,
+		.ctx = tim,
+		.event = NO_OS_EVT_TIM_ELAPSED,
+		.peripheral = NO_OS_TIM_IRQ,
+		.handle = MXC_TMR1,
 	};
-	ret = no_os_irq_register_callback(nvic, RTC_IRQn, &rtc_cb);
+
+	/* Irq descriptor */
+	struct no_os_irq_ctrl_desc *nvic;
+
+	/* Initialize timer IRQ controller */
+	ret = no_os_irq_ctrl_init(&nvic, &irq_config);
 	if (ret)
 		return ret;
-	ret = no_os_irq_set_priority(nvic, RTC_IRQn, 1);
+ 
+	/* Set timer IRQ priority */
+	ret = no_os_irq_set_priority(nvic, TMR1_IRQn, 1);
 	if (ret)
 		return ret;
-	ret = no_os_irq_enable(nvic, RTC_IRQn);
+ 
+	/* Register callback for timer IRQ */
+	ret = no_os_irq_register_callback(nvic, TMR1_IRQn, &irq_cb);
 	if (ret)
 		return ret;
-	ret = no_os_rtc_start(rtc);
+ 
+	/* Enable timer IRQ */
+	ret = no_os_irq_enable(nvic, TMR1_IRQn);
 	if (ret)
 		return ret;
+
+	/* Start timer */	 
+	ret = no_os_timer_start(tim);
+	if (ret)	 
+		return ret;	
 
 	return 0;
 }
@@ -106,11 +123,12 @@ int main(void)
 	const uint16_t nvmpsz = sizeof(union nvmp255);
 	uint8_t eebuf[nvmpsz + 1];
 	union nvmp255 *nvmp;
-	struct adm1177_iio_dev *iio_adm1177;
 	struct dp83tg_desc *dp83tg;
 
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
 	no_os_crc8_populate_msb(crc8, 0x7);
+
+	no_os_init();
 
 	// Greeting
 	struct no_os_uart_init_param uart_greeting_ip = uart_console_ip;
@@ -210,25 +228,6 @@ post_eeprom:
 	if (ret)
 		return ret;
 
-	struct adm1177_iio_init_param iio_adm1177_config = {
-		.adm1177_initial = &(struct adm1177_init_param)
-		{
-			.i2c_init = {
-				.device_id = 0,
-				.slave_address = ADM1177_ADDRESS,
-				.extra = &(struct max_i2c_init_param)
-				{
-					.vssel = MXC_GPIO_VSSEL_VDDIOH,
-				},
-				.platform_ops = &max_i2c_ops,
-				.max_speed_hz = 100000,
-			},
-		},
-	};
-	ret = adm1177_iio_init(&iio_adm1177, &iio_adm1177_config);
-	if (ret)
-		return ret;
-
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
 		.reset_gpio_ip = &xcvr_reset_gpio_ip,
@@ -275,7 +274,7 @@ post_eeprom:
 	if (ret)
 		goto end;
 
-	if (id == ID_ADMV96X5) {
+	if (id == ID_ADMV96X5 || id == ID_ADMV96X7) {
 		ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SEL_VREF, 0x8);
 		if (ret)
 			goto end;
@@ -342,11 +341,6 @@ post_eeprom:
 			.dev = iio_dp83tg,
 			.dev_descriptor = iio_dp83tg->iio_dev,
 		},*/
-		{
-			.name = "adm1177",
-			.dev = iio_adm1177,
-			.dev_descriptor = iio_adm1177->iio_dev,
-		},
 	};
 
 	struct iio_ctx_attr iio_ctx_attrs[] = {
