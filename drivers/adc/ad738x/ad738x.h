@@ -45,6 +45,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "no_os_util.h"
+#include "clk_axi_clkgen.h"
 #if defined(USE_STANDARD_SPI)
 #include "no_os_spi.h"
 #endif
@@ -158,6 +159,8 @@ struct ad738x_dev {
 #if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+	struct axi_clkgen *clkgen;
+	struct no_os_pwm_desc *pwm_desc;
 #endif
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
@@ -172,8 +175,11 @@ struct ad738x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		*spi_param;
 #if !defined(USE_STANDARD_SPI)
+	struct axi_clkgen_init *clkgen_init;
+	uint32_t axi_clkgen_rate;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+	struct no_os_pwm_init_param *pwm_init;
 #endif
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;
