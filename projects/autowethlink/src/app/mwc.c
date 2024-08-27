@@ -20,10 +20,10 @@ const union nvmp255 factory_defaults_template = {
 		.carrier_model = "-",
 		.carrier_serial = "-",
 
-		.tx_autotuning = true,
+		.tx_autotuning = false,
 		.tx_target = 350,
 		.tx_tolerance = 50,
-		.rx_autotuning = true,
+		.rx_autotuning = false,
 		.rx_target = 1950,
 		.rx_tolerance = 50,
 		.tx_auto_ifvga = true,
