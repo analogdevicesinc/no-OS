@@ -1,9 +1,11 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Parameters definition for AD738x-FMCZ.
+ *   @brief  Definitions specific to xilinx platform used by ad463x_fmcz
+ *           project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,15 +38,70 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#ifndef PARAMETERS_H_
-#define PARAMETERS_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdio.h>
+#include <xparameters.h>
+#include <xil_cache.h>
+#include <xilinx_uart.h>
+#include "xilinx_gpio.h"
+#include "axi_pwm_extra.h"
+#include "spi_engine.h"
+
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD738X_DMA_BASEADDR             XPAR_AXI_AD738X_DMA_BASEADDR
-#define AD738X_SPI_ENGINE_BASEADDR      XPAR_SPI_AD738X_ADC_SPI_AD738X_ADC_AXI_REGMAP_BASEADDR
+#ifdef _XPARAMETERS_PS_H_
+#define UART_DEVICE_ID                  XPAR_XUARTPS_0_DEVICE_ID
+#define INTC_DEVICE_ID                  XPAR_SCUGIC_SINGLE_DEVICE_ID
+
+#ifdef XPS_BOARD_ZCU102
+#define UART_IRQ_ID                     XPAR_XUARTPS_0_INTR
+#else
+#define UART_IRQ_ID                     XPAR_XUARTPS_1_INTR
+#endif
+
+#else // _XPARAMETERS_PS_H_
+#define UART_DEVICE_ID                  XPAR_AXI_UART_DEVICE_ID
+#define INTC_DEVICE_ID                  XPAR_INTC_SINGLE_DEVICE_ID
+#define UART_IRQ_ID                     XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#endif // _XPARAMETERS_PS_H_
+
+#define UART_BAUDRATE                   115200
+#define UART_EXTRA                      &uart_extra_ip
+#define UART_OPS                        &xil_uart_ops
+
+#define DMA_BASEADDR                    XPAR_AXI_AD738X_DMA_BASEADDR
+#define SPI_ENGINE_BASEADDR             XPAR_SPI_AD738X_ADC_SPI_AD738X_ADC_AXI_REGMAP_BASEADDR
+#define RX_CLKGEN_BASEADDR              XPAR_SPI_CLKGEN_BASEADDR
+#define AXI_PWMGEN_BASEADDR             XPAR_SPI_TRIGGER_GEN_BASEADDR
+
 #define AD738X_SPI_CS                   0
 
-#endif /* PARAMETERS_H_ */
+#define SPI_DEVICE_ID                   0
+#define SPI_OPS                         &spi_eng_platform_ops
+#define SPI_EXTRA                       &spi_eng_init_param
+#define SPI_CS                          0
+#define SPI_BAUDRATE                    10000000
+
+#define NO_OS_PWM_ID                    0
+#define PWM_OPS                         &axi_pwm_ops
+#define PWM_PERIOD_NS                   500
+#define PWM_DUTY_NS                     10
+
+#define SAMPLES_PER_CHANNEL		1000
+#define BYTES_PER_SAMPLE		2
+#define MAX_SIZE_BASE_ADDR		(SAMPLES_PER_CHANNEL * 2 * BYTES_PER_SAMPLE)
+
+#define DCACHE_INVALIDATE		Xil_DCacheInvalidateRange
+
+extern struct xil_uart_init_param uart_extra_ip;
+extern struct spi_engine_init_param spi_eng_init_param;
+
+
+#endif /* __PARAMETERS_H__ */

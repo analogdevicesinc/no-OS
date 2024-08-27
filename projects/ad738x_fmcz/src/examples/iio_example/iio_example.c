@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for STM32 platform of eval-ad738x project.
+ *   @file   iio_example.c
+ *   @brief  IIO example header for eval-ad738x project
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -41,33 +41,60 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
+#include <stdio.h>
 
-#ifdef IIO_EXAMPLE
 #include "iio_example.h"
-#endif
+#include "common_data.h"
+#include "iio.h"
+#include "ad738x.h"
+#include "iio_ad738x.h"
+#include "no_os_util.h"
+#include "no_os_gpio.h"
+#include "no_os_print_log.h"
+#include "iio_app.h"
 
-/***************************************************************************//**
- * @brief Main function execution for STM32 platform.
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+
+/**
+ * @brief IIO example main execution.
  *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-#define AD738X_ADC_REF_VOLTAGE 3300
-
-int main()
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
+ */
+int iio_example_main()
 {
-	ad738x_ip.spi_param = &ad738x_spi_ip;
-	ad738x_ip.conv_mode = ONE_WIRE_MODE;
-	ad738x_ip.ref_sel = EXT_REF;
-	ad738x_ip.ref_voltage_mv = AD738X_ADC_REF_VOLTAGE;
-	ad738x_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK2Freq;
+	struct ad738x_iio_dev *dev;
+	struct iio_app_init_param app_init_param = {0};
+	struct iio_app_desc *app;
+	struct iio_app_device iio_devices[] = {
+		{ .name = "ad738x" },
+	};
+	int ret;
 
-	stm32_init();
-#ifdef IIO_EXAMPLE
-	return iio_example_main();
-#else
-#error At least one example has to be selected using y value in Makefile.
-#endif
+	ret = ad738x_iio_init(&dev, &ad738x_init_param);
+	if (ret)
+		return ret;
+
+	iio_devices[0].dev = dev;
+	iio_devices[0].dev_descriptor = dev->iio_dev;
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = ad738x_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret) {
+		ad738x_iio_remove(dev);
+		return ret;
+	}
+
+	ret = iio_app_run(app);
+	if (ret)
+		pr_info("Error: iio_app_run: %d\n", ret);
+
+	iio_app_remove(app);
+
+	ad738x_iio_remove(dev);
+
+	return ret;
 }

@@ -1,10 +1,10 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-ad738x project.
+ *   @file   basic_example.h
+ *   @brief  BASIC example header
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
- * Copyright 2024(c) BayLibre, SAS.
  *
  * All rights reserved.
  *
@@ -37,14 +37,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __BASIC_EXAMPLE_H__
+#define __BASIC_EXAMPLE_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+int basic_example_main();
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#endif /* __BASIC_EXAMPLE_H__ */

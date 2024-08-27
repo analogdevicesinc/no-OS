@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-ad738x project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of eval-ad738x project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -41,15 +41,41 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-struct stm32_uart_init_param ad738x_uart_extra_ip = {
-	.huart = &huart5,
-};
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
+#elif defined(IIO_EXAMPLE)
+#include "iio_example.h"
+#endif
 
-struct stm32_spi_init_param ad738x_spi_extra_ip  = {
-	.chip_select_port = SPI_CS_PORT,
-};
+/***************************************************************************//**
+ * @brief Main function execution for STM32 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+#define AD738X_ADC_REF_VOLTAGE 3300
+
+int main()
+{
+	int ret;
+	struct no_os_uart_desc *uart;
+
+	stm32_init();
+	ret = no_os_uart_init(&uart, &ad738x_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart);
+
+#ifdef BASIC_EXAMPLE
+	ret = basic_example_main();
+#elif defined(IIO_EXAMPLE)
+
+	ret = iio_example_main();
+#else
+#error At least one example has to be selected using y value in Makefile.
+#endif
+}
