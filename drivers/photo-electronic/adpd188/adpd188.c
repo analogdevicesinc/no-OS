@@ -628,7 +628,7 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
  * @param freq_hz - Desired ADC sample frequency.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, uint16_t freq_hz)
+int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, float freq_hz)
 {
 	uint16_t reg_data;
 
@@ -646,7 +646,7 @@ int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, uint16_t freq_hz)
  * @param freq_hz - ADC sample frequency.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, uint16_t *freq_hz)
+int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, float *freq_hz)
 {
 	int32_t ret;
 	uint16_t reg_data;
@@ -654,7 +654,7 @@ int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, uint16_t *freq_hz)
 	ret = adpd188_reg_read(dev, ADPD188_REG_FSAMPLE, &reg_data);
 	if(ret != 0)
 		return -1;
-	*freq_hz = 32000 / (reg_data * 4);
+	*freq_hz = 32000.0 / (reg_data * 4.0);
 
 	return 0;
 }
