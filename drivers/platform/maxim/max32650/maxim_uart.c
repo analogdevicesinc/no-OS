@@ -194,6 +194,10 @@ static int32_t max_uart_read_nonblocking(struct no_os_uart_desc *desc,
 		ret = MXC_UART_TransactionAsync(&uart_irq_state[id]);
 		if (ret == E_BUSY)
 			return -EBUSY;
+		else if (ret == E_BAD_STATE) {
+			MXC_UART_RxAsyncStop(MXC_UART_GET_UART(desc->device_id));
+			return 0;
+		}
 	}
 
 	return 0;
@@ -449,6 +453,7 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 	extra = desc->extra;
 
 	if (desc->rx_fifo) {
+		MXC_UART_RxAsyncStop(MXC_UART_GET_UART(desc->device_id));
 		no_os_irq_disable(extra->nvic, MXC_UART_GET_IRQ(desc->device_id));
 		no_os_irq_unregister_callback(extra->nvic,
 					      MXC_UART_GET_IRQ(desc->device_id),
