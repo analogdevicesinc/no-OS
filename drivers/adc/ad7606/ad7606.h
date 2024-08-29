@@ -123,6 +123,9 @@
 #define AD7606_SERIAL_RD_FLAG_MSK(x)		(NO_OS_BIT(6) | ((x) & 0x3F))
 #define AD7606_SERIAL_WR_FLAG_MSK(x)		((x) & 0x3F)
 
+#define AD7606_PARALLEL_RD_FLAG_MSK(x)		(NO_OS_BIT(7) | ((x) & 0x7F))
+#define AD7606_PARALLEL_WR_FLAG_MSK(x)		((x) & 0x7F)
+
 #define AD7606_MAX_CHANNELS		8
 
 /**
@@ -288,6 +291,8 @@ struct ad7606_axi_init_param {
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* AXI Core */
 	uint32_t core_baseaddr;
+	/* RX DMA base address */
+	uint32_t rx_dma_baseaddr;
 	uint32_t reg_access_speed;
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -325,6 +330,8 @@ struct ad7606_init_param {
 	struct ad7606_oversampling oversampling;
 	/** Whether the device is running in hardware or software mode */
 	bool sw_mode;
+	/** Serial interface mode or Parallel interface mode */
+	bool parallel_interface;
 	/** Configuration register settings */
 	struct ad7606_config config;
 	/** Digital diagnostics register settings */

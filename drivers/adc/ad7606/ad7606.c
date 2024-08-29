@@ -46,6 +46,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
+#include <unistd.h>
 #include "ad7606.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
@@ -59,10 +60,26 @@
 #define AD7606_SPI_ENG_OFFLOAD_ADDR_WIDTH		0x10
 #define AD7606_SPI_ENG_OFFLOAD_FIFO_WIDTH		0x14
 
+#define AD7606_CONFIG_WR				0x80
+#define AD7606_CONFIG_RD				0x84
+
+#define AD7606_CONFIG_CTRL				0x8C
+#define AD7606_CONFIG_CTRL_DEFAULT			0x00
+#define AD7606_CONFIG_CTRL_READ_OP			0x03
+#define AD7606_CONFIG_CTRL_WRITE_OP			0x01
+
+#define AD7606_CHAN_CTRL(c)				(0x0400 + (c) * 0x40)
+#define AD7606_CHAN_CTRL_ENABLE				0x01
+
+#define AD7606_CORE_CNTRL_3				0x4C
+
 #define AD7606_CORE_RESET				0x40
 
 #define AD7606_SERIAL_CORE_ENABLE			0x00
 #define AD7606_SERIAL_CORE_DISABLE			0x01
+
+#define AD7606_PARALLEL_CORE_ENABLE			0x01
+#define AD7606_PARALLEL_CORE_DISABLE			0x00
 
 struct ad7606_chip_info {
 	const char *name;
@@ -248,6 +265,8 @@ struct ad7606_axi_dev {
 	struct spi_engine_offload_init_param offload_init_param;
 	/* AXI Core */
 	uint32_t core_baseaddr;
+	/* RX DMA base address */
+	uint32_t rx_dma_baseaddr;
 	uint32_t reg_access_speed;
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -285,6 +304,8 @@ struct ad7606_dev {
 	struct ad7606_oversampling oversampling;
 	/** Whether the device is running in hardware or software mode */
 	bool sw_mode;
+	/** Serial interface mode or Parallel interface mode */
+	bool parallel_interface;
 	/** Whether the device is running in register or ADC reading mode */
 	bool reg_mode;
 	/** Number of DOUT lines supported by the device */
@@ -306,6 +327,83 @@ struct ad7606_dev {
 	/** Data buffer (used internally by the SPI communication functions) */
 	uint8_t data[28];
 };
+
+/***************************************************************************//**
+ * @brief Write register using AXI core via Parallel interface
+ *
+ * @param dev        - The device structure.
+ * @param reg        - Register address
+ * @param val        - Register value
+ *
+*******************************************************************************/
+static int ad7606_parallel_mode_write_reg(struct ad7606_dev *dev,
+		uint8_t reg_addr,
+		uint8_t reg_data)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	uint32_t wr = AD7606_PARALLEL_WR_FLAG_MSK(reg_addr) << 8 | reg_data;
+
+	/* Some waits are required, such that the core can talk to the ADC */
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_WR, wr);
+	usleep(1);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_CTRL,
+			   AD7606_CONFIG_CTRL_WRITE_OP);
+	usleep(1);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_CTRL,
+			   AD7606_CONFIG_CTRL_DEFAULT);
+
+	dev->reg_mode = true;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Read register using AXI core via Parallel interface
+ *
+ * This will perform a write of the address of the register and then read
+ * the value of the register.
+ *
+ * @param dev        - The device structure.
+ * @param reg        - Register address
+ * @param val        - Register value
+ *
+*******************************************************************************/
+static int ad7606_parallel_mode_read_reg(struct ad7606_dev *dev,
+		uint8_t reg_addr,
+		uint8_t *reg_data)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	uint32_t wr = AD7606_PARALLEL_RD_FLAG_MSK(reg_addr) << 8;
+	uint32_t rd = 0;
+
+	/* Some waits are required, such that the core can talk to the ADC */
+
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_WR, wr);
+	usleep(1);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_CTRL,
+			   AD7606_CONFIG_CTRL_WRITE_OP);
+	usleep(1);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_CTRL,
+			   AD7606_CONFIG_CTRL_DEFAULT);
+
+	usleep(1);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_CTRL,
+			   AD7606_CONFIG_CTRL_READ_OP);
+	usleep(1);
+	no_os_axi_io_read(axi->core_baseaddr, AD7606_CONFIG_RD, &rd);
+
+	usleep(1);
+	no_os_axi_io_write(axi->core_baseaddr, AD7606_CONFIG_CTRL,
+			   AD7606_CONFIG_CTRL_DEFAULT);
+
+	if (reg_data)
+		*reg_data = rd;
+
+	dev->reg_mode = true;
+
+	return 0;
+}
 
 /***************************************************************************//**
  * @brief Read a device register via SPI.
@@ -438,6 +536,9 @@ int32_t ad7606_reg_read(struct ad7606_dev *dev,
 			uint8_t reg_addr,
 			uint8_t *reg_data)
 {
+	if (dev->parallel_interface)
+		return ad7606_parallel_mode_read_reg(dev, reg_addr, reg_data);
+
 	return ad7606_spi_reg_read(dev, reg_addr, reg_data);
 }
 
@@ -461,6 +562,9 @@ int32_t ad7606_reg_write(struct ad7606_dev *dev,
 			 uint8_t reg_addr,
 			 uint8_t reg_data)
 {
+	if (dev->parallel_interface)
+		return ad7606_parallel_mode_write_reg(dev, reg_addr, reg_data);
+
 	return ad7606_spi_reg_write(dev, reg_addr, reg_data);
 }
 
@@ -667,6 +771,77 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 }
 
 /***************************************************************************//**
+ * @brief Read multiple samples using the AXI core via Parallel interface
+ *
+ * @param dev        - The device structure.
+ * @param data       - Pointer to location of buffer where to store the data.
+ * @param samples    - Number of samples to read
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  -ETIME - Timeout while waiting for the BUSY signal.
+ *                  -EBADMSG - CRC computation mismatch.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
+		uint32_t *buf, uint32_t samples)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	struct axi_dmac		*dmac;
+	struct axi_dmac_init	dmac_init;
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to writen/read
+		.size = samples,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode (CYCLIC?)
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)buf
+	};
+	int32_t i, ret;
+
+	dmac_init.name = "ADC DMAC";
+	dmac_init.base = axi->rx_dma_baseaddr;
+	dmac_init.irq_option = IRQ_DISABLED;
+
+	axi_dmac_init(&dmac, &dmac_init);
+	if (!dmac)
+		goto pwm_disable;
+
+	/* Enable channels */
+	for (i = 0; i < dev->num_channels; i++) {
+		no_os_axi_io_write(axi->core_baseaddr, AD7606_CHAN_CTRL(i),
+				   AD7606_CHAN_CTRL_ENABLE);
+	}
+
+	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
+	if (ret)
+		return ret;
+
+	ret = axi_dmac_transfer_start(dmac, &transfer);
+	if (ret)
+		goto pwm_disable;
+
+	/* Wait until transfer finishes */
+	ret = axi_dmac_transfer_wait_completion(dmac, 500);
+	if (ret)
+		goto axi_dmac_disable;
+
+	if (axi->dcache_invalidate_range)
+		axi->dcache_invalidate_range(transfer.dest_addr, samples * sizeof(uint32_t));
+
+axi_dmac_disable:
+	axi_dmac_remove(dmac);
+pwm_disable:
+	no_os_pwm_disable(axi->trigger_pwm_desc);
+
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Read multiple samples using the AXI SPI engine code
  *
  * @param dev        - The device structure.
@@ -814,8 +989,11 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 		dev->reg_mode = false;
 	}
 
-	if (axi->initialized)
+	if (axi->initialized) {
+		if (dev->parallel_interface)
+			return ad7606_read_raw_data_parallel(dev, data, samples);
 		return ad7606_read_raw_data_spi_engine(dev, data, samples);
+	}
 
 	nchannels = ad7606_chip_info_tbl[dev->device_id].num_channels;
 	sample_size = nchannels * sizeof(uint32_t);
@@ -877,6 +1055,7 @@ static inline void ad7606_reset_settings(struct ad7606_dev *dev)
 *******************************************************************************/
 int32_t ad7606_reset(struct ad7606_dev *dev)
 {
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	int32_t ret;
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, 1);
@@ -890,6 +1069,11 @@ int32_t ad7606_reset(struct ad7606_dev *dev)
 		return ret;
 
 	ad7606_reset_settings(dev);
+
+	/* Enable core in parallel mode, to be able to read/write registers */
+	if (dev->parallel_interface)
+		no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
+				   AD7606_PARALLEL_CORE_ENABLE);
 
 	return ret;
 }
@@ -988,9 +1172,16 @@ static int32_t ad7606_request_gpios(struct ad7606_dev *dev,
 		return ret;
 
 	if (dev->gpio_par_ser) {
+		uint8_t pin;
+
+		if (dev->parallel_interface)
+			pin = NO_OS_GPIO_LOW;
+		else
+			pin = NO_OS_GPIO_HIGH;
+
 		/* Driver currently supports only serial interface, therefore,
 		 * if available, pull the GPIO HIGH. */
-		ret = no_os_gpio_direction_output(dev->gpio_par_ser, NO_OS_GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_par_ser, pin);
 		if (ret < 0)
 			return ret;
 	}
@@ -1415,22 +1606,28 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	if (!axi_init)
 		return 0;
 
-	ret = axi_clkgen_init(&axi->clkgen, axi_init->clkgen_init);
-	if (ret != 0)
-		return ret;
+	if (!device->parallel_interface) {
+		ret = axi_clkgen_init(&axi->clkgen, axi_init->clkgen_init);
+		if (ret != 0)
+			return ret;
 
-	ret = axi_clkgen_set_rate(axi->clkgen, axi_init->axi_clkgen_rate);
-	if (ret != 0)
-		goto error;
+		ret = axi_clkgen_set_rate(axi->clkgen, axi_init->axi_clkgen_rate);
+		if (ret != 0)
+			goto error;
+	}
 
 	ret = no_os_pwm_init(&axi->trigger_pwm_desc, axi_init->trigger_pwm_init);
 	if (ret != 0)
 		goto error;
 
+	/* Make sure the PWM is disabled on start-up */
+	no_os_pwm_disable(axi->trigger_pwm_desc);
+
 	memcpy(&axi->offload_init_param, axi_init->offload_init_param,
 	       sizeof(axi->offload_init_param));
 
 	axi->core_baseaddr = axi_init->core_baseaddr;
+	axi->rx_dma_baseaddr = axi_init->rx_dma_baseaddr;
 	axi->reg_access_speed = axi_init->reg_access_speed;
 	axi->dcache_invalidate_range = axi_init->dcache_invalidate_range;
 
@@ -1480,6 +1677,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		return -ENOMEM;
 
 	dev->device_id = init_param->device_id;
+	dev->parallel_interface = init_param->parallel_interface;
 	info = &ad7606_chip_info_tbl[dev->device_id];
 	printf("Initializing device %s, num-channels %u SDI lines %u\n",
 	       info->name, info->num_channels, 1 << info->max_dout_lines);
@@ -1488,16 +1686,27 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	if (ret != 0)
 		goto error;
 
+	if (!dev->axi_dev.initialized && !dev->parallel_interface) {
+		ret = -EINVAL;
+		printf("Parallel interface requires an AXI Core module\n");
+		goto error;
+	}
+
 	dev->num_channels = info->num_channels;
 	dev->max_dout_lines = info->max_dout_lines;
 	if (info->has_registers)
 		dev->sw_mode = init_param->sw_mode;
 
+	if (dev->parallel_interface) {
+		printf("Notice: Parallel mode enabled, forcing SW mode\n");
+		dev->sw_mode = true;
+	}
+
 	ret = ad7606_request_gpios(dev, init_param);
 	if (ret < 0)
 		goto error;
 
-	if (init_param->sw_mode) {
+	if (dev->sw_mode) {
 		ret = no_os_gpio_set_value(dev->gpio_os0, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error;
@@ -1523,9 +1732,11 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	/* wait DEVICE_SETUP time */
 	no_os_udelay(253);
 
-	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret < 0)
-		goto error;
+	if (!dev->parallel_interface) {
+		ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
+		if (ret < 0)
+			goto error;
+	}
 
 	if (dev->sw_mode) {
 		ret = ad7606_reg_read(dev, AD7606_REG_ID, &reg);
@@ -1614,8 +1825,13 @@ void ad7606_axi_remove(struct ad7606_dev *dev)
 
 	axi = &dev->axi_dev;
 
+	if (dev->parallel_interface)
+		no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
+				   AD7606_PARALLEL_CORE_DISABLE);
+
 	no_os_pwm_remove(axi->trigger_pwm_desc);
-	axi_clkgen_remove(axi->clkgen);
+	if (!dev->parallel_interface)
+		axi_clkgen_remove(axi->clkgen);
 }
 
 /***************************************************************************//**
@@ -1629,7 +1845,7 @@ void ad7606_axi_remove(struct ad7606_dev *dev)
 *******************************************************************************/
 int32_t ad7606_remove(struct ad7606_dev *dev)
 {
-	int32_t ret;
+	int32_t ret = 0;
 
 	no_os_gpio_remove(dev->gpio_reset);
 	no_os_gpio_remove(dev->gpio_convst);
@@ -1641,7 +1857,8 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 	no_os_gpio_remove(dev->gpio_os2);
 	no_os_gpio_remove(dev->gpio_par_ser);
 
-	ret = no_os_spi_remove(dev->spi_desc);
+	if (!dev->parallel_interface)
+		ret = no_os_spi_remove(dev->spi_desc);
 
 	ad7606_axi_remove(dev);
 
