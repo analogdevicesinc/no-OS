@@ -791,7 +791,7 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 	struct axi_dmac_init	dmac_init;
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to writen/read
-		.size = samples,
+		.size = samples * 8,
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode (CYCLIC?)
