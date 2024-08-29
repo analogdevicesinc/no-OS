@@ -61,8 +61,8 @@
 *******************************************************************************/
 int main(void)
 {
-	struct ad7606_init_param *init_param = &ad7606x_init_param_serial;
 	uint32_t *buf = (uint32_t *)ADC_DDR_BASEADDR;
+	struct ad7606_init_param *init_param;
 	struct ad7606_dev *dev;
 	double scales[8];
 	uint32_t i, ch;
@@ -71,7 +71,13 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	pr_info("AD7606X Reference Design.\n");
+	if (AD7606X_MODE == AD7606X_MODE_PARALLEL) {
+		pr_info("AD7606X Reference Design - Parallel interface.\n");
+		init_param = &ad7606x_init_param_parallel;
+	} else {
+		pr_info("AD7606X Reference Design - Serial interface.\n");
+		init_param = &ad7606x_init_param_serial;
+	}
 
 	ret = ad7606_init(&dev, init_param);
 	if (ret) {

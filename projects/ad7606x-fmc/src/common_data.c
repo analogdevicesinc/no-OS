@@ -145,7 +145,47 @@ static struct ad7606_axi_init_param ad7606x_axi_init_param = {
 	.axi_clkgen_rate = AD7606X_REF_CLK_HZ,
 	.reg_access_speed = 1000000,
 	.core_baseaddr = AD7606X_CORE_BASEADDR,
+	.rx_dma_baseaddr = AD7606X_DMA_BASEADDR,
 	.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+};
+
+struct ad7606_init_param ad7606x_init_param_parallel = {
+	.axi_init = &ad7606x_axi_init_param,
+	.gpio_reset = &ad7606x_gpio_reset,
+	.gpio_convst = NULL, // Driven by HDL
+	.gpio_busy = NULL,   // Driver by HDL
+	.gpio_stby_n = &ad7606x_gpio_stby,
+	.gpio_range = &ad7606x_gpio_range,
+	.gpio_os0 = &ad7606x_gpio_os0,
+	.gpio_os1 = &ad7606x_gpio_os1,
+	.gpio_os2 = &ad7606x_gpio_os2,
+	.gpio_par_ser = &ad7606x_gpio_ser_par,
+	.device_id = ID_AD7606C_18,
+	.oversampling = {
+	},
+	.sw_mode = true,
+	.parallel_interface = true,
+	.config = {
+		.dout_format = AD7606_8_DOUT,
+	},
+	.digital_diag_enable = { // CRC checks
+	},
+	.offset_ch = {
+	},
+	.phase_ch = {
+	},
+	.gain_ch = {
+	},
+	.range_ch = { // in HW mode there are only 2 ranges supported, none are differential
+		{  -5000,  5000, false },
+		{ -10000, 10000, false },
+		{  -5000,  5000, false },
+		{ -10000, 10000, false },
+		{  -5000,  5000, false },
+		{ -10000, 10000, false },
+		{  -5000,  5000, false },
+		{ -10000, 10000, false },
+	}
 };
 
 struct ad7606_init_param ad7606x_init_param_serial = {
