@@ -142,6 +142,9 @@ static int stm32_spi_config(struct no_os_spi_desc *desc)
 	sdesc->hspi.Init.TIMode = SPI_TIMODE_DISABLE;
 	sdesc->hspi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
 	sdesc->hspi.Init.CRCPolynomial = 10;
+#ifdef SPI_MASTER_KEEP_IO_STATE_ENABLE
+	sdesc->hspi.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_ENABLE;
+#endif
 	ret = HAL_SPI_Init(&sdesc->hspi);
 	if (ret != HAL_OK) {
 		ret = -EIO;
@@ -561,7 +564,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 		goto abort_transfer;
 
 	if (sdesc->rxdma_ch)
-#if defined (STM32H5)
+#if defined (STM32H5) || defined (STM32H7)
 		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
 #else
 		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
@@ -616,7 +619,7 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 		no_os_pwm_disable(sdesc->tx_pwm_desc);
 #endif
 
-#if defined (STM32H5)
+#if defined (STM32H5) || defined (STM32H7)
 	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
 #else
 	CLEAR_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
@@ -635,7 +638,12 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 	sdesc->stm32_spi_dma_done = true;
 
 	/* Dummy read to clear any pending read on SPI */
+#ifndef SPI_SR_TXE
+	*(volatile uint8_t *)&SPIx->TXDR;
+#else
 	*(volatile uint8_t *)&SPIx->DR;
+#endif
+
 	if (sdesc->stm32_spi_dma_user_cb)
 		sdesc->stm32_spi_dma_user_cb(sdesc->stm32_spi_dma_user_ctx);
 }
