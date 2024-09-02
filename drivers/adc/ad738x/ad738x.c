@@ -138,7 +138,7 @@ int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
-				     uint16_t *adc_data)
+				     uint32_t *adc_data)
 {
 	uint8_t buf[4];
 	uint8_t rx_buf_len;
@@ -157,9 +157,7 @@ int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
 	 *  Conversion data is 32 bits long in 1-wire mode and
 	 *  16 bits in 2-wire mode
 	 */
-	adc_data[0] =  (buf[0] << 8) | buf[1];
-	adc_data[1] =  (buf[2] << 8) | buf[3];
-
+	*adc_data = (buf[2] << 24) | buf[3] << 16 | (buf[0] << 8) | buf[1];
 	return ret;
 }
 

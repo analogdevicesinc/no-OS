@@ -360,7 +360,6 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
 #endif
 
-
 	// Compute a slave ID based on SPI instance and chip select.
 	// If it did not change since last call to stm32_spi_write_and_read,
 	// no need to reconfigure SPI. Otherwise, reconfigure it.

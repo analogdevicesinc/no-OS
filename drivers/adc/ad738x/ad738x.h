@@ -207,7 +207,7 @@ int32_t ad738x_spi_reg_write(struct ad738x_dev *dev,
 			     uint16_t reg_data);
 /** Read conversion result from device. */
 int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
-				     uint16_t *adc_data);
+				     uint32_t *adc_data);
 /** SPI write to device using a mask. */
 int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
 			      uint8_t reg_addr,
