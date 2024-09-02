@@ -291,6 +291,7 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 			 uint16_t samples)
 {
 	int32_t ret;
+	int i;
 
 #if !defined(USE_STANDARD_SPI)
 	uint32_t commands_data[2] = {0, 0};
@@ -325,9 +326,11 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 	if (ret != 0)
 		return ret;
 #else
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, samples);
-	if (ret)
-		return ret;
+	for (i = 0; i < samples; i++) {
+		ret = ad738x_spi_single_conversion(dev, &buf[i]);
+		if (ret)
+			return ret;
+	}
 #endif
 
 	return 0;
