@@ -85,6 +85,8 @@ struct adrv9025_rf_phy {
 	adi_adrv9025_PostMcsInit_t	adrv9025PostMcsInitInst;
 	struct adrv9025_hal_cfg		hal;
 
+	adi_adrv9025_AgcCfg_t  		*agcConfig;
+
 	struct jesd204_dev		*jdev;
 	/* protect against device accesses */
 	void				*lock;
@@ -110,6 +112,7 @@ struct adrv9025_init_param {
 	struct no_os_clk_desc		*dev_clk;
 	struct adi_adrv9025_Device	*adrv9025_device;
 	char				*streamImageFile;
+	adi_adrv9025_AgcCfg_t  		*agcConfig_init_param;
 };
 
 /* Initialize the device. */
