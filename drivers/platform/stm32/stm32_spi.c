@@ -480,7 +480,6 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
  * @param len - Number of messages.
  * @param callback - Function to be invoked after transfers
  * @param ctx - User defined parameter for the callback function.
- * @param is_async - Whether or not the function should wait for the completion.
  * @return 0 in case of success, errno codes otherwise.
  */
 int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
@@ -490,7 +489,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 						   struct no_os_dma_xfer_desc *old_xfer,
 						   struct no_os_dma_xfer_desc *next_xfer,
 						   void *ctx),
-				   void* ctx, bool is_async)
+				   void* ctx)
 {
 	struct stm32_spi_desc* sdesc = desc->extra;
 	struct no_os_dma_xfer_desc* rx_ch_xfer;
@@ -659,8 +658,8 @@ int32_t stm32_spi_dma_transfer_async(struct no_os_spi_desc* desc,
 
 	sdesc->stm32_spi_dma_user_cb = callback;
 	sdesc->stm32_spi_dma_user_ctx = ctx;
-	return stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback, desc,
-					  true);
+	return stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback,
+					  desc);
 }
 
 /**
@@ -679,7 +678,7 @@ int32_t stm32_spi_dma_transfer_sync(struct no_os_spi_desc* desc,
 	struct stm32_spi_desc* sdesc = desc->extra;
 
 	sdesc->stm32_spi_dma_done = false;
-	stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback, desc, true);
+	stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback, desc);
 	timeout = msgs->bytes_number;
 	while(timeout--) {
 		no_os_mdelay(1);
