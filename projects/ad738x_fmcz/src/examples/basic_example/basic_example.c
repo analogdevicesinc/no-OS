@@ -69,17 +69,19 @@ int basic_example_main()
 	if (ret)
 		return ret;
 	while(true) {
-		ret = ad738x_read_data(dev, buf, SAMPLES_PER_CHANNEL);
+		ret = ad738x_read_data(dev, buf, 400);
 		if (ret != 0)
 			return ret;
-		for (i = 0; i < SAMPLES_PER_CHANNEL; i++) {
+
+		for (i = 0; i < 400; i++) {
 			ch0 = buf[i] >> AD738X_STORAGE_BITS;
 			ch1 = buf[i] & NO_OS_GENMASK(AD738X_STORAGE_BITS, 0);
 			ch0 >>= AD738X_SHIFT;
 			ch1 >>= AD738X_SHIFT;
 
-			pr_info("ADC sample %lu : %hd  %hd %hx\r\n", i, ch0, ch1, ch1);
+			pr_info("ADC sample %lu: %hd %hd\r\n", i, ch0, ch1);
 		}
+
 		no_os_mdelay(5000);
 	}
 
