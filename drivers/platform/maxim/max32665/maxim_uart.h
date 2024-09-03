@@ -50,10 +50,19 @@ enum max_uart_flow_ctrl {
 };
 
 /**
+ * @brief UART pin mapping select
+ */
+enum max_uart_map {
+	UART_MAP_B,
+	UART_MAP_A,
+};
+
+/**
  * @brief Aditional UART config parameters
  */
 struct max_uart_init_param {
 	enum max_uart_flow_ctrl flow;
+	enum max_uart_map map;
 	mxc_gpio_vssel_t vssel;
 };
 
