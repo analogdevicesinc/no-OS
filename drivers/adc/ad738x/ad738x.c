@@ -44,14 +44,12 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
-#endif
 #include "ad738x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
-
+#include "no_os_pwm.h"
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -131,35 +129,6 @@ int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
 	return ret;
 }
 
-/**
- * Read conversion result from device.
- * @param dev - The device structure.
- * @param adc_data - The conversion result data
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
-				     uint32_t *adc_data)
-{
-	uint8_t buf[4];
-	uint8_t rx_buf_len;
-	int32_t ret;
-
-	buf[0] = 0x00;
-	buf[1] = 0x00;
-	buf[2] = 0x00;
-	buf[3] = 0x00;
-
-	/* Conversion data is 2 bytes long */
-	rx_buf_len = 2 * dev->conv_mode + 2;
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
-
-	/*
-	 *  Conversion data is 32 bits long in 1-wire mode and
-	 *  16 bits in 2-wire mode
-	 */
-	*adc_data = (buf[2] << 24) | buf[3] << 16 | (buf[0] << 8) | buf[1];
-	return ret;
-}
 
 /**
  * Select if ADC A and ADC B output on both SDOA and SDOB lines
@@ -279,21 +248,86 @@ int32_t ad738x_reference_sel(struct ad738x_dev *dev,
 }
 
 /**
- * @brief Read from device.
+ * Read conversion result from device.
+ * @param dev - The device structure.
+ * @param adc_data - The conversion result data
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
+				     uint32_t *adc_data)
+{
+	uint8_t buf[4];
+	uint8_t rx_buf_len;
+	int32_t ret;
+
+	buf[0] = 0x00;
+	buf[1] = 0x00;
+	buf[2] = 0x00;
+	buf[3] = 0x00;
+
+	/* Conversion data is 2 bytes long */
+	rx_buf_len = 2 * dev->conv_mode + 2;
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
+
+	/*
+	 *  Conversion data is 32 bits long in 1-wire mode and
+	 *  16 bits in 2-wire mode
+	 */
+	*adc_data = (buf[2] << 24) | buf[3] << 16 | (buf[0] << 8) | buf[1];
+	return ret;
+}
+
+static int32_t ad738x_read_data_dma(struct ad738x_dev *dev,
+				    uint32_t *buf,
+				    uint16_t samples)
+{
+	struct no_os_spi_msg spi_msg;
+	uint8_t tx_buf = 0x00;
+	uint8_t *buf_p;
+	int ret;
+	int i;
+
+	if (!dev)
+		return -EINVAL;
+
+	spi_msg.tx_buff = &tx_buf,
+	spi_msg.bytes_number = samples * 4,
+	spi_msg.rx_buff = buf,
+
+	ret = no_os_pwm_enable(dev->pwm_desc);
+	if (ret != 0)
+		goto out;
+
+	ret = no_os_spi_transfer_dma_sync(dev->spi_desc, &spi_msg, 1);
+	if (ret)
+		goto out;
+
+	ret = no_os_pwm_disable(dev->pwm_desc);
+	if (ret != 0)
+		goto out;
+
+	for (i = 0; i < samples; i++) {
+		buf_p = &buf[i];
+		buf[i] = (buf_p[2] << 24) | buf_p[3] << 16 | (buf_p[0] << 8) | buf_p[1];
+	}
+out:
+	return ret;
+}
+
+/**
+ * @brief Read from device using spi engine offload
  *        Enter register mode to read/write registers
  * @param dev - ad738x_dev device handler.
  * @param buf - data buffer.
  * @param samples - sample number.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad738x_read_data(struct ad738x_dev *dev,
-			 uint32_t *buf,
-			 uint16_t samples)
+
+static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
+					uint32_t *buf,
+					uint16_t samples)
 {
 	int32_t ret;
-	int i;
-
-#if !defined(USE_STANDARD_SPI)
 	uint32_t commands_data[2] = {0, 0};
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
@@ -322,16 +356,35 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
 
-	ret = no_os_pwm_disable(dev->pwm_desc);
-	if (ret != 0)
-		return ret;
-#else
+	return 0;
+}
+
+/**
+ * @brief Read from device.
+ *        Enter register mode to read/write registers
+ * @param dev - ad738x_dev device handler.
+ * @param buf - data buffer.
+ * @param samples - sample number.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t ad738x_read_data(struct ad738x_dev *dev,
+			 uint32_t *buf,
+			 uint16_t samples)
+{
+	int32_t ret;
+	int i;
+
+	if (dev->flags & AD738X_FLAG_OFFLOAD)
+		return ad738x_read_data_offload(dev, buf, samples);
+
+	if (dev->flags & AD738X_FLAG_STANDARD_SPI_DMA)
+		return ad738x_read_data_dma(dev, buf, samples);
+
 	for (i = 0; i < samples; i++) {
 		ret = ad738x_spi_single_conversion(dev, &buf[i]);
 		if (ret)
 			return ret;
 	}
-#endif
 
 	return 0;
 }
@@ -354,9 +407,10 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	if (!dev)
 		return -1;
 
-#if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+	dev->flags = init_param->flags;
+
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret)
 		goto err;
@@ -369,7 +423,6 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	if (ret)
 		goto err;
 
-#endif
 	dev->conv_mode = init_param->conv_mode;
 	dev->ref_sel = init_param->ref_sel;
 	dev->ref_voltage_mv = init_param->ref_voltage_mv;
@@ -414,7 +467,7 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret)
 		goto out;
-#if !defined(USE_STANDARD_SPI)
+
 	ret = axi_clkgen_remove(dev->clkgen);
 	if (ret)
 		goto out;
@@ -422,7 +475,7 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 	ret = no_os_pwm_remove(dev->pwm_desc);
 	if (ret)
 		goto out;
-#endif
+
 	no_os_free(dev);
 out:
 	return ret;

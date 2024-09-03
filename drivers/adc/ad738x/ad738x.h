@@ -46,9 +46,7 @@
 /******************************************************************************/
 #include "no_os_util.h"
 #include "clk_axi_clkgen.h"
-#if defined(USE_STANDARD_SPI)
 #include "no_os_spi.h"
-#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -111,6 +109,8 @@
 /* Read from register x */
 #define AD738X_REG_READ(x)              ((x & 0x7) << 4)
 
+#define AD738X_FLAG_STANDARD_SPI_DMA    NO_OS_BIT(0)
+#define AD738X_FLAG_OFFLOAD             NO_OS_BIT(1)
 /*****************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -156,12 +156,11 @@ enum ad738x_ref_sel {
 struct ad738x_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
-#if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	struct axi_clkgen *clkgen;
 	struct no_os_pwm_desc *pwm_desc;
-#endif
+
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
@@ -169,24 +168,25 @@ struct ad738x_dev {
 	enum ad738x_resolution 	resolution;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	uint32_t flags;
 };
 
 struct ad738x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		*spi_param;
-#if !defined(USE_STANDARD_SPI)
 	struct axi_clkgen_init *clkgen_init;
 	uint32_t axi_clkgen_rate;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	struct no_os_pwm_init_param *pwm_init;
-#endif
+
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
 	uint32_t		ref_voltage_mv;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	uint32_t flags;
 };
 
 /******************************************************************************/
