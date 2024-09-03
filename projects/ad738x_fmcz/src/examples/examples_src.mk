@@ -4,6 +4,9 @@ SRCS += $(PROJECT)/src/examples/basic_example/basic_example.c
 INCS += $(PROJECT)/src/examples/basic_example/basic_example.h
 endif
 
+ifeq (xilinx,$(PLATFORM))
+CFLAGS += -DSPI_ENGINE_OFFLOAD_EXAMPLE
+endif
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 CFLAGS += -DIIO_EXAMPLE -DIIO_SUPPORT
 
@@ -15,12 +18,6 @@ SRCS += $(DRIVERS)/adc/ad738x/iio_ad738x.c
 IIOD=y
 
 SRC_DIRS += $(NO-OS)/iio/iio_app
-endif
-
-ifeq (xilinx,$(PLATFORM))
-CFLAGS += -DSPI_ENGINE_OFFLOAD_EXAMPLE
-else
-CFLAGS += -DUSE_STANDARD_SPI
 endif
 
 INCS += $(DRIVERS)/adc/ad738x/ad738x.h

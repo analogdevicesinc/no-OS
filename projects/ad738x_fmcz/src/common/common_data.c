@@ -42,10 +42,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "common_data.h"
+#include "spi_engine.h"
 #include "no_os_spi.h"
 #include "no_os_uart.h"
-#include "spi_engine.h"
-
+#include "no_os_pwm.h"
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -73,52 +73,28 @@ struct no_os_spi_init_param ad738x_spi_init_param = {
 	.extra = SPI_EXTRA,
 };
 
-#ifndef USE_STANDARD_SPI
-struct spi_engine_init_param spi_eng_init_param  = {
-	.ref_clk_hz = 100000000,
-	.type = SPI_ENGINE,
-	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
-	.cs_delay = 0,
-	.data_width = 32,
-};
-
-struct spi_engine_offload_init_param spi_engine_offload_init_param = {
-	.offload_config = OFFLOAD_RX_EN,
-	.rx_dma_baseaddr = DMA_BASEADDR,
-};
-
-struct axi_clkgen_init clkgen_init = {
-	.name = "rx_clkgen",
-	.base = RX_CLKGEN_BASEADDR,
-	.parent_rate = 100000000,
-};
-
-struct axi_pwm_init_param axi_pwm_init_param = {
-	.base_addr = AXI_PWMGEN_BASEADDR,
-	.ref_clock_Hz = 100000000,
-	.channel = 0
-};
-
-struct no_os_pwm_init_param pwm_init_param = {
-	.id = NO_OS_PWM_ID,
-	.period_ns = PWM_PERIOD_NS,
-	.duty_cycle_ns = PWM_DUTY_NS,
+struct no_os_pwm_init_param trigger_pwm_init_param = {
+	.id = TRIGGER_PWM_ID,
+	.period_ns = TRIGGER_PERIOD_NS,
+	.duty_cycle_ns = TRIGGER_DUTY_NS,
 	.polarity = NO_OS_PWM_POLARITY_HIGH,
 	.platform_ops = PWM_OPS,
-	.extra = &axi_pwm_init_param,
+	.extra = TRIGGER_PWM_EXTRA,
 };
-#endif
 
 struct ad738x_init_param ad738x_init_param = {
 	.spi_param = &ad738x_spi_init_param,
-#ifndef USE_STANDARD_SPI
-	.clkgen_init = &clkgen_init,
+	.clkgen_init = CLKGEN_INIT,
 	.axi_clkgen_rate = 100000000,
-	.pwm_init = &pwm_init_param,
-	.offload_init_param = &spi_engine_offload_init_param,
+	.offload_init_param = OFFLOAD_INIT,
 	.dcache_invalidate_range =
 	(void (*)(uint32_t, uint32_t))DCACHE_INVALIDATE,
-#endif
+	.pwm_init = &trigger_pwm_init_param,
 	.conv_mode = ONE_WIRE_MODE,
 	.ref_sel = INT_REF,
+#ifdef USE_STANDARD_SPI
+	.flags = AD738X_FLAG_STANDARD_SPI_DMA,
+#else
+	.flags = AD738X_FLAG_OFFLOAD,
+#endif
 };
