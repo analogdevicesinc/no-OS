@@ -90,6 +90,7 @@ int iio_example_main(void)
 {
 	struct adrv9025_init_param adrv9025_init_par = { 0 };
 	struct adi_adrv9025_Device adrv9025_device = { 0 };
+	adi_adrv9025_AgcCfg_t agcConfig_init_param = { 0 };
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
 	struct ad9528_init_param ad9528_param;
@@ -294,6 +295,7 @@ int iio_example_main(void)
 	adrv9025_init_par.adrv9025_device = &adrv9025_device;
 	adrv9025_init_par.dev_clk = ad9528_device->clk_desc[1];
 	adrv9025_init_par.streamImageFile = ADRV9025_STREAM_IMAGE_FILE;
+	adrv9025_init_par.agcConfig_init_param = &agcConfig_init_param;
 
 	status = adrv9025_init(&phy, &adrv9025_init_par);
 	if (status) {
