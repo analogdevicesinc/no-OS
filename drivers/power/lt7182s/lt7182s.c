@@ -53,6 +53,9 @@ static const struct lt7182s_chip_info lt7182s_info[] = {
 	[ID_LT7182S] = {
 		.name = "LT7182S",
 	},
+	[ID_LT7184S] = {
+		.name = "LT7184S",
+	},
 };
 
 /**

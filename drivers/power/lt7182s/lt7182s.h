@@ -226,6 +226,7 @@
 
 enum lt7182s_chip_id {
 	ID_LT7182S,
+	ID_LT7184S,
 };
 
 enum lt7182s_output_channel {
