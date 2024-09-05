@@ -44,7 +44,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "spi_engine.h"
+//#include "spi_engine.h"
+#include "axi_dmac.h"
+#include "axi_adc_core.h"
 #include <xil_cache.h>
 #include <xparameters.h>
 #include "no_os_error.h"
@@ -66,18 +68,26 @@
 /******************************************************************************/
 #define AD7616_SDZ_SAMPLE_NO 1000
 
-struct spi_engine_offload_init_param spi_engine_offload_init_param = {
+/*struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 	.offload_config = OFFLOAD_RX_EN,
 	.rx_dma_baseaddr = AD7616_DMA_BASEADDR,
 };
+*/
 
-struct spi_engine_init_param spi_eng_init_param  = {
+struct xil_spi_init_param xil_spi_init = { // added
+	.flags = 0,
+	.type = SPI_PS
+};
+
+/*struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = 100000000,
 	.type = SPI_ENGINE,
-	.spi_engine_baseaddr = AD7616_SPI_ENGINE_BASEADDR,
+	//.spi_engine_baseaddr = AD7616_SPI_ENGINE_BASEADDR,
+	.type = AD7616_CORE_BASEADDR,
 	.cs_delay = 1,
 	.data_width = 16,
 };
+*/
 
 struct axi_clkgen_init clkgen_init = {
 	.name = "rx_clkgen",
@@ -98,28 +108,49 @@ struct no_os_pwm_init_param trigger_pwm_init = {
 	.platform_ops = &axi_pwm_ops,
 };
 
-struct no_os_spi_init_param ad7616_spi_init = {
+/*SPI*/
+
+struct no_os_spi_init_param ad7616_spi_init = { // checked
 	.chip_select = SPI_AD7616_CS,
 	.max_speed_hz = 50000000,
 	.mode = NO_OS_SPI_MODE_2,
-	.platform_ops = &spi_eng_platform_ops,
-	.extra = (void*)&spi_eng_init_param,
+	//.platform_ops = &spi_eng_platform_ops,
+	.platform_ops = &xil_spi_ops,
+	//.extra = (void*)&xil_spi_init
+	.extra = &xil_spi_init
 };
 
-struct xil_gpio_init_param xil_gpio_param = {
+struct xil_gpio_init_param xil_gpio_param = { // checked
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS,
 };
-struct no_os_gpio_init_param ad7616_gpio_reset = {
+struct no_os_gpio_init_param ad7616_gpio_reset = { // checked
 	.number = GPIO_ADC_RESET_N,
 	.platform_ops = &xil_gpio_ops,
 	.extra = &xil_gpio_param
 };
 
+/* ADC Core */
+struct axi_adc_init ad7616_core_param = { //added
+	.name = "ad7616_core",
+	.num_channels = 16,
+	.base = AD7616_CORE_BASEADDR
+};
+struct axi_adc *ad7616_core;
+
+/* AXI DMAC */
+struct axi_dmac_init ad7616_dmac_param = { //added
+	.name = "ad7616_dmac",
+	.base = AD7616_DMA_BASEADDR,
+	.irq_option = IRQ_DISABLED
+};
+
+struct axi_dmac *ad7616_dmac;
+
 struct ad7616_init_param init_param = {
 	/* SPI */
 	.spi_param = &ad7616_spi_init,
-	.offload_init_param = &spi_engine_offload_init_param,
+	//.offload_init_param = &spi_engine_offload_init_param,
 	.trigger_pwm_init = &trigger_pwm_init,
 	.clkgen_init = &clkgen_init,
 	.axi_clkgen_rate = 100000000,
@@ -132,7 +163,7 @@ struct ad7616_init_param init_param = {
 	.gpio_os2_param = NULL,
 	.gpio_reset_param = &ad7616_gpio_reset,
 	/* AXI Core */
-	.core_baseaddr = AD7616_SPI_ENGINE_BASEADDR,
+	.core_baseaddr = AD7616_CORE_BASEADDR,
 	/* Device Settings */
 	.mode = AD7616_SW,
 	.va = {
@@ -153,6 +184,7 @@ struct ad7616_init_param init_param = {
 *******************************************************************************/
 int main(void)
 {
+	int ret;
 	struct ad7616_dev	*dev;
 	struct ad7616_conversion_result buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((
 				aligned));
@@ -162,6 +194,18 @@ int main(void)
 	Xil_DCacheEnable();
 
 	pr_info("AD7616 Reference Design.\n");
+
+	ret = axi_adc_init(&ad7616_core,  &ad7616_core_param);
+	if (ret) {
+		pr_err("axi_adc_init() error: %s\n", ad7616_core->name);
+		return ret;
+	}
+
+	ret = axi_dmac_init(&ad7616_dmac, &ad7616_dmac_param);
+	if (ret) {
+		pr_err("axi_dmac_init() error: %s\n", ad7616_dmac->name);
+		return ret;
+	}
 
 	ad7616_setup(&dev, &init_param);
 

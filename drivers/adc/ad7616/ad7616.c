@@ -819,19 +819,19 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev)
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, 0x00);
 	no_os_mdelay(10);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
-	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
+	//no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
 			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 	no_os_mdelay(10);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 	no_os_mdelay(10);
 
-	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
+	//no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
 
-	if (type)
+	//if (type)
 		dev->interface = AD7616_PARALLEL;
-	else
-		dev->interface = AD7616_SERIAL;
+	//else
+	//	dev->interface = AD7616_SERIAL;
 
 	return 0;
 }
@@ -919,9 +919,9 @@ int32_t ad7616_self_test(struct ad7616_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	ret = ad7616_read_data_serial(dev, &result, 1);
-	if (ret != 0)
-		return ret;
+//	ret = ad7616_read_data_serial(dev, &result, 1);
+//	if (ret != 0)
+//		return ret;
 
 	ret = ad7616_select_channel_source(dev, ch_save[0]);
 	if (ret != 0)

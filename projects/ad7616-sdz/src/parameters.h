@@ -43,7 +43,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD7616_SPI_ENGINE_BASEADDR  XPAR_SPI_AD7616_SPI_AD7616_AXI_REGMAP_BASEADDR
+//#define AD7616_SPI_ENGINE_BASEADDR  XPAR_SPI_AD7616_SPI_AD7616_AXI_REGMAP_BASEADDR
+#define AD7616_CORE_BASEADDR        XPAR_AXI_AD7616_BASEADDR
 #define AD7616_DMA_BASEADDR			XPAR_AXI_AD7616_DMA_BASEADDR
 #define AD7616_RX_CLKGEN_BASEADDR   XPAR_SPI_CLKGEN_BASEADDR
 #define AXI_PWMGEN_BASEADDR         XPAR_AXI_PWM_GEN_0_BASEADDR

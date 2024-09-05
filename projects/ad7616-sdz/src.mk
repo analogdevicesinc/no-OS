@@ -19,6 +19,7 @@ SRCS += $(DRIVERS)/adc/ad7616/ad7616.c \
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
+	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_mutex.c
@@ -32,7 +33,8 @@ INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
-	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
+	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
+	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
