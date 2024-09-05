@@ -20,10 +20,10 @@ const union nvmp255 factory_defaults_template = {
 		.carrier_model = "-",
 		.carrier_serial = "-",
 
-		.tx_autotuning = false,
+		.tx_autotuning = true,
 		.tx_target = 350,
 		.tx_tolerance = 50,
-		.rx_autotuning = false,
+		.rx_autotuning = true,
 		.rx_target = 1950,
 		.rx_tolerance = 50,
 		.tx_auto_ifvga = true,
@@ -174,6 +174,8 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 					break;
 
 				prev_rf_attn = attn;
+			} else if (iter_count >= 8) {
+				break;
 			}
 
 			iter_count++;
@@ -217,6 +219,8 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 					break;
 
 				prev_bb_attn = attn;
+			} else if (iter_count >= 8) {
+				break;
 			}
 
 			iter_count++;
