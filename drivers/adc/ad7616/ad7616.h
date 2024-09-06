@@ -175,8 +175,11 @@ enum ad7616_osr {
 
 struct ad7616_dev {
 	/* SPI */
-	struct no_os_spi_desc		*spi_desc;
-	struct spi_engine_offload_init_param *offload_init_param;
+	//struct no_os_spi_desc		*spi_desc;
+	//struct spi_engine_offload_init_param *offload_init_param;
+
+	struct axi_adc			*ad7616_core;
+	struct axi_dmac			*axi_dmac;
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen	*clkgen;
 	/* Trigger conversion PWM generator descriptor */
@@ -207,8 +210,11 @@ struct ad7616_dev {
 
 struct ad7616_init_param {
 	/* SPI */
-	struct no_os_spi_init_param		*spi_param;
-	struct spi_engine_offload_init_param *offload_init_param;
+	//struct no_os_spi_init_param		*spi_param;
+	//struct spi_engine_offload_init_param *offload_init_param;
+
+	struct axi_adc_init		*ad7616_core_ip;
+	struct axi_dmac_init	*dmac_ip;
 	/* PWM generator init structure */
 	struct no_os_pwm_init_param	*trigger_pwm_init;
 	/* Clock gen for hdl design init structure */

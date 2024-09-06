@@ -57,9 +57,10 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include "no_os_util.h"
+#include "no_os_print_log.h"
 
 #ifdef XILINX_PLATFORM
-#include "spi_engine.h"
+//#include "spi_engine.h"
 #include "axi_dmac.h"
 #include "no_os_axi_io.h"
 #else
@@ -238,7 +239,7 @@ static int32_t ad7616_toggle_conv(struct ad7616_dev *dev)
  * @param crc - Pointer to store the CRC received from the device
  * @return 0 on success, an error code otherwise
  */
-static int32_t ad7616_read_channels(struct ad7616_dev *dev,
+/*static int32_t ad7616_read_channels(struct ad7616_dev *dev,
 				    struct ad7616_conversion_result *res,
 				    uint8_t *crc)
 {
@@ -274,7 +275,7 @@ static int32_t ad7616_read_channels(struct ad7616_dev *dev,
 
 	return 0;
 }
-
+*/
 /**
  * @brief Select a new source for a channel.
  * @param dev - The device structure.
@@ -330,9 +331,9 @@ int32_t ad7616_read(struct ad7616_dev *dev,
 		    uint8_t reg_addr,
 		    uint16_t *reg_data)
 {
-	if (dev->interface == AD7616_SERIAL)
-		return ad7616_spi_read(dev, reg_addr, reg_data);
-	else
+//	if (dev->interface == AD7616_SERIAL)
+//		return ad7616_spi_read(dev, reg_addr, reg_data);
+//	else
 		return ad7616_par_read(dev, reg_addr, reg_data);
 }
 
@@ -347,9 +348,9 @@ int32_t ad7616_write(struct ad7616_dev *dev,
 		     uint8_t reg_addr,
 		     uint16_t reg_data)
 {
-	if (dev->interface == AD7616_SERIAL)
-		return ad7616_spi_write(dev, reg_addr, reg_data);
-	else
+//	if (dev->interface == AD7616_SERIAL)
+//		return ad7616_spi_write(dev, reg_addr, reg_data);
+//	else
 		return ad7616_par_write(dev, reg_addr, reg_data);
 }
 
@@ -369,9 +370,9 @@ int32_t ad7616_read_mask(struct ad7616_dev *dev,
 	uint16_t reg_data;
 	int32_t ret;
 
-	if (dev->interface == AD7616_SERIAL)
-		ret = ad7616_spi_read(dev, reg_addr, &reg_data);
-	else
+//	if (dev->interface == AD7616_SERIAL)
+//		ret = ad7616_spi_read(dev, reg_addr, &reg_data);
+//	else
 		ret = ad7616_par_read(dev, reg_addr, &reg_data);
 	*data = (reg_data & mask);
 
@@ -394,15 +395,15 @@ int32_t ad7616_write_mask(struct ad7616_dev *dev,
 	uint16_t reg_data;
 	int32_t ret;
 
-	if (dev->interface == AD7616_SERIAL)
-		ret = ad7616_spi_read(dev, reg_addr, &reg_data);
-	else
+//if (dev->interface == AD7616_SERIAL)
+//		ret = ad7616_spi_read(dev, reg_addr, &reg_data);
+//	else
 		ret = ad7616_par_read(dev, reg_addr, &reg_data);
 	reg_data &= ~mask;
 	reg_data |= data;
-	if (dev->interface == AD7616_SERIAL)
-		ret |= ad7616_spi_write(dev, reg_addr, reg_data);
-	else
+//	if (dev->interface == AD7616_SERIAL)
+//		ret |= ad7616_spi_write(dev, reg_addr, reg_data);
+//	else
 		ret |= ad7616_par_write(dev, reg_addr, reg_data);
 
 	return ret;
@@ -415,7 +416,7 @@ int32_t ad7616_write_mask(struct ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_spi_read(struct ad7616_dev *dev,
+/*int32_t ad7616_spi_read(struct ad7616_dev *dev,
 			uint8_t reg_addr,
 			uint16_t *reg_data)
 {
@@ -433,7 +434,7 @@ int32_t ad7616_spi_read(struct ad7616_dev *dev,
 
 	return ret;
 }
-
+*/
 /**
  * SPI write to device.
  * @param dev - The device structure.
@@ -441,7 +442,7 @@ int32_t ad7616_spi_read(struct ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_spi_write(struct ad7616_dev *dev,
+/*int32_t ad7616_spi_write(struct ad7616_dev *dev,
 			 uint8_t reg_addr,
 			 uint16_t reg_data)
 {
@@ -453,7 +454,7 @@ int32_t ad7616_spi_write(struct ad7616_dev *dev,
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
-}
+}*/
 
 /**
  * Perform a full reset of the device.
@@ -606,7 +607,7 @@ int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
 	return 0;
 }
 
-#ifdef XILINX_PLATFORM
+//#ifdef XILINX_PLATFORM
 /**
  * @brief Read from device in serial mode.
  *        Enter register mode to read/write registers,
@@ -616,7 +617,7 @@ int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
  * @param samples - sample number.
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
+/*static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
 		uint32_t *buf, uint32_t samples)
 {
 	int32_t ret;
@@ -659,7 +660,7 @@ static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
 	return ret;
 }
 #endif
-
+*/
 /**
  * @brief Read conversion result from device, checking with CRC if enabled.
  * @param dev - ad7616_dev device handler.
@@ -667,7 +668,7 @@ static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
  * @param samples - sample number.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
+/*int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 				struct ad7616_conversion_result *results,
 				uint32_t samples)
 {
@@ -698,7 +699,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 		}
 	}
 	return 0;
-}
+} */
 
 /**
  * PAR read from device.
@@ -766,7 +767,7 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 	struct axi_dmac_init	dmac_init;
 
 	dmac_init.name = "ADC DMAC";
-	dmac_init.base = dev->offload_init_param->rx_dma_baseaddr;
+	//dmac_init.base = dev->offload_init_param->rx_dma_baseaddr;
 	dmac_init.irq_option = IRQ_DISABLED;
 
 	axi_dmac_init(&dmac, &dmac_init);
@@ -969,8 +970,20 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	if (ret != 0)
 		goto cleanup;
 
+	ret = axi_adc_init(&dev->ad7616_core, init_param->ad7616_core_ip);
+	if (ret) {
+		pr_err("axi_adc_init() error: %s\n", ret);
+		goto cleanup;
+	}
+
+	ret = axi_dmac_init(&dev->axi_dmac, init_param->dmac_ip);
+	if (ret) {
+		pr_err("axi_dmac_init() error: %s\n", ret);
+		goto cleanup;
+	}
+
 	dev->core_baseaddr = init_param->core_baseaddr;
-	dev->offload_init_param = init_param->offload_init_param;
+	//dev->offload_init_param = init_param->offload_init_param;
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 
@@ -979,7 +992,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	dev->interface = AD7616_SERIAL;
 #endif
 
-	if (dev->interface == AD7616_SERIAL) {
+/*	if (dev->interface == AD7616_SERIAL) {
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 		if (ret != 0)
 			goto cleanup;
@@ -987,7 +1000,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 #endif
 	}
-
+*/
 	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel0,
 				      init_param->gpio_hw_rngsel0_param);
 	if (ret != 0)
@@ -1078,8 +1091,8 @@ void ad7616_remove(struct ad7616_dev *dev)
 	no_os_pwm_remove(dev->trigger_pwm_desc);
 #endif
 
-	if (dev->interface == AD7616_SERIAL)
-		no_os_spi_remove(dev->spi_desc);
+//	if (dev->interface == AD7616_SERIAL)
+//		no_os_spi_remove(dev->spi_desc);
 
 	no_os_gpio_remove(dev->gpio_hw_rngsel0);
 	no_os_gpio_remove(dev->gpio_hw_rngsel1);
