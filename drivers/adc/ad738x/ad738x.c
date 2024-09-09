@@ -51,6 +51,38 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad738x_device_table[] = {
+	{.compatible = "adi,ad7380"},
+	{.compatible = "adi,ad7381"},
+	{.compatible = "adi,ad7382"},
+	{.compatible = "adi,ad7383"},
+	{.compatible = "adi,ad7384"},
+	{.compatible = "adi,ad7385"},
+	{.compatible = "adi,ad7386"},
+	{.compatible = "adi,ad7387"},
+	{.compatible = "adi,ad7388"},
+	{.compatible = "adi,ad7380-4"},
+	{.compatible = "adi,ad7381-4"},
+	{.compatible = "adi,ad7382-4"},
+	{.compatible = "adi,ad7383-4"},
+	{.compatible = "adi,ad7384-4"},
+	{.compatible = "adi,ad7385-4"},
+	{.compatible = "adi,ad7386-4"},
+	{.compatible = "adi,ad7387-4"},
+	{.compatible = "adi,ad7388-4"},
+	{.compatible = "adi,ad4680"},
+	{.compatible = "adi,ad4681"},
+	{.compatible = "adi,ad4682"},
+	{.compatible = "adi,ad4683"},
+	{.compatible = "adi,ad4684"},
+	{.compatible = "adi,ad4685"},
+	{}
+};
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

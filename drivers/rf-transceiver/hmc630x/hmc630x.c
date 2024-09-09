@@ -41,6 +41,16 @@
 #include "hmc630x.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device hmc630x_device_table[] = {
+	{.compatible = "adi,hmc6300"},
+	{.compatible = "adi,hmc6301"},
+	{}
+};
 
 #define HMC630X_ARRAY_ADDRESS_MASK NO_OS_GENMASK(13, 8)
 #define HMC630X_RW_MASK NO_OS_BIT(14)

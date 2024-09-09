@@ -40,6 +40,15 @@
 #include "ad5592r-base.h"
 #include "no_os_error.h"
 #include "ad5593r.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5593r_device_table[] = {
+	{.compatible = "adi,ad5593r"},
+	{}
+};
 
 #define AD5593R_MODE_CONF		(0 << 4)
 #define AD5593R_MODE_DAC_WRITE		(1 << 4)

@@ -54,6 +54,17 @@
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9081_device_table[] = {
+	{.compatible = "adi,ad9081"},
+	{.compatible = "adi,ad9082"},
+	{}
+};
+
 /* ffh: 2 - gpio6, 3 - gpio7, 4 - gpio8, 5 - gpio9, 6 - gpio10, 7 - syncinb1_p, 8 - syncinb1_n */
 
 #define AD9081_PERI_SEL_GPIO6		2

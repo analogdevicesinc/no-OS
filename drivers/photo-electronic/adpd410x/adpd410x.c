@@ -47,6 +47,16 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "adpd410x.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adpd410x_device_table[] = {
+	{.compatible = "adi,adpd4100"},
+	{.compatible = "adi,adpd4101"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

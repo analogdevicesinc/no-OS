@@ -45,6 +45,15 @@
 #include "axi_adc_core.h"
 #include "ad9265.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9265_device_table[] = {
+	{.compatible = "adi,ad9265"},
+	{}
+};
 
 #define DCO_DEBUG
 

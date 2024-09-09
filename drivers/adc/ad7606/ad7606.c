@@ -51,6 +51,23 @@
 #include "no_os_util.h"
 #include "no_os_crc.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7606_device_table[] = {
+	{.compatible = "adi,ad7605-4"},
+	{.compatible = "adi,ad7606-4"},
+	{.compatible = "adi,ad7606-6"},
+	{.compatible = "adi,ad7606-8"},
+	{.compatible = "adi,ad7606b"},
+	{.compatible = "adi,ad7606c-16"},
+	{.compatible = "adi,ad7606c-18"},
+	{.compatible = "adi,ad7608"},
+	{.compatible = "adi,ad7609"},
+	{}
+};
 
 struct ad7606_chip_info {
 	const char *name;

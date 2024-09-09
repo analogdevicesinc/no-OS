@@ -47,6 +47,15 @@
 #include "ad9508.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9508_device_table[] = {
+	{.compatible = "adi,ad9508"},
+	{}
+};
 
 /**
  * @brief Reads from the ad9508 that is contected to the SPI

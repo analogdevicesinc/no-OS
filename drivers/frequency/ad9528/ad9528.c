@@ -50,6 +50,15 @@
 #include "no_os_clk.h"
 #include "ad9528.h"
 #include "jesd204.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9528_device_table[] = {
+	{.compatible = "adi,ad9528"},
+	{}
+};
 
 struct ad9528_jesd204_priv {
 	struct ad9528_dev *device;

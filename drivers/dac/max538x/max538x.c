@@ -48,6 +48,26 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max538x_device_table[] = {
+	{.compatible = "adi,max5380l"},
+	{.compatible = "adi,max5380m"},
+	{.compatible = "adi,max5380n"},
+	{.compatible = "adi,max5380k"},
+	{.compatible = "adi,max5381l"},
+	{.compatible = "adi,max5381m"},
+	{.compatible = "adi,max5381n"},
+	{.compatible = "adi,max5381k"},
+	{.compatible = "adi,max5382l"},
+	{.compatible = "adi,max5382m"},
+	{.compatible = "adi,max5382n"},
+	{.compatible = "adi,max5382k"},
+	{}
+};
 
 const struct max538x_chip_info chip_info[] = {
 	[MAX5380L] = {

@@ -5,6 +5,15 @@
 #include "no_os_gpio.h"
 #include "mdio_bitbang.h"
 #include "adin1300.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adin1300_device_table[] = {
+	{.compatible = "adi,adin1300"},
+	{}
+};
 
 int adin1300_init(struct adin1300_desc **dev, struct adin1300_init_param *param)
 {

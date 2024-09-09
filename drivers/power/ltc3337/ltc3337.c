@@ -41,7 +41,15 @@
 #include <errno.h>
 #include "ltc3337.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
 
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc3337_device_table[] = {
+	{.compatible = "adi,ltc3337"},
+	{}
+};
 
 /**
  * Structure supporting the iPeak lookup table

@@ -43,6 +43,15 @@
 #include <stdlib.h>
 #include "ad7780.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7780_device_table[] = {
+	{.compatible = "adi,ad7780"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

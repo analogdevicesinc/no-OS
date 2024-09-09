@@ -48,6 +48,15 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "adf4371.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adf4371_device_table[] = {
+	{.compatible = "adi,adf4371"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

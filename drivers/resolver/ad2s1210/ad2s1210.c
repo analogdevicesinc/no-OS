@@ -44,6 +44,15 @@
 #include "no_os_print_log.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad2s1210_device_table[] = {
+	{.compatible = "adi,ad2s1210"},
+	{}
+};
 
 static int ad2s1210_set_mode_pins(struct ad2s1210_dev *dev,
 				  enum ad2s1210_mode mode);

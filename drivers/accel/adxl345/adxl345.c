@@ -43,6 +43,16 @@
 #include <stdlib.h>
 #include "adxl345.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adxl345_device_table[] = {
+	{.compatible = "adi,adxl345"},
+	{.compatible = "adi,adxl346"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Variable Declarations ******************************/

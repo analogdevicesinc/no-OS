@@ -45,6 +45,15 @@
 #include "ad796x.h"
 #include "no_os_alloc.h"
 #include "no_os_print_log.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad796x_device_table[] = {
+	{.compatible = "adi,ad7960"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

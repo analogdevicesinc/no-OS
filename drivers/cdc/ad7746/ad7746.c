@@ -43,6 +43,17 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include "ad7746.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7746_device_table[] = {
+	{.compatible = "adi,ad7745"},
+	{.compatible = "adi,ad7746"},
+	{.compatible = "adi,ad7747"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Initialize the ad7606 device structure.

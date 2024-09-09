@@ -43,6 +43,25 @@
 #include <stdlib.h>
 #include "ad74xx.h"		// AD74xx definitions.
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad74xx_device_table[] = {
+	{.compatible = "adi,ad7466"},
+	{.compatible = "adi,ad7467"},
+	{.compatible = "adi,ad7468"},
+	{.compatible = "adi,ad7475"},
+	{.compatible = "adi,ad7476"},
+	{.compatible = "adi,ad7476a"},
+	{.compatible = "adi,ad7477"},
+	{.compatible = "adi,ad7477a"},
+	{.compatible = "adi,ad7478"},
+	{.compatible = "adi,ad7478a"},
+	{.compatible = "adi,ad7495"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

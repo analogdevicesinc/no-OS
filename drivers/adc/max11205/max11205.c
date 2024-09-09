@@ -44,6 +44,15 @@
 #include "max11205.h"
 #include "errno.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max11205_device_table[] = {
+	{.compatible = "adi,max11205"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

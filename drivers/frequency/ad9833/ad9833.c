@@ -45,6 +45,18 @@
 #include "ad9833.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9833_device_table[] = {
+	{.compatible = "adi,ad9833"},
+	{.compatible = "adi,ad9834"},
+	{.compatible = "adi,ad9837"},
+	{.compatible = "adi,ad9838"},
+	{}
+};
 
 /******************************************************************************/
 /************************** Constants Definitions *****************************/

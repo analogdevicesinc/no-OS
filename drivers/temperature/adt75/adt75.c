@@ -46,6 +46,15 @@
 #include "no_os_util.h"
 #include "no_os_units.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adt75_device_table[] = {
+	{.compatible = "adi,adt75"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

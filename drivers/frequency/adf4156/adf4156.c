@@ -45,6 +45,15 @@
 #include "adf4156.h"
 #include "adf4156_cfg.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adf4156_device_table[] = {
+	{.compatible = "adi,adf4156"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Initialize the SPI communication with the device.

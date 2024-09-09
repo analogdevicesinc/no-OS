@@ -51,6 +51,16 @@ ongoing work.
 #include <math.h>
 #include "ltc2312.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc2312_device_table[] = {
+	{.compatible = "adi,ltc2312-12"},
+	{.compatible = "adi,ltc2312-14"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

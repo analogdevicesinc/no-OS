@@ -48,6 +48,17 @@
 #include "no_os_util.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adxl313_device_table[] = {
+	{.compatible = "adi,adxl312"},
+	{.compatible = "adi,adxl313"},
+	{.compatible = "adi,adxl314"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

@@ -47,6 +47,15 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include <string.h>
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device nhd_c12832a1z_device_table[] = {
+	{.compatible = "nhd-c12832a1z"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

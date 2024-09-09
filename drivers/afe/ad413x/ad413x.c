@@ -50,6 +50,15 @@
 #include "no_os_crc8.h"
 #include "no_os_spi.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad413x_device_table[] = {
+	{.compatible = "adi,ad4130-8"},
+	{}
+};
 
 NO_OS_DECLARE_CRC8_TABLE(ad413x_crc8);
 uint32_t timeout = 0xFFFFFF;

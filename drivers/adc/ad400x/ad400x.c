@@ -51,6 +51,41 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "no_os_util.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad400x_device_table[] = {
+	{.compatible = "adi,ad4000"},
+	{.compatible = "adi,ad4001"},
+	{.compatible = "adi,ad4002"},
+	{.compatible = "adi,ad4003"},
+	{.compatible = "adi,ad4004"},
+	{.compatible = "adi,ad4005"},
+	{.compatible = "adi,ad4006"},
+	{.compatible = "adi,ad4007"},
+	{.compatible = "adi,ad4008"},
+	{.compatible = "adi,ad4010"},
+	{.compatible = "adi,ad4011"},
+	{.compatible = "adi,ad4020"},
+	{.compatible = "adi,ad4021"},
+	{.compatible = "adi,ad4022"},
+	{.compatible = "adi,adaq4003"},
+	{.compatible = "adi,ad7690"},
+	{.compatible = "adi,ad7691"},
+	{.compatible = "adi,ad7693"},
+	{.compatible = "adi,ad7942"},
+	{.compatible = "adi,ad7944"},
+	{.compatible = "adi,ad7946"},
+	{.compatible = "adi,ad7980"},
+	{.compatible = "adi,ad7982"},
+	{.compatible = "adi,ad7983"},
+	{.compatible = "adi,ad7984"},
+	{.compatible = "adi,ad7985"},
+	{.compatible = "adi,ad7986"},
+	{}
+};
 
 const struct ad400x_dev_info ad400x_devices[] = {
 	[ID_AD4000] = {.resolution = 16, .sign = 'u', .max_rate = 2000},

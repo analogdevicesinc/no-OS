@@ -44,6 +44,17 @@
 #include <stdlib.h>
 #include "ad5110.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5110_device_table[] = {
+	{.compatible = "adi,ad5110"},
+	{.compatible = "adi,ad5111"},
+	{.compatible = "adi,ad5112"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Initializes the communication with the device.

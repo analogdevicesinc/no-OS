@@ -45,6 +45,15 @@
 #include "adaq8092.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adaq8092_device_table[] = {
+	{.compatible = "adi,adaq8092"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

@@ -46,6 +46,15 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adaq7980_device_table[] = {
+	{.compatible = "adi,adaq7980"},
+	{}
+};
 
 /**
  * @brief Read from device.

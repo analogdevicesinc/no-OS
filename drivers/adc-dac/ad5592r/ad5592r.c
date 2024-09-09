@@ -39,6 +39,15 @@
 #include "no_os_error.h"
 #include "ad5592r-base.h"
 #include "ad5592r.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5592r_device_table[] = {
+	{.compatible = "adi,ad5592r"},
+	{}
+};
 
 const struct ad5592r_rw_ops ad5592r_rw_ops = {
 	.write_dac = ad5592r_write_dac,

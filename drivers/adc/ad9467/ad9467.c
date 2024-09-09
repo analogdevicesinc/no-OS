@@ -43,6 +43,15 @@
 #include <stdlib.h>
 #include "ad9467.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9467_device_table[] = {
+	{.compatible = "adi,ad9467"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Configures the test mode and the output mode to a default state.

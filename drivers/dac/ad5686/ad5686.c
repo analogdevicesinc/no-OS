@@ -46,6 +46,47 @@
 #include <stdlib.h>
 #include "ad5686.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5686_device_table[] = {
+	{.compatible = "adi,ad5671r"},
+	{.compatible = "adi,ad5672r"},
+	{.compatible = "adi,ad5673r"},
+	{.compatible = "adi,ad5674"},
+	{.compatible = "adi,ad5674r"},
+	{.compatible = "adi,ad5675r"},
+	{.compatible = "adi,ad5676"},
+	{.compatible = "adi,ad5676r"},
+	{.compatible = "adi,ad5677r"},
+	{.compatible = "adi,ad5679"},
+	{.compatible = "adi,ad5679r"},
+	{.compatible = "adi,ad5686"},
+	{.compatible = "adi,ad5684r"},
+	{.compatible = "adi,ad5685r"},
+	{.compatible = "adi,ad5686r"},
+	{.compatible = "adi,ad5687"},
+	{.compatible = "adi,ad5687r"},
+	{.compatible = "adi,ad5689"},
+	{.compatible = "adi,ad5689r"},
+	{.compatible = "adi,ad5697r"},
+	{.compatible = "adi,ad5694"},
+	{.compatible = "adi,ad5694r"},
+	{.compatible = "adi,ad5695r"},
+	{.compatible = "adi,ad5696"},
+	{.compatible = "adi,ad5696r"},
+	{.compatible = "adi,ad5681r"},
+	{.compatible = "adi,ad5682r"},
+	{.compatible = "adi,ad5683r"},
+	{.compatible = "adi,ad5683"},
+	{.compatible = "adi,ad5691r"},
+	{.compatible = "adi,ad5692r"},
+	{.compatible = "adi,ad5693r"},
+	{.compatible = "adi,ad5693"},
+	{}
+};
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/

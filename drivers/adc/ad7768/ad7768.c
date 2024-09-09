@@ -46,6 +46,15 @@
 #include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7768_device_table[] = {
+	{.compatible = "adi,ad7768"},
+	{}
+};
 
 const uint8_t standard_pin_ctrl_mode_sel[3][4] = {
 //		MCLK/1,	MCLK/2,	MCLK/4,	MCLK/8

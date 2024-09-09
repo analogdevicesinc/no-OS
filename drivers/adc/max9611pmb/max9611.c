@@ -49,6 +49,15 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include "max9611.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max9611_device_table[] = {
+	{.compatible = "adi,max9611"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief Generates slave address based on A1 and A0 pin values

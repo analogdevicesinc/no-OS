@@ -44,6 +44,15 @@
 #include <stdio.h>
 #include "ad9625.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad9625_device_table[] = {
+	{.compatible = "adi,ad9625"},
+	{}
+};
 
 /***************************************************************************//**
  * @brief ad9625_spi_read

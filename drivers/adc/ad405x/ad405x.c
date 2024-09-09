@@ -47,6 +47,16 @@
 #include "ad405x.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad405x_device_table[] = {
+	{.compatible = "adi,ad4050"},
+	{.compatible = "adi,ad4052"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

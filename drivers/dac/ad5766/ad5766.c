@@ -45,6 +45,16 @@
 #include "ad5766.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5766_device_table[] = {
+	{.compatible = "adi,ad5766"},
+	{.compatible = "adi,ad5767"},
+	{}
+};
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

@@ -43,6 +43,18 @@
 #include "no_os_print_log.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad7689_device_table[] = {
+	{.compatible = "adi,ad7689"},
+	{.compatible = "adi,ad7682"},
+	{.compatible = "adi,ad7949"},
+	{.compatible = "adi,ad7699"},
+	{}
+};
 
 const char *ad7689_device_name[] = {
 	"AD7689",

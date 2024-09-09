@@ -5,6 +5,15 @@
 #include "no_os_gpio.h"
 #include "mdio_bitbang.h"
 #include "max24287.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device max24287_device_table[] = {
+	{.compatible = "adi,max24287"},
+	{}
+};
 
 int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param)
 {

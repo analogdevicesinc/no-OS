@@ -49,6 +49,27 @@
 #include "no_os_alloc.h"
 #include "no_os_print_log.h"
 #include <string.h>
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adis1646x_device_table[] = {
+	{.compatible = "adi,adis16465"},
+	{.compatible = "adi,adis16467"},
+	{.compatible = "adi,adis16470"},
+	{.compatible = "adi,adis16475"},
+	{.compatible = "adi,adis16477"},
+	{.compatible = "adi,adis16500"},
+	{.compatible = "adi,adis16501"},
+	{.compatible = "adi,adis16505"},
+	{.compatible = "adi,adis16550"},
+	{.compatible = "adi,adis16507"},
+	{.compatible = "adi,adis16575"},
+	{.compatible = "adi,adis16576"},
+	{.compatible = "adi,adis16577"},
+	{}
+};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

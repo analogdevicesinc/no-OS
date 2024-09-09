@@ -45,6 +45,19 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "adt7420.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device adt7420_device_table[] = {
+	{.compatible = "adi,adt7310"},
+	{.compatible = "adi,adt7320"},
+	{.compatible = "adi,adt7410"},
+	{.compatible = "adi,adt7420"},
+	{.compatible = "adi,adt7422"},
+	{}
+};
 
 const struct adt7420_chip_info chip_info[] = {
 	[ID_ADT7410] = {

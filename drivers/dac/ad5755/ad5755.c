@@ -44,6 +44,17 @@
 #include "ad5755.h"         // AD5755 definitions.
 #include "ad5755_cfg.h"     // AD5755_cfg definitions.
 #include "no_os_alloc.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad5755_device_table[] = {
+	{.compatible = "adi,ad5755"},
+	{.compatible = "adi,ad5755-1"},
+	{.compatible = "adi,ad5757"},
+	{}
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

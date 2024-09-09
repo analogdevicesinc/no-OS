@@ -53,6 +53,16 @@
 
 #include "ltc3350.h"
 
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ltc3337_device_table[] = {
+	{.compatible = "adi,ltc3337"},
+	{}
+};
+
 /***************************************************************************//**
  * @brief Initializes the communication peripheral and checks if the LTC3350
  *        part is present.

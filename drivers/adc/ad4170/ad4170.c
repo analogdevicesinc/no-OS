@@ -46,6 +46,18 @@
 #include "no_os_delay.h"
 #include "no_os_crc8.h"
 #include "ad4170.h"
+#include "no_os_device.h"
+
+/**
+ * @brief Device driver compatibility list.
+ */
+const struct no_os_device ad4170_device_table[] = {
+	{.compatible = "adi,ad4170"},
+	{.compatible = "adi,ad4171"},
+	{.compatible = "adi,ad4172"},
+	{.compatible = "adi,ad4190"},
+	{}
+};
 
 NO_OS_DECLARE_CRC8_TABLE(ad4170_crc8);
 
