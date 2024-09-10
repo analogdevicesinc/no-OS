@@ -767,7 +767,7 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 	struct axi_dmac_init	dmac_init;
 
 	dmac_init.name = "ADC DMAC";
-	//dmac_init.base = dev->offload_init_param->rx_dma_baseaddr;
+	dmac_init.base = 0x44A30000; // dev->offload_init_param->rx_dma_baseaddr;
 	dmac_init.irq_option = IRQ_DISABLED;
 
 	axi_dmac_init(&dmac, &dmac_init);
@@ -984,6 +984,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 
 	dev->core_baseaddr = init_param->core_baseaddr;
 	//dev->offload_init_param = init_param->offload_init_param;
+	dev->axi_dmac = init_param->dmac_ip;
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 
