@@ -96,6 +96,13 @@ struct no_os_gpio_init_param dp83tg_int_gpio_ip = {
 	.extra = &xgpio,
 };
 
+struct no_os_gpio_init_param dp83tg_link_gpio_ip = {
+	.port = DP83TG_LINK_PORT,
+	.number = DP83TG_LINK_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+
 struct no_os_gpio_init_param brd_select_gpio_ip = {
 	.port = BRD_SELECT_PORT,
 	.number = BRD_SELECT_PIN,

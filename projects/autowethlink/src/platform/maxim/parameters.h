@@ -49,6 +49,9 @@
 #define DP83TG_INT_PIN	16
 #define DP83TG_INT_IRQn	GPIO2_IRQn
 
+#define DP83TG_LINK_PORT	1
+#define DP83TG_LINK_PIN		2
+
 #define BRD_SELECT_PORT		0
 #define BRD_SELECT_PIN		20
 
@@ -66,6 +69,7 @@ extern struct no_os_gpio_init_param dp83tg_reset_gpio_ip; // ok
 extern struct no_os_gpio_init_param dp83tg_mdc_gpio_ip; // ok
 extern struct no_os_gpio_init_param dp83tg_mdio_gpio_ip; // ok
 extern struct no_os_gpio_init_param dp83tg_int_gpio_ip; // ok
+extern struct no_os_gpio_init_param dp83tg_link_gpio_ip; // ok
 extern struct no_os_gpio_init_param brd_select_gpio_ip; // ok
 extern struct no_os_gpio_init_param factory_defaults_gpio_ip;
 extern struct no_os_eeprom_init_param eeprom_ip; // ok

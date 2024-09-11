@@ -36,6 +36,12 @@ int dp83tg_init(struct dp83tg_desc **dev, struct dp83tg_init_param *param)
 	if (ret)
 		goto free_reset;
 
+	if (param->link) {
+		ret = no_os_gpio_get(&d->link, param->link);
+		if (ret)
+			goto free_d;
+	}
+
 	// MDIO sanity check after a reset
 	ret = dp83tg_read(d, DP83TG_PHY_ID_1, &val);
 	if (val != 0x2000) {
@@ -183,7 +189,22 @@ static bool dp83tg_reg_mask_is_nonzero(struct dp83tg_desc *dev, uint32_t addr, u
 
 bool dp83tg_link_is_up(struct dp83tg_desc *dev)
 {
-	return dp83tg_reg_mask_is_nonzero(dev, DP83TG_BMSR, DP83TG_LINK_STATUS_MASK);
+/* TODO: remove all this stuff 
+	if (dev->link)
+	{
+		int ret;
+		uint8_t link;
+
+		ret = no_os_gpio_get_value(dev->link, &link);
+		if (ret)
+			return false;
+		
+		return (bool)link;
+	}
+	else
+		return dp83tg_reg_mask_is_nonzero(dev, DP83TG_BMSR, DP83TG_LINK_STATUS_MASK);
+*/
+	return dp83tg_mii_link_is_up(dev) && dp83tg_mdi_link_is_up(dev);
 }
 
 bool dp83tg_mii_link_is_up(struct dp83tg_desc *dev)
@@ -193,6 +214,6 @@ bool dp83tg_mii_link_is_up(struct dp83tg_desc *dev)
 
 bool dp83tg_mdi_link_is_up(struct dp83tg_desc *dev)
 {
-	return dp83tg_reg_mask_is_nonzero(dev, DP83TG_MII_REG_10, DP83TG_LINK_STATUS_BIT_MASK);
+	return dp83tg_reg_mask_is_nonzero(dev, DP83TG_LSR, DP83TG_LINK_UP_MASK);
 
 }

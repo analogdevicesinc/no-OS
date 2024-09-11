@@ -36,6 +36,8 @@ int net_init(struct dp83tg_iio_desc **dp83tg_iio)
 	});
 	if (ret)
 		return ret;
+	
+	return 0;
 }
 
 #if 0 // for reference only
