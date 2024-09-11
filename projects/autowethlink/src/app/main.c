@@ -13,6 +13,7 @@
 #include "mwc.h"
 #include "iio_app.h"
 #include "dp83tg.h"
+#include "iio_dp83tg.h"
 #include "mxc_sys.h"
 
 volatile bool heartbeat_pulse = false;
@@ -123,7 +124,7 @@ int main(void)
 	const uint16_t nvmpsz = sizeof(union nvmp255);
 	uint8_t eebuf[nvmpsz + 1];
 	union nvmp255 *nvmp;
-	struct dp83tg_desc *dp83tg;
+	struct dp83tg_iio_desc *iio_dp83tg;
 
 	NO_OS_DECLARE_CRC8_TABLE(crc8);
 	no_os_crc8_populate_msb(crc8, 0x7);
@@ -210,23 +211,9 @@ apply_factory_defaults: {
 post_eeprom:
 	nvmp = (union nvmp255 *)eebuf;
 
-	
-	struct dp83tg_init_param dp83tg_ip = {
-		.reset = &dp83tg_reset_gpio_ip,
-		.mdio = {
-			.c45 = false, // doesn't directly support clause 45, only indirectly (implemented in device driver)
-			.addr = 0,
-			.ops = &mdio_bitbang_ops,
-			.extra = &(struct mdio_bitbang_init_param)
-			{
-				.mdc = dp83tg_mdc_gpio_ip,
-				.mdio = dp83tg_mdio_gpio_ip,
-			},
-		},
-	};
-	ret = dp83tg_init(&dp83tg, &dp83tg_ip);
+	ret = net_init(&iio_dp83tg);
 	if (ret)
-		return ret;
+		goto end;
 
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
@@ -244,7 +231,7 @@ post_eeprom:
 		.hbtx = hbtx,
 		.crc8 = crc8,
 		.eeprom = eeprom,
-		//.dp83tg = iio_dp83tg->dev,
+		.dp83tg = iio_dp83tg->dev,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)
@@ -336,11 +323,11 @@ post_eeprom:
 			.dev = mwc,
 			.dev_descriptor = mwc->iio_dev,
 		},
-		/*{
+		{
 			.name = "dp83tg",
 			.dev = iio_dp83tg,
 			.dev_descriptor = iio_dp83tg->iio_dev,
-		},*/
+		},
 	};
 
 	struct iio_ctx_attr iio_ctx_attrs[] = {

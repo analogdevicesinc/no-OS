@@ -2,6 +2,7 @@
 #define _DP83TG_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "no_os_util.h"
 #include "no_os_mdio.h"
 
@@ -11,9 +12,15 @@
 #define DP83TG_REGCR					0xd
 #define DP83TG_ADDAR					0xe
 
+#define DP83TG_MII_REG_10				0x10
+#define DP83TG_LINK_STATUS_BIT_MASK		NO_OS_BIT(0)
+
 #define DP83TG_MII_REG_1F				0x1f
 #define DP83TG_SW_GLOBAL_RESET_MASK		NO_OS_BIT(15)
 #define DP83TG_DIGITAL_RESET_MASK		NO_OS_BIT(14)
+
+#define DP83TG_BMSR						NO_OS_MDIO_C45_ADDR(0x1f, 0x141)
+#define DP83TG_LINK_STATUS_MASK			NO_OS_BIT(2)
 
 #define DP83TG_SGMII_CTRL_1				NO_OS_MDIO_C45_ADDR(0x1f, 0x608)
 #define DP83TG_CFG_SGMII_EN_MASK		NO_OS_BIT(9)
@@ -53,5 +60,8 @@ int dp83tg_soft_reset(struct dp83tg_desc *dev);
 int dp83tg_hard_reset(struct dp83tg_desc *dev);
 
 int dp83tg_sgmii(struct dp83tg_desc *dev);
+bool dp83tg_link_is_up(struct dp83tg_desc *dev);
+bool dp83tg_mii_link_is_up(struct dp83tg_desc *dev);
+bool dp83tg_mdi_link_is_up(struct dp83tg_desc *dev);
 
 #endif

@@ -4,6 +4,7 @@
 #include "no_os_mdio.h"
 #include "no_os_alloc.h"
 #include "no_os_gpio.h"
+#include "no_os_delay.h"
 
 int dp83tg_init(struct dp83tg_desc **dev, struct dp83tg_init_param *param)
 {
@@ -166,4 +167,32 @@ int dp83tg_write_bits(struct dp83tg_desc *dev, uint8_t addr, uint16_t val,
 int dp83tg_sgmii(struct dp83tg_desc *dev)
 {
 	return dp83tg_write_bits(dev, DP83TG_SGMII_CTRL_1, DP83TG_CFG_SGMII_EN_MASK, DP83TG_CFG_SGMII_EN_MASK);
+}
+
+static bool dp83tg_reg_mask_is_nonzero(struct dp83tg_desc *dev, uint32_t addr, uint16_t mask)
+{
+	int ret;
+	uint16_t val;
+
+	ret = dp83tg_read(dev, addr, &val);
+	if (ret)
+		return false;
+	
+	return (bool)no_os_field_get(mask, val);
+}
+
+bool dp83tg_link_is_up(struct dp83tg_desc *dev)
+{
+	return dp83tg_reg_mask_is_nonzero(dev, DP83TG_BMSR, DP83TG_LINK_STATUS_MASK);
+}
+
+bool dp83tg_mii_link_is_up(struct dp83tg_desc *dev)
+{
+	return dp83tg_reg_mask_is_nonzero(dev, DP83TG_SGMII_STATUS, DP83TG_LINK_STATUS_1000BX_MASK);
+}
+
+bool dp83tg_mdi_link_is_up(struct dp83tg_desc *dev)
+{
+	return dp83tg_reg_mask_is_nonzero(dev, DP83TG_MII_REG_10, DP83TG_LINK_STATUS_BIT_MASK);
+
 }

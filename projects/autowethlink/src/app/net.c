@@ -1,3 +1,43 @@
+#include "no_os_delay.h"
+#include "no_os_mdio.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
+#include "mdio_bitbang.h"
+#include "net.h"
+#include "parameters.h"
+#include "dp83tg.h"
+#include "iio_dp83tg.h"
+
+int net_init(struct dp83tg_iio_desc **dp83tg_iio)
+{
+	int ret;
+	struct dp83tg_desc *dp83tg;
+
+	struct dp83tg_init_param dp83tg_ip = {
+		.reset = &dp83tg_reset_gpio_ip,
+		.mdio = {
+			.c45 = false, // doesn't directly support clause 45, only indirectly (implemented in device driver)
+			.addr = 0,
+			.ops = &mdio_bitbang_ops,
+			.extra = &(struct mdio_bitbang_init_param)
+			{
+				.mdc = dp83tg_mdc_gpio_ip,
+				.mdio = dp83tg_mdio_gpio_ip,
+			},
+		},
+	};
+	ret = dp83tg_init(&dp83tg, &dp83tg_ip);
+	if (ret)
+		return ret;
+
+	ret = dp83tg_iio_init(dp83tg_iio,
+	&(struct dp83tg_iio_init_param) {
+		.dev = dp83tg
+	});
+	if (ret)
+		return ret;
+}
+
 #if 0 // for reference only
 #include <stdio.h>
 #include "no_os_delay.h"
