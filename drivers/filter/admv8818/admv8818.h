@@ -104,7 +104,7 @@
 #define ADMV8818_LPF_WR0_MSK			NO_OS_GENMASK(3, 0)
 
 /* Specifications */
-#define ADMV8818_BUFF_SIZE_BYTES		2
+#define ADMV8818_BUFF_SIZE_BYTES		3
 #define ADMV8818_CHIP_ID			NO_OS_BIT(0)
 #define ADMV8818_SPI_READ_CMD			NO_OS_BIT(7)
 
@@ -148,15 +148,15 @@ struct admv8818_dev {
 };
 
 /** ADMV8818 SPI write */
-int admv8818_spi_write(struct admv8818_dev *dev, uint8_t reg_addr,
+int admv8818_spi_write(struct admv8818_dev *dev, uint16_t reg_addr,
 		       uint8_t data);
 
 /* ADMV8818 Register Update */
-int admv8818_spi_update_bits(struct admv8818_dev *dev, uint8_t reg_addr,
+int admv8818_spi_update_bits(struct admv8818_dev *dev, uint16_t reg_addr,
 			     uint8_t mask, uint8_t data);
 
 /** ADMV8818 SPI Read */
-int admv8818_spi_read(struct admv8818_dev *dev, uint8_t reg_addr,
+int admv8818_spi_read(struct admv8818_dev *dev, uint16_t reg_addr,
 		      uint8_t *data);
 
 /** Set the HPF Frequency */
