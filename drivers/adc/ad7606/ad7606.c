@@ -322,9 +322,9 @@ struct ad7606_dev {
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
-			    uint8_t reg_addr,
-			    uint8_t *reg_data)
+static int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
+				   uint8_t reg_addr,
+				   uint8_t *reg_data)
 {
 	uint8_t buf[3];
 	uint8_t crc;
@@ -334,7 +334,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 	if (!dev->sw_mode)
 		return -ENOTSUP;
 
-	buf[0] = AD7606_RD_FLAG_MSK(reg_addr);
+	buf[0] = AD7606_SERIAL_RD_FLAG_MSK(reg_addr);
 	buf[1] = 0x00;
 	if (dev->digital_diag_enable.int_crc_err_en) {
 		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
@@ -347,7 +347,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 
 	dev->reg_mode = true;
 
-	buf[0] = AD7606_RD_FLAG_MSK(reg_addr);
+	buf[0] = AD7606_SERIAL_RD_FLAG_MSK(reg_addr);
 	buf[1] = 0x00;
 	if (dev->digital_diag_enable.int_crc_err_en) {
 		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
@@ -384,9 +384,9 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
-			     uint8_t reg_addr,
-			     uint8_t reg_data)
+static int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
+				    uint8_t reg_addr,
+				    uint8_t reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -398,12 +398,12 @@ int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
 
 	/* Dummy read to place the chip in register mode. */
 	if (!dev->reg_mode) {
-		ret = ad7606_spi_reg_read(dev, reg_addr, NULL);
+		ret = ad7606_reg_read(dev, reg_addr, NULL);
 		if (ret < 0)
 			return ret;
 	}
 
-	buf[0] = AD7606_WR_FLAG_MSK(reg_addr);
+	buf[0] = AD7606_SERIAL_WR_FLAG_MSK(reg_addr);
 	buf[1] = reg_data;
 	if (dev->digital_diag_enable.int_crc_err_en) {
 		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
@@ -416,6 +416,52 @@ int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
 		return ret;
 
 	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Write a device register via SPI or AXI Parallel core.
+ *
+ * The behavior of this function varies slightly depending on whether
+ * the operation is done via SPI or AXI core.
+ *
+ * @param dev        - The device structure.
+ * @param reg_addr   - Register address in device memory.
+ * @param reg_data   - Value to write to register.
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  -ENOTSUP - Device not in software mode.
+ *                  -EBADMSG - CRC computation mismatch.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_reg_read(struct ad7606_dev *dev,
+			uint8_t reg_addr,
+			uint8_t *reg_data)
+{
+	return ad7606_spi_reg_read(dev, reg_addr, reg_data);
+}
+
+/***************************************************************************//**
+ * @brief Write a device register via SPI or AXI Parallel core.
+ *
+ * The behavior of this function varies slightly depending on whether
+ * the operation is done via SPI or AXI core.
+ *
+ * @param dev        - The device structure.
+ * @param reg_addr   - Register address in device memory.
+ * @param reg_data   - Value to write to register.
+ *
+ * @return ret - return code.
+ *         Example: -EIO - SPI communication error.
+ *                  -ENOTSUP - Device not in software mode.
+ *                  -EBADMSG - CRC computation mismatch.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_reg_write(struct ad7606_dev *dev,
+			 uint8_t reg_addr,
+			 uint8_t reg_data)
+{
+	return ad7606_spi_reg_write(dev, reg_addr, reg_data);
 }
 
 /***************************************************************************//**
@@ -432,7 +478,7 @@ int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_spi_write_mask(struct ad7606_dev *dev,
+int32_t ad7606_reg_write_mask(struct ad7606_dev *dev,
 			      uint32_t addr,
 			      uint32_t mask,
 			      uint32_t val)
@@ -440,14 +486,14 @@ int32_t ad7606_spi_write_mask(struct ad7606_dev *dev,
 	uint8_t reg_data;
 	int ret;
 
-	ret = ad7606_spi_reg_read(dev, addr, &reg_data);
+	ret = ad7606_reg_read(dev, addr, &reg_data);
 	if (ret < 0)
 		return ret;
 
 	reg_data &= ~mask;
 	reg_data |= val;
 
-	return ad7606_spi_reg_write(dev, addr, reg_data);
+	return ad7606_reg_write(dev, addr, reg_data);
 }
 
 /* Internal function to copy the content of a buffer in 18-bit chunks to a 32-bit buffer by
@@ -515,7 +561,7 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
 
 	if (dev->reg_mode) {
 		/* Enter ADC reading mode by writing at address zero. */
-		ret = ad7606_spi_reg_write(dev, 0, 0);
+		ret = ad7606_reg_write(dev, 0, 0);
 		if (ret < 0)
 			return ret;
 
@@ -761,7 +807,7 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 
 	if (dev->reg_mode) {
 		/* Enter ADC reading mode by writing at address zero. */
-		ret = ad7606_spi_reg_write(dev, 0, 0);
+		ret = ad7606_reg_write(dev, 0, 0);
 		if (ret < 0)
 			return ret;
 
@@ -975,7 +1021,7 @@ int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 	if (dev->sw_mode) {
 		val = no_os_field_prep(AD7606_OS_RATIO_MSK, oversampling.os_ratio);
 		val |= no_os_field_prep(AD7606_OS_PAD_MSK, oversampling.os_pad);
-		ret = ad7606_spi_reg_write(dev, AD7606_REG_OVERSAMPLING, val);
+		ret = ad7606_reg_write(dev, AD7606_REG_OVERSAMPLING, val);
 		if (ret < 0)
 			return ret;
 	} else {
@@ -1064,7 +1110,7 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 		return -EINVAL;
 
 	if (dev->sw_mode)
-		ret = ad7606_spi_write_mask(dev, AD7606_REG_RANGE_CH_ADDR(ch),
+		ret = ad7606_reg_write_mask(dev, AD7606_REG_RANGE_CH_ADDR(ch),
 					    AD7606_RANGE_CH_MSK(ch),
 					    AD7606_RANGE_CH_MODE(ch, value));
 	else
@@ -1155,7 +1201,7 @@ int32_t ad7606_set_ch_offset(struct ad7606_dev *dev, uint8_t ch,
 	if (!dev->sw_mode)
 		return -ENOTSUP;
 
-	ret = ad7606_spi_reg_write(dev, AD7606_REG_OFFSET_CH(ch), value);
+	ret = ad7606_reg_write(dev, AD7606_REG_OFFSET_CH(ch), value);
 	if (ret < 0)
 		return ret;
 
@@ -1189,7 +1235,7 @@ int32_t ad7606_set_ch_phase(struct ad7606_dev *dev, uint8_t ch,
 	if (!dev->sw_mode)
 		return -ENOTSUP;
 
-	ret = ad7606_spi_reg_write(dev, AD7606_REG_PHASE_CH(ch), phase);
+	ret = ad7606_reg_write(dev, AD7606_REG_PHASE_CH(ch), phase);
 	if (ret < 0)
 		return ret;
 
@@ -1224,7 +1270,7 @@ int32_t ad7606_set_ch_gain(struct ad7606_dev *dev, uint8_t ch,
 		return -ENOTSUP;
 
 	gain = no_os_field_get(AD7606_GAIN_MSK, gain);
-	ret = ad7606_spi_reg_write(dev, AD7606_REG_GAIN_CH(ch), gain);
+	ret = ad7606_reg_write(dev, AD7606_REG_GAIN_CH(ch), gain);
 	if (ret < 0)
 		return ret;
 
@@ -1264,7 +1310,7 @@ int32_t ad7606_set_config(struct ad7606_dev *dev,
 		val |= no_os_field_prep(AD7606_CONFIG_EXT_OS_CLOCK_MSK, config.ext_os_clock);
 		val |= no_os_field_prep(AD7606_CONFIG_STATUS_HEADER_MSK, config.status_header);
 
-		ret = ad7606_spi_reg_write(dev, AD7606_REG_CONFIG, val);
+		ret = ad7606_reg_write(dev, AD7606_REG_CONFIG, val);
 		if (ret)
 			return ret;
 	} else {
@@ -1333,7 +1379,7 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 				diag.clk_fs_os_counter_en);
 	val |= no_os_field_prep(AD7606_INTERFACE_CHECK_EN_MSK, diag.interface_check_en);
 
-	ret = ad7606_spi_reg_write(dev, AD7606_REG_DIGITAL_DIAG_ENABLE, val);
+	ret = ad7606_reg_write(dev, AD7606_REG_DIGITAL_DIAG_ENABLE, val);
 	if (ret < 0)
 		return ret;
 
@@ -1482,7 +1528,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		goto error;
 
 	if (dev->sw_mode) {
-		ret = ad7606_spi_reg_read(dev, AD7606_REG_ID, &reg);
+		ret = ad7606_reg_read(dev, AD7606_REG_ID, &reg);
 		if (ret < 0)
 			goto error;
 

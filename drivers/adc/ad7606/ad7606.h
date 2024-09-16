@@ -120,8 +120,8 @@
 /* AD7606_REG_DIAGNOSTIC_MUX_CH */
 #define AD7606_DIAGN_MUX_CH_MSK(ch)		(NO_OS_GENMASK(2, 0) << (3 * (ch & 0x1)))
 
-#define AD7606_RD_FLAG_MSK(x)		(NO_OS_BIT(6) | ((x) & 0x3F))
-#define AD7606_WR_FLAG_MSK(x)		((x) & 0x3F)
+#define AD7606_SERIAL_RD_FLAG_MSK(x)		(NO_OS_BIT(6) | ((x) & 0x3F))
+#define AD7606_SERIAL_WR_FLAG_MSK(x)		((x) & 0x3F)
 
 #define AD7606_MAX_CHANNELS		8
 
@@ -339,16 +339,16 @@ struct ad7606_init_param {
 	struct ad7606_range range_ch[AD7606_MAX_CHANNELS];
 };
 
-int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
-			    uint8_t reg_addr,
-			    uint8_t *reg_data);
-int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
-			     uint8_t reg_addr,
-			     uint8_t reg_data);
-int32_t ad7606_spi_write_mask(struct ad7606_dev *dev,
-			      uint32_t addr,
-			      uint32_t mask,
-			      uint32_t val);
+int32_t ad7606_reg_read(struct ad7606_dev *dev,
+			uint8_t reg_addr,
+			uint8_t *reg_data);
+int32_t ad7606_reg_write(struct ad7606_dev *dev,
+			 uint8_t reg_addr,
+			 uint8_t reg_data);
+int32_t ad7606_write_mask(struct ad7606_dev *dev,
+			  uint32_t addr,
+			  uint32_t mask,
+			  uint32_t val);
 int32_t ad7606_spi_data_read(struct ad7606_dev *dev,
 			     uint32_t *data);
 int32_t ad7606_read_samples(struct ad7606_dev *dev,
