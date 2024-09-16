@@ -91,19 +91,19 @@ const char *json_profile_active_use_case = "{ \n\
         }, \n\
         \"enableJesd204C\": 0, \n\
         \"bankId\": 0, \n\
-        \"deviceId\": 0, \n\
+        \"deviceId\": 1, \n\
         \"lane0Id\": 0, \n\
         \"jesd204M\": 0, \n\
-        \"jesd204K\": 0, \n\
+        \"jesd204K\": 32, \n\
         \"jesd204F\": 0, \n\
         \"jesd204Np\": 0, \n\
         \"jesd204E\": 0, \n\
-        \"scramble\": 0, \n\
+        \"scramble\": 1, \n\
         \"serializerLanesEnabled\": 0, \n\
         \"lmfcOffset\": 0, \n\
-        \"syncbInSelect\": 0, \n\
+        \"syncbInSelect\": 1, \n\
         \"overSample\": 0, \n\
-        \"syncbInLvdsMode\": 0, \n\
+        \"syncbInLvdsMode\": 1, \n\
         \"syncbInLvdsPnInvert\": 0, \n\
         \"newSysrefOnRelink\": 0, \n\
         \"sysrefForStartup\": 0, \n\
@@ -146,19 +146,19 @@ const char *json_profile_active_use_case = "{ \n\
         }, \n\
         \"enableJesd204C\": 0, \n\
         \"bankId\": 0, \n\
-        \"deviceId\": 0, \n\
+        \"deviceId\": 1, \n\
         \"lane0Id\": 0, \n\
         \"jesd204M\": 0, \n\
-        \"jesd204K\": 0, \n\
+        \"jesd204K\": 1, \n\
         \"jesd204F\": 0, \n\
         \"jesd204Np\": 0, \n\
         \"jesd204E\": 0, \n\
-        \"scramble\": 0, \n\
+        \"scramble\": 1, \n\
         \"serializerLanesEnabled\": 0, \n\
         \"lmfcOffset\": 0, \n\
-        \"syncbInSelect\": 0, \n\
+        \"syncbInSelect\": 2, \n\
         \"overSample\": 0, \n\
-        \"syncbInLvdsMode\": 0, \n\
+        \"syncbInLvdsMode\": 1, \n\
         \"syncbInLvdsPnInvert\": 0, \n\
         \"newSysrefOnRelink\": 0, \n\
         \"sysrefForStartup\": 0, \n\
@@ -252,26 +252,26 @@ const char *json_profile_active_use_case = "{ \n\
     \"serCfg\": [ \n\
       { \n\
         \"serAmplitude\": 0, \n\
-        \"serPreEmphasis\": 0, \n\
-        \"serPostEmphasis\": 0, \n\
+        \"serPreEmphasis\": 1, \n\
+        \"serPostEmphasis\": 3, \n\
         \"serInvertLanePolarity\": 0 \n\
       }, \n\
       { \n\
         \"serAmplitude\": 0, \n\
-        \"serPreEmphasis\": 0, \n\
-        \"serPostEmphasis\": 0, \n\
+        \"serPreEmphasis\": 1, \n\
+        \"serPostEmphasis\": 3, \n\
         \"serInvertLanePolarity\": 0 \n\
       }, \n\
       { \n\
         \"serAmplitude\": 0, \n\
-        \"serPreEmphasis\": 0, \n\
-        \"serPostEmphasis\": 0, \n\
+        \"serPreEmphasis\": 1, \n\
+        \"serPostEmphasis\": 3, \n\
         \"serInvertLanePolarity\": 0 \n\
       }, \n\
       { \n\
         \"serAmplitude\": 0, \n\
-        \"serPreEmphasis\": 0, \n\
-        \"serPostEmphasis\": 0, \n\
+        \"serPreEmphasis\": 1, \n\
+        \"serPostEmphasis\": 3, \n\
         \"serInvertLanePolarity\": 0 \n\
       } \n\
     ], \n\
@@ -337,7 +337,7 @@ const char *json_profile_active_use_case = "{ \n\
       \"linkSharingEnabled\": 0, \n\
       \"linkSharingM\": 0, \n\
       \"linkSharingS\": 0, \n\
-      \"linkSharingNp\": 16, \n\
+      \"linkSharingNp\": 0, \n\
       \"linkSharingAdcCrossbar\": { \n\
         \"conv0\": 127, \n\
         \"conv1\": 127, \n\
@@ -395,44 +395,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 1, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 122880, \n\
+          \"rfBandwidth_kHz\": 100000, \n\
+          \"rxBbf3dBCorner_kHz\": 100000, \n\
+          \"rxAdcBandWidth_kHz\": 50000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
+              -12, \n\
               4, \n\
-              -1, \n\
               -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
               -2, \n\
-              -1, \n\
+              10, \n\
+              -18, \n\
+              25, \n\
+              -25, \n\
+              8, \n\
+              73, \n\
+              -587, \n\
+              17346, \n\
+              -587, \n\
+              73, \n\
+              8, \n\
+              -25, \n\
+              25, \n\
+              -18, \n\
+              10, \n\
+              -2, \n\
+              -2, \n\
               4, \n\
-              -10, \n\
+              -12, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -543,44 +543,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 2, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 122880, \n\
+          \"rfBandwidth_kHz\": 100000, \n\
+          \"rxBbf3dBCorner_kHz\": 100000, \n\
+          \"rxAdcBandWidth_kHz\": 50000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
+              -12, \n\
               4, \n\
-              -1, \n\
               -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
               -2, \n\
-              -1, \n\
+              10, \n\
+              -18, \n\
+              25, \n\
+              -25, \n\
+              8, \n\
+              73, \n\
+              -587, \n\
+              17346, \n\
+              -587, \n\
+              73, \n\
+              8, \n\
+              -25, \n\
+              25, \n\
+              -18, \n\
+              10, \n\
+              -2, \n\
+              -2, \n\
               4, \n\
-              -10, \n\
+              -12, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -691,44 +691,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 4, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 122880, \n\
+          \"rfBandwidth_kHz\": 100000, \n\
+          \"rxBbf3dBCorner_kHz\": 100000, \n\
+          \"rxAdcBandWidth_kHz\": 50000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
+              -12, \n\
               4, \n\
-              -1, \n\
               -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
               -2, \n\
-              -1, \n\
+              10, \n\
+              -18, \n\
+              25, \n\
+              -25, \n\
+              8, \n\
+              73, \n\
+              -587, \n\
+              17346, \n\
+              -587, \n\
+              73, \n\
+              8, \n\
+              -25, \n\
+              25, \n\
+              -18, \n\
+              10, \n\
+              -2, \n\
+              -2, \n\
               4, \n\
-              -10, \n\
+              -12, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -839,44 +839,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 8, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 122880, \n\
+          \"rfBandwidth_kHz\": 100000, \n\
+          \"rxBbf3dBCorner_kHz\": 100000, \n\
+          \"rxAdcBandWidth_kHz\": 50000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
+              -12, \n\
               4, \n\
-              -1, \n\
               -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
               -2, \n\
-              -1, \n\
+              10, \n\
+              -18, \n\
+              25, \n\
+              -25, \n\
+              8, \n\
+              73, \n\
+              -587, \n\
+              17346, \n\
+              -587, \n\
+              73, \n\
+              8, \n\
+              -25, \n\
+              25, \n\
+              -18, \n\
+              10, \n\
+              -2, \n\
+              -2, \n\
               4, \n\
-              -10, \n\
+              -12, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1878,41 +1878,41 @@ const char *json_profile_active_use_case = "{ \n\
     \"txChannelCfg\": [ \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
+          \"txInputRate_kHz\": 122880, \n\
+          \"primarySigBandwidth_kHz\": 100000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
           \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
+            \"gain_dB\": 6, \n\
             \"numFirCoefs\": 20, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
+              -28, \n\
+              45, \n\
+              -82, \n\
+              152, \n\
+              -262, \n\
+              462, \n\
+              -893, \n\
+              1945, \n\
+              -4588, \n\
+              22882, \n\
+              -4588, \n\
+              1945, \n\
+              -893, \n\
+              462, \n\
+              -262, \n\
+              152, \n\
+              -82, \n\
+              45, \n\
+              -28, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1990,41 +1990,41 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
+          \"txInputRate_kHz\": 122880, \n\
+          \"primarySigBandwidth_kHz\": 100000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
           \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
+            \"gain_dB\": 6, \n\
             \"numFirCoefs\": 20, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
+              -28, \n\
+              45, \n\
+              -82, \n\
+              152, \n\
+              -262, \n\
+              462, \n\
+              -893, \n\
+              1945, \n\
+              -4588, \n\
+              22882, \n\
+              -4588, \n\
+              1945, \n\
+              -893, \n\
+              462, \n\
+              -262, \n\
+              152, \n\
+              -82, \n\
+              45, \n\
+              -28, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -2102,41 +2102,41 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
+          \"txInputRate_kHz\": 122880, \n\
+          \"primarySigBandwidth_kHz\": 100000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
           \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
+            \"gain_dB\": 6, \n\
             \"numFirCoefs\": 20, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
+              -28, \n\
+              45, \n\
+              -82, \n\
+              152, \n\
+              -262, \n\
+              462, \n\
+              -893, \n\
+              1945, \n\
+              -4588, \n\
+              22882, \n\
+              -4588, \n\
+              1945, \n\
+              -893, \n\
+              462, \n\
+              -262, \n\
+              152, \n\
+              -82, \n\
+              45, \n\
+              -28, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -2214,41 +2214,41 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
+          \"txInputRate_kHz\": 122880, \n\
+          \"primarySigBandwidth_kHz\": 100000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
           \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
+            \"gain_dB\": 6, \n\
             \"numFirCoefs\": 20, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
+              -28, \n\
+              45, \n\
+              -82, \n\
+              152, \n\
+              -262, \n\
+              462, \n\
+              -893, \n\
+              1945, \n\
+              -4588, \n\
+              22882, \n\
+              -4588, \n\
+              1945, \n\
+              -893, \n\
+              462, \n\
+              -262, \n\
+              152, \n\
+              -82, \n\
+              45, \n\
+              -28, \n\
               0, \n\
               0, \n\
               0, \n\

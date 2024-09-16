@@ -124,7 +124,7 @@ int dma_example_main(void)
 	ad9528_channels[0].channel_num = 0;
 	ad9528_channels[0].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[0].divider_phase = 0;
-	ad9528_channels[0].channel_divider = 5;
+	ad9528_channels[0].channel_divider = 10;
 	ad9528_channels[0].signal_source = SOURCE_SYSREF_VCO;
 	ad9528_channels[0].output_dis = 0;
 
@@ -132,7 +132,7 @@ int dma_example_main(void)
 	ad9528_channels[1].channel_num = 1;
 	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[1].divider_phase = 0;
-	ad9528_channels[1].channel_divider = 5;
+	ad9528_channels[1].channel_divider = 10;
 	ad9528_channels[1].signal_source = SOURCE_VCO;
 	ad9528_channels[1].output_dis = 0;
 
@@ -140,7 +140,7 @@ int dma_example_main(void)
 	ad9528_channels[3].channel_num = 3;
 	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[3].divider_phase = 0;
-	ad9528_channels[3].channel_divider = 5;
+	ad9528_channels[3].channel_divider = 10;
 	ad9528_channels[3].signal_source = SOURCE_VCO;
 	ad9528_channels[3].output_dis = 0;
 
@@ -148,7 +148,7 @@ int dma_example_main(void)
 	ad9528_channels[12].channel_num = 12;
 	ad9528_channels[12].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[12].divider_phase = 0;
-	ad9528_channels[12].channel_divider = 5;
+	ad9528_channels[12].channel_divider = 10;
 	ad9528_channels[12].signal_source = SOURCE_SYSREF_VCO;
 	ad9528_channels[12].output_dis = 0;
 
@@ -156,7 +156,7 @@ int dma_example_main(void)
 	ad9528_channels[13].channel_num = 13;
 	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[13].divider_phase = 0;
-	ad9528_channels[13].channel_divider = 5;
+	ad9528_channels[13].channel_divider = 10;
 	ad9528_channels[13].signal_source = SOURCE_VCO;
 	ad9528_channels[13].output_dis = 0;
 
