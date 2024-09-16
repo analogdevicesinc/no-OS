@@ -9,6 +9,20 @@
 #include "dp83tg.h"
 #include "iio.h"
 
+static uint16_t _reg_space(uint16_t addr)
+{
+	if (addr <= 0xefd)
+        return 0x1f;
+    else if (addr <= 0x1904)
+        return 0x1;
+    else if (addr <= 0x390d)
+        return 0x3;
+    else if (addr <= 0x7200)
+        return 0x7;
+    else
+        return 0xff; // invalid register space
+}
+
 static int32_t _dp83tg_read2(struct dp83tg_iio_desc *iiodev,
 			       uint32_t reg,
 			       uint32_t *readval)
@@ -16,10 +30,7 @@ static int32_t _dp83tg_read2(struct dp83tg_iio_desc *iiodev,
 	int ret;
 	uint16_t val;
 
-    if (reg > 0xefd)
-        return -EINVAL;
-
-	ret = dp83tg_read(iiodev->dev, NO_OS_MDIO_C45_ADDR(0x1f, reg), &val);
+	ret = dp83tg_read(iiodev->dev, NO_OS_MDIO_C45_ADDR(_reg_space(reg), reg), &val);
 	if (ret)
 		return ret;
 
@@ -31,10 +42,7 @@ static int32_t _dp83tg_write2(struct dp83tg_iio_desc *iiodev,
 				uint32_t reg,
 				uint32_t writeval)
 {
-    if (reg > 0xefd)
-        return -EINVAL;
-
-	return dp83tg_write(iiodev->dev, NO_OS_MDIO_C45_ADDR(0x1f, reg), (uint16_t)writeval);
+	return dp83tg_write(iiodev->dev, NO_OS_MDIO_C45_ADDR(_reg_space(reg), reg), (uint16_t)writeval);
 }
 
 static int dp83tg_iio_read_attr(void *device, char *buf,

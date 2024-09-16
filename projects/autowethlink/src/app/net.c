@@ -8,10 +8,36 @@
 #include "dp83tg.h"
 #include "iio_dp83tg.h"
 
+struct net_context {
+	struct dp83tg_desc *phy;
+	struct no_os_irq_ctrl_desc *nvic;
+};
+
+void phy_int(void *context)
+{
+	asm("nop;");
+}
+
 int net_init(struct dp83tg_iio_desc **dp83tg_iio)
 {
 	int ret;
+	static struct net_context ctx;
 	struct dp83tg_desc *dp83tg;
+	struct no_os_gpio_desc *int_gpio;
+	struct no_os_irq_ctrl_desc *nvic;
+	struct no_os_irq_init_param nvic_ip = {
+		.platform_ops = &max_irq_ops,
+	};
+	struct no_os_irq_ctrl_desc *gpio2intc;
+	struct no_os_irq_init_param gpio2intc_ip = {
+		.irq_ctrl_id = DP83TG_INT_PORT,
+		.platform_ops = &max_gpio_irq_ops,
+	};
+	struct no_os_callback_desc dp83tg_int_cb = {
+		.callback = phy_int,
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+	};
 
 	struct dp83tg_init_param dp83tg_ip = {
 		.reset = &dp83tg_reset_gpio_ip,
@@ -34,6 +60,67 @@ int net_init(struct dp83tg_iio_desc **dp83tg_iio)
 	&(struct dp83tg_iio_init_param) {
 		.dev = dp83tg
 	});
+	if (ret)
+		return ret;
+
+	// configure the phy interrupt pin
+	ret = no_os_gpio_get(&int_gpio, &dp83tg_int_gpio_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_direction_input(int_gpio);
+	if (ret)
+		return ret;
+	
+	uint8_t val;
+	no_os_gpio_get_value(int_gpio, &val);
+	if(val)
+		asm("nop;");
+
+	ret = dp83tg_read(dp83tg, DP83TG_INTERRUPT_STATUS_1, NULL);
+	if (ret)
+		return ret;
+	ret = dp83tg_write_bits(dp83tg, DP83TG_INTERRUPT_STATUS_1,
+									DP83TG_LINK_STATUS_CHANGED_MASK | DP83TG_ENERGY_DETECT_MASK | DP83TG_TRAINING_DONE_MASK,
+									DP83TG_LINK_STATUS_CHANGED_MASK | DP83TG_ENERGY_DETECT_MASK | DP83TG_TRAINING_DONE_MASK);
+	if (ret)
+		return ret;
+	ret = dp83tg_write_bits(dp83tg, DP83TG_MII_REG_11, 
+									DP83TG_INT_EN_MASK | DP83TG_INT_POLARITY_MASK,
+									DP83TG_INT_EN_MASK | DP83TG_INT_POLARITY_MASK);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_ctrl_init(&nvic, &nvic_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(nvic, DP83TG_INT_IRQn);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_ctrl_init(&gpio2intc, &gpio2intc_ip);
+	if (ret)
+		return ret;
+
+	ctx.phy = dp83tg;
+	ctx.nvic = nvic;
+	dp83tg_int_cb.ctx = &ctx;
+	ret = no_os_irq_register_callback(gpio2intc, DP83TG_INT_PIN,
+					  &dp83tg_int_cb);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_trigger_level_set(gpio2intc, DP83TG_INT_PIN,
+					  NO_OS_IRQ_EDGE_FALLING);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(gpio2intc, DP83TG_INT_PIN, 1);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(gpio2intc, DP83TG_INT_PIN);
 	if (ret)
 		return ret;
 	

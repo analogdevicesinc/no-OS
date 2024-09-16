@@ -21,6 +21,7 @@ volatile bool heartbeat_pulse = false;
 static int mwc_step(void *arg)
 {
 	uint8_t lock;
+	uint16_t reg;
 	struct mwc_iio_dev *mwc = arg;
 	if (!heartbeat_pulse)
 		return 0;
@@ -32,6 +33,20 @@ static int mwc_step(void *arg)
 	hmc630x_read(mwc->rx_iiodev->dev, HMC630X_LOCKDET, &lock);
 
 	mwc_algorithms(mwc);
+/*
+	dp83tg_read(mwc->dp83tg, DP83TG_INTERRUPT_STATUS_1, &reg);
+	reg >>= 8;
+	if (reg & DP83TG_LINK_STATUS_CHANGED_MASK) {
+		if ((reg & DP83TG_ENERGY_DETECT_MASK) && !(reg & DP83TG_TRAINING_DONE_MASK))
+		{
+			dp83tg_read(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, &reg);
+			bool master = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
+
+			// dp83tg_write_bits(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, !master, DP83TG_CFG_MASTER_SLAVE_MASK);
+			// reinitialize phy
+		}
+	}
+*/
 
 	heartbeat_pulse = false;
 	return 0;
