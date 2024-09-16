@@ -5,7 +5,7 @@
 * see the "LICENSE.txt" file in this zip file.
 */
 
-#include "stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h"
+#include "ADRV9025_stream_image.h"
 #include "ActiveUtilInit_profile.h"
 #include "ActiveUseCase_profile.h"
 #include "ADRV9025_TxAttenTable.h"
