@@ -20,7 +20,7 @@ INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/hal/no_os_platform.h \
 	$(PROJECT)/src/common/firmware/ADRV9025_DPDCORE_FW.h \
 	$(PROJECT)/src/common/firmware/ADRV9025_FW.h \
-	$(PROJECT)/src/common/firmware/stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h \
+	$(PROJECT)/src/common/firmware/ADRV9025_stream_image.h \
 	$(PROJECT)/src/common/firmware/ActiveUseCase_profile.h \
 	$(PROJECT)/src/common/firmware/ActiveUtilInit_profile.h
 

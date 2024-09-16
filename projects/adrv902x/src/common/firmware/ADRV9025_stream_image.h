@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h
+ *   @file   ADRV9025_stream_image.h
  *   @brief  Navassa stream binary.
  *   @author George Mois (george.mois@analog.com)
 ********************************************************************************
@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef STREAM_IMAGE_6E3E00EFB74FE7D465FA88A171B81B8F_H
-#define STREAM_IMAGE_6E3E00EFB74FE7D465FA88A171B81B8F_H
+#ifndef ADRV9025_STREAM_IMAGE_H
+#define ADRV9025_STREAM_IMAGE_H
 
 unsigned char stream_image_bin[] = {
 	0x41, 0x23, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x09, 0x04, 0x00, 0x01,
