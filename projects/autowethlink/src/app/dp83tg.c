@@ -6,6 +6,145 @@
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
 
+static const uint16_t dp83tg_master_init[25][2] = {
+         {0x408, 0x580},
+         {0x409, 0x2a},
+         {0x8a1, 0xbff},
+         {0x802, 0x422},
+         {0x864, 0x1fd0},
+         {0x865, 0x2},
+         {0x8a3, 0x24e9},
+         {0x800, 0x2090},
+         {0x840, 0x4120},
+         {0x841, 0x6151},
+         {0x8a0, 0x01E7},
+         {0x879, 0xe4ce},
+         {0x89f, 0x1},
+         {0x844, 0x3f10},
+         {0x843, 0x327a},
+         {0x842, 0x6652},
+         {0x8a8, 0xe080},
+         {0x8a9, 0x3f0},
+         {0x88d, 0x3fa0},
+         {0x899, 0x3fa0},
+         {0x50b, 0x7e7c},
+         {0x56a, 0x5f41},
+         {0x56b, 0xffb4},
+         {0x56c, 0xffb4},
+         {0x573, 0x1},
+};
+
+static const uint16_t dp83tg_slave_init[25][2] = {
+         {0x408, 0x580},
+         {0x409, 0x2a},
+         {0x8a1, 0xbff},
+         {0x802, 0x422},
+         {0x864, 0x1fd0},
+         {0x865, 0x2},
+         {0x853, 0x632},
+         {0x824, 0x15e0},
+         {0x86a, 0x106},
+         {0x894, 0x5057},
+         {0x85d, 0x6405},
+         {0x892, 0x1b0},
+         {0x852, 0x327a},
+         {0x851, 0x6652},
+         {0x877, 0x55},
+         {0x80b, 0x16},
+         {0x8a8, 0xe080},
+         {0x8a9, 0x3f0},
+         {0x88d, 0x3fa0},
+         {0x899, 0x3fa0},
+         {0x1f, 0x4000},
+         {0x56a, 0x5f41},
+         {0x56b, 0xffb4},
+         {0x56c, 0xffb4},
+         {0x573, 0x1},
+};
+
+int dp83tg_config(struct dp83tg_desc *d, bool master)
+{
+	int ret;
+	uint16_t val;
+	int i;
+
+	if (d->reset)
+		ret = dp83tg_hard_reset(d);
+	else
+		ret = dp83tg_soft_reset(d);
+	if (ret)
+		return ret;
+
+	// MDIO sanity check after a reset
+	ret = dp83tg_read(d, DP83TG_PHY_ID_1, &val);
+	if (val != 0x2000)
+		ret = -EFAULT;
+
+	ret = dp83tg_read(d, DP83TG_PHY_ID_2, &val);
+	if (val != 0xa284)
+		return -EFAULT;
+	
+	ret = dp83tg_sgmii(d);
+	if (ret)
+		return ret;
+
+	/* Start up procedure */
+	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x573), 0x101);
+	if (ret)
+		return ret;
+
+	if (master) {
+		ret = dp83tg_write(d, DP83TG_BMSR, 0x940);
+		if (ret)
+			return ret;
+
+		ret = dp83tg_write(d, DP83TG_BMSR, 0x140);
+		if (ret)
+			return ret;
+
+		ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x834), 0xc001);
+		if (ret)
+			return ret;
+
+		for (i = 0; i < 25; i++) {
+			ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, dp83tg_master_init[i][0]), dp83tg_master_init[i][1]);
+			if (ret)
+				return ret;
+		}
+	}
+	else {
+		ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x834), 0x8001);
+		if (ret)
+			return ret;
+
+		for (i = 0; i < 25; i++) {
+			ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, dp83tg_slave_init[i][0]), dp83tg_slave_init[i][1]);
+			if (ret)
+				return ret;
+		}
+	}
+
+	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x18c), 0x1);
+	if (ret)
+		return ret;
+
+	ret = dp83tg_write(d, DP83TG_MII_REG_1F, DP83TG_DIGITAL_RESET_MASK);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(1);
+
+	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x573), 0x1);
+	if (ret)
+		return ret;
+
+	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x56A), 0x5f41);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
 int dp83tg_init(struct dp83tg_desc **dev, struct dp83tg_init_param *param)
 {
 	int ret;
@@ -19,53 +158,27 @@ int dp83tg_init(struct dp83tg_desc **dev, struct dp83tg_init_param *param)
 	if (!d)
 		return -ENOMEM;
 
-	// initialize the MDIO
 	ret = no_os_mdio_init(&d->mdio, &param->mdio);
 	if (ret)
-		goto free_reset;
+		goto free_d;
 
-	// reset
 	if (param->reset) {
 		ret = no_os_gpio_get(&d->reset, param->reset);
 		if (ret)
-			goto free_d;
-		ret = dp83tg_hard_reset(d);
-	} else {
-		ret = dp83tg_soft_reset(d);
+			goto free_mdio;
 	}
+
+	ret = dp83tg_config(d, param->master);
 	if (ret)
 		goto free_reset;
-
-	if (param->link) {
-		ret = no_os_gpio_get(&d->link, param->link);
-		if (ret)
-			goto free_d;
-	}
-
-	// MDIO sanity check after a reset
-	ret = dp83tg_read(d, DP83TG_PHY_ID_1, &val);
-	if (val != 0x2000) {
-		ret = -EFAULT;
-		goto free_mdio;
-	}
-
-	ret = dp83tg_read(d, DP83TG_PHY_ID_2, &val);
-	if (val != 0xa284) {
-		ret = -EFAULT;
-		goto free_mdio;
-	}
-	
-	ret = dp83tg_sgmii(d);
-	if (ret)
-		return ret;
 
 	*dev = d;
 
 	return 0;
-free_mdio:
-	no_os_mdio_remove(d->mdio);
 free_reset:
 	no_os_gpio_remove(d->reset);
+free_mdio:
+	no_os_mdio_remove(d->mdio);
 free_d:
 	free(d);
 	return ret;

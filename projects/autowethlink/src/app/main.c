@@ -1,4 +1,5 @@
 #include <string.h>
+#include "no_os_init.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -11,6 +12,7 @@
 #include "hmc630x.h"
 #include "iio_hmc630x.h"
 #include "mwc.h"
+#include "net.h"
 #include "iio_app.h"
 #include "dp83tg.h"
 #include "iio_dp83tg.h"
@@ -22,6 +24,7 @@ static int mwc_step(void *arg)
 {
 	uint8_t lock;
 	uint16_t reg;
+	static bool temp = false;
 	struct mwc_iio_dev *mwc = arg;
 	if (!heartbeat_pulse)
 		return 0;
@@ -33,20 +36,22 @@ static int mwc_step(void *arg)
 	hmc630x_read(mwc->rx_iiodev->dev, HMC630X_LOCKDET, &lock);
 
 	mwc_algorithms(mwc);
-/*
-	dp83tg_read(mwc->dp83tg, DP83TG_INTERRUPT_STATUS_1, &reg);
-	reg >>= 8;
-	if (reg & DP83TG_LINK_STATUS_CHANGED_MASK) {
-		if ((reg & DP83TG_ENERGY_DETECT_MASK) && !(reg & DP83TG_TRAINING_DONE_MASK))
+
+	if (!link)
+	{
+		dp83tg_read(mwc->dp83tg, DP83TG_INTERRUPT_STATUS_1, &reg);
+		reg >>= 8;
+		if ((reg & DP83TG_ENERGY_DETECT_MASK) && !(reg & DP83TG_TRAINING_DONE_MASK) && !temp)
 		{
+			temp = true;
 			dp83tg_read(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, &reg);
 			bool master = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
 
-			// dp83tg_write_bits(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, !master, DP83TG_CFG_MASTER_SLAVE_MASK);
-			// reinitialize phy
+			dp83tg_config(mwc->dp83tg, !master);
 		}
 	}
-*/
+	else
+		temp = false;
 
 	heartbeat_pulse = false;
 	return 0;
@@ -129,7 +134,6 @@ int main(void)
 	struct no_os_uart_desc *console;
 	char hw_model_str[10];
 	enum admv96xx_id id = ID_ADMV96X7;
-	int speed;
 	uint8_t hbtx;
 	uint8_t pin;
 	uint8_t crc;
@@ -226,7 +230,7 @@ apply_factory_defaults: {
 post_eeprom:
 	nvmp = (union nvmp255 *)eebuf;
 
-	ret = net_init(&iio_dp83tg);
+	ret = net_init(&iio_dp83tg, !hbtx);
 	if (ret)
 		goto end;
 

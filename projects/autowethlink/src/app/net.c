@@ -13,12 +13,31 @@ struct net_context {
 	struct no_os_irq_ctrl_desc *nvic;
 };
 
+volatile bool link = false;
+
 void phy_int(void *context)
 {
-	asm("nop;");
+	uint16_t reg;
+	struct net_context *ctx = context;
+
+	link = link ? false : true;
+
+	// // todo, move this IO operation out of this interrupt
+	dp83tg_read(ctx->phy, DP83TG_INTERRUPT_STATUS_1, &reg);
+	// reg >>= 8;
+	// if (dp83tg_mdi_link_is_up(ctx->phy)) {
+	// 	if ((reg & DP83TG_ENERGY_DETECT_MASK) && !(reg & DP83TG_TRAINING_DONE_MASK))
+	// 	{
+	// 		dp83tg_read(ctx->phy, DP83TG_PMA_PMD_CONTROL, &reg);
+	// 		bool master = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
+
+	// 		// dp83tg_write_bits(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, !master, DP83TG_CFG_MASTER_SLAVE_MASK);
+	// 		// reinitialize phy
+	// 	}
+	// }
 }
 
-int net_init(struct dp83tg_iio_desc **dp83tg_iio)
+int net_init(struct dp83tg_iio_desc **dp83tg_iio, bool master)
 {
 	int ret;
 	static struct net_context ctx;
@@ -51,6 +70,7 @@ int net_init(struct dp83tg_iio_desc **dp83tg_iio)
 				.mdio = dp83tg_mdio_gpio_ip,
 			},
 		},
+		.master = master,
 	};
 	ret = dp83tg_init(&dp83tg, &dp83tg_ip);
 	if (ret)
@@ -60,6 +80,11 @@ int net_init(struct dp83tg_iio_desc **dp83tg_iio)
 	&(struct dp83tg_iio_init_param) {
 		.dev = dp83tg
 	});
+	if (ret)
+		return ret;
+
+	// use GPIO_0 as INT_N
+	ret = dp83tg_write(dp83tg, DP83TG_IO_CONTROL_1, 0x3);
 	if (ret)
 		return ret;
 
@@ -112,7 +137,7 @@ int net_init(struct dp83tg_iio_desc **dp83tg_iio)
 		return ret;
 
 	ret = no_os_irq_trigger_level_set(gpio2intc, DP83TG_INT_PIN,
-					  NO_OS_IRQ_EDGE_FALLING);
+					  NO_OS_IRQ_EDGE_BOTH);
 	if (ret)
 		return ret;
 

@@ -34,6 +34,8 @@
 #define DP83TG_LSR						NO_OS_MDIO_C45_ADDR(0x1f, 0x180)
 #define DP83TG_LINK_UP_MASK				NO_OS_BIT(15)
 
+#define DP83TG_IO_CONTROL_1				NO_OS_MDIO_C45_ADDR(0x1f, 0x454)
+
 #define DP83TG_SGMII_CTRL_1				NO_OS_MDIO_C45_ADDR(0x1f, 0x608)
 #define DP83TG_CFG_SGMII_EN_MASK		NO_OS_BIT(9)
 #define DP83TG_SGMII_AUTONEG_TIMER_MASK	NO_OS_GENMASK(2, 1)
@@ -54,12 +56,14 @@ struct dp83tg_init_param {
 	struct no_os_gpio_init_param *reset;
 	struct no_os_mdio_init_param mdio;
 	struct no_os_gpio_init_param *link;
+	bool master;
 };
 
 struct dp83tg_desc {
 	struct no_os_gpio_desc *reset;
 	struct no_os_mdio_desc *mdio;
 	struct no_os_gpio_desc *link;
+	bool master;
 };
 
 int dp83tg_init(struct dp83tg_desc **dev,
