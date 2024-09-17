@@ -44,10 +44,10 @@ static int mwc_step(void *arg)
 		if ((reg & DP83TG_ENERGY_DETECT_MASK) && !(reg & DP83TG_TRAINING_DONE_MASK) && !temp)
 		{
 			temp = true;
-			dp83tg_read(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, &reg);
-			bool master = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
+			// dp83tg_read(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, &reg);
+			// bool master = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
 
-			dp83tg_config(mwc->dp83tg, !master);
+			dp83tg_config(mwc->dp83tg, !mwc->dp83tg->master);
 		}
 	}
 	else
@@ -230,7 +230,7 @@ apply_factory_defaults: {
 post_eeprom:
 	nvmp = (union nvmp255 *)eebuf;
 
-	ret = net_init(&iio_dp83tg, !hbtx);
+	ret = net_init(&iio_dp83tg, hbtx);
 	if (ret)
 		goto end;
 

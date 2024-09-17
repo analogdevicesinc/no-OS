@@ -83,13 +83,9 @@ int dp83tg_config(struct dp83tg_desc *d, bool master)
 	ret = dp83tg_read(d, DP83TG_PHY_ID_2, &val);
 	if (val != 0xa284)
 		return -EFAULT;
-	
-	ret = dp83tg_sgmii(d);
-	if (ret)
-		return ret;
 
 	/* Start up procedure */
-	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x573), 0x101);
+	ret = dp83tg_write(d, 0x573, 0x101);
 	if (ret)
 		return ret;
 
@@ -102,29 +98,37 @@ int dp83tg_config(struct dp83tg_desc *d, bool master)
 		if (ret)
 			return ret;
 
-		ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x834), 0xc001);
+		ret = dp83tg_write(d, 0x1834, 0xc001);
 		if (ret)
 			return ret;
 
 		for (i = 0; i < 25; i++) {
-			ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, dp83tg_master_init[i][0]), dp83tg_master_init[i][1]);
+			ret = dp83tg_write(d, dp83tg_master_init[i][0], dp83tg_master_init[i][1]);
 			if (ret)
 				return ret;
 		}
 	}
 	else {
-		ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x834), 0x8001);
+		ret = dp83tg_write(d, 0x1834, 0x8001);
 		if (ret)
 			return ret;
 
 		for (i = 0; i < 25; i++) {
-			ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, dp83tg_slave_init[i][0]), dp83tg_slave_init[i][1]);
+			ret = dp83tg_write(d, dp83tg_slave_init[i][0], dp83tg_slave_init[i][1]);
 			if (ret)
 				return ret;
 		}
 	}
+	// test if this succeeded
+	ret = dp83tg_read(d, DP83TG_PMA_PMD_CONTROL, &val);
+	if (ret)
+		return ret;
+	// if (master != (val & DP83TG_CFG_MASTER_SLAVE_MASK))
+	// 	return -EFAULT;
 
-	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x18c), 0x1);
+	d->master = master;
+
+	ret = dp83tg_write(d, 0x18c, 0x1);
 	if (ret)
 		return ret;
 
@@ -134,11 +138,15 @@ int dp83tg_config(struct dp83tg_desc *d, bool master)
 
 	no_os_mdelay(1);
 
-	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x573), 0x1);
+	ret = dp83tg_write(d, 0x573, 0x1);
 	if (ret)
 		return ret;
 
-	ret = dp83tg_write(d, NO_OS_MDIO_C45_ADDR(0x1f, 0x56A), 0x5f41);
+	ret = dp83tg_write(d, 0x56A, 0x5f41);
+	if (ret)
+		return ret;
+
+	ret = dp83tg_sgmii(d);
 	if (ret)
 		return ret;
 
@@ -227,8 +235,11 @@ int dp83tg_write(struct dp83tg_desc *dev, uint32_t addr,
 			  uint16_t val)
 {
 	int ret;
-	uint8_t devad = no_os_field_get(NO_OS_MDIO_C45_DEVADDR_MASK, addr);
-	uint16_t regad = no_os_field_get(NO_OS_MDIO_DATA_MASK, addr);
+	uint8_t devad = no_os_field_get(NO_OS_GENMASK(17, 12), addr);
+	uint16_t regad = no_os_field_get(NO_OS_GENMASK(11, 0), addr);
+
+	if (!devad && regad > 0x1f)
+		devad = 0x1f;
 
 	if (devad) {
 		ret = no_os_mdio_write(dev->mdio, DP83TG_REGCR, devad);
@@ -249,8 +260,11 @@ int dp83tg_read(struct dp83tg_desc *dev, uint32_t addr,
 			 uint16_t *val)
 {
 	int ret;
-	uint8_t devad = no_os_field_get(NO_OS_MDIO_C45_DEVADDR_MASK, addr);
-	uint16_t regad = no_os_field_get(NO_OS_MDIO_DATA_MASK, addr);
+	uint8_t devad = no_os_field_get(NO_OS_GENMASK(17, 12), addr);
+	uint16_t regad = no_os_field_get(NO_OS_GENMASK(11, 0), addr);
+
+	if (!devad && regad > 0x1f)
+		devad = 0x1f;
 
 	if (devad) {
 		ret = no_os_mdio_write(dev->mdio, DP83TG_REGCR, devad);
@@ -267,7 +281,7 @@ int dp83tg_read(struct dp83tg_desc *dev, uint32_t addr,
 	return no_os_mdio_read(dev->mdio, addr, val);
 }
 
-int dp83tg_write_bits(struct dp83tg_desc *dev, uint8_t addr, uint16_t val,
+int dp83tg_write_bits(struct dp83tg_desc *dev, uint32_t addr, uint16_t val,
 			uint16_t bitmask)
 {
 	int ret;

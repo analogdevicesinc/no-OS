@@ -9,20 +9,6 @@
 #include "dp83tg.h"
 #include "iio.h"
 
-static uint16_t _reg_space(uint16_t addr)
-{
-	if (addr <= 0xefd)
-        return 0x1f;
-    else if (addr <= 0x1904)
-        return 0x1;
-    else if (addr <= 0x390d)
-        return 0x3;
-    else if (addr <= 0x7200)
-        return 0x7;
-    else
-        return 0xff; // invalid register space
-}
-
 static int32_t _dp83tg_read2(struct dp83tg_iio_desc *iiodev,
 			       uint32_t reg,
 			       uint32_t *readval)
@@ -30,7 +16,7 @@ static int32_t _dp83tg_read2(struct dp83tg_iio_desc *iiodev,
 	int ret;
 	uint16_t val;
 
-	ret = dp83tg_read(iiodev->dev, NO_OS_MDIO_C45_ADDR(_reg_space(reg), reg), &val);
+	ret = dp83tg_read(iiodev->dev, reg, &val);
 	if (ret)
 		return ret;
 
@@ -42,7 +28,7 @@ static int32_t _dp83tg_write2(struct dp83tg_iio_desc *iiodev,
 				uint32_t reg,
 				uint32_t writeval)
 {
-	return dp83tg_write(iiodev->dev, NO_OS_MDIO_C45_ADDR(_reg_space(reg), reg), (uint16_t)writeval);
+	return dp83tg_write(iiodev->dev, reg, (uint16_t)writeval);
 }
 
 static int dp83tg_iio_read_attr(void *device, char *buf,
@@ -53,6 +39,7 @@ static int dp83tg_iio_read_attr(void *device, char *buf,
 	struct dp83tg_iio_desc *iiodev = (struct dp83tg_iio_desc *)device;
 	struct dp83tg_desc *d = iiodev->dev;
 	int32_t val;
+	uint16_t reg;
 	bool link;
 
 	switch (priv) {
@@ -67,6 +54,10 @@ static int dp83tg_iio_read_attr(void *device, char *buf,
 	case DP83TG_IIO_ATTR_MDI_LINK:
 		link = dp83tg_mdi_link_is_up(d);
 		val = link;
+		break;
+	case DP83TG_IIO_ATTR_MASTER:
+		dp83tg_read(d, DP83TG_PMA_PMD_CONTROL, &reg);
+		val = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
 		break;
 	default:
 		return -EINVAL;
@@ -95,6 +86,8 @@ static int dp83tg_iio_write_attr(void *device, char *buf,
 		break;
 	case DP83TG_IIO_ATTR_MDI_LINK:
 		break;
+	case DP83TG_IIO_ATTR_MASTER:
+		break;
 	default:
 		return -EINVAL;
 	};
@@ -121,6 +114,12 @@ static struct iio_attribute dp83tg_iio_attrs[] = {
 	{
 		.name = "mdi_link",
 		.priv = DP83TG_IIO_ATTR_MDI_LINK,
+		.show = dp83tg_iio_read_attr,
+		.store = dp83tg_iio_write_attr,
+	},
+	{
+		.name = "master",
+		.priv = DP83TG_IIO_ATTR_MASTER,
 		.show = dp83tg_iio_read_attr,
 		.store = dp83tg_iio_write_attr,
 	},
