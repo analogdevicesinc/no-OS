@@ -318,6 +318,21 @@ struct ad7606_dev {
 };
 
 /***************************************************************************//**
+ * @brief Returns the number of channels this ADC has
+ *
+ * @param dev  - The device structure.
+ * @return ret - number of channels or -EINVAL if 'dev' is null.
+ *
+*******************************************************************************/
+int32_t ad7606_get_channels_number(struct ad7606_dev *dev)
+{
+	if (!dev)
+		return -EINVAL;
+
+	return dev->num_channels;
+}
+
+/***************************************************************************//**
  * @brief Write register using AXI core via Parallel interface
  *
  * @param dev        - The device structure.

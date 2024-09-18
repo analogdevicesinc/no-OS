@@ -355,6 +355,8 @@ const struct ad7606_range *ad7606_get_ch_ranges(struct ad7606_dev *dev,
 		uint8_t ch,
 		uint32_t *num_ranges);
 
+int32_t ad7606_get_channels_number(struct ad7606_dev *dev);
+
 int32_t ad7606_reg_read(struct ad7606_dev *dev,
 			uint8_t reg_addr,
 			uint8_t *reg_data);
