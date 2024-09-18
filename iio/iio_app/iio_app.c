@@ -408,10 +408,10 @@ int iio_app_init(struct iio_app_desc **app,
 	*app = application;
 
 	return 0;
-error:
+error_uart:
 	/** We might have to reinit UART, settings might have changed for IIO */
 	uart_setup(&uart_desc, &app_init_param.uart_init_params);
-error_uart:
+error:
 	no_os_free(application);
 
 	status = print_uart_error_message(&uart_desc,
