@@ -3,7 +3,20 @@ INCS := $(PROJECT)/src/parameters.h      \
         $(PROJECT)/src/common_data.h
 SRCS := $(PROJECT)/src/common_data.c
 
-ifeq (y,$(strip $(BASIC_EXAMPLE)))
+ifeq (y,$(strip $(IIO_EXAMPLE)))
+IIOD=y
+SRCS += $(PROJECT)/src/iio_example.c
+
+INCS += $(DRIVERS)/adc/ad7606/iio_ad7606.h \
+        $(PLATFORM_DRIVERS)/xilinx_uart.h \
+        $(PLATFORM_DRIVERS)/xilinx_irq.h \
+        $(NO-OS)/iio/iio_app/iio_app.h
+SRCS += $(DRIVERS)/adc/ad7606/iio_ad7606.c \
+        $(PLATFORM_DRIVERS)/xilinx_uart.c \
+        $(PLATFORM_DRIVERS)/xilinx_irq.c \
+        $(NO-OS)/iio/iio_app/iio_app.c
+
+else ifeq (y,$(strip $(BASIC_EXAMPLE)))
 SRCS += $(PROJECT)/src/basic_example.c
 endif
 
@@ -18,6 +31,7 @@ SRCS += $(DRIVERS)/api/no_os_uart.c     \
         $(NO-OS)/util/no_os_alloc.c     \
         $(NO-OS)/util/no_os_mutex.c     \
         $(DRIVERS)/api/no_os_gpio.c     \
+        $(DRIVERS)/api/no_os_irq.c      \
         $(NO-OS)/util/no_os_crc8.c      \
         $(NO-OS)/util/no_os_crc16.c     \
         $(NO-OS)/util/no_os_crc24.c     \
