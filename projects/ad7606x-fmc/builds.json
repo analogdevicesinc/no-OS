@@ -3,6 +3,10 @@
     "basic_example": {
       "flags" : "BASIC_EXAMPLE=y",
       "hardware" : ["ad7606x_fmc_zed"]
+    },
+    "iio_example": {
+      "flags" : "IIO_EXAMPLE=y",
+      "hardware" : ["ad7606x_fmc_zed"]
     }
   }
 }
