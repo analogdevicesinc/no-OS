@@ -130,8 +130,6 @@ static int32_t iio_ad738x_submit_buffer(struct iio_device_data *iio_dev_data)
 		return ret;
 
 	return iio_buffer_block_done(buffer);
-
-	return 0;
 }
 
 static struct scan_type ad738x_iio_scan_type = {
