@@ -410,8 +410,7 @@ error:
 
 	no_os_free(application);
 
-	status = print_uart_error_message(&uart_desc,
-					  &app_init_param.uart_init_params, status);
+	print_uart_error_message(&uart_desc, &app_init_param.uart_init_params, status);
 	no_os_uart_remove(uart_desc);
 
 	return status;
