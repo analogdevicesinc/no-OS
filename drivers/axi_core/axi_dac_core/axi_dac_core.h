@@ -41,6 +41,11 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+enum {
+	AXI_DAC_BUS_TYPE_NONE,
+	AXI_DAC_BUS_TYPE_QSPI,
+};
+
 /**
  * @struct axi_dac
  * @brief AXI DAC Device Descriptor.
@@ -56,6 +61,8 @@ struct axi_dac {
 	uint64_t clock_hz;
 	/** DAC channels manual configuration */
 	struct axi_dac_channel *channels;
+	/** DAC IP bus type */
+	uint32_t bus_type;
 };
 
 struct axi_dac_init {
@@ -69,6 +76,8 @@ struct axi_dac_init {
 	struct axi_dac_channel *channels;
 	/** The effective DAC rate */
 	uint8_t rate;
+	/** DAC IP bus type */
+	uint32_t bus_type;
 };
 
 enum axi_dac_data_sel {
@@ -172,5 +181,27 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 				 uint32_t address);
 /** Setup the AXI DAC Data */
 int32_t axi_dac_data_setup(struct axi_dac *dac);
+/** AXI DAC Bus Data read */
+int32_t axi_dac_bus_read(struct axi_dac *dac,
+			 uint32_t reg_addr,
+			 uint32_t *reg_data,
+			 uint8_t data_size);
+/** AXI DAC Bus Data write */
+int32_t axi_dac_bus_write(struct axi_dac *dac,
+			  uint32_t reg_addr,
+			  uint32_t reg_data,
+			  uint8_t data_size);
+/** AXI DAC Set DDR (bus double-data-rate) mode */
+int32_t axi_dac_set_ddr(struct axi_dac *dac,
+			bool enable);
+/** AXI DAC Set data stream mode */
+int32_t axi_dac_set_data_stream(struct axi_dac *dac,
+				bool enable);
+/** AXI DAC Set dma buffering mode */
+int32_t axi_dac_data_transfer_addr(struct axi_dac *dac,
+				   uint32_t address);
+/** AXI DAC data format */
+int32_t axi_dac_data_format_set(struct axi_dac *dac,
+				int format);
 
 #endif
