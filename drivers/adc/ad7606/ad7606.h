@@ -203,6 +203,17 @@ enum ad7606_dout_format {
 };
 
 /**
+ * @enum ad7606_range_type
+ * @brief Type of range for this channel.
+ */
+enum ad7606_range_type {
+	AD7606_HW_RANGE,
+	AD7606_SW_RANGE_SINGLE_ENDED_UNIPOLAR,
+	AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR,
+	AD7606_SW_RANGE_DIFFERENTIAL_BIPOLAR,
+};
+
+/**
  * @struct ad7606_config
  * @brief AD7606_REG_CONFIG configuration parameters
  */
@@ -226,8 +237,8 @@ struct ad7606_range {
 	int32_t min;
 	/** Maximum range value */
 	int32_t max;
-	/** Whether the range is differential */
-	bool differential;
+	/** Type of range according to \ref ad7606_range_type */
+	enum ad7606_range_type type;
 };
 
 /**
@@ -339,6 +350,10 @@ struct ad7606_init_param {
 	/** Channel operating range */
 	struct ad7606_range range_ch[AD7606_MAX_CHANNELS];
 };
+
+const struct ad7606_range *ad7606_get_ch_ranges(struct ad7606_dev *dev,
+		uint8_t ch,
+		uint32_t *num_ranges);
 
 int32_t ad7606_reg_read(struct ad7606_dev *dev,
 			uint8_t reg_addr,
