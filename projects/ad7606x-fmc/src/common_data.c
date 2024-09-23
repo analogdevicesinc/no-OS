@@ -170,15 +170,15 @@ struct ad7606_init_param ad7606x_init_param_parallel = {
 	},
 	.gain_ch = {
 	},
-	.range_ch = { // in HW mode there are only 2 ranges supported, none are differential
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
+	.range_ch = {
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
 	}
 };
 
@@ -215,14 +215,14 @@ struct ad7606_init_param ad7606x_init_param_serial = {
 	},
 	.gain_ch = {
 	},
-	.range_ch = { // in HW mode there are only 2 ranges supported, none are differential
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
-		{  -5000,  5000, false },
-		{ -10000, 10000, false },
+	.range_ch = {
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{  -5000,  5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
+		{ -10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR },
 	}
 };

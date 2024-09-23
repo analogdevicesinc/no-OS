@@ -93,47 +93,40 @@ NO_OS_DECLARE_CRC8_TABLE(ad7606_crc8);
 NO_OS_DECLARE_CRC16_TABLE(ad7606_crc16);
 
 static const struct ad7606_range ad7606_range_table[] = {
-	{-5000, 5000, false},	/* RANGE pin LOW */
-	{-10000, 10000, false},	/* RANGE pin HIGH */
+	{-5000, 5000, AD7606_HW_RANGE},		/* RANGE pin LOW */
+	{-10000, 10000, AD7606_HW_RANGE},	/* RANGE pin HIGH */
 };
 
 static const struct ad7606_range ad7609_range_table[] = {
-	{-10000, 10000, true},	/* RANGE pin LOW */
-	{-20000, 20000, true},	/* RANGE pin HIGH */
+	{-10000, 10000, AD7606_HW_RANGE},	/* RANGE pin LOW */
+	{-20000, 20000, AD7606_HW_RANGE},	/* RANGE pin HIGH */
 };
 
 static const struct ad7606_range ad7606b_range_table[] = {
-	{-2500, 2500, false},	/* 0000 */
-	{-5000, 5000, false},	/* 0001 */
-	{-10000, 10000, false},	/* 0010 */
-	{-10000, 10000, false},	/* 0011 */
-	{-10000, 10000, false},	/* 0100 */
-	{-10000, 10000, false},	/* 0101 */
-	{-10000, 10000, false},	/* 0110 */
-	{-10000, 10000, false},	/* 0111 */
-	{-10000, 10000, false},	/* 1000 */
-	{-10000, 10000, false},	/* 1001 */
-	{-10000, 10000, false},	/* 1010 */
-	{-10000, 10000, false},	/* 1011 */
+	{-2500, 2500, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0000 */
+	{-5000, 5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0001 */
+	{-10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0010-1011 */
+	/* Register values can be selected all the way up to 1011,
+	 * but they will all configure the last range in this array
+	 */
 };
 
 static const struct ad7606_range ad7606c_range_table[] = {
-	{-2500, 2500, false},	/* 0000 */
-	{-5000, 5000, false},	/* 0001 */
-	{-6250, 6250, false},	/* 0010 */
-	{-10000, 10000, false},	/* 0011 */
-	{-12500, 12500, false},	/* 0100 */
-	{0, 5000, false},	/* 0101 */
-	{0, 10000, false},	/* 0110 */
-	{0, 12500, false},	/* 0111 */
-	{-5000, 5000, true},	/* 1000 */
-	{-10000, 10000, true},	/* 1001 */
-	{-12500, 12500, true},	/* 1010 */
-	{-20000, 20000, true},	/* 1011 */
-	{-20000, 20000, true},	/* 1100 */
-	{-20000, 20000, true},	/* 1101 */
-	{-20000, 20000, true},	/* 1110 */
-	{-20000, 20000, true},	/* 1111 */
+	{-2500, 2500, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0000 */
+	{-5000, 5000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0001 */
+	{-6250, 6250, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0010 */
+	{-10000, 10000, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0011 */
+	{-12500, 12500, AD7606_SW_RANGE_SINGLE_ENDED_BIPOLAR},	/* 0100 */
+	{0, 5000, AD7606_SW_RANGE_SINGLE_ENDED_UNIPOLAR},	/* 0101 */
+	{0, 10000, AD7606_SW_RANGE_SINGLE_ENDED_UNIPOLAR},	/* 0110 */
+	{0, 12500, AD7606_SW_RANGE_SINGLE_ENDED_UNIPOLAR},	/* 0111 */
+	{-5000, 5000, AD7606_SW_RANGE_DIFFERENTIAL_BIPOLAR},	/* 1000 */
+	{-10000, 10000, AD7606_SW_RANGE_DIFFERENTIAL_BIPOLAR},	/* 1001 */
+	{-12500, 12500, AD7606_SW_RANGE_DIFFERENTIAL_BIPOLAR},	/* 1010 */
+	{-20000, 20000, AD7606_SW_RANGE_DIFFERENTIAL_BIPOLAR},	/* 1011 */
+	/* Register values can be selected all the way up to 1111,
+	 * but they will all configure the last range in this array
+	 */
 };
 
 static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
@@ -312,6 +305,8 @@ struct ad7606_dev {
 	uint8_t num_channels;
 	/** Channel scale computed from channel range setting */
 	double scale_ch[AD7606_MAX_CHANNELS];
+	/** Channel type setting */
+	enum ad7606_range_type range_ch_type[AD7606_MAX_CHANNELS];
 	/** Channel offset calibration */
 	int8_t offset_ch[AD7606_MAX_CHANNELS];
 	/** Channel phase calibration */
@@ -1235,6 +1230,49 @@ int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 	return 0;
 }
 
+/***************************************************************************//**
+ * @brief Get the available channel ranges for the given channel
+ *
+ * @param dev          - The device structure.
+ * @param ch           - The channel number
+ * @param num_ranges   - A pointer to store the number of returned ranges.
+ *
+ * @return A pointer to the ranges of the devices, or NULL if 'dev' or
+ *         'num_ranges' is NULL.
+*******************************************************************************/
+const struct ad7606_range *ad7606_get_ch_ranges(struct ad7606_dev *dev,
+		uint8_t ch,
+		uint32_t *num_ranges)
+{
+	const struct ad7606_chip_info *info;
+	const struct ad7606_range *rt;
+	uint32_t i;
+
+	if (!dev || !num_ranges)
+		return NULL;
+
+	info = &ad7606_chip_info_tbl[dev->device_id];
+
+	if (!dev->sw_mode) {
+		*num_ranges = info->hw_range_table_sz;
+		return info->hw_range_table;
+	}
+
+	/* For SW mode, we need to select the ranges; luckily they are contiguous */
+	*num_ranges = 0;
+	rt = NULL;
+	for (i = 0; i < info->sw_range_table_sz; i++) {
+		const struct ad7606_range *e = &info->sw_range_table[i];
+		if (dev->range_ch_type[ch] != e->type)
+			continue;
+		if (!rt)
+			rt = e;
+		(*num_ranges)++;
+	}
+
+	return rt;
+}
+
 /* Internal function to find the index of a given operation range in the
  * operation range table specific to a device. */
 static int8_t ad7606_find_range(struct ad7606_dev *dev,
@@ -1255,7 +1293,7 @@ static int8_t ad7606_find_range(struct ad7606_dev *dev,
 			continue;
 		if (range.max != rt[i].max)
 			continue;
-		if (range.differential != rt[i].differential)
+		if (range.type != rt[i].type)
 			continue;
 		v = i;
 		break;
@@ -1306,6 +1344,7 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 
 	info = &ad7606_chip_info_tbl[dev->device_id];
 
+	dev->range_ch_type[ch] = range.type;
 	dev->scale_ch[ch] = (double)(range.max - range.min) / (double)(1 << info->bits);
 
 	return ret;
