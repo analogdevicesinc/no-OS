@@ -819,6 +819,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	struct spi_engine_msg	transfer;
 	struct spi_engine_desc	*eng_desc;
 	uint32_t 		i;
+	int32_t			ret;
 
 	eng_desc = desc->extra;
 
@@ -849,6 +850,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	}
 
+	ret = 0;
 	spi_engine_transfer_message(desc, &transfer);
 
 	/* Start transfer */
@@ -866,7 +868,9 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			// Address of data destination
 			.dest_addr = 0
 		};
-		axi_dmac_transfer_start(eng_desc->offload_tx_dma, &tx_transfer);
+		ret = axi_dmac_transfer_start(eng_desc->offload_tx_dma, &tx_transfer);
+		if (ret)
+			goto error;
 	}
 
 	if(eng_desc->offload_config & OFFLOAD_RX_EN) {
@@ -882,15 +886,20 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			// Address of data destination
 			.dest_addr = (uintptr_t)msg.rx_addr
 		};
-		axi_dmac_transfer_start(eng_desc->offload_rx_dma, &rx_transfer);
-		axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
+		ret = axi_dmac_transfer_start(eng_desc->offload_rx_dma, &rx_transfer);
+		if (ret)
+			goto error;
+		ret = axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
+		if (ret)
+			goto error;
 	}
 
 	usleep(1000);
 
+error:
 	spi_engine_queue_no_os_free(&transfer.cmds);
 
-	return 0;
+	return ret;
 }
 
 /**
