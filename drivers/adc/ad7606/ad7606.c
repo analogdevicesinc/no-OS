@@ -1754,12 +1754,6 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		if (ret < 0)
 			goto error;
 
-		for (i = 0; i < dev->num_channels; i++) {
-			ret = ad7606_set_ch_range(dev, i, init_param->range_ch[i]);
-			if (ret < 0)
-				goto error;
-		}
-
 		for(i = 0; i < dev->num_channels; i++) {
 			ret = ad7606_set_ch_offset(dev, i, init_param->offset_ch[i]);
 			if (ret < 0)
@@ -1777,8 +1771,17 @@ int32_t ad7606_init(struct ad7606_dev **device,
 			if (ret < 0)
 				goto error;
 		}
-	} else {
-		ret = ad7606_set_ch_range(dev, 0, init_param->range_ch[0]);
+	}
+
+	for (i = 0; i < dev->num_channels; i++) {
+		struct ad7606_range *rt;
+
+		if (i > 0)
+			rt = &init_param->range_ch[i];
+		else
+			rt = &init_param->range_ch[0];
+
+		ret = ad7606_set_ch_range(dev, i, *rt);
 		if (ret < 0)
 			goto error;
 	}
