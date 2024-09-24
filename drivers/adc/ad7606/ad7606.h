@@ -355,6 +355,8 @@ const struct ad7606_range *ad7606_get_ch_ranges(struct ad7606_dev *dev,
 		uint8_t ch,
 		uint32_t *num_ranges);
 
+bool ad7606_sw_mode_enabled(struct ad7606_dev *dev);
+
 int32_t ad7606_get_channels_number(struct ad7606_dev *dev);
 
 int32_t ad7606_reg_read(struct ad7606_dev *dev,
@@ -376,6 +378,8 @@ int32_t ad7606_convst(struct ad7606_dev *dev);
 int32_t ad7606_reset(struct ad7606_dev *dev);
 int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 				struct ad7606_oversampling oversampling);
+int32_t ad7606_get_oversampling(struct ad7606_dev *dev,
+				struct ad7606_oversampling *oversampling);
 int32_t ad7606_get_ch_scale(struct ad7606_dev *dev, uint8_t ch,
 			    double *scale);
 int32_t ad7606_get_resolution_bits(struct ad7606_dev *dev);
