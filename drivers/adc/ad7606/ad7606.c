@@ -485,7 +485,7 @@ static int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
 
 	/* Dummy read to place the chip in register mode. */
 	if (!dev->reg_mode) {
-		ret = ad7606_reg_read(dev, reg_addr, NULL);
+		ret = ad7606_spi_reg_read(dev, reg_addr, NULL);
 		if (ret < 0)
 			return ret;
 	}
