@@ -1246,6 +1246,29 @@ int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 }
 
 /***************************************************************************//**
+ * @brief Get the oversampling ratio.
+ *
+ * Return the current oversampling ratio.
+ *
+ * @param dev          - The device structure.
+ * @param oversampling - Pointer to an object where to store oversampling settings.
+ *
+ * @return ret - return code.
+ *         Example: -EINVAL is 'dev' or 'oversampling' are NULL.
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_get_oversampling(struct ad7606_dev *dev,
+				struct ad7606_oversampling *oversampling)
+{
+	if (!dev || !oversampling)
+		return -EINVAL;
+
+	*oversampling = dev->oversampling;
+
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief Get the available channel ranges for the given channel
  *
  * @param dev          - The device structure.
@@ -1315,6 +1338,21 @@ static int8_t ad7606_find_range(struct ad7606_dev *dev,
 	}
 
 	return v;
+}
+
+/***************************************************************************//**
+ * @brief Returns true if SW mode is enabled.
+ *
+ * @param dev        - The device structure.
+ *
+ * @return true if software mode is enabled, false otherwise.
+*******************************************************************************/
+bool ad7606_sw_mode_enabled(struct ad7606_dev *dev)
+{
+	if (!dev)
+		return false;
+
+	return dev->sw_mode;
 }
 
 /***************************************************************************//**
