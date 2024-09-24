@@ -64,6 +64,7 @@
 
 #define AD7606_CHAN_CTRL(c)				(0x0400 + (c) * 0x40)
 #define AD7606_CHAN_CTRL_ENABLE				0x01
+#define AD7606_CHAN_CTRL_DISABLE			0x00
 
 #define AD7606_CORE_CNTRL_3				0x4C
 
@@ -250,6 +251,8 @@ struct ad7606_axi_dev {
 	struct no_os_pwm_desc *trigger_pwm_desc;
 	/* SPI Engine offload parameters */
 	struct spi_engine_offload_init_param offload_init_param;
+	/* AXI DMA controller for parallel sample capture */
+	struct axi_dmac *dmac;
 	/* AXI Core */
 	uint32_t core_baseaddr;
 	/* RX DMA base address */
@@ -775,6 +778,56 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 }
 
 /***************************************************************************//**
+ * @brief Prepares the SPI Engine offload and enables the PWM.
+ *
+ * @param dev        - The device structure.
+ *
+ * @return 0 on success, or negative error code.
+*******************************************************************************/
+static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	struct axi_dmac_init dmac_init;
+	int32_t i, ret;
+
+	dmac_init.name = "ADC DMAC";
+	dmac_init.base = axi->rx_dma_baseaddr;
+	dmac_init.irq_option = IRQ_DISABLED;
+
+	ret = axi_dmac_init(&axi->dmac, &dmac_init);
+	if (ret)
+		return ret;
+
+	/* Enable channels */
+	for (i = 0; i < dev->num_channels; i++) {
+		no_os_axi_io_write(axi->core_baseaddr, AD7606_CHAN_CTRL(i),
+				   AD7606_CHAN_CTRL_ENABLE);
+	}
+
+	return no_os_pwm_enable(axi->trigger_pwm_desc);
+}
+
+/***************************************************************************//**
+ * @brief Disables PWM and the SPI engine core
+ *
+ * @param dev        - The device structure.
+*******************************************************************************/
+static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+	uint32_t i;
+
+	for (i = 0; i < dev->num_channels; i++) {
+		no_os_axi_io_write(axi->core_baseaddr, AD7606_CHAN_CTRL(i),
+				   AD7606_CHAN_CTRL_DISABLE);
+	}
+
+	axi_dmac_remove(axi->dmac);
+	no_os_pwm_disable(axi->trigger_pwm_desc);
+	axi->dmac = NULL;
+}
+
+/***************************************************************************//**
  * @brief Read multiple samples using the AXI core via Parallel interface
  *
  * @param dev        - The device structure.
@@ -791,8 +844,6 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 		uint32_t *buf, uint32_t samples)
 {
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
-	struct axi_dmac		*dmac;
-	struct axi_dmac_init	dmac_init;
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to writen/read
 		.size = samples * 8,
@@ -805,44 +856,52 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 		// Address of data destination
 		.dest_addr = (uintptr_t)buf
 	};
-	int32_t i, ret;
+	int32_t ret;
 
-	dmac_init.name = "ADC DMAC";
-	dmac_init.base = axi->rx_dma_baseaddr;
-	dmac_init.irq_option = IRQ_DISABLED;
-
-	axi_dmac_init(&dmac, &dmac_init);
-	if (!dmac)
-		goto pwm_disable;
-
-	/* Enable channels */
-	for (i = 0; i < dev->num_channels; i++) {
-		no_os_axi_io_write(axi->core_baseaddr, AD7606_CHAN_CTRL(i),
-				   AD7606_CHAN_CTRL_ENABLE);
-	}
-
-	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
+	ret = axi_dmac_transfer_start(axi->dmac, &transfer);
 	if (ret)
 		return ret;
 
-	ret = axi_dmac_transfer_start(dmac, &transfer);
-	if (ret)
-		goto pwm_disable;
-
 	/* Wait until transfer finishes */
-	ret = axi_dmac_transfer_wait_completion(dmac, 500);
+	ret = axi_dmac_transfer_wait_completion(axi->dmac, 500);
 	if (ret)
-		goto axi_dmac_disable;
+		return ret;
 
 	if (axi->dcache_invalidate_range)
 		axi->dcache_invalidate_range(transfer.dest_addr, samples * sizeof(uint32_t));
 
-axi_dmac_disable:
-	axi_dmac_remove(dmac);
-pwm_disable:
-	no_os_pwm_disable(axi->trigger_pwm_desc);
+	return 0;
+}
 
-	return ret;
+/***************************************************************************//**
+ * @brief Prepares the SPI Engine and enables the PWM.
+ *
+ * @param dev        - The device structure.
+ *
+ * @return 0 on success, or negative error code.
+*******************************************************************************/
+static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
+{
+	const uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+
+	dev->spi_desc->mode = NO_OS_SPI_MODE_2;
+	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+	spi_engine_set_transfer_width(dev->spi_desc, bits);
+
+	return no_os_pwm_enable(axi->trigger_pwm_desc);
+}
+
+/***************************************************************************//**
+ * @brief Disables PWM
+ *
+ * @param dev        - The device structure.
+*******************************************************************************/
+static void ad7606_spi_engine_capture_post_disable(struct ad7606_dev *dev)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+
+	no_os_pwm_disable(axi->trigger_pwm_desc);
 }
 
 /***************************************************************************//**
@@ -865,49 +924,29 @@ static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
 	int32_t ret;
 	uint32_t commands_data[2] = {0x00, 0x00};
 	struct spi_engine_offload_message msg = {};
-	const uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
 	uint32_t spi_eng_msg_cmds[3] = {
 		CS_LOW,
 		READ(2),
 		CS_HIGH,
 	};
 
-	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
-			   AD7606_SERIAL_CORE_DISABLE);
-	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
-	if (ret)
-		return ret;
-
-	dev->spi_desc->mode = NO_OS_SPI_MODE_2;
-	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
-	spi_engine_set_transfer_width(dev->spi_desc, bits);
-
 	ret = spi_engine_offload_init(dev->spi_desc, &axi->offload_init_param);
 	if (ret)
-		goto pwm_disable;
+		return ret;
 
 	msg.commands_data = commands_data;
 	msg.commands = spi_eng_msg_cmds;
 	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
 
-	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
-			   AD7606_SERIAL_CORE_ENABLE);
-
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
 	if (ret)
-		goto core_disable;
+		goto error;
 
 	if (axi->dcache_invalidate_range)
 		axi->dcache_invalidate_range(msg.rx_addr, samples * sizeof(uint32_t));
 
-core_disable:
-	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
-			   AD7606_SERIAL_CORE_DISABLE);
-
-pwm_disable:
-	no_os_pwm_disable(axi->trigger_pwm_desc);
-
+error:
 	return ret;
 }
 
@@ -959,6 +998,44 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 	}
 
 	return ad7606_spi_data_read(dev, data);
+}
+
+/***************************************************************************//**
+ * @brief Prepares buffer capture for an AXI SPI Engine or AXI Parallel interface
+ *
+ * @param dev        - The device structure.
+ *
+ * @return 0 on success, or negative error code.
+*******************************************************************************/
+int32_t ad7606_capture_pre_enable(struct ad7606_dev *dev)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+
+	if (!axi->initialized)
+		return 0;
+
+	if (dev->parallel_interface)
+		return ad7606_parallel_capture_pre_enable(dev);
+
+	return ad7606_spi_engine_capture_pre_enable(dev);
+}
+
+/***************************************************************************//**
+ * @brief Disables buffer capture for an AXI SPI Engine or AXI Parallel interface
+ *
+ * @param dev        - The device structure.
+*******************************************************************************/
+void ad7606_capture_post_disable(struct ad7606_dev *dev)
+{
+	struct ad7606_axi_dev *axi = &dev->axi_dev;
+
+	if (!axi->initialized)
+		return;
+
+	if (dev->parallel_interface)
+		return ad7606_parallel_capture_post_disable(dev);
+
+	return ad7606_spi_engine_capture_post_disable(dev);
 }
 
 /***************************************************************************//**
@@ -1717,8 +1794,6 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	axi->reg_access_speed = axi_init->reg_access_speed;
 	axi->dcache_invalidate_range = axi_init->dcache_invalidate_range;
 
-	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
-			   AD7606_SERIAL_CORE_DISABLE);
 	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
 			   AD7606_SERIAL_CORE_ENABLE);
 	no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,

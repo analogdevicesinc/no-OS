@@ -79,6 +79,12 @@ int main(void)
 		return ret;
 	}
 
+	ret = ad7606_capture_pre_enable(dev);
+	if (ret) {
+		pr_err("Error pre-enabling buffers\n");
+		goto error;
+	}
+
 	memset(buf, 0, AD7606X_FMC_SAMPLE_NO * sizeof(uint32_t));
 	ret = ad7606_read_samples(dev, buf, AD7606X_FMC_SAMPLE_NO);
 	if (ret < 0) {
@@ -106,6 +112,7 @@ int main(void)
 	pr_info("Capture done. \n");
 
 error:
+	ad7606_capture_post_disable(dev);
 	ad7606_remove(dev);
 
 	Xil_DCacheDisable();
