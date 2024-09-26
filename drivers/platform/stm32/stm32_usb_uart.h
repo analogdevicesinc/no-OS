@@ -43,13 +43,26 @@
 #include <stdbool.h>
 #include "no_os_uart.h"
 #include "stm32_hal.h"
+#include "usbd_cdc.h"
 
 /**
- * @struct stm32_uart_desc
+ * @struct stm32_usb_uart_init_param
+ * @brief Specific initialization parameters for stm32 UART over USB.
+ */
+struct stm32_usb_uart_init_param {
+	/** USB UART instance */
+	USBD_HandleTypeDef *husbdevice;
+};
+
+/**
+ * @struct stm32_usb_uart_desc
  * @brief stm32 platform specific UART over USB descriptor.
  */
 struct stm32_usb_uart_desc {
-	struct lf256_fifo *fifo;
+	/** USB UART instance */
+	USBD_HandleTypeDef *husbdevice;
+	/** FIFO */
+	struct lf256fifo *fifo;
 };
 
 /**
