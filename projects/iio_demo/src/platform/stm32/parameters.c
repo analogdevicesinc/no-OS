@@ -42,11 +42,14 @@
 /******************************************************************************/
 #include "parameters.h"
 
-#if defined(STM32F469xx)
-struct stm32_uart_init_param iio_demo_uart_extra_ip = {
-	.huart = &huart5,
+#if defined NO_OS_USB_UART
+struct stm32_usb_uart_init_param iio_demo_usb_uart_extra_ip = {
+	.husbdevice = IIO_APP_HUSBUART,
 };
 #else
+struct stm32_uart_init_param iio_demo_uart_extra_ip = {
+	.huart = IIO_APP_HUART,
+};
 #endif
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
