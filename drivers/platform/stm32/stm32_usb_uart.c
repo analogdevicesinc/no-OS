@@ -54,46 +54,47 @@
 
 static uint8_t rxbuf[STM32_USB_CDC_ACM_RXBUF_LEN];
 static uint8_t txbuf[STM32_USB_CDC_ACM_TXBUF_LEN];
-extern USBD_HandleTypeDef hUsbDeviceFS;
+
+USBD_HandleTypeDef *gusbdevice;
 
 static volatile int tx_pending;
 
 /* This global FIFO is needed because of how the STM32 CDC API is implemented.
  * The function ops do not allow passing context parameters and so it is
- * impossible to pass this fifo to CDC_Receive_FS() in any other way.
+ * impossible to pass this fifo to CDC_Receive() in any other way.
  * The implication is that only 1 USB CDC ACM interface may be used at once
  * but this is an acceptable compromise, since having more than one doesn't
  * make much sense anyway. */
 static struct lf256fifo *gfifo;
 
-static int8_t CDC_Init_FS(void);
-static int8_t CDC_DeInit_FS(void);
-static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
-static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
-static int8_t CDC_TransmitCplt_FS(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
+static int8_t CDC_Init(void);
+static int8_t CDC_DeInit(void);
+static int8_t CDC_Control(uint8_t cmd, uint8_t* pbuf, uint16_t length);
+static int8_t CDC_Receive(uint8_t* pbuf, uint32_t *Len);
+static int8_t CDC_TransmitCplt(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
 
-USBD_CDC_ItfTypeDef USBD_Interface_fops_FS = {
-	CDC_Init_FS,
-	CDC_DeInit_FS,
-	CDC_Control_FS,
-	CDC_Receive_FS,
-	CDC_TransmitCplt_FS
+USBD_CDC_ItfTypeDef USBD_Interface_fops = {
+	CDC_Init,
+	CDC_DeInit,
+	CDC_Control,
+	CDC_Receive,
+	CDC_TransmitCplt
 };
 
-static int8_t CDC_Init_FS(void)
+static int8_t CDC_Init(void)
 {
-	USBD_CDC_SetTxBuffer(&hUsbDeviceFS, txbuf, 0);
-	USBD_CDC_SetRxBuffer(&hUsbDeviceFS, rxbuf);
+	USBD_CDC_SetTxBuffer(gusbdevice, txbuf, 0);
+	USBD_CDC_SetRxBuffer(gusbdevice, rxbuf);
 
 	return USBD_OK;
 }
 
-static int8_t CDC_DeInit_FS(void)
+static int8_t CDC_DeInit(void)
 {
 	return USBD_OK;
 }
 
-static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
+static int8_t CDC_Control(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 {
 	return USBD_OK;
 }
@@ -110,34 +111,32 @@ void stm32_on_usb_cdc_acm_rx(uint8_t* buf, uint32_t len)
 
 		i++;
 	}
-
-	return i;
 }
 
-static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
+static int8_t CDC_Receive(uint8_t* Buf, uint32_t *Len)
 {
 	stm32_on_usb_cdc_acm_rx(Buf, *Len);
 
-	USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
-	USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+	USBD_CDC_SetRxBuffer(gusbdevice, &Buf[0]);
+	USBD_CDC_ReceivePacket(gusbdevice);
 
 	return USBD_OK;
 }
 
-static uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
+static uint8_t CDC_Transmit(uint8_t* Buf, uint16_t Len)
 {
 	uint8_t result = USBD_OK;
-	USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+	USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)gusbdevice->pClassData;
 	if (hcdc->TxState != 0)
 		return USBD_BUSY;
 
-	USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
-	result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+	USBD_CDC_SetTxBuffer(gusbdevice, Buf, Len);
+	result = USBD_CDC_TransmitPacket(gusbdevice);
 
 	return result;
 }
 
-static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
+static int8_t CDC_TransmitCplt(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 {
 	tx_pending = 0;
 
@@ -154,8 +153,15 @@ static int32_t stm32_usb_uart_init(struct no_os_uart_desc **desc,
 				   struct no_os_uart_init_param *param)
 {
 	int ret;
+	struct stm32_usb_uart_init_param *suip;
 	struct no_os_uart_desc *descriptor;
 	struct stm32_usb_uart_desc *sdesc;
+
+	if (!param)
+		return -EINVAL;
+
+	if (!param->extra)
+		return -EINVAL;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -166,13 +172,33 @@ static int32_t stm32_usb_uart_init(struct no_os_uart_desc **desc,
 		ret = -ENOMEM;
 		goto err_sdesc;
 	}
+
 	descriptor->extra = sdesc;
+	suip = param->extra;
+
+	sdesc->husbdevice = suip->husbdevice;
 
 	ret = lf256fifo_init(&sdesc->fifo);
 	if (ret)
 		goto err_fifo;
 
 	gfifo = sdesc->fifo;
+	gusbdevice = sdesc->husbdevice;
+
+	/* Stop the USB before configuring */
+	ret = USBD_Stop(gusbdevice);
+	if (ret)
+		goto err_fifo;
+
+	/* Configure USB CDC with new operations */
+	ret = USBD_CDC_RegisterInterface(gusbdevice, &USBD_Interface_fops);
+	if (ret)
+		goto err_fifo;
+
+	/* Restart the USB */
+	ret = USBD_Start(gusbdevice);
+	if (ret)
+		goto err_fifo;
 
 	*desc = descriptor;
 
@@ -215,7 +241,7 @@ static int32_t stm32_usb_uart_write(struct no_os_uart_desc *desc,
 	unsigned int len = no_os_min(bytes_number, STM32_USB_CDC_ACM_TXBUF_LEN);
 
 	tx_pending = 1;
-	ret = CDC_Transmit_FS(data, len);
+	ret = CDC_Transmit(data, len);
 	if (ret) {
 		tx_pending = 0;
 		return -EFAULT;
