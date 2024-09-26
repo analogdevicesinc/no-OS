@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_common_error_types.h
 * \brief Contains common error data types for API Error messaging
 *

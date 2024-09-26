@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_user.h
  * \brief Contains Talise API macro definitions and global structure declarations for talise_user.c

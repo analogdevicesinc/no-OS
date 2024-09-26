@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /*!
  * \file talise_types.h
  * \brief Contains Talise API configuration and run-time type definitions

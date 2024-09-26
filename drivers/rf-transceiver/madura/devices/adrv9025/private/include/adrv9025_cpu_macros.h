@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file adrv9025_cpu_macros.h
  * \brief Contains ADRV9025 API miscellaneous macro definitions for CPU
  *

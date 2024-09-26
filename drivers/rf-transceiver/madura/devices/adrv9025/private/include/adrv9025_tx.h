@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adrv9025_tx.h
 * \brief Contains ADRV9025 transmit related function prototypes for
 *        adrv9025_tx.c which helps adi_adrv9025_tx.c

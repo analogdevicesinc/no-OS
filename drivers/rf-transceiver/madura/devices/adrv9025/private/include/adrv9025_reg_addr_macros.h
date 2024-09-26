@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adrv9025_reg_addr_macros.h
 * \brief Contains ADRV9025 API miscellaneous macro definitions
 *        Use these register Address only for initialize and before MCS.

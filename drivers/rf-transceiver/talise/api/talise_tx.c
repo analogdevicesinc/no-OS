@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_tx.c
  * \brief Contains functions to support Talise Tx data path control

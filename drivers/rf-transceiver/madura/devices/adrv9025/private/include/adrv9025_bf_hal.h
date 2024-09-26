@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-#ifndef ADRV9025_BF_HAL_H_
+/*#ifndef ADRV9025_BF_HAL_H_
 #define ADRV9025_BF_HAL_H_
 
 #ifdef __KERNEL__

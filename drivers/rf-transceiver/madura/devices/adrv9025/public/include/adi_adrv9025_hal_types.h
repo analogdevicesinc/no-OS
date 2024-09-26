@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file adi_adrv9025_hal_types.h
  * \brief Contains prototypes and macro definitions for ADI HAL wrapper
  *        functions implemented in adi_adrv9025_hal.c

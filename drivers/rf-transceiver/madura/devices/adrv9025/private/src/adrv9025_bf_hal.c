@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adrv9025_bf_hal.c
 * \brief Contains ADI Transceiver Hardware Abstraction functions

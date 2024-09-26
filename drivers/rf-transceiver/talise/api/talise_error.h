@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_error.h
  * \brief Contains Talise API error handling function prototypes and data types for talise_error.c

@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_adrv9025_cpu.h
 * \brief Contains ADRV9025 processor function prototypes for
 *    adi_adrv9025_cpu.c

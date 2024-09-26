@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file adrv9025_cals.c
  * \brief Contains ADRV9025 calibration related private function implementation

@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_radioctrl.h
  * \brief Contains Talise related function prototypes for talise_radioctrl.c

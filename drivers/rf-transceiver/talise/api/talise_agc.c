@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_agc.c
  * \brief Contains Talise API AGC function calls

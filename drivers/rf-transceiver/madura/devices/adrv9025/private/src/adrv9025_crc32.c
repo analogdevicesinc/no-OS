@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adrv9025_crc32.c
 * \brief Contains ARM private features related function implementation defined in

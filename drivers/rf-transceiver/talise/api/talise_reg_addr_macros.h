@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_reg_addr_macros.h
  * \brief Contains Talise API address macro definitions

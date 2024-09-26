@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_jesd204_types.h
  * \brief Contains Talise API JESD data types

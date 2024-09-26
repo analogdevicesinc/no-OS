@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_error_types.h
  * \brief Contains Talise data types for API Error messaging

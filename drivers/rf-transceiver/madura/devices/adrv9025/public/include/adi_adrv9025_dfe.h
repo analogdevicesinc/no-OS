@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_adrv9025_dfe.h
 * \brief Contains ADRV9025 DFE related function prototypes for
 *        adi_adrv9025_dfe.c

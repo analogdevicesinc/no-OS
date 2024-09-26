@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file adi_adrv9025_cals_types.h
  * \brief Contains ADRV9025 API Calibration data types
  *

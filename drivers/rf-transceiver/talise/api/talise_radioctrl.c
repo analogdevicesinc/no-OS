@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_radioctrl.c
  * \brief Contains functions to support Talise radio control and pin control

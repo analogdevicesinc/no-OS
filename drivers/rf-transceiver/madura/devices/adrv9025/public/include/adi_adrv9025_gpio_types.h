@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file adi_adrv9025_gpio_types.h
  * \brief Contains functions to allow control of the General Purpose IO functions on the ADRV9025 device
  *

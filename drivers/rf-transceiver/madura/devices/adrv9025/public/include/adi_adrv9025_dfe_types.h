@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_adrv9025_dfe_types.h
 * \brief Contains ADRV9025 API DFE data types
 *

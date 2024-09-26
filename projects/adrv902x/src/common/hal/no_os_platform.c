@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * Copyright 2015 - 2023 Analog Devices Inc.
 * Released under the ADRV9025 API license, for more information.

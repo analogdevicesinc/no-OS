@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file adi_adrv9025_gpio.h
  * \brief ADRV9025 GPIO header file
  *

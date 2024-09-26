@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adrv9025_shared_resource_manager.h
 * \brief Contains ADRV9025 shared resource related private function prototypes for
 *        adrv9025_shared_resource_manager.c
