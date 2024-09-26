@@ -46,13 +46,14 @@
 #include "stm32_hal.h"
 #include "stm32_irq.h"
 #include "stm32_timer.h"
-#include "stm32_uart.h"
 #include "stm32_uart_stdio.h"
 #include "common_data.h"
 #include "no_os_util.h"
 
-#if defined(STM32F413xx) || defined(STM32H743xx)
+#if defined NO_OS_USB_UART
 #include "stm32_usb_uart.h"
+#else
+#include "stm32_uart.h"
 #endif
 
 /******************************************************************************/
@@ -63,13 +64,12 @@ of samples needed to be stored in the device buffer
 and based on the available RAM memory of the platform */
 #define SAMPLES_PER_CHANNEL_PLATFORM 2000
 
-#if defined(STM32F413xx) || defined(STM32H743xx)
-#define UART_EXTRA      NULL
+#if defined NO_OS_USB_UART
+#define UART_EXTRA      &iio_demo_usb_uart_extra_ip
 #define UART_OPS        &stm32_usb_uart_ops
-#elif defined(STM32F469xx)
+#else
 #define UART_EXTRA      &iio_demo_uart_extra_ip
 #define UART_OPS        &stm32_uart_ops
-#else
 #endif
 
 extern UART_HandleTypeDef huart5;
@@ -79,8 +79,18 @@ extern UART_HandleTypeDef huart5;
 #define UART_DEVICE_ID      5
 #define UART_BAUDRATE  115200
 
+#if defined NO_OS_USB_UART
+extern struct stm32_usb_uart_init_param iio_demo_usb_uart_extra_ip;
+#if defined(STM32F413xx) || defined(STM32H743xx)
+extern USBD_HandleTypeDef hUsbDeviceFS;
+#define IIO_APP_HUSBUART (&hUsbDeviceFS)
+#elif defined(STM32F469xx)
+extern USBD_HandleTypeDef hUsbDeviceHS;
+#define IIO_APP_HUSBUART (&hUsbDeviceHS)
+#endif
+#else
 extern struct stm32_uart_init_param iio_demo_uart_extra_ip;
-extern struct stm32_uart_init_param iio_demo_usb_uart_extra_ip;
+#endif
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 /* Adc Demo Timer settings */
