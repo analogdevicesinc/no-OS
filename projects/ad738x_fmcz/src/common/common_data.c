@@ -80,7 +80,7 @@ struct no_os_spi_init_param spi_init = {
 	.device_id = SPI_DEVICE_ID,
 	.chip_select = SPI_CS,
 	.max_speed_hz = SPI_BAUDRATE,
-	.mode = NO_OS_SPI_MODE_1,
+	.mode = NO_OS_SPI_MODE_2,
 	.platform_ops = SPI_OPS,
 	.extra = (void*)SPI_EXTRA,
 };
