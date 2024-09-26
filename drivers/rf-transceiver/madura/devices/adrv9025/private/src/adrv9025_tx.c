@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adrv9025_tx.c
 * \brief Contains ADRV9025 transmit related function implementations

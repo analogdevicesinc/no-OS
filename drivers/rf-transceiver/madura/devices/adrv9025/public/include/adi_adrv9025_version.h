@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file adi_adrv9025_version.h
  * \brief Contains the version number for the ADRV9025 API
  *

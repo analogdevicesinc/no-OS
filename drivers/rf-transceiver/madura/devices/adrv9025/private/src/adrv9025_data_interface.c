@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adrv9025_data_interface.c
 * \brief Contains private helper functions to assist the ADRV9025 data interface

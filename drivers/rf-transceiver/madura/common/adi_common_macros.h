@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_common_macros.h
 * \brief Contains ADI Transceiver general purpose macros.
 *

@@ -1,10 +1,8 @@
-// SPDX-License-Identifier: GPL-2.0
 /*
  * ADRV9025/6 RF Transceiver
  *
  * Copyright 2020-2023 Analog Devices Inc.
  *
- * Licensed under the GPL-2.
  */
 
 #include "xilinx_transceiver.h"

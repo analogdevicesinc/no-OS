@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /*!
  * @brief     APIs for RX configuration and control
  *

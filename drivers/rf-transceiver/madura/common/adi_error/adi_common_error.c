@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file adi_common_error.c
  * \brief Contains common API error handling functions implementations

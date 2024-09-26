@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adrv9025_utilities.c
 * \brief Contains Utility features related private function implementations

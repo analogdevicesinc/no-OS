@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
  * \file Automatically generated file: adrv9025_bf_analog_rx_mem_map.h
  *
  * \brief Contains BitField functions to support ADRV9025 transceiver device.

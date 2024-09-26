@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_adrv9025_user.h
 * \brief Contains ADRV9025 API macro definitions and global structure declarations for adi_adrv9025_user.c
 *

@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adi_adrv9025_cpu.c
 * \brief Contains Adrv9025's processor features related function

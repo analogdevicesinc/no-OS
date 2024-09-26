@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adi_adrv9025_rx.c
 * \brief Contains Rx features related function implementation defined in

@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file Automatically generated file: adrv9025_bf_jesd_common.c
  *

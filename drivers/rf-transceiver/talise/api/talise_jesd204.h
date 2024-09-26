@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_jesd204.h
  * \brief Contains Talise JESD204b data path related function prototypes for

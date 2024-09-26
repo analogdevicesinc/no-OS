@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_rx.c
  * \brief Contains functions to support Talise Rx and Observation Rx data path

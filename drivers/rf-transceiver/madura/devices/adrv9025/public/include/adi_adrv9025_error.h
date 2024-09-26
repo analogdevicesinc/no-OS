@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_adrv9025_error.h
 * \brief ADRV9025 ERROR header file
 *

@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_gpio.h
  * \brief Talise GPIO header file

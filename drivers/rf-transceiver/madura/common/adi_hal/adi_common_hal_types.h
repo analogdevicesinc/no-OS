@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_common_hal_types.h
 * \brief Contains ADI Transceiver common hal types.
 *

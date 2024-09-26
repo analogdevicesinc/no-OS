@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_version.h
  * \brief Contains the version number for the Talise API

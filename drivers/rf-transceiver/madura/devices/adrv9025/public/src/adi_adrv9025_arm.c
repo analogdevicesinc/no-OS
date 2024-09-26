@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adi_adrv9025_arm.c
 * \brief Contains ARM features related function implementation defined in

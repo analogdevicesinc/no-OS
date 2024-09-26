@@ -1,10 +1,8 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/*
+/*/*
  * ADRV9025
  *
  * Copyright 2020-2023 Analog Devices Inc.
  *
- * Licensed under the GPL-2.
  */
 
 #ifndef IIO_TRX_ADRV9025_H_

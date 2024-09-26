@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_arm.h
  * \brief Contains Talise ARM related function prototypes for talise_arm.c

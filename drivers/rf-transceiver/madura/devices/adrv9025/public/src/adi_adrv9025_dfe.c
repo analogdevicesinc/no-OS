@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adi_adrv9025_dfe.c
 * \brief Contains DPD features related function implementation defined in

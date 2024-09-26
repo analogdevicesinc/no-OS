@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \file adi_platform.h
 * \brief Contains ADI Transceiver Hardware Abstraction functions interface
 *        Analog Devices maintains and provides updates to this code layer.

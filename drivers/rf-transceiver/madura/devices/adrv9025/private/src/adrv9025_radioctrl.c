@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file adrv9025_radioctrl.c
  * \brief Contains ADRV9025 radio control related private function implementations

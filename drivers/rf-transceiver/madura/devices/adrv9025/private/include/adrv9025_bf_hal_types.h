@@ -1,5 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
-/**
+/*/**
 * \brief Contains BitField definitions to support ADRV9025 transciever device.
 *
 */

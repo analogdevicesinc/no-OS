@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_tx_types.h
  * \brief Contains Talise API Tx datapath data types

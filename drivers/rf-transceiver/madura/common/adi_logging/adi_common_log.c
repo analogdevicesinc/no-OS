@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adi_common_log.c
 * \brief Contains ADI Transceiver Logging functions

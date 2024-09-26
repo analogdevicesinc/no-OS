@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /**
 * \file adi_adrv9025_tx.c
 * \brief Contains Tx features related function implementation defined in
