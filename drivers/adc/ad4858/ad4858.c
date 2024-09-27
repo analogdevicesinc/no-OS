@@ -1005,6 +1005,8 @@ int ad4858_init(struct ad4858_dev **device,
 
 	dev->big_endian = no_os_is_big_endian();
 
+	dev->prod_id = init_param->prod_id;
+
 	/* Configure GPIOs */
 	ret = ad4858_gpio_config(dev, init_param);
 	if (ret)
@@ -1048,8 +1050,8 @@ int ad4858_init(struct ad4858_dev **device,
 	if (ret)
 		goto error_spi;
 
-	if ((product_id_l != AD4858_PRODUCT_ID_L)
-	    || (product_id_h != AD4858_PRODUCT_ID_H)) {
+	if ((product_id_l != dev->prod_id)
+	    || (product_id_h != AD485X_PRODUCT_ID_H)) {
 		pr_err("Product ID mismatch \r\n");
 		return -EFAULT;
 	}
