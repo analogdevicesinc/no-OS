@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   app_config.h
- *   @brief  Config file of ad3552r_fmcz project.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   axi_qspi_example.h
+ *   @brief  AXI_QSPI example header
+ *   @author Angelo Dureghello (adureghello@baylibre.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,9 +30,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef __AXI_QSPI_EXAMPLE_H__
+#define __AXI_QSPI_EXAMPLE_H__
 
-//#define XILINX_PLATFORM
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+int example_main();
 
-#endif
+#endif /* __AXI_QSPI_EXAMPLE_H__ */
