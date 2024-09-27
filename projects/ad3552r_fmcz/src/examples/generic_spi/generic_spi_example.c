@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad3552r_fmcz/srcs/main.c
+ *   @file   generic_spi_example.c
  *   @brief  Implementation of Main Function.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -36,8 +36,7 @@
 /******************************************************************************/
 
 #include <inttypes.h>
-#include "app_config.h"
-#include "parameters.h"
+#include "common_data.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_spi.h"
@@ -58,17 +57,6 @@
 static uint8_t data_buffer[MAX_BUFF_SAMPLES];
 
 #endif
-
-/* Default structures */
-static struct xil_gpio_init_param xil_gpio_param = {
-	.device_id = GPIO_DEVICE_ID,
-	.type = GPIO_PS
-};
-
-static struct no_os_gpio_init_param default_gpio_param = {
-	.platform_ops = &xil_gpio_ops,
-	.extra = &xil_gpio_param
-};
 
 int32_t init_gpios_to_defaults()
 {
@@ -150,7 +138,7 @@ int32_t run_example(struct ad3552r_desc *dac)
 	return err;
 }
 
-int main()
+int example_main()
 {
 	int32_t err;
 
@@ -161,63 +149,6 @@ int main()
 		pr_err("init_gpios_to_defaults failed: %"PRIi32"\n", err);
 		return err;
 	}
-
-	struct no_os_gpio_init_param ldac_param = default_gpio_param;
-	struct no_os_gpio_init_param reset_param = default_gpio_param;
-
-	ldac_param.number = GPIO_OFFSET + GPIO_LDAC_N;
-	reset_param.number = GPIO_OFFSET + GPIO_RESET_N;
-
-	struct xil_spi_init_param xil_spi_param = {
-#ifdef PLATFORM_MB
-		.type = SPI_PL,
-#else
-		.type = SPI_PS,
-#endif
-		.flags = 0
-	};
-
-	struct ad3552r_init_param default_ad3552r_param = {
-		.chip_id = AD3552R_ID,
-		.spi_param = {
-			.device_id = SPI_DEVICE_ID,
-			.chip_select = 0,
-			.mode = NO_OS_SPI_MODE_0,
-			.max_speed_hz = 20000000,
-			.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-#ifdef XPAR_XSPI_NUM_INSTANCES
-			.platform_ops = &xil_spi_pl_ops,
-#else
-			.platform_ops = &xil_spi_ops,
-#endif
-			.extra = &xil_spi_param
-		},
-		.ldac_gpio_param_optional = &ldac_param,
-		.reset_gpio_param_optional = &reset_param,
-		.channels = {
-			[0] = {
-				.en = 1,
-				.range = AD3542R_CH_OUTPUT_RANGE_0__2P5V
-			},
-			[1] = {
-				.en = 1,
-				.range = AD3542R_CH_OUTPUT_RANGE_0__2P5V
-			}
-		},
-		.crc_en = 0,
-#ifdef XILINX_PLATFORM
-		/*
-		 * Zed board requires this option, spi instruction/addr + data
-		 * must be sent in a single transfer.
-		 */
-		.single_transfer = 1,
-#endif
-	};
-
-	/* Enable the instruction cache. */
-	Xil_ICacheEnable();
-	/* Enable the data cache. */
-	Xil_DCacheEnable();
 
 #ifndef IIO_SUPPORT
 	struct ad3552r_desc *dac;
