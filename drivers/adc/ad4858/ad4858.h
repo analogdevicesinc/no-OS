@@ -130,8 +130,16 @@
 
 /** Miscellaneous Definitions */
 #define AD4858_REG_RD_BIT_MSK       NO_OS_BIT(7)
-#define AD4858_PRODUCT_ID_L         0x60
-#define AD4858_PRODUCT_ID_H         0x00
+#define AD4858_PRODUCT_ID_L		0x60
+#define AD4857_PRODUCT_ID_L		0x61
+#define AD4856_PRODUCT_ID_L		0x62
+#define AD4855_PRODUCT_ID_L		0x63
+#define AD4854_PRODUCT_ID_L		0x64
+#define AD4853_PRODUCT_ID_L		0x65
+#define AD4852_PRODUCT_ID_L		0x66
+#define AD4851_PRODUCT_ID_L		0x67
+#define AD4858I_PRODUCT_ID_L		0x6F
+#define AD485X_PRODUCT_ID_H         0x00
 #define AD4858_NUM_CHANNELS         8
 #define AD4858_DEF_CHN_SOFTSPAN     0xf
 #define AD4858_DEF_CHN_OFFSET       0x0
@@ -139,6 +147,22 @@
 #define AD4858_DEF_CHN_PHASE        0x0
 #define AD4858_DEF_CHN_OR           0x7ffff0
 #define AD4858_DEF_CHN_UR           0x800000
+
+/**
+ * @enum ad4858_prod_id
+ * @brief AD485X Product ID
+ */
+enum ad4858_prod_id {
+	AD4858_PROD_ID_L=0x60,
+	AD4857_PROD_ID_L=0x61,
+	AD4856_PROD_ID_L=0x62,
+	AD4855_PROD_ID_L=0x63,
+	AD4854_PROD_ID_L=0x64,
+	AD4853_PROD_ID_L=0x65,
+	AD4852_PROD_ID_L=0x66,
+	AD4851_PROD_ID_L=0x67,
+	AD4858I_PROD_ID_L=0x6F,
+};
 
 /**
  * @enum ad4858_operating_mode
@@ -277,6 +301,8 @@ struct ad4858_init_param {
 	struct no_os_gpio_init_param *gpio_cnv;
 	/** Busy GPIO configuration. */
 	struct no_os_gpio_init_param *gpio_busy;
+	/** AD458X Product ID */
+	enum ad4858_prod_id prod_id;
 	/** Enable address ascension. */
 	bool addr_ascension_enable;
 	/** Operating mode. */
@@ -324,6 +350,8 @@ struct ad4858_dev {
 	struct no_os_gpio_desc *gpio_cnv;
 	/** Busy GPIO descriptor. */
 	struct no_os_gpio_desc *gpio_busy;
+	/** AD458X Product ID */
+	enum ad4858_prod_id prod_id;
 	/** Address ascension enable status. */
 	bool addr_ascension_enable;
 	/** Operating mode. */
