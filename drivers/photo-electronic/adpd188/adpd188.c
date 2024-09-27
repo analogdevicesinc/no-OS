@@ -679,40 +679,6 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOT_EN, reg_data);
 	if(ret != 0)
 		return -1;
-	slota_conf.slot_en = true;
-	slota_conf.slot_id = ADPD188_SLOTA;
-	slota_conf.sot_fifo_mode = ADPD188_32BIT_SUM;
-	ret = adpd188_slot_setup(dev, slota_conf);
-	if(ret != 0)
-		return -1;
-	slotb_conf.slot_en = true;
-	slotb_conf.slot_id = ADPD188_SLOTB;
-	slotb_conf.sot_fifo_mode = ADPD188_32BIT_SUM;
-	ret = adpd188_slot_setup(dev, slotb_conf);
-	if(ret != 0)
-		return -1;
-
-	ret = adpd188_adc_fsample_set(dev, 16.0);
-	if(ret != 0)
-		return -1;
-
-	ret = adpd188_reg_read(dev, ADPD188_REG_PD_LED_SELECT, &reg_data);
-	if(ret != 0)
-		return -1;
-	/* Blue LED in slot A */
-	reg_data |= (1 << ADPD188_PD_LED_SELECT_SLOTA_LED_SEL_POS) &
-		    ADPD188_PD_LED_SELECT_SLOTA_LED_SEL_MASK;
-	/* IR LED in slot A */
-	reg_data |= (3 << ADPD188_PD_LED_SELECT_SLOTB_LED_SEL_POS) &
-		    ADPD188_PD_LED_SELECT_SLOTB_LED_SEL_MASK;
-	/* Combine PDs for both slots */
-	reg_data |= (1 << ADPD188_PD_LED_SELECT_SLOTA_PD_SEL_POS) &
-		    ADPD188_PD_LED_SELECT_SLOTA_PD_SEL_MASK;
-	reg_data |= (1 << ADPD188_PD_LED_SELECT_SLOTB_PD_SEL_POS) &
-		    ADPD188_PD_LED_SELECT_SLOTB_PD_SEL_MASK;
-	ret = adpd188_reg_write(dev, ADPD188_REG_PD_LED_SELECT, reg_data);
-	if(ret != 0)
-		return -1;
 
 	/* No decimation for any slot */
 	ret = adpd188_reg_write(dev, ADPD188_REG_NUM_AVG, 0);
@@ -745,47 +711,6 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	if(ret != 0)
 		return -1;
 
-	/* Slot B chop mode is inverted, non-inverted, non-inverted, inverted */
-	ret = adpd188_reg_read(dev, ADPD188_REG_INT_SEQ_B, &reg_data);
-	if(ret != 0)
-		return -1;
-	reg_data |= 0x9 & ADPD188_INT_SEQ_B_INTEG_ORDER_B_MASK;
-	ret = adpd188_reg_write(dev, ADPD188_REG_INT_SEQ_B, reg_data);
-	if(ret != 0)
-		return -1;
-
-	/* No ADC offset on channel 1, Slot B */
-	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH1_OFFSET, 0);
-	if(ret != 0)
-		return -1;
-	/* Unused channel 2, slot B */
-	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH2_OFFSET, 0x3FFF);
-	if(ret != 0)
-		return -1;
-	/* Unused channel 3, slot B */
-	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH3_OFFSET, 0x3FFF);
-	if(ret != 0)
-		return -1;
-	/* Unused channel 4, slot B */
-	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH4_OFFSET, 0x3FFF);
-	if(ret != 0)
-		return -1;
-
-	/* Set IR LED 3 power */
-	ret = adpd188_reg_read(dev, ADPD188_REG_ILED3_COARSE, &reg_data);
-	if(ret != 0)
-		return -1;
-	reg_data &= ~ADPD188_ILED3_COARSE_ILED3_COARSE_MASK;
-	reg_data |= (0x9 << ADPD188_ILED3_COARSE_ILED3_COARSE_POS) &
-		    ADPD188_ILED3_COARSE_ILED3_COARSE_MASK;
-	reg_data &= ~ADPD188_ILED3_COARSE_ILED3_SLEW_MASK;
-	reg_data |= (0x3 << ADPD188_ILED3_COARSE_ILED3_SLEW_POS) &
-		    ADPD188_ILED3_COARSE_ILED3_SLEW_MASK;
-	reg_data |= ADPD188_ILED3_COARSE_ILED3_SCALE_MASK;
-	ret = adpd188_reg_write(dev, ADPD188_REG_ILED3_COARSE, reg_data);
-	if(ret != 0)
-		return -1;
-
 	/* Set blue LED 1 power */
 	ret = adpd188_reg_read(dev, ADPD188_REG_ILED1_COARSE, &reg_data);
 	if(ret != 0)
@@ -815,20 +740,6 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	if(ret != 0)
 		return -1;
 
-	/* Slot B 4 LED pulses with 15us period */
-	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTB_NUMPULSES, &reg_data);
-	if(ret != 0)
-		return -1;
-	reg_data &= ~ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_MASK;
-	reg_data |= (0x4 << ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_POS) &
-		    ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_MASK;
-	reg_data &= ~ADPD188_SLOTB_NUMPULSES_SLOTB_PERIOD_MASK;
-	reg_data |= (0xE << ADPD188_SLOTB_NUMPULSES_SLOTB_PERIOD_POS) &
-		    ADPD188_SLOTB_NUMPULSES_SLOTB_PERIOD_MASK;
-	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_NUMPULSES, reg_data);
-	if(ret != 0)
-		return -1;
-
 	/* Slot A integrator window */
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTA_AFE_WINDOW, &reg_data);
 	if(ret != 0)
@@ -840,31 +751,6 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	reg_data |= (0x2F0 << ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_OFFSET_POS) &
 		    ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_OFFSET_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_AFE_WINDOW, reg_data);
-	if(ret != 0)
-		return -1;
-
-	/* Slot B integrator window */
-	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTB_AFE_WINDOW, &reg_data);
-	if(ret != 0)
-		return -1;
-	reg_data &= ~ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_MASK;
-	reg_data |= (0x4 << ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_POS) &
-		    ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_MASK;
-	reg_data &= ~ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_OFFSET_MASK;
-	reg_data |= (0x2F0 << ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_OFFSET_POS) &
-		    ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_OFFSET_MASK;
-	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_AFE_WINDOW, reg_data);
-	if(ret != 0)
-		return -1;
-
-	/* Power down channels 2, 3 and 4 */
-	ret = adpd188_reg_read(dev, ADPD188_REG_AFE_PWR_CFG1, &reg_data);
-	if(ret != 0)
-		return -1;
-	reg_data &= ~ADPD188_AFE_PWR_CFG1_AFE_POWERDOWN_MASK;
-	reg_data |= (0x1C << ADPD188_AFE_PWR_CFG1_AFE_POWERDOWN_POS) &
-		    ADPD188_AFE_PWR_CFG1_AFE_POWERDOWN_MASK;
-	ret = adpd188_reg_write(dev, ADPD188_REG_AFE_PWR_CFG1, reg_data);
 	if(ret != 0)
 		return -1;
 
