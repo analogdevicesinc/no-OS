@@ -302,7 +302,7 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 int iio_app_init(struct iio_app_desc **app,
 		 struct iio_app_init_param app_init_param)
 {
-	struct iio_device_init *iio_init_devs;
+	struct iio_device_init *iio_init_devs = NULL;
 	struct iio_init_param iio_init_param;
 	struct no_os_uart_desc *uart_desc;
 	struct iio_app_desc *application;
@@ -339,11 +339,6 @@ int iio_app_init(struct iio_app_desc **app,
 	status = uart_setup(&uart_desc, &app_init_param.uart_init_params);
 	if (status < 0)
 		goto error_uart;
-
-	status = print_uart_hello_message(&uart_desc,
-					  &app_init_param.uart_init_params);
-	if (status < 0)
-		goto error;
 
 	application->uart_desc = uart_desc;
 #if defined(NO_OS_LWIP_NETWORKING)
@@ -405,13 +400,20 @@ int iio_app_init(struct iio_app_desc **app,
 
 	no_os_free(iio_init_devs);
 
+	status = print_uart_hello_message(&uart_desc,
+					  &app_init_param.uart_init_params);
+	if (status < 0)
+		goto error;
+
 	*app = application;
 
 	return 0;
-error:
+error_uart:
 	/** We might have to reinit UART, settings might have changed for IIO */
 	uart_setup(&uart_desc, &app_init_param.uart_init_params);
-error_uart:
+error:
+	no_os_free(iio_init_devs);
+
 	no_os_free(application);
 
 	status = print_uart_error_message(&uart_desc,

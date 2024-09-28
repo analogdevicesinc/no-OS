@@ -88,6 +88,7 @@ int32_t ad5791_init(struct ad5791_dev **device,
 		return -1;
 
 	dev->act_device = init_param.act_device;
+	dev->rbuf_gain2 = init_param.rbuf_gain2;
 
 	/* GPIO */
 	status = no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
@@ -323,7 +324,12 @@ int32_t ad5791_setup(struct ad5791_dev *dev,
 	uint32_t new_ctrl = 0;
 	uint32_t val;
 	int32_t status = 0;
+	uint32_t rbuf_mask;
 
+	if (dev->rbuf_gain2)
+		rbuf_mask = 0;
+	else
+		rbuf_mask = AD5791_CTRL_RBUF_MASK;
 	/* Reads the control register in order to save the options related to the
 	   DAC output state that may have been configured previously. */
 	status = ad5791_get_register_value(dev, AD5791_REG_CTRL, &val);
@@ -335,7 +341,7 @@ int32_t ad5791_setup(struct ad5791_dev *dev,
 	old_ctrl = old_ctrl & ~(AD5791_CTRL_LINCOMP(-1) |
 				AD5791_CTRL_SDODIS_MASK |
 				AD5791_CTRL_BIN2SC_MASK |
-				AD5791_CTRL_RBUF_MASK);
+				rbuf_mask);
 	/* Sets the new state provided by the user. */
 	new_ctrl = old_ctrl | setup_word;
 	status = ad5791_set_register_value(dev,

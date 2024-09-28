@@ -85,6 +85,7 @@ struct ad5791_dev {
 	struct no_os_gpio_desc	*gpio_ldac;
 	/* Device Settings */
 	enum ad5791_type act_device;
+	bool rbuf_gain2;
 };
 
 struct ad5791_init_param {
@@ -96,6 +97,7 @@ struct ad5791_init_param {
 	struct no_os_gpio_init_param		gpio_ldac;
 	/* Device Settings */
 	enum ad5791_type act_device;
+	bool					rbuf_gain2;
 };
 
 /******************************************************************************/
