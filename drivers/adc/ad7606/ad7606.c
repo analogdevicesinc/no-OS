@@ -326,6 +326,8 @@ struct ad7606_dev {
 	uint8_t gain_ch[AD7606_MAX_CHANNELS];
 	/** Data buffer (used internally by the SPI communication functions) */
 	uint8_t data[28];
+	/** Channel operating range */
+	struct ad7606_range range_ch[AD7606_MAX_CHANNELS];
 };
 
 /***************************************************************************//**
@@ -647,6 +649,46 @@ static int32_t cpy26b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
 }
 
 /***************************************************************************//**
+ * @brief Correction upper 14 bits for negative value(for 18 bit data)
+ * @param dev       - The device structure pointer
+ * @param pdata     - Pointer to data buffer address
+ * @param size      - Number of value, decided by device struct
+ * @return ret - return code.
+ *         Example: EINVAL  - invalid input data number
+ *                  0       - No errors encountered.
+ *******************************************************************************/
+static int32_t sign_correction(struct ad7606_dev* dev, uint32_t size, uint32_t* pdata)
+{
+	int32_t ret = 0;
+	uint8_t cnt = 0;
+
+    //check if input size equal to device channel size
+    if(size != (dev->num_channels))
+    {
+    	ret = EINVAL;
+        return ret;
+    }
+
+    
+    for(cnt = 0;cnt < size;cnt ++)
+    {
+        if((dev->range_ch[cnt].min) < 0)//check if channel range is bipolar, only bipolar input needs correction
+        {
+            if( * pdata >> 17)          //if sign bit is 1(negative)
+            {
+                * pdata = * pdata | ((uint32_t)0xFFFC << 16);
+            }
+        }
+        pdata += 1;
+    }
+
+    return 0;
+
+}
+
+
+
+/***************************************************************************//**
  * @brief Toggle the CONVST pin to start a conversion.
  *
  * If needed, this function also puts the device in ADC reading mode by a write
@@ -747,6 +789,10 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 			ret = cpy26b32b(dev->data, sz, data);
 		else
 			ret = cpy18b32b(dev->data, sz, data);
+		if (ret < 0)
+			return ret;
+		
+		ret = sign_correction(dev,sz,data);
 		if (ret < 0)
 			return ret;
 		break;
@@ -1313,6 +1359,8 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 	info = &ad7606_chip_info_tbl[dev->device_id];
 
 	dev->scale_ch[ch] = (double)(range.max - range.min) / (double)(1 << info->bits);
+
+	dev->range_ch[ch] = range;
 
 	return ret;
 }
