@@ -68,6 +68,13 @@ RF TRANSCEIVER
 
    drivers/madura
 
+TEMPERATURE
+==============
+.. toctree::
+   :maxdepth: 1
+
+   drivers/max31827
+
 POWER MANAGEMENT
 ================
 .. toctree::
