@@ -340,6 +340,11 @@ int iio_app_init(struct iio_app_desc **app,
 	if (status < 0)
 		goto error_uart;
 
+	status = print_uart_hello_message(&uart_desc,
+					  &app_init_param.uart_init_params);
+	if (status < 0)
+		goto error;
+
 	application->uart_desc = uart_desc;
 #if defined(NO_OS_LWIP_NETWORKING)
 	status = lwip_network_setup(application, app_init_param, &iio_init_param);
@@ -399,11 +404,6 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 
 	no_os_free(iio_init_devs);
-
-	status = print_uart_hello_message(&uart_desc,
-					  &app_init_param.uart_init_params);
-	if (status < 0)
-		goto error;
 
 	*app = application;
 
