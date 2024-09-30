@@ -69,6 +69,7 @@
 
 #define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
 #define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
+#define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
 #define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
 
 #define DDR_MEM_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR
@@ -98,10 +99,17 @@
 #define AD9528_CS			1
 #define ADRV9025_CS			0
 
-#define DAC_GPIO_PLDDR_BYPASS	        (GPIO_OFFSET + 69)
-#define AD9528_RESET_B			(GPIO_OFFSET + 68)
-#define AD9528_SYSREF_REQ		(GPIO_OFFSET + 58)
-#define ADRV9025_RESET_B		(GPIO_OFFSET + 57)
+#ifdef XPS_BOARD_ZCU102
+#define DAC_GPIO_PLDDR_BYPASS          (GPIO_OFFSET + 69)
+#define AD9528_RESET_B                 (GPIO_OFFSET + 68)
+#define AD9528_SYSREF_REQ              (GPIO_OFFSET + 58)
+#define ADRV9025_RESET_B               (GPIO_OFFSET + 57)
+#else
+#define DAC_GPIO_PLDDR_BYPASS	        (GPIO_OFFSET + 63)
+#define AD9528_RESET_B			(GPIO_OFFSET + 62)
+#define AD9528_SYSREF_REQ		(GPIO_OFFSET + 61)
+#define ADRV9025_RESET_B		(GPIO_OFFSET + 51)
+#endif
 
 extern struct xil_spi_init_param spi_extra;
 extern struct xil_gpio_init_param xil_gpio_param;

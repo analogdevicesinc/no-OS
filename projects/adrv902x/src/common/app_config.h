@@ -44,7 +44,11 @@
 
 //#define DMA_EXAMPLE
 
+#ifdef PLATFORM_MB
+#define UART_BAUDRATE                                   115200
+#else
 #define UART_BAUDRATE                                   921600
+#endif
 
 #define ADRV9025_DEVICE_CLK_KHZ                         245760
 #define ADRV9025_LANE_RATE_KHZ				9830400
