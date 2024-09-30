@@ -627,7 +627,12 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 	sdesc->stm32_spi_dma_done = true;
 
 	/* Dummy read to clear any pending read on SPI */
+#ifndef SPI_SR_RXNE
+	*(volatile uint8_t *)&SPIx->RXDR;
+#else
 	*(volatile uint8_t *)&SPIx->DR;
+#endif
+
 	if (sdesc->stm32_spi_dma_user_cb)
 		sdesc->stm32_spi_dma_user_cb(sdesc->stm32_spi_dma_user_ctx);
 }
