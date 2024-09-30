@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 #ifndef ADI_COMMON_HAL_SPIARRAYSIZE
-    #define ADI_COMMON_HAL_SPIARRAYSIZE 256
+    #define ADI_COMMON_HAL_SPIARRAYSIZE 16
 #endif
 
 #ifdef __cplusplus
