@@ -76,7 +76,6 @@ enum adrv9025_clocks {
 #define ADRV9025_MAX_NUM_GAIN_TABLES 10
 
 struct adrv9025_rf_phy {
-	struct no_os_spi_desc		*spi_desc;
 	adi_adrv9025_Device_t		adi_adrv9025_device;
 	adi_adrv9025_Device_t		*madDevice;
 	adi_adrv9025_SpiSettings_t	spiSettings;
