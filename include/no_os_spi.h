@@ -79,6 +79,21 @@ enum no_os_spi_bit_order {
 };
 
 /**
+ * @enum no_os_spi_lanes
+ * @brief SPI configuration for number of lanes.
+ */
+enum no_os_spi_lanes {
+	/** Single Lane */
+	NO_OS_SPI_SINGLE_LANE,
+	/** Dual Lane */
+	NO_OS_SPI_DUAL_LANE,
+	/** Quad Lane */
+	NO_OS_SPI_QUAD_LANE,
+	/** Octo Lane */
+	NO_OS_SPI_OCTO_LANE,
+};
+
+/**
  * @struct no_os_spi_msg_list
  * @brief List item describing a SPI transfer
  */
@@ -133,6 +148,7 @@ struct no_os_spi_init_param {
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
+	enum no_os_spi_lanes   lanes;
 	const struct no_os_spi_platform_ops *platform_ops;
 	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
@@ -158,6 +174,7 @@ struct no_os_spibus_desc {
 	enum no_os_spi_mode	mode;
 	/** SPI bus bit order */
 	enum no_os_spi_bit_order	bit_order;
+	enum no_os_spi_lanes   lanes;
 	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
 	/** SPI bus extra */
@@ -181,6 +198,7 @@ struct no_os_spi_desc {
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
+	enum no_os_spi_lanes   lanes;
 	const struct no_os_spi_platform_ops *platform_ops;
 	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
