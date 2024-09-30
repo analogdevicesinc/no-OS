@@ -77,7 +77,7 @@
 #include "iio_app.h"
 #endif // IIO_SUPPORT
 
-static uint32_t adc_buffer[ADC_BUFFER_SIZE] __attribute__((aligned));
+static uint32_t adc_buffer[ADC_BUFFER_SIZE] __attribute__((aligned(1024)));
 
 int main()
 {

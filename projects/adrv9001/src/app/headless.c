@@ -71,9 +71,9 @@
 /* ADC/DAC Buffers */
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 static uint32_t dac_buffers[IIO_DEV_COUNT][DAC_BUFFER_SAMPLES]
-__attribute__((aligned));
+__attribute__((aligned(1024)));
 static uint16_t adc_buffers[IIO_DEV_COUNT][ADC_BUFFER_SAMPLES]
-__attribute__((aligned));
+__attribute__((aligned(1024)));
 #endif
 
 uint64_t sampling_freq;
