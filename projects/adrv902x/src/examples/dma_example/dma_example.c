@@ -68,9 +68,9 @@
 #include "adrv9025.h"
 #include "ad9528.h"
 
-uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(16)));
 uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
-			aligned));
+			aligned(16)));
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
