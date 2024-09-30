@@ -80,9 +80,9 @@ extern ad9528Device_t clockAD9528_;
 extern mykonosDevice_t mykDevice;
 
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(1024)));
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
-			aligned));
+			aligned(1024)));
 #endif
 /***************************************************************************//**
  * @brief main

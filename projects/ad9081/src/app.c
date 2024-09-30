@@ -69,8 +69,8 @@
 
 #ifdef IIO_SUPPORT
 
-static int16_t dac_buffer[MAX_DAC_BUF_SAMPLES] __attribute__ ((aligned));
-static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned));
+static int16_t dac_buffer[MAX_DAC_BUF_SAMPLES] __attribute__ ((aligned(1024)));
+static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned(1024)));
 
 #endif
 

@@ -65,7 +65,7 @@
 #include "xilinx_uart.h"
 #endif
 
-static int16_t adc_buff[ADC_MAX_SAMPLES] __attribute__((aligned));
+static int16_t adc_buff[ADC_MAX_SAMPLES] __attribute__((aligned(1024)));
 
 int main(void)
 {
