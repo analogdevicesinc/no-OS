@@ -375,6 +375,12 @@ int iio_example_main(void)
 		},
 	};
 
+	status = adi_adrv9025_HwOpen(phy->madDevice, &phy->spiSettings);
+	if (status) {
+		pr_err("error: adi_adrv9025_HwOpen() failed\n");
+		goto error_8;
+	}
+
 	jesd204_topology_init(&topology, devs,
 			      sizeof(devs)/sizeof(*devs));
 
@@ -516,7 +522,6 @@ error_8:
 error_7:
 	axi_dac_remove(phy->tx_dac);
 error_6:
-	adi_adrv9025_HwClose(phy->madDevice);
 	adrv9025_remove(phy);
 error_5:
 	axi_jesd204_rx_remove(rx_jesd);
