@@ -87,6 +87,9 @@ int basic_example_main(void)
 	struct adrv9025_rf_phy *phy;
 	int status;
 
+	Xil_ICacheEnable();
+	Xil_DCacheEnable();
+
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
@@ -386,6 +389,11 @@ error_1:
 		goto error;
 
 	printf("Bye \n");
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return 0;
 
