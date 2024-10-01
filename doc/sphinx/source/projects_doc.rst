@@ -86,3 +86,4 @@ TEMPERATURE
    :maxdepth: 1
 
    projects/max31827-evkit
+   projects/ltc2983

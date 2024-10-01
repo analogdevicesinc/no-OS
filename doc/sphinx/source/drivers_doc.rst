@@ -74,6 +74,7 @@ TEMPERATURE
    :maxdepth: 1
 
    drivers/max31827
+   drivers/ltc2983
 
 POWER MANAGEMENT
 ================
