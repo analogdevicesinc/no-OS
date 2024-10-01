@@ -453,11 +453,19 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 			dmac->init_addr = dmac->next_dest_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
+			if (dmac->transfer.dest_addr % (dmac->width_dst / 8)) {
+				printf("Destination address should be aligned with destination data path width.\n\n");
+				return -1;
+			}
 			break;
 		case DMA_MEM_TO_DEV:
 			dmac->init_addr = dmac->next_src_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			if (dmac->transfer.src_addr % (dmac->width_src / 8)) {
+				printf("Source address should be aligned with source data path width.\n");
+				return -1;
+			}
 			break;
 		case DMA_MEM_TO_MEM:
 			dmac->init_addr = dmac->next_src_addr;
@@ -465,6 +473,11 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			if ((dmac->transfer.dest_addr % (dmac->width_dst / 8))
+			    || (dmac->transfer.src_addr % (dmac->width_src / 8))) {
+				printf("Source and destination addresses should be aligned with data path widths.\n");
+				return -1;
+			}
 			break;
 		default:
 			return -1; /* Other directions are not supported yet. */

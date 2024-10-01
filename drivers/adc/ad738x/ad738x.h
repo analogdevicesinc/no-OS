@@ -45,9 +45,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "no_os_util.h"
-#if defined(USE_STANDARD_SPI)
+#include "clk_axi_clkgen.h"
 #include "no_os_spi.h"
-#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -110,6 +109,8 @@
 /* Read from register x */
 #define AD738X_REG_READ(x)              ((x & 0x7) << 4)
 
+#define AD738X_FLAG_STANDARD_SPI_DMA    NO_OS_BIT(0)
+#define AD738X_FLAG_OFFLOAD             NO_OS_BIT(1)
 /*****************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -155,10 +156,11 @@ enum ad738x_ref_sel {
 struct ad738x_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
-#if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
-#endif
+	struct axi_clkgen *clkgen;
+	struct no_os_pwm_desc *pwm_desc;
+
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
@@ -166,21 +168,25 @@ struct ad738x_dev {
 	enum ad738x_resolution 	resolution;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	uint32_t flags;
 };
 
 struct ad738x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		*spi_param;
-#if !defined(USE_STANDARD_SPI)
+	struct axi_clkgen_init *clkgen_init;
+	uint32_t axi_clkgen_rate;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
-#endif
+	struct no_os_pwm_init_param *pwm_init;
+
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
 	uint32_t		ref_voltage_mv;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	uint32_t flags;
 };
 
 /******************************************************************************/
@@ -201,7 +207,7 @@ int32_t ad738x_spi_reg_write(struct ad738x_dev *dev,
 			     uint16_t reg_data);
 /** Read conversion result from device. */
 int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
-				     uint16_t *adc_data);
+				     uint32_t *adc_data);
 /** SPI write to device using a mask. */
 int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
 			      uint8_t reg_addr,

@@ -1,6 +1,5 @@
-============================
-adrv902x no-OS Sample Poject
-============================
+adrv902x no-OS Example Project
+==============================
 
 Supported Devices
 =================
@@ -69,7 +68,7 @@ This is how the `adrv902x no-OS project <https://github.com/analogdevicesinc/no-
 | │   │   │   ├── ActiveUtilInit_profile.h
 | │   │   │   ├── ADRV9025_DPDCORE_FW.h
 | │   │   │   ├── ADRV9025_FW.h
-| │   │   │   └── stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h
+| │   │   │   └── ADRV9025_stream_image.h
 | │   │   └── hal
 | │   │       ├── no_os_platform.c
 | │   │       └── no_os_platform.h
@@ -138,7 +137,7 @@ When the implementation of a different use case than the one in the project fold
 
 	xxd -i ADRV9025_FW.bin > ADRV9025_FW.h
 
-* Copy the generated unsigned char array to the correspoding header file in the `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`_ (ADRV9025_FW.bin, ADRV9025_DPDCORE_FW.bin or stream_image_x.bin).
+* Copy the generated unsigned char array to the correspoding header file in the `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`_ (ADRV9025_FW.h, ADRV9025_DPDCORE_FW.h or ADRV9025_stream_image.h).
 
 3. Profile files also have to be transformed for being included in the project:
 

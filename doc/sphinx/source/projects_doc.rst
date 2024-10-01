@@ -12,7 +12,7 @@ ANALOG TO DIGITAL CONVERTERS
    projects/ad7091r8-sdz
    projects/ad7616-st
    projects/ad796x_fmcz
-   projects/ad400x-fmcz
+   projects/pulsar-adc
    projects/ad469x_fmcz
 
 FREQUENCY GENERATORS
@@ -70,6 +70,8 @@ POWER MANAGEMENT
 
    projects/adp1050
    projects/ltc4296
+   projects/lt7182s
+   projects/lt8722
 
 DAC
 ===
@@ -77,3 +79,10 @@ DAC
    :maxdepth: 1
 
    projects/max2201x
+
+TEMPERATURE
+==============
+.. toctree::
+   :maxdepth: 1
+
+   projects/max31827-evkit

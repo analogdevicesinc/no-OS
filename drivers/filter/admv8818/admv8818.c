@@ -75,13 +75,14 @@ static const unsigned long long freq_range_lpf[4][2] = {
  * @param data - Data value to write.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int admv8818_spi_write(struct admv8818_dev *dev, uint8_t reg_addr,
+int admv8818_spi_write(struct admv8818_dev *dev, uint16_t reg_addr,
 		       uint8_t data)
 {
 	uint8_t buff[ADMV8818_BUFF_SIZE_BYTES];
 
-	buff[0] = reg_addr;
-	buff[1] = data;
+	buff[0] = no_os_field_get(NO_OS_GENMASK(15, 8), reg_addr);
+	buff[1] = no_os_field_get(NO_OS_GENMASK(7, 0), reg_addr);
+	buff[2] = data;
 
 	return no_os_spi_write_and_read(dev->spi_desc, buff,
 					ADMV8818_BUFF_SIZE_BYTES);
@@ -94,14 +95,16 @@ int admv8818_spi_write(struct admv8818_dev *dev, uint8_t reg_addr,
  * @param data - Data read from the device.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int admv8818_spi_read(struct admv8818_dev *dev, uint8_t reg_addr,
+int admv8818_spi_read(struct admv8818_dev *dev, uint16_t reg_addr,
 		      uint8_t *data)
 {
 	uint8_t buff[ADMV8818_BUFF_SIZE_BYTES];
 	int ret;
 
-	buff[0] = ADMV8818_SPI_READ_CMD | reg_addr;
-	buff[1] = 0;
+	buff[0] = ADMV8818_SPI_READ_CMD | no_os_field_get(NO_OS_GENMASK(15, 8),
+			reg_addr);
+	buff[1] = no_os_field_get(NO_OS_GENMASK(7, 0), reg_addr);
+	buff[2] = 0;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADMV8818_BUFF_SIZE_BYTES);
 	if(ret)
@@ -120,7 +123,7 @@ int admv8818_spi_read(struct admv8818_dev *dev, uint8_t reg_addr,
  * @param data - Data written to the device (requires prior bit shifting).
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int admv8818_spi_update_bits(struct admv8818_dev *dev, uint8_t reg_addr,
+int admv8818_spi_update_bits(struct admv8818_dev *dev, uint16_t reg_addr,
 			     uint8_t mask, uint8_t data)
 {
 	uint8_t read_val;

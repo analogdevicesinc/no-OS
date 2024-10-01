@@ -74,13 +74,19 @@
 #include "iio_app.h"
 
 
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(1024)));
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
-			aligned));
+			aligned(1024)));
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+
+/***************************************************************************//**
+ * @brief Set AGC parameters in initialization structure.
+*******************************************************************************/
+int adrv9025_set_agc_params(adi_adrv9025_AgcCfg_t *agcConfig_init_param);
+
 /***************************************************************************//**
  * @brief IIO example main execution.
  *
@@ -90,6 +96,7 @@ int iio_example_main(void)
 {
 	struct adrv9025_init_param adrv9025_init_par = { 0 };
 	struct adi_adrv9025_Device adrv9025_device = { 0 };
+	adi_adrv9025_AgcCfg_t agcConfig_init_param = { 0 };
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
 	struct ad9528_init_param ad9528_param;
@@ -295,6 +302,10 @@ int iio_example_main(void)
 	adrv9025_init_par.dev_clk = ad9528_device->clk_desc[1];
 	adrv9025_init_par.streamImageFile = ADRV9025_STREAM_IMAGE_FILE;
 
+	adrv9025_set_agc_params(&agcConfig_init_param);
+
+	adrv9025_init_par.agcConfig_init_param = &agcConfig_init_param;
+
 	status = adrv9025_init(&phy, &adrv9025_init_par);
 	if (status) {
 		pr_err("error: adrv9025_init() failed\n");
@@ -364,6 +375,12 @@ int iio_example_main(void)
 		},
 	};
 
+	status = adi_adrv9025_HwOpen(phy->madDevice, &phy->spiSettings);
+	if (status) {
+		pr_err("error: adi_adrv9025_HwOpen() failed\n");
+		goto error_8;
+	}
+
 	jesd204_topology_init(&topology, devs,
 			      sizeof(devs)/sizeof(*devs));
 
@@ -371,6 +388,15 @@ int iio_example_main(void)
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+
+	adi_adrv9025_RxAgcMode_t gainMode;
+	gainMode.rxChannelMask = ADI_ADRV9025_RX1;
+	gainMode.agcMode = ADI_ADRV9025_MGC;
+	status = adi_adrv9025_RxGainCtrlModeSet(phy->madDevice, &gainMode, 1);
+	if (status) {
+		printf("adi_adrv9025_RxGainCtrlModeSet failed: %d\n", status);
+		goto error_9;
+	}
 
 	/**
 	 * UART init params
@@ -496,7 +522,6 @@ error_8:
 error_7:
 	axi_dac_remove(phy->tx_dac);
 error_6:
-	adi_adrv9025_HwClose(phy->madDevice);
 	adrv9025_remove(phy);
 error_5:
 	axi_jesd204_rx_remove(rx_jesd);
@@ -525,4 +550,75 @@ error_1:
 error:
 	printf("Error %d.\n", status);
 	return status;
+}
+
+/***************************************************************************//**
+ * @brief AGC settings.
+ *
+ * @return ret - 0 on success, negative value othervise.
+*******************************************************************************/
+int adrv9025_set_agc_params(adi_adrv9025_AgcCfg_t *agcConfig_init_param)
+{
+	/* Settings for PEAK DETECT MODE WITH FAST ATTACK */
+	/* General AGC Configuration */
+	agcConfig_init_param->rxChannelMask = 0x0F;
+	agcConfig_init_param->agcPeakWaitTime = 4;
+	agcConfig_init_param->agcRxMaxGainIndex = 255;
+	agcConfig_init_param->agcRxMinGainIndex = 195;
+	agcConfig_init_param->agcGainUpdateCounter = 921600;
+	agcConfig_init_param->agcRxAttackDelay = 10;
+	agcConfig_init_param->agcSlowLoopSettlingDelay = 16;
+	agcConfig_init_param->agcLowThreshPreventGainInc = 1;
+	agcConfig_init_param->agcChangeGainIfThreshHigh = 1;
+	agcConfig_init_param->agcPeakThreshGainControlMode = 1;
+	agcConfig_init_param->agcResetOnRxon = 0;
+	agcConfig_init_param->agcEnableSyncPulseForGainCounter = 0;
+	agcConfig_init_param->agcEnableFastRecoveryLoop = 0;
+
+	/* adi_adrv9025_AgcPeak_t agcPeak */
+	agcConfig_init_param->agcPeak.agcUnderRangeLowInterval = 836;
+	agcConfig_init_param->agcPeak.agcUnderRangeMidInterval = 2;
+	agcConfig_init_param->agcPeak.agcUnderRangeHighInterval = 4;
+	agcConfig_init_param->agcPeak.apdHighThresh = 38;
+	agcConfig_init_param->agcPeak.apdLowThresh = 25;
+	agcConfig_init_param->agcPeak.apdUpperThreshPeakExceededCnt = 10;
+	agcConfig_init_param->agcPeak.apdLowerThreshPeakExceededCnt = 3;
+	agcConfig_init_param->agcPeak.enableHb2Overload = 1;
+	agcConfig_init_param->agcPeak.hb2OverloadDurationCnt = 2;
+	agcConfig_init_param->agcPeak.hb2OverloadThreshCnt = 1;
+	agcConfig_init_param->agcPeak.hb2HighThresh = 11598;
+	agcConfig_init_param->agcPeak.hb2UnderRangeLowThresh = 8211;
+	agcConfig_init_param->agcPeak.hb2UnderRangeMidThresh = 5813;
+	agcConfig_init_param->agcPeak.hb2UnderRangeHighThresh = 2913;
+	agcConfig_init_param->agcPeak.hb2UpperThreshPeakExceededCnt = 10;
+	agcConfig_init_param->agcPeak.hb2UnderRangeHighThreshExceededCnt = 3;
+	agcConfig_init_param->agcPeak.hb2UnderRangeMidThreshExceededCnt = 3;
+	agcConfig_init_param->agcPeak.hb2UnderRangeLowThreshExceededCnt = 3;
+	agcConfig_init_param->agcPeak.hb2OverloadPowerMode = 0;
+	agcConfig_init_param->agcPeak.hb2ThreshConfig = 3;
+
+	agcConfig_init_param->agcPeak.apdGainStepAttack = 4;
+	agcConfig_init_param->agcPeak.apdGainStepRecovery = 2;
+	agcConfig_init_param->agcPeak.hb2GainStepAttack = 4;
+	agcConfig_init_param->agcPeak.hb2GainStepHighRecovery = 2;
+	agcConfig_init_param->agcPeak.hb2GainStepMidRecovery = 4;
+	agcConfig_init_param->agcPeak.hb2GainStepLowRecovery = 8;
+
+	/* adi_adrv9025_AgcPower_t agcPower */
+	agcConfig_init_param->agcPower.powerEnableMeasurement = 0;
+	agcConfig_init_param->agcPower.powerInputSelect = 0;
+	agcConfig_init_param->agcPower.underRangeHighPowerThresh = 9;
+	agcConfig_init_param->agcPower.underRangeLowPowerThresh = 2;
+	agcConfig_init_param->agcPower.underRangeHighPowerGainStepRecovery = 0;
+	agcConfig_init_param->agcPower.underRangeLowPowerGainStepRecovery = 0;
+	agcConfig_init_param->agcPower.powerMeasurementDuration = 5;
+	agcConfig_init_param->agcPower.rxTddPowerMeasDuration = 5;
+	agcConfig_init_param->agcPower.rxTddPowerMeasDelay = 1;
+	agcConfig_init_param->agcPower.overRangeHighPowerThresh = 2;
+	agcConfig_init_param->agcPower.overRangeLowPowerThresh = 0;
+	agcConfig_init_param->agcPower.powerLogShift = 1;
+	agcConfig_init_param->agcPower.overRangeHighPowerGainStepAttack = 0;
+	agcConfig_init_param->agcPower.overRangeLowPowerGainStepAttack = 0;
+
+	return 0;
 }

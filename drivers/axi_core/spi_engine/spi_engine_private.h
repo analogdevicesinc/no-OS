@@ -94,6 +94,7 @@
 #define SPI_ENGINE_CONFIG_CPHA			NO_OS_BIT(0)
 #define SPI_ENGINE_CONFIG_CPOL			NO_OS_BIT(1)
 #define SPI_ENGINE_CONFIG_3WIRE			NO_OS_BIT(2)
+#define SPI_ENGINE_CONFIG_SDO_IDLE		NO_OS_BIT(3)
 #define SPI_ENGINE_VERSION_MAJOR(x) 		((x >> 16) & 0xff)
 #define SPI_ENGINE_VERSION_MINOR(x) 		((x >> 8) & 0xff)
 #define SPI_ENGINE_VERSION_PATCH(x) 		(x & 0xff)

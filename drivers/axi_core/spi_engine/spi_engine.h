@@ -97,6 +97,8 @@ struct spi_engine_init_param {
 	uint32_t		cs_delay;
 	/** Data with of one SPI transfer ( in bits ) */
 	uint8_t			data_width;
+	/**  output of SDO when CS is inactive or read-only transfers */
+	uint8_t			sdo_idle_state;
 };
 
 
@@ -135,6 +137,8 @@ struct spi_engine_desc {
 	uint8_t			data_width;
 	/** The maximum data width supported by the engine */
 	uint8_t 		max_data_width;
+	/**  output of SDO when CS is inactive or read-only transfers */
+	uint8_t			sdo_idle_state;
 };
 
 

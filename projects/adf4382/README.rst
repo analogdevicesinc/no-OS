@@ -1,5 +1,5 @@
-Evaluating the ADF4382
-======================
+ADF4382 no-OS Example Project
+=============================
 
 Contents
 --------

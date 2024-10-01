@@ -1,5 +1,5 @@
-Evaluating AD7616 on SDP-K1
-===========================
+AD7616 no-OS Example Project on SDP-K1
+======================================
 
 .. contents::
     :depth: 3

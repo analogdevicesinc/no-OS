@@ -51,6 +51,7 @@ PLATFORM_INCS += $(sort $(foreach h,$(EXTRA_INCS), -I$(dir $h)))
 
 # Get the path of the .s script
 STARTUP_FILE += $(call rwildcard, $(PROJECT_BUILD)/Startup,*.s)
+EXTRA_FILES += $(STARTUP_FILE)
 
 # Get the path of the interrupts file
 ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)

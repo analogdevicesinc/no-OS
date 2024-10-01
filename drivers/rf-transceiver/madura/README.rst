@@ -280,9 +280,9 @@ ADRV9025 IIO Driver Initialization Example
 	#define DAC_BUFFER_SAMPLES 8192
 	#define ADC_BUFFER_SAMPLES              16384
 	#define ADC_CHANNELS                    4
-	uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+	uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(1024)));
 	uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
-			aligned));
+			aligned(1024)));
 
 	/**
 	 * IIO application descriptor

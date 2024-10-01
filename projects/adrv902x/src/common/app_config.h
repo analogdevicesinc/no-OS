@@ -44,7 +44,11 @@
 
 //#define DMA_EXAMPLE
 
+#ifdef PLATFORM_MB
+#define UART_BAUDRATE                                   115200
+#else
 #define UART_BAUDRATE                                   921600
+#endif
 
 #define ADRV9025_DEVICE_CLK_KHZ                         245760
 #define ADRV9025_LANE_RATE_KHZ				9830400
@@ -62,6 +66,6 @@
 #define ADRV9025_RX_JESD_FRAMES_PER_MULTIFRAME		32
 #define ADRV9025_RX_JESD_SUBCLASS		        1
 
-#define ADRV9025_STREAM_IMAGE_FILE			"stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.bin"
+#define ADRV9025_STREAM_IMAGE_FILE			"ADRV9025_stream_image.bin"
 
 #endif /* APP_CONFIG_H_ */

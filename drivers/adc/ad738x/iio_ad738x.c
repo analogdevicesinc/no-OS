@@ -117,36 +117,24 @@ static int32_t iio_ad738x_submit_buffer(struct iio_device_data *iio_dev_data)
 {
 	struct ad738x_iio_dev *iio_dev = iio_dev_data->dev;
 	struct ad738x_dev *dev = iio_dev->ad738x_dev;
-	uint16_t results[2];
-	uint32_t i;
+	struct iio_buffer *buffer = iio_dev_data->buffer;
+	void *buff;
 	int32_t ret;
 
-	for (i = 0; i < iio_dev_data->buffer->samples; i++) {
-		ret = ad738x_spi_single_conversion(dev, results);
-		if (ret)
-			return ret;
+	ret = iio_buffer_get_block(iio_dev_data->buffer, &buff);
+	if (ret)
+		return ret;
 
-		/* iio_buffer_push_scan will consume the number of bytes
-		 * accoridg to the number of enabled channels.
-		 * if the second channel is the only enabled channel
-		 * we push only the second result.
-		 */
-		if ((iio_dev_data->buffer->active_mask & NO_OS_BIT(1)) &&
-		    (!(iio_dev_data->buffer->active_mask & NO_OS_BIT(0)))) {
-			iio_buffer_push_scan(iio_dev_data->buffer, &results[1]);
-			continue;
-		}
+	ret = ad738x_read_data(dev, buff, buffer->samples);
+	if (ret)
+		return ret;
 
-		iio_buffer_push_scan(iio_dev_data->buffer, &results[0]);
-
-	}
-
-	return 0;
+	return iio_buffer_block_done(buffer);
 }
 
 static struct scan_type ad738x_iio_scan_type = {
-	.sign = 'u',
-	.realbits = AD738X_CHN_STORAGE_BITS,
+	.sign = 's',
+	.realbits = AD738X_ADC_RESOLUTION,
 	.storagebits = AD738X_CHN_STORAGE_BITS,
 };
 

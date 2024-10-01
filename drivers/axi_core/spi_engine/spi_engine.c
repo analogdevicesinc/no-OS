@@ -519,6 +519,7 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
 {
 	struct spi_engine_desc	*desc_extra;
+	uint8_t cfg_reg;
 
 	desc_extra = desc->extra;
 
@@ -535,14 +536,19 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 					    desc_extra->data_width));
 	/*
 	 * Configure the spi mode :
+	 * 	- sdo_idle_state
 	 *	- 3 wire
 	 *	- CPOL
 	 *	- CPHA
 	 */
+	cfg_reg = desc->mode;
+	if (desc_extra->sdo_idle_state != 0)
+		cfg_reg |= SPI_ENGINE_CONFIG_SDO_IDLE;
+
 	spi_engine_queue_append_cmd(&msg->cmds,
 				    SPI_ENGINE_CMD_CONFIG(
 					    SPI_ENGINE_CMD_REG_CONFIG,
-					    desc->mode));
+					    cfg_reg));
 
 	/* Add a sync command to signal that the transfer has finished */
 	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(_sync_id));
@@ -813,6 +819,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	struct spi_engine_msg	transfer;
 	struct spi_engine_desc	*eng_desc;
 	uint32_t 		i;
+	int32_t			ret;
 
 	eng_desc = desc->extra;
 
@@ -843,6 +850,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	}
 
+	ret = 0;
 	spi_engine_transfer_message(desc, &transfer);
 
 	/* Start transfer */
@@ -860,7 +868,9 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			// Address of data destination
 			.dest_addr = 0
 		};
-		axi_dmac_transfer_start(eng_desc->offload_tx_dma, &tx_transfer);
+		ret = axi_dmac_transfer_start(eng_desc->offload_tx_dma, &tx_transfer);
+		if (ret)
+			goto error;
 	}
 
 	if(eng_desc->offload_config & OFFLOAD_RX_EN) {
@@ -876,15 +886,20 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			// Address of data destination
 			.dest_addr = (uintptr_t)msg.rx_addr
 		};
-		axi_dmac_transfer_start(eng_desc->offload_rx_dma, &rx_transfer);
-		axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
+		ret = axi_dmac_transfer_start(eng_desc->offload_rx_dma, &rx_transfer);
+		if (ret)
+			goto error;
+		ret = axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
+		if (ret)
+			goto error;
 	}
 
 	usleep(1000);
 
+error:
 	spi_engine_queue_no_os_free(&transfer.cmds);
 
-	return 0;
+	return ret;
 }
 
 /**

@@ -1,12 +1,24 @@
 {
-      "xilinx": {
-        "single_conversion": {
-              "flags" : "",
-              "hardware" : ["ad738x_fmc_zed"]
-        },
-        "spi_engine_offload": {
-              "flags" :  "NEW_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE",
-              "hardware" : ["ad738x_fmc_zed"]
-        }
-      }
+  "xilinx": {
+    "basic": {
+      "flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n",
+      "hardware": [
+        "ad738x_fmc_zed"
+      ]
+    },
+    "iio": {
+      "flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y",
+      "hardware": [
+        "ad738x_fmc_zed"
+      ]
+    }
+  },
+  "stm32": {
+    "basic": {
+      "flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+    },
+    "iio": {
+      "flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y"
+    }
+  }
 }

@@ -1,37 +1,65 @@
-################################################################################
-#									       #
-#     Shared variables:							       #
-#	- PROJECT							       #
-#	- DRIVERS							       #
-#	- INCLUDE							       #
-#	- PLATFORM_DRIVERS						       #
-#	- NO-OS								       #
-#									       #
-################################################################################
+include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
+include $(PROJECT)/src/examples/examples_src.mk
 
-SRCS += $(PROJECT)/src/ad738x_fmc.c
-SRCS += $(DRIVERS)/adc/ad738x/ad738x.c \
-	$(DRIVERS)/api/no_os_spi.c \
-	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
-	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
-	$(NO-OS)/util/no_os_util.c \
+SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c \
+	$(PROJECT)/src/common/common_data.c \
+	$(PROJECT)/src/platform/$(PLATFORM)/parameters.c
+
+INCS += $(PROJECT)/src/common/common_data.h \
+	$(PROJECT)/src/platform/platform_includes.h \
+	$(PROJECT)/src/platform/$(PLATFORM)/parameters.h
+
+SRCS += $(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_dma.c \
+	$(DRIVERS)/api/no_os_gpio.c \
+	$(DRIVERS)/api/no_os_uart.c \
+	$(DRIVERS)/api/no_os_timer.c \
+	$(DRIVERS)/api/no_os_pwm.c \
+	$(DRIVERS)/api/no_os_irq.c
+
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
+
+SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
-	$(NO-OS)/util/no_os_mutex.c
-SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
-	$(PLATFORM_DRIVERS)/xilinx_spi.c \
-	$(PLATFORM_DRIVERS)/xilinx_delay.c
-INCS += $(PROJECT)/src/app_config.h \
-	$(PROJECT)/src/parameters.h \
-	$(DRIVERS)/adc/ad738x/ad738x.h \
-	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
-	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
-	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
-INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h					
+	$(NO-OS)/util/no_os_mutex.c \
+	$(NO-OS)/util/no_os_circular_buffer.c \
+	$(NO-OS)/util/no_os_list.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
+	$(NO-OS)/util/no_os_fifo.c
+
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_dma.h \
+	$(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_delay.h \
-	$(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_alloc.h \
-	$(INCLUDE)/no_os_mutex.h 
+	$(INCLUDE)/no_os_mutex.h \
+	$(INCLUDE)/no_os_pwm.h \
+	$(INCLUDE)/no_os_timer.h \
+	$(INCLUDE)/no_os_circular_buffer.h \
+	$(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/no_os_list.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
+	$(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_fifo.h
+
+SRCS +=	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
+	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm.c \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c
+
+INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
+	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
+	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \
+	$(DRIVERS)/platform/xilinx/xilinx_spi.h
