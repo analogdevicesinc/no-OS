@@ -65,7 +65,14 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+	printf("\n");
 
+	printf("\e[H\e[2J\e[93mStarting MQTT Example Program:\e[0m\r\n\r\n");
+	ret = swiot1l_mqtt();
+	printf("\r\n\r\n\e[93mExit with code\e[0m -> %d\r\n", ret);
+
+
+	return ret;
 #ifdef SWIOT1L_MQTT_EXAMPLE
 	return swiot1l_mqtt();
 #elif SWIOT1L_DEFAULT_FW

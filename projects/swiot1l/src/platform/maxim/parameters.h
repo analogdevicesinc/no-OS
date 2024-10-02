@@ -62,6 +62,8 @@
 #define SPI_CS          0
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adin1110_spi_extra_ip
+#define SPI1_EXTRA       &adxl355_spi_extra_ip
+
 
 #define I2C_EXTRA	&vddioh_i2c_extra
 #define GPIO_EXTRA	&vddioh_gpio_extra
@@ -70,6 +72,7 @@ extern struct max_uart_init_param adin1110_uart_extra_ip;
 extern struct max_spi_init_param adin1110_spi_extra_ip;
 extern struct max_i2c_init_param vddioh_i2c_extra;
 extern struct max_gpio_init_param vddioh_gpio_extra;
+extern struct max_spi_init_param adxl355_spi_extra_ip; 
 
 #define AD74413R_GPIO_TRIG_IRQ_ID     22
 #define AD74413R_GPIO_CB_HANDLE       NULL

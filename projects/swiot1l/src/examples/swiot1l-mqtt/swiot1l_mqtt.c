@@ -41,6 +41,8 @@
 #include <stdio.h>
 #include <string.h>
 
+
+#include "C:/Users/JCarson/SecurityProject/no_OS_2/no-OS/drivers/temperature/adt75/iio_adt75.h"
 #include "swiot1l_mqtt.h"
 #include "common_data.h"
 #include "no_os_util.h"
@@ -50,6 +52,7 @@
 #include "mqtt_client.h"
 #include "mqtt_noos_support.h"
 #include "no_os_timer.h"
+#include "tcp_socket.h" 
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 
@@ -67,6 +70,7 @@ int swiot1l_mqtt()
 	struct ad74413r_decimal val;
 	char val_buff[32];
 	uint32_t msg_len;
+	int32_t adt75_val;
 	int ret;
 
 	struct ad74413r_desc *ad74413r;
@@ -74,6 +78,9 @@ int swiot1l_mqtt()
 		.platform_ops = &adin1110_lwip_ops,
 		.mac_param = &adin1110_ip,
 	};
+
+	struct adt75_desc *adt75;
+
 	struct lwip_network_desc *lwip_desc;
 	struct tcp_socket_desc *tcp_socket;
 	struct no_os_timer_init_param adc_demo_tip = {
@@ -84,6 +91,14 @@ int swiot1l_mqtt()
 		.extra = NULL,
 	};
 	uint32_t connect_timeout = 5000;
+
+    ret = adt75_init(&adt75, &adt75_ip);
+    if (ret) {
+        printf("Failed to initialise ADT75 - %d\r\n", ret);
+        return ret;
+    }
+
+    printf("ADT75 Sensor Initialised - %d\r\n", ret);
 
 	struct no_os_gpio_desc *ad74413r_ldac_gpio;
 	struct no_os_gpio_desc *ad74413r_reset_gpio;
@@ -163,12 +178,26 @@ int swiot1l_mqtt()
 		pr_err("LWIP init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
 	}
-
+//JEAN WEDNESDAY START HERE
 	struct tcp_socket_init_param tcp_ip = {
 		.net = &lwip_desc->no_os_net,
-		.max_buff_size = 0
+		.max_buff_size = 0,
+
+	};
+	struct secure_init_param secure_params = {
+	// 	.trng_init_param = NULL, // Set this to NULL or provide a valid trng_init_param
+	// 	.hostname = (uint8_t *)"mqtt.example.com",  // Example server hostname
+	// 	.cert_verify_mode = MBEDTLS_SSL_VERIFY_REQUIRED,  // Verify server certificate
+		.ca_cert = NULL,  // Point to CA certificate data (if required)
+	// 	.ca_cert_len = 0,  // Length of CA certificate (if applicable)
+	// 	.cli_cert = NULL,  // Client cert for mutual TLS (if required)
+	// 	.cli_cert_len = 0,  // Length of client cert
+	// 	.cli_pk = NULL,  // Client private key (if required)
+	// 	.cli_pk_len = 0   // Length of private key
 	};
 
+
+	tcp_ip.secure_init_param = &secure_params
 	ret = socket_init(&tcp_socket, &tcp_ip);
 	if (ret) {
 		pr_err("Socket init error: %d (%s)\n", ret, strerror(-ret));
@@ -220,8 +249,10 @@ int swiot1l_mqtt()
 	}
 
 	ret = mqtt_connect(mqtt, &conn_config, NULL);
+	printf("THIS LINE IS reallllyy RUNNING\n");
 	if (ret) {
 		socket_disconnect(tcp_socket);
+		printf ("IM HERE \n");
 		pr_err("Couldn't connect to the MQTT broker: %d (%s)\n", ret, strerror(-ret));
 		goto free_mqtt;
 	}
@@ -296,6 +327,20 @@ int swiot1l_mqtt()
 			goto free_mqtt;
 		}
 
+		ret = adt75_get_single_temp(adt75, &adt75_val);
+		memset(val_buff, 0, sizeof(val_buff));
+
+		if (!ret) {
+			msg_len = snprintf(val_buff, sizeof(val_buff), "%.03f", ((double)adt75_val / 1000));
+			printf("Temperature reading: \e[96m%.03f\e[0m degrees C\r\n\r\n", ((double) adt75_val / 1000));
+		} else {
+			msg_len = snprintf(val_buff, sizeof(val_buff), "Null");
+			printf("No Valid Data - %d\r\n", ret);
+		}
+
+		test_msg.len = msg_len;
+		ret = mqtt_publish(mqtt, "adt75/temperature", &test_msg);
+
 		no_os_mdelay(1000);
 	}
 
@@ -330,3 +375,29 @@ free_gpio:
 
 	return ret;
 }
+
+
+// //
+// // MQTT endpoints
+// //
+// static const char* mqtt_url_prefix = "ssl://";
+// static const char* mqtt_url_suffix =":8883";
+// //
+// // Functions
+// //
+// void create_mqtt_endpoint(
+// 	const char* broker_address,
+// 	char* out_endpoint,
+// 	size_t endpoint_size)
+// {
+// 	int32_t required_size = strlen(mqtt_url_prefix) + strlen(broker_address) + strlen(mqtt_url_suffix) + 1;// +1 for null terminator
+
+// 	if ((size_t)required_size > endpoint_size) {
+// 			printf("\e[H\e[2J\e[93mFailed to create MQTT endpoint: Buffer is too small.\e[0m");
+// 			exit(1);
+// 	}
+
+// 	snprintf(out_endpoint, endpoint_size, "%s%s", mqtt_url_prefix, broker_address, mqtt_url_suffix);
+
+// 	printf("\e[H\e[2J\e[93mMQTT endpoint created at \"%s\".\e[0m", out_endpoint);
+// }
