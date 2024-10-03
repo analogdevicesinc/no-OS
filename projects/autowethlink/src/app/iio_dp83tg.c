@@ -57,7 +57,7 @@ static int dp83tg_iio_read_attr(void *device, char *buf,
 		break;
 	case DP83TG_IIO_ATTR_MASTER:
 		dp83tg_read(d, DP83TG_PMA_PMD_CONTROL, &reg);
-		val = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
+		val = (bool)(reg & DP83TG_CFG_MASTER_SLAVE_MASK);
 		break;
 	default:
 		return -EINVAL;
