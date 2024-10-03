@@ -70,10 +70,10 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 
 	/* Note: Channel number is assigned via the Instance for MCU
 	 * families other than STM32F2, STM32F4 and STM32F7 */
-#if defined (STM32H5)
-	sdma_ch->hdma->Instance = sdma_ch->ch_num;
-#else
+#if defined (STM32F2) || defined (STM32F4) || defined (STM32F7)
 	sdma_ch->hdma->Init.Channel = sdma_ch->ch_num;
+#else
+	sdma_ch->hdma->Instance = sdma_ch->ch_num;
 #endif
 #if defined (STM32H5)
 	sdma_ch->hdma->Init.DestInc = sdma_ch->mem_increment ? DMA_DINC_INCREMENTED :
