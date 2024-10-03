@@ -68,6 +68,13 @@ LED
 
    drivers/max25603
 
+METER
+=====
+.. toctree::
+   :maxdepth: 1
+
+   drivers/ade7816
+
 RF TRANSCEIVER
 ==============
 .. toctree::
