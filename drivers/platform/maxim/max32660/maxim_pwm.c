@@ -189,6 +189,8 @@ int max_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 
 	pwm_extra = desc->extra;
 
+	duty_cycle_ns = desc->period_ns - duty_cycle_ns;
+
 	duty_ticks = MXC_TMR_GetPeriod(MXC_TMR_GET_TMR(desc->id),
 				       MAX_PWM_PRESCALER_TRUE(pwm_extra->tmr_cfg.pres),
 				       NO_OS_DIV_ROUND_CLOSEST_ULL(NANO, duty_cycle_ns));
@@ -204,6 +206,8 @@ int max_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	/*  Set actual duty cycle value. */
 	desc->duty_cycle_ns = duty_ticks * MAX_PWM_PRESCALER_TRUE(
 				      pwm_extra->tmr_cfg.pres) * NO_OS_DIV_ROUND_CLOSEST_ULL(NANO,PeripheralClock);
+
+	desc->duty_cycle_ns = desc->period_ns - desc->duty_cycle_ns;
 
 	return 0;
 }
