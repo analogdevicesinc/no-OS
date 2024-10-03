@@ -462,7 +462,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			for (int i = 0; i < PQLIB_MAX_HARMONICS - 1; i++) {
 				sprintf(buffTmp, "%f",
 					convert_pct_type(pqlibExample.output->params1012Cycles
-							 .voltageParams[channel->ch_num]
+							 .currentParams[channel->ch_num]
 							 .harmonics[i]));
 				strcat(buf, buffTmp);
 				if (i != PQLIB_MAX_HARMONICS - 1)
@@ -480,7 +480,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			for (int i = 0; i < PQLIB_MAX_INTER_HARMONICS - 1; i++) {
 				sprintf(buffTmp, "%f",
 					convert_pct_type(pqlibExample.output->params1012Cycles
-							 .voltageParams[channel->ch_num]
+							 .currentParams[channel->ch_num]
 							 .interHarmonics[i]));
 				strcat(buf, buffTmp);
 				if (i != PQLIB_MAX_INTER_HARMONICS - 1)
