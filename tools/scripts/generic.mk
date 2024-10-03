@@ -143,6 +143,10 @@ ifeq 'mbed' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/mbed.mk
 endif
 
+ifeq 'ftd2xx' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/ftd2xx.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
