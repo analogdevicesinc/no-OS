@@ -162,7 +162,7 @@ int config_afe_irq(void)
 	uint32_t config = 0;
 	status = afe_write_32bit_reg(REG_MASK0, (uint32_t *)&config);
 	if (status == 0) {
-		config = BITM_MASK0_RMSONERDY;
+		config = BITM_MASK0_RMSONERDY | BITM_MASK0_COH_PAGE_RDY;
 		status = afe_write_32bit_reg(REG_MASK0, (uint32_t *)&config);
 		if (status != 0) {
 			status = SYS_STATUS_AFE_MASK0_FAILED;
