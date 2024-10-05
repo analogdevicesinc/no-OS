@@ -644,31 +644,27 @@ static void adcdata_sign_correction(struct ad7606_dev* dev, uint32_t size, uint3
  *******************************************************************************/
 static int32_t stats_data_separate(struct ad7606_dev* dev, uint32_t size, uint32_t* pdata, uint8_t* pstats)
 {
-
 	uint8_t i = 0;
-	if(pstats==NULL)
-	{
+
+	if(pstats == NULL)	
 		return -ENOMEM;
-	}
 
     //correct upper 14 bits for adc data, store status information to pstats points buffer
-    for(i = 0;i < size;i ++)
+    for (i = 0; i < size; i++)
     {
-		* pstats = (uint8_t) 0xFF & (* pdata);
-		* pdata = * pdata >> 8;
+		*pstats = (uint8_t) 0xFF & (*pdata);
+		*pdata = *pdata >> 8;
         if((dev->range_ch[i].min) < 0)   //if negative value could exist
         {
-            if( * pdata >> 17)            //if sign bit is 1(negative)
+            if( *pdata >> 17)            //if sign bit is 1(negative)
             {
-                * pdata = * pdata | ((uint32_t)0xFFFC << 16); //set bit31 - bit18 to 1
+                *pdata = *pdata | ((uint32_t)0xFFFC << 16); //set bit31 - bit18 to 1
             }
         }
-        pdata += 1; 
-		pstats +=1 ; //go for next data
+        pdata++; 
+		pstats++; //go for next data
     }
-
 	return 0;
-
 }
 
 /* Internal function to copy the content of a buffer in 18-bit chunks to a 32-bit buffer by
@@ -776,7 +772,7 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
  * 					-ENOMEM  - No mem pointer for stutas
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data,uint8_t *stats)
+int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data, uint8_t *stats)
 {
 	uint32_t sz;
 	int32_t ret, i;
@@ -1007,7 +1003,7 @@ pwm_disable:
  * 					-ENOMEM - No buffer for status information
  *                  0 - No errors encountered.
 *******************************************************************************/
-static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data,uint8_t * stats)
+static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t *data, uint8_t *stats)
 {
 	int32_t ret;
 	uint8_t busy;
@@ -1059,8 +1055,8 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data,ui
  * 					-ENOMEM  - No mem pointer for stutas
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
-			    uint32_t samples,uint8_t * stats)
+int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t *data,
+			    uint32_t samples, uint8_t *stats)
 {
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t nchannels, i, sample_size;
