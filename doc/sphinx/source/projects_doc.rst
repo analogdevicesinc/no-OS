@@ -72,6 +72,7 @@ POWER MANAGEMENT
    projects/ltc4296
    projects/lt7182s
    projects/lt8722
+   projects/ltp8800
 
 DAC
 ===
