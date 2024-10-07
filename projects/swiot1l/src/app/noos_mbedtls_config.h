@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   mbedtls_config.h
+ *   @file   noos_mbedtls_config.h
  *   @brief  Config to build mbedtls library
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -38,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef MBEDTLS_CONFIG_H
-#define MBEDTLS_CONFIG_H
+#ifndef NOOS_MBEDTLS_CONFIG_H
+#define NOOS_MBEDTLS_CONFIG_H
 
 /******************************************************************************/
 /***************************** User configuration *****************************/

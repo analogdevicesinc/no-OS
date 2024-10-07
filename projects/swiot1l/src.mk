@@ -1,7 +1,6 @@
 LIBRARIES += lwip
 
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-
 INCS += $(NO-OS)/network/tcp_socket.h
 INCS += $(NO-OS)/network/noos_mbedtls_config.h
 INCS += $(NO-OS)/network/network_interface.h
@@ -37,7 +36,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_util.h \
 		$(INCLUDE)/no_os_units.h \
-		$(INCLUDE)/no_os_alloc.h
+		$(INCLUDE)/no_os_alloc.h \
+		$(INCLUDE)/no_os_trng.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_lf256fifo.c \
@@ -52,7 +52,9 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_crc8.c \
 		$(NO-OS)/util/no_os_util.c \
 		$(NO-OS)/util/no_os_mutex.c \
-		$(NO-OS)/util/no_os_alloc.c
+		$(NO-OS)/util/no_os_alloc.c \
+		$(DRIVERS)/api/no_os_trng.c \
+		# $(NO-OS)/libraries/mbedtls/library/ssl_tls.c
 
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
@@ -92,6 +94,7 @@ SRCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.c
 INCS += $(DRIVERS)/temperature/adt75/iio_adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/iio_adt75.c
 
+
 endif
 
 ifeq (y,$(strip $(SWIOT1L_MQTT_EXAMPLE)))
@@ -106,8 +109,18 @@ endif
 
 CFLAGS += -DSWIOT1L_MQTT_SERVER_IP=\"$(SWIOT1L_MQTT_SERVER_IP)\"
 CFLAGS += -DSWIOT1L_MQTT_SERVER_PORT=$(SWIOT1L_MQTT_SERVER_PORT)
+# CFLAGS += -I$(PROJECT)/libraries/mbedtls/include
+# INCS += $(PROJECT)/libraries/mbedtls/include
+MBED_TLS_CONFIG_FILE = $(PROJECT)/src/app/noos_mbedtls_config.h
+
+LIBRARIES += mbedtls
+#  $(NO-OS)/libraries/mbedtls/library
+# LDFLAGS += -L/libraries/mbedtls/library
+
+# LDLIBS += -lmbedtls -lmbedx509 -lmbedcrypto
 
 CFLAGS += -DSWIOT1L_MQTT_EXAMPLE
+
 LIBRARIES += mqtt
 SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
 INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h

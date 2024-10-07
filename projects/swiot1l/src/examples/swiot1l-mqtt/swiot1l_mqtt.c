@@ -184,21 +184,27 @@ int swiot1l_mqtt()
 		.max_buff_size = 0,
 
 	};
+
+	char hostname_buffer[100];  // Allocate a buffer large enough for your hostname
+	snprintf(hostname_buffer, sizeof(hostname_buffer), "mqtt.%s.com", SWIOT1L_MQTT_SERVER_IP);
 	struct secure_init_param secure_params = {
-	// 	.trng_init_param = NULL, // Set this to NULL or provide a valid trng_init_param
-	// 	.hostname = (uint8_t *)"mqtt.example.com",  // Example server hostname
-	// 	.cert_verify_mode = MBEDTLS_SSL_VERIFY_REQUIRED,  // Verify server certificate
-		.ca_cert = NULL,  // Point to CA certificate data (if required)
-	// 	.ca_cert_len = 0,  // Length of CA certificate (if applicable)
-	// 	.cli_cert = NULL,  // Client cert for mutual TLS (if required)
-	// 	.cli_cert_len = 0,  // Length of client cert
-	// 	.cli_pk = NULL,  // Client private key (if required)
-	// 	.cli_pk_len = 0   // Length of private key
+		.trng_init_param = NULL, // Set this to NULL or provide a valid trng_init_param
+		.hostname = "jean", //(uint8_t *)hostname_buffer,  // Example server hostname
+		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE,//MBEDTLS_SSL_VERIFY_REQUIRED,  // Verify server certificate
+		.ca_cert = "C:/Program Files/OpenSSL-Win64/bin/ca-cert.pem",  // Point to CA certificate data (if required)
+		// .ca_cert_len = 0,  // Length of CA certificate (if applicable)
+		.cli_cert = "C:/Program Files/OpenSSL-Win64/bin/client-cert.pem",  // Client cert for mutual TLS (if required)
+		// .cli_cert_len = 0,  // Length of client cert
+		.cli_pk = "C:/Program Files/OpenSSL-Win64/bin/client-key.pem",  // Client private key (if required)
+		// .cli_pk_len = 0   // Length of private key
 	};
 
 
-	tcp_ip.secure_init_param = &secure_params
+	tcp_ip.secure_init_param = &secure_params;
+	printf("Ta me anseo");
+
 	ret = socket_init(&tcp_socket, &tcp_ip);
+	printf("Ta me anseo tar eis an initialisation function");
 	if (ret) {
 		pr_err("Socket init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
