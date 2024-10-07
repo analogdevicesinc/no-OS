@@ -1,0 +1,3 @@
+[console_scripts]
+pack-manager = cmsis_pack_manager.pack_manager:main
+

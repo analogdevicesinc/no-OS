@@ -1,0 +1,3 @@
+[distutils.setup_keywords]
+milksnake_tasks = milksnake.setuptools_ext:milksnake_tasks
+milksnake_universal = milksnake.setuptools_ext:milksnake_universal

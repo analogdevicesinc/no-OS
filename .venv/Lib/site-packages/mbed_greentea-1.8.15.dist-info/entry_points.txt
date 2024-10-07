@@ -1,0 +1,3 @@
+[console_scripts]
+mbedgt = mbed_greentea.mbed_greentea_cli:main
+

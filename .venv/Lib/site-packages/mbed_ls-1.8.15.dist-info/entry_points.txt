@@ -1,0 +1,3 @@
+[console_scripts]
+mbedls = mbed_lstools:mbedls_main
+

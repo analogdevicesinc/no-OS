@@ -1,0 +1,67 @@
+Metadata-Version: 2.1
+Name: mbed-os-tools
+Version: 1.8.15
+Summary: The tools to build, test, and work with Mbed OS
+Home-page: https://github.com/ARMmbed/mbed-os-tools
+Author: Jimmy Brisson, Brian Daniels
+Author-email: jimmy.brisson@arm.com, brian.daniels@arm.com
+Maintainer: Jimmy Brisson, Brian Daniels
+Maintainer-email: jimmy.brisson@arm.com, brian.daniels@arm.com
+License: Apache-2.0
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: Topic :: Software Development :: Embedded Systems
+Requires-Python: >=2.7.10, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4
+Description-Content-Type: text/markdown
+Requires-Dist: PySerial (<4.0,>=3.0)
+Requires-Dist: requests (<3.0,>=2.0)
+Requires-Dist: intelhex (<3.0,>=2.0)
+Requires-Dist: future
+Requires-Dist: fasteners
+Requires-Dist: appdirs (<2.0,>=1.4)
+Requires-Dist: junit-xml (<2.0,>=1.0)
+Requires-Dist: lockfile
+Requires-Dist: six (<2.0,>=1.0)
+Requires-Dist: colorama (<0.5,>=0.3)
+Requires-Dist: beautifulsoup4
+Requires-Dist: PrettyTable (<=1.0.1) ; python_version < "3.6"
+Requires-Dist: prettytable (<3.0,>=2.0) ; python_version >= "3.6"
+Requires-Dist: lxml ; sys_platform == "darwin"
+Provides-Extra: pyocd
+Requires-Dist: pyocd (>=0.32.0) ; extra == 'pyocd'
+
+# Mbed OS tools
+
+This repository contains the Python modules needed to work with Mbed OS. Historically, the Mbed OS tools have been delivered in separate packages and repositories. Their APIs have evolved separately over time, each with their own style and syntax. This project unifies these packages into a single intuitive API.
+
+## Packages
+
+Below is a table showing what packages are delivered from this repository:
+
+| PyPI package | Source | Depends on | Stable API |
+| ------- | ------ | ---------- | ---------- |
+| `mbed-os-tools` ([Documentation](docs)) | [`src/`](src) | | **No** |
+| `mbed-ls` ([Documentation](packages/mbed-ls/README.md)) | [`packages/mbed-ls/`](packages/mbed-ls) | `mbed-os-tools` | **Yes** |
+| `mbed-host-tests` ([Documentation](packages/mbed-host-tests/README.md)) | [`packages/mbed-host-tests/`](packages/mbed-host-tests/) | `mbed-os-tools` | **Yes** |
+| `mbed-greentea` ([Documentation](packages/mbed-greentea/README.md)) | [`packages/mbed-greentea/`](packages/mbed-greentea/) | `mbed-os-tools` | **Yes** |
+
+As indicated above, **the API `mbed-os-tools` provides is not stable**. For this reason, please continue to use the other packages.
+
+## License and contributions
+
+The software is provided under [Apache-2.0 license](LICENSE). Contributions to this project are accepted under the same license. Please see [contributing.md](CONTRIBUTING.md) for more info.
+
+This project contains code from other projects. The original license text is included in those source files. They must comply with our [license guide](https://os.mbed.com/docs/latest/reference/license.html).
+
+

@@ -1,0 +1,142 @@
+Metadata-Version: 2.1
+Name: milksnake
+Version: 0.1.6
+Summary: A python library that extends setuptools for binary extensions.
+Author: Armin Ronacher
+Author-email: armin.ronacher@active-4.com
+License: Apache License 2.0
+Platform: any
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: cffi >=1.6.0
+
+# Milksnake
+
+<a href="https://pypi.python.org/pypi/milksnake"><img src="https://img.shields.io/pypi/v/milksnake.svg" alt=""></a>
+<a href="https://travis-ci.org/getsentry/milksnake"><img src="https://travis-ci.org/getsentry/milksnake.svg?branch=master" alt=""></a>
+<a href="https://github.com/getsentry/milksnake/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/milksnake.svg" alt=""></a>
+
+
+Milksnake is an extension for setuptools that allows you to distribute
+dynamic linked libraries in Python wheels in the most portable way imaginable.
+
+It gives you a hook to invoke your own build process and to then take the
+resulting dynamic linked library.
+
+## Why?
+
+There are already other projects that make Python and native libraries play
+along but this one is different.  Unlike other projects that build Python
+extension modules the goal of this project is to build regular native libraries
+that are then loaded with CFFI at runtime.  Why not just use CFFI?  Because
+CFFI's setuptools support alone does not properly work with such wheels (it
+does not provide a way to build and properly tag wheels for shared libraries) and
+it does not provide a good way to invoke an external build process (like a
+makefile, cargo to build rust binaries etc.)
+
+In particular you will most likely only need two wheels for Linux, one for macs
+and soon one for Windows independently of how many Python interpreters you want
+to target.
+
+## What is supported?
+
+* Platforms: Linux, Mac, Windows
+* setuptools commands: `bdist_wheel`, `build`, `build_ext`, `develop`
+* `pip install --editable .`
+* Universal wheels (`PACKAGE-py2.py3-none-PLATFORM.whl`); this can be disabled
+  with `milksnake_universal=False` in `setup()` in case the package also contains
+  stuff that does link against libpython.
+
+## How?
+
+This example shows how to build a rust project with it:
+
+This is what a `setup.py` file looks like:
+
+```python
+from setuptools import setup
+
+def build_native(spec):
+    # build an example rust library
+    build = spec.add_external_build(
+        cmd=['cargo', 'build', '--release'],
+        path='./rust'
+    )
+
+    spec.add_cffi_module(
+        module_path='example._native',
+        dylib=lambda: build.find_dylib('example', in_path='target/release'),
+        header_filename=lambda: build.find_header('example.h', in_path='target'),
+        rtld_flags=['NOW', 'NODELETE']
+    )
+
+setup(
+    name='example',
+    version='0.0.1',
+    packages=['example'],
+    zip_safe=False,
+    platforms='any',
+    setup_requires=['milksnake'],
+    install_requires=['milksnake'],
+    milksnake_tasks=[
+        build_native
+    ]
+)
+```
+
+You then need a `rust/` folder that has a Rust library (with a crate type
+of `cdylib`) and a `example/` python package.
+
+Example `example/__init__.py` file:
+
+```python
+from example._native import ffi, lib
+
+
+def test():
+    return lib.a_function_from_rust()
+```
+
+And a `rust/src/lib.rs`:
+
+```rust
+#[no_mangle]
+pub unsafe extern "C" fn a_function_from_rust() -> i32 {
+    42
+}
+```
+
+And the `rust/Cargo.toml`:
+
+```toml
+[package]
+name = "example"
+version = "0.1.0"
+build = "build.rs"
+
+[lib]
+name = "example"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+cbindgen = "0.4"
+```
+
+And finally the build.rs file:
+
+```rust
+extern crate cbindgen;
+
+use std::env;
+
+fn main() {
+    let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let mut config: cbindgen::Config = Default::default();
+    config.language = cbindgen::Language::C;
+    cbindgen::generate_with_config(&crate_dir, config)
+      .unwrap()
+      .write_to_file("target/example.h");
+}
+```

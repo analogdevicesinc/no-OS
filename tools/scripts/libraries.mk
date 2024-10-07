@@ -38,7 +38,7 @@ CLEAN_MBEDTLS	= $(call remove_file,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_LIB_DIR)/*.d
 $(MBEDTLS_LIB_DIR)/libmbedcrypto.a: $(MBED_TLS_CONFIG_FILE)
 	-$(CLEAN_MBEDTLS)
 	$(MAKE) -C $(MBEDTLS_LIB_DIR)
-$(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
+# $(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
 $(MBEDTLS_LIB_DIR)/libmbedtls.a: $(MBEDTLS_LIB_DIR)/libmbedx509.a
 
 # Custom settings
@@ -46,7 +46,9 @@ CFLAGS 		+= -I$(MBEDTLS_DIR)/include
 CFLAGS 		+= -I$(dir $(MBED_TLS_CONFIG_FILE)) \
 			-DMBEDTLS_CONFIG_FILE=\"$(notdir $(MBED_TLS_CONFIG_FILE))\"
 else
-DISABLE_SECURE_SOCKET ?= y
+# DISABLE_SECURE_SOCKET ?= y
+
+
 endif
 
 #	FATFS

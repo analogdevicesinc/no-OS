@@ -1,0 +1,4 @@
+[console_scripts]
+mbedflsh = mbed_host_tests.mbedflsh:main
+mbedhtrun = mbed_host_tests.mbedhtrun:main
+

@@ -168,8 +168,15 @@ int32_t mqtt_connect(struct mqtt_desc *desc,
 		     const struct mqtt_connect_config *conf,
 		     struct mqtt_connack_data *result_optional)
 {
-	if (!desc || !conf)
-		return -1;
+if (!desc) {
+    printf("Error: mqtt_desc is NULL\n");
+    return -1;
+}
+if (!conf) {
+    printf("Error: mqtt_connect_config is NULL\n");
+    return -1;
+}
+
 
 	int32_t			ret;
 	MQTTConnackData 	res;

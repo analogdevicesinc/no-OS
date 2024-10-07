@@ -170,9 +170,9 @@ ifeq (y,$(strip $(NETWORKING)))
 CFLAGS += -DNO_OS_NETWORKING
 endif
 
-ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
-CFLAGS += -DDISABLE_SECURE_SOCKET
-endif
+# ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
+# CFLAGS += -DDISABLE_SECURE_SOCKET
+# endif
 
 SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 
