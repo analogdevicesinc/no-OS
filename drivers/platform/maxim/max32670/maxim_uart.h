@@ -43,8 +43,8 @@
  * @brief UART flow control
  */
 enum max_uart_flow_ctrl {
-	MAX_UART_FLOW_DIS,
-	MAX_UART_FLOW_EN
+	UART_FLOW_DIS,
+	UART_FLOW_EN
 };
 
 /**
@@ -52,6 +52,7 @@ enum max_uart_flow_ctrl {
  */
 struct max_uart_init_param {
 	enum max_uart_flow_ctrl flow;
+	mxc_gpio_vssel_t vssel;
 };
 
 /**
