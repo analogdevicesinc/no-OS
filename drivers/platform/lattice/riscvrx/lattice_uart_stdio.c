@@ -90,10 +90,10 @@ static int stdio_getc(FILE *file)
 	uint8_t c;
 	int ret;
 
-	while (1) {
-		if (no_os_uart_read(stdio_desc, &c, 1) == 1) {
-			return c;
-		}
+	if (no_os_uart_read(stdio_desc, &c, 1) == 1) {
+		return c;
+	} else {
+		return 0;
 	}
 
 	return EOF;
