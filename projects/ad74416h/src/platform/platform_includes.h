@@ -50,4 +50,10 @@
 #include "mbed/parameters.h"
 #endif
 
+#define FTD2XX_PLATFORM
+
+#ifdef FTD2XX_PLATFORM
+#include "ftd2xx/parameters.h"
+#endif
+
 #endif /* __PLATFORM_INCLUDES_H__ */
