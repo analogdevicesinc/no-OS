@@ -48,7 +48,7 @@
 #include "network_interface.h"
 #ifndef DISABLE_SECURE_SOCKET
 //TODO this shouldn't be absolute path
-#include "C:/Users/JCarson/SecurityProject/no_OS_2/no-OS/libraries/mbedtls/include/mbedtls/ssl.h"
+#include "mbedtls/ssl.h"
 #endif
 #include <stdint.h>
 

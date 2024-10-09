@@ -145,17 +145,14 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	struct secure_socket_desc	*ldesc;
 	int32_t				ret;
 
-	printf("anseo a haon\n");
 	if (!desc || !param)
 		return -1;
-	printf("anseo do \n");
 	ldesc = (typeof(ldesc))no_os_calloc(1, sizeof(*ldesc));
-	if (!ldesc)
+	// ldesc = (struct secure_socket_desc *)no_os_calloc(1, sizeof(*ldesc));
+	if (ldesc == NULL)
 		return -1;
-	
-	printf("anseo 3\n");
+	printf(&ldesc);
 	// /* Initialize structures */
-	printf(ldesc);
 	mbedtls_ssl_config_init(&ldesc->conf);
 	printf("sslconfig\n");
 	mbedtls_x509_crt_init(&ldesc->cacert);
@@ -165,14 +162,13 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	mbedtls_pk_init(&ldesc->pkey);
 	printf("pkey\n");
 	mbedtls_ssl_init(&ldesc->ssl);
-	printf("anseo 4\n");
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		ldesc->trng = NULL;
 		goto exit;
 	}
-	printf("anseo 4\n");
+
 
 	/* Set default configuration: TLS client socket */
 	ret = mbedtls_ssl_config_defaults(&ldesc->conf,
@@ -202,7 +198,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		mbedtls_ssl_conf_authmode(&ldesc->conf,
 					  MBEDTLS_SSL_VERIFY_NONE);
 	}
-printf("anseo 5\n");
 	if (param->cli_cert) {
 		if (!param->cli_pk) {
 			ret = -EINVAL;
@@ -250,7 +245,6 @@ printf("anseo 5\n");
 			    (mbedtls_ssl_recv_t *)tls_net_recv, NULL);
 
 	*desc = ldesc;
-	printf("anseo 6\n");
 	return 0;
 
 exit:
@@ -294,16 +288,13 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 	}
 
 #ifndef DISABLE_SECURE_SOCKET
-	printf("tar eis an cead check\n");
 	if (!param->secure_init_param){
 		ldesc->secure = NULL;
 	}
 	else{
 		ret = stcp_socket_init(&ldesc->secure, ldesc,
-				       param->secure_init_param);
-		printf("tar eis an fiveu check\n");}
+				       param->secure_init_param);}
 	if (NO_OS_IS_ERR_VALUE(ret)) {
-		printf("tar eis an sixu check\n");
 		ldesc->net->socket_close(ldesc->net->net, ldesc->id);
 		no_os_free(ldesc);
 		return ret;
