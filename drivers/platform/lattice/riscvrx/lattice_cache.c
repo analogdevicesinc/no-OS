@@ -54,7 +54,9 @@
  */
 void lattice_dcache_invalidate_range(uint32_t addr, uint32_t range)
 {
-	for (int i = 0; i < range / 4; i += 8) {
+	//	addr = addr & ~0x1F;
+	range = range + (addr & 0x1F);
+	for (int i = 0; i < range >> 2; i += 8) {
 		cache_invalidate(((uint32_t *) addr) + i);
 	}
 }
