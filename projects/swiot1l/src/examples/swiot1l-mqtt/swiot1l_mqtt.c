@@ -185,18 +185,18 @@ int swiot1l_mqtt()
 
 	};
 
-	char hostname_buffer[100];  // Allocate a buffer large enough for your hostname
+	char hostname_buffer[100];  
 	snprintf(hostname_buffer, sizeof(hostname_buffer), "mqtt.%s.com", SWIOT1L_MQTT_SERVER_IP);
 	struct secure_init_param secure_params = {
-		.trng_init_param = NULL, // Set this to NULL or provide a valid trng_init_param
-		.hostname = "jean", //(uint8_t *)hostname_buffer,  // Example server hostname
-		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE,//MBEDTLS_SSL_VERIFY_REQUIRED,  // Verify server certificate
-		.ca_cert = "C:/Program Files/OpenSSL-Win64/bin/ca-cert.pem",  // Point to CA certificate data (if required)
-		// .ca_cert_len = 0,  // Length of CA certificate (if applicable)
-		.cli_cert = "C:/Program Files/OpenSSL-Win64/bin/client-cert.pem",  // Client cert for mutual TLS (if required)
-		// .cli_cert_len = 0,  // Length of client cert
-		.cli_pk = "C:/Program Files/OpenSSL-Win64/bin/client-key.pem",  // Client private key (if required)
-		// .cli_pk_len = 0   // Length of private key
+		.trng_init_param = NULL, 
+		.hostname = "jean", 
+		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE,
+		.ca_cert = "C:/Program Files/OpenSSL-Win64/bin/ca-cert.pem",  
+		// .ca_cert_len = 0,  
+		.cli_cert = "C:/Program Files/OpenSSL-Win64/bin/client-cert.pem", 
+		// .cli_cert_len = 0, 
+		.cli_pk = "C:/Program Files/OpenSSL-Win64/bin/client-key.pem",  
+		// .cli_pk_len = 0   
 	};
 
 
