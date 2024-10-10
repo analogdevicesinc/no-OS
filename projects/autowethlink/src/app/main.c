@@ -47,7 +47,8 @@ static int mwc_step(void *arg)
 			// dp83tg_read(mwc->dp83tg, DP83TG_PMA_PMD_CONTROL, &reg);
 			// bool master = reg & DP83TG_CFG_MASTER_SLAVE_MASK;
 
-			dp83tg_config(mwc->dp83tg, !mwc->dp83tg->master);
+			// disable MASTER/SLAVE switching for now
+			// dp83tg_config(mwc->dp83tg, !mwc->dp83tg->master);
 		}
 	}
 	else
