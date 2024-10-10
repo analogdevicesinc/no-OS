@@ -61,6 +61,13 @@ INERTIAL MEASUREMENT UNITS
 
    drivers/imu
 
+LED
+===
+.. toctree::
+   :maxdepth: 1
+
+   drivers/max25603
+
 RF TRANSCEIVER
 ==============
 .. toctree::
