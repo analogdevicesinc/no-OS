@@ -79,6 +79,21 @@ enum no_os_spi_bit_order {
 };
 
 /**
+ * @enum no_os_spi_lanes
+ * @brief SPI configuration for number of lanes.
+ */
+enum no_os_spi_lanes {
+	/** Single Lane */
+	NO_OS_SPI_SINGLE_LANE = 0,
+	/** Dual Lane */
+	NO_OS_SPI_DUAL_LANE = 1,
+	/** Quad Lane */
+	NO_OS_SPI_QUAD_LANE = 2,
+	/** Octo Lane */
+	NO_OS_SPI_OCTO_LANE = 3,
+};
+
+/**
  * @struct no_os_spi_msg_list
  * @brief List item describing a SPI transfer
  */
@@ -133,7 +148,11 @@ struct no_os_spi_init_param {
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
+	/** SPI Lanes */
+	enum no_os_spi_lanes   lanes;
+	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
+	/** SPI delays */
 	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
@@ -158,6 +177,8 @@ struct no_os_spibus_desc {
 	enum no_os_spi_mode	mode;
 	/** SPI bus bit order */
 	enum no_os_spi_bit_order	bit_order;
+	/** SPI Lanes */
+	enum no_os_spi_lanes   lanes;
 	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
 	/** SPI bus extra */
@@ -181,7 +202,11 @@ struct no_os_spi_desc {
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
+	/** SPI Lanes */
+	enum no_os_spi_lanes   lanes;
+	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
+	/** SPI delays */
 	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
@@ -197,6 +222,8 @@ struct no_os_spi_desc {
 struct no_os_spi_platform_ops {
 	/** SPI initialization function pointer */
 	int32_t (*init)(struct no_os_spi_desc **, const struct no_os_spi_init_param *);
+	/** SPI configuration function pointer */
+	int32_t (*config)(struct no_os_spi_desc *, const struct no_os_spi_init_param *);
 	/** SPI write/read function pointer */
 	int32_t (*write_and_read)(struct no_os_spi_desc *, uint8_t *, uint16_t);
 	/** Iterate over the spi_msg array and send all messages at once */
@@ -226,6 +253,10 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 
 /* Free the resources allocated by no_os_spi_init(). */
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc);
+
+/* Configure the SPI peripheral */
+int32_t no_os_spi_config(struct no_os_spi_desc *desc,
+			 const struct no_os_spi_init_param *param);
 
 /* Write and read data to/from SPI. */
 int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,

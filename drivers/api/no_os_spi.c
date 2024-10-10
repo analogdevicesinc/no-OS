@@ -150,6 +150,31 @@ void no_os_spibus_remove(uint32_t bus_number)
 }
 
 /**
+ * @brief Configure the SPI peripheral.
+ * @param desc - The SPI descriptor.
+ * @param param - The structure that contains the SPI parameters.
+ * @return 0 in case of success, negative code otherwise.
+ */
+int32_t no_os_spi_config(struct no_os_spi_desc *desc,
+			 const struct no_os_spi_init_param *param)
+{
+	int32_t ret;
+
+	if (!param || !param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->config)
+		return -ENOSYS;
+
+	/* Configure the SPI */
+	ret = param->platform_ops->config(desc, param);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+/**
  * @brief Write and read data to/from SPI.
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
