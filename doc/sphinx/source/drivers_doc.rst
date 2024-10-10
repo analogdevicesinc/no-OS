@@ -84,6 +84,7 @@ POWER MANAGEMENT
    drivers/adp1050
    drivers/ltc2992
    drivers/ltc4296
+   drivers/lt7170
    drivers/lt7182s
    drivers/lt8722
    drivers/max42500
