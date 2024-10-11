@@ -148,8 +148,11 @@ struct no_os_spi_init_param {
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
+	/** SPI Lanes */
 	enum no_os_spi_lanes   lanes;
+	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
+	/** SPI delays */
 	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
@@ -174,6 +177,7 @@ struct no_os_spibus_desc {
 	enum no_os_spi_mode	mode;
 	/** SPI bus bit order */
 	enum no_os_spi_bit_order	bit_order;
+	/** SPI Lanes */
 	enum no_os_spi_lanes   lanes;
 	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
@@ -198,8 +202,11 @@ struct no_os_spi_desc {
 	enum no_os_spi_mode	mode;
 	/** SPI bit order */
 	enum no_os_spi_bit_order	bit_order;
+	/** SPI Lanes */
 	enum no_os_spi_lanes   lanes;
+	/** SPI bus platform ops */
 	const struct no_os_spi_platform_ops *platform_ops;
+	/** SPI delays */
 	struct no_os_platform_spi_delays platform_delays;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
