@@ -14,13 +14,13 @@ endif
 ifeq (y, $(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/iio/iio_app/iio_app.c	\
-	$(DRIVERS)/dac/max2201x/iio_max2201x.c	\
+	$(DRIVERS)/dac/max22017/iio_max22017.c	\
 	$(NO-OS)/iio/iio.c	\
 	$(NO-OS)/iio/iiod.c	\
 	$(NO-OS)/util/no_os_fifo.c
 
 INCS += $(NO-OS)/iio/iio_app/iio_app.h	\
-	$(DRIVERS)/dac/max2201x/iio_max2201x.h	\
+	$(DRIVERS)/dac/max22017/iio_max22017.h	\
 	$(NO-OS)/iio/iio.h	\
 	$(NO-OS)/iio/iiod.h	\
 	$(NO-OS)/iio/iio_types.h	\

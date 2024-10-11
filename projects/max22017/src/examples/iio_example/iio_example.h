@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by max2201x examples.
+ *   @file   iio_example.h
+ *   @brief  IIO example header file for max22017.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,15 +30,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef __IIO_EXAMPLE_H__
+#define __IIO_EXAMPLE_H__
 
-#include "platform_includes.h"
-#include "max2201x.h"
+int iio_example_main();
 
-extern struct no_os_uart_init_param max2201x_uart_ip;
-extern struct no_os_spi_init_param max2201x_spi_ip;
-extern struct no_os_gpio_init_param max2201x_rstb_ip;
-extern struct max2201x_init_param max2201x_ip;
-
-#endif /* __COMMON_DATA_H_ */
+#endif /* __IIO_EXAMPLE_H__ */

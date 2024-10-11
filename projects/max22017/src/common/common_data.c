@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of max2201x project.
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by max22017 examples.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,50 +30,39 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_includes.h"
 #include "common_data.h"
-#include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+struct no_os_uart_init_param max22017_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.platform_ops = UART_OPS,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+};
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
+struct no_os_spi_init_param max22017_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.extra = SPI_EXTRA,
+	.max_speed_hz = SPI_BAUDRATE,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+};
 
-int main()
-{
-	int ret = -EINVAL;
+struct no_os_gpio_init_param max22017_rstb_ip = {
+	.port = GPIO_RSTB_PORT_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.number = GPIO_RSTB_PIN_NUM,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &max2201x_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	ret = basic_example_main();
-
-	no_os_uart_remove(uart_desc);
-#endif
-
-#if (BASIC_EXAMPLE + IIO_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + IIO_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable ony one example and re-build thhe project.
-#endif
-
-	return ret;
-}
+struct max22017_init_param max22017_ip = {
+	.comm_param = &max22017_spi_ip,
+	.crc_en = false,
+	.ext_dac_ref = false,
+	.rstb_param = &max22017_rstb_ip,
+};

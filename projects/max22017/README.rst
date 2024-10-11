@@ -1,4 +1,4 @@
-MAX2201X no-OS Example Project
+MAX22017 no-OS Example Project
 ==============================
 
 .. contents::
@@ -99,10 +99,10 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max2201x/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22017/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max2201x/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22017/src/platform>`_
 
 Basic Example
 ^^^^^^^^^^^^^
@@ -114,7 +114,7 @@ Values of the maximum value, frequency and increment can be changed in the
 basic_example.c source file.
 
 In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max2201x/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22017/Makefile>`_
 
 .. code-block:: bash
 
@@ -133,7 +133,7 @@ MAX22017 in every way possible througout an IIO interface such as IIO
 oscilloscope.
 
 In order to build the IIO example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max2201x/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22017/Makefile>`_
 
 .. code-block:: bash
 

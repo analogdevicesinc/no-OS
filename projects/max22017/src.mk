@@ -39,6 +39,6 @@ SRCS += $(DRIVERS)/api/no_os_spi.c		\
 	$(NO-OS)/util/no_os_util.c		\
 	$(NO-OS)/util/no_os_crc8.c
 
-INCS += $(DRIVERS)/dac/max2201x/max2201x.h
+INCS += $(DRIVERS)/dac/max22017/max22017.h
 
-SRCS += $(DRIVERS)/dac/max2201x/max2201x.c
+SRCS += $(DRIVERS)/dac/max22017/max22017.c

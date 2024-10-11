@@ -80,7 +80,7 @@ DAC
 .. toctree::
    :maxdepth: 1
 
-   projects/max2201x
+   projects/max22017
 
 TEMPERATURE
 ==============

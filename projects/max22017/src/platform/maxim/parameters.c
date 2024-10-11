@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_example.h
- *   @brief  IIO example header file for max2201x.
+ *   @file   parameters.c
+ *   @brief  Definition of Maxim platform data used by max22017 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,9 +30,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+#include "parameters.h"
 
-int iio_example_main();
+struct max_gpio_init_param max22017_gpio_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH
+};
 
-#endif /* __IIO_EXAMPLE_H__ */
+struct max_uart_init_param max22017_uart_extra = {
+	.flow = UART_FLOW_DIS,
+};
+
+struct max_spi_init_param max22017_spi_extra = {
+	.num_slaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};

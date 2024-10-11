@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Maxim platform data used by max2201x project.
+ *   @file   platform_includes.h
+ *   @brief  Includes for used platforms used by max22017 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,18 +30,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "parameters.h"
+#ifndef __PLATFORM_INCLUDES_H__
+#define __PLATFORM_INCLUDES_H__
 
-struct max_gpio_init_param max2201x_gpio_extra_ip = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH
-};
+#ifdef MAXIM_PLATFORM
+#include "maxim/parameters.h"
+#endif
 
-struct max_uart_init_param max2201x_uart_extra = {
-	.flow = UART_FLOW_DIS,
-};
-
-struct max_spi_init_param max2201x_spi_extra = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
+#endif /* __PLATFORM_INCLUDES_H__ */
