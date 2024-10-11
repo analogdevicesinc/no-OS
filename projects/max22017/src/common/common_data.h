@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_max2201x.h
- *   @brief  Header file of IIO MAX2201X Driver.
+ *   @file   common_data.h
+ *   @brief  Defines common data to be used by max22017 examples.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,74 +30,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_MAX2201X_H
-#define IIO_MAX2201X_H
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "iio.h"
-#include "max2201x.h"
+#include "platform_includes.h"
+#include "max22017.h"
 
-enum max2201x_iio_slew_rate {
-	MAX2201X_IIO_SLEW_RATE,
-	MAX2201X_IIO_RANGE,
-	MAX2201X_IIO_STEP_SIZE,
-	MAX2201X_IIO_UPDATE_RATE,
-};
+extern struct no_os_uart_init_param max22017_uart_ip;
+extern struct no_os_spi_init_param max22017_spi_ip;
+extern struct no_os_gpio_init_param max22017_rstb_ip;
+extern struct max22017_init_param max22017_ip;
 
-enum max2201x_iio_ao_config {
-	MAX2201X_IIO_POLARITY,
-	MAX2201X_IIO_CM_SENSE,
-	MAX2201X_IIO_LDAC,
-};
-
-enum max2201x_iio_config {
-	MAX2201X_IIO_DAC_REF,
-	MAX2201X_IIO_LD_CTRL,
-	MAX2201X_IIO_CURR_LIM,
-	MAX2201X_IIO_OVC_SHTDN = 4,
-	MAX2201X_IIO_TH_SHTDN = 6,
-	MAX2201X_IIO_OW_DETECT = 14,
-};
-
-enum max2201x_iio_timeout {
-	MAX2201X_IIO_TIMEOUT,
-	MAX2201X_IIO_TIMEOUT_EN = 8,
-	MAX2201X_IIO_TIMEOUT_CFG = 9,
-};
-
-enum max2201x_iio_available {
-	MAX2201X_IIO_ENABLE_AVAILABLE,
-	MAX2201X_IIO_RANGE_AVAILABLE,
-	MAX2201X_IIO_STEP_SIZE_AVAILABLE,
-	MAX2201X_IIO_UPDATE_RATE_AVAILABLE,
-	MAX2201X_IIO_OP_MODE_AVAILABLE,
-	MAX2201X_IIO_POLARITY_AVAILABLE,
-	MAX2201X_IIO_CM_SENSE_AVAILABLE,
-	MAX2201X_IIO_CONFIG_ENABLE_AVAILABLE,
-	MAX2201X_IIO_TIMEOUT_AVAILABLE,
-};
-
-/**
- * @brief Structure holding the MAX2201X IIO descriptor
-*/
-struct max2201x_iio_desc {
-	struct max2201x_desc *max2201x_desc;
-	struct iio_device *iio_dev;
-};
-
-/**
- * @brief Structure holding the MAX2201X IIO initialization parameter.
-*/
-struct max2201x_iio_desc_init_param {
-	struct max2201x_init_param *max2201x_init_param;
-};
-
-/** IIO descriptor initialize function. */
-int max2201x_iio_init(struct max2201x_iio_desc **,
-		      struct max2201x_iio_desc_init_param *);
-
-/** Free resources allocated by the iio_init() function. */
-int max2201x_iio_remove(struct max2201x_iio_desc *);
-
-#endif /* IIO_MAX2201X_H */
+#endif /* __COMMON_DATA_H_ */

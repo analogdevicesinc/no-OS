@@ -45,7 +45,7 @@ DIGITAL TO ANALOG CONVERTERS
 .. toctree::
    :maxdepth: 1
 
-   drivers/max2201x
+   drivers/max22017
 
 FREQUENCY GENERATORS
 ====================

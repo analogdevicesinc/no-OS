@@ -1,11 +1,10 @@
-MAX2201X no-OS Driver
+MAX22017 no-OS Driver
 =====================
 
 Supported Devices
 -----------------
 
 `MAX22017 <https://www.analog.com/MAX22017>`_
-`MAX22018 <https://www.analog.com/MAX22018>`_
 
 Overview
 --------
@@ -17,19 +16,7 @@ The MAX22017 offers one 16-bit DAC per output
 channel. The MAX22017 can operate from an internal or 
 external reference.
 
-The MAX22018 is a single-channel industrial-grade 
-configurable analog output device that can be changed 
-on-the-fly in software to voltage or current output mode. 
-The MAX22018 can operate from an internal or external 
-reference. The MAX22018 features zero-drift high-voltage amplifiers
-and high voltage switches to be compliant with standard industrial-grade
-voltage and current ranges.
-
-Both MAX22017 and MAX22018 have pretty much the same register map except
-channel's 2 registers in case of MAX22018, therefor the max2201x.c and
-max2201x.h driver files support both devices.
-
-MAX2201X Device Configuration
+MAX22017 Device Configuration
 -----------------------------
 
 Driver Initialization
@@ -38,7 +25,7 @@ Driver Initialization
 In order to be able to use the device, you will have to provide the support for
 the communication protocol (SPI) as well as an external GPIO for the RSTB pin.
 
-The first API to be called is **max2201x_init**. Make sure that it returns 0,
+The first API to be called is **max22017_init**. Make sure that it returns 0,
 which means that the driver was intialized correctly.
 
 GPIO Controller Configuration
@@ -46,69 +33,69 @@ GPIO Controller Configuration
 
 Both devices have an internal GPIO controller, only difference is that MAX22017
 supports 6 GPIOs meanwhile MAX22018 only supports 4 GPIOs.
-In the driver files the **max2201x_gpio_ops** can be found and used when
+In the driver files the **max22017_gpio_ops** can be found and used when
 declaring a no-OS GPIO initializaon parameter, therefor all the platform
 specific operation are called from the no-OS GPIO API as a standalone platform.
 
 Channel Configuration
 ---------------------
 
-Channel data can be set/get with the **max2201x_set_data** and
-**max2201x_get_data**.
+Channel data can be set/get with the **max22017_set_data** and
+**max22017_get_data**.
 
-Channel slew-rate configuration can also be set using **max2201x_slew_rate**
+Channel slew-rate configuration can also be set using **max22017_slew_rate**
 
-Channel gain and offset can be calibrated with **max2201x_offset_calib** and
-**max2201x_gain_calib**.
+Channel gain and offset can be calibrated with **max22017_offset_calib** and
+**max22017_gain_calib**.
 
-Channel operation mode can also be configured using **max2201x_op_mode** as well
+Channel operation mode can also be configured using **max22017_op_mode** as well
 as other channel specific configurations that can be changed using
-**max2201x_config**
+**max22017_config**
 
 Soft Reset
 ----------
 
-Both devices can be soft reseted by using **max2201x_soft_reset**.
+MAX22017 can be soft reseted by using **max22017_soft_reset**.
 
-MAX2201X Driver Initialization Example
+MAX22017 Driver Initialization Example
 --------------------------------------
 
 .. code-block:: bash
 
-	struct max2201x_desc *max2201x;
+	struct max22017_desc *max22017;
 	struct no_os_spi_init_param spi_ip = {
 		.device_id = 0,
-		.extra = &max2201x_spi_extra,
+		.extra = &max22017_spi_extra,
 		.max_speed_hz = 100000,
 		.platform_ops = &max_spi_ops,
 		.chip_select = 0,
 	};
-	struct no_os_gpio_init_param max2201x_rstb_ip = {
+	struct no_os_gpio_init_param max22017_rstb_ip = {
 		.port = 1,
 		.pull = NO_OS_PULL_NONE,
 		.number = 6,
 		.platform_ops = &max_gpio_ops,
-		.extra = &max2201x_gpio_extra,
+		.extra = &max22017_gpio_extra,
 	};
-	struct max2201x_init_param max2201x_ip = {
+	struct max22017_init_param max22017_ip = {
 		.chip_id = ID_MAX22017,
-		.comm_param = &max2201x_spi_ip,
+		.comm_param = &max22017_spi_ip,
 		.crc_en = false,
 		.ext_dac_ref = false,
-		.rstb_param = &max2201x_rstb_ip,
+		.rstb_param = &max22017_rstb_ip,
 	};
 
-	ret = max2201x_init(&max2201x, &max2201x_ip);
+	ret = max22017_init(&max22017, &max22017_ip);
 	if (ret)
 		goto error;
 
-MAX2201X no-OS IIO Support
+MAX22017 no-OS IIO Support
 --------------------------
 
-The MAX2201X IIO driver comes on top of the MAX2201X driver and offers support
+The MAX22017 IIO driver comes on top of the MAX22017 driver and offers support
 for interfacing IIO clients through IIO lib.
 
-MAX2201X IIO Device Configuration
+MAX22017 IIO Device Configuration
 ---------------------------------
 
 Device Attributes
@@ -117,7 +104,7 @@ Device Attributes
 Channel Attributes
 ------------------
 
-MAX2201X has a total of 2 channel attributes:
+MAX22017 has a total of 2 channel attributes:
 
 * ``raw - the output data to be transmitted to the channel's DAC``
 * ``offset - offset value used for channel's offset calibration``
@@ -168,40 +155,38 @@ The device has a total of 37 debug attributes.
 Device Channels
 ---------------
 
-MAX2201X has a specific API, **max2201x_iio_setup_channels** for configuring the
-channels at initialization depending on the chip id. Therefore the channels can
-be enabled/disabled only at initialization.
+MAX22017 has a total of 2 channels.
 
-MAX2201X IIO Driver Initialization Example
+max22017 IIO Driver Initialization Example
 ------------------------------------------
 
 .. code-block:: bash
 
 	int ret;
 
-	struct max2201x_iio_desc *max2201x_iio_desc;
-	struct max2201x_iio_desc_init_param max2201x_iio_ip = {
-		.max2201x_init_param = &max2201x_ip,
+	struct max22017_iio_desc *max22017_iio_desc;
+	struct max22017_iio_desc_init_param max22017_iio_ip = {
+		.max22017_init_param = &max22017_ip,
 	};
 
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
-	ret = max2201x_iio_init(&max2201x_iio_desc, &max2201x_iio_ip);
+	ret = max22017_iio_init(&max22017_iio_desc, &max22017_iio_ip);
 	if (ret)
 		goto error;
 
 	struct iio_app_device iio_devices[] = {
 		{
-			.name = "max2201x",
-			.dev = max2201x_iio_desc,
-			.dev_descriptor = max2201x_iio_desc->iio_dev,
+			.name = "max22017",
+			.dev = max22017_iio_desc,
+			.dev_descriptor = max22017_iio_desc->iio_dev,
 		},
 	};
 
 	app_init_param.devices = iio_devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
-	app_init_param.uart_init_params = max2201x_uart_ip;
+	app_init_param.uart_init_params = max22017_uart_ip;
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)

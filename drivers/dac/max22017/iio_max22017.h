@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definition of Maxim platform data used by max2201x project.
+ *   @file   iio_max22017.h
+ *   @brief  Header file of IIO MAX22017 Driver.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,51 +30,74 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef IIO_MAX22017_H
+#define IIO_MAX22017_H
 
-#include "maxim_irq.h"
-#include "maxim_spi.h"
-#include "maxim_gpio.h"
-#include "maxim_uart.h"
-#include "maxim_uart_stdio.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include "iio.h"
+#include "max22017.h"
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID		0
-#endif
+enum max22017_iio_slew_rate {
+	MAX22017_IIO_SLEW_RATE,
+	MAX22017_IIO_RANGE,
+	MAX22017_IIO_STEP_SIZE,
+	MAX22017_IIO_UPDATE_RATE,
+};
 
-#if (TARGET_NUM == 32690)
-#define UART_IRQ_ID		UART0_IRQn
-#define UART_DEVICE_ID		0
+enum max22017_iio_ao_config {
+	MAX22017_IIO_POLARITY,
+	MAX22017_IIO_CM_SENSE,
+	MAX22017_IIO_LDAC,
+};
 
-#define SPI_DEVICE_ID		4
+enum max22017_iio_config {
+	MAX22017_IIO_DAC_REF,
+	MAX22017_IIO_LD_CTRL,
+	MAX22017_IIO_CURR_LIM,
+	MAX22017_IIO_OVC_SHTDN = 4,
+	MAX22017_IIO_TH_SHTDN = 6,
+	MAX22017_IIO_OW_DETECT = 14,
+};
 
-#define GPIO_RSTB_PORT_NUM	1
-#define GPIO_RSTB_PIN_NUM	6
-#elif (TARGET_NUM == 32665)
-#define UART_IRQ_ID		UART1_IRQn
-#define UART_DEVICE_ID		1
+enum max22017_iio_timeout {
+	MAX22017_IIO_TIMEOUT,
+	MAX22017_IIO_TIMEOUT_EN = 8,
+	MAX22017_IIO_TIMEOUT_CFG = 9,
+};
 
-#define SPI_DEVICE_ID		1
+enum max22017_iio_available {
+	MAX22017_IIO_ENABLE_AVAILABLE,
+	MAX22017_IIO_RANGE_AVAILABLE,
+	MAX22017_IIO_STEP_SIZE_AVAILABLE,
+	MAX22017_IIO_UPDATE_RATE_AVAILABLE,
+	MAX22017_IIO_OP_MODE_AVAILABLE,
+	MAX22017_IIO_POLARITY_AVAILABLE,
+	MAX22017_IIO_CM_SENSE_AVAILABLE,
+	MAX22017_IIO_CONFIG_ENABLE_AVAILABLE,
+	MAX22017_IIO_TIMEOUT_AVAILABLE,
+};
 
-#define GPIO_RSTB_PORT_NUM	0
-#define GPIO_RSTB_PIN_NUM	5
-#endif
+/**
+ * @brief Structure holding the MAX22017 IIO descriptor
+*/
+struct max22017_iio_desc {
+	struct max22017_desc *max22017_desc;
+	struct iio_device *iio_dev;
+};
 
-#define UART_BAUDRATE		57600
-#define UART_EXTRA		&max2201x_uart_extra
-#define UART_OPS		&max_uart_ops
+/**
+ * @brief Structure holding the MAX22017 IIO initialization parameter.
+*/
+struct max22017_iio_desc_init_param {
+	struct max22017_init_param *max22017_init_param;
+};
 
-#define SPI_CS			0
-#define SPI_BAUDRATE		100000
-#define SPI_OPS			&max_spi_ops
-#define SPI_EXTRA		&max2201x_spi_extra
+/** IIO descriptor initialize function. */
+int max22017_iio_init(struct max22017_iio_desc **,
+		      struct max22017_iio_desc_init_param *);
 
-#define GPIO_OPS		&max_gpio_ops
-#define GPIO_EXTRA		&max2201x_gpio_extra_ip
+/** Free resources allocated by the iio_init() function. */
+int max22017_iio_remove(struct max22017_iio_desc *);
 
-extern struct max_gpio_init_param max2201x_gpio_extra_ip;
-extern struct max_uart_init_param max2201x_uart_extra;
-extern struct max_spi_init_param max2201x_spi_extra;
-
-#endif /* __PARAMATERS_H__ */
+#endif /* IIO_MAX22017_H */
