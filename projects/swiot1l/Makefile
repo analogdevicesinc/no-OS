@@ -21,11 +21,10 @@ include ../../tools/scripts/generic_variables.mk
 include src.mk
 
 include ../../tools/scripts/generic.mk
-
 CFLAGS += -DNO_OS_LWIP_NETWORKING
 CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
 CFLAGS += -DNO_OS_LWIP_INIT_ONETIME=1
 CFLAGS += -g -O0
-
+# CFLAGS += -mfloat-abi=soft
 # SWIOT1L_MQTT_SERVER_IP=192.168.0.80
 SWIOT1L_MQTT_SERVER_PORT=1883

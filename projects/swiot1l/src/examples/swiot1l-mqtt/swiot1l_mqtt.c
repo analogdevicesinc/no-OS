@@ -41,8 +41,8 @@
 #include <stdio.h>
 #include <string.h>
 
-
-#include "C:/Users/JCarson/SecurityProject/no_OS_2/no-OS/drivers/temperature/adt75/iio_adt75.h"
+// TODO why?? is this an absolute path
+#include "iio_adt75.h"
 #include "swiot1l_mqtt.h"
 #include "common_data.h"
 #include "no_os_util.h"
@@ -52,9 +52,10 @@
 #include "mqtt_client.h"
 #include "mqtt_noos_support.h"
 #include "no_os_timer.h"
-#include "tcp_socket.h" 
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
+#include "maxim_trng.h"
+
 
 static void message_handler(struct mqtt_message_data *msg)
 {
@@ -178,17 +179,18 @@ int swiot1l_mqtt()
 		pr_err("LWIP init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
 	}
-//JEAN WEDNESDAY START HERE
 	struct tcp_socket_init_param tcp_ip = {
 		.net = &lwip_desc->no_os_net,
 		.max_buff_size = 0,
 
 	};
-
+	struct no_os_trng_init_param trng_ip = {
+		.platform_ops = &max_trng_ops
+	};
 	char hostname_buffer[100];  
 	snprintf(hostname_buffer, sizeof(hostname_buffer), "mqtt.%s.com", SWIOT1L_MQTT_SERVER_IP);
 	struct secure_init_param secure_params = {
-		.trng_init_param = NULL, 
+		.trng_init_param = &trng_ip, 
 		.hostname = "jean", 
 		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE,
 		.ca_cert = "C:/Program Files/OpenSSL-Win64/bin/ca-cert.pem",  
@@ -199,6 +201,7 @@ int swiot1l_mqtt()
 		// .cli_pk_len = 0   
 	};
 
+//JEAN BREAKS HERE
 
 	tcp_ip.secure_init_param = &secure_params;
 

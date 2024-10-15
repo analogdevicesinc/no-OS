@@ -17,6 +17,7 @@ INCS += $(PROJECT)/src/platform/platform_includes.h
 INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c 
 
+
 INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_error.h     \
 		$(INCLUDE)/no_os_gpio.h      \
@@ -37,7 +38,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_util.h \
 		$(INCLUDE)/no_os_units.h \
 		$(INCLUDE)/no_os_alloc.h \
-		$(INCLUDE)/no_os_trng.h
+		$(INCLUDE)/no_os_trng.h \
+		$(NO-OS)/iio/
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_lf256fifo.c \
@@ -54,8 +56,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_mutex.c \
 		$(NO-OS)/util/no_os_alloc.c \
 		$(DRIVERS)/api/no_os_trng.c \
-		# $(NO-OS)/libraries/mbedtls/library/ssl_tls.c
 
+INCS += $(DRIVERS)/temperature/adt75/iio_adt75.h
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 
@@ -87,6 +89,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/iio/iio_trigger.c
 INCS += $(NO-OS)/iio/iio_trigger.h
 
+
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
 INCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.h
@@ -107,20 +110,19 @@ ifndef SWIOT1L_MQTT_SERVER_PORT
 SWIOT1L_MQTT_SERVER_PORT=1883
 endif
 
+
 CFLAGS += -DSWIOT1L_MQTT_SERVER_IP=\"$(SWIOT1L_MQTT_SERVER_IP)\"
 CFLAGS += -DSWIOT1L_MQTT_SERVER_PORT=$(SWIOT1L_MQTT_SERVER_PORT)
-# CFLAGS += -I$(PROJECT)/libraries/mbedtls/include
-# INCS += $(PROJECT)/libraries/mbedtls/include
+
 MBED_TLS_CONFIG_FILE = $(PROJECT)/src/app/noos_mbedtls_config.h
-
 LIBRARIES += mbedtls
-#  $(NO-OS)/libraries/mbedtls/library
-# LDFLAGS += -L/libraries/mbedtls/library
 
-# LDLIBS += -lmbedtls -lmbedx509 -lmbedcrypto
+INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls/ssl.h
+SRC_DIRS += $(NO-OS)/libraries/mbedtls/library
+
+
 
 CFLAGS += -DSWIOT1L_MQTT_EXAMPLE
-
 LIBRARIES += mqtt
 SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
 INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h
