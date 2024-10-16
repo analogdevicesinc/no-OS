@@ -47,6 +47,7 @@
 #include "stdbool.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -158,6 +159,7 @@
 #define AD74416H_ALARM_DEG_PERIOD_MSK		NO_OS_BIT(12)
 #define AD74VOUT_4W_EN_MSK			NO_OS_BIT(11)
 #define AD74416H_WAIT_LDAC_CMD_MSK		NO_OS_BIT(10)
+#define AD74416H_HART_COMPL_SETTLED_MSK		NO_OS_BIT(8)
 #define AD74416H_VOUT_RANGE_MSK			NO_OS_BIT(7)
 #define AD74416H_SLEW_EN_MSK			NO_OS_GENMASK(6, 5)
 #define AD74416H_SLEW_LIN_STEP_MSK		NO_OS_GENMASK(4, 3)
