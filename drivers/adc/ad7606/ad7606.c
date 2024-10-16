@@ -313,6 +313,8 @@ struct ad7606_dev {
 	uint8_t phase_ch[AD7606_MAX_CHANNELS];
 	/** Channel gain calibration */
 	uint8_t gain_ch[AD7606_MAX_CHANNELS];
+	/** Channel operating range */
+	struct ad7606_range range_ch[AD7606_MAX_CHANNELS];
 	/** Data buffer (used internally by the SPI communication functions) */
 	uint8_t data[28];
 };
@@ -589,6 +591,71 @@ int32_t ad7606_reg_write_mask(struct ad7606_dev *dev,
 	return ad7606_reg_write(dev, addr, reg_data);
 }
 
+/***************************************************************************
+ * @brief Correction bit31 - bit18 for negative value (for 18 bits ADC7606 data via spi)
+ *
+ * @param dev       - The device structure pointer
+ * @param pdata     - data buffer pointer
+ * @param size      - Number of data needs correct
+ * @return 
+ *******************************************************************************/
+static void adcdata_sign_correction(struct ad7606_dev* dev, uint32_t size, uint32_t* pdata)
+{
+
+	uint8_t i = 0;
+
+    //correct upper 14 bits for adc data
+    for(i = 0;i < size;i ++)
+    {
+        if((dev->range_ch[i].min) < 0)   //if negative value could exist
+        {
+            if( * pdata >> 17)            //if sign bit is 1(negative)
+            {
+                * pdata = * pdata | ((uint32_t)0xFFFC << 16); //set bit31 - bit18 to 1
+            }
+        }
+        pdata += 1; //go for next data
+    }
+
+}
+
+/***************************************************************************
+ * @brief Correction bit31 - bit18 for negative value
+ * 		  seperate status information bits(for 26 bits ADC7606 data via spi)
+ *
+ * @param dev       - The device structure pointer
+ * @param pdata     - data buffer pointer
+ * @param size      - Number of data needs correct
+ * @param pstats    - status information buffer pointer
+ * @return ret -return code
+ * 			   -ENOMEM - no buffer for status information
+ * 			   -0 -No errors encountered.   
+ *******************************************************************************/
+static int32_t stats_data_separate(struct ad7606_dev* dev, uint32_t size, uint32_t* pdata, uint8_t* pstats)
+{
+	uint8_t i = 0;
+
+	if(pstats == NULL)	
+		return -ENOMEM;
+
+    //correct upper 14 bits for adc data, store status information to pstats points buffer
+    for (i = 0; i < size; i++)
+    {
+		*pstats = (uint8_t) 0xFF & (*pdata);
+		*pdata = *pdata >> 8;
+        if((dev->range_ch[i].min) < 0)   //if negative value could exist
+        {
+            if( *pdata >> 17)            //if sign bit is 1(negative)
+            {
+                *pdata = *pdata | ((uint32_t)0xFFFC << 16); //set bit31 - bit18 to 1
+            }
+        }
+        pdata++; 
+		pstats++; //go for next data
+    }
+	return 0;
+}
+
 /* Internal function to copy the content of a buffer in 18-bit chunks to a 32-bit buffer by
  * extending the chunks to 32-bit size. */
 static int32_t cpy18b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
@@ -680,18 +747,21 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
  *
  * The output buffer provided by the user should be as wide as to be able to
  * contain 1 sample from each channel since this function reads conversion data
- * across all channels.
+ * across all channels. if status is enabled in device settings, a buffer should be 
+ * provided and wide enough.
  *
  * @param dev        - The device structure.
  * @param data       - Pointer to location of buffer where to store the data.
- *
+ * @param stats	     - Pointer to location of buffer where to store the status info.
+ * 					   null for disable situation.
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
  *                  -EBADMSG - CRC computation mismatch.
  *                  -ENOTSUP - Device bits per sample not supported.
+ * 					-ENOMEM  - No mem pointer for stutas
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
+int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data, uint8_t *stats)
 {
 	uint32_t sz;
 	int32_t ret, i;
@@ -733,9 +803,17 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 	switch(bits) {
 	case 18:
 		if (dev->config.status_header)
+		{
 			ret = cpy26b32b(dev->data, sz, data);
+			if (ret < 0)
+				return ret;
+			ret = stats_data_separate(dev, nchannels, data, stats);
+		}
 		else
+		{
 			ret = cpy18b32b(dev->data, sz, data);
+			adcdata_sign_correction(dev, nchannels, data);
+		}
 		if (ret < 0)
 			return ret;
 		break;
@@ -905,14 +983,16 @@ pwm_disable:
  *
  * @param dev        - The device structure.
  * @param data       - Pointer to location of buffer where to store the data.
- *
+ * @param stats       - Pointer to location of buffer where to store the data.
+ * 
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
  *                  -ETIME - Timeout while waiting for the BUSY signal.
  *                  -EBADMSG - CRC computation mismatch.
+ * 					-ENOMEM - No buffer for status information
  *                  0 - No errors encountered.
 *******************************************************************************/
-static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
+static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t *data, uint8_t *stats)
 {
 	int32_t ret;
 	uint8_t busy;
@@ -943,7 +1023,7 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 		no_os_udelay(tconv_max[dev->oversampling.os_ratio]);
 	}
 
-	return ad7606_spi_data_read(dev, data);
+	return ad7606_spi_data_read(dev, data, stats);
 }
 
 /***************************************************************************//**
@@ -954,16 +1034,18 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
  *
  * @param dev        - The device structure.
  * @param data       - Pointer to location of buffer where to store the data.
+ * @param stats      - Pointer to location of buffer where to store the status info.
  * @param samples    - Number of samples to read
  *
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
  *                  -ETIME - Timeout while waiting for the BUSY signal.
  *                  -EBADMSG - CRC computation mismatch.
+ * 					-ENOMEM  - No mem pointer for stutas
  *                  0 - No errors encountered.
 *******************************************************************************/
-int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
-			    uint32_t samples)
+int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t *data,
+			    uint32_t samples, uint8_t *stats)
 {
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t nchannels, i, sample_size;
@@ -988,7 +1070,7 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 	sample_size = nchannels * sizeof(uint32_t);
 
 	for (i = 0; i < samples; i++) {
-		ret = ad7606_read_one_sample(dev, data);
+		ret = ad7606_read_one_sample(dev, data, stats);
 		if (ret)
 			return ret;
 		data += sample_size;
@@ -1346,6 +1428,8 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 
 	dev->range_ch_type[ch] = range.type;
 	dev->scale_ch[ch] = (double)(range.max - range.min) / (double)(1 << info->bits);
+
+	dev->range_ch[ch] = range;
 
 	return ret;
 }
