@@ -250,21 +250,29 @@ int max25603_init(struct max25603_desc **desc,
 	if (ret)
 		goto en1_err;
 
-	ret = no_os_pwm_init(&descriptor->hb_desc, init_param->hb_param);
-	if (ret)
-		goto en2_err;
+	if (init_param->hb_param) {
+		ret = no_os_pwm_init(&descriptor->hb_desc, init_param->hb_param);
+		if (ret)
+			goto en2_err;
+	}
 
-	ret = no_os_pwm_init(&descriptor->lb_desc, init_param->lb_param);
-	if (ret)
-		goto hb_err;
+	if (init_param->lb_param) {
+		ret = no_os_pwm_init(&descriptor->lb_desc, init_param->lb_param);
+		if (ret)
+			goto hb_err;
+	}
 
-	ret = no_os_pwm_init(&descriptor->drl_desc, init_param->drl_param);
-	if (ret)
-		goto lb_err;
+	if (init_param->drl_param) {
+		ret = no_os_pwm_init(&descriptor->drl_desc, init_param->drl_param);
+		if (ret)
+			goto lb_err;
+	}
 
-	ret = no_os_pwm_init(&descriptor->turn_desc, init_param->turn_param);
-	if (ret)
-		goto drl_err;
+	if (init_param->turn_param) {
+		ret = no_os_pwm_init(&descriptor->turn_desc, init_param->turn_param);
+		if (ret)
+			goto drl_err;
+	}
 
 	ret = max25603_set_enable(descriptor, MAX25603_DISABLE_EN, 0, 0);
 	if (ret)
