@@ -56,6 +56,8 @@ enum max25603_beam {
 	MAX25603_DISABLE_BEAM,
 	MAX25603_HIGH_BEAM,
 	MAX25603_LOW_BEAM,
+	MAX25603_DRL_BEAM,
+	MAX25603_TURN_BEAM,
 };
 
 struct max25603_init_param {
@@ -66,6 +68,8 @@ struct max25603_init_param {
 	struct no_os_pwm_init_param *en2_param;
 	struct no_os_pwm_init_param *lb_param;
 	struct no_os_pwm_init_param *hb_param;
+	struct no_os_pwm_init_param *drl_param;
+	struct no_os_pwm_init_param *turn_param;
 };
 
 struct max25603_desc {
@@ -76,6 +80,8 @@ struct max25603_desc {
 	struct no_os_pwm_desc *en2_desc;
 	struct no_os_pwm_desc *lb_desc;
 	struct no_os_pwm_desc *hb_desc;
+	struct no_os_pwm_desc *drl_desc;
+	struct no_os_pwm_desc *turn_desc;
 
 	enum max25603_enable enable;
 	enum max25603_beam beam;
