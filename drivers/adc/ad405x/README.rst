@@ -67,7 +67,7 @@ Soft Reset
 
 The device can be soft reseted by using **ad405x_soft_reset**.
 
-MAX2201X Driver Initialization Example
+AD405X Driver Initialization Example
 --------------------------------------
 
 .. code-block:: bash
