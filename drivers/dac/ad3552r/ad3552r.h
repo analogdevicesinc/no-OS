@@ -392,12 +392,17 @@ struct ad3552r_desc {
 	struct no_os_spi_desc *spi;
 	struct no_os_gpio_desc *ldac;
 	struct no_os_gpio_desc *reset;
+	struct axi_clkgen *clkgen;
+	struct axi_dac  *ad3552r_core_ip;
+	struct axi_dmac *dmac_ip;
 	struct ad3552r_ch_data ch_data[AD3552R_MAX_NUM_CH];
+	uint8_t axi_xfer_size;
 	uint8_t crc_table[NO_OS_CRC8_TABLE_SIZE];
 	uint8_t chip_id;
 	uint8_t crc_en : 1;
 	uint8_t is_simultaneous : 1;
 	uint8_t single_transfer : 1;
+	uint8_t axi: 1;
 };
 
 struct ad3552r_custom_output_range_cfg {
@@ -443,6 +448,16 @@ struct ad3552r_init_param {
 	bool crc_en;
 	bool is_simultaneous;
 	bool single_transfer;
+	/* Set for AXI qspi controller in use */
+	bool axi_qspi_controller;
+	/* Set AXI clock rate */
+	int axi_clkgen_rate;
+	/* Points to struct axi_clkgen_init for clkgen ip init params */
+	struct axi_clkgen_init *clkgen_ip;
+	/* Points to struct axi_dac_init for AXI ip init params */
+	struct axi_dac_init *ad3552r_core_ip;
+	/* Points to struct axi_dmac_init for AXI DMAC init params */
+	struct axi_dmac_init *dmac_ip;
 };
 
 /*****************************************************************************/
@@ -509,4 +524,9 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 			      enum ad3552r_write_mode mode);
 
 int32_t ad3552r_simulatneous_update_enable(struct ad3552r_desc *desc);
+
+/* DMA buffering, fast mode, AXI QSPI */
+int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
+			       uint16_t samples, bool cyclic, int cyclic_secs);
+
 #endif /* _AD3552R_H_ */

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad3552r_fmcz/srcs/parameters.h
+ *   @file   parameters.h
  *   @brief  Parameters Definitions.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -37,9 +37,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef XILINX_PLATFORM
 #include <xparameters.h>
-#endif
+#include "xilinx_spi.h"
+#include "xilinx_gpio.h"
+#include "xil_cache.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -85,5 +86,13 @@
 #define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
 
 #define UART_IRQ_ID		XPAR_XUARTPS_1_INTR
+
+#define TX_CORE_BASEADDR        XPAR_AXI_AD3552R_DAC_BASEADDR
+#define TX_DMA_BASEADDR         XPAR_AXI_DAC_DMA_BASEADDR
+#define TX_CLKGEN_BASEADDR      XPAR_AXI_CLKGEN_BASEADDR
+
+#define GPIO_OPS		&xil_gpio_ops
+#define GPIO_EXTRA		&xil_gpio_param
+#define SPI_EXTRA		&xil_spi_param
 
 #endif // __PARAMETERS_H__

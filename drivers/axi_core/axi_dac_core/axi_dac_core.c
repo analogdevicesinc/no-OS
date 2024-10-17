@@ -54,6 +54,10 @@
 #define AXI_DAC_REG_SYNC_CONTROL		0x44
 #define AXI_DAC_SYNC					NO_OS_BIT(0)
 
+#define AXI_DAC_REG_CNTRL_2			0x48
+#define AXI_DAC_SDR_DDR_N			NO_OS_BIT(16)
+#define AXI_DAC_SYMB_8B				NO_OS_BIT(14)
+
 #define AXI_DAC_REG_RATECNTRL			0x4C
 #define AXI_DAC_RATE(x)					(((x) & 0xFF) << 0)
 #define AXI_DAC_TO_RATE(x)				(((x) >> 0) & 0xFF)
@@ -71,6 +75,22 @@
 #define AXI_DAC_MUX_PN_OOS				NO_OS_BIT(2)
 #define AXI_DAC_MUX_OVER_RANGE			NO_OS_BIT(1)
 #define AXI_DAC_STATUS					NO_OS_BIT(0)
+
+#define AXI_DAC_CNTRL_DATA_RD			0x80
+
+#define AXI_DAC_CNTRL_DATA_WR			0x84
+#define AXI_DAC_DATA_WR_16(x)			((x << 8) & 0x00ffff00)
+#define AXI_DAC_DATA_WR_8(x)			((x << 16) & 0x00ff0000)
+
+#define AXI_DAC_REG_CUSTOM_CTRL			0x8c
+#define AXI_DAC_ADDRESS(x)			((x << 24) & 0xff000000)
+#define AXI_DAC_STREAM				NO_OS_BIT(1)
+#define AXI_DAC_TRANSFER_DATA			NO_OS_BIT(0)
+#define AXI_DAC_STREAM_ENABLE			(AXI_DAC_STREAM | \
+						AXI_DAC_TRANSFER_DATA)
+
+#define AXI_DAC_UI_STATUS			0x88
+#define AXI_DAC_BUSY				NO_OS_BIT(4)
 
 #define AXI_DAC_REG_DDS_SCALE(x)		(0x400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define AXI_DAC_DDS_SCALE(x)			(((x) & 0xFFFF) << 0)
@@ -100,6 +120,8 @@
 #define AXI_DAC_TO_IQCOR_COEFF_1(x)		(((x) >> 16) & 0xFFFF)
 #define AXI_DAC_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
 #define AXI_DAC_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
+
+#define AXI_DAC_RD_ADDR(x)			(NO_OS_BIT(7) | x)
 
 const uint16_t sine_lut[128] = {
 	0x000, 0x064, 0x0C8, 0x12C, 0x18F, 0x1F1, 0x252, 0x2B1,
@@ -359,6 +381,201 @@ int32_t axi_dac_write(struct axi_dac *dac,
 		      uint32_t reg_data)
 {
 	no_os_axi_io_write(dac->base, reg_addr, reg_data);
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC Update Data bits.
+ * @param dac - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_mask - The data mask.
+ * @param reg_data - The data value.
+ */
+void axi_dac_update_bits(struct axi_dac *dac, uint32_t reg_addr,
+			 uint32_t reg_mask, uint32_t reg_data)
+{
+	uint32_t reg;
+
+	no_os_axi_io_read(dac->base, reg_addr, &reg);
+
+	reg &= ~reg_mask;
+	reg |= reg_data;
+
+	no_os_axi_io_write(dac->base, reg_addr, reg);
+}
+
+/**
+ * @brief AXI DAC Read Data until condition is met.
+ * @param dac - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The data mask to apply.
+ * @param value - The data value to check.
+ * @param sleep_us - Poll interval.
+ * @param timeout_us - Poll timepout.
+ */
+int32_t axi_dac_read_poll_timeout(struct axi_dac *dac, uint32_t reg_addr,
+				  uint32_t mask, uint32_t value,
+				  uint32_t sleep_us, uint32_t timeout_us)
+{
+	uint32_t reg;
+
+	while (timeout_us) {
+		no_os_axi_io_read(dac->base, reg_addr, &reg);
+
+		if ((reg & mask) == value)
+			return 0;
+
+		no_os_udelay(sleep_us);
+		timeout_us -= sleep_us;
+	}
+
+	return -ETIMEDOUT;
+}
+
+/**
+ * @brief AXI DAC Bus Data Write.
+ * @param dac - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - Data value to be written.
+ * @param data_size - Data size in bytes.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_bus_write(struct axi_dac *dac, uint32_t reg_addr,
+			  uint32_t reg_data, uint8_t data_size)
+{
+	int err;
+
+	if (dac->bus_type != AXI_DAC_BUS_TYPE_QSPI)
+		return -EINVAL;
+
+	no_os_axi_io_write(dac->base, AXI_DAC_CNTRL_DATA_WR,
+			   (data_size == 2) ?
+			   AXI_DAC_DATA_WR_16(reg_data) :
+			   AXI_DAC_DATA_WR_8(reg_data));
+
+	axi_dac_update_bits(dac, AXI_DAC_REG_CNTRL_2, AXI_DAC_SYMB_8B,
+			    (data_size == 1) ? AXI_DAC_SYMB_8B : 0);
+
+	axi_dac_update_bits(dac, AXI_DAC_REG_CUSTOM_CTRL,
+			    AXI_DAC_ADDRESS(0xff), AXI_DAC_ADDRESS(reg_addr));
+
+	axi_dac_update_bits(dac, AXI_DAC_REG_CUSTOM_CTRL,
+			    AXI_DAC_TRANSFER_DATA, AXI_DAC_TRANSFER_DATA);
+
+	err = axi_dac_read_poll_timeout(dac, AXI_DAC_REG_CUSTOM_CTRL,
+					AXI_DAC_TRANSFER_DATA,
+					AXI_DAC_TRANSFER_DATA, 10, 100000);
+	if (err)
+		return err;
+
+	no_os_udelay(100);
+
+	axi_dac_update_bits(dac, AXI_DAC_REG_CUSTOM_CTRL,
+			    AXI_DAC_TRANSFER_DATA, 0);
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC Bus Data Read.
+ * @param dac - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - Pointer to data value to be read.
+ * @param data_size - Data size in bytes.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_bus_read(struct axi_dac *dac,
+			 uint32_t reg_addr,
+			 uint32_t *reg_data,
+			 uint8_t data_size)
+{
+	int err;
+
+	if (dac->bus_type != AXI_DAC_BUS_TYPE_QSPI)
+		return -EINVAL;
+
+	err = axi_dac_bus_write(dac, AXI_DAC_RD_ADDR(reg_addr), 0, data_size);
+	if (err)
+		return err;
+
+	err = axi_dac_read_poll_timeout(dac, AXI_DAC_UI_STATUS,
+					AXI_DAC_BUSY, 0, 10, 100);
+	if (err)
+		return err;
+
+	no_os_udelay(100);
+
+	no_os_axi_io_read(dac->base, AXI_DAC_CNTRL_DATA_RD, reg_data);
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC Set DDR (bus double-data-rate) mode
+ * @param dac - The device structure.
+ * @param enable - enable or disable DDR mode.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_set_ddr(struct axi_dac *dac, bool enable)
+{
+	axi_dac_update_bits(dac, AXI_DAC_REG_CNTRL_2, AXI_DAC_SDR_DDR_N,
+			    enable ? 0 : AXI_DAC_SDR_DDR_N);
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC Set data stream mode.
+ * @param dac - The device structure.
+ * @param enable - enable or disable data stream over the bus interface,
+ *                 where any is available.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_set_data_stream(struct axi_dac *dac, bool enable)
+{
+	axi_dac_update_bits(dac, AXI_DAC_REG_CUSTOM_CTRL, AXI_DAC_STREAM_ENABLE,
+			    enable ? AXI_DAC_STREAM_ENABLE : 0);
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC Set starting dma data trasfer address.
+ * @param dac - The device structure.
+ * @param address - the 8-bit target register address for dma
+ * 	            data streaming operations.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_data_transfer_addr(struct axi_dac *dac, uint32_t address)
+{
+	/*
+	 * Sample register address, when the DAC is configured, or stream
+	 * start address when the FSM is in stream state.
+	 */
+	axi_dac_update_bits(dac,
+			    AXI_DAC_REG_CUSTOM_CTRL,
+			    AXI_DAC_ADDRESS(0xff),
+			    AXI_DAC_ADDRESS(address));
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC data format.
+ * @param dac - The device structure.
+ * @param format - bit width of the samples sent over dma, can be 8 or 16.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_data_format_set(struct axi_dac *dac, int format)
+{
+	if (format != 8 && format != 16)
+		return -EINVAL;
+
+	axi_dac_update_bits(dac,
+			    AXI_DAC_REG_CNTRL_2,
+			    AXI_DAC_SYMB_8B,
+			    format == 8 ? AXI_DAC_SYMB_8B : 0);
 
 	return 0;
 }
@@ -891,6 +1108,7 @@ int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 	dac->base = init->base;
 	dac->num_channels = init->num_channels;
 	dac->channels = init->channels;
+	dac->bus_type = init->bus_type;
 
 	*dac_core = dac;
 
@@ -909,8 +1127,10 @@ int32_t axi_dac_init_finish(struct axi_dac *dac)
 	uint32_t ratio;
 
 	axi_dac_read(dac, AXI_DAC_REG_STATUS, &reg_data);
-	if(reg_data == 0x0) {
-		printf("%s: Status errors\n", dac->name);
+
+	/* ad3552r-axi ip is not setting STATUS3 to 1, but is anyway ok */
+	if(reg_data == 0x0 && !dac->bus_type) {
+		printf("%s: Status errors: %08ld\n", dac->name, reg_data);
 		return -1;
 	}
 
