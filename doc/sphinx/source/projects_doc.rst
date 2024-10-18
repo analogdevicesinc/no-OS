@@ -69,6 +69,7 @@ POWER MANAGEMENT
    :maxdepth: 1
 
    projects/adp1050
+   projects/dc2703a
    projects/ltc4296
    projects/lt7182s
    projects/lt8722
