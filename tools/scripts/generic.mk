@@ -143,6 +143,10 @@ ifeq 'mbed' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/mbed.mk
 endif
 
+ifeq 'aducm36x' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/aducm36x.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
