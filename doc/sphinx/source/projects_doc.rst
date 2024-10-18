@@ -10,6 +10,7 @@ ANALOG TO DIGITAL CONVERTERS
    :maxdepth: 1
 
    projects/ad7091r8-sdz
+   projects/ad7606x-fmc
    projects/ad7616-st
    projects/ad796x_fmcz
    projects/pulsar-adc
