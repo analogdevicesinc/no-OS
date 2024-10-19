@@ -9,6 +9,8 @@ ANALOG TO DIGITAL CONVERTERS
 .. toctree::
    :maxdepth: 1
 
+   projects/ad405x
+
    projects/ad469x_evb
 
    projects/ad7091r8-sdz
