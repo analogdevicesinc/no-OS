@@ -1,0 +1,16 @@
+{
+  "stm32": {
+    "basic_example": {
+      "flags" : "EXAMPLE=basic_example DEV_TYPE=AD4050 HARDWARE=nucleo-h563zi.ioc"
+    },
+    "basic_i3c_example": {
+      "flags" : "EXAMPLE=basic_i3c_example DEV_TYPE=AD4060 HARDWARE=nucleo-h563zi.ioc"
+    },
+    "i3c_dma_example": {
+      "flags" : "EXAMPLE=i3c_dma DEV_TYPE=AD4062 HARDWARE=nucleo-h503rb.ioc"
+    },
+    "iio_example": {
+      "flags" : "EXAMPLE=iio_example DEV_TYPE=AD4058 HARDWARE=nucleo-h503rb.ioc"
+    }
+  }
+}
