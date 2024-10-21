@@ -41,6 +41,9 @@
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
 #include "xil_cache.h"
+#ifdef IIO_SUPPORT
+#include "xilinx_uart.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

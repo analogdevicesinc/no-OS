@@ -53,7 +53,9 @@
 
 extern struct xil_gpio_init_param xil_gpio_param;
 extern struct xil_spi_init_param xil_spi_param;
+extern struct xil_uart_init_param platform_uart_param;
 extern struct no_os_gpio_init_param default_gpio_param;
+extern struct no_os_uart_init_param uart_init_param;
 extern struct ad3552r_init_param default_ad3552r_param;
 
 #endif /* __COMMON_DATA_H__ */
