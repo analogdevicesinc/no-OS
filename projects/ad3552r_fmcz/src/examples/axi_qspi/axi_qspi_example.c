@@ -58,6 +58,15 @@
 
 #define NUM_CYCLES 8
 
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#include "iio_ad3552r.h"
+#include "iio_axi_dac.h"
+
+static uint8_t data_buffer[MAX_BUFF_SAMPLES];
+
+#endif
+
 extern const uint16_t no_os_sine_lut_16[512];
 
 int32_t init_gpios_to_defaults()
@@ -111,7 +120,7 @@ void set_power_up_success_led()
 int32_t run_example(struct ad3552r_desc *dac)
 {
 	int32_t err;
-	uint16_t samples[2] __attribute__ ((aligned));
+	uint16_t samples[2] __attribute__((aligned));
 
 	samples[0] = 65534;
 	samples[1] = 0;
@@ -158,7 +167,6 @@ int32_t run_example(struct ad3552r_desc *dac)
 int example_main()
 {
 	int32_t err;
-	struct ad3552r_desc *dac;
 
 	pr_info("Hey, welcome to ad3552r_fmcz AXI example\n");
 
@@ -168,12 +176,15 @@ int example_main()
 		return err;
 	}
 
+	struct ad3552r_desc *dac;
+
 	err = ad3552r_init(&dac, &default_ad3552r_param);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("ad3552r_init failed with code: %"PRIi32"\n", err);
 		return err;
 	}
 
+#ifndef IIO_SUPPORT
 	set_power_up_success_led();
 
 	err = run_example(dac);
@@ -183,6 +194,42 @@ int example_main()
 	}
 
 	ad3552r_remove(dac);
+
+#else /* IIO_SUPPORT */
+	struct iio_ad3552r_desc *iio_ad3552r_desc;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+	struct iio_device *iio_dev_desc;
+	struct iio_data_buffer wr_buff = {
+		.buff = data_buffer,
+		.size = sizeof(data_buffer)
+	};
+
+	err = iio_ad3552r_init(&iio_ad3552r_desc, &default_ad3552r_param);
+	if (NO_OS_IS_ERR_VALUE(err)) {
+		pr_err("Error initializing iio_dac. Code: %"PRIi32"\n", err);
+		return err;
+	}
+
+	set_power_up_success_led();
+
+	iio_ad3552r_get_descriptor(iio_ad3552r_desc, &iio_dev_desc);
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("ad3552r-hs", iio_ad3552r_desc, iio_dev_desc,
+			       NULL, &wr_buff, NULL)
+	};
+
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = uart_init_param;
+
+	err = iio_app_init(&app, app_init_param);
+	if (err)
+		return err;
+
+	return iio_app_run(app);
+#endif
 
 	pr_info("Example completed, bye !\n");
 
