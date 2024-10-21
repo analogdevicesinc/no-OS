@@ -47,6 +47,9 @@
 #include "axi_dmac.h"
 #include "clk_axi_clkgen.h"
 #include "axi_dac_core.h"
+#ifdef IIO_SUPPORT
+#include "no_os_uart.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -86,6 +89,19 @@ struct no_os_gpio_init_param default_gpio_param = {
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA
 };
+
+#ifdef IIO_SUPPORT
+struct no_os_uart_init_param uart_init_param = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = &platform_uart_param,
+	.platform_ops = &xil_uart_ops,
+};
+#endif
 
 struct ad3552r_init_param default_ad3552r_param = {
 	.chip_id = AD3552R_ID,

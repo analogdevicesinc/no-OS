@@ -52,3 +52,10 @@ struct xil_spi_init_param xil_spi_param = {
 	.type = SPI_PS,
 	.flags = 0
 };
+
+#ifdef IIO_SUPPORT
+struct xil_uart_init_param platform_uart_param = {
+	.type = UART_PS,
+	.irq_id = UART_IRQ_ID
+};
+#endif
