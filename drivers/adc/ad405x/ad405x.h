@@ -224,7 +224,8 @@ enum ad405x_device_type {
 
 /** AD405X product ID */
 enum ad405x_product_id {
-	PROD_ID_AD4052 = 0x70
+	PROD_ID_AD4050 = 0x70,
+	PROD_ID_AD4052 = 0x72,
 };
 
 /**
