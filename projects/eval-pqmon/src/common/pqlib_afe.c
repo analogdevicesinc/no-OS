@@ -36,6 +36,7 @@
 /******************************************************************************/
 
 #include "pqlib_afe.h"
+#include "iio_pqm.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -82,7 +83,7 @@ int get_afe_input()
 				 ADI_PQLIB_WAVEFORM_BLOCK_SIZE * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS);
 		pWaveform->isDataProcessed = 0;
 		pWaveform->sequenceNumber++;
-		if (pqlibExample.no_os_cb_desc) {
+		if (pqlibExample.no_os_cb_desc && !processData) {
 			no_os_cb_write (pqlibExample.no_os_cb_desc,
 					(uint8_t *)&(pqlibExample.inputWaveform.waveform),
 					ADI_PQLIB_WAVEFORM_BLOCK_SIZE
