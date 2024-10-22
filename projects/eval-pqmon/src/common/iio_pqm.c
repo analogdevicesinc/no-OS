@@ -293,8 +293,20 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 			configChanged = false;
 			if (!strcmp (buf, "1"))
 				processData = true;
-			else
+			else {
 				processData = false;
+				// Empty waveform iio buffer
+				int tmp_ret;
+				uint8_t tmp_buff[ADI_PQLIB_WAVEFORM_BLOCK_SIZE
+						 * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
+						 * sizeof (uint16_t)];
+				do {
+					tmp_ret = no_os_cb_read(pqlibExample.no_os_cb_desc,tmp_buff,
+								ADI_PQLIB_WAVEFORM_BLOCK_SIZE
+								* ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
+								* sizeof (uint16_t));
+				} while(!tmp_ret);
+			}
 		default:
 			desc->pqm_global_attr[attr_id] = value;
 		}
@@ -387,7 +399,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			return strlen(buf);
 
 		case CHAN_SCALE:
-			return snprintf(buf, len, "%.2f",
+			return snprintf(buf, len, "%.5f",
 					(pqlibExample.exampleConfig.voltageScale /
 					 ((float)(RESAMPLED_WAVEFORM_FULL_SCALE))));
 
@@ -482,7 +494,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			}
 			return strlen(buf);
 		case CHAN_SCALE:
-			return snprintf(buf, len, "%.2f",
+			return snprintf(buf, len, "%.5f",
 					(pqlibExample.exampleConfig.currentScale /
 					 (float)(RESAMPLED_WAVEFORM_FULL_SCALE)));
 
