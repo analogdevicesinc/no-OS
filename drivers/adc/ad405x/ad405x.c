@@ -794,6 +794,10 @@ int ad405x_init(struct ad405x_dev **device,
 
 	switch (init_param.active_device) {
 	case ID_AD4050:
+		if (no_os_get_unaligned_be16(prod_id) != PROD_ID_AD4050)
+			goto error_spi;
+
+		break;
 	case ID_AD4052:
 		if (no_os_get_unaligned_be16(prod_id) != PROD_ID_AD4052)
 			goto error_spi;
@@ -818,7 +822,7 @@ int ad405x_init(struct ad405x_dev **device,
 	dev->gp1_mode = AD405X_GP_MODE_DEV_RDY;
 	dev->invert_on_chop_status = AD405X_INVERT_ON_CHOP_DISABLED;
 	dev->gp0_mode = AD405X_GP_MODE_HIGH_Z;
-	dev->data_format = AD405X_STRAIGHT_BINARY;
+	dev->data_format = AD405X_TWOS_COMPLEMENT;
 	dev->active_device = init_param.active_device;
 
 	*device = dev;
