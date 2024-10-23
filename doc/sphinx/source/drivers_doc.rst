@@ -93,6 +93,7 @@ POWER MANAGEMENT
    drivers/ltc4296
    drivers/lt7170
    drivers/lt7182s
+   drivers/lt8491
    drivers/lt8722
    drivers/ltp8800
    drivers/max42500
