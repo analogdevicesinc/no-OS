@@ -173,6 +173,8 @@ int example_main()
 
 	struct iio_ad3552r_desc *iio_dac;
 	struct iio_device *iio_dac_descriptor;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 
 	struct iio_data_buffer wr_buff = {
 		.buff = data_buffer,
@@ -194,12 +196,15 @@ int example_main()
 			       &wr_buff, NULL)
 	};
 
-	err = 0;
-	while (err >= 0) {
-		err = iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
-	}
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = uart_init_param;
 
-	iio_ad3552r_remove(iio_dac);
+	err = iio_app_init(&app, app_init_param);
+	if (err)
+		return err;
+
+	return iio_app_run(app);
 #endif
 
 	pr_debug("Bye\n");
