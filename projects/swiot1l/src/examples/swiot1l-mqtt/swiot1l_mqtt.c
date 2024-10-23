@@ -65,6 +65,8 @@ static void message_handler(struct mqtt_message_data *msg)
 
 int swiot1l_mqtt()
 {
+
+
 	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
 	uint8_t send_buff[256];
 	uint8_t read_buff[256];
@@ -184,24 +186,25 @@ int swiot1l_mqtt()
 		.max_buff_size = 0,
 
 	};
+	char my_ca_cert[] = CA_CERT;
+	char my_cli_cert[] = DEVICE_CERT;
+	char my_cli_pk[] = DEVICE_PRIVATE_KEY;
+
 	struct no_os_trng_init_param trng_ip = {
 		.platform_ops = &max_trng_ops
 	};
-	char hostname_buffer[100];  
-	snprintf(hostname_buffer, sizeof(hostname_buffer), "mqtt.%s.com", SWIOT1L_MQTT_SERVER_IP);
+
 	struct secure_init_param secure_params = {
-		.trng_init_param = &trng_ip, 
-		.hostname = "jean", 
-		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE,
-		.ca_cert = "C:/Program Files/OpenSSL-Win64/bin/ca-cert.pem",  
-		// .ca_cert_len = 0,  
-		.cli_cert = "C:/Program Files/OpenSSL-Win64/bin/client-cert.pem", 
-		// .cli_cert_len = 0, 
-		.cli_pk = "C:/Program Files/OpenSSL-Win64/bin/client-key.pem",  
-		// .cli_pk_len = 0   
+		.trng_init_param = &trng_ip,
+		.ca_cert = my_ca_cert,
+		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
+		.cli_cert = my_cli_cert,
+		.cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
+		.cli_pk = my_cli_pk,
+		.cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk),
+		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE
 	};
 
-//JEAN BREAKS HERE
 
 	tcp_ip.secure_init_param = &secure_params;
 
@@ -214,8 +217,8 @@ int swiot1l_mqtt()
 
 	/* The default settings are 192.168.97.1:1883 */
 	struct socket_address ip_addr = {
-		.addr = SWIOT1L_MQTT_SERVER_IP,
-		.port = SWIOT1L_MQTT_SERVER_PORT
+		.port = SWIOT1L_MQTT_SERVER_PORT,
+		.addr = SWIOT1L_MQTT_SERVER_IP
 	};
 
 	struct mqtt_desc *mqtt;
@@ -243,7 +246,7 @@ int swiot1l_mqtt()
 		.username = NULL,
 		.password = NULL
 	};
-
+	//ret is not zero
 	ret = socket_connect(tcp_socket, &ip_addr);
 	if (ret) {
 		pr_err("Couldn't connect to the remote TCP socket: %d (%s)\n", ret,
@@ -257,10 +260,8 @@ int swiot1l_mqtt()
 	}
 
 	ret = mqtt_connect(mqtt, &conn_config, NULL);
-	printf("THIS LINE IS reallllyy RUNNING\n");
 	if (ret) {
 		socket_disconnect(tcp_socket);
-		printf ("IM HERE \n");
 		pr_err("Couldn't connect to the MQTT broker: %d (%s)\n", ret, strerror(-ret));
 		goto free_mqtt;
 	}
@@ -385,27 +386,3 @@ free_gpio:
 }
 
 
-// //
-// // MQTT endpoints
-// //
-// static const char* mqtt_url_prefix = "ssl://";
-// static const char* mqtt_url_suffix =":8883";
-// //
-// // Functions
-// //
-// void create_mqtt_endpoint(
-// 	const char* broker_address,
-// 	char* out_endpoint,
-// 	size_t endpoint_size)
-// {
-// 	int32_t required_size = strlen(mqtt_url_prefix) + strlen(broker_address) + strlen(mqtt_url_suffix) + 1;// +1 for null terminator
-
-// 	if ((size_t)required_size > endpoint_size) {
-// 			printf("\e[H\e[2J\e[93mFailed to create MQTT endpoint: Buffer is too small.\e[0m");
-// 			exit(1);
-// 	}
-
-// 	snprintf(out_endpoint, endpoint_size, "%s%s", mqtt_url_prefix, broker_address, mqtt_url_suffix);
-
-// 	printf("\e[H\e[2J\e[93mMQTT endpoint created at \"%s\".\e[0m", out_endpoint);
-// }

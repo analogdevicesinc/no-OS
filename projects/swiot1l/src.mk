@@ -97,7 +97,6 @@ SRCS += $(DRIVERS)/digital-io/max149x6/iio_max14906.c
 INCS += $(DRIVERS)/temperature/adt75/iio_adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/iio_adt75.c
 
-
 endif
 
 ifeq (y,$(strip $(SWIOT1L_MQTT_EXAMPLE)))
@@ -107,7 +106,7 @@ SWIOT1L_MQTT_SERVER_IP=192.168.0.80
 endif
 
 ifndef SWIOT1L_MQTT_SERVER_PORT
-SWIOT1L_MQTT_SERVER_PORT=1883
+SWIOT1L_MQTT_SERVER_PORT=8883
 endif
 
 
@@ -115,8 +114,8 @@ CFLAGS += -DSWIOT1L_MQTT_SERVER_IP=\"$(SWIOT1L_MQTT_SERVER_IP)\"
 CFLAGS += -DSWIOT1L_MQTT_SERVER_PORT=$(SWIOT1L_MQTT_SERVER_PORT)
 
 MBED_TLS_CONFIG_FILE = $(PROJECT)/src/app/noos_mbedtls_config.h
-LIBRARIES += mbedtls
 
+LIBRARIES += mbedtls
 INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls/ssl.h
 SRC_DIRS += $(NO-OS)/libraries/mbedtls/library
 

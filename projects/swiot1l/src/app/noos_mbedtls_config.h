@@ -67,7 +67,7 @@
  * chipersuites should work for other servers too.
  */
 
-//#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 //#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_CBC_SHA
 #define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 //#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_CBC_SHA256
@@ -120,7 +120,8 @@
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,\
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,\
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,\
-	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, \
+	MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
 
 /******************************************************************************/
 /*************** Configuration depending on user input ************************/
@@ -143,6 +144,8 @@
 
 /* Enable KEY_EXCHANGE_ECDHE_RSA_ENABLED if used one of these chipersuites is defined */
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+
 
 #endif /* Chipers that use ENABLE_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #endif /* ENABLE_TLS1_2 */
@@ -179,6 +182,21 @@
 #define MBEDTLS_ASN1_PARSE_C
 #define MBEDTLS_X509_USE_C
 #define MBEDTLS_X509_CRT_PARSE_C
+#define MBEDTLS_SHA256_C
+#define MBEDTLS_ASN1_WRITE_C
+#define MBEDTLS_ECDSA_C
+
+#define MBEDTLS_SSL_PROTO_DTLS
+// Trying to force tls v 1.2
+#undef MBEDTLS_SSL_PROTO_TLS1_3
+#undef MBEDTLS_SSL_PROTO_TLS1_1
+#undef MBEDTLS_SSL_PROTO_TLS1_0
+#define MBEDTLS_SSL_PROTO_TLS1_2
+
+
+// #define MBEDTLS_SSL_MAX_CONTENT_LEN 4096  // Or a larger value if needed
+// #define MBEDTLS_MPI_MAX_SIZE 512  // Adjust based on your memory requirements
+
 
 #ifdef ENABLE_ECP_DP_SECP256R1_ENABLED
 #define MBEDTLS_ECP_DP_SECP256R1_ENABLED
@@ -214,6 +232,7 @@
 #   define MBEDTLS_SHA1_C
 #  endif
 # endif
+#   define MBEDTLS_SHA256_C
 
 # if (defined(ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_GCM_SHA256) || \
 	defined(ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_GCM_SHA384))
@@ -234,7 +253,6 @@
 #define MBEDTLS_SHA256_C
 #endif
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
-
 /* Check if the configuration is ok */
 #include "mbedtls/check_config.h"
 
