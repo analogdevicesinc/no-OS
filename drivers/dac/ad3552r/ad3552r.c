@@ -1006,7 +1006,12 @@ int32_t ad3552r_get_ch_value(struct ad3552r_desc *desc,
 		*val = desc->ch_data[ch].fast_en;
 		return 0;
 	case AD3552R_CH_CODE:
-		return _ad3552r_get_code_value(desc, ch, val);
+		if (desc->axi)
+			desc->axi_xfer_size = 2;
+		err = _ad3552r_get_code_value(desc, ch, val);
+		if (desc->axi)
+			desc->axi_xfer_size = 1;
+		return err;
 	case AD3552R_CH_RFB:
 		*val = desc->ch_data[ch].rfb;
 		return 0;
@@ -1051,9 +1056,16 @@ int32_t ad3552r_set_ch_value(struct ad3552r_desc *desc,
 		desc->ch_data[ch].fast_en = !!val;
 		return 0;
 	case AD3552R_CH_CODE:
+		if (desc->axi)
+			desc->axi_xfer_size = 2;
 		if (desc->is_simultaneous)
-			return ad3552r_write_simulatneously(desc, ch,val);
-		return _ad3552r_set_code_value(desc, ch, val);
+			err = ad3552r_write_simulatneously(desc, ch,val);
+		else {
+			err = _ad3552r_set_code_value(desc, ch, val);
+		}
+		if (desc->axi)
+			desc->axi_xfer_size = 1;
+		return err;
 	case AD3552R_CH_RFB:
 		desc->ch_data[ch].rfb = val;
 		ad3552r_calc_gain_and_offset(desc, ch);
