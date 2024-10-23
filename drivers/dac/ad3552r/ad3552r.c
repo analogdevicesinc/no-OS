@@ -532,7 +532,7 @@ int32_t ad3552r_single_transfer(struct ad3552r_desc *desc,
 	msgs[0].rx_buff = data->data;
 	msgs[0].tx_buff = data->data;
 
-	err= no_os_spi_transfer(desc->spi, &msgs[0], 1);
+	err = no_os_spi_transfer(desc->spi, &msgs[0], 1);
 
 	if (data->is_read)
 		data->data[0] = data->data[1];
@@ -820,7 +820,7 @@ static int32_t _ad3552r_get_code_value(struct ad3552r_desc *desc,
 static void ad3552r_get_custom_range(struct ad3552r_desc *dac, uint8_t i,
 				     int32_t *v_min, int32_t *v_max)
 {
-	int64_t vref, tmp, common, offset, gn, gp, offset_polarity=0;
+	int64_t vref, tmp, common, offset, gn, gp, offset_polarity = 0;
 	/*
 	 * From datasheet formula (In Volts):
 	 *	Vmin = 2.5 + [((CH_Offset * Offset_polarity) / 1024 - GainP) * 1.6 * Rfb]
@@ -1006,7 +1006,12 @@ int32_t ad3552r_get_ch_value(struct ad3552r_desc *desc,
 		*val = desc->ch_data[ch].fast_en;
 		return 0;
 	case AD3552R_CH_CODE:
-		return _ad3552r_get_code_value(desc, ch, val);
+		if (desc->axi)
+			desc->axi_xfer_size = 2;
+		err = _ad3552r_get_code_value(desc, ch, val);
+		if (desc->axi)
+			desc->axi_xfer_size = 1;
+		return err;
 	case AD3552R_CH_RFB:
 		*val = desc->ch_data[ch].rfb;
 		return 0;
@@ -1051,9 +1056,16 @@ int32_t ad3552r_set_ch_value(struct ad3552r_desc *desc,
 		desc->ch_data[ch].fast_en = !!val;
 		return 0;
 	case AD3552R_CH_CODE:
+		if (desc->axi)
+			desc->axi_xfer_size = 2;
 		if (desc->is_simultaneous)
-			return ad3552r_write_simulatneously(desc, ch,val);
-		return _ad3552r_set_code_value(desc, ch, val);
+			err = ad3552r_write_simulatneously(desc, ch, val);
+		else {
+			err = _ad3552r_set_code_value(desc, ch, val);
+		}
+		if (desc->axi)
+			desc->axi_xfer_size = 1;
+		return err;
 	case AD3552R_CH_RFB:
 		desc->ch_data[ch].rfb = val;
 		ad3552r_calc_gain_and_offset(desc, ch);
@@ -1227,7 +1239,7 @@ static int32_t ad3552r_configure_device(struct ad3552r_desc *desc,
 					return err;
 			} else {
 				err = ad3552r_config_custom_gain(desc,
-								 &param->channels[i].custom_range,i);
+								 &param->channels[i].custom_range, i);
 				if (NO_OS_IS_ERR_VALUE(err)) {
 					pr_err("Custom gain configuration failed for channel %"PRIu16"\n", i);
 					return err;
@@ -1588,7 +1600,7 @@ int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 
 	if (cyclic) {
 		if (cyclic_secs == 0)
-			while(true)
+			while (true)
 				no_os_mdelay(1000);
 		else
 			no_os_mdelay(cyclic_secs * 1000);
