@@ -364,7 +364,8 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 100% always
+			// Adding fundamental waveform, 0% & 100% always
+			sprintf(buffTmp, "%f", 0.0f);
 			sprintf(buffTmp, "%f", 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
@@ -460,7 +461,8 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 100% always
+			// Adding fundamental waveform, 0% & 100% always
+			sprintf(buffTmp, "%f", 0.0f);
 			sprintf(buffTmp, "%f", 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
