@@ -41,7 +41,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-volatile uint8_t rmsOneReady = 0;
 struct no_os_spi_desc *hSPI;
 struct no_os_spi_msg spiMsg;
 extern struct no_os_gpio_init_param reset_gpio_ip;
@@ -98,7 +97,6 @@ int afe_init(void)
 		}
 	}
 
-	init_interrupt();
 	if (status == 0) {
 		status = config_wfb();
 		if (status != 0) {
@@ -419,20 +417,18 @@ int afe_read_status0(uint32_t *pSTATUS0)
 
 	uint32_t status0 = 0;
 	*pSTATUS0 = 0;
-	if (rmsOneReady != 0) {
-		rmsOneReady = 0;
-		status = afe_read_32bit_buff(REG_STATUS0, 1, pSTATUS0);
-		status0 = *pSTATUS0;
+
+	status = afe_read_32bit_buff(REG_STATUS0, 1, pSTATUS0);
+	status0 = *pSTATUS0;
+	if (status != 0) {
+		status = SYS_STATUS_AFE_STATUS0_FAILED;
+	}
+
+	if (status == 0) {
+		status0 |= BITM_STATUS0_RMSONERDY;
+		status = afe_write_32bit_reg(REG_STATUS0, (uint32_t *)&status0);
 		if (status != 0) {
 			status = SYS_STATUS_AFE_STATUS0_FAILED;
-		}
-
-		if (status == 0) {
-			status0 |= BITM_STATUS0_RMSONERDY;
-			status = afe_write_32bit_reg(REG_STATUS0, (uint32_t *)&status0);
-			if (status != 0) {
-				status = SYS_STATUS_AFE_STATUS0_FAILED;
-			}
 		}
 	}
 
@@ -445,12 +441,10 @@ void afe_wait_settling(uint32_t cycles)
 	uint32_t status0;
 
 	while (cycles > 0) {
-		if (rmsOneReady != 0) {
-			status = afe_read_status0((uint32_t *)&status0);
-			if ((status == SYS_STATUS_AFE_STATUS0_FAILED) ||
-			    (status == SYS_STATUS_SUCCESS)) {
-				cycles--;
-			}
+		status = afe_read_status0((uint32_t *)&status0);
+		if ((status == SYS_STATUS_AFE_STATUS0_FAILED) ||
+		    (status == SYS_STATUS_SUCCESS)) {
+			cycles--;
 		}
 	}
 }
