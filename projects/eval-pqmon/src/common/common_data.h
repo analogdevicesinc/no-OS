@@ -55,7 +55,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define FW_VERSION 2.0
+#define FW_VERSION 2.1
 
 #define IIO_BUFF_TYPE int16_t
 #define SAMPLES_PER_CHANNEL_PLATFORM 256
