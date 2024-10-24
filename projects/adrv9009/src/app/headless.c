@@ -197,6 +197,7 @@ int main(void)
 	};
 	struct axi_adc *rx_adc;
 
+#ifndef ADRV9008_1
 	struct axi_adc_init rx_os_adc_init = {
 		"rx_os_adc",
 		RX_OS_CORE_BASEADDR,
@@ -212,6 +213,7 @@ int main(void)
 		3
 	};
 	struct axi_dac *tx_dac;
+#endif //#ifndef ADRV9008_1
 
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
@@ -220,6 +222,7 @@ int main(void)
 	};
 	struct axi_dmac *rx_dmac;
 
+#ifndef ADRV9008_1
 	struct axi_dmac_init rx_os_dmac_init = {
 		"rx_os_dmac",
 		RX_OS_DMA_BASEADDR,
@@ -233,6 +236,7 @@ int main(void)
 		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
+#endif //#ifndef ADRV9008_1
 
 #ifdef DMA_EXAMPLE
 	struct no_os_gpio_desc *gpio_plddrbypass;
@@ -383,11 +387,13 @@ int main(void)
 	}
 #endif
 
+#ifndef ADRV9008_1
 	status = axi_dmac_init(&rx_os_dmac, &rx_os_dmac_init);
 	if (status) {
 		printf("OBS axi_dmac_init() rx init error: %d\n", status);
 		goto error_3;
 	}
+#endif //#ifndef ADRV9008_1
 
 #ifdef DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
@@ -484,7 +490,11 @@ int main(void)
 #ifdef ADRV9008_2
 	status = start_iiod(rx_os_dmac, tx_dmac, rx_os_adc, tx_dac);
 #else
+#ifndef ADRV9008_1
 	status = start_iiod(rx_dmac, tx_dmac, rx_adc, tx_dac);
+#else
+	status = start_iiod(rx_dmac, NULL, rx_adc, NULL);
+#endif
 #endif
 	if (status)
 		printf("iiod error: %d\n", status);
