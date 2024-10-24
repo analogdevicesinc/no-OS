@@ -1971,6 +1971,61 @@ error:
 	return ret;
 }
 
+/*******************************************************************************
+ * @brief correct spi read serial raw data
+ *        1. sign extend for hardware/bipolar mode in case of negative value
+ *        2. split data and status information into 2 arrays
+ *        note: this function should be called after read a sample through spi
+ *              serial interface( parallel interface not supported yet)
+ *
+ * @param dev          - The device structure.
+ * @param buf          - pointer to data buffer read by spi.
+ * @param data         - pointer to data buffer after correction
+ * @param status       - pointer to status information buffer,
+ *                       input null for status_header disable
+ *
+ * @return ret - return code.
+ *         Example: -EINVAL - No valid status information buffer pointer
+ *                  -EINVAL - No valid data buffer pointer
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_data_correction_serial(struct ad7606_dev *dev,
+				      uint32_t *buf, int32_t *data, uint8_t *status)
+{
+	uint8_t i = 0;
+	uint8_t num_ch = dev->num_channels;
+	uint32_t *pbuf = buf;
+	uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+
+	if(dev->config.status_header) {
+		// validate status pointers
+		if(!status)
+			return EINVAL;
+
+		for(i=0; i<num_ch; i++) {
+			*status = (uint8_t)*pbuf|0xff;
+			*pbuf = *pbuf >> 8;
+			pbuf++;
+			status++;
+		}
+	}
+
+	// validate data pointers
+	if(!status)
+		return EINVAL;
+
+	// correct negative data value
+	for(i=0; i<num_ch; i++) {
+		// if negative value exist (hardware/bipolar)
+		if(dev->range_ch_type[i] != AD7606_SW_RANGE_SINGLE_ENDED_UNIPOLAR)
+			*data = no_os_sign_extend32(*buf, bits-1);
+		buf++;
+		data++;
+	}
+
+	return 0;
+}
+
 /***************************************************************************//**
  * @brief Free any resource used by the driver.
  *

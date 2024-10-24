@@ -400,5 +400,7 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 				struct ad7606_digital_diag diag);
 int32_t ad7606_init(struct ad7606_dev **device,
 		    struct ad7606_init_param *init_param);
+int32_t ad7606_data_correction_serial(struct ad7606_dev *dev,
+				      uint32_t *buf, int32_t *data, uint8_t *status);
 int32_t ad7606_remove(struct ad7606_dev *dev);
 #endif /* AD7606_H_ */
