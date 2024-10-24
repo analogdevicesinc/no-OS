@@ -64,8 +64,6 @@
 #define SPI_OPS &max_spi_ops
 
 #define I2C_EXTRA &vddioh_i2c_extra
-#define GPIO_EXTRA &vddioh_gpio_extra
-#define GPIO_OPS &max_gpio_ops
 #define SPI_PQM_DEVICE_ID 1
 #define SPI_PQM_BAUDRATE 6000000
 #define SPI_PQM_EXTRA &spi_extra_ip
@@ -97,7 +95,6 @@
 /******************************************************************************/
 
 extern struct max_i2c_init_param vddioh_i2c_extra;
-extern struct max_gpio_init_param vddioh_gpio_extra;
 extern struct max_spi_init_param spi_extra_ip;
 extern struct max_uart_init_param uart_stdio_extra_ip;
 extern struct max_uart_init_param iio_demo_uart_extra_ip;

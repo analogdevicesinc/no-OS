@@ -41,7 +41,6 @@
 #include "ade9430.h"
 #include "adi_pqlib.h"
 #include "afe_config.h"
-#include "intrpt_handler.h"
 #include "pqlib_example.h"
 #include "status.h"
 #include <stdbool.h>
