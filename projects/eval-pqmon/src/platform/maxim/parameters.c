@@ -41,10 +41,6 @@
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
 
-struct max_gpio_init_param vddioh_gpio_extra = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
 struct max_i2c_init_param vddioh_i2c_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
