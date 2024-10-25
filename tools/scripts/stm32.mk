@@ -1,5 +1,14 @@
 VSCODE_SUPPORT = yes
 
+ifeq ($(STM32_DRIVER_DIR),)
+	STM32_EXT_BUILD := n
+else
+	STM32_EXT_BUILD := y
+	STM32_DRIVER_DIR := $(PROJECT)/$(STM32_DRIVER_DIR)
+endif
+
+ifeq ($(STM32_EXT_BUILD),n)
+
 IDE = stm32cubeide
 STM32CUBEIDE ?= $(wildcard /opt/stm32cubeide)
 ifeq ($(STM32CUBEIDE),)
@@ -22,6 +31,10 @@ $(error $(ENDL)$(ENDL)STM32CUBEMX not defined or not found at default path /opt/
 		Ex: export STM32CUBEMX=/opt/stm32cubemx$(ENDL)$(ENDL))
 endif # STM32CUBEMX check
 
+endif # STM32_EXT_BUILD
+
+ifeq ($(STM32_EXT_BUILD),n)
+
 # Locate the compiler path under STM32CubeIDE plugins directory
 COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc *arm-none-eabi-gcc.exe)))
 COMPILER_INTELLISENSE_PATH = $(COMPILER_BIN)/arm-none-eabi-gcc
@@ -30,6 +43,16 @@ COMPILER_INTELLISENSE_PATH = $(COMPILER_BIN)/arm-none-eabi-gcc
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
 OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
 OPENOCD_SVD = $(word 1,$(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *.svd))))
+
+else
+
+OPENOCD_SCRIPTS ?= /usr/share/openocd/scripts
+COMPILER_BIN ?= $(realpath $(dir arm-none-eabi-gcc))
+OPENOCD_BIN ?= /usr/bin
+
+endif #STM32_EXT_BUILD
+
+COMPILER_INTELLISENSE_PATH = $(COMPILER_BIN)/arm-none-eabi-gcc
 VSCODE_CMSISCFG_FILE = "$(BINARY).openocd-cmsis"
 TARGET_HARDWARE=HARDWARE=$(HARDWARE)
 
@@ -50,7 +73,12 @@ EXTRA_INCS += $(call rwildcard, $(PROJECT_BUILD)/Inc, *.h)
 PLATFORM_INCS += $(sort $(foreach h,$(EXTRA_INCS), -I$(dir $h)))
 
 # Get the path of the .s script
+ifeq ($(STM32_EXT_BUILD),y)
+STARTUP_FILE += $(call rwildcard, $(STM32_DRIVER_DIR),*.s)
+else
 STARTUP_FILE += $(call rwildcard, $(PROJECT_BUILD)/Startup,*.s)
+endif #STM32_EXT_BUILD
+
 EXTRA_FILES += $(STARTUP_FILE)
 
 # Get the path of the interrupts file
@@ -60,11 +88,25 @@ ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
 HALCONF = $(call rwildcard, $(PROJECT_BUILD)/Inc,*_hal_conf.h)
 
 ifneq (,$(wildcard $(PROJECT_BUILD)))
+
+ifeq ($(STM32_EXT_BUILD),y)
+
+TARGET = $(shell echo $(CHIPNAME) | grep -Eo 'STM32[A-Z][0-9][0-9A-Z][0-9]')
+CHIPNAME = $(shell grep 'Mcu.Name' $(STM32_DRIVER_DIR)/*.ioc | cut -d'=' -f2)
+CFLAGS += -D$(TARGET)xx
+TARGET_FAMILY_LOWER = $(shell echo $(TARGET) | grep -Eo 'STM32[A-Z][0-9]' | tr '[:upper:]' '[:lower:]')
+TARGETCFG = target/$(TARGET_FAMILY_LOWER)x.cfg
+TARGETSVD = $(TARGET)
+
+else
+
 TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9]x.)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 CFLAGS += -D$(TARGET)
 CHIPNAME = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9][A-Z][A-Z][A-Z]x+)" .*$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 TARGETCFG = $(shell sed -rn "s|^.*(STM32[A-Z][0-9]).*$$|target/\L\1x.cfg|p" $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 TARGETSVD = $(shell sed -rn "s|^.*(STM32[A-Z][0-9][0-9A-Z][0-9]).*$$|\1|p" $(PROJECT_BUILDROOT)/.cproject | head -n 1)
+endif #STM32_EXT_BUILD
+
 endif
 
 # Get the path of the linker script
@@ -79,6 +121,15 @@ SRC_DIRS += $(BUILD_DIR)/app/USB_DEVICE \
 SRCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.c
 INCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.h
 endif
+
+ifeq ($(STM32_EXT_BUILD),y)
+
+$(PLATFORM)_project:
+	$(call print,Creating IDE project)
+	$(call mk_dir, $(BUILD_DIR))
+	$(call mk_dir, $(VSCODE_CFG_DIR))
+	$(MAKE) --no-print-directory $(PROJECT)_configure
+else
 
 $(PLATFORM)_project:
 	$(call print,Creating IDE project)
@@ -95,6 +146,39 @@ $(PLATFORM)_project:
 	java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	$(call remove_file,$(BINARY).cubemx) $(HIDE)
 	$(MAKE) --no-print-directory $(PROJECT)_configure
+
+endif #STM32_EXT_BUILD
+
+ifeq ($(STM32_EXT_BUILD),y)
+$(PROJECT)_configure:
+	$(call copy_dir, $(PROJECT)/stm32_files, $(PROJECT_BUILDROOT))
+	$(call print,Configuring project)
+	$(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
+	sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
+	sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
+	$(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
+	$(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
+
+	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
+	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(STARTUP_FILE) $(EXTI_GEN_FILE))
+	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
+
+	$(file > $(CPP_PROP_JSON).default,$(CPP_FINAL_CONTENT))
+	$(file > $(SETTINGSJSON).default,$(VSC_SET_CONTENT))
+	$(file > $(LAUNCHJSON).default,$(VSC_LAUNCH_CONTENT))
+	$(file > $(TASKSJSON).default,$(VSC_TASKS_CONTENT))
+
+	[ -s $(CPP_PROP_JSON) ]	&& echo '.vscode/c_cpp_properties.json already exists, not overwriting'	|| cp $(CPP_PROP_JSON).default $(CPP_PROP_JSON)
+	[ -s $(SETTINGSJSON) ] 	&& echo '.vscode/settings.json already exists, not overwriting'			|| cp $(SETTINGSJSON).default $(SETTINGSJSON)
+	[ -s $(LAUNCHJSON) ] 	&& echo '.vscode/launch.json already exists, not overwriting'			|| cp $(LAUNCHJSON).default $(LAUNCHJSON)
+	[ -s $(TASKSJSON) ] 	&& echo '.vscode/tasks.json already exists, not overwriting'			|| cp $(TASKSJSON).default $(TASKSJSON)
+
+	rm $(CPP_PROP_JSON).default $(SETTINGSJSON).default $(LAUNCHJSON).default $(TASKSJSON).default
+
+	$(MAKE) $(BINARY).openocd-cmsis
+	$(MAKE) $(BINARY).openocd
+
+else
 
 $(PROJECT)_configure:
 	$(call print,Configuring project)
@@ -131,6 +215,8 @@ $(PROJECT)_configure:
 
 	$(MAKE) $(BINARY).openocd-cmsis
 	$(MAKE) $(BINARY).openocd
+
+endif
 
 $(PLATFORM)_sdkopen:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -import "build/app" -data "build" &
