@@ -193,7 +193,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		return ret;
 
 #else
-#if defined(PLATFORM_ZYNQMP)
+#if defined(PLATFORM_ZYNQMP) || defined (PLATFORM_ZYNQ)
 	struct hmc7044_chan_spec chan_spec[] = {
 		{
 			.num = 0,		// CORE_CLK_RX
