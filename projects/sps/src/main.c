@@ -41,6 +41,7 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_init.h"
 #include "no_os_spi.h"
 #include "iio_adpd188.h"
 #include "iio_app.h"
@@ -509,54 +510,56 @@ int main(void)
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
-	status = ad7793_iio_init(&ad7793_iiodev, &ad7793_param);
-	if (status)
-		return status;
+	no_os_init();
 
-	// ad7799_set_channel(ad7793_iiodev->ad7793_desc, 0);
+	// status = ad7793_iio_init(&ad7793_iiodev, &ad7793_param);
+	// if (status)
+	// 	return status;
+
+	// // ad7799_set_channel(ad7793_iiodev->ad7793_desc, 0);
+	// // ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_ZERO);
+	// // ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
+	// // ad7799_set_channel(ad7793_iiodev->ad7793_desc, 0);
+	// // ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_FULL);
+	// // ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
+	// // ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
+
+	// ad7799_set_channel(ad7793_iiodev->ad7793_desc, 1);
 	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_ZERO);
 	// ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
-	// ad7799_set_channel(ad7793_iiodev->ad7793_desc, 0);
+	// ad7799_set_channel(ad7793_iiodev->ad7793_desc, 1);
 	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_FULL);
 	// ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
 	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
 
-	ad7799_set_channel(ad7793_iiodev->ad7793_desc, 1);
-	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_ZERO);
-	ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
-	ad7799_set_channel(ad7793_iiodev->ad7793_desc, 1);
-	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_CAL_INT_FULL);
-	ad7799_dev_ready(ad7793_iiodev->ad7793_desc);
-	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
+	// ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
+	// status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);
 
-	ad7799_set_mode(ad7793_iiodev->ad7793_desc, AD7799_MODE_IDLE);
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);
+	// /* Enable excitation current */
+	// status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, &reg_val);
+	// reg_val &= ~NO_OS_GENMASK(3, 0);
+	// reg_val |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
+	// // reg_data &= ~NO_OS_GENMASK(3, 0);
+	// // reg_data |= NO_OS_BIT(1);
+	// status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, reg_val);
+	// // status = ad7799_set_mode(ad7793_iiodev->ad7793_desc, 0x3);
 
-	/* Enable excitation current */
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, &reg_val);
-	reg_val &= ~NO_OS_GENMASK(3, 0);
-	reg_val |= NO_OS_BIT(3) | NO_OS_BIT(2) | NO_OS_BIT(1);
-	// reg_data &= ~NO_OS_GENMASK(3, 0);
-	// reg_data |= NO_OS_BIT(1);
-	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_IO, reg_val);
-	// status = ad7799_set_mode(ad7793_iiodev->ad7793_desc, 0x3);
+	// status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);
+	// // reg_data |= NO_OS_BIT(4);
+	// // status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, reg_data);
 
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, &reg_val);
-	// reg_data |= NO_OS_BIT(4);
-	// status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_CONF, reg_data);
+	// status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, &reg_val);
+	// reg_val &= ~NO_OS_GENMASK(3, 0);
+	// reg_val |= 0xF;
+	// // reg_data |= NO_OS_GENMASK(3, 0);
+	// status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, reg_val);
 
-	status = ad7799_read(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, &reg_val);
-	reg_val &= ~NO_OS_GENMASK(3, 0);
-	reg_val |= 0xF;
-	// reg_data |= NO_OS_GENMASK(3, 0);
-	status = ad7799_write(ad7793_iiodev->ad7793_desc, AD7799_REG_MODE, reg_val);
-
-	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
-	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
-	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
-	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
-	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
-	status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
+	// status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
+	// status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
+	// status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 0, &reg_val);
+	// status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
+	// status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
+	// status = ad7799_read_channel(ad7793_iiodev->ad7793_desc, 1, &reg_val);
 
 	// status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
 	// if (status < 0)
@@ -765,12 +768,12 @@ int main(void)
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
 	       NETIF_MAX_HWADDR_LEN);
 
-	status = iio_app_init(&app, app_init_param);
-	if (status)
-		return status;
+	// status = iio_app_init(&app, app_init_param);
+	// if (status)
+	// 	return status;
 	
 	LCD_Init(U2D_R2L, 800);
-	LCD_Clear(WHITE);
+	LCD_Clear(MAGENTA);
 	print_line(1, 0, 10, "IO1  (mA):");
 	print_line(2, 0, 10, "IO2      :");
 	print_line(3, 0, 10, "IO3   (V):");
@@ -784,6 +787,9 @@ int main(void)
                 	LCD_WriteData(adi_logo[i * 240 + j]);
 	}
 
-	return iio_app_run(app);
+	while(1);
+
+	return 0;
+	// return iio_app_run(app);
 }
 

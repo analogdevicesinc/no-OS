@@ -29,14 +29,14 @@ struct no_os_gpio_desc *rst;
 struct no_os_gpio_desc *dc;
 struct no_os_gpio_desc *cs;
 
+static struct max_spi_init_param max_spi_ip = {
+    .num_slaves = 1,
+    .polarity = SPI_SS_POL_LOW,
+    .vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
 
 void mylcdinit()
 {
-	struct max_spi_init_param max_spi_ip = {
-		.num_slaves = 1,
-		.polarity = SPI_SS_POL_LOW,
-		.vssel = MXC_GPIO_VSSEL_VDDIOH,
-	};
 	const struct no_os_spi_init_param lcd_config = {
 		.device_id = 1,
 		.max_speed_hz = 25000000,
@@ -46,7 +46,9 @@ void mylcdinit()
 		.chip_select = 2, // useless
 		.extra = &max_spi_ip,
 	};
-	no_os_spi_init(&lcd, &lcd_config);
+    int ret;
+
+	ret = no_os_spi_init(&lcd, &lcd_config);
 
 	// backlight 
 	const struct no_os_gpio_init_param bl_config =
