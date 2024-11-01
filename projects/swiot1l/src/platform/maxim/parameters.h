@@ -83,43 +83,45 @@ extern struct max_spi_init_param adxl355_spi_extra_ip;
 
 #ifndef DISABLE_SECURE_SOCKET
 /* Populate here your CA certificate content */
-#define CA_CERT                                                            \
-    "-----BEGIN CERTIFICATE-----\r\n"                                       \
-    "MIIB4DCCAYWgAwIBAgIUHpqP4S7K66hCtVEh+RN77svnW9gwCgYIKoZIzj0EAwIw\r\n"  \
-    "RTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGElu\r\n"  \
-    "dGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNDEwMDQxNDEyNDFaFw0zNDEwMDIx\r\n"  \
-    "NDEyNDFaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYD\r\n"  \
-    "VQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwWTATBgcqhkjOPQIBBggqhkjO\r\n"  \
-    "PQMBBwNCAARwmufphokl0wcFvDdWCK7Ep5wW6bU42wWtiIi61VOqiPZQSsLDXoce\r\n"  \
-    "OM3lappoIXZN/ZYOmecM/hpJ1ngRwlmvo1MwUTAdBgNVHQ4EFgQUoGglOXpmAXqM\r\n"  \
-    "FLmD1/CI0G24ftYwHwYDVR0jBBgwFoAUoGglOXpmAXqMFLmD1/CI0G24ftYwDwYD\r\n"  \
-    "VR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNJADBGAiEAmB3i33r6fnCxTmYhMomc\r\n"  \
-    "OtSZIUge085aVD5CLqdzXiwCIQCNTihRRvEAbihzZ2NvzOox7XJ6qL/RrKIIqt59\r\n"  \
-    "TUHO3g==\r\n"  \
+#define CA_CERT                                                             \
+    "-----BEGIN CERTIFICATE-----\n"                                       \
+    "MIICGTCCAb+gAwIBAgIUfUilbMM2CLs3W2DzTLc334CISgUwCgYIKoZIzj0EAwIw\r\n"  \
+    "YjELMAkGA1UEBhMCQVUxCzAJBgNVBAgMAkFBMQswCQYDVQQHDAJCQjEMMAoGA1UE\r\n"  \
+    "CgwDQURJMQswCQYDVQQLDAJDQzELMAkGA1UEAwwCREQxETAPBgkqhkiG9w0BCQEW\r\n"  \
+    "AkVFMB4XDTI0MTAyNDExMDYxOFoXDTM0MTAyMjExMDYxOFowYjELMAkGA1UEBhMC\r\n"  \
+    "QVUxCzAJBgNVBAgMAkFBMQswCQYDVQQHDAJCQjEMMAoGA1UECgwDQURJMQswCQYD\r\n"  \
+    "VQQLDAJDQzELMAkGA1UEAwwCREQxETAPBgkqhkiG9w0BCQEWAkVFMFkwEwYHKoZI\r\n"  \
+    "zj0CAQYIKoZIzj0DAQcDQgAEdmQy9SlQrHP+2bAoGXJREWDD35QAQxR/zHZimxJ+\r\n"  \
+    "fILRTt/CGIuo4CUTX4cRByCnOz7VUD71Sxbx6oZaycLtnaNTMFEwHQYDVR0OBBYE\r\n"  \
+    "FAFaULsdIF3XDldeIrLANi9M/SYlMB8GA1UdIwQYMBaAFAFaULsdIF3XDldeIrLA\r\n"  \
+    "Ni9M/SYlMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAKcZuIPt\r\n"  \
+    "+xp97vfHl94n4jp8ejb/8KispWj66OKwGf52AiA7Qpts04IkPNbDfFcfsAGZORYy\r\n"  \
+    "jgrJ7IyKvBu3h+RNVg==\r\n"  \
     "-----END CERTIFICATE-----\r\n";
 
 /* Populate here your device certificate content */
 #define DEVICE_CERT                                                        \
-    "-----BEGIN CERTIFICATE-----\n"                                          \
-    "MIIB3TCCAYOgAwIBAgIUbloQHlMZ+kpmwOcBnyUFCjUuTJ4wCgYIKoZIzj0EAwIw\r\n"  \
-    "RTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGElu\r\n"  \
-    "dGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNDEwMDQxNDE0NTVaFw0yNTEwMDQx\r\n"  \
-    "NDE0NTVaMFQxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYD\r\n"  \
-    "VQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQxDTALBgNVBAMMBGplYW4wWTAT\r\n"  \
-    "BgcqhkjOPQIBBggqhkjOPQMBBwNCAATwEpCVKjiEUDkZDY0w0iQ/EOOZ/3uE1Mfe\r\n"  \
-    "Sl2yXlU1sA0BONIvtwCXAHmvgsYv01uWX3dMbtAk69DeLdZOb4npo0IwQDAdBgNV\r\n"  \
-    "HQ4EFgQUuyguzpQo8u/6Ib9NWetXbtXhmwMwHwYDVR0jBBgwFoAUoGglOXpmAXqM\r\n"  \
-    "FLmD1/CI0G24ftYwCgYIKoZIzj0EAwIDSAAwRQIhAKOAjczTfadWxsmj3lyW+RL3\r\n"  \
-    "64u8bX4iPmJXNTQz7tOJAiAUahgCzBCRf/1eyJ6Ks6wHiuTNmufakOjnQ8z3vFY9\r\n"  \
-    "8Q==\r\n"  \
-    "-----END CERTIFICATE-----\r\n";    
+    "-----BEGIN CERTIFICATE-----\n"                                            \
+    "MIICEjCCAbegAwIBAgIUK/zCtY0zFeo75Ih51lgMcV+T0f0wCgYIKoZIzj0EAwIw\r\n"  \
+    "YjELMAkGA1UEBhMCQVUxCzAJBgNVBAgMAkFBMQswCQYDVQQHDAJCQjEMMAoGA1UE\r\n"  \
+    "CgwDQURJMQswCQYDVQQLDAJDQzELMAkGA1UEAwwCREQxETAPBgkqhkiG9w0BCQEW\r\n"  \
+    "AkVFMB4XDTI0MTAyNDExMDk0OVoXDTI1MTAyNDExMDk0OVowazELMAkGA1UEBhMC\r\n"  \
+    "TEwxCzAJBgNVBAgMAk1NMQswCQYDVQQHDAJOTjELMAkGA1UECgwCT08xCzAJBgNV\r\n"  \
+    "BAsMAlBQMRUwEwYDVQQDDAwxOTIuMTY4LjAuODAxETAPBgkqhkiG9w0BCQEWAlBQ\r\n"  \
+    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEBDJAVCLqAtZoI/S1Yq3HYYXfgPYc\r\n"  \
+    "jVPNz1nW4wa/CoEd0iMQggA5eoJ/ZYjpRb0irQ6wXMtyNSq/D+gF9hBl4KNCMEAw\r\n"  \
+    "HQYDVR0OBBYEFGFTeTvNQUSlQ/dN+AELzLSToBnCMB8GA1UdIwQYMBaAFAFaULsd\r\n"  \
+    "IF3XDldeIrLANi9M/SYlMAoGCCqGSM49BAMCA0kAMEYCIQD5/l3uibkt+4h2FRCH\r\n"  \
+    "kUJw6+DrUocBsPSTNW6IXjpmRQIhAO+E+LxgmM2uSH9ovxssm9eUECHb/YTj1AxN\r\n"  \
+    "MoRSGDYf\r\n"  \
+    "-----END CERTIFICATE-----\r\n";
 
 /* Populate here your device private key content */
 #define DEVICE_PRIVATE_KEY                                                 \
-    "-----BEGIN EC PRIVATE KEY-----\n"                                      \
-    "MHcCAQEEIGJ6HljUxTGMFCAkchF4E2sPb/Ank//Qia5zof3vCLX9oAoGCCqGSM49\r\n"  \
-    "AwEHoUQDQgAE8BKQlSo4hFA5GQ2NMNIkPxDjmf97hNTH3kpdsl5VNbANATjSL7cA\r\n"  \
-    "lwB5r4LGL9Nbll93TG7QJOvQ3i3WTm+J6Q==\r\n"  \
+    "-----BEGIN EC PRIVATE KEY-----\n"                                     \
+    "MHcCAQEEIL8dt3Q3X3PLyFYKl5ZGC7QefyDpT5ZmDO3q0UvkpzO+oAoGCCqGSM49\r\n"  \
+    "AwEHoUQDQgAEBDJAVCLqAtZoI/S1Yq3HYYXfgPYcjVPNz1nW4wa/CoEd0iMQggA5\r\n"  \
+    "eoJ/ZYjpRb0irQ6wXMtyNSq/D+gF9hBl4A==\r\n"  \
     "-----END EC PRIVATE KEY-----\r\n";
 
 #endif

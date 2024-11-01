@@ -55,7 +55,7 @@
 #define MBEDTLS_ERROR_C
 
 /* Latest supported version by mbedtls */
-// #define ENABLE_TLS1_2
+#define ENABLE_TLS1_2
 
 /*
  * Enabled chipersuites.
@@ -131,7 +131,7 @@
 #define MBEDTLS_SSL_MAX_CONTENT_LEN	MAX_CONTENT_LEN
 #endif
 
-// #ifdef ENABLE_TLS1_2
+#ifdef ENABLE_TLS1_2
 
 #define MBEDTLS_SSL_PROTO_TLS1_2
 
@@ -148,7 +148,7 @@
 
 
 #endif /* Chipers that use ENABLE_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
-// #endif /* ENABLE_TLS1_2 */
+#endif /* ENABLE_TLS1_2 */
 
 #ifdef ENABLE_MEMORY_OPTIMIZATIONS
 
@@ -187,7 +187,11 @@
 #define MBEDTLS_ECDSA_C
 
 #define MBEDTLS_SSL_PROTO_DTLS
-#define MBEDTLS_SSL_PROTO_TLS1_3_EXPERIMENTAL
+// Trying to force tls v 1.2
+#undef MBEDTLS_SSL_PROTO_TLS1_3
+#undef MBEDTLS_SSL_PROTO_TLS1_1
+#undef MBEDTLS_SSL_PROTO_TLS1_0
+#define MBEDTLS_SSL_PROTO_TLS1_2
 
 
 // #define MBEDTLS_SSL_MAX_CONTENT_LEN 4096  // Or a larger value if needed

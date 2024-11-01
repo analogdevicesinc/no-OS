@@ -55,7 +55,7 @@
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 #include "maxim_trng.h"
-
+#include "mbedtls/debug.h"
 
 static void message_handler(struct mqtt_message_data *msg)
 {
@@ -65,7 +65,6 @@ static void message_handler(struct mqtt_message_data *msg)
 
 int swiot1l_mqtt()
 {
-
 
 	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
 	uint8_t send_buff[256];
