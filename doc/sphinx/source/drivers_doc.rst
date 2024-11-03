@@ -104,3 +104,10 @@ POWER MANAGEMENT
    drivers/lt8722
    drivers/ltp8800
    drivers/max42500
+
+POTENTIOMETER
+================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/ad5293
