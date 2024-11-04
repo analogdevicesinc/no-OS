@@ -2,3 +2,8 @@
 --indent=force-tab=8 
 --max-code-length=80
 --suffix=none
+
+--pad-oper         # Add spaces around operators
+--pad-header       # Add spaces between 'if', 'for', 'while' 
+--unpad-paren      # Remove spaces inside parentheses
+--pad-comma        # Add space after commas
