@@ -70,7 +70,7 @@ error_uart:
 
 
 #if (BASIC_EXAMPLE != 1)
-#error Please enable the example and re-build the project.
+#error Please enable the example and rebuild the project.
 #endif
 
 error:

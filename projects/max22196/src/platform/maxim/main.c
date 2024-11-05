@@ -72,7 +72,7 @@ int main()
 #error At least one example has to be selected using y value in Makefile.
 #elif (BASIC_EXAMPLE + IIO_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
-Please enable ony one example and re-build thhe project.
+Please enable ony one example and rebuild thhe project.
 #endif
 
 	return ret;
