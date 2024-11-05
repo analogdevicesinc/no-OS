@@ -118,6 +118,10 @@ int basic_pqm_firmware()
 
 	int status = SYS_STATUS_SUCCESS;
 
+	status = init_lcd();
+	if (status)
+		goto exit;
+
 	status = no_os_uart_init(&uart_desc, &uart_ip_stdio);
 	if (status)
 		goto exit;
