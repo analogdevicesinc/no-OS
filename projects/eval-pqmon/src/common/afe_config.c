@@ -49,6 +49,87 @@ extern struct no_os_gpio_init_param reset_gpio_ip;
 /************************* Functions Definitions ******************************/
 /******************************************************************************/
 
+int init_lcd(void)
+{
+	int status;
+	char buff[50];
+	struct no_os_gpio_sec *spi_cs;
+	struct nhd_c12832a1z_dev *nhd_c12832a1z_device;
+
+	struct max_gpio_init_param gpio_extra_ip_cs = {
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	};
+
+	struct no_os_gpio_init_param gpio_dc_ip_cs = {
+		.port = 2,
+		.number = 26,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip_cs,
+	};
+
+	status = no_os_gpio_get(&spi_cs, &gpio_dc_ip_cs);
+	if (status)
+		return status;
+
+	struct max_gpio_init_param gpio_extra_ip = {
+		.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	};
+
+	struct no_os_gpio_init_param gpio_dc_ip = {
+		.port = 3,
+		.number = 5,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip,
+	};
+
+	struct no_os_gpio_init_param gpio_lcd_rst_ip = {
+		.port = 3,
+		.number = 4,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip,
+	};
+
+	struct max_spi_init_param spi_extra_ip = {
+		.num_slaves = 1,
+		.polarity = SPI_SS_POL_LOW,
+		.vssel = MXC_GPIO_VSSEL_VDDIOH
+	};
+
+	struct no_os_spi_init_param spi_lcd_ip = {
+		.device_id = 0,
+		.max_speed_hz = 1000000,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = &max_spi_ops,
+		.chip_select = 0,
+		.extra = &spi_extra_ip,
+	};
+
+	struct nhd_c12832a1z_init_param nhd_c12832a1z_ip = {
+		.spi_ip = &spi_lcd_ip,
+		.dc_pin_ip = &gpio_dc_ip,
+		.reset_pin_ip = &gpio_lcd_rst_ip
+	};
+
+	status = nhd_c12832a1z_init (&nhd_c12832a1z_device, nhd_c12832a1z_ip);
+	if (status)
+		return status;
+	sprintf (buff, "   AD-PQMON-SL     Eval Board");
+	status = no_os_gpio_set_value (spi_cs, 1);
+	if (status)
+		return status;
+	status = nhd_c12832a1z_print_string (nhd_c12832a1z_device, buff);
+	if (status)
+		return status;
+	status = no_os_gpio_set_value (spi_cs, 0);
+	if (status)
+		return status;
+
+}
+
 int afe_init(void)
 {
 	int status = 0;

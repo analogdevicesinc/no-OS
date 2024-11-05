@@ -45,6 +45,7 @@
 #include "status.h"
 #include <stdint.h>
 #include <string.h>
+#include "nhd_c12832a1z.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -108,6 +109,13 @@ typedef enum {
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+/**
+ * @brief Initialize LCD screen and text
+ *
+ * @return Return value of initialization, 0 onn success, different from 0 otherwise.
+ */
+int init_lcd(void);
 
 /**
  * @brief SPI Initialization Function
