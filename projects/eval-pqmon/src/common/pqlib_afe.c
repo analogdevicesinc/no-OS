@@ -54,7 +54,6 @@ int get_afe_input()
 
 	status = afe_read_status0((uint32_t *)&pOneCycle->STATUS0);
 	if ((status == 0) && (pOneCycle->STATUS0 & BITM_STATUS0_RMSONERDY)) {
-		pOneCycle->timestamp = get_irq0_timestamp();
 		status = afe_read_rms_one((uint32_t *)&pOneCycle->AVRMSONE, 3);
 		if (status == 0) {
 			status =
