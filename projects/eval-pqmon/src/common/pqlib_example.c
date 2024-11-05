@@ -43,7 +43,7 @@
 /******************************************************************************/
 
 PQLIB_EXAMPLE pqlibExample;
-extern volatile uint8_t newSyncTimeAvailable;
+extern volatile uint8_t newSyncTimeAvailable = 0;
 extern volatile bool configChanged;
 
 /******************************************************************************/
