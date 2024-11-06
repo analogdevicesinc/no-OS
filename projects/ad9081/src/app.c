@@ -227,8 +227,10 @@ int main(void)
 
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
-	/* Enable the data cache. */
-	Xil_DCacheEnable();
+//	/* Enable the data cache. */
+//	Xil_DCacheEnable();
+
+	Xil_DCacheDisable();
 
 #ifdef QUAD_MXFE
 	struct xil_gpio_init_param  xil_gpio_param_2 = {
