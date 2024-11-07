@@ -98,7 +98,16 @@
 #define CHAN_VOLTAGE_PINST              10
 #define CHAN_VOLTAGE_PST                11
 #define CHAN_VOLTAGE_PLT                12
-
+#define CHAN_EVENT_COUNT                13
+#define CHAN_EVENT_START_TIME           14
+#define CHAN_EVENT_END_TIME             15
+#define CHAN_EVENT_DURATION_IN_CYCL     16
+#define CHAN_EVENT_MIN_MAG              17
+#define CHAN_EVENT_MAX_MAG              18
+#define CHAN_EVENT_DELTA_U_MAX          19
+#define CHAN_EVENT_DELTA_U_SS           20
+#define CHAN_VOLTAGE_MAGNITUDE1012      21
+#define CHAN_VOLTAGE_MAX_MAGNITUDE      22
 
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 

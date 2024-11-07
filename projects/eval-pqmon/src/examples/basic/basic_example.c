@@ -55,7 +55,7 @@ int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
 	d->ext_buff_len = param->ext_buff_len;
 	for (int i = 0; i < TOTAL_PQM_CHANNELS; i++) {
 		for (int j = 0; j < MAX_CH_ATTRS; j++) {
-			d->pqm_ch_attr[i][j] = param->dev_ch_attr[i][j];
+			d->pqm_ch_attr[i][j] = 0;
 		}
 	}
 	for (int i = 0; i < PQM_DEVICE_ATTR_NUMBER; i++) {
