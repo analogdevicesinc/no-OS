@@ -61,7 +61,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define FW_VERSION 2.1
+#define FW_VERSION 2.2
 
 #define IIO_BUFF_TYPE int16_t
 #define SAMPLES_PER_CHANNEL_PLATFORM 256
@@ -69,11 +69,12 @@
 #define MAX_SIZE_BASE_ADDR_WITH_SIZE                                           \
   (MAX_SIZE_BASE_ADDR * sizeof(IIO_BUFF_TYPE))
 
-#define TOTAL_PQM_CHANNELS 7
+#define TOTAL_PQM_CHANNELS 11
 #define VOLTAGE_CH_NUMBER 3
-#define MAX_CH_ATTRS 12
+#define MAX_CH_ATTRS 23
 #define PQM_DEVICE_ATTR_NUMBER 35
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
+#define MAX_EVENT_NUMBER 6
 
 extern IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR];
 

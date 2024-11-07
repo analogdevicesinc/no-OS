@@ -42,10 +42,20 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
-
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
+/**
+ * @brief Enumeration for possible event types for iio output preparation
+ *
+ */
+typedef enum {
+	EVENT_DIPS,
+	EVENT_SWELL,
+	EVENT_RVC,
+	EVENT_INTRPS,
+} EVENT_TYPE;
 
 /**
  * @brief Converts ADI_AFE_RMS_TYPE to voltage/current magnitude
@@ -89,5 +99,15 @@ ADI_PQLIB_FREQ_TYPE convert_to_freq_type(float val);
  * @return time in millisec
  */
 uint32_t convert_to_time_ms(float timesec);
+
+/**
+ * @brief Prepare string output for specific event attribute types
+ *
+ * @param event_type Type of the event needed for output.
+ * @param event_value Type of the event property, depends on the event.
+ * @param buf IIO-buffer used for output preparation.
+ * @return int Length of the prepared string
+ */
+int prepara_string(EVENT_TYPE event_type, int event_value, char *buf);
 
 #endif /* __PQLIB_CONVERT_H__ */
