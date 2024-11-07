@@ -186,6 +186,8 @@ int ad405x_reset_pattern_command(struct ad405x_dev *dev)
 	if (!ret)
 		dev->operation_mode = AD405X_CONFIG_MODE_OP;
 
+	no_os_mdelay(5);	// Let the device reset complete
+
 	return ret;
 }
 
