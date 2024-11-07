@@ -228,6 +228,7 @@ int stm32_dma_init(struct no_os_dma_desc** desc,
 
 	descriptor->id = param->id;
 	descriptor->num_ch = param->num_ch;
+	descriptor->sg_handler = param->sg_handler;
 
 	for (i = 0; i < param->num_ch; i++) {
 		descriptor->channels[i].free = true;
