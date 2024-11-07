@@ -253,6 +253,7 @@ PHONY += all
 ifneq ($(wildcard $(BUILD_LOCK)),)
 all:
 	$(call print_build_type,$(PLATFORM))
+	$(MAKE) --no-print-directory update
 	$(MAKE) --no-print-directory build
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
