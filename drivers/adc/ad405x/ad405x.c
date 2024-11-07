@@ -281,6 +281,39 @@ int ad405x_set_burst_averaging_mode(struct ad405x_dev *dev)
 }
 
 /**
+ * @brief Enter Averaging Mode
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad405x_set_averaging_mode(struct ad405x_dev *dev)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	/* Set Averaging mode. */
+	ret = ad405x_update_bits(dev,
+				 AD405X_REG_ADC_MODES,
+				 AD405X_ADC_MODES_MSK,
+				 AD405X_AVERAGING_MODE);
+	if (ret)
+		return ret;
+
+	/* Enter ADC_MODE. */
+	ret = ad405x_update_bits(dev,
+				 AD405X_REG_MODE_SET,
+				 AD405X_ENTER_ADC_MODE_MSK,
+				 no_os_field_prep(AD405X_ENTER_ADC_MODE_MSK, 1));
+	if (ret)
+		return ret;
+
+	dev->operation_mode = AD405X_AVERAGING_MODE_OP;
+
+	return 0;
+}
+
+/**
  * @brief Enter Config Mode
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
@@ -330,6 +363,8 @@ int ad405x_set_operation_mode(struct ad405x_dev *dev,
 			return ad405x_set_adc_mode(dev);
 		case AD405X_BURST_AVERAGING_MODE_OP:
 			return ad405x_set_burst_averaging_mode(dev);
+		case AD405X_AVERAGING_MODE_OP:
+			return ad405x_set_averaging_mode(dev);
 		default:
 			return -EINVAL;
 		}
@@ -381,7 +416,14 @@ int ad405x_spi_data_read(struct ad405x_dev *dev, int32_t *data)
 		bytes_number = 2;
 		break;
 	case AD405X_BURST_AVERAGING_MODE_OP:
-		bytes_number += dev->active_device;
+		if (dev->active_device == ID_AD4052) {
+			bytes_number = 3;
+		}
+		break;
+	case AD405X_AVERAGING_MODE_OP:
+		if (dev->active_device == ID_AD4052) {
+			bytes_number = 3;
+		}
 		break;
 	default:
 		bytes_number = 2;
@@ -824,6 +866,7 @@ int ad405x_init(struct ad405x_dev **device,
 	dev->gp0_mode = AD405X_GP_MODE_HIGH_Z;
 	dev->data_format = AD405X_TWOS_COMPLEMENT;
 	dev->active_device = init_param.active_device;
+	dev->filter_length = AD405X_LENGTH_2;
 
 	*device = dev;
 
