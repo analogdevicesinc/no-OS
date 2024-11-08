@@ -601,7 +601,7 @@ int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 {
 	int32_t ret;
 	struct no_os_pwm_init_param param;
-	struct stm32_pwm_init_param sparam;
+	struct stm32_pwm_init_param sparam = {0};
 
 	param.id = desc->id;
 	param.duty_cycle_ns = desc->duty_cycle_ns;
