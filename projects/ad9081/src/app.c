@@ -232,6 +232,8 @@ int main(void)
 
 	Xil_DCacheDisable();
 
+	Xil_DCacheDisable();
+
 #ifdef QUAD_MXFE
 	struct xil_gpio_init_param  xil_gpio_param_2 = {
 #ifdef PLATFORM_MB
@@ -262,7 +264,7 @@ int main(void)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
 	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
+			       750000, 375000, 375000, 15000000, 15000000);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
@@ -375,6 +377,9 @@ int main(void)
 
     /* Flush cache data. */
     Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma, sizeof(sine_lut_iq) * tx_dac->num_channels / 2);
+
+    printf("Tx DMA_EXAMPLE: address=%#lx\n",
+    		   (uintptr_t)dac_buffer_dma);
 
     no_os_mdelay(1000);
 
@@ -506,6 +511,8 @@ int main(void)
 
 #else // IIO_SUPPORT
 	printf("Bye\n");
+
+	while(1);
 
 	/* Disable the instruction cache. */
 	Xil_DCacheDisable();
