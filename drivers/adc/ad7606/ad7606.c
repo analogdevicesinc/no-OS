@@ -616,16 +616,20 @@ static int32_t cpy18b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
 	if (srcsz % 9)
 		return -EINVAL;
 
-	for(i = 0; i < srcsz; i += 9) {
+	for (i = 0; i < srcsz; i += 9) {
 		j = 4 * (i / 9);
-		pdst[j+0] = ((uint32_t)(psrc[i+0] & 0xff) << 10) | ((uint32_t)psrc[i+1] << 2)
-			    | ((uint32_t)psrc[i+2] >> 6);
-		pdst[j+1] = ((uint32_t)(psrc[i+2] & 0x3f) << 12) | ((uint32_t)psrc[i+3] << 4)
-			    | ((uint32_t)psrc[i+4] >> 4);
-		pdst[j+2] = ((uint32_t)(psrc[i+4] & 0x0f) << 14) | ((uint32_t)psrc[i+5] << 6)
-			    | ((uint32_t)psrc[i+6] >> 2);
-		pdst[j+3] = ((uint32_t)(psrc[i+6] & 0x03) << 16) | ((uint32_t)psrc[i+7] << 8)
-			    | ((uint32_t)psrc[i+8] >> 0);
+		pdst[j + 0] = ((uint32_t)(psrc[i + 0] & 0xff) << 10) | ((
+					uint32_t)psrc[i + 1] << 2)
+			      | ((uint32_t)psrc[i + 2] >> 6);
+		pdst[j + 1] = ((uint32_t)(psrc[i + 2] & 0x3f) << 12) | ((
+					uint32_t)psrc[i + 3] << 4)
+			      | ((uint32_t)psrc[i + 4] >> 4);
+		pdst[j + 2] = ((uint32_t)(psrc[i + 4] & 0x0f) << 14) | ((
+					uint32_t)psrc[i + 5] << 6)
+			      | ((uint32_t)psrc[i + 6] >> 2);
+		pdst[j + 3] = ((uint32_t)(psrc[i + 6] & 0x03) << 16) | ((
+					uint32_t)psrc[i + 7] << 8)
+			      | ((uint32_t)psrc[i + 8] >> 0);
 	}
 	return 0;
 }
@@ -639,16 +643,20 @@ static int32_t cpy26b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
 	if (srcsz % 13)
 		return -EINVAL;
 
-	for(i = 0; i < srcsz; i += 13) {
+	for (i = 0; i < srcsz; i += 13) {
 		j = 4 * (i / 13);
-		pdst[j+0] = ((uint32_t)(psrc[i+0] & 0xff) << 18) | ((uint32_t)psrc[i+1] << 10)
-			    | ((uint32_t)psrc[i+2] << 2) | ((uint32_t)psrc[i+3] >> 6);
-		pdst[j+1] = ((uint32_t)(psrc[i+3] & 0x3f) << 20) | ((uint32_t)psrc[i+4] << 12)
-			    | ((uint32_t)psrc[i+5] << 4) | ((uint32_t)psrc[i+6] >> 4);
-		pdst[j+2] = ((uint32_t)(psrc[i+6] & 0x0f) << 22) | ((uint32_t)psrc[i+7] << 14)
-			    | ((uint32_t)psrc[i+8] << 6) | ((uint32_t)psrc[i+9] >> 2);
-		pdst[j+3] = ((uint32_t)(psrc[i+9] & 0x03) << 24) | ((uint32_t)psrc[i+10] << 16)
-			    | ((uint32_t)psrc[i+11] << 8) | ((uint32_t)psrc[i+12] >> 0);
+		pdst[j + 0] = ((uint32_t)(psrc[i + 0] & 0xff) << 18) | ((
+					uint32_t)psrc[i + 1] << 10)
+			      | ((uint32_t)psrc[i + 2] << 2) | ((uint32_t)psrc[i + 3] >> 6);
+		pdst[j + 1] = ((uint32_t)(psrc[i + 3] & 0x3f) << 20) | ((
+					uint32_t)psrc[i + 4] << 12)
+			      | ((uint32_t)psrc[i + 5] << 4) | ((uint32_t)psrc[i + 6] >> 4);
+		pdst[j + 2] = ((uint32_t)(psrc[i + 6] & 0x0f) << 22) | ((
+					uint32_t)psrc[i + 7] << 14)
+			      | ((uint32_t)psrc[i + 8] << 6) | ((uint32_t)psrc[i + 9] >> 2);
+		pdst[j + 3] = ((uint32_t)(psrc[i + 9] & 0x03) << 24) | ((
+					uint32_t)psrc[i + 10] << 16)
+			      | ((uint32_t)psrc[i + 11] << 8) | ((uint32_t)psrc[i + 12] >> 0);
 	}
 	return 0;
 }
@@ -743,12 +751,12 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 		sz -= 2;
 		crc = no_os_crc16(ad7606_crc16, dev->data, sz, 0);
 		icrc = ((uint16_t)dev->data[sz] << 8) |
-		       dev->data[sz+1];
+		       dev->data[sz + 1];
 		if (icrc != crc)
 			return -EBADMSG;
 	}
 
-	switch(bits) {
+	switch (bits) {
 	case 18:
 		if (dev->config.status_header)
 			ret = cpy26b32b(dev->data, sz, data);
@@ -758,14 +766,14 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 			return ret;
 		break;
 	case 16:
-		for(i = 0; i < nchannels; i++) {
+		for (i = 0; i < nchannels; i++) {
 			if (dev->config.status_header) {
-				data[i] = (uint32_t)dev->data[i*3] << 16;
-				data[i] |= (uint32_t)dev->data[i*3+1] << 8;
-				data[i] |= (uint32_t)dev->data[i*3+2];
+				data[i] = (uint32_t)dev->data[i * 3] << 16;
+				data[i] |= (uint32_t)dev->data[i * 3 + 1] << 8;
+				data[i] |= (uint32_t)dev->data[i * 3 + 2];
 			} else {
-				data[i] = (uint32_t)dev->data[i*2] << 8;
-				data[i] |= (uint32_t)dev->data[i*2+1];
+				data[i] = (uint32_t)dev->data[i * 2] << 8;
+				data[i] |= (uint32_t)dev->data[i * 2 + 1];
 			}
 		}
 		break;
@@ -978,7 +986,7 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 
 	if (dev->gpio_busy) {
 		/* Wait for BUSY falling edge */
-		while(timeout) {
+		while (timeout) {
 			ret = no_os_gpio_get_value(dev->gpio_busy, &busy);
 			if (ret < 0)
 				return ret;
@@ -1094,10 +1102,10 @@ static inline void ad7606_reset_settings(struct ad7606_dev *dev)
 {
 	int i;
 	const struct ad7606_range *rt = dev->sw_mode ?
-						ad7606_chip_info_tbl[dev->device_id].sw_range_table:
+						ad7606_chip_info_tbl[dev->device_id].sw_range_table :
 						ad7606_chip_info_tbl[dev->device_id].hw_range_table;
 
-	for(i = 0; i < dev->num_channels; i++) {
+	for (i = 0; i < dev->num_channels; i++) {
 		if (dev->sw_mode)
 			ad7606_set_ch_range(dev, i, rt[3]);
 		else
@@ -1396,11 +1404,11 @@ static int8_t ad7606_find_range(struct ad7606_dev *dev,
 	uint8_t i;
 	int8_t v = -1;
 	const struct ad7606_range *rt = dev->sw_mode ?
-						ad7606_chip_info_tbl[dev->device_id].sw_range_table:
+						ad7606_chip_info_tbl[dev->device_id].sw_range_table :
 						ad7606_chip_info_tbl[dev->device_id].hw_range_table;
 
 	uint32_t rtsz = dev->sw_mode ?
-			ad7606_chip_info_tbl[dev->device_id].sw_range_table_sz:
+			ad7606_chip_info_tbl[dev->device_id].sw_range_table_sz :
 			ad7606_chip_info_tbl[dev->device_id].hw_range_table_sz;
 
 	for (i = 0; i < rtsz; i++) {
@@ -1668,7 +1676,7 @@ int32_t ad7606_set_config(struct ad7606_dev *dev,
 		if (ret)
 			return ret;
 	} else {
-		switch(config.op_mode) {
+		switch (config.op_mode) {
 		case AD7606_NORMAL:
 			range_pin = NO_OS_GPIO_LOW;
 			stby_n_pin = NO_OS_GPIO_HIGH;
@@ -1921,19 +1929,19 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		if (ret < 0)
 			goto error;
 
-		for(i = 0; i < dev->num_channels; i++) {
+		for (i = 0; i < dev->num_channels; i++) {
 			ret = ad7606_set_ch_offset(dev, i, init_param->offset_ch[i]);
 			if (ret < 0)
 				goto error;
 		}
 
-		for(i = 0; i < dev->num_channels; i++) {
+		for (i = 0; i < dev->num_channels; i++) {
 			ret = ad7606_set_ch_phase(dev, i, init_param->phase_ch[i]);
 			if (ret < 0)
 				goto error;
 		}
 
-		for(i = 0; i < dev->num_channels; i++) {
+		for (i = 0; i < dev->num_channels; i++) {
 			ret = ad7606_set_ch_gain(dev, i, init_param->gain_ch[i]);
 			if (ret < 0)
 				goto error;
@@ -1969,6 +1977,61 @@ error:
 	printf("ad7606 initialization failed\n");
 	ad7606_remove(dev);
 	return ret;
+}
+
+/*******************************************************************************
+ * @brief correct spi read serial raw data
+ *        1. sign extend for hardware/bipolar mode in case of negative value
+ *        2. split data and status information into 2 arrays
+ *        note: this function should be called after read a sample through spi
+ *              serial interface( parallel interface not supported yet)
+ *
+ * @param dev          - The device structure.
+ * @param buf          - pointer to data buffer read by spi.
+ * @param data         - pointer to data buffer after correction
+ * @param status       - pointer to status information buffer,
+ *                       input null for status_header disable
+ *
+ * @return ret - return code.
+ *         Example: -EINVAL - No valid status information buffer pointer
+ *                  -EINVAL - No valid data buffer pointer
+ *                  0 - No errors encountered.
+*******************************************************************************/
+int32_t ad7606_data_correction_serial(struct ad7606_dev *dev,
+				      uint32_t *buf, int32_t *data, uint8_t *status)
+{
+	uint8_t i = 0;
+	uint8_t num_ch = dev->num_channels;
+	uint32_t *pbuf = buf;
+	uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
+
+	if (dev->config.status_header) {
+		// validate status pointers
+		if (!status)
+			return EINVAL;
+
+		for (i = 0; i < num_ch; i++) {
+			*status = (uint8_t) * pbuf | 0xff;
+			*pbuf = *pbuf >> 8;
+			pbuf++;
+			status++;
+		}
+	}
+
+	// validate data pointers
+	if (!status)
+		return EINVAL;
+
+	// correct negative data value
+	for (i = 0; i < num_ch; i++) {
+		// if negative value exist (hardware/bipolar)
+		if (dev->range_ch_type[i] != AD7606_SW_RANGE_SINGLE_ENDED_UNIPOLAR)
+			*data = no_os_sign_extend32(*buf, bits - 1);
+		buf++;
+		data++;
+	}
+
+	return 0;
 }
 
 /***************************************************************************//**
