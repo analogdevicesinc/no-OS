@@ -47,7 +47,7 @@ int basic_example_main()
 	struct adf4368_dev *dev;
 	int ret;
 
-	pr_info("adf4368_init basic example \n");
+	pr_info("Enter basic example \n");
 
 	ret = adf4368_init(&dev, &adf4368_ip);
 	if (ret)
@@ -57,7 +57,7 @@ int basic_example_main()
 	if (ret)
 		goto remove_adf4368;
 
-	ret = adf4368_set_phase(dev, 4000);
+	ret = adf4368_set_phase(dev, 4000, true);
 
 remove_adf4368:
 	adf4368_remove(dev);
