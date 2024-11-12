@@ -260,7 +260,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 12,		// FPGA_REFCLK2
-			.divider = 6,		// 500 MHz
+			.divider = 12,		// 500 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 13,		// FPGA_SYSREF

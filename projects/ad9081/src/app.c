@@ -68,6 +68,10 @@ static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned(1024)));
 
 #endif
 
+uint32_t dac_buffer_dma[1024 * 16] __attribute__ ((aligned(1024)));
+uint16_t adc_buffer_dma[262144] __attribute__ ((
+			aligned(1024)));
+
 extern struct axi_jesd204_rx *rx_jesd;
 extern struct axi_jesd204_tx *tx_jesd;
 extern struct hmc7044_dev* hmc7044_dev;
@@ -256,7 +260,7 @@ int main(void)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
 	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
+			       250000, 250000, 250000, 10000000, 10000000);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
@@ -347,6 +351,61 @@ int main(void)
 	axi_jesd204_rx_status_read(rx_jesd);
 
 	no_os_mdelay(10);
+
+	extern const uint32_t sine_lut_iq[1024];
+	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+//	axi_dac_data_setup(tx_dac);
+	axi_dac_load_custom_data(tx_dac, sine_lut_iq, NO_OS_ARRAY_SIZE(sine_lut_iq), (uintptr_t)dac_buffer_dma);
+
+	struct axi_dma_transfer transfer = {
+					// Number of bytes to write/read
+					.size = sizeof(sine_lut_iq) * tx_dac->num_channels / 2,
+					// Transfer done flag
+					.transfer_done = 0,
+					// Signal transfer mode
+					.cyclic = NO,
+					// Address of data source
+					.src_addr = (uintptr_t)dac_buffer_dma,
+					// Address of data destination
+					.dest_addr = 0
+	};
+
+	/* Transfer the data. */
+	axi_dmac_transfer_start(tx_dmac, &transfer);
+
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma, sizeof(sine_lut_iq) * tx_dac->num_channels / 2);
+
+	printf("Tx DMA_EXAMPLE: address=%#lx\n",
+			   (uintptr_t)dac_buffer_dma);
+
+	no_os_mdelay(1000);
+
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(adc_buffer_dma),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buffer_dma
+	};
+
+	/* Read the data from the ADC DMA. */
+	axi_dmac_transfer_start(rx_dmac, &read_transfer);
+
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	if(status < 0)
+		return status;
+
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, sizeof(adc_buffer_dma));
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		   (uintptr_t)adc_buffer_dma, NO_OS_ARRAY_SIZE(adc_buffer_dma), rx_adc_init.num_channels,
+		   8 * sizeof(adc_buffer_dma[0]));
 
 #ifdef IIO_SUPPORT
 
