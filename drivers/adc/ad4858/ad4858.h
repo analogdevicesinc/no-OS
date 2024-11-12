@@ -122,6 +122,21 @@
 /** AD4858_REG_CH_SOFTSPAN bit masks */
 #define AD4858_SOFTSPAN_MSK         NO_OS_GENMASK(3,0)
 
+/** Status bit masks for 16-bit resolution ADC */
+#define AD4858_OR_UR_STATUS_MSK_16_BIT	NO_OS_BIT(7)
+#define AD4858_CHN_ID_MSK_16_BIT		NO_OS_GENMASK(6,4)
+#define AD4858_SOFTSPAN_ID_MSK_16_BIT	NO_OS_GENMASK(3,0)
+
+/** Status bit masks for 20-bit resolution ADC */
+#define AD4858_OR_UR_STATUS_MSK_20_BIT	NO_OS_BIT(3)
+#define AD4858_CHN_ID_MSK_20_BIT       	NO_OS_GENMASK(2,0)
+#define AD4858_SOFTSPAN_ID_MSK_20_BIT  	NO_OS_GENMASK(7,4)
+
+/** Raw data bit masks for 20-bit resolution ADC */
+#define AD4858_RAW_DATA_MSK_20_BIT		NO_OS_GENMASK(23,4)
+#define AD4858_RAW_DATA_MSK_EVEN_20_BIT	NO_OS_GENMASK(23,4)
+#define AD4858_RAW_DATA_MSK_ODD_20_BIT 	NO_OS_GENMASK(19,0)
+
 /** Miscellaneous Definitions */
 #define AD4858_REG_RD_BIT_MSK       NO_OS_BIT(7)
 #define AD4858_PRODUCT_ID_L		0x60
@@ -235,10 +250,10 @@ enum ad4858_osr_ratio {
  * @brief Packet formats
  */
 enum ad4858_packet_format {
+	AD4858_PACKET_16_BIT,
 	AD4858_PACKET_20_BIT,
 	AD4858_PACKET_24_BIT,
-	AD4858_PACKET_32_BIT,
-	AD4858_NUM_OF_PACKETS
+	AD4858_PACKET_32_BIT
 };
 
 /**
