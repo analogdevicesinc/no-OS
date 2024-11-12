@@ -339,12 +339,25 @@ int ad4858_set_packet_format(struct ad4858_dev *dev,
 	int ret;
 	uint32_t val;
 
-	if (!dev || (packet_format >= AD4858_NUM_OF_PACKETS))
+	if (!dev || (dev->prod_id == AD4858_PROD_ID_L
+		     && packet_format < AD4858_PACKET_20_BIT)
+	    || (dev->prod_id == AD4855_PROD_ID_L && (packet_format == AD4858_PACKET_20_BIT
+			    || packet_format == AD4858_PACKET_32_BIT)))
 		return -EINVAL;
 
 	val = no_os_field_prep(AD4858_PACKET_FORMAT_MSK, packet_format);
-	ret = ad4858_reg_mask(dev, AD4858_REG_PACKET, AD4858_PACKET_FORMAT_MSK,
-			      val);
+
+	if (dev->prod_id == AD4855_PROD_ID_L)
+		ret = ad4858_reg_mask(dev,
+				      AD4858_REG_PACKET,
+				      AD4858_PACKET_FORMAT_MSK,
+				      val / 2);
+	else
+		ret = ad4858_reg_mask(dev,
+				      AD4858_REG_PACKET,
+				      AD4858_PACKET_FORMAT_MSK,
+				      val - 1);
+
 	if (ret)
 		return ret;
 
@@ -481,8 +494,14 @@ int ad4858_set_chn_offset(struct ad4858_dev *dev, uint8_t chn, uint32_t offset)
 	if (!dev || (chn >= AD4858_NUM_CHANNELS))
 		return -EINVAL;
 
-	/* Offset value is spanned over bits [24:4] */
-	ret = ad4858_reg_write(dev, AD4858_REG_CH_OFFSET(chn), (offset << 4));
+	if (dev->prod_id == AD4855_PROD_ID_L) {
+		/* Offset value is spanned over bits [23:8] */
+		ret = ad4858_reg_write(dev, AD4858_REG_CH_OFFSET(chn), (offset << 8));
+	} else {
+		/* Offset value is spanned over bits [23:4] */
+		ret = ad4858_reg_write(dev, AD4858_REG_CH_OFFSET(chn), (offset << 4));
+	}
+
 	if (ret)
 		return ret;
 
@@ -664,6 +683,10 @@ int ad4858_spi_data_read(struct ad4858_dev *dev, struct ad4858_conv_data *data)
 		return -EINVAL;
 
 	switch (dev->packet_format) {
+	case AD4858_PACKET_16_BIT:
+		nb_bytes = (16 * AD4858_NUM_CHANNELS) >> 3;
+		break;
+
 	case AD4858_PACKET_20_BIT:
 		nb_bytes = (20 * AD4858_NUM_CHANNELS) >> 3;
 		break;
@@ -685,46 +708,82 @@ int ad4858_spi_data_read(struct ad4858_dev *dev, struct ad4858_conv_data *data)
 	if (ret)
 		return ret;
 
-	switch (dev->packet_format) {
-	case AD4858_PACKET_20_BIT:
-		/* 20-bit conversion result */
-		for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
-			indx = buff_chn_offset[chn];
-			if (!(chn % 2))
-				data->raw[chn] = (((uint32_t)buff[indx] << 16) |
-						  ((uint32_t)buff[indx + 1] << 8) |
-						  (buff[indx + 2])) >> 4;
-			else
-				data->raw[chn] = ((uint32_t)(buff[indx] & 0x0f) << 16) |
-						 ((uint32_t)buff[indx + 1] << 8) |
-						 (buff[indx + 2]);
+	switch (dev->prod_id) {
+	case AD4855_PROD_ID_L:
+		switch (dev->packet_format) {
+		case AD4858_PACKET_16_BIT:
+			/* 16-bit conversion result */
+			for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
+				indx = chn * 2;
+				data->raw[chn] = no_os_get_unaligned_be16(buff + indx);
+			}
+			break;
+
+		case AD4858_PACKET_24_BIT:
+			/* 16-bit conversion result + 1-bit OR/UR + 3-bit channel ID + 4-bit softspan ID */
+			for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
+				indx = chn * 3;
+				data->raw[chn] = no_os_get_unaligned_be16(buff + indx);
+				data->or_ur_status[chn] = no_os_field_get(AD4858_OR_UR_STATUS_MSK_16_BIT,
+							  buff[indx + 2]);
+				data->chn_id[chn] = no_os_field_get(AD4858_CHN_ID_MSK_16_BIT, buff[indx + 2]);
+				data->softspan_id[chn] = no_os_field_get(AD4858_SOFTSPAN_ID_MSK_16_BIT,
+							 buff[indx + 2]);
+			}
+			break;
+
+		default:
+			return -EINVAL;
 		}
+
 		break;
 
-	case AD4858_PACKET_24_BIT:
-		/* 20-bit conversion result + 1-bit OR/UR + 3-bit channel ID */
-		for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
-			indx = chn * 3;
-			data->raw[chn] = (((uint32_t)buff[indx] << 16) |
-					  ((uint32_t)buff[indx + 1] << 8) |
-					  (buff[indx + 2])) >> 4;
-			data->or_ur_status[chn] = (buff[indx + 2] >> 3) & 0x1;
-			data->chn_id[chn] = buff[indx + 2] & 0x7;
-		}
-		chn = 0;
-		break;
+	case AD4858_PROD_ID_L:
+		switch (dev->packet_format) {
+		case AD4858_PACKET_20_BIT:
+			/* 20-bit conversion result */
+			for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
+				indx = buff_chn_offset[chn];
+				if (!(chn % 2))
+					data->raw[chn] = no_os_field_get(AD4858_RAW_DATA_MSK_EVEN_20_BIT,
+									 no_os_get_unaligned_be24(buff + indx));
+				else
+					data->raw[chn] = no_os_field_get(AD4858_RAW_DATA_MSK_ODD_20_BIT,
+									 no_os_get_unaligned_be24(buff + indx));
+			}
+			break;
 
-	case AD4858_PACKET_32_BIT:
-		/* 20-bit conversion result + 1-bit OR/UR + 3-bit channel ID + 4-bit softspan ID + 4 0's */
-		for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
-			indx = chn * 4;
-			data->raw[chn] = (((uint32_t)buff[indx] << 16) |
-					  ((uint32_t)buff[indx + 1] << 8) |
-					  (buff[indx + 2])) >> 4;
-			data->or_ur_status[chn] = (buff[indx + 2] >> 3) & 0x1;
-			data->chn_id[chn] = buff[indx + 2] & 0x7;
-			data->softspan_id[chn] = (buff[indx + 3] >> 4) & 0xf;
+		case AD4858_PACKET_24_BIT:
+			/* 20-bit conversion result + 1-bit OR/UR + 3-bit channel ID */
+			for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
+				indx = chn * 3;
+				data->raw[chn] = no_os_field_get(AD4858_RAW_DATA_MSK_20_BIT,
+								 no_os_get_unaligned_be24(buff + indx));
+				data->or_ur_status[chn] = no_os_field_get(AD4858_OR_UR_STATUS_MSK_20_BIT,
+							  buff[indx + 2]);
+				data->chn_id[chn] = no_os_field_get(AD4858_CHN_ID_MSK_20_BIT, buff[indx + 2]);
+			}
+			chn = 0;
+			break;
+
+		case AD4858_PACKET_32_BIT:
+			/* 20-bit conversion result + 1-bit OR/UR + 3-bit channel ID + 4-bit softspan ID + 4 0's */
+			for (chn = 0; chn < AD4858_NUM_CHANNELS; chn++) {
+				indx = chn * 4;
+				data->raw[chn] = no_os_field_get(AD4858_RAW_DATA_MSK_20_BIT,
+								 no_os_get_unaligned_be24(buff + indx));
+				data->or_ur_status[chn] = no_os_field_get(AD4858_OR_UR_STATUS_MSK_20_BIT,
+							  buff[indx + 2]);
+				data->chn_id[chn] = no_os_field_get(AD4858_CHN_ID_MSK_20_BIT, buff[indx + 2]);
+				data->softspan_id[chn] = no_os_field_get(AD4858_SOFTSPAN_ID_MSK_20_BIT,
+							 buff[indx + 3]);
+			}
+			break;
+
+		default:
+			return -EINVAL;
 		}
+
 		break;
 
 	default:
