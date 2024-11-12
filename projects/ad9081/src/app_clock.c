@@ -235,36 +235,36 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	struct hmc7044_chan_spec chan_spec[] = {
 		{
 			.num = 0,		// CORE_CLK_RX
-			.divider = 8,		// 250 MHz
+			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 2,		// DEV_REFCLK
-			.divider = 6,		// 250 MHz
+			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 3,		// DEV_SYSREF
-			.divider = 256,	// 1.953125 MHz
+			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
 			.is_sysref = true,
 		}, {
 			.num = 6,		// CORE_CLK_TX
-			.divider = 8,		// 250 MHz
+			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 8,		// CORE_CLK_RX_ALT2
-			.divider = 4,		// 250 MHz
+			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 10,		// CORE_CLK_RX_ALT
-			.divider = 8,		// 250 MHz
+			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 12,		// FPGA_REFCLK2
-			.divider = 4,		// 500 MHz
+			.divider = 6,		// 500 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 13,		// FPGA_SYSREF
-			.divider = 256,	// 1.953125 MHz
+			.divider = 1536,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
 			.is_sysref = true,
 		}

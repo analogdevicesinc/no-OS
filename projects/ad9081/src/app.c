@@ -172,6 +172,7 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_maindp_dac_1x_non1x_crossbar_select = AD9081_TX_DAC_1X_NON1X_CROSSBAR,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
@@ -227,12 +228,8 @@ int main(void)
 
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
-//	/* Enable the data cache. */
-//	Xil_DCacheEnable();
-
-	Xil_DCacheDisable();
-
-	Xil_DCacheDisable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
 
 #ifdef QUAD_MXFE
 	struct xil_gpio_init_param  xil_gpio_param_2 = {
@@ -264,7 +261,7 @@ int main(void)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
 	status = app_jesd_init(jesd_clk,
-			       750000, 375000, 375000, 15000000, 15000000);
+			       500000, 250000, 250000, 10000000, 10000000);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
@@ -356,6 +353,7 @@ int main(void)
 
 	extern const uint32_t sine_lut_iq[1024];
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+//	axi_dac_data_setup(tx_dac);
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq, NO_OS_ARRAY_SIZE(sine_lut_iq), (uintptr_t)dac_buffer_dma);
 	no_os_mdelay(1000);
 

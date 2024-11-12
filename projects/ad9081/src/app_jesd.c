@@ -112,7 +112,7 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	struct adxcvr_init rx_adxcvr_init = {
 		.name = "rx_adxcvr",
 		.base = RX_XCVR_BASEADDR,
-		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
 		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.lane_rate_khz = rx_lane_clk_khz,
