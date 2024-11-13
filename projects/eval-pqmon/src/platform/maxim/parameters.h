@@ -56,7 +56,15 @@
 #define UART_BAUDRATE 115200
 #define UART_IRQ_ID USB_IRQn
 #define UART_OPS &max_usb_uart_ops
+
+#if defined(PQM_CONN_USB)
 #define UART_EXTRA &iio_demo_usb_uart_extra_ip
+#elif defined(PQM_CONN_SERIAL)
+#define UART_EXTRA &uart_stdio_extra_ip
+#elif defined(PQM_CONN_T1L)
+#define UART_EXTRA &uart_stdio_extra_ip
+#define ADIN_SPI_EXTRA &spi_extra_ip
+#endif
 
 #define SPI_CS 0
 #define SPI_DEVICE_ID 2
@@ -83,6 +91,7 @@
 #define RESET_GPIO_PORT_NUM 1
 #define GPIO_OPS &max_gpio_ops
 #define RESET_GPIO_EXTRA &max_reset_gpio_extra_ip
+#define GPIO_EXTRA &max_reset_gpio_extra_ip
 
 #define INTR_GPIO_PIN_NUM 30
 #define INTR_GPIO_PORT_NUM 0
