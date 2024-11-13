@@ -48,16 +48,37 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 # PQM library
 ifdef PQLIB_PATH
-INCS += ${PQLIB_PATH}/include/config/adi_pqlib_cfg.h   	\
-	${PQLIB_PATH}/include/ade9430.h       		\
-	${PQLIB_PATH}/include/adi_pqlib_debug.h       	\
-	${PQLIB_PATH}/include/adi_pqlib_error.h       	\
-	${PQLIB_PATH}/include/adi_pqlib_memory.h      	\
-	${PQLIB_PATH}/include/adi_pqlib_profile.h     	\
-	${PQLIB_PATH}/include/adi_pqlib_version.h     	\
+INCS += ${PQLIB_PATH}/include/config/adi_pqlib_cfg.h   		\
+	${PQLIB_PATH}/include/ade9430.h       			\
+	${PQLIB_PATH}/include/adi_pqlib_debug.h       		\
+	${PQLIB_PATH}/include/adi_pqlib_error.h       		\
+	${PQLIB_PATH}/include/adi_pqlib_memory.h      		\
+	${PQLIB_PATH}/include/adi_pqlib_profile.h     		\
+	${PQLIB_PATH}/include/adi_pqlib_version.h     		\
 	${PQLIB_PATH}/include/adi_pqlib.h     
-	
+
 EXTRA_MATH_PQM = ${PQLIB_PATH}/libadi_pqlib_cm4_gcc.a
+endif
+
+ifeq ($(INTERFACE), usb)
+endif
+
+ifeq ($(INTERFACE), serial)
+endif
+
+ifeq ($(INTERFACE), ethernet)
+	LIBRARIES += lwip
+	INCS += $(NO-OS)/network/tcp_socket.h			\
+		$(NO-OS)/network/noos_mbedtls_config.h		\
+		$(NO-OS)/network/network_interface.h		\
+		$(INCLUDE)/no_os_crc8.h				\
+		$(DRIVERS)/net/adin1110/adin1110.h		\
+		$(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h
+
+	SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c	\
+		$(DRIVERS)/net/adin1110/adin1110.c					\
+		$(NO-OS)/util/no_os_crc8.c						\
+		$(NO-OS)/network/tcp_socket.c
 endif
 
 INCS += $(INCLUDE)/no_os_crc8.h
@@ -67,3 +88,5 @@ INCS += $(INCLUDE)/no_os_list.h \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
 
 EXTRA_FILES +=	$(EXTRA_MATH_PQM) ${EXTRA_MATH_LIB}
+
+

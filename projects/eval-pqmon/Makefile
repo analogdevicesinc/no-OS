@@ -1,8 +1,31 @@
+INTERFACE ?= usb
+
 BASIC_EXAMPLE = y
 IIOD=y
 
 HEAP_SIZE=0x80000
 STACK_SIZE=0x20000
+
+ifeq ($(INTERFACE), usb)
+$(info Using USB as interface for IIO communication)
+CFLAGS += -DPQM_CONN_USB
+CFLAGS += -DNO_OS_USB_UART
+endif
+
+ifeq ($(INTERFACE), serial)
+$(info Using SERIAL as interface for IIO communication)
+CFLAGS += -DPQM_CONN_SERIAL
+endif
+
+ifeq ($(INTERFACE), ethernet)
+$(info Using ETHERNET as interface for IIO communication)
+CFLAGS += -DPQM_CONN_T1L
+CFLAGS += -DNO_OS_LWIP_NETWORKING
+CFLAGS += -DNO_OS_LWIP_INIT_ONETIME=1
+NO_OS_IP=192.168.97.40
+NO_OS_NETMASK=255.255.0.0
+NO_OS_GATEWAY=0.0.0.0
+endif
 
 ifndef PQLIB_PATH
 $(error 'No PQM library path defined')
@@ -11,9 +34,7 @@ endif
 include ../../tools/scripts/generic_variables.mk
 
 CFLAGS_MFLOAT_TYPE=soft
-CFLAGS += -DNO_OS_USB_UART
 CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
-CFLAGS += -DNO_OS_LWIP_INIT_ONETIME=1
 
 include src.mk
 include ../../tools/scripts/generic.mk

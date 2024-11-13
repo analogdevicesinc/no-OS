@@ -38,6 +38,12 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#if defined(PQM_CONN_T1L)
+#include "lwip_socket.h"
+#include "lwip_adin1110.h"
+#include "adin1110.h"
+#endif
+
 #include "adi_pqlib.h"
 #include "iio.h"
 #include "iio_app.h"
@@ -70,7 +76,26 @@
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 
 extern IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR];
-extern struct no_os_uart_init_param iio_demo_uart_ip;
+
+#if defined(PQM_CONN_USB)
+extern struct no_os_uart_init_param iio_demo_usb_ip;
+#elif defined(PQM_CONN_SERIAL)
+extern struct no_os_uart_init_param iio_demo_serial_ip;
+#elif defined(PQM_CONN_T1L)
+extern struct no_os_uart_init_param iio_demo_serial_ip;
+extern const struct no_os_gpio_init_param adin1110_int_ip;
+extern const struct no_os_gpio_init_param adin1110_rst_gpio_ip;
+extern const struct no_os_gpio_init_param adin1110_swpd_ip;
+extern const struct no_os_gpio_init_param adin1110_tx2p4_ip;
+extern const struct no_os_gpio_init_param adin1110_mssel_ip;
+extern const struct no_os_gpio_init_param adin1110_cfg0_ip;
+extern const struct no_os_gpio_init_param adin1110_cfg1_ip;
+extern const struct no_os_spi_init_param adin1110_spi_ip;
+
+extern struct adin1110_init_param adin1110_ip;
+extern struct lwip_network_param lwip_ip;
+#endif
+
 extern struct pqm_init_para pqm_ip;
 extern struct no_os_spi_init_param spi_egy_ip;
 extern struct no_os_i2c_init_param i2c_ip;

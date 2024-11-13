@@ -29,6 +29,19 @@ pqlib_dir
 
 It can be integrated into the project by defining the `PQLIB_PATH` to point to the `pqlib_dir` path. 
 
+
+## Choose interface
+
+The firmware application can communicate with clients via several interfaces. In order to use the preferred connection type, set `INTERFACE` to the desired value:
+
+* ```INTERFACE=usb``` (Default value)
+* ```INTERFACE=serial``` (Used for 485 communication. Half-duplex communication must be handled by user)
+* ```INTERFACE=ethernet``` (Used for communication over T1L)
+
+NOTE: In case one builds firmware multiple times with different interfaces, make sure to delete the `build` directory before the new  compilation.
+
+NOTE 2: For T1L connection the deffault ip for the device is `192.168.97.40`. For network configuration on client side, use the following steps: [network configuration steps](https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602).
+
 ## Build and run
 
 The project is based on a [MAX32650](https://www.analog.com/en/products/max32650.html) microcontroller. It can be built and run by running the following script:
@@ -40,6 +53,8 @@ make reset
 export PLATFORM=maxim
 # select controller type
 export TARGET=max32650
+# select interface
+export INTERFACE=usb
 # build and flash the code
 make PQLIB_PATH=<path_to_library> run
 ```

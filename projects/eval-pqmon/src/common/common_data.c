@@ -41,7 +41,8 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-struct no_os_uart_init_param iio_demo_uart_ip = {
+#if defined(PQM_CONN_USB)
+struct no_os_uart_init_param iio_demo_usb_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
 	.asynchronous_rx = true,
@@ -51,7 +52,99 @@ struct no_os_uart_init_param iio_demo_uart_ip = {
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = UART_EXTRA,
 	.platform_ops = &max_usb_uart_ops,
-}; // UART initialization parameter for iio connection
+}; // USB initialization parameter for iio connection
+#elif defined(PQM_CONN_SERIAL) || defined(PQM_CONN_T1L)
+
+struct no_os_uart_init_param iio_demo_serial_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = &max_uart_ops,
+}; // SERIAL initialization parameter for iio connection
+
+#if defined(PQM_CONN_T1L)
+
+const struct no_os_gpio_init_param adin1110_int_ip = {
+	.port = 2,
+	.number = 6,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
+	.port = 2,
+	.number = 1,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param adin1110_swpd_ip = {
+	.port = 2,
+	.number = 25,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param adin1110_tx2p4_ip = {
+	.port = 2,
+	.number = 10,
+	.pull = NO_OS_PULL_DOWN,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param adin1110_mssel_ip = {
+	.port = 2,
+	.number = 9,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param adin1110_cfg0_ip = {
+	.port = 2,
+	.number = 3,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param adin1110_cfg1_ip = {
+	.port = 2,
+	.number = 0,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+const struct no_os_spi_init_param adin1110_spi_ip = {
+	.device_id = 2,
+	.max_speed_hz = 15000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS,
+	.chip_select = 0,
+	.extra = ADIN_SPI_EXTRA,
+};
+struct adin1110_init_param adin1110_ip = {
+	.chip_type = ADIN1110,
+	.comm_param = adin1110_spi_ip,
+	.reset_param = adin1110_rst_gpio_ip,
+	.append_crc = false,
+};
+struct lwip_network_param lwip_ip = {
+	.platform_ops = &adin1110_lwip_ops,
+	.mac_param = &adin1110_ip,
+};
+#endif
+#endif
 
 IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR] = {0};
 
