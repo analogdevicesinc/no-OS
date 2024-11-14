@@ -123,6 +123,10 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 		/*
 		 * Currently, the LWIP networking layer doesn't implement packet RX
 		 * using interrupts, so we have to poll.
+		 * 
+		 * Adding this as a temporary workaround, based off this commit: https://github.com/analogdevicesinc/no-OS/commit/8ca2a15b8b7cc7a53985bf5a773bdd99f4bc63bc#diff-f9781ad4653f9192f0521846b4116a5b34ae3c2abd2c4256ee0a813e3f947aa4R158
+		 * 
+		 * Previously this polling was only applied to the mqtt layer
 		 */
 		int i = 500;
 		while(i>0){
@@ -367,6 +371,10 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 		/*
 		 * Currently, the LWIP networking layer doesn't implement packet RX
 		 * using interrupts, so we have to poll.
+		 * 
+		 * Adding this as a temporary workaround, based off this commit: https://github.com/analogdevicesinc/no-OS/commit/8ca2a15b8b7cc7a53985bf5a773bdd99f4bc63bc#diff-f9781ad4653f9192f0521846b4116a5b34ae3c2abd2c4256ee0a813e3f947aa4R158
+		 * 
+		 * Previously this polling was only applied to the mqtt layer
 		 */
 		int i = 500;
 		while(i>0){
