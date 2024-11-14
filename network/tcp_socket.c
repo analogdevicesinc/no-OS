@@ -78,6 +78,17 @@
 /******************************************************************************/
 
 #ifndef DISABLE_SECURE_SOCKET
+
+static void my_debug( void *ctx, int level,
+                      const char *file, int line,
+                      const char *str )
+{
+    ((void) level);
+
+    printf( (FILE *) ctx, "%s:%04d: %s", file, line, str );
+    fflush(  (FILE *) ctx  );
+}
+
 /**
  * @struct secure_socket_desc
  * @brief Fields used by secure socket
@@ -97,6 +108,7 @@ struct secure_socket_desc {
 	/** Mbedtls tls context */
 	mbedtls_ssl_context	ssl;
 };
+
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
@@ -109,7 +121,17 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 			size_t len)
 {
 	int32_t ret;
-
+	#ifdef NO_OS_LWIP_NETWORKING
+		/*
+		 * Currently, the LWIP networking layer doesn't implement packet RX
+		 * using interrupts, so we have to poll.
+		 */
+		int i = 500;
+		while(i>0){
+		no_os_lwip_step(sock->net->net, NULL);
+		i--;
+		}
+	#endif /*NO_OS_LWIP_NETWORKING*/
 	ret = sock->net->socket_recv(sock->net->net, sock->id, buff, len);
 	if (ret == -EAGAIN)
 		return MBEDTLS_ERR_SSL_WANT_READ;
@@ -148,20 +170,16 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (!desc || !param)
 		return -1;
 	ldesc = (typeof(ldesc))no_os_calloc(1, sizeof(*ldesc));
-	// ldesc = (struct secure_socket_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (ldesc == NULL)
 		return -1;
 	printf(&ldesc);
 	// /* Initialize structures */
 	mbedtls_ssl_config_init(&ldesc->conf);
-	printf("sslconfig\n");
 	mbedtls_x509_crt_init(&ldesc->cacert);
-	printf("cacert\n");
 	mbedtls_x509_crt_init(&ldesc->clicert);
-	printf("clicert\n");
 	mbedtls_pk_init(&ldesc->pkey);
-	printf("pkey\n");
 	mbedtls_ssl_init(&ldesc->ssl);
+	mbedtls_ssl_conf_dbg( &ldesc->conf, my_debug, stdout );
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
@@ -346,7 +364,17 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 					desc->id, addr);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
-
+	#ifdef NO_OS_LWIP_NETWORKING
+		/*
+		 * Currently, the LWIP networking layer doesn't implement packet RX
+		 * using interrupts, so we have to poll.
+		 */
+		int i = 500;
+		while(i>0){
+		no_os_lwip_step(desc->net->net, NULL);
+		i--;
+		}
+	#endif /*NO_OS_LWIP_NETWORKING*/
 #ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure) {
 		do {
