@@ -79,14 +79,12 @@
 
 #ifndef DISABLE_SECURE_SOCKET
 
-static void my_debug( void *ctx, int level,
-                      const char *file, int line,
-                      const char *str )
+static void my_debug(void *ctx, int level,
+                     const char *file, int line,
+                     const char *str)
 {
-    ((void) level);
-
-    printf( (FILE *) ctx, "%s:%04d: %s", file, line, str );
-    fflush(  (FILE *) ctx  );
+    (void)ctx; // ctx is unused, so suppress the warning
+    printf("%s:%04d: %s", file, line, str);
 }
 
 /**
@@ -179,7 +177,8 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	mbedtls_x509_crt_init(&ldesc->clicert);
 	mbedtls_pk_init(&ldesc->pkey);
 	mbedtls_ssl_init(&ldesc->ssl);
-	mbedtls_ssl_conf_dbg( &ldesc->conf, my_debug, stdout );
+	mbedtls_ssl_conf_dbg(&ldesc->conf, my_debug, NULL);
+	mbedtls_debug_set_threshold(4);
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
