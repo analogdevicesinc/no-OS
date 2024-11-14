@@ -208,7 +208,6 @@ int swiot1l_mqtt()
 	tcp_ip.secure_init_param = &secure_params;
 
 	ret = socket_init(&tcp_socket, &tcp_ip);
-	printf("Ta me anseo tar eis an initialisation function");
 	if (ret) {
 		pr_err("Socket init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
