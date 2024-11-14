@@ -82,7 +82,7 @@ struct iio_ad3552r_desc {
 /************************* Functions Definitions *****************************/
 /*****************************************************************************/
 
-static int iio_ad3552r_attr_get(void *device, char *buf, size_t len,
+static int iio_ad3552r_attr_get(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct iio_ad3552r_desc *iio_dac = device;
