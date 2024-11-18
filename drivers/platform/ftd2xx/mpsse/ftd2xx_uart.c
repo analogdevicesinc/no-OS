@@ -1,11 +1,13 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "no_os_alloc.h"
 #include "ftd2xx_uart.h"
 
 static int ftd2xx_uart_init(struct no_os_uart_desc **desc,
 			    struct no_os_uart_init_param *param)
 {
+        *desc = no_os_calloc(1, sizeof(struct no_os_uart_desc));
 	return 0;
 };
 
