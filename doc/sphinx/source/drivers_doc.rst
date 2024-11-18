@@ -53,6 +53,7 @@ FREQUENCY GENERATORS
    :maxdepth: 1
 
    drivers/adf4382
+   drivers/adf4368
 
 INERTIAL MEASUREMENT UNITS
 ==========================
