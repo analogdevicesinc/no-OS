@@ -59,6 +59,13 @@
 #define AD74416H_CH_C                   2
 #define AD74416H_CH_D                   3
 
+#define AD74416H_GPIO_A                 0
+#define AD74416H_GPIO_B                 1
+#define AD74416H_GPIO_C                 2
+#define AD74416H_GPIO_D                 3
+#define AD74416H_GPIO_E                 4
+#define AD74416H_GPIO_F                 5
+
 /** The value of the sense resistor in ohms */
 #define AD74416H_RSENSE                 12
 /** 16 bit ADC */
