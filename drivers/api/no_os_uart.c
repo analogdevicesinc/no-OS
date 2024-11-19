@@ -59,7 +59,6 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 			struct no_os_uart_init_param *param)
 {
 	int32_t ret;
-        *desc = malloc(sizeof(struct no_os_uart_desc));
 
 	if (!param || !param->platform_ops
 	    || param->device_id >= NO_OS_ARRAY_SIZE(uart_mutex_table))
