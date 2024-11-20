@@ -1,9 +1,9 @@
 /*******************************************************************************
- *   @file   no_os_alloc.h
- *   @brief  Header file of memory allocator.
- *   @author GMois (george.mois@analog.com)
+ *   @file   no_os_config.h
+ *   @brief  Default configurations for No-OS.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,21 +30,47 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef _NO_OS_ALLOC_H_
-#define _NO_OS_ALLOC_H_
+#ifndef _NO_OS_CONFIG_H_
+#define _NO_OS_CONFIG_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "no_os_config.h"
+#ifndef CONFIG_PLATFORM_IRQ_ACTIONS
+#define CONFIG_PLATFORM_IRQ_ACTIONS 1
+#endif
 
-/* Allocate memory and return a pointer to it */
-void *no_os_malloc(size_t size);
+#ifndef CONFIG_DYNAMIC_ALLOC
+#define CONFIG_DYNAMIC_ALLOC 0
+#endif
 
-/* Allocate memory and return a pointer to it, set memory to 0 */
-void *no_os_calloc(size_t nitems, size_t size);
+#ifndef CONFIG_IIO_INST
+#define CONFIG_IIO_INST 1
+#endif
 
-/* Deallocate memory previously allocated by a call to no_os_calloc or
- * no_os_malloc */
-void no_os_free(void *ptr);
+#ifndef CONFIG_IIO_DEVS
+#define CONFIG_IIO_DEVS 1
+#endif
 
-#endif // _NO_OS_ALLOC_H_
+#ifndef CONFIG_IIO_TRIGS
+#define CONFIG_IIO_TRIGS 1
+#endif
+
+#ifndef CONFIG_IIOD_CONN_BUFF_SIZE
+#define CONFIG_IIOD_CONN_BUFF_SIZE 4096
+#endif
+
+#ifndef CONFIG_IIOD_CONN
+#define CONFIG_IIOD_CONN 1
+#endif
+
+#ifndef CONFIG_NET_DEVS
+#define CONFIG_NET_DEVS 1
+#endif
+
+#ifndef CONFIG_NET_IFACE
+#define CONFIG_NET_IFACE 1
+#endif
+
+#ifndef CONFIG_SPI_NUM_DEVS
+#define CONFIG_SPI_NUM_DEVS 5
+#endif
+
+#endif
