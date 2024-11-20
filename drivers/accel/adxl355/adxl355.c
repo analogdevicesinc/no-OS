@@ -43,6 +43,18 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#ifndef CONFIG_ADXL355_INSTANCES
+#define CONFIG_ADXL355_INSTANCES	1
+#endif
+
+#endif
+
+static struct no_os_spi_desc adxl355_spi[CONFIG_ADXL355_INSTANCES];
+static struct no_os_i2c_desc adxl355_i2c[CONFIG_ADXL355_INSTANCES];
+static uint32_t adxl355_index;
+
 static uint8_t shadow_reg_val[5] = {0, 0, 0, 0, 0};
 static const uint8_t adxl355_scale_mul[4] = {0, 1, 2, 4};
 static const uint8_t adxl355_part_id[] = {
@@ -150,10 +162,21 @@ int adxl355_init(struct adxl355_dev **device,
 		return -EINVAL;
 	}
 
-	dev = (struct adxl355_dev *)no_os_calloc(1, sizeof(*dev));
+	if (CONFIG_DYNAMIC_ALLOC){
+		dev = (struct adxl355_dev *)no_os_calloc(1, sizeof(*dev));
 
-	if (!dev)
-		return -ENOMEM;
+		if (!dev)
+			return -ENOMEM;
+	} else {
+		if (adxl355_index >= CONFIG_ADXL355_INSTANCES)
+			return -ENOMEM;
+
+		dev = *device;
+		if (init_param.comm_type == ADXL355_SPI_COMM)
+			dev->com_desc.spi_desc = &adxl355_spi[adxl355_index];
+		else
+			dev->com_desc.i2c_desc = &adxl355_i2c[adxl355_index];
+	}
 
 	dev->comm_type = init_param.comm_type;
 
@@ -206,6 +229,9 @@ int adxl355_init(struct adxl355_dev **device,
 	dev->act_cnt = GET_ADXL355_RESET_VAL(ADXL355_ACT_CNT);
 
 	*device = dev;
+
+	if (!CONFIG_DYNAMIC_ALLOC)
+		adxl355_index++;
 
 	return ret;
 error_com:
