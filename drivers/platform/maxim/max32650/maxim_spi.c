@@ -55,6 +55,11 @@
 #define MAX_DELAY_SCLK	255
 #define NS_PER_US	1000
 
+#if CONFIG_DYNAMIC_ALLOC == 0
+static struct max_spi_state max_spi_state[CONFIG_SPI_NUM_DEVS];
+static uint32_t spi_index;
+#endif
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -388,6 +393,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
+#if CONFIG_DYNAMIC_ALLOC == 1
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
@@ -397,6 +403,10 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		ret = -ENOMEM;
 		goto err;
 	}
+#else
+	descriptor = *desc;
+	st = &max_spi_state[spi_index++];
+#endif
 
 	eparam = param->extra;
 	descriptor->device_id = param->device_id;
