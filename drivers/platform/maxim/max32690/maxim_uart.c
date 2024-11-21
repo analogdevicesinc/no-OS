@@ -52,6 +52,16 @@ bool is_callback;
 
 static uint8_t c;
 
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#ifndef CONFIG_UART_INSTANCES
+#define CONFIG_UART_INSTANCES	5
+#endif
+
+static struct max_uart_desc max_uart_desc[CONFIG_UART_INSTANCES];
+static uint32_t max_uart_index;
+#endif
+
 /**
  * @brief Empty function used to discard a callback
  * @param req - UART request struct
@@ -260,15 +270,24 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
-	if (!descriptor)
-		return -ENOMEM;
+	if (CONFIG_DYNAMIC_ALLOC) {
+		descriptor = no_os_calloc(1, sizeof(*descriptor));
+		if (!descriptor)
+			return -ENOMEM;
 
-	max_uart = no_os_calloc(1, sizeof(*max_uart));
-	if (!descriptor) {
-		ret = -ENOMEM;
-		goto error;
+		max_uart = no_os_calloc(1, sizeof(*max_uart));
+		if (!descriptor) {
+			ret = -ENOMEM;
+			goto error;
+		}
+	} else {
+		if (max_uart_index >= CONFIG_UART_INSTANCES)
+			return -ENOMEM;
+
+		descriptor = *desc;
+		max_uart = &max_uart_desc[max_uart_index];
 	}
+
 	descriptor->extra = max_uart;
 	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
@@ -413,6 +432,9 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		if (ret)
 			goto error_nvic;
 	}
+
+	if (!CONFIG_DYNAMIC_ALLOC)
+		max_uart_index++;
 
 	return 0;
 error_nvic:
