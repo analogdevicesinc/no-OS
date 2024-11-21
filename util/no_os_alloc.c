@@ -40,6 +40,10 @@
  */
 __attribute__((weak)) void *no_os_malloc(size_t size)
 {
+	if (CONFIG_DYNAMIC_ALLOC == 0){
+		while(1);
+	}
+
 	return malloc(size);
 }
 
@@ -51,6 +55,10 @@ __attribute__((weak)) void *no_os_malloc(size_t size)
  */
 __attribute__((weak)) void *no_os_calloc(size_t nitems, size_t size)
 {
+	if (CONFIG_DYNAMIC_ALLOC == 0){
+		while(1);
+	}
+
 	return calloc(nitems, size);
 }
 
@@ -63,5 +71,8 @@ __attribute__((weak)) void *no_os_calloc(size_t nitems, size_t size)
  */
 __attribute__((weak)) void no_os_free(void *ptr)
 {
+	if (CONFIG_DYNAMIC_ALLOC == 0)
+		return;
+
 	free(ptr);
 }
