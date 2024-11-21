@@ -40,6 +40,17 @@
 #include "no_os_alloc.h"
 #include "adt7420.h"
 
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#ifndef CONFIG_ADT7420_INSTANCES
+#define CONFIG_ADT7420_INSTANCES	1
+#endif
+
+// static struct no_os_i2c_desc adt7420_i2c[CONFIG_ADT7420_INSTANCES];
+#endif
+
+static uint32_t adt7420_index;
+
 const struct adt7420_chip_info chip_info[] = {
 	[ID_ADT7410] = {
 		.resolution = 16,
@@ -206,9 +217,17 @@ int32_t adt7420_init(struct adt7420_dev **device,
 	int32_t status;
 	uint16_t device_connected_check = 0;
 
-	dev = (struct adt7420_dev *)no_os_malloc(sizeof(*dev));
-	if (!dev)
-		return -1;
+	if (CONFIG_DYNAMIC_ALLOC){
+		dev = (struct adt7420_dev *)no_os_malloc(sizeof(*dev));
+		if (!dev)
+			return -1;
+	} else{
+		if (adt7420_index >= CONFIG_ADT7420_INSTANCES)
+			return -1;
+
+		dev = *device;
+		// dev->i2c_desc = &adt7420_i2c[adt7420_index];
+	}
 
 	dev->active_device = init_param.active_device;
 
@@ -270,6 +289,9 @@ int32_t adt7420_remove(struct adt7420_dev *dev)
 	else
 		ret = no_os_spi_remove(dev->spi_desc);
 	no_os_free(dev);
+
+	if (!CONFIG_DYNAMIC_ALLOC && adt7420_index)
+		adt7420_index--;
 
 	return ret;
 }
