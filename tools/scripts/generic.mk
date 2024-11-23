@@ -174,6 +174,8 @@ ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
 CFLAGS += -DDISABLE_SECURE_SOCKET
 endif
 
+# Mbed also has an INC_DIRS variable, so this needs to be NO_OS_INC_DIRS
+NO_OS_INC_DIRS := $(patsubst %/,%,$(NO_OS_INC_DIRS))
 SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 
 # Get all .c, .cpp and .h files from SRC_DIRS
@@ -182,6 +184,7 @@ SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.cpp))
 ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.S))
 ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.s))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
+INCS     += $(foreach dir, $(NO_OS_INC_DIRS), $(call rwildcard, $(dir),*.h))
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
 # all files from inside the directory will be ignored
