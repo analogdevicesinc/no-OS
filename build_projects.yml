@@ -131,7 +131,7 @@ jobs:
   pool:
     name: Default
     demands:
-      - agent.name -equals no-OS
+      - agent.name -equals no-OS_xilinx
   steps:
   - checkout: self
     fetchDepth: 50
