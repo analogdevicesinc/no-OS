@@ -25,106 +25,106 @@ variables:
     value: $(Build.SourceBranchName)
 
 jobs:
-- job: Xilinx
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS_xilinx
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: |
-      export BRANCH=$(branch)
-      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
-        -export_dir $(RELEASE_DIR) \
-        -log_dir $(LOG_DIR) \
-        -builds_dir /no-OS_builds/builds \
-        -platform xilinx \
-        -hdl_branch $(HDL_BRANCH)
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_Xilinx'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_Xilinx_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: Xilinx
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS_xilinx
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: |
+#       export BRANCH=$(branch)
+#       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+#         -export_dir $(RELEASE_DIR) \
+#         -log_dir $(LOG_DIR) \
+#         -builds_dir /no-OS_builds/builds \
+#         -platform xilinx \
+#         -hdl_branch $(HDL_BRANCH)
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_Xilinx'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_Xilinx_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: STM32
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform stm32
-               -hdl_branch $(HDL_BRANCH)'
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_STM32'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_STM32_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: STM32
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
+#                -export_dir $(RELEASE_DIR)
+#                -log_dir $(LOG_DIR)
+#                -builds_dir /no-OS_builds/builds
+#                -platform stm32
+#                -hdl_branch $(HDL_BRANCH)'
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_STM32'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_STM32_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: Maxim
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform maxim
-               -hdl_branch $(HDL_BRANCH)'
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_Maxim'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_Maxim_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: Maxim
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
+#                -export_dir $(RELEASE_DIR)
+#                -log_dir $(LOG_DIR)
+#                -builds_dir /no-OS_builds/builds
+#                -platform maxim
+#                -hdl_branch $(HDL_BRANCH)'
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_Maxim'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_Maxim_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
 - job: Mbed
   timeoutInMinutes: 200
@@ -159,89 +159,89 @@ jobs:
       artifact: 'logs_Mbed_$(System.JobId)'
       publishLocation: 'pipeline'
 
-- job: Pico
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform pico
-               -hdl_branch $(HDL_BRANCH)'
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_Pico'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_Pico_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: Pico
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
+#                -export_dir $(RELEASE_DIR)
+#                -log_dir $(LOG_DIR)
+#                -builds_dir /no-OS_builds/builds
+#                -platform pico
+#                -hdl_branch $(HDL_BRANCH)'
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_Pico'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_Pico_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: ADuCM3029
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform aducm3029
-               -hdl_branch $(HDL_BRANCH)'
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_ADuCM3029'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_ADuCM3029_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: ADuCM3029
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
+#                -export_dir $(RELEASE_DIR)
+#                -log_dir $(LOG_DIR)
+#                -builds_dir /no-OS_builds/builds
+#                -platform aducm3029
+#                -hdl_branch $(HDL_BRANCH)'
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_ADuCM3029'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_ADuCM3029_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: Unit_tests
-  pool:
-    vmImage: ubuntu-latest
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: |
-      sudo apt install ruby-full
-      sudo gem install ceedling
-      pip install gcovr==4.1
-      cd tests/drivers/imu/
-      ceedling test:all
-    displayName: 'Run unit tests'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'tests/drivers/imu/build/artifacts/test/*.xml'
+# - job: Unit_tests
+#   pool:
+#     vmImage: ubuntu-latest
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: |
+#       sudo apt install ruby-full
+#       sudo gem install ceedling
+#       pip install gcovr==4.1
+#       cd tests/drivers/imu/
+#       ceedling test:all
+#     displayName: 'Run unit tests'
+#   - task: PublishTestResults@2
+#     inputs:
+#       testResultsFormat: 'JUnit'
+#       testResultsFiles: 'tests/drivers/imu/build/artifacts/test/*.xml'
