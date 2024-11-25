@@ -49,12 +49,18 @@ static void *i2c_table[I2C_MAX_BUS_NUMBER + 1];
 #define CONFIG_I2C_INSTANCES	5
 #endif
 
+#else
+
+#ifndef CONFIG_I2C_INSTANCES
+#define CONFIG_I2C_INSTANCES	0
+#endif
+
+#endif
+
 static struct no_os_i2c_desc i2c_desc[CONFIG_I2C_INSTANCES];
 static struct no_os_i2cbus_desc *i2c_bus[I2C_MAX_BUS_NUMBER + 1];
 static uint32_t i2c_bus_index;
 static uint32_t i2c_desc_index;
-
-#endif
 
 /**
  * @brief Initialize the I2C communication peripheral.
@@ -81,13 +87,14 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 			return ret;
 	}
 	// Initilize I2C descriptor
-#if CONFIG_DYNAMIC_ALLOC == 0
-	struct no_os_i2c_desc *i2c = &i2c_desc[i2c_desc_index];
-	ret = param->platform_ops->i2c_ops_init(&i2c, param);
-	*desc = i2c;
-#else
-	ret = param->platform_ops->i2c_ops_init(desc, param);
-#endif
+	if (!CONFIG_DYNAMIC_ALLOC) {
+		struct no_os_i2c_desc *i2c = &i2c_desc[i2c_desc_index];
+		ret = param->platform_ops->i2c_ops_init(&i2c, param);
+		*desc = i2c;
+	} else {
+		ret = param->platform_ops->i2c_ops_init(desc, param);
+	}
+
 	if (ret)
 		return ret;
 
@@ -96,9 +103,8 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 	(*desc)->bus->slave_number++;
 	(*desc)->platform_ops = param->platform_ops;
 
-#if CONFIG_DYNAMIC_ALLOC == 0
-	i2c_desc_index++;
-#endif
+	if (!CONFIG_DYNAMIC_ALLOC)
+		i2c_desc_index++;
 
 	return 0;
 }
@@ -112,12 +118,13 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 {
 	struct no_os_i2cbus_desc *bus;
 	
-#if CONFIG_DYNAMIC_ALLOC == 1
-	bus = (struct no_os_i2cbus_desc *)no_os_calloc(1,
-		sizeof(struct no_os_i2cbus_desc));
-#else
-	bus = &i2c_bus[param->device_id];
-#endif
+	if (CONFIG_DYNAMIC_ALLOC){
+		bus = (struct no_os_i2cbus_desc *)no_os_calloc(1,
+			sizeof(struct no_os_i2cbus_desc));
+	} else {
+		bus = &i2c_bus[param->device_id];
+	}
+
 	if (!bus)
 		return -ENOMEM;
 
@@ -131,9 +138,8 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 
 	i2c_table[param->device_id] = bus;
 
-#if CONFIG_DYNAMIC_ALLOC == 0
-	i2c_bus_index++;
-#endif
+	if (!CONFIG_DYNAMIC_ALLOC)
+		i2c_bus_index++;
 
 	return 0;
 }

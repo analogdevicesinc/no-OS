@@ -48,6 +48,27 @@
 			 (id == 1) ? MXC_SYS_PERIPH_CLOCK_I2C1:		\
 			 (id == 2) ? MXC_SYS_PERIPH_CLOCK_I2C2: 0)
 
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#ifndef CONFIG_I2C_INSTANCES
+#define CONFIG_I2C_INSTANCES	5
+#endif
+
+#ifndef CONFIG_MAX_I2C_XFER_SIZE
+#define CONFIG_MAX_I2C_XFER_SIZE	32
+#endif
+
+#else
+
+#define CONFIG_I2C_INSTANCES		0
+#define CONFIG_MAX_I2C_XFER_SIZE	0
+
+#endif
+
+static struct max_i2c_extra max_i2c_extra[CONFIG_I2C_INSTANCES];
+static uint8_t max_i2c_data[CONFIG_I2C_INSTANCES][CONFIG_MAX_I2C_XFER_SIZE];
+static uint32_t max_i2c_index;
+
 /** Used to know how many instances are created */
 static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
 
@@ -140,14 +161,23 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 	if (param->device_id >= MXC_I2C_INSTANCES)
 		return -EINVAL;
 
-	*desc = no_os_calloc(1, sizeof(**desc));
-	if (!(*desc))
-		return -ENOMEM;
+	if (CONFIG_DYNAMIC_ALLOC){
+		*desc = no_os_calloc(1, sizeof(**desc));
+		if (!(*desc))
+			return -ENOMEM;
 
-	max_i2c = no_os_calloc(1, sizeof(*max_i2c));
-	if (!max_i2c) {
-		ret = -ENOMEM;
-		goto error_desc;
+		max_i2c = no_os_calloc(1, sizeof(*max_i2c));
+		if (!max_i2c) {
+			ret = -ENOMEM;
+			goto error_desc;
+		}
+	} else {
+		if (max_i2c_index >= CONFIG_I2C_INSTANCES)
+			return -ENOMEM;
+
+		max_i2c = &max_i2c_extra[max_i2c_index];
+		max_i2c->prologue_data = max_i2c_data[max_i2c_index];
+		(*desc)->extra = max_i2c;
 	}
 
 	eparam = param->extra;
@@ -191,7 +221,11 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 
 	nb_created_desc[param->device_id]++;
 
+	if (!CONFIG_DYNAMIC_ALLOC)
+		max_i2c_index++;
+
 	return 0;
+
 error_extra:
 	no_os_free(max_i2c);
 error_desc:
@@ -221,8 +255,13 @@ static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
 		NVIC_DisableIRQ(MXC_I2C_GET_IRQ(desc->device_id));
 	}
 
-	no_os_free(max_i2c);
-	no_os_free(desc);
+	if (CONFIG_DYNAMIC_ALLOC){
+		no_os_free(max_i2c);
+		no_os_free(desc);
+	} else {
+		if (max_i2c_index)
+			max_i2c_index--;
+	}
 
 	return 0;
 }
@@ -255,17 +294,22 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 
 	if (stop_bit == 0) {
 		max_i2c_desc->prologue_size = bytes_number;
-		if (max_i2c_desc->prologue_data) {
-			ptr = realloc(max_i2c_desc->prologue_data, bytes_number);
-			max_i2c_desc->prologue_data = ptr;
+		if (CONFIG_DYNAMIC_ALLOC){
+			if (max_i2c_desc->prologue_data) {
+				ptr = realloc(max_i2c_desc->prologue_data, bytes_number);
+				max_i2c_desc->prologue_data = ptr;
+			} else {
+				max_i2c_desc->prologue_data = malloc(bytes_number);
+				if (!max_i2c_desc->prologue_data)
+					return -ENOMEM;
+			}
 		} else {
-			max_i2c_desc->prologue_data = malloc(bytes_number);
-			if (!max_i2c_desc->prologue_data)
+			if (bytes_number > CONFIG_MAX_I2C_XFER_SIZE)
 				return -ENOMEM;
-		}
-		memcpy(max_i2c_desc->prologue_data, data, bytes_number);
+			memcpy(max_i2c_desc->prologue_data, data, bytes_number);
 
-		return 0;
+			return 0;
+		}
 	}
 
 	req.i2c = i2c_regs;
@@ -322,10 +366,15 @@ static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 
 	ret = MXC_I2C_MasterTransaction(&req);
 
-	if (max_i2c_desc->prologue_size != 0) {
-		no_os_free(max_i2c_desc->prologue_data);
-		max_i2c_desc->prologue_size = 0;
-		max_i2c_desc->prologue_data = NULL;
+	if (CONFIG_DYNAMIC_ALLOC){
+		if (max_i2c_desc->prologue_size != 0) {
+			no_os_free(max_i2c_desc->prologue_data);
+			max_i2c_desc->prologue_size = 0;
+			max_i2c_desc->prologue_data = NULL;
+		}
+	} else {
+		if (max_i2c_desc->prologue_size != 0)
+			max_i2c_desc->prologue_size = 0;
 	}
 
 	return ret;
