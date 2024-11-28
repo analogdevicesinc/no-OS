@@ -32,9 +32,6 @@
 #include "talise.h"
 #include "talise_config.h"
 #include "app_config.h"
-// #include "app_clocking.h"
-// #include "app_jesd.h"
-// #include "app_transceiver.h"
 #include "adrv9009.h"
 #include "ad9528.h"
 
@@ -51,6 +48,8 @@
 #else
 #include "axi_adxcvr.h"
 #endif
+
+uint32_t dac_buffer_dma[1024 * 16] __attribute__ ((aligned(1024)));
 
 #ifdef IIO_SUPPORT
 
@@ -337,28 +336,28 @@ int main(void)
 	ad9528_channels[13].output_dis = 0;
 	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[13].divider_phase = 0;
-	ad9528_channels[13].channel_divider = 10;
+	ad9528_channels[13].channel_divider = 5;
 	ad9528_channels[13].signal_source = SOURCE_VCO;
 
 	// fpga device clock
 	ad9528_channels[1].output_dis = 0;
 	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[1].divider_phase = 0;
-	ad9528_channels[1].channel_divider = 10;
+	ad9528_channels[1].channel_divider = 5;
 	ad9528_channels[1].signal_source = SOURCE_VCO;
 
 	// adrv9009 sysref
 	ad9528_channels[12].output_dis = 0;
 	ad9528_channels[12].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[12].divider_phase = 0;
-	ad9528_channels[12].channel_divider = 10;
+	ad9528_channels[12].channel_divider = 5;
 	ad9528_channels[12].signal_source = SOURCE_SYSREF_VCO;
 
 	// fpga sysref
 	ad9528_channels[3].output_dis = 0;
 	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[3].divider_phase = 0;
-	ad9528_channels[3].channel_divider = 10;
+	ad9528_channels[3].channel_divider = 5;
 	ad9528_channels[3].signal_source = SOURCE_SYSREF_VCO;
 
 	// ad9528 settings
@@ -380,7 +379,7 @@ int main(void)
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
 	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_NSHOT;
 	ad9528_param.pdata->sysref_k_div = 512;
-//	ad9528_param.pdata->sysref_req_en = true;
+	ad9528_param.pdata->sysref_req_en = false;
 	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
 	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
 	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
@@ -546,6 +545,104 @@ int main(void)
 	if (status)
 		goto error;
 
+	struct axi_clkgen *rx_clkgen;
+	struct axi_clkgen *tx_clkgen;
+	struct axi_clkgen *rx_os_clkgen;
+
+	struct axi_clkgen_init rx_clkgen_init = {
+		"rx_clkgen",
+		RX_CLKGEN_BASEADDR,
+		talInit.clocks.deviceClock_kHz * 1000
+	};
+	struct axi_clkgen_init tx_clkgen_init = {
+		"tx_clkgen",
+		TX_CLKGEN_BASEADDR,
+		talInit.clocks.deviceClock_kHz * 1000
+	};
+	struct axi_clkgen_init rx_os_clkgen_init = {
+		"rx_os_clkgen",
+		RX_OS_CLKGEN_BASEADDR,
+		talInit.clocks.deviceClock_kHz * 1000
+	};
+
+#ifndef ADRV9008_2
+	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
+	if (status) {
+		printf("error: %s: axi_clkgen_init() failed\n", rx_clkgen_init.name);
+		goto error;
+	}
+#endif
+#ifndef ADRV9008_1
+	status = axi_clkgen_init(&tx_clkgen, &tx_clkgen_init);
+	if (status) {
+		printf("error: %s: axi_clkgen_init() failed\n", tx_clkgen_init.name);
+		goto error;
+	}
+	status = axi_clkgen_init(&rx_os_clkgen, &rx_os_clkgen_init);
+	if (status) {
+		printf("error: %s: axi_clkgen_init() failed\n", rx_os_clkgen_init.name);
+		goto error;
+	}
+#endif
+
+	// Required by CLKGEN, // fpga device clock
+	status = ad9528_clk_set_rate(clkchip_device, 1, talInit.clocks.deviceClock_kHz * 1000);
+	if (status != 0) {
+		printf("error: ad9528_clk_set_rate() failed\n");
+		goto error;
+	}
+
+	// adrv9009 sysref
+	status = ad9528_clk_set_rate(clkchip_device, 12, 60000);
+	if (status != 0) {
+		printf("error: ad9528_clk_set_rate() failed\n");
+		goto error;
+	}
+	// fpga sysref
+	status = ad9528_clk_set_rate(clkchip_device, 3, 60000);
+	if (status != 0) {
+		printf("error: ad9528_clk_set_rate() failed\n");
+		goto error;
+	}
+	// adrv9009 device clock
+	status = ad9528_clk_set_rate(clkchip_device, 13, talInit.clocks.deviceClock_kHz * 1000);
+	if (status != 0) {
+		printf("error: ad9528_clk_set_rate() failed\n");
+		goto error;
+	}
+
+#ifndef ADRV9008_2
+	status = axi_clkgen_set_rate(rx_clkgen, rx_div40_rate_hz);
+	if (status != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_clkgen->name);
+		goto error;
+	}
+#endif
+#ifndef ADRV9008_1
+	status = axi_clkgen_set_rate(tx_clkgen, tx_div40_rate_hz);
+	if (status != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", tx_clkgen->name);
+		goto error;
+	}
+	status = axi_clkgen_set_rate(rx_os_clkgen, rx_os_div40_rate_hz);
+	if (status != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
+		goto error;
+	}
+#endif
+
+	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
+	if (status)
+		goto error;
+
+	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
+	if (status)
+		goto error;
+
+	status = adxcvr_init(&rx_os_adxcvr, &rx_os_adxcvr_init);
+	if (status)
+		goto error;
+
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
 	struct axi_jesd204_rx *rx_os_jesd;
@@ -585,6 +682,7 @@ int main(void)
 		goto error;
 	}
 
+#if 1
 	status = axi_dac_init_begin(&phy->tx_dac, &tx_dac_init);
 	if (status)
 		goto error;
@@ -616,9 +714,6 @@ int main(void)
 		goto error;
 	}
 
-	// Set DDS data
-	axi_dac_data_setup(phy->tx_dac);
-
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		pr_info("axi_dmac_init tx init error: %d\n", status);
@@ -635,82 +730,12 @@ int main(void)
 		goto error;
 	}
 
-	struct axi_clkgen *rx_clkgen;
-	struct axi_clkgen *tx_clkgen;
-	struct axi_clkgen *rx_os_clkgen;
-
-	struct axi_clkgen_init rx_clkgen_init = {
-		"rx_clkgen",
-		RX_CLKGEN_BASEADDR,
-		talInit.clocks.deviceClock_kHz * 1000
-	};
-	struct axi_clkgen_init tx_clkgen_init = {
-		"tx_clkgen",
-		TX_CLKGEN_BASEADDR,
-		talInit.clocks.deviceClock_kHz * 1000
-	};
-	struct axi_clkgen_init rx_os_clkgen_init = {
-		"rx_os_clkgen",
-		RX_OS_CLKGEN_BASEADDR,
-		talInit.clocks.deviceClock_kHz * 1000
-	};
-
-#ifndef ADRV9008_2
-	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
-	if (status) {
-		printf("error: %s: axi_clkgen_init() failed\n", rx_clkgen_init.name);
-		goto error;
-	}
-#endif
-#ifndef ADRV9008_1
-	status = axi_clkgen_init(&tx_clkgen, &tx_clkgen_init);
-	if (status) {
-		printf("error: %s: axi_clkgen_init() failed\n", tx_clkgen_init.name);
-		goto error;
-	}
-	status = axi_clkgen_init(&rx_os_clkgen, &rx_os_clkgen_init);
-	if (status) {
-		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen_init.name);
-		goto error;
-	}
-#endif
-
 #ifdef PLATFORM_MB
 	/* Required for using SPI desc*/
 	status = TALISE_openHw(phy->talDevice);
 	if(status) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 		pr_info("error: TALISE_openHw() failed\n");
-		goto error;
-	}
-#endif
-
-	// Required by CLKGEN
-	status = ad9528_clk_set_rate(clkchip_device, 1, talInit.clocks.deviceClock_kHz * 1000);
-	if (status != 0) {
-		printf("error: ad9528_clk_set_rate() failed\n");
-		goto error;
-	}
-
-	ad9528_clk_set_rate(clkchip_device, 12, 60000);
-	ad9528_clk_set_rate(clkchip_device, 3, talInit.clocks.deviceClock_kHz * 1000);
-
-#ifndef ADRV9008_2
-	status = axi_clkgen_set_rate(rx_clkgen, rx_div40_rate_hz);
-	if (status != 0) {
-		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_clkgen->name);
-		goto error;
-	}
-#endif
-#ifndef ADRV9008_1
-	status = axi_clkgen_set_rate(tx_clkgen, tx_div40_rate_hz);
-	if (status != 0) {
-		printf("error: %s: axi_clkgen_set_rate() failed\n", tx_clkgen->name);
-		goto error;
-	}
-	status = axi_clkgen_set_rate(rx_os_clkgen, rx_os_div40_rate_hz);
-	if (status != 0) {
-		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
 		goto error;
 	}
 #endif
@@ -751,9 +776,75 @@ int main(void)
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
-	axi_jesd204_tx_status_read(tx_jesd);
+	printf("\n");
+
+	// Set DDS data
+	axi_dac_data_setup(phy->tx_dac);
+
 	axi_jesd204_rx_status_read(rx_jesd);
+	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_os_jesd);
+
+	// axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	extern const uint32_t sine_lut_iq[1024];
+	axi_dac_set_datasel(phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	axi_dac_load_custom_data(phy->tx_dac, sine_lut_iq, NO_OS_ARRAY_SIZE(sine_lut_iq), (uintptr_t)dac_buffer_dma);
+
+	struct axi_dma_transfer transfer = {
+			// Number of bytes to write/read
+			.size = sizeof(sine_lut_iq) * phy->tx_dac->num_channels / 2,
+			// Transfer done flag
+			.transfer_done = 0,
+			// Signal transfer mode
+			.cyclic = NO,
+			// Address of data source
+			.src_addr = (uintptr_t)dac_buffer_dma,
+			// Address of data destination
+			.dest_addr = 0
+	};
+	/* Transfer the data. */
+	axi_dmac_transfer_start(tx_dmac, &transfer);
+
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma, sizeof(sine_lut_iq) * phy->tx_dac->num_channels / 2);
+
+	no_os_mdelay(50);
+
+	/* Transfer 16384 samples from ADC to MEM */
+	struct axi_dma_transfer transfer_rx = {
+		// Number of bytes to write/read
+		.size = 16384 * TALISE_NUM_CHANNELS *
+		NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)(DDR_MEM_BASEADDR + 0x800000)
+	};
+
+	no_os_mdelay(1000);
+
+	status = axi_dmac_transfer_start(rx_dmac, &transfer_rx);
+	if(status)
+		return status;
+	printf("Rx -> ");
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	uint8_t num_chans = rx_adc_init.num_channels;
+	if(status)
+		return status;
+
+	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,
+				  16384 * TALISE_NUM_CHANNELS *
+				  NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
+
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%u\n",
+	       transfer_rx.dest_addr, transfer_rx.size / NO_OS_DIV_ROUND_UP(
+		       talInit.jesd204Settings.framerA.Np, 8),
+	       num_chans,
+	       8 * NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
 
 	while(0) {
 		axi_jesd204_tx_status_read(tx_jesd);
@@ -768,7 +859,7 @@ int main(void)
 		printf("%c",'2');
 		printf("%c",'J');
 	}
-
+#endif
 error:
 	pr_info("Bye\n");
 
