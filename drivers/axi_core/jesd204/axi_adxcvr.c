@@ -478,7 +478,7 @@ static int adxcvr_reset(struct adxcvr *xcvr)
  */
 int adxcvr_clk_enable(struct adxcvr *xcvr)
 {
-	int ret, retry = 10;
+	int ret, retry = 100;
 	unsigned int status;
 	int bufstatus_err;
 
