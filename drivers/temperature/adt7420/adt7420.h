@@ -40,6 +40,7 @@
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
+#include "no_os_config.h"
 #include <stdbool.h>
 
 /******************************************************************************/
@@ -111,7 +112,6 @@
 
 #define ADT7420_RESET_DELAY 		1
 
-
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -162,6 +162,15 @@ struct adt7420_init_param {
 };
 
 extern const struct adt7420_chip_info chip_info[];
+
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#define ADT7420_INST				\
+	&(struct adt7420_dev){			\
+		.i2c_desc = NO_OS_I2C_INST,	\
+	}
+
+#endif
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

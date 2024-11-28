@@ -86,4 +86,13 @@ enum max_i2c_speed {
  */
 extern const struct no_os_i2c_platform_ops max_i2c_ops;
 
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#define NO_OS_PLATFORM_I2C_PRIV			\
+	&(struct max_i2c_extra){		\
+		.prologue_data = (int[32]){}	\
+	}
+
+#endif
+
 #endif /* MAXIM_I2C_H_ */

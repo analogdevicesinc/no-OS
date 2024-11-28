@@ -84,10 +84,7 @@ int main(void)
 		.dev_type = ID_ADXL355,
 	};
 
-	struct adxl355_dev adxl355_mem = {};
-	struct adxl355_desc *adxl355 = &adxl355_mem;
-	struct adt7420_dev adt7420_mem = {};
-	struct adt7420_dev *adt7420 = &adt7420_mem;
+	struct adt7420_dev *adt7420 = ADT7420_INST;
 
 	ret = no_os_uart_init(&uart, &uart_init);
 	if (ret)

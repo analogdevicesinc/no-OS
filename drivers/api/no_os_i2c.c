@@ -82,29 +82,18 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 		return -EINVAL;
 	// Initializing BUS descriptor
 	if (i2c_table[param->device_id] == NULL) {
-		ret = no_os_i2cbus_init(param);
+		ret = no_os_i2cbus_init(*desc, param);
 		if (ret)
 			return ret;
 	}
 	// Initilize I2C descriptor
-	if (!CONFIG_DYNAMIC_ALLOC) {
-		struct no_os_i2c_desc *i2c = &i2c_desc[i2c_desc_index];
-		ret = param->platform_ops->i2c_ops_init(&i2c, param);
-		*desc = i2c;
-	} else {
-		ret = param->platform_ops->i2c_ops_init(desc, param);
-	}
-
+	ret = param->platform_ops->i2c_ops_init(desc, param);
 	if (ret)
 		return ret;
 
-	*desc = &i2c_desc;
 	(*desc)->bus = i2c_table[param->device_id];
 	(*desc)->bus->slave_number++;
 	(*desc)->platform_ops = param->platform_ops;
-
-	if (!CONFIG_DYNAMIC_ALLOC)
-		i2c_desc_index++;
 
 	return 0;
 }
@@ -114,7 +103,7 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
  * @param param - The structure that containes the i2c bus parameters
  * @return 0 in case of success, error code otherwise
 */
-int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
+int32_t no_os_i2cbus_init(struct no_os_i2c_desc *desc, const struct no_os_i2c_init_param *param)
 {
 	struct no_os_i2cbus_desc *bus;
 	
@@ -122,7 +111,7 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 		bus = (struct no_os_i2cbus_desc *)no_os_calloc(1,
 			sizeof(struct no_os_i2cbus_desc));
 	} else {
-		bus = &i2c_bus[param->device_id];
+		bus = desc->bus;
 	}
 
 	if (!bus)
@@ -137,9 +126,6 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param)
 	bus->extra = param->extra;
 
 	i2c_table[param->device_id] = bus;
-
-	if (!CONFIG_DYNAMIC_ALLOC)
-		i2c_bus_index++;
 
 	return 0;
 }

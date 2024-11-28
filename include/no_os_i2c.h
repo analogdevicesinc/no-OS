@@ -40,6 +40,10 @@
 
 #include <stdint.h>
 
+#if defined(MAXIM_PLATFORM)
+#include "maxim_i2c.h"
+#endif
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -154,9 +158,20 @@ int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t stop_bit);
 
 /* Initialize I2C bus descriptor*/
-int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param);
+int32_t no_os_i2cbus_init(struct no_os_i2c_desc *desc,
+			  const struct no_os_i2c_init_param *param);
 
 /* Free the resources allocated for I2C  bus desc*/
 void no_os_i2cbus_remove(uint32_t bus_number);
+
+#if CONFIG_DYNAMIC_ALLOC == 0
+
+#define NO_OS_I2C_INST	 				\
+	&(struct no_os_i2c_desc){ 			\
+		.bus = &(struct no_os_i2c_desc){},	\
+		.extra = NO_OS_PLATFORM_I2C_PRIV,	\
+	}
+
+#endif
 
 #endif // _NO_OS_I2C_H_

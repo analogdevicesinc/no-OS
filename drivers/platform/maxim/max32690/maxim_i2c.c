@@ -175,9 +175,7 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 		if (max_i2c_index >= CONFIG_I2C_INSTANCES)
 			return -ENOMEM;
 
-		max_i2c = &max_i2c_extra[max_i2c_index];
-		max_i2c->prologue_data = max_i2c_data[max_i2c_index];
-		(*desc)->extra = max_i2c;
+		max_i2c = (*desc)->extra;
 	}
 
 	eparam = param->extra;
