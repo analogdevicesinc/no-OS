@@ -61,9 +61,9 @@ adiHalErr_t ADIHAL_setTimeout(void *devHalInfo, uint32_t halTimeout_ms)
 adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 {
 	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
-	struct no_os_spi_init_param spi_param;
-	struct no_os_gpio_init_param gpio_adrv_resetb_param;
-	struct no_os_gpio_init_param gpio_adrv_sysref_req_param;
+	struct no_os_spi_init_param spi_param = { 0 };
+	struct no_os_gpio_init_param gpio_adrv_resetb_param = { 0 };
+	struct no_os_gpio_init_param gpio_adrv_sysref_req_param = { 0 };
 	int32_t status = 0;
 
 	gpio_adrv_resetb_param.number = dev_hal_data->gpio_adrv_resetb_num;
