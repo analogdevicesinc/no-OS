@@ -301,32 +301,41 @@ LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
 define generate_cflags_func
-echo $(subst \",\\\",$(1)) >> $(CFLAGS_FILE)
+echo $(subst \",\\\",$(1)) >> $(CFLAGS_FILE).tmp
 endef
 
 define generate_cppflags_func
-echo $(subst \",\\\",$(1)) >> $(CPPFLAGS_FILE)
+echo $(subst \",\\\",$(1)) >> $(CPPFLAGS_FILE).tmp
 endef
 
 define generate_asflags_func
-echo $(subst \",\\\",$(1)) >> $(ASFLAGS_FILE)
+echo $(subst \",\\\",$(1)) >> $(ASFLAGS_FILE).tmp
 endef
 
 define generate_objs_func
-echo $(1) >> $(OBJS_FILE)
+echo $(1) >> $(OBJS_FILE).tmp
+endef
+
+define overwrite_file_if_different
+	if ! diff $(1) $(2) &> /dev/null ; then \
+		mv -f $(1) $(2) ; \
+	fi
+endef
+
+define generate_flags_file
+	echo -n > $(1).tmp
+	$(call process_items_in_chunks,$(2),10,$(3))
+	$(call overwrite_file_if_different,$(1).tmp,$(1))
+	rm -f $(1).tmp
 endef
 
 PHONY += pre_build
 pre_build:
 	$(call print,Generating build flags)
-	echo -n > $(CFLAGS_FILE)
-	$(call process_items_in_chunks,$(CFLAGS),10,generate_cflags_func)
-	echo -n > $(CPPFLAGS_FILE)
-	$(call process_items_in_chunks,$(CPPFLAGS),10,generate_cppflags_func)
-	echo -n > $(ASFLAGS_FILE)
-	$(call process_items_in_chunks,$(ASFLAGS),10,generate_asflags_func)
-	echo -n > $(OBJS_FILE)
-	$(call process_items_in_chunks,$(sort $(OBJS)),10,generate_objs_func)
+	$(call generate_flags_file,$(CFLAGS_FILE),$(CFLAGS),generate_cflags_func)
+	$(call generate_flags_file,$(CPPFLAGS_FILE),$(CPPFLAGS),generate_cppflags_func)
+	$(call generate_flags_file,$(ASFLAGS_FILE),$(ASFLAGS),generate_asflags_func)
+	$(call generate_flags_file,$(OBJS_FILE),$(OBJS),generate_objs_func)
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	$(call print,[LD] $(notdir $(OBJS)))
