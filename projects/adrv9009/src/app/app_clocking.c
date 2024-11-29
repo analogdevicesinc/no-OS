@@ -70,7 +70,7 @@
 #include "adi_hal.h"
 
 // devices
-#include "app_talise.h"
+#include "adrv9009.h"
 
 // header
 #include "app_clocking.h"

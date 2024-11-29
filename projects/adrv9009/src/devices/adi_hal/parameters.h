@@ -94,7 +94,11 @@
 #ifdef PLATFORM_ZYNQMP
 #define GPIO_DEVICE_ID			XPAR_PSU_GPIO_0_DEVICE_ID
 #else
+#ifdef PLATFORM_MB
+#define GPIO_DEVICE_ID			XPAR_AXI_GPIO_DEVICE_ID
+#else
 #define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#endif
 #endif
 
 #if defined(ZU11EG) // ZU11EG
@@ -163,10 +167,17 @@
 #define CLK_RESETB_GPIO			137
 #define DAC_FIFO_BYPASS_GPIO		138
 #else // ZC706
+#if defined PLATFORM_MB
+#define TRX_A_RESETB_GPIO		52
+#define SYSREF_REQ_GPIO			58
+#define CLK_RESETB_GPIO			59
+#define DAC_FIFO_BYPASS_GPIO		60
+#else
 #define TRX_A_RESETB_GPIO		106
 #define SYSREF_REQ_GPIO			112
 #define CLK_RESETB_GPIO			113
 #define DAC_FIFO_BYPASS_GPIO		114
+#endif
 #endif
 #endif
 

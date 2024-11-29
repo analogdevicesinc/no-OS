@@ -14,6 +14,7 @@
 #include "adi_hal.h"
 #include "no_os_spi.h"
 #include "no_os_error.h"
+#include "no_os_print_log.h"
 #include "no_os_delay.h"
 #include "parameters.h"
 #include "no_os_util.h"
@@ -31,11 +32,25 @@
 #include "talise.h"
 #include "talise_config.h"
 #include "app_config.h"
-#include "app_clocking.h"
-#include "app_jesd.h"
-#include "app_transceiver.h"
-#include "app_talise.h"
+// #include "app_clocking.h"
+// #include "app_jesd.h"
+// #include "app_transceiver.h"
+#include "adrv9009.h"
 #include "ad9528.h"
+
+// jesd
+#include "axi_jesd204_rx.h"
+#include "axi_jesd204_tx.h"
+
+// clkgen
+#include "clk_axi_clkgen.h"
+
+// xcvr
+#ifdef ALTERA_PLATFORM
+#include "altera_adxcvr.h"
+#else
+#include "axi_adxcvr.h"
+#endif
 
 #ifdef IIO_SUPPORT
 
@@ -148,6 +163,27 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 
 #endif // IIO_SUPPORT
 
+/***************************************************************************//**
+ * @brief Function for obtaining SPI settings.
+ *
+ * @return SPI settings
+*******************************************************************************/
+taliseSpiSettings_t *adrv9009_spi_settings_get(void)
+{
+	return &talInit.spiSettings;
+}
+
+/***************************************************************************//**
+ * @brief Function for obtaining initial settings.
+ *
+ * @return initial settings
+*******************************************************************************/
+taliseInit_t *adrv9009_initial_settings_get(void)
+{
+	return &talInit;
+}
+
+
 /**********************************************************/
 /**********************************************************/
 /********** Talise Data Structure Initializations ********/
@@ -190,28 +226,10 @@ int main(void)
 	uint32_t lmfc_rate = no_os_min(rx_lmfc_rate, rx_os_lmfc_rate);
 	lmfc_rate = no_os_min(tx_lmfc_rate, lmfc_rate);
 
-	struct axi_adc_init rx_adc_init = {
-		"rx_adc",
-		RX_CORE_BASEADDR,
-		TALISE_NUM_CHANNELS
-	};
-	struct axi_adc *rx_adc;
-
-	struct axi_adc_init rx_os_adc_init = {
-		"rx_os_adc",
-		RX_OS_CORE_BASEADDR,
-		TALISE_NUM_CHANNELS / 2
-	};
-	struct axi_adc *rx_os_adc;
-
-	struct axi_dac_init tx_dac_init = {
-		"tx_dac",
-		TX_CORE_BASEADDR,
-		TALISE_NUM_CHANNELS,
-		NULL,
-		3
-	};
-	struct axi_dac *tx_dac;
+#ifndef ALTERA_PLATFORM
+	Xil_ICacheEnable();
+	Xil_DCacheEnable();
+#endif
 
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
@@ -269,238 +287,490 @@ int main(void)
 
 	hal.extra_gpio = &hal_gpio_param;
 #endif
-	int t;
-	struct adi_hal hal[TALISE_DEVICE_ID_MAX];
-	taliseDevice_t tal[TALISE_DEVICE_ID_MAX];
-	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		hal[t].extra_gpio= &hal_gpio_param;
-		hal[t].extra_spi = &hal_spi_param;
-		tal[t].devHalInfo = (void *) &hal[t];
-	}
-	hal[TALISE_A].gpio_adrv_resetb_num = TRX_A_RESETB_GPIO;
-	hal[TALISE_A].spi_adrv_csn = ADRV_CS;
-#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-	hal[TALISE_B].gpio_adrv_resetb_num = TRX_B_RESETB_GPIO;
-	hal[TALISE_B].spi_adrv_csn = ADRV_B_CS;
-#endif
+//	int t;
+//	struct adi_hal hal[TALISE_DEVICE_ID_MAX];
+//	taliseDevice_t tal[TALISE_DEVICE_ID_MAX];
+//	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
+//		hal[t].extra_gpio= &hal_gpio_param;
+//		hal[t].extra_spi = &hal_spi_param;
+//		tal[t].devHalInfo = (void *) &hal[t];
+//	}
+//	hal[TALISE_A].gpio_adrv_resetb_num = TRX_A_RESETB_GPIO;
+//	hal[TALISE_A].spi_adrv_csn = ADRV_CS;
+//#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+//	hal[TALISE_B].gpio_adrv_resetb_num = TRX_B_RESETB_GPIO;
+//	hal[TALISE_B].spi_adrv_csn = ADRV_B_CS;
+//#endif
 
+	struct adrv9009_init_param adrv9009_init_par = { 0 };
+	struct ad9528_platform_data ad9528_pdata = { 0 };
+	struct ad9528_channel_spec ad9528_channels[14];
+	taliseAgcCfg_t agcConfig_init_param = { 0 };
+	taliseDevice_t adrv9009_device = { 0 };
+	struct ad9528_init_param ad9528_param;
+	struct adi_hal adrv9009_hal = { 0 };
+	struct ad9528_dev* clkchip_device;
+	struct adrv9009_rf_phy *phy;
+
+	pr_info("Hello\n");
+
+	// ad9528 defaults
+	ad9528_param.pdata = &ad9528_pdata;
+	ad9528_param.pdata->num_channels = 14;
+	ad9528_param.pdata->channels = &ad9528_channels[0];
+
+	status = ad9528_init(&ad9528_param);
+	if(status) {
+		pr_info("error: ad9528_init() failed with %d\n", status);
+		goto error;
+	}
+
+	// ad9528 channel defaults
+	for(unsigned int ch = 0; ch < ad9528_param.pdata->num_channels; ch++) {
+		ad9528_channels[ch].channel_num = ch;
+		ad9528_channels[ch].output_dis = 1;
+	}
+
+	// ad9528 channel specifics
+
+	// adrv9009 device clock
+	ad9528_channels[13].output_dis = 0;
+	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[13].divider_phase = 0;
+	ad9528_channels[13].channel_divider = 10;
+	ad9528_channels[13].signal_source = SOURCE_VCO;
+
+	// fpga device clock
+	ad9528_channels[1].output_dis = 0;
+	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[1].divider_phase = 0;
+	ad9528_channels[1].channel_divider = 10;
+	ad9528_channels[1].signal_source = SOURCE_VCO;
+
+	// adrv9009 sysref
+	ad9528_channels[12].output_dis = 0;
+	ad9528_channels[12].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[12].divider_phase = 0;
+	ad9528_channels[12].channel_divider = 10;
+	ad9528_channels[12].signal_source = SOURCE_SYSREF_VCO;
+
+	// fpga sysref
+	ad9528_channels[3].output_dis = 0;
+	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[3].divider_phase = 0;
+	ad9528_channels[3].channel_divider = 10;
+	ad9528_channels[3].signal_source = SOURCE_SYSREF_VCO;
+
+	// ad9528 settings
+	ad9528_param.pdata->spi3wire = 0;
+	ad9528_param.pdata->vcxo_freq = 122880000;
+	ad9528_param.pdata->refa_en = 1;
+	ad9528_param.pdata->refa_diff_rcv_en = 1;
+	ad9528_param.pdata->refa_r_div = 1;
+	ad9528_param.pdata->osc_in_cmos_neg_inp_en = 1;
+	ad9528_param.pdata->pll1_feedback_div = 4;
+	ad9528_param.pdata->pll1_feedback_src_vcxo = 0; /* VCO */
+	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
+	ad9528_param.pdata->pll1_bypass_en = 0;
+	ad9528_param.pdata->pll2_vco_div_m1 = 3;
+	ad9528_param.pdata->pll2_n2_div = 10;
+	ad9528_param.pdata->pll2_r1_div = 1;
+	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
+	ad9528_param.pdata->pll2_bypass_en = false;
+	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_NSHOT;
+	ad9528_param.pdata->sysref_k_div = 512;
+//	ad9528_param.pdata->sysref_req_en = true;
+	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
+	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
+	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
+	ad9528_param.pdata->rzero = RZERO_1850_OHM;
+	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
+	ad9528_param.pdata->stat0_pin_func_sel = 0x2; /* PLL1 & PLL2 Locked */
+	ad9528_param.pdata->stat1_pin_func_sel = 0x9; /* REFA Correct */
+
+	struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
+#endif
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+		.flags = SPI_CS_DECODE
+#endif
+	};
+
+	// clock chip spi settings
+	struct no_os_spi_init_param clkchip_spi_init_param = {
+		.device_id = 0,
+		.max_speed_hz = 10000000,
+		.mode = NO_OS_SPI_MODE_0,
+		.chip_select = CLK_CS,
 #ifndef ALTERA_PLATFORM
-	/* Enable the instruction cache. */
-	Xil_ICacheEnable();
-	/* Enable the data cache. */
-	Xil_DCacheEnable();
+		.platform_ops = &xil_spi_ops,
+#else
+		.platform_ops = &altera_spi_ops,
 #endif
+		.extra = &xil_spi_param
+	};
 
-	printf("Hello\n");
+	ad9528_param.spi_init = clkchip_spi_init_param;
 
-	/**********************************************************/
-	/**********************************************************/
-	/************ Talise Initialization Sequence *************/
-	/**********************************************************/
-	/**********************************************************/
-
-	err = clocking_init(rx_div40_rate_hz,
-			    tx_div40_rate_hz,
-			    rx_os_div40_rate_hz,
-			    talInit.clocks.deviceClock_kHz,
-			    lmfc_rate);
-	if (err != ADIHAL_OK)
-		goto error_0;
-
-	err = jesd_init(rx_div40_rate_hz,
-			tx_div40_rate_hz,
-			rx_os_div40_rate_hz);
-	if (err != ADIHAL_OK)
-		goto error_1;
-
-	err = fpga_xcvr_init(rx_lane_rate_khz,
-			     tx_lane_rate_khz,
-			     rx_os_lane_rate_khz,
-			     talInit.clocks.deviceClock_kHz);
-	if (err != ADIHAL_OK)
-		goto error_2;
-
-	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		err = talise_setup(&tal[t], &talInit);
-		if (err != ADIHAL_OK)
-			goto error_3;
-	}
-#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-	printf("Performing multi-chip synchronization...\n");
-	for(int i=0; i < 12; i++) {
-		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-			err = talise_multi_chip_sync(&tal[t], i);
-			if (err != ADIHAL_OK)
-				goto error_3;
-		}
-	}
+	// clock chip GPIO settings
+	struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
 #endif
-	ADIHAL_sysrefReq(tal[TALISE_A].devHalInfo, SYSREF_CONT_ON);
+		.device_id = GPIO_DEVICE_ID,
+	};
 
-	jesd_rx_watchdog();
+	struct no_os_gpio_init_param clkchip_gpio_init_param = {
+		.number = CLK_RESETB_GPIO,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+	ad9528_param.gpio_resetb = &clkchip_gpio_init_param;
 
-	/* Print JESD status */
-	jesd_status();
+	// Export no_os_clk_desc for each channel
+	ad9528_param.export_no_os_clk = true;
 
-	/* Initialize the DAC core */
-#ifndef ADRV9008_1
-	status = axi_dac_init(&tx_dac, &tx_dac_init);
+	status = ad9528_setup(&clkchip_device, ad9528_param);
+	if(status) {
+		pr_info("error: ad9528_setup() failed with %d\n", status);
+		goto error;
+	}
+
+	struct axi_adc_init rx_adc_init = {
+		.name = "rx_adc",
+		.base = RX_CORE_BASEADDR,
+		.num_channels = TALISE_NUM_CHANNELS
+	};
+
+	struct axi_adc_init rx_os_adc_init = {
+		.name = "rx_os_adc",
+		.base = RX_OS_CORE_BASEADDR,
+		.num_channels = TALISE_NUM_CHANNELS / 2
+	};
+
+	struct axi_dac_init tx_dac_init = {
+		.name = "tx_dac",
+		.base = TX_CORE_BASEADDR,
+		.num_channels = TALISE_NUM_CHANNELS,
+		.channels = NULL,
+		.rate = 3
+	};
+
+	rx_lane_rate_khz = rx_div40_rate_hz / 1000 * 40;
+	struct jesd204_rx_init rx_jesd_init = {
+		.name = "rx_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = 4,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = rx_div40_rate_hz / 1000,
+		.lane_clk_khz = rx_lane_rate_khz
+	};
+	tx_lane_rate_khz = tx_div40_rate_hz / 1000 * 40;
+	struct jesd204_tx_init tx_jesd_init = {
+		.name = "tx_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = 2,
+		.frames_per_multiframe = talInit.jesd204Settings.deframerA.K,
+		.converters_per_device = talInit.jesd204Settings.deframerA.M,
+		.converter_resolution = 14,
+		.bits_per_sample = talInit.jesd204Settings.deframerA.Np,
+		.high_density = true,
+		.control_bits_per_sample  = 2,
+		.subclass = 1,
+		.device_clk_khz = tx_div40_rate_hz / 1000,
+		.lane_clk_khz = tx_lane_rate_khz
+	};
+	rx_os_lane_rate_khz = rx_os_div40_rate_hz / 1000 * 40;
+	struct jesd204_rx_init rx_os_jesd_init = {
+		.name = "rx_os_jesd",
+		.base = RX_OS_JESD_BASEADDR,
+		.octets_per_frame = 2,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = rx_os_div40_rate_hz / 1000,
+		.lane_clk_khz = rx_os_lane_rate_khz,
+	};
+
+	struct adxcvr_init rx_adxcvr_init = {
+		.name = "rx_adxcvr",
+		.base = RX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 1,
+		.lane_rate_khz = rx_lane_rate_khz,
+		.ref_rate_khz = talInit.clocks.deviceClock_kHz,
+		.export_no_os_clk = true
+	};
+	struct adxcvr *rx_adxcvr;
+
+	struct adxcvr_init tx_adxcvr_init = {
+		.name = "tx_adxcvr",
+		.base = TX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 0,
+		.lane_rate_khz = tx_lane_rate_khz,
+		.ref_rate_khz = talInit.clocks.deviceClock_kHz,
+		.export_no_os_clk = true
+	};
+	struct adxcvr *tx_adxcvr;
+
+	struct adxcvr_init rx_os_adxcvr_init = {
+		.name = "rx_os_adxcvr",
+		.base = RX_OS_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 1,
+		.lane_rate_khz = rx_os_lane_rate_khz,
+		.ref_rate_khz = talInit.clocks.deviceClock_kHz,
+		.export_no_os_clk = true
+	};
+	struct adxcvr *rx_os_adxcvr;
+
+	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
+	if (status)
+		goto error;
+
+	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
+	if (status)
+		goto error;
+
+	status = adxcvr_init(&rx_os_adxcvr, &rx_os_adxcvr_init);
+	if (status)
+		goto error;
+
+	struct axi_jesd204_rx *rx_jesd;
+	struct axi_jesd204_tx *tx_jesd;
+	struct axi_jesd204_rx *rx_os_jesd;
+
+	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
+	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
+	rx_os_jesd_init.lane_clk = rx_os_adxcvr->clk_out;
+
+	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	if (status)
+		goto error;
+
+	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	if (status)
+		goto error;
+
+	status = axi_jesd204_rx_init(&rx_os_jesd, &rx_os_jesd_init);
+	if (status)
+		goto error;
+
+	adrv9009_hal.extra_gpio= &hal_gpio_param;
+	adrv9009_hal.extra_spi = &hal_spi_param;
+	adrv9009_hal.gpio_adrv_resetb_num = TRX_A_RESETB_GPIO;
+	adrv9009_hal.spi_adrv_csn = ADRV_CS;
+
+	adrv9009_device.devHalInfo = (void *)&adrv9009_hal;
+
+	adrv9009_init_par.adrv9009_device = &adrv9009_device;
+	adrv9009_init_par.dev_clk = clkchip_device->clk_desc[13];
+	adrv9009_init_par.streamImageFile = STREAM;
+	adrv9009_init_par.armImageFile = FIRMWARE;
+	adrv9009_init_par.rxAgcConfig_init_param = &agcConfig_init_param;
+
+	status = adrv9009_init(&phy, &adrv9009_init_par);
 	if (status) {
-		printf("axi_dac_init() failed with status %d\n", status);
-		goto error_3;
+		pr_err("error: adrv9009_init() failed\n");
+		goto error;
 	}
-#endif
 
-	/* Initialize the ADC core */
-#ifndef ADRV9008_2
-	status = axi_adc_init(&rx_adc, &rx_adc_init);
+	status = axi_dac_init_begin(&phy->tx_dac, &tx_dac_init);
+	if (status)
+		goto error;
+	status = axi_adc_init_begin(&phy->rx_adc, &rx_adc_init);
+	if (status)
+		goto error;
+	status = axi_adc_init_begin(&phy->rx_os_adc, &rx_os_adc_init);
+	if (status)
+		goto error;
+
+	// Reset Tx DAC
+	axi_adc_write(phy->rx_adc, 0x4040, 0);
+	axi_adc_write(phy->rx_adc, 0x4040,
+		      NO_OS_BIT(1) | NO_OS_BIT(0));
+
+	// Reset Rx ADC
+	axi_adc_write(phy->rx_adc, AXI_ADC_REG_RSTN, 0);
+	axi_adc_write(phy->rx_adc, AXI_ADC_REG_RSTN,
+		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
+
+	// Reset Rx OS ADC
+	axi_adc_write(phy->rx_adc, 0x8040, 0);
+	axi_adc_write(phy->rx_adc, 0x8040,
+			NO_OS_BIT(1) | NO_OS_BIT(0));
+
+	status = adrv9009_post_setup(phy);
 	if (status) {
-		printf("axi_adc_init() failed with status %d\n", status);
-		goto error_3;
+		pr_err("error: adrv9009_post_setup() failed\n");
+		goto error;
 	}
 
-#endif
-
-#ifndef ADRV9008_1
-	status = axi_adc_init(&rx_os_adc, &rx_os_adc_init);
-	if (status) {
-		printf("OBS axi_adc_init() failed with status %d\n", status);
-		goto error_3;
-	}
+	// Set DDS data
+	axi_dac_data_setup(phy->tx_dac);
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
-		printf("axi_dmac_init() tx init error: %d\n", status);
-		goto error_3;
+		pr_info("axi_dmac_init tx init error: %d\n", status);
+		goto error;
 	}
-
-#endif
-#ifndef ADRV9008_2
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if (status) {
-		printf("axi_dmac_init() rx init error: %d\n", status);
-		goto error_3;
+		pr_info("axi_dmac_init rx init error: %d\n", status);
+		goto error;
 	}
-#endif
-
 	status = axi_dmac_init(&rx_os_dmac, &rx_os_dmac_init);
 	if (status) {
-		printf("OBS axi_dmac_init() rx init error: %d\n", status);
-		goto error_3;
+		pr_info("axi_dmac_init rx os init error: %d\n", status);
+		goto error;
 	}
 
-#ifdef DMA_EXAMPLE
-	gpio_init_plddrbypass.extra = &hal_gpio_param;
-#ifndef ALTERA_PLATFORM
-	gpio_init_plddrbypass.platform_ops = &xil_gpio_ops;
-#else
-	gpio_init_plddrbypass.platform_ops = &altera_gpio_ops;
-#endif
-	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS_GPIO;
-	status = no_os_gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
-	if (status) {
-		printf("no_os_gpio_get() failed with status %d", status);
-		goto error_3;
-	}
-	no_os_gpio_direction_output(gpio_plddrbypass, 1);
+	struct axi_clkgen *rx_clkgen;
+	struct axi_clkgen *tx_clkgen;
+	struct axi_clkgen *rx_os_clkgen;
 
-#ifndef ADRV9008_1
-	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-				 NO_OS_ARRAY_SIZE(sine_lut_iq),
-				 DAC_DDR_BASEADDR);
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheFlush();
-#endif
-
-	struct axi_dma_transfer transfer_tx = {
-		// Number of bytes to write/read
-		.size = sizeof(sine_lut_iq),
-		// Transfer done flag
-		.transfer_done = 0,
-		// Signal transfer mode
-#ifdef IIO_SUPPORT
-		.cyclic = CYCLIC,
-#else
-		.cyclic = NO,
-#endif
-		// Address of data source
-		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
-		// Address of data destination
-		.dest_addr = 0
+	struct axi_clkgen_init rx_clkgen_init = {
+		"rx_clkgen",
+		RX_CLKGEN_BASEADDR,
+		talInit.clocks.deviceClock_kHz * 1000
 	};
-	axi_dmac_transfer_start(tx_dmac, &transfer_tx);
-	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
-
-	no_os_mdelay(1000);
-#endif
-
-	/* Transfer 16384 samples from ADC to MEM */
-	struct axi_dma_transfer transfer_rx = {
-		// Number of bytes to write/read
-		.size = 16384 * TALISE_NUM_CHANNELS *
-		NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8),
-		// Transfer done flag
-		.transfer_done = 0,
-		// Signal transfer mode
-		.cyclic = NO,
-		// Address of data source
-		.src_addr = 0,
-		// Address of data destination
-		.dest_addr = (uintptr_t)(DDR_MEM_BASEADDR + 0x800000)
+	struct axi_clkgen_init tx_clkgen_init = {
+		"tx_clkgen",
+		TX_CLKGEN_BASEADDR,
+		talInit.clocks.deviceClock_kHz * 1000
 	};
+	struct axi_clkgen_init rx_os_clkgen_init = {
+		"rx_os_clkgen",
+		RX_OS_CLKGEN_BASEADDR,
+		talInit.clocks.deviceClock_kHz * 1000
+	};
+
 #ifndef ADRV9008_2
-	status = axi_dmac_transfer_start(rx_dmac, &transfer_rx);
-	if(status)
-		return status;
-	printf("Rx ");
-	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
-	uint8_t num_chans = rx_adc_init.num_channels;
-#else
-	status = axi_dmac_transfer_start(rx_os_dmac, &transfer_rx);
-	if(status)
-		return status;
-	printf("Rx obs ");
-	status = axi_dmac_transfer_wait_completion(rx_os_dmac, 500);
-	uint8_t num_chans = rx_os_adc_init.num_channels;
-#endif
-	if(status)
-		return status;
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,
-				  16384 * TALISE_NUM_CHANNELS *
-				  NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
-#endif
-	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%u\n",
-	       transfer_rx.dest_addr, transfer_rx.size / NO_OS_DIV_ROUND_UP(
-		       talInit.jesd204Settings.framerA.Np, 8),
-	       num_chans,
-	       8 * NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
-#endif
-
-#ifdef IIO_SUPPORT
-	// Allow time to display messages correctly
-	no_os_mdelay(100);
-#ifdef ADRV9008_2
-	status = start_iiod(rx_os_dmac, tx_dmac, rx_os_adc, tx_dac);
-#else
-	status = start_iiod(rx_dmac, tx_dmac, rx_adc, tx_dac);
-#endif
-	if (status)
-		printf("iiod error: %d\n", status);
-#endif // IIO_SUPPORT
-
-	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		talise_shutdown(&tal[t]);
+	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
+	if (status) {
+		printf("error: %s: axi_clkgen_init() failed\n", rx_clkgen_init.name);
+		goto error;
 	}
-error_3:
-	fpga_xcvr_deinit();
-error_2:
-	jesd_deinit();
-error_1:
-	clocking_deinit();
-error_0:
-	printf("Bye\n");
+#endif
+#ifndef ADRV9008_1
+	status = axi_clkgen_init(&tx_clkgen, &tx_clkgen_init);
+	if (status) {
+		printf("error: %s: axi_clkgen_init() failed\n", tx_clkgen_init.name);
+		goto error;
+	}
+	status = axi_clkgen_init(&rx_os_clkgen, &rx_os_clkgen_init);
+	if (status) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen_init.name);
+		goto error;
+	}
+#endif
+
+#ifdef PLATFORM_MB
+	/* Required for using SPI desc*/
+	status = TALISE_openHw(phy->talDevice);
+	if(status) {
+		/*** < User: decide what to do based on Talise recovery action returned > ***/
+		pr_info("error: TALISE_openHw() failed\n");
+		goto error;
+	}
+#endif
+
+	// Required by CLKGEN
+	status = ad9528_clk_set_rate(clkchip_device, 1, talInit.clocks.deviceClock_kHz * 1000);
+	if (status != 0) {
+		printf("error: ad9528_clk_set_rate() failed\n");
+		goto error;
+	}
+
+	ad9528_clk_set_rate(clkchip_device, 12, 60000);
+	ad9528_clk_set_rate(clkchip_device, 3, talInit.clocks.deviceClock_kHz * 1000);
+
+#ifndef ADRV9008_2
+	status = axi_clkgen_set_rate(rx_clkgen, rx_div40_rate_hz);
+	if (status != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_clkgen->name);
+		goto error;
+	}
+#endif
+#ifndef ADRV9008_1
+	status = axi_clkgen_set_rate(tx_clkgen, tx_div40_rate_hz);
+	if (status != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", tx_clkgen->name);
+		goto error;
+	}
+	status = axi_clkgen_set_rate(rx_os_clkgen, rx_os_div40_rate_hz);
+	if (status != 0) {
+		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
+		goto error;
+	}
+#endif
+
+	struct jesd204_topology *topology;
+	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = clkchip_device->jdev,
+			.link_ids = {DEFRAMER_LINK_TX, FRAMER_LINK_RX, FRAMER_LINK_ORX},
+			.links_number = 3,
+			.is_sysref_provider = true,
+		},
+		{
+			.jdev = rx_jesd->jdev,
+			.link_ids = {FRAMER_LINK_RX},
+			.links_number = 1,
+		},
+		{
+			.jdev = rx_os_jesd->jdev,
+			.link_ids = {FRAMER_LINK_ORX},
+			.links_number = 1,
+		},
+		{
+			.jdev = tx_jesd->jdev,
+			.link_ids = {DEFRAMER_LINK_TX},
+			.links_number = 1,
+		},
+		{
+			.jdev = phy->jdev,
+			.link_ids = {DEFRAMER_LINK_TX, FRAMER_LINK_RX, FRAMER_LINK_ORX},
+			.links_number = 3,
+			.is_top_device = true,
+		},
+	};
+
+	jesd204_topology_init(&topology, devs,
+			      sizeof(devs)/sizeof(*devs));
+
+	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
+	axi_jesd204_rx_status_read(rx_os_jesd);
+
+	while(0) {
+		axi_jesd204_tx_status_read(tx_jesd);
+		axi_jesd204_rx_status_read(rx_jesd);
+		axi_jesd204_rx_status_read(rx_os_jesd);
+
+		no_os_mdelay(2000);
+
+		/* Clear the screen. */
+		printf("%c",27);
+		printf("%c",'[');
+		printf("%c",'2');
+		printf("%c",'J');
+	}
+
+error:
+	pr_info("Bye\n");
 
 #ifndef ALTERA_PLATFORM
 	/* Disable the instruction cache. */
