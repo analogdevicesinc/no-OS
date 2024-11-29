@@ -52,4 +52,9 @@
 // #define DMA_EXAMPLE
 // #define IIO_SUPPORT
 
+#define FIRMWARE	"TaliseTDDArmFirmware.bin"
+#define FIRMWARE_TX	"TaliseTxArmFirmware.bin"
+#define FIRMWARE_RX	"TaliseRxArmFirmware.bin"
+#define STREAM		"TaliseStream.bin"
+
 #endif /* APP_CONFIG_H_ */
