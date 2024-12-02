@@ -78,8 +78,8 @@ int iio_example_main()
 		return ret;
 
 	struct iio_app_device iio_devices[] = {
-		IIO_APP_DEVICE( "pulsar_adc", dev,
-				dev->iio_dev, &adc_buff, NULL, NULL)
+		IIO_APP_DEVICE("pulsar_adc", dev,
+			       dev->iio_dev, &adc_buff, NULL, NULL)
 	};
 
 	app_init_param.devices = iio_devices;

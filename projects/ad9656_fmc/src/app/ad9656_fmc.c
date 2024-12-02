@@ -146,7 +146,7 @@ int main(void)
 		.octets_per_frame = 2,
 		.frames_per_multiframe = 32,
 		.subclass = 1,
-		.device_clk_khz = 2500000/40,
+		.device_clk_khz = 2500000 / 40,
 		.lane_clk_khz = 2500000
 	};
 
@@ -232,13 +232,13 @@ int main(void)
 
 	/* receive path testing */
 	ad9656_JESD204_test(ad9656_device, AD9656_TEST_PN9);
-	if(axi_adc_pn_mon(ad9656_core, AXI_ADC_PN9, 10) == -1) {
+	if (axi_adc_pn_mon(ad9656_core, AXI_ADC_PN9, 10) == -1) {
 		printf("%s ad9656 - PN9 sequence mismatch!\n", __func__);
 	} else {
 		printf("%s ad9656 - PN9 sequence checked!\n", __func__);
 	}
 	ad9656_JESD204_test(ad9656_device, AD9656_TEST_PN23);
-	if(axi_adc_pn_mon(ad9656_core, AXI_ADC_PN23A, 10) == -1) {
+	if (axi_adc_pn_mon(ad9656_core, AXI_ADC_PN23A, 10) == -1) {
 		printf("%s ad9656 - PN23 sequence mismatch!\n", __func__);
 	} else {
 		printf("%s ad9656 - PN23 sequence checked!\n", __func__);
@@ -275,7 +275,7 @@ int main(void)
 	axi_dmac_transfer_start(ad9656_dmac, &read_transfer);
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(ad9656_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 4);
 
@@ -353,5 +353,5 @@ int main(void)
 	/* Disable the data cache. */
 	Xil_DCacheDisable();
 
-	return(0);
+	return (0);
 }

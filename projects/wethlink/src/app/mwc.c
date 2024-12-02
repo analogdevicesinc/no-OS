@@ -157,7 +157,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 		no_os_pid_reset(mwc->tx_pid);
 		no_os_pid_hysteresis(mwc->tx_pid, mwc->tx_tolerance);
-		while(true) {
+		while (true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
 				.scale = MXC_ADC_SCALE_1,
@@ -205,7 +205,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 		no_os_pid_reset(mwc->rx_pid);
 		no_os_pid_hysteresis(mwc->rx_pid, mwc->rx_tolerance);
-		while(true) {
+		while (true) {
 			mxc_adc_conversion_req_t req = {
 				.channel = ch,
 				.scale = MXC_ADC_SCALE_2X,
@@ -357,7 +357,7 @@ int mwc_save_to_eeprom(struct mwc_iio_dev *mwc, uint16_t address)
 
 	memcpy(eebuf, &nvmp, nvmpsz);
 	eebuf[nvmpsz] = no_os_crc8(mwc->crc8, eebuf, nvmpsz, 0xa5);
-	return no_os_eeprom_write(mwc->eeprom, address, eebuf, nvmpsz+1);
+	return no_os_eeprom_write(mwc->eeprom, address, eebuf, nvmpsz + 1);
 }
 
 static int mwc_iio_read_attr(void *device, char *buf,

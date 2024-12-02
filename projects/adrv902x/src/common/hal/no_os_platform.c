@@ -648,7 +648,7 @@ int32_t (*adi_hal_ArmImagePageGet)(void *devHalCfg, const char *ImagePath,
 int32_t (*adi_hal_StreamImagePageGet)(void *devHalCfg, const char *ImagePath,
 				      uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
 
-long int ftell (FILE *stream)
+long int ftell(FILE *stream)
 {
 	return profile.ptr - profile.start;
 }
@@ -660,14 +660,15 @@ FILE* __fopen(const char * filename, const char *mode)
 	char *temp;
 
 	if (!strcmp(filename, "ActiveUseCase.profile")) {
-		temp = (char *)no_os_malloc((strlen(json_profile_active_use_case)+1)*sizeof(
+		temp = (char *)no_os_malloc((strlen(json_profile_active_use_case) + 1) * sizeof(
 						    char));
 		strcpy(temp, json_profile_active_use_case);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
 	} else if (!strcmp(filename, "ActiveUtilInit.profile")) {
-		temp = (char *)no_os_malloc((strlen(json_profile_active_util_init)+1)*sizeof(
+		temp = (char *)no_os_malloc((strlen(json_profile_active_util_init) + 1) *
+					    sizeof(
 						    char));
 		strcpy(temp, json_profile_active_util_init);
 		profile.data = temp;

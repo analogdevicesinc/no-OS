@@ -11,7 +11,7 @@
 #include "tx_isr.h"
 #include "no_os_alloc.h"
 
-CONSTANT UINT16 VicInfo[NUM_OF_VICS*4] = {
+CONSTANT UINT16 VicInfo[NUM_OF_VICS * 4] = {
 	/* H     V     I   Hz */
 	0,    0,    0, 0,       /* 0 */
 	640,  480,  0, 60,
@@ -96,14 +96,14 @@ STATIC UINT32 Last250usCount = 0;
  *========================================*/
 STATIC uint8_t CecTxState;
 STATIC uint8_t CecCurrOper;                       /* Currently executing op   */
-STATIC uint8_t CecRxMessage[CEC_MAX_MSG_SIZE+4];
+STATIC uint8_t CecRxMessage[CEC_MAX_MSG_SIZE + 4];
 STATIC uint8_t CecRetryCount;                     /* For arb lost errors      */
 STATIC uint8_t OperBuf[32];
 STATIC uint8_t BufIdx;
 STATIC uint8_t SrcLogAddr;
 STATIC struct cec_status cec_status;
 
-extern UINT16 Cec_Notification (UCHAR Event, UINT16 Len, void *Buff);
+extern UINT16 Cec_Notification(UCHAR Event, UINT16 Len, void *Buff);
 
 //void DBG_Printf(const char *data, ...)
 //{
@@ -129,7 +129,7 @@ extern UINT16 Cec_Notification (UCHAR Event, UINT16 Len, void *Buff);
  *          This function can not return elapsed time over 65 seconds
  *
  *==========================================================================*/
-UINT32 ATV_GetElapsedMs (UINT32 StartCount, UINT32 *CurrMsCount)
+UINT32 ATV_GetElapsedMs(UINT32 StartCount, UINT32 *CurrMsCount)
 {
 	UINT32 Elapsed;
 	UINT32 CurrCount;
@@ -152,7 +152,7 @@ UINT32 ATV_GetElapsedMs (UINT32 StartCount, UINT32 *CurrMsCount)
  *
  *
  *==========================================================================*/
-UINT32 ATV_GetMsCountNZ (void)
+UINT32 ATV_GetMsCountNZ(void)
 {
 	UINT32 i;
 	i = HAL_GetCurrentMsCount();
@@ -176,14 +176,14 @@ UINT32 ATV_GetMsCountNZ (void)
  * Return:  Field value in the LSBits of the return value
  *
  *===========================================================================*/
-UCHAR ATV_I2CReadField8 (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-			 UCHAR BitPos)
+UCHAR ATV_I2CReadField8(UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
+			UCHAR BitPos)
 {
 	uint8_t read_data;
 	int32_t ret;
 
 	ret = HAL_I2CReadBlock(DevAddr, RegAddr, &read_data, 1);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	return ((read_data & Mask) >> BitPos);
@@ -206,14 +206,14 @@ UCHAR ATV_I2CReadField8 (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
  * Return:  None
  *
  *===========================================================================*/
-void ATV_I2CWriteField8 (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-			 UCHAR BitPos, UCHAR FieldVal)
+void ATV_I2CWriteField8(UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
+			UCHAR BitPos, UCHAR FieldVal)
 {
 	int32_t ret;
 	uint8_t write_data_byte;
 
 	ret = HAL_I2CReadByte(DevAddr, RegAddr, &write_data_byte);
-	if(ret != 0)
+	if (ret != 0)
 		return;
 
 	write_data_byte &= ~Mask;
@@ -245,26 +245,26 @@ void ATV_I2CWriteField8 (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
  * Return:  Field value in the LSBits of the return value
  *
  *===========================================================================*/
-UINT32 ATV_I2CReadField32 (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-			   UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan)
+UINT32 ATV_I2CReadField32(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			  UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan)
 {
 	int32_t ret;
 	uint8_t *read_data, j = 1;
 	uint32_t value = 0;
 	int8_t i;
 
-	read_data = no_os_calloc(FldSpan, sizeof *read_data);
-	if(!read_data)
+	read_data = no_os_calloc(FldSpan, sizeof * read_data);
+	if (!read_data)
 		return 0xDEADDEAD;
 
 	ret = HAL_I2CReadBlock(DevAddr, RegAddr, read_data, FldSpan);
-	if(ret != 0)
+	if (ret != 0)
 		goto error;
 
 	value |= read_data[(FldSpan - 1)] >> LsbPos;
 
-	for(i = (FldSpan - 2); i >= 0; i--) {
-		if(i == 0)
+	for (i = (FldSpan - 2); i >= 0; i--) {
+		if (i == 0)
 			read_data[i] &= MsbMask;
 		value |= (read_data[i] << (j++ * 8 - LsbPos));
 	}
@@ -301,25 +301,25 @@ error:
  * Return:  Field value in the LSBits of the return value
  *
  *===========================================================================*/
-UINT32 ATV_I2CReadField32LE (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-			     UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan)
+UINT32 ATV_I2CReadField32LE(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			    UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan)
 {
 	int32_t ret;
 	uint8_t *read_data, i;
 	uint32_t value = 0;
 
-	read_data = no_os_calloc(FldSpan, sizeof *read_data);
-	if(!read_data)
+	read_data = no_os_calloc(FldSpan, sizeof * read_data);
+	if (!read_data)
 		return 0xDEADDEAD;
 
 	ret = HAL_I2CReadBlock(DevAddr, RegAddr, read_data, FldSpan);
-	if(ret != 0)
+	if (ret != 0)
 		goto error;
 
 	value |= (read_data[0] >> LsbPos);
 
-	for(i = 1; i < FldSpan; i++) {
-		if(i == (FldSpan - 1))
+	for (i = 1; i < FldSpan; i++) {
+		if (i == (FldSpan - 1))
 			read_data[i] &= MsbMask;
 		value |= read_data[i] << (i * 8 - LsbPos);
 	}
@@ -353,26 +353,26 @@ error:
  *
  *
  *===========================================================================*/
-void ATV_I2CWriteField32 (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-			  UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val)
+void ATV_I2CWriteField32(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			 UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val)
 {
 	int32_t ret;
 	uint8_t *read_data, j = 1;
 	int8_t i;
 
-	read_data = no_os_calloc(FldSpan, sizeof *read_data);
-	if(!read_data)
+	read_data = no_os_calloc(FldSpan, sizeof * read_data);
+	if (!read_data)
 		return;
 
 	ret = HAL_I2CReadBlock(DevAddr, RegAddr, read_data, FldSpan);
-	if(ret != 0)
+	if (ret != 0)
 		goto error;
 
 	read_data[(FldSpan)] &= ~LsbMask;
 	read_data[(FldSpan)] |= ((Val << LsbPos) & LsbMask);
 
-	for(i = (FldSpan - 2); i >= 0; i--) {
-		if(i == 0) {
+	for (i = (FldSpan - 2); i >= 0; i--) {
+		if (i == 0) {
 			read_data[i] &= ~MsbMask;
 			read_data[i] |= ((Val >> ((j * 8) - LsbPos)) & MsbMask);
 		} else {
@@ -403,25 +403,25 @@ error:
  * Return:  None
  *
  *==========================================================================*/
-void ATV_I2CWriteFields (UCHAR *Table, UCHAR EndVal)
+void ATV_I2CWriteFields(UCHAR *Table, UCHAR EndVal)
 {
 	int32_t ret;
 	uint32_t i = 0;
 	uint8_t write_word;
 
-	while(1) {
-		if(Table[i] == EndVal)
+	while (1) {
+		if (Table[i] == EndVal)
 			break;
 
 		ret = HAL_I2CReadByte(Table[i], Table[(i + 1)], &write_word);
-		if(ret != 0)
+		if (ret != 0)
 			return;
 
 		write_word &= ~Table[(i + 2)];
 		write_word |= (Table[(i + 3)] & Table[(i + 2)]);
 
 		ret = HAL_I2CWriteByte(Table[i], Table[(i + 1)], write_word);
-		if(ret != 0)
+		if (ret != 0)
 			return;
 
 		i += 4;
@@ -449,26 +449,26 @@ void ATV_I2CWriteFields (UCHAR *Table, UCHAR EndVal)
  *
  *
  *===========================================================================*/
-void ATV_I2CWriteField32LE (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-			    UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val)
+void ATV_I2CWriteField32LE(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			   UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val)
 {
 	int32_t ret;
 	uint8_t *read_data, j = 0;
 	int8_t i;
 
-	read_data = no_os_calloc(FldSpan, sizeof *read_data);
-	if(!read_data)
+	read_data = no_os_calloc(FldSpan, sizeof * read_data);
+	if (!read_data)
 		return;
 
 	ret = HAL_I2CReadBlock(DevAddr, RegAddr, read_data, FldSpan);
-	if(ret != 0)
+	if (ret != 0)
 		goto error;
 
 	read_data[0] &= ~LsbMask;
 	read_data[0] |= ((Val << LsbPos) & LsbMask);
 
-	for(i = 1; i < FldSpan; i++) {
-		if(i == (FldSpan - 1)) {
+	for (i = 1; i < FldSpan; i++) {
+		if (i == (FldSpan - 1)) {
 			read_data[i] &= MsbMask;
 			read_data[i] |= ((Val >> (j * 8 + (8 - LsbPos))) & MsbMask);
 		} else {
@@ -499,17 +499,17 @@ error:
  * Return:  None
  *
  *==========================================================================*/
-void ATV_I2CWriteTable (UCHAR *Table, UCHAR EndVal)
+void ATV_I2CWriteTable(UCHAR *Table, UCHAR EndVal)
 {
 	uint32_t i = 0;
 	int32_t ret;
 
-	while(1) {
-		if(Table[i] == EndVal)
+	while (1) {
+		if (Table[i] == EndVal)
 			break;
 
 		ret = HAL_I2CWriteByte(Table[i], Table[(i + 1)], Table[(i + 2)]);
-		if(ret != 0)
+		if (ret != 0)
 			return;
 	}
 }
@@ -520,21 +520,21 @@ void ATV_I2CWriteTable (UCHAR *Table, UCHAR EndVal)
  * Return:  Offset of matching value or end value
  *
  *==========================================================================*/
-UINT16 ATV_LookupValue8 (UCHAR *Table, UCHAR Value, UCHAR EndVal, UINT16 Step)
+UINT16 ATV_LookupValue8(UCHAR *Table, UCHAR Value, UCHAR EndVal, UINT16 Step)
 {
-	UINT16 i=0, found = 0;
+	UINT16 i = 0, found = 0;
 
-	while(1) {
-		if(Table[i] == EndVal)
+	while (1) {
+		if (Table[i] == EndVal)
 			break;
-		if(Table[i] == Value) {
+		if (Table[i] == Value) {
 			found = 1;
 			break;
 		}
 		i += Step;
 	}
 
-	if(found)
+	if (found)
 		return i;
 	else
 		return EndVal;
@@ -549,14 +549,14 @@ UINT16 ATV_LookupValue8 (UCHAR *Table, UCHAR Value, UCHAR EndVal, UINT16 Step)
  *          PostFix = Postfix string
  *
  *==========================================================================*/
-void ATV_PrintTime (char *Prefix, UCHAR Gran, char *Postfix)
+void ATV_PrintTime(char *Prefix, UCHAR Gran, char *Postfix)
 {
 	uint32_t ms_no, s_no, m_no;
 
 	DBG_MSG(Prefix);
 
 	ms_no = ATV_GetMsCountNZ();
-	switch(Gran) {
+	switch (Gran) {
 	case 0:
 		DBG_MSG("%d", (int)ms_no);
 		break;
@@ -582,7 +582,7 @@ void ATV_PrintTime (char *Prefix, UCHAR Gran, char *Postfix)
 /*===========================================================================
  *
  *==========================================================================*/
-void HAL_DelayMs (UINT16 Counter)
+void HAL_DelayMs(UINT16 Counter)
 {
 	WaitMilliSec(Counter);
 }
@@ -590,7 +590,7 @@ void HAL_DelayMs (UINT16 Counter)
 /*===========================================================================
  *
  *==========================================================================*/
-UINT16 HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NofBytes)
+UINT16 HAL_I2CReadBlock(UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NofBytes)
 {
 	int32_t ret;
 	uint8_t i2c_addr = Dev >> 1; /* I2C non-formatted address */
@@ -602,14 +602,14 @@ UINT16 HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NofBytes)
 	do {
 		reg_addr = Reg + i;
 		ret = no_os_i2c_write(i2c_handler, &reg_addr, 1, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return 0xDEAD;
 
 		ret = no_os_i2c_read(i2c_handler, Data + i, 1, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return 0xDEAD;
 		i++;
-	} while(i != NofBytes);
+	} while (i != NofBytes);
 
 	return 0;
 }
@@ -617,8 +617,8 @@ UINT16 HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NofBytes)
 /*===========================================================================
  *
  *==========================================================================*/
-UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
-			   UINT16 NumberBytes)
+UINT16  HAL_I2CWriteBlock(UCHAR Dev, UCHAR Reg, UCHAR *Data,
+			  UINT16 NumberBytes)
 {
 	int32_t ret;
 	uint8_t *data_write;
@@ -627,16 +627,16 @@ UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
 
 	i2c_handler->slave_address = i2c_addr;
 
-	data_write = no_os_calloc((NumberBytes + 1), sizeof *data_write);
-	if(!data_write)
+	data_write = no_os_calloc((NumberBytes + 1), sizeof * data_write);
+	if (!data_write)
 		return 0xDEAD;
 
 	data_write[0] = Reg;
-	for(i = 1; i <= NumberBytes; i++)
+	for (i = 1; i <= NumberBytes; i++)
 		data_write[i] = Data[(i - 1)];
 
 	ret = no_os_i2c_write(i2c_handler, data_write, (NumberBytes + 1), 1);
-	if(ret != 0)
+	if (ret != 0)
 		goto error;
 
 	no_os_free(data_write);
@@ -651,7 +651,7 @@ error:
 /*===========================================================================
  *
  *==========================================================================*/
-UCHAR HAL_I2CReadByte (UCHAR Dev, UCHAR Reg, UCHAR *Data)
+UCHAR HAL_I2CReadByte(UCHAR Dev, UCHAR Reg, UCHAR *Data)
 {
 	int32_t ret;
 	uint8_t i2c_addr = Dev >> 1; /* I2C non-formatted address */
@@ -659,11 +659,11 @@ UCHAR HAL_I2CReadByte (UCHAR Dev, UCHAR Reg, UCHAR *Data)
 	i2c_handler->slave_address = i2c_addr;
 
 	ret = no_os_i2c_write(i2c_handler, &Reg, 1, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return 0xDD;
 
 	ret = no_os_i2c_read(i2c_handler, Data, 1, 1);
-	if(ret != 0)
+	if (ret != 0)
 		return 0xDD;
 
 	return 0;
@@ -672,7 +672,7 @@ UCHAR HAL_I2CReadByte (UCHAR Dev, UCHAR Reg, UCHAR *Data)
 /*===========================================================================
  *
  *==========================================================================*/
-UCHAR HAL_I2CWriteByte (UCHAR Dev, UCHAR Reg, UCHAR Data)
+UCHAR HAL_I2CWriteByte(UCHAR Dev, UCHAR Reg, UCHAR Data)
 {
 	int32_t ret;
 	uint8_t data_write[2];
@@ -684,7 +684,7 @@ UCHAR HAL_I2CWriteByte (UCHAR Dev, UCHAR Reg, UCHAR Data)
 	data_write[1] = Data;
 
 	ret = no_os_i2c_write(i2c_handler, data_write, 2, 1);
-	if(ret != 0)
+	if (ret != 0)
 		return 0xDD;
 
 	return 0;
@@ -701,12 +701,12 @@ UCHAR HAL_SetRxChipSelect(UCHAR DevIdx)
 void WaitMilliSec(unsigned int msec)
 {
 	timer_counter_intr = 0;
-	while(timer_counter_intr != msec);
+	while (timer_counter_intr != msec);
 }
 
 static inline void cec_reg_soft_reset_set(uint8_t reg_value)
 {
-	if((reg_value == 0) || (reg_value == 1))
+	if ((reg_value == 0) || (reg_value == 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_SOFT_RESET,
 				   ADV7511_CEC_SOFT_RESET_MASK, ADV7511_CEC_SOFT_RESET_SHIFT,
 				   reg_value);
@@ -714,7 +714,7 @@ static inline void cec_reg_soft_reset_set(uint8_t reg_value)
 
 static inline void cec_reg_tx_retry_count_set(uint8_t reg_value)
 {
-	if((reg_value >= 1) && (reg_value <= 7))
+	if ((reg_value >= 1) && (reg_value <= 7))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_TX_RETRY_COUNT,
 				   ADV7511_CEC_TX_RETRY_COUNT_MASK,
 				   ADV7511_CEC_TX_RETRY_COUNT_SHIFT, reg_value);
@@ -728,7 +728,7 @@ static inline void cec_reg_tx_retry_count_set(uint8_t reg_value)
  * Return:  ATVERR_OK
  *
  *===========================================================================*/
-ATV_ERR CEC_Reset (void)
+ATV_ERR CEC_Reset(void)
 {
 	cec_reg_soft_reset_set(1);
 	HAL_DelayMs(10);
@@ -746,7 +746,7 @@ ATV_ERR CEC_Reset (void)
 
 static inline void cec_reg_power_mode_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 3))
+	if ((reg_value >= 0) && (reg_value <= 3))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_POWER_MODE,
 				   ADV7511_CEC_POWER_MODE_MASK, ADV7511_CEC_POWER_MODE_SHIFT,
 				   reg_value);
@@ -754,7 +754,7 @@ static inline void cec_reg_power_mode_set(int8_t reg_value)
 
 static inline void cec_reg_rx_enable_set(uint8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 1))
+	if ((reg_value >= 0) && (reg_value <= 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_RX_ENABLE,
 				   ADV7511_CEC_RX_ENABLE_MASK, ADV7511_CEC_RX_ENABLE_SHIFT,
 				   reg_value);
@@ -762,7 +762,7 @@ static inline void cec_reg_rx_enable_set(uint8_t reg_value)
 
 static inline void cec_reg_rx_buff_no_set(uint8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 1))
+	if ((reg_value >= 0) && (reg_value <= 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_RX_BUFFER_NUMBER,
 				   ADV7511_CEC_RX_BUFFER_NUMBER_MASK,
 				   ADV7511_CEC_RX_BUFFER_NUMBER_SHIFT, reg_value);
@@ -770,7 +770,7 @@ static inline void cec_reg_rx_buff_no_set(uint8_t reg_value)
 
 static inline void cec_reg_tx_enable_set(uint8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 1))
+	if ((reg_value >= 0) && (reg_value <= 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_TX_TRANS_ENABLE,
 				   ADV7511_CEC_TX_TRANS_ENABLE_MASK,
 				   ADV7511_CEC_TX_TRANS_ENABLE_SHIFT, reg_value);
@@ -785,7 +785,7 @@ static inline void cec_reg_tx_enable_set(uint8_t reg_value)
  * Return:  ATVERR_OK
  *
  *===========================================================================*/
-ATV_ERR CEC_Enable (BOOL Enable)
+ATV_ERR CEC_Enable(BOOL Enable)
 {
 	cec_reg_power_mode_set(Enable ? 0x01 : 0x00);
 	CEC_Reset();
@@ -816,7 +816,7 @@ ATV_ERR CEC_Enable (BOOL Enable)
 
 static inline void cec_reg_logaddr0_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 15))
+	if ((reg_value >= 0) && (reg_value <= 15))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_LOGICADDR0,
 				   ADV7511_CEC_LOGICADDR0_MASK, ADV7511_CEC_LOGICADDR0_SHIFT,
 				   reg_value);
@@ -824,7 +824,7 @@ static inline void cec_reg_logaddr0_set(int8_t reg_value)
 
 static inline void cec_reg_logaddr1_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 15))
+	if ((reg_value >= 0) && (reg_value <= 15))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_LOGICADDR1,
 				   ADV7511_CEC_LOGICADDR1_MASK, ADV7511_CEC_LOGICADDR1_SHIFT,
 				   reg_value);
@@ -832,7 +832,7 @@ static inline void cec_reg_logaddr1_set(int8_t reg_value)
 
 static inline void cec_reg_logaddr2_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 15))
+	if ((reg_value >= 0) && (reg_value <= 15))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_LOGICADDR2,
 				   ADV7511_CEC_LOGICADDR2_MASK, ADV7511_CEC_LOGICADDR2_SHIFT,
 				   reg_value);
@@ -846,7 +846,7 @@ static inline uint8_t cdc_reg_logaddr_mask_get()
 
 static inline void cec_reg_logaddr_mask_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 7))
+	if ((reg_value >= 0) && (reg_value <= 7))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_LOGICADDR_MASK,
 				   ADV7511_CEC_LOGICADDR_MASK_MASK,
 				   ADV7511_CEC_LOGICADDR_MASK_SHIFT, reg_value);
@@ -864,12 +864,12 @@ static inline void cec_reg_logaddr_mask_set(int8_t reg_value)
  *          ATVERR_INV_PARM if DevId is larger than 2
  *
  *===========================================================================*/
-ATV_ERR CEC_SetLogicalAddr (UCHAR LogAddr, UCHAR DevId, BOOL Enable)
+ATV_ERR CEC_SetLogicalAddr(UCHAR LogAddr, UCHAR DevId, BOOL Enable)
 {
 	uint8_t reg_mask, dev_bit;
 
 	LogAddr &= 0x0f;
-	switch(DevId) {
+	switch (DevId) {
 	case 0:
 		cec_reg_logaddr0_set(LogAddr);
 		dev_bit = ADV7511_CEC_LOGICADDR_MASK_ADDR0;
@@ -888,7 +888,7 @@ ATV_ERR CEC_SetLogicalAddr (UCHAR LogAddr, UCHAR DevId, BOOL Enable)
 
 	reg_mask = cdc_reg_logaddr_mask_get();
 	reg_mask &= (~dev_bit);
-	if(Enable)
+	if (Enable)
 		reg_mask |= dev_bit;
 	cec_reg_logaddr_mask_set(reg_mask);
 
@@ -897,7 +897,7 @@ ATV_ERR CEC_SetLogicalAddr (UCHAR LogAddr, UCHAR DevId, BOOL Enable)
 
 static inline void cec_reg_tx_framelen_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 31))
+	if ((reg_value >= 0) && (reg_value <= 31))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_TX_FRAME_LENGTH,
 				   ADV7511_CEC_TX_FRAME_LENGTH_MASK,
 				   ADV7511_CEC_TX_FRAME_LENGTH_SHIFT, reg_value);
@@ -914,15 +914,15 @@ static inline void cec_reg_tx_framelen_set(int8_t reg_value)
  *          ATVERR_INV_PARM if MsgLen is larger than max message size
  *
  *===========================================================================*/
-ATV_ERR CEC_SendMessage (UCHAR *MsgPtr, UCHAR MsgLen)
+ATV_ERR CEC_SendMessage(UCHAR *MsgPtr, UCHAR MsgLen)
 {
 	uint8_t header = 0, tail = 0;
 	uint8_t i, j;
 
-	if(MsgLen > CEC_MAX_MSG_SIZE)
+	if (MsgLen > CEC_MAX_MSG_SIZE)
 		return ATVERR_INV_PARM;
 
-	if(CecTxState == CEC_TX_STATE_DONE) {
+	if (CecTxState == CEC_TX_STATE_DONE) {
 		CecTxState = CEC_TX_STATE_BUSY;
 		HAL_I2CWriteBlock(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_TX_FRAME_HEADER,
 				  MsgPtr, MsgLen);
@@ -941,7 +941,7 @@ ATV_ERR CEC_SendMessage (UCHAR *MsgPtr, UCHAR MsgLen)
 	tail = cec_status.tx_tail;
 	cec_status.tx_buf[tail] = MsgLen; /* 1. to save message length */
 	j = MsgLen;
-	if(tail == header) {
+	if (tail == header) {
 		if (cec_status.tx_cnt != 0)    /* not empty buffer */
 			return ATVERR_FAILED;
 		else
@@ -955,9 +955,9 @@ ATV_ERR CEC_SendMessage (UCHAR *MsgPtr, UCHAR MsgLen)
 	}
 
 	if (tail >= header) {
-		if((MsgLen + tail) >= CEC_TX_BUF_LEN) {
+		if ((MsgLen + tail) >= CEC_TX_BUF_LEN) {
 			j = CEC_TX_BUF_LEN - tail;
-			if ((j+header) < MsgLen)
+			if ((j + header) < MsgLen)
 				return ATVERR_FAILED;
 		}
 	} else {
@@ -966,11 +966,11 @@ ATV_ERR CEC_SendMessage (UCHAR *MsgPtr, UCHAR MsgLen)
 	}
 
 	for (i = 0; i < j; i++)
-		cec_status.tx_buf[tail++] = *(MsgPtr+i);
+		cec_status.tx_buf[tail++] = *(MsgPtr + i);
 	if (j != MsgLen) {
 		tail = 0;
-		for (i=j; i<MsgLen; i++)
-			cec_status.tx_buf[tail++] = *(MsgPtr+i);
+		for (i = j; i < MsgLen; i++)
+			cec_status.tx_buf[tail++] = *(MsgPtr + i);
 	}
 	if (tail >= CEC_TX_BUF_LEN)
 		tail = 0;
@@ -994,7 +994,7 @@ ATV_ERR CEC_SendMessage (UCHAR *MsgPtr, UCHAR MsgLen)
  *          obeyed at application level. These are a desired maximum response
  *          time of 200ms and a required maximum response time of 1 second.
  *===========================================================================*/
-ATV_ERR CEC_SendMessageOut (void)
+ATV_ERR CEC_SendMessageOut(void)
 {
 	UCHAR msg_ptr[CEC_TX_BUF_LEN];
 	UCHAR msg_len = 0, i = 0;
@@ -1043,7 +1043,7 @@ ATV_ERR CEC_SendMessageOut (void)
  *          ATVERR_FAILED if CEC controller is busy
  *
  *===========================================================================*/
-ATV_ERR CEC_ResendLastMessage (void)
+ATV_ERR CEC_ResendLastMessage(void)
 {
 	if (CecTxState == CEC_TX_STATE_DONE) {
 		CecTxState = CEC_TX_STATE_BUSY;
@@ -1056,7 +1056,7 @@ ATV_ERR CEC_ResendLastMessage (void)
 
 static inline void cec_reg_rx_buf1_rdy_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 1))
+	if ((reg_value >= 0) && (reg_value <= 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_RX_BUFFER1_RDY,
 				   ADV7511_CEC_RX_BUFFER1_RDY_MASK,
 				   ADV7511_CEC_RX_BUFFER1_RDY_SHIFT, reg_value);
@@ -1064,7 +1064,7 @@ static inline void cec_reg_rx_buf1_rdy_set(int8_t reg_value)
 
 static inline void cec_reg_rx_buf2_rdy_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 1))
+	if ((reg_value >= 0) && (reg_value <= 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_RX_BUFFER2_RDY,
 				   ADV7511_CEC_RX_BUFFER2_RDY_MASK,
 				   ADV7511_CEC_RX_BUFFER2_RDY_SHIFT, reg_value);
@@ -1072,7 +1072,7 @@ static inline void cec_reg_rx_buf2_rdy_set(int8_t reg_value)
 
 static inline void cec_reg_rx_buf3_rdy_set(int8_t reg_value)
 {
-	if((reg_value >= 0) && (reg_value <= 1))
+	if ((reg_value >= 0) && (reg_value <= 1))
 		ATV_I2CWriteField8(ADV7511_CEC_I2C_ADDR, ADV7511_CEC_RX_BUFFER3_RDY,
 				   ADV7511_CEC_RX_BUFFER3_RDY_MASK,
 				   ADV7511_CEC_RX_BUFFER3_RDY_SHIFT, reg_value);
@@ -1108,7 +1108,7 @@ static void handle_log_addr_alloc_ints(CEC_INTERRUPTS *CecInts)
 		 *=================================*/
 		if (OperBuf[BufIdx] == 0xff) {
 			CecCurrOper = CEC_OP_NONE;
-			Cec_Notification(CEC_EVENT_LOG_ADDR_ALLOC, 0, OperBuf+BufIdx);
+			Cec_Notification(CEC_EVENT_LOG_ADDR_ALLOC, 0, OperBuf + BufIdx);
 		} else {
 			/*==================================
 			 * Try next logical addresses
@@ -1123,7 +1123,7 @@ static void handle_log_addr_alloc_ints(CEC_INTERRUPTS *CecInts)
 		 *============================================*/
 		if (nack_count == (CEC_RETRY_COUNT + 1)) {
 			CecCurrOper = CEC_OP_NONE;
-			Cec_Notification(CEC_EVENT_LOG_ADDR_ALLOC, 0, OperBuf+BufIdx);
+			Cec_Notification(CEC_EVENT_LOG_ADDR_ALLOC, 0, OperBuf + BufIdx);
 		} else {
 			err_code = 0x10;                 /* Try same logical addr again */
 		}
@@ -1203,7 +1203,7 @@ static void handle_log_addr_polling_ints(CEC_INTERRUPTS *CecInts)
 			 * Try next logical addresses
 			 *=================================*/
 			msg  = BufIdx;
-			msg |= (SrcLogAddr==0xff)? (BufIdx << 4): (SrcLogAddr << 4);
+			msg |= (SrcLogAddr == 0xff) ? (BufIdx << 4) : (SrcLogAddr << 4);
 			CEC_SendMessage(&msg, 1);
 		}
 	}
@@ -1217,7 +1217,7 @@ static void handle_log_addr_polling_ints(CEC_INTERRUPTS *CecInts)
  *
  *
  *===========================================================================*/
-void CEC_Isr (CEC_INTERRUPTS *CecInts)
+void CEC_Isr(CEC_INTERRUPTS *CecInts)
 {
 #if (((TX_INCLUDE_CEC) && ((TX_DEVICE==8002)||(TX_DEVICE==7511))) || \
 		((RX_INCLUDE_CEC) && (RX_DEVICE==7844)))
@@ -1234,9 +1234,9 @@ void CEC_Isr (CEC_INTERRUPTS *CecInts)
 		(TX_DEVICE==7511))) || ((RX_INCLUDE_CEC) && (RX_DEVICE==7844)))
 	j = 1; /* First receiving value */
 	do {
-		for(i = 0; i < CEC_TRIPLE_NUMBER; i++) {
+		for (i = 0; i < CEC_TRIPLE_NUMBER; i++) {
 			if (CecInts->RxFrameOrder[i] == j) {
-				switch(i) {
+				switch (i) {
 				case CEC_RX_BUFFER1:
 					HAL_I2CReadBlock(ADV7511_CEC_I2C_ADDR,
 							 ADV7511_CEC_RX_BUFF1_HDR, CecRxMessage,
@@ -1272,7 +1272,7 @@ void CEC_Isr (CEC_INTERRUPTS *CecInts)
 			}
 		}
 		j++;
-	} while(j <= CEC_TRIPLE_NUMBER);
+	} while (j <= CEC_TRIPLE_NUMBER);
 #else
 	/*======================================
 	 * RX int
@@ -1295,7 +1295,7 @@ void CEC_Isr (CEC_INTERRUPTS *CecInts)
 	/*======================================
 	 * Check current operation
 	 *=====================================*/
-	switch(CecCurrOper) {
+	switch (CecCurrOper) {
 	case CEC_OP_LOG_ADDR_ALLOC:
 		handle_log_addr_alloc_ints(CecInts);
 		break;
@@ -1339,7 +1339,7 @@ void CEC_Isr (CEC_INTERRUPTS *CecInts)
  * the caller will be notified by the event ADI_EVENT_CEC_LOG_ADDR_ALLOC
  *
  *===========================================================================*/
-ATV_ERR CEC_AllocateLogAddr (UCHAR *LogAddrList)
+ATV_ERR CEC_AllocateLogAddr(UCHAR *LogAddrList)
 {
 	UCHAR i, msg;
 	ATV_ERR RetVal;
@@ -1407,7 +1407,7 @@ uint32_t HAL_GetCurrentMsCount()
 	else
 		i = 0xFFFFFFFFL - (Last250usCount - i);
 	i >>= 2;
-	if(i) {
+	if (i) {
 		Last250usCount = (timer_counter_intr & 0xFFFFFFFCL);
 		MsCnt += i;
 	}

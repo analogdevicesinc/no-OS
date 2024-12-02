@@ -128,7 +128,7 @@ int main(void)
 		pr_err("SPI Read Failed!");
 	}
 
-	if(ADF4377_LOCKED(f_lock))
+	if (ADF4377_LOCKED(f_lock))
 		pr_info("Output Frequency Locked!");
 	else
 		pr_err("Output Frequency not Locked!");

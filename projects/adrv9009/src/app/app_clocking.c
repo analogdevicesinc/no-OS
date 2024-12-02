@@ -267,13 +267,13 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	ad9528_param.pdata->channels = &ad9528_channels[0];
 
 	status = ad9528_init(&ad9528_param);
-	if(status) {
+	if (status) {
 		printf("error: ad9528_init() failed with %d\n", status);
 		goto error_0;
 	}
 
 	// ad9528 channel defaults
-	for(unsigned int ch = 0; ch < ad9528_param.pdata->num_channels; ch++) {
+	for (unsigned int ch = 0; ch < ad9528_param.pdata->num_channels; ch++) {
 		ad9528_channels[ch].channel_num = ch;
 		ad9528_channels[ch].output_dis = 1;
 	}
@@ -470,7 +470,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	}
 #else
 	status = ad9528_setup(&clkchip_device, ad9528_param);
-	if(status < 0) {
+	if (status < 0) {
 		printf("error: ad9528_setup() failed with %d\n", status);
 		goto error_1;
 	}

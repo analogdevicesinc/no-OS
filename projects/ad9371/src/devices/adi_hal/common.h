@@ -32,14 +32,14 @@ extern "C" {
  *=======================================*/
 /* proposed to increase number of error return values to make unique for each return */
 typedef enum {
-	ADIERR_OK=0,
+	ADIERR_OK = 0,
 	ADIERR_INV_PARM,
 	ADIERR_FAILED
 } ADI_ERR;
 
 /*!< \brief COMMON layer error reporting enumerated types */
 typedef enum {
-	COMMONERR_OK=0,
+	COMMONERR_OK = 0,
 	COMMONERR_FAILED
 } commonErr_t;
 
@@ -87,19 +87,19 @@ commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex);
 commonErr_t CMB_setSPIOptions(spiSettings_t
 			      *spiSettings); /* allows the platform HAL to work with devices with various SPI settings */
 commonErr_t CMB_setSPIChannel(uint16_t
-			      chipSelectIndex );  /* value of 0 deasserts all chip selects */
+			      chipSelectIndex);   /* value of 0 deasserts all chip selects */
 commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
 			     uint8_t data); /* single SPI byte write function */
 commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr,
 			      uint8_t *data, uint32_t count);
-commonErr_t CMB_SPIReadByte (spiSettings_t *spiSettings, uint16_t addr,
-			     uint8_t *readdata); /* single SPI byte read function */
+commonErr_t CMB_SPIReadByte(spiSettings_t *spiSettings, uint16_t addr,
+			    uint8_t *readdata); /* single SPI byte read function */
 commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr,
 			      uint8_t  field_val, uint8_t mask,
 			      uint8_t start_bit); /* write a field in a single register */
-commonErr_t CMB_SPIReadField (spiSettings_t *spiSettings, uint16_t addr,
-			      uint8_t *field_val, uint8_t mask,
-			      uint8_t start_bit);	/* read a field in a single register */
+commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr,
+			     uint8_t *field_val, uint8_t mask,
+			     uint8_t start_bit);	/* read a field in a single register */
 
 /* platform timer functions */
 commonErr_t CMB_wait_ms(uint32_t time_ms);

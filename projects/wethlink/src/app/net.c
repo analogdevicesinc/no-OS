@@ -123,7 +123,7 @@ int net_init(struct adin1300_iio_desc **adin1300_iio,
 		.peripheral = NO_OS_GPIO_IRQ,
 	};
 
-	switch(speed) {
+	switch (speed) {
 	case 10:
 		phy_speed_cap = ADIN1300_10_BASE_T_FULLDUPLEX;
 		break;

@@ -111,8 +111,8 @@ int basic_example_main()
 		(float)temp_scale.dividend / temp_scale.divisor,
 	};
 
-	while(1) {
-		pr_info ("while loop \n");
+	while (1) {
+		pr_info("while loop \n");
 		no_os_mdelay(1000);
 		ret = adis_read_x_gyro(adis1647x_desc, &val[0]);
 		if (ret)

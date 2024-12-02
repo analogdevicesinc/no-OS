@@ -47,7 +47,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -67,7 +67,7 @@ int iio_example_main()
 	struct iio_app_desc *app;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*3*sizeof(int)
+		.size = DATA_BUFFER_SIZE * 3 * sizeof(int)
 	};
 	struct iio_app_init_param app_init_param = { 0 };
 
@@ -76,7 +76,7 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	switch(adxl313_iio_desc->adxl313_dev->dev_type) {
+	switch (adxl313_iio_desc->adxl313_dev->dev_type) {
 	case ID_ADXL312:
 		dev_name = "adxl312";
 		break;

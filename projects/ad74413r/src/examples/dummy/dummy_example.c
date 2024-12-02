@@ -136,10 +136,10 @@ int dummy_example_main()
 
 	while (1) {
 		/* Clear the screen. */
-		pr_info("%c",27);
-		pr_info("%c",'[');
-		pr_info("%c",'2');
-		pr_info("%c",'J');
+		pr_info("%c", 27);
+		pr_info("%c", '[');
+		pr_info("%c", '2');
+		pr_info("%c", 'J');
 
 		ret = ad74413r_gpo_get(ad74413r_desc, AD74413R_CH_A, &val);
 		if (ret)

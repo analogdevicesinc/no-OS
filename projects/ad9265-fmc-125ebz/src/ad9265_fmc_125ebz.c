@@ -146,7 +146,7 @@ int main(void)
 	}
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(ad9265_dmac, 500);
-	if(status < 0)
+	if (status < 0)
 		return status;
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 

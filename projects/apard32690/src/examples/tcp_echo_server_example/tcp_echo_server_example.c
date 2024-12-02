@@ -87,7 +87,7 @@ int tcp_echo_server_example_main()
 	if (ret)
 		return ret;
 
-	while(1) {
+	while (1) {
 		ret = socket_accept(server_socket, &client_socket);
 		if (ret && ret != -EAGAIN)
 			return ret;

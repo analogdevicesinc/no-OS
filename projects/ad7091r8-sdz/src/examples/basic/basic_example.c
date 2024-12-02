@@ -67,7 +67,7 @@ int basic_example_main()
 	if (ret)
 		goto error;
 
-	while(1) {
+	while (1) {
 		ret = ad7091r8_sequenced_read(ad7091r8_dev, &val);
 		if (ret)
 			goto error;

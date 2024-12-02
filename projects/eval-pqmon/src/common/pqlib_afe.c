@@ -78,16 +78,16 @@ int get_afe_input()
 
 	if ((status == 0) && (pOneCycle->STATUS0 & BITM_STATUS0_COH_PAGE_RDY)) {
 		status = afe_read_waveform(
-				 (uint16_t *)&(pqlibExample.inputWaveform.waveform),
+				 (uint16_t *) & (pqlibExample.inputWaveform.waveform),
 				 ADI_PQLIB_WAVEFORM_BLOCK_SIZE * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS);
 		pWaveform->isDataProcessed = 0;
 		pWaveform->sequenceNumber++;
 		if (pqlibExample.no_os_cb_desc && !processData) {
-			no_os_cb_write (pqlibExample.no_os_cb_desc,
-					(uint8_t *)&(pqlibExample.inputWaveform.waveform),
-					ADI_PQLIB_WAVEFORM_BLOCK_SIZE
-					* ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
-					* sizeof (uint16_t));
+			no_os_cb_write(pqlibExample.no_os_cb_desc,
+				       (uint8_t *) & (pqlibExample.inputWaveform.waveform),
+				       ADI_PQLIB_WAVEFORM_BLOCK_SIZE
+				       * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
+				       * sizeof(uint16_t));
 		}
 	}
 

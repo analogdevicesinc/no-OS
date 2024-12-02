@@ -96,12 +96,12 @@ int selftest_example_main()
 	/* Self test */
 	ret = adxl38x_selftest(adxl38x_desc, opmode, &selftest_x, &selftest_y,
 			       &selftest_z);
-	pr_info(" X axis self test %s\n", selftest_x?"successful":"failed");
-	pr_info(" Y axis self test %s\n", selftest_y?"successful":"failed");
-	pr_info(" Z axis self test %s\n", selftest_z?"successful":"failed");
+	pr_info(" X axis self test %s\n", selftest_x ? "successful" : "failed");
+	pr_info(" Y axis self test %s\n", selftest_y ? "successful" : "failed");
+	pr_info(" Z axis self test %s\n", selftest_z ? "successful" : "failed");
 
 error:
-	if(ret)
+	if (ret)
 		pr_info("Error occurred!");
 	else
 		pr_info("The program has ended after successful execution\n");

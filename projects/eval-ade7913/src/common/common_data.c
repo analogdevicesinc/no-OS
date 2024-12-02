@@ -86,14 +86,14 @@ int rms_adc_values_read(struct ade7913_dev *dev, struct rms_adc_values *rms)
 	rms->i_rms_adc[0] = (int32_t)rms_filter_i((int32_t)dev->i_wav_m[0]);
 
 	rms->i_rms[0] = (((int64_t)((int64_t)(int64_t)rms->i_rms_adc[0]))
-			 *ADE7913_VREF_I) /
+			 * ADE7913_VREF_I) /
 			(1 << 23);
 	rms->v1_rms[0] = (((int64_t)((int64_t)(supply_scale_v((int64_t)
 					       rms->v1_rms_adc[0]))))
-			  *ADE7913_VREF_V) / (1 << 23);
+			  * ADE7913_VREF_V) / (1 << 23);
 	rms->v2_rms[0] = (((int64_t)((int64_t)(supply_scale_v((int64_t)
 					       rms->v2_rms_adc[0]))))
-			  *ADE7913_VREF_V) / (1 << 23);
+			  * ADE7913_VREF_V) / (1 << 23);
 
 	return 0;
 }
@@ -118,14 +118,14 @@ int rms_adc_values_read_2(struct ade7913_dev *dev, struct rms_adc_values *rms)
 	rms->i_rms_adc[1] = (int32_t)rms_filter_i_2((int32_t)dev->i_wav_m[1]);
 
 	rms->i_rms[1] = (((int64_t)((int64_t)(int64_t)rms->i_rms_adc[1]))
-			 *ADE7913_VREF_I) /
+			 * ADE7913_VREF_I) /
 			(1 << 23);
 	rms->v1_rms[1] = (((int64_t)((int64_t)(supply_scale_v((int64_t)
 					       rms->v1_rms_adc[1]))))
-			  *ADE7913_VREF_V) / (1 << 23);
+			  * ADE7913_VREF_V) / (1 << 23);
 	rms->v2_rms[1] = (((int64_t)((int64_t)(supply_scale_v((int64_t)
 					       rms->v2_rms_adc[1]))))
-			  *ADE7913_VREF_V) / (1 << 23);
+			  * ADE7913_VREF_V) / (1 << 23);
 
 	return 0;
 }
@@ -150,14 +150,14 @@ int rms_adc_values_read_3(struct ade7913_dev *dev, struct rms_adc_values *rms)
 	rms->i_rms_adc[2] = (int32_t)rms_filter_i_3((int32_t)dev->i_wav_m[2]);
 
 	rms->i_rms[2] = (((int64_t)((int64_t)(int64_t)rms->i_rms_adc[2]))
-			 *ADE7913_VREF_I) /
+			 * ADE7913_VREF_I) /
 			(1 << 23);
 	rms->v1_rms[2] = (((int64_t)((int64_t)(supply_scale_v((int64_t)
 					       rms->v1_rms_adc[2]))))
-			  *ADE7913_VREF_V) / (1 << 23);
+			  * ADE7913_VREF_V) / (1 << 23);
 	rms->v2_rms[2] = (((int64_t)((int64_t)(supply_scale_v((int64_t)
 					       rms->v2_rms_adc[2]))))
-			  *ADE7913_VREF_V) / (1 << 23);
+			  * ADE7913_VREF_V) / (1 << 23);
 
 	return 0;
 }

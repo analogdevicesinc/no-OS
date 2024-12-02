@@ -388,12 +388,12 @@ int pilot_write_new_values(struct stout *stout)
 void pilot_update_vals(void)
 {
 	for (unsigned int i = 9; i > 0; i--) {
-		pwm_high[i] = pwm_high[i-1];
+		pwm_high[i] = pwm_high[i - 1];
 	}
 	pwm_high[0] = pwm_high_val;
 
 	for (unsigned int i = 9; i > 0; i--) {
-		pwm_low[i] = pwm_low[i-1];
+		pwm_low[i] = pwm_low[i - 1];
 	}
 	pwm_low[0] = pwm_low_val;
 }

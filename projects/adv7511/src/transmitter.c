@@ -130,7 +130,7 @@ ATV_ERR ADIAPI_TransmitterInit(void)
 *******************************************************************************/
 void TRANSMITTER_SoftwareInit(void)
 {
-	memset (&(TransmitterTxVars), 0, sizeof(TRANSMITTER_TX_VARS));
+	memset(&(TransmitterTxVars), 0, sizeof(TRANSMITTER_TX_VARS));
 
 	TxStatus.Hpd        = FALSE;
 	TxStatus.Msen       = FALSE;
@@ -147,7 +147,7 @@ void TRANSMITTER_HardwareInit(void)
 	ADIAPI_TxInit(TRUE);
 
 	/* Enable TMDS clock and data lines. */
-	ADIAPI_TxEnableTmds (TRUE, TRUE);
+	ADIAPI_TxEnableTmds(TRUE, TRUE);
 
 	/* Set system mute. */
 	ADIAPI_TxSetAvmute(TX_AVMUTE_OFF);
@@ -178,11 +178,11 @@ void TRANSMITTER_HardwareInit(void)
 				   1);
 
 	/* Set interrupt masks. */
-	ADIAPI_TxSetEnabledEvents (TX_EVENT_ALL_EVENTS, FALSE);
-	ADIAPI_TxSetEnabledEvents ((TX_EVENT)(TX_EVENT_HPD_CHG |
-					      TX_EVENT_MSEN_CHG |
-					      TX_EVENT_EDID_READY),
-				   TRUE);
+	ADIAPI_TxSetEnabledEvents(TX_EVENT_ALL_EVENTS, FALSE);
+	ADIAPI_TxSetEnabledEvents((TX_EVENT)(TX_EVENT_HPD_CHG |
+					     TX_EVENT_MSEN_CHG |
+					     TX_EVENT_EDID_READY),
+				  TRUE);
 
 	/* Enable AVI InfoFrame. */
 	ADIAPI_TxEnablePackets(PKT_AV_INFO_FRAME,
@@ -216,7 +216,7 @@ ATV_ERR ADIAPI_TransmitterGetDetectedMode(TRANSMITTER_OPER_MODE *Mode)
 	BOOL Msen;
 
 	ADIAPI_TxGetHpdMsenState(&Hpd, &Msen);
-	if(Hpd && Msen) {
+	if (Hpd && Msen) {
 		*Mode = MODE_XMT;
 	} else {
 		*Mode = MODE_NONE;
@@ -272,7 +272,7 @@ ATV_ERR ADIAPI_TransmitterSetOperatingMode(TRANSMITTER_OPER_MODE Mode)
 *******************************************************************************/
 void ADIAPI_TransmitterSetMuteMode(TRANSMITTER_OPER_MODE Mode)
 {
-	if(Mode == MODE_XMT) {
+	if (Mode == MODE_XMT) {
 		MuteState = MUTE_DISABLE;
 	} else {
 		MuteState = MUTE_ENABLE;
@@ -290,12 +290,12 @@ void TRANSMITTER_MonitorAvrMode(void)
 	TRANSMITTER_OPER_MODE Mode;
 
 	ADIAPI_TransmitterGetDetectedMode(&Mode);
-	if(Mode != LastDetMode) {
+	if (Mode != LastDetMode) {
 		LastDetMode = Mode;
 		ModeChngCount = ATV_GetMsCountNZ();
 	}
-	if((Mode != TransmitterParm.Mode) && ModeChngCount) {
-		if(ATV_GetElapsedMs(ModeChngCount, 0) > TRANSMITTER_MODE_SWITCH_DELAY) {
+	if ((Mode != TransmitterParm.Mode) && ModeChngCount) {
+		if (ATV_GetElapsedMs(ModeChngCount, 0) > TRANSMITTER_MODE_SWITCH_DELAY) {
 			ADIAPI_TransmitterSetOperatingMode(Mode);
 			ADIAPI_TransmitterSetMuteMode(Mode);
 			ModeChngCount = 0;
@@ -315,7 +315,7 @@ ATV_ERR ADIAPI_TransmitterMain(void)
 
 	TRANSMITTER_MonitorAvrMode();
 	Events = 0;
-	if ( (TransmitterParm.PowerMode == REP_POWER_UP) && (TransmitterParm.Changed ||
+	if ((TransmitterParm.PowerMode == REP_POWER_UP) && (TransmitterParm.Changed ||
 			(ATV_GetElapsedMs(HouseKeepingDelay, 0) >= TRANSMITTER_HOUSEKEEPING_DELAY))) {
 		TransmitterParm.Changed = FALSE;
 		Events |= ADI_TASK_EVENT_TIMER;
@@ -329,7 +329,7 @@ ATV_ERR ADIAPI_TransmitterMain(void)
 	    && (TransmitterParm.PowerMode == REP_POWER_UP)) {
 		TRANSMITTER_Housekeeping();
 	}
-	if((CurrMuteState == MUTE_DISABLE)
+	if ((CurrMuteState == MUTE_DISABLE)
 	    && (TransmitterParm.PowerMode == REP_POWER_UP)) {
 		AudioClick();
 	}
@@ -358,7 +358,7 @@ ATV_ERR ADIAPI_TransmitterSetMuteState(void)
 {
 	if (MuteState != CurrMuteState) {
 		CurrMuteState = MuteState;
-		if(CurrMuteState) {
+		if (CurrMuteState) {
 			TRANSMITTER_DBG_MSG("Mute audio and video.\n\r");
 			ADIAPI_TxMuteAudio(TRUE);
 			ADIAPI_TxMuteVideo(TRUE);
@@ -377,13 +377,13 @@ ATV_ERR ADIAPI_TransmitterSetMuteState(void)
  *
  * @return Returns 0.
 *******************************************************************************/
-UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, void *BufPtr)
+UINT16 TRANSMITTER_Notification(TX_EVENT Ev, UINT16 Count, void *BufPtr)
 {
 	switch (Ev) {
 	/* HPD changed */
 	case TX_EVENT_HPD_CHG:
 		TxStatus.Hpd = *((BOOL *)BufPtr);
-		TRANSMITTER_DBG_MSG("HPD changed to %s\n\r", TxStatus.Hpd? "HI": "LOW");
+		TRANSMITTER_DBG_MSG("HPD changed to %s\n\r", TxStatus.Hpd ? "HI" : "LOW");
 		if (TxStatus.Hpd) {
 			TRANSMITTER_HardwareInit();
 		} else {
@@ -393,7 +393,7 @@ UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, void *BufPtr)
 	/* MSEN changed */
 	case TX_EVENT_MSEN_CHG:
 		TxStatus.Msen = *((BOOL *)BufPtr);
-		TRANSMITTER_DBG_MSG("MSEN changed to %s\n\r", TxStatus.Msen? "HI": "LOW");
+		TRANSMITTER_DBG_MSG("MSEN changed to %s\n\r", TxStatus.Msen ? "HI" : "LOW");
 		break;
 	/* EDID ready */
 	case TX_EVENT_EDID_READY:
@@ -435,20 +435,20 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 	unsigned long  ieeeRegistration         = 0;
 
 	if (SegPtr) {
-		memcpy (EdidData, SegPtr, 256);
+		memcpy(EdidData, SegPtr, 256);
 	} else {
-		memset (EdidData, 0, 256);
+		memset(EdidData, 0, 256);
 	}
 	if (SegPtr && (SegmentNum < 2)) {
-		for(edidIndex = 128; edidIndex <= 253; edidIndex++) {
+		for (edidIndex = 128; edidIndex <= 253; edidIndex++) {
 			ieeeRegistration = ((unsigned long)EdidData[edidIndex + 2] << 16) |
 					   ((unsigned short)EdidData[edidIndex + 1] << 8) |
 					   EdidData[edidIndex];
-			if(ieeeRegistration == HDMI_IEEE_REG) {
+			if (ieeeRegistration == HDMI_IEEE_REG) {
 				break;
 			}
 		}
-		if(ieeeRegistration == HDMI_IEEE_REG) {
+		if (ieeeRegistration == HDMI_IEEE_REG) {
 			TRANSMITTER_DBG_MSG("HDMI device.\n\r");
 			ADIAPI_TxSetOutputMode(OUT_MODE_HDMI);
 		} else {

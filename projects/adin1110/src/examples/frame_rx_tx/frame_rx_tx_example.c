@@ -165,10 +165,10 @@ int frame_rx_tx_example_main()
 
 	while (1) {
 		/* Clear the screen */
-		printf("%c",27);
-		printf("%c",'[');
-		printf("%c",'2');
-		printf("%c",'J');
+		printf("%c", 27);
+		printf("%c", '[');
+		printf("%c", '2');
+		printf("%c", 'J');
 
 		ret = adin1110_reg_read(adin1110, ADIN1110_TX_UCAST_CNT_REG,
 					&ucast_frame_tx_cnt);

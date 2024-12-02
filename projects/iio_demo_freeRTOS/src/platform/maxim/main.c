@@ -72,14 +72,14 @@ int blinkingTask()
 			ret = no_os_gpio_set_value(led_pin, NO_OS_GPIO_HIGH);
 			if (ret)
 				goto error_pin;
-			led_on=true;
+			led_on = true;
 			no_os_mdelay(100);
 		}
 		if (led_on) {
 			ret = no_os_gpio_set_value(led_pin, NO_OS_GPIO_LOW);
 			if (ret)
 				goto error_pin;
-			led_on=false;
+			led_on = false;
 			no_os_mdelay(100);
 		}
 	}

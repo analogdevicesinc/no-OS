@@ -73,7 +73,7 @@ int basic_example_main()
 		return ret;
 	}
 
-	for(i = 0, data = ADC_DDR_BASEADDR; i < SAMPLES_PER_CHANNEL; i++, data++) {
+	for (i = 0, data = ADC_DDR_BASEADDR; i < SAMPLES_PER_CHANNEL; i++, data++) {
 		if (sign == 's')
 			printf("ADC: %ld\n\r", no_os_sign_extend32(*data, resolution - 1));
 		else

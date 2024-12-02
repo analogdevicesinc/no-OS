@@ -23,7 +23,7 @@
 #include "t_mykonos_gpio.h"
 #include "myk.h"
 
-static int16_t txFirCoefs[] = {-15,33,-92,207,-457,1094,-3342,21908,-4607,2226,-862,376,-169,72,-29,19};
+static int16_t txFirCoefs[] = {-15, 33, -92, 207, -457, 1094, -3342, 21908, -4607, 2226, -862, 376, -169, 72, -29, 19};
 
 static mykonosFir_t txFir = {
 	6,              /* Filter gain in dB*/
@@ -31,27 +31,27 @@ static mykonosFir_t txFir = {
 	&txFirCoefs[0]  /* A pointer to an array of filter coefficients*/
 };
 
-static int16_t rxFirCoefs[] = {-20,6,66,22,-128,-54,240,126,-402,-248,634,444,-956,-756,1400,1244,-2028,-2050,2978,3538,-4646,-7046,9536,30880,30880,9536,-7046,-4646,3538,2978,-2050,-2028,1244,1400,-756,-956,444,634,-248,-402,126,240,-54,-128,22,66,6,-20};
+static int16_t rxFirCoefs[] = {-20, 6, 66, 22, -128, -54, 240, 126, -402, -248, 634, 444, -956, -756, 1400, 1244, -2028, -2050, 2978, 3538, -4646, -7046, 9536, 30880, 30880, 9536, -7046, -4646, 3538, 2978, -2050, -2028, 1244, 1400, -756, -956, 444, 634, -248, -402, 126, 240, -54, -128, 22, 66, 6, -20};
 
 static mykonosFir_t rxFir = {
 	-6,             /* Filter gain in dB*/
-	48,             /* Number of coefficients in the FIR filter*/
-	&rxFirCoefs[0]  /* A pointer to an array of filter coefficients*/
-};
+		48,             /* Number of coefficients in the FIR filter*/
+		&rxFirCoefs[0]  /* A pointer to an array of filter coefficients*/
+	};
 
-static int16_t obsrxFirCoefs[] = {150,-55,-64,354,-896,1788,-3101,4953,-7622,9914,-14047,25417,25417,-14047,9914,-7622,4953,-3101,1788,-896,354,-64,-55,150};
+static int16_t obsrxFirCoefs[] = {150, -55, -64, 354, -896, 1788, -3101, 4953, -7622, 9914, -14047, 25417, 25417, -14047, 9914, -7622, 4953, -3101, 1788, -896, 354, -64, -55, 150};
 static mykonosFir_t obsrxFir = {
 	0,              /* Filter gain in dB*/
 	24,             /* Number of coefficients in the FIR filter*/
 	&obsrxFirCoefs[0] /* A pointer to an array of filter coefficients*/
 };
 
-static int16_t snifferFirCoefs[] = {-1,-5,-14,-23,-16,24,92,137,80,-120,-378,-471,-174,507,1174,1183,98,-1771,-3216,-2641,942,7027,13533,17738,17738,13533,7027,942,-2641,-3216,-1771,98,1183,1174,507,-174,-471,-378,-120,80,137,92,24,-16,-23,-14,-5,-1};
-static mykonosFir_t snifferRxFir= {
+static int16_t snifferFirCoefs[] = {-1, -5, -14, -23, -16, 24, 92, 137, 80, -120, -378, -471, -174, 507, 1174, 1183, 98, -1771, -3216, -2641, 942, 7027, 13533, 17738, 17738, 13533, 7027, 942, -2641, -3216, -1771, 98, 1183, 1174, 507, -174, -471, -378, -120, 80, 137, 92, 24, -16, -23, -14, -5, -1};
+static mykonosFir_t snifferRxFir = {
 	-6,             /* Filter gain in dB*/
-	48,             /* Number of coefficients in the FIR filter*/
-	&snifferFirCoefs[0] /* A pointer to an array of filter coefficients*/
-};
+		48,             /* Number of coefficients in the FIR filter*/
+		&snifferFirCoefs[0] /* A pointer to an array of filter coefficients*/
+	};
 
 static mykonosJesd204bFramerConfig_t rxFramer = {
 	0,              /* JESD204B Configuration Bank ID -extension to Device ID (Valid 0..15)*/
@@ -344,7 +344,7 @@ static mykonosDpdConfig_t dpdConfig = {
 	4096,           /* threshold for sample in AM-AM plot outside of 1:1 line to be thrown out. (default: 50% = 8192/2, valid 8192 to 1)*/
 	0,              /* 16th of an ORx sample (16=1sample), (default 0, valid -64 to 64)*/
 	255,            /* Default 255 (-30dBFs=(20Log10(value/8192)), (valid range  1 to 8191)*/
-	{{64,0},{0,0},{0,0}}/* DPD model error weighting (real/imag valid from -128 to 127)*/
+	{{64, 0}, {0, 0}, {0, 0}} /* DPD model error weighting (real/imag valid from -128 to 127)*/
 };
 
 static mykonosClgcConfig_t clgcConfig = {
@@ -448,9 +448,9 @@ static mykonosGpioLowVoltage_t gpio = {
 
 static mykonosAuxIo_t mykonosAuxIo = {
 	0,	//auxDacEnableMask uint16_t
-	{0,0,0,0,0,0,0,0,0,0},	 //AuxDacValue uint16[10]
-	{0,0,0,0,0,0,0,0,0,0},	 //AuxDacSlope uint8[10]
-	{0,0,0,0,0,0,0,0,0,0},	 //AuxDacVref uint8[10]
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	 //AuxDacValue uint16[10]
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	 //AuxDacSlope uint8[10]
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	 //AuxDacVref uint8[10]
 	&gpio3v3,	//pointer to gpio3v3 struct
 	&gpio,	//pointer to gpio1v8 struct
 	&armGpio

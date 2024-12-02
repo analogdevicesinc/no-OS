@@ -131,11 +131,11 @@ int main()
 	ad77681_setup(&adc_dev, ADC_default_init_param, &adc_status);
 
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
-		while(1) {
+		while (1) {
 			ad77681_spi_read_adc_data(adc_dev, adc_data,
 						  AD77681_CONTINUOUS_DATA_READ);
 			printf("[ADC DATA]: 0x");
-			for(i = 0; i < sizeof(adc_data); i++) {
+			for (i = 0; i < sizeof(adc_data); i++) {
 				printf("%x", adc_data[i]);
 			}
 			printf("\r\n");

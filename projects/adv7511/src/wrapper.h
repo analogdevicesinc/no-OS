@@ -318,9 +318,9 @@ EXTERNAL CONSTANT UINT16 VicInfo[];
  * Enums and structures
  *=======================================*/
 typedef enum {
-	ATVERR_OK=0,
-	ATVERR_FALSE=0,
-	ATVERR_TRUE=1,
+	ATVERR_OK = 0,
+	ATVERR_FALSE = 0,
+	ATVERR_TRUE = 1,
 	ATVERR_INV_PARM,
 	ATVERR_NOT_AVAILABLE,
 	ATVERR_FAILED
@@ -375,48 +375,48 @@ enum cec_operations {
 	CEC_OP_GET_LOG_ADDR_LIST
 };
 
-void    HAL_DelayMs (UINT16 Counter);
-UCHAR   HAL_I2CReadByte (UCHAR Dev, UCHAR Reg, UCHAR *Data);
-UCHAR   HAL_I2CWriteByte (UCHAR Dev, UCHAR Reg, UCHAR Data);
-UINT16  HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
+void    HAL_DelayMs(UINT16 Counter);
+UCHAR   HAL_I2CReadByte(UCHAR Dev, UCHAR Reg, UCHAR *Data);
+UCHAR   HAL_I2CWriteByte(UCHAR Dev, UCHAR Reg, UCHAR Data);
+UINT16  HAL_I2CReadBlock(UCHAR Dev, UCHAR Reg, UCHAR *Data,
+			 UINT16 NumberBytes);
+UINT16  HAL_I2CWriteBlock(UCHAR Dev, UCHAR Reg, UCHAR *Data,
 			  UINT16 NumberBytes);
-UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
-			   UINT16 NumberBytes);
 UCHAR HAL_SetRxChipSelect(UCHAR DevIdx);
 void WaitMilliSec(unsigned int msec);
 void DBG_Printf(const char *data, ...);
 
 
-UCHAR   ATV_I2CReadField8   (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-			     UCHAR BitPos);
-void    ATV_I2CWriteField8  (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-			     UCHAR BitPos,  UCHAR FieldVal);
-UINT32  ATV_I2CReadField32  (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-			     UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
-UINT32  ATV_I2CReadField32LE   (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-				UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
-void    ATV_I2CWriteField32      (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-				  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
-				  UINT32 Val);
-void    ATV_I2CWriteField32LE    (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-				  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
-				  UINT32 Val);
-void    ATV_I2CWriteFields (UCHAR *Table, UCHAR EndVal);
-void    ATV_I2CWriteTable (UCHAR *Table, UCHAR EndVal);
-UINT16  ATV_LookupValue8 (UCHAR *Table, UCHAR Value, UCHAR EndVal, UINT16 Step);
-void    ATV_PrintTime (char *Prefix, UCHAR Gran, char *Postfix);
+UCHAR   ATV_I2CReadField8(UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
+			  UCHAR BitPos);
+void    ATV_I2CWriteField8(UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
+			   UCHAR BitPos,  UCHAR FieldVal);
+UINT32  ATV_I2CReadField32(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			   UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
+UINT32  ATV_I2CReadField32LE(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			     UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
+void    ATV_I2CWriteField32(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			    UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
+			    UINT32 Val);
+void    ATV_I2CWriteField32LE(UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
+			      UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
+			      UINT32 Val);
+void    ATV_I2CWriteFields(UCHAR *Table, UCHAR EndVal);
+void    ATV_I2CWriteTable(UCHAR *Table, UCHAR EndVal);
+UINT16  ATV_LookupValue8(UCHAR *Table, UCHAR Value, UCHAR EndVal, UINT16 Step);
+void    ATV_PrintTime(char *Prefix, UCHAR Gran, char *Postfix);
 
-UINT32  ATV_GetElapsedMs (UINT32 StartCount, UINT32 *CurrMsCount);
-UINT32  ATV_GetMsCountNZ (void);
+UINT32  ATV_GetElapsedMs(UINT32 StartCount, UINT32 *CurrMsCount);
+UINT32  ATV_GetMsCountNZ(void);
 
-ATV_ERR CEC_Reset (void);
-ATV_ERR CEC_Enable (BOOL Enable);
-ATV_ERR CEC_SetLogicalAddr (UCHAR LogAddr, UCHAR DevId, BOOL Enable);
-ATV_ERR CEC_SendMessage (UCHAR *MsgPtr, UCHAR MsgLen);
-ATV_ERR CEC_SendMessageOut (void);
-ATV_ERR CEC_ResendLastMessage (void);
-ATV_ERR CEC_AllocateLogAddr (UCHAR *LogAddrList);
-void  CEC_Isr (CEC_INTERRUPTS *CecInts);
+ATV_ERR CEC_Reset(void);
+ATV_ERR CEC_Enable(BOOL Enable);
+ATV_ERR CEC_SetLogicalAddr(UCHAR LogAddr, UCHAR DevId, BOOL Enable);
+ATV_ERR CEC_SendMessage(UCHAR *MsgPtr, UCHAR MsgLen);
+ATV_ERR CEC_SendMessageOut(void);
+ATV_ERR CEC_ResendLastMessage(void);
+ATV_ERR CEC_AllocateLogAddr(UCHAR *LogAddrList);
+void  CEC_Isr(CEC_INTERRUPTS *CecInts);
 BOOL HAL_GetMBSwitchState();
 uint32_t HAL_GetCurrentMsCount();
 void uart_int_handler(void *instance);

@@ -165,10 +165,10 @@ int main(void)
 		return -1;
 	}
 	status = axi_dmac_transfer_wait_completion(ad9434_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 	/* Flush cache data. */
-	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 2);
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 
 #ifdef IIO_SUPPORT
 	struct xil_uart_init_param platform_uart_init_par = {

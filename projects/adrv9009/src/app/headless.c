@@ -106,7 +106,7 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 
 #ifndef ADRV9008_1
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 #endif
 
@@ -273,7 +273,7 @@ int main(void)
 	struct adi_hal hal[TALISE_DEVICE_ID_MAX];
 	taliseDevice_t tal[TALISE_DEVICE_ID_MAX];
 	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
-		hal[t].extra_gpio= &hal_gpio_param;
+		hal[t].extra_gpio = &hal_gpio_param;
 		hal[t].extra_spi = &hal_spi_param;
 		tal[t].devHalInfo = (void *) &hal[t];
 	}
@@ -327,7 +327,7 @@ int main(void)
 	}
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	printf("Performing multi-chip synchronization...\n");
-	for(int i=0; i < 12; i++) {
+	for (int i = 0; i < 12; i++) {
 		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
 			err = talise_multi_chip_sync(&tal[t], i);
 			if (err != ADIHAL_OK)
@@ -451,20 +451,20 @@ int main(void)
 	};
 #ifndef ADRV9008_2
 	status = axi_dmac_transfer_start(rx_dmac, &transfer_rx);
-	if(status)
+	if (status)
 		return status;
 	printf("Rx ");
 	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
 	uint8_t num_chans = rx_adc_init.num_channels;
 #else
 	status = axi_dmac_transfer_start(rx_os_dmac, &transfer_rx);
-	if(status)
+	if (status)
 		return status;
 	printf("Rx obs ");
 	status = axi_dmac_transfer_wait_completion(rx_os_dmac, 500);
 	uint8_t num_chans = rx_os_adc_init.num_channels;
 #endif
-	if(status)
+	if (status)
 		return status;
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,

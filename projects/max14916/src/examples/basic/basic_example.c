@@ -56,20 +56,20 @@ int basic_example_main()
 
 	/* Intializing the device MAX14916. */
 	ret = max14916_init(&max14916_desc, &max14916_ip);
-	if(ret)
+	if (ret)
 		goto exit;
 
 	/* Create a loop that will turn SLEDs on and off like in a "loading screen"
 	   sequence. */
 	while (j < 5) {
-		for(i = 0; i < MAX14916_CHANNELS; i++) {
+		for (i = 0; i < MAX14916_CHANNELS; i++) {
 			ret = max14916_sled_set(max14916_desc, i, MAX14916_SLED_ON);
 			if (ret)
 				goto remove_max14916;
 			no_os_mdelay(200);
 		}
 
-		for(i = 0; i < MAX14916_CHANNELS; i++) {
+		for (i = 0; i < MAX14916_CHANNELS; i++) {
 			ret = max14916_sled_set(max14916_desc, i, MAX14916_SLED_OFF);
 			if (ret)
 				goto remove_max14916;

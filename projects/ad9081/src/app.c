@@ -63,8 +63,8 @@
 
 #ifdef IIO_SUPPORT
 
-static int16_t dac_buffer[MAX_DAC_BUF_SAMPLES] __attribute__ ((aligned(1024)));
-static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned(1024)));
+static int16_t dac_buffer[MAX_DAC_BUF_SAMPLES] __attribute__((aligned(1024)));
+static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__((aligned(1024)));
 
 #endif
 
@@ -339,7 +339,7 @@ int main(void)
 	};
 
 	jesd204_topology_init(&topology, devs,
-			      sizeof(devs)/sizeof(*devs));
+			      sizeof(devs) / sizeof(*devs));
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
@@ -389,7 +389,7 @@ int main(void)
 	struct iio_app_init_param app_init_param = { 0 };
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
@@ -402,7 +402,7 @@ int main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	struct iio_data_buffer read_buff = {

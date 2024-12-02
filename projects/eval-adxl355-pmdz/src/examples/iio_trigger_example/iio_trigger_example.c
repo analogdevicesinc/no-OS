@@ -47,7 +47,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -66,7 +66,7 @@ int iio_trigger_example_main()
 	struct adxl355_iio_dev_init_param adxl355_iio_ip;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*3*sizeof(int)
+		.size = DATA_BUFFER_SIZE * 3 * sizeof(int)
 	};
 	struct iio_hw_trig *adxl355_trig_desc;
 	struct no_os_irq_ctrl_desc *adxl355_irq_desc;

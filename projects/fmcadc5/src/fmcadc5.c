@@ -344,11 +344,11 @@ int main(void)
 
 	// PRBS test
 	ad9625_test(ad9625_0_device, AD9625_TEST_PNLONG);
-	if(axi_adc_pn_mon(ad9625_0_core, AXI_ADC_PN23, 10) == -1) {
+	if (axi_adc_pn_mon(ad9625_0_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s PN23 sequence mismatch at ad9625_0!\n", __func__);
 	};
 	ad9625_test(ad9625_1_device, AD9625_TEST_PNLONG);
-	if(axi_adc_pn_mon(ad9625_1_core, AXI_ADC_PN23, 10) == -1) {
+	if (axi_adc_pn_mon(ad9625_1_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s PN23 sequence mismatch at ad9625_1!\n", __func__);
 	};
 
@@ -372,7 +372,7 @@ int main(void)
 	};
 	axi_dmac_transfer_start(ad9625_dmac, &read_transfer);
 	status = axi_dmac_transfer_wait_completion(ad9625_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buff, sizeof(adc_buff));
 
@@ -452,5 +452,5 @@ int main(void)
 	/* Disable the data cache. */
 	Xil_DCacheDisable();
 
-	return(0);
+	return (0);
 }

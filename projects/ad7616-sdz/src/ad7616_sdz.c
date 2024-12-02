@@ -148,7 +148,7 @@ struct ad7616_init_param init_param = {
 int main(void)
 {
 	struct ad7616_dev	*dev;
-	struct ad7616_conversion_result buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((
+	struct ad7616_conversion_result buf[AD7616_SDZ_SAMPLE_NO] __attribute__((
 				aligned));
 	uint32_t i;
 
@@ -159,7 +159,7 @@ int main(void)
 
 	ad7616_setup(&dev, &init_param);
 
-	if(dev->interface == AD7616_PARALLEL)
+	if (dev->interface == AD7616_PARALLEL)
 		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
 	else
 		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO * 2);

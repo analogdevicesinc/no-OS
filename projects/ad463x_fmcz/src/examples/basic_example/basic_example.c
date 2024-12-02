@@ -82,12 +82,12 @@ int basic_example_main()
 	if (ret)
 		goto out;
 
-	for (i = 0; i < SAMPLES_PER_CHANNEL; i+=2) {
+	for (i = 0; i < SAMPLES_PER_CHANNEL; i += 2) {
 		tmp = no_os_sign_extend32(buf[i], REAL_BITS - 1);
 		pr_info("ADC sample ch1: %lu : %ld \r\n", i, tmp);
 	}
 
-	for (i = 1; i < SAMPLES_PER_CHANNEL; i+=2) {
+	for (i = 1; i < SAMPLES_PER_CHANNEL; i += 2) {
 		tmp = no_os_sign_extend32(buf[i], REAL_BITS - 1);
 		pr_info("ADC sample ch2: %lu : %ld \r\n", i, tmp);
 	}

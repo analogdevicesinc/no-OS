@@ -103,7 +103,7 @@ int channel_output_example_main()
 		goto error_ad5460;
 
 	/* Set channel 0 output */
-	if(ad5460_desc->channel_configs[0].function == AD5460_VOLTAGE_OUT) {
+	if (ad5460_desc->channel_configs[0].function == AD5460_VOLTAGE_OUT) {
 		ret = ad5460_dac_voltage_to_code(ad5460_desc, output_in_mvolts_ch0, &dac_code0,
 						 0);
 		if (ret)
@@ -115,7 +115,7 @@ int channel_output_example_main()
 
 		pr_info("For channel 0, expected output = %d mV \n DAC code = %d \n",
 			output_in_mvolts_ch0, dac_code0);
-	} else if(ad5460_desc->channel_configs[0].function == (AD5460_CURRENT_OUT|
+	} else if (ad5460_desc->channel_configs[0].function == (AD5460_CURRENT_OUT |
 			AD5460_CURRENT_OUT_HART)) {
 		ret = ad5460_dac_current_to_code(ad5460_desc, output_in_uamps_ch0, &dac_code0,
 						 0);

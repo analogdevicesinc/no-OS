@@ -82,7 +82,7 @@ int dummy_example_main()
 	/* Datasheet specified delay between conversions. */
 	no_os_mdelay(240);
 
-	while(1) {
+	while (1) {
 		ret = adt7420_reg_read(adt7420, ADT7420_REG_T_HIGH_MSB, &temp_msb_l);
 		if (ret)
 			goto error_adt7420;
@@ -99,8 +99,8 @@ int dummy_example_main()
 			goto error_adt7420;
 		temp_min = (temp_msb_l << 8) | temp_lsb_l;
 
-		if(adt7420->resolution_setting) {
-			if(temp_max & ADT7420_16BIT_SIGN) {
+		if (adt7420->resolution_setting) {
+			if (temp_max & ADT7420_16BIT_SIGN) {
 				/*! Negative temperature */
 				temp_c_max = (float)((int32_t)temp_max - ADT7420_16BIT_NEG) / ADT7420_16BIT_DIV;
 				temp_c_min = (float)((int32_t)temp_min - ADT7420_16BIT_NEG) / ADT7420_16BIT_DIV;
@@ -111,8 +111,8 @@ int dummy_example_main()
 			}
 		} else {
 			temp_max >>= 3;
-			temp_min >>=3;
-			if(temp_max & ADT7420_13BIT_SIGN) {
+			temp_min >>= 3;
+			if (temp_max & ADT7420_13BIT_SIGN) {
 				/*! Negative temperature */
 				temp_c_max = (float)((int32_t)temp_max - ADT7420_13BIT_NEG) / ADT7420_13BIT_DIV;
 				temp_c_min = (float)((int32_t)temp_min - ADT7420_13BIT_NEG) / ADT7420_13BIT_DIV;

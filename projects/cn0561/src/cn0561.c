@@ -307,18 +307,18 @@ int main()
 				  CN0561_FMC_SAMPLE_NO * CN0561_FMC_CH_NO *
 				  sizeof(uint32_t));
 
-	for(i = 0; i < CN0561_FMC_SAMPLE_NO; i++) {
+	for (i = 0; i < CN0561_FMC_SAMPLE_NO; i++) {
 		j = 0;
 		printf("%lu: ", i);
-		while(j < CN0561_FMC_CH_NO) {
-			adc_buffer[CN0561_FMC_CH_NO*i+j] &= 0xffffff00;
-			adc_buffer[CN0561_FMC_CH_NO*i+j] >>= 8;
-			data = lsb * (int32_t)adc_buffer[CN0561_FMC_CH_NO*i+j];
-			if(data > 4.095)
+		while (j < CN0561_FMC_CH_NO) {
+			adc_buffer[CN0561_FMC_CH_NO * i + j] &= 0xffffff00;
+			adc_buffer[CN0561_FMC_CH_NO * i + j] >>= 8;
+			data = lsb * (int32_t)adc_buffer[CN0561_FMC_CH_NO * i + j];
+			if (data > 4.095)
 				data = data - 8.192;
 			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
-			       adc_buffer[CN0561_FMC_CH_NO*i+j], data);
-			if(j == (CN0561_FMC_CH_NO - 1))
+			       adc_buffer[CN0561_FMC_CH_NO * i + j], data);
+			if (j == (CN0561_FMC_CH_NO - 1))
 				printf("\n");
 			j++;
 		}

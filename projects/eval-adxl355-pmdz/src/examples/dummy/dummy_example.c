@@ -74,15 +74,15 @@ int dummy_example_main()
 	union adxl355_sts_reg_flags status_flags = {0};
 	uint8_t fifo_entries = 0;
 
-	while(1) {
+	while (1) {
 
 		pr_info("Single read \n");
-		ret = adxl355_get_xyz(adxl355_desc,&x[0], &y[0], &z[0]);
+		ret = adxl355_get_xyz(adxl355_desc, &x[0], &y[0], &z[0]);
 		if (ret)
 			goto error;
 		pr_info(" x=%d"".%09u", (int)x[0].integer, (abs)(x[0].fractional));
 		pr_info(" y=%d"".%09u", (int)y[0].integer, (abs)(y[0].fractional));
-		pr_info(" z=%d"".%09u \n", (int)z[0].integer,(abs)(z[0].fractional));
+		pr_info(" z=%d"".%09u \n", (int)z[0].integer, (abs)(z[0].fractional));
 
 		ret = adxl355_get_fifo_data(adxl355_desc,
 					    &fifo_entries,
@@ -92,9 +92,9 @@ int dummy_example_main()
 		if (ret)
 			goto error;
 		pr_info("Number of read entries from the FIFO %d \n", fifo_entries);
-		pr_info("Number of read data sets from the FIFO %d \n", fifo_entries/3);
+		pr_info("Number of read data sets from the FIFO %d \n", fifo_entries / 3);
 		for (uint8_t idx = 0; idx < 32; idx ++) {
-			if (idx < fifo_entries/3) {
+			if (idx < fifo_entries / 3) {
 				pr_info(" x=%d"".%09u m/s^2", (int)x[idx].integer, (abs)(x[idx].fractional));
 				pr_info(" y=%d"".%09u m/s^2", (int)y[idx].integer, (abs)(y[idx].fractional));
 				pr_info(" z=%d"".%09u m/s^2", (int)z[idx].integer, (abs)(z[idx].fractional));

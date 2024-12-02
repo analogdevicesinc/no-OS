@@ -195,7 +195,7 @@ int main(void)
 	if (ret)
 		goto free_dev;
 
-	while(1) {
+	while (1) {
 		// time delay between readings
 		no_os_mdelay(READ_INTERVAL);
 		/* read and print the ade9153a measured values */

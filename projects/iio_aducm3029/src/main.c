@@ -184,7 +184,7 @@ int main(void)
 	char buff[100];
 	uint32_t active_ch = no_os_hweight32(ch_mask);
 	uint32_t nb_samples = 10;
-	uint32_t i,j,k;
+	uint32_t i, j, k;
 
 
 
@@ -199,7 +199,7 @@ int main(void)
 		for (i = 0; i < nb_samples; i++) {
 			uint32_t n = 0;
 			for (j = 0; j < active_ch; j++) {
-				n += sprintf(buff + n, "ch%d:%d",j,adc_buffer[k++]);
+				n += sprintf(buff + n, "ch%d:%d", j, adc_buffer[k++]);
 				if (j == active_ch - 1)
 					n += sprintf(buff + n, "\r\n");
 				else
