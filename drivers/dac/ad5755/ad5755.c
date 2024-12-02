@@ -107,8 +107,8 @@ int8_t ad5755_init(struct ad5755_dev **device,
 				     (AD5755_DC_DC_PHASE(dev->p_ad5755_st->dc_dc_phase_bit)) |
 				     (AD5755_DC_DC_MAX_V(dev->p_ad5755_st->dc_dc_max_vbit)));
 	/* Configure the DAC control register on a per channel basis. */
-	for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
-		if((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1)) {
+	for (channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
+		if ((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1)) {
 			dac_control_buff[channel] = AD5755_DAC_INT_ENABLE |
 						    AD5755_DAC_CLR_EN |
 						    dev->p_ad5755_st->rset_bits[channel] |
@@ -131,7 +131,7 @@ int8_t ad5755_init(struct ad5755_dev **device,
 	/* Allow at least 200us before enabling the channel output. */
 	no_os_mdelay(200);
 	/* Enable the channel output. */
-	for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
+	for (channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
 		/* Write to each DAC data register*/
 		ad5755_set_register_value(dev,
 					  AD5755_DREG_WR_DAC,
@@ -205,7 +205,7 @@ int32_t ad5755_get_register_value(struct ad5755_dev *dev,
 	buffer[0] = (command & 0xFF0000) >> 16;
 	buffer[1] = (command & 0x00FF00) >> 8;
 	buffer[2] = (command & 0x0000FF) >> 0;
-	if(dev->p_ad5755_st->enable_packet_error_check) {
+	if (dev->p_ad5755_st->enable_packet_error_check) {
 		buffer[3] = ad5755_check_crc(buffer, 3);
 	}
 	no_os_spi_write_and_read(dev->spi_desc,
@@ -218,7 +218,7 @@ int32_t ad5755_get_register_value(struct ad5755_dev *dev,
 	buffer[0] = (command & 0xFF0000) >> 16;
 	buffer[1] = (command & 0x00FF00) >> 8;
 	buffer[2] = (command & 0x0000FF) >> 0;
-	if(dev->p_ad5755_st->enable_packet_error_check) {
+	if (dev->p_ad5755_st->enable_packet_error_check) {
 		buffer[3] = ad5755_check_crc(buffer, 3);
 	}
 	no_os_spi_write_and_read(dev->spi_desc,
@@ -226,9 +226,9 @@ int32_t ad5755_get_register_value(struct ad5755_dev *dev,
 				 3 + dev->p_ad5755_st->enable_packet_error_check);
 	reg_value = ((uint16_t)buffer[1] << 8) + buffer[2];
 	/* Check the CRC. */
-	if(dev->p_ad5755_st->enable_packet_error_check) {
+	if (dev->p_ad5755_st->enable_packet_error_check) {
 		crc = ad5755_check_crc(&buffer[1], 3);
-		if(crc != AD5755_CRC_CHECK_CODE) {
+		if (crc != AD5755_CRC_CHECK_CODE) {
 			reg_value = -1;
 		}
 	}
@@ -271,15 +271,15 @@ uint16_t ad5755_set_register_value(struct ad5755_dev *dev,
 		  AD5755_ISR_DUT_AD1(dev->p_ad5755_st->pin_ad1state) |
 		  AD5755_ISR_DUT_AD0(dev->p_ad5755_st->pin_ad0state) |
 		  AD5755_ISR_DREG(register_address) |
-		  AD5755_ISR_DAC_AD(channel)|
+		  AD5755_ISR_DAC_AD(channel) |
 		  AD5755_ISR_DATA(register_value);
 	buff[0] = (command & 0xFF0000) >> 16;
 	buff[1] = (command & 0x00FF00) >> 8;
 	buff[2] = (command & 0x0000FF) >> 0;
-	if(dev->p_ad5755_st->enable_packet_error_check) {
+	if (dev->p_ad5755_st->enable_packet_error_check) {
 		buff[3] = ad5755_check_crc(buff, 3);
 	}
-	if(dev->p_ad5755_st->stat_readbit == 0) {
+	if (dev->p_ad5755_st->stat_readbit == 0) {
 		no_os_spi_write_and_read(dev->spi_desc,
 					 buff,
 					 3 + dev->p_ad5755_st->enable_packet_error_check);
@@ -406,9 +406,9 @@ uint8_t ad5755_check_crc(uint8_t* data,
 	uint8_t bit = 0;
 
 	/* Calculates 8-Bit checksum with given polynomial. */
-	for(byte = 0; byte < bytes_number; byte++) {
+	for (byte = 0; byte < bytes_number; byte++) {
 		crc ^= (data[byte]);
-		for(bit = 8; bit > 0; bit--) {
+		for (bit = 8; bit > 0; bit--) {
 			if (crc & 0x80) {
 				crc = (crc << 1) ^ AD5755_CRC_POLYNOMIAL;
 			} else {
@@ -496,7 +496,7 @@ void ad5755_set_channel_range(struct ad5755_dev *dev,
 			      AD5755_DAC_DC_DC |
 			      AD5755_DAC_R(7));
 	/* Select the output code before changing the range. */
-	if((range == AD5755_R_M5_P5_V) || (range == AD5755_R_M10_P10_V)) {
+	if ((range == AD5755_R_M5_P5_V) || (range == AD5755_R_M10_P10_V)) {
 		output_code = 0x8000;
 	}
 	/* Set the output code to zero or midscale. */
@@ -630,7 +630,7 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 	float v_ref = 0;
 	float real_voltage = 0;
 
-	if((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1)) {
+	if ((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1)) {
 		/* Get the offset, gain and range of the selected channel. */
 		offset = ad5755_get_register_value(dev,
 						   AD5755_RD_OFFSET_REG(channel));
@@ -638,7 +638,7 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 						 AD5755_RD_GAIN_REG(channel));
 		range = ad5755_get_register_value(dev,
 						  AD5755_RD_CTRL_REG(channel)) & 0x7;
-		switch(range) {
+		switch (range) {
 		case AD5755_R_0_5_V : {
 			range_offset = 0;
 			v_ref = 5.0;
@@ -672,13 +672,13 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 		}
 		/* Compute the binary code from the users voltage value. */
 		code = (int32_t)(voltage * (1l << resolution) / v_ref) + range_offset;
-		if(code > 0xFFFF) {
+		if (code > 0xFFFF) {
 			code = 0xFFFF;
 		}
 		/* Offset and Gain are used to obtain the correct value to be written
 		 to the DAC register in order to output the voltage desired by the user.
 		*/
-		if((int32_t)(code + (1l << 15) - offset) > 0) { // Avoid negative values
+		if ((int32_t)(code + (1l << 15) - offset) > 0) { // Avoid negative values
 			dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
 		} else {
 			dac_val = 0;
@@ -728,7 +728,7 @@ float ad5755_set_current(struct ad5755_dev *dev,
 					 AD5755_RD_GAIN_REG(channel));
 	range = ad5755_get_register_value(dev,
 					  AD5755_RD_CTRL_REG(channel)) & 0x7;
-	switch(range) {
+	switch (range) {
 	case AD5755_R_4_20_MA : {
 		i_ref = 16.0;        // mA
 		range_offset = 4;    // mA
@@ -752,12 +752,12 @@ float ad5755_set_current(struct ad5755_dev *dev,
 	}
 	/* Compute the binary code from the value(mA) provided by user. */
 	code = (int32_t)((m_acurrent - range_offset) * (1l << 16) / i_ref);
-	if(code > 0xFFFF) {
+	if (code > 0xFFFF) {
 		code = 0xFFFF;
 	}
 	/* Offset and Gain are used to obtain the correct value to be written to the
 	   DAC register in order to output the current desired by the user. */
-	if((code + (1l << 15) - offset) > 0) {  // Avoid negative values
+	if ((code + (1l << 15) - offset) > 0) { // Avoid negative values
 		dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
 	} else {
 		dac_val = 0;

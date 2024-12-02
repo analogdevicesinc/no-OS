@@ -166,7 +166,7 @@ int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
-	if(!desc->platform_ops->trigger_level_set)
+	if (!desc->platform_ops->trigger_level_set)
 		return -ENOSYS;
 
 	return desc->platform_ops->trigger_level_set(desc, irq_id, trig);

@@ -107,7 +107,7 @@ int32_t ad9680_test(struct ad9680_dev *dev,
 		ad9680_spi_write(dev,
 				 AD9680_REG_OUTPUT_MODE,
 				 AD9680_FORMAT_OFFSET_BINARY);
-	return(0);
+	return (0);
 }
 
 static int ad9680_jesd204_link_init(struct jesd204_dev *jdev,
@@ -237,7 +237,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	ad9680_spi_read(dev,
 			AD9680_REG_CHIP_ID_LOW,
 			&chip_id);
-	if(chip_id != AD9680_CHIP_ID) {
+	if (chip_id != AD9680_CHIP_ID) {
 		printf("AD9680: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
@@ -312,7 +312,7 @@ int32_t ad9680_setup_jesd_fsm(struct ad9680_dev **device,
 	ad9680_spi_read(dev,
 			AD9680_REG_CHIP_ID_LOW,
 			&chip_id);
-	if(chip_id != AD9680_CHIP_ID) {
+	if (chip_id != AD9680_CHIP_ID) {
 		printf("AD9680: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -EINVAL;
 	}

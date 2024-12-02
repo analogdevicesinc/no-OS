@@ -74,7 +74,7 @@ static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 
 	uio_addr = mmap(NULL,
 			offset + sizeof(*read),
-			PROT_READ|PROT_WRITE,
+			PROT_READ | PROT_WRITE,
 			MAP_SHARED,
 			uio_fd,
 			0);

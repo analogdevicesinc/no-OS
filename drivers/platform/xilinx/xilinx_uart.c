@@ -83,7 +83,7 @@ static int32_t uart_fifo_insert(struct no_os_uart_desc *desc)
 		if (ret < 0)
 			return ret;
 		xil_uart_desc->bytes_received = 0;
-		switch(xil_uart_desc->type) {
+		switch (xil_uart_desc->type) {
 		case UART_PS:
 			XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff),
 				     UART_BUFF_LENGTH);
@@ -120,7 +120,7 @@ static int32_t xil_uart_read_byte(struct no_os_uart_desc *desc, uint8_t *data)
 	int32_t ret;
 #endif
 
-	switch(xil_uart_desc->type) {
+	switch (xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
 		while (xil_uart_desc->fifo == NULL) {
@@ -192,7 +192,7 @@ static int32_t xil_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 #endif
 	uint32_t offset = 0;
 
-	switch(xil_uart_desc->type) {
+	switch (xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
 		while (offset < bytes_number) {
@@ -235,9 +235,9 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 {
 	struct xil_uart_desc *xil_uart_desc = call_back_ref;
 
-	switch(xil_uart_desc->type) {
+	switch (xil_uart_desc->type) {
 	case UART_PS:
-		switch(event) {
+		switch (event) {
 		/* All of the data has been received */
 		case XUARTPS_EVENT_RECV_DATA:
 		/*
@@ -291,7 +291,7 @@ static int32_t uart_irq_init(struct no_os_uart_desc *descriptor)
 	struct xil_uart_desc *xil_uart_desc = descriptor->extra;
 	struct no_os_callback_desc callback_desc;
 
-	switch(xil_uart_desc->type) {
+	switch (xil_uart_desc->type) {
 	case UART_PS:
 		callback_desc.callback = (void (*)())XUartPs_InterruptHandler;
 		callback_desc.ctx = xil_uart_desc->instance;
@@ -393,7 +393,7 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 		goto error_free_xil_uart_desc;
 #endif
 
-	switch(xil_uart_desc->type) {
+	switch (xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
 		xil_uart_desc->instance = no_os_calloc(1, sizeof(XUartPs));

@@ -195,7 +195,7 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 	if (ret != 0)
 		return -1;
 	command[0] = 0x21;
-	command[1] = column*8;
+	command[1] = column * 8;
 	command[2] = device->cols_nb * 8 - 1U;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 3U);
 	if (ret != 0)

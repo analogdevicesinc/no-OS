@@ -159,7 +159,7 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 	if (nb_created_desc[param->device_id] == 0) {
 		MXC_I2C_Shutdown(max_i2c->handler);
 		/** The last parameter (slave address) is ignored in master mode */
-		if((MXC_I2C_Init(i2c_regs, I2C_MASTER_MODE, 0)) != E_NO_ERROR) {
+		if ((MXC_I2C_Init(i2c_regs, I2C_MASTER_MODE, 0)) != E_NO_ERROR) {
 			ret = -1;
 			goto error_extra;
 		}
@@ -200,7 +200,7 @@ static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
 		return -EINVAL;
 	nb_created_desc[desc->device_id]--;
 
-	if(nb_created_desc[desc->device_id] == 0) {
+	if (nb_created_desc[desc->device_id] == 0) {
 		ret = MXC_I2C_Shutdown(max_i2c->handler);
 		if (ret != E_NO_ERROR)
 			return ret;

@@ -254,14 +254,14 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 			spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
 						msgs[i].rx_buff, msgs[i].bytes_number);
 
-		if(msgs[i].cs_delay_last)
+		if (msgs[i].cs_delay_last)
 			no_os_udelay(msgs[i].cs_delay_last);
 
 		if (msgs[i].cs_change)
 			/* De-assert CS */
 			gpio_put(pico_spi->spi_cs_pin, 1);
 
-		if(msgs[i].cs_change_delay)
+		if (msgs[i].cs_change_delay)
 			no_os_udelay(msgs[i].cs_change_delay);
 	}
 

@@ -70,7 +70,7 @@ static int ad5940_iio_read_chan_raw(void *device, char *buf, uint32_t len,
 	uint32_t count = 0;
 
 	AppBiaGetCfg(&pBiaCfg);
-	if(pBiaCfg->bParamsChanged)
+	if (pBiaCfg->bParamsChanged)
 		AppBiaInit(iiodev->ad5940, iiodev->AppBuff, 512);
 
 	AppBiaCtrl(iiodev->ad5940, BIACTRL_START, 0);
@@ -97,8 +97,8 @@ static int ad5940_iio_read_chan_raw(void *device, char *buf, uint32_t len,
 		fCarZval = computeImpedance(iiodev->AppBuff);
 		if (iiodev->magnitude_mode) {
 			// respond with magnitude of impedance (one ieee754 float value)
-			fMagVal = sqrt(fCarZval.Real*fCarZval.Real +
-				       fCarZval.Image*fCarZval.Image);
+			fMagVal = sqrt(fCarZval.Real * fCarZval.Real +
+				       fCarZval.Image * fCarZval.Image);
 			pval = (int32_t *)&fMagVal;
 			values[0] = *pval;
 			return iio_format_value(buf, len, IIO_VAL_INT, 1, values);
@@ -114,8 +114,8 @@ static int ad5940_iio_read_chan_raw(void *device, char *buf, uint32_t len,
 		if (iiodev->magnitude_mode) {
 			// respond with magnitude of voltage only (one ieee754 float value)
 			iCarVval = *((iImpCar_Type *)iiodev->AppBuff);
-			fMagVal = sqrt((iCarVval.Real*1.0)*(iCarVval.Real*1.0) +
-				       (iCarVval.Image*1.0)*(iCarVval.Image*1.0));
+			fMagVal = sqrt((iCarVval.Real * 1.0) * (iCarVval.Real * 1.0) +
+				       (iCarVval.Image * 1.0) * (iCarVval.Image * 1.0));
 			pval = (int32_t *)&fMagVal;
 			values[0] = *pval;
 			return iio_format_value(buf, len, IIO_VAL_INT, 1, values);
@@ -136,7 +136,7 @@ int ad5940_iio_get_attr(void *device, char *buf, uint32_t len,
 
 	AppBiaGetCfg(&pBiaCfg);
 
-	switch(priv) {
+	switch (priv) {
 	case AD5940_IIO_IMPEDANCE_MODE:
 		val = (int32_t)pBiaCfg->bImpedanceReadMode;
 		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
@@ -171,13 +171,13 @@ int ad5940_iio_set_attr(void *device, char *buf, uint32_t len,
 
 	AppBiaGetCfg(&pBiaCfg);
 
-	switch(priv) {
+	switch (priv) {
 	case AD5940_IIO_IMPEDANCE_MODE:
 		if (val < 0 || val > 1)
 			return -EINVAL;
 		if (pBiaCfg->bImpedanceReadMode != (bool)val) {
 			pBiaCfg->bImpedanceReadMode = (bool)val;
-			if(pBiaCfg->bImpedanceReadMode)
+			if (pBiaCfg->bImpedanceReadMode)
 				pBiaCfg->FifoThresh = 4;
 			else
 				pBiaCfg->FifoThresh = 2;

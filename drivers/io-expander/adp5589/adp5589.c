@@ -109,14 +109,14 @@ int8_t adp5589_init(struct adp5589_dev **device,
 		return -1;
 
 	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
-	if((adp5589_get_register_value(dev,ADP5589_ADR_ID) & ADP5589_ID_MAN_ID) !=
+	if ((adp5589_get_register_value(dev, ADP5589_ADR_ID) & ADP5589_ID_MAN_ID) !=
 	    ADP5589_ID) {
 		status = -1;
 	}
 	/* Enable internal oscillator and set clock frequency to 500 kHz. */
 	adp5589_set_register_value(dev,
 				   ADP5589_ADR_GENERAL_CFG_B,
-				   ADP5589_GENERAL_CFG_B_OSC_EN|
+				   ADP5589_GENERAL_CFG_B_OSC_EN |
 				   ADP5589_GENERAL_CFG_B_CORE_FREQ(3));
 
 	*device = dev;
@@ -172,7 +172,7 @@ void adp5589_init_pwm(struct adp5589_dev *dev)
 void adp5589_init_key(struct adp5589_dev *dev,
 		      uint8_t pmod_port)
 {
-	if(!pmod_port) {
+	if (!pmod_port) {
 		/* Config row 0,1,2,3 */
 		adp5589_set_register_value(dev,
 					   ADP5589_ADR_PIN_CONFIG_A,
@@ -300,10 +300,10 @@ uint8_t adp5589_key_decode(uint8_t reg,
 	uint8_t key = 0;
 
 	reg -= 0x30 * pmod_port;
-	if(event_type == ADP5589_EVENT_KEY_PRESSED) {
+	if (event_type == ADP5589_EVENT_KEY_PRESSED) {
 		reg -= 0x80;
 	}
-	switch(reg) {
+	switch (reg) {
 	case 0x25:
 		key = '1';
 		break;
@@ -390,5 +390,5 @@ void adp5589_key_lock(struct adp5589_dev *dev,
 	do {
 		data = adp5589_get_register_value(dev,
 						  ADP5589_ADR_STATUS);
-	} while((data & ADP5589_STATUS_LOCK_STAT) != 0);
+	} while ((data & ADP5589_STATUS_LOCK_STAT) != 0);
 }

@@ -457,12 +457,12 @@ int adxl38x_get_xyz_gees(struct adxl38x_dev *dev,
 int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 		     bool *st_x, bool *st_y, bool *st_z);
 
-int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t numSamples,
-			    bool externalTrigger, enum adxl38x_fifo_mode fifo_mode,
-			    bool chIDEnable, bool readReset);
+int adxl38x_accel_set_FIFO(struct adxl38x_dev *dev, uint16_t numSamples,
+			   bool externalTrigger, enum adxl38x_fifo_mode fifo_mode,
+			   bool chIDEnable, bool readReset);
 
-int adxl38x_data_raw_to_gees( struct adxl38x_dev *dev, uint8_t *raw_accel_data,
-			      struct adxl38x_fractional_val *data_frac);
+int adxl38x_data_raw_to_gees(struct adxl38x_dev *dev, uint8_t *raw_accel_data,
+			     struct adxl38x_fractional_val *data_frac);
 
 #endif /* __ADXL38X_H__ */
 

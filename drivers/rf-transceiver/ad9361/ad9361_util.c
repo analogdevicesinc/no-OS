@@ -122,7 +122,7 @@ int32_t no_os_clk_set_rate(struct ad9361_rf_phy *phy,
 	uint32_t round_rate;
 
 	source = clk_priv->source;
-	if(phy->clks[source]->rate != rate) {
+	if (phy->clks[source]->rate != rate) {
 		switch (source) {
 		case TX_REFCLK:
 		case RX_REFCLK:
@@ -182,25 +182,25 @@ int32_t no_os_clk_set_rate(struct ad9361_rf_phy *phy,
 		default:
 			break;
 		}
-		for(i = BB_REFCLK; i < BBPLL_CLK; i++) {
+		for (i = BB_REFCLK; i < BBPLL_CLK; i++) {
 			phy->clks[i]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[i],
 					     phy->clk_refin->rate);
 		}
 		phy->clks[BBPLL_CLK]->rate = ad9361_bbpll_recalc_rate(
 						     phy->ref_clk_scale[BBPLL_CLK],
 						     phy->clks[phy->ref_clk_scale[BBPLL_CLK]->parent_source]->rate);
-		for(i = ADC_CLK; i < RX_RFPLL_INT; i++) {
+		for (i = ADC_CLK; i < RX_RFPLL_INT; i++) {
 			phy->clks[i]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[i],
 					     phy->clks[phy->ref_clk_scale[i]->parent_source]->rate);
 		}
-		for(i = RX_RFPLL_INT; i < RX_RFPLL_DUMMY; i++) {
+		for (i = RX_RFPLL_INT; i < RX_RFPLL_DUMMY; i++) {
 			phy->clks[i]->rate = ad9361_rfpll_int_recalc_rate(phy->ref_clk_scale[i],
 					     phy->clks[phy->ref_clk_scale[i]->parent_source]->rate);
 		}
-		for(i = RX_RFPLL_DUMMY; i < RX_RFPLL; i++) {
+		for (i = RX_RFPLL_DUMMY; i < RX_RFPLL; i++) {
 			phy->clks[i]->rate = ad9361_rfpll_dummy_recalc_rate(phy->ref_clk_scale[i]);
 		}
-		for(i = RX_RFPLL; i < NUM_AD9361_CLKS; i++) {
+		for (i = RX_RFPLL; i < NUM_AD9361_CLKS; i++) {
 			phy->clks[i]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[i]);
 		}
 	} else {

@@ -893,7 +893,7 @@ static int max22200_iio_write_ch_avail_attrs(void *dev, char *buf, uint32_t len,
 
 	switch (priv) {
 	case MAX22200_IIO_SCALE:
-		for(i = 0; i < NO_OS_ARRAY_SIZE(max22200_scale_avail); i++) {
+		for (i = 0; i < NO_OS_ARRAY_SIZE(max22200_scale_avail); i++) {
 			if (!strcmp(buf, max22200_scale_avail[i])) {
 				val = no_os_field_prep(MAX22200_HFS_MASK, i);
 

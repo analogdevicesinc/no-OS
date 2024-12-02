@@ -67,7 +67,7 @@ int8_t ad799x_init(struct ad799x_dev **device,
 	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	/* Determine the number of bits available for a conversion. */
-	switch(init_param.part_number) {
+	switch (init_param.part_number) {
 	case AD7991:
 		dev->bits_number = 12;
 		break;

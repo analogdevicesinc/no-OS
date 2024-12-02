@@ -66,7 +66,7 @@ int32_t altera_spi_init(struct no_os_spi_desc **desc,
 	if (!descriptor)
 		return -1;
 
-	descriptor->extra = no_os_calloc(1, sizeof *altera_descriptor);
+	descriptor->extra = no_os_calloc(1, sizeof * altera_descriptor);
 	if (!(descriptor->extra)) {
 		no_os_free(descriptor);
 		return -1;
@@ -118,7 +118,7 @@ int32_t altera_spi_write_and_read(struct no_os_spi_desc *desc,
 
 	altera_desc = desc->extra;
 
-	switch(altera_desc->type) {
+	switch (altera_desc->type) {
 	case NIOS_II_SPI:
 		IOWR_32DIRECT(altera_desc->base_address,
 			      (ALTERA_AVALON_SPI_CONTROL_REG * 4),

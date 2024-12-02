@@ -73,7 +73,7 @@ int max31865_init(struct max31865_dev **device,
 	if (ret)
 		goto err;
 
-	descriptor->t_rc_delay = (int) (init_param->rtd_rc * 10.5 * 1000000);
+	descriptor->t_rc_delay = (int)(init_param->rtd_rc * 10.5 * 1000000);
 
 	if (descriptor->t_rc_delay < 1)
 		/* default 2mS/2000uS delay if no RC time constant specified */
@@ -418,7 +418,7 @@ int max31865_read_rtd(struct max31865_dev *device, uint16_t *rtd_reg)
 	*rtd_reg = reg_data << 8;
 
 	ret = max31865_read(device, MAX31865_RTDLSB_REG, &reg_data);
-	if(ret)
+	if (ret)
 		return ret;
 
 	*rtd_reg = *rtd_reg | (uint16_t)reg_data;

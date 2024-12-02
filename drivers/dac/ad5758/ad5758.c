@@ -457,7 +457,7 @@ int32_t ad5758_slew_rate_config(struct ad5758_dev *dev,
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_DAC_CONFIG,
 				    AD5758_DAC_CONFIG_SR_EN_MSK,
 				    AD5758_DAC_CONFIG_SR_EN_MODE(enable));
-	if(ret)
+	if (ret)
 		goto error;
 
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_DAC_CONFIG,
@@ -586,13 +586,13 @@ int32_t ad5758_set_clkout_config(struct ad5758_dev *dev,
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_GP_CONFIG1,
 				    AD5758_GP_CONFIG1_CLKOUT_FREQ_MSK,
 				    AD5758_GP_CONFIG1_CLKOUT_FREQ_MODE(freq));
-	if(ret < 0)
+	if (ret < 0)
 		goto error;
 
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_GP_CONFIG1,
 				    AD5758_GP_CONFIG1_CLKOUT_CONFIG_MSK,
 				    AD5758_GP_CONFIG1_CLKOUT_CONFIG_MODE(config));
-	if(ret < 0)
+	if (ret < 0)
 		goto error;
 
 	dev->clkout_config = config;
@@ -778,80 +778,80 @@ int32_t ad5758_init(struct ad5758_dev **device,
 
 	/* Initialize the SPI communication */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if(ret)
+	if (ret)
 		goto error_init;
 
 	/* GPIO */
 	ret = no_os_gpio_get(&dev->reset_n, &init_param->reset_n);
-	if(ret)
+	if (ret)
 		goto error_init;
 	ret = no_os_gpio_get(&dev->ldac_n, &init_param->ldac_n);
-	if(ret)
+	if (ret)
 		goto error_gpio_ldac;
 
 	/* Get the DAC out of reset */
 	ret = no_os_gpio_direction_output(dev->reset_n, NO_OS_GPIO_HIGH);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Tie the LDAC pin low */
 	ret = no_os_gpio_direction_output(dev->ldac_n, NO_OS_GPIO_LOW);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Perform a software reset */
 	ret = ad5758_soft_reset(dev);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Perform a calibration memory refresh */
 	ret = ad5758_calib_mem_refresh(dev);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Clear the RESET_OCCURRED flag */
 	ret = ad5758_clear_dig_diag_flag(dev, DIAG_RESET_OCCURRED);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Configure CLKOUT before enabling the dc-to-dc converter */
 	ret = ad5758_set_clkout_config(dev, init_param->clkout_config,
 				       init_param->clkout_freq);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Set the dc-to-dc current limit */
 	ret = ad5758_set_dc_dc_ilimit(dev, init_param->dc_dc_ilimit);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Set up the dc-to-dc converter mode */
 	ret = ad5758_set_dc_dc_conv_mode(dev, init_param->dc_dc_mode);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Power up the DAC and internal (INT) amplifiers */
 	ret = ad5758_internal_buffers_en(dev, 1);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Configure the output range */
 	ret = ad5758_set_out_range(dev, init_param->output_range);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Enable Slew Rate Control and set the slew rate clock */
 	ret = ad5758_slew_rate_config(dev, init_param->slew_rate_clk, 1);
-	if(ret)
+	if (ret)
 		goto err;
 
 	/* Enable VIOUT */
 	ret = ad5758_dac_output_en(dev, 1);
-	if(ret)
+	if (ret)
 		goto err;
 
 	ret = ad5758_set_crc(dev, init_param->crc_en);
-	if(ret)
+	if (ret)
 		goto err;
 
 	*device = dev;

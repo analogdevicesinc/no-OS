@@ -78,16 +78,16 @@ int get_adc_demo_attr(void *device, char *buf, uint32_t len,
 {
 	struct adc_demo_desc *desc;
 
-	if(!device)
+	if (!device)
 		return -ENODEV;
 
 	desc = device;
 
-	switch(attr_id) {
+	switch (attr_id) {
 	case ADC_GLOBAL_ATTR:
-		return snprintf(buf,len,"%"PRIu32"",desc->adc_global_attr);
+		return snprintf(buf, len, "%"PRIu32"", desc->adc_global_attr);
 	case ADC_CHANNEL_ATTR:
-		return snprintf(buf,len,"%"PRIu32"",desc->adc_ch_attr[channel->ch_num]);
+		return snprintf(buf, len, "%"PRIu32"", desc->adc_ch_attr[channel->ch_num]);
 	default:
 		return -EINVAL;
 	}
@@ -110,12 +110,12 @@ int set_adc_demo_attr(void *device, char *buf, uint32_t len,
 	struct adc_demo_desc *desc;
 	uint32_t value = no_os_str_to_uint32(buf);
 
-	if(!device)
+	if (!device)
 		return -ENODEV;
 
 	desc = device;
 
-	switch(attr_id) {
+	switch (attr_id) {
 	case ADC_GLOBAL_ATTR:
 		desc->adc_global_attr = value;
 		return len;
@@ -143,24 +143,26 @@ int32_t adc_submit_samples(struct iio_device_data *dev_data)
 	uint32_t i;
 	uint16_t *ch_buf_ptr;
 
-	if(!dev_data)
+	if (!dev_data)
 		return -ENODEV;
 
 	desc = (struct adc_demo_desc *)dev_data->dev;
 
-	if(desc->ext_buff == NULL) {
+	if (desc->ext_buff == NULL) {
 		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
-		for(i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan; i++) {
-			while(get_next_ch_idx(desc->active_ch, ch, &ch))
-				buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
+		for (i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
+		     i++) {
+			while (get_next_ch_idx(desc->active_ch, ch, &ch))
+				buff[k++] = sine_lut[(i + ch * offset_per_ch) % NO_OS_ARRAY_SIZE(sine_lut)];
 			k = 0;
 			iio_buffer_push_scan(dev_data->buffer, buff);
 		}
 		return dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
 	}
 
-	for(i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan; i++) {
-		while(get_next_ch_idx(desc->active_ch, ch, &ch)) {
+	for (i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
+	     i++) {
+		while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
 			ch_buf_ptr = (uint16_t*)desc->ext_buff + (ch * desc->ext_buff_len);
 			buff[k++] = ch_buf_ptr[i];
 		}
@@ -193,10 +195,10 @@ int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
 
 	desc = (struct adc_demo_desc *)dev_data->dev;
 
-	if(desc->ext_buff == NULL) {
+	if (desc->ext_buff == NULL) {
 		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
-		while(get_next_ch_idx(desc->active_ch, ch, &ch))
-			buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
+		while (get_next_ch_idx(desc->active_ch, ch, &ch))
+			buff[k++] = sine_lut[(i + ch * offset_per_ch) % NO_OS_ARRAY_SIZE(sine_lut)];
 		if (i == NO_OS_ARRAY_SIZE(sine_lut))
 			i = 0;
 		else
@@ -205,7 +207,7 @@ int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
 		return iio_buffer_push_scan(dev_data->buffer, buff);
 	}
 
-	while(get_next_ch_idx(desc->active_ch, ch, &ch)) {
+	while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
 		ch_buf_ptr = (uint16_t*)desc->ext_buff + (ch * desc->ext_buff_len);
 		buff[k++] = ch_buf_ptr[i];
 	}

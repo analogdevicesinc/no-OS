@@ -43,7 +43,7 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 
 	/* Determine which framer structures are valid */
 	if (device->devStateInfo.profilesValid & RX_PROFILE_VALID) {
-		switch(init->rx.framerSel) {
+		switch (init->rx.framerSel) {
 		case TAL_FRAMER_A:
 			activeFramersMask |= 0x01;
 			activeLanesEnabled |= init->jesd204Settings.framerA.serializerLanesEnabled;
@@ -138,7 +138,7 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 	}
 
 	if (device->devStateInfo.profilesValid & ORX_PROFILE_VALID) {
-		switch(init->obsRx.framerSel) {
+		switch (init->obsRx.framerSel) {
 		case TAL_FRAMER_A:
 			activeFramersMask |= 0x01;
 			activeLanesEnabled |= init->jesd204Settings.framerA.serializerLanesEnabled;
@@ -174,7 +174,7 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 				     activeLanesEnabled : 0;
 
 		/* TODO: Need error check to make sure that if FRAMER A and B, then make sure each framer has same number of lanes, and M matches */
-		for(i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			obsRxL += ((currentFramer->serializerLanesEnabled >> i) & 0x01);
 		}
 
@@ -273,7 +273,7 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 
 	txser_div = (uint8_t)(init->clocks.clkPllVcoFreq_kHz / fasterLaneRate_kHz);
 
-	switch(txser_div) {
+	switch (txser_div) {
 	case 1:
 		txser_div_reg = 0;
 		break;
@@ -294,21 +294,21 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 	/* Set Tx serializer divider */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_3,
 				    txser_div_reg, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Power down all lanes */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_JESD_FRAMER_SRST_CFG,
 				   0xFF); /* hold framer output data in reset */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Reset serializers */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_PD,
 				   0x1E); /* power down all lanes */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -316,44 +316,44 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 					  activeLanesEnabled & 0x02) << 1) | ((activeLanesEnabled & 0x04) >> 1)) & 0x0F);
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_PD,
 				   (0x80 | (activeLanesPowerDown << 1))); /* power up desired lanes */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Manual Serializer reset sequence */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_1,
 				   0x3F);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_1,
 				   0x2F);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_1,
 				   0x27);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_1,
 				   0x23);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_1,
 				   0x21);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_1,
 				   0x20);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -364,7 +364,7 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PREEMPH_CTRL,
 				   ((preEmp << 4) | (preEmp)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -372,27 +372,27 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 			     1) | ((enPreEmphasisMask & 0x04) >> 1));
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_ENABLES,
 				   (0x50 | (enPreEmphasisMask & 0x0F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_ENABLES,
 				   (0x10 | (enPreEmphasisMask & 0x0F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set serializer amplitude */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SER_PHY_TXCTRL_0,
 				   (0x03 | ((serAmplitude & 0x0F) << 3)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Allow framer data to output to serializer (clear reset) */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_JESD_FRAMER_SRST_CFG,
 				   0x0F);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -402,21 +402,21 @@ uint32_t TALISE_setupSerializers(taliseDevice_t *device, taliseInit_t *init)
 	laneInvert = ~laneInvert;
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_JESD_FRAMER_COMMON_CFG, laneInvert);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Toggle Serializer SRESET */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_JESD_FRAMER_SRST_CFG,
 				   0xFF);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Allow framer data to output to serializer (clear reset) */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_JESD_FRAMER_SRST_CFG,
 				   0x0F);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -605,13 +605,13 @@ uint32_t TALISE_setupDeserializers(taliseDevice_t *device, taliseInit_t *init)
 	/* Set deserializer half rate/full rate mode and deserializer divider */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_DES_PHY_CLK_CTL_0,
 				    halfRateMode, 0x40, 6);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_DES_PHY_CLK_CTL_1,
 				   deserializerDiv);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -619,35 +619,35 @@ uint32_t TALISE_setupDeserializers(taliseDevice_t *device, taliseInit_t *init)
 	cdrDiv = 0;  /* always div 1 on CDR divider */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_3,
 				    cdrDiv, 0x0C, 2);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set lane PN inverts - invert all lanes by default due to PN inverts in Talise laminate */
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_JESD_DEFRAMER_COMMON_CFG3, laneInvert, 0xF0, 4);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set CDR clock enable */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_DES_PHY_GENERAL_CTL_0, 0x90);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Release lane power downs */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_DES_PHY_PWR_DWN_4,
 				    lanesPowerDown, 0x0F, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Release deserializer master power down */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_DES_PHY_PWR_DWN_4,
 				    0, 0x20, 5);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -657,14 +657,14 @@ uint32_t TALISE_setupDeserializers(taliseDevice_t *device, taliseInit_t *init)
 		       (init->jesd204Settings.desEqSetting << 2) | init->jesd204Settings.desEqSetting;
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_DES_PHY_EQ_CONTROL2,
 				   desEqSetting);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Enable deserializers */
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_DES_PHY_GENERAL_CTL_1, 1, 0x10, 4);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -719,7 +719,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 		/* Disable Framer link and exit Framer setup */
 		halError = talSpiWriteByte(device->devHalInfo,
 					   (TALISE_ADDR_JESD_FRAMER_CFG_0 + framerAddrOffset), 0x02);
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 	} else if ((framer->M == 1)
 		   && !(init->rx.rxProfile.rxDdcMode == TAL_RXDDC_INT2_REALIF)
@@ -777,12 +777,12 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 		/* Disable Link, and return from function */
 		halError = talSpiWriteByte(device->devHalInfo,
 					   (TALISE_ADDR_JESD_FRAMER_CFG_0 + framerAddrOffset), 0x02);
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 	} else if ((L != 1) &&
 		   (L != 2) &&
 		   (L != 4)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_RXFRAMER_INV_L_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -806,7 +806,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	if ((FK < 20) ||
 	    (FK > 1024) ||
 	    (FK % 4 != 0)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_RXFRAMER_INV_FK_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -815,7 +815,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	if (framer->enableManualLaneXbar != 0) {
 		framerLaneXbar = framer->serializerLaneCrossbar;
 	} else {
-		switch((framer->serializerLanesEnabled & 0x0F)) {
+		switch ((framer->serializerLanesEnabled & 0x0F)) {
 		/* Lanes 1 and 2 are swapped on laminate, correct here */
 		/* Set unused lanes to select value b11 */
 		case 1:
@@ -894,7 +894,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	}
 
 	if (outputRate_kHz == 0) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_RXFRAMER_INV_OUTPUT_RATE, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -914,7 +914,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 			}
 
 			if (pclkDiv == 7) {
-				return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+				return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 								  TAL_ERR_RXFRAMER_INV_PCLKFREQ, retVal, TALACT_ERR_CHECK_PARAM);
 			}
 		}
@@ -924,88 +924,89 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_CFG_0 + framerAddrOffset),
 				   ((framer->syncbInSelect << 5) | 0x02));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG0_0 + framerAddrOffset),
 				   framer->deviceId); /* DID */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG1_0 + framerAddrOffset),
 				   (framer->bankId & 0x0F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG2_0 + framerAddrOffset),
 				   (framer->lane0Id & 0x1F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	scr = (framer->scramble == 0) ? 0x00 : 0x80;
 
 	halError = talSpiWriteByte(device->devHalInfo,
-				   (TALISE_ADDR_JESD_FRAMER_L0_CFG3_0 + framerAddrOffset), (scr | ((L-1) & 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				   (TALISE_ADDR_JESD_FRAMER_L0_CFG3_0 + framerAddrOffset),
+				   (scr | ((L - 1) & 0x1F)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG4_0 + framerAddrOffset), (framer->F - 1));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG5_0 + framerAddrOffset), (framer->K - 1));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG6_0 + framerAddrOffset), (framer->M - 1));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG7_0 + framerAddrOffset),
 				   (((CS & 3) << 6) | ((framer->Np & 0x1F) - 1)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG8_0 + framerAddrOffset),
 				   (((JESDSUBCLASS & 7) << 5) | ((framer->Np & 0x1F) - 1)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG9_0 + framerAddrOffset),
 				   (((JESDVER & 7) << 5) | (S - 1)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_L0_CFG10_0 + framerAddrOffset),
 				   ((HD << 7) | (CF & 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_JESD_FRAMER_ILAS_MF_COUNT_0, 0x00); /* 4 multiframes in ILAS */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1013,35 +1014,35 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_01_0 + framerAddrOffset),
 				   (uint8_t)(framerAdcXbar));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_23_0 + framerAddrOffset),
 				   (uint8_t)(framerAdcXbar >> 8));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_45_0 + framerAddrOffset),
 				   (uint8_t)(framerAdcXbar >> 16));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_67_0 + framerAddrOffset),
 				   (uint8_t)(framerAdcXbar >> 24));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Framer: Set Lane Crossbar */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_LANE_XBAR_0 + framerAddrOffset), framerLaneXbar);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1049,7 +1050,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	if (framer->newSysrefOnRelink > 0) {
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_FRAMER_SYSREF_CFG_0 + framerAddrOffset), 0x01, 0x02, 1);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1058,11 +1059,11 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 		halError = talSpiWriteByte(device->devHalInfo,
 					   (TALISE_ADDR_JESD_FRAMER_CFG5_0 + framerAddrOffset),
 					   ((pclkDiv << 5) | (framer->lmfcOffset & 0x1F)));
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_FRAMER_INV_LMFC_OFFSET_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1071,7 +1072,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	    (framer->F == 6)) {
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_FRAMER_CFG4_0 + framerAddrOffset), 0x01, 0x08, 3);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1080,7 +1081,7 @@ uint32_t TALISE_setupJesd204bFramer(taliseDevice_t *device, taliseInit_t *init,
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_CFG_0 + framerAddrOffset),
 				   ((framer->syncbInSelect << 5) | 0x03));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1126,11 +1127,11 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 			deframerAddrOffset = TALISE_JESD_DEFRAMERB_OFFSET;
 			deframer = &init->jesd204Settings.deframerB;
 		} else {
-			return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_DEFRAMER_INV_DEFSEL, retVal, TALACT_ERR_CHECK_PARAM);
 		}
 	} else {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_TXPROFILE, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1139,7 +1140,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	scr = (deframer->scramble > 0) ? 1 : 0;
 
 	if (deframer->deserializerLanesEnabled > 15) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_LANESEN, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1150,13 +1151,13 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	if ((L != 1) &&
 	    (L != 2) &&
 	    (L != 4)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_L, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	if ((deframer->M != 2) &&
 	    (deframer->M != 4)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_M, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1167,7 +1168,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	}
 
 	/* Check for fractional F - invalid settings */
-	if(device->devStateInfo.swTest > 0) {
+	if (device->devStateInfo.swTest > 0) {
 		/*For a software test bypass bounds checking on F and assign a valid value*/
 		F = 2;
 	} else {
@@ -1181,13 +1182,13 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 
 	if ((F < 1) ||
 	    (F > 32)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_F, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	if ((deframer->K < 1) ||
 	    (deframer->K > 32)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_K, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1195,7 +1196,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	if (((FK % 4) != 0) ||
 	    (FK < 20) ||
 	    (FK > 1024)) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_FK, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1210,7 +1211,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 		pclkReg = 0;
 	} else {
 		if (((hsDigClkDiv4or5_Hz / 1000) % pclk_kHz) != 0) {
-			return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_DEFRAMER_INV_PCLK, retVal, TALACT_ERR_CHECK_PARAM);
 		}
 
@@ -1236,24 +1237,24 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 			pclkReg = 5; /* PCLK = HsDigClk /128 */
 			break;
 		default: {
-			return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_DEFRAMER_INV_PCLKDIV, retVal, TALACT_ERR_CHECK_PARAM);
 		}
 		}
 	}
 
 	if (deframer->bankId > 15) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_BANKID, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	if (deframer->lane0Id > 31) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_ERR_DEFRAMER_INV_LANEID, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	if (deframer->lmfcOffset >= deframer->K) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_DEFRAMER_INV_LMFC_OFFSET, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -1265,7 +1266,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	/* checksum mode - clear [7] for correct mode */
 	halError = talSpiWriteField(device->devHalInfo,
 				    (TALISE_ADDR_JESD_DEFRAMER_CFG3_0 + deframerAddrOffset), 0, 0x80, 7);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1273,14 +1274,14 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	halError = talSpiWriteField(device->devHalInfo,
 				    (TALISE_ADDR_JESD_DEFRAMER_IP_CFG3_0 + deframerAddrOffset), DFRMRCMMIRQMASK,
 				    0x80, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set LMFC Offset */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_CFG4_0 + deframerAddrOffset), deframer->lmfcOffset);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1288,7 +1289,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	halError = talSpiWriteField(device->devHalInfo,
 				    (TALISE_ADDR_JESD_DEFRAMER_SYSREF_CFG2_0 + deframerAddrOffset), extSysref, 0x20,
 				    5);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1296,7 +1297,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	if (extSysref == 0) {
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_DEFRAMER_SYSREF_CFG_0 + deframerAddrOffset), 0, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1304,14 +1305,14 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	halError = talSpiWriteField(device->devHalInfo,
 				    (TALISE_ADDR_JESD_DEFRAMER_SYSREF_CFG_0 + deframerAddrOffset),
 				    newSysrefOnRelink, 0x02, 1);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* set PCLK for deframers */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_JESD_DEFRAMER_COMMON_CFG, (0x10 | pclkReg));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1322,87 +1323,87 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    (TALISE_ADDR_JESD_DEFRAMER_CFG_0 + deframerAddrOffset), syncBarSel, 0x60, 5);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG0_0 + deframerAddrOffset), deframer->deviceId);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG1_0 + deframerAddrOffset),
 				   (deframer->bankId & 0x0F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG2_0 + deframerAddrOffset),
 				   (deframer->lane0Id & 0x1F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG3_0 + deframerAddrOffset),
 				   ((scr << 7) | ((L - 1) & 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG4_0 + deframerAddrOffset), (F - 1));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG5_0 + deframerAddrOffset),
 				   ((deframer->K - 1) & 0x1F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG6_0 + deframerAddrOffset), (deframer->M - 1));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG7_0 + deframerAddrOffset),
 				   (((CS & 0x03) << 6) | ((deframer->Np - 1) & 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG8_0 + deframerAddrOffset),
 				   (((SUBCLASSV & 0x7) << 5) | ((deframer->Np - 1) & 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG9_0 + deframerAddrOffset),
 				   (((JESDV & 0x7) << 5) | ((S - 1) & 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_L0_CFG10_0 + deframerAddrOffset),
 				   ((HD << 7) | (CF * 0x1F)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_ILAS_MF_COUNT_0 + deframerAddrOffset), 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1422,7 +1423,7 @@ uint32_t TALISE_setupJesd204bDeframer(taliseDevice_t *device,
 	}
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_DEFRAMER_LANE_XBAR_0 + deframerAddrOffset), deframerlaneXbar);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1460,7 +1461,7 @@ uint32_t TALISE_enableFramerLink(taliseDevice_t *device,
 	    (framerSel == TAL_FRAMER_A_AND_B)) {
 		halError = talSpiWriteField(device->devHalInfo, (TALISE_ADDR_JESD_FRAMER_CFG_0),
 					    enableLink, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1471,7 +1472,7 @@ uint32_t TALISE_enableFramerLink(taliseDevice_t *device,
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_FRAMER_CFG_0 + TALISE_JESD_FRAMERB_OFFSET), enableLink, 0x01,
 					    0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1513,14 +1514,14 @@ uint32_t TALISE_enableDeframerLink(taliseDevice_t *device,
 		/* Enable the deframer JESD link */
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_DEFRAMER_CFG_0 + deframerOffset), 1, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else {
 		/* clear deframer link enable bit */
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_DEFRAMER_CFG_0 + deframerOffset), 0, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1555,7 +1556,7 @@ uint32_t TALISE_enableSysrefToFramer(taliseDevice_t *device,
 	    (framerSel == TAL_FRAMER_A_AND_B)) {
 		halError = talSpiWriteField(device->devHalInfo,
 					    TALISE_ADDR_JESD_FRAMER_SYSREF_CFG_0, enableSysref, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1565,7 +1566,7 @@ uint32_t TALISE_enableSysrefToFramer(taliseDevice_t *device,
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_FRAMER_SYSREF_CFG_0 + TALISE_JESD_FRAMERB_OFFSET),
 					    enableSysref, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1600,7 +1601,7 @@ uint32_t TALISE_enableSysrefToDeframer(taliseDevice_t *device,
 	    (deframerSel == TAL_DEFRAMER_A_AND_B)) {
 		halError = talSpiWriteField(device->devHalInfo,
 					    TALISE_ADDR_JESD_DEFRAMER_SYSREF_CFG_0, enableSysref, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1610,7 +1611,7 @@ uint32_t TALISE_enableSysrefToDeframer(taliseDevice_t *device,
 		halError = talSpiWriteField(device->devHalInfo,
 					    (TALISE_ADDR_JESD_DEFRAMER_SYSREF_CFG_0 + TALISE_JESD_DEFRAMERB_OFFSET),
 					    enableSysref, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1680,7 +1681,7 @@ uint32_t TALISE_readFramerStatus(taliseDevice_t *device,
 	IF_ERR_RETURN_U32(retVal);
 
 	/*Read Invalid Framer Config status only if Silicon Revision is C0 or higher, else report 0 as invalid config*/
-	if(device->devStateInfo.deviceSiRev >= INVALIDCFG_STS_MIN_SUPPORTED_SIREV) {
+	if (device->devStateInfo.deviceSiRev >= INVALIDCFG_STS_MIN_SUPPORTED_SIREV) {
 		halError = ADIHAL_spiReadField(device->devHalInfo, configStatus4Addr,
 					       &configStatus4, 0x01, 0);
 		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
@@ -1733,7 +1734,7 @@ uint32_t TALISE_readDeframerStatus(taliseDevice_t *device,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
-	if(device->devStateInfo.deviceSiRev >= INVALIDCFG_STS_MIN_SUPPORTED_SIREV) {
+	if (device->devStateInfo.deviceSiRev >= INVALIDCFG_STS_MIN_SUPPORTED_SIREV) {
 		halError = ADIHAL_spiReadField(device->devHalInfo,
 					       (configStatus3Addr + deframerOffset), &configStatus3, 0x01, 0);
 		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
@@ -1746,7 +1747,7 @@ uint32_t TALISE_readDeframerStatus(taliseDevice_t *device,
 	return (uint32_t)retVal;
 }
 
-static talRecoveryActions_t talCheckDacSampleXbarSelectEnum (
+static talRecoveryActions_t talCheckDacSampleXbarSelectEnum(
 	taliseDevice_t *device, taliseDacSampleXbarSelect_t lane)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
@@ -1791,23 +1792,23 @@ uint32_t TALISE_setupDacSampleXbar(taliseDevice_t *device,
 	}
 
 	/* Check Crossbar for valid settings */
-	retVal = talCheckDacSampleXbarSelectEnum (device, dacXbar.dacChanI);
+	retVal = talCheckDacSampleXbarSelectEnum(device, dacXbar.dacChanI);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckDacSampleXbarSelectEnum (device, dacXbar.dacChanQ);
+	retVal = talCheckDacSampleXbarSelectEnum(device, dacXbar.dacChanQ);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* setting the DAC sample crossbar */
 	xbarReg = (((uint8_t)dacXbar.dacChanI) & CONV_MASK) | ((((
 				uint8_t)dacXbar.dacChanQ) & CONV_MASK) << CONV_POS);
 	halError = talSpiWriteByte(device->devHalInfo, channelAddr, xbarReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	return (uint32_t)retVal;
 }
 
-static talRecoveryActions_t talCheckAdcSampleXbarSelectEnum (
+static talRecoveryActions_t talCheckAdcSampleXbarSelectEnum(
 	taliseDevice_t *device, taliseAdcSampleXbarSelect_t conv)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
@@ -1859,21 +1860,21 @@ uint32_t TALISE_setupAdcSampleXbar(taliseDevice_t *device,
 	}
 
 	/* Check Crossbar for valid settings */
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv0);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv0);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv1);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv1);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv2);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv2);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv3);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv3);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv4);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv4);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv5);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv5);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv6);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv6);
 	IF_ERR_RETURN_U32(retVal);
-	retVal = talCheckAdcSampleXbarSelectEnum (device, adcXbar.conv7);
+	retVal = talCheckAdcSampleXbarSelectEnum(device, adcXbar.conv7);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing setting to the ADC sample crossbar */
@@ -1881,7 +1882,7 @@ uint32_t TALISE_setupAdcSampleXbar(taliseDevice_t *device,
 			CONV_MASK) << CONV_POS);
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_01_0 + framerOffset), xbarReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1889,7 +1890,7 @@ uint32_t TALISE_setupAdcSampleXbar(taliseDevice_t *device,
 			CONV_MASK) << CONV_POS);
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_23_0 + framerOffset), xbarReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1897,7 +1898,7 @@ uint32_t TALISE_setupAdcSampleXbar(taliseDevice_t *device,
 			CONV_MASK) << CONV_POS);
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_45_0 + framerOffset), xbarReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1905,7 +1906,7 @@ uint32_t TALISE_setupAdcSampleXbar(taliseDevice_t *device,
 			CONV_MASK) << CONV_POS);
 	halError = talSpiWriteByte(device->devHalInfo,
 				   (TALISE_ADDR_JESD_FRAMER_SAMPLE_XBAR_67_0 + framerOffset), xbarReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -2071,7 +2072,7 @@ uint32_t TALISE_clearDeframerPrbsCounters(taliseDevice_t *device)
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_JESD_DEFRAMER_PRBS_ERROR_FLAG, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -2110,7 +2111,7 @@ uint32_t TALISE_readDeframerPrbsCounters(taliseDevice_t *device, uint8_t lane,
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Save Lane Data Inverted Status */
-	*prbsInvertedStatus =  ((prbsCheckLocation & 0xF0) >> 4);
+	*prbsInvertedStatus = ((prbsCheckLocation & 0xF0) >> 4);
 
 	/* Mask off the source bit */
 	prbsCheckLocation = (prbsCheckLocation & 0x01);
@@ -2599,7 +2600,7 @@ uint32_t TALISE_getDfrmIrqSource(taliseDevice_t *device,
 							  9) |
 							  (((uint16_t)(dataArray[1] & 0x01) << 8) | dataArray[0]))))));
 
-	return((uint32_t)retVal);
+	return ((uint32_t)retVal);
 }
 
 uint32_t TALISE_clearDfrmIrq(taliseDevice_t *device,
@@ -2704,7 +2705,7 @@ uint32_t TALISE_clearDfrmIrq(taliseDevice_t *device,
 	/* restore orignal irqmask */
 	halError = talSpiWriteByte(device->devHalInfo, irqVector[0],
 				   (uint8_t)(irqMask & 0x00FF));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -2803,13 +2804,13 @@ talRecoveryActions_t talFindDfrmrLaneCntErr(taliseDevice_t *device,
 
 	/* clear the error counter */
 	halError = talSpiWriteByte(device->devHalInfo, deframerEcntRstAddress0, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 
 	/* clear the error counter */
 	halError = talSpiWriteByte(device->devHalInfo, deframerEcntRstAddress1, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 

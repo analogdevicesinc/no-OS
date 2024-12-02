@@ -123,7 +123,7 @@ static int32_t stm32_uart_init(struct no_os_uart_desc **desc,
 	sud->timeout = suip->timeout ? suip->timeout : HAL_MAX_DELAY;
 
 	// nonblocking uart_read
-	if(param->asynchronous_rx) {
+	if (param->asynchronous_rx) {
 		ret = lf256fifo_init(&descriptor->rx_fifo);
 		if (ret < 0)
 			goto error;
@@ -265,7 +265,7 @@ static int32_t stm32_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	sud = desc->extra;
 
 	if (desc->rx_fifo) {
-		while(i < bytes_number) {
+		while (i < bytes_number) {
 			ret = lf256fifo_read(desc->rx_fifo, &data[i]);
 			if (ret < 0)
 				return i ? i : -EAGAIN;

@@ -123,7 +123,7 @@ uint16_t ad7980_conversion(struct ad7980_dev *dev)
 	AD7980_CS_HIGH;
 	received_data = (rx_data[0] << 8) + rx_data[1];
 
-	return(received_data);
+	return (received_data);
 }
 
 /***************************************************************************//**

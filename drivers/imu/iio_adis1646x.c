@@ -81,19 +81,19 @@ static struct scan_type adis1646x_iio_temp_scan_type = {
 };
 
 static struct iio_channel adis1646x_channels[] = {
-	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		1646x, adis_iio_anglvel_attrs),
-	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		1646x, adis_iio_anglvel_attrs),
-	ADIS_GYRO_CHAN		(Z, 	ADIS_GYRO_Z, 		1646x, adis_iio_anglvel_attrs),
-	ADIS_ACCEL_CHAN		(X,	ADIS_ACCEL_X, 		1646x, adis_iio_accel_attrs),
-	ADIS_ACCEL_CHAN		(Y,	ADIS_ACCEL_Y, 		1646x, adis_iio_accel_attrs),
-	ADIS_ACCEL_CHAN		(Z,	ADIS_ACCEL_Z, 		1646x, adis_iio_accel_attrs),
-	ADIS_TEMP_CHAN		(ADIS_TEMP, 			1646x, adis_iio_temp_attrs),
-	ADIS_DELTA_ANGL_CHAN_NO_SCAN	(X, 	ADIS_DELTA_ANGL_X, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_ANGL_CHAN_NO_SCAN	(Y, 	ADIS_DELTA_ANGL_Y, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_ANGL_CHAN_NO_SCAN	(Z, 	ADIS_DELTA_ANGL_Z, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_VEL_CHAN_NO_SCAN	(X, 	ADIS_DELTA_VEL_X, adis_iio_delta_vel_attrs),
-	ADIS_DELTA_VEL_CHAN_NO_SCAN	(Y, 	ADIS_DELTA_VEL_Y, adis_iio_delta_vel_attrs),
-	ADIS_DELTA_VEL_CHAN_NO_SCAN	(Z, 	ADIS_DELTA_VEL_Z, adis_iio_delta_vel_attrs),
+	ADIS_GYRO_CHAN(X, 	ADIS_GYRO_X, 		1646x, adis_iio_anglvel_attrs),
+	ADIS_GYRO_CHAN(Y, 	ADIS_GYRO_Y, 		1646x, adis_iio_anglvel_attrs),
+	ADIS_GYRO_CHAN(Z, 	ADIS_GYRO_Z, 		1646x, adis_iio_anglvel_attrs),
+	ADIS_ACCEL_CHAN(X,	ADIS_ACCEL_X, 		1646x, adis_iio_accel_attrs),
+	ADIS_ACCEL_CHAN(Y,	ADIS_ACCEL_Y, 		1646x, adis_iio_accel_attrs),
+	ADIS_ACCEL_CHAN(Z,	ADIS_ACCEL_Z, 		1646x, adis_iio_accel_attrs),
+	ADIS_TEMP_CHAN(ADIS_TEMP, 			1646x, adis_iio_temp_attrs),
+	ADIS_DELTA_ANGL_CHAN_NO_SCAN(X, 	ADIS_DELTA_ANGL_X, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_ANGL_CHAN_NO_SCAN(Y, 	ADIS_DELTA_ANGL_Y, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_ANGL_CHAN_NO_SCAN(Z, 	ADIS_DELTA_ANGL_Z, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_VEL_CHAN_NO_SCAN(X, 	ADIS_DELTA_VEL_X, adis_iio_delta_vel_attrs),
+	ADIS_DELTA_VEL_CHAN_NO_SCAN(Y, 	ADIS_DELTA_VEL_Y, adis_iio_delta_vel_attrs),
+	ADIS_DELTA_VEL_CHAN_NO_SCAN(Z, 	ADIS_DELTA_VEL_Z, adis_iio_delta_vel_attrs),
 };
 
 static struct iio_attribute adis1646x_debug_attrs[] = {

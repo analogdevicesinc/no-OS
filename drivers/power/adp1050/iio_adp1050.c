@@ -553,7 +553,7 @@ static int adp1050_iio_read_raw(void *dev, char *buf, uint32_t len,
 		if (ret)
 			return ret;
 
-		return iio_format_value(buf, len, IIO_VAL_INT, 1,  (int32_t *)&mant);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&mant);
 	case ADP1050_IIO_TEMP_CHAN:
 		ret = adp1050_read_value(adp1050, &mant, &exp, ADP1050_TEMP);
 		break;

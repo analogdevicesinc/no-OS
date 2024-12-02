@@ -81,7 +81,7 @@ uint32_t TALISE_getErrCode(taliseDevice_t *device, uint32_t* errSrc,
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 
-	if(device == NULL ||
+	if (device == NULL ||
 	    errSrc == NULL ||
 	    errCode == NULL) {
 		return (uint32_t)TALACT_ERR_CHECK_PARAM;
@@ -99,7 +99,7 @@ const char* TALISE_getErrorMessage(uint32_t errSrc, uint32_t errCode)
 	return "";
 #else
 
-	if(errSrc == TAL_ERRSRC_ADIHAL) {
+	if (errSrc == TAL_ERRSRC_ADIHAL) {
 		switch (errCode) {
 		case ADIHAL_OK:
 			return "";

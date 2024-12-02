@@ -87,7 +87,7 @@ int32_t pico_timer_init(struct no_os_timer_desc **desc,
 	if (!no_os_desc)
 		return -ENOMEM;
 
-	pico_timer = (struct pico_timer_desc*)no_os_calloc(1,sizeof(*pico_timer));
+	pico_timer = (struct pico_timer_desc*)no_os_calloc(1, sizeof(*pico_timer));
 	if (!pico_timer) {
 		ret = -ENOMEM;
 		goto error;
@@ -96,7 +96,7 @@ int32_t pico_timer_init(struct no_os_timer_desc **desc,
 	no_os_desc->extra = pico_timer;
 
 	/* Get period of timer in microseconds */
-	uint64_t period = param->ticks_count*1000000/param->freq_hz;
+	uint64_t period = param->ticks_count * 1000000 / param->freq_hz;
 
 	/* Make sure the period is range */
 	if (!period) {
@@ -251,7 +251,7 @@ int32_t pico_timer_count_clk_set(struct no_os_timer_desc *desc,
 	time interval at which an alarm is activated, generating an alarm interrupt. */
 
 	/* Get period of timer in microseconds */
-	uint64_t period = desc->ticks_count*1000000/freq_hz;
+	uint64_t period = desc->ticks_count * 1000000 / freq_hz;
 
 	if (!period)
 		return -EINVAL;

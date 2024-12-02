@@ -607,7 +607,7 @@ int32_t ad413x_set_mclk(struct ad413x_dev *dev, enum ad413x_mclk_sel clk)
 				   AD413X_REG_ADC_CTRL,
 				   AD413X_ADC_CNTRL_MCLK(clk),
 				   AD413X_ADC_CNTRL_MCLK(0xF));
-	if(ret)
+	if (ret)
 		return ret;
 
 	dev->mclk = clk;
@@ -630,7 +630,7 @@ int32_t ad413x_do_soft_reset(struct ad413x_dev *dev)
 	/* The AD413X can be reset by writing a series of 64 consecutive 1s
 	 * to the DIN input */
 	ret = no_os_spi_write_and_read(dev->spi_dev, buf, 8);
-	if(ret)
+	if (ret)
 		return ret;
 
 	no_os_mdelay(5); // TBD
@@ -657,7 +657,7 @@ int32_t ad413x_reg_write(struct ad413x_dev *dev,
 
 	buf[0] = AD413X_CMD_WR_COM_REG(reg_addr);
 
-	switch(data_size) {
+	switch (data_size) {
 	case 1:
 		buf[1] = (reg_data & 0xFF);
 		break;
@@ -779,7 +779,7 @@ int32_t ad413x_single_conv(struct ad413x_dev *dev, uint32_t *buffer,
 	if (ret)
 		return ret;
 
-	while(ctx.buffer_size) {
+	while (ctx.buffer_size) {
 		timeout = 0xFFFFFF;
 		do {
 			ret = no_os_gpio_get_value(dev->rdy_pin_desc, &pin_val);;
@@ -831,7 +831,7 @@ int32_t ad413x_continuous_conv(struct ad413x_dev *dev, uint32_t *buffer,
 	if (ret)
 		return ret;
 
-	while(ctx.buffer_size > 0) {
+	while (ctx.buffer_size > 0) {
 		timeout = 0xFFFFFF;
 		do {
 			ret = no_os_gpio_get_value(dev->rdy_pin_desc, &pin_val);
@@ -959,9 +959,9 @@ int32_t ad413x_init(struct ad413x_dev **device,
 	if (ret)
 		goto err_spi;
 
-	switch(dev->chip_id) {
+	switch (dev->chip_id) {
 	case AD4130_8:
-		if(reg_data != AD4130_8) {
+		if (reg_data != AD4130_8) {
 			goto err_spi;
 		}
 		break;

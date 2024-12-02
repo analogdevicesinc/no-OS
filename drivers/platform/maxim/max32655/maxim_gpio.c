@@ -87,7 +87,7 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 
 	pextra = param->extra;
 
-	switch(param->pull) {
+	switch (param->pull) {
 	case NO_OS_PULL_NONE:
 		m_pad = MXC_GPIO_PAD_NONE;
 		break;
@@ -211,7 +211,7 @@ int32_t max_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
 	MXC_GPIO_Config(maxim_extra);
 
 	set_enable(gpio_regs, NO_OS_BIT(desc->number), true);
-	switch(value) {
+	switch (value) {
 	case NO_OS_GPIO_LOW:
 		MXC_GPIO_OutClr(gpio_regs, NO_OS_BIT(desc->number));
 		break;
@@ -269,7 +269,7 @@ int32_t max_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 	gpio_regs = max_gpio_cfg->port;
 
 	set_enable(gpio_regs, NO_OS_BIT(desc->number), true);
-	switch(value) {
+	switch (value) {
 	case NO_OS_GPIO_LOW:
 		MXC_GPIO_OutClr(gpio_regs, NO_OS_BIT(desc->number));
 		break;

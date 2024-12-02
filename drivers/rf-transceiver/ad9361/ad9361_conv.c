@@ -210,7 +210,7 @@ static int32_t ad9361_dig_tune_iodelay(struct ad9361_rf_phy *phy, bool tx)
 
 		dev_dbg(&phy->spi->dev,
 			"%s Lane %"PRId32", window cnt %"PRIu32" , start %"PRIu32", IODELAY set to %"PRIu32"\n",
-			tx ? "TX" :"RX",  i, c0, s0, s0 + c0 / 2);
+			tx ? "TX" : "RX",  i, c0, s0, s0 + c0 / 2);
 	}
 
 	return 0;

@@ -281,17 +281,17 @@ int32_t axi_adc_delay_calibrate(struct axi_adc *adc,
 			if (start_valid_delay == 32) {
 				start_valid_delay = val;
 			}
-			if (start_valid_delay != 32 && start_invalid_delay != 32 ) {
+			if (start_valid_delay != 32 && start_invalid_delay != 32) {
 				start_valid_delay = 32;
 				start_invalid_delay = 32;
 			}
 			cnt_valid[interval]++;
 		}
-		if((err_field[val] == 1) || (val == max_val - 1)) {
+		if ((err_field[val] == 1) || (val == max_val - 1)) {
 			if (start_invalid_delay == 32) {
 				start_invalid_delay = val;
 			}
-			if (start_valid_delay != 32 && start_invalid_delay != 32 ) {
+			if (start_valid_delay != 32 && start_invalid_delay != 32) {
 				valid_range[interval] = start_valid_delay;
 				invalid_range[interval] = start_invalid_delay;
 				start_valid_delay = 32;
@@ -616,7 +616,7 @@ int32_t axi_adc_init_finish(struct axi_adc *adc)
 	uint32_t ratio;
 
 	axi_adc_read(adc, AXI_ADC_REG_STATUS, &reg_data);
-	if(reg_data == 0x0) {
+	if (reg_data == 0x0) {
 		printf("%s: Status errors\n", adc->name);
 		return -1;
 	}

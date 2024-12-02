@@ -57,7 +57,7 @@ static int32_t iio_ad738x_debug_reg_read(void *device, uint32_t reg,
 	int ret;
 	uint16_t val16;
 
-	ret = ad738x_spi_reg_read(dev,  (uint8_t) reg, &val16);
+	ret = ad738x_spi_reg_read(dev, (uint8_t) reg, &val16);
 	if (ret)
 		return ret;
 
@@ -153,7 +153,7 @@ static struct iio_device ad738x_iio_device_template = {
 	.num_ch = NO_OS_ARRAY_SIZE(ad738x_channels),
 	.channels = ad738x_channels,
 	.debug_reg_read = iio_ad738x_debug_reg_read,
-	.debug_reg_write= iio_ad738x_debug_reg_write,
+	.debug_reg_write = iio_ad738x_debug_reg_write,
 	.submit = iio_ad738x_submit_buffer,
 };
 

@@ -120,7 +120,7 @@ void ad5933_set_register_value(struct ad5933_dev *dev,
 	uint8_t byte = 0;
 	uint8_t write_data[2] = {0, 0};
 
-	for(byte = 0; byte < bytes_number; byte++) {
+	for (byte = 0; byte < bytes_number; byte++) {
 		write_data[0] = register_address + bytes_number - byte - 1;
 		write_data[1] = (uint8_t)((register_value >> (byte * 8)) & 0xFF);
 		no_os_i2c_write(dev->i2c_desc, write_data, 2, 1);
@@ -145,7 +145,7 @@ uint32_t ad5933_get_register_value(struct ad5933_dev *dev,
 	uint8_t write_data[2]   = {0, 0};
 	uint8_t read_data[2]    = {0, 0};
 
-	for(byte = 0; byte < bytes_number; byte ++) {
+	for (byte = 0; byte < bytes_number; byte ++) {
 		/* Set the register pointer. */
 		write_data[0] = AD5933_ADDR_POINTER;
 		write_data[1] = register_address + byte;
@@ -191,7 +191,7 @@ void ad5933_set_system_clk(struct ad5933_dev *dev,
 			   uint32_t ext_clk_freq)
 {
 	dev->current_clock_source = clk_source;
-	if(clk_source == AD5933_CONTROL_EXT_SYSCLK) {
+	if (clk_source == AD5933_CONTROL_EXT_SYSCLK) {
 		dev->current_sys_clk = ext_clk_freq;                 // External clock frequency
 	} else {
 		dev->current_sys_clk = AD5933_INTERNAL_SYS_CLK;    // 16 MHz
@@ -253,7 +253,7 @@ float ad5933_get_temperature(struct ad5933_dev *dev)
 				  AD5933_CONTROL_RANGE(dev->current_range) |
 				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
 				  1);
-	while((status & AD5933_STAT_TEMP_VALID) == 0) {
+	while ((status & AD5933_STAT_TEMP_VALID) == 0) {
 		status = ad5933_get_register_value(dev,
 						   AD5933_REG_STATUS,
 						   1);
@@ -262,7 +262,7 @@ float ad5933_get_temperature(struct ad5933_dev *dev)
 	temperature = ad5933_get_register_value(dev,
 						AD5933_REG_TEMP_DATA,
 						2);
-	if(temperature < 8192) {
+	if (temperature < 8192) {
 		temperature /= 32;
 	} else {
 		temperature -= 16384;
@@ -293,7 +293,7 @@ void ad5933_config_sweep(struct ad5933_dev *dev,
 	uint16_t inc_num_reg = 0;
 
 	/* Ensure that incNum is a valid data. */
-	if(inc_num > AD5933_MAX_INC_NUM) {
+	if (inc_num > AD5933_MAX_INC_NUM) {
 		inc_num_reg = AD5933_MAX_INC_NUM;
 	} else {
 		inc_num_reg = inc_num;
@@ -342,7 +342,7 @@ void ad5933_start_sweep(struct ad5933_dev *dev)
 	ad5933_reset(dev);
 	ad5933_set_register_value(dev,
 				  AD5933_REG_CONTROL_HB,
-				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_INIT_START_FREQ)|
+				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_INIT_START_FREQ) |
 				  AD5933_CONTROL_RANGE(dev->current_range) |
 				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
 				  1);
@@ -353,7 +353,7 @@ void ad5933_start_sweep(struct ad5933_dev *dev)
 				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
 				  1);
 	status = 0;
-	while((status & AD5933_STAT_DATA_VALID) == 0) {
+	while ((status & AD5933_STAT_DATA_VALID) == 0) {
 		status = ad5933_get_register_value(dev,
 						   AD5933_REG_STATUS,
 						   1);
@@ -387,7 +387,7 @@ void ad5933_get_data(struct ad5933_dev *dev,
 				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
 				  1);
 
-	while((status & AD5933_STAT_DATA_VALID) == 0) {
+	while ((status & AD5933_STAT_DATA_VALID) == 0) {
 		status = ad5933_get_register_value(dev,
 						   AD5933_REG_STATUS,
 						   1);

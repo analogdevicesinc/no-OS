@@ -61,7 +61,7 @@ uint32_t TALISE_openHw(taliseDevice_t *device)
 	ADIHAL_setLogLevel(device->devHalInfo, TALISE_LOGGING);
 	halError = ADIHAL_openHw(device->devHalInfo, 100);
 	if (halError != ADIHAL_OK) {
-		switch(halError) {
+		switch (halError) {
 		case ADIHAL_SPI_FAIL:
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_HAL_SPI,
 							  halError, retVal, TALACT_ERR_RESET_SPI);
@@ -88,7 +88,7 @@ uint32_t TALISE_closeHw(taliseDevice_t *device)
 	halError = ADIHAL_closeHw(device->devHalInfo);
 
 	if (halError != ADIHAL_OK) {
-		switch(halError) {
+		switch (halError) {
 		case ADIHAL_SPI_FAIL:
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_HAL_SPI,
 							  halError, retVal, TALACT_ERR_RESET_SPI);
@@ -250,14 +250,14 @@ static talRecoveryActions_t talInitializeDdc(taliseDevice_t *device,
 					rxNco1PhaseAccumDivideRatio;
 			halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_7,
 						    registerValue, 0x73, 0);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN(retVal);
 
 			/* NCO configuration: NCO1 enable, DDC HB enable, DDC mode = Dec2, NCO2 enable */
 			halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_RX_NCO_CONTROL_0,
 						    0x45, 0xFD, 0);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN(retVal);
 
@@ -265,7 +265,7 @@ static talRecoveryActions_t talInitializeDdc(taliseDevice_t *device,
 			registerValue = (combineBands << 2) | 0x3;
 			halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_RX_BAND_CONTROL,
 						   registerValue);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN(retVal);
 
@@ -273,7 +273,7 @@ static talRecoveryActions_t talInitializeDdc(taliseDevice_t *device,
 			if (init->rx.rxProfile.rxDdcMode == TAL_RXDDC_DEC2_REALIF) {
 				halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_RX_NCO_CONTROL_0,
 							    0x80, 0x80, 0);
-				retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 							  TALACT_ERR_RESET_SPI);
 				IF_ERR_RETURN(retVal);
 			}
@@ -291,7 +291,7 @@ static talRecoveryActions_t talInitializeDdc(taliseDevice_t *device,
 			rxNco1PhaseAccumDivideRatio = ncoPhaseAccumDivideRatio;
 			rxNcoControl = 0;
 
-			switch(init->rx.rxProfile.rxDdcMode) {
+			switch (init->rx.rxProfile.rxDdcMode) {
 			case TAL_RXDDC_BYPASS:
 			case TAL_RXDDC_BYPASS_REALIF:
 				rxNco2PhaseAccumDivideRatio = ncoPhaseAccumDivideRatio;
@@ -350,14 +350,14 @@ static talRecoveryActions_t talInitializeDdc(taliseDevice_t *device,
 			/* Setup value of NCO2 phase accum clock */
 			halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_7,
 						    ((rxNco2PhaseAccumDivideRatio << 4) | rxNco1PhaseAccumDivideRatio), 0x73, 0);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN(retVal);
 
 			/* Set DDC HB mode, and NCO1/2 enable/disable bits */
 			halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_RX_NCO_CONTROL_0,
 						    rxNcoControl, 0xFD, 0);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN(retVal);
 
@@ -442,8 +442,8 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	uint32_t agcClock_Hz = 0;
 	uint32_t gainUpdateCount = 0;
-	taliseAdcSampleXbar_t adcXbar = {(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0};
-	taliseDacSampleXbar_t dacXbar = {(taliseDacSampleXbarSelect_t)0,(taliseDacSampleXbarSelect_t)0};
+	taliseAdcSampleXbar_t adcXbar = {(taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0, (taliseAdcSampleXbarSelect_t)0};
+	taliseDacSampleXbar_t dacXbar = {(taliseDacSampleXbarSelect_t)0, (taliseDacSampleXbarSelect_t)0};
 	uint8_t deframerSyncPadCfg = 0;
 	uint16_t syncbPadCfgAddr = 0;
 	uint8_t framerSyncPadCfg = 0;
@@ -514,33 +514,33 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	/* Disable stream processor TxEnable/RxEnable pin control mode */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_RADIO_CONTROL_CONFIG1, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Enable Reference clock - Set REFCLK pad common mode voltage */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_REF_PAD_CONFIG2,
 				   0x07);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set Master bias trim and reset bandgap */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_MASTERBIAS_CONFIG1,
 				   0x0F);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_MASTERBIAS_CONFIG0,
 				   0x30);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_MASTERBIAS_CONFIG0,
 				   0x10);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -552,7 +552,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SYSREF_PAD_CONFIG,
 				   sysrefCfg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -586,7 +586,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 		halError = talSpiWriteByte(device->devHalInfo, syncbPadCfgAddr,
 					   deframerSyncPadCfg);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -614,7 +614,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 		halError = talSpiWriteByte(device->devHalInfo, syncbPadCfgAddr,
 					   deframerSyncPadCfg);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -637,7 +637,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 		halError = talSpiWriteByte(device->devHalInfo, syncbPadCfgAddr,
 					   framerSyncPadCfg);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -659,7 +659,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 		halError = talSpiWriteByte(device->devHalInfo, syncbPadCfgAddr,
 					   framerSyncPadCfg);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -691,21 +691,21 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	/* Set Digital device clock divider */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_0,
 				    digDeviceClockDiv, 0xE0, 5);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set number of divided device clock cycles per microsecond */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_REFERENCE_CLOCK_CYCLES, (uint8_t)(digRefClock_MHz - 1));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Negate Rx2 so phase matches Rx1 */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_TX_RX_DATAPATH_INVERSION, 0x0C);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -752,7 +752,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 			rxChannelSettings |= 0x02;
 		}
 
-		if ( init->rx.rxProfile.rhb1Decimation == 2) {
+		if (init->rx.rxProfile.rhb1Decimation == 2) {
 			rxChannelSettings |= 0x10;
 		}
 
@@ -771,7 +771,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	/* Determine ORx channel settings */
 	if (device->devStateInfo.profilesValid & ORX_PROFILE_VALID) {
-		if ( init->obsRx.orxProfile.rxDec5Decimation == 5) {
+		if (init->obsRx.orxProfile.rxDec5Decimation == 5) {
 			rxChannelSettings |= 0x02;
 		}
 
@@ -800,37 +800,37 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	************************************************************************/
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CONFIGURATION_CONTROL_2, txChannelSettings);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CONFIGURATION_CONTROL_4, rxChannelSettings);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CONFIGURATION_CONTROL_ORX, orxChannelSettings);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_RX_PFIR_BANK_A_SETTINGS, rxFirDecBitField, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_RX_PFIR_BANK_B_SETTINGS, orxFirDecBitField, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_RX_PFIR_BANK_C_SETTINGS, orxFirDecBitField, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -841,21 +841,21 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	regData |= (init->tx.txAttenStepSize << 4);
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_TX_TPC_CONFIG,
 				    regData, 0x3F, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set DAC divider */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_1,
 				    dacClockRateSelect, 0x01, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set ADC Flash bias */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ADC_BIAS_FLASH_VISB,
 				   0x7D);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -864,26 +864,26 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = ADIHAL_wait_us(device->devHalInfo, CLKPLL_LOCK_US);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_CHECK_TIMER);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_0, 0,
 				    0x01, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_0, 1,
 				    0x01, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Enable digital clocks - this is gated by the CLKPLL being locked */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_0, 1,
 				    0x04, 2);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -899,7 +899,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	/* Toggle DEC5 divider reset bit */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_0, 0,
 				    0x01, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -946,7 +946,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 			/* Enable Digital gain for Rx and ObsRx gain tables */
 			halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_DIGITAL_GAIN_CONFIG,
 						   0x80);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 		}
@@ -976,7 +976,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 			/* Enable Digital gain for Rx and ObsRx gain tables */
 			halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_DIGITAL_GAIN_CONFIG,
 						   0x80);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 		}
@@ -984,7 +984,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_RCAL_CONTROL,
 				   0x07); /* Set RCAL code to nominal */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1115,7 +1115,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 		}
 
 		/* set the ADC crossbar: Q/I data assigned to even/odd converters to account for I/Q swap in DUT */
-		if ((device->devStateInfo.orxAdcStitchingEnabled == 0 )
+		if ((device->devStateInfo.orxAdcStitchingEnabled == 0)
 		    && (init->obsRx.obsRxChannelsEnable == TAL_ORX2)) {
 			adcXbar.conv0 = TAL_ADC_RX2_Q;
 			adcXbar.conv1 = TAL_ADC_RX2_I;
@@ -1247,7 +1247,7 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_GAIN_VALID_OVERRIDES,
 					   0x88);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1262,12 +1262,12 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	/* Set RxFE LO Common mode */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_RXFE1_LOCM, 0x30);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_RXFE2_LOCM, 0x30);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1275,64 +1275,64 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	/* ULB threshold is set to 3db below full scale of ADC */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_UPPER_LEVEL_BLOCKER_THRESHOLD, ULB_THRESHOLD);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* ULB2 is 3db above ULB threshold */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_UPPER_LEVEL_BLOCKER_THRESHOLD2, ULB2_THRESHOLD);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* LLB is 3db below ULB threshold */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_LOWER_LEVEL_BLOCKER_THRESHOLD, LLB_THRESHOLD);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* LLB2 is 3db above LLB threshold */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_LOWER_LEVEL_BLOCKER_THRESHOLD2, LLB2_THRESHOLD);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ULB_COUNT_THRESHOLD,
 				   0x06);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_DEC_OVERLOAD_CONFIG1,
 				   0x91);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_DEC_OVERLOAD_UPPER_THRESHOLD, 0xB5);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_ADC_HIGH_OVRG_COUNT_THRESHOLD, 0x06);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_AGC_CONFIG1, 0x04,
 				    0x3F, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_DEC_OVERLOAD_CONFIG2, 0x03, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1350,49 +1350,49 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_GAIN_UPDATE_COUNTER1,
 				   (gainUpdateCount & 0xFF));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_GAIN_UPDATE_COUNTER2,
 				   ((gainUpdateCount >> 8) & 0xFF));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_GAIN_UPDATE_COUNTER3,
 				   ((gainUpdateCount >> 16) & 0x3F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_SLOWLOOP_SETTLING_DELAY, 0x10);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_SLOWLOOP_CONFIG,
 				   0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_AGC_UNDERRANGE1,
 				   0x02);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_AGC_MANUAL_GAIN_CONTROL_CONFIG_RX1, 1, 0x02, 1);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_AGC_MANUAL_GAIN_CONTROL_CONFIG_RX2, 1, 0x02, 1);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1406,13 +1406,13 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_TX_DP_MASK_CH1,
 				    (uint8_t)init->tx.disTxDataIfPllUnlock, 0x06, 1);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_TX_DP_MASK_CH2,
 				    (uint8_t)init->tx.disTxDataIfPllUnlock, 0x06, 1);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1506,7 +1506,7 @@ uint32_t TALISE_enableMultichipSync(taliseDevice_t *device, uint8_t enableMcs,
 		/* If CLKPLL SDM not bypassed, reset CLKPLL SDM as well. */
 		halError = ADIHAL_spiReadField(device->devHalInfo,
 					       TALISE_ADDR_CLK_SYNTH_DIVIDER_INT_BYTE1, &clkPllSdmBypass, 0x40, 6);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1516,20 +1516,20 @@ uint32_t TALISE_enableMultichipSync(taliseDevice_t *device, uint8_t enableMcs,
 
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_MCS_CONTROL,
 					   mcsEnable);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		/* Prime the K1 input sync (clear bit 4, then set bit 4) */
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_MCS_CONTROL_2, 0,
 					    0x10, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_MCS_CONTROL_2, 1,
 					    0x10, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else {
@@ -1541,7 +1541,7 @@ uint32_t TALISE_enableMultichipSync(taliseDevice_t *device, uint8_t enableMcs,
 	if (mcsStatus != NULL) {
 		halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_MCS_STATUS,
 					  mcsStatus);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1567,34 +1567,34 @@ uint32_t TALISE_enableMultichipRfLOPhaseSync(taliseDevice_t *device,
 	if (enableDigTestClk > 0) {
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_MCS_CONTROL,
 					   mcsEnable);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		/* Prime the K1 input sync (clear bit 4, then set bit 4) */
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_MCS_CONTROL_2, 0,
 					    0x10, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_MCS_CONTROL_2, 1,
 					    0x10, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		/* Enable Digital Test Clock  */
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_DIGITAL_TEST_BYTE,
 					    1, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else {
 		/* Disable Digital Test Clock */
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_DIGITAL_TEST_BYTE,
 					    0, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1602,7 +1602,7 @@ uint32_t TALISE_enableMultichipRfLOPhaseSync(taliseDevice_t *device,
 			0x93; /* [7] Keeps RF LO divider enabled, Enable MCS[4] ,reset Digital clocks[1] and JESD204 SYSREF[0] */
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_MCS_CONTROL,
 					   mcsEnable);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1680,7 +1680,7 @@ uint32_t TALISE_programFir(taliseDevice_t *device,
 	}
 
 	/* firBankSelect and assignment of maxNumTaps, nTapMul and address firAddr.*/
-	switch(filterToProgram) {
+	switch (filterToProgram) {
 	case TAL_TX1_FIR:
 		maxNumTaps = 80;
 		firBankSel = TXFIR_BANKA;
@@ -1942,7 +1942,7 @@ uint32_t TALISE_calculateDigitalClocks(taliseDevice_t *device,
 	device->devStateInfo.clocks.clkPllHsDiv = digClocks->clkPllHsDiv;
 	device->devStateInfo.clocks.deviceClock_kHz = digClocks->deviceClock_kHz;
 
-	switch(digClocks->clkPllHsDiv) {
+	switch (digClocks->clkPllHsDiv) {
 	case TAL_HSDIV_2:
 		hsDivTimes10 = 20;
 		hsClkDivHsDigClk4or5 = 10;
@@ -1965,7 +1965,7 @@ uint32_t TALISE_calculateDigitalClocks(taliseDevice_t *device,
 		break;
 	default:
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
-						  TAL_ERR_CLKPLL_INV_HSDIV, retVal, TALACT_ERR_CHECK_PARAM );
+						  TAL_ERR_CLKPLL_INV_HSDIV, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	localHsDigClkDiv2_Hz = (uint32_t)((DIV_U64((((uint64_t)(
@@ -2053,7 +2053,7 @@ static talRecoveryActions_t talVerifyRxProfile(taliseDevice_t *device,
 					TAL_ERR_VERRXPFILE_INV_COEF, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	switch(rxProfile->rxDdcMode) {
+	switch (rxProfile->rxDdcMode) {
 	case TAL_RXDDC_BYPASS_REALIF:
 	case TAL_RXDDC_BYPASS:
 		ddcMultiply = 1;
@@ -2076,11 +2076,11 @@ static talRecoveryActions_t talVerifyRxProfile(taliseDevice_t *device,
 		break;
 	default:
 		return talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
-					TAL_ERR_VERRXPFILE_INV_DDC, retVal, TALACT_ERR_CHECK_PARAM );
+					TAL_ERR_VERRXPFILE_INV_DDC, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	*rxHsDigClk_kHz = ( rxProfile->rxOutputRate_kHz * rxProfile->rxFirDecimation *
-			    rxProfile->rhb1Decimation * rxProfile->rxDec5Decimation * ddcMultiply ) /
+	*rxHsDigClk_kHz = (rxProfile->rxOutputRate_kHz * rxProfile->rxFirDecimation *
+			   rxProfile->rhb1Decimation * rxProfile->rxDec5Decimation * ddcMultiply) /
 			  ddcDivide;
 
 	return retVal;
@@ -2133,9 +2133,9 @@ static talRecoveryActions_t talVerifyOrxProfile(taliseDevice_t *device,
 					TAL_ERR_VERORXPFILE_INV_RFBW, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	if(orxProfile->rfBandwidth_Hz > 200000000) {
+	if (orxProfile->rfBandwidth_Hz > 200000000) {
 		// Disable stitching for bandwidth above 200 MHz,if all MergeFilter values are zero
-		for(indexMF = 0; indexMF < 12; ++indexMF) {
+		for (indexMF = 0; indexMF < 12; ++indexMF) {
 			sumMergeFilter += orxProfile->orxMergeFilter[indexMF];
 		}
 
@@ -2169,7 +2169,7 @@ static talRecoveryActions_t talVerifyOrxProfile(taliseDevice_t *device,
 					TAL_ERR_VERORXPFILE_INV_COEF, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	switch(orxProfile->orxDdcMode) {
+	switch (orxProfile->orxDdcMode) {
 	case TAL_ORXDDC_DISABLED:
 		ddcMultiply = 1;
 		ddcDivide = 1;
@@ -2180,7 +2180,7 @@ static talRecoveryActions_t talVerifyOrxProfile(taliseDevice_t *device,
 		break;
 	default:
 		return talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
-					TAL_ERR_VERORXPFILE_INV_DDC, retVal, TALACT_ERR_CHECK_PARAM );
+					TAL_ERR_VERORXPFILE_INV_DDC, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	*orxHsDigClk_kHz = (orxProfile->orxOutputRate_kHz * orxProfile->rxFirDecimation
@@ -2285,7 +2285,7 @@ static talRecoveryActions_t talVerifyTxProfile(taliseDevice_t *device,
 					TAL_ERR_VERTXPFILE_INV_COEF, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	if((txProfile->dacDiv != 1) &&
+	if ((txProfile->dacDiv != 1) &&
 	    (txProfile->dacDiv != 2)) {
 		return talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 					TAL_ERR_VERTXPFILE_INV_DACDIV, retVal, TALACT_ERR_CHECK_PARAM);
@@ -2323,19 +2323,19 @@ uint32_t TALISE_verifyProfiles(taliseDevice_t *device, taliseInit_t *init)
 
 	device->devStateInfo.profilesValid = 0;
 
-	if(init->tx.txChannels != TAL_TXOFF) {
+	if (init->tx.txChannels != TAL_TXOFF) {
 		txProfile = &init->tx.txProfile;
 		retVal = talVerifyTxProfile(device, txProfile, &txHsDigClk_kHz);
 		IF_ERR_RETURN_U32(retVal);
 	}
 
-	if(init->rx.rxChannels != TAL_RXOFF) {
+	if (init->rx.rxChannels != TAL_RXOFF) {
 		rxProfile = &init->rx.rxProfile;
 		retVal = talVerifyRxProfile(device, rxProfile, &rxHsDigClk_kHz);
 		IF_ERR_RETURN_U32(retVal);
 	}
 
-	if((init->obsRx.obsRxChannelsEnable != TAL_ORXOFF)
+	if ((init->obsRx.obsRxChannelsEnable != TAL_ORXOFF)
 	    || (init->tx.txChannels != TAL_TXOFF)) {
 		orxProfile = &init->obsRx.orxProfile;
 		retVal = talVerifyOrxProfile(device, orxProfile, &orxHsDigClk_kHz);
@@ -2448,18 +2448,18 @@ uint32_t TALISE_setSpiSettings(taliseDevice_t *device, taliseSpiSettings_t *spi)
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_SPI_INTERFACE_CONFIG_A, spiReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
-	if (( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_1X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_2X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_3X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_4X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_5X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_6X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_8X) &&
-	    ( spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_10X)) {
+	if ((spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_1X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_2X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_3X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_4X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_5X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_6X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_8X) &&
+	    (spi->cmosPadDrvStrength != TAL_CMOSPAD_DRV_10X)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETSPI_INV_CMOS_DRV_STR, retVal, TALACT_ERR_CHECK_PARAM);
 	} else {
@@ -2467,13 +2467,13 @@ uint32_t TALISE_setSpiSettings(taliseDevice_t *device, taliseSpiSettings_t *spi)
 		halError = talSpiWriteField(device->devHalInfo,
 					    TALISE_ADDR_GPIO_SLEW_CONTROL_BYTE3,
 					    (((uint8_t)spi->cmosPadDrvStrength) & 0x0F), 0xF0, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_DIGITAL_IO_CONTROL,
 					    (((uint8_t)spi->cmosPadDrvStrength) >> 4), 0x10, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -2482,26 +2482,26 @@ uint32_t TALISE_setSpiSettings(taliseDevice_t *device, taliseSpiSettings_t *spi)
 		/* Allow SPI streaming mode: SPI message ends when chip select de-asserts */
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_SPI_INTERFACE_CONFIG_B, 0x00);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else {
 		/* Force single instruction mode */
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_SPI_INTERFACE_CONFIG_B, 0x80);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
 
 	/* Check if SPI reads and writes work after changing settings */
-	retVal = (talRecoveryActions_t)TALISE_verifySpiReadWrite (device);
+	retVal = (talRecoveryActions_t)TALISE_verifySpiReadWrite(device);
 	IF_ERR_RETURN_U32(retVal);
 
 	return (uint32_t)retVal;
 }
 
-uint32_t TALISE_verifySpiReadWrite (taliseDevice_t *device)
+uint32_t TALISE_verifySpiReadWrite(taliseDevice_t *device)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 	adiHalErr_t halError = ADIHAL_OK;
@@ -2740,11 +2740,11 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 		deviceClkDiv = 2; /* div 4 */
 		clkPllRefClkDiv = 2; /* div 4 */
 	} else {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_INV_SCALEDDEVCLK_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	switch(clockSettings->clkPllHsDiv) {
+	switch (clockSettings->clkPllHsDiv) {
 	case TAL_HSDIV_2:
 		hsDivTimes10 = 20;
 		break;
@@ -2761,7 +2761,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 		hsDivTimes10 = 50;
 		break;
 	default:
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_CLKPLL_INV_HSDIV, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -2782,7 +2782,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 
 	/* TxAtten clock should be less than 250Mhz by design */
 	if (txAttenClock_Hz > 250000000) {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETCLKPLL_INV_TXATTENDIV, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -2797,7 +2797,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 
 	if (vcoIndex < 1 || vcoIndex > 53) {
 		/* vco index out of range */
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETCLKPLL_INV_VCOINDEX, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
@@ -2805,9 +2805,9 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 	vcoOutLvl      = (vcoIndex <= 16) ? 13 : (vcoIndex <= 23) ? 12 :
 			 (vcoIndex <= 25) ?
 			 11 : (vcoIndex <= 35) ? 10 : (vcoIndex <= 39) ? 9 : (vcoIndex <= 43) ?
-			 8 :  (vcoIndex <= 48) ? 7 : 6;
+			 8 : (vcoIndex <= 48) ? 7 : 6;
 	vcoVaractor    = (vcoIndex <= 29 || vcoIndex == 35) ?  1 : 2;
-	vcoBiasRef     = (vcoIndex <= 7 ) ?  4 : (vcoIndex <= 16) ? 6 : 7;
+	vcoBiasRef     = (vcoIndex <= 7) ?  4 : (vcoIndex <= 16) ? 6 : 7;
 	vcoBiasTcf     = (vcoIndex <= 25 || (vcoIndex > 26 && vcoIndex <= 29) ||
 			  (vcoIndex > 37 && vcoIndex <= 39)) || (vcoIndex > 40 && vcoIndex <= 43) ?
 			 2 : 3;
@@ -2818,13 +2818,13 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 	if (scaledRefClk_kHz >= 15000 && scaledRefClk_kHz < 53760) {
 		/* scaledRefClkMhz = 46.08 MHz */
 		vcoCalOffset   = (vcoIndex == 11 || (vcoIndex > 35 && vcoIndex <= 37)
-				  || (vcoIndex > 29 && vcoIndex <= 34)|| vcoIndex == 40 || vcoIndex == 44) ?
-				 14 :(vcoIndex <= 10 || vcoIndex > 44) ?
+				  || (vcoIndex > 29 && vcoIndex <= 34) || vcoIndex == 40 || vcoIndex == 44) ?
+				 14 : (vcoIndex <= 10 || vcoIndex > 44) ?
 				 15 : ((vcoIndex > 12 && vcoIndex <= 25) || (vcoIndex > 26 && vcoIndex <= 29)
 				       || vcoIndex == 35) ?
 				 12 : 13;
 
-		loopFilterIcp = icp_46p08[vcoIndex-1];
+		loopFilterIcp = icp_46p08[vcoIndex - 1];
 		loopFilterC2C1 = 0xF9; /* C2=0xF0 */
 		loopFilterR1C3 = 0xD5;
 		loopFilterR3   = 0x0E;
@@ -2832,7 +2832,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 		/* scaledRefClkMhz = 61.44 MHz */
 		vcoCalOffset   = (vcoIndex == 11 || (vcoIndex > 29 && vcoIndex <= 34)
 				  || vcoIndex == 40 || vcoIndex == 44) ?
-				 14 :(vcoIndex <= 10 || vcoIndex > 44) ?
+				 14 : (vcoIndex <= 10 || vcoIndex > 44) ?
 				 15 : ((vcoIndex > 12 && vcoIndex <= 22) || (vcoIndex > 23 && vcoIndex <= 25)
 				       || (vcoIndex > 26 && vcoIndex <= 29) || (vcoIndex > 34 && vcoIndex <= 37)) ?
 				 12 : (vcoIndex > 37 && vcoIndex <= 39) ? 11 : 13;
@@ -2840,7 +2840,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 		vcoVaractor = (vcoIndex > 35 && vcoIndex <= 39) ? 1 : vcoVaractor;
 		vcoBiasRef = (vcoIndex > 4 && vcoIndex <= 7) ? 5 : vcoBiasRef;
 		vcoVaractorRef = (vcoIndex > 35 && vcoIndex <= 39) ? 14 : vcoVaractorRef;
-		loopFilterIcp  = icp_61p44[vcoIndex-1];
+		loopFilterIcp  = icp_61p44[vcoIndex - 1];
 		loopFilterC2C1 = ((vcoIndex > 2 && vcoIndex <= 6) || (vcoIndex > 8
 				  && vcoIndex <= 13) || (vcoIndex > 14)) ? 0xFD : 0xFC; /* C2=0xF0 */
 		loopFilterR1C3 = 0xC5;
@@ -2849,47 +2849,47 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 	} else if (scaledRefClk_kHz >= 69120 && scaledRefClk_kHz < 80000) {
 		/* scaledRefClkMhz = 76.8 MHz */
 		vcoCalOffset   = (vcoIndex == 11 || (vcoIndex > 35 && vcoIndex <= 37)
-				  || (vcoIndex > 29 && vcoIndex <= 34)|| vcoIndex == 40 || vcoIndex == 44) ?
-				 14 :(vcoIndex <= 10 || vcoIndex > 44) ?
+				  || (vcoIndex > 29 && vcoIndex <= 34) || vcoIndex == 40 || vcoIndex == 44) ?
+				 14 : (vcoIndex <= 10 || vcoIndex > 44) ?
 				 15 : ((vcoIndex > 12 && vcoIndex <= 25) || (vcoIndex > 26 && vcoIndex <= 29)
 				       || vcoIndex == 35) ?
 				 12 : 13;
 
-		loopFilterIcp  = icp_76p8[vcoIndex-1];
-		loopFilterC2C1 = (vcoIndex == 20 ) ? 0xF7 : (vcoIndex == 4 || vcoIndex == 6
-				 || vcoIndex == 8 ) ? 0xE6: 0xF6; /*C2=0xF0, C1=6 or 7 */
-		loopFilterR1C3 = (vcoIndex == 4 ) ? 0xE4 : 0xD5;
+		loopFilterIcp  = icp_76p8[vcoIndex - 1];
+		loopFilterC2C1 = (vcoIndex == 20) ? 0xF7 : (vcoIndex == 4 || vcoIndex == 6
+				 || vcoIndex == 8) ? 0xE6 : 0xF6; /*C2=0xF0, C1=6 or 7 */
+		loopFilterR1C3 = (vcoIndex == 4) ? 0xE4 : 0xD5;
 		loopFilterR3   = 0x0E;
 	} else {
-		return (uint32_t)talApiErrHandler(device,TAL_ERRHDL_INVALID_PARAM,
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETRFPLL_INV_REFCLK, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	/* Hold CLKPLL digital logic in reset */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_4,
 				   0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set Device clock divider */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_5,
 				   clockControl5);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Set reference clock scaler + HSdiv */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_2,
 				   clockControl2);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/*Set VCO cal time */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_CAL_CONTROL, 0x02);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -2897,72 +2897,72 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_F_VCOTN_BYTE1,
 				   ((vcoCalOffset & 0x0F) << 3)); /* Set VCO Cal offset[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE1,
 				   (0xC0 | (vcoVaractor & 0x0F))); /* Init ALC[3:0], VCO varactor[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE2,
 				   (0x40 | (vcoOutLvl & 0x0F))); /* VCO output level */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE9,
 				   (((vcoBiasTcf & 0x03) << 3) | (vcoBiasRef &
 						   0x07))); /* Set VCO Bias Tcf[1:0] and VCO Bias Ref[2:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_VCO_CAL_REF,
 				   0x30); /* Set VCO cal time (compare length) + Set VCO Cal Ref Tcf[2:0]=0 */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_VCO_VAR_CTR1,
 				   0x70); /* Set VCO Varactor Ref Tcf[2:0] and VCO Varactor Offset[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_VCO_VAR_CTR2,
 				   (vcoVaractorRef & 0x0F)); /* Set VCO Varactor Reference[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Write Loop filter */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE3,
 				   (loopFilterIcp & 0x03F)); /* Set Loop Filter Icp[5:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE6,
 				   loopFilterC2C1); /* Set Loop Filter C2[3:0] and C1[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE7,
 				   loopFilterR1C3); /* Set Loop Filter R1[3:0] and C3[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_LF_R3,
 				   (loopFilterR3 & 0x0F)); /*Set Loop Filter R3[3:0] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -2975,7 +2975,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 
 	/* +1 >>1 is rounding (add .5) */
 	fractionalWord = (uint32_t)(DIV_U64((uint64_t)fractionalRemainder * 4177920,
-					    (uint64_t)scaledRefClk_Hz) + 1 ) >> 1;
+					    (uint64_t)scaledRefClk_Hz) + 1) >> 1;
 
 	/* if fractionalWord rounded up and == PLL modulus, fix it */
 	if (fractionalWord == 2088960) {
@@ -3006,19 +3006,19 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 	/* Set PLL fractional word[22:0] */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_DIVIDER_FRAC_BYTE0, (fractionalWord & 0xFF));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_DIVIDER_FRAC_BYTE1, ((fractionalWord >> 8) & 0xFF));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_DIVIDER_FRAC_BYTE2, ((fractionalWord >> 16) & 0x7F));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -3026,53 +3026,53 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_DIVIDER_INT_BYTE1,
 				   (sdmSettings | ((integerWord >> 8) & 0x7)));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTH_DIVIDER_INT_BYTE0, (integerWord & 0xFF));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Release PLL from reset, and set start VCO cal bit to 0 */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_4,
 				   0x80);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Power up CLKPLL */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_CLK_SYNTHESIZER_POWER_DOWN, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = ADIHAL_wait_us(device->devHalInfo,
 				  CLKPLL_POWERUP_US); /* Allow PLL time to power up */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_WAIT, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_WAIT, halError, retVal,
 				  TALACT_ERR_CHECK_TIMER);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Enable Charge pump cal after Charge Pump current set (Icp[5:0]) */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLK_SYNTH_BYTE5,
 				   0x84);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Start VCO Cal */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_4,
 				   0x80);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_4,
 				   0x81);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -3137,7 +3137,7 @@ uint32_t TALISE_setTxPfirSyncClk(taliseDevice_t *device,
 							  TALISE_ERR_TXFIR_TAPSEXCEEDED, retVal, TALACT_ERR_CHECK_PARAM);
 		}
 
-		if(txProfile->txFirInterpolation < numRows) {
+		if (txProfile->txFirInterpolation < numRows) {
 			/* SYNC CLOCK is the PFIR output rate / 2 */
 			syncClk_kHz = txProfile->txInputRate_kHz * txProfile->txFirInterpolation / 2;
 		} else {
@@ -3156,7 +3156,7 @@ uint32_t TALISE_setTxPfirSyncClk(taliseDevice_t *device,
 		/* Write Tx PFIR SYNC Clock divider */
 		halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_6,
 					    syncDiv, 0x38, 3);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -3226,7 +3226,7 @@ uint32_t TALISE_setRxPfirSyncClk(taliseDevice_t *device,
 		}
 
 		/* Calculate Rx PFIR output from Rx output and decimation */
-		rxOutClk_kHz = (rxProfile->rxOutputRate_kHz * ddcMultiply ) / ddcDivide;
+		rxOutClk_kHz = (rxProfile->rxOutputRate_kHz * ddcMultiply) / ddcDivide;
 
 		/* Set slowestOutputRate_kHz to the Rx PFIR output rate */
 		slowestOutputRate_kHz = rxOutClk_kHz;
@@ -3242,7 +3242,7 @@ uint32_t TALISE_setRxPfirSyncClk(taliseDevice_t *device,
 		}
 
 		/* Effective number of rows is the power of 2 that's >= rows */
-		switch(rxNumRows) {
+		switch (rxNumRows) {
 		case 1:
 			rxEffectiveNumRows = 1;
 			break;
@@ -3304,7 +3304,7 @@ uint32_t TALISE_setRxPfirSyncClk(taliseDevice_t *device,
 		}
 
 		/* Effective number of rows is the power of 2 that's >= rows */
-		switch(orxNumRows) {
+		switch (orxNumRows) {
 		case 1:
 			orxEffectiveNumRows = 1;
 			break;
@@ -3346,15 +3346,15 @@ uint32_t TALISE_setRxPfirSyncClk(taliseDevice_t *device,
 	/* Write Rx/Orx PFIR SYNC Clock divider */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_6,
 				    syncDiv, 0x7, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	return (uint32_t)retVal;
 }
 
-uint32_t TALISE_getApiVersion (taliseDevice_t *device, uint32_t *siVer,
-			       uint32_t *majorVer, uint32_t *minorVer, uint32_t *buildVer)
+uint32_t TALISE_getApiVersion(taliseDevice_t *device, uint32_t *siVer,
+			      uint32_t *majorVer, uint32_t *minorVer, uint32_t *buildVer)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 
@@ -3400,7 +3400,7 @@ uint32_t TALISE_getDeviceRev(taliseDevice_t *device, uint8_t *revision)
 
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_PRODUCT_ID_1,
 				  revision);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 
 	return (uint32_t)retVal;
@@ -3425,7 +3425,7 @@ uint32_t TALISE_getProductId(taliseDevice_t *device, uint8_t *productId)
 
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_PRODUCT_ID_0,
 				  productId);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 
 	return (uint32_t)retVal;

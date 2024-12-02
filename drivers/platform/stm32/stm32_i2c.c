@@ -60,7 +60,7 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-	xdesc = (struct stm32_i2c_desc *)no_os_calloc(1,sizeof(struct stm32_i2c_desc));
+	xdesc = (struct stm32_i2c_desc *)no_os_calloc(1, sizeof(struct stm32_i2c_desc));
 	if (!xdesc) {
 		ret = -ENOMEM;
 		goto error_1;

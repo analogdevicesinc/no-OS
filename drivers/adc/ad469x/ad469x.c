@@ -864,7 +864,7 @@ int32_t ad469x_reset_dev(struct ad469x_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	if(!((reset_status & AD469x_REG_STATUS_RESET_MASK) >> 5))
+	if (!((reset_status & AD469x_REG_STATUS_RESET_MASK) >> 5))
 		return -1;
 
 	return 0;
@@ -987,7 +987,7 @@ int32_t ad469x_config_extended(struct ad469x_dev *dev, struct
 				return ret;
 
 		}
-	} else if(config_desc->ch_sequence == AD469x_standard_seq)  {
+	} else if (config_desc->ch_sequence == AD469x_standard_seq)  {
 		ret = ad469x_std_sequence_ch(dev, ch_mask);
 		if (ret)
 			return ret;
@@ -1113,7 +1113,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 		       init_param->num_data_ch, max_data_ch);
 		ret = -EINVAL;
 		goto error_spi;
-	} else if(init_param->num_data_ch == 0) {
+	} else if (init_param->num_data_ch == 0) {
 		dev->num_data_ch = max_data_ch;
 	} else {
 		dev->num_data_ch = init_param->num_data_ch;

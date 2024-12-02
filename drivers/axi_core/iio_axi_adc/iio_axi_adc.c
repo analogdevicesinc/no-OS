@@ -239,9 +239,9 @@ static int set_calibbias(void *device, char *buf, uint32_t len,
 static int set_calibscale(void *device, char *buf, uint32_t len,
 			  const struct iio_ch_info *channel, intptr_t priv)
 {
-	float calib= strtof(buf, NULL);
+	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
-	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	int32_t val2 = (int32_t)(calib * 1000000) % 1000000;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	int ret = axi_adc_set_calib_scale(iio_adc->adc, channel->ch_num, val,
 					  val2);
@@ -370,7 +370,7 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 		return ret;
 	/* Wait until transfer finishes */
 	ret = axi_dmac_transfer_wait_completion(iio_adc->dmac, 500);
-	if(ret)
+	if (ret)
 		return ret;
 
 	if (iio_adc->dcache_invalidate_range)

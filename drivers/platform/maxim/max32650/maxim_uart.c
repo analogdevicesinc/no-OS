@@ -137,13 +137,13 @@ static int32_t max_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 	int block_size;
 	int32_t ret;
 
-	if(!desc || !data || !bytes_number)
+	if (!desc || !data || !bytes_number)
 		return -EINVAL;
 
 	while (bytes_number) {
 		block_size = no_os_min(MXC_UART_FIFO_DEPTH, bytes_number);
-		while(!(MXC_UART_GetStatus(MXC_UART_GET_UART(desc->device_id)) &
-			MXC_F_UART_STAT_TX_EMPTY));
+		while (!(MXC_UART_GetStatus(MXC_UART_GET_UART(desc->device_id)) &
+			 MXC_F_UART_STAT_TX_EMPTY));
 		ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id),
 				     (uint8_t *)(data + transfered),
 				     &block_size);
@@ -271,7 +271,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	descriptor->device_id = param->device_id;
 	descriptor->baud_rate = param->baud_rate;
 
-	switch(param->parity) {
+	switch (param->parity) {
 	case NO_OS_UART_PAR_NO:
 		parity = MXC_UART_PARITY_DISABLE;
 		break;
@@ -292,7 +292,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error_max;
 	}
 
-	switch(param->size) {
+	switch (param->size) {
 	case NO_OS_UART_CS_5:
 		size = 5;
 		break;
@@ -310,7 +310,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error_max;
 	}
 
-	switch(param->stop) {
+	switch (param->stop) {
 	case NO_OS_UART_STOP_1_BIT:
 		stop = MXC_UART_STOP_1;
 		break;

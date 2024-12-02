@@ -156,7 +156,7 @@ int32_t ad5791_set_register_value(struct ad5791_dev *dev,
 	status = no_os_spi_write_and_read(dev->spi_desc,
 					  write_command,
 					  3);
-	if(status != 0) {
+	if (status != 0) {
 		return -1;
 	}
 
@@ -188,7 +188,7 @@ int32_t ad5791_get_register_value(struct ad5791_dev *dev,
 	status = no_os_spi_write_and_read(dev->spi_desc,
 					  register_word,
 					  3);
-	if(status != 0) {
+	if (status != 0) {
 		return -1;
 	}
 	register_word[0] = 0x00;
@@ -197,7 +197,7 @@ int32_t ad5791_get_register_value(struct ad5791_dev *dev,
 	status = no_os_spi_write_and_read(dev->spi_desc,
 					  register_word,
 					  3);
-	if(status != 0) {
+	if (status != 0) {
 		return -1;
 	}
 	*value = ((int32_t)register_word[0] << 16) |
@@ -228,7 +228,7 @@ int32_t ad5791_dac_ouput_state(struct ad5791_dev *dev,
 	int32_t status = 0;
 
 	status = ad5791_get_register_value(dev, AD5791_REG_CTRL, &val);
-	if(status < 0) {
+	if (status < 0) {
 		return status;
 	}
 	old_ctrl = val;
@@ -287,7 +287,7 @@ int32_t ad5791_soft_instruction(struct ad5791_dev *dev,
 	status = ad5791_set_register_value(dev,
 					   AD5791_CMD_WR_SOFT_CTRL,
 					   instruction_bit);
-	if(status < 0) {
+	if (status < 0) {
 		return status;
 	}
 	no_os_mdelay(1);    // Wait for the instruction to take effect.
@@ -327,7 +327,7 @@ int32_t ad5791_setup(struct ad5791_dev *dev,
 	/* Reads the control register in order to save the options related to the
 	   DAC output state that may have been configured previously. */
 	status = ad5791_get_register_value(dev, AD5791_REG_CTRL, &val);
-	if(status < 0) {
+	if (status < 0) {
 		return status;
 	}
 	old_ctrl = val;
@@ -368,7 +368,7 @@ int ad5791_spi_write_mask(struct ad5791_dev *dev,
 	int status;
 	uint32_t reg_data;
 
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	status = ad5791_get_register_value(dev, register_address, &reg_data);
@@ -391,10 +391,10 @@ int ad5791_spi_write_mask(struct ad5791_dev *dev,
 int ad5791_set_lin_comp(struct ad5791_dev *dev,
 			enum ad5791_lin_comp_select v_span)
 {
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
-	switch(dev->act_device) {
+	switch (dev->act_device) {
 	case ID_AD5781:
 		if (v_span != AD5781_SPAN_UPTO_10V &&
 		    v_span != AD5781_SPAN_10V_TO_20V)

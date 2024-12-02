@@ -458,7 +458,7 @@ static int __ltc2983_chan_custom_sensor_assign(struct ltc2983_desc *device,
 	int ret;
 	uint32_t i;
 	uint8_t raw_array[6];
-	uint8_t step = custom->is_steinhart? 4 : 3;
+	uint8_t step = custom->is_steinhart ? 4 : 3;
 
 	if (device->custom_addr_ptr + (custom->len * step) >
 	    LTC2983_CUST_SENS_TBL_SIZE)

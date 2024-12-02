@@ -61,7 +61,7 @@ const struct pulsar_adc_dev_info pulsar_adc_devices[] = {
 	[ID_AD4020] = {.resolution = 20, .sign = 's', .max_rate = 1800},
 	[ID_AD4021] = {.resolution = 20, .sign = 's', .max_rate = 1000},
 	[ID_AD4022] = {.resolution = 20, .sign = 's', .max_rate = 500},
-	[ID_ADAQ4003] = {.resolution = 18, .sign = 's',.max_rate = 2000},
+	[ID_ADAQ4003] = {.resolution = 18, .sign = 's', .max_rate = 2000},
 	[ID_AD7690] = {.resolution = 18, .sign = 's', .max_rate = 400},
 	[ID_AD7691] = {.resolution = 18, .sign = 's', .max_rate = 250},
 	[ID_AD7693] = {.resolution = 16, .sign = 's', .max_rate = 500},

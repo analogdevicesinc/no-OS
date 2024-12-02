@@ -149,16 +149,16 @@ int8_t ad5446_init(struct ad5446_dev **device,
 	status |= no_os_gpio_get(&dev->gpio_clrout, &init_param.gpio_clrout);
 
 	/* Initialize configuration pins, if exist. */
-	if(dev->act_device == ID_AD5542A) {
+	if (dev->act_device == ID_AD5542A) {
 		AD5446_LDAC_OUT;
 		AD5446_LDAC_LOW;
 		AD5446_CLR_OUT;
 		AD5446_CLR_HIGH;
-	} else if(dev->act_device == ID_AD5541A ||
-		  dev->act_device == ID_AD5600) {
+	} else if (dev->act_device == ID_AD5541A ||
+		   dev->act_device == ID_AD5600) {
 		AD5446_LDAC_OUT;
 		AD5446_LDAC_LOW;
-	} else if(dev->act_device == ID_AD5446) { /* Enable the SDO line */
+	} else if (dev->act_device == ID_AD5446) { /* Enable the SDO line */
 		/* AD5446_CLR is mapped to GPIO0 */
 		AD5446_CLR_OUT;
 		AD5446_CLR_LOW;
@@ -206,7 +206,7 @@ void ad5446_set_register(struct ad5446_dev *dev,
 	uint16_t input_shift_reg = 0;
 	uint8_t spi_data[PKT_LENGTH] = {0, 0};
 
-	if(chip_info[dev->act_device].has_ctrl == true) {
+	if (chip_info[dev->act_device].has_ctrl == true) {
 		input_shift_reg = ((command & CMD_MASK) << CMD_OFFSET) |
 				  (data & DATA_MASK(chip_info[dev->act_device].resolution) \
 				   << DATA_OFFSET(chip_info[dev->act_device].resolution));
@@ -242,7 +242,7 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 	uint16_t  max_value = DATA_MASK(chip_info[dev->act_device].resolution);
 
 	/* Get raw data from the user's desired voltage value. */
-	switch(vout_type) {
+	switch (vout_type) {
 	case unipolar : {
 		code = (voltage * max_value) / vref;
 		break;
@@ -252,7 +252,7 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 		break;
 	}
 	case bipolar : {
-		code = ((voltage + vref) * (max_value/2)) / vref;
+		code = ((voltage + vref) * (max_value / 2)) / vref;
 		break;
 	}
 	}
@@ -261,7 +261,7 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 	register_value = (uint16_t)code;
 
 	/* Check to value which will be written to register. */
-	if (register_value > (max_value - 1) ) {
+	if (register_value > (max_value - 1)) {
 		register_value = (max_value - 1);
 	}
 
@@ -270,7 +270,7 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 			    0,
 			    register_value);
 	/* Calculate the output voltage value. */
-	switch(vout_type) {
+	switch (vout_type) {
 	case unipolar : {
 		actual_vout = ((float)register_value / max_value) * vref;
 		break;
@@ -280,7 +280,7 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 		break;
 	}
 	case bipolar : {
-		actual_vout = (vref * (float)register_value / (max_value/2)) - vref;
+		actual_vout = (vref * (float)register_value / (max_value / 2)) - vref;
 		break;
 	}
 	}

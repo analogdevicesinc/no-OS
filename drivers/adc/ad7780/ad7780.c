@@ -87,17 +87,17 @@ int8_t ad7780_init(struct ad7780_dev **device,
 	/* SPI */
 	init_status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
-	if(init_status != 0) {
+	if (init_status != 0) {
 		return -1;
 	}
 	AD7780_PDRST_HIGH;
 	init_status = ad7780_wait_rdy_go_low(dev);
-	if(init_status != 0) {
+	if (init_status != 0) {
 		return -1;
 	}
 	ad7780_read_sample(dev,
 			   &ad7780status);
-	if((ad7780status & (AD7780_STAT_ID1 | AD7780_STAT_ID0)) != AD7780_ID_NUMBER) {
+	if ((ad7780status & (AD7780_STAT_ID1 | AD7780_STAT_ID0)) != AD7780_ID_NUMBER) {
 		return -1;
 	}
 
@@ -141,11 +141,11 @@ int8_t ad7780_wait_rdy_go_low(struct ad7780_dev *dev)
 	uint32_t timeout = 0xFFFFF;
 	uint8_t wait = 1;
 
-	while(wait && timeout) {
+	while (wait && timeout) {
 		AD7780_RDY_STATE(wait);
 		timeout--;
 	}
-	if(timeout == 0) {
+	if (timeout == 0) {
 		return -1;
 	} else {
 		return 0;

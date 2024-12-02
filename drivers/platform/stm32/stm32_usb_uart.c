@@ -98,7 +98,7 @@ void stm32_on_usb_cdc_acm_rx(uint8_t* buf, uint32_t len)
 	unsigned int i = 0;
 	int ret;
 
-	while(i < len) {
+	while (i < len) {
 		ret = lf256fifo_write(gfifo, buf[i]);
 		if (ret)
 			break;
@@ -241,7 +241,7 @@ static int32_t stm32_usb_uart_write(struct no_os_uart_desc *desc,
 		return -EFAULT;
 	}
 
-	while(tx_pending)
+	while (tx_pending)
 		;
 
 	return len;
@@ -261,7 +261,7 @@ static int32_t stm32_usb_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	unsigned int i = 0;
 	struct stm32_usb_uart_desc *sdesc = desc->extra;
 
-	while(i < bytes_number) {
+	while (i < bytes_number) {
 		ret = lf256fifo_read(sdesc->fifo, &data[i]);
 		if (ret)
 			break;

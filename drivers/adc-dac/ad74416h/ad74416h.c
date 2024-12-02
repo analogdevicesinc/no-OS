@@ -82,7 +82,7 @@ int ad74416h_dac_voltage_to_code(struct ad74416h_desc *desc, int32_t mvolts,
 {
 	uint32_t range, offset, res;
 
-	switch(desc->id) {
+	switch (desc->id) {
 	case ID_AD74414H:
 		res = AD74414H_DAC_RESOLUTION;
 		break;
@@ -127,7 +127,7 @@ int ad74416h_dac_current_to_code(struct ad74416h_desc *desc, uint32_t uamps,
 {
 	uint32_t res;
 
-	switch(desc->id) {
+	switch (desc->id) {
 	case ID_AD74414H:
 		res = AD74414H_DAC_RESOLUTION;
 		break;
@@ -379,7 +379,7 @@ int ad74416h_set_adc_range(struct ad74416h_desc *desc, uint32_t ch,
 			   enum ad74416h_adc_range val)
 {
 	if (desc->id == ID_AD74414H) {
-		switch(val) {
+		switch (val) {
 		case AD74416H_RNG_NEG12_12_V:
 		case AD74416H_RNG_0_0P625V:
 		case AD74416H_RNG_NEG104_104MV:
@@ -461,7 +461,7 @@ int ad74416h_set_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
 			      enum ad74416h_adc_conv_mux val)
 {
 	if (desc->id == ID_AD74414H) {
-		switch(val) {
+		switch (val) {
 		case AD74416H_MUX_VSENSEN_TO_AGND:
 		case AD74416H_MUX_LF_TO_VSENSEN:
 			return -EINVAL;
@@ -580,7 +580,7 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 	uint16_t dac_code;
 
 	if (desc->id == ID_AD74414H) {
-		switch(ch_func) {
+		switch (ch_func) {
 		case AD74416H_VOLTAGE_OUT:
 		case AD74416H_VOLTAGE_IN:
 		case AD74416H_RESISTANCE:
@@ -597,7 +597,7 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 
 	/* Get the DAC code corresponing to 0mV */
 	ret = ad74416h_dac_voltage_to_code(desc, 0, &dac_code, ch);
-	if(ret)
+	if (ret)
 		return ret;
 
 	ret = ad74416h_reg_update(desc, AD74416H_DAC_CODE(ch),
@@ -688,7 +688,7 @@ int ad74416h_set_diag(struct ad74416h_desc *desc, uint32_t ch,
 		      enum ad74416h_diag_mode diag_code)
 {
 	if (desc->id == ID_AD74414H) {
-		switch(diag_code) {
+		switch (diag_code) {
 		case AD74416H_DIAG_LVIN:
 		case AD74416H_VSENSEN_C:
 			return -EINVAL;

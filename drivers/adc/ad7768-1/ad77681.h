@@ -375,7 +375,7 @@ enum ad77681_rdy_dout {
 
 enum ad77681_conv_diag_mux {
 	AD77681_TEMP_SENSOR = 0x0,
-	AD77681_AIN_SHORT= 0x8,
+	AD77681_AIN_SHORT = 0x8,
 	AD77681_POSITIVE_FS = 0x9,
 	AD77681_NEGATIVE_FS = 0xA
 };

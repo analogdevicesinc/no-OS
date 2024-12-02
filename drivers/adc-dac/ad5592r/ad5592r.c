@@ -79,7 +79,7 @@ int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 	if (!dev)
 		return -1;
 
-	dev->spi_msg = swab16( NO_OS_BIT(15) | (uint16_t)(chan << 12) | value);
+	dev->spi_msg = swab16(NO_OS_BIT(15) | (uint16_t)(chan << 12) | value);
 
 	return no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
 					sizeof(dev->spi_msg));
@@ -276,7 +276,7 @@ int32_t ad5592r_init(struct ad5592r_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	if(init_param->int_ref) {
+	if (init_param->int_ref) {
 		ret = ad5592r_reg_read(dev, AD5592R_REG_PD, &temp_reg_val);
 		if (ret < 0)
 			return ret;

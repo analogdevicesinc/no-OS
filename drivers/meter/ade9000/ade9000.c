@@ -67,7 +67,7 @@ int ade9000_read(struct ade9000_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 	if (!reg_data)
 		return -EINVAL;
 
-	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16,4), reg_addr);
+	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16, 4), reg_addr);
 	no_os_put_unaligned_be16(addr, &buff);
 	buff[1] = buff[1] | ADE9000_SPI_READ;
 
@@ -205,7 +205,7 @@ int ade9000_read_temp(struct ade9000_dev *dev)
 		return ret;
 
 	// wait for conversion result
-	while(!(status)) {
+	while (!(status)) {
 		ret = ade9000_get_int_status0(dev, ADE9000_MASK0_TEMP_RDY, &status);
 		no_os_mdelay(2);
 		timeout++;

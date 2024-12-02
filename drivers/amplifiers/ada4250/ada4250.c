@@ -56,7 +56,7 @@ int32_t ada4250_write(struct ada4250_dev *dev, uint8_t reg_addr,
 {
 	uint8_t buff[ADA4250_BUFF_SIZE_BYTES];
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	buff[0] = ADA4250_SPI_WRITE_CMD | reg_addr;
@@ -79,14 +79,14 @@ int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
 	int32_t ret;
 	uint8_t buff[ADA4250_BUFF_SIZE_BYTES];
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	buff[0] = ADA4250_SPI_READ_CMD | reg_addr;
 	buff[1] = ADA4250_SPI_DUMMY_DATA;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADA4250_BUFF_SIZE_BYTES);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	*data = buff[1];
@@ -108,7 +108,7 @@ int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 	uint8_t read_val;
 	int32_t ret;
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	ret = ada4250_read(dev, reg_addr, &read_val);
@@ -163,13 +163,13 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 	uint16_t timeout = 0xFFFF;
 	uint8_t data;
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	ret = ada4250_update(dev, ADA4250_REG_RESET, ADA4250_RESET_MSK,
 			     ADA4250_RESET(ADA4250_RESET_ENABLE));
 
-	while(timeout--) {
+	while (timeout--) {
 		ret = ada4250_read(dev, ADA4250_REG_RESET, &data);
 		if (ret != 0)
 			return ret;
@@ -199,7 +199,7 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 {
 	int32_t ret;
 
-	switch(dev->device_id) {
+	switch (dev->device_id) {
 	case ADA4250:
 		ret = ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
 				     ADA4250_REFBUF(refbuf));
@@ -228,7 +228,7 @@ int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 {
 	int32_t ret;
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	ret = ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_BIAS_SET_MSK,
@@ -251,7 +251,7 @@ static int32_t ada4250_set_range(struct ada4250_dev *dev,
 {
 	int32_t ret;
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	ret = ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_RANGE_SET_MSK,
@@ -273,7 +273,7 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 {
 	int32_t ret;
 
-	if(dev->device_id == ADA4250) {
+	if (dev->device_id == ADA4250) {
 		ret = ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
 				     ADA4250_GAIN_MUX(gain));
 	} else {
@@ -309,7 +309,7 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int64_t offset)
 	enum ada4250_offset_range range;
 	int64_t x[8], vlsb, max_vos, min_vos;
 
-	if(dev->device_id != ADA4250)
+	if (dev->device_id != ADA4250)
 		return -ENODEV;
 
 	if (dev->bias == ADA4250_BIAS_DISABLE)
@@ -329,7 +329,7 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int64_t offset)
 		for (i = ADA4250_RANGE1; i <= ADA4250_RANGE4; i++) {
 			max_vos = x[dev->gain] *  127 * ((1 << (i + 1)) - 1);
 			min_vos = (-1) * max_vos;
-			if(offset > min_vos && offset < max_vos) {
+			if (offset > min_vos && offset < max_vos) {
 				range = i;
 				vlsb = x[dev->gain] * ((1 << (i + 1)) - 1);
 				break;
@@ -553,7 +553,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	no_os_mdelay(1);
 	dev->power_mode = ADA4250_POWER_NORMAL;
 
-	if(dev->device_id == ADA4250) {
+	if (dev->device_id == ADA4250) {
 		/* SPI */
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 		if (ret != 0)
@@ -577,7 +577,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		}
 
 		ret = ada4250_soft_reset(dev);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 	} else {
 		ret = no_os_gpio_get(&dev->gpio_g2, init_param->gpio_g2_param);

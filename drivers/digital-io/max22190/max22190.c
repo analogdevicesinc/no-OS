@@ -68,7 +68,7 @@ static uint8_t max22190_crc(uint8_t *data)
 
 	for (i = 0; i < length - 1; i++) {
 		tmp = (uint8_t)(((crc_step & 0x1F) << 1) +
-				((datainput >> (length -2 - i)) & 0x01));
+				((datainput >> (length - 2 - i)) & 0x01));
 
 		if ((tmp & 0x20) == 0x20)
 			crc_step = (uint8_t)(tmp ^ crc_poly);
@@ -229,7 +229,7 @@ int max22190_fault_enable_get(struct max22190_desc *desc,
 	int ret;
 	uint32_t reg_val;
 
-	switch(fault_enable) {
+	switch (fault_enable) {
 	case MAX22190_FAULT1_WBGE ... MAX22190_FAULT1_FAULT2E:
 		ret = max22190_reg_read(desc, MAX22190_FAULT1_EN_REG, &reg_val);
 		if (ret)
@@ -276,7 +276,7 @@ int max22190_fault_enable_set(struct max22190_desc *desc,
 {
 	int ret;
 
-	switch(fault_enable) {
+	switch (fault_enable) {
 	case MAX22190_FAULT1_WBGE ... MAX22190_FAULT1_FAULT2E:
 		return max22190_reg_update(desc, MAX22190_FAULT1_EN_REG,
 					   MAX22190_FAULT_MASK(fault_enable),
@@ -490,7 +490,7 @@ int max22190_remove(struct max22190_desc *desc)
 	if (!desc)
 		return -ENODEV;
 
-	for(i = 0; i < MAX22190_CHANNELS; i++) {
+	for (i = 0; i < MAX22190_CHANNELS; i++) {
 		ret = max22190_chan_state(desc, i, MAX22190_CH_OFF);
 		if (ret)
 			return ret;

@@ -86,7 +86,7 @@ int adrf6780_spi_read(struct adrf6780_dev *dev, uint8_t reg_addr,
 	buff[2] = 0;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADRF6780_BUFF_SIZE_BYTES);
-	if(ret)
+	if (ret)
 		return ret;
 
 	/*

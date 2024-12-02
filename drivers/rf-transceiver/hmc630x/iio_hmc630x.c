@@ -278,7 +278,7 @@ static int hmc630x_iio_read_vco_available(void *device, char *buf,
 		return ret;
 
 	for (n = 0; n < nfreqs; n++) {
-		l += snprintf(buf + l, 12, "%lu ", (uint32_t)(freqs[n]/1000));
+		l += snprintf(buf + l, 12, "%lu ", (uint32_t)(freqs[n] / 1000));
 
 		if (l > len)
 			return -E2BIG;

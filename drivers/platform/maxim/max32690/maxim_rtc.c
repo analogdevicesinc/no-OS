@@ -54,7 +54,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	int32_t ret;
 	struct no_os_rtc_desc *dev;
 
-	if(!init_param)
+	if (!init_param)
 		return -EINVAL;
 
 	dev = no_os_calloc(1, sizeof(*dev));
@@ -146,7 +146,7 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 	mxc_rtc_regs_t *rtc_regs;
 
 	if (!dev)
-		return-EINVAL;
+		return -EINVAL;
 
 	rtc_regs = MXC_RTC;
 

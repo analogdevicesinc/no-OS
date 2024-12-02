@@ -117,7 +117,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 	no_os_mdelay(10);
 
 	ad9625_spi_read(dev, AD9625_REG_CHIP_ID, &chip_id);
-	if(chip_id != AD9625_CHIP_ID) {
+	if (chip_id != AD9625_CHIP_ID) {
 		printf("%s Error: Invalid CHIP ID (0x%x).\n",
 		       __func__,
 		       chip_id);
@@ -125,7 +125,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 	}
 
 	ad9625_spi_read(dev, AD9625_REG_PLL_STATUS, &pll_stat);
-	if((pll_stat & 0x80) != 0x80) {
+	if ((pll_stat & 0x80) != 0x80) {
 		printf("%s Error: AD9625 PLL is NOT locked (0x%x).\n",
 		       __func__,
 		       chip_id);

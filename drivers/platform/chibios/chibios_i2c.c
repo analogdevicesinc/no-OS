@@ -135,7 +135,7 @@ int chibios_i2c_write(struct no_os_i2c_desc *desc,
 	xdesc = desc->extra;
 
 	if (!stop_bit) {
-		chI2CBuffer = (uint8_t *)no_os_malloc(bytes_number*sizeof(uint8_t));
+		chI2CBuffer = (uint8_t *)no_os_malloc(bytes_number * sizeof(uint8_t));
 		memcpy(chI2CBuffer, data, bytes_number);
 		buffSize = bytes_number;
 		ret = I2C_NO_ERROR;
@@ -179,7 +179,7 @@ int chibios_i2c_read(struct no_os_i2c_desc *desc,
 		ret = i2cMasterTransmitTimeout(xdesc->hi2c,  desc->slave_address, chI2CBuffer,
 					       buffSize, data, bytes_number, TIME_INFINITE);
 		no_os_free(chI2CBuffer);
-		buffSize=0;
+		buffSize = 0;
 	}
 
 	if (ret != I2C_NO_ERROR)

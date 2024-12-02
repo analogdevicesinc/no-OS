@@ -309,10 +309,10 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 	xinit = param->extra;
 
 	dev = (struct no_os_timer_desc *)no_os_calloc(1, sizeof(*dev));
-	if(!dev)
+	if (!dev)
 		return -1;
 	xdesc = (struct xil_timer_desc *)no_os_calloc(1, sizeof(*xdesc));
-	if(!xdesc)
+	if (!xdesc)
 		goto error_desc;
 
 	dev->id = param->id;
@@ -369,7 +369,7 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 		dev->freq_hz = ((XTmrCtr_Config *)xdesc->config)->SysClockFreqHz;
 
 		ret = XTmrCtr_SelfTest(xdesc->instance, dev->id);
-		if(ret != 0)
+		if (ret != 0)
 			goto error_desc;
 		XTmrCtr_SetOptions(xdesc->instance, xdesc->active_tmr,
 				   XTC_DOWN_COUNT_OPTION | XTC_INT_MODE_OPTION |
@@ -404,7 +404,7 @@ int32_t xilinx_timer_remove(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
-	if(!desc)
+	if (!desc)
 		return -1;
 
 	xdesc = desc->extra;

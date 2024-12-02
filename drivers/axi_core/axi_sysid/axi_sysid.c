@@ -236,7 +236,7 @@ int32_t axi_sysid_init(struct axi_sysid **sysid_core,
 
 	sysid->info = info;
 
-	switch(sysid->info->version) {
+	switch (sysid->info->version) {
 	case AXI_SYSID_VER_1_00_A:
 		sysid->info->header_version = AXI_SYSID_HEADER_V1;
 		break;

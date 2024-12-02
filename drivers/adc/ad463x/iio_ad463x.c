@@ -199,7 +199,7 @@ static int ad463x_iio_read_scale(void *dev, char *buf, uint32_t len,
 		return -EINVAL;
 
 	ad463x_dev = iio_desc->ad463x_desc;
-	if(ad463x_dev->has_pgia) {
+	if (ad463x_dev->has_pgia) {
 		vals[0] = ad463x_dev->scale_table[ad463x_dev->pgia_idx][0];
 		vals[1] = ad463x_dev->scale_table[ad463x_dev->pgia_idx][1];
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_NANO, 2, vals);
@@ -231,7 +231,7 @@ static int ad463x_iio_store_scale(void *dev, char *buf, uint32_t len,
 
 	ad463x_dev = iio_desc->ad463x_desc;
 	/** Scale only configurable if PGIA is available */
-	if(!ad463x_dev->has_pgia)
+	if (!ad463x_dev->has_pgia)
 		return -EINVAL;
 	iio_parse_value(buf, IIO_VAL_FRACTIONAL, &vals[0], &vals[1]);
 
@@ -261,7 +261,7 @@ static int ad463x_iio_read_scale_avail(void *dev, char *buf,
 	ad463x_dev = iio_desc->ad463x_desc;
 	char *buffer = buf;
 
-	if(ad463x_dev->has_pgia) {
+	if (ad463x_dev->has_pgia) {
 		/** Go through the values in the table and add them to the buffer */
 		for (uint8_t i = 0; i < NO_OS_ARRAY_SIZE(ad463x_dev->scale_table); i++) {
 			vals[0] = ad463x_dev->scale_table[i][0];
@@ -310,11 +310,11 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 
 	/** Fill IIO Buffer  with singel channel if only one is enabled */
 	if (desc->mask == 0x1)
-		for (i = 0, j = 0; j < nb_samples; i+=2)
+		for (i = 0, j = 0; j < nb_samples; i += 2)
 			buff[j++] = buff[i];
 
 	if (desc->mask == 0x2)
-		for (i = 1, j = 0; j < nb_samples; i+=2)
+		for (i = 1, j = 0; j < nb_samples; i += 2)
 			buff[j++] = buff[i];
 
 	return nb_samples;

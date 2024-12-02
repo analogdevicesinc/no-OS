@@ -967,8 +967,8 @@ static int adrv9025_phy_parse_agc_params(struct adrv9025_rf_phy *phy,
 			       &init_param->agcConfig_init_param->agcPeak.apdLowThresh, 30, 0, 63);
 	if (ret)
 		return ret;
-	ret =ADRV9025_OF_PROP(&phy->agcConfig->agcPeak.apdLowGainModeLowThresh,
-			      &init_param->agcConfig_init_param->agcPeak.apdLowGainModeLowThresh, 0, 0, 63);
+	ret = ADRV9025_OF_PROP(&phy->agcConfig->agcPeak.apdLowGainModeLowThresh,
+			       &init_param->agcConfig_init_param->agcPeak.apdLowGainModeLowThresh, 0, 0, 63);
 	if (ret)
 		return ret;
 	ret = ADRV9025_OF_PROP(&phy->agcConfig->agcPeak.apdUpperThreshPeakExceededCnt,

@@ -106,7 +106,7 @@ int max14001_write(struct max14001_dev *dev,
 	    || reg_addr < MAX14001_FLTEN_REG)
 		return -EINVAL;
 
-	tx_data = MAX14001_REG_WRITE(reg_addr,reg_data);
+	tx_data = MAX14001_REG_WRITE(reg_addr, reg_data);
 	tx_data = REVERSE_UINT16(tx_data);
 
 	no_os_put_unaligned_be16(tx_data, buf);
@@ -302,7 +302,7 @@ int max14001_init_config(struct max14001_dev *dev)
 int max14001_wen(struct max14001_dev *dev, bool enable)
 {
 	return max14001_write(dev, MAX14001_WEN_REG,
-			      enable ? MAX14001_SPI_REG_WRITE_ENABLE:
+			      enable ? MAX14001_SPI_REG_WRITE_ENABLE :
 			      MAX14001_SPI_REG_WRITE_DISABLE);
 }
 
@@ -348,7 +348,7 @@ int max14001_emv_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_EMV_FLTEN_MASK,
-					    mode ? MAX14001_EMV_FLTEN_MASK: 0);
+					    mode ? MAX14001_EMV_FLTEN_MASK : 0);
 }
 
 /**
@@ -363,7 +363,7 @@ int max14001_efet_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_EFET_FLTEN_MASK,
-					    mode ? MAX14001_EFET_FLTEN_MASK: 0);
+					    mode ? MAX14001_EFET_FLTEN_MASK : 0);
 }
 
 /**
@@ -378,7 +378,7 @@ int max14001_ecrcf_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_ECRCF_FLTEN_MASK,
-					    mode ? MAX14001_ECRCF_FLTEN_MASK: 0);
+					    mode ? MAX14001_ECRCF_FLTEN_MASK : 0);
 }
 
 /**
@@ -393,7 +393,7 @@ int max14001_ecrcl_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_ECRCL_FLTEN_MASK,
-					    mode ? MAX14001_ECRCL_FLTEN_MASK: 0);
+					    mode ? MAX14001_ECRCL_FLTEN_MASK : 0);
 }
 
 /**
@@ -408,7 +408,7 @@ int max14001_ecom_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_ECOM_FLTEN_MASK,
-					    mode ? MAX14001_ECOM_FLTEN_MASK: 0);
+					    mode ? MAX14001_ECOM_FLTEN_MASK : 0);
 }
 
 /**
@@ -423,7 +423,7 @@ int max14001_espi_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_ESPI_FLTEN_MASK,
-					    mode ? MAX14001_ESPI_FLTEN_MASK: 0);
+					    mode ? MAX14001_ESPI_FLTEN_MASK : 0);
 }
 
 /**
@@ -438,7 +438,7 @@ int max14001_einrd_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_EINRD_FLTEN_MASK,
-					    mode ? MAX14001_EINRD_FLTEN_MASK: 0);
+					    mode ? MAX14001_EINRD_FLTEN_MASK : 0);
 }
 
 /**
@@ -453,7 +453,7 @@ int max14001_eadc_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_EADC_FLTEN_MASK,
-					    mode ? MAX14001_EADC_FLTEN_MASK: 0);
+					    mode ? MAX14001_EADC_FLTEN_MASK : 0);
 }
 
 /**
@@ -468,7 +468,7 @@ int max14001_dyen_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_FLTEN_REG,
 					    MAX14001_DYEN_FLTEN_MASK,
-					    mode ? MAX14001_DYEN_FLTEN_MASK: 0);
+					    mode ? MAX14001_DYEN_FLTEN_MASK : 0);
 }
 
 /**
@@ -483,7 +483,7 @@ int max14001_fast_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_CFG_REG,
 					    MAX14001_FAST_CFG_MASK,
-					    fast ? MAX14001_FAST_CFG_MASK: 0);
+					    fast ? MAX14001_FAST_CFG_MASK : 0);
 }
 
 /**
@@ -498,7 +498,7 @@ int max14001_iraw_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_CFG_REG,
 					    MAX14001_IRAW_CFG_MASK,
-					    raw_data ? MAX14001_IRAW_CFG_MASK: 0);
+					    raw_data ? MAX14001_IRAW_CFG_MASK : 0);
 }
 
 /**
@@ -513,7 +513,7 @@ int max14001_ena_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_ENBL_REG,
 					    MAX14001_ENA_ENBL_MASK,
-					    enable ? MAX14001_ENA_ENBL_MASK: 0);
+					    enable ? MAX14001_ENA_ENBL_MASK : 0);
 }
 
 /**
@@ -528,7 +528,7 @@ int max14001_exrf_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_CFG_REG,
 					    MAX14001_EXRF_CFG_MASK,
-					    mode ? MAX14001_EXRF_CFG_MASK: 0);
+					    mode ? MAX14001_EXRF_CFG_MASK : 0);
 }
 
 /**
@@ -543,7 +543,7 @@ int max14001_exti_config(struct max14001_dev *dev,
 {
 	return max14001_write_config_verify(dev, MAX14001_CFG_REG,
 					    MAX14001_EXTI_CFG_MASK,
-					    mode ? MAX14001_EXTI_CFG_MASK: 0);
+					    mode ? MAX14001_EXTI_CFG_MASK : 0);
 }
 
 /**

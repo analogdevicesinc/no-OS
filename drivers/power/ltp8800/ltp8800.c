@@ -561,7 +561,7 @@ int ltp8800_read_word(struct ltp8800_dev *dev, uint16_t cmd, uint16_t *word)
 			return -EBADMSG;
 	} else {
 		ret = no_os_i2c_read(dev->i2c_desc, rx_buf, 2, 1);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -681,10 +681,10 @@ int ltp8800_read_block_data(struct ltp8800_dev *dev, uint16_t cmd,
 			return -EBADMSG;
 	} else {
 		ret = no_os_i2c_read(dev->i2c_desc, rxbuf, nbytes + 1, 1);
-		if(ret)
+		if (ret)
 			return ret;
 
-		if((size_t)rxbuf[0] > nbytes)
+		if ((size_t)rxbuf[0] > nbytes)
 			return -EMSGSIZE;
 	}
 

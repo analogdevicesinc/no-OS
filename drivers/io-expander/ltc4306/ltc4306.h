@@ -133,9 +133,9 @@ struct ltc4306_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Generate slave address depending on A0 and A1 logic levels */
-int ltc4306_addr_gen (struct ltc4306_init_param *init_param,
-		      enum ltc4306_addr_conn addr0, enum ltc4306_addr_conn addr1,
-		      enum ltc4306_addr_conn addr2);
+int ltc4306_addr_gen(struct ltc4306_init_param *init_param,
+		     enum ltc4306_addr_conn addr0, enum ltc4306_addr_conn addr1,
+		     enum ltc4306_addr_conn addr2);
 
 /* Initialize device */
 int ltc4306_init(struct ltc4306_dev **device,

@@ -238,7 +238,7 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 	} else {
 		clock_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(100000ULL * clock_ratio,
 				1ULL << 16);
-		printf("\tMeasured Link Clock: %"PRIu32".%.3"PRIu32" MHz\n",\
+		printf("\tMeasured Link Clock: %"PRIu32".%.3"PRIu32" MHz\n", \
 		       clock_rate / 1000, clock_rate % 1000);
 	}
 

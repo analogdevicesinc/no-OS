@@ -79,18 +79,18 @@ int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	case GPIO_PL:
 #ifdef XGPIO_H
 		xdesc->instance = (XGpio *)no_os_malloc(sizeof(XGpio));
-		if(!xdesc->instance)
+		if (!xdesc->instance)
 			goto pl_error;
 
 		xdesc->config = XGpio_LookupConfig(xinit->device_id);
-		if(xdesc->config == NULL)
+		if (xdesc->config == NULL)
 			goto pl_error;
 
 		ret = XGpio_CfgInitialize(xdesc->instance,
 					  xdesc->config,
 					  ((XGpio_Config*)xdesc->config)
 					  ->BaseAddress);
-		if(ret < 0)
+		if (ret < 0)
 			goto pl_error;
 
 		break;
@@ -101,17 +101,17 @@ pl_error:
 	case GPIO_PS:
 #ifdef XGPIOPS_H
 		xdesc->instance = (XGpioPs *)no_os_malloc(sizeof(XGpioPs));
-		if(!xdesc->instance)
+		if (!xdesc->instance)
 			goto ps_error;
 
 		xdesc->config = XGpioPs_LookupConfig(xinit->device_id);
-		if(xdesc->config == NULL)
+		if (xdesc->config == NULL)
 			goto ps_error;
 
 		ret = XGpioPs_CfgInitialize(xdesc->instance,
 					    xdesc->config,
 					    ((XGpioPs_Config*)xdesc->config)->BaseAddr);
-		if(ret < 0)
+		if (ret < 0)
 			goto ps_error;
 		break;
 ps_error:
@@ -148,7 +148,7 @@ int32_t xil_gpio_get(struct no_os_gpio_desc **desc,
 	descriptor->extra = extra;
 	ret = _gpio_init(descriptor, param);
 
-	if(ret != 0)
+	if (ret != 0)
 		goto error;
 
 	*desc = descriptor;
@@ -170,7 +170,7 @@ error:
 int32_t xil_gpio_get_optional(struct no_os_gpio_desc **desc,
 			      const struct no_os_gpio_init_param *param)
 {
-	if(param == NULL) {
+	if (param == NULL) {
 		*desc = NULL;
 		return 0;
 	}
@@ -276,7 +276,7 @@ int32_t xil_gpio_direction_output(struct no_os_gpio_desc *desc,
 				       reg_val);
 		reg_val = XGpio_DiscreteRead(extra->instance,
 					     channel);
-		if(value)
+		if (value)
 			reg_val |= (1 << pin);
 		else
 			reg_val &= ~(1 << pin);
@@ -380,7 +380,7 @@ int32_t xil_gpio_set_value(struct no_os_gpio_desc *desc,
 			channel = 1;
 
 		reg_val = XGpio_DiscreteRead(extra->instance, channel);
-		if(value)
+		if (value)
 			reg_val |= (1 << pin);
 		else
 			reg_val &= ~(1 << pin);

@@ -105,7 +105,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	ret = 0;
 
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
-	if(chip_id != AD9152_CHIP_ID) {
+	if (chip_id != AD9152_CHIP_ID) {
 		printf("AD9152: Invalid CHIP ID (0x%x)!\n", chip_id);
 		return -1;
 	}
@@ -227,9 +227,9 @@ int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
 			ad9152_spi_write(dev, 0x32c,
 					 ((sample << 4) | (dac << 2) | 0x00));
 			ad9152_spi_write(dev, 0x32e,
-					 (init_param.stpl_samples[dac][sample]>>8));
+					 (init_param.stpl_samples[dac][sample] >> 8));
 			ad9152_spi_write(dev, 0x32d,
-					 (init_param.stpl_samples[dac][sample]>>0));
+					 (init_param.stpl_samples[dac][sample] >> 0));
 			ad9152_spi_write(dev, 0x32c,
 					 ((sample << 4) | (dac << 2) | 0x01));
 			ad9152_spi_write(dev, 0x32c,
@@ -246,7 +246,7 @@ int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
 				       status);
 		}
 	}
-	return(0);
+	return (0);
 }
 
 /***************************************************************************//**
@@ -264,7 +264,7 @@ int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
 	ret = 0;
 
 	if (init_param.interpolation == 1)
-		return(ret);
+		return (ret);
 
 	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
 	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
@@ -286,7 +286,7 @@ int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
 		ret = -1;
 	}
 
-	return(ret);
+	return (ret);
 }
 
 /***************************************************************************//**
@@ -326,6 +326,6 @@ int32_t ad9152_status(struct ad9152_dev *dev)
 		ret = -1;
 	}
 
-	return(ret);
+	return (ret);
 }
 

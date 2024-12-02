@@ -46,13 +46,13 @@ int32_t platform_init(void)
 	int32_t ret;
 
 	ret = adi_pwr_Init();
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
-	ret = adi_pwr_SetClockDivider(ADI_CLOCK_HCLK,1);
-	if(ret != 0)
+	ret = adi_pwr_SetClockDivider(ADI_CLOCK_HCLK, 1);
+	if (ret != 0)
 		return -1;
-	ret = adi_pwr_SetClockDivider(ADI_CLOCK_PCLK,1);
-	if(ret != 0)
+	ret = adi_pwr_SetClockDivider(ADI_CLOCK_PCLK, 1);
+	if (ret != 0)
 		return ret;
 
 	adi_initComponents();

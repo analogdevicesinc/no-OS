@@ -393,7 +393,7 @@ int32_t ltc268x_set_voltage(struct ltc268x_dev *dev, uint8_t channel,
 
 	/* Compute the binary code from the value(mA) provided by user. */
 	code = (uint32_t)((voltage - range_offset) * (1l << 16) / v_ref);
-	if(code > 0xFFFF)
+	if (code > 0xFFFF)
 		code = 0xFFFF;
 
 	dev->dac_code[channel] = code;

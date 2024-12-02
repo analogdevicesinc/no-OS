@@ -140,7 +140,7 @@ int32_t ad9144_spi_check_status(struct ad9144_dev *dev,
 			timeout++;
 			no_os_mdelay(1);
 		}
-	} while(timeout < 100);
+	} while (timeout < 100);
 
 	return -1;
 }
@@ -422,7 +422,7 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 			return ret;
 	}
 
-	phase_offset = (phase/180) * (1 << 15);
+	phase_offset = (phase / 180) * (1 << 15);
 	ret = ad9144_spi_write(dev, REG_NCO_PHASE_OFFSET0, phase_offset & 0xFF);
 	if (ret != 0)
 		return ret;
@@ -993,14 +993,14 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	no_os_mdelay(1);
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
-	if(chip_id != AD9144_CHIP_ID) {
+	if (chip_id != AD9144_CHIP_ID) {
 		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
 
 	ad9144_spi_write(dev, REG_SPI_SCRATCHPAD, 0xAD);
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
-	if(scratchpad != 0xAD) {
+	if (scratchpad != 0xAD) {
 		printf("%s : scratchpad read-write failed (0x%x)!\n", __func__,
 		       scratchpad);
 		return -1;
@@ -1149,14 +1149,14 @@ int32_t ad9144_setup_jesd_fsm(struct ad9144_dev **device,
 	no_os_mdelay(1);
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
-	if(chip_id != AD9144_CHIP_ID) {
+	if (chip_id != AD9144_CHIP_ID) {
 		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
 
 	ad9144_spi_write(dev, REG_SPI_SCRATCHPAD, 0xAD);
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
-	if(scratchpad != 0xAD) {
+	if (scratchpad != 0xAD) {
 		printf("%s : scratchpad read-write failed (0x%x)!\n", __func__,
 		       scratchpad);
 		return -1;
@@ -1292,9 +1292,9 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
 					 ((sample << 4) | (dac << 2) | 0x00));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2,
-					 (init_param->stpl_samples[dac][sample]>>8));
+					 (init_param->stpl_samples[dac][sample] >> 8));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1,
-					 (init_param->stpl_samples[dac][sample]>>0));
+					 (init_param->stpl_samples[dac][sample] >> 0));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
 					 ((sample << 4) | (dac << 2) | 0x01));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,

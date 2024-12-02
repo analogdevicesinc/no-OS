@@ -54,7 +54,7 @@ void no_os_udelay(uint32_t usecs)
 		firstrun = false;
 	}
 	volatile uint32_t start = DWT->CYCCNT;
-	while(DWT->CYCCNT - start < cycles);
+	while (DWT->CYCCNT - start < cycles);
 }
 #pragma GCC pop_options
 #else

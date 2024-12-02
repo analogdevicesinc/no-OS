@@ -107,7 +107,7 @@ static void aducm_uart_callback(void *ctx, uint32_t event, void *buff)
 	uint32_t		len;
 	struct irq_action *action;
 
-	switch(event) {
+	switch (event) {
 	/* Read done */
 	case ADI_UART_EVENT_RX_BUFFER_PROCESSED:
 		if (extra->read_desc.pending) {

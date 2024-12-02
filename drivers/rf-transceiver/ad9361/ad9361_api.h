@@ -281,10 +281,10 @@ typedef struct {
 
 	/* External LO clocks */
 	uint32_t	(*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
-	int32_t		(*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv,
-			uint32_t rate);
-	int32_t		(*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv,
-			uint32_t rate);
+	int32_t	(*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv,
+					       uint32_t rate);
+	int32_t	(*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv,
+					     uint32_t rate);
 #ifndef AXI_ADC_NOT_PRESENT
 	struct axi_adc_init	*rx_adc_init;
 	struct axi_dac_init	*tx_dac_init;
@@ -363,81 +363,81 @@ enum ad9361_ensm_mode {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize the AD9361 part. */
-int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
-		     AD9361_InitParam *init_param);
+int32_t ad9361_init(struct ad9361_rf_phy **ad9361_phy,
+		    AD9361_InitParam *init_param);
 /* Free the allocated resources. */
 int32_t ad9361_remove(struct ad9361_rf_phy *phy);
 /* Set the Enable State Machine (ENSM) mode. */
-int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
+int32_t ad9361_set_en_state_machine_mode(struct ad9361_rf_phy *phy,
 		uint32_t mode);
 /* Get the Enable State Machine (ENSM) mode. */
-int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
+int32_t ad9361_get_en_state_machine_mode(struct ad9361_rf_phy *phy,
 		uint32_t *mode);
 /* Set the receive RF gain for the selected channel. */
-int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy, uint8_t ch,
-			       int32_t gain_db);
+int32_t ad9361_set_rx_rf_gain(struct ad9361_rf_phy *phy, uint8_t ch,
+			      int32_t gain_db);
 /* Get current receive RF gain for the selected channel. */
-int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy, uint8_t ch,
-			       int32_t *gain_db);
+int32_t ad9361_get_rx_rf_gain(struct ad9361_rf_phy *phy, uint8_t ch,
+			      int32_t *gain_db);
 /* Set the RX RF bandwidth. */
-int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
-				    uint32_t bandwidth_hz);
+int32_t ad9361_set_rx_rf_bandwidth(struct ad9361_rf_phy *phy,
+				   uint32_t bandwidth_hz);
 /* Get the RX RF bandwidth. */
-int32_t ad9361_get_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
-				    uint32_t *bandwidth_hz);
+int32_t ad9361_get_rx_rf_bandwidth(struct ad9361_rf_phy *phy,
+				   uint32_t *bandwidth_hz);
 /* Set the RX sampling frequency. */
-int32_t ad9361_set_rx_sampling_freq (struct ad9361_rf_phy *phy,
-				     uint32_t sampling_freq_hz);
+int32_t ad9361_set_rx_sampling_freq(struct ad9361_rf_phy *phy,
+				    uint32_t sampling_freq_hz);
 /* Get current RX sampling frequency. */
-int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy,
-				     uint32_t *sampling_freq_hz);
+int32_t ad9361_get_rx_sampling_freq(struct ad9361_rf_phy *phy,
+				    uint32_t *sampling_freq_hz);
 /* Set the RX LO frequency. */
-int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
+int32_t ad9361_set_rx_lo_freq(struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
 /* Get current RX LO frequency. */
-int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
+int32_t ad9361_get_rx_lo_freq(struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
 /* Switch between internal and external LO. */
 int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext);
 /* Get the RSSI for the selected channel. */
-int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy, uint8_t ch,
-			    struct rf_rssi *rssi);
+int32_t ad9361_get_rx_rssi(struct ad9361_rf_phy *phy, uint8_t ch,
+			   struct rf_rssi *rssi);
 /* Set the gain control mode for the selected channel. */
-int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy, uint8_t ch,
-		uint8_t gc_mode);
+int32_t ad9361_set_rx_gain_control_mode(struct ad9361_rf_phy *phy, uint8_t ch,
+					uint8_t gc_mode);
 /* Get the gain control mode for the selected channel. */
-int32_t ad9361_get_rx_gain_control_mode (struct ad9361_rf_phy *phy, uint8_t ch,
-		uint8_t *gc_mode);
+int32_t ad9361_get_rx_gain_control_mode(struct ad9361_rf_phy *phy, uint8_t ch,
+					uint8_t *gc_mode);
 /* Set the RX FIR filter configuration. */
-int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
-				  AD9361_RXFIRConfig fir_cfg);
+int32_t ad9361_set_rx_fir_config(struct ad9361_rf_phy *phy,
+				 AD9361_RXFIRConfig fir_cfg);
 /* Get the RX FIR filter configuration. */
 int32_t ad9361_get_rx_fir_config(struct ad9361_rf_phy *phy, uint8_t rx_ch,
 				 AD9361_RXFIRConfig *fir_cfg);
 /* Enable/disable the RX FIR filter. */
-int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+int32_t ad9361_set_rx_fir_en_dis(struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the RX FIR filter. */
-int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+int32_t ad9361_get_rx_fir_en_dis(struct ad9361_rf_phy *phy, uint8_t *en_dis);
 /* Enable/disable the RX RFDC Tracking. */
-int32_t ad9361_set_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy,
-		uint8_t en_dis);
+int32_t ad9361_set_rx_rfdc_track_en_dis(struct ad9361_rf_phy *phy,
+					uint8_t en_dis);
 /* Get the status of the RX RFDC Tracking. */
-int32_t ad9361_get_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy,
-		uint8_t *en_dis);
+int32_t ad9361_get_rx_rfdc_track_en_dis(struct ad9361_rf_phy *phy,
+					uint8_t *en_dis);
 /* Enable/disable the RX BasebandDC Tracking. */
-int32_t ad9361_set_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy,
-		uint8_t en_dis);
+int32_t ad9361_set_rx_bbdc_track_en_dis(struct ad9361_rf_phy *phy,
+					uint8_t en_dis);
 /* Get the status of the RX BasebandDC Tracking. */
-int32_t ad9361_get_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy,
-		uint8_t *en_dis);
+int32_t ad9361_get_rx_bbdc_track_en_dis(struct ad9361_rf_phy *phy,
+					uint8_t *en_dis);
 /* Enable/disable the RX Quadrature Tracking. */
-int32_t ad9361_set_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
-		uint8_t en_dis);
+int32_t ad9361_set_rx_quad_track_en_dis(struct ad9361_rf_phy *phy,
+					uint8_t en_dis);
 /* Get the status of the RX Quadrature Tracking. */
-int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
-		uint8_t *en_dis);
+int32_t ad9361_get_rx_quad_track_en_dis(struct ad9361_rf_phy *phy,
+					uint8_t *en_dis);
 /* Set the RX RF input port. */
-int32_t ad9361_set_rx_rf_port_input (struct ad9361_rf_phy *phy, uint32_t mode);
+int32_t ad9361_set_rx_rf_port_input(struct ad9361_rf_phy *phy, uint32_t mode);
 /* Get the selected RX RF input port. */
-int32_t ad9361_get_rx_rf_port_input (struct ad9361_rf_phy *phy, uint32_t *mode);
+int32_t ad9361_get_rx_rf_port_input(struct ad9361_rf_phy *phy, uint32_t *mode);
 /* Store RX fastlock profile. */
 int32_t ad9361_rx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile);
 /* Recall RX fastlock profile. */
@@ -453,53 +453,53 @@ int32_t ad9361_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option);
 /* Get the RX Local Oscillator power status. */
 int32_t ad9361_get_rx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option);
 /* Set the transmit attenuation for the selected channel. */
-int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch,
-				   uint32_t attenuation_mdb);
+int32_t ad9361_set_tx_attenuation(struct ad9361_rf_phy *phy, uint8_t ch,
+				  uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
-int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch,
-				   uint32_t *attenuation_mdb);
+int32_t ad9361_get_tx_attenuation(struct ad9361_rf_phy *phy, uint8_t ch,
+				  uint32_t *attenuation_mdb);
 /* Set the TX RF bandwidth. */
-int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
-				    uint32_t bandwidth_hz);
+int32_t ad9361_set_tx_rf_bandwidth(struct ad9361_rf_phy *phy,
+				   uint32_t bandwidth_hz);
 /* Get the TX RF bandwidth. */
-int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
-				    uint32_t *bandwidth_hz);
+int32_t ad9361_get_tx_rf_bandwidth(struct ad9361_rf_phy *phy,
+				   uint32_t *bandwidth_hz);
 /* Set the TX sampling frequency. */
-int32_t ad9361_set_tx_sampling_freq (struct ad9361_rf_phy *phy,
-				     uint32_t sampling_freq_hz);
+int32_t ad9361_set_tx_sampling_freq(struct ad9361_rf_phy *phy,
+				    uint32_t sampling_freq_hz);
 /* Get current TX sampling frequency. */
-int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy,
-				     uint32_t *sampling_freq_hz);
+int32_t ad9361_get_tx_sampling_freq(struct ad9361_rf_phy *phy,
+				    uint32_t *sampling_freq_hz);
 /* Set the TX LO frequency. */
-int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
+int32_t ad9361_set_tx_lo_freq(struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
 /* Get current TX LO frequency. */
-int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
+int32_t ad9361_get_tx_lo_freq(struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
 /* Switch between internal and external LO. */
 int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext);
 /* Set the TX FIR filter configuration. */
-int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
-				  AD9361_TXFIRConfig fir_cfg);
+int32_t ad9361_set_tx_fir_config(struct ad9361_rf_phy *phy,
+				 AD9361_TXFIRConfig fir_cfg);
 /* Get the TX FIR filter configuration. */
 int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch,
 				 AD9361_TXFIRConfig *fir_cfg);
 /* Enable/disable the TX FIR filter. */
-int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+int32_t ad9361_set_tx_fir_en_dis(struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the TX FIR filter. */
-int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+int32_t ad9361_get_tx_fir_en_dis(struct ad9361_rf_phy *phy, uint8_t *en_dis);
 /* Get the TX RSSI for the selected channel. */
-int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy, uint8_t ch,
-			    uint32_t *rssi_db_x_1000);
+int32_t ad9361_get_tx_rssi(struct ad9361_rf_phy *phy, uint8_t ch,
+			   uint32_t *rssi_db_x_1000);
 /* Set the TX RF output port. */
-int32_t ad9361_set_tx_rf_port_output (struct ad9361_rf_phy *phy, uint32_t mode);
+int32_t ad9361_set_tx_rf_port_output(struct ad9361_rf_phy *phy, uint32_t mode);
 /* Get the selected TX RF output port. */
-int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy,
-				      uint32_t *mode);
+int32_t ad9361_get_tx_rf_port_output(struct ad9361_rf_phy *phy,
+				     uint32_t *mode);
 /* Enable/disable the auto calibration. */
-int32_t ad9361_set_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy,
-				       uint8_t en_dis);
+int32_t ad9361_set_tx_auto_cal_en_dis(struct ad9361_rf_phy *phy,
+				      uint8_t en_dis);
 /* Get the status of the auto calibration flag. */
-int32_t ad9361_get_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy,
-				       uint8_t *en_dis);
+int32_t ad9361_get_tx_auto_cal_en_dis(struct ad9361_rf_phy *phy,
+				      uint8_t *en_dis);
 /* Store TX fastlock profile. */
 int32_t ad9361_tx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile);
 /* Recall TX fastlock profile. */
@@ -526,11 +526,11 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode);
 int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master,
 		      struct ad9361_rf_phy *phy_slave);
 /* Enable/disable the TRX FIR filters. */
-int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+int32_t ad9361_set_trx_fir_en_dis(struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Set the OSR rate governor. */
-int32_t ad9361_set_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t rate_gov);
+int32_t ad9361_set_trx_rate_gov(struct ad9361_rf_phy *phy, uint32_t rate_gov);
 /* Get the OSR rate governor. */
-int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov);
+int32_t ad9361_get_trx_rate_gov(struct ad9361_rf_phy *phy, uint32_t *rate_gov);
 /* Perform the selected calibration. */
 int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg);
 /* Load and enable TRX FIR filters configurations. */

@@ -80,7 +80,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 	struct stm32_tdm_desc *tdesc;
 	struct stm32_tdm_init_param *tinit;
 
-	tdesc = (struct stm32_tdm_desc*)no_os_calloc(1,sizeof(struct stm32_tdm_desc));
+	tdesc = (struct stm32_tdm_desc*)no_os_calloc(1, sizeof(struct stm32_tdm_desc));
 	if (!tdesc) {
 		ret = -ENOMEM;
 		goto error;
@@ -91,7 +91,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 
 	tdesc->hsai.Instance = tinit->base;
 	tdesc->hsai.Init.Protocol = SAI_FREE_PROTOCOL;
-	switch(param->mode) {
+	switch (param->mode) {
 	case NO_OS_TDM_MASTER_TX:
 	case NO_OS_TDM_MASTER_RX:
 	case NO_OS_TDM_SLAVE_TX:
@@ -106,7 +106,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		break;
 	};
 	tdesc->hsai.Init.AudioMode = tmp;
-	switch(param->data_size) {
+	switch (param->data_size) {
 	case 8:
 		tmp = SAI_DATASIZE_8;
 		break;
@@ -160,7 +160,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		goto error;
 	}
 
-	if(param->rx_complete_callback) {
+	if (param->rx_complete_callback) {
 		ret = lf256fifo_init(&tdm_desc->rx_fifo);
 		if (ret < 0)
 			goto error;
@@ -189,7 +189,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 			goto error;
 	}
 
-	if(param->rx_half_complete_callback) {
+	if (param->rx_half_complete_callback) {
 		struct no_os_irq_init_param nvic_rx_half_cplt = {
 			.platform_ops = &stm32_irq_ops
 		};

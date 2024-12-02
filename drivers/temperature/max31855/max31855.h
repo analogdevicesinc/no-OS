@@ -79,11 +79,11 @@ struct max31855_decimal {
 
 struct _max31855_fault_sts_mask {
 	/** Thermocouple is short circuited to VCC */
-	uint8_t SCV:1;
+	uint8_t SCV: 1;
 	/** Thermocouple is short circuited to GND */
-	uint8_t SCG:1;
+	uint8_t SCG: 1;
 	/** Thermocouple probe not connected */
-	uint8_t OC:1;
+	uint8_t OC: 1;
 };
 
 union max31855_fault_sts {

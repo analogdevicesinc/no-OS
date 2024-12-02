@@ -221,7 +221,7 @@ static int lt7182s_data2reg_ieee754(struct lt7182s_dev *dev, int data,
 	}
 
 	if (scale > (int)MILLI)
-		data = NO_OS_DIV_ROUND_CLOSEST_ULL(data, scale/MILLI);
+		data = NO_OS_DIV_ROUND_CLOSEST_ULL(data, scale / MILLI);
 	else
 		data *= (int)MILLI / scale;
 
@@ -791,11 +791,11 @@ int lt7182s_set_page(struct lt7182s_dev *dev, int page)
 
 		ret = no_os_i2c_write(dev->i2c_desc, tx_buf,
 				      dev->crc_en + 2, 1);
-		if(ret)
+		if (ret)
 			return ret;
 
 		ret = no_os_i2c_write(dev->i2c_desc, tx_buf, 1, 0);
-		if(ret)
+		if (ret)
 			return ret;
 
 		if (dev->crc_en) {
@@ -811,11 +811,11 @@ int lt7182s_set_page(struct lt7182s_dev *dev, int page)
 
 		} else {
 			ret = no_os_i2c_read(dev->i2c_desc, &read_page, 1, 1);
-			if(ret)
+			if (ret)
 				return ret;
 		}
 
-		if(read_page != page)
+		if (read_page != page)
 			return -EIO;
 
 		dev->page = page;
@@ -839,7 +839,7 @@ int lt7182s_send_byte(struct lt7182s_dev *dev, int page, uint8_t cmd)
 
 	if (lt7182s_cmd_is_paged(cmd)) {
 		ret = lt7182s_set_page(dev, page);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -867,7 +867,7 @@ int lt7182s_read_byte(struct lt7182s_dev *dev, int page,
 
 	if (lt7182s_cmd_is_paged(cmd)) {
 		ret = lt7182s_set_page(dev, page);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -906,7 +906,7 @@ int lt7182s_write_byte(struct lt7182s_dev *dev, int page,
 
 	if (lt7182s_cmd_is_paged(cmd)) {
 		ret = lt7182s_set_page(dev, page);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -936,7 +936,7 @@ int lt7182s_read_word(struct lt7182s_dev *dev, int page,
 
 	if (lt7182s_cmd_is_paged(cmd)) {
 		ret = lt7182s_set_page(dev, page);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -953,7 +953,7 @@ int lt7182s_read_word(struct lt7182s_dev *dev, int page,
 			return -EBADMSG;
 	} else {
 		ret = no_os_i2c_read(dev->i2c_desc, rx_buf, 2, 1);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -978,7 +978,7 @@ int lt7182s_write_word(struct lt7182s_dev *dev, int page,
 
 	if (lt7182s_cmd_is_paged(cmd)) {
 		ret = lt7182s_set_page(dev, page);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -1053,12 +1053,12 @@ int lt7182s_read_block_data(struct lt7182s_dev *dev, int page, uint8_t cmd,
 
 	if (lt7182s_cmd_is_paged(cmd)) {
 		ret = lt7182s_set_page(dev, page);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
 	ret = no_os_i2c_write(dev->i2c_desc, &cmd, 1, 0);
-	if(ret)
+	if (ret)
 		return ret;
 
 	if (dev->crc_en) {
@@ -1074,10 +1074,10 @@ int lt7182s_read_block_data(struct lt7182s_dev *dev, int page, uint8_t cmd,
 			return -EBADMSG;
 	} else {
 		ret = no_os_i2c_read(dev->i2c_desc, rxbuf, nbytes + 1, 1);
-		if(ret)
+		if (ret)
 			return ret;
 
-		if((size_t)rxbuf[0] > nbytes)
+		if ((size_t)rxbuf[0] > nbytes)
 			return -EMSGSIZE;
 	}
 

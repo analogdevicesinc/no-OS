@@ -205,7 +205,7 @@ static int adis1646x_get_scale(struct adis_dev *adis,
 			       uint32_t *scale_m1, uint32_t *scale_m2,
 			       enum adis_chan_type chan_type)
 {
-	switch(chan_type) {
+	switch (chan_type) {
 	case ADIS_ACCL_CHAN:
 		*scale_m1 = adis1646x_accl_scale[ADIS1646X_ID_NO_OFFSET(adis->dev_id)].scale_m1;
 		*scale_m2 = adis1646x_accl_scale[ADIS1646X_ID_NO_OFFSET(adis->dev_id)].scale_m2;

@@ -561,7 +561,7 @@ int max22200_get_ch_scale(struct max22200_desc *desc, uint32_t ch,
 	if (ch > MAX22200_MAX_CHN_IDX)
 		return -EINVAL;
 
-	ret = max22200_reg_read(desc,MAX22200_CFG_CH(ch), &reg_val);
+	ret = max22200_reg_read(desc, MAX22200_CFG_CH(ch), &reg_val);
 	if (ret)
 		return ret;
 

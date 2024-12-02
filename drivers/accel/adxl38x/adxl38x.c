@@ -77,16 +77,16 @@ int adxl38x_read_device_data(struct adxl38x_dev *dev, uint8_t base_address,
 		buffer[0] = (base_address << 1) | ADXL38X_SPI_READ;
 		ret = no_os_spi_write_and_read(dev->com_desc.spi_desc, buffer,
 					       size + 1);
-		if(ret)
+		if (ret)
 			return ret;
 		for (idx = 0; idx < size; idx++)
 			read_data[idx] = buffer[idx + 1];
 	} else {
 		ret = no_os_i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 0);
-		if(ret)
+		if (ret)
 			return ret;
 		ret = no_os_i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -147,7 +147,7 @@ int adxl38x_register_update_bits(struct adxl38x_dev *dev, uint8_t reg_addr,
 	// Handle case where the OP_MODE register is accessed. Needs to go to
 	// standby before changing any bits of the register. Needed for a safe
 	// transition.
-	if(reg_addr == ADXL38X_OP_MODE)
+	if (reg_addr == ADXL38X_OP_MODE)
 		adxl38x_set_to_standby(dev);
 
 	data &= ~mask;
@@ -393,7 +393,7 @@ int adxl38x_get_deviceID(struct adxl38x_dev *dev,
 	int ret;
 	uint8_t misc0_reg;
 
-	ret = adxl38x_read_device_data(dev, ADXL38X_MISC0,1, &misc0_reg);
+	ret = adxl38x_read_device_data(dev, ADXL38X_MISC0, 1, &misc0_reg);
 	if (misc0_reg & NO_OS_BIT(7))
 		dev->dev_type = ID_ADXL382;
 	else
@@ -421,11 +421,11 @@ int adxl38x_set_self_test_registers(struct adxl38x_dev *dev, bool st_mode,
 	int ret;
 	uint8_t st_fields_value = 0;
 
-	if(st_mode)
+	if (st_mode)
 		st_fields_value |= NO_OS_BIT(7);
-	if(st_force)
+	if (st_force)
 		st_fields_value |= NO_OS_BIT(6);
-	if(st_dir)
+	if (st_dir)
 		st_fields_value |= NO_OS_BIT(5);
 
 	ret = adxl38x_register_update_bits(dev, ADXL38X_SNSR_AXIS_EN,
@@ -470,7 +470,7 @@ int adxl38x_get_sts_reg(struct adxl38x_dev *dev,
 	uint8_t status_value[4];
 
 	ret = adxl38x_read_device_data(dev, ADXL38X_STATUS0, 4, status_value);
-	if(ret)
+	if (ret)
 		return ret;
 	status_flags->value = no_os_get_unaligned_be32(status_value);
 
@@ -505,7 +505,7 @@ int adxl38x_get_raw_xyz(struct adxl38x_dev *dev, uint16_t *raw_x,
 	ret = adxl38x_get_op_mode(dev, &op_mode);
 	if (ret)
 		return ret;
-	if(op_mode == 0) {
+	if (op_mode == 0) {
 		adxl38x_set_op_mode(dev, ADXL38X_MODE_HP);
 	}
 
@@ -546,7 +546,7 @@ int adxl38x_get_temp(struct adxl38x_dev *dev,
 	ret = adxl38x_get_op_mode(dev, &op_mode);
 	if (ret)
 		return ret;
-	if(op_mode == 0) {
+	if (op_mode == 0) {
 		adxl38x_set_op_mode(dev, ADXL38X_MODE_HP);
 	}
 
@@ -602,22 +602,22 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 	ret = adxl38x_get_op_mode(dev, &op_mode);
 	if (ret)
 		return ret;
-	if(op_mode == 0) {
+	if (op_mode == 0) {
 		adxl38x_set_op_mode(dev, ADXL38X_MODE_HP);
 	}
 
 	//Find the channels and number of bytes to read
 	tzyx = (uint8_t)channels;
-	if(tzyx & 0x01) {
+	if (tzyx & 0x01) {
 		start_addr = ADXL38X_XDATA_H;
-	} else if(tzyx & 0x02) {
+	} else if (tzyx & 0x02) {
 		start_addr = ADXL38X_YDATA_H;
-	} else if(tzyx & 0x04) {
+	} else if (tzyx & 0x04) {
 		start_addr = ADXL38X_ZDATA_H;
 	} else {
 		start_addr = ADXL38X_TDATA_H;
 	}
-	while(tzyx) {
+	while (tzyx) {
 		num_bytes += tzyx & 0x01;
 		tzyx >>= 1;
 	}
@@ -629,24 +629,24 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 		return ret;
 	//Re-assign raw data to corresponding channels
 	tzyx = (uint8_t)channels;
-	for(int i = 0; i <  8; i+=2) {
-		if(tzyx & 0x01) {
+	for (int i = 0; i <  8; i += 2) {
+		if (tzyx & 0x01) {
 			array_rearranged_data[i] = array_raw_data[j];
-			array_rearranged_data[i+1] = array_raw_data[j+1];
+			array_rearranged_data[i + 1] = array_raw_data[j + 1];
 			j += 2;
 		} else {
 			array_rearranged_data[i] = 0;
-			array_rearranged_data[i+1] = 0;
+			array_rearranged_data[i + 1] = 0;
 		}
 		tzyx >>= 1;
 	}
-	if(raw_x)
+	if (raw_x)
 		*raw_x = no_os_get_unaligned_be16(array_rearranged_data);
-	if(raw_y)
+	if (raw_y)
 		*raw_y = no_os_get_unaligned_be16(array_rearranged_data + 2);
-	if(raw_z)
+	if (raw_z)
 		*raw_z = no_os_get_unaligned_be16(array_rearranged_data + 4);
-	if(raw_temp)
+	if (raw_temp)
 		*raw_temp = no_os_get_unaligned_be16(array_rearranged_data + 6) >> 4;
 
 	return ret;
@@ -777,7 +777,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	ret = adxl38x_set_op_mode(dev, ADXL38X_MODE_STDBY);
 
 	/* Enable desired channels (except temperature) */
-	if(op_mode == ADXL38X_MODE_HRT_SND) {
+	if (op_mode == ADXL38X_MODE_HRT_SND) {
 		// Only one axis
 		ret = adxl38x_register_update_bits(dev, ADXL38X_DIG_EN,
 						   ADXL38X_MASK_CHEN_DIG_EN,
@@ -801,7 +801,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 		return ret;
 
 	/* Measure output on all three axes for at least 25 samples and compute average*/
-	for(int k = 0; k < 25; k++) {
+	for (int k = 0; k < 25; k++) {
 		no_os_mdelay(10);
 		ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 
@@ -822,7 +822,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	x_sum = 0;
 	y_sum = 0;
 	z_sum = 0;
-	for(int k = 0; k < 25; k++) {
+	for (int k = 0; k < 25; k++) {
 		no_os_mdelay(10);
 		ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 
@@ -836,7 +836,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 
 	/* Compute self-test delta */
 	// Multiply self test denomitator for the values to be comparable
-	for(int k = 0; k < 3; k++) {
+	for (int k = 0; k < 3; k++) {
 		st_delta_data[k] = (int32_t) abs(st_positive_data[k] - st_negative_data[k]);
 		st_delta_data[k] = st_delta_data[k] * ADXL38X_ST_LIMIT_DENOMINATOR;
 	}
@@ -866,11 +866,11 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 		return -1;
 	}
 
-	if(st_delta_data[0] >= low_limit_xy && st_delta_data[0] <= up_limit_xy)
+	if (st_delta_data[0] >= low_limit_xy && st_delta_data[0] <= up_limit_xy)
 		*st_x = true;
-	if(st_delta_data[1] >= low_limit_xy && st_delta_data[1] <= up_limit_xy)
+	if (st_delta_data[1] >= low_limit_xy && st_delta_data[1] <= up_limit_xy)
 		*st_y = true;
-	if(st_delta_data[2] >= low_limit_z && st_delta_data[2] <= up_limit_z)
+	if (st_delta_data[2] >= low_limit_z && st_delta_data[2] <= up_limit_z)
 		*st_z = true;
 
 	/* Reset ST bits */
@@ -893,9 +893,9 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
  *
  * @return ret      		- Result of the procedure.
 *******************************************************************************/
-int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
-			    bool external_trigger, enum adxl38x_fifo_mode fifo_mode, bool ch_ID_enable,
-			    bool read_reset)
+int adxl38x_accel_set_FIFO(struct adxl38x_dev *dev, uint16_t num_samples,
+			   bool external_trigger, enum adxl38x_fifo_mode fifo_mode, bool ch_ID_enable,
+			   bool read_reset)
 {
 	int ret;
 	uint8_t write_data = 0;
@@ -912,9 +912,9 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
 	// Check if number of samples provided is allowed
 	if (num_samples > 320)
 		return -EINVAL;
-	else if((num_samples > 318) &&
-		((!set_channels) || (set_channels == ADXL38X_CH_EN_XYZ) ||
-		 (set_channels == ADXL38X_CH_EN_YZT)))
+	else if ((num_samples > 318) &&
+		 ((!set_channels) || (set_channels == ADXL38X_CH_EN_XYZ) ||
+		  (set_channels == ADXL38X_CH_EN_YZT)))
 		return -EINVAL;
 
 	// set FIFO_CFG1 register
@@ -931,13 +931,13 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
 	fifo_mode = no_os_field_prep(ADXL38X_FIFOCFG_FIFOMODE_MSK, fifo_mode);
 	write_data |= fifo_mode;
 
-	if(read_reset)
+	if (read_reset)
 		write_data |= NO_OS_BIT(7);
 
-	if(ch_ID_enable)
+	if (ch_ID_enable)
 		write_data |= NO_OS_BIT(6);
 
-	if(external_trigger && fifo_mode == ADXL38X_FIFO_TRIGGER)
+	if (external_trigger && fifo_mode == ADXL38X_FIFO_TRIGGER)
 		write_data |= NO_OS_BIT(3);
 
 	ret = adxl38x_write_device_data(dev, ADXL38X_FIFO_CFG0, 1, &write_data);
@@ -954,8 +954,8 @@ int adxl38x_accel_set_FIFO( struct adxl38x_dev *dev, uint16_t num_samples,
  *
  * @return ret      		- Result of the procedure.
 *******************************************************************************/
-int adxl38x_data_raw_to_gees( struct adxl38x_dev *dev, uint8_t *raw_accel_data,
-			      struct adxl38x_fractional_val *data_frac)
+int adxl38x_data_raw_to_gees(struct adxl38x_dev *dev, uint8_t *raw_accel_data,
+			     struct adxl38x_fractional_val *data_frac)
 {
 	int ret;
 	uint16_t data = 0;

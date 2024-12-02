@@ -957,7 +957,7 @@ int lt8722_reset(struct lt8722_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	return lt8722_reg_write_mask(dev,LT8722_SPIS_COMMAND,
+	return lt8722_reg_write_mask(dev, LT8722_SPIS_COMMAND,
 				     LT8722_SPI_RST_MASK, LT8722_SPI_RST_RESET);
 }
 

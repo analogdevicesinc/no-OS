@@ -232,9 +232,9 @@ int ltc4306_reg_update(struct ltc4306_dev *dev, uint8_t addr, int update_mask,
  *
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-int ltc4306_addr_gen (struct ltc4306_init_param *init_param,
-		      enum ltc4306_addr_conn addr0, enum ltc4306_addr_conn addr1,
-		      enum ltc4306_addr_conn addr2)
+int ltc4306_addr_gen(struct ltc4306_init_param *init_param,
+		     enum ltc4306_addr_conn addr0, enum ltc4306_addr_conn addr1,
+		     enum ltc4306_addr_conn addr2)
 {
 	int loc;
 
@@ -641,7 +641,7 @@ int ltc4306_set_mass_write(struct ltc4306_dev *dev, bool mass_write_en)
 {
 	if (mass_write_en)
 		return ltc4306_reg_update(dev, LTC4306_CTRL_REG2, LTC4306_MASS_WRITE,
-					  no_os_field_prep(LTC4306_MASS_WRITE,1));
+					  no_os_field_prep(LTC4306_MASS_WRITE, 1));
 
 	return ltc4306_reg_update(dev, LTC4306_CTRL_REG2, LTC4306_MASS_WRITE, 0);
 }

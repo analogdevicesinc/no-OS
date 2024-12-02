@@ -88,7 +88,7 @@ int32_t pico_i2c_init(struct no_os_i2c_desc **desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-	pico_i2c = (struct pico_i2c_desc *)no_os_calloc(1,sizeof(*pico_i2c));
+	pico_i2c = (struct pico_i2c_desc *)no_os_calloc(1, sizeof(*pico_i2c));
 	if (!pico_i2c) {
 		ret = -ENOMEM;
 		goto free_desc;

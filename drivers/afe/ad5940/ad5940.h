@@ -2407,8 +2407,8 @@
 typedef enum {
 	SPI_POINTER_SPI   =  0,  /**< Base address set to SPI block. 16B Peripheral*/
 	SPI_POINTER_AGPIO =  1,  /**< Base address set to AGPIO block. 16B Peripheral */
-	SPI_POINTER_AFECON=  2,  /**< Base address set to AFECON block. 16B Peripheral */
-	SPI_POINTER_WUPTMR=  4,  /**< Base address set to Wakeup Timer block. 16B Peripheral */
+	SPI_POINTER_AFECON =  2, /**< Base address set to AFECON block. 16B Peripheral */
+	SPI_POINTER_WUPTMR =  4, /**< Base address set to Wakeup Timer block. 16B Peripheral */
 	SPI_POINTER_ALLON =  6,  /**< Base address set to Always on block. 16B Peripheral */
 	SPI_POINTER_INTC  =  7,  /**< Base address set to INTC(interrupt controller) block. 32B Peripheral */
 	SPI_POINTER_AFE   =  11, /**< Base address set to AFE block. 32B Peripheral */
@@ -3937,8 +3937,8 @@ typedef struct {
  * Structure used to store register information(address and its data)
  * */
 typedef struct {
-	uint32_t RegAddr  :8;   /* 8bit address is enough for sequencer */
-	uint32_t RegValue :24;  /* Reg data is limited to 24bit by sequencer  */
+	uint32_t RegAddr  : 8;  /* 8bit address is enough for sequencer */
+	uint32_t RegValue : 24; /* Reg data is limited to 24bit by sequencer  */
 } SEQGenRegInfo_Type;
 
 /**

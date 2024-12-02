@@ -66,7 +66,7 @@ int32_t altera_gpio_get(struct no_os_gpio_desc **desc,
 	if (!descriptor)
 		return -1;
 
-	descriptor->extra = no_os_calloc(1, sizeof *altera_descriptor);
+	descriptor->extra = no_os_calloc(1, sizeof * altera_descriptor);
 	if (!(descriptor->extra)) {
 		no_os_free(descriptor);
 		return -1;
@@ -95,7 +95,7 @@ int32_t altera_gpio_get(struct no_os_gpio_desc **desc,
 int32_t altera_gpio_get_optional(struct no_os_gpio_desc **desc,
 				 const struct no_os_gpio_init_param *param)
 {
-	if(param == NULL) {
+	if (param == NULL) {
 		*desc = NULL;
 		return 0;
 	}
@@ -179,7 +179,7 @@ int32_t altera_gpio_get_direction(struct no_os_gpio_desc *desc,
 int32_t altera_gpio_set_value(struct no_os_gpio_desc *desc,
 			      uint8_t value)
 {
-	if(!desc)
+	if (!desc)
 		return -1;
 
 	uint32_t ppos;
@@ -192,7 +192,7 @@ int32_t altera_gpio_set_value(struct no_os_gpio_desc *desc,
 	if (desc->number < 32)
 		return -1;
 
-	switch(altera_desc->type) {
+	switch (altera_desc->type) {
 	case NIOS_II_GPIO:
 		ppos = desc->number - 32;
 		pmask = 0x1 << ppos;
@@ -220,7 +220,7 @@ int32_t altera_gpio_set_value(struct no_os_gpio_desc *desc,
 int32_t altera_gpio_get_value(struct no_os_gpio_desc *desc,
 			      uint8_t *value)
 {
-	if(!desc)
+	if (!desc)
 		return -1;
 
 	uint32_t ppos;
@@ -232,7 +232,7 @@ int32_t altera_gpio_get_value(struct no_os_gpio_desc *desc,
 	if (desc->number < 32)
 		return -1;
 
-	switch(altera_desc->type) {
+	switch (altera_desc->type) {
 	case NIOS_II_GPIO:
 		ppos = desc->number - 32;
 

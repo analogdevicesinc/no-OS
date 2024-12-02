@@ -187,7 +187,7 @@ static int ad7746_iio_read_raw(void *device, char *buf, uint32_t len,
 	c = desc->setup.config;
 	c.md = AD7746_MODE_SINGLE;
 
-	if(_configdiff(&desc->setup.config, &c)) {
+	if (_configdiff(&desc->setup.config, &c)) {
 		ret = ad7746_set_config(desc, c);
 		if (ret < 0)
 			return ret;
@@ -311,7 +311,7 @@ static int ad7746_iio_write_offset(void *device, char *buf, uint32_t len,
 		return ret;
 
 	en = (bool)(iiodev->capdac[channel->ch_num][1] & AD7746_CAPDAC_DACEN_MSK);
-	code = iiodev->capdac[channel->ch_num][1] &AD7746_CAPDAC_DACP_MSK;
+	code = iiodev->capdac[channel->ch_num][1] & AD7746_CAPDAC_DACP_MSK;
 	ret = ad7746_set_cap_dac_b(desc, en, code);
 	if (ret < 0)
 		return ret;

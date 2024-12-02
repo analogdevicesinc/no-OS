@@ -348,7 +348,7 @@ int32_t pico_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  */
 int32_t pico_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
-	for(uint8_t irq_num = 0; irq_num < PICO_IRQ_NB; irq_num++)
+	for (uint8_t irq_num = 0; irq_num < PICO_IRQ_NB; irq_num++)
 		if (irq_is_enabled(irq_num))
 			irq_enabled_mask |= 1 << irq_num;
 

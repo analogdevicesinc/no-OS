@@ -448,7 +448,7 @@ int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data)
 	memset(dev->buf, 0, 3);
 
 	dev->buf[0] = AD7746_STATUS_RDYVT_MSK;
-	while(dev->buf[0] & AD7746_STATUS_RDYVT_MSK) {
+	while (dev->buf[0] & AD7746_STATUS_RDYVT_MSK) {
 		ret = ad7746_reg_read(dev, AD7746_REG_STATUS, dev->buf, 1);
 		if (ret < 0)
 			return ret;
@@ -490,7 +490,7 @@ int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data)
 	memset(dev->buf, 0, 3);
 
 	dev->buf[0] = AD7746_STATUS_RDYCAP_MSK;
-	while(dev->buf[0] & AD7746_STATUS_RDYCAP_MSK) {
+	while (dev->buf[0] & AD7746_STATUS_RDYCAP_MSK) {
 		ret = ad7746_reg_read(dev, AD7746_REG_STATUS,	dev->buf, 1);
 		if (ret < 0)
 			return ret;

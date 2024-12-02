@@ -422,7 +422,7 @@ static const uint8_t full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] = {
 		{0x68, 0x38, 0x20}, {0x69, 0x38, 0x20}, {0x6A, 0x38, 0x20},
 		{0x6B, 0x38, 0x20}, {0x6C, 0x38, 0x20}, {0x6D, 0x38, 0x20},
 		{0x6E, 0x38, 0x20}, {0x6F, 0x38, 0x20}
-	},{  /* 2300 MHz */
+	}, { /* 2300 MHz */
 		{0x00, 0x00, 0x20}, {0x00, 0x00, 0x00}, {0x00, 0x00, 0x00},
 		{0x00, 0x01, 0x00}, {0x00, 0x02, 0x00}, {0x00, 0x03, 0x00},
 		{0x00, 0x04, 0x00}, {0x00, 0x05, 0x00}, {0x01, 0x03, 0x20},
@@ -449,7 +449,7 @@ static const uint8_t full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] = {
 		{0x68, 0x38, 0x20}, {0x69, 0x38, 0x20}, {0x6A, 0x38, 0x20},
 		{0x6B, 0x38, 0x20}, {0x6C, 0x38, 0x20}, {0x6D, 0x38, 0x20},
 		{0x6E, 0x38, 0x20}, {0x6F, 0x38, 0x20},
-	},{  /* 5500 MHz */
+	}, { /* 5500 MHz */
 		{0x00, 0x00, 0x20}, {0x00, 0x00, 0x00}, {0x00, 0x00, 0x00},
 		{0x00, 0x00, 0x00}, {0x00, 0x00, 0x00}, {0x00, 0x01, 0x00},
 		{0x00, 0x02, 0x00}, {0x00, 0x03, 0x00}, {0x01, 0x01, 0x20},
@@ -536,7 +536,7 @@ static const uint8_t split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] = {
 		{0x68, 0x38, 0x20}, {0x69, 0x38, 0x20}, {0x6A, 0x38, 0x20},
 		{0x6B, 0x38, 0x20}, {0x6C, 0x38, 0x20}, {0x6D, 0x38, 0x20},
 		{0x6E, 0x38, 0x20}, {0x6F, 0x38, 0x20},
-	},{  /* 2300 MHz */
+	}, { /* 2300 MHz */
 		{0x00, 0x18, 0x20}, {0x00, 0x18, 0x00}, {0x00, 0x18, 0x00},
 		{0x00, 0x18, 0x00}, {0x00, 0x18, 0x00}, {0x00, 0x18, 0x00},
 		{0x00, 0x18, 0x00}, {0x00, 0x18, 0x20}, {0x01, 0x18, 0x20},
@@ -551,7 +551,7 @@ static const uint8_t split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] = {
 		{0x68, 0x38, 0x20}, {0x69, 0x38, 0x20}, {0x6A, 0x38, 0x20},
 		{0x6B, 0x38, 0x20}, {0x6C, 0x38, 0x20}, {0x6D, 0x38, 0x20},
 		{0x6E, 0x38, 0x20}, {0x6F, 0x38, 0x20},
-	},{  /* 5500 MHz */
+	}, { /* 5500 MHz */
 		{0x00, 0x18, 0x20}, {0x00, 0x18, 0x00}, {0x00, 0x18, 0x00},
 		{0x00, 0x18, 0x00}, {0x00, 0x18, 0x00}, {0x00, 0x18, 0x00},
 		{0x00, 0x18, 0x00}, {0x00, 0x18, 0x00}, {0x00, 0x18, 0x00},
@@ -603,34 +603,34 @@ struct gain_table_info ad9361_adi_gt_info[] = {
 		.max_index = SIZE_FULL_TABLE,
 		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_200_1300_MHZ],
 		.tab = (uint8_t (*)[3]) full_gain_table[TBL_200_1300_MHZ],
-	},{
+	}, {
 		.start = 1300000000ULL,
 		.end = 4000000000ULL,
 		.max_index = SIZE_FULL_TABLE,
 		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_1300_4000_MHZ],
 		.tab = (uint8_t (*)[3]) full_gain_table[TBL_1300_4000_MHZ],
-	},{
+	}, {
 		.start = 4000000000ULL,
 		.end = 6000000000ULL,
 		.max_index = SIZE_FULL_TABLE,
 		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_4000_6000_MHZ],
 		.tab = (uint8_t (*)[3]) full_gain_table[TBL_4000_6000_MHZ],
 #if HAVE_SPLIT_GAIN_TABLE
-	},{
+	}, {
 		.start = 0,
 		.end = 1300000000ULL,
 		.max_index = SIZE_SPLIT_TABLE,
 		.split_table = 1,
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_200_1300_MHZ],
 		.tab = (uint8_t (*)[3]) split_gain_table[TBL_200_1300_MHZ],
-	},{
+	}, {
 		.start = 1300000000ULL,
 		.end = 4000000000ULL,
 		.max_index = SIZE_SPLIT_TABLE,
 		.split_table = 1,
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_1300_4000_MHZ],
 		.tab = (uint8_t (*)[3]) split_gain_table[TBL_1300_4000_MHZ],
-	},{
+	}, {
 		.start = 4000000000ULL,
 		.end = 6000000000ULL,
 		.max_index = SIZE_SPLIT_TABLE,
@@ -638,7 +638,7 @@ struct gain_table_info ad9361_adi_gt_info[] = {
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_4000_6000_MHZ],
 		.tab = (uint8_t (*)[3]) split_gain_table[TBL_4000_6000_MHZ],
 #endif
-	},{
+	}, {
 		.start = 0,
 		.end = 0,
 		.max_index = 0,
@@ -650,12 +650,12 @@ struct gain_table_info ad9361_adi_gt_info[] = {
 
 /* Mixer GM Sub-table */
 
-static const uint8_t gm_st_gain[16]= {0x78, 0x74, 0x70, 0x6C, 0x68, 0x64, 0x60,
-				      0x5C, 0x58, 0x54, 0x50, 0x4C, 0x48, 0x30, 0x18, 0x0
-				     };
-static const uint8_t gm_st_ctrl[16]= {0x0, 0xD, 0x15, 0x1B, 0x21, 0x25, 0x29,
-				      0x2C, 0x2F, 0x31, 0x33, 0x34, 0x35, 0x3A, 0x3D, 0x3E
-				     };
+static const uint8_t gm_st_gain[16] = {0x78, 0x74, 0x70, 0x6C, 0x68, 0x64, 0x60,
+				       0x5C, 0x58, 0x54, 0x50, 0x4C, 0x48, 0x30, 0x18, 0x0
+				      };
+static const uint8_t gm_st_ctrl[16] = {0x0, 0xD, 0x15, 0x1B, 0x21, 0x25, 0x29,
+				       0x2C, 0x2F, 0x31, 0x33, 0x34, 0x35, 0x3A, 0x3D, 0x3E
+				      };
 
 
 static const int8_t lna_table[RXGAIN_TBLS_END][4] = {
@@ -702,7 +702,7 @@ int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 
 	cmd = AD_READ | AD_CNT(num) | AD_ADDR(reg);
 	rbuffer = no_os_malloc(num + 2);
-	if(!rbuffer)
+	if (!rbuffer)
 		return -ENOMEM;
 	rbuffer[0] = cmd >> 8;
 	rbuffer[1] = cmd & 0xFF;
@@ -983,7 +983,7 @@ int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_start)
 {
 	int32_t i, cnt = 0, max_cnt = 0, start, max_start = 0;
 
-	for(i = 0, start = -1; i < (int64_t)size; i++) {
+	for (i = 0, start = -1; i < (int64_t)size; i++) {
 		if (field[i] == 0) {
 			if (start == -1)
 				start = i;
@@ -2529,7 +2529,7 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 	if (bb_bw_Hz >= 18000000) {
 		invrc_tconst_1e6 = (160975ULL * r2346 *
 				    (160 * c3_msb + 10 * c3_lsb + 140) *
-				    (bb_bw_Hz)* (1000 + (10 * (bb_bw_Hz - 18000000) / 1000000)));
+				    (bb_bw_Hz) * (1000 + (10 * (bb_bw_Hz - 18000000) / 1000000)));
 
 		no_os_do_div(&invrc_tconst_1e6, 1000UL);
 
@@ -5267,7 +5267,7 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 				  MCS_REFCLK_SCALE_EN, 1);
 		break;
 	case 2:
-		if(!phy->gpio_desc_sync)
+		if (!phy->gpio_desc_sync)
 			break;
 		/*
 		 * NOTE: This is not a regular GPIO -
@@ -5282,7 +5282,7 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 				  mcs_mask, MCS_BB_ENABLE | MCS_DIGITAL_CLK_ENABLE | MCS_RF_ENABLE);
 		break;
 	case 4:
-		if(!phy->gpio_desc_sync)
+		if (!phy->gpio_desc_sync)
 			break;
 		no_os_gpio_set_value(phy->gpio_desc_sync, 1);
 		no_os_gpio_set_value(phy->gpio_desc_sync, 0);
@@ -5800,7 +5800,7 @@ static int32_t ad9361_verify_fir_filter_coef(struct ad9361_rf_phy *phy,
 			      (ad9361_spi_read(spi, REG_TX_FILTER_COEF_READ_DATA_2 + offs) << 8);
 
 			if (tmp != coef[val]) {
-				dev_err(&phy->spi->dev,"%s%"PRIu32" read verify failed TAP%"PRIu32" %d =! %d",
+				dev_err(&phy->spi->dev, "%s%"PRIu32" read verify failed TAP%"PRIu32" %d =! %d",
 					(dest & FIR_IS_RX) ? "RX" : "TX", sel,
 					val, tmp, coef[val]);
 				ret = -EIO;
@@ -5969,7 +5969,7 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 			ret = sscanf(line,
 				     "RTX %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32,
 #endif
-				     &phy->filt_tx_path_clks[0],
+				     & phy->filt_tx_path_clks[0],
 				     &phy->filt_tx_path_clks[1],
 				     &phy->filt_tx_path_clks[2],
 				     &phy->filt_tx_path_clks[3],
@@ -5990,7 +5990,7 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 			ret = sscanf(line,
 				     "RRX %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32,
 #endif
-				     &phy->filt_rx_path_clks[0],
+				     & phy->filt_rx_path_clks[0],
 				     &phy->filt_rx_path_clks[1],
 				     &phy->filt_rx_path_clks[2],
 				     &phy->filt_rx_path_clks[3],
@@ -6129,7 +6129,7 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 			min = phy->rate_governor ? 1500000U : 1000000U;
 			dev_err(dev,
 				"%s: Calculating filter rates failed %"PRId32
-				" using min frequency",__func__, ret);
+				" using min frequency", __func__, ret);
 			ret = ad9361_calculate_rf_clock_chain(phy, min,
 							      phy->rate_governor, rx, tx);
 			if (ret < 0) {
@@ -6675,7 +6675,7 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	temp = rate;
 	tmp = no_os_do_div(&temp, parent_rate);
 	rate = temp;
-	tmp = tmp *(uint64_t)BBPLL_MODULUS + (parent_rate >> 1);
+	tmp = tmp * (uint64_t)BBPLL_MODULUS + (parent_rate >> 1);
 	no_os_do_div(&tmp, parent_rate);
 
 	integer = rate;
@@ -7459,10 +7459,10 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 	/* Program the LNA gain step words into the internal table. */
 	ad9361_spi_write(phy->spi, REG_CONFIG,
 			 CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
-	for(i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++) {
 		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
 		ad9361_spi_write(phy->spi, REG_GAIN_DIFF_WORDERROR_WRITE,
-				 gain_step_calib_reg_val[lo_index][i+1]);
+				 gain_step_calib_reg_val[lo_index][i + 1]);
 		ad9361_spi_write(phy->spi, REG_CONFIG,
 				 CALIB_TABLE_SELECT(0x3) | WRITE_LNA_GAIN_DIFF | START_CALIB_TABLE_CLOCK);
 		no_os_udelay(3);	//Wait for data to fully write to internal table
@@ -7476,12 +7476,12 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 
 	/* Read the LNA and Mixer error terms into nonvolatile memory. */
 	ad9361_spi_write(phy->spi, REG_CONFIG, CALIB_TABLE_SELECT(0x1) | READ_SELECT);
-	for(i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++) {
 		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
 		lna_error[i] = ad9361_spi_read(phy->spi, REG_GAIN_ERROR_READ);
 	}
 	ad9361_spi_write(phy->spi, REG_CONFIG, CALIB_TABLE_SELECT(0x1));
-	for(i = 0; i < 15; i++) {
+	for (i = 0; i < 15; i++) {
 		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
 		mixer_error[i] = ad9361_spi_read(phy->spi, REG_GAIN_ERROR_READ);
 	}
@@ -7490,7 +7490,7 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 	/* Programming gain step errors into the AD9361 in the field */
 	ad9361_spi_write(phy->spi,
 			 REG_CONFIG, CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
-	for(i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++) {
 		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
 		ad9361_spi_write(phy->spi, REG_GAIN_DIFF_WORDERROR_WRITE, lna_error[i]);
 		ad9361_spi_write(phy->spi, REG_CONFIG,
@@ -7498,7 +7498,7 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 	}
 	ad9361_spi_write(phy->spi, REG_CONFIG,
 			 CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
-	for(i = 0; i < 15; i++) {
+	for (i = 0; i < 15; i++) {
 		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
 		ad9361_spi_write(phy->spi, REG_GAIN_DIFF_WORDERROR_WRITE, mixer_error[i]);
 		ad9361_spi_write(phy->spi, REG_CONFIG,

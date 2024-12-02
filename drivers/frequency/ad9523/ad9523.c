@@ -63,7 +63,7 @@ int32_t ad9523_spi_read(struct ad9523_dev *dev,
 	uint8_t index;
 
 	*reg_data = 0;
-	for(index = 0; index < AD9523_TRANSF_LEN(reg_addr); index++) {
+	for (index = 0; index < AD9523_TRANSF_LEN(reg_addr); index++) {
 		buf[0] = 0x80 | (reg_addr >> 8);
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = 0x00;
@@ -96,7 +96,7 @@ int32_t ad9523_spi_write(struct ad9523_dev *dev,
 	int32_t ret = 0;
 	uint8_t index;
 
-	for(index = 0; index < AD9523_TRANSF_LEN(reg_addr); index++) {
+	for (index = 0; index < AD9523_TRANSF_LEN(reg_addr); index++) {
 		buf[0] = reg_addr >> 8;
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = (reg_data >> ((AD9523_TRANSF_LEN(reg_addr) - index - 1) * 8)) & 0xFF;
@@ -231,10 +231,10 @@ int32_t ad9523_calibrate(struct ad9523_dev *dev)
 			&reg_data);
 	if ((reg_data & 0x1) != 0x0) {
 		printf("AD9523: VCO calibration failed (%#06lx)!\n", reg_data);
-		return(-1);
+		return (-1);
 	}
 
-	return(0);
+	return (0);
 }
 
 /***************************************************************************//**
@@ -294,7 +294,7 @@ int32_t ad9523_status(struct ad9523_dev *dev)
 		ret = -1;
 	}
 
-	return(ret);
+	return (ret);
 }
 
 /***************************************************************************//**
@@ -396,7 +396,7 @@ int32_t ad9523_init(struct ad9523_init_param *init_param)
 	init_param->pdata->rzero_bypass_en = 0;
 
 	/* Output Channel Configuration */
-	for (i=0; i < init_param->pdata->num_channels; i++) {
+	for (i = 0; i < init_param->pdata->num_channels; i++) {
 		(&init_param->pdata->channels[i])->channel_num = 0;
 		(&init_param->pdata->channels[i])->divider_output_invert_en = 0;
 		(&init_param->pdata->channels[i])->sync_ignore_en = 0;
@@ -674,8 +674,8 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 		}
 	}
 
-	for(i = 0; i < AD9523_NUM_CHAN; i++) {
-		if(!(active_mask & (1 << i))) {
+	for (i = 0; i < AD9523_NUM_CHAN; i++) {
+		if (!(active_mask & (1 << i))) {
 			ad9523_spi_write(dev,
 					 AD9523_CHANNEL_CLOCK_DIST(i),
 					 AD9523_CLK_DIST_DRIVER_MODE(TRISTATE) |
@@ -712,7 +712,7 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 
 	*device = dev;
 
-	return(ad9523_status(dev));
+	return (ad9523_status(dev));
 }
 
 /***************************************************************************//**

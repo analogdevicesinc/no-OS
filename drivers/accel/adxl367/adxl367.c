@@ -99,17 +99,17 @@ int adxl367_init(struct adxl367_dev **device,
 	status = adxl367_get_register_value(dev, &reg_value, ADXL367_REG_DEVID_AD, 1);
 	if (status)
 		goto err;
-	if(reg_value != ADXL367_DEVICE_AD)
+	if (reg_value != ADXL367_DEVICE_AD)
 		goto err;
 	status = adxl367_get_register_value(dev, &reg_value, ADXL367_REG_DEVID_MST, 1);
 	if (status)
 		goto err;
-	if(reg_value != ADXL367_DEVICE_MST)
+	if (reg_value != ADXL367_DEVICE_MST)
 		goto err;
 	status = adxl367_get_register_value(dev, &reg_value, ADXL367_REG_PARTID, 1);
 	if (status)
 		goto err;
-	if(reg_value != ADXL367_PART_ID)
+	if (reg_value != ADXL367_PART_ID)
 		goto err;
 
 	*device = dev;
@@ -1070,14 +1070,14 @@ int adxl367_read_raw_fifo(struct adxl367_dev *dev, int16_t *x, int16_t *y,
 		return -1;
 
 	// MSB = 6 data bits + 2 bits for CH ID
-	for (i = 0; i < (stored_entr * 2); i += 2 ) {
+	for (i = 0; i < (stored_entr * 2); i += 2) {
 		id = dev->fifo_buffer[i] >> 6;
 
 		switch (id) {
 		case (ADXL367_FIFO_X_ID) :
 			if (x == NULL)
 				return -1;
-			*x = ((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i+1];
+			*x = ((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i + 1];
 			//extend sign
 			if (*x & NO_OS_BIT(13))
 				*x |= NO_OS_GENMASK(15, 14);
@@ -1087,7 +1087,7 @@ int adxl367_read_raw_fifo(struct adxl367_dev *dev, int16_t *x, int16_t *y,
 		case (ADXL367_FIFO_Y_ID) :
 			if (y == NULL)
 				return -1;
-			*y = ((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i+1];
+			*y = ((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i + 1];
 			//extend sign
 			if (*y & NO_OS_BIT(13))
 				*y |= NO_OS_GENMASK(15, 14);
@@ -1097,7 +1097,7 @@ int adxl367_read_raw_fifo(struct adxl367_dev *dev, int16_t *x, int16_t *y,
 		case (ADXL367_FIFO_Z_ID) :
 			if (z == NULL)
 				return -1;
-			*z = ((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i+1];
+			*z = ((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i + 1];
 			//extend sign
 			if (*z & NO_OS_BIT(13))
 				*z |= NO_OS_GENMASK(15, 14);
@@ -1108,7 +1108,7 @@ int adxl367_read_raw_fifo(struct adxl367_dev *dev, int16_t *x, int16_t *y,
 			if (temp_adc == NULL)
 				return -1;
 			*temp_adc = (int16_t)((dev->fifo_buffer[i] & 0x3F) << 8) + dev->fifo_buffer[i
-					+1];
+					+ 1];
 			//extend sign
 			if (*temp_adc & NO_OS_BIT(13))
 				*temp_adc |= NO_OS_GENMASK(15, 14);

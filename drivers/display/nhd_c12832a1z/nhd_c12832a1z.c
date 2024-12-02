@@ -319,7 +319,7 @@ int nhd_c12832a1z_write_cmd(struct nhd_c12832a1z_dev *dev, uint8_t cmd)
 {
 	int ret;
 
-	if(!dev->spi_desc || !dev->dc_pin)
+	if (!dev->spi_desc || !dev->dc_pin)
 		return -EINVAL;
 
 	ret = no_os_gpio_set_value(dev->dc_pin, NHD_C12832A1Z_DC_CMD);
@@ -339,7 +339,7 @@ int nhd_c12832a1z_write_data(struct nhd_c12832a1z_dev *dev, uint8_t data)
 {
 	int ret;
 
-	if(!dev->spi_desc || !dev->dc_pin)
+	if (!dev->spi_desc || !dev->dc_pin)
 		return -EINVAL;
 
 	ret = no_os_gpio_set_value(dev->dc_pin, NHD_C12832A1Z_DC_DATA);
@@ -373,7 +373,7 @@ int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg)
 		int x = (cursor & 0xf) << 3; // segment
 
 		for (i = 0; i < 8; i++)
-			framebuffer_memory[y][x+i] = ASC16[msg[cursor]][i];
+			framebuffer_memory[y][x + i] = ASC16[msg[cursor]][i];
 	}
 
 	ret = nhd_c12832a1z_write_cmd(dev, NHD_C12832A1Z_DISP_OFF);

@@ -49,7 +49,7 @@
 const struct ad5592r_rw_ops ad5593r_rw_ops = {
 	.write_dac = ad5593r_write_dac,
 	.read_adc = ad5593r_read_adc,
-	.multi_read_adc= ad5593r_multi_read_adc,
+	.multi_read_adc = ad5593r_multi_read_adc,
 	.reg_write = ad5593r_reg_write,
 	.reg_read = ad5593r_reg_read,
 	.gpio_read = ad5593r_gpio_read,
@@ -185,7 +185,7 @@ int32_t ad5593r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 	data[1] = value >> 8;
 	data[2] = value;
 
-	ret = no_os_i2c_write(dev->i2c, data,sizeof(data), STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, sizeof(data), STOP_BIT);
 
 	if (reg == AD5592R_REG_RESET && ret < 0) {
 		return 0;
@@ -221,7 +221,7 @@ int32_t ad5593r_reg_read(struct ad5592r_dev *dev, uint8_t reg,
 	if (ret < 0)
 		return ret;
 
-	*value = (uint16_t) (data[0] << 8) + data[1];
+	*value = (uint16_t)(data[0] << 8) + data[1];
 
 	return 0;
 }
@@ -281,7 +281,7 @@ int32_t ad5593r_init(struct ad5592r_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	if(init_param->int_ref) {
+	if (init_param->int_ref) {
 		ret = ad5593r_reg_read(dev, AD5592R_REG_PD, &temp_reg_val);
 		if (ret < 0)
 			return ret;

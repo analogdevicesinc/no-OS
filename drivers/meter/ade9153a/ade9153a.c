@@ -394,11 +394,11 @@ int ade9153a_read(struct ade9153a_dev *dev, uint16_t reg_addr,
 	for (i = 0; i < 8; i++)
 		buff[i] = 0;
 
-	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16,4), reg_addr);
+	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16, 4), reg_addr);
 	no_os_put_unaligned_be16(addr, &buff);
 	buff[1] = buff[1] | ADE9153A_SPI_READ;
 
-	if ((reg_addr > ADE9153A_START_16ADDR ) & (reg_addr < ADE9153A_END_16ADDR)) {
+	if ((reg_addr > ADE9153A_START_16ADDR) & (reg_addr < ADE9153A_END_16ADDR)) {
 		no_of_read_bytes = ADE9153A_NO_BYTES_R_16;
 		ret = no_os_spi_write_and_read(dev->spi_desc, buff,
 					       no_of_read_bytes);
@@ -459,10 +459,10 @@ int ade9153a_write(struct ade9153a_dev *dev, uint16_t reg_addr,
 	if (!dev)
 		return -ENODEV;
 
-	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16,4), reg_addr);
+	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16, 4), reg_addr);
 	no_os_put_unaligned_be16(addr, &buff);
 
-	if ((reg_addr > ADE9153A_START_16ADDR ) & (reg_addr < ADE9153A_END_16ADDR)) {
+	if ((reg_addr > ADE9153A_START_16ADDR) & (reg_addr < ADE9153A_END_16ADDR)) {
 		no_os_put_unaligned_be16(reg_data, &buff[data_byte_offset]);
 		ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADE9153A_NO_BYTES_W_16);
 		if (ret)
@@ -2824,8 +2824,8 @@ int ade9153a_temp_offset_val(struct ade9153a_dev *dev, uint32_t *val)
 	ret = ade9153a_read(dev, ADE9153A_REG_TEMP_TRIM, &reg_val);
 	if (ret)
 		return ret;
-	*val = (uint32_t) ((reg_val >> 16) & ((uint32_t)ADE9153A_TEMP_OFFSET_MSK >>
-					      16));
+	*val = (uint32_t)((reg_val >> 16) & ((uint32_t)ADE9153A_TEMP_OFFSET_MSK >>
+					     16));
 
 	return 0;
 }
@@ -3989,7 +3989,7 @@ int ade9153a_chip_status(struct ade9153a_dev *dev, uint8_t *status)
 		return ret;
 
 	if (no_os_test_bit(no_os_find_first_set_bit(ADE9153A_UART_RESET_MSK),
-			   &reg_val) )
+			   &reg_val))
 		*status = ADE9153A_UART_RESET;
 	else if (no_os_test_bit(no_os_find_first_set_bit(ADE9153A_UART_ERROR2_MSK),
 				&reg_val))
@@ -4070,7 +4070,7 @@ int ade9153a_temp_val(struct ade9153a_dev *dev,
 		return ret;
 
 	// wait for conversion result
-	while(!(status)) {
+	while (!(status)) {
 		ret = ade9153a_get_temp_rdy(dev, &status);
 		no_os_mdelay(1);
 		timeout++;

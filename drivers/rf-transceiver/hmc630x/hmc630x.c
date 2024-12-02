@@ -379,7 +379,7 @@ int hmc630x_write_regmap(struct hmc630x_dev *dev, const uint8_t *regmap)
 	int ret, r, skip1, skip2;
 	uint8_t reg;
 
-	switch(dev->type) {
+	switch (dev->type) {
 	case HMC6301:
 		r = 0;
 		skip1 = 10;
@@ -449,7 +449,7 @@ int hmc630x_read_regmap(struct hmc630x_dev *dev, uint8_t *regmap)
 	int ret, skip1, skip2;
 	uint8_t r;
 
-	switch(dev->type) {
+	switch (dev->type) {
 	case HMC6301:
 		r = 0;
 		skip1 = 10;

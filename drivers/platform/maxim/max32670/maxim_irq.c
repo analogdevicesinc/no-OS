@@ -306,7 +306,7 @@ int max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	struct irq_action *action;
 	struct irq_action action_key = {.irq_id = irq_id};
 
-	if(is_gpio_irq_id(irq_id))
+	if (is_gpio_irq_id(irq_id))
 		return -ENOSYS;
 
 	if (!desc || !callback_desc)
@@ -447,9 +447,9 @@ int max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	int ret;
 	void *discard_action = NULL;
-	struct irq_action action_key= {.irq_id = irq_id};
+	struct irq_action action_key = {.irq_id = irq_id};
 
-	if(is_gpio_irq_id(irq_id))
+	if (is_gpio_irq_id(irq_id))
 		return -ENOSYS;
 
 	if (!desc || !cb)

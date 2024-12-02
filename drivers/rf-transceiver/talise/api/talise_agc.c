@@ -85,8 +85,8 @@ uint32_t TALISE_setupRxAgc(taliseDevice_t *device, taliseAgcCfg_t *rxAgcCtrl)
 	static const uint8_t ENABLE_IP3_OPTIMIZATION_MASK = 0x80;
 
 #if TALISE_VERBOSE
-	halError =talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
-				"TALISE_setupRxAgc()\n");
+	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
+				 "TALISE_setupRxAgc()\n");
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
 				  TALACT_WARN_RESET_LOG);
 #endif
@@ -290,7 +290,7 @@ uint32_t TALISE_setupRxAgc(taliseDevice_t *device, taliseAgcCfg_t *rxAgcCtrl)
 
 
 		/* If C0 silicon or lower, clear [7], do not allow IP3 feature */
-		if(device->devStateInfo.deviceSiRev <= MIN_SUPPORTED_SIREV) {
+		if (device->devStateInfo.deviceSiRev <= MIN_SUPPORTED_SIREV) {
 			agcRegister &= ~ENABLE_IP3_OPTIMIZATION_MASK;
 		}
 
@@ -372,7 +372,7 @@ uint32_t TALISE_setupRxAgc(taliseDevice_t *device, taliseAgcCfg_t *rxAgcCtrl)
 		IF_ERR_RETURN_U32(retVal);
 
 		if (rxAgcCtrl->agcPeak.agcUnderRangeMidInterval &
-		    ~agcUnderRangeMidIntervalMask ) {
+		    ~agcUnderRangeMidIntervalMask) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_INV_AGC_RX_GAIN_UNDERRANGE_MID_INTERVAL_PARM, retVal,
 							  TALACT_ERR_CHECK_PARAM);
@@ -385,7 +385,7 @@ uint32_t TALISE_setupRxAgc(taliseDevice_t *device, taliseAgcCfg_t *rxAgcCtrl)
 		}
 
 		if (rxAgcCtrl->agcPeak.agcUnderRangeHighInterval &
-		    ~agcUnderRangeHighIntervalMask ) {
+		    ~agcUnderRangeHighIntervalMask) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_INV_AGC_RX_GAIN_UNDERRANGE_HIGH_INTERVAL_PARM, retVal,
 							  TALACT_ERR_CHECK_PARAM);
@@ -991,7 +991,7 @@ uint32_t TALISE_getAgcCtrlRegisters(taliseDevice_t *device,
 						  TAL_ERR_INV_AGC_CLK_DIV_RATIO_PARM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	if(agcClock_Hz == 0) {
+	if (agcClock_Hz == 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_INV_AGC_CLK_PARM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
@@ -1541,7 +1541,7 @@ static talRecoveryActions_t talSetupDualBandRx1Agc(taliseDevice_t *device,
 	}
 
 	/* Set the source control */
-	registerValue = (registerValue & ~0x0F ) | ((
+	registerValue = (registerValue & ~0x0F) | ((
 				rxAgcCtrlDualBand->dualBandGpioEnable > 0) ?
 			RX1_DUALBAND_EXT_LNA_SOURCE_CONTROL : 0x00);
 	halError = talSpiWriteByte(device->devHalInfo,
@@ -1563,7 +1563,7 @@ static talRecoveryActions_t talSetupDualBandRx1Agc(taliseDevice_t *device,
 	/* Set upper LNA index */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_RX1_AGC_DUALBAND_INDEX_X,
-				   rxAgcCtrlDualBand->agcRxDualbandExtTableUpperIndex );
+				   rxAgcCtrlDualBand->agcRxDualbandExtTableUpperIndex);
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
@@ -1571,7 +1571,7 @@ static talRecoveryActions_t talSetupDualBandRx1Agc(taliseDevice_t *device,
 	/* Set lower LNA index */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_RX1_AGC_DUALBAND_INDEX_Y,
-				   rxAgcCtrlDualBand->agcRxDualbandExtTableLowerIndex );
+				   rxAgcCtrlDualBand->agcRxDualbandExtTableLowerIndex);
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
@@ -1638,7 +1638,7 @@ static talRecoveryActions_t talSetupDualBandRx2Agc(taliseDevice_t *device,
 	}
 
 	/* Set the source control */
-	registerValue = (registerValue & ~0xF0 ) | (((
+	registerValue = (registerValue & ~0xF0) | (((
 				rxAgcCtrlDualBand->dualBandGpioEnable > 0) ?
 			RX2_DUALBAND_EXT_LNA_SOURCE_CONTROL : 0x00) << 4);
 	halError = talSpiWriteByte(device->devHalInfo,
@@ -1660,7 +1660,7 @@ static talRecoveryActions_t talSetupDualBandRx2Agc(taliseDevice_t *device,
 	/* Set upper LNA index */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_RX2_AGC_DUALBAND_INDEX_X,
-				   rxAgcCtrlDualBand->agcRxDualbandExtTableUpperIndex );
+				   rxAgcCtrlDualBand->agcRxDualbandExtTableUpperIndex);
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
@@ -1668,7 +1668,7 @@ static talRecoveryActions_t talSetupDualBandRx2Agc(taliseDevice_t *device,
 	/* Set lower LNA index */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_RX2_AGC_DUALBAND_INDEX_Y,
-				   rxAgcCtrlDualBand->agcRxDualbandExtTableLowerIndex );
+				   rxAgcCtrlDualBand->agcRxDualbandExtTableLowerIndex);
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
@@ -1683,8 +1683,8 @@ static talRecoveryActions_t talSetupDualBandRx2Agc(taliseDevice_t *device,
 	return retVal;
 }
 
-uint32_t TALISE_setupDualBandRxAgc( taliseDevice_t *device,
-				    taliseRxChannels_t rxChannel, taliseAgcDualBandCfg_t *rxAgcCtrlDualBand)
+uint32_t TALISE_setupDualBandRxAgc(taliseDevice_t *device,
+				   taliseRxChannels_t rxChannel, taliseAgcDualBandCfg_t *rxAgcCtrlDualBand)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 	adiHalErr_t halError = ADIHAL_OK;
@@ -1703,7 +1703,7 @@ uint32_t TALISE_setupDualBandRxAgc( taliseDevice_t *device,
 	}
 
 	/* Check: Null pointer */
-	if ( rxAgcCtrlDualBand == NULL) {
+	if (rxAgcCtrlDualBand == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETUPDUALBANDRXAGC_NULL_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
@@ -1831,20 +1831,20 @@ uint32_t TALISE_getDualBandLnaControls(taliseDevice_t *device,
 	/* Disable gain table read - Otherwise, the readback will read a forced index */
 	halError = talSpiWriteField(device->devHalInfo,
 				    TALISE_ADDR_GAIN_TABLE_CONFIGURATION, 0x0, 0x04, 2);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 
 	/* Read control word for the current LNA index */
 	halError = talSpiReadField(device->devHalInfo, lowerBandAddr,
 				   &rxDualBandLnaControls->rxLowerBandLnaControl, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 
 	halError = talSpiReadField(device->devHalInfo, upperBandAddr,
 				   &rxDualBandLnaControls->rxUpperBandLnaControl, 0x03, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 
@@ -1865,13 +1865,13 @@ uint32_t TALISE_setRxAgcMinMaxGainIndex(taliseDevice_t *device,
 #endif
 
 	/* Ensure that Max Gain Index is always greater than Min Gain Index */
-	if(minGainIndex >= maxGainIndex) {
+	if (minGainIndex >= maxGainIndex) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_INV_AGC_RX_MIN_GAIN_GRT_THAN_MAX_GAIN_PARM, retVal,
 						  TALACT_ERR_CHECK_PARAM);
 	}
 
-	if((rxChannel == TAL_RX1) || (rxChannel == TAL_RX1RX2)) {
+	if ((rxChannel == TAL_RX1) || (rxChannel == TAL_RX1RX2)) {
 		/*Ensure that requested min and max gain indexes are within the range supported by the current chip config*/
 		if ((maxGainIndex > device->devStateInfo.gainIndexes.rx1MaxGainIndex) ||
 		    (minGainIndex < device->devStateInfo.gainIndexes.rx1MinGainIndex)) {
@@ -1893,7 +1893,7 @@ uint32_t TALISE_setRxAgcMinMaxGainIndex(taliseDevice_t *device,
 		IF_ERR_RETURN_U32(retVal);
 	}
 
-	if((rxChannel == TAL_RX2) || (rxChannel == TAL_RX1RX2)) {
+	if ((rxChannel == TAL_RX2) || (rxChannel == TAL_RX1RX2)) {
 		/*Ensure that requested min and max gain indexes are within the range supported by the current chip config*/
 		if ((maxGainIndex > device->devStateInfo.gainIndexes.rx2MaxGainIndex) ||
 		    (minGainIndex < device->devStateInfo.gainIndexes.rx2MinGainIndex)) {

@@ -132,7 +132,7 @@ int8_t ad5449_init(struct ad5449_dev **device,
 			   (AD5449_DAISY_CHAIN_DIS << AD5449_DSY_BIT) | \
 			   (AD5449_ZERO_SCALE << AD5449_HCLR_BIT) | \
 			   (AD5449_CLOCK_NEGEDGE << AD5449_SCLK_BIT);
-	if(chip_info[dev->act_device].has_ctrl) {
+	if (chip_info[dev->act_device].has_ctrl) {
 		ad5449_set_input_shift_reg(dev,
 					   AD5449_CTRL_REG,
 					   dev->control_reg);
@@ -186,7 +186,7 @@ uint16_t ad5449_set_input_shift_reg(struct ad5449_dev *dev,
 	uint8_t data_offset = MAX_RESOLUTION - \
 			      chip_info[dev->act_device].resolution;
 
-	if(command == AD5449_CTRL_REG) {
+	if (command == AD5449_CTRL_REG) {
 		input_shift_reg = ((command & CMD_MASK) << CMD_OFFSET) | \
 				  (data & DATA_MASK);
 	} else {
@@ -221,7 +221,7 @@ void ad5449_load_update_channel(struct ad5449_dev *dev,
 				uint8_t channel,
 				uint16_t dac_value)
 {
-	if(chip_info[dev->act_device].num_channels > 1) {
+	if (chip_info[dev->act_device].num_channels > 1) {
 		ad5449_set_input_shift_reg(dev,
 					   AD5449_CTRL_LOADUPDATE(channel),
 					   dac_value);
@@ -247,7 +247,7 @@ void ad5449_load_channel(struct ad5449_dev *dev,
 			 uint8_t channel,
 			 uint16_t dac_value)
 {
-	if(chip_info[dev->act_device].num_channels > 1) {
+	if (chip_info[dev->act_device].num_channels > 1) {
 		ad5449_set_input_shift_reg(dev,
 					   AD5449_CTRL_LOAD(channel),
 					   dac_value);
@@ -273,7 +273,7 @@ uint16_t ad5449_readback_channel(struct ad5449_dev *dev,
 {
 	uint16_t dac_value = 0;
 
-	if(chip_info[dev->act_device].num_channels > 1) {
+	if (chip_info[dev->act_device].num_channels > 1) {
 		ad5449_set_input_shift_reg(dev,
 					   AD5449_CTRL_READBACK(channel),
 					   0x0);
@@ -301,7 +301,7 @@ uint16_t ad5449_readback_channel(struct ad5449_dev *dev,
 ******************************************************************************/
 void ad5449_update_all(struct ad5449_dev *dev)
 {
-	if(chip_info[dev->act_device].num_channels > 1) {
+	if (chip_info[dev->act_device].num_channels > 1) {
 		ad5449_set_input_shift_reg(dev,
 					   AD5449_CTRL_UPDATEALL,
 					   0x0);
@@ -320,7 +320,7 @@ void ad5449_update_all(struct ad5449_dev *dev)
 void ad5449_load_all(struct ad5449_dev *dev,
 		     int16_t dac_value)
 {
-	if(chip_info[dev->act_device].num_channels > 1) {
+	if (chip_info[dev->act_device].num_channels > 1) {
 		ad5449_set_input_shift_reg(dev,
 					   AD5449_CTRL_LOADALL,
 					   dac_value);
@@ -341,14 +341,14 @@ void ad5449_load_all(struct ad5449_dev *dev,
 void ad5449_clear_scale_setup(struct ad5449_dev *dev,
 			      int8_t type)
 {
-	if(chip_info[dev->act_device].has_ctrl) {
-		if(type == AD5449_ZERO_SCALE) {
+	if (chip_info[dev->act_device].has_ctrl) {
+		if (type == AD5449_ZERO_SCALE) {
 			/* Reset the HCLR bit in the Control Register */
 			dev->control_reg &= ~AD5449_HCLR_MASK;
 			ad5449_set_input_shift_reg(dev,
 						   AD5449_CTRL_REG,
 						   dev->control_reg);
-		} else if(type == AD5449_MID_SCALE) {
+		} else if (type == AD5449_MID_SCALE) {
 			/* Set the HCLR bit in the Control Register */
 			dev->control_reg |= AD5449_HCLR_MASK;
 			ad5449_set_input_shift_reg(dev,
@@ -356,7 +356,7 @@ void ad5449_clear_scale_setup(struct ad5449_dev *dev,
 						   dev->control_reg);
 		}
 	} else {
-		if(type == AD5449_ZERO_SCALE) {
+		if (type == AD5449_ZERO_SCALE) {
 			ad5449_set_input_shift_reg(dev,
 						   AD5449_CTRL_CLR_ZERO,
 						   0x0);
@@ -381,14 +381,14 @@ void ad5449_clear_scale_setup(struct ad5449_dev *dev,
 void ad5449_daisy_chain_setup(struct ad5449_dev *dev,
 			      int8_t value)
 {
-	if(chip_info[dev->act_device].has_ctrl) {
-		if(value == AD5449_DAISY_CHAIN_EN) {
+	if (chip_info[dev->act_device].has_ctrl) {
+		if (value == AD5449_DAISY_CHAIN_EN) {
 			/* Set the DSY bit in the Control Register */
 			dev->control_reg |= AD5449_DSY_MASK;
 			ad5449_set_input_shift_reg(dev,
 						   AD5449_CTRL_REG,
 						   dev->control_reg);
-		} else if(value == AD5449_DAISY_CHAIN_DIS) {
+		} else if (value == AD5449_DAISY_CHAIN_DIS) {
 			/* Reset the DSY bit in the Control Register */
 			dev->control_reg &= ~AD5449_DSY_MASK;
 			ad5449_set_input_shift_reg(dev,
@@ -421,7 +421,7 @@ void ad5449_sdocontrol(struct ad5449_dev *dev,
 		       int8_t control_bits)
 {
 	/* Check if the current device supports this functions */
-	if(chip_info[dev->act_device].has_ctrl) {
+	if (chip_info[dev->act_device].has_ctrl) {
 		/* Reset the SDO bits of the local Control Register */
 		dev->control_reg &= ~AD5449_SDO_MASK;
 		/* Set up the new SDO bits */
@@ -448,14 +448,14 @@ void ad5449_sdocontrol(struct ad5449_dev *dev,
 void ad5449_sclksetup(struct ad5449_dev *dev,
 		      int8_t value)
 {
-	if(chip_info[dev->act_device].has_ctrl) {
-		if(value == AD5449_CLOCK_POSEDGE) {
+	if (chip_info[dev->act_device].has_ctrl) {
+		if (value == AD5449_CLOCK_POSEDGE) {
 			/* Set the SCLK bit in the Control Register */
 			dev->control_reg |= AD5449_SCLK_MASK;
 			ad5449_set_input_shift_reg(dev,
 						   AD5449_CTRL_REG,
 						   dev->control_reg);
-		} else if(value == AD5449_CLOCK_NEGEDGE) {
+		} else if (value == AD5449_CLOCK_NEGEDGE) {
 			/* Reset the SCLK bit in the Control Register */
 			dev->control_reg &= ~AD5449_SCLK_MASK;
 			ad5449_set_input_shift_reg(dev,

@@ -44,8 +44,8 @@
  *
  * \note indata and outdata arrays are of same size.
  */
-typedef int (*spi_xfer_t) (void *user_data, uint8_t *indata, uint8_t *outdata,
-			   int size_bytes);
+typedef int (*spi_xfer_t)(void *user_data, uint8_t *indata, uint8_t *outdata,
+			  int size_bytes);
 
 /**
  * \brief Delay for specified number of microseconds. Platform Dependant.
@@ -59,7 +59,7 @@ typedef int (*spi_xfer_t) (void *user_data, uint8_t *indata, uint8_t *outdata,
  *
  * \param us - time to delay/sleep in microseconds.
  */
-typedef int (*delay_us_t) (void *user_data, unsigned int us);
+typedef int (*delay_us_t)(void *user_data, unsigned int us);
 
 /**
  * \brief Platform hardware initialisation for the AD9164 Device
@@ -77,7 +77,7 @@ typedef int (*delay_us_t) (void *user_data, unsigned int us);
  * \retval Any non-zero value indicates an error
  *
  */
-typedef int (*hw_open_t) (void *user_data);
+typedef int (*hw_open_t)(void *user_data);
 
 /**
  * \brief Closes any platform hardware resources for the AD9164 Device
@@ -95,7 +95,7 @@ typedef int (*hw_open_t) (void *user_data);
  * \retval Any non-zero value indicates an error
  *
  */
-typedef int (*hw_close_t) (void *user_data);
+typedef int (*hw_close_t)(void *user_data);
 /**
  * \brief Client  Event Handler
  *
@@ -110,7 +110,7 @@ typedef int (*hw_close_t) (void *user_data);
  *
  * \note
  */
-typedef int (*event_handler_t) (uint16_t event, uint8_t ref, void *data);
+typedef int (*event_handler_t)(uint16_t event, uint8_t ref, void *data);
 
 /**
  * \brief TX_ENABLE PIN CONTROL FUNCTION
@@ -130,7 +130,7 @@ typedef int (*event_handler_t) (uint16_t event, uint8_t ref, void *data);
  *
  * \note
  */
-typedef int (*tx_en_pin_ctrl_t) (void *user_data, uint8_t enable);
+typedef int (*tx_en_pin_ctrl_t)(void *user_data, uint8_t enable);
 
 /**
  * \brief RESETB PIN CONTROL FUNCTION
@@ -149,7 +149,7 @@ typedef int (*tx_en_pin_ctrl_t) (void *user_data, uint8_t enable);
  *
  * \note
  */
-typedef int (*reset_pin_ctrl_t) (void *user_data, uint8_t enable);
+typedef int (*reset_pin_ctrl_t)(void *user_data, uint8_t enable);
 
 /** API register access structure */
 struct adi_reg_data {

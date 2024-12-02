@@ -163,7 +163,7 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 	idesc = (struct no_os_i2c_desc *)no_os_malloc(sizeof(*idesc));
 	xdesc = (struct xil_i2c_desc *)no_os_malloc(sizeof(*xdesc));
 
-	if(!idesc || !xdesc)
+	if (!idesc || !xdesc)
 		goto error;
 
 	idesc->max_speed_hz = param->max_speed_hz;
@@ -195,36 +195,36 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 		}
 
 		xdesc->instance = (XIic *)no_os_malloc(sizeof(XIic));
-		if(!xdesc->instance)
+		if (!xdesc->instance)
 			goto pl_error;
 
 		xdesc->config = XIic_LookupConfig(xinit->device_id);
-		if(xdesc->config == NULL)
+		if (xdesc->config == NULL)
 			goto pl_error;
 
 		ret = XIic_CfgInitialize(xdesc->instance,
 					 xdesc->config,
 					 ((XIic_Config*)xdesc->config)
 					 ->BaseAddress);
-		if(ret != 0)
+		if (ret != 0)
 			goto pl_error;
 
 		ret = XIic_Start(xdesc->instance);
-		if(ret != 0)
+		if (ret != 0)
 			goto pl_error;
 
 		ret = XIic_SetAddress(xdesc->instance,
 				      XII_ADDR_TO_SEND_TYPE,
 				      param->slave_address);
-		if(ret != 0)
+		if (ret != 0)
 			goto pl_error;
 
 		ret = XIic_SelfTest(xdesc->instance);
-		if(ret < 0)
+		if (ret < 0)
 			goto pl_error;
 
 		ret = XIic_SetGpOutput(xdesc->instance, 1);
-		if(ret < 0)
+		if (ret < 0)
 			goto pl_error;
 
 		temp_el_pl = (struct inst_table_item*)no_os_calloc(1, sizeof(*temp_el_pl));
@@ -260,18 +260,18 @@ pl_error:
 		}
 
 		xdesc->instance = (XIicPs *)no_os_malloc(sizeof(XIicPs));
-		if(!xdesc->instance)
+		if (!xdesc->instance)
 			goto ps_error;
 
 		xdesc->config = XIicPs_LookupConfig(xinit->device_id);
-		if(xdesc->config == NULL)
+		if (xdesc->config == NULL)
 			goto ps_error;
 
 		ret = XIicPs_CfgInitialize(xdesc->instance,
 					   xdesc->config,
 					   ((XIicPs_Config*)xdesc->config)
 					   ->BaseAddress);
-		if(ret != 0)
+		if (ret != 0)
 			goto ps_error;
 
 		XIicPs_SetSClk(xdesc->instance, param->max_speed_hz);
@@ -333,7 +333,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 
 		ret = XIic_Stop(((XIic *)xdesc->instance));
 
-		if(ret != 0)
+		if (ret != 0)
 			goto error;
 
 		/** Remove list element */
@@ -417,14 +417,14 @@ int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 
 		ret = XIicPs_SetOptions(xdesc->instance,
 					stop_bit ? 0 : XIICPS_REP_START_OPTION);
-		if(ret != 0)
+		if (ret != 0)
 			goto error;
 
 		XIicPs_MasterSend(xdesc->instance,
 				  data,
 				  bytes_number,
 				  desc->slave_address);
-		if(ret != 0)
+		if (ret != 0)
 			goto error;
 
 		break;
@@ -471,7 +471,7 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 				data,
 				bytes_number,
 				stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
-		if(ret != bytes_number)
+		if (ret != bytes_number)
 			goto error;
 
 		break;
@@ -485,14 +485,14 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 
 		ret = XIicPs_SetOptions(xdesc->instance,
 					stop_bit ? 0 : XIICPS_REP_START_OPTION);
-		if(ret != 0)
+		if (ret != 0)
 			goto error;
 
 		XIicPs_MasterRecv(xdesc->instance,
 				  data,
 				  bytes_number,
 				  desc->slave_address);
-		if(ret != 0)
+		if (ret != 0)
 			goto error;
 
 		break;

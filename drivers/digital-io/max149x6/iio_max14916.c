@@ -68,7 +68,7 @@ static int max14916_iio_reg_read(struct max14916_iio_desc *, uint32_t,
 				 uint32_t *);
 
 static int max14916_iio_reg_write(struct max14916_iio_desc *, uint32_t,
-				  uint32_t );
+				  uint32_t);
 
 static struct iio_attribute max14916_attrs[] = {
 	{

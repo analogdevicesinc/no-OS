@@ -125,7 +125,7 @@ int32_t chibios_spi_write_and_read(struct no_os_spi_desc *desc,
 
 	//send and receive buffer
 	//switch implementation to support two word transfer as well
-	while(bytes_number--) {
+	while (bytes_number--) {
 		spiExchange((sdesc->hspi), 1, data, data);
 		data++;
 	}

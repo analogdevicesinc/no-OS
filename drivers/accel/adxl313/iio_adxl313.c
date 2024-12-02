@@ -971,7 +971,7 @@ static int adxl313_iio_read_samples(void* dev, int16_t* buff, uint32_t samples)
 
 	adxl313 = iio_adxl313->adxl313_dev;
 
-	for(uint32_t i = 0; i < samples*iio_adxl313->no_of_active_channels;) {
+	for (uint32_t i = 0; i < samples * iio_adxl313->no_of_active_channels;) {
 		ret = adxl313_get_raw_xyz(adxl313, &data_x, &data_y, &data_z);
 		if (ret)
 			return ret;

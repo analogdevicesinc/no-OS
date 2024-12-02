@@ -64,7 +64,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	int32_t ret;
 	struct no_os_rtc_desc *dev;
 
-	if(!init_param)
+	if (!init_param)
 		return -EINVAL;
 
 	dev = no_os_calloc(1, sizeof(*dev));
@@ -113,7 +113,7 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
 {
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	MXC_RTC_Start();
 
 	return 0;
@@ -126,7 +126,7 @@ int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
 {
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	MXC_RTC_Stop();
 
 	return 0;
@@ -156,23 +156,23 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 	mxc_rtc_regs_t *rtc_regs;
 
 	if (!dev)
-		return-EINVAL;
+		return -EINVAL;
 
 	rtc_regs = MXC_RTC;
 
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	rtc_regs->ctrl |= MXC_F_RTC_REVA_CTRL_WR_EN;
 
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	no_os_rtc_stop(dev);
 
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	rtc_regs->sec = tmr_cnt;
 
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	no_os_rtc_start(dev);
 
-	while(MXC_RTC_GetBusyFlag());
+	while (MXC_RTC_GetBusyFlag());
 	rtc_regs->ctrl &= ~MXC_F_RTC_REVA_CTRL_WR_EN;
 
 	return 0;
