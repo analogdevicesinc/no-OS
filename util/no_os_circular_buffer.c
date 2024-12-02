@@ -276,7 +276,7 @@ static int32_t no_os_cb_operation(struct no_os_circular_buffer *desc,
 			sticky_overrun = true;
 
 		/* If no data is available return error */
-		if(!available_size)
+		if (!available_size)
 			return -1;
 
 		if (is_read)
