@@ -346,7 +346,7 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 #elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
-	if(status < 0)
+	if (status < 0)
 		goto error;
 #else
 	iio_init_param.phy_type = USE_UART;
@@ -394,7 +394,7 @@ int iio_app_init(struct iio_app_desc **app,
 	iio_init_param.nb_ctx_attr = app_init_param.nb_ctx_attr;
 
 	status = iio_init(&application->iio_desc, &iio_init_param);
-	if(status < 0)
+	if (status < 0)
 		goto error;
 
 	no_os_free(iio_init_devs);

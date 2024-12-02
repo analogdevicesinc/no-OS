@@ -109,7 +109,7 @@ error:
 */
 int iio_trig_enable(void *trig)
 {
-	if(!trig)
+	if (!trig)
 		return -EINVAL;
 
 	struct iio_hw_trig *desc = trig;
@@ -126,7 +126,7 @@ int iio_trig_enable(void *trig)
 */
 int iio_trig_disable(void *trig)
 {
-	if(!trig)
+	if (!trig)
 		return -EINVAL;
 
 	struct iio_hw_trig *desc = trig;
@@ -142,7 +142,7 @@ int iio_trig_disable(void *trig)
 */
 void iio_hw_trig_handler(void *trig)
 {
-	if(!trig)
+	if (!trig)
 		return;
 
 	struct iio_hw_trig *desc = trig;
@@ -159,7 +159,7 @@ void iio_hw_trig_handler(void *trig)
 */
 int iio_hw_trig_remove(struct iio_hw_trig *trig)
 {
-	if(trig)
+	if (trig)
 		no_os_free(trig);
 
 	return 0;
@@ -209,7 +209,7 @@ int iio_sw_trig_handler(void *trig, char *buf, uint32_t len,
 			const struct iio_ch_info *channel,
 			intptr_t priv)
 {
-	if(!trig)
+	if (!trig)
 		return -EINVAL;
 
 	struct iio_sw_trig *desc = trig;
@@ -226,7 +226,7 @@ int iio_sw_trig_handler(void *trig, char *buf, uint32_t len,
 */
 int iio_sw_trig_remove(struct iio_sw_trig *trig)
 {
-	if(trig)
+	if (trig)
 		no_os_free(trig);
 
 	return 0;

@@ -271,11 +271,11 @@ static int iio_send(struct iiod_ctx *ctx, uint8_t *buf, uint32_t len)
 
 static inline void _print_ch_id(char *buff, struct iio_channel *ch)
 {
-	if(ch->modified) {
+	if (ch->modified) {
 		sprintf(buff, "%s_%s", iio_chan_type_string[ch->ch_type],
 			iio_modifier_names[ch->channel2]);
 	} else {
-		if(ch->indexed) {
+		if (ch->indexed) {
 			if (ch->diferential)
 				sprintf(buff, "%s%d-%s%d", iio_chan_type_string[ch->ch_type],
 					(int)ch->channel, iio_chan_type_string[ch->ch_type],
@@ -363,7 +363,7 @@ static int iio_set_buffers_count(struct iiod_ctx *ctx, const char *device,
 {
 	struct iio_desc *desc = ctx->instance;
 
-	if(!get_iio_device(desc, device))
+	if (!get_iio_device(desc, device))
 		return -ENODEV;
 
 	/* Our implementation uses a circular buffer to send/receive data so
@@ -844,7 +844,7 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 	trig_dev = get_iio_trig_device(ctx->instance, device);
 
 	/* If IIO trigger with given name is found, handle reading of attributes */
-	if(trig_dev) {
+	if (trig_dev) {
 		params.ch_info = NULL; /* Triggers cannot have channels */
 		params.buf = buf;
 		params.len = len;
@@ -921,7 +921,7 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 	trig_dev = get_iio_trig_device(ctx->instance, device);
 
 	/* If IIO trigger with given name is found, handle writing of attributes */
-	if(trig_dev) {
+	if (trig_dev) {
 		params.ch_info = NULL; /* Triggers cannot have channels */
 		params.buf = (char *)buf;
 		params.len = len;
@@ -1263,7 +1263,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	}
 
 	desc = ctx->instance;
-	if(dev->trig_idx != NO_TRIGGER) {
+	if (dev->trig_idx != NO_TRIGGER) {
 		trig = &desc->trigs[dev->trig_idx];
 		if (trig->descriptor->disable) {
 			ret = trig->descriptor->disable(trig->instance);
@@ -1289,12 +1289,12 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		return -EINVAL;
 
 	dev->buffer.public.dir = dir;
-	if (dev->dev_descriptor->submit && dev->trig_idx==NO_TRIGGER)
+	if (dev->dev_descriptor->submit && dev->trig_idx == NO_TRIGGER)
 		return dev->dev_descriptor->submit(&dev->dev_data);
 	else if ((dir == IIO_DIRECTION_INPUT && dev->dev_descriptor->read_dev
-		  && dev->trig_idx==NO_TRIGGER)
+		  && dev->trig_idx == NO_TRIGGER)
 		 || (dir == IIO_DIRECTION_OUTPUT &&
-		     dev->dev_descriptor->write_dev && dev->trig_idx==NO_TRIGGER)) {
+		     dev->dev_descriptor->write_dev && dev->trig_idx == NO_TRIGGER)) {
 		/* Code used to don't break devices using read_dev */
 		int32_t ret;
 		void *buff;
@@ -1627,7 +1627,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<channel id=\"%s\"",
 				      ch_id);
-			if(ch->name)
+			if (ch->name)
 				i += snprintf(buff + i, no_os_max(n - i, 0),
 					      " name=\"%s\"",
 					      ch->name);
