@@ -711,7 +711,7 @@ static int32_t iiod_read_line(struct iiod_desc *desc,
 
 	while (conn->parser_idx < IIOD_PARSER_MAX_BUF_SIZE - 1) {
 		ch = conn->parser_buf + conn->parser_idx;
-		ret = desc->ops.recv(&ctx,(uint8_t *)ch, 1);
+		ret = desc->ops.recv(&ctx, (uint8_t *)ch, 1);
 		if (ret == -EAGAIN || ret == 0)
 			return -EAGAIN;
 
