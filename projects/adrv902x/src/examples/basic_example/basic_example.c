@@ -356,7 +356,7 @@ int basic_example_main(void)
 	}
 
 	jesd204_topology_init(&topology, devs,
-			      sizeof(devs)/sizeof(*devs));
+			      sizeof(devs) / sizeof(*devs));
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 

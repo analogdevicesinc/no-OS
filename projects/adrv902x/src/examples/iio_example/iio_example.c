@@ -68,8 +68,8 @@
 #include "iio_app.h"
 
 
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(1024)));
-uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
+uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
 			aligned(1024)));
 
 /******************************************************************************/
@@ -376,7 +376,7 @@ int iio_example_main(void)
 	}
 
 	jesd204_topology_init(&topology, devs,
-			      sizeof(devs)/sizeof(*devs));
+			      sizeof(devs) / sizeof(*devs));
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
@@ -460,7 +460,7 @@ int iio_example_main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if(status < 0)
+	if (status < 0)
 		goto error_10;
 
 	struct iio_data_buffer read_buff = {
@@ -478,7 +478,7 @@ int iio_example_main(void)
 	};
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if(status < 0)
+	if (status < 0)
 		goto error_11;
 	struct iio_data_buffer write_buff = {
 		.buff = (void *)dac_buffer,

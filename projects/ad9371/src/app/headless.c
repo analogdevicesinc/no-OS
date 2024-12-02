@@ -74,8 +74,8 @@ extern ad9528Device_t clockAD9528_;
 extern mykonosDevice_t mykDevice;
 
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(1024)));
-uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
+uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
 			aligned(1024)));
 #endif
 /***************************************************************************//**
@@ -956,7 +956,7 @@ int main(void)
 	axi_dmac_transfer_start(rx_dmac, &read_transfer);
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
@@ -1062,7 +1062,7 @@ int main(void)
 	struct iio_device *adc_dev_desc, *dac_dev_desc;
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
@@ -1075,7 +1075,7 @@ int main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	iio_axi_adc_obs_init_par = (struct iio_axi_adc_init_param) {
@@ -1089,7 +1089,7 @@ int main(void)
 
 	status = iio_axi_adc_init(&iio_axi_adc_obs_desc,
 				  &iio_axi_adc_obs_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	struct iio_data_buffer read_buff = {
@@ -1109,7 +1109,7 @@ int main(void)
 	};
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 	struct iio_data_buffer write_buff = {
 		.buff = (void *)dac_buffer,

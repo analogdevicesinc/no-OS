@@ -112,7 +112,7 @@ static bool app_driver_enabled(void)
 {
 	if ((driver_enable && HAL_GetMBSwitchState()) != last_enable) {
 		last_enable = driver_enable && HAL_GetMBSwitchState();
-		DBG_MSG("APP: Driver %s\n\r", last_enable? "Enabled": "Disabled");
+		DBG_MSG("APP: Driver %s\n\r", last_enable ? "Enabled" : "Disabled");
 	}
 
 	return last_enable;
@@ -155,17 +155,17 @@ static void app_change_resolution(struct axi_clkgen *clk_gen_core)
 	char received_char;
 
 #if defined(_XPARAMETERS_PS_H_)
-	if(XUartPs_IsReceiveData(UART_BASEADDR)) {
+	if (XUartPs_IsReceiveData(UART_BASEADDR)) {
 #else
-	if(!XUartLite_IsReceiveEmpty(UART_BASEADDR)) {
+	if (!XUartLite_IsReceiveEmpty(UART_BASEADDR)) {
 #endif
 		received_char = inbyte();
-		if((received_char >= 0x30) && (received_char <= 0x36)) {
+		if ((received_char >= 0x30) && (received_char <= 0x36)) {
 			SetVideoResolution(clk_gen_core, (received_char - 0x30));
 			DBG_MSG("Resolution was changed to %s \r\n",
 				resolutions[received_char - 0x30]);
 		} else {
-			if((received_char != 0x0A) && (received_char != 0x0D)) {
+			if ((received_char != 0x0A) && (received_char != 0x0D)) {
 				SetVideoResolution(clk_gen_core, RESOLUTION_640x480);
 				DBG_MSG("Resolution was changed to %s \r\n", resolutions[0]);
 			}
@@ -209,16 +209,16 @@ static int32_t app_set_i2c_mux(struct no_os_i2c_desc *adv7511_i2c)
 	mem_val = pca9548_setup;
 
 	ret = no_os_i2c_init(&i2c_mux, &i2c_mux_init);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = no_os_i2c_write(i2c_mux, &pca9548_setup, byte_transfer_no, stop_bit);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	pca9548_setup = 0xdd;
 	ret = no_os_i2c_read(i2c_mux, &pca9548_setup, byte_transfer_no, stop_bit);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
-	if(pca9548_setup != mem_val)
+	if (pca9548_setup != mem_val)
 		return -1;
 	return no_os_i2c_remove(i2c_mux);
 
@@ -264,16 +264,16 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 	struct no_os_callback_desc cb_desc_temp;
 
 	ret = no_os_timer_init(timer_inst_ptr, timer_inits);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	xil_tmr = (*timer_inst_ptr)->extra;
 	ret = no_os_i2c_init(adv7511_i2c, adv7511_i2c_init);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ps_i2c_extra = (*adv7511_i2c)->extra;
 
 	ret = no_os_irq_ctrl_init(gic_inst_ptr, gic_init);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	no_os_irq_global_enable(*gic_inst_ptr);
 #if defined(_XPARAMETERS_PS_H_)
@@ -286,18 +286,18 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 	ret = no_os_irq_register_callback(*gic_inst_ptr, timer_int_nr, &cb_desc_temp);
 	XTmrCtr_SetHandler(xil_tmr->instance, timer_isr, xil_tmr->instance);
 #endif
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = no_os_irq_enable(*gic_inst_ptr, timer_int_nr);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	cb_desc_temp.callback = XIic_InterruptHandler;
 	cb_desc_temp.ctx = &ps_i2c_extra->instance;
 	ret = no_os_irq_register_callback(*gic_inst_ptr, i2c_int_nr, &cb_desc_temp);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = no_os_irq_enable(*gic_inst_ptr, i2c_int_nr);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	no_os_timer_start(*timer_inst_ptr);
@@ -385,10 +385,10 @@ int main()
 
 	ret = hal_platform_init(&adv7511_i2c, &adv7511_i2c_init, &timer_inst_ptr,
 				&timer_init, &gic_inst_ptr, &gic_init);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = axi_clkgen_init(&clk_gen_core, &clk_gen_core_initial);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	transmitter_link_clkgen(clk_gen_core);
 
@@ -407,8 +407,8 @@ int main()
 
 	start_count = HAL_GetCurrentMsCount();
 
-	while(1) {
-		if (ATV_GetElapsedMs (start_count, NULL) >= HDMI_CALL_INTERVAL_MS) {
+	while (1) {
+		if (ATV_GetElapsedMs(start_count, NULL) >= HDMI_CALL_INTERVAL_MS) {
 			start_count = HAL_GetCurrentMsCount();
 			if (app_driver_enabled())
 				ADIAPI_TransmitterMain();

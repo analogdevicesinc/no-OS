@@ -76,7 +76,7 @@ int main(void)
 			return ret;
 	}
 
-	while(1) {
+	while (1) {
 		/* Read data from the ADC */
 		ret = ad7124_wait_for_conv_ready(dev, timeout);
 		if (ret != 0)

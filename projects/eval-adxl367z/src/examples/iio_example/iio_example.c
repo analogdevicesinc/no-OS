@@ -47,7 +47,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*4*sizeof(int16_t)];
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 4 * sizeof(int16_t)];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -65,7 +65,7 @@ int iio_example_main()
 	struct adxl367_iio_init_param adxl367_iio_ip;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*4*sizeof(int16_t)
+		.size = DATA_BUFFER_SIZE * 4 * sizeof(int16_t)
 	};
 
 	adxl367_iio_ip.adxl367_initial_param = &init_param;

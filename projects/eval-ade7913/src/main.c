@@ -269,7 +269,7 @@ int main(void)
 	ade7913_dev->burst_mode = ENABLE;
 
 	// main loop
-	while(1) {
+	while (1) {
 		if (get_drdy_flag_state() >= 1) {
 			// Reset data ready flag
 			reset_drdy_low_flag_state();

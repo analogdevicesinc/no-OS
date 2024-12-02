@@ -94,9 +94,9 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 /******************************************************************************/
 
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned(1024)));
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 #endif
-uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
+uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
 			aligned(1024)));
 
 #define AD9361_ADC_DAC_BYTES_PER_SAMPLE 2
@@ -682,7 +682,7 @@ int main(void)
 	struct no_os_irq_ctrl_desc *irq_desc;
 
 	status = no_os_irq_ctrl_init(&irq_desc, &irq_init_param);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	status = no_os_irq_global_enable(irq_desc);
@@ -696,16 +696,16 @@ int main(void)
 
 	status = no_os_irq_register_callback(irq_desc,
 					     AD9361_ADC_DMA_IRQ_INTR, &rx_dmac_callback);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	status = no_os_irq_trigger_level_set(irq_desc,
 					     AD9361_ADC_DMA_IRQ_INTR, NO_OS_IRQ_LEVEL_HIGH);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	status = no_os_irq_enable(irq_desc, AD9361_ADC_DMA_IRQ_INTR);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	samples = 2048;
@@ -724,11 +724,11 @@ int main(void)
 
 	status = no_os_irq_register_callback(irq_desc,
 					     AD9361_DAC_DMA_IRQ_INTR, &tx_dmac_callback);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	status = no_os_irq_enable(irq_desc, AD9361_DAC_DMA_IRQ_INTR);
-	if(status < 0)
+	if (status < 0)
 		return status;
 #endif
 
@@ -773,7 +773,7 @@ int main(void)
 
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
-	if(status < 0)
+	if (status < 0)
 		return status;
 #else
 	struct axi_dma_transfer read_transfer = {
@@ -794,7 +794,7 @@ int main(void)
 
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
-	if(status < 0)
+	if (status < 0)
 		return status;
 #endif
 #ifdef XILINX_PLATFORM
@@ -923,7 +923,7 @@ int main(void)
 #endif
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if(status < 0)
+	if (status < 0)
 		return status;
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
@@ -936,7 +936,7 @@ int main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 
@@ -951,7 +951,7 @@ int main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_b_desc, &iio_axi_adc_b_init_par);
-	if(status < 0)
+	if (status < 0)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_b_desc, &adc_b_dev_desc);
 #endif
@@ -1061,7 +1061,7 @@ int main(void)
 			no_os_mdelay(1000);
 
 			if (ad9361_phy->pdata->ensm_pin_pulse_mode) {
-				while(1) {
+				while (1) {
 					no_os_gpio_set_value(gpio_txnrx_pin, 0);
 					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 1);
@@ -1099,7 +1099,7 @@ int main(void)
 					no_os_mdelay(1000);
 				}
 			} else {
-				while(1) {
+				while (1) {
 					no_os_gpio_set_value(gpio_txnrx_pin, 0);
 					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 1);
@@ -1134,7 +1134,7 @@ int main(void)
 				}
 			}
 		} else {
-			while(1) {
+			while (1) {
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_RX);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - RX: %s\n",

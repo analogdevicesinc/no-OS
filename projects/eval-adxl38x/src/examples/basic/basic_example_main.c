@@ -89,7 +89,7 @@ int basic_example_main()
 		pr_info(" Device Type = ADXL380\n");
 	no_os_mdelay(500);
 
-	while(1) {
+	while (1) {
 		ret = adxl38x_get_sts_reg(adxl38x_desc, &device_flags);
 		if (ret)
 			goto error;

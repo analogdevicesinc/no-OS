@@ -80,11 +80,11 @@ int main(int argc, char *argv[])
 	};
 
 	ret = platform_init();
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 
 	ret = no_os_irq_ctrl_init(&irq_dut, &irq_init);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 
 	ret = no_os_irq_global_enable(irq_dut);

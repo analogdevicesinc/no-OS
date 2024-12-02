@@ -64,10 +64,10 @@ int basic_example_main()
 
 	while (1) {
 		/* Clear the screen. */
-		printf("%c",27);
-		printf("%c",'[');
-		printf("%c",'2');
-		printf("%c",'J');
+		printf("%c", 27);
+		printf("%c", '[');
+		printf("%c", '2');
+		printf("%c", 'J');
 
 		ret = adt75_get_single_temp(adt75_desc, &val);
 		if (ret)

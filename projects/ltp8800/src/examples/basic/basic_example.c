@@ -69,7 +69,7 @@ int basic_example_main()
 	if (ret)
 		goto exit;
 
-	while(1) {
+	while (1) {
 		ret = ltp8800_read_value(dev, LTP8800_VIN, &vals[0]);
 		if (ret)
 			goto exit;

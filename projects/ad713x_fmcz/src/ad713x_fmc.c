@@ -338,7 +338,7 @@ int main()
 	struct iio_app_init_param app_init_param = { 0 };
 
 	ret = iio_dual_ad713x_init(&iio_ad713x, &iio_ad713x_init_par);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 
 	iio_dual_ad713x_get_dev_descriptor(iio_ad713x, &ad713x_dev_desc);
@@ -383,18 +383,18 @@ int main()
 				  AD7134_FMC_SAMPLE_NO * AD7134_FMC_CH_NO *
 				  sizeof(uint32_t));
 
-	for(i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
+	for (i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
 		j = 0;
 		printf("%lu: ", i);
-		while(j < 8) {
-			adc_buffer[AD7134_FMC_CH_NO*i+j] &= 0xffffff00;
-			adc_buffer[AD7134_FMC_CH_NO*i+j] >>= 8;
-			data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO*i+j];
-			if(data > 4.095)
+		while (j < 8) {
+			adc_buffer[AD7134_FMC_CH_NO * i + j] &= 0xffffff00;
+			adc_buffer[AD7134_FMC_CH_NO * i + j] >>= 8;
+			data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO * i + j];
+			if (data > 4.095)
 				data = data - 8.192;
 			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
-			       adc_buffer[AD7134_FMC_CH_NO*i+j], data);
-			if(j == 7)
+			       adc_buffer[AD7134_FMC_CH_NO * i + j], data);
+			if (j == 7)
 				printf("\n");
 			j++;
 		}

@@ -135,72 +135,72 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 	struct no_os_gpio_desc *gpio_adc_agc2;
 
 	ret = no_os_gpio_get(&gpio_adc_oen, &gpio_adc_oen_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_s0, &gpio_adc_s0_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_s1, &gpio_adc_s1_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_sela, &gpio_adc_sela_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_selb, &gpio_adc_selb_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_resetb, &gpio_adc_resetb_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_agc1, &gpio_adc_agc1_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_agc2, &gpio_adc_agc2_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_direction_output(gpio_adc_oen, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	switch (init_param.decimation) {
 	case 12:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		break;
 	case 16:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		break;
 	case 24:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		break;
 	case 32:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		break;
 	default:
@@ -209,28 +209,28 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 
 	if (init_param.use_extclk) {
 		ret = no_os_gpio_direction_output(gpio_adc_sela, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_selb, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 	} else {
 		ret = no_os_gpio_direction_output(gpio_adc_sela, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_selb, 1);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 	}
 
 	ret = no_os_gpio_direction_output(gpio_adc_resetb, 1);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	ret = no_os_gpio_direction_output(gpio_adc_agc1, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	ret = no_os_gpio_direction_output(gpio_adc_agc2, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	no_os_gpio_remove(gpio_adc_oen);
@@ -355,21 +355,21 @@ int main(void)
 
 	// receiver DMA configuration
 	ret = no_os_gpio_get(&gpio_sysref, &gpio_sysref_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_direction_output(gpio_sysref, 1);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	// set up clock
 	ret = ad6676_gpio_config(ad6676_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	// set up the device
 	ret = ad6676_setup(&ad6676_device, ad6676_param);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	// set up the XCVR core
@@ -408,11 +408,11 @@ int main(void)
 
 	// PRBS test
 	ad6676_test(ad6676_device, TESTGENMODE_PN9_SEQ);
-	if(axi_adc_pn_mon(ad6676_core, AXI_ADC_PN9, 10) == -1) {
+	if (axi_adc_pn_mon(ad6676_core, AXI_ADC_PN9, 10) == -1) {
 		pr_err("%s ad6676 - PN23 sequence mismatch!\n", __func__);
 	};
 	ad6676_test(ad6676_device, TESTGENMODE_PN23_SEQ);
-	if(axi_adc_pn_mon(ad6676_core, AXI_ADC_PN23, 10) == -1) {
+	if (axi_adc_pn_mon(ad6676_core, AXI_ADC_PN23, 10) == -1) {
 		pr_err("%s ad6676 - PN23 sequence mismatch!\n", __func__);
 	};
 
@@ -437,10 +437,10 @@ int main(void)
 	axi_dmac_transfer_start(ad6676_dmac, &transfer_test);
 	/* Wait until transfer finishes */
 	int32_t status = axi_dmac_transfer_wait_completion(ad6676_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 	/* Flush cache data. */
-	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 2);
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 
 	// capture data with DMA
 	ad6676_test(ad6676_device, TESTGENMODE_OFF);
@@ -460,10 +460,10 @@ int main(void)
 	axi_dmac_transfer_start(ad6676_dmac, &transfer_capture);
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(ad6676_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 	/* Flush cache data. */
-	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 2);
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 
 #ifdef IIO_SUPPORT
 	struct xil_uart_init_param platform_uart_init_par = {

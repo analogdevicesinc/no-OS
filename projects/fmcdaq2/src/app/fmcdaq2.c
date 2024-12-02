@@ -418,7 +418,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.high_density = false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 10000000/40,
+		.device_clk_khz = 10000000 / 40,
 		.lane_clk_khz = 10000000
 	};
 	dev_init->ad9680_jesd_param = (struct jesd204_rx_init) {
@@ -427,7 +427,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.octets_per_frame = 1,
 		.frames_per_multiframe = 32,
 		.subclass = 1,
-		.device_clk_khz = 10000000/40,
+		.device_clk_khz = 10000000 / 40,
 		.lane_clk_khz = 10000000
 	};
 
@@ -626,11 +626,11 @@ static int fmcdaq2_test(struct fmcdaq2_dev *dev,
 
 	/* receive path testing */
 	ad9680_test(dev->ad9680_device, AD9680_TEST_PN9);
-	if(axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN9, 10) == -1) {
+	if (axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN9, 10) == -1) {
 		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
 	};
 	ad9680_test(dev->ad9680_device, AD9680_TEST_PN23);
-	if(axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN23A, 10) == -1) {
+	if (axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN23A, 10) == -1) {
 		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
@@ -657,9 +657,9 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 		.rate = 3
 	};
 
-	for(uint32_t n=0;
-	    n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.lane_mux);
-	    n++)
+	for (uint32_t n = 0;
+	     n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.lane_mux);
+	     n++)
 		dev_init->ad9144_param.lane_mux[n] = n;
 
 	dev_init->ad9144_param.stpl_samples[0][0] =
@@ -718,7 +718,7 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
-	dev_init->ad9144_dmac_param = (struct axi_dmac_init ) {
+	dev_init->ad9144_dmac_param = (struct axi_dmac_init) {
 		.name = "ad9144_dmac",
 		.base = TX_DMA_BASEADDR,
 		.irq_option = IRQ_DISABLED
@@ -821,13 +821,13 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 
 	uint8_t mode = 0;
 
-	printf ("Available sampling rates:\n");
-	printf ("\t1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
-	printf ("\t2 - ADC  500 MSPS; DAC 1000 MSPS\n");
-	printf ("\t3 - ADC  500 MSPS; DAC  500 MSPS\n");
-	printf ("\t4 - ADC  600 MSPS; DAC  600 MSPS\n");
-	printf ("\t5 - ADC 1000 MSPS; DAC 2000 MSPS (2x interpolation)\n");
-	printf ("choose an option [default 1]:\n");
+	printf("Available sampling rates:\n");
+	printf("\t1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
+	printf("\t2 - ADC  500 MSPS; DAC 1000 MSPS\n");
+	printf("\t3 - ADC  500 MSPS; DAC  500 MSPS\n");
+	printf("\t4 - ADC  600 MSPS; DAC  600 MSPS\n");
+	printf("\t5 - ADC 1000 MSPS; DAC 2000 MSPS (2x interpolation)\n");
+	printf("choose an option [default 1]:\n");
 
 	mode = getc(stdin);
 
@@ -846,7 +846,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_QPLL0;
 		break;
 	case '4':
-		printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
+		printf("4 - ADC  600 MSPS; DAC  600 MSPS\n");
 		p_ad9523_param->pll2_vco_diff_m1 = 5;
 		(&p_ad9523_param->channels[DAC_FPGA_CLK])->
 		channel_divider = 2;
@@ -890,7 +890,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #endif
 		break;
 	case '3':
-		printf ("3 - ADC  500 MSPS; DAC  500 MSPS\n");
+		printf("3 - ADC  500 MSPS; DAC  500 MSPS\n");
 		p_ad9523_param->pll2_vco_diff_m1 = 3;
 		(&p_ad9523_param->channels[DAC_FPGA_CLK])->
 		channel_divider = 4;
@@ -934,7 +934,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #endif
 		break;
 	case '2':
-		printf ("2 - ADC  500 MSPS; DAC 1000 MSPS\n");
+		printf("2 - ADC  500 MSPS; DAC 1000 MSPS\n");
 		p_ad9523_param->pll2_vco_diff_m1 = 3;
 		(&p_ad9523_param->channels[DAC_FPGA_CLK])->
 		channel_divider = 2;
@@ -978,7 +978,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #endif
 		break;
 	default:
-		printf ("1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
+		printf("1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->ref_rate_khz = 500000;
 		ad9680_xcvr_param->ref_rate_khz = 500000;
@@ -991,7 +991,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		break;
 	}
 
-	return(0);
+	return (0);
 }
 
 static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
@@ -1250,7 +1250,7 @@ int main(void)
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
 #ifdef USE_NCO
-	status = ad9144_set_nco(fmcdaq2.ad9144_device,62500,1);
+	status = ad9144_set_nco(fmcdaq2.ad9144_device, 62500, 1);
 	if (status)
 		return status;
 #endif
@@ -1284,12 +1284,12 @@ int main(void)
 #endif
 #else
 	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
-	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
+	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33 * 1000 * 1000;
 	fmcdaq2.ad9144_channels[0].dds_phase_0 = 0;
 	fmcdaq2.ad9144_channels[0].dds_scale_0 = 500000;
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
 	fmcdaq2.ad9144_channels[1].dds_dual_tone = 0;
-	fmcdaq2.ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
+	fmcdaq2.ad9144_channels[1].dds_frequency_0 = 11 * 1000 * 1000;
 	fmcdaq2.ad9144_channels[1].dds_phase_0 = 0;
 	fmcdaq2.ad9144_channels[1].dds_scale_0 = 500000;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
@@ -1308,10 +1308,10 @@ int main(void)
 		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
 	};
 	status = axi_dmac_transfer_start(fmcdaq2.ad9680_dmac, &transfer_rx);
-	if(status)
+	if (status)
 		return status;
 	status = axi_dmac_transfer_wait_completion(fmcdaq2.ad9680_dmac, 1000);
-	if(status)
+	if (status)
 		return status;
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,

@@ -85,15 +85,15 @@ void fmcdaq3_reconfig(struct ad9152_init_param *ad9152_param,
 
 	uint8_t mode = 0;
 
-	printf ("Available sampling rates:\n");
-	printf ("\t1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
-	printf ("\t2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
+	printf("Available sampling rates:\n");
+	printf("\t1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
+	printf("\t2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
 
 	mode = getc(stdin);
 
 	switch (mode) {
 	case '2':
-		printf ("2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
+		printf("2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
 		ad9680_param->lane_rate_kbps = 6165000;
 		ad9152_param->lane_rate_kbps = 6165000;
 		ad9152_xcvr_param->lane_rate_khz = 6165000;
@@ -114,7 +114,7 @@ void fmcdaq3_reconfig(struct ad9152_init_param *ad9152_param,
 		(&ad9528_param->channels[6])->channel_divider = 4;
 		break;
 	default:
-		printf ("1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
+		printf("1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
 		break;
 	}
 }
@@ -325,12 +325,12 @@ int main(void)
 	/* DAC (AD9152) channels configuration */
 	struct axi_dac_channel ad9152_channels[2];
 	ad9152_channels[0].dds_dual_tone = 0;
-	ad9152_channels[0].dds_frequency_0 = 33*1000*1000;
+	ad9152_channels[0].dds_frequency_0 = 33 * 1000 * 1000;
 	ad9152_channels[0].dds_phase_0 = 0;
 	ad9152_channels[0].dds_scale_0 = 500000;
 	ad9152_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
 	ad9152_channels[1].dds_dual_tone = 0;
-	ad9152_channels[1].dds_frequency_0 = 11*1000*1000;
+	ad9152_channels[1].dds_frequency_0 = 11 * 1000 * 1000;
 	ad9152_channels[1].dds_phase_0 = 0;
 	ad9152_channels[1].dds_scale_0 = 500000;
 	ad9152_channels[0].pat_data = 0xb1b0a1a0;
@@ -568,11 +568,11 @@ int main(void)
 	}
 
 	ad9680_test(ad9680_device, AD9680_TEST_PN9);
-	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN9, 10) == -1) {
+	if (axi_adc_pn_mon(ad9680_core, AXI_ADC_PN9, 10) == -1) {
 		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
 	};
 	ad9680_test(ad9680_device, AD9680_TEST_PN23);
-	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN23A, 10) == -1) {
+	if (axi_adc_pn_mon(ad9680_core, AXI_ADC_PN23A, 10) == -1) {
 		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
@@ -624,7 +624,7 @@ int main(void)
 	};
 	axi_dmac_transfer_start(ad9680_dmac, &transfer_rx);
 	status = axi_dmac_transfer_wait_completion(ad9680_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
@@ -744,5 +744,5 @@ int main(void)
 	Xil_DCacheDisable();
 #endif
 
-	return(0);
+	return (0);
 }

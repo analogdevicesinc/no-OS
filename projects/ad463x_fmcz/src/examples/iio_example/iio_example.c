@@ -83,7 +83,7 @@ int iio_example_main()
 #endif
 
 	ret = iio_ad463x_init(&iio_ad463x, dev);
-	if(ret < 0)
+	if (ret < 0)
 		goto out;
 
 	struct iio_app_device devices[] = {

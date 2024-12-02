@@ -52,7 +52,7 @@
 
 int main()
 {
-	uint16_t buf[ADAQ7980_EVB_SAMPLE_NO] __attribute__ ((aligned));
+	uint16_t buf[ADAQ7980_EVB_SAMPLE_NO] __attribute__((aligned));
 	struct adaq7980_dev *dev;
 	int32_t ret, i;
 
@@ -92,7 +92,7 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
-	struct no_os_gpio_init_param adaq7980_ref_pd= {
+	struct no_os_gpio_init_param adaq7980_ref_pd = {
 		.number = GPIO_REF_PUB,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
@@ -125,7 +125,7 @@ int main()
 	if (ret < 0)
 		return -1;
 
-	while(1) {
+	while (1) {
 		ret = ad7980_read_data(dev, buf, ADAQ7980_EVB_SAMPLE_NO);
 		if (ret < 0)
 			return -1;

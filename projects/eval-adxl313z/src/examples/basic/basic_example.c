@@ -56,10 +56,10 @@ int basic_example_main()
 	int ret = -EINVAL;
 
 	/* Clear the screen. */
-	printf("%c",27);
-	printf("%c",'[');
-	printf("%c",'2');
-	printf("%c",'J');
+	printf("%c", 27);
+	printf("%c", '[');
+	printf("%c", '2');
+	printf("%c", 'J');
 
 	/* Initialize component. */
 	ret = adxl313_init(&adxl313, adxl313_user_init);
@@ -150,15 +150,15 @@ int basic_example_main()
 	uint8_t fifo_entries = 0;
 	int16_t x_raw = 0, y_raw = 0, z_raw = 0;
 
-	while(1) {
+	while (1) {
 		/* Clear the screen. */
-		printf("%c",27);
-		printf("%c",'[');
-		printf("%c",'2');
-		printf("%c",'J');
+		printf("%c", 27);
+		printf("%c", '[');
+		printf("%c", '2');
+		printf("%c", 'J');
 
 		pr_info("Single read raw data:\n");
-		ret = adxl313_get_raw_xyz(adxl313,&x_raw, &y_raw, &z_raw);
+		ret = adxl313_get_raw_xyz(adxl313, &x_raw, &y_raw, &z_raw);
 		if (ret)
 			goto error;
 		pr_info(" x=%d", x_raw);
@@ -166,12 +166,12 @@ int basic_example_main()
 		pr_info(" z=%d\n", z_raw);
 
 		pr_info("Single read:\n");
-		ret = adxl313_get_xyz(adxl313,&x[0], &y[0], &z[0]);
+		ret = adxl313_get_xyz(adxl313, &x[0], &y[0], &z[0]);
 		if (ret)
 			goto error;
 		pr_info(" x=%d"".%07u", (int)x[0].integer, (abs)(x[0].fractional));
 		pr_info(" y=%d"".%07u", (int)y[0].integer, (abs)(y[0].fractional));
-		pr_info(" z=%d"".%07u\n", (int)z[0].integer,(abs)(z[0].fractional));
+		pr_info(" z=%d"".%07u\n", (int)z[0].integer, (abs)(z[0].fractional));
 
 		/* Read FIFO data. */
 		ret = adxl313_get_fifo_data(adxl313, &fifo_entries, x, y, z);
@@ -206,6 +206,6 @@ int basic_example_main()
 	}
 
 error:
-	pr_info("Error! (code %d)\n",ret);
+	pr_info("Error! (code %d)\n", ret);
 	return ret;
 }

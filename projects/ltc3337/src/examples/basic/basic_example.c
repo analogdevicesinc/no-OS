@@ -59,39 +59,39 @@ int basic_example_main()
 
 	while (1) {
 		ret = ltc3337_get_accumulated_charge(dev, &charge, &value16);
-		if(ret)
+		if (ret)
 			goto free_dev;
 
 		pr_info("Accumulated Charge %d.%09d (0x%04X)\n", charge.a_hr, charge.na_hr,
 			value16);
 
 		ret = ltc3337_get_voltage_mv(dev, BAT_IN_IPEAK_OFF, &value32);
-		if(ret)
+		if (ret)
 			goto free_dev;
 
 		pr_info("Batt In, iPeak Off %d mV\n", value32);
 
 		ret = ltc3337_get_voltage_mv(dev, BAT_IN_IPEAK_ON, &value32);
-		if(ret)
+		if (ret)
 			goto free_dev;
 
 		pr_info("Batt In, iPeak On %d mV\n", value32);
 
 		ret = ltc3337_get_voltage_mv(dev, BAT_OUT_IPEAK_OFF, &value32);
-		if(ret)
+		if (ret)
 			goto free_dev;
 
 		pr_info("Batt Out, iPeak Off %d mV\n", value32);
 
 		ret = ltc3337_get_voltage_mv(dev, BAT_OUT_IPEAK_ON, &value32);
-		if(ret)
+		if (ret)
 			goto free_dev;
 
 		pr_info("Batt Out, iPeak On %d mV\n", value32);
 
 
 		ret = ltc3337_get_temperature_c(dev, &temp_value);
-		if(ret)
+		if (ret)
 			goto free_dev;
 
 		pr_info("Die Temp %d C\n", temp_value);

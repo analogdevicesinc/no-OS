@@ -165,7 +165,7 @@ int main(void)
 	mm = (max - min) / 51;
 
 	pr_info("[DEMO] Move the ruler around, its position will is read and displayed every 2 seconds.\n");
-	while(true) {
+	while (true) {
 		ret = ad7746_get_cap_data(adc, &capData);
 		if (ret < 0) {
 			pr_err("CAP reading failed with: %d\n", ret);

@@ -535,7 +535,7 @@ int main(void)
 #endif
 	axi_dmac_transfer_start(phy.rx1_dmac, &read_transfer1);
 	ret = axi_dmac_transfer_wait_completion(phy.rx1_dmac, 500);
-	if(ret)
+	if (ret)
 		return ret;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0],
@@ -557,9 +557,9 @@ int main(void)
 		.dest_addr = (uintptr_t)adc_buffers[1]
 	};
 	axi_adc_update_active_channels(phy.rx2_adc, 0x3);
-	axi_dmac_transfer_start(phy.rx2_dmac,&read_transfer2);
+	axi_dmac_transfer_start(phy.rx2_dmac, &read_transfer2);
 	ret = axi_dmac_transfer_wait_completion(phy.rx2_dmac, 500);
-	if(ret)
+	if (ret)
 		return ret;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1],

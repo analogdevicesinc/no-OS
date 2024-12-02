@@ -118,7 +118,7 @@ int main(void)
 		/* r4_user_settings */
 		.aux_output_enable = 0,
 		.aux_output_fundamental_enable = 1,
-		.mute_till_lock_enable= 0,
+		.mute_till_lock_enable = 0,
 		.output_power = 3,
 		.aux_output_power = 0,
 	};
@@ -200,7 +200,7 @@ int main(void)
 				  NO_OS_ARRAY_SIZE(sine_lut) * sizeof(uint16_t));
 #else
 	ad9739a_channels[0].dds_dual_tone = 0;
-	ad9739a_channels[0].dds_frequency_0 = 33*1000*1000;
+	ad9739a_channels[0].dds_frequency_0 = 33 * 1000 * 1000;
 	ad9739a_channels[0].dds_phase_0 = 0;
 	ad9739a_channels[0].dds_scale_0 = 250000;
 	ad9739a_channels[0].sel = AXI_DAC_DATA_SEL_DDS;

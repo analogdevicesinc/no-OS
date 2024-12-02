@@ -58,7 +58,7 @@ int basic_example_main()
 	if (ret)
 		goto exit;
 
-	for(i = 0; i < MAX22190_CHANNELS; i++) {
+	for (i = 0; i < MAX22190_CHANNELS; i++) {
 		ret = max22190_reg_read(max22190_desc, MAX22190_DIGITAL_INPUT_REG, &rand_reg);
 		if (ret)
 			goto remove_max22190;
@@ -100,7 +100,7 @@ int basic_example_main()
 	if (ret)
 		goto remove_max22190;
 
-	for(i = 0; i < MAX22190_CHANNELS; i++) {
+	for (i = 0; i < MAX22190_CHANNELS; i++) {
 		ret = max22190_wbe_get(max22190_desc, i, &enabled);
 		if (ret)
 			goto remove_max22190;

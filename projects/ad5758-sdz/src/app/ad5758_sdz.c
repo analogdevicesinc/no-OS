@@ -106,13 +106,13 @@ int main()
 	Xil_DCacheEnable();
 
 	ret = ad5758_init(&dev, &ad5758_default_init_param);
-	if(ret)
+	if (ret)
 		return -1;
 
 	/* Write mid-scale DAC code to the input register
 	 * V1_OUT pin will have half the scale (5V) */
 	ret = ad5758_dac_input_write(dev, 0x7FFF);
-	if(ret)
+	if (ret)
 		return -1;
 
 	printf("Success\n");

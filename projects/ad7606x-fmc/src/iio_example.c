@@ -116,8 +116,8 @@ int main(void)
 	}
 
 	struct iio_app_device iio_devices[] = {
-		IIO_APP_DEVICE( "ad7606x", dev,
-				dev->iio_dev, &adc_buff, NULL, NULL)
+		IIO_APP_DEVICE("ad7606x", dev,
+			       dev->iio_dev, &adc_buff, NULL, NULL)
 	};
 
 	app_init_param.devices = iio_devices;

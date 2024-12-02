@@ -94,7 +94,7 @@ void configMeasurement(struct measurement_config *oldCfg,
 	if (oldCfg->nAmplitudePP != newCfg.nAmplitudePP) {
 		pBiaCfg->bParamsChanged = true;
 		oldCfg->nAmplitudePP = newCfg.nAmplitudePP;
-		pBiaCfg->DacVoltPP = newCfg.nAmplitudePP*1.0;
+		pBiaCfg->DacVoltPP = newCfg.nAmplitudePP * 1.0;
 	}
 	pBiaCfg->bImpedanceReadMode = newCfg.bImpedanceReadMode;
 	pBiaCfg->SweepCfg.SweepEn = newCfg.bSweepEn;
@@ -262,17 +262,17 @@ void SendResult(uint32_t *pData, uint16_t len,
 	if (bImpedanceReadMode && (len == 4)) { // Send Impedance
 		fCarZval = computeImpedance(pData);
 		if (bMagnitudeMode) { // Complex to Magnitude
-			fMagVal = sqrt(fCarZval.Real*fCarZval.Real +
-				       fCarZval.Image*fCarZval.Image);
+			fMagVal = sqrt(fCarZval.Real * fCarZval.Real +
+				       fCarZval.Image * fCarZval.Image);
 			SendResultIeee754(&fMagVal, 1); // Impedance Magnitude only. Float
 		} else { // Complex Impedance in IEE754 uint32 hex string.
 			SendResultIeee754((float *)&fCarZval, 2);
 		}
-	} else if((!bImpedanceReadMode) && (len == 2)) { // Send Voltage
+	} else if ((!bImpedanceReadMode) && (len == 2)) { // Send Voltage
 		if (bMagnitudeMode) { // Complex to Magnitude
 			iCarVval = *((iImpCar_Type *)pData);
-			fMagVal = sqrt((iCarVval.Real*1.0)*(iCarVval.Real*1.0) +
-				       (iCarVval.Image*1.0)*(iCarVval.Image*1.0));
+			fMagVal = sqrt((iCarVval.Real * 1.0) * (iCarVval.Real * 1.0) +
+				       (iCarVval.Image * 1.0) * (iCarVval.Image * 1.0));
 			SendResultIeee754(&fMagVal, 1); // Voltage Magnitude only. Float
 		} else { // Complex Voltage in uint32 hex string.
 			SendResultUint32(pData, 2);
@@ -283,7 +283,7 @@ void SendResult(uint32_t *pData, uint16_t len,
 void MuxSupportedElectrodeCounts()
 {
 	//uint8_t outBuff[20]={0};
-	printf("%s","08,10,20");
+	printf("%s", "08,10,20");
 }
 
 /* !!Change the application parameters here if you want to change it to
@@ -358,7 +358,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 	struct electrode_combo newElCfg;
 	struct measurement_config newMeasCfg;
 
-	char *buffStr=0;
+	char *buffStr = 0;
 	uint32_t temp;
 	uint16_t switchSeqCnt = 0;
 	uint16_t switchSeqNum = 0;
@@ -402,18 +402,18 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 		else if (!ret)
 			continue;
 
-		if (cmd[cmdi-1] == '\n') {
+		if (cmd[cmdi - 1] == '\n') {
 			if (cmd[0] == 'O') { // STOP
 				ADG2128_SwRst(ad5940);
 				AppBiaCtrl(ad5940, BIACTRL_STOPNOW, 0);
-				printf("%s","\n!O ");
+				printf("%s", "\n!O ");
 				runningCmd = 0;
 				fflush(stdin);
-				printf("%s","\n");
+				printf("%s", "\n");
 			}
 			if (cmd[0] == 'R') { // RESET
 				ADG2128_SwRst(ad5940);
-				printf("%s","!R \n");
+				printf("%s", "!R \n");
 				runningCmd = 0;
 				fflush(stdin);
 			}
@@ -421,7 +421,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 			if (!runningCmd) {
 				if (cmd[0] == 'B') { //
 					ADG2128_SwRst(ad5940);
-					printf("%s","!B ");
+					printf("%s", "!B ");
 					runningCmd = 0;
 					fflush(stdin);
 					MuxSupportedElectrodeCounts();
@@ -433,7 +433,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 					cmd[0] = 0;
 					newElCfg = oldElCfg;
 					newMeasCfg = oldMeasCfg;
-					buffStr = (char *) (cmd+1);
+					buffStr = (char *)(cmd + 1);
 					cmd_err = ParseQuery(buffStr,
 							     &newElCfg,
 							     &newMeasCfg);
@@ -441,17 +441,17 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 					// No errors during parsing.
 					if (!cmd_err) {
 						runningCmd = 'Q';
-						printf("%s","!CMD Q OK\n");
+						printf("%s", "!CMD Q OK\n");
 						configMeasurement(&oldMeasCfg, newMeasCfg);
 						AppBiaInit(ad5940, AppBuff, APPBUFF_SIZE);
 						no_os_udelay(10);
-						printf("%s","!Q ");
+						printf("%s", "!Q ");
 						setMuxSwitch(i2c, ad5940, newElCfg, MUXBOARD_SIZE);
 						no_os_udelay(3);
 						AppBiaCtrl(ad5940, BIACTRL_START, 0);
 						lastConfig = 'Q';
 					} else {
-						printf("%s","!CMD Q ERROR\n");
+						printf("%s", "!CMD Q ERROR\n");
 					}
 				}
 
@@ -460,7 +460,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 					cmd[0] = 0;
 					newEitCfg = oldEitCfg;
 					newMeasCfg = oldMeasCfg;
-					buffStr = (char *) (cmd+1);
+					buffStr = (char *)(cmd + 1);
 					cmd_err = ParseConfig(buffStr,
 							      &newEitCfg,
 							      &newMeasCfg);
@@ -469,32 +469,32 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 					if (!cmd_err) {
 						runningCmd = 0;
 						switchSeqNum = 0;
-						printf("%s","!CMD C OK\n");
+						printf("%s", "!CMD C OK\n");
 						switchSeqCnt = generateSwitchCombination(newEitCfg,
 								swComboSeq);
 						configMeasurement(&oldMeasCfg, newMeasCfg);
 						AppBiaInit(ad5940, AppBuff, APPBUFF_SIZE);
 						no_os_udelay(10);
-						printf("%s","!C OK\n");
+						printf("%s", "!C OK\n");
 						lastConfig = 'C';
 					} else {
-						printf("%s","!CMD C ERROR\n");
+						printf("%s", "!CMD C ERROR\n");
 					}
 				}
 
 				if (cmd[0] == 'V') { //Start boundary voltage query sequence
 					fflush(stdin);
 					if (lastConfig == 'C') {
-						printf("%s","!CMD V OK\n");
+						printf("%s", "!CMD V OK\n");
 						runningCmd = 'V';
 						switchSeqNum = 0;
 						setMuxSwitch(i2c, ad5940, swComboSeq[switchSeqNum++], newEitCfg.nElectrodeCnt);
 						AppBiaInit(ad5940, AppBuff, APPBUFF_SIZE);
 						no_os_udelay(10);
 						AppBiaCtrl(ad5940, BIACTRL_START, 0);
-						printf("%s","!V ");
+						printf("%s", "!V ");
 					} else
-						printf("%s","!Send C Command first to configure!\n");
+						printf("%s", "!Send C Command first to configure!\n");
 				}
 			}
 

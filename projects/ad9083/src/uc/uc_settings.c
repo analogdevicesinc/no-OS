@@ -21,16 +21,16 @@
 /*============= D A T A ====================*/
 uint64_t clk_hz[][3] = {
 	/*-----dev_ref----*//*----fpga_ref----*//*-----adc_clk----*/
-	{ (uint64_t)250e6,    (uint64_t)500e6,    (uint64_t)2000e6 }, /* uc0,  Lane Rate: 10Gbps */
-	{ (uint64_t)250e6,    (uint64_t)750e6,    (uint64_t)2000e6 }, /* uc1,  Lane Rate: 15Gbps */
-	{ (uint64_t)250e6,    (uint64_t)500e6,    (uint64_t)2000e6 }, /* uc2,  Lane Rate: 10Gbps */
-	{ (uint64_t)200e6,    (uint64_t)800e6,    (uint64_t)1600e6 }, /* uc3,  Lane Rate: 16Gbps */
-	{ (uint64_t)125e6,    (uint64_t)500e6,    (uint64_t)1000e6 }, /* uc4,  Lane Rate: 10Gbps */
-	{ (uint64_t)250e6,    (uint64_t)375e6,    (uint64_t)1000e6 }, /* uc5,  Lane Rate: 7.5Gbps */
-	{ (uint64_t)100e6,    (uint64_t)500e6,    (uint64_t)2000e6 }, /* uc6,  Lane Rate: 10Gbps */
-	{ (uint64_t)250e6,    (uint64_t)500e6,    (uint64_t)2000e6 }, /* uc7,  Lane Rate: 10Gbps */
-	{ (uint64_t)200e6,    (uint64_t)600e6,    (uint64_t)1600e6 }, /* uc8,  Lane Rate: 12Gbps */
-	{ (uint64_t)250e6,    (uint64_t)500e6,    (uint64_t)2000e6 }, /* uc9,  Lane Rate: 10Gbps */
+	{ (uint64_t)250e6, (uint64_t)500e6, (uint64_t)2000e6 },       /* uc0,  Lane Rate: 10Gbps */
+	{ (uint64_t)250e6, (uint64_t)750e6, (uint64_t)2000e6 },       /* uc1,  Lane Rate: 15Gbps */
+	{ (uint64_t)250e6, (uint64_t)500e6, (uint64_t)2000e6 },       /* uc2,  Lane Rate: 10Gbps */
+	{ (uint64_t)200e6, (uint64_t)800e6, (uint64_t)1600e6 },       /* uc3,  Lane Rate: 16Gbps */
+	{ (uint64_t)125e6, (uint64_t)500e6, (uint64_t)1000e6 },       /* uc4,  Lane Rate: 10Gbps */
+	{ (uint64_t)250e6, (uint64_t)375e6, (uint64_t)1000e6 },       /* uc5,  Lane Rate: 7.5Gbps */
+	{ (uint64_t)100e6, (uint64_t)500e6, (uint64_t)2000e6 },       /* uc6,  Lane Rate: 10Gbps */
+	{ (uint64_t)250e6, (uint64_t)500e6, (uint64_t)2000e6 },       /* uc7,  Lane Rate: 10Gbps */
+	{ (uint64_t)200e6, (uint64_t)600e6, (uint64_t)1600e6 },       /* uc8,  Lane Rate: 12Gbps */
+	{ (uint64_t)250e6, (uint64_t)500e6, (uint64_t)2000e6 },       /* uc9,  Lane Rate: 10Gbps */
 };
 
 /* Full scale valtage, unit: mv */
@@ -119,7 +119,7 @@ uint32_t finmax[] = {
 
 uint64_t nco_freq_hz[][3] = {
 	/*NCO0       NCO1     NCO2 */
-	{ 74.21875e6,0,        0 },   /* uc0 */
+	{ 74.21875e6, 0,        0 },  /* uc0 */
 	{ 0,         0,        0 },   /* uc1 */
 	{ 0,         0,        0 },   /* uc2 */
 	{ 75e6,      0,        0 },   /* uc3 */

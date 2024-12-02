@@ -119,7 +119,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 
 	/*Open Talise Hw Device*/
 	talAction = TALISE_openHw(pd);
-	if(talAction != TALACT_NO_ACTION) {
+	if (talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 		printf("error: TALISE_openHw() failed\n");
 		goto error_0;
@@ -377,14 +377,14 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_ON);
 
 #ifndef ADRV9008_2
-	if(talInit.rx.rxChannels != TAL_RXOFF)
+	if (talInit.rx.rxChannels != TAL_RXOFF)
 		axi_jesd204_rx_lane_clk_enable(rx_jesd);
 #endif
 
-	if(talInit.obsRx.obsRxChannelsEnable != TAL_RXOFF)
+	if (talInit.obsRx.obsRxChannelsEnable != TAL_RXOFF)
 		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
 
-	if(talInit.tx.txChannels != TAL_RXOFF) {
+	if (talInit.tx.txChannels != TAL_RXOFF) {
 		axi_jesd204_tx_lane_clk_enable(tx_jesd);
 
 		/* RESET CDR */
@@ -773,7 +773,7 @@ void talise_shutdown(taliseDevice_t * const pd)
 
 	/*Close Talise Hw Device*/
 	talAction = TALISE_closeHw(pd);
-	if(talAction != TALACT_NO_ACTION) {
+	if (talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 	}
 }

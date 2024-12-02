@@ -127,12 +127,12 @@ int32_t platform_remove(void)
 
 commonErr_t CMB_closeHardware(void)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_setGPIO(uint32_t GPIO)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
@@ -147,7 +147,7 @@ commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 		reset_gpio = gpio_ad9528_resetb;
 		break;
 	default:
-		return(COMMONERR_FAILED);
+		return (COMMONERR_FAILED);
 	}
 
 	no_os_gpio_direction_output(reset_gpio, 1);
@@ -157,17 +157,17 @@ commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 	no_os_gpio_direction_output(reset_gpio, 1);
 	CMB_wait_ms(1);
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_setSPIOptions(spiSettings_t *spiSettings)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
-commonErr_t CMB_setSPIChannel(uint16_t chipSelectIndex )
+commonErr_t CMB_setSPIChannel(uint16_t chipSelectIndex)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
@@ -177,13 +177,13 @@ commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
 
 	spi_ad_desc->chip_select = spiSettings->chipSelectIndex - 1;
 
-	buf[0] = (uint8_t) ((addr >> 8) & 0x7f);
-	buf[1] = (uint8_t) (addr & 0xff);
+	buf[0] = (uint8_t)((addr >> 8) & 0x7f);
+	buf[1] = (uint8_t)(addr & 0xff);
 	buf[2] = (uint8_t) data;
 
 	no_os_spi_write_and_read(spi_ad_desc, buf, 3);
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr,
@@ -194,9 +194,9 @@ commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr,
 	for (index = 0; index < count; index++)
 		if (CMB_SPIWriteByte(spiSettings, *(addr + index),
 				     *(data + index)) != COMMONERR_OK)
-			return(COMMONERR_FAILED);
+			return (COMMONERR_FAILED);
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_SPIReadByte(spiSettings_t *spiSettings, uint16_t addr,
@@ -206,14 +206,14 @@ commonErr_t CMB_SPIReadByte(spiSettings_t *spiSettings, uint16_t addr,
 
 	spi_ad_desc->chip_select = spiSettings->chipSelectIndex - 1;
 
-	buf[0] = (uint8_t) ((addr >> 8) | 0x80);
-	buf[1] = (uint8_t) (addr & 0xff);
+	buf[0] = (uint8_t)((addr >> 8) | 0x80);
+	buf[1] = (uint8_t)(addr & 0xff);
 	buf[2] = (uint8_t) 0x00;
 
 	no_os_spi_write_and_read(spi_ad_desc, buf, 3);
 	*readdata = buf[2];
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr,
@@ -222,14 +222,14 @@ commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr,
 	uint8_t data;
 
 	if (CMB_SPIReadByte(spiSettings, addr, &data) != COMMONERR_OK)
-		return(COMMONERR_FAILED);
+		return (COMMONERR_FAILED);
 
 	data = (data & ~mask) | ((field_val << start_bit) & mask);
 
 	if (CMB_SPIWriteByte(spiSettings, addr, data) != COMMONERR_OK)
-		return(COMMONERR_FAILED);
+		return (COMMONERR_FAILED);
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 /* read a field in a single register space (not multibyte fields) */
@@ -239,63 +239,63 @@ commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr,
 	uint8_t data;
 
 	if (CMB_SPIReadByte(spiSettings, addr, &data) != COMMONERR_OK)
-		return(COMMONERR_FAILED);
+		return (COMMONERR_FAILED);
 
 	data = (data & mask) >> start_bit;
 	*field_val = data;
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex,
 			   uint32_t errorCode, const char *comment)
 {
 
-	if((CMB_LOGLEVEL & ADIHAL_LOG_ERROR) && (level == ADIHAL_LOG_ERROR)) {
+	if ((CMB_LOGLEVEL & ADIHAL_LOG_ERROR) && (level == ADIHAL_LOG_ERROR)) {
 		printf("ERROR: %d: %s", (int)errorCode, comment);
-	} else if((CMB_LOGLEVEL & ADIHAL_LOG_WARNING)
-		  && (level == ADIHAL_LOG_WARNING)) {
-		printf("WARNING: %d: %s",(int)errorCode, comment);
-	} else if((CMB_LOGLEVEL & ADIHAL_LOG_MESSAGE)
-		  && (level == ADIHAL_LOG_MESSAGE)) {
-		printf("MESSAGE: %d: %s",(int)errorCode, comment);
-	} else if(CMB_LOGLEVEL == ADIHAL_LOG_NONE ) {
+	} else if ((CMB_LOGLEVEL & ADIHAL_LOG_WARNING)
+		   && (level == ADIHAL_LOG_WARNING)) {
+		printf("WARNING: %d: %s", (int)errorCode, comment);
+	} else if ((CMB_LOGLEVEL & ADIHAL_LOG_MESSAGE)
+		   && (level == ADIHAL_LOG_MESSAGE)) {
+		printf("MESSAGE: %d: %s", (int)errorCode, comment);
+	} else if (CMB_LOGLEVEL == ADIHAL_LOG_NONE) {
 		//printf("MESSAGE: %d: %s",(int)errorCode, comment);
 	} else {
 		printf("Undefined Log Level: 0x%X", level);
 	}
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 /* if filename null, a default path will be used in logging.c */
 commonErr_t CMB_openLog(const char *filename)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_closeLog(void)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_flushLog(void)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_wait_ms(uint32_t time_ms)
 {
 	no_os_mdelay(time_ms);
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_wait_us(uint32_t time_us)
 {
 	no_os_udelay(time_us);
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_setTimeout_ms(uint32_t timeOut_ms)
@@ -306,14 +306,14 @@ commonErr_t CMB_setTimeout_ms(uint32_t timeOut_ms)
 	_desired_time_to_elapse_us = timeOut_ms * 50;	// FIXME
 #endif
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_setTimeout_us(uint32_t timeOut_us)
 {
 	_desired_time_to_elapse_us = timeOut_us;
 
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_hasTimeoutExpired()
@@ -322,27 +322,27 @@ commonErr_t CMB_hasTimeoutExpired()
 
 	_desired_time_to_elapse_us--;
 	if (_desired_time_to_elapse_us > 0)
-		return(COMMONERR_OK);
+		return (COMMONERR_OK);
 
-	return(COMMONERR_FAILED);
+	return (COMMONERR_FAILED);
 }
 
 commonErr_t CMB_regRead(uint32_t offset, uint32_t *data)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_regWrite(uint32_t offset, uint32_t data)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_memRead(uint32_t offset, uint32_t *data, uint32_t len)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }
 
 commonErr_t CMB_memWrite(uint32_t offset, uint32_t *data, uint32_t len)
 {
-	return(COMMONERR_OK);
+	return (COMMONERR_OK);
 }

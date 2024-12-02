@@ -105,7 +105,7 @@ int main(void)
 
 	no_os_mdelay(RESET_TIME);
 
-	while(1) {
+	while (1) {
 		// time delay between readings
 		no_os_mdelay(READ_INTERVAL);
 		/* read and print the ade9000 rms measured values for PHASE A */
@@ -113,14 +113,14 @@ int main(void)
 		if (ret)
 			goto free_dev;
 
-		pr_info("Vrms: %d mV\n",ade9000_dev->vrms_val);
-		pr_info("Irms: %d mA\n",ade9000_dev->irms_val);
+		pr_info("Vrms: %d mV\n", ade9000_dev->vrms_val);
+		pr_info("Irms: %d mA\n", ade9000_dev->irms_val);
 		/* read the temperature value */
 		ret = ade9000_read_temp(ade9000_dev);
 		if (ret)
 			goto free_dev;
 
-		pr_info("Temperature: %d deg C \n",ade9000_dev->temp_deg);
+		pr_info("Temperature: %d deg C \n", ade9000_dev->temp_deg);
 		/* toggle the LED on the MCU board */
 		ret = interface_toggle_led(gpio_desc);
 		if (ret)

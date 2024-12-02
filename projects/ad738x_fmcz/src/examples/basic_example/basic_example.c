@@ -62,7 +62,7 @@ int basic_example_main()
 	ret = ad738x_init(&dev, &ad738x_init_param);
 	if (ret)
 		return ret;
-	while(true) {
+	while (true) {
 		ret = ad738x_read_data(dev, buf, 400);
 		if (ret != 0)
 			return ret;

@@ -366,16 +366,16 @@ int rms_adc_values_read(struct stout *stout, struct rms_adc_values *rms)
 	rms->v2_rms_adc = (int32_t)rms_filter_v2((int32_t)v2_val);
 	rms->i_rms_adc = (int32_t)rms_filter_i((int32_t)i_val);
 	// Scale is 0,03125 = 3125/100000 = 1/32 = 1/2^5
-	rms->i_rms = (((int64_t)((int32_t)(int64_t)rms->i_rms_adc))*ADE9113_VREF) /
+	rms->i_rms = (((int64_t)((int32_t)(int64_t)rms->i_rms_adc)) * ADE9113_VREF) /
 		     (1 << 28);
 	rms->v1_rms = (((int64_t)((int32_t)(supply_scale_v1((int64_t)rms->v1_rms_adc))))
-		       *ADE9113_VREF) / (1 << 23);
+		       * ADE9113_VREF) / (1 << 23);
 #if defined(REV_A)
 	rms->v2_rms = (((int64_t)((int32_t)(supply_scale_v2((int64_t)rms->v2_rms_adc))))
-		       *ADE9113_VREF) / (1 << 23);
+		       * ADE9113_VREF) / (1 << 23);
 #elif defined(REV_D)
 	rms->v2_rms = (((int64_t)((int32_t)(supply_scale_v1((int64_t)rms->v2_rms_adc))))
-		       *ADE9113_VREF) / (1 << 23);
+		       * ADE9113_VREF) / (1 << 23);
 #endif
 
 	return 0;

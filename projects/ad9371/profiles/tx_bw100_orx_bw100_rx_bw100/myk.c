@@ -23,7 +23,7 @@
 #include "t_mykonos_gpio.h"
 #include "myk.h"
 
-static int16_t txFirCoefs[] = {-94,-26,282,177,-438,-368,756,732,-1170,-1337,1758,2479,-2648,-5088,4064,16760,16759,4110,-4881,-2247,2888,1917,-1440,-1296,745,828,-358,-474,164,298,-16,-94};
+static int16_t txFirCoefs[] = {-94, -26, 282, 177, -438, -368, 756, 732, -1170, -1337, 1758, 2479, -2648, -5088, 4064, 16760, 16759, 4110, -4881, -2247, 2888, 1917, -1440, -1296, 745, 828, -358, -474, 164, 298, -16, -94};
 
 static mykonosFir_t txFir = {
 	6,              /* Filter gain in dB*/
@@ -31,27 +31,27 @@ static mykonosFir_t txFir = {
 	&txFirCoefs[0]  /* A pointer to an array of filter coefficients*/
 };
 
-static int16_t rxFirCoefs[] = {-20,6,66,22,-128,-54,240,126,-402,-248,634,444,-956,-756,1400,1244,-2028,-2050,2978,3538,-4646,-7046,9536,30880,30880,9536,-7046,-4646,3538,2978,-2050,-2028,1244,1400,-756,-956,444,634,-248,-402,126,240,-54,-128,22,66,6,-20};
+static int16_t rxFirCoefs[] = {-20, 6, 66, 22, -128, -54, 240, 126, -402, -248, 634, 444, -956, -756, 1400, 1244, -2028, -2050, 2978, 3538, -4646, -7046, 9536, 30880, 30880, 9536, -7046, -4646, 3538, 2978, -2050, -2028, 1244, 1400, -756, -956, 444, 634, -248, -402, 126, 240, -54, -128, 22, 66, 6, -20};
 
 static mykonosFir_t rxFir = {
 	-6,             /* Filter gain in dB*/
-	48,             /* Number of coefficients in the FIR filter*/
-	&rxFirCoefs[0]  /* A pointer to an array of filter coefficients*/
-};
+		48,             /* Number of coefficients in the FIR filter*/
+		&rxFirCoefs[0]  /* A pointer to an array of filter coefficients*/
+	};
 
-static int16_t obsrxFirCoefs[] = {-14,-19,44,41,-89,-95,175,178,-303,-317,499,527,-779,-843,1184,1317,-1781,-2059,2760,3350,-4962,-7433,9822,32154,32154,9822,-7433,-4962,3350,2760,-2059,-1781,1317,1184,-843,-779,527,499,-317,-303,178,175,-95,-89,41,44,-19,-14};
+static int16_t obsrxFirCoefs[] = {-14, -19, 44, 41, -89, -95, 175, 178, -303, -317, 499, 527, -779, -843, 1184, 1317, -1781, -2059, 2760, 3350, -4962, -7433, 9822, 32154, 32154, 9822, -7433, -4962, 3350, 2760, -2059, -1781, 1317, 1184, -843, -779, 527, 499, -317, -303, 178, 175, -95, -89, 41, 44, -19, -14};
 static mykonosFir_t obsrxFir = {
 	-6,             /* Filter gain in dB*/
-	48,             /* Number of coefficients in the FIR filter*/
-	&obsrxFirCoefs[0] /* A pointer to an array of filter coefficients*/
-};
+		48,             /* Number of coefficients in the FIR filter*/
+		&obsrxFirCoefs[0] /* A pointer to an array of filter coefficients*/
+	};
 
-static int16_t snifferFirCoefs[] = {-1,-5,-14,-23,-16,24,92,137,80,-120,-378,-471,-174,507,1174,1183,98,-1771,-3216,-2641,942,7027,13533,17738,17738,13533,7027,942,-2641,-3216,-1771,98,1183,1174,507,-174,-471,-378,-120,80,137,92,24,-16,-23,-14,-5,-1};
-static mykonosFir_t snifferRxFir= {
+static int16_t snifferFirCoefs[] = {-1, -5, -14, -23, -16, 24, 92, 137, 80, -120, -378, -471, -174, 507, 1174, 1183, 98, -1771, -3216, -2641, 942, 7027, 13533, 17738, 17738, 13533, 7027, 942, -2641, -3216, -1771, 98, 1183, 1174, 507, -174, -471, -378, -120, 80, 137, 92, 24, -16, -23, -14, -5, -1};
+static mykonosFir_t snifferRxFir = {
 	-6,             /* Filter gain in dB*/
-	48,             /* Number of coefficients in the FIR filter*/
-	&snifferFirCoefs[0] /* A pointer to an array of filter coefficients*/
-};
+		48,             /* Number of coefficients in the FIR filter*/
+		&snifferFirCoefs[0] /* A pointer to an array of filter coefficients*/
+	};
 
 static mykonosJesd204bFramerConfig_t rxFramer = {
 	0,              /* JESD204B Configuration Bank ID -extension to Device ID (Valid 0..15)*/
@@ -344,7 +344,7 @@ static mykonosDpdConfig_t dpdConfig = {
 	4096,           /* threshold for sample in AM-AM plot outside of 1:1 line to be thrown out. (default: 50% = 8192/2, valid 8192 to 1)*/
 	0,              /* 16th of an ORx sample (16=1sample), (default 0, valid -64 to 64)*/
 	255,            /* Default 255 (-30dBFs=(20Log10(value/8192)), (valid range  1 to 8191)*/
-	{{64,0},{0,0},{0,0}}/* DPD model error weighting (real/imag valid from -128 to 127)*/
+	{{64, 0}, {0, 0}, {0, 0}} /* DPD model error weighting (real/imag valid from -128 to 127)*/
 };
 
 static mykonosClgcConfig_t clgcConfig = {
@@ -448,9 +448,9 @@ static mykonosGpioLowVoltage_t gpio = {
 
 static mykonosAuxIo_t mykonosAuxIo = {
 	0,	//auxDacEnableMask uint16_t
-	{0,0,0,0,0,0,0,0,0,0},	 //AuxDacValue uint16[10]
-	{0,0,0,0,0,0,0,0,0,0},	 //AuxDacSlope uint8[10]
-	{0,0,0,0,0,0,0,0,0,0},	 //AuxDacVref uint8[10]
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	 //AuxDacValue uint16[10]
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	 //AuxDacSlope uint8[10]
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	 //AuxDacVref uint8[10]
 	&gpio3v3,	//pointer to gpio3v3 struct
 	&gpio,	//pointer to gpio1v8 struct
 	&armGpio

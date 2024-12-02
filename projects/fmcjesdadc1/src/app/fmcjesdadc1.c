@@ -357,96 +357,96 @@ int main(void)
 
 	// set up clock generator
 	status = ad9517_setup(&ad9517_device, ad9517_param);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error ad9517_setup()\n");
 		return -1;
 	}
 
 	/* Set the channel 0 power mode on */
 	status = ad9517_power_mode(ad9517_device, 0, 0);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 0 ad9517_power_mode()\n");
 		return -1;
 	}
 	/* Set the channel 0 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 0, 250000000);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 0 ad9517_frequency()\n");
 		return -1;
 	}
 
 	/* Set the channel 1 power mode on */
 	status = ad9517_power_mode(ad9517_device, 1, 0);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 1 ad9517_power_mode()\n");
 		return -1;
 	}
 
 	/* Set the channel 1 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 1, 250000000);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 1 ad9517_frequency()\n");
 		return -1;
 	}
 
 	/* Set the channel 4 power mode on */
 	status = ad9517_power_mode(ad9517_device, 4, 0);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 4 ad9517_power_mode()\n");
 		return -1;
 	}
 
 	/* Set the channel 4 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 4, 250000000);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 4 ad9517_frequency()\n");
 		return -1;
 	}
 
 	/* Set the channel 5 power mode on */
 	status = ad9517_power_mode(ad9517_device, 5, 0);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 5 ad9517_power_mode()\n");
 		return -1;
 	}
 
 	/* Set the channel 5 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 5, 250000000);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 5 ad9517_frequency()\n");
 		return -1;
 	}
 
 	/* Set the channel 6 power mode on */
 	status = ad9517_power_mode(ad9517_device, 6, 0);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 6 ad9517_power_mode()\n");
 		return -1;
 	}
 
 	/* Set the channel 6 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 6, 250000000);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 6 ad9517_frequency()\n");
 		return -1;
 	}
 
 	/* Set the channel 7 power mode on */
 	status = ad9517_power_mode(ad9517_device, 7, 0);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 7 ad9517_power_mode()\n");
 		return -1;
 	}
 
 	/* Set the channel 7 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 7, 250000000);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error channel 7 ad9517_frequency()\n");
 		return -1;
 	}
 
 	status = ad9517_update(ad9517_device);
-	if(status < 0) {
+	if (status < 0) {
 		printf("Error ad9517_update()\n");
 		return -1;
 	}
@@ -462,12 +462,12 @@ int main(void)
 	printf("AD9517 PLL locked.\n");
 
 	// set up the devices
-	status= ad9250_setup(&ad9250_0_device, ad9250_0_param);
-	if(status< 0)
+	status = ad9250_setup(&ad9250_0_device, ad9250_0_param);
+	if (status < 0)
 		printf("Error ad9250_0_setup()\n");
 
-	status= ad9250_setup(&ad9250_1_device, ad9250_1_param);
-	if(status< 0)
+	status = ad9250_setup(&ad9250_1_device, ad9250_1_param);
+	if (status < 0)
 		printf("Error ad9250_1_setup()\n");
 
 	// set up the XCVR core
@@ -513,7 +513,7 @@ int main(void)
 
 	ad9250_test_mode(ad9250_1_device, AD9250_TEST_PNLONG);
 	ad9250_transfer(ad9250_1_device);
-	if(axi_adc_pn_mon(ad9250_core, AXI_ADC_PN23, 10) == -1) {
+	if (axi_adc_pn_mon(ad9250_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s ad9250 - PN23 sequence mismatch!\n", __func__);
 	};
 
@@ -539,9 +539,9 @@ int main(void)
 	};
 	axi_dmac_transfer_start(ad9250_dmac, &read_transfer);
 	status = axi_dmac_transfer_wait_completion(ad9250_dmac, 500);
-	if(status)
+	if (status)
 		return status;
-	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 4);
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 4);
 	Xil_DCacheFlush();
 
 	// set up normal output
@@ -565,9 +565,9 @@ int main(void)
 	};
 	axi_dmac_transfer_start(ad9250_dmac, &read_transfer_capture);
 	status = axi_dmac_transfer_wait_completion(ad9250_dmac, 500);
-	if(status)
+	if (status)
 		return status;
-	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 4);
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 4);
 	Xil_DCacheFlush();
 
 #ifdef IIO_SUPPORT

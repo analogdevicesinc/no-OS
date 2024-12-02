@@ -103,7 +103,7 @@ void TRANSMITTER_Housekeeping(void);
 ATV_ERR ADIAPI_TransmitterSetMuteState(void);
 
 /*! Performs the notification operations. */
-UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, void *BufPtr);
+UINT16 TRANSMITTER_Notification(TX_EVENT Ev, UINT16 Count, void *BufPtr);
 
 /*! @brief Parse the new EDID segment. */
 void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr);

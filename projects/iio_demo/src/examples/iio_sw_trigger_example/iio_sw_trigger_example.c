@@ -104,9 +104,9 @@ int iio_sw_trigger_example_main()
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adc_demo", adc_desc,
-			       &adc_demo_iio_descriptor,&adc_buff, NULL, NULL),
+			       &adc_demo_iio_descriptor, &adc_buff, NULL, NULL),
 		IIO_APP_DEVICE("dac_demo", dac_desc,
-			       &dac_demo_iio_descriptor,NULL, &dac_buff, NULL)
+			       &dac_demo_iio_descriptor, NULL, &dac_buff, NULL)
 	};
 
 	struct iio_trigger_init trigs[] = {

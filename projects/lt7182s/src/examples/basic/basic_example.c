@@ -48,7 +48,7 @@ int basic_example_main()
 	if (ret)
 		goto exit;
 
-	while(1) {
+	while (1) {
 		for (chan = LT7182S_CHAN_0; chan <= LT7182S_CHAN_1; chan++) {
 			ret = lt7182s_read_value(dev, chan,
 						 LT7182S_VIN, &vals[0]);

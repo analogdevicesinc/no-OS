@@ -67,7 +67,7 @@ int main(void)
 {
 	int ret;
 	uint16_t adc_buffer[ADAQ8092_SAMPLES_PER_CH * ADAQ8092_NUM_CH]
-	__attribute__ ((aligned));
+	__attribute__((aligned));
 
 	struct xil_spi_init_param xil_spi_init = {
 		.flags = 0,
@@ -190,12 +190,12 @@ int main(void)
 	}
 	/* Wait until transfer finishes */
 	ret = axi_dmac_transfer_wait_completion(adaq8092_dmac, 500);
-	if(ret)
+	if (ret)
 		return ret;
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
 
-	for (int i = 0; i < ADAQ8092_SAMPLES_PER_CH; i+=2)
-		pr_info("CH1: %d CH2: %d \n",adc_buffer[i], adc_buffer[i+1]);
+	for (int i = 0; i < ADAQ8092_SAMPLES_PER_CH; i += 2)
+		pr_info("CH1: %d CH2: %d \n", adc_buffer[i], adc_buffer[i + 1]);
 
 	ret = adaq8092_set_test_mode(adaq8092_device, ADAQ8092_TEST_OFF);
 	if (ret)

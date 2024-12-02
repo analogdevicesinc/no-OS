@@ -49,7 +49,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -69,7 +69,7 @@ int iio_example_main()
 	struct iio_app_desc *app;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*3*sizeof(int)
+		.size = DATA_BUFFER_SIZE * 3 * sizeof(int)
 	};
 	struct iio_app_init_param app_init_param = { 0 };
 

@@ -100,7 +100,7 @@ int main(void)
 
 	sign_bit = ad7606_get_resolution_bits(dev) - 1;
 
-	for (i = 0; i < AD7606X_FMC_SAMPLE_NO; i+= ch) {
+	for (i = 0; i < AD7606X_FMC_SAMPLE_NO; i += ch) {
 		for (ch = 0; ch < 8; ch++) {
 			int32_t sample = no_os_sign_extend32(buf[i + ch], sign_bit);
 			int mvolts = sample * scales[ch];

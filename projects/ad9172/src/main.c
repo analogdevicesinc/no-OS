@@ -268,7 +268,7 @@ int main(void)
 	axi_dmac_transfer_start(tx_dmac, &transfer);
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(tx_dmac, 500);
-	if(status)
+	if (status)
 		return status;
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)DDR_MEM_BASEADDR,

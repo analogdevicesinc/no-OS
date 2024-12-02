@@ -193,9 +193,9 @@ int read_measurements(struct ade9153a_dev *dev)
 
 	if (!(skip_temp)) {
 		// compute the deg C value using the trim values
-		temperature_val = ((float)temp_val.offset_reg_val / (float)( 1 << 5 )) - (((
+		temperature_val = ((float)temp_val.offset_reg_val / (float)(1 << 5)) - (((
 					  float)temp_val.temperature_reg_val * (float)temp_val.gain_reg_val)
-				  / (float)( 1 << 17 ));
+				  / (float)(1 << 17));
 		pr_info("Temperature: %.2f deg C \n", temperature_val);
 	}
 	// compute energy values
@@ -274,7 +274,7 @@ int read_measurements(struct ade9153a_dev *dev)
 
 	power_factor_val = (float)pq_vals.power_factor_reg_val / (float)PF_CC;
 
-	frequency_val = (float)(FREQ_CC) / (float)(pq_vals.period_reg_val +1);
+	frequency_val = (float)(FREQ_CC) / (float)(pq_vals.period_reg_val + 1);
 	// frequency value Hz
 
 	// multiplier constant for selected frequency
@@ -319,15 +319,15 @@ int autocalibration_read_vals(struct ade9153a_dev *dev)
 	if (ret)
 		return ret;
 
-	pr_info("AICC: %.2f \n", (float)autocal_vals.aicc_reg_val / ( 1 << 11 ));
-	pr_info("AVCC: %.2f \n", (float)autocal_vals.avcc_reg_val / ( 1 << 11 ));
+	pr_info("AICC: %.2f \n", (float)autocal_vals.aicc_reg_val / (1 << 11));
+	pr_info("AVCC: %.2f \n", (float)autocal_vals.avcc_reg_val / (1 << 11));
 
-	aicc = (float)autocal_vals.aicc_reg_val / (float)( 1 << 11 );
+	aicc = (float)autocal_vals.aicc_reg_val / (float)(1 << 11);
 	i_gain = aicc / (RMS_CURENT_CC * 1000);
 	i_gain = (-i_gain - 1);
-	i_gain = i_gain * (float)( 1 << 27 );
+	i_gain = i_gain * (float)(1 << 27);
 
-	avcc = (float)autocal_vals.avcc_reg_val / (float)( 1 << 11 );
+	avcc = (float)autocal_vals.avcc_reg_val / (float)(1 << 11);
 	v_gain = (float)((avcc / ((float)RMS_VOLTAGE_CC * (float)1000)) - 1) *
 		 (1 << 27);
 
@@ -338,10 +338,10 @@ int autocalibration_read_vals(struct ade9153a_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = ade9153a_write(dev,ADE9153A_REG_AIGAIN, (int32_t)i_gain);
+	ret = ade9153a_write(dev, ADE9153A_REG_AIGAIN, (int32_t)i_gain);
 	if (ret)
 		return ret;
-	ret = ade9153a_write(dev,ADE9153A_REG_AVGAIN, (uint32_t)v_gain);
+	ret = ade9153a_write(dev, ADE9153A_REG_AVGAIN, (uint32_t)v_gain);
 	if (ret)
 		return ret;
 

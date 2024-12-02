@@ -120,12 +120,12 @@ int fifo_example_main()
 		goto error;
 
 	pr_info("Starting watermark check\n");
-	while(true) {
+	while (true) {
 		// Read status to assert if FIFO_WATERMARK bit set
 		ret = adxl38x_read_device_data(adxl38x_desc, ADXL38X_STATUS0, 1, &status0);
 		if (ret)
 			goto error;
-		pr_info("Status 0: %d\n", status0 );
+		pr_info("Status 0: %d\n", status0);
 		ret = adxl38x_read_device_data(adxl38x_desc, ADXL38X_FIFO_STATUS0, 2,
 					       fifo_status);
 		if (ret)
@@ -135,9 +135,9 @@ int fifo_example_main()
 
 
 		// Read FIFO status and data if FIFO_WATERMARK is set
-		if(status0 & NO_OS_BIT(3)) {
+		if (status0 & NO_OS_BIT(3)) {
 			pr_info(" FIFO_WATERMARK is set. Total fifo entries =  %d\n", fifo_entries);
-			if(fifo_entries < set_fifo_entries)
+			if (fifo_entries < set_fifo_entries)
 				goto unmatch_error;
 
 			// Read data from FIFO (can read at least upto 12 samples * 3 bytes (chID, data))
@@ -147,7 +147,7 @@ int fifo_example_main()
 
 			// Parse Data for fist five samples
 			pr_info("First four entries (absolute values printed for magnitude between -1g & 1g):\n");
-			for(int b = 0; b < 36; b += 3) {
+			for (int b = 0; b < 36; b += 3) {
 				ret = adxl38x_data_raw_to_gees(adxl38x_desc, (fifo_data + b + 1), data_frac);
 				if (ret)
 					goto error;
@@ -158,7 +158,7 @@ int fifo_example_main()
 	}
 
 error:
-	if(ret)
+	if (ret)
 		pr_info("Error occurred!");
 	else
 		pr_info("The program has ended after successful execution\n");
@@ -177,7 +177,7 @@ unmatch_error:
 *******************************************************************************/
 static char getaxis(uint8_t chID)
 {
-	if(chID)
+	if (chID)
 		return chID > 1 ? 'z' : 'y';
 	return 'x';
 }

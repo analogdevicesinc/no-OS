@@ -28,8 +28,8 @@ static inline void i5g_write(struct s_i5g *st, int reg, int val)
 static inline int i5g_spi_access(struct s_i5g *st, int data)
 {
 	i5g_write(st, I5G_SPI_TRANSMIT_ADDR, data);
-	while(i5g_read(st, I5G_SPI_BUSY_ADDR) == I5G_SPI_BUSY) {}
-	return(i5g_read(st, I5G_SPI_RECEIVE_ADDR));
+	while (i5g_read(st, I5G_SPI_BUSY_ADDR) == I5G_SPI_BUSY) {}
+	return (i5g_read(st, I5G_SPI_RECEIVE_ADDR));
 }
 
 /* Indirect read, straight forward just send 3 bytes and return the last byte */
@@ -39,7 +39,7 @@ static inline int i5g_spi_read(struct s_i5g *st, int sel, int reg)
 	unsigned char val;
 #if 0
 	i5g_write(st, I5G_SPI_SELECT_N_ADDR, ~sel);
-	val = i5g_spi_access(st, ((reg>>8) | 0x80));
+	val = i5g_spi_access(st, ((reg >> 8) | 0x80));
 	val = i5g_spi_access(st, reg);
 	val = i5g_spi_access(st, 0);
 	i5g_write(st, I5G_SPI_SELECT_N_ADDR, -1);
@@ -49,7 +49,7 @@ static inline int i5g_spi_read(struct s_i5g *st, int sel, int reg)
 	else
 		ad9625_spi_read(st->ad9625_1_device, reg, &val);
 #endif
-	return(val);
+	return (val);
 }
 
 /* Simple write, in this case just send 3 bytes */
@@ -57,7 +57,7 @@ static inline void i5g_spi_write(struct s_i5g *st, int sel, int reg, int val)
 {
 #if 0
 	i5g_write(st, I5G_SPI_SELECT_N_ADDR, ~sel);
-	i5g_spi_access(st, ((reg>>8) | 0x00));
+	i5g_spi_access(st, ((reg >> 8) | 0x00));
 	i5g_spi_access(st, reg);
 	i5g_spi_access(st, val);
 	i5g_write(st, I5G_SPI_SELECT_N_ADDR, -1);
@@ -97,17 +97,17 @@ static inline int i5g_ad9625_status(struct s_i5g *st,
 
 	/* SYSREF received */
 	data = i5g_spi_read(st, sel, I5G_AD9625_SC_ADDR);
-	if(data != I5G_AD9625_SC_RECEIVED(sel)) {
+	if (data != I5G_AD9625_SC_RECEIVED(sel)) {
 		printf("sysref status mismatch (%d, %d, %x)!\n", sel, band, data);
 	}
 
 	/* Sysref violations */
 	data = i5g_spi_read(st, sel, I5G_AD9625_SS_ADDR);
-	if((data & I5G_AD9625_SS_MASK) == I5G_AD9625_SS_SET) {
-		return(status | (0x1 << band));
+	if ((data & I5G_AD9625_SS_MASK) == I5G_AD9625_SS_SET) {
+		return (status | (0x1 << band));
 	}
 
-	return(status);
+	return (status);
 }
 
 /* Check violation band, mostly a gimmick function- but helps you understand the
@@ -116,11 +116,11 @@ static inline int i5g_ad9625_status(struct s_i5g *st,
 
 static inline int i5g_status_check(int status)
 {
-	if (status == 0x3e) return(0); /* sysref at or within 235ps */
-	if (status == 0x3c) return(0); /* sysref at or within 270ps */
-	if (status == 0x38) return(0); /* sysref at or within 305ps */
+	if (status == 0x3e) return (0); /* sysref at or within 235ps */
+	if (status == 0x3c) return (0); /* sysref at or within 270ps */
+	if (status == 0x38) return (0); /* sysref at or within 305ps */
 
-	return(-1);
+	return (-1);
 }
 
 /* The mean thing that brutally overtakes everything else to synchronize the
@@ -144,7 +144,7 @@ static int i5g_intlv(struct s_i5g *st)
 	data = i5g_read(st, I5G_SYNC_STATUS_ADDR);
 	if (data == I5G_SYNC_OOS) {
 		printf("link out-of-sync (%x), deferring probe!\n", data);
-		return(-1);
+		return (-1);
 	}
 #if 1
 	/* Request indirect access (this overrides the default access) */
@@ -154,7 +154,7 @@ static int i5g_intlv(struct s_i5g *st)
 		timeout = timeout - 1;
 		if (timeout == 0) {
 			printf("request for device access denied!\n");
-			return(0);
+			return (0);
 		}
 	}
 #endif
@@ -164,7 +164,7 @@ static int i5g_intlv(struct s_i5g *st)
 		printf("unsupported device (%x) at (%d)!\n",
 		       data,
 		       (int)st->ad9625_cs_0);
-		return(0);
+		return (0);
 	}
 
 	data = i5g_spi_read(st, st->ad9625_cs_1, I5G_AD9625_ID_ADDR);
@@ -172,14 +172,14 @@ static int i5g_intlv(struct s_i5g *st)
 		printf("unsupported device (%x) at (%d)!\n",
 		       data,
 		       (int)st->ad9625_cs_1);
-		return(0);
+		return (0);
 	}
 
 	/* Check delay is locked */
 	data = i5g_read(st, I5G_DELAY_LOCKED_ADDR);
 	if (data != I5G_DELAY_LOCKED) {
 		printf("sysref delay controller is out-of-lock (%d)!\n", data);
-		return(0);
+		return (0);
 	}
 
 	/* So far so good, let's try synchronization:
@@ -278,12 +278,12 @@ static int i5g_intlv(struct s_i5g *st)
 		timeout = timeout - 1;
 		if (timeout == 0) {
 			printf("request for device release failed!\n");
-			return(0);
+			return (0);
 		}
 	}
 #endif
 	/* That's all folks! */
-	return(0);
+	return (0);
 }
 
 /* Calibrate the data paths, poor man's version (see hdl for more details)
@@ -336,14 +336,14 @@ static int i5g_calibrate(struct s_i5g *st)
 	i5g_write(st, I5G_COR_ENABLE_ADDR, I5G_COR_DISABLE);
 
 	/* Peaks - divide or shift? */
-	cal_max_0 = cal_max_0/16;
-	cal_min_0 = cal_min_0/16;
-	cal_max_1 = cal_max_1/16;
-	cal_min_1 = cal_min_1/16;
+	cal_max_0 = cal_max_0 / 16;
+	cal_min_0 = cal_min_0 / 16;
+	cal_max_1 = cal_max_1 / 16;
+	cal_min_1 = cal_min_1 / 16;
 
 	/* Offsets -divide or shift? -multiply or subtract? */
-	cal_offset_0 = -1*((cal_max_0 + cal_min_0)/2);
-	cal_offset_1 = -1*((cal_max_1 + cal_min_1)/2);
+	cal_offset_0 = -1 * ((cal_max_0 + cal_min_0) / 2);
+	cal_offset_1 = -1 * ((cal_max_1 + cal_min_1) / 2);
 
 	i5g_write(st, I5G_COR_OFFSET_0_ADDR, cal_offset_0);
 	i5g_write(st, I5G_COR_OFFSET_1_ADDR, cal_offset_1);
@@ -354,10 +354,10 @@ static int i5g_calibrate(struct s_i5g *st)
 	cal_scale_1 = (uint16_t)(cal_max_1 - cal_min_1);
 
 	if (cal_scale_1 > cal_scale_0) {
-		cal_scale_0 = ((uint32_t)(cal_scale_1*32768))/cal_scale_0;
+		cal_scale_0 = ((uint32_t)(cal_scale_1 * 32768)) / cal_scale_0;
 		cal_scale_1 = 32768;
 	} else {
-		cal_scale_1 = ((uint32_t)(cal_scale_0*32768))/cal_scale_1;
+		cal_scale_1 = ((uint32_t)(cal_scale_0 * 32768)) / cal_scale_1;
 		cal_scale_0 = 32768;
 	}
 
@@ -371,7 +371,7 @@ static int i5g_calibrate(struct s_i5g *st)
 	printf("calibration values (1) (%d, %d)!\n", cal_max_1, cal_min_1);
 	printf("correction values (1) (%d, %d)!\n", cal_offset_1, cal_scale_1);
 
-	return(0);
+	return (0);
 }
 
 int32_t i5g_setup(struct s_i5g **descriptor,
@@ -392,7 +392,7 @@ int32_t i5g_setup(struct s_i5g **descriptor,
 	data = i5g_read(st, I5G_VERSION_ADDR);
 	if (data != I5G_VERSION) {
 		printf("unsupported core version (%x)!\n", (int)data);
-		return(-1);
+		return (-1);
 	}
 
 	data = i5g_spi_read(st, st->ad9625_cs_0, AD9625_REG_CHIP_ID);
@@ -403,7 +403,7 @@ int32_t i5g_setup(struct s_i5g **descriptor,
 	/* Interleave & calibrate */
 	if (i5g_intlv(st) != 0) {
 		printf("i5g_intlv failed!\n");
-		return(-1);
+		return (-1);
 	}
 
 	i5g_calibrate(st);

@@ -59,7 +59,7 @@ int dummy_example_main()
 	struct adxl367_dev *dev;
 
 	ret = adxl367_init(&dev, init_param);
-	if(ret)
+	if (ret)
 		return -1;
 
 	ret = adxl367_self_test(dev);
