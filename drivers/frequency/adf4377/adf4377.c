@@ -117,7 +117,7 @@ int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 	}
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADF4377_BUFF_SIZE_BYTES);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 
 	*data = buff[2];
@@ -143,7 +143,7 @@ int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	if(scratchpad != ADF4377_SPI_SCRATCHPAD_TEST_A)
+	if (scratchpad != ADF4377_SPI_SCRATCHPAD_TEST_A)
 		return -1;
 
 	ret = adf4377_spi_write(dev, ADF4377_REG(0x0A), ADF4377_SPI_SCRATCHPAD_TEST_B);
@@ -154,7 +154,7 @@ int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	if(scratchpad != ADF4377_SPI_SCRATCHPAD_TEST_B)
+	if (scratchpad != ADF4377_SPI_SCRATCHPAD_TEST_B)
 		return -1;
 
 	return 0;
@@ -254,12 +254,12 @@ int32_t adf4377_soft_reset(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	while(timeout--) {
+	while (timeout--) {
 		ret = adf4377_spi_read(dev, ADF4377_REG(0x00), &data);
 		if (ret < 0)
 			return ret;
 
-		if(!(data & ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN)))
+		if (!(data & ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN)))
 			return adf4377_set_default(dev);
 	}
 
@@ -280,7 +280,7 @@ int32_t adf4377_set_freq(struct adf4377_dev *dev, uint64_t freq)
 
 	dev->clkout_div_sel = 0;
 
-	if(ADF4377_CHECK_RANGE(dev->f_clk, CLKPN_FREQ))
+	if (ADF4377_CHECK_RANGE(dev->f_clk, CLKPN_FREQ))
 		return -1;
 
 	dev->f_vco = freq;
@@ -360,7 +360,7 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 	else
 		dev->f_pfd = dev->clkin_freq * (1 + dev->ref_doubler_en);
 
-	if(ADF4377_CHECK_RANGE(dev->f_pfd, FREQ_PFD))
+	if (ADF4377_CHECK_RANGE(dev->f_pfd, FREQ_PFD))
 		return -1;
 
 	f_div_rclk = dev->f_pfd;
@@ -452,7 +452,7 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	ret = adf4377_spi_write(dev,ADF4377_REG(0x29),
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x29),
 				ADF4377_VCO_ALC_TO_LSB(vco_alc_timeout));
 	if (ret < 0)
 		return ret;
@@ -537,7 +537,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	if (ret < 0)
 		goto error_dev;
 
-	if(dev->gpio_ce) {
+	if (dev->gpio_ce) {
 		ret = no_os_gpio_direction_output(dev->gpio_ce, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error_gpio_ce;
@@ -585,7 +585,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		if (ret < 0)
 			goto error_spi;
 
-		if(dev->gpio_enclk1) {
+		if (dev->gpio_enclk1) {
 			ret = no_os_gpio_direction_output(dev->gpio_enclk1, NO_OS_GPIO_HIGH);
 			if (ret < 0)
 				goto error_gpio_enclk1;
@@ -596,7 +596,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 			if (ret < 0)
 				goto error_gpio_enclk1;
 
-			if(dev->gpio_enclk2) {
+			if (dev->gpio_enclk2) {
 				ret = no_os_gpio_direction_output(dev->gpio_enclk2, NO_OS_GPIO_HIGH);
 				if (ret < 0)
 					goto error_gpio_enclk2;

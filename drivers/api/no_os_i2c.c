@@ -59,7 +59,7 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 
 	if (!param->platform_ops->i2c_ops_init)
 		return -ENOSYS;
-	if ( param->device_id > I2C_MAX_BUS_NUMBER)
+	if (param->device_id > I2C_MAX_BUS_NUMBER)
 		return -EINVAL;
 	// Initializing BUS descriptor
 	if (i2c_table[param->device_id] == NULL) {

@@ -117,7 +117,7 @@ int8_t ad7156_init(struct ad7156_dev **device,
 				  &test,
 				  AD7156_REG_CHIP_ID,
 				  1);
-	if(test != AD7156_DEFAULT_ID) {
+	if (test != AD7156_DEFAULT_ID) {
 		status = -1;
 	}
 
@@ -182,7 +182,7 @@ void ad7156_set_power_mode(struct ad7156_dev *dev,
 				  AD7156_REG_CONFIG,
 				  1);
 	old_config_reg &= ~AD7156_CONFIG_MD(0x3);
-	new_config_reg = old_config_reg| AD7156_CONFIG_MD(pwr_mode);
+	new_config_reg = old_config_reg | AD7156_CONFIG_MD(pwr_mode);
 	ad7156_set_register_value(dev,
 				  new_config_reg,
 				  AD7156_REG_CONFIG,
@@ -259,7 +259,7 @@ void ad7156_set_range(struct ad7156_dev *dev,
 				  reg_address,
 				  1);
 	/* Update global variables that hold range information. */
-	if(channel == 1) {
+	if (channel == 1) {
 		dev->ad7156_channel1_range = ad7156_get_range(dev,
 					     channel);
 	} else {
@@ -291,7 +291,7 @@ float ad7156_get_range(struct ad7156_dev *dev,
 				  reg_address,
 				  1);
 	setup_reg = (setup_reg & AD7156_CH1_SETUP_RANGE(0x3)) >> 6;
-	switch(setup_reg) {
+	switch (setup_reg) {
 	case AD7156_CDC_RANGE_2_PF:
 		range =  2.0;
 		break;
@@ -306,7 +306,7 @@ float ad7156_get_range(struct ad7156_dev *dev,
 		break;
 	}
 	/* Update global variables that hold range information. */
-	if(channel == 1) {
+	if (channel == 1) {
 		dev->ad7156_channel1_range = range;
 	} else {
 		dev->ad7156_channel2_range = range;
@@ -376,9 +376,9 @@ void ad7156_set_threshold(struct ad7156_dev *dev,
 	range = ad7156_get_range(dev,
 				 channel);
 	raw_thr = (uint16_t)((p_fthr * 0xA000 / range) + 0x3000);
-	if(raw_thr > 0xD000) {
+	if (raw_thr > 0xD000) {
 		raw_thr = 0xD000;
-	} else if(raw_thr < 0x3000) {
+	} else if (raw_thr < 0x3000) {
 		raw_thr = 0x3000;
 	}
 	ad7156_set_register_value(dev,
@@ -435,7 +435,7 @@ uint16_t ad7156_read_channel_data(struct ad7156_dev *dev,
 	uint8_t reg_data[2] = {0, 0};
 	uint8_t ch_address = 0;
 
-	if(channel == 1) {
+	if (channel == 1) {
 		ch_address = AD7156_REG_CH1_DATA_H;
 	} else {
 		ch_address = AD7156_REG_CH2_DATA_H;
@@ -468,7 +468,7 @@ uint16_t ad7156_wait_read_channel_data(struct ad7156_dev *dev,
 	uint8_t ch_rdy_mask = 0;
 	uint8_t ch_address = 0;
 
-	if(channel == 1) {
+	if (channel == 1) {
 		ch_rdy_mask = AD7156_STATUS_RDY1;
 		ch_address = AD7156_REG_CH1_DATA_H;
 	} else {
@@ -480,7 +480,7 @@ uint16_t ad7156_wait_read_channel_data(struct ad7156_dev *dev,
 					  &status,
 					  AD7156_REG_STATUS,
 					  1);
-	} while((status & ch_rdy_mask) != 0);
+	} while ((status & ch_rdy_mask) != 0);
 	ad7156_get_register_value(dev,
 				  reg_data,
 				  ch_address,
@@ -511,9 +511,9 @@ float ad7156_read_channel_capacitance(struct ad7156_dev *dev,
 		   dev->ad7156_channel2_range;
 	raw_ch = ad7156_read_channel_data(dev,
 					  channel);
-	if(raw_ch < 0x3000) {
-		raw_ch= 0x3000;
-	} else if(raw_ch > 0xD000) {
+	if (raw_ch < 0x3000) {
+		raw_ch = 0x3000;
+	} else if (raw_ch > 0xD000) {
 		raw_ch = 0xD000;
 	}
 	p_fdata = (((raw_ch) - 0x3000) * ch_range) / 0xA000;
@@ -542,9 +542,9 @@ float ad7156_wait_read_channel_capacitance(struct ad7156_dev *dev,
 		   dev->ad7156_channel2_range;
 	raw_ch = ad7156_wait_read_channel_data(dev,
 					       channel);
-	if(raw_ch < 0x3000) {
-		raw_ch= 0x3000;
-	} else if(raw_ch > 0xD000) {
+	if (raw_ch < 0x3000) {
+		raw_ch = 0x3000;
+	} else if (raw_ch > 0xD000) {
 		raw_ch = 0xD000;
 	}
 	p_fdata = (((raw_ch) - 0x3000) * ch_range) / 0xA000;

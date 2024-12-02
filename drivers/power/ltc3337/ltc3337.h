@@ -135,7 +135,7 @@ int ltc3337_init(struct ltc3337_dev** dev,
 		 struct ltc3337_init_param* init_param);
 
 /* Removes the device instance */
-int ltc3337_remove( struct ltc3337_dev* dev);
+int ltc3337_remove(struct ltc3337_dev* dev);
 
 /* Sets the device prescaler value */
 int ltc3337_set_prescaler(struct ltc3337_dev* dev, uint8_t prescale);

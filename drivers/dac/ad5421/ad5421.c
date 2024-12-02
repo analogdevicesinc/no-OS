@@ -104,7 +104,7 @@ int32_t ad5421_init(struct ad5421_dev **device,
 
 	*device = dev;
 
-	return(ret_value);
+	return (ret_value);
 }
 
 /***************************************************************************//**
@@ -206,7 +206,7 @@ int32_t ad5421_get_dac(struct ad5421_dev *dev)
 		   &spi_data);
 	dac_value = ad5421_get(dev);
 
-	return(dac_value);
+	return (dac_value);
 }
 
 /**************************************************************************//**
@@ -227,7 +227,7 @@ int32_t ad5421_get_offset(struct ad5421_dev *dev)
 		   &spi_data);
 	offset_value = ad5421_get(dev);
 
-	return(offset_value);
+	return (offset_value);
 }
 
 /**************************************************************************//**
@@ -248,7 +248,7 @@ int32_t ad5421_get_gain(struct ad5421_dev *dev)
 		   &spi_data);
 	gain_value = ad5421_get(dev);
 
-	return(gain_value);
+	return (gain_value);
 }
 
 /**************************************************************************//**
@@ -269,7 +269,7 @@ int32_t ad5421_get_fault(struct ad5421_dev *dev)
 		   &spi_data);
 	value = ad5421_get(dev);
 
-	return(value);
+	return (value);
 }
 
 
@@ -309,9 +309,9 @@ int32_t ad5421_get_temp(struct ad5421_dev *dev)
 		   &spi_data);
 	temp_value = ad5421_get(dev) & 0x0FF;
 	/* Calculate temperature according to the datasheet formula. */
-	temp_value = (int32_t) (temp_constant1 * temp_value) + temp_constant2;
+	temp_value = (int32_t)(temp_constant1 * temp_value) + temp_constant2;
 
-	return(temp_value);
+	return (temp_value);
 }
 
 /**************************************************************************//**
@@ -346,10 +346,10 @@ float ad5421_get_vloop(struct ad5421_dev *dev)
 	ad5421_set(dev,
 		   &spi_data);
 	/* Calculate Vloop according to the datasheet formula. */
-	vloop_value = (float) (ad5421_get(dev) & 0x0FF);
+	vloop_value = (float)(ad5421_get(dev) & 0x0FF);
 	vloop_value = divide_constant_vloop * vloop_value;
 
-	return(vloop_value);
+	return (vloop_value);
 }
 
 /**************************************************************************//**
@@ -369,9 +369,9 @@ int32_t ad5421_set(struct ad5421_dev *dev,
 	int8_t status = 0;
 
 	/* Arrange the data to be sent in 8 bit packets. */
-	tx_buffer[0] = (uint8_t) ((*value & 0xff0000) >> 16);
-	tx_buffer[1] = (uint8_t) ((*value & 0x00ff00) >> 8);
-	tx_buffer[2] = (uint8_t) ((*value & 0x0000ff) >> 0);
+	tx_buffer[0] = (uint8_t)((*value & 0xff0000) >> 16);
+	tx_buffer[1] = (uint8_t)((*value & 0x00ff00) >> 8);
+	tx_buffer[2] = (uint8_t)((*value & 0x0000ff) >> 0);
 	/* Do a write operation via SPI. */
 	status = no_os_spi_write_and_read(dev->spi_desc,
 					  tx_buffer,
@@ -402,10 +402,10 @@ int32_t ad5421_get(struct ad5421_dev *dev)
 	if (status != 3) {
 		return -1;
 	}
-	return_val |= (int32_t) (rx_buffer[1] << 8);
-	return_val |= (int32_t) (rx_buffer[2] << 0);
+	return_val |= (int32_t)(rx_buffer[1] << 8);
+	return_val |= (int32_t)(rx_buffer[2] << 0);
 
-	return(return_val);
+	return (return_val);
 }
 
 /**************************************************************************//**

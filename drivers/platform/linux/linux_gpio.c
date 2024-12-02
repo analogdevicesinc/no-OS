@@ -273,7 +273,7 @@ int32_t linux_gpio_get_value(struct no_os_gpio_desc *desc,
 		return -1;
 	}
 
-	if(data == '0')
+	if (data == '0')
 		*value = NO_OS_GPIO_LOW;
 	else
 		*value = NO_OS_GPIO_HIGH;

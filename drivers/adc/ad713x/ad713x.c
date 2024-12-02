@@ -112,7 +112,7 @@ int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
 	buf[1] = 0x00;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
-	if(NO_OS_IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 	*reg_data = buf[1];
 
@@ -155,7 +155,7 @@ int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 	int32_t ret;
 
 	ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
-	if(NO_OS_IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 	reg_data &= ~mask;
 	reg_data |= data;
@@ -208,7 +208,7 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 	id = dev->dev_id;
 
 	while (ad713x_output_data_frame[id][i][0] != INVALID) {
-		if((adc_data_len == ad713x_output_data_frame[id][i][0]) &&
+		if ((adc_data_len == ad713x_output_data_frame[id][i][0]) &&
 		    (crc_header == ad713x_output_data_frame[id][i][1])) {
 			return ad713x_spi_write_mask(dev,
 						     AD713X_REG_DATA_PACKET_CONFIG,
@@ -494,27 +494,27 @@ static int32_t ad713x_remove_gpio(struct ad713x_dev *dev)
 
 	if (dev->gpio_dclkio) {
 		ret = no_os_gpio_remove(dev->gpio_dclkio);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 	if (dev->gpio_dclkio) {
 		ret = no_os_gpio_remove(dev->gpio_dclkmode);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 	if (dev->gpio_mode) {
 		ret = no_os_gpio_remove(dev->gpio_mode);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 	if (dev->gpio_pnd) {
 		ret = no_os_gpio_remove(dev->gpio_pnd);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 	if (dev->gpio_resetn) {
 		ret = no_os_gpio_remove(dev->gpio_resetn);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 
@@ -564,7 +564,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_dev;
 	} else {
-		dev->spi_desc = no_os_calloc(1, sizeof *dev->spi_desc);
+		dev->spi_desc = no_os_calloc(1, sizeof * dev->spi_desc);
 		dev->spi_desc->chip_select = init_param->spi_init_prm.chip_select;
 		dev->spi_desc->extra = init_param->spi_common_dev->extra;
 		dev->spi_desc->max_speed_hz = init_param->spi_init_prm.max_speed_hz;
@@ -573,7 +573,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	}
 
 	ret = ad713x_init_gpio(dev, init_param);
-	if(NO_OS_IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
 	dev->dev_id = init_param->dev_id;
@@ -639,15 +639,15 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 {
 	int32_t ret;
 
-	if(!dev)
+	if (!dev)
 		return -1;
 
 	ret = no_os_spi_remove(dev->spi_desc);
-	if(NO_OS_IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
 	ret = ad713x_remove_gpio(dev);
-	if(NO_OS_IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
 	no_os_free(dev);

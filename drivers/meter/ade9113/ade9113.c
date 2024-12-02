@@ -324,7 +324,7 @@ int ade9113_write_dc(struct ade9113_dev *dev, uint8_t reg_addr,
 		buff[i + 48] = buff[i];
 	}
 
-	for(i = 1; i <  dev->no_devs; i++) {
+	for (i = 1; i <  dev->no_devs; i++) {
 		buff[14 + 16 * i] = reg_data[dev->no_devs - i - 1];
 		crc = no_os_crc8(ade9113_crc8, &buff[12 + 16 * i], 3, 0);
 		crc ^= 0x55;
@@ -523,7 +523,7 @@ int ade9113_init(struct ade9113_dev **device,
 	no_os_mdelay(50);
 
 	// Check if device 0 communication is up
-	if(dev->no_devs < 2) {
+	if (dev->no_devs < 2) {
 		do {
 			ret = ade9113_get_com_up(dev, &reg_val);
 			if (ret)
@@ -551,7 +551,7 @@ int ade9113_init(struct ade9113_dev **device,
 		} while (!(reg_val_dc[0] & ADE9113_COM_UP_MSK));
 	}
 
-	if(dev->no_devs > 1) {
+	if (dev->no_devs > 1) {
 		/* Start clock output for other devices */
 		uint8_t write_data[4] = {0x01, 0x00, 0x00, 0x00};
 		ret = ade9113_write_dc(dev, ADE9113_REG_CONFIG0, write_data);

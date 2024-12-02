@@ -439,7 +439,7 @@ uint32_t TALISE_setSpiSettings(taliseDevice_t *device,
  * \retval TALACT_ERR_RESET_FULL Recovery action for full chip reset required
  * \retval TALACT_NO_ACTION Function completed successfully, no action required
  */
-uint32_t TALISE_verifySpiReadWrite (taliseDevice_t *device);
+uint32_t TALISE_verifySpiReadWrite(taliseDevice_t *device);
 
 /**
  * \brief Sets the CLKPLL output frequency
@@ -535,8 +535,8 @@ uint32_t TALISE_setRxPfirSyncClk(taliseDevice_t *device,
  * \retval TALACT_ERR_CHECK_PARAM recovery action for bad parameter check
  * \retval TALACT_NO_ACTION function completed successfully, no action required *
  */
-uint32_t TALISE_getApiVersion (taliseDevice_t *device, uint32_t *siVer,
-			       uint32_t *majorVer, uint32_t *minorVer, uint32_t *buildVer);
+uint32_t TALISE_getApiVersion(taliseDevice_t *device, uint32_t *siVer,
+			      uint32_t *majorVer, uint32_t *minorVer, uint32_t *buildVer);
 
 /**
  * \brief Reads back the silicon revision for the Talise Device

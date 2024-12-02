@@ -62,7 +62,7 @@ static ADI_I2C_HANDLE i2c_handler = NULL;
  * Buffer needed to be aligned to 32 bits.
  */
 static uint8_t adi_i2c_buffer[ADI_I2C_MEMORY_SIZE]
-__attribute__((aligned (4)));
+__attribute__((aligned(4)));
 
 /** Save the current state of the bitrate to not change it each time */
 static uint32_t last_bitrate = UNINITIALIZED_BITRATE;

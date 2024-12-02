@@ -106,7 +106,7 @@ static int32_t _ad7689_rac(struct ad7689_dev *dev,
 			// Bipolar samples are in two's complement, scale down to 14-bit
 			// by keeping the sign bit using division instead of implementation
 			// specific right shift. This works for unipolar samples too.
-			*data = (int16_t)*data / 4;
+			*data = (int16_t) * data / 4;
 		}
 	}
 

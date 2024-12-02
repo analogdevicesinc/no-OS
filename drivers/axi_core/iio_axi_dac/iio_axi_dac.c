@@ -68,11 +68,11 @@ static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
 	int ret = axi_dac_dds_get_calib_scale(iio_dac->dac, channel->ch_num,
 					      &val, &val2);
 	int32_t i = 0;
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	if(val2 < 0 && val >= 0) {
+	if (val2 < 0 && val >= 0) {
 		ret = (int) snprintf(buf, len, "-");
-		if(ret < 0)
+		if (ret < 0)
 			return ret;
 		i++;
 	}
@@ -99,9 +99,9 @@ static int get_voltage_calibphase(void *device, char *buf, uint32_t len,
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_get_calib_phase(iio_dac->dac, channel->ch_num,
 					      &val, &val2);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	if(val2 < 0 && val >= 0) {
+	if (val2 < 0 && val >= 0) {
 		i++;
 	}
 
@@ -240,9 +240,9 @@ static int set_voltage_calibscale(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
-	float calib= strtof(buf, NULL);
+	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
-	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	int32_t val2 = (int32_t)(calib * 1000000) % 1000000;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_set_calib_scale(iio_dac->dac, channel->ch_num, val,
 					      val2);
@@ -266,7 +266,7 @@ static int set_voltage_calibphase(void *device, char *buf, uint32_t len,
 {
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
-	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	int32_t val2 = (int32_t)(calib * 1000000) % 1000000;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_set_calib_phase(iio_dac->dac, channel->ch_num, val,
 					      val2);
@@ -474,7 +474,7 @@ int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
 			ret = axi_dac_set_datasel(iio_dac->dac, i, AXI_DAC_DATA_SEL_DMA);
 		else
 			ret = axi_dac_set_datasel(iio_dac->dac, i, AXI_DAC_DATA_SEL_DDS);
-		if(ret < 0)
+		if (ret < 0)
 			return ret;
 	}
 
@@ -501,7 +501,7 @@ int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 	iio_dac = (struct iio_axi_dac_desc *)dev;
 	bytes = nb_samples * no_os_hweight32(iio_dac->mask) * (STORAGE_BITS / 8);
 
-	if(iio_dac->dcache_flush_range)
+	if (iio_dac->dcache_flush_range)
 		iio_dac->dcache_flush_range((uintptr_t)buff, bytes);
 
 	struct axi_dma_transfer transfer = {

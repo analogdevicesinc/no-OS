@@ -1005,8 +1005,8 @@ int ad74413r_set_threshold(struct ad74413r_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	dac_threshold= AD74413R_THRESHOLD_DAC_RANGE * threshold /
-		       AD74413R_THRESHOLD_RANGE;
+	dac_threshold = AD74413R_THRESHOLD_DAC_RANGE * threshold /
+			AD74413R_THRESHOLD_RANGE;
 
 	return ad74413r_reg_update(desc, AD74413R_DIN_THRESH,
 				   AD74413R_COMP_THRESH_MASK, dac_threshold);

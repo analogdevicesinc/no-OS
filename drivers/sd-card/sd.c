@@ -369,7 +369,7 @@ static int32_t write_multiple_blocks(struct sd_desc *sd_desc,
 static int32_t read_multiple_blocks(struct sd_desc *sd_desc,
 				    uint8_t *data, uint64_t addr, uint64_t len)
 {
-	uint8_t		buff[DATA_BLOCK_LEN] __attribute__ ((aligned));
+	uint8_t		buff[DATA_BLOCK_LEN] __attribute__((aligned));
 	uint32_t	i;
 	uint64_t	data_idx;
 
@@ -421,7 +421,7 @@ int32_t sd_read(struct sd_desc *sd_desc,
 		return -1;
 
 	/* Send read command */
-	cmd_desc.cmd = (get_nb_of_blocks(address, len) == 1) ? CMD(17): CMD(18);
+	cmd_desc.cmd = (get_nb_of_blocks(address, len) == 1) ? CMD(17) : CMD(18);
 	cmd_desc.arg = address >> DATA_BLOCK_BITS;;
 	cmd_desc.response_len = R1_LEN;
 	if (0 != send_command(sd_desc, &cmd_desc))
@@ -442,7 +442,7 @@ int32_t sd_read(struct sd_desc *sd_desc,
 		cmd_desc.response_len = R1_LEN;
 		if (0 != send_command(sd_desc, &cmd_desc))
 			return -1;
-		if(cmd_desc.response[0] != R1_READY_STATE) {
+		if (cmd_desc.response[0] != R1_READY_STATE) {
 			DEBUG_MSG("Failed to send stop transmission command\n");
 			return -1;
 		}
@@ -464,8 +464,8 @@ int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
 		 uint64_t len)
 {
 	struct cmd_desc	cmd_desc;
-	uint8_t		first_block[DATA_BLOCK_LEN] __attribute__ ((aligned));
-	uint8_t		last_block[DATA_BLOCK_LEN] __attribute__ ((aligned));
+	uint8_t		first_block[DATA_BLOCK_LEN] __attribute__((aligned));
+	uint8_t		last_block[DATA_BLOCK_LEN] __attribute__((aligned));
 
 	/* Initial checks */
 	if (data == NULL || address > sd_desc->memory_size ||
@@ -486,7 +486,7 @@ int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
 			DATA_BLOCK_LEN);
 
 	/* Send write command to SD */
-	cmd_desc.cmd = (get_nb_of_blocks(address, len) == 1) ? CMD(24): CMD(25);
+	cmd_desc.cmd = (get_nb_of_blocks(address, len) == 1) ? CMD(24) : CMD(25);
 	cmd_desc.arg = address >> DATA_BLOCK_BITS; //Address of first block
 	cmd_desc.response_len = R1_LEN;
 	if (0 != send_command(sd_desc, &cmd_desc))
@@ -612,7 +612,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 		goto failure;
 
 	/* Get c_size from CSD */
-	uint32_t c_size = ((local_desc->buff[7] & ((1u<<5) -1)) << 16) |
+	uint32_t c_size = ((local_desc->buff[7] & ((1u << 5) - 1)) << 16) |
 			  (local_desc->buff[8] << 8) |
 			  local_desc->buff[9];
 	local_desc->memory_size = ((uint64_t)c_size + 1) *

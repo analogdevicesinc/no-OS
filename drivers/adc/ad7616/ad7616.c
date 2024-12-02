@@ -764,7 +764,7 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 	dmac_init.irq_option = IRQ_DISABLED;
 
 	axi_dmac_init(&dmac, &dmac_init);
-	if(!dmac)
+	if (!dmac)
 		return -1;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
@@ -787,7 +787,7 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 		return ret;
 	/* Wait until transfer finishes */
 	ret = axi_dmac_transfer_wait_completion(dmac, 500);
-	if(ret)
+	if (ret)
 		return ret;
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range((uintptr_t)buf, samples);

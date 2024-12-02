@@ -58,13 +58,13 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 	struct dac_demo_desc *adesc;
 	adesc = (struct dac_demo_desc*)no_os_calloc(1, sizeof(*adesc));
 
-	if(!adesc)
+	if (!adesc)
 		return -ENOMEM;
 
 	adesc->loopback_buffers = param->loopback_buffers;
 	adesc->loopback_buffer_len = param->loopback_buffer_len;
 
-	for(int i = 0; i < TOTAL_DAC_CHANNELS; i++)
+	for (int i = 0; i < TOTAL_DAC_CHANNELS; i++)
 		adesc->dac_ch_attr[i] = param->dev_ch_attr[i];
 	adesc->dac_global_attr = param->dev_global_attr;
 	*desc = adesc;
@@ -78,7 +78,7 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 ******************************************************************************/
 int32_t dac_demo_remove(struct dac_demo_desc *desc)
 {
-	if(!desc)
+	if (!desc)
 		return -EINVAL;
 
 	no_os_free(desc);
@@ -95,7 +95,7 @@ int32_t dac_demo_remove(struct dac_demo_desc *desc)
 int32_t update_dac_channels(void *dev, int32_t mask)
 {
 	struct dac_demo_desc *desc;
-	if(!dev)
+	if (!dev)
 		return -ENODEV;
 
 	desc = dev;
@@ -113,7 +113,7 @@ int32_t update_dac_channels(void *dev, int32_t mask)
 int32_t close_dac_channels(void* dev)
 {
 	struct dac_demo_desc *desc;
-	if(!dev)
+	if (!dev)
 		return -ENODEV;
 
 	desc = dev;
@@ -133,7 +133,7 @@ int32_t close_dac_channels(void* dev)
 int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval)
 {
-	if(!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
+	if (!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
 		return -EINVAL;
 
 	*readval = desc->reg[reg_index];
@@ -151,7 +151,7 @@ int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 int32_t dac_demo_reg_write(struct dac_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval)
 {
-	if(!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
+	if (!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
 		return -EINVAL;
 
 	desc->reg[reg_index] = writeval;

@@ -210,7 +210,7 @@ enum ad717x_odr {
 	sps_49 = 0x10,
 	sps_20 = 0x11,
 	sps_16 = 0x12,
-	sps_10 =0x13,
+	sps_10 = 0x13,
 	sps_5 = 0x14,
 	sps_2p5 = 0x15,
 	sps_1p25 = 0x16

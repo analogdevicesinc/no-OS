@@ -1027,7 +1027,7 @@ int ade7816_calib_rms(struct ade7816_desc *desc, enum ade7816_channel chan,
 		return ret;
 
 	return ade7816_write_reg(desc, reg,
-				 NO_OS_DIV_ROUND_CLOSEST_ULL(rms*rms - reg_val * reg_val, 128));
+				 NO_OS_DIV_ROUND_CLOSEST_ULL(rms * rms - reg_val * reg_val, 128));
 }
 
 /**

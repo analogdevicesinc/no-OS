@@ -65,7 +65,7 @@ int32_t adxrs453_init(struct adxrs453_dev **device,
 
 	/* Read the value of the ADXRS453 ID register. */
 	adxrs453_id = adxrs453_get_register_value(dev, ADXRS453_REG_PID);
-	if((adxrs453_id >> 8) != 0x52)
+	if ((adxrs453_id >> 8) != 0x52)
 		status = -1;
 
 	*device = dev;
@@ -114,10 +114,10 @@ uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
 		  ((uint32_t)data_buffer[1] << 16) |
 		  ((uint16_t)data_buffer[2] << 8) |
 		  data_buffer[3];
-	for(bit_no = 31; bit_no > 0; bit_no--)
+	for (bit_no = 31; bit_no > 0; bit_no--)
 		sum += ((command >> bit_no) & 0x1);
 
-	if(!(sum % 2))
+	if (!(sum % 2))
 		data_buffer[3] |= 1;
 
 	data_buffer[4] = data_buffer[0];
@@ -161,10 +161,10 @@ void adxrs453_set_register_value(struct adxrs453_dev *dev,
 		  ((uint32_t)data_buffer[1] << 16) |
 		  ((uint16_t)data_buffer[2] << 8) |
 		  data_buffer[3];
-	for(bit_no = 31; bit_no > 0; bit_no--)
+	for (bit_no = 31; bit_no > 0; bit_no--)
 		sum += ((command >> bit_no) & 0x1);
 
-	if(!(sum % 2))
+	if (!(sum % 2))
 		data_buffer[3] |= 1;
 
 	no_os_spi_write_and_read(dev->spi_desc, data_buffer, 4);
@@ -190,10 +190,10 @@ uint32_t adxrs453_get_sensor_data(struct adxrs453_dev *dev)
 		  ((uint32_t)data_buffer[1] << 16) |
 		  ((uint16_t)data_buffer[2] << 8) |
 		  data_buffer[3];
-	for(bit_no = 31; bit_no > 0; bit_no--)
+	for (bit_no = 31; bit_no > 0; bit_no--)
 		sum += ((command >> bit_no) & 0x1);
 
-	if(!(sum % 2))
+	if (!(sum % 2))
 		data_buffer[3] |= 1;
 
 	data_buffer[4] = data_buffer[0];
@@ -225,7 +225,7 @@ float adxrs453_get_rate(struct adxrs453_dev *dev)
 	register_value = adxrs453_get_register_value(dev, ADXRS453_REG_RATE);
 
 	/*!< If data received is in positive degree range */
-	if(register_value < 0x8000)
+	if (register_value < 0x8000)
 		rate = ((float)register_value / 80);
 	/*!< If data received is in negative degree range */
 	else

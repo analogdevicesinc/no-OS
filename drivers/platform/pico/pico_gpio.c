@@ -63,7 +63,7 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	desc->number = param->number;
 	gpio_init(desc->number);
 
-	switch(param->pull) {
+	switch (param->pull) {
 	case NO_OS_PULL_NONE:
 		up = false;
 		down = false;
@@ -114,7 +114,7 @@ int32_t pico_gpio_get(struct no_os_gpio_desc **desc,
 
 	descriptor->extra = extra;
 	ret = _gpio_init(descriptor, param);
-	if(ret)
+	if (ret)
 		goto error;
 
 	*desc = descriptor;
@@ -136,7 +136,7 @@ error:
 int32_t pico_gpio_get_optional(struct no_os_gpio_desc **desc,
 			       const struct no_os_gpio_init_param *param)
 {
-	if(param == NULL) {
+	if (param == NULL) {
 		*desc = NULL;
 		return 0;
 	}

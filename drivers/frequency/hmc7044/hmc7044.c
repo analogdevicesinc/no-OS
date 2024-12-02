@@ -417,7 +417,7 @@ int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 			break;
 		}
 	}
-	if (chan == NULL )
+	if (chan == NULL)
 		return -1;
 
 	*rate = dev->pll2_freq / chan->divider;
@@ -464,7 +464,7 @@ int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 			break;
 		}
 	}
-	if (chan == NULL )
+	if (chan == NULL)
 		return -1;
 
 	div = hmc7044_calc_out_div(rate, dev->pll2_freq);
@@ -472,7 +472,7 @@ int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 
 	ret = hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan->num),
 			    HMC7044_DIV_LSB(div));
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 
 	return hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan->num),
@@ -1689,7 +1689,7 @@ int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
  * @brief hmc7044 clock ops
  */
 const struct no_os_clk_platform_ops hmc7044_clk_ops = {
-	.clk_recalc_rate =&hmc7044_recalc_rate,
+	.clk_recalc_rate = &hmc7044_recalc_rate,
 	.clk_round_rate = &hmc7044_round_rate,
 	.clk_set_rate = &hmc7044_set_rate,
 };

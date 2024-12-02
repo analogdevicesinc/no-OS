@@ -170,7 +170,7 @@ uint32_t TALISE_checkInitCalComplete(taliseDevice_t *device,
 		}
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_RUNINIT_OPCODE, 0, cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -218,7 +218,7 @@ uint32_t TALISE_abortInitCals(taliseDevice_t *device, uint32_t *calsCompleted)
 		cmdStatusByte = 2;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_ABORT_OPCODE, 0, cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -242,7 +242,7 @@ uint32_t TALISE_abortInitCals(taliseDevice_t *device, uint32_t *calsCompleted)
 			cmdStatusByte = 2;
 		}
 
-		if((cmdStatusByte >> 1) > 0) {
+		if ((cmdStatusByte >> 1) > 0) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 							  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 							  TALACT_ERR_RESET_ARM);
@@ -325,7 +325,7 @@ uint32_t TALISE_getInitCalStatus(taliseDevice_t *device,
 			cmdStatusByte = 2;
 		}
 
-		if((cmdStatusByte >> 1) > 0) {
+		if ((cmdStatusByte >> 1) > 0) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 							  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, talInitCalDoneObjectID, cmdStatusByte),
 							  retVal, TALACT_ERR_RESET_ARM);
@@ -448,7 +448,7 @@ uint32_t TALISE_enableTrackingCals(taliseDevice_t *device, uint32_t enableMask)
 		cmdStatusByte = 3;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_WRITECFG_OPCODE, TALISE_ARM_OBJECTID_CAL_SCHEDULER,
 								  cmdStatusByte), retVal, TALACT_ERR_RESET_ARM);
@@ -477,7 +477,7 @@ uint32_t TALISE_getEnabledTrackingCals(taliseDevice_t *device,
 				  TALACT_WARN_RESET_LOG);
 #endif
 
-	if(enableMask == NULL) {
+	if (enableMask == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_GETENABLED_TRACK_CALS_NULL_PTR, retVal, TALACT_ERR_CHECK_PARAM);
 	}
@@ -516,14 +516,14 @@ uint32_t TALISE_getPendingTrackingCals(taliseDevice_t *device,
 	/* read back the RX Tracking cal status */
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_ARM_CMD_STATUS_11,
 				  &readData[0]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* read back the TX Tracking cal status */
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_ARM_CMD_STATUS_12,
 				  &readData[1]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -610,7 +610,7 @@ uint32_t TALISE_rescheduleTrackingCal(taliseDevice_t *device,
 	if (device->devStateInfo.swTest == CODECHECK_PARAM_RESCHEDULETRACKINGCAL_ERR1) {
 		cmdStatusByte = 2;
 	}
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -681,7 +681,7 @@ uint32_t TALISE_setAllTrackCalState(taliseDevice_t *device,
 	if (device->devStateInfo.swTest == CODECHECK_PARAM_SETALLTRACKCALSTATE_ERR1) {
 		cmdStatusByte = 2;
 	}
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -739,7 +739,7 @@ uint32_t TALISE_getAllTrackCalState(taliseDevice_t *device,
 	if (device->devStateInfo.swTest == CODECHECK_PARAM_GETALLTRACKCALSTATE_ERR1) {
 		cmdStatusByte = 2;
 	}
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -752,8 +752,8 @@ uint32_t TALISE_getAllTrackCalState(taliseDevice_t *device,
 			TALISE_ADDR_ARM_START_DATA_ADDR, &armData[0], sizeof(armData), 0);
 	IF_ERR_RETURN_U32(retVal);
 
-	*resumeCalMask =  (uint32_t)armData[0] | ((uint32_t)armData[1] << 8) | ((
-				  uint32_t)armData[2] << 16) | ((uint32_t)armData[3] << 24);
+	*resumeCalMask = (uint32_t)armData[0] | ((uint32_t)armData[1] << 8) | ((
+				 uint32_t)armData[2] << 16) | ((uint32_t)armData[3] << 24);
 
 	/* ARM returns a 32bit value with unused bits set high, mask with valid cal
 	 * bits to only show the resume bits for the valid cals. */
@@ -816,7 +816,7 @@ uint32_t TALISE_getTxLolStatus(taliseDevice_t *device,
 		cmdStatusByte = 2;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -832,19 +832,19 @@ uint32_t TALISE_getTxLolStatus(taliseDevice_t *device,
 	/* Assign to data structure */
 	txLolStatus->errorCode = (((uint32_t)armReadBack[3]) << 24) | (((
 					 uint32_t)armReadBack[2]) << 16) |
-				 (((uint32_t)armReadBack[1]) <<  8) |  ((uint32_t)armReadBack[0]);
+				 (((uint32_t)armReadBack[1]) <<  8) | ((uint32_t)armReadBack[0]);
 	txLolStatus->percentComplete = (((uint32_t)armReadBack[7]) << 24) | (((
 					       uint32_t)armReadBack[6]) << 16) |
-				       (((uint32_t)armReadBack[5]) <<  8) |  ((uint32_t)armReadBack[4]);
+				       (((uint32_t)armReadBack[5]) <<  8) | ((uint32_t)armReadBack[4]);
 	txLolStatus->varianceMetric = (((uint32_t)armReadBack[11]) << 24) | (((
 					      uint32_t)armReadBack[10]) << 16) |
-				      (((uint32_t)armReadBack[ 9]) <<  8) |  ((uint32_t)armReadBack[ 8]);
+				      (((uint32_t)armReadBack[ 9]) <<  8) | ((uint32_t)armReadBack[ 8]);
 	txLolStatus->iterCount = (((uint32_t)armReadBack[15]) << 24) | (((
 					 uint32_t)armReadBack[14]) << 16) |
-				 (((uint32_t)armReadBack[13]) <<  8) |  ((uint32_t)armReadBack[12]);
+				 (((uint32_t)armReadBack[13]) <<  8) | ((uint32_t)armReadBack[12]);
 	txLolStatus->updateCount = (((uint32_t)armReadBack[19]) << 24) | (((
 					   uint32_t)armReadBack[18]) << 16) |
-				   (((uint32_t)armReadBack[17]) <<  8) |  ((uint32_t)armReadBack[16]);
+				   (((uint32_t)armReadBack[17]) <<  8) | ((uint32_t)armReadBack[16]);
 
 	return (uint32_t)retVal;
 }
@@ -899,7 +899,7 @@ uint32_t TALISE_getTxQecStatus(taliseDevice_t *device,
 		cmdStatusByte = 2;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -915,19 +915,19 @@ uint32_t TALISE_getTxQecStatus(taliseDevice_t *device,
 	/* Assign to data structure */
 	txQecStatus->errorCode = (((uint32_t)armReadBack[3]) << 24) | (((
 					 uint32_t)armReadBack[2]) << 16) |
-				 (((uint32_t)armReadBack[1]) <<  8) |  ((uint32_t)armReadBack[0]);
+				 (((uint32_t)armReadBack[1]) <<  8) | ((uint32_t)armReadBack[0]);
 	txQecStatus->percentComplete = (((uint32_t)armReadBack[7]) << 24) | (((
 					       uint32_t)armReadBack[6]) << 16) |
-				       (((uint32_t)armReadBack[5]) <<  8) |  ((uint32_t)armReadBack[4]);
+				       (((uint32_t)armReadBack[5]) <<  8) | ((uint32_t)armReadBack[4]);
 	txQecStatus->correctionMetric = (((uint32_t)armReadBack[11]) << 24) | (((
 						uint32_t)armReadBack[10]) << 16) |
-					(((uint32_t)armReadBack[ 9]) <<  8) |  ((uint32_t)armReadBack[ 8]);
+					(((uint32_t)armReadBack[ 9]) <<  8) | ((uint32_t)armReadBack[ 8]);
 	txQecStatus->iterCount = (((uint32_t)armReadBack[15]) << 24) | (((
 					 uint32_t)armReadBack[14]) << 16) |
-				 (((uint32_t)armReadBack[13]) <<  8) |  ((uint32_t)armReadBack[12]);
+				 (((uint32_t)armReadBack[13]) <<  8) | ((uint32_t)armReadBack[12]);
 	txQecStatus->updateCount = (((uint32_t)armReadBack[19]) << 24) | (((
 					   uint32_t)armReadBack[18]) << 16) |
-				   (((uint32_t)armReadBack[17]) <<  8) |  ((uint32_t)armReadBack[16]);
+				   (((uint32_t)armReadBack[17]) <<  8) | ((uint32_t)armReadBack[16]);
 
 	return (uint32_t)retVal;
 }
@@ -982,7 +982,7 @@ uint32_t TALISE_getRxQecStatus(taliseDevice_t *device,
 		cmdStatusByte = 2;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -998,19 +998,19 @@ uint32_t TALISE_getRxQecStatus(taliseDevice_t *device,
 	/* Assign to data structure */
 	rxQecStatus->errorCode = (((uint32_t)armReadBack[3]) << 24) | (((
 					 uint32_t)armReadBack[2]) << 16) |
-				 (((uint32_t)armReadBack[1]) <<  8) |  ((uint32_t)armReadBack[0]);
+				 (((uint32_t)armReadBack[1]) <<  8) | ((uint32_t)armReadBack[0]);
 	rxQecStatus->percentComplete = (((uint32_t)armReadBack[7]) << 24) | (((
 					       uint32_t)armReadBack[6]) << 16) |
-				       (((uint32_t)armReadBack[5]) <<  8) |  ((uint32_t)armReadBack[4]);
+				       (((uint32_t)armReadBack[5]) <<  8) | ((uint32_t)armReadBack[4]);
 	rxQecStatus->selfcheckIrrDb = (((uint32_t)armReadBack[11]) << 24) | (((
 					      uint32_t)armReadBack[10]) << 16) |
-				      (((uint32_t)armReadBack[ 9]) <<  8) |  ((uint32_t)armReadBack[ 8]);
+				      (((uint32_t)armReadBack[ 9]) <<  8) | ((uint32_t)armReadBack[ 8]);
 	rxQecStatus->iterCount = (((uint32_t)armReadBack[15]) << 24) | (((
 					 uint32_t)armReadBack[14]) << 16) |
-				 (((uint32_t)armReadBack[13]) <<  8) |  ((uint32_t)armReadBack[12]);
+				 (((uint32_t)armReadBack[13]) <<  8) | ((uint32_t)armReadBack[12]);
 	rxQecStatus->updateCount = (((uint32_t)armReadBack[19]) << 24) | (((
 					   uint32_t)armReadBack[18]) << 16) |
-				   (((uint32_t)armReadBack[17]) <<  8) |  ((uint32_t)armReadBack[16]);
+				   (((uint32_t)armReadBack[17]) <<  8) | ((uint32_t)armReadBack[16]);
 
 	return (uint32_t)retVal;
 }
@@ -1065,7 +1065,7 @@ uint32_t TALISE_getOrxQecStatus(taliseDevice_t *device,
 		cmdStatusByte = 2;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1081,19 +1081,19 @@ uint32_t TALISE_getOrxQecStatus(taliseDevice_t *device,
 	/* Assign to data structure */
 	orxQecStatus->errorCode = (((uint32_t)armReadBack[3]) << 24) | (((
 					  uint32_t)armReadBack[2]) << 16) |
-				  (((uint32_t)armReadBack[1]) <<  8) |  ((uint32_t)armReadBack[0]);
+				  (((uint32_t)armReadBack[1]) <<  8) | ((uint32_t)armReadBack[0]);
 	orxQecStatus->percentComplete = (((uint32_t)armReadBack[7]) << 24) | (((
 						uint32_t)armReadBack[6]) << 16) |
-					(((uint32_t)armReadBack[5]) <<  8) |  ((uint32_t)armReadBack[4]);
+					(((uint32_t)armReadBack[5]) <<  8) | ((uint32_t)armReadBack[4]);
 	orxQecStatus->selfcheckIrrDb = (((uint32_t)armReadBack[11]) << 24) | (((
 					       uint32_t)armReadBack[10]) << 16) |
-				       (((uint32_t)armReadBack[ 9]) <<  8) |  ((uint32_t)armReadBack[ 8]);
+				       (((uint32_t)armReadBack[ 9]) <<  8) | ((uint32_t)armReadBack[ 8]);
 	orxQecStatus->iterCount = (((uint32_t)armReadBack[15]) << 24) | (((
 					  uint32_t)armReadBack[14]) << 16) |
-				  (((uint32_t)armReadBack[13]) <<  8) |  ((uint32_t)armReadBack[12]);
+				  (((uint32_t)armReadBack[13]) <<  8) | ((uint32_t)armReadBack[12]);
 	orxQecStatus->updateCount = (((uint32_t)armReadBack[19]) << 24) | (((
 					    uint32_t)armReadBack[18]) << 16) |
-				    (((uint32_t)armReadBack[17]) <<  8) |  ((uint32_t)armReadBack[16]);
+				    (((uint32_t)armReadBack[17]) <<  8) | ((uint32_t)armReadBack[16]);
 
 	return (uint32_t)retVal;
 }
@@ -1148,7 +1148,7 @@ uint32_t TALISE_getRxHd2Status(taliseDevice_t *device,
 		cmdStatusByte = 2;
 	}
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1164,19 +1164,19 @@ uint32_t TALISE_getRxHd2Status(taliseDevice_t *device,
 	/* Assign to data structure */
 	rxHd2Status->errorCode = (((uint32_t)armReadBack[3]) << 24) | (((
 					 uint32_t)armReadBack[2]) << 16) |
-				 (((uint32_t)armReadBack[1]) <<  8) |  ((uint32_t)armReadBack[0]);
+				 (((uint32_t)armReadBack[1]) <<  8) | ((uint32_t)armReadBack[0]);
 	rxHd2Status->percentComplete = (((uint32_t)armReadBack[7]) << 24) | (((
 					       uint32_t)armReadBack[6]) << 16) |
-				       (((uint32_t)armReadBack[5]) <<  8) |  ((uint32_t)armReadBack[4]);
+				       (((uint32_t)armReadBack[5]) <<  8) | ((uint32_t)armReadBack[4]);
 	rxHd2Status->confidenceLevel = (((uint32_t)armReadBack[11]) << 24) | (((
 					       uint32_t)armReadBack[10]) << 16) |
-				       (((uint32_t)armReadBack[ 9]) <<  8) |  ((uint32_t)armReadBack[ 8]);
+				       (((uint32_t)armReadBack[ 9]) <<  8) | ((uint32_t)armReadBack[ 8]);
 	rxHd2Status->iterCount = (((uint32_t)armReadBack[15]) << 24) | (((
 					 uint32_t)armReadBack[14]) << 16) |
-				 (((uint32_t)armReadBack[13]) <<  8) |  ((uint32_t)armReadBack[12]);
+				 (((uint32_t)armReadBack[13]) <<  8) | ((uint32_t)armReadBack[12]);
 	rxHd2Status->updateCount = (((uint32_t)armReadBack[19]) << 24) | (((
 					   uint32_t)armReadBack[18]) << 16) |
-				   (((uint32_t)armReadBack[17]) <<  8) |  ((uint32_t)armReadBack[16]);
+				   (((uint32_t)armReadBack[17]) <<  8) | ((uint32_t)armReadBack[16]);
 
 	return (uint32_t)retVal;
 }
@@ -1189,10 +1189,10 @@ uint32_t TALISE_waitForEvent(taliseDevice_t *device,
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 	talRecoveryActions_t retValWarn = TALACT_NO_ACTION;
 	talRecoveryActions_t eventTimeOutAction = TALACT_NO_ACTION;
-	uint16_t spiAddr=0;
-	uint8_t  spiBit=0;
-	uint8_t  doneBitLevel=0;
-	uint8_t  data=0;
+	uint16_t spiAddr = 0;
+	uint8_t  spiBit = 0;
+	uint8_t  doneBitLevel = 0;
+	uint8_t  data = 0;
 	uint32_t numEventChecks = 1;
 	uint32_t eventCheck = 0;
 
@@ -1208,7 +1208,7 @@ uint32_t TALISE_waitForEvent(taliseDevice_t *device,
 
 	retValWarn = retVal;
 
-	switch(waitEvent) {
+	switch (waitEvent) {
 	case TAL_CLKPLLCP:
 		spiAddr = TALISE_ADDR_CLK_SYNTH_CAL;
 		spiBit = 5;
@@ -1268,7 +1268,7 @@ uint32_t TALISE_waitForEvent(taliseDevice_t *device,
 
 	for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++) {
 		halError = talSpiReadByte(device->devHalInfo, spiAddr, &data);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1334,7 +1334,7 @@ uint32_t TALISE_readEventStatus(taliseDevice_t *device,
 						  TAL_ERR_READEVENTSTATUS_NULL_PARM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	switch(waitEvent) {
+	switch (waitEvent) {
 	case TAL_CLKPLLCP:
 		spiAddr = TALISE_ADDR_CLK_SYNTH_CAL;
 		spiBit = 5;
@@ -1376,7 +1376,7 @@ uint32_t TALISE_readEventStatus(taliseDevice_t *device,
 	}
 
 	halError = talSpiReadByte(device->devHalInfo, spiAddr, &data);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -1455,7 +1455,7 @@ uint32_t TALISE_resetExtTxLolChannel(taliseDevice_t *device,
 	if (device->devStateInfo.swTest == CODECHECK_PARAM_RESETEXTTXLOLCHANNEL_ERR2) {
 		cmdStatusByte  = 2;
 	}
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1595,8 +1595,8 @@ uint32_t TALISE_setDigDcOffsetMShift(taliseDevice_t *device,
 	adiHalErr_t halError = ADIHAL_OK;
 	uint16_t mshiftRegAddress = 0;
 
-	static const uint8_t MSHIFT_MIN_RANGE= 0x08;
-	static const uint8_t MSHIFT_MAX_RANGE= 0x14;
+	static const uint8_t MSHIFT_MIN_RANGE = 0x08;
+	static const uint8_t MSHIFT_MAX_RANGE = 0x14;
 
 #if TALISE_VERBOSE
 	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
@@ -1735,7 +1735,7 @@ uint32_t TALISE_setDigDcOffsetEn(taliseDevice_t *device, uint8_t enableMask)
 	return (uint32_t)retVal;
 }
 
-uint32_t TALISE_getDigDcOffsetEn(taliseDevice_t *device,uint8_t *enableMask)
+uint32_t TALISE_getDigDcOffsetEn(taliseDevice_t *device, uint8_t *enableMask)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 	adiHalErr_t halError = ADIHAL_OK;

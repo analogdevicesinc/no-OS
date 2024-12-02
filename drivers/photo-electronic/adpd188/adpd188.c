@@ -59,8 +59,8 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	struct adpd188_dev *dev;
 	uint16_t reg_data;
 
-	dev = (struct adpd188_dev *)no_os_calloc(1, sizeof (*dev));
-	if(!dev)
+	dev = (struct adpd188_dev *)no_os_calloc(1, sizeof(*dev));
+	if (!dev)
 		return -1;
 	dev->device = init_param->device;
 	if (dev->device == ADPD1080)
@@ -70,42 +70,42 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	else
 		dev->phy_opt = init_param->phy_opt;
 
-	if(dev->phy_opt == ADPD188_SPI)
+	if (dev->phy_opt == ADPD188_SPI)
 		ret = no_os_spi_init((struct no_os_spi_desc **)&dev->phy_desc,
 				     (const struct no_os_spi_init_param *)&init_param->phy_init);
-	else if(dev->phy_opt == ADPD188_I2C)
+	else if (dev->phy_opt == ADPD188_I2C)
 		ret = no_os_i2c_init((struct no_os_i2c_desc **)&dev->phy_desc,
 				     (const struct no_os_i2c_init_param *)&init_param->phy_init);
 	else
 		ret = -1;
-	if(ret != 0)
+	if (ret != 0)
 		goto error_dev;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_DEVID, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_phy;
-	if((dev->device == ADPD188BI) && (reg_data != ADPD188_DEVICE_ID))
+	if ((dev->device == ADPD188BI) && (reg_data != ADPD188_DEVICE_ID))
 		goto error_phy;
-	else if(((dev->device == ADPD1080) || (dev->device == ADPD1081)) &&
-		(reg_data != ADPD108X_DEVICE_ID))
+	else if (((dev->device == ADPD1080) || (dev->device == ADPD1081)) &&
+		 (reg_data != ADPD108X_DEVICE_ID))
 		goto error_phy;
 
 	ret = adpd188_sw_reset(dev);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_phy;
 
 	ret = no_os_gpio_get(&dev->gpio0, &init_param->gpio0_init);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_phy;
 	ret = no_os_gpio_get(&dev->gpio1, &init_param->gpio1_init);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio0;
 
 	ret = no_os_gpio_direction_input(dev->gpio0);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio1;
 	ret = no_os_gpio_direction_input(dev->gpio1);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio1;
 
 	*device = dev;
@@ -117,9 +117,9 @@ error_gpio1:
 error_gpio0:
 	no_os_gpio_remove(dev->gpio0);
 error_phy:
-	if(dev->phy_opt == ADPD188_SPI)
+	if (dev->phy_opt == ADPD188_SPI)
 		no_os_spi_remove(dev->phy_desc);
-	else if(dev->phy_opt == ADPD188_I2C)
+	else if (dev->phy_opt == ADPD188_I2C)
 		no_os_i2c_remove(dev->phy_desc);
 error_dev:
 	no_os_free(dev);
@@ -136,20 +136,20 @@ int32_t adpd188_remove(struct adpd188_dev *dev)
 {
 	int32_t ret;
 
-	if(dev->phy_opt == ADPD188_SPI)
+	if (dev->phy_opt == ADPD188_SPI)
 		ret = no_os_spi_remove(dev->phy_desc);
-	else if(dev->phy_opt == ADPD188_I2C)
+	else if (dev->phy_opt == ADPD188_I2C)
 		ret = no_os_i2c_remove(dev->phy_desc);
 	else
 		ret = -1;
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = no_os_gpio_remove(dev->gpio0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	ret = no_os_gpio_remove(dev->gpio1);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	no_os_free(dev);
@@ -170,12 +170,12 @@ int32_t adpd188_reg_read(struct adpd188_dev *dev, uint8_t reg_addr,
 	int32_t ret;
 	uint8_t buff[] = {0, 0, 0};
 
-	if(dev->phy_opt == ADPD188_SPI) {
+	if (dev->phy_opt == ADPD188_SPI) {
 		buff[0] = (reg_addr << 1) & 0xFE;
 		ret = no_os_spi_write_and_read(dev->phy_desc, buff, 3);
-	} else if(dev->phy_opt == ADPD188_I2C) {
+	} else if (dev->phy_opt == ADPD188_I2C) {
 		ret = no_os_i2c_write(dev->phy_desc, &reg_addr, 1, 0);
-		if(ret != 0)
+		if (ret != 0)
 			return -1;
 		/**
 		 *  Store read values starting with the second place in the buffer to
@@ -186,7 +186,7 @@ int32_t adpd188_reg_read(struct adpd188_dev *dev, uint8_t reg_addr,
 	} else {
 		ret = -1;
 	}
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	*reg_val = (buff[1] << 8) & 0xFF00;
@@ -211,16 +211,16 @@ int32_t adpd188_reg_write(struct adpd188_dev *dev, uint8_t reg_addr,
 	buff[1] = (reg_val & 0xFF00) >> 8;
 	buff[2] = reg_val & 0x00FF;
 
-	if(dev->phy_opt == ADPD188_SPI) {
+	if (dev->phy_opt == ADPD188_SPI) {
 		buff[0] = (reg_addr << 1) | 1;
 		ret = no_os_spi_write_and_read(dev->phy_desc, buff, 3);
-	} else if(dev->phy_opt == ADPD188_I2C) {
+	} else if (dev->phy_opt == ADPD188_I2C) {
 		buff[0] = reg_addr;
 		ret = no_os_i2c_write(dev->phy_desc, buff, 3, 1);
 	} else {
 		ret = -1;
 	}
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	return 0;
@@ -241,7 +241,7 @@ int32_t adpd188_mode_get(struct adpd188_dev *dev, enum adpd188_mode *mode)
 	uint16_t data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_MODE, &data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	*mode = data & ADPD188_MODE_MODE_MASK;
@@ -279,7 +279,7 @@ int32_t adpd188_fifo_status_get(struct adpd188_dev *dev, uint8_t *bytes_no)
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_STATUS, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	*bytes_no = (reg_data & ADPD188_STATUS_FIFO_SAMPLES_MASK) >>
@@ -299,7 +299,7 @@ int32_t adpd188_fifo_clear(struct adpd188_dev *dev)
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_STATUS, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data |= 0x8000;
 	/* Write 0 to the interrupt flags to not clear them unintentionally. */
@@ -321,11 +321,11 @@ int32_t adpd188_fifo_thresh_set(struct adpd188_dev *dev, uint8_t word_no)
 	int32_t ret;
 	uint16_t reg_data;
 
-	if(word_no > ADPD188_FIFO_THRESH_MAX_THRESHOLD)
+	if (word_no > ADPD188_FIFO_THRESH_MAX_THRESHOLD)
 		return -1;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_FIFO_THRESH, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	reg_data &= ~ADPD188_FIFO_THRESH_FIFO_THRESH_MASK;
@@ -353,11 +353,11 @@ int32_t adpd188_interrupt_get(struct adpd188_dev *dev, uint8_t *flags)
 	*flags = 0;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_STATUS, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
-	if(reg_data & ADPD188_STATUS_SLOTA_INT_MASK)
+	if (reg_data & ADPD188_STATUS_SLOTA_INT_MASK)
 		*flags |= ADPD188_SLOTA_INT;
-	if(reg_data & ADPD188_STATUS_SLOTB_INT_MASK)
+	if (reg_data & ADPD188_STATUS_SLOTB_INT_MASK)
 		*flags |= ADPD188_SLOTB_INT;
 
 	return 0;
@@ -380,22 +380,22 @@ int32_t adpd188_interrupt_clear(struct adpd188_dev *dev, uint8_t flags)
 	int32_t ret;
 	uint16_t reg_data;
 
-	if(!flags)
+	if (!flags)
 		return 0;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_STATUS, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/*
 	 * If an interrupt is not to be cleared, but happens to be asserted write 0
 	 * to that spot to not clear it unintentionally.
 	 */
-	if(flags & ADPD188_SLOTA_INT)
+	if (flags & ADPD188_SLOTA_INT)
 		reg_data |= ADPD188_STATUS_SLOTA_INT_MASK;
 	else
 		reg_data &= ~ADPD188_STATUS_SLOTA_INT_MASK;
-	if(flags & ADPD188_SLOTB_INT)
+	if (flags & ADPD188_SLOTB_INT)
 		reg_data |= ADPD188_STATUS_SLOTB_INT_MASK;
 	else
 		reg_data &= ~ADPD188_STATUS_SLOTB_INT_MASK;
@@ -421,13 +421,13 @@ int32_t adpd188_interrupt_en(struct adpd188_dev *dev, uint8_t flags)
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_INT_MASK, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
-	if(flags & ADPD188_SLOTA_INT)
+	if (flags & ADPD188_SLOTA_INT)
 		reg_data &= ~ADPD188_INT_MASK_SLOTA_INT_MASK_MASK;
-	if(flags & ADPD188_SLOTB_INT)
+	if (flags & ADPD188_SLOTB_INT)
 		reg_data &= ~ADPD188_INT_MASK_SLOTB_INT_MASK_MASK;
-	if(flags & ADPD188_FIFO_INT)
+	if (flags & ADPD188_FIFO_INT)
 		reg_data &= ~ADPD188_INT_MASK_FIFO_INT_MASK_MASK;
 
 	return adpd188_reg_write(dev, ADPD188_REG_INT_MASK, reg_data);
@@ -446,27 +446,27 @@ int32_t adpd188_gpio_setup(struct adpd188_dev *dev,
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_GPIO_DRV, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
-	if(config.gpio_id == 0) {
-		if(config.gpio_pol)
+	if (config.gpio_id == 0) {
+		if (config.gpio_pol)
 			reg_data |= ADPD188_GPIO_DRV_GPIO0_POL_MASK;
 		else
 			reg_data &= ~ADPD188_GPIO_DRV_GPIO0_POL_MASK;
-		if(config.gpio_drv)
+		if (config.gpio_drv)
 			reg_data |= ADPD188_GPIO_DRV_GPIO0_DRV_MASK;
 		else
 			reg_data &= ~ADPD188_GPIO_DRV_GPIO0_DRV_MASK;
-		if(config.gpio_en)
+		if (config.gpio_en)
 			reg_data |= ADPD188_GPIO_DRV_GPIO0_ENA_MASK;
 		else
 			reg_data &= ~ADPD188_GPIO_DRV_GPIO0_ENA_MASK;
-	} else if(config.gpio_id == 1) {
-		if(config.gpio_pol)
+	} else if (config.gpio_id == 1) {
+		if (config.gpio_pol)
 			reg_data |= ADPD188_GPIO_DRV_GPIO1_POL_MASK;
 		else
 			reg_data &= ~ADPD188_GPIO_DRV_GPIO1_POL_MASK;
-		if(config.gpio_drv)
+		if (config.gpio_drv)
 			reg_data |= ADPD188_GPIO_DRV_GPIO1_DRV_MASK;
 		else
 			reg_data &= ~ADPD188_GPIO_DRV_GPIO1_DRV_MASK;
@@ -489,14 +489,14 @@ int32_t adpd188_gpio_alt_setup(struct adpd188_dev *dev, uint8_t gpio_id,
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_GPIO_CTRL, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
-	if(gpio_id == 0) {
+	if (gpio_id == 0) {
 		reg_data &= ~ADPD188_GPIO_CTRL_GPIO0_ALT_CFG_MASK;
 		reg_data |= (config << ADPD188_GPIO_CTRL_GPIO0_ALT_CFG_POS) &
 			    ADPD188_GPIO_CTRL_GPIO0_ALT_CFG_MASK;
-	} else if(gpio_id == 1) {
+	} else if (gpio_id == 1) {
 		reg_data &= ~ADPD188_GPIO_CTRL_GPIO1_ALT_CFG_MASK;
 		reg_data |= (config << ADPD188_GPIO_CTRL_GPIO1_ALT_CFG_POS) &
 			    ADPD188_GPIO_CTRL_GPIO1_ALT_CFG_MASK;
@@ -531,28 +531,28 @@ int32_t adpd188_clk32mhz_cal(struct adpd188_dev *dev)
 	float clk_error;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_DATA_ACCESS_CTL, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data |= ADPD188_DATA_ACCESS_CTL_DIGITAL_CLOCK_ENA_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_DATA_ACCESS_CTL, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_CLK32M_CAL_EN, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data |= ADPD188_CLK32M_CAL_EN_CLK32M_CAL_EN_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_CLK32M_CAL_EN, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	no_os_mdelay(1);
 	ret = adpd188_reg_read(dev, ADPD188_REG_CLK_RATIO, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ADPD188_CLK_RATIO_CLK_RATIO_MASK;
 
-	clk_error = 32000000.0 * (1.0 - (float)reg_data/2000.0);
+	clk_error = 32000000.0 * (1.0 - (float)reg_data / 2000.0);
 	if (dev->device == ADPD188BI)
 		reg_data = clk_error / 109000;
 	else
@@ -560,19 +560,19 @@ int32_t adpd188_clk32mhz_cal(struct adpd188_dev *dev)
 	reg_data &= ADPD188_CLK32M_ADJUST_CLK32M_ADJUST_MASK;
 
 	ret = adpd188_reg_write(dev, ADPD188_REG_CLK32M_ADJUST, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_CLK32M_CAL_EN, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_CLK32M_CAL_EN_CLK32M_CAL_EN_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_CLK32M_CAL_EN, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_DATA_ACCESS_CTL, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_DATA_ACCESS_CTL_DIGITAL_CLOCK_ENA_MASK;
 
@@ -592,10 +592,10 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOT_EN, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
-	if(config.slot_id == ADPD188_SLOTA) {
+	if (config.slot_id == ADPD188_SLOTA) {
 		reg_data &= ~ADPD188_SLOT_EN_SLOTA_EN_MASK;
 		reg_data |= (config.slot_en << ADPD188_SLOT_EN_SLOTA_EN_POS) &
 			    ADPD188_SLOT_EN_SLOTA_EN_MASK;
@@ -603,7 +603,7 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
 		reg_data |= (config.sot_fifo_mode <<
 			     ADPD188_SLOT_EN_SLOTA_FIFO_MODE_POS) &
 			    ADPD188_SLOT_EN_SLOTA_FIFO_MODE_MASK;
-	} else if(config.slot_id == ADPD188_SLOTB) {
+	} else if (config.slot_id == ADPD188_SLOTB) {
 		reg_data &= ~ADPD188_SLOT_EN_SLOTB_EN_MASK;
 		reg_data |= (config.slot_en << ADPD188_SLOT_EN_SLOTB_EN_POS) &
 			    ADPD188_SLOT_EN_SLOTB_EN_MASK;
@@ -626,7 +626,7 @@ int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, uint16_t freq_hz)
 {
 	uint16_t reg_data;
 
-	if(freq_hz > 2000)
+	if (freq_hz > 2000)
 		return -1;
 
 	reg_data = 32000 / (freq_hz * 4);
@@ -646,7 +646,7 @@ int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, uint16_t *freq_hz)
 	uint16_t reg_data;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_FSAMPLE, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	*freq_hz = 32000 / (reg_data * 4);
 
@@ -666,32 +666,32 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	struct adpd188_slot_config slota_conf, slotb_conf;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOT_EN, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data |= ADPD188_SLOT_EN_RDOUT_MODE_MASK |
 		    ADPD188_SLOT_EN_FIFO_OVRN_PREVENT_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOT_EN, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	slota_conf.slot_en = true;
 	slota_conf.slot_id = ADPD188_SLOTA;
 	slota_conf.sot_fifo_mode = ADPD188_32BIT_SUM;
 	ret = adpd188_slot_setup(dev, slota_conf);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	slotb_conf.slot_en = true;
 	slotb_conf.slot_id = ADPD188_SLOTB;
 	slotb_conf.sot_fifo_mode = ADPD188_32BIT_SUM;
 	ret = adpd188_slot_setup(dev, slotb_conf);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = adpd188_adc_fsample_set(dev, 16.0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	ret = adpd188_reg_read(dev, ADPD188_REG_PD_LED_SELECT, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Blue LED in slot A */
 	reg_data |= (1 << ADPD188_PD_LED_SELECT_SLOTA_LED_SEL_POS) &
@@ -705,69 +705,69 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	reg_data |= (1 << ADPD188_PD_LED_SELECT_SLOTB_PD_SEL_POS) &
 		    ADPD188_PD_LED_SELECT_SLOTB_PD_SEL_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_PD_LED_SELECT, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* No decimation for any slot */
 	ret = adpd188_reg_write(dev, ADPD188_REG_NUM_AVG, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Slot A chop mode is inverted, non-inverted, non-inverted, inverted */
 	ret = adpd188_reg_read(dev, ADPD188_REG_INT_SEQ_A, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data |= 0x9 & ADPD188_INT_SEQ_A_INTEG_ORDER_A_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_INT_SEQ_A, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* No ADC offset on channel 1, Slot A */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_CH1_OFFSET, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Unused channel 2, slot A */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_CH2_OFFSET, 0x3FFF);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Unused channel 3, slot A */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_CH3_OFFSET, 0x3FFF);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Unused channel 4, slot A */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_CH4_OFFSET, 0x3FFF);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Slot B chop mode is inverted, non-inverted, non-inverted, inverted */
 	ret = adpd188_reg_read(dev, ADPD188_REG_INT_SEQ_B, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data |= 0x9 & ADPD188_INT_SEQ_B_INTEG_ORDER_B_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_INT_SEQ_B, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* No ADC offset on channel 1, Slot B */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH1_OFFSET, 0);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Unused channel 2, slot B */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH2_OFFSET, 0x3FFF);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Unused channel 3, slot B */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH3_OFFSET, 0x3FFF);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	/* Unused channel 4, slot B */
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_CH4_OFFSET, 0x3FFF);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Set IR LED 3 power */
 	ret = adpd188_reg_read(dev, ADPD188_REG_ILED3_COARSE, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_ILED3_COARSE_ILED3_COARSE_MASK;
 	reg_data |= (0x9 << ADPD188_ILED3_COARSE_ILED3_COARSE_POS) &
@@ -777,12 +777,12 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 		    ADPD188_ILED3_COARSE_ILED3_SLEW_MASK;
 	reg_data |= ADPD188_ILED3_COARSE_ILED3_SCALE_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_ILED3_COARSE, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Set blue LED 1 power */
 	ret = adpd188_reg_read(dev, ADPD188_REG_ILED1_COARSE, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_ILED1_COARSE_ILED1_COARSE_MASK;
 	reg_data |= (0x6 << ADPD188_ILED1_COARSE_ILED1_COARSE_POS) &
@@ -792,12 +792,12 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 		    ADPD188_ILED1_COARSE_ILED1_SLEW_MASK;
 	reg_data |= ADPD188_ILED1_COARSE_ILED1_SCALE_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_ILED1_COARSE, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Slot A 4 LED pulses with 15us period */
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTA_NUMPULSES, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_SLOTA_NUMPULSES_SLOTA_PULSES_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTA_NUMPULSES_SLOTA_PULSES_POS) &
@@ -806,12 +806,12 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	reg_data |= (0xE << ADPD188_SLOTA_NUMPULSES_SLOTA_PERIOD_POS) &
 		    ADPD188_SLOTA_NUMPULSES_SLOTA_PERIOD_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_NUMPULSES, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Slot B 4 LED pulses with 15us period */
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTB_NUMPULSES, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_POS) &
@@ -820,12 +820,12 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	reg_data |= (0xE << ADPD188_SLOTB_NUMPULSES_SLOTB_PERIOD_POS) &
 		    ADPD188_SLOTB_NUMPULSES_SLOTB_PERIOD_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_NUMPULSES, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Slot A integrator window */
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTA_AFE_WINDOW, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_WIDTH_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_WIDTH_POS) &
@@ -834,12 +834,12 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	reg_data |= (0x2F0 << ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_OFFSET_POS) &
 		    ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_OFFSET_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTA_AFE_WINDOW, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Slot B integrator window */
 	ret = adpd188_reg_read(dev, ADPD188_REG_SLOTB_AFE_WINDOW, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_POS) &
@@ -848,23 +848,23 @@ int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev)
 	reg_data |= (0x2F0 << ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_OFFSET_POS) &
 		    ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_OFFSET_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_SLOTB_AFE_WINDOW, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Power down channels 2, 3 and 4 */
 	ret = adpd188_reg_read(dev, ADPD188_REG_AFE_PWR_CFG1, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_AFE_PWR_CFG1_AFE_POWERDOWN_MASK;
 	reg_data |= (0x1C << ADPD188_AFE_PWR_CFG1_AFE_POWERDOWN_POS) &
 		    ADPD188_AFE_PWR_CFG1_AFE_POWERDOWN_MASK;
 	ret = adpd188_reg_write(dev, ADPD188_REG_AFE_PWR_CFG1, reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	/* Math for chop mode is inverted, non-inverted, non-inverted, inverted */
 	ret = adpd188_reg_read(dev, ADPD188_REG_MATH, &reg_data);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 	reg_data &= ~ADPD188_MATH_FLT_MATH34_B_MASK;
 	reg_data |= (0x01 << ADPD188_MATH_FLT_MATH34_B_POS) &

@@ -69,11 +69,11 @@ int32_t ad5628_init(struct ad5628_dev **device,
 	ad5628_reset(dev);
 	/* Turns on the on-board reference. */
 	ad5628_set_input_register(dev,
-				  AD5628_CMD(AD5628_CMD_SET_INT_REF)|
+				  AD5628_CMD(AD5628_CMD_SET_INT_REF) |
 				  AD5628_INT_REF_ON);
 	/* Clear code is set to 0x0000. */
 	ad5628_set_input_register(dev,
-				  AD5628_CMD(AD5628_CMD_LOAD_CLEAR_CODE)|
+				  AD5628_CMD(AD5628_CMD_LOAD_CLEAR_CODE) |
 				  AD5628_CODE_0X0000);
 	*device = dev;
 
@@ -124,7 +124,7 @@ void ad5628_power_mode(struct ad5628_dev *dev,
 {
 	uint8_t selected_channel = 0;
 
-	if(channel == AD5628_ADDR_DAC_ALL) {
+	if (channel == AD5628_ADDR_DAC_ALL) {
 		selected_channel = 0xFF;
 	} else {
 		selected_channel = (1 << channel);

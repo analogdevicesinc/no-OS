@@ -125,10 +125,10 @@ int max14916_fled_time_set(struct max149x6_desc *desc,
 	ret = max149x6_reg_update(desc, MAX14916_CONFIG1_REG,
 				  MAX14916_FLED_MASK,
 				  no_os_field_prep(MAX14916_FLED_MASK, 0));
-	if(ret)
+	if (ret)
 		return ret;
 
-	switch(fled_time) {
+	switch (fled_time) {
 	case MAX14916_FLED_TIME_DISABLED:
 	case MAX14916_FLED_TIME_1S:
 	case MAX14916_FLED_TIME_2S:
@@ -282,7 +282,7 @@ int max14916_init(struct max149x6_desc **desc,
 	if (ret)
 		goto synch_gpio_err;
 
-	for(i = 0; i < MAX14916_CHANNELS; i++) {
+	for (i = 0; i < MAX14916_CHANNELS; i++) {
 		ret = max14916_ch_set(descriptor, i, 0);
 		if (ret)
 			goto synch_gpio_err;

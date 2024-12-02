@@ -296,8 +296,8 @@ uint32_t TALISE_setRxGainControlMode(taliseDevice_t *device,
  * \retval TALACT_ERR_RESET_SPI Recovery action for SPI reset required
  * \retval TALACT_NO_ACTION Function completed successfully, no action required
  */
-uint32_t TALISE_setRxDataFormat (taliseDevice_t *device,
-				 taliseRxDataFormat_t *rxDataFormat);
+uint32_t TALISE_setRxDataFormat(taliseDevice_t *device,
+				taliseRxDataFormat_t *rxDataFormat);
 
 /**
  * \brief Retreive the Rx data path format configuration.
@@ -464,7 +464,7 @@ talRecoveryActions_t talSetDualBandSettings(taliseDevice_t *device,
  * \retval TALACT_ERR_RESET_SPI Recovery action for SPI reset required
  * \retval TALACT_NO_ACTION Function completed successfully, no action required
  */
-uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
+uint32_t TALISE_programDualBandLnaGainTable(taliseDevice_t *device,
 		taliseDualBandLnaGainTable_t *gainTablePtr, uint8_t numGainIndexesInTable,
 		taliseRxChannels_t rxChannel);
 

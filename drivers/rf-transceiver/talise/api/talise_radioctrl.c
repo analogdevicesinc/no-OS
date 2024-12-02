@@ -47,7 +47,7 @@ uint32_t TALISE_loadStreamFromBinary(taliseDevice_t *device, uint8_t *binary)
 	/* resetting the stream processor */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_STREAM_CONTROL,
 				    0x01, 0x01, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -59,76 +59,76 @@ uint32_t TALISE_loadStreamFromBinary(taliseDevice_t *device, uint8_t *binary)
 	/* writing lower 16 bits of stream base address */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_STREAM_BASE_BYTE0,
 				   (uint8_t)streamBaseAddr);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_STREAM_BASE_BYTE1,
 				   (uint8_t)(streamBaseAddr >> 8));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing lower byte of number of streams */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_LAST_STREAM_NUM,
 				   numberStreams);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* clearing stream reset bit */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_STREAM_CONTROL,
 				    0x00, 0x01, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* setting up the stream processor and clearing the debug registers */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG0, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG1, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG2, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG3, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG4, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG5, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG6, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_STREAM_PROC_DEBUG_REG7, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -183,7 +183,7 @@ uint32_t TALISE_setArmGpioPins(taliseDevice_t *device,
 	/* Free all current GPIO's */
 	gpioStatus[0] = TALISE_ARM_OBJECTID_GPIO_CTRL;
 
-	for(i = 0; i < sizeof(signalId); i++) {
+	for (i = 0; i < sizeof(signalId); i++) {
 		gpioStatus[1] = signalId[i];
 
 		/* Get current GPIO pin assigned to this signal_id */
@@ -194,7 +194,7 @@ uint32_t TALISE_setArmGpioPins(taliseDevice_t *device,
 		retVal = (talRecoveryActions_t)TALISE_waitArmCmdStatus(device,
 				TALISE_ARM_GET_OPCODE, &cmdStatusByte, SETARMGPIO_TIMEOUT_US,
 				SETARMGPIO_INTERVAL_US);
-		if((cmdStatusByte >> 1) > 0) {
+		if ((cmdStatusByte >> 1) > 0) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 							  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, gpioStatus[0], cmdStatusByte), retVal,
 							  TALACT_ERR_RESET_ARM);
@@ -214,8 +214,8 @@ uint32_t TALISE_setArmGpioPins(taliseDevice_t *device,
 	usedGpiopins = device->devStateInfo.usedGpiopins & ~gpioFreeMask;
 
 	/* Update all used GPIO's */
-	for(i = 0; i < sizeof(signalId); i++) {
-		switch(signalId[i]) {
+	for (i = 0; i < sizeof(signalId); i++) {
+		switch (signalId[i]) {
 		case TALISE_ARM_ORX1_TX_SEL0_SIGNALID:
 			gpioPinSel = armGpio->orx1TxSel0Pin.gpioPinSel;
 			gpioEnable = armGpio->orx1TxSel0Pin.enable;
@@ -263,7 +263,7 @@ uint32_t TALISE_setArmGpioPins(taliseDevice_t *device,
 		}
 		}
 
-		if ( gpioCheck > 0) {
+		if (gpioCheck > 0) {
 			/* Use GPIO if pin enabled for ARM */
 			if (gpioEnable) {
 				if (gpioPinSel > TAL_GPIO_15) {
@@ -287,11 +287,11 @@ uint32_t TALISE_setArmGpioPins(taliseDevice_t *device,
 
 	/* Write ARM set command to setup which ARM signals are using which GPIO pins */
 	/* Setup input pins for ORX_MODE[2:0] and ORX_MODE_Trigger if orx is in pin mode */
-	for(i = 0; i < sizeof(signalId); i++) {
+	for (i = 0; i < sizeof(signalId); i++) {
 		gpioConfig[0] = TALISE_ARM_OBJECTID_GPIO_CTRL;
 		gpioConfig[1] = signalId[i];
 
-		switch(signalId[i]) {
+		switch (signalId[i]) {
 		case TALISE_ARM_ORX1_TX_SEL0_SIGNALID:
 			gpioConfig[2] = (uint8_t)(armGpio->orx1TxSel0Pin.gpioPinSel |
 						  (((armGpio->orx1TxSel0Pin.polarity > 0) ? 1 : 0) << 5) |
@@ -344,7 +344,7 @@ uint32_t TALISE_setArmGpioPins(taliseDevice_t *device,
 		retVal = (talRecoveryActions_t)TALISE_waitArmCmdStatus(device,
 				TALISE_ARM_SET_OPCODE, &cmdStatusByte, SETARMGPIO_TIMEOUT_US,
 				SETARMGPIO_INTERVAL_US);
-		if((cmdStatusByte >> 1) > 0) {
+		if ((cmdStatusByte >> 1) > 0) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 							  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, gpioConfig[0], cmdStatusByte), retVal,
 							  TALACT_ERR_RESET_ARM);
@@ -391,14 +391,14 @@ uint32_t TALISE_setRadioCtlPinMode(taliseDevice_t *device,
 		 */
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_RADIO_CONTROL_CONFIG1, pinOptionsMask);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		/* Set which GPIO pins are used by the stream processor to control ORx enable[1:0] */
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_RADIO_CONTROL_CONFIG2, ((uint8_t)orxEnGpioPinSel));
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -432,14 +432,14 @@ uint32_t TALISE_getRadioCtlPinMode(taliseDevice_t *device,
 
 	halError = talSpiReadField(device->devHalInfo,
 				   TALISE_ADDR_RADIO_CONTROL_CONFIG1, pinOptionsMask, radioCtlCfg1BitMask, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* Read which GPIO pins are used by the stream processor to control ORx enable[1:0] */
 	halError = talSpiReadField(device->devHalInfo,
 				   TALISE_ADDR_RADIO_CONTROL_CONFIG2, &readData, orxEnGpioPinSelFieldMask, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -492,13 +492,13 @@ uint32_t TALISE_setOrxLoCfg(taliseDevice_t *device,
 	/* If this feature already enabled for any GPIO pin, free the pin */
 	halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_STREAM_CONTROL,
 				   &gpio3StreamMaskReadValue, 0x80, 7);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiReadField(device->devHalInfo,
 				   TALISE_ADDR_STREAM_GPIO_TRIGGER_PIN_SELECT_BYTE1, &gpioSelReadVal, 0xF0, 4);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -639,7 +639,7 @@ uint32_t TALISE_radioOn(taliseDevice_t *device)
 	retVal = (talRecoveryActions_t)TALISE_waitArmCmdStatus(device,
 			TALISE_ARM_RADIOON_OPCODE, &cmdStatusByte, RADIOON_TIMEOUT_US,
 			RADIOON_INTERVAL_US);
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_RADIOON_OPCODE, 0, cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -665,7 +665,7 @@ uint32_t TALISE_radioOff(taliseDevice_t *device)
 	retVal = (talRecoveryActions_t)TALISE_waitArmCmdStatus(device,
 			TALISE_ARM_ABORT_OPCODE, &cmdStatusByte, RADIOOFF_TIMEOUT_US,
 			RADIOOFF_INTERVAL_US);
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_ABORT_OPCODE, 0, cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -753,7 +753,7 @@ uint32_t TALISE_setRxTxEnable(taliseDevice_t *device,
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_BBIC_ENABLES,
 				   chEnable);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -782,7 +782,7 @@ uint32_t TALISE_getRxTxEnable(taliseDevice_t *device,
 
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_BBIC_ENABLES,
 				  &chEnable);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -863,7 +863,7 @@ uint32_t TALISE_setTxToOrxMapping(taliseDevice_t *device, uint8_t txCalEnable,
 	retVal = (talRecoveryActions_t)TALISE_waitArmCmdStatus(device,
 			TALISE_ARM_SET_OPCODE, &cmdStatusByte, SETTXTOORXMAP_TIMEOUT_US,
 			SETTXTOORXMAP_INTERVAL_US);
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -908,7 +908,7 @@ uint32_t TALISE_setRfPllFrequency(taliseDevice_t *device,
 	/*if Tx profile valid, (rfpllFrequency - TxProfileRFBW/2) > 0 */
 	txFreqValid = (int64_t)rfPllLoFrequency_Hz - (int64_t)(
 			      device->devStateInfo.txBandwidth_Hz >> 1);
-	if(((device->devStateInfo.profilesValid & TX_PROFILE_VALID) > 0)
+	if (((device->devStateInfo.profilesValid & TX_PROFILE_VALID) > 0)
 	    && (txFreqValid <= 0)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_RFPLLFREQ_TX_OUT_OF_RANGE, retVal, TALACT_ERR_CHECK_PARAM);
@@ -917,7 +917,7 @@ uint32_t TALISE_setRfPllFrequency(taliseDevice_t *device,
 	/*If Rx profile valid, (rfpllFrequency - RxProfileRFBW/2) > 0 */
 	rxFreqValid = (int64_t)rfPllLoFrequency_Hz - (int64_t)(
 			      device->devStateInfo.rxBandwidth_Hz >> 1);
-	if(((device->devStateInfo.profilesValid & RX_PROFILE_VALID) > 0)
+	if (((device->devStateInfo.profilesValid & RX_PROFILE_VALID) > 0)
 	    && (rxFreqValid <= 0)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_RFPLLFREQ_RX_OUT_OF_RANGE, retVal, TALACT_ERR_CHECK_PARAM);
@@ -926,7 +926,7 @@ uint32_t TALISE_setRfPllFrequency(taliseDevice_t *device,
 	/*If ORx profile valid, (rfpllFrequency - OrxProfileRFBW/2) > 0 */
 	orxFreqValid = (int64_t)rfPllLoFrequency_Hz - (int64_t)(
 			       device->devStateInfo.orxBandwidth_Hz >> 1);
-	if(((device->devStateInfo.profilesValid & ORX_PROFILE_VALID) > 0)
+	if (((device->devStateInfo.profilesValid & ORX_PROFILE_VALID) > 0)
 	    && (orxFreqValid <= 0)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_RFPLLFREQ_ORX_OUT_OF_RANGE, retVal, TALACT_ERR_CHECK_PARAM);
@@ -1010,7 +1010,7 @@ uint32_t TALISE_setRfPllFrequency(taliseDevice_t *device,
 	}
 
 	/* check previous TALISE_waitArmCmdStatus for ARM errors */
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1086,49 +1086,49 @@ uint32_t TALISE_getRfPllFrequency(taliseDevice_t *device,
 		/* read in integer and fractional PLL data into variables */
 		halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_2,
 					   &hsDivReg, 0x07, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_5,
 					   &devClkDivideRatio, 0x30, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_CLOCK_CONTROL_2,
 					   &clkPllRefClkDiv, 0x70, 4);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadByte(device->devHalInfo,
 					  TALISE_ADDR_CLK_SYNTH_DIVIDER_INT_BYTE0, &clkPllIntWord7_0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadField(device->devHalInfo,
 					   TALISE_ADDR_CLK_SYNTH_DIVIDER_INT_BYTE1, &clkPllIntWord10_8, 0x07, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadByte(device->devHalInfo,
 					  TALISE_ADDR_CLK_SYNTH_DIVIDER_FRAC_BYTE0, &clkPllFracWord7_0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadByte(device->devHalInfo,
 					  TALISE_ADDR_CLK_SYNTH_DIVIDER_FRAC_BYTE1, &clkPllFracWord15_8);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		halError = talSpiReadField(device->devHalInfo,
 					   TALISE_ADDR_CLK_SYNTH_DIVIDER_FRAC_BYTE2, &clkPllFracWord22_16, 0x7F, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1224,7 +1224,7 @@ uint32_t TALISE_getRfPllFrequency(taliseDevice_t *device,
 		retVal = (talRecoveryActions_t)TALISE_waitArmCmdStatus(device,
 				TALISE_ARM_GET_OPCODE, &cmdStatusByte, GETRFPLL_TIMEOUT_US,
 				GETRFPLL_INTERVAL_US);
-		if((cmdStatusByte >> 1) > 0) {
+		if ((cmdStatusByte >> 1) > 0) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 							  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 							  TALACT_ERR_RESET_ARM);
@@ -1237,14 +1237,14 @@ uint32_t TALISE_getRfPllFrequency(taliseDevice_t *device,
 		IF_ERR_RETURN_U32(retVal);
 
 		/* form RF PLL LO frequency word for read-back */
-		*rfPllLoFrequency_Hz =  ((uint64_t)(armData[0])) |
-					((uint64_t)(armData[1]) << 8) |
-					((uint64_t)(armData[2]) << 16) |
-					((uint64_t)(armData[3]) << 24) |
-					((uint64_t)(armData[4]) << 32) |
-					((uint64_t)(armData[5]) << 40) |
-					((uint64_t)(armData[6]) << 48) |
-					((uint64_t)(armData[7]) << 56);
+		*rfPllLoFrequency_Hz = ((uint64_t)(armData[0])) |
+				       ((uint64_t)(armData[1]) << 8) |
+				       ((uint64_t)(armData[2]) << 16) |
+				       ((uint64_t)(armData[3]) << 24) |
+				       ((uint64_t)(armData[4]) << 32) |
+				       ((uint64_t)(armData[5]) << 40) |
+				       ((uint64_t)(armData[6]) << 48) |
+				       ((uint64_t)(armData[7]) << 56);
 	}
 
 	return (uint32_t)retVal;
@@ -1274,21 +1274,21 @@ uint32_t TALISE_getPllsLockStatus(taliseDevice_t *device,
 
 		halError = talSpiReadField(device->devHalInfo,
 					   TALISE_ADDR_CLK_SYNTH_VCO_BAND_BYTE1, &readData, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 		*pllLockStatus = readData;
 
 		halError = talSpiReadField(device->devHalInfo,
 					   TALISE_ADDR_RF_SYNTH_VCO_BAND_BYTE1, &readData, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 		*pllLockStatus = *pllLockStatus | (readData << 1);
 
 		halError = talSpiReadField(device->devHalInfo,
 					   TALISE_ADDR_AUX_SYNTH_VCO_BAND_BYTE1, &readData, 0x01, 0);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 		*pllLockStatus = *pllLockStatus | (readData << 2);
@@ -1414,7 +1414,7 @@ uint32_t TALISE_setPllLoopFilter(taliseDevice_t *device,
 			SETRFPLL_LOOP_FREQ_INTERVAL_US);
 
 	/* performing command status check */
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1478,7 +1478,7 @@ uint32_t TALISE_getPllLoopFilter(taliseDevice_t *device,
 			GETRFPLL_LOOP_FREQ_INTERVAL_US);
 
 	/* performing command status check */
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, extData[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1560,14 +1560,14 @@ uint32_t TALISE_setOrxLoSource(taliseDevice_t *device,
 		/* Write stream ID to run */
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_EXT_CMD_BYTE_1,
 					   streamId);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
 		/* Run stream */
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_COMMAND,
 					   ARMCMD_RUN_STREAM);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1648,7 +1648,7 @@ static uint32_t talSetFhmGpio(taliseDevice_t *device,
 			TALISE_ARM_GET_OPCODE, &cmdStatusByte, SETARMGPIO_TIMEOUT_US,
 			SETARMGPIO_INTERVAL_US);
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, gpioStatus[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1667,13 +1667,13 @@ static uint32_t talSetFhmGpio(taliseDevice_t *device,
 
 	usedGpioPins = device->devStateInfo.usedGpiopins & ~gpioFreeMask;
 
-	if(fhmGpioPin <= TAL_GPIO_15) {
+	if (fhmGpioPin <= TAL_GPIO_15) {
 		gpioUsedMask = (1 << fhmGpioPin);
 		gpioConfig[2] = ((uint8_t)fhmGpioPin | GPIO_CONFIG_POLARITY |
 				 GPIO_CONFIG_ENABLE);
 	}
 
-	else if(fhmGpioPin == TAL_GPIO_INVALID) {
+	else if (fhmGpioPin == TAL_GPIO_INVALID) {
 		gpioUsedMask = 0;
 		gpioConfig[2] = ((uint8_t)TAL_GPIO_INVALID | GPIO_CONFIG_POLARITY |
 				 GPIO_CONFIG_DISABLE);
@@ -1697,10 +1697,10 @@ static uint32_t talSetFhmGpio(taliseDevice_t *device,
 			TALISE_ARM_SET_OPCODE, &cmdStatusByte, SETARMGPIO_TIMEOUT_US,
 			SETARMGPIO_INTERVAL_US);
 
-	if((cmdStatusByte >> 1) > 0) {
-		return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-						   ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, gpioConfig[0], cmdStatusByte), retVal,
-						   TALACT_ERR_RESET_ARM);
+	if ((cmdStatusByte >> 1) > 0) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+						  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, gpioConfig[0], cmdStatusByte), retVal,
+						  TALACT_ERR_RESET_ARM);
 	} else {
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1744,7 +1744,7 @@ static uint32_t talGetFhmGpio(taliseDevice_t *device,
 			TALISE_ARM_GET_OPCODE, &cmdStatusByte, SETARMGPIO_TIMEOUT_US,
 			SETARMGPIO_INTERVAL_US);
 
-	if((cmdStatusByte >> 1) > 0) {
+	if ((cmdStatusByte >> 1) > 0) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
 						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, gpioStatus[0], cmdStatusByte), retVal,
 						  TALACT_ERR_RESET_ARM);
@@ -1785,19 +1785,19 @@ uint32_t TALISE_setFhmConfig(taliseDevice_t *device,
 	retValWarn = retVal;
 
 	/*Check for NULL*/
-	if(fhmConfig == NULL) {
+	if (fhmConfig == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMCONFIG_NULL_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	/*Check that Frequency Hop Trigger GPIO pin is valid*/
-	if((fhmConfig->fhmGpioPin > TAL_GPIO_15) &&
+	if ((fhmConfig->fhmGpioPin > TAL_GPIO_15) &&
 	    (fhmConfig->fhmGpioPin != TAL_GPIO_INVALID)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMCONFIG_INV_FHMGPIOPIN, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	if(fhmConfig->fhmMinFreq_MHz >= fhmConfig->fhmMaxFreq_MHz) {
+	if (fhmConfig->fhmMinFreq_MHz >= fhmConfig->fhmMaxFreq_MHz) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMCONFIG_INV_FHMCONFIG_FHM_MAX_FREQ, retVal,
 						  TALACT_ERR_CHECK_PARAM);
@@ -1807,7 +1807,7 @@ uint32_t TALISE_setFhmConfig(taliseDevice_t *device,
 	/*If Rx profile valid, (fhmMinFreq - RxProfileRFBW/2) > 0 */
 	freqValid = ((int64_t)fhmConfig->fhmMinFreq_MHz * MHZ_TO_HZ_CONVERSION_FACTOR)
 		    - (int64_t)(device->devStateInfo.rxBandwidth_Hz >> 1);
-	if(((device->devStateInfo.profilesValid & RX_PROFILE_VALID) > 0)
+	if (((device->devStateInfo.profilesValid & RX_PROFILE_VALID) > 0)
 	    && (freqValid <= 0)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMCONFIG_INV_FHMCONFIG_FHM_MIN_FREQ, retVal,
@@ -1817,7 +1817,7 @@ uint32_t TALISE_setFhmConfig(taliseDevice_t *device,
 	/*If Tx profile valid, (fhmMinFreq - TxProfileRFBW/2) > 0 */
 	freqValid = ((int64_t)fhmConfig->fhmMinFreq_MHz * MHZ_TO_HZ_CONVERSION_FACTOR)
 		    - (int64_t)(device->devStateInfo.txBandwidth_Hz >> 1);
-	if(((device->devStateInfo.profilesValid & TX_PROFILE_VALID) > 0)
+	if (((device->devStateInfo.profilesValid & TX_PROFILE_VALID) > 0)
 	    && (freqValid <= 0)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMCONFIG_INV_FHMCONFIG_FHM_MIN_FREQ, retVal,
@@ -1827,7 +1827,7 @@ uint32_t TALISE_setFhmConfig(taliseDevice_t *device,
 	/*If ORx profile valid, (fhmMinFreq - OrxProfileRFBW/2) > 0 */
 	freqValid = ((int64_t)fhmConfig->fhmMinFreq_MHz * MHZ_TO_HZ_CONVERSION_FACTOR)
 		    - (int64_t)(device->devStateInfo.orxBandwidth_Hz >> 1);
-	if(((device->devStateInfo.profilesValid & ORX_PROFILE_VALID) > 0)
+	if (((device->devStateInfo.profilesValid & ORX_PROFILE_VALID) > 0)
 	    && (freqValid <= 0)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMCONFIG_INV_FHMCONFIG_FHM_MIN_FREQ, retVal,
@@ -1887,7 +1887,7 @@ uint32_t TALISE_getFhmConfig(taliseDevice_t *device,
 	retValWarn = retVal;
 
 	/*Check for NULL*/
-	if(fhmConfig == NULL) {
+	if (fhmConfig == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_GETFHMCONFIG_NULL_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
@@ -1993,16 +1993,16 @@ uint32_t TALISE_setFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 	retValWarn = retVal;
 
 	/*Check for NULL*/
-	if(fhmMode == NULL) {
+	if (fhmMode == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_SETFHMMODE_NULL_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
-	if(fhmMode->fhmEnable > 0) {
+	if (fhmMode->fhmEnable > 0) {
 		/*Check if requested FHM init frequency on enable is valid*/
-		if((fhmMode->fhmInitFrequency_Hz > ((uint64_t)
-						    device->devStateInfo.talFhmFreqRange.fhmMaxFreq_MHz *
-						    MHZ_TO_HZ_CONVERSION_FACTOR)) ||
+		if ((fhmMode->fhmInitFrequency_Hz > ((uint64_t)
+						     device->devStateInfo.talFhmFreqRange.fhmMaxFreq_MHz *
+						     MHZ_TO_HZ_CONVERSION_FACTOR)) ||
 		    (fhmMode->fhmInitFrequency_Hz < ((uint64_t)
 						     device->devStateInfo.talFhmFreqRange.fhmMinFreq_MHz *
 						     MHZ_TO_HZ_CONVERSION_FACTOR))) {
@@ -2011,7 +2011,7 @@ uint32_t TALISE_setFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 		}
 
 		/*Check if requested FHM mode is valid*/
-		if((fhmMode->fhmTriggerMode != TAL_FHM_GPIO_MODE) &&
+		if ((fhmMode->fhmTriggerMode != TAL_FHM_GPIO_MODE) &&
 		    (fhmMode->fhmTriggerMode != TAL_FHM_NON_GPIO_MODE)) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_SETFHMMODE_INV_FHM_TRIGGER_MODE, retVal, TALACT_ERR_CHECK_PARAM);
@@ -2028,7 +2028,7 @@ uint32_t TALISE_setFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 		  Byte2 - Enable MCS Synchronization*/
 		armFhmModeCfgCmd[0] = (uint8_t)TALISE_ARM_OBJECTID_FAST_FREQ_HOP_MODE;
 		armFhmModeCfgCmd[1] = FHM_ENABLE;
-		armFhmModeCfgCmd[2] = ( fhmMode->enableMcsSync > 0 ) ? FHM_ENABLE_MCS_SYNC :
+		armFhmModeCfgCmd[2] = (fhmMode->enableMcsSync > 0) ? FHM_ENABLE_MCS_SYNC :
 				      FHM_DISABLE_MCS_SYNC;
 		retVal = (talRecoveryActions_t)TALISE_sendArmCommand(device,
 				TALISE_ARM_SET_OPCODE, &armFhmModeCfgCmd[0], ARM_FHM_MODE_CMD_NUM_BYTES);
@@ -2039,10 +2039,10 @@ uint32_t TALISE_setFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 				TALISE_ARM_SET_OPCODE, &cmdStatusByte, SETFREQHOP_MODE_TIMEOUT_US,
 				SETFREQHOP_MODE_INTERVAL_US);
 
-		if((cmdStatusByte >> 1) > 0) {
-			return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-							   ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, armFhmModeCfgCmd[0], cmdStatusByte),
-							   retVal, TALACT_ERR_RESET_ARM);
+		if ((cmdStatusByte >> 1) > 0) {
+			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+							  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, armFhmModeCfgCmd[0], cmdStatusByte),
+							  retVal, TALACT_ERR_RESET_ARM);
 		} else {
 			IF_ERR_RETURN_U32(retVal);
 		}
@@ -2050,10 +2050,10 @@ uint32_t TALISE_setFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 		/*Store the trigger mode, init FHM frequency and MCS Synch flag in the device data structure*/
 		device->devStateInfo.talFhmInitHopFreq_Hz = fhmMode->fhmInitFrequency_Hz;
 		device->devStateInfo.talFhmTriggerMode = fhmMode->fhmTriggerMode;
-		device->devStateInfo.talFhmMcsSync  = ( fhmMode->enableMcsSync > 0 ) ?
+		device->devStateInfo.talFhmMcsSync  = (fhmMode->enableMcsSync > 0) ?
 						      FHM_ENABLE_MCS_SYNC : FHM_DISABLE_MCS_SYNC;
-	} else if(fhmMode->fhmEnable == 0) {
-		if((fhmMode->fhmExitMode != TAL_FHM_QUICK_EXIT) &&
+	} else if (fhmMode->fhmEnable == 0) {
+		if ((fhmMode->fhmExitMode != TAL_FHM_QUICK_EXIT) &&
 		    (fhmMode->fhmExitMode != TAL_FHM_FULL_EXIT)) {
 			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 							  TAL_ERR_SETFHMMODE_INV_FHM_EXIT_MODE, retVal, TALACT_ERR_CHECK_PARAM);
@@ -2075,10 +2075,10 @@ uint32_t TALISE_setFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 				TALISE_ARM_SET_OPCODE, &cmdStatusByte, SETFREQHOP_MODE_TIMEOUT_US,
 				SETFREQHOP_MODE_INTERVAL_US);
 
-		if((cmdStatusByte >> 1) > 0) {
-			return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-							   ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, armFhmModeCfgCmd[0], cmdStatusByte),
-							   retVal, TALACT_ERR_RESET_ARM);
+		if ((cmdStatusByte >> 1) > 0) {
+			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+							  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, armFhmModeCfgCmd[0], cmdStatusByte),
+							  retVal, TALACT_ERR_RESET_ARM);
 		} else {
 			IF_ERR_RETURN_U32(retVal);
 		}
@@ -2121,7 +2121,7 @@ uint32_t TALISE_getFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 	retValWarn = retVal;
 
 	/*Check for NULL*/
-	if(fhmMode == NULL) {
+	if (fhmMode == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_GETFHMMODE_NULL_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
@@ -2138,10 +2138,10 @@ uint32_t TALISE_getFhmMode(taliseDevice_t *device, taliseFhmMode_t *fhmMode)
 			TALISE_ARM_GET_OPCODE, &cmdStatusByte, GETFREQHOP_MODE_TIMEOUT_US,
 			GETFREQHOP_MODE_INTERVAL_US);
 
-	if((cmdStatusByte >> 1) > 0) {
-		return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-						   ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, armGetFhmModeCmdArr[0], cmdStatusByte),
-						   retVal, TALACT_ERR_RESET_ARM);
+	if ((cmdStatusByte >> 1) > 0) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, armGetFhmModeCmdArr[0], cmdStatusByte),
+						  retVal, TALACT_ERR_RESET_ARM);
 	} else {
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -2193,9 +2193,9 @@ uint32_t TALISE_setFhmHop(taliseDevice_t *device,
 	retValWarn = retVal;
 
 	/*Check if requested FHM init frequency on enable is valid*/
-	if((nextRfPllFrequency_Hz > ((uint64_t)
-				     device->devStateInfo.talFhmFreqRange.fhmMaxFreq_MHz *
-				     MHZ_TO_HZ_CONVERSION_FACTOR)) ||
+	if ((nextRfPllFrequency_Hz > ((uint64_t)
+				      device->devStateInfo.talFhmFreqRange.fhmMaxFreq_MHz *
+				      MHZ_TO_HZ_CONVERSION_FACTOR)) ||
 	    (nextRfPllFrequency_Hz < ((uint64_t)
 				      device->devStateInfo.talFhmFreqRange.fhmMinFreq_MHz *
 				      MHZ_TO_HZ_CONVERSION_FACTOR))) {
@@ -2209,7 +2209,7 @@ uint32_t TALISE_setFhmHop(taliseDevice_t *device,
 	IF_ERR_RETURN_U32(retVal);
 
 	/*If the FHM trigger mode is non-GPIO, send an ARM command to hop frequency*/
-	if(device->devStateInfo.talFhmTriggerMode == TAL_FHM_NON_GPIO_MODE) {
+	if (device->devStateInfo.talFhmTriggerMode == TAL_FHM_NON_GPIO_MODE) {
 		/*Send ARM command to set FHM Hop*/
 		armSetFhmHopCmdArr[0] =
 			TALISE_ARM_OBJECTID_FREQ_HOP; /*No payload for set FHM hop cmd*/
@@ -2222,10 +2222,10 @@ uint32_t TALISE_setFhmHop(taliseDevice_t *device,
 				TALISE_ARM_SET_OPCODE, &cmdStatusByte, SETFREQHOP_MODE_TIMEOUT_US,
 				SETFREQHOP_MODE_INTERVAL_US);
 
-		if((cmdStatusByte >> 1) > 0) {
-			return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-							   ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, armSetFhmHopCmdArr[0], cmdStatusByte),
-							   retVal, TALACT_ERR_RESET_ARM);
+		if ((cmdStatusByte >> 1) > 0) {
+			return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+							  ARMCMD_ERRCODE(TALISE_ARM_SET_OPCODE, armSetFhmHopCmdArr[0], cmdStatusByte),
+							  retVal, TALACT_ERR_RESET_ARM);
 		} else {
 			IF_ERR_RETURN_U32(retVal);
 		}
@@ -2281,10 +2281,10 @@ uint32_t TALISE_getFhmRfPllFrequency(taliseDevice_t *device,
 			TALISE_ARM_GET_OPCODE, &cmdStatusByte, GETFREQHOP_MODE_TIMEOUT_US,
 			GETFREQHOP_MODE_INTERVAL_US);
 
-	if((cmdStatusByte >> 1) > 0) {
-		return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-						   ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, armGetFhmModeCmdArr[0], cmdStatusByte),
-						   retVal, TALACT_ERR_RESET_ARM);
+	if ((cmdStatusByte >> 1) > 0) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, armGetFhmModeCmdArr[0], cmdStatusByte),
+						  retVal, TALACT_ERR_RESET_ARM);
 	} else {
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -2349,7 +2349,7 @@ uint32_t TALISE_getFhmStatus(taliseDevice_t *device,
 	uint8_t armFhmStsData[8] = { 0 };
 
 	/*Check for NULL*/
-	if(fhmStatus == NULL) {
+	if (fhmStatus == NULL) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_GETFHMSTS_NULL_PARAM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
@@ -2375,10 +2375,10 @@ uint32_t TALISE_getFhmStatus(taliseDevice_t *device,
 			TALISE_ARM_GET_OPCODE, &cmdStatusByte, GETFREQHOP_MODE_TIMEOUT_US,
 			GETFREQHOP_MODE_INTERVAL_US);
 
-	if((cmdStatusByte >> 1) > 0) {
-		return  (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
-						   ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, armGetFhmModeCmdArr[0], cmdStatusByte),
-						   retVal, TALACT_ERR_RESET_ARM);
+	if ((cmdStatusByte >> 1) > 0) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_ARM_CMD_ERR,
+						  ARMCMD_ERRCODE(TALISE_ARM_GET_OPCODE, armGetFhmModeCmdArr[0], cmdStatusByte),
+						  retVal, TALACT_ERR_RESET_ARM);
 	} else {
 		IF_ERR_RETURN_U32(retVal);
 	}

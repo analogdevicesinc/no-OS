@@ -94,7 +94,7 @@ int admv1014_spi_read(struct admv1014_dev *dev, uint8_t reg_addr,
 	buff[2] = 0;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADMV1014_BUFF_SIZE_BYTES);
-	if(ret)
+	if (ret)
 		return ret;
 
 	/*

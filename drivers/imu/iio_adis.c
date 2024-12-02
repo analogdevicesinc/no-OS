@@ -112,7 +112,7 @@ int adis_iio_read_raw(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	switch(channel->address) {
+	switch (channel->address) {
 	case ADIS_GYRO_X:
 		ret = adis_read_x_gyro(adis, &res);
 		break;
@@ -514,7 +514,7 @@ int adis_iio_read_lpf(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	switch(channel->address) {
+	switch (channel->address) {
 	case ADIS_GYRO_X:
 		ret = adis_read_lpf(adis, ADIS_GYRO_CHAN, ADIS_X_AXIS, &freq);
 		break;
@@ -581,7 +581,7 @@ int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
 	if (ret)
 		return ret;
 
-	switch(channel->address) {
+	switch (channel->address) {
 	case ADIS_GYRO_X:
 		return adis_write_lpf(adis, ADIS_GYRO_CHAN, ADIS_X_AXIS, freq);
 	case ADIS_GYRO_Y:
@@ -629,7 +629,7 @@ static int adis_iio_get_freq(struct adis_dev* adis, uint32_t *freq)
 	if (ret)
 		return ret;
 
-	if(sync_mode == ADIS_SYNC_SCALED) {
+	if (sync_mode == ADIS_SYNC_SCALED) {
 		ret = adis_read_up_scale(adis, &up_scale);
 		if (ret)
 			return ret;
@@ -673,7 +673,7 @@ int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 	adis = iio_adis->adis_dev;
 
 	ret = adis_iio_get_freq(adis, &freq);
-	if(ret)
+	if (ret)
 		return ret;
 
 	iio_adis->sampling_frequency = freq;
@@ -708,7 +708,7 @@ static int adis_iio_set_freq(struct adis_dev* adis, uint32_t freq)
 	if (ret)
 		return ret;
 
-	if(sync_mode == ADIS_SYNC_SCALED) {
+	if (sync_mode == ADIS_SYNC_SCALED) {
 		scaled_rate = no_os_lowest_common_multiple(adis_sync_clk_freq, freq);
 
 		/*
@@ -892,7 +892,7 @@ int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 
 	adis = iio_adis->adis_dev;
 
-	switch(priv) {
+	switch (priv) {
 	case ADIS_DIAG_SNSR_INIT_FAILURE:
 		ret = adis_read_diag_snsr_init_failure(adis, &res);
 		break;
@@ -1240,7 +1240,7 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 	if (ret)
 		return ret;
 
-	switch(priv) {
+	switch (priv) {
 	case ADIS_FIFO_EN:
 		return adis_write_fifo_en(adis, val);
 	case ADIS_FIFO_OVERFLOW:
@@ -1524,16 +1524,16 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 	uint32_t current_data_cntr = data.data_cntr_lsb | data.data_cntr_msb << 16;
 
 	if (iio_adis->data_cntr) {
-		if(current_data_cntr > iio_adis->data_cntr) {
+		if (current_data_cntr > iio_adis->data_cntr) {
 			if (iio_adis->sync_mode != ADIS_SYNC_SCALED)
 				iio_adis->samples_lost += current_data_cntr - iio_adis->data_cntr - 1;
 			else {
 				res1 = (current_data_cntr - iio_adis->data_cntr) * 49;
 				res2 = NO_OS_DIV_ROUND_CLOSEST(1000000, iio_adis->sampling_frequency);
 
-				if(res1 > res2) {
+				if (res1 > res2) {
 					iio_adis->samples_lost += res1 / res2;
-					if(res1 % res2 < res2 / 2)
+					if (res1 % res2 < res2 / 2)
 						iio_adis->samples_lost--;
 				}
 			}
@@ -1554,7 +1554,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 
 	for (chan = 0; chan < ADIS_NUM_CHAN; chan++) {
 		if (mask & (1 << chan)) {
-			switch(chan) {
+			switch (chan) {
 			case ADIS_TEMP:
 
 				if (iio_adis->iio_dev->channels[chan].scan_type->storagebits == 32)
@@ -1574,7 +1574,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 					iio_adis->data[i++] = 0;
 				break;
 			case ADIS_GYRO_X:
-				if(iio_adis->burst_sel) {
+				if (iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1585,7 +1585,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_GYRO_Y:
-				if(iio_adis->burst_sel) {
+				if (iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1596,7 +1596,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_GYRO_Z:
-				if(iio_adis->burst_sel) {
+				if (iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1607,7 +1607,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_ACCEL_X:
-				if(iio_adis->burst_sel) {
+				if (iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1618,7 +1618,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_ACCEL_Y:
-				if(iio_adis->burst_sel) {
+				if (iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1629,7 +1629,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_ACCEL_Z:
-				if(iio_adis->burst_sel) {
+				if (iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1640,7 +1640,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_DELTA_ANGL_X:
-				if(!iio_adis->burst_sel) {
+				if (!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1651,7 +1651,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_DELTA_ANGL_Y:
-				if(!iio_adis->burst_sel) {
+				if (!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1662,7 +1662,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_DELTA_ANGL_Z:
-				if(!iio_adis->burst_sel) {
+				if (!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1673,7 +1673,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_DELTA_VEL_X:
-				if(!iio_adis->burst_sel) {
+				if (!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1684,7 +1684,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_DELTA_VEL_Y:
-				if(!iio_adis->burst_sel) {
+				if (!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {
@@ -1695,7 +1695,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
 				}
 				break;
 			case ADIS_DELTA_VEL_Z:
-				if(!iio_adis->burst_sel) {
+				if (!iio_adis->burst_sel) {
 					iio_adis->data[i++] = 0;
 					iio_adis->data[i++] = 0;
 				} else {

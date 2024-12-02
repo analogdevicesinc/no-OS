@@ -403,7 +403,7 @@ static struct iio_device ad7616_iio_device_template = {
 	.channels = ad7616_channels,
 	.attributes = ad7616_iio_global_attributes,
 	.debug_reg_read = iio_ad7616_debug_reg_read,
-	.debug_reg_write= iio_ad7616_debug_reg_write,
+	.debug_reg_write = iio_ad7616_debug_reg_write,
 	.submit = iio_ad7616_submit_buffer,
 };
 

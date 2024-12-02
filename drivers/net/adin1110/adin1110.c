@@ -53,7 +53,7 @@ struct _adin1110_priv {
 
 static struct _adin1110_priv driver_data[2] = {
 	[ADIN1110] = {
-		.phy_id= ADIN1110_PHY_ID,
+		.phy_id = ADIN1110_PHY_ID,
 		.num_ports = 1,
 	},
 	[ADIN2111] = {

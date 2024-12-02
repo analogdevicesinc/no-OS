@@ -754,7 +754,7 @@ int32_t adxcvr_no_os_clk_set_rate(struct no_os_clk_desc *desc,
  */
 const struct no_os_clk_platform_ops adxcvr_clk_ops = {
 	.clk_enable = &adxcvr_no_os_clk_enable,
-	.clk_recalc_rate =&adxcvr_no_os_clk_recalc_rate,
+	.clk_recalc_rate = &adxcvr_no_os_clk_recalc_rate,
 	.clk_round_rate = &adxcvr_no_os_clk_round_rate,
 	.clk_set_rate = &adxcvr_no_os_clk_set_rate,
 	.clk_disable = &adxcvr_no_os_clk_disable,

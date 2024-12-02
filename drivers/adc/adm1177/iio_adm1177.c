@@ -150,16 +150,16 @@ static int adm1177_iio_read_samples(void *device, int *buff, uint32_t samples)
 
 	while (i < samples * iio_adm1177->no_of_active_channels) {
 		ret = adm1177_read_conv(adm1177, &conv_voltage, &conv_current);
-		if(ret)
+		if (ret)
 			return ret;
 		raw_voltage = conv_voltage;
 		raw_current = conv_current;
 
-		if(iio_adm1177->active_channels & NO_OS_BIT(0)) {
+		if (iio_adm1177->active_channels & NO_OS_BIT(0)) {
 			buff[i] = raw_voltage;
 			i++;
 		}
-		if(iio_adm1177->active_channels & NO_OS_BIT(1)) {
+		if (iio_adm1177->active_channels & NO_OS_BIT(1)) {
 			buff[i] = raw_current;
 			i++;
 		}

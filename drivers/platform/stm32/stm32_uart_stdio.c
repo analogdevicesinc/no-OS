@@ -55,7 +55,7 @@ static struct no_os_uart_desc *guart = NULL;
 
 void no_os_uart_stdio(struct no_os_uart_desc *desc)
 {
-	if(!desc || !desc->extra)
+	if (!desc || !desc->extra)
 		return;
 
 	guart = desc;

@@ -165,7 +165,7 @@ int32_t stm32_timer_init(struct no_os_timer_desc **desc,
 	}
 
 	/* Overwrite generated values with given values */
-	stm_desc->htimer->Init.Prescaler = src_freq/param->freq_hz;
+	stm_desc->htimer->Init.Prescaler = src_freq / param->freq_hz;
 	stm_desc->htimer->Init.Period = param->ticks_count;
 
 	ret = HAL_TIM_Base_Init(stm_desc->htimer);
@@ -314,8 +314,8 @@ int32_t stm32_timer_count_clk_set(struct no_os_timer_desc *desc,
 
 	tim_desc = desc->extra;
 
-	__HAL_TIM_SET_PRESCALER(tim_desc, src_freq/freq_hz);
-	tim_desc->Init.Prescaler = src_freq/freq_hz;
+	__HAL_TIM_SET_PRESCALER(tim_desc, src_freq / freq_hz);
+	tim_desc->Init.Prescaler = src_freq / freq_hz;
 
 	desc->freq_hz = freq_hz;
 

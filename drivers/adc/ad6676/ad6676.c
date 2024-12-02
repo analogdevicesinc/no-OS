@@ -334,7 +334,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 		return ret;
 
 	/* Compute I_CP val */
-	if(freq == MAX_FADC) {
+	if (freq == MAX_FADC) {
 		reg_val = 0x12;
 	} else {
 		reg_val = (f_pfd / MHz) * (freq / MHz) * (freq / MHz);
@@ -363,7 +363,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	if(freq == MAX_FADC) {
+	if (freq == MAX_FADC) {
 		ret = ad6676_spi_write(dev, AD6676_CLKSYN_KVCO_VCO, 0x2A); /* 2A9 */
 		if (ret < 0) {
 			return ret;

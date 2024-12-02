@@ -96,7 +96,7 @@ int max31865_init(struct max31865_dev **, struct max31865_init_param *);
 int max31865_remove(struct max31865_dev *);
 
 /** Update Register using given update value */
-int max31865_reg_update(struct max31865_dev *, uint8_t,uint8_t, bool);
+int max31865_reg_update(struct max31865_dev *, uint8_t, uint8_t, bool);
 
 /** Read raw register value */
 int max31865_read(struct max31865_dev *, uint8_t, uint8_t *);

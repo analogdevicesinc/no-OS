@@ -167,7 +167,7 @@ static int adpd410x_iio_get_sampling_freq(void *device, char *buf,
 }
 
 static char const * const adpd410x_iio_timeslots[] = {
-	"A","B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
 };
 
 /**

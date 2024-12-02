@@ -78,16 +78,16 @@ int get_dac_demo_attr(void *device, char *buf, uint32_t len,
 {
 	struct dac_demo_desc *desc;
 
-	if(!device)
+	if (!device)
 		return -ENODEV;
 
 	desc = device;
 
-	switch(attr_id) {
+	switch (attr_id) {
 	case DAC_GLOBAL_ATTR:
-		return snprintf(buf,len,"%"PRIu32"",desc->dac_global_attr);
+		return snprintf(buf, len, "%"PRIu32"", desc->dac_global_attr);
 	case DAC_CHANNEL_ATTR:
-		return snprintf(buf,len,"%"PRIu32"",desc->dac_ch_attr[channel->ch_num]);
+		return snprintf(buf, len, "%"PRIu32"", desc->dac_ch_attr[channel->ch_num]);
 	default:
 		return -EINVAL;
 	}
@@ -110,7 +110,7 @@ int32_t dac_submit_samples(struct iio_device_data *dev_data)
 	int ret;
 	uint32_t i = 0;
 
-	if(!dev_data)
+	if (!dev_data)
 		return -ENODEV;
 
 	desc = dev_data->dev;
@@ -153,7 +153,7 @@ int32_t dac_demo_trigger_handler(struct iio_device_data *dev_data)
 	static uint32_t i = 0;
 	int ret;
 
-	if(!dev_data)
+	if (!dev_data)
 		return -ENODEV;
 
 	desc = (struct dac_demo_desc *)dev_data->dev;
@@ -196,12 +196,12 @@ int set_dac_demo_attr(void *device, char *buf, uint32_t len,
 	struct dac_demo_desc *desc;
 	uint32_t value = no_os_str_to_uint32(buf);
 
-	if(!device)
+	if (!device)
 		return -ENODEV;
 
 	desc = device;
 
-	switch(attr_id) {
+	switch (attr_id) {
 	case DAC_GLOBAL_ATTR:
 		desc->dac_global_attr = value;
 		return len;

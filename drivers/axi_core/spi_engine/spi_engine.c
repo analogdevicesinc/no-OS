@@ -237,7 +237,7 @@ static int32_t spi_engine_queue_new_cmd(struct spi_engine_cmd_queue **fifo,
 
 	local_fifo = (spi_engine_cmd_queue*)no_os_malloc(sizeof(*local_fifo));
 
-	if(!local_fifo)
+	if (!local_fifo)
 		return -1;
 
 	local_fifo->cmd = cmd;
@@ -326,9 +326,9 @@ static int32_t spi_engine_queue_get_cmd(struct spi_engine_cmd_queue **fifo,
  */
 static int32_t spi_engine_queue_no_os_free(struct spi_engine_cmd_queue **fifo)
 {
-	if(*fifo && (*fifo)->next)
+	if (*fifo && (*fifo)->next)
 		spi_engine_queue_no_os_free(&(*fifo)->next);
-	if((*fifo) != NULL) {
+	if ((*fifo) != NULL) {
 		no_os_free(*fifo);
 		*fifo = NULL;
 	}
@@ -349,7 +349,7 @@ static int32_t spi_engine_write_cmd_reg(struct spi_engine_desc *desc,
 	int32_t ret;
 
 	/* Check if offload is enabled */
-	if(desc->offload_config & (OFFLOAD_TX_EN | OFFLOAD_RX_EN)) {
+	if (desc->offload_config & (OFFLOAD_TX_EN | OFFLOAD_RX_EN)) {
 		ret = spi_engine_write(desc,
 				       SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0),
 				       cmd);
@@ -464,16 +464,16 @@ static int32_t spi_engine_write_cmd(struct no_os_spi_desc *desc,
 	modifier = (cmd >> 8) & 0x0F;
 	parameter = cmd & 0xFF;
 
-	switch(engine_command) {
+	switch (engine_command) {
 	case SPI_ENGINE_INST_TRANSFER:
 		spi_engine_transfer(desc_extra, modifier, parameter);
 		break;
 
 	case SPI_ENGINE_INST_ASSERT:
-		if(parameter == 0xFF) {
+		if (parameter == 0xFF) {
 			/* Set the CS HIGH */
 			spi_engine_set_cs(desc, true);
-		} else if(parameter == 0x00) {
+		} else if (parameter == 0x00) {
 			/* Set the CS LOW */
 			spi_engine_set_cs(desc, false);
 		}
@@ -483,9 +483,9 @@ static int32_t spi_engine_write_cmd(struct no_os_spi_desc *desc,
 	modifier */
 	case SPI_ENGINE_INST_SYNC_SLEEP:
 		/* SYNC instruction */
-		if(modifier == 0x00) {
+		if (modifier == 0x00) {
 			spi_engine_write_cmd_reg(desc_extra, cmd);
-		} else if(modifier == 0x01) {
+		} else if (modifier == 0x01) {
 			spi_gen_sleep_ns(desc, parameter);
 		}
 		break;
@@ -575,21 +575,21 @@ static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
 		     (desc_extra->offload_config & OFFLOAD_RX_EN);
 
 	/* Write the command fifo buffer */
-	while(msg->cmds != NULL) {
+	while (msg->cmds != NULL) {
 		spi_engine_queue_get_cmd(&msg->cmds, &data);
 		spi_engine_write_cmd(desc, data);
 	}
 
 	/* Write a number of tx_length WORDS on the SDO line */
 
-	if(offload_en) {
-		for(i = 0; i < desc_extra->offload_tx_len; i++)
+	if (offload_en) {
+		for (i = 0; i < desc_extra->offload_tx_len; i++)
 			spi_engine_write(desc_extra,
 					 SPI_ENGINE_REG_OFFLOAD_SDO_MEM(0),
 					 msg->tx_buf[i]);
 
 	} else {
-		for(i = 0; i < msg->length; i++)
+		for (i = 0; i < msg->length; i++)
 			spi_engine_write(desc_extra,
 					 SPI_ENGINE_REG_SDO_DATA_FIFO,
 					 msg->tx_buf[i]);
@@ -599,12 +599,12 @@ static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
 					&sync_id);
 		}
 		/* Wait for the end sync signal */
-		while(sync_id != _sync_id);
+		while (sync_id != _sync_id);
 		_sync_id++;
 
 		/* Read a number of rx_length WORDS from the SDI line and store
 		them */
-		for(i = 0; i < msg->length; i++) {
+		for (i = 0; i < msg->length; i++) {
 			spi_engine_read(desc_extra,
 					SPI_ENGINE_REG_SDI_DATA_FIFO,
 					&data);
@@ -636,7 +636,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 	}
 
 	*desc = no_os_malloc(sizeof(**desc));
-	if(! *desc) {
+	if (! *desc) {
 		no_os_free(*desc);
 		return -1;
 	}
@@ -720,8 +720,8 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 	if (!msg.cmds)
 		return -1;
 
-	msg.tx_buf =(uint32_t*)no_os_calloc(words_number, sizeof(msg.tx_buf[0]));
-	msg.rx_buf =(uint32_t*)no_os_calloc(words_number, sizeof(msg.rx_buf[0]));
+	msg.tx_buf = (uint32_t*)no_os_calloc(words_number, sizeof(msg.tx_buf[0]));
+	msg.rx_buf = (uint32_t*)no_os_calloc(words_number, sizeof(msg.rx_buf[0]));
 	msg.length = words_number;
 
 	/* Get the length of transfered word */
@@ -736,7 +736,7 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 
 	/* Pack the bytes into engine WORDS */
 	for (i = 0; i < bytes_number; i++)
-		msg.tx_buf[i / word_len] |= data[i] << (desc_extra->data_width-
+		msg.tx_buf[i / word_len] |= data[i] << (desc_extra->data_width -
 							(i % word_len + 1) * 8);
 
 	ret = spi_engine_transfer_message(desc, &msg);
@@ -770,28 +770,28 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 
 	eng_desc->offload_config = param->offload_config;
 
-	if(!param->dma_flags) {
+	if (!param->dma_flags) {
 		eng_desc->cyclic = CYCLIC;
 	} else {
-		if(param->dma_flags & DMA_CYCLIC)
+		if (param->dma_flags & DMA_CYCLIC)
 			eng_desc->cyclic = CYCLIC;
 		else
 			eng_desc->cyclic = NO;
 	}
 
 	dmac_init.irq_option = IRQ_DISABLED;
-	if(param->offload_config & OFFLOAD_TX_EN) {
+	if (param->offload_config & OFFLOAD_TX_EN) {
 		dmac_init.name = "DAC DMAC";
 		dmac_init.base = param->tx_dma_baseaddr;
 		axi_dmac_init(&eng_desc->offload_tx_dma, &dmac_init);
-		if(!eng_desc->offload_tx_dma)
+		if (!eng_desc->offload_tx_dma)
 			return -1;
 	}
-	if(param->offload_config & OFFLOAD_RX_EN) {
+	if (param->offload_config & OFFLOAD_RX_EN) {
 		dmac_init.name = "ADC DMAC";
 		dmac_init.base = param->rx_dma_baseaddr;
 		axi_dmac_init(&eng_desc->offload_rx_dma, &dmac_init);
-		if(!eng_desc->offload_rx_dma)
+		if (!eng_desc->offload_rx_dma)
 			return -1;
 	}
 
@@ -818,8 +818,8 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	eng_desc = desc->extra;
 
 	/* Check if offload is disabled */
-	if(!((eng_desc->offload_config & OFFLOAD_TX_EN) |
-	     (eng_desc->offload_config & OFFLOAD_RX_EN)))
+	if (!((eng_desc->offload_config & OFFLOAD_TX_EN) |
+	      (eng_desc->offload_config & OFFLOAD_RX_EN)))
 		return -1;
 
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_RESET(0), 1);
@@ -839,7 +839,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	transfer.cmds->next = NULL;
 	transfer.cmds->cmd = msg.commands[0];
 	i = 1;
-	while(i < msg.no_commands) {
+	while (i < msg.no_commands) {
 		spi_engine_queue_add_cmd(&transfer.cmds, msg.commands[i++]);
 
 	}
@@ -849,7 +849,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	/* Start transfer */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0x0001);
-	if(eng_desc->offload_config & OFFLOAD_TX_EN) {
+	if (eng_desc->offload_config & OFFLOAD_TX_EN) {
 		struct axi_dma_transfer tx_transfer = {
 			// Number of bytes to write/read
 			.size = eng_desc->offload_tx_dma->width_src * eng_desc->offload_tx_len * no_samples,
@@ -867,7 +867,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			goto error;
 	}
 
-	if(eng_desc->offload_config & OFFLOAD_RX_EN) {
+	if (eng_desc->offload_config & OFFLOAD_RX_EN) {
 		struct axi_dma_transfer rx_transfer = {
 			// Number of bytes to write/read
 			.size = eng_desc->offload_rx_dma->width_src * eng_desc->offload_tx_len * no_samples,
@@ -908,9 +908,9 @@ int32_t spi_engine_remove(struct no_os_spi_desc *desc)
 
 	eng_desc = desc->extra;
 
-	if(eng_desc->offload_config & OFFLOAD_TX_EN)
+	if (eng_desc->offload_config & OFFLOAD_TX_EN)
 		axi_dmac_remove(eng_desc->offload_tx_dma);
-	if(eng_desc->offload_config & OFFLOAD_RX_EN)
+	if (eng_desc->offload_config & OFFLOAD_RX_EN)
 		axi_dmac_remove(eng_desc->offload_rx_dma);
 	no_os_free(desc->extra);
 	no_os_free(desc);

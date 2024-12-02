@@ -72,23 +72,23 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
 	struct xil_callback_desc *callback_desc;
 
 	status = no_os_iterator_move_to_idx(param->it, 0);
-	while(!status) {
+	while (!status) {
 		no_os_iterator_read(param->it, &callback_desc);
 		status = no_os_iterator_move(param->it, 1);
-		if(XGpioPs_IntrGetStatusPin(&param->my_Gpio, callback_desc->pin_nb))
+		if (XGpioPs_IntrGetStatusPin(&param->my_Gpio, callback_desc->pin_nb))
 			callback_desc->triggered = true;
 	}
 
 	status = no_os_iterator_move_to_idx(param->it, 0);
-	while(!status) {
+	while (!status) {
 		no_os_iterator_read(param->it, &callback_desc);
 		status = no_os_iterator_move(param->it, 1);
-		if(callback_desc->triggered == true) {
+		if (callback_desc->triggered == true) {
 			callback_desc->triggered = false;
 			XGpioPs_IntrDisablePin(&param->my_Gpio, callback_desc->pin_nb);
 			XGpioPs_IntrClearPin(&param->my_Gpio, callback_desc->pin_nb);
 			callback_desc->callback.callback(callback_desc->callback.ctx);
-			if(callback_desc->enabled)
+			if (callback_desc->enabled)
 				XGpioPs_IntrEnablePin(&param->my_Gpio, callback_desc->pin_nb);
 		}
 	}
@@ -109,10 +109,10 @@ int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	extra = desc->extra;
 
 	status = no_os_iterator_move_to_idx(extra->it, 0);
-	while(!status) {
+	while (!status) {
 		no_os_iterator_read(extra->it, &callback_desc);
 		status = no_os_iterator_move(extra->it, 1);
-		if(callback_desc->pin_nb == irq_id) {
+		if (callback_desc->pin_nb == irq_id) {
 			callback_desc->enabled = false;
 			break;
 		}
@@ -142,11 +142,11 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	struct no_os_callback_desc callback;
 
 	xil_desc = (struct xil_gpio_irq_desc *)no_os_calloc(1, sizeof(*xil_desc));
-	if(!xil_desc)
+	if (!xil_desc)
 		return -ENOMEM;
 
 	ldesc = (struct no_os_irq_ctrl_desc *)no_os_calloc(1, sizeof(*ldesc));
-	if(!ldesc) {
+	if (!ldesc) {
 		no_os_free(xil_desc);
 		return -ENOMEM;
 	}
@@ -155,7 +155,7 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	GPIO_Config = XGpioPs_LookupConfig(xil_ip->gpio_device_id);
 	status = XGpioPs_CfgInitialize(&xil_desc->my_Gpio, GPIO_Config,
 				       GPIO_Config->BaseAddr);
-	if(status)
+	if (status)
 		goto error_desc;
 
 	ldesc->extra = xil_desc;
@@ -163,11 +163,11 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 	status = no_os_list_init(&xil_desc->callback_list, NO_OS_LIST_DEFAULT,
 				 call_cmp);
-	if(status)
+	if (status)
 		goto error_list;
 
 	status = no_os_iterator_init(&xil_desc->it, xil_desc->callback_list, 0);
-	if(status) {
+	if (status) {
 		no_os_iterator_remove(xil_desc->it);
 		goto error_list;
 	}
@@ -175,18 +175,18 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	ldesc->irq_ctrl_id = param->irq_ctrl_id;
 	status = no_os_irq_trigger_level_set(xil_desc->parent_desc, ldesc->irq_ctrl_id,
 					     NO_OS_IRQ_EDGE_RISING);
-	if(status)
+	if (status)
 		goto error_op;
 
 	status = no_os_irq_enable(xil_desc->parent_desc, ldesc->irq_ctrl_id);
-	if(status)
+	if (status)
 		goto error_op;
 
 	callback.callback = &xil_gpio_irq_handler;
 	callback.ctx = ldesc->extra;
 	status = no_os_irq_register_callback(xil_desc->parent_desc, ldesc->irq_ctrl_id,
 					     &callback);
-	if(status)
+	if (status)
 		goto error_op;
 
 	*desc = ldesc;
@@ -244,7 +244,7 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 	dev_callback = (struct xil_callback_desc *)no_os_calloc(1,
 			sizeof(*dev_callback));
-	if(!dev_callback)
+	if (!dev_callback)
 		return -1;
 
 	dev_callback->pin_nb = irq_id;
@@ -278,7 +278,7 @@ int32_t xil_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	search_callback.pin_nb = irq_id;
 	status = no_os_list_get_find(extra->callback_list, &dev_callback,
 				     &search_callback);
-	if(status)
+	if (status)
 		return -ENXIO;
 
 	no_os_free(dev_callback);
@@ -301,10 +301,10 @@ int32_t xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	extra = desc->extra;
 
 	status = no_os_iterator_move_to_idx(extra->it, 0);
-	while(!status) {
+	while (!status) {
 		no_os_iterator_read(extra->it, &callback_desc);
 		status = no_os_iterator_move(extra->it, 1);
-		if(callback_desc->pin_nb == irq_id) {
+		if (callback_desc->pin_nb == irq_id) {
 			callback_desc->enabled = true;
 			XGpioPs_IntrClearPin(&extra->my_Gpio, irq_id);
 			break;

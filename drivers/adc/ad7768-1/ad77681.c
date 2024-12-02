@@ -128,7 +128,7 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 		if (dev->crc_sel == AD77681_XOR)
 			/* INITIAL_CRC is 0, when ADC is not in continuous-read mode */
 			crc = ad77681_compute_xor(crc_buf, 2, INITIAL_CRC);
-		else if(dev->crc_sel == AD77681_CRC)
+		else if (dev->crc_sel == AD77681_CRC)
 			/* INITIAL_CRC is 0, when ADC is not in continuous-read mode */
 			crc = ad77681_compute_crc8(crc_buf, 2, INITIAL_CRC);
 
@@ -494,7 +494,7 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 	}
 
 	/* Sample rate to Hz */
-	dev->sample_rate = (dev->mclk / (osr*mclk_div)) * 1000;
+	dev->sample_rate = (dev->mclk / (osr * mclk_div)) * 1000;
 
 	return 0;
 }
@@ -796,7 +796,7 @@ int32_t ad77681_set_filter_type(struct ad77681_dev *dev,
 					      AD77681_SINC3_DEC_RATE_LSB(sinc3_LSB));
 	}
 
-	if ( ret == 0) {
+	if (ret == 0) {
 		dev->decimate = decimate;
 		dev->filter = filter;
 		/* Sync pulse after each filter change */
@@ -1215,7 +1215,7 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 		no_os_udelay(twait);
 
 		/* Padding of zeros before the desired coef in case the coef count in less than 56 */
-		if((num_coeffs + i) < coeff_reg_length) {
+		if ((num_coeffs + i) < coeff_reg_length) {
 			/* wirte zeroes to COEFF_DATA, in case of less coeffs than 56*/
 			coeffs_buf[0] = AD77681_REG_WRITE(AD77681_REG_COEFF_DATA);
 			coeffs_buf[1] = 0;
@@ -1702,7 +1702,7 @@ int32_t ad77681_status(struct ad77681_dev *dev,
 	uint8_t buf[3];
 
 	/* Master status register */
-	ret = ad77681_spi_reg_read(dev, AD77681_REG_MASTER_STATUS,buf);
+	ret = ad77681_spi_reg_read(dev, AD77681_REG_MASTER_STATUS, buf);
 	status->master_error = buf[1] & AD77681_MASTER_ERROR_MSK;
 	status->adc_error = buf[1] & AD77681_MASTER_ADC_ERROR_MSK;
 	status->dig_error = buf[1] & AD77681_MASTER_DIG_ERROR_MSK;
@@ -1719,7 +1719,7 @@ int32_t ad77681_status(struct ad77681_dev *dev,
 	status->spi_write_error = buf[1] & AD77681_SPI_WRITE_ERROR_MSK;
 	status->spi_crc_error = buf[1] & AD77681_SPI_CRC_ERROR_MSK;
 	/* ADC diag status register */
-	ret |= ad77681_spi_reg_read(dev, AD77681_REG_ADC_DIAG_STATUS,buf);
+	ret |= ad77681_spi_reg_read(dev, AD77681_REG_ADC_DIAG_STATUS, buf);
 	status->dldo_psm_error = buf[1] & AD77681_ADC_DLDO_PSM_ERROR_MSK;
 	status->aldo_psm_error = buf[1] & AD77681_ADC_ALDO_PSM_ERROR_MSK;
 	status->ref_det_error = buf[1] & AD77681_ADC_REF_DET_ERROR_MSK;
@@ -1727,7 +1727,7 @@ int32_t ad77681_status(struct ad77681_dev *dev,
 	status->filt_not_set_error = buf[1] & AD77681_ADC_FILT_NOT_SET_MSK;
 	status->ext_clk_qual_error = buf[1] & AD77681_ADC_DIG_ERR_EXT_CLK_MSK;
 	/* DIG diag status register */
-	ret |= ad77681_spi_reg_read(dev, AD77681_REG_DIG_DIAG_STATUS,buf);
+	ret |= ad77681_spi_reg_read(dev, AD77681_REG_DIG_DIAG_STATUS, buf);
 	status->memoy_map_crc_error = buf[1] & AD77681_DIG_MEMMAP_CRC_ERROR_MSK;
 	status->ram_crc_error = buf[1] & AD77681_DIG_RAM_CRC_ERROR_MSK;
 	status->fuse_crc_error = buf[1] & AD77681_DIG_FUS_CRC_ERROR_MSK;
@@ -1799,7 +1799,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	if (ad77681_scratchpad(dev, &scratchpad_check) == -1) {
 		scratchpad_check = 0xAD;/* If failure, second try */
 		ret |= (ad77681_scratchpad(dev, &scratchpad_check));
-		if(ret == -1) {
+		if (ret == -1) {
 			no_os_free(dev);
 			no_os_free(stat);
 			return ret;

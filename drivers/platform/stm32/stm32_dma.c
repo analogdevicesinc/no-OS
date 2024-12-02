@@ -266,10 +266,10 @@ int stm32_dma_xfer_start(struct no_os_dma_desc *desc,
 
 	if (chan->irq_num) {
 		ret = HAL_DMA_Start_IT(sdma_chan->hdma, (uint32_t)sdma_chan->src,
-				       (uint32_t )sdma_chan->dst, sdma_chan->length);
+				       (uint32_t)sdma_chan->dst, sdma_chan->length);
 	} else {
-		ret = HAL_DMA_Start(sdma_chan->hdma, (uint32_t )sdma_chan->src,
-				    (uint32_t )sdma_chan->dst, sdma_chan->length);
+		ret = HAL_DMA_Start(sdma_chan->hdma, (uint32_t)sdma_chan->src,
+				    (uint32_t)sdma_chan->dst, sdma_chan->length);
 	}
 
 	if (ret != HAL_OK)

@@ -101,7 +101,7 @@ int admv8818_spi_read(struct admv8818_dev *dev, uint16_t reg_addr,
 	buff[2] = 0;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADMV8818_BUFF_SIZE_BYTES);
-	if(ret)
+	if (ret)
 		return ret;
 
 	*data = buff[1];
@@ -298,7 +298,7 @@ int admv8818_read_lpf_freq(struct admv8818_dev *dev, unsigned long long *freq)
 
 	lpf_band = no_os_field_get(ADMV8818_SW_OUT_WR0_MSK, data);
 	if (!lpf_band || lpf_band > 4) {
-		*freq= 0;
+		*freq = 0;
 		return ret;
 	}
 

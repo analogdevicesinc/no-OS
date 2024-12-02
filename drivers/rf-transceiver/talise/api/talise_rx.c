@@ -91,15 +91,15 @@ uint32_t TALISE_programRxGainTable(taliseDevice_t *device,
 	ctlReg = (uint8_t)((rxChannel << 3) | EN_TABLECLK);
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, ctlReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* programming a table selected by rxChannel enum type */
 	addrIndex = 0;
 
-	for(i = START_RX_GAIN_INDEX; i > START_RX_GAIN_INDEX - numGainIndexesInTable;
-	    i--) {
+	for (i = START_RX_GAIN_INDEX; i > START_RX_GAIN_INDEX - numGainIndexesInTable;
+	     i--) {
 		tableRowIndex = START_RX_GAIN_INDEX - i;
 
 		/* set current gain table index (address) */
@@ -121,7 +121,7 @@ uint32_t TALISE_programRxGainTable(taliseDevice_t *device,
 		/* Set digital attenuation/gain[10:4] */
 		addrArray[addrIndex] = TALISE_ADDR_GAIN_TABLE_WORD_DATA_DIG;
 		dataArray[addrIndex++] = ((digGainSign & 0x01) << 6) | (((uint8_t)(
-						 digGainMag >> 4 )) & 0x3F);
+						 digGainMag >> 4)) & 0x3F);
 
 		/* Set digital attenuation/gain[3:0], TIA control */
 		addrArray[addrIndex] = TALISE_ADDR_GAIN_TABLE_WORD_DATA_DIG2;
@@ -143,7 +143,7 @@ uint32_t TALISE_programRxGainTable(taliseDevice_t *device,
 		if (addrIndex >= spiBufferSize) {
 			halError = talSpiWriteBytes(device->devHalInfo, &addrArray[0], &dataArray[0],
 						    addrIndex);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 
@@ -154,7 +154,7 @@ uint32_t TALISE_programRxGainTable(taliseDevice_t *device,
 	if (addrIndex > 0) {
 		halError = talSpiWriteBytes(device->devHalInfo, &addrArray[0], &dataArray[0],
 					    addrIndex);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -162,7 +162,7 @@ uint32_t TALISE_programRxGainTable(taliseDevice_t *device,
 	/* disabling the gain table clock */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -241,15 +241,15 @@ uint32_t TALISE_programOrxGainTable(taliseDevice_t *device,
 	ctlReg = (uint8_t)((orxChannel << 3) | EN_TABLECLK);
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, ctlReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* programming a table selected by rxChannel enum type */
 	addrIndex = 0;
 
-	for(i = START_ORX_GAIN_INDEX; i > START_ORX_GAIN_INDEX - numGainIndexesInTable;
-	    i--) {
+	for (i = START_ORX_GAIN_INDEX; i > START_ORX_GAIN_INDEX - numGainIndexesInTable;
+	     i--) {
 		tableRowIndex = START_ORX_GAIN_INDEX - i;
 
 		/* set current gain table index (address) */
@@ -271,7 +271,7 @@ uint32_t TALISE_programOrxGainTable(taliseDevice_t *device,
 		/* Set digital attenuation/gain[10:4] */
 		addrArray[addrIndex] = TALISE_ADDR_GAIN_TABLE_WORD_DATA_DIG;
 		dataArray[addrIndex++] = ((digGainSign & 0x01) << 6) | (((uint8_t)(
-						 digGainMag >> 4 )) & 0x3F);
+						 digGainMag >> 4)) & 0x3F);
 
 		/* Set digital attenuation/gain[3:0], TIA control */
 		addrArray[addrIndex] = TALISE_ADDR_GAIN_TABLE_WORD_DATA_DIG2;
@@ -284,7 +284,7 @@ uint32_t TALISE_programOrxGainTable(taliseDevice_t *device,
 		if (addrIndex >= spiBufferSize) {
 			halError = talSpiWriteBytes(device->devHalInfo, &addrArray[0], &dataArray[0],
 						    addrIndex);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 
@@ -295,7 +295,7 @@ uint32_t TALISE_programOrxGainTable(taliseDevice_t *device,
 	if (addrIndex > 0) {
 		halError = talSpiWriteBytes(device->devHalInfo, &addrArray[0], &dataArray[0],
 					    addrIndex);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -303,7 +303,7 @@ uint32_t TALISE_programOrxGainTable(taliseDevice_t *device,
 	/* disabling the gain table clock */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -339,7 +339,7 @@ uint32_t TALISE_setRxManualGain(taliseDevice_t *device,
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_MANUAL_GAIN_INDEX_RX1,
 					   (START_RX_GAIN_INDEX - (MAX_GAIN_TABLE_INDEX - gainIndex)));
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else if (rxChannel == TAL_RX2) {
@@ -352,7 +352,7 @@ uint32_t TALISE_setRxManualGain(taliseDevice_t *device,
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_MANUAL_GAIN_INDEX_RX2,
 					   (START_RX_GAIN_INDEX - (MAX_GAIN_TABLE_INDEX - gainIndex)));
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	} else {
@@ -396,13 +396,13 @@ uint32_t TALISE_getRxGain(taliseDevice_t *device, taliseRxChannels_t rxChannel,
 
 	/* Write the readback register to update the value */
 	halError = talSpiWriteByte(device->devHalInfo, regGainCh, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* read back the current gain index for the required channel */
 	halError = talSpiReadByte(device->devHalInfo, regGainCh, &readData);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -447,7 +447,7 @@ uint32_t TALISE_setObsRxManualGain(taliseDevice_t *device,
 	}
 
 	/* check for valid channel and assign address */
-	switch(obsRxCh) {
+	switch (obsRxCh) {
 	case TAL_ORX1:
 		if ((gainIndex < device->devStateInfo.gainIndexes.orx1MinGainIndex) ||
 		    (gainIndex > device->devStateInfo.gainIndexes.orx1MaxGainIndex)) {
@@ -481,7 +481,7 @@ uint32_t TALISE_setObsRxManualGain(taliseDevice_t *device,
 	/* update the value in the device data structure, and write to device.*/
 	halError = talSpiWriteByte(device->devHalInfo, manualGainIndexSpiAddr,
 				   orxGainIndex);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -521,13 +521,13 @@ uint32_t TALISE_getObsRxGain(taliseDevice_t *device,
 
 	/* Write the readback register to update the value */
 	halError = talSpiWriteByte(device->devHalInfo, regGainCh, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* read back the current gain index for the required channel */
 	halError = talSpiReadByte(device->devHalInfo, regGainCh, &readData);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -580,14 +580,14 @@ uint32_t TALISE_setRxGainControlMode(taliseDevice_t *device,
 	/* read, modify, write AGC type for Rx1 */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_AGC_CONFIG_RX1,
 				    (uint8_t)mode, rxGainTypeBitMask, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* read, modify, write AGC type for Rx2 */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_AGC_CONFIG_RX2,
 				    (uint8_t)mode, rxGainTypeBitMask, 0);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -597,8 +597,8 @@ uint32_t TALISE_setRxGainControlMode(taliseDevice_t *device,
 	return (uint32_t)retVal;
 }
 
-uint32_t TALISE_setRxDataFormat (taliseDevice_t *device,
-				 taliseRxDataFormat_t *rxDataFormat)
+uint32_t TALISE_setRxDataFormat(taliseDevice_t *device,
+				taliseRxDataFormat_t *rxDataFormat)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
 	adiHalErr_t halError = ADIHAL_OK;
@@ -1275,11 +1275,11 @@ uint32_t TALISE_getRxDataFormat(taliseDevice_t *device,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
-	rxDataFormat->fpRoundMode = (taliseFpRoundModes_t) ((config & ROUND_MODE_BITM)
+	rxDataFormat->fpRoundMode = (taliseFpRoundModes_t)((config & ROUND_MODE_BITM)
 				    >> 5);
 	rxDataFormat->fpDataFormat = ((config & MSBLSB_FORMAT_BITM) >> 4);
 	rxDataFormat->fpEncodeNan = ((config & FP_ENCNAN_BITM) >> 3);
-	rxDataFormat->fpNumExpBits = (taliseFpExponentModes_t) ((
+	rxDataFormat->fpNumExpBits = (taliseFpExponentModes_t)((
 					     config & NUM_EXPBITS_BITM) >> 1);
 	rxDataFormat->fpHideLeadingOne = (config & HIDE_LEADING_ONES_BITM);
 
@@ -1290,9 +1290,9 @@ uint32_t TALISE_getRxDataFormat(taliseDevice_t *device,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
-	rxDataFormat->fpRx2Atten = (taliseFpAttenSteps_t) ((config & RX2_ATTEN_BITM) >>
+	rxDataFormat->fpRx2Atten = (taliseFpAttenSteps_t)((config & RX2_ATTEN_BITM) >>
 				   3);
-	rxDataFormat->fpRx1Atten = (taliseFpAttenSteps_t) (config & RX1_ATTEN_BITM);
+	rxDataFormat->fpRx1Atten = (taliseFpAttenSteps_t)(config & RX1_ATTEN_BITM);
 
 	/* fetch the Integer configuration */
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_INTEGER_FORMAT_CONFIG,
@@ -1354,7 +1354,7 @@ uint32_t TALISE_getRxDataFormat(taliseDevice_t *device,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
-	rxDataFormat->extPinStepSize = (taliseGainStepSize_t) ((
+	rxDataFormat->extPinStepSize = (taliseGainStepSize_t)((
 					       gainEn & SLICER_STEPSIZE_BITM) >> 6);
 
 	/* fetch the rx1 gpio configuration */
@@ -1445,7 +1445,7 @@ uint32_t TALISE_getSlicerPosition(taliseDevice_t *device,
 	return (uint32_t)retVal;
 }
 
-static talRecoveryActions_t talSetRx1GainCtrlPin (taliseDevice_t *device,
+static talRecoveryActions_t talSetRx1GainCtrlPin(taliseDevice_t *device,
 		uint8_t enable, taliseGpioPinSel_t rxGainIncPin,
 		taliseGpioPinSel_t rxGainDecPin)
 {
@@ -1536,7 +1536,7 @@ static talRecoveryActions_t talSetRx1GainCtrlPin (taliseDevice_t *device,
 	return retVal;
 }
 
-static talRecoveryActions_t talSetRx2GainCtrlPin (taliseDevice_t *device,
+static talRecoveryActions_t talSetRx2GainCtrlPin(taliseDevice_t *device,
 		uint8_t enable, taliseGpioPinSel_t rxGainIncPin,
 		taliseGpioPinSel_t rxGainDecPin)
 {
@@ -1635,15 +1635,15 @@ uint32_t TALISE_setRxGainCtrlPin(taliseDevice_t *device,
 	static const uint8_t MAX_STEP = 0x07;
 
 #if TALISE_VERBOSE
-	halError =talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
-				"TALISE_setRxGainCtrlPin()\n");
+	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
+				 "TALISE_setRxGainCtrlPin()\n");
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
 				  TALACT_WARN_RESET_LOG);
 #endif
 
 	switch (rxChannel) {
 	case TAL_RX1:
-		if ( rxGainCtrlPin->enable > 0 ) {
+		if (rxGainCtrlPin->enable > 0) {
 			if ((rxGainCtrlPin->rxGainIncPin != TAL_GPIO_00)
 			    && (rxGainCtrlPin->rxGainIncPin != TAL_GPIO_10)) {
 				return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
@@ -1718,8 +1718,8 @@ uint32_t TALISE_getRxGainCtrlPin(taliseDevice_t *device,
 	adiHalErr_t halError = ADIHAL_OK;
 
 #if TALISE_VERBOSE
-	halError =talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
-				"TALISE_getRxGainCtrlPin()\n");
+	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
+				 "TALISE_getRxGainCtrlPin()\n");
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
 				  TALACT_WARN_RESET_LOG);
 #endif
@@ -1753,22 +1753,22 @@ uint32_t TALISE_getRxGainCtrlPin(taliseDevice_t *device,
 	IF_ERR_RETURN_U32(retVal);
 	pinSel = (regVal >> 4) & 0x03;
 	rxGainCtrlPin->rxGainIncPin = (rxChannel == TAL_RX1) ? ((
-					      pinSel == 0x00) ? TAL_GPIO_00 : (( pinSel == 0x01) ? TAL_GPIO_10 :
+					      pinSel == 0x00) ? TAL_GPIO_00 : ((pinSel == 0x01) ? TAL_GPIO_10 :
 							      TAL_GPIO_INVALID))
-				      : ((pinSel == 0x00) ? TAL_GPIO_03 : (( pinSel == 0x01) ? TAL_GPIO_13 :
+				      : ((pinSel == 0x00) ? TAL_GPIO_03 : ((pinSel == 0x01) ? TAL_GPIO_13 :
 						      TAL_GPIO_INVALID));
 	pinSel = (regVal >> 2) & 0x03;
 	rxGainCtrlPin->rxGainDecPin = (rxChannel == TAL_RX1) ? ((
-					      pinSel == 0x00) ? TAL_GPIO_01 : (( pinSel == 0x01) ? TAL_GPIO_11 :
+					      pinSel == 0x00) ? TAL_GPIO_01 : ((pinSel == 0x01) ? TAL_GPIO_11 :
 							      TAL_GPIO_INVALID))
-				      : ((pinSel == 0x00) ? TAL_GPIO_04 : (( pinSel == 0x01) ? TAL_GPIO_14 :
+				      : ((pinSel == 0x00) ? TAL_GPIO_04 : ((pinSel == 0x01) ? TAL_GPIO_14 :
 						      TAL_GPIO_INVALID));
 	rxGainCtrlPin->enable = regVal & 0x01;
 
 	/* Gain step */
 	halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_MANUAL_GAIN_CONFIG,
 				  &regVal);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 	rxGainCtrlPin->incStep = (regVal >> 3) & 0x7;
@@ -2187,7 +2187,7 @@ static talRecoveryActions_t talSetRxNcoFtw(taliseDevice_t *device,
 	adiHalErr_t halError = ADIHAL_OK;
 	uint16_t spiAddr = 0;
 
-	switch(rxNcoChannel) {
+	switch (rxNcoChannel) {
 	case TAL_RX1_NCO1A:
 		spiAddr = TALISE_ADDR_RX_NCO_CH1_FTW_BYTE4;
 		break;
@@ -2411,7 +2411,7 @@ talRecoveryActions_t talSetupNcoShifter(taliseDevice_t *device,
 	return retVal;
 }
 
-uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
+uint32_t TALISE_programDualBandLnaGainTable(taliseDevice_t *device,
 		taliseDualBandLnaGainTable_t *gainTablePtr, uint8_t numGainIndexesInTable,
 		taliseRxChannels_t rxChannel)
 {
@@ -2456,7 +2456,7 @@ uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
 	gtConfigReg = ((uint8_t)rxChannel << 3) | EN_TABLECLK;
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, gtConfigReg);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 
@@ -2467,7 +2467,7 @@ uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
 	for (count = 0; count < numGainIndexesInTable; count ++) {
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_GAIN_TABLE_WORD_ADDRESS, count);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN(retVal);
 
@@ -2475,13 +2475,13 @@ uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
 				(gainTablePtr[count].dualbandControl & 0x03);
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_GAIN_TABLE_WORD_DATA_DUALBAND, registerValue);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN(retVal);
 
 		halError = talSpiWriteByte(device->devHalInfo,
 					   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, gtConfigReg);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN(retVal);
 	}
@@ -2489,7 +2489,7 @@ uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
 	/* disabling the gain table clock */
 	halError = talSpiWriteByte(device->devHalInfo,
 				   TALISE_ADDR_GAIN_TABLE_CONFIGURATION, 0x00);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN(retVal);
 
@@ -2497,8 +2497,8 @@ uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
 	if ((rxChannel == TAL_RX1) ||
 	    (rxChannel == TAL_RX1RX2)) {
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_RX1_SLOWLOOP_CONFIG,
-					   (uint8_t)(numGainIndexesInTable-1));
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+					   (uint8_t)(numGainIndexesInTable - 1));
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN(retVal);
 	}
@@ -2507,8 +2507,8 @@ uint32_t TALISE_programDualBandLnaGainTable( taliseDevice_t *device,
 	if ((rxChannel == TAL_RX2) ||
 	    (rxChannel == TAL_RX1RX2)) {
 		halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_RX2_SLOWLOOP_CONFIG,
-					   (uint8_t)(numGainIndexesInTable-1));
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+					   (uint8_t)(numGainIndexesInTable - 1));
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN(retVal);
 	}
@@ -2576,12 +2576,12 @@ uint32_t TALISE_setGainTableExtCtrlPins(taliseDevice_t *device,
 
 	usedGpio3p3pins = device->devStateInfo.usedGpio3p3pins;
 
-	if(device->devStateInfo.swTest == SWTEST_SIMULATE_RX1_GPIO3P3_INP) {
+	if (device->devStateInfo.swTest == SWTEST_SIMULATE_RX1_GPIO3P3_INP) {
 		curr3p3SrcCtrl = 0;
 		usedGpio3p3pins |= 0x01;
 	}
 
-	if(device->devStateInfo.swTest == SWTEST_SIMULATE_RX2_GPIO3P3_INP) {
+	if (device->devStateInfo.swTest == SWTEST_SIMULATE_RX2_GPIO3P3_INP) {
 		curr3p3SrcCtrl = 0;
 		usedGpio3p3pins |= (0x01 << 4);
 	}

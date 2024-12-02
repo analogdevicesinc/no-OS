@@ -281,7 +281,7 @@ int ltc2672_set_current_all_channels(struct ltc2672_dev *device,
  */
 int ltc2672_set_span_channel(struct ltc2672_dev *device,
 			     enum ltc2672_out_range ch_span
-			     ,enum ltc2672_dac_ch out_ch) {
+			     , enum ltc2672_dac_ch out_ch) {
 	int ret;
 	uint32_t span = 0;
 	uint32_t command;
@@ -466,7 +466,7 @@ int ltc2672_monitor_mux(struct ltc2672_dev *device,
  */
 int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
 				 enum ltc2672_dac_ch out_ch
-				 ,uint32_t current_reg_a, uint32_t current_reg_b) {
+				 , uint32_t current_reg_a, uint32_t current_reg_b) {
 	int ret;
 	uint32_t current_code;
 	uint32_t command;

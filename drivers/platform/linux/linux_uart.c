@@ -117,7 +117,7 @@ static int32_t linux_uart_init(struct no_os_uart_desc **desc,
 
 	cfmakeraw(linux_desc->terminal);
 
-	switch(param->baud_rate) {
+	switch (param->baud_rate) {
 	case 50:
 		speed = B50;
 		break;
@@ -171,7 +171,7 @@ static int32_t linux_uart_init(struct no_os_uart_desc **desc,
 	cfsetospeed(linux_desc->terminal, speed);
 
 	linux_desc->terminal->c_cflag &= ~CSIZE;
-	switch(param->size) {
+	switch (param->size) {
 	case NO_OS_UART_CS_5:
 		linux_desc->terminal->c_cflag |= CS5;
 		break;
@@ -191,7 +191,7 @@ static int32_t linux_uart_init(struct no_os_uart_desc **desc,
 
 	linux_desc->terminal->c_cflag &= ~PARENB;
 	linux_desc->terminal->c_cflag &= ~PARODD;
-	switch(param->parity) {
+	switch (param->parity) {
 	case NO_OS_UART_PAR_NO:
 		break;
 	case NO_OS_UART_PAR_ODD:

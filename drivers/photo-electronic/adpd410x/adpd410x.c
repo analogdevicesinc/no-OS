@@ -92,7 +92,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
 
 		ret = no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
-		if(ret != 0) {
+		if (ret != 0) {
 			no_os_free(buff);
 			return ret;
 		}
@@ -111,12 +111,12 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 
 		/* No stop bit */
 		ret = no_os_i2c_write(dev->dev_ops.i2c_phy_dev, buff, 2, 0);
-		if(ret != 0) {
+		if (ret != 0) {
 			no_os_free(buff);
 			return ret;
 		}
 		ret = no_os_i2c_read(dev->dev_ops.i2c_phy_dev, data, (uint8_t) num_bytes, 1);
-		if(ret != 0) {
+		if (ret != 0) {
 			no_os_free(buff);
 			return ret;
 		}
@@ -197,7 +197,7 @@ static int32_t adpd410x_get_clk_opt(struct adpd410x_dev *dev)
 	uint16_t reg_temp;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	dev->clk_opt = (reg_temp & BITM_SYS_CTL_ALT_CLOCKS) >>
 		       BITP_SYS_CTL_ALT_CLOCKS;
@@ -216,7 +216,7 @@ int32_t adpd410x_reset(struct adpd410x_dev *dev)
 
 	ret = adpd410x_reg_write_mask(dev, ADPD410X_REG_SYS_CTL, 1,
 				      BITM_SYS_CTL_SW_RESET);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	return adpd410x_get_clk_opt(dev);
@@ -303,12 +303,12 @@ int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 	uint32_t reg_load;
 	uint16_t reg_temp;
 
-	if((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
+	if ((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
 	    (dev->clk_opt == ADPD410X_INTLFO_EXTHFO)) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-		if(ret != 0)
+		if (ret != 0)
 			return ret;
-		if(reg_temp & BITP_SYS_CTL_LFOSC_SEL)
+		if (reg_temp & BITP_SYS_CTL_LFOSC_SEL)
 			reg_load = ADPD410X_LOW_FREQ_OSCILLATOR_FREQ1;
 		else
 			reg_load = ADPD410X_LOW_FREQ_OSCILLATOR_FREQ2;
@@ -319,7 +319,7 @@ int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 	reg_load /= sampling_freq;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_TS_FREQ,
 				 (reg_load & 0xFFFF));
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	return adpd410x_reg_write(dev, ADPD410X_REG_TS_FREQH,
 				  ((reg_load & 0x7F0000) >> 16));
@@ -382,35 +382,35 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 	uint16_t data;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
-	if(((data & BITM_OPMODE_TIMESLOT_EN) >> BITP_OPMODE_TIMESLOT_EN) <
+	if (((data & BITM_OPMODE_TIMESLOT_EN) >> BITP_OPMODE_TIMESLOT_EN) <
 	    timeslot_no)
 		return -EINVAL;
 
 	/* Enable channel 2 */
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_CTRL(timeslot_no), &data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
-	if(init->enable_ch2)
+	if (init->enable_ch2)
 		data |= BITM_TS_CTRL_A_CH2_EN;
 	else
 		data &= ~BITM_TS_CTRL_A_CH2_EN;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_TS_CTRL(timeslot_no), data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Setup inputs */
 	data = init->ts_inputs.option << (init->ts_inputs.pair * 4);
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_INPUTS(timeslot_no), data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Set precondition PD */
 	ret = adpd410x_reg_write_mask(dev, ADPD410X_REG_CATHODE(timeslot_no),
 				      init->precon_option,
 				      BITM_CATHODE_A_PRECON);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/**
@@ -422,28 +422,28 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 	       init->chan2 << BITP_AFE_TRIM_A_TIA_GAIN_CH2 |
 	       init->chan1 << BITP_AFE_TRIM_A_TIA_GAIN_CH1;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_AFE_TRIM(timeslot_no), data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Set LED pattern */
 	data = init->pulse4_subtract << BITP_PATTERN_A_SUBTRACT |
 	       init->pulse4_reverse << BITP_PATTERN_A_REVERSE_INTEG;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_PATTERN(timeslot_no), data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Set bytes number for time slot */
 	data = (init->byte_no << BITP_DATA1_A_SIGNAL_SIZE) &
 	       BITM_DATA1_A_SIGNAL_SIZE;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_DATA1(timeslot_no), data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Set decimate factor */
 	data = (init->dec_factor << BITP_DECIMATE_A_DECIMATE_FACTOR) &
 	       BITM_DECIMATE_A_DECIMATE_FACTOR;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_DECIMATE(timeslot_no), data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Set LED power */
@@ -451,19 +451,19 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 	       (init->led2.value << BITP_LED_POW12_A_LED_CURRENT2);
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_LED_POW12(timeslot_no),
 				 data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	data = init->led3.value |
 	       (init->led4.value << BITP_LED_POW34_A_LED_CURRENT4);
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_LED_POW34(timeslot_no),
 				 data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	/* Set ADC cycle and repeat */
-	if(init->adc_cycles == 0)
+	if (init->adc_cycles == 0)
 		init->adc_cycles = 1;
-	if(init->repeats_no == 0)
+	if (init->repeats_no == 0)
 		init->repeats_no = 1;
 	data = init->repeats_no | (init->adc_cycles << BITP_COUNTS_A_NUM_INT);
 	return adpd410x_reg_write(dev, ADPD410X_REG_COUNTS(timeslot_no),
@@ -481,7 +481,7 @@ int32_t adpd410x_get_fifo_bytecount(struct adpd410x_dev *dev, uint16_t *bytes)
 	int32_t ret;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_FIFO_STATUS, bytes);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	*bytes &= BITM_INT_STATUS_FIFO_FIFO_BYTE_COUNT;
@@ -510,12 +510,12 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 	uint8_t *slot_bytecount_tab;
 
 	slot_bytecount_tab = (uint8_t *)no_os_calloc(no_slots,
-			     sizeof (*slot_bytecount_tab));
+			     sizeof(*slot_bytecount_tab));
 	if (!slot_bytecount_tab)
 		return -ENOMEM;
-	for(i = 0; i < no_slots; i++) {
+	for (i = 0; i < no_slots; i++) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_DATA1(i), &temp_data);
-		if(ret != 0)
+		if (ret != 0)
 			goto error_slot;
 		slot_bytecount_tab[i] = (temp_data & BITM_DATA1_A_SIGNAL_SIZE);
 	}
@@ -528,13 +528,13 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 			goto error_slot;
 
 		sample_index++;
-		if(((dual_chan & (1 << i)) != 0) && (got_one == 0)) {
+		if (((dual_chan & (1 << i)) != 0) && (got_one == 0)) {
 			got_one = 1;
 		} else {
 			i++;
 			got_one = 0;
 		}
-	} while(i < no_slots);
+	} while (i < no_slots);
 
 	no_os_free(slot_bytecount_tab);
 	return 0;
@@ -567,7 +567,7 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 		return -1;
 
 	data_byte_buff = (uint8_t *) no_os_calloc(total_bytes,
-			 sizeof (*data_byte_buff));
+			 sizeof(*data_byte_buff));
 	if (!data_byte_buff)
 		return -ENOMEM;
 
@@ -579,7 +579,7 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 		ret = adpd410x_reg_read_bytes(dev, ADPD410X_REG_FIFO_DATA,
 					      data_byte_buff + bytes_read,
 					      next_packet_size);
-		if(ret != 0)
+		if (ret != 0)
 			goto fifo_free_return;
 
 		bytes_read += next_packet_size;
@@ -587,7 +587,7 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 
 	i = 0;
 	for (j = 0; j < num_samples; j++) {
-		switch(datawidth) {
+		switch (datawidth) {
 		case 0:
 			break;
 		case 1:
@@ -631,17 +631,17 @@ int32_t adpd410x_get_data(struct adpd410x_dev *dev, uint32_t *data)
 	uint8_t ts_no;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &temp_data);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ts_no = ((temp_data & BITM_OPMODE_TIMESLOT_EN) >>
 		 BITP_OPMODE_TIMESLOT_EN) + 1;
 
-	for(i = 0; i < ts_no; i++) {
+	for (i = 0; i < ts_no; i++) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_CTRL(i),
 					&temp_data);
-		if(ret != 0)
+		if (ret != 0)
 			return ret;
-		if((temp_data & BITM_TS_CTRL_A_CH2_EN) != 0)
+		if ((temp_data & BITM_TS_CTRL_A_CH2_EN) != 0)
 			dual_chan |= (1 << i);
 	}
 
@@ -661,57 +661,57 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	struct adpd410x_dev *dev;
 	uint16_t reg_temp;
 
-	dev = no_os_calloc(1, sizeof *dev);
-	if(!dev)
+	dev = no_os_calloc(1, sizeof * dev);
+	if (!dev)
 		return -ENOMEM;
 
 	dev->dev_type = init_param->dev_type;
 	dev->ext_lfo_freq = init_param->ext_lfo_freq;
 
-	if(dev->dev_type == ADPD4100)
+	if (dev->dev_type == ADPD4100)
 		ret = no_os_spi_init(&dev->dev_ops.spi_phy_dev,
 				     &init_param->dev_ops_init.spi_phy_init);
 	else
 		ret = no_os_i2c_init(&dev->dev_ops.i2c_phy_dev,
 				     &init_param->dev_ops_init.i2c_phy_init);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_dev;
 
 	ret = no_os_gpio_get(&dev->gpio0, &init_param->gpio0);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_phy;
 	ret = no_os_gpio_get(&dev->gpio1, &init_param->gpio1);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio0;
 	ret = no_os_gpio_get(&dev->gpio2, &init_param->gpio2);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio1;
 	ret = no_os_gpio_get(&dev->gpio3, &init_param->gpio3);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio2;
 
 	ret = adpd410x_reset(dev);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
 
 	/* Do power-up sequence described in errata. */
 	ret = no_os_gpio_direction_output(dev->gpio0, NO_OS_GPIO_HIGH);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
 	ret = adpd410x_reg_write(dev, 0xB5, 0x04);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
 	ret = adpd410x_reg_write(dev, 0xB5, 0x00);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
 	ret = no_os_gpio_set_value(dev->gpio0, NO_OS_GPIO_HIGH_Z);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_CHIP_ID, &reg_temp);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
-	if((reg_temp & BITM_CHIP_ID) != ADPD410X_CHIP_ID)
+	if ((reg_temp & BITM_CHIP_ID) != ADPD410X_CHIP_ID)
 		goto error_gpio3;
 
 	dev->clk_opt = init_param->clk_opt;
@@ -719,21 +719,21 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 
 	ret = adpd410x_reg_write_mask(dev, ADPD410X_REG_SYS_CTL, dev->clk_opt,
 				      BITM_SYS_CTL_ALT_CLOCKS);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_gpio3;
 
 	/**
 	 * Enable the 1MHz oscillator if the internal low frequency oscillator
 	 * is used.
 	 */
-	if((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
+	if ((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
 	    (dev->clk_opt == ADPD410X_INTLFO_EXTHFO)) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-		if(ret != 0)
+		if (ret != 0)
 			goto error_gpio3;
 		reg_temp |= (BITM_SYS_CTL_OSC_1M_EN | BITM_SYS_CTL_LFOSC_SEL);
 		ret = adpd410x_reg_write(dev, ADPD410X_REG_SYS_CTL, reg_temp);
-		if(ret != 0)
+		if (ret != 0)
 			goto error_gpio3;
 	}
 
@@ -750,7 +750,7 @@ error_gpio1:
 error_gpio0:
 	no_os_gpio_remove(dev->gpio0);
 error_phy:
-	if(dev->dev_type == ADPD4100)
+	if (dev->dev_type == ADPD4100)
 		no_os_spi_remove(dev->dev_ops.spi_phy_dev);
 	else
 		no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
@@ -769,27 +769,27 @@ int32_t adpd410x_remove(struct adpd410x_dev *dev)
 {
 	int32_t ret;
 
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
-	if(dev->dev_type == ADPD4100)
+	if (dev->dev_type == ADPD4100)
 		ret = no_os_spi_remove(dev->dev_ops.spi_phy_dev);
 	else
 		ret = no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio0);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio1);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio2);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio3);
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	no_os_free(dev);

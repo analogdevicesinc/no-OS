@@ -83,7 +83,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 
 	/* Example 1 from the datasheet */
 	/* Configure the Control LB register for all devices */
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CONTROL_LB << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CONTROL_LB << 21) |
 				  ((AD7280A_CTRL_LB_MUST_SET |
 				    AD7280A_CTRL_LB_LOCK_DEV_ADDR |
 				    AD7280A_CTRL_LB_DAISY_CHAIN_RB_EN) << 13) |
@@ -91,7 +91,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Configure the Read Register for all devices */
-	value = ad7280a_crc_write((uint32_t) (AD7280A_READ << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_READ << 21) |
 				  (AD7280A_CONTROL_LB << 15) |
 				  (1 << 12));
 	ad7280a_transfer_32bits(dev,
@@ -245,7 +245,7 @@ int32_t ad7280a_crc_read(uint32_t message)
 	int32_t crc6 = 0;
 	int32_t crc7 = 0;
 
-	crc_rec= (message >> 2) & 0xFF;
+	crc_rec = (message >> 2) & 0xFF;
 	data_in = message >> 10;
 	for (i = NUMBITS_READ; i >= 0; i--) {
 		xor5 = (crc4 ^ crc7) ? 1 : 0;
@@ -288,7 +288,7 @@ int8_t ad7280a_convert_read_all(struct ad7280a_dev *dev)
 
 	/* Configure Control HB register. Read all register, convert all registers,
 	average 8 values for all devices */
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CONTROL_HB << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CONTROL_HB << 21) |
 				  ((AD7280A_CTRL_HB_CONV_RES_READ_ALL |
 				    AD7280A_CTRL_HB_CONV_INPUT_ALL |
 				    AD7280A_CTRL_HB_CONV_AVG_8) << 13) |
@@ -296,13 +296,13 @@ int8_t ad7280a_convert_read_all(struct ad7280a_dev *dev)
 	/* Configure the Read register for all devices */
 	ad7280a_transfer_32bits(dev,
 				value);
-	value = ad7280a_crc_write((uint32_t) (AD7280A_READ << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_READ << 21) |
 				  (AD7280A_CELL_VOLTAGE_1 << 15) |
 				  (1 << 12));
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Configure the CNVST register, allow single CNVST pulse */
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CNVST_N_CONTROL << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CNVST_N_CONTROL << 21) |
 				  (2 << 13) |
 				  (1 << 12));
 	ad7280a_transfer_32bits(dev,
@@ -317,7 +317,7 @@ int8_t ad7280a_convert_read_all(struct ad7280a_dev *dev)
 	/* Wait 300us */
 	no_os_mdelay(300);
 	/* Read data from both devices */
-	for(i = 0; i < 24; i++) {
+	for (i = 0; i < 24; i++) {
 		dev->read_data[i] = ad7280a_transfer_32bits(dev,
 				    AD7280A_READ_TXVAL);
 	}
@@ -348,14 +348,14 @@ int8_t ad7280a_convert_data_all(struct ad7280a_dev *dev)
 {
 	uint8_t i;
 
-	for(i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		dev->cell_voltage[i]     = 1 + ((dev->read_data[i]    >> 11) & 0xfff) *
 					   0.0009765625;
-		dev->aux_adc[i]          = ((dev->read_data[i+6]      >> 11) & 0xfff) *
+		dev->aux_adc[i]          = ((dev->read_data[i + 6]      >> 11) & 0xfff) *
 					   0.001220703125;
-		dev->cell_voltage[i + 6] = 1 + ((dev->read_data[i+12] >> 11) & 0xfff) *
+		dev->cell_voltage[i + 6] = 1 + ((dev->read_data[i + 12] >> 11) & 0xfff) *
 					   0.0009765625;
-		dev->aux_adc[i + 6]      = ((dev->read_data[i+18]     >> 11) & 0xfff) *
+		dev->aux_adc[i + 6]      = ((dev->read_data[i + 18]     >> 11) & 0xfff) *
 					   0.001220703125;
 	}
 
@@ -388,13 +388,13 @@ int16_t ad7280a_read_register(struct ad7280a_dev *dev,
 
 	/* Example 6 from datasheet */
 	/* Disable reading on all devices */
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CONTROL_HB << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CONTROL_HB << 21) |
 				  (AD7280A_CTRL_HB_CONV_RES_READ_NO << 13) |
 				  (1 << 12));
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Enable reading on the selected device */
-	value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+	value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 				  (AD7280A_CONTROL_HB << 21) |
 				  ((AD7280A_CTRL_HB_CONV_RES_READ_ALL |
 				    AD7280A_CTRL_HB_CONV_INPUT_ALL) << 13));
@@ -403,7 +403,7 @@ int16_t ad7280a_read_register(struct ad7280a_dev *dev,
 	/* Wait 100us */
 	no_os_mdelay(100);
 	/* Configure the Read register */
-	value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+	value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 				  (AD7280A_READ << 21) |
 				  (read_reg << 15));
 	ad7280a_transfer_32bits(dev,
@@ -414,7 +414,7 @@ int16_t ad7280a_read_register(struct ad7280a_dev *dev,
 	if (ad7280a_crc_read(value) == 1) {
 		//readDevAddress = value >> 27;              // Extract the Device address
 		//readRegAddress = (value >> 21 ) & 0x2F;    // Extract the Register address
-		read_content    = (value >> 13 ) & 0xFF;    // Extract the Register data
+		read_content    = (value >> 13) & 0xFF;     // Extract the Register data
 		//readWriteAck   = (value & 0x200) ? 1 : 0;  // Extract the write acknowledge
 	} else {
 		read_content = -1;
@@ -470,9 +470,9 @@ int16_t ad7280a_read_conversion(struct ad7280a_dev *dev,
 	/* Wait 100us */
 	no_os_mdelay(100);
 	/* Allow conversions to be initiated using CNVST pin on selected part */
-	value=ad7280a_crc_write((uint32_t)(dev_addr << 31) |
-				(AD7280A_CNVST_N_CONTROL << 21) |
-				(2 << 13));
+	value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
+				  (AD7280A_CNVST_N_CONTROL << 21) |
+				  (2 << 13));
 	/* Write the CNVST_N register, allow single CNVST pulse */
 	ad7280a_transfer_32bits(dev,
 				value);
@@ -491,7 +491,7 @@ int16_t ad7280a_read_conversion(struct ad7280a_dev *dev,
 	if (ad7280a_crc_read(value) == 1) {
 		//readDevAddress = value >> 27;              // Extract the Device address
 		//readRegAddress = (value >> 23 ) & 0x2F;    // Extract the Register address
-		read_conversion = (value >> 11 ) & 0xFFF;   // Extract the Register data
+		read_conversion = (value >> 11) & 0xFFF;    // Extract the Register data
 		//readWriteAck   = (value & 0x200) ? 1 :0;   //Extract the write acknowledge
 	} else {
 		read_conversion = -1;
@@ -548,119 +548,119 @@ void ad7280a_write_register(struct ad7280a_dev *dev,
 
 	switch (read_reg) {
 	case 0x0D:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CONTROL_HB << 21)      |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x0E:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CONTROL_LB << 21)      |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x0F:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31)  |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31)  |
 					  (AD7280A_CELL_OVERVOLTAGE << 21) |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x10:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31)   |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31)   |
 					  (AD7280A_CELL_UNDERVOLTAGE << 21) |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x11:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31)     |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31)     |
 					  (AD7280A_AUX_ADC_OVERVOLTAGE << 21) |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x12:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31)      |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31)      |
 					  (AD7280A_AUX_ADC_UNDERVOLTAGE << 21) |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x13:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_ALERT << 21)           |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x14:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CELL_BALANCE << 21)    |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x15:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CB1_TIMER << 21)       |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x16:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CB2_TIMER << 21)       |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x17:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CB3_TIMER << 21)       |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x18:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CB4_TIMER << 21)       |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x19:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CB5_TIMER << 21)       |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x1A:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CB6_TIMER << 21)       |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x1B:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_PD_TIMER << 21)        |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x1C:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_READ << 21)            |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
 					value);
 		break;
 	case 0x1D:
-		value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
+		value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 					  (AD7280A_CNVST_N_CONTROL << 21) |
 					  (reg_val << 13));
 		ad7280a_transfer_32bits(dev,
@@ -687,7 +687,7 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 	uint32_t value;
 
 	/* Example 7 of AD7280 datasheet */
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CONTROL_HB << 21)    |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CONTROL_HB << 21)    |
 				  ((AD7280A_CTRL_HB_CONV_RES_READ_ALL           |
 				    AD7280A_CTRL_HB_CONV_INPUT_SELF_TEST) << 13) |
 				  (1 << 12));
@@ -696,13 +696,13 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 				value);
 	/* Wait 100us */
 	no_os_mdelay(100);
-	value = ad7280a_crc_write((uint32_t) (AD7280A_READ << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_READ << 21) |
 				  (AD7280A_SELF_TEST << 15)            |
 				  (1 << 12));
 	/* Write the read register with the address of the Self test register */
 	ad7280a_transfer_32bits(dev,
 				value);
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CNVST_N_CONTROL << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CNVST_N_CONTROL << 21) |
 				  (2 << 13)                       |
 				  (1 << 12));
 	/* Write the CNVST_N register, allow single CNVST pulse */
@@ -714,7 +714,7 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 	AD7280A_CNVST_HIGH;
 	/* wait 300us */
 	no_os_mdelay(300);
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CNVST_N_CONTROL << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CNVST_N_CONTROL << 21) |
 				  (1 << 13)                       |
 				  (1 << 12));
 	/* Update registers */
@@ -728,7 +728,7 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 					 AD7280A_READ_TXVAL) >> 11) & 0xfff;
 	/* Read slave self test register */
 	*self_test_reg_b = (float)value * 0.001220703125;
-	value = ad7280a_crc_write((uint32_t) (AD7280A_CONTROL_HB << 21) |
+	value = ad7280a_crc_write((uint32_t)(AD7280A_CONTROL_HB << 21) |
 				  ((AD7280A_CTRL_HB_CONV_RES_READ_ALL        |
 				    AD7280A_CTRL_HB_CONV_INPUT_ALL) << 13)     |
 				  (1 << 12));

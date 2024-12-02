@@ -99,7 +99,7 @@ static int lt7170_data2reg_ieee754(struct lt7170_dev *dev, int data,
 	}
 
 	if (scale > (int)MILLI)
-		data = NO_OS_DIV_ROUND_CLOSEST_ULL(data, scale/MILLI);
+		data = NO_OS_DIV_ROUND_CLOSEST_ULL(data, scale / MILLI);
 	else
 		data *= (int)MILLI / scale;
 
@@ -555,7 +555,7 @@ int lt7170_read_word(struct lt7170_dev *dev, uint8_t cmd, uint16_t *word)
 			return -EBADMSG;
 	} else {
 		ret = no_os_i2c_read(dev->i2c_desc, rx_buf, 2, 1);
-		if(ret)
+		if (ret)
 			return ret;
 	}
 
@@ -637,7 +637,7 @@ int lt7170_read_block_data(struct lt7170_dev *dev, uint8_t cmd, uint8_t *data,
 	uint8_t rxbuf[nbytes + 2];
 
 	ret = no_os_i2c_write(dev->i2c_desc, &cmd, 1, 0);
-	if(ret)
+	if (ret)
 		return ret;
 
 	if (dev->crc_en) {
@@ -653,10 +653,10 @@ int lt7170_read_block_data(struct lt7170_dev *dev, uint8_t cmd, uint8_t *data,
 			return -EBADMSG;
 	} else {
 		ret = no_os_i2c_read(dev->i2c_desc, rxbuf, nbytes + 1, 1);
-		if(ret)
+		if (ret)
 			return ret;
 
-		if((size_t)rxbuf[0] > nbytes)
+		if ((size_t)rxbuf[0] > nbytes)
 			return -EMSGSIZE;
 	}
 

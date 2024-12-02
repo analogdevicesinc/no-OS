@@ -166,7 +166,7 @@ static struct iio_device pulsar_adc_iio_device_template = {
 	.num_ch = 1,
 	.channels = &pulsar_adc_channel,
 	.debug_reg_read = iio_pulsar_adc_debug_reg_read,
-	.debug_reg_write= iio_pulsar_adc_debug_reg_write,
+	.debug_reg_write = iio_pulsar_adc_debug_reg_write,
 	.submit = iio_pulsar_adc_submit_buffer,
 };
 

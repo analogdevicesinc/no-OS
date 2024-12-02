@@ -67,7 +67,7 @@ const struct no_os_baud_desc baud_rates_26MHz[NO_OS_BAUDS_NB] = {
 	{230400, 1563, 1, 2, 3},
 	{460800, 1563, 1, 1, 3},
 	{921600, 1563, 1, 1, 2},
-	{1000000,1280, 1, 1, 2},
+	{1000000, 1280, 1, 1, 2},
 	{1500000, 171, 1, 1, 2}
 };
 
@@ -117,7 +117,7 @@ static struct no_os_uart_desc *alloc_desc_mem(void)
 	}
 
 	mem = (uint32_t)aducm_desc->adi_uart_buffer;
-	aducm_desc->adi_uart_buffer = (uint8_t *)((mem+3u) & (~(3u)));
+	aducm_desc->adi_uart_buffer = (uint8_t *)((mem + 3u) & (~(3u)));
 	aducm_desc->adi_uart_buffer_offset =
 		(uint32_t)aducm_desc->adi_uart_buffer - mem;
 
@@ -343,7 +343,7 @@ static int32_t aducm3029_uart_init(struct no_os_uart_desc **desc,
 	if (param->size > NO_OS_UART_CS_8)
 		return -EINVAL;
 
-	switch(param->parity) {
+	switch (param->parity) {
 	case NO_OS_UART_PAR_NO:
 		aducm_uart_parity = ADI_UART_NO_PARITY;
 		break;
@@ -399,7 +399,7 @@ static int32_t aducm3029_uart_init(struct no_os_uart_desc **desc,
 		goto failure;
 
 	// nonblocking uart_read
-	if(param->asynchronous_rx) {
+	if (param->asynchronous_rx) {
 		ret = lf256fifo_init(&descriptor->rx_fifo);
 		if (ret < 0)
 			goto failure;

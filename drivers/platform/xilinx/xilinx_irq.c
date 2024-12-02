@@ -71,11 +71,11 @@ int32_t xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	void *config;
 #endif
 
-	descriptor = (struct no_os_irq_ctrl_desc *)no_os_calloc(1, sizeof *descriptor);
-	if(!descriptor)
+	descriptor = (struct no_os_irq_ctrl_desc *)no_os_calloc(1, sizeof * descriptor);
+	if (!descriptor)
 		return -1;
-	xil_dev = (struct xil_irq_desc *)no_os_calloc(1, sizeof *xil_dev);
-	if(!xil_dev) {
+	xil_dev = (struct xil_irq_desc *)no_os_calloc(1, sizeof * xil_dev);
+	if (!xil_dev) {
 		no_os_free(descriptor);
 		return -1;
 	}
@@ -86,15 +86,15 @@ int32_t xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	descriptor->extra = xil_dev;
 	xil_dev->type = ((struct xil_irq_init_param *)param->extra)->type;
 
-	switch(xil_dev->type) {
+	switch (xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		xil_dev->instance = no_os_calloc(1, sizeof(XScuGic));
-		if(!xil_dev->instance)
+		if (!xil_dev->instance)
 			goto error;
 
 		config = XScuGic_LookupConfig(descriptor->irq_ctrl_id);
-		if(!config)
+		if (!config)
 			goto ps_error;
 
 		status = XScuGic_CfgInitialize(xil_dev->instance, config,
@@ -114,15 +114,15 @@ ps_error:
 	case IRQ_PL:
 #ifdef XINTC_H
 		xil_dev->instance = no_os_calloc(1, sizeof(XIntc));
-		if(!xil_dev->instance)
+		if (!xil_dev->instance)
 			goto error;
 
 		status = XIntc_Initialize(xil_dev->instance, descriptor->irq_ctrl_id);
-		if(status != 0)
+		if (status != 0)
 			goto pl_error;
 
 		status = XIntc_Start(xil_dev->instance, XIN_REAL_MODE);
-		if(status != 0)
+		if (status != 0)
 			goto pl_error;
 
 		break;
@@ -181,7 +181,7 @@ int32_t xil_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
-	switch(xil_dev->type) {
+	switch (xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		XScuGic_Enable(xil_dev->instance, irq_id);
@@ -210,7 +210,7 @@ int32_t xil_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
-	switch(xil_dev->type) {
+	switch (xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		XScuGic_Disable(xil_dev->instance, irq_id);
@@ -242,7 +242,7 @@ int32_t xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
-	switch(xil_dev->type) {
+	switch (xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		return XScuGic_Connect(xil_dev->instance, irq_id,
@@ -290,10 +290,10 @@ int32_t xil_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
-	if(trig == NO_OS_IRQ_EDGE_BOTH)
+	if (trig == NO_OS_IRQ_EDGE_BOTH)
 		return -EINVAL;
 
-	switch(xil_dev->type) {
+	switch (xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		;
@@ -333,7 +333,7 @@ int32_t xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
-	switch(xil_dev->type) {
+	switch (xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		XScuGic_Disconnect(xil_dev->instance, irq_id);

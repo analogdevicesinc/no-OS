@@ -166,7 +166,7 @@ static int32_t stm32_xspi_config(struct no_os_spi_desc *desc,
 	(void)HAL_XSPI_Abort(&xspi_desc->hxspi);
 
 	/* Store the data mode in the descriptor */
-	switch(params->lanes) {
+	switch (params->lanes) {
 	case NO_OS_SPI_SINGLE_LANE:
 		xspi_cmd->DataMode = HAL_XSPI_DATA_1_LINE;
 		break;
@@ -381,7 +381,7 @@ static int32_t stm32_xspi_transfer(struct no_os_spi_desc *desc,
 		if (!msgs[i].tx_buff && !msgs[i].rx_buff)
 			return -EINVAL;
 
-		if(msgs[i].cs_delay_first)
+		if (msgs[i].cs_delay_first)
 			no_os_udelay(msgs[i].cs_delay_first);
 
 		/* Configure the command with updated length */
@@ -413,10 +413,10 @@ static int32_t stm32_xspi_transfer(struct no_os_spi_desc *desc,
 				ret = -EIO;
 		}
 
-		if(msgs[i].cs_delay_last)
+		if (msgs[i].cs_delay_last)
 			no_os_udelay(msgs[i].cs_delay_last);
 
-		if(msgs[i].cs_change_delay)
+		if (msgs[i].cs_change_delay)
 			no_os_udelay(msgs[i].cs_change_delay);
 
 		if (ret)
@@ -592,12 +592,12 @@ static int32_t stm32_xspi_config_dma_and_start(struct no_os_spi_desc* desc,
 
 		if (xfer_tx) {
 			ch_xfer[i].src = msgs[i].tx_buff;
-			ch_xfer[i].dst = (uint8_t*)&(XSPIx->DR);
+			ch_xfer[i].dst = (uint8_t*) & (XSPIx->DR);
 			ch_xfer[i].xfer_type = MEM_TO_DEV;
 			ch_xfer[i].periph = NO_OS_DMA_IRQ;
 			ch_xfer[i].length = msgs[i].bytes_number;
 		} else {
-			ch_xfer[i].src = (uint8_t*)&(XSPIx->DR);
+			ch_xfer[i].src = (uint8_t*) & (XSPIx->DR);
 			ch_xfer[i].dst = msgs[i].rx_buff;
 			ch_xfer[i].periph = NO_OS_DMA_IRQ;
 			ch_xfer[i].xfer_type = DEV_TO_MEM;
@@ -656,7 +656,7 @@ static int32_t stm32_xspi_dma_transfer_async(struct no_os_spi_desc *desc,
 {
 	struct stm32_xspi_desc *sdesc;
 
-	if(!desc)
+	if (!desc)
 		return -EINVAL;
 
 	sdesc = desc->extra;
@@ -682,7 +682,7 @@ static int32_t stm32_xspi_dma_transfer_sync(struct no_os_spi_desc *desc,
 	uint32_t timeout;
 	struct stm32_xspi_desc *sdesc;
 
-	if(!desc)
+	if (!desc)
 		return -EINVAL;
 
 	sdesc = desc->extra;
@@ -693,7 +693,7 @@ static int32_t stm32_xspi_dma_transfer_sync(struct no_os_spi_desc *desc,
 		return ret;
 
 	timeout = msgs->bytes_number;
-	while(timeout--) {
+	while (timeout--) {
 		no_os_mdelay(1);
 		if (sdesc->stm32_xspi_dma_done)
 			break;

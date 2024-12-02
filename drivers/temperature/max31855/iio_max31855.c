@@ -239,7 +239,7 @@ static int max31855_iio_read_raw(void *dev, char *buf, uint32_t len,
 		if (ret)
 			return ret;
 
-		switch(channel->address) {
+		switch (channel->address) {
 		case 0:
 			temp = no_os_field_get(NO_OS_GENMASK(15, 4), buff);
 			temp = no_os_sign_extend32(temp, 11);

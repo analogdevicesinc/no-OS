@@ -163,7 +163,7 @@ int adf4382_reg_dump(struct adf4382_dev *dev)
 	uint16_t i;
 	int ret;
 
-	for(i = 0; i < 0x68; i++) {
+	for (i = 0; i < 0x68; i++) {
 		ret = adf4382_spi_read(dev, i, &val);
 		if (ret)
 			return ret;
@@ -554,7 +554,7 @@ int adf4382_set_rfout(struct adf4382_dev *dev, uint64_t val)
 	if (!dev)
 		return -EINVAL;
 
-	dev->freq= val;
+	dev->freq = val;
 
 	if (val > dev->freq_max)
 		dev->freq = dev->freq_max;
@@ -601,70 +601,70 @@ int adf4382_get_rfout(struct adf4382_dev *dev, uint64_t *val)
 	pfd = adf4382_pfd_compute(dev);
 
 	ret = adf4382_spi_read(dev, 0x11, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	n = tmp & ADF4382_N_INT_MSB_MSK;
 	n = n << 8;
 
 	ret = adf4382_spi_read(dev, 0x10, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	n |= tmp;
 
 	ret = adf4382_spi_read(dev, 0x15, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac1 = tmp & ADF4382_FRAC1WORD_MSB;
 	frac1 = frac1 << 8;
 
 	ret = adf4382_spi_read(dev, 0x14, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac1 |= tmp;
 	frac1 = frac1 << 8;
 
 	ret = adf4382_spi_read(dev, 0x13, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac1 |= tmp;
 	frac1 = frac1 << 8;
 
 	ret = adf4382_spi_read(dev, 0x12, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac1 |= tmp;
 
 	ret = adf4382_spi_read(dev, 0x19, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac2 = tmp;
 	frac2 = frac2 << 8;
 
 	ret = adf4382_spi_read(dev, 0x18, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac2 |= tmp;
 	frac2 = frac2 << 8;
 
 	ret = adf4382_spi_read(dev, 0x17, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	frac2 |= tmp;
 
 	ret = adf4382_spi_read(dev, 0x1c, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	mod2 = tmp;
 	mod2 = mod2 << 8;
 
 	ret = adf4382_spi_read(dev, 0x1b, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	mod2 |= tmp;
 	mod2 = mod2 << 8;
 
 	ret = adf4382_spi_read(dev, 0x1a, &tmp);
-	if  (ret)
+	if (ret)
 		return ret;
 	mod2 |= tmp;
 
@@ -814,7 +814,7 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 
 	for (clkout_div = 0; clkout_div <= dev->clkout_div_reg_val_max; clkout_div++) {
 		tmp = (1 << clkout_div) * dev->freq;
-		if (tmp < dev->vco_min || tmp > dev->vco_max )
+		if (tmp < dev->vco_min || tmp > dev->vco_max)
 			continue;
 
 		vco = tmp;
@@ -846,17 +846,17 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 
 		/*The lock detector pulse window is determined based on the
 		PFD frequency as described in the datasheet*/
-		if (pfd_freq <= 40*MHZ) {
+		if (pfd_freq <= 40 * MHZ) {
 			ldwin_pw = 7;
-		} else if (pfd_freq <= 50*MHZ) {
+		} else if (pfd_freq <= 50 * MHZ) {
 			ldwin_pw = 6;
-		} else if (pfd_freq <= 100*MHZ) {
+		} else if (pfd_freq <= 100 * MHZ) {
 			ldwin_pw = 5;
-		} else if (pfd_freq <= 200*MHZ) {
+		} else if (pfd_freq <= 200 * MHZ) {
 			ldwin_pw = 4;
-		} else if (pfd_freq <= 250*MHZ) {
-			if (dev->freq >= 5000U*MHZ &&
-			    dev->freq < 6400U*MHZ) {
+		} else if (pfd_freq <= 250 * MHZ) {
+			if (dev->freq >= 5000U * MHZ &&
+			    dev->freq < 6400U * MHZ) {
 				ldwin_pw = 3;
 			} else {
 				ldwin_pw = 2;

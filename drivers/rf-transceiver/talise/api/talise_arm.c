@@ -65,41 +65,41 @@ uint32_t TALISE_initArm(taliseDevice_t *device, taliseInit_t *init)
 	/* auto_incr[2] = 1 */
 	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_ARM_DMA_CTL, 0x01,
 				    0x02, 1);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* arm_debug_enable[7] = 1, mem_hresp_mask[3] = 1, arm_m3_run[0] = 0 */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_CTL_1, 0x88);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* setting the ARM clock rate, resetting the program counter, and enabling the ARM clock */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_CLOCK_CONTROL,
 				   armClkSel |= 0x41);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* maintaining the ARM clock rate, disabling the program counter reset, and maintaining ARM clock enable */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_CLOCK_CONTROL,
 				   armClkSel &= ~0x40);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* setting the SPI read and write clock rates with default reg clk cycles wait */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_BRIDGE_CLOCK_CONTROL,
 				   regClkSel |= 0x40);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* blockout_window_size[4:1] = 9, ahb_spi_bridge_enable[0] = 1 */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_AHB_SPI_BRIDGE,
 				   0x13);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -363,62 +363,62 @@ uint32_t TALISE_loadArmFromBinary(taliseDevice_t *device, uint8_t *binary,
 	/* writing stack pointer [7:0] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_STACK_PTR_BYTE_0,
 				   stackPtr[0]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing stack pointer [15:8] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_STACK_PTR_BYTE_1,
 				   stackPtr[1]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing stack pointer [23:16] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_STACK_PTR_BYTE_2,
 				   stackPtr[2]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing stack pointer [31:24] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_STACK_PTR_BYTE_3,
 				   stackPtr[3]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing boot address [7:0] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_BOOT_ADDR_BYTE0,
 				   bootAddr[0]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing boot address [15:8] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_BOOT_ADDR_BYTE1,
 				   bootAddr[1]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing boot address [23:16] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_BOOT_ADDR_BYTE2,
 				   bootAddr[2]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing boot address [31:24] */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_BOOT_ADDR_BYTE3,
 				   bootAddr[3]);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* setting arm_debug_enable[7]=1, mem_hresp_mask[3]=1, arm_m3_run[0]=1 */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_CTL_1, 0x89);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -712,7 +712,7 @@ uint32_t TALISE_readArmMem(taliseDevice_t *device, uint32_t address,
 
 	/* check that start and stop address are in valid range */
 	if (!(address >= TALISE_ADDR_ARM_START_PROG_ADDR
-	      && address <= TALISE_ADDR_ARM_END_PROG_ADDR ) &&
+	      && address <= TALISE_ADDR_ARM_END_PROG_ADDR) &&
 	    !(address >= TALISE_ADDR_ARM_START_DATA_ADDR
 	      && address <= TALISE_ADDR_ARM_END_DATA_ADDR)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
@@ -720,7 +720,7 @@ uint32_t TALISE_readArmMem(taliseDevice_t *device, uint32_t address,
 	}
 
 	if (!((address + bytesToRead - 1) >= TALISE_ADDR_ARM_START_PROG_ADDR
-	      && (address + bytesToRead - 1) <= TALISE_ADDR_ARM_END_PROG_ADDR ) &&
+	      && (address + bytesToRead - 1) <= TALISE_ADDR_ARM_END_PROG_ADDR) &&
 	    !((address + bytesToRead - 1) >= TALISE_ADDR_ARM_START_DATA_ADDR
 	      && (address + bytesToRead - 1) <= TALISE_ADDR_ARM_END_DATA_ADDR)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
@@ -735,25 +735,25 @@ uint32_t TALISE_readArmMem(taliseDevice_t *device, uint32_t address,
 	}
 
 	/* range checking autoIncrement */
-	autoIncBit = (autoIncrement > 0) ? 1: 0;
+	autoIncBit = (autoIncrement > 0) ? 1 : 0;
 
 	/* setting up ARM read for legacy mode with autoincrement bit setting */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_CTL,
 				   READ_MEM_BIT | (dataMem << 6)  | LEGACY_MODE_BIT | (autoIncBit <<
 						   1)); /* set to read */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_ADDR0,
 				   (uint8_t)((address) >> 2)); /* write address[9:2] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_ADDR1,
 				   (uint8_t)(address >> 10)); /* write address[17:10] */
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -764,7 +764,7 @@ uint32_t TALISE_readArmMem(taliseDevice_t *device, uint32_t address,
 			halError = talSpiReadByte(device->devHalInfo,
 						  (uint16_t)(TALISE_ADDR_ARM_DMA_DATA0 + (((address & 0x3) + i) % 4)),
 						  &returnData[i]);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 		}
@@ -773,7 +773,7 @@ uint32_t TALISE_readArmMem(taliseDevice_t *device, uint32_t address,
 			halError = talSpiReadByte(device->devHalInfo,
 						  (uint16_t)(TALISE_ADDR_ARM_DMA_DATA0 + (((address & 0x3) + i) % 4)),
 						  &returnData[i]);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 
@@ -781,13 +781,13 @@ uint32_t TALISE_readArmMem(taliseDevice_t *device, uint32_t address,
 			    TALISE_ADDR_ARM_DMA_DATA3) {
 				halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_ADDR0,
 							   (uint8_t)(((address += 0x4) & 0x3FF) >> 2));
-				retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 							  TALACT_ERR_RESET_SPI);
 				IF_ERR_RETURN_U32(retVal);
 
 				halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_ADDR1,
 							   (uint8_t)((address >> 10) & 0x7F));
-				retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 							  TALACT_ERR_RESET_SPI);
 				IF_ERR_RETURN_U32(retVal);
 			}
@@ -830,16 +830,16 @@ uint32_t TALISE_writeArmMem(taliseDevice_t *device, uint32_t address,
 	}
 
 	if (!((address + byteCount - 1) >= TALISE_ADDR_ARM_START_PROG_ADDR
-	      && (address + byteCount-1) <= TALISE_ADDR_ARM_END_PROG_ADDR ) &&
-	    !((address + byteCount-1) >= TALISE_ADDR_ARM_START_DATA_ADDR
-	      && (address + byteCount-1) <= TALISE_ADDR_ARM_END_DATA_ADDR)) {
+	      && (address + byteCount - 1) <= TALISE_ADDR_ARM_END_PROG_ADDR) &&
+	    !((address + byteCount - 1) >= TALISE_ADDR_ARM_START_DATA_ADDR
+	      && (address + byteCount - 1) <= TALISE_ADDR_ARM_END_DATA_ADDR)) {
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_WRITEARMMEM_INV_ADDR_PARM, retVal, TALACT_ERR_CHECK_PARAM);
 	}
 
 	/* determining the data space and setting dataMem bit accordingly */
 	dataMem = ((address >= TALISE_ADDR_ARM_START_DATA_ADDR)
-		   && (address <= TALISE_ADDR_ARM_END_DATA_ADDR)) ? 1: 0;
+		   && (address <= TALISE_ADDR_ARM_END_DATA_ADDR)) ? 1 : 0;
 
 	/* clearing write bit, setting legacy mode, forcing auto increment of address for efficiency to form dma control word */
 	regWrite |= (dataMem << 6) | LEGACY_MODE_BIT | FORCE_AUTO_INC;
@@ -847,20 +847,20 @@ uint32_t TALISE_writeArmMem(taliseDevice_t *device, uint32_t address,
 	/* setting up the DMA control register for a write */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_CTL,
 				   regWrite);
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	/* writing the starting address */
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_ADDR0,
 				   (uint8_t)((address) >> 2));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
 	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_ARM_DMA_ADDR1,
 				   (uint8_t)(address >> 10));
-	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
 
@@ -872,7 +872,7 @@ uint32_t TALISE_writeArmMem(taliseDevice_t *device, uint32_t address,
 		if (addrIndex == spiBufferSize) {
 			halError = talSpiWriteBytes(device->devHalInfo, &addrArray[0], &data[dataIndex],
 						    addrIndex);
-			retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+			retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 						  TALACT_ERR_RESET_SPI);
 			IF_ERR_RETURN_U32(retVal);
 
@@ -885,7 +885,7 @@ uint32_t TALISE_writeArmMem(taliseDevice_t *device, uint32_t address,
 	if (addrIndex > 0) {
 		halError = talSpiWriteBytes(device->devHalInfo, &addrArray[0], &data[dataIndex],
 					    addrIndex);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 	}
@@ -1029,7 +1029,7 @@ uint32_t TALISE_readArmCmdStatus(taliseDevice_t *device, uint16_t *errorWord,
 	for (i = 0; i < 8; i++) {
 		halError = talSpiReadByte(device->devHalInfo, TALISE_ADDR_ARM_CMD_STATUS_0 + i,
 					  &bytes[i]);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1196,7 +1196,7 @@ uint32_t TALISE_sendArmCommand(taliseDevice_t *device, uint8_t opCode,
 	for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++) {
 		halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_ARM_COMMAND,
 					   &armCommandBusy, 0x80, 7);
-		retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+		retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 					  TALACT_ERR_RESET_SPI);
 		IF_ERR_RETURN_U32(retVal);
 
@@ -1269,9 +1269,9 @@ uint32_t TALISE_getArmVersion_v2(taliseDevice_t *device,
 	talArmVersionInfo->minorVer = (uint8_t)((fullVersion / 100) % 100);
 	talArmVersionInfo->majorVer = (uint8_t)(fullVersion / 10000);
 
-	if(ver[4] & 0x01) {
+	if (ver[4] & 0x01) {
 		talArmVersionInfo->buildType = TAL_ARM_BUILD_DEBUG;
-	} else if(ver[4] & 0x04) {
+	} else if (ver[4] & 0x04) {
 		talArmVersionInfo->buildType = TAL_ARM_BUILD_TEST_OBJECT;
 	} else {
 		talArmVersionInfo->buildType = TAL_ARM_BUILD_RELEASE;
@@ -1409,7 +1409,7 @@ const char* talGetArmErrorMessage(uint32_t errSrc, uint32_t errCode)
 #else
 
 	if (errSrc == TAL_ERRSRC_TALAPIARM) {
-		switch(errCode) {
+		switch (errCode) {
 		case TALAPI_ARMERR_BOOTUP_TIMEOUT_ERROR:
 			return "TALISE_loadArmFromBinary(): Timed out waiting for ARM bootup to happen\n";
 		case TALAPI_ARMERR_BOOTUP_IDLE:

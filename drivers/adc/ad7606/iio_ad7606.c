@@ -157,7 +157,7 @@ static int set_over_sampling_ratio(struct ad7606_dev *dev,
 	uint32_t i;
 	int val;
 
-	if (sscanf(buf, "%u", &val) !=1)
+	if (sscanf(buf, "%u", &val) != 1)
 		return -EINVAL;
 
 	switch (val) {
@@ -342,7 +342,7 @@ static int32_t iio_ad7606_submit_buffer(struct iio_device_data *iio_dev_data)
 		return ret;
 
 	push_data = buff;
-	for (k = 0, i = 0; i < total_samples; i+= num_chan) {
+	for (k = 0, i = 0; i < total_samples; i += num_chan) {
 		uint32_t active_mask = buffer->active_mask;
 
 		for (j = 0; j < num_chan; j++) {

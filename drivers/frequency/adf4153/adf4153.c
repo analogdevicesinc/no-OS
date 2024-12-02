@@ -124,7 +124,7 @@ int8_t adf4153_init(struct adf4153_dev **device,
 			     ADF4153_R2_RESYNC(dev->adf4153_st.resync)
 			    );
 	/* If resync feature is enabled */
-	if(init_param.adf4153_st.resync != 0x0) {
+	if (init_param.adf4153_st.resync != 0x0) {
 		/* Load the R divider register */
 		adf4153_update_latch(dev,
 				     ADF4153_CTRL_R_DIVIDER |
@@ -203,7 +203,7 @@ void adf4153_update_latch(struct adf4153_dev *dev,
 	uint8_t latch_type = latch_data & 0x3;
 
 	/* Update the internal buffers */
-	switch(latch_type) {
+	switch (latch_type) {
 	case ADF4153_CTRL_N_DIVIDER :
 		dev->r0 = latch_data;
 		break;
@@ -246,7 +246,7 @@ void adf4153_update_latch(struct adf4153_dev *dev,
 uint32_t adf4153_read_latch(struct adf4153_dev *dev,
 			    uint8_t latch_type)
 {
-	switch(latch_type) {
+	switch (latch_type) {
 	case ADF4153_CTRL_N_DIVIDER :
 		return dev->r0;
 
@@ -285,7 +285,7 @@ uint32_t adf4153_tune_rcounter(struct adf4153_dev *dev,
 		(*r_counter)++;
 		pfd_frequency = dev->adf4153_st.ref_in * \
 				((float)(1 + ref_doubler) / (*r_counter));
-	} while(pfd_frequency > dev->adf4153_pfd_max_frq);
+	} while (pfd_frequency > dev->adf4153_pfd_max_frq);
 
 	return pfd_frequency;
 }
@@ -312,8 +312,8 @@ uint64_t adf4153_set_frequency(struct adf4153_dev *dev,
 	uint8_t device_prescaler = 0;
 	uint8_t int_min = 0;
 	/* validate the given frequency parameter */
-	if(frequency <= dev->adf4153_vco_max_frq) {
-		if(frequency >= dev->adf4153_vco_min_frq) {
+	if (frequency <= dev->adf4153_vco_max_frq) {
+		if (frequency >= dev->adf4153_vco_min_frq) {
 			vco_frequency = frequency;
 		} else {
 			vco_frequency = dev->adf4153_vco_min_frq;
@@ -326,12 +326,12 @@ uint64_t adf4153_set_frequency(struct adf4153_dev *dev,
 	mod_value = CEIL(dev->adf4153_st.ref_in,
 			 dev->adf4153_st.channel_spacing);
 	/* if the mod_value is too high, increase the channel spacing */
-	if(mod_value > dev->adf4153_mod_max) {
+	if (mod_value > dev->adf4153_mod_max) {
 		do {
 			dev->adf4153_st.channel_spacing++;
 			mod_value = CEIL(dev->adf4153_st.ref_in,
 					 dev->adf4153_st.channel_spacing);
-		} while(mod_value <= dev->adf4153_mod_max);
+		} while (mod_value <= dev->adf4153_mod_max);
 	}
 	/* define prescaler */
 	device_prescaler = (vco_frequency <= FREQ_2_GHZ) ? ADF4153_PRESCALER_4_5 : \
@@ -343,17 +343,17 @@ uint64_t adf4153_set_frequency(struct adf4153_dev *dev,
 		pfd_frequency = adf4153_tune_rcounter(dev,
 						      &r_counter);
 		int_value = vco_frequency / pfd_frequency;
-	} while(int_value < int_min);
+	} while (int_value < int_min);
 	/*define FRAC value */
 	do {
 		frac_value++;
-		buffer = int_value + ((float)frac_value/mod_value);
+		buffer = int_value + ((float)frac_value / mod_value);
 		calculated_frequency = (uint64_t)(buffer * pfd_frequency);
-	} while(calculated_frequency <= vco_frequency);
+	} while (calculated_frequency <= vco_frequency);
 	frac_value--;
 
 	/* Find the actual VCO frequency. */
-	buffer = int_value + ((float)frac_value/mod_value);
+	buffer = int_value + ((float)frac_value / mod_value);
 	calculated_frequency = (uint64_t)(buffer * pfd_frequency);
 
 	/* Enable the Counter Reset */

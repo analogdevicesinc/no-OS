@@ -389,7 +389,7 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 	uint8_t data_buff [ PKT_LENGTH ] = {0, 0, 0};
 	uint16_t read_back_data = 0;
 
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
 		data_buff[0] = ((command & AD5686_CMD_MASK) << CMD_OFFSET) | \
 			       (address & ADDR_MASK);
 		data_buff[1] = (data & AD5686_MSB_MASK) >> AD5686_MSB_OFFSET;
@@ -401,9 +401,9 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 		data_buff[2] = (data & AD5683_LSB_MASK) << AD5683_LSB_OFFSET;
 	}
 
-	if(chip_info[dev->act_device].communication == SPI) {
+	if (chip_info[dev->act_device].communication == SPI) {
 		no_os_spi_write_and_read(dev->spi_desc, data_buff, PKT_LENGTH);
-		if(chip_info[dev->act_device].register_map == AD5686_REG_MAP)
+		if (chip_info[dev->act_device].register_map == AD5686_REG_MAP)
 			read_back_data = (data_buff[1] << AD5686_MSB_OFFSET) | data_buff[2];
 		else
 			read_back_data = (data_buff[0] & AD5683_CMD_MASK) << AD5683_MSB_OFFSET |
@@ -556,7 +556,7 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 	uint8_t rb_data_i2c[3] = { 0 };
 
-	if(chip_info[dev->act_device].communication == SPI) {
+	if (chip_info[dev->act_device].communication == SPI) {
 		ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, address, 0);
 		read_back_data = ad5686_set_shift_reg(dev, AD5686_CTRL_NOP, 0,
 						      0);
@@ -614,12 +614,12 @@ void ad5686_power_mode(struct ad5686_dev *dev,
 {
 	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
 		/* AD5674R/AD5679R have 16 channels and 2 powerdown registers */
 		if (channel > AD5686_CH_7)
 			channel -= AD5686_CH_7 + 1;
-		dev->power_down_mask &= ~(0x3 << (channel *2));
-		dev->power_down_mask |= (mode << (channel *2));
+		dev->power_down_mask &= ~(0x3 << (channel * 2));
+		dev->power_down_mask |= (mode << (channel * 2));
 		ad5686_set_shift_reg(dev, AD5686_CTRL_PWR, address,
 				     dev->power_down_mask);
 	} else {
@@ -658,7 +658,7 @@ void ad5686_ldac_mask(struct ad5686_dev *dev,
 		      enum ad5686_dac_channels channel,
 		      uint8_t enable)
 {
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
 		dev->ldac_mask &= ~(0x1 << channel);
 		dev->ldac_mask |= (enable << channel);
 		ad5686_set_shift_reg(dev, AD5686_CTRL_LDAC_MASK, 0, dev->ldac_mask);
@@ -674,7 +674,7 @@ void ad5686_ldac_mask(struct ad5686_dev *dev,
 ******************************************************************************/
 void ad5686_software_reset(struct ad5686_dev *dev)
 {
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP)
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP)
 		ad5686_set_shift_reg(dev, AD5686_CTRL_SWRESET, 0, 0);
 	else
 		ad5686_set_shift_reg(dev, AD5683_CMD_WR_CTRL_REG, 0, AD5683_SW_RESET);
@@ -694,7 +694,7 @@ void ad5686_software_reset(struct ad5686_dev *dev)
 void ad5686_internal_reference(struct ad5686_dev *dev,
 			       uint8_t value)
 {
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP)
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP)
 		ad5686_set_shift_reg(dev, AD5686_CTRL_IREF_REG, 0, value);
 	else
 		ad5686_set_shift_reg(dev, AD5683_CMD_WR_CTRL_REG, 0,
@@ -714,7 +714,7 @@ void ad5686_internal_reference(struct ad5686_dev *dev,
 void ad5686_daisy_chain_en(struct ad5686_dev *dev,
 			   uint8_t value)
 {
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP)
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP)
 		ad5686_set_shift_reg(dev, AD5686_CTRL_DCEN, 0, value);
 	else
 		ad5686_set_shift_reg(dev, AD5683_CMD_WR_CTRL_REG, 0, AD5683_CTRL_DCEN(value));
@@ -733,7 +733,7 @@ void ad5686_daisy_chain_en(struct ad5686_dev *dev,
 void ad5686_read_back_en(struct ad5686_dev *dev,
 			 uint8_t value)
 {
-	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP)
+	if (chip_info[dev->act_device].register_map == AD5686_REG_MAP)
 		ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, 0, value);
 }
 
@@ -750,7 +750,7 @@ void ad5686_read_back_en(struct ad5686_dev *dev,
 ******************************************************************************/
 int32_t ad5686_gain_mode(struct ad5686_dev *dev, uint8_t value)
 {
-	if(chip_info[dev->act_device].register_map == AD5683_REG_MAP)
+	if (chip_info[dev->act_device].register_map == AD5683_REG_MAP)
 		return ad5686_set_shift_reg(dev, AD5683_CMD_WR_CTRL_REG, 0,
 					    AD5683_CTRL_GM(value));
 	return -1;

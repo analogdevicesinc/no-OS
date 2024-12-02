@@ -754,7 +754,7 @@ int ad7124_set_channel_status(struct ad7124_dev *device,
 		status = 0x0U;
 
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CH0_MAP_REG+chn_num,
+				   AD7124_CH0_MAP_REG + chn_num,
 				   status,
 				   AD7124_CH_MAP_REG_CH_ENABLE);
 	if (ret)
@@ -780,7 +780,7 @@ int ad7124_connect_analog_input(struct ad7124_dev *device,
 
 	/* Select the Positive Analog Input */
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CH0_MAP_REG+chn_num,
+				   AD7124_CH0_MAP_REG + chn_num,
 				   no_os_field_prep(AD7124_CHMAP_REG_AINPOS_MSK, analog_input.ainp),
 				   AD7124_CHMAP_REG_AINPOS_MSK);
 	if (ret)
@@ -788,7 +788,7 @@ int ad7124_connect_analog_input(struct ad7124_dev *device,
 
 	/* Select the Negative Analog Input */
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CH0_MAP_REG+chn_num,
+				   AD7124_CH0_MAP_REG + chn_num,
 				   no_os_field_prep(AD7124_CHMAP_REG_AINNEG_MSK, analog_input.ainm),
 				   AD7124_CHMAP_REG_AINNEG_MSK);
 	if (ret)
@@ -817,7 +817,7 @@ int ad7124_assign_setup(struct ad7124_dev *device,
 
 	/* Assign setup to the Channel Register. */
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CH0_MAP_REG+chn_num,
+				   AD7124_CH0_MAP_REG + chn_num,
 				   no_os_field_prep(AD7124_CHMAP_REG_SETUP_SEL_MSK, setup),
 				   AD7124_CHMAP_REG_SETUP_SEL_MSK);
 	if (ret)
@@ -849,7 +849,7 @@ int ad7124_set_polarity(struct ad7124_dev* device,
 		reg_data = 0x0U;
 
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CFG0_REG+setup_id,
+				   AD7124_CFG0_REG + setup_id,
 				   reg_data,
 				   AD7124_CFG_REG_BIPOLAR);
 	if (ret)
@@ -879,7 +879,7 @@ int ad7124_set_reference_source(struct ad7124_dev* device,
 		return -EINVAL;
 
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CFG0_REG+setup_id,
+				   AD7124_CFG0_REG + setup_id,
 				   no_os_field_prep(AD7124_SETUP_CONF_REG_REF_SEL_MSK, ref_source),
 				   AD7124_SETUP_CONF_REG_REF_SEL_MSK);
 	if (ret)
@@ -931,7 +931,7 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 		reg_val =  0;
 
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CFG0_REG+setup_id,
+				   AD7124_CFG0_REG + setup_id,
 				   reg_val,
 				   AD7124_AIN_BUF_MSK);
 	if (ret)
@@ -945,7 +945,7 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 		reg_val = 0;
 
 	ret = ad7124_reg_write_msk(device,
-				   AD7124_CFG0_REG+setup_id,
+				   AD7124_CFG0_REG + setup_id,
 				   reg_val,
 				   AD7124_REF_BUF_MSK);
 	if (ret)

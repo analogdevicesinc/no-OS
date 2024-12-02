@@ -53,18 +53,18 @@ static const int ltc4296_spoe_rsense[LTC4296_MAX_PORTS] = {333, 666, 1470, 4000,
 /* Value of RSense resistor for each port in mOhm */
 static const int ltc4296_spoe_sense_resistor[LTC4296_MAX_PORTS] = {3000, 1500, 680, 250, 100};
 
-int ltc4296_spoe_vol_range_mv[12][2] = { {20000,30000},  /* SPoE Class 10         */
-	{20000,30000},  /* SPoE Class 11         */
-	{20000,30000},  /* SPoE Class 12         */
-	{50000,58000},  /* SPoE Class 13         */
-	{50000,58000},  /* SPoE Class 14         */
-	{50000,58000},  /* SPoE Class 15         */
-	{9600,15000},   /* APL Class A           */
-	{9600,15000},   /* APL Class A noAutoNeg */
-	{9600,15000},   /* APL Class C           */
-	{46000,50000},  /* APL Class 3           */
-	{9600,15000},   /* Production Power Test */
-	{9600,15000}    /* APL Class A oldAPL    */
+int ltc4296_spoe_vol_range_mv[12][2] = { {20000, 30000}, /* SPoE Class 10         */
+	{20000, 30000}, /* SPoE Class 11         */
+	{20000, 30000}, /* SPoE Class 12         */
+	{50000, 58000}, /* SPoE Class 13         */
+	{50000, 58000}, /* SPoE Class 14         */
+	{50000, 58000}, /* SPoE Class 15         */
+	{9600, 15000},  /* APL Class A           */
+	{9600, 15000},  /* APL Class A noAutoNeg */
+	{9600, 15000},  /* APL Class C           */
+	{46000, 50000}, /* APL Class 3           */
+	{9600, 15000},  /* Production Power Test */
+	{9600, 15000}   /* APL Class A oldAPL    */
 };
 
 /* Stirng to print the different classes of LTC4296-1  */
@@ -101,9 +101,9 @@ static uint8_t ltc4296_get_pec_byte(uint8_t data, uint8_t seed)
 	int bit;
 	for (bit = 7; bit >= 0; bit--) {
 		din = (data >> bit) & 0x01;
-		in0 = din ^ ( (pec >> 7) & 0x01 );
-		in1 = in0 ^ ( pec & 0x01);
-		in2 = in0 ^ ( (pec >> 1) & 0x01 );
+		in0 = din ^ ((pec >> 7) & 0x01);
+		in1 = in0 ^ (pec & 0x01);
+		in2 = in0 ^ ((pec >> 1) & 0x01);
 		pec = (pec << 1);
 		pec &= ~(0x07);
 		pec = pec | in0 | (in1 << 1) | (in2 << 2);
@@ -364,7 +364,7 @@ int ltc4296_is_vin_valid(struct ltc4296_dev *dev, int port_vin_mv,
 		return -EINVAL;
 
 	if ((port_vin_mv <= ltc4296_spoe_vol_range_mv[ltcboard_class][LTC4296_VMAX])
-	    && (port_vin_mv >= ltc4296_spoe_vol_range_mv[ltcboard_class][LTC4296_VMIN]) ) {
+	    && (port_vin_mv >= ltc4296_spoe_vol_range_mv[ltcboard_class][LTC4296_VMIN])) {
 		*vin_valid = true;
 	} else {
 		/* Voltage is out of range of the MIN/MAX value*/
@@ -388,7 +388,7 @@ int ltc4296_is_vout_valid(struct ltc4296_dev *dev, int port_vout_mv,
 		return -EINVAL;
 
 	if ((port_vout_mv <= ltc4296_spoe_vol_range_mv[ltcboard_class][LTC4296_VMAX])
-	    && (port_vout_mv >= ltc4296_spoe_vol_range_mv[ltcboard_class][LTC4296_VMIN]) ) {
+	    && (port_vout_mv >= ltc4296_spoe_vol_range_mv[ltcboard_class][LTC4296_VMIN])) {
 		*vout_valid =  true;
 	} else {
 		/* Voltage is out of range of the MIN/MAX value*/
@@ -638,7 +638,7 @@ int ltc4296_read_port_adc(struct ltc4296_dev *dev, enum ltc4296_port port_no,
 
 	if ((val16 & LTC4296_NEW_MSK) == LTC4296_NEW_MSK)
 		/* A new ADC value is available */
-		*port_i_out_ma =( ((val16 & 0x0FFF) - LTC4296_ADC_OFFSET) *
+		*port_i_out_ma = (((val16 & 0x0FFF) - LTC4296_ADC_OFFSET) *
 				  ltc4296_spoe_rsense[port_no] /
 				  10);
 	else
@@ -796,7 +796,7 @@ int ltc4296_force_port_pwr(struct ltc4296_dev *dev, enum ltc4296_port port_no)
 
 	return ltc4296_reg_write(dev, port_addr,
 				 (LTC4296_SW_EN_MSK | LTC4296_SW_POWER_AVAILABLE_MSK |
-				  LTC4296_SW_PSE_READY_MSK | LTC4296_TMFVDO_TIMER_DISABLE_MSK) );
+				  LTC4296_SW_PSE_READY_MSK | LTC4296_TMFVDO_TIMER_DISABLE_MSK));
 }
 
 /**
@@ -887,7 +887,7 @@ int ltc4296_print_port_events(enum ltc4296_port port_no, uint16_t port_events)
 			port_no);
 
 	if ((port_events & LTC4296_PD_WAKEUP_MSK) == LTC4296_PD_WAKEUP_MSK)
-		pr_info("LTC4296-1 port%d PD_WAKEUP, wake up requested by PD \n",port_no);
+		pr_info("LTC4296-1 port%d PD_WAKEUP, wake up requested by PD \n", port_no);
 
 	if ((port_events & LTC4296_TINRUSH_TIMER_DONE_MSK) ==
 	    LTC4296_TINRUSH_TIMER_DONE_MSK)
@@ -895,7 +895,7 @@ int ltc4296_print_port_events(enum ltc4296_port port_no, uint16_t port_events)
 			port_no);
 
 	if ((port_events & LTC4296_MFVS_TIMEOUT_MSK) == LTC4296_MFVS_TIMEOUT_MSK)
-		pr_info("LTC4296-1 port%d MFVS_TIMEOUT, PD disconnected \n",port_no);
+		pr_info("LTC4296-1 port%d MFVS_TIMEOUT, PD disconnected \n", port_no);
 
 	if ((port_events & LTC4296_OVERLOAD_DETECTED_IPOWERED_MSK) ==
 	    LTC4296_OVERLOAD_DETECTED_IPOWERED_MSK)
@@ -969,7 +969,7 @@ int ltc4296_chk_global_events(struct ltc4296_dev *dev)
 			    LTC4296_MEMORY_FAULT_MSK)   ||
 			   ((global_events & LTC4296_PEC_FAULT_MSK) == LTC4296_PEC_FAULT_MSK) ||
 			   ((global_events & LTC4296_COMMAND_FAULT_MSK) == LTC4296_COMMAND_FAULT_MSK) ||
-			   ((global_events & LTC4296_UVLO_DIGITAL_MSK) == LTC4296_UVLO_DIGITAL_MSK)   ) {
+			   ((global_events & LTC4296_UVLO_DIGITAL_MSK) == LTC4296_UVLO_DIGITAL_MSK)) {
 			/* Global events other than circuit breaker ?*/
 			ret = ltc4296_reset(dev);
 			if (ret)

@@ -175,19 +175,19 @@ struct iio_attribute adis1654x_dev_attrs[] = {
 };
 
 static struct iio_channel adis1654x_channels[] = {
-	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		1654x, adis1654x_iio_anglvel_attrs),
-	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		1654x, adis1654x_iio_anglvel_attrs),
-	ADIS_GYRO_CHAN		(Z, 	ADIS_GYRO_Z, 		1654x, adis1654x_iio_anglvel_attrs),
-	ADIS_ACCEL_CHAN		(X,	ADIS_ACCEL_X, 		1654x, adis1654x_iio_accel_attrs),
-	ADIS_ACCEL_CHAN		(Y,	ADIS_ACCEL_Y, 		1654x, adis1654x_iio_accel_attrs),
-	ADIS_ACCEL_CHAN		(Z,	ADIS_ACCEL_Z, 		1654x, adis1654x_iio_accel_attrs),
-	ADIS_TEMP_CHAN		(ADIS_TEMP, 			1654x, adis1654x_iio_temp_attrs),
-	ADIS_DELTA_ANGL_CHAN	(X, 	ADIS_DELTA_ANGL_X, 	1654x, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_ANGL_CHAN	(Y, 	ADIS_DELTA_ANGL_Y, 	1654x, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_ANGL_CHAN	(Z, 	ADIS_DELTA_ANGL_Z, 	1654x, adis_iio_delta_angl_attrs),
-	ADIS_DELTA_VEL_CHAN	(X, 	ADIS_DELTA_VEL_X, 	1654x, adis_iio_delta_vel_attrs),
-	ADIS_DELTA_VEL_CHAN	(Y, 	ADIS_DELTA_VEL_Y, 	1654x, adis_iio_delta_vel_attrs),
-	ADIS_DELTA_VEL_CHAN	(Z, 	ADIS_DELTA_VEL_Z, 	1654x, adis_iio_delta_vel_attrs),
+	ADIS_GYRO_CHAN(X, 	ADIS_GYRO_X, 		1654x, adis1654x_iio_anglvel_attrs),
+	ADIS_GYRO_CHAN(Y, 	ADIS_GYRO_Y, 		1654x, adis1654x_iio_anglvel_attrs),
+	ADIS_GYRO_CHAN(Z, 	ADIS_GYRO_Z, 		1654x, adis1654x_iio_anglvel_attrs),
+	ADIS_ACCEL_CHAN(X,	ADIS_ACCEL_X, 		1654x, adis1654x_iio_accel_attrs),
+	ADIS_ACCEL_CHAN(Y,	ADIS_ACCEL_Y, 		1654x, adis1654x_iio_accel_attrs),
+	ADIS_ACCEL_CHAN(Z,	ADIS_ACCEL_Z, 		1654x, adis1654x_iio_accel_attrs),
+	ADIS_TEMP_CHAN(ADIS_TEMP, 			1654x, adis1654x_iio_temp_attrs),
+	ADIS_DELTA_ANGL_CHAN(X, 	ADIS_DELTA_ANGL_X, 	1654x, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_ANGL_CHAN(Y, 	ADIS_DELTA_ANGL_Y, 	1654x, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_ANGL_CHAN(Z, 	ADIS_DELTA_ANGL_Z, 	1654x, adis_iio_delta_angl_attrs),
+	ADIS_DELTA_VEL_CHAN(X, 	ADIS_DELTA_VEL_X, 	1654x, adis_iio_delta_vel_attrs),
+	ADIS_DELTA_VEL_CHAN(Y, 	ADIS_DELTA_VEL_Y, 	1654x, adis_iio_delta_vel_attrs),
+	ADIS_DELTA_VEL_CHAN(Z, 	ADIS_DELTA_VEL_Z, 	1654x, adis_iio_delta_vel_attrs),
 };
 
 static struct iio_attribute adis1654x_debug_attrs[] = {

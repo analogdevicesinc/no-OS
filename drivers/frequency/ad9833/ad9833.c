@@ -172,15 +172,15 @@ void ad9833_tx_spi(struct ad9833_dev *dev,
 	uint16_t spi_data = 0;
 	uint8_t tx_buffer[4]  = {0, 0, 0, 0};// Tx SPI Buffer.
 
-	tx_buffer[0] = (uint8_t) ((value & 0x00ff00) >> 8); // data to be sent
-	tx_buffer[1] = (uint8_t) (value & 0x0000ff);        // in 8 bit packets
+	tx_buffer[0] = (uint8_t)((value & 0x00ff00) >> 8);  // data to be sent
+	tx_buffer[1] = (uint8_t)(value & 0x0000ff);         // in 8 bit packets
 	if (no_os_spi_write_and_read(dev->spi_desc, tx_buffer, 2) != 0) {
 		/* Initialize board. */
 		spi_data |= AD9833_CTRLRESET;
 		ad9833_tx_spi(dev,
 			      spi_data);
 		no_os_mdelay(10);
-		spi_data &=~ AD9833_CTRLRESET;
+		spi_data &= ~ AD9833_CTRLRESET;
 		ad9833_tx_spi(dev,
 			      spi_data);
 	}
@@ -213,7 +213,7 @@ int8_t ad9833_out_mode(struct ad9833_dev *dev,
 		spi_data = (dev->ctrl_reg_value & ~(AD9833_CTRLMODE    |
 						    AD9833_CTRLOPBITEN |
 						    AD9833_CTRLDIV2));
-		switch(out_mode) {
+		switch (out_mode) {
 		case 1:     // Triangle
 			spi_data += AD9833_CTRLMODE;
 			break;
@@ -234,7 +234,7 @@ int8_t ad9833_out_mode(struct ad9833_dev *dev,
 			spi_data = (dev->ctrl_reg_value & ~AD9833_CTRLMODE);
 			dev->test_opbiten = dev->ctrl_reg_value & AD9833_CTRLOPBITEN;
 
-			switch(out_mode) {
+			switch (out_mode) {
 			case 1:     // Triangle
 				if (dev->test_opbiten == 0) {
 					spi_data += AD9833_CTRLMODE;
@@ -278,7 +278,7 @@ void ad9833_sleep_mode(struct ad9833_dev *dev,
 
 	if (dev->prog_method == 0) {
 		spi_data = (dev->ctrl_reg_value & ~(AD9833_CTRLSLEEP12 | AD9833_CTRLSLEEP1));
-		switch(sleep_mode) {
+		switch (sleep_mode) {
 		case 1:     // DAC powered down
 			spi_data += AD9833_CTRLSLEEP12;
 			break;
@@ -296,7 +296,7 @@ void ad9833_sleep_mode(struct ad9833_dev *dev,
 		dev->ctrl_reg_value = spi_data;
 	} else {
 		if (dev->prog_method == 1) {
-			switch(sleep_mode) {
+			switch (sleep_mode) {
 			case 0:     // No power-down
 				AD9834_SLEEP_LOW;
 				break;
@@ -334,7 +334,7 @@ void ad9833_set_freq(struct ad9833_dev *dev,
 	dev->ctrl_reg_value |= AD9833_CTRLB28;
 	ad9833_tx_spi(dev,
 		      dev->ctrl_reg_value);
-	if(register_number == 0) {
+	if (register_number == 0) {
 		ad9833_tx_spi(dev,
 			      BIT_F0ADDRESS + i_freq_lsb);
 		ad9833_tx_spi(dev,
@@ -363,7 +363,7 @@ void ad9833_set_phase(struct ad9833_dev *dev,
 	uint16_t phase_calc;
 
 	phase_calc = (uint16_t)(phase_value * phase_const);
-	if(register_number == 0) {
+	if (register_number == 0) {
 		ad9833_tx_spi(dev,
 			      BIT_P0ADDRESS + phase_calc);
 	} else {
@@ -388,7 +388,7 @@ void ad9833_select_freq_reg(struct ad9833_dev *dev,
 	if (dev->prog_method == 0) {
 		spi_data = (dev->ctrl_reg_value & ~AD9833_CTRLFSEL);
 		// Select soft the working frequency register according to parameter
-		if(freq_reg == 1) {
+		if (freq_reg == 1) {
 			spi_data += AD9833_CTRLFSEL;
 		}
 		ad9833_tx_spi(dev,
@@ -424,7 +424,7 @@ void ad9833_select_phase_reg(struct ad9833_dev *dev,
 	if (dev->prog_method == 0) {
 		spi_data = (dev->ctrl_reg_value & ~AD9833_CTRLPSEL);
 		// Select soft the working phase register according to parameter
-		if(phase_reg == 1) {
+		if (phase_reg == 1) {
 			spi_data += AD9833_CTRLPSEL;
 		}
 		ad9833_tx_spi(dev,
@@ -491,7 +491,7 @@ void ad9834_logic_output(struct ad9833_dev *dev,
 					    AD9833_CTRLDIV2));
 
 
-	if(opbiten == 1) {
+	if (opbiten == 1) {
 		spi_data |= AD9833_CTRLOPBITEN;
 
 		if (signpib == 1) {

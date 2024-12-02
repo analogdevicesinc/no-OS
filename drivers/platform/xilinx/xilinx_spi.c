@@ -82,7 +82,7 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	struct xil_spi_init_param	*xinit;
 
 	xdesc = (struct xil_spi_desc*)no_os_malloc(sizeof(struct xil_spi_desc));
-	if(!xdesc) {
+	if (!xdesc) {
 		no_os_free(xdesc);
 		return -1;
 	}
@@ -93,18 +93,18 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	xdesc->flags = xinit->flags;
 
 	xdesc->instance = (XSpi*)no_os_calloc(1, sizeof(XSpi));
-	if(!xdesc->instance)
+	if (!xdesc->instance)
 		goto pl_error;
 
 	xdesc->config = XSpi_LookupConfig(param->device_id);
-	if(xdesc->config == NULL)
+	if (xdesc->config == NULL)
 		goto pl_error;
 
 	ret = XSpi_CfgInitialize(xdesc->instance,
 				 xdesc->config,
 				 ((XSpi_Config*)xdesc->config)
 				 ->BaseAddress);
-	if(ret != 0)
+	if (ret != 0)
 		goto pl_error;
 
 	ret = XSpi_Initialize(xdesc->instance, param->device_id);
@@ -156,7 +156,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	uint32_t			input_clock = 0u;
 
 	xdesc = (struct xil_spi_desc*)no_os_malloc(sizeof(struct xil_spi_desc));
-	if(!xdesc) {
+	if (!xdesc) {
 		no_os_free(xdesc);
 		return -1;
 	}
@@ -167,18 +167,18 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	xdesc->flags = xinit->flags;
 
 	xdesc->instance = (XSpiPs*)no_os_malloc(sizeof(XSpiPs));
-	if(!xdesc->instance)
+	if (!xdesc->instance)
 		goto ps_error;
 
 	xdesc->config = XSpiPs_LookupConfig(param->device_id);
-	if(xdesc->config == NULL)
+	if (xdesc->config == NULL)
 		goto ps_error;
 
 	ret = XSpiPs_CfgInitialize(xdesc->instance,
 				   xdesc->config,
 				   ((XSpiPs_Config*)xdesc->config)
 				   ->BaseAddress);
-	if(ret != 0)
+	if (ret != 0)
 		goto ps_error;
 
 	switch (param->device_id) {
@@ -203,7 +203,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 
 		// find the power of two just higher than div and
 		// store the exponent in prescaler
-		while(div) {
+		while (div) {
 			prescaler += 1;
 			div >>= 1u;
 		}
@@ -228,7 +228,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 
 	ret = XSpiPs_SetClkPrescaler(xdesc->instance, prescaler);
 
-	if(ret != 0)
+	if (ret != 0)
 		goto ps_error;
 
 	return 0;
@@ -257,14 +257,14 @@ int32_t xil_spi_init(struct no_os_spi_desc **desc,
 	}
 
 	*desc = no_os_malloc(sizeof(**desc));
-	if(! *desc) {
+	if (! *desc) {
 		no_os_free(*desc);
 		return -1;
 	}
 
 	spi_type = param->extra;
 
-	if(!spi_type)
+	if (!spi_type)
 		goto init_error;
 
 	(*desc)->max_speed_hz = param->max_speed_hz;
@@ -310,19 +310,19 @@ int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 
 	spi_type = desc->extra;
 
-	if(!spi_type)
+	if (!spi_type)
 		return -1;
 
-	switch (*spi_type ) {
+	switch (*spi_type) {
 	case SPI_PL:
 #ifdef XSPI_H
 		xdesc = desc->extra;
 
-		if(!xdesc)
+		if (!xdesc)
 			return -1;
 
 		ret = XSpi_Stop((XSpi *)(xdesc->instance));
-		if(ret != 0)
+		if (ret != 0)
 			goto error;
 #endif
 		break;
@@ -330,7 +330,7 @@ int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 #ifdef XSPIPS_H
 		xdesc = desc->extra;
 
-		if(!xdesc)
+		if (!xdesc)
 			return -1;
 #endif
 		break;
@@ -343,7 +343,7 @@ error:
 		return -1;
 	}
 
-	if(xdesc)
+	if (xdesc)
 		no_os_free(xdesc->instance);
 	no_os_free(desc->extra);
 	no_os_free(desc);
@@ -373,7 +373,7 @@ int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 
 	spi_type = desc->extra;
 
-	if(!spi_type)
+	if (!spi_type)
 		return -1;
 
 	xdesc = desc->extra;

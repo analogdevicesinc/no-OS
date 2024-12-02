@@ -251,7 +251,7 @@ int64_t adf4350_set_freq(adf4350_dev *dev,
 	dev->regs[ADF4350_REG5] = ADF4350_REG5_LD_PIN_MODE_DIGITAL | 0x00180000;
 
 	ret = adf4350_sync_config(dev);
-	if(ret < 0) {
+	if (ret < 0) {
 		return ret;
 	}
 
@@ -381,7 +381,7 @@ int64_t adf4350_out_altvoltage0_frequency(adf4350_dev *dev,
 int32_t adf4350_out_altvoltage0_frequency_resolution(adf4350_dev *dev,
 		int32_t Hz)
 {
-	if(Hz != INT32_MAX) {
+	if (Hz != INT32_MAX) {
 		dev->chspc = Hz;
 	}
 
@@ -399,7 +399,7 @@ int32_t adf4350_out_altvoltage0_frequency_resolution(adf4350_dev *dev,
 int64_t adf4350_out_altvoltage0_refin_frequency(adf4350_dev *dev,
 		int64_t Hz)
 {
-	if(Hz != INT32_MAX) {
+	if (Hz != INT32_MAX) {
 		dev->clkin = Hz;
 	}
 
@@ -419,11 +419,11 @@ int64_t adf4350_out_altvoltage0_refin_frequency(adf4350_dev *dev,
 int32_t adf4350_out_altvoltage0_powerdown(adf4350_dev *dev,
 		int32_t pwd)
 {
-	if(pwd == 1) {
+	if (pwd == 1) {
 		dev->regs[ADF4350_REG2] |= ADF4350_REG2_POWER_DOWN_EN;
 		adf4350_sync_config(dev);
 	}
-	if(pwd == 0) {
+	if (pwd == 0) {
 		dev->regs[ADF4350_REG2] &= ~ADF4350_REG2_POWER_DOWN_EN;
 		adf4350_sync_config(dev);
 	}

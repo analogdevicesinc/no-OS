@@ -87,7 +87,7 @@ int ade7913_read(struct ade7913_dev *dev, uint8_t reg_addr, uint8_t *reg_data)
 		no_of_read_bytes = 2; // 8 bits registers
 
 	/* set address to read from */
-	buff[0] = (uint8_t) no_os_field_prep(NO_OS_GENMASK(8,3), reg_addr);
+	buff[0] = (uint8_t) no_os_field_prep(NO_OS_GENMASK(8, 3), reg_addr);
 	/* set read bit */
 	buff[0] |= ADE7913_SPI_READ;
 
@@ -100,25 +100,25 @@ int ade7913_read(struct ade7913_dev *dev, uint8_t reg_addr, uint8_t *reg_data)
 	/* get data */
 	if (dev->burst_mode) {
 		dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_be24
-						 (&buff[data_byte_offset]),23);
+						 (&buff[data_byte_offset]), 23);
 		dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_be24
-						  (&buff[data_byte_offset+3]),23);
+						  (&buff[data_byte_offset + 3]), 23);
 		dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_be24
-						  (&buff[data_byte_offset+6]),23);
+						  (&buff[data_byte_offset + 6]), 23);
 		dev->adc_crc = no_os_sign_extend16(no_os_get_unaligned_be16
-						   (&buff[data_byte_offset+9]), 15);
-		dev->status0 = buff[data_byte_offset+11];
+						   (&buff[data_byte_offset + 9]), 15);
+		dev->status0 = buff[data_byte_offset + 11];
 		dev->cnt_snapshot = no_os_sign_extend16(no_os_get_unaligned_be16
-							(&buff[data_byte_offset+12]), 15);;
+							(&buff[data_byte_offset + 12]), 15);;
 	} else if (reg_addr == ADE7913_REG_IWV) {
 		dev->i_wav = no_os_sign_extend32(no_os_get_unaligned_be24
-						 (&buff[data_byte_offset]),23);
+						 (&buff[data_byte_offset]), 23);
 	} else if (reg_addr == ADE7913_REG_V1WV) {
 		dev->v1_wav = no_os_sign_extend32(no_os_get_unaligned_be24
-						  (&buff[data_byte_offset]),23);
+						  (&buff[data_byte_offset]), 23);
 	} else if (reg_addr == ADE7913_REG_V2WV) {
 		dev->v2_wav = no_os_sign_extend32(no_os_get_unaligned_be24
-						  (&buff[data_byte_offset]),23);
+						  (&buff[data_byte_offset]), 23);
 	} else if (reg_addr == ADE7913_REG_ADC_CRC) {
 		dev->adc_crc = no_os_sign_extend16(no_os_get_unaligned_be16
 						   (&buff[data_byte_offset]), 15);
@@ -237,7 +237,7 @@ int ade7913_write(struct ade7913_dev *dev, uint8_t reg_addr, uint8_t reg_data)
 		return -ENODEV;
 
 	/* set address to read from */
-	buff[0] = (uint8_t) no_os_field_prep(NO_OS_GENMASK(8,3), reg_addr);
+	buff[0] = (uint8_t) no_os_field_prep(NO_OS_GENMASK(8, 3), reg_addr);
 	/* set data to write */
 	buff[1] = reg_data;
 
@@ -860,7 +860,7 @@ int ade7913_emi_ctrl(struct ade7913_dev *dev,
 	if (!dev)
 		return -ENODEV;
 
-	return ade7913_write(dev,ADE7913_REG_EMI_CTRL, emi_ctrl);
+	return ade7913_write(dev, ADE7913_REG_EMI_CTRL, emi_ctrl);
 }
 
 /**

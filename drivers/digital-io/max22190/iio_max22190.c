@@ -338,7 +338,7 @@ static int max22190_iio_write_filter(void *dev, char *buf, uint32_t len,
 	return max22190_reg_update(desc->max22190_desc,
 				   MAX22190_FILTER_IN_REG(ch),
 				   MAX22190_FBP_MASK,
-				   no_os_field_prep(MAX22190_FBP_MASK,val));
+				   no_os_field_prep(MAX22190_FBP_MASK, val));
 }
 
 /**
@@ -446,7 +446,7 @@ static int max22190_iio_read_fault(void *dev, char *buf, uint32_t len,
 	uint32_t val;
 	int ret;
 
-	switch(priv) {
+	switch (priv) {
 	case MAX22190_IIO_FAULT1:
 		ret = max22190_reg_read(desc->max22190_desc, MAX22190_FAULT1_REG, &val);
 		if (ret)

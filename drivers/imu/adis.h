@@ -134,67 +134,67 @@ enum adis_axis_type {
  */
 struct adis_diag_flags {
 	/** Sensor initialization failure. */
-	uint8_t snsr_init_failure	:1;
+	uint8_t snsr_init_failure	: 1;
 	/** Data path overrun bit. */
-	uint8_t data_path_overrun	:1;
+	uint8_t data_path_overrun	: 1;
 	/** Flash memory update failure. */
-	uint8_t fls_mem_update_failure	:1;
+	uint8_t fls_mem_update_failure	: 1;
 	/** SPI communication error. */
-	uint8_t spi_comm_err		:1;
+	uint8_t spi_comm_err		: 1;
 	/** Standby mode. */
-	uint8_t standby_mode		:1;
+	uint8_t standby_mode		: 1;
 	/** Sensor failure. */
-	uint8_t snsr_failure		:1;
+	uint8_t snsr_failure		: 1;
 	/** Memory failure. */
-	uint8_t mem_failure		:1;
+	uint8_t mem_failure		: 1;
 	/** Clock error. */
-	uint8_t clk_err			:1;
+	uint8_t clk_err			: 1;
 	/** Gyroscope 1 failure. */
-	uint8_t gyro1_failure		:1;
+	uint8_t gyro1_failure		: 1;
 	/** Gyroscope 2 failure. */
-	uint8_t gyro2_failure		:1;
+	uint8_t gyro2_failure		: 1;
 	/** Accelerometer failure. */
-	uint8_t accl_failure		:1;
+	uint8_t accl_failure		: 1;
 	/** X-Axis gyroscope failure. */
-	uint8_t x_axis_gyro_failure	:2;
+	uint8_t x_axis_gyro_failure	: 2;
 	/** Y-Axis gyroscope failure. */
-	uint8_t y_axis_gyro_failure	:2;
+	uint8_t y_axis_gyro_failure	: 2;
 	/** Z-Axis gyroscope failure. */
-	uint8_t z_axis_gyro_failure	:2;
+	uint8_t z_axis_gyro_failure	: 2;
 	/** X-Axis accelerometer failure. */
-	uint8_t x_axis_accl_failure	:2;
+	uint8_t x_axis_accl_failure	: 2;
 	/** Y-Axis accelerometer failure. */
-	uint8_t y_axis_accl_failure	:2;
+	uint8_t y_axis_accl_failure	: 2;
 	/** Z-Axis accelerometer failure. */
-	uint8_t z_axis_accl_failure	:2;
+	uint8_t z_axis_accl_failure	: 2;
 	/** ADuC microcontroller fault. */
-	uint8_t aduc_mcu_fault		:1;
+	uint8_t aduc_mcu_fault		: 1;
 	/** Configuration and/or calibration CRC error. */
-	uint8_t config_calib_crc_error	:1;
+	uint8_t config_calib_crc_error	: 1;
 	/** Overrange event occurred. */
-	uint8_t overrange		:1;
+	uint8_t overrange		: 1;
 	/** Temperature error. */
-	uint8_t temp_err		:1;
+	uint8_t temp_err		: 1;
 	/** Power supply failure. */
-	uint8_t power_supply_failure	:1;
+	uint8_t power_supply_failure	: 1;
 	/** Power supply failure. */
-	uint8_t boot_memory_failure	:1;
+	uint8_t boot_memory_failure	: 1;
 	/** Register NVM error. */
-	uint8_t reg_nvm_err		:1;
+	uint8_t reg_nvm_err		: 1;
 	/** Watchdog timer flag. */
-	uint8_t wdg_timer_flag		:1;
+	uint8_t wdg_timer_flag		: 1;
 	/** Internal processor supply error. */
-	uint8_t int_proc_supply_err	:1;
+	uint8_t int_proc_supply_err	: 1;
 	/** External 5V supply error. */
-	uint8_t ext_5v_supply_err	:1;
+	uint8_t ext_5v_supply_err	: 1;
 	/** Internal sensor supply error. */
-	uint8_t int_snsr_supply_err	:1;
+	uint8_t int_snsr_supply_err	: 1;
 	/** Internal regulator error. */
-	uint8_t int_reg_err		:1;
+	uint8_t int_reg_err		: 1;
 	/** Checksum error.  */
-	uint8_t checksum_err		:1;
+	uint8_t checksum_err		: 1;
 	/** Flash memory write count exceeded. */
-	uint8_t fls_mem_wr_cnt_exceed	:1;
+	uint8_t fls_mem_wr_cnt_exceed	: 1;
 };
 
 /** @struct adis_temp_flags
@@ -202,23 +202,23 @@ struct adis_diag_flags {
  */
 struct adis_temp_flags {
 	/** Accelerometer temperature flag for z-axis and x-axis. */
-	uint8_t accl_temp_z_x	:1;
+	uint8_t accl_temp_z_x	: 1;
 	/** Accelerometer temperature flag for y-axis and z-axis. */
-	uint8_t accl_temp_y_z	:1;
+	uint8_t accl_temp_y_z	: 1;
 	/** Accelerometer temperature flag for x-axis and y-axis. */
-	uint8_t accl_temp_x_y	:1;
+	uint8_t accl_temp_x_y	: 1;
 	/** Gyroscope2 temperature flag for z-axis. */
-	uint8_t	gyro2_temp_z	:1;
+	uint8_t	gyro2_temp_z	: 1;
 	/** Gyroscope1 temperature flag for z-axis. */
-	uint8_t gyro1_temp_z	:1;
+	uint8_t gyro1_temp_z	: 1;
 	/** Gyroscope2 temperature flag for y-axis. */
-	uint8_t	gyro2_temp_y	:1;
+	uint8_t	gyro2_temp_y	: 1;
 	/** Gyroscope1 temperature flag for y-axis. */
-	uint8_t gyro1_temp_y	:1;
+	uint8_t gyro1_temp_y	: 1;
 	/** Gyroscope2 temperature flag for x-axis. */
-	uint8_t	gyro2_temp_x	:1;
+	uint8_t	gyro2_temp_x	: 1;
 	/** Gyroscope1 temperature flag for x-axis. */
-	uint8_t gyro1_temp_x	:1;
+	uint8_t gyro1_temp_x	: 1;
 };
 
 /** @struct adis_scale_fractional
@@ -905,7 +905,7 @@ int adis_read_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t *coef);
 int adis_write_fir_coef(struct adis_dev *adis, uint8_t coef_idx, uint32_t coef);
 
 /*! Read burst data */
-int adis_read_burst_data(struct adis_dev *adis,struct adis_burst_data *data,
+int adis_read_burst_data(struct adis_dev *adis, struct adis_burst_data *data,
 			 bool burst32, uint8_t burst_sel, bool fifo_pop, bool crc_check);
 
 /*! Update external clock frequency. */

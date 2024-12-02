@@ -611,7 +611,7 @@ int AppBiaInit(struct ad5940_dev *dev, uint32_t *pBuffer, uint32_t BufferSize)
 
 	/* Initialization sequencer  */
 	AppBiaCfg.InitSeqInfo.WriteSRAM = false;
-	ret = ad5940_SEQInfoCfg(dev,&AppBiaCfg.InitSeqInfo);
+	ret = ad5940_SEQInfoCfg(dev, &AppBiaCfg.InitSeqInfo);
 	if (ret < 0)
 		return ret;
 	seq_cfg.SeqEnable = true;
@@ -652,16 +652,16 @@ int AppBiaInit(struct ad5940_dev *dev, uint32_t *pBuffer, uint32_t BufferSize)
 static int AppEITRegModify(struct ad5940_dev *dev, int32_t * const pData,
 			   uint32_t *pDataCount)
 {
-	if(AppBiaCfg.NumOfData > 0) {
-		AppBiaCfg.FifoDataCount += *pDataCount/4;
-		if((int32_t)AppBiaCfg.FifoDataCount >= AppBiaCfg.NumOfData) {
+	if (AppBiaCfg.NumOfData > 0) {
+		AppBiaCfg.FifoDataCount += *pDataCount / 4;
+		if ((int32_t)AppBiaCfg.FifoDataCount >= AppBiaCfg.NumOfData) {
 			return ad5940_WUPTCtrl(dev, false);
 		}
 	}
-	if(AppBiaCfg.StopRequired == true) {
+	if (AppBiaCfg.StopRequired == true) {
 		return ad5940_WUPTCtrl(dev, false);
 	}
-	if(AppBiaCfg.SweepCfg.SweepEn) { /* Need to set new frequency and set power mode */
+	if (AppBiaCfg.SweepCfg.SweepEn) { /* Need to set new frequency and set power mode */
 		return ad5940_WGFreqCtrlS(dev, AppBiaCfg.SweepNextFreq, AppBiaCfg.SysClkFreq);
 	}
 	return 0;
@@ -685,9 +685,9 @@ fImpCar_Type computeImpedance(uint32_t *const pData)
 	iImpCar_Type *pSrcData = (iImpCar_Type *)pData;
 	iImpCar_Type *pDftVolt, *pDftCurr;
 	fImpCar_Type fCarZval;
-	float a,b;
-	float c,d;
-	float denum=1;
+	float a, b;
+	float c, d;
+	float denum = 1;
 
 	pDftVolt = pSrcData++;
 	pDftCurr = pSrcData;
@@ -702,11 +702,11 @@ fImpCar_Type computeImpedance(uint32_t *const pData)
 	d = (float)pDftCurr->Image;
 
 	//(c^2+d^2)
-	denum = (c*c+d*d);
+	denum = (c * c + d * d);
 	//RE((a+bi)(c-di)) = RE(a*c-b*d(-1)+(-a*d+b*c)i) = a*c+b*d
-	fCarZval.Real = (a*c + b*d)/denum;
+	fCarZval.Real = (a * c + b * d) / denum;
 	////IM((a+bi)(c-di)) = IM(a*c-b*d(-1)+(-a*d+b*c)i) = (-a*d+b*c)
-	fCarZval.Image = (-a*d + b*c)/denum;
+	fCarZval.Image = (-a * d + b * c) / denum;
 
 	//Apply Rtia cal values;
 	a = fCarZval.Real * AppBiaCfg.RtiaCurrValue[0] - fCarZval.Image *

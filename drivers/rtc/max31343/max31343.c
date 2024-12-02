@@ -227,13 +227,13 @@ int max31343_reg_read_time_stamp(struct max31343_dev *dev,
 	ts->min = no_os_bcd2bin(data);
 
 	ret = max31343_reg_read(dev, MAX31343_R_HOURS, &data);
-	if(ret)
+	if (ret)
 		return ret;
 	ts->hr = no_os_bcd2bin(data);
 
 	ret = max31343_reg_read(dev, MAX31343_R_DATE, &data);
 	if (ret)
-		return(ret);
+		return (ret);
 	ts->day = no_os_bcd2bin(data);
 
 	ret = max31343_reg_read(dev, MAX31343_R_MONTH, &data);
@@ -248,7 +248,7 @@ int max31343_reg_read_time_stamp(struct max31343_dev *dev,
 	ret = max31343_reg_read(dev, MAX31343_R_YEAR, &data);
 	if (ret)
 		return ret;
-	if(century)
+	if (century)
 		ts->year = no_os_bcd2bin(data) + 2100;
 	else
 		ts->year = no_os_bcd2bin(data) + 2000;

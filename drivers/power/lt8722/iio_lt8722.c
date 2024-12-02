@@ -1771,7 +1771,7 @@ static int lt8722_iio_read_pin(void *dev, char *buf, uint32_t len,
 
 	uint8_t value;
 
-	switch(priv) {
+	switch (priv) {
 	case LT8722_EN_PIN:
 		ret = lt8722_get_en_pin(lt8722, &value);
 		if (ret)
@@ -1821,7 +1821,7 @@ static int lt8722_iio_write_pin(void *dev, char *buf, uint32_t len,
 	if (value == num_values)
 		return -EINVAL;
 
-	switch(priv) {
+	switch (priv) {
 	case LT8722_EN_PIN:
 		ret = lt8722_set_en_pin(lt8722, value);
 	case LT8722_SWEN_PIN:

@@ -164,7 +164,7 @@ static inline bool _is_addr_valid(struct ad4170_dev *dev, uint32_t reg_addr)
 static inline bool _is_big_endian()
 {
 	uint16_t a = 0x0100;
-	return (bool) *(uint8_t *) &a;
+	return (bool) * (uint8_t *) &a;
 }
 
 /* Swap bytes in a buffer with a given step
@@ -183,10 +183,10 @@ static void _memswap64(void * buf, uint32_t bytes, size_t step)
 	uint8_t temp[8];
 	if (step < 2 || step > 8 || bytes < step || bytes % step != 0)
 		return;
-	for(i = 0; i < bytes; i += step) {
+	for (i = 0; i < bytes; i += step) {
 		memcpy(temp, p, step);
-		for(j = step; j > 0; j--) {
-			*p++ = temp[j-1];
+		for (j = step; j > 0; j--) {
+			*p++ = temp[j - 1];
 		}
 	}
 }
@@ -282,7 +282,7 @@ int ad4170_spi_reg_read(struct ad4170_dev *dev,
 
 	if (dev->spi_settings.crc_enabled) {
 		icrc = no_os_crc8(ad4170_crc8, &buf[di], reg_size, icrc);
-		if (icrc != buf[sz-1])
+		if (icrc != buf[sz - 1])
 			return -EBADMSG;
 	}
 
@@ -611,7 +611,7 @@ static int32_t _ad4170_read(struct ad4170_dev *dev, uint32_t *pbuf,
 	    || (dev->config.pin_muxing.dig_aux1_ctrl != AD4170_DIG_AUX1_RDY))
 		return -ENOTSUP;
 
-	while(nb_samples) {
+	while (nb_samples) {
 		for (ch = 0; ch < AD4170_NUM_CHANNELS; ch++) {
 			repeat = dev->config.setup[ch].repeat_n;
 			/* if only one channel is enabled, the repeat setting is ignored */
@@ -619,7 +619,7 @@ static int32_t _ad4170_read(struct ad4170_dev *dev, uint32_t *pbuf,
 				repeat = 0;
 
 			do {
-				if(!(dev->config.channel_en & NO_OS_BIT(ch)))
+				if (!(dev->config.channel_en & NO_OS_BIT(ch)))
 					continue;
 
 				rdyb = NO_OS_GPIO_HIGH;
@@ -643,7 +643,7 @@ static int32_t _ad4170_read(struct ad4170_dev *dev, uint32_t *pbuf,
 
 				p++;
 				nb_samples--;
-			} while(repeat-- && nb_samples);
+			} while (repeat-- && nb_samples);
 
 			if (!nb_samples)
 				break;
@@ -777,7 +777,7 @@ static int32_t _ad4170_continuous_read_one(struct ad4170_dev *dev,
 		*status_out = buf[3];
 
 	if (dev->spi_settings.crc_enabled && !exit) {
-		icrc = no_os_crc8(ad4170_crc8, buf, sz-1, AD4170_CRC8_INITIAL_VALUE);
+		icrc = no_os_crc8(ad4170_crc8, buf, sz - 1, AD4170_CRC8_INITIAL_VALUE);
 		if (icrc != buf[sz - 1])
 			return -EBADMSG;
 	}
@@ -812,7 +812,7 @@ int ad4170_continuous_read(struct ad4170_dev *dev, uint32_t *data_out,
 	if (!nb_samples)
 		return 0;
 
-	while(nb_samples) {
+	while (nb_samples) {
 		for (ch = 0; ch < AD4170_NUM_CHANNELS; ch++) {
 			repeat = dev->config.setup[ch].repeat_n;
 			// if only one channel is enabled, the repeat setting is ignored
@@ -820,7 +820,7 @@ int ad4170_continuous_read(struct ad4170_dev *dev, uint32_t *data_out,
 				repeat = 0;
 
 			do {
-				if(!(dev->config.channel_en & NO_OS_BIT(ch)))
+				if (!(dev->config.channel_en & NO_OS_BIT(ch)))
 					continue;
 
 				ret = _ad4170_continuous_read_one(dev, &data_out[i], &status_out[i], false);
@@ -829,7 +829,7 @@ int ad4170_continuous_read(struct ad4170_dev *dev, uint32_t *data_out,
 
 				i++;
 				nb_samples--;
-			} while(repeat-- && nb_samples);
+			} while (repeat-- && nb_samples);
 
 			if (!nb_samples)
 				break;
@@ -1887,7 +1887,7 @@ int ad4170_init(struct ad4170_dev **device,
 			goto error;
 	}
 
-	for(ch = 0; ch < AD4170_NUM_CHANNELS; ch++) {
+	for (ch = 0; ch < AD4170_NUM_CHANNELS; ch++) {
 		if (!(init_param->config.channel_en & AD4170_CHANNEL(ch)))
 			continue;
 
@@ -2095,7 +2095,7 @@ int ad4170_regmap(struct ad4170_dev *dev)
 
 	uint32_t ri;
 	printf("[register]: [value]\n");
-	for(ri = 0; ri < NO_OS_ARRAY_SIZE(regs); ri++) {
+	for (ri = 0; ri < NO_OS_ARRAY_SIZE(regs); ri++) {
 		ret = ad4170_spi_reg_read(dev, regs[ri], &reg);
 		if (ret) {
 			printf("error %d while reading reg 0x%x", ret, AD4170_ADDR(regs[ri]));

@@ -87,7 +87,7 @@ static void max_dma_xfer_cycle(struct no_os_dma_xfer_desc *old_xfer,
 	       no_os_dma_in_progress(max_spi_state->dma, data->tx_ch));
 
 	/* Wait for the SPI transfer to finish. */
-	while(spi->stat & 1);
+	while (spi->stat & 1);
 
 	if (!next_xfer) {
 		if (data->cb)
@@ -155,11 +155,11 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 	mxc_gpio_cfg_t spi_pins;
 	mxc_gpio_cfg_t cs;
 
-	switch(desc->device_id) {
+	switch (desc->device_id) {
 	case 0:
 		spi_pins = gpio_cfg_spi0;
 
-		switch(desc->chip_select) {
+		switch (desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi0_ss0;
 			break;
@@ -173,7 +173,7 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 	case 1:
 		spi_pins = gpio_cfg_spi1;
 
-		switch(desc->chip_select) {
+		switch (desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi1_ss0;
 			break;
@@ -191,7 +191,7 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 	case 2:
 		spi_pins = gpio_cfg_spi2;
 
-		switch(desc->chip_select) {
+		switch (desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi2_ss0;
 			break;
@@ -208,7 +208,7 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 	case 3:
 		spi_pins = gpio_cfg_spi3;
 
-		switch(desc->chip_select) {
+		switch (desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi3_ss0;
 			break;
@@ -225,7 +225,7 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 	case 4:
 		spi_pins = gpio_cfg_spi4;
 
-		switch(desc->chip_select) {
+		switch (desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi4_ss0;
 			break;
@@ -615,10 +615,10 @@ static int32_t max_config_dma_and_start(struct no_os_spi_desc *desc,
 		goto abort_rx_tx;
 
 	if (!is_async) {
-		while(!no_os_dma_is_completed(max_spi->dma, rx_ch) ||
-		      !no_os_dma_is_completed(max_spi->dma, tx_ch));
+		while (!no_os_dma_is_completed(max_spi->dma, rx_ch) ||
+		       !no_os_dma_is_completed(max_spi->dma, tx_ch));
 
-		while(spi->stat & 1);
+		while (spi->stat & 1);
 		/* End the transaction */
 		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_START;
 		/* Disable the RX and TX FIFOs */

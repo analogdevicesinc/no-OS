@@ -121,7 +121,7 @@ int32_t adf7023_init(struct adf7023_dev **device,
 	if (timeout == 1000)
 		ret = -1;
 
-	while(!(status & STATUS_CMD_READY))
+	while (!(status & STATUS_CMD_READY))
 		adf7023_get_status(dev, &status);
 
 	adf7023_set_ram(dev, 0x100, 64, (uint8_t*)&dev->adf7023_bbram_current);
@@ -197,7 +197,7 @@ void adf7023_set_fw_state(struct adf7023_dev *dev,
 {
 	uint8_t status = 0;
 
-	switch(fw_state) {
+	switch (fw_state) {
 	case FW_STATE_PHY_OFF:
 		adf7023_set_command(dev, CMD_PHY_OFF);
 		break;
@@ -213,7 +213,7 @@ void adf7023_set_fw_state(struct adf7023_dev *dev,
 	default:
 		adf7023_set_command(dev, CMD_PHY_SLEEP);
 	}
-	while((status & STATUS_FW_STATE) != fw_state) {
+	while ((status & STATUS_FW_STATE) != fw_state) {
 		adf7023_get_status(dev, &status);
 	}
 }
@@ -237,7 +237,7 @@ void adf7023_get_ram(struct adf7023_dev *dev,
 	adf7023_write_read_byte(dev, SPI_MEM_RD | ((address & 0x700) >> 8), 0);
 	adf7023_write_read_byte(dev, address & 0xFF, 0);
 	adf7023_write_read_byte(dev, SPI_NOP, 0);
-	while(length--) {
+	while (length--) {
 		adf7023_write_read_byte(dev, SPI_NOP, data++);
 	}
 	ADF7023_CS_DEASSERT;
@@ -261,7 +261,7 @@ void adf7023_set_ram(struct adf7023_dev *dev,
 	ADF7023_CS_ASSERT;
 	adf7023_write_read_byte(dev, SPI_MEM_WR | ((address & 0x700) >> 8), 0);
 	adf7023_write_read_byte(dev, address & 0xFF, 0);
-	while(length--) {
+	while (length--) {
 		adf7023_write_read_byte(dev, *(data++), 0);
 	}
 	ADF7023_CS_DEASSERT;
@@ -284,7 +284,7 @@ void adf7023_receive_packet(struct adf7023_dev *dev,
 
 	adf7023_set_fw_state(dev, FW_STATE_PHY_ON);
 	adf7023_set_fw_state(dev, FW_STATE_PHY_RX);
-	while(!(interrupt_reg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_CRC_CORRECT)) {
+	while (!(interrupt_reg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_CRC_CORRECT)) {
 		adf7023_get_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
 				0x1,
 				&interrupt_reg);
@@ -318,7 +318,7 @@ void adf7023_transmit_packet(struct adf7023_dev *dev,
 	adf7023_set_ram(dev, 0x12, length, packet);
 	adf7023_set_fw_state(dev, FW_STATE_PHY_ON);
 	adf7023_set_fw_state(dev, FW_STATE_PHY_TX);
-	while(!(interrupt_reg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_TX_EOF)) {
+	while (!(interrupt_reg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_TX_EOF)) {
 		adf7023_get_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
 				0x1,
 				&interrupt_reg);

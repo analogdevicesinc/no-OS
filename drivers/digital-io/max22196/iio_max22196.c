@@ -573,7 +573,7 @@ static int max22196_iio_read_di_mode_available(void *dev, char *buf,
 	uint32_t length = 0;
 	uint32_t i;
 
-	for(i = 0; i < avail_size; i++)
+	for (i = 0; i < avail_size; i++)
 		length += sprintf(buf + length, "%s ", max22196_di_mode_avail[i]);
 
 	return length;

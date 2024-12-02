@@ -91,19 +91,19 @@ int ltc3337_init(struct ltc3337_dev** device,
 	struct ltc3337_dev *dev;
 
 	//Input parameter NULL checks
-	if((!device) || (!init_param))
+	if ((!device) || (!init_param))
 		return -EINVAL;
 
 	dev = (struct ltc3337_dev*)no_os_calloc(1, sizeof(struct ltc3337_dev));
-	if(!dev)
+	if (!dev)
 		return  -ENOMEM;
 
 	ret = no_os_i2c_init(&dev->i2c_desc, &init_param->i2c_init);
-	if(ret) //Failure creating I2C
+	if (ret) //Failure creating I2C
 		goto err;
 
 	ret = ltc3337_read_reg(dev, LTC3337_REG_C, &reg_val);
-	if(ret) //Failure on a I2C Read
+	if (ret) //Failure on a I2C Read
 		goto comm_err;
 
 	//Success
@@ -134,7 +134,7 @@ int ltc3337_remove(struct ltc3337_dev* dev)
 	int ret;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
@@ -159,10 +159,10 @@ int ltc3337_get_voltage_mv(struct ltc3337_dev* dev,
 	int ret;
 
 	//Input parameter NULL checks
-	if((!dev) || (!value))
+	if ((!dev) || (!value))
 		return -EINVAL;
 
-	switch(source) {
+	switch (source) {
 	case BAT_IN_IPEAK_ON:
 		reg = LTC3337_REG_D;
 		break;
@@ -181,7 +181,7 @@ int ltc3337_get_voltage_mv(struct ltc3337_dev* dev,
 	}
 
 	ret = ltc3337_read_reg(dev, reg, &reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
 	reg_value = no_os_field_get(LTC3337_BATV_MSK, reg_value);
@@ -202,11 +202,11 @@ int ltc3337_get_temperature_c(struct ltc3337_dev* dev, int16_t* value)
 	int ret;
 
 	//Input parameter NULL checks
-	if((!dev) || (!value))
+	if ((!dev) || (!value))
 		return -EINVAL;
 
 	ret = ltc3337_read_reg(dev, LTC3337_REG_C, &reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
 	*value = ltc3337_temp_reg_to_c(
@@ -234,17 +234,17 @@ int ltc3337_get_accumulated_charge(struct ltc3337_dev* dev,
 	int ret;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	ret = ltc3337_read_reg(dev, LTC3337_REG_B, &reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
-	if(raw_value)
+	if (raw_value)
 		*raw_value = reg_value;
 
-	if(value) {
+	if (value) {
 		prescale = no_os_field_get(LTC3337_RA_PRESCALE_MSK, dev->latched_reg_a);
 		ltc3337_charge_count_to_a(reg_value, prescale,
 					  ipeak_lookup_table[dev->ipeak_latched].qlsb_na_hr,
@@ -274,14 +274,14 @@ int ltc3337_set_prescaler(struct ltc3337_dev* dev, uint8_t prescale)
 	int ret;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	reg_value = dev->latched_reg_a;
 	reg_value &= ~(LTC3337_RA_PRESCALE_MSK);
 	reg_value |= no_os_field_prep(LTC3337_RA_PRESCALE_MSK, prescale);
 	ret = ltc3337_write_reg(dev, LTC3337_REG_A, reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
 	dev->latched_reg_a = reg_value;
@@ -303,10 +303,10 @@ int ltc3337_set_temperature_alarms_c(struct ltc3337_dev* dev, int16_t hot_alarm,
 	uint8_t temp_val;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
-	if((hot_alarm < LTC3337_MIN_TEMP_C) || (hot_alarm > LTC3337_MAX_TEMP_C) ||
+	if ((hot_alarm < LTC3337_MIN_TEMP_C) || (hot_alarm > LTC3337_MAX_TEMP_C) ||
 	    (cold_alarm < LTC3337_MIN_TEMP_C) || (cold_alarm > LTC3337_MAX_TEMP_C))
 		return -EINVAL;
 
@@ -330,18 +330,18 @@ int ltc3337_set_counter_shutdown(struct ltc3337_dev* dev, uint8_t shutdown_en)
 	int ret;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	reg_value = dev->latched_reg_a;
 
-	if(shutdown_en)
+	if (shutdown_en)
 		reg_value |= LTC3337_RA_SHTDN;
 	else
 		reg_value &= ~(LTC3337_RA_SHTDN);
 
 	ret = ltc3337_write_reg(dev, LTC3337_REG_A, reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
 	dev->latched_reg_a = reg_value;
@@ -368,7 +368,7 @@ int ltc3337_set_counter_alarm(struct ltc3337_dev* dev, uint16_t counter_reg_val,
 	int ret;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	reg_value = dev->latched_reg_a;
@@ -378,14 +378,14 @@ int ltc3337_set_counter_alarm(struct ltc3337_dev* dev, uint16_t counter_reg_val,
 
 	//If rounding was requested, check the if any of the lower bits are set,
 	//and if we wont overflow dataToSet beyond 8-bits, increment
-	if((round_up) && (counter_reg_val & 0xFF) && (data_to_set != 0xFF))
+	if ((round_up) && (counter_reg_val & 0xFF) && (data_to_set != 0xFF))
 		data_to_set++;
 
 	reg_value &= ~(LTC3337_RA_ALARM_LVL_MSK);
 	reg_value |= no_os_field_prep(LTC3337_RA_ALARM_LVL_MSK, data_to_set);
 
 	ret = ltc3337_write_reg(dev, LTC3337_REG_A, reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
 	dev->latched_reg_a = reg_value;
@@ -410,7 +410,7 @@ int ltc3337_set_accumulated_charge(struct ltc3337_dev* dev, uint16_t reg_value,
 	uint16_t data_to_set;
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	//Only upper 8-bits (MSB) are writable
@@ -421,7 +421,7 @@ int ltc3337_set_accumulated_charge(struct ltc3337_dev* dev, uint16_t reg_value,
 	//if we increment
 	//Add 1 to the MSB of the data to set to account for rounding
 	//request
-	if((round_up) && (reg_value & 0xFF) && (data_to_set != 0xFF00))
+	if ((round_up) && (reg_value & 0xFF) && (data_to_set != 0xFF00))
 		data_to_set += 0x100;
 
 	return ltc3337_write_reg(dev, LTC3337_REG_B, data_to_set);
@@ -446,20 +446,20 @@ int ltc3337_get_and_clear_interrupts(struct ltc3337_dev* dev,
 	int ret;
 
 	//Input parameter NULL checks
-	if((!dev) || (!int_field))
+	if ((!dev) || (!int_field))
 		return -EINVAL;
 
 	ret = ltc3337_read_reg(dev, LTC3337_REG_C, int_field);
-	if(ret)
+	if (ret)
 		return ret;
 
 	write_reg_value = dev->latched_reg_a;
 	write_reg_value |= (LTC3337_RA_CLEAR_INT);
 	ret = ltc3337_write_reg(dev, LTC3337_REG_A, write_reg_value);
-	if(ret)
+	if (ret)
 		return ret;
 
-	if(temp_c)
+	if (temp_c)
 		*temp_c = ltc3337_temp_reg_to_c(no_os_field_get(LTC3337_RC_DIE_TEMP_MSK,
 						*int_field));
 
@@ -483,7 +483,7 @@ int ltc3337_calculate_charge_register(struct ltc3337_dev* dev,
 	uint8_t prescale;
 
 	//Input parameter NULL checks
-	if((!dev) || (!charge_a) || (!reg_value))
+	if ((!dev) || (!charge_a) || (!reg_value))
 		return -EINVAL;
 
 	prescale = no_os_field_get(LTC3337_RA_PRESCALE_MSK, dev->latched_reg_a);
@@ -509,16 +509,16 @@ static int ltc3337_read_reg(struct ltc3337_dev* dev, uint8_t reg,
 	int ret;
 
 	//Input parameter NULL checks
-	if((!dev) || (!data))
+	if ((!dev) || (!data))
 		return -EINVAL;
 
 	ret = no_os_i2c_write(dev->i2c_desc, &reg_buf, 1, 1);
-	if(ret)
+	if (ret)
 		return ret;
 
 	//Successful write
 	ret = no_os_i2c_read(dev->i2c_desc, data_buf, 2, 1);
-	if(ret)
+	if (ret)
 		return ret;
 
 	//Data comes Little Endian
@@ -540,7 +540,7 @@ static int ltc3337_write_reg(struct ltc3337_dev* dev, uint8_t reg,
 	uint8_t data_buf[3];
 
 	//Input parameter NULL check
-	if(!dev)
+	if (!dev)
 		return -EINVAL;
 
 	//Register followed by Little Endian 16-bit word
@@ -588,9 +588,9 @@ static uint8_t ltc3337_temp_c_to_reg(int16_t temp_c)
 {
 	int32_t working;
 
-	if(temp_c > LTC3337_MAX_TEMP_C )
+	if (temp_c > LTC3337_MAX_TEMP_C)
 		return 0xFF;
-	else if(temp_c < LTC3337_MIN_TEMP_C)
+	else if (temp_c < LTC3337_MIN_TEMP_C)
 		return 0x00;
 	else {
 		working = (temp_c - LTC3337_TEMP_MIN_C) * LTC3337_MC_TO_C_SCALE;
@@ -648,7 +648,7 @@ static void ltc3337_charge_count_to_a(uint16_t charge_count, uint8_t prescale,
 	ret_value->na_hr += fract_count >> prescale;
 
 	//If the nA-hr component overflowed 1A, adjust accordingly
-	while(ret_value->na_hr > LTC3337_NANO_AMP) {
+	while (ret_value->na_hr > LTC3337_NANO_AMP) {
 		ret_value->a_hr++;
 		ret_value->na_hr -= LTC3337_NANO_AMP;
 	}
@@ -686,7 +686,7 @@ static uint16_t ltc3337_a_to_charge_count(uint8_t prescale, uint32_t lsb_na,
 
 	//Exceeds the bounds of the configuration, and could overflow
 	//the math.  Drop out now.
-	if(charge_a->a_hr > (UINT16_MAX / bits_per_a))
+	if (charge_a->a_hr > (UINT16_MAX / bits_per_a))
 		return UINT16_MAX;
 
 	//Get the baseline count
@@ -706,7 +706,7 @@ static uint16_t ltc3337_a_to_charge_count(uint8_t prescale, uint32_t lsb_na,
 	working_count -= ((fract_count /
 			   lsb_na)); //divide by lsbna to negate the prescaler
 
-	if(working_count > UINT16_MAX) //Clamp to register max
+	if (working_count > UINT16_MAX) //Clamp to register max
 		return UINT16_MAX;
 	else
 		return working_count;

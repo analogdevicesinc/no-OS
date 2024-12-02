@@ -825,7 +825,7 @@ static int adf4382_iio_write_phase_adj(void *dev, char *buf, uint32_t len,
 	else
 		ret = adf4382_set_phase_pol(adf4382, 0);
 
-	if(ret)
+	if (ret)
 		return ret;
 
 	val = abs(val);

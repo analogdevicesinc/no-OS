@@ -192,7 +192,7 @@ float ad7091r_convert_to_volts(int16_t raw_sample, float v_ref)
 {
 	float voltage = 0;
 
-	if(v_ref == 0) {
+	if (v_ref == 0) {
 		v_ref = 2.5;
 	}
 	voltage = v_ref * (float)raw_sample / (1 << 12);

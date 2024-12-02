@@ -68,7 +68,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 		goto error_dev;
 
 	adev->memory = no_os_calloc(1, ADI_RTC_MEMORY_SIZE);
-	if(!adev->memory)
+	if (!adev->memory)
 		goto error_extra;
 
 	dev->id = init_param->id;
@@ -78,12 +78,12 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 
 	ret = adi_rtc_Open(dev->id, adev->memory, ADI_RTC_MEMORY_SIZE,
 			   &adev->instance);
-	if(ret != 0)
+	if (ret != 0)
 		goto error_mem;
 
 	if ((dev->freq >= AUDCM_32768HZ) && (dev->freq <= AUDCM_1HZ)) {
 		ret = adi_rtc_SetPreScale(adev->instance, dev->freq);
-		if(ret != 0)
+		if (ret != 0)
 			goto error_open;
 	} else {
 		goto error_open;
@@ -120,7 +120,7 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
 	struct aducm_rtc_desc *adev = dev->extra;
 
 	ret = adi_rtc_Close(adev->instance);
-	if(ret != 0)
+	if (ret != 0)
 		return -1;
 
 	no_os_free(adev->memory);

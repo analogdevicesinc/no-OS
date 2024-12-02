@@ -59,7 +59,7 @@ struct adicup_flash_dev {
 	/** Necessary memory for DFP driver */
 	uint8_t dfp_memory[ADI_FEE_MEMORY_SIZE];
 	/** Buffer to read one flash page */
-	uint32_t temp_ptr[FLASH_PAGE_SIZE_WORDS] __attribute__ ((aligned (sizeof(
+	uint32_t temp_ptr[FLASH_PAGE_SIZE_WORDS] __attribute__((aligned(sizeof(
 				uint32_t))));
 };
 
@@ -100,7 +100,7 @@ int32_t no_os_flash_init(struct no_os_flash_dev **device,
 	ret = adi_fee_Open(dev->id, adicup_extra->dfp_memory,
 			   ADI_FEE_MEMORY_SIZE,
 			   &adicup_extra->instance);
-	if(ret != ADI_FEE_SUCCESS)
+	if (ret != ADI_FEE_SUCCESS)
 		goto error_adicup;
 
 	*device = dev;
@@ -161,7 +161,7 @@ int32_t no_os_flash_clear_page(struct no_os_flash_dev *dev, int32_t page_no)
 
 	ret = adi_fee_PageErase(adicup_extra->instance, page_no, page_no,
 				&fee_hw_error);
-	if(ret != ADI_FEE_SUCCESS)
+	if (ret != ADI_FEE_SUCCESS)
 		return -1;
 
 	return 0;
@@ -195,7 +195,7 @@ int32_t no_os_flash_write_page(struct no_os_flash_dev *dev, int32_t page_no,
 
 	ret = adi_fee_Write(adicup_extra->instance, &transaction,
 			    &fee_hw_error);
-	if(ret != ADI_FEE_SUCCESS)
+	if (ret != ADI_FEE_SUCCESS)
 		return -1;
 
 	return 0;
@@ -230,13 +230,13 @@ static int32_t flash_read_then_write(struct no_os_flash_dev *dev,
 	/* Get the page number */
 	ret = adi_fee_GetPageNumber(adicup_extra->instance, flash_addr,
 				    &page_nr);
-	if(ret != ADI_FEE_SUCCESS)
+	if (ret != ADI_FEE_SUCCESS)
 		return -1;
 
 	/* First erase page */
 	ret = adi_fee_PageErase(adicup_extra->instance, page_nr, page_nr,
 				&fee_hw_error);
-	if(ret != ADI_FEE_SUCCESS)
+	if (ret != ADI_FEE_SUCCESS)
 		return -1;
 
 	return no_os_flash_write_page(dev, page_nr, adicup_extra->temp_ptr);

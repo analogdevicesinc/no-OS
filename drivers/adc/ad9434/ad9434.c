@@ -149,7 +149,7 @@ int32_t ad9434_setup(struct ad9434_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ret |= ad9434_spi_read(dev, AD9434_REG_CHIP_ID, &chip_id);
-	if(chip_id != AD9434_CHIP_ID) {
+	if (chip_id != AD9434_CHIP_ID) {
 		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}

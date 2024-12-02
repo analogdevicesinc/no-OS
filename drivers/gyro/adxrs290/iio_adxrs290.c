@@ -193,13 +193,13 @@ static int32_t adxrs290_read_samples(void *device, uint16_t *buff,
 		/* Stop until data is available.
 		 * This will not block at first data since sync pin will
 		 * will always be high until read. */
-		while(true) {
+		while (true) {
 			adxrs290_get_data_ready(dev, &rdy);
 			if (rdy == true)
 				break;
 		}
 		adxrs290_get_burst_data(dev, data, &ch_cnt);
-		memcpy(&buff[offset], data, ch_cnt*sizeof(int16_t));
+		memcpy(&buff[offset], data, ch_cnt * sizeof(int16_t));
 		offset += ch_cnt;
 	}
 
@@ -275,8 +275,8 @@ static struct iio_channel adxrs290_iio_channels[] = {
 	{
 		.ch_type = IIO_ANGL_VEL,
 		.channel = 0,
-		.modified=1,
-		.channel2=IIO_MOD_X,
+		.modified = 1,
+		.channel2 = IIO_MOD_X,
 		.scan_index = 0,
 		.scan_type = &scan_type_gyro,
 		.attributes = adxrs290_iio_vel_attrs,
@@ -285,8 +285,8 @@ static struct iio_channel adxrs290_iio_channels[] = {
 	{
 		.ch_type = IIO_ANGL_VEL,
 		.channel = 1,
-		.modified=1,
-		.channel2=IIO_MOD_Y,
+		.modified = 1,
+		.channel2 = IIO_MOD_Y,
 		.scan_index = 1,
 		.scan_type = &scan_type_gyro,
 		.attributes = adxrs290_iio_vel_attrs,

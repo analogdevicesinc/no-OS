@@ -144,7 +144,7 @@ int32_t ad9528_spi_read_n(struct ad9528_dev *dev,
 	uint8_t index;
 
 	*reg_data = 0;
-	for(index = 0; index < AD9528_TRANSF_LEN(reg_addr); index++) {
+	for (index = 0; index < AD9528_TRANSF_LEN(reg_addr); index++) {
 		buf[0] = 0x80 | (reg_addr >> 8);
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = 0x00;
@@ -179,7 +179,7 @@ int32_t ad9528_spi_write_n(struct ad9528_dev *dev,
 	int32_t ret = 0;
 	uint8_t index;
 
-	for(index = 0; index < AD9528_TRANSF_LEN(reg_addr); index++) {
+	for (index = 0; index < AD9528_TRANSF_LEN(reg_addr); index++) {
 		buf[0] = reg_addr >> 8;
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = (reg_data >> ((AD9528_TRANSF_LEN(reg_addr) -
@@ -331,7 +331,7 @@ int32_t ad9528_init(struct ad9528_init_param *init_param)
 	init_param->pdata->sysref_src = SYSREF_SRC_INTERNAL;
 	init_param->pdata->sysref_k_div = 512;
 	init_param->pdata->rpole2 = RPOLE2_900_OHM;
-	init_param->pdata->rzero= RZERO_1850_OHM;
+	init_param->pdata->rzero = RZERO_1850_OHM;
 	init_param->pdata->cpole1 = CPOLE1_16_PF;
 	init_param->pdata->rzero_bypass_en = 0;
 
@@ -346,7 +346,7 @@ int32_t ad9528_init(struct ad9528_init_param *init_param)
 		(&init_param->pdata->channels[i])->channel_divider = 1;
 	}
 
-	return(0);
+	return (0);
 }
 
 /**
@@ -367,7 +367,7 @@ int32_t ad9528_clk_recalc_rate(struct no_os_clk_desc *desc,
 
 	ad9528_dev = desc->dev_desc;
 
-	if(!ad9528_dev)
+	if (!ad9528_dev)
 		return -ENODEV;
 
 	s_source = ad9528_dev->pdata->channels[desc->hw_ch_num].signal_source;
@@ -1293,18 +1293,18 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 {
 	int32_t s;
 
-	if(!dev)
+	if (!dev)
 		return -1;
 
-	if(dev->gpio_resetb) {
+	if (dev->gpio_resetb) {
 		s = no_os_gpio_direction_output(dev->gpio_resetb, 0);
-		if(s < 0)
+		if (s < 0)
 			return s;
 
 		no_os_mdelay(100);
 
 		s = no_os_gpio_direction_output(dev->gpio_resetb, 1);
-		if(s < 0)
+		if (s < 0)
 			return s;
 		no_os_mdelay(100);
 	}
@@ -1320,7 +1320,7 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 	no_os_mdelay(100);
 
 	s = ad9528_spi_write_n(dev, AD9528_SERIAL_PORT_CONFIG_B, 0x00);
-	if(s < 0)
+	if (s < 0)
 		return s;
 
 	no_os_mdelay(100);

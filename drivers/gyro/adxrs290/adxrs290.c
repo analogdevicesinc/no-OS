@@ -97,7 +97,7 @@ int32_t adxrs290_set_op_mode(struct adxrs290_dev *dev, enum adxrs290_mode mode)
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
-	switch(mode) {
+	switch (mode) {
 	case ADXRS290_MODE_STANDBY:
 		val &= ~ADXRS290_MEASUREMENT;
 		break;
@@ -206,8 +206,8 @@ int32_t adxrs290_get_rate_data(struct adxrs290_dev *dev,
 	int32_t ret = 0;
 	uint8_t data[3];
 
-	data[0] = 0x80 | (ADXRS290_REG_DATAX0+ch*2);
-	data[1] = 0x80 | (ADXRS290_REG_DATAX1+ch*2);
+	data[0] = 0x80 | (ADXRS290_REG_DATAX0 + ch * 2);
+	data[1] = 0x80 | (ADXRS290_REG_DATAX1 + ch * 2);
 	data[2] = 0;
 	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
 	if (NO_OS_IS_ERR_VALUE(ret))
@@ -254,7 +254,7 @@ int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
 				uint8_t *ch_cnt)
 {
 	int32_t		ret = 0;
-	uint8_t		data_bytes = ADXRS290_CHANNEL_COUNT*2;
+	uint8_t		data_bytes = ADXRS290_CHANNEL_COUNT * 2;
 	uint8_t		data[data_bytes + 1];
 	int16_t		result;
 	uint8_t		ch_idx;
@@ -272,7 +272,7 @@ int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
 	i = 1;
 	*ch_cnt = 0;
 	for (ch_idx = 0; ch_idx < ADXRS290_CHANNEL_COUNT; ch_idx++) {
-		result = (((int16_t)data[i+1]) << 8) | data[i];
+		result = (((int16_t)data[i + 1]) << 8) | data[i];
 		i += 2;
 		if (ch_idx == ADXRS290_CHANNEL_TEMP)
 			result = (result << 4) >> 4;

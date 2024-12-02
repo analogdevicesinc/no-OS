@@ -87,7 +87,7 @@ int32_t ad463x_spi_reg_read(struct ad463x_dev *dev,
 	int32_t ret;
 	uint8_t buf[3];
 
-	buf[0] = AD463X_REG_READ| ((reg_addr >> 8) & 0x7F);
+	buf[0] = AD463X_REG_READ | ((reg_addr >> 8) & 0x7F);
 	buf[1] = (uint8_t)reg_addr;
 	buf[2] = AD463X_REG_READ_DUMMY;
 
@@ -222,7 +222,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
 					   AD463X_REG_AVG,
 					   AD463X_AVG_FILTER_RESET);
 	} else {
-		if(mode < 1 || mode > 16)
+		if (mode < 1 || mode > 16)
 			return -EINVAL;
 		ret = ad463x_spi_reg_write_masked(dev,
 						  AD463X_REG_MODES,
@@ -246,7 +246,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
  */
 int32_t ad463x_set_drive_strength(struct ad463x_dev *dev, uint8_t mode)
 {
-	if((mode != AD463X_NORMAL_OUTPUT_STRENGTH)
+	if ((mode != AD463X_NORMAL_OUTPUT_STRENGTH)
 	    && (mode != AD463X_DOUBLE_OUTPUT_STRENGTH))
 		return -EINVAL;
 
@@ -378,7 +378,7 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 
 	/** Configure PGIA pins, if available */
 	if (dev->has_pgia) {
-		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a0,init_param->gpio_pgia_a0);
+		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a0, init_param->gpio_pgia_a0);
 		if (ret != 0)
 			goto error_gpio_cnv;
 		ret = no_os_gpio_get_optional(&dev->gpio_pgia_a1, init_param->gpio_pgia_a1);
@@ -608,7 +608,7 @@ static int32_t ad463x_read_data_dma(struct ad463x_dev *dev,
 
 	rx_sample = rx_buf;
 	for (i = 0; i < samples; i++) {
-		ad463x_pext_sample(dev, rx_sample, 6, p_buf, p_buf +1);
+		ad463x_pext_sample(dev, rx_sample, 6, p_buf, p_buf + 1);
 		rx_sample += dev->read_bytes_no;
 		p_buf += 2;
 	}
@@ -641,8 +641,8 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 	if (dev->spi_dma_enable)
 		return ad463x_read_data_dma(dev, buf, samples);
 
-	for (i = 0, p_buf = buf; i < samples; i++, p_buf+=2) {
-		ret = ad463x_read_single_sample(dev, p_buf, p_buf +1);
+	for (i = 0, p_buf = buf; i < samples; i++, p_buf += 2) {
+		ret = ad463x_read_single_sample(dev, p_buf, p_buf + 1);
 		if (ret)
 			return ret;
 	}
@@ -668,7 +668,7 @@ static void ad463x_fill_scale_tbl(struct ad463x_dev *dev)
 	for (i = 0; i < NO_OS_ARRAY_SIZE(ad463x_gains); i++) {
 		val = (dev->vref * 2) / MILLI;
 		val = val * ad4630_gains_frac[i][1] * MILLI;
-		val = val /ad4630_gains_frac[i][0];
+		val = val / ad4630_gains_frac[i][0];
 
 		tmp2 = no_os_shift_right((int64_t)val * MICRO, val2);
 		tmp0 = (int)no_os_div_s64_rem(tmp2, NANO, &tmp1);

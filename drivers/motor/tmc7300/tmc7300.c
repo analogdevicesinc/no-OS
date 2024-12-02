@@ -129,7 +129,7 @@ int tmc7300_reg_read(struct tmc7300_desc *desc, uint32_t addr, uint32_t *val)
 	/* Flush the UART FIFO */
 	do {
 		ret = no_os_uart_read(desc->comm_desc, rx_data, 1);
-	} while(ret != -EAGAIN);
+	} while (ret != -EAGAIN);
 
 	ret = no_os_uart_write(desc->comm_desc, tx_data, 4);
 	if (ret < 0)

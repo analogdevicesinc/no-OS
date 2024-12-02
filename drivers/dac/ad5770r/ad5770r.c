@@ -637,17 +637,17 @@ static int32_t ad5770r_remove_gpio(struct ad5770r_dev *dev)
 
 	if (dev->gpio_alarm_n) {
 		ret = no_os_gpio_remove(dev->gpio_alarm_n);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 	if (dev->gpio_ldac_n) {
 		ret = no_os_gpio_remove(dev->gpio_ldac_n);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 	if (dev->gpio_reset_n) {
 		ret = no_os_gpio_remove(dev->gpio_reset_n);
-		if(NO_OS_IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
 
@@ -732,7 +732,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 	ret |= ad5770r_set_hw_ldac(dev,
 				   &init_param->mask_hw_ldac);
 
-	for( i = AD5770R_CH0; i <=  AD5770R_CH5; i++) {
+	for (i = AD5770R_CH0; i <=  AD5770R_CH5; i++) {
 		ret |= ad5770r_set_output_mode(dev,
 					       &init_param->output_mode[i], i);
 		ret |= ad5770r_set_output_filter(dev,

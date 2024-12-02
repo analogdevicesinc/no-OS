@@ -984,12 +984,12 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 	uint32_t data_i2;
 	uint32_t data_q2;
 	tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-	if(dac->num_channels == 4) {
-		for(index = 0, index_mem = 0; index < (tx_count * 2);
-		    index += 2, index_mem += 2) {
+	if (dac->num_channels == 4) {
+		for (index = 0, index_mem = 0; index < (tx_count * 2);
+		     index += 2, index_mem += 2) {
 			index_i1 = index;
 			index_q1 = index + (tx_count / 2);
-			if(index_q1 >= (tx_count * 2))
+			if (index_q1 >= (tx_count * 2))
 				index_q1 -= (tx_count * 2);
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
@@ -998,9 +998,9 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 
 			index_i2 = index_i1;
 			index_q2 = index_q1;
-			if(index_i2 >= (tx_count * 2))
+			if (index_i2 >= (tx_count * 2))
 				index_i2 -= (tx_count * 2);
-			if(index_q2 >= (tx_count * 2))
+			if (index_q2 >= (tx_count * 2))
 				index_q2 -= (tx_count * 2);
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
@@ -1009,10 +1009,10 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 
 		}
 	} else {
-		for(index = 0; index < tx_count; index += 1) {
+		for (index = 0; index < tx_count; index += 1) {
 			index_i1 = index;
 			index_q1 = index + (tx_count / 4);
-			if(index_q1 >= tx_count)
+			if (index_q1 >= tx_count)
 				index_q1 -= tx_count;
 			data_i1 = (sine_lut[index_i1] << 20);
 			data_q1 = (sine_lut[index_q1] << 4);
@@ -1042,7 +1042,7 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 	uint32_t data_i;
 	uint32_t data_q;
 
-	for(index = 0; index < buff_size; index += 2) {
+	for (index = 0; index < buff_size; index += 2) {
 		data_i = (buff[index]);
 		data_q = (buff[index + 1] << 16);
 
@@ -1069,7 +1069,7 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	uint8_t chan;
 	uint8_t num_tx_channels = dac->num_channels / 2;
 
-	for(index = 0; index < custom_tx_count; index++) {
+	for (index = 0; index < custom_tx_count; index++) {
 		/* Send the same data on all the channels */
 		for (chan = 0; chan < num_tx_channels; chan++) {
 
@@ -1081,8 +1081,8 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	}
 
 	for (chan = 0; chan < dac->num_channels; chan++) {
-		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((chan*2)+0), 0x2);
-		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((chan*2)+1), 0x2);
+		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((chan * 2) + 0), 0x2);
+		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((chan * 2) + 1), 0x2);
 	}
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
@@ -1129,7 +1129,7 @@ int32_t axi_dac_init_finish(struct axi_dac *dac)
 	axi_dac_read(dac, AXI_DAC_REG_STATUS, &reg_data);
 
 	/* ad3552r-axi ip is not setting STATUS3 to 1, but is anyway ok */
-	if(reg_data == 0x0 && !dac->bus_type) {
+	if (reg_data == 0x0 && !dac->bus_type) {
 		printf("%s: Status errors: %08ld\n", dac->name, reg_data);
 		return -1;
 	}
@@ -1195,21 +1195,21 @@ int32_t axi_dac_data_setup(struct axi_dac *dac)
 	struct axi_dac_channel *chan;
 	uint32_t i;
 
-	if(dac->channels) {
+	if (dac->channels) {
 		for (i = 0; i < dac->num_channels; i++) {
 			chan = &dac->channels[i];
 			if (chan->sel == AXI_DAC_DATA_SEL_DDS) {
-				axi_dac_dds_set_frequency(dac, ((i*2)+0), chan->dds_frequency_0);
-				axi_dac_dds_set_phase(dac, ((i*2)+0), chan->dds_phase_0);
-				axi_dac_dds_set_scale(dac, ((i*2)+0), chan->dds_scale_0);
+				axi_dac_dds_set_frequency(dac, ((i * 2) + 0), chan->dds_frequency_0);
+				axi_dac_dds_set_phase(dac, ((i * 2) + 0), chan->dds_phase_0);
+				axi_dac_dds_set_scale(dac, ((i * 2) + 0), chan->dds_scale_0);
 				if (chan->dds_dual_tone == 0) {
-					axi_dac_dds_set_frequency(dac, ((i*2)+1), chan->dds_frequency_0);
-					axi_dac_dds_set_phase(dac, ((i*2)+1), chan->dds_phase_0);
-					axi_dac_dds_set_scale(dac, ((i*2)+1), chan->dds_scale_0);
+					axi_dac_dds_set_frequency(dac, ((i * 2) + 1), chan->dds_frequency_0);
+					axi_dac_dds_set_phase(dac, ((i * 2) + 1), chan->dds_phase_0);
+					axi_dac_dds_set_scale(dac, ((i * 2) + 1), chan->dds_scale_0);
 				} else {
-					axi_dac_dds_set_frequency(dac, ((i*2)+1), chan->dds_frequency_1);
-					axi_dac_dds_set_phase(dac, ((i*2)+1), chan->dds_phase_1);
-					axi_dac_dds_set_scale(dac, ((i*2)+1), chan->dds_scale_1);
+					axi_dac_dds_set_frequency(dac, ((i * 2) + 1), chan->dds_frequency_1);
+					axi_dac_dds_set_phase(dac, ((i * 2) + 1), chan->dds_phase_1);
+					axi_dac_dds_set_scale(dac, ((i * 2) + 1), chan->dds_scale_1);
 				}
 			}
 			axi_dac_write(dac, DAC_REG_DATA_PATTERN(i), chan->pat_data);
@@ -1217,14 +1217,14 @@ int32_t axi_dac_data_setup(struct axi_dac *dac)
 		}
 	} else {
 		for (i = 0; i < dac->num_channels; i++) {
-			axi_dac_dds_set_frequency(dac, ((i*2)+0), 3*1000*1000);
-			axi_dac_dds_set_frequency(dac, ((i*2)+1), 3*1000*1000);
-			axi_dac_dds_set_phase(dac, ((i*2)+0), (i % 2) ? 0 : 90000);
-			axi_dac_dds_set_phase(dac, ((i*2)+1), (i % 2) ? 0 : 90000);
-			axi_dac_dds_set_scale(dac, ((i*2)+0), 50*1000);
-			axi_dac_dds_set_scale(dac, ((i*2)+1), 50*1000);
-			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i*2)+0), 0);
-			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i*2)+1), 0);
+			axi_dac_dds_set_frequency(dac, ((i * 2) + 0), 3 * 1000 * 1000);
+			axi_dac_dds_set_frequency(dac, ((i * 2) + 1), 3 * 1000 * 1000);
+			axi_dac_dds_set_phase(dac, ((i * 2) + 0), (i % 2) ? 0 : 90000);
+			axi_dac_dds_set_phase(dac, ((i * 2) + 1), (i % 2) ? 0 : 90000);
+			axi_dac_dds_set_scale(dac, ((i * 2) + 0), 50 * 1000);
+			axi_dac_dds_set_scale(dac, ((i * 2) + 1), 50 * 1000);
+			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i * 2) + 0), 0);
+			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i * 2) + 1), 0);
 		}
 	}
 	return 0;

@@ -68,7 +68,7 @@ int32_t adxl362_init(struct adxl362_dev **device,
 	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	adxl362_get_register_value(dev, &reg_value, ADXL362_REG_PARTID, 1);
-	if((reg_value != ADXL362_PART_ID))
+	if ((reg_value != ADXL362_PART_ID))
 		status = -1;
 
 	dev->selected_range = 2; // Measurement Range: +/- 2g (reset default).
@@ -143,12 +143,12 @@ void adxl362_get_register_value(struct adxl362_dev *dev,
 
 	buffer[0] = ADXL362_READ_REG;
 	buffer[1] = register_address;
-	for(index = 0; index < bytes_number; index++)
+	for (index = 0; index < bytes_number; index++)
 		buffer[index + 2] = read_data[index];
 	no_os_spi_write_and_read(dev->spi_desc,
 				 buffer,
 				 bytes_number + 2);
-	for(index = 0; index < bytes_number; index++)
+	for (index = 0; index < bytes_number; index++)
 		read_data[index] = buffer[index + 2];
 }
 
@@ -170,12 +170,12 @@ void adxl362_get_fifo_value(struct adxl362_dev *dev,
 	uint16_t index = 0;
 
 	spi_buffer[0] = ADXL362_WRITE_FIFO;
-	for(index = 0; index < bytes_number; index++)
+	for (index = 0; index < bytes_number; index++)
 		spi_buffer[index + 1] = buffer[index];
 	no_os_spi_write_and_read(dev->spi_desc,
 				 spi_buffer,
 				 bytes_number + 1);
-	for(index = 0; index < bytes_number; index++)
+	for (index = 0; index < bytes_number; index++)
 		buffer[index] = spi_buffer[index + 1];
 }
 

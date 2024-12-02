@@ -669,7 +669,7 @@ int ad405x_set_gp_mode(struct ad405x_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	switch(gp) {
+	switch (gp) {
 	case AD405X_GP_0 :
 		msk = AD405X_GP0_MODE_MSK;
 		break;
@@ -690,7 +690,7 @@ int ad405x_set_gp_mode(struct ad405x_dev *dev,
 	if (ret)
 		return ret;
 
-	switch(gp) {
+	switch (gp) {
 	case AD405X_GP_0 :
 		dev->gp0_mode = mode;
 		break;
@@ -718,7 +718,7 @@ enum ad405x_gp_mode ad405x_get_gp_mode(
 	if (!dev)
 		return -EINVAL;
 
-	switch(gp) {
+	switch (gp) {
 	case AD405X_GP_0 :
 		return dev->gp0_mode;
 	case AD405X_GP_1 :
