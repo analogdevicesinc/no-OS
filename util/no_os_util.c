@@ -541,7 +541,7 @@ uint64_t no_os_mul_u64_u32_div(uint64_t a, uint32_t mul, uint32_t divisor)
 bool no_os_is_big_endian(void)
 {
 	uint16_t a = 0x0100;
-	return (bool) *(uint8_t *)&a;
+	return (bool) * (uint8_t *)&a;
 }
 
 /* @brief Swap bytes in a buffer with a given step
