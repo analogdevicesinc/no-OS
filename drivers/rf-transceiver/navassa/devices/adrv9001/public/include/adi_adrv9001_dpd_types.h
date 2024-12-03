@@ -139,6 +139,7 @@ typedef struct adi_adrv9001_DpdCfg
 	int32_t clgcFilteredGain_HundredthdB;   /*!< filtered gain.  Only valid during Get. */
 	
 	uint32_t captureDelay_us;               /*!< Amount of time that capture will be delayed (beyond normal) relative to the start of the frame.  This parameter applies to both DPD and CLGC. */
+	bool enableRepeatedEstimationInTDD;     /*!< If true, will allow CLGC repeated capture during a FH frame in TDD mode */
 } adi_adrv9001_DpdCfg_t;
 
 typedef struct adi_adrv9001_DpdCoefficients
@@ -152,5 +153,15 @@ typedef struct adi_adrv9001_DpdFhRegions
     uint64_t startFrequency_Hz; //!< Carrier frequency greater than or equal to this is included in the region
     uint64_t endFrequency_Hz;   //!< Carrier frequency less than this is included in the region
 } adi_adrv9001_DpdFhRegions_t;
+
+typedef struct adi_adrv9001_DpdChannelStatus
+{
+    uint32_t numberOfSuccessfulIterations;  /*!< a count of successful estimations for DPD */
+    uint32_t numberOfIterations;            /*!< a count of successful captures for DPD and CLGC */
+    int32_t	txPeakPower_100th_dB;           /*!< peak TX power of capture in 100th of dBFS */
+    int32_t	rxPeakPower_100th_dB;           /*!< peak RX power of capture in 100th of dBFS */
+    int32_t	txAvgPower_100th_dB;            /*!< average TX power of capture in 100th of dBFS */
+    int32_t	rxAvgPower_100th_dB;            /*!< average RX power of capture in 100th of dBFS */
+} adi_adrv9001_DpdChannelStatus_t;
 
 #endif /* _ADI_ADRV9001_DPD_TYPES_H_ */

@@ -262,6 +262,7 @@ int main(void)
 	struct adi_common_ApiVersion api_version;
 	struct adi_adrv9001_ArmVersion arm_version;
 	struct adi_adrv9001_SiliconVersion silicon_version;
+	struct adi_adrv9001_StreamVersion stream_version;
 	struct adi_adrv9001_Device adrv9001_device = {0};
 	struct adrv9002_chip_info chip = {0};
 	struct adrv9002_rf_phy phy = {0};
@@ -402,11 +403,13 @@ int main(void)
 	adi_adrv9001_ApiVersion_Get(phy.adrv9001, &api_version);
 	adi_adrv9001_arm_Version(phy.adrv9001, &arm_version);
 	adi_adrv9001_SiliconVersion_Get(phy.adrv9001, &silicon_version);
+	adi_adrv9001_Stream_Version(phy.adrv9001, &stream_version);
 
-	printf("%s Rev %d.%d, Firmware %u.%u.%u.%u API version: %u.%u.%u successfully initialized\n",
+	printf("%s Rev %d.%d, Firmware %u.%u.%u,  Stream %u.%u.%u.%u,  API version: %u.%u.%u successfully initialized",
 	       "ADRV9002", silicon_version.major, silicon_version.minor,
-	       arm_version.majorVer, arm_version.minorVer,
-	       arm_version.maintVer, arm_version.rcVer, api_version.major,
+	       arm_version.majorVer, arm_version.minorVer, arm_version.maintVer,
+	       stream_version.majorVer, stream_version.minorVer,
+	       stream_version.maintVer, stream_version.buildVer, api_version.major,
 	       api_version.minor, api_version.patch);
 
 	/* Post AXI DAC/ADC setup, digital interface tuning */

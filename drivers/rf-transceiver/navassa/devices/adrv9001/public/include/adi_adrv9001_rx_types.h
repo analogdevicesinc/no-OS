@@ -167,7 +167,7 @@ typedef struct adi_adrv9001_GainIndexPinCfg
     adi_adrv9001_GpioPinCrumbSel_e gainIndex_01_00;
     adi_adrv9001_GpioPinCrumbSel_e gainIndex_03_02;
     adi_adrv9001_GpioPinCrumbSel_e gainIndex_05_04;
-    adi_adrv9001_GpioPinCrumbSel_e gainIndex_07_06;
+    adi_adrv9001_GpioPinCrumbSel_e gainChange_gainIndex_06;
 } adi_adrv9001_GainIndexPinCfg_t;
 
 /**

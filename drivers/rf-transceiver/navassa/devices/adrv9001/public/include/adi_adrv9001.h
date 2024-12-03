@@ -25,7 +25,7 @@ extern "C" {
 *********************************************************************************************************
 */
 /* "adi_adrv9001_user.h" contains the #define that other header file use */
-#include "adi_adrv9001_user.h"
+#include <adi_adrv9001_user.h>
 
 /* ADI specific header files */
 #include "adi_common_macros.h"

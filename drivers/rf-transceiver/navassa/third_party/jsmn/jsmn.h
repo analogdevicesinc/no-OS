@@ -1,7 +1,11 @@
 #ifndef __JSMN_H_
 #define __JSMN_H_
 
+#ifndef __KERNEL__
 #include <stddef.h>
+#else
+#include <linux/types.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
