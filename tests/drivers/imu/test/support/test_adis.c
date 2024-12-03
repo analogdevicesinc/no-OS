@@ -3839,7 +3839,7 @@ void test_adis_read_fls_mem_wr_cntr_2(void)
 	device_alloc.diag_flags.fls_mem_wr_cnt_exceed = false;
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
-	no_os_field_get_IgnoreAndReturn(adis_chip_info->fls_mem_wr_cntr_max+1);
+	no_os_field_get_IgnoreAndReturn(adis_chip_info->fls_mem_wr_cntr_max + 1);
 	retval = adis_read_fls_mem_wr_cntr(&device_alloc, &fls_mem_wr_cntr);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 	TEST_ASSERT_EQUAL_INT(true, device_alloc.diag_flags.fls_mem_wr_cnt_exceed);
