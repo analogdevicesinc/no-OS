@@ -376,7 +376,7 @@ int32_t ad5421_set(struct ad5421_dev *dev,
 	status = no_os_spi_write_and_read(dev->spi_desc,
 					  tx_buffer,
 					  3);
-	if (status != 3) {
+	if (status != 0) {
 		return -1;
 	} else {
 		return 0;
@@ -393,13 +393,13 @@ int32_t ad5421_set(struct ad5421_dev *dev,
 int32_t ad5421_get(struct ad5421_dev *dev)
 {
 	int32_t return_val = 0;
-	uint8_t rx_buffer[3] = {0, 0, 0};
+	uint8_t rx_buffer[3] = {AD5421_NO_OP, 0, 0};
 	int8_t status = 0;
 
 	status = no_os_spi_write_and_read(dev->spi_desc,
 					  rx_buffer,
 					  3);
-	if (status != 3) {
+	if (status != 0) {
 		return -1;
 	}
 	return_val |= (int32_t)(rx_buffer[1] << 8);
