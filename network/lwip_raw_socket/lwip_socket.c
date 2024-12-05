@@ -873,7 +873,27 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 
 	pcb = socket->pcb;
 
-	return tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
+	ret =  tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
+#ifdef NO_OS_LWIP_NETWORKING
+	/*
+	 * Currently, the LWIP networking layer doesn't implement packet RX
+	 * using interrupts, so we have to poll.
+	 *
+	 * Timeout defaults to 500ms
+	 */
+	int i = 0;
+	do {
+		ret = no_os_lwip_step(desc, NULL);
+		if (ret == 0) {
+			break;
+		}
+		no_os_mdelay(1);
+		i++;
+	} while (i < LWIP_POLLING_TIMEOUT_MS);
+
+#endif /* NO_OS_LWIP_NETWORKING */
+
+	return ret;
 }
 
 /**

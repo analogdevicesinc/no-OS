@@ -41,6 +41,7 @@
 #include "tcp_socket.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 
 #ifndef DISABLE_SECURE_SOCKET
 #include "noos_mbedtls_config.h"
@@ -104,6 +105,26 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 {
 	int32_t ret;
 
+#ifdef NO_OS_LWIP_NETWORKING
+	/*
+	 * Currently, the LWIP networking layer doesn't implement packet RX
+	 * using interrupts, so we have to poll.
+	 *
+	 * Timeout defaults to 500ms
+	 */
+	int i = 0;
+	do {
+		ret = no_os_lwip_step(sock->net->net, NULL);
+
+		if (ret == 0) {
+			break;
+		}
+
+		no_os_mdelay(1);
+		i++;
+	} while (i < LWIP_POLLING_TIMEOUT_MS);
+
+#endif /* NO_OS_LWIP_NETWORKING */
 	ret = sock->net->socket_recv(sock->net->net, sock->id, buff, len);
 	if (ret == -EAGAIN)
 		return MBEDTLS_ERR_SSL_WANT_READ;
