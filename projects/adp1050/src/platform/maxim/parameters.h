@@ -41,13 +41,13 @@
 
 #define INTC_DEVICE_ID		0
 
-#define UART_DEVICE_ID		0
+#define UART_DEVICE_ID		2
 #define UART_BAUDRATE		57600
 #define	UART_OPS		&max_uart_ops
 #define UART_EXTRA		&adp1050_uart_extra
 
 #define GPIO_PG_ALT_PORT	0
-#define GPIO_PG_ALT_PIN		24
+#define GPIO_PG_ALT_PIN		9
 #define GPIO_OPS		&max_gpio_ops
 #define GPIO_EXTRA		&adp1050_pg_alt_extra
 
