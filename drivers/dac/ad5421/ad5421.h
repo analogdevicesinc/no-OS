@@ -51,6 +51,7 @@
 #define AD5421_CMDWRGAIN        4
 #define AD5421_CMDRST			7
 #define AD5421_CMDMEASVTEMP     8
+#define AD5421_NO_OP			9
 #define AD5421_CMDRDDAC         129
 #define AD5421_CMDRDCTRL		130
 #define AD5421_CMDRDOFFSET      131
