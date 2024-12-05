@@ -307,7 +307,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_IBRO_CLK);
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
