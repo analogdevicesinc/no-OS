@@ -58,31 +58,41 @@ static int stm32_spi_config(struct no_os_spi_desc *desc)
 		switch (div) {
 		case 0 ... 2:
 			prescaler = SPI_BAUDRATEPRESCALER_2;
+			desc->max_speed_hz = sdesc->input_clock / 2;
 			break;
 		case 3 ... 4:
 			prescaler = SPI_BAUDRATEPRESCALER_4;
+			desc->max_speed_hz = sdesc->input_clock / 4;
 			break;
 		case 5 ... 8:
 			prescaler = SPI_BAUDRATEPRESCALER_8;
+			desc->max_speed_hz = sdesc->input_clock / 8;
 			break;
 		case 9 ... 16:
 			prescaler = SPI_BAUDRATEPRESCALER_16;
+			desc->max_speed_hz = sdesc->input_clock / 16;
 			break;
 		case 17 ... 32:
 			prescaler = SPI_BAUDRATEPRESCALER_32;
+			desc->max_speed_hz = sdesc->input_clock / 32;
 			break;
 		case 33 ... 64:
 			prescaler = SPI_BAUDRATEPRESCALER_64;
+			desc->max_speed_hz = sdesc->input_clock / 64;
 			break;
 		case 65 ... 128:
 			prescaler = SPI_BAUDRATEPRESCALER_128;
+			desc->max_speed_hz = sdesc->input_clock / 128;
 			break;
 		default:
 			prescaler = SPI_BAUDRATEPRESCALER_256;
+			desc->max_speed_hz = sdesc->input_clock / 256;
 			break;
 		}
-	} else
+	} else {
 		prescaler = SPI_BAUDRATEPRESCALER_64;
+		desc->max_speed_hz = sdesc->input_clock / 64;
+	}
 
 	switch (desc->device_id) {
 #if defined(SPI1)
