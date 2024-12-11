@@ -170,12 +170,10 @@ ifeq (y,$(strip $(NETWORKING)))
 CFLAGS += -DNO_OS_NETWORKING
 endif
 
-ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
-CFLAGS += -DDISABLE_SECURE_SOCKET
-endif
+# ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
+# CFLAGS += -DDISABLE_SECURE_SOCKET
+# endif
 
-# Mbed also has an INC_DIRS variable, so this needs to be NO_OS_INC_DIRS
-NO_OS_INC_DIRS := $(patsubst %/,%,$(NO_OS_INC_DIRS))
 SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 
 # Get all .c, .cpp and .h files from SRC_DIRS
@@ -184,7 +182,6 @@ SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.cpp))
 ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.S))
 ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.s))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
-INCS     += $(foreach dir, $(NO_OS_INC_DIRS), $(call rwildcard, $(dir),*.h))
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
 # all files from inside the directory will be ignored
@@ -256,7 +253,6 @@ PHONY += all
 ifneq ($(wildcard $(BUILD_LOCK)),)
 all:
 	$(call print_build_type,$(PLATFORM))
-	$(MAKE) --no-print-directory update
 	$(MAKE) --no-print-directory build
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
@@ -304,41 +300,32 @@ LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
 define generate_cflags_func
-echo $(subst \",\\\",$(1)) >> $(CFLAGS_FILE).tmp
+echo $(subst \",\\\",$(1)) >> $(CFLAGS_FILE)
 endef
 
 define generate_cppflags_func
-echo $(subst \",\\\",$(1)) >> $(CPPFLAGS_FILE).tmp
+echo $(subst \",\\\",$(1)) >> $(CPPFLAGS_FILE)
 endef
 
 define generate_asflags_func
-echo $(subst \",\\\",$(1)) >> $(ASFLAGS_FILE).tmp
+echo $(subst \",\\\",$(1)) >> $(ASFLAGS_FILE)
 endef
 
 define generate_objs_func
-echo $(1) >> $(OBJS_FILE).tmp
-endef
-
-define overwrite_file_if_different
-	if ! diff $(1) $(2) &> /dev/null ; then \
-		mv -f $(1) $(2) ; \
-	fi
-endef
-
-define generate_flags_file
-	echo -n > $(1).tmp
-	$(call process_items_in_chunks,$(2),10,$(3))
-	$(call overwrite_file_if_different,$(1).tmp,$(1))
-	rm -f $(1).tmp
+echo $(1) >> $(OBJS_FILE)
 endef
 
 PHONY += pre_build
 pre_build:
 	$(call print,Generating build flags)
-	$(call generate_flags_file,$(CFLAGS_FILE),$(CFLAGS),generate_cflags_func)
-	$(call generate_flags_file,$(CPPFLAGS_FILE),$(CPPFLAGS),generate_cppflags_func)
-	$(call generate_flags_file,$(ASFLAGS_FILE),$(ASFLAGS),generate_asflags_func)
-	$(call generate_flags_file,$(OBJS_FILE),$(OBJS),generate_objs_func)
+	echo -n > $(CFLAGS_FILE)
+	$(call process_items_in_chunks,$(CFLAGS),10,generate_cflags_func)
+	echo -n > $(CPPFLAGS_FILE)
+	$(call process_items_in_chunks,$(CPPFLAGS),10,generate_cppflags_func)
+	echo -n > $(ASFLAGS_FILE)
+	$(call process_items_in_chunks,$(ASFLAGS),10,generate_asflags_func)
+	echo -n > $(OBJS_FILE)
+	$(call process_items_in_chunks,$(sort $(OBJS)),10,generate_objs_func)
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	$(call print,[LD] $(notdir $(OBJS)))

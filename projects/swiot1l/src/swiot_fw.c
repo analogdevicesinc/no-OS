@@ -74,7 +74,7 @@ int step_callback(void *arg)
 *******************************************************************************/
 int swiot_firmware()
 {
-	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
+	uint8_t adin1110_mac_address[6] = {0x00, 0xe0, 0x22, 0x03, 0x25, 0x60};
 	struct ad74413r_iio_desc_init_param ad74413r_iio_ip;
 	struct no_os_irq_ctrl_desc *ad74413r_irq_desc;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
