@@ -18,10 +18,14 @@ INCLUDES = -I../include/ \
 	 -I./axi_core/spi_engine \
 	 -I./axi_core/axi_dmac \
 	 -I./axi_core/clk_axi_clkgen \
+	 -I./axi_core/jesd204 \
 	 -I./platform/xilinx \
 	 -I../projects/adrv9009/src/devices/adi_hal \
+	 -I../projects/adrv9009/profiles/tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88 \
 	 -I../iio \
-	 -I./display
+	 -I./display \
+	 -I./rf-transceiver/talise/api \
+	 -I./rf-transceiver/talise/firmware
 
 IIOD_FLAGS += -DIIO_SUPPORT
 
