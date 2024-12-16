@@ -790,21 +790,20 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 
 	for (i = 0; i < ports; i++) {
 		ret = adin1110_mdio_read_c45(desc, ADIN1110_MDIO_PHY_ID(i),
-					     0, ADIN1110_MI_CONTROL_REG, &reg_val);
+					     0x1E, ADIN1110_CRSM_SFT_PD_CNTRL_REG, &reg_val);
 		if (ret)
 			return ret;
 
 		/* Get the PHY out of software power down to start the autonegotiation process*/
-		sw_pd = no_os_field_get(ADIN1110_MI_SFT_PD_MASK, reg_val);
+		sw_pd = no_os_field_get(ADIN1110_CRSM_SFT_PD_MASK, reg_val);
 		if (sw_pd) {
-			while (reg_val & ADIN1110_MI_SFT_PD_MASK) {
-				reg_val &= ~ADIN1110_MI_SFT_PD_MASK;
+			while (reg_val & ADIN1110_CRSM_SFT_PD_MASK) {
 				ret = adin1110_mdio_write_c45(desc, ADIN1110_MDIO_PHY_ID(i),
-							      0, ADIN1110_MI_CONTROL_REG, reg_val);
+							      0x1E, ADIN1110_CRSM_SFT_PD_CNTRL_REG, 0x0);
 				if (ret)
 					return ret;
 				ret = adin1110_mdio_read_c45(desc, ADIN1110_MDIO_PHY_ID(i),
-							     0, ADIN1110_MI_CONTROL_REG, &reg_val);
+							     0x1E, ADIN1110_CRSM_SFT_PD_CNTRL_REG, &reg_val);
 				if (ret)
 					return ret;
 			}
