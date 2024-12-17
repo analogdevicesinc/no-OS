@@ -35,6 +35,8 @@
 #include <stdio.h>
 #include <string.h>
 
+// TODO why?? is this an absolute path
+#include "iio_adt75.h"
 #include "swiot1l_mqtt.h"
 #include "common_data.h"
 #include "no_os_util.h"
@@ -46,6 +48,8 @@
 #include "no_os_timer.h"
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
+#include "maxim_trng.h"
+#include "mbedtls/debug.h"
 
 static void message_handler(struct mqtt_message_data *msg)
 {
@@ -55,12 +59,14 @@ static void message_handler(struct mqtt_message_data *msg)
 
 int swiot1l_mqtt()
 {
-	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x60};
+
+	uint8_t adin1110_mac_address[6] = {0x00, 0xe0, 0x22, 0x03, 0x25, 0x60};
 	uint8_t send_buff[256];
 	uint8_t read_buff[256];
 	struct ad74413r_decimal val;
 	char val_buff[32];
 	uint32_t msg_len;
+	int32_t adt75_val;
 	int ret;
 
 	struct ad74413r_desc *ad74413r;
@@ -68,6 +74,9 @@ int swiot1l_mqtt()
 		.platform_ops = &adin1110_lwip_ops,
 		.mac_param = &adin1110_ip,
 	};
+
+	struct adt75_desc *adt75;
+
 	struct lwip_network_desc *lwip_desc;
 	struct tcp_socket_desc *tcp_socket;
 	struct no_os_timer_init_param adc_demo_tip = {
@@ -78,6 +87,14 @@ int swiot1l_mqtt()
 		.extra = NULL,
 	};
 	uint32_t connect_timeout = 5000;
+
+    ret = adt75_init(&adt75, &adt75_ip);
+    if (ret) {
+        printf("Failed to initialise ADT75 - %d\r\n", ret);
+        return ret;
+    }
+
+    printf("ADT75 Sensor Initialised - %d\r\n", ret);
 
 	struct no_os_gpio_desc *ad74413r_ldac_gpio;
 	struct no_os_gpio_desc *ad74413r_reset_gpio;
@@ -157,11 +174,33 @@ int swiot1l_mqtt()
 		pr_err("LWIP init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
 	}
-
 	struct tcp_socket_init_param tcp_ip = {
 		.net = &lwip_desc->no_os_net,
-		.max_buff_size = 0
+		.max_buff_size = 0,
+
 	};
+	
+	char my_ca_cert[] = CA_CERT;
+	char my_cli_cert[] = DEVICE_CERT;
+	char my_cli_pk[] = DEVICE_PRIVATE_KEY;
+
+	struct no_os_trng_init_param trng_ip = {
+		.platform_ops = &max_trng_ops
+	};
+
+	struct secure_init_param secure_params = {
+		.trng_init_param = &trng_ip,
+		.ca_cert = my_ca_cert,
+		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
+		.cli_cert = my_cli_cert,
+		.cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
+		.cli_pk = my_cli_pk,
+		.cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk),
+		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE
+	};
+
+
+	tcp_ip.secure_init_param = &secure_params;
 
 	ret = socket_init(&tcp_socket, &tcp_ip);
 	if (ret) {
@@ -171,8 +210,8 @@ int swiot1l_mqtt()
 
 	/* The default settings are 192.168.97.1:1883 */
 	struct socket_address ip_addr = {
-		.addr = SWIOT1L_MQTT_SERVER_IP,
-		.port = SWIOT1L_MQTT_SERVER_PORT
+		.port = 8883,
+		.addr = SWIOT1L_MQTT_SERVER_IP
 	};
 
 	struct mqtt_desc *mqtt;
@@ -200,7 +239,7 @@ int swiot1l_mqtt()
 		.username = NULL,
 		.password = NULL
 	};
-
+	//ret is not zero
 	ret = socket_connect(tcp_socket, &ip_addr);
 	if (ret) {
 		pr_err("Couldn't connect to the remote TCP socket: %d (%s)\n", ret,
@@ -290,8 +329,54 @@ int swiot1l_mqtt()
 			goto free_mqtt;
 		}
 
+		ret = adt75_get_single_temp(adt75, &adt75_val);
+		memset(val_buff, 0, sizeof(val_buff));
+
+		if (!ret) {
+			msg_len = snprintf(val_buff, sizeof(val_buff), "%.03f", ((double)adt75_val / 1000));
+			printf("Temperature reading: \e[96m%.03f\e[0m degrees C\r\n\r\n", ((double) adt75_val / 1000));
+		} else {
+			msg_len = snprintf(val_buff, sizeof(val_buff), "Null");
+			printf("No Valid Data - %d\r\n", ret);
+		}
+
+		test_msg.len = msg_len;
+		ret = mqtt_publish(mqtt, "adt75/temperature", &test_msg);
+
 		no_os_mdelay(1000);
 	}
+	
+
+	printf("\nsubscribing \n");
+	ret = mqtt_subscribe(mqtt, "test", MQTT_QOS0, NULL);
+	if (ret) {
+		// pr_err("Error mqtt_subscribe!\n");
+		goto free_mqtt;
+	}
+
+	pr_info("Subscribed to topic: %s\n", "test");
+
+	ret = mqtt_yield(mqtt, 50000);
+	if (ret) {
+		pr_err("Error mqtt_yield!\n");
+		goto free_mqtt;
+	}
+
+	// ret = mqtt_subscribe(mqtt, "test", MQTT_QOS0, NULL);
+	// if (ret) {
+	// 	pr_err("Error mqtt_subscribe!\n");
+	// 	goto free_mqtt;
+	// }
+	// printf("Subscribed!!");
+	// ret = mqtt_yield(mqtt, 50000);
+	// if (ret) {
+	// 	pr_err("Error mqtt_yield!\n");
+	// 	goto free_mqtt;
+	// }
+
+
+
+
 
 	return 0;
 
@@ -324,3 +409,5 @@ free_gpio:
 
 	return ret;
 }
+
+

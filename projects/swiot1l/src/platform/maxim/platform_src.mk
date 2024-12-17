@@ -7,7 +7,10 @@ INCS += $(PLATFORM_DRIVERS)/maxim_delay.h     \
         $(PLATFORM_DRIVERS)/maxim_i2c.h       \
         $(PLATFORM_DRIVERS)/maxim_timer.h      \
         $(PLATFORM_DRIVERS)/maxim_uart.h      \
-        $(PLATFORM_DRIVERS)/maxim_uart_stdio.h
+        $(PLATFORM_DRIVERS)/maxim_uart_stdio.h \
+        $(PLATFORM_DRIVERS)/maxim_trng.h       
+        //$(NO-OS)/libraries/mbedtls/include/mbedtls/memory_buffer_alloc.h
+
 
 SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c     \
         $(PLATFORM_DRIVERS)/maxim_gpio.c      \
@@ -19,4 +22,6 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c     \
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.c  \
         $(PLATFORM_DRIVERS)/maxim_irq.c       \
         $(PLATFORM_DRIVERS)/maxim_uart.c      \
-        $(PLATFORM_DRIVERS)/maxim_uart_stdio.c
+        $(PLATFORM_DRIVERS)/maxim_uart_stdio.c \
+        $(PLATFORM_DRIVERS)/maxim_trng.c
+

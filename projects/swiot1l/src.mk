@@ -102,7 +102,7 @@ endif
 ifeq (y,$(strip $(SWIOT1L_MQTT_EXAMPLE)))
 
 ifndef SWIOT1L_MQTT_SERVER_IP
-SWIOT1L_MQTT_SERVER_IP=192.168.0.80
+SWIOT1L_MQTT_SERVER_IP=10.32.51.2
 endif
 
 ifndef SWIOT1L_MQTT_SERVER_PORT
@@ -117,6 +117,7 @@ MBED_TLS_CONFIG_FILE = $(PROJECT)/src/app/noos_mbedtls_config.h
 
 LIBRARIES += mbedtls
 INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls/ssl.h
+INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls/memory_buffer_alloc.h
 SRC_DIRS += $(NO-OS)/libraries/mbedtls/library
 
 

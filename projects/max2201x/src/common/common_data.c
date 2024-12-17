@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the swiot1l project.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by max2201x examples.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,49 +30,40 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "../platform_includes.h"
 #include "common_data.h"
-#include "no_os_error.h"
 
-#ifdef SWIOT1L_MQTT_EXAMPLE
+struct no_os_uart_init_param max2201x_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.platform_ops = UART_OPS,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+};
 
-#include "swiot1l_mqtt.h"
+struct no_os_spi_init_param max2201x_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.extra = SPI_EXTRA,
+	.max_speed_hz = SPI_BAUDRATE,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+};
 
-#elif SWIOT1L_DEFAULT_FW
+struct no_os_gpio_init_param max2201x_rstb_ip = {
+	.port = GPIO_RSTB_PORT_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.number = GPIO_RSTB_PIN_NUM,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
 
-#include "swiot_fw.h"
-
-#endif
-
-/***************************************************************************//**
- * @brief Main function
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	
-	struct no_os_uart_desc *uart_desc;
-	int ret;
-
-	ret = no_os_uart_init(&uart_desc, &uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	printf("\n");
-
-	printf("\e[H\e[2J\e[93mStarting MQTT Example Program:\e[0m\r\n\r\n");
-	ret = swiot1l_mqtt();
-	printf("\r\n\r\n\e[93mExit with code\e[0m -> %d\r\n", ret);
-
-
-	return ret;
-#ifdef SWIOT1L_MQTT_EXAMPLE
-	return swiot1l_mqtt();
-#elif SWIOT1L_DEFAULT_FW
-	return swiot_firmware();
-#elif SWIOT1L_DEFAULT_FW + SWIOT1L_MQTT_EXAMPLE != 1
-#error Invalid example selection. Only one example may be selected.
-#endif
-}
+struct max2201x_init_param max2201x_ip = {
+	.chip_id = ID_MAX22017,
+	.comm_param = &max2201x_spi_ip,
+	.crc_en = false,
+	.ext_dac_ref = false,
+	.rstb_param = &max2201x_rstb_ip,
+};

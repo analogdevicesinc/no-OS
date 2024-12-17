@@ -41,10 +41,12 @@
 #include "tcp_socket.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_trng.h"
+#include "no_os_delay.h"
+
 
 #ifndef DISABLE_SECURE_SOCKET
 #include "noos_mbedtls_config.h"
-#include "no_os_trng.h"
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
@@ -72,6 +74,15 @@
 /******************************************************************************/
 
 #ifndef DISABLE_SECURE_SOCKET
+
+static void my_debug(void *ctx, int level,
+                     const char *file, int line,
+                     const char *str)
+{
+    //(void)ctx; // ctx is unused, so suppress the warning
+    //printf("%s:%04d: %s", file, line, str);
+}
+
 /**
  * @struct secure_socket_desc
  * @brief Fields used by secure socket
@@ -91,6 +102,7 @@ struct secure_socket_desc {
 	/** Mbedtls tls context */
 	mbedtls_ssl_context	ssl;
 };
+
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
@@ -103,7 +115,22 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 			size_t len)
 {
 	int32_t ret;
-
+	#ifdef NO_OS_LWIP_NETWORKING
+		/*
+		 * Currently, the LWIP networking layer doesn't implement packet RX
+		 * using interrupts, so we have to poll.
+		 * 
+		 * Adding this as a workaround, based off this commit: https://github.com/analogdevicesinc/no-OS/commit/8ca2a15b8b7cc7a53985bf5a773bdd99f4bc63bc#diff-f9781ad4653f9192f0521846b4116a5b34ae3c2abd2c4256ee0a813e3f947aa4R158
+		 * 
+		 * Previously this polling was only applied to the mqtt layer
+		 */
+		int i = 500;
+		while(i>0){
+		no_os_lwip_step(sock->net->net, NULL);
+		no_os_mdelay(1);
+		i--;
+		}
+	#endif /*NO_OS_LWIP_NETWORKING*/
 	ret = sock->net->socket_recv(sock->net->net, sock->id, buff, len);
 	if (ret == -EAGAIN)
 		return MBEDTLS_ERR_SSL_WANT_READ;
@@ -141,23 +168,25 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 
 	if (!desc || !param)
 		return -1;
-
 	ldesc = (typeof(ldesc))no_os_calloc(1, sizeof(*ldesc));
-	if (!ldesc)
+	if (ldesc == NULL)
 		return -1;
-
-	/* Initialize structures */
+	printf(&ldesc);
+	// /* Initialize structures */
 	mbedtls_ssl_config_init(&ldesc->conf);
 	mbedtls_x509_crt_init(&ldesc->cacert);
 	mbedtls_x509_crt_init(&ldesc->clicert);
 	mbedtls_pk_init(&ldesc->pkey);
 	mbedtls_ssl_init(&ldesc->ssl);
+	mbedtls_ssl_conf_dbg(&ldesc->conf, my_debug, NULL);
+	mbedtls_debug_set_threshold(4);
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		ldesc->trng = NULL;
 		goto exit;
 	}
+
 
 	/* Set default configuration: TLS client socket */
 	ret = mbedtls_ssl_config_defaults(&ldesc->conf,
@@ -169,16 +198,16 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 
 	if (param->ca_cert) {
 #ifdef ENABLE_PEM_CERT
-		ret = mbedtls_x509_crt_parse(&ldesc->cacert,
+		ret = mbedtls_x509_crt_parse( &ldesc->cacert,
 #else
 		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->cacert,
 #endif /* ENABLE_PEM_CERT */
-					     (const unsigned char *)param->ca_cert,
-					     (size_t)param->ca_cert_len);
+					      (const unsigned char *)param->ca_cert,
+					      (size_t)param->ca_cert_len);
 		if (ret < 0)
 			goto exit;
 
-		mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->cacert, NULL);
+		mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->cacert, NULL );
 		/* Verify server identity */
 		mbedtls_ssl_conf_authmode(&ldesc->conf,
 					  param->cert_verify_mode);
@@ -187,24 +216,23 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		mbedtls_ssl_conf_authmode(&ldesc->conf,
 					  MBEDTLS_SSL_VERIFY_NONE);
 	}
-
 	if (param->cli_cert) {
 		if (!param->cli_pk) {
 			ret = -EINVAL;
 			goto exit;
 		}
 #ifdef ENABLE_PEM_CERT
-		ret = mbedtls_x509_crt_parse(&ldesc->clicert,
+		ret = mbedtls_x509_crt_parse( &ldesc->clicert,
 #else
 		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->clicert,
 #endif /* ENABLE_PEM_CERT */
-					     (const unsigned char *)param->cli_cert,
-					     (size_t)param->cli_cert_len);
+					      (const unsigned char *)param->cli_cert,
+					      (size_t)param->cli_cert_len);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto exit;
 		ret = mbedtls_pk_parse_key(&ldesc->pkey,
 					   (const unsigned char *)param->cli_pk,
-					   param->cli_pk_len, NULL, 0);
+					   param->cli_pk_len, NULL, 0 );
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto exit;
 
@@ -235,7 +263,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 			    (mbedtls_ssl_recv_t *)tls_net_recv, NULL);
 
 	*desc = ldesc;
-
 	return 0;
 
 exit:
@@ -262,31 +289,29 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 
 	if (!desc || !param)
 		return -1;
-
 	ldesc = (typeof(ldesc))no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
-
 	ldesc->net = param->net;
-
 	if (param->max_buff_size != 0)
 		buff_size = param->max_buff_size;
 	else
 		buff_size = DEFAULT_CONNECTION_BUFFER_SIZE;
 
 	ret = ldesc->net->socket_open(ldesc->net->net, &ldesc->id, PROTOCOL_TCP,
-				      buff_size);
+				      buff_size);	  
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		no_os_free(ldesc);
 		return ret;
 	}
 
 #ifndef DISABLE_SECURE_SOCKET
-	if (!param->secure_init_param)
+	if (!param->secure_init_param){
 		ldesc->secure = NULL;
-	else
+	}
+	else{
 		ret = stcp_socket_init(&ldesc->secure, ldesc,
-				       param->secure_init_param);
+				       param->secure_init_param);}
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		ldesc->net->socket_close(ldesc->net->net, ldesc->id);
 		no_os_free(ldesc);
@@ -339,7 +364,22 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 					desc->id, addr);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
-
+	// #ifdef NO_OS_LWIP_NETWORKING
+	// 	/*
+	// 	 * Currently, the LWIP networking layer doesn't implement packet RX
+	// 	 * using interrupts, so we have to poll.
+	// 	 * 
+	// 	 * Adding this as a  workaround, based off this commit: https://github.com/analogdevicesinc/no-OS/commit/8ca2a15b8b7cc7a53985bf5a773bdd99f4bc63bc#diff-f9781ad4653f9192f0521846b4116a5b34ae3c2abd2c4256ee0a813e3f947aa4R158
+	// 	 * 
+	// 	 * Previously this polling was only applied to the mqtt layer
+	// 	 */
+	// 	int i = 500;
+	// 	while(i>0){
+	// 	no_os_lwip_step(desc->net->net, NULL);
+	// 	no_os_mdelay(1);
+	// 	i--;
+	// 	}
+	// #endif /*NO_OS_LWIP_NETWORKING*/
 #ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure) {
 		do {

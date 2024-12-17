@@ -36,4 +36,17 @@
 
 int swiot1l_mqtt();
 
+// /*
+//  * @brief Builds an MQTT endpoint .
+//  *
+//  * @param[in] type The enumerated type of the sample.
+//  * @param[out] endpoint A buffer with sufficient capacity to hold the built endpoint. If
+//  * successful, contains a null-terminated string of the endpoint.
+//  * @param[in] endpoint_size The size of \p out_endpoint in bytes.
+//  */
+// void create_mqtt_endpoint(
+// 	const char* broker_address,
+// 	char* endpoint,
+// 	size_t endpoint_size);
+
 #endif // __SWIOT1L_MQTT_H__

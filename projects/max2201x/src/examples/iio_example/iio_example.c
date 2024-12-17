@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the swiot1l project.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @file   iio_example.c
+ *   @brief  IIO example source file for max2201x.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,49 +30,52 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "../platform_includes.h"
+#include "iio_example.h"
+#include "iio_max2201x.h"
 #include "common_data.h"
-#include "no_os_error.h"
+#include "no_os_print_log.h"
+#include "iio_app.h"
 
-#ifdef SWIOT1L_MQTT_EXAMPLE
-
-#include "swiot1l_mqtt.h"
-
-#elif SWIOT1L_DEFAULT_FW
-
-#include "swiot_fw.h"
-
-#endif
-
-/***************************************************************************//**
- * @brief Main function
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
+int iio_example_main()
 {
-	
-	struct no_os_uart_desc *uart_desc;
 	int ret;
 
-	ret = no_os_uart_init(&uart_desc, &uart_ip);
+	struct max2201x_iio_desc *max2201x_iio_desc;
+	struct max2201x_iio_desc_init_param max2201x_iio_ip = {
+		.max2201x_init_param = &max2201x_ip,
+	};
+
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	ret = max2201x_iio_init(&max2201x_iio_desc, &max2201x_iio_ip);
 	if (ret)
-		return ret;
+		goto exit;
 
-	no_os_uart_stdio(uart_desc);
-	printf("\n");
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "max2201x",
+			.dev = max2201x_iio_desc,
+			.dev_descriptor = max2201x_iio_desc->iio_dev,
+		},
+	};
 
-	printf("\e[H\e[2J\e[93mStarting MQTT Example Program:\e[0m\r\n\r\n");
-	ret = swiot1l_mqtt();
-	printf("\r\n\r\n\e[93mExit with code\e[0m -> %d\r\n", ret);
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = max2201x_uart_ip;
 
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto remove_iio_max2201x;
 
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+
+remove_iio_max2201x:
+	max2201x_iio_remove(max2201x_iio_desc);
+exit:
+	if (ret)
+		printf("Error!\n");
 	return ret;
-#ifdef SWIOT1L_MQTT_EXAMPLE
-	return swiot1l_mqtt();
-#elif SWIOT1L_DEFAULT_FW
-	return swiot_firmware();
-#elif SWIOT1L_DEFAULT_FW + SWIOT1L_MQTT_EXAMPLE != 1
-#error Invalid example selection. Only one example may be selected.
-#endif
 }
