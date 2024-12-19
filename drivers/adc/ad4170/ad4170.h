@@ -990,7 +990,8 @@ enum ad4170_id {
 	ID_AD4170,
 	ID_AD4171,
 	ID_AD4172,
-	ID_AD4190
+	ID_AD4190,
+	ID_AD4195
 };
 
 /**
