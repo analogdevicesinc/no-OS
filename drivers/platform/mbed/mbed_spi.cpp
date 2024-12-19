@@ -81,7 +81,8 @@ int32_t mbed_spi_init(struct no_os_spi_desc **desc,
 	spi_desc->chip_select = param->chip_select;
 	spi_desc->mode = param->mode;
 	spi_desc->max_speed_hz = param->max_speed_hz;
-
+	spi_desc->bit_order = param->bit_order;
+	
 	/* Allocate memory for mbed_spi_desc structure */
 	mbed_spi_desc = (struct mbed_spi_desc *)calloc(1, sizeof(*mbed_spi_desc));
 	if (!mbed_spi_desc)
