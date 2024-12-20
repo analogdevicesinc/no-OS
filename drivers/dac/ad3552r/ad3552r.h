@@ -179,6 +179,12 @@ enum ad3552r_id {
 	AD3552R_ID
 };
 
+enum ad3552r_io_mode {
+	AD3552R_SPI,
+	AD3552R_DUAL_SPI,
+	AD3552R_QUAD_SPI,
+};
+
 enum ad3552r_ch_vref_select {
 	/* Internal source with Vref I/O floating */
 	AD3552R_INTERNAL_VREF_PIN_FLOATING,
@@ -399,6 +405,7 @@ struct ad3552r_desc {
 	uint8_t axi_xfer_size;
 	uint8_t crc_table[NO_OS_CRC8_TABLE_SIZE];
 	uint8_t chip_id;
+	uint8_t num_spi_data_lanes;
 	uint8_t crc_en : 1;
 	uint8_t is_simultaneous : 1;
 	uint8_t single_transfer : 1;
