@@ -120,6 +120,7 @@ struct ad3552r_init_param default_ad3552r_param = {
 	},
 	.ldac_gpio_param_optional = &gpio_ldac_param,
 	.reset_gpio_param_optional = &gpio_reset_param,
+	.sdo_drive_strength = 1,
 	.channels = {
 		[0] = {
 			.en = 1,
