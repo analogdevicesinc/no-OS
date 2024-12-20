@@ -41,9 +41,15 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-enum {
+enum axi_iface {
 	AXI_DAC_BUS_TYPE_NONE,
 	AXI_DAC_BUS_TYPE_QSPI,
+};
+
+enum axi_io_mode {
+	AXI_DAC_IO_MODE_SPI,
+	AXI_DAC_IO_MODE_DSPI,
+	AXI_DAC_IO_MODE_QSPI,
 };
 
 /**
@@ -194,6 +200,9 @@ int32_t axi_dac_bus_write(struct axi_dac *dac,
 /** AXI DAC Set DDR (bus double-data-rate) mode */
 int32_t axi_dac_set_ddr(struct axi_dac *dac,
 			bool enable);
+/** AXI DAC set IO mode */
+int32_t axi_dac_set_io_mode(struct axi_dac *dac,
+			    enum axi_io_mode mode);
 /** AXI DAC Set data stream mode */
 int32_t axi_dac_set_data_stream(struct axi_dac *dac,
 				bool enable);

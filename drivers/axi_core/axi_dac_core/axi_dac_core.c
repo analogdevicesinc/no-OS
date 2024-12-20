@@ -86,6 +86,7 @@
 #define AXI_DAC_ADDRESS(x)			((x << 24) & 0xff000000)
 #define AXI_DAC_STREAM				NO_OS_BIT(1)
 #define AXI_DAC_TRANSFER_DATA			NO_OS_BIT(0)
+#define AXI_DAC_IO_MODE(x)			((x << 2) & 0x0000000c)
 #define AXI_DAC_STREAM_ENABLE			(AXI_DAC_STREAM | \
 						AXI_DAC_TRANSFER_DATA)
 
@@ -521,6 +522,20 @@ int32_t axi_dac_set_ddr(struct axi_dac *dac, bool enable)
 {
 	axi_dac_update_bits(dac, AXI_DAC_REG_CNTRL_2, AXI_DAC_SDR_DDR_N,
 			    enable ? 0 : AXI_DAC_SDR_DDR_N);
+
+	return 0;
+}
+
+/**
+ * @brief AXI DAC Set IO mode
+ * @param dac - The device structure.
+ * @param mode - enum axi_io_mode.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_dac_set_io_mode(struct axi_dac *dac, enum axi_io_mode mode)
+{
+	axi_dac_update_bits(dac, AXI_DAC_REG_CUSTOM_CTRL,
+			    AXI_DAC_IO_MODE(0x03), AXI_DAC_IO_MODE(mode));
 
 	return 0;
 }
