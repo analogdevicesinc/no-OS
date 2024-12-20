@@ -86,6 +86,7 @@ DAC
 .. toctree::
    :maxdepth: 1
 
+   projects/eval-ad8460
    projects/max22017
 
 TEMPERATURE
