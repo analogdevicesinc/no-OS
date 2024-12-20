@@ -1389,6 +1389,12 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 		}
 	}
 
+	/* Clean reset flags. */
+	err = ad3552r_write_reg(ldesc, AD3552R_REG_ADDR_ERR_STATUS,
+				AD3552R_MASK_RESET_STATUS);
+	if (err)
+		return err;
+
 	err = ad3552r_check_scratch_pad(ldesc);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Scratch pad test failed: %"PRIi32"\n", err);
