@@ -45,6 +45,7 @@ DIGITAL TO ANALOG CONVERTERS
 .. toctree::
    :maxdepth: 1
 
+   drivers/ad8460
    drivers/max22017
 
 FREQUENCY GENERATORS
