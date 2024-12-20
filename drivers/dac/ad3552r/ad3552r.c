@@ -1395,6 +1395,25 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	if (err)
 		return err;
 
+	/*
+	 * FPGA HDL keeps QSPI pin low for ad355xr, so for the whole family
+	 * SPI "multi IO" mode is set appropriately for each working mode.
+	 *
+	 * Whatever is the SPI IO mode, reading in DDR is never possible.
+	 * R/W as D/QSPI is also possible for the secondary region.
+	 *
+	 * When not streaming, so in configuration mode or raw sammple R/W,
+	 * staying instruction mode, simple SPI SDR.
+	 *
+	 * When streaming, setting streamign mode and best high speed mode.
+	 */
+	err = _ad3552r_update_reg_field(ldesc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_B,
+					AD3552R_MASK_SINGLE_INST,
+					AD3552R_MASK_SINGLE_INST);
+	if (err < 0)
+		return err;
+
 	err = ad3552r_check_scratch_pad(ldesc);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Scratch pad test failed: %"PRIi32"\n", err);
@@ -1597,6 +1616,13 @@ static int ad3552r_hs_buffer_preenable(struct ad3552r_desc *desc)
 {
 	int ret, loop_len;
 
+	/* Set target into streaming mode. */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_B,
+					AD3552R_MASK_SINGLE_INST, 0);
+	if (ret)
+		return ret;
+
 	/* Need to keep loop len. */
 	ret = _ad3552r_update_reg_field(desc,
 					AD3552R_REG_ADDR_TRANSFER_REGISTER,
@@ -1701,6 +1727,14 @@ static int ad3552r_hs_buffer_postdisable(struct ad3552r_desc *desc)
 					AD3552R_REG_ADDR_TRANSFER_REGISTER,
 					AD3552R_MASK_MULTI_IO_MODE,
 					AD3552R_SPI);
+	if (ret)
+		return ret;
+
+	/* Back to single instruction mode, disabling loop. */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_B,
+					AD3552R_MASK_SINGLE_INST,
+					AD3552R_MASK_SINGLE_INST);
 	if (ret)
 		return ret;
 
