@@ -106,6 +106,7 @@ POWER MANAGEMENT
    drivers/ltc7841
    drivers/ltc7871
    drivers/ltm4686
+   drivers/lt3074
    drivers/lt7170
    drivers/lt7182s
    drivers/lt8491
