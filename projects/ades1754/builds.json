@@ -1,0 +1,10 @@
+{
+	"maxim": {
+		"basic_example_max32690_ades1754": {
+			"flags" : "EXAMPLE=basic TARGET=max32690"
+		},
+		"spi_uart_example_max32690_ades1754_max17851": {
+			"flags" : "EXAMPLE=spi_uart_bridge TARGET=max32690"
+		}
+	}
+}
