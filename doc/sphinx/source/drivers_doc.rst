@@ -99,6 +99,7 @@ POWER MANAGEMENT
 .. toctree::
    :maxdepth: 1
 
+   drivers/ades1754
    drivers/adp1050
    drivers/ltc2992
    drivers/ltc4162l
