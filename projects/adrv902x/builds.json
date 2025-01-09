@@ -1,0 +1,22 @@
+{
+	"xilinx": {
+	      "basic_example": {
+		    "flags": "BASIC_EXAMPLE=y DMA_EXAMPLE=n IIO_EXAMPLE=n",
+		    "hardware": [
+			  "adrv9026_zcu102"
+		    ]
+	      },
+	      "dma_example": {
+		  "flags": "BASIC_EXAMPLE=n DMA_EXAMPLE=y IIO_EXAMPLE=n",
+		  "hardware": [
+			"adrv9026_zcu102"
+		  ]
+	      },
+	      "iio_example": {
+		  "flags": "BASIC_EXAMPLE=n DMA_EXAMPLE=n IIO_EXAMPLE=y IIOD=y",
+		  "hardware": [
+			"adrv9026_zcu102"
+		  ]
+	      }
+	}
+}
