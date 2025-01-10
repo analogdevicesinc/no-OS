@@ -23,6 +23,7 @@ FREQUENCY GENERATORS
 
    projects/adf4382
    projects/adf4368
+   projects/adf5611
 
 INERTIAL MEASUREMENT UNITS
 ==========================
