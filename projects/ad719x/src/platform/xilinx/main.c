@@ -36,28 +36,70 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "common_data.h"
+#include "no_os_delay.h"
 #include "no_os_error.h"
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
+#include "no_os_print_log.h"
+#include "ad719x.h"
+#include <stdint.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /***************************************************************************//**
  * @brief Main function execution for XILINX platform.
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
+
 int main()
 {
-	int ret = -EINVAL;
+	struct ad719x_dev *dev;
+	float temp, v;
+	int ret, x = 0;
+	uint32_t avg;
+	uint32_t samples = 0;
+	uint32_t command;
 
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
 
-#ifdef DUMMY_EXAMPLE
-	ret = dummy_example_main();
-#endif
+
+	ad7190_dev_ip.chip_id = AD7195;
+
+    ret = ad719x_init(&dev, ad7190_dev_ip);
+	if (ret)
+		return ret;
+
+    printf("init \n" );
+	ret = ad719x_temperature_read(dev, &temp);
+	if (ret)
+		return ret;
+
+    command = AD719X_MODE_SEL(AD719X_MODE_CONT) |
+		  AD719X_MODE_CLKSRC(AD719X_INT_CLK_4_92_MHZ_TRIST) |
+		  AD719X_MODE_RATE(dev->data_rate_code);
+
+	ret = ad719x_set_register_value(dev, AD719X_REG_MODE, command, 3);
+	if (ret != 0)
+		return ret;
+
+	while (x < 100) {
+		ret = ad719x_get_register_value(dev, AD719X_REG_DATA, 3, &samples);
+		no_os_mdelay(100);
+		pr_info("%d \n", samples);
+		x++;
+	}
+
+	ret = ad719x_continuous_read_avg(dev, 100, &avg);
+	if (ret)
+		return ret;
+
+	v = ad719x_convert_to_volts(dev, avg, 3.3);
+
+	pr_info("Temperature = %.6f C\n", temp);
+	pr_info("Average read from 100 samples = %.6f Volts.", avg);
 
 	/* Disable the instruction cache. */
 	Xil_DCacheDisable();

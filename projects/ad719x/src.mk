@@ -9,7 +9,6 @@
 #									       #
 ################################################################################
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
 
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
