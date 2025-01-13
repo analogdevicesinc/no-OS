@@ -506,41 +506,6 @@ int adf4382_get_en_chan(struct adf4382_dev *dev, uint8_t ch, bool *en)
 }
 
 /**
- * @brief Set the sync to enable or disable based on the passed parameter. If
- * the parameter is different then 0 it will set the doubler to enable.
- * @param dev 		- The device structure.
- * @param en	 	- The enable or disable sync.
- * @return    		- Result of the writing procedure, error code otherwise.
- */
-int adf4382_set_en_sync(struct adf4382_dev *dev, bool en)
-{
-	uint8_t enable;
-
-	enable = no_os_field_prep(ADF4382_PD_SYNC_MSK, en);
-	return adf4382_spi_update_bits(dev, 0x2A, ADF4382_PD_SYNC_MSK, enable);
-}
-
-/**
- * @brief Gets the value the sync if it is enabled or disable.
- * @param dev 		- The device structure.
- * @param en	 	- The read status of the sync enable.
- * @return    		- 0 in case of success or negative error code.
- */
-int adf4382_get_en_sync(struct adf4382_dev *dev, bool *en)
-{
-	uint8_t tmp;
-	int ret;
-
-	ret = adf4382_spi_read(dev, 0x2A, &tmp);
-	if (ret)
-		return ret;
-
-	*en = no_os_field_get(tmp, ADF4382_PD_SYNC_MSK);
-	return 0;
-
-}
-
-/**
  * @brief Set the desired output frequency and reset everything over to maximum
  * supported value of 22GHz (21GHz for ADF4382A) to the max. value and
  * everything under the minimum supported value of 687.5MHz (2.875GHz for
@@ -1826,6 +1791,180 @@ int adf4382_get_phase_pol(struct adf4382_dev *dev, bool *polarity)
 		return ret;
 
 	*polarity = no_os_field_get(tmp, ADF4382_PHASE_ADJ_POL_MSK);
+	return 0;
+}
+
+/**
+ * @brief Set the EZSYNC features' initial state. Awaits the SW_SYNC toggle.
+ * @param dev 		- The device structure.
+ * @param sync	 	- The enable or disable sync.
+ * @return    		- Result of the writing procedure, error code otherwise.
+ */
+int adf4382_set_ezsync_setup(struct adf4382_dev *dev, bool sync)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (sync == 1) {
+		ret = adf4382_spi_update_bits(dev, 0x2A, ADF4382_PD_SYNC_MSK, 0);
+		if (ret)
+			return ret;
+
+		ret = adf4382_spi_update_bits(dev, 0x53,
+					      ADF4382_SYNC_SEL_MSK, 0xff);
+		if (ret)
+			return ret;
+
+		ret = adf4382_spi_update_bits(dev, 0x1E,
+					      ADF4382_TIMED_SYNC_MSK, 0);
+		if (ret)
+			return ret;
+
+		ret = adf4382_spi_update_bits(dev, 0x1E,
+					      (ADF4382_EN_REF_RST_MSK |
+					       ADF4382_EN_PHASE_RESYNC_MSK), 0xff);
+		if (ret)
+			return ret;
+
+	} else {
+		ret = adf4382_spi_update_bits(dev, 0x2A, ADF4382_PD_SYNC_MSK,
+					      0xff);
+		if (ret)
+			return ret;
+	}
+	return 0;
+}
+
+/**
+ * @brief Set Timed SYNC features' initial state. Uses SYNC pin.
+ * @param dev 		- The device structure.
+ * @param sync	 	- The enable or disable sync.
+ * @return    		- Result of the writing procedure, error code otherwise.
+ */
+int adf4382_set_timed_sync_setup(struct adf4382_dev *dev, bool sync)
+{
+	uint64_t pfd_freq;
+	uint8_t delay;
+	uint8_t val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (sync == 1) {
+		// Timed Sync
+		ret = adf4382_spi_update_bits(dev, 0x2A, ADF4382_PD_SYNC_MSK, 0);
+		if (ret)
+			return ret;
+
+		ret = adf4382_spi_update_bits(dev, 0x53,
+					      ADF4382_SYNC_SEL_MSK, 0);
+		if (ret)
+			return ret;
+
+		ret = adf4382_spi_update_bits(dev, 0x1E, (ADF4382_EN_REF_RST_MSK
+					      | ADF4382_TIMED_SYNC_MSK
+					      | ADF4382_EN_PHASE_RESYNC_MSK),
+					      0xff);
+		if (ret)
+			return ret;
+
+		pfd_freq = adf4382_pfd_compute(dev);
+		if (pfd_freq >= 225 * MHZ) {
+			delay = 3;
+		} else if (pfd_freq >= 200 * MHZ) {
+			delay = 4;
+		} else if (pfd_freq >= 148 * MHZ) {
+			delay = 1;
+		} else if (pfd_freq >= 130 * MHZ) {
+			delay = 3;
+		} else if (pfd_freq >= 85 * MHZ) {
+			delay = 4;
+		} else if (pfd_freq < 85 * MHZ) {
+			delay = 0;
+		}
+		ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_SYNC_DEL_MSK,
+					      no_os_field_prep
+					      (ADF4382_SYNC_DEL_MSK, delay));
+		if (ret)
+			return ret;
+
+		val = no_os_field_prep(ADF4382_DRCLK_DEL_MSK, delay) |
+		      no_os_field_prep(ADF4382_DNCLK_DEL_MSK, delay);
+		ret = adf4382_spi_update_bits(dev, 0x34,
+					      ADF4382_DRCLK_DEL_MSK
+					      | ADF4382_DNCLK_DEL_MSK, val);
+
+		if (ret)
+			return ret;
+	} else {
+		ret = adf4382_spi_update_bits(dev, 0x2A, ADF4382_PD_SYNC_MSK,
+					      0xff);
+		if (ret)
+			return ret;
+	}
+	return 0;
+}
+
+
+/**
+ * @brief Gets the value of the SYNC powerdown bit.
+ * @param dev 		- The device structure.
+ * @param en	 	- The read status of the sync enable.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4382_get_phase_sync_setup(struct adf4382_dev *dev, bool *en)
+{
+	uint8_t tmp;
+	int ret;
+
+	ret = adf4382_spi_read(dev, 0x2A, &tmp);
+	if (ret)
+		return ret;
+
+	*en = no_os_field_get(tmp, ADF4382_PD_SYNC_MSK);
+	return 0;
+}
+
+/**
+ * @brief Set Software SYNC Request. Setting SW_SYNC resets the RF block.
+ * Clearing SW_SYNC makes ready for a new reference clock.
+ * @param dev 		- The device structure.
+ * @param sw_sync 	- Set send SW_SYNC request
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4382_set_sw_sync(struct adf4382_dev *dev, bool sw_sync)
+{
+	uint8_t tmp;
+
+	if (!dev)
+		return -EINVAL;
+
+	tmp = no_os_field_prep(ADF4382_SW_SYNC_MSK, sw_sync);
+	return adf4382_spi_update_bits(dev, 0x1F, ADF4382_SW_SYNC_MSK, tmp);
+}
+
+/**
+ * @brief Gets the value of the SW_SYNC bit.
+ * @param dev 		- The device structure.
+ * @param sw_sync	- The read value of the SW_SYNC.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4382_get_sw_sync(struct adf4382_dev *dev, bool *sw_sync)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4382_spi_read(dev, 0x1F, &tmp);
+	if (ret)
+		return ret;
+	*sw_sync = no_os_field_get(tmp, ADF4382_SW_SYNC_MSK);
+
 	return 0;
 }
 

@@ -181,11 +181,17 @@ Synchronization Enable Configuration
 ------------------------------------
 
 The ADF4382 has a synchronization feature wherein Both RF Output signals are
-synchronized to an input signal at this pin. It is used for multi-chip phase
-synchronization. This can be enabled or disabled using the
-**adf4382_set_en_sync** API.
+synchronized to an input signal at this pin. This feature is used for multi-chip 
+phase synchronization. This can be enabled or disabled using the
+**adf4382_set_ezsync_setup** API for EZSync and **adf4382_set_timed_sync_setup** 
+API for Timed Sync. There are 2 methods for synchronization, EZSync and Timed 
+Sync supported by this function.
 
-By default it is disabled.
+By default, the synchronization feature is disabled by setting option 0 for 
+both API, while option 1 enables EZSYNC or Timed Sync respectively.
+
+The EZSync require a reset signal, which is applied through 
+**adf4382_set_sw_sync** API.
 
 ADF4382 Frequency Generation
 ----------------------------
@@ -293,12 +299,20 @@ The attributes are:
 * reference_divider - is the current value of the input divider.
 * reference_doubler_en - enables the input doubler.
 * reference_frequency - is the current set input frequency.
-* sync_en - enables the synchronization feature to an external signal.
+* sw_sync_en - enables the reset signal for ezsync feature.
+* ezsync_setup - enables ezsync setup for synchronization with external signal.
+* timed_sync_setup - enables timed sync setup for synchronization with external 
+					 signal.
+* fastcal_en - this enables fast calibration feature post initialization.
+			   It enables the Lookup Table LUT Calibration after fast calibration
+			   initialzation routine is complete.
+* fastcal_lut_en - toggles between fast calibration and normal auto
+				   calibration.
 
 Device Channels
 ---------------
 
-ADXL355 IIO device has 2 output channels which can have independent output
+ADF4382 IIO device has 2 output channels which can have independent output
 powers.
 
 The channels are:

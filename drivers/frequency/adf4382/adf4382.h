@@ -731,12 +731,6 @@ int adf4382_set_en_chan(struct adf4382_dev *dev, uint8_t ch, bool en);
 /** ADF4382 Get channel enable attributes */
 int adf4382_get_en_chan(struct adf4382_dev *dev, uint8_t ch, bool *en);
 
-/** ADF4382 Set sync enable attributes */
-int adf4382_set_en_sync(struct adf4382_dev *dev, bool en);
-
-/** ADF4382 Get sync enable attributes */
-int adf4382_get_en_sync(struct adf4382_dev *dev, bool *en);
-
 /** ADF4382 Sets frequency */
 int adf4382_set_freq(struct adf4382_dev *dev);
 
@@ -772,6 +766,21 @@ int adf4382_set_phase_pol(struct adf4382_dev *dev, bool polarity);
 
 /** ADF4382 Gets Phase adjustment polarity*/
 int adf4382_get_phase_pol(struct adf4382_dev *dev, bool *polarity);
+
+/** ADF4382 Set EZSYNC feature attributes */
+int adf4382_set_ezsync_setup(struct adf4382_dev *dev, bool sync);
+
+/** ADF4382 Set Timed SYNC feature attributes */
+int adf4382_set_timed_sync_setup(struct adf4382_dev *dev, bool sync);
+
+/** ADF4382 Get EZSYNC and Timed SYNC feature attributes */
+int adf4382_get_phase_sync_setup(struct adf4382_dev *dev, bool *en);
+
+/** ADF4382 Set sw_sync attribute */
+int adf4382_set_sw_sync(struct adf4382_dev *dev, bool sw_sync);
+
+/** ADF4382 Get sw_sync attribute */
+int adf4382_get_sw_sync(struct adf4382_dev *dev, bool *sw_sync);
 
 /** ADF4382 Initialization */
 int adf4382_init(struct adf4382_dev **device,
