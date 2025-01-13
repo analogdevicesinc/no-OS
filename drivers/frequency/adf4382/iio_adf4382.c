@@ -210,8 +210,8 @@ static int adf4382_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 		break;
 
-	case ADF4382_IIO_DEV_ATTR_SW_SYNC:
-		ret = adf4382_get_en_sync(adf4382, &en);
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_EN:
+		ret = adf4382_get_en_lut_calibration(adf4382, &en);
 		if (ret)
 			return ret;
 
@@ -219,6 +219,56 @@ static int adf4382_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 		break;
 
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN:
+		ret = adf4382_get_en_lut_calibration(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_CHANGE_FREQ:
+		ret = adf4382_get_change_rfout(adf4382, &val_64);
+		if (ret)
+			return ret;
+
+		ret = snprintf(buf, len, "%"PRIu64, val_64);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_START_CALIBRATION:
+		ret = adf4382_get_start_calibration(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_SW_SYNC:
+		ret = adf4382_get_sw_sync(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4382_IIO_DEV_ATTR_EZ_SYNC:
+		ret = adf4382_get_phase_sync_setup(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4382_IIO_DEV_ATTR_TIMED_SYNC:
+		ret = adf4382_get_phase_sync_setup(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
 	default:
 		return -EINVAL;
 	};
@@ -290,11 +340,52 @@ static int adf4382_iio_write_dev_attr(void *dev, char *buf, uint32_t len,
 		ret = adf4382_set_en_ref_doubler(adf4382, val);
 		break;
 
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_EN:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_en_fast_calibration(adf4382, en);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_en_lut_calibration(adf4382, en);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_CHANGE_FREQ:
+		sscanf(buf, "%"PRIu64, &val_64);
+		ret = adf4382_set_change_rfout(adf4382, val_64);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_START_CALIBRATION:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		if (!val)
+			return 0;
+
+		ret = adf4382_set_start_calibration(adf4382);
+		break;
+
 	case ADF4382_IIO_DEV_ATTR_SW_SYNC:
 		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
 		en = val;
-		ret = adf4382_set_en_sync(adf4382, en);
+		ret = adf4382_set_sw_sync(adf4382, en);
+		break;
+	case ADF4382_IIO_DEV_ATTR_EZ_SYNC:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_ezsync_setup(adf4382, en);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_TIMED_SYNC:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_timed_sync_setup(adf4382, en);
 		break;
 	default:
 		return -EINVAL;
@@ -482,9 +573,51 @@ static struct iio_attribute adf4382_iio_attrs[] = {
 		.store = adf4382_iio_write_dev_attr,
 	},
 	{
-		.name = "sync_en",
+		.name = "sw_sync_en",
 		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4382_IIO_DEV_ATTR_SW_SYNC,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "ezsync_setup",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_EZ_SYNC,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "timed_sync_setup",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_TIMED_SYNC,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "fastcal_en",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_EN,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "fastcal_lut_en",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "change_frequency",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_CHANGE_FREQ,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "start_calibration",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_START_CALIBRATION,
 		.show = adf4382_iio_read_dev_attr,
 		.store = adf4382_iio_write_dev_attr,
 	},
