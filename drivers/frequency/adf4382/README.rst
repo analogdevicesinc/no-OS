@@ -162,6 +162,21 @@ To determine the current phase adjustment and polarity,
 
 By default the polarity is positive.
 
+ADF4382 Fast Calibration
+------------------------
+Fast calibration uses **adf4382_set_en_fast_calibration** to initialized Fast 
+calibration. It computes the minimum NDIV value and the minimum VCO frequency
+is readback through the frequency counter, which is then used used to generate
+the fast calibration Look up Table.
+
+'1' starts fast calibration LUT generation, and '0' means this function is 
+inactive. The function defaults to '0' after running fast calibration LUT 
+generation. 
+
+**adf4382_set_en_lut_calibration** function enables/disables the lookup table 
+Calibration. '1' enables LUT calibration. '0' disables LUT calibration and
+reverts to normal auto calibration.
+
 Synchronization Enable Configuration
 ------------------------------------
 
@@ -189,6 +204,11 @@ with the computed values.
 Because of the link between the calculated values and the configurations, when
 an attribute is reconfigured using the corresponding API it will not have any
 effect until the **adf4382_set_freq** API is called.
+
+In fast calibration mode, locktimes can be measured using the **adf4382_change_freq**
+function in combination with **adf4382_start_calibration**. The first function will
+set the desird registers for the new frequency, while the second function will trigger
+the calibration process.
 
 ADF4382 Driver Initialization Example
 -------------------------------------
