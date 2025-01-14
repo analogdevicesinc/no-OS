@@ -43,6 +43,9 @@ TARGET_HARDWARE=TARGET=$(TARGET)
 
 PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET_LCASE)
 
+NO_OS_INC_DIRS += $(PLATFORM_DRIVERS)/../common
+SRC_DIRS += $(PLATFORM_DRIVERS)/../common
+
 ifeq ($(TARGET_LCASE), $(filter $(TARGET_LCASE),max32655 max32690))
 include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_memory.mk
 endif
