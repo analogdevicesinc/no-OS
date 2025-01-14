@@ -61,8 +61,8 @@
  * @param param - The structure that contains the IRQ parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-			  const struct no_os_irq_init_param *param)
+int xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+		      const struct no_os_irq_init_param *param)
 {
 	int32_t status;
 	struct no_os_irq_ctrl_desc *descriptor;
@@ -151,7 +151,7 @@ error:
  * @brief Enable global interrupts.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
+int xil_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	/* Enable interrupts */
 	Xil_ExceptionEnable();
@@ -163,7 +163,7 @@ int32_t xil_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  * @brief Disable global interrupts.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
+int xil_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	/* Disable interrupts */
 	Xil_ExceptionDisable();
@@ -177,7 +177,7 @@ int32_t xil_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @param irq_id - Interrupt identifier.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int xil_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -206,7 +206,7 @@ int32_t xil_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int xil_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -236,9 +236,9 @@ int32_t xil_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param callback_desc - Callback descriptor
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
-				  uint32_t irq_id,
-				  struct no_os_callback_desc *callback_desc)
+int xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+			      uint32_t irq_id,
+			      struct no_os_callback_desc *callback_desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -284,9 +284,9 @@ int32_t xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @param trig - New trigger level for the interrupt.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
-				  uint32_t irq_id,
-				  enum no_os_irq_trig_level trig)
+int xil_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+			      uint32_t irq_id,
+			      enum no_os_irq_trig_level trig)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -328,8 +328,8 @@ int32_t xil_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @param cb - Callback descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id, struct no_os_callback_desc *cb)
+int xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -357,7 +357,7 @@ int32_t xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  * @param desc - The IRQ control descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
+int xil_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 	no_os_free(xil_dev->instance);

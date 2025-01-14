@@ -377,8 +377,8 @@ void max_uart_callback(mxc_uart_req_t *req, int result)
  * @param param - Configuration information for the instance
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-			  const struct no_os_irq_init_param *param)
+int max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+		      const struct no_os_irq_init_param *param)
 {
 	struct no_os_irq_ctrl_desc *descriptor;
 
@@ -408,7 +408,7 @@ int32_t max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
  * @param desc - Interrupt controller descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
+int max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	void *discard;
 	if (!desc)
@@ -434,9 +434,9 @@ int32_t max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
  * @param callback_desc - Descriptor of the callback.
  * @return 0 in case of success, errno error codes otherwise
  */
-int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
-				  uint32_t irq_id,
-				  struct no_os_callback_desc *callback_desc)
+int max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+			      uint32_t irq_id,
+			      struct no_os_callback_desc *callback_desc)
 {
 	int ret;
 	void *discard;
@@ -530,8 +530,8 @@ free_action:
  * @param cb - Callback descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id, struct no_os_callback_desc *cb)
+int max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	int ret;
 	void *discard_action = NULL;
@@ -572,9 +572,9 @@ int32_t max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  * @param trig_l - the trigger condition.
  * @return -ENOSYS
  */
-int32_t max_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
-				  uint32_t irq_id,
-				  enum no_os_irq_trig_level trig_l)
+int max_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+			      uint32_t irq_id,
+			      enum no_os_irq_trig_level trig_l)
 {
 	return -ENOSYS;
 }
@@ -584,7 +584,7 @@ int32_t max_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t max_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
+int max_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	__enable_irq();
 
@@ -596,7 +596,7 @@ int32_t max_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t max_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
+int max_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	__disable_irq();
 
@@ -609,7 +609,7 @@ int32_t max_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @param irq_id - The interrupt vector entry id of the peripheral.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;
@@ -625,8 +625,8 @@ int32_t max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - The interrupt vector entry id of the peripheral.
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int32_t max_irq_disable(struct no_os_irq_ctrl_desc *desc,
-			uint32_t irq_id)
+int max_irq_disable(struct no_os_irq_ctrl_desc *desc,
+		    uint32_t irq_id)
 {
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;
@@ -643,9 +643,9 @@ int32_t max_irq_disable(struct no_os_irq_ctrl_desc *desc,
  * @param priority_level - The interrupt priority level
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t max_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id,
-				    uint32_t priority_level)
+static int max_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id,
+				uint32_t priority_level)
 {
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;

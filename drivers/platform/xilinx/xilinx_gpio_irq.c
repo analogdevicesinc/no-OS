@@ -100,7 +100,7 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
  * @param irq_id - Pin number.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	int32_t status;
 	struct xil_gpio_irq_desc *extra;
@@ -130,8 +130,8 @@ int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * irq_ctrl_id from irq_init_param is the interrupt id for the parent controller
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-			       const struct no_os_irq_init_param *param)
+int xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			   const struct no_os_irq_init_param *param)
 {
 	int32_t i;
 	int32_t status;
@@ -210,9 +210,9 @@ error_desc:
  * @param trig - New trigger level for the GPIO interrupt.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
-				       uint32_t irq_id,
-				       enum no_os_irq_trig_level trig)
+int xil_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+				   uint32_t irq_id,
+				   enum no_os_irq_trig_level trig)
 {
 	static const int32_t trig_level[5] = {XGPIOPS_IRQ_TYPE_LEVEL_LOW,
 					      XGPIOPS_IRQ_TYPE_LEVEL_HIGH,
@@ -235,9 +235,9 @@ int32_t xil_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @param callback_desc - Callback.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
-				       uint32_t irq_id,
-				       struct no_os_callback_desc *callback_desc)
+int xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+				   uint32_t irq_id,
+				   struct no_os_callback_desc *callback_desc)
 {
 	struct xil_callback_desc *dev_callback;
 	struct xil_gpio_irq_desc *extra;
@@ -266,8 +266,8 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @param cb - Callback descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id, struct no_os_callback_desc *cb)
+int xil_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				     uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	int32_t status;
 	struct xil_gpio_irq_desc *extra;
@@ -292,7 +292,7 @@ int32_t xil_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  * @param irq_id - Pin number.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	int32_t status;
 	struct xil_gpio_irq_desc *extra;
@@ -321,7 +321,7 @@ int32_t xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param desc - The GPIO IRQ controller descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
+int xil_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	struct xil_gpio_irq_desc *extra;
 	struct xil_callback_desc *callback_desc;
