@@ -159,33 +159,33 @@ struct no_os_callback_desc {
  */
 struct no_os_irq_platform_ops {
 	/** Initialize a interrupt controller peripheral. */
-	int32_t (*init)(struct no_os_irq_ctrl_desc **desc,
-			const struct no_os_irq_init_param *param);
+	int (*init)(struct no_os_irq_ctrl_desc **desc,
+		    const struct no_os_irq_init_param *param);
 	/** Register a callback to handle the irq events */
-	int32_t (*register_callback)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
-				     struct no_os_callback_desc *callback);
+	int (*register_callback)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
+				 struct no_os_callback_desc *callback);
 	/** Unregisters a generic IRQ handling function */
-	int32_t (*unregister_callback)(struct no_os_irq_ctrl_desc *desc,
-				       uint32_t irq_id,
-				       struct no_os_callback_desc *callback);
+	int (*unregister_callback)(struct no_os_irq_ctrl_desc *desc,
+				   uint32_t irq_id,
+				   struct no_os_callback_desc *callback);
 	/** Global interrupt enable */
-	int32_t (*global_enable)(struct no_os_irq_ctrl_desc *desc);
+	int (*global_enable)(struct no_os_irq_ctrl_desc *desc);
 	/** Global interrupt disable */
-	int32_t (*global_disable)(struct no_os_irq_ctrl_desc *desc);
+	int (*global_disable)(struct no_os_irq_ctrl_desc *desc);
 	/** Set interrupt trigger level. */
-	int32_t (*trigger_level_set)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
-				     enum no_os_irq_trig_level trig);
+	int (*trigger_level_set)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
+				 enum no_os_irq_trig_level trig);
 	/** Enable specific interrupt */
-	int32_t (*enable)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+	int (*enable)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 	/** Disable specific interrupt */
-	int32_t (*disable)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+	int (*disable)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 	/** Set the priority level for a specific interrupt */
-	int32_t (*set_priority)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
-				uint32_t priority_level);
+	int (*set_priority)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
+			    uint32_t priority_level);
 	/** IRQ remove function pointer */
-	int32_t (*remove)(struct no_os_irq_ctrl_desc *desc);
+	int (*remove)(struct no_os_irq_ctrl_desc *desc);
 	/** Clear pending interrupt */
-	int32_t(*clear_pending)(struct no_os_irq_ctrl_desc* desc, uint32_t irq_id);
+	int(*clear_pending)(struct no_os_irq_ctrl_desc* desc, uint32_t irq_id);
 };
 
 /******************************************************************************/
@@ -193,45 +193,45 @@ struct no_os_irq_platform_ops {
 /******************************************************************************/
 
 /* Initialize a interrupt controller peripheral. */
-int32_t no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-			    const struct no_os_irq_init_param *param);
+int no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			const struct no_os_irq_init_param *param);
 
 /* Free the resources allocated by no_os_irq_ctrl_init(). */
-int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc);
+int no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc);
 
 /* Register a callback to handle the irq events */
-int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id,
-				    struct no_os_callback_desc *callback_desc);
+int no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id,
+				struct no_os_callback_desc *callback_desc);
 
 /* Unregisters a generic IRQ handling function */
-int32_t no_os_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-				      uint32_t irq_id,
-				      struct no_os_callback_desc *callback_desc);
+int no_os_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				  uint32_t irq_id,
+				  struct no_os_callback_desc *callback_desc);
 
 /* Global interrupt enable */
-int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc);
+int no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc);
 
 /* Global interrupt disable */
-int32_t no_os_irq_global_disable(struct no_os_irq_ctrl_desc *desc);
+int no_os_irq_global_disable(struct no_os_irq_ctrl_desc *desc);
 
 /* Set interrupt trigger level. */
-int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id,
-				    enum no_os_irq_trig_level trig);
+int no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id,
+				enum no_os_irq_trig_level trig);
 
 /* Enable specific interrupt */
-int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+int no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 
 /* Disable specific interrupt */
-int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+int no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 
 /** Set the priority level for a specific interrupt */
-int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
-			       uint32_t irq_id,
-			       uint32_t priority_level);
+int no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+			   uint32_t irq_id,
+			   uint32_t priority_level);
 
 /* Clear the pending interrupts */
-int32_t no_os_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
-				uint32_t irq_id);
+int no_os_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
+			    uint32_t irq_id);
 #endif // _NO_OS_IRQ_H_

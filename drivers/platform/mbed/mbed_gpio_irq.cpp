@@ -159,7 +159,7 @@ static void store_mbed_callbacks(void)
  * @param	param[in] - Configuration information for the instance.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+int mbed_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 				const struct no_os_irq_init_param *param)
 {
 	struct no_os_irq_ctrl_desc *irq_desc;
@@ -200,7 +200,7 @@ err_mbed_irq_desc:
  * @param	irq_id[in] - Interrupt identifier.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int mbed_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	InterruptIn *ext_interrupt;
 
@@ -220,7 +220,7 @@ int32_t mbed_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param	irq_id[in] - Interrupt identifier.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int mbed_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	InterruptIn *ext_interrupt;
 
@@ -242,7 +242,7 @@ int32_t mbed_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 *			callback will be unregistered
 * @return	0 in case of success, negative error code otherwise.
 */
-int32_t mbed_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+int mbed_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 					uint32_t irq_id,
 					struct no_os_callback_desc *callback_desc)
 {
@@ -279,7 +279,7 @@ int32_t mbed_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @param   callback_desc[in] - Descriptor of the callback.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_irq_unregister(struct no_os_irq_ctrl_desc *desc,
+int mbed_gpio_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 				 uint32_t irq_id,
 				 struct no_os_callback_desc *callback_desc)
 {
@@ -301,7 +301,7 @@ int32_t mbed_gpio_irq_unregister(struct no_os_irq_ctrl_desc *desc,
  * @param   trig[in] - Trigger level.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+int mbed_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 					uint32_t irq_id,
 					enum no_os_irq_trig_level trig)
 {
@@ -337,7 +337,7 @@ int32_t mbed_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @param	desc[in, out] - Interrupt controller descriptor.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
+int mbed_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	uint8_t irq_id;
 
