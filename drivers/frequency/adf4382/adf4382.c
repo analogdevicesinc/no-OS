@@ -1,7 +1,8 @@
 /***************************************************************************//**
  *   @file   adf4382.c
  *   @brief  Implementation of adf4382 Driver.
- *   @author Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ *   @authors Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ * 	      Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -1993,6 +1994,34 @@ static int adf4382_check_scratchpad(struct adf4382_dev *dev)
 }
 
 /**
+ * @brief Update core bias table for ADF4383.
+ * @param dev 	- The device structure.
+ * @return 	- 0 in case of success or negative error code.
+ */
+static int adf4383_update_core_bias_table(struct adf4382_dev *dev)
+{
+	int ret;
+
+	ret = adf4382_spi_write(dev, 0x109, 0x3);
+	if (ret)
+		return ret;
+	ret = adf4382_spi_write(dev, 0x10A, 0x7);
+	if (ret)
+		return ret;
+	ret = adf4382_spi_write(dev, 0x10F, 0x7);
+	if (ret)
+		return ret;
+	ret = adf4382_spi_write(dev, 0x110, 0x7);
+	if (ret)
+		return ret;
+	ret = adf4382_spi_write(dev, 0x111, 0x7);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+/**
  * @brief Initializes the ADF4382.
  * @param dev	     - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -2040,6 +2069,13 @@ int adf4382_init(struct adf4382_dev **dev,
 		device->vco_min = ADF4382A_VCO_FREQ_MIN;
 		device->clkout_div_reg_val_max = ADF4382A_CLKOUT_DIV_REG_VAL_MAX;
 		break;
+	case ID_ADF4383:
+		device->freq_max = ADF4383_RFOUT_MAX;
+		device->freq_min = ADF4383_RFOUT_MIN;
+		device->vco_max = ADF4383_VCO_FREQ_MAX;
+		device->vco_min = ADF4383_VCO_FREQ_MIN;
+		device->clkout_div_reg_val_max = ADF4382_CLKOUT_DIV_REG_VAL_MAX;
+		break;
 	default:
 		goto error_spi;
 	}
@@ -2059,7 +2095,8 @@ int adf4382_init(struct adf4382_dev **dev,
 		goto error_spi;
 
 	ret = adf4382_spi_write(device, 0x3D,
-				no_os_field_prep(ADF4382_CMOS_OV_MSK, device->cmos_3v3));
+				no_os_field_prep(ADF4382_CMOS_OV_MSK,
+						device->cmos_3v3));
 	if (ret)
 		goto error_spi;
 
@@ -2071,6 +2108,12 @@ int adf4382_init(struct adf4382_dev **dev,
 		ret = adf4382_spi_write(device,
 					adf4382_reg_defaults[i].reg,
 					adf4382_reg_defaults[i].val);
+		if (ret)
+			goto error_spi;
+	}
+
+	if (ID_ADF4383 == init_param->id) {
+		ret = adf4383_update_core_bias_table(device);
 		if (ret)
 			goto error_spi;
 	}
