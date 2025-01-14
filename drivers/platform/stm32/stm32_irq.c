@@ -220,8 +220,8 @@ void _ErrorCallback(UART_HandleTypeDef *huart)
  * @param param - Configuration information for the instance
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t stm32_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-			    const struct no_os_irq_init_param *param)
+int stm32_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			const struct no_os_irq_init_param *param)
 {
 	static struct no_os_irq_ctrl_desc *descriptor;
 	if (!param)
@@ -247,7 +247,7 @@ int32_t stm32_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
  * @param desc - Interrupt controller descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t stm32_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
+int stm32_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	initialized = false;
 
@@ -264,9 +264,9 @@ int32_t stm32_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
  * @param level - the trigger condition.
  * @return -ENOSYS
  */
-int32_t stm32_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
-				uint32_t irq_id,
-				enum no_os_irq_trig_level level)
+int stm32_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+			    uint32_t irq_id,
+			    enum no_os_irq_trig_level level)
 {
 	return -ENOSYS;
 }
@@ -278,9 +278,9 @@ int32_t stm32_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @param cb - Descriptor of the callback.
  * @return 0 if successfull, negative error code otherwise.
  */
-int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id,
-				    struct no_os_callback_desc *cb)
+int stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id,
+				struct no_os_callback_desc *cb)
 {
 	int ret;
 	pUART_CallbackTypeDef pUartCallback;
@@ -447,8 +447,8 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @param cb - Descriptor of the callback.
  * @return 0 if successfull, negative error code otherwise.
  */
-int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-				      uint32_t irq_id, struct no_os_callback_desc *cb)
+int stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				  uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	int ret;
 	void *discard  = NULL;
@@ -515,7 +515,7 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t stm32_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
+int stm32_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	__enable_irq();
 
@@ -527,7 +527,7 @@ int32_t stm32_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t stm32_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
+int stm32_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	__disable_irq();
 
@@ -540,7 +540,7 @@ int32_t stm32_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @param irq_id - Interrupt identifier
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t stm32_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int stm32_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	NVIC_EnableIRQ(irq_id);
 
@@ -553,7 +553,7 @@ int32_t stm32_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int32_t stm32_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int stm32_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	NVIC_DisableIRQ(irq_id);
 
@@ -567,9 +567,9 @@ int32_t stm32_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param priority_level - The interrupt priority level
  * @return 0
  */
-static int32_t stm32_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
-				      uint32_t irq_id,
-				      uint32_t priority_level)
+static int stm32_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				  uint32_t irq_id,
+				  uint32_t priority_level)
 {
 	HAL_NVIC_SetPriority(irq_id, priority_level, 0);
 

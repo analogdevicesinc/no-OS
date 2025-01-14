@@ -202,8 +202,8 @@ static void aducm_timer_callback(void *ctx, uint32_t event, void *buff)
  * @param param - Configuration information for the instance
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-				const struct no_os_irq_init_param *param)
+int aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			    const struct no_os_irq_init_param *param)
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 
@@ -232,7 +232,7 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
  * @param desc - Interrupt controller descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
+int aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -1;
@@ -254,9 +254,9 @@ int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
  * callback will be unregistered
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
-					uint32_t irq_id,
-					struct no_os_callback_desc *callback_desc)
+int aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+				    uint32_t irq_id,
+				    struct no_os_callback_desc *callback_desc)
 {
 	struct no_os_aducm_uart_desc	*aducm_uart;
 	struct no_os_rtc_desc			*rtc_desc;
@@ -368,8 +368,8 @@ free_action:
  * @param cb - Callback descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id, struct no_os_callback_desc *cb)
+int aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				      uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	struct irq_action			*action;
 	uint32_t					ret;
@@ -405,7 +405,7 @@ int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
+int aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -1;
@@ -422,7 +422,7 @@ int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
+int aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -1;
@@ -449,8 +449,8 @@ int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @param irq_id - Id of the interrupt
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
-			     uint32_t irq_id)
+int aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
+			 uint32_t irq_id)
 {
 	struct no_os_rtc_desc		*rtc_desc;
 	struct aducm_rtc_desc		*aducm_rtc;
@@ -491,8 +491,8 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
  * @param irq_id - Id of the interrupt
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc,
-			      uint32_t irq_id)
+int aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc,
+			  uint32_t irq_id)
 {
 	struct no_os_rtc_desc		*rtc_desc;
 	struct aducm_rtc_desc		*aducm_rtc;
@@ -533,9 +533,9 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc,
  * @param priority_level - The interrupt priority level
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t aducm3029_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id,
-		uint32_t priority_level)
+static int aducm3029_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				      uint32_t irq_id,
+				      uint32_t priority_level)
 {
 	if (irq_id >= NVIC_INTS)
 		return -EINVAL;
