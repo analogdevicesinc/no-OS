@@ -4,7 +4,9 @@ ADF4382 no-OS driver
 Supported Devices
 -----------------
 
-`ADF4382 <www.analog.com/en/products/adf4382a.html>`_
+* `ADF4382 <www.analog.com/en/products/adf4382.html>`_
+* `ADF4382A <www.analog.com/en/products/adf4382a.html>`_
+* `ADF43823 <www.analog.com/en/products/adf43823.html>`_
 
 Overview
 --------

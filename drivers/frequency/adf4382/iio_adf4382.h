@@ -1,7 +1,8 @@
 /***************************************************************************//**
  *   @file   iio_adf4382.h
  *   @brief  Implementation of IIO ADF4382 Driver.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
+ *   @authors Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ *            Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
