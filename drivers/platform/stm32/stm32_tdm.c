@@ -30,6 +30,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifdef HAL_SAI_MODULE_ENABLED
+
 #include <stdlib.h>
 #include <errno.h>
 #include "no_os_gpio.h"
@@ -355,3 +357,5 @@ int32_t stm32_resume_tdm_transfer(struct no_os_tdm_desc *desc)
 
 	return 0;
 }
+
+#endif

@@ -33,6 +33,8 @@
 #ifndef STM32_TDM_H_
 #define STM32_TDM_H_
 
+#ifdef HAL_SAI_MODULE_ENABLED
+
 #include <stdint.h>
 #include "no_os_tdm.h"
 #include "stm32_hal.h"
@@ -93,5 +95,6 @@ int32_t stm32_pause_tdm_transfer(struct no_os_tdm_desc *desc);
 /* Resume TDM DMA Data transfer */
 int32_t stm32_resume_tdm_transfer(struct no_os_tdm_desc *desc);
 
+#endif
 
 #endif // STM32_TDM_H_
