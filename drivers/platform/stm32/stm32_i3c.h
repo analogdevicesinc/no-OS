@@ -39,6 +39,8 @@
 #ifndef STM32_I3C_H_
 #define STM32_I3C_H_
 
+#if (USE_HAL_I3C_MODULE == 1)
+
 #include <stdint.h>
 #include "no_os_i3c.h"
 #include "stm32_hal.h"
@@ -85,5 +87,7 @@ extern struct no_os_i3c_bus_desc *i3c_table [];
  * @brief STM32 specific I3C platform ops structure.
  */
 extern const struct no_os_i3c_platform_ops stm32_i3c_ops;
+
+#endif
 
 #endif // STM32_I3C_H_

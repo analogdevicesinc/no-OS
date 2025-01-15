@@ -36,6 +36,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#if (USE_HAL_I3C_MODULE == 1)
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -745,3 +746,5 @@ const struct no_os_i3c_platform_ops stm32_i3c_ops = {
 	.i3c_ops_conf_irq = &stm32_i3c_conf_irq,
 	.i3c_ops_get_ccc_info = &stm32_i3c_get_ccc_info,
 };
+
+#endif
