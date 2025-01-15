@@ -1,5 +1,11 @@
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c
-SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
+INCS += $(PLATFORM_DRIVERS)/xilinx_gpio.h \
+	$(PLATFORM_DRIVERS)/xilinx_spi.h \
+	$(PLATFORM_DRIVERS)/xilinx_uart.h \
+	$(PLATFORM_DRIVERS)/xilinx_irq.h
 
-INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h \
-	$(INCLUDE)/no_os_gpio.h
+SRCS += $(PLATFORM_DRIVERS)/xilinx_axi_io.c \
+	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
+	$(PLATFORM_DRIVERS)/xilinx_delay.c \
+	$(PLATFORM_DRIVERS)/xilinx_spi.c \
+	$(PLATFORM_DRIVERS)/xilinx_uart.c \
+        $(PLATFORM_DRIVERS)/xilinx_irq.c

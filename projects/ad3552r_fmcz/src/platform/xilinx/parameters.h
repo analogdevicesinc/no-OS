@@ -98,4 +98,8 @@
 #define GPIO_EXTRA		&xil_gpio_param
 #define SPI_EXTRA		&xil_spi_param
 
+extern struct xil_gpio_init_param xil_gpio_param;
+extern struct xil_spi_init_param xil_spi_param;
+extern struct xil_uart_init_param platform_uart_param;
+
 #endif // __PARAMETERS_H__
