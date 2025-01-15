@@ -47,8 +47,6 @@ struct stm32_spi_init_param ad74413r_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,
 };
 
-#ifdef IIO_TRIGGER_EXAMPLE
 struct stm32_gpio_irq_init_param ad74413r_gpio_irq_extra_ip = {
 	.port_nb = 6, /* Port G */
 };
-#endif

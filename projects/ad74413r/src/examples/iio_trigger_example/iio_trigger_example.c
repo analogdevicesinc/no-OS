@@ -35,9 +35,11 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "common_data.h"
-#include "iio_trigger_example.h"
+#include "iio_app.h"
 #include "iio_ad74413r.h"
 #include "no_os_util.h"
+#include "parameters.h"
+#include "iio_trigger.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -49,6 +51,39 @@
 /******************************************************************************/
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 8 * sizeof(uint32_t)];
 
+#define AD74413R_GPIO_TRIG_NAME "ad74413r-dev0"
+
+extern struct iio_trigger ad74413r_iio_trig_desc;
+extern struct iio_hw_trig_init_param ad74413r_gpio_trig_ip;
+extern struct no_os_irq_init_param ad74413r_gpio_irq_ip;
+extern struct iio_trigger ad74413r_iio_trig_desc;
+
+/* GPIO trigger */
+struct no_os_irq_init_param ad74413r_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+const struct iio_hw_trig_cb_info gpio_cb_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = AD74413R_GPIO_CB_HANDLE,
+};
+
+struct iio_hw_trig_init_param ad74413r_gpio_trig_ip = {
+	.irq_id = AD74413R_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = gpio_cb_info,
+	.name = AD74413R_GPIO_TRIG_NAME,
+};
+
+struct iio_trigger ad74413r_iio_trig_desc = {
+	.is_synchronous = true,
+	.enable = iio_trig_enable,
+	.disable = iio_trig_disable
+};
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -59,7 +94,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 8 * sizeof(uint32_t)];
  *               execute continuously function iio_app_run_with_trigs and will
  * 				 not return.
 *******************************************************************************/
-int iio_trigger_example_main()
+int example_main()
 {
 	int ret;
 	struct iio_hw_trig *ad74413r_trig_desc;

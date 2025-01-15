@@ -71,7 +71,6 @@ extern UART_HandleTypeDef huart3;
 extern struct stm32_uart_init_param ad74413r_uart_extra_ip;
 extern struct stm32_spi_init_param ad74413r_spi_extra_ip;
 
-#ifdef IIO_TRIGGER_EXAMPLE
 extern struct stm32_gpio_irq_init_param ad74413r_gpio_irq_extra_ip;
 /* Setting for PortG Pin0 used for DATA_READY.
    Has to be adapted accordingly if another pin is used.
@@ -82,6 +81,5 @@ extern struct stm32_gpio_irq_init_param ad74413r_gpio_irq_extra_ip;
 #define GPIO_IRQ_ID             0 /* Pin 0 */
 #define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          &ad74413r_gpio_irq_extra_ip
-#endif
 
 #endif /* __PARAMETERS_H__ */
