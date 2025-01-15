@@ -30,6 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#if (USBD_MAX_NUM_INTERFACES > 0)
 #include <errno.h>
 #include <stdlib.h>
 #include "no_os_util.h"
@@ -280,3 +281,5 @@ const struct no_os_uart_platform_ops stm32_usb_uart_ops = {
 	.write = &stm32_usb_uart_write,
 	.remove = &stm32_usb_uart_remove
 };
+
+#endif

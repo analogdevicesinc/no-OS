@@ -33,6 +33,8 @@
 #ifndef _STM32_USB_UART_H_
 #define _STM32_USB_UART_H_
 
+#if (USBD_MAX_NUM_INTERFACES > 0)
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_uart.h"
@@ -63,5 +65,7 @@ struct stm32_usb_uart_desc {
  * @brief stm32 specific UART over USB platform ops structure.
  */
 extern const struct no_os_uart_platform_ops stm32_usb_uart_ops;
+
+#endif
 
 #endif
