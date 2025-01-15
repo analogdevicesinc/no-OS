@@ -32,6 +32,8 @@
 #ifndef STM32_PWM_H_
 #define STM32_PWM_H_
 
+#ifdef HAL_TIM_MODULE_ENABLED
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_gpio.h"
@@ -147,5 +149,7 @@ struct stm32_pwm_desc {
  * @brief STM32 specific PWM platform ops structure
  */
 extern const struct no_os_pwm_platform_ops stm32_pwm_ops;
+
+#endif
 
 #endif // STM32_PWM_H_

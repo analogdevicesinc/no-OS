@@ -29,6 +29,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifdef HAL_TIME_MODULE_ENABLED
+
 #include <stdlib.h>
 #include <errno.h>
 #include "no_os_util.h"
@@ -716,3 +718,5 @@ const struct no_os_pwm_platform_ops stm32_pwm_ops = {
 	.pwm_ops_get_duty_cycle = &stm32_pwm_get_duty_cycle,
 	.pwm_ops_remove = &stm32_pwm_remove
 };
+
+#endif
