@@ -58,6 +58,38 @@ static uint8_t data_buffer[MAX_BUFF_SAMPLES];
 
 #endif
 
+struct ad3552r_init_param default_ad3552r_param = {
+	.chip_id = AD3552R_ID,
+	.spi_param = {
+		.device_id = SPI_DEVICE_ID,
+		.chip_select = 0,
+		.mode = NO_OS_SPI_MODE_0,
+		.max_speed_hz = 66000000,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.platform_ops = &xil_spi_ops,
+		.extra = SPI_EXTRA
+	},
+	.ldac_gpio_param_optional = &gpio_ldac_param,
+	.reset_gpio_param_optional = &gpio_reset_param,
+	.sdo_drive_strength = 1,
+	.channels = {
+		[0] = {
+			.en = 1,
+			.range = AD3552R_CH_OUTPUT_RANGE_NEG_10__10V,
+		},
+		[1] = {
+			.en = 1,
+			.range = AD3552R_CH_OUTPUT_RANGE_NEG_10__10V,
+		}
+	},
+	.crc_en = 0,
+	/*
+	 * Zed board requires this option, spi instruction/addr + data
+	 * must be sent in a single transfer.
+	 */
+	.single_transfer = 1,
+};
+
 int32_t init_gpios_to_defaults()
 {
 	const uint8_t gpios_initial_value[][2] = {

@@ -42,7 +42,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
+#include "parameters.h"
 #include "no_os_util.h"
 #include "ad3552r.h"
 
@@ -51,11 +51,12 @@
 /******************************************************************************/
 #define SAMPLES_PER_CHANNEL     SAMPLES_PER_CHANNEL_PLATFORM
 
-extern struct xil_gpio_init_param xil_gpio_param;
-extern struct xil_spi_init_param xil_spi_param;
-extern struct xil_uart_init_param platform_uart_param;
 extern struct no_os_gpio_init_param default_gpio_param;
 extern struct no_os_uart_init_param uart_init_param;
-extern struct ad3552r_init_param default_ad3552r_param;
+extern struct axi_dac_init ad3552r_core_ip;
+extern struct axi_clkgen_init clkgen_ip;
+extern struct axi_dmac_init dmac_ip;
+extern struct no_os_gpio_init_param gpio_ldac_param;
+extern struct no_os_gpio_init_param gpio_reset_param;
 
 #endif /* __COMMON_DATA_H__ */
