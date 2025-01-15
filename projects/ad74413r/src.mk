@@ -1,16 +1,3 @@
-include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
-
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
-
-INCS += $(PROJECT)/src/common/common_data.h
-SRCS += $(PROJECT)/src/common/common_data.c
-	
-INCS += $(PROJECT)/src/platform/platform_includes.h
-
-INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c 
-
 INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_error.h     \
 		$(INCLUDE)/no_os_gpio.h      \
@@ -41,8 +28,3 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
-
-ifeq (y,$(strip $(IIO_EXAMPLE)))
-INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
-SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
-endif

@@ -34,7 +34,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_example.h"
+#include "iio_app.h"
 #include "iio_ad74413r.h"
 #include "common_data.h"
 #include "no_os_util.h"
@@ -58,7 +58,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
