@@ -30,6 +30,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifdef HAL_TIM_MODULE_ENABLED
+
 #include <stdlib.h>
 #include <errno.h>
 #include "no_os_util.h"
@@ -350,3 +352,4 @@ const struct no_os_timer_platform_ops stm32_timer_ops = {
 	.remove = &stm32_timer_remove
 };
 
+#endif

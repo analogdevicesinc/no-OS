@@ -33,6 +33,8 @@
 #ifndef STM32_TIMER_H_
 #define STM32_TIMER_H_
 
+#ifdef HAL_TIM_MODULE_ENABLED
+
 #include <stdint.h>
 #include "no_os_timer.h"
 #include "stm32_hal.h"
@@ -59,5 +61,7 @@ struct stm32_timer_desc {
  * @brief stm32 specific timer platform ops structure
  */
 extern const struct no_os_timer_platform_ops stm32_timer_ops;
+
+#endif
 
 #endif // STM32_TIMER_H_
