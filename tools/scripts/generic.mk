@@ -15,6 +15,7 @@ endif
 
 TIMESTAMP = $(shell date +"%T")
 copy_file = cp $1 $2
+move_file = mv $1 $2
 copy_dir = cp -r $1 $2
 remove_file = rm -rf $1
 remove_dir_action = rm -rf $1

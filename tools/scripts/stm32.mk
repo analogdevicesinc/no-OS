@@ -103,8 +103,7 @@ $(PROJECT)_configure:
 	sed -i 's/USE_HAL_TIM_REGISTER_CALLBACKS\s*0U/USE_HAL_TIM_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
 	sed -i 's/USE_HAL_UART_REGISTER_CALLBACKS\s*0U/USE_HAL_UART_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
 	sed -i 's/USE_HAL_SAI_REGISTER_CALLBACKS\s*0U/USE_HAL_SAI_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
-	$(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
-	$(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
+	$(call move_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 
 	$(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
 
@@ -115,7 +114,7 @@ $(PROJECT)_configure:
 		$(HIDE)
 	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(STARTUP_FILE) $(EXTI_GEN_FILE))
-	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
+	$(call move_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
 
 	$(file > $(CPP_PROP_JSON).default,$(CPP_FINAL_CONTENT))
 	$(file > $(SETTINGSJSON).default,$(VSC_SET_CONTENT))
