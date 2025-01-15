@@ -33,6 +33,8 @@
 #ifndef STM32_XSPI_H_
 #define STM32_XSPI_H_
 
+#if defined(HAL_QSPI_MODULE_ENABLED) || defined(HAL_OSPI_MODULE_ENABLED)
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_spi.h"
@@ -127,5 +129,7 @@ struct stm32_xspi_desc {
  * @brief stm32 specific XSPI platform ops structure
  */
 extern const struct no_os_spi_platform_ops stm32_xspi_ops;
+
+#endif
 
 #endif // STM32_XSPI_H_

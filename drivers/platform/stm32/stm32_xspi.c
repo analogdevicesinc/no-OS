@@ -30,6 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#if defined(HAL_QSPI_MODULE_ENABLED) || defined(HAL_OSPI_MODULE_ENABLED)
 
 #include <stdlib.h>
 #include <string.h>
@@ -719,3 +720,5 @@ const struct no_os_spi_platform_ops stm32_xspi_ops = {
 	.dma_transfer_sync = stm32_xspi_dma_transfer_sync,
 	.dma_transfer_async = stm32_xspi_dma_transfer_async,
 };
+
+#endif
