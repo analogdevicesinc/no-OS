@@ -68,16 +68,13 @@
 #define GPIO_OPS                &aducm_gpio_ops
 #define GPIO_EXTRA              NULL
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #define GPIO_IRQ_ID     ADUCM_XINT_SOFT_CTRL /* External interrupt used (to be able to use high level trigger) */
 #define GPIO_IRQ_OPS    &aducm_gpio_irq_ops
 #define GPIO_IRQ_EXTRA  NULL /* Not used for aducm3029 platform */
 
 #define ADXRS290_GPIO_TRIG_IRQ_ID    ADI_XINT_EVENT_INT1 /* for EVAL-ADICUP3029 pin number 16 is connected to XINT1 */
 #define ADXRS290_GPIO_CB_HANDLE      NULL /* Not used for aducm3029 platform */
-#endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
 /* ADXRS290 Timer settings */
 extern struct aducm_timer_init_param adxrs290_timer_extra_ip;
 #define ADXRS290_TIMER_DEVICE_ID    1
@@ -94,7 +91,6 @@ extern struct aducm_timer_init_param adxrs290_timer_extra_ip;
 /* ADXRS290 timer trigger settings */
 #define ADXRS290_TIMER_CB_HANDLE    0 /* Device descriptor is being used as a handle in this case */
 #define ADXRS290_TIMER_TRIG_IRQ_ID  ADUCM_TIMER1_INT_ID
-#endif
 
 extern struct aducm_spi_init_param adxrs290_spi_extra_ip;
 
