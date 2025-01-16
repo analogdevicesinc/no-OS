@@ -10,22 +10,24 @@ Contents
 Supported Evaluation Boards
 ---------------------------
 
+* `EVAL-ADF4382 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382.html>`_
 * `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_
+* `EVAL-ADF43823 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
 
 Overview
 --------
-The EV-ADF4382ASD2Z evaluates the performance of the ADF4382A frequency
+The EV-ADF4382SD1Z evaluates the performance of the ADF4382 frequency
 synthesizer with an integrated voltage-con-trolled oscillator (VCO) for
 phase-locked loops (PLLs). It  contains the ADF4382A frequency synthesizer with
 an integrated VCO, a USB interface, power supply connectors, on-board reference
 oscillator, propagation delay calibration paths, and Subminiature Version A (SMA)
-connectors. The outputs of the EV-ADF4382ASD2Z are AC-coupled with 50 Ω
+connectors. The outputs of the EV-ADF4382SD1Z are AC-coupled with 50 Ω
 transmission lines, making these outputs suitable to drive 50 Ω impedance
 instruments.
 
-Full specifications for the ADF4382A frequency synthesizer are available in the
-ADF4382A data sheet, which must be consulted in conjunction with this user guide
-when working with the EV-ADF4382ASD2Z.
+Full specifications for the ADF4382 frequency synthesizer are available in the
+ADF4382 data sheet, which must be consulted in conjunction with this user guide
+when working with the EV-ADF4382SD1Z.
 
 Applications
 ------------
@@ -40,21 +42,21 @@ Hardware Specifications
 Power Supply Requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The EV-ADF4382ASD2Z is powered by a 6 V power supply connected to the J18 SMA
+The EV-ADF4382SD1Z is powered by a 6 V power supply connected to the J18 SMA
 connector, or the J14 banana plug and GND to the J15 banana plug.
 
 Reference Input Requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The EV-ADF4382ASD2Z has an on-board, 125 MHz, ultra low phase noise, sine-wave
-oscillator to drive the ADF4382A reference input. Single-ended oscillator output
+The EV-ADF4382SD1Z has an on-board, 125 MHz, ultra low phase noise, sine-wave
+oscillator to drive the ADF4382 reference input. Single-ended oscillator output
 is connected to the REFP pin, and the REFN pin is AC grounded. This oscillator
 is used by default on the board. 
 
 The reference input can also be driven externally via a pair of SMA connectors,
 REFN (J4) and REFP (J11). When using the external reference, disable the
 on-board oscillator supply. This will require board modifications, please refer
-to the `EVAL-ADF4382A User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-adf4382a-ug-2185.pdf>`_ for details.
+to the `EVAL-ADF4382 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-adf4382-ug-2185.pdf>`_ for details.
 
 Pin Description
 ^^^^^^^^^^^^^^^
@@ -355,7 +357,7 @@ This example initializes the ADF4382 with the configurations provided in the
 above mentioned common files and applies them to the IC. By default reference
 frequency is provided by the local oscillator of the board and channel 0 is
 active with a power level of 9. Subsequently the example sets a test frequency
-of 3.1 GHz and adjusts the phase by 1ns.
+of 20 GHz and adjusts the phase by 1ns.
 
 
 In order to build the basic example make sure you have the following
@@ -401,12 +403,12 @@ STM32 Platform
 
 **Used hardware**
 
-* `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_
+* `EVAL-ADF4382 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382.html>`_, `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_, or `EVAL-ADF4383 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
 * `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 **Connections**:
 
-The SDP connector of the SDP-K1 needs to be connected to P5 of the EVAL-ADF4382A
+The SDP connector of the SDP-K1 needs to be connected to P5 of the EVAL-ADF4382
 board. Additionally a 6V power supply needs to be connected to either J14 - J15
 or to J18 (the SMA interface).
 
@@ -432,7 +434,7 @@ Mbed Platform
 
 **Used hardware**
 
-* `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_
+* `EVAL-ADF4382 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382.html>`_, `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_, or `EVAL-ADF4383 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
 * `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 **Connections**:

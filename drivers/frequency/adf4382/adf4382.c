@@ -532,7 +532,7 @@ int adf4382_set_rfout(struct adf4382_dev *dev, uint64_t val)
 }
 
 /**
- * @brief Computes the PFD frequency and returns the value in KHz.
+ * @brief Computes the PFD frequency and returns the value in Hz.
  * @param dev 	     - The device structure.
  * @return 	     - PFD value in Hz.
  */
@@ -676,7 +676,7 @@ static int adf4382_frac2_compute(struct adf4382_dev *dev, uint64_t res,
 	if (ret)
 		return ret;
 
-	en_phase_resync = no_os_field_get(tmp, ADF4382_EN_PHASE_RESYNC_MSK);;
+	en_phase_resync = no_os_field_get(tmp, ADF4382_EN_PHASE_RESYNC_MSK);
 
 	if (en_phase_resync)
 		mod2_max = ADF4382_PHASE_RESYNC_MOD2WORD_MAX;
@@ -1207,9 +1207,9 @@ int adf4382_get_change_rfout(struct adf4382_dev *dev, uint64_t *val)
 
 /**
  * @brief Set the desired output frequency and reset everything over to maximum
- * supported value of 22GHz (21GHz for ADF4382A) to the max. value and
- * everything under the minimum supported value of 687.5MHz (2.875GHz for
- * ADF4382A) to the min. value.
+ * supported value of 22GHz (21GHz for ADF4382A) to the max without starting
+ * autocalibration. value and everything under the minimum supported value of
+ * 687.5MHz (2.875GHz for ADF4382A) to the min. value.
  * @param dev 		- The device structure.
  * @param val	 	- The desired output frequency in Hz.
  * @return    		- 0 in case of success or negative error code.
@@ -1228,6 +1228,48 @@ int adf4382_set_change_rfout(struct adf4382_dev *dev, uint64_t val)
 		dev->freq = dev->freq_min;
 
 	return adf4382_set_change_freq(dev);
+}
+
+/**
+ * @brief Computes the optimized bleed word value for the PLL in fractional mode.
+ * @param dev 	     - The device structure.
+ * @param pfd_freq   - Phase detector frequency.
+ * @return 	     - 0 in case of success or negative error code.
+ */
+static int adf4382_bleed_word_compute(struct adf4382_dev *dev,
+				      uint64_t pfd_freq)
+{
+	uint32_t coars_bleed;
+	uint16_t bleed_delay = 0;
+	uint32_t fine_bleed;
+	uint16_t bleed_word_tmp;
+	uint64_t bleed_i;
+	uint64_t rem;
+
+	if (!dev)
+		return -EINVAL;
+
+	/* Computes the bleed delay based on rfout frequency in SDM MODE 0.
+	See Product DataSheet for more details. */
+	if (dev->freq < 1800000000UL)
+		bleed_delay = 3600;
+	else if (dev->freq < 4000000000)
+		bleed_delay = 1000;
+	else if (dev->freq < 10000000000UL)
+		bleed_delay = 625;
+	else if (dev->freq >= 10000000000UL)
+		bleed_delay = 300;
+
+	bleed_i = bleed_delay * pfd_freq * adf4382_ci_ua[dev->cp_i];
+	bleed_i = NO_OS_DIV_ROUND_CLOSEST(bleed_i, PS_TO_S);
+	coars_bleed = no_os_div64_u64_rem(bleed_i, ADF4382_COARSE_BLEED_CONST,
+					  &rem);
+	fine_bleed = rem * ADF4382_FINE_BLEED_CONST_1;
+	fine_bleed = NO_OS_DIV_ROUND_UP(fine_bleed, ADF4382_FINE_BLEED_CONST_2);
+	bleed_word_tmp = coars_bleed << 9 | fine_bleed;
+	bleed_word_tmp = no_os_clamp(bleed_word_tmp, 1, 8191);
+	dev->bleed_word = bleed_word_tmp;
+	return 0;
 }
 
 /**
@@ -1266,7 +1308,7 @@ int adf4382_set_change_freq(struct adf4382_dev *dev)
 		return -EINVAL;
 	}
 
-	//Calculates the PFD freq. the output will be in KHz
+	//Calculates the PFD freq. the output will be in Hz
 	pfd_freq = adf4382_pfd_compute(dev);
 
 	ret = adf4382_pll_fract_n_compute(dev, dev->freq, pfd_freq, &n_int,
@@ -1292,6 +1334,9 @@ int adf4382_set_change_freq(struct adf4382_dev *dev)
 				ldwin_pw = 2;
 			}
 		}
+		ret = adf4382_bleed_word_compute(dev, pfd_freq);
+		if (ret)
+			return ret;
 	} else {
 		en_bleed = 0;
 
@@ -1470,7 +1515,7 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 		return -EINVAL;
 	}
 
-	//Calculates the PFD freq. the output will be in KHz
+	//Calculates the PFD freq. the output will be in Hz
 	pfd_freq = adf4382_pfd_compute(dev);
 
 	ret = adf4382_spi_update_bits(dev, 0x1F, ADF4382_CP_I_MSK,
@@ -1506,6 +1551,11 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 				ldwin_pw = 2;
 			}
 		}
+
+		ret = adf4382_bleed_word_compute(dev, pfd_freq);
+		if (ret)
+			return ret;
+
 	} else {
 		int_mode = 1;
 		en_bleed = 0;

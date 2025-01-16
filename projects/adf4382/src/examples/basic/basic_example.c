@@ -53,7 +53,7 @@ int basic_example_main()
 	if (ret)
 		goto error;
 
-	ret = adf4382_set_rfout(dev, 3100000000);
+	ret = adf4382_set_rfout(dev, 20000000000);
 	if (ret)
 		goto remove_adf4382;
 
