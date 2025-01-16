@@ -3,7 +3,7 @@
  *   @brief  Implementation of AD5592R driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. â€œAS ISâ€ AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -50,7 +50,7 @@ const struct ad5592r_rw_ops ad5592r_rw_ops = {
  * @param buf - buffer where to read
  * @return 0 in case of success, negative error code otherwise
  */
-static int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf)
+int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf)
 {
 	int32_t ret;
 	uint16_t spi_msg_nop = 0; /* NOP */
@@ -76,13 +76,21 @@ static int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf)
 int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 			  uint16_t value)
 {
+	int ret;
+
 	if (!dev)
 		return -1;
 
 	dev->spi_msg = swab16(NO_OS_BIT(15) | (uint16_t)(chan << 12) | value);
 
-	return no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-					sizeof(dev->spi_msg));
+	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+				       sizeof(dev->spi_msg));
+	if (ret)
+		return ret;
+
+	dev->cached_dac[chan] = value;
+
+	return 0;
 }
 
 /**
@@ -124,6 +132,29 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	*value = dev->spi_msg;
 
 	return 0;
+}
+
+/**
+ * Enable Busy Indicator.
+ *
+ * @param dev - The device structure.
+ * @param enable - Enable/Disable busy Indicator.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad5592r_enable_busy(struct ad5592r_dev *dev, bool enable)
+{
+	uint16_t temp_reg_val = 0;
+
+	dev->channel_modes[7] = CH_MODE_GPO;
+	ad5592r_set_channel_modes(dev);
+
+	if (!dev)
+		return -1;
+
+	temp_reg_val = enable ? AD5592R_REG_GPIO_OUT_EN_ADC_NOT_BUSY : 0;
+
+	return ad5592r_base_reg_update(dev, AD5592R_REG_GPIO_OUT_EN, temp_reg_val,
+				       AD5592R_REG_GPIO_OUT_EN_ADC_NOT_BUSY);
 }
 
 /**
@@ -253,22 +284,48 @@ int32_t ad5592r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
 /**
  * Initialize AD5593r device.
  *
- * @param dev - The device structure.
+ * @param device - The device structure.
  * @param init_param - The initial parameters of the device.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t ad5592r_init(struct ad5592r_dev *dev,
+int32_t ad5592r_init(struct ad5592r_dev **device,
 		     struct ad5592r_init_param *init_param)
 {
 	int32_t ret;
-	uint16_t temp_reg_val;
+	struct ad5592r_dev *dev;
+	uint8_t i;
 
+	dev = (struct ad5592r_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
+	/* Initialize the SPI communication. */
+	ret = no_os_spi_init(&dev->spi, init_param->spi_init);
+	if (ret)
+		return ret;
+
 	dev->ops = &ad5592r_rw_ops;
+	dev->ldac_mode = 0;
+	dev->num_channels = NUM_OF_CHANNELS;
 
 	ret = ad5592r_software_reset(dev);
+	if (ret < 0)
+		return ret;
+
+	for (i = 0; i < NUM_OF_CHANNELS; i++) {
+		dev->channel_modes[i] = init_param->channel_modes[i];
+		dev->channel_offstate[i] = init_param->channel_offstate[i];
+	}
+
+	ret = ad5592r_set_adc_range(dev, init_param->adc_range);
+	if (ret < 0)
+		return ret;
+
+	ret = ad5592r_set_dac_range(dev, init_param->dac_range);
+	if (ret < 0)
+		return ret;
+
+	ret = ad5592r_set_adc_buffer(dev, init_param->adc_buf);
 	if (ret < 0)
 		return ret;
 
@@ -276,14 +333,17 @@ int32_t ad5592r_init(struct ad5592r_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	if (init_param->int_ref) {
-		ret = ad5592r_reg_read(dev, AD5592R_REG_PD, &temp_reg_val);
+	ret = ad5592r_set_int_ref(dev, init_param->int_ref);
+	if (ret < 0)
+		return ret;
+
+	for (i = 0; i < NUM_OF_CHANNELS; i++) {
+		ret = ad5592r_power_down(dev, i, init_param->power_down[i]);
 		if (ret < 0)
 			return ret;
-		temp_reg_val |= AD5592R_REG_PD_EN_REF;
-
-		return ad5592r_reg_write(dev, AD5592R_REG_PD, temp_reg_val);
 	}
+
+	*device = dev;
 
 	return ret;
 }
